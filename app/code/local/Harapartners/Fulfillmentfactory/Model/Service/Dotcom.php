@@ -74,11 +74,17 @@ class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
 	 *
 	 */
 	public function runUpdateShipment() {
-		//put one day as default
-		$fromDate = $this->_getYesterday();
-		$toDate = date("Y-m-d 00:00:00");
-		
-		$this->updateShipment($fromDate, $toDate);
+		try {
+			//put one day as default
+			$fromDate = $this->_getYesterday();
+			$toDate = date("Y-m-d 00:00:00");
+			
+			$this->updateShipment($fromDate, $toDate);
+		}
+		catch (Exception $e) {
+			Mage::helper('fulfillmentfactory/log')->errorLog($e->getMessage());
+			throw Exception;
+		}
 	}
 	
 	//===============Functions===============//
