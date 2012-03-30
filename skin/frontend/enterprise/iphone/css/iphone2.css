@@ -310,3 +310,10 @@ div.checkout-sub-title sub-title{
 .checkout-content{
 	margin-left:19px;
 }
+#giftcard-form .v-fix{
+	
+}
+
+#giftcard-form #giftcard_code{
+	width: 89%;
+}
