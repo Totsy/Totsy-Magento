@@ -359,3 +359,9 @@ div.checkout-sub-title sub-title{
 .the-account-login .forgot-pwd{
 	display: inline;
 }
+
+.product-options-bottom .add-to-cart .width-button{
+	clear:both;
+	width:100%;
+	margin-top:10px;
+}
