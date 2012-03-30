@@ -202,6 +202,45 @@ class Mage_Customer_Model_Customer extends Mage_Core_Model_Abstract
         $this->_getResource()->loadByEmail($this, $customerEmail);
         return $this;
     }
+    
+    /**
+     * trim gmail address, to restore alias gmail address
+     *
+     * @param string $email
+     * @return string original email
+     */
+    protected function trimGmail($email) {
+    	
+    	$strArray = explode('@', $email);
+    	
+    	if(empty($strArray) ||
+    	   empty($strArray[1]) ||
+    	   $strArray[1] != 'gmail.com') {
+    		return $email;
+    	}
+    	
+		//get username, such as 'abcd'
+		$username = $strArray[0];
+		//Get username string's length
+		$len = strlen($username);
+		$originalGmail = '';
+		
+		//iterate chacrates in username string
+		for($j=0; $j<$len; $j++) {
+			//if encounters '+', discard the rest of the string
+			if($username[$j] == '+') {
+				break;
+			}
+			
+			//check if it is '.', if yes, don't concatenate.
+			if($username[$j] != '.') {
+				//concatenate username chacrater
+				$originalGmail .= $username[$j];
+			}
+		}
+    	
+		return $originalGmail . '@gmail.com';
+    }
 
 
     /**
@@ -217,7 +256,11 @@ class Mage_Customer_Model_Customer extends Mage_Core_Model_Abstract
         if ($storeId === null) {
             $this->setStoreId(Mage::app()->getStore()->getId());
         }
-
+        
+        //remove alias for Gmail address, add by Jing Xiao
+        $email = $this->trimGmail($this->getEmail());
+        $this->setEmail($email);
+        
         $this->getGroupId();
         return $this;
     }
