@@ -206,6 +206,7 @@ class Mage_Checkout_CartController extends Mage_Core_Controller_Front_Action
             $cart->save();
 
             $this->_getSession()->setCartWasUpdated(true);
+            $this->_getSession()->setCartUpdatedFlag(true);		//Harapartners, yang, for header flotting cart logic
             $this->_getSession()->setCountDownTimer($this->_getCurrentTime());	//Harapartners, yang, set new cart timer
 
             /**
@@ -525,33 +526,4 @@ class Mage_Checkout_CartController extends Mage_Core_Controller_Front_Action
 
         $this->_goBack();
     }
-    
-
-	//Harapartners, yang, START
-	//To update header cart information
-    public function cartHeaderUpdateAction()
-    {
-        $cart = $this->_getCart();
-		Mage::getSingleton('checkout/session')->cartTimeoutCheck($cart);
-
-        if ($cart->getQuote()->getItemsCount()) {
-            $cart->init();
-            $cart->save();
-
-            if (!$this->_getQuote()->validateMinimumAmount()) {
-                $warning = Mage::getStoreConfig('sales/minimum_order/description');
-                $cart->getCheckoutSession()->addNotice($warning);
-            }
-        }
-		
-		$this->_getSession()->setCartWasUpdated(true);
-		
-		Mage::getSingleton('checkout/session')->setData('top_cart_qty_temp', Mage::getSingleton('checkout/cart')->getSummaryQty()); 
-		
-        $jsonResponse['status'] = 1;
-		$jsonResponse['error'] = ''; 
-		echo json_encode($jsonResponse);
-		exit;
-    }    
-    //Harapartners, yang, END
 }

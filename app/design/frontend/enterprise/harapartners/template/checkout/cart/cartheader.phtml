@@ -37,15 +37,11 @@
 
 <div class="top-cart">
 <?php 
-	$_cartQty = Mage::getModel('checkout/cart')->getSummaryQty();
-	if(!Mage::getSingleton('checkout/session')->hasData('top_cart_qty_temp')){
-		$_cartQtyTemp = 0;
-	}else {
-		$_cartQtyTemp = Mage::getSingleton('checkout/session')->getData('top_cart_qty_temp');
-	}
-	$_cartQtyComp = abs($_cartQty - $_cartQtyTemp);
+	$_cartQty = Mage::getModel('checkout/cart')->getSummaryQty(); 
+	$_itemsArray = $this->getItems();
+	$_updateFlag = $checkoutSession->getCartUpdatedFlag();
 ?>
-<?php if ($_cartQty > 0): ?>
+<?php if ($_cartQty > 0 && !empty($_itemsArray)): ?>
     <?php $_myCart = $this->__('%s Items', '<span>' . $_cartQty . '</span>') ?>
 <?php else: ?>
     <?php $_myCart = $this->__('%s Items', '<span>0</span>') ?>
@@ -58,11 +54,15 @@
     </div>
 <?php else:?>
     <div class="block-title<?php if(!$_cartQty) { echo (' no-items'); } ?>">
+    	<?php if ($_cartQty > 0 && !empty($_itemsArray)):?>
         <strong id="cartHeader"><?php echo $_myCart ?><span><?php echo ' | '.Mage::helper('checkout')->formatPrice($this->getSubtotal()) ?><?php if ($_subtotalInclTax = $this->getSubtotalInclTax()): ?> / <?php echo ' | '.Mage::helper('checkout')->formatPrice($_subtotalInclTax) ?> <?php echo ' | '.Mage::helper('tax')->getIncExcText(true) ?><?php endif; ?></span></strong>
+    	<?php else :?>
+    	<strong id="cartHeader"><span>0</span> Items<span> | <span class='price'>$0.00</span></span></strong>
+    	<?php endif;?>
     </div>
-    <div id="topCartContent" class="block-content" style="display:none">
+    <div id="topCartContent" class="block-content" style="<?php if ( !!$_updateFlag && $_updateFlag ) {echo "display:block"; $checkoutSession->setCartUpdatedFlag(false);} else echo "display:none";?>"> 
         <div class="inner-wrapper"><?php // extra div to smooth slideUp and slideDown ?>
-        	<?php if ($_cartQty > 0):?>
+        	<?php if ($_cartQty > 0 && !empty($_itemsArray)):?>
 	        <div class="timer-control-box">
 	        	<div class="shipping-date">
 		        	<span>Estimated Ship Date:</span>
@@ -82,7 +82,10 @@
 								},
 								onComplete: function( event ){											
 									jQuery(this).html("<span class='over'>no longer reserved</span>");
-									updateQtySession();
+									jQuery("#cartHeader").html("<span>0</span> Items<span> | <span class='price'>$0.00</span></span>");
+									jQuery("#items-info-wrapper").hide();
+									jQuery("div.shipping-date").hide();
+									jQuery("#items-timer-passed").show();
 								},
 								leadingZero: true,
 								direction: "down"
@@ -92,52 +95,48 @@
 				</div>
 	        </div>
 	        <?php endif;?>
-        <?php $_items = $this->getRecentItems() ?>
-        <?php if(count($_items)): ?>
-            <ol id="mini-cart" class="mini-products-list">
-            <?php foreach($_items as $_item): ?>
-                <!-- Add Customerize Cart item info -->
-                <?php echo $this->getItemHtml($_item) ?>
-            <?php endforeach; ?>
-            </ol>
-            <script type="text/javascript">decorateList('mini-cart', 'none-recursive')</script>
-        <?php else: ?>
-            <p class="block-subtitle">
-                <span onclick="Enterprise.TopCart.hideCart()" class="close-btn"><?php echo $this->__('Close'); ?></span>
-                <?php echo $this->__('Recently added item(s)') ?>
-            </p>
-            <p class="cart-empty">
-                <?php echo $this->__('You have no items in your shopping cart.') ?>
-            </p>
-        <?php endif ?>
-        <?php if($_cartQty && $this->isPossibleOnepageCheckout()): ?>
-            <p class="subtotal">
-                <?php if ($this->canApplyMsrp()): ?>
-                    <span class="map-cart-sidebar-total"><?php echo $this->__('ORDER TOTAL WILL BE DISPLAYED BEFORE YOU SUBMIT THE ORDER'); ?></span>
-                <?php else: ?>
-                    <span class="label"><?php echo $this->__('Subtotal:') ?></span> <?php echo Mage::helper('checkout')->formatPrice($this->getSubtotal()) ?><?php if ($_subtotalInclTax = $this->getSubtotalInclTax()): ?> / <?php echo Mage::helper('checkout')->formatPrice($_subtotalInclTax) ?> <?php echo Mage::helper('tax')->getIncExcText(true) ?><?php endif; ?>
-                <?php endif; ?>
-            </p>
-            <div class="actions">
-                <?php echo $this->getChildHtml('extra_actions') ?>
-                <button class="button" type="button" onclick="setLocation('<?php echo $this->getCheckoutUrl() ?>')"><span><span><?php echo $this->__('Checkout') ?></span></span></button>
-                <a href="<?php echo $this->getUrl('checkout/cart'); ?>"><span><?php echo $this->__('Go to Shopping Cart') ?></span></a>
-            </div>
-        <?php endif ?>
+		    <div id="items-info-wrapper">
+		        <?php $_items = $this->getRecentItems() ?>
+		        <?php if( count($_items) && !empty($_itemsArray) ): ?>
+		            <ol id="mini-cart" class="mini-products-list">
+		            <?php foreach($_items as $_item): ?>
+		                <!-- Add Customerize Cart item info -->
+		                <?php echo $this->getItemHtml($_item) ?>
+		            <?php endforeach; ?>
+		            </ol>
+		            <script type="text/javascript">decorateList('mini-cart', 'none-recursive')</script>
+		        <?php else: ?>
+		            <p class="block-subtitle">
+		                <span onclick="Enterprise.TopCart.hideCart()" class="close-btn"><?php echo $this->__('Close'); ?></span>
+		                <?php echo $this->__('Recently added item(s)') ?>
+		            </p>
+		            <p class="cart-empty">
+		                <?php echo $this->__('You have no items in your shopping cart.') ?>
+		            </p>
+		        <?php endif ?>
+		        <?php if($_cartQty && $this->isPossibleOnepageCheckout() && !empty($_itemsArray)): ?>
+		            <p class="subtotal">
+		                <?php if ($this->canApplyMsrp()): ?>
+		                    <span class="map-cart-sidebar-total"><?php echo $this->__('ORDER TOTAL WILL BE DISPLAYED BEFORE YOU SUBMIT THE ORDER'); ?></span>
+		                <?php else: ?>
+		                    <span class="label"><?php echo $this->__('Subtotal:') ?></span> <?php echo Mage::helper('checkout')->formatPrice($this->getSubtotal()) ?><?php if ($_subtotalInclTax = $this->getSubtotalInclTax()): ?> / <?php echo Mage::helper('checkout')->formatPrice($_subtotalInclTax) ?> <?php echo Mage::helper('tax')->getIncExcText(true) ?><?php endif; ?>
+		                <?php endif; ?>
+		            </p>
+		            <div class="actions">
+		                <?php echo $this->getChildHtml('extra_actions') ?>
+		                <button class="button" type="button" onclick="setLocation('<?php echo $this->getCheckoutUrl() ?>')"><span><span><?php echo $this->__('Checkout') ?></span></span></button>
+		                <a href="<?php echo $this->getUrl('checkout/cart'); ?>"><span><?php echo $this->__('Go to Shopping Cart') ?></span></a>
+		            </div>
+		        <?php endif ?>
+	        </div>
+	        <div id="items-timer-passed" style="display:none;"><p class="cart-empty"><?php echo $this->__('You have no items in your shopping cart.')?></p></div>
         </div>
     </div>
 <script type="text/javascript">
-    //Enterprise.TopCart.initialize('topCartContent');
+    // Enterprise.TopCart.initialize('topCartContent');
     // Below can be used to show minicart after item added
-    //Enterprise.TopCart.showCart(7);
+    // Enterprise.TopCart.showCart(7);
 	jQuery(document).ready(function(){
-
-		var tempComp = <?php echo $_cartQtyComp;?>;
-		if(tempComp){
-			jQuery("#topCartContent").fadeIn();
-			updateQtySession();
-		};
-
 		jQuery("#usercart").hover(
 			function(){
 				jQuery("#topCartContent").fadeIn();},
@@ -145,21 +144,6 @@
 				jQuery("#topCartContent").fadeOut();}
 		);
 	})
-	
-	function updateQtySession(){
-
-		jQuery.ajax({
-			type: "GET",
-			url: "<?php echo $this->getBaseUrl();?>checkout/cart/cartheaderupdate",
-			dataType: "json",
-			success: function(jsonResponse){
-				if(!jsonResponse.status){
-					alert(jsonResponse.error);
-				}
-	        }		
-		});
-	}
-
 </script>
 <?php endif;?>
 </div>

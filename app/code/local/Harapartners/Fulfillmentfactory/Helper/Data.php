@@ -10,7 +10,11 @@
  * to eula@harapartners.com so we can send you a copy immediately.
  * 
  */
-class Harapartners_FulfillmentFactory_Helper_Data extends Mage_Core_Helper_Abstract{	
+class Harapartners_FulfillmentFactory_Helper_Data extends Mage_Core_Helper_Abstract{
+	const ORDER_STATUS_PROCESSING_FULFILLMENT = 'processing_fulfillment';
+	const ORDER_STATUS_PAYMENT_FAILED = 'payment_failed';
+	const ORDER_STATUS_FULFILLMENT_FAILED = 'fulfillment_failed';
+	
 	/**
 	 * get 2-letter code for states
 	 *

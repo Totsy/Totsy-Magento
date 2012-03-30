@@ -82,6 +82,32 @@
                 </connection>
             </fulfillmentfactory_read>
         </resources>
+		<sales>
+            <order>
+                <statuses>
+                    <processing_fulfillment translate="label"><label>Processing Fulfillment</label></processing_fulfillment>
+					<payment_failed translate="label"><label>Payment Failed</label></payment_failed>
+					<fulfillment_failed translate="label"><label>Fulfillment Failed</label></fulfillment_failed>
+                </statuses>
+                <states>
+                    <processing_fulfillment>
+                        <statuses>
+                            <processing_fulfillment/>
+                        </statuses>
+                    </processing_fulfillment>
+					<payment_failed>
+                        <statuses>
+                            <payment_failed/>
+                        </statuses>
+                    </payment_failed>
+					<fulfillment_failed>
+                        <statuses>
+                            <fulfillment_failed/>
+                        </statuses>
+                    </fulfillment_failed>
+                </states>
+            </order>
+        </sales>
     </global>
 	<admin>
         <routers>
