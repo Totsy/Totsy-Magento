@@ -30,9 +30,12 @@
  *
  * @see Mage_Checkout_Block_Cart
  */
-	$countDownTimer = Mage::getSingleton('checkout/session')->getCountDownTimer();
-	$timeout = Mage::getSingleton('checkout/session')->getQuoteItemExpireTime();	
-	$endcount_lc = date("F j, Y, G:i:s", ($countDownTimer + $timeout));
+	$countDownTimer  =	Mage::getSingleton('checkout/session')->getCountDownTimer();
+	$timeout		 =	Mage::getSingleton('checkout/session')->getQuoteItemExpireTime();	
+	$endcount_lc 	 =	date("F j, Y, G:i:s", ($countDownTimer + $timeout));
+	$storeObj 		 =	Mage::app()->getStore();
+	$storeCode 		 =  $storeObj->getCode();
+	$storeId 		 =	$storeObj->getId();
 ?>
 <div class="cart">
     <div class="page-title title-buttons">
@@ -145,6 +148,7 @@
         </ul>
         <?php endif; ?>
     </div>
+    <?php if ( $storeCode == 'default' || $storeId == 1 ):?>
     <div class="cart-collaterals<?php if($this->getChildHtml('crosssell')) echo ' cross-inside'; ?>">
         <?php //echo $this->getChildHtml('crosssell') ?>
         <div class="deals">
@@ -153,5 +157,5 @@
         </div>
         <?php //if (!$this->getIsVirtual()): echo $this->getChildHtml('shipping'); endif; ?>
     </div>
-
+    <?php endif;?>
 </div>
