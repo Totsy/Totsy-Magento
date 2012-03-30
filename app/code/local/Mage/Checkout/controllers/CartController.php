@@ -206,6 +206,7 @@ class Mage_Checkout_CartController extends Mage_Core_Controller_Front_Action
             $cart->save();
 
             $this->_getSession()->setCartWasUpdated(true);
+            $this->_getSession()->setCartUpdatedFlag(true);		//Harapartners, yang, for header flotting cart logic
             $this->_getSession()->setCountDownTimer($this->_getCurrentTime());	//Harapartners, yang, set new cart timer
 
             /**
