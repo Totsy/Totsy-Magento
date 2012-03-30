@@ -340,3 +340,22 @@ div.checkout-sub-title sub-title{
 #hpcheckout-wrapper .sub-title{
 	font-size: 20px;
 }
+
+.facebook-part{
+	float:right;	
+}
+
+.signinbutton1 .submit-button{
+	float:left;	
+}
+
+.the-account-login .emailpassword .required{
+	color:#333333;
+}
+.the-account-login .emailpassword .required em{
+	color: #DF280A;
+}
+
+.the-account-login .forgot-pwd{
+	display: inline;
+}
