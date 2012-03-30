@@ -91,6 +91,13 @@ class Harapartners_Customertracking_Model_Observer {
 	
 	public function loginAfter(Varien_Event_Observer $observer) {
 		$customer = $observer->getEvent()->getCustomer();
+		
+		//No need to register anything
+		//add affl to session
+		//login count ++
+		
+		
+		
 		Mage::unregister('isLoginPage');
 		Mage::register('isLoginPage',true);
 		$this->_addAffiliateLoginCount($customer);
