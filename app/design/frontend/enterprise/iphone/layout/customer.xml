@@ -384,14 +384,14 @@ Customer account address edit page
         </reference>
     </customer_account_for_category_view>	
 	
-	<customer_account_for_category_list translate="label">
+	<customer_account_for_event_index translate="label">
         <label>Customer My Account (All Pages)</label>
         <!--remove name="catalog.compare.sidebar"/>
         <remove name="sale.reorder.sidebar"/-->
         <!-- Mage_Customer -->
 		
         <reference name="content">
-            <block type="customer/account_navigation" name="customer_account_navigation_mobile" after="category.layerlist" template="customer/account/navigation.phtml">
+            <block type="customer/account_navigation" name="customer_account_navigation_mobile" after="categoryevent.index.index" template="customer/account/navigation.phtml">
                 <action method="addLink" translate="label" module="customer"><name>customer_account</name><path>customer/account/</path><label>Manage Account</label></action>
 				<action method="addLink" translate="label" module="enterprise_customerbalance"><name>enterprise_customerbalance</name><path>enterprise_customerbalance/info/</path><label>My Credit</label></action>
                 <action method="addLink" translate="label" module="checkout"><name>checkout_cart</name><path>checkout/cart/</path><label>My Cart </label></action>
@@ -402,7 +402,7 @@ Customer account address edit page
             <!--block type="catalog/product_compare_sidebar" name="catalog.compare.sidebar" template="catalog/product/compare/sidebar.phtml"/-->
             <remove name="tags_popular"/>
         </reference>
-    </customer_account_for_category_list>
+    </customer_account_for_event_index>
 	
 	
 	

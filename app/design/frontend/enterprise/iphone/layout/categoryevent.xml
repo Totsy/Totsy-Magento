@@ -12,6 +12,7 @@
 		<reference name="content">
             <block type="categoryevent/index_index" name="categoryevent.index.index" template="categoryevent/index.phtml" />
         </reference>
+		<update handle="customer_account_for_event_index"/>
 	</categoryevent_index_index>
 	<categoryevent_index_topnav translate="label">
 		<label>Catalog Category List (Non-Anchor)</label>

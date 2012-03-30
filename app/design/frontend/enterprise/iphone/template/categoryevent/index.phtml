@@ -69,7 +69,7 @@
 <div class="catalog-events-container">
 	<form class="ui-listview-filter ui-bar-c" role="search">
 		<div class="ui-input-search ui-shadow-inset ui-btn-corner-all ui-btn-shadow ui-icon-searchfield ui-body-c">
-			<input class="ui-input-text ui-body-c" placeholder="Filter Sales...placeholder for now" data-type="search">
+			<input class="ui-input-text ui-body-c" placeholder="Filter Sales...placeholder for now" onkeyup="namefilter()" data-type="search" id="name-filter">
 		</div>
 	</form>
 	<div class="live-events-box">
@@ -186,3 +186,19 @@
 	</div>
 	<?php endif;?>	
 </div>
+<script>
+	function namefilter(){
+		//alert(jQuery('#name-filter').val());
+		var searchName = jQuery('#name-filter').val();
+		var patt=new RegExp(searchName,"i");
+		jQuery(".live-events-box .event-link .event-name").each(function(){
+			var eventName = jQuery(this).html();
+			if (eventName.match(patt) == null){
+				jQuery(this).parent().hide();
+			}else{
+				jQuery(this).parent().show();
+			}
+		})
+		;
+	}
+</script>
