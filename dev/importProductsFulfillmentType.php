@@ -17,24 +17,25 @@ $filename = './products_sku.txt';
 $fp = fopen($filename, 'r+');
 
 if($fp) {
-	while(!feof($fp))
-	{
-		$sku = fgets($fp, 4096);
-		$productsSku[] = $filename;
-	}
+        while(!feof($fp))
+        {
+                $sku = fgets($fp, 1024);
+                $productsSku[] = trim($sku);
+        }
 }
 
 fclose($fp);
 
 foreach($productsSku as $productSku) {
-	$product = Mage::getModel('catalog/product')->loadByAttribute('sku', $productSku);
-	if(empty($product) || !$product->getId()) {
-		continue;
-	}
-	$product->setData('fulfillment_type', $newFulfillmentType)
-			->save();
-			
-	echo $productSku . ' DONE';
+        $product = Mage::getModel('catalog/product')->loadByAttribute('sku', $productSku);
+        if(empty($product) || !$product->getId()) {
+        		echo $productSku . " MISSED\n";
+                continue;
+        }
+        $product->setData('fulfillment_type', $newFulfillmentType)
+                        ->save();
+
+        echo $productSku . " DONE\n";
 }
 
 echo 'DONE';
