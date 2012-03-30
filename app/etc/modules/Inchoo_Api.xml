@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+
+<config>
+    <modules>
+        <Inchoo_Api>
+            <active>false</active>
+            <codePool>community</codePool>
+            <depends>
+                <Mage_Api />
+            </depends>            
+        </Inchoo_Api>
+    </modules>
+</config>

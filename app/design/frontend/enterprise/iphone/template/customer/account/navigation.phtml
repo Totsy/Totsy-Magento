@@ -1,0 +1,60 @@
+<?php
+/**
+ * Magento Enterprise Edition
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Magento Enterprise Edition License
+ * that is bundled with this package in the file LICENSE_EE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://www.magentocommerce.com/license/enterprise-edition
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://www.magentocommerce.com/license/enterprise-edition
+ */
+?>
+	<div class="page-sub-title">
+		<h2 class="gray"><?php echo $this->__('My Account  '); ?></h2>
+		<hr/>
+	</div>
+<div class="block block-account">
+
+    <div class="block-content">
+        <ul class="ui-listview  ui-listview-inset ui-corner-all ui-shadow">
+            <?php $_links = $this->getLinks(); ?>
+            <?php $_index = 1; ?>
+            <?php $_count = count($_links); ?>
+            <?php foreach ($_links as $_link): ?>
+                <?php $_last = ($_index++ >= $_count); ?>
+
+                    <li class="ui-li-has-count ui-btn ui-btn-icon-right ui-li-has-arrow ui-li ui-corner-top ui-btn-up-c<?php echo ($_last ? ' last' : '') ?>">
+						<div class="ui-btn-inner ui-li" aria-hidden="true">
+							<div class="ui-btn-text">
+								<a class="ui-link-inherit" href="<?php echo $_link->getUrl() ?>"><?php echo $_link->getLabel() ?>
+									<?php if ($_link->getName()=='checkout_cart') :?>
+										<span class="ui-li-count ui-btn-up-c ui-btn-corner-all"><?php echo Mage::getSingleton('checkout/cart')->getSummaryQty(); ?></span>
+									<?php elseif ($_link->getName()=='enterprise_customerbalance') : ?>
+										<?php $baseCredit = Mage::getSingleton('core/layout')->createBlock('enterprise_customerbalance/account_balance')->getBalance();?>
+										<?php $credit = Mage::helper('core')->currency($baseCredit); ?>
+										<span class="ui-li-count ui-btn-up-c ui-btn-corner-all credit-count-box"><?php echo 'Credit '.$credit ?></span>
+									<?php endif; ?>
+								</a>
+								<span class="ui-icon ui-icon-arrow-r ui-icon-shadow"></span>
+							</div>
+						</div>
+					</li>
+            <?php endforeach; ?>
+        </ul>
+    </div>
+</div>

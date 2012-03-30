@@ -1,0 +1,66 @@
+<?php
+/*
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the End User Software Agreement (EULA).
+ * It is also available through the world-wide-web at this URL:
+ * http://www.harapartners.com/license
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to eula@harapartners.com so we can send you a copy immediately.
+ * 
+ */
+?>
+<style>
+	.categoryevent-adminhtml-sort-index #sortable li, .categoryevent-adminhtml-sort-index #sortable2 li{ display: inline-block;}
+	.categoryevent-adminhtml-sort-index p.event-list-title {border-top: 1px solid #f2f2f2; color: green; font-size: 20px; margin-top: 20px; padding:10px 0;}
+	.categoryevent-adminhtml-sort-index div.control-button-set {margin: 20px 0;}
+	.categoryevent-adminhtml-sort-index p.event-name {color: #888888; font-weight: bold; margin-bottom: 0px; padding: 5px; background: #f2f2f2;}
+</style>
+<?php 
+	$keyPost = $this->getPostKey();
+	$KeyForm = $this->getFormKey();
+	$postStoreId = $this->getSortPostResponse('id');
+	$postSortDate = $this->getSortPostResponse('date');
+?>
+<div class="content-header">
+<table cellspacing="0">
+    <tr>
+        <td style="width:50%;"><h3 class="icon-head head-products"><?php echo Mage::helper('categoryevent')->__('Sort Category Events') ?></h3></td>
+    </tr>
+</table>
+</div>
+<?php if( !$this->isSingleStoreMode() ): ?>
+	<?php echo $this->getChildHtml('store_switcher');?>
+<?php endif;?>
+<div class="sort-index-container">
+	<form id="sort-selection" action="<?php echo $this->getBaseUrl().'categoryevent/adminhtml_sort/index/key/'.$keyPost.$postStoreId;?>" method="post">
+		<label for="sort_date" ><?php echo Mage::helper('categoryevent')->__('Sort on Date') ?></label>
+		<input type="text" name="sort_date" id="datepicker" value="<?php echo $postSortDate;?>"/>
+		<input type="hidden" name="form_key" value="<?php echo $KeyForm?>"/>
+		<input type="hidden" name="sort_store" value="" id="sort_store_id"/>
+		<input type="hidden" name="post_active" value="1"/>
+		<button id="sort-type-submit" class="scalable" type="submit" >
+			<span><?php echo Mage::helper('categoryevent')->__('Edit/Update') ?></span>
+		</button>
+	</form>
+	<div id="ajax-collection-container" >
+		<?php if (!!(Mage::getSingleton('adminhtml/session')->getData('categoryevent_sort_data_post'))):?>
+			<?php echo $this->getEventListHtml();?>
+		<?php endif;?>
+	</div>
+</div>
+
+
+<script type="text/javascript">
+	jQuery(document).ready(function(){
+
+		var store_id = jQuery("#store_switcher option[selected = 'selected']").val();
+		
+		if(typeof(store_id) != "undefined" && store_id !== null){
+			jQuery("#sort_store_id").attr("value", store_id);
+		}
+
+		jQuery("#datepicker").datepicker({ dateFormat: 'yy-mm-dd' });
+	})
+</script>

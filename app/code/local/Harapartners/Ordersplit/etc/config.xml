@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<!--
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the End User Software Agreement (EULA).
+ * It is also available through the world-wide-web at this URL:
+ * http://www.harapartners.com/license
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to eula@harapartners.com so we can send you a copy immediately.
+ * 
+ -->
+<config>
+    <modules>
+        <Harapartners_Ordersplit>
+            <version>1.0.0</version>
+        </Harapartners_Ordersplit>
+    </modules>
+    <global>
+		<helpers>
+            <ordersplit>
+				<class>Harapartners_Ordersplit_Helper</class>
+			</ordersplit>
+        </helpers>
+		<models>
+		    <ordersplit>
+				<class>Harapartners_Ordersplit_Model</class>
+			</ordersplit>
+		</models>
+		<!--Moved to Harapartners_Service-->
+		<!--events>
+            <sales_order_place_after>
+               <observers>
+                    <ordersplit>
+                        <type>singleton</type>
+                        <class>ordersplit/observer</class>
+                        <method>salesOrderPlaceAfterSplit</method>
+                    </ordersplit>
+                </observers> 
+            </sales_order_place_after>
+        </events-->			
+    </global>
+</config>

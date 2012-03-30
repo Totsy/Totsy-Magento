@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the End User Software Agreement (EULA).
+ * It is also available through the world-wide-web at this URL:
+ * http://www.harapartners.com/license
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to eula@harapartners.com so we can send you a copy immediately.
+ * 
+ -->
+
+<config>
+    <tabs>
+        <sailthruconfig translate="label" module="emailfactory">
+            <label>Sailthru</label>
+            <sort_order>99999</sort_order>
+        </sailthruconfig>
+    </tabs>
+    <sections>
+        <sailthru_options translate="label" module="emailfactory">
+            <label>Settings</label>
+            <tab>sailthruconfig</tab>
+            <frontend_type>text</frontend_type>
+            <sort_order>1</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>1</show_in_store>
+            <groups>
+                <api translate="label">
+                    <label>API</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>1</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <comment><![CDATA[<a href="https://www.sailthru.com">Go to Sailthru account</a>]]></comment>
+                    <fields>
+                        <sailthru_api_key translate="label">
+                            <label>API Key</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>Sailthru API Key. </comment>
+                        </sailthru_api_key>
+                        <sailthru_api_secret translate="label">
+                            <label>API Secret</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>2</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>Sailthru Secret.</comment>
+                        </sailthru_api_secret>
+                    </fields>
+                </api>
+                <email translate="label">
+                    <label>Email</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>2</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <sailthru_def_list translate="label">
+                            <label>Default Email List</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>The email list users are added to when they register.</comment>
+                        </sailthru_def_list>
+                        <sailthru_news_list translate="label">
+                            <label>Newsletter Email List</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>2</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>The email listusers are added to when they subscribe to the newsletter.</comment>
+                        </sailthru_news_list>
+                        <sailthru_sender_email translate="label">
+                            <label>Admin Email Address</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>3</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>The email address used for customer service.</comment>
+                        </sailthru_sender_email>
+                    </fields>
+                </email>
+                <horizon translate="label">
+                    <label>Horizon</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>4</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <comment>Complete the first three steps of <![CDATA[<a href="http://docs.sailthru.com/horizon/setup">this page</a>]]> and fill out the "Horizon Domain" field below to complete Horizon setup</comment>
+                    <fields>
+                        <sailthru_horizon_domain translate="label">
+                                <label>Horizon Domain</label>
+                                <frontend_type>text</frontend_type>
+                                <sort_order>1</sort_order>
+                                <show_in_default>1</show_in_default>
+                                <show_in_website>1</show_in_website>
+                                <show_in_store>1</show_in_store>
+                        </sailthru_horizon_domain>
+                        <sailthru_concierge_enabled translate="label">
+                                <label>Enable Concierge</label>
+                                <frontend_type>select</frontend_type>
+                                <sort_order>2</sort_order>
+                                <show_in_default>1</show_in_default>
+                                <show_in_website>1</show_in_website>
+                                <show_in_store>1</show_in_store>
+                                <source_model>adminhtml/system_config_source_yesno</source_model>
+                        </sailthru_concierge_enabled>
+                    </fields>
+                </horizon>
+            </groups>
+        </sailthru_options>
+    </sections>
+</config>

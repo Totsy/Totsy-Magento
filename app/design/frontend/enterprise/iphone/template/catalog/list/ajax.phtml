@@ -1,0 +1,70 @@
+<?php
+/**
+ * Harapartners
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Harapartners License
+ * that is bundled with this package in the file LICENSE_EE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://www.Harapartners.com/license
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@Harapartners.com so we can send you a copy immediately.
+ *
+ */
+?>
+<?php
+/**
+ * Catalog update ajax template
+ * 'show more' block return
+ * @see Mage_Catalog_Block_Catalog_ajax
+ */
+?>
+
+<?php 
+	$flag = Mage::getSingleton('customer/session')->getData('categoryevent_sort_update_selected_block');
+	$eventArray = $this->loadUpdateSortCollection($flag);
+?>
+<?php foreach ($eventArray as $value):?>
+	<?php
+		if ($flag == 1 || $flag == 'live'){
+			$timerSet = $this->setCountDownTimer($value['event_end_date']);
+			$timerFlag = 'Ends in';
+		}elseif ($flag == 2 || $flag == 'upcoming'){
+			$timerSet = $this->setCountDownTimer($value['event_start_date']);
+			$timerFlag = 'Opens in';
+		}
+		$timer = $timerSet['timer'];
+		$endcount = $timerSet['endcount'];
+		$imgFile = BP.DS.'media'.DS.'catalog'.DS.'category'.DS.$value['thumbnail'];
+	?>
+	<li class="catalog-event ui-btn-up-c ajax-event-<?php echo $flag;?>-display" style="display: none; ">
+		<div class="ui-btn-text">
+			<a class="event-link" href="<?php echo Mage::getBaseUrl().$value['url_path']; ?>">
+			<?php if ($flag == 1 || $flag == 'live'):?>
+				<img src="<?php echo Mage::helper('service/image')->loadImageFile($imgFile)->resize(80,80); ?>" width="80px" height="80px" alt=""></img>
+			<?php endif;?>
+				<h3 class="event-name"><?php echo $value['name'];?></h3>
+				<p id="time<?php echo $flag;?>-<?php echo $timer ?>"></p> 
+				<script type="text/javascript">
+					jQuery("#time<?php echo $flag;?>-<?php echo $timer ?>").countdown({
+						//date: "12 10, 2011 16:11", //Counting TO a date
+						date: "<?php echo $endcount; ?>", //Counting TO a date
+						htmlTemplate: "<span><?php echo $timerFlag;?></span> %{d} <span class=\"cd-time\">Days</span> %{h}<span class=\"cd-time\">:</span>%{m}<span class=\"cd-time\">:</span>%{s}<span class=\"cd-time\"></span>",
+		
+						onChange: function( event, timer ){
+						},
+						onComplete: function( event ){										
+							jQuery(this).html("Completed");
+						},
+						leadingZero: true,
+						direction: "down"
+					});
+				</script>
+				<span class="ui-icon ui-icon-arrow-r ui-icon-shadow hp-ui-icon-right"></span>
+			</a>
+			<div class="clear"></div>
+		</div>	
+	</li>
+<?php endforeach;?>

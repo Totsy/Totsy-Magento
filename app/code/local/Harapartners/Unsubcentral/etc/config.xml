@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+
+<!--
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the End User Software Agreement (EULA).
+ * It is also available through the world-wide-web at this URL:
+ * http://www.harapartners.com/license
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to eula@harapartners.com so we can send you a copy immediately.
+ * 
+ -->
+
+<config>
+    <modules>
+        <Harapartners_Unsubcentral>
+            <version>1.0.0</version>
+        </Harapartners_Unsubcentral>
+    </modules>
+    <global>
+        <models>
+            <unsubcentral>
+                <class>Harapartners_Unsubcentral_Model</class>
+                <resourceModel>unsubcentral_mysql4</resourceModel>
+            </unsubcentral>
+            <unsubcentral_mysql4>
+                <class>Harapartners_Unsubcentral_Model_Mysql4</class>
+                <entities>
+                    <item>
+                        <table>unsubcentral_item</table>
+                    </item>
+                </entities>
+            </unsubcentral_mysql4>
+        </models>
+        <resources>
+            <unsubcentral_setup>
+                <setup>
+                    <module>Harapartners_Unsubcentral</module>
+                </setup>
+            </unsubcentral_setup>
+        </resources>
+		<!--Moved to Harapartners_Service-->
+		<!--events>
+	        <newsletter_subscriber_save_after>
+                <observers>
+                    <unsubcentral_subscribe_observer>
+	                    <type>singleton</type>
+                        <class>unsubcentral/observer</class>
+                        <method>unsubscribeCustomerObserver</method>
+                    </unsubcentral_subscribe_observer>
+                </observers>
+            </newsletter_subscriber_save_after>
+		</events-->
+    </global>
+	<frontend/>
+</config>

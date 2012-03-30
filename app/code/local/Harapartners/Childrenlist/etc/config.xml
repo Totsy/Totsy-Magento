@@ -1,0 +1,83 @@
+<?xml version="1.0"?>
+
+<!--
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the End User Software Agreement (EULA).
+ * It is also available through the world-wide-web at this URL:
+ * http://www.harapartners.com/license
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to eula@harapartners.com so we can send you a copy immediately.
+ * 
+ -->
+
+<config>
+    <modules>
+        <Harapartners_Childrenlist>
+            <version>1.0.0</version>
+        </Harapartners_Childrenlist>
+    </modules>
+    <global>
+        <models>
+            <childrenlist>
+                <class>Harapartners_Childrenlist_Model</class>
+                <resourceModel>childrenlist_mysql4</resourceModel>
+            </childrenlist>
+            <childrenlist_mysql4>
+                <class>Harapartners_Childrenlist_Model_Mysql4</class>
+                <entities>
+                    <child>
+                        <table>childrenlist_child</table>
+                    </child>
+                </entities>
+            </childrenlist_mysql4>
+        </models>
+        <resources>
+            <childrenlist_setup>
+                <setup>
+                    <module>Harapartners_Childrenlist</module>
+                </setup>
+            </childrenlist_setup>
+        </resources>
+        <blocks>
+            <childrenlist>
+                <class>Harapartners_Childrenlist_Block</class>
+            </childrenlist>
+        </blocks>
+        <helpers>
+            <childrenlist>
+                <class>Harapartners_Childrenlist_Helper</class>
+            </childrenlist>
+        </helpers>
+    </global>
+	<frontend>
+        <routers>
+            <childrenlist>
+                <use>standard</use>
+                <args>
+                    <module>Harapartners_Childrenlist</module>
+                    <frontName>childrenlist</frontName>
+                </args>
+            </childrenlist>
+        </routers>
+		<layout>
+			<updates>
+				<childrenlist>
+					<file>childrenlist.xml</file>
+				</childrenlist>
+			</updates>
+		</layout>
+	</frontend>
+    <admin>
+        <routers>
+            <childrenlist>
+                <use>admin</use>
+                <args>
+                    <module>Harapartners_Childrenlist</module>
+                    <frontName>childrenlist</frontName>
+                </args>
+            </childrenlist>
+        </routers>
+    </admin>
+</config>

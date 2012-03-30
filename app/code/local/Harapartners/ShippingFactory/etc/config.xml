@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<!--
+/*
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the End User Software Agreement (EULA).
+ * It is also available through the world-wide-web at this URL:
+ * http://www.harapartners.com/license
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to eula@harapartners.com so we can send you a copy immediately.
+ * 
+ */
+ -->
+<config>
+    <modules>
+        <Harapartners_ShippingFactory>
+            <version>1.0.0</version>
+        </Harapartners_ShippingFactory>
+    </modules>
+    <global>
+        <models>
+            <shippingfactory>
+                <class>Harapartners_ShippingFactory_Model</class>
+            </shippingfactory>
+        </models>
+        <helpers>
+            <shippingfactory>
+                <class>Harapartners_ShippingFactory_Helper</class>
+            </shippingfactory>
+        </helpers>
+        <sales>
+            <shipping>
+                <carriers>
+                    <flexible>
+                        <class>Harapartners_ShippingFactory_Model_Shipping_Carrier_Flexible</class>
+                    </flexible>
+                </carriers>
+            </shipping>
+        </sales>
+    </global>
+    <default>
+        <carriers>
+            <flexible>
+                <active>0</active>
+                <sallowspecific>0</sallowspecific>
+                <model>shippingfactory/shipping_carrier_flexible</model>
+                <title>Flexible Shipping</title>
+                <name>Flexible Shipping</name>
+				<dest_type>RES</dest_type>
+				<!--
+				<allowed_methods>1DM,1DML,1DA,1DAL,1DAPI,1DP,1DPL,2DM,2DML,2DA,2DAL,3DS,GND,GNDCOM,GNDRES,STD,XPR,WXS,XPRL,XDM,XDML,XPD</allowed_methods>
+				-->
+				<ups_gateway_url>http://www.ups.com/using/services/rave/qcostcgi.cgi</ups_gateway_url>
+                <specificerrmsg>This shipping method is currently unavailable. If you would like to ship using this shipping method, please contact us.</specificerrmsg>
+                <handling_type>F</handling_type>
+            </flexible>
+        </carriers>
+    </default>
+</config>

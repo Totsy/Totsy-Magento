@@ -1,0 +1,19 @@
+ <layout version="0.1.0">
+	<customer_account>
+        <reference name="customer_account_navigation" >
+            <action method="addLink" translate="label"><name>paymentfactory</name><path>paymentfactory/</path><label>My Credit Cards</label></action>
+        </reference>
+    </customer_account>
+	
+	<paymentfactory_index_index>
+		<label>Customer My Account Credit Cards</label>
+		<!-- Mage_Customer -->
+		<update handle="customer_account"/>
+		<reference name="root">
+			<action method="setTemplate"><template>page/2columns-left.phtml</template></action>
+		</reference>
+		<reference name="my.account.wrapper">
+			<block type="core/template" name="credit_cards" template="paymentfactory/payment.phtml"/>
+		</reference>
+	 </paymentfactory_index_index>
+ </layout>

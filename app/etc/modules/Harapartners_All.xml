@@ -1,0 +1,198 @@
+<?xml version="1.0"?>
+<!--
+/*
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the End User Software Agreement (EULA).
+ * It is also available through the world-wide-web at this URL:
+ * http://www.harapartners.com/license
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to eula@harapartners.com so we can send you a copy immediately.
+ * 
+ */
+ -->
+
+
+<config>
+     <modules>
+		<!-- CORE SERVICE MODULE -->
+     	<Harapartners_Service>
+            <active>true</active>
+            <codePool>local</codePool>
+        </Harapartners_Service>
+		
+		<!-- DEPENDENT MODULES -->
+		<Harapartners_Affiliate>
+			<active>true</active>
+			<codePool>local</codePool>
+			<depends>
+                <Harapartners_Service/>
+            </depends>
+		</Harapartners_Affiliate>
+		
+		<Harapartners_Categoryevent>
+			<active>true</active>
+            <codePool>local</codePool>
+			<depends>
+                <Harapartners_Service/>
+            </depends>
+		</Harapartners_Categoryevent>
+		
+		<Harapartners_Customertracking>
+			<active>true</active>
+			<codePool>local</codePool>
+			<depends>
+                <Harapartners_Service/>
+            </depends>
+		</Harapartners_Customertracking>
+		
+		<Harapartners_Childrenlist>
+			<active>true</active>
+			<codePool>local</codePool>
+			<depends>
+                <Harapartners_Service/>
+            </depends>
+        </Harapartners_Childrenlist>
+		
+     	<Harapartners_Dropshipfactory>
+            <active>true</active>
+            <codePool>local</codePool>
+			<depends>
+                <Harapartners_Service/>
+            </depends>
+        </Harapartners_Dropshipfactory>
+		
+		<Harapartners_EmailFactory>
+			<active>true</active>
+			<codePool>local</codePool>
+			<depends>
+                <Harapartners_Service/>
+            </depends>
+        </Harapartners_EmailFactory>
+		
+		<Harapartners_Fulfillmentfactory>
+            <active>true</active>
+            <codePool>local</codePool>
+			<depends>
+                <Harapartners_Service/>
+            </depends>
+        </Harapartners_Fulfillmentfactory>
+		
+		<Harapartners_HpCheckout>
+            <active>true</active>
+            <codePool>local</codePool>
+			<depends>
+                <Harapartners_Service/>
+            </depends>
+        </Harapartners_HpCheckout>
+		
+		<Harapartners_Import>
+            <active>true</active>
+            <codePool>local</codePool>
+			<depends>
+                <Harapartners_Service/>
+            </depends>
+        </Harapartners_Import>
+		
+		<Harapartners_MemcacheDb>
+			<active>true</active>
+            <codePool>local</codePool>
+			<depends>
+                <Harapartners_Service/>
+            </depends>
+		</Harapartners_MemcacheDb>
+		
+		<Harapartners_MobileApi>
+			<active>false</active>
+			<codePool>local</codePool>
+			<depends>
+                <Harapartners_Service/>
+            </depends>
+		</Harapartners_MobileApi>
+		
+		<Harapartners_Ordersplit>
+			<active>true</active>
+			<codePool>local</codePool>
+			<depends>
+                <Harapartners_Service/>
+            </depends>
+		</Harapartners_Ordersplit>
+		
+		<Harapartners_Paymentfactory>
+			<active>true</active>
+            <codePool>local</codePool>
+			<depends>
+				<Harapartners_Service/>
+                <Mage_Cybersource/>
+            </depends>
+		</Harapartners_Paymentfactory>
+		
+		<Harapartners_Promotionfactory>
+			<active>true</active>
+            <codePool>local</codePool>
+			<depends>
+                <Harapartners_Service/>
+            </depends>
+		</Harapartners_Promotionfactory>		
+		
+		<Harapartners_Recurringmembership>
+			<active>true</active>
+            <codePool>local</codePool>
+			<depends>
+                <Harapartners_Service/>
+				<Harapartners_Paymentfactory/>
+            </depends>
+		</Harapartners_Recurringmembership>	
+		
+		<Harapartners_ShippingFactory>
+			<active>true</active>
+			<codePool>local</codePool>
+			<depends>
+                <Harapartners_Service/>
+				<!--Mage_Usa/-->
+            </depends>
+		</Harapartners_ShippingFactory>
+		
+		<Harapartners_SpeedTax>
+            <active>true</active>
+            <codePool>local</codePool>
+            <depends>
+                <Harapartners_Service/>
+            </depends>
+        </Harapartners_SpeedTax>
+		
+		<Harapartners_Stockhistory>
+			<active>true</active>
+			<codePool>local</codePool>
+			<depends>
+                <Harapartners_Service/>
+            </depends>
+		</Harapartners_Stockhistory>
+		
+		<Harapartners_Rushcheckout>
+            <active>true</active>
+            <codePool>local</codePool>
+			<depends>
+                <Harapartners_Service/>
+            </depends>
+        </Harapartners_Rushcheckout>
+		
+		<Harapartners_SpeedTax>
+            <active>true</active>
+            <codePool>local</codePool>
+            <depends>
+                <Harapartners_Service/>
+            </depends>
+        </Harapartners_SpeedTax>
+		
+		<Harapartners_Unsubcentral>
+			<active>true</active>
+			<codePool>local</codePool>
+			<depends>
+                <Harapartners_Service/>
+            </depends>
+        </Harapartners_Unsubcentral>
+		
+    </modules>
+</config>

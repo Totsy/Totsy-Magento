@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+<!--
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the End User Software Agreement (EULA).
+ * It is also available through the world-wide-web at this URL:
+ * http://www.harapartners.com/license
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to eula@harapartners.com so we can send you a copy immediately.
+ * 
+ -->
+<config>
+    <modules>
+        <Harapartners_Dropshipfactory>
+            <version>1.0.0</version>
+        </Harapartners_Dropshipfactory>
+    </modules>
+    <global>
+        <helpers>
+            <dropshipfactory>
+            	<class>Harapartners_Dropshipfactory_Helper</class>
+            </dropshipfactory>
+        </helpers>
+		<blocks>
+			<dropshipfactory>
+				<class>Harapartners_Dropshipfactory_Block</class>
+			</dropshipfactory>
+		</blocks>
+		<models>
+            <dropshipfactory>
+                <class>Harapartners_Dropshipfactory_Model</class>
+            </dropshipfactory>
+        </models>
+    </global>
+	<admin>
+        <routers>
+            <dropshipfactory>
+                <use>admin</use>
+                <args>
+                    <module>Harapartners_Dropshipfactory</module>
+                    <frontName>dropshipfactory</frontName>
+                </args>
+            </dropshipfactory>
+        </routers>
+    </admin>
+    <adminhtml>
+		<menu>
+            <sales>
+				<children>
+					<dropshipfactory translate="title" module="dropshipfactory">
+		                <title>Drop Ship Factory</title>
+		                <sort_order>32</sort_order>
+						<children>
+							<dropshipgrid translate="title" module="dropshipfactory">
+								<title>Export Drop Ship data</title>
+								<sort_order>0</sort_order>
+								<action>dropshipfactory/adminhtml_dropship/index</action>
+							</dropshipgrid>
+							<importtracking translate="title" module="dropshipfactory">
+								<title>Import Tracking Number</title>
+								<sort_order>1</sort_order>
+								<action>dropshipfactory/adminhtml_dropship/showimportcsv</action>
+							</importtracking>
+						</children>
+		            </dropshipfactory>
+				</children>
+            </sales>
+        </menu>
+    </adminhtml>
+</config>

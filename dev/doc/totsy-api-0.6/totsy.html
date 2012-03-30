@@ -1,0 +1,1473 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Totsy REST API Specification</title><style type="text/css">
+                    body {
+                        font-family: sans-serif;
+                        font-size: 0.85em;
+                        margin: 2em 8em;
+                        background-color: #DCEDFA;
+                        color: #707070;
+                    }
+                    .methods {
+                        background-color: #eef;
+                        padding: 1em;
+                        background-color: #F7F7F7;
+                        -webkit-border-radius: 4px;
+                        -moz-border-radius: 4px;
+                        border-radius: 4px;
+                        -webkit-box-shadow: 1px 1px 10px 1px #999999;
+                        -moz-box-shadow: 1px 1px 10px 1px #999999;
+                        box-shadow: 1px 1px 10px 1px #999999;
+                    }
+                    h1 {
+                        background: url(logo-125x77.png) no-repeat left top;
+                        height: 70px;
+                        padding: 10px 0 0 130px;
+                        font-size: 2.5em;
+                    }
+                    h2 {
+                        border-bottom: 1px solid black;
+                        margin-top: 1em;
+                        margin-bottom: 0.5em;
+                        font-size: 2em;
+                        font-weight: normal;
+                       }
+                    h3 {
+                        color: #555;
+                        font-size: 1.75em;
+                        margin-top: 1.25em;
+                        margin-bottom: 0em;
+                        font-weight: normal;
+                    }
+                    h3 .resource-uri {
+                        font-size: smaller;
+                        margin-left: 12px;
+                        color: #999;
+                    }
+                    h4 {
+                        margin: 0em;
+                        padding: 0em;
+                        border-bottom: 2px solid white;
+                    }
+                    h6 {
+                        font-size: 1.1em;
+                        color: #99a;
+                        margin: 0.5em 0em 0.25em 0em;
+                    }
+                    a:link, a:visited, a:active {
+                        color: #ED1C25;
+                        text-decoration: none;
+                    }
+                    a:hover {
+                        text-decoration: underline;
+                    }
+                    dd {
+                        margin-left: 1em;
+                    }
+                    tt {
+                        font-size: 1.2em;
+                    }
+                    table {
+                        margin-bottom: 0.5em;
+                    }
+                    th {
+                        text-align: left;
+                        font-weight: normal;
+                        color: black;
+                        border-bottom: 1px solid black;
+                        padding: 3px 6px;
+                    }
+                    td {
+                        padding: 6px;
+                        vertical-align: top;
+                        background-color: f6f6ff;
+                        font-size: 0.85em;
+                    }
+                    td p {
+                        margin: 0px;
+                    }
+                    ul {
+                        padding-left: 1.75em;
+                    }
+                    p + ul, p + ol, p + dl {
+                        margin-top: 0em;
+                    }
+                    .optional {
+                        font-weight: normal;
+                        opacity: 0.75;
+                    }
+                </style></head><body><h1>Totsy REST API Specification</h1><p>
+    Version 0.6<br xmlns="http://research.sun.com/wadl/2006/10"></br>
+    Author: <a xmlns="http://research.sun.com/wadl/2006/10" href="mailto:tbhuvanendran@totsy.com">Tharsan Bhuvanendran &lt;tbhuvanendran@totsy.com&gt;</a>
+  </p><ul><li><a href="#resources">Resources</a><ul><li><a href="#idp5464">https://api.totsy.com/event</a><ul><li><a href="#idp192928">https://api.totsy.com/event/{event_id}</a><ul><li><a href="#idp201808">https://api.totsy.com/event/{event_id}/product</a></li></ul></li></ul></li><li><a href="#idp207936">https://api.totsy.com/product</a><ul><li><a href="#idp218504">https://api.totsy.com/product/{product_id}</a></li></ul></li><li><a href="#idp228560">https://api.totsy.com/auth</a><ul><li><a href="#idp235392">https://api.totsy.com/auth/{auth_token_id}</a></li></ul></li><li><a href="#idp238688">https://api.totsy.com/user</a><ul><li><a href="#idp244008">https://api.totsy.com/user/{user_id}</a><ul><li><a href="#idp252424">https://api.totsy.com/user/{user_id}/address</a></li><li><a href="#idp261504">https://api.totsy.com/user/{user_id}/order</a></li><li><a href="#idp282960">https://api.totsy.com/user/{user_id}/reward</a></li><li><a href="#idp291272">https://api.totsy.com/user/{user_id}/creditcard</a></li></ul></li></ul></li><li><a href="#idp299952">https://api.totsy.com/address</a><ul><li><a href="#idp301888">https://api.totsy.com/address/{address_id}</a></li></ul></li><li><a href="#idp311352">https://api.totsy.com/order</a><ul><li><a href="#idp313304">https://api.totsy.com/order/{order_id}</a></li></ul></li><li><a href="#idp328248">https://api.totsy.com/reward</a><ul><li><a href="#idp330168">https://api.totsy.com/reward/{reward_id}</a></li></ul></li><li><a href="#idp339904">https://api.totsy.com/creditcard</a><ul><li><a href="#idp341872">https://api.totsy.com/creditcard/{creditcard_id}</a></li></ul></li></ul></li><li><a href="#representations">Representations</a><ul><li><a href="#idp15600">Event Collection (application/json)</a></li><li><a href="#idp198504">Full Event Entity (application/json)</a></li><li><a href="#idp200832">Event Image (image/*)</a></li><li><a href="#idp203888">Product Collection (application/json)</a></li><li><a href="#idp214320">Product Collection (application/json)</a></li><li><a href="#idp224200">Full Product Entity (application/json)</a></li><li><a href="#idp227480">Product Image (image/*)</a></li><li><a href="#idp230552">Authorization Token Request (application/json)</a></li><li><a href="#idp232824">Authorization Token Entity (application/json)</a></li><li><a href="#idp240328">Partial User Entity (application/json)</a></li><li><a href="#idp242136">Full User Entity (application/json)</a></li><li><a href="#idp248064">Full User Entity (application/json)</a></li><li><a href="#idp250960">Partial User Entity (application/json)</a></li><li><a href="#idp254456">Address Collection (application/json)</a></li><li><a href="#idp258000">Partial Address Entity (application/json)</a></li><li><a href="#idp259912">Full Address Entity (application/json)</a></li><li><a href="#idp263224">Order Collection (application/json)</a></li><li><a href="#idp271224">Partial Order Entity (application/json)</a></li><li><a href="#idp274968">Full Order Entity (application/json)</a></li><li><a href="#idp279200">Full Order Entity (application/json)</a></li><li><a href="#idp284928">User Reward Collection (application/json)</a></li><li><a href="#idp288024">Partial Reward Entity (application/json)</a></li><li><a href="#idp289648">Full Reward Entity (application/json)</a></li><li><a href="#idp293216">Credit Card Collection (application/json)</a></li><li><a href="#idp296296">Partial Credit Card Entity (application/json)</a></li><li><a href="#idp298056">Full Credit Card Entity (application/json)</a></li><li><a href="#idp305600">Full Address Entity (application/json)</a></li><li><a href="#idp307936">Partial Address Entity (application/json)</a></li><li><a href="#idp309688">Full Address Entity (application/json)</a></li><li><a href="#idp317040">Full Order Entity (application/json)</a></li><li><a href="#idp321032">Partial Order Entity (application/json)</a></li><li><a href="#idp324376">Full Order Entity (application/json)</a></li><li><a href="#idp334080">Full Reward Entity (application/json)</a></li><li><a href="#idp336600">Partial Reward Entity (application/json)</a></li><li><a href="#idp338168">Full Reward Entity (application/json)</a></li><li><a href="#idp345720">Full Credit Card Entity (application/json)</a></li></ul></li></ul><h2 id="resources">Resources</h2><div class="resource"><h3 id="idp5464">Event<span class="resource-uri">/event<span class="optional">?department</span><span class="optional">&amp;category</span><span class="optional">&amp;age</span><span class="optional">&amp;when</span></span></h3><span class="resource-uri"></span><p>
+        An Event is a time-limited sale of zero or more Product items.
+      </p><h6>Methods</h6><div class="methods"><div class="method"><h4 id="idp6368">GET</h4><p>
+          Retrieve a collection of all active/current Event instances.
+        </p><h6>request query parameters</h6><table><tr><th>parameter</th><th>value</th><th>description</th></tr><tr><td><p><strong>department</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em><small> (repeating)</small></p></td><td><p>A comma-separated list of department names to filter events on.</p></td></tr><tr><td><p><strong>category</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em><small> (repeating)</small></p></td><td><p>A comma-separated list of category names to filter events on.</p></td></tr><tr><td><p><strong>age</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em><small> (repeating)</small></p></td><td><p>A comma-separated list of age names to filter events on.</p></td></tr><tr><td><p><strong>when</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em><small> (repeating)</small></p><p><em>One of:</em></p><ul><li><tt>past</tt></li><li><tt>current</tt></li><li><tt>upcoming</tt></li></ul></td><td><p>A comma-separated list of time period names to filter events on.</p></td></tr></table><h6>request header parameters</h6><table><tr><th>parameter</th><th>value</th><th>description</th></tr><tr><td><p><strong>Authorization</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em><small> (required)</small></p></td><td><p>
+        The authorization token granted to the client application.
+      </p></td></tr></table><h6>response header parameters</h6><table><tr><th>parameter</th><th>value</th><th>description</th></tr><tr><td><p><strong>Authorization</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em><small> (required)</small></p></td><td><p>
+        The authorization token granted to the client application.
+      </p></td></tr></table><p><em>available response representations:</em></p><ul><li><a href="#idp15600">Event Collection (application/json)</a></li></ul></div></div></div><div class="resource"><h3 id="idp192928">Event Entity<span class="resource-uri">/event/{event_id}<span class="optional">?size</span></span></h3><span class="resource-uri"></span><p>A single sale Event instance.</p><h6>resource-wide template parameters</h6><table><tr><th>parameter</th><th>value</th><th>description</th></tr><tr><td><p><strong>event_id</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em></p></td><td><p>The unique Event identifier.</p></td></tr></table><h6>Methods</h6><div class="methods"><div class="method"><h4 id="idp194496">GET</h4><h6>request query parameters</h6><table><tr><th>parameter</th><th>value</th><th>description</th></tr><tr><td><p><strong>size</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em></p><p><em>One of:</em></p><ul><li><tt>small</tt></li><li><tt>med</tt></li><li><tt>large</tt></li></ul></td><td><p>
+                The relative image size (relevant when expecting a
+                representation of type <code xmlns="http://research.sun.com/wadl/2006/10">image/*</code>).
+              </p></td></tr></table><h6>request header parameters</h6><table><tr><th>parameter</th><th>value</th><th>description</th></tr><tr><td><p><strong>Authorization</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em><small> (required)</small></p></td><td><p>
+        The authorization token granted to the client application.
+      </p></td></tr></table><h6>response header parameters</h6><table><tr><th>parameter</th><th>value</th><th>description</th></tr><tr><td><p><strong>Authorization</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em><small> (required)</small></p></td><td><p>
+        The authorization token granted to the client application.
+      </p></td></tr></table><p><em>available response representations:</em></p><ul><li><a href="#idp198504">Full Event Entity (application/json)</a></li><li><a href="#idp200832">Event Image (image/*)</a></li></ul></div></div></div><div class="resource"><h3 id="idp201808">Event Product Collection<span class="resource-uri">/event/{event_id}/product</span></h3><span class="resource-uri"></span><p>Products that are part of an Event.</p><h6>resource-wide template parameters</h6><table><tr><th>parameter</th><th>value</th><th>description</th></tr><tr><td><p><strong>event_id</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em></p></td><td><p>The unique Event identifier.</p></td></tr></table><h6>Methods</h6><div class="methods"><div class="method"><h4 id="idp202560">GET</h4><h6>request header parameters</h6><table><tr><th>parameter</th><th>value</th><th>description</th></tr><tr><td><p><strong>Authorization</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em><small> (required)</small></p></td><td><p>
+        The authorization token granted to the client application.
+      </p></td></tr></table><h6>response header parameters</h6><table><tr><th>parameter</th><th>value</th><th>description</th></tr><tr><td><p><strong>Authorization</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em><small> (required)</small></p></td><td><p>
+        The authorization token granted to the client application.
+      </p></td></tr></table><p><em>available response representations:</em></p><ul><li><a href="#idp203888">Product Collection (application/json)</a></li></ul></div></div></div><div class="resource"><h3 id="idp207936">Product<span class="resource-uri">/product<span class="optional">?department</span><span class="optional">&amp;category</span><span class="optional">&amp;age</span></span></h3><span class="resource-uri"></span><p>
+        A Product is a single item that is available for sale.
+      </p><h6>Methods</h6><div class="methods"><div class="method"><h4 id="idp208576">GET</h4><p>
+          Retrieve a collection of all Product instances.
+        </p><h6>request query parameters</h6><table><tr><th>parameter</th><th>value</th><th>description</th></tr><tr><td><p><strong>department</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em><small> (repeating)</small></p></td><td><p>A comma-separated list of department names to filter events on.</p></td></tr><tr><td><p><strong>category</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em><small> (repeating)</small></p></td><td><p>A comma-separated list of category names to filter events on.</p></td></tr><tr><td><p><strong>age</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em><small> (repeating)</small></p></td><td><p>A comma-separated list of age names to filter events on.</p></td></tr></table><h6>request header parameters</h6><table><tr><th>parameter</th><th>value</th><th>description</th></tr><tr><td><p><strong>Authorization</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em><small> (required)</small></p></td><td><p>
+        The authorization token granted to the client application.
+      </p></td></tr></table><h6>response header parameters</h6><table><tr><th>parameter</th><th>value</th><th>description</th></tr><tr><td><p><strong>Authorization</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em><small> (required)</small></p></td><td><p>
+        The authorization token granted to the client application.
+      </p></td></tr></table><p><em>available response representations:</em></p><ul><li><a href="#idp214320">Product Collection (application/json)</a></li></ul></div></div></div><div class="resource"><h3 id="idp218504">Product Entity<span class="resource-uri">/product/{product_id}<span class="optional">?size</span></span></h3><span class="resource-uri"></span><p>A single Product instance.</p><h6>resource-wide template parameters</h6><table><tr><th>parameter</th><th>value</th><th>description</th></tr><tr><td><p><strong>product_id</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em></p></td><td><p>The unique Product identifier.</p></td></tr></table><h6>Methods</h6><div class="methods"><div class="method"><h4 id="idp220272">GET</h4><h6>request query parameters</h6><table><tr><th>parameter</th><th>value</th><th>description</th></tr><tr><td><p><strong>size</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em></p><p><em>One of:</em></p><ul><li><tt>small</tt></li><li><tt>med</tt></li><li><tt>large</tt></li></ul></td><td><p>
+                The relative image size (relevant when expecting a
+                representation of type <code xmlns="http://research.sun.com/wadl/2006/10">image/*</code>).
+              </p></td></tr></table><h6>request header parameters</h6><table><tr><th>parameter</th><th>value</th><th>description</th></tr><tr><td><p><strong>Authorization</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em><small> (required)</small></p></td><td><p>
+        The authorization token granted to the client application.
+      </p></td></tr></table><h6>response header parameters</h6><table><tr><th>parameter</th><th>value</th><th>description</th></tr><tr><td><p><strong>Authorization</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em><small> (required)</small></p></td><td><p>
+        The authorization token granted to the client application.
+      </p></td></tr></table><p><em>available response representations:</em></p><ul><li><a href="#idp224200">Full Product Entity (application/json)</a></li><li><a href="#idp227480">Product Image (image/*)</a></li></ul></div></div></div><div class="resource"><h3 id="idp228560">Authorization Token<span class="resource-uri">/auth</span></h3><span class="resource-uri"></span><p>
+        An authorization token allows API clients to request sensitive
+        information on behalf of an existing user.
+      </p><h6>Methods</h6><div class="methods"><div class="method"><h4 id="idp229352">POST</h4><p>
+          Request a new Authorization Token on behalf of an existing system User.
+        </p><h6>request header parameters</h6><table><tr><th>parameter</th><th>value</th><th>description</th></tr><tr><td><p><strong>Authorization</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em><small> (required)</small></p></td><td><p>
+        The authorization token granted to the client application.
+      </p></td></tr></table><p><em>acceptable request representations:</em></p><ul><li><a href="#idp230552">Authorization Token Request (application/json)</a></li></ul><h6>response header parameters</h6><table><tr><th>parameter</th><th>value</th><th>description</th></tr><tr><td><p><strong>Authorization</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em><small> (required)</small></p></td><td><p>
+        The authorization token granted to the client application.
+      </p></td></tr></table><p><em>available response representations:</em></p><ul><li><a href="#idp232824">Authorization Token Entity (application/json)</a></li></ul><h6>response header parameters</h6><table><tr><th>parameter</th><th>value</th><th>description</th></tr><tr><td><p><strong>Authorization</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em><small> (required)</small></p></td><td><p>
+        The authorization token granted to the client application.
+      </p></td></tr></table></div></div></div><div class="resource"><h3 id="idp235392">Authorization Token Entity<span class="resource-uri">/auth/{auth_token_id}</span></h3><span class="resource-uri"></span><p>A single Authorization Token instance.</p><h6>resource-wide template parameters</h6><table><tr><th>parameter</th><th>value</th><th>description</th></tr><tr><td><p><strong>auth_token_id</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em></p></td><td><p>The unique Authorization Token identifier.</p></td></tr></table><h6>Methods</h6><div class="methods"><div class="method"><h4 id="idp237288">DELETE</h4><p>
+            Destroy an existing authorization token when it is no longer needed.
+          </p><h6>request header parameters</h6><table><tr><th>parameter</th><th>value</th><th>description</th></tr><tr><td><p><strong>Authorization</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em><small> (required)</small></p></td><td><p>
+        The authorization token granted to the client application.
+      </p></td></tr></table><h6>response header parameters</h6><table><tr><th>parameter</th><th>value</th><th>description</th></tr><tr><td><p><strong>Authorization</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em><small> (required)</small></p></td><td><p>
+        The authorization token granted to the client application.
+      </p></td></tr></table></div></div></div><div class="resource"><h3 id="idp238688">User<span class="resource-uri">/user</span></h3><span class="resource-uri"></span><p>
+        A system User represents an account that enables the holder to perform
+        certain activities, including purchasing Products.
+      </p><h6>Methods</h6><div class="methods"><div class="method"><h4 id="idp239480">POST</h4><p>Add a new User to the system.</p><h6>request header parameters</h6><table><tr><th>parameter</th><th>value</th><th>description</th></tr><tr><td><p><strong>Authorization</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em><small> (required)</small></p></td><td><p>
+        The authorization token granted to the client application.
+      </p></td></tr></table><p><em>acceptable request representations:</em></p><ul><li><a href="#idp240328">Partial User Entity (application/json)</a></li></ul><h6>response header parameters</h6><table><tr><th>parameter</th><th>value</th><th>description</th></tr><tr><td><p><strong>Authorization</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em><small> (required)</small></p></td><td><p>
+        The authorization token granted to the client application.
+      </p></td></tr></table><p><em>available response representations:</em></p><ul><li><a href="#idp242136">Full User Entity (application/json)</a></li></ul></div></div></div><div class="resource"><h3 id="idp244008">User Entity<span class="resource-uri">/user/{user_id}</span></h3><span class="resource-uri"></span><p>A single system User instance.</p><h6>resource-wide template parameters</h6><table><tr><th>parameter</th><th>value</th><th>description</th></tr><tr><td><p><strong>user_id</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em></p></td><td><p>The unique User identifier.</p></td></tr></table><h6>Methods</h6><div class="methods"><div class="method"><h4 id="idp246824">GET</h4><p>
+            Retrieve a single User entity.
+          </p><h6>request query parameters</h6><table><tr><th>parameter</th><th>value</th><th>description</th></tr><tr><td><p><strong>auth_token</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em><small> (required)</small></p></td><td><p>
+            The authorization token granted to the client to perform sensitive
+            operations on behalf of a User.
+          </p></td></tr></table><h6>request header parameters</h6><table><tr><th>parameter</th><th>value</th><th>description</th></tr><tr><td><p><strong>Authorization</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em><small> (required)</small></p></td><td><p>
+        The authorization token granted to the client application.
+      </p></td></tr></table><h6>response header parameters</h6><table><tr><th>parameter</th><th>value</th><th>description</th></tr><tr><td><p><strong>Authorization</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em><small> (required)</small></p></td><td><p>
+        The authorization token granted to the client application.
+      </p></td></tr></table><p><em>available response representations:</em></p><ul><li><a href="#idp248064">Full User Entity (application/json)</a></li></ul></div><div class="method"><h4 id="idp250192">PUT</h4><p>
+            Update the record of an existing system User.
+          </p><h6>request query parameters</h6><table><tr><th>parameter</th><th>value</th><th>description</th></tr><tr><td><p><strong>auth_token</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em><small> (required)</small></p></td><td><p>
+            The authorization token granted to the client to perform sensitive
+            operations on behalf of a User.
+          </p></td></tr></table><h6>request header parameters</h6><table><tr><th>parameter</th><th>value</th><th>description</th></tr><tr><td><p><strong>Authorization</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em><small> (required)</small></p></td><td><p>
+        The authorization token granted to the client application.
+      </p></td></tr></table><p><em>acceptable request representations:</em></p><ul><li><a href="#idp250960">Partial User Entity (application/json)</a></li></ul></div></div></div><div class="resource"><h3 id="idp252424">User Addresses<span class="resource-uri">/user/{user_id}/address</span></h3><span class="resource-uri"></span><p>
+            The collection of all Address instances associated with a system User.
+          </p><h6>resource-wide template parameters</h6><table><tr><th>parameter</th><th>value</th><th>description</th></tr><tr><td><p><strong>user_id</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em></p></td><td><p>The unique User identifier.</p></td></tr></table><h6>Methods</h6><div class="methods"><div class="method"><h4 id="idp253136">GET</h4><p>
+              Retrieve all Addresses associated with a system User.
+            </p><h6>request query parameters</h6><table><tr><th>parameter</th><th>value</th><th>description</th></tr><tr><td><p><strong>auth_token</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em><small> (required)</small></p></td><td><p>
+            The authorization token granted to the client to perform sensitive
+            operations on behalf of a User.
+          </p></td></tr></table><h6>request header parameters</h6><table><tr><th>parameter</th><th>value</th><th>description</th></tr><tr><td><p><strong>Authorization</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em><small> (required)</small></p></td><td><p>
+        The authorization token granted to the client application.
+      </p></td></tr></table><h6>response header parameters</h6><table><tr><th>parameter</th><th>value</th><th>description</th></tr><tr><td><p><strong>Authorization</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em><small> (required)</small></p></td><td><p>
+        The authorization token granted to the client application.
+      </p></td></tr></table><p><em>available response representations:</em></p><ul><li><a href="#idp254456">Address Collection (application/json)</a></li></ul></div><div class="method"><h4 id="idp257120">POST</h4><p>
+              Add a new Address to an existing system User.
+           </p><h6>request query parameters</h6><table><tr><th>parameter</th><th>value</th><th>description</th></tr><tr><td><p><strong>auth_token</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em><small> (required)</small></p></td><td><p>
+            The authorization token granted to the client to perform sensitive
+            operations on behalf of a User.
+          </p></td></tr></table><h6>request header parameters</h6><table><tr><th>parameter</th><th>value</th><th>description</th></tr><tr><td><p><strong>Authorization</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em><small> (required)</small></p></td><td><p>
+        The authorization token granted to the client application.
+      </p></td></tr></table><p><em>acceptable request representations:</em></p><ul><li><a href="#idp258000">Partial Address Entity (application/json)</a></li></ul><h6>response header parameters</h6><table><tr><th>parameter</th><th>value</th><th>description</th></tr><tr><td><p><strong>Authorization</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em><small> (required)</small></p></td><td><p>
+        The authorization token granted to the client application.
+      </p></td></tr></table><p><em>available response representations:</em></p><ul><li><a href="#idp259912">Full Address Entity (application/json)</a></li></ul></div></div></div><div class="resource"><h3 id="idp261504">User Orders<span class="resource-uri">/user/{user_id}/order</span></h3><span class="resource-uri"></span><p>
+            The collection of all orders that a user has ever placed.
+          </p><h6>resource-wide template parameters</h6><table><tr><th>parameter</th><th>value</th><th>description</th></tr><tr><td><p><strong>user_id</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em></p></td><td><p>The unique User identifier.</p></td></tr></table><h6>Methods</h6><div class="methods"><div class="method"><h4 id="idp262176">GET</h4><p>
+              Retrieve the collection of all orders that a user has ever placed.
+            </p><h6>response header parameters</h6><table><tr><th>parameter</th><th>value</th><th>description</th></tr><tr><td><p><strong>Authorization</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em><small> (required)</small></p></td><td><p>
+        The authorization token granted to the client application.
+      </p></td></tr></table><p><em>available response representations:</em></p><ul><li><a href="#idp263224">Order Collection (application/json)</a></li></ul></div><div class="method"><h4 id="idp269728">POST</h4><p>
+              Submit a new Order for this user. An order is intially created
+              with one or more product items, and is assigned an expiration date.
+              Then an order can be continually updated with more items, which
+              updates the expiration date. Once the expiration date passes,
+              the incomplete order is destroyed and will cease to exist.<br xmlns="http://research.sun.com/wadl/2006/10"></br>
+              Finally, once both payment and addresses information is submitted,
+              the order is considered complete, at which point is no longer
+              contains an expiry date.
+            </p><h6>request query parameters</h6><table><tr><th>parameter</th><th>value</th><th>description</th></tr><tr><td><p><strong>auth_token</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em><small> (required)</small></p></td><td><p>
+            The authorization token granted to the client to perform sensitive
+            operations on behalf of a User.
+          </p></td></tr></table><h6>request header parameters</h6><table><tr><th>parameter</th><th>value</th><th>description</th></tr><tr><td><p><strong>Authorization</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em><small> (required)</small></p></td><td><p>
+        The authorization token granted to the client application.
+      </p></td></tr></table><p><em>acceptable request representations:</em></p><ul><li><a href="#idp271224">Partial Order Entity (application/json)</a></li></ul><h6>response header parameters</h6><table><tr><th>parameter</th><th>value</th><th>description</th></tr><tr><td><p><strong>Authorization</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em><small> (required)</small></p></td><td><p>
+        The authorization token granted to the client application.
+      </p></td></tr></table><p><em>available response representations:</em></p><ul><li><a href="#idp274968">Full Order Entity (application/json)</a></li></ul><h6>response header parameters</h6><table><tr><th>parameter</th><th>value</th><th>description</th></tr><tr><td><p><strong>Authorization</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em><small> (required)</small></p></td><td><p>
+        The authorization token granted to the client application.
+      </p></td></tr></table><p><em>available response representations:</em></p><ul><li><a href="#idp279200">Full Order Entity (application/json)</a></li></ul></div></div></div><div class="resource"><h3 id="idp282960">User Rewards<span class="resource-uri">/user/{user_id}/reward</span></h3><span class="resource-uri"></span><p>
+            The collection of all Rewards currently associated with a system User.
+          </p><h6>resource-wide template parameters</h6><table><tr><th>parameter</th><th>value</th><th>description</th></tr><tr><td><p><strong>user_id</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em></p></td><td><p>The unique User identifier.</p></td></tr></table><h6>Methods</h6><div class="methods"><div class="method"><h4 id="idp283648">GET</h4><p>
+              Retrieve a collection of all account rewards.
+            </p><h6>request query parameters</h6><table><tr><th>parameter</th><th>value</th><th>description</th></tr><tr><td><p><strong>auth_token</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em><small> (required)</small></p></td><td><p>
+            The authorization token granted to the client to perform sensitive
+            operations on behalf of a User.
+          </p></td></tr></table><h6>request header parameters</h6><table><tr><th>parameter</th><th>value</th><th>description</th></tr><tr><td><p><strong>Authorization</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em><small> (required)</small></p></td><td><p>
+        The authorization token granted to the client application.
+      </p></td></tr></table><h6>response header parameters</h6><table><tr><th>parameter</th><th>value</th><th>description</th></tr><tr><td><p><strong>Authorization</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em><small> (required)</small></p></td><td><p>
+        The authorization token granted to the client application.
+      </p></td></tr></table><p><em>available response representations:</em></p><ul><li><a href="#idp284928">User Reward Collection (application/json)</a></li></ul></div><div class="method"><h4 id="idp287088">POST</h4><p>
+              Add a new User reward to the system, which the user may apply to a
+              future purchase.
+            </p><h6>request query parameters</h6><table><tr><th>parameter</th><th>value</th><th>description</th></tr><tr><td><p><strong>auth_token</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em><small> (required)</small></p></td><td><p>
+            The authorization token granted to the client to perform sensitive
+            operations on behalf of a User.
+          </p></td></tr></table><h6>request header parameters</h6><table><tr><th>parameter</th><th>value</th><th>description</th></tr><tr><td><p><strong>Authorization</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em><small> (required)</small></p></td><td><p>
+        The authorization token granted to the client application.
+      </p></td></tr></table><p><em>acceptable request representations:</em></p><ul><li><a href="#idp288024">Partial Reward Entity (application/json)</a></li></ul><h6>response header parameters</h6><table><tr><th>parameter</th><th>value</th><th>description</th></tr><tr><td><p><strong>Authorization</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em><small> (required)</small></p></td><td><p>
+        The authorization token granted to the client application.
+      </p></td></tr></table><p><em>available response representations:</em></p><ul><li><a href="#idp289648">Full Reward Entity (application/json)</a></li></ul></div></div></div><div class="resource"><h3 id="idp291272">User Credit Cards<span class="resource-uri">/user/{user_id}/creditcard</span></h3><span class="resource-uri"></span><p>
+            The collection of all Credit Cards saved for a system User.
+          </p><h6>resource-wide template parameters</h6><table><tr><th>parameter</th><th>value</th><th>description</th></tr><tr><td><p><strong>user_id</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em></p></td><td><p>The unique User identifier.</p></td></tr></table><h6>Methods</h6><div class="methods"><div class="method"><h4 id="idp291968">GET</h4><p>
+              Retrieve a collection of all user Credit Cards.
+            </p><h6>request query parameters</h6><table><tr><th>parameter</th><th>value</th><th>description</th></tr><tr><td><p><strong>auth_token</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em><small> (required)</small></p></td><td><p>
+            The authorization token granted to the client to perform sensitive
+            operations on behalf of a User.
+          </p></td></tr></table><h6>request header parameters</h6><table><tr><th>parameter</th><th>value</th><th>description</th></tr><tr><td><p><strong>Authorization</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em><small> (required)</small></p></td><td><p>
+        The authorization token granted to the client application.
+      </p></td></tr></table><h6>response header parameters</h6><table><tr><th>parameter</th><th>value</th><th>description</th></tr><tr><td><p><strong>Authorization</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em><small> (required)</small></p></td><td><p>
+        The authorization token granted to the client application.
+      </p></td></tr></table><p><em>available response representations:</em></p><ul><li><a href="#idp293216">Credit Card Collection (application/json)</a></li></ul></div><div class="method"><h4 id="idp295416">POST</h4><p>
+              Add a new User Credit Card to the system.
+            </p><h6>request query parameters</h6><table><tr><th>parameter</th><th>value</th><th>description</th></tr><tr><td><p><strong>auth_token</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em><small> (required)</small></p></td><td><p>
+            The authorization token granted to the client to perform sensitive
+            operations on behalf of a User.
+          </p></td></tr></table><h6>request header parameters</h6><table><tr><th>parameter</th><th>value</th><th>description</th></tr><tr><td><p><strong>Authorization</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em><small> (required)</small></p></td><td><p>
+        The authorization token granted to the client application.
+      </p></td></tr></table><p><em>acceptable request representations:</em></p><ul><li><a href="#idp296296">Partial Credit Card Entity (application/json)</a></li></ul><h6>response header parameters</h6><table><tr><th>parameter</th><th>value</th><th>description</th></tr><tr><td><p><strong>Authorization</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em><small> (required)</small></p></td><td><p>
+        The authorization token granted to the client application.
+      </p></td></tr></table><p><em>available response representations:</em></p><ul><li><a href="#idp298056">Full Credit Card Entity (application/json)</a></li></ul></div></div></div><div class="resource"><h3 id="idp299952">Address<span class="resource-uri">/address</span></h3><span class="resource-uri"></span><p>
+        An Address represents a physical real-world location that is used to
+        ship products to, or as a billing address.
+      </p><h6>Methods</h6><div class="methods"></div></div><div class="resource"><h3 id="idp301888">Address Entity<span class="resource-uri">/address/{address_id}</span></h3><span class="resource-uri"></span><h6>resource-wide template parameters</h6><table><tr><th>parameter</th><th>value</th><th>description</th></tr><tr><td><p><strong>address_id</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em></p></td><td><p>The unique address identifier.</p></td></tr></table><h6>Methods</h6><div class="methods"><div class="method"><h4 id="idp303488">DELETE</h4><p>Delete an existing Address.</p><h6>request query parameters</h6><table><tr><th>parameter</th><th>value</th><th>description</th></tr><tr><td><p><strong>auth_token</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em><small> (required)</small></p></td><td><p>
+          The authorization token granted to the client to perform sensitive
+          operations on behalf of a User.
+        </p></td></tr></table><h6>request header parameters</h6><table><tr><th>parameter</th><th>value</th><th>description</th></tr><tr><td><p><strong>Authorization</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em><small> (required)</small></p></td><td><p>
+        The authorization token granted to the client application.
+      </p></td></tr></table><h6>response header parameters</h6><table><tr><th>parameter</th><th>value</th><th>description</th></tr><tr><td><p><strong>Authorization</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em><small> (required)</small></p></td><td><p>
+        The authorization token granted to the client application.
+      </p></td></tr></table></div><div class="method"><h4 id="idp304472">GET</h4><p>Retrieve a single Address instance.</p><h6>request query parameters</h6><table><tr><th>parameter</th><th>value</th><th>description</th></tr><tr><td><p><strong>auth_token</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em><small> (required)</small></p></td><td><p>
+          The authorization token granted to the client to perform sensitive
+          operations on behalf of a User.
+        </p></td></tr></table><h6>request header parameters</h6><table><tr><th>parameter</th><th>value</th><th>description</th></tr><tr><td><p><strong>Authorization</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em><small> (required)</small></p></td><td><p>
+        The authorization token granted to the client application.
+      </p></td></tr></table><h6>response header parameters</h6><table><tr><th>parameter</th><th>value</th><th>description</th></tr><tr><td><p><strong>Authorization</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em><small> (required)</small></p></td><td><p>
+        The authorization token granted to the client application.
+      </p></td></tr></table><p><em>available response representations:</em></p><ul><li><a href="#idp305600">Full Address Entity (application/json)</a></li></ul></div><div class="method"><h4 id="idp307144">PUT</h4><p>Update the record of an existing Address instance.</p><h6>request query parameters</h6><table><tr><th>parameter</th><th>value</th><th>description</th></tr><tr><td><p><strong>auth_token</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em><small> (required)</small></p></td><td><p>
+          The authorization token granted to the client to perform sensitive
+          operations on behalf of a User.
+        </p></td></tr></table><h6>request header parameters</h6><table><tr><th>parameter</th><th>value</th><th>description</th></tr><tr><td><p><strong>Authorization</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em><small> (required)</small></p></td><td><p>
+        The authorization token granted to the client application.
+      </p></td></tr></table><p><em>acceptable request representations:</em></p><ul><li><a href="#idp307936">Partial Address Entity (application/json)</a></li></ul><h6>response header parameters</h6><table><tr><th>parameter</th><th>value</th><th>description</th></tr><tr><td><p><strong>Authorization</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em><small> (required)</small></p></td><td><p>
+        The authorization token granted to the client application.
+      </p></td></tr></table><p><em>available response representations:</em></p><ul><li><a href="#idp309688">Full Address Entity (application/json)</a></li></ul></div></div></div><div class="resource"><h3 id="idp311352">Order<span class="resource-uri">/order</span></h3><span class="resource-uri"></span><p>
+        An Order is a collection of Product entities and corresponding quantities
+        that a User purchases.
+      </p><h6>Methods</h6><div class="methods"></div></div><div class="resource"><h3 id="idp313304">Order Entity<span class="resource-uri">/order/{order_id}</span></h3><span class="resource-uri"></span><p>A single Order instance.</p><h6>resource-wide template parameters</h6><table><tr><th>parameter</th><th>value</th><th>description</th></tr><tr><td><p><strong>order_id</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em></p></td><td><p>The unique Order identifier.</p></td></tr></table><h6>Methods</h6><div class="methods"><div class="method"><h4 id="idp314968">DELETE</h4><p>Delete an existing Order.</p><h6>request query parameters</h6><table><tr><th>parameter</th><th>value</th><th>description</th></tr><tr><td><p><strong>auth_token</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em><small> (required)</small></p></td><td><p>
+          The authorization token granted to the client to perform sensitive
+          operations on behalf of a User.
+        </p></td></tr></table><h6>request header parameters</h6><table><tr><th>parameter</th><th>value</th><th>description</th></tr><tr><td><p><strong>Authorization</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em><small> (required)</small></p></td><td><p>
+        The authorization token granted to the client application.
+      </p></td></tr></table><h6>response header parameters</h6><table><tr><th>parameter</th><th>value</th><th>description</th></tr><tr><td><p><strong>Authorization</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em><small> (required)</small></p></td><td><p>
+        The authorization token granted to the client application.
+      </p></td></tr></table></div><div class="method"><h4 id="idp315984">GET</h4><p>
+            Retrieve a single Order entity instance.
+          </p><h6>response header parameters</h6><table><tr><th>parameter</th><th>value</th><th>description</th></tr><tr><td><p><strong>Authorization</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em><small> (required)</small></p></td><td><p>
+        The authorization token granted to the client application.
+      </p></td></tr></table><p><em>available response representations:</em></p><ul><li><a href="#idp317040">Full Order Entity (application/json)</a></li></ul></div><div class="method"><h4 id="idp320656">PUT</h4><h6>request query parameters</h6><table><tr><th>parameter</th><th>value</th><th>description</th></tr><tr><td><p><strong>auth_token</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em><small> (required)</small></p></td><td><p>
+          The authorization token granted to the client to perform sensitive
+          operations on behalf of a User.
+        </p></td></tr></table><h6>request header parameters</h6><table><tr><th>parameter</th><th>value</th><th>description</th></tr><tr><td><p><strong>Authorization</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em><small> (required)</small></p></td><td><p>
+        The authorization token granted to the client application.
+      </p></td></tr></table><p><em>acceptable request representations:</em></p><ul><li><a href="#idp321032">Partial Order Entity (application/json)</a></li></ul><h6>response header parameters</h6><table><tr><th>parameter</th><th>value</th><th>description</th></tr><tr><td><p><strong>Authorization</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em><small> (required)</small></p></td><td><p>
+        The authorization token granted to the client application.
+      </p></td></tr></table><p><em>available response representations:</em></p><ul><li><a href="#idp324376">Full Order Entity (application/json)</a></li></ul></div></div></div><div class="resource"><h3 id="idp328248">Reward<span class="resource-uri">/reward</span></h3><span class="resource-uri"></span><p>
+        The Reward is a positive balance that may be applied to a purchase one
+        time only.
+      </p><h6>Methods</h6><div class="methods"></div></div><div class="resource"><h3 id="idp330168">Reward Entity<span class="resource-uri">/reward/{reward_id}</span></h3><span class="resource-uri"></span><p>
+          A single Reward Entity instance.
+        </p><h6>resource-wide template parameters</h6><table><tr><th>parameter</th><th>value</th><th>description</th></tr><tr><td><p><strong>reward_id</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em></p></td><td><p>The unique Reward identifier.</p></td></tr></table><h6>Methods</h6><div class="methods"><div class="method"><h4 id="idp331896">DELETE</h4><p>Delete an existing Reward.</p><h6>request query parameters</h6><table><tr><th>parameter</th><th>value</th><th>description</th></tr><tr><td><p><strong>auth_token</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em><small> (required)</small></p></td><td><p>
+          The authorization token granted to the client to perform sensitive
+          operations on behalf of a User.
+        </p></td></tr></table><h6>request header parameters</h6><table><tr><th>parameter</th><th>value</th><th>description</th></tr><tr><td><p><strong>Authorization</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em><small> (required)</small></p></td><td><p>
+        The authorization token granted to the client application.
+      </p></td></tr></table><h6>response header parameters</h6><table><tr><th>parameter</th><th>value</th><th>description</th></tr><tr><td><p><strong>Authorization</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em><small> (required)</small></p></td><td><p>
+        The authorization token granted to the client application.
+      </p></td></tr></table></div><div class="method"><h4 id="idp332880">GET</h4><p>
+            Retrieve a single Reward Entity instance.
+          </p><h6>request query parameters</h6><table><tr><th>parameter</th><th>value</th><th>description</th></tr><tr><td><p><strong>auth_token</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em><small> (required)</small></p></td><td><p>
+          The authorization token granted to the client to perform sensitive
+          operations on behalf of a User.
+        </p></td></tr></table><h6>request header parameters</h6><table><tr><th>parameter</th><th>value</th><th>description</th></tr><tr><td><p><strong>Authorization</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em><small> (required)</small></p></td><td><p>
+        The authorization token granted to the client application.
+      </p></td></tr></table><h6>response header parameters</h6><table><tr><th>parameter</th><th>value</th><th>description</th></tr><tr><td><p><strong>Authorization</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em><small> (required)</small></p></td><td><p>
+        The authorization token granted to the client application.
+      </p></td></tr></table><p><em>available response representations:</em></p><ul><li><a href="#idp334080">Full Reward Entity (application/json)</a></li></ul></div><div class="method"><h4 id="idp335768">PUT</h4><p>
+            Update the record of an existing Reward.
+          </p><h6>request query parameters</h6><table><tr><th>parameter</th><th>value</th><th>description</th></tr><tr><td><p><strong>auth_token</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em><small> (required)</small></p></td><td><p>
+          The authorization token granted to the client to perform sensitive
+          operations on behalf of a User.
+        </p></td></tr></table><h6>request header parameters</h6><table><tr><th>parameter</th><th>value</th><th>description</th></tr><tr><td><p><strong>Authorization</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em><small> (required)</small></p></td><td><p>
+        The authorization token granted to the client application.
+      </p></td></tr></table><p><em>acceptable request representations:</em></p><ul><li><a href="#idp336600">Partial Reward Entity (application/json)</a></li></ul><h6>response header parameters</h6><table><tr><th>parameter</th><th>value</th><th>description</th></tr><tr><td><p><strong>Authorization</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em><small> (required)</small></p></td><td><p>
+        The authorization token granted to the client application.
+      </p></td></tr></table><p><em>available response representations:</em></p><ul><li><a href="#idp338168">Full Reward Entity (application/json)</a></li></ul></div></div></div><div class="resource"><h3 id="idp339904">Credit Card<span class="resource-uri">/creditcard</span></h3><span class="resource-uri"></span><p>
+        A single Credit Card whose information is saved by the system for the user
+        for future purchases.
+      </p><h6>Methods</h6><div class="methods"></div></div><div class="resource"><h3 id="idp341872">Credit Card Entity<span class="resource-uri">/creditcard/{creditcard_id}</span></h3><span class="resource-uri"></span><p>
+          A single Credit Card Entity instance.
+        </p><h6>resource-wide template parameters</h6><table><tr><th>parameter</th><th>value</th><th>description</th></tr><tr><td><p><strong>creditcard_id</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em></p></td><td><p>The unique Credit Card identifier.</p></td></tr></table><h6>Methods</h6><div class="methods"><div class="method"><h4 id="idp343520">DELETE</h4><p>Delete an existing Credit Card.</p><h6>request query parameters</h6><table><tr><th>parameter</th><th>value</th><th>description</th></tr><tr><td><p><strong>auth_token</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em><small> (required)</small></p></td><td><p>
+          The authorization token granted to the client to perform sensitive
+          operations on behalf of a User.
+        </p></td></tr></table><h6>request header parameters</h6><table><tr><th>parameter</th><th>value</th><th>description</th></tr><tr><td><p><strong>Authorization</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em><small> (required)</small></p></td><td><p>
+        The authorization token granted to the client application.
+      </p></td></tr></table><h6>response header parameters</h6><table><tr><th>parameter</th><th>value</th><th>description</th></tr><tr><td><p><strong>Authorization</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em><small> (required)</small></p></td><td><p>
+        The authorization token granted to the client application.
+      </p></td></tr></table></div><div class="method"><h4 id="idp344544">GET</h4><p>
+            Retrieve a single Credit Card Entity instance.
+          </p><h6>request query parameters</h6><table><tr><th>parameter</th><th>value</th><th>description</th></tr><tr><td><p><strong>auth_token</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em><small> (required)</small></p></td><td><p>
+          The authorization token granted to the client to perform sensitive
+          operations on behalf of a User.
+        </p></td></tr></table><h6>request header parameters</h6><table><tr><th>parameter</th><th>value</th><th>description</th></tr><tr><td><p><strong>Authorization</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em><small> (required)</small></p></td><td><p>
+        The authorization token granted to the client application.
+      </p></td></tr></table><h6>response header parameters</h6><table><tr><th>parameter</th><th>value</th><th>description</th></tr><tr><td><p><strong>Authorization</strong></p></td><td><p><em><a href="http://www.w3.org/TR/xmlschema-2/#string">string</a></em><small> (required)</small></p></td><td><p>
+        The authorization token granted to the client application.
+      </p></td></tr></table><p><em>available response representations:</em></p><ul><li><a href="#idp345720">Full Credit Card Entity (application/json)</a></li></ul></div></div></div><h2 id="representations">Representations</h2><h3 id="idp15600">Event Collection (application/json)</h3><p>
+              <pre xmlns="http://research.sun.com/wadl/2006/10">
+              [
+                {
+                  "name": "...",
+                  "blurb": "...",
+                  "start": "2011-12-16 00:00:00",
+                  "end": "2011-12-19 18:00:00",
+                  "links": [
+                    {
+                      "rel": "http://rel.totsy.com/product",
+                      "href": "https://api.totsy.com/product/46684"
+                    },
+                    {
+                      "rel": "http://rel.totsy.com/product",
+                      "href": "https://api.totsy.com/product/9078976"
+                    },
+                    {
+                      "rel": "self",
+                      "href": "https://api.totsy.com/event/36537566"
+                    }
+                  ],
+                  "enabled": true
+                },
+                {
+                  "name": "...",
+                  "blurb": "...",
+                  "start": "2011-12-16 00:00:00",
+                  "end": "2011-12-19 18:00:00",
+                  "links": [
+                    {
+                      "rel": "http://rel.totsy.com/product",
+                      "href": "https://api.totsy.com/product/436346275"
+                    },
+                    {
+                      "rel": "http://rel.totsy.com/product",
+                      "href": "https://api.totsy.com/product/2423442"
+                    },
+                    {
+                      "rel": "self",
+                      "href": "https://api.totsy.com/event/4626546525"
+                    }
+                  ],
+                  "enabled": true
+                }
+              ]
+              </pre>
+            </p><h3 id="idp198504">Full Event Entity (application/json)</h3><p>
+                <pre xmlns="http://research.sun.com/wadl/2006/10">
+                {
+                  "name": "...",
+                  "blurb": "...",
+                  "start": "2011-12-16 00:00:00",
+                  "end": "2011-12-19 18:00:00",
+                  "links": [
+                    {
+                      "rel": "http://rel.totsy.com/product",
+                      "href": "https://api.totsy.com/product/4264323"
+                    },
+                    {
+                      "rel": "http://rel.totsy.com/product",
+                      "href": "https://api.totsy.com/product/4267689874"
+                    }
+                  ],
+                  "enabled": true
+                }
+                </pre>
+              </p><h3 id="idp200832">Event Image (image/*)</h3><h3 id="idp203888">Product Collection (application/json)</h3><p>
+                  <pre xmlns="http://research.sun.com/wadl/2006/10">
+                  [
+                    {
+                      "name": "...",
+                      "description": "...",
+                      "age": "...",
+                      "category": "...",
+                      "color": "...",
+                      "created": "2011-12-16 00:00:00",
+                      "msrp": 30.5,
+                      "percent_discount": 60,
+                      "weight": 11.2,
+                      "sku": "KIW-B45-DFC-BD0",
+                      "quantity": 18,
+                      "vendor": "...",
+                      "vendor_style": "...",
+                      "enabled": true,
+                      "links": [
+                        {
+                          "rel": "http://rel.totsy.com/event",
+                          "href": "https://api.totsy.com/event/65475354"
+                        }
+                      ]
+                    },
+                    {
+                      "name": "...",
+                      "description": "...",
+                      "age": "...",
+                      "category": "...",
+                      "color": "...",
+                      "created": "2011-12-16 00:00:00",
+                      "msrp": 30.5,
+                      "percent_discount": 60,
+                      "weight": 11.2,
+                      "sku": "KIW-B45-DFC-BD0",
+                      "quantity": 18,
+                      "vendor": "...",
+                      "vendor_style": "...",
+                      "enabled": true,
+                      "links": [
+                        {
+                          "rel": "http://rel.totsy.com/event",
+                          "href": "https://api.totsy.com/event/8485646"
+                        }
+                      ]
+                    }
+                  ]
+                  </pre>
+                </p><h3 id="idp214320">Product Collection (application/json)</h3><p>
+              <pre xmlns="http://research.sun.com/wadl/2006/10">
+              [
+                {
+                  "name": "...",
+                  "description": "...",
+                  "age": [
+                    "0_6m",
+                    "6_24m"
+                  ],
+                  "category": [
+                    "one",
+                    "two"
+                  ],
+                  "department": [
+                    "boys",
+                    "girls",
+                    "shoes"
+                  ],
+                  "color": [
+                    "blue",
+                    "yellow"
+                  ],
+                  "vendor": [
+                    "...",
+                    "..."
+                  ],
+                  "vendor_style": "...",
+                  "created": "2011-12-16 00:00:00",
+                  "msrp": 30.5,
+                  "percent_discount": 60,
+                  "weight": 11.2,
+                  "sku": "KIW-B45-DFC-BD0",
+                  "featured": true,
+                  "hot": false,
+                  "enabled": true,
+                  "links": [
+                    {
+                      "rel": "http://rel.totsy.com/event",
+                      "href": "https://api.totsy.com/event/65475354"
+                    }
+                  ]
+                },
+                {
+                  "name": "...",
+                  "description": "...",
+                  "age": [
+                    "0_6m",
+                    "6_24m"
+                  ],
+                  "category": [
+                    "one",
+                    "two"
+                  ],
+                  "department": [
+                    "boys",
+                    "girls",
+                    "shoes"
+                  ],
+                  "color": [
+                    "blue",
+                    "yellow"
+                  ],
+                  "vendor": [
+                    "...",
+                    "..."
+                  ],
+                  "vendor_style": "...",
+                  "created": "2011-12-16 00:00:00",
+                  "msrp": 30.5,
+                  "percent_discount": 60,
+                  "weight": 11.2,
+                  "sku": "KIW-B45-DFC-BD0",
+                  "featured": true,
+                  "hot": false,
+                  "enabled": true,
+                  "links": [
+                    {
+                      "rel": "http://rel.totsy.com/event",
+                      "href": "https://api.totsy.com/event/8485646"
+                    }
+                  ]
+                }
+              ]
+              </pre>
+            </p><h3 id="idp224200">Full Product Entity (application/json)</h3><p>
+                <pre xmlns="http://research.sun.com/wadl/2006/10">
+                {
+                  "name": "...",
+                  "description": "...",
+                  "age": [
+                    "0_6m",
+                    "6_24m"
+                  ],
+                  "category": [
+                    "one",
+                    "two"
+                  ],
+                  "department": [
+                    "boys",
+                    "girls",
+                    "shoes"
+                  ],
+                  "color": [
+                    "blue",
+                    "yellow"
+                  ],
+                  "vendor": [
+                    "...",
+                    "..."
+                  ],
+                  "vendor_style": "...",
+                  "created": "2011-12-16 00:00:00",
+                  "msrp": 30.5,
+                  "percent_discount": 60,
+                  "weight": 11.2,
+                  "sku": "KIW-B45-DFC-BD0",
+                  "featured": true,
+                  "hot": false,
+                  "enabled": true,
+                  "links": [
+                    {
+                      "rel": "http://rel.totsy.com/event",
+                      "href": "https://api.totsy.com/event/8485646"
+                    }
+                  ]
+                }
+                </pre>
+              </p><h3 id="idp227480">Product Image (image/*)</h3><h3 id="idp230552">Authorization Token Request (application/json)</h3><p>
+              <pre xmlns="http://research.sun.com/wadl/2006/10">
+              {
+                "email": "...",
+                "password": "..."
+              }
+              </pre>
+            </p><h3 id="idp232824">Authorization Token Entity (application/json)</h3><p>
+              <pre xmlns="http://research.sun.com/wadl/2006/10">
+              {
+                "auth_token": "4c59a46ace64e5e61b370f00",
+                "links": [
+                  {
+                    "rel": "http://rel.totsy.com/user",
+                    "href": "https://api.totsy.com/user/35235235"
+                  }
+                ]
+              }
+              </pre>
+            </p><h3 id="idp240328">Partial User Entity (application/json)</h3><p>
+              <pre xmlns="http://research.sun.com/wadl/2006/10">
+              {
+                "email": "...",
+                "firstname": "...",
+                "lastname": "...",
+                "password_hash": "..."
+              }
+              </pre>
+            </p><h3 id="idp242136">Full User Entity (application/json)</h3><p>
+              <pre xmlns="http://research.sun.com/wadl/2006/10">
+              {
+                "email": "...",
+                "firstname": "...",
+                "lastname": "...",
+                "password_hash": "...",
+                "links": [
+                  {
+                    "rel": "http://rel.totsy.com/address",
+                    "href": "https://api.totsy.com/user/9894933/address"
+                  },
+                  {
+                    "rel": "http://rel.totsy.com/order",
+                    "href": "https://api.totsy.com/user/9894933/order"
+                  },
+                  {
+                    "rel": "http://rel.totsy.com/reward",
+                    "href": "https://api.totsy.com/user/9894933/reward"
+                  }
+                ]
+              }
+              </pre>
+            </p><h3 id="idp248064">Full User Entity (application/json)</h3><p>
+                <pre xmlns="http://research.sun.com/wadl/2006/10">
+                {
+                  "email": "...",
+                  "firstname": "...",
+                  "lastname": "...",
+                  "password_hash": "...",
+                  "links": [
+                    {
+                      "rel": "http://rel.totsy.com/address",
+                      "href": "https://api.totsy.com/user/9894933/address"
+                    },
+                    {
+                      "rel": "http://rel.totsy.com/order",
+                      "href": "https://api.totsy.com/user/9894933/order"
+                    },
+                    {
+                      "rel": "http://rel.totsy.com/reward",
+                      "href": "https://api.totsy.com/user/9894933/reward"
+                    }
+                  ]
+                }
+                </pre>
+              </p><h3 id="idp250960">Partial User Entity (application/json)</h3><p>
+                <pre xmlns="http://research.sun.com/wadl/2006/10">
+                {
+                  "email": "...",
+                  "firstname": "...",
+                  "lastname": "...",
+                  "password_hash": "..."
+                }
+                </pre>
+              </p><h3 id="idp254456">Address Collection (application/json)</h3><p>
+                  <pre xmlns="http://research.sun.com/wadl/2006/10">
+                  [
+                    {
+                      "type": "shipping",
+                      "firstname": "...",
+                      "lastname": "...",
+                      "address": [
+                        "line1", "line2", "line3"
+                      ],
+                      "region": "...",
+                      "country": "...",
+                      "zip": "...",
+                      "default": true,
+                      "links": [
+                        {
+                          "rel": "self",
+                          "href": "https://api.totsy.com/address/12423532"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "billing",
+                      "firstname": "...",
+                      "lastname": "...",
+                      "address": [
+                        "line1", "line2", "line3"
+                      ],
+                      "region": "...",
+                      "country": "...",
+                      "zip": "...",
+                      "default": false,
+                      "links": [
+                        {
+                          "rel": "self",
+                          "href": "https://api.totsy.com/address/53456346"
+                        }
+                      ]
+                    }
+                  ]
+                  </pre>
+                </p><h3 id="idp258000">Partial Address Entity (application/json)</h3><p>
+                  <pre xmlns="http://research.sun.com/wadl/2006/10">
+                  {
+                    "type": "billing",
+                    "firstname": "...",
+                    "lastname": "...",
+                    "address": [
+                      "line1", "line2", "line3"
+                    ],
+                    "region": "...",
+                    "country": "...",
+                    "zip": "...",
+                    "default": true
+                  }
+                  </pre>
+                </p><h3 id="idp259912">Full Address Entity (application/json)</h3><p>
+                  <pre xmlns="http://research.sun.com/wadl/2006/10">
+                  {
+                    "firstname": "...",
+                    "lastname": "...",
+                    "address": [
+                      "line1", "line2", "line3"
+                    ],
+                    "region": "...",
+                    "country": "...",
+                    "zip": "...",
+                    "default": false
+                  }
+                  </pre>
+                </p><h3 id="idp263224">Order Collection (application/json)</h3><p>
+                  <pre xmlns="http://research.sun.com/wadl/2006/10">
+                  [
+                    {
+                      "status": "...",
+                      "placed": "2011-12-13 14:42:22",
+                      "subtotal": 15.88,
+                      "shipping": 7.95,
+                      "taxes": 0,
+                      "payment": {
+                        "card_type": "VI",
+                        "card_number": 1111,
+                        "expire_month": 4,
+                        "expire_year": 2012,
+                        "card_holder_name": "..."
+                      },
+                      "addresses": [
+                        {
+                          "type": "shipping",
+                          "link": {
+                            "rel": "http://rel.totsy.com/address",
+                            "href": "https://api.totsy.com/address/293"
+                          }
+                        },
+                        {
+                          "type": "billing",
+                          "firstname": "...",
+                          "lastname": "...",
+                          "address": [
+                            "line1", "line2", "line3"
+                          ],
+                          "region": "...",
+                          "country": "...",
+                          "zip": "..."
+                        }
+                      ],
+                      "items": [
+                        {
+                          "quantity": 2,
+                          "size": "...",
+                          "color": "...",
+                          "style": "...",
+                          "link": {
+                            "rel": "http://rel.totsy.com/product",
+                            "href": "https://api.totsy.com/product/3820"
+                          }
+                        },
+                        {
+                          "quantity": 1,
+                          "size": "...",
+                          "color": "...",
+                          "style": "...",
+                          "link": {
+                            "rel": "http://rel.totsy.com/product",
+                            "href": "https://api.totsy.com/product/32532"
+                          }
+                        }
+                      ],
+                      "links": [
+                        {
+                          "rel": "http://rel.totsy.com/user",
+                          "href": "https://api.totsy.com/user/12492"
+                        },
+                        {
+                          "rel": "self",
+                          "href": "https://api.totsy.com/order/294882"
+                        }
+                      ]
+                    },
+                    {
+                      "status": "...",
+                      "placed": "2011-12-13 14:42:22",
+                      "subtotal": 15.88,
+                      "shipping": 7.95,
+                      "taxes": 0,
+                      "payment": {
+                        "card_type": "VI",
+                        "card_number": 1111,
+                        "expire_month": 4,
+                        "expire_year": 2012,
+                        "card_holder_name": "..."
+                      },
+                      "addresses": [
+                        {
+                          "type": "shipping",
+                          "link": {
+                            "rel": "http://rel.totsy.com/address",
+                            "href": "https://api.totsy.com/address/293"
+                          }
+                        },
+                        {
+                          "type": "billing",
+                          "firstname": "...",
+                          "lastname": "...",
+                          "address": [
+                            "line1", "line2", "line3"
+                          ],
+                          "region": "...",
+                          "country": "...",
+                          "zip": "..."
+                        }
+                      ],
+                      "items": [
+                        {
+                          "quantity": 2,
+                          "size": "...",
+                          "color": "...",
+                          "style": "...",
+                          "link": {
+                            "rel": "http://rel.totsy.com/product",
+                            "href": "https://api.totsy.com/product/3820"
+                          }
+                        },
+                        {
+                          "quantity": 1,
+                          "size": "...",
+                          "color": "...",
+                          "style": "...",
+                          "link": {
+                            "rel": "http://rel.totsy.com/product",
+                            "href": "https://api.totsy.com/product/32532"
+                          }
+                        }
+                      ],
+                      "links": [
+                        {
+                          "rel": "http://rel.totsy.com/user",
+                          "href": "https://api.totsy.com/user/12492"
+                        },
+                        {
+                          "rel": "self",
+                          "href": "https://api.totsy.com/order/294882"
+                        }
+                      ]
+                    }
+                  ]
+                  </pre>
+                </p><h3 id="idp271224">Partial Order Entity (application/json)</h3><p>
+                  <pre xmlns="http://research.sun.com/wadl/2006/10">
+                    {
+                      "payment": {
+                        "card_type": "VI",
+                        "card_number": 4111111111111111,
+                        "expire_month": 4,
+                        "expire_year": 2012,
+                        "card_holder_name": "..."
+                      },
+                      "addresses": [
+                        {
+                          "type": "shipping",
+                          "link": {
+                            "rel": "http://rel.totsy.com/address",
+                            "href": "https://api.totsy.com/address/293"
+                          }
+                        },
+                        {
+                          "type": "billing",
+                          "firstname": "...",
+                          "lastname": "...",
+                          "address": [
+                            "line1", "line2", "line3"
+                          ],
+                          "region": "...",
+                          "country": "...",
+                          "zip": "..."
+                        }
+                      ],
+                      "items": [
+                        {
+                          "quantity": 2,
+                          "size": "...",
+                          "color": "...",
+                          "style": "...",
+                          "link": {
+                            "rel": "http://rel.totsy.com/product",
+                            "href": "https://api.totsy.com/product/3820"
+                          }
+                        },
+                        {
+                          "quantity": 1,
+                          "size": "...",
+                          "color": "...",
+                          "style": "...",
+                          "link": {
+                            "rel": "http://rel.totsy.com/product",
+                            "href": "https://api.totsy.com/product/32532"
+                          }
+                        }
+                      ]
+                    }
+                  </pre>
+                </p><h3 id="idp274968">Full Order Entity (application/json)</h3><p>
+                  <pre xmlns="http://research.sun.com/wadl/2006/10">
+                  {
+                    "status": "...",
+                    "placed": "2011-12-13 14:42:22",
+                    "subtotal": 15.88,
+                    "shipping": 7.95,
+                    "taxes": 0,
+                    "payment": {
+                      "card_type": "VI",
+                      "card_number": 1111,
+                      "expire_month": 4,
+                      "expire_year": 2012,
+                      "card_holder_name": "..."
+                    },
+                    "addresses": [
+                      {
+                        "type": "shipping",
+                        "link": {
+                          "rel": "http://rel.totsy.com/address",
+                          "href": "https://api.totsy.com/address/293"
+                        }
+                      },
+                      {
+                        "type": "billing",
+                        "firstname": "...",
+                        "lastname": "...",
+                        "address": [
+                          "line1", "line2", "line3"
+                        ],
+                        "region": "...",
+                        "country": "...",
+                        "zip": "..."
+                      }
+                    ],
+                    "items": [
+                      {
+                        "quantity": 2,
+                        "size": "...",
+                        "color": "...",
+                        "style": "...",
+                        "link": {
+                          "rel": "http://rel.totsy.com/product",
+                          "href": "https://api.totsy.com/product/3820"
+                        }
+                      },
+                      {
+                        "quantity": 1,
+                        "size": "...",
+                        "color": "...",
+                        "style": "...",
+                        "link": {
+                          "rel": "http://rel.totsy.com/product",
+                          "href": "https://api.totsy.com/product/32532"
+                        }
+                      }
+                    ],
+                    "expires": "2012-03-05 10:00:01",
+                    "links": [
+                      {
+                        "rel": "http://rel.totsy.com/user",
+                        "href": "https://api.totsy.com/user/12492"
+                      },
+                      {
+                        "rel": "self",
+                        "href": "https://api.totsy.com/order/294882"
+                      }
+                    ]
+                  }
+                  </pre>
+                </p><h3 id="idp279200">Full Order Entity (application/json)</h3><p>
+                  <pre xmlns="http://research.sun.com/wadl/2006/10">
+                  {
+                    "status": "...",
+                    "placed": "2011-12-13 14:42:22",
+                    "subtotal": 15.88,
+                    "shipping": 7.95,
+                    "taxes": 0,
+                    "payment": {
+                      "card_type": "VI",
+                      "card_number": 1111,
+                      "expire_month": 4,
+                      "expire_year": 2012,
+                      "card_holder_name": "..."
+                    },
+                    "addresses": [
+                      {
+                        "type": "shipping",
+                        "link": {
+                          "rel": "http://rel.totsy.com/address",
+                          "href": "https://api.totsy.com/address/293"
+                        }
+                      },
+                      {
+                        "type": "billing",
+                        "firstname": "...",
+                        "lastname": "...",
+                        "address": [
+                          "line1", "line2", "line3"
+                        ],
+                        "region": "...",
+                        "country": "...",
+                        "zip": "..."
+                      }
+                    ],
+                    "items": [
+                      {
+                        "quantity": 2,
+                        "size": "...",
+                        "color": "...",
+                        "style": "...",
+                        "link": {
+                          "rel": "http://rel.totsy.com/product",
+                          "href": "https://api.totsy.com/product/3820"
+                        }
+                      },
+                      {
+                        "quantity": 1,
+                        "size": "...",
+                        "color": "...",
+                        "style": "...",
+                        "link": {
+                          "rel": "http://rel.totsy.com/product",
+                          "href": "https://api.totsy.com/product/32532"
+                        }
+                      }
+                    ],
+                    "links": [
+                      {
+                        "rel": "http://rel.totsy.com/user",
+                        "href": "https://api.totsy.com/user/12492"
+                      },
+                      {
+                        "rel": "self",
+                        "href": "https://api.totsy.com/order/294882"
+                      }
+                    ]
+                  }
+                  </pre>
+                </p><h3 id="idp284928">User Reward Collection (application/json)</h3><p>
+                  <pre xmlns="http://research.sun.com/wadl/2006/10">
+                  [
+                    {
+                      "description": "...",
+                      "amount": 30,
+                      "expires": "2012-01-03 10:01:33",
+                      "links": [
+                        {
+                          "rel": "http://rel.totsy.com/user",
+                          "href": "https://api.totsy.com/user/3643623453"
+                        }
+                      ]
+                    },
+                    {
+                      "description": "...",
+                      "amount": 20,
+                      "expires": "2012-01-01 10:01:33",
+                      "links": [
+                        {
+                          "rel": "http://rel.totsy.com/user",
+                          "href": "https://api.totsy.com/user/3643623453"
+                        }
+                      ]
+                    }
+                  ]
+                  </pre>
+                </p><h3 id="idp288024">Partial Reward Entity (application/json)</h3><p>
+                  <pre xmlns="http://research.sun.com/wadl/2006/10">
+                  {
+                    "description": "...",
+                    "amount": 40
+                  }
+                  </pre>
+                </p><h3 id="idp289648">Full Reward Entity (application/json)</h3><p>
+                  <pre xmlns="http://research.sun.com/wadl/2006/10">
+                  {
+                    "description": "...",
+                    "amount": 30,
+                    "expires": "2012-01-03 10:01:33",
+                    "links": [
+                      {
+                        "rel": "http://rel.totsy.com/user",
+                        "href": "https://api.totsy.com/user/3643623453"
+                      }
+                    ]
+                  }
+                  </pre>
+                </p><h3 id="idp293216">Credit Card Collection (application/json)</h3><p>
+                  <pre xmlns="http://research.sun.com/wadl/2006/10">
+                  [
+                    {
+                      "type": "VI",
+                      "last_four": 4929,
+                      "expiry_year": 2014,
+                      "expiry_month": 4,
+                      "cardholder_name": "...",
+                      "links": [
+                        {
+                          "rel": "http://rel.totsy.com/user",
+                          "href": "https://api.totsy.com/user/29480"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "MC",
+                      "last_four": 2444,
+                      "expiry_year": 2014,
+                      "expiry_month": 5,
+                      "cardholder_name": "...",
+                      "links": [
+                        {
+                          "rel": "http://rel.totsy.com/user",
+                          "href": "https://api.totsy.com/user/29480"
+                        }
+                      ]
+                    }
+                  ]
+                  </pre>
+                </p><h3 id="idp296296">Partial Credit Card Entity (application/json)</h3><p>
+                  <pre xmlns="http://research.sun.com/wadl/2006/10">
+                  {
+                    "type": "VI",
+                    "number": 1234567812345678,
+                    "expiry_year": 2014,
+                    "expiry_month": 4,
+                    "cardholder_name": "First Last"
+                  }
+                  </pre>
+                </p><h3 id="idp298056">Full Credit Card Entity (application/json)</h3><p>
+                  <pre xmlns="http://research.sun.com/wadl/2006/10">
+                  {
+                    "type": "VI",
+                    "last_four": 5678,
+                    "expiry_year": 2014,
+                    "expiry_month": 4,
+                    "cardholder_name": "First Last",
+                    "links": [
+                      {
+                        "rel": "http://rel.totsy.com/user",
+                        "href": "https://api.totsy.com/user/29480"
+                      }
+                    ]
+                  }
+                  </pre>
+                </p><h3 id="idp305600">Full Address Entity (application/json)</h3><p>
+                <pre xmlns="http://research.sun.com/wadl/2006/10">
+                {
+                  "firstname": "...",
+                  "lastname": "...",
+                  "address": [
+                    "line1", "line2", "line3"
+                  ],
+                  "region": "...",
+                  "country": "...",
+                  "zip": "..."
+                }
+                </pre>
+              </p><h3 id="idp307936">Partial Address Entity (application/json)</h3><p>
+                <pre xmlns="http://research.sun.com/wadl/2006/10">
+                {
+                  "firstname": "...",
+                  "lastname": "...",
+                  "address": [
+                    "line1", "line2", "line3"
+                  ],
+                  "region": "...",
+                  "country": "...",
+                  "zip": "..."
+                }
+                </pre>
+              </p><h3 id="idp309688">Full Address Entity (application/json)</h3><p>
+                <pre xmlns="http://research.sun.com/wadl/2006/10">
+                {
+                  "firstname": "...",
+                  "lastname": "...",
+                  "address": [
+                    "line1", "line2", "line3"
+                  ],
+                  "region": "...",
+                  "country": "...",
+                  "zip": "..."
+                }
+                </pre>
+              </p><h3 id="idp317040">Full Order Entity (application/json)</h3><p>
+                <pre xmlns="http://research.sun.com/wadl/2006/10">
+                  {
+                    "status": "...",
+                    "placed": "2011-12-13 14:42:22",
+                    "subtotal": 15.88,
+                    "shipping": 7.95,
+                    "taxes": 0,
+                    "payment": {
+                      "card_type": "VI",
+                      "card_number": 1111,
+                      "expire_month": 4,
+                      "expire_year": 2012,
+                      "card_holder_name": "..."
+                    },
+                    "addresses": [
+                      {
+                        "type": "shipping",
+                        "link": {
+                          "rel": "http://rel.totsy.com/address",
+                          "href": "https://api.totsy.com/address/293"
+                        }
+                      },
+                      {
+                        "type": "billing",
+                        "firstname": "...",
+                        "lastname": "...",
+                        "address": [
+                          "line1", "line2", "line3"
+                        ],
+                        "region": "...",
+                        "country": "...",
+                        "zip": "..."
+                      }
+                    ],
+                    "items": [
+                      {
+                        "quantity": 2,
+                        "size": "...",
+                        "color": "...",
+                        "style": "...",
+                        "link": {
+                          "rel": "http://rel.totsy.com/product",
+                          "href": "https://api.totsy.com/product/3820"
+                        }
+                      },
+                      {
+                        "quantity": 1,
+                        "size": "...",
+                        "color": "...",
+                        "style": "...",
+                        "link": {
+                          "rel": "http://rel.totsy.com/product",
+                          "href": "https://api.totsy.com/product/32532"
+                        }
+                      }
+                    ],
+                    "links": [
+                      {
+                        "rel": "http://rel.totsy.com/user",
+                        "href": "https://api.totsy.com/user/12492"
+                      },
+                      {
+                        "rel": "self",
+                        "href": "https://api.totsy.com/order/294882"
+                      }
+                    ]
+                  }
+                </pre>
+              </p><h3 id="idp321032">Partial Order Entity (application/json)</h3><p>
+                <pre xmlns="http://research.sun.com/wadl/2006/10">
+                  {
+                    "payment": {
+                      "card_type": "VI",
+                      "card_number": 4111111111111111,
+                      "expire_month": 4,
+                      "expire_year": 2012,
+                      "card_holder_name": "..."
+                    },
+                    "addresses": [
+                      {
+                        "type": "shipping",
+                        "link": {
+                          "rel": "http://rel.totsy.com/address",
+                          "href": "https://api.totsy.com/address/293"
+                        }
+                      },
+                      {
+                        "type": "billing",
+                        "firstname": "...",
+                        "lastname": "...",
+                        "address": [
+                          "line1", "line2", "line3"
+                        ],
+                        "region": "...",
+                        "country": "...",
+                        "zip": "..."
+                      }
+                    ],
+                    "items": [
+                      {
+                        "quantity": 2,
+                        "size": "...",
+                        "color": "...",
+                        "style": "...",
+                        "link": {
+                          "rel": "http://rel.totsy.com/product",
+                          "href": "https://api.totsy.com/product/3820"
+                        }
+                      },
+                      {
+                        "quantity": 1,
+                        "size": "...",
+                        "color": "...",
+                        "style": "...",
+                        "link": {
+                          "rel": "http://rel.totsy.com/product",
+                          "href": "https://api.totsy.com/product/32532"
+                        }
+                      }
+                    ],
+                    "expires": "2012-03-03 14:00:01"
+                  }
+                </pre>
+              </p><h3 id="idp324376">Full Order Entity (application/json)</h3><p>
+                <pre xmlns="http://research.sun.com/wadl/2006/10">
+                  {
+                    "status": "...",
+                    "placed": "2011-12-13 14:42:22",
+                    "subtotal": 15.88,
+                    "shipping": 7.95,
+                    "taxes": 0,
+                    "payment": {
+                      "card_type": "VI",
+                      "card_number": 1111,
+                      "expire_month": 4,
+                      "expire_year": 2012,
+                      "card_holder_name": "..."
+                    },
+                    "addresses": [
+                      {
+                        "type": "shipping",
+                        "link": {
+                          "rel": "http://rel.totsy.com/address",
+                          "href": "https://api.totsy.com/address/293"
+                        }
+                      },
+                      {
+                        "type": "billing",
+                        "firstname": "...",
+                        "lastname": "...",
+                        "address": [
+                          "line1", "line2", "line3"
+                        ],
+                        "region": "...",
+                        "country": "...",
+                        "zip": "..."
+                      }
+                    ],
+                    "items": [
+                      {
+                        "quantity": 2,
+                        "size": "...",
+                        "color": "...",
+                        "style": "...",
+                        "link": {
+                          "rel": "http://rel.totsy.com/product",
+                          "href": "https://api.totsy.com/product/3820"
+                        }
+                      },
+                      {
+                        "quantity": 1,
+                        "size": "...",
+                        "color": "...",
+                        "style": "...",
+                        "link": {
+                          "rel": "http://rel.totsy.com/product",
+                          "href": "https://api.totsy.com/product/32532"
+                        }
+                      }
+                    ],
+                    "links": [
+                      {
+                        "rel": "http://rel.totsy.com/user",
+                        "href": "https://api.totsy.com/user/12492"
+                      },
+                      {
+                        "rel": "self",
+                        "href": "https://api.totsy.com/order/294882"
+                      }
+                    ]
+                  }
+                </pre>
+              </p><h3 id="idp334080">Full Reward Entity (application/json)</h3><p>
+                <pre xmlns="http://research.sun.com/wadl/2006/10">
+                {
+                  "description": "...",
+                  "amount": 30,
+                  "expires": "2012-01-03 10:01:33",
+                  "links": [
+                    {
+                      "rel": "http://rel.totsy.com/user",
+                      "href": "https://api.totsy.com/user/3643623453"
+                    }
+                  ]
+                }
+                </pre>
+              </p><h3 id="idp336600">Partial Reward Entity (application/json)</h3><p>
+                <pre xmlns="http://research.sun.com/wadl/2006/10">
+                {
+                  "description": "...",
+                  "amount": 30,
+                  "expires": "2012-01-03 10:01:33"
+                }
+                </pre>
+              </p><h3 id="idp338168">Full Reward Entity (application/json)</h3><p>
+                <pre xmlns="http://research.sun.com/wadl/2006/10">
+                {
+                  "description": "...",
+                  "amount": 30,
+                  "expires": "2012-01-03 10:01:33",
+                  "links": [
+                    {
+                      "rel": "http://rel.totsy.com/user",
+                      "href": "https://api.totsy.com/user/3643623453"
+                    }
+                  ]
+                }
+                </pre>
+              </p><h3 id="idp345720">Full Credit Card Entity (application/json)</h3><p>
+                <pre xmlns="http://research.sun.com/wadl/2006/10">
+                {
+                  "type": "VI",
+                  "last_four": 4929,
+                  "expiry_year": 2014,
+                  "expiry_month": 4,
+                  "cardholder_name": "First Last",
+                  "links": [
+                    {
+                      "rel": "http://rel.totsy.com/user",
+                      "href": "https://api.totsy.com/user/29480"
+                    }
+                  ]
+                }
+                </pre>
+              </p></body></html>

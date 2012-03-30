@@ -1,0 +1,312 @@
+/*Edward*/
+
+/*General CSS styles*/
+.totsy-input{
+    background-image: none;
+    display: block;
+    font-size: 16px;
+    line-height: 1.4;
+    padding: 0.4em 1.5%;
+    width: 97%;
+	margin: 2px 0 5px;	
+}
+
+.totsy-input-shadow{
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2) inset;
+}
+.totsy-mobile-button{
+	
+}
+
+
+.totsy-div-with-arrow{
+    border-bottom-color: rgba(255, 255, 255, 0.3);
+    border-left-color: rgba(255, 255, 255, 0.3);	
+}
+.totsy-div-with-arrow a{
+	padding-right: 30px;
+	padding: 0.7em 15px;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+button.button {
+border: 0;
+padding: 0;
+margin: 0;
+background: transparent;
+overflow: visible;
+cursor: pointer;
+vertical-align: middle;
+}
+
+hr {
+    -moz-border-bottom-colors: none;
+    -moz-border-image: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+	border-bottom-color:none;
+	-moz-border-image:none; /* Firefox */
+	-webkit-border-image:none; /* Safari and Chrome */
+	-o-border-image:none; /* Opera */
+	border-image:none;
+	border-left-colors: none;
+	border-right-colors: none;
+	border-top-colors: none;
+    border-color: #AAAAAA -moz-use-text-color #FFFFFF;
+    border-left: medium none;
+    border-right: medium none;
+    border-style: solid none;
+    border-width: 1px medium;
+    clear: both;
+    display: block;
+    font-size: 1px;
+    line-height: 0;
+    margin: 8px auto;
+    overflow: visible;
+    padding: 0;
+    position: relative;
+    width: 100%;
+}
+
+
+
+body h3{
+	margin: 0 0;
+}
+.main{
+	padding: 10px;
+}
+body a:hover{
+	text-decoration: none;
+}
+
+.header{
+	
+}
+
+.pseudo-ui-page  .ui-header, .pseudo-ui-page  .ui-footer {
+    position: relative;
+}
+
+.ui-header {
+    box-shadow: 0 0 4px 0 #666666;
+}
+/*Specific CSS styles*/
+
+body .my-account h2{
+    font-size: 18px;
+    margin: 0;
+}
+
+.page-sub-title .block-account{
+	margin: 0px;
+}
+.ui-link-inherit{
+	font-size: 16px;
+}
+body .ui-collapsible {
+    margin: -0.1em 0px !important;
+}
+.my-account{
+	margin-bottom: 10px;
+}
+body .footer-container {
+	background:transparent;
+}
+.enterprise-invitation-index-index .page-sub-title h2{
+	display: inline-block;
+}
+
+.cloudsponge-tab{
+    height: 15px;
+}
+
+.float-right{   
+	float: right;
+}
+
+.category-title{
+	font-size:14px;
+	margin-top:30px;
+	margin-bottom:20px;
+}
+
+.category-list{
+	margin:0px 10px;
+}
+.category-hr{
+	margin-bottom:20px;
+}
+
+#main .page-sub-title, #main .block-account{
+	margin:0 10px;
+}
+
+.ui-li-has-count .credit-count-box{
+	color:#009900;
+}
+.cart .page-title{
+	margin:0px 5px;
+}
+
+.cart form, .cart .discount{
+	margin:0px 5px;
+}
+
+.cart #discount-coupon-form, .cart #giftcard-form{
+	margin: 0 0px;
+}
+
+body .cart .discount, body .cart .giftcard{
+	margin: 0 0px 0px;
+	background-color:transparent;
+	padding:5px;
+}
+
+.large-font{
+	font-size:18px;
+}
+
+.checkout-bottom-box {
+    display: block;
+    height: 40px;
+    margin: 10px;
+}
+
+.cart .item-options div{
+	display: inline-block;
+}
+
+.cart-empty{
+  background-attachment:initial;
+  background-clip:initial;
+  background-color:#FFFFFF;
+  background-image:initial;
+  background-origin:initial;
+  background-position:initial initial;
+  background-repeat:initial initial;
+  border-bottom-color:#DDDDDD;
+  border-bottom-style:solid;
+  border-bottom-width:1px;
+  border-image:initial;
+  border-left-color:#DDDDDD;
+  border-left-style:solid;
+  border-left-width:1px;
+  border-right-color:#DDDDDD;
+  border-right-style:solid;
+  border-right-width:1px;
+  border-top-color:#DDDDDD;
+  border-top-style:solid;
+  border-top-width:1px;
+  font-size:13px;
+  padding-bottom:5px;
+  padding-left:5px;
+  padding-right:5px;
+  padding-top:5px;
+  text-align:center;
+  margin:10px;
+}
+
+.cart h1{
+	margin-left:0px;
+}
+
+.float-left{
+	float:left;
+}
+.float-right{
+	float:right;
+}
+
+.light-green{
+	color:#009900
+}
+.clear{
+	clear:both;
+}
+
+#giftcard-form label{
+    clear: both;
+    display: block;
+    margin-bottom: 5px;	
+}
+
+.sales-found{
+	float:right; font-size:12px; color:#999;
+}
+
+.layerlist-title{
+	font-size:14px;
+}
+
+.font-size-sixteen{
+	font-size:16px;
+}
+p.price{
+	color:#999; font-size:12px;
+}
+
+.layer-list-content-primary, .layer-list-content-primary-hr{
+	margin:0px 20px;
+}
+
+#main div.layer-category{
+	border-bottom:1px solid #CCCCCC;
+	margin: 10px 22px 0px;
+	padding-left:0px;
+	padding-right:0px;
+}
+
+.topnav-link {
+    font-size: 12px;
+}
+div #hpcheckout-billing-wrapper {
+    border-right: 0px solid #C7C7C7;
+}
+div #hpcheckout-billing-wrapper, div #hpcheckout-shipping-wrapper {
+    display: block;
+}
+div .checkout-content {
+    padding-left: 0px;
+	margin-left:0px;
+}
+#billing-new-address-form input, #shipping-new-address-form input{
+	/*float:right;*/
+	clear:both;
+	
+}
+
+div.totsy-selective-input-box{
+    /*display: inline-block;
+    float: right;*/
+}
+
+div button.button{
+    background-color: #EEEEEE;
+    border: 1px solid #CCCCCC;
+    border-radius: 5px 5px 5px 5px;
+    font-weight: bold;
+    height: auto;
+    padding: 6px 14px;
+    width: auto;
+}
+
+div div button.button-exception{
+	background-color: transparent;
+    border: 0px solid #CCCCCC;
+	padding :0px;
+}
+
+.timer-control-box{
+	margin:5px;
+}
+
+div.checkout-sub-title sub-title{
+	margin: 20px 0 10px 0px;
+}
+
+.checkout-content{
+	margin-left:19px;
+}

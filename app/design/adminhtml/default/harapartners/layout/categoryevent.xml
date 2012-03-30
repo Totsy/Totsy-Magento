@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<!--
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the End User Software Agreement (EULA).
+ * It is also available through the world-wide-web at this URL:
+ * http://www.harapartners.com/license
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to eula@harapartners.com so we can send you a copy immediately.
+ * 
+ -->
+<layout>
+
+    <categoryevent_adminhtml_browse_index>
+        <reference name="content">
+            <block type="categoryevent/adminhtml_browse_index" name="categoryevent.adminhtml.browse.index">
+                <block type="adminhtml/store_switcher" name="store_switcher" as="store_switcher">
+                    <action method="setUseConfirm"><params>0</params></action>
+                </block>
+            </block>
+        </reference>
+		<reference name="menu">
+            <action method="setActive"><menupath>catalog/categoryevent</menupath></action>
+        </reference>
+    </categoryevent_adminhtml_browse_index>
+	
+	<categoryevent_adminhtml_sort_index>
+        <reference name="content">
+            <block type="categoryevent/adminhtml_sort_index" name="categoryevent.adminhtml.sort.index">
+                <block type="adminhtml/store_switcher" name="store_switcher" as="store_switcher">
+                    <action method="setUseConfirm"><params>0</params></action>
+                </block>
+				<block type="categoryevent/adminhtml_sort_index_edit" name="categoryevent_adminhtml_sort_edit" />
+            </block>
+        </reference>
+		<reference name="menu">
+            <action method="setActive"><menupath>catalog/sortcategoryevent</menupath></action>
+        </reference>
+    </categoryevent_adminhtml_sort_index>
+	
+</layout>

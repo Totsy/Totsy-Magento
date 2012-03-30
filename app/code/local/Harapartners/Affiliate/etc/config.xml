@@ -1,0 +1,121 @@
+<?xml version="1.0"?>
+<!--
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the End User Software Agreement (EULA).
+ * It is also available through the world-wide-web at this URL:
+ * http://www.harapartners.com/license
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to eula@harapartners.com so we can send you a copy immediately.
+ * 
+ -->
+<config>
+    <modules>
+        <Harapartners_Affiliate>
+            <version>1.0.0</version>
+        </Harapartners_Affiliate>
+    </modules>
+    <global>
+		<blocks>
+			<affiliate>
+				<class>Harapartners_Affiliate_Block</class>
+			</affiliate>
+		</blocks>
+        <helpers>
+            <affiliate>
+            	<class>Harapartners_Affiliate_Helper</class>
+            </affiliate>
+        </helpers>
+		<models>
+            <affiliate>
+                <class>Harapartners_Affiliate_Model</class>
+				<resourceModel>affiliate_mysql4</resourceModel>
+            </affiliate>
+			<affiliate_mysql4>
+                <class>Harapartners_Affiliate_Model_Mysql4</class>
+                <entities>
+                    <record>
+                        <table>affiliate_record</table>
+                    </record>
+                </entities>
+            </affiliate_mysql4>
+        </models>
+		<resources>
+            <affiliate_setup>
+                <setup>
+                    <module>Harapartners_Affiliate</module>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </affiliate_setup>
+            <affiliate_write>
+                <connection>
+                    <use>core_write</use>
+                </connection>
+            </affiliate_write>
+            <affiliate_read>
+                <connection>
+                    <use>core_read</use>
+                </connection>
+            </affiliate_read>		
+        </resources>
+		<!--Moved to Harapartners_Service-->
+		<!--events>
+            <controller_front_init_routers>
+                <observers>
+                    <affiliate>
+						<type>singleton</type>
+                        <class>affiliate/observer</class>
+                        <method>addAffiliateRouter</method>
+                    </affiliate>
+                </observers>
+            </controller_front_init_routers>
+        </events-->
+    </global>
+	<frontend>
+	    <routers>
+            <affiliate>
+                <use>standard</use>
+                <args>
+                    <module>Harapartners_Affiliate</module>
+                    <frontName>affiliate</frontName>
+                </args>
+            </affiliate>
+        </routers>
+	</frontend>
+	<admin>
+		<routers>
+            <affiliate>
+                <use>admin</use>
+                <args>
+                    <module>Harapartners_Affiliate</module>
+                    <frontName>adminhtml_affiliate</frontName>
+                </args>
+            </affiliate>
+        </routers>
+	</admin>
+	<adminhtml>
+        <menu>
+            <harapartners>
+				<children>
+					<affiliate translate="title" module="affiliate">
+		                <title>Affiliates</title>
+		                <sort_order>10</sort_order>
+						<action>adminhtml_affiliate/adminhtml_record</action>
+					</affiliate>
+				</children>
+            </harapartners>
+			<report>
+				<children>
+					<affiliate translate="title" module="affiliate">
+		                <title>Affiliate Report</title>
+		                <sort_order>0</sort_order>
+						<action>adminhtml_affiliate/adminhtml_report</action>
+					</affiliate>
+				</children>
+            </report>
+        </menu>
+    </adminhtml>
+</config>

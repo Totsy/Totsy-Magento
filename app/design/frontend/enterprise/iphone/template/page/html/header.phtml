@@ -1,0 +1,54 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     default_iphone
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+/**
+ * @var Mage_Page_Block_Html_Header $this
+ */
+?>
+
+<div class="logo">
+    <div class="col2-alt-set">
+        <div class="col-1">
+            <h1 id="logo"><a href="<?php echo $this->getUrl('') ?>"><img width="60px" src="<?php echo $this->getLogoSrc() ?>" alt="<?php echo $this->getLogoAlt() ?>" /></a></h1>
+        </div>
+        <div class="col-2">      
+            <p class="welcome-msg"><a class="top-account" href="<?php echo $this->getUrl('customer/account')?>"><?php echo $this->getWelcome()?></a></p>
+            <?php echo $this->getChildHtml('topCart') ?>
+        </div>
+    </div>
+</div>
+<div class="shop-access-ob ui-navbar ui-navbar-noicons">
+    <ul class="access-tag-ob ui-grid-b">
+    	<li class="tag-shop ui-block-a">
+    		<a href="<?php echo $this->getBaseUrl(); ?>" class="ui-btn ui-btn-up-c"><span class="ui-btn-inner"><span class="ui-btn-text text-span">Shop<br>by Date</span></span></a>
+    	</li>
+    	<li class="tag-shop ui-block-b">
+    		<a href="<?php echo $this->getBaseUrl(); ?>event/index/age/" class="ui-btn ui-btn-up-c"><span class="ui-btn-inner"><span class="ui-btn-text text-span">Shop<br>by Age</span></span></a>
+    	</li>
+    	<li class="tag-shop ui-block-c">
+    		<a href="<?php echo $this->getBaseUrl(); ?>event/index/category/" class="ui-btn ui-btn-up-c"><span class="ui-btn-inner"><span class="ui-btn-text text-span">Shop<br>by Category</span></span></a>
+    	</li>
+    </ul>
+</div><div class="clear"></div>

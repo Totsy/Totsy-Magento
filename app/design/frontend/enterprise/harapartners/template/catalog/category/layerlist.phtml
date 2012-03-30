@@ -1,0 +1,118 @@
+<?php
+/**
+ * Harapartners
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Harapartners License
+ * that is bundled with this package in the file LICENSE_EE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://www.Harapartners.com/license
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@Harapartners.com so we can send you a copy immediately.
+ *
+ */
+?>
+<?php
+/**
+ * Product list template
+ *
+ * @see Mage_Catalog_Block_Product_List
+ */
+?>
+<?php
+		/*$cdsArray = $this->getCdsDataObject();
+		$layerCategoryCollection = $cdsArray['category_product_complete_data']; 
+		$howMany = count($layerCategoryCollection);
+		echo '<h2>';
+		echo $cdsArray['attr_text_label'];
+		echo '<span>';
+		echo ' ( '.$howMany.' Sales Found )';
+		echo '</span>';
+		echo '</h2>';*/
+		
+		
+		$temp = $this->topLayerNav();
+		$layerCategoryCollection = $temp['category_product_complete_data']; 
+		$howMany = count($layerCategoryCollection);
+		echo '<h2>';
+		echo $temp['attr_text_label'];
+		echo '<span>';
+		echo ' ( '.$howMany.' Sales Found )';
+		echo '</span>';
+		echo '</h2>';
+		
+		
+?>
+<?php foreach($layerCategoryCollection as $category):?>
+
+<div class="events-div">
+
+<?php 
+	$timerParam=$category['prepare_timer'];
+	$endcount_lc=$timerParam['endcount_lc'];
+	$timer=$timerParam['timer'];
+	
+?>
+	<a href="<?php echo $this->getBaseUrl().$category['category_info']['url_key']; ?>"><h3 class="category-name"><?php echo $category['category_info']['name']; ?></h3></a>
+	<div class="layer-timer">
+		<p id="time-layer-<?php echo $timer ?>"></p>					 
+		<script type="text/javascript">
+			jQuery("#time-layer-<?php echo $timer ?>").countdown({
+				date: "<?php echo $endcount_lc; ?>", //Counting TO a date
+				htmlTemplate: "<span>Ends in</span><span class='italic'> %{d} <span class=\"cd-time\">Days</span> %{h}<span class=\"cd-time\">:</span>%{m}<span class=\"cd-time\">:</span>%{s}<span class=\"cd-time\"></span></span>",
+
+				onChange: function( event, timer ){
+				},
+				onComplete: function( event ){										
+					jQuery(this).html("Completed");
+				},
+				leadingZero: true,
+				direction: "down"
+			});
+		</script>
+	</div>
+	<p class="layer-description"><?php echo $category['description']; ?></p>
+
+
+	<?php echo $this->getAdditionalHtml() ?>
+		<div class="category-products">
+		<ul class="products-grid">
+			<?php $i=0; foreach ($category['product_list'] as $_product): ?>
+				<li class="item">
+					<a href="<?php echo $this->getBaseUrl().$_product['url_path'] ?>" title="<?php echo $_product['name']; ?>" class="product-image"><img src="<?php echo $_product['small_image']; ?>" width="125" height="125" alt="<?php echo $_product['name']; ?>" /></a>
+						<a class="item-details" href="<?php echo $this->getBaseUrl().$_product['url'] ?>" title="<?php echo $_product['name']; ?>"><h4 class="product-name"><?php echo $_product['name']; ?></h4>
+							<?php //echo $this->getPriceHtml($_product, true) ?>
+							<div class="price-box">
+								<span class="regular-price" id="product-price-<?php echo $_product['entity_id']; ?>">
+								<?php $price = (isset($_product['special_price']))?$_product['special_price']:$_product['price']?>
+									<span class="price">$<?php echo number_format($price,2,'.',''); ?></span>
+								</span>
+							</div>
+						</a>
+				</li>
+				<?php 
+					$i++; 
+					if ($i==6){
+						break;
+					}
+				?>
+			<?php endforeach ?>
+			<li class="item last btn viewAllEvents">
+				<a href="<?php echo $this->getBaseUrl().$category['category_info']['url_path']; ?>">
+					<img src="<?php echo $this->getSkinUrl()?>images/btn-viewevents-bug.png" />
+				</a>
+			</li>
+		</ul>
+
+			<script type="text/javascript">decorateGeneric($$('ul.products-grid'), ['odd','even','first','last'])</script>
+		</div>
+	
+	<div class='vuall'>View all items from <a href="<?php echo $this->getBaseUrl().$category['category_info']['url_path']; ?>"><?php echo $category['category_info']['name']; ?></a></div>
+	
+</div>
+<?php endforeach ?>
+
+
+

@@ -1,0 +1,90 @@
+<?php
+/**
+ * Harapartners
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Harapartners License
+ * that is bundled with this package in the file LICENSE_EE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://www.Harapartners.com/license
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@Harapartners.com so we can send you a copy immediately.
+ *
+ */
+?>
+<?php
+/**
+ * Product list template
+ *
+ * @see Mage_Catalog_Block_Product_List
+ */
+?>
+<?php
+		/*$cdsArray = $this->getCdsDataObject();
+		$layerCategoryCollection = $cdsArray['category_product_complete_data'];
+		$howMany = count($layerCategoryCollection);
+		echo '<div class="page-sub-title layer-category"><h3 class="layerlist-title">';
+		echo $cdsArray['attr_text_label'];
+		echo '<em class="sales-found">';
+		echo ' ( '.$howMany.' Sales Found )';
+		echo '</em></h3></div>';*/
+		$temp = $this->topLayerNav();
+		$layerCategoryCollection = $temp['category_product_complete_data'];
+		$howMany = count($layerCategoryCollection);
+		echo '<div class="page-sub-title layer-category"><h3 class="layerlist-title">';
+		echo $temp['attr_text_label'];
+		echo '<em class="sales-found">';
+		echo ' ( '.$howMany.' Sales Found )';
+		echo '</em></h3></div>';
+?>
+
+<?php foreach($layerCategoryCollection as $category):?>
+
+<div class="layer-list-content-primary content-primary">
+
+		<ul class=" ui-listview ui-listview-inset ui-corner-all ui-shadow " data-divider-theme="e" data-inset="true" data-role="listview">
+			<li class="ui-btn ui-btn-icon-right ui-li ui-corner-top ui-btn-up-c font-size-sixteen" data-icon="false"  data-role="list-divider" data-theme="c">
+				<div class="ui-btn-inner ui-li" aria-hidden="true">
+					<div class="ui-btn-text">
+						<a class="ui-link-inherit" title="See the Elan sale" href="<?php echo $this->getBaseUrl().$category['category_info']['url_key']; ?>"><?php echo $category['category_info']['name']; ?></a>
+					</div>
+				</div>
+			</li>			
+			<?php $i=0; foreach ($category['product_list'] as $_product): ?>
+				<li class="item ui-btn ui-btn-icon-right ui-li-has-arrow ui-li ui-li-has-thumb ui-btn-up-c" data-theme="c">
+				<div class="ui-btn-inner ui-li" aria-hidden="true">
+					<div class="ui-btn-text">
+						<a class="ui-link-inherit" title="<?php echo $_product['name']; ?>" href="<?php echo $this->getBaseUrl().$_product['url_path'] ?>">
+							<img class="ui-li-thumb" width="80" src="<?php echo $_product['small_image']; ?>" alt="<?php echo $_product['name']; ?>">
+								<h3 class="ui-li-heading"><?php echo $_product['name']; ?></h3>
+								<?php $price = (isset($_product['special_price']))?$_product['special_price']:$_product['price']?>
+							<p id="product-price-<?php echo $_product['entity_id']; ?>" class="ui-li-desc price" style="color:#999; font-size:12px;">$<?php echo number_format($price,2,'.',''); ?></p>
+						</a>
+					</div>
+					<span class="ui-icon ui-icon-arrow-r ui-icon-shadow"></span>
+					</div>
+				</li>
+				<?php 
+					$i++; 
+					if ($i==6){
+						break;
+					}
+				?>
+			<?php endforeach ?>
+			<li class="ui-btn ui-btn-up-d ui-btn-icon-right ui-li ui-corner-bottom" style="font-size:12px;" data-icon="false" data-theme="d">
+				<div class="ui-btn-inner ui-li" aria-hidden="true">
+					<div class="ui-btn-text">
+						<a class="topnav-link ui-link-inherit" href="<?php echo $this->getBaseUrl().$category['category_info']['url_key']; ?>">More from <?php echo $category['category_info']['name']; ?></a>
+					</div>
+				</div>
+			</li>
+		</ul>
+
+			<script type="text/javascript">decorateGeneric($$('ul.products-grid'), ['odd','even','first','last'])</script>
+</div>
+<?php endforeach ?>
+
+
+

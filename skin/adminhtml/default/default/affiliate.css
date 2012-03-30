@@ -1,0 +1,37 @@
+ .affiliate-adminhtml-report-result #anchor-content .date-pick {
+	display:inline-block;
+	margin:10px;
+ }
+.affiliate-adminhtml-report-index  #anchor-content .date-pick {
+	display:inline-block;
+	margin:10px;
+ }
+ .affiliate-adminhtml-report-result #anchor-content .time_period .ui-datepicker-trigger{
+	height:18px;
+	width:20px;
+ }
+ .affiliate-adminhtml-report-index  #anchor-content.time_period .ui-datepicker-trigger{
+	height:18px;
+	width:20px;
+ }
+ .affiliate-adminhtml-report-result #anchor-content div{
+	margin-bottom:10px;
+ }
+  .affiliate-adminhtml-report-index  #anchor-content div{
+	margin-bottom:10px;
+ }
+  .affiliate-adminhtml-report-result #anchor-content table{
+	margin-bottom:10px;
+ }
+ .affiliate-adminhtml-report-result #anchor-content th{
+   width:120px;
+   height:30px;
+   border:1px solid;
+   text-align:center;
+   }
+    .affiliate-adminhtml-report-result td{
+   width:120px;
+   height:30px;
+   border:1px solid;
+   text-align:center;
+   }

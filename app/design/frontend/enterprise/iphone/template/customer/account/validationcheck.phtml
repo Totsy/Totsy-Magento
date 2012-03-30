@@ -1,0 +1,43 @@
+<?php
+/**
+ * Harapartners
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Harapartners License
+ * that is bundled with this package in the file LICENSE_EE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://www.Harapartners.com/license
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@Harapartners.com so we can send you a copy immediately.
+ *
+ */
+?>
+<div class="validation-form-container">
+	<?php $customer = Mage::getSingleton('customer/session')->getCustomer();?>
+	<form name="validation-check-form" method="post" action="<?php echo $this->getBaseUrl() . 'customer/account/validationcheckpost'?>">
+		<div class="fieldset">
+			<h2>Require Validation</h2>
+			<ul class="form-list emailpassword">
+				<li>
+					<label for="email" class="required">Email <em>*</em></label>
+					<div class="input-box">
+						<input name="login[username]" id="email" type="text" class="input-text required-entry validate-email" title="Email Address" value="<?php echo $customer->getEmail();?>"/>
+					</div>
+				</li>
+				<li>
+					<label for="password" class="required">Password <em>*</em></label>
+					<div class="input-box">
+						<input name="login[password]" id="password" autocomplete="off" type="password" class="input-text required-entry validate-password" title="Password" value=""/>
+					</div>
+				</li>
+			</ul>
+			<div class="buttons-set form-buttons btn-only">
+				<button type="submit" class="button" name="send" id="send2">
+					<div class="sign-in-button">Submit</div>
+				</button>
+			</div>
+		</div>
+	</form>
+</div>

@@ -1,0 +1,133 @@
+<?xml version="1.0"?>
+<!--
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the End User Software Agreement (EULA).
+ * It is also available through the world-wide-web at this URL:
+ * http://www.harapartners.com/license
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to eula@harapartners.com so we can send you a copy immediately.
+ * 
+ -->
+<config>
+    <modules>
+        <Harapartners_Categoryevent>
+            <version>1.0.0</version>
+        </Harapartners_Categoryevent>
+    </modules>
+    <global>
+		<blocks>
+			<categoryevent>
+				<class>Harapartners_Categoryevent_Block</class>
+			</categoryevent>
+		</blocks>
+        <helpers>
+            <categoryevent>
+            	<class>Harapartners_Categoryevent_Helper</class>
+            </categoryevent>
+        </helpers>
+		<models>
+            <categoryevent>
+                <class>Harapartners_Categoryevent_Model</class>
+				<resourceModel>categoryevent_mysql4</resourceModel>
+            </categoryevent>
+			<categoryevent_mysql4>
+                <class>Harapartners_Categoryevent_Model_Mysql4</class>
+                <entities>
+                    <sortentry>
+                        <table>categoryevent_sortentry</table>
+                    </sortentry>
+                </entities>
+            </categoryevent_mysql4>
+        </models>
+		<resources>
+            <categoryevent_setup>
+                <setup>
+                    <module>Harapartners_Categoryevent</module>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </categoryevent_setup>
+            <categoryevent_write>
+                <connection>
+                    <use>core_write</use>
+                </connection>
+            </categoryevent_write>
+            <categoryevent_read>
+                <connection>
+                    <use>core_read</use>
+                </connection>
+            </categoryevent_read>		
+        </resources>
+    </global>
+	<frontend>
+		<routers>
+            <categoryevent>
+                <use>standard</use>
+                <args>
+                    <module>Harapartners_Categoryevent</module>
+                    <frontName>event</frontName>
+                </args>
+            </categoryevent>
+        </routers>
+		<layout>
+			<updates>
+				<categoryevent>
+					<file>categoryevent.xml</file>
+				</categoryevent>
+			</updates>
+		</layout>
+		<cache>
+            <requests>
+                <event>enterprise_pagecache/processor_default</event>
+            </requests>
+        </cache>
+    </frontend>
+	<admin>
+        <routers>
+            <categoryevent>
+                <use>admin</use>
+                <args>
+                    <module>Harapartners_Categoryevent</module>
+                    <frontName>categoryevent</frontName>
+                </args>
+            </categoryevent>
+        </routers>
+    </admin>
+    <adminhtml>
+        <menu>
+            <catalog>
+				<children>
+					<categoryevent translate="title" module="categoryevent">
+		                <title>Browse Categories/Events</title>
+		                <sort_order>0</sort_order>
+		                <action>categoryevent/adminhtml_browse</action>
+		            </categoryevent>
+				</children>
+				<children>
+					<sortcategoryevent translate="title" module="categoryevent">
+		                <title>Sort Categories/Events</title>
+		                <sort_order>0</sort_order>
+		                <action>categoryevent/adminhtml_sort</action>
+		            </sortcategoryevent>
+				</children>
+				<children>
+					<displaycategoryevent translate="title" module="categoryevent">
+		                <title>Category Page Setting</title>
+		                <sort_order>0</sort_order>
+		                <action>categoryevent/adminhtml_config</action>
+		            </displaycategoryevent>
+				</children>
+            </catalog>
+        </menu>
+		<layout>
+            <updates>
+                <categoryevent>
+                    <file>categoryevent.xml</file>
+                </categoryevent>
+            </updates>
+        </layout>
+    </adminhtml>
+</config>

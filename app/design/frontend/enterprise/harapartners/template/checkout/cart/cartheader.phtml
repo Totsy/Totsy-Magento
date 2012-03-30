@@ -1,0 +1,165 @@
+<?php
+/**
+ * Magento Enterprise Edition
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Magento Enterprise Edition License
+ * that is bundled with this package in the file LICENSE_EE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://www.magentocommerce.com/license/enterprise-edition
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     enterprise_default
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://www.magentocommerce.com/license/enterprise-edition
+ */
+
+/**
+ * Shoping cart sidebar
+ *
+ * @see Mage_Checkout_Block_Cart_Sidebar
+ */
+	$checkoutSession = Mage::getSingleton('checkout/session');
+   	$countDownTimerHeader= $checkoutSession->getCountDownTimer();
+    $timeoutHeader = $checkoutSession->getQuoteItemExpireTime();
+	$endcount_lc_header = date("F j, Y, G:i:s", ($countDownTimerHeader + $timeoutHeader));
+?>
+
+<div class="top-cart">
+<?php 
+	$_cartQty = Mage::getModel('checkout/cart')->getSummaryQty();
+	if(!Mage::getSingleton('checkout/session')->hasData('top_cart_qty_temp')){
+		$_cartQtyTemp = 0;
+	}else {
+		$_cartQtyTemp = Mage::getSingleton('checkout/session')->getData('top_cart_qty_temp');
+	}
+	$_cartQtyComp = abs($_cartQty - $_cartQtyTemp);
+?>
+<?php if ($_cartQty > 0): ?>
+    <?php $_myCart = $this->__('%s Items', '<span>' . $_cartQty . '</span>') ?>
+<?php else: ?>
+    <?php $_myCart = $this->__('%s Items', '<span>0</span>') ?>
+<?php endif ?>
+<?php if ($this->getIsLinkMode() || !$this->getIsNeedToDisplaySideBar()):?>
+    <div class="block-title no-items">
+        <ul class="links cart-link">
+            <li ><a href="<?php echo $this->getUrl('checkout/cart'); ?>"><?php echo $_myCart ?><span>$0.00</span></a></li>
+        </ul>
+    </div>
+<?php else:?>
+    <div class="block-title<?php if(!$_cartQty) { echo (' no-items'); } ?>">
+        <strong id="cartHeader"><?php echo $_myCart ?><span><?php echo ' | '.Mage::helper('checkout')->formatPrice($this->getSubtotal()) ?><?php if ($_subtotalInclTax = $this->getSubtotalInclTax()): ?> / <?php echo ' | '.Mage::helper('checkout')->formatPrice($_subtotalInclTax) ?> <?php echo ' | '.Mage::helper('tax')->getIncExcText(true) ?><?php endif; ?></span></strong>
+    </div>
+    <div id="topCartContent" class="block-content" style="display:none">
+        <div class="inner-wrapper"><?php // extra div to smooth slideUp and slideDown ?>
+        	<?php if ($_cartQty > 0):?>
+	        <div class="timer-control-box">
+	        	<div class="shipping-date">
+		        	<span>Estimated Ship Date:</span>
+		        	<p id="cart-shipping-date-header"><?php echo $this->getShippingDate();?></p>	        		
+	        	</div>
+	        	<div class="count-down-timer">
+		        	<span>Item Reserved For:</span>
+		        	<p id="cart-timer-header"></p>
+			        <script type="text/javascript">
+						jQuery(document).ready(function() {
+							jQuery("#cart-timer-header").countdown({
+								//date: "12 10, 2011 16:11", //Counting TO a date
+								date: "<?php echo $endcount_lc_header; ?>", //Counting TO a date
+								htmlTemplate: "%{m} <span class=\"cd-time\">:</span> %{s} <span class=\"cd-time\">minutes</span>",
+			
+								onChange: function( event, timer ){
+								},
+								onComplete: function( event ){											
+									jQuery(this).html("<span class='over'>no longer reserved</span>");
+									updateQtySession();
+								},
+								leadingZero: true,
+								direction: "down"
+							});										
+						});	 
+					</script>
+				</div>
+	        </div>
+	        <?php endif;?>
+        <?php $_items = $this->getRecentItems() ?>
+        <?php if(count($_items)): ?>
+            <ol id="mini-cart" class="mini-products-list">
+            <?php foreach($_items as $_item): ?>
+                <!-- Add Customerize Cart item info -->
+                <?php echo $this->getItemHtml($_item) ?>
+            <?php endforeach; ?>
+            </ol>
+            <script type="text/javascript">decorateList('mini-cart', 'none-recursive')</script>
+        <?php else: ?>
+            <p class="block-subtitle">
+                <span onclick="Enterprise.TopCart.hideCart()" class="close-btn"><?php echo $this->__('Close'); ?></span>
+                <?php echo $this->__('Recently added item(s)') ?>
+            </p>
+            <p class="cart-empty">
+                <?php echo $this->__('You have no items in your shopping cart.') ?>
+            </p>
+        <?php endif ?>
+        <?php if($_cartQty && $this->isPossibleOnepageCheckout()): ?>
+            <p class="subtotal">
+                <?php if ($this->canApplyMsrp()): ?>
+                    <span class="map-cart-sidebar-total"><?php echo $this->__('ORDER TOTAL WILL BE DISPLAYED BEFORE YOU SUBMIT THE ORDER'); ?></span>
+                <?php else: ?>
+                    <span class="label"><?php echo $this->__('Subtotal:') ?></span> <?php echo Mage::helper('checkout')->formatPrice($this->getSubtotal()) ?><?php if ($_subtotalInclTax = $this->getSubtotalInclTax()): ?> / <?php echo Mage::helper('checkout')->formatPrice($_subtotalInclTax) ?> <?php echo Mage::helper('tax')->getIncExcText(true) ?><?php endif; ?>
+                <?php endif; ?>
+            </p>
+            <div class="actions">
+                <?php echo $this->getChildHtml('extra_actions') ?>
+                <button class="button" type="button" onclick="setLocation('<?php echo $this->getCheckoutUrl() ?>')"><span><span><?php echo $this->__('Checkout') ?></span></span></button>
+                <a href="<?php echo $this->getUrl('checkout/cart'); ?>"><span><?php echo $this->__('Go to Shopping Cart') ?></span></a>
+            </div>
+        <?php endif ?>
+        </div>
+    </div>
+<script type="text/javascript">
+    //Enterprise.TopCart.initialize('topCartContent');
+    // Below can be used to show minicart after item added
+    //Enterprise.TopCart.showCart(7);
+	jQuery(document).ready(function(){
+
+		var tempComp = <?php echo $_cartQtyComp;?>;
+		if(tempComp){
+			jQuery("#topCartContent").fadeIn();
+			updateQtySession();
+		};
+
+		jQuery("#usercart").hover(
+			function(){
+				jQuery("#topCartContent").fadeIn();},
+			function(){
+				jQuery("#topCartContent").fadeOut();}
+		);
+	})
+	
+	function updateQtySession(){
+
+		jQuery.ajax({
+			type: "GET",
+			url: "<?php echo $this->getBaseUrl();?>checkout/cart/cartheaderupdate",
+			dataType: "json",
+			success: function(jsonResponse){
+				if(!jsonResponse.status){
+					alert(jsonResponse.error);
+				}
+	        }		
+		});
+	}
+
+</script>
+<?php endif;?>
+</div>

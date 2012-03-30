@@ -1,0 +1,300 @@
+body.cms-page-view div.page{
+    width:960px;
+}
+
+body.cms-page-view .header-panel {
+    display:none;
+}
+
+body.cms-page-view .quick-access{
+	
+}
+body.cms-page-view p{
+    color: #707070;
+    font-size:12px;
+    line-height:19px;
+}
+
+body.cms-page-view .main{
+   margin: -62px 0 30px  -20px;
+   padding-bottom:12px;
+}
+
+body.cms-page-view #contentMain{
+    margin-top:65px;
+}
+
+body.cms-page-view .std hr {
+    border-color:#DDD;
+    border-style:solid;
+    border-width:1px 0 0;
+    height:0px;
+    margin: 6px 0;
+}
+
+body.cms-page-view .top_title{
+    font-size:20px;
+    font-weight:normal;
+    margin:0 0  20px;
+    color: #707070;
+}
+
+body.cms-page-view .left_column{
+    width: 230px;
+    margin: 0 5px;
+}
+
+body.cms-page-view .right_column{
+    width: 660px;
+    margin:0 0 0 5px;
+    padding: 20px 15px;
+    border: 1px solid #D7D7D7;
+    border-radius: 8px;
+    background: #F7F7F7;
+}
+
+body.cms-page-view .right_column a{
+	color:#ED1C25;
+}
+
+body.cms-page-view .left_column,.right_column{
+    float:left;
+}
+
+body.cms-page-view .left_aboutus, .left_needhelp{
+    background: #F7F7F7;
+    padding:13px;
+    border: 1px solid #D7D7D7;
+    border-radius:8px;
+    margin; 0 auto 10px;
+    margin-bottom:10px;
+}
+
+body.cms-page-view .left_column ul{
+    padding:0;
+}
+
+body.cms-page-view .left_column li{
+    list-style: none;
+}
+
+body.cms-page-view .left_column a:link, a:visited{
+    color: #ED1C25;
+    font-size:12px;
+    line-height:19px;
+}
+
+body.cms-page-view .clear{
+     clear:both;
+}
+
+body.cms-page-view  #footer ul{
+    float:right;
+}
+
+body.cms-page-view .photo_avatar{
+    float:left;
+    margin:0;
+    width:150px;
+}
+
+body.cms-page-view ul.bullets{
+    font-size: 11px;
+    list-style-type: circle;
+    margin: 5px 0 2px 15px; 
+}
+
+body.cms-page-view .std ul{
+	padding:0px;
+}
+
+body.cms-page-view ul.bullets li{
+	margin:5px 0;
+}
+
+body.cms-page-view .mtm_right_content{
+	float:left;
+	margin-left:10px;
+	width:516px;
+}
+
+body.cms-page-view .bigger{
+	font-size:20px;
+}
+body.cms-page-view .left_aboutus, body.cms-page-view .left_needhelp{
+	font-weight: normal;
+}
+body.cms-page-view .right_column{
+	font-weight: normal;
+}
+
+
+.catalog-category-list .category-products .products-grid .price-box, .category-products .products-list .price-box{
+	text-align:right;
+	background:url("../images/link-arrow-gr.png") no-repeat 110px 5px;
+	border-top:1px solid #E1E0E0;
+	margin:0 4px;
+}
+
+.catalog-category-list .category-products .price{
+	color:#070;
+	font-size:16px;
+	padding-right:15px;
+}
+
+.catalog-category-list .category-products .products-grid{
+	margin-bottom:15px;
+}
+
+.catalog-category-list .category-products .products-grid a{
+	text-decoration:none;
+}
+
+.catalog-category-list .vuall{
+	text-align:right;
+	font-size:13px;
+}
+
+.catalog-category-list .catalog-category-list .vuall a{
+	text-decoration:none;
+	color:#ED1C25;
+}
+
+.catalog-category-list .products-grid .item{
+	background:#F0EFEF;
+}
+
+body.cms-page-view .logo a{
+	width:130px;
+	overflow:hidden;
+}
+
+body.enterprise-invitation-index-index .need_help, body.enterprise-reward-customer-info .need_help,body.enterprise-giftregistry-index-index .need_help,body.enterprise-giftcardaccount-customer-index .need_help, body.newsletter-manage-index .need_help,body.sales-order-history .need_help,body.customer-address-index .need_help,body.customer-account-edit .need_help,body.customer-account-index .need_help,body.enterprise-invitation-index-index .block-account,body.enterprise-reward-customer-info .block-account, body.enterprise-giftregistry-index-index .block-account, body.enterprise-giftcardaccount-customer-index .block-account, body.newsletter-manage-index .block-account,body.customer-account-index .block-account, body.customer-account-edit .block-account, body.customer-address-index .block-account, body.sales-order-history .block-account {
+	background:#F7F7F7;
+	padding:13px;
+	border: 1px solid #d7d7d7;
+	border-radius:8px;
+	margin:0 0 10px 10px;
+	width:180px;
+}
+
+body.enterprise-invitation-index-index .need_help a, body.enterprise-reward-customer-info .need_help a,body.enterprise-giftregistry-index-index .need_help a,body.enterprise-giftcardaccount-customer-index .need_help a, body.newsletter-manage-index .need_help a,body.sales-order-history .need_help a,body.customer-address-index .need_help a,body.customer-account-edit .need_help a,body.customer-account-index .need_help a{
+	color:#ED1C25;
+}
+
+body.enterprise-invitation-index-index .account-page-title, body.enterprise-reward-customer-info .account-page-title,body.enterprise-giftregistry-index-index .account-page-title,body.enterprise-giftcardaccount-customer-index .account-page-title, body.newsletter-manage-index .account-page-title,body.sales-order-history .account-page-title,body.customer-address-index .account-page-title,body.customer-account-edit .account-page-title,body.customer-account-index .account-page-title{
+	margin-bottom:10px;
+}
+
+
+body.enterprise-invitation-index-index .need_help hr,body.enterprise-reward-customer-info .need_help hr,body.enterprise-giftregistry-index-index .need_help hr,body.enterprise-giftcardaccount-customer-index .need_help hr,body.newsletter-manage-index .need_help hr,body.sales-order-history .need_help hr,body.customer-address-index .need_help hr,body.customer-account-index .need_help hr, body.customer-account-edit .need_help hr{
+	border:1px solid #CCC;
+	border-bottom:none;
+}
+
+body.enterprise-reward-customer-info .my-rewards .box{
+	margin-top:10px;
+}
+
+body.enterprise-invitation-index-index .block-account .block-title, body.enterprise-reward-customer-info .block-account .block-title, body.enterprise-giftregistry-index-index .block-account .block-title,body.enterprise-giftcardaccount-customer-index .block-account .block-title,body.newsletter-manage-index .block-account .block-title, body.customer-account-index .block-account .block-title, body.customer-account-edit .block-account .block-title,body.customer-address-index .block-account .block-title, body.sales-order-history .block-account .block-title{
+	padding:0px 0px 5px 0;
+	border-bottom:1px solid #BBB;
+	margin-bottom:5px;
+}
+
+body.enterprise-invitation-index-index .sidebar .block-account .block-title,body.enterprise-reward-customer-info .sidebar .block-account .block-title, body.enterprise-giftregistry-index-index .sidebar .block-account .block-title, body.enterprise-giftcardaccount-customer-index .sidebar .block-account .block-title strong, body.newsletter-manage-index .sidebar .block-account .block-title strong, body.sales-order-history .sidebar .block-account .block-title strong,body.customer-account-index .sidebar .block-account .block-title strong,body.customer-account-edit .sidebar .block-account .block-title strong,body.customer-address-index .sidebar .block-account .block-title strong{
+	font-size:13px;
+	color:#AAA;
+	font-weight:bold;
+}
+
+body.enterprise-invitation-index-index .block-content li a, body.enterprise-reward-customer-info .block-content li a, body.enterprise-giftregistry-index-index .block-content li a ,body.enterprise-giftcardaccount-customer-index .block-content li a,body.newsletter-manage-index .block-content li a, body.sales-order-history .block-content li a, body.customer-account-index .block-content li a,body.customer-account-edit .block-content li a,body.customer-address-index .block-content li a{
+	color:#DE6076; 
+}
+
+body.enterprise-invitation-index-index .block-content li a:hover,body.enterprise-reward-customer-info .block-content li a:hover,body.enterprise-giftregistry-index-index .block-content li a:hover,body.enterprise-giftcardaccount-customer-index .block-content li a:hover,body.newsletter-manage-index .block-content li a:hover, body.sales-order-history .block-content li a:hover, body.customer-account-index .block-content li a:hover,body.customer-account-edit .block-content li a:hover,body.customer-address-index .block-content li a:hover{
+	background:none;
+	color:#ED1C25;
+}
+
+body.enterprise-invitation-index-index .block-content li a, body.enterprise-reward-customer-info .block-content li a ,body.enterprise-giftregistry-index-index .block-content li a, body.enterprise-giftcardaccount-customer-index .block-content li a ,body.newsletter-manage-index .block-content li a, body.sales-order-history .block-content li a,body.customer-account-index .block-content li a,body.customer-account-edit .block-content li a,body.customer-address-index .block-content li a{
+	padding:0px;
+}
+
+body.enterprise-invitation-index-index .block-content li.current, body.enterprise-reward-customer-info .block-content li.current ,body.enterprise-giftregistry-index-index .block-content li.current,body.enterprise-giftcardaccount-customer-index .block-content li.current, body.newsletter-manage-index .block-content li.current, body.sales-order-history .block-content li.current, body.customer-account-index .block-content li.current,body.customer-account-edit .block-content li.current,body.customer-address-index .block-content li.current{
+	color:#DE6076;
+	font-weight:lighter;
+	background:none;
+	padding-left:0px;
+}
+
+body.enterprise-invitation-index-index .block-content li,body.enterprise-reward-customer-info .block-content li, body.enterprise-giftregistry-index-index .block-content li, body.enterprise-giftcardaccount-customer-index .block-content li,body.newsletter-manage-index .block-content li, body.sales-order-history .block-content li, body.customer-account-index .block-content li,body.customer-account-edit .block-content li,body.customer-address-index .block-content li{
+	padding-left:0px;
+	text-align:left;
+}
+
+body.enterprise-invitation-index-index .my-account, body.enterprise-reward-customer-info .my-account,body.enterprise-giftregistry-index-index .my-account, body.enterprise-giftcardaccount-customer-index .my-account,body.newsletter-manage-index .my-account, body.sales-order-history .my-account,body.customer-account-index .my-account,body.customer-account-edit .my-account,body.customer-address-index .my-account{
+	margin-left:10px;
+	border: 1px solid #d7d7d7;
+	border-radius:8px;
+	background:#F7F7F7;
+	padding:10px;
+}
+
+body.enterprise-invitation-index-index .page-title, body.enterprise-reward-customer-info .page-title ,body.enterprise-giftregistry-index-index .page-title, body.enterprise-giftcardaccount-customer-index .page-title,body.newsletter-manage-index .page-title,body.sales-order-history .page-title,body.customer-account-index .page-title,body.customer-account-edit .page-title, body.customer-address-index .page-title{
+	margin: 0px;
+	border-bottom:1px solid #CCC;
+	padding:10px 20px 15px 0px;
+}
+
+body.customer-account-index .welcome-msg{
+	padding-top:10px;
+}
+
+body.customer-address-index .addresses-list{
+	margin-top:10px;
+}
+
+.info-box{
+	border-radius:8px;
+}
+
+body.customer-address-index .info-box{
+	margin-bottom:10px;
+}
+
+body.customer-account-index  .dashboard a{
+	color:#DE6076;
+}
+
+.faq_answer{
+	background:#DDD;
+	padding: 5px;
+}
+
+.faq_question{
+	background:#FFF;
+	padding:5px;
+	color:#777;
+	border:1px solid #DDD;
+}
+
+.cms-faq .right_column{
+	font-size:12px;
+}
+
+.cms-faq  h4.gray{
+	color:#777;
+}
+
+.cms-contact .right_column{
+	font-size:12px;
+}
+
+#badges > div{
+	display:inline;
+}
+
+#badges{
+	text-align:center;
+}

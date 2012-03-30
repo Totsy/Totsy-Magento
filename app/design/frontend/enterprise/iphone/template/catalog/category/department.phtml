@@ -1,0 +1,34 @@
+<?php
+
+/*
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the End User Software Agreement (EULA).
+ * It is also available through the world-wide-web at this URL:
+ * http://www.harapartners.com/license
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to eula@harapartners.com so we can send you a copy immediately.
+ * 
+ */
+ 
+ ?>
+<div class="type-interior department-list category-list list">
+	<h3 class="category-title"><?php echo $this->__('Shop by Category'); ?></h3>
+	<hr class="category-hr" />
+	<ul data-role="listview" class=" ui-listview ui-listview-inset ui-corner-all ui-shadow " >
+		<?php $type = 'departments'; ?>
+		<?php $departmentAttr = Mage::getModel('catalog/category')->getResource()->getAttribute($type);?>
+		<?php $optionArray = $departmentAttr->getSource()->getAllOptions();?>
+		<?php foreach($optionArray as $option):?>
+			<li data-theme="c" class="ui-btn ui-btn-icon-right ui-li-has-arrow ui-li ui-corner-top ui-btn-up-c">
+				<div class="ui-btn-inner ui-li" aria-hidden="true">
+					<div class="ui-btn-text">
+						<a class="ui-link-inherit" href="<?php echo $this->getBaseUrl();?>event/index/topnav/type/<?php echo $type;?>/value/<?php echo $option['value']?>"><?php echo $option['label']?></a>
+					</div>
+					<span class="ui-icon ui-icon-arrow-r ui-icon-shadow"/>
+				</div>
+			</li>
+		<?php endforeach;?>
+	</ul>
+</div>

@@ -1,0 +1,121 @@
+<?php
+/**
+ * Harapartners
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Harapartners License
+ * that is bundled with this package in the file LICENSE_EE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://www.Harapartners.com/license
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@Harapartners.com so we can send you a copy immediately.
+ *
+ */
+?>
+<?php 
+	$keySortPost = $this->getPostKey();
+	$KeySortForm = $this->getFormKey();
+	$sortDate = $this->getSortDate();
+	$storeId = $this->getSortStore();
+	$arrayCollection = $this->loadSortCollection($sortDate, $storeId);
+	$liveArray = $arrayCollection['live'];
+	$upcomingArray = $arrayCollection['upcoming'];
+?>
+<div class="catalog-events-container">
+	<div class="live-events-container">
+		<p class="event-list-title"><?php echo Mage::helper('categoryevent')->__('Live Events List') ?></p>
+		<ul id="sortable" class="ui-sortable" >
+		<?php foreach ( $liveArray as $live ):?>
+			<li class="ui-state-default" id="recordsLiveArray_<?php echo $live['entity_id'];?>" >
+				<?php $imgFile = BP.DS.'media'.DS.'catalog'.DS.'category'.DS.$live['thumbnail'];?>
+				<p class="event-name"><?php echo $live['name'];?></p>
+				<a class="event-link" href=""><img src="<?php echo Mage::helper('service/image')->loadImageFile($imgFile)->resize(150,173); ?>" width="150px" height="173px" alt="" /></a>
+			</li>
+		<?php endforeach; ?>
+		</ul>
+	</div>
+	<div class="upcoming-events-container">
+		<p class="event-list-title"><?php echo Mage::helper('categoryevent')->__('Upcoming Events List') ?></p>
+		<ul id="sortable2">
+			<?php foreach ( $upcomingArray as $up ):?>
+				<li class="ui-state-default" id="recordsUpArray_<?php echo $up['entity_id'];?>">
+					<?php $imgFile = BP.DS.'media'.DS.'catalog'.DS.'category'.DS.$up['thumbnail'];?>
+					<p class="event-name"><?php echo $up['name'];?></p>
+					<a class="event-link" href=""><img src="<?php echo Mage::helper('service/image')->loadImageFile($imgFile)->resize(150,173); ?>" width="150px" height="173px" alt="" /></a>
+				</li>
+			<?php endforeach; ?>
+		</ul>
+	</div>
+	<div class="control-button-set">
+		<button id="sort-order-submit" class="scalable" type="button" onclick="saveOrderSubmit();">
+			<span><?php echo Mage::helper('categoryevent')->__('Save Sort') ?></span>
+		</button>
+		<button id="sort-rebuild-submit" class="scalable" type="button" onclick="rebuildSubmit();">
+			<span><?php echo Mage::helper('categoryevent')->__('Rebuild Sort') ?></span>
+		</button>
+	</div>
+</div>
+		
+<script>
+
+	var liveorder = 0;
+	var uporder = 0;
+	var sortdate = '<?php echo $sortDate; ?>';
+	var storeid = '<?php echo $storeId; ?>';
+	
+	jQuery(function() {
+		jQuery( "#sortable" ).sortable({
+				update: function(){
+					liveorder = jQuery(this).sortable("serialize");
+				}
+			});
+		jQuery( "#sortable" ).disableSelection();
+	});
+
+	jQuery(function() {
+		jQuery( "#sortable2" ).sortable({
+				update: function(){
+					uporder = jQuery(this).sortable("serialize");
+				}
+			});
+		jQuery( "#sortable2" ).disableSelection();
+	});
+
+	function saveOrderSubmit(){
+		var sortformkey = '<?php echo $KeySortForm; ?>';
+		jQuery.ajax({
+			type: 'POST',
+			url: "<?php echo $this->getBaseUrl().'categoryevent/adminhtml_sort/sortsave/key/'.$keySortPost;?>",
+			data: "&sortdate="+sortdate+"&storeid="+storeid+"&"+liveorder+"&"+uporder+"&form_key="+sortformkey,
+			dataType: "json",
+			success: function(jsonResponse){
+				if(jsonResponse.status){
+					alert('Sort Order Saved');
+					jQuery("#sort-type-submit").click();					
+				}else {
+					alert(jsonResponse.error_message);
+				}
+			}
+		});
+	}
+
+	function rebuildSubmit(){
+		var sortformkey = '<?php echo $KeySortForm; ?>';
+		jQuery.ajax({
+			type: 'POST',
+			url: "<?php echo $this->getBaseUrl().'categoryevent/adminhtml_sort/sortrebuild/key/'.$keySortPost;?>",
+			data: "&sortdate="+sortdate+"&storeid="+storeid+"&"+liveorder+"&"+uporder+"&form_key="+sortformkey,
+			dataType: "json",
+			success: function(jsonResponse){
+				if(jsonResponse.status){
+					alert('Sort Rebuild Completed');
+					jQuery("#sort-type-submit").click();					
+				}else {
+					alert(jsonResponse.error_message);
+				}
+			},
+		});
+	}	
+</script>

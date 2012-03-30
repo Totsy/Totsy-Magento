@@ -1,0 +1,10 @@
+Release Notes - Inchoo_Api 1.1.0.0 stable (August 26, 2011)
+***********************************************************
+Major Highlights:
+    - Added AMF support, http://en.wikipedia.org/wiki/Action_Message_Format
+
+
+Release Notes - Inchoo_Api 1.0.0.0 stable (August 26, 2011)
+***********************************************************
+Major Highlights:
+    - First stable release

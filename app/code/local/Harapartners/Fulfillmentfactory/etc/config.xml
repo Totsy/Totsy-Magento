@@ -1,0 +1,138 @@
+<?xml version="1.0"?>
+<!--
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the End User Software Agreement (EULA).
+ * It is also available through the world-wide-web at this URL:
+ * http://www.harapartners.com/license
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to eula@harapartners.com so we can send you a copy immediately.
+ * 
+ -->
+<config>
+    <modules>
+        <Harapartners_Fulfillmentfactory>
+            <version>1.0.0</version>
+        </Harapartners_Fulfillmentfactory>
+    </modules>
+    <global>
+		<blocks>
+			<fulfillmentfactory>
+				<class>Harapartners_Fulfillmentfactory_Block</class>
+			</fulfillmentfactory>
+		</blocks>
+        <helpers>
+            <fulfillmentfactory>
+            	<class>Harapartners_Fulfillmentfactory_Helper</class>
+            </fulfillmentfactory>
+        </helpers>
+		<models>
+            <fulfillmentfactory>
+                <class>Harapartners_Fulfillmentfactory_Model</class>
+				<resourceModel>fulfillmentfactory_mysql4</resourceModel>
+            </fulfillmentfactory>
+			<fulfillmentfactory_mysql4>
+                <class>Harapartners_Fulfillmentfactory_Model_Mysql4</class>
+                <entities>
+                    <itemqueue>
+                        <table>fulfillmentfactory_itemqueue</table>
+                    </itemqueue>
+                </entities>
+            </fulfillmentfactory_mysql4>
+        </models>
+		<!--Moved to Harapartners_Service-->
+		<!--events>
+			<order_cancel_after>
+				<observers>
+                    <fulfillmentfactory>
+                    	<type>singleton</type>
+                    	<class>fulfillmentfactory/observer</class>
+                        <method>cancelItemQueue</method>
+                    </fulfillmentfactory>
+                </observers>
+			</order_cancel_after>
+			<sales_order_save_after>
+				<observers>
+                    <fulfillmentfactory>
+                    	<type>singleton</type>
+                    	<class>fulfillmentfactory/observer</class>
+                        <method>updateItemQueueStatus</method>
+                    </fulfillmentfactory>
+                </observers>
+			</sales_order_save_after>
+        </events-->
+		<resources>
+            <fulfillmentfactory_setup>
+                <setup>
+                    <module>Harapartners_Fulfillmentfactory</module>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </fulfillmentfactory_setup>
+            <fulfillmentfactory_write>
+                <connection>
+                    <use>core_write</use>
+                </connection>
+            </fulfillmentfactory_write>
+            <fulfillmentfactory_read>
+                <connection>
+                    <use>core_read</use>
+                </connection>
+            </fulfillmentfactory_read>
+        </resources>
+    </global>
+	<admin>
+        <routers>
+            <fulfillmentfactory>
+                <use>admin</use>
+                <args>
+                    <module>Harapartners_Fulfillmentfactory</module>
+                    <frontName>fulfillmentfactory</frontName>
+                </args>
+            </fulfillmentfactory>
+        </routers>
+    </admin>
+    <adminhtml>
+		<menu>
+            <sales>
+				<children>
+					<fulfillmentfactory translate="title" module="fulfillmentfactory">
+		                <title>Fulfillment Factory</title>
+		                <sort_order>31</sort_order>
+		                <action>fulfillmentfactory/adminhtml_itemqueue</action>
+		            </fulfillmentfactory>
+				</children>
+            </sales>
+        </menu>
+    </adminhtml>
+	<crontab>
+        <jobs>
+            <fulfillmentfactory_dotcom_update_product>
+                <schedule>
+					<cron_expr>0 0 * * *</cron_expr>
+				</schedule>
+                <run>
+					<model>fulfillmentfactory/service_dotcom::runUpdateProduct</model>
+				</run>
+            </fulfillmentfactory_dotcom_update_product>
+            <fulfillmentfactory_dotcom_fulfill_order>
+                <schedule>
+					<cron_expr>0 0 * * *</cron_expr>
+				</schedule>
+                <run>
+					<model>fulfillmentfactory/service_dotcom::runDotcomFulfillOrder</model>
+				</run>
+            </fulfillmentfactory_dotcom_fulfill_order>
+            <fulfillmentfactory_dotcom_update_shipment>
+                <schedule>
+					<cron_expr>0 0 * * *</cron_expr>
+				</schedule>
+                <run>
+					<model>fulfillmentfactory/service_dotcom::runUpdateShipment</model>
+				</run>
+            </fulfillmentfactory_dotcom_update_shipment>
+        </jobs>
+    </crontab>
+</config>

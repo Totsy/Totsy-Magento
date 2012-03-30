@@ -1,0 +1,19 @@
+<form action="" id="hpcheckout-payment-form">
+    <fieldset>
+    	<?php //echo $this->getChildChildHtml('methods_additional') ?>
+        <?php echo $this->getChildHtml('methods') ?>
+        <?php echo $this->getChildHtml( 'customerbalance' ) ?>
+    </fieldset>
+</form>
+
+<div class="spinner" style="display: none;"><img src="<?php echo $this->getSkinUrl( 'images/ajax-loader.gif' ) ?>"></div>
+
+<script type="text/javascript">
+	//var paymentForm = new VarienForm( 'hpcheckout-payment-form' );
+	
+	jQuery( document ).ready( function() {
+//		//jQuery( '#payment-select, #payment-select ul' ).bind( 'change', hpcheckout.update );
+		//jQuery( '#hpcheckout-payment-select' ).bind( 'change', hpcheckout.update );
+	});
+
+</script>

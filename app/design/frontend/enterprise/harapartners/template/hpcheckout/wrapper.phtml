@@ -1,0 +1,85 @@
+<script type="text/javascript">countryRegions = <?php echo $this->helper('directory')->getRegionJson() ?></script>
+<div id="hpcheckout-wrapper">
+	<div class="page-title title-buttons">
+		<h1><?php echo $this->__('Checkout') ?></h1>
+		<?php
+			$countDownTimer = Mage::getSingleton('checkout/session')->getCountDownTimer();
+			$timeout = Mage::getSingleton('checkout/session')->getQuoteItemExpireTime();	
+			$endcount_lc = date("F j, Y, G:i:s", ($countDownTimer + $timeout));
+		?>	
+		<div class="timer-control-box">
+		<span>Item Reserved For:</span>
+		<p id="checkout-timer"></p>
+		<script type="text/javascript">
+			jQuery(document).ready(function() {
+				jQuery("#checkout-timer").countdown({
+					//date: "12 10, 2011 16:11", //Counting TO a date
+					date: "<?php echo $endcount_lc; ?>", //Counting TO a date
+					htmlTemplate: "%{m} <span class=\"cd-time\">:</span> %{s} <span class=\"cd-time\">minutes</span>",
+					onChange: function( event, timer ){
+					},
+					onComplete: function( event ){										
+						jQuery(this).html("<span class='over'>no longer reserved</span>");
+					},
+					leadingZero: true,
+					direction: "down"
+				});										
+			});	 
+		</script>
+		</div>
+	</div>
+	<?php if( count( $this->getQuote()->getAllItems() ) ): ?>
+		<?php if( ! $this->getCustomerSession()->isLoggedIn() ): ?>
+			<div id="hpcheckout-login-wrapper">
+				<?php echo $this->getChildHtml( 'login' ) ?>
+			</div>
+		<?php endif ?>
+		<div class="address">
+			<div id="hpcheckout-billing-wrapper">
+				<div class="billing-title sub-title checkout-sub-title"><?php echo $this->__('Billing Address') ?></div>
+				<div class="checkout-content"><?php echo $this->getChildHtml( 'billing' ) ?></div>
+			</div>
+			<?php if( ! $this->getQuote()->isVirtual() ): ?>
+				<div id="hpcheckout-shipping-wrapper">
+					<div class="shipping-title sub-title checkout-sub-title"><?php echo $this->__('Shipping Address') ?></div>
+					<div class="checkout-content"><?php echo $this->getChildHtml( 'shipping' ) ?></div>
+				</div>
+			<?php endif ?>
+		</div>
+		<?php if( ! $this->getQuote()->isVirtual() ): ?>
+			<div id="hpcheckout-shipping-method-wrapper">
+				<div class="checkout-sub-title sub-title">Shipping Method</div>
+				<div class="checkout-content"><?php echo $this->getChildHtml( 'shipping_method' ) ?></div>
+			</div>
+		<?php endif ?>
+		<div id="hpcheckout-payment-wrapper">
+			<div class="checkout-sub-title sub-title">Payment</div>
+			<div class="checkout-content"><?php echo $this->getChildHtml( 'payment' ) ?></div>
+		</div>
+		<div id="hpcheckout-review-wrapper">
+			<div class="checkout-sub-title sub-title">Review</div>
+			<div class="checkout-content"><?php echo $this->getChildHtml( 'review' ) ?></div>
+		</div>
+		<?php echo $this->getChildHtml( 'script' ) ?>
+	<?php else: ?>
+		<?php echo $this->__( 'Your cart is empty.' ) ?>
+	<?php endif ?>
+</div>
+<script type="text/javascript">
+	function reflash(){
+			jQuery(".totsy-selective-input-box select").each(function(){
+			var temphtml = jQuery(this).html();
+			var text = jQuery(this).find("option:selected").text();
+			var value = jQuery(this).find("option:selected").val();
+			if (value==''){
+				text = jQuery(this).find("option[selected='true']").text();
+				if (text=='')
+					text = jQuery(this).find("option[value='']").text();
+			}
+			jQuery(this).parent('div').children('span').html(text);
+	})}
+	jQuery(document).ready(function(){	
+		reflash();
+		jQuery("body").change(reflash);
+		})
+</script>

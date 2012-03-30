@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+    <import_adminhtml_import_index>
+        <reference name="content">
+            <block type="import/adminhtml_import" name="import" />
+        </reference>
+    </import_adminhtml_import_index>
+</layout>

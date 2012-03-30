@@ -1,0 +1,59 @@
+<?php
+/**
+ * Harapartners
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Harapartners License
+ * that is bundled with this package in the file LICENSE_EE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://www.Harapartners.com/license
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@Harapartners.com so we can send you a copy immediately.
+ *
+ */
+?>
+<?php
+/**
+ * Catalog index list template
+ *
+ * @see Mage_Catalog_Block_Catalog_List
+ */
+?>
+<?php $liveArray = $this->loadUpdateSortCollection(1);?>
+<?php foreach ($liveArray as $live):?>
+	<?php
+		$timerSet = $this->setCountDownTimer($live['event_end_date']);
+		$timer = $timerSet['timer'];
+		$endcount_lc = $timerSet['endcount'];
+	?>
+	<div class="catalog-event ajax-event-live-display" style="display: none;">
+		<?php $imgFile = BP.DS.'media'.DS.'catalog'.DS.'category'.DS.$live['thumbnail'];?>	
+		<a class="event-link" href="<?php echo Mage::getBaseUrl().$live['url_path']; ?>"><img src="<?php echo Mage::helper('service/image')->loadImageFile($imgFile)->resize(228,263); ?>" width="228px" height="263px" alt="" /></a>
+		<div class="splash-details">
+			<div class="table-cell-left">	
+				<p class="event-name"><?php echo $live['name'];?></p>
+				<p id="time1-<?php echo $timer ?>"></p> 
+				<script type="text/javascript">
+					jQuery("#time1-<?php echo $timer ?>").countdown({
+						//date: "12 10, 2011 16:11", //Counting TO a date
+						date: "<?php echo $endcount_lc; ?>", //Counting TO a date
+						htmlTemplate: "<span>Ends in</span> %{d} <span class=\"cd-time\">Days</span> %{h}<span class=\"cd-time\">:</span>%{m}<span class=\"cd-time\">:</span>%{s}<span class=\"cd-time\"></span>",
+		
+						onChange: function( event, timer ){
+						},
+						onComplete: function( event ){										
+							jQuery(this).html("Completed");
+						},
+						leadingZero: true,
+						direction: "down"
+					});
+				</script>
+			</div>
+			<div class="table-cell-right">
+				<a class="shop-button" href="<?php echo Mage::getBaseUrl().$live['url_path']; ?>">Shop</a>
+			</div>
+		</div>	
+	</div>
+<?php endforeach;?>

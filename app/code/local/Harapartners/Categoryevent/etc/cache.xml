@@ -1,0 +1,16 @@
+<config>
+    <placeholders>
+        <categoryevent_event_index>
+            <block>categoryevent/index_index</block>
+            <placeholder>EVENT_INDEX_INDEX</placeholder>
+            <container>Harapartners_Categoryevent_Model_Cache_Index</container>
+            <cache_lifetime>1</cache_lifetime>
+        </categoryevent_event_index>
+        <categoryevent_event_topnav>
+            <block>categoryevent/index_topnav</block>
+            <placeholder>EVENT_INDEX_TOPNAV</placeholder>
+            <container>Harapartners_Categoryevent_Model_Cache_Topnav</container>
+            <cache_lifetime>1</cache_lifetime>
+        </categoryevent_event_topnav>
+	</placeholders>
+</config>	

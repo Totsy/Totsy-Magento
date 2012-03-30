@@ -1,0 +1,83 @@
+<?php
+/**
+ * Magento Enterprise Edition
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Magento Enterprise Edition License
+ * that is bundled with this package in the file LICENSE_EE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://www.magentocommerce.com/license/enterprise-edition
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://www.magentocommerce.com/license/enterprise-edition
+ */
+?>
+
+<?php
+$_product    = $this->getProduct();
+$_attributes = Mage::helper('core')->decorateArray($this->getAllowAttributes());
+?>
+<?php if ($_product->isSaleable() && count($_attributes)):?>
+    <dl>
+    <?php $counter = 0;?>
+    <?php foreach($_attributes as $_attribute): ?>
+        <dd<?php if ($_attribute->decoratedIsLast){?> class="last"<?php }?>>
+            <div class="input-box">
+            	<div class="ui-btn ui-btn-icon-right ui-btn-corner-all ui-shadow ui-btn-up-b" data-theme="b" >
+            		<span class="ui-btn-inner ui-btn-corner-all">
+            			<span class="ui-btn-text" style="-moz-user-select: none;" id="activechange<?php echo $counter;?>"><?php echo $this->__('Please Select ').$_attribute->getLabel() ?></span>
+            			<span class="ui-icon ui-icon-arrow-d ui-icon-shadow"></span>
+            		</span>
+            	</div>
+            	<div class="select-container select-container-<?php echo $_attribute->getAttributeId() ?>" style="display:none">
+	                <select name="super_attribute[<?php echo $_attribute->getAttributeId() ?>]" id="attribute<?php echo $_attribute->getAttributeId() ?>" class="required-entry super-attribute-select">
+	                    <option><?php echo $this->__('Please Select ').$_attribute->getLabel() ?></option>
+	                </select>
+                </div>
+            </div>
+        </dd>
+        <script type="text/javascript">
+        	jQuery(document).ready(function(){
+				jQuery('#activechange<?php echo $counter;?>').click(function(){
+						jQuery('.select-container-<?php echo $_attribute->getAttributeId() ?>').fadeIn();
+					});
+				jQuery('#attribute<?php echo $_attribute->getAttributeId()?> option').click(function(){
+						jQuery('.select-container-<?php echo $_attribute->getAttributeId() ?>').fadeOut();
+					});
+            
+        		jQuery("button.btn-cart").css("background-color","#AAAAAA");
+	        	var selector_span_<?php echo $counter;?> = "#activechange<?php echo $counter;?>";
+	        	var selector_select_<?php echo $counter;?> = "#attribute<?php echo $_attribute->getAttributeId()?>";
+				jQuery(selector_select_<?php echo $counter;?>).click(function(){
+						var temphtml = jQuery(this).html();
+						var test = jQuery(this).find("option:selected").text();
+						jQuery(selector_span_<?php echo $counter;?>).html(test);
+						if( jQuery(this).val() == ''){
+							jQuery("button.btn-cart").css("background-color","#AAAAAA");
+						}else {
+							jQuery("button.btn-cart").css("background-color","#ED1C25");
+						}
+					});
+            })
+        </script>
+        <?php $counter++; ?>
+    <?php endforeach; ?>
+    </dl>
+    
+    <script type="text/javascript">
+        var spConfig = new Product.Config(<?php echo $this->getJsonConfig() ?>);
+    </script>
+    
+<?php endif;?>

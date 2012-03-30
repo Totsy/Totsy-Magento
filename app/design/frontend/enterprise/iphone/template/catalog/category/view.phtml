@@ -1,0 +1,199 @@
+<?php
+/**
+ * Magento Enterprise Edition
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Magento Enterprise Edition License
+ * that is bundled with this package in the file LICENSE_EE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://www.magentocommerce.com/license/enterprise-edition
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     enterprise_default
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://www.magentocommerce.com/license/enterprise-edition
+ */
+?>
+<?php
+/**
+ * Category view template
+ * Event View
+ * @see Mage_Catalog_Block_Category_View
+ */
+?>
+<?php
+    $_helper    = $this->helper('catalog/output');
+    $_category  = $this->getCurrentCategory();
+    $_imgHtml   = '';
+    $timer = 'category';
+    if ($_imgUrl = $_category->getImageUrl()) {
+        $_imgHtml = '<p class="category-image"><img src="'.$_imgUrl.'" alt="'.$this->htmlEscape($_category->getName()).'" title="'.$this->htmlEscape($_category->getName()).'" /></p>';
+        $_imgHtml = $_helper->categoryAttribute($_category, $_imgHtml, 'image');
+    }
+?>
+<?php echo $this->getMessagesBlock()->toHtml() ?>
+<div class="category-view">
+	<div class="event-title-container">
+		<h1><a href="<?php echo $this->getBaseUrl();?>">Totsy's Sales</a><span> / <span><?php echo $_helper->categoryAttribute($_category, $_category->getName(), 'name') ?></h1>
+	</div>
+	<hr/>
+	<div class="event-description-container">	
+	    <?php if($_description=$this->getCurrentCategory()->getDescription()): ?>
+	    	<h3 class="category-description-title">
+	    		<a class="ui-collapsible-heading-toggle ui-btn ui-btn-icon-left ui-corner-top ui-corner-bottom ui-btn-up-c" href="#" data-theme="c" >
+		    		<span class="ui-btn-inner ui-corner-top ui-corner-bottom">
+			    		<span><?php echo $this->__('Description')?></span>
+			    		<span class="ui-icon ui-icon-shadow ui-icon-plus hp-ui-icon-left"></span>
+		    		</span>
+	    		</a>
+	    	</h3>
+	        <div class="category-description std ui-collapsible-content" style="display:none;">
+	            <?php echo $_helper->categoryAttribute($_category, $_description, 'description') ?>
+	        </div>
+	        <script type="text/javascript">
+		    	jQuery(document).ready(function(){
+		    		jQuery('h3.category-description-title').click(function(){
+							jQuery('div.category-description').toggle();
+		    		});
+		    	})
+		    </script>
+	    <?php endif; ?>
+	</div>
+	<div class="event-timer-container">
+		<?php
+			$defaultTimezone = date_default_timezone_get();
+			$mageTimezone = Mage::getStoreConfig(Mage_Core_Model_Locale::XML_PATH_DEFAULT_TIMEZONE);
+			date_default_timezone_set($mageTimezone);
+			$now = now();
+			date_default_timezone_set($defaultTimezone);
+			
+			$endcount_utc = strtotime($_category->getEventEndDate());
+			$startcount_utc = strtotime($_category->getEventStartDate());
+			$endcount_lc = date("F j, Y, G:i:s", $endcount_utc);
+			$startcount_lc = date("F j, Y, G:i:s", $startcount_utc);
+			
+			if (strtotime($now) >= strtotime( $startcount_lc )){
+				$timecount = $endcount_lc;
+				$timerFlag = 'Ends in';
+			}else {
+				$timecount = $startcount_lc;
+				$timerFlag = 'Opens in';
+			}
+		?>
+		<p class="count-down-timer" id="time-<?php echo $timer ?>"></p>					 
+		<script type="text/javascript">
+			jQuery("#time-<?php echo $timer ?>").countdown({
+				//date: "12 10, 2011 16:11", //Counting TO a date
+				date: "<?php echo $timecount; ?>", //Counting TO a date
+				htmlTemplate: "<span><?php echo $timerFlag;?></span> %{d} <span class=\"cd-time\">Days, </span> %{h}<span class=\"cd-time\">:</span>%{m}<span class=\"cd-time\">:</span>%{s}<span class=\"cd-time\"></span>",
+	
+				onChange: function( event, timer ){
+				},
+				onComplete: function( event ){										
+					jQuery(this).html("Completed");
+				},
+				leadingZero: true,
+				direction: "down"
+			});
+		</script>
+	</div>
+	<hr/>
+	<div class="middle-part">		
+		<?php 
+			$depts = $_category->getDepartments();
+			$_attributes = array();
+			$_attributes = explode(',',$depts);
+			$allowAttrArray = array('boys','girls','moms_dads');
+		?>
+		<div class="options-container-big">	
+			<fieldset id="product-options-wrapper" class="product-options">	
+				<dl>
+			        <dd>
+			            <div class="input-box">
+			            	
+			            	<span class="sort-by-lable"><?php echo $this->__('Sort By')?></span>
+			                <select name="departments" id="attribute" class="required-entry">
+			                	<option value="all"><?php echo $this->__('All') ?></option>
+			                	<?php foreach($_attributes as $_attribute): ?>
+			                		<?php if (in_array($_attribute,$allowAttrArray)): ?>
+				                	<?php 	
+			                			$productAttrOption = Mage::getModel('catalog/product')->getResource()->getAttribute('departments');
+			                			$value = $productAttrOption->getSource()->getOptionId($_attribute);
+			                			$categoryAttrOption = Mage::getModel('catalog/category')->getResource()->getAttribute('departments');
+			                			$label = $categoryAttrOption->getSource()->getOptionText($_attribute);
+			                		?>
+			                		<option value="<?php echo $value; ?>"><?php echo $label ?></option>
+			                		<?php endif;?>
+			                	<?php endforeach;?>
+			                </select>
+			            </div>
+			        </dd>
+			        <script type="text/javascript">
+			        jQuery(document).ready(function(){
+				        	var selector_span = "#activechange";
+				        	var selector_select = "#attribute";
+							jQuery(selector_select).click(function(){
+									var temphtml = jQuery(this).html();
+									var test = jQuery(this).find("option:selected").text();
+									jQuery(selector_span).html(test);
+									if( jQuery(this).val() == ''){
+										jQuery("button.btn-cart").css("background-color","#AAAAAA");
+									}else {
+										jQuery("button.btn-cart").css("background-color","#ED1C25");
+									}
+								});
+			
+			            })
+			        </script>
+				</dl>
+			</fieldset>
+		</div>	
+	</div>
+	<hr/>
+	<script>
+		jQuery(document).ready(function(){
+			jQuery('#attribute option').click(function(){
+					if (jQuery(this).val()=="all"){
+						jQuery('.products-grid li').show();
+					}else{
+						var position = '.products-grid li.'+jQuery(this).val();
+						jQuery('.products-grid li').hide();
+						jQuery(position).show();
+					}
+				})
+		})
+	</script>
+
+    <?php if($this->isContentMode()): ?>
+        <?php echo $this->getCmsBlockHtml() ?>
+    <?php elseif($this->isMixedMode()): ?>
+        <?php echo $this->getCmsBlockHtml() ?>
+        <?php echo $this->getProductListHtml() ?>
+    <?php else: ?>
+        <?php echo $this->getProductListHtml() ?>
+    <?php endif; ?>
+</div>
+
+
+<script type="text/javascript">var switchTo5x=true;</script>
+<script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
+<script type="text/javascript">stLight.options({publisher: "fa9539d4-b1db-40d3-9e2d-9e9a8dc98b42",onhover: false}); </script>
+<script>
+	stWidget.addEntry({
+        "service":"sharethis",
+        "element":document.getElementById('st_sharethis_custom'),
+        "url":"<?php echo $this->helper('core/url')->getCurrentUrl();?>",
+        "title":"Totsy",
+        "image":"<?php echo $_imgUrl; ?>"
+	});
+</script>

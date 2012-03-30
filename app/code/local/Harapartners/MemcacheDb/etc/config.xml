@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!--
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the End User Software Agreement (EULA).
+ * It is also available through the world-wide-web at this URL:
+ * http://www.harapartners.com/license
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to eula@harapartners.com so we can send you a copy immediately.
+ * 
+ -->
+<config>
+    <modules>
+        <Harapartners_MemcacheDb>
+            <version>1.0.0</version>
+        </Harapartners_MemcacheDb>
+    </modules>
+    <global>
+		<models>
+            <memcachedb>
+                <class>Harapartners_MemcacheDb_Model</class>
+            </memcachedb>
+			<!--Moved to Harapartners_Service-->
+			<!--core_resource>
+				<rewrite>
+					<session>Harapartners_MemcacheDb_Model_Resource_Session</session>
+				</rewrite>
+			</core_resource-->
+        </models>
+    </global>
+</config>

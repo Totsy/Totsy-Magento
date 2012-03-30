@@ -1,0 +1,108 @@
+<?xml version="1.0"?>
+
+<!--
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the End User Software Agreement (EULA).
+ * It is also available through the world-wide-web at this URL:
+ * http://www.harapartners.com/license
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to eula@harapartners.com so we can send you a copy immediately.
+ * 
+ -->
+
+<config>
+    <modules>
+        <Harapartners_EmailFactory>
+            <version>1.0.0</version>
+        </Harapartners_EmailFactory>
+    </modules>
+    <global>
+		<models>
+			<emailfactory>
+				<class>Harapartners_EmailFactory_Model</class>
+				<resourceModel>emailfactory_mysql4</resourceModel>
+			</emailfactory>
+			<!--Moved to Harapartners_Service-->
+			<!--core>
+                <rewrite>
+                    <email_template>Harapartners_EmailFactory_Model_Email_Template</email_template>
+                </rewrite>
+            </core-->
+            <emailfactory_mysql4>
+                <class>Harapartners_EmailFactory_Model_Mysql4</class>
+                <entities>
+                    <record>
+                        <table>emailfactory_record</table>
+                    </record>
+                </entities>
+            </emailfactory_mysql4>
+		</models>
+        <resources>
+            <emailfactory_setup>
+                <setup>
+                    <module>Harapartners_EmailFactory</module>
+                </setup>
+            </emailfactory_setup>
+        </resources>
+		<blocks>
+            <emailfactory>
+                <class>Harapartners_EmailFactory_Block</class>
+            </emailfactory>
+			<!--Moved to Harapartners_Service-->
+			<!--page>
+                <rewrite>
+                    <html_head>Harapartners_EmailFactory_Block_Page_Html_Head</html_head>
+                </rewrite>
+            </page-->
+        </blocks>	
+        <helpers>
+            <emailfactory>
+                <class>Harapartners_EmailFactory_Helper</class>
+            </emailfactory>
+        </helpers>
+		<!--Moved to Harapartners_Service-->
+		<!--events>
+	        <newsletter_subscriber_save_after>
+				<observers>
+					<sailthru_customer_subscribe>
+						<type>singleton</type>
+						<class>emailfactory/observer</class>
+						<method>newsletterupdateObserver</method>						
+					</sailthru_customer_subscribe>
+				</observers>				
+            </newsletter_subscriber_save_after>
+			<customer_save_after>
+                <observers>
+                    <sailthru_subscribe_update_data>
+	                    <type>singleton</type>
+                        <class>emailfactory/observer</class>
+                        <method>customerupdateObserver</method>
+                    </sailthru_subscribe_update_data>
+                </observers>
+            </customer_save_after>
+		</events-->			
+    </global>
+	<frontend/>
+    <admin>
+        <routers>
+            <emailfactory>
+                <use>admin</use>
+                <args>
+                    <module>Harapartners_EmailFactory</module>
+                    <frontName>emailfactory</frontName>
+                </args>
+            </emailfactory>
+        </routers>
+    </admin>	
+    <crontab>
+        <jobs>
+            <rule_apply_all>
+				<!-- every day -->
+                <schedule><cron_expr>15 * * * *</cron_expr></schedule>
+                <run><model>emailfactory/observer::checkRegisterEmails</model></run>
+            </rule_apply_all>
+        </jobs>
+    </crontab>
+</config>

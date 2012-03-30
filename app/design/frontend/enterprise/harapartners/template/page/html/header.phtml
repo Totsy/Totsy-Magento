@@ -1,0 +1,115 @@
+<?php
+/**
+ * Magento Enterprise Edition
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Magento Enterprise Edition License
+ * that is bundled with this package in the file LICENSE_EE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://www.magentocommerce.com/license/enterprise-edition
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://www.magentocommerce.com/license/enterprise-edition
+ */
+/**
+ * @var Mage_Page_Block_Html_Header $this
+ */
+?>
+<div class="header-container">
+    <div class="header">
+        <?php if ($this->getIsHomePage()):?>
+        <h1 class="logo"><strong><?php echo $this->getLogoAlt() ?></strong><a href="<?php echo $this->getUrl('') ?>" title="<?php echo $this->getLogoAlt() ?>" class="logo"><img src="<?php echo $this->getLogoSrc() ?>" alt="<?php echo $this->getLogoAlt() ?>" /></a></h1>
+        <?php else:?>
+        <a href="<?php echo $this->getUrl('') ?>" title="<?php echo $this->getLogoAlt() ?>" class="logo"><strong><?php echo $this->getLogoAlt() ?></strong><img src="<?php echo $this->getLogoSrc() ?>" alt="<?php echo $this->getLogoAlt() ?>" /></a>
+        <?php endif?>
+        <div id="invite">
+        		<a href="<?php echo $this -> getBaseUrl();?>invitation">INVITE YOUR FRIEND, <strong>GET $15 </strong></a><?php echo $this->getAdditionalHtml() ?>
+       </div>
+       <div class="nav">
+       		<div class="tri"></div>
+	        <div class="quick-access">	
+	            <?php  // echo $this->getChildHtml('topSearch') ?>
+	            <div id="userinfo"><strong><?php echo $this->__('Hi, %s ', Mage::getSingleton('customer/session')->getCustomer()->getFirstname()); ?> </strong><?php echo $this->getChildHtml('topLinks') ?></div>	  
+	            <div id="usercart">
+	            	<?php //Place holder for session check, may be remove later?>
+	            	<?php if ( true ): ?>
+		        		<?php echo $this->getChildHtml('topCart') ?>
+	 					<strong><?php echo $this->getChildHtml('checkoutLinks') ?></strong>
+	 				<?php else :?>
+	 					<?php echo 'JS here'?>
+ 					<?php endif;?>
+	            </div>	           
+	        </div>
+	        <ul class="menu">
+		        <li id="newsales">
+		        	<div class="space"></div>
+		        	<a href="<?php echo $this->getBaseUrl()?>event/"><em>NEW<br/>SALES</em></a>
+		        </li>
+		        <div class="trileft"></div>
+		        <li id="ending">
+		        	<div class="space"></div>
+		        	<a href="<?php echo $this->getBaseUrl()?>event#event-upcoming"><em>UPCOMING<br/>SALES</em></a>
+		        </li>
+		        <div class="trileft"></div>
+		        <li id="bycat" class="haschild">
+		        	<a href="#"><em>SHOP BY<br/>CATEGORY</em></a>
+					<ul class="shop">
+						<?php $type = 'departments'; ?>
+						<?php $departmentAttr = Mage::getModel('catalog/category')->getResource()->getAttribute($type);?>
+						<?php $optionArray = $departmentAttr->getSource()->getAllOptions();?>
+						<?php foreach($optionArray as $option):?>
+							<li><a href="<?php echo $this->getBaseUrl();?>event/index/topnav/type/<?php echo $type;?>/value/<?php echo $option['value']?>"><?php echo $option['label']?></a></li>
+						<?php endforeach;?>
+					</ul>        
+		        </li>
+		        <div class="trileft"></div>
+		        <li id="bycat" class="haschild">
+		        	<a href="#"><em>SHOP BY<br/>AGE</em></a>
+		        	<ul class="shop">
+		        		<?php $age = 'ages'; ?>
+		        		<?php $ageAttr = Mage::getModel('catalog/category')->getResource()->getAttribute($age);?>
+		        		<?php $ageOptionArray = $ageAttr->getSource()->getAllOptions();?>
+		        		<?php foreach($ageOptionArray as $option):?>
+		        			<li><a href="<?php echo $this->getBaseUrl();?>event/index/topnav/type/<?php echo $age;?>/value/<?php echo $option['value']?>"><?php echo $option['label']?></a></li>
+		        		<?php endforeach;?>
+		        	</ul>
+		        </li>
+		        <div class="trileft"> </div>
+	        </ul>
+       </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+jQuery(document).ready(function(){
+	jQuery(".menu li").hover(function(){
+		jQuery(this).children(".space").stop().css("height","10px").slideDown("normal");
+		},function(){
+		jQuery(this).children(".space").stop().slideUp("fast");
+		})
+	});
+
+jQuery(document).ready(function(){
+	jQuery(".haschild").mouseenter(function(){
+		jQuery(this).children("ul").stop().css("height","auto").slideDown("normal");
+		})
+	});
+
+jQuery(document).ready(function(){
+	jQuery(".haschild").mouseleave(function(){
+		jQuery(this).children("ul").stop().slideUp("fast");
+		})
+	});
+</script>

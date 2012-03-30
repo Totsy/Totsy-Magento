@@ -1,0 +1,102 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @author      Branko Ajzele, ajzele@gmail.com
+ * @category    Inchoo
+ * @package     Inchoo_Api
+ * @copyright   Copyright (c) Inchoo LLC (http://inchoo.net)
+ * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ */
+-->
+<config>
+    <api>
+		<!-- HP Song Start-->
+		<resources>
+			<catalog_category translate="title" module="catalog">
+				<model>catalog/category_api</model>
+				<title>Active Event Api</title>
+				<acl>catalog/category</acl>
+				<methods>
+					<currentevent translate="title" module="catalog">
+						<title>Retrieve Active Event</title>
+						<acl>catalog/category/currentevent</acl>
+					</currentevent>
+				</methods>
+			</catalog_category>
+			<catalog_product translate="title" module="catalog">
+				<model>catalog/product_api</model>
+				<title>Product Api</title>
+				<acl>catalog/product</acl>
+				<methods>
+					<collection translate="title" module="catalog">
+						<title>Product Collection Api</title>
+						<acl>catalog/product/collection</acl>
+					</collection>
+				</methods>
+			</catalog_product>
+			<cart translate="title" module="checkout">
+				<model>checkout/cart_api</model>
+				<title>Cart Api</title>
+				<acl>cart</acl>
+				<methods>
+					<update translate="title" module="checkout">
+						<title>Update Cart Api</title>
+						<acl>cart/update</acl>
+					</update>
+					<delete translate="titile" module="checkout">
+						<title>Delete Cart Api</title>
+						<acl>cart/delete</acl>
+					</delete>
+				</methods>
+			</cart>
+			<customer translate="titile" module="customer">
+				<model>customer/customer_api</model>
+				<title>Customer Api</title>
+				<acl>customer</acl>
+				<methods>
+					<cart translate="title" module="customer">
+						<title>Customer Cart Api</title>
+						<acl>customer/cart</acl>
+					</cart>
+					<auth translate="title" module="customer">
+						<title>Customer Auth Api</title>
+						<acl>customer/auth</acl>
+					</auth>
+					<address translate="title" module="customer">
+						<title>Customer Address Api</title>
+						<acl>customer/address</acl>
+					</address>
+				</methods>
+			</customer>
+		</resources>
+		<!--HP Song End -->
+        <adapters>
+            <inchoo_api_rest>
+                <model>inchoo_api/api_server_adapter_rest</model>
+                <handler>inchoo_api_rest</handler>
+                <active>1</active>
+            </inchoo_api_rest>   
+            <inchoo_api_json>
+                <model>inchoo_api/api_server_adapter_json</model>
+                <handler>inchoo_api_json</handler>
+                <active>1</active>
+            </inchoo_api_json>     
+            <inchoo_api_amf>
+                <model>inchoo_api/api_server_adapter_amf</model>
+                <handler>inchoo_api_amf</handler>
+                <active>1</active>
+            </inchoo_api_amf>            
+        </adapters>
+        <handlers>
+            <inchoo_api_rest>
+                <model>inchoo_api/api_server_handler_rest</model>
+            </inchoo_api_rest>  
+            <inchoo_api_json>
+                <model>inchoo_api/api_server_handler_json</model>
+            </inchoo_api_json>    
+            <inchoo_api_amf>
+                <model>inchoo_api/api_server_handler_amf</model>
+            </inchoo_api_amf>             
+        </handlers>
+    </api>
+</config>

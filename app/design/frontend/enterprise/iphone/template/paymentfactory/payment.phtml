@@ -1,0 +1,62 @@
+<?php 
+	$customer = Mage::getSingleton('customer/session')->getCustomer();
+	$id = $customer->getId(); 
+	$paymentCollection = Mage::getModel('paymentfactory/profile')->loadByCustomerId($id);
+	$counter = 0;
+?>
+
+<div class="page-title">
+	<h1>My Credit Cards</h1>
+</div>
+
+<div class="cards-info">
+	<h2></h2>
+	<?php if(count($paymentCollection)!=0):?>
+	<ul>
+	<?php foreach($paymentCollection as $payment):
+			$type = $payment->getData('card_type');
+			switch ($type) {
+		    case "SO":
+		       $cardType = 'Solo';
+		       break;
+		    case "SM":
+		        $cardType = 'Maestro/Switch';
+		        break;
+		    case "VI":
+		       $cardType = 'Visa';
+		       break;
+		    case "MC":
+		       $cardType = 'Master Card';
+		       break;       
+		    case "AE":
+		       $cardType = 'American Express';
+		       break;	
+		    case "DI":
+		       $cardType = 'Discovery';
+		       break;	
+		    case "JCB":
+		       $cardType = 'JCB';
+		       break;	
+		    case "LASER":
+		       $cardType = 'LASER';
+		       break;	}
+		   	$counter++;
+		    
+	?>
+	<li>
+		<ul class="cards_item">
+		<form action="<?php echo $this->getBaseUrl();?>paymentfactory/index/delete/" method="post" id="payment_edit_form">
+			<li class="card_type"><?php echo $counter;?>.<?php echo $cardType ?></li>
+			<li>xxxxxxxxxxxx<?php echo $payment->getData('last4no')?></li>
+			<li><?php echo $payment->getData('expire_date')?></li>
+			<input type="hidden" name="entity_id" id="id" value="<?php echo $payment->getData('entity_id') ?>"  class="input-text hidden" /></td>
+			<li><button class="button general top" type="submit"><span><span>Delete</span></span></button></li>
+		</form>
+		</ul>
+	</li>
+	<?php endforeach;?>
+	</ul>
+	<?php else:?>
+	<h2>You don't have a saved credit card with your account.</h2>
+	<?php endif;?>
+</div>

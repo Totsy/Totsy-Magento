@@ -1,0 +1,65 @@
+<?php
+/**
+ * Magento Enterprise Edition
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Magento Enterprise Edition License
+ * that is bundled with this package in the file LICENSE_EE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://www.magentocommerce.com/license/enterprise-edition
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     enterprise_default
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://www.magentocommerce.com/license/enterprise-edition
+ */
+?>
+
+        <div class="box ui-collapsible ui-collapsible-collapsed">
+			<h3>
+				<a class="ui-collapsible-heading-toggle ui-btn ui-btn-icon-left ui-corner-top ui-btn-up-c" href="##" data-theme="c">
+					<span class="ui-btn-inner ui-corner-top" aria-hidden="true">
+						<span class="ui-btn-text">
+						<?php echo $this->__('Manage Addresses') ?>
+							<span class="ui-collapsible-heading-status"> click to collapse contents</span>
+						</span>
+						<span class="ui-icon ui-icon-shadow ui-icon-plus"></span>
+					</span>
+				</a>
+			</h3>
+            <div class="box-content ui-collapsible-content-collapsed ui-collapsible-content ui-body-d">
+				<p>
+					<?php echo $this->__('Billing Addresses') ?>
+				</p>
+                <p>
+					<address class="box-content">
+						<?php echo $this->getPrimaryBillingAddressHtml() ?>
+					</address>
+                </p>
+				<p>
+					<?php echo $this->__('Shipping Addresses') ?>
+				</p>
+				<p>
+				    <address class="box-content">
+						<?php echo $this->getPrimaryShippingAddressHtml() ?>
+					</address>
+				</p>
+                <p>
+					<a href="<?php echo $this->getAddressBookUrl() ?>"><?php echo $this->__('Manage Addresses') ?></a>
+                </p>
+            </div>
+        </div>
+
+
+	
+

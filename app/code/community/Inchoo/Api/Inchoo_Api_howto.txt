@@ -1,0 +1,175 @@
+/**
+ * @author      Branko Ajzele, ajzele@gmail.com
+ * @category    Inchoo
+ * @package     Inchoo_Api
+ * @copyright   Copyright (c) Inchoo LLC (http://inchoo.net)
+ * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ */
+
+*******************
+REST Server API url
+*******************
+    http://{my_store}/index.php/api/inchoo/rest (suggested way)
+        or
+    http://{my_store}/index.php/inchoo-api/inchoo/rest
+
+
+*******************
+JSON Server API url
+*******************
+    http://{my_store}/index.php/api/inchoo/json (suggested way)
+        or
+    http://magento.ce/index.php/inchoo-api/inchoo/json
+
+
+*******************
+AMF Server API url
+*******************
+    http://{my_store}/index.php/api/inchoo/amf (suggested way)
+        or
+    http://magento.ce/index.php/inchoo-api/inchoo/amf
+
+
+****************************************************************************
+/* START REST EXAMPLE */
+$serverApiUri = 'http://magento.ce/index.php/api/inchoo/rest';
+$client = new Zend_Rest_Client();
+$client->setUri($serverApiUri);
+
+//$session = $client->__call('login', array('inchoo_surveillance_app', 'apiTEST123'));
+$session = $client->login('inchoo_surveillance_app', 'apiTEST123')->get();
+
+Zend_Debug::dump($session, 'REST-$session');
+
+/*
+    REST-$session object(Zend_Rest_Client_Result)#27 (2) {
+      ["_sxml":protected] => object(SimpleXMLElement)#118 (2) {
+        ["@attributes"] => array(2) {
+          ["generator"] => string(4) "zend"
+          ["version"] => string(3) "1.0"
+        }
+        ["login"] => object(SimpleXMLElement)#106 (2) {
+          ["response"] => string(32) "df3ed1ad80388283a6c55f8ce9f66b0a"
+          ["status"] => string(7) "success"
+        }
+      }
+      ["_errstr":protected] => NULL
+    }
+ */
+
+
+REST EXAMPLE #2
+
+
+$serverApiUri = 'http://magento1610.ce/api/inchoo/rest';
+$client = new Zend_Rest_Client();
+$client->setUri($serverApiUri);
+
+$session = (string)$client->login('testMe', 'MyPWMyPW')->get()->response;
+
+//Shortcut to get string(32) "5d3ff58fa4db3000582edd3d2636cba1"
+//was
+//$session = $client->login('testMe', 'MyPWMyPW')->get();
+//now is
+//(string)$client->login('testMe', 'MyPWMyPW')->get()->response;
+
+Zend_Debug::dump($session, 'REST-$session');    
+
+if(strlen($session) == 32) {
+    $newCustomer = array(
+        'email'      => 'Johhny233.English@gmail.com',
+        'firstname'  => 'Johhny',
+        'lastname'   => 'English',
+        'password_hash'   => md5('WhySoCool-007'),
+        'store_id'   => 1,
+        'website_id' => 1
+    );                       
+
+    /*
+        http://magento1610.ce/api/inchoo/rest/?method=call&sessionId=5d3ff58fa4db3000582edd3d2636cba1&apiPath=customer.list
+     */
+
+    //$resultOf_CustomerCreate = $client->call()->sessionId($session)->apiPath('customer.create')->params(array($newCustomer))->get();
+    $resultOf_CustomerCreate = $client->call()->sessionId($session)->apiPath('customer.create')->arg2(array($newCustomer))->get();            
+
+    /**
+        http://magento1610.ce/api/inchoo/rest/?method=call&sessionId=c53b24d57192bba87dd11af1116e516a&apiPath=customer.create&arg2[customer][email]=ajzele@gmail.com&arg2[customer][fname]=Branko
+     */
+
+
+    Zend_Debug::dump($resultOf_CustomerCreate, 'REST-$resultOf_CustomerCreate');             
+}
+
+/* END REST EXAMPLE */
+****************************************************************************
+
+****************************************************************************
+/* START JSON EXAMPLE */
+$serverApiUri = 'http://magento.ce/index.php/api/inchoo/json';
+
+$signature = md5(time());
+
+$params = array(
+    'jsonrpc' => '2.0',
+    'method' => 'login',
+    'params' => array('inchoo_surveillance_app', 'apiTEST123'),
+    'id' => md5(md5(time()))
+);
+
+$http = new Zend_Http_Client();
+$http->setUri($serverApiUri);
+$http->setMethod(Zend_Http_Client::POST);
+$http->setRawData(json_encode($params));
+
+Zend_Debug::dump($http->request()->getBody(), 'JSON-$session');        
+/*
+    JSON-$session string(114) "{"result":"46b778fa0697bfacbe09b3c6ceaeaf34","id":"b14bf7a8b8e4ba4215c274822ff9c757","error":null,"jsonrpc":"2.0"}"
+ */
+
+
+
+JSON EXAMPLE #2
+
+$time = time();
+
+$params = array(
+    'jsonrpc' => '2.0',
+    'method' => 'login',
+    'params' => array('testMe', 'MyPWMyPW'),
+    'id' => $time
+);        
+
+$serverApiUri = 'http://magento1610.ce/api/inchoo/json';
+
+$http = new Zend_Http_Client();
+
+
+
+$http->setUri($serverApiUri);
+$http->setMethod(Zend_Http_Client::POST);
+$http->setRawData(json_encode($params));
+
+$result = json_decode($http->request()->getBody());
+
+$sessionId = $result->result;
+
+Zend_Debug::dump($sessionId, '$sessionId');
+
+$params2 = array(
+    'jsonrpc' => '2.0',
+    'method' => 'call',
+    'params' => array($sessionId, 'customer.info', array('4')),
+    'id' => $time
+);        
+
+$http2 = new Zend_Http_Client();
+$http2->setUri($serverApiUri);
+$http2->setMethod(Zend_Http_Client::POST);
+$http2->setRawData(json_encode($params2));
+$result2 = json_decode($http2->request()->getBody());                
+
+Zend_Debug::dump($result2, '$result2');
+
+
+/* END JSON EXAMPLE */
+****************************************************************************

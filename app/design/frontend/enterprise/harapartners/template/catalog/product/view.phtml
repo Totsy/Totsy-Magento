@@ -1,0 +1,224 @@
+<?php
+/**
+ * Magento Enterprise Edition
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Magento Enterprise Edition License
+ * that is bundled with this package in the file LICENSE_EE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://www.magentocommerce.com/license/enterprise-edition
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     enterprise_default
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://www.magentocommerce.com/license/enterprise-edition
+ */
+
+/**
+ * Product view template
+ *
+ * @see Mage_Catalog_Block_Product_View
+ * @see Mage_Review_Block_Product_View
+ */
+?>
+<?php $_helper = $this->helper('catalog/output'); ?>
+<?php $_product = $this->getProduct(); ?>
+<?php 
+	if (!Mage::registry('current_category')){	
+		$_categories = $_product->getCategoryIds();
+		$_category = Mage::getModel( 'catalog/category' )->load( $_categories[1] );
+	}else {		
+		$_category  = Mage::registry('current_category');
+	}
+?>
+<script type="text/javascript">
+    var optionsPrice = new Product.OptionsPrice(<?php echo $this->getJsonConfig() ?>);
+</script>
+<div id="messages_product_view"><?php echo $this->getMessagesBlock()->toHtml() ?></div>
+<div class="product-view">
+	<div class="event-title-container">
+		<h1><a href="<?php echo $this->getBaseUrl();?>">Totsy's Sales</a><span> / <span><a href="<?php echo $_category->getUrl();?>"><?php echo $_helper->categoryAttribute($_category, $_category->getName(), 'name') ?></a></h1>
+		<?php
+			$endcount_utc = strtotime($_category->getEventEndDate());
+			$endcount_lc = date("F j, Y, G:i:s", $endcount_utc);
+		?>
+		<p class="count-down-timer" id="timer"></p>					 
+		<script type="text/javascript">
+			jQuery("#timer").countdown({
+				//date: "12 10, 2011 16:11", //Counting TO a date
+				date: "<?php echo $endcount_lc; ?>", //Counting TO a date
+				htmlTemplate: "<span>Ends in</span> %{d} <span class=\"cd-time\">Days, </span> %{h}<span class=\"cd-time\">:</span>%{m}<span class=\"cd-time\">:</span>%{s}<span class=\"cd-time\"></span>",
+	
+				onChange: function( event, timer ){
+				},
+				onComplete: function( event ){										
+					jQuery(this).html("Completed");
+				},
+				leadingZero: true,
+				direction: "down"
+			});
+		</script>
+	</div>
+    <form action="<?php echo $this->getSubmitUrl($_product) ?>" method="post" id="product_addtocart_form"<?php if($_product->getOptions()): ?> enctype="multipart/form-data"<?php endif; ?>>
+        <div class="no-display">
+            <input type="hidden" name="product" value="<?php echo $_product->getId() ?>" />
+            <input type="hidden" name="related_product" id="related-products-field" value="" />
+        </div>
+        <div class="product-essential">
+            <div class="product-img-box product-view-block">
+                <?php echo $this->getChildHtml('media') ?>
+            </div>
+			<div class="product-info-box product-view-block">
+	            <div class="product-name">
+	                <h1><?php echo $_helper->productAttribute($_product, $_product->getName(), 'name') ?></h1>
+	            </div>
+		        <div class="product-collateral">
+		            <?php if ($detailedInfoGroup = $this->getChildGroup('detailed_info', 'getChildHtml')):?>
+		                <dl id="collateral-tabs" class="collateral-tabs">
+		                <?php foreach ($detailedInfoGroup as $alias => $html):?>
+		                    <dt class="tab"><span><?php if ( $this->escapeHtml($this->getChildData($alias, 'title')) == 'Details' ) echo 'Description'; else echo $this->__('Shipping & Returns');?></span></dt>
+		                    <dd class="tab-container">
+		                       <div class="tab-content"><?php echo $html ?></div>
+		                    </dd>
+		                <?php endforeach;?>
+		                </dl>
+		                <script type="text/javascript">new Enterprise.Tabs('collateral-tabs')</script>
+		            <?php endif; ?>
+		            <?php //if ($this->canEmailToFriend()): ?>
+		                <!--p class="emailto-link"><a href="<?php //echo $this->helper('catalog/product')->getEmailToFriendUrl($_product) ?>"><?php //echo $this->__('Email to a Friend') ?></a></p-->
+		            <?php //endif; ?>
+		            <?php if ($_product->getData('final_sale')): ?>
+		            	<p class="final-sale"><strong>Final Sale</strong></p>
+		            <?php endif; ?>
+	        	</div>
+			</div>
+            <div class="product-shop product-view-block">
+                <div class="product-main-info">
+                    <p class="product-ids"><?php echo $this->__('SKU# %s', $this->htmlEscape($_product->getSku())); ?></p>
+                    <?php //echo $this->getReviewsSummaryHtml($_product, false, true)?>
+                    <?php echo $this->getChildHtml('alert_urls') ?>
+                    <?php echo $this->getChildHtml('product_type_data') ?>
+                
+                 <?php echo $this->getChildHtml('tierprices') ?>
+                 <?php echo $this->getChildHtml('extrahint') ?>
+
+                 <?php if (!$this->hasOptions()):?>
+                     <div class="add-to-box">
+                         <?php if($_product->isSaleable()): ?>
+                             <?php echo $this->getChildHtml('addtocart') ?>
+                         <?php endif; ?>
+                         <?php //echo $this->getChildHtml('addto') ?>
+                     </div>
+                 <?php else:?>
+                     <?php if ($_product->isSaleable() && $this->hasOptions() && $this->getChildChildHtml('container1') ):?>
+                         <div class="options-container-small">
+                             <?php echo $this->getChildChildHtml('container1', '', true, true) ?>
+                         </div>
+                     <?php else: ?>
+                         <?php //echo $this->getChildHtml('addto') ?>
+                     <?php endif;?>
+                 <?php endif; ?>
+
+                 <?php if ($_product->getShortDescription()):?>
+                     <div class="short-description std">
+                         <h2><?php echo $this->__('Quick Overview') ?></h2>
+                         <?php echo $_helper->productAttribute($_product, nl2br($_product->getShortDescription()), 'short_description') ?>
+                     </div>
+                 <?php endif;?>
+
+                 <?php echo $this->getChildHtml('other');?>
+                 
+				<?php if ($_product->isSaleable() && $this->hasOptions() && $this->getChildChildHtml('container2') ):?>
+					<div class="options-container-big">
+					   <?php echo $this->getChildChildHtml('container2', '', true, true) ?>
+					</div>
+				<?php endif;?>
+                </div>
+                <!-- div class="gift-card">
+	            	<?php //$_giftcard = Mage::getModel('catalog/product')->loadByAttribute('url_key', 'totsy-gift-card');?>
+	            	<a class="gift-card-btn" href="<?php //echo $this->getBaseUrl() . $_giftcard->getUrlPath();?>">Get A Totsy Gift Card</a>
+	            </div-->
+                <div class="share-button" id="st_sharethis_custom">
+	                <div class="st_sharethis_custom"></div>
+	            </div>
+            </div>
+        </div>       
+        <div class="clearer"></div>
+    </form>
+        <?php echo $this->getChildHtml('relatedProducts') ?>
+        <?php echo $this->getChildHtml('upsell_products') ?>
+        <?php echo $this->getChildHtml('productTagList') ?>
+        <?php echo $this->getChildHtml('product_additional_data') ?>
+</div>
+
+<script type="text/javascript">
+//	jQuery(document).ready(function(){
+//		jQuery("button.btn-cart").css("background-color","#AAAAAA");
+//	})
+//<![CDATA[
+    var productAddToCartForm = new VarienForm('product_addtocart_form');
+    productAddToCartForm.submit = function(button, url) {
+        if (this.validator.validate()) {
+            var form = this.form;
+            var oldUrl = form.action;
+
+            if (url) {
+               form.action = url;
+            }
+            var e = null;
+            try {
+                this.form.submit();
+            } catch (e) {
+            }
+            this.form.action = oldUrl;
+            if (e) {
+                throw e;
+            }
+
+            if (button && button != 'undefined') {
+                button.disabled = true;
+            }
+        }
+    }.bind(productAddToCartForm);
+
+    productAddToCartForm.submitLight = function(button, url){
+        if(this.validator) {
+            var nv = Validation.methods;
+            delete Validation.methods['required-entry'];
+            delete Validation.methods['validate-one-required'];
+            delete Validation.methods['validate-one-required-by-name'];
+            if (this.validator.validate()) {
+                if (url) {
+                    this.form.action = url;
+                }
+                this.form.submit();
+            }
+            Object.extend(Validation.methods, nv);
+        }
+    }.bind(productAddToCartForm);
+//]]>
+</script>
+<script type="text/javascript">var switchTo5x=true;</script>
+<script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
+<script type="text/javascript">stLight.options({publisher: "fa9539d4-b1db-40d3-9e2d-9e9a8dc98b42",onhover: false}); </script>
+
+<?php $small_img = $this->helper('catalog/image')->init($_product, 'image')->resize(100); ?>
+<script>
+	stWidget.addEntry({
+        "service":"sharethis",
+        "element":document.getElementById('st_sharethis_custom'),
+        "url":"<?php echo $this->helper('core/url')->getCurrentUrl();?>",
+        "title":"Totsy",
+        "image":"<?php echo $small_img; ?>"
+	});
+</script>

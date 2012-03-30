@@ -1,0 +1,238 @@
+/*edward on ibuy*/
+
+#hpcheckout-billing-wrapper , #hpcheckout-shipping-wrapper{
+    display: inline-block;
+    vertical-align: top;
+    width: 415px;
+	padding-left:20px;
+	padding-right:10px;
+}
+#hpcheckout-billing-wrapper{
+	border-right:1px solid #C7C7C7;
+}
+#hpcheckout-wrapper .form-list label {
+	width:180px;
+	text-align:left;
+	padding:6px 15px 0 0;
+}
+.form-half-left{
+	
+}
+.form-half-right{
+	
+}
+.form-list input.long-input{
+	width:404px;
+}
+
+.half-of-half input.input-text{
+	width: 190px;
+}
+.half-of-half select{
+	width: 195px;
+}
+.half-of-half{
+	width: 400px;
+    display: inline-block;
+    vertical-align: top;
+}
+.form-list li.fields div.minus-padding{
+	padding: 0 0 5px;
+}
+.hpcheckout-checkout-index .col1-layout .col-main .page-title{
+	margin: 0px;
+}
+.address .checkout-sub-title{
+	
+}
+#hpcheckout-review-wrapper .checkout-sub-title{
+}
+
+div.billing-title, div.shipping-title{
+	margin-left:0px;
+	margin-right:15px;
+
+}
+
+
+
+.checkout-sub-title{
+	color: #ED1C25;
+	margin:20px 0px 10px 19px;
+	border-bottom:1px solid #DDDDDD;
+	padding-bottom:5px;
+}
+.checkout-content{
+	padding-left: 22px;
+}
+#hpcheckout-wrapper{
+}
+#checkout-review-load{
+	margin-left:0px;
+}
+.presudo-valgin{
+	position:relative;
+	top: 30px;
+}
+.place-order{
+	float:right;
+}
+#checkout-review-table-wrapper{
+	border-bottom:1px solid #dddddd;
+}
+#checkout-review-table td a:hover{
+	text-decoration: underline;
+}
+#review-buttons-container{
+	padding: 20px;
+}
+
+#hpcheckout-review-wrapper button.btn-checkout{
+	padding: 4px;
+}
+#hpcheckout-review-wrapper button.btn-checkout span span{
+	font-size: 17px;
+}
+.hpcheckout-checkout-index input{
+	background: rgb(234,234,234); /* Old browsers */
+	background: -moz-linear-gradient(top,  rgba(234,234,234,1) 0%, rgba(255,255,255,1) 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(234,234,234,1)), color-stop(100%,rgba(255,255,255,1))); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  rgba(234,234,234,1) 0%,rgba(255,255,255,1) 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  rgba(234,234,234,1) 0%,rgba(255,255,255,1) 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  rgba(234,234,234,1) 0%,rgba(255,255,255,1) 100%); /* IE10+ */
+	background: linear-gradient(top,  rgba(234,234,234,1) 0%,rgba(255,255,255,1) 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#eaeaea', endColorstr='#ffffff',GradientType=0 ); /* IE6-9 */
+	border-radius: 5px;
+    padding: 5px;
+}
+.hpcheckout-checkout-index input:hover{
+	background: rgb(224,224,224); /* Old browsers */
+	background: -moz-linear-gradient(top,  rgba(224,224,224,1) 0%, rgba(255,255,255,1) 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(224,224,224,1)), color-stop(100%,rgba(255,255,255,1))); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  rgba(224,224,224,1) 0%,rgba(255,255,255,1) 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  rgba(224,224,224,1) 0%,rgba(255,255,255,1) 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  rgba(224,224,224,1) 0%,rgba(255,255,255,1) 100%); /* IE10+ */
+	background: linear-gradient(top,  rgba(224,224,224,1) 0%,rgba(255,255,255,1) 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e0e0e0', endColorstr='#ffffff',GradientType=0 ); /* IE6-9 */
+}
+
+
+.hpcheckout-checkout-index .form-list .validation-advice{
+	margin-left:196px;
+}
+
+.hidden-state {
+    float: right !important;
+    margin-right: 3px !important;
+    margin-top: 5px !important;
+}
+.totsy-selective-input-box span {
+    border-bottom-left-radius: 4px;
+    border-right: 1px solid #C1C1C1;
+    border-top-left-radius: 4px;
+    color: #333333 !important;
+    display: block;
+    line-height: 14px !important;
+    margin-right: 20px;
+    overflow: hidden;
+    padding: 5px;
+	min-height:13px;
+    white-space: nowrap;
+}
+.totsy-selective-input-box {
+    background: url("../images/selector.png") no-repeat scroll right 7px transparent;
+    border: 1px solid #C1C1C1;
+    border-radius: 5px 5px 5px 5px;
+    box-shadow: 0 -10px 9px rgba(0, 0, 0, 0.05) inset;
+    color: #333333 !important;
+    line-height: 14px !important;
+    margin: 2px -2px;
+    overflow: hidden;
+    padding: 0;
+    position: relative;
+	width:50%;
+}
+.totsy-selective-input-box  select {
+    background: none repeat scroll 0 0 transparent;
+    border: 1px solid;
+    color: #333333 !important;
+    height: 100%;
+    left: 0;
+    line-height: 14px !important;
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+}
+
+.hpcheckout-checkout-index .totsy-selective-input-box .validation-advice{
+	border-top: 1px solid #C1C1C1;
+	text-align: center;
+	width:215px;
+	margin-left:0px;
+}
+.hpcheckout-checkout-index div.middle-length .validation-advice{
+	width:262px;
+}
+.hpcheckout-checkout-index .middle-length{
+	width: 262px;
+}
+.hpcheckout-checkout-index .short-length{
+	width: 122px;
+}
+.right-margin{
+	margin-right:20px;
+}
+
+.totsy-button {
+    background-color: #ED1C25;
+    border-color: #8B9FC2;
+    border-radius: 5px 5px 5px 5px;
+    border-style: solid;
+    border-width: 0;
+    color: white;
+    font-weight: bold;
+    padding: 5px 30px;
+}
+.totsy-button-white {
+    background-color: white;
+    border-color: #ED1C25;
+    border-radius: 5px 5px 5px 5px;
+    border-style: solid;
+    border-width: 1px;
+    color: #ED1C25;
+    font-weight: bold;
+    padding: 5px 30px;
+}
+#savedfiles span{
+	font-size: 12px;
+}
+#savedfiles input{
+	position:relative;
+	bottom:2px;
+}
+#hpcheckout-shipping-method-wrapper, #hpcheckout-payment-wrapper, #hpcheckout-review-wrapper{
+	padding-right: 21px;
+}
+
+div.page-title .timer-control-box p#checkout-timer, div.page-title .timer-control-box p#checkout-timer span {
+    color: #009900;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.hpcheckout-checkout-index #hpcheckout-payment-form .form-list .validation-advice{
+	margin-left:0px;
+}
+
+.hpcheckout-checkout-index #hpcheckout-payment-form  .totsy-selective-input-box .validation-advice{
+	width: 127px;
+}
+.hpcheckout-checkout-index #hpcheckout-payment-form .totsy-selective-input-box #advice-validate-select-hpcheckout-payment-select{
+	width: 262px;
+}
+
+.hpcheckout-error-message {
+	color: red;
+	display: block;
+}

@@ -1,0 +1,13 @@
+jQuery(document).ready(function(){
+	jQuery('.ui-btn').hover(
+		function(){jQuery(this).removeClass('ui-btn-up-c').addClass('ui-btn-hover-c')},
+		function(){jQuery(this).removeClass('ui-btn-hover-c').addClass('ui-btn-up-c')}
+	);
+	jQuery('.ui-collapsible-heading-toggle').click(
+		function(){
+			jQuery(this).parent().parent('.ui-collapsible').toggleClass('ui-collapsible-collapsed');
+			jQuery(this).parent().parent('.ui-collapsible').children('.ui-collapsible-content').toggleClass('ui-collapsible-content-collapsed');
+			jQuery(this).children().children('.ui-icon').toggleClass('ui-icon-plus').toggleClass('ui-icon-minus');
+		}
+	)
+})
