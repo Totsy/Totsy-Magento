@@ -19,55 +19,55 @@ class Harapartners_Stockhistory_Block_Adminhtml_History_Index_Grid extends Mage_
 	public function __construct()
 	{
 		parent::__construct();
-		$this->setId('StockGrid');
-		$this->setDefaultSort('history_id');
+		$this->setId('TransactionGrid');
+		$this->setDefaultSort('id');
 		$this->setDefaultDir('ASC');
 		$this->setSaveParametersInSession(true);
 	}
 	
 	protected function _prepareCollection()
 	{
-		$collection = Mage::getModel('stockhistory/history')->getCollection();
+		$collection = Mage::getModel('stockhistory/report')->getCollection();
 		$this->setCollection($collection);
 		return parent::_prepareCollection();
 	}
 	
 	protected function _prepareColumns()
 	{
-		$this->addColumn('history_id', array(
+		$this->addColumn('id', array(
 					'header'	=>	Mage::helper('stockhistory')->__('ID'),
 					'align'		=>	'right',
 					'width'		=>	'50px',
-					'index'		=>	'history_id',
+					'index'		=>	'id',
 					//'renderer'	=>	new Mage_Adminhtml_Block_Widget_Grid_Column_Renderer_Checkbox(),
 		));
 		
-		$this->addColumn('entity_id', array(
-					'header'	=>	Mage::helper('stockhistory')->__('Product ID'),
+		$this->addColumn('vendor_id', array(
+					'header'	=>	Mage::helper('stockhistory')->__('Vendor ID'),
 					'align'		=>	'right',
 					'width'		=>	'50px',
-					'index'		=>	'entity_id',
+					'index'		=>	'vendor_id',
 		));
 		
-		$this->addColumn('product_name', array(
-					'header'	=>	Mage::helper('stockhistory')->__('Product Name'),
+		$this->addColumn('po_id', array(
+					'header'	=>	Mage::helper('stockhistory')->__('Purchase Order ID'),
 					'align'		=>	'right',
 					'width'		=>	'50px',
-					'index'		=>	'product_name',
+					'index'		=>	'po_id',
 		)); 
 		
-		$this->addColumn('size', array(
-					'header'	=>	Mage::helper('stockhistory')->__('Size'),
+		$this->addColumn('product_id', array(
+					'header'	=>	Mage::helper('stockhistory')->__('Product ID'),
 					'align'		=>	'right',
 					'width'		=>	'20px',
-					'index'		=>	'size',
+					'index'		=>	'product_id',
 		));
 		
-		$this->addColumn('color', array(
-					'header'	=>	Mage::helper('stockhistory')->__('Color'),
+		$this->addColumn('category_id', array(
+					'header'	=>	Mage::helper('stockhistory')->__('Category ID'),
 					'align'		=>	'right',
 					'width'		=>	'20px',
-					'index'		=>	'color',
+					'index'		=>	'category_id',
 		));
 		
 		$this->addColumn('product_sku', array(
@@ -98,12 +98,12 @@ class Harapartners_Stockhistory_Block_Adminhtml_History_Index_Grid extends Mage_
 					'index'		=>	'unit_cost',
 		));
 		
-		$this->addColumn('total_cost', array(
-					'header'	=>	Mage::helper('stockhistory')->__('Total Cost'),
-					'align'		=>	'right',
-					'width'		=>	'50px',
-					'index'		=>	'total_cost',
-		));
+//		$this->addColumn('total_cost', array(
+//					'header'	=>	Mage::helper('stockhistory')->__('Total Cost'),
+//					'align'		=>	'right',
+//					'width'		=>	'50px',
+//					'index'		=>	'total_cost',
+//		));
 		
 		$this->addColumn('created_at', array(
 					'header'	=>	Mage::helper('stockhistory')->__('Created At'),
@@ -123,11 +123,11 @@ class Harapartners_Stockhistory_Block_Adminhtml_History_Index_Grid extends Mage_
 					'gmtoffset'	=> 	true,
 		));
 		
-		$this->addColumn('status', array(
-					'header'	=>	Mage::helper('stockhistory')->__('Status'),
+		$this->addColumn('action_type', array(
+					'header'	=>	Mage::helper('stockhistory')->__('Action'),
 					'align'		=>	'right',
 					'width'		=>	'50px',
-					'index'		=>	'status',
+					'index'		=>	'action_type',
 					'type'		=>	'options',
 					'options'	=>  array('0' => 'Pending', '1'=>'Processed', '2'=> 'Failed')
 		));
