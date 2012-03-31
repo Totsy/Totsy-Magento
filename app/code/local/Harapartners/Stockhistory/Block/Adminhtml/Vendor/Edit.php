@@ -12,35 +12,20 @@
  * 
  */
 
-class Harapartners_Stockhistory_Block_Adminhtml_History_Import extends Mage_Adminhtml_Block_Widget_Form_Container
+class Harapartners_Stockhistory_Block_Adminhtml_Vendor_Edit extends Mage_Adminhtml_Block_Widget_Form_Container
 {
 	public function __construct()
 	{
 		parent::__construct();
+		$this->_objectId = 'id';
 		$this->_blockGroup = 'stockhistory';
-		$this->_controller = 'adminhtml_history';
-		$this->_mode = 'import';
-		$this->_removeButton('save');
-		$this->_addButton('importsave', array(
-            'label'     => Mage::helper('stockhistory')->__('Save File'),
-            'onclick'   => 'saveAndImport()',
-			'class'		=> 'save',
-      	));
-	
-	
-	$this->_formScripts = array(<<<Javascript
-	
-var importForm = new varienForm('import_form', '');
-var saveAndImport = function (){
-	importForm.submit($('import_form').action);
-}
-
-Javascript
-	);
+		$this->_controller = 'adminhtml_vendor';
+		$this->_removeButton('delete');
+		//$this->_updateButton('save', 'label', Mage::helper('stockhistory')->__('Import File'));
 	}
 	
 	public function getHeaderText() {
-    	return Mage::helper('stockhistory')->__('Purchase Order Import');
+    	return Mage::helper('stockhistory')->__('Vendor Info');
     }
 
     public function getSaveUrl(){

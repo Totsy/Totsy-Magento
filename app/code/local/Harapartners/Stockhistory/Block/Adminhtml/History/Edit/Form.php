@@ -24,7 +24,7 @@ class Harapartners_Stockhistory_Block_Adminhtml_History_Edit_Form extends Mage_A
         ));
         
 
-        $fieldset = $form->addFieldset('stockhistory', array('legend'=>Mage::helper('stockhistory')->__("PO Info")));
+        $fieldset = $form->addFieldset('stockhistory_edit', array('legend'=>Mage::helper('stockhistory')->__("PO Info")));
         
         $fieldset->addField('history_id', 'label', array(
             'label'     => Mage::helper('stockhistory')->__('PO ID:'),
