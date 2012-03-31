@@ -18,7 +18,7 @@ class Harapartners_Stockhistory_Block_Adminhtml_Vendor_Edit_Form extends Mage_Ad
 
         $form = new Varien_Data_Form(array(
             'id'        => 'edit_form',
-            'action'    => $this->getData('action'),
+            'action'    => $this->getUrl('*/*/save', array('id' => $this->getRequest()->getParam('id'))),
             'method'    => 'post',
             //'enctype'  	 => 'multipart/form-data'
         ));
@@ -26,14 +26,20 @@ class Harapartners_Stockhistory_Block_Adminhtml_Vendor_Edit_Form extends Mage_Ad
 
         $fieldset = $form->addFieldset('vendor', array('legend'=>Mage::helper('stockhistory')->__("Vendor Info")));
         
-        $fieldset->addField('id', 'label', array(
-            'label'     => Mage::helper('stockhistory')->__('Vendor ID:'),
-            'name'      => 'id',
-        ));
+//        $fieldset->addField('id', 'text', array(
+//            'label'     => Mage::helper('stockhistory')->__('Vendor ID:'),
+//            'name'      => 'id',
+//        ));
         
-        $fieldset->addField('vendor_name', 'label', array(
+        
+        $fieldset->addField('vendor_name', 'text', array(
             'label'     => Mage::helper('stockhistory')->__('Vendor Name:'),
             'name'      => 'vendor_name',
+        ));
+        
+        $fieldset->addField('vendor_sku', 'text', array(
+            'label'     => Mage::helper('stockhistory')->__('Vendor SKU:'),
+            'name'      => 'vendor_sku',
         ));
         
         $fieldset->addField('contact_person', 'text', array(

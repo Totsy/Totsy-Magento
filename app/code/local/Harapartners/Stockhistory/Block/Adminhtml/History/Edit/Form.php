@@ -24,7 +24,7 @@ class Harapartners_Stockhistory_Block_Adminhtml_History_Edit_Form extends Mage_A
         ));
         
 
-        $fieldset = $form->addFieldset('stockhistory_edit', array('legend'=>Mage::helper('stockhistory')->__("PO Info")));
+        $fieldset = $form->addFieldset('stockhistory', array('legend'=>Mage::helper('stockhistory')->__("PO Info")));
         
         $fieldset->addField('history_id', 'label', array(
             'label'     => Mage::helper('stockhistory')->__('PO ID:'),
@@ -101,11 +101,11 @@ class Harapartners_Stockhistory_Block_Adminhtml_History_Edit_Form extends Mage_A
 		
         //$form->setValues( array('file_import' => $configText) );
         
-		if ( $formData = Mage::getSingleton('adminhtml/session')->getFormData() ){
+		if ( $formData = Mage::getSingleton('adminhtml/session')->getTransFormData() ){
             $form->setValues($formData);
-            Mage::getSingleton('adminhtml/session')->setFormData(null);
-        } elseif ( Mage::registry('po_data') ) {
-            $form->setValues(Mage::registry('po_data')->getData());
+            Mage::getSingleton('adminhtml/session')->setTransFormData(null);
+        } elseif ( Mage::registry('trans_data') ) {
+            $form->setValues(Mage::registry('trans_data')->getData());
         }
         $form->setUseContainer(true);
         $this->setForm($form);
