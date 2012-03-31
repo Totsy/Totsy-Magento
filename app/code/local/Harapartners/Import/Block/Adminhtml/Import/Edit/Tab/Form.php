@@ -47,10 +47,10 @@ class Harapartners_Import_Block_Adminhtml_Import_Edit_Tab_Form extends Mage_Admi
 //          'required'  => true,
 //      ));
      
-      if ( Mage::getSingleton('adminhtml/session')->getImportData() )
+      if ( Mage::getSingleton('adminhtml/session')->getHpImportFormData() )
       {
-          $form->setValues(Mage::getSingleton('adminhtml/session')->getImportData());
-          Mage::getSingleton('adminhtml/session')->setImportData(null);
+          $form->setValues(Mage::getSingleton('adminhtml/session')->getHpImportFormData());
+          Mage::getSingleton('adminhtml/session')->setHpImportFormData(null);
       } elseif ( Mage::registry('import_data') ) {
           $form->setValues(Mage::registry('import_data')->getData());
       }

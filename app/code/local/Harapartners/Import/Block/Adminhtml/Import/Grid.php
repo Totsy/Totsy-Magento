@@ -1,5 +1,17 @@
 <?php
 
+/*
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the End User Software Agreement (EULA).
+ * It is also available through the world-wide-web at this URL:
+ * http://www.harapartners.com/license
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to eula@harapartners.com so we can send you a copy immediately.
+ * 
+ */
+
 class Harapartners_Import_Block_Adminhtml_Import_Grid extends Mage_Adminhtml_Block_Widget_Grid
 {
   public function __construct()
@@ -45,6 +57,13 @@ class Harapartners_Import_Block_Adminhtml_Import_Grid extends Mage_Adminhtml_Blo
           'index'     => 'import_status',
       ));
       
+      $this->addColumn('error_message', array(
+          'header'    => Mage::helper('import')->__('Error Message'),
+          'align'     =>'left',
+          'index'     => 'error_message',
+      	  'type'      => 'text',
+      ));
+      
       $this->addColumn('created_time', array(
           'header'    => Mage::helper('import')->__('Created'),
           'align'     =>'left',
@@ -73,9 +92,9 @@ class Harapartners_Import_Block_Adminhtml_Import_Grid extends Mage_Adminhtml_Blo
         return $this;
     }
 
-  public function getRowUrl($row)
-  {
-      return $this->getUrl('*/*/edit', array('id' => $row->getId()));
-  }
+//  public function getRowUrl($row)
+//  {
+//      return $this->getUrl('*/*/edit', array('id' => $row->getId()));
+//  }
 
 }
