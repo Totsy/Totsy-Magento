@@ -45,6 +45,13 @@ class Harapartners_Stockhistory_Adminhtml_HistoryController extends Mage_Adminht
 			->renderLayout();
     
 	}
+	
+	public function saveAction()
+	{
+		$data = $this->getRequest()->getParams();
+		$history = Mage::getModel('stockhistory/history')->load($data[id]);
+		
+	}
 	public function saveImportAction()
 	{
 		$data = $this->getRequest()->getParams();

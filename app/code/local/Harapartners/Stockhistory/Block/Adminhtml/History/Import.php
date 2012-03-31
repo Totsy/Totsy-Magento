@@ -23,9 +23,20 @@ class Harapartners_Stockhistory_Block_Adminhtml_History_Import extends Mage_Admi
 		$this->_removeButton('save');
 		$this->_addButton('importsave', array(
             'label'     => Mage::helper('stockhistory')->__('Save File'),
-            'onclick'   => 'setLocation(\'' . $this->getUrl('*/*/saveImport') .'\')',
-			//'class'		=> 'save',
+            'onclick'   => 'saveAndImport()',
+			'class'		=> 'save',
       	));
+	
+	
+	$this->_formScripts = array(<<<Javascript
+	
+var importForm = new varienForm('import_form', '');
+var saveAndImport = function (){
+	importForm.submit($('import_form').action);
+}
+
+Javascript
+	);
 	}
 	
 	public function getHeaderText() {

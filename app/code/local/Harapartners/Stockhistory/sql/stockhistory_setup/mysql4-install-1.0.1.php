@@ -37,7 +37,42 @@ CREATE TABLE {$this->getTable('stockhistory/history')}(
 	KEY `FK_STOCKHISTORY_HISTORY_ITEM` (`entity_id`),
   CONSTRAINT `FK_STOCKHISTORY_HISTORY_ITEM` FOREIGN KEY (`entity_id`) REFERENCES {$this->getTable('catalog/product')} (`entity_id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Stock History'
+
+-- DROP TABLE IF EXISTS {$this->getTable('stockhistory/report')};
+CREATE TABLE {$this->getTable('stockhistory/report')}(
+	`id`		 	int(10) unsigned NOT NULL auto_increment,
+	`entity_id` 	int(10) unsigned default NULL,
+	`product_name`	varchar(50) NOT NULL default '',
+	`product_sku`	varchar(50) NOT NULL default '',
+	`vendor_sku`	varchar(30)	NOT NULL default '',
+	`qty`			smallint(10) NOT NULL default '0',
+	`created_at`	datetime default NULL,
+	`updated_at` 	datetime default NULL,
+	`status`		varchar(20) default NULL,
+	`comment`		varchar(100) default '',
+	PRIMARY KEY	(`id`),
+	KEY `FK_STOCKHISTORY_REPORT_ITEM` (`entity_id`),
+  CONSTRAINT `FK_STOCKHISTORY__ITEM` FOREIGN KEY (`entity_id`) REFERENCES {$this->getTable('catalog/product')} (`entity_id`) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Stock Report'
+
+-- DROP TABLE IF EXISTS {$this->getTable('stockhistory/report')};
+CREATE TABLE {$this->getTable('stockhistory/vendor')}(
+	`id`		 	int(10) unsigned NOT NULL auto_increment,
+	`entity_id` 	int(10) unsigned default NULL,
+	`product_name`	varchar(50) NOT NULL default '',
+	`product_sku`	varchar(50) NOT NULL default '',
+	`vendor_sku`	varchar(30)	NOT NULL default '',
+	`qty`			smallint(10) NOT NULL default '0',
+	`created_at`	datetime default NULL,
+	`updated_at` 	datetime default NULL,
+	`status`		varchar(20) default NULL,
+	`comment`		varchar(100) default '',
+	PRIMARY KEY	(`id`),
+	KEY `FK_STOCKHISTORY_REPORT_ITEM` (`entity_id`),
+  CONSTRAINT `FK_STOCKHISTORY__ITEM` FOREIGN KEY (`entity_id`) REFERENCES {$this->getTable('catalog/product')} (`entity_id`) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Stock Report'
 ");
+
 
 $installer->endSetup();
 

@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Harapartners_Stockhistory>
-            <version>1.0.2</version>
+            <version>1.0.1</version>
         </Harapartners_Stockhistory>
     </modules>
     <global>
@@ -30,6 +30,12 @@
 					<report>
 						<table>stockhistory_report</table>
 					</report>
+					<purchaseorder>
+						<table>stockhistory_purchaseorder</table>
+					</purchaseorder>
+					<vendor>
+						<table>stockhistory_vendor</table>
+					</vendor>
 				</entities>
 			</stockhistory_mysql4>
         </models>
