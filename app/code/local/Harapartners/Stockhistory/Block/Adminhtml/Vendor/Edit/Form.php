@@ -35,11 +35,13 @@ class Harapartners_Stockhistory_Block_Adminhtml_Vendor_Edit_Form extends Mage_Ad
         $fieldset->addField('vendor_name', 'text', array(
             'label'     => Mage::helper('stockhistory')->__('Vendor Name:'),
             'name'      => 'vendor_name',
+        	'required'	=> true,
         ));
         
         $fieldset->addField('vendor_sku', 'text', array(
             'label'     => Mage::helper('stockhistory')->__('Vendor SKU:'),
             'name'      => 'vendor_sku',
+        	'required'	=> true,
         ));
         
         $fieldset->addField('contact_person', 'text', array(
@@ -50,6 +52,7 @@ class Harapartners_Stockhistory_Block_Adminhtml_Vendor_Edit_Form extends Mage_Ad
         $fieldset->addField('email', 'text', array(
             'label'     => Mage::helper('stockhistory')->__('Email:'),
             'name'      => 'email',
+        	'required'	=> true,
         ));
         
         $fieldset->addField('phone', 'text', array(

@@ -60,7 +60,7 @@ class Harapartners_Stockhistory_Adminhtml_VendorController extends Mage_Adminhtm
 			if(!!$this->getRequest()->getParam('id')){
 				$model->load($this->getRequest()->getParam('id'));
 			}
-			$model->addData($data)->save();
+			$model->validateAndSave($data);
 			$this->_getSession()->addSuccess(Mage::helper('stockhistory')->__('Vendor saved successfully'));
 			$this->_getSession()->setVendorFormData(null);
 		}catch(Exception $e){
