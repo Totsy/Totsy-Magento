@@ -38,7 +38,7 @@ class Harapartners_Import_Adminhtml_ImportController extends Mage_Adminhtml_Cont
 	}
 	
 	public function newAction() {
-		$this->_forward('import');
+		$this->_forward('edit');
 	}
 
 	public function saveAction() {
@@ -122,7 +122,7 @@ class Harapartners_Import_Adminhtml_ImportController extends Mage_Adminhtml_Cont
     }
     
     public function runDataflowProfile($filename){	
-    	$profileId = 8; //put your profile id here
+    	$profileId = 7; //put your profile id here
 		$profile = Mage::getModel('dataflow/profile');
 		
 		if ($profileId) {
