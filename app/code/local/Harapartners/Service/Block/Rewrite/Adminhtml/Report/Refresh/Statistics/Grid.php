@@ -12,26 +12,42 @@
  * 
  */
  
-class Harapartners_Service_Block_Adminhtml_Report_Refresh_Statistics_Grid extends Mage_Adminhtml_Block_Report_Refresh_Statistics_Grid {    
-    protected function _prepareMassaction(){
+class Harapartners_Service_Block_Rewrite_Adminhtml_Report_Refresh_Statistics_Grid extends Mage_Adminhtml_Block_Report_Refresh_Statistics_Grid {
+	
+	CONST REPORT_EARLIEST_DATE = '2012-03-26';
+	   
+	protected function _prepareMassaction(){
+        $this->setMassactionIdField('id');
+        $this->getMassactionBlock()->setFormFieldName('code');
+		
+        $maxReportingHours = round((time() - strtotime(self::REPORT_EARLIEST_DATE))/3600) + 25;
+        
+        $this->getMassactionBlock()->addItem('refresh_fromdate', array(
+            'label'    => Mage::helper('reports')->__('Refresh Statistics from ' . self::REPORT_EARLIEST_DATE),
+            'url'      => $this->getUrl('*/*/refreshRange', array('hours' => $maxReportingHours)),
+            'confirm'  => Mage::helper('reports')->__('This may take a long time. Are you sure?')
+        ));
+        
         $this->getMassactionBlock()->addItem('refresh_sevendays', array(
             'label'    => Mage::helper('reports')->__('Refresh Last 7 days Statistics'),
-            'url'      => $this->getUrl('*/*/refreshSevendays'),
-            'confirm'  => Mage::helper('reports')->__('Are you sure you want to refresh last 7 days statistics? '),
+            'url'      => $this->getUrl('*/*/refreshRange', array('hours' => 7*24+1)),
+            'confirm'  => Mage::helper('reports')->__('Are you sure you want to refresh the last 7 days\' statistics? '),
         ));
-
+        
         $this->getMassactionBlock()->addItem('refresh_lastmonth', array(
-            'label'    => Mage::helper('reports')->__('Refresh Statistics for the Last Month'),
-            'url'      => $this->getUrl('*/*/refreshLastmonth'),
-            'confirm'  => Mage::helper('reports')->__('Are you sure?')
-        ));
-		
-        $this->getMassactionBlock()->addItem('refresh_fromdate', array(
-            'label'    => Mage::helper('reports')->__('Refresh Statistics from March 26th'),
-            'url'      => $this->getUrl('*/*/refreshfromdate'),
-            'confirm'  => Mage::helper('reports')->__('Are you sure?')
+            'label'    => Mage::helper('reports')->__('Refresh Statistics for the Last 30 days'),
+            'url'      => $this->getUrl('*/*/refreshRange', array('hours' => 30*24+1)),
+            'confirm'  => Mage::helper('reports')->__('Are you sure you want to refresh the last 30 days\' statistics?')
         ));
 
-        return parent::_prepareMassaction();;
+        $this->getMassactionBlock()->addItem('refresh_recent', array(
+            'label'    => Mage::helper('reports')->__('Refresh Statistics for the Last Day'),
+            'url'      => $this->getUrl('*/*/refreshRecent'),
+            'confirm'  => Mage::helper('reports')->__('Are you sure?'),
+            'selected' => true
+        ));
+
+        return $this;
     }
+    	
 }

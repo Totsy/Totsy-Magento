@@ -175,18 +175,21 @@ class Mage_Adminhtml_Report_StatisticsController extends Mage_Adminhtml_Controll
     }
     
     
-    //Harapartners,Tong
-  	//7 day
-    public function refreshSevendaysAction()
-    {
+    //Harapartners, Tong/Jun, START, specify range for report
+    public function refreshRangeAction(){
         try {
+        	$rangeInHours = $this->getRequest()->getParam(hours);
+        	if(!is_numeric($rangeInHours) || $rangeInHours < 25){
+        		$rangeInHours = 25;
+        	}
+        	
             $collectionsNames = $this->_getCollectionNames();
             $currentDate = Mage::app()->getLocale()->date();
-            $date = $currentDate->subHour(169);
+            $date = $currentDate->subHour($rangeInHours);
             foreach ($collectionsNames as $collectionName) {
                 Mage::getResourceModel($collectionName)->aggregate($date);
             }
-            Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('adminhtml')->__('Last 7 days statistics have been updated.'));
+            Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('adminhtml')->__('Past statistics have been updated.'));
         } catch (Mage_Core_Exception $e) {
             Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
         } catch (Exception $e) {
@@ -201,90 +204,7 @@ class Mage_Adminhtml_Report_StatisticsController extends Mage_Adminhtml_Controll
         }
         return $this;
     }
-    // last Month
-	
-    public function refreshLastmonthAction()
-    {
-        try {
-            $collectionsNames = $this->_getCollectionNames();
-            $currentDate = Mage::app()->getLocale()->date();
-            $date = $currentDate->subHour(1321);
-            foreach ($collectionsNames as $collectionName) {
-                Mage::getResourceModel($collectionName)->aggregate($date);
-            }
-            Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('adminhtml')->__('Last 30 days statistics have been updated.'));
-        } catch (Mage_Core_Exception $e) {
-            Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
-        } catch (Exception $e) {
-            Mage::getSingleton('adminhtml/session')->addError(Mage::helper('adminhtml')->__('Unable to refresh last 30 days statistics.'));
-            Mage::logException($e);
-        }
-
-        if($this->_getSession()->isFirstPageAfterLogin()) {
-            $this->_redirect('*/*');
-        } else {
-            $this->_redirectReferer('*/*');
-        }
-        return $this;
-    }
-    
-    // From A Date
-    
-	public function refreshfromdateAction()
-    {
-        try {
-            $collectionsNames = $this->_getCollectionNames();
-            $currentDate = Mage::app()->getLocale()->date();
-            $timeTo = mktime(0, 0, 0, 3, 26, 2012);
-            $hour = $this->_getCountHours($timeTo);
-            $date = $currentDate->subHour((int)$hour);
-            foreach ($collectionsNames as $collectionName) {
-                Mage::getResourceModel($collectionName)->aggregate($date);
-            }
-            Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('adminhtml')->__('All statistics (from March 26th 2012)have been updated.'));
-        } catch (Mage_Core_Exception $e) {
-            Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
-        } catch (Exception $e) {
-            Mage::getSingleton('adminhtml/session')->addError(Mage::helper('adminhtml')->__('Unable to refresh statistics (from March 26th 2012).'));
-            Mage::logException($e);
-        }
-
-        if($this->_getSession()->isFirstPageAfterLogin()) {
-            $this->_redirect('*/*');
-        } else {
-            $this->_redirectReferer('*/*');
-        }
-        return $this;
-    }
-    
-    
-    //timer function
-    
-    protected function _getCurrentTime(){
-   		$defaultTimezone = date_default_timezone_get();
-		$mageTimezone = Mage::getStoreConfig(Mage_Core_Model_Locale::XML_PATH_DEFAULT_TIMEZONE);			
-		date_default_timezone_set($mageTimezone);
-		$timer = now();
-		date_default_timezone_set($defaultTimezone);
-		
-		return strtotime($timer);
-    }
-    
-   protected  function _getCountHours($timeTo) {
-    	$now = $this->_getCurrentTime();
-    	if ( $now > $timeTo ) {
-    		return ( ($now - $timeTo)/3600 );
-    	}else {
-    		return '';
-    	}
-    }
-    
-    
-    
-    
-    
-    
-    //Harapartners,Tong
+    //Harapartners, Tong/Jun, END
 
     public function indexAction()
     {
