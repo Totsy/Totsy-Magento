@@ -74,7 +74,7 @@
                         <li>
                             <label for="email" class="required"><?php echo $this->__('Email') ?><em> *</em></label>
                             <div class="input-box">
-                                <input name="login[username]" value="<?php echo $this->htmlEscape($this->getUsername()) ?>" id="email" type="text" class="input-text required-entry validate-email" title="<?php echo $this->__('Email Address') ?>" />
+                                <input name="login[username]" value="<?php echo $this->htmlEscape($this->getUsername()) ?>" id="email" type="text" class="ui-input-text ui-body-c ui-corner-all ui-shadow-inset input-text required-entry validate-email" title="<?php echo $this->__('Email Address') ?>" />
                             </div>
                         </li>
                         <li>
@@ -83,7 +83,7 @@
 	                    		<a href="<?php echo $this->getForgotPasswordUrl() ?>"><?php echo $this->__('Forgot Your Password?') ?></a>
 	                    	</div>
                             <div class="input-box">
-                                <input name="login[password]" type="password" class="input-text required-entry validate-password" id="pass" title="<?php echo $this->__('Password') ?>" />
+                                <input name="login[password]" type="password" class="ui-input-text ui-body-c ui-corner-all ui-shadow-inset input-text required-entry validate-password" id="pass" title="<?php echo $this->__('Password') ?>" />
                             </div>
                         </li>
                         <?php echo $this->getChildHtml('persistent.remember.me'); ?>
