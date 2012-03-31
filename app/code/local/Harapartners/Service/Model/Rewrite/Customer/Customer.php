@@ -55,5 +55,66 @@ class Harapartners_Service_Model_Rewrite_Customer_Customer extends Mage_Customer
         Mage::getSingleton('customer/session')->setData('CUSTOMER_LAST_VALIDATION_TIME', now());
         return true;
     }
+    
+    
+    //This is a very strange solution. Must check with the business logic
+    //also there should also be a frontend validation so that the customer will be notified! 
+    
+    protected function _beforeSave(){
+        parent::_beforeSave();
+
+        $storeId = $this->getStoreId();
+        if ($storeId === null) {
+            $this->setStoreId(Mage::app()->getStore()->getId());
+        }
+        
+        //Harapartners, remove alias for Gmail address, add by Jing Xiao
+        $email = $this->_trimGmail($this->getEmail());
+        $this->setEmail($email);
+        
+
+        $this->getGroupId();
+        return $this;
+    }
+    
+    /**
+     * Haraparnters:
+     * trim gmail address, to restore alias gmail address
+     *
+     * @param string $email
+     * @return string original email
+     */
+    protected function _trimGmail($email) {
+    	
+    	$strArray = explode('@', $email);
+    	
+    	if(empty($strArray) ||
+    	   empty($strArray[1]) ||
+    	   $strArray[1] != 'gmail.com') {
+    		return $email;
+    	}
+    	
+		//get username, such as 'abcd'
+		$username = $strArray[0];
+		//Get username string's length
+		$len = strlen($username);
+		$originalGmail = '';
+		
+		//iterate chacrates in username string
+		for($j=0; $j<$len; $j++) {
+			//if encounters '+', discard the rest of the string
+			if($username[$j] == '+') {
+				break;
+			}
+			
+			//check if it is '.', if yes, don't concatenate.
+			if($username[$j] != '.') {
+				//concatenate username chacrater
+				$originalGmail .= $username[$j];
+			}
+		}
+    	
+		return $originalGmail . '@gmail.com';
+    }
 
 }
