@@ -39,7 +39,9 @@
 				<rewrite>
 					<!--Harapartners_Service: allow admin harapartner theme-->
 					<page>Harapartners_Service_Block_Rewrite_Adminhtml_Page</page>
-					<report_refresh_statistics_grid>Harapartners_Service_Block_Adminhtml_Report_Refresh_Statistics_Grid</report_refresh_statistics_grid>
+					<!--Harapartners_Service: avoid reporting the complete history (ignore unvalidated historical data) -->
+					<report_refresh_statistics_grid>Harapartners_Service_Block_Rewrite_Adminhtml_Report_Refresh_Statistics_Grid</report_refresh_statistics_grid>
+					<!--Harapartners_Service: widget_form 'datetime' support with Varien_Data_Form_Element_Datetime-->
 				</rewrite>
 			</adminhtml>
 			<checkout>
