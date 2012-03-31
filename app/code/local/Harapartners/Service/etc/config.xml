@@ -87,6 +87,13 @@
 					<session>Harapartners_Service_Model_Rewrite_Core_Resource_Session</session>
 				</rewrite>
 			</core_resource>
+			<customer>
+                <rewrite>
+					<customer>Harapartners_Service_Model_Rewrite_Customer_Session</customer>
+					<!--Harapartners_Affiliate--><!--Harapartners_Customertracking--><!--Harapartners_Rushcheckout-->
+                    <session>Harapartners_Service_Model_Rewrite_Customer_Session</session>
+                </rewrite>
+            </customer>
 			<sales>
 				<rewrite>
 					<!--Harapartners_Ordersplit--><!--Harapartners_Paymentfactory-->
