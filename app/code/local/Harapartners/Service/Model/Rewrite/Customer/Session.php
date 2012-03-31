@@ -14,7 +14,41 @@
 
 class Harapartners_Service_Model_Rewrite_Customer_Session extends Mage_Customer_Model_Session {
 
-	const REMEMBER_ME_PERIOD = 2592000; //Harapartners, yang, add remember me time 30 * 24 * 3600, 1 month	
+	const REMEMBER_ME_PERIOD = 2592000; //Harapartners, yang, add remember me time 30 * 24 * 3600, 1 month
+	
+	protected $_affiliate = null;
+	
+	public function getAffiliate(){
+		if(!($this->_affiliate instanceof Harapartners_Affiliate_Model_Record)){
+			$this->_affiliate = Mage::getModel('affiliate/record');
+			//always try to get the latest affiliate info, setup caching separately if needed
+			if(!!$this->getAffiliateId()){
+				$this->_affiliate->load($this->getAffiliateId());
+			}elseif(!!$this->getAffiliateCode()){
+				$this->_affiliate->loadByAffiliateCode($this->getAffiliateCode());
+			}else{
+				//load from customer tracking record
+				$customer = $this->getCustomer();
+				if(!!$customer && !!$customer->getId()){
+					$customerTrackingRecord = Mage::getModel('customertracking/record')->loadByCustomerEmail($customer->getEmail());
+					if(!!$customerTrackingRecord && !!$customerTrackingRecord->getId()){
+						$this->_affiliate->load($customerTrackingRecord->getAffiliateId());
+					}
+				}
+			}
+		}
+		return $this->_affiliate;
+	}
+	
+	public function setAffiliate(Harapartners_Affiliate_Model_Record $affiliate){
+		$this->_affiliate = $affiliate;
+		//save affiliate ID and code, for future retrieval of the affiliate object
+		if(!!$this->_affiliate && !!$this->_affiliate->getId()){
+			$this->getAffiliateId($this->_affiliate->getId());
+			$this->getAffiliateCode($this->_affiliate->getCode());
+		}
+		return $this;
+	}
     
     public function login($username, $password) {
         $customer = Mage::getModel('customer/customer')
