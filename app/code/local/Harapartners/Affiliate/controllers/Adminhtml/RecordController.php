@@ -30,7 +30,7 @@ class Harapartners_Affiliate_Adminhtml_RecordController extends Mage_Adminhtml_C
 		$model  = Mage::getModel('affiliate/record')->load($id);
 		
 		if($id == 0){
-			$data = Mage::getSingleton('adminhtml/session')->getFormData(true);
+			$data = Mage::getSingleton('adminhtml/session')->getAffiliateFormData(true);
 		}elseif(!!$model->getId()){
 			$data = $model->getData();
 		//prepare data
@@ -125,7 +125,7 @@ class Harapartners_Affiliate_Adminhtml_RecordController extends Mage_Adminhtml_C
 			try {
 				$model->save();
 				Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('affiliate')->__('Record was successfully saved'));
-				Mage::getSingleton('adminhtml/session')->setFormData(false);
+				Mage::getSingleton('adminhtml/session')->setAffiliateFormData(false);
 
 				if ($this->getRequest()->getParam('back')) {
 					$this->_redirect('*/*/edit', array('id' => $model->getId()));
@@ -135,7 +135,7 @@ class Harapartners_Affiliate_Adminhtml_RecordController extends Mage_Adminhtml_C
 				return;
             } catch (Exception $e) {
                 Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
-                Mage::getSingleton('adminhtml/session')->setFormData($data);
+                Mage::getSingleton('adminhtml/session')->setAffiliateFormData($data);
                 $this->_redirect('*/*/edit', array('id' => $this->getRequest()->getParam('id')));
                 return;
             }
