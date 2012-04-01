@@ -25,8 +25,8 @@ class Harapartners_Affiliate_Controller_Router extends Mage_Core_Controller_Vari
     public function match(Zend_Controller_Request_Http $request){
         if (!Mage::isInstalled()) {
             Mage::app()->getFrontController()->getResponse()
-                ->setRedirect(Mage::getUrl('install'))
-                ->sendResponse();
+            		->setRedirect(Mage::getUrl('install'))
+            		->sendResponse();
             exit;
         }		
         $identifier = trim($request->getPathInfo(), '/');

@@ -14,6 +14,12 @@
 
 class Harapartners_Affiliate_Model_Record extends Mage_Core_Model_Abstract {
     
+	const STATUS_ENABLED = 1;
+	const STATUS_DISABLED = 2;
+	
+	const TYPE_STANDARD = 1;
+	const TYPE_SUPER = 2;
+	
     protected function _construct(){
         $this->_init('affiliate/record');
     }
@@ -23,13 +29,89 @@ class Harapartners_Affiliate_Model_Record extends Mage_Core_Model_Abstract {
     	return $this;
     }
     
+    //Note method will throw exceptions
+    public function importDataWithValidation($data){
+    	
+    	//Type casting
+    	if(is_array($data)){
+    		$data =  new Varien_Object($data);
+    	}
+    	if(!($data instanceof Varien_Object)){
+    		throw new Exception('Invalid type for data importing, Array or Varien_Object needed.');
+    	}
+    	
+    	//Forcefully overwrite existing data, certain data may need to be removed before this step
+    	$this->addData($data->getData());
+    	
+    	//Default values should go here
+    	if(!$this->getData('type')){
+    		$this->setData('type', self::TYPE_STANDARD);
+    	}
+    	if(!$this->getData('status')){
+    		$this->setData('status', self::STATUS_ENABLED);
+    	}
+    	//store_id is defaulted as 0 at the DB level
+    	
+    	//Data cleaning
+    	if(!!($this->getData('sub_affiliate_code'))){
+    		$rawSubCode = explode(',', trim(trim($this->getData('sub_affiliate_code'), ',')));
+    		$cleanSubCode = array();
+    		foreach($rawSubCode as $subCodeValue){
+    			if(!trim($subCodeValue)){
+    				$cleanSubCode[] = strtolower(trim($subCodeValue));
+    			}
+    		}
+    		$this->setData('sub_affiliate_code', implode($cleanSubCode));
+    	}    	
+    	
+		$this->validate();
+		return $this;
+    }
+    
+    public function validate(){
+    	if(!$this->getData('affiliate_code')){
+    		throw new Exception('Affilicate code is required!');
+    	}else{
+    		if(!preg_match("/^[a-z0-9_]+$/", $this->getData('affiliate_code'))){
+    			throw new Exception('Affilicate code must be alphanumerical (lowercase) with underscore. Error value: ' . $this->getData('affiliate_code'));
+    		}
+    	}
+    	
+    	if(!$this->getData('type')){
+    		throw new Exception('Affilicate type is required!');
+    	}
+    	
+    	if(!!($this->getData('tracking_code'))){
+			$result = json_decode($this->getData('tracking_code'), true);
+			if(!is_array($result)){
+				throw new Exception('Tracking code must be valid JSON');
+			}
+    	}
+    	
+    	if(!!($this->getData('sub_affiliate_code'))){
+    		$cleanSubCode = explode(',', $this->getData('sub_affiliate_code'));
+    		foreach($cleanSubCode as $subCodeValue){
+	    		if(!preg_match("/^[a-z0-9_]+$/",  $subCodeValue)){
+	    			throw new Exception('Sub-affilicate code must be alphanumerical (lowercase) with underscore. Error value: ' . $subCodeValue);
+	    		}
+    		}
+    	}
+    	
+    	return $this;
+    }
+    
     protected function _beforeSave(){
+    	parent::_beforeSave();
+    	
     	if(!$this->getId() && !$this->getCreatedAt()){
     		$this->setData('created_at', now());
     	}else{
     		$this->setData('updated_at', now());
     	}
-    	return parent::_beforeSave();
+    	
+    	$this->validate(); //Errors will be thrown as exceptions
+    	
+    	return $this;
     }
     
 }

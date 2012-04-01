@@ -13,124 +13,121 @@
  */
 
 class Harapartners_Affiliate_Block_Adminhtml_Record_Edit_Form extends Mage_Adminhtml_Block_Widget_Form {
-    protected  $_statusOption = array(
-       						array('label'=>'Enable','value'=>1),
-       						array('label'=>'Disable','value'=>0));
-    protected  $_typeOption = array(
-       						array('label'=>'Standard','value'=>'Standard'),
-       						array('label'=>'Super Affiliate','value'=>'Super Affiliate'));
-    protected  $_pageArray = array(
-    							array('label'=>'Landing_page','value'=>'landing'),
-	       						array('label'=>'After_registering','value'=>'after_reg'),
-	       						array('label'=>'Login_page','value'=>'login'),
-	       						array('label'=>'Sales_page','value'=>'sales'),
-	       						array('label'=>'Product_page','value'=>'product'),
-	       						array('label'=>'Event_page','value'=>'event'),
-	       						array('label'=>'Order_confirmation_page','value'=>'order'),
-	       						array('label'=>'Order_confirmation_page(spinback)','value'=>'order_spinback'),
-	       						array('label'=>'Invite_page(spinback)','value'=>'invite_spinback'),
-	       						);
+    
+	       						
 	protected function _prepareForm() {
+		$affiliateHelper = Mage::helper('affiliate');
 		
-		$yesno = Mage::getModel('adminhtml/system_config_source_yesno');
-		if(!!Mage::registry('affiliatePixelsCount')){
-			$pixelCount = Mage::registry('affiliatePixelsCount');
-		}
+//		if(!!Mage::registry('affiliatePixelsCount')){
+//			$pixelCount = Mage::registry('affiliatePixelsCount');
+//		}
+		
         $form = new Varien_Data_Form(array(
             'id'        => 'edit_form',
             'action'    => $this->getData('action'),
             'method'    => 'post'
         ));
         
+        $fieldset = $form->addFieldset('affiliate', array('legend'=>$affiliateHelper->__('Record')));
+        $fieldset->addType('trackingcode', 'Harapartners_Affiliate_Block_Adminhtml_Widget_Form_Element_Trackingcode');
         
-        $fieldset = $form->addFieldset('affiliate', array('legend'=>Mage::helper('affiliate')->__('Record')));
+        $fieldset->addField('affiliate_name', 'text', array(
+            'label'     => $affiliateHelper->__('Affiliate Name'),
+            'name'      => 'affiliate_name',
+            'required'  => true,
+        	'note'		=> '255 characters max.'
+        ));
+        
         $fieldset->addField('affiliate_code', 'text', array(
-            'label'     => Mage::helper('affiliate')->__('Affiliate Code'),
+            'label'     => $affiliateHelper->__('Affiliate Code'),
             'name'      => 'affiliate_code',
             'required'  => true,
+        	'note'		=> 'Alpha-numeric and underscore only. All character in lower case. 255 characters max.'
         ));
-        $fieldset->addField('sub_affiliate_code', 'text', array(
-            'label'     => Mage::helper('affiliate')->__('Sub Affiliate Code'),
-            'name'      => 'sub_affiliate_code',           
-        ));
+        
         $fieldset->addField('type', 'select', array(
-            'label'     => Mage::helper('affiliate')->__('Type'),
+            'label'     => $affiliateHelper->__('Type'),
             'name'      => 'type',
             'required'  => true,
-        	'values'    => $this->_typeOption,
-        ));        
+        	'values'    => $affiliateHelper->getFormTypeArray()
+        ));
+        
         $fieldset->addField('status', 'select', array(
-            'label'     => Mage::helper('affiliate')->__('Status'),
+            'label'     => $affiliateHelper->__('Status'),
             'name'      => 'status',
             'required'  => true,
-        	'values'    => $this->_statusOption,
-//          'note'		=> Mage::helper('affiliate')->__('Enable Status'),
+        	'values'    => $affiliateHelper->getFormStatusArray()
         ));
-        $fieldset->addField('invitation_code', 'text', array(
-            'label'     => Mage::helper('affiliate')->__('Invitation Code'),
-            'name'      => 'invitation_code',
-//          'required'  => true,
-        ));        
-//        $fieldset->addField('tracking_code', 'text', array(
-//            'label'     => Mage::helper('affiliate')->__('Tracking Code'),
-//            'name'      => 'tracking_code',
-//           'required'  => true,
-//        ));
-		$i=0;
-		while ($i<$pixelCount) {	
-			$j=$i+1;			
-	        $fieldset->addField('pixel'.$i.'separator', 'label', array(
-	            'label'     => Mage::helper('affiliate')->__('Pixel #'.$j.':'),
-	            'name'      => 'pixels'.$i.'separator',
-	        ));			
-	        $fieldset->addField('pixels'.$i.'enable', 'select', array(
-	            'label'     => Mage::helper('affiliate')->__('Pixel Enable'),
-	            'name'      => 'pixels'.$i.'enable',
-//          	'required'  => true,
-	        	'values'    => array(
-	       						array('label'=>'Enable','value'=>'true'),
-	       						array('label'=>'Disable','value'=>'false')),
-	        ));
-	        $fieldset->addField('pixels'.$i.'page', 'multiselect', array(
-	            'label'     => Mage::helper('affiliate')->__('Selct page'),
-	            'name'      => 'pixels'.$i.'page',
-	        	'values'    => $this->_pageArray,
-	        ));
-	        $fieldset->addField('pixels'.$i.'pixel', 'textarea', array(
-	            'label'     => Mage::helper('affiliate')->__('Pixel'),
-	            'name'      => 'pixels'.$i.'pixel',
-//         		'required'  => true,
-	        ));	
-	        $i++;
-		}
-		$j=$i+1;
-			$fieldset->addField('pixel'.$i.'separator', 'label', array(
-	            'label'     => Mage::helper('affiliate')->__('Add Pixel #'.$j.':'),
-	            'name'      => 'pixels'.$i.'separator',
-	        ));			
-	        $fieldset->addField('pixels'.$i.'enable', 'select', array(
-	            'label'     => Mage::helper('affiliate')->__('Pixel Enable'),
-	            'name'      => 'pixels'.$i.'enable',
-//          	'required'  => true,
-	        	'values'    => array(
-	       						array('label'=>'Enable','value'=>'true'),
-	       						array('label'=>'Disable','value'=>'false')),
-	        ));
-	        $fieldset->addField('pixels'.$i.'page', 'multiselect', array(
-	            'label'     => Mage::helper('affiliate')->__('Selct page'),
-	            'name'      => 'pixels'.$i.'page',
-	        	'values'    => $this->_pageArray,
-	        ));
-	        $fieldset->addField('pixels'.$i.'pixel', 'textarea', array(
-	            'label'     => Mage::helper('affiliate')->__('Pixel'),
-	            'name'      => 'pixels'.$i.'pixel',
-//          	'required'  => true,
-	        ));	
+        
+        $fieldset->addField('tracking_code', 'trackingcode', array(
+			'label'		=> $affiliateHelper->__('Tracking Code'),
+			'name'		=> 'tracking_code',
+        	'note'		=> 'You must "Confirm" if you want your edits to be saved. Empty fields are cleaned automatically before save.'
+		));
+        
+        $fieldset->addField('sub_affiliate_code', 'textarea', array(
+            'label'     => $affiliateHelper->__('Sub Affiliate Code'),
+            'name'      => 'sub_affiliate_code',
+        	'note'		=> 'Comma delimited. Each sub-code must be alpha-numeric and underscore only. All character in lower case.'        
+        ));
+        
+        $fieldset->addField('comment', 'textarea', array(
+            'label'     => $affiliateHelper->__('Coment'),
+            'name'      => 'comment'
+        ));
+//        
+//		$i=0;
+//		while ($i<$pixelCount) {	
+//			$j=$i+1;			
+//	        $fieldset->addField('pixel'.$i.'separator', 'label', array(
+//	            'label'     => $affiliateHelper->__('Pixel #'.$j.':'),
+//	            'name'      => 'pixels'.$i.'separator',
+//	        ));			
+//	        $fieldset->addField('pixels'.$i.'enable', 'select', array(
+//	            'label'     => $affiliateHelper->__('Pixel Enable'),
+//	            'name'      => 'pixels'.$i.'enable',
+////          	'required'  => true,
+//	        	'values'    => array(
+//	       						array('label'=>'Enable','value'=>'true'),
+//	       						array('label'=>'Disable','value'=>'false')),
+//	        ));
+//	        $fieldset->addField('pixels'.$i.'page', 'multiselect', array(
+//	            'label'     => $affiliateHelper->__('Selct page'),
+//	            'name'      => 'pixels'.$i.'page',
+//	        	'values'    => $this->_pageArray,
+//	        ));
+//	        $fieldset->addField('pixels'.$i.'pixel', 'textarea', array(
+//	            'label'     => $affiliateHelper->__('Pixel'),
+//	            'name'      => 'pixels'.$i.'pixel',
+////         		'required'  => true,
+//	        ));	
+//	        $i++;
+//		}
+//		$j=$i+1;
+//			$fieldset->addField('pixel'.$i.'separator', 'label', array(
+//	            'label'     => $affiliateHelper->__('Add Pixel #'.$j.':'),
+//	            'name'      => 'pixels'.$i.'separator',
+//	        ));			
+//	        $fieldset->addField('pixels'.$i.'enable', 'select', array(
+//	            'label'     => $affiliateHelper->__('Pixel Enable'),
+//	            'name'      => 'pixels'.$i.'enable',
+////          	'required'  => true,
+//	        	'values'    => array(
+//	       						array('label'=>'Enable','value'=>'true'),
+//	       						array('label'=>'Disable','value'=>'false')),
+//	        ));
+//	        $fieldset->addField('pixels'.$i.'page', 'multiselect', array(
+//	            'label'     => $affiliateHelper->__('Selct page'),
+//	            'name'      => 'pixels'.$i.'page',
+//	        	'values'    => $this->_pageArray,
+//	        ));
+//	        $fieldset->addField('pixels'.$i.'pixel', 'textarea', array(
+//	            'label'     => $affiliateHelper->__('Pixel'),
+//	            'name'      => 'pixels'.$i.'pixel',
+////          	'required'  => true,
+//	        ));	
 
-        if ( $formData = Mage::getSingleton('adminhtml/session')->getAffiliateFormData() ){
-            $form->setValues($formData);
-            Mage::getSingleton('adminhtml/session')->setAffiliateFormData(null);
-        } elseif ( Mage::registry('affiliate_form_data') ) {
+        if ( Mage::registry('affiliate_form_data') ) {
             $form->setValues(Mage::registry('affiliate_form_data'));
         }
 

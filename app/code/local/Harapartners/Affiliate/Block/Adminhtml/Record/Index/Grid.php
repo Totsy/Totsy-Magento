@@ -38,43 +38,44 @@ class Harapartners_Affiliate_Block_Adminhtml_Record_Index_Grid extends Mage_Admi
         return Mage::app()->getStore($storeId);
     }
 
-    protected function _prepareColumns(){        
+    protected function _prepareColumns(){
+    	$affilicateHelper = Mage::helper('affiliate');    
 		$this->addColumn('affiliate_id', array(
-            'header'        => Mage::helper('affiliate')->__('Affiliate ID'),
+            'header'        => $affilicateHelper->__('Affiliate ID'),
             'align'         => 'center',
             'width'         => '50px',
             'index'         => 'affiliate_id'
         ));
         $this->addColumn('affiliate_name', array(
-            'header'        => Mage::helper('affiliate')->__('Affiliate Name'),
+            'header'        => $affilicateHelper->__('Affiliate Name'),
             'align'         => 'center',
             'width'         => '100px',
             'index'         => 'affiliate_name'
         )); 
         $this->addColumn('affiliate_code', array(
-            'header'        => Mage::helper('affiliate')->__('Affiliate Code'),
+            'header'        => $affilicateHelper->__('Affiliate Code'),
             'align'         => 'center',
             'width'         => '100px',
             'index'         => 'affiliate_code'
         ));
         $this->addColumn('type', array(
-            'header'        => Mage::helper('affiliate')->__('Type'),
+            'header'        => $affilicateHelper->__('Type'),
             'align'         => 'right',
             'width'         => '50px',
             'index'         => 'status',
         	'type'			=> 'options',
-            'options' => array('1'=>'Enable','0'=>'Disable')
+            'options' => $affilicateHelper->getGridTypeArray()
         ));
         $this->addColumn('status', array(
-            'header'        => Mage::helper('affiliate')->__('Status'),
+            'header'        => $affilicateHelper->__('Status'),
             'align'         => 'right',
             'width'         => '50px',
             'index'         => 'status',
         	'type'			=> 'options',
-            'options' => array('1'=>'Enable','0'=>'Disable')
+            'options' => $affilicateHelper->getGridStatusArray()
         ));
 		$this->addColumn('created_at', array(
-            'header'        => Mage::helper('affiliate')->__('Created At'),
+            'header'        => $affilicateHelper->__('Created At'),
             'align'         => 'center',
             'width'         => '100px',
             'index'         => 'created_at',
@@ -82,7 +83,7 @@ class Harapartners_Affiliate_Block_Adminhtml_Record_Index_Grid extends Mage_Admi
             'gmtoffset' 	=> true
         ));   
 		$this->addColumn('updated_at', array(
-            'header'        => Mage::helper('affiliate')->__('Updated At'),
+            'header'        => $affilicateHelper->__('Updated At'),
             'align'         => 'center',
             'width'         => '100px',
             'index'         => 'updated_at',
@@ -90,8 +91,8 @@ class Harapartners_Affiliate_Block_Adminhtml_Record_Index_Grid extends Mage_Admi
             'gmtoffset' 	=> true
         ));        
         
-		$this->addExportType('*/*/exportCsv', Mage::helper('affiliate')->__('CSV'));
-  		$this->addExportType('*/*/exportXml', Mage::helper('affiliate')->__('XML'));
+		$this->addExportType('*/*/exportCsv', $affilicateHelper->__('CSV'));
+  		$this->addExportType('*/*/exportXml', $affilicateHelper->__('XML'));
       return parent::_prepareColumns();
     }
 
