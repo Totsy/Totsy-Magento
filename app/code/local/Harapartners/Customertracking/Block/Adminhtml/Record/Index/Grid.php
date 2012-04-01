@@ -32,79 +32,80 @@ class Harapartners_Customertracking_Block_Adminhtml_Record_Index_Grid extends Ma
         return Mage::app()->getStore($storeId);
     }
 
-    protected function _prepareColumns(){        
+    protected function _prepareColumns(){
+    	
+    	$helper = Mage::helper('customertracking');
+    	
         $this->addColumn('customertracking_id', array(
-            'header'        => Mage::helper('customertracking')->__('Customertracking ID'),
+            'header'        => $helper->__('Customertracking ID'),
             'align'         => 'center',
-            'width'         => '50px',
+            'width'         => '25px',
             'index'         => 'customertracking_id'
         ));
-       $this->addColumn('created_at', array(
-            'header'        => Mage::helper('customertracking')->__('Created At'),
+        
+        $this->addColumn('customer_id', array(
+            'header'        => $helper->__('customer ID'),
             'align'         => 'center',
-            'width'         => '300px',
+            'width'         => '25px',
+            'index'         => 'customer_id'
+        ));
+        
+        $this->addColumn('customer_email', array(
+            'header'        => $helper->__('customer Email'),
+            'align'         => 'center',
+            'width'         => '50px',
+            'index'         => 'customer_email'
+        ));
+        
+		$this->addColumn('affiliate_id', array(
+            'header'        => $helper->__('Affiliate ID'),
+            'align'         => 'center',
+            'width'         => '25px',
+            'index'         => 'affiliate_id'
+		));
+		
+		$this->addColumn('affiliate_code', array(
+            'header'        => $helper->__('Affiliate Code'),
+            'align'         => 'center',
+            'width'         => '50px',
+            'index'         => 'affiliate_code'
+        ));
+        
+        $this->addColumn('sub_affiliate_code', array(
+            'header'        => $helper->__('Sub Affiliate Code'),
+            'align'         => 'center',
+            'width'         => '50px',
+            'index'         => 'sub_affiliate_code'
+        ));
+        
+        $this->addColumn('status', array(
+            'header'        => $helper->__('Status'),
+            'align'         => 'right',
+            'width'         => '50px',
+            'index'         => 'status',
+        	'type'			=> 'options',
+            'options' => $helper->getGridStatusArray()
+        ));
+        
+		$this->addColumn('created_at', array(
+            'header'        => $helper->__('Created At'),
+            'align'         => 'center',
+            'width'         => '50px',
             'index'         => 'created_at',
         	'type'      	=> 'datetime',
             'gmtoffset' 	=> true
         ));  
-       $this->addColumn('updated_at', array(
-            'header'        => Mage::helper('customertracking')->__('Last Activity At'),
+		$this->addColumn('updated_at', array(
+            'header'        => $helper->__('Last Activity At'),
             'align'         => 'center',
-            'width'         => '300px',
+            'width'         => '50px',
             'index'         => 'updated_at',
         	'type'      	=> 'datetime',
             'gmtoffset' 	=> true
         ));    
-       $this->addColumn('customer_id', array(
-            'header'        => Mage::helper('customertracking')->__('customer ID'),
-            'align'         => 'center',
-            'width'         => '50px',
-            'index'         => 'customer_id'
-        ));
-       $this->addColumn('affiliate_id', array(
-            'header'        => Mage::helper('customertracking')->__('Affiliate ID'),
-            'align'         => 'center',
-            'width'         => '50px',
-            'index'         => 'affiliate_id'
-        ));   
-        $this->addColumn('affiliate_code', array(
-            'header'        => Mage::helper('customertracking')->__('Affiliate Code'),
-            'align'         => 'center',
-            'width'         => '250px',
-            'index'         => 'affiliate_code'
-        )); 
-        $this->addColumn('sub_affiliate_code', array(
-            'header'        => Mage::helper('customertracking')->__('Sub Affiliate Code'),
-            'align'         => 'center',
-            'width'         => '250px',
-            'index'         => 'sub_affiliate_code'
-        ));            
-        $this->addColumn('registration_param', array(
-            'header'        => Mage::helper('customertracking')->__('Registration Param'),
-            'align'         => 'center',
-            'width'         => '250px',
-            'index'         => 'registration_param'
-        ));      
-        $this->addColumn('customer_email', array(
-            'header'        => Mage::helper('customertracking')->__('Customer Email'),
-            'align'         => 'center',
-            'width'         => '300px',
-            'index'         => 'customer_email'
-        ));          
-        $this->addColumn('login_count', array(
-            'header'        => Mage::helper('customertracking')->__('Login Count'),
-            'align'         => 'center',
-            'width'         => '50px',
-            'index'         => 'login_count'
-        ));     
-//        $this->addColumn('page_view_count', array(
-//            'header'        => Mage::helper('customertracking')->__('Page View Count'),
-//            'align'         => 'center',
-//            'width'         => '50px',
-//            'index'         => 'page_view_count'
-//        ));     
-		$this->addExportType('*/*/exportCsv', Mage::helper('customertracking')->__('CSV'));
-  		$this->addExportType('*/*/exportXml', Mage::helper('customertracking')->__('XML'));
+ 
+		$this->addExportType('*/*/exportCsv', $helper->__('CSV'));
+  		$this->addExportType('*/*/exportXml', $helper->__('XML'));
       return parent::_prepareColumns();
     }
 

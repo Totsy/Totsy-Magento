@@ -14,111 +14,84 @@
 
 class Harapartners_Customertracking_Model_Observer {
 	
-	protected function _addAffiliateCustomer($customer){		
-		$affiliateCode = Mage::getSingleton('customer/session')->getAffiliateCode();
-		if(!!$affiliateCode){		    	
-		    $otherParam = Mage::getSingleton('customer/session')->getOtherParam();
-		    $subAffiliateCode = Mage::getSingleton('customer/session')->getSubAffiliateCode();
-		    $datetime = date('Y-m-d H:i:s');
-		    $model = Mage::getModel('customertracking/record')->loadByCustomerEmail($customer->getEmail());
-			$affiliate = Mage::getModel('affiliate/record')->loadByAffiliateCode($affiliateCode);
-			$registrationParam = array();
-		    if(!!$otherParam){		    	
-		    	$registrationParam['otherparam'] = $otherParam;	
-		    }		    		   
-//		    $trackingCode = json_decode($affiliate->getTrackingCode(),true);   
-//			foreach ($trackingCode as $label=>$value) {
-//				$registrationParam[$label] = $value;
-//			}
-		    if(!$model->getId()){			   
-			    $model->setCreatedAt($datetime);
-			    $model->setCustomerId($customer->getId());
-			    $model->setAffiliateId($affiliate->getId());
-			    $model->setAffiliateCode($affiliateCode);
-			    $model->setSubAffiliateCode($subAffiliateCode);
-			    if(isset($registrationParam) && !!$registrationParam){
-			    	$model->setRegistrationParam(json_encode($registrationParam));
-			    }			    
-			    $model->setCustomerEmail($customer->getEmail());
-			    $model->setLoginCount(0);
-			    $model->setPageViewCount(0);
-			    $model->save();
-			    return true;
-		    }
-		    return false;
-		    // no need to clear customer session
-		}		
-	    return false;
-	}
-	
-	public function _addAffiliateLoginCount($customer){
-		if(!!$customer && !!$customer->getEmail() ){
-			$model = Mage::getModel('customertracking/record')->loadByCustomerEmail($customer->getEmail());
-			if(!!$model->getId()){
-				if(!$model->getLoginCount()){
-					$model->setLoginCount(1);
-				}else{
-					$model->setLoginCount($model->getLoginCount()+1);
-				}
-				$model->save();
-				return true;
-			}
-			return false;
-		}
-		return false;
-	}
-	
-//	public function addPageViewCount(Varien_Event_Observer $observer){
-//		$customerSession = Mage::getSingleton('customer/session');
-//		$customer = $customerSession->getCustomer();
-//		if(!!$customer && !!$customer->getEmail() ){
-//			$model = Mage::getModel('customertracking/record')->loadByCustomerEmail($customer->getEmail());
-//			if(!!$model->getId()&&$observer->getEvent()->getResponse()->getHttpResponseCode()==200){
-//				$model->setPageViewCount($model->getPageViewCount()+1);
-//				$model->save();
-//			}
-//		}
-//
-//		return $this;
-//	}
 	public function customerRegisterSuccess(Varien_Event_Observer $observer) {
 		$customer = $observer->getEvent()->getCustomer();
-		$this->_addAffiliateCustomer($customer);
-		//plant cookie
-		//Harapartners, yang, set register success referal popup cookie here
-		$this->_plantRegisterSuccessReferCookie($observer, $customer);
+		if(!!$customer && !!$customer->getId()){
+			$this->_addAffiliateCustomer($customer);
+			//Harapartners, yang, plant cookie, set register success referal popup cookie here
+			$this->_plantRegisterSuccessReferCookie($observer, $customer);
+		}
 	}
 	
 	public function loginAfter(Varien_Event_Observer $observer) {
 		$customer = $observer->getEvent()->getCustomer();
-		
-		//No need to register anything
-		//add affl to session
-		//login count ++
-		
-		
-		
-		Mage::unregister('isLoginPage');
-		Mage::register('isLoginPage',true);
-		$this->_addAffiliateLoginCount($customer);
-		//plant cookie
+		if(!!$customer && !!$customer->getId()){
+			
+			TODO: Jun add affiliate id/code/info to the session
+			
+			$this->_affiliateLoginCountIncrement($customer);
+		}
 	}
 	
 	protected function _plantRegisterSuccessReferCookie($observer, $customer) {
-		//set cookie
 //		if (!Mage::app()->useCache('full_page')) {
 //            return false;
 //        }
-
         $cacheCookie = Mage::getSingleton('enterprise_pagecache/cookie');
         $cacheCookie->setObscure(Harapartners_Customertracking_Helper_Data::COOKIE_CUSTOMER_WELCOME, 'customer_welcome_' . $customer->getId());
-
 //        $cacheId = md5(Enterprise_PageCache_Model_Container_Customer::CACHE_TAG_PREFIX
 //            . $cacheCookie->get(Enterprise_PageCache_Model_Cookie::COOKIE_CUSTOMER));
-//
 //        Enterprise_PageCache_Model_Cache::getCacheInstance()->remove($cacheId);
-	        
         return true;
+	}
+	
+	protected function _addAffiliateCustomer($customer){		
+		$affiliate = Mage::getSingleton('customer/session')->getAffiliate();
+		if(!!$affiliate && !!$affiliate->getId()){		    
+			$model = Mage::getModel('customertracking/record')->loadByCustomerId($customer->getId());
+			
+			//check potential conflicts
+			if(!!$model && !$model->getId()){
+				$data = array(
+						'customer_id' => $customer->getId(),
+						'customer_email' => $customer->getEmail(),
+						'affiliate_id' => $affiliate->getId(),
+						'affiliate_code' => $affiliate->getAffiliateCode (),
+						'status' => Harapartners_Customertracking_Model_Record::STATUS_NEW,
+						'login_count' => 1
+				);
+				$affiliateInfo = Mage::getSingleton('customer/session')->getData('affiliate_info');
+				if(!empty($affiliateInfo['sub_affiliate_code'])){
+					$data['sub_affiliate_code'] = $affiliateInfo['sub_affiliate_code'];
+				}
+				if(!empty($affiliateInfo['registration_param'])){
+					$data['registration_param'] = $affiliateInfo['registration_param'];
+				}
+				try{
+					$model->importDataWithValidation($data)->save();
+				}catch(Exception $e){
+					return false;
+				}
+			}
+		}
+	    return true;
+	}
+	
+	public function _affiliateLoginCountIncrement($customer){
+		$model = Mage::getModel('customertracking/record')->loadByCustomerEmail($customer->getEmail());
+		if(!!$model && !!$model->getId()){
+			if(!$model->getLoginCount()){
+				$model->setLoginCount(1);
+			}else{
+				$model->setLoginCount($model->getLoginCount()+1);
+			}
+			try{
+				$model->save();
+			}catch(Exception $e){
+				return false;
+			}
+		}
+		return true;
 	}
 	
 }

@@ -57,11 +57,11 @@ class Harapartners_Affiliate_Model_Record extends Mage_Core_Model_Abstract {
     		$rawSubCode = explode(',', trim(trim($this->getData('sub_affiliate_code'), ',')));
     		$cleanSubCode = array();
     		foreach($rawSubCode as $subCodeValue){
-    			if(!trim($subCodeValue)){
+    			if(!!trim($subCodeValue)){
     				$cleanSubCode[] = strtolower(trim($subCodeValue));
     			}
     		}
-    		$this->setData('sub_affiliate_code', implode($cleanSubCode));
+    		$this->setData('sub_affiliate_code', implode(',', $cleanSubCode));
     	}    	
     	
 		$this->validate();
@@ -69,6 +69,7 @@ class Harapartners_Affiliate_Model_Record extends Mage_Core_Model_Abstract {
     }
     
     public function validate(){
+    	//Note some of the ID field are validated at the DB level by foreign key
     	if(!$this->getData('affiliate_code')){
     		throw new Exception('Affilicate code is required!');
     	}else{

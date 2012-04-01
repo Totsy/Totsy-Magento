@@ -90,57 +90,6 @@ class Harapartners_Affiliate_Adminhtml_RecordController extends Mage_Adminhtml_C
             $this->_redirect('*/*/edit', array('id' => $this->getRequest()->getParam('id')));
             return;
         }
-
-//			//split tracking code to code and tracking pixels					
-//			$trackingCode = json_decode($model->getTrackingCode(),true);
-//			if(!isset($trackingCode)){
-//				$trackingCode = array();
-//			}			
-//			if(isset($data['invitation_code']) && !!$data['invitation_code']){
-//				$trackingCode['code'] = $data['invitation_code'];
-//				unset($data['invitation_code']);
-//			}
-//			if(isset($trackingCode['pixels'])){
-//				$pixelCount = count($trackingCode['pixels']);
-//			}else{
-//				$trackingCode['pixels'] = array();
-//				$pixelCount=0;
-//			}
-//			$i=0;
-//			while ($i<$pixelCount){	
-//				if(!isset($trackingCode['pixels'][$i]) ){
-//					$trackingCode['pixels'][$i]=array();
-//				}					
-//				if(isset($data['pixels'.$i.'page']) && !!$data['pixels'.$i.'page']){
-//					$trackingCode['pixels'][$i]['page'] = $data['pixels'.$i.'page'];
-//					unset($data['pixels'.$i.'page']);
-//				}	
-//				if(isset($data['pixels'.$i.'pixel']) && !!$data['pixels'.$i.'pixel']){
-//					$trackingCode['pixels'][$i]['pixel'] = $data['pixels'.$i.'pixel'];
-//					unset($data['pixels'.$i.'pixel']);
-//					$trackingCode['pixels'][$i]['enable'] = $data['pixels'.$i.'enable'];
-//					unset($data['pixels'.$i.'enable']);
-//				}			
-//				$i++;
-//			}
-//			if($i==$pixelCount && isset($data['pixels'.$i.'pixel']) && !!$data['pixels'.$i.'pixel']){
-//				$trackingCode['pixels'][$i]['enable'] = $data['pixels'.$i.'enable'];
-//				unset($data['pixels'.$i.'enable']);
-//				$trackingCode['pixels'][$i]=array();
-//				$trackingCode['pixels'][$i]['page'] = $data['pixels'.$i.'page'];
-//				unset($data['pixels'.$i.'page']);
-//				$trackingCode['pixels'][$i]['pixel'] = $data['pixels'.$i.'pixel'];
-//				unset($data['pixels'.$i.'pixel']);
-//			}
-//			$data['tracking_code'] = json_encode($trackingCode);
-//			// end
-//			
-//			if($id>0){
-//				$data['affiliate_id'] = $id;
-//			}
-//			$model->setData($data);					
-//			
-        
     }
     
     public function deleteAction(){

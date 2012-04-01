@@ -42,7 +42,7 @@ class Harapartners_Affiliate_Block_Adminhtml_Record_Edit_Form extends Mage_Admin
             'label'     => $affiliateHelper->__('Affiliate Code'),
             'name'      => 'affiliate_code',
             'required'  => true,
-        	'note'		=> 'Alpha-numeric and underscore only. All character in lower case. 255 characters max.'
+        	'note'		=> 'Alpha-numeric and underscore only. All characters in lower case. 255 characters max.'
         ));
         
         $fieldset->addField('type', 'select', array(
@@ -68,65 +68,14 @@ class Harapartners_Affiliate_Block_Adminhtml_Record_Edit_Form extends Mage_Admin
         $fieldset->addField('sub_affiliate_code', 'textarea', array(
             'label'     => $affiliateHelper->__('Sub Affiliate Code'),
             'name'      => 'sub_affiliate_code',
-        	'note'		=> 'Comma delimited. Each sub-code must be alpha-numeric and underscore only. All character in lower case.'        
+        	'note'		=> 'Comma delimited. Each sub-code must be alpha-numeric and underscore only. All characters in lower case.'        
         ));
         
         $fieldset->addField('comment', 'textarea', array(
             'label'     => $affiliateHelper->__('Coment'),
             'name'      => 'comment'
         ));
-//        
-//		$i=0;
-//		while ($i<$pixelCount) {	
-//			$j=$i+1;			
-//	        $fieldset->addField('pixel'.$i.'separator', 'label', array(
-//	            'label'     => $affiliateHelper->__('Pixel #'.$j.':'),
-//	            'name'      => 'pixels'.$i.'separator',
-//	        ));			
-//	        $fieldset->addField('pixels'.$i.'enable', 'select', array(
-//	            'label'     => $affiliateHelper->__('Pixel Enable'),
-//	            'name'      => 'pixels'.$i.'enable',
-////          	'required'  => true,
-//	        	'values'    => array(
-//	       						array('label'=>'Enable','value'=>'true'),
-//	       						array('label'=>'Disable','value'=>'false')),
-//	        ));
-//	        $fieldset->addField('pixels'.$i.'page', 'multiselect', array(
-//	            'label'     => $affiliateHelper->__('Selct page'),
-//	            'name'      => 'pixels'.$i.'page',
-//	        	'values'    => $this->_pageArray,
-//	        ));
-//	        $fieldset->addField('pixels'.$i.'pixel', 'textarea', array(
-//	            'label'     => $affiliateHelper->__('Pixel'),
-//	            'name'      => 'pixels'.$i.'pixel',
-////         		'required'  => true,
-//	        ));	
-//	        $i++;
-//		}
-//		$j=$i+1;
-//			$fieldset->addField('pixel'.$i.'separator', 'label', array(
-//	            'label'     => $affiliateHelper->__('Add Pixel #'.$j.':'),
-//	            'name'      => 'pixels'.$i.'separator',
-//	        ));			
-//	        $fieldset->addField('pixels'.$i.'enable', 'select', array(
-//	            'label'     => $affiliateHelper->__('Pixel Enable'),
-//	            'name'      => 'pixels'.$i.'enable',
-////          	'required'  => true,
-//	        	'values'    => array(
-//	       						array('label'=>'Enable','value'=>'true'),
-//	       						array('label'=>'Disable','value'=>'false')),
-//	        ));
-//	        $fieldset->addField('pixels'.$i.'page', 'multiselect', array(
-//	            'label'     => $affiliateHelper->__('Selct page'),
-//	            'name'      => 'pixels'.$i.'page',
-//	        	'values'    => $this->_pageArray,
-//	        ));
-//	        $fieldset->addField('pixels'.$i.'pixel', 'textarea', array(
-//	            'label'     => $affiliateHelper->__('Pixel'),
-//	            'name'      => 'pixels'.$i.'pixel',
-////          	'required'  => true,
-//	        ));	
-
+        
         if ( Mage::registry('affiliate_form_data') ) {
             $form->setValues(Mage::registry('affiliate_form_data'));
         }

@@ -14,10 +14,38 @@
 
 class Harapartners_Affiliate_RegisterController extends Mage_Core_Controller_Front_Action{
 
-    public function indexAction(){       
+    public function indexAction(){
+    	//Request data can be very dirty, clean up and validate
     	$request = $this->getRequest();
-        $affiliateCode = $request->getParam('affiliate');
-        if(!!$request->getParam('siteid')){
+        $affiliateCode = $this->formatCode($request->getParam('affiliate_code'));
+        $affiliate = Mage::getModel('affiliate/record')->loadByAffiliateCode($affiliateCode);
+        
+        if(!!$affiliate && !!$affiliate->getId()){
+        	$affiliateInfo = array();
+	        $subAffiliateCode = $this->getRequestSubAffiliateCode();
+	        if(in_array($subAffiliateCode, explode(',', $affiliate->getSubAffiliateCode()))){
+	        	$affiliateInfo['sub_affiliate_code'] = $subAffiliateCode;
+	        }
+	        $affiliateInfo['registration_param'] = json_encode($request->getParams());
+	        
+	        //Additional logic: specific landing page after registration, background image can also be prepared here!
+	        
+	        Mage::getSingleton('customer/session')->setData('affiliate_id', $affiliate->getId());
+	        Mage::getSingleton('customer/session')->setData('affiliate_info', $affiliateInfo);
+        }
+        $this->_redirect('customer/account/create');
+    }
+    
+    //Alpha-numerical, lower case only, underscore allowed
+    public function formatCode($code){
+    	return preg_replace("/[^a-z0-9_]/", "_", trim(strtolower((urldecode($code)))));
+    }
+    
+    public function getRequestSubAffiliateCode(){
+    	$subAffiliateCode = '';
+    	$request = $this->getRequest();
+    	
+    	if(!!$request->getParam('siteid')){
         	$subAffiliateCode = $request->getParam('siteid');
         }elseif(!!$request->getParam('subid')){
         	$subAffiliateCode = $request->getParam('subid');
@@ -30,21 +58,7 @@ class Harapartners_Affiliate_RegisterController extends Mage_Core_Controller_Fro
         }elseif(!!$request->getParam('siteID')){
         	$subAffiliateCode = $request->getParam('siteID');
         }
-        $otherParam = $request->getParam('other_param');  
-        $affiliate = Mage::getModel('affiliate/record')->loadByAffiliateCode($affiliateCode);      
-        $subAffiliateCodeArray = explode(',', $affiliate->getSubAffiliateCode());       
-        if(!!$affiliate->getId()&& !!$affiliate->getStatus()){
-            Mage::getSingleton('customer/session')->setData('affiliate_code', $affiliateCode);
-            if(in_array($subAffiliateCode, $subAffiliateCodeArray)){
-				Mage::getSingleton('customer/session')->setData('sub_affiliate_code', $subAffiliateCode)
-													->setData('other_param', $otherParam);
-        	}else{
-        		Mage::getSingleton('customer/session')->setData('other_param', $otherParam);										
-        	}
-        }else{
-        	//Mage::log('Invalid Affiliate'.$params['affiliateId'].$params['affiliateCode'].$params['registrationParam'].now());
-        }
-        $this->_redirect('customer/account/create');
-        //Mage::getModel('haraparters/customerTracking')
-    }   
+        
+        return $this->formatCode($subAffiliateCode);
+    }
 }
