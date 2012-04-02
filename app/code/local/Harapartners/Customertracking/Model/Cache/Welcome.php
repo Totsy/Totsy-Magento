@@ -14,14 +14,14 @@
 
 class Harapartners_Customertracking_Model_Cache_Welcome extends Enterprise_PageCache_Model_Container_Abstract {
     
-	const CACHE_TAG_PREFIX = 'customertracking_welcome';
-
-	public function applyWithoutApp(&$content){
-        return false;
-    }
+	const CACHE_TAG_PREFIX = 'CUSTOMERTRACKING_WELCOME';
 	
-    protected function _getCacheId() {
-        return false;
+	protected function _getIdentifier(){
+        return $this->_getCookieValue(Harapartners_Customertracking_Helper_Data::COOKIE_CUSTOMER_WELCOME, '');
+    }
+
+    protected function _getCacheId(){
+        return md5(self::CACHE_TAG_PREFIX . $this->_getIdentifier());
     }
     
     protected function _renderBlock() {
@@ -32,6 +32,8 @@ class Harapartners_Customertracking_Model_Cache_Welcome extends Enterprise_PageC
         $block->setNameInLayout('customertracking.welcome');
         $block->setTemplate($template);
         $block->setLayout(Mage::app()->getLayout());
+        
+        //clean up is done within toHtml() so that regular page load follows the same logic
 
         return $block->toHtml();
     }

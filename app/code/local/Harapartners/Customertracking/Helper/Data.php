@@ -15,5 +15,13 @@
 class Harapartners_Customertracking_Helper_Data extends Mage_Core_Helper_Abstract{
 	
 	const COOKIE_CUSTOMER_WELCOME = 'CUSTOMER_WELCOME';
+	const COOKIE_IS_ACTIVE = '1';
+	
+	public function getGridStatusArray(){
+		return array(
+				Harapartners_Customertracking_Model_Record::STATUS_NEW => 'New',
+				Harapartners_Customertracking_Model_Record::STATUS_EMAIL_CONFIRMED => 'Email Confirmed'
+		);
+	}
 	
 }

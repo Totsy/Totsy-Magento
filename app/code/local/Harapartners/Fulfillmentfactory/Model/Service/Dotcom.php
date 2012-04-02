@@ -52,15 +52,21 @@ class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
 	 *
 	 */
 	public function runDotcomFulfillOrder() {
-		//fetch inventory data from DOTcom
-		$inventoryList = $this->updateInventory();
-		//update stock info
-		$service = Mage::getModel('fulfillmentfactory/service_fulfillment');
-		$processingOrderCollection = $service->stockUpdate($inventoryList);
-		//update order's info
-		$service->updateOrderFulfillStatus($processingOrderCollection);
-		//submit orders to fulfill
-		$this->submitOrderToFulfillByQueue();
+		try {
+			//fetch inventory data from DOTcom
+			$inventoryList = $this->updateInventory();
+			//update stock info
+			$service = Mage::getModel('fulfillmentfactory/service_fulfillment');
+			$processingOrderCollection = $service->stockUpdate($inventoryList);
+			//update order's info
+			$service->updateOrderFulfillStatus($processingOrderCollection);
+			//submit orders to fulfill
+			$this->submitOrderToFulfillByQueue();
+		}
+		catch (Exception $e) {
+			Mage::helper('fulfillmentfactory/log')->errorLog($e->getMessage());
+			throw Exception;
+		}
 	}
 	
 	/**
@@ -68,11 +74,17 @@ class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
 	 *
 	 */
 	public function runUpdateShipment() {
-		//put one day as default
-		$fromDate = $this->_getYesterday();
-		$toDate = date("Y-m-d 00:00:00");
-		
-		$this->updateShipment($fromDate, $toDate);
+		try {
+			//put one day as default
+			$fromDate = $this->_getYesterday();
+			$toDate = date("Y-m-d 00:00:00");
+			
+			$this->updateShipment($fromDate, $toDate);
+		}
+		catch (Exception $e) {
+			Mage::helper('fulfillmentfactory/log')->errorLog($e->getMessage());
+			throw Exception;
+		}
 	}
 	
 	//===============Functions===============//
@@ -312,7 +324,7 @@ XML;
 		$xml = '<orders xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">';
 		
 		foreach($orders as $order) {
-			
+			$order->setStatus(Harapartners_FulfillmentFactory_Helper_Data::ORDER_STATUS_PROCESSING_FULFILLMENT)->save();	//start fulfillment
 			try {
 				//capture payment
 				$orderPayment = $order->getPayment();
@@ -329,6 +341,7 @@ XML;
 	           	$transactionSave->save();
 			}
 			catch(Exception $e) {
+				$order->setStatus(Harapartners_FulfillmentFactory_Helper_Data::ORDER_STATUS_PAYMENT_FAILED)->save();	//payment failed
 				throw new Exception('Order ' . $order->getIncrementId() . ' could not place the payment. ' . $e->getMessage());
 				continue;
 			}
@@ -460,10 +473,8 @@ XML;
 		
 		$xml .= '</orders>';
 		
-		//echo $xml;
-		
 		$response = Mage::helper('fulfillmentfactory/dotcom')->submitOrders($xml);
-		
+
 		return $response;
 	}
 	
@@ -609,6 +620,7 @@ XML;
 		//echo count($orders);
 		//return $this->submitOrdersToFulfill($orders);
 		
-		$this->submitOrderToFulfillByQueue();
+		//$this->submitOrderToFulfillByQueue();
+		$this->runDotcomFulfillOrder();
 	}
 }

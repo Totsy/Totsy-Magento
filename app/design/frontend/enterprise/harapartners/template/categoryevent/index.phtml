@@ -50,7 +50,7 @@
 				$endcountRaw = strtotime($top['event_end_date']);
 				$endcount = date("F j, Y, G:i:s", $endcountRaw);
 			?>
-			<div class="catalog-top-event">
+			<div class="catalog-top-event event-counter-<?php echo $timer;?>">
 				<?php $imgFile = BP.DS.'media'.DS.'catalog'.DS.'category'.DS.$top['thumbnail'];?>	
 				<a class="event-link" href="<?php echo Mage::getBaseUrl().$top['url_path']; ?>"><img src="<?php echo Mage::helper('service/image')->loadImageFile($imgFile)->resize(349,403); ?>" width="349px" height="403px" alt="" /></a>
 				<div class="splash-details">
@@ -67,6 +67,7 @@
 								},
 								onComplete: function( event ){										
 									jQuery(this).html("Completed");
+									jQuery("div.event-counter-<?php echo $timer;?>").hide();
 								},
 								leadingZero: true,
 								direction: "down"
@@ -89,7 +90,7 @@
 				$endcountRaw = strtotime($live['event_end_date']);
 				$endcount = date("F j, Y, G:i:s", $endcountRaw);
 			?>
-			<div class="catalog-event">
+			<div class="catalog-event event-counter-<?php echo $timer;?>">
 				<?php $imgFile = BP.DS.'media'.DS.'catalog'.DS.'category'.DS.$live['thumbnail'];?>	
 				<a class="event-link" href="<?php echo Mage::getBaseUrl().$live['url_path']; ?>"><img src="<?php echo Mage::helper('service/image')->loadImageFile($imgFile)->resize(228,263); ?>" width="228px" height="263px" alt="" /></a>
 				<div class="splash-details">
@@ -106,6 +107,7 @@
 								},
 								onComplete: function( event ){										
 									jQuery(this).html("Completed");
+									jQuery("div.event-counter-<?php echo $timer;?>").hide();
 								},
 								leadingZero: true,
 								direction: "down"

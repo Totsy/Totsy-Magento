@@ -19,7 +19,7 @@ class Harapartners_Stockhistory_Block_Adminhtml_History_Index extends Mage_Admin
 		parent::__construct();
 		$this->_controller = 'adminhtml_history_index';
 		$this->_blockGroup = 'stockhistory';
-		$this->_headerText = Mage::helper('stockhistory')->__('Purchase Order Manager');
+		$this->_headerText = Mage::helper('stockhistory')->__('Transcation Report');
 		$this->_removeButton('add');
 //		$this->_addButton('update_status', array(
 //												'label' => Mage::helper('stockhistory')->__('Update Status'),

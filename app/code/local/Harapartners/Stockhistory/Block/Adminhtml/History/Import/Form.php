@@ -18,13 +18,13 @@ class Harapartners_Stockhistory_Block_Adminhtml_History_Import_Form extends Mage
 
         $form = new Varien_Data_Form(array(
             'id'        => 'import_form',
-            'action'    => $this->getUrl('*/*/saveImport', array('id' => $this->getRequest()->getParam('id'))),
+            'action'    => $this->getUrl('*/*/saveImport', array('id' => $this->getRequest()->getParam('stock_import'))),
             'method'    => 'post',
             'enctype'  	 => 'multipart/form-data'
         ));
         
 
-        $fieldset = $form->addFieldset('stockhistory', array('legend'=>Mage::helper('stockhistory')->__('Import CSV Files')));
+        $fieldset = $form->addFieldset('stockhistory_import', array('legend'=>Mage::helper('stockhistory')->__('Import CSV Files')));
         
         $fieldset->addField('stock_import', 'file', array(
             'label'     => Mage::helper('stockhistory')->__('Please import file:'),

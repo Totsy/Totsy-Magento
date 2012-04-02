@@ -35,12 +35,13 @@ $_attributes = Mage::helper('core')->decorateArray($this->getAllowAttributes());
     <?php foreach($_attributes as $_attribute): ?>
         <dd<?php if ($_attribute->decoratedIsLast){?> class="last"<?php }?>>
             <div class="input-box">
-            	<div class="ui-btn ui-btn-icon-right ui-btn-corner-all ui-shadow ui-btn-up-b" data-theme="b" >
+            	<div class="ui-btn ui-btn-icon-right ui-btn-corner-all ui-shadow ui-btn-up-b" data-theme="b" id="activechange<?php echo $counter;?>">
             		<span class="ui-btn-inner ui-btn-corner-all">
-            			<span class="ui-btn-text" style="-moz-user-select: none;" id="activechange<?php echo $counter;?>"><?php echo $this->__('Please Select ').$_attribute->getLabel() ?></span>
+            			<span class="ui-btn-text"  ><?php echo $this->__('Please Select ').$_attribute->getLabel() ?></span>
             			<span class="ui-icon ui-icon-arrow-d ui-icon-shadow"></span>
             		</span>
             	</div>
+
             	<div class="select-container select-container-<?php echo $_attribute->getAttributeId() ?>" style="display:none">
 	                <select name="super_attribute[<?php echo $_attribute->getAttributeId() ?>]" id="attribute<?php echo $_attribute->getAttributeId() ?>" class="required-entry super-attribute-select">
 	                    <option><?php echo $this->__('Please Select ').$_attribute->getLabel() ?></option>
@@ -70,6 +71,7 @@ $_attributes = Mage::helper('core')->decorateArray($this->getAllowAttributes());
 							jQuery("button.btn-cart").css("background-color","#ED1C25");
 						}
 					});
+
             })
         </script>
         <?php $counter++; ?>

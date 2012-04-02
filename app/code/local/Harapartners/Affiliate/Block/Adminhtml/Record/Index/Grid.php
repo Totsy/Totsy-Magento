@@ -38,69 +38,61 @@ class Harapartners_Affiliate_Block_Adminhtml_Record_Index_Grid extends Mage_Admi
         return Mage::app()->getStore($storeId);
     }
 
-    protected function _prepareColumns(){        
-        $this->addColumn('affiliate_id', array(
-            'header'        => Mage::helper('affiliate')->__('Affiliate ID'),
+    protected function _prepareColumns(){
+    	$affilicateHelper = Mage::helper('affiliate');    
+		$this->addColumn('affiliate_id', array(
+            'header'        => $affilicateHelper->__('Affiliate ID'),
             'align'         => 'center',
             'width'         => '50px',
             'index'         => 'affiliate_id'
-        ));    
-       $this->addColumn('created_at', array(
-            'header'        => Mage::helper('affiliate')->__('Created At'),
+        ));
+        $this->addColumn('affiliate_name', array(
+            'header'        => $affilicateHelper->__('Affiliate Name'),
+            'align'         => 'center',
+            'width'         => '100px',
+            'index'         => 'affiliate_name'
+        )); 
+        $this->addColumn('affiliate_code', array(
+            'header'        => $affilicateHelper->__('Affiliate Code'),
+            'align'         => 'center',
+            'width'         => '100px',
+            'index'         => 'affiliate_code'
+        ));
+        $this->addColumn('type', array(
+            'header'        => $affilicateHelper->__('Type'),
+            'align'         => 'right',
+            'width'         => '50px',
+            'index'         => 'status',
+        	'type'			=> 'options',
+            'options' => $affilicateHelper->getGridTypeArray()
+        ));
+        $this->addColumn('status', array(
+            'header'        => $affilicateHelper->__('Status'),
+            'align'         => 'right',
+            'width'         => '50px',
+            'index'         => 'status',
+        	'type'			=> 'options',
+            'options' => $affilicateHelper->getGridStatusArray()
+        ));
+		$this->addColumn('created_at', array(
+            'header'        => $affilicateHelper->__('Created At'),
             'align'         => 'center',
             'width'         => '100px',
             'index'         => 'created_at',
         	'type'      	=> 'datetime',
             'gmtoffset' 	=> true
         ));   
-       $this->addColumn('updated_at', array(
-            'header'        => Mage::helper('affiliate')->__('Updated At'),
+		$this->addColumn('updated_at', array(
+            'header'        => $affilicateHelper->__('Updated At'),
             'align'         => 'center',
             'width'         => '100px',
             'index'         => 'updated_at',
         	'type'      	=> 'datetime',
             'gmtoffset' 	=> true
         ));        
-        $this->addColumn('status', array(
-            'header'        => Mage::helper('affiliate')->__('Status'),
-            'align'         => 'right',
-            'width'         => '50px',
-            'index'         => 'status',
-        	'type'			=> 'options',
-            'options' => array('1'=>'Enable','0'=>'Disable')
-        ));       
-        $this->addColumn('affiliate_code', array(
-            'header'        => Mage::helper('affiliate')->__('Affiliate Code'),
-            'align'         => 'center',
-            'width'         => '100px',
-            'index'         => 'affiliate_code'
-        )); 
-//        $this->addColumn('sub_affiliate_code', array(
-//            'header'        => Mage::helper('affiliate')->__('Sub Affiliate Code'),
-//            'align'         => 'center',
-//            'width'         => '300px',
-//            'index'         => 'sub_affiliate_code'
-//        ));     
-        $this->addColumn('type', array(
-            'header'        => Mage::helper('affiliate')->__('Type'),
-            'align'         => 'center',
-            'width'         => '100px',
-            'index'         => 'type'
-        ));  
-        $this->addColumn('tracking_code', array(
-            'header'        => Mage::helper('affiliate')->__('Tracking Code'),
-            'align'         => 'center',
-            'width'         => '300px',
-            'index'         => 'tracking_code'
-        ));    
-        $this->addColumn('referer_count', array(
-            'header'        => Mage::helper('affiliate')->__('Total Bounces'),
-            'align'         => 'center',
-            'width'         => '200px',
-            'index'         => 'total_bounces'
-        ));               
-		$this->addExportType('*/*/exportCsv', Mage::helper('affiliate')->__('CSV'));
-  		$this->addExportType('*/*/exportXml', Mage::helper('affiliate')->__('XML'));
+        
+		$this->addExportType('*/*/exportCsv', $affilicateHelper->__('CSV'));
+  		$this->addExportType('*/*/exportXml', $affilicateHelper->__('XML'));
       return parent::_prepareColumns();
     }
 

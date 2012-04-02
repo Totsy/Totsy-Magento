@@ -13,6 +13,7 @@
  */
 
 class Harapartners_Affiliate_Block_Report extends Mage_Adminhtml_Block_Template {
+	
 	public function getReportHtml(){  
 		$resultFilter = Mage::registry('resultFilter');
 		$reportHtml = '';

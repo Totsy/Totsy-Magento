@@ -299,6 +299,12 @@ div div button.button-exception{
 	padding :0px;
 }
 
+#checkout-review-table-wrapper #review-buttons-container .button-exception{
+	background-color: transparent;
+    border: 0px solid #CCCCCC;
+	padding :0px;
+}
+
 .timer-control-box{
 	margin:5px;
 }
@@ -309,4 +315,53 @@ div.checkout-sub-title sub-title{
 
 .checkout-content{
 	margin-left:19px;
+}
+#giftcard-form .v-fix{
+	
+}
+
+#giftcard-form #giftcard_code, #discount-coupon-form #coupon_code{
+	width: 89%;
+	font-size:14px;
+}
+
+#hpcheckout-wrapper #hpcheckout-shipping-method-wrapper, #hpcheckout-wrapper #hpcheckout-payment-wrapper,
+#hpcheckout-wrapper #hpcheckout-review-wrapper
+{
+	padding-left:20px;
+}
+#hpcheckout-wrapper .checkout-sub-title, #hpcheckout-wrapper {
+	margin-left:0px;
+}
+.use-new-card-wrapper li .totsy-selective-input-box {
+	width:122px;
+}
+
+#hpcheckout-wrapper .sub-title{
+	font-size: 20px;
+}
+
+.facebook-part{
+	float:right;	
+}
+
+.signinbutton1 .submit-button{
+	float:left;	
+}
+
+.the-account-login .emailpassword .required{
+	color:#333333;
+}
+.the-account-login .emailpassword .required em{
+	color: #DF280A;
+}
+
+.the-account-login .forgot-pwd{
+	display: inline;
+}
+
+.product-options-bottom .add-to-cart .width-button{
+	clear:both;
+	width:100%;
+	margin-top:10px;
 }
