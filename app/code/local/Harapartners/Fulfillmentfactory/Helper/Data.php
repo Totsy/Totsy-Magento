@@ -41,7 +41,7 @@ class Harapartners_FulfillmentFactory_Helper_Data extends Mage_Core_Helper_Abstr
 	 * @param Object $order
 	 */
 	public function _pushUniqueOrderIntoArray(&$orderArray, $order) {
-		if(empty($order)) {
+		if(empty($order) || !$order->getId()) {
 			return;
 		}
 		

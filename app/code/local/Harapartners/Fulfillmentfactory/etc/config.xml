@@ -13,7 +13,7 @@
 <config>
     <modules>
         <Harapartners_Fulfillmentfactory>
-            <version>1.0.0</version>
+            <version>1.0.1</version>
         </Harapartners_Fulfillmentfactory>
     </modules>
     <global>
@@ -38,30 +38,12 @@
                     <itemqueue>
                         <table>fulfillmentfactory_itemqueue</table>
                     </itemqueue>
+					<errorlog>
+                        <table>fulfillmentfactory_errorlog</table>
+                    </errorlog>
                 </entities>
             </fulfillmentfactory_mysql4>
         </models>
-		<!--Moved to Harapartners_Service-->
-		<!--events>
-			<order_cancel_after>
-				<observers>
-                    <fulfillmentfactory>
-                    	<type>singleton</type>
-                    	<class>fulfillmentfactory/observer</class>
-                        <method>cancelItemQueue</method>
-                    </fulfillmentfactory>
-                </observers>
-			</order_cancel_after>
-			<sales_order_save_after>
-				<observers>
-                    <fulfillmentfactory>
-                    	<type>singleton</type>
-                    	<class>fulfillmentfactory/observer</class>
-                        <method>updateItemQueueStatus</method>
-                    </fulfillmentfactory>
-                </observers>
-			</sales_order_save_after>
-        </events-->
 		<resources>
             <fulfillmentfactory_setup>
                 <setup>
@@ -127,7 +109,18 @@
 					<fulfillmentfactory translate="title" module="fulfillmentfactory">
 		                <title>Fulfillment Factory</title>
 		                <sort_order>31</sort_order>
-		                <action>fulfillmentfactory/adminhtml_itemqueue</action>
+						<children>
+							<fulfillmentgrid translate="title" module="fulfillmentfactory">
+								<title>Order Queue</title>
+								<sort_order>0</sort_order>
+								<action>fulfillmentfactory/adminhtml_itemqueue</action>
+							</fulfillmentgrid>
+							<fulfillmentlog translate="title" module="fulfillmentfactory">
+								<title>Fulfillment Error Log</title>
+								<sort_order>1</sort_order>
+								<action>fulfillmentfactory/adminhtml_errorlog</action>
+							</fulfillmentlog>
+						</children>
 		            </fulfillmentfactory>
 				</children>
             </sales>
