@@ -19,7 +19,7 @@ class Harapartners_Fulfillmentfactory_Block_Adminhtml_Itemqueue_Index_Renderer_S
 
         $data = $row->getData($this->getColumn()->getIndex());
 		
-        $statusList = Mage::getModel('fulfillmentfactory/itemqueue')->getStatusList();
+        $statusList = Mage::helper('fulfillmentfactory')->getItemqueueStatusDropdownOptionList();
         
         //show status label
         foreach ($statusList as $status) {

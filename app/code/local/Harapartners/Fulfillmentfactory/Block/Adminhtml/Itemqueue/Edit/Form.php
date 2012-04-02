@@ -14,7 +14,6 @@ class Harapartners_Fulfillmentfactory_Block_Adminhtml_Itemqueue_Edit_Form extend
     
 	protected function _prepareForm() {
 		$yesno = Mage::getModel('adminhtml/system_config_source_yesno');
-		$statusList = Mage::getModel('fulfillmentfactory/itemqueue')->getStatusList();
 
         $form = new Varien_Data_Form(array(
             'id'        => 'edit_form',
@@ -89,14 +88,12 @@ class Harapartners_Fulfillmentfactory_Block_Adminhtml_Itemqueue_Edit_Form extend
         $queueFieldset->addField('status', 'select', array(
             'label'     => Mage::helper('fulfillmentfactory')->__('Status'),
             'name'      => 'status',
-            'values'    => $statusList,
+            'values'    => Mage::helper('fulfillmentfactory')->getItemqueueStatusDropdownOptionList(),
         	'note'		=> Mage::helper('fulfillmentfactory')->__('Current status for this item')
         ));
-
-        if($itemQueueData = Mage::getSingleton('adminhtml/session')->getItemQueueFormData()) {
-            $form->setValues($itemQueueData);
-        } elseif ( Mage::registry('itemqueue') ) {
-            $form->setValues(Mage::registry('itemqueue')->getData());
+        
+		if (Mage::registry('itemqueue_form_data')) {
+            $form->setValues(Mage::registry('itemqueue_form_data'));
         }
 
         $form->setUseContainer(true);
