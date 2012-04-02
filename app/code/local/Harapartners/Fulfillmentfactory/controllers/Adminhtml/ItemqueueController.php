@@ -34,61 +34,70 @@ class Harapartners_Fulfillmentfactory_Adminhtml_ItemqueueController extends Mage
      */
     public function editAction() {
     	$id = $this->getRequest()->getParam('id');
-		$model  = Mage::getModel('fulfillmentfactory/itemqueue')->load($id);
-
-		if (!!$model->getId() || $id == 0) {
-			Mage::unregister('itemqueue');
-			Mage::register('itemqueue', $model);
-			$this->loadLayout()->_setActiveMenu('fulfillmentfactory/edit');
-			$this->_addContent($this->getLayout()->createBlock('fulfillmentfactory/adminhtml_itemqueue_edit'));
-			$this->renderLayout();
-		} 
-		else {
-			Mage::getSingleton('adminhtml/session')->addError(Mage::helper('fulfillmentfactory')->__('Item Queue does not exist'));
-			$this->_redirect('*/*/index');
+		//$data is used to pre-poluate form, by default load from session
+    	$data = Mage::getSingleton('adminhtml/session')->getItemqueueFormData();
+    	
+    	//Do nothing for 'new'. With valid ID, load $data from DB
+		if(!!$id){
+			$model  = Mage::getModel('fulfillmentfactory/itemqueue')->load($id);
+			if(!!$model && !!$model->getId()){
+				$data = $model->getData();
+			}else{
+				Mage::getSingleton('adminhtml/session')->addError(Mage::helper('fulfillmentfactory')->__('Invalid ID'));
+				$this->_redirect('*/*/');
+				return;
+			}
 		}
+		
+    	if(!!$data){
+			Mage::unregister('itemqueue_form_data');
+			Mage::register('itemqueue_form_data', $data);
+		}
+		
+		$this->loadLayout()->_setActiveMenu('fulfillmentfactory/edit');
+		$this->getLayout()->getBlock('head')->setCanLoadExtJs(true);
+		$this->_addContent($this->getLayout()->createBlock('fulfillmentfactory/adminhtml_itemqueue_edit'));
+		$this->renderLayout();
     }
     
     /**
      * save item queue object
      */
 	public function saveAction() {
-    	if ($data = $this->getRequest()->getPost()) {
-			try {
-				$itemqueue_id = $this->getRequest()->getParam('id');
-				$model = Mage::getModel('fulfillmentfactory/itemqueue')->load($itemqueue_id);
-				
-				foreach($data as $key=>$value) {
-					$model->setData($key, $value);
+		$data = $this->getRequest()->getPost();
+		//save data in session in case of failure
+		Mage::getSingleton('adminhtml/session')->setItemqueueFormData($data);
+		if(!$data){
+			Mage::getSingleton('adminhtml/session')->addError(Mage::helper('fulfillmentfactory')->__('Nothing to save.'));
+        	$this->_redirect('*/*/');
+        	return;
+		}
+		
+		try {
+			$id = $this->getRequest()->getParam('id');
+			$model = Mage::getModel('fulfillmentfactory/itemqueue');
+			if(!!$id){
+				$model->load($id);
+				if(!$model || !$model->getId()){
+					throw new Exception('Invalid ID');
 				}
-				
-				if(($validateResult = $model->validateData()) !== true){
-					throw new Exception((string) $validateResult);
-				}
-				
-				$model->save();
-				
-				Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('fulfillmentfactory')->__('Item queue saved successfully'));
-				Mage::getSingleton('adminhtml/session')->setItemQueueFormData(null);
-
-				if ($this->getRequest()->getParam('back')) {
-					$this->_redirect('*/*/index');
-					return;
-				}
-            }
-            catch (Exception $e) {
-                Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
-                $this->_redirect('*/*/edit', array('id' => $this->getRequest()->getParam('id')));
-                return;
-            }
+			}
+			$model->importDataWithValidation($data)->save();
+			
+			Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('fulfillmentfactory')->__('Save success.'));
+			Mage::getSingleton('adminhtml/session')->setAffiliateFormData(null); //clear form data from session
+			if ($this->getRequest()->getParam('back')) {
+				$this->_redirect('*/*/edit', array('id' => $model->getId()));
+			}else{
+				$this->_redirect('*/*/');
+			}
+			return;
+        } catch (Exception $e) {
+            Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
+            Mage::getSingleton('adminhtml/session')->setAffiliateFormData($data);
+            $this->_redirect('*/*/edit', array('id' => $this->getRequest()->getParam('id')));
+            return;
         }
-        else {
-        	 Mage::getSingleton('adminhtml/session')->addError(
-        	 		Mage::helper('fulfillmentfactory')->__('Unable to save item queue')
-        	 );
-        }
-        
-        $this->_redirect('*/*/index');
     }
     
     /**
