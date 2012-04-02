@@ -14,14 +14,16 @@
 
 class Harapartners_Customertracking_Model_Cache_Pixel extends Enterprise_PageCache_Model_Container_Abstract {
     
-//	const CACHE_TAG_PREFIX = 'customertracking_pixel';
-
-	public function applyWithoutApp(&$content){
-        return false;
-    }
+	const CACHE_TAG_PREFIX = 'CUSTOMERTRACKING_PIXEL';
 	
-    protected function _getCacheId() {
-        return false;
+	protected function _getIdentifier(){
+        return $this->_getCookieValue(Harapartners_Affiliate_Helper_Data::COOKIE_AFFILIATE, '')
+            . $this->_getCookieValue(Enterprise_PageCache_Model_Cookie::COOKIE_CUSTOMER, '')
+            . $this->_getCookieValue(Harapartners_Customertracking_Helper_Data::COOKIE_CUSTOMER_WELCOME);
+    }
+
+    protected function _getCacheId(){
+        return md5(self::CACHE_TAG_PREFIX . $this->_getIdentifier());
     }
     
     protected function _renderBlock() {

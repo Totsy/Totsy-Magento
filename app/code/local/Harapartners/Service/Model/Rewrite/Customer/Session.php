@@ -18,6 +18,16 @@ class Harapartners_Service_Model_Rewrite_Customer_Session extends Mage_Customer_
 	
 	protected $_affiliate = null;
 	
+	//Important step so that cache pages can still display messages
+	public function addMessage(Mage_Core_Model_Message_Abstract $message){
+		if(Mage::app()->useCache('full_page')){
+			$cacheCookie = Mage::getSingleton('enterprise_pagecache/cookie');
+			//mt_rand() range to 2^31, which should be sufficient (global messages are transient and deleted after displayed)
+	        $cacheCookie->setObscure(Enterprise_PageCache_Model_Cookie::COOKIE_MESSAGE, md5(mt_rand()));
+		}
+        return parent::addMessage($message);
+    }
+	
 	public function getAffiliate(){
 		if(!($this->_affiliate instanceof Harapartners_Affiliate_Model_Record)){
 			$this->_affiliate = Mage::getModel('affiliate/record');
@@ -44,8 +54,8 @@ class Harapartners_Service_Model_Rewrite_Customer_Session extends Mage_Customer_
 		$this->_affiliate = $affiliate;
 		//save affiliate ID and code, for future retrieval of the affiliate object
 		if(!!$this->_affiliate && !!$this->_affiliate->getId()){
-			$this->getAffiliateId($this->_affiliate->getId());
-			$this->getAffiliateCode($this->_affiliate->getCode());
+			$this->setAffiliateId($this->_affiliate->getId());
+			$this->setAffiliateCode($this->_affiliate->getCode());
 		}
 		return $this;
 	}

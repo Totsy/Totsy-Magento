@@ -14,6 +14,9 @@
  
 class Harapartners_Affiliate_Helper_Data extends Mage_Core_Helper_Abstract{
 	
+	const COOKIE_AFFILIATE = 'AFFILIATE';
+	const PAGE_NAME_AFTER_CUSTOMER_REGISTER_SUCCESS = 'after_customer_register_success';
+	
 	public function getGridTypeArray(){
 		return array(
 				Harapartners_Affiliate_Model_Record::TYPE_STANDARD => 'Standard',
@@ -42,18 +45,19 @@ class Harapartners_Affiliate_Helper_Data extends Mage_Core_Helper_Abstract{
        	);
 	}
 	
+	//Note page name must be  strtolower(Mage::app()->getFrontController()->getAction()->getFullActionName());
 	public function getFormTrackingPageCodeArray(){
 		return array(
 		    		// ----- Atomic pages, determined by module/controller/action ----- //
 		    		'customer_account_create' => 'Customer Account Create',
 		    		'customer_account_login' => 'Customer Account Login', 
-	       			'event_index_index' => 'Event Index (Home)', 
+	       			'categoryevent_index_index' => 'Event Index (Home)', 
 	       			'catalog_category_view' => 'Event Detail (Category)',
 	       			'catalog_product_view' => 'Product Detail', 
 	       			'hpcheckout_checkout_success' => 'Order Confirmation', //dependent on the checkout module
 	       			
 	       			// ----- Dependent on business logic, require cookie/session data ----- //
-	       			'after_customer_register_success' => 'After Customer Register Success'
+	       			self::PAGE_NAME_AFTER_CUSTOMER_REGISTER_SUCCESS => 'After Customer Register Success'
 
 	       	);
 //		    return array(
@@ -66,7 +70,7 @@ class Harapartners_Affiliate_Helper_Data extends Mage_Core_Helper_Abstract{
 //	       			array('label' => 'Order Confirmation', 'value' => 'hpcheckout_checkout_success'), //dependent on the checkout module
 //	       			
 //	       			// ----- Dependent on business logic, require cookie/session data ----- //
-//	       			array('label' => 'After Customer Register Success', 'value' => 'after_customer_register_success'),
+//	       			array('label' => 'After Customer Register Success', 'value' => self::PAGE_NAME_AFTER_CUSTOMER_REGISTER_SUCCESS),
 //
 //	       	);
 	}

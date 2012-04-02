@@ -20,11 +20,23 @@ class Harapartners_Customertracking_Block_Pixel extends Mage_Core_Block_Template
 		if(!!$affiliate && !!$affiliate->getId()){
 			try{
 				$trackingCode = json_decode($affiliate->getTrackingCode(), true);
-				//Page detection logic here!
-				$currentPageTag = '';
+				
+				//Page detection
+				$currentPageTag = strtolower(Mage::app()->getFrontController()->getAction()->getFullActionName());
 				if(!empty($trackingCode[$currentPageTag])){
-					$pixelHtml = $trackingCode[$currentPageTag];
+					$pixelHtml .= $trackingCode[$currentPageTag];
 				}
+				
+				//Additional logic
+				$cookie = Mage::app()->getCookie();
+    			$key = Harapartners_Customertracking_Helper_Data::COOKIE_CUSTOMER_WELCOME;
+    			if(!!$cookie->get($key)){
+	    			if(!empty($trackingCode[Harapartners_Affiliate_Helper_Data::PAGE_NAME_AFTER_CUSTOMER_REGISTER_SUCCESS])){
+						$pixelHtml .= $trackingCode[Harapartners_Affiliate_Helper_Data::PAGE_NAME_AFTER_CUSTOMER_REGISTER_SUCCESS];
+					}
+					$cookie->delete($key); //Note cookie still available till next page request
+		    	}
+				
 			}catch(Exception $e){
 			}
 		}

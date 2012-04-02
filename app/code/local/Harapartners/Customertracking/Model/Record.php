@@ -61,11 +61,14 @@ class Harapartners_Customertracking_Model_Record extends Mage_Core_Model_Abstrac
     }
     
     protected function _beforeSave(){
-    	if(!$this->getId()){
+    	parent::_beforeSave();
+    	//For new object which does not specify 'created_at'
+    	if(!$this->getId() && !$this->getData('created_at')){
     		$this->setData('created_at', now());
-    	}else{
-    		$this->setData('updated_at', now());
     	}
-    	parent::_beforeSave();  
+    	//Always specify 'updated_at'
+    	$this->setData('updated_at', now());
+    	$this->validate(); //Errors will be thrown as exceptions
+    	return $this;
     }
 }

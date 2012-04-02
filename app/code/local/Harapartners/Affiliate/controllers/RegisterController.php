@@ -15,6 +15,12 @@
 class Harapartners_Affiliate_RegisterController extends Mage_Core_Controller_Front_Action{
 
     public function indexAction(){
+    	//Short-circuit logic, do NOT overwrite exiting affiliate
+    	if(!!Mage::getSingleton('customer/session')->getAffiliateId()){
+			$this->_redirect('customer/account/create');
+			return;
+		}
+    	
     	//Request data can be very dirty, clean up and validate
     	$request = $this->getRequest();
         $affiliateCode = $this->formatCode($request->getParam('affiliate_code'));
@@ -34,6 +40,7 @@ class Harapartners_Affiliate_RegisterController extends Mage_Core_Controller_Fro
 	        Mage::getSingleton('customer/session')->setData('affiliate_info', $affiliateInfo);
         }
         $this->_redirect('customer/account/create');
+        return;
     }
     
     //Alpha-numerical, lower case only, underscore allowed

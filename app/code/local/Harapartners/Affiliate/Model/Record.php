@@ -103,15 +103,13 @@ class Harapartners_Affiliate_Model_Record extends Mage_Core_Model_Abstract {
     
     protected function _beforeSave(){
     	parent::_beforeSave();
-    	
-    	if(!$this->getId() && !$this->getCreatedAt()){
+    	//For new object which does not specify 'created_at'
+    	if(!$this->getId() && !$this->getData('created_at')){
     		$this->setData('created_at', now());
-    	}else{
-    		$this->setData('updated_at', now());
     	}
-    	
+    	//Always specify 'updated_at'
+    	$this->setData('updated_at', now());
     	$this->validate(); //Errors will be thrown as exceptions
-    	
     	return $this;
     }
     
