@@ -1,4 +1,25 @@
 <?php
+		
+		
+		
+		
+		
+		
+		
+		/* 
+		 * 	Now this script is only for reference and no longer work, to view the script with is really work,
+		 * 	Please go to app\code\local\Harapartners\Unsubcentral\Model\Observer::runUpdateUnscribeScript()
+		 */
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		ini_set('memory_limit', '2G');	
 		$mageFilename = '../app/Mage.php';
 		require_once $mageFilename;
