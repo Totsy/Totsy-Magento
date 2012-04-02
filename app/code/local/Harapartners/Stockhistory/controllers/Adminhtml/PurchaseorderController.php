@@ -12,7 +12,7 @@
  * 
  */
 
-class Harapartners_Stockhistory_Adminhtml_PurchaseOrderController extends Mage_Adminhtml_Controller_Action
+class Harapartners_Stockhistory_Adminhtml_PurchaseorderController extends Mage_Adminhtml_Controller_Action
 {   
 	//protected $statusOptions = array('Pending' => 0, 'Processed' => 1, 'Failed' => 2);
 	protected $mimes = array('application/vnd.ms-excel', 'text/plain', 'text/csv', 'text/tsv');
