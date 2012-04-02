@@ -17,7 +17,7 @@ $installer->startSetup();
 
 $installer->run("
 
--- DROP TABLE IF EXISTS {$this->getTable('stockhistory/vendor')};
+ -- DROP TABLE IF EXISTS {$this->getTable('stockhistory/vendor')};
 CREATE TABLE {$this->getTable('stockhistory/vendor')}(
 	`id`		 		int(10) unsigned NOT NULL auto_increment,
 	`vendor_name` 		varchar(50) NOT NULL default '',
@@ -38,7 +38,7 @@ CREATE TABLE {$this->getTable('stockhistory/vendor')}(
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Vendor';
 
 
--- DROP TABLE IF EXISTS {$this->getTable('stockhistory/purchaseorder')};
+ -- DROP TABLE IF EXISTS {$this->getTable('stockhistory/purchaseorder')};
 CREATE TABLE {$this->getTable('stockhistory/purchaseorder')}(
 	`id`		 		int(10) unsigned NOT NULL auto_increment,
 	`vendor_id` 		int(10) unsigned default NULL,
@@ -57,7 +57,7 @@ CREATE TABLE {$this->getTable('stockhistory/purchaseorder')}(
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Purchase Order';
 
 
--- DROP TABLE IF EXISTS {$this->getTable('stockhistory/report')};
+ -- DROP TABLE IF EXISTS {$this->getTable('stockhistory/report')};
 CREATE TABLE {$this->getTable('stockhistory/report')}(
 	`id`		 	int(10) unsigned NOT NULL auto_increment,
 	`vendor_id` 	int(10) unsigned default NULL,
