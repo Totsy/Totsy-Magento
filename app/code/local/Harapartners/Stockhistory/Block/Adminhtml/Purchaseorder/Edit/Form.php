@@ -48,15 +48,6 @@ class Harapartners_Stockhistory_Block_Adminhtml_Purchaseorder_Edit_Form extends 
         	'required'	=> true,
         ));
         
-        $fieldset->addField('created_at', 'label', array(
-            'label'     => Mage::helper('stockhistory')->__('Created At:'),
-            'name'      => 'created_at',
-        ));
-        
-        $fieldset->addField('updated_at', 'label', array(
-            'label'     => Mage::helper('stockhistory')->__('Updated At:'),
-            'name'      => 'updated_at',
-        ));
         
         $fieldset->addField('comment', 'textarea', array(
             'label'     => Mage::helper('stockhistory')->__('Comment:'),
@@ -67,7 +58,7 @@ class Harapartners_Stockhistory_Block_Adminhtml_Purchaseorder_Edit_Form extends 
 		
         //$form->setValues( array('file_import' => $configText) );
 		if ( Mage::registry('po_data') ) {
-            $form->setValues('po_data');
+            $form->setValues(Mage::registry('po_data'));
         }
 //		if ( $formData = Mage::getSingleton('adminhtml/session')->getPoFormData() ){
 //            $form->setValues($formData);

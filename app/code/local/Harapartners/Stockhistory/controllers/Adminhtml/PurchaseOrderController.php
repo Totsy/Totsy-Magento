@@ -86,5 +86,21 @@ class Harapartners_Stockhistory_Adminhtml_PurchaseOrderController extends Mage_A
 		$this->_redirect('*/*/index');
 	}
 	
+	public function deleteAction()
+	{
+		$id = $this->getrequest()->getParam('id');
+		$model = Mage::getModel('stockhistory/purchaseorder')->load($id);
+		if($model->getId()){
+			try{
+				$model->delete();
+				$this->_getSession()->addSuccess(Mage::helper('stockhistory')->__('Delete the Record successfully'));
+			}catch(Exception $e){
+				$this->_getSession()->addError(Mage::helper('stockhistory')->__('Unable to Delete, please try again'));
+			}
+		}else{
+			$this->_getSession()->addError(Mage::helper('stockhistory')->__('Unknown record, deletion failed'));
+		}
+		$this->_redirect('*/*/index');
+	}
 
 }

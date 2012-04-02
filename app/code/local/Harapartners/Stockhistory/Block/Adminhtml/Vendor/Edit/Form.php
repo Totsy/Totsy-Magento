@@ -60,16 +60,6 @@ class Harapartners_Stockhistory_Block_Adminhtml_Vendor_Edit_Form extends Mage_Ad
             'name'      => 'phone',
         ));
         
-        $fieldset->addField('created_at', 'label', array(
-            'label'     => Mage::helper('stockhistory')->__('Created At:'),
-            'name'      => 'created_at',
-        ));
-        
-        $fieldset->addField('updated_at', 'label', array(
-            'label'     => Mage::helper('stockhistory')->__('Updated At:'),
-            'name'      => 'updated_at',
-        ));
-        
         $fieldset->addField('comment', 'textarea', array(
             'label'     => Mage::helper('stockhistory')->__('Comment:'),
             'name'      => 'comment',

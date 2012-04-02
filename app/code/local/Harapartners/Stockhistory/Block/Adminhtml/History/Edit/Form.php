@@ -88,16 +88,6 @@ class Harapartners_Stockhistory_Block_Adminhtml_History_Edit_Form extends Mage_A
             'name'      => 'qty_delta',
         	'required'	=> true
         ));
-
-        $fieldset->addField('created_at', 'label', array(
-            'label'     => Mage::helper('stockhistory')->__('Created At:'),
-            'name'      => 'created_at',
-        ));
-        
-        $fieldset->addField('updated_at', 'label', array(
-            'label'     => Mage::helper('stockhistory')->__('Updated At:'),
-            'name'      => 'updated_at',
-        ));
         
         $fieldset->addField('action_type', 'select', array(
             'label'     => Mage::helper('stockhistory')->__('Action:'),

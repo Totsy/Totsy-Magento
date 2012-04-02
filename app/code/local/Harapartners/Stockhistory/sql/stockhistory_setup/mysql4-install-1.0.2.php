@@ -17,7 +17,7 @@ $installer->startSetup();
 
 $installer->run("
 
-
+ -- DROP TABLE IF EXISTS {$this->getTable('stockhistory/vendor')};
 CREATE TABLE {$this->getTable('stockhistory/vendor')}(
 	`id`		 		int(10) unsigned NOT NULL auto_increment,
 	`vendor_name` 		varchar(50) NOT NULL default '',
@@ -32,12 +32,13 @@ CREATE TABLE {$this->getTable('stockhistory/vendor')}(
 	
 	PRIMARY KEY	(`id`),
 	UNIQUE KEY `FK_STOCKHISTORY_VENDOR_SKU` (`vendor_sku`),
+	KEY `FK_STOCKHISTORY_VENDOR_STORE` (`store_id`),
 	
   CONSTRAINT `FK_STOCKHISTORY_VENDOR_STORE` FOREIGN KEY (`store_id`) REFERENCES {$this->getTable('core_store')} (`store_id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Vendor';
 
 
-
+ -- DROP TABLE IF EXISTS {$this->getTable('stockhistory/purchaseorder')};
 CREATE TABLE {$this->getTable('stockhistory/purchaseorder')}(
 	`id`		 		int(10) unsigned NOT NULL auto_increment,
 	`vendor_id` 		int(10) unsigned default NULL,
@@ -49,13 +50,14 @@ CREATE TABLE {$this->getTable('stockhistory/purchaseorder')}(
 	
 	PRIMARY KEY	(`id`),
 	KEY `FK_STOCKHISTORY_PURCHASEORDER_VENDOR` (`vendor_id`),
+	KEY `FK_STOCKHISTORY_PURCHASEORDER_STORE` (`store_id`),
 	
   CONSTRAINT `FK_STOCKHISTORY_PURCHASEORDER_VENDOR` FOREIGN KEY (`vendor_id`) REFERENCES {$this->getTable('stockhistory/vendor')} (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `FK_STOCKHISTORY_PURCHASEORDER_STORE` FOREIGN KEY (`store_id`) REFERENCES {$this->getTable('core_store')} (`store_id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Purchase Order';
 
 
-
+ -- DROP TABLE IF EXISTS {$this->getTable('stockhistory/report')};
 CREATE TABLE {$this->getTable('stockhistory/report')}(
 	`id`		 	int(10) unsigned NOT NULL auto_increment,
 	`vendor_id` 	int(10) unsigned default NULL,
@@ -75,6 +77,8 @@ CREATE TABLE {$this->getTable('stockhistory/report')}(
 	KEY `FK_STOCKHISTORY_REPORT_ITEM` (`product_id`),
 	KEY `FK_STOCKHISTORY_REPORT_VENDOR` (`vendor_id`),
 	KEY `FK_STOCKHISTORY_REPORT_PO` (`po_id`),
+	KEY `FK_STOCKHISTORY_REPORT_STORE` (`store_id`),
+	
   CONSTRAINT `FK_STOCKHISTORY_REPORT_ITEM` FOREIGN KEY (`product_id`) REFERENCES {$this->getTable('catalog/product')} (`entity_id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `FK_STOCKHISTORY_REPORT_STORE` FOREIGN KEY (`store_id`) REFERENCES {$this->getTable('core_store')} (`store_id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `FK_STOCKHISTORY_REPORT_VENDOR` FOREIGN KEY (`vendor_id`) REFERENCES {$this->getTable('stockhistory/vendor')} (`id`) ON DELETE SET NULL ON UPDATE CASCADE,

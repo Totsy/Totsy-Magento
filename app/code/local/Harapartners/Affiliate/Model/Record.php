@@ -34,7 +34,7 @@ class Harapartners_Affiliate_Model_Record extends Mage_Core_Model_Abstract {
     	
     	//Type casting
     	if(is_array($data)){
-    		$data =  new Varien_Object($data);
+    		$data = new Varien_Object($data);
     	}
     	if(!($data instanceof Varien_Object)){
     		throw new Exception('Invalid type for data importing, Array or Varien_Object needed.');

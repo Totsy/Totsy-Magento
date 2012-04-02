@@ -109,7 +109,7 @@ class Harapartners_Fulfillmentfactory_Block_Adminhtml_Itemqueue_Index_Grid exten
             'width'         => '100px',
             'index'         => 'status',
         	'type'			=> 'options',
-        	'options'		=> $this->_getItemQueueStatusList(),
+        	'options'		=> Mage::helper('fulfillmentfactory')->getItemqueueStatusGridOptionList(),
             'renderer'		=> 'Harapartners_Fulfillmentfactory_Block_Adminhtml_Itemqueue_Index_Renderer_Status',
         ));
         
@@ -154,23 +154,5 @@ class Harapartners_Fulfillmentfactory_Block_Adminhtml_Itemqueue_Index_Grid exten
 	            'store'=>$this->getRequest()->getParam('store'),
 	            'id'=>$row->getId()
         ));
-    }
-    
-    /**
-     * get item queue's status list.
-     * convert format to grid's requirement.
-     * 
-     * @return Array
-     */
-    protected function _getItemQueueStatusList() {
-    	$statusList = Mage::getModel('fulfillmentfactory/itemqueue')->getStatusList();
-    	
-    	$list = array();
-    	
-    	foreach($statusList as $status) {
-    		$list[$status['value']] = $status['label'];
-    	}
-    	
-    	return $list;
     }
 }

@@ -8,7 +8,7 @@ $installer->run("
 CREATE TABLE {$this->getTable('paymentfactory/profile')} (
   `entity_id` int(10) unsigned NOT NULL auto_increment,
   `customer_email` varchar(255) NOT NULL,
-  `customer_id` int(40) NOT NULL,
+  `customer_id` int(10) NOT NULL,
   `subscription_id` varchar(255) NOT NULL,
   `cc_number_hash` varchar(255) NOT NULL,
   `nickname` varchar(255) NOT NULL,
@@ -16,7 +16,7 @@ CREATE TABLE {$this->getTable('paymentfactory/profile')} (
   `expire_year` varchar(10) default '',
   `expire_month` varchar(10) default '',
   `card_type` varchar(10) default '',
-  `is_default` int(1) default 0,
+  `is_default` smallint(5) default 0,
   `store_id` smallint(5) unsigned DEFAULT NULL,
   `created_at` datetime default NULL,
   `updated_at` datetime default NULL,
