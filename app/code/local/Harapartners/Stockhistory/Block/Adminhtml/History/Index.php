@@ -21,23 +21,11 @@ class Harapartners_Stockhistory_Block_Adminhtml_History_Index extends Mage_Admin
 		$this->_blockGroup = 'stockhistory';
 		$this->_headerText = Mage::helper('stockhistory')->__('Transcation Report');
 		$this->_removeButton('add');
-//		$this->_addButton('update_status', array(
-//												'label' => Mage::helper('stockhistory')->__('Update Status'),
-//												'onclick' => "setLocation('".$this->getUrl('*/*/massStatus')."')"
-//											));
-//		$this->_addButton('import', array(
-//     							'label'		=> 	Mage::helper('advancereport')->__('Import'),
-//   						'onclick'   => "setLocation('".$this->getUrl('*/*/import')."')"
-//     					),-1,4,'header','header'
-//     	);
+
      	$this->_addButton('import', array(
             'label'     => Mage::helper('stockhistory')->__('Import Order'),
             'onclick'   => 'setLocation(\'' . $this->getUrl('*/*/importCsv') .'\')',
       	));
-//      	
-//      	$this->_addButton('export', array(
-//      		'label'		=> 	Mage::helper('stockhistory')->__('Export'),
-//      		'onclick'	=>	'setLocation(\''. $this->getCreateUrl() . '\')',
-//      	));
 	}
+
 }

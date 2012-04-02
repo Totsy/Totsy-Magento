@@ -42,22 +42,19 @@ class Harapartners_Stockhistory_Block_Adminhtml_Purchaseorder_Index_Grid extends
 					//'renderer'	=>	new Mage_Adminhtml_Block_Widget_Grid_Column_Renderer_Checkbox(),
 		));
 		
+		$this->addColumn('name', array(
+					'header'	=>	Mage::helper('stockhistory')->__('Purchase Order Name'),
+					'align'		=>	'right',
+					'width'		=>	'20px',
+					'index'		=>	'name',
+		));
+		
 		$this->addColumn('vendor_id', array(
 					'header'	=>	Mage::helper('stockhistory')->__('Vendor ID'),
 					'align'		=>	'right',
 					'width'		=>	'50px',
 					'index'		=>	'vendor_id',
 		));
-		
-		
-		
-		$this->addColumn('name', array(
-					'header'	=>	Mage::helper('stockhistory')->__('Name'),
-					'align'		=>	'right',
-					'width'		=>	'20px',
-					'index'		=>	'name',
-		));
-		
 		
 		$this->addColumn('comment', array(
 					'header'	=>	Mage::helper('stockhistory')->__('Note'),
@@ -66,8 +63,6 @@ class Harapartners_Stockhistory_Block_Adminhtml_Purchaseorder_Index_Grid extends
 					'index'		=>	'comment',
 					
 		));
-		
-		
 		
 		$this->addColumn('created_at', array(
 					'header'	=>	Mage::helper('stockhistory')->__('Created At'),
