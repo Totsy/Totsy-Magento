@@ -12,7 +12,7 @@
  * 
  */
 
-class Harapartners_Stockhistory_Adminhtml_PurchaseOrderController extends Mage_Adminhtml_Controller_Action
+class Harapartners_Stockhistory_Adminhtml_PurchaseorderController extends Mage_Adminhtml_Controller_Action
 {   
 	
 	protected function _getSession()
