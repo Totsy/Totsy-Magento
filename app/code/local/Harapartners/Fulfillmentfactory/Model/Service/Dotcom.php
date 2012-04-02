@@ -65,7 +65,7 @@ class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
 		}
 		catch (Exception $e) {
 			Mage::helper('fulfillmentfactory/log')->errorLog($e->getMessage());
-			throw Exception;
+			throw new Exception($e->getMessage());
 		}
 	}
 	
@@ -83,7 +83,7 @@ class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
 		}
 		catch (Exception $e) {
 			Mage::helper('fulfillmentfactory/log')->errorLog($e->getMessage());
-			throw Exception;
+			//throw new Exception($e->getMessage());
 		}
 	}
 	
@@ -151,6 +151,11 @@ XML;
 		$xml .= '</items>';
 		
 		$response = Mage::helper('fulfillmentfactory/dotcom')->submitProductItems($xml);
+		
+		$error = $response->item_errors;
+		if(!!$error) {
+			throw new Exception('Error response from DOTcom when submit products.');
+		}
 		
 		return $response;
 	}
@@ -311,34 +316,37 @@ XML;
 						  ->save();
 		}
 		
-		return $this->submitOrdersToFulfill($orderArray);
+		return $this->submitOrdersToFulfill($orderArray, true);
 	}
-	
+
 	/**
 	 * submit orders to Dotcom for fulfillment, by quantity
 	 *
 	 * @param array $orders for orders we want to submit
+	 * @param boolean $capturePayment	flag to indicate capture payment in this fulfillment
 	 * @return response
 	 */
-	public function submitOrdersToFulfill($orders) {												   
+	public function submitOrdersToFulfill($orders, $capturePayment=false) {												   
 		$xml = '<orders xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">';
 		
 		foreach($orders as $order) {
 			$order->setStatus(Harapartners_FulfillmentFactory_Helper_Data::ORDER_STATUS_PROCESSING_FULFILLMENT)->save();	//start fulfillment
 			try {
-				//capture payment
-				$orderPayment = $order->getPayment();
-				$orderPayment->getMethodInstance()->setData('forced_payment_action', 
-																Mage_Payment_Model_Method_Abstract::ACTION_AUTHORIZE_CAPTURE);
-				$orderPayment->getMethodInstance()->setData('cybersource_subid', $orderPayment->getCybersourceSubid());
-				$orderPayment->place();
-				
-				//update order information
-				$order->setStatus('processing');
-				$transactionSave = Mage::getModel('core/resource_transaction')
-	                    ->addObject($order);
-	                    
-	           	$transactionSave->save();
+				if($capturePayment) {
+					//capture payment
+					$orderPayment = $order->getPayment();
+					$orderPayment->getMethodInstance()->setData('forced_payment_action', 
+																	Mage_Payment_Model_Method_Abstract::ACTION_AUTHORIZE_CAPTURE);
+					$orderPayment->getMethodInstance()->setData('cybersource_subid', $orderPayment->getCybersourceSubid());
+					$orderPayment->place();
+					
+					//update order information
+					$order->setStatus('processing');
+					$transactionSave = Mage::getModel('core/resource_transaction')
+		                    ->addObject($order);
+		                    
+		           	$transactionSave->save();
+				}
 			}
 			catch(Exception $e) {
 				$order->setStatus(Harapartners_FulfillmentFactory_Helper_Data::ORDER_STATUS_PAYMENT_FAILED)->save();	//payment failed
@@ -474,6 +482,16 @@ XML;
 		$xml .= '</orders>';
 		
 		$response = Mage::helper('fulfillmentfactory/dotcom')->submitOrders($xml);
+		
+		$error = $response->order_error;
+		if(!!$error) {
+			$orderNumber = $error->order_number;
+			if(!!$orderNumber) {
+				$errorOrder = Mage::getModel('sales/order')->loadByIncrementId($orderNumber);
+				$errorOrder->setStatus(Harapartners_FulfillmentFactory_Helper_Data::ORDER_STATUS_FULFILLMENT_FAILED)->save();
+				throw new Exception('Error response from DOTcom. ' . ' Order ' . $error->order_number . ': ' . $error->error_description);
+			}
+		}
 
 		return $response;
 	}

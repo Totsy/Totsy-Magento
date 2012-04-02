@@ -17,6 +17,11 @@ class Harapartners_Stockhistory_Adminhtml_HistoryController extends Mage_Adminht
 	//protected $statusOptions = array('Pending' => 0, 'Processed' => 1, 'Failed' => 2);
 	protected $mimes = array('application/vnd.ms-excel', 'text/plain', 'text/csv', 'text/tsv');
 	
+	protected function _getSession()
+	{
+		return Mage::getSingleton('adminhtml/session');
+	}
+	
 	public function indexAction()
 	{
 		$this->loadLayout()
@@ -25,6 +30,21 @@ class Harapartners_Stockhistory_Adminhtml_HistoryController extends Mage_Adminht
 			->renderLayout();
 	}
 
+	public function newAction()
+	{
+		$this->_getSession()->setTransFormData(null);
+		$data = $this->getRequest()->getParams();
+		$this->loadLayout()
+			->_setActiveMenu('stockhistory/history')
+			->_addContent($this->getLayout()->createBlock('stockhistory/adminhtml_history_edit'))
+			->renderLayout();
+	}
+	
+	public function editAction()
+	{
+		$this->_redirect('*/*/index');
+	}
+	
 	public function exportCsvAction()
 	{
 		
@@ -134,35 +154,8 @@ class Harapartners_Stockhistory_Adminhtml_HistoryController extends Mage_Adminht
 			
 	}
 	
-	public function newAction()
-	{
-		$this->_forward('importCsv');
-	}
+
 	
-	public function editAction()
-	{
-		$id = $this->getRequest()->getParam('id', null);
-		$model  = Mage::getModel('stockhistory/history');
-		if ($id) {
-            $model->load((int) $id);
-            if (!!$model->getId()) {
-                $data = Mage::getSingleton('adminhtml/session')->getFormData(true);
-                if ($data) {
-                    $model->setData($data)->setId($id);
-                }
-            } else {
-                Mage::getSingleton('adminhtml/session')->addError(Mage::helper('awesome')->__('Example does not exist'));
-                $this->_redirect('*/*/');
-            }
-        }
-		
-		
-		Mage::register('po_data', $model);
-		$this->loadLayout()->_setActiveMenu('stockhistory/edit');
-		$this->_addContent($this->getLayout()->createBlock('stockhistory/adminhtml_history_edit'));
-		$this->renderLayout();
-		//$this->_redirect('*/*/index');
-	}
 	
 //	public function massStatusAction()
 //	{

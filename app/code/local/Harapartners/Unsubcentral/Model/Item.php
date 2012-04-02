@@ -15,12 +15,10 @@
 class Harapartners_Unsubcentral_Model_Item extends Mage_Core_Model_Abstract
 {
 	const API_PENDING_STATUS = 0;
-	const API_PRECESSED_STATUS = 1;
-	const API_ERROR_STATUS = 2;
-	
-	const UNSUBSCRIBE_LIST = '130';  // opt out list should be 113 in live 
-	const REGISTER_LIST = '142';  // should be 116 in live
-	
+	const API_PROCESSING_UNSUBSCRIBE_STATUS = 1;
+	const API_PROCESSING_REGISTER_STATUS = 2;
+	const API_PROCESSED_STATUS = 3;
+	const API_ERROR_STATUS = 4;
 	
 	protected function _construct()
     {
