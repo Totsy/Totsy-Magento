@@ -40,6 +40,11 @@
                 </setup>
             </unsubcentral_setup>
         </resources>
+        <helpers>
+            <unsubcentral>
+                <class>Harapartners_Unsubcentral_Helper</class>
+            </unsubcentral>
+        </helpers>
 		<!--Moved to Harapartners_Service-->
 		<!--events>
 	        <newsletter_subscriber_save_after>
