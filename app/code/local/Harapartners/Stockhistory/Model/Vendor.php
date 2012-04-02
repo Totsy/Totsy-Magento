@@ -18,4 +18,23 @@ class Harapartners_Stockhistory_Model_Vendor extends Mage_Core_Model_Abstract
 	{
 		$this->_init('stockhistory/vendor');
 	}
+	
+	protected function _beforeSave(){
+		$now = date('Y-m-d H:i:s');
+    	if(!$this->getId()){
+    		$this->setData('created_at', $now);
+    	}
+    	$this->setData('updated_at', $now);
+    	
+    	parent::_beforeSave();  
+    }
+    
+	public function validateAndSave($data){
+    	$this->addData($data);
+    	if(!$this->getVendorName() || !$this->getVendorSku() || !$this->getEmail()){
+    		throw new Exception('Required Data is missing');
+    	}
+    	$this->save();
+    	return $this;
+    }
 }
