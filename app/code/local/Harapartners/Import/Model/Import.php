@@ -15,11 +15,11 @@
 class Harapartners_Import_Model_Import extends Mage_Core_Model_Abstract
 {
 	//Harapartners_Import_Model_Import::IMPORT_STATUS_
-	const IMPORT_STATUS_UPLOADED = 'uploaded';
-	const IMPORT_STATUS_PROCESSING = 'processing';
-	const IMPORT_STATUS_FINALIZING = 'finalizing';
-	const IMPORT_STATUS_COMPLETE = 'complete';
-	const IMPORT_STATUS_ERROR = 'error';
+	const IMPORT_STATUS_UPLOADED 		= 'uploaded';
+	const IMPORT_STATUS_PROCESSING 		= 'processing';
+	const IMPORT_STATUS_FINALIZING 		= 'finalizing';
+	const IMPORT_STATUS_COMPLETE 		= 'complete';
+	const IMPORT_STATUS_ERROR 			= 'error';
 	
 	
     public function _construct()
