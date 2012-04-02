@@ -42,7 +42,7 @@ class Harapartners_Stockhistory_Model_Mysql4_Vendor extends Mage_Core_Model_Mysq
 		return $rowData;
 	}
 	
-	public function validataBySku($sku, $storeId = null)
+	public function validateBySku($sku, $storeId = null)
 	{
 		return $this->loadBySku($sku);
 	}

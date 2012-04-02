@@ -74,17 +74,16 @@ class Harapartners_Stockhistory_Block_Adminhtml_Vendor_Edit_Form extends Mage_Ad
             'label'     => Mage::helper('stockhistory')->__('Comment:'),
             'name'      => 'comment',
         ));
-		//$configKey = 'text_content';		
-		//$configText = Mage::getStoreConfig('config/textconfig_text/'.$configKey);
 		
-        //$form->setValues( array('file_import' => $configText) );
-        
-		if ( $formData = Mage::getSingleton('adminhtml/session')->getVendorFormData() ){
-            $form->setValues($formData);
-            Mage::getSingleton('adminhtml/session')->setVendorFormData(null);
-        } elseif ( Mage::registry('vendor_data') ) {
-            $form->setValues(Mage::registry('vendor_data')->getData());
+		if ( Mage::registry('vendor_data') ) {
+            $form->setValues(Mage::registry('vendor_data'));
         }
+//		if ( $formData = Mage::getSingleton('adminhtml/session')->getVendorFormData() ){
+//            $form->setValues($formData);
+//            Mage::getSingleton('adminhtml/session')->setVendorFormData(null);
+//        } elseif ( Mage::registry('vendor_data') ) {
+//            $form->setValues(Mage::registry('vendor_data')->getData());
+//        }
         $form->setUseContainer(true);
         $this->setForm($form);
         return parent::_prepareForm();

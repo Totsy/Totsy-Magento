@@ -17,6 +17,11 @@ class Harapartners_Stockhistory_Adminhtml_HistoryController extends Mage_Adminht
 	//protected $statusOptions = array('Pending' => 0, 'Processed' => 1, 'Failed' => 2);
 	protected $mimes = array('application/vnd.ms-excel', 'text/plain', 'text/csv', 'text/tsv');
 	
+	protected function _getSession()
+	{
+		return Mage::getSingleton('adminhtml/session');
+	}
+	
 	public function indexAction()
 	{
 		$this->loadLayout()
@@ -27,6 +32,7 @@ class Harapartners_Stockhistory_Adminhtml_HistoryController extends Mage_Adminht
 
 	public function newAction()
 	{
+		$this->_getSession()->setTransFormData(null);
 		$data = $this->getRequest()->getParams();
 		$this->loadLayout()
 			->_setActiveMenu('stockhistory/history')

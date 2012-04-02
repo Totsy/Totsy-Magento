@@ -30,16 +30,29 @@ class Harapartners_Stockhistory_Adminhtml_VendorController extends Mage_Adminhtm
 
 	public function newAction()
 	{
+		$this->_getSession()->setVendorFormData(null);
 		$this->_forward('edit');
 	}
 	
 	public function editAction()
 	{
 		$id = $this->getRequest()->getParam('id', null);
-		$model  = Mage::getModel('stockhistory/vendor')->load($id);
-		if(!! $model->getId() || $id == 0){
+		$data = $this->_getSession()->getVendorFromData();
+		
+		if(!!$id){
+			$model  = Mage::getModel('stockhistory/vendor')->load($id);
+			if(!!$model && !!$model->getId()){
+				$data = $model->getData();
+			}else{
+				$this->_getSession()->addError(Mage::helper('stockhistory')->__('Invalid ID'));
+				$this->_redirect('*/*/index');
+				return;
+			}
+		
+		}
+		if(!!$data){
 			Mage::unregister('vendor_data');
-			Mage::register('vendor_data', $model);
+			Mage::register('vendor_data', $data);
 		}
 		$this->loadLayout()->_setActiveMenu('stockhistory/edit');
 		$this->_addContent($this->getLayout()->createBlock('stockhistory/adminhtml_vendor_edit'));

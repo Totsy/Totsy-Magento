@@ -43,7 +43,8 @@ class Harapartners_Stockhistory_Block_Adminhtml_Vendor_Edit extends Mage_Adminht
 	}
 	
 	public function getVendorId()
-	{
-		return Mage::registry('vendor_data')->getId();
+	{   
+		$vendorInfo = Mage::registry('vendor_data');
+		return $vendorInfo['id'];
 	}
 }

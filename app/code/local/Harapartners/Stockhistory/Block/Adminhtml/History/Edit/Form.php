@@ -23,21 +23,38 @@ class Harapartners_Stockhistory_Block_Adminhtml_History_Edit_Form extends Mage_A
             //'enctype'  	 => 'multipart/form-data'
         ));
         
-
+		$data = $this->getRequest()->getParams();
         $fieldset = $form->addFieldset('stockhistory', array('legend'=>Mage::helper('stockhistory')->__("PO Info")));
-        
-        $fieldset->addField('po_id', 'label', array(
+        if(isset($data['po_id']) && !!$data['po_id']){
+        	$fieldset->addField('po_id', 'label', array(
             'label'     => Mage::helper('stockhistory')->__('PO ID:'),
             'name'      => 'po_id',
-        	'required'	=> true
-        ));
-        
-        $fieldset->addField('vendor_id', 'label', array(
-            'label'     => Mage::helper('stockhistory')->__('Vendor ID:'),
-            'name'      => 'vendor_id',
-        	'required'	=> true
-        ));
-        
+        	'readonly' 	=> true,
+        	'value'		=> $data['po_id'],
+        	'required'	=> true,
+        	));
+        }else{
+	        $fieldset->addField('po_id', 'text', array(
+	            'label'     => Mage::helper('stockhistory')->__('PO ID:'),
+	            'name'      => 'po_id',
+	        	'required'	=> true
+	        ));
+        }
+        if(isset($data['vendor_id']) && !!$data['vendor_id']){
+        	$fieldset->addField('vendor_id', 'label', array(
+	            'label'     => Mage::helper('stockhistory')->__('Vendor ID:'),
+	            'name'      => 'vendor_id',
+	        	'required'	=> true,
+        		'readonly'	=> true,
+        		'value'		=> $data['vendor_id'],
+	        ));
+        }else{
+	        $fieldset->addField('vendor_id', 'text', array(
+	            'label'     => Mage::helper('stockhistory')->__('Vendor ID:'),
+	            'name'      => 'vendor_id',
+	        	'required'	=> true
+	        ));
+        }
         $fieldset->addField('product_id', 'text', array(
             'label'     => Mage::helper('stockhistory')->__('Product ID:'),
             'name'      => 'product_id',

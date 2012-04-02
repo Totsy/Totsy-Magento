@@ -30,20 +30,32 @@ class Harapartners_Stockhistory_Adminhtml_PurchaseOrderController extends Mage_A
 	
 	public function newAction()
 	{
+		$this->_getSession()->setPoFormData(null);
 		$this->_forward('edit');
 	}
 	
 	public function editAction()
 	{
-		$data = $this->getRequest()->getParams();
+		$data1 = $this->getRequest()->getParams();
 		$id = $this->getRequest()->getParam('id', null);
 		$model  = Mage::getModel('stockhistory/purchaseorder')->load($id);
+		$data = $this->_getSession()->getPoFormData();
 		
-       	if (!!$model->getId() || $id == 0) {
-            Mage::unregister('po_data');
-        	Mage::register('po_data', $model);
+       	if (!!$id ) {
+       		$model  = Mage::getModel('stockhistory/purchaseorder')->load($id);
+            if(!!$model && !!$model->getId()){
+            	$data = $model->getData();
+            }else{
+            	$this->_getSession()->addError(Mage::helper('stockhistory')->__('Invalid ID'));
+            	$this->_redirect('*/*/index');
+            	return;
+            }
         }
 		
+        if(!!$data){
+        	Mage::unregister('po_data');
+        	Mage::register('po_data', $data);
+        }
 		$this->loadLayout()->_setActiveMenu('stockhistory/edit');
 		$this->_addContent($this->getLayout()->createBlock('stockhistory/adminhtml_purchaseorder_edit'));
 		$this->renderLayout();
