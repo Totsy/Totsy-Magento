@@ -164,6 +164,16 @@
                     </customertracking>
                 </observers>
             </customer_login>
+			<customer_logout>
+                <observers>
+					<!--Harapartners_Customertracking-->
+                    <customertracking>
+						<type>singleton</type>
+                        <class>customertracking/observer</class>
+                        <method>logoutAfter</method>
+                    </customertracking>
+                </observers>
+            </customer_logout>
 			<harapartners_import_after>
 				<observers>
 					<!--Harapartners_Import-->
