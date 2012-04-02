@@ -49,7 +49,7 @@ class Harapartners_Stockhistory_Adminhtml_HistoryController extends Mage_Adminht
 	public function saveAction()
 	{
 		$data = $this->getRequest()->getParams();
-		$history = Mage::getModel('stockhistory/history')->load($data[id]);
+		$history = Mage::getModel('stockhistory/report')->load($data[id]);
 		
 	}
 	public function saveImportAction()
@@ -86,9 +86,9 @@ class Harapartners_Stockhistory_Adminhtml_HistoryController extends Mage_Adminht
 									$createdAt = trim($fileData[9]);
 									$updatedAt = trim($fileData[10]);
 									$status = trim($fileData[11]);
-									$history = Mage::getModel('stockhistory/history');
-									$history->setData('entity_id', $entityId);
-									$history->setData('product_name', $productName);
+									$history = Mage::getModel('stockhistory/report');
+									$history->setData('vendor_id', $vendorId);
+									$history->setData('po_id', $productName);
 									$history->setData('product_sku', $productSku);
 									$history->setData('vendor_sku', $vendorSku);
 									$history->setData('size', $size);
@@ -101,21 +101,21 @@ class Harapartners_Stockhistory_Adminhtml_HistoryController extends Mage_Adminht
 									$history->setData('status', $statusOptions[$status]);
 									$history->save();
 									
-									$report = Mage::getModel('stockhistory/report')->loadByEntityId($entityId);
-									if(! $report->getId()){
-										$report = Mage::getModel('stockhistory/report');
-										$report->setData('entity_id', $entityId);
-										$report->setData('product_name', $productName);
-										$report->setData('product_sku', $productSku);
-										$report->setData('vendor_sku', $vendorSku);
-										$report->setData('qty', $qtyDelta);
-										$report->setData('created_at', $createdAt);
-									}else{
-										$qty = $report->getData('qty') + $qtyDelta;
-										$report->setData('qty', $qty);
-										$report->setData('updated_at', date('Y-m-d H:i:s'));
-									}
-									$report->save();
+//									$report = Mage::getModel('stockhistory/report')->loadByEntityId($entityId);
+//									if(! $report->getId()){
+//										$report = Mage::getModel('stockhistory/report');
+//										$report->setData('entity_id', $entityId);
+//										$report->setData('product_name', $productName);
+//										$report->setData('product_sku', $productSku);
+//										$report->setData('vendor_sku', $vendorSku);
+//										$report->setData('qty', $qtyDelta);
+//										$report->setData('created_at', $createdAt);
+//									}else{
+//										$qty = $report->getData('qty') + $qtyDelta;
+//										$report->setData('qty', $qty);
+//										$report->setData('updated_at', date('Y-m-d H:i:s'));
+//									}
+//									$report->save();
 								}
 								$row ++;
 							}
