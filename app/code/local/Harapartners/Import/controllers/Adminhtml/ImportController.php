@@ -136,7 +136,7 @@ class Harapartners_Import_Adminhtml_ImportController extends Mage_Adminhtml_Cont
     }
     
     public function runDataflowProfile($filename){	
-    	$profileId = 7; //put your profile id here
+    	$profileId = 8; //hardcoded.  Need to put your profile id here
 		$profile = Mage::getModel('dataflow/profile');
 		
 		if ($profileId) {
@@ -161,26 +161,29 @@ class Harapartners_Import_Adminhtml_ImportController extends Mage_Adminhtml_Cont
     }
     
     
-    public function updateProducts($import_import_id){
-    	
-    	$allcollection = Mage::getModel('import/importset')->getCollection()->addFieldToFilter('import_import_id', $import_import_id);
-    	$collection = Mage::getModel('import/importset')->getCollection()->addFieldToFilter('import_import_id', $import_import_id);
-	    $collection->getSelect()->limit($numberOfRows,$startingRow);
-	    $adapter = Mage::getModel('catalog/convert_adapter_product');
-	    
-	    foreach ($collection as $rowContent){	
-	    	//$this->flushBuffers();
-	    	$rowData = json_decode($rowContent->getData('import_importset_row_content'),true);
-	    	try{
-	    		$adapter->saveRow($rowData);
-          	} catch (Exception $e) {
-          		Mage::getSingleton('adminhtml/session')->addError($e->getMessage());	
-          		Mage::getSingleton('adminhtml/session')->setHpImportFormData($data);
-          		$this->_redirect('*/*/edit', array('id' => $this->getRequest()->getParam('id')));
-                return;
-          	}
-	    }
-    }
+    /**
+     * Obsolete
+     */
+//    public function updateProducts($import_import_id){
+//    	
+//    	$allcollection = Mage::getModel('import/importset')->getCollection()->addFieldToFilter('import_import_id', $import_import_id);
+//    	$collection = Mage::getModel('import/importset')->getCollection()->addFieldToFilter('import_import_id', $import_import_id);
+//	    $collection->getSelect()->limit($numberOfRows,$startingRow);
+//	    $adapter = Mage::getModel('catalog/convert_adapter_product');
+//	    
+//	    foreach ($collection as $rowContent){	
+//	    	//$this->flushBuffers();
+//	    	$rowData = json_decode($rowContent->getData('import_importset_row_content'),true);
+//	    	try{
+//	    		$adapter->saveRow($rowData);
+//          	} catch (Exception $e) {
+//          		Mage::getSingleton('adminhtml/session')->addError($e->getMessage());	
+//          		Mage::getSingleton('adminhtml/session')->setHpImportFormData($data);
+//          		$this->_redirect('*/*/edit', array('id' => $this->getRequest()->getParam('id')));
+//                return;
+//          	}
+//	    }
+//    }
 
 }
 ?>
