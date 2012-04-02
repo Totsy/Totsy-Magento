@@ -54,10 +54,7 @@ class Harapartners_Childrenlist_Block_Adminhtml_Childrenlist_Grid extends Mage_A
             'width'         => '50px',
             'index'         => 'child_gender',
             'type'          => 'options',
-        	'options'    => array(
-        			Harapartners_Childrenlist_Model_Child::CHILD_GENDER_CODE_UNKNOWN => '',
-        			Harapartners_Childrenlist_Model_Child::CHILD_GENDER_CODE_BOY => 'Boy',
-        			Harapartners_Childrenlist_Model_Child::CHILD_GENDER_CODE_GIRL => 'Girl'),
+        	'options'    => Harapartners_Childrenlist_Model_Child::getChildGenderLabels(),
             'truncate'      => 50,
             'escape'        => true,
         ));
@@ -68,9 +65,7 @@ class Harapartners_Childrenlist_Block_Adminhtml_Childrenlist_Grid extends Mage_A
             'width'         => '50px',
             'index'         => 'child_customer_relationship',
             'type'          => 'options',
-        	'options'    => array(Harapartners_Childrenlist_Model_Child::CHILD_CUSTOMER_RELATIONSHIP_CODE_UNKNOWN => '',
-        			Harapartners_Childrenlist_Model_Child::CHILD_CUSTOMER_RELATIONSHIP_CODE_PARENT_CHILD => 'Parent and Child',
-        			Harapartners_Childrenlist_Model_Child::CHILD_CUSTOMER_RELATIONSHIP_CODE_GRANDPARENT_GRANDCHILD => 'Grandparent and Grandchild'),
+        	'options'    => Harapartners_Childrenlist_Model_Child::getChildRelationshipLabels(),
             'truncate'      => 50,
             'escape'        => true,
         ));
