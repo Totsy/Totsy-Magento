@@ -139,8 +139,9 @@ class Harapartners_FulfillmentFactory_Helper_Dotcom extends Mage_Core_Helper_Abs
 	 */
 	public function submitProductItems($dataXML) {
 		$uri = self::DOTCOM_BASE_URL . '/item';
+		$response = $this->_postXMLRequest($uri, $dataXML);
 		
-		return $this->_postXMLRequest($uri, $dataXML);
+		return $this->_readXMLString($response);
 	}
 	
 	/**
@@ -150,8 +151,9 @@ class Harapartners_FulfillmentFactory_Helper_Dotcom extends Mage_Core_Helper_Abs
 	 */
 	public function submitOrders($dataXML) {
 		$uri = self::DOTCOM_BASE_URL . '/order';
+		$response = $this->_postXMLRequest($uri, $dataXML);
 		
-		return $this->_postXMLRequest($uri, $dataXML);
+		return $this->_readXMLString($response);
 	}
 	
 	/**
