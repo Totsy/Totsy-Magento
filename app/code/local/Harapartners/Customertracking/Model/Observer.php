@@ -30,6 +30,12 @@ class Harapartners_Customertracking_Model_Observer {
 		}
 	}
 	
+	public function logoutAfter(Varien_Event_Observer $observer) {
+		$cacheCookie = Mage::getSingleton('enterprise_pagecache/cookie');
+		$cacheCookie->delete(Harapartners_Customertracking_Helper_Data::COOKIE_CUSTOMER_WELCOME);
+        $cacheCookie->delete(Harapartners_Affiliate_Helper_Data::COOKIE_AFFILIATE);
+	}
+	
 	protected function _plantRegisterSuccessReferCookie($observer, $customer) {
 		//prepare general welcome is_active cookie (also used for full page cache)
         $cacheCookie = Mage::getSingleton('enterprise_pagecache/cookie');
