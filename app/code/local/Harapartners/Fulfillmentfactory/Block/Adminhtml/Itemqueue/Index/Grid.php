@@ -144,6 +144,7 @@ class Harapartners_Fulfillmentfactory_Block_Adminhtml_Itemqueue_Index_Grid exten
         $this->getMassactionBlock()->addItem('batch_cancel', array(
              'label'=> Mage::helper('fulfillmentfactory')->__('Batch Cancel'),
              'url'  => $this->getUrl('*/*/batchCancel'),
+             'confirm' => Mage::helper('fulfillmentfactory')->__('Are you sure?')
         ));
 
         return $this;

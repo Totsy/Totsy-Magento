@@ -474,6 +474,10 @@ XML;
 		$xml .= '</orders>';
 		
 		$response = Mage::helper('fulfillmentfactory/dotcom')->submitOrders($xml);
+		
+		$message = Mage::helper('fulfillmentfactory/dotcom')->_readXMLString($response);
+		
+		echo $message;
 
 		return $response;
 	}
