@@ -24,21 +24,60 @@ class Harapartners_Fulfillmentfactory_Model_Itemqueue extends Mage_Core_Model_Ab
 	protected function _construct(){
         $this->_init('fulfillmentfactory/itemqueue');
     }
+    
+	//Note method will throw exceptions
+    public function importDataWithValidation($data) {
+    	//Type casting
+    	if(is_array($data)){
+    		$data =  new Varien_Object($data);
+    	}
+    	if(!($data instanceof Varien_Object)){
+    		throw new Exception('Invalid type for data importing, Array or Varien_Object needed.');
+    	}
+    	
+    	$this->addData($data->getData());
+    	
+    	if(!$this->getData('store_id')){
+    		$this->setData('store_id', Mage_Core_Model_App::ADMIN_STORE_ID);
+    	}
+    
+    	$this->validate();
+		return $this;
+    }
+    
+    public function validate(){
+    	if(!$this->getData('order_item_id') || 
+    	   !$this->getData('order_id') || 
+    	   !$this->getData('store_id') || 
+    	   !$this->getData('product_id')) {
+    	   	throw new Exception('Required field is missing!');
+    	}
+    	
+    	$qtyOrdered = $this->getData('qty_ordered');
+    	$fulfillCount = $this->getData('fulfill_count');
+    	$status = $this->getData('status');
+    	
+    	if(($qtyOrdered >= $fulfillCount) && ($fulfillCount >= 0)){
+    		if(($qtyOrdered != $fulfillCount) && ($status == self::STATUS_READY)) {
+    			throw new Exception('Fulfill count is not matching with status!');
+    		}
+    	}else{
+    		throw new Exception('Invalid fulfill count for item queue object!');
+    	}
+    	
+    	return $this;
+    }
 	
 	protected function _beforeSave() {
+		parent::_beforeSave();
     	//Timezone manipulation ignored. Use Magento default timezone (UTC)
 		$datetime = date('Y-m-d H:i:s');
     	if(!$this->getId()){
     		$this->setData('created_at', $datetime);
     	}
     	$this->setData('updated_at', $datetime);
-    	if(!$this->getStoreId()){
-    		$this->setStoreId(Mage_Core_Model_App::ADMIN_STORE_ID);
-    	}
     	
-    	if(($validateResult = $this->validateData()) !== true) {
-    		throw new Exception((string) $validateResult);
-    	}
+    	$this->validate(); //Errors will be thrown as exceptions
     	
     	parent::_beforeSave();
     }
@@ -52,76 +91,5 @@ class Harapartners_Fulfillmentfactory_Model_Itemqueue extends Mage_Core_Model_Ab
 	public function loadByItemId($orderItemId){
         $this->addData($this->getResource()->loadByOrderItemId($orderItemId));
         return $this;
-    }
-    
-    /**
-     * validate before save
-     *
-     * @return bool
-     */
-    public function validateData(){
-    	//validate requird field
-    	if(!$this->getData('order_item_id') || 
-    	   !$this->getData('order_id') || 
-    	   !$this->getData('store_id') || 
-    	   !$this->getData('product_id')) {
-    	   	return 'Required field is missing!';
-    	}
-    	
-    	$qtyOrdered = $this->getData('qty_ordered');
-    	$fulfillCount = $this->getData('fulfill_count');
-    	$status = $this->getData('status');
-    	
-    	if(($qtyOrdered >= $fulfillCount) && ($fulfillCount >= 0)){
-    		if(($qtyOrdered != $fulfillCount) && ($status == self::STATUS_READY)) {
-    			return 'Fulfill count is not matching with status!';
-    		}
-    		
-    		return true;
-    	}else{
-    		return 'Invalid fulfill count for item queue object!';
-    	}
-    	
-    	//could put more validation logic if necessary.
-    }
-    
-    /*
-     * get array list of Status (for dropdown list)
-     */
-    public function getStatusList() {
-    	return array(
-    		array(
-    			'label' => 'Pending',
-    			'value' => self::STATUS_PENDING
-    		),
-    		array(
-    			'label' => 'Partial filled',
-    			'value' => self::STATUS_PARTIAL
-    		),
-    		array(
-    			'label' => 'Ready',
-    			'value' => self::STATUS_READY
-    		),
-    		array(
-    			'label' => 'Processing',
-    			'value' => self::STATUS_PROCESSING
-    		),
-    		array(
-    			'label' => 'Suspended',
-    			'value' => self::STATUS_SUSPENDED
-    		),
-    		array(
-    			'label' => 'Submitted',
-    			'value' => self::STATUS_SUBMITTED
-    		),
-    		array(
-    			'label' => 'Complete',
-    			'value' => self::STATUS_CLOSED
-    		),
-    		array(
-    			'label' => 'Cancelled',
-    			'value' => self::STATUS_CANCELLED
-    		),
-    	);
     }
 }
