@@ -26,56 +26,52 @@ class Harapartners_Stockhistory_Block_Adminhtml_History_Edit_Form extends Mage_A
 
         $fieldset = $form->addFieldset('stockhistory', array('legend'=>Mage::helper('stockhistory')->__("PO Info")));
         
-        $fieldset->addField('history_id', 'label', array(
+        $fieldset->addField('po_id', 'label', array(
             'label'     => Mage::helper('stockhistory')->__('PO ID:'),
-            'name'      => 'history_id',
+            'name'      => 'po_id',
+        	'required'	=> true
         ));
         
-        $fieldset->addField('entity_id', 'label', array(
+        $fieldset->addField('vendor_id', 'label', array(
+            'label'     => Mage::helper('stockhistory')->__('Vendor ID:'),
+            'name'      => 'vendor_id',
+        	'required'	=> true
+        ));
+        
+        $fieldset->addField('product_id', 'text', array(
             'label'     => Mage::helper('stockhistory')->__('Product ID:'),
-            'name'      => 'entity_id',
+            'name'      => 'product_id',
+        	'required'	=> true
         ));
         
-        $fieldset->addField('product_name', 'label', array(
-            'label'     => Mage::helper('stockhistory')->__('Product Name:'),
-            'name'      => 'product_name',
+        $fieldset->addField('category_id', 'text', array(
+            'label'     => Mage::helper('stockhistory')->__('Category ID:'),
+            'name'      => 'category_id',
+        	'required'	=> true
         ));
         
-        $fieldset->addField('size', 'label', array(
-            'label'     => Mage::helper('stockhistory')->__('Size:'),
-            'name'      => 'size',
-        ));
-        
-        $fieldset->addField('color', 'label', array(
-            'label'     => Mage::helper('stockhistory')->__('Color:'),
-            'name'      => 'color',
-        ));
-        
-        $fieldset->addField('product_sku', 'label', array(
+        $fieldset->addField('product_sku', 'text', array(
             'label'     => Mage::helper('stockhistory')->__('Product SKU:'),
             'name'      => 'product_sku',
         ));
         
-        $fieldset->addField('vendor_sku', 'label', array(
+        $fieldset->addField('vendor_sku', 'text', array(
             'label'     => Mage::helper('stockhistory')->__('Vendor SKU:'),
             'name'      => 'vendor_sku',
         ));
         
-        $fieldset->addField('qty_delta', 'label', array(
-            'label'     => Mage::helper('stockhistory')->__('Quality Changed:'),
-            'name'      => 'qty_delta',
-        ));
-        
-        $fieldset->addField('unit_cost', 'label', array(
+        $fieldset->addField('unit_cost', 'text', array(
             'label'     => Mage::helper('stockhistory')->__('Unit Cost:'),
             'name'      => 'unit_cost',
+        	'required'	=> true
         ));
         
-        $fieldset->addField('total_cost', 'label', array(
-            'label'     => Mage::helper('stockhistory')->__('Total Cost:'),
-            'name'      => 'total_cost',
+        $fieldset->addField('qty_delta', 'text', array(
+            'label'     => Mage::helper('stockhistory')->__('Qty Changed:'),
+            'name'      => 'qty_delta',
+        	'required'	=> true
         ));
-        
+
         $fieldset->addField('created_at', 'label', array(
             'label'     => Mage::helper('stockhistory')->__('Created At:'),
             'name'      => 'created_at',
@@ -86,10 +82,10 @@ class Harapartners_Stockhistory_Block_Adminhtml_History_Edit_Form extends Mage_A
             'name'      => 'updated_at',
         ));
         
-        $fieldset->addField('status', 'label', array(
-            'label'     => Mage::helper('stockhistory')->__('Status:'),
-            'name'      => 'status',
-        	'value'		=> Mage::helper('stockhistory')->getStatusOptions(),
+        $fieldset->addField('action_type', 'select', array(
+            'label'     => Mage::helper('stockhistory')->__('Action:'),
+            'name'      => 'action_type',
+        	'values'		=> Mage::helper('stockhistory')->getStatusOptions(),
         ));
         
         $fieldset->addField('comment', 'textarea', array(

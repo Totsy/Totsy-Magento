@@ -20,12 +20,15 @@ class Harapartners_Stockhistory_Block_Adminhtml_Purchaseorder_Edit extends Mage_
 		$this->_objectId = 'id';
 		$this->_blockGroup = 'stockhistory';
 		$this->_controller = 'adminhtml_purchaseorder';
-		$this->_removeButton('delete');
-		//$this->_updateButton('save', 'label', Mage::helper('stockhistory')->__('Import File'));
+		$this->_addButton('transaction_add', array(
+            'label'     => Mage::helper('stockhistory')->__('Create Amendment'),
+            'onclick'   => 'setLocation(\'' . $this->getUrl('stockhistory/adminhtml_history/new') .'\')',
+			'class'		=> 'add',
+      	));
 	}
 	
 	public function getHeaderText() {
-    	return Mage::helper('stockhistory')->__('Vendor Info');
+    	return Mage::helper('stockhistory')->__('Purchase Order Info');
     }
 
     public function getSaveUrl(){

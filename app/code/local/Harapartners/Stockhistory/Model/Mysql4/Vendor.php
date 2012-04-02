@@ -14,8 +14,36 @@
 
 class Harapartners_Stockhistory_Model_Mysql4_Vendor extends Mage_Core_Model_Mysql4_Abstract
 {
+	protected $_read;
+	
 	public function _construct()
 	{
 		$this->_init('stockhistory/vendor', 'id');
+		$this->_read = $this->_getReadAdapter();
+        //$this->_write = $this->_getWriteAdapter();
+	}
+	
+	public function loadBySku($sku, $storeId = null)
+	{
+    	$select = $this->_read->select()
+    		->from($this->getMainTable())
+    		->where('vendor_sku' . ' = ?', $sku);
+    	
+    	if(!!$storeId){
+			$select->where('store_id=?', $storeId);
+		}
+		
+		$rowData = $this->_read->fetchRow($select);
+		
+		if(!$rowData){
+			$rowData = array();	
+		}
+		
+		return $rowData;
+	}
+	
+	public function validataBySku($sku, $storeId = null)
+	{
+		return $this->loadBySku($sku);
 	}
 }
