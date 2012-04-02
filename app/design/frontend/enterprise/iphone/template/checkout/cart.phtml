@@ -31,7 +31,7 @@
  * @see Mage_Checkout_Block_Cart
  */
 	$countDownTimer = Mage::getSingleton('checkout/session')->getCountDownTimer();
-	$timeout = Mage::getModel('rushcheckout/session')->getQuoteItemExpireTime();	
+	$timeout = Mage::getModel('checkout/session')->getQuoteItemExpireTime();	
 	$endcount_lc = date("F j, Y, G:i:s", ($countDownTimer + $timeout));
 ?>
 <div class="cart">

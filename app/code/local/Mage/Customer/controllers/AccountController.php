@@ -262,7 +262,6 @@ class Mage_Customer_AccountController extends Mage_Core_Controller_Front_Action
      */
     public function createPostAction()
     {
-    	Mage::register('new_account', 1); //Harapartners, Andu
         $session = $this->_getSession();
         if ($session->isLoggedIn()) {
             $this->_redirect('*/*/');
@@ -341,7 +340,6 @@ class Mage_Customer_AccountController extends Mage_Core_Controller_Front_Action
                         array('account_controller' => $this, 'customer' => $customer)
                     );
 
-					Mage::getSingleton('customer/session')->setData('login_refer', true); //Harapartners, Andu
                     if ($customer->isConfirmationRequired()) {
                         $customer->sendNewAccountEmail(
                             'confirmation',
@@ -383,7 +381,6 @@ class Mage_Customer_AccountController extends Mage_Core_Controller_Front_Action
                     ->addException($e, $this->__('Cannot save the customer.'));
             }
         }
-		Mage::unregister('new_account'); //Harapartners, Andu
         $this->_redirectError(Mage::getUrl('*/*/create', array('_secure' => true)));
     }
 

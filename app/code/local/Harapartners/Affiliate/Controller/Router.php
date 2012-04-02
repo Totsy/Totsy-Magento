@@ -25,18 +25,20 @@ class Harapartners_Affiliate_Controller_Router extends Mage_Core_Controller_Vari
     public function match(Zend_Controller_Request_Http $request){
         if (!Mage::isInstalled()) {
             Mage::app()->getFrontController()->getResponse()
-                ->setRedirect(Mage::getUrl('install'))
-                ->sendResponse();
+            		->setRedirect(Mage::getUrl('install'))
+            		->sendResponse();
             exit;
         }		
         $identifier = trim($request->getPathInfo(), '/');
         $p = explode('/', $identifier);
-        if(substr($identifier,0,2)=='a/'){
+        
+        //must at least specify affiliate code
+        if(count($p) >= 2 && $p[0]=='a'){
         	$request->setModuleName('affiliate')
-           			 ->setControllerName('register')
-           			 ->setActionName('index')
-            		->setParam('affiliate', $p[1])
-            		->setParam('other_param', $p[2]);
+        			->setControllerName('register')
+        			->setActionName('index')
+        			->setParam('affiliate_code', $p[1]);
+           //All other parameters need to be sent as GET params
         	return true;
         }else{
         	return false;

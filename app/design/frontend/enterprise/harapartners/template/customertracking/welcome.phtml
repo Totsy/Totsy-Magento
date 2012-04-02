@@ -18,7 +18,7 @@
 	$isFaceBook =	Mage::getSingleton('customer/session')->getFacebookAccountFirstCreate();
 	$storeCode	=	Mage::app()->getStore()->getCode();
 ?>
-<?php if ( !!$isFaceBook && $isFaceBook ):?>
+<?php if ( !!$isFaceBook ):?>
 	<a id="facebook_pop" href="#facebook_window" class="hidden"></a>
 	<div style="display: none;">
 		<div id="facebook_window">

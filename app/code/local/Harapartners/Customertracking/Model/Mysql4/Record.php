@@ -19,6 +19,18 @@ class Harapartners_Customertracking_Model_Mysql4_record extends Mage_Core_Model_
     protected function _construct(){
         $this->_init('customertracking/record', 'customertracking_id');
     }
+    
+	public function loadByCustomerId($customerId){
+    	$readAdapter = $this->_getReadAdapter();
+    	$select = $readAdapter->select()
+            	->from($this->getMainTable())
+            	->where('customer_id=:customer_id');
+        $result = $readAdapter->fetchRow($select, array('customer_id' => $customerId));
+        if (!$result) {
+           $result = array(); 
+        }
+        return $result;    	
+    }
 
     public function loadByCustomerEmail($customerEmail){
     	$readAdapter = $this->_getReadAdapter();

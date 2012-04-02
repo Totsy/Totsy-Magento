@@ -82,7 +82,7 @@ div.top-cart .block-title strong { color: #F21C25; font-size: 12px; text-transfo
 div.form-buttons button { margin: 10px 0px;}
  
  /* Event Catalog ================================================================================= */
-.catalog-index-index .col-main { padding: 5px; }
+.catalog-index-index .col-main, .categoryevent-index-index .col-main { padding: 5px; }
 h1.event-collection-title { 
 	color: #707070;
 	font-size: 20px;

@@ -39,6 +39,9 @@
 				<rewrite>
 					<!--Harapartners_Service: allow admin harapartner theme-->
 					<page>Harapartners_Service_Block_Rewrite_Adminhtml_Page</page>
+					<!--Harapartners_Service: avoid reporting the complete history (ignore unvalidated historical data) -->
+					<report_refresh_statistics_grid>Harapartners_Service_Block_Rewrite_Adminhtml_Report_Refresh_Statistics_Grid</report_refresh_statistics_grid>
+					<!--Harapartners_Service: widget_form 'datetime' support with Varien_Data_Form_Element_Datetime-->
 				</rewrite>
 			</adminhtml>
 			<checkout>
@@ -87,6 +90,14 @@
 					<session>Harapartners_Service_Model_Rewrite_Core_Resource_Session</session>
 				</rewrite>
 			</core_resource>
+			<customer>
+                <rewrite>
+					<!--Harapartners_Customertracking, redirect customer to a different store if customer's email does not match current store but matches a different store-->
+					<customer>Harapartners_Service_Model_Rewrite_Customer_Customer</customer>
+					<!--Harapartners_Affiliate--><!--Harapartners_Customertracking--><!--Harapartners_Rushcheckout-->
+                    <session>Harapartners_Service_Model_Rewrite_Customer_Session</session>
+                </rewrite>
+            </customer>
 			<sales>
 				<rewrite>
 					<!--Harapartners_Ordersplit--><!--Harapartners_Paymentfactory-->

@@ -13,49 +13,34 @@
  */
 
 class Harapartners_Customertracking_Block_Pixel extends Mage_Core_Block_Template{
+	
 	public function _toHtml(){
 		$pixelHtml = '';
-		$customerSession = Mage::getSingleton('customer/session');
-		$customer = $customerSession->getCustomer();
-		if(!!$customer && !!$customer->getEmail() ){
-			$customerTrackingRecord = Mage::getModel('customertracking/record')->loadByCustomerEmail($customer->getEmail());
-			if(!!$customerTrackingRecord){
-				if(!!$customerTrackingRecord->getAffiliateCode()){
-					$affiliate = Mage::getModel('affiliate/record')->loadByAffiliateCode($customerTrackingRecord->getAffiliateCode());
-				}elseif(!!$customerTrackingRecord->getAffiliateId()){
-					$affiliate = Mage::getModel('affiliate/record')->load($customerTrackingRecord->getAffiliateId());
-				} 
-				if(!!Mage::registry('isLoginPage')){
-					$currentPage = 'login';
+		$affiliate = Mage::getSingleton('customer/session')->getAffiliate();
+		if(!!$affiliate && !!$affiliate->getId()){
+			try{
+				$trackingCode = json_decode($affiliate->getTrackingCode(), true);
+				
+				//Page detection
+				$currentPageTag = strtolower(Mage::app()->getFrontController()->getAction()->getFullActionName());
+				if(!empty($trackingCode[$currentPageTag])){
+					$pixelHtml .= $trackingCode[$currentPageTag];
 				}
-			}
-		}elseif(!!$affiliateCode = Mage::getSingleton('customer/session')->getAffiliateCode()){
-			$affiliate = Mage::getModel('affiliate/record')->loadByAffiliateCode($affiliateCode);
-			if(!!Mage::registry('isLoginPage')){
-				$currentPage = 'after_reg';
-			}else{
-				$currentPage = 'landing';
+				
+				//Additional logic
+				$cookie = Mage::app()->getCookie();
+    			$key = Harapartners_Customertracking_Helper_Data::COOKIE_CUSTOMER_WELCOME;
+    			if(!!$cookie->get($key)){
+	    			if(!empty($trackingCode[Harapartners_Affiliate_Helper_Data::PAGE_NAME_AFTER_CUSTOMER_REGISTER_SUCCESS])){
+						$pixelHtml .= $trackingCode[Harapartners_Affiliate_Helper_Data::PAGE_NAME_AFTER_CUSTOMER_REGISTER_SUCCESS];
+					}
+					$cookie->delete($key); //Note cookie still available till next page request
+		    	}
+				
+			}catch(Exception $e){
 			}
 		}
-		if(!!$affiliate && !!$affiliate->getTrackingCode()){
-				$trackingCode = json_decode($affiliate->getTrackingCode(),true);
-				if(isset($trackingCode['pixels']) && !!$trackingCode['pixels']){
-					foreach ($trackingCode['pixels'] as $pixel) {
-						if(isset($pixel['enable']) && $pixel['enable']){
-							if(!$currentPage){
-								$currentPage = 'pageCanBeIgnored';	
-							}						
-							///page name matching
-							foreach ($pixel['page'] as $page) {
-								if($page == $currentPage){
-									$pixelHtml.= $pixel['pixel'];
-									break;
-								}
-							}								
-						}
-					}					
-				}					
-			}				
 		return $pixelHtml;
 	}
+	
 }
