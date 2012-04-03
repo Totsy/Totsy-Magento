@@ -23,7 +23,6 @@ class Harapartners_Affiliate_Block_Report extends Mage_Adminhtml_Block_Template 
 			$affiliate = $resultFilter->getAffiliate();
 			$from = $resultFilter->getFrom();
 			$to = $resultFilter->getTo();
-			$totalBounces = json_decode($affiliate->getTotalBounces(),true);
 			$includeAllSubAffiliate = $resultFilter->getIncludeAllSubAffiliate();
 			$subAffiliateCode = $resultFilter->getSubAffiliateCode();
 			if(!!$includeAllSubAffiliate && !!$subAffiliateCode){
@@ -32,33 +31,25 @@ class Harapartners_Affiliate_Block_Report extends Mage_Adminhtml_Block_Template 
 				if(!!$includeAllSubAffiliate){
 					$recordCollection = Mage::getModel('customertracking/record')->getCollection()
 																			->addFieldToFilter('created_at', array( "lt" => $to,"gt"=>$from ))
-																			->addFieldToFilter('affiliate_code', $affiliate->getAffiliateCode());		
-					if(isset($totalBounces)){
-						foreach ($totalBounces as $index=>$count) {
-							$bounces+=$count;
-						}
-					}else{
-						$bounces = 0;
-					}	
+																			->addFieldToFilter('affiliate_code', $affiliate->getAffiliateCode());
+					$bounceCollection = Mage::getModel('customertracking/record')->getCollection()
+																			->addFieldToFilter('created_at', array( "lt" => $to,"gt"=>$from ))
+																			->addFieldToFilter('affiliate_code', $affiliate->getAffiliateCode())
+																			->addFieldToFilter('status',array(3,4));	
 				}else{
 					$recordCollection = Mage::getModel('customertracking/record')->getCollection()
 																			->addFieldToFilter('created_at', array( "lt" => $to,"gt"=>$from ))
 																			->addFieldToFilter('affiliate_code', $affiliate->getAffiliateCode())
-																			->addFieldToFilter('sub_affiliate_code', $subAffiliateCode);					
-					if(!!$subAffiliateCode = $resultFilter->getSubAffiliateCode()){				
-						if(isset($totalBounces[$subAffiliateCode])){
-							$bounces = $totalBounces[$subAffiliateCode];
-						}else{
-							$bounces = 0;
-						}													
-					}else{
-						if(isset($totalBounces['masterAffiliate'])){
-							$bounces = $totalBounces['masterAffiliate'];
-						}else{
-							$bounces = 0;
-						}			
-					}			
+																			->addFieldToFilter('sub_affiliate_code', $subAffiliateCode);								
+					$bounceCollection = Mage::getModel('customertracking/record')->getCollection()
+																			->addFieldToFilter('created_at', array( "lt" => $to,"gt"=>$from ))
+																			->addFieldToFilter('affiliate_code', $affiliate->getAffiliateCode())
+																			->addFieldToFilter('sub_affiliate_code', $subAffiliateCode)
+																			->addFieldToFilter('status',array(3,4));
 				}
+				$totalRegistrations = $recordCollection->count();
+				$totalBounces = $bounceCollection->count();
+				$validateRegistrations = $totalRegistrations-$totalBounces;
 				$revenue = 0;
 				$z = 0;
 				$tenth = 0;
@@ -108,6 +99,7 @@ class Harapartners_Affiliate_Block_Report extends Mage_Adminhtml_Block_Template 
 				$reportHtml.=	'<th>Total Revenue</th>
 								<th>Total Registrations</th>
 								<th>Total Bounces</th>
+								<th>Validated Registrations</th>
 								</tr>
 								<tr>
 								<td>'.$resultFilter->getFrom().'</td>
@@ -121,8 +113,9 @@ class Harapartners_Affiliate_Block_Report extends Mage_Adminhtml_Block_Template 
 					$reportHtml.=	'<th>No</th>';
 				}
 				$reportHtml.=	'<td>'.$revenue.'</td>
-								<td>'.$recordCollection->count().'</td>
-								<td>'.$bounces.'</td>
+								<td>'.$totalRegistrations.'</td>
+								<td>'.$totalBounces.'</td>
+								<td>'.$validateRegistrations.'</td>
 								</tr>						
 								</table> ';			
 				$reportHtml.= '<table>
