@@ -691,58 +691,6 @@ class Mage_Catalog_Model_Convert_Adapter_Product
 					$product->setConfigurableProductsData($this->getProductIdFromSku($importData['conf_simple_products'], $product));
 				}
 			}
-	
-	        /**
-	         * Init product links data (related, upsell, crosssell, grouped)
-	         */
-					
-			if (isset($importData['related'])) {
-
-				$linkIds = $this->skusToIds($importData['related'], $product);
-
-				if (!empty($linkIds)) {
-
-					$product->setRelatedLinkData($linkIds);
-
-				}
-
-			}
-
-			if (isset($importData['upsell'])) {
-
-				$linkIds = $this->skusToIds($importData['upsell'], $product);
-
-				if (!empty($linkIds)) {
-
-					$product->setUpSellLinkData($linkIds);
-
-				}
-
-			}
-
-			if (isset($importData['crosssell'])) {
-
-				$linkIds = $this->skusToIds($importData['crosssell'], $product);
-
-				if (!empty($linkIds)) {
-
-					$product->setCrossSellLinkData($linkIds);
-
-				}
-
-			}
-
-			if (isset($importData['grouped'])) {
-
-				$linkIds = $this->skusToIds($importData['grouped'], $product);
-
-				if (!empty($linkIds)) {
-
-					$product->setGroupedLinkData($linkIds);
-
-				}
-
-			}
 			/**
 			 * Hara Partners END
 			 * Richu

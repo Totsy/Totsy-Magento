@@ -1,5 +1,17 @@
 <?php
 
+/*
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the End User Software Agreement (EULA).
+ * It is also available through the world-wide-web at this URL:
+ * http://www.harapartners.com/license
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to eula@harapartners.com so we can send you a copy immediately.
+ * 
+ */
+
 $installer = $this;
 
 $installer->startSetup();
@@ -21,19 +33,3 @@ CREATE TABLE {$this->getTable('import/import')} (
     ");
 
 $installer->endSetup();
-
-
-//  `import_set_id` int(10) unsigned NOT NULL default '0',
-//  `import_row_content` mediumtext NOT NULL default '',
-
-//-- DROP TABLE IF EXISTS {$this->getTable('import/importset')};
-//CREATE TABLE {$this->getTable('import/importset')} (
-//  `import_importset_id` int(11) unsigned NOT NULL auto_increment,
-//  `import_import_id` int(11) unsigned NOT NULL Default '0',
-//  `import_importset_row_content` mediumtext NOT NULL default '',
-//  `created_time` datetime NULL,
-//  `update_time` datetime NULL,
-//   PRIMARY KEY (`import_importset_id`), 
-//   KEY `FK_IMPORT_IMPORT_ID` (`import_import_id`),
-//   CONSTRAINT `FK_IMPORT_IMPORT_ID` foreign key (`import_import_id`) REFERENCES {$installer->getTable('import/import')} (`import_import_id`) ON DELETE CASCADE ON UPDATE CASCADE
-//)ENGINE=InnoDB DEFAULT CHARSET=utf8;

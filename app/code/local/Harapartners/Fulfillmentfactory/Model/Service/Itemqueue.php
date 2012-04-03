@@ -106,32 +106,18 @@ class Harapartners_Fulfillmentfactory_Model_Service_Itemqueue
 				$itemqueue->save();
     		}
     	}
-    	
-    	/*if($state == Mage_Sales_Model_Order::STATE_COMPLETE) {
-    		foreach($collection as $itemqueue) {
-    			$itemqueue->setStatus(Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_CLOSED);
-				$itemqueue->save();
-    		}
-    	}
-    	else if($state == Mage_Sales_Model_Order::STATE_NEW){
-    		foreach($collection as $itemqueue) {
-    			$itemqueue->setStatus(Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_PENDING);
-				$itemqueue->save();
-    		}
-    	}
-    	else if($state == Mage_Sales_Model_Order::STATE_PROCESSING){
+    	else if($status == Harapartners_FulfillmentFactory_Helper_Data::ORDER_STATUS_PAYMENT_FAILED){
     		foreach($collection as $itemqueue) {
     			$itemqueue->setStatus(Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_PROCESSING);
-    			$itemqueue->setFulfillCount($itemqueue->getQtyOrdered());	//fulfill all items
 				$itemqueue->save();
     		}
     	}
-    	else if($state == Mage_Sales_Model_Order::STATE_CANCELED){
+    	else if($status == Harapartners_FulfillmentFactory_Helper_Data::ORDER_STATUS_FULFILLMENT_FAILED){
     		foreach($collection as $itemqueue) {
-    			$itemqueue->setStatus(Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_CANCELLED);
+    			$itemqueue->setStatus(Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_PROCESSING);
 				$itemqueue->save();
     		}
-    	}*/
+    	}
     }
     
 	/**
