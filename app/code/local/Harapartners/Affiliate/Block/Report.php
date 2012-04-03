@@ -76,14 +76,13 @@ class Harapartners_Affiliate_Block_Report extends Mage_Adminhtml_Block_Template 
 					
 					$customerId = $record->getCustomerId();
 					$orderCollection = Mage::getModel('sales/order')->getCollection()
-																	->addFieldToFilter('customer_id',$customerId);
+																	->addFieldToFilter('customer_id',$customerId)
+																	->addFieldToFilter('state','complete');
 					if($orderCollection->count()){
 						$valuedCustomerCount++;
 					}
 						foreach ($orderCollection as $order) {
-							if($order->getState()=='complete'){
 								$revenue+=$order->getGrandTotal();
-							}
 						}														
 				}			
 				$reportHtml.= '<table>
