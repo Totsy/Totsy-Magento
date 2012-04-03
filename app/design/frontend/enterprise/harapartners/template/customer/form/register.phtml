@@ -35,27 +35,19 @@
 <?php 
 	/*prepare image for login, in order to insert more image, 
 	just put them to \skin\frontend\enterprise\harapartners\images\login foler */
-	$dir = BP . DS . 'skin'. DS .'frontend'. DS .'enterprise'. DS .'harapartners'. DS .'images'. DS .'login'. DS . '*.jpg';
-	$dir2 = BP . DS . 'skin'. DS .'frontend'. DS .'enterprise'. DS .'harapartners'. DS .'images'. DS .'login'. DS;
-	$images = scandir($dir2);
-	unset($images[0]);
-	unset($images[1]);
-	shuffle($images);
+//	$dir = BP . DS . 'skin'. DS .'frontend'. DS .'enterprise'. DS .'harapartners'. DS .'images'. DS .'login'. DS . '*.jpg';
+//	$dir2 = BP . DS . 'skin'. DS .'frontend'. DS .'enterprise'. DS .'harapartners'. DS .'images'. DS .'login'. DS;
+//	$images = scandir($dir2);
+//	unset($images[0]);
+//	unset($images[1]);
+//	shuffle($images);
 ?>
-<script>
-    jQuery.backstretch("<?php echo $this->getSkinUrl()?>images/login/<?php echo $images[0];?>");
-</script>
 <div class="account-create">
     <?php //echo $this->getChildHtml('form_fields_before')?>
 	<?php //the up child is a reward html ?>
 	<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
     <form action="<?php echo $this->getPostActionUrl() ?>" method="post" id="form-validate" enctype="multipart/form-data">
-    	<div class="info-title">
-			<h2 class="legend membersignup"><?php echo $this->__('Sign Up') ?></h2>
-			<p class="membersignin">Already a Totsy member? <a href="<?php echo Mage::getUrl('customer/account/login');?>">Sign In</a></p>
-        </div>
-        <div class="clear"></div>
-	    <hr/>
+	<h2 class="join-with-email" >Join by Invitation</h2>
         <div class="fieldset">
             <input type="hidden" name="success_url" value="<?php echo $this->getSuccessUrl() ?>" />
             <input type="hidden" name="error_url" value="<?php echo $this->getErrorUrl() ?>" />
@@ -65,21 +57,21 @@
                 </li>
                 <li>
                     <label for="email_address" class="required"><em>*</em><?php echo $this->__('Email Address') ?></label>
-                    <div class="input-box">
-                        <input type="text" name="email" id="email_address" value="<?php echo $this->htmlEscape($this->getFormData()->getEmail()) ?>" title="<?php echo $this->__('Email Address') ?>" class="ui-input-text ui-body-c ui-corner-all ui-shadow-inset input-text validate-email required-entry" />
+                    <div class="input-box" id="input-email-box">
+                        <input type="text" name="email" id="email_address" value="<?php echo $this->htmlEscape($this->getFormData()->getEmail()) ?>" title="<?php echo $this->__('Email Address') ?>" class="input-text validate-email required-entry" />
                     </div>
                 </li>
 			    <li class="fields">
                     <div class="field">
                         <label for="password" class="required"><em>*</em><?php echo $this->__('Password') ?></label>
                         <div class="input-box">
-                            <input type="password" name="password" id="password" title="<?php echo $this->__('Password') ?>" class="input-text required-entry validate-password ui-input-text ui-body-c ui-corner-all ui-shadow-inset" />
+                            <input type="password" name="password" id="password" title="<?php echo $this->__('Password') ?>" class="input-text required-entry strong-validate-password" />
                         </div>
                     </div>
                     <div class="field">
                         <label for="confirmation" class="required"><em>*</em><?php echo $this->__('Confirm Password') ?></label>
                         <div class="input-box">
-                            <input type="password" name="confirmation" title="<?php echo $this->__('Confirm Password') ?>" id="confirmation" class="input-text required-entry validate-cpassword ui-input-text ui-body-c ui-corner-all ui-shadow-inset" />
+                            <input type="password" name="confirmation" title="<?php echo $this->__('Confirm Password') ?>" id="confirmation" class="input-text required-entry validate-cpassword" />
                         </div>
                     </div>
                 </li>
@@ -192,15 +184,17 @@
             </ul>
             <?php echo $this->getChildHtml('persistent.remember.me.tooltip'); ?>
         </div>
-        <p><?php echo $this->__('By clicking register you accept our ')?> <a id="redtrerm" href="<?php echo $this->getBaseUrl()?>terms-of-use/">terms and condititons.</a></p>
         <div class="buttons-set form-buttons">
-            <button type="submit" class="button" title="<?php echo $this->__('Submit') ?>"><div class="sign-in-button"><?php echo $this->__('Sign Up') ?></div></button>
+			<p><?php echo $this->__('By joining you accept our ')?> <a id="redtrerm" href="<?php echo $this->getBaseUrl()?>terms/">terms and condititons.</a></p>
+            <button type="submit" class="button" id="submit-button" title="<?php echo $this->__('Submit') ?>"><div class="sign-in-button"><?php echo $this->__('JOIN NOW') ?></div></button>
         </div>
-       	<div class="facebook-part">
-			<a rel="facebook-connect" title="<?php echo $this->__('Connect with Facebook') ?>" class="facebook-button"><span><img src="<?php echo $this->getSkinUrl()?>images/sign_in_fb.png"/></span></a>
-		</div>
+        <?php if (Mage::helper('checkout')->isContextCheckout()): ?>
+            <input name="context" type="hidden" value="checkout" />
+        <?php endif; ?>
     </form>
-		
+	
+
+	
     <script type="text/javascript">
     //<![CDATA[
         var dataForm = new VarienForm('form-validate', true);
@@ -213,13 +207,20 @@
         });
     //]]>
     </script>
-    
 </div>
-
-<script type="text/javascript">
-	  jQuery(document).ready(function() {
-	  	jQuery(".sign-in-button").click({
-			jQuery("#password").val();
-		})
-	  });
-</script>
+<div class="desc-box">
+	<h2 class="tagline" style="margin-top:2px;">Why savvy moms shop at Totsy?</h2>
+	<ul id="bug_bullets">
+		<li>Membership is free</li>
+		<li>Exclusive sales for kids, moms and families</li>
+		<li>Savings of up to 90% off retail</li>
+		<li>Sales last up to 3 days</li>
+		<li>A tree is planted for your first purchase</li>
+		<li>Refer friends and earn Totsy credits</li>
+	</ul>
+</div>
+<!--div class="free_shipping_banner_reg_new rollover_img">
+	<a href="javascript:;" title="Free Shipping">
+		<span/>
+	</a>
+</div-->
