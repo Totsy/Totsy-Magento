@@ -13,7 +13,7 @@
 <config>
     <modules>
         <Harapartners_Fulfillmentfactory>
-            <version>1.0.0</version>
+            <version>1.0.1</version>
         </Harapartners_Fulfillmentfactory>
     </modules>
     <global>
@@ -38,30 +38,12 @@
                     <itemqueue>
                         <table>fulfillmentfactory_itemqueue</table>
                     </itemqueue>
+					<errorlog>
+                        <table>fulfillmentfactory_errorlog</table>
+                    </errorlog>
                 </entities>
             </fulfillmentfactory_mysql4>
         </models>
-		<!--Moved to Harapartners_Service-->
-		<!--events>
-			<order_cancel_after>
-				<observers>
-                    <fulfillmentfactory>
-                    	<type>singleton</type>
-                    	<class>fulfillmentfactory/observer</class>
-                        <method>cancelItemQueue</method>
-                    </fulfillmentfactory>
-                </observers>
-			</order_cancel_after>
-			<sales_order_save_after>
-				<observers>
-                    <fulfillmentfactory>
-                    	<type>singleton</type>
-                    	<class>fulfillmentfactory/observer</class>
-                        <method>updateItemQueueStatus</method>
-                    </fulfillmentfactory>
-                </observers>
-			</sales_order_save_after>
-        </events-->
 		<resources>
             <fulfillmentfactory_setup>
                 <setup>
@@ -88,6 +70,8 @@
                     <processing_fulfillment translate="label"><label>Processing Fulfillment</label></processing_fulfillment>
 					<payment_failed translate="label"><label>Payment Failed</label></payment_failed>
 					<fulfillment_failed translate="label"><label>Fulfillment Failed</label></fulfillment_failed>
+					<fulfillment_aging translate="label"><label>Fulfillment Aging</label></fulfillment_aging>
+					<shipment_aging translate="label"><label>Shipment Aging</label></shipment_aging>
                 </statuses>
                 <states>
                     <processing_fulfillment>
@@ -105,6 +89,16 @@
                             <fulfillment_failed/>
                         </statuses>
                     </fulfillment_failed>
+					<fulfillment_aging>
+                        <statuses>
+                            <fulfillment_aging/>
+                        </statuses>
+                    </fulfillment_aging>
+					<shipment_aging>
+                        <statuses>
+                            <shipment_aging/>
+                        </statuses>
+                    </shipment_aging>
                 </states>
             </order>
         </sales>
@@ -120,19 +114,14 @@
             </fulfillmentfactory>
         </routers>
     </admin>
-    <adminhtml>
-		<menu>
-            <sales>
-				<children>
-					<fulfillmentfactory translate="title" module="fulfillmentfactory">
-		                <title>Fulfillment Factory</title>
-		                <sort_order>31</sort_order>
-		                <action>fulfillmentfactory/adminhtml_itemqueue</action>
-		            </fulfillmentfactory>
-				</children>
-            </sales>
-        </menu>
-    </adminhtml>
+	<default>
+		<fulfillmentfactory_options>
+			<aging_setting>
+				<fulfillment_aging_day>90</fulfillment_aging_day>
+				<shipment_aging_day>3</shipment_aging_day>
+			</aging_setting>
+		</fulfillmentfactory_options>
+	</default>
 	<crontab>
         <jobs>
             <fulfillmentfactory_dotcom_update_product>
@@ -159,6 +148,22 @@
 					<model>fulfillmentfactory/service_dotcom::runUpdateShipment</model>
 				</run>
             </fulfillmentfactory_dotcom_update_shipment>
+			<fulfillmentfactory_dotcom_mark_fulfillment_aging_order>
+                <schedule>
+					<cron_expr>0 0 * * *</cron_expr>
+				</schedule>
+                <run>
+					<model>fulfillmentfactory/service_fulfillment::markFulfillmentAgingOrders</model>
+				</run>
+            </fulfillmentfactory_dotcom_mark_fulfillment_aging_order>
+			<fulfillmentfactory_dotcom_mark_shipment_aging_order>
+                <schedule>
+					<cron_expr>0 0 * * *</cron_expr>
+				</schedule>
+                <run>
+					<model>fulfillmentfactory/service_fulfillment::markShipmentAgingOrders</model>
+				</run>
+            </fulfillmentfactory_dotcom_mark_shipment_aging_order>
         </jobs>
     </crontab>
 </config>

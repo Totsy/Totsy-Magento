@@ -12,6 +12,50 @@
  */
 class Harapartners_Fulfillmentfactory_Model_Service_Fulfillment
 {
+	const DAY_SECONDS = 86400;
+	
+	/**
+	 * mark orders which havn't been fulfilled
+	 *
+	 */
+	public function markFulfillmentAgingOrders() {
+		$agingDay = Mage::getStoreConfig('fulfillmentfactory_options/aging_setting/fulfillment_aging_day');
+
+		$expiredTime = time() - self::DAY_SECONDS * 5;
+		$expiredDate = date('Y-m-d H:i:s', $expiredTime);
+		echo $expiredDate . "\n\n";
+		
+		$orderCollection = Mage::getModel('sales/order')->getCollection()
+														->addAttributeToFilter('status', 'pending')
+														->addAttributeToFilter('created_at', array('to' => $expiredDate));
+		echo count($orderCollection);			
+		foreach($orderCollection as $order) {
+			$order->setStatus(Harapartners_FulfillmentFactory_Helper_Data::ORDER_STATUS_FULFILLMENT_AGING)
+				  ->save();
+		}
+	}
+	
+	/**
+	 * mark orders which have sent to fulfillment but haven't received shipment infomation
+	 *
+	 */
+	public function markShipmentAgingOrders() {
+		$agingDay = Mage::getStoreConfig('fulfillmentfactory_options/aging_setting/shipment_aging_day');
+
+		$expiredTime = time() - self::DAY_SECONDS * $agingDay;
+		$expiredDate = date('Y-m-d H:i:s', $expiredTime);
+		echo $expiredDate . "\n\n";
+		
+		$orderCollection = Mage::getModel('sales/order')->getCollection()
+														->addAttributeToFilter('status', 'processing')
+														->addAttributeToFilter('updated_at', array('to' => $expiredDate));
+		echo count($orderCollection);			
+		foreach($orderCollection as $order) {
+			$order->setStatus(Harapartners_FulfillmentFactory_Helper_Data::ORDER_STATUS_SHIPMENT_AGING)
+				  ->save();
+		}
+	}
+	
 	/**
 	 * update items' fulfill statuses for all waiting orders
 	 *

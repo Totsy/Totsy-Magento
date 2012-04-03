@@ -14,6 +14,8 @@ class Harapartners_FulfillmentFactory_Helper_Data extends Mage_Core_Helper_Abstr
 	const ORDER_STATUS_PROCESSING_FULFILLMENT = 'processing_fulfillment';
 	const ORDER_STATUS_PAYMENT_FAILED = 'payment_failed';
 	const ORDER_STATUS_FULFILLMENT_FAILED = 'fulfillment_failed';
+	const ORDER_STATUS_FULFILLMENT_AGING = 'fulfillment_aging';
+	const ORDER_STATUS_SHIPMENT_AGING = 'shipment_aging';
 	
 	/**
 	 * get 2-letter code for states
@@ -41,7 +43,7 @@ class Harapartners_FulfillmentFactory_Helper_Data extends Mage_Core_Helper_Abstr
 	 * @param Object $order
 	 */
 	public function _pushUniqueOrderIntoArray(&$orderArray, $order) {
-		if(empty($order)) {
+		if(empty($order) || !$order->getId()) {
 			return;
 		}
 		

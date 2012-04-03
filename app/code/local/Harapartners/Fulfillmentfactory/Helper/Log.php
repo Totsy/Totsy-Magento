@@ -16,9 +16,34 @@ class Harapartners_FulfillmentFactory_Helper_Log extends Mage_Core_Helper_Abstra
 	 * log message
 	 *
 	 * @param string $message
+	 * @return log file name
 	 */
 	public function errorLog($message) {
 		$logFileName = 'fulfillment_error_' . date('Y_m_d_his') . '.log';
+		
+		$errorlogModel = Mage::getModel('fulfillmentfactory/errorlog');
+		$errorlogModel->setMessage($message);
+		$errorlogModel->importDataWithValidation($errorlogModel->getData())->save();
+		
+		Mage::log($message, null, $logFileName);
+		
+		return $logFileName;
+	}
+	
+	/**
+	 * log message with order id
+	 *
+	 * @param string $message
+	 * @param unknown_type $orderId
+	 * @return log file name
+	 */
+	public function errorLogWithOrder($message, $orderId) {
+		$logFileName = 'fulfillment_error_' . date('Y_m_d_his') . '.log';
+
+		$errorlogModel = Mage::getModel('fulfillmentfactory/errorlog');
+		$errorlogModel->setOrderId($orderId);
+		$errorlogModel->setMessage($message);
+		$errorlogModel->importDataWithValidation($errorlogModel->getData())->save();
 		
 		Mage::log($message, null, $logFileName);
 		
