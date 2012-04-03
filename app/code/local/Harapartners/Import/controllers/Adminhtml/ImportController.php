@@ -54,6 +54,14 @@ class Harapartners_Import_Adminhtml_ImportController extends Mage_Adminhtml_Cont
 	public function newAction() {
 		$this->_forward('edit');
 	}
+	
+	public function newByCategoryAction(){
+		$categoryId = $this->getRequest()->getParam('category_id');
+		Mage::getSingleton('adminhtml/session')->setHpImportFormData(array(
+				'category_id' => $categoryId
+		));
+		$this->_forward('edit');
+	}
 
 	public function saveAction() {
 		if ($data = $this->getRequest()->getPost()) {

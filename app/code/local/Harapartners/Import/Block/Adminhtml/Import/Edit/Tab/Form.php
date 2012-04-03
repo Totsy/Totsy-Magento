@@ -15,6 +15,20 @@ class Harapartners_Import_Block_Adminhtml_Import_Edit_Tab_Form extends Mage_Admi
           'name'      => 'import_title',
       ));
 
+      $fieldset->addField('category_id', 'text', array(
+			'label'     => Mage::helper('import')->__('Category/Event ID'),
+			//'required'  => true,
+			'name'      => 'category_id',
+      		'note'		=> Mage::helper('import')->__('If specified, the \'category_ids\' field in the import field will be overwritten.')
+      ));
+      
+      $fieldset->addField('po_id', 'text', array(
+			'label'     => Mage::helper('import')->__('Purchase Order ID'),
+			//'required'  => true,
+			'name'      => 'po_id',
+      		'note'		=> Mage::helper('import')->__('If NOT specified, a new purchase order will be created.')
+      ));
+      
       $fieldset->addField('import_filename', 'file', array(
           'label'     => Mage::helper('import')->__('File'),
       	  'class'     => 'required-entry',
@@ -22,33 +36,8 @@ class Harapartners_Import_Block_Adminhtml_Import_Edit_Tab_Form extends Mage_Admi
           'name'      => 'import_filename',
 	  ));
 		
-//      $fieldset->addField('status', 'select', array(
-//          'label'     => Mage::helper('import')->__('Status'),
-//          'name'      => 'status',
-//          'values'    => array(
-//              array(
-//                  'value'     => 1,
-//                  'label'     => Mage::helper('import')->__('Enabled'),
-//              ),
-//
-//              array(
-//                  'value'     => 2,
-//                  'label'     => Mage::helper('import')->__('Disabled'),
-//              ),
-//          ),
-//      ));
      
-//      $fieldset->addField('content', 'editor', array(
-//          'name'      => 'content',
-//          'label'     => Mage::helper('import')->__('Content'),
-//          'title'     => Mage::helper('import')->__('Content'),
-//          'style'     => 'width:700px; height:500px;',
-//          'wysiwyg'   => false,
-//          'required'  => true,
-//      ));
-     
-      if ( Mage::getSingleton('adminhtml/session')->getHpImportFormData() )
-      {
+      if ( Mage::getSingleton('adminhtml/session')->getHpImportFormData() ) {
           $form->setValues(Mage::getSingleton('adminhtml/session')->getHpImportFormData());
           Mage::getSingleton('adminhtml/session')->setHpImportFormData(null);
       } elseif ( Mage::registry('import_data') ) {

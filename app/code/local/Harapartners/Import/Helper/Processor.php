@@ -14,9 +14,29 @@
 
 class Harapartners_Import_Helper_Processor extends Mage_Core_Helper_Abstract {
 	
+	protected $_errorFile = null;
+	protected $_errorMessages = array();
 	
-	public function runImport($importId = null){
-		// ===== get import object ===== //
+	protected function _logError($errorMessage){
+		$errorMessage = 'Row '.$recordCount.': '.$ex->getMessage()."\n";
+						$this->_errorMessages[] = $errorMessage;
+						fwrite($this->getErrorFile(), $errorMessage);
+	}
+	
+	protected function _getErrorFile($importModelId){
+		if(!$this->_errorFile){
+			$filename = $this->getErrorFilePath(). date('Y_m_d'). '_' . $importModelId . '.txt';
+			$this->_errorFile = fopen($filename,'w');
+			$this->_errorMessages = array(); 
+		}
+		return $this->_errorFile;
+	}
+	
+	protected function _getErrorFilePath(){
+		return Mage::getBaseDir('media').DS.'import'.DS.'errors'.DS;
+	}
+	
+	protected function _getImportModel($importId = null){
 		$import = Mage::getModel('import/import');
 		if(!!$importId){
 			$import->load($importId);
@@ -28,52 +48,48 @@ class Harapartners_Import_Helper_Processor extends Mage_Core_Helper_Abstract {
 			$collection->getSelect()->limit(1);
 			$import = $collection->getFirstItem();
 		}
-		if(!$import || !$import->getId()){
+		return $import;
+	}
+	
+	public function runImport($importId = null){
+		$import = $this->_getImportModel($importId);
+		if(!$import || !$import->getId() || !$import->getData('import_batch_id')){
 			//Nothing to run
 			return true;
 		}
 
 		// ===== dataflow, processing ===== //
-			try{
+		try{
 			$batchModel = Mage::getModel('dataflow/batch')->load($import->getData('import_batch_id'));
-	
-			if (!!$batchModel 
-					&& !!$batchModel->getId() 
-					&& !!$batchModel->getIoAdapter()
-					&& ($batchImportModel = $batchModel->getBatchImportModel()) //prepare import data reader
-					&& ($adapter = Mage::getModel($batchModel->getAdapter())) //prepare data processor/writer
-			) {
+			if (!!$batchModel && !!$batchModel->getId()){
+				$batchImportModel = $batchModel->getBatchImportModel(); //read line item
+				$adapter = Mage::getModel($batchModel->getAdapter()); //processor/writer
 				
 				//update status to 'lock' this import
 				$import->setImportStatus(Harapartners_Import_Model_Import::IMPORT_STATUS_PROCESSING);
 				$import->save();
 				
-				//prepare error file
-				//TODO: JUN, relative path should be saved in the DB, there should be a function getErrorFileBasePath()
-				$localPath = Mage::getBaseDir('media').DS.'import'.DS.'errors'.DS;
-				$filename = $localPath.date('Y_m_d').'_'.$import->getData('import_import_id').'.txt';
-				$errorFile = fopen($filename,'w');
-				$error = '';
-				$hasErrors = false;
-				
+				//collection load is not possible due to the large amount of data per row
 				$batchId = $batchModel->getId();  
 				$importIds = $batchImportModel->getIdCollection($batchId);
-				$recordCount = 0;
 				foreach ($importIds as $importId) {	
-					$recordCount++;	
 					try{	
 						$batchImportModel->load($importId);
-						if (!$batchImportModel->getId()) {	
-							$errors[] = Mage::helper('dataflow')->__('Skip undefined row');	
+						if (!$batchImportModel || !$batchImportModel->getId()) {
+							$this->_logError(Mage::helper('dataflow')->__('Skip undefined row'));
+
 							continue;	
 						}
 						$importData = $batchImportModel->getBatchData();
+						/**
+						 * Hard Code Attributes Here to accommodate template for totsy
+						 */
+						
 						$adapter->saveRow($importData);	
 	
 					} catch(Exception $ex) {
-						$error = 'Row '.$recordCount.': '.$ex->getMessage()."\n";
-						fwrite($errorFile, $error);
-						$hasErrors = true;  	
+						//TODO
+						$this->_logError(Mage::helper('dataflow')->__('Skip undefined row'));
 					}  
 				}
 				if($hasErrors){
