@@ -6,6 +6,8 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Mage_Cybersource_Model_
     protected $_formBlockType = 'paymentfactory/form';
     protected $_infoBlockType = 'paymentfactory/info';
     protected $_payment = null;
+    
+    protected $_paymentProfile = null;
 
     
     // =============================================== //
@@ -30,28 +32,42 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Mage_Cybersource_Model_
     }
     
 	public function order(Varien_Object $payment, $amount){
-		//For totsy, no payment is allowed to be captured upon order place
+		//For Totsy, no payment is allowed to be captured upon order place
 		$amount = 0.00;
-		$customerId = Mage::getSingleton('customer/session')->getCustomerId();
+     	$profile = $this->_getPaymentProfile($payment);
+     	
+     	if(!!$profile && !!$profile->getId()){
+     		//For Totsy, all orders are captured, so the authorize is only used for validation
+//     		if(!Mage::registry('is_current_payment_profile_just_created')){
+     			$this->authorize($payment, $amount);
+//     		}
+     	}else{
+     		$this->create($payment);
+     		Mage::unregister('is_current_payment_profile_just_created');
+     		Mage::register('is_current_payment_profile_just_created', true);
+     	}
 		
-     	if (!!$payment->getData('cybersource_subid')){
+     	return $this;
+		
+		
+//     	if (!!$payment->getData('cybersource_subid')){
 //     		$profile = Mage::getModel('paymentfactory/profile')->loadByEncryptedSubscriptionId($payment->getData('cybersource_subid'));
 //     		if(!!$profile && !!$profile->getEntityId()){
 //     			//Replace encrypted to non-encrypted
 //     			$payment->setData('cybersource_subid', $profile->getData('subscription_id'));
 //     		}
-     		return $this->authorize($payment, $amount);
-     	}
-     	if (!!$payment->getData('cc_number')){
-     		$profile = Mage::getModel('paymentfactory/profile')->loadByCcNumberWithId($payment->getData('cc_number').$customerId);
-     		if(!!$profile && !!$profile->getId()){
-     			//Checkout with existing profile instead of creating new card
-     			$payment->setData('cybersource_subid', $profile->getData('cybersource_subid'));     			
-     			return $this->authorize($payment, $amount);
-     		}
-     	}
-     		
-        return $this->create($payment);
+//     		return $this->authorize($payment, $amount);
+//     	}
+//     	if (!!$payment->getData('cc_number')){
+//     		$profile = Mage::getModel('paymentfactory/profile')->loadByCcNumberWithId($payment->getData('cc_number').$customerId);
+//     		if(!!$profile && !!$profile->getId()){
+//     			//Checkout with existing profile instead of creating new card
+//     			$payment->setData('cybersource_subid', $profile->getData('cybersource_subid'));     			
+//     			return $this->authorize($payment, $amount);
+//     		}
+//     	}
+//     		
+//        return $this->create($payment);
      }
      
 	protected function iniRequest(){
@@ -66,8 +82,6 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Mage_Cybersource_Model_
     
     //-----------------Create Customer Payment Profile-------//
 	public function create(Varien_Object $payment) {
-		
-		
 		//??? can we use parent::authorize() with different init param ???
         $error = false;
         $soapClient = $this->getSoapApi();
@@ -128,10 +142,17 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Mage_Cybersource_Model_
         	$customerId = Mage::getSingleton('customer/session')->getCustomerId();
         	$data = new Varien_Object($payment->getData());
         	$data->setData('customer_id', $customerId);
-        	$data->addData('cybersource_sudid',$result->paySubscriptionCreateReply->subscriptionID);
         	$profile = Mage::getModel('paymentfactory/profile');
-        	$profile->importDataWithValidation($data);               
+        	$profile->importDataWithValidation($data);
+        	
+			// ===================================================================================== //
+        	//WARNING! The current process is within order processing DB transaction, no DB write will be committed until the very end!!!
         	$profile->save();
+        	// ===================================================================================== //
+        	
+        	Mage::unregister('current_payment_profile');
+        	Mage::register('current_payment_profile', $profile);
+        	
         }catch (Exception $e) {
            Mage::throwException(
                 Mage::helper('paymentfactory')->__('Can not save payment profile')
@@ -143,27 +164,61 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Mage_Cybersource_Model_
 
     public function authorize(Varien_Object $payment, $amount){
     	$this->_payment = $payment;
-    	parent::authorize($payment, $amount);
-    	$payment->setCybersourceSubid($payment->getCybersourceSubid());
-    	$profile = Mage::getModel('paymentfactory/profile')->loadBySubscriptionId($payment->getCybersourceSubid());
-    	$payment->setCcLast4($profile->getData('last4no'));
-    	$payment->setCcType($profile->getData('card_type'));
-    	$payment->setCcExpYear($profile->getData('expire_year'));
-    	$payment->setCcExpMonth($profile->getData('expire_month'));
+    	$profile = $this->_getPaymentProfile($payment);
     	
+    	//Add data for processing
+		$payment->setData('cybersource_subid', $profile->getData('subscription_id'));
+		//Add data for display    
+    	$payment->setCcLast4($profile->getData('last4no'));
+	    $payment->setCcType($profile->getData('card_type'));
+	    $payment->setCcExpYear($profile->getData('expire_year'));
+	    $payment->setCcExpMonth($profile->getData('expire_month'));
+	    
+    	try{
+    		parent::authorize($payment, $amount);
+
+    		
+    		//Reset profile fail count
+    		if($profile->getFailedCount() > 0){
+    			$profile->setFailedCount(0);
+    			$profile->save();
+    		}
+    	}catch (Exception $e){
+    		$profile->setFailedCount($profile->getFailedCount()+1);
+    		$profile->save();
+    		//Important, exception must keep bubbling
+    		throw $e;
+    	}
     	$this->_payment = NULL; 
         return $this;
     }
 
     public function capture(Varien_Object $payment, $amount){
     	$this->_payment = $payment;
-        parent::capture($payment, $amount);
-        $payment->setCybersourceSubid($payment->getCybersourceSubid()); //Harapartners
-        $profile = Mage::getModel('paymentfactory/profile')->loadBySubscriptionId($payment->getCybersourceSubid());
+    	$profile = $this->_getPaymentProfile($payment);
+    	
+    	//Add data for processing
+		$payment->setData('cybersource_subid', $profile->getData('subscription_id'));
+		//Add data for display    
     	$payment->setCcLast4($profile->getData('last4no'));
-    	$payment->setCcType($profile->getData('card_type'));
-    	$payment->setCcExpYear($profile->getData('expire_year'));
-    	$payment->setCcExpMonth($profile->getData('expire_month'));
+	    $payment->setCcType($profile->getData('card_type'));
+	    $payment->setCcExpYear($profile->getData('expire_year'));
+	    $payment->setCcExpMonth($profile->getData('expire_month'));
+	    
+    	
+    	try{
+	        parent::capture($payment, $amount);
+    		//Reset profile fail count
+    		if($profile->getFailedCount() > 0){
+    			$profile->setFailedCount(0);
+    			$profile->save();
+    		}
+    	}catch (Exception $e){
+    		$profile->setFailedCount($profile->getFailedCount()+1);
+    		$profile->save();
+    		//Important, exception must keep bubbling
+    		throw $e;
+    	}
         $this->_payment = NULL;
         return $this;
     }
@@ -171,6 +226,38 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Mage_Cybersource_Model_
     // ========================================== //
 	// ============= Utilities ================== //
 	// ========================================== //
+	
+    protected function _getPaymentProfile($payment){
+    	//Object internal cache first
+    	if($this->_paymentProfile instanceof Harapartners_Paymentfactory_Model_Profile
+    			&& !!$this->_paymentProfile->getId()){
+    		return $this->_paymentProfile;
+    	}
+    	
+    	
+    	//Else, Existing profile always has the highest priority
+    	//This is important since objects cannot be saved during the order processing steps (within one DB transaction)
+    	if(!!($profile = Mage::registry('current_payment_profile'))
+    			&& $profile instanceof Harapartners_Paymentfactory_Model_Profile
+    			&& !!$profile->getId()){
+    		return $this->_paymentProfile = $profile;
+    	}
+    	
+    	//Otherwise, try to load existing profile here
+		$this->_paymentProfile = Mage::getModel('paymentfactory/profile');
+		if(!!$payment->getData('cybersource_subid')){
+			$this->_paymentProfile->loadByEncryptedSubscriptionId($payment->getData('cybersource_subid'));
+			if(!$this->_paymentProfile || !$this->_paymentProfile->getId()){
+				throw new Exception('Invalid profile, please try a different card.');
+			}
+		}elseif (!!$payment->getData('cc_number')){
+			//Check against creating duplicate profile of the same credit card + customer ID
+			$customerId = Mage::getSingleton('customer/session')->getCustomerId();
+     		$this->_paymentProfile->loadByCcNumberWithId($payment->getData('cc_number').$customerId);
+     	}
+     	
+     	return $this->_paymentProfile;
+    }
 
     protected function addCcInfo($payment){
 
@@ -212,7 +299,7 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Mage_Cybersource_Model_
 	 		case 'DI':
 	 			return '004';
 	 		default:
-	 			return 000;
+	 			return '000';
 	 	}
     }
     
