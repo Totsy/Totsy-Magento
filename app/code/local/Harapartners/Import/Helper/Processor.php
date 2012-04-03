@@ -18,6 +18,7 @@ class Harapartners_Import_Helper_Processor extends Mage_Core_Helper_Abstract {
 	protected $_errorMessages 		= array();
 	protected $_requiredFields 		= array();
 	protected $_confSimpleProducts 	= array();
+	protected $_purchaseOrderId		= null;
 	
 	protected function _logError($errorMessage){
 		$errorMessage = 'Row '.$recordCount.': '.$ex->getMessage()."\n";
@@ -126,8 +127,46 @@ class Harapartners_Import_Helper_Processor extends Mage_Core_Helper_Abstract {
 		return $importData;
 	}
 	
-	protected function _setPurchaseOrderInfo($importData){
-		$a=1;
+	protected function _setPurchaseOrderInfo($importData, $poId, $categoryId){
+		$stockhistoryReport = Mage::getModel('stockhistory/report');
+		$product = Mage::getModel('catalog/product')->loadByAttribute('sku', $importData['sku']);
+		if(!!$product && $product->getId()){
+			//Purchase Order ID
+			if(!!$this->_purchaseOrderId){
+				$stockhistoryReport->setData('po_id',$this->_purchaseOrderId);
+			}elseif(!!$poId){
+				$stockhistoryReport->setData('po_id',$poId);
+				$this->_purchaseOrderId = $poId;
+			}else{
+				//Get Last PO ID
+			}
+			
+			//Category ID
+			if(!!$categoryId){
+				$stockhistoryReport->setData('category_id', $categoryId);
+			}elseif(!!$importData['category_ids'] && isset($importData['category_ids'])){
+				$categoryIds = explode(',', $importData['category_ids']);
+				$stockhistoryReport->setData('category_id',$categoryIds[0]);
+			}
+			
+			$stockhistoryReport->setData('vendor_id', $product->getVendor());
+			$stockhistoryReport->setData('product_id', $product->getId());
+			$stockhistoryReport->setData('vendor_sku', $product->getVendorStyle());
+			$stockhistoryReport->setData('product_sku', $product->getSku());
+			$stockhistoryReport->setData('cost', $product->getCost());
+			try {
+				$stockhistoryReport->save();
+			}catch (Exception $e){
+				//Error Log here
+				/**
+				 * Need Jun/Song for this message
+				 * (string:285) SQLSTATE[HY000]: 
+				 * General error: 1452 Cannot add or update a child row: 
+				 * a foreign key constraint fails (`totsy_pdb1`.`stockhistory_report`, CONSTRAINT `FK_STOCKHISTORY_REPORT_VENDOR` FOREIGN KEY (`vendor_id`) REFERENCES `stockhistory_vendor` (`id`) ON DELETE SET NULL ON UPDATE CASCADE)
+				 */
+				$a=1;
+			}
+		}
 	}
 	
 	public function runImport($importId = null){
@@ -163,12 +202,13 @@ class Harapartners_Import_Helper_Processor extends Mage_Core_Helper_Abstract {
 							continue;	
 						}
 						$importData = $batchImportModel->getBatchData();
-						$adapter->saveRow($this->_setRequiredAttributes($importData));
+						$importData = $this->_setRequiredAttributes($importData);
+						$adapter->saveRow($importData);
 
 						/**
 						 * PO Saves Here
 						 */
-						$this->_setPurchaseOrderInfo($importData);
+						$this->_setPurchaseOrderInfo($importData, $import->getData('po_id'), $import->getData('category_id'));
 						
 	
 					} catch(Exception $ex) {
@@ -186,7 +226,7 @@ class Harapartners_Import_Helper_Processor extends Mage_Core_Helper_Abstract {
 		  
 			}
 			$batchModel->delete();
-			fclose();
+			fclose(); //Handle
 			return true;
 		}catch(Exception $ex){
 			return false;
