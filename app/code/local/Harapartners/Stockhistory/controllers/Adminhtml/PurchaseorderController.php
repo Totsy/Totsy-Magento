@@ -12,83 +12,84 @@
  * 
  */
 
-class Harapartners_Stockhistory_Adminhtml_VendorController extends Mage_Adminhtml_Controller_Action
+class Harapartners_Stockhistory_Adminhtml_PurchaseorderController extends Mage_Adminhtml_Controller_Action
 {   
-	//protected $statusOptions = array('Pending' => 0, 'Processed' => 1, 'Failed' => 2);
-	//protected $mimes = array('application/vnd.ms-excel', 'text/plain', 'text/csv', 'text/tsv');
 	
-	protected function _getSession() {
+	protected function _getSession()
+	{
 		return Mage::getSingleton('adminhtml/session');
 	}
+	
 	public function indexAction()
 	{
 		$this->loadLayout()
-			->_setActiveMenu('stockhistory/vendor')
-			->_addContent($this->getLayout()->createBlock('stockhistory/adminhtml_vendor_index'))
+			->_setActiveMenu('stockhistory/purchaseorder')
+			->_addContent($this->getLayout()->createBlock('stockhistory/adminhtml_purchaseorder_index'))
 			->renderLayout();
 	}
-
+	
 	public function newAction()
 	{
-		$this->_getSession()->setVendorFormData(null);
+		$this->_getSession()->setPoFormData(null);
 		$this->_forward('edit');
 	}
 	
 	public function editAction()
 	{
+		$data1 = $this->getRequest()->getParams();
 		$id = $this->getRequest()->getParam('id', null);
-		$data = $this->_getSession()->getVendorFromData();
+		$model  = Mage::getModel('stockhistory/purchaseorder')->load($id);
+		$data = $this->_getSession()->getPoFormData();
 		
-		if(!!$id){
-			$model  = Mage::getModel('stockhistory/vendor')->load($id);
-			if(!!$model && !!$model->getId()){
-				$data = $model->getData();
-			}else{
-				$this->_getSession()->addError(Mage::helper('stockhistory')->__('Invalid ID'));
-				$this->_redirect('*/*/index');
-				return;
-			}
+       	if (!!$id ) {
+       		$model  = Mage::getModel('stockhistory/purchaseorder')->load($id);
+            if(!!$model && !!$model->getId()){
+            	$data = $model->getData();
+            }else{
+            	$this->_getSession()->addError(Mage::helper('stockhistory')->__('Invalid ID'));
+            	$this->_redirect('*/*/index');
+            	return;
+            }
+        }
 		
-		}
-		if(!!$data){
-			Mage::unregister('vendor_data');
-			Mage::register('vendor_data', $data);
-		}
+        if(!!$data){
+        	Mage::unregister('po_data');
+        	Mage::register('po_data', $data);
+        }
 		$this->loadLayout()->_setActiveMenu('stockhistory/edit');
-		$this->_addContent($this->getLayout()->createBlock('stockhistory/adminhtml_vendor_edit'));
-		//$this->_addLeft($this->getLayout()->createBlock('stockhistory/adminhtml_vendor_edit_tabs'));
+		$this->_addContent($this->getLayout()->createBlock('stockhistory/adminhtml_purchaseorder_edit'));
 		$this->renderLayout();
 		//$this->_redirect('*/*/index');
 	}
 	
 	public function saveAction()
-	{   
+	{
 		$data = $this->getRequest()->getPost();
 		if(isset($data['form_key'])){
 			unset($data['form_key']);
 		}
-		$this->_getSession()->setVendorFormData($data);
+		$this->_getSession()->setPoFormData($data);
 		
 		try{
-			$model = Mage::getModel('stockhistory/vendor');
+			$model = Mage::getModel('stockhistory/purchaseorder');
 			if(!!$this->getRequest()->getParam('id')){
-				$model->load($this->getRequest()->getParam('id'));
+				$model->load($this->getReqeust()->getParam('id'));
 			}
 			$model->validateAndSave($data);
-			$this->_getSession()->addSuccess(Mage::helper('stockhistory')->__('Vendor saved successfully'));
-			$this->_getSession()->setVendorFormData(null);
+			$this->_getSession()->addSuccess(Mage::helper('stockhistory')->__('Purchase Order saved successfully'));
+			$this->_getSession()->setPoFormData(null);
 		}catch(Exception $e){
 			$this->_getSession()->addError($e->getMessage());
-       		$this->_redirect('*/*/edit', array('id' => $this->getRequest()->getParam('id')));
-       		return;
+			$this->_redirect('*/*/edit', array('id' => $this->getRequest()->getParam('id')));
+			return;
 		}
 		$this->_redirect('*/*/index');
 	}
-
+	
 	public function deleteAction()
 	{
 		$id = $this->getrequest()->getParam('id');
-		$model = Mage::getModel('stockhistory/vendor')->load($id);
+		$model = Mage::getModel('stockhistory/purchaseorder')->load($id);
 		if($model->getId()){
 			try{
 				$model->delete();
@@ -101,4 +102,5 @@ class Harapartners_Stockhistory_Adminhtml_VendorController extends Mage_Adminhtm
 		}
 		$this->_redirect('*/*/index');
 	}
+
 }

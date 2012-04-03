@@ -23,73 +23,76 @@ class Harapartners_Stockhistory_Block_Adminhtml_History_Edit_Form extends Mage_A
             //'enctype'  	 => 'multipart/form-data'
         ));
         
-
-        $fieldset = $form->addFieldset('stockhistory_edit', array('legend'=>Mage::helper('stockhistory')->__("PO Info")));
-        
-        $fieldset->addField('history_id', 'label', array(
+		$data = $this->getRequest()->getParams();
+        $fieldset = $form->addFieldset('stockhistory', array('legend'=>Mage::helper('stockhistory')->__("PO Info")));
+        if(isset($data['po_id']) && !!$data['po_id']){
+        	$fieldset->addField('po_id', 'label', array(
             'label'     => Mage::helper('stockhistory')->__('PO ID:'),
-            'name'      => 'history_id',
-        ));
-        
-        $fieldset->addField('entity_id', 'label', array(
+            'name'      => 'po_id',
+        	'readonly' 	=> true,
+        	'value'		=> $data['po_id'],
+        	'required'	=> true,
+        	));
+        }else{
+	        $fieldset->addField('po_id', 'text', array(
+	            'label'     => Mage::helper('stockhistory')->__('PO ID:'),
+	            'name'      => 'po_id',
+	        	'required'	=> true
+	        ));
+        }
+        if(isset($data['vendor_id']) && !!$data['vendor_id']){
+        	$fieldset->addField('vendor_id', 'label', array(
+	            'label'     => Mage::helper('stockhistory')->__('Vendor ID:'),
+	            'name'      => 'vendor_id',
+	        	'required'	=> true,
+        		'readonly'	=> true,
+        		'value'		=> $data['vendor_id'],
+	        ));
+        }else{
+	        $fieldset->addField('vendor_id', 'text', array(
+	            'label'     => Mage::helper('stockhistory')->__('Vendor ID:'),
+	            'name'      => 'vendor_id',
+	        	'required'	=> true
+	        ));
+        }
+        $fieldset->addField('product_id', 'text', array(
             'label'     => Mage::helper('stockhistory')->__('Product ID:'),
-            'name'      => 'entity_id',
+            'name'      => 'product_id',
+        	'required'	=> true
         ));
         
-        $fieldset->addField('product_name', 'label', array(
-            'label'     => Mage::helper('stockhistory')->__('Product Name:'),
-            'name'      => 'product_name',
+        $fieldset->addField('category_id', 'text', array(
+            'label'     => Mage::helper('stockhistory')->__('Category ID:'),
+            'name'      => 'category_id',
+        	'required'	=> true
         ));
         
-        $fieldset->addField('size', 'label', array(
-            'label'     => Mage::helper('stockhistory')->__('Size:'),
-            'name'      => 'size',
-        ));
-        
-        $fieldset->addField('color', 'label', array(
-            'label'     => Mage::helper('stockhistory')->__('Color:'),
-            'name'      => 'color',
-        ));
-        
-        $fieldset->addField('product_sku', 'label', array(
+        $fieldset->addField('product_sku', 'text', array(
             'label'     => Mage::helper('stockhistory')->__('Product SKU:'),
             'name'      => 'product_sku',
         ));
         
-        $fieldset->addField('vendor_sku', 'label', array(
+        $fieldset->addField('vendor_sku', 'text', array(
             'label'     => Mage::helper('stockhistory')->__('Vendor SKU:'),
             'name'      => 'vendor_sku',
         ));
         
-        $fieldset->addField('qty_delta', 'label', array(
-            'label'     => Mage::helper('stockhistory')->__('Quality Changed:'),
-            'name'      => 'qty_delta',
-        ));
-        
-        $fieldset->addField('unit_cost', 'label', array(
+        $fieldset->addField('unit_cost', 'text', array(
             'label'     => Mage::helper('stockhistory')->__('Unit Cost:'),
             'name'      => 'unit_cost',
+        	'required'	=> true
         ));
         
-        $fieldset->addField('total_cost', 'label', array(
-            'label'     => Mage::helper('stockhistory')->__('Total Cost:'),
-            'name'      => 'total_cost',
+        $fieldset->addField('qty_delta', 'text', array(
+            'label'     => Mage::helper('stockhistory')->__('Qty Changed:'),
+            'name'      => 'qty_delta',
+        	'required'	=> true
         ));
         
-        $fieldset->addField('created_at', 'label', array(
-            'label'     => Mage::helper('stockhistory')->__('Created At:'),
-            'name'      => 'created_at',
-        ));
-        
-        $fieldset->addField('updated_at', 'label', array(
-            'label'     => Mage::helper('stockhistory')->__('Updated At:'),
-            'name'      => 'updated_at',
-        ));
-        
-        $fieldset->addField('status', 'label', array(
-            'label'     => Mage::helper('stockhistory')->__('Status:'),
-            'name'      => 'status',
-        	'value'		=> Mage::helper('stockhistory')->getStatusOptions(),
+        $fieldset->addField('action_type', 'select', array(
+            'label'     => Mage::helper('stockhistory')->__('Action:'),
+            'name'      => 'action_type',
+        	'values'		=> Mage::helper('stockhistory')->getStatusOptions(),
         ));
         
         $fieldset->addField('comment', 'textarea', array(
@@ -101,11 +104,11 @@ class Harapartners_Stockhistory_Block_Adminhtml_History_Edit_Form extends Mage_A
 		
         //$form->setValues( array('file_import' => $configText) );
         
-		if ( $formData = Mage::getSingleton('adminhtml/session')->getFormData() ){
+		if ( $formData = Mage::getSingleton('adminhtml/session')->getTransFormData() ){
             $form->setValues($formData);
-            Mage::getSingleton('adminhtml/session')->setFormData(null);
-        } elseif ( Mage::registry('po_data') ) {
-            $form->setValues(Mage::registry('po_data')->getData());
+            Mage::getSingleton('adminhtml/session')->setTransFormData(null);
+        } elseif ( Mage::registry('trans_data') ) {
+            $form->setValues(Mage::registry('trans_data')->getData());
         }
         $form->setUseContainer(true);
         $this->setForm($form);

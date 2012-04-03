@@ -17,6 +17,11 @@ class Harapartners_Stockhistory_Adminhtml_HistoryController extends Mage_Adminht
 	//protected $statusOptions = array('Pending' => 0, 'Processed' => 1, 'Failed' => 2);
 	protected $mimes = array('application/vnd.ms-excel', 'text/plain', 'text/csv', 'text/tsv');
 	
+	protected function _getSession()
+	{
+		return Mage::getSingleton('adminhtml/session');
+	}
+	
 	public function indexAction()
 	{
 		$this->loadLayout()
@@ -25,6 +30,21 @@ class Harapartners_Stockhistory_Adminhtml_HistoryController extends Mage_Adminht
 			->renderLayout();
 	}
 
+	public function newAction()
+	{
+		$this->_getSession()->setTransFormData(null);
+		$data = $this->getRequest()->getParams();
+		$this->loadLayout()
+			->_setActiveMenu('stockhistory/history')
+			->_addContent($this->getLayout()->createBlock('stockhistory/adminhtml_history_edit'))
+			->renderLayout();
+	}
+	
+	public function editAction()
+	{
+		$this->_redirect('*/*/index');
+	}
+	
 	public function exportCsvAction()
 	{
 		
@@ -49,7 +69,7 @@ class Harapartners_Stockhistory_Adminhtml_HistoryController extends Mage_Adminht
 	public function saveAction()
 	{
 		$data = $this->getRequest()->getParams();
-		$history = Mage::getModel('stockhistory/history')->load($data[id]);
+		$history = Mage::getModel('stockhistory/report')->load($data[id]);
 		
 	}
 	public function saveImportAction()
@@ -86,9 +106,9 @@ class Harapartners_Stockhistory_Adminhtml_HistoryController extends Mage_Adminht
 									$createdAt = trim($fileData[9]);
 									$updatedAt = trim($fileData[10]);
 									$status = trim($fileData[11]);
-									$history = Mage::getModel('stockhistory/history');
-									$history->setData('entity_id', $entityId);
-									$history->setData('product_name', $productName);
+									$history = Mage::getModel('stockhistory/report');
+									$history->setData('vendor_id', $vendorId);
+									$history->setData('po_id', $productName);
 									$history->setData('product_sku', $productSku);
 									$history->setData('vendor_sku', $vendorSku);
 									$history->setData('size', $size);
@@ -101,21 +121,21 @@ class Harapartners_Stockhistory_Adminhtml_HistoryController extends Mage_Adminht
 									$history->setData('status', $statusOptions[$status]);
 									$history->save();
 									
-									$report = Mage::getModel('stockhistory/report')->loadByEntityId($entityId);
-									if(! $report->getId()){
-										$report = Mage::getModel('stockhistory/report');
-										$report->setData('entity_id', $entityId);
-										$report->setData('product_name', $productName);
-										$report->setData('product_sku', $productSku);
-										$report->setData('vendor_sku', $vendorSku);
-										$report->setData('qty', $qtyDelta);
-										$report->setData('created_at', $createdAt);
-									}else{
-										$qty = $report->getData('qty') + $qtyDelta;
-										$report->setData('qty', $qty);
-										$report->setData('updated_at', date('Y-m-d H:i:s'));
-									}
-									$report->save();
+//									$report = Mage::getModel('stockhistory/report')->loadByEntityId($entityId);
+//									if(! $report->getId()){
+//										$report = Mage::getModel('stockhistory/report');
+//										$report->setData('entity_id', $entityId);
+//										$report->setData('product_name', $productName);
+//										$report->setData('product_sku', $productSku);
+//										$report->setData('vendor_sku', $vendorSku);
+//										$report->setData('qty', $qtyDelta);
+//										$report->setData('created_at', $createdAt);
+//									}else{
+//										$qty = $report->getData('qty') + $qtyDelta;
+//										$report->setData('qty', $qty);
+//										$report->setData('updated_at', date('Y-m-d H:i:s'));
+//									}
+//									$report->save();
 								}
 								$row ++;
 							}
@@ -134,35 +154,8 @@ class Harapartners_Stockhistory_Adminhtml_HistoryController extends Mage_Adminht
 			
 	}
 	
-	public function newAction()
-	{
-		$this->_forward('importCsv');
-	}
+
 	
-	public function editAction()
-	{
-		$id = $this->getRequest()->getParam('id', null);
-		$model  = Mage::getModel('stockhistory/history');
-		if ($id) {
-            $model->load((int) $id);
-            if (!!$model->getId()) {
-                $data = Mage::getSingleton('adminhtml/session')->getFormData(true);
-                if ($data) {
-                    $model->setData($data)->setId($id);
-                }
-            } else {
-                Mage::getSingleton('adminhtml/session')->addError(Mage::helper('awesome')->__('Example does not exist'));
-                $this->_redirect('*/*/');
-            }
-        }
-		
-		
-		Mage::register('po_data', $model);
-		$this->loadLayout()->_setActiveMenu('stockhistory/edit');
-		$this->_addContent($this->getLayout()->createBlock('stockhistory/adminhtml_history_edit'));
-		$this->renderLayout();
-		//$this->_redirect('*/*/index');
-	}
 	
 //	public function massStatusAction()
 //	{

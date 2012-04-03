@@ -22,7 +22,7 @@
  * @package     default_default
  * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://www.magentocommerce.com/license/enterprise-edition
- */
+ */``
 ?>
 
 <div class="content-header">
@@ -31,6 +31,7 @@
             <?php echo $this->getResetButtonHtml() ?>
             <?php if($this->getCategoryId()): ?>
                     <?php echo $this->getDeleteButtonHtml(); ?>
+                    <?php echo $this->getImportProductButtonHtml();?>
                     <?php echo $this->getReleaseButtonHtml(); ?>
                     <?php echo $this->getUndoReleaseButtonHtml();?>
             <?php endif; ?>

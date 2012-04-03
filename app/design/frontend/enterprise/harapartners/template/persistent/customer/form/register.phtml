@@ -61,7 +61,7 @@
                 </li>
                 <li>
                     <label for="email_address" class="required"><em>*</em><?php echo $this->__('Email Address') ?></label>
-                    <div class="input-box">
+                    <div class="input-box" id="input-email-box">
                         <input type="text" name="email" id="email_address" value="<?php echo $this->htmlEscape($this->getFormData()->getEmail()) ?>" title="<?php echo $this->__('Email Address') ?>" class="input-text validate-email required-entry" />
                     </div>
                 </li>
@@ -189,8 +189,8 @@
             <?php echo $this->getChildHtml('persistent.remember.me.tooltip'); ?>
         </div>
         <div class="buttons-set form-buttons">
-			<p><?php echo $this->__('By joining you accept our ')?> <a id="redtrerm" href="<?php echo $this->getBaseUrl()?>terms">terms and condititons.</a></p>
-            <button type="submit" class="button" title="<?php echo $this->__('Submit') ?>"><div class="sign-in-button"><?php echo $this->__('JOIN NOW') ?></div></button>
+			<p><?php echo $this->__('By joining you accept our ')?> <a id="redtrerm" href="<?php echo $this->getBaseUrl()?>terms/">terms and condititons.</a></p>
+            <button type="submit" class="button" id="submit-button" title="<?php echo $this->__('Submit') ?>"><div class="sign-in-button"><?php echo $this->__('JOIN NOW') ?></div></button>
         </div>
         <?php if (Mage::helper('checkout')->isContextCheckout()): ?>
             <input name="context" type="hidden" value="checkout" />
@@ -223,16 +223,8 @@
 		<li>Refer friends and earn Totsy credits</li>
 	</ul>
 </div>
-<div class="free_shipping_banner_reg_new rollover_img">
+<!--div class="free_shipping_banner_reg_new rollover_img">
 	<a href="javascript:;" title="Free Shipping">
 		<span/>
 	</a>
-</div>
-
-<script type="text/javascript">
-	  jQuery(document).ready(function() {
-	  	jQuery(".sign-in-button").click({
-			jQuery("#password").val();
-		})
-	  });
-</script>
+</div-->

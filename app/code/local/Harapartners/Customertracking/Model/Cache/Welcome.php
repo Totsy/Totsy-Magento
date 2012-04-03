@@ -21,7 +21,7 @@ class Harapartners_Customertracking_Model_Cache_Welcome extends Enterprise_PageC
     }
 
     protected function _getCacheId(){
-        return md5(self::CACHE_TAG_PREFIX . $this->_getIdentifier());
+        return md5(self::CACHE_TAG_PREFIX . $this->_getIdentifier() );
     }
     
     protected function _renderBlock() {

@@ -17,15 +17,15 @@ class Harapartners_Stockhistory_Block_Adminhtml_History_Edit extends Mage_Adminh
 	public function __construct()
 	{
 		parent::__construct();
-		$this->_objectId = 'history_id';
+		$this->_objectId = 'id';
 		$this->_blockGroup = 'stockhistory';
 		$this->_controller = 'adminhtml_history';
-		$this->_removeButton('delete');
+		//$this->_removeButton('delete');
 		//$this->_updateButton('save', 'label', Mage::helper('stockhistory')->__('Import File'));
 	}
 	
 	public function getHeaderText() {
-    	return Mage::helper('stockhistory')->__('Purchase Order Import');
+    	return Mage::helper('stockhistory')->__('Purchase Order Amendment');
     }
 
     public function getSaveUrl(){

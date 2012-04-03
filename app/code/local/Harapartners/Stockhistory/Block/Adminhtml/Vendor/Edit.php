@@ -20,7 +20,12 @@ class Harapartners_Stockhistory_Block_Adminhtml_Vendor_Edit extends Mage_Adminht
 		$this->_objectId = 'id';
 		$this->_blockGroup = 'stockhistory';
 		$this->_controller = 'adminhtml_vendor';
-		$this->_removeButton('delete');
+		//$this->_removeButton('delete');
+		$this->_addButton('create_po', array(
+            'label'     => Mage::helper('stockhistory')->__('Create PO'),
+            'onclick'   => 'setLocation(\'' . $this->getCreatePoUrl() .'\')',
+			'class'		=> 'add',
+      	));
 		//$this->_updateButton('save', 'label', Mage::helper('stockhistory')->__('Import File'));
 	}
 	
@@ -32,5 +37,14 @@ class Harapartners_Stockhistory_Block_Adminhtml_Vendor_Edit extends Mage_Adminht
         return $this->getUrl('*/*/save', array('_current'=>true));
     }
     
+	public function getCreatePoUrl()
+	{
+		return $this->getUrl('stockhistory/adminhtml_purchaseorder/new', array('vendor_id' => $this->getVendorId()));
+	}
 	
+	public function getVendorId()
+	{   
+		$vendorInfo = Mage::registry('vendor_data');
+		return $vendorInfo['id'];
+	}
 }
