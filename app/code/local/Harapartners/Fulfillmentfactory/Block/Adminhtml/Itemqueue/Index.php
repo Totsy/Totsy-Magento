@@ -6,7 +6,7 @@ class Harapartners_Fulfillmentfactory_Block_Adminhtml_Itemqueue_Index extends Ma
     	
 		$this->_blockGroup = 'fulfillmentfactory';
 		$this->_controller = 'adminhtml_itemqueue_index';
-    	$this->_headerText = Mage::helper('fulfillmentfactory')->__('Order Queue');
+    	$this->_headerText = Mage::helper('fulfillmentfactory')->__('Item Queue');
    		//$this->_addButtonLabel = Mage::helper('fulfillmentfactory')->__('New Item Queue');
    		$this->_removeButton('add');
    		

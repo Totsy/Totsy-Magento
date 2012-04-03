@@ -15,7 +15,7 @@ class Harapartners_Fulfillmentfactory_Adminhtml_ErrorlogController extends Mage_
 	/**
      * index page of fulfillment error log panel
      */
-	public function indexAction() {        
+	public function indexAction() {
         $this->loadLayout()
 			->_setActiveMenu('fulfillmentfactory/errorlog')
 			->_addContent($this->getLayout()->createBlock('fulfillmentfactory/adminhtml_errorlog_index'))
