@@ -45,6 +45,14 @@ class Harapartners_Stockhistory_Adminhtml_HistoryController extends Mage_Adminht
 		$this->_redirect('*/*/index');
 	}
 	
+	public function reportAction()
+	{
+		$this->loadLayout()
+			->_setActiveMenu('stockhistory/history')	
+			->_addContent($this->getLayout()->createBlock('stockhistory/adminhtml_history_report'))
+			->renderLayout();	
+	}
+	
 	public function exportCsvAction()
 	{
 		
@@ -68,8 +76,25 @@ class Harapartners_Stockhistory_Adminhtml_HistoryController extends Mage_Adminht
 	
 	public function saveAction()
 	{
-		$data = $this->getRequest()->getParams();
-		$history = Mage::getModel('stockhistory/report')->load($data[id]);
+		$data = $this->getRequest()->getPost();
+		if(isset($data['form_key'])){
+			unset($data['form_key']);
+		}
+		
+		try{
+			$model = Mage::getModel('stockhistory/report');
+			if(!!$this->getRequest()->getParam('id')){
+				$model->load($this->getRequest()->getParam('id'));
+			}
+			$model->validateAndSave($data);
+			$this->_getSession()->addSuccess(Mage::helper('stockhistory')->__('Transaction saved'));
+			$this->_getSession()->setTransFormData(null);
+		}catch(Exception $e){
+			$this->_getSession()->addError($e->getMessage());
+			$this->_redirect('*/*/edit', array('id' => $this->getRequest()->getParam('id')));
+			return;
+		}
+		$this->_redirect('*/*/index');
 		
 	}
 	public function saveImportAction()
@@ -154,28 +179,4 @@ class Harapartners_Stockhistory_Adminhtml_HistoryController extends Mage_Adminht
 			
 	}
 	
-
-	
-	
-//	public function massStatusAction()
-//	{
-//		$historyIds = $this->getRequest()->getParam('history');
-//		if(!is_array($historyIds)){
-//			Mage::GetSingleton('adminhtml/session')->addError($this->__("Please select IDs"));	
-//		}else{
-//			try{
-//				foreach($historyIds as $historyId){
-//					$history = Mage::getSingleton('stockhistory/report')
-//							->load($historyId)
-//							->setStatus($this->getRequest()->getParam('status'))
-//							->setIsMassupdate(true)
-//							->save();
-//				}
-//				$this->_getSession()->addSuccess($this->__('%d record(s) were successfully updated', count($historyIds)));
-//			}catch(Exception $e){
-//				$this->_getSession()->addError($e->getMessage());
-//			}
-//		}
-//		$this->_redirect('*/*/index');
-//	}
 }

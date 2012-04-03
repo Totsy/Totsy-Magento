@@ -25,6 +25,10 @@ class Harapartners_Stockhistory_Block_Adminhtml_Purchaseorder_Edit extends Mage_
             'onclick'   => 'setLocation(\'' . $this->getCreateAmendmentUrl() .'\')',
 			'class'		=> 'add',
       	));
+      	$this->_addButton('view_product', array(
+      		'label'		=>	Mage::helper('stockhistory')->__('View by Products'),
+      		'onclick'	=> 'setLocation(\'' . $this->getViewProductsUrl() .'\')',
+      	));
 	}
 	
 	public function getHeaderText() {
@@ -33,6 +37,13 @@ class Harapartners_Stockhistory_Block_Adminhtml_Purchaseorder_Edit extends Mage_
 
     public function getSaveUrl(){
         return $this->getUrl('*/*/save', array('_current'=>true));
+    }
+    
+    public function getViewProductsUrl()
+    {
+    	return $this->getUrl('stockhistory/adminhtml_history/report', array(
+    									'po_id'	=>	$this->getPoId(),
+    									));	
     }
     
     public function getCreateAmendmentUrl()
