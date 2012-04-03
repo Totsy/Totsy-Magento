@@ -17,27 +17,30 @@ $installer->startSetup();
 
 $installer->run("
 
- -- DROP TABLE IF EXISTS {$this->getTable('stockhistory/vendor')};
+-- DROP TABLE IF EXISTS {$this->getTable('stockhistory/vendor')};
 CREATE TABLE {$this->getTable('stockhistory/vendor')}(
 	`id`		 		int(10) unsigned NOT NULL auto_increment,
 	`vendor_name` 		varchar(255) NOT NULL default '',
-	`vendor_sku`		varchar(255) NOT NULL default '',
+	`vendor_code`		varchar(255) NOT NULL default '',
+	`vendor_type`		smallint(5) unsigned DEFAULT 0,
 	`contact_person`	varchar(255) NOT NULL default '',
-	`email`				varchar(255) NOT NULL default '',
+	`email_list`		varchar(255) NOT NULL default '',
 	`phone`				varchar(255) NOT NULL default '',
+	`address`			text NOT NULL default '',
+	`parent_id`			int(10) unsigned default 0,
 	`comment`			text NOT NULL default '',
 	`created_at`		datetime default NULL,
 	`updated_at` 		datetime default NULL,
 	`store_id`			smallint(5) unsigned DEFAULT 0,
 	
 	PRIMARY KEY	(`id`),
-	UNIQUE KEY `FK_STOCKHISTORY_VENDOR_SKU` (`vendor_sku`),
+	UNIQUE KEY `FK_STOCKHISTORY_VENDOR_CODE` (`vendor_code`),
 	KEY `FK_STOCKHISTORY_VENDOR_STORE` (`store_id`),
   	CONSTRAINT `FK_STOCKHISTORY_VENDOR_STORE` FOREIGN KEY (`store_id`) REFERENCES {$this->getTable('core_store')} (`store_id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Vendor';
 
 
- -- DROP TABLE IF EXISTS {$this->getTable('stockhistory/purchaseorder')};
+-- DROP TABLE IF EXISTS {$this->getTable('stockhistory/purchaseorder')};
 CREATE TABLE {$this->getTable('stockhistory/purchaseorder')}(
 	`id`		 		int(10) unsigned NOT NULL auto_increment,
 	`vendor_id` 		int(10) unsigned default NULL,
@@ -55,7 +58,7 @@ CREATE TABLE {$this->getTable('stockhistory/purchaseorder')}(
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Purchase Order';
 
 
- -- DROP TABLE IF EXISTS {$this->getTable('stockhistory/transaction')};
+-- DROP TABLE IF EXISTS {$this->getTable('stockhistory/transaction')};
 CREATE TABLE {$this->getTable('stockhistory/transaction')}(
 	`id`		 	int(10) unsigned NOT NULL auto_increment,
 	`vendor_id` 	int(10) unsigned default NULL,

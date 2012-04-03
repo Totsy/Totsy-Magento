@@ -52,6 +52,17 @@ class Harapartners_Stockhistory_Adminhtml_TransactionController extends Mage_Adm
 			->_addContent($this->getLayout()->createBlock('stockhistory/adminhtml_transaction_report'))
 			->renderLayout();	
 	}
+	public function exportPoCsvAction()
+	{
+		
+        $fileName   = 'stock_transaction_info_' . date('YmdHi'). '.csv';
+        $content    = $this->getLayout()
+            ->createBlock('stockhistory/adminhtml_transaction_report_grid')
+            ->getCsv();
+
+        $this->_prepareDownloadResponse($fileName, $content);
+        //$this->_redirect('*/*/index');	
+	}
 	
 	public function exportCsvAction()
 	{
@@ -119,32 +130,26 @@ class Harapartners_Stockhistory_Adminhtml_TransactionController extends Mage_Adm
 						if(($fh = fopen($fileName, 'r')) !== FALSE){
 							while(($fileData = fgetcsv($fh, 10000, ',', '"')) !== FALSE){
 								if($row > 0){
-									$entityId = trim($fileData[0]);
-									$productName = trim($fileData[1]);
-									$productSku = trim($fileData[2]);
-									$size = trim($fileData[3]);
-									$color = trim($fileData[4]);
-									$vendorSku = trim($fileData[5]);
-									$qtyDelta = trim($fileData[6]);
-									$unitCost = trim($fileData[7]);
-									$totalCost = trim($fileData[8]);
-									$createdAt = trim($fileData[9]);
-									$updatedAt = trim($fileData[10]);
-									$status = trim($fileData[11]);
+									$vendorId 	= trim($fileData[0]);
+									$poId 		= trim($fileData[1]);
+									$productId 	= trim($fileData[2]);
+									$productSku = trim($fileData[3]);
+									$vendorSku 	= trim($fileData[4]);
+									$unitCost	= trim($fileData[5]);
+									$qtyDelta 	= trim($fileData[6]);
+									$comment	= trim($fileData[7]);
+									
 									$transaction = Mage::getModel('stockhistory/transaction');
 									$transaction->setData('vendor_id', $vendorId);
 									$transaction->setData('po_id', $productName);
+									$transaction->setData('product_id', $productId);
+									$transaction->setData('category_id', $category_id);
 									$transaction->setData('product_sku', $productSku);
 									$transaction->setData('vendor_sku', $vendorSku);
-									$transaction->setData('size', $size);
-									$transaction->setData('color', $color);
-									$transaction->setData('qty_delta', $qtyDelta);
-									$transaction->setData('created_at', $createdAt);
-									//$transaction->setData('updated_at', $updatedAt);
 									$transaction->setData('unit_cost', $unitCost);
-									$transaction->setData('total_cost', $totalCost);
-									$transaction->setData('status', $statusOptions[$status]);
-									$transaction->save();
+									$transaction->setData('qty_delta', $qtyDelta);
+									$transaction->setData('comment', $comment);
+									$transaction->validateAndSave();
 									
 //									$transaction = Mage::getModel('stockhistory/transaction')->loadByEntityId($entityId);
 //									if(! $transaction->getId()){
