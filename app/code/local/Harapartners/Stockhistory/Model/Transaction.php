@@ -12,11 +12,10 @@
  * 
  */
 
-class Harapartners_Stockhistory_Model_Report extends Mage_Core_Model_Abstract
-{
-	public function _construct()
-	{
-		$this->_init('stockhistory/report');
+class Harapartners_Stockhistory_Model_Transaction extends Mage_Core_Model_Abstract {
+	
+	public function _construct() {
+		$this->_init('stockhistory/transaction');
 	}
 	
 	protected function _beforeSave(){
@@ -32,15 +31,12 @@ class Harapartners_Stockhistory_Model_Report extends Mage_Core_Model_Abstract
     	parent::_beforeSave();  
     }
     
-	public function loadByProductId($id)
-	{
-		$collection = Mage::getModel('stockhistory/report')->getCollection();
-		$collection->getSelect()->where('product_id = ?', $id);
-		return $collection->getFirstItem();
+	public function loadByProductId($productId) {
+		$this->addData($this->getResource()->loadByProductId($productId));
+		return $this;
 	}
 	
-	public function validateAndSave($data)
-	{
+	public function validateAndSave($data){
 		$this->addData($data);
 		if(!$this->getData('product_id')){
 			throw new Exception('Product ID is needed');
@@ -59,4 +55,5 @@ class Harapartners_Stockhistory_Model_Report extends Mage_Core_Model_Abstract
 		$this->save();
 		return $this;
 	}
+	
 }

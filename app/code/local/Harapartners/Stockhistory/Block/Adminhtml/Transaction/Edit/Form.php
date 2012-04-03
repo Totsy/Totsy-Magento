@@ -12,7 +12,7 @@
  * 
  */
 
-class Harapartners_Stockhistory_Block_Adminhtml_History_Edit_Form extends Mage_Adminhtml_Block_Widget_Form {
+class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Edit_Form extends Mage_Adminhtml_Block_Widget_Form {
        						
 	protected function _prepareForm() {
 
@@ -26,7 +26,7 @@ class Harapartners_Stockhistory_Block_Adminhtml_History_Edit_Form extends Mage_A
 		$data = $this->getRequest()->getParams();
         $fieldset = $form->addFieldset('stockhistory', array('legend'=>Mage::helper('stockhistory')->__("PO Info")));
         if(isset($data['po_id']) && !!$data['po_id']){
-        	$fieldset->addField('po_id', 'label', array(
+        	$fieldset->addField('po_id', 'text', array(
             'label'     => Mage::helper('stockhistory')->__('PO ID:'),
             'name'      => 'po_id',
         	'readonly' 	=> true,
@@ -41,7 +41,7 @@ class Harapartners_Stockhistory_Block_Adminhtml_History_Edit_Form extends Mage_A
 	        ));
         }
         if(isset($data['vendor_id']) && !!$data['vendor_id']){
-        	$fieldset->addField('vendor_id', 'label', array(
+        	$fieldset->addField('vendor_id', 'text', array(
 	            'label'     => Mage::helper('stockhistory')->__('Vendor ID:'),
 	            'name'      => 'vendor_id',
 	        	'required'	=> true,
