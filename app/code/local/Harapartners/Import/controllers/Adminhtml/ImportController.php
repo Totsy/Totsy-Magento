@@ -65,13 +65,12 @@ class Harapartners_Import_Adminhtml_ImportController extends Mage_Adminhtml_Cont
 
 	public function saveAction() {
 		if ($data = $this->getRequest()->getPost()) {
-			
 			if(isset($_FILES['import_filename']['name']) && $_FILES['import_filename']['name'] != '') {
 				try {	
 					/* Starting upload */	
 					$uploader = new Varien_File_Uploader('import_filename');
 					
-					// Any extention would work
+					// Any extension would work
 	           		$uploader->setAllowedExtensions(array('csv'));
 					$uploader->setAllowRenameFiles(false);
 				
@@ -144,18 +143,17 @@ class Harapartners_Import_Adminhtml_ImportController extends Mage_Adminhtml_Cont
     }
     
     public function runDataflowProfile($filename){	
+    	
     	$profileId = 8; //hardcoded.  Need to put your profile id here
-		$profile = Mage::getModel('dataflow/profile');
-		
-		if ($profileId) {
-		    $profile->load($profileId);
+		$profile = Mage::getModel('dataflow/profile')->load($profileId);
+
+		if (!!$profile && !!$profile->getId()) {
 		    $gui_data = $profile->getData('gui_data');
 		    $gui_data['file']['filename'] = $filename;
 		    $profile->setData('gui_data', $gui_data);
 		    $profile->save();
-		    if (!$profile->getId()) {
-		      Mage::getSingleton('adminhtml/session')->addError('The profile you are trying to save no longer exists');
-		    }
+		  }else{
+		  	Mage::getSingleton('adminhtml/session')->addError('The profile you are trying to save no longer exists');
 		  }
 		  Mage::register('current_convert_profile', $profile);
 		  $profile->run();
@@ -167,31 +165,7 @@ class Harapartners_Import_Adminhtml_ImportController extends Mage_Adminhtml_Cont
 		  	}
 		  }
     }
-    
-    
-    /**
-     * Obsolete
-     */
-//    public function updateProducts($import_import_id){
-//    	
-//    	$allcollection = Mage::getModel('import/importset')->getCollection()->addFieldToFilter('import_import_id', $import_import_id);
-//    	$collection = Mage::getModel('import/importset')->getCollection()->addFieldToFilter('import_import_id', $import_import_id);
-//	    $collection->getSelect()->limit($numberOfRows,$startingRow);
-//	    $adapter = Mage::getModel('catalog/convert_adapter_product');
-//	    
-//	    foreach ($collection as $rowContent){	
-//	    	//$this->flushBuffers();
-//	    	$rowData = json_decode($rowContent->getData('import_importset_row_content'),true);
-//	    	try{
-//	    		$adapter->saveRow($rowData);
-//          	} catch (Exception $e) {
-//          		Mage::getSingleton('adminhtml/session')->addError($e->getMessage());	
-//          		Mage::getSingleton('adminhtml/session')->setHpImportFormData($data);
-//          		$this->_redirect('*/*/edit', array('id' => $this->getRequest()->getParam('id')));
-//                return;
-//          	}
-//	    }
-//    }
+  
 
 }
 ?>

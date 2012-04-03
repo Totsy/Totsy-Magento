@@ -82,10 +82,17 @@ class Harapartners_Import_Helper_Processor extends Mage_Core_Helper_Abstract {
 						}
 						$importData = $batchImportModel->getBatchData();
 						/**
-						 * Hard Code Attributes Here to accommodate template for totsy
+						 * Hard Code Attributes Here to accommodate template for totsy.
+						 * Generate Random SKUs here.
 						 */
 						
-						$adapter->saveRow($importData);	
+						$adapter->saveRow($importData);
+						
+						/**
+						 * PO Saves Here
+						 */
+						
+						
 	
 					} catch(Exception $ex) {
 						//TODO
