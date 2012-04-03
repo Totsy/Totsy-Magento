@@ -23,11 +23,11 @@ class Harapartners_Stockhistory_Model_Mysql4_Vendor extends Mage_Core_Model_Mysq
         //$this->_write = $this->_getWriteAdapter();
 	}
 	
-	public function loadBySku($sku, $storeId = null)
+	public function loadByCode($code, $storeId = null)
 	{
     	$select = $this->_read->select()
     		->from($this->getMainTable())
-    		->where('vendor_sku' . ' = ?', $sku);
+    		->where('vendor_code' . ' = ?', $code);
     	
     	if(!!$storeId){
 			$select->where('store_id=?', $storeId);
@@ -42,8 +42,11 @@ class Harapartners_Stockhistory_Model_Mysql4_Vendor extends Mage_Core_Model_Mysq
 		return $rowData;
 	}
 	
-	public function validateBySku($sku, $storeId = null)
+	public function validateByCode($code, $storeId = null)
 	{
-		return $this->loadBySku($sku);
+		$row = $this->loadByCode($code);
+		$vendorId = isset($row['id']) ? $row['id'] : null;
+		return $vendorId;
+		//return $this->loadBySku($sku);
 	}
 }
