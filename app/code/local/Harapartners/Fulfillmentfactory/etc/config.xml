@@ -148,6 +148,22 @@
 					<model>fulfillmentfactory/service_dotcom::runUpdateShipment</model>
 				</run>
             </fulfillmentfactory_dotcom_update_shipment>
+			<fulfillmentfactory_dotcom_mark_fulfillment_aging_order>
+                <schedule>
+					<cron_expr>0 0 * * *</cron_expr>
+				</schedule>
+                <run>
+					<model>fulfillmentfactory/service_fulfillment::markFulfillmentAgingOrders</model>
+				</run>
+            </fulfillmentfactory_dotcom_mark_fulfillment_aging_order>
+			<fulfillmentfactory_dotcom_mark_shipment_aging_order>
+                <schedule>
+					<cron_expr>0 0 * * *</cron_expr>
+				</schedule>
+                <run>
+					<model>fulfillmentfactory/service_fulfillment::markShipmentAgingOrders</model>
+				</run>
+            </fulfillmentfactory_dotcom_mark_shipment_aging_order>
         </jobs>
     </crontab>
 </config>
