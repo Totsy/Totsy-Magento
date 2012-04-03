@@ -95,13 +95,13 @@ class Harapartners_EmailFactory_Model_Observer extends Mage_Core_Model_Abstract 
     	foreach ($collection as $record){
     		$sailthru = Mage::getSingleton('emailfactory/sailthruconfig')->getHandle();
     		$result = $sailthru->getSend($record->getSendId());
-    		$record->setData('sailthru_email_deliver_stetatus',$result['status']);
+    		$record->setData('sailthru_email_deliver_status',$result['status']);
     		if (strcmp($result['status'], 'delivered')!=0){
     			//Mage::dispatchEvent('customer_register_email_exception',$result);
     		    $customerTrackingRecord = Mage::getModel('customertracking/record')->loadByCustomerEmail($record->getCustomerEmail());
 	    		if(!!$customerTrackingRecord && $customerTrackingRecord->getId()){
 	    			$status = Harapartners_Customertracking_Model_Record::STATUS_EMAIL_OTHER_PROBLEMS;
-	    			if (strcmp($result['status'], 'softbronce')==0){
+	    			if (strcmp($result['status'], 'softbounce')==0){
 	    				$status = Harapartners_Customertracking_Model_Record::STATUS_EMAIL_SOFTBRONCE;
 	    			}elseif (strcmp($result['status'], 'hardbounce')==0){
 	    				$status = Harapartners_Customertracking_Model_Record::STATUS_EMAIL_HARDBRONCE;
