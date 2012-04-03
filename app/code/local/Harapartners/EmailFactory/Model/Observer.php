@@ -18,6 +18,7 @@ class Harapartners_EmailFactory_Model_Observer extends Mage_Core_Model_Abstract 
      *  for event newsletter_subscriber_save_after,
      *  (which means after customer set their newsletter preference)
      */    
+	
     public function newsletterupdateObserver($observer){
     	//Sailthru status must follow Magento newletter status
     	$subscriber = $observer->getEvent()->getSubscriber();
@@ -89,14 +90,25 @@ class Harapartners_EmailFactory_Model_Observer extends Mage_Core_Model_Abstract 
 		
     	//check the record which is not successful to delivered
     	$collection = Mage::getModel('emailfactory/record')->getCollection();
-    	$collection->addFieldToFilter('sailthru_api_status',0);
+    	$collection->addFieldToFilter('sailthru_api_status',Harapartners_EmailFactory_Model_Record::SAILTHRU_API_STATUS_UNCHECK);
     	$collection->load();
     	foreach ($collection as $record){
     		$sailthru = Mage::getSingleton('emailfactory/sailthruconfig')->getHandle();
     		$result = $sailthru->getSend($record->getSendId());
     		$record->setData('sailthru_email_deliver_stetatus',$result['status']);
     		if (strcmp($result['status'], 'delivered')!=0){
-    			Mage::dispatchEvent('customer_register_email_exception',$result);
+    			//Mage::dispatchEvent('customer_register_email_exception',$result);
+    		    $customerTrackingRecord = Mage::getModel('customertracking/record')->loadByCustomerEmail($record->getCustomerEmail());
+	    		if(!!$customerTrackingRecord && $customerTrackingRecord->getId()){
+	    			$status = Harapartners_Customertracking_Model_Record::STATUS_EMAIL_OTHER_PROBLEMS;
+	    			if (strcmp($result['status'], 'softbronce')==0){
+	    				$status = Harapartners_Customertracking_Model_Record::STATUS_EMAIL_SOFTBRONCE;
+	    			}elseif (strcmp($result['status'], 'hardbounce')==0){
+	    				$status = Harapartners_Customertracking_Model_Record::STATUS_EMAIL_HARDBRONCE;
+	    			}
+	    			$customerTrackingRecord->setStatus($status);
+	    			$customerTrackingRecord->save();
+	    		}
     		}
     		$record->setData('sailthru_api_status',Harapartners_EmailFactory_Model_Record::SAILTHRU_API_STATUS_CHECK);
     		$record->save();
