@@ -12,18 +12,18 @@
  * 
  */
 
-class Harapartners_Stockhistory_Block_Adminhtml_History_Index extends Mage_Adminhtml_Block_Widget_Grid_Container
+class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Index extends Mage_Adminhtml_Block_Widget_Grid_Container
 {
 	public function __construct()
 	{	
 		parent::__construct();
-		$this->_controller = 'adminhtml_history_index';
+		$this->_controller = 'adminhtml_transaction_index';
 		$this->_blockGroup = 'stockhistory';
-		$this->_headerText = Mage::helper('stockhistory')->__('Transcation Report');
+		$this->_headerText = Mage::helper('stockhistory')->__('Transcations');
 		$this->_removeButton('add');
 
      	$this->_addButton('import', array(
-            'label'     => Mage::helper('stockhistory')->__('Import Order'),
+            'label'     => Mage::helper('stockhistory')->__('Import Transactions'),
             'onclick'   => 'setLocation(\'' . $this->getUrl('*/*/importCsv') .'\')',
       	));
 	}

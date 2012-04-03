@@ -12,7 +12,7 @@
  * 
  */
 
-class Harapartners_Stockhistory_Block_Adminhtml_History_Index_Grid extends Mage_Adminhtml_Block_Widget_Grid
+class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Index_Grid extends Mage_Adminhtml_Block_Widget_Grid
 {
 	//private $options = array('0' => 'Pending', '1'=>'Processed', '2'=> 'Failed');
 	
@@ -27,7 +27,7 @@ class Harapartners_Stockhistory_Block_Adminhtml_History_Index_Grid extends Mage_
 	
 	protected function _prepareCollection()
 	{
-		$collection = Mage::getModel('stockhistory/report')->getCollection();
+		$collection = Mage::getModel('stockhistory/transaction')->getCollection();
 		$this->setCollection($collection);
 		return parent::_prepareCollection();
 	}
@@ -153,11 +153,11 @@ class Harapartners_Stockhistory_Block_Adminhtml_History_Index_Grid extends Mage_
 	public function getCsv()
 	{
 		$csv = '';
-		$ids = $this->getRequest()->getParam('history_id');
+		$ids = $this->getRequest()->getParam('transaction_id');
         $this->_isExport = true; // Important! set to true can get all the records in all pages
         $this->_prepareGrid();
         if(!empty($ids)){        	
-        	$this->getCollection()->addFieldToFilter('history_id', array('in' => $ids));
+        	$this->getCollection()->addFieldToFilter('transaction_id', array('in' => $ids));
         }
         // Customize the collection to get the total qty for each product 
        
@@ -214,14 +214,14 @@ class Harapartners_Stockhistory_Block_Adminhtml_History_Index_Grid extends Mage_
 			/*$entityIds = array_unique($entityIds);
 			foreach($entityIds as $entityId){
 				$data = array();
-				$report = Mage::getModel('stockhistory/report')->loadByEntityId($entityId);
-				$data[] = $report->getData('entity_id');
-				$data[] = $report->getData('sku');
-				$data[] = $report->getData('vendor');
-				$data[] = $report->getData('qty');
-				$data[] = $report->getData('created_at');
-				$data[] = $report->getData('updated_at');
-				$data[] = $report->getData('status');
+				$transaction = Mage::getModel('stockhistory/transaction')->loadByEntityId($entityId);
+				$data[] = $transaction->getData('entity_id');
+				$data[] = $transaction->getData('sku');
+				$data[] = $transaction->getData('vendor');
+				$data[] = $transaction->getData('qty');
+				$data[] = $transaction->getData('created_at');
+				$data[] = $transaction->getData('updated_at');
+				$data[] = $transaction->getData('status');
 				$csv.= implode(',', $data)."\n";
 			}*/
         	foreach($Items as $product){
@@ -250,8 +250,8 @@ class Harapartners_Stockhistory_Block_Adminhtml_History_Index_Grid extends Mage_
 	
 //	protected function _prepareMassaction()
 //	{
-//		$this->setMassactionIdField('history_id');
-//        $this->getMassactionBlock()->setFormFieldName('history_id');
+//		$this->setMassactionIdField('transaction_id');
+//        $this->getMassactionBlock()->setFormFieldName('transaction_id');
 //        $this->getMassactionBlock()->setUseSelectAll(false);
 //        
 //        $this->getMassactionBlock()->addItem('stock_export', array(

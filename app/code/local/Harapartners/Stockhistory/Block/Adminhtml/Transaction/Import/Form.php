@@ -12,7 +12,7 @@
  * 
  */
 
-class Harapartners_Stockhistory_Block_Adminhtml_History_Import_Form extends Mage_Adminhtml_Block_Widget_Form{
+class Harapartners_Stockhistory_Block_Adminhtml_Import_Form extends Mage_Adminhtml_Block_Widget_Form{
 	
 	protected function _prepareForm() {
 

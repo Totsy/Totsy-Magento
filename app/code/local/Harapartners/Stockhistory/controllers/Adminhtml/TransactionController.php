@@ -12,7 +12,7 @@
  * 
  */
 
-class Harapartners_Stockhistory_Adminhtml_HistoryController extends Mage_Adminhtml_Controller_Action
+class Harapartners_Stockhistory_Adminhtml_TransactionController extends Mage_Adminhtml_Controller_Action
 {   
 	//protected $statusOptions = array('Pending' => 0, 'Processed' => 1, 'Failed' => 2);
 	protected $mimes = array('application/vnd.ms-excel', 'text/plain', 'text/csv', 'text/tsv');
@@ -25,8 +25,8 @@ class Harapartners_Stockhistory_Adminhtml_HistoryController extends Mage_Adminht
 	public function indexAction()
 	{
 		$this->loadLayout()
-			->_setActiveMenu('stockhistory/history')
-			->_addContent($this->getLayout()->createBlock('stockhistory/adminhtml_history_index'))
+			->_setActiveMenu('stockhistory/transaction')
+			->_addContent($this->getLayout()->createBlock('stockhistory/adminhtml_transaction_index'))
 			->renderLayout();
 	}
 
@@ -35,8 +35,8 @@ class Harapartners_Stockhistory_Adminhtml_HistoryController extends Mage_Adminht
 		$this->_getSession()->setTransFormData(null);
 		$data = $this->getRequest()->getParams();
 		$this->loadLayout()
-			->_setActiveMenu('stockhistory/history')
-			->_addContent($this->getLayout()->createBlock('stockhistory/adminhtml_history_edit'))
+			->_setActiveMenu('stockhistory/transaction')
+			->_addContent($this->getLayout()->createBlock('stockhistory/adminhtml_transaction_edit'))
 			->renderLayout();
 	}
 	
@@ -48,17 +48,17 @@ class Harapartners_Stockhistory_Adminhtml_HistoryController extends Mage_Adminht
 	public function reportAction()
 	{
 		$this->loadLayout()
-			->_setActiveMenu('stockhistory/history')	
-			->_addContent($this->getLayout()->createBlock('stockhistory/adminhtml_history_report'))
+			->_setActiveMenu('stockhistory/transaction')	
+			->_addContent($this->getLayout()->createBlock('stockhistory/adminhtml_transaction_report'))
 			->renderLayout();	
 	}
 	
 	public function exportCsvAction()
 	{
 		
-        $fileName   = 'stock_history_info_' . date('YmdHi'). '.csv';
+        $fileName   = 'stock_transaction_info_' . date('YmdHi'). '.csv';
         $content    = $this->getLayout()
-            ->createBlock('stockhistory/adminhtml_history_index_grid')
+            ->createBlock('stockhistory/adminhtml_transaction_index_grid')
             ->getCsv();
 
         $this->_prepareDownloadResponse($fileName, $content);
@@ -68,8 +68,8 @@ class Harapartners_Stockhistory_Adminhtml_HistoryController extends Mage_Adminht
 	public function importCsvAction()
 	{
 		$this->loadLayout()
-			->_setActiveMenu('stockhistory/history')	
-			->_addContent($this->getLayout()->createBlock('stockhistory/adminhtml_history_import'))
+			->_setActiveMenu('stockhistory/transaction')	
+			->_addContent($this->getLayout()->createBlock('stockhistory/adminhtml_transaction_import'))
 			->renderLayout();
     
 	}
@@ -82,7 +82,7 @@ class Harapartners_Stockhistory_Adminhtml_HistoryController extends Mage_Adminht
 		}
 		
 		try{
-			$model = Mage::getModel('stockhistory/report');
+			$model = Mage::getModel('stockhistory/transaction');
 			if(!!$this->getRequest()->getParam('id')){
 				$model->load($this->getRequest()->getParam('id'));
 			}
@@ -131,36 +131,36 @@ class Harapartners_Stockhistory_Adminhtml_HistoryController extends Mage_Adminht
 									$createdAt = trim($fileData[9]);
 									$updatedAt = trim($fileData[10]);
 									$status = trim($fileData[11]);
-									$history = Mage::getModel('stockhistory/report');
-									$history->setData('vendor_id', $vendorId);
-									$history->setData('po_id', $productName);
-									$history->setData('product_sku', $productSku);
-									$history->setData('vendor_sku', $vendorSku);
-									$history->setData('size', $size);
-									$history->setData('color', $color);
-									$history->setData('qty_delta', $qtyDelta);
-									$history->setData('created_at', $createdAt);
-									//$history->setData('updated_at', $updatedAt);
-									$history->setData('unit_cost', $unitCost);
-									$history->setData('total_cost', $totalCost);
-									$history->setData('status', $statusOptions[$status]);
-									$history->save();
+									$transaction = Mage::getModel('stockhistory/transaction');
+									$transaction->setData('vendor_id', $vendorId);
+									$transaction->setData('po_id', $productName);
+									$transaction->setData('product_sku', $productSku);
+									$transaction->setData('vendor_sku', $vendorSku);
+									$transaction->setData('size', $size);
+									$transaction->setData('color', $color);
+									$transaction->setData('qty_delta', $qtyDelta);
+									$transaction->setData('created_at', $createdAt);
+									//$transaction->setData('updated_at', $updatedAt);
+									$transaction->setData('unit_cost', $unitCost);
+									$transaction->setData('total_cost', $totalCost);
+									$transaction->setData('status', $statusOptions[$status]);
+									$transaction->save();
 									
-//									$report = Mage::getModel('stockhistory/report')->loadByEntityId($entityId);
-//									if(! $report->getId()){
-//										$report = Mage::getModel('stockhistory/report');
-//										$report->setData('entity_id', $entityId);
-//										$report->setData('product_name', $productName);
-//										$report->setData('product_sku', $productSku);
-//										$report->setData('vendor_sku', $vendorSku);
-//										$report->setData('qty', $qtyDelta);
-//										$report->setData('created_at', $createdAt);
+//									$transaction = Mage::getModel('stockhistory/transaction')->loadByEntityId($entityId);
+//									if(! $transaction->getId()){
+//										$transaction = Mage::getModel('stockhistory/transaction');
+//										$transaction->setData('entity_id', $entityId);
+//										$transaction->setData('product_name', $productName);
+//										$transaction->setData('product_sku', $productSku);
+//										$transaction->setData('vendor_sku', $vendorSku);
+//										$transaction->setData('qty', $qtyDelta);
+//										$transaction->setData('created_at', $createdAt);
 //									}else{
-//										$qty = $report->getData('qty') + $qtyDelta;
-//										$report->setData('qty', $qty);
-//										$report->setData('updated_at', date('Y-m-d H:i:s'));
+//										$qty = $transaction->getData('qty') + $qtyDelta;
+//										$transaction->setData('qty', $qty);
+//										$transaction->setData('updated_at', date('Y-m-d H:i:s'));
 //									}
-//									$report->save();
+//									$transaction->save();
 								}
 								$row ++;
 							}

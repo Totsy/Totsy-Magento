@@ -24,9 +24,9 @@
 			<stockhistory_mysql4>
 				<class>Harapartners_Stockhistory_Model_Mysql4</class>
 				<entities>
-					<report>
-						<table>stockhistory_report</table>
-					</report>
+					<transaction>
+						<table>stockhistory_transaction</table>
+					</transaction>
 					<purchaseorder>
 						<table>stockhistory_purchaseorder</table>
 					</purchaseorder>
@@ -82,14 +82,14 @@
 								<action>stockhistory/adminhtml_vendor</action>
 							</vendor>
 							<purchaseorder translate="title" module="stockhistory">
-								<title>PO Report</title>
+								<title>Purchase Order Report</title>
 								<sort_order>20</sort_order>
 								<action>stockhistory/adminhtml_purchaseorder</action>
 							</purchaseorder>
 							<transaction translate="title" module="stockhistory">
 								<title>Transaction Report</title>
 								<sort_order>30</sort_order>
-								<action>stockhistory/adminhtml_history</action>
+								<action>stockhistory/adminhtml_transaction</action>
 							</transaction>
 						</children>
 					</stockhistory>
