@@ -350,7 +350,9 @@ XML;
 			}
 			catch(Exception $e) {
 				$order->setStatus(Harapartners_FulfillmentFactory_Helper_Data::ORDER_STATUS_PAYMENT_FAILED)->save();	//payment failed
-				throw new Exception('Order ' . $order->getIncrementId() . ' could not place the payment. ' . $e->getMessage());
+				$message = 'Order ' . $order->getIncrementId() . ' could not place the payment. ' . $e->getMessage();
+				Mage::helper('fulfillmentfactory/log')->errorLogWithOrder($message, $order->getId());
+				//throw new Exception($message);
 				continue;
 			}
 			
@@ -489,7 +491,9 @@ XML;
 			if(!!$orderNumber) {
 				$errorOrder = Mage::getModel('sales/order')->loadByIncrementId($orderNumber);
 				$errorOrder->setStatus(Harapartners_FulfillmentFactory_Helper_Data::ORDER_STATUS_FULFILLMENT_FAILED)->save();
-				throw new Exception('Error response from DOTcom. ' . ' Order ' . $error->order_number . ': ' . $error->error_description);
+				$message = 'Error response from DOTcom: ' . $error->error_description;
+				Mage::helper('fulfillmentfactory/log')->errorLogWithOrder($message, $errorOrder->getId());
+				//throw new Exception($message);
 			}
 		}
 

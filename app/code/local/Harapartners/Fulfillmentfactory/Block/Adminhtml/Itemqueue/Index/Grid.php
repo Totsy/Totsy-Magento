@@ -150,7 +150,7 @@ class Harapartners_Fulfillmentfactory_Block_Adminhtml_Itemqueue_Index_Grid exten
         return $this;
     }
 
-    public function getRowUrl($row){
+    public function getRowUrl($row) {
         return $this->getUrl('*/*/edit', array(
 	            'store'=>$this->getRequest()->getParam('store'),
 	            'id'=>$row->getId()
