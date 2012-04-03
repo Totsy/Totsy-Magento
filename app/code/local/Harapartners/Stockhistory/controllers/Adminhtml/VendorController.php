@@ -67,7 +67,6 @@ class Harapartners_Stockhistory_Adminhtml_VendorController extends Mage_Adminhtm
 		if(isset($data['form_key'])){
 			unset($data['form_key']);
 		}
-		$this->_getSession()->setVendorFormData($data);
 		
 		try{
 			$model = Mage::getModel('stockhistory/vendor');

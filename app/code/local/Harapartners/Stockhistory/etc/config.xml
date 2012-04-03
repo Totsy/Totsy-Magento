@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Harapartners_Stockhistory>
-            <version>1.0.2</version>
+            <version>1.0.3</version>
         </Harapartners_Stockhistory>
     </modules>
     <global>
@@ -76,21 +76,21 @@
 		                <title>Purchase Order</title>
 		                <sort_order>100</sort_order>
 						<children>
-							<transaction translate="title" module="stockhistory">
-								<title>Transaction Report</title>
-								<sort_order>1</sort_order>
-								<action>stockhistory/adminhtml_history</action>
-							</transaction>
 							<vendor translate="title" module="stockhistory">
 								<title>Vendor Report</title>
-								<sort_order>2</sort_order>
+								<sort_order>10</sort_order>
 								<action>stockhistory/adminhtml_vendor</action>
 							</vendor>
 							<purchaseorder translate="title" module="stockhistory">
 								<title>PO Report</title>
-								<sort_order>3</sort_order>
+								<sort_order>20</sort_order>
 								<action>stockhistory/adminhtml_purchaseorder</action>
 							</purchaseorder>
+							<transaction translate="title" module="stockhistory">
+								<title>Transaction Report</title>
+								<sort_order>30</sort_order>
+								<action>stockhistory/adminhtml_history</action>
+							</transaction>
 						</children>
 					</stockhistory>
 				</children>
