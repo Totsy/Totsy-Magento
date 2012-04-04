@@ -71,7 +71,6 @@ class Harapartners_Service_Model_Rewrite_Customer_Customer extends Mage_Customer
         //Harapartners, remove alias for Gmail address, add by Jing Xiao
         $email = $this->_trimGmail($this->getEmail());
         $this->setEmail($email);
-        
 
         $this->getGroupId();
         return $this;
@@ -85,7 +84,6 @@ class Harapartners_Service_Model_Rewrite_Customer_Customer extends Mage_Customer
      * @return string original email
      */
     protected function _trimGmail($email) {
-    	
     	$strArray = explode('@', $email);
     	
     	if(empty($strArray) ||
@@ -98,7 +96,7 @@ class Harapartners_Service_Model_Rewrite_Customer_Customer extends Mage_Customer
 		$username = $strArray[0];
 		//Get username string's length
 		$len = strlen($username);
-		$originalGmail = '';
+		$trimmedGmail = '';
 		
 		//iterate chacrates in username string
 		for($j=0; $j<$len; $j++) {
@@ -110,11 +108,19 @@ class Harapartners_Service_Model_Rewrite_Customer_Customer extends Mage_Customer
 			//check if it is '.', if yes, don't concatenate.
 			if($username[$j] != '.') {
 				//concatenate username chacrater
-				$originalGmail .= $username[$j];
+				$trimmedGmail .= $username[$j];
 			}
 		}
-    	
-		return $originalGmail . '@gmail.com';
+		
+		$trimmedGmail .= '@gmail.com';
+		
+		if($email != $trimmedGmail) {
+			//if gmail has been trimmed, show message.
+			$message = 'Your Gmail address alias(' . $email . ') has been trimmed as actual Gmail address(' . $trimmedGmail . ').';
+			Mage::getSingleton('customer/session')->addError(Mage::helper('customer')->__($message));
+		}
+
+		return $trimmedGmail;
     }
 
 }

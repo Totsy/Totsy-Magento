@@ -52,7 +52,16 @@ class Harapartners_Childrenlist_Block_Adminhtml_Childrenlist_Edit_Form extends M
                 $customerText = Mage::helper('childrenlist')->__('Administrator');
             }
         }
-
+		
+        if (isset($childId)){
+	        $fieldset->addField('child_id', 'text', array(
+	            'value'      => $childId,
+	        	'name'      => 'child_id',
+	        	'style'   => "display:none",
+	        	'readonly' => true
+	        ));
+        }
+        
         $fieldset->addField('customer', 'note', array(
             'label'     => Mage::helper('childrenlist')->__('Customer Infomation'),
             'text'      => $customerText,
@@ -114,8 +123,10 @@ class Harapartners_Childrenlist_Block_Adminhtml_Childrenlist_Edit_Form extends M
             'value'      => $customerId,
         	'name'      => 'customer_id',
         	'style'   => "display:none",
-        	'readonly' => "ture"
+        	'readonly' => true
         ));
+        
+        
         $this->setForm($form);
         return parent::_prepareForm();
     }

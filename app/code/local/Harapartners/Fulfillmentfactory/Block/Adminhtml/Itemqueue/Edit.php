@@ -26,7 +26,7 @@ class Harapartners_Fulfillmentfactory_Block_Adminhtml_Itemqueue_Edit extends Mag
     }
 
     public function getHeaderText() {
-        if( Mage::registry('itemqueue_data') && Mage::registry('itemqueue_data')->getId() ) {
+        if( Mage::registry('itemqueue_form_data')) {
             return Mage::helper('fulfillmentfactory')->__('Edit Item Queue');
         } else {
             return Mage::helper('fulfillmentfactory')->__('Add Item Queue');

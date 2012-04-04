@@ -345,8 +345,9 @@ div.checkout-sub-title sub-title{
 	float:right;	
 }
 
-.signinbutton1 .submit-button{
+.signinbutton1 .submit-button, .customer-account-create .account-create .buttons-set {
 	float:left;	
+	
 }
 
 .the-account-login .emailpassword .required{
@@ -364,4 +365,25 @@ div.checkout-sub-title sub-title{
 	clear:both;
 	width:100%;
 	margin-top:10px;
+}
+
+.product-collateral .ui-btn-inner>span,
+ .product-options .ui-btn-inner>span{
+    font-size: 16px;
+    line-height: 25px;
+}
+.product-options-bottom .btn-cart span>span{
+    font-size: 16px;
+    line-height: 25px;	
+}
+
+.account-create .form-list .input-box{
+	margin-right: 15px;
+}
+
+.cms-page-view #main{
+	padding:10px;
+}
+.cms-page-view #main p{ 
+	font-size:15px;
 }

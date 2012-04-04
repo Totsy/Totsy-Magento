@@ -40,6 +40,11 @@
                 </setup>
             </unsubcentral_setup>
         </resources>
+        <helpers>
+            <unsubcentral>
+                <class>Harapartners_Unsubcentral_Helper</class>
+            </unsubcentral>
+        </helpers>
 		<!--Moved to Harapartners_Service-->
 		<!--events>
 	        <newsletter_subscriber_save_after>
@@ -53,5 +58,14 @@
             </newsletter_subscriber_save_after>
 		</events-->
     </global>
+    <crontab>
+        <jobs>
+            <run_update_unscribe_script>
+				<!-- 3:00AM every day -->
+                <schedule><cron_expr>0 3 * * *</cron_expr></schedule>
+                <run><model>unsubcentral/observer::runUpdateUnscribeScript</model></run>
+            </run_update_unscribe_script>
+        </jobs>
+    </crontab>
 	<frontend/>
 </config>

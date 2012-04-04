@@ -30,6 +30,12 @@ class Harapartners_Customertracking_Model_Observer {
 		}
 	}
 	
+	public function logoutAfter(Varien_Event_Observer $observer) {
+		$cacheCookie = Mage::getSingleton('enterprise_pagecache/cookie');
+		$cacheCookie->delete(Harapartners_Customertracking_Helper_Data::COOKIE_CUSTOMER_WELCOME);
+        $cacheCookie->delete(Harapartners_Affiliate_Helper_Data::COOKIE_AFFILIATE);
+	}
+	
 	protected function _plantRegisterSuccessReferCookie($observer, $customer) {
 		//prepare general welcome is_active cookie (also used for full page cache)
         $cacheCookie = Mage::getSingleton('enterprise_pagecache/cookie');
@@ -49,7 +55,7 @@ class Harapartners_Customertracking_Model_Observer {
 	protected function _addAffiliateCustomerTracking($customer){		
 		$affiliate = Mage::getSingleton('customer/session')->getAffiliate();
 		if(!!$affiliate && !!$affiliate->getId()){		    
-			$customerTrackingRecord = Mage::getModel('customertracking/record')->loadByCustomerId($customer->getId());
+			$customerTrackingRecord = Mage::getModel('customertracking/record')->loadByCustomerEmail($customer->getEmail());
 			
 			//check potential conflicts
 			if(!!$customerTrackingRecord && !$customerTrackingRecord->getId()){
@@ -81,7 +87,7 @@ class Harapartners_Customertracking_Model_Observer {
 	protected function _loadAffiliateToSession($customer){
 		//no need to reload
 		if(!Mage::getSingleton('customer/session')->getAffiliateId()){
-			$customerTrackingRecord = Mage::getModel('customertracking/record')->loadByCustomerId($customer->getId());
+			$customerTrackingRecord = Mage::getModel('customertracking/record')->loadByCustomerEmail($customer->getEmail());
 			if(!!$customerTrackingRecord && !!$customerTrackingRecord->getId()){
 				$affiliate = Mage::getModel('affiliate/record')->load($customerTrackingRecord->getAffiliateId());
 				Mage::getSingleton('customer/session')->setAffiliate($affiliate);
