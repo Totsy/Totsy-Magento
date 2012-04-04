@@ -35,7 +35,7 @@ class Harapartners_Affiliate_Block_Report extends Mage_Adminhtml_Block_Template 
 					$bounceCollection = Mage::getModel('customertracking/record')->getCollection()
 																			->addFieldToFilter('created_at', array( "lt" => $to,"gt"=>$from ))
 																			->addFieldToFilter('affiliate_code', $affiliate->getAffiliateCode())
-																			->addFieldToFilter('status',array(3,4));	
+																			->addFieldToFilter('status',array(3,4,5));	
 				}else{
 					$recordCollection = Mage::getModel('customertracking/record')->getCollection()
 																			->addFieldToFilter('created_at', array( "lt" => $to,"gt"=>$from ))
@@ -45,7 +45,7 @@ class Harapartners_Affiliate_Block_Report extends Mage_Adminhtml_Block_Template 
 																			->addFieldToFilter('created_at', array( "lt" => $to,"gt"=>$from ))
 																			->addFieldToFilter('affiliate_code', $affiliate->getAffiliateCode())
 																			->addFieldToFilter('sub_affiliate_code', $subAffiliateCode)
-																			->addFieldToFilter('status',array(3,4));
+																			->addFieldToFilter('status',array(3,4,5));
 				}
 				$totalRegistrations = $recordCollection->count();
 				$totalBounces = $bounceCollection->count();
