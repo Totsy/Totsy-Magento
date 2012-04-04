@@ -251,6 +251,9 @@ body.cms-page-view .page div.main {
   padding-right:0;
   padding-top:0;	
   font-weight:normal;
+  height:45px;
+  overflow:hidden;
+  line-height:16px;
 }
 
 .events-div .products-grid {
@@ -1164,5 +1167,8 @@ body .col-left hr {
 }
 .left_needhelp .main-nav a{
 	color:#EE1C25;
+}
+.categoryevent-index-topnav .products-grid .product-image{
+	margin: 0 auto 3px;
 }
 
