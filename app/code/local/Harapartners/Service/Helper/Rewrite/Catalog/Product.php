@@ -11,7 +11,6 @@
  * to eula@harapartners.com so we can send you a copy immediately.
  * 
  */
- 
 
 class Harapartners_Service_Helper_Rewrite_Catalog_Product extends Mage_Catalog_Helper_Product {
    
