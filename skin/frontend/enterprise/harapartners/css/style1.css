@@ -252,6 +252,8 @@ body.cms-page-view .page div.main {
   padding-top:0;	
   font-weight:normal;
   height:45px;
+  overflow:hidden;
+  line-height:16px;
 }
 
 .events-div .products-grid {
