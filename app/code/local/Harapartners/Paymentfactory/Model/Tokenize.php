@@ -32,7 +32,7 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Mage_Cybersource_Model_
 	public function order(Varien_Object $payment, $amount){
 		//For totsy, no payment is allowed to be captured upon order place
 		$amount = 0.00;
-		$customerId = Mage::getSingleton('customer/session')->getCustomerId();
+		$customerId = $payment->getOrder()->getQuote()->getCustomerId();
 		
      	if (!!$payment->getData('cybersource_subid')){
 //     		$profile = Mage::getModel('paymentfactory/profile')->loadByEncryptedSubscriptionId($payment->getData('cybersource_subid'));
@@ -125,7 +125,7 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Mage_Cybersource_Model_
         
         $payment->setCybersourceSubid($result->paySubscriptionCreateReply->subscriptionID);
         try{
-        	$customerId = Mage::getSingleton('customer/session')->getCustomerId();
+        	$customerId = $payment->getOrder()->getQuote()->getCustomerId();
         	$data = new Varien_Object($payment->getData());
         	$data->setData('customer_id', $customerId);
         	$data->addData('cybersource_sudid',$result->paySubscriptionCreateReply->subscriptionID);
