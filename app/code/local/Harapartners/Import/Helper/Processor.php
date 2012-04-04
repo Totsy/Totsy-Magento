@@ -14,11 +14,39 @@
 
 class Harapartners_Import_Helper_Processor extends Mage_Core_Helper_Abstract {
 	
+	const DEFAULT_DATAFLOW_PROFILE_ID = 9;
+	
 	protected $_errorFile 			= null;
 	protected $_errorMessages 		= array();
 	protected $_requiredFields 		= array();
 	protected $_confSimpleProducts 	= array();
 	protected $_purchaseOrderId		= null;
+	
+	
+	public function runDataflowProfile($filename){	
+		$profile = Mage::getModel('dataflow/profile')->load(self::DEFAULT_DATAFLOW_PROFILE_ID);
+
+		if (!!$profile && !!$profile->getId()) {
+		    $gui_data = $profile->getData('gui_data');
+		    $gui_data['file']['filename'] = $filename;
+		    $profile->setData('gui_data', $gui_data);
+		    $profile->save();
+		}else{
+			throw new Exception('The profile you are trying to save no longer exists');
+		  	Mage::getSingleton('adminhtml/session')->addError('The profile you are trying to save no longer exists');
+		}
+//		Mage::register('current_convert_profile', $profile);
+		$profile->run();
+		$batchModel = Mage::getSingleton('dataflow/batch');
+		if ($batchModel->getId()) {
+		  	if ($batchModel->getIoAdapter()) {
+		  		$batchId = $batchModel->getId();
+				return $batchId;
+		  	}
+		}
+		
+		return null;
+    }
 	
 	protected function _logError($errorMessage){
 		$errorMessage = 'Row '.$recordCount.': '.$ex->getMessage()."\n";

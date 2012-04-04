@@ -31,7 +31,6 @@ class Harapartners_Stockhistory_Helper_Data extends Mage_Core_Helper_Abstract  {
 	}
 	
 	public function getFormVendorTypeArray(){
-		TODO
 		return array(
        			array('label' => 'Process Immediately', 'value' => Harapartners_Import_Model_Import::ACTION_TYPE_PROCESS_IMMEDIATELY),
        			array('label' => 'Pending', 'value' => Harapartners_Import_Model_Import::ACTION_TYPE_PENDING)

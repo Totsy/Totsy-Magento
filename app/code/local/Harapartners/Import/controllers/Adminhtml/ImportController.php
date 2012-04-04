@@ -121,14 +121,30 @@ class Harapartners_Import_Adminhtml_ImportController extends Mage_Adminhtml_Cont
 	        }
         
 	        //this way the name is saved in DB
-	        $data['import_batch_id'] = $this->runDataflowProfile($_FILES['import_filename']['name']);
+	        $processorHelper = Mage::helper('import/processor');
+	        $data['import_batch_id'] = $processorHelper->runDataflowProfile($_FILES['import_filename']['name']);
   			$data['import_filename'] = $_FILES['import_filename']['name'];
   			$data['import_status'] = Harapartners_Import_Model_Import::IMPORT_STATUS_UPLOADED;
 			
-  			$model->addData($data)->save();
+  			$model->importDataWithValidation($data)->save();
 			
 			Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('import')->__('Save success.'));
 			Mage::getSingleton('adminhtml/session')->setImportFormData(null); //clear form data from session
+			
+			try{
+				if(isset($data['action_type']) && $data['action_type'] == Harapartners_Import_Model_Import::ACTION_TYPE_PROCESS_IMMEDIATELY){
+					
+					$processorHelper->runImport($model->getId());
+					Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('import')->__('The imported data has been processed.'));
+					$model->setData('status', Harapartners_Import_Model_Import::IMPORT_STATUS_COMPLETE)
+							->save();
+				}
+			}catch(Exception $e){
+				Mage::getSingleton('adminhtml/session')->addError(Mage::helper('import')->__('There is an error processing the uploaded data.'));
+				$model->setData('status', Harapartners_Import_Model_Import::IMPORT_STATUS_ERROR)
+						->save();
+			}
+			
 			if ($this->getRequest()->getParam('back')) {
 				$this->_redirect('*/*/edit', array('id' => $model->getId()));
 			}else{
@@ -165,29 +181,29 @@ class Harapartners_Import_Adminhtml_ImportController extends Mage_Adminhtml_Cont
         $this->_redirect('*/*/index');
     }
     
-    public function runDataflowProfile($filename){	
-    	
-    	$profileId = 8; //hardcoded.  Need to put your profile id here
-		$profile = Mage::getModel('dataflow/profile')->load($profileId);
-
-		if (!!$profile && !!$profile->getId()) {
-		    $gui_data = $profile->getData('gui_data');
-		    $gui_data['file']['filename'] = $filename;
-		    $profile->setData('gui_data', $gui_data);
-		    $profile->save();
-		  }else{
-		  	Mage::getSingleton('adminhtml/session')->addError('The profile you are trying to save no longer exists');
-		  }
-		  Mage::register('current_convert_profile', $profile);
-		  $profile->run();
-		  $batchModel = Mage::getSingleton('dataflow/batch');
-		  if ($batchModel->getId()) {
-		  	if ($batchModel->getIoAdapter()) {
-		  		$batchId = $batchModel->getId();
-				return $batchId;
-		  	}
-		  }
-    }
+//    public function runDataflowProfile($filename){	
+//    	
+//    	$profileId = 9; //hardcoded.  Need to put your profile id here
+//		$profile = Mage::getModel('dataflow/profile')->load($profileId);
+//
+//		if (!!$profile && !!$profile->getId()) {
+//		    $gui_data = $profile->getData('gui_data');
+//		    $gui_data['file']['filename'] = $filename;
+//		    $profile->setData('gui_data', $gui_data);
+//		    $profile->save();
+//		  }else{
+//		  	Mage::getSingleton('adminhtml/session')->addError('The profile you are trying to save no longer exists');
+//		  }
+//		  Mage::register('current_convert_profile', $profile);
+//		  $profile->run();
+//		  $batchModel = Mage::getSingleton('dataflow/batch');
+//		  if ($batchModel->getId()) {
+//		  	if ($batchModel->getIoAdapter()) {
+//		  		$batchId = $batchModel->getId();
+//				return $batchId;
+//		  	}
+//		  }
+//    }
   
 
 }
