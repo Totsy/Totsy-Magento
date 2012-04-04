@@ -14,7 +14,14 @@
 
 class Harapartners_Service_Model_Rewrite_Salesrule_Quote_Discount extends Mage_SalesRule_Model_Quote_Discount {
 
-    public function collect(Mage_Sales_Model_Quote_Address $address) {	
+    public function collect(Mage_Sales_Model_Quote_Address $address) {
+    	
+    	//TODO:
+    	//$lastOrder = ...
+    	//logic here
+    	//apply special $10 off here
+    	
+    	
     	$quote = $address->getQuote();
     	$couponCode = $quote->getCouponCode();//may be a pseudo code, or a real code
     	$groupcoupon = Mage::getModel('promotionfactory/groupcoupon')->loadByPseudoCode($couponCode);
