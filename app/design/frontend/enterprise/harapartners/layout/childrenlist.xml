@@ -1,9 +1,9 @@
 <layout version="0.1.0">
-	<customer_account>
+	<!--customer_account>
 		<reference name="customer_account_navigation">
 			<action method="addLink" translate="label" module="childrenlist"><name>childrenlist</name><path>childrenlist/index/index/</path><label>My Children List</label></action>
 		</reference>
-	</customer_account>
+	</customer_account-->
 	
     <childrenlist_index_index translate="label">
 		<label>Children Lists</label>

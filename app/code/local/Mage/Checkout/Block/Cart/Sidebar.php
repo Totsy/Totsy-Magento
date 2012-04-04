@@ -330,5 +330,26 @@ class Mage_Checkout_Block_Cart_Sidebar extends Mage_Checkout_Block_Cart_Abstract
     	}
     	return date('m-d-Y', $endDate + 15*24*3600 );
     }
-	//
+	//Harapartners, yang, END
+	
+    //Harapartners, yang, START
+	//Return total savings
+    public function getTotalSaving() {
+    	$items = $this->getRecentItems();
+    	$savings = (double)0;
+        if( count($items) ) {
+    		foreach ( $items as $item){
+				$item->getQty();
+				$product = $item->getProduct();
+				if (!!$product->getSpecialPrice()) {
+					$priceDiff = (double)$product->getPrice() - (double)$product->getSpecialPrice();
+				}else {
+					$priceDiff = (double)0.00;
+				}				
+				$savings = $savings + $priceDiff * $item->getQty();	
+    		}
+    	}    	
+    	return $savings;
+    }
+    //Harapartners, yang, END
 }

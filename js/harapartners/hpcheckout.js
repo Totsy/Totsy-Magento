@@ -83,7 +83,7 @@ HpCheckout.prototype = {
 				}
 				errorMessage = '<div class="hpcheckout-error-message">' + message + '</div>';
 			}
-			jQuery( '#' + blocksData[ blockCode ].wrapperId + ' .checkout-content' ).html( errorMessage + blocksData[ blockCode ].html );
+			jQuery( '#' + blocksData[ blockCode ].wrapperId ).html( errorMessage + blocksData[ blockCode ].html );
 		}
 	},
 	
@@ -120,9 +120,36 @@ HpCheckout.prototype = {
 		jQuery( 'ul#payment_form_' + selection ).show();
 	},
 	
+	switchAddress: function() {
+		var clickedAddress = jQuery( this ); 
+		var blockType = '';
+		if( clickedAddress.attr( 'id' ) == 'billing-address-select' ) {
+			blockType = 'billing';
+		} else if( clickedAddress.attr( 'id' ) == 'shipping-address-select' ) {
+			blockType = 'shipping';
+		}
+		if( clickedAddress.val() == '' ) {
+			jQuery( '#' + hpcheckout.data.blocks[ blockType ].formId + ' input' ).val( '' );
+		} else {
+			if( hpcheckoutAddresses[ clickedAddress.val() ] ) {
+				jQuery('select#' + blockType +'\\:country_id').val( hpcheckoutAddresses[ clickedAddress.val() ][ 'country_id' ] );
+				if( blockType == 'billing' ) {
+					billingRegionUpdater.update();
+				} else if ( blockType == 'shipping' ) {
+					shippingRegionUpdater.update();
+				}
+				jQuery( 'input, select', '#' + hpcheckout.data.blocks[ blockType ].formId ).each( function(){
+					jQuery( this ).val( hpcheckoutAddresses[ clickedAddress.val() ][ jQuery( this ).attr( 'id' ).replace( blockType + ':', '' ) ] );
+				});
+				if( blockType == 'shipping' ) {
+					jQuery( '#shipping\\:postcode' ).change();
+				}
+			}
+		}
+	},
 
 	renderErrorMessage: function( message ) {
-		alert( message );
+		jQuery( '#error-message-wrapper' ).html( message );
 	},
 	//==============================//
 	//==========Controller==========//

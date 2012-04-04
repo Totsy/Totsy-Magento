@@ -28,6 +28,7 @@
 		</script>
 		</div>
 	</div>
+	<div id="error-message-wrapper"></div>
 	<?php if( count( $this->getQuote()->getAllItems() ) ): ?>
 		<?php if( ! $this->getCustomerSession()->isLoggedIn() ): ?>
 			<div id="hpcheckout-login-wrapper">
@@ -36,29 +37,24 @@
 		<?php endif ?>
 		<div class="address">
 			<div id="hpcheckout-billing-wrapper">
-				<div class="billing-title sub-title checkout-sub-title"><?php echo $this->__('Billing Address') ?></div>
-				<div class="checkout-content"><?php echo $this->getChildHtml( 'billing' ) ?></div>
+				<?php echo $this->getChildHtml( 'billing' ) ?>
 			</div>
 			<?php if( ! $this->getQuote()->isVirtual() ): ?>
 				<div id="hpcheckout-shipping-wrapper">
-					<div class="shipping-title sub-title checkout-sub-title"><?php echo $this->__('Shipping Address') ?></div>
-					<div class="checkout-content"><?php echo $this->getChildHtml( 'shipping' ) ?></div>
+					<?php echo $this->getChildHtml( 'shipping' ) ?>
 				</div>
 			<?php endif ?>
 		</div>
 		<?php if( ! $this->getQuote()->isVirtual() ): ?>
 			<div id="hpcheckout-shipping-method-wrapper">
-				<div class="checkout-sub-title sub-title">Shipping Method</div>
-				<div class="checkout-content"><?php echo $this->getChildHtml( 'shipping_method' ) ?></div>
+				<?php echo $this->getChildHtml( 'shipping_method' ) ?>
 			</div>
 		<?php endif ?>
 		<div id="hpcheckout-payment-wrapper">
-			<div class="checkout-sub-title sub-title">Payment</div>
-			<div class="checkout-content"><?php echo $this->getChildHtml( 'payment' ) ?></div>
+			<?php echo $this->getChildHtml( 'payment' ) ?>
 		</div>
 		<div id="hpcheckout-review-wrapper">
-			<div class="checkout-sub-title sub-title">Review</div>
-			<div class="checkout-content"><?php echo $this->getChildHtml( 'review' ) ?></div>
+			<?php echo $this->getChildHtml( 'review' ) ?>
 		</div>
 		<?php echo $this->getChildHtml( 'script' ) ?>
 	<?php else: ?>

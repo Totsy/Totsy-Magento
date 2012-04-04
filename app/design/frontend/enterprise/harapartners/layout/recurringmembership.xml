@@ -1,9 +1,9 @@
- <layout version="0.1.0">
+<!-- <layout version="0.1.0">
 	<customer_account>
         <reference name="customer_account_navigation" >
             <action method="addLink" translate="label"><name>recurringmembership</name><path>recurringmembership/</path><label>Recurring Membership</label></action>
         </reference>
-    </customer_account>
+    </customer_account>-->
 	
 	<recurringmembership_index_index>
 		<label>Customer My Account Recurring Membership</label>
