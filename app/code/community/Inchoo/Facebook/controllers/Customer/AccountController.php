@@ -234,7 +234,7 @@ class Inchoo_Facebook_Customer_AccountController extends Mage_Core_Controller_Fr
     protected function _loginPostRedirect()
     {
         $session = $this->_getCustomerSession();
-        $redirectUrl = "";
+        $redirectUrl = "/";
 
         //Harapartners, yang: set referer to base
 		//        if ($session->getBeforeAuthUrl() && 

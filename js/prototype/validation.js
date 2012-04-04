@@ -485,7 +485,7 @@ Validation.addAllThese([
                 return Validation.get('IsEmpty').test(v) ||  /^[\S ]+$/.test(v)
                     }],
 	//Harapartners, quan: new strong validation for user registrition				
-    ['strong-validate-password', 'Please enter 6 or more characters and include at least 1 number and 1 special character. Spaces will be ignored.', function(v) {
+    ['strong-validate-password', 'Please enter 6 or more characters and include at least 1 number. Spaces will be ignored.', function(v) {
                 var pass=v.strip(); /*strip leading and trailing spaces*/
                 return !(pass.length>0 && pass.length < 6) && /[0-9]{1,}/.test(v) && /[a-zA-Z]{1,}/.test(v);  
             }],
