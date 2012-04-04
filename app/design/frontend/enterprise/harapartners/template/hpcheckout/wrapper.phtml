@@ -28,6 +28,7 @@
 		</script>
 		</div>
 	</div>
+	<div id="error-message-wrapper"></div>
 	<?php if( count( $this->getQuote()->getAllItems() ) ): ?>
 		<?php if( ! $this->getCustomerSession()->isLoggedIn() ): ?>
 			<div id="hpcheckout-login-wrapper">
