@@ -330,7 +330,7 @@ XML;
 		$xml = '<orders xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">';
 		
 		foreach($orders as $order) {
-			$order->setStatus(Harapartners_FulfillmentFactory_Helper_Data::ORDER_STATUS_PROCESSING_FULFILLMENT)->save();	//start fulfillment
+			$order->setStatus(Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_PROCESSING_FULFILLMENT)->save();	//start fulfillment
 			try {
 				if($capturePayment) {
 					//capture payment
@@ -349,7 +349,7 @@ XML;
 				}
 			}
 			catch(Exception $e) {
-				$order->setStatus(Harapartners_FulfillmentFactory_Helper_Data::ORDER_STATUS_PAYMENT_FAILED)->save();	//payment failed
+				$order->setStatus(Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_PAYMENT_FAILED)->save();	//payment failed
 				$message = 'Order ' . $order->getIncrementId() . ' could not place the payment. ' . $e->getMessage();
 				Mage::helper('fulfillmentfactory/log')->errorLogWithOrder($message, $order->getId());
 				//throw new Exception($message);
@@ -490,7 +490,7 @@ XML;
 			$orderNumber = $error->order_number;
 			if(!!$orderNumber) {
 				$errorOrder = Mage::getModel('sales/order')->loadByIncrementId($orderNumber);
-				$errorOrder->setStatus(Harapartners_FulfillmentFactory_Helper_Data::ORDER_STATUS_FULFILLMENT_FAILED)->save();
+				$errorOrder->setStatus(Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_FULFILLMENT_FAILED)->save();
 				$message = 'Error response from DOTcom: ' . $error->error_description;
 				Mage::helper('fulfillmentfactory/log')->errorLogWithOrder($message, $errorOrder->getId());
 				//throw new Exception($message);
