@@ -12,13 +12,7 @@
  * 
  */
 
-class Harapartners_Import_Helper_Data extends Mage_Core_Helper_Abstract {
-	
-	public function getFormActionTypeArray(){
-		return array(
-       			array('label' => 'Process Immediately', 'value' => Harapartners_Import_Model_Import::ACTION_TYPE_PROCESS_IMMEDIATELY),
-       			array('label' => 'Pending', 'value' => Harapartners_Import_Model_Import::ACTION_TYPE_PENDING)
-       	);
-	}
-	
-}
+$installer = $this;
+$installer->startSetup();
+$installer->getConnection()->addColumn($this->getTable('import/import'), 'action_type', 'smallint(5) unsigned default NULL');
+$installer->endSetup();

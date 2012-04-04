@@ -21,6 +21,8 @@ class Harapartners_Import_Model_Import extends Mage_Core_Model_Abstract
 	const IMPORT_STATUS_COMPLETE 		= 'complete';
 	const IMPORT_STATUS_ERROR 			= 'error';
 	
+	const ACTION_TYPE_PROCESS_IMMEDIATELY 		= '1';
+	const ACTION_TYPE_PENDING					= '2';
 	
     public function _construct()
     {

@@ -27,8 +27,9 @@ CREATE TABLE {$this->getTable('stockhistory/vendor')}(
 	`email_list`		varchar(255) NOT NULL default '',
 	`phone`				varchar(255) NOT NULL default '',
 	`address`			text NOT NULL default '',
-	`parent_id`			int(10) unsigned default 0,
+	`parent_id`			int(10) unsigned default NULL,
 	`comment`			text NOT NULL default '',
+	`status`			smallint(5) unsigned default NULL,
 	`created_at`		datetime default NULL,
 	`updated_at` 		datetime default NULL,
 	`store_id`			smallint(5) unsigned DEFAULT 0,
@@ -46,6 +47,7 @@ CREATE TABLE {$this->getTable('stockhistory/purchaseorder')}(
 	`vendor_id` 		int(10) unsigned default NULL,
 	`name`				varchar(255) NOT NULL default '',
 	`comment`			text NOT NULL default '',
+	`status`			smallint(5) unsigned default NULL,
 	`created_at`		datetime default NULL,
 	`updated_at` 		datetime default NULL,
 	`store_id`			smallint(5) unsigned DEFAULT 0,
@@ -62,15 +64,16 @@ CREATE TABLE {$this->getTable('stockhistory/purchaseorder')}(
 CREATE TABLE {$this->getTable('stockhistory/transaction')}(
 	`id`		 	int(10) unsigned NOT NULL auto_increment,
 	`vendor_id` 	int(10) unsigned default NULL,
+	`vendor_code`	varchar(255) NOT NULL default '',
 	`po_id`			int(10) unsigned default NULL,
-	`product_id`	int(10)	unsigned default NULL,
 	`category_id`	int(10) unsigned default NULL,
+	`product_id`	int(10)	unsigned default NULL,
 	`product_sku`	varchar(255) NOT NULL default '',
-	`vendor_sku`	varchar(255) NOT NULL default '',
 	`unit_cost`		decimal(12,4) NOT NULL default 0.0000,
-	`qty_delta`		int(10) NOT NULL default 0 ,
+	`qty_delta`		int(10) NOT NULL default 0,
 	`action_type`	smallint(5) unsigned NOT NULL default 0,
 	`comment`		text NOT NULL default '',
+	`status`		smallint(5) unsigned default NULL,
 	`created_at`	datetime default NULL,
 	`updated_at` 	datetime default NULL,
 	`store_id`		smallint(5) unsigned DEFAULT 0,
@@ -87,10 +90,7 @@ CREATE TABLE {$this->getTable('stockhistory/transaction')}(
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Stock Report'
 
 
-
-
 ");
-
 
 $installer->endSetup();
 

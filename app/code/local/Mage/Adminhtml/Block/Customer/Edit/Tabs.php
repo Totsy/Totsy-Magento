@@ -120,6 +120,11 @@ class Mage_Adminhtml_Block_Customer_Edit_Tabs extends Mage_Adminhtml_Block_Widge
             ));
             
         }
+        
+        //Harapartners, Jun, START
+        $this->removeTab('customer_edit_tab_agreements');
+        $this->removeTab('customer_edit_tab_recurring_profile');
+        //Harapartners, Jun, END
 
         $this->_updateActiveTab();
         Varien_Profiler::stop('customer/tabs');
