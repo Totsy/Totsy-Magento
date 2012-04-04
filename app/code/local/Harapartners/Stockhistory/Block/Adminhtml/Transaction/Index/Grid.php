@@ -79,11 +79,11 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Index_Grid extends M
 					'index'		=>	'product_sku',
 		));
 		
-		$this->addColumn('vendor_sku', array(
-					'header'	=>	$helper->__('Vendor SKU'),
+		$this->addColumn('vendor_code', array(
+					'header'	=>	$helper->__('Vendor Code'),
 					'align'		=>	'right',
 					'width'		=>	'50px',
-					'index'		=>	'vendor_sku',
+					'index'		=>	'vendor_code',
 		));
 		
 		$this->addColumn('qty_delta', array(
@@ -124,7 +124,7 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Index_Grid extends M
 					'width'		=>	'50px',
 					'index'		=>	'action_type',
 					'type'		=>	'options',
-					'options'	=>  $this->options,
+					'options'	=>  $this->action,
 		));
 	
 	    $this->addColumn('comment', array(
