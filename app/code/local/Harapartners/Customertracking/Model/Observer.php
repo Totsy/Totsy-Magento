@@ -55,7 +55,7 @@ class Harapartners_Customertracking_Model_Observer {
 	protected function _addAffiliateCustomerTracking($customer){		
 		$affiliate = Mage::getSingleton('customer/session')->getAffiliate();
 		if(!!$affiliate && !!$affiliate->getId()){		    
-			$customerTrackingRecord = Mage::getModel('customertracking/record')->loadByCustomerId($customer->getId());
+			$customerTrackingRecord = Mage::getModel('customertracking/record')->loadByCustomerEmail($customer->getEmail());
 			
 			//check potential conflicts
 			if(!!$customerTrackingRecord && !$customerTrackingRecord->getId()){
@@ -87,7 +87,7 @@ class Harapartners_Customertracking_Model_Observer {
 	protected function _loadAffiliateToSession($customer){
 		//no need to reload
 		if(!Mage::getSingleton('customer/session')->getAffiliateId()){
-			$customerTrackingRecord = Mage::getModel('customertracking/record')->loadByCustomerId($customer->getId());
+			$customerTrackingRecord = Mage::getModel('customertracking/record')->loadByCustomerEmail($customer->getEmail());
 			if(!!$customerTrackingRecord && !!$customerTrackingRecord->getId()){
 				$affiliate = Mage::getModel('affiliate/record')->load($customerTrackingRecord->getAffiliateId());
 				Mage::getSingleton('customer/session')->setAffiliate($affiliate);

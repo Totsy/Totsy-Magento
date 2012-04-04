@@ -10,7 +10,7 @@
  * to eula@harapartners.com so we can send you a copy immediately.
  * 
  */
-class Harapartners_FulfillmentFactory_Helper_Dotcom extends Mage_Core_Helper_Abstract{
+class Harapartners_Fulfillmentfactory_Helper_Dotcom extends Mage_Core_Helper_Abstract{
 	const API_KEY = '53e04657f78564b584b0ff2682ae89c4';
 	const API_PASSWORD = '36e4c4ad2ff195b7becd59dbdb23550d';
 	const DOTCOM_BASE_URL = 'https://cwa.dotcomdistribution.com/dcd_api_test/DCDAPIService.svc';

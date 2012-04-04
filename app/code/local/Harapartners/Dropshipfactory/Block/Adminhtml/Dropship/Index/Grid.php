@@ -77,12 +77,21 @@ class Harapartners_Dropshipfactory_Block_Adminhtml_Dropship_Index_Grid extends M
             'index'         => 'sku'
         ));
         
+//        $this->addColumn('value', array(
+//            'header'        => Mage::helper('dropshipfactory')->__('vendor'),
+//            'align'         => 'right',
+//            'width'         => '30px',
+//        	'type'			=> 'options',
+//        	'options'		=> Mage::helper('dropshipfactory')->getVendorList(),
+//            'index'         => 'value',
+//        	'filter_index'	=> $catalog_product_entity_int_table . '.value'
+//        ));
+
         $this->addColumn('value', array(
             'header'        => Mage::helper('dropshipfactory')->__('vendor'),
             'align'         => 'right',
             'width'         => '30px',
-        	'type'			=> 'options',
-        	'options'		=> Mage::helper('dropshipfactory')->getVendorList(),
+        	'type'			=> 'text',
             'index'         => 'value',
         	'filter_index'	=> $catalog_product_entity_int_table . '.value'
         ));
@@ -148,7 +157,7 @@ class Harapartners_Dropshipfactory_Block_Adminhtml_Dropship_Index_Grid extends M
         	
        		$product = Mage::getModel('catalog/product')->load($row->getData('product_id'));
         	
-        	$data[] = $product->getAttributeText('vendor');
+        	$data[] = $product->getAttributeText('vendor_code');
         	
         	//customer information
         	$data[] = $order->getCustomerFirstname() . " " . $order->getCustomerLastname();
