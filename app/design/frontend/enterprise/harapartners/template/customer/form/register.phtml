@@ -46,15 +46,16 @@
     <?php //echo $this->getChildHtml('form_fields_before')?>
 	<?php //the up child is a reward html ?>
 	<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+	<div class="facebook-part">
+		<h2 class="join-with-fb"><?php echo $this->__('Sign in with Facebook') ?></h2>
+		<a rel="facebook-connect" title="<?php echo $this->__('Connect with Facebook') ?>" class="facebook-button"><span><img src="<?php echo $this->getSkinUrl()?>images/sign_in_fb.png"/></span></a>
+	</div>
     <form action="<?php echo $this->getPostActionUrl() ?>" method="post" id="form-validate" enctype="multipart/form-data">
-	<h2 class="join-with-email" >Join by Invitation</h2>
+	<h2 class="join-with-email" >Join with email</h2>
         <div class="fieldset">
             <input type="hidden" name="success_url" value="<?php echo $this->getSuccessUrl() ?>" />
             <input type="hidden" name="error_url" value="<?php echo $this->getErrorUrl() ?>" />
             <ul class="form-list">
-                <li class="fields">
-                <?php echo $this->getLayout()->createBlock('customer/widget_name')->setObject($this->getFormData())->setForceUseCustomerAttributes(true)->toHtml() ?>
-                </li>
                 <li>
                     <label for="email_address" class="required"><em>*</em><?php echo $this->__('Email Address') ?></label>
                     <div class="input-box" id="input-email-box">
