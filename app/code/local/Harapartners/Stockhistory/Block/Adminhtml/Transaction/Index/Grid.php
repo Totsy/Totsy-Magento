@@ -14,7 +14,8 @@
 
 class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Index_Grid extends Mage_Adminhtml_Block_Widget_Grid
 {
-	private $options = array('0' => 'Pending', '1'=>'Processed', '2'=> 'Failed');
+	private $status = array('0' => 'Pending', '1' => 'Processed', '2'=> 'Failed');
+	private $action = array('1' => 'Amendment', '2' => 'Event Import', '3' => 'Direct Import');
 	
 	public function __construct()
 	{
@@ -33,72 +34,74 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Index_Grid extends M
 	}
 	
 	protected function _prepareColumns()
-	{
+	{	
+		$helper = Mage::helper('stockhistory');
+	
 		$this->addColumn('id', array(
-					'header'	=>	Mage::helper('stockhistory')->__('ID'),
+					'header'	=>	$helper->__('ID'),
 					'align'		=>	'right',
 					'width'		=>	'50px',
 					'index'		=>	'id',
 		));
 		
 		$this->addColumn('vendor_id', array(
-					'header'	=>	Mage::helper('stockhistory')->__('Vendor ID'),
+					'header'	=>	$helper->__('Vendor ID'),
 					'align'		=>	'right',
 					'width'		=>	'50px',
 					'index'		=>	'vendor_id',
 		));
 		
 		$this->addColumn('po_id', array(
-					'header'	=>	Mage::helper('stockhistory')->__('Purchase Order ID'),
+					'header'	=>	$helper->__('Purchase Order ID'),
 					'align'		=>	'right',
 					'width'		=>	'50px',
 					'index'		=>	'po_id',
 		)); 
 		
 		$this->addColumn('product_id', array(
-					'header'	=>	Mage::helper('stockhistory')->__('Product ID'),
+					'header'	=>	$helper->__('Product ID'),
 					'align'		=>	'right',
 					'width'		=>	'20px',
 					'index'		=>	'product_id',
 		));
 		
 		$this->addColumn('category_id', array(
-					'header'	=>	Mage::helper('stockhistory')->__('Category ID'),
+					'header'	=>	$helper->__('Category ID'),
 					'align'		=>	'right',
 					'width'		=>	'20px',
 					'index'		=>	'category_id',
 		));
 		
 		$this->addColumn('product_sku', array(
-					'header'	=>	Mage::helper('stockhistory')->__('Product SKU'),
+					'header'	=>	$helper->__('Product SKU'),
 					'align'		=>	'right',
 					'width'		=>	'50px',
 					'index'		=>	'product_sku',
 		));
 		
 		$this->addColumn('vendor_sku', array(
-					'header'	=>	Mage::helper('stockhistory')->__('Vendor SKU'),
+					'header'	=>	$helper->__('Vendor SKU'),
 					'align'		=>	'right',
 					'width'		=>	'50px',
 					'index'		=>	'vendor_sku',
 		));
 		
 		$this->addColumn('qty_delta', array(
-					'header'	=>	Mage::helper('stockhistory')->__('Qty Changed'),
+					'header'	=>	$helper->__('Qty Changed'),
 					'align'		=>	'right',
 					'width'		=>	'50px',
 					'index'		=>	'qty_delta',
 		));
 		
 		$this->addColumn('unit_cost', array(
-					'header'	=>	Mage::helper('stockhistory')->__('Unit Cost'),
+					'header'	=>	$helper->__('Unit Cost'),
 					'align'		=>	'right',
 					'width'		=>	'30px',
 					'index'		=>	'unit_cost',
 		));
 		
 		$this->addColumn('created_at', array(
-					'header'	=>	Mage::helper('stockhistory')->__('Created At'),
+					'header'	=>	$helper->__('Created At'),
 					'align'		=>	'right',
 					'width'		=>	'50px',
 					'index'		=>	'created_at',
@@ -107,7 +110,7 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Index_Grid extends M
 		));
 		
 		$this->addColumn('updated_at', array(
-					'header'	=>	Mage::helper('stockhistory')->__('Updated At'),
+					'header'	=>	$helper->__('Updated At'),
 					'align'		=>	'right',
 					'width'		=>	'50px',
 					'index'		=>	'updated_at',
@@ -116,7 +119,7 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Index_Grid extends M
 		));
 		
 		$this->addColumn('action_type', array(
-					'header'	=>	Mage::helper('stockhistory')->__('Action'),
+					'header'	=>	$helper->__('Action'),
 					'align'		=>	'right',
 					'width'		=>	'50px',
 					'index'		=>	'action_type',
@@ -125,13 +128,13 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Index_Grid extends M
 		));
 	
 	    $this->addColumn('comment', array(
-					'header'	=>	Mage::helper('stockhistory')->__('Comment'),
+					'header'	=>	$helper->__('Comment'),
 					'align'		=>	'right',
 					'width'		=>	'50px',
 					'index'		=>	'comment',		
 		));
 		
-		$this->addExportType('*/*/exportCsv', Mage::helper('stockhistory')->__('CSV'));
+		$this->addExportType('*/*/exportCsv', $helper->__('CSV'));
 		
 		return parent::_prepareColumns();
 	}
@@ -154,7 +157,7 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Index_Grid extends M
 //        $this->_afterLoadCollection();
 //		
 //        
-//        $data = Mage::helper('stockhistory')->getCsvHeader();
+//        $data = $helper->getCsvHeader();
 //
 //		
 //        $csv.= implode(',', $data)."\n";
