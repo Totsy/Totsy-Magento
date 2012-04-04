@@ -139,7 +139,7 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Mage_Cybersource_Model_
         
         $payment->setCybersourceSubid($result->paySubscriptionCreateReply->subscriptionID);
         try{
-        	$customerId = Mage::getSingleton('customer/session')->getCustomerId();
+        	$customerId = $payment->getOrder()->getQuote()->getCustomerId();
         	$data = new Varien_Object($payment->getData());
         	$data->setData('customer_id', $customerId);
         	$profile = Mage::getModel('paymentfactory/profile');
@@ -252,7 +252,7 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Mage_Cybersource_Model_
 			}
 		}elseif (!!$payment->getData('cc_number')){
 			//Check against creating duplicate profile of the same credit card + customer ID
-			$customerId = Mage::getSingleton('customer/session')->getCustomerId();
+			$customerId = $payment->getOrder()->getQuote()->getCustomerId();
      		$this->_paymentProfile->loadByCcNumberWithId($payment->getData('cc_number').$customerId);
      	}
      	
