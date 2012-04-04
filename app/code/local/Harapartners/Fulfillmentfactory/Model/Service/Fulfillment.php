@@ -28,7 +28,7 @@ class Harapartners_Fulfillmentfactory_Model_Service_Fulfillment
 														->addAttributeToFilter('status', 'pending')
 														->addAttributeToFilter('created_at', array('to' => $expiredDate));
 		foreach($orderCollection as $order) {
-			$order->setStatus(Harapartners_FulfillmentFactory_Helper_Data::ORDER_STATUS_FULFILLMENT_AGING)
+			$order->setStatus(Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_FULFILLMENT_AGING)
 				  ->save();
 		}
 	}
@@ -47,7 +47,7 @@ class Harapartners_Fulfillmentfactory_Model_Service_Fulfillment
 														->addAttributeToFilter('status', 'processing')
 														->addAttributeToFilter('updated_at', array('to' => $expiredDate));		
 		foreach($orderCollection as $order) {
-			$order->setStatus(Harapartners_FulfillmentFactory_Helper_Data::ORDER_STATUS_SHIPMENT_AGING)
+			$order->setStatus(Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_SHIPMENT_AGING)
 				  ->save();
 		}
 	}
