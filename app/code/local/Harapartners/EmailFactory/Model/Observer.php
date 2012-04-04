@@ -96,19 +96,22 @@ class Harapartners_EmailFactory_Model_Observer extends Mage_Core_Model_Abstract 
     		$sailthru = Mage::getSingleton('emailfactory/sailthruconfig')->getHandle();
     		$result = $sailthru->getSend($record->getSendId());
     		$record->setData('sailthru_email_deliver_status',$result['status']);
-    		if (strcmp($result['status'], 'delivered')!=0){
+    		
+    		$customerTrackingRecord = Mage::getModel('customertracking/record')->loadByCustomerEmail($record->getCustomerEmail());
     			//Mage::dispatchEvent('customer_register_email_exception',$result);
-    		    $customerTrackingRecord = Mage::getModel('customertracking/record')->loadByCustomerEmail($record->getCustomerEmail());
-	    		if(!!$customerTrackingRecord && $customerTrackingRecord->getId()){
+    		if(!!$customerTrackingRecord && $customerTrackingRecord->getId()){
+    			if (strcmp($result['status'], 'delivered')!=0){
 	    			$status = Harapartners_Customertracking_Model_Record::STATUS_EMAIL_OTHER_PROBLEMS;
 	    			if (strcmp($result['status'], 'softbounce')==0){
 	    				$status = Harapartners_Customertracking_Model_Record::STATUS_EMAIL_SOFTBRONCE;
 	    			}elseif (strcmp($result['status'], 'hardbounce')==0){
 	    				$status = Harapartners_Customertracking_Model_Record::STATUS_EMAIL_HARDBRONCE;
 	    			}
-	    			$customerTrackingRecord->setStatus($status);
-	    			$customerTrackingRecord->save();
-	    		}
+    			}else{
+    				$status = Harapartners_Customertracking_Model_Record::STATUS_EMAIL_CONFIRMED;
+    			}
+    			$customerTrackingRecord->setStatus($status);
+    			$customerTrackingRecord->save();
     		}
     		$record->setData('sailthru_api_status',Harapartners_EmailFactory_Model_Record::SAILTHRU_API_STATUS_CHECK);
     		$record->save();
