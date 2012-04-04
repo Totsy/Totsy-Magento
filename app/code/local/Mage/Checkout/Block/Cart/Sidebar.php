@@ -313,9 +313,13 @@ class Mage_Checkout_Block_Cart_Sidebar extends Mage_Checkout_Block_Cart_Abstract
     
     //Harapartners, yang, START
 	//Add new function for getting estimate shipping date
-    public function getShippingDate(){
+    public function getShippingDate( $orderConfirmFlag = NULL , $order = NULL ){
     	$endDate = 0;
-    	$items = $this->getRecentItems();
+    	if ( !!$orderConfirmFlag && !!$order && ( $order instanceof Mage_Sales_Model_Order ) ){
+    		$items = $order->getAllItems();
+    	}else {
+    		$items = $this->getRecentItems();
+    	}
     	if( count($items) ) {
     		foreach ( $items as $item){
     			$categoryIdsArray = $item->getProduct()->getCategoryIds();
@@ -327,6 +331,9 @@ class Mage_Checkout_Block_Cart_Sidebar extends Mage_Checkout_Block_Cart_Abstract
     				}
     			}
     		}
+    	}
+    	if ( !$endDate ){
+    		$endDate = now();
     	}
     	return date('m-d-Y', $endDate + 15*24*3600 );
     }

@@ -41,18 +41,12 @@
 	$_cartQty = Mage::getModel('checkout/cart')->getSummaryQty(); 
 	$_itemsArray = $this->getItems();
 	$_updateFlag = $checkoutSession->getCartUpdatedFlag();
+	$_mySaving = $this->__('Your savings: %s', Mage::helper('checkout')->formatPrice($_saving));
 ?>
 <?php if ($_cartQty > 0 && !empty($_itemsArray)): ?>
     <?php $_myCart = $this->__('%s Items', '<span>' . $_cartQty . '</span>') ?>
-    <?php if ($_saving > 0):?>
-    	<?php $_mySaving = $this->__('Your saving: %s', '<span>$' . $_saving . '</span>');?>
-    <?php else:?>
-    	<?php $_saving = '$0.00';?>
-    	<?php $_mySaving = $this->__('Your saving: %s', '<span>$' . $_saving . '</span>');?>
-    <?php endif;?>
 <?php else: ?>
     <?php $_myCart = $this->__('%s Items', '<span>0</span>') ?>
-    <?php $_mySaving = $this->__('%s Items', '<span>0</span>') ?>
 <?php endif ?>
 <?php if ($this->getIsLinkMode() || !$this->getIsNeedToDisplaySideBar()):?>
     <div class="block-title no-items">
@@ -134,7 +128,7 @@
 		                <?php if ($this->canApplyMsrp()): ?>
 		                    <span class="map-cart-sidebar-total"><?php echo $this->__('ORDER TOTAL WILL BE DISPLAYED BEFORE YOU SUBMIT THE ORDER'); ?></span>
 		                <?php else: ?>
-		                	<span class="label"><?php echo $this->__('Your saving:') ?></span><?php echo $this->__('%s', '<span class="price">$' . $_saving . '</span>'); ?>
+		                	<span class="label"><?php echo $this->__('Your saving:') ?></span><?php echo Mage::helper('checkout')->formatPrice($_saving); ?>
 		                    <span class="label"><?php echo $this->__('Subtotal:') ?></span> <?php echo Mage::helper('checkout')->formatPrice($this->getSubtotal()) ?><?php if ($_subtotalInclTax = $this->getSubtotalInclTax()): ?> / <?php echo Mage::helper('checkout')->formatPrice($_subtotalInclTax) ?> <?php echo Mage::helper('tax')->getIncExcText(true) ?><?php endif; ?>
 		                <?php endif; ?>
 		            </p>

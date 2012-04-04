@@ -6,26 +6,35 @@
 			$countDownTimer = Mage::getSingleton('checkout/session')->getCountDownTimer();
 			$timeout = Mage::getSingleton('checkout/session')->getQuoteItemExpireTime();	
 			$endcount_lc = date("F j, Y, G:i:s", ($countDownTimer + $timeout));
-		?>	
+		?>
+		<div class="shipping-date">
+			<span>Estimated Ship Date:</span>
+			<p id="cart-shipping-date-header"><?php echo Mage::app()->getLayout()->createBlock('checkout/cart')->getShippingDate();?></p>           
+		</div>	
 		<div class="timer-control-box">
-		<span>Item Reserved For:</span>
-		<p id="checkout-timer"></p>
-		<script type="text/javascript">
-			jQuery(document).ready(function() {
-				jQuery("#checkout-timer").countdown({
-					//date: "12 10, 2011 16:11", //Counting TO a date
-					date: "<?php echo $endcount_lc; ?>", //Counting TO a date
-					htmlTemplate: "%{m} <span class=\"cd-time\">:</span> %{s} <span class=\"cd-time\">minutes</span>",
-					onChange: function( event, timer ){
-					},
-					onComplete: function( event ){										
-						jQuery(this).html("<span class='over'>no longer reserved</span>");
-					},
-					leadingZero: true,
-					direction: "down"
-				});										
-			});	 
-		</script>
+			<span>Item Reserved For:</span>
+			<p id="checkout-timer"></p>
+			<script type="text/javascript">
+				jQuery(document).ready(function() {
+					jQuery("#checkout-timer").countdown({
+						//date: "12 10, 2011 16:11", //Counting TO a date
+						date: "<?php echo $endcount_lc; ?>", //Counting TO a date
+						htmlTemplate: "%{m} <span class=\"cd-time\">:</span> %{s} <span class=\"cd-time\">minutes</span>",
+						onChange: function( event, timer ){
+						},
+						onComplete: function( event ){										
+							jQuery(this).html("<span class='over'>no longer reserved</span>");
+							setTimeout("cartRedirect();",2000);
+						},
+						leadingZero: true,
+						direction: "down"
+					});										
+				});	
+
+				function cartRedirect(){
+					window.location = "<?php echo Mage::getUrl('checkout/cart');?>"
+				}; 
+			</script>
 		</div>
 	</div>
 	<div id="error-message-wrapper"></div>
