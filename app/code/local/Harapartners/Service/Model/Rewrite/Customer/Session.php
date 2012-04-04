@@ -73,7 +73,7 @@ class Harapartners_Service_Model_Rewrite_Customer_Session extends Mage_Customer_
 	            $this->getCookie()->set('remember_me', 'Remember Me', self::REMEMBER_ME_PERIOD);
             }
 			//Harapartners, yang, END
-            $model = Mage::getModel('customertracking/record')->loadByCustomerId($customer->getId());
+            $model = Mage::getModel('customertracking/record')->loadByCustomerEmail($customer->getEmail());
             if(!!$model->getId()){
             	$this->setAffiliateId($model->getAffiliateId());
             	if($model->getSubAffiliateCode()){

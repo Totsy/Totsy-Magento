@@ -10,7 +10,7 @@
  * to eula@harapartners.com so we can send you a copy immediately.
  * 
  */
-class Harapartners_FulfillmentFactory_Helper_Log extends Mage_Core_Helper_Abstract{	
+class Harapartners_Fulfillmentfactory_Helper_Log extends Mage_Core_Helper_Abstract{	
 	
 	/**
 	 * log message
