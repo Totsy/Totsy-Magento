@@ -53,6 +53,7 @@ class Harapartners_Stockhistory_Block_Adminhtml_Purchaseorder_Edit extends Mage_
     	return $this->getUrl('stockhistory/adminhtml_transaction/new', array(
     									'vendor_id' => $this->getVendorId(),
     									'po_id' => $this->getPoId(),
+    									'vendor_code' => $this->getVendorCode(),
     	));
     }
 	
@@ -64,5 +65,15 @@ class Harapartners_Stockhistory_Block_Adminhtml_Purchaseorder_Edit extends Mage_
     public function getPoId() {
     	$poInfo = Mage::registry('po_data');
     	return $poInfo['id'];
+    }
+    
+    public function getVendorCode(){
+    	$poId = $this->getVendorId();
+    	$vendor = Mage::getModel('stockhistory/vendor')->load($poId);
+    	if(!! $vendor->getId()){
+    		return $vendor->getVendorCode();
+    	}
+    	return null;
+    	
     }
 }
