@@ -1174,4 +1174,9 @@ body .col-left hr {
 .categoryevent-index-topnav .products-grid .product-image{
 	margin: 0 auto 3px;
 }
-
+#hpcheckout-wrapper .fields>.fields>.validation-advice{
+	
+}
+.hpcheckout-checkout-index .form-list .validation-advice {
+    width:203px;
+}
