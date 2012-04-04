@@ -109,6 +109,7 @@ h1.event-collection-title {
 	text-transform: capitalize;
 	font-family: Helvetica,Arial,sans-serif;
 	width: 207px;
+	max-height: 45px;
 	overflow: hidden;}
 .catalog-events-container .catalog-event p{ 
 	color: #c7c7c7;
@@ -469,3 +470,7 @@ body.product-totsy-gift-card div.share-button { padding: 0px; width: 130px; }
     margin-bottom: 20px;
     padding: 0 0 10px;
     text-align: center;}
+
+	
+/* customer password reset ================================================================================= */
+body.customer-account-resetpassword .col1-layout .col-main { width: 380px;}
