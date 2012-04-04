@@ -37,7 +37,7 @@ class Harapartners_Dropshipfactory_Block_Adminhtml_Dropship_Index_Grid extends M
         						->where($order_table . '.state="' . Mage_Sales_Model_Order::STATE_NEW . '" AND ' .
         								$catalog_product_entity_int_table . '.attribute_id=' . $vendorAttributeId . ' AND ' .
         								$catalog_product_entity_varchar_table . '.attribute_id=' . $fulfillmentTypeAttributeId . ' AND ' .
-        								$catalog_product_entity_varchar_table . '.value="dropship"');
+        								$catalog_product_entity_varchar_table . '.value="' . Harapartners_Ordersplit_Helper_Data::TYPE_DROPSHIP . '"');
 		       						
 		$this->setCollection($collection);
 		parent::_prepareCollection();
