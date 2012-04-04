@@ -811,3 +811,37 @@ body.customer-account-create div .facebook-button, .enterprise-invitation-custom
     margin-right: 3px;
     width: 300px;
 }
+
+.customer-account-resetpassword .page-title h1{
+	font-weight:normal
+}
+
+.customer-account-resetpassword .page-title{
+	border-bottom: 1px #aaa;
+}
+
+
+.customer-account-resetpassword .col-main{
+	margin-left:5px
+}
+
+.customer-account-resetpassword .buttons-set button.button{
+	float:left
+}
+
+.customer-account-resetpassword .buttons-set{
+	padding-top:0px;
+	margin-top:0px
+}
+
+.customer-account-resetpassword .fieldset{
+	margin-bottom:0px
+}
+
+.sales-order-view .order-date{
+	margin-bottom:0px;	
+}
+
+.sales-order-view .shipping-date{
+	font-size:11px;
+}
