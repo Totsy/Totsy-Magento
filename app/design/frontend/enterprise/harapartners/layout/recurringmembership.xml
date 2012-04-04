@@ -3,12 +3,12 @@
         <reference name="customer_account_navigation" >
             <action method="addLink" translate="label"><name>recurringmembership</name><path>recurringmembership/</path><label>Recurring Membership</label></action>
         </reference>
-    </customer_account>
+    </customer_account>-->
 	
 	<recurringmembership_index_index>
 		<label>Customer My Account Recurring Membership</label>
 		<!-- Mage_Customer -->
-<!--		<update handle="customer_account"/>
+		<update handle="customer_account"/>
 		<reference name="root">
 			<action method="setTemplate"><template>page/2columns-left.phtml</template></action>
 		</reference>
@@ -16,4 +16,4 @@
 			<block type="core/template" name="recurring_membership" template="recurringmembership/membership.phtml"/>
 		</reference>
 	 </recurringmembership_index_index>
- </layout>-->
+ </layout>
