@@ -183,6 +183,7 @@ class Harapartners_Categoryevent_Block_Index_Topnav extends Mage_Core_Block_Temp
 	        		'thumbnail',
 	        		'url_path',
 					'special_price',
+					'original_price',
 					'price')
 	        );
 			$productInfoArray = $productCollection->load()->toArray();

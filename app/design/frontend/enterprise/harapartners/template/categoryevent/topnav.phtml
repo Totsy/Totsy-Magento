@@ -29,7 +29,6 @@
 	$timerParam = $category['prepare_timer'];
 	$endcount_lc = $timerParam['endcount_lc'];
 	$timer = $timerParam['timer'];
-	
 ?>
 	<a href="<?php echo Mage::getBaseUrl().$category['category_info']['url_key']; ?>"><h3 class="category-name"><?php echo $category['category_info']['name']; ?></h3></a>
 	<div class="layer-timer">
@@ -43,6 +42,7 @@
 				},
 				onComplete: function( event ){										
 					jQuery(this).html("Completed");
+					jQuery(this).parents('.events-div').hide();
 				},
 				leadingZero: true,
 				direction: "down"
