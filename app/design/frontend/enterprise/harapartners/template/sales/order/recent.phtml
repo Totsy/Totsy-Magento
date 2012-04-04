@@ -19,20 +19,23 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    design
- * @package     enterprise_default
+ * @package     base_default
  * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://www.magentocommerce.com/license/enterprise-edition
  */
 ?>
-<div class="recent-orders">
+<div class="box-account box-recent">
 <?php $_orders = $this->getOrders(); ?>
-    <h2 class="table-caption"><?php echo $this->__('Recent Orders') ?><?php if( sizeof($_orders->getItems()) > 0 ): ?> <span class="separator">|</span> <a href="<?php echo $this->getUrl('sales/order/history') ?>"><?php echo $this->__('View All') ?></a><?php endif; ?></h2>
-    <?php echo $this->getChildHtml()?>
+    <div class="box-head">
+        <h2><?php echo $this->__('Recent Orders') ?></h2>
+        <?php if( sizeof($_orders->getItems()) > 0 ): ?><a href="<?php echo $this->getUrl('sales/order/history') ?>"><?php echo $this->__('View All') ?></a><?php endif; ?>
+    </div>
 <?php if( sizeof($_orders->getItems()) > 0 ): ?>
     <table class="data-table" id="my-orders-table">
     <col width="1" />
     <col width="1" />
-    <col width="1"/>
+    <col />
+    <col width="1" />
     <col width="1" />
     <col width="1" />
         <thead>
@@ -41,6 +44,7 @@
                 <th><?php echo $this->__('Date') ?></th>
                 <th><?php echo $this->__('Ship To') ?></th>
                 <th><span class="nobr"><?php echo $this->__('Order Total') ?></span></th>
+                <th><?php echo $this->__('Status') ?></th>
                 <th>&nbsp;</th>
             </tr>
         </thead>
@@ -51,12 +55,15 @@
                     <td><span class="nobr"><?php echo $this->formatDate($_order->getCreatedAtStoreDate()) ?></span></td>
                     <td><?php echo $_order->getShippingAddress() ? $this->htmlEscape($_order->getShippingAddress()->getName()) : '&nbsp;' ?></td>
                     <td><?php echo $_order->formatPrice($_order->getGrandTotal()) ?></td>
+                    <td><em><?php echo $_order->getStatusLabel() ?></em></td>
                     <td class="a-center">
-                        <a href="<?php echo $this->getViewUrl($_order) ?>" class="nobr"><?php echo $this->__('View Order') ?></a><!--
+                        <span class="nobr">
+                        <a href="<?php echo $this->getViewUrl($_order) ?>"><?php echo $this->__('View Order') ?></a>
                         <?php if ($this->helper('sales/reorder')->canReorder($_order)) : ?>
-                            <span class="separator">|</span> <a href="<?php echo $this->getReorderUrl($_order) ?>" class="nobr"><?php echo $this->__('Reorder') ?></a>
+                            <span class="separator">|</span> <a href="<?php echo $this->getReorderUrl($_order) ?>" class="link-reorder"><?php echo $this->__('Reorder') ?></a>
                         <?php endif ?>
-                    --></td>
+                        </span>
+                    </td>
                 </tr>
             <?php endforeach; ?>
         </tbody>
