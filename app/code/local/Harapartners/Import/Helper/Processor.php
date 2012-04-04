@@ -128,43 +128,49 @@ class Harapartners_Import_Helper_Processor extends Mage_Core_Helper_Abstract {
 	}
 	
 	protected function _setPurchaseOrderInfo($importData, $poId, $categoryId){
-		$stockhistoryReport = Mage::getModel('stockhistory/report');
+		$vendorID = '';
+		$stockhistoryReport = Mage::getModel('stockhistory/transaction');
 		$product = Mage::getModel('catalog/product')->loadByAttribute('sku', $importData['sku']);
+		
 		if(!!$product && $product->getId()){
-			//Purchase Order ID
-			if(!!$this->_purchaseOrderId){
-				$stockhistoryReport->setData('po_id',$this->_purchaseOrderId);
-			}elseif(!!$poId){
-				$stockhistoryReport->setData('po_id',$poId);
-				$this->_purchaseOrderId = $poId;
-			}else{
-				//Get Last PO ID
-			}
-			
-			//Category ID
-			if(!!$categoryId){
-				$stockhistoryReport->setData('category_id', $categoryId);
-			}elseif(!!$importData['category_ids'] && isset($importData['category_ids'])){
-				$categoryIds = explode(',', $importData['category_ids']);
-				$stockhistoryReport->setData('category_id',$categoryIds[0]);
-			}
-			
-			$stockhistoryReport->setData('vendor_id', $product->getVendor());
-			$stockhistoryReport->setData('product_id', $product->getId());
-			$stockhistoryReport->setData('vendor_sku', $product->getVendorStyle());
-			$stockhistoryReport->setData('product_sku', $product->getSku());
-			$stockhistoryReport->setData('cost', $product->getCost());
-			try {
-				$stockhistoryReport->save();
-			}catch (Exception $e){
-				//Error Log here
-				/**
-				 * Need Jun/Song for this message
-				 * (string:285) SQLSTATE[HY000]: 
-				 * General error: 1452 Cannot add or update a child row: 
-				 * a foreign key constraint fails (`totsy_pdb1`.`stockhistory_report`, CONSTRAINT `FK_STOCKHISTORY_REPORT_VENDOR` FOREIGN KEY (`vendor_id`) REFERENCES `stockhistory_vendor` (`id`) ON DELETE SET NULL ON UPDATE CASCADE)
-				 */
-				$a=1;
+			$vendor = Mage::getModel('stockhistory/vendor')->loadByCode($product->getAttributeText('vendor'));
+			if(!!$vendor && isset($vendor['id'])){
+				//Purchase Order ID
+				if(!!$this->_purchaseOrderId){
+					$stockhistoryReport->setData('po_id',$this->_purchaseOrderId);
+				}elseif(!!$poId){
+					$stockhistoryReport->setData('po_id',$poId);
+					$this->_purchaseOrderId = $poId;
+				}else{
+					//Create New PO ID
+				}
+				
+				//Category ID
+				if(!!$categoryId){
+					$stockhistoryReport->setData('category_id', $categoryId);
+				}elseif(!!$importData['category_ids'] && isset($importData['category_ids'])){
+					$categoryIds = explode(',', $importData['category_ids']);
+					$stockhistoryReport->setData('category_id',$categoryIds[0]);
+				}
+				
+				$stockhistoryReport->setData('vendor_id', $vendor['id']);
+				$stockhistoryReport->setData('product_id', $product->getId());
+				$stockhistoryReport->setData('vendor_sku', $product->getVendorStyle());
+				$stockhistoryReport->setData('product_sku', $product->getSku());
+				$stockhistoryReport->setData('cost', $product->getCost());
+				$stockhistoryReport->setData('qty_delta', $importData['qty']);
+				try {
+					$stockhistoryReport->save();
+				}catch (Exception $e){
+					//Error Log here
+					/**
+					 * Need Jun/Song for this message
+					 * (string:285) SQLSTATE[HY000]: 
+					 * General error: 1452 Cannot add or update a child row: 
+					 * a foreign key constraint fails (`totsy_pdb1`.`stockhistory_report`, CONSTRAINT `FK_STOCKHISTORY_REPORT_VENDOR` FOREIGN KEY (`vendor_id`) REFERENCES `stockhistory_vendor` (`id`) ON DELETE SET NULL ON UPDATE CASCADE)
+					 */
+					$a=1;
+				}
 			}
 		}
 	}
