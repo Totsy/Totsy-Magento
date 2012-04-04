@@ -7,7 +7,7 @@
 <config>
     <modules>
         <Harapartners_Import>
-            <version>1.0.2</version>
+            <version>1.0.3</version>
         </Harapartners_Import>
     </modules>
 	<global>
