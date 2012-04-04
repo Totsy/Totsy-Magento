@@ -43,6 +43,7 @@
 				},
 				onComplete: function( event ){										
 					jQuery(this).html("Completed");
+					jQuery(this).parents().parents().hide();
 				},
 				leadingZero: true,
 				direction: "down"
