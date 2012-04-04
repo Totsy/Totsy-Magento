@@ -149,7 +149,7 @@ HpCheckout.prototype = {
 	},
 
 	renderErrorMessage: function( message ) {
-		alert( message );
+		jQuery( '#error-message-wrapper' ).html( message );
 	},
 	//==============================//
 	//==========Controller==========//
