@@ -733,6 +733,9 @@ body.catalog-category-view .product-options dd{
 body.catalog-category-view .category-products {
     padding: 5px 0 0;
 }
+body.catalog-category-view div.options-container-big{
+	display:none;
+}
 .middle-part {
 	
 }
