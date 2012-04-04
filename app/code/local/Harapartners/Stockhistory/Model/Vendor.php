@@ -47,9 +47,9 @@ class Harapartners_Stockhistory_Model_Vendor extends Mage_Core_Model_Abstract
     	$this->addData($data);
     	if(!$this->getVendorName() || !$this->getVendorCode() || !$this->getEmailList()){
     		throw new Exception('Required Data is missing');
-    	}elseif($this->getData('id') !== $this->_validateByCode($data['vendor_code'])){
+    	}/*elseif($this->getData('id') !== $this->_validateByCode($data['vendor_code'])){
     		throw new Exception('Vendor SKU already exists, please choose another one');
-    	}
+    	}*/
     	$this->save();
     	return $this;
     }

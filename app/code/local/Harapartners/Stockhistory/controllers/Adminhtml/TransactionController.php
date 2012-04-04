@@ -15,6 +15,7 @@
 class Harapartners_Stockhistory_Adminhtml_TransactionController extends Mage_Adminhtml_Controller_Action
 {   
 	//protected $statusOptions = array('Pending' => 0, 'Processed' => 1, 'Failed' => 2);
+	
 	protected $mimes = array('application/vnd.ms-excel', 'text/plain', 'text/csv', 'text/tsv');
 	
 	protected function _getSession()
@@ -149,6 +150,8 @@ class Harapartners_Stockhistory_Adminhtml_TransactionController extends Mage_Adm
 									$transaction->setData('unit_cost', $unitCost);
 									$transaction->setData('qty_delta', $qtyDelta);
 									$transaction->setData('comment', $comment);
+									$transaction->setData('status', Harapartners_Stockhistory_Helper_Data::STATUS_PROCESSING);
+									$transaction->setData('action_type', Harapartners_Stockhistory_Helper_Data::TRANSACTION_ACTION_DIRECT_IMPORT);
 									$transaction->validateAndSave();
 									
 //									$transaction = Mage::getModel('stockhistory/transaction')->loadByEntityId($entityId);
