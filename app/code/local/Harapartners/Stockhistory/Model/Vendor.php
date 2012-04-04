@@ -34,7 +34,7 @@ class Harapartners_Stockhistory_Model_Vendor extends Mage_Core_Model_Abstract
     
     public function loadByCode($code, $storeId = null)
     {
-    	return $this->getResource()->loadBySku($code, $storeId);
+    	return $this->getResource()->loadByCode($code, $storeId);
     }
     
     protected function _validateByCode($code, $storeId = null)

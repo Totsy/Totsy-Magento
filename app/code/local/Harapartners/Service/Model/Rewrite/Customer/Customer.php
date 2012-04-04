@@ -56,6 +56,47 @@ class Harapartners_Service_Model_Rewrite_Customer_Customer extends Mage_Customer
         return true;
     }
     
+    //Haraparnters, jun: remove first name last name validation from registering
+	public function validate(){
+        $errors = array();
+        $customerHelper = Mage::helper('customer');
+
+        if (!Zend_Validate::is($this->getEmail(), 'EmailAddress')) {
+            $errors[] = $customerHelper->__('Invalid email address "%s".', $this->getEmail());
+        }
+
+        $password = $this->getPassword();
+        if (!$this->getId() && !Zend_Validate::is($password , 'NotEmpty')) {
+            $errors[] = $customerHelper->__('The password cannot be empty.');
+        }
+        if (strlen($password) && !Zend_Validate::is($password, 'StringLength', array(6))) {
+            $errors[] = $customerHelper->__('The minimum password length is %s', 6);
+        }
+        $confirmation = $this->getConfirmation();
+        if ($password != $confirmation) {
+            $errors[] = $customerHelper->__('Please make sure your passwords match.');
+        }
+
+        $entityType = Mage::getSingleton('eav/config')->getEntityType('customer');
+        $attribute = Mage::getModel('customer/attribute')->loadByCode($entityType, 'dob');
+        if ($attribute->getIsRequired() && '' == trim($this->getDob())) {
+            $errors[] = $customerHelper->__('The Date of Birth is required.');
+        }
+        $attribute = Mage::getModel('customer/attribute')->loadByCode($entityType, 'taxvat');
+        if ($attribute->getIsRequired() && '' == trim($this->getTaxvat())) {
+            $errors[] = $customerHelper->__('The TAX/VAT number is required.');
+        }
+        $attribute = Mage::getModel('customer/attribute')->loadByCode($entityType, 'gender');
+        if ($attribute->getIsRequired() && '' == trim($this->getGender())) {
+            $errors[] = $customerHelper->__('Gender is required.');
+        }
+
+        if (empty($errors)) {
+            return true;
+        }
+        return $errors;
+    }
+    
     
     //This is a very strange solution. Must check with the business logic
     //also there should also be a frontend validation so that the customer will be notified! 

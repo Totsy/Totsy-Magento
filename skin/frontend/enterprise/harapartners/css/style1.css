@@ -251,6 +251,9 @@ body.cms-page-view .page div.main {
   padding-right:0;
   padding-top:0;	
   font-weight:normal;
+  height:45px;
+  overflow:hidden;
+  line-height:16px;
 }
 
 .events-div .products-grid {
@@ -730,6 +733,9 @@ body.catalog-category-view .product-options dd{
 body.catalog-category-view .category-products {
     padding: 5px 0 0;
 }
+body.catalog-category-view div.options-container-big{
+	display:none;
+}
 .middle-part {
 	
 }
@@ -1158,7 +1164,19 @@ body .col-left hr {
 .customer-account-forgotpassword .footer-container{
 	margin: 0px;
 }
-.categoryevent-index-topnav a.product-image{
+.categoryevent-index-topnav .col-main a.product-image{
 	width:125px;
 	height:125px;
+}
+.left_needhelp .main-nav a{
+	color:#EE1C25;
+}
+.categoryevent-index-topnav .products-grid .product-image{
+	margin: 0 auto 3px;
+}
+#hpcheckout-wrapper .fields>.fields>.validation-advice{
+	
+}
+.hpcheckout-checkout-index .form-list .validation-advice {
+    width:203px;
 }
