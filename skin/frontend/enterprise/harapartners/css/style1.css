@@ -1158,7 +1158,11 @@ body .col-left hr {
 .customer-account-forgotpassword .footer-container{
 	margin: 0px;
 }
-.categoryevent-index-topnav a.product-image{
+.categoryevent-index-topnav .col-main a.product-image{
 	width:125px;
 	height:125px;
 }
+.left_needhelp .main-nav a{
+	color:#EE1C25;
+}
+
