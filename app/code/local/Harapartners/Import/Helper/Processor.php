@@ -14,7 +14,7 @@
 
 class Harapartners_Import_Helper_Processor extends Mage_Core_Helper_Abstract {
 	
-	const DEFAULT_DATAFLOW_PROFILE_ID = 9;
+	const DEFAULT_DATAFLOW_PROFILE_ID = 8;
 	
 	protected $_errorFile 			= null;
 	protected $_errorMessages 		= array();
@@ -122,6 +122,9 @@ class Harapartners_Import_Helper_Processor extends Mage_Core_Helper_Abstract {
 					case 'attribute_set':
 						$importData['attribute_set'] = 'Totsy';
 						break;
+//					case 'status':
+//						$importData['status'] = 'Enabled';
+//						break;
 					case 'sku':
 						$importData['sku'] = $this->_setProductSku($importData);
 						break;
@@ -143,9 +146,12 @@ class Harapartners_Import_Helper_Processor extends Mage_Core_Helper_Abstract {
 					case 'tax_class_id':
 						$importData['tax_class_id'] = 'Taxable Goods';
 						break;
+					
 				}
 			}
 		}
+		$importData['status'] = 'Enabled';
+		$importData['status'] = '0';
 		if($importData['type'] == 'configurable'){
 			$importData['configurable_attribute_codes'] = 'color,size';  //Hard Coded.  Need to enforce in template!
 			$importData['conf_simple_products']			= implode(',',$this->_confSimpleProducts);
@@ -170,6 +176,8 @@ class Harapartners_Import_Helper_Processor extends Mage_Core_Helper_Abstract {
 			$stockhistoryTransaction->setData('product_sku', $product->getSku());
 			$stockhistoryTransaction->setData('unit_cost', $product->getData('sale_wholesale'));
 			$stockhistoryTransaction->setData('qty_delta', $importDataObject->getQty());
+			$stockhistoryTransaction->setData('action', Harapartners_Stockhistory_Helper_Data::TRANSACTION_ACTION_EVENT_IMPORT);
+			$stockhistoryTransaction->setData('comment', date('Y-n-j H:i:s'));
 			try {
 				$stockhistoryTransaction->save();
 			}catch (Exception $e){
@@ -236,7 +244,7 @@ class Harapartners_Import_Helper_Processor extends Mage_Core_Helper_Abstract {
 					$importObject->setImportStatus('import_import_error<a href="'.Mage::getBaseUrl().'media/import/errors/'.date('Y_m_d').'_'.$importObject->getId().'.txt">Error</a>');
 					$importObject->save();   
 				}else{
-					$importObjectObject->setImportStatus(Harapartners_Import_Model_Import::IMPORT_STATUS_COMPLETE);
+					$importObject->setImportStatus(Harapartners_Import_Model_Import::IMPORT_STATUS_COMPLETE);
 					$importObject->save();
 				}
 		  

@@ -99,7 +99,7 @@ class Harapartners_EmailFactory_Model_Observer extends Mage_Core_Model_Abstract 
     		if (strcmp($result['status'], 'delivered')!=0){
     			//Mage::dispatchEvent('customer_register_email_exception',$result);
     		    $customerTrackingRecord = Mage::getModel('customertracking/record')->loadByCustomerEmail($record->getCustomerEmail());
-	    		if(!!$customerTrackingRecord && $customerTrackingRecord->getId()){
+	    		if(!!$customerTrackingRecord && !!$customerTrackingRecord->getId()){
 	    			$status = Harapartners_Customertracking_Model_Record::STATUS_EMAIL_OTHER_PROBLEMS;
 	    			if (strcmp($result['status'], 'softbounce')==0){
 	    				$status = Harapartners_Customertracking_Model_Record::STATUS_EMAIL_SOFTBRONCE;

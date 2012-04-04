@@ -106,13 +106,13 @@ class Harapartners_Fulfillmentfactory_Model_Service_Itemqueue
 				$itemqueue->save();
     		}
     	}
-    	else if($status == Harapartners_FulfillmentFactory_Helper_Data::ORDER_STATUS_PAYMENT_FAILED){
+    	else if($status == Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_PAYMENT_FAILED){
     		foreach($collection as $itemqueue) {
     			$itemqueue->setStatus(Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_PROCESSING);
 				$itemqueue->save();
     		}
     	}
-    	else if($status == Harapartners_FulfillmentFactory_Helper_Data::ORDER_STATUS_FULFILLMENT_FAILED){
+    	else if($status == Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_FULFILLMENT_FAILED){
     		foreach($collection as $itemqueue) {
     			$itemqueue->setStatus(Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_PROCESSING);
 				$itemqueue->save();

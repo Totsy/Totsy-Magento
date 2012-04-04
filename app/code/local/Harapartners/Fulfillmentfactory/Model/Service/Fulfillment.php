@@ -21,16 +21,14 @@ class Harapartners_Fulfillmentfactory_Model_Service_Fulfillment
 	public function markFulfillmentAgingOrders() {
 		$agingDay = Mage::getStoreConfig('fulfillmentfactory_options/aging_setting/fulfillment_aging_day');
 
-		$expiredTime = time() - self::DAY_SECONDS * 5;
+		$expiredTime = time() - self::DAY_SECONDS * $agingDay;
 		$expiredDate = date('Y-m-d H:i:s', $expiredTime);
-		echo $expiredDate . "\n\n";
 		
 		$orderCollection = Mage::getModel('sales/order')->getCollection()
 														->addAttributeToFilter('status', 'pending')
 														->addAttributeToFilter('created_at', array('to' => $expiredDate));
-		echo count($orderCollection);			
 		foreach($orderCollection as $order) {
-			$order->setStatus(Harapartners_FulfillmentFactory_Helper_Data::ORDER_STATUS_FULFILLMENT_AGING)
+			$order->setStatus(Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_FULFILLMENT_AGING)
 				  ->save();
 		}
 	}
@@ -44,14 +42,12 @@ class Harapartners_Fulfillmentfactory_Model_Service_Fulfillment
 
 		$expiredTime = time() - self::DAY_SECONDS * $agingDay;
 		$expiredDate = date('Y-m-d H:i:s', $expiredTime);
-		echo $expiredDate . "\n\n";
 		
 		$orderCollection = Mage::getModel('sales/order')->getCollection()
 														->addAttributeToFilter('status', 'processing')
-														->addAttributeToFilter('updated_at', array('to' => $expiredDate));
-		echo count($orderCollection);			
+														->addAttributeToFilter('updated_at', array('to' => $expiredDate));		
 		foreach($orderCollection as $order) {
-			$order->setStatus(Harapartners_FulfillmentFactory_Helper_Data::ORDER_STATUS_SHIPMENT_AGING)
+			$order->setStatus(Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_SHIPMENT_AGING)
 				  ->save();
 		}
 	}

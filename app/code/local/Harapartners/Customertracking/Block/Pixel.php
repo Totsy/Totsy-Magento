@@ -40,7 +40,40 @@ class Harapartners_Customertracking_Block_Pixel extends Mage_Core_Block_Template
 			}catch(Exception $e){
 			}
 		}
+		$varaiableArray = $this->_stringToArray($pixelHtml); 
+		$pixelHtml = '';
+		foreach ($varaiableArray as $text) {
+			if(is_array($text)){
+				foreach ($text as $realText) {
+					$pixelHtml.= $realText;
+				}
+			}else{
+				$pixelHtml.=$text;	
+			}				
+		}
+		
 		return $pixelHtml;
 	}
-	
+	protected function _stringToArray($string){
+		$array = explode('{{', $string);
+		$i=count($array);
+		for($j=1;$j<$i;$j++){
+			$array[$j] = explode('}}',$array[$j]);
+		}
+		if($i>1){
+			$customer = Mage::getSingleton('customer/session')->getCustomer();
+			$orderId = Mage::getSingleton('checkout/session')->getLastOrderId();
+			$order = Mage::getModel('sales/order')->load($orderId);
+			for ($j=1;$j<$i;$j++){
+				if(substr($array[$j][0],0,9)=='customer.'){
+					$array[$j][0] = $customer->getData(substr($array[$j][0],9));
+				}elseif (substr($array[$j][0],0,6)=='order.'){
+					$array[$j][0] = $order->getData(substr($array[$j][0],6));
+				}else{
+					$array[$j][0] = '{{'.$array[$j][0].'}}';
+				}
+			}
+		}
+		return $array;
+	}
 }
