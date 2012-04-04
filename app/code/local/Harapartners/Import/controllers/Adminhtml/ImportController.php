@@ -122,6 +122,7 @@ class Harapartners_Import_Adminhtml_ImportController extends Mage_Adminhtml_Cont
         
 	        //this way the name is saved in DB
 	        $processorHelper = Mage::helper('import/processor');
+	        
 	        $data['import_batch_id'] = $processorHelper->runDataflowProfile($_FILES['import_filename']['name']);
   			$data['import_filename'] = $_FILES['import_filename']['name'];
   			$data['import_status'] = Harapartners_Import_Model_Import::IMPORT_STATUS_UPLOADED;

@@ -46,8 +46,15 @@ class Harapartners_Import_Model_Import extends Mage_Core_Model_Abstract {
     	$data->setData('vendor_id', $vendor->getId());
     	$data->setData('vendor_code', $vendor->getData('vendor_code'));
     	
-    	//TODO: hard-coded
-    	$data->setData('po_id', 1);
+    	if(!$data->getdata('po_id')){
+			$newPurchaseOrder = Mage::getModel('stockhistory/purchaseorder');
+			$newPurchaseOrder->setData('vendor_id', $data->getdata('vendor_id'));
+			$newPurchaseOrder->setData('name', 'Category Product Import');
+			$newPurchaseOrder->setData('comment', date('Y-n-j H:i:s'));
+			$newPurchaseOrder->save();
+			$data->setData('po_id', $newPurchaseOrder->getId());
+	    }
+    	
     	
     	//Forcefully overwrite existing data, certain data may need to be removed before this step
     	$this->addData($data->getData());
