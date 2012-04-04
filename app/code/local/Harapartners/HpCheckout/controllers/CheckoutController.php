@@ -157,7 +157,7 @@ class Harapartners_HpCheckout_CheckoutController extends Mage_Checkout_Controlle
 		//$this->_initLayoutMessages( 'checkout/session' );
 		$json[ 'billing' ][ 'html' ] = $this->_renderBilling();
 		$json[ 'shipping' ][ 'html' ] = $this->_renderShipping();
-		$json[ 'shipping_method' ][ 'html' ] = $this->_renderShippingMethod();
+		//$json[ 'shipping_method' ][ 'html' ] = $this->_renderShippingMethod();
 		$json[ 'payment' ][ 'html' ] = $this->_renderPayment();
 		$json[ 'review' ][ 'html' ] = $this->_renderReview();
 		return $json;

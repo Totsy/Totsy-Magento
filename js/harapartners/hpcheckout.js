@@ -125,7 +125,7 @@ HpCheckout.prototype = {
 		var blockType = '';
 		if( clickedAddress.attr( 'id' ) == 'billing-address-select' ) {
 			blockType = 'billing';
-		} else if( clickedAddress.id() == 'shipping-address-select' ) {
+		} else if( clickedAddress.attr( 'id' ) == 'shipping-address-select' ) {
 			blockType = 'shipping';
 		}
 		if( clickedAddress.val() == '' ) {
