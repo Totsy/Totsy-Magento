@@ -141,6 +141,9 @@ HpCheckout.prototype = {
 				jQuery( 'input, select', '#' + hpcheckout.data.blocks[ blockType ].formId ).each( function(){
 					jQuery( this ).val( hpcheckoutAddresses[ clickedAddress.val() ][ jQuery( this ).attr( 'id' ).replace( blockType + ':', '' ) ] );
 				});
+				if( blockType == 'shipping' ) {
+					jQuery( '#shipping\\:postcode' ).change();
+				}
 			}
 		}
 	},

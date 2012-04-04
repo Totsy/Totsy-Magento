@@ -1,10 +1,12 @@
-<div class="billing-title sub-title checkout-sub-title"><?php echo $this->__('Billing Address') ?></div>
-<?php if ($this->customerHasAddresses()): ?>
-    <div class="billing-address-select totsy-selective-input-box">
-		<span>New Address</span>
-        <?php echo $this->getAddressesHtmlSelect('billing') ?>
-    </div>
-<?php endif; ?>
+<div class="checkout-headline">
+	<div class="billing-title sub-title checkout-sub-title"><?php echo $this->__('Billing Address') ?></div>
+	<?php if ($this->customerHasAddresses()): ?>
+	    <div class="billing-address-select totsy-selective-input-box">
+			<span>New Address</span>
+	        <?php echo $this->getAddressesHtmlSelect('billing') ?>
+	    </div>
+	<?php endif; ?>
+</div>
 <div class="checkout-content">
 	<form id="hpcheckout-billing-form" action="">
 	    <ul class="form-list">

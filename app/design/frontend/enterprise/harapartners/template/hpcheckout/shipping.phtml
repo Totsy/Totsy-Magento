@@ -1,10 +1,12 @@
-<div class="shipping-title sub-title checkout-sub-title"><?php echo $this->__('Shipping Address') ?></div>
-<?php if ($this->customerHasAddresses()): ?>
-    <div class="shipping-address-select totsy-selective-input-box">
-		<span>New Address</span>
-        <?php echo $this->getAddressesHtmlSelect('shipping') ?>
-    </div>
-<?php endif; ?>
+<div class="checkout-headline">
+	<div class="shipping-title sub-title checkout-sub-title"><?php echo $this->__('Shipping Address') ?></div>
+	<?php if ($this->customerHasAddresses()): ?>
+	    <div class="shipping-address-select totsy-selective-input-box">
+			<span>New Address</span>
+	        <?php echo $this->getAddressesHtmlSelect('shipping') ?>
+	    </div>
+	<?php endif; ?>
+</div>
 <div class="checkout-content">
 	<form id="hpcheckout-shipping-form" action="">
 	    <ul class="form-list">
@@ -83,6 +85,7 @@
 	
 	    jQuery( document ).ready( function() {
 	    	jQuery( '#shipping\\:postcode, #shipping\\:region_id' ).bind( 'change', hpcheckout.update );
+	    	jQuery( '#shipping-address-select' ).bind( 'change', hpcheckout.switchAddress );
 		});
 	    
 	//]]>
