@@ -139,9 +139,9 @@
 	jQuery(document).ready(function(){
 		jQuery("#usercart").hover(
 			function(){
-				jQuery("#topCartContent").fadeIn();},
+				jQuery("#topCartContent").stop().fadeTo(200,1);},
 			function(){
-				jQuery("#topCartContent").fadeOut();}
+				jQuery("#topCartContent").stop().fadeTo(200,0);}
 		);
 	})
 </script>
