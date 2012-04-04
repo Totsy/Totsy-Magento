@@ -67,6 +67,12 @@
             <service>
             	<class>Harapartners_Service_Helper</class>
             </service>
+			<catalog>
+                <rewrite>
+					<!--Harapartners_Service: do NOT allow product view without category!-->
+                    <product>Harapartners_Service_Helper_Rewrite_Catalog_Product</product>
+                </rewrite>
+            </catalog>
         </helpers>
 		<models>
             <service>
