@@ -14,9 +14,17 @@
 
 class Harapartners_Stockhistory_Helper_Data extends Mage_Core_Helper_Abstract  {
 	
-	const STATE_PENDING = 0;
-	const STATE_PROCESSED = 1;
-	const STATE_FAILED = 2;
+	const STATUS_PENDING = 0;
+	const STATUS_PROCESSED = 1;
+	const STATUS_FAILED = 2;
+	
+	const TYPE_VENDOR = 1;
+	const TYPE_SUBVENDOR = 2;
+	const TYPE_DISTRIBUTOR = 3;
+	
+	const TRANSACTION_ACTION_AMENDMENT = 1;
+	const TRANSACTION_ACTION_EVENT_IMPORT = 2;
+	const TRANSACTION_ACTION_DIRECT_IMPORT = 3;
 	
 	private $csv_header = array('Product ID', 'Product Name', 'Product SKU', 'Size', 'Color', 'Vendor SKU', 'Qty', 'Created At', 'Updated At', 'Status', 'Comment');
 //	private $statusOptions = array(
@@ -31,19 +39,36 @@ class Harapartners_Stockhistory_Helper_Data extends Mage_Core_Helper_Abstract  {
 	}
 	
 	public function getFormVendorTypeArray(){
+		
 		return array(
-       			array('label' => 'Process Immediately', 'value' => Harapartners_Import_Model_Import::ACTION_TYPE_PROCESS_IMMEDIATELY),
-       			array('label' => 'Pending', 'value' => Harapartners_Import_Model_Import::ACTION_TYPE_PENDING)
+       			array('label' => 'Vendor', 'value' => self::TYPE_VENDOR),
+       			array('label' => 'SubVendor', 'value' => self::TYPE_SUBVENDOR),
+       			array('label' => 'Distributor', 'value' => self::TYPE_DISTRIBUTOR),
        	);
 	}
 	
+	public function getFormTransactionTypeArray(){
+		
+		return array(
+       			array('label' => 'Amendment', 'value' => self::TRANSACTION_ACTION_AMENDMENT),
+       			array('label' => 'Event Import', 'value' => self::TRANSACTION_ACTION_EVENT_IMPORT),
+       			array('label' => 'Direc Import', 'value' => self::TRANSACTION_ACTION_DIRECT_IMPORT),
+       	);
+	}
+	public function getFormVendorStatusArray(){
+		return array(
+				array('label' => 'Enabled', 'value' => 1),
+				array('label' => 'Disabled', 'value' => 0),
+		);
+	}
+	
 	public function getStatusOptions(){
-		$statusOptions = array(
+		return  array(
 				array('value' => 0, 'label' => $this->__('Pending')),
 				array('value' => 1, 'label' => $this->__('Processed')),
 				array('value' => 2, 'label' => $this->__('Failed')),
 		);
-		return $statusOptions;
+		
 	}
 	
 }

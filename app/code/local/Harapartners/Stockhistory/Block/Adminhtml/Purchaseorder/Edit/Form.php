@@ -16,47 +16,57 @@ class Harapartners_Stockhistory_Block_Adminhtml_Purchaseorder_Edit_Form extends 
        						
 	protected function _prepareForm() {
 		
-		$dataObject = new Varien_Object(Mage::registry('po_data'));
+		//$dataObject = new Varien_Object(Mage::registry('po_data'));
+		$helper = Mage::helper('stockhistory');
+		$data = $this->getRequest()->getParams();
+		
 		
         $form = new Varien_Data_Form(array(
             'id'        => 'edit_form',
-            'action'    => $this->getUrl('*/*/save', array('id' => $dataObject->getId())),
+            'action'    => $this->getUrl('*/*/save', array('id' => $this->getRequest()->getParam('id'))),
             'method'    => 'post',
             //'enctype'  	 => 'multipart/form-data'
         ));
         
-		$data = $this->getRequest()->getParams();
-        $fieldset = $form->addFieldset('vendor', array('legend'=>Mage::helper('stockhistory')->__("Vendor Info")));
+		
+        $fieldset = $form->addFieldset('vendor', array('legend'=>$helper->__("Vendor Info")));
 		
         //Adding PO without vendor_id is not allowed
-        $fieldset->addField('vendor_id', 'text', array(
-	            	'label'     => Mage::helper('stockhistory')->__('Vendor ID:'),
-	            	'name'      => 'vendor_id',
-	        		'readonly' 	=> true,
-	        		'value'		=> $dataObject->getVendorId(),
-	        		'required'	=> true,
-        			'note'		=> 'Read only field. Each purchase order must be associated to a given vendor.'
-        ));
+        if(isset($data['vendor_id']) && !! $data['vendor_id']){
+	        $fieldset->addField('vendor_id', 'text', array(
+		            	'label'     => $helper->__('Vendor ID:'),
+		            	'name'      => 'vendor_id',
+		        		'readonly' 	=> true,
+		        		'value'		=> $data['vendor_id'],//$dataObject->getVendorId(),
+		        		'required'	=> true,
+	        			'note'		=> 'Read only field. Each purchase order must be associated to a given vendor.'
+	        ));
+        }else{
+        	$fieldset->addField('vendor_id', 'text', array(
+		            	'label'     => $helper->__('Vendor ID:'),
+		            	'name'      => 'vendor_id',
+		        		'readonly' 	=> true,
+		        		'required'	=> true,
+	        			'note'		=> 'Read only field. Each purchase order must be associated to a given vendor.'
+	        ));
+        }
         
         $fieldset->addField('name', 'text', array(
-            'label'     => Mage::helper('stockhistory')->__('Purchase Order Name:'),
+            'label'     => $helper->__('Purchase Order Title:'),
             'name'      => 'name',
         	'required'	=> true,
         ));
         
         
         $fieldset->addField('comment', 'textarea', array(
-            'label'     => Mage::helper('stockhistory')->__('Comment:'),
+            'label'     => $helper->__('Comment:'),
             'name'      => 'comment',
         ));
-		//$configKey = 'text_content';		
-		//$configText = Mage::getStoreConfig('config/textconfig_text/'.$configKey);
 		
-        //$form->setValues( array('file_import' => $configText) );
-        $form->setValues($dataObject->getData());
-//		if ( Mage::registry('po_data') ) {
-//            $form->setValues(Mage::registry('po_data'));
-//        }
+        //$form->setValues($dataObject->getData());
+		if ( Mage::registry('po_data') ) {
+            $form->setValues(Mage::registry('po_data'));
+        }
 //		if ( $formData = Mage::getSingleton('adminhtml/session')->getPoFormData() ){
 //            $form->setValues($formData);
 //            Mage::getSingleton('adminhtml/session')->setPoFormData(null);
