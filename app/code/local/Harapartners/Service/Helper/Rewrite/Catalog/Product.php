@@ -12,7 +12,16 @@
  * 
  */
 
-$installer = $this;
-$installer->startSetup();
-$installer->getConnection()->addColumn($this->getTable('import/import'), 'action_type', 'smallint(5) unsigned default NULL');
-$installer->endSetup();
+class Harapartners_Service_Helper_Rewrite_Catalog_Product extends Mage_Catalog_Helper_Product {
+   
+    public function initProduct($productId, $controller, $params = null) {
+        if (!$params) {
+            $params = new Varien_Object();
+        }
+        if(!$params->getCategoryId()){
+        	return false;
+        }
+        return parent::initProduct($productId, $controller, $params);
+    }
+    
+}

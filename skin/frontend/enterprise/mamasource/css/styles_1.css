@@ -468,3 +468,6 @@ body.product-totsy-gift-card div.share-button { padding: 0px; width: 130px; }
     margin-bottom: 20px;
     padding: 0 0 10px;
     text-align: center;}
+
+/* customer password reset ================================================================================= */
+body.customer-account-resetpassword .col1-layout .col-main { width: 380px;}
