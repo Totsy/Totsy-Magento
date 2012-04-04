@@ -22,6 +22,7 @@ class Harapartners_ShippingFactory_Model_Shipping_Carrier_Flexible
     const GUAM_COUNTRY_ID = 'GU';
     const GUAM_REGION_CODE = 'GU';
     
+    
     // Cache the quotes
     protected static $_quotesCache = array();
     
@@ -49,10 +50,18 @@ class Harapartners_ShippingFactory_Model_Shipping_Carrier_Flexible
         if (!$this->getConfigFlag('active')) {
             return false;
         }
-        
+        //HP Song --Start
+        $defaultShippingPrice = $this->getConfigData('default_shipping_price');
+        $hasDefaultShippingItem = false;
+        //HP --End
         $freeBoxes = 0;
         $shippingPrice = 0;
-        if ($request->getAllItems()) {
+        if(false){
+        	// Pass
+        	// Grandfathering free shipping on first order or $10 off order of $50 or more.
+        	$shippingPrice = '0.00';
+        }
+        elseif ($request->getAllItems()) {
         	
             foreach ($request->getAllItems() as $item) {
             	
@@ -65,7 +74,14 @@ class Harapartners_ShippingFactory_Model_Shipping_Carrier_Flexible
             			$childProduct = Mage::getModel('catalog/product')->load($child->getProductId());
             			if($this->_isFlatRate($childProduct)){
             				$qty = $item->getQty() * $child->getQty();
-            				$shippingPrice += $childProduct->getShippingRate() * $qty;
+            				$childPrice = $childProduct->getShippingRate() ? $childProduct->getShippingRate(): $defaultShippingPrice; 
+            				
+            				if($childPrice > $defaultShippingPrice){
+            					$shippingPrice += $childPrice * $qty;
+            				}elseif(!$hasDefaultShippingItem){
+            					$shippingPrice += $childPrice;
+            					$hasDefaultShippingItem = true;
+            				}
             			}elseif($this->_isFreeShipping($childProduct)){
             				$freeBoxes += $item->getQty() * $child->getQty();
             				
@@ -80,7 +96,16 @@ class Harapartners_ShippingFactory_Model_Shipping_Carrier_Flexible
                 } elseif (! $item->getParentItem() && ! $item->getHasChildren()) {
                 	$product = Mage::getModel('catalog/product')->load($item->getProductId());
                 	if($this->_isFlatRate($product)){
-                    	$shippingPrice += $product->getShippingRate() * $item->getQty();
+                		$qty = $item->getQty();
+                		$itemPrice = $product->getShippingRate() ? $product->getShippingRate() : $defaultShippingPrice;
+                		
+                		if($itemPrice > $defaultShippingPrice){
+            				$shippingPrice += $itemPrice * $qty;
+            			}elseif(!$hasDefaultShippingItem){
+            				$shippingPrice += $itemPrice;
+            				$hasDefaultShippingItem = true;
+            			}
+                		
                 	}elseif($this->_isFreeShipping($product)){
                 		$freeBoxes += $item->getQty();
                 	}elseif($this->_isDimensional($product)){

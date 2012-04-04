@@ -48,6 +48,7 @@
                 <title>Flexible Shipping</title>
                 <name>Flexible Shipping</name>
 				<dest_type>RES</dest_type>
+				<default_shipping_price>7.95</default_shipping_price>
 				<!--
 				<allowed_methods>1DM,1DML,1DA,1DAL,1DAPI,1DP,1DPL,2DM,2DML,2DA,2DAL,3DS,GND,GNDCOM,GNDRES,STD,XPR,WXS,XPRL,XDM,XDML,XPD</allowed_methods>
 				-->
