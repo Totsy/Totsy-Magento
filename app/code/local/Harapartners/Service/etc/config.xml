@@ -37,11 +37,14 @@
 			<!-- ===== BLOCK REWRITE START ===== -->
 			<adminhtml>
 				<rewrite>
+					<!--Harapartners_Service: widget_form 'datetime' support with Varien_Data_Form_Element_Datetime-->
+				
 					<!--Harapartners_Service: allow admin harapartner theme-->
 					<page>Harapartners_Service_Block_Rewrite_Adminhtml_Page</page>
 					<!--Harapartners_Service: avoid reporting the complete history (ignore unvalidated historical data) -->
 					<report_refresh_statistics_grid>Harapartners_Service_Block_Rewrite_Adminhtml_Report_Refresh_Statistics_Grid</report_refresh_statistics_grid>
-					<!--Harapartners_Service: widget_form 'datetime' support with Varien_Data_Form_Element_Datetime-->
+					<!--Harapartners_Categoryevent-->
+					<catalog_category_edit_form>Harapartners_Service_Block_Rewrite_Adminhtml_Catalog_Category_Edit_Form</catalog_category_edit_form>
 				</rewrite>
 			</adminhtml>
 			<checkout>
@@ -168,6 +171,16 @@
                     </customertracking>
                 </observers>
             </customer_login>
+			<customer_logout>
+                <observers>
+					<!--Harapartners_Customertracking-->
+                    <customertracking>
+						<type>singleton</type>
+                        <class>customertracking/observer</class>
+                        <method>logoutAfter</method>
+                    </customertracking>
+                </observers>
+            </customer_logout>
 			<harapartners_import_after>
 				<observers>
 					<!--Harapartners_Import-->

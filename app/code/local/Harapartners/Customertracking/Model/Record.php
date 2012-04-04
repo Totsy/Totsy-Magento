@@ -17,6 +17,9 @@ class Harapartners_Customertracking_Model_Record extends Mage_Core_Model_Abstrac
 	
 	const STATUS_NEW = 1;
 	const STATUS_EMAIL_CONFIRMED = 2;
+	const STATUS_EMAIL_SOFTBRONCE = 3;
+	const STATUS_EMAIL_HARDBRONCE = 4;
+	const STATUS_EMAIL_OTHER_PROBLEMS = 5;
     
     protected function _construct(){
         $this->_init('customertracking/record');

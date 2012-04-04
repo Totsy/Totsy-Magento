@@ -72,7 +72,7 @@ class Inchoo_Facebook_Customer_AccountController extends Mage_Core_Controller_Fr
 			$this->_getCustomerSession()->addSuccess(
 				$this->__('Your Facebook account has been successfully connected. Now you can fast login using Facebook Connect anytime.')
 			);
-			$this->_redirect('catalogt');
+			$this->_loginPostRedirect();
 			return;
         }
         
@@ -143,7 +143,7 @@ class Inchoo_Facebook_Customer_AccountController extends Mage_Core_Controller_Fr
 			$this->_getCustomerSession()->addSuccess(
 				$this->__('Your Facebook account has been successfully connected. Now you can fast login using Facebook Connect anytime.')
 			);
-			$this->_redirect('catalog');
+			$this->_loginPostRedirect();
     		return;
 		}
 		
@@ -194,7 +194,15 @@ class Inchoo_Facebook_Customer_AccountController extends Mage_Core_Controller_Fr
 
 		if (true === $validationResult) {
 			$customer->save();
-			$this->_getCustomerSession()->setFacebookAccountFirstCreate(true);
+			
+			//Harapartners, Yang, START
+			//Harapartners, Yang, MUST dispatch 'customer_register_success' otherwise the cookies will not be set properly
+			Mage::dispatchEvent('customer_register_success',
+            		array('account_controller' => $this, 'customer' => $customer)
+            );
+            //Harapartners, Yang, END
+                    
+            $this->_getCustomerSession()->setFacebookAccountFirstCreate(true);
 			$this->_getCustomerSession()->addSuccess(
 				$this->__('Thank you for registering with %s', Mage::app()->getStore()->getFrontendName()) .
 				'. ' . 
@@ -204,7 +212,7 @@ class Inchoo_Facebook_Customer_AccountController extends Mage_Core_Controller_Fr
 			$customer->sendNewAccountEmail();
 			
 			$this->_getCustomerSession()->setCustomerAsLoggedIn($customer);
-			$this->_redirect('catalog');
+			$this->_loginPostRedirect();
 			return;
 		
 		//else set form data and redirect to registration
@@ -226,20 +234,20 @@ class Inchoo_Facebook_Customer_AccountController extends Mage_Core_Controller_Fr
     protected function _loginPostRedirect()
     {
         $session = $this->_getCustomerSession();
-        //Set redirect to base url HP Yang
-        $redirectUrl = Mage::getBaseUrl();
+        $redirectUrl = "";
 
-        if ($session->getBeforeAuthUrl() && 
-        	!in_array($session->getBeforeAuthUrl(), array(Mage::helper('customer')->getLogoutUrl(), Mage::getBaseUrl()))) {
-        	$redirectUrl = $session->getBeforeAuthUrl(true);
-        } elseif(($referer = $this->getRequest()->getCookie('fb-referer'))) {
-        	$referer = Mage::helper('core')->urlDecode($referer);     	
-        	//@todo: check why is this added in Magento 1.7
-        	//$referer = Mage::getModel('core/url')->getRebuiltUrl(Mage::helper('core')->urlDecode($referer));
-        	if($this->_isUrlInternal($referer)) {
-        		$redirectUrl = $referer;
-        	}
-        }
+        //Harapartners, yang: set referer to base
+		//        if ($session->getBeforeAuthUrl() && 
+		//        	!in_array($session->getBeforeAuthUrl(), array(Mage::helper('customer')->getLogoutUrl(), Mage::getBaseUrl()))) {
+		//        	$redirectUrl = $session->getBeforeAuthUrl(true);
+		//        } elseif(($referer = $this->getRequest()->getCookie('fb-referer'))) {
+		//        	$referer = Mage::helper('core')->urlDecode($referer);     	
+		//        	//@todo: check why is this added in Magento 1.7
+		//        	//$referer = Mage::getModel('core/url')->getRebuiltUrl(Mage::helper('core')->urlDecode($referer));
+		//        	if($this->_isUrlInternal($referer)) {
+		//        		$redirectUrl = $referer;
+		//        	}
+		//        }
         
         $this->_redirectUrl($redirectUrl);
     }    

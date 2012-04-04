@@ -20,7 +20,7 @@ class Varien_Data_Form_Element_Datetime extends Varien_Data_Form_Element_Date {
         //Important format, also compatible with JS calendar
         $this->setFormat("yyyy-MM-dd HH:mm:ss");
         $this->setTime(true);
-        if(class_exists(Mage)){
+        if(class_exists('Mage')){
         	$this->setImage(Mage::getDesign()->getSkinUrl('images/grid-cal.gif'));
         }
     }

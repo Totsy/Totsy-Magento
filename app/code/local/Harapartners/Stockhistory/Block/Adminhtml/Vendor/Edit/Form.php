@@ -16,9 +16,10 @@ class Harapartners_Stockhistory_Block_Adminhtml_Vendor_Edit_Form extends Mage_Ad
        						
 	protected function _prepareForm() {
 
+		$objectId = $this->getRequest()->getParam('id');
         $form = new Varien_Data_Form(array(
             'id'        => 'edit_form',
-            'action'    => $this->getUrl('*/*/save', array('id' => $this->getRequest()->getParam('id'))),
+            'action'    => $this->getUrl('*/*/save', array('id' => $objectId)),
             'method'    => 'post',
             //'enctype'  	 => 'multipart/form-data'
         ));
@@ -26,22 +27,29 @@ class Harapartners_Stockhistory_Block_Adminhtml_Vendor_Edit_Form extends Mage_Ad
 
         $fieldset = $form->addFieldset('vendor', array('legend'=>Mage::helper('stockhistory')->__("Vendor Info")));
         
-//        $fieldset->addField('id', 'text', array(
-//            'label'     => Mage::helper('stockhistory')->__('Vendor ID:'),
-//            'name'      => 'id',
-//        ));
-        
+        if(!!$objectId){
+	        $fieldset->addField('id', 'label', array(
+	            'label'     => Mage::helper('stockhistory')->__('Vendor ID:'),
+	            'name'      => 'id',
+	        ));
+		}
         
         $fieldset->addField('vendor_name', 'text', array(
             'label'     => Mage::helper('stockhistory')->__('Vendor Name:'),
             'name'      => 'vendor_name',
+        	//'required'	=> true,
+        ));
+        
+        $fieldset->addField('vendor_code', 'text', array(
+            'label'     => Mage::helper('stockhistory')->__('Vendor Code:'),
+            'name'      => 'vendor_code',
         	'required'	=> true,
         ));
         
-        $fieldset->addField('vendor_sku', 'text', array(
-            'label'     => Mage::helper('stockhistory')->__('Vendor SKU:'),
-            'name'      => 'vendor_sku',
-        	'required'	=> true,
+        $fieldset->addField('vendor_type', 'text', array(
+            'label'     => Mage::helper('stockhistory')->__('Vendor Type:'),
+            'name'      => 'vendor_type',
+        	//'required'	=> true,
         ));
         
         $fieldset->addField('contact_person', 'text', array(
@@ -49,42 +57,38 @@ class Harapartners_Stockhistory_Block_Adminhtml_Vendor_Edit_Form extends Mage_Ad
             'name'      => 'contact_person',
         ));
         
-        $fieldset->addField('email', 'text', array(
-            'label'     => Mage::helper('stockhistory')->__('Email:'),
-            'name'      => 'email',
+        $fieldset->addField('email_list', 'text', array(
+            'label'     => Mage::helper('stockhistory')->__('Email List:'),
+            'name'      => 'email_list',
         	'required'	=> true,
+        	//'class'		=> 'validate-email',
         ));
         
         $fieldset->addField('phone', 'text', array(
             'label'     => Mage::helper('stockhistory')->__('Phone:'),
             'name'      => 'phone',
+        	'class'		=>	'validate-phoneLax',
         ));
         
-        $fieldset->addField('created_at', 'label', array(
-            'label'     => Mage::helper('stockhistory')->__('Created At:'),
-            'name'      => 'created_at',
-        ));
-        
-        $fieldset->addField('updated_at', 'label', array(
-            'label'     => Mage::helper('stockhistory')->__('Updated At:'),
-            'name'      => 'updated_at',
+        $fieldset->addField('address', 'text', array(
+            'label'     => Mage::helper('stockhistory')->__('Address:'),
+            'name'      => 'address',
         ));
         
         $fieldset->addField('comment', 'textarea', array(
             'label'     => Mage::helper('stockhistory')->__('Comment:'),
             'name'      => 'comment',
         ));
-		//$configKey = 'text_content';		
-		//$configText = Mage::getStoreConfig('config/textconfig_text/'.$configKey);
 		
-        //$form->setValues( array('file_import' => $configText) );
-        
-		if ( $formData = Mage::getSingleton('adminhtml/session')->getVendorFormData() ){
-            $form->setValues($formData);
-            Mage::getSingleton('adminhtml/session')->setVendorFormData(null);
-        } elseif ( Mage::registry('vendor_data') ) {
-            $form->setValues(Mage::registry('vendor_data')->getData());
+		if ( Mage::registry('vendor_data') ) {
+            $form->setValues(Mage::registry('vendor_data'));
         }
+//		if ( $formData = Mage::getSingleton('adminhtml/session')->getVendorFormData() ){
+//            $form->setValues($formData);
+//            Mage::getSingleton('adminhtml/session')->setVendorFormData(null);
+//        } elseif ( Mage::registry('vendor_data') ) {
+//            $form->setValues(Mage::registry('vendor_data')->getData());
+//        }
         $form->setUseContainer(true);
         $this->setForm($form);
         return parent::_prepareForm();

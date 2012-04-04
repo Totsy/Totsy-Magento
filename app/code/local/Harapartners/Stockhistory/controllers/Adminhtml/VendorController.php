@@ -15,7 +15,7 @@
 class Harapartners_Stockhistory_Adminhtml_VendorController extends Mage_Adminhtml_Controller_Action
 {   
 	//protected $statusOptions = array('Pending' => 0, 'Processed' => 1, 'Failed' => 2);
-	protected $mimes = array('application/vnd.ms-excel', 'text/plain', 'text/csv', 'text/tsv');
+	//protected $mimes = array('application/vnd.ms-excel', 'text/plain', 'text/csv', 'text/tsv');
 	
 	protected function _getSession() {
 		return Mage::getSingleton('adminhtml/session');
@@ -30,19 +30,33 @@ class Harapartners_Stockhistory_Adminhtml_VendorController extends Mage_Adminhtm
 
 	public function newAction()
 	{
+		$this->_getSession()->setVendorFormData(null);
 		$this->_forward('edit');
 	}
 	
 	public function editAction()
 	{
 		$id = $this->getRequest()->getParam('id', null);
-		$model  = Mage::getModel('stockhistory/vendor')->load($id);
-		if(!! $model->getId() || $id == 0){
+		$data = $this->_getSession()->getVendorFromData();
+		
+		if(!!$id){
+			$model  = Mage::getModel('stockhistory/vendor')->load($id);
+			if(!!$model && !!$model->getId()){
+				$data = $model->getData();
+			}else{
+				$this->_getSession()->addError(Mage::helper('stockhistory')->__('Invalid ID'));
+				$this->_redirect('*/*/index');
+				return;
+			}
+		
+		}
+		if(!!$data){
 			Mage::unregister('vendor_data');
-			Mage::register('vendor_data', $model);
+			Mage::register('vendor_data', $data);
 		}
 		$this->loadLayout()->_setActiveMenu('stockhistory/edit');
 		$this->_addContent($this->getLayout()->createBlock('stockhistory/adminhtml_vendor_edit'));
+		//$this->_addLeft($this->getLayout()->createBlock('stockhistory/adminhtml_vendor_edit_tabs'));
 		$this->renderLayout();
 		//$this->_redirect('*/*/index');
 	}
@@ -53,7 +67,6 @@ class Harapartners_Stockhistory_Adminhtml_VendorController extends Mage_Adminhtm
 		if(isset($data['form_key'])){
 			unset($data['form_key']);
 		}
-		$this->_getSession()->setVendorFormData($data);
 		
 		try{
 			$model = Mage::getModel('stockhistory/vendor');
@@ -64,10 +77,27 @@ class Harapartners_Stockhistory_Adminhtml_VendorController extends Mage_Adminhtm
 			$this->_getSession()->addSuccess(Mage::helper('stockhistory')->__('Vendor saved successfully'));
 			$this->_getSession()->setVendorFormData(null);
 		}catch(Exception $e){
-			Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
+			$this->_getSession()->addError($e->getMessage());
        		$this->_redirect('*/*/edit', array('id' => $this->getRequest()->getParam('id')));
+       		return;
 		}
 		$this->_redirect('*/*/index');
 	}
 
+	public function deleteAction()
+	{
+		$id = $this->getrequest()->getParam('id');
+		$model = Mage::getModel('stockhistory/vendor')->load($id);
+		if($model->getId()){
+			try{
+				$model->delete();
+				$this->_getSession()->addSuccess(Mage::helper('stockhistory')->__('Delete the Record successfully'));
+			}catch(Exception $e){
+				$this->_getSession()->addError(Mage::helper('stockhistory')->__('Unable to Delete, please try again'));
+			}
+		}else{
+			$this->_getSession()->addError(Mage::helper('stockhistory')->__('Unknown record, deletion failed'));
+		}
+		$this->_redirect('*/*/index');
+	}
 }
