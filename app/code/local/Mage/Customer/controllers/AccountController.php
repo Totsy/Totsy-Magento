@@ -334,8 +334,11 @@ class Mage_Customer_AccountController extends Mage_Core_Controller_Front_Action
                 $validationResult = count($errors) == 0;
 
                 if (true === $validationResult) {
+                	
+                	Mage::register('new_account',1);//Harapartners, Edward, Start of setting for Affliate email validation
                     $customer->save();
-
+					Mage::unregister('new_account');//Harapartners, Edward, End of setting for Affliate email validation 
+					
                     Mage::dispatchEvent('customer_register_success',
                         array('account_controller' => $this, 'customer' => $customer)
                     );

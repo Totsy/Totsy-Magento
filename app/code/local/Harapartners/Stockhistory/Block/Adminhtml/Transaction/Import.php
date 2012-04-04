@@ -12,13 +12,13 @@
  * 
  */
 
-class Harapartners_Stockhistory_Block_Adminhtml_History_Import extends Mage_Adminhtml_Block_Widget_Form_Container
+class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Import extends Mage_Adminhtml_Block_Widget_Form_Container
 {
 	public function __construct()
 	{
 		parent::__construct();
 		$this->_blockGroup = 'stockhistory';
-		$this->_controller = 'adminhtml_history';
+		$this->_controller = 'adminhtml_transaction';
 		$this->_mode = 'import';
 		$this->_removeButton('save');
 		$this->_addButton('importsave', array(

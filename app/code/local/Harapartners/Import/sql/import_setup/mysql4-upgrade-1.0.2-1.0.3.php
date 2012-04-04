@@ -12,10 +12,7 @@
  * 
  */
 
-class Harapartners_Stockhistory_Model_Mysql4_History extends Mage_Core_Model_Mysql4_Abstract
-{
-	public function _construct()
-	{
-		$this->_init('stockhistory/history', 'history_id');
-	}
-}
+$installer = $this;
+$installer->startSetup();
+$installer->getConnection()->addColumn($this->getTable('import/import'), 'action_type', 'smallint(5) unsigned default NULL');
+$installer->endSetup();

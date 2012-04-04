@@ -32,22 +32,22 @@ class Harapartners_Stockhistory_Model_Vendor extends Mage_Core_Model_Abstract
     	parent::_beforeSave();  
     }
     
-    public function loadBySku($sku, $storeId = null)
+    public function loadByCode($code, $storeId = null)
     {
-    	return $this->getResource()->loadBySku($sku, $storeId);
+    	return $this->getResource()->loadBySku($code, $storeId);
     }
     
-    protected function _validateBySku($sku, $storeId = null)
+    protected function _validateByCode($code, $storeId = null)
     {
-    	return $this->getResource()->validateBySku($sku, $storeId);
+    	return $this->getResource()->validateByCode($code, $storeId);
     }
     
 	public function validateAndSave($data)
 	{
     	$this->addData($data);
-    	if(!$this->getVendorName() || !$this->getVendorSku() || !$this->getEmail()){
+    	if(!$this->getVendorName() || !$this->getVendorCode() || !$this->getEmailList()){
     		throw new Exception('Required Data is missing');
-    	}elseif(!!$this->_validateBySku($data['vendor_sku'])){
+    	}elseif($this->getData('id') !== $this->_validateByCode($data['vendor_code'])){
     		throw new Exception('Vendor SKU already exists, please choose another one');
     	}
     	$this->save();

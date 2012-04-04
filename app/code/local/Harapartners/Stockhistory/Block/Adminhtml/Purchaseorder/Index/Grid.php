@@ -84,7 +84,7 @@ class Harapartners_Stockhistory_Block_Adminhtml_Purchaseorder_Index_Grid extends
 		
 		
 		
-		$this->addExportType('*/*/exportCsv', Mage::helper('stockhistory')->__('CSV'));
+		//$this->addExportType('*/*/exportCsv', Mage::helper('stockhistory')->__('CSV'));
 		
 		return parent::_prepareColumns();
 	}

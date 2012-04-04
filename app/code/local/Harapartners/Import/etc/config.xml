@@ -7,9 +7,67 @@
 <config>
     <modules>
         <Harapartners_Import>
-            <version>1.0.0</version>
+            <version>1.0.3</version>
         </Harapartners_Import>
     </modules>
+	<global>
+        <models>
+            <import>
+                <class>Harapartners_Import_Model</class>
+                <resourceModel>import_mysql4</resourceModel>
+            </import>
+            <import_mysql4>
+                <class>Harapartners_Import_Model_Mysql4</class>
+                <entities>
+                    <import>
+                        <table>import_import</table>
+                    </import>
+                </entities>
+            </import_mysql4>
+        </models>
+        <resources>
+            <import_setup>
+                <setup>
+                    <module>Harapartners_Import</module>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </import_setup>
+            <import_write>
+                <connection>
+                    <use>core_write</use>
+                </connection>
+            </import_write>
+            <import_read>
+                <connection>
+                    <use>core_read</use>
+                </connection>
+            </import_read>
+        </resources>
+        <blocks>
+            <import>
+                <class>Harapartners_Import_Block</class>
+            </import>
+        </blocks>
+        <helpers>
+            <import>
+                <class>Harapartners_Import_Helper</class>
+            </import>
+        </helpers>
+		<!--Moved to Harapartners_Service-->
+		<!--events>
+			<harapartners_import_after>
+				<observers>
+					<import>
+						<type>singleton</type>
+						<class>import/observer</class>
+						<method>processBatch</method>
+					</import>
+				</observers>
+			</harapartners_import_after>
+		</events-->
+    </global>
     <frontend>
         <routers>
             <import>
@@ -75,67 +133,5 @@
 				</import>
 			</updates>
 		</layout>
-		
-    </adminhtml>   
-    <global>
-        <models>
-            <import>
-                <class>Harapartners_Import_Model</class>
-                <resourceModel>import_mysql4</resourceModel>
-            </import>
-            <import_mysql4>
-                <class>Harapartners_Import_Model_Mysql4</class>
-                <entities>
-                    <import>
-                        <table>import_import</table>
-                    </import>
-					<importset>
-                        <table>import_importset</table>
-                    </importset>
-                </entities>
-            </import_mysql4>
-        </models>
-        <resources>
-            <import_setup>
-                <setup>
-                    <module>Harapartners_Import</module>
-                </setup>
-                <connection>
-                    <use>core_setup</use>
-                </connection>
-            </import_setup>
-            <import_write>
-                <connection>
-                    <use>core_write</use>
-                </connection>
-            </import_write>
-            <import_read>
-                <connection>
-                    <use>core_read</use>
-                </connection>
-            </import_read>
-        </resources>
-        <blocks>
-            <import>
-                <class>Harapartners_Import_Block</class>
-            </import>
-        </blocks>
-        <helpers>
-            <import>
-                <class>Harapartners_Import_Helper</class>
-            </import>
-        </helpers>
-		<!--Moved to Harapartners_Service-->
-		<!--events>
-			<harapartners_import_after>
-				<observers>
-					<import>
-						<type>singleton</type>
-						<class>import/observer</class>
-						<method>processBatch</method>
-					</import>
-				</observers>
-			</harapartners_import_after>
-		</events-->
-    </global>
+    </adminhtml>  
 </config>

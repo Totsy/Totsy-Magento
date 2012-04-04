@@ -21,9 +21,13 @@ class Harapartners_Stockhistory_Block_Adminhtml_Purchaseorder_Edit extends Mage_
 		$this->_blockGroup = 'stockhistory';
 		$this->_controller = 'adminhtml_purchaseorder';
 		$this->_addButton('transaction_add', array(
-            'label'     => Mage::helper('stockhistory')->__('Create Amendment'),
+            'label'     => Mage::helper('stockhistory')->__('Create Transaction'),
             'onclick'   => 'setLocation(\'' . $this->getCreateAmendmentUrl() .'\')',
 			'class'		=> 'add',
+      	));
+      	$this->_addButton('view_product', array(
+      		'label'		=>	Mage::helper('stockhistory')->__('Generate Report'),
+      		'onclick'	=> 'setLocation(\'' . $this->getViewProductsUrl() .'\')',
       	));
 	}
 	
@@ -35,9 +39,16 @@ class Harapartners_Stockhistory_Block_Adminhtml_Purchaseorder_Edit extends Mage_
         return $this->getUrl('*/*/save', array('_current'=>true));
     }
     
+    public function getViewProductsUrl()
+    {
+    	return $this->getUrl('stockhistory/adminhtml_transaction/report', array(
+    									'po_id'	=>	$this->getPoId(),
+    									));	
+    }
+    
     public function getCreateAmendmentUrl()
     {
-    	return $this->getUrl('stockhistory/adminhtml_history/new', array(
+    	return $this->getUrl('stockhistory/adminhtml_transaction/new', array(
     									'vendor_id' => $this->getVendorId(),
     									'po_id' => $this->getPoId(),
     									));
