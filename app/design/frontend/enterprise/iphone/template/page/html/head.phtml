@@ -27,6 +27,9 @@
 <title>
     <?php echo htmlspecialchars(html_entity_decode($this->getTitle())) ?>
 </title>
+<meta name="sailthru.date" content="<?php echo date("r");?>" />
+<meta name="sailthru.title" content="<?php echo ($this->getSailthruTitle()=='')?htmlspecialchars($this->getKeywords()):htmlspecialchars($this->getSailthruTitle()) ?>" />
+<meta name="sailthru.tags" content="<?php echo ($this->getSailthruTags()=='')?htmlspecialchars($this->getKeywords()):htmlspecialchars($this->getSailthruTags()) ?>" />
 <meta id="viewport" name="viewport" content="width=320; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
 <script type="text/javascript">
     var BLANK_URL = '<?php echo $this->helper('core/js')->getJsUrl('blank.html') ?>';

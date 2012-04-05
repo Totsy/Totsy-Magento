@@ -36,7 +36,7 @@ class Harapartners_Fulfillmentfactory_Model_Mysql4_Itemqueue_Collection extends 
 	 */
 	public function loadReadyForSubmitItemQueue() {
 		//for now, it is using Processing to indicate this item could be submitted.
-		$collection = $this->addFieldToFilter('status', Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_PROCESSING);
+		$collection = $this->addFieldToFilter('status', Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_READY);
 		
 		return $collection;
 	}
