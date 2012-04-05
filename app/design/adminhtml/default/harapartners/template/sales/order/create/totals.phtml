@@ -61,17 +61,16 @@ function notifyCustomerUpdate() {
     notifyCustomerCheckbox.disabled = !sendEmailCheckbox.checked;
 }
 function putCommentAndSubmit(){
-	var oriComment = jQuery('textarea#order-comment').html();
+	var oriComment = jQuery('textarea#order-comment').val();
 	<?php 
 		$user = Mage::getSingleton('admin/session');
 		$userId = $user->getUser()->getUserId();
 		$userFirstname = $user->getUser()->getFirstname();
-		$commentInput = ' by '.$userFirstname.' (id:'.$userId.')';
+		$commentInput = ' (edit by '.$userFirstname.' id:'.$userId.')';
 	?>
 	var modifyComment = oriComment+"<?php echo $commentInput; ?>";
-	jQuery('textarea#order-comment').html(modifyComment);
 	jQuery('textarea#order-comment').val(modifyComment);
-	setTimeout("order.submit()",500);
+	setTimeout("order.submit()",100);
 }
 //]]>
 </script>
