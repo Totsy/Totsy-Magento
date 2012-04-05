@@ -19,9 +19,10 @@ class Harapartners_Service_Model_Rewrite_Catalog_Product extends Mage_Catalog_Mo
 	}
    
     public function afterCommitCallback() {
-    	Mage::dispatchEvent('model_save_commit_after', array('object'=>$this));
-        Mage::dispatchEvent($this->_eventPrefix.'_save_commit_after', $this->_getEventData());
-        return $this;
+    	parent::afterCommitCallback();
+//    	Mage::dispatchEvent('model_save_commit_after', array('object'=>$this));
+//        Mage::dispatchEvent($this->_eventPrefix.'_save_commit_after', $this->_getEventData());
+//        return $this;
     }
     
     protected function _beforeSave() {
