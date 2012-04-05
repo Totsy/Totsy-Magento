@@ -846,3 +846,7 @@ body.customer-account-create div .facebook-button, .enterprise-invitation-custom
 .sales-order-view .shipping-date{
 	font-size:11px;
 }
+
+body .sp-methods select.year {
+    width: 120px;
+}
