@@ -35,4 +35,92 @@ class Harapartners_Service_Block_Rewrite_Page_Html_Head extends Mage_Page_Block_
                 //sailthru
         }
     }
+    
+    public function setTopnavKeywords(){
+    	//$type = Mage::registry('attrtype');
+		$type = Mage::app()->getRequest()->getParam('type');
+		//$value = Mage::registry('attrvalue');
+		$value = Mage::app()->getRequest()->getParam('value');
+		$typeAttributes = Mage::getModel('catalog/product')->getResource()->getAttribute($type);
+		$valueId = $typeAttributes->getSource()->getOptionId($value);
+		$label = Mage::helper('catalog')->__($value);
+		$this->setSailthruTitle($label);
+		$label = strtolower(str_replace(' ','_',$label));
+    	$this->setSailthruTags($label);
+    }
+    
+    public function setEventTags(){
+        $categoryId = (int) $this->getRequest()->getParam('id', false);
+        if (!$categoryId) {
+            return $this;
+        }
+		$category = Mage::getModel('catalog/category')
+            ->setStoreId(Mage::app()->getStore()->getId())
+            ->load($categoryId);
+        $label = $category->getName(); 
+        $label = strtolower(str_replace(' ','_',$label));
+    	$this->setSailthruTags($label);
+    }
+    
+    public function setEventSailthruTitle(){
+        $categoryId = (int) $this->getRequest()->getParam('id', false);
+        if (!$categoryId) {
+            return $this;
+        }
+		$category = Mage::getModel('catalog/category')
+            ->setStoreId(Mage::app()->getStore()->getId())
+            ->load($categoryId);
+        $label = $category->getName(); 
+        $label = strtolower(str_replace(' ','_',$label));
+    	$this->setSailthruTitle($label);
+    }
+    
+    public function setProductTags(){
+        $productId = (int) $this->getRequest()->getParam('id', false);
+        if (!$productId) {
+            return $this;
+        }
+		$product = Mage::getModel('catalog/product')
+            ->setStoreId(Mage::app()->getStore()->getId())
+            ->load($productId);
+        $label = $product->getName(); 
+        $label = strtolower(str_replace(' ','_',$label));
+        
+        $dept = $product->getDepartments();
+        $deptArray = explode(',', $dept);
+        $newDeptArray = array();
+		$attrOptions = Mage::getModel('catalog/product')->getResource()->getAttribute('departments');
+        foreach ($deptArray as $perdept){
+        	$attrText = $attrOptions->getSource()->getOptionText($perdept);
+        	$newDeptArray[] = 	$this->__($attrText);
+        }
+        $deptStr = implode(',' , $newDeptArray);
+        if (count($deptArray)!=0){
+        	$deptStr = ','.$deptStr;
+        }
+        $age = $product->getAges();
+        $ageArray = explode(',', $age);
+		$newAgeArray = array();
+		$ageAttrOptions = Mage::getModel('catalog/product')->getResource()->getAttribute('ages');
+        foreach ($ageArray as $perage){
+        	$attrText = $attrOptions->getSource()->getOptionText($perage);
+        	$newAgeArray[] = 	$this->__($attrText);
+        }
+        $ageStr = implode(',' , $newDeptArray);
+        if (count($ageArray)!=0){
+        	$ageStr = ','.$ageStr;
+        }
+        $label = $label.$deptStr.$ageStr;
+    	$this->setSailthruTags($label);
+    }
+        
+    public function setProductSailthruTitle(){
+        $productId = (int) $this->getRequest()->getParam('id', false);
+        if (!$productId) {
+            return $this;
+        }
+		$product = Mage::getModel('catalog/product')->load($productId);
+		$label = $product->getName();
+    	$this->setSailthruTitle($label);
+    }
 }

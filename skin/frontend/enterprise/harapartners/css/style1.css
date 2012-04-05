@@ -1189,3 +1189,17 @@ body .col-left hr {
     position: relative;
     width: 200px;
 }
+
+.big-div-not-found{
+	display:inline-block;
+	width: 120px;
+}
+
+.not-found-names{
+	color:#222222;
+	font-size:12px;
+}
+
+.big-div-not-found a:hover .not-found-names{
+	color:#EF1C25;
+}
