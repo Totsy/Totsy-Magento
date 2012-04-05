@@ -13,8 +13,7 @@
  */
 
 class Harapartners_Affiliate_Block_Report extends Mage_Adminhtml_Block_Template {
-	
-	public function getReportHtml(){  
+	public function getRegistrationHtml() {
 		$resultFilter = Mage::registry('resultFilter');
 		$reportHtml = '';
 		if(!!$warningMessage = $resultFilter->getWarningMessage()){
@@ -23,124 +22,297 @@ class Harapartners_Affiliate_Block_Report extends Mage_Adminhtml_Block_Template 
 			$affiliate = $resultFilter->getAffiliate();
 			$from = $resultFilter->getFrom();
 			$to = $resultFilter->getTo();
-			$includeAllSubAffiliate = $resultFilter->getIncludeAllSubAffiliate();
 			$subAffiliateCode = $resultFilter->getSubAffiliateCode();
-			if(!!$includeAllSubAffiliate && !!$subAffiliateCode){
-				$reportHtml.='Can not check "include all subaffiliate" and fill subaffiliate code at the same time';
-			}else{
-				if(!!$includeAllSubAffiliate){
+			$includeAllSubAffiliate = $resultFilter->getIncludeAllSubAffiliate();
+			$recordCollection = Mage::getModel('customertracking/record')->getCollection()
+															->addFieldToFilter('created_at', array( "lt" => $to,"gt"=>$from ))
+															->addFieldToFilter('sub_affiliate_code', '')
+															->addFieldToFilter('affiliate_code', $affiliate->getAffiliateCode());
+			$bounceCollection = Mage::getModel('customertracking/record')->getCollection()
+																			->addFieldToFilter('created_at', array( "lt" => $to,"gt"=>$from ))
+																			->addFieldToFilter('affiliate_code', $affiliate->getAffiliateCode())
+																			->addFieldToFilter('sub_affiliate_code', '')
+																			->addFieldToFilter('status',array(3,4,5));															
+			$totalRegistrations = $recordCollection->count();
+			$totalBounces = $bounceCollection->count();
+			$grandTotalRegistrations = $totalRegistrations;
+			$grandTotalBounces = $totalBounces;
+			$reportHtml.= $from.' -- '.$to.' :';	
+			$reportHtml.= '<table>
+							<tr>
+							<th>Affiliate</th>							
+							<th>Total Registrations</th>
+							<th>Total Bounces</th>
+							</tr>
+							<tr>
+							<td>'.$affiliate->getAffiliateCode().'</td>				
+							<td>'.$totalRegistrations.'</td>
+							<td>'.$totalBounces.'</td>
+							</tr>';
+			if(!!$includeAllSubAffiliate){	
+				$subAffiliateArray = explode(',',$affiliate->getSubAffiliateCode());
+				foreach ($subAffiliateArray as $subAffiliate) {
 					$recordCollection = Mage::getModel('customertracking/record')->getCollection()
 																			->addFieldToFilter('created_at', array( "lt" => $to,"gt"=>$from ))
-																			->addFieldToFilter('affiliate_code', $affiliate->getAffiliateCode());
+																			->addFieldToFilter('affiliate_code', $affiliate->getAffiliateCode())
+																			->addFieldToFilter('sub_affiliate_code', $subAffiliate);								
 					$bounceCollection = Mage::getModel('customertracking/record')->getCollection()
 																			->addFieldToFilter('created_at', array( "lt" => $to,"gt"=>$from ))
 																			->addFieldToFilter('affiliate_code', $affiliate->getAffiliateCode())
-																			->addFieldToFilter('status',array(3,4,5));	
-				}else{
-					$recordCollection = Mage::getModel('customertracking/record')->getCollection()
-																			->addFieldToFilter('created_at', array( "lt" => $to,"gt"=>$from ))
-																			->addFieldToFilter('affiliate_code', $affiliate->getAffiliateCode())
-																			->addFieldToFilter('sub_affiliate_code', $subAffiliateCode);								
-					$bounceCollection = Mage::getModel('customertracking/record')->getCollection()
-																			->addFieldToFilter('created_at', array( "lt" => $to,"gt"=>$from ))
-																			->addFieldToFilter('affiliate_code', $affiliate->getAffiliateCode())
-																			->addFieldToFilter('sub_affiliate_code', $subAffiliateCode)
-																			->addFieldToFilter('status',array(3,4,5));
-				}
-				$totalRegistrations = $recordCollection->count();
-				$totalBounces = $bounceCollection->count();
-				$validateRegistrations = $totalRegistrations-$totalBounces;
-				$revenue = 0;
-				$z = 0;
-				$tenth = 0;
-				$twentyth = 0;
-				$thirtyth = 0;
-				$fortyth = 0;
-				$fiftyth = 0;
-				$valuedCustomerCount = 0;
-				foreach ($recordCollection as $record) {
-					$loginCount = $record->getLoginCount();
-					if($loginCount<10){
-						$z+=1;
-					}elseif ($loginCount>=10 && $loginCount<20){
-						$tenth+=1;
-					}elseif ($loginCount>=20 && $loginCount<30){
-						$twentyth+=1;
-					}elseif ($loginCount>=30 && $loginCount<40){
-						$thirtyth+=1;
-					}elseif ($loginCount>=40 && $loginCount<50){
-						$fortyth+=1;
-					}elseif ($loginCount>=50){
-						$fiftyth+=1;
-					}
-					
-					$customerId = $record->getCustomerId();
-					$orderCollection = Mage::getModel('sales/order')->getCollection()
-																	->addFieldToFilter('customer_id',$customerId)
-																	->addFieldToFilter('state','complete');
-					if($orderCollection->count()){
-						$valuedCustomerCount++;
-					}
-						foreach ($orderCollection as $order) {
-								$revenue+=$order->getGrandTotal();
-						}														
-				}			
-				$reportHtml.= '<table>
-								<tr>
-								<th>From</th>
-								<th>To</th>
-								<th>Affiliate</th>';
-				if(!!$subAffiliateCode){
-					$reportHtml.=	'<th>Sub Affiliate</th>';
-				}else{
-					$reportHtml.=	'<th>Including SubAffiliates</th>';
-				}
-				$reportHtml.=	'<th>Total Revenue</th>
-								<th>Total Registrations</th>
-								<th>Total Bounces</th>
-								<th>Validated Registrations</th>
-								</tr>
-								<tr>
-								<td>'.$resultFilter->getFrom().'</td>
-								<td>'.$resultFilter->getTo().'</td>
-								<td>'.$resultFilter->getAffiliate()->getAffiliateCode().'</td>';
-				if(!!$subAffiliateCode){
-					$reportHtml.=	'<td>'.$subAffiliateCode.'</td>';
-				}elseif(!!$includeAllSubAffiliate){
-					$reportHtml.=	'<th>Yes</th>';
-				}else{
-					$reportHtml.=	'<th>No</th>';
-				}
-				$reportHtml.=	'<td>'.$revenue.'</td>
+																			->addFieldToFilter('sub_affiliate_code', $subAffiliate)
+																			->addFieldToFilter('status',array(3,4,5));					
+					$totalRegistrations = $recordCollection->count();
+					$totalBounces = $bounceCollection->count();
+					$grandTotalRegistrations+= $totalRegistrations;
+					$grandTotalBounces+= $totalBounces;
+					$reportHtml.= '<tr>
+								<td>'.$affiliate->getAffiliateCode().'_'.$subAffiliate.'</td>				
 								<td>'.$totalRegistrations.'</td>
 								<td>'.$totalBounces.'</td>
-								<td>'.$validateRegistrations.'</td>
-								</tr>						
-								</table> ';			
-				$reportHtml.= '<table>
-								<tr>
-								<th>Effective Co-Reg</th>
-								<th>Number Of Customer Who Have Made Purchase</th>
-								<th>0x</th>	
-								<th>1x</th>	
-								<th>2x</th>	
-								<th>3x</th>	
-								<th>4x</th>	
-								<th>5x And Above</th>							
-								</tr>
-								<tr>
-								<td></td>
-								<td>'.$valuedCustomerCount.'</td>
-								<td>'.$z.'</td>
-								<td>'.$tenth.'</td>
-								<td>'.$twentyth.'</td>
-								<td>'.$thirtyth.'</td>
-								<td>'.$fortyth.'</td>
-								<td>'.$fiftyth.'</td>							
-								</tr>
-								</table>';
+								</tr>';	
+				}
+					$reportHtml.= '<tr>
+					<td>grand total</td>				
+					<td>'.$grandTotalRegistrations.'</td>
+					<td>'.$grandTotalBounces.'</td>
+					</tr>';																											
 			}
+			$reportHtml.= '</table> ';	
 		}
-		return  $reportHtml;
+		return  $reportHtml;		
+	}
+	
+	public function getReVenueHtml(){
+		$resultFilter = Mage::registry('resultFilter');
+		$reportHtml = '';
+		if(!!$warningMessage = $resultFilter->getWarningMessage()){
+			$reportHtml.= $warningMessage;
+		}else{
+			$affiliate = $resultFilter->getAffiliate();
+			$from = $resultFilter->getFrom();
+			$to = $resultFilter->getTo();
+			$subAffiliateCode = $resultFilter->getSubAffiliateCode();
+			$includeAllSubAffiliate = $resultFilter->getIncludeAllSubAffiliate();
+			$recordCollection = Mage::getModel('customertracking/record')->getCollection()
+															->addFieldToFilter('created_at', array( "lt" => $to,"gt"=>$from ))
+															->addFieldToFilter('sub_affiliate_code', '')
+															->addFieldToFilter('affiliate_code', $affiliate->getAffiliateCode());	
+			$revenue = 0;
+			foreach ($recordCollection as $record) {
+				//$customer = Mage::getModel('customer/customer')->loadByEmail($record->getCustomerEmail());
+				$orderCollection = Mage::getModel('sales/order')->getCollection()
+																	->addFieldToFilter('customer_id',$record->getCustomerId())
+																	->addFieldToFilter('state','complete');	
+				foreach ($orderCollection as $order) {
+					$revenue+=$order->getGrandTotal();
+				}
+			}
+			$grandRevenue = $revenue;
+			$reportHtml.= $from.' -- '.$to.' :';	
+			$reportHtml.= '<table>
+							<tr>
+							<th>Affiliate</th>								
+							<th>Total Revenue</th>
+							</tr>
+							<tr>
+							<td>'.$affiliate->getAffiliateCode().'</td>				
+							<td>'.$revenue.'</td>
+							</tr>';
+			if(!!$includeAllSubAffiliate){	
+				$subAffiliateArray = explode(',',$affiliate->getSubAffiliateCode());
+				foreach ($subAffiliateArray as $subAffiliate) {
+					$recordCollection = Mage::getModel('customertracking/record')->getCollection()
+																			->addFieldToFilter('created_at', array( "lt" => $to,"gt"=>$from ))
+																			->addFieldToFilter('affiliate_code', $affiliate->getAffiliateCode())
+																			->addFieldToFilter('sub_affiliate_code', $subAffiliate);				
+					$revenue = 0;
+					foreach ($recordCollection as $record) {
+						//$customer = Mage::getModel('customer/customer')->loadByEmail($record->getCustomerEmail());
+						$orderCollection = Mage::getModel('sales/order')->getCollection()
+																			->addFieldToFilter('customer_id',$record->getCustomerId())
+																			->addFieldToFilter('state','complete');	
+						foreach ($orderCollection as $order) {
+							$revenue+=$order->getGrandTotal();
+						}
+					}
+					$grandRevenue+= $revenue;
+					$reportHtml.= '<tr>
+								<td>'.$affiliate->getAffiliateCode().'_'.$subAffiliate.'</td>				
+								<td>'.$revenue.'</td>
+								</tr>';
+				}
+					$reportHtml.= '<tr>
+					<td>grand total</td>			
+					<td>'.$grandRevenue.'</td>
+					</tr>';																								
+			}
+			$reportHtml.= '</table> ';	
+		}
+		return  $reportHtml;		
+	}	
+	
+	public function getBounceHtml(){
+		$resultFilter = Mage::registry('resultFilter');
+		$reportHtml = '';
+		if(!!$warningMessage = $resultFilter->getWarningMessage()){
+			$reportHtml.= $warningMessage;
+		}else{
+			$affiliate = $resultFilter->getAffiliate();
+			$from = $resultFilter->getFrom();
+			$to = $resultFilter->getTo();
+			$subAffiliateCode = $resultFilter->getSubAffiliateCode();
+			$includeAllSubAffiliate = $resultFilter->getIncludeAllSubAffiliate();
+			$recordCollection = Mage::getModel('customertracking/record')->getCollection()
+															->addFieldToFilter('created_at', array( "lt" => $to,"gt"=>$from ))
+															->addFieldToFilter('sub_affiliate_code', '')
+															->addFieldToFilter('affiliate_code', $affiliate->getAffiliateCode())
+															->addFieldToFilter('status',array(3,4,5));	
+			$reportHtml.= $from.' -- '.$to.' :';	
+			$reportHtml.= '<table>
+						<tr>
+						<th>Affiliate</th>
+						<th>Email</th>								
+						<th>Registration Time</th>
+						<th>Bounce Type</th>
+						<th>Last Bounced</th>
+						</tr>';
+			foreach ($recordCollection as $record) {
+				$status = $record->getStatus();
+				if($status==3){
+					$bounceType = 'softbounce';
+				}elseif($status==4){
+					$bounceType = 'hardbounce';
+				}else{
+					$bounceType = 'otherbounce';
+				}
+				$reportHtml.='<tr>
+						<td>'.$affiliate->getAffiliateCode().'</td>
+						<td>'.$record->getCustomerEmail().'</td>
+						<td>'.$record->getCreatedAt().'</td>					
+						<td>'.$bounceType.'</td>
+						<td>'.$record->getUpdatedAt().'</td>
+						</tr>';
+			}
+			if(!!$includeAllSubAffiliate){	
+				$subAffiliateArray = explode(',',$affiliate->getSubAffiliateCode());
+				foreach ($subAffiliateArray as $subAffiliate) {
+					$recordCollection = Mage::getModel('customertracking/record')->getCollection()
+																			->addFieldToFilter('created_at', array( "lt" => $to,"gt"=>$from ))
+																			->addFieldToFilter('affiliate_code', $affiliate->getAffiliateCode())
+																			->addFieldToFilter('sub_affiliate_code', $subAffiliate)
+																			->addFieldToFilter('status',array(3,4,5));
+					foreach ($recordCollection as $record) {
+						$status = $record->getStatus();
+						if($status==3){
+							$bounceType = 'softbounce';
+						}elseif($status==4){
+							$bounceType = 'hardbounce';
+						}else{
+							$bounceType = 'otherbounce';
+						}
+						$reportHtml.='<tr>
+								<td>'.$affiliate->getAffiliateCode().'_'.$subAffiliate.'</td>
+								<td>'.$record->getCustomerEmail().'</td>
+								<td>'.$record->getCreatedAt().'</td>					
+								<td>'.$bounceType.'</td>
+								<td>'.$record->getUpdatedAt().'</td>
+								</tr>';
+					}														
+				}
+			}	
+			$reportHtml.= '</table> ';				
+		}
+		return $reportHtml;
+	}
+	public function getEffeticeHtml(){
+		$resultFilter = Mage::registry('resultFilter');
+		$reportHtml = '';
+		if(!!$warningMessage = $resultFilter->getWarningMessage()){
+			$reportHtml.= $warningMessage;
+		}else{
+			$affiliate = $resultFilter->getAffiliate();
+			$from = $resultFilter->getFrom();
+			$to = $resultFilter->getTo();
+			$subAffiliateCode = $resultFilter->getSubAffiliateCode();
+			$includeAllSubAffiliate = $resultFilter->getIncludeAllSubAffiliate();
+			$recordCollection = Mage::getModel('customertracking/record')->getCollection()
+															->addFieldToFilter('created_at', array( "lt" => $to,"gt"=>$from ))
+															->addFieldToFilter('sub_affiliate_code', '')
+															->addFieldToFilter('affiliate_code', $affiliate->getAffiliateCode());
+			$never = 0; $zero = 0; $ten = 0; $twenty =0; $thirty = 0; $forty = 0;
+			foreach ($recordCollection as $record) {
+				$loginCount = $record->getLoginCount();				
+				if($loginCount<=1){
+					$never+= 1;
+				}elseif($loginCount>1 && $loginCount<10){
+					$zero+= 1;
+				}elseif($loginCount>=10 && $loginCount<20){
+					$ten+=1;
+				}elseif($loginCount>=20 && $loginCount<30){
+					$twenty+=1;
+				}elseif($loginCount>=30 && $loginCount<40){
+					$thirty+=1;
+				}else{
+					$forty+=1;
+				}
+			}													
+			$reportHtml.= $from.' -- '.$to.' :';	
+			$reportHtml.= '<table>
+				<tr>
+				<th>Affiliate</th>							
+				<th>Never</th>
+				<th>Login 0x</th>
+				<th>Login 1x</th>
+				<th>Login 2x</th>
+				<th>Login 3x</th>
+				<th>Login 4x or More</th>
+				</tr>
+				<tr>
+				<td>'.$affiliate->getAffiliateCode().'</td>				
+				<td>'.$never.'</td>
+				<td>'.$zero.'</td>
+				<td>'.$ten.'</td>
+				<td>'.$twenty.'</td>
+				<td>'.$thirty.'</td>
+				<td>'.$forty.'</td>
+				</tr>';
+			if(!!$includeAllSubAffiliate){	
+				$subAffiliateArray = explode(',',$affiliate->getSubAffiliateCode());
+				foreach ($subAffiliateArray as $subAffiliate) {
+					$recordCollection = Mage::getModel('customertracking/record')->getCollection()
+																			->addFieldToFilter('created_at', array( "lt" => $to,"gt"=>$from ))
+																			->addFieldToFilter('affiliate_code', $affiliate->getAffiliateCode())
+																			->addFieldToFilter('sub_affiliate_code', $subAffiliate);
+					$never = 0; $zero = 0; $ten = 0; $twenty =0; $thirty = 0; $forty = 0;
+					foreach ($recordCollection as $record) {
+						$loginCount = $record->getLoginCount();						
+						if($loginCount<=1){
+							$never+= 1;
+						}elseif($loginCount>1 && $loginCount<10){
+							$zero+= 1;
+						}elseif($loginCount>=10 && $loginCount<20){
+							$ten+=1;
+						}elseif($loginCount>=20 && $loginCount<30){
+							$twenty+=1;
+						}elseif($loginCount>=30 && $loginCount<40){
+							$thirty+=1;
+						}else{
+							$forty+=1;
+						}
+					}	
+				$reportHtml.='<tr>
+							<td>'.$affiliate->getAffiliateCode().'_'.$subAffiliate.'</td>
+							<td>'.$never.'</td>
+							<td>'.$zero.'</td>
+							<td>'.$ten.'</td>
+							<td>'.$twenty.'</td>
+							<td>'.$thirty.'</td>
+							<td>'.$forty.'</td>
+							</tr>';								
+				}
+			}	
+			$reportHtml.= '</table> ';	
+		}
+		return $reportHtml;
 	}
 }

@@ -15,6 +15,8 @@
 class Harapartners_Stockhistory_Block_Adminhtml_Purchaseorder_Edit extends Mage_Adminhtml_Block_Widget_Form_Container {
 	
 	public function __construct() {
+		$dataObject = new Varien_Object(Mage::registry('stockhistory_po_data'));
+		
 		parent::__construct();
 		$this->_objectId = 'id';
 		$this->_blockGroup = 'stockhistory';
@@ -22,7 +24,7 @@ class Harapartners_Stockhistory_Block_Adminhtml_Purchaseorder_Edit extends Mage_
 
 		$this->_removeButton('add');
 		
-		if(!!$this->getPoId()){
+		if(!!$dataObject->getId()){
 			$this->_addButton('transaction_add', array(
 	            'label'     => Mage::helper('stockhistory')->__('Create Transaction'),
 	            'onclick'   => 'setLocation(\'' . $this->getCreateAmendmentUrl() .'\')',
@@ -44,36 +46,27 @@ class Harapartners_Stockhistory_Block_Adminhtml_Purchaseorder_Edit extends Mage_
     }
     
     public function getViewProductsUrl() {
+    	$dataObject = new Varien_Object(Mage::registry('stockhistory_po_data'));
     	return $this->getUrl('stockhistory/adminhtml_transaction/report', array(
-    									'po_id'	=>	$this->getPoId(),
+    			'po_id'	=>	$dataObject->getId(),
     	));	
     }
     
     public function getCreateAmendmentUrl() {
+    	$dataObject = new Varien_Object(Mage::registry('stockhistory_po_data'));
     	return $this->getUrl('stockhistory/adminhtml_transaction/new', array(
-    									'vendor_id' => $this->getVendorId(),
-    									'po_id' => $this->getPoId(),
-    									'vendor_code' => $this->getVendorCode(),
+    			'vendor_id' => $dataObject->getVendorId(),
+    			'po_id' => $dataObject->getId(),
+    			'vendor_code' => $this->getVendorCode($dataObject->getVendorId()),
     	));
     }
-	
-    public function getVendorId() {   
-    	$poInfo = Mage::registry('po_data');
-    	return $poInfo['vendor_id'];
-    }
     
-    public function getPoId() {
-    	$poInfo = Mage::registry('po_data');
-    	return $poInfo['id'];
-    }
-    
-    public function getVendorCode(){
-    	$poId = $this->getVendorId();
-    	$vendor = Mage::getModel('stockhistory/vendor')->load($poId);
+    public function getVendorCode($vendorId){
+    	$vendor = Mage::getModel('stockhistory/vendor')->load($vendorId);
     	if(!! $vendor->getId()){
     		return $vendor->getVendorCode();
     	}
     	return null;
-    	
     }
+    
 }

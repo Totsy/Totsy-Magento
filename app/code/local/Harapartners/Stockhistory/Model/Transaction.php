@@ -14,16 +14,23 @@
 
 class Harapartners_Stockhistory_Model_Transaction extends Mage_Core_Model_Abstract {
 	
+	const STATUS_PENDING = 1;
+	const STATUS_PROCESSED = 2;
+	const STATUS_FAILED = 3;
+	
+	const ACTION_TYPE_AMENDMENT = 1;
+	const ACTION_TYPE_EVENT_IMPORT = 2;
+	const ACTION_TYPE_DIRECT_IMPORT = 3;
+	
 	public function _construct() {
 		$this->_init('stockhistory/transaction');
 	}
 	
 	protected function _beforeSave(){
-		$now = date('Y-m-d H:i:s');
-    	if(!$this->getId()){
-    		$this->setData('created_at', $now);
+		if(!$this->getId()){
+    		$this->setData('created_at', now());
     	}
-    	$this->setData('updated_at', $now);
+    	$this->setData('updated_at', now());
     	
 		if(!$this->getStoreId()){
     		$this->setStoreId(Mage_Core_Model_App::ADMIN_STORE_ID);
@@ -38,19 +45,26 @@ class Harapartners_Stockhistory_Model_Transaction extends Mage_Core_Model_Abstra
 	
 	public function validateAndSave($data){
 		$this->addData($data);
-		if(!$this->getData('product_id')){
-			throw new Exception('Product ID is needed');
+		
+		if(!$this->getData('vendor_id')){
+			throw new Exception('Vendor ID is required.');
+		}
+		if(!$this->getData('po_id')){
+			throw new Exception('Purchase order ID is required.');
 		}
 		if(!$this->getData('category_id')){
-			throw new Exception('Category ID is needed');
+			throw new Exception('Category ID is required.');
+		}
+		if(!$this->getData('product_id')){
+			throw new Exception('Product ID is required.');
 		}
 		if(!!$this->getData('unit_cost')){
 			$unitCost = $this->getData('unit_cost');
 			if($unitCost < 0){
-				throw new Exception('Please Enter a Positive number');
+				throw new Exception('Unit cost must be a non-negative number.');
 			}
 		}else{
-			throw new Exception('Unit Cost is needed');
+			throw new Exception('Unit Cost is required.');
 		}
 		$this->save();
 		return $this;

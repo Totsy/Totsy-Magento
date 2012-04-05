@@ -15,7 +15,7 @@
 class Harapartners_Stockhistory_Block_Adminhtml_Vendor_Edit_Form extends Mage_Adminhtml_Block_Widget_Form {
        						
 	protected function _prepareForm() {
-		$dataObject = new Varien_Object(Mage::registry('vendor_data'));
+		$dataObject = new Varien_Object(Mage::registry('stockhistory_vendor_data'));
 		$helper = Mage::helper('stockhistory');
 		
         $form = new Varien_Data_Form(array(
@@ -52,7 +52,7 @@ class Harapartners_Stockhistory_Block_Adminhtml_Vendor_Edit_Form extends Mage_Ad
 	            'label'     => $helper->__('Vendor Code:'),
 	            'name'      => 'vendor_code',
 	        	'required'	=> true,
-	        	'note'		=> 'Once saved, this field <b color="red">CANNOT</b> be modified. Alpha-numeric with underscore, lowercase only.'
+	        	'note'		=> 'Once saved, this field <b>CANNOT</b> be modified. Alpha-numeric with underscore, lowercase only.'
         	));
 		}
         

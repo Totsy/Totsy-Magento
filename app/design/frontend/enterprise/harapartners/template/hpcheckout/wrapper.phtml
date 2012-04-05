@@ -46,24 +46,45 @@
 		<?php endif ?>
 		<div class="address">
 			<div id="hpcheckout-billing-wrapper">
-				<?php echo $this->getChildHtml( 'billing' ) ?>
+				<div class="checkout-headline">
+					<div class="billing-title sub-title checkout-sub-title"><?php echo $this->__('Billing Address') ?></div>
+					<?php if ($this->customerHasAddresses()): ?>
+					    <div class="billing-address-select totsy-selective-input-box">
+							<span>New Address</span>
+					        <?php echo $this->getAddressesHtmlSelect('billing') ?>
+					    </div>
+					<?php endif; ?>
+				</div>
+				<div class="checkout-content"><?php echo $this->getChildHtml( 'billing' ) ?></div>
 			</div>
 			<?php if( ! $this->getQuote()->isVirtual() ): ?>
 				<div id="hpcheckout-shipping-wrapper">
-					<?php echo $this->getChildHtml( 'shipping' ) ?>
+					<div class="checkout-headline">
+						<div class="shipping-title sub-title checkout-sub-title"><?php echo $this->__('Shipping Address') ?></div>
+						<?php if ($this->customerHasAddresses()): ?>
+						    <div class="shipping-address-select totsy-selective-input-box">
+								<span>New Address</span>
+						        <?php echo $this->getAddressesHtmlSelect('shipping') ?>
+						    </div>
+						<?php endif; ?>
+					</div>
+					<div class="checkout-content"><?php echo $this->getChildHtml( 'shipping' ) ?></div>
 				</div>
 			<?php endif ?>
 		</div>
-		<?php if( ! $this->getQuote()->isVirtual() ): ?>
+		<?php if( false && ! $this->getQuote()->isVirtual() ): ?>
 			<div id="hpcheckout-shipping-method-wrapper">
-				<?php echo $this->getChildHtml( 'shipping_method' ) ?>
+				<div class="checkout-sub-title sub-title">Shipping Method</div>
+				<div class="checkout-content"><?php echo $this->getChildHtml( 'shipping_method' ) ?></div>
 			</div>
 		<?php endif ?>
 		<div id="hpcheckout-payment-wrapper">
-			<?php echo $this->getChildHtml( 'payment' ) ?>
+			<div class="checkout-sub-title sub-title">Payment</div>
+			<div class="checkout-content"><?php echo $this->getChildHtml( 'payment' ) ?></div>
 		</div>
 		<div id="hpcheckout-review-wrapper">
-			<?php echo $this->getChildHtml( 'review' ) ?>
+			<div class="checkout-sub-title sub-title">Review</div>
+			<div class="checkout-content"><?php echo $this->getChildHtml( 'review' ) ?></div>
 		</div>
 		<?php echo $this->getChildHtml( 'script' ) ?>
 	<?php else: ?>
@@ -71,20 +92,18 @@
 	<?php endif ?>
 </div>
 <script type="text/javascript">
-	function reflash(){
-			jQuery(".totsy-selective-input-box select").each(function(){
-			var temphtml = jQuery(this).html();
-			var text = jQuery(this).find("option:selected").text();
-			var value = jQuery(this).find("option:selected").val();
-			if (value==''){
-				text = jQuery(this).find("option[selected='true']").text();
-				if (text=='')
-					text = jQuery(this).find("option[value='']").text();
+function updateSelectText(){
+	jQuery(".totsy-selective-input-box select").each(function(){
+		var temphtml = jQuery(this).html();
+		var text = jQuery(this).find("option:selected").text();
+		var value = jQuery(this).find("option:selected").val();
+		if (value==''){
+			text = jQuery(this).find("option[selected='true']").text();
+			if (text=='') {
+				text = jQuery(this).find("option[value='']").text();
 			}
-			jQuery(this).parent('div').children('span').html(text);
-	})}
-	jQuery(document).ready(function(){	
-		reflash();
-		jQuery("body").change(reflash);
-		})
+		}
+		jQuery(this).parent('div').children('span').html(text);
+	});
+}
 </script>
