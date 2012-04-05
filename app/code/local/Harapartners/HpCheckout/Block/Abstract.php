@@ -65,49 +65,49 @@ abstract class Harapartners_HpCheckout_Block_Abstract extends Mage_Core_Block_Te
         return $this->_regionCollection;
     }
 	
-//    public function customerHasAddresses()
-//    {
-//        return count($this->getCustomer()->getAddresses());
-//    }
-//
-//    
-//    public function getAddressesHtmlSelect($type)
-//    {
-//        if ($this->isCustomerLoggedIn()) {
-//            $options = array();
-//            foreach ($this->getCustomer()->getAddresses() as $address) {
-//                $options[] = array(
-//                    'value' => $address->getId(),
-//                    'label' => $address->format('oneline')
-//                );
-//            }
-//
-//            $addressId = $this->getAddress()->getCustomerAddressId();
-//            if (empty($addressId)) {
-//                if ($type=='billing') {
-//                    $address = $this->getCustomer()->getPrimaryBillingAddress();
-//                } else {
-//                    $address = $this->getCustomer()->getPrimaryShippingAddress();
-//                }
-//                if ($address) {
-//                    $addressId = $address->getId();
-//                }
-//            }
-//
-//            $select = $this->getLayout()->createBlock('core/html_select')
-//                ->setName($type.'_address_id')
-//                ->setId($type.'-address-select')
-//                ->setClass('address-select')
-//                ->setExtraParams('onchange="'.$type.'.newAddress(!this.value)"')
-//                ->setValue($addressId)
-//                ->setOptions($options);
-//
-//            $select->addOption('', Mage::helper('checkout')->__('New Address'));
-//
-//            return $select->getHtml();
-//        }
-//        return '';
-//    }
+    public function customerHasAddresses()
+    {
+        return count($this->getCustomer()->getAddresses());
+    }
+    
+    public function getAddressesHtmlSelect($type)
+    {
+        if ($this->isCustomerLoggedIn()) {
+            $options = array();
+            if( $this->customerHasAddresses() ) {
+            	$options[] = array( 'value' => '', 'label' => 'New Address' );
+            }
+            foreach ($this->getCustomer()->getAddresses() as $address) {
+                $options[] = array(
+                    'value' => $address->getId(),
+                    'label' => $address->format('oneline')
+                );
+            }
+
+            $select = $this->getLayout()->createBlock('core/html_select')
+                ->setName($type.'_address_id')
+                ->setId($type.'-address-select')
+                ->setClass('address-select')
+                ->setValue('')
+                ->setOptions($options);
+
+            return $select->getHtml();
+        }
+        return '';
+    }
+    
+    public function getAddressesJson() {
+    	$json = array();
+    	foreach ($this->getCustomer()->getAddresses() as $address) {
+    		$addressData = $address->getData();
+    		$addressData [ 'email' ] = $this->getCustomer()->getEmail();
+    		$streetArray = explode( "\n", $addressData[ 'street' ] );
+    		$addressData[ 'street1' ] = $streetArray[0];
+    		$addressData[ 'street2' ] = isset( $streetArray[1] ) ? $streetArray[1] : '';
+    		$json[ $address->getId() ] = $addressData;
+    	}
+    	return json_encode( $json );
+    }
 
     public function getCountryHtmlSelect($type)
     {

@@ -15,9 +15,32 @@
 class Harapartners_Service_Model_Rewrite_Customer_Customer extends Mage_Customer_Model_Customer {
  
     const EXCEPTION_INVALID_STORE_ACCOUNT = 5;	//Harapartners, yang, multistore sigin error control
+    
+    //Harapartners, Jun, Important logic to handle legacy customers
+	public function validatePassword($password){
+		if(!!$this->getData('legacy_customer')){
+			return (sha1($password) == $this->getPasswordHash());
+		}else{
+	        $hash = $this->getPasswordHash();
+	        if (!$hash) {
+	            return false;
+	        }
+	        return Mage::helper('core')->validateHash($password, $hash);
+		}
+    }
+    
+    //Harapartners, Jun, Legacy customer will be come concurrent after password change
+	public function changePassword($newPassword) {
+		$this->setPassword($newPassword);
+        $this->_getResource()->saveAttribute($this, 'password_hash');
+        if(!!$this->getData('legacy_customer')){
+	        $this->setData('legacy_customer', 0);
+	        $this->_getResource()->saveAttribute($this, 'legacy_customer');
+        }
+        return $this;
+    }
 
-    public function authenticate($login, $password, $reValidate = false)
-    {
+    public function authenticate($login, $password, $reValidate = false) {
         $this->loadByEmail($login);
 
         //Haraparnters, yang, START
@@ -54,6 +77,47 @@ class Harapartners_Service_Model_Rewrite_Customer_Customer extends Mage_Customer
 		//Haraparnters, yang, Set 15min validation time
         Mage::getSingleton('customer/session')->setData('CUSTOMER_LAST_VALIDATION_TIME', now());
         return true;
+    }
+    
+    //Haraparnters, jun: remove first name last name validation from registering
+	public function validate(){
+        $errors = array();
+        $customerHelper = Mage::helper('customer');
+
+        if (!Zend_Validate::is($this->getEmail(), 'EmailAddress')) {
+            $errors[] = $customerHelper->__('Invalid email address "%s".', $this->getEmail());
+        }
+
+        $password = $this->getPassword();
+        if (!$this->getId() && !Zend_Validate::is($password , 'NotEmpty')) {
+            $errors[] = $customerHelper->__('The password cannot be empty.');
+        }
+        if (strlen($password) && !Zend_Validate::is($password, 'StringLength', array(6))) {
+            $errors[] = $customerHelper->__('The minimum password length is %s', 6);
+        }
+        $confirmation = $this->getConfirmation();
+        if ($password != $confirmation) {
+            $errors[] = $customerHelper->__('Please make sure your passwords match.');
+        }
+
+        $entityType = Mage::getSingleton('eav/config')->getEntityType('customer');
+        $attribute = Mage::getModel('customer/attribute')->loadByCode($entityType, 'dob');
+        if ($attribute->getIsRequired() && '' == trim($this->getDob())) {
+            $errors[] = $customerHelper->__('The Date of Birth is required.');
+        }
+        $attribute = Mage::getModel('customer/attribute')->loadByCode($entityType, 'taxvat');
+        if ($attribute->getIsRequired() && '' == trim($this->getTaxvat())) {
+            $errors[] = $customerHelper->__('The TAX/VAT number is required.');
+        }
+        $attribute = Mage::getModel('customer/attribute')->loadByCode($entityType, 'gender');
+        if ($attribute->getIsRequired() && '' == trim($this->getGender())) {
+            $errors[] = $customerHelper->__('Gender is required.');
+        }
+
+        if (empty($errors)) {
+            return true;
+        }
+        return $errors;
     }
     
     

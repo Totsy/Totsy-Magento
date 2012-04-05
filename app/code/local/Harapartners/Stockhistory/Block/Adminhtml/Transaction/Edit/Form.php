@@ -15,7 +15,8 @@
 class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Edit_Form extends Mage_Adminhtml_Block_Widget_Form {
        						
 	protected function _prepareForm() {
-
+		$dataObject = new Varien_Object(Mage::registry('stockhistory_transaction_data'));
+		$helper = Mage::helper('stockhistory');
         $form = new Varien_Data_Form(array(
             'id'        => 'edit_form',
             'action'    => $this->getData('action'),
@@ -23,93 +24,103 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Edit_Form extends Ma
             //'enctype'  	 => 'multipart/form-data'
         ));
         
-		$data = $this->getRequest()->getParams();
-        $fieldset = $form->addFieldset('stockhistory', array('legend'=>Mage::helper('stockhistory')->__("PO Info")));
-        if(isset($data['po_id']) && !!$data['po_id']){
-        	$fieldset->addField('po_id', 'text', array(
-            'label'     => Mage::helper('stockhistory')->__('PO ID:'),
-            'name'      => 'po_id',
-        	'readonly' 	=> true,
-        	'value'		=> $data['po_id'],
-        	'required'	=> true,
-        	));
-        }else{
-	        $fieldset->addField('po_id', 'text', array(
-	            'label'     => Mage::helper('stockhistory')->__('PO ID:'),
-	            'name'      => 'po_id',
-	        	'required'	=> true
-	        ));
-        }
-        if(isset($data['vendor_id']) && !!$data['vendor_id']){
+        $fieldset = $form->addFieldset('stockhistory', array('legend'=>$helper->__("Transaction Info")));
+        
+		if(!!$dataObject->getData('vendor_id')){
         	$fieldset->addField('vendor_id', 'text', array(
-	            'label'     => Mage::helper('stockhistory')->__('Vendor ID:'),
-	            'name'      => 'vendor_id',
-	        	'required'	=> true,
-        		'readonly'	=> true,
-        		'value'		=> $data['vendor_id'],
+		            'label'     => $helper->__('Vendor ID:'),
+		            'name'      => 'vendor_id',
+		        	'required'	=> true,
+	        		'readonly'	=> true,
+	        		'note'		=> 'Read only field.'
 	        ));
         }else{
 	        $fieldset->addField('vendor_id', 'text', array(
-	            'label'     => Mage::helper('stockhistory')->__('Vendor ID:'),
-	            'name'      => 'vendor_id',
-	        	'required'	=> true
+		            'label'     => $helper->__('Vendor ID:'),
+		            'name'      => 'vendor_id',
+		        	'required'	=> true,
+		        	'note'		=> 'Once saved, this field <b>CANNOT</b> be modified.'
 	        ));
         }
+        
+        if(!!$dataObject->getData('po_id')){
+        	$fieldset->addField('po_id', 'text', array(
+		            'label'     => $helper->__('PO ID:'),
+		            'name'      => 'po_id',
+		        	'readonly' 	=> true,
+		        	'required'	=> true,
+        			'note'		=> 'Read only field.'
+		     ));
+        }else{
+	        $fieldset->addField('po_id', 'text', array(
+		            'label'     => $helper->__('PO ID:'),
+		            'name'      => 'po_id',
+		        	'required'	=> true,
+		        	'note'		=> 'Once saved, this field <b>CANNOT</b> be modified.'
+	        ));
+        }
+        
+        if(!!$dataObject->getData('vendor_code')){
+	         $fieldset->addField('vendor_code', 'text', array(
+		            'label'     => $helper->__('Vendor Code:'),
+		            'name'      => 'vendor_code',
+		         	'required'	=> true,
+		         	'readonly'	=> true,
+		         	'note'		=> 'Read only field.'
+	        ));
+        }else{
+	        $fieldset->addField('vendor_code', 'text', array(
+		            'label'     => $helper->__('Vendor Code:'),
+		            'name'      => 'vendor_code',
+		        	'required'	=> true,
+		        	'note'		=> 'Once saved, this field <b>CANNOT</b> be modified.'
+	        ));
+        }
+        
+        $fieldset->addField('category_id', 'text', array(
+            'label'     => $helper->__('Category ID:'),
+            'name'      => 'category_id',
+        	'required'	=> true,
+        	'note'		=> 'Category ID of the event'
+        ));
+        
         $fieldset->addField('product_id', 'text', array(
-            'label'     => Mage::helper('stockhistory')->__('Product ID:'),
+            'label'     => $helper->__('Product ID:'),
             'name'      => 'product_id',
         	'required'	=> true
         ));
         
-        $fieldset->addField('category_id', 'text', array(
-            'label'     => Mage::helper('stockhistory')->__('Category ID:'),
-            'name'      => 'category_id',
-        	'required'	=> true
-        ));
-        
-        $fieldset->addField('product_sku', 'text', array(
-            'label'     => Mage::helper('stockhistory')->__('Product SKU:'),
-            'name'      => 'product_sku',
-        ));
-        
-        $fieldset->addField('vendor_sku', 'text', array(
-            'label'     => Mage::helper('stockhistory')->__('Vendor SKU:'),
-            'name'      => 'vendor_sku',
-        ));
+//        $fieldset->addField('product_sku', 'text', array(
+//            'label'     => $helper->__('Product SKU:'),
+//            'name'      => 'product_sku',
+//        ));
         
         $fieldset->addField('unit_cost', 'text', array(
-            'label'     => Mage::helper('stockhistory')->__('Unit Cost:'),
+            'label'     => $helper->__('Unit Cost:'),
             'name'      => 'unit_cost',
         	'required'	=> true
         ));
         
         $fieldset->addField('qty_delta', 'text', array(
-            'label'     => Mage::helper('stockhistory')->__('Qty Changed:'),
+            'label'     => $helper->__('Qty Changed:'),
             'name'      => 'qty_delta',
         	'required'	=> true
         ));
         
-        $fieldset->addField('action_type', 'select', array(
-            'label'     => Mage::helper('stockhistory')->__('Action:'),
+        $fieldset->addField('action_type', 'text', array(
+            //'label'     => $helper->__('Action:'),
             'name'      => 'action_type',
-        	'values'		=> Mage::helper('stockhistory')->getStatusOptions(),
+        	'readonly'	=> true,
+        	'style'		=> 'display:none',
+        	//'values'		=> $helper->getFormTransactionTypeArray(),
         ));
         
         $fieldset->addField('comment', 'textarea', array(
-            'label'     => Mage::helper('stockhistory')->__('Comment:'),
+            'label'     => $helper->__('Comment:'),
             'name'      => 'comment',
         ));
-		//$configKey = 'text_content';		
-		//$configText = Mage::getStoreConfig('config/textconfig_text/'.$configKey);
-		
-        //$form->setValues( array('file_import' => $configText) );
         
-		if ( $formData = Mage::getSingleton('adminhtml/session')->getTransFormData() ){
-            $form->setValues($formData);
-            Mage::getSingleton('adminhtml/session')->setTransFormData(null);
-        } elseif ( Mage::registry('trans_data') ) {
-            $form->setValues(Mage::registry('trans_data')->getData());
-        }
+		$form->setValues($dataObject->getData());
         $form->setUseContainer(true);
         $this->setForm($form);
         return parent::_prepareForm();

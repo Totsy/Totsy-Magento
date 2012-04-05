@@ -12,30 +12,26 @@
  * 
  */
 
-class Harapartners_Stockhistory_Adminhtml_VendorController extends Mage_Adminhtml_Controller_Action
-{   
+class Harapartners_Stockhistory_Adminhtml_VendorController extends Mage_Adminhtml_Controller_Action {   
 	//protected $statusOptions = array('Pending' => 0, 'Processed' => 1, 'Failed' => 2);
 	//protected $mimes = array('application/vnd.ms-excel', 'text/plain', 'text/csv', 'text/tsv');
 	
 	protected function _getSession() {
 		return Mage::getSingleton('adminhtml/session');
 	}
-	public function indexAction()
-	{
+	public function indexAction() {
 		$this->loadLayout()
 			->_setActiveMenu('stockhistory/vendor')
 			->_addContent($this->getLayout()->createBlock('stockhistory/adminhtml_vendor_index'))
 			->renderLayout();
 	}
 
-	public function newAction()
-	{
+	public function newAction() {
 		$this->_getSession()->setVendorFormData(null);
 		$this->_forward('edit');
 	}
 	
-	public function editAction()
-	{
+	public function editAction() {
 		$id = $this->getRequest()->getParam('id', null);
 		$data = $this->_getSession()->getVendorFromData();
 		
@@ -48,11 +44,10 @@ class Harapartners_Stockhistory_Adminhtml_VendorController extends Mage_Adminhtm
 				$this->_redirect('*/*/index');
 				return;
 			}
-		
 		}
 		if(!!$data){
-			Mage::unregister('vendor_data');
-			Mage::register('vendor_data', $data);
+			Mage::unregister('stockhistory_vendor_data');
+			Mage::register('stockhistory_vendor_data', $data);
 		}
 		$this->loadLayout()->_setActiveMenu('stockhistory/edit');
 		$this->_addContent($this->getLayout()->createBlock('stockhistory/adminhtml_vendor_edit'));
@@ -61,12 +56,12 @@ class Harapartners_Stockhistory_Adminhtml_VendorController extends Mage_Adminhtm
 		//$this->_redirect('*/*/index');
 	}
 	
-	public function saveAction()
-	{   
+	public function saveAction() {   
 		$data = $this->getRequest()->getPost();
 		if(isset($data['form_key'])){
 			unset($data['form_key']);
 		}
+		$this->_getSession()->setVendorFormData($data);
 		
 		try{
 			$model = Mage::getModel('stockhistory/vendor');

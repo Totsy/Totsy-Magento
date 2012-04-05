@@ -13,7 +13,8 @@
  */
 
 
-class Harapartners_Ordersplit_Helper_Data extends Mage_Core_Helper_Abstract{	
+class Harapartners_Ordersplit_Helper_Data extends Mage_Core_Helper_Abstract {
+	
 	const TYPE_VIRTUAL = 'virtual';
 	const TYPE_DOTCOM = 'dotcom';
 	const TYPE_DROPSHIP = 'dropship';

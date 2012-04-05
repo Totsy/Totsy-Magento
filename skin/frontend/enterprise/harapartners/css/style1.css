@@ -251,6 +251,9 @@ body.cms-page-view .page div.main {
   padding-right:0;
   padding-top:0;	
   font-weight:normal;
+  height:45px;
+  overflow:hidden;
+  line-height:16px;
 }
 
 .events-div .products-grid {
@@ -730,6 +733,9 @@ body.catalog-category-view .product-options dd{
 body.catalog-category-view .category-products {
     padding: 5px 0 0;
 }
+body.catalog-category-view div.options-container-big{
+	display:none;
+}
 .middle-part {
 	
 }
@@ -1165,4 +1171,21 @@ body .col-left hr {
 .left_needhelp .main-nav a{
 	color:#EE1C25;
 }
+.categoryevent-index-topnav .products-grid .product-image{
+	margin: 0 auto 3px;
+}
+#hpcheckout-wrapper .fields>.fields>.validation-advice{
+	
+}
+.hpcheckout-checkout-index .form-list .validation-advice  {
+    width:203px;
+}
 
+.hpcheckout-checkout-index .billing-address-select , .hpcheckout-checkout-index .shipping-address-select{
+    float: right;
+    left: 4px;
+    margin-bottom: 9px;
+    margin-right: 0;
+    position: relative;
+    width: 200px;
+}
