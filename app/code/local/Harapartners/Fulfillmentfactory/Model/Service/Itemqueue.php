@@ -106,6 +106,12 @@ class Harapartners_Fulfillmentfactory_Model_Service_Itemqueue
 				$itemqueue->save();
     		}
     	}
+    	else if($status == Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_PROCESSING_FULFILLMENT){
+    		foreach($collection as $itemqueue) {
+    			$itemqueue->setStatus(Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_SUBMITTED);
+				$itemqueue->save();
+    		}
+    	}/*
     	else if($status == Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_PAYMENT_FAILED){
     		foreach($collection as $itemqueue) {
     			$itemqueue->setStatus(Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_PROCESSING);
@@ -117,7 +123,7 @@ class Harapartners_Fulfillmentfactory_Model_Service_Itemqueue
     			$itemqueue->setStatus(Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_PROCESSING);
 				$itemqueue->save();
     		}
-    	}
+    	}*/
     }
     
 	/**
