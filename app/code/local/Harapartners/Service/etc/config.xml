@@ -67,6 +67,12 @@
             <service>
             	<class>Harapartners_Service_Helper</class>
             </service>
+			<catalog>
+                <rewrite>
+					<!--Harapartners_Service: do NOT allow product view without category!-->
+                    <product>Harapartners_Service_Helper_Rewrite_Catalog_Product</product>
+                </rewrite>
+            </catalog>
         </helpers>
 		<models>
             <service>
@@ -117,10 +123,14 @@
 					<quote_address>Harapartners_Service_Model_Rewrite_Sales_Quote_Address</quote_address>
 					<!--Harapartners_SpeedTax-->
 					<quote_address_total_grand>Harapartners_Service_Model_Rewrite_Sales_Quote_Address_Total_Grand</quote_address_total_grand>
-					<!--Harapartners_SpeedTax-->
-					<quote_address_total_tax>Harapartners_Service_Model_Rewrite_Sales_Quote_Address_Total_Tax</quote_address_total_tax>
 				</rewrite>
 			</sales>
+			<tax>
+				<rewrite>
+					<!--Harapartners_SpeedTax-->
+					<sales_total_quote_tax>Harapartners_Service_Model_Rewrite_Sales_Quote_Address_Total_Tax</sales_total_quote_tax>
+				</rewrite>
+			</tax>
 			<salesrule>
 				<rewrite>
 					<!--Harapartners_Ordersplit--><!--Harapartners_Paymentfactory-->

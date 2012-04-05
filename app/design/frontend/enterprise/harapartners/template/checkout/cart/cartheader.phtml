@@ -32,6 +32,7 @@
 	$checkoutSession = Mage::getSingleton('checkout/session');
    	$countDownTimerHeader= $checkoutSession->getCountDownTimer();
     $timeoutHeader = $checkoutSession->getQuoteItemExpireTime();
+    $_saving = $this->getTotalSaving();
 	$endcount_lc_header = date("F j, Y, G:i:s", ($countDownTimerHeader + $timeoutHeader));
 ?>
 
@@ -40,6 +41,7 @@
 	$_cartQty = Mage::getModel('checkout/cart')->getSummaryQty(); 
 	$_itemsArray = $this->getItems();
 	$_updateFlag = $checkoutSession->getCartUpdatedFlag();
+	$_mySaving = $this->__('Your savings: %s', Mage::helper('checkout')->formatPrice($_saving));
 ?>
 <?php if ($_cartQty > 0 && !empty($_itemsArray)): ?>
     <?php $_myCart = $this->__('%s Items', '<span>' . $_cartQty . '</span>') ?>
@@ -53,11 +55,18 @@
         </ul>
     </div>
 <?php else:?>
-    <div class="block-title<?php if(!$_cartQty) { echo (' no-items'); } ?>">
+    <div id="usercart-block-title" class="block-title<?php if(!$_cartQty) { echo (' no-items'); } ?>">
     	<?php if ($_cartQty > 0 && !empty($_itemsArray)):?>
-        <strong id="cartHeader"><?php echo $_myCart ?><span><?php echo ' | '.Mage::helper('checkout')->formatPrice($this->getSubtotal()) ?><?php if ($_subtotalInclTax = $this->getSubtotalInclTax()): ?> / <?php echo ' | '.Mage::helper('checkout')->formatPrice($_subtotalInclTax) ?> <?php echo ' | '.Mage::helper('tax')->getIncExcText(true) ?><?php endif; ?></span></strong>
+        	<strong id="cartHeader"><?php echo $_myCart ?><span><?php echo ' | '.Mage::helper('checkout')->formatPrice($this->getSubtotal()) ?><?php if ($_subtotalInclTax = $this->getSubtotalInclTax()): ?> / <?php echo ' | '.Mage::helper('checkout')->formatPrice($_subtotalInclTax) ?> <?php echo ' | '.Mage::helper('tax')->getIncExcText(true) ?><?php endif; ?></span></strong>
     	<?php else :?>
-    	<strong id="cartHeader"><span>0</span> Items<span> | <span class='price'>$0.00</span></span></strong>
+    		<strong id="cartHeader"><span>0</span> Items<span> | <span class='price'>$0.00</span></span></strong>
+    	<?php endif;?>
+    </div>
+    <div id="checkoutcart-block-title" class="block-title<?php if(!$_cartQty) { echo (' no-items'); } ?>">
+    	<?php if ($_cartQty > 0 && !empty($_itemsArray)):?>
+        	<strong id="cartHeader"><?php echo $_mySaving ?><span><?php echo ' | '.Mage::helper('checkout')->formatPrice($this->getSubtotal()) ?><?php if ($_subtotalInclTax = $this->getSubtotalInclTax()): ?> / <?php echo ' | '.Mage::helper('checkout')->formatPrice($_subtotalInclTax) ?> <?php echo ' | '.Mage::helper('tax')->getIncExcText(true) ?><?php endif; ?></span></strong>
+    	<?php else :?>
+    		<strong id="cartHeader"><span>Your saving:</span> $0.00<span> | <span class='price'>$0.00</span></span></strong>
     	<?php endif;?>
     </div>
     <div id="topCartContent" class="block-content" style="<?php if ( !!$_updateFlag && $_updateFlag ) {echo "display:block"; $checkoutSession->setCartUpdatedFlag(false);} else echo "display:none";?>"> 
@@ -119,6 +128,7 @@
 		                <?php if ($this->canApplyMsrp()): ?>
 		                    <span class="map-cart-sidebar-total"><?php echo $this->__('ORDER TOTAL WILL BE DISPLAYED BEFORE YOU SUBMIT THE ORDER'); ?></span>
 		                <?php else: ?>
+		                	<span class="label"><?php echo $this->__('Your saving:') ?></span><?php echo Mage::helper('checkout')->formatPrice($_saving); ?>
 		                    <span class="label"><?php echo $this->__('Subtotal:') ?></span> <?php echo Mage::helper('checkout')->formatPrice($this->getSubtotal()) ?><?php if ($_subtotalInclTax = $this->getSubtotalInclTax()): ?> / <?php echo Mage::helper('checkout')->formatPrice($_subtotalInclTax) ?> <?php echo Mage::helper('tax')->getIncExcText(true) ?><?php endif; ?>
 		                <?php endif; ?>
 		            </p>
@@ -137,12 +147,19 @@
     // Below can be used to show minicart after item added
     // Enterprise.TopCart.showCart(7);
 	jQuery(document).ready(function(){
-		jQuery("#usercart").hover(
+		jQuery(".top-cart").hover(
 			function(){
 				jQuery("#topCartContent").stop().fadeTo(200,1);},
-			function(){
-				jQuery("#topCartContent").stop().fadeTo(200,0).hide();}
+				function(){
+					jQuery("#topCartContent").stop().fadeTo(200,0).hide();}	
+
 		);
+		
+		jQuery(".hpcheckout-checkout-index .top-cart").hover(
+			function(){
+				jQuery("#topCartContent").hide();}
+		);
+		
 		jQuery("#items-info-wrapper .block-subtitle .close-btn").click(function(){
 			jQuery("#topCartContent").hide();
 		})

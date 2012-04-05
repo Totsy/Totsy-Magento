@@ -14,6 +14,10 @@ class Harapartners_MemcacheDb_Model_Resource_Memcache {
     }
     
     protected function _initMemcache(){
+    	//Only used for Frontend, for Backend actions, always use the default method for safety
+    	if(Mage::app()->getStore()->isAdmin()){
+    		return;
+    	}
     	try{
     		if(!class_exists(Memcache)){
     			$this->_memcache = null;

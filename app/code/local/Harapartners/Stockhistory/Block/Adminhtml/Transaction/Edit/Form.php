@@ -56,6 +56,22 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Edit_Form extends Ma
 	        	'required'	=> true
 	        ));
         }
+        if(isset($data['vendor_code']) && !! $data['vendor_code']){
+	         $fieldset->addField('vendor_code', 'text', array(
+	            'label'     => $helper->__('Vendor Code:'),
+	            'name'      => 'vendor_code',
+	         	'required'	=> true,
+	         	'value'		=> $data['vendor_code'],
+	         	'readonly'	=> true,
+	        ));
+        }else{
+	        $fieldset->addField('vendor_code', 'text', array(
+	            'label'     => $helper->__('Vendor Code:'),
+	            'name'      => 'vendor_code',
+	        	'required'	=> true
+	        ));
+        }
+        
         $fieldset->addField('product_id', 'text', array(
             'label'     => $helper->__('Product ID:'),
             'name'      => 'product_id',
@@ -73,10 +89,7 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Edit_Form extends Ma
             'name'      => 'product_sku',
         ));
         
-        $fieldset->addField('vendor_code', 'text', array(
-            'label'     => $helper->__('Vendor Code:'),
-            'name'      => 'vendor_code',
-        ));
+       
         
         $fieldset->addField('unit_cost', 'text', array(
             'label'     => $helper->__('Unit Cost:'),
@@ -90,13 +103,13 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Edit_Form extends Ma
         	'required'	=> true
         ));
         
-        $fieldset->addField('action_type', 'select', array(
-            'label'     => $helper->__('Action:'),
+        $fieldset->addField('action_type', 'text', array(
+            //'label'     => $helper->__('Action:'),
             'name'      => 'action_type',
         	'readonly'	=> true,
-        	//'style'		=>	'display:none',
+        	'style'		=>	'display:none',
         	'value'		=> Harapartners_Stockhistory_Helper_Data::TRANSACTION_ACTION_AMENDMENT,
-        	'values'		=> $helper->getFormTransactionTypeArray(),
+        	//'values'		=> $helper->getFormTransactionTypeArray(),
         ));
         
         $fieldset->addField('comment', 'textarea', array(
@@ -104,10 +117,6 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Edit_Form extends Ma
             'name'      => 'comment',
         ));
         
-		//$configKey = 'text_content';		
-		//$configText = Mage::getStoreConfig('config/textconfig_text/'.$configKey);
-		
-        //$form->setValues( array('file_import' => $configText) );
         
 		if ( $formData = Mage::getSingleton('adminhtml/session')->getTransFormData() ){
             $form->setValues($formData);

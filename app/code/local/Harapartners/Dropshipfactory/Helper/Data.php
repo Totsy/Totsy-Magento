@@ -29,7 +29,7 @@ class Harapartners_DropshipFactory_Helper_Data extends Mage_Core_Helper_Abstract
 	 */
 	public function getVendorAttributeId() {
 		
-		return $this->getAttributeId('vendor');
+		return $this->getAttributeId('vendor_code');
 	}
 	
 	/**
@@ -54,13 +54,13 @@ class Harapartners_DropshipFactory_Helper_Data extends Mage_Core_Helper_Abstract
 	
 	/**
 	 * get Vendor List
-	 *
+	 * Notice: there is a bug with vendor_code because of attribute changes
 	 * @return array
 	 */
 	public function getVendorList() {
 		$vendorAttribute = Mage::getModel('catalog/entity_attribute')
 								->load(Mage::getResourceModel('eav/entity_attribute')
-										->getIdByCode('catalog_product','vendor')
+										->getIdByCode('catalog_product','vendor_code')
 								  );
 								  
 								  
