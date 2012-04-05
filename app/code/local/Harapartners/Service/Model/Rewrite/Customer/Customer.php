@@ -21,19 +21,23 @@ class Harapartners_Service_Model_Rewrite_Customer_Customer extends Mage_Customer
 		if(!!$this->getData('legacy_customer')){
 			return (sha1($password) == $this->getPasswordHash());
 		}else{
-	        $hash = $this->getPasswordHash();
-	        if (!$hash) {
-	            return false;
-	        }
-	        return Mage::helper('core')->validateHash($password, $hash);
+			return parent::validatePassword($password);
 		}
     }
     
     //Harapartners, Jun, Legacy customer will be come concurrent after password change
 	public function changePassword($newPassword) {
-		$this->setPassword($newPassword);
-        $this->_getResource()->saveAttribute($this, 'password_hash');
+		parent::changePassword($newPassword);
         if(!!$this->getData('legacy_customer')){
+	        $this->setData('legacy_customer', 0);
+	        $this->_getResource()->saveAttribute($this, 'legacy_customer');
+        }
+        return $this;
+    }
+    
+	public function changeResetPasswordLinkToken($newResetPasswordLinkToken) {
+        parent::changeResetPasswordLinkToken($newResetPasswordLinkToken);
+		if(!!$this->getData('legacy_customer')){
 	        $this->setData('legacy_customer', 0);
 	        $this->_getResource()->saveAttribute($this, 'legacy_customer');
         }
