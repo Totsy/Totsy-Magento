@@ -14,7 +14,7 @@
 
 class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Grid extends Mage_Adminhtml_Block_Widget_Grid
 {
-	//private $options = array('0' => 'Pending', '1'=>'Processed', '2'=> 'Failed');
+	// save collection for create csv
 	private $_reportCollection = null;
 	
 	public function __construct()
@@ -53,7 +53,7 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Grid extends 
 		$reportCollection = new Varien_Data_Collection();
 
 		foreach($uniqueProductList as $productId => $productInfo){
-			$item = new Varien_Object();//Mage::getModel('stockhistory/report');
+			$item = new Varien_Object();
 			$product = Mage::getModel('catalog/product')->load($productId);
 			//you may want to add some product info here, like SKU, Name, Vendor ... so the report is good looking
 			$data = array(
