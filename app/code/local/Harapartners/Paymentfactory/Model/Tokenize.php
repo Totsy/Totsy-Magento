@@ -128,7 +128,7 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Mage_Cybersource_Model_
         	$customerId = $payment->getOrder()->getQuote()->getCustomerId();
         	$data = new Varien_Object($payment->getData());
         	$data->setData('customer_id', $customerId);
-        	$data->addData('cybersource_sudid',$result->paySubscriptionCreateReply->subscriptionID);
+        	$data->setData('cybersource_sudid', $result->paySubscriptionCreateReply->subscriptionID);
         	$profile = Mage::getModel('paymentfactory/profile');
         	$profile->importDataWithValidation($data);               
         	$profile->save();

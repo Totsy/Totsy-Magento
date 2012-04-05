@@ -13,7 +13,8 @@
  */
 
 
-class Harapartners_Ordersplit_Helper_Data extends Mage_Core_Helper_Abstract{	
+class Harapartners_Ordersplit_Helper_Data extends Mage_Core_Helper_Abstract {
+	
 	const TYPE_VIRTUAL = 'virtual';
 	const TYPE_DOTCOM = 'dotcom';
 	const TYPE_DROPSHIP = 'dropship';
@@ -195,6 +196,7 @@ class Harapartners_Ordersplit_Helper_Data extends Mage_Core_Helper_Abstract{
 					$newQuote->getPayment()->importData($oldPayment->getData(), false);
 					$newQuote->save();
 					$this->_revertGiftCard($oldOrder, $newQuote);
+					$this->_revertRewardPoints($oldOrder, $newQuote);
 					$this->_revertCustomerBalance($oldOrder, $newQuote, $store);
 					//$this->_processPayment($oldQuote, $newQuote, $type); //in case there should be additional logic for payment processing
 					$newQuote->collectTotals();
@@ -330,6 +332,30 @@ class Harapartners_Ordersplit_Helper_Data extends Mage_Core_Helper_Abstract{
 			//apply on new quote				
 			Mage::helper('enterprise_giftcardaccount')->setCards($newQuote, $newCards);	
         }
+	}
+	protected function _revertRewardPoints($oldOrder, $newQuote){
+		if (!!$oldOrder->getCustomerId() && $oldOrder->getRewardPointsBalance() && !Mage::registry('isRewardPointsReverted')) {       
+	        Mage::getModel('enterprise_reward/reward')
+	            ->setCustomerId($oldOrder->getCustomerId())
+	            ->setWebsiteId(Mage::app()->getStore($oldOrder->getStoreId())->getWebsiteId())
+	            ->setPointsDelta($oldOrder->getRewardPointsBalance())
+	            ->setAction(Enterprise_Reward_Model_Reward::REWARD_ACTION_REVERT)
+	            ->setActionEntity($oldOrder)
+	            ->updateRewardPoints();
+	        Mage::unregister('isRewardPointsReverted');
+			Mage::register('isRewardPointsReverted', true);
+		}
+		if(Mage::registry('isRewardPointsReverted')){
+			$reward = Mage::getModel('enterprise_reward/reward')
+                ->setCustomerId($oldOrder->getCustomerId())
+                ->setWebsiteId(Mage::app()->getStore($oldOrder->getStoreId())->getWebsiteId())
+                ->loadByCustomer();
+           if($reward->getPointsBalance()>0){
+           		$newQuote->setUseRewardPoints(1);
+           }else{
+           		$newQuote->setUseRewardPoints(0);
+           }
+		}
 	}
 	
 	protected function _revertCustomerBalance($oldOrder, $newQuote, $store){

@@ -16,28 +16,27 @@ class Harapartners_Stockhistory_Block_Adminhtml_Purchaseorder_Edit_Form extends 
        						
 	protected function _prepareForm() {
 		
-		//$dataObject = new Varien_Object(Mage::registry('po_data'));
+		$dataObject = new Varien_Object(Mage::registry('stockhistory_po_data'));
 		$helper = Mage::helper('stockhistory');
-		$data = $this->getRequest()->getParams();
+		//$data = $this->getRequest()->getParams();
 		
 		
         $form = new Varien_Data_Form(array(
             'id'        => 'edit_form',
-            'action'    => $this->getUrl('*/*/save', array('id' => $this->getRequest()->getParam('id'))),
+            'action'    => $this->getUrl('*/*/save', array('id' => $dataObject->getId())),
             'method'    => 'post',
             //'enctype'  	 => 'multipart/form-data'
         ));
         
 		
-        $fieldset = $form->addFieldset('vendor', array('legend'=>$helper->__("Vendor Info")));
+        $fieldset = $form->addFieldset('purchase_order', array('legend'=>$helper->__("Purchase Order Info")));
 		
         //Adding PO without vendor_id is not allowed
-        if(isset($data['vendor_id']) && !! $data['vendor_id']){
+        if(!!$dataObject->getData('vendor_id')){
 	        $fieldset->addField('vendor_id', 'text', array(
 		            	'label'     => $helper->__('Vendor ID:'),
 		            	'name'      => 'vendor_id',
 		        		'readonly' 	=> true,
-		        		'value'		=> $data['vendor_id'],//$dataObject->getVendorId(),
 		        		'required'	=> true,
 	        			'note'		=> 'Read only field. Each purchase order must be associated to a given vendor.'
 	        ));
@@ -45,9 +44,8 @@ class Harapartners_Stockhistory_Block_Adminhtml_Purchaseorder_Edit_Form extends 
         	$fieldset->addField('vendor_id', 'text', array(
 		            	'label'     => $helper->__('Vendor ID:'),
 		            	'name'      => 'vendor_id',
-		        		'readonly' 	=> true,
 		        		'required'	=> true,
-	        			'note'		=> 'Read only field. Each purchase order must be associated to a given vendor.'
+	        			'note'		=> 'Once saved, this field <b>CANNOT</b> be modified.'
 	        ));
         }
         
@@ -57,22 +55,13 @@ class Harapartners_Stockhistory_Block_Adminhtml_Purchaseorder_Edit_Form extends 
         	'required'	=> true,
         ));
         
-        
         $fieldset->addField('comment', 'textarea', array(
             'label'     => $helper->__('Comment:'),
             'name'      => 'comment',
         ));
-		
-        //$form->setValues($dataObject->getData());
-		if ( Mage::registry('po_data') ) {
-            $form->setValues(Mage::registry('po_data'));
-        }
-//		if ( $formData = Mage::getSingleton('adminhtml/session')->getPoFormData() ){
-//            $form->setValues($formData);
-//            Mage::getSingleton('adminhtml/session')->setPoFormData(null);
-//        } elseif ( Mage::registry('po_data') ) {
-//            $form->setValues(Mage::registry('po_data')->getData());
-//        }
+
+        
+		$form->setValues($dataObject->getData());
         $form->setUseContainer(true);
         $this->setForm($form);
         return parent::_prepareForm();

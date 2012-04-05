@@ -45,8 +45,21 @@ class Harapartners_ShippingFactory_Model_Shipping_Carrier_Flexible
 	 */
 	protected $_result = null;
 	
-	public function collectRates(Mage_Shipping_Model_Rate_Request $request)
-    {
+	public function collectRates(Mage_Shipping_Model_Rate_Request $request) {
+		
+//		//Somehow, please get the address object
+//		$lastOrderList = $address->getCustomerLastOrderList();
+//		//Your logic here,
+//		//If array has no item, this must be the first order,
+//		$address->getCustomer();
+//		//test created date
+//		//if within 30 days, free shipping!!
+		
+		
+		
+		
+		
+		
         if (!$this->getConfigFlag('active')) {
             return false;
         }
