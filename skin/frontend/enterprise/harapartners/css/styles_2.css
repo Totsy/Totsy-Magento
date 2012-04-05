@@ -696,7 +696,7 @@ body .my-account .fieldset h2.legend {
     color: #ED1C25;
     resize: none; 
     height:15px;
-    width:250px
+    width:270px
 }
 
 .my-account .button span{
@@ -806,6 +806,7 @@ ul.menu ul.shop li a:hover{
 	-o-transition-duration: 0.4s; /* Opera */ 
 }
 
+/*-------------------------Reset Password-------------------------------------*/
 body.customer-account-create div .facebook-button, .enterprise-invitation-customer-account-create div .facebook-button{
     float: right;
     margin-right: 3px;
