@@ -83,7 +83,7 @@ HpCheckout.prototype = {
 				}
 				errorMessage = '<div class="hpcheckout-error-message">' + message + '</div>';
 			}
-			jQuery( '#' + blocksData[ blockCode ].wrapperId ).html( errorMessage + blocksData[ blockCode ].html );
+			jQuery( '#' + blocksData[ blockCode ].wrapperId + ' .checkout-content' ).html( errorMessage + blocksData[ blockCode ].html );
 		}
 	},
 	

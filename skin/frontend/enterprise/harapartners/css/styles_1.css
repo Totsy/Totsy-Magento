@@ -24,6 +24,8 @@
  
  div.nav { min-width: 780px;}
  
+ #userinfo strong { text-overflow: ellipsis; white-space: nowrap;}
+ 
  
  /* Top Cart ================================================================================= */
  

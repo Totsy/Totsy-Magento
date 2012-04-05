@@ -94,5 +94,4 @@ class Harapartners_Service_Model_Rewrite_Customer_Session extends Mage_Customer_
         Mage::dispatchEvent('customer_login', array('customer'=>$customer));
         return $this;
     }
-
 }

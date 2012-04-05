@@ -45,6 +45,7 @@ class Harapartners_Stockhistory_Model_Transaction extends Mage_Core_Model_Abstra
 	
 	public function validateAndSave($data){
 		$this->addData($data);
+		
 		if(!$this->getData('vendor_id')){
 			throw new Exception('Vendor ID is required.');
 		}

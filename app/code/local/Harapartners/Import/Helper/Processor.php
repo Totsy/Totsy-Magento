@@ -14,7 +14,7 @@
 
 class Harapartners_Import_Helper_Processor extends Mage_Core_Helper_Abstract {
 	
-	const DEFAULT_DATAFLOW_PROFILE_ID = 8;
+	const DEFAULT_DATAFLOW_PROFILE_ID = 7;
 	
 	protected $_errorFile 			= null;
 	protected $_errorMessages 		= array();
@@ -176,6 +176,7 @@ class Harapartners_Import_Helper_Processor extends Mage_Core_Helper_Abstract {
 			$importData['conf_simple_products']			= implode(',',$this->_confSimpleProducts);
 			$importData['visibility']					= 'Catalog, Search';
 		}else{
+			$importData['visibility']					= 'Catalog, Search'; //Need Logic for simple only.
 			$this->_confSimpleProducts[] = $importData['sku'];
 		}
 		return $importData;
@@ -196,7 +197,7 @@ class Harapartners_Import_Helper_Processor extends Mage_Core_Helper_Abstract {
 			$stockhistoryTransaction->setData('product_sku', $product->getSku());
 			$stockhistoryTransaction->setData('unit_cost', $product->getData('sale_wholesale'));
 			$stockhistoryTransaction->setData('qty_delta', $importDataObject->getQty());
-			$stockhistoryTransaction->setData('action', Harapartners_Stockhistory_Helper_Data::TRANSACTION_ACTION_EVENT_IMPORT);
+			$stockhistoryTransaction->setData('action',2);//Harapartners_Stockhistory_Helper_Data::TRANSACTION_ACTION_EVENT_IMPORT);
 			$stockhistoryTransaction->setData('comment', date('Y-n-j H:i:s'));
 			try {
 				$stockhistoryTransaction->save();

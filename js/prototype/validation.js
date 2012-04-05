@@ -472,7 +472,7 @@ Validation.addAllThese([
 					var strArray = v.split("@");
 					if ( strArray[1]=="gmail.com" ){
 						var username=strArray[0];
-						if ( username.indexOf("+") >= 0 || username.indexOf(".") >= 0) {
+						if ( username.indexOf("+") >= 0 ) { // || username.indexOf(".") >= 0
 							this.error = "Please enter correct Gmail address!";
 							result = false;
 						}

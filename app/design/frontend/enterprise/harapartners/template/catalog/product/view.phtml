@@ -80,20 +80,17 @@
 	                <h1><?php echo $_helper->productAttribute($_product, $_product->getName(), 'name') ?></h1>
 	            </div>
 		        <div class="product-collateral">
-		            <?php if ($detailedInfoGroup = $this->getChildGroup('detailed_info', 'getChildHtml')):?>
-		                <dl id="collateral-tabs" class="collateral-tabs">
-		                <?php foreach ($detailedInfoGroup as $alias => $html):?>
-		                    <dt class="tab"><span><?php if ( $this->escapeHtml($this->getChildData($alias, 'title')) == 'Details' ) echo 'Description'; else echo $this->__('Shipping & Returns');?></span></dt>
-		                    <dd class="tab-container">
-		                       <div class="tab-content"><?php echo $html ?></div>
-		                    </dd>
-		                <?php endforeach;?>
-		                </dl>
-		                <script type="text/javascript">new Enterprise.Tabs('collateral-tabs')</script>
-		            <?php endif; ?>
-		            <?php //if ($this->canEmailToFriend()): ?>
-		                <!--p class="emailto-link"><a href="<?php //echo $this->helper('catalog/product')->getEmailToFriendUrl($_product) ?>"><?php //echo $this->__('Email to a Friend') ?></a></p-->
-		            <?php //endif; ?>
+	                <dl id="collateral-tabs" class="collateral-tabs">
+	                    <dt class="tab"><span><?php echo $this->__('Description');?></span></dt>
+	                    <dd class="tab-container">
+	                    	<div class="tab-content"><?php echo $_product->getDescription(); ?></div>
+	                    </dd>
+						<dt class="tab"><span><?php echo $this->__('Shipping & Returns');?></span></dt>
+	                    <dd class="tab-container">
+	                    	<div class="tab-content"><?php echo Mage::app()->getLayout()->createBlock('cms/block')->setBlockId('shipping_and_return')->toHtml()?></div>
+	                    </dd>
+	                </dl>
+	                <script type="text/javascript">new Enterprise.Tabs('collateral-tabs')</script>
 		            <?php if ($_product->getData('final_sale')): ?>
 		            	<p class="final-sale"><strong>Final Sale</strong></p>
 		            <?php endif; ?>
@@ -106,17 +103,17 @@
                     <?php echo $this->getChildHtml('alert_urls') ?>
                     <?php echo $this->getChildHtml('product_type_data') ?>
                 
-                 <?php echo $this->getChildHtml('tierprices') ?>
-                 <?php echo $this->getChildHtml('extrahint') ?>
+                <?php echo $this->getChildHtml('tierprices') ?>
+                <?php echo $this->getChildHtml('extrahint') ?>
 
-                 <?php if (!$this->hasOptions()):?>
+                <?php if (!$this->hasOptions()):?>
                      <div class="add-to-box">
                          <?php if($_product->isSaleable()): ?>
                              <?php echo $this->getChildHtml('addtocart') ?>
                          <?php endif; ?>
                          <?php //echo $this->getChildHtml('addto') ?>
                      </div>
-                 <?php else:?>
+                <?php else:?>
                      <?php if ($_product->isSaleable() && $this->hasOptions() && $this->getChildChildHtml('container1') ):?>
                          <div class="options-container-small">
                              <?php echo $this->getChildChildHtml('container1', '', true, true) ?>
@@ -124,16 +121,16 @@
                      <?php else: ?>
                          <?php //echo $this->getChildHtml('addto') ?>
                      <?php endif;?>
-                 <?php endif; ?>
+                <?php endif; ?>
 
-                 <?php if ($_product->getShortDescription()):?>
+                <?php if ($_product->getShortDescription()):?>
                      <div class="short-description std">
                          <h2><?php echo $this->__('Quick Overview') ?></h2>
                          <?php echo $_helper->productAttribute($_product, nl2br($_product->getShortDescription()), 'short_description') ?>
                      </div>
-                 <?php endif;?>
+                <?php endif;?>
 
-                 <?php echo $this->getChildHtml('other');?>
+                <?php echo $this->getChildHtml('other');?>
                  
 				<?php if ($_product->isSaleable() && $this->hasOptions() && $this->getChildChildHtml('container2') ):?>
 					<div class="options-container-big">
@@ -141,10 +138,6 @@
 					</div>
 				<?php endif;?>
                 </div>
-                <!-- div class="gift-card">
-	            	<?php //$_giftcard = Mage::getModel('catalog/product')->loadByAttribute('url_key', 'totsy-gift-card');?>
-	            	<a class="gift-card-btn" href="<?php //echo $this->getBaseUrl() . $_giftcard->getUrlPath();?>">Get A Totsy Gift Card</a>
-	            </div-->
                 <div class="share-button" id="st_sharethis_custom">
 	                <div class="st_sharethis_custom"></div>
 	            </div>

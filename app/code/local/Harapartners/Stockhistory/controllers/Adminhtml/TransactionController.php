@@ -142,7 +142,7 @@ class Harapartners_Stockhistory_Adminhtml_TransactionController extends Mage_Adm
 						$uploader->setFilesDispersion(false);
 						$path = Mage::getBaseDir('var') . DS;
 						$uploader->save($path, $file['name']);
-						$statusOptions = Mage::helper('stockhistory')->getStatusOptions();
+						$statusOptions = Mage::helper('stockhistory')->getGridTransactionStatusArray();
 						$row = 0;
 						
 						$fileName = $path . $file['name'];
@@ -168,8 +168,8 @@ class Harapartners_Stockhistory_Adminhtml_TransactionController extends Mage_Adm
 									$transaction->setData('unit_cost', $unitCost);
 									$transaction->setData('qty_delta', $qtyDelta);
 									$transaction->setData('comment', $comment);
-									$transaction->setData('status', Harapartners_Stockhistory_Helper_Data::STATUS_PROCESSING);
-									$transaction->setData('action_type', Harapartners_Stockhistory_Helper_Data::TRANSACTION_ACTION_DIRECT_IMPORT);
+									$transaction->setData('status', Harapartners_Stockhistory_Model_Transaction::STATUS_PROCESSING);
+									$transaction->setData('action_type', Harapartners_Stockhistory_Model_Transaction::ACTION_DIRECT_IMPORT);
 									$transaction->validateAndSave();
 									
 //									$transaction = Mage::getModel('stockhistory/transaction')->loadByEntityId($entityId);
