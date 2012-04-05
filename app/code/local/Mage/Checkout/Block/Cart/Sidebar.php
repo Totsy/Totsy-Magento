@@ -313,20 +313,42 @@ class Mage_Checkout_Block_Cart_Sidebar extends Mage_Checkout_Block_Cart_Abstract
     
     //Harapartners, yang, START
 	//Add new function for getting estimate shipping date
-    public function getShippingDate(){
+    public function getShippingDate( $orderConfirmFlag = NULL , $order = NULL ){
     	$endDate = 0;
-    	$items = $this->getRecentItems();
-    	if( count($items) ) {
-    		foreach ( $items as $item){
-    			$categoryIdsArray = $item->getProduct()->getCategoryIds();
-    			foreach ( $categoryIdsArray as $id ){
-    				$category = Mage::getModel('catalog/category')->load($id);
-    				if (!!$category) {
-	    				$categoryEndDate = strtotime($category->getData('event_end_date'));
-	    				$endDate = ( $categoryEndDate > $endDate ) ? $categoryEndDate : $endDate;    					
-    				}
-    			}
-    		}
+    	if ( !!$orderConfirmFlag && !!$order && ( $order instanceof Mage_Sales_Model_Order ) ){
+    		$items = $order->getAllItems();
+    		if( count($items) ) {
+	    		foreach ( $items as $item){
+	    			$productId = $item->getProductId();
+	    			$product = Mage::getModel('catalog/product')->load($productId);
+	    			$categoryIdsArray = $product->getCategoryIds();
+	    			foreach ( $categoryIdsArray as $id ){
+	    				$category = Mage::getModel('catalog/category')->load($id);
+	    				if (!!$category) {
+		    				$categoryEndDate = strtotime($category->getData('event_end_date'));
+		    				$endDate = ( $categoryEndDate > $endDate ) ? $categoryEndDate : $endDate;    					
+	    				}
+	    			}
+	    		}
+	    	}    		
+    	}else {
+    		$items = $this->getRecentItems();
+	    	if( count($items) ) {
+	    		foreach ( $items as $item){
+	    			$categoryIdsArray = $item->getProduct()->getCategoryIds();
+	    			foreach ( $categoryIdsArray as $id ){
+	    				$category = Mage::getModel('catalog/category')->load($id);
+	    				if (!!$category) {
+		    				$categoryEndDate = strtotime($category->getData('event_end_date'));
+		    				$endDate = ( $categoryEndDate > $endDate ) ? $categoryEndDate : $endDate;    					
+	    				}
+	    			}
+	    		}
+	    	}
+    	}
+
+    	if ( !$endDate ){
+    		$endDate = now();
     	}
     	return date('m-d-Y', $endDate + 15*24*3600 );
     }

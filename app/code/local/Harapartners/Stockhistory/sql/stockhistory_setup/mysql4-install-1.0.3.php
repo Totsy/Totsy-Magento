@@ -87,7 +87,7 @@ CREATE TABLE {$this->getTable('stockhistory/transaction')}(
 	CONSTRAINT `FK_STOCKHISTORY_TRANSACTION_STORE` FOREIGN KEY (`store_id`) REFERENCES {$this->getTable('core_store')} (`store_id`) ON DELETE SET NULL ON UPDATE CASCADE,
 	CONSTRAINT `FK_STOCKHISTORY_TRANSACTION_VENDOR` FOREIGN KEY (`vendor_id`) REFERENCES {$this->getTable('stockhistory/vendor')} (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
 	CONSTRAINT `FK_STOCKHISTORY_TRANSACTION_PO` FOREIGN KEY (`po_id`) REFERENCES {$this->getTable('stockhistory/purchaseorder')} (`id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Stock Report'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Stock Report';
 
 
 ");

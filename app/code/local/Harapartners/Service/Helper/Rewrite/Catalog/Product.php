@@ -12,10 +12,16 @@
  * 
  */
 
-class Harapartners_Stockhistory_Model_Mysql4_Report extends Mage_Core_Model_Mysql4_Abstract
-{
-	public function _construct()
-	{
-		$this->_init('stockhistory/report', 'id');
-	}
+class Harapartners_Service_Helper_Rewrite_Catalog_Product extends Mage_Catalog_Helper_Product {
+   
+    public function initProduct($productId, $controller, $params = null) {
+        if (!$params) {
+            $params = new Varien_Object();
+        }
+        if(!$params->getCategoryId()){
+        	return false;
+        }
+        return parent::initProduct($productId, $controller, $params);
+    }
+    
 }
