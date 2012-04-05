@@ -133,6 +133,14 @@
 					<quote_discount>Harapartners_Service_Model_Rewrite_Salesrule_Quote_Discount</quote_discount>
 				</rewrite>
 			</salesrule>
+			<enterprise_reward>
+				<rewrite>
+					<!--Harapartners_Rewrite_Reward_Observer-->
+					<observer>Harapartners_Service_Model_Rewrite_Reward_Observer</observer>
+				</rewrite>
+			</enterprise_reward>
+			
+			
 			<!-- ===== MODEL REWRITE END ===== -->
         </models>
 		<events>
@@ -323,6 +331,18 @@
 		</events>
     </frontend>
 	<adminhtml>
+		<events>
+			<adminhtml_customer_save_after>
+				<observers>
+					<!--Harapartners_CustomerTracking-->
+					<commentstracking>
+						<type>singleton</type>
+						<class>customertracking/commentstracking</class>
+						<method>rewardPointCommentSetUser</method>
+					</commentstracking>
+				</observers>
+			</adminhtml_customer_save_after>
+		</events>
 		<menu>
 			<harapartners translate="title" module="service">
 				<title>Hara Partners</title>
