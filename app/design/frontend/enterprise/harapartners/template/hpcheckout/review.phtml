@@ -1,6 +1,9 @@
-<div class="checkout-sub-title sub-title">Review</div>
-<div class="checkout-content">
-	<div class="order-review" id="checkout-review-load">
-	    <?php echo $this->getChildHtml('info') ?>
-	</div>
+<div class="order-review" id="checkout-review-load">
+    <?php echo $this->getChildHtml('info') ?>
 </div>
+<script>
+	jQuery( document ).ready( function() {
+	    updateSelectText();
+	    jQuery('#hpcheckout-wrapper .totsy-selective-input-box select').bind( 'change', updateSelectText );
+	});
+</script>
