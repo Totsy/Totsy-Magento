@@ -58,6 +58,8 @@ class Harapartners_Affiliate_Adminhtml_ReportController extends Mage_Adminhtml_C
 			$this->_forward('revenue');
 		}elseif($request->getParam('report_type')=='totalbounces'){
 			$this->_forward('bounce');
+		}elseif($request->getParam('report_type')=='effectivecoreg'){
+			$this->_forward('effectivecoreg');
 		}else{
 			$this->_forward('index');
 		}  	    	
@@ -81,6 +83,13 @@ class Harapartners_Affiliate_Adminhtml_ReportController extends Mage_Adminhtml_C
     	$this->loadLayout();
 		$reportBlock = $this->getLayout()->createBlock("affiliate/report")->setTemplate("affiliate/report.phtml");
 		$resultBlock = $this->getLayout()->createBlock("affiliate/report")->setTemplate("affiliate/bounce.phtml");
+		$this->getLayout()->getBlock('content')->append($reportBlock)->append($resultBlock);
+		$this->renderLayout();
+    }
+    public function effectivecoregAction() {
+    	$this->loadLayout();
+		$reportBlock = $this->getLayout()->createBlock("affiliate/report")->setTemplate("affiliate/report.phtml");
+		$resultBlock = $this->getLayout()->createBlock("affiliate/report")->setTemplate("affiliate/effectivecoreg.phtml");
 		$this->getLayout()->getBlock('content')->append($reportBlock)->append($resultBlock);
 		$this->renderLayout();
     }

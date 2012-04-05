@@ -46,6 +46,18 @@
   .affiliate-adminhtml-report-bounce  #anchor-content div{
 	margin-bottom:10px;
  }
+  .affiliate-adminhtml-report-effectivecoreg  #anchor-content .date-pick {
+	display:inline-block;
+	margin:10px;
+ }
+ .affiliate-adminhtml-report-effectivecoreg  #anchor-content.time_period .ui-datepicker-trigger{
+	height:18px;
+	width:20px;
+ }
+
+  .affiliate-adminhtml-report-effectivecoreg  #anchor-content div{
+	margin-bottom:10px;
+ }
   .affiliate-adminhtml-report-registration #anchor-content table{
 	margin-bottom:10px;
  }
@@ -79,13 +91,28 @@
 .affiliate-adminhtml-report-bounce #anchor-content table{
 	margin-bottom:10px;
  }
- .affiliate-adminhtml-report-bounce #anchor-content th{
+.affiliate-adminhtml-report-bounce #anchor-content th{
    width:120px;
    height:30px;
    border:1px solid;
    text-align:center;
    }
-    .affiliate-adminhtml-report-bounce td{
+.affiliate-adminhtml-report-bounce td{
+   width:120px;
+   height:30px;
+   border:1px solid;
+   text-align:center;
+   }
+.affiliate-adminhtml-report-effectivecoreg #anchor-content table{
+	margin-bottom:10px;
+ }
+.affiliate-adminhtml-report-effectivecoreg #anchor-content th{
+   width:120px;
+   height:30px;
+   border:1px solid;
+   text-align:center;
+   }
+.affiliate-adminhtml-report-effectivecoreg td{
    width:120px;
    height:30px;
    border:1px solid;
