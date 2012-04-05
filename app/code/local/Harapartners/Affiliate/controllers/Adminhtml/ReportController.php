@@ -20,6 +20,7 @@ class Harapartners_Affiliate_Adminhtml_ReportController extends Mage_Adminhtml_C
 		$this->getLayout()->getBlock('content')->append($tempBlock);
 		$this->renderLayout();
     } 
+    
     public function resultAction(){
     	$request = $this->getRequest();
     	$resultFilter = new Varien_Object;
@@ -74,6 +75,7 @@ class Harapartners_Affiliate_Adminhtml_ReportController extends Mage_Adminhtml_C
 		$this->getLayout()->getBlock('content')->append($reportBlock)->append($resultBlock);
 		$this->renderLayout();
     }
+    
     public function revenueAction() {
     	$this->loadLayout();
 		$reportBlock = $this->getLayout()->createBlock("affiliate/report")->setTemplate("affiliate/report.phtml");
@@ -81,6 +83,7 @@ class Harapartners_Affiliate_Adminhtml_ReportController extends Mage_Adminhtml_C
 		$this->getLayout()->getBlock('content')->append($reportBlock)->append($resultBlock);
 		$this->renderLayout();
     }
+    
     public function bounceAction() {
     	$this->loadLayout();
 		$reportBlock = $this->getLayout()->createBlock("affiliate/report")->setTemplate("affiliate/report.phtml");
@@ -88,6 +91,7 @@ class Harapartners_Affiliate_Adminhtml_ReportController extends Mage_Adminhtml_C
 		$this->getLayout()->getBlock('content')->append($reportBlock)->append($resultBlock);
 		$this->renderLayout();
     }
+    
     public function effectivecoregAction() {
     	$this->loadLayout();
 		$reportBlock = $this->getLayout()->createBlock("affiliate/report")->setTemplate("affiliate/report.phtml");
@@ -95,4 +99,5 @@ class Harapartners_Affiliate_Adminhtml_ReportController extends Mage_Adminhtml_C
 		$this->getLayout()->getBlock('content')->append($reportBlock)->append($resultBlock);
 		$this->renderLayout();
     }
+    
 }
