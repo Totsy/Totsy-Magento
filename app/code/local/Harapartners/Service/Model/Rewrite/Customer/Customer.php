@@ -25,9 +25,8 @@ class Harapartners_Service_Model_Rewrite_Customer_Customer extends Mage_Customer
 		}
     }
     
-    //Harapartners, Jun, Legacy customer will be come concurrent after password change
-	public function changePassword($newPassword) {
-		parent::changePassword($newPassword);
+	public function setPassword($password){
+		parent::setPassword($password);
         if(!!$this->getData('legacy_customer')){
 	        $this->setData('legacy_customer', 0);
 	        $this->_getResource()->saveAttribute($this, 'legacy_customer');
@@ -35,15 +34,25 @@ class Harapartners_Service_Model_Rewrite_Customer_Customer extends Mage_Customer
         return $this;
     }
     
-    //Harapartners, Jun, ForgotPassWord logic does NOT route via changePassword($newPassword)
-	public function changeResetPasswordLinkToken($newResetPasswordLinkToken) {
-        parent::changeResetPasswordLinkToken($newResetPasswordLinkToken);
-		if(!!$this->getData('legacy_customer')){
-	        $this->setData('legacy_customer', 0);
-	        $this->_getResource()->saveAttribute($this, 'legacy_customer');
-        }
-        return $this;
-    }
+//    //Harapartners, Jun, Legacy customer will be come concurrent after password change
+//	public function changePassword($newPassword) {
+//		parent::changePassword($newPassword);
+//        if(!!$this->getData('legacy_customer')){
+//	        $this->setData('legacy_customer', 0);
+//	        $this->_getResource()->saveAttribute($this, 'legacy_customer');
+//        }
+//        return $this;
+//    }
+//    
+//    //Harapartners, Jun, ForgotPassWord logic does NOT route via changePassword($newPassword)
+//	public function changeResetPasswordLinkToken($newResetPasswordLinkToken) {
+//        parent::changeResetPasswordLinkToken($newResetPasswordLinkToken);
+//		if(!!$this->getData('legacy_customer')){
+//	        $this->setData('legacy_customer', 0);
+//	        $this->_getResource()->saveAttribute($this, 'legacy_customer');
+//        }
+//        return $this;
+//    }
 
     public function authenticate($login, $password, $reValidate = false) {
         $this->loadByEmail($login);
