@@ -45,36 +45,52 @@ class Harapartners_ShippingFactory_Model_Shipping_Carrier_Flexible
 	 */
 	protected $_result = null;
 	
+	protected function _getCurrentTimer(){
+    	$defaultTimezone = date_default_timezone_get();
+  		$mageTimezone = Mage::getStoreConfig(Mage_Core_Model_Locale::XML_PATH_DEFAULT_TIMEZONE);   
+  		date_default_timezone_set($mageTimezone);
+  		$timer = now();
+  		date_default_timezone_set($defaultTimezone);
+  
+  		return strtotime($timer);
+    }
+    
+    public function getCountHours($timeTo) {
+    	//$timeTo are set to March, 26 2012 Must in date/ datetime format
+     	$countToTimer = strtotime($timeTo);
+     	$now = $this->_getCurrentTimer();
+     	if ( $now - $countToTimer > 30*24*3600) {
+      		return true;
+     	}
+     	return false;
+    }
+    
 	public function collectRates(Mage_Shipping_Model_Rate_Request $request) {
-		
-//		//Somehow, please get the address object
-//		$lastOrderList = $address->getCustomerLastOrderList();
-//		//Your logic here,
-//		//If array has no item, this must be the first order,
-//		$address->getCustomer();
-//		//test created date
-//		//if within 30 days, free shipping!!
-		
-		
-		
-		
-		
 		
         if (!$this->getConfigFlag('active')) {
             return false;
         }
+        
+        $freeBoxes = 0;
+        $shippingPrice = 0;
+        
         //HP Song --Start
         $defaultShippingPrice = $this->getConfigData('default_shipping_price');
         $hasDefaultShippingItem = false;
-        //HP --End
-        $freeBoxes = 0;
-        $shippingPrice = 0;
-        if(false){
-        	// Pass
-        	// Grandfathering free shipping on first order or $10 off order of $50 or more.
-        	$shippingPrice = '0.00';
-        }
-        elseif ($request->getAllItems()) {
+       
+        $quote = Mage::getSingleton('checkout/session')->getQuote();
+		$customerCreatedAt = $quote->getCustomer()->getCreatedAt();
+		
+		$timeOut = $this->getCountHours($customerCreatedAt);
+		
+		
+        $address = $quote->getShippingAddress();
+		$orderCollection = $address->getCustomerOrderCollection();
+		
+		if(count($orderCollection) == 0 && !$timeOut){
+	        $shippingPrice = '0.00';
+	    //HP Song --End
+	    }elseif ($request->getAllItems()) {
         	
             foreach ($request->getAllItems() as $item) {
             	
