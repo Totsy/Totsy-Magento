@@ -1203,3 +1203,7 @@ body .col-left hr {
 .big-div-not-found a:hover .not-found-names{
 	color:#EF1C25;
 }
+
+.left_needhelp .grey_inside .main-nav a{
+	font-size: 12px
+}
