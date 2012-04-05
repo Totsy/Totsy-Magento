@@ -19,16 +19,16 @@ class Harapartners_Ordersplit_Model_Product_Attribute_Source_Fulfillment extends
         	$helper = Mage::helper('ordersplit');
             $this->_options = array(
                 array(
-                    'value' => Harapartners_Ordersplit_Helper_Data::TYPE_VIRTUAL,
-                    'label' => $helper->__('Virtual')
-                ),
-                array(
                     'value' => Harapartners_Ordersplit_Helper_Data::TYPE_DOTCOM,
                     'label' => $helper->__('DotCom')
                 ),
                 array(
                     'value' => Harapartners_Ordersplit_Helper_Data::TYPE_DROPSHIP,
                     'label' => $helper->__('Dropship')
+                ),
+                array(
+                    'value' => Harapartners_Ordersplit_Helper_Data::TYPE_VIRTUAL,
+                    'label' => $helper->__('Virtual')
                 ),
                 array(
                     'value' => Harapartners_Ordersplit_Helper_Data::TYPE_OTHER,
