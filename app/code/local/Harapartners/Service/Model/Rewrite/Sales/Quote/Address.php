@@ -14,23 +14,22 @@ class Harapartners_Service_Model_Rewrite_Sales_Quote_Address extends Mage_Sales_
 {
 	protected $_speedtaxValidator = null;
 	protected $_customerOrderCollection = null;
+	
+	const DEFAULT_CUSTOMER_ORDER_COLLECTION_SIZE = 2;
  
  	public function getCustomerOrderCollection(){
-  
 		if($this->_customerOrderCollection === null){
-	   
-	   		$orderCollection = Mage::getModel('sales/order')->getCollection();
+	   		$this->_customerOrderCollection = Mage::getModel('sales/order')->getCollection();
 	   		$customerId = $this->getCustomerId();
-	   		$orderCollection->getSelect()
-			   ->where('customer_id = ?', $customerId)
-			   ->where('relation_parent_id is null') // orignal order
-			   ->order('created_at')     //from 1st - 2nd
-			   ->limit(2);
-			    
-			   $this->_customerOrderCollection = $orderCollection;
-			   if(!$this->_customerOrderCollection){
-			    	$this->_customerOrderCollection = Mage::getModel('sales/order')->getCollection() ;
-			   }
+	   		$this->_customerOrderCollection->getSelect()
+				   ->where('`customer_id` = ?', $customerId)
+				   ->where('`relation_parent_id` IS NULL') // orignal order
+				   ->order('`created_at`')     //from 1st - 2nd
+				   ->limit(self::DEFAULT_CUSTOMER_ORDER_COLLECTION_SIZE);
+//				   
+//			if(!$this->_customerOrderCollection){
+//			  	$this->_customerOrderCollection = Mage::getModel('sales/order')->getCollection();
+//			}
 		}
  	 	return $this->_customerOrderCollection;
  	}
