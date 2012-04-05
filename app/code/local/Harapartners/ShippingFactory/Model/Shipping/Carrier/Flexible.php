@@ -46,38 +46,18 @@ class Harapartners_ShippingFactory_Model_Shipping_Carrier_Flexible
 	 */
 	protected $_result = null;
 	
-//	protected function _getCurrentTimer(){
-//    	$defaultTimezone = date_default_timezone_get();
-//  		$mageTimezone = Mage::getStoreConfig(Mage_Core_Model_Locale::XML_PATH_DEFAULT_TIMEZONE);   
-//  		date_default_timezone_set($mageTimezone);
-//  		$timer = now();
-//  		date_default_timezone_set($defaultTimezone);
-//  
-//  		return strtotime($timer);
-//    }
-//    
-//    public function getCountHours($timeTo) {
-//    	//$timeTo are set to March, 26 2012 Must in date/ datetime format
-//    	
-//    	
-//    	
-//    	$countToTimer = strtotime($timeTo);
-//		     	
-//     	
-//     	$now = $this->_getCurrentTimer();
-//     	if ( $now - $countToTimer > 30*24*3600) {
-//      		return true;
-//     	}
-//     	return false;
-//    }
-    
+    /**
+     * Free Shipping logic only apply to Totsy clients not Mamasource
+     */
     public function shouldUseFreeShipping(){
     	if(!!Mage::registry('split_order_force_free_shipping')){
     		return true;
     	}
     	$quote = Mage::getSingleton('checkout/session')->getQuote();
     	$customer = $quote->getCustomer();
-    	if(!!$customer && !!$customer->getId()
+    	$storeId = $customer->getStoreId();
+    	$storeName = $customer->getStore()->getName();
+    	if(!!$customer && !!$customer->getId() && ($storeId == 1 || $storeName == 'totsy')
     			&& strtotime($customer->getData('created_at')) + self::FREE_SHIPPING_AFTER_REGISTRATION_TIME > strtotime(now())){
     		$address = $quote->getShippingAddress();
     		if(!!$address && !!$address->getId() && 
@@ -205,18 +185,7 @@ class Harapartners_ShippingFactory_Model_Shipping_Carrier_Flexible
     
     protected function _getShippingMethod($product)
     {
-//		TO DO remove hard code
-//    	$method = $product->getShippingMethod();
-//    	switch($method){
-//    		case 33:
-//    			return 'dimensional';
-//    		case 34:
-//    			return 'flat_rate';
-//    		case 35:
-//    			return 'free_shipping';
-//    	}
     	return $product->getAttributeText('shipping_method');
-    
     }
     /* Check Shipping Method --End */
     

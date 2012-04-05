@@ -24,7 +24,7 @@ class Harapartners_Service_Model_Rewrite_Sales_Quote_Address extends Mage_Sales_
 	   		$this->_customerOrderCollection->getSelect()
 				   ->where('`customer_id` = ?', $customerId)
 				   ->where('`relation_parent_id` IS NULL') // orignal order
-				   ->order('`created_at`')     //from 1st - 2nd
+				   ->order('created_at')     //from 1st - 2nd
 				   ->limit(self::DEFAULT_CUSTOMER_ORDER_COLLECTION_SIZE);
 //				   
 //			if(!$this->_customerOrderCollection){
