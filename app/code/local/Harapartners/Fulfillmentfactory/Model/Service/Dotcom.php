@@ -104,6 +104,39 @@ class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
 	}
 	
 	/**
+	 * submit products to Dotcom By Event Id
+	 *
+	 * @param int $eventId
+	 */
+	public function submitProductsToDotcomByEventName($eventName = '') {
+		$event = Mage::getModel('catalog/category')->loadByAttribute('name', $eventName);
+		if(!!$event) {
+			$productCollection = $event->getProductCollection();
+			$products = array();
+			
+			foreach($productCollection as $productEntity) {
+				if($productEntity->getTypeId() == 'configurable') {
+					//need to load children products if this product is configurable product
+					$childrenProducts = $productEntity->getTypeInstance()->getUsedProducts();
+					
+					foreach($childrenProducts as $cProduct) {
+						$products[] = $cProduct;
+					}
+				}
+				else if($productEntity->getTypeId() == 'simple') {
+					$products[] = $productEntity;
+				}
+			}
+			
+			echo count($products) . '<br><br>';
+			
+			if(!empty($products) && count($products) > 0) {
+				$this->submitProductsToDotcom($products);
+			}
+		}
+	}
+	
+	/**
 	 * post products information to Dotcom
 	 *
 	 * @param array $products for products we want to submit
@@ -149,6 +182,8 @@ XML;
 		}
 		
 		$xml .= '</items>';
+		
+		echo $xml;
 		
 		$response = Mage::helper('fulfillmentfactory/dotcom')->submitProductItems($xml);
 		
@@ -584,12 +619,13 @@ XML;
 	//===============Test Function===============//
 	
 	public function testSubmitProductsToDotcom() {
-		$products = Mage::getModel('catalog/product')->getCollection()
-													->addAttributeToSelect('*')
-													->addAttributeToFilter('entity_id', array('gt' => '1075'));
+//		$products = Mage::getModel('catalog/product')->getCollection()
+//													->addAttributeToSelect('*')
+//													->addAttributeToFilter('entity_id', array('gt' => '1075'));
+		$this->submitProductsToDotcomByEventName('Event03');
   		
   										
-  		return $this->submitProductsToDotcom($products);
+  		//return $this->submitProductsToDotcom($products);
 	}
 	
 	public function testSubmitPurchaseOrdersToDotcom() {
