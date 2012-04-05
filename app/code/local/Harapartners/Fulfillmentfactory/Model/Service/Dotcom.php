@@ -516,7 +516,8 @@ XML;
 XML;
 			
 			//change status
-			$order->setStatus(Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_PROCESSING_FULFILLMENT);
+			$order->setStatus(Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_PROCESSING_FULFILLMENT)
+				  ->save();
 		}
 		
 		$xml .= '</orders>';

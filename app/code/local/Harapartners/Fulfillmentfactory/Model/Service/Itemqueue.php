@@ -111,19 +111,20 @@ class Harapartners_Fulfillmentfactory_Model_Service_Itemqueue
     			$itemqueue->setStatus(Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_SUBMITTED);
 				$itemqueue->save();
     		}
-    	}/*
-    	else if($status == Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_PAYMENT_FAILED){
-    		foreach($collection as $itemqueue) {
-    			$itemqueue->setStatus(Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_PROCESSING);
-				$itemqueue->save();
-    		}
     	}
     	else if($status == Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_FULFILLMENT_FAILED){
     		foreach($collection as $itemqueue) {
-    			$itemqueue->setStatus(Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_PROCESSING);
+    			$itemqueue->setStatus(Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_READY);
 				$itemqueue->save();
     		}
-    	}*/
+    	}
+//    	else if($status == Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_PAYMENT_FAILED){
+//    		foreach($collection as $itemqueue) {
+//    			$itemqueue->setStatus(Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_PROCESSING);
+//				$itemqueue->save();
+//    		}
+//    	}
+    	
     }
     
 	/**
