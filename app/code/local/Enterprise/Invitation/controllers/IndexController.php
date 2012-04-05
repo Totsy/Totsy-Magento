@@ -65,7 +65,8 @@ class Enterprise_Invitation_IndexController extends Mage_Core_Controller_Front_A
             $attempts = 0;
             $sent     = 0;
             $customerExists = 0;
-            $emailArray = explode(',',$data['email']);
+            $emailArray = explode(',',$data['email']); 
+            $existEmailArray = array();	//Harapartners, yang: add for error record
             foreach ($emailArray as $email) {
                 $attempts++;
                 //hara partner, integrating CloudSponge
@@ -98,6 +99,7 @@ class Enterprise_Invitation_IndexController extends Mage_Core_Controller_Front_A
                 catch (Mage_Core_Exception $e) {
                     if (Enterprise_Invitation_Model_Invitation::ERROR_CUSTOMER_EXISTS === $e->getCode()) {
                         $customerExists++;
+                        array_push($existEmailArray, $email);
                     }
                     else {
                         Mage::getSingleton('customer/session')->addError($e->getMessage());
@@ -108,9 +110,15 @@ class Enterprise_Invitation_IndexController extends Mage_Core_Controller_Front_A
                 }
             }
             if ($customerExists) {
-                Mage::getSingleton('customer/session')->addNotice(
-                    Mage::helper('enterprise_invitation')->__('%d invitation(s) were not sent, because customer accounts already exist for specified email addresses.', $customerExists)
-                );
+            	//Harapartners, yang: for add error message for different existed user
+            	foreach ( $existEmailArray as $existEmail ){
+            		$customer = Mage::getModel('customer/customer')->setWebsiteId(Mage::app()->getStore()->getWebsiteId())->loadByEmail($existEmail);
+            		$customerStoreName = Mage::app()->getStore($customer->getStoreId())->getName();
+            		Mage::getSingleton('customer/session')->addNotice(             	
+                		Mage::helper('enterprise_invitation')->__('Invitation was not sent to ' . $existEmail . ' because this customer account already exist in ' . $customerStoreName )
+                	);
+            	}
+            	//Harapartners, yang: end
             }
             $this->_redirect('*/*/');
             return;

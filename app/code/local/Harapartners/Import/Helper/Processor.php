@@ -174,6 +174,8 @@ class Harapartners_Import_Helper_Processor extends Mage_Core_Helper_Abstract {
 		if($importData['type'] == 'configurable'){
 			$importData['configurable_attribute_codes'] = 'color,size';  //Hard Coded.  Need to enforce in template!
 			$importData['conf_simple_products']			= implode(',',$this->_confSimpleProducts);
+			unset($this->_confSimpleProducts);
+			$this->_confSimpleProducts = array();
 			$importData['visibility']					= 'Catalog, Search';
 		}else{
 			$importData['visibility']					= 'Catalog, Search'; //Need Logic for simple only.

@@ -376,7 +376,7 @@ class Harapartners_Fulfillmentfactory_Model_Service_Fulfillment
 					$itemListCollection = array (
 			  			array (
 			  				'items' => $completeItems,
-			  				'state' => Mage_Sales_Model_Order::STATE_PROCESSING,
+			  				'state' => Mage_Sales_Model_Order::STATE_NEW,
 			  				'type'	=> 'dotcom'
 			  			),
 			  			array (
