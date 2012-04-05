@@ -22,6 +22,7 @@ class Harapartners_ShippingFactory_Model_Shipping_Carrier_Flexible
     const GUAM_COUNTRY_ID = 'GU';
     const GUAM_REGION_CODE = 'GU';
     
+    const FREE_SHIPPING_AFTER_REGISTRATION_TIME = 2592000; // 30 days
     
     // Cache the quotes
     protected static $_quotesCache = array();
@@ -45,43 +46,67 @@ class Harapartners_ShippingFactory_Model_Shipping_Carrier_Flexible
 	 */
 	protected $_result = null;
 	
+//	protected function _getCurrentTimer(){
+//    	$defaultTimezone = date_default_timezone_get();
+//  		$mageTimezone = Mage::getStoreConfig(Mage_Core_Model_Locale::XML_PATH_DEFAULT_TIMEZONE);   
+//  		date_default_timezone_set($mageTimezone);
+//  		$timer = now();
+//  		date_default_timezone_set($defaultTimezone);
+//  
+//  		return strtotime($timer);
+//    }
+//    
+//    public function getCountHours($timeTo) {
+//    	//$timeTo are set to March, 26 2012 Must in date/ datetime format
+//    	
+//    	
+//    	
+//    	$countToTimer = strtotime($timeTo);
+//		     	
+//     	
+//     	$now = $this->_getCurrentTimer();
+//     	if ( $now - $countToTimer > 30*24*3600) {
+//      		return true;
+//     	}
+//     	return false;
+//    }
+    
+    public function shouldUseFreeShipping(){
+    	if(!!Mage::registry('split_order_force_free_shipping')){
+    		return true;
+    	}
+    	$quote = Mage::getSingleton('checkout/session')->getQuote();
+    	$customer = $quote->getCustomer();
+    	if(!!$customer && !!$customer->getId()
+    			&& strtotime($customer->getData('created_at')) + self::FREE_SHIPPING_AFTER_REGISTRATION_TIME > strtotime(now())){
+    		$address = $quote->getShippingAddress();
+    		if(!!$address && !!$address->getId() && 
+    				!count($address->getCustomerOrderCollection())){
+    			return true;
+    		}
+    	}
+    	return false;
+    }
+    
 	public function collectRates(Mage_Shipping_Model_Rate_Request $request) {
-		
-//		//Somehow, please get the address object
-//		$lastOrderList = $address->getCustomerLastOrderList();
-//		//Your logic here,
-//		//If array has no item, this must be the first order,
-//		$address->getCustomer();
-//		//test created date
-//		//if within 30 days, free shipping!!
-		
-		
-		
-		
-		
-		
         if (!$this->getConfigFlag('active')) {
             return false;
         }
+        $freeBoxes = 0;
+        $shippingPrice = 0;
+        
         //HP Song --Start
         $defaultShippingPrice = $this->getConfigData('default_shipping_price');
         $hasDefaultShippingItem = false;
-        //HP --End
-        $freeBoxes = 0;
-        $shippingPrice = 0;
-        if(false){
-        	// Pass
-        	// Grandfathering free shipping on first order or $10 off order of $50 or more.
-        	$shippingPrice = '0.00';
-        }
-        elseif ($request->getAllItems()) {
-        	
+       
+		if($this->shouldUseFreeShipping()){
+	        $shippingPrice = '0.00';
+	    //HP Song --End
+	    }elseif ($request->getAllItems()) {
             foreach ($request->getAllItems() as $item) {
-            	
                 if ($item->getProduct()->isVirtual() || $item->getParentItem()) {
                     continue;
                 }
-				
             	if($item->getHasChildren()){
             		foreach($item->getChildren() as $child){
             			$childProduct = Mage::getModel('catalog/product')->load($child->getProductId());
@@ -105,7 +130,6 @@ class Harapartners_ShippingFactory_Model_Shipping_Carrier_Flexible
             				$shippingPrice += $result * $qty;
             			}
             		}
-            		
                 } elseif (! $item->getParentItem() && ! $item->getHasChildren()) {
                 	$product = Mage::getModel('catalog/product')->load($item->getProductId());
                 	if($this->_isFlatRate($product)){
@@ -118,7 +142,6 @@ class Harapartners_ShippingFactory_Model_Shipping_Carrier_Flexible
             				$shippingPrice += $itemPrice;
             				$hasDefaultShippingItem = true;
             			}
-                		
                 	}elseif($this->_isFreeShipping($product)){
                 		$freeBoxes += $item->getQty();
                 	}elseif($this->_isDimensional($product)){
@@ -134,9 +157,7 @@ class Harapartners_ShippingFactory_Model_Shipping_Carrier_Flexible
             }
         }
         $this->setFreeBoxes($freeBoxes);
-
     	$result = Mage::getModel('shipping/rate_result');
-
         $shippingPrice = $this->getFinalPriceWithHandlingFee($shippingPrice);
 
         if ($shippingPrice !== false)
