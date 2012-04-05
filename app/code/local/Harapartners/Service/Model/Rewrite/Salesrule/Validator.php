@@ -14,8 +14,8 @@
 
 class Harapartners_Service_Model_Rewrite_Salesrule_Validator extends Mage_SalesRule_Model_Validator {
 	
-	const AUTO_COUPON_AFTER_FIRST_ORDER_TIME = 2592000; // 30day
-	const COUPON_NAME_10_OFF_50_FIRST_ORDER = '10_OFF_50_FIRST_ORDER';
+	const NEW_CUSTOMER_FIRST_ORDER_TIME = 2592000; // 30day
+	const COUPON_NAME_NEW_CUSTOMER_FIRST_ORDER_IN_30_DAYS = 'NEW_CUSTOMER_FIRST_ORDER_IN_30_DAYS';
 	
 	public function canApplyFirstOrderCouponRule($address) {
 		$firstOrder = $address->getCustomerOrderCollection()->getFirstItem();
@@ -23,7 +23,7 @@ class Harapartners_Service_Model_Rewrite_Salesrule_Validator extends Mage_SalesR
 		
 		//$50 limit is given by coupon rule in the admin panel
 		if (count($address->getCustomerOrderCollection()) == 1 
-				&& strtotime($firstOrderCreatedAt) + self::AUTO_COUPON_AFTER_FIRST_ORDER_TIME > strtotime(now())
+				&& strtotime($firstOrderCreatedAt) + self::NEW_CUSTOMER_FIRST_ORDER_TIME > strtotime(now())
 		){
 			return TRUE;
 		}
@@ -33,7 +33,7 @@ class Harapartners_Service_Model_Rewrite_Salesrule_Validator extends Mage_SalesR
 	protected function _canProcessRule($rule, $address){
 		$ruleId = $rule->getId();
 		
-		if($rule->getName() == self::COUPON_NAME_10_OFF_50_FIRST_ORDER
+		if($rule->getName() == self::COUPON_NAME_NEW_CUSTOMER_FIRST_ORDER_IN_30_DAYS
 				&& !!$this->canApplyFirstOrderCouponRule($address)){
 			return true;
 		}
