@@ -58,5 +58,30 @@ class Harapartners_Service_Model_Rewrite_Reward_Observer extends Enterprise_Rewa
         }
         return $this;
     }
+    
+	public function checkRates(Varien_Event_Observer $observer)
+    {
+        if (!Mage::helper('enterprise_reward')->isEnabledOnFront()) {
+            return $this;
+        }
+
+        $groupId    = $observer->getEvent()->getCustomerSession()->getCustomerGroupId();
+        $websiteId  = Mage::app()->getStore()->getWebsiteId();
+
+        $rate = Mage::getModel('enterprise_reward/reward_rate');
+
+        $hasRates = $rate->fetch(
+            $groupId, $websiteId, Enterprise_Reward_Model_Reward_Rate::RATE_EXCHANGE_DIRECTION_TO_CURRENCY
+        )->getId() /*&&
+            $rate->reset()->fetch(
+                $groupId,
+                $websiteId,
+                Enterprise_Reward_Model_Reward_Rate::RATE_EXCHANGE_DIRECTION_TO_POINTS
+            )->getId()*/;
+
+        Mage::helper('enterprise_reward')->setHasRates($hasRates);
+
+        return $this;
+    }
 
 }
