@@ -29,13 +29,30 @@ class Harapartners_Import_Block_Adminhtml_Import_Edit_Tab_Form extends Mage_Admi
 			'note'		=> 'For internal tracking.'
 		));
 		
+		//Validate vendor code??
+		
+		$fieldset->addField('vendor_code', 'text', array(
+				'label'     => $helper->__('Vendor Code'),
+				'required'  => true,
+				'name'		=> 'vendor_code',
+				'note'		=> $helper->__('Please make sure the vendor exists.')
+		));
+		
+		$fieldset->addField('po_id', 'text', array(
+			'label'     => $helper->__('Purchase Order ID'),
+			//'required'  => true,
+			'name'		=> 'po_id',
+			'note'		=> $helper->__('If <b>NOT</b> specified, a new purchase order will be created.')
+		));
+		
 		$category = Mage::getModel('catalog/category')->load($dataObj->getData('category_id'));
 		if($category->getId()){
-			$fieldset->addField('category_id', 'label', array(
+			$fieldset->addField('category_id', 'text', array(
 				'label'     => $helper->__('Category/Event ID'),
 				'required'  => true,
 				'name'		=> 'category_id',
-				'note'		=> $helper->__($category->getName())
+				'readonly'	=> true,
+				'note'		=> $helper->__('Linked to ' . $category->getName() . '. <b>Read Only.</b>')
 			));
 		}else{
 			$fieldset->addField('category_id', 'text', array(
@@ -45,13 +62,6 @@ class Harapartners_Import_Block_Adminhtml_Import_Edit_Tab_Form extends Mage_Admi
 				'note'		=> $helper->__('If specified, the \'category_ids\' field in the import field will be overwritten.')
 			));
 		}
-		
-		$fieldset->addField('po_id', 'text', array(
-			'label'     => $helper->__('Purchase Order ID'),
-			//'required'  => true,
-			'name'		=> 'po_id',
-			'note'		=> $helper->__('If <b>NOT</b> specified, a new purchase order will be created.')
-		));
 		
 		$fieldset->addField('import_filename', 'file', array(
 		    'label'     => $helper->__('File'),

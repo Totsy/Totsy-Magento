@@ -23,8 +23,24 @@
 			<?php endforeach;?>
 			</select>
 			<input type="checkbox" name="all" /> <?php echo $this->__(' Include all sub affiliate')?>
-		</div>
+		</div><!--
 		<div class="sub_affiliate_code"><?php echo $this->__('Specified Sub Affiliate Code If Applicable: ')?> <input type="text" name="sub_affiliate_code" /></div>
+		--><div class="report_type required"><?php echo $this->__('Choose Report Type: ')?>
+			<select name="report_type" >
+				<option value="totalregistrations">
+				Total Registrations
+				</option>
+				<option value="totalrevenue">
+				Total Revenue
+				</option>
+				<option value="totalbounces">
+				Total Bounces
+				</option>				
+				<option value="effectivecoreg">
+				Effective Co-reg
+				</option>					
+			</select>
+		</div>		
 		<button type="submit" title="<?php echo $this->__('Get Report') ?>" class="button"><span><span><?php echo $this->__('Get Report') ?></span></span></button>
 	</form>
 </div>

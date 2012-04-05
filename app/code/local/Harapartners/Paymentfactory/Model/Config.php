@@ -32,7 +32,7 @@ class Harapartners_Paymentfactory_Model_Config extends Mage_Payment_Model_Config
         $this->_ccTypes['LASER'] = Mage::helper('paymentfactory')->__('Laser');
         $this->_ccTypes['UATP'] = Mage::helper('paymentfactory')->__('UATP');
         $this->_ccTypes['MCI'] = Mage::helper('paymentfactory')->__('Maestro (International)');
-        $this->_ccTypes[Harapartners_Paymentfactory_Model_Tokenize] = Mage::helper('paymentfactory')->__('Maestro/Solo(UK Domestic)');
+        $this->_ccTypes[Mage_Cybersource_Model_Soap::CC_CARDTYPE_SS] = Mage::helper('paymentfactory')->__('Maestro/Solo(UK Domestic)');
 
     }
 

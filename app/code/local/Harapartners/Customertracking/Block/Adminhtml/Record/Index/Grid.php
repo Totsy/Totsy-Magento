@@ -86,6 +86,12 @@ class Harapartners_Customertracking_Block_Adminhtml_Record_Index_Grid extends Ma
         	'type'			=> 'options',
             'options' => $helper->getGridStatusArray()
         ));
+        $this->addColumn('registration_param', array(
+            'header'        => $helper->__('Registration Param'),
+            'align'         => 'center',
+            'width'         => '300px',
+            'index'         => 'registration_param'
+		));
         
 		$this->addColumn('created_at', array(
             'header'        => $helper->__('Created At'),

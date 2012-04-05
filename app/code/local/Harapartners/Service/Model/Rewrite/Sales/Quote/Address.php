@@ -13,6 +13,22 @@
 class Harapartners_Service_Model_Rewrite_Sales_Quote_Address extends Mage_Sales_Model_Quote_Address
 {
 	protected $_speedtaxValidator = null;
+	protected $_customerFirstOrder = null;
+	
+//	public function getCustomerFirstOrder(){
+//		if($this->_customerFirstOrder!== null){
+//			$customer = $this->getCustomer();
+//			$orderCollection = Mage::getModel('sales/order')->getCollection();
+//			//Add filters here for the logic
+//			//Sort by created_date decending
+//			$orderCollection->getSelect()->limit(2);
+//			$this->_customerFirstOrder = $orderCollection->getAllItem()->asArray();
+//			if(!$this->_customerFirstOrder){
+//				$this->_customerFirstOrder= array();
+//			}
+//		}
+//		return $this->_customerFirstOrder;
+//	}
 	
 	public function getSpeedTaxValidator() { 
 		return $this->_speedtaxValidator;

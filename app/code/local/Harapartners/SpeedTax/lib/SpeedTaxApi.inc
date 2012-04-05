@@ -417,7 +417,8 @@ class price {
 }
 
 // Harapartners: TODO: address class is declared more than once in the checkout step saveShipping, further investigation need...
-if(!class_exists('address')){
+// Do not evoke autoload for class_exists
+//if(!class_exists('address', false)){
 	class address {
 	
 	    /**
@@ -441,7 +442,7 @@ if(!class_exists('address')){
 	    public $resolvedDate;
 	
 	}
-}
+//}
 
 class taxJurisdiction {
 
