@@ -136,7 +136,7 @@
         <?php $saving = Mage::app()->getLayout()->createBlock('checkout/cart_sidebar')->getTotalSaving();?>
         <?php if (!!$saving):?>
         <p class="savings">
-        	<span class="label"><?php echo $this->__('Your savings: ') ?></span><?php echo $this->__('%s', '<span class="price">$' . $saving . '</span>'); ?>
+        	<span class="label"><?php echo $this->__('Your savings: ') ?></span><?php echo Mage::helper('checkout')->formatPrice($saving); ?>
         </p>
         <?php endif;?>
         <?php if(!$this->hasError()): ?>

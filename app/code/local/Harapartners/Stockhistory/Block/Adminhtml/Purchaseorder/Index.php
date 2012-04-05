@@ -18,7 +18,8 @@ class Harapartners_Stockhistory_Block_Adminhtml_Purchaseorder_Index extends Mage
 		$this->_blockGroup = 'stockhistory';
 		$this->_controller = 'adminhtml_purchaseorder_index';
     	$this->_headerText = Mage::helper('stockhistory')->__('Purchase Order Info');
-        parent::__construct();
+        $this->_removeButton('add');
+    	parent::__construct();
     }
  
 }

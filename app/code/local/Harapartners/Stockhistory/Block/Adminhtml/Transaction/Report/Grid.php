@@ -78,13 +78,7 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Grid extends 
 	
 	protected function _prepareColumns()
 	{
-//		$this->addColumn('po_id', array(
-//					'header'	=>	Mage::helper('stockhistory')->__('PO ID'),
-//					'align'		=>	'left',
-//					'width'		=>	'10px',
-//					'index'		=> 'po_id'
-//		));
-		
+
 		$this->addColumn('vendor_style', array(
 					'header'	=>	Mage::helper('stockhistory')->__('Vendor Style'),
 					'align'		=>	'right',

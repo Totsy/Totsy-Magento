@@ -1177,6 +1177,15 @@ body .col-left hr {
 #hpcheckout-wrapper .fields>.fields>.validation-advice{
 	
 }
-.hpcheckout-checkout-index .form-list .validation-advice {
+.hpcheckout-checkout-index .form-list .validation-advice  {
     width:203px;
+}
+
+.hpcheckout-checkout-index .billing-address-select , .hpcheckout-checkout-index .shipping-address-select{
+    float: right;
+    left: 4px;
+    margin-bottom: 9px;
+    margin-right: 0;
+    position: relative;
+    width: 200px;
 }

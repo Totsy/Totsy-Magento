@@ -20,6 +20,7 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Index extends Mage_A
 		$this->_controller = 'adminhtml_transaction_index';
 		$this->_blockGroup = 'stockhistory';
 		$this->_headerText = Mage::helper('stockhistory')->__('Transcations');
+		
 		$this->_removeButton('add');
 
      	$this->_addButton('import', array(

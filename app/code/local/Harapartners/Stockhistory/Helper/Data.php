@@ -14,29 +14,78 @@
 
 class Harapartners_Stockhistory_Helper_Data extends Mage_Core_Helper_Abstract  {
 	
-	const STATE_PENDING = 0;
-	const STATE_PROCESSED = 1;
-	const STATE_FAILED = 2;
-	
-	private $csv_header = array('Product ID', 'Product Name', 'Product SKU', 'Size', 'Color', 'Vendor SKU', 'Qty', 'Created At', 'Updated At', 'Status', 'Comment');
-//	private $statusOptions = array(
-//								'Pending' => 0, 
-//								'Processed' => 1, 
-//								'Failed'  => 2
-//							);
-
+	private $_csvHeader = array(
+			'Product ID', 
+			'Product Name', 
+			'Product SKU', 
+			'Size', 
+			'Color', 
+			'Vendor SKU', 
+			'Qty', 
+			'Created At', 
+			'Updated At', 
+			'Status', 
+			'Comment'
+	);
 	
 	public function getCsvHeader(){
-		return $this->csv_header;
+		return $this->_csvHeader;
 	}
 	
-	public function getStatusOptions(){
-		$statusOptions = array(
-				array('value' => 0, 'label' => $this->__('Pending')),
-				array('value' => 1, 'label' => $this->__('Processed')),
-				array('value' => 2, 'label' => $this->__('Failed')),
+	public function getGridVendorTypeArray(){
+		return array(
+				Harapartners_Stockhistory_Model_Vendor::TYPE_VENDOR => 'Vendor', 
+				Harapartners_Stockhistory_Model_Vendor::TYPE_SUBVENDOR =>'Sub Vendor', 
+				Harapartners_Stockhistory_Model_Vendor::TYPE_DISTRIBUTOR => 'Distributor'
 		);
-		return $statusOptions;
+	}
+	
+	public function getGridTransactionTypeArray(){
+		return array(
+				Harapartners_Stockhistory_Model_Transaction::ACTION_TYPE_AMENDMENT => 'Amendment', 
+				Harapartners_Stockhistory_Model_Transaction::ACTION_TYPE_EVENT_IMPORT => 'Event Import', 
+				Harapartners_Stockhistory_Model_Transaction::ACTION_TYPE_DIRECT_IMPORT => 'Direct Import'
+		);
+	}
+	
+	public function getGridTransactionStatusArray(){
+		return array(
+				Harapartners_Stockhistory_Model_Transaction::STATUS_PENDING => 'Pending', 
+				Harapartners_Stockhistory_Model_Transaction::STATUS_PROCESSED => 'Processed', 
+				Harapartners_Stockhistory_Model_Transaction::STATUS_FAILED=> 'Failed'
+		);
+
+	}
+	
+	public function getFormVendorTypeArray(){
+		return array(
+       			array('label' => 'Vendor', 'value' => Harapartners_Stockhistory_Model_Vendor::TYPE_VENDOR),
+       			array('label' => 'SubVendor', 'value' => Harapartners_Stockhistory_Model_Vendor::TYPE_SUBVENDOR),
+       			array('label' => 'Distributor', 'value' => Harapartners_Stockhistory_Model_Vendor::TYPE_DISTRIBUTOR),
+       	);
+	}
+	
+	public function getFormVendorStatusArray(){
+		return array(
+				array('label' => 'Enabled', 'value' => Harapartners_Stockhistory_Model_Vendor::STATUS_ENABLED),
+				array('label' => 'Disabled', 'value' => Harapartners_Stockhistory_Model_Vendor::STATUS_DISABLED),
+		);
+	}
+	
+	public function getFormTransactionTypeArray(){
+		return array(
+       			array('label' => 'Amendment', 'value' => Harapartners_Stockhistory_Model_Transaction::ACTION_TYPE_AMENDMENT),
+       			array('label' => 'Event Import', 'value' => Harapartners_Stockhistory_Model_Transaction::ACTION_TYPE_EVENT_IMPORT),
+       			array('label' => 'Direc Import', 'value' => Harapartners_Stockhistory_Model_Transaction::ACTION_TYPE_DIRECT_IMPORT),
+       	);
+	}
+	
+	public function getFormTransactionStatusArray(){
+		return  array(
+				array('label' => $this->__('Pending'), 'value' => Harapartners_Stockhistory_Model_Transaction::STATUS_PENDING),
+				array('label' => $this->__('Processed'), 'value' => Harapartners_Stockhistory_Model_Transaction::STATUS_PROCESSED ),
+				array('label' => $this->__('Failed'), 'value' => Harapartners_Stockhistory_Model_Transaction::STATUS_FAILED),
+		);
 	}
 	
 }

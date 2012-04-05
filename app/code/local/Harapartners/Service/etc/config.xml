@@ -61,18 +61,37 @@
                     <html_head>Harapartners_Service_Block_Rewrite_Page_Html_Head</html_head>
                 </rewrite>
             </page>
+			<enterprise_reward>
+				<rewrite>
+					<adminhtml_customer_edit_tab_reward_management_update>Harapartners_Service_Block_Rewrite_Reward_Adminhtml_Customer_Edit_Tab_Reward_Management_Update</adminhtml_customer_edit_tab_reward_management_update>
+				</rewrite>
+			</enterprise_reward>
 			<!-- ===== BLOCK REWRITE END ===== -->
 		</blocks>
         <helpers>
             <service>
             	<class>Harapartners_Service_Helper</class>
             </service>
+			<catalog>
+                <rewrite>
+					<!--Harapartners_Service: do NOT allow category view if expired!-->
+					<!--category>Harapartners_Service_Helper_Rewrite_Catalog_Category</category-->
+					<!--Harapartners_Service: do NOT allow product view without category!-->
+                    <!--product>Harapartners_Service_Helper_Rewrite_Catalog_Product</product-->
+                </rewrite>
+            </catalog>
         </helpers>
 		<models>
             <service>
                 <class>Harapartners_Service_Model</class>
             </service>
 			<!-- ===== MODEL REWRITE START ===== -->
+			<catalog>
+				<rewrite>
+					<!--Harapartners_Import: Important logic to prevent cleaning cache and indexing for each product save.-->
+					<product>Harapartners_Service_Model_Rewrite_Catalog_Product</product>
+				</rewrite>
+			</catalog>
 			<checkout>
 				<rewrite>
 					<!--Harapartners_HpCheckout--><!--Harapartners_Rushcheckout-->
@@ -127,6 +146,12 @@
 					<quote_discount>Harapartners_Service_Model_Rewrite_Salesrule_Quote_Discount</quote_discount>
 				</rewrite>
 			</salesrule>
+			<enterprise_reward>
+				<rewrite>
+					<!--Harapartners_Rewrite_Reward_Observer-->
+					<observer>Harapartners_Service_Model_Rewrite_Reward_Observer</observer>
+				</rewrite>
+			</enterprise_reward>
 			<!-- ===== MODEL REWRITE END ===== -->
         </models>
 		<events>

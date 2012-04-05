@@ -403,7 +403,8 @@ div.cart .deals button span span, div.cart .cart-table .btn-update span span  { 
 
 div.cart .totals .savings { 
 	text-align: right; 
-	padding-bottom: 10px;     
+	padding-bottom: 10px; 
+	padding-right: 5px;	    
 	color: #FF6D1D;
     font-style: italic;
     font-weight: bold;}
@@ -468,3 +469,6 @@ body.product-totsy-gift-card div.share-button { padding: 0px; width: 130px; }
     margin-bottom: 20px;
     padding: 0 0 10px;
     text-align: center;}
+
+/* customer password reset ================================================================================= */
+body.customer-account-resetpassword .col1-layout .col-main { width: 380px;}

@@ -12,16 +12,14 @@
  * 
  */
 
-class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report extends Mage_Adminhtml_Block_Widget_Grid_Container
-{
-	public function __construct()
-	{	
-		$data = $this->getRequest()->getParams();
-		$poId = $data['po_id'];
+class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report extends Mage_Adminhtml_Block_Widget_Grid_Container {
+	
+	public function __construct() {	
+		$dataObject = new Varien_Object(Mage::registry('stockhistory_po_report_data'));
 		parent::__construct();
 		$this->_controller = 'adminhtml_transaction_report';
 		$this->_blockGroup = 'stockhistory';
-		$this->_headerText = Mage::helper('stockhistory')->__('Product Report from PO ' . $poId);
+		$this->_headerText = Mage::helper('stockhistory')->__('Product Report from PO ' . $dataObject->getData('po_id'));
 		$this->_removeButton('add');
 	}
 
