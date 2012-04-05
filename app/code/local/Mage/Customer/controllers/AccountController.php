@@ -572,10 +572,12 @@ class Mage_Customer_AccountController extends Mage_Core_Controller_Front_Action
                     $this->_getSession()->addError($exception->getMessage());
                     $this->_redirect('*/*/forgotpassword');
                     return;
-                }
-            }
-            $this->_getSession()
-                ->addSuccess(Mage::helper('customer')->__('If there is an account associated with %s you will receive an email with a link to reset your password.', Mage::helper('customer')->htmlEscape($email)));
+                }      
+                $this->_getSession()
+                	->addSuccess(Mage::helper('customer')->__('If there is an account associated with %s you will receive an email with a link to reset your password.', Mage::helper('customer')->htmlEscape($email)));
+            }else {
+            	$this->_getSession()->addError($this->__('The email you entered is NOT associated with any account, please check.'));
+            }       
             $this->_redirect('*/*/');
             return;
         } else {
