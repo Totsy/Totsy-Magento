@@ -41,12 +41,28 @@
        		<div class="tri"></div>
 	        <div class="quick-access">	
 	            <?php  // echo $this->getChildHtml('topSearch') ?>
-	            <div id="userinfo"><strong><?php echo $this->__('Hi, %s ', Mage::getSingleton('customer/session')->getCustomer()->getFirstname()); ?> </strong><?php echo $this->getChildHtml('topLinks') ?></div>	  
+	            <?php 
+	            	$welcomeInfo = '';
+	            	$customerName = Mage::getSingleton('customer/session')->getCustomer()->getName();
+	            	if ( empty($customerName) ){
+	            		$welcomeInfo = $customerName;
+	            	}else {
+	            		$welcomeInfo = Mage::getSingleton('customer/session')->getCustomer()->getEmail();
+	            	}
+	            ?>
+	            <div id="userinfo"><strong><?php echo $this->__( 'Hi, %s ', $welcomeInfo );//$this->__('Hi, %s ', Mage::getSingleton('customer/session')->getCustomer()->getEmail()); ?> </strong><?php echo $this->getChildHtml('topLinks') ?></div>	  
 	            <div id="usercart">
 	            	<?php //Place holder for session check, may be remove later?>
 	            	<?php if ( true ): ?>
 		        		<?php echo $this->getChildHtml('topCart') ?>
-	 					<strong><?php echo $this->getChildHtml('checkoutLinks') ?></strong>
+	 					<strong>
+	 						<?php //echo $this->getChildHtml('checkoutLinks') ?>
+	 						<ul class="links">
+	 							<li class="links">
+	 								<a class="top-link-checkout" title="Checkout" href="<?php echo Mage::getUrl('checkout/cart')?>">Checkout</a>
+	 							</li>
+	 						</ul>
+	 					</strong>
 	 				<?php else :?>
 	 					<?php echo 'JS here'?>
  					<?php endif;?>
