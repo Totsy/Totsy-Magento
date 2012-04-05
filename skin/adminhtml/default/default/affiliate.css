@@ -1,35 +1,91 @@
- .affiliate-adminhtml-report-result #anchor-content .date-pick {
-	display:inline-block;
-	margin:10px;
- }
 .affiliate-adminhtml-report-index  #anchor-content .date-pick {
 	display:inline-block;
 	margin:10px;
- }
- .affiliate-adminhtml-report-result #anchor-content .time_period .ui-datepicker-trigger{
-	height:18px;
-	width:20px;
  }
  .affiliate-adminhtml-report-index  #anchor-content.time_period .ui-datepicker-trigger{
 	height:18px;
 	width:20px;
  }
- .affiliate-adminhtml-report-result #anchor-content div{
-	margin-bottom:10px;
- }
+
   .affiliate-adminhtml-report-index  #anchor-content div{
 	margin-bottom:10px;
  }
-  .affiliate-adminhtml-report-result #anchor-content table{
+ .affiliate-adminhtml-report-registration  #anchor-content .date-pick {
+	display:inline-block;
+	margin:10px;
+ }
+ .affiliate-adminhtml-report-registration  #anchor-content.time_period .ui-datepicker-trigger{
+	height:18px;
+	width:20px;
+ }
+
+  .affiliate-adminhtml-report-registration  #anchor-content div{
 	margin-bottom:10px;
  }
- .affiliate-adminhtml-report-result #anchor-content th{
+  .affiliate-adminhtml-report-revenue  #anchor-content .date-pick {
+	display:inline-block;
+	margin:10px;
+ }
+ .affiliate-adminhtml-report-revenue  #anchor-content.time_period .ui-datepicker-trigger{
+	height:18px;
+	width:20px;
+ }
+
+  .affiliate-adminhtml-report-revenue  #anchor-content div{
+	margin-bottom:10px;
+ }
+ .affiliate-adminhtml-report-bounce  #anchor-content .date-pick {
+	display:inline-block;
+	margin:10px;
+ }
+ .affiliate-adminhtml-report-bounce  #anchor-content.time_period .ui-datepicker-trigger{
+	height:18px;
+	width:20px;
+ }
+
+  .affiliate-adminhtml-report-bounce  #anchor-content div{
+	margin-bottom:10px;
+ }
+  .affiliate-adminhtml-report-registration #anchor-content table{
+	margin-bottom:10px;
+ }
+ .affiliate-adminhtml-report-registration #anchor-content th{
    width:120px;
    height:30px;
    border:1px solid;
    text-align:center;
    }
-    .affiliate-adminhtml-report-result td{
+    .affiliate-adminhtml-report-registration td{
+   width:120px;
+   height:30px;
+   border:1px solid;
+   text-align:center;
+   }
+     .affiliate-adminhtml-report-revenue #anchor-content table{
+	margin-bottom:10px;
+ }
+ .affiliate-adminhtml-report-revenue #anchor-content th{
+   width:120px;
+   height:30px;
+   border:1px solid;
+   text-align:center;
+   }
+    .affiliate-adminhtml-report-revenue td{
+   width:120px;
+   height:30px;
+   border:1px solid;
+   text-align:center;
+   }
+.affiliate-adminhtml-report-bounce #anchor-content table{
+	margin-bottom:10px;
+ }
+ .affiliate-adminhtml-report-bounce #anchor-content th{
+   width:120px;
+   height:30px;
+   border:1px solid;
+   text-align:center;
+   }
+    .affiliate-adminhtml-report-bounce td{
    width:120px;
    height:30px;
    border:1px solid;

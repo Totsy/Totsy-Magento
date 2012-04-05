@@ -38,6 +38,7 @@ class Harapartners_Affiliate_Controller_Router extends Mage_Core_Controller_Vari
         			->setControllerName('register')
         			->setActionName('index')
         			->setParam('affiliate_code', $p[1]);
+        			//->setParam('clickid', $p[2]);
            //All other parameters need to be sent as GET params
         	return true;
         }else{
