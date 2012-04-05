@@ -25,20 +25,22 @@ class Harapartners_Affiliate_Adminhtml_ReportController extends Mage_Adminhtml_C
     	$resultFilter = new Varien_Object;
     	$from = $request->getParam('from');
     	$to = $request->getparam('to');
+    	$waringMessage = '';
     	if(!!$from && !!$to){
     		$resultFilter->setFrom($from);
     		$resultFilter->setTo($to);
     	}else{
-    		$waringMessage = 'Please fill time period';
-    		$resultFilter->setWarningMessage($waringMessage);
+    		$waringMessage.= 'Please fill time period';
     	}
     	$affiliate = Mage::getModel('affiliate/record')->load($request->getParam('affiliate_code'));
-    	if($affiliate->getStatus()!=1){
-    		$waringMessage = 'Inactive Affiliate';
-    		$resultFilter->setWarningMessage($waringMessage);
+    	if(!$affiliate && !$affiliate->getId()){
+    		$waringMessage.= 'Invalid Affiliate';
+    	}elseif($affiliate->getStatus()!=1){
+    		$waringMessage.= 'Inactive Affiliate';   		
     	}else{
     		$resultFilter->setAffiliate($affiliate);
     	}
+    	$resultFilter->setWarningMessage($waringMessage);
 //    	if($subAffiliateCode = $request->getParam('sub_affiliate_code')){
 //    		$resultFilter->setSubAffiliateCode($subAffiliateCode);
 //    		$subAffiliateCodeArray = explode(',', $affiliate->getSubAffiliateCode()); 
