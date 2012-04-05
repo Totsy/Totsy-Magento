@@ -35,6 +35,7 @@ class Harapartners_Service_Model_Rewrite_Customer_Customer extends Mage_Customer
         return $this;
     }
     
+    //Harapartners, Jun, ForgotPassWord logic does NOT route via changePassword($newPassword)
 	public function changeResetPasswordLinkToken($newResetPasswordLinkToken) {
         parent::changeResetPasswordLinkToken($newResetPasswordLinkToken);
 		if(!!$this->getData('legacy_customer')){
