@@ -12,19 +12,24 @@
  * 
  */
 
-class Harapartners_Stockhistory_Model_Vendor extends Mage_Core_Model_Abstract
-{
-	public function _construct()
-	{
+class Harapartners_Stockhistory_Model_Vendor extends Mage_Core_Model_Abstract {
+	
+	const STATUS_ENABLED = 1;
+	const STATUS_DISABLED = 2;
+	
+	const TYPE_VENDOR = 1;
+	const TYPE_SUBVENDOR = 2;
+	const TYPE_DISTRIBUTOR = 3;
+	
+	public function _construct() {
 		$this->_init('stockhistory/vendor');
 	}
 	
 	protected function _beforeSave(){
-		$now = date('Y-m-d H:i:s');
     	if(!$this->getId()){
-    		$this->setData('created_at', $now);
+    		$this->setData('created_at', now());
     	}
-    	$this->setData('updated_at', $now);
+    	$this->setData('updated_at', now());
     	
 		if(!$this->getStoreId()){
     		$this->setStoreId(Mage_Core_Model_App::ADMIN_STORE_ID);
@@ -32,24 +37,24 @@ class Harapartners_Stockhistory_Model_Vendor extends Mage_Core_Model_Abstract
     	parent::_beforeSave();  
     }
     
-    public function loadByCode($code, $storeId = null)
-    {
-    	return $this->getResource()->loadByCode($code, $storeId);
+    public function loadByCode($code, $storeId = null) {
+    	$this->addData($this->getResource()->loadByCode($code, $storeId));
+    	return $this;
     }
     
-    protected function _validateByCode($code, $storeId = null)
-    {
-    	return $this->getResource()->validateByCode($code, $storeId);
-    }
+//    protected function _validateByCode($code, $storeId = null) {
+//    	return $this->getResource()->validateByCode($code, $storeId);
+//    }
     
-	public function validateAndSave($data)
-	{
+	public function validateAndSave($data) {
     	$this->addData($data);
-    	if(!$this->getVendorName() || !$this->getVendorCode() || !$this->getEmailList()){
-    		throw new Exception('Required Data is missing');
-    	}/*elseif($this->getData('id') !== $this->_validateByCode($data['vendor_code'])){
-    		throw new Exception('Vendor SKU already exists, please choose another one');
-    	}*/
+    	if(!$this->getVendorName()){
+    		throw new Exception('Vendor name is required.');
+    	}
+    	if(!$this->getVendorCode()){
+    		throw new Exception('Vendor code is required.');
+    	}
+    	
     	$this->save();
     	return $this;
     }

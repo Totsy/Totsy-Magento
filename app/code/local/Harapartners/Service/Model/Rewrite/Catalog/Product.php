@@ -15,14 +15,21 @@
 class Harapartners_Service_Model_Rewrite_Catalog_Product extends Mage_Catalog_Model_Product {
    
 	public function cleanCache(){
-		return $this;
+		if(!!Mage::registry('batch_import_no_index')) {
+			return $this;
+		}else{
+			return parent::cleanCache();
+		}
 	}
    
     public function afterCommitCallback() {
-    	parent::afterCommitCallback();
-//    	Mage::dispatchEvent('model_save_commit_after', array('object'=>$this));
-//        Mage::dispatchEvent($this->_eventPrefix.'_save_commit_after', $this->_getEventData());
-//        return $this;
+    	if(!!Mage::registry('batch_import_no_index')){
+	    	Mage::dispatchEvent('model_save_commit_after', array('object'=>$this));
+	        Mage::dispatchEvent($this->_eventPrefix.'_save_commit_after', $this->_getEventData());
+	        return $this;
+    	}else{
+			return parent::afterCommitCallback();
+		}
     }
     
     protected function _beforeSave() {

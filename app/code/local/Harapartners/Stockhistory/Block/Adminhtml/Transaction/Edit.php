@@ -12,10 +12,8 @@
  * 
  */
 
-class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Edit extends Mage_Adminhtml_Block_Widget_Form_Container
-{
-	public function __construct()
-	{
+class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Edit extends Mage_Adminhtml_Block_Widget_Form_Container {
+	public function __construct() {
 		parent::__construct();
 		$this->_objectId = 'id';
 		$this->_blockGroup = 'stockhistory';
@@ -32,5 +30,4 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Edit extends Mage_Ad
         return $this->getUrl('*/*/save', array('_current'=>true));
     }
     
-	
 }

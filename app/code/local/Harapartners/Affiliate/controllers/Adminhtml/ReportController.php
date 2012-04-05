@@ -39,22 +39,48 @@ class Harapartners_Affiliate_Adminhtml_ReportController extends Mage_Adminhtml_C
     	}else{
     		$resultFilter->setAffiliate($affiliate);
     	}
-    	if($subAffiliateCode = $request->getParam('sub_affiliate_code')){
-    		$resultFilter->setSubAffiliateCode($subAffiliateCode);
-    		$subAffiliateCodeArray = explode(',', $affiliate->getSubAffiliateCode()); 
-    		if(!in_array($subAffiliateCode, $subAffiliateCodeArray)){
-    			$waringMessage.= 'No such sub affiliate associate to the master affiliate.';
-    			$resultFilter->setWarningMessage($waringMessage);
-    		}
-    	}
+//    	if($subAffiliateCode = $request->getParam('sub_affiliate_code')){
+//    		$resultFilter->setSubAffiliateCode($subAffiliateCode);
+//    		$subAffiliateCodeArray = explode(',', $affiliate->getSubAffiliateCode()); 
+//    		if(!in_array($subAffiliateCode, $subAffiliateCodeArray)){
+//    			$waringMessage.= 'No such sub affiliate associate to the master affiliate.';
+//    			$resultFilter->setWarningMessage($waringMessage);
+//    		}
+//    	}
     	if($request->getParam('all')){
     		$resultFilter->setIncludeAllSubAffiliate(true);
     	}
 		Mage::unregister('resultFilter');
-		Mage::register('resultFilter',$resultFilter);    	    	
-		$this->loadLayout();
+		Mage::register('resultFilter',$resultFilter); 
+		if($request->getParam('report_type')=='totalregistrations'){
+			$this->_forward('registration');
+		}elseif($request->getParam('report_type')=='totalrevenue'){
+			$this->_forward('revenue');
+		}elseif($request->getParam('report_type')=='totalbounces'){
+			$this->_forward('bounce');
+		}else{
+			$this->_forward('index');
+		}  	    	
+    }
+    
+    public function registrationAction() {
+    	$this->loadLayout();
 		$reportBlock = $this->getLayout()->createBlock("affiliate/report")->setTemplate("affiliate/report.phtml");
-		$resultBlock = $this->getLayout()->createBlock("affiliate/report")->setTemplate("affiliate/result.phtml");
+		$resultBlock = $this->getLayout()->createBlock("affiliate/report")->setTemplate("affiliate/registration.phtml");
+		$this->getLayout()->getBlock('content')->append($reportBlock)->append($resultBlock);
+		$this->renderLayout();
+    }
+    public function revenueAction() {
+    	$this->loadLayout();
+		$reportBlock = $this->getLayout()->createBlock("affiliate/report")->setTemplate("affiliate/report.phtml");
+		$resultBlock = $this->getLayout()->createBlock("affiliate/report")->setTemplate("affiliate/revenue.phtml");
+		$this->getLayout()->getBlock('content')->append($reportBlock)->append($resultBlock);
+		$this->renderLayout();
+    }
+    public function bounceAction() {
+    	$this->loadLayout();
+		$reportBlock = $this->getLayout()->createBlock("affiliate/report")->setTemplate("affiliate/report.phtml");
+		$resultBlock = $this->getLayout()->createBlock("affiliate/report")->setTemplate("affiliate/bounce.phtml");
 		$this->getLayout()->getBlock('content')->append($reportBlock)->append($resultBlock);
 		$this->renderLayout();
     }

@@ -75,7 +75,15 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </title>
-						<ups_gateway_url>
+						<default_shipping_price translate="label">
+							<label>Default Shipping Price</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>8</sort_order>
+							<show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+						</default_shipping_price>
+						<ups_gateway_url translate="label">
 							<label>UPS Gateway URL</label>
 							<frontend_type>text</frontend_type>
 							<sort_order>9</sort_order>
