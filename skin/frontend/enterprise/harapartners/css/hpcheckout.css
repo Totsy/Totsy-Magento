@@ -250,4 +250,5 @@ div.page-title .timer-control-box p#checkout-timer, div.page-title .timer-contro
 .hpcheckout-checkout-index #error-message-wrapper {
 	color: red;
 	padding-left: 20px;
+	font-size: 13px;
 }
