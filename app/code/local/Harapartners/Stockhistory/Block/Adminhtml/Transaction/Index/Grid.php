@@ -12,13 +12,10 @@
  * 
  */
 
-class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Index_Grid extends Mage_Adminhtml_Block_Widget_Grid
-{
-	private $status = array('0' => 'Pending', '1' => 'Processed', '2'=> 'Failed');
-	private $action = array('1' => 'Amendment', '2' => 'Event Import', '3' => 'Direct Import');
+class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Index_Grid extends Mage_Adminhtml_Block_Widget_Grid {
 	
-	public function __construct()
-	{
+	
+	public function __construct() {
 		parent::__construct();
 		$this->setId('TransactionGrid');
 		$this->setDefaultSort('id');
@@ -26,17 +23,14 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Index_Grid extends M
 		$this->setSaveParametersInSession(true);
 	}
 	
-	protected function _prepareCollection()
-	{
+	protected function _prepareCollection() {
 		$collection = Mage::getModel('stockhistory/transaction')->getCollection();
 		$this->setCollection($collection);
 		return parent::_prepareCollection();
 	}
 	
-	protected function _prepareColumns()
-	{	
+	protected function _prepareColumns(){	
 		$helper = Mage::helper('stockhistory');
-	
 		$this->addColumn('id', array(
 					'header'	=>	$helper->__('ID'),
 					'align'		=>	'right',
@@ -124,7 +118,7 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Index_Grid extends M
 					'width'		=>	'50px',
 					'index'		=>	'action_type',
 					'type'		=>	'options',
-					'options'	=>  $this->action,
+					'options'	=>  $helper->getGridTransactionTypeArray(),
 		));
 	
 	    $this->addColumn('comment', array(

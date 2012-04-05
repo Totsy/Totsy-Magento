@@ -13,7 +13,7 @@
 class Harapartners_Service_Model_Rewrite_Sales_Quote_Address extends Mage_Sales_Model_Quote_Address
 {
 	protected $_speedtaxValidator = null;
-	protected $_customerFirstOrder= null;
+	protected $_customerFirstOrder = null;
 	
 //	public function getCustomerFirstOrder(){
 //		if($this->_customerFirstOrder!== null){

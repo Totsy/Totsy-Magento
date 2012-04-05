@@ -18,8 +18,7 @@ class Harapartners_Stockhistory_Adminhtml_PurchaseorderController extends Mage_A
 		return Mage::getSingleton('adminhtml/session');
 	}
 	
-	public function indexAction()
-	{
+	public function indexAction() {
 		$this->loadLayout()
 			->_setActiveMenu('stockhistory/purchaseorder')
 			->_addContent($this->getLayout()->createBlock('stockhistory/adminhtml_purchaseorder_index'))
@@ -32,12 +31,12 @@ class Harapartners_Stockhistory_Adminhtml_PurchaseorderController extends Mage_A
 		$this->_forward('edit');
 	}
 	
-	public function editAction()
-	{
-		$data1 = $this->getRequest()->getParams();
-		$id = $this->getRequest()->getParam('id', null);
-		$model  = Mage::getModel('stockhistory/purchaseorder')->load($id);
+	public function editAction() {
+		$id = $this->getRequest()->getParam('id');
 		$data = $this->_getSession()->getPoFormData();
+		if(empty($data['vendor_id'])){
+			$data['vendor_id'] = $this->getRequest()->getParam('vendor_id');
+		}
 		
        	if (!!$id ) {
        		$model  = Mage::getModel('stockhistory/purchaseorder')->load($id);
@@ -51,8 +50,8 @@ class Harapartners_Stockhistory_Adminhtml_PurchaseorderController extends Mage_A
         }
 		
         if(!!$data){
-        	Mage::unregister('po_data');
-        	Mage::register('po_data', $data);
+        	Mage::unregister('stockhistory_po_data');
+        	Mage::register('stockhistory_po_data', $data);
         }
 		$this->loadLayout()->_setActiveMenu('stockhistory/edit');
 		$this->_addContent($this->getLayout()->createBlock('stockhistory/adminhtml_purchaseorder_edit'));
@@ -71,7 +70,7 @@ class Harapartners_Stockhistory_Adminhtml_PurchaseorderController extends Mage_A
 		try{
 			$model = Mage::getModel('stockhistory/purchaseorder');
 			if(!!$this->getRequest()->getParam('id')){
-				$model->load($this->getReqeust()->getParam('id'));
+				$model->load($this->getRequest()->getParam('id'));
 			}
 			$model->validateAndSave($data);
 			$this->_getSession()->addSuccess(Mage::helper('stockhistory')->__('Purchase Order saved successfully'));

@@ -14,7 +14,6 @@
 
 class Harapartners_Stockhistory_Block_Adminhtml_Purchaseorder_Index_Grid extends Mage_Adminhtml_Block_Widget_Grid
 {
-	//private $options = array('0' => 'Pending', '1'=>'Processed', '2'=> 'Failed');
 	
 	public function __construct()
 	{
