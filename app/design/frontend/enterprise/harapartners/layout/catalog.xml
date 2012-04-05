@@ -118,6 +118,10 @@ Category default layout
         <reference name="root">
             <action method="setTemplate"><template>page/1column.phtml</template></action>
         </reference>
+		<reference name="head">
+			<action method="setEventTags"></action>
+			<action method="setEventSailthruTitle"></action>
+		</reference>
 		<remove name="right"/>
 		<remove name="breadcrumbs"/>
         <reference name="left">
@@ -229,6 +233,8 @@ Product view
             <action method="setTemplate"><template>page/1column.phtml</template></action>
         </reference>
         <reference name="head">
+			<action method="setProductTags"></action>
+			<action method="setProductSailthruTitle"></action>
             <action method="addJs"><script>varien/product.js</script></action>
             <action method="addJs"><script>varien/configurable.js</script></action>
             <action method="addItem"><type>skin_js</type><name>js/jqzoom/jquery.jqzoom1.0.1.js</name></action>
