@@ -1,36 +1,33 @@
-<div class="checkout-sub-title sub-title">Shipping Method</div>
-<div class="checkout-content">
-	<form id="hpcheckout-shipping-method-form" action="">
-	    <div id="checkout-shipping-method-load">
-	        <?php if (!($rates = $this->getShippingRates())): ?>
-			    <p><?php echo $this->__('Please enter a valid shipping address') ?></p>
-			<?php elseif( count( $rates ) == 1 ): ?>
-				<input type="hidden" name="shipping_method" value="<?php echo key( $rates ) ?>">
-				<div><?php echo $rates[ key( $rates ) ] ?></div>
-			<?php else: ?>
-				<span class="shipping-method-title">Shipping Method</span>
-				<div class="totsy-selective-input-box middle-length">
-					<span><?php echo $this->__('Please select shipping method') ?></span>
-					<select id="shipping-methods-select" name="shipping_method" class="validate-select" >
-					<option value=""><?php echo $this->__('Please select shipping method') ?></option>
-					<?php foreach( $rates as $key => $value ): ?>
-						<option value="<?php echo $key ?>" class="shipping-method-option" <?php if($key===$this->getAddressShippingMethod()) echo ' selected="true"' ?> ><?php echo $value ?></option>
-					<?php endforeach ?>
-					</select>
-				</div>	
-			<?php endif ?>
-	    </div>
-	</form>
+<form id="hpcheckout-shipping-method-form" action="">
+    <div id="checkout-shipping-method-load">
+        <?php if (!($rates = $this->getShippingRates())): ?>
+		    <p><?php echo $this->__('Please enter a valid shipping address') ?></p>
+		<?php elseif( count( $rates ) == 1 ): ?>
+			<input type="hidden" name="shipping_method" value="<?php echo key( $rates ) ?>">
+			<div><?php echo $rates[ key( $rates ) ] ?></div>
+		<?php else: ?>
+			<span class="shipping-method-title">Shipping Method</span>
+			<div class="totsy-selective-input-box middle-length">
+				<span><?php echo $this->__('Please select shipping method') ?></span>
+				<select id="shipping-methods-select" name="shipping_method" class="validate-select" >
+				<option value=""><?php echo $this->__('Please select shipping method') ?></option>
+				<?php foreach( $rates as $key => $value ): ?>
+					<option value="<?php echo $key ?>" class="shipping-method-option" <?php if($key===$this->getAddressShippingMethod()) echo ' selected="true"' ?> ><?php echo $value ?></option>
+				<?php endforeach ?>
+				</select>
+			</div>	
+		<?php endif ?>
+    </div>
+</form>
+
+<div class="spinner" style="display: none;"><img src="<?php echo $this->getSkinUrl( 'images/ajax-loader.gif' ) ?>"></div>
+
+<script type="text/javascript">
+//	var shippingMethodForm = new VarienForm( 'hpcheckout-shipping-method-form' );
+
+	jQuery( document ).ready( function() {
+    	jQuery( '#shipping-methods-select' ).bind( 'change', hpcheckout.update );
+	});
 	
-	<div class="spinner" style="display: none;"><img src="<?php echo $this->getSkinUrl( 'images/ajax-loader.gif' ) ?>"></div>
-	
-	<script type="text/javascript">
-	//	var shippingMethodForm = new VarienForm( 'hpcheckout-shipping-method-form' );
-	
-		jQuery( document ).ready( function() {
-	    	jQuery( '#shipping-methods-select' ).bind( 'change', hpcheckout.update );
-		});
-		
-	</script>
-</div>
+</script>
 

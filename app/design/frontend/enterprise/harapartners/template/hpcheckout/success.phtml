@@ -39,13 +39,18 @@
     'USA'             // country
   ]);
 	<?php 
+	$category = array();
 //	$productid = Mage::getModel('catalog/product')->getData('category_ids');
 //	$order  = Mage::getModel('catalog/category')->getCollection()->load($productid);
-	foreach($order->getAllItems() as $item){
-		if( !! $item->getParentItemId() ) {
+	foreach($order->getAllItems() as $item):?>
+	<?php 	if( !! $item->getParentItemId() ) {
 			continue;
 		}
 		$product = Mage::getModel( 'catalog/product' )->load( $item->getProductId() );
+		$categoryIds = $product->getCategoryIds();
+		foreach ($categoryIds as $cateId){
+			$category[] = Mage::getModel('catalog/category')->load($cateId)->getData('name');
+		}
 	?>
 
    // add item might be called for every item in the shopping cart
@@ -55,12 +60,12 @@
     '<?php echo $order->getData('increment_id'); ?>',           // order ID - required
     '<?php echo $item->getData('sku'); ?>',           // SKU/code - required
     '<?php echo $item->getData('name')?>',        // product name
-    '<?php echo json_encode( $product->getCategoryIds() ) ?>',   // category or variation
+    '<?php echo json_encode( $category ) ?>',   // category or variation
     '<?php echo $item->getPrice() ?>',          // unit price - required
     '<?php echo $item->getQtyOrdered() ?>'               // quantity - required
   ]);
-  <?php 
-  }
+  <?php   		
+  endforeach;
   ?>
   _gaq.push(['_trackTrans']); //submits transaction to the Analytics servers
 

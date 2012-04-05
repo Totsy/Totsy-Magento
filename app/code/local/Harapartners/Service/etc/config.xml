@@ -63,6 +63,7 @@
             </page>
 			<enterprise_reward>
 				<rewrite>
+					<!--Harapartners_For_MANDATORY_Comment-->
 					<adminhtml_customer_edit_tab_reward_management_update>Harapartners_Service_Block_Rewrite_Reward_Adminhtml_Customer_Edit_Tab_Reward_Management_Update</adminhtml_customer_edit_tab_reward_management_update>
 				</rewrite>
 			</enterprise_reward>
@@ -75,7 +76,7 @@
 			<catalog>
                 <rewrite>
 					<!--Harapartners_Service: do NOT allow category view if expired!-->
-					<!--category>Harapartners_Service_Helper_Rewrite_Catalog_Category</category-->
+					<category>Harapartners_Service_Helper_Rewrite_Catalog_Category</category>
 					<!--Harapartners_Service: do NOT allow product view without category!-->
                     <!--product>Harapartners_Service_Helper_Rewrite_Catalog_Product</product-->
                 </rewrite>
@@ -88,6 +89,8 @@
 			<!-- ===== MODEL REWRITE START ===== -->
 			<catalog>
 				<rewrite>
+					<!--Harapartners_Service: The 'Event' category is a reserved anchor category. Disable any related changes.-->
+					<category>Harapartners_Service_Model_Rewrite_Catalog_Category</category>
 					<!--Harapartners_Import: Important logic to prevent cleaning cache and indexing for each product save.-->
 					<product>Harapartners_Service_Model_Rewrite_Catalog_Product</product>
 				</rewrite>
