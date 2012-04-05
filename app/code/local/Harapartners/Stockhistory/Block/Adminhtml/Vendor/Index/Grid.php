@@ -12,9 +12,8 @@
  * 
  */
 
-class Harapartners_Stockhistory_Block_Adminhtml_Vendor_Index_Grid extends Mage_Adminhtml_Block_Widget_Grid
-{
-	private $options = array('1' => 'Vendor', '2'=>'Sub Vendor', '3'=> 'Distributor');
+class Harapartners_Stockhistory_Block_Adminhtml_Vendor_Index_Grid extends Mage_Adminhtml_Block_Widget_Grid {
+	
 	
 	public function __construct()
 	{
@@ -34,80 +33,82 @@ class Harapartners_Stockhistory_Block_Adminhtml_Vendor_Index_Grid extends Mage_A
 	
 	protected function _prepareColumns()
 	{
+		$helper = Mage::helper('stockhistory');
+		
 		$this->addColumn('id', array(
-					'header'	=>	Mage::helper('stockhistory')->__('ID'),
+					'header'	=>	$helper->__('ID'),
 					'align'		=>	'right',
 					'width'		=>	'50px',
 					'index'		=>	'id',
 		));
 		
 		$this->addColumn('vendor_name', array(
-					'header'	=>	Mage::helper('stockhistory')->__('Vendor Name'),
+					'header'	=>	$helper->__('Vendor Name'),
 					'align'		=>	'right',
 					'width'		=>	'50px',
 					'index'		=>	'vendor_name',
 		));
 		
 		$this->addColumn('vendor_code', array(
-					'header'	=>	Mage::helper('stockhistory')->__('Vendor Code'),
+					'header'	=>	$helper->__('Vendor Code'),
 					'align'		=>	'right',
 					'width'		=>	'50px',
 					'index'		=>	'vendor_code',
 		)); 
 		
 		$this->addColumn('vendor_type', array(
-					'header'	=>	Mage::helper('stockhistory')->__('Vendor Type'),
+					'header'	=>	$helper->__('Vendor Type'),
 					'align'		=>	'right',
 					'width'		=>	'50px',
 					'index'		=>	'vendor_type',
 					'type'		=>	'options',
-					'options'	=>	$this->options,
+					'options'	=>	$helper->getGridVendorTypeArray(),
 		)); 
 		
 		$this->addColumn('contact_person', array(
-					'header'	=>	Mage::helper('stockhistory')->__('Contact Person'),
+					'header'	=>	$helper->__('Contact Person'),
 					'align'		=>	'right',
 					'width'		=>	'20px',
 					'index'		=>	'contact_person',
 		));
 		
 		$this->addColumn('email_list', array(
-					'header'	=>	Mage::helper('stockhistory')->__('Email'),
+					'header'	=>	$helper->__('Email'),
 					'align'		=>	'right',
 					'width'		=>	'20px',
 					'index'		=>	'email_list',
 		));
 		
 		$this->addColumn('phone', array(
-					'header'	=>	Mage::helper('stockhistory')->__('Phone'),
+					'header'	=>	$helper->__('Phone'),
 					'align'		=>	'right',
 					'width'		=>	'30px',
 					'index'		=>	'phone',
 		));
 		
 		$this->addColumn('address', array(
-					'header'	=>	Mage::helper('stockhistory')->__('Address'),
+					'header'	=>	$helper->__('Address'),
 					'align'		=>	'right',
 					'width'		=>	'50px',
 					'index'		=>	'address',
 		));
 		
 		$this->addColumn('parent_id', array(
-					'header'	=>	Mage::helper('stockhistory')->__('Parent ID'),
+					'header'	=>	$helper->__('Parent ID'),
 					'align'		=>	'right',
 					'width'		=>	'50px',
 					'index'		=>	'parent_id',
 		));
 		
 		$this->addColumn('comment', array(
-					'header'	=>	Mage::helper('stockhistory')->__('Note'),
+					'header'	=>	$helper->__('Note'),
 					'align'		=>	'right',
 					'width'		=>	'50px',
 					'index'		=>	'comment',
 		));
 		
 		$this->addColumn('created_at', array(
-					'header'	=>	Mage::helper('stockhistory')->__('Created At'),
+					'header'	=>	$helper->__('Created At'),
 					'align'		=>	'right',
 					'width'		=>	'30px',
 					'index'		=>	'created_at',
@@ -116,7 +117,7 @@ class Harapartners_Stockhistory_Block_Adminhtml_Vendor_Index_Grid extends Mage_A
 		));
 		
 		$this->addColumn('updated_at', array(
-					'header'	=>	Mage::helper('stockhistory')->__('Updated At'),
+					'header'	=>	$helper->__('Updated At'),
 					'align'		=>	'right',
 					'width'		=>	'30px',
 					'index'		=>	'updated_at',
@@ -124,9 +125,7 @@ class Harapartners_Stockhistory_Block_Adminhtml_Vendor_Index_Grid extends Mage_A
 					'gmtoffset'	=> 	true,
 		));
 		
-		
-		
-		$this->addExportType('*/*/exportCsv', Mage::helper('stockhistory')->__('CSV'));
+		$this->addExportType('*/*/exportCsv', $helper->__('CSV'));
 		
 		return parent::_prepareColumns();
 	}

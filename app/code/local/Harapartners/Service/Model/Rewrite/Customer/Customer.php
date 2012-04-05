@@ -15,9 +15,32 @@
 class Harapartners_Service_Model_Rewrite_Customer_Customer extends Mage_Customer_Model_Customer {
  
     const EXCEPTION_INVALID_STORE_ACCOUNT = 5;	//Harapartners, yang, multistore sigin error control
+    
+    //Harapartners, Jun, Important logic to handle legacy customers
+	public function validatePassword($password){
+		if(!!$this->getData('legacy_customer')){
+			return (sha1($password) == $this->getPasswordHash());
+		}else{
+	        $hash = $this->getPasswordHash();
+	        if (!$hash) {
+	            return false;
+	        }
+	        return Mage::helper('core')->validateHash($password, $hash);
+		}
+    }
+    
+    //Harapartners, Jun, Legacy customer will be come concurrent after password change
+	public function changePassword($newPassword) {
+		$this->setPassword($newPassword);
+        $this->_getResource()->saveAttribute($this, 'password_hash');
+        if(!!$this->getData('legacy_customer')){
+	        $this->setData('legacy_customer', 0);
+	        $this->_getResource()->saveAttribute($this, 'legacy_customer');
+        }
+        return $this;
+    }
 
-    public function authenticate($login, $password, $reValidate = false)
-    {
+    public function authenticate($login, $password, $reValidate = false) {
         $this->loadByEmail($login);
 
         //Haraparnters, yang, START

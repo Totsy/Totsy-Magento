@@ -88,6 +88,10 @@ class Harapartners_Import_Helper_Processor extends Mage_Core_Helper_Abstract {
         $this->_requiredFields[] = 'type';  
         $this->_requiredFields[] = 'attribute_set';
         $this->_requiredFields[] = 'sku';
+        $this->_requiredFields[] = 'websites';
+        $this->_requiredFields[] = 'status';
+        $this->_requiredFields[] = 'is_in_stock';
+        
         
 		$fieldset = Mage::getConfig()->getFieldset('catalog_product_dataflow', 'admin');
         foreach ($fieldset as $code => $node) {
@@ -105,16 +109,22 @@ class Harapartners_Import_Helper_Processor extends Mage_Core_Helper_Abstract {
 		&& isset($importData['size'])){
 			$sku = $importData['vendor'].'-'.$importData['vendor_style'].'-'.$importData['color'].'-'.$importData['size'];
 		}else{
-			$sku = 'hp-'.date('y-m-d-H-i-s-u');
+			$string = 'harapartners';
+			$shuffled = str_shuffle($string);
+			$sku = 'hp-'.date('y-m-d-H-i-s-').$shuffled;
+			$sku = str_replace(' ', '', $sku);
 		}
 		return $sku;
 	}
-	protected function _setRequiredAttributes($importData){
+	protected function _setRequiredAttributes($importData, $importObject){
 		foreach ($this->_requiredFields as $field) {
 			if (!isset($importData[$field])){
 				switch ($field) {
 					case 'store':
 						$importData['store'] = 'admin';
+						break;
+					case 'websites':
+						$importData['websites'] = 'base';
 						break;
 					case 'type':
 						$importData['type'] = 'simple';
@@ -122,9 +132,9 @@ class Harapartners_Import_Helper_Processor extends Mage_Core_Helper_Abstract {
 					case 'attribute_set':
 						$importData['attribute_set'] = 'Totsy';
 						break;
-//					case 'status':
-//						$importData['status'] = 'Enabled';
-//						break;
+					case 'status':
+						$importData['status'] = 'Enabled';
+						break;
 					case 'sku':
 						$importData['sku'] = $this->_setProductSku($importData);
 						break;
@@ -146,15 +156,25 @@ class Harapartners_Import_Helper_Processor extends Mage_Core_Helper_Abstract {
 					case 'tax_class_id':
 						$importData['tax_class_id'] = 'Taxable Goods';
 						break;
-					
+					case 'is_in_stock':
+						$importData['is_in_stock'] = '1';
+						break;
 				}
 			}
 		}
-		$importData['status'] = 'Enabled';
-		$importData['status'] = '0';
+		//Respect form data vendor_code
+		if(!!$importObject && $importObject->getData('vendor_code')){
+			$importData['vendor_code'] = $importObject->getData('vendor_code');
+		}
+		//Respect form data category ID
+		if(!!$importObject && $importObject->getData('category_id')){
+			$importData['category_ids'] = $importObject->getData('category_id');
+		}
+		
 		if($importData['type'] == 'configurable'){
 			$importData['configurable_attribute_codes'] = 'color,size';  //Hard Coded.  Need to enforce in template!
 			$importData['conf_simple_products']			= implode(',',$this->_confSimpleProducts);
+			$importData['visibility']					= 'Catalog, Search';
 		}else{
 			$this->_confSimpleProducts[] = $importData['sku'];
 		}
@@ -226,7 +246,7 @@ class Harapartners_Import_Helper_Processor extends Mage_Core_Helper_Abstract {
 							continue;	
 						}
 						$importData = $batchImportModel->getBatchData();
-						$importData = $this->_setRequiredAttributes($importData);
+						$importData = $this->_setRequiredAttributes($importData, $importObject);
 						$adapter->saveRow($importData);
 
 						/**

@@ -12,46 +12,44 @@
  * 
  */
 
-class Harapartners_Stockhistory_Model_Purchaseorder extends Mage_Core_Model_Abstract
-{
-	public function _construct()
-	{
+class Harapartners_Stockhistory_Model_Purchaseorder extends Mage_Core_Model_Abstract {
+	
+	public function _construct() {
 		$this->_init('stockhistory/purchaseorder');
 	}
 	
-	protected function _beforeSave()
-	{
-		$now = date('Y-m-d H:i:s');
+	protected function _beforeSave(){
 		if(!$this->getId()){
-			$this->setData('created_at', $now);
-		}
-		$this->setData('updated_at', $now);
-		
+    		$this->setData('created_at', now());
+    	}
+    	$this->setData('updated_at', now());
+    	
 		if(!$this->getStoreId()){
     		$this->setStoreId(Mage_Core_Model_App::ADMIN_STORE_ID);
     	}
     	parent::_beforeSave();  
 	}
 	
-	public function loadByVendorId($vendorId, $storeId = null)
-	{
-		return $this->getResource()->loadByVendorId($vendorId, $storeId);
+	public function loadByVendorId($vendorId, $storeId = null){
+		$this->addData($this->getResource()->loadByVendorId($vendorId, $storeId));
+		return $this;
 	}
 	
-	protected function validateByVendorId($vendorId, $storeId = null)
-	{
-		return $this->getResource()->validateByVendorId($vendorId, $storeId);
-	}
+//	protected function validateByVendorId($vendorId, $storeId = null){
+//		return $this->getResource()->validateByVendorId($vendorId, $storeId);
+//	}
 	
-	public function validateAndSave($data)
-	{
+	public function validateAndSave($data){
 		$this->addData($data);
 		if(!$this->getVendorId()){
 			throw new Exception('Vendor ID is missing');
-		}elseif(!$this->validateByVendorId($data['vendor_id'])){
-			throw new Exception('Vendor ID does not exist');
-		}	
+		}
+//		elseif(!$this->validateByVendorId($data['vendor_id'])){
+//			//Due to foreign key constraint, this is not necessary
+//			throw new Exception('Vendor ID does not exist');
+//		}	
 		$this->save();
 		return $this;
 	}
+	
 }
