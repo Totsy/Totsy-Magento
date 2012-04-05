@@ -61,6 +61,11 @@
                     <html_head>Harapartners_Service_Block_Rewrite_Page_Html_Head</html_head>
                 </rewrite>
             </page>
+			<enterprise_reward>
+				<rewrite>
+					<adminhtml_customer_edit_tab_reward_management_update>Harapartners_Service_Block_Rewrite_Reward_Adminhtml_Customer_Edit_Tab_Reward_Management_Update</adminhtml_customer_edit_tab_reward_management_update>
+				</rewrite>
+			</enterprise_reward>
 			<!-- ===== BLOCK REWRITE END ===== -->
 		</blocks>
         <helpers>
@@ -139,8 +144,6 @@
 					<observer>Harapartners_Service_Model_Rewrite_Reward_Observer</observer>
 				</rewrite>
 			</enterprise_reward>
-			
-			
 			<!-- ===== MODEL REWRITE END ===== -->
         </models>
 		<events>
@@ -331,18 +334,6 @@
 		</events>
     </frontend>
 	<adminhtml>
-		<events>
-			<adminhtml_customer_save_after>
-				<observers>
-					<!--Harapartners_CustomerTracking-->
-					<commentstracking>
-						<type>singleton</type>
-						<class>customertracking/commentstracking</class>
-						<method>rewardPointCommentSetUser</method>
-					</commentstracking>
-				</observers>
-			</adminhtml_customer_save_after>
-		</events>
 		<menu>
 			<harapartners translate="title" module="service">
 				<title>Hara Partners</title>
