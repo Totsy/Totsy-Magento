@@ -1,0 +1,114 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Harapartners_Stockhistory>
+            <version>1.0.3</version>
+        </Harapartners_Stockhistory>
+    </modules>
+    <global>
+        <blocks>
+            <stockhistory>
+				<class>Harapartners_Stockhistory_Block</class>
+            </stockhistory>
+        </blocks>
+		<helpers>
+            <stockhistory>
+				<class>Harapartners_Stockhistory_Helper</class>
+			</stockhistory>
+        </helpers>
+        <models>
+			<stockhistory>
+				<class>Harapartners_Stockhistory_Model</class>
+				<resourceModel>stockhistory_mysql4</resourceModel>
+			</stockhistory>
+			<stockhistory_mysql4>
+				<class>Harapartners_Stockhistory_Model_Mysql4</class>
+				<entities>
+					<transaction>
+						<table>stockhistory_transaction</table>
+					</transaction>
+					<purchaseorder>
+						<table>stockhistory_purchaseorder</table>
+					</purchaseorder>
+					<vendor>
+						<table>stockhistory_vendor</table>
+					</vendor>
+				</entities>
+			</stockhistory_mysql4>
+        </models>
+		<resources>
+			<stockhistory_setup>
+				<setup>
+					<module>Harapartners_Stockhistory</module>
+				</setup>
+				<connection>
+					<use>core_setup</use>
+				</connection>
+			</stockhistory_setup>
+			<stockhistory_write>
+				<connection>
+					<use>core_write</use>
+				</connection>
+			</stockhistory_write>
+			<stockhistory_read>
+				<connection>
+					<use>core_read</use>
+				</connection>
+			</stockhistory_read>
+		</resources>
+	</global>
+	<admin>
+        <routers>
+            <stockhistory>
+                <use>admin</use>
+                <args>
+                    <module>Harapartners_Stockhistory</module>
+                    <frontName>stockhistory</frontName>
+                </args>
+            </stockhistory>
+        </routers>
+    </admin>
+	<adminhtml>
+        <menu>
+            <harapartners>
+				<children>
+					<stockhistory translate="title" module="stockhistory">
+		                <title>Purchase Order</title>
+		                <sort_order>100</sort_order>
+						<children>
+							<vendor translate="title" module="stockhistory">
+								<title>Vendor Report</title>
+								<sort_order>10</sort_order>
+								<action>stockhistory/adminhtml_vendor</action>
+							</vendor>
+							<purchaseorder translate="title" module="stockhistory">
+								<title>Purchase Order Report</title>
+								<sort_order>20</sort_order>
+								<action>stockhistory/adminhtml_purchaseorder</action>
+							</purchaseorder>
+							<transaction translate="title" module="stockhistory">
+								<title>Transaction Report</title>
+								<sort_order>30</sort_order>
+								<action>stockhistory/adminhtml_transaction</action>
+							</transaction>
+						</children>
+					</stockhistory>
+				</children>
+            </harapartners>
+        </menu>
+    </adminhtml>
+	<!--
+	<crontab>
+        <jobs>
+            <harapartners_stockhistory>
+                <schedule>
+                    <cron_expr>*/5 * * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>stockhistory/session::cartCleanCron</model>
+                </run>
+            </harapartners_stockhistory>
+        </jobs>
+    </crontab>
+	-->
+</config>
