@@ -14,7 +14,7 @@
 
 class Harapartners_Import_Helper_Processor extends Mage_Core_Helper_Abstract {
 	
-	const DEFAULT_DATAFLOW_PROFILE_ID = 8;
+	const DEFAULT_DATAFLOW_PROFILE_ID = 7;
 	
 	protected $_errorFile 			= null;
 	protected $_errorMessages 		= array();
