@@ -1,4 +1,5 @@
 <?php
+
 /*
  * NOTICE OF LICENSE
  *
@@ -10,9 +11,10 @@
  * to eula@harapartners.com so we can send you a copy immediately.
  *
  */
+
 class Harapartners_SpeedTax_Model_Observer extends Mage_Core_Model_Abstract {
 	
-	public function saleOrderInvoicePlace(Varien_Event_Observer $observer) {
+	public function saleOrderInvoicePay(Varien_Event_Observer $observer) {
 		//$storeId = $observer->getEvent()->getQuote()->getStoreId();
 		$storeId = Mage::app ()->getStore ()->getId ();
 		$invoice = $observer->getInvoice ();
