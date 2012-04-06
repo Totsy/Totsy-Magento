@@ -959,5 +959,3 @@ class SpeedTax
 		return $result;
 	}    
 }
-
-?>
