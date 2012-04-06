@@ -57,8 +57,13 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Mage_Cybersource_Model_
 	protected function iniRequest(){
 		parent::iniRequest();
 		$this->_addSubscriptionToRequest($this->_payment);
+		
+		//Harapartners, Jun, Totsy logic requires Order ID when applicable
+		$order = $this->getInfoInstance()->getOrder();
+		if(!!$order && !!$order->getData('increment_id')){
+			$this->_request->merchantReferenceCode = $order->getData('increment_id');
+		}
     }
-     
     
     // ============================================== //
     // =========== Payment gateway actions ========== //
