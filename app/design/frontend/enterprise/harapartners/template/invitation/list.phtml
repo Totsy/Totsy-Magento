@@ -290,17 +290,18 @@ if ( !$rewardCollection ) {
 <script type="text/javascript">var switchTo5x=true;</script>
 <script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
 			<?php $currentUrl = $this->helper('core/url')->getCurrentUrl();?>
-			<?php $localPattern = '/127/';?>
-			<?php $stagePattern = '/stage/';?>
+			<?php $localPattern = '/local/';?>
+			<?php $stagePattern = '/magento-totsy/';?>
+			
 <script type="text/javascript">stLight.options({publisher: "fa9539d4-b1db-40d3-9e2d-9e9a8dc98b42",onhover: false}); </script>
 		<!-- Include these scripts to import address books with CloudSponge -->
-		<script src="https://api.cloudsponge.com/address_books.js" type="text/javascript"></script>
-		<script type="text/javascript">// <![CDATA[
+		<script type="text/javascript" src="https://api.cloudsponge.com/address_books.js"></script>
+		<script type="text/javascript" charset="utf-8">
 		var csPageOptions = {
-		  domain_key:"<?php echo (preg_match($localPattern, $currentUrl))?'LFNJ5T67DJXNEDS6QEVG':((preg_match($stagePattern, $currentUrl))?'KUS5NYD485ZVU753VVB5':'') ?>", 
+		  domain_key:"<?php echo (preg_match($localPattern, $currentUrl))?'YFTQRG87V58ADFMUECZ6':((preg_match($stagePattern, $currentUrl))?'L54WA4LFYYYZU5Q2A8MF':'') ?>", 
 		  textarea_id:"contact_list"
 		};
-		// ]]></script>
+		</script>
 <script>
 	stWidget.addEntry({
         "service":"sharethis",
