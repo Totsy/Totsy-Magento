@@ -22,6 +22,7 @@ class Harapartners_ShippingFactory_Model_Shipping_Carrier_Flexible
     const GUAM_COUNTRY_ID = 'GU';
     const GUAM_REGION_CODE = 'GU';
     
+    const FREE_SHIPPING_AFTER_REGISTRATION_TIME = 2592000; // 30 days
     
     // Cache the quotes
     protected static $_quotesCache = array();
@@ -45,43 +46,47 @@ class Harapartners_ShippingFactory_Model_Shipping_Carrier_Flexible
 	 */
 	protected $_result = null;
 	
+    /**
+     * Free Shipping logic only apply to Totsy clients not Mamasource
+     */
+    public function shouldUseFreeShipping(){
+    	if(!!Mage::registry('split_order_force_free_shipping')){
+    		return true;
+    	}
+    	$quote = Mage::getSingleton('checkout/session')->getQuote();
+    	$customer = $quote->getCustomer();
+    	$storeId = $customer->getStoreId();
+    	$storeName = $customer->getStore()->getName();
+    	if(!!$customer && !!$customer->getId() && ($storeId == 1 || $storeName == 'totsy')
+    			&& strtotime($customer->getData('created_at')) + self::FREE_SHIPPING_AFTER_REGISTRATION_TIME > strtotime(now())){
+    		$address = $quote->getShippingAddress();
+    		if(!!$address && !!$address->getId() && 
+    				!count($address->getCustomerOrderCollection())){
+    			return true;
+    		}
+    	}
+    	return false;
+    }
+    
 	public function collectRates(Mage_Shipping_Model_Rate_Request $request) {
-		
-//		//Somehow, please get the address object
-//		$lastOrderList = $address->getCustomerLastOrderList();
-//		//Your logic here,
-//		//If array has no item, this must be the first order,
-//		$address->getCustomer();
-//		//test created date
-//		//if within 30 days, free shipping!!
-		
-		
-		
-		
-		
-		
         if (!$this->getConfigFlag('active')) {
             return false;
         }
+        $freeBoxes = 0;
+        $shippingPrice = 0;
+        
         //HP Song --Start
         $defaultShippingPrice = $this->getConfigData('default_shipping_price');
         $hasDefaultShippingItem = false;
-        //HP --End
-        $freeBoxes = 0;
-        $shippingPrice = 0;
-        if(false){
-        	// Pass
-        	// Grandfathering free shipping on first order or $10 off order of $50 or more.
-        	$shippingPrice = '0.00';
-        }
-        elseif ($request->getAllItems()) {
-        	
+       
+		if($this->shouldUseFreeShipping()){
+	        $shippingPrice = '0.00';
+	    //HP Song --End
+	    }elseif ($request->getAllItems()) {
             foreach ($request->getAllItems() as $item) {
-            	
                 if ($item->getProduct()->isVirtual() || $item->getParentItem()) {
                     continue;
                 }
-				
             	if($item->getHasChildren()){
             		foreach($item->getChildren() as $child){
             			$childProduct = Mage::getModel('catalog/product')->load($child->getProductId());
@@ -105,7 +110,6 @@ class Harapartners_ShippingFactory_Model_Shipping_Carrier_Flexible
             				$shippingPrice += $result * $qty;
             			}
             		}
-            		
                 } elseif (! $item->getParentItem() && ! $item->getHasChildren()) {
                 	$product = Mage::getModel('catalog/product')->load($item->getProductId());
                 	if($this->_isFlatRate($product)){
@@ -118,7 +122,6 @@ class Harapartners_ShippingFactory_Model_Shipping_Carrier_Flexible
             				$shippingPrice += $itemPrice;
             				$hasDefaultShippingItem = true;
             			}
-                		
                 	}elseif($this->_isFreeShipping($product)){
                 		$freeBoxes += $item->getQty();
                 	}elseif($this->_isDimensional($product)){
@@ -134,9 +137,7 @@ class Harapartners_ShippingFactory_Model_Shipping_Carrier_Flexible
             }
         }
         $this->setFreeBoxes($freeBoxes);
-
     	$result = Mage::getModel('shipping/rate_result');
-
         $shippingPrice = $this->getFinalPriceWithHandlingFee($shippingPrice);
 
         if ($shippingPrice !== false)
@@ -184,18 +185,7 @@ class Harapartners_ShippingFactory_Model_Shipping_Carrier_Flexible
     
     protected function _getShippingMethod($product)
     {
-//		TO DO remove hard code
-//    	$method = $product->getShippingMethod();
-//    	switch($method){
-//    		case 33:
-//    			return 'dimensional';
-//    		case 34:
-//    			return 'flat_rate';
-//    		case 35:
-//    			return 'free_shipping';
-//    	}
     	return $product->getAttributeText('shipping_method');
-    
     }
     /* Check Shipping Method --End */
     

@@ -164,6 +164,11 @@ class Enterprise_Invitation_Helper_Data extends Mage_Core_Helper_Abstract
     	if( $inviter && $inviter->getCustomer() && $inviter->getCustomer()->getId() ) {
     		$inviterId = $inviter->getCustomer()->getId();
     		$inviterName = $inviter->getCustomer()->getFirstname() . $inviter->getCustomer()->getLastname();
+    		$inviterEmail = $inviter->getCustomer()->getEmail();
+    		if (empty($inviterName)) {
+    			$inviterEmailArray = explode( "@", $inviterEmail );
+    			$inviterName = preg_replace("/[^a-zA-Z0-9\s]/", "", $inviterEmailArray[0]);
+    		}
     	}
     	$customerInfo = array(
     			'id' => $inviterId

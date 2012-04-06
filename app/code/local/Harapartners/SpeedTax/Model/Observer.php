@@ -22,6 +22,10 @@ class Harapartners_SpeedTax_Model_Observer extends Mage_Core_Model_Abstract {
 			$order = $invoice->getOrder ();
 			$invoice->setData ( "increment_id", $order->getData ( "increment_id" ) );
 			if ($calculator->addInvoice ( $invoice )) {
+				foreach ( $order->getAllItems () as $item ) {
+					/*** make line item ***/
+					$calculator->addLine ( $item );
+				}
 				$result = $calculator->invoiceTaxPost ();
 			}
 		} catch( Exception $e ) {

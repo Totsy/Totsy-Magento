@@ -101,6 +101,20 @@ class Harapartners_Import_Helper_Processor extends Mage_Core_Helper_Abstract {
         }
 	}
 	
+	protected function _setSimpleProductVisibility(){
+		foreach ($this->_confSimpleProducts as $sku) {
+			$product = Mage::getModel('catalog/product')->loadByAttribute('sku', $sku);
+			if(!!$product && $product->getId()){
+				$product->setData('visibility', '1');
+				try {
+					$product->save();
+				}catch(Exception $e){
+					$a=1;
+				}
+			}
+		}
+	}
+	
 	protected function _setProductSku($importData){
 		$sku = '';
 		if(isset($importData['vendor']) 
@@ -174,8 +188,12 @@ class Harapartners_Import_Helper_Processor extends Mage_Core_Helper_Abstract {
 		if($importData['type'] == 'configurable'){
 			$importData['configurable_attribute_codes'] = 'color,size';  //Hard Coded.  Need to enforce in template!
 			$importData['conf_simple_products']			= implode(',',$this->_confSimpleProducts);
+			$this->_setSimpleProductVisibility();
+			unset($this->_confSimpleProducts);
+			$this->_confSimpleProducts = array();
 			$importData['visibility']					= 'Catalog, Search';
 		}else{
+			$importData['visibility']					= 'Catalog, Search'; //Need Logic for simple only.
 			$this->_confSimpleProducts[] = $importData['sku'];
 		}
 		return $importData;
@@ -196,7 +214,7 @@ class Harapartners_Import_Helper_Processor extends Mage_Core_Helper_Abstract {
 			$stockhistoryTransaction->setData('product_sku', $product->getSku());
 			$stockhistoryTransaction->setData('unit_cost', $product->getData('sale_wholesale'));
 			$stockhistoryTransaction->setData('qty_delta', $importDataObject->getQty());
-			$stockhistoryTransaction->setData('action', 2);//Harapartners_Stockhistory_Helper_Data::TRANSACTION_ACTION_EVENT_IMPORT
+			$stockhistoryTransaction->setData('action',2);//Harapartners_Stockhistory_Helper_Data::TRANSACTION_ACTION_EVENT_IMPORT);
 			$stockhistoryTransaction->setData('comment', date('Y-n-j H:i:s'));
 			try {
 				$stockhistoryTransaction->save();

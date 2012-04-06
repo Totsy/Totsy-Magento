@@ -373,7 +373,15 @@ class Mage_Customer_AccountController extends Mage_Core_Controller_Front_Action
                 $session->setCustomerFormData($this->getRequest()->getPost());
                 if ($e->getCode() === Mage_Customer_Model_Customer::EXCEPTION_EMAIL_EXISTS) {
                     $url = Mage::getUrl('customer/account/forgotpassword');
-                    $message = $this->__('There is already an account with this email address. If you are sure that it is your email address, <a href="%s">click here</a> to get your password and access your account.', $url);
+                    $existEmail = $customerData['email'];
+                    $existCustomer = Mage::getModel('customer/customer')->setWebsiteId(Mage::app()->getStore()->getWebsiteId())->loadByEmail($existEmail);
+                    $existStoreName = '';
+                    if (!!$existCustomer){
+                    	$existStoreName = Mage::app()->getStore($existCustomer->getStoreId())->getName();
+                    	$message = $this->__('There is already an account with this email address in ' . $existStoreName . '.com');
+                    }else {
+                    	$message = $this->__('There is already an account with this email address. If you are sure that it is your email address, <a href="%s">click here</a> to get your password and access your account.', $url);
+                    }
                     $session->setEscapeMessages(false);
                 } else {
                     $message = $e->getMessage();
@@ -564,10 +572,12 @@ class Mage_Customer_AccountController extends Mage_Core_Controller_Front_Action
                     $this->_getSession()->addError($exception->getMessage());
                     $this->_redirect('*/*/forgotpassword');
                     return;
-                }
-            }
-            $this->_getSession()
-                ->addSuccess(Mage::helper('customer')->__('If there is an account associated with %s you will receive an email with a link to reset your password.', Mage::helper('customer')->htmlEscape($email)));
+                }      
+                $this->_getSession()
+                	->addSuccess(Mage::helper('customer')->__('If there is an account associated with %s you will receive an email with a link to reset your password.', Mage::helper('customer')->htmlEscape($email)));
+            }else {
+            	$this->_getSession()->addError($this->__('The email you entered is NOT associated with any account, please check.'));
+            }       
             $this->_redirect('*/*/');
             return;
         } else {

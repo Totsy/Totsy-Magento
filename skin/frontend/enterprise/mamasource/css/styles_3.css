@@ -1,0 +1,25 @@
+body.cms-page-view div.mtm_right_content{
+	width:500px;
+}
+
+/*------------------Mamasource Header Fix------------------*/
+body div.header-container {
+    background-color: #FFFFFF;
+    border-color: #FFFFFF;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.2);
+    min-height: 47px;
+    margin: 94px auto 0;
+    overflow: visible;
+    padding: 10px 5px 5px 10px;
+    width: 941px;
+}
+
+.cms-page-view div.header {
+    margin: -104px 0 40px;
+    padding-top: 26px;
+    position: relative;
+    width: 100%;
+    z-index: 100;
+}

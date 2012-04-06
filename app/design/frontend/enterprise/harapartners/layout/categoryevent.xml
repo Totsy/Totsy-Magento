@@ -14,6 +14,9 @@
         </reference>
 	</categoryevent_index_index>
 	<categoryevent_index_topnav translate="label">
+		<reference name="head">
+			<action method="setTopnavKeywords"></action>
+		</reference>
 		<label>Catalog Category List (Non-Anchor)</label>
 		<remove name="right" />
 	    <reference name="root">

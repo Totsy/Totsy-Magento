@@ -700,7 +700,7 @@ body .my-account .fieldset h2.legend {
     color: #ED1C25;
     resize: none; 
     height:15px;
-    width:250px
+    min-width:270px
 }
 
 .my-account .button span{
@@ -816,4 +816,84 @@ ul.menu ul.shop li a:hover{
 
 .collateral-tabs .tab{
 	background-image:url("../images/bkg_collateral-tabs.gif")
+}
+
+/*-------------------------Reset Password-------------------------------------*/
+body.customer-account-create div .facebook-button, .enterprise-invitation-customer-account-create div .facebook-button{
+    float: right;
+    margin-right: 3px;
+    width: 300px;
+}
+
+.customer-account-resetpassword .page-title h1{
+	font-weight:normal
+}
+
+.customer-account-resetpassword .page-title{
+	border-bottom: 1px #aaa;
+}
+
+
+.customer-account-resetpassword .col-main{
+	margin-left:5px
+}
+
+.customer-account-resetpassword .buttons-set button.button{
+	float:left
+}
+
+.customer-account-resetpassword .buttons-set{
+	padding-top:0px;
+	margin-top:0px
+}
+
+.customer-account-resetpassword .fieldset{
+	margin-bottom:0px
+}
+
+.sales-order-view .order-date{
+	margin-bottom:0px;	
+}
+
+.sales-order-view .shipping-date{
+	font-size:11px;
+}
+
+body .sp-methods select.year {
+    width: 120px;
+}
+
+
+body.enterprise-invitation-index-index .account-page-title h2{
+    border-bottom-color: #DDDDDD;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    color: #707070;
+    font-size: 20px;
+    font-weight: normal;
+    margin-bottom: 0;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: 0;
+    padding-bottom: 20px;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 20px;
+    text-align: left;
+}
+
+body.enterprise-invitation-index-index  h2.account-page-title {
+    border-bottom-color: #DDDDDD;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    color: #707070;
+    font-size: 20px;
+    font-weight: normal;
+    margin-left: 10px;
+    margin-right: 10px;
+    padding-bottom: 20px;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 20px;
+    text-align: left;
 }

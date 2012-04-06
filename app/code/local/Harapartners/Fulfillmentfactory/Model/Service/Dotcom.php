@@ -104,6 +104,39 @@ class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
 	}
 	
 	/**
+	 * submit products to Dotcom By Event Id
+	 *
+	 * @param int $eventId
+	 */
+	public function submitProductsToDotcomByEventName($eventName = '') {
+		$event = Mage::getModel('catalog/category')->loadByAttribute('name', $eventName);
+		if(!!$event) {
+			$productCollection = $event->getProductCollection();
+			$products = array();
+			
+			foreach($productCollection as $productEntity) {
+				if($productEntity->getTypeId() == 'configurable') {
+					//need to load children products if this product is configurable product
+					$childrenProducts = $productEntity->getTypeInstance()->getUsedProducts();
+					
+					foreach($childrenProducts as $cProduct) {
+						$products[] = $cProduct;
+					}
+				}
+				else if($productEntity->getTypeId() == 'simple') {
+					$products[] = $productEntity;
+				}
+			}
+			
+			echo count($products) . '<br><br>';
+			
+			if(!empty($products) && count($products) > 0) {
+				$this->submitProductsToDotcom($products);
+			}
+		}
+	}
+	
+	/**
 	 * post products information to Dotcom
 	 *
 	 * @param array $products for products we want to submit
@@ -125,7 +158,7 @@ class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
 					<upc xsi:nil="true" />
 					<weight xsi:nil="true" />
 					<cost xsi:nil="true"/>
-					<price>{$product->getPrice()}</price>
+					<price xsi:nil="true"/>
 					<root-sku xsi:nil="true"/>
 					<package-qty xsi:nil="true"/>
 					<serial-indicator xsi:nil="true"/>
@@ -149,6 +182,8 @@ XML;
 		}
 		
 		$xml .= '</items>';
+		
+		echo $xml;
 		
 		$response = Mage::helper('fulfillmentfactory/dotcom')->submitProductItems($xml);
 		
@@ -310,10 +345,6 @@ XML;
 		foreach($itemQueueCollection as $itemqueue) {
 			$order = Mage::getModel('sales/order')->load($itemqueue->getOrderId());
 			Mage::helper('fulfillmentfactory')->_pushUniqueOrderIntoArray($orderArray, $order);
-			
-			//change status
-			$itemqueue->setStatus(Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_SUBMITTED)
-						  ->save();
 		}
 		
 		return $this->submitOrdersToFulfill($orderArray, true);
@@ -330,22 +361,26 @@ XML;
 		$xml = '<orders xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">';
 		
 		foreach($orders as $order) {
-			$order->setStatus(Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_PROCESSING_FULFILLMENT)->save();	//start fulfillment
 			try {
 				if($capturePayment) {
 					//capture payment
 					$orderPayment = $order->getPayment();
-					$orderPayment->getMethodInstance()->setData('forced_payment_action', 
-																	Mage_Payment_Model_Method_Abstract::ACTION_AUTHORIZE_CAPTURE);
-					$orderPayment->getMethodInstance()->setData('cybersource_subid', $orderPayment->getCybersourceSubid());
-					$orderPayment->place();
-					
-					//update order information
-					$order->setStatus('processing');
-					$transactionSave = Mage::getModel('core/resource_transaction')
-		                    ->addObject($order);
-		                    
-		           	$transactionSave->save();
+					if(!!$orderPayment) {
+						$paymentInstance = $orderPayment->getMethodInstance();
+						if(!!$paymentInstance) {
+							$paymentInstance->setData('forced_payment_action', 
+																			Mage_Payment_Model_Method_Abstract::ACTION_AUTHORIZE_CAPTURE);
+							$paymentInstance->setData('cybersource_subid', $orderPayment->getCybersourceSubid());
+							$orderPayment->place();
+							
+							//update order information
+							$order->setStatus('processing');
+							$transactionSave = Mage::getModel('core/resource_transaction')
+				                    ->addObject($order);
+				                    
+				           	$transactionSave->save();
+						}
+					}
 				}
 			}
 			catch(Exception $e) {
@@ -479,6 +514,10 @@ XML;
 				</line-items>
 			</order>
 XML;
+			
+			//change status
+			$order->setStatus(Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_PROCESSING_FULFILLMENT)
+				  ->save();
 		}
 		
 		$xml .= '</orders>';
@@ -487,7 +526,7 @@ XML;
 		
 		$error = $response->order_error;
 		if(!!$error) {
-			$orderNumber = $error->order_number;
+			$orderNumber = (string)$error->order_number;
 			if(!!$orderNumber) {
 				$errorOrder = Mage::getModel('sales/order')->loadByIncrementId($orderNumber);
 				$errorOrder->setStatus(Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_FULFILLMENT_FAILED)->save();
@@ -584,12 +623,13 @@ XML;
 	//===============Test Function===============//
 	
 	public function testSubmitProductsToDotcom() {
-		$products = Mage::getModel('catalog/product')->getCollection()
-													->addAttributeToSelect('*')
-													->addAttributeToFilter('entity_id', array('gt' => '1075'));
+//		$products = Mage::getModel('catalog/product')->getCollection()
+//													->addAttributeToSelect('*')
+//													->addAttributeToFilter('entity_id', array('gt' => '1075'));
+		$this->submitProductsToDotcomByEventName('Event03');
   		
   										
-  		return $this->submitProductsToDotcom($products);
+  		//return $this->submitProductsToDotcom($products);
 	}
 	
 	public function testSubmitPurchaseOrdersToDotcom() {
