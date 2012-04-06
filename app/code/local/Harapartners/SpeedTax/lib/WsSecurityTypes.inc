@@ -265,5 +265,3 @@ function createMixedValueSignature($MixedVals)
 		//return new SoapVar($mixedParamsList, SOAP_ENC_ARRAY);
 	}
 }
-
-?>
