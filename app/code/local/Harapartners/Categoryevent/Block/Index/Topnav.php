@@ -172,6 +172,7 @@ class Harapartners_Categoryevent_Block_Index_Topnav extends Mage_Core_Block_Temp
 			$productCollection = Mage::getModel('catalog/product')->getCollection();
 			$productCollection->getSelect()->where('`e`.`entity_id` IN(' . implode(',', $uniqueProductIds) . ')');
 			$productCollection->addFieldToFilter($type, array('like' => '%'.$valueId.'%'));
+			$productCollection->addFieldToFilter('status', Mage_Catalog_Model_Product_Status::STATUS_ENABLED);
 			$productCollection->addFieldToFilter('visibility', array("in" => array(
 					Mage_Catalog_Model_Product_Visibility::VISIBILITY_IN_CATALOG,
 					Mage_Catalog_Model_Product_Visibility::VISIBILITY_BOTH
@@ -186,6 +187,16 @@ class Harapartners_Categoryevent_Block_Index_Topnav extends Mage_Core_Block_Temp
 					'original_price',
 					'price')
 	        );
+	        $productCollection->joinField(
+		      'stock_status',
+		      'cataloginventory/stock_status',
+		      'stock_status',
+		      'product_id=entity_id', array(
+		        'stock_status' => Mage_CatalogInventory_Model_Stock_Status::STATUS_IN_STOCK,
+		        'website_id' => Mage::app()->getWebsite()->getWebsiteId(),
+			      )
+			 );
+	        
 			$productInfoArray = $productCollection->load()->toArray();
 			
 			foreach($liveCategoryInfoArray as &$liveCategoryInfo){
