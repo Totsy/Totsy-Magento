@@ -169,9 +169,20 @@ if ( !$rewardCollection ) {
 		   <!--p class="required"><?php echo Mage::helper('enterprise_invitation')->__('* Required Fields') ?></p-->
 		    <div class="buttons-set form-buttons">
 		        <!--p class="back-link"><a href="<?php echo Mage::helper('enterprise_invitation')->getCustomerInvitationUrl() ?>"><small>&laquo; </small><?php  echo Mage::helper('enterprise_invitation')->__('Back to Invitations') ?></a></p-->
-		        <button class="button" type="submit"><div class="invite-button"><?php echo Mage::helper('enterprise_invitation')->__('Send Invitations') ?></div></button>
+		        <button class="button" onclick="modifyform()" type="button"><div class="invite-button"><?php echo Mage::helper('enterprise_invitation')->__('Send Invitations') ?></div></button>
 		    </div>		
 		</form>
+		
+
+		<script>
+		function modifyform(){
+			var invitationForm = jQuery('#invitationForm');
+			var txtArea = document.getElementById('contact_list');
+			txtArea.value = document.getElementById('contact_list').value.replace(/;/gi,',').replace(/\n/gi,',').replace(/,,/gi,',');
+			invitationForm.submit();
+		}
+		</script>
+		
 		<script type="text/javascript">
 		    var contactForm = new VarienForm('invitationForm', false);
 		</script>
@@ -298,7 +309,7 @@ if ( !$rewardCollection ) {
 		<script type="text/javascript" src="https://api.cloudsponge.com/address_books.js"></script>
 		<script type="text/javascript" charset="utf-8">
 		var csPageOptions = {
-		  domain_key:"<?php echo (preg_match($localPattern, $currentUrl))?'YFTQRG87V58ADFMUECZ6':((preg_match($stagePattern, $currentUrl))?'L54WA4LFYYYZU5Q2A8MF':'') ?>", 
+		  domain_key:"<?php echo (preg_match($localPattern, $currentUrl))?'YFTQRG87V58ADFMUECZ6':((preg_match($stagePattern, $currentUrl))?'T4YQVH6GQB7MNFQYT5TQ':'') ?>", 
 		  textarea_id:"contact_list"
 		};
 		</script>

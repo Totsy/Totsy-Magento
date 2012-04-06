@@ -9,15 +9,6 @@ Mage::app($mageRunCode, $mageRunType);
 Varien_Profiler::enable();
 Varien_Profiler::start('mytimer');
 
-/**************enable profiler in admin panel****************/
-
-/*******your test code  *******/
-
-/******************************/
-
-Varien_Profiler::stop('mytimer');
-/*create a block and output the
-profiler*/
-
-echo Mage::getSingleton('core/layout')->createBlock('core/profiler')->toHtml();         
-echo'done';
+$product = Mage::getModel('catalog/product')->load(14);
+$stock = $product->getStockItem()->getQty();
+$a = 1;
