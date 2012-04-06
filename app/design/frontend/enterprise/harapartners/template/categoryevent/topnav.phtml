@@ -14,14 +14,13 @@
  *
  */
 
-		
-		$temp = $this->topLayerNav();
-		$layerCategoryCollection = $temp['category_product_complete_data']; 
-		$howMany = count($layerCategoryCollection);
+$topNavDataObject = $this->getTopNavDataObject();
+$categoryDataArray = $topNavDataObject->getData('category_product_complete_data'); 
+$howMany = count($categoryDataArray);
 ?>
-<h2><?php echo $temp['attr_text_label']; ?><span><?php echo ' ( '.$howMany.' Sales Found )';?></span></h2>
+<h2><?php echo $topNavDataObject->getData('attr_text_label'); ?><span><?php echo ' ( '.$howMany.' Sales Found )';?></span></h2>
 
-<?php foreach($layerCategoryCollection as $category):?>
+<?php foreach($categoryDataArray as $category):?>
 
 <div class="events-div">
 

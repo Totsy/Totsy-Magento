@@ -41,10 +41,10 @@ class Harapartners_Service_Helper_Rewrite_Catalog_Product extends Mage_Catalog_H
             return false;
         }
 
-        // Load product current category
+        // Each product must have a category/event
         $categoryId = $params->getCategoryId();
         if (!$categoryId) {
-            $categoryEventId = $this->XXX()
+            $categoryEventId = $this->getCategoryIdFromCategoryEventSort();
             if ($product->canBeShowInCategory($categoryEventId)) {
                 $categoryId = $categoryEventId;
             }
@@ -81,6 +81,7 @@ class Harapartners_Service_Helper_Rewrite_Catalog_Product extends Mage_Catalog_H
     
     protected function getCategoryIdFromCategoryEventSort($product){
     	$categoryIds = $product->getCategoryIds();
+    	return null;
     	
     }
     
