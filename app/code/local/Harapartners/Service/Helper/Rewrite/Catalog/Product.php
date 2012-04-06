@@ -44,7 +44,7 @@ class Harapartners_Service_Helper_Rewrite_Catalog_Product extends Mage_Catalog_H
         // Each product must have a category/event
         $categoryId = $params->getCategoryId();
         if (!$categoryId) {
-            $categoryEventId = $this->getCategoryIdFromCategoryEventSort();
+            $categoryEventId = $this->getLiveCategoryIdFromCategoryEventSort($product);
             if ($product->canBeShowInCategory($categoryEventId)) {
                 $categoryId = $categoryEventId;
             }
@@ -73,16 +73,21 @@ class Harapartners_Service_Helper_Rewrite_Catalog_Product extends Mage_Catalog_H
             Mage::logException($e);
             return false;
         }
-
         return $product;
-        
-        
     }
     
-    protected function getCategoryIdFromCategoryEventSort($product){
+    // Search for the latest matching live event
+    public function getLiveCategoryIdFromCategoryEventSort($product){
     	$categoryIds = $product->getCategoryIds();
+    	$helper = Mage::helper('categoryevent/memcache');
+    	$indexData = $helper->getIndexDataObject();
+    	foreach($indexData->getLive() as $liveCategoryData){
+    		if(isset($liveCategoryData['entity_id']) 
+    				&& in_array($liveCategoryData['entity_id'], $categoryIds)){
+    			return $liveCategoryData['entity_id'];
+    		}
+    	}
     	return null;
-    	
     }
     
 }
