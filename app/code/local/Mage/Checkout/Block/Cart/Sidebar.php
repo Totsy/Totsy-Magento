@@ -332,7 +332,7 @@ class Mage_Checkout_Block_Cart_Sidebar extends Mage_Checkout_Block_Cart_Abstract
 	    		}
 	    	}    		
     	}else {
-    		$items = $this->getRecentItems();
+    		$items = $this->getItems();
 	    	if( count($items) ) {
 	    		foreach ( $items as $item){
 	    			$categoryIdsArray = $item->getProduct()->getCategoryIds();
@@ -357,7 +357,7 @@ class Mage_Checkout_Block_Cart_Sidebar extends Mage_Checkout_Block_Cart_Abstract
     //Harapartners, yang, START
 	//Return total savings
     public function getTotalSaving() {
-    	$items = $this->getRecentItems();
+    	$items = $this->getItems();
     	$savings = (double)0;
         if( count($items) ) {
     		foreach ( $items as $item){

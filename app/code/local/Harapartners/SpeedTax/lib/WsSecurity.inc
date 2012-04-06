@@ -27,6 +27,3 @@ $userToken = new SoapVar($tmp, SOAP_ENC_OBJECT, NULL, $nsWsse, 'UsernameToken', 
 
 $secHeaderValue=new SoapVar($userToken, SOAP_ENC_OBJECT, NULL, $nsWsse, 'Security', $nsWsse);
 $secHeader = new SoapHeader($nsWsse, 'Security', $secHeaderValue, true);
-
-
-?>

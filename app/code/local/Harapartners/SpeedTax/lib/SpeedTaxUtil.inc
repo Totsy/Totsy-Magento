@@ -259,5 +259,3 @@ function DisplayInvoice($invoice)
 		DisplayLineItem($value);
 	}
 }
-
-?>

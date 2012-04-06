@@ -76,9 +76,9 @@
 			<catalog>
                 <rewrite>
 					<!--Harapartners_Service: do NOT allow category view if expired!-->
-					<!--category>Harapartners_Service_Helper_Rewrite_Catalog_Category</category-->
+					<category>Harapartners_Service_Helper_Rewrite_Catalog_Category</category>
 					<!--Harapartners_Service: do NOT allow product view without category!-->
-                    <!--product>Harapartners_Service_Helper_Rewrite_Catalog_Product</product-->
+                    <product>Harapartners_Service_Helper_Rewrite_Catalog_Product</product>
                 </rewrite>
             </catalog>
         </helpers>
@@ -271,11 +271,17 @@
             </sales_order_creditmemo_refund>
 			<sales_order_invoice_pay>
                 <observers>
+					<!--Harapartners_Recurringmembership-->
+					<!--recurringmembership>
+                        <type>singleton</type>
+                        <class>recurringmembership/observer</class>
+                        <method>saleOrderInvoicePay</method>
+                    </recurringmembership-->
 					<!--Harapartners_SpeedTax-->
                     <speedtax>
                         <type>singleton</type>
                         <class>speedtax/observer</class>
-                        <method>saleOrderInvoicePlace</method>
+                        <method>saleOrderInvoicePay</method>
                     </speedtax>
                 </observers>
             </sales_order_invoice_pay>
@@ -287,12 +293,12 @@
                         <class>ordersplit/observer</class>
                         <method>salesOrderPlaceAfterSplit</method>
                     </ordersplit>
-					<!--Harapartners_Recurringmembership-->
-                    <recurringmembership>
+					<!--Harapartners_Promotionfactory-->
+                    <promotionfactory>
                         <type>singleton</type>
-                        <class>recurringmembership/observer</class>
+                        <class>promotionfactory/observer</class>
                         <method>saleOrderPlaceAfter</method>
-                    </recurringmembership>
+                    </promotionfactory>
 					<!--Harapartners_EmailFactory-->
 					<sialthru_success_purchase>
 						<type>singleton</type>
@@ -317,15 +323,6 @@
 	<frontend>
 		<events>
 			<!-- ===== FRONTEND ONLY EVENTS START ===== -->
-			<!--controller_action_predispatch>
-				<observers>
-					///*** Not necesarry now Removed by Andu, Harapartners_HpCheckout
-                    <hpcheckout_controller_rewrite>
-                        <class>hpcheckout/observer</class>
-                        <method>hpcheckoutControllerRewrite</method>
-                    </hpcheckout_controller_rewrite>
-                </observers>
-			</controller_action_predispatch-->
 			<customer_session_init>
 				<observers>
 					<!--Harapartners_Rushcheckout-->

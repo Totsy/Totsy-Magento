@@ -99,9 +99,10 @@ class Harapartners_Affiliate_Block_Report extends Mage_Adminhtml_Block_Template 
 															->addFieldToFilter('affiliate_code', $affiliate->getAffiliateCode());	
 			$revenue = 0;
 			foreach ($recordCollection as $record) {
-				//$customer = Mage::getModel('customer/customer')->loadByEmail($record->getCustomerEmail());
+				// record may not have accurate customerId
+				$customer = Mage::getModel('customer/customer')->setWebsiteId(1)->loadByEmail($record->getCustomerEmail());
 				$orderCollection = Mage::getModel('sales/order')->getCollection()
-																	->addFieldToFilter('customer_id',$record->getCustomerId())
+																	->addFieldToFilter('customer_id',$customer->getId())
 																	->addFieldToFilter('state','complete');	
 				foreach ($orderCollection as $order) {
 					$revenue+=$order->getGrandTotal();
@@ -127,9 +128,9 @@ class Harapartners_Affiliate_Block_Report extends Mage_Adminhtml_Block_Template 
 																			->addFieldToFilter('sub_affiliate_code', $subAffiliate);				
 					$revenue = 0;
 					foreach ($recordCollection as $record) {
-						//$customer = Mage::getModel('customer/customer')->loadByEmail($record->getCustomerEmail());
+						$customer = Mage::getModel('customer/customer')->setWebsiteId(1)->loadByEmail($record->getCustomerEmail());
 						$orderCollection = Mage::getModel('sales/order')->getCollection()
-																			->addFieldToFilter('customer_id',$record->getCustomerId())
+																			->addFieldToFilter('customer_id',$customer->getId())
 																			->addFieldToFilter('state','complete');	
 						foreach ($orderCollection as $order) {
 							$revenue+=$order->getGrandTotal();
@@ -224,6 +225,7 @@ class Harapartners_Affiliate_Block_Report extends Mage_Adminhtml_Block_Template 
 		}
 		return $reportHtml;
 	}
+	
 	public function getEffeticeHtml(){
 		$resultFilter = Mage::registry('resultFilter');
 		$reportHtml = '';
@@ -239,28 +241,56 @@ class Harapartners_Affiliate_Block_Report extends Mage_Adminhtml_Block_Template 
 															->addFieldToFilter('created_at', array( "lt" => $to,"gt"=>$from ))
 															->addFieldToFilter('sub_affiliate_code', '')
 															->addFieldToFilter('affiliate_code', $affiliate->getAffiliateCode());
-			$never = 0; $zero = 0; $ten = 0; $twenty =0; $thirty = 0; $forty = 0;
+			$never = array(0,0); $zero = array(0,0); $ten = array(0,0); $twenty = array(0,0); $thirty = array(0,0); $forty = array(0,0);
+			$totalValuedCustomer = 0;
 			foreach ($recordCollection as $record) {
-				$loginCount = $record->getLoginCount();				
+				$loginCount = $record->getLoginCount();	
+				$customer = Mage::getModel('customer/customer')->setWebsiteId(1)->loadByEmail($record->getCustomerEmail());
+				$orderCollection = Mage::getModel('sales/order')->getCollection()
+																->addFieldToFilter('customer_id',$customer->getId())
+																->addFieldToFilter('state','complete');	
+				$count = $orderCollection->count();
+				if($count>0){
+					$totalValuedCustomer+= 1;
+				}		
 				if($loginCount<=1){
-					$never+= 1;
+					$never[0]+= 1;
+					if($count>0){
+						$never[1]+= 1;
+					}					
 				}elseif($loginCount>1 && $loginCount<10){
-					$zero+= 1;
+					$zero[0]+= 1;
+					if($count>0){
+						$zero[1]+= 1;
+					}
 				}elseif($loginCount>=10 && $loginCount<20){
-					$ten+=1;
+					$ten[0]+=1;
+					if($count>0){
+						$ten[1]+= 1;
+					}
 				}elseif($loginCount>=20 && $loginCount<30){
-					$twenty+=1;
+					$twenty[0]+=1;
+					if($count>0){
+						$twenty[1]+= 1;
+					}
 				}elseif($loginCount>=30 && $loginCount<40){
-					$thirty+=1;
+					$thirty[0]+=1;
+					if($count>0){
+						$thirty[1]+= 1;
+					}
 				}else{
-					$forty+=1;
+					$forty[0]+=1;
+					if($count>0){
+						$forty[1]+= 1;
+					}
 				}
 			}													
-			$reportHtml.= $from.' -- '.$to.' :';	
+			$reportHtml.= 'Number in parentheses show number of people made at least one purchase<br/>'.$from.' -- '.$to.' :';	
 			$reportHtml.= '<table>
 				<tr>
-				<th>Affiliate</th>							
-				<th>Never</th>
+				<th>Affiliate</th>	
+				<th>Total Registration</th>						
+				<th>Never Login</th>
 				<th>Login 0x</th>
 				<th>Login 1x</th>
 				<th>Login 2x</th>
@@ -268,13 +298,14 @@ class Harapartners_Affiliate_Block_Report extends Mage_Adminhtml_Block_Template 
 				<th>Login 4x or More</th>
 				</tr>
 				<tr>
-				<td>'.$affiliate->getAffiliateCode().'</td>				
-				<td>'.$never.'</td>
-				<td>'.$zero.'</td>
-				<td>'.$ten.'</td>
-				<td>'.$twenty.'</td>
-				<td>'.$thirty.'</td>
-				<td>'.$forty.'</td>
+				<td>'.$affiliate->getAffiliateCode().'</td>	
+				<td>'.$recordCollection->count().' ('.$totalValuedCustomer.')'.'</td>			
+				<td>'.$never[0].' ('.$never[1].')'.'</td>
+				<td>'.$zero[0].' ('.$zero[1].')'.'</td>
+				<td>'.$ten[0].' ('.$ten[1].')'.'</td>
+				<td>'.$twenty[0].' ('.$twenty[1].')'.'</td>
+				<td>'.$thirty[0].' ('.$thirty[1].')'.'</td>
+				<td>'.$forty[0].' ('.$forty[1].')'.'</td>
 				</tr>';
 			if(!!$includeAllSubAffiliate){	
 				$subAffiliateArray = explode(',',$affiliate->getSubAffiliateCode());
@@ -283,31 +314,59 @@ class Harapartners_Affiliate_Block_Report extends Mage_Adminhtml_Block_Template 
 																			->addFieldToFilter('created_at', array( "lt" => $to,"gt"=>$from ))
 																			->addFieldToFilter('affiliate_code', $affiliate->getAffiliateCode())
 																			->addFieldToFilter('sub_affiliate_code', $subAffiliate);
-					$never = 0; $zero = 0; $ten = 0; $twenty =0; $thirty = 0; $forty = 0;
+					$never = array(0,0); $zero = array(0,0); $ten = array(0,0); $twenty = array(0,0); $thirty = array(0,0); $forty = array(0,0);
+					$totalValuedCustomer = 0;
 					foreach ($recordCollection as $record) {
+						$customer = Mage::getModel('customer/customer')->setWebsiteId(1)->loadByEmail($record->getCustomerEmail());
+						$orderCollection = Mage::getModel('sales/order')->getCollection()
+																->addFieldToFilter('customer_id',$customer->getId())
+																->addFieldToFilter('state','complete');	
+						$count = $orderCollection->count();
 						$loginCount = $record->getLoginCount();						
+						if($count>0){
+							$totalValuedCustomer+= 1;
+						}		
 						if($loginCount<=1){
-							$never+= 1;
+							$never[0]+= 1;
+							if($count>0){
+								$never[1]+= 1;
+							}					
 						}elseif($loginCount>1 && $loginCount<10){
-							$zero+= 1;
+							$zero[0]+= 1;
+							if($count>0){
+								$zero[1]+= 1;
+							}
 						}elseif($loginCount>=10 && $loginCount<20){
-							$ten+=1;
+							$ten[0]+=1;
+							if($count>0){
+								$ten[1]+= 1;
+							}
 						}elseif($loginCount>=20 && $loginCount<30){
-							$twenty+=1;
+							$twenty[0]+=1;
+							if($count>0){
+								$twenty[1]+= 1;
+							}
 						}elseif($loginCount>=30 && $loginCount<40){
-							$thirty+=1;
+							$thirty[0]+=1;
+							if($count>0){
+								$thirty[1]+= 1;
+							}
 						}else{
-							$forty+=1;
+							$forty[0]+=1;
+							if($count>0){
+								$forty[1]+= 1;
+							}
 						}
 					}	
 				$reportHtml.='<tr>
 							<td>'.$affiliate->getAffiliateCode().'_'.$subAffiliate.'</td>
-							<td>'.$never.'</td>
-							<td>'.$zero.'</td>
-							<td>'.$ten.'</td>
-							<td>'.$twenty.'</td>
-							<td>'.$thirty.'</td>
-							<td>'.$forty.'</td>
+							<td>'.$recordCollection->count().' ('.$totalValuedCustomer.')'.'</td>			
+							<td>'.$never[0].' ('.$never[1].')'.'</td>
+							<td>'.$zero[0].' ('.$zero[1].')'.'</td>
+							<td>'.$ten[0].' ('.$ten[1].')'.'</td>
+							<td>'.$twenty[0].' ('.$twenty[1].')'.'</td>
+							<td>'.$thirty[0].' ('.$thirty[1].')'.'</td>
+							<td>'.$forty[0].' ('.$forty[1].')'.'</td>
 							</tr>';								
 				}
 			}	
@@ -315,4 +374,5 @@ class Harapartners_Affiliate_Block_Report extends Mage_Adminhtml_Block_Template 
 		}
 		return $reportHtml;
 	}
+	
 }
