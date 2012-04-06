@@ -105,6 +105,8 @@
                 <rewrite>
 					<!--Harapartners_EmailFactory-->
                     <email_template>Harapartners_Service_Model_Rewrite_Core_Email_Template</email_template>
+					<!--Harapartners_Service: locking admin modifications-->
+					<store>Harapartners_Service_Model_Rewrite_Core_Store</store>
                 </rewrite>
             </core>
 			<core_resource>
@@ -115,6 +117,8 @@
 			</core_resource>
 			<customer>
                 <rewrite>
+					<!--Harapartners_Service: locking admin modifications-->
+					<group>Harapartners_Service_Model_Rewrite_Customer_Group</group>
 					<!--Harapartners_Customertracking, redirect customer to a different store if customer's email does not match current store but matches a different store-->
 					<customer>Harapartners_Service_Model_Rewrite_Customer_Customer</customer>
 					<!--Harapartners_Affiliate--><!--Harapartners_Customertracking--><!--Harapartners_Rushcheckout-->
