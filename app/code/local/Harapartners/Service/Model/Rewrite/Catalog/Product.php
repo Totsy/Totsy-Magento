@@ -13,7 +13,26 @@
  */
 
 class Harapartners_Service_Model_Rewrite_Catalog_Product extends Mage_Catalog_Model_Product {
-   
+	
+	//Product out of the live event is NOT salable
+	public function isSalable() {
+		$eventCategoryFound = false;
+		if(!!Mage::registry('current_category')){
+			$eventCategoryFound = true;
+		}else{
+			$helper = Mage::helper('catalog/product');
+			if(!!$helper->getLiveCategoryIdFromCategoryEventSort($this)){
+				$eventCategoryFound = true;
+			}
+		}
+		
+		if($eventCategoryFound){
+        	return parent::isSalable();
+		}else{
+			return false;
+		}
+    }
+	
 	public function cleanCache(){
 		if(!!Mage::registry('batch_import_no_index')) {
 			return $this;

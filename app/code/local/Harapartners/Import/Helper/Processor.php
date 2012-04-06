@@ -123,13 +123,14 @@ class Harapartners_Import_Helper_Processor extends Mage_Core_Helper_Abstract {
 		&& isset($importData['size'])){
 			$sku = $importData['vendor'].'-'.$importData['vendor_style'].'-'.$importData['color'].'-'.$importData['size'];
 		}else{
-			$string = 'harapartners';
+			$string = 'totsy';
 			$shuffled = str_shuffle($string);
-			$sku = 'hp-'.date('y-m-d-H-i-s-').$shuffled;
+			$sku = 'hp-'.date('H-i-s').$shuffled;
 			$sku = str_replace(' ', '', $sku);
 		}
 		return $sku;
 	}
+	
 	protected function _setRequiredAttributes($importData, $importObject){
 		foreach ($this->_requiredFields as $field) {
 			if (!isset($importData[$field])){

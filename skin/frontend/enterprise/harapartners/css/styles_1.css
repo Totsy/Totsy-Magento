@@ -100,6 +100,7 @@ h1.event-collection-title {
 	margin-bottom: 6px;
 	margin: 10px 5px 0px;
 	padding: 10px 0 5px;}
+.top-events { display: none; }
 .top-events .catalog-top-event { display: inline-block; padding:5px 0px 5px 4px; height: 403px; vertical-align: top;}
 .catalog-events-container .top-events .splash-details { top: -56px; border: none; background: none repeat scroll 0 0 #000000; opacity:0.7;}
 .catalog-events-container .catalog-event { display: inline-block; padding:5px 0px 5px 4px; min-width: 230px; min-height: 321px;}

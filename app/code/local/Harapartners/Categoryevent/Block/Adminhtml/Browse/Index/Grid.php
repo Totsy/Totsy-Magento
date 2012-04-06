@@ -46,7 +46,7 @@ class Harapartners_Categoryevent_Block_Adminhtml_Browse_Index_Grid extends Mage_
         $collection->addFieldToFilter('level', self::CATEGOTYEVENT_LEVEL);
         $collection->addFieldToFilter('parent_id', $subcatIds[0]);
         $this->setCollection($collection);
-        $collection->load();
+        //$collection->load();
         parent::_prepareCollection();
         return $this;
     }
@@ -56,7 +56,8 @@ class Harapartners_Categoryevent_Block_Adminhtml_Browse_Index_Grid extends Mage_
             'header'        => Mage::helper('categoryevent')->__('ID'),
             'align'         => 'right',
             'width'         => '50px',
-            'index'         => 'entity_id'
+            'index'         => 'entity_id',
+        	'type'  		=> 'number',
         ));
         
         $this->addColumn('name', array(
@@ -68,7 +69,7 @@ class Harapartners_Categoryevent_Block_Adminhtml_Browse_Index_Grid extends Mage_
         
         $this->addColumn('thumbnail', array(
             'header'    => Mage::helper('categoryevent')->__('Event Image'),
-
+			'index'     => 'thumbnail',
         	'width'     => '120px',
         	'renderer'	=> 'Harapartners_Service_Block_Adminhtml_Widget_Grid_Column_Renderer_Category_Image'
         ));

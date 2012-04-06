@@ -61,8 +61,8 @@ class Harapartners_Service_Model_Rewrite_Core_Email_Template extends Mage_Core_M
         $mail->setFrom($this->getSenderEmail(), $this->getSenderName());
         try {
             //Harapartners sailthru//
-            $storeCode = Mage::app()->getStore()->getCode();
-            if (strcmp($storeCode,'mamasource')==0){
+            //$storeCode = Mage::app()->getStore()->getCode();
+            if (Mage::helper('service')->isMamasourceStore()){
             	$template_name = "mamasource-transactional-email-template";
             }else{
             	$template_name = "totsy-transactional-email-template";

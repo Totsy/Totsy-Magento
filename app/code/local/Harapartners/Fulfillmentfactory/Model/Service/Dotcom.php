@@ -151,10 +151,13 @@ class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
 				continue;
 			}
 			
+			$sku = substr($product->getSku(), 0, 17);	//In case of DOTcom length problem. For better logic, should be removed after.
+			$name = substr($product->getName(), 0, 28);
+			
 			$xml .= <<<XML
 				<item>
-					<sku><![CDATA[{$product->getSku()}]]></sku>
-					<description><![CDATA[{$product->getName()}]]></description>
+					<sku><![CDATA[$sku]]></sku>
+					<description><![CDATA[$name]]></description>
 					<upc xsi:nil="true" />
 					<weight xsi:nil="true" />
 					<cost xsi:nil="true"/>
@@ -260,15 +263,17 @@ XML;
 				continue;
 			}
 			
+			$name = substr($product->getName(), 0, 28);
+			
 			$xml .= <<<XML
 					<item>
 						<sku><![CDATA[{$product->getSku()}]]></sku>
-						<description><![CDATA[{$product->getName()}]]></description>
+						<description><![CDATA[$name]]></description>
 						<quantity>$quantity</quantity>
 						<upc xsi:nil="true" />
 						<weight xsi:nil="true" />
 						<cost xsi:nil="true" />
-						<price>{$product->getPrice()}</price>
+						<price xsi:nil="true" />
 						<root-sku xsi:nil="true" />
 						<package-qty xsi:nil="true" />
 						<serial-indicator xsi:nil="true" />
@@ -357,28 +362,33 @@ XML;
 	 * @param boolean $capturePayment	flag to indicate capture payment in this fulfillment
 	 * @return response
 	 */
-	public function submitOrdersToFulfill($orders, $capturePayment=false) {												   
-		$xml = '<orders xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">';
+	public function submitOrdersToFulfill($orders, $capturePayment=false) {
+		$responseArray = array();
 		
 		foreach($orders as $order) {
 			try {
 				if($capturePayment) {
-					//capture payment
-					$orderPayment = $order->getPayment();
-					if(!!$orderPayment) {
-						$paymentInstance = $orderPayment->getMethodInstance();
-						if(!!$paymentInstance) {
-							$paymentInstance->setData('forced_payment_action', 
-																			Mage_Payment_Model_Method_Abstract::ACTION_AUTHORIZE_CAPTURE);
-							$paymentInstance->setData('cybersource_subid', $orderPayment->getCybersourceSubid());
-							$orderPayment->place();
-							
-							//update order information
-							$order->setStatus('processing');
-							$transactionSave = Mage::getModel('core/resource_transaction')
-				                    ->addObject($order);
-				                    
-				           	$transactionSave->save();
+					$invoices = Mage::getResourceModel('sales/order_invoice_collection')->setOrderFilter($order->getId());
+					
+					//only capture once
+					if(empty($invoices) || (count($invoices) <= 0)) {
+						//capture payment
+						$orderPayment = $order->getPayment();
+						if(!!$orderPayment) {
+							$paymentInstance = $orderPayment->getMethodInstance();
+							if(!!$paymentInstance) {
+								$paymentInstance->setData('forced_payment_action', 
+																				Mage_Payment_Model_Method_Abstract::ACTION_AUTHORIZE_CAPTURE);
+								$paymentInstance->setData('cybersource_subid', $orderPayment->getCybersourceSubid());
+								$orderPayment->place();
+								
+								//update order information
+								$order->setStatus('processing');
+								$transactionSave = Mage::getModel('core/resource_transaction')
+					                    ->addObject($order);
+					                    
+					           	$transactionSave->save();
+							}
 						}
 					}
 				}
@@ -404,7 +414,8 @@ XML;
 			
 			$state = Mage::helper('fulfillmentfactory')->getStateCodeByFullName($shippingAddress->getRegion(), $shippingAddress->getCountry());
 			
-			$xml .= <<<XML
+			$xml = <<<XML
+		<orders xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 			<order>
 				<order-number>{$order->getIncrementId()}</order-number>
 				<order-date>{$orderDate}</order-date>
@@ -513,30 +524,28 @@ XML;
 			$xml .= <<<XML
 				</line-items>
 			</order>
+		</orders>
 XML;
 			
 			//change status
 			$order->setStatus(Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_PROCESSING_FULFILLMENT)
 				  ->save();
-		}
-		
-		$xml .= '</orders>';
-		
-		$response = Mage::helper('fulfillmentfactory/dotcom')->submitOrders($xml);
-		
-		$error = $response->order_error;
-		if(!!$error) {
-			$orderNumber = (string)$error->order_number;
-			if(!!$orderNumber) {
-				$errorOrder = Mage::getModel('sales/order')->loadByIncrementId($orderNumber);
-				$errorOrder->setStatus(Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_FULFILLMENT_FAILED)->save();
+				  
+			$response = Mage::helper('fulfillmentfactory/dotcom')->submitOrders($xml);
+			$responseArray[] = $response;
+			
+			$error = $response->order_error;
+			if(!!$error) {
+				$order->setStatus(Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_FULFILLMENT_FAILED)
+					  ->save();
+					  
 				$message = 'Error response from DOTcom: ' . $error->error_description;
-				Mage::helper('fulfillmentfactory/log')->errorLogWithOrder($message, $errorOrder->getId());
+				Mage::helper('fulfillmentfactory/log')->errorLogWithOrder($message, $order->getId());
 				//throw new Exception($message);
 			}
 		}
 
-		return $response;
+		return $responseArray;
 	}
 	
 	/**
