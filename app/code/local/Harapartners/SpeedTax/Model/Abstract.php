@@ -1,4 +1,5 @@
 <?php
+
 /*
  * NOTICE OF LICENSE
  *
@@ -10,22 +11,11 @@
  * to eula@harapartners.com so we can send you a copy immediately.
  *
  */
-abstract class Harapartners_SpeedTax_Model_Abstract extends Varien_Object
-{
 
-	/*protected $_helper = null;
+abstract class Harapartners_SpeedTax_Model_Abstract extends Varien_Object {
 
-
-	protected function _construct ()
-	{
-		Mage::getSingleton('speedtax/config');
-	}*/
-
-	
-	public function getSession ()
-	{
+	public function getSession () {
 		return Mage::getSingleton('speedtax/session');
 	}
-
 	
 }
