@@ -105,7 +105,7 @@
 	        </div>
 	        <?php endif;?>
 		    <div id="items-info-wrapper">
-		        <?php $_items = $this->getRecentItems() ?>
+		        <?php $_items = $this->getItems() //change from getRecentItems()?> 
 		        <?php if( count($_items) && !empty($_itemsArray) ): ?>
 		            <ol id="mini-cart" class="mini-products-list">
 		            <?php foreach($_items as $_item): ?>
