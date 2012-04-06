@@ -116,27 +116,21 @@ class Harapartners_Import_Helper_Processor extends Mage_Core_Helper_Abstract {
 	}
 	
 	protected function _setProductSku($importData){
-		$length = 3;
-		//add length limitation
-		//Because of DOTcom's issue, the sku should not be over 17 characters
 		$sku = '';
-		if(isset($importData['vendor'])
+		if(isset($importData['vendor']) 
 		&& isset($importData['vendor_style']) 
 		&& isset($importData['color']) 
 		&& isset($importData['size'])){
-			$sku = substr($importData['vendor'], 0, $length) . '-' . 
-				   substr($importData['vendor_style'], 0, $length) . '-' .
-				   substr($importData['color'], 0, $length) . '-' .
-				   substr($importData['size'], 0, $length);
+			$sku = $importData['vendor'].'-'.$importData['vendor_style'].'-'.$importData['color'].'-'.$importData['size'];
 		}else{
-			$string = 'hp' . rand(999);
+			$string = 'totsy';
 			$shuffled = str_shuffle($string);
-			$msTimestamp = microtime(true);
-			$sku = 'hp-'. date('ymd-') . $string;
+			$sku = 'hp-'.date('H-i-s').$shuffled;
 			$sku = str_replace(' ', '', $sku);
 		}
 		return $sku;
 	}
+	
 	protected function _setRequiredAttributes($importData, $importObject){
 		foreach ($this->_requiredFields as $field) {
 			if (!isset($importData[$field])){

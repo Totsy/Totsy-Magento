@@ -1,4 +1,5 @@
 <?php
+
 /*
  * NOTICE OF LICENSE
  *
@@ -15,7 +16,7 @@ class Harapartners_Service_Helper_Data extends Mage_Core_Helper_Url{
 	
 	const TOTSY_STORE_ID 					= 1;
 	const TOTSY_CUSTOMER_GROUP_ID 			= 1;
-	const MAMASOURCE_STORE_ID 				= 2;
+	const MAMASOURCE_STORE_ID 				= 3;
 	const MAMASOURCE_CUSTOMER_GROUP_ID 		= 2;
 	
 	public function isTotsyStore(){

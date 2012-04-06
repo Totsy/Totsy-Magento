@@ -1207,3 +1207,7 @@ body .col-left hr {
 .left_needhelp .grey_inside .main-nav a{
 	font-size: 12px
 }
+
+.non-mobile-hide{
+	display:none;
+}
