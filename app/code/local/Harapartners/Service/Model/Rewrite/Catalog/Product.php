@@ -14,6 +14,11 @@
 
 class Harapartners_Service_Model_Rewrite_Catalog_Product extends Mage_Catalog_Model_Product {
    
+	public function isSalable() {
+		//load event category here!
+        return parent::isSalable();
+    }
+	
 	public function cleanCache(){
 		if(!!Mage::registry('batch_import_no_index')) {
 			return $this;
