@@ -77,7 +77,7 @@ class Harapartners_Service_Helper_Rewrite_Catalog_Product extends Mage_Catalog_H
     }
     
     // Search for the latest matching live event
-    protected function getLiveCategoryIdFromCategoryEventSort($product){
+    public function getLiveCategoryIdFromCategoryEventSort($product){
     	$categoryIds = $product->getCategoryIds();
     	$helper = Mage::helper('categoryevent/memcache');
     	$indexData = $helper->getIndexDataObject();
