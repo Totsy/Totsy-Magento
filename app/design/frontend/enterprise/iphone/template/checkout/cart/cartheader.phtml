@@ -34,26 +34,43 @@
    	$countDownTimerHeader= $checkoutSession->getCountDownTimer();
     $timeoutHeader = $checkoutSession->getQuoteItemExpireTime();	
 	$endcount_lc_header = date("F j, Y, G:i:s", ($countDownTimerHeader + $timeoutHeader));
+	$_updateFlag = $checkoutSession->getCartUpdatedFlag();
+	$_myCartDefault = $this->__('%s Item', '<span class=\"cart-head-title\">Cart: </span>' . '<span>0</span>')
 ?>
 
 <div class="top-cart">
 <?php 
 	$_cartQty = Mage::getModel('checkout/cart')->getSummaryQty();
-	if(!Mage::getSingleton('checkout/session')->hasData('top_cart_qty_temp')){
-		$_cartQtyTemp = 0;
-	}else {
-		$_cartQtyTemp = Mage::getSingleton('checkout/session')->getData('top_cart_qty_temp');
-	}
-	$_cartQtyComp = abs($_cartQty - $_cartQtyTemp);
 ?>
 <?php if ($_cartQty > 0): ?>
     <?php $_myCart = $this->__('%s Items', '<span class="cart-head-title">Cart: </span>' . '<span>' . $_cartQty . '</span>') ?>
 <?php else: ?>
     <?php $_myCart = $this->__('%s Item', '<span class="cart-head-title">Cart: </span>' . '<span>0</span>') ?>
 <?php endif ?>
+    <div class="count-down-timer" style="display: none">
+		<span>Item Reserved For:</span>
+		<p id="cart-timer-header"></p>
+		<script type="text/javascript">
+		jQuery(document).ready(function() {
+			jQuery("#cart-timer-header").countdown({
+				//date: "12 10, 2011 16:11", //Counting TO a date
+				date: "<?php echo $endcount_lc_header; ?>", //Counting TO a date
+				htmlTemplate: "%{m} <span class=\"cd-time\">:</span> %{s} <span class=\"cd-time\">minutes</span>",
+		
+				onChange: function( event, timer ){
+				},
+				onComplete: function( event ){											
+					jQuery("#cart-header-content").html("<?php echo $_myCartDefault;?>");
+				},
+				leadingZero: true,
+				direction: "down"
+			});										
+		});	 
+		</script>
+	</div>
     <div class="block-title no-items">
         <ul class="links cart-link">
-            <li ><a href="<?php echo $this->getUrl('checkout/cart'); ?>"><?php echo $_myCart ?></a></li>
+            <li ><a href="<?php echo $this->getUrl('checkout/cart'); ?>" id="cart-header-content"><?php echo  $_myCart ?></a></li>
         </ul>
     </div>
 </div>
