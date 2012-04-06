@@ -33,9 +33,6 @@
 	$countDownTimer  =	Mage::getSingleton('checkout/session')->getCountDownTimer();
 	$timeout		 =	Mage::getSingleton('checkout/session')->getQuoteItemExpireTime();	
 	$endcount_lc 	 =	date("F j, Y, G:i:s", ($countDownTimer + $timeout));
-	$storeObj 		 =	Mage::app()->getStore();
-	$storeCode 		 =  $storeObj->getCode();
-	$storeId 		 =	$storeObj->getId();
 ?>
 <div class="cart">
     <div class="page-title title-buttons">
@@ -154,7 +151,7 @@
         </ul>
         <?php endif; ?>
     </div>
-    <?php if ( $storeCode == 'default' || $storeId == 1 ):?>
+    <?php if ( Mage::helper('service')->isTotsyStore() ):?>
     <div class="cart-collaterals<?php if($this->getChildHtml('crosssell')) echo ' cross-inside'; ?>">
         <?php //echo $this->getChildHtml('crosssell') ?>
         <div class="deals">

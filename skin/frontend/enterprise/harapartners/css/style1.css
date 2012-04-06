@@ -1005,7 +1005,7 @@ a.invite-btn {
     float: left;
     max-height: 17px;
     overflow: hidden;
-    max-width: 107px;
+    max-width: 100px;
 	margin-top: 1px;
 }
 body.customer-account-login #footer ul {
@@ -1206,4 +1206,8 @@ body .col-left hr {
 
 .left_needhelp .grey_inside .main-nav a{
 	font-size: 12px
+}
+
+.non-mobile-hide{
+	display:none;
 }

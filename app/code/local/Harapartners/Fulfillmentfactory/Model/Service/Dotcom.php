@@ -151,11 +151,12 @@ class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
 				continue;
 			}
 			
+			$sku = substr($product->getSku(), 0, 17);	//In case of DOTcom length problem. For better logic, should be removed after.
 			$name = substr($product->getName(), 0, 28);
 			
 			$xml .= <<<XML
 				<item>
-					<sku><![CDATA[{$product->getSku()}]]></sku>
+					<sku><![CDATA[$sku]]></sku>
 					<description><![CDATA[$name]]></description>
 					<upc xsi:nil="true" />
 					<weight xsi:nil="true" />
