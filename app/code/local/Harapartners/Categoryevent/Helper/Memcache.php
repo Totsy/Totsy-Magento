@@ -236,7 +236,7 @@ class Harapartners_Categoryevent_Helper_Memcache extends Mage_Core_Helper_Abstra
 								if ($productInfo['small_image'] != 'no_selection'){
 									$containerProductInfo['small_image'] = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA).'catalog/product'.$productInfo['small_image'];
 								}else {
-									$containerProductInfo['small_image'] = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA).'catalog/product/placeholder/small_image.jpg';
+									$containerProductInfo['small_image'] = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA).'catalog/product/placeholder/default/small_image.jpg';
 								}
 							}
 							$categoryHasProduct = true;
