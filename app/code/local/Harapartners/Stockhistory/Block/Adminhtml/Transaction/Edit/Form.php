@@ -104,7 +104,8 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Edit_Form extends Ma
         $fieldset->addField('qty_delta', 'text', array(
             'label'     => $helper->__('Qty Changed:'),
             'name'      => 'qty_delta',
-        	'required'	=> true
+        	'required'	=> true,
+        	'note'		=> 'Qty changed will also be applied to the Product Stock',
         ));
         
         $fieldset->addField('action_type', 'text', array(

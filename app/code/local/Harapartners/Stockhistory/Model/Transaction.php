@@ -58,6 +58,9 @@ class Harapartners_Stockhistory_Model_Transaction extends Mage_Core_Model_Abstra
 		if(!$this->getData('product_id')){
 			throw new Exception('Product ID is required.');
 		}
+		if(!$this->getData('qty_delta')){
+			throw new Exception('Qty Changed is required.');
+		}
 		if(!!$this->getData('unit_cost')){
 			$unitCost = $this->getData('unit_cost');
 			if($unitCost < 0){
@@ -66,7 +69,17 @@ class Harapartners_Stockhistory_Model_Transaction extends Mage_Core_Model_Abstra
 		}else{
 			throw new Exception('Unit Cost is required.');
 		}
+		
+		$product = Mage::getModel('catalog/product')->load($this->getData('product_id'));
+		$stock = $product->getStockItem();
+		$qtyStock = $stock->getQty();
+		$qtyDelta = $this->getData('qty_delta');
+		if(($qtyStock + $qtyDelta) < 0){
+			throw new Exception('Stock is negative. Please double check the Product Stock and Qty Changed');
+		}
 		$this->save();
+		$stock->setQty($qtyStock + $qtyDelta);
+		$stock->save();
 		return $this;
 	}
 	

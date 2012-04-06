@@ -94,38 +94,19 @@ class Harapartners_SpeedTax_Model_Speedtax_Calculate extends Harapartners_SpeedT
 	
 	//prepare for QueryTax(), add every item in the order
 	public function addLine($item) {
-		if (! $item) {
+		if (!$item) {
 			return false;
 		}
-		$quote = $item->getQuote ();
-		$product = $item->getProduct ();
-		//$stx = new SpeedTax ( );
 		
-
-		$t = explode ( ' ', microtime () );
-		$InvoiceNr = "INV" . $t [1];
+		if($item instanceof Mage_Sales_Model_Quote_Item){
+			return $this->_addLineItemFromQuoteItem($item);
+		}
 		
-		$this->_invoice->invoiceNumber = $InvoiceNr; //This is your invoice number for this purchase.  Leave this out for a straight query.
-		$Price = new price ( );
-		$Price->decimalValue = $item->getRowTotal () - $item->getDiscountAmount ();
-		$LineItem = new lineItem ( );
-		$LineItem->lineItemNumber = count( $this->_invoice->lineItems );
-		$LineItem->productCode = $this->getProductCode( $product );
-		$LineItem->customReference = "My Custom Reference Info";
-		$LineItem->quantity = $item->getQuantity ();
-		$LineItem->salesAmount = $Price;
+		if($item instanceof Mage_Sales_Model_Order_Item){
+			return $this->_addLineItemFromOrderItem($item);
+		}
 		
-		/**********get shipp from address from config setting ***********/
-		$LineItem->shipFromAddress = $this->_getShippingFromAdress ();
-		
-		$shippingAddress = ($quote->getShippingAddress ()->getPostcode ()) ? $quote->getShippingAddress () : $quote->getBillingAddress ();
-		$ShipToAddress = $this->_getShippingToAdress ( $shippingAddress );
-		
-		$LineItem->shipToAddress = $ShipToAddress;
-		
-		$this->_invoice->lineItems [] = $LineItem;
-		
-		return true;
+		return false;
 	}
 	
 	//add shipping cost as an item to speedtax request
@@ -152,7 +133,7 @@ class Harapartners_SpeedTax_Model_Speedtax_Calculate extends Harapartners_SpeedT
 		$LineItem->salesAmount = $Price;
 		
 		/**********get shipp from address from config setting ***********/
-		$LineItem->shipFromAddress = $this->_getShippingFromAdress ();
+		$LineItem->shipFromAddress = $this->_getShippingFromAddress ();
 		
 		$shippingAddress = ($quote->getShippingAddress ()->getPostcode ()) ? $quote->getShippingAddress () : $quote->getBillingAddress ();
 		$ShipToAddress = $this->_getShippingToAdress ( $shippingAddress );
@@ -187,7 +168,7 @@ class Harapartners_SpeedTax_Model_Speedtax_Calculate extends Harapartners_SpeedT
 		$LineItem->salesAmount = $Price;
 		
 		/**********get shipp from address from config setting ***********/
-		$LineItem->shipFromAddress = $this->_getShippingFromAdress ();
+		$LineItem->shipFromAddress = $this->_getShippingFromAddress ();
 		
 		$shippingAddress = ($order->getIsVirtual()) ? $order->getBillingAddress () : $order->getShippingAddress () ;
 		$ShipToAddress = $this->_getShippingToAdress ( $shippingAddress );
@@ -207,10 +188,13 @@ class Harapartners_SpeedTax_Model_Speedtax_Calculate extends Harapartners_SpeedT
 		
 		//$stx = new SpeedTax ( );
 		$this->_invoice->invoiceNumber = $invoice->getData ( "increment_id" );
-		
 		$this->_invoice->subtotal = $invoice->getSubtotal ();
 		$this->_invoice->tax = $invoice->getTaxAmount ();
 		$this->_invoice->exempt = $invoice->getExempt ();
+		
+		if(!!$invoice->getOrder()){
+			$this->addOrder ( $invoice->getOrder() );
+		}
 		
 		return true;
 	}
@@ -259,7 +243,7 @@ class Harapartners_SpeedTax_Model_Speedtax_Calculate extends Harapartners_SpeedT
 		$stx = new SpeedTax ( );
 		if ($this->_invoice) {
 			$invoiceNumbers [0] = $this->_invoice->invoiceNumber;
-			$this->_result = $stx->PostInvoices ( $invoiceNumbers )->PostBatchInvoicesResult;
+			$this->_result = $stx->CalculateInvoice ( $invoiceNumbers )->PostBatchInvoicesResult;
 			$this->_result->_resultEvent = "Post Invoice";
 			$log = $this->_makeLog ();
 			$LogModel = Mage::getModel ( 'speedtax/log' );
@@ -433,7 +417,7 @@ class Harapartners_SpeedTax_Model_Speedtax_Calculate extends Harapartners_SpeedT
 	}
 	
 	//get Departure Shipping Address
-	protected function _getShippingFromAdress() {
+	protected function _getShippingFromAddress() {
 		$ShipFromAddress = new address ( );
 		$country = Mage::getStoreConfig ( 'shipping/origin/country_id', $store );
 		$zip = Mage::getStoreConfig ( 'shipping/origin/postcode', $store );
@@ -505,6 +489,66 @@ class Harapartners_SpeedTax_Model_Speedtax_Calculate extends Harapartners_SpeedT
 			$log ["call"] = true;
 		}
 		return $log;
+	}
+	
+	// ========================================================== //
+	// Utilities, Converting Magento Objects to SpeedTax Objects
+	protected function _addLineItemFromQuoteItem(Mage_Sales_Model_Quote_Item $item){
+		$quote = $item->getQuote ();
+		$product = $item->getProduct ();
+		
+		//Init new invoice line item
+		$t = explode ( ' ', microtime () );
+		$InvoiceNr = "INV" . $t [1];
+		$this->_invoice->invoiceNumber = $InvoiceNr; //This is your invoice number for this purchase.  Leave this out for a straight query.
+		$Price = new price ( );
+		$Price->decimalValue = $item->getRowTotal () - $item->getDiscountAmount ();
+		$LineItem = new lineItem ( );
+		$LineItem->lineItemNumber = count( $this->_invoice->lineItems );
+		
+		$LineItem->productCode = $this->getProductCode( $product );
+		$LineItem->customReference = "Reference Info";
+		$LineItem->quantity = $item->getQuantity ();
+		$LineItem->salesAmount = $Price;
+		
+		/**********get ship from address from config setting ***********/
+		$LineItem->shipFromAddress = $this->_getShippingFromAddress ();
+		
+		$shippingAddress = ($quote->isVirtual()) ? $quote->getShippingAddress () : $quote->getBillingAddress ();
+		$ShipToAddress = $this->_getShippingToAdress ( $shippingAddress );
+		$LineItem->shipToAddress = $ShipToAddress;
+		
+		$this->_invoice->lineItems [] = $LineItem;
+		return true;
+	}
+	
+	protected function _addLineItemFromOrderItem(Mage_Sales_Model_Order_Item $item){
+		$quote = $item->getOrder()->getQuote(); //??
+		$product = $item->getProduct (); //??
+		
+		//Init new invoice line item
+		$t = explode ( ' ', microtime () );
+		$InvoiceNr = "INV" . $t [1];
+		$this->_invoice->invoiceNumber = $InvoiceNr; //This is your invoice number for this purchase.  Leave this out for a straight query.
+		$Price = new price ( );
+		$Price->decimalValue = $item->getRowTotal () - $item->getDiscountAmount ();
+		$LineItem = new lineItem ( );
+		$LineItem->lineItemNumber = count( $this->_invoice->lineItems );
+		
+		$LineItem->productCode = $this->getProductCode( $product );
+		$LineItem->customReference = "Reference Info";
+		$LineItem->quantity = $item->getQuantity ();
+		$LineItem->salesAmount = $Price;
+		
+		/**********get ship from address from config setting ***********/
+		$LineItem->shipFromAddress = $this->_getShippingFromAddress ();
+		
+		$shippingAddress = ($quote->isVirtual()) ? $quote->getShippingAddress () : $quote->getBillingAddress ();
+		$ShipToAddress = $this->_getShippingToAdress ( $shippingAddress );
+		$LineItem->shipToAddress = $ShipToAddress;
+		
+		$this->_invoice->lineItems [] = $LineItem;
+		return true;
 	}
 
 }
