@@ -35,8 +35,8 @@ $_attributes = Mage::helper('core')->decorateArray($this->getAllowAttributes());
     <?php foreach($_attributes as $_attribute): ?>
         <dd<?php if ($_attribute->decoratedIsLast){?> class="last"<?php }?>>
             <div class="input-box">
-            	<div class="ui-btn ui-btn-icon-right ui-btn-corner-all ui-shadow ui-btn-up-b" data-theme="b" id="activechange<?php echo $counter;?>">
-            		<span class="ui-btn-inner ui-btn-corner-all">
+            	<div class="ui-btn ui-btn-icon-right ui-btn-corner-all ui-shadow ui-btn-up-b" data-theme="b" >
+            		<span class="ui-btn-inner ui-btn-corner-all" id="activechange<?php echo $counter;?>">
             			<span class="ui-btn-text"  ><?php echo $this->__('Please Select ').$_attribute->getLabel() ?></span>
             			<span class="ui-icon ui-icon-arrow-d ui-icon-shadow"></span>
             		</span>
@@ -59,8 +59,11 @@ $_attributes = Mage::helper('core')->decorateArray($this->getAllowAttributes());
 					});
             
         		jQuery("button.btn-cart").css("background-color","#AAAAAA");
+        		
 	        	var selector_span_<?php echo $counter;?> = "#activechange<?php echo $counter;?>";
+	        	
 	        	var selector_select_<?php echo $counter;?> = "#attribute<?php echo $_attribute->getAttributeId()?>";
+	        	
 				jQuery(selector_select_<?php echo $counter;?>).click(function(){
 						var temphtml = jQuery(this).html();
 						var test = jQuery(this).find("option:selected").text();
@@ -69,6 +72,7 @@ $_attributes = Mage::helper('core')->decorateArray($this->getAllowAttributes());
 							jQuery("button.btn-cart").css("background-color","#AAAAAA");
 						}else {
 							jQuery("button.btn-cart").css("background-color","#ED1C25");
+							jQuery('.select-container-<?php echo $_attribute->getAttributeId() ?>').fadeOut();
 						}
 					});
 
