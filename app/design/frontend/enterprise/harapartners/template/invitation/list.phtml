@@ -169,9 +169,20 @@ if ( !$rewardCollection ) {
 		   <!--p class="required"><?php echo Mage::helper('enterprise_invitation')->__('* Required Fields') ?></p-->
 		    <div class="buttons-set form-buttons">
 		        <!--p class="back-link"><a href="<?php echo Mage::helper('enterprise_invitation')->getCustomerInvitationUrl() ?>"><small>&laquo; </small><?php  echo Mage::helper('enterprise_invitation')->__('Back to Invitations') ?></a></p-->
-		        <button class="button" type="submit"><div class="invite-button"><?php echo Mage::helper('enterprise_invitation')->__('Send Invitations') ?></div></button>
+		        <button class="button" onclick="modifyform()" type="button"><div class="invite-button"><?php echo Mage::helper('enterprise_invitation')->__('Send Invitations') ?></div></button>
 		    </div>		
 		</form>
+		
+
+		<script>
+		function modifyform(){
+			var invitationForm = jQuery('#invitationForm');
+			var txtArea = document.getElementById('contact_list');
+			txtArea.value = document.getElementById('contact_list').value.replace(/;/gi,',').replace(/\n/gi,',').replace(/,,/gi,',');
+			invitationForm.submit();
+		}
+		</script>
+		
 		<script type="text/javascript">
 		    var contactForm = new VarienForm('invitationForm', false);
 		</script>
@@ -290,17 +301,18 @@ if ( !$rewardCollection ) {
 <script type="text/javascript">var switchTo5x=true;</script>
 <script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
 			<?php $currentUrl = $this->helper('core/url')->getCurrentUrl();?>
-			<?php $localPattern = '/127/';?>
-			<?php $stagePattern = '/stage/';?>
+			<?php $localPattern = '/local/';?>
+			<?php $stagePattern = '/magento-totsy/';?>
+			
 <script type="text/javascript">stLight.options({publisher: "fa9539d4-b1db-40d3-9e2d-9e9a8dc98b42",onhover: false}); </script>
 		<!-- Include these scripts to import address books with CloudSponge -->
-		<script src="https://api.cloudsponge.com/address_books.js" type="text/javascript"></script>
-		<script type="text/javascript">// <![CDATA[
+		<script type="text/javascript" src="https://api.cloudsponge.com/address_books.js"></script>
+		<script type="text/javascript" charset="utf-8">
 		var csPageOptions = {
-		  domain_key:"<?php echo (preg_match($localPattern, $currentUrl))?'LFNJ5T67DJXNEDS6QEVG':((preg_match($stagePattern, $currentUrl))?'KUS5NYD485ZVU753VVB5':'') ?>", 
+		  domain_key:"<?php echo (preg_match($localPattern, $currentUrl))?'YFTQRG87V58ADFMUECZ6':((preg_match($stagePattern, $currentUrl))?'T4YQVH6GQB7MNFQYT5TQ':'') ?>", 
 		  textarea_id:"contact_list"
 		};
-		// ]]></script>
+		</script>
 <script>
 	stWidget.addEntry({
         "service":"sharethis",

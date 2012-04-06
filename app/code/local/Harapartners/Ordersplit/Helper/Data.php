@@ -276,11 +276,12 @@ class Harapartners_Ordersplit_Helper_Data extends Mage_Core_Helper_Abstract {
 						$action = Mage_Payment_Model_Method_Abstract::ACTION_AUTHORIZE_CAPTURE;
 						$orderPayment = $order->getPayment();
 						$orderPayment->getMethodInstance()->setData('forced_payment_action', $action);
-						$orderPayment->place();//somehow we must force this one to be capture!
-//						$invoiceId = Mage::getModel('sales/order_invoice_api')
-//								->create($order->getIncrementId(), array());				
-//						$invoice = Mage::getModel('sales/order_invoice')
-//								->loadByIncrementId($invoiceId);				
+						
+						//NOTE: important events like 'sales_order_invoice_pay' are automatically dispatched
+						$orderPayment->place();
+						
+//						$invoiceId = Mage::getModel('sales/order_invoice_api')->create($order->getIncrementId(), array());				
+//						$invoice = Mage::getModel('sales/order_invoice')->loadByIncrementId($invoiceId);				
 //						$invoice->capture()->save();							
 //						$order->setStatus('complete');
 //       				$order->addStatusToHistory($order->getStatus(), 'Auto Complete Virtual Order', false);

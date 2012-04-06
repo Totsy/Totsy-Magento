@@ -241,7 +241,9 @@ div.page-title .timer-control-box p#checkout-timer, div.page-title .timer-contro
 	display: inline;
 }
 
-.hpcheckout-checkout-index #use-store-credit {
+.hpcheckout-checkout-index #use-store-credit,
+.hpcheckout-checkout-index #use-reward-point
+{
 	text-decoration: underline;
 	color: #ED1C25;
 	cursor: pointer;
