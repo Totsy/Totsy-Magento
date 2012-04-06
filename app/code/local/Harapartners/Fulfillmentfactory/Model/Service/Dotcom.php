@@ -151,10 +151,12 @@ class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
 				continue;
 			}
 			
+			$name = substr($product->getName(), 0, 28);
+			
 			$xml .= <<<XML
 				<item>
 					<sku><![CDATA[{$product->getSku()}]]></sku>
-					<description><![CDATA[{$product->getName()}]]></description>
+					<description><![CDATA[$name]]></description>
 					<upc xsi:nil="true" />
 					<weight xsi:nil="true" />
 					<cost xsi:nil="true"/>
@@ -260,15 +262,17 @@ XML;
 				continue;
 			}
 			
+			$name = substr($product->getName(), 0, 28);
+			
 			$xml .= <<<XML
 					<item>
 						<sku><![CDATA[{$product->getSku()}]]></sku>
-						<description><![CDATA[{$product->getName()}]]></description>
+						<description><![CDATA[$name]]></description>
 						<quantity>$quantity</quantity>
 						<upc xsi:nil="true" />
 						<weight xsi:nil="true" />
 						<cost xsi:nil="true" />
-						<price>{$product->getPrice()}</price>
+						<price xsi:nil="true" />
 						<root-sku xsi:nil="true" />
 						<package-qty xsi:nil="true" />
 						<serial-indicator xsi:nil="true" />
