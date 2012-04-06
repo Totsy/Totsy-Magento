@@ -24,32 +24,29 @@ class Harapartners_Recurringmembership_Model_Observer {
 			$emailCoupon->save();	
 		}
 		
-		
-		
 		$orderId = $order->getIncrementId ();
 		$items = $order->getItemsCollection ()->getItems ();
 		
 		//check item if it is membership
 		
-		// create if not exsiting
+		//create if not exsiting
 		
 		// done
-		$create= FALSE;
+		$create = FALSE;
 		//get order, loop start
 		foreach ( $items as $item ) {
 			$sku = $item->getSku ();
 			if($sku == 'membershipregister'){
 				$create = TRUE;
 				$productSku = $sku;
-				$productId =$item->getProductId();
+				$productId = $item->getProductId();
 			};
 		}
 		
 		$orderRealId = $order->getId();
 		
-		
 		$cybersourceSubId = $order->getPayment()->getCybersourceSubid();
-		$exsitingProfile = Mage::getModel ( 'recurringmembership/profile' )->loadByCustProductId($customerId,$productId);
+		$exsitingProfile = Mage::getModel ( 'recurringmembership/profile' )->loadByCustProductId($customerId, $productId);
 		
 		if($create && (!$exsitingProfile->getId())){
 			$newProfile = Mage::getModel ( 'recurringmembership/profile' );
