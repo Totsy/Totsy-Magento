@@ -16,7 +16,6 @@
 ?>
 <?php 
 	$isFaceBook =	Mage::getSingleton('customer/session')->getFacebookAccountFirstCreate();
-	$storeCode	=	Mage::app()->getStore()->getCode();
 ?>
 <?php if ( !!$isFaceBook ):?>
 	<a id="facebook_pop" href="#facebook_window" class="hidden"></a>
@@ -37,7 +36,7 @@
 	    });
 	</script>
 	<?php Mage::getSingleton('customer/session')->setFacebookAccountFirstCreate(false);?>
-<?php elseif( Mage::helper('enterprise_invitation')->isInvitationMessageAllowed() && $storeCode == 'default' ):?>
+<?php elseif( Mage::helper('enterprise_invitation')->isInvitationMessageAllowed() && Mage::helper('service')->isTotsyStore() ):?>
 	<a id="invite_pop" href="#invite_window" class="hidden"></a>
 	<div style="display: none;">
 		<div id="invite_window" >

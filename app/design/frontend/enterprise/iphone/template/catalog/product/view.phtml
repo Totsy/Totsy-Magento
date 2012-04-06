@@ -116,11 +116,9 @@
 							</div>
 						</h3>
 						<div class="shipping-returns ui-collapsible-content" style="display:none;">
-							<?php if ($_product->getShippingReturns()):?>
 							<div class="product-info-detail">
-								<?php echo $_product->getShippingReturns(); ?>
+								<?php echo Mage::app()->getLayout()->createBlock('cms/block')->setBlockId('shipping_and_return')->toHtml();?>
 							</div>
-							<?php endif;?>
 						</div>
 					</div>
 	        	</div>
