@@ -49,9 +49,9 @@ class Harapartners_Import_Helper_Processor extends Mage_Core_Helper_Abstract {
     }
 	
 	protected function _logError($errorMessage){
-		$errorMessage = 'Row '.$recordCount.': '.$ex->getMessage()."\n";
-						$this->_errorMessages[] = $errorMessage;
-						fwrite($this->getErrorFile(), $errorMessage);
+//		$errorMessage = 'Row '.$recordCount.': '.$ex->getMessage()."\n";
+		$this->_errorMessages[] = $errorMessage;
+		fwrite($this->getErrorFile(), $errorMessage);
 	}
 	
 	protected function _getErrorFile($importModelId){
