@@ -387,3 +387,22 @@ div.checkout-sub-title sub-title{
 .cms-page-view #main p{ 
 	font-size:15px;
 }
+.category-view .middle-part{
+	display:none;
+}
+.catalog-events-container .event-name{
+	margin-top:10px;
+	font-size: 15px;
+}
+.upcoming-events-container a.event-link>p.event-name{
+	color: #ED1C24;
+}
+.catalog-events-container a.event-link>p{
+	color:#A89999;
+	font-weight:normal;
+}
+
+body .account-create .field {
+    clear: both;
+    margin-bottom: 31px;
+}
