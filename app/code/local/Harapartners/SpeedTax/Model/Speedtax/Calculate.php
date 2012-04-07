@@ -42,12 +42,21 @@ class Harapartners_SpeedTax_Model_Speedtax_Calculate extends Harapartners_SpeedT
 		return parent::_construct ();
 	}
 	
-	//for tax querying it is either a quote or an invoice
-	//We build an invoice from the line items
-	
-	public function query(Mage_Sales_Model_Quote $mageQuote){
-		//$this->_invoice populated, cachekey generated based on $this->_invoice 
-		$cacheKey = $this->_prepareSpeedTaxInvoiceByMageQuote($mageQuote);
+	// ========== Entry point ========== //
+	//for collect total, billing vs. shipping vs. multi-shipping
+	public function queryQuoteAddress(Mage_Sales_Model_Quote_Address $mageQuoteAddress){
+		//Shipping address only!
+		if ($address->getAddressType () != Mage_Sales_Model_Quote_Address::TYPE_SHIPPING 
+				|| !Mage::getStoreConfig("speedtax/speedtax/tax_shipping", $store->getId())) {
+			return null;		
+		}
+		
+		$cacheKey = $this->_prepareSpeedTaxInvoiceByMageAddres($mageQuoteAddress);
+		//nothing to calculate!
+		if(!$this->hasItem()){
+			return null;
+		}
+		
 		$this->_result = $this->_loadCachedResult( $cacheKey );
 		if(!$this->_result){
 			$this->_result = $stx->CalculateInvoice ( $this->_invoice )->CalculateInvoiceResult;
@@ -56,47 +65,156 @@ class Harapartners_SpeedTax_Model_Speedtax_Calculate extends Harapartners_SpeedT
 			if($this->_result->resultType == 'SUCCESS'){
 				$this->_saveCachedResult($cacheKey, $this->_result);
 			}
-			$sessionInvoices = $this->_getCheckoutSession()->getData( 'speedtax_invoices' );
-			$sessionInvoices[] = serialize( array( 'invoice' => $this->_invoice, 'result' => $this->_result ) );
-			$this->_getCheckoutSession()->setData( 'speedtax_invoices', $sessionInvoices );
-			
 		}
-		if ($this->_invoice) {
-			if( $speedTaxQueryResult = $this->_getCachedResult( $this->_invoice ) ) {
-				$this->_result = $speedtaxResult;
-			} else {
-				$this->_result = $stx->CalculateInvoice ( $this->_invoice )->CalculateInvoiceResult;
-				$this->_result->_resultEvent = "QueryInvoice";
-				$sessionInvoices = $this->_getCheckoutSession()->getData( 'speedtax_invoices' );
-				$sessionInvoices[] = serialize( array( 'invoice' => $this->_invoice, 'result' => $this->_result ) );
-				$this->_getCheckoutSession()->setData( 'speedtax_invoices', $sessionInvoices );
-			}
-		}
-		return $this->_resultHandler ();
 		
-		
-		
-		
+		//TODO: result processing
+//		return $this->_resultHandler ();
+		return $this;
 	}
 	
-//make a query on speedtax
-	public function prepareSpeedTaxInvoiceByMageQuote(Mage_Sales_Model_Quote $mageQuote) {
+	protected function _prepareSpeedTaxInvoiceByMageAddress(Mage_Sales_Model_Quote_Address $mageQuoteAddress) {
+		//Clear the invoice number so that the request is just a query
 		$this->_invoice->invoiceNumber = null;
-		$this->_invoice->customerIdentifier = Mage::getStoreConfig ( 'speedtax/speedtax/account' ); //E.g. customer name, customer ID.  For reference only.	
+		$this->_invoice->customerIdentifier = Mage::getStoreConfig ( 'speedtax/speedtax/account' ); //E.g. customer name, customer ID.  For reference only.
+	
+		//Add line items
+		foreach ( $mageQuoteAddress->getAllItems () as $mageQuoteAddressItem ) {
+			//not all items are equal!
+			//not all items are treated equal, conf-simple pair etc, some are not taxable as well
+			//Using parent item only
+			if(!!$mageQuoteAddressItem->getParentItemId()){
+				continue;
+			}
+			//check is taxable??
+			if(false){
+				continue;
+			}
+			
+			$this->_addLineItemFromAddressItem( $mageQuoteAddressItem );
+		}
 
+		//If tax shipping
+		if(false){
+			$this->_addLineItemFromShippingCost($mageQuoteAddress);
+		}
+
+		return $this;
+	}
+	
+	
+	
+	protected function _addLineItemFromAddressItem(Mage_Sales_Model_Quote_Address_Item $mageQuoteAddressItem){
+		$product = $mageQuoteAddressItem->getProduct();
+
+		$sptxLineItem = new lineItem();
+		$sptxLineItem->lineItemNumber = count( $this->_invoice->lineItems ); //Append to end
+		
+		$sptxLineItem->productCode = $this->_productCodeLookUpByTaxClass($product);
+		$sptxLineItem->customReference = "Reference Info";
+		$sptxLineItem->quantity = $mageQuoteAddressItem->getQuantity ();
+		
+		$sptxPrice = new price();
+		$sptxPrice->decimalValue = $mageQuoteAddressItem->getRowTotal() - $mageQuoteAddressItem->getDiscountAmount();
+		$sptxLineItem->salesAmount = $sptxPrice;
+
+		$sptxLineItem->shipFromAddress = $this->_getShippingFromAddress ();
+		$sptxLineItem->shipToAddress = $this->_getShippingToAdress ( $mageQuoteAddressItem->getAddress()); //Note, address type is validated at the entry point 'queryQuoteAddress'
+		
+		$this->_invoice->lineItems [] = $sptxLineItem;
+		return $this;
+	}
+	
+	protected function _addLineItemFromShippingCost(Mage_Sales_Model_Quote_Address $mageQuoteAddress) {
+		$store = Mage::app()->getStore();
+		$shippingCostObject = new Varien_Object ( );
+		$shippingCostObject->setId ( Mage::getStoreConfig ( 'speedtax/speedtax/shipping_sku', $store->getId()));
+		$shippingCostObject->setQuote ( $mageQuoteAddress->getQuote () );
+
+		$quote = $shippingCostObject->getQuote ();
+		
+		//$stx = new SpeedTax ( );
+		
+
+		$t = explode ( ' ', microtime () );
+		$InvoiceNr = "INV" . $t [1];
+		
+		$this->_invoice->invoiceNumber = $InvoiceNr; //This is your invoice number for this purchase.  Leave this out for a straight query.
+		$sptxPrice = new price ( );
+		$sptxPrice->decimalValue = ( float ) $quote->getShippingAddress ()->getShippingAmount ();
+		$sptxLineItem = new lineItem ( );
+		$sptxLineItem->lineItemNumber = count( $this->_invoice->lineItems );
+		$sptxLineItem->productCode = $shippingCostObject->getId ();
+		$sptxLineItem->customReference = "Shipping";
+		$sptxLineItem->quantity = 1;
+		$sptxLineItem->salesAmount = $sptxPrice;
+		
+		/**********get shipp from address from config setting ***********/
+		$sptxLineItem->shipFromAddress = $this->_getShippingFromAddress ();
+		
+		$shippingAddress = ($quote->getShippingAddress ()->getPostcode ()) ? $quote->getShippingAddress () : $quote->getBillingAddress ();
+		$ShipToAddress = $this->_getShippingToAdress ( $shippingAddress );
+		
+		$sptxLineItem->shipToAddress = $ShipToAddress;
+		
+		$this->_invoice->lineItems [] = $sptxLineItem;
+		
+		return true;
+	}
+	
+	
+//get Departure Shipping Address
+	protected function _getShippingFromAddress() {
+		$ShipFromAddress = new address ( );
+		$country = Mage::getStoreConfig ( 'shipping/origin/country_id', $store );
+		$zip = Mage::getStoreConfig ( 'shipping/origin/postcode', $store );
+		$regionId = Mage::getStoreConfig ( 'shipping/origin/region_id', $store );
+		$state = Mage::getModel ( 'directory/region' )->load ( $regionId )->getCode ();
+		$city = Mage::getStoreConfig ( 'shipping/origin/city', $store );
+		$street = Mage::getStoreConfig ( 'shipping/origin/street', $store );
+		
+		$ShipFromAddress->address1 = $street;
+		$ShipFromAddress->address2 = $city . ", " . $state . " " . $zip; //. ", " . $country;
+		return $ShipFromAddress;
+	}
+	
+	//get Destination Shipping Address
+	protected function _getShippingToAdress($address) {
 		$stx = new SpeedTax ( );
-		if ($this->_invoice) {
-			if( $speedtaxResult = $this->_getCachedResult( $this->_invoice ) ) {
-				$this->_result = $speedtaxResult;
-			} else {
-				$this->_result = $stx->CalculateInvoice ( $this->_invoice )->CalculateInvoiceResult;
-				$this->_result->_resultEvent = "QueryInvoice";
-				$sessionInvoices = $this->_getCheckoutSession()->getData( 'speedtax_invoices' );
-				$sessionInvoices[] = serialize( array( 'invoice' => $this->_invoice, 'result' => $this->_result ) );
-				$this->_getCheckoutSession()->setData( 'speedtax_invoices', $sessionInvoices );
+		$rawAddress = new address ( );
+		$ShipToAddress = new address ( );
+		$country = $address->getCountry ();
+		$zip = $zip = preg_replace ( '/[^0-9\-]*/', '', $address->getPostcode () );
+		//$regionId = 
+		$state = Mage::getModel ( 'directory/region' )->load ( $address->getRegionId () )->getCode ();
+		$city = $address->getCity ();
+		$streetArr = $address->getStreet ();
+		$street = $streetArr [0] . " " . $streetArr [1];
+		
+		$rawAddress->address1 = $street;
+		$rawAddress->address2 = $city . ", " . $state . " " . $zip; //. ", " . $country;
+		//address validation
+		$result = $stx->ResolveAddress ( $rawAddress );
+		$fullAddress = $result->ResolveAddressResult->resolvedAddress;
+		
+		$ShipToAddress->address1 = $fullAddress->address;
+		$ShipToAddress->address2 = $fullAddress->city . ", " . $fullAddress->state . " " . $fullAddress->zip; //. ", " . $country;
+
+		return $ShipToAddress;
+	}
+	
+	
+	//product sku is the default
+	protected function _productCodeLookUpByTaxClass( $product ) {
+		if( Mage::getStoreConfig( 'speedtax/speedtax/customized_tax_class' ) ) {
+			$taxClassId = $product->getTaxClassId();
+			if( isset( $this->_taxClassIdMapNameArray[ $taxClassId ] ) ) {
+				$taxClassName = $this->_taxClassIdMapNameArray[ $taxClassId ];
+				if( isset( $this->_taxClassMapProductCodeArray[ $taxClassName ] ) ) {
+					return $this->_taxClassMapProductCodeArray[ $taxClassName ];
+				}
 			}
 		}
-		return $this->_resultHandler ();
+		return $product->getSku();
 	}
 	
 	protected function _resultHandler() {
@@ -156,18 +274,7 @@ class Harapartners_SpeedTax_Model_Speedtax_Calculate extends Harapartners_SpeedT
 		return false;
 	}
 	
-	public function getProductCode( $product ) {
-		if( Mage::getStoreConfig( 'speedtax/speedtax/customized_tax_class' ) ) {
-			$taxClassId = $product->getTaxClassId();
-			if( isset( $this->_taxClassIdMapNameArray[ $taxClassId ] ) ) {
-				$taxClassName = $this->_taxClassIdMapNameArray[ $taxClassId ];
-				if( isset( $this->_taxClassMapProductCodeArray[ $taxClassName ] ) ) {
-					return $this->_taxClassMapProductCodeArray[ $taxClassName ];
-				}
-			}
-		}
-		return $product->getSku();
-	}
+	
 	
 	protected function _getCheckoutSession() {
 		if( ! $this->_checkoutSession ) {
@@ -188,28 +295,28 @@ class Harapartners_SpeedTax_Model_Speedtax_Calculate extends Harapartners_SpeedT
 	}
 	
 	//prepare for QueryTax(), add every item in the order
-	public function addLine($item) {
-		if (!$item) {
+	public function addLine($mageItem) {
+		if (!$mageItem) {
 			return false;
 		}
 		
-		if($item instanceof Mage_Sales_Model_Quote_Item){
-			return $this->_addLineItemFromQuoteItem($item);
+		if($mageItem instanceof Mage_Sales_Model_Quote_Item){
+			return $this->_addLineItemFromQuoteItem($mageItem);
 		}
 		
-		if($item instanceof Mage_Sales_Model_Order_Item){
-			return $this->_addLineItemFromOrderItem($item);
+		if($mageItem instanceof Mage_Sales_Model_Order_Item){
+			return $this->_addLineItemFromOrderItem($mageItem);
 		}
 		
 		return false;
 	}
 	
 	//add shipping cost as an item to speedtax request
-	public function addShipping($item) {
-		if (! $item) {
+	public function addShipping($mageItem) {
+		if (! $mageItem) {
 			return false;
 		}
-		$quote = $item->getQuote ();
+		$quote = $mageItem->getQuote ();
 		
 		//$stx = new SpeedTax ( );
 		
@@ -218,24 +325,24 @@ class Harapartners_SpeedTax_Model_Speedtax_Calculate extends Harapartners_SpeedT
 		$InvoiceNr = "INV" . $t [1];
 		
 		$this->_invoice->invoiceNumber = $InvoiceNr; //This is your invoice number for this purchase.  Leave this out for a straight query.
-		$Price = new price ( );
-		$Price->decimalValue = ( float ) $quote->getShippingAddress ()->getShippingAmount ();
-		$LineItem = new lineItem ( );
-		$LineItem->lineItemNumber = count( $this->_invoice->lineItems );
-		$LineItem->productCode = $item->getId ();
-		$LineItem->customReference = "Shipping";
-		$LineItem->quantity = 1;
-		$LineItem->salesAmount = $Price;
+		$sptxPrice = new price ( );
+		$sptxPrice->decimalValue = ( float ) $quote->getShippingAddress ()->getShippingAmount ();
+		$sptxLineItem = new lineItem ( );
+		$sptxLineItem->lineItemNumber = count( $this->_invoice->lineItems );
+		$sptxLineItem->productCode = $mageItem->getId ();
+		$sptxLineItem->customReference = "Shipping";
+		$sptxLineItem->quantity = 1;
+		$sptxLineItem->salesAmount = $sptxPrice;
 		
 		/**********get shipp from address from config setting ***********/
-		$LineItem->shipFromAddress = $this->_getShippingFromAddress ();
+		$sptxLineItem->shipFromAddress = $this->_getShippingFromAddress ();
 		
 		$shippingAddress = ($quote->getShippingAddress ()->getPostcode ()) ? $quote->getShippingAddress () : $quote->getBillingAddress ();
 		$ShipToAddress = $this->_getShippingToAdress ( $shippingAddress );
 		
-		$LineItem->shipToAddress = $ShipToAddress;
+		$sptxLineItem->shipToAddress = $ShipToAddress;
 		
-		$this->_invoice->lineItems [] = $LineItem;
+		$this->_invoice->lineItems [] = $sptxLineItem;
 		
 		return true;
 	}
@@ -249,28 +356,28 @@ class Harapartners_SpeedTax_Model_Speedtax_Calculate extends Harapartners_SpeedT
 		//$stx = new SpeedTax ( );
 		$this->_invoice->invoiceNumber = $order->getData ( "increment_id" );
 		
-		$Price = new price ( );
+		$sptxPrice = new price ( );
 		if ($order->getData ( "IsCreditMemo" )) {
-			$Price->decimalValue = $order->getSubtotalRefunded ();
+			$sptxPrice->decimalValue = $order->getSubtotalRefunded ();
 		} else {
-			$Price->decimalValue = $order->getSubtotal ();
+			$sptxPrice->decimalValue = $order->getSubtotal ();
 		}
-		$LineItem = new lineItem ( );
-		//$LineItem->lineItemNumber = count( $this->_invoice->lineItems );
-		$LineItem->productCode = "product_sku"; //$observer->getInvoice()->getOrder()->getAllItems();
-		$LineItem->customReference = "My Custom Reference Info";
-		$LineItem->quantity = 1;
-		$LineItem->salesAmount = $Price;
+		$sptxLineItem = new lineItem ( );
+		//$sptxLineItem->lineItemNumber = count( $this->_invoice->lineItems );
+		$sptxLineItem->productCode = "product_sku"; //$observer->getInvoice()->getOrder()->getAllItems();
+		$sptxLineItem->customReference = "My Custom Reference Info";
+		$sptxLineItem->quantity = 1;
+		$sptxLineItem->salesAmount = $sptxPrice;
 		
 		/**********get shipp from address from config setting ***********/
-		$LineItem->shipFromAddress = $this->_getShippingFromAddress ();
+		$sptxLineItem->shipFromAddress = $this->_getShippingFromAddress ();
 		
 		$shippingAddress = ($order->getIsVirtual()) ? $order->getBillingAddress () : $order->getShippingAddress () ;
 		$ShipToAddress = $this->_getShippingToAdress ( $shippingAddress );
 		
-		$LineItem->shipToAddress = $ShipToAddress;
+		$sptxLineItem->shipToAddress = $ShipToAddress;
 		
-		$this->_invoice->lineItems [] = $LineItem;
+		$this->_invoice->lineItems [] = $sptxLineItem;
 		
 		return true;
 	}
@@ -471,45 +578,7 @@ class Harapartners_SpeedTax_Model_Speedtax_Calculate extends Harapartners_SpeedT
 		return $lineNumber;
 	}
 	
-	//get Departure Shipping Address
-	protected function _getShippingFromAddress() {
-		$ShipFromAddress = new address ( );
-		$country = Mage::getStoreConfig ( 'shipping/origin/country_id', $store );
-		$zip = Mage::getStoreConfig ( 'shipping/origin/postcode', $store );
-		$regionId = Mage::getStoreConfig ( 'shipping/origin/region_id', $store );
-		$state = Mage::getModel ( 'directory/region' )->load ( $regionId )->getCode ();
-		$city = Mage::getStoreConfig ( 'shipping/origin/city', $store );
-		$street = Mage::getStoreConfig ( 'shipping/origin/street', $store );
-		
-		$ShipFromAddress->address1 = $street;
-		$ShipFromAddress->address2 = $city . ", " . $state . " " . $zip; //. ", " . $country;
-		return $ShipFromAddress;
-	}
 	
-	//get Destination Shipping Address
-	protected function _getShippingToAdress($address) {
-		$stx = new SpeedTax ( );
-		$rawAddress = new address ( );
-		$ShipToAddress = new address ( );
-		$country = $address->getCountry ();
-		$zip = $zip = preg_replace ( '/[^0-9\-]*/', '', $address->getPostcode () );
-		//$regionId = 
-		$state = Mage::getModel ( 'directory/region' )->load ( $address->getRegionId () )->getCode ();
-		$city = $address->getCity ();
-		$streetArr = $address->getStreet ();
-		$street = $streetArr [0] . " " . $streetArr [1];
-		
-		$rawAddress->address1 = $street;
-		$rawAddress->address2 = $city . ", " . $state . " " . $zip; //. ", " . $country;
-		//address validation
-		$result = $stx->ResolveAddress ( $rawAddress );
-		$fullAddress = $result->ResolveAddressResult->resolvedAddress;
-		
-		$ShipToAddress->address1 = $fullAddress->address;
-		$ShipToAddress->address2 = $fullAddress->city . ", " . $fullAddress->state . " " . $fullAddress->zip; //. ", " . $country;
-
-		return $ShipToAddress;
-	}
 	
 	protected function _makeLog() {
 		
@@ -556,24 +625,24 @@ class Harapartners_SpeedTax_Model_Speedtax_Calculate extends Harapartners_SpeedT
 		$t = explode ( ' ', microtime () );
 		$InvoiceNr = "INV" . $t [1];
 		$this->_invoice->invoiceNumber = $InvoiceNr; //This is your invoice number for this purchase.  Leave this out for a straight query.
-		$Price = new price ( );
-		$Price->decimalValue = $item->getRowTotal () - $item->getDiscountAmount ();
-		$LineItem = new lineItem ( );
-		$LineItem->lineItemNumber = count( $this->_invoice->lineItems );
+		$sptxPrice = new price ( );
+		$sptxPrice->decimalValue = $item->getRowTotal () - $item->getDiscountAmount ();
+		$sptxLineItem = new lineItem ( );
+		$sptxLineItem->lineItemNumber = count( $this->_invoice->lineItems );
 		
-		$LineItem->productCode = $this->getProductCode( $product );
-		$LineItem->customReference = "Reference Info";
-		$LineItem->quantity = $item->getQuantity ();
-		$LineItem->salesAmount = $Price;
+		$sptxLineItem->productCode = $this->getProductCode( $product );
+		$sptxLineItem->customReference = "Reference Info";
+		$sptxLineItem->quantity = $item->getQuantity ();
+		$sptxLineItem->salesAmount = $sptxPrice;
 		
 		/**********get ship from address from config setting ***********/
-		$LineItem->shipFromAddress = $this->_getShippingFromAddress ();
+		$sptxLineItem->shipFromAddress = $this->_getShippingFromAddress ();
 		
 		$shippingAddress = ($quote->isVirtual()) ? $quote->getShippingAddress () : $quote->getBillingAddress ();
 		$ShipToAddress = $this->_getShippingToAdress ( $shippingAddress );
-		$LineItem->shipToAddress = $ShipToAddress;
+		$sptxLineItem->shipToAddress = $ShipToAddress;
 		
-		$this->_invoice->lineItems [] = $LineItem;
+		$this->_invoice->lineItems [] = $sptxLineItem;
 		return true;
 	}
 	
@@ -585,24 +654,24 @@ class Harapartners_SpeedTax_Model_Speedtax_Calculate extends Harapartners_SpeedT
 		$t = explode ( ' ', microtime () );
 		$InvoiceNr = "INV" . $t [1];
 		$this->_invoice->invoiceNumber = $InvoiceNr; //This is your invoice number for this purchase.  Leave this out for a straight query.
-		$Price = new price ( );
-		$Price->decimalValue = $item->getRowTotal () - $item->getDiscountAmount ();
-		$LineItem = new lineItem ( );
-		$LineItem->lineItemNumber = count( $this->_invoice->lineItems );
+		$sptxPrice = new price ( );
+		$sptxPrice->decimalValue = $item->getRowTotal () - $item->getDiscountAmount ();
+		$sptxLineItem = new lineItem ( );
+		$sptxLineItem->lineItemNumber = count( $this->_invoice->lineItems );
 		
-		$LineItem->productCode = $this->getProductCode( $product );
-		$LineItem->customReference = "Reference Info";
-		$LineItem->quantity = $item->getQuantity ();
-		$LineItem->salesAmount = $Price;
+		$sptxLineItem->productCode = $this->getProductCode( $product );
+		$sptxLineItem->customReference = "Reference Info";
+		$sptxLineItem->quantity = $item->getQuantity ();
+		$sptxLineItem->salesAmount = $sptxPrice;
 		
 		/**********get ship from address from config setting ***********/
-		$LineItem->shipFromAddress = $this->_getShippingFromAddress ();
+		$sptxLineItem->shipFromAddress = $this->_getShippingFromAddress ();
 		
 		$shippingAddress = ($quote->isVirtual()) ? $quote->getShippingAddress () : $quote->getBillingAddress ();
 		$ShipToAddress = $this->_getShippingToAdress ( $shippingAddress );
-		$LineItem->shipToAddress = $ShipToAddress;
+		$sptxLineItem->shipToAddress = $ShipToAddress;
 		
-		$this->_invoice->lineItems [] = $LineItem;
+		$this->_invoice->lineItems [] = $sptxLineItem;
 		return true;
 	}
 
