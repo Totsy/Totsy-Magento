@@ -14,11 +14,11 @@ class Harapartners_SpeedTax_Model_Speedtax_Calculate extends Harapartners_SpeedT
 
 	const CACHE_TTL = 120;
 
-	protected $_lines = array ();
-	protected $_invoice = array ();
+	protected $_lines = null;
+	protected $_invoice = null;
 	
-	protected $_result = array ();
-	protected $_resultType;
+	protected $_result = null;
+//	protected $_resultType; ??
 	
 	protected $_tax;
 	protected $_rate;
@@ -26,24 +26,119 @@ class Harapartners_SpeedTax_Model_Speedtax_Calculate extends Harapartners_SpeedT
 	protected $_checkoutSession;
 	
 	protected $_taxClassMapProductCodeArray = array();
-	
 	protected $_taxClassIdMapNameArray = array();
 	
 	protected function _construct() {
 		Mage::helper ( 'speedtax' )->loadSpeedTaxLibrary ();
-		
 		$this->_invoice = new invoice ( );
-		
 		$this->_invoice->invoiceDate = date ( 'Y-m-d' );
 		$this->_invoice->invoiceType = INVOICE_TYPES::INVOICE;
 		
-		$_taxClasses = Mage::getModel( 'tax/class' )->getCollection();
-		foreach( $_taxClasses as $_taxClass ) {
-			$this->_taxClassIdMapNameArray[ $_taxClass->getClassId() ] = $_taxClass->getClassName();
+		$taxClasses = Mage::getModel( 'tax/class' )->getCollection();
+		foreach( $taxClasses as $taxClass ) {
+			$this->_taxClassIdMapNameArray[ $taxClass->getClassId() ] = $taxClass->getClassName();
 		}
 		
 		return parent::_construct ();
 	}
+	
+	//for tax querying it is either a quote or an invoice
+	//We build an invoice from the line items
+	
+	public function query(Mage_Sales_Model_Quote $mageQuote){
+		//$this->_invoice populated, cachekey generated based on $this->_invoice 
+		$cacheKey = $this->_prepareSpeedTaxInvoiceByMageQuote($mageQuote);
+		$this->_result = $this->_loadCachedResult( $cacheKey );
+		if(!$this->_result){
+			$this->_result = $stx->CalculateInvoice ( $this->_invoice )->CalculateInvoiceResult;
+			$this->_result->_resultEvent = "QueryInvoice";
+			
+			if($this->_result->resultType == 'SUCCESS'){
+				$this->_saveCachedResult($cacheKey, $this->_result);
+			}
+			$sessionInvoices = $this->_getCheckoutSession()->getData( 'speedtax_invoices' );
+			$sessionInvoices[] = serialize( array( 'invoice' => $this->_invoice, 'result' => $this->_result ) );
+			$this->_getCheckoutSession()->setData( 'speedtax_invoices', $sessionInvoices );
+			
+		}
+		if ($this->_invoice) {
+			if( $speedTaxQueryResult = $this->_getCachedResult( $this->_invoice ) ) {
+				$this->_result = $speedtaxResult;
+			} else {
+				$this->_result = $stx->CalculateInvoice ( $this->_invoice )->CalculateInvoiceResult;
+				$this->_result->_resultEvent = "QueryInvoice";
+				$sessionInvoices = $this->_getCheckoutSession()->getData( 'speedtax_invoices' );
+				$sessionInvoices[] = serialize( array( 'invoice' => $this->_invoice, 'result' => $this->_result ) );
+				$this->_getCheckoutSession()->setData( 'speedtax_invoices', $sessionInvoices );
+			}
+		}
+		return $this->_resultHandler ();
+		
+		
+		
+		
+	}
+	
+//make a query on speedtax
+	public function prepareSpeedTaxInvoiceByMageQuote(Mage_Sales_Model_Quote $mageQuote) {
+		$this->_invoice->invoiceNumber = null;
+		$this->_invoice->customerIdentifier = Mage::getStoreConfig ( 'speedtax/speedtax/account' ); //E.g. customer name, customer ID.  For reference only.	
+
+		$stx = new SpeedTax ( );
+		if ($this->_invoice) {
+			if( $speedtaxResult = $this->_getCachedResult( $this->_invoice ) ) {
+				$this->_result = $speedtaxResult;
+			} else {
+				$this->_result = $stx->CalculateInvoice ( $this->_invoice )->CalculateInvoiceResult;
+				$this->_result->_resultEvent = "QueryInvoice";
+				$sessionInvoices = $this->_getCheckoutSession()->getData( 'speedtax_invoices' );
+				$sessionInvoices[] = serialize( array( 'invoice' => $this->_invoice, 'result' => $this->_result ) );
+				$this->_getCheckoutSession()->setData( 'speedtax_invoices', $sessionInvoices );
+			}
+		}
+		return $this->_resultHandler ();
+	}
+	
+	protected function _resultHandler() {
+		
+		switch ($this->_result->resultType) {
+			case 'SUCCESS' :
+				return true;
+				break;
+			case 'FAILED_WITH_ERRORS' || 'FAILED_INVOICE_NUMBER' :
+				//log hangdler;
+				return false;
+				break;
+			case 'FAILED_INVOICE_NUMBER' :
+				return false;
+				break;
+			//print "FAILED. The invoice number is incorrectly formatted.\n";
+			default :
+				return false;
+				break;
+			//print "Other result type: '" . $this->_result->CalculateInvoiceResult->resultType . "'\n";
+		}
+	
+	}
+	
+//	//$stx->CalculateInvoice when invoice number missing, just query
+//	//With invoice number, create an invoice and status 'Pending'
+//	$stx->CalculateInvoice ( $this->_invoice ); //Query
+//	$stx->CalculateInvoice ( $this->_invoice ); //Pending
+//	$stx->CalculateInvoice ( $invoiceNumbers ); //Post
+//	
+//	//To post an invoice
+//	$stx->PostInvoice
+//	//Same as $stx->CalculateInvoice, but invoice number required, and status 'Posted'
+//	
+//	Key question: line items should be simple or configurable item??
+//	Simple product is better, but we need the info from the configurable product
+	
+	
+	
+	// ============================================ //
+	// ============ Utility functions ============= //
+	// ============================================ //
 	
 	/**
 	 * Check if store has nexus inside destination state
@@ -252,47 +347,7 @@ class Harapartners_SpeedTax_Model_Speedtax_Calculate extends Harapartners_SpeedT
 		return $this->_resultHandler ();
 	}
 	
-	//make a query on speedtax
-	public function QueryTax() {
-		$this->_invoice->invoiceNumber = null;
-		$this->_invoice->customerIdentifier = Mage::getStoreConfig ( 'speedtax/speedtax/account' ); //E.g. customer name, customer ID.  For reference only.	
-
-		$stx = new SpeedTax ( );
-		if ($this->_invoice) {
-			if( $speedtaxResult = $this->_getCachedResult( $this->_invoice ) ) {
-				$this->_result = $speedtaxResult;
-			} else {
-				$this->_result = $stx->CalculateInvoice ( $this->_invoice )->CalculateInvoiceResult;
-				$this->_result->_resultEvent = "QueryInvoice";
-				$sessionInvoices = $this->_getCheckoutSession()->getData( 'speedtax_invoices' );
-				$sessionInvoices[] = serialize( array( 'invoice' => $this->_invoice, 'result' => $this->_result ) );
-				$this->_getCheckoutSession()->setData( 'speedtax_invoices', $sessionInvoices );
-			}
-		}
-		return $this->_resultHandler ();
-	}
 	
-	protected function _resultHandler() {
-		
-		switch ($this->_result->resultType) {
-			case 'SUCCESS' :
-				return true;
-				break;
-			case 'FAILED_WITH_ERRORS' || 'FAILED_INVOICE_NUMBER' :
-				//log hangdler;
-				return false;
-				break;
-			case 'FAILED_INVOICE_NUMBER' :
-				return false;
-				break;
-			//print "FAILED. The invoice number is incorrectly formatted.\n";
-			default :
-				return false;
-				break;
-			//print "Other result type: '" . $this->_result->CalculateInvoiceResult->resultType . "'\n";
-		}
-	
-	}
 	
 	public function getTotalTax() {
 		if (! $this->_tax) {
