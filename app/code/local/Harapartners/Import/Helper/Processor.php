@@ -116,7 +116,7 @@ class Harapartners_Import_Helper_Processor extends Mage_Core_Helper_Abstract {
 	
 	protected function _getErrorFile($importModelId){
 		if(!$this->_errorFile){
-			$filename = $this->getErrorFilePath(). date('Y_m_d'). '_' . $importModelId . '.txt';
+			$filename = $this->_getErrorFilePath(). date('Y_m_d'). '_' . $importModelId . '.txt';
 			$this->_errorFile = fopen($filename, 'w');
 			$this->_errorMessages = array(); 
 		}
@@ -175,11 +175,11 @@ class Harapartners_Import_Helper_Processor extends Mage_Core_Helper_Abstract {
 	
 	protected function _setProductSku($importData){
 		$sku = '';
-		if(isset($importData['vendor']) 
+		if(isset($importData['vendor_code']) 
 		&& isset($importData['vendor_style']) 
 		&& isset($importData['color']) 
 		&& isset($importData['size'])){
-			$sku = $importData['vendor'].'-'.$importData['vendor_style'].'-'.$importData['color'].'-'.$importData['size'];
+			$sku = $importData['vendor_code'].'-'.$importData['vendor_style'].'-'.$importData['color'].'-'.$importData['size'];
 		}else{
 			$string = 'totsy';
 			$shuffled = str_shuffle($string);
@@ -190,6 +190,17 @@ class Harapartners_Import_Helper_Processor extends Mage_Core_Helper_Abstract {
 	}
 	
 	protected function _setRequiredAttributes($importData, $importObject){
+	
+		//Respect form data vendor_code
+		if(!!$importObject && $importObject->getData('vendor_code')){
+			$importData['vendor_code'] = $importObject->getData('vendor_code');
+		}
+		//Respect form data category ID
+		if(!!$importObject && $importObject->getData('category_id')){
+			$importData['category_ids'] = $importObject->getData('category_id');
+		}
+		
+		
 		foreach ($this->_requiredFields as $field) {
 			if (!isset($importData[$field])){
 				switch ($field) {
@@ -235,14 +246,7 @@ class Harapartners_Import_Helper_Processor extends Mage_Core_Helper_Abstract {
 				}
 			}
 		}
-		//Respect form data vendor_code
-		if(!!$importObject && $importObject->getData('vendor_code')){
-			$importData['vendor_code'] = $importObject->getData('vendor_code');
-		}
-		//Respect form data category ID
-		if(!!$importObject && $importObject->getData('category_id')){
-			$importData['category_ids'] = $importObject->getData('category_id');
-		}
+		
 		
 		if($importData['type'] == 'configurable'){
 			$importData['configurable_attribute_codes'] = 'color,size';  //Hard Coded.  Need to enforce in template!
