@@ -45,15 +45,9 @@ class Harapartners_Service_Model_Rewrite_Sales_Quote_Address_Total_Tax extends M
 		/****** make invoice ******/
 		try {
 			$calculator = Mage::getModel ( 'speedtax/speedtax_calculate' );
-			
-			if( ! $calculator->isTaxable( $address ) ) {
-				return $this;
-			}
-
-			if (!!$calculator->queryAddress( $address)) {
+			if (!!$calculator->queryQuoteAddress( $address)) {
 				$amount = $calculator->getTotalTax ();
 				$percent = $calculator->getTotalRate ();
-				
 				$this->_addAmount ( $amount );
 				$this->_addBaseAmount ( $amount );
 			}
