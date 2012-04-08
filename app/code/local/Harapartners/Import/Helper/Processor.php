@@ -98,7 +98,6 @@ class Harapartners_Import_Helper_Processor extends Mage_Core_Helper_Abstract {
 					$importObject->setImportStatus(Harapartners_Import_Model_Import::IMPORT_STATUS_COMPLETE);
 					$importObject->save();
 				}
-		  
 			}
 			$batchModel->delete();
 			fclose(); //Handle
@@ -125,7 +124,7 @@ class Harapartners_Import_Helper_Processor extends Mage_Core_Helper_Abstract {
 	}
 	
 	protected function _getErrorFilePath(){
-		return BP.DS.'log'.DS.'import_error'.DS;
+		return BP.DS.'var'.DS.'log'.DS.'import_error'.DS;
 	}
 	
 	protected function _getImportModel($importId = null){
@@ -143,7 +142,6 @@ class Harapartners_Import_Helper_Processor extends Mage_Core_Helper_Abstract {
 		return $import;
 	}
 	
-	
 	protected function _getRequiredFields(){
 		$this->_requiredFields[] = 'store';
         $this->_requiredFields[] = 'type';  
@@ -152,7 +150,6 @@ class Harapartners_Import_Helper_Processor extends Mage_Core_Helper_Abstract {
         $this->_requiredFields[] = 'websites';
         $this->_requiredFields[] = 'status';
         $this->_requiredFields[] = 'is_in_stock';
-        
         
 		$fieldset = Mage::getConfig()->getFieldset('catalog_product_dataflow', 'admin');
         foreach ($fieldset as $code => $node) {
