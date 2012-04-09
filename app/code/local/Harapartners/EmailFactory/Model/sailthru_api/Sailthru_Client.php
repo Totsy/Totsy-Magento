@@ -1110,4 +1110,3 @@ class Sailthru_Client {
         return $payload;
     }
 }
-?>

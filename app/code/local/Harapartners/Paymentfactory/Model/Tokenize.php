@@ -301,15 +301,18 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Mage_Cybersource_Model_
     
     
 	protected function _addSubscriptionToRequest($payment){
-        $subscription = new stdClass();
-		$subscription->title  ="On-Demand Profile Test";
-		$subscription->paymentMethod = "credit card";
-		$this->_request->subscription = $subscription;
-	
-		$recurringSubscriptionInfo = new stdClass();
-		$recurringSubscriptionInfo->frequency = "on-demand";
-		$recurringSubscriptionInfo->subscriptionID = $payment->getCybersourceSubid();
-		$this->_request->recurringSubscriptionInfo = $recurringSubscriptionInfo;
+		//For refund we do NOT need subscription info, $payment will be null
+		if(!!$payment){
+	        $subscription = new stdClass();
+			$subscription->title  ="On-Demand Profile Test";
+			$subscription->paymentMethod = "credit card";
+			$this->_request->subscription = $subscription;
+		
+			$recurringSubscriptionInfo = new stdClass();
+			$recurringSubscriptionInfo->frequency = "on-demand";
+			$recurringSubscriptionInfo->subscriptionID = $payment->getCybersourceSubid();
+			$this->_request->recurringSubscriptionInfo = $recurringSubscriptionInfo;
+		}
 	}
     
 }

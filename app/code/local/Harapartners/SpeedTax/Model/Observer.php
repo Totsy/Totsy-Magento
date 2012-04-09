@@ -16,31 +16,25 @@ class Harapartners_SpeedTax_Model_Observer extends Mage_Core_Model_Abstract {
 	
 	public function saleOrderInvoicePay(Varien_Event_Observer $observer) {
 		$invoice = $observer->getEvent()->getInvoice();
-		$calculator = Mage::getModel ( 'speedtax/speedtax_calculate' );
-		
-		//Jun, Restoring increment_id, why?
-//		$order = $invoice->getOrder ();
-//		$invoice->setData ( "increment_id", $order->getData ( "increment_id" ) );
-
-		$calculator->addInvoice ( $invoice );
-		$calculator->invoiceTaxPost ();
-//		
-//		if ($calculator->addInvoice ( $invoice )) {
-//			foreach ( $order->getAllItems () as $item ) {
-//				/*** make line item ***/
-//				$calculator->addLine ( $item );
-//			}
-//			$result = $calculator->invoiceTaxPost ();
-//		}
+		try {
+			$calculator = Mage::getModel ( 'speedtax/speedtax_calculate' );
+			$calculator->postOrderInvoice($invoice);
+		} catch( Exception $e ) {
+			//Tax collecting is very important, bubble exceptions up
+			throw new $e;
+		}
 	}
 	
 	public function salesOrderCreditmemoRefund(Varien_Event_Observer $observer) {
-		$creditMemo = $observer->getEvent()->getCreditMemo();
-		$calculator = Mage::getModel ( 'speedtax/speedtax_calculate' );
-		$order = $observer->creditmemo->getOrder();
-		if ($calculator->addCreditmemo ( $order )) {
-			$result = $calculator->invoiceTaxPending ();
+		$creditmemo = $observer->getEvent()->getCreditmemo();
+		try {
+			$calculator = Mage::getModel ( 'speedtax/speedtax_calculate' );
+			$calculator->postOrderCreditmemo($creditmemo);
+		} catch( Exception $e ) {
+			//Tax collecting is very important, bubble exceptions up
+			throw new $e;
 		}
+		
 	}
 	
 }
