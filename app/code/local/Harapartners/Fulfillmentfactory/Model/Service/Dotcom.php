@@ -152,7 +152,14 @@ class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
 			}
 			
 			$sku = substr($product->getSku(), 0, 17);	//In case of DOTcom length problem. For better logic, should be removed after.
+			if(empty($sku)) {
+				$sku = 'error sku';
+			}
+			
 			$name = substr($product->getName(), 0, 28);
+			if(empty($name)) {
+				$name = 'null';
+			}
 			
 			$xml .= <<<XML
 				<item>
