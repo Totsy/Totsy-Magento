@@ -23,7 +23,7 @@
  */
 ?>
 <?php 
-	$cdsDataObj 	= 	$this->getIndexDataObject();
+	$indexDataObj 	= 	$this->getIndexDataObject();
 	$baseUrl 		= 	Mage::getBaseUrl();
 	$maxPerSend 	= 	0;
 	$timer 			= 	0;
@@ -31,14 +31,14 @@
 	$liveArray 		= 	'';
 	$upcomingArray  = 	'';	
 	
-	if( $cdsDataObj->hasData('toplive') ){
-		$topArray = $cdsDataObj->getData('toplive');
+	if( $indexDataObj->hasData('toplive') ){
+		$topArray = $indexDataObj->getData('toplive');
 	}
-	if( $cdsDataObj->hasData('live') ){
-		$liveArray = $cdsDataObj->getData('live');
+	if( $indexDataObj->hasData('live') ){
+		$liveArray = $indexDataObj->getData('live');
 	}
-	if( $cdsDataObj->hasData('upcoming') ){
-		$upcomingArray = $cdsDataObj->getData('upcoming');
+	if( $indexDataObj->hasData('upcoming') ){
+		$upcomingArray = $indexDataObj->getData('upcoming');
 	}
 ?>
 <div class="catalog-events-container">
