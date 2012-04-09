@@ -51,10 +51,10 @@ class Harapartners_Import_Block_Adminhtml_Import_Grid extends Mage_Adminhtml_Blo
           'index'     => 'import_filename',
       ));
       
-      $this->addColumn('import_status', array(
+      $this->addColumn('status', array(
           'header'    => Mage::helper('import')->__('Status'),
           'align'     =>'left',
-          'index'     => 'import_status',
+          'index'     => 'status',
       ));
       
       $this->addColumn('error_message', array(
@@ -64,16 +64,16 @@ class Harapartners_Import_Block_Adminhtml_Import_Grid extends Mage_Adminhtml_Blo
       	  'type'      => 'text',
       ));
       
-      $this->addColumn('created_time', array(
+      $this->addColumn('created_at', array(
           'header'    => Mage::helper('import')->__('Created'),
           'align'     =>'left',
-          'index'     => 'created_time',
+          'index'     => 'created_at',
       ));
       
-      $this->addColumn('update_time', array(
+      $this->addColumn('updated_at', array(
           'header'    => Mage::helper('import')->__('Updated'),
           'align'     =>'left',
-          'index'     => 'update_time',
+          'index'     => 'updated_at',
       ));
 	  
       return parent::_prepareColumns();

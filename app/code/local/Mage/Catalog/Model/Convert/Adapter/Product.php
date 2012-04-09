@@ -751,10 +751,13 @@ class Mage_Catalog_Model_Convert_Adapter_Product
                 continue;
             }
 
-            $isArray = false;
-            $setValue = $value;
+            $isArray 	= false;
+            $setValue 	= $value;
 
             if ($attribute->getFrontendInput() == 'multiselect') {
+            	if(!$value || empty($value)){
+            		continue;
+            	}
                 $value = explode(self::MULTI_DELIMITER, $value);
                 $isArray = true;
                 $setValue = array();
@@ -789,7 +792,14 @@ class Mage_Catalog_Model_Convert_Adapter_Product
                 }
             }
 
-            $product->setData($field, $setValue);
+            //Hara Partners, Richu
+            if(!$setValue && !!$value){
+            	$message = 'Attribute \''.$field.'\' has options that does not exists.';
+            	Mage::throwException($message);
+            }else{
+            	$product->setData($field, $setValue);
+            }
+            
         }
 
         if (!$product->getVisibility()) {

@@ -63,7 +63,7 @@ class Harapartners_Import_Helper_Processor extends Mage_Core_Helper_Abstract {
 				$adapter = Mage::getModel($batchModel->getAdapter()); //processor/writer
 				
 				//update status to 'lock' this import
-				$importObject->setImportStatus(Harapartners_Import_Model_Import::IMPORT_STATUS_PROCESSING);
+				$importObject->setStatus(Harapartners_Import_Model_Import::IMPORT_STATUS_PROCESSING);
 				//$importObject->save();
 				
 				//collection load is not possible due to the large amount of data per row
@@ -72,9 +72,10 @@ class Harapartners_Import_Helper_Processor extends Mage_Core_Helper_Abstract {
 				
 				//Get the required fields
 				$this->_getRequiredFields();
-				
+				$row = 0;
 				foreach ($importObjectIds as $importObjectId) {	
-					try{	
+					try{
+						$row++;	
 						$batchImportModel->load($importObjectId);
 						if (!$batchImportModel || !$batchImportModel->getId()) {
 							$this->_logError(Mage::helper('dataflow')->__('Skip undefined row'));
@@ -88,14 +89,15 @@ class Harapartners_Import_Helper_Processor extends Mage_Core_Helper_Abstract {
 						$this->_setPurchaseOrderInfo($importData, $importObject);
 	
 					} catch(Exception $ex) {
-						$this->_logError('Skip undefined row, ' . $ex->getMessage());
+						$this->_logError('Skip row '.$row.', ' . $ex->getMessage() . "\n", $importObject->getId());
 					}  
 				}
-				if($hasErrors){
-					$importObject->setImportStatus('import_import_error<a href="'.Mage::getBaseUrl().'media/import/errors/'.date('Y_m_d').'_'.$importObject->getId().'.txt">Error</a>');
+				if(!!$this->_errorMessages && (count($this->_errorMessages)>0)){
+					$importObject->setStatus(Harapartners_Import_Model_Import::IMPORT_STATUS_ERROR);
+					$importObject->setErrorMessage('<a href="'.Mage::getBaseUrl().'var/log/import_error/'.date('Y_m_d'). '_' . $importObject->getId() . '.txt">Error</a>');
 					$importObject->save();   
 				}else{
-					$importObject->setImportStatus(Harapartners_Import_Model_Import::IMPORT_STATUS_COMPLETE);
+					$importObject->setStatus(Harapartners_Import_Model_Import::IMPORT_STATUS_COMPLETE);
 					$importObject->save();
 				}
 			}
@@ -108,10 +110,10 @@ class Harapartners_Import_Helper_Processor extends Mage_Core_Helper_Abstract {
 		}
 	}
 	
-	protected function _logError($errorMessage){
+	protected function _logError($errorMessage, $importModelId){
 //		$errorMessage = 'Row '.$recordCount.': '.$ex->getMessage()."\n";
 		$this->_errorMessages[] = $errorMessage;
-		fwrite($this->_getErrorFile(), $errorMessage);
+		fwrite($this->_getErrorFile($importModelId), $errorMessage);
 	}
 	
 	protected function _getErrorFile($importModelId){

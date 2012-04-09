@@ -137,13 +137,9 @@ class Harapartners_Import_Adminhtml_ImportController extends Mage_Adminhtml_Cont
 					
 					$processorHelper->runImport($model->getId());
 					Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('import')->__('The imported data has been processed.'));
-					$model->setData('status', Harapartners_Import_Model_Import::IMPORT_STATUS_COMPLETE)
-							->save();
 				}
 			}catch(Exception $e){
 				Mage::getSingleton('adminhtml/session')->addError(Mage::helper('import')->__('There is an error processing the uploaded data.'));
-				$model->setData('status', Harapartners_Import_Model_Import::IMPORT_STATUS_ERROR)
-						->save();
 			}
 			
 			if ($this->getRequest()->getParam('back')) {

@@ -91,7 +91,7 @@ class Harapartners_Import_Model_Import extends Mage_Core_Model_Abstract {
     }
     
     protected function _beforeSave(){
-    	parent::_beforeSave();
+    	
     	//For new object which does not specify 'created_at'
     	if(!$this->getId() && !$this->getData('created_at')){
     		$this->setData('created_at', now());
@@ -99,7 +99,7 @@ class Harapartners_Import_Model_Import extends Mage_Core_Model_Abstract {
     	//Always specify 'updated_at'
     	$this->setData('updated_at', now());
     	$this->validate(); //Errors will be thrown as exceptions
-    	return $this;
+    	parent::_beforeSave();
     }
 //    
 //    
