@@ -64,7 +64,7 @@ abstract class Harapartners_SpeedTax_Model_Speedtax_Abstract extends Harapartner
 	 * @return Address
 	 */
 	protected function _newAddress($line1, $line2, $city, $state, $zip, $country='USA') {
-		$address = new Address();
+		$address = new address();
 		$address->setLine1($line1);
 		$address->setLine2($line2);
 		$address->setCity($city);

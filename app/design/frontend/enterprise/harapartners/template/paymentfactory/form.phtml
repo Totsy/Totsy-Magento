@@ -21,7 +21,7 @@
 			<label for="use-card-method">Choose a credit/debit card:</label>
 			<div class="totsy-selective-input-box middle-length" id="use-card-method">
 				<span>New Credit/Debit Card</span>
-				<select name="payment[cybersource_subid]">
+				<select id="cybersource-use-card-method" name="payment[cybersource_subid]">
 					<option value="" class="use-new-card-control">New Credit/Debit Card</option>
 				<?php foreach( $profiles as $profile ): ?>
 					<?php if( !$profile->getSubscriptionId() ) { continue; } ?>
@@ -148,11 +148,12 @@
 </ul>
 <script type="text/javascript">
 			jQuery( document ).ready( function() {
-				jQuery( '.use-new-card-control' ).click( function() {
-					jQuery( '.use-new-card-wrapper' ).show();
-				});
-				jQuery( '.use-saved-card-control' ).click( function() {
-					jQuery( '.use-new-card-wrapper' ).hide();
+				jQuery( 'select#cybersource-use-card-method' ).change( function(){
+					if( jQuery( this ).val() == '' ) {
+						jQuery( '.use-new-card-wrapper' ).show();
+					} else {
+						jQuery( '.use-new-card-wrapper' ).hide();
+					}
 				});
 			});
 </script>
