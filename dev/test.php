@@ -9,6 +9,8 @@ Mage::app($mageRunCode, $mageRunType);
 Varien_Profiler::enable();
 Varien_Profiler::start('mytimer');
 
+$customer = Mage::getModel('customer/customer')->load(14);
+$order = Mage::getModel('sales/order')->load(1);
 $product = Mage::getModel('catalog/product')->load(14);
 $stock = $product->getStockItem()->getQty();
 $a = 1;

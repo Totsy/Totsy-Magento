@@ -26,9 +26,10 @@ class Harapartners_Affiliate_RemoteController extends Mage_Core_Controller_Front
         if(!!$affiliate && !!$affiliate->getId()){
         	$affiliateInfo = array();
 	        $subAffiliateCode = $request->getParam('sub_affiliate_code');
-	        if(in_array($subAffiliateCode, explode(',', $affiliate->getSubAffiliateCode()))){
+	        if(!!$subAffiliateCode){
 	        	$affiliateInfo['sub_affiliate_code'] = $subAffiliateCode;
 	        }
+	        
 	        $affiliateInfo['registration_param'] = json_encode($request->getParams());
 	        $session->setData('affiliate_id', $affiliate->getId());
 	        $session->setData('affiliate_info', $affiliateInfo);
@@ -38,11 +39,11 @@ class Harapartners_Affiliate_RemoteController extends Mage_Core_Controller_Front
                 ->setWebsiteId(Mage::app()->getStore()->getWebsiteId())
                 ->loadByEmail($email);
 		if(!$key){
-			$request = 'invalid key.';
+			$result = 'invalid key.';
 		}elseif(!$email && !Zend_Validate::is($email, 'EmailAddress')) {
-            $request = 'invalid email address.';
+            $result = 'invalid email address.';
         }elseif(!!$customer->getId()){
-            $request = 'customer with the email already existed.';
+            $result = 'customer with the email already existed.';
         }else{
         	//create account with random password associated with affiliate 
         	//send email notification
@@ -55,12 +56,63 @@ class Harapartners_Affiliate_RemoteController extends Mage_Core_Controller_Front
 				Mage::unregister('new_account');//Harapartners, Edward, End of setting for Affliate email validation 
 				Mage::dispatchEvent('customer_register_success',array('account_controller' => $this, 'customer' => $customer));// for affiliate customer tracking
         	}catch(Exception $e){
-        		$request='account creation failed';
+        		$result='account creation failed'.$e->getMessage();
         	}
         	$customer->sendPasswordReminderEmail();//can be specifed email later.
-        	$request = 'account created you will reveiv e a email including your temporal password';
+        	$result = 'account created you will reveiv e a email including your temporal password';
         }
         $response->setBody($result);
+    }
+    public function loginAction(){
+    	$response = Mage::app()->getResponse();
+		$response->setHeader('Content-type', 'application/json');
+    	$request = $this->getRequest();
+    	$email = $request->getParam('email');
+    	$key = $request->getParam('key');
+        $affiliateCode = $this->formatCode($request->getParam('affiliate_code'));
+        $affiliate = Mage::getModel('affiliate/record')->loadByAffiliateCode($affiliateCode);    
+        $session = Mage::getSingleton('customer/session');   
+        if(!!$affiliate && !!$affiliate->getId()){
+        	$affiliateInfo = array();
+	        $subAffiliateCode = $request->getParam('sub_affiliate_code');
+	        if(!!$subAffiliateCode){
+	        	$affiliateInfo['sub_affiliate_code'] = $subAffiliateCode;
+	        }
+	        
+	        $affiliateInfo['registration_param'] = json_encode($request->getParams());
+	        $session->setData('affiliate_id', $affiliate->getId());
+	        $session->setData('affiliate_info', $affiliateInfo);
+	       
+        }
+        $customer = Mage::getModel('customer/customer')
+                ->setWebsiteId(Mage::app()->getStore()->getWebsiteId())
+                ->loadByEmail($email);
+		if(!$key){
+			$result = 'invalid key.';
+		}elseif(!$email && !Zend_Validate::is($email, 'EmailAddress')) {
+            $result = 'invalid email address.';
+        }elseif(!!$customer->getId()){
+            $result = 'customer with the email already existed.';
+        }else{
+        	//create account with random password associated with affiliate 
+        	//send email notification
+        	try{
+	        	$password = $customer->generatePassword();
+	        	$customer->setEmail($email);
+	        	$customer->setpassword($password);
+	           	Mage::register('new_account',1);//Harapartners, Edward, Start of setting for Affliate email validation
+	            $customer->save();
+				Mage::unregister('new_account');//Harapartners, Edward, End of setting for Affliate email validation 
+				Mage::dispatchEvent('customer_register_success',array('account_controller' => $this, 'customer' => $customer));// for affiliate customer tracking
+        	}catch(Exception $e){
+        		$result='account creation failed';
+        	}
+        	$customer->sendPasswordReminderEmail();//can be specifed email later.
+        	$success = 'account created you will reveiv e a email including your temporal password';
+        }
+        if(!!$result){
+        	$response->setBody($result);
+        }
     }
     
     public function formatCode($code){
