@@ -35,7 +35,6 @@ class Harapartners_SpeedTax_Model_Speedtax_Calculate extends Harapartners_SpeedT
 		Mage::helper('speedtax')->loadSpeedTaxLibrary();
 		$this->_invoice = new invoice();
 		$this->_invoice->invoiceDate = date('Y-m-d');
-		$this->_invoice->invoiceType = INVOICE_TYPES::INVOICE;
 		return parent::_construct();
 	}
 	
@@ -51,6 +50,7 @@ class Harapartners_SpeedTax_Model_Speedtax_Calculate extends Harapartners_SpeedT
 			return null;		
 		}
 		
+		$this->_invoice->invoiceType = INVOICE_TYPES::INVOICE;
 		$this->_prepareSpeedTaxInvoiceByMageAddress($mageQuoteAddress);
 		if(!$this->_invoice || !$this->_invoice->lineItems){
 			return null;
@@ -72,6 +72,7 @@ class Harapartners_SpeedTax_Model_Speedtax_Calculate extends Harapartners_SpeedT
 			return null;		
 		}
 		
+		$this->_invoice->invoiceType = INVOICE_TYPES::CREDIT;
 		$this->_prepareSpeedTaxInvoiceByMageAddress($mageQuoteAddress);
 		if(!$this->_invoice || !$this->_invoice->lineItems){
 			return null;
