@@ -14,31 +14,34 @@
 
 class Harapartners_Service_Model_Rewrite_Salesrule_Validator extends Mage_SalesRule_Model_Validator {
 	
-	const AUTO_COUPON_AFTER_FIRST_ORDER_TIME = 2592000; // 30day
-	const AUTO_TEN_RULE_ID = 3 ;
+	const NEW_CUSTOMER_FIRST_ORDER_TIME = 2592000; // 30day
+	const COUPON_NAME_NEW_CUSTOMER_FIRST_ORDER_IN_30_DAYS = 'NEW_CUSTOMER_FIRST_ORDER_IN_30_DAYS';
 	
-	public function canApplyAutoTen($address) {
+	public function canApplyFirstOrderCouponRule($address) {
 		$firstOrder = $address->getCustomerOrderCollection()->getFirstItem();
+		$firstOrderCreatedAt = $firstOrder->getData('created_at');
 		
-		$firstOrderCreatedAt= $firstOrder->getData('created_at');
-		if (count($address->getCustomerOrderCollection()) == 1 && strtotime($firstOrderCreatedAt) + self::AUTO_COUPON_AFTER_FIRST_ORDER_TIME > strtotime(now())){
+		//$50 limit is given by coupon rule in the admin panel
+		if (count($address->getCustomerOrderCollection()) == 1 
+				&& strtotime($firstOrderCreatedAt) + self::NEW_CUSTOMER_FIRST_ORDER_TIME > strtotime(now())
+		){
 			return TRUE;
 		}
-    		return FALSE;
+    	return FALSE;
 	}
 	
 	protected function _canProcessRule($rule, $address){
-		
-		//check condition 1
 		$ruleId = $rule->getId();
-		if($ruleId == self::AUTO_TEN_RULE_ID && !$this->canApplyAutoTen($address)){
-			return FALSE;
+		
+		if($rule->getName() == self::COUPON_NAME_NEW_CUSTOMER_FIRST_ORDER_IN_30_DAYS
+				&& !!$this->canApplyFirstOrderCouponRule($address)){
+			return true;
 		}
 		
 		$ruleExsit = Mage::getModel('promotionfactory/emailcoupon')->ruleIdExist($ruleId);
 		$custEmail = $address->getQuote()->getCustomer()->getEmail() ;
 		$emailCouponMatchFail = False;
-		$emailCouponMacthFail = Mage::getModel('promotionfactory/emailcoupon')->emailCouponMacthFail($ruleId,$custEmail);
+		$emailCouponMacthFail = Mage::getModel('promotionfactory/emailcoupon')->emailCouponMacthFail($ruleId, $custEmail);
 		
 		if($ruleExsit && $emailCouponMacthFail){
 			return false;

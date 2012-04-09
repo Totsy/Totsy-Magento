@@ -218,7 +218,8 @@ class Mage_Checkout_CartController extends Mage_Core_Controller_Front_Action
 
             if (!$this->_getSession()->getNoCartRedirect(true)) {
                 if (!$cart->getQuote()->getHasError()){
-                    $message = $this->__('%s was added to your shopping cart.', Mage::helper('core')->htmlEscape($product->getName()));
+                	$html = '%s was added to your shopping cart.<h2 class="non-mobile-hide"><a href="'.Mage::helper('checkout/cart')->getCartUrl().'">Go to Cart</a></h2>';
+                    $message = $this->__($html, Mage::helper('core')->htmlEscape($product->getName()));
                     $this->_getSession()->addSuccess($message);
                 }
                 $this->_goBack();

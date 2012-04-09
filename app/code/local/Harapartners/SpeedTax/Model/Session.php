@@ -1,4 +1,5 @@
 <?php
+
 /*
  * NOTICE OF LICENSE
  *
@@ -10,11 +11,10 @@
  * to eula@harapartners.com so we can send you a copy immediately.
  *
  */
-class Harapartners_SpeedTax_Model_Session extends Mage_Core_Model_Session_Abstract
-{
 
-    public function __construct()
-    {
+class Harapartners_SpeedTax_Model_Session extends Mage_Core_Model_Session_Abstract {
+
+    public function __construct() {
         $this->init('speedtax');
     }
 

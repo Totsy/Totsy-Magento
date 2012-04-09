@@ -30,15 +30,19 @@
 <div class="login-border-top">
 	<div class="header-container">
 	    <div class="header">
-	        <h1 class="logo"><strong><?php echo $this->getLogoAlt() ?></strong><img src="<?php echo $this->getSkinUrl() ?>images/logoN.png" alt="<?php echo $this->getLogoAlt() ?>" /></h1>
+	        
 			<?php $currentUrl = $this->helper('core/url')->getCurrentUrl();?>
 			<?php $createPattern = '/create/';?>
 			<?php $loginPattern = '/login/';?>
 			<?php $forgetpasswordPattern = '/forgotpassword/';?>
 			<?php if (preg_match($createPattern, $currentUrl)):?>
+				<h1 class="logo"><strong><?php echo $this->getLogoAlt() ?></strong><img src="<?php echo $this->getSkinUrl() ?>images/logoN.png" alt="<?php echo $this->getLogoAlt() ?>" /></h1>
 				<p class="right-top">Already a member? <a href="<?php echo $this->getBaseUrl()?>customer/account/login/" id="sign-up">Sign In</a></p>
 			<?php elseif (preg_match($loginPattern, $currentUrl)||preg_match($forgetpasswordPattern, $currentUrl)):?>
 				<p class="right-top">Not a member yet? <a href="<?php echo $this->getBaseUrl()?>customer/account/create/" id="join-now">Join now!</a></p>
+				<h1 class="logo"><strong><?php echo $this->getLogoAlt() ?></strong><img src="<?php echo $this->getSkinUrl() ?>images/logoN.png" alt="<?php echo $this->getLogoAlt() ?>" /></h1>
+			<?php else:?>
+				<a href="<?php echo $this->getBaseUrl()?>"><h1 class="logo"><strong><?php echo $this->getLogoAlt() ?></strong><img src="<?php echo $this->getSkinUrl() ?>images/logo.png" alt="<?php echo $this->getLogoAlt() ?>" /></h1></a>
 			<?php endif;?>
 	        <?php //echo $this->getChildHtml('topContainer'); ?>
 	    </div>
