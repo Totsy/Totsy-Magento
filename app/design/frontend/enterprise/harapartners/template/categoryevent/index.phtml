@@ -89,36 +89,39 @@
 			<?php
 				$endcountRaw = strtotime($live['event_end_date']);
 				$endcount = date("m j, Y, G:i:s", $endcountRaw);
+				$hasProduct = $this->hasProduct($live['entity_id']);
 			?>
-			<div class="catalog-event event-counter-<?php echo $timer;?>">
-				<?php $imgFile = BP.DS.'media'.DS.'catalog'.DS.'category'.DS.$live['thumbnail'];?>	
-				<a class="event-link" href="<?php echo Mage::getBaseUrl().$live['url_path']; ?>"><img src="<?php echo Mage::helper('service/image')->loadImageFile($imgFile)->resize(228,263); ?>" width="228px" height="263px" alt="" /></a>
-				<div class="splash-details">
-					<div class="table-cell-left">	
-						<p class="event-name"><?php echo $live['name'];?></p>
-						<p id="time1-<?php echo $timer ?>"></p>					 
-						<script type="text/javascript">
-							jQuery("#time1-<?php echo $timer ?>").countdown({
-								//date: "12 10, 2011 16:11", //Counting TO a date
-								date: "<?php echo $endcount; ?>", //Counting TO a date
-								htmlTemplate: "<span>Ends in</span> %{d} <span class=\"cd-time\">Days</span> %{h}<span class=\"cd-time\">:</span>%{m}<span class=\"cd-time\">:</span>%{s}<span class=\"cd-time\"></span>",								
-								onChange: function( event, timer ){
-								},
-								onComplete: function( event ){										
-									jQuery(this).html("Completed");
-									jQuery("div.event-counter-<?php echo $timer;?>").hide();
-								},
-								leadingZero: false,
-								direction: "down"
-							});
-						</script>
-					</div>
-					<div class="table-cell-right">
-						<a class="shop-button" href="<?php echo Mage::getBaseUrl().$live['url_path']; ?>">Shop</a>
-					</div>
-				</div>	
-			</div>
-			<?php $timer++;?>
+			<?php if ($hasProduct):?>
+				<div class="catalog-event event-counter-<?php echo $timer;?>">
+					<?php $imgFile = BP.DS.'media'.DS.'catalog'.DS.'category'.DS.$live['thumbnail'];?>	
+					<a class="event-link" href="<?php echo Mage::getBaseUrl().$live['url_path']; ?>"><img src="<?php echo Mage::helper('service/image')->loadImageFile($imgFile)->resize(228,263); ?>" width="228px" height="263px" alt="" /></a>
+					<div class="splash-details">
+						<div class="table-cell-left">	
+							<p class="event-name"><?php echo $live['name'];?></p>
+							<p id="time1-<?php echo $timer ?>"></p>					 
+							<script type="text/javascript">
+								jQuery("#time1-<?php echo $timer ?>").countdown({
+									//date: "12 10, 2011 16:11", //Counting TO a date
+									date: "<?php echo $endcount; ?>", //Counting TO a date
+									htmlTemplate: "<span>Ends in</span> %{d} <span class=\"cd-time\">Days</span> %{h}<span class=\"cd-time\">:</span>%{m}<span class=\"cd-time\">:</span>%{s}<span class=\"cd-time\"></span>",								
+									onChange: function( event, timer ){
+									},
+									onComplete: function( event ){										
+										jQuery(this).html("Completed");
+										jQuery("div.event-counter-<?php echo $timer;?>").hide();
+									},
+									leadingZero: false,
+									direction: "down"
+								});
+							</script>
+						</div>
+						<div class="table-cell-right">
+							<a class="shop-button" href="<?php echo Mage::getBaseUrl().$live['url_path']; ?>">Shop</a>
+						</div>
+					</div>	
+				</div>
+				<?php $timer++;?>
+			<?php endif;?>
 		<?php endforeach;?>
 	</div>
 
