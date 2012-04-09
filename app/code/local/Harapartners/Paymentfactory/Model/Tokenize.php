@@ -44,7 +44,7 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Mage_Cybersource_Model_
      	}
      	if (!!$payment->getData('cc_number')){
      		$profile = Mage::getModel('paymentfactory/profile')->loadByCcNumberWithId($payment->getData('cc_number').$customerId);
-     		if(!!$profile && !!$profile->getId()){
+     		if(!!$profile && !!$profile->getId() && $profile->getExpireYear() === $payment->getCcExpYear()  && $profile->getExpireMonth() === $payment->getCcExpMonth() ){
      			//Checkout with existing profile instead of creating new card
      			$payment->setData('cybersource_subid', $profile->getData('cybersource_subid'));     			
      			return $this->authorize($payment, $amount);
@@ -57,8 +57,13 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Mage_Cybersource_Model_
 	protected function iniRequest(){
 		parent::iniRequest();
 		$this->_addSubscriptionToRequest($this->_payment);
+		
+		//Harapartners, Jun, Totsy logic requires Order ID when applicable
+		$order = $this->getInfoInstance()->getOrder();
+		if(!!$order && !!$order->getData('increment_id')){
+			$this->_request->merchantReferenceCode = $order->getData('increment_id');
+		}
     }
-     
     
     // ============================================== //
     // =========== Payment gateway actions ========== //

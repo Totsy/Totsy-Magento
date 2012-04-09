@@ -1,13 +1,12 @@
 body.cms-page-view div.page{
-    width:960px;
+    width:960px;  
 }
 
 body.cms-page-view .header-panel {
-    display:none;
+    display:none;   
 }
 
 body.cms-page-view .quick-access{
-	
 }
 body.cms-page-view p{
     color: #707070;

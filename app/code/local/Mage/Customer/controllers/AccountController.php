@@ -354,6 +354,7 @@ class Mage_Customer_AccountController extends Mage_Core_Controller_Front_Action
                         return;
                     } else {
                         $session->setCustomerAsLoggedIn($customer);
+                    	$defaultUrl = $this->_welcomeCustomer($customer);  //Harapartners, Edward, keep this function only for sending welcome email, the real url to redirect is $url
                         //$url = $this->_welcomeCustomer($customer);	
                         $url = Mage::getBaseUrl();	//Harapartners, yang, set success redirect url to home page
                         $this->_redirectSuccess($url);
@@ -562,8 +563,10 @@ class Mage_Customer_AccountController extends Mage_Core_Controller_Front_Action
             $customer = Mage::getModel('customer/customer')
                 ->setWebsiteId(Mage::app()->getStore()->getWebsiteId())
                 ->loadByEmail($email);
+            
+            $storeId = Mage::app()->getStore()->getId();
 
-            if ($customer->getId()) {
+            if ($customer->getId() && $customer->getStoreId() == $storeId) {
                 try {
                     $newResetPasswordLinkToken = Mage::helper('customer')->generateResetPasswordLinkToken();
                     $customer->changeResetPasswordLinkToken($newResetPasswordLinkToken);
@@ -574,7 +577,9 @@ class Mage_Customer_AccountController extends Mage_Core_Controller_Front_Action
                     return;
                 }      
                 $this->_getSession()
-                	->addSuccess(Mage::helper('customer')->__('If there is an account associated with %s you will receive an email with a link to reset your password.', Mage::helper('customer')->htmlEscape($email)));
+                	->addSuccess(Mage::helper('customer')->__('Email sent to %s , you will receive an email with a link to reset your password.', Mage::helper('customer')->htmlEscape($email)));
+            }elseif ($customer->getId() && $customer->getStoreId() != $storeId) {
+            	$this->_getSession()->addError($this->__('The email you entered is belong to an %s account, please check.', Mage::app()->getStore($customer->getStoreId())->getName() ));
             }else {
             	$this->_getSession()->addError($this->__('The email you entered is NOT associated with any account, please check.'));
             }       

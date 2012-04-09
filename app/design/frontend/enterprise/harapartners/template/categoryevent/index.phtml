@@ -23,7 +23,7 @@
  */
 ?>
 <?php 
-	$cdsDataObj 	= 	$this->getCdsDataObject();
+	$cdsDataObj 	= 	$this->getIndexDataObject();
 	$baseUrl 		= 	Mage::getBaseUrl();
 	$maxPerSend 	= 	0;
 	$timer 			= 	0;
@@ -88,7 +88,7 @@
 		<?php foreach ($liveArray as $live):?>
 			<?php
 				$endcountRaw = strtotime($live['event_end_date']);
-				$endcount = date("F j, Y, G:i:s", $endcountRaw);
+				$endcount = date("m j, Y, G:i:s", $endcountRaw);
 			?>
 			<div class="catalog-event event-counter-<?php echo $timer;?>">
 				<?php $imgFile = BP.DS.'media'.DS.'catalog'.DS.'category'.DS.$live['thumbnail'];?>	
@@ -101,15 +101,14 @@
 							jQuery("#time1-<?php echo $timer ?>").countdown({
 								//date: "12 10, 2011 16:11", //Counting TO a date
 								date: "<?php echo $endcount; ?>", //Counting TO a date
-								htmlTemplate: "<span>Ends in</span> %{d} <span class=\"cd-time\">Days</span> %{h}<span class=\"cd-time\">:</span>%{m}<span class=\"cd-time\">:</span>%{s}<span class=\"cd-time\"></span>",
-				
+								htmlTemplate: "<span>Ends in</span> %{d} <span class=\"cd-time\">Days</span> %{h}<span class=\"cd-time\">:</span>%{m}<span class=\"cd-time\">:</span>%{s}<span class=\"cd-time\"></span>",								
 								onChange: function( event, timer ){
 								},
 								onComplete: function( event ){										
 									jQuery(this).html("Completed");
 									jQuery("div.event-counter-<?php echo $timer;?>").hide();
 								},
-								leadingZero: true,
+								leadingZero: false,
 								direction: "down"
 							});
 						</script>
@@ -128,7 +127,7 @@
 		<h1 class="event-collection-title" id="event-upcoming">Upcoming Sales</h1>
 		<?php foreach ($upcomingArray as $up):?>
 			<?php
-				$endcountRaw = strtotime($up['event_end_date']);
+				$endcountRaw = strtotime($up['event_start_date']);
 				$endcount = date("F j, Y, G:i:s", $endcountRaw);
 			?>
 			<div class="catalog-event">
@@ -149,7 +148,7 @@
 								onComplete: function( event ){										
 									jQuery(this).html("Completed");
 								},
-								leadingZero: true,
+								leadingZero: false,
 								direction: "down"
 							});
 						</script>
