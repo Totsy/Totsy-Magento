@@ -106,4 +106,13 @@ function updateSelectText(){
 		jQuery(this).parent('div').children('span').html(text);
 	});
 }
+
+jQuery( document ).ready( function() {
+	if( jQuery( '#billing-address-select' ).val() != '' ) {
+		jQuery( '#billing-address-select' ).change();
+    }
+	if( jQuery( '#shipping-address-select' ).val() != '' ) {
+		jQuery( '#shipping-address-select' ).change();
+    }
+});
 </script>
