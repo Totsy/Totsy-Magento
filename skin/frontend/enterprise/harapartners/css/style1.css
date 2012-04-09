@@ -1212,3 +1212,7 @@ body .col-left hr {
 	display:none;
 }
 
+.catalog-category-view .category-products ul.products-grid li.item div.product-info .price-box p.old-price{
+	text-align:right;
+}
+

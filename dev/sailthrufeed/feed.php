@@ -138,10 +138,10 @@ function getLargestSaveByCategory(Mage_Catalog_Model_Category $_category){
     /*Getting how many percent of money save for a event  START*/
 	$storeId = Mage::app()->getStore()->getId();
   	$layer = Mage::getSingleton('catalog/layer')->setStore($storeId);
-	$productCollection = Mage::getModel('catalog/product')->getCollection();
+	//$productCollection = Mage::getModel('catalog/product')->getCollection();
 	$currentCategory = $layer->setCurrentCategory($_category);
-	$layer->prepareProductCollection($productCollection);
-	$productCollection->addCountToCategories($_collection);
+	//$layer->prepareProductCollection($productCollection);
+	//$productCollection->addCountToCategories($_collection);
 	
 	$_category->getProductCollection()->setStoreId($storeId);
 	
