@@ -31,30 +31,45 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Mage_Cybersource_Model_
     
 	public function order(Varien_Object $payment, $amount){
 		//For totsy, no payment is allowed to be captured upon order place
-		$amount = 0.00;
 		$customerId = $payment->getOrder()->getQuote()->getCustomerId();
 		
+		$profile = Mage::getModel('paymentfactory/profile');
      	if (!!$payment->getData('cybersource_subid')){
-//     		$profile = Mage::getModel('paymentfactory/profile')->loadByEncryptedSubscriptionId($payment->getData('cybersource_subid'));
-//     		if(!!$profile && !!$profile->getEntityId()){
-//     			//Replace encrypted to non-encrypted
-//     			$payment->setData('cybersource_subid', $profile->getData('subscription_id'));
-//     		}
-     		return $this->authorize($payment, $amount);
+     		//
+     		$profile->loadBySubscriptionId($payment->getData('cybersource_subid'));
+     	}elseif (!!$payment->getData('cc_number')){
+     		$profile->loadByCcNumberWithId($payment->getData('cc_number').$customerId.$payment->getCcExpYear().$payment->getCcExpMonth());
      	}
-     	if (!!$payment->getData('cc_number')){
-     		$profile = Mage::getModel('paymentfactory/profile')->loadByCcNumberWithId($payment->getData('cc_number').$customerId);
-     		if(!!$profile && !!$profile->getId()){
-     			//Checkout with existing profile instead of creating new card
-     			$payment->setData('cybersource_subid', $profile->getData('cybersource_subid'));     			
-     			return $this->authorize($payment, $amount);
-     		}
+     	
+		if(!!$profile && !!$profile->getId() 
+				// $profile->getExpireYear() === $payment->getCcExpYear() 
+			//	 $profile->getExpireMonth() === $payment->getCcExpMonth()
+		){
+     		//Checkout with existing profile instead of creating new card
+     		//$payment->setData('cybersource_subid', $profile->getData('subscription_id'));     			
+     		return $this->_validateProfile($profile, $payment);
      	}
      		
         return $this->create($payment);
      }
      
-	protected function iniRequest(){
+     protected function _validateProfile($profile, $payment){
+//     	IF VISA, auth 0
+//     	ELSE auth 1 and void
+		if ($profile->getCardType() == 'VI'){
+			return $this->authorize($payment,0);
+		}else{
+			$validationStatus = $this->authorize($payment,1);
+			if($validationStatus){
+				$payment->setParentTransactionId($payment->getTransactionId());
+				$this->voidSpecial($payment,1);
+			}
+			return $validationStatus;
+		}
+     	
+     }
+     
+     protected function iniRequest(){
 		parent::iniRequest();
 		$this->_addSubscriptionToRequest($this->_payment);
 		
@@ -159,6 +174,19 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Mage_Cybersource_Model_
     	$this->_payment = NULL; 
         return $this;
     }
+    
+    public function void(Varien_Object $payment, $amount){
+    	$this->_payment = $payment;
+        parent::void($payment, $amount);
+        $payment->setCybersourceSubid($payment->getCybersourceSubid()); //Harapartners
+        $profile = Mage::getModel('paymentfactory/profile')->loadBySubscriptionId($payment->getCybersourceSubid());
+    	$payment->setCcLast4($profile->getData('last4no'));
+    	$payment->setCcType($profile->getData('card_type'));
+    	$payment->setCcExpYear($profile->getData('expire_year'));
+    	$payment->setCcExpMonth($profile->getData('expire_month'));
+        $this->_payment = NULL;
+        return $this;
+    }
 
     public function capture(Varien_Object $payment, $amount){
     	$this->_payment = $payment;
@@ -171,6 +199,56 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Mage_Cybersource_Model_
     	$payment->setCcExpMonth($profile->getData('expire_month'));
         $this->_payment = NULL;
         return $this;
+    }
+    
+    public function voidSpecial(Varien_Object $payment, $amount){ //for void $1 as V,Harapartners
+    	$this->_payment = $payment;
+         $error = false;
+        if ($payment->getTransactionId() && $payment->getCybersourceToken()) {
+            $soapClient = $this->getSoapApi();
+            
+            parent::iniRequest();
+            
+            $ccAuthReversalService = new stdClass();
+            $ccAuthReversalService->run = "true";
+            $ccAuthReversalService->authRequestID = $payment->getTransactionId();
+            $ccAuthReversalService->authRequestToken = $payment->getCybersourceToken();
+            $this->_request->ccAuthReversalService = $ccAuthReversalService;
+
+            $purchaseTotals = new stdClass();
+            $purchaseTotals->currency = $payment->getOrder()->getBaseCurrencyCode();
+            $purchaseTotals->grandTotalAmount = $amount;
+            $this->_request->purchaseTotals = $purchaseTotals;
+
+            try {
+                $result = $soapClient->runTransaction($this->_request);
+                if ($result->reasonCode==self::RESPONSE_CODE_SUCCESS) {
+                    $payment->setTransactionId($result->requestID)
+                        ->setCybersourceToken($result->requestToken);
+                     //   ->setIsTransactionClosed(1);
+                } else {
+                     $error = Mage::helper('cybersource')->__('There is an error in processing the payment. Please try again or contact us.');
+                }
+            } catch (Exception $e) {
+               Mage::throwException(
+                    Mage::helper('cybersource')->__('Gateway request error: %s', $e->getMessage())
+                );
+            }
+        }else{
+            $error = Mage::helper('cybersource')->__('Invalid transaction id or token');
+        }
+        if ($error !== false) {
+            Mage::throwException($error);
+        }
+        $payment->setCybersourceSubid($payment->getCybersourceSubid()); //Harapartners
+        $profile = Mage::getModel('paymentfactory/profile')->loadBySubscriptionId($payment->getCybersourceSubid());
+    	$payment->setCcLast4($profile->getData('last4no'));
+    	$payment->setCcType($profile->getData('card_type'));
+    	$payment->setCcExpYear($profile->getData('expire_year'));
+    	$payment->setCcExpMonth($profile->getData('expire_month'));
+        $this->_payment = NULL;
+        return $this;    	
+    	
     }
 
     // ========================================== //

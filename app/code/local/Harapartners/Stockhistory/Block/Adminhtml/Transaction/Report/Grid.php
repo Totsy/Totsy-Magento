@@ -36,6 +36,8 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Grid extends 
 //					->columns(array('qty' => 'SUM(qty_delta)', 'total_all_cost' => 'SUM(total_cost)'))
 //					->group('product_id');
 		
+		$categoryId = '';
+		
 		$uniqueProductList = array();
 		foreach($rawCollection as $item){
 			
@@ -49,20 +51,29 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Grid extends 
 			$uniqueProductList[$item->getProductId()]['total'] += $item->getQtyDelta() * $item->getUnitCost();
 			$uniqueProductList[$item->getProductId()]['qty'] += $item->getQtyDelta();
 			
+			$categoryId = $item->getCategoryId();
+			
 		}
 		$reportCollection = new Varien_Data_Collection();
+		
+		$productsSoldArray = Mage::helper('stockhistory')->getProductSoldInfoByEvent($categoryId);
 
 		foreach($uniqueProductList as $productId => $productInfo){
 			$item = new Varien_Object();//Mage::getModel('stockhistory/report');
 			$product = Mage::getModel('catalog/product')->load($productId);
+			$sku = $product->getSku();
+			
+			$soldNum = (isset($productsSoldArray[$sku])) ? $productsSoldArray[$sku] : 0;
+			
 			//you may want to add some product info here, like SKU, Name, Vendor ... so the report is good looking
 			$data = array(
 				'po_id'			=>	$poId,
 				'product_name'	=>	$product->getName(),
 				'vendor_style'	=>	$product->getVendorStyle(),
-				'sku'			=>  $product->getSku(),
+				'sku'			=>  $sku,
 				'color'			=>	$product->getColor(),
 				'size'			=>	$product->getSize(),
+				'qty_sold'		=>	$soldNum,
 				'qty'			=>	$productInfo['qty'],
 				'total'			=>	$productInfo['total'],
 				'average_cost'	=>	round($productInfo['total']/$productInfo['qty'], 2),
@@ -119,8 +130,15 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Grid extends 
 
 		));
 		
+		$this->addColumn('qty_sold', array(
+					'header'	=>	Mage::helper('stockhistory')->__('Quantity Sold'),
+					'align'		=>	'right',
+					'width'		=>	'50px',
+					'index'		=>  'qty_sold',
+		));
+		
 		$this->addColumn('qty', array(
-					'header'	=>	Mage::helper('stockhistory')->__('Quantity'),
+					'header'	=>	Mage::helper('stockhistory')->__('Stock Quantity'),
 					'align'		=>	'right',
 					'width'		=>	'50px',
 					'index'		=>  'qty',

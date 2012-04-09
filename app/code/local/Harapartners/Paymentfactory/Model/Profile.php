@@ -87,7 +87,7 @@ class Harapartners_Paymentfactory_Model_Profile extends Mage_Core_Model_Abstract
     	if(!!$dataObject->getData('cc_number_hash')){
     		$this->setData('cc_number_hash', $dataObject->getData('cc_number_hash'));
     	}elseif(!!$dataObject->getData('cc_number')){
-    		$this->setData('cc_number_hash',md5($dataObject->getCcNumber().$dataObject->getData('customer_id')));
+    		$this->setData('cc_number_hash',md5($dataObject->getCcNumber().$dataObject->getData('customer_id').$dataObject->getData('cc_exp_year').$dataObject->getData('cc_exp_month')));
     	}else{
     		throw new Exception('Unable to create hash key');
     	}       
