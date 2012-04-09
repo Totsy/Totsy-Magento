@@ -45,45 +45,15 @@ class Harapartners_Service_Model_Rewrite_Sales_Quote_Address_Total_Tax extends M
 		/****** make invoice ******/
 		try {
 			$calculator = Mage::getModel ( 'speedtax/speedtax_calculate' );
-			
-			if( ! $calculator->isTaxable( $address ) ) {
-				return $this;
+			if (!!$calculator->queryQuoteAddress($address)) {
+				//Line item amount and shipping tax amount are set within the query
+				$amount = $calculator->getTotalTax ();
+				$this->_addAmount ( $amount );
+				$this->_addBaseAmount ( $amount );
 			}
-			
-			foreach ( $address->getAllItems () as $item ) {
-				/*** make line item ***/
-				$calculator->addLine ( $item );
-			}
-			if ($address->getAddressType () == Mage_Sales_Model_Quote_Address::TYPE_SHIPPING && Mage::getStoreConfig("speedtax/speedtax/tax_shipping", $store->getId())) {
-				$shippingItem = new Varien_Object ( );
-				$shippingItem->setId ( Mage::getStoreConfig ( 'speedtax/speedtax/' . "shipping_sku", $store->getId () ) );
-				$shippingItem->setQuote ( $address->getQuote () );
-				$calculator->addShipping ( $shippingItem );
-				//$shippingTax = $result->CalculateInvoiceResult->totalTax->decimalValue;
-			}
-			if ($calculator->hasItem ()) {
-				/*** send request and get result ***/
-				if ($calculator->QueryTax ()) {
-					$amount = $calculator->getTotalTax ();
-					$percent = $calculator->getTotalRate ();
-					
-					$this->_addAmount ( $amount );
-					$this->_addBaseAmount ( $amount );
-				}
-			}
-			//set every item's tax from speedtax result 
-			$index = 0;
-			foreach ( $address->getAllItems () as $item ) {
-				/*** make line item ***/
-				$item->setTaxAmount ( $calculator->getTax ( $index ) );
-				$item->setBaseTaxAmount ( $calculator->getTax ( $index ) );
-				$item->setTaxPercent ( $calculator->getRate ( $index ) * 100 );
-				$index ++;
-			}
-			$shippingTax = $calculator->getShippingTax ();
-			$address->setShippingTaxAmount ( $shippingTax );
-			$address->setBaseShippingTaxAmount ( $shippingTax );
 		} catch( Exception $e ) {
+			//Tax collecting is very important, bubble exceptions up
+			throw new $e;
 		}
 		
 		return $this;
