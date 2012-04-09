@@ -106,7 +106,7 @@ class Harapartners_Service_Block_Rewrite_Page_Html_Head extends Mage_Page_Block_
         	$attrText = $attrOptions->getSource()->getOptionText($perage);
         	$newAgeArray[] = 	$this->__($attrText);
         }
-        $ageStr = implode(',' , $newDeptArray);
+        $ageStr = implode(',' , $newAgeArray);
         if (count($ageArray)!=0){
         	$ageStr = ','.$ageStr;
         }

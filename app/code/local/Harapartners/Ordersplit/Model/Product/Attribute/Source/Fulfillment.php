@@ -1,4 +1,5 @@
 <?php
+
 /*
  * NOTICE OF LICENSE
  *
@@ -18,6 +19,10 @@ class Harapartners_Ordersplit_Model_Product_Attribute_Source_Fulfillment extends
         if (!$this->_options) {
         	$helper = Mage::helper('ordersplit');
             $this->_options = array(
+            	array(
+                    'value' => '',
+                    'label' => $helper->__('-- Please Select --')
+                ),
                 array(
                     'value' => Harapartners_Ordersplit_Helper_Data::TYPE_DOTCOM,
                     'label' => $helper->__('DotCom')

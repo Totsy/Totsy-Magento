@@ -42,17 +42,30 @@ class Harapartners_Ordersplit_Helper_Data extends Mage_Core_Helper_Abstract {
 		$dotcomItems = array();
 		$otherItems = array();	
 		foreach ($oldQuote->getAllItems() as $item) {
-			$product = Mage::getModel('catalog/product')->load($item->getProductId());
-			//$product = Mage::getModel('catalog/product')->loadByAttribute('sku', $item->getSku());
-			if($product->getIsVirtual()){
-				array_push($virtualItems, $item);
-			}elseif ($product->getFulfillmentType() == 'dotcom'){
-				array_push($dotcomItems, $item);
-			}elseif($product->getFulfillmentType() == 'dropship'){
-				array_push($dropshipItems, $item);
+			
+			//Fulfillment type is determined by parent item only!
+			if(!!$item->getParentItemId()){
+				$productId = $item->getParentItem()->getProductId();
 			}else{
-				array_push($otherItems, $item);	
-			}							
+				$productId = $item->getProductId();
+			}
+			$product = Mage::getModel('catalog/product')->load($productId);
+			
+			switch ($product->getFulfillmentType()){
+				case self::TYPE_DOTCOM:
+					array_push($dotcomItems, $item);
+					break;
+				case self::TYPE_DROPSHIP:
+					array_push($dropshipItems, $item);
+					break;
+				case self::TYPE_VIRTUAL:
+					array_push($virtualItems, $item);
+					break;
+				default:
+					array_push($otherItems, $item);
+					break;
+			}
+						
 		}
 		
 		if(!!count($dotcomItems) 
@@ -83,13 +96,13 @@ class Harapartners_Ordersplit_Helper_Data extends Mage_Core_Helper_Abstract {
 			);
 		}else{
 			if(count($dotcomItems)){
-				Mage::helper('ordersplit')->processNonHybridOrder($oldOrder, 'dotcom');
+				Mage::helper('ordersplit')->processNonHybridOrder($oldOrder, self::TYPE_DOTCOM);
 			}elseif(count($virtualItems)){
-				Mage::helper('ordersplit')->processNonHybridOrder($oldOrder, 'virtual');
+				Mage::helper('ordersplit')->processNonHybridOrder($oldOrder, self::TYPE_VIRTUAL);
 			}elseif(count($dropshipItems)){
-				Mage::helper('ordersplit')->processNonHybridOrder($oldOrder, 'dropship');
+				Mage::helper('ordersplit')->processNonHybridOrder($oldOrder, self::TYPE_DROPSHIP);
 			}elseif(count($otherItems)){
-				Mage::helper('ordersplit')->processNonHybridOrder($oldOrder, 'other');
+				Mage::helper('ordersplit')->processNonHybridOrder($oldOrder, self::TYPE_OTHER);
 			}
 		}
 			
