@@ -128,7 +128,7 @@
 		<h1 class="event-collection-title" id="event-upcoming">Upcoming Sales</h1>
 		<?php foreach ($upcomingArray as $up):?>
 			<?php
-				$endcountRaw = strtotime($up['event_end_date']);
+				$endcountRaw = strtotime($up['event_start_date']);
 				$endcount = date("F j, Y, G:i:s", $endcountRaw);
 			?>
 			<div class="catalog-event">
