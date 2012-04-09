@@ -39,19 +39,16 @@ class Harapartners_SpeedTax_Model_Speedtax_Calculate extends Harapartners_SpeedT
 	}
 	
 	
-	
 	// ================================================== //
 	// ===== Entry point ================================ //
 	// ================================================== //
 	public function queryQuoteAddress(Mage_Sales_Model_Quote_Address $mageQuoteAddress){
-		// Taxable Shipping address only, ignore billing, compatible with multiple-shipping
-		// Empty address is not taxable
 		if (!$this->_isTaxable($mageQuoteAddress)){
 			return null;		
 		}
 		
 		$this->_invoice->invoiceType = INVOICE_TYPES::INVOICE;
-		$this->_prepareSpeedTaxInvoiceByMageAddress($mageQuoteAddress);
+		$this->_prepareSpeedTaxInvoiceByMageQuoteAddress($mageQuoteAddress);
 		if(!$this->_invoice || !$this->_invoice->lineItems){
 			return null;
 		}
@@ -65,23 +62,34 @@ class Harapartners_SpeedTax_Model_Speedtax_Calculate extends Harapartners_SpeedT
 		return $this;
 	}
 	
-	public function postOrderAddress(Mage_Sales_Model_Order_Address $mageOrderAddress){
-		//Taxable Shipping address only, ignore billing, compatible with multiple-shipping
-		// Empty address is not taxable
-		if ($mageOrderAddress->getAddressType() != Mage_Sales_Model_Quote_Address::TYPE_SHIPPING 
-				|| !$this->_isTaxable($mageOrderAddress)){
+	
+	public function postOrderInvoice(Mage_Sales_Model_Order_Invoice $mageOrderInvoice){
+		$mageOrderAddress = $mageOrderInvoice->getShippingAddress();
+		if (!$this->_isTaxable($mageOrderAddress)){
 			return null;		
 		}
 		
-		$this->_invoice->invoiceType = INVOICE_TYPES::CREDIT;
-		$this->_prepareSpeedTaxInvoiceByMageAddress($mageOrderAddress);
+		$this->_invoice->invoiceType = INVOICE_TYPES::INVOICE;
+		$this->_prepareSpeedTaxInvoiceByMageOrderInvoice($mageOrderInvoice);
 		if(!$this->_invoice || !$this->_invoice->lineItems){
 			return null;
 		}
 		
 		if(!$this->_result){
-			$this->_result = $this->_getSpeedtax()->CalculateInvoice($this->_invoice)->CalculateInvoiceResult;
-			$this->_result->_resultEvent = "Post Invoice"; //"Calculate Invoice" will not be logged
+			$this->_result = $this->_getSpeedtax()->PostInvoice($this->_invoice)->PostInvoiceResult;
+		}
+		return $this;
+	}
+	
+	public function postOrderCreditmemo(Mage_Sales_Model_Order_Creditmemo $mageCreditmemo){
+		$mageOrderAddress = $mageCreditmemo->getShippingAddress();
+		if (!$this->_isTaxable($mageOrderAddress)){
+			return null;		
+		}
+		
+		//One invoid per order, full refund only!
+		if(!$this->_result){
+			$this->_result = $this->_getSpeedtax()->VoidInvoice($mageCreditmemo->getOrderIncrementId());
 		}
 		return $this;
 	}
@@ -92,14 +100,14 @@ class Harapartners_SpeedTax_Model_Speedtax_Calculate extends Harapartners_SpeedT
 	// ===== Core Login, Line items, Cleaning Up ======== //
 	// ================================================== //
 	//Mage_Sales_Model_Quote_Address or Mage_Sales_Model_Order_Address 
-	protected function _prepareSpeedTaxInvoiceByMageAddress($mageAddress) {
+	protected function _prepareSpeedTaxInvoiceByMageQuoteAddress(Mage_Sales_Model_Quote_Address $mageQuoteAddress) {
 		//Clear the invoice number so that the request is just a query
 		$this->_invoice->invoiceNumber = null;
 		$this->_invoice->customerIdentifier = Mage::getStoreConfig ( 'speedtax/speedtax/account' ); //E.g. customer name, customer ID.  For reference only.
 		
 		// ----- Product line items ----- //
 		//Add line items, the quote address only fetches related quote items
-		foreach ( $mageAddress->getAllItems () as $mageItem ) {
+		foreach ( $mageQuoteAddress->getAllItems () as $mageItem ) {
 			//For parent-child pair (for example: conf-simple), using parent item only
 			if(!!$mageItem->getParentItemId()){
 				continue;
@@ -111,32 +119,87 @@ class Harapartners_SpeedTax_Model_Speedtax_Calculate extends Harapartners_SpeedT
 				continue;
 			}
 			
+			if($mageItem->getRowTotal() - $mageItem->getDiscountAmount() <= 0){
+				continue;
+			}
+			
+			$mageItem->setData('speedtax_invoice_lineitem_index', count($this->_invoice->lineItems)); //For request clean up
+			
 			$sptxLineItem = new lineItem();
 			$sptxLineItem->lineItemNumber = count( $this->_invoice->lineItems ); //Append to end
 			//Specify tax class (product code for SpeedTax), if empty, default company code will be applied on SpeedTax's end
-			if(!!$this->_getProductTaxClass()){
-				$sptxLineItem->productCode = $this->_getProductTaxClass()->getOptionText($mageItem->getTaxClassId());
-			}
+			//Tax rate by SKU requires product setup on SpeedTax's end, not supported in the current version
+			//ProductCode should be SKU, and the Merchant need to setup the default tax class
+			$sptxLineItem->productCode = $mageItem->getSku();
+			
 			$sptxLineItem->customReference = $mageItem->getSku();
-			$sptxLineItem->quantity = $mageItem->getQuantity ();
+			$sptxLineItem->quantity = $mageItem->getQty ();
+			
+			//Price of row total, not unit price
 			$sptxPrice = new price();
 			$sptxPrice->decimalValue = $mageItem->getRowTotal() - $mageItem->getDiscountAmount();
 			$sptxLineItem->salesAmount = $sptxPrice;
+			
 			$sptxLineItem->shipFromAddress = $this->_getShipFromAddress ();
-			$sptxLineItem->shipToAddress = $this->_getShippingToAddress ($mageAddress); //Note, address type is validated at the entry point 'queryQuoteAddress'
+			$sptxLineItem->shipToAddress = $this->_getShippingToAddress ($mageQuoteAddress); //Note, address type is validated at the entry point 'queryQuoteAddress'
 			
 			$this->_invoice->lineItems[] = $sptxLineItem;
-			//For request clean up
-			$mageItem->setData('speedtax_invoice_lineitem_index', count($this->_invoice->lineItems));
 		}
 		
 		// ----- Other line items ----- //
 		//If global store config specifies: "tax_shipping", then create shipping cost line item. Note this is different from "Tax_Shipping" tax class of a product
 		if(!!Mage::getStoreConfig("speedtax/speedtax/tax_shipping")){
-			$this->_addLineItemFromShippingCost($mageAddress);
+			$this->_addLineItemFromShippingCost($mageQuoteAddress);
 		}
 		return $this;
 	}
+	
+	protected function _prepareSpeedTaxInvoiceByMageOrderInvoice(Mage_Sales_Model_Order_Invoice $mageOrderInvoice) {
+		//Clear the invoice number so that the request is just a query
+		$mageOrderAddress = $mageOrderInvoice->getShippingAddress();
+		
+		//Allow only one INVOICE per ORDER!
+		$this->_invoice->invoiceNumber = $mageOrderInvoice->getOrderIncrementId();
+		$this->_invoice->customerIdentifier = Mage::getStoreConfig ( 'speedtax/speedtax/account' ); //E.g. customer name, customer ID.  For reference only.
+		
+		// ----- Product line items ----- //
+		foreach ( $mageOrderInvoice->getAllItems() as $mageItem ) {
+			//Child item has no tax amount and should be ignored
+			if(!$mageItem->getTaxAmount()){
+				continue;
+			}
+			
+			if($mageItem->getRowTotal() - $mageItem->getDiscountAmount() <= 0){
+				continue;
+			}
+
+			$sptxLineItem = new lineItem();
+			$sptxLineItem->lineItemNumber = count( $this->_invoice->lineItems ); //Append to end
+			
+			//Default tax class
+			$sptxLineItem->productCode = $mageItem->getSku();
+			$sptxLineItem->customReference = $mageItem->getSku();
+			$sptxLineItem->quantity = $mageItem->getQty ();
+			
+			//Price of row total, not unit price
+			$sptxPrice = new price();
+			$sptxPrice->decimalValue = $mageItem->getRowTotal() - $mageItem->getDiscountAmount();
+			$sptxLineItem->salesAmount = $sptxPrice;
+			
+			$sptxLineItem->shipFromAddress = $this->_getShipFromAddress ();
+			$sptxLineItem->shipToAddress = $this->_getShippingToAddress ($mageOrderAddress); //Note, address type is validated at the entry point 'queryQuoteAddress'
+			
+			$this->_invoice->lineItems[] = $sptxLineItem;
+		}
+		
+		// ----- Other line items ----- //
+		//If global store config specifies: "tax_shipping", then create shipping cost line item. Note this is different from "Tax_Shipping" tax class of a product
+		if(!!Mage::getStoreConfig("speedtax/speedtax/tax_shipping")){
+			$this->_addLineItemFromShippingCost($mageOrderAddress);
+		}
+		return $this;
+	}
+	
 	
 	//Mage_Sales_Model_Quote_Address or Mage_Sales_Model_Order_Address
 	protected function _addLineItemFromShippingCost($mageAddress) {
@@ -162,17 +225,22 @@ class Harapartners_SpeedTax_Model_Speedtax_Calculate extends Harapartners_SpeedT
 				$this->_saveCachedResult();
 				
 				foreach ( $mageQuoteAddress->getAllItems() as $mageQuoteItem ) {
-					if(!$mageQuoteItem->getData('speedtax_invoice_lineitem_index')){
+					//Note '0' is a valid index
+					if(!is_numeric($mageQuoteItem->getData('speedtax_invoice_lineitem_index'))){
 						continue;
 					}
 					$taxAmount = $this->_getLineItemTaxAmountByIndex($mageQuoteItem->getData('speedtax_invoice_lineitem_index'));
 					$mageQuoteItem->setTaxAmount ($taxAmount);
 					$mageQuoteItem->setBaseTaxAmount ($taxAmount);
+					if(($mageQuoteItem->getRowTotal() - $mageQuoteItem->getDiscountAmount()) > 0){
+						$mageQuoteItem->setTaxPercent (sprintf("%.4f", 100*$taxAmount/($mageQuoteItem->getRowTotal() - $mageQuoteItem->getDiscountAmount())));
+					}
 				}
 				
 				if(!!$this->_getTaxShippingAmount()){
-					$mageQuoteAddress->setShippingTaxAmount($this->_getTaxShippingAmount());
-					$mageQuoteAddress->setBaseShippingTaxAmount($this->_getTaxShippingAmount());
+					$taxShippingAmount = $this->_getTaxShippingAmount();
+					$mageQuoteAddress->setShippingTaxAmount($taxShippingAmount);
+					$mageQuoteAddress->setBaseShippingTaxAmount($taxShippingAmount);
 				}
 				break;
 			case 'FAILED_WITH_ERRORS' || 'FAILED_INVOICE_NUMBER' :
@@ -225,6 +293,10 @@ class Harapartners_SpeedTax_Model_Speedtax_Calculate extends Harapartners_SpeedT
 	// ================================================== //
 	//Mage_Sales_Model_Quote_Address or Mage_Sales_Model_Order_Address 
 	protected function _isTaxable($mageAddress) {
+		//Only quote address class have the const (shared with order address here)
+		if($mageAddress->getAddressType() != Mage_Sales_Model_Quote_Address::TYPE_SHIPPING){
+			return false;
+		}
 		$originsString = Mage::getStoreConfig('speedtax/speedtax/origins');
 		return in_array($mageAddress->getRegionId(), explode(',', $originsString));
 	}
@@ -308,9 +380,10 @@ class Harapartners_SpeedTax_Model_Speedtax_Calculate extends Harapartners_SpeedT
 	}
 	
 	protected function _getLineItemTaxAmountByIndex($index) {
-		//atternertive $result->CalculateInvoiceResult->totalTax->dollars
 		try{
-			if (is_array ( $this->_result->lineItemBundles->lineItems )) {
+			if (is_array ( $this->_result->lineItemBundles->lineItems )
+					&& !empty($this->_result->lineItemBundles->lineItems[$index])
+			) {
 				return $this->_result->lineItemBundles->lineItems[$index]->taxAmount->decimalValue;
 			} else {
 				return $this->_result->lineItemBundles->lineItems->taxAmount->decimalValue;

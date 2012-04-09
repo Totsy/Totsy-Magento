@@ -18,8 +18,7 @@ class Harapartners_SpeedTax_Model_Observer extends Mage_Core_Model_Abstract {
 		$invoice = $observer->getEvent()->getInvoice();
 		try {
 			$calculator = Mage::getModel ( 'speedtax/speedtax_calculate' );
-//			$quote = $invoice->getOrder()->getQuote();
-			$calculator->postOrderAddress($invoice->getShippingAddress());
+			$calculator->postOrderInvoice($invoice);
 		} catch( Exception $e ) {
 			//Tax collecting is very important, bubble exceptions up
 			throw new $e;
@@ -27,12 +26,15 @@ class Harapartners_SpeedTax_Model_Observer extends Mage_Core_Model_Abstract {
 	}
 	
 	public function salesOrderCreditmemoRefund(Varien_Event_Observer $observer) {
-		$creditMemo = $observer->getEvent()->getCreditMemo();
-		$calculator = Mage::getModel ( 'speedtax/speedtax_calculate' );
-		$order = $observer->creditmemo->getOrder();
-		if ($calculator->addCreditmemo ( $order )) {
-			$result = $calculator->invoiceTaxPending ();
+		$creditmemo = $observer->getEvent()->getCreditmemo();
+		try {
+			$calculator = Mage::getModel ( 'speedtax/speedtax_calculate' );
+			$calculator->postOrderCreditmemo($creditmemo);
+		} catch( Exception $e ) {
+			//Tax collecting is very important, bubble exceptions up
+			throw new $e;
 		}
+		
 	}
 	
 }
