@@ -59,12 +59,30 @@ class Harapartners_SpeedTax_Model_Speedtax_Calculate extends Harapartners_SpeedT
 		$this->_result = $this->_loadCachedResult();
 		if(!$this->_result){
 			$this->_result = $this->_getSpeedtax()->CalculateInvoice($this->_invoice)->CalculateInvoiceResult;
-			$this->_result->_resultEvent = "CalculateInvoice"; //For logging
+			$this->_result->_resultEvent = "Calculate Invoice"; //"Calculate Invoice" will not be logged
 			$this->_updataMageQuoteItems($mageQuoteAddress);
 		}
 		return $this;
 	}
 	
+	public function postQuoteAddress(Mage_Sales_Model_Quote_Address $mageQuoteAddress){
+		//Taxable Shipping address only, ignore billing, compatible with multiple-shipping
+		if ($mageQuoteAddress->getAddressType() != Mage_Sales_Model_Quote_Address::TYPE_SHIPPING 
+				|| !$this->_isTaxable($mageQuoteAddress)){
+			return null;		
+		}
+		
+		$this->_prepareSpeedTaxInvoiceByMageAddress($mageQuoteAddress);
+		if(!$this->_invoice || !$this->_invoice->lineItems){
+			return null;
+		}
+		
+		if(!$this->_result){
+			$this->_result = $this->_getSpeedtax()->CalculateInvoice($this->_invoice)->CalculateInvoiceResult;
+			$this->_result->_resultEvent = "Post Invoice"; //"Calculate Invoice" will not be logged
+		}
+		return $this;
+	}
 	
 	
 	
@@ -332,7 +350,10 @@ class Harapartners_SpeedTax_Model_Speedtax_Calculate extends Harapartners_SpeedT
 			$log ['customer_name'] = $this->_invoice->customerIdentifier;
 			$log ["error"] = true;
 		}
-		if ($this->_result->_resultEvent == "Post Invoice" || $this->_result->_resultEvent == "Pending Credit" || $this->_result->_resultEvent == "Pending Invoice") {
+		if ($this->_result->_resultEvent == "Post Invoice" 
+				|| $this->_result->_resultEvent == "Pending Credit" 
+				|| $this->_result->_resultEvent == "Pending Invoice"
+		) {
 			//API Request Log
 			$log ['event'] = $this->_result->_resultEvent;
 			$log ['result_type'] = $this->_result->resultType;

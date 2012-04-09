@@ -16,22 +16,17 @@ class Harapartners_SpeedTax_Model_Observer extends Mage_Core_Model_Abstract {
 	
 	public function saleOrderInvoicePay(Varien_Event_Observer $observer) {
 		$invoice = $observer->getEvent()->getInvoice();
-		$calculator = Mage::getModel ( 'speedtax/speedtax_calculate' );
-		
-		//Jun, Restoring increment_id, why?
-//		$order = $invoice->getOrder ();
-//		$invoice->setData ( "increment_id", $order->getData ( "increment_id" ) );
+		try {
+			$calculator = Mage::getModel ( 'speedtax/speedtax_calculate' );
+			$quote = $invoice->getOrder()->getQuote();
+			foreach($quote->getAddresses() as $address){
+				$calculator->postQuoteAddress($address);
+			}
+		} catch( Exception $e ) {
+			//Tax collecting is very important, bubble exceptions up
+			throw new $e;
+		}
 
-		$calculator->addInvoice ( $invoice );
-		$calculator->invoiceTaxPost ();
-//		
-//		if ($calculator->addInvoice ( $invoice )) {
-//			foreach ( $order->getAllItems () as $item ) {
-//				/*** make line item ***/
-//				$calculator->addLine ( $item );
-//			}
-//			$result = $calculator->invoiceTaxPost ();
-//		}
 	}
 	
 	public function salesOrderCreditmemoRefund(Varien_Event_Observer $observer) {

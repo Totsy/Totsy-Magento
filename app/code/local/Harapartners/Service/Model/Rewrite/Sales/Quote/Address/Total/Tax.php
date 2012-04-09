@@ -45,27 +45,15 @@ class Harapartners_Service_Model_Rewrite_Sales_Quote_Address_Total_Tax extends M
 		/****** make invoice ******/
 		try {
 			$calculator = Mage::getModel ( 'speedtax/speedtax_calculate' );
-			if (!!$calculator->queryQuoteAddress( $address)) {
+			if (!!$calculator->queryQuoteAddress($address)) {
+				//Line item amount and shipping tax amount are set within the query
 				$amount = $calculator->getTotalTax ();
-				$percent = $calculator->getTotalRate ();
 				$this->_addAmount ( $amount );
 				$this->_addBaseAmount ( $amount );
 			}
-			
-			//cleaning up
-			//set every item's tax from speedtax result 
-			$index = 0;
-			foreach ( $address->getAllItems () as $item ) {
-				/*** make line item ***/
-				$item->setTaxAmount ( $calculator->getTax ( $index ) );
-				$item->setBaseTaxAmount ( $calculator->getTax ( $index ) );
-				$item->setTaxPercent ( $calculator->getRate ( $index ) * 100 );
-				$index ++;
-			}
-			$shippingTax = $calculator->getShippingTax ();
-			$address->setShippingTaxAmount ( $shippingTax );
-			$address->setBaseShippingTaxAmount ( $shippingTax );
 		} catch( Exception $e ) {
+			//Tax collecting is very important, bubble exceptions up
+			throw new $e;
 		}
 		
 		return $this;
