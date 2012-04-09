@@ -83,12 +83,22 @@ abstract class Harapartners_HpCheckout_Block_Abstract extends Mage_Core_Block_Te
                     'label' => $address->format('oneline')
                 );
             }
+            
+            $addressId = '';
+            if ($type=='billing') {
+                $address = $this->getCustomer()->getPrimaryBillingAddress();
+            } else {
+                $address = $this->getCustomer()->getPrimaryShippingAddress();
+            }
+            if ($address) {
+                $addressId = $address->getId();
+            }
 
             $select = $this->getLayout()->createBlock('core/html_select')
                 ->setName($type.'_address_id')
                 ->setId($type.'-address-select')
                 ->setClass('address-select')
-                ->setValue('')
+                ->setValue($addressId)
                 ->setOptions($options);
 
             return $select->getHtml();
