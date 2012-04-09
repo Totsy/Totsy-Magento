@@ -16,16 +16,15 @@ class Harapartners_Categoryevent_Adminhtml_SortController extends Mage_Adminhtml
 	
 	public function indexAction(){
 		$this->_title($this->__('Category Event'))->_title($this->__('Sort Category Events'));
-		$post = $this->getRequest()->getPost();
-		$sortDate = $post['sort_date'];
+		$sortDate = $this->getRequest()->getPost('sort_date');
 		if(!$sortDate){
 			$sortDate = now();
 		}
-		$storeId = $post['sort_store'];
+		$storeId = $this->getRequest()->getPost('sort_store');
 		if(!$storeId){
 			$storeId = Mage_Core_Model_App::DISTRO_STORE_ID;
 		}
-		if ( isset($post['post_active']) && !!$post['post_active'] ) {
+		if (!!$this->getRequest()->getPost('post_active') ) {
 			Mage::getSingleton('adminhtml/session')->setData('categoryevent_sort_data_post', true); 
 			try {			
 				$sortentry = Mage::getModel('categoryevent/sortentry')->loadByDate($sortDate, $storeId, false);
@@ -48,18 +47,18 @@ class Harapartners_Categoryevent_Adminhtml_SortController extends Mage_Adminhtml
     }
 	
     public function sortSaveAction(){
-    	$post = $this->getRequest()->getPost();
+//    	$post = $this->getRequest()->getPost();
 		$liveSortedIdArray = array();
 		$upComingSortedIdArray = array();
-    	$liveSortedIdArray = $post['recordsLiveArray'];
-    	$upComingSortedIdArray = $post['recordsUpArray'];
-		if(!!$post['sortdate']){
-			$sortDate = $post['sortdate'];
+    	$liveSortedIdArray = $this->getRequest()->getPost('recordsLiveArray');
+    	$upComingSortedIdArray = $this->getRequest()->getPost('recordsUpArray');
+		if(!!$this->getRequest()->getPost('sortdate')){
+			$sortDate = $this->getRequest()->getPost('sortdate');
 		}else {
 			$sortDate = now();
 		}
-		if(!!$post['storeid']){
-			$storeId = $post['storeid'];
+		if(!!$this->getRequest()->getPost('storeid')){
+			$storeId = $this->getRequest()->getPost('storeid');
 		}else {
 			$storeId = Mage_Core_Model_App::DISTRO_STORE_ID;
 		}
@@ -79,14 +78,14 @@ class Harapartners_Categoryevent_Adminhtml_SortController extends Mage_Adminhtml
     }
     
     public function sortRebuildAction(){
-    	$post = $this->getRequest()->getPost();
-    	if(!!$post['sortdate']){
-			$sortDate = $post['sortdate'];
+//    	$post = $this->getRequest()->getPost();
+    	if(!!$this->getRequest()->getPost('sortdate')){
+			$sortDate = $this->getRequest()->getPost('sortdate');
 		}else {
 			$sortDate = now();
 		}
-		if(!!$post['storeid']){
-			$storeId = $post['storeid'];
+		if(!!$this->getRequest()->getPost('storeid')){
+			$storeId = $this->getRequest()->getPost('storeid');
 		}else {
 			$storeId = Mage_Core_Model_App::DISTRO_STORE_ID;
 		}
