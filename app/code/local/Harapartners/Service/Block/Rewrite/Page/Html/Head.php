@@ -110,7 +110,8 @@ class Harapartners_Service_Block_Rewrite_Page_Html_Head extends Mage_Page_Block_
         if (count($ageArray)!=0){
         	$ageStr = ','.$ageStr;
         }
-        $label = $label.$deptStr.$ageStr;
+        $label = trim($label.$deptStr.$ageStr , ',');
+        //$label = $label.$deptStr.$ageStr;
     	$this->setSailthruTags($label);
     }
         
