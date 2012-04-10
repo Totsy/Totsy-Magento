@@ -901,7 +901,7 @@ a.ui-link-inherit {
 .ui-icon-searchfield:after {
 	background: #FFFFFF /*{global-icon-color}*/;
 	background: rgba(0,0,0,0.4) /*{global-icon-disc}*/;
-	background-image: url(http://code.jquery.com/mobile/latest/images/icons-18-white.png) /*{global-icon-set}*/;
+	background-image: url(../images/buttons.png) /*{global-icon-set}*/;
 	background-repeat: no-repeat;
 	-moz-border-radius: 				9px;
 	-webkit-border-radius: 				9px;
@@ -958,6 +958,7 @@ a.ui-link-inherit {
 /* arrows */
 .ui-icon-arrow-r {
 	background-position: 	-108px 50%;
+	
 }
 .ui-icon-arrow-l {
 	background-position: 	-144px 50%;
