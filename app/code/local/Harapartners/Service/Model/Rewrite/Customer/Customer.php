@@ -196,7 +196,7 @@ class Harapartners_Service_Model_Rewrite_Customer_Customer extends Mage_Customer
 		
 		if(($email != $trimmedGmail) && $showMessage) {
 			//if gmail has been trimmed, show message.
-			$message = 'Your Gmail address alias(' . $email . ') has been trimmed as actual Gmail address(' . $trimmedGmail . ').';
+			$message = 'Your Gmail address alias(' . $email . ') has been trimmed as actual Gmail address(' . $trimmedGmail . '). You could still use your usual gmail address to login.';
 			Mage::getSingleton('customer/session')->addError(Mage::helper('customer')->__($message));
 		}
 
