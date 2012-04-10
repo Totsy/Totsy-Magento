@@ -1,0 +1,252 @@
+<?php
+/**
+ * Harapartners
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Harapartners License
+ * that is bundled with this package in the file LICENSE_EE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://www.Harapartners.com/license
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@Harapartners.com so we can send you a copy immediately.
+ *
+ * 
+ */
+
+?>
+<form id="hpcheckout-billing-form" action="">
+<?php $_code='paymentfactory_tokenize'; ?>
+	<div id="card-info">
+		<script type="text/javascript">
+		//<![CDATA[
+		    Validation.creditCartTypes.set('JCB', [new RegExp('^(35[0-9]{14}|(2131|1800)[0-9]{11})$'), new RegExp('^([0-9]{3})?$'), true]);
+		    Validation.creditCartTypes.set('LASER', [new RegExp('^((6304|6706|6771|6709)[0-9]{12}([0-9]{3}))$'), new RegExp('^([0-9]{3})?$'), false]);
+		    Validation.creditCartTypes.set('UATP', [false, new RegExp('^[0-9]{3}([0-9]{1})?$'), false]);
+		    Validation.creditCartTypes.set('MCI', [false, new RegExp('^[0-9]{3}([0-9]{1})?$'), false]);
+		//]]>
+		</script>
+		<img class="cart-type"  width="180px;" src="<?php echo $this->getSkinUrl('images/creditcards.jpg')?>"/>
+		<ul id="payment_form_paymentfactory_tokenize" class="form-list" style="">
+			<li>
+				<label class="required" for="paymentfactory_tokenize_cc_type"><em>*</em>Card Type</label>
+				<div class="input-box">
+					<div class="totsy-selective-input-box middle-length">
+						<span>American Express</span>
+						<select id="paymentfactory_tokenize_cc_type" class="required-entry validate-cybsersource-cc-type-select" name="payment[cc_type]">
+							<option value="AE">American Express</option>
+							<option value="VI">Visa</option>
+							<option value="MC">MasterCard</option>
+							<option value="DI">Discover</option>
+						</select>
+					</div>
+				</div>
+			</li>
+			<li>
+				<label class="required" for="paymentfactory_tokenize_cc_number"><em>*</em>Card Number</label>
+				<div class="input-box">
+					<input id="paymentfactory_tokenize_cc_number" class="input-text validate-cc-number validate-cc-type" type="text" value="" title="Credit Card Number" name="payment[cc_number]">
+				</div>
+			</li>
+			<li>
+				<label class="required" for="paymentfactory_tokenize_expiration"><em>*</em>Expiration Date</label>
+				<div class="input-box">
+					<div class="v-fix right-margin">
+						<div class="totsy-selective-input-box short-length">
+							<span>Month</span>
+							<select id="paymentfactory_tokenize_expiration" class="month validate-cc-exp required-entry" name="payment[cc_exp_month]">
+								<option selected="selected" value="">Month</option>
+								<option value="1">01 - January</option>
+								<option value="2">02 - February</option>
+								<option value="3">03 - March</option>
+								<option value="4">04 - April</option>
+								<option value="5">05 - May</option>
+								<option value="6">06 - June</option>
+								<option value="7">07 - July</option>
+								<option value="8">08 - August</option>
+								<option value="9">09 - September</option>
+								<option value="10">10 - October</option>
+								<option value="11">11 - November</option>
+								<option value="12">12 - December</option>
+							</select>
+						</div>
+					</div>
+					<div class="v-fix">
+						<div class="totsy-selective-input-box short-length">
+							<span>Year</span>
+							<select id="paymentfactory_tokenize_expiration_yr" class="year required-entry" name="payment[cc_exp_year]">
+								<option selected="selected" value="">Year</option>
+								<option value="2012">2012</option>
+								<option value="2013">2013</option>
+								<option value="2014">2014</option>
+								<option value="2015">2015</option>
+								<option value="2016">2016</option>
+								<option value="2017">2017</option>
+								<option value="2018">2018</option>
+								<option value="2019">2019</option>
+								<option value="2020">2020</option>
+								<option value="2021">2021</option>
+								<option value="2022">2022</option>
+							</select>
+						</div>
+					</div>
+				</div>
+			</li>
+			<li>
+				<label class="required" for="paymentfactory_tokenize_cc_cid"><em>*</em>Security Code</label>
+				<div class="input-box">
+					<div class="v-fix">
+						<input id="paymentfactory_tokenize_cc_cid" class="input-text cvv required-entry validate-cc-cvn" type="text" value="" name="payment[cc_cid]" title="Card Verification Number">
+					</div>
+				</div>
+			</li>
+		</ul>
+	</div>
+	
+	<div id="billing-info">
+		<p class="billing-addr-title">Billing Address</p>
+	    <ul class="form-list">
+		    <li id="billing-new-address-form">
+		        <ul>
+		            <li class="fields">
+		            	<div class="field half-of-half">
+		            		<label for="billing:firstname" class="required"><em>*</em><?php echo $this->__('First Name') ?></label>
+		                    <input type="text" name="billing[firstname]" title="<?php echo $this->__('First Name') ?>" class="input-text required-entry" value="<?php //echo $this->htmlEscape($this->getFirstname()) ?>" id="billing:firstname" />
+		            	</div>
+		            	<div class="field half-of-half">
+		            		<label for="billing:lastname" class="required"><em>*</em><?php echo $this->__('Last Name') ?></label>
+		                    <input type="text" name="billing[lastname]" title="<?php echo $this->__('Last Name') ?>" class="input-text required-entry" value="<?php //echo $this->htmlEscape($this->getLastname()) ?>" id="billing:lastname" />
+		            	</div>
+		            </li>	
+		            <li class="fields">
+		                <div class="field half-of-half">
+		                    <label for="billing:telephone" class="required"><em>*</em><?php echo $this->__('Telephone') ?></label>
+		                    <input type="text" name="billing[telephone]" title="<?php echo $this->__('Telephone') ?>" class="input-text required-entry validate-phoneLax" id="billing:telephone" value="<?php //echo $this->htmlEscape($this->getAddress()->getTelephone()) ?>" />
+		                </div>
+		            </li>
+		            <li class="fields">
+		            	<div class="field minus-padding half-of-half">
+			                <label for="billing:street1" class="required"><em>*</em><?php echo $this->__('Street Address 1') ?></label>
+			                <input type="text" title="<?php echo $this->__('Street Address Line 1') ?>" name="billing[street][0]" id="billing:street1" value="<?php //echo $this->htmlEscape($this->getAddress()->getStreet(1)) ?>" class="input-text required-entry" />
+		                </div>
+		                <div class="field half-of-half">
+		                	<label for="billing:street2">&nbsp;&nbsp;<?php echo $this->__('Street Address 2') ?></label>
+		                	<input type="text" title="<?php echo $this->__('Street Address Line 2') ?>" name="billing[street][1]" id="billing:street2" value="<?php //echo $this->htmlEscape($this->getAddress()->getStreet(2)) ?>" class="input-text" />
+		                </div>
+		            </li>
+		            <li class="fields"> 
+		                <div class="field half-of-half">
+		                    <label for="billing:city" class="required"><em>*</em><?php echo $this->__('City') ?></label>
+		                    <input type="text" title="<?php echo $this->__('City') ?>" name="billing[city]" class="input-text required-entry" value="<?php //echo $this->htmlEscape($this->getAddress()->getCity()) ?>" id="billing:city" />
+		                </div>
+		                <div class="field half-of-half">
+		                    <label for="billing:region_id" class="required"><em>*</em><?php echo $this->__('State/Province') ?></label>
+							<div class="totsy-selective-input-box">
+								<span>State</span>
+								<select id="billing:region_id" name="billing[region_id]" title="<?php echo $this->__('State/Province') ?>" class="validate-select"  >
+									<option value="">Please select region, state or province</option>
+									<option value="1">Alabama</option>
+									<option value="2">Alaska</option>
+									<option value="3">American Samoa</option>
+									<option value="4">Arizona</option>
+									<option value="5">Arkansas</option>
+									<option value="6">Armed Forces Africa</option>
+									<option value="7">Armed Forces Americas</option>
+									<option value="8">Armed Forces Canada</option>
+									<option value="9">Armed Forces Europe</option>
+									<option value="10">Armed Forces Middle East</option>
+									<option value="11">Armed Forces Pacific</option>
+									<option value="12">California</option>
+									<option value="13">Colorado</option>
+									<option value="14">Connecticut</option>
+									<option value="15">Delaware</option>
+									<option value="16">District of Columbia</option>
+									<option value="17">Federated States Of Micronesia</option>
+									<option value="18">Florida</option>
+									<option value="19">Georgia</option>
+									<option value="20">Guam</option>
+									<option value="21">Hawaii</option>
+									<option value="22">Idaho</option>
+									<option value="23">Illinois</option>
+									<option value="24">Indiana</option>
+									<option value="25">Iowa</option>
+									<option value="26">Kansas</option>
+									<option value="27">Kentucky</option>
+									<option value="28">Louisiana</option>
+									<option value="29">Maine</option>
+									<option value="30">Marshall Islands</option>
+									<option value="31">Maryland</option>
+									<option value="32">Massachusetts</option>
+									<option value="33">Michigan</option>
+									<option value="34">Minnesota</option>
+									<option value="35">Mississippi</option>
+									<option value="36">Missouri</option>
+									<option value="37">Montana</option>
+									<option value="38">Nebraska</option>
+									<option value="39">Nevada</option>
+									<option value="40">New Hampshire</option>
+									<option value="41">New Jersey</option>
+									<option value="42">New Mexico</option>
+									<option value="43">New York</option>
+									<option value="44">North Carolina</option>
+									<option value="45">North Dakota</option>
+									<option value="46">Northern Mariana Islands</option>
+									<option value="47">Ohio</option>
+									<option value="48">Oklahoma</option>
+									<option value="49">Oregon</option>
+									<option value="50">Palau</option>
+									<option value="51">Pennsylvania</option>
+									<option value="52">Puerto Rico</option>
+									<option value="53">Rhode Island</option>
+									<option value="54">South Carolina</option>
+									<option value="55">South Dakota</option>
+									<option value="56">Tennessee</option>
+									<option value="57">Texas</option>
+									<option value="58">Utah</option>
+									<option value="59">Vermont</option>
+									<option value="60">Virgin Islands</option>
+									<option value="61">Virginia</option>
+									<option value="62">Washington</option>
+									<option value="63">West Virginia</option>
+									<option value="64">Wisconsin</option>
+									<option value="65">Wyoming</option>
+								</select>
+							</div>
+		                </div>
+		            </li>
+		            <li class="fields">
+		                <div class="field half-of-half">
+		                    <label for="billing:postcode" class="required"><em>*</em><?php echo $this->__('Zip/Postal Code') ?></label>
+		                    <input type="text" title="<?php echo $this->__('Zip/Postal Code') ?>" name="billing[postcode]" id="billing:postcode" class="input-text validate-zip-international required-entry" value="<?php //echo $this->htmlEscape($this->getAddress()->getPostcode()) ?>" />
+		                </div>
+		            </li>
+		        </ul>
+		     </li>
+	    </ul>
+    </div>
+</form>
+<script type="text/javascript">
+
+	var paymentForm = new VarienForm( 'hpcheckout-billing-form' );
+
+	jQuery( document ).ready( function() {
+		updateSelectText();
+		jQuery('.totsy-selective-input-box select').bind( 'change', updateSelectText );
+	}); 
+	
+	function updateSelectText(){
+		jQuery(".totsy-selective-input-box select").each(function(){
+			var temphtml = jQuery(this).html();
+			var text = jQuery(this).find("option:selected").text();
+			var value = jQuery(this).find("option:selected").val();
+			if (value==''){
+				text = jQuery(this).find("option[selected='true']").text();
+				if (text=='') {
+					text = jQuery(this).find("option[value='']").text();
+				}
+			}
+			jQuery(this).parent('div').children('span').html(text);
+		});
+	};
+</script>

@@ -22,4 +22,7 @@ class Harapartners_Categoryevent_Block_Index_Index extends Mage_Core_Block_Templ
     	return $helper->getIndexDataObject();
     }
     
+    public function hasProduct($categoryId){
+    	return Mage::getResourceModel('categoryevent/sortentry')->checkEventProduct($categoryId);
+    }
 }

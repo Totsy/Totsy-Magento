@@ -74,6 +74,7 @@ class Harapartners_Import_Adminhtml_ImportController extends Mage_Adminhtml_Cont
 		$this->renderLayout();
 	}
 
+	
 	public function saveAction() {
 		$data = $this->getRequest()->getPost();
 		//save data in session in case of failure
@@ -113,6 +114,11 @@ class Harapartners_Import_Adminhtml_ImportController extends Mage_Adminhtml_Cont
 				$path = Mage::getBaseDir('var') . DS . 'import' . DS;
 				$uploader->save($path, $_FILES['import_filename']['name'] );
 				
+				$vendor = Mage::getModel('stockhistory/vendor')->loadByCode($this->getRequest()->getPost('vendor_code'));
+				if(!$vendor || !$vendor->getId()){
+					throw new Exception('Invalid vendor.');
+				}
+				
 			} catch (Exception $e) {
 	      		Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
 	      		Mage::getSingleton('adminhtml/session')->setHpImportFormData($data);
@@ -125,7 +131,8 @@ class Harapartners_Import_Adminhtml_ImportController extends Mage_Adminhtml_Cont
 	        
 	        $data['import_batch_id'] = $processorHelper->runDataflowProfile($_FILES['import_filename']['name']);
   			$data['import_filename'] = $_FILES['import_filename']['name'];
-  			$data['import_status'] = Harapartners_Import_Model_Import::IMPORT_STATUS_UPLOADED;
+  			$data['status'] = Harapartners_Import_Model_Import::IMPORT_STATUS_UPLOADED;
+  			$data['vendor_id'] = $vendor->getId();
 			
   			$model->importDataWithValidation($data)->save();
 			
@@ -137,13 +144,9 @@ class Harapartners_Import_Adminhtml_ImportController extends Mage_Adminhtml_Cont
 					
 					$processorHelper->runImport($model->getId());
 					Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('import')->__('The imported data has been processed.'));
-					$model->setData('status', Harapartners_Import_Model_Import::IMPORT_STATUS_COMPLETE)
-							->save();
 				}
 			}catch(Exception $e){
 				Mage::getSingleton('adminhtml/session')->addError(Mage::helper('import')->__('There is an error processing the uploaded data.'));
-				$model->setData('status', Harapartners_Import_Model_Import::IMPORT_STATUS_ERROR)
-						->save();
 			}
 			
 			if ($this->getRequest()->getParam('back')) {
