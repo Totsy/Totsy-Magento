@@ -55,7 +55,7 @@ class Mage_Customer_RevalidateController extends Mage_Core_Controller_Front_Acti
                         case Mage_Customer_Model_Customer::EXCEPTION_INVALID_EMAIL_OR_PASSWORD:
                             $message = $e->getMessage();
                             break;
-                        case Mage_Customer_Model_Customer::EXCEPTION_INVALID_STORE_ACCOUNT:
+                        case Harapartners_Service_Model_Rewrite_Customer_Customer::EXCEPTION_INVALID_STORE_ACCOUNT:
                         	$message = $e->getMessage();
                             break;
                         default:
