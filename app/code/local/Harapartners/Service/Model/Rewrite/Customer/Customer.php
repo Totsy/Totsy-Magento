@@ -55,9 +55,11 @@ class Harapartners_Service_Model_Rewrite_Customer_Customer extends Mage_Customer
 //    }
 
     public function authenticate($login, $password, $reValidate = false) {
+    	$login = $this->_trimGmail($login, false);	//Harapartners, trim gmail alias
+    	
         $this->loadByEmail($login);
 
-        //Haraparnters, yang, START
+        //Harapartners, yang, START
 		//Store switching, if customer has a valid account in another store/store view, redirect
         //If customer is invalid, stay in the current store/store view
     	if(!!$this->getStoreId()
@@ -147,7 +149,7 @@ class Harapartners_Service_Model_Rewrite_Customer_Customer extends Mage_Customer
         }
         
         //Harapartners, remove alias for Gmail address, add by Jing Xiao
-        $email = $this->_trimGmail($this->getEmail());
+        $email = $this->_trimGmail($this->getEmail(), true);
         $this->setEmail($email);
 
         $this->getGroupId();
@@ -161,7 +163,7 @@ class Harapartners_Service_Model_Rewrite_Customer_Customer extends Mage_Customer
      * @param string $email
      * @return string original email
      */
-    protected function _trimGmail($email) {
+    protected function _trimGmail($email, $showMessage = false) {
     	$strArray = explode('@', $email);
     	
     	if(empty($strArray) ||
@@ -192,7 +194,7 @@ class Harapartners_Service_Model_Rewrite_Customer_Customer extends Mage_Customer
 		
 		$trimmedGmail .= '@gmail.com';
 		
-		if($email != $trimmedGmail) {
+		if(($email != $trimmedGmail) && $showMessage) {
 			//if gmail has been trimmed, show message.
 			$message = 'Your Gmail address alias(' . $email . ') has been trimmed as actual Gmail address(' . $trimmedGmail . ').';
 			Mage::getSingleton('customer/session')->addError(Mage::helper('customer')->__($message));
