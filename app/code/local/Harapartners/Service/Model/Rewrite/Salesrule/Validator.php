@@ -36,6 +36,9 @@ class Harapartners_Service_Model_Rewrite_Salesrule_Validator extends Mage_SalesR
 		if($rule->getName() == self::COUPON_NAME_NEW_CUSTOMER_FIRST_ORDER_IN_30_DAYS
 				&& !!$this->canApplyFirstOrderCouponRule($address)){
 			return true;
+		}// HP Song
+		elseif($rule->getName() == self::COUPON_NAME_NEW_CUSTOMER_FIRST_ORDER_IN_30_DAYS){
+			return false;
 		}
 		
 		$ruleExsit = Mage::getModel('promotionfactory/emailcoupon')->ruleIdExist($ruleId);

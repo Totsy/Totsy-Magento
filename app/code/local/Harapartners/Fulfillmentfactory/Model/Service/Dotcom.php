@@ -517,11 +517,12 @@ XML;
 
 			foreach($items as $item) {
 				$quantity = intval($item->getQtyOrdered());
+				$sku = substr($item->getSku(), 0, 17);
 				
 				$xml .= <<<XML
 					<line-item>
-						<sku>{$item->getSku()}</sku>
-						<quantity>{$quantity}</quantity>
+						<sku>$sku</sku>
+						<quantity>$quantity</quantity>
 						<price>{$item->getPrice()}</price>
 						<tax>{$item->getTaxAmount()}</tax>
 						<shipping-handling>0</shipping-handling>
