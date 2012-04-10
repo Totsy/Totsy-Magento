@@ -7,6 +7,25 @@
 
 <div class="page-title">
 	<h1>My Credit Cards</h1>
+	<div class="add-new-card">
+		<p class="add-new-card-button">Add a new credit card</p>
+		<script type="text/javascript">
+			jQuery(document).ready(function(){
+				jQuery(".add-new-card-button").click( function() {
+					jQuery(".add-new-card-form").fadeIn();
+					jQuery(this).hide();
+				});
+				jQuery(".add-new-card-close").click( function() {
+					jQuery(".add-new-card-form").fadeOut();
+					jQuery(".add-new-card-button").show();
+				});
+			})
+		</script>
+		<div class="add-new-card-form" style="display:none;">
+			<?php echo $this->getChildHtml('credit_cards_form');?>
+			<p class="add-new-card-close" >Close</p>
+		</div>
+	</div>
 </div>
 
 <div class="cards-info">

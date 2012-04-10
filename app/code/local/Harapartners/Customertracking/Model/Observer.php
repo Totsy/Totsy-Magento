@@ -70,6 +70,10 @@ class Harapartners_Customertracking_Model_Observer {
 				$affiliateInfo = Mage::getSingleton('customer/session')->getData('affiliate_info');
 				if(!empty($affiliateInfo['sub_affiliate_code'])){
 					$data['sub_affiliate_code'] = $affiliateInfo['sub_affiliate_code'];
+					 if(!in_array($subAffiliateCode, explode(',', $affiliate->getSubAffiliateCode()))){	       
+	        			$affiliate->setSubAffiliateCode($affiliate->getSubAffiliateCode().','.$subAffiliateCode);
+	        			$affiliate->save();
+	       	 		}
 				}
 				if(!empty($affiliateInfo['registration_param'])){
 					$data['registration_param'] = $affiliateInfo['registration_param'];

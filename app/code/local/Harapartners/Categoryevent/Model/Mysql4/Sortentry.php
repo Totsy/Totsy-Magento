@@ -86,6 +86,19 @@ class Harapartners_Categoryevent_Model_Mysql4_Sortentry extends Mage_Core_Model_
 		
 		return $rowData;
     }
+    
+    public function checkEventProduct($categoryId) {    	
+    	$select = $this->_read->select()
+    		->from('catalog_category_product')
+    		->where('category_id=?', $categoryId)
+    		->limit(1); 		
+    	$rowData = $this->_read->fetchRow($select);
+    	$result = false;
+    	if($rowData){
+			$result = true;	
+		}
+		return $result;
+    }
 
  /**
  * //Harapartners

@@ -1216,3 +1216,7 @@ body .col-left hr {
 	text-align:right;
 }
 
+body .top-cart .block-content p.subtotal span.orange, .orange{
+	color:#FF6D1D;
+}
+
