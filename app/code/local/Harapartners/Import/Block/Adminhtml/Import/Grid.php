@@ -52,9 +52,11 @@ class Harapartners_Import_Block_Adminhtml_Import_Grid extends Mage_Adminhtml_Blo
       ));
       
       $this->addColumn('status', array(
-          'header'    => Mage::helper('import')->__('Status'),
-          'align'     =>'left',
-          'index'     => 'status',
+			'header'    => Mage::helper('import')->__('Status'),
+			'align'     =>'left',
+			'index'     => 'status',
+			'type'			=> 'options',
+            'options' => Mage::helper('import')->getGridStatusArray()
       ));
       
       $this->addColumn('error_message', array(
