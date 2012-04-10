@@ -16,7 +16,7 @@
  */
 
 ?>
-<form id="hpcheckout-billing-form" action="">
+<form action="<?php echo $this->getBaseUrl();?>paymentfactory/index/create/" method="post" id="hpcheckout-billing-form" >
 <?php $_code='paymentfactory_tokenize'; ?>
 	<div id="card-info">
 		<script type="text/javascript">
@@ -225,6 +225,7 @@
 		     </li>
 	    </ul>
     </div>
+    <button class="button general top" type="submit"><span>SUBMIT THIS CARD</span></button>
 </form>
 <script type="text/javascript">
 

@@ -59,7 +59,7 @@ class Harapartners_Stockhistory_Helper_Data extends Mage_Core_Helper_Abstract  {
 	
 	public function getFormVendorTypeArray(){
 		return array(
-       			array('label' => 'Vendor', 'value' => Harapartners_Stockhistory_Model_Vendor::TYPE_VENDOR),
+       			array('label' => 'Vendor', 'value' => Harapartners_Stockhisftory_Model_Vendor::TYPE_VENDOR),
        			array('label' => 'SubVendor', 'value' => Harapartners_Stockhistory_Model_Vendor::TYPE_SUBVENDOR),
        			array('label' => 'Distributor', 'value' => Harapartners_Stockhistory_Model_Vendor::TYPE_DISTRIBUTOR),
        	);
@@ -109,13 +109,22 @@ class Harapartners_Stockhistory_Helper_Data extends Mage_Core_Helper_Abstract  {
 			foreach($productCollection as $product) {
 				$sku = $product->getSku();
 				$productsArray[$sku] = 0;
+				
+				if($product->getTypeId() == 'configurable') {
+					$childProducts = Mage::getModel('catalog/product_type_configurable')->getUsedProducts(null,$product);
+					
+					foreach($childProducts as $cProduct) {
+						$cSku = $cProduct->getSku();
+						$productsArray[$cSku] = 0;
+					}
+				}
 			}
 			
 			$orders = Mage::getModel('sales/order')->getCollection()
-											->addAttributeToFilter('status', 'pending')
+											->addAttributeToFilter('status', array('neq', 'canceled'))
 											->addAttributeToFilter('created_at', array(
 																					'from' => $event->getData('event_start_date'),
-																					'from' => $event->getData('event_end_date'),
+																					'to' => $event->getData('event_end_date'),
 																				)
 											);
 			

@@ -45,6 +45,8 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Mage_Cybersource_Model_
 				// $profile->getExpireYear() === $payment->getCcExpYear() 
 			//	 $profile->getExpireMonth() === $payment->getCcExpMonth()
 		){
+			$profile->setIsDefault(0);
+			$profile->save();
      		//Checkout with existing profile instead of creating new card
      		//$payment->setData('cybersource_subid', $profile->getData('subscription_id'));     			
      		return $this->_validateProfile($profile, $payment);
@@ -311,5 +313,95 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Mage_Cybersource_Model_
 		$recurringSubscriptionInfo->subscriptionID = $payment->getCybersourceSubid();
 		$this->_request->recurringSubscriptionInfo = $recurringSubscriptionInfo;
 	}
+	
+	
+	public function createProfile($payment,$billing,$customerId) {
+				
+		//??? can we use parent::authorize() with different init param ???
+        $error = false;
+        $soapClient = $this->getSoapApi();
+        
+        parent::iniRequest();
+
+        $paySubscriptionCreateService = new stdClass();
+        $paySubscriptionCreateService->run = "true";
+        
+        $this->_request->paySubscriptionCreateService = $paySubscriptionCreateService;    
+        
+        $billTo = new stdClass();
+        $billTo->firstName = $billing->getFirstname();
+        $billTo->lastName = $billing->getLastname();
+        $billTo->company = $billing->getCompany();
+        $billTo->street1 = $billing->getStreet(0);
+        $billTo->street2 = $billing->getStreet(1);
+        $billTo->city = $billing->getCity();
+        $billTo->state = $billing->getRegion();
+        $billTo->postalCode = $billing->getPostcode();
+        $billTo->country = 'US';
+        $billTo->phoneNumber = $billing->getTelephone();
+        $billTo->email = ($email ? $email : Mage::getStoreConfig('trans_email/ident_general/email'));
+        $billTo->ipAddress = $this->getIpAddress();
+        $this->_request->billTo = $billTo;        
+        
+        $this->addCcInfo($payment);
+        
+        $purchaseTotals = new stdClass();
+        $purchaseTotals->currency = 'USD';
+        $this->_request->purchaseTotals = $purchaseTotals; 
+         
+        $subscription = new stdClass();
+		$subscription->title  ="On-Demand Profile Test";
+		$subscription->paymentMethod = "credit card";
+		$this->_request->subscription = $subscription;
+		
+		$recurringSubscriptionInfo = new stdClass();
+		$recurringSubscriptionInfo->frequency = "on-demand";
+		$this->_request->recurringSubscriptionInfo = $recurringSubscriptionInfo;
+
+        try {
+            $result = $soapClient->runTransaction($this->_request);
+            if ($result->reasonCode==self::RESPONSE_CODE_SUCCESS && $result->paySubscriptionCreateReply->reasonCode==self::RESPONSE_CODE_SUCCESS ) {
+            	
+                $payment->setLastTransId($result->requestID)
+                    	->setCcTransId($result->requestID)
+                    	->setIsTransactionClosed(0)
+                    	->setCybersourceToken($result->requestToken)
+                   	 	->setCcAvsStatus($result->ccAuthReply->avsCode);          	 	                  	 	
+                /*
+                 * checking if we have cvCode in response bc
+                 * if we don't send cvn we don't get cvCode in response
+                 */
+                if (isset($result->ccAuthReply->cvCode)) {
+                    $payment->setCcCidStatus($result->ccAuthReply->cvCode);
+                }
+            } else {
+                 $error = Mage::helper('paymentfactory')->__('There is an error in processing the payment(create). Please try again or contact us.');
+            }
+        } catch (Exception $e) {
+           Mage::throwException(
+                Mage::helper('paymentfactory')->__('Gateway request error: %s', $e->getMessage())
+            );
+        }
+
+        if ($error !== false) {
+            Mage::throwException($error);
+        }
+        
+        $payment->setCybersourceSubid($result->paySubscriptionCreateReply->subscriptionID);
+        try{
+        	$data = new Varien_Object($payment->getData());
+        	$data->setData('customer_id', $customerId);
+        	$data->setData('cybersource_sudid', $result->paySubscriptionCreateReply->subscriptionID);
+        	$profile = Mage::getModel('paymentfactory/profile');
+        	$profile->importDataWithValidation($data);               
+        	$profile->save();
+        }catch (Exception $e) {
+           Mage::throwException(
+                Mage::helper('paymentfactory')->__('Can not save payment profile')
+            );
+        }
+        
+        return $this;
+    }
     
 }

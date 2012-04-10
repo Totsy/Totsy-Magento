@@ -62,6 +62,7 @@
 		   	$counter++;
 		    
 	?>
+	<?php if($payment->getIsDefault()== 0):?>
 	<li>
 		<ul class="cards_item">
 		<form action="<?php echo $this->getBaseUrl();?>paymentfactory/index/delete/" method="post" id="payment_edit_form">
@@ -73,6 +74,7 @@
 		</form>
 		</ul>
 	</li>
+	<?php endif;?>
 	<?php endforeach;?>
 	</ul>
 	<?php else:?>
