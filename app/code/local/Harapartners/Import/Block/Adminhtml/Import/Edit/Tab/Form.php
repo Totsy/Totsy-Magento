@@ -74,7 +74,7 @@ class Harapartners_Import_Block_Adminhtml_Import_Edit_Tab_Form extends Mage_Admi
 		    'required'  => true,
 		    'name'		=> 'action_type',
 			'values'    => $helper->getFormActionTypeArray(),
-			'note'		=> 'Pending import should be processed manually or by cronjob.'
+			'note'		=> 'Large imports will take a long time to run and may time out. Please process pending imports offline.'
 		));
 		
 		if ( Mage::registry('import_form_data') ) {

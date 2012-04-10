@@ -15,10 +15,18 @@
 
 class Harapartners_Ordersplit_Helper_Data extends Mage_Core_Helper_Abstract {
 	
-	const TYPE_VIRTUAL = 'virtual';
 	const TYPE_DOTCOM = 'dotcom';
 	const TYPE_DROPSHIP = 'dropship';
+	const TYPE_VIRTUAL = 'virtual';
 	const TYPE_OTHER = 'other';
+	
+	public function getAllowedFulfillmentTypeArray(){
+		return array(
+				self::TYPE_DOTCOM, 
+				self::TYPE_DROPSHIP, 
+				self::TYPE_VIRTUAL
+		);
+	}
 	
 	public function orderSplit($oldOrder){		
 		if(!($splitInfoArray = $this->_splitQuoteItems($oldOrder))){
