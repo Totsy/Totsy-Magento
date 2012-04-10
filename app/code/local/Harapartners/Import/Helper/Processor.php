@@ -94,7 +94,7 @@ class Harapartners_Import_Helper_Processor extends Mage_Core_Helper_Abstract {
 				}
 				if(!!$this->_errorMessages && (count($this->_errorMessages)>0)){
 					$importObject->setStatus(Harapartners_Import_Model_Import::IMPORT_STATUS_ERROR);
-					$importObject->setErrorMessage('<a href="'.Mage::getBaseUrl().'var/log/import_error/'.date('Y_m_d'). '_' . $importObject->getId() . '.txt">Error</a>');
+					$importObject->setErrorMessage('<a href="'.Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'var/log/import_error/'.date('Y_m_d'). '_' . $importObject->getId() . '.txt">Error</a>');
 					$importObject->save();   
 				}else{
 					$importObject->setStatus(Harapartners_Import_Model_Import::IMPORT_STATUS_COMPLETE);
@@ -112,7 +112,7 @@ class Harapartners_Import_Helper_Processor extends Mage_Core_Helper_Abstract {
 	
 	protected function _logError($errorMessage, $importModelId){
 //		$errorMessage = 'Row '.$recordCount.': '.$ex->getMessage()."\n";
-		$this->_errorMessages[] = $errorMessage;
+		array_push($this->_errorMessages, $errorMessage);
 		fwrite($this->_getErrorFile($importModelId), $errorMessage);
 	}
 	
