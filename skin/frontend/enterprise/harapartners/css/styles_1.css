@@ -111,7 +111,7 @@ h1.event-collection-title {
 	font-style: normal;
 	font-family: Helvetica,Arial,sans-serif;
 	width: 210px;
-	max-height: 45px;
+	max-height: 24px;
 	overflow: hidden;}
 .catalog-events-container .catalog-event p{ 
 	color: #c7c7c7;
@@ -505,3 +505,27 @@ body.paymentfactory-index-index div.page-title { padding: 10px 0 0 0; }
     width: 64px;}
 .paymentfactory-index-index .billing-addr-title { color: #ED1C25; margin: 20px 0 15px 0; border-bottom: 1px solid #dddddd;}
 .paymentfactory-index-index .cards-info h2 { text-align: center;}
+
+/* customer account info ================================================================================= */
+
+.customer-account-edit #account-info { margin-top:20px; width: 350px; display: inline-block; padding: 10px; vertical-align: top;}
+.customer-account-edit #facebook-info { display: inline-block; width: 283px; margin-top:20px;  padding: 10px;}
+.customer-account-edit #facebook-name { font-size: 13px; font-weight: bold; margin-top: 5px;}
+.customer-account-edit #facebook-photo { padding: 5px; }
+.customer-account-edit .my-account .fieldset h2.legend, .customer-account-edit .my-account h2.legend {     
+	color: #707070;
+    font-size: 12px;
+    font-weight: bolder; 
+	margin: 10px 0 0 0;}
+.customer-account-edit .my-account hr { 
+	height: 0;
+	border: solid #DDD;
+	border-width: 1px 0 0;
+	margin: 10px 0;}
+.customer-account-edit .form-list input.input-text { 
+	border-radius: 5px 5px 5px 5px;
+    font-size: 13px;
+    padding: 6px;
+    width: 163px;}
+.customer-account-edit .my-account .form-list label { text-align: left; width: 150px; padding-left: 7px;}
+.customer-account-edit p.required { width: 350px;}
