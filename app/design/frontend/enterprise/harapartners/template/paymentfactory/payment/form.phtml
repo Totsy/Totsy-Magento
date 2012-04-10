@@ -30,27 +30,27 @@
 		<img class="cart-type"  width="180px;" src="<?php echo $this->getSkinUrl('images/creditcards.jpg')?>"/>
 		<ul id="payment_form_paymentfactory_tokenize" class="form-list" style="">
 			<li>
-				<label class="required" for="paymentfactory_tokenize_cc_type"><em>*</em>Card Type</label>
+				<label class="required" for="paymentfactory_tokenize_cc_type"><em>*</em><?php echo $this->__('Card Type');?></label>
 				<div class="input-box">
 					<div class="totsy-selective-input-box middle-length">
-						<span>American Express</span>
+						<span><?php echo $this->__('American Express');?></span>
 						<select id="paymentfactory_tokenize_cc_type" class="required-entry validate-cybsersource-cc-type-select" name="payment[cc_type]">
-							<option value="AE">American Express</option>
-							<option value="VI">Visa</option>
-							<option value="MC">MasterCard</option>
-							<option value="DI">Discover</option>
+							<option value="AE"><?php echo $this->__('American Express');?></option>
+							<option value="VI"><?php echo $this->__('Visa');?></option>
+							<option value="MC"><?php echo $this->__('MasterCard');?></option>
+							<option value="DI"><?php echo $this->__('Discover');?></option>
 						</select>
 					</div>
 				</div>
 			</li>
 			<li>
-				<label class="required" for="paymentfactory_tokenize_cc_number"><em>*</em>Card Number</label>
+				<label class="required" for="paymentfactory_tokenize_cc_number"><em>*</em><?php echo $this->__('Card Number');?></label>
 				<div class="input-box">
 					<input id="paymentfactory_tokenize_cc_number" class="input-text validate-cc-number validate-cc-type" type="text" value="" title="Credit Card Number" name="payment[cc_number]">
 				</div>
 			</li>
 			<li>
-				<label class="required" for="paymentfactory_tokenize_expiration"><em>*</em>Expiration Date</label>
+				<label class="required" for="paymentfactory_tokenize_expiration"><em>*</em><?php echo $this->__('Expiration Date');?></label>
 				<div class="input-box">
 					<div class="v-fix right-margin">
 						<div class="totsy-selective-input-box short-length">
@@ -94,7 +94,7 @@
 				</div>
 			</li>
 			<li>
-				<label class="required" for="paymentfactory_tokenize_cc_cid"><em>*</em>Security Code</label>
+				<label class="required" for="paymentfactory_tokenize_cc_cid"><em>*</em><?php echo $this->__('Security Code');?></label>
 				<div class="input-box">
 					<div class="v-fix">
 						<input id="paymentfactory_tokenize_cc_cid" class="input-text cvv required-entry validate-cc-cvn" type="text" value="" name="payment[cc_cid]" title="Card Verification Number">
@@ -105,7 +105,7 @@
 	</div>
 	
 	<div id="billing-info">
-		<p class="billing-addr-title">Billing Address</p>
+		<p class="billing-addr-title"><?php echo $this->__('Billing Address');?></p>
 	    <ul class="form-list">
 		    <li id="billing-new-address-form">
 		        <ul>
@@ -225,7 +225,7 @@
 		     </li>
 	    </ul>
     </div>
-    <button class="button general top" type="submit"><span>SUBMIT THIS CARD</span></button>
+    <button class="button general top" type="submit"><span><?php echo $this->__('Submit');?></span></button>
 </form>
 <script type="text/javascript">
 
