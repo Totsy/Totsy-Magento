@@ -40,11 +40,6 @@ class Harapartners_Import_Model_Import extends Mage_Core_Model_Abstract {
     	}
     	
     	//Load vendor
-    	//TODO: hard-coded
-    	$vendor = Mage::getModel('stockhistory/vendor')->load(1);
-    	//$vendor = Mage::getModel('stockhistory/vendor')->loadByVendorCode($data->getData('vendor_code'));
-    	$data->setData('vendor_id', $vendor->getId());
-    	$data->setData('vendor_code', $vendor->getData('vendor_code'));
     	
     	if(!$data->getdata('po_id')){
 			$newPurchaseOrder = Mage::getModel('stockhistory/purchaseorder');
@@ -99,7 +94,6 @@ class Harapartners_Import_Model_Import extends Mage_Core_Model_Abstract {
     	//Always specify 'updated_at'
     	$this->setData('updated_at', now());
     	$this->validate(); //Errors will be thrown as exceptions
-    	return $this;
     }
 //    
 //    
