@@ -62,7 +62,7 @@ class Harapartners_Affiliate_Block_Adminhtml_Record_Index_Grid extends Mage_Admi
             'header'        => $affilicateHelper->__('Type'),
             'align'         => 'right',
             'width'         => '50px',
-            'index'         => 'status',
+            'index'         => 'type',
         	'type'			=> 'options',
             'options' => $affilicateHelper->getGridTypeArray()
         ));

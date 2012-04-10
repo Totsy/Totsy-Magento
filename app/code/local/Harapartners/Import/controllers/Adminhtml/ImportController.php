@@ -12,9 +12,7 @@
  * 
  */
 
-
-class Harapartners_Import_Adminhtml_ImportController extends Mage_Adminhtml_Controller_action
-{
+class Harapartners_Import_Adminhtml_ImportController extends Mage_Adminhtml_Controller_action {
 
 	protected function _initAction() {
 		$this->loadLayout()
@@ -66,9 +64,10 @@ class Harapartners_Import_Adminhtml_ImportController extends Mage_Adminhtml_Cont
 		//$this->getLayout()->getBlock('head')->setCanLoadExtJs(true);
 		$this->_addContent($this->getLayout()->createBlock('import/adminhtml_import_edit'))
 				->_addLeft($this->getLayout()->createBlock('import/adminhtml_import_edit_tabs'));
-		$message = 'Please name your import, select a file and click on \'Import\'.' . '<br>' 
-					.'Wait and leave the window open until everything is processed.';
-		Mage::getSingleton('adminhtml/session')->addSuccess($message);
+		$message = 'For imports with 100+ proucts, please ONLY upload the file and run import offline.<br/>'
+					. 'For small imports, please wait and leave the window open until everything is processed.<br/>'
+					. 'If you want to see run big imports online. Please cut them in smaller pieces.';
+		Mage::getSingleton('adminhtml/session')->addNotice($message);
 		Mage::getSingleton('adminhtml/session')->setHpImportFormData(null);
 		$this->_initLayoutMessages('adminhtml/session');
 		$this->renderLayout();
@@ -141,9 +140,11 @@ class Harapartners_Import_Adminhtml_ImportController extends Mage_Adminhtml_Cont
 			
 			try{
 				if(isset($data['action_type']) && $data['action_type'] == Harapartners_Import_Model_Import::ACTION_TYPE_PROCESS_IMMEDIATELY){
-					
-					$processorHelper->runImport($model->getId());
-					Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('import')->__('The imported data has been processed.'));
+					if($processorHelper->runImport($model->getId())){
+						Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('import')->__('The imported data has been processed.'));
+					}else{
+						Mage::getSingleton('adminhtml/session')->addError(Mage::helper('import')->__('There is an error processing the uploaded data. Please check the error log.'));
+					}
 				}
 			}catch(Exception $e){
 				Mage::getSingleton('adminhtml/session')->addError(Mage::helper('import')->__('There is an error processing the uploaded data.'));
@@ -184,31 +185,5 @@ class Harapartners_Import_Adminhtml_ImportController extends Mage_Adminhtml_Cont
         }
         $this->_redirect('*/*/index');
     }
-    
-//    public function runDataflowProfile($filename){	
-//    	
-//    	$profileId = 9; //hardcoded.  Need to put your profile id here
-//		$profile = Mage::getModel('dataflow/profile')->load($profileId);
-//
-//		if (!!$profile && !!$profile->getId()) {
-//		    $gui_data = $profile->getData('gui_data');
-//		    $gui_data['file']['filename'] = $filename;
-//		    $profile->setData('gui_data', $gui_data);
-//		    $profile->save();
-//		  }else{
-//		  	Mage::getSingleton('adminhtml/session')->addError('The profile you are trying to save no longer exists');
-//		  }
-//		  Mage::register('current_convert_profile', $profile);
-//		  $profile->run();
-//		  $batchModel = Mage::getSingleton('dataflow/batch');
-//		  if ($batchModel->getId()) {
-//		  	if ($batchModel->getIoAdapter()) {
-//		  		$batchId = $batchModel->getId();
-//				return $batchId;
-//		  	}
-//		  }
-//    }
-  
 
 }
-?>
