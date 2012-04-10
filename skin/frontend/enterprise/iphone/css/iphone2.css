@@ -406,3 +406,7 @@ body .account-create .field {
     clear: both;
     margin-bottom: 31px;
 }
+
+#hpcheckout-wrapper #hpcheckout-shipping-method-wrapper{
+	display:none;
+}

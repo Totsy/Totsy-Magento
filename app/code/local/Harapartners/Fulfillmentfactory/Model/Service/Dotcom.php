@@ -97,7 +97,7 @@ class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
 	public function submitProductsToDotcomByDate($createdAfter = '2012-01-01 00:00:00') {
 		$products = Mage::getModel('catalog/product')->getCollection()
 													 ->addAttributeToSelect('*')
-													 ->addAttributeToFilter('created_at', array('from' => $createdAfter));	
+													 ->addAttributeToFilter('created_at', array('from' => $createdAfter));
   		
   										
   		return $this->submitProductsToDotcom($products);
@@ -160,6 +160,11 @@ class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
 			if(empty($name)) {
 				$name = 'null';
 			}
+			
+//			$color = $product->getAttributeText('color');
+//			if(empty($color)) {
+//				$color = '';
+//			}
 			
 			$xml .= <<<XML
 				<item>

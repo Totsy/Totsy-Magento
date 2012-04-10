@@ -88,4 +88,51 @@ class Harapartners_Stockhistory_Helper_Data extends Mage_Core_Helper_Abstract  {
 		);
 	}
 	
+	/**
+	 * get products sold by event Id
+	 *
+	 * @param int $eventId
+	 * @return array
+	 */
+	public function getProductSoldInfoByEvent($eventId) {
+		if(empty($eventId)) {
+			return array();
+		}
+		
+		$event = Mage::getModel('catalog/category')->load($eventId);
+		
+		$productsArray = array();
+		
+		if(!!$event) {
+			$productCollection = $event->getProductCollection();
+			
+			foreach($productCollection as $product) {
+				$sku = $product->getSku();
+				$productsArray[$sku] = 0;
+			}
+			
+			$orders = Mage::getModel('sales/order')->getCollection()
+											->addAttributeToFilter('status', 'pending')
+											->addAttributeToFilter('created_at', array(
+																					'from' => $event->getData('event_start_date'),
+																					'from' => $event->getData('event_end_date'),
+																				)
+											);
+			
+			foreach($orders as $order) {
+				$items = $order->getAllItems();
+				
+				foreach($items as $item) {
+					$sku = $item->getSku();
+					$qty = $item->getQtyOrdered();
+					
+					if(isset($productsArray[$sku])) {
+						$productsArray[$sku] += $qty;
+					}
+				}
+			}											
+		}
+		
+		return $productsArray;
+	}
 }
