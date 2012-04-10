@@ -300,7 +300,7 @@ Customer account address edit page
         <reference name="content">
             <block type="customer/account_navigation" name="customer_account_navigation_mobile" after="-" template="customer/account/navigation.phtml">
                 <action method="addLink" translate="label" module="customer"><name>customer_account</name><path>customer/account/</path><label>Manage Account</label></action>
-				<action method="addLink" translate="label" module="enterprise_customerbalance"><name>enterprise_customerbalance</name><path>enterprise_customerbalance/info/</path><label>My Credit</label></action>
+				<action method="addLink" translate="label" module="enterprise_reward"><name>enterprise_reward</name><path>reward/customer/info/</path><label>My Credit</label></action>
                 <action method="addLink" translate="label" module="checkout"><name>checkout_cart</name><path>checkout/cart/</path><label>My Cart </label></action>
 				<action method="addLink" translate="label" module="sales"><name>orders</name><path>sales/order/history/</path><label>My Orders</label></action>
 				<action method="addLink" translate="label" module="enterprise_invitation"><name>invitations</name><path>invitation/</path><label>Invite Friends, Get $15</label></action>
@@ -320,7 +320,7 @@ Customer account address edit page
         <reference name="content">
             <block type="customer/account_navigation" name="customer_account_navigation_mobile" after="checkout.cart" template="customer/account/navigation.phtml">
                 <action method="addLink" translate="label" module="customer"><name>customer_account</name><path>customer/account/</path><label>Manage Account</label></action>
-				<action method="addLink" translate="label" module="enterprise_customerbalance"><name>enterprise_customerbalance</name><path>enterprise_customerbalance/info/</path><label>My Credit</label></action>
+				<action method="addLink" translate="label" module="enterprise_reward"><name>enterprise_reward</name><path>reward/customer/info/</path><label>My Credit</label></action>
                 <action method="addLink" translate="label" module="checkout"><name>checkout_cart</name><path>checkout/cart/</path><label>My Cart </label></action>
 				<action method="addLink" translate="label" module="sales"><name>orders</name><path>sales/order/history/</path><label>My Orders</label></action>
 				<action method="addLink" translate="label" module="enterprise_invitation"><name>invitations</name><path>invitation/</path><label>Invite Friends, Get $15</label></action>
@@ -353,7 +353,7 @@ Customer account address edit page
         <reference name="content">
             <block type="customer/account_navigation" name="customer_account_navigation_mobile" after="category.list" template="customer/account/navigation.phtml">
                 <action method="addLink" translate="label" module="customer"><name>customer_account</name><path>customer/account/</path><label>Manage Account</label></action>
-				<action method="addLink" translate="label" module="enterprise_customerbalance"><name>enterprise_customerbalance</name><path>enterprise_customerbalance/info/</path><label>My Credit</label></action>
+				<action method="addLink" translate="label" module="enterprise_reward"><name>enterprise_reward</name><path>reward/customer/info/</path><label>My Credit</label></action>
                 <action method="addLink" translate="label" module="checkout"><name>checkout_cart</name><path>checkout/cart/</path><label>My Cart </label></action>
 				<action method="addLink" translate="label" module="sales"><name>orders</name><path>sales/order/history/</path><label>My Orders</label></action>
 				<action method="addLink" translate="label" module="enterprise_invitation"><name>invitations</name><path>invitation/</path><label>Invite Friends, Get $15</label></action>
@@ -373,7 +373,7 @@ Customer account address edit page
         <reference name="content">
             <block type="customer/account_navigation" name="customer_account_navigation_mobile" after="category.products" template="customer/account/navigation.phtml">
                 <action method="addLink" translate="label" module="customer"><name>customer_account</name><path>customer/account/</path><label>Manage Account</label></action>
-				<action method="addLink" translate="label" module="enterprise_customerbalance"><name>enterprise_customerbalance</name><path>enterprise_customerbalance/info/</path><label>My Credit</label></action>
+				<action method="addLink" translate="label" module="enterprise_reward"><name>enterprise_reward</name><path>reward/customer/info/</path><label>My Credit</label></action>
                 <action method="addLink" translate="label" module="checkout"><name>checkout_cart</name><path>checkout/cart/</path><label>My Cart </label></action>
 				<action method="addLink" translate="label" module="sales"><name>orders</name><path>sales/order/history/</path><label>My Orders</label></action>
 				<action method="addLink" translate="label" module="enterprise_invitation"><name>invitations</name><path>invitation/</path><label>Invite Friends, Get $15</label></action>
@@ -393,7 +393,7 @@ Customer account address edit page
         <reference name="content">
             <block type="customer/account_navigation" name="customer_account_navigation_mobile" after="categoryevent.index.index" template="customer/account/navigation.phtml">
                 <action method="addLink" translate="label" module="customer"><name>customer_account</name><path>customer/account/</path><label>Manage Account</label></action>
-				<action method="addLink" translate="label" module="enterprise_customerbalance"><name>enterprise_customerbalance</name><path>enterprise_customerbalance/info/</path><label>My Credit</label></action>
+				<action method="addLink" translate="label" module="enterprise_reward"><name>enterprise_reward</name><path>reward/customer/info/</path><label>My Credit</label></action>
                 <action method="addLink" translate="label" module="checkout"><name>checkout_cart</name><path>checkout/cart/</path><label>My Cart </label></action>
 				<action method="addLink" translate="label" module="sales"><name>orders</name><path>sales/order/history/</path><label>My Orders</label></action>
 				<action method="addLink" translate="label" module="enterprise_invitation"><name>invitations</name><path>invitation/</path><label>Invite Friends, Get $15</label></action>
