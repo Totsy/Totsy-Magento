@@ -91,6 +91,8 @@
 				<rewrite>
 					<!--Harapartners_Import: Important logic to prevent cleaning cache and indexing for each product save.-->
 					<product>Harapartners_Service_Model_Rewrite_Catalog_Product</product>
+					<!--Harapartners_Import: Core logic parsing data -->
+					<convert_adapter_product>Harapartners_Service_Model_Rewrite_Catalog_Convert_Adapter_Product</convert_adapter_product>
 				</rewrite>
 			</catalog>
 			<checkout>

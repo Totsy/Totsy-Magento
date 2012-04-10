@@ -279,7 +279,7 @@ class Harapartners_Import_Helper_Processor extends Mage_Core_Helper_Abstract {
 			$stockhistoryTransaction->setData('product_sku', $product->getSku());
 			$stockhistoryTransaction->setData('unit_cost', $product->getData('sale_wholesale'));
 			$stockhistoryTransaction->setData('qty_delta', $importDataObject->getQty());
-			$stockhistoryTransaction->setData('action',2);//Harapartners_Stockhistory_Helper_Data::TRANSACTION_ACTION_EVENT_IMPORT);
+			$stockhistoryTransaction->setData('action', Harapartners_Stockhistory_Model_Transaction::ACTION_TYPE_EVENT_IMPORT);
 			$stockhistoryTransaction->setData('comment', date('Y-n-j H:i:s'));
 			try {
 				$stockhistoryTransaction->save();
