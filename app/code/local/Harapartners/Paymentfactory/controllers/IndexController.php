@@ -43,8 +43,7 @@ class Harapartners_Paymentfactory_IndexController extends Mage_Core_Controller_F
                 Mage::helper('paymentfactory')->__($e->getMessage()));
 		}
 		
-		
-		$a= 1;
+		$this->_redirect ( '*/*/' );
 		
 	}
 	

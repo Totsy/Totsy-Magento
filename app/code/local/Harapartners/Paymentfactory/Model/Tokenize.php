@@ -375,7 +375,7 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Mage_Cybersource_Model_
                     $payment->setCcCidStatus($result->ccAuthReply->cvCode);
                 }
             } else {
-                 $error = Mage::helper('paymentfactory')->__('There is an error in processing the payment(create). Please try again or contact us.');
+                 $error = Mage::helper('paymentfactory')->__('There is an gateway error in processing the payment(create). Please try again or contact us.');
             }
         } catch (Exception $e) {
            Mage::throwException(
@@ -391,7 +391,8 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Mage_Cybersource_Model_
         try{
         	$data = new Varien_Object($payment->getData());
         	$data->setData('customer_id', $customerId);
-        	$data->setData('cybersource_sudid', $result->paySubscriptionCreateReply->subscriptionID);
+        	$data->setData('cc_last4', substr($payment->getCcNumber(), -4));
+        	$data->setData('cybersource_subid', $result->paySubscriptionCreateReply->subscriptionID);
         	$profile = Mage::getModel('paymentfactory/profile');
         	$profile->importDataWithValidation($data);               
         	$profile->save();
