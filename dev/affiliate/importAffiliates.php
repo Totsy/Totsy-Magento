@@ -17,9 +17,6 @@ Mage::app($mageRunCode, $mageRunType)->setCurrentStore($storeId);
  * importCsvFile
  * delmiter
  */
-$productData	= array();
-$stockData		= array();
-$urlRewriteData	= array();
 
 //$importCsvFile 	= 'product_meta_'.$startId.'_to_'.$endId.'_store'.$storeId.'_attributeSetId'.$attributeSetId.'.csv';
 $importCsvFile 	= 'affiliate.csv';
@@ -49,6 +46,8 @@ if(($handle = fopen($importCsvFile,'r')) !== FALSE){
 			}	
 			
 			$trackingCode = json_decode($affiliate->getTrackingCode(),true);
+		
+			
 			$newTrackingCode = json_decode($data[7],true);
 			if(!!$trackingCode){
 				if(isset($newTrackingCode['pixels']) && !!is_array($newTrackingCode['pixels'])){
