@@ -26,7 +26,7 @@
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-30611020-1']);  //Hara Partners, Hardcoded GA ID.  Need to get from config.
+  _gaq.push(['_setAccount', 'UA-30611020-2']);  //Hara Partners, Hardcoded GA ID.  Need to get from config.
   _gaq.push(['_trackPageview']);
   _gaq.push(['_addTrans',
     '<?php echo $order->getData('increment_id'); ?>',           // order ID - required
@@ -46,6 +46,7 @@
 	<?php 	if( !! $item->getParentItemId() ) {
 			continue;
 		}
+		unset($category);
 		$product = Mage::getModel( 'catalog/product' )->load( $item->getProductId() );
 		$categoryIds = $product->getCategoryIds();
 		foreach ($categoryIds as $cateId){
@@ -60,7 +61,9 @@
     '<?php echo $order->getData('increment_id'); ?>',           // order ID - required
     '<?php echo $item->getData('sku'); ?>',           // SKU/code - required
     '<?php echo $item->getData('name')?>',        // product name
-    '<?php echo json_encode( $category ) ?>',   // category or variation
+    '<?php foreach($category as $cat){
+    	echo $cat.',';
+    } ?>',   // category or variation
     '<?php echo $item->getPrice() ?>',          // unit price - required
     '<?php echo $item->getQtyOrdered() ?>'               // quantity - required
   ]);

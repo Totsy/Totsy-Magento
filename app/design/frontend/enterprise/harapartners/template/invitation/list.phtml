@@ -128,7 +128,7 @@ if ( !$rewardCollection ) {
 			<hr class="the-hr"/>
 			<p class="invite-notes">
 			<?php 
-				if ( $storeId == 1 ) {
+				if ( Mage::Helper('service')->isTotsyStore() ) {
 					$inviteFriendNotes = "For each friend you invite, Totsy will credit your account with <span class='needgreen'>$15</span> after your friend's place their first order.";
 				}else {
 					$inviteFriendNotes = "For each friend you invite, we will credit your account with <span class='needgreen'>$15</span> after your friend's place their first order.";
@@ -156,7 +156,7 @@ if ( !$rewardCollection ) {
 		            <li class="email-msg-box">
 		                <label for="message"><?php echo Mage::helper('enterprise_invitation')->__('Personalized Message To Friends:');?> </label>
 		                <div class="input-box">
-		                	<?php if ( $storeId == 1 ):?>
+		                	<?php if ( Mage::Helper('service')->isTotsyStore() ):?>
 		                    	<textarea tabindex="<?php //echo $_index+1 ?>" name="message" id="message" title="<?php echo Mage::helper('enterprise_invitation')->__('Message') ?>"  class="input-text" rows="3" cols="4"><?php echo 'Please accept this invitation to join Totsy'; ?></textarea>
 		                	<?php else :?>
 		                		<textarea tabindex="<?php //echo $_index+1 ?>" name="message" id="message" title="<?php echo Mage::helper('enterprise_invitation')->__('Message') ?>"  class="input-text" rows="3" cols="4"><?php echo 'Please accept this invitation to join Mamasource Private Sales powered by Totsy'; ?></textarea>

@@ -1,4 +1,5 @@
 <?php
+
 /*
  * NOTICE OF LICENSE
  *
@@ -10,29 +11,13 @@
  * to eula@harapartners.com so we can send you a copy immediately.
  *
  */
-abstract class Harapartners_SpeedTax_Model_Speedtax_Abstract extends Harapartners_SpeedTax_Model_Abstract
-{
-	
-	/**
-	 * Flag that states if there was an error
-	 *
-	 * @var bool
-	 */
+
+abstract class Harapartners_SpeedTax_Model_Speedtax_Abstract extends Harapartners_SpeedTax_Model_Abstract {
+
 	protected static $_hasError = false;
+	protected $_request = null; //Jun, What is this?
 	
-	/**
-	 * The request data object
-	 *
-	 * @var mixed
-	 */
-	protected $_request = null;
-	
-	/**
-	 * Adds the orgin address to the request
-	 *
-	 * @return Address
-	 */
-	protected function _setOriginAddress($store=null) {
+	protected function _setOriginAddress($store = null) {
 		$country = Mage::getStoreConfig('shipping/origin/country_id', $store);
 		$zip = Mage::getStoreConfig('shipping/origin/postcode', $store);
 		$regionId = Mage::getStoreConfig('shipping/origin/region_id', $store);
@@ -79,7 +64,7 @@ abstract class Harapartners_SpeedTax_Model_Speedtax_Abstract extends Harapartner
 	 * @return Address
 	 */
 	protected function _newAddress($line1, $line2, $city, $state, $zip, $country='USA') {
-		$address = new Address();
+		$address = new address();
 		$address->setLine1($line1);
 		$address->setLine2($line2);
 		$address->setCity($city);

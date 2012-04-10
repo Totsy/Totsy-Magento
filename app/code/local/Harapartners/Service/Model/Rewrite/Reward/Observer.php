@@ -83,5 +83,79 @@ class Harapartners_Service_Model_Rewrite_Reward_Observer extends Enterprise_Rewa
 
         return $this;
     }
+    
+    /**
+     * Update points balance after customer registered by invitation
+     *
+     * @param Varien_Event_Observer $observer
+     * @return Enterprise_Reward_Model_Observer
+     */
+    public function invitationToCustomer($observer)
+    {
+        /* @var $invitation Enterprise_Invitation_Model_Invitation */
+        $invitation = $observer->getEvent()->getInvitation();
+        $websiteId = Mage::app()->getStore($invitation->getStoreId())->getWebsiteId();
+        if (!Mage::helper('enterprise_reward')->isEnabledOnFront($websiteId)) {
+            return $this;
+        }
+
+        if ($invitation->getCustomerId() && $invitation->getReferralId()) {
+            $reward = Mage::getModel('enterprise_reward/reward')
+                ->setCustomerId($invitation->getCustomerId())
+                ->setWebsiteId($websiteId)
+                ->setAction(Enterprise_Reward_Model_Reward::REWARD_ACTION_INVITATION_CUSTOMER)
+                ->setActionEntity($invitation)
+                ->updateRewardPoints();
+        }
+
+        
+        /*
+        $customer = $observer->getEvent()->getCustomer();
+		$customerOrigData = $customer->getOrigData();
+		TODO: if new 
+		send email
+		*/
+        
+        return $this;
+    }
+    
+    
+	/**
+     * Update inviter points balance after referral's order completed
+     *
+     * @param Varien_Event_Observer $observer
+     * @return Enterprise_Reward_Model_Observer
+     */
+    protected function _invitationToOrder($observer)
+    {
+        if (Mage::helper('Core')->isModuleEnabled('Enterprise_Invitation')) {
+            $invoice = $observer->getEvent()->getInvoice();
+            /* @var $invoice Mage_Sales_Model_Order_Invoice */
+            $order = $invoice->getOrder();
+            /* @var $order Mage_Sales_Model_Order */
+            if ($order->getBaseTotalDue() > 0) {
+                return $this;
+            }
+            $invitation = Mage::getModel('enterprise_invitation/invitation')
+                ->load($order->getCustomerId(), 'referral_id');
+            if (!$invitation->getId() || !$invitation->getCustomerId()) {
+                return $this;
+            }
+            $reward = Mage::getModel('enterprise_reward/reward')
+                ->setActionEntity($invitation)
+                ->setCustomerId($invitation->getCustomerId())
+                ->setStore($order->getStoreId())
+                ->setAction(Enterprise_Reward_Model_Reward::REWARD_ACTION_INVITATION_ORDER)
+                ->updateRewardPoints();
+        }
+		
+        
+        /*
+		//TODO: send email to inviter
+		*/
+        
+        return $this;
+    }
+    
 
 }

@@ -20,5 +20,15 @@ class Harapartners_Import_Helper_Data extends Mage_Core_Helper_Abstract {
        			array('label' => 'Pending', 'value' => Harapartners_Import_Model_Import::ACTION_TYPE_PENDING)
        	);
 	}
+	public function getGridStatusArray(){
+		return array(
+				Harapartners_Import_Model_Import::IMPORT_STATUS_COMPLETE => 'Complete', 
+				Harapartners_Import_Model_Import::IMPORT_STATUS_ERROR => 'Error',
+				Harapartners_Import_Model_Import::IMPORT_STATUS_FINALIZING => 'Finalizing',
+				Harapartners_Import_Model_Import::IMPORT_STATUS_PROCESSING => 'Processing',
+				Harapartners_Import_Model_Import::IMPORT_STATUS_UPLOADED => 'Uploaded'
+		);
+	}
+	
 	
 }

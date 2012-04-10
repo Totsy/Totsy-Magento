@@ -1,4 +1,5 @@
 <?php
+
 /*
  * NOTICE OF LICENSE
  *
@@ -10,54 +11,30 @@
  * to eula@harapartners.com so we can send you a copy immediately.
  *
  */
+
 class Harapartners_SpeedTax_Model_Observer extends Mage_Core_Model_Abstract {
 	
-	public function saleOrderInvoicePlace(Varien_Event_Observer $observer) {
-		//$storeId = $observer->getEvent()->getQuote()->getStoreId();
-		$storeId = Mage::app ()->getStore ()->getId ();
-		$invoice = $observer->getInvoice ();
-		//if(Mage::getStoreConfig('tax/speedtax/post_invoice' , $storeId)) {
+	public function saleOrderInvoicePay(Varien_Event_Observer $observer) {
+		$invoice = $observer->getEvent()->getInvoice();
 		try {
 			$calculator = Mage::getModel ( 'speedtax/speedtax_calculate' );
-			$order = $invoice->getOrder ();
-			$invoice->setData ( "increment_id", $order->getData ( "increment_id" ) );
-			if ($calculator->addInvoice ( $invoice )) {
-				foreach ( $order->getAllItems () as $item ) {
-					/*** make line item ***/
-					$calculator->addLine ( $item );
-				}
-				$result = $calculator->invoiceTaxPost ();
-			}
+			$calculator->postOrderInvoice($invoice);
 		} catch( Exception $e ) {
+			//Tax collecting is very important, bubble exceptions up
+			throw new $e;
 		}
-		//}
 	}
-	
-//	public function salesOrderPlaceEnd(Varien_Event_Observer $observer) {
-//		$storeId = Mage::app ()->getStore ()->getId ();
-//		$order = $observer->getOrder ();
-//		try {
-//			$calculator = Mage::getModel ( 'speedtax/speedtax_calculate' );
-//			//$invoice = $observer->getInvoice();
-//			//$invoice->setData("increment_id", $order->getData("increment_id"));
-//			if ($calculator->addOrder ( $order )) {
-//				$result = $calculator->invoiceTaxPending ();
-//			}
-//		} catch( Exception $e ) {
-//		}
-//	}
 	
 	public function salesOrderCreditmemoRefund(Varien_Event_Observer $observer) {
-		$storeId = Mage::app ()->getStore ()->getId ();
+		$creditmemo = $observer->getEvent()->getCreditmemo();
 		try {
 			$calculator = Mage::getModel ( 'speedtax/speedtax_calculate' );
-			//$invoice = $observer->getInvoice();
-			$order = $observer->creditmemo->getOrder();
-			//$invoice->setData("increment_id", $order->getData("increment_id"));
-			if ($calculator->addCreditmemo ( $order )) {
-				$result = $calculator->invoiceTaxPending ();
-			}
+			$calculator->postOrderCreditmemo($creditmemo);
 		} catch( Exception $e ) {
+			//Tax collecting is very important, bubble exceptions up
+			throw new $e;
 		}
+		
 	}
+	
 }

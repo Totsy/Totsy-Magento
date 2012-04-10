@@ -30,17 +30,21 @@
 		echo '<em class="sales-found">';
 		echo ' ( '.$howMany.' Sales Found )';
 		echo '</em></h3></div>';*/
-		$temp = $this->topLayerNav();
-		$layerCategoryCollection = $temp['category_product_complete_data'];
-		$howMany = count($layerCategoryCollection);
+
+		
+		$topNavDataObject = $this->getTopNavDataObject();
+		$categoryDataArray = $topNavDataObject->getData('category_product_complete_data');
+		$howMany = count($categoryDataArray);
+		
+
 		echo '<div class="page-sub-title layer-category"><h3 class="layerlist-title">';
-		echo $temp['attr_text_label'];
+		echo $topNavDataObject->getData('attr_text_label');
 		echo '<em class="sales-found">';
 		echo ' ( '.$howMany.' Sales Found )';
 		echo '</em></h3></div>';
 ?>
 
-<?php foreach($layerCategoryCollection as $category):?>
+<?php foreach($categoryDataArray as $category):?>
 
 <div class="layer-list-content-primary content-primary">
 

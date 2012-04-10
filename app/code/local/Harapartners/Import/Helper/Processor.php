@@ -14,14 +14,35 @@
 
 class Harapartners_Import_Helper_Processor extends Mage_Core_Helper_Abstract {
 	
-	const DEFAULT_DATAFLOW_PROFILE_ID = 7;
+	const DEFAULT_DATAFLOW_PROFILE_ID 					= 7;
+	const DEFAULT_PRODUCT_STORE_CODE	 				= 'admin';
+	const DEFAULT_PRODUCT_WEBSITE_CODE	 				= 'base';
+	const DEFAULT_PRODUCT_ATTRIBUTE_SET 				= 'Totsy';
+	const DEFAULT_PRODUCT_STATUS		 				= 'Enabled';
+	const DEFAULT_PRODUCT_TAX_CLASS		 				= 'Taxable Goods';
+	const DEFAULT_PRODUCT_SHORT_DESCRIPTION				= 'Welcome to Totsy!';
+	const DEFAULT_PRODUCT_DESCRIPTION					= 'Welcome to Totsy!';
+	const DEFAULT_PRODUCT_WEIGHT						= '1.0'; //Note all fields MUST be text
+	const DEFAULT_PRODUCT_IS_IN_STOCK					= '1'; //Note all fields MUST be text
 	
-	protected $_errorFile 			= null;
-	protected $_errorMessages 		= array();
-	protected $_requiredFields 		= array();
-	protected $_confSimpleProducts 	= array();
-	protected $_purchaseOrderId		= null;
+	const PRODUCT_SKU_MAX_LENGTH						= 17; //Restricted by DotCom
+	const CONFIGURABLE_ATTRIBUTE_CODE					= 'color,size';
 	
+	protected $_errorFilePath 				= null;
+	protected $_errorFileWebPath 			= null;
+	protected $_errorMessages 				= array();
+	protected $_requiredFields 				= array();
+	protected $_confSimpleProducts 			= array();
+	
+	public function __construct(){
+		$this->_errorFilePath = BP.DS.'var'.DS.'log'.DS.'import_error'.DS;
+		$this->_errorFileWebPath = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).'var/log/import_error/';
+	}
+	
+	
+	// ================================================================== //
+	// ===== Entry Points =============================================== //
+	// ================================================================== //
 	
 	public function runDataflowProfile($filename){	
 		$profile = Mage::getModel('dataflow/profile')->load(self::DEFAULT_DATAFLOW_PROFILE_ID);
@@ -44,30 +65,194 @@ class Harapartners_Import_Helper_Processor extends Mage_Core_Helper_Abstract {
 				return $batchId;
 		  	}
 		}
-		
 		return null;
     }
+    
+	public function runImport($importObjectId = null){
+		$importObject = $this->_getUploadedImportModel($importObjectId);
+		if(!$importObject || !$importObject->getId() || !$importObject->getData('import_batch_id')){
+			//Nothing to run
+			$this->_errorMessages[] = "Nothing to run!" . "\n";
+		}else{
 	
-	protected function _logError($errorMessage){
-		$errorMessage = 'Row '.$recordCount.': '.$ex->getMessage()."\n";
-						$this->_errorMessages[] = $errorMessage;
-						fwrite($this->getErrorFile(), $errorMessage);
-	}
+			// ===== dataflow, processing ===== //
+			try{
+				$batchModel = Mage::getModel('dataflow/batch')->load($importObject->getData('import_batch_id'));
+				if (!!$batchModel && !!$batchModel->getId()){
+					$batchImportModel = $batchModel->getBatchImportModel(); //read line item
+					$adapter = Mage::getModel($batchModel->getAdapter()); //processor/writer
+					
+					//update status to 'lock' this import
+					$importObject->setStatus(Harapartners_Import_Model_Import::IMPORT_STATUS_PROCESSING);
+					$importObject->save();
+					
+					//collection load is not possible due to the large amount of data per row
+					$batchId = $batchModel->getId();  
+					$importObjectIds = $batchImportModel->getIdCollection($batchId);
+					
+					//Get the required fields
+					$this->_prepareRequiredFields();
+					$row = 0;
+					foreach ($importObjectIds as $importObjectId) {	
+						try{
+							$row++;	
+							$batchImportModel->load($importObjectId);
+							if (!$batchImportModel || !$batchImportModel->getId()) {
+								$this->_errorMessages[] = Mage::helper('dataflow')->__('Skip undefined row ' . $row . "\n");
+								continue;	
+							}
+							$importData = $batchImportModel->getBatchData();
+							$importData = $this->_importDataCleaning($importData, $importObject);
+							$adapter->saveRow($importData);
 	
-	protected function _getErrorFile($importModelId){
-		if(!$this->_errorFile){
-			$filename = $this->getErrorFilePath(). date('Y_m_d'). '_' . $importModelId . '.txt';
-			$this->_errorFile = fopen($filename,'w');
-			$this->_errorMessages = array(); 
+							//PO Saves Here
+							$this->_savePurchaseOrderInfo($importData, $importObject);
+		
+						} catch(Exception $ex) {
+							$this->_errorMessages[] = 'Skip row ' . $row . ', ' . $ex->getMessage() . "\n";
+						}  
+					}
+				}
+				$batchModel->delete();
+			}catch(Exception $ex){
+				$this->_errorMessages[] = $ex->getMessage() . "\n";
+				$this->_errorMessages[] = "Execution terminated!" . "\n";
+			}
 		}
-		return $this->_errorFile;
+		
+		//Clean up and error handling
+		if(!(count($this->_errorMessages))){
+			$importObject->setStatus(Harapartners_Import_Model_Import::IMPORT_STATUS_COMPLETE);
+			$importObject->save();
+			return true;
+		}else{
+			$filename = $this->_logErrorToFile();
+			$importObject->setStatus(Harapartners_Import_Model_Import::IMPORT_STATUS_ERROR);
+			$importObject->setErrorMessage('<a href="' . $this->_errorFileWebPath . $filename . '">Error</a>');
+			$importObject->save();
+			return false;
+		}
 	}
 	
-	protected function _getErrorFilePath(){
-		return Mage::getBaseDir('media').DS.'import'.DS.'errors'.DS;
+	
+	// ================================================================== //
+	// ===== Data Cleaning ============================================== //
+	// ================================================================== //
+	protected function _importDataCleaning($importData, $importObject){
+	
+		// ----- Data from Import Form ----- //
+		if(!$importObject->getData('vendor_id') || !$importObject->getData('vendor_code')){
+			throw new Exception('Invalid vendor.');
+		}
+		$importData['vendor_code'] = $importObject->getData('vendor_code');
+		if(!$importObject->getData('category_id')){
+			throw new Exception('category_id is required');
+		}
+		$importData['category_ids'] = $importObject->getData('category_id');
+		
+		
+		// ----- Data from Import Form ----- //
+		foreach ($this->_requiredFields as $field) {
+			if (empty($importData[$field])){
+				switch ($field) {
+					case 'store':
+						$importData['store'] = self::DEFAULT_PRODUCT_STORE_CODE;
+						break;
+					case 'websites':
+						$importData['websites'] = self::DEFAULT_PRODUCT_WEBSITE_CODE;
+						break;
+					case 'attribute_set':
+						$importData['attribute_set'] = self::DEFAULT_PRODUCT_ATTRIBUTE_SET;
+						break;
+					case 'status':
+						$importData['status'] = self::DEFAULT_PRODUCT_STATUS;
+						break;
+					case 'sku':
+						$importData['sku'] = $this->_generateProductSku($importData, $importObject);
+						break;
+					case 'short_description':
+						$importData['short_description'] = self::DEFAULT_PRODUCT_SHORT_DESCRIPTION;
+						break;
+					case 'description':
+						$importData['description'] = self::DEFAULT_PRODUCT_DESCRIPTION;
+						break;
+					case 'weight':
+						$importData['weight'] = self::DEFAULT_PRODUCT_WEIGHT;
+						break;
+					case 'tax_class_id':
+						$importData['tax_class_id'] = self::DEFAULT_PRODUCT_TAX_CLASS;
+						break;
+					case 'is_in_stock':
+						$importData['is_in_stock'] = self::DEFAULT_PRODUCT_IS_IN_STOCK;
+						break;
+					default:
+						throw new Exception($field . ' is required.');
+						break;
+				}
+			}
+		}
+		
+		// ----- Configurable/Simple products ----- //
+		if($importData['type'] == 'configurable'){
+			$importData['configurable_attribute_codes'] = self::CONFIGURABLE_ATTRIBUTE_CODE; //Hard Coded.  Need to enforce in template!
+			$importData['conf_simple_products'] = implode(',', $this->_confSimpleProducts);
+			$this->_hideAssociatedSimpleProducts();
+			$this->_confSimpleProducts = array();
+		}else{
+			$this->_confSimpleProducts[] = $importData['sku'];
+		}
+		
+		// ----- Default fields ----- //
+		$importData['visibility'] = 'Catalog, Search'; //All products are visible by default
+		
+		return $importData;
 	}
 	
-	protected function _getImportModel($importId = null){
+	protected function _prepareRequiredFields(){
+		$this->_requiredFields = array(
+				//Magento core default
+				'store', 'type', 'attribute_set', 'sku', 'websites', 'status', 'is_in_stock',
+				//Totsy business logic
+				'vendor_code', 'vendor_style', 'fulfillment_type', 
+				'price', 'special_price', 'original_wholesale', 'sale_wholesale', 
+				'shipping_method', 'weight', 
+		);
+        
+		//Additional dataflow fields
+		$fieldset = Mage::getConfig()->getFieldset('catalog_product_dataflow', 'admin');
+        foreach ($fieldset as $code => $node) {
+        	if ($node->is('required')) {
+        		if(!in_array($code, $this->_requiredFields)){
+                	$this->_requiredFields[] = $code;
+        		}
+            }
+        }
+	}
+	
+	protected function _hideAssociatedSimpleProducts(){
+		foreach ($this->_confSimpleProducts as $sku) {
+			$product = Mage::getModel('catalog/product')->loadByAttribute('sku', $sku);
+			if(!!$product && $product->getId()){
+				$product->setData('visibility', '1');
+				$product->save(); //exceptions will be caught as _errorMessage
+			}
+		}
+	}
+	
+	protected function _generateProductSku($importData, $importObject){
+		//$importObject must have 'vendor_id' here
+		$sku = $importObject->getData('vendor_id') //The vendor_id is readable and can be 10^6 big
+				. '-' . base_convert(time(), 10, 36) // 7 characters, including '-'
+				. base_convert(rand(0, base_convert('zzz', 36, 10)), 10, 36); // 3 character
+		$sku = substr($sku, 0, self::PRODUCT_SKU_MAX_LENGTH);
+		return $sku;
+	}
+	
+	
+	// ================================================================== //
+	// ===== Utilities ================================================== //
+	// ================================================================== //
+	protected function _getUploadedImportModel($importId = null){
 		$import = Mage::getModel('import/import');
 		if(!!$importId){
 			$import->load($importId);
@@ -79,130 +264,20 @@ class Harapartners_Import_Helper_Processor extends Mage_Core_Helper_Abstract {
 			$collection->getSelect()->limit(1);
 			$import = $collection->getFirstItem();
 		}
-		return $import;
-	}
-	
-	
-	protected function _getRequiredFields(){
-		$this->_requiredFields[] = 'store';
-        $this->_requiredFields[] = 'type';  
-        $this->_requiredFields[] = 'attribute_set';
-        $this->_requiredFields[] = 'sku';
-        $this->_requiredFields[] = 'websites';
-        $this->_requiredFields[] = 'status';
-        $this->_requiredFields[] = 'is_in_stock';
-        
-        
-		$fieldset = Mage::getConfig()->getFieldset('catalog_product_dataflow', 'admin');
-        foreach ($fieldset as $code => $node) {
-        	if ($node->is('required')) {
-                $this->_requiredFields[] = $code;
-            }
-        }
-	}
-	
-	protected function _setSimpleProductVisibility(){
-		foreach ($this->_confSimpleProducts as $sku) {
-			$product = Mage::getModel('catalog/product')->loadByAttribute('sku', $sku);
-			if(!!$product && $product->getId()){
-				$product->setData('visibility', '1');
-				try {
-					$product->save();
-				}catch(Exception $e){
-					$a=1;
-				}
-			}
-		}
-	}
-	
-	protected function _setProductSku($importData){
-		$sku = '';
-		if(isset($importData['vendor']) 
-		&& isset($importData['vendor_style']) 
-		&& isset($importData['color']) 
-		&& isset($importData['size'])){
-			$sku = $importData['vendor'].'-'.$importData['vendor_style'].'-'.$importData['color'].'-'.$importData['size'];
+		if(!!$import 
+				&& !!$import->getId()
+				&& $import->getData('status') == Harapartners_Import_Model_Import::IMPORT_STATUS_UPLOADED
+		){
+			return $import;
 		}else{
-			$string = 'harapartners';
-			$shuffled = str_shuffle($string);
-			$sku = 'hp-'.date('y-m-d-H-i-s-').$shuffled;
-			$sku = str_replace(' ', '', $sku);
+			return null;
 		}
-		return $sku;
-	}
-	protected function _setRequiredAttributes($importData, $importObject){
-		foreach ($this->_requiredFields as $field) {
-			if (!isset($importData[$field])){
-				switch ($field) {
-					case 'store':
-						$importData['store'] = 'admin';
-						break;
-					case 'websites':
-						$importData['websites'] = 'base';
-						break;
-					case 'type':
-						$importData['type'] = 'simple';
-						break;
-					case 'attribute_set':
-						$importData['attribute_set'] = 'Totsy';
-						break;
-					case 'status':
-						$importData['status'] = 'Enabled';
-						break;
-					case 'sku':
-						$importData['sku'] = $this->_setProductSku($importData);
-						break;
-					case 'name':
-						$importData['name'] = $importData['sku'];
-						break;
-					case 'description':
-						$importData['description'] = 'description';
-						break;
-					case 'short_description':
-						$importData['short_description'] = 'blurb';
-						break;
-					case 'weight':
-						$importData['weight'] = '1';
-						break;
-					case 'price':
-						$importData['price'] = '1';
-						break;
-					case 'tax_class_id':
-						$importData['tax_class_id'] = 'Taxable Goods';
-						break;
-					case 'is_in_stock':
-						$importData['is_in_stock'] = '1';
-						break;
-				}
-			}
-		}
-		//Respect form data vendor_code
-		if(!!$importObject && $importObject->getData('vendor_code')){
-			$importData['vendor_code'] = $importObject->getData('vendor_code');
-		}
-		//Respect form data category ID
-		if(!!$importObject && $importObject->getData('category_id')){
-			$importData['category_ids'] = $importObject->getData('category_id');
-		}
-		
-		if($importData['type'] == 'configurable'){
-			$importData['configurable_attribute_codes'] = 'color,size';  //Hard Coded.  Need to enforce in template!
-			$importData['conf_simple_products']			= implode(',',$this->_confSimpleProducts);
-			$this->_setSimpleProductVisibility();
-			unset($this->_confSimpleProducts);
-			$this->_confSimpleProducts = array();
-			$importData['visibility']					= 'Catalog, Search';
-		}else{
-			$importData['visibility']					= 'Catalog, Search'; //Need Logic for simple only.
-			$this->_confSimpleProducts[] = $importData['sku'];
-		}
-		return $importData;
 	}
 	
-	protected function _setPurchaseOrderInfo($importData, $importObject){
+	protected function _savePurchaseOrderInfo($importData, $importObject){
 		$importDataObject = new Varien_Object($importData);
-		
 		$stockhistoryTransaction = Mage::getModel('stockhistory/transaction');
+		//validate save results
 		$product = Mage::getModel('catalog/product')->loadByAttribute('sku', $importData['sku']);
 		if(!!$product && $product->getId()){
 			$stockhistoryTransaction->setData('vendor_id', $importObject->getData('vendor_id'));
@@ -214,85 +289,24 @@ class Harapartners_Import_Helper_Processor extends Mage_Core_Helper_Abstract {
 			$stockhistoryTransaction->setData('product_sku', $product->getSku());
 			$stockhistoryTransaction->setData('unit_cost', $product->getData('sale_wholesale'));
 			$stockhistoryTransaction->setData('qty_delta', $importDataObject->getQty());
-			$stockhistoryTransaction->setData('action',2);//Harapartners_Stockhistory_Helper_Data::TRANSACTION_ACTION_EVENT_IMPORT);
+			$stockhistoryTransaction->setData('action', Harapartners_Stockhistory_Model_Transaction::ACTION_TYPE_EVENT_IMPORT);
 			$stockhistoryTransaction->setData('comment', date('Y-n-j H:i:s'));
-			try {
-				$stockhistoryTransaction->save();
-			}catch (Exception $e){
-				//Error Log here
-				/**
-				 * Need Jun/Song for this message
-				 * (string:285) SQLSTATE[HY000]: 
-				 * General error: 1452 Cannot add or update a child row: 
-				 * a foreign key constraint fails (`totsy_pdb1`.`stockhistory_report`, CONSTRAINT `FK_STOCKHISTORY_REPORT_VENDOR` FOREIGN KEY (`vendor_id`) REFERENCES `stockhistory_vendor` (`id`) ON DELETE SET NULL ON UPDATE CASCADE)
-				 */
-				$a = 1;
-			}
+			$stockhistoryTransaction->save(); //exceptions will be caught as _errorMessage
 		}
 	}
 	
-	public function runImport($importObjectId = null){
-		$importObject = $this->_getImportModel($importObjectId);
-		if(!$importObject || !$importObject->getId() || !$importObject->getData('import_batch_id')){
-			//Nothing to run
-			return true;
-		}
-
-		// ===== dataflow, processing ===== //
-		try{
-			$batchModel = Mage::getModel('dataflow/batch')->load($importObject->getData('import_batch_id'));
-			if (!!$batchModel && !!$batchModel->getId()){
-				$batchImportModel = $batchModel->getBatchImportModel(); //read line item
-				$adapter = Mage::getModel($batchModel->getAdapter()); //processor/writer
-				
-				//update status to 'lock' this import
-				$importObject->setImportStatus(Harapartners_Import_Model_Import::IMPORT_STATUS_PROCESSING);
-				//$importObject->save();
-				
-				//collection load is not possible due to the large amount of data per row
-				$batchId = $batchModel->getId();  
-				$importObjectIds = $batchImportModel->getIdCollection($batchId);
-				
-				//Get the required fields
-				$this->_getRequiredFields();
-				
-				foreach ($importObjectIds as $importObjectId) {	
-					try{	
-						$batchImportModel->load($importObjectId);
-						if (!$batchImportModel || !$batchImportModel->getId()) {
-							$this->_logError(Mage::helper('dataflow')->__('Skip undefined row'));
-							continue;	
-						}
-						$importData = $batchImportModel->getBatchData();
-						$importData = $this->_setRequiredAttributes($importData, $importObject);
-						$adapter->saveRow($importData);
-
-						/**
-						 * PO Saves Here
-						 */
-						$this->_setPurchaseOrderInfo($importData, $importObject);
-						
 	
-					} catch(Exception $ex) {
-						//TODO
-						$this->_logError(Mage::helper('dataflow')->__('Skip undefined row'));
-					}  
-				}
-				if($hasErrors){
-					$importObject->setImportStatus('import_import_error<a href="'.Mage::getBaseUrl().'media/import/errors/'.date('Y_m_d').'_'.$importObject->getId().'.txt">Error</a>');
-					$importObject->save();   
-				}else{
-					$importObject->setImportStatus(Harapartners_Import_Model_Import::IMPORT_STATUS_COMPLETE);
-					$importObject->save();
-				}
-		  
-			}
-			$batchModel->delete();
-			fclose(); //Handle
-			return true;
-		}catch(Exception $ex){
-			return false;
+	// ================================================================== //
+	// ===== Error Logging ============================================== //
+	// ================================================================== //
+	protected function _logErrorToFile(){
+		$filename = date('Y_m_d'). '_' . md5(time()) . '.txt';
+		$errorFile = fopen($this->_errorFilePath . $filename, 'w');
+		foreach($this->_errorMessages as $errorMessage){
+			fwrite($errorFile, $errorMessage);
 		}
+		fclose($errorFile);
+		return $filename;
 	}
 	
 }

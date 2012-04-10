@@ -59,7 +59,7 @@ class Harapartners_Stockhistory_Helper_Data extends Mage_Core_Helper_Abstract  {
 	
 	public function getFormVendorTypeArray(){
 		return array(
-       			array('label' => 'Vendor', 'value' => Harapartners_Stockhistory_Model_Vendor::TYPE_VENDOR),
+       			array('label' => 'Vendor', 'value' => Harapartners_Stockhisftory_Model_Vendor::TYPE_VENDOR),
        			array('label' => 'SubVendor', 'value' => Harapartners_Stockhistory_Model_Vendor::TYPE_SUBVENDOR),
        			array('label' => 'Distributor', 'value' => Harapartners_Stockhistory_Model_Vendor::TYPE_DISTRIBUTOR),
        	);
@@ -88,4 +88,60 @@ class Harapartners_Stockhistory_Helper_Data extends Mage_Core_Helper_Abstract  {
 		);
 	}
 	
+	/**
+	 * get products sold by event Id
+	 *
+	 * @param int $eventId
+	 * @return array
+	 */
+	public function getProductSoldInfoByEvent($eventId) {
+		if(empty($eventId)) {
+			return array();
+		}
+		
+		$event = Mage::getModel('catalog/category')->load($eventId);
+		
+		$productsArray = array();
+		
+		if(!!$event) {
+			$productCollection = $event->getProductCollection();
+			
+			foreach($productCollection as $product) {
+				$sku = $product->getSku();
+				$productsArray[$sku] = 0;
+				
+				if($product->getTypeId() == 'configurable') {
+					$childProducts = Mage::getModel('catalog/product_type_configurable')->getUsedProducts(null,$product);
+					
+					foreach($childProducts as $cProduct) {
+						$cSku = $cProduct->getSku();
+						$productsArray[$cSku] = 0;
+					}
+				}
+			}
+			
+			$orders = Mage::getModel('sales/order')->getCollection()
+											->addAttributeToFilter('status', array('neq', 'canceled'))
+											->addAttributeToFilter('created_at', array(
+																					'from' => $event->getData('event_start_date'),
+																					'to' => $event->getData('event_end_date'),
+																				)
+											);
+			
+			foreach($orders as $order) {
+				$items = $order->getAllItems();
+				
+				foreach($items as $item) {
+					$sku = $item->getSku();
+					$qty = $item->getQtyOrdered();
+					
+					if(isset($productsArray[$sku])) {
+						$productsArray[$sku] += $qty;
+					}
+				}
+			}											
+		}
+		
+		return $productsArray;
+	}
 }
