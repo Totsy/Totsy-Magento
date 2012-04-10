@@ -316,8 +316,7 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Mage_Cybersource_Model_
 	
 	
 	public function createProfile($payment,$billing,$customerId) {
-		
-		
+				
 		//??? can we use parent::authorize() with different init param ???
         $error = false;
         $soapClient = $this->getSoapApi();

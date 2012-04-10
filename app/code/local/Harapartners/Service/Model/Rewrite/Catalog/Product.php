@@ -42,6 +42,11 @@ class Harapartners_Service_Model_Rewrite_Catalog_Product extends Mage_Catalog_Mo
 	}
    
     public function afterCommitCallback() {
+    	// ===== Index rebuild ========================================== //
+        //Note URL rewrite is always refreshed
+		$urlModel = Mage::getSingleton('catalog/url');
+		$urlModel->refreshProductRewrite($this->getId());
+    	
     	if(!!Mage::registry('batch_import_no_index')){
 	    	Mage::dispatchEvent('model_save_commit_after', array('object'=>$this));
 	        Mage::dispatchEvent($this->_eventPrefix.'_save_commit_after', $this->_getEventData());
