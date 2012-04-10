@@ -369,7 +369,7 @@ class Harapartners_Fulfillmentfactory_Model_Service_Fulfillment
 			
 			if(!empty($completeItems)) {
 				if(empty($incompleteItems)) {
-					$order->setState(Mage_Sales_Model_Order::STATE_PROCESSING, true)->save();
+					//$order->setState(Mage_Sales_Model_Order::STATE_PROCESSING, true)->save();
 				}
 				else {
 					//trigger split order
