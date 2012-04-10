@@ -88,7 +88,7 @@
 		<?php foreach ($liveArray as $live):?>
 			<?php
 				$endcountRaw = strtotime($live['event_end_date']);
-				$endcount = date("m j, Y, G:i:s", $endcountRaw);
+				$endcount = date("F j, Y, G:i:s", $endcountRaw);
 				$hasProduct = $this->hasProduct($live['entity_id']);
 			?>
 			<?php if ($hasProduct):?>
