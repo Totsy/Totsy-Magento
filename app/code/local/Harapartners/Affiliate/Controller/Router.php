@@ -41,6 +41,12 @@ class Harapartners_Affiliate_Controller_Router extends Mage_Core_Controller_Vari
         			//->setParam('clickid', $p[2]);
            //All other parameters need to be sent as GET params
         	return true;
+        }elseif(count($p) >= 1 && $p[0]=='remote'){
+        	$request->setModuleName('affiliate')
+        			->setControllerName('remote')
+        			->setActionName('login');
+           //All other parameters need to be sent as GET params
+        	return true;
         }else{
         	return false;
         }

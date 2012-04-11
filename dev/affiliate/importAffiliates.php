@@ -45,21 +45,28 @@ if(($handle = fopen($importCsvFile,'r')) !== FALSE){
 				$affiliate->setData('type', 1);
 			}	
 			
-			$trackingCode = json_decode($affiliate->getTrackingCode(),true);
+			$oldTrackingCode = json_decode($affiliate->getTrackingCode(),true);
 		
 			
 			$newTrackingCode = json_decode($data[7],true);
-			if(!!$trackingCode){
+			if(!!$oldTrackingCode){				
 				if(isset($newTrackingCode['pixels']) && !!is_array($newTrackingCode['pixels'])){
+					foreach ($oldTrackingCode as $index=>$record) {
+						$trackingCode[$index] = $record;
+					}					
 					foreach ($newTrackingCode['pixels'] as $pixel) {
-						$trackingCode[$pixel['page']].= $pixel['code'];
+						if($pixel['code']!=$trackingCode[$pixel['page']]){
+							$trackingCode[$pixel['page']].= $pixel['code'];
+						}
 					}				
 				}
 			}else{
 				$trackingCode = array();
 				if(isset($newTrackingCode['pixels']) && !!is_array($newTrackingCode['pixels'])){
 					foreach ($newTrackingCode['pixels'] as $pixel) {
-						$trackingCode[$pixel['page']].= $pixel['code'];
+						if($trackingCode[$pixel['page']]!= $pixel['code']){
+							$trackingCode[$pixel['page']].= $pixel['code'];
+						}						
 					}				
 				}
 			}
