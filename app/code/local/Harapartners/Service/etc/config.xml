@@ -65,6 +65,7 @@
 				<rewrite>
 					<!--Harapartners_For_MANDATORY_Comment-->
 					<adminhtml_customer_edit_tab_reward_management_update>Harapartners_Service_Block_Rewrite_Reward_Adminhtml_Customer_Edit_Tab_Reward_Management_Update</adminhtml_customer_edit_tab_reward_management_update>
+					<customer_account>Harapartners_Service_Block_Rewrite_Reward_Customer_Account</customer_account>
 				</rewrite>
 			</enterprise_reward>
 			<!-- ===== BLOCK REWRITE END ===== -->

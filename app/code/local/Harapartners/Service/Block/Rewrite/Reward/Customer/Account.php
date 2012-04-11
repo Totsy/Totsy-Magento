@@ -31,7 +31,7 @@
  * @package     Enterprise_Reward
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Enterprise_Reward_Block_Customer_Account extends Mage_Core_Block_Abstract
+class Harapartners_Service_Block_Rewrite_Reward_Customer_Account extends Enterprise_Reward_Block_Customer_Account
 {
     /**
      * Add RP link to tab if we have all rates
@@ -44,7 +44,7 @@ class Enterprise_Reward_Block_Customer_Account extends Mage_Core_Block_Abstract
         $navigationBlock = $this->getLayout()->getBlock('customer_account_navigation');
         if ($navigationBlock && Mage::helper('enterprise_reward')->isEnabledOnFront()) {
             $navigationBlock->addLink('enterprise_reward', 'enterprise_reward/customer/info/',
-                Mage::helper('enterprise_reward')->__('Reward Points'));
+                Mage::helper('enterprise_reward')->__('My Credits'));
         }
         return $this;
     }
