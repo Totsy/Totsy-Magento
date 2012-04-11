@@ -1,9 +1,10 @@
  <layout version="0.1.0">
-	<customer_account>
+	<!--The following part is not moved to cusomter.xml-->
+	<!--customer_account>
         <reference name="customer_account_navigation" >
-            <action method="addLink" translate="label"><name>paymentfactory</name><path>paymentfactory/</path><label>My Credit Cards</label></action>
+			<action method="addLink" translate="label"><name>paymentfactory</name><path>paymentfactory/</path><label>My Credit Cards</label></action>
         </reference>
-    </customer_account>
+    </customer_account-->
 	
 	<paymentfactory_index_index>
 		<label>Customer My Account Credit Cards</label>

@@ -20,6 +20,17 @@
         <?php echo $this->__('Click <a href="%s" onclick="this.target=\'_blank\'">here to print</a> a copy of your order confirmation.', $this->getPrintUrl()) ?>
         <?php echo $this->getChildHtml() ?>
     </p>
+    <p class="red review-order-detail">
+    	<?php 		
+    		$order_id = $order->getId();
+			$url = $this->getBaseUrl().'sales/order/view/order_id/'.$order_id;
+		?>
+		You will redirect to order review in 5 second. Or <a href="<?php echo $url?>">click here</a>
+    </p>
+    <script language="javascript" type="text/javascript">
+		function redirect(){window.location.href="<?php echo $url?>"};
+		setTimeout("redirect()",5000);
+	</script>
 <?php endif;?>
 <?php endif;?>
 
