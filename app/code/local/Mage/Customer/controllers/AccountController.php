@@ -732,7 +732,16 @@ class Mage_Customer_AccountController extends Mage_Core_Controller_Front_Action
         if ($this->getRequest()->getParam('changepass')==1){
             $customer->setChangePassword(1);
         }
-
+		
+        //Harapartners, Edward, for change password link start
+        $passwordPageFlag = 'changepassword';
+        $passwordPage = $this->getRequest()->getParam($passwordPageFlag);
+        if (isset($passwordPage)){
+        	Mage::unregister('changepassword');
+        	Mage::register('changepassword',1);
+        }
+		//Harapartners, Edward, for change password link end
+        
         $this->getLayout()->getBlock('head')->setTitle($this->__('Account Information'));
         $this->getLayout()->getBlock('messages')->setEscapeMessageFlag(true);
         $this->renderLayout();
