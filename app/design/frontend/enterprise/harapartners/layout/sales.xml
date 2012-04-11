@@ -49,7 +49,7 @@ Customer account pages, rendered for all tabs in dashboard
 
     <customer_account>
         <!-- Mage_Sales -->
-		<!--The following part is not moved to cusomter.xml-->
+		<!--The following part is now moved to cusomter.xml-->
         <!--reference name="customer_account_navigation">
             <action method="addLink" translate="label" module="sales"><name>orders</name><path>sales/order/history/</path><label>My Orders</label></action>
         </reference-->

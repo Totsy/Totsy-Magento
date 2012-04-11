@@ -84,13 +84,14 @@
         </reference>
     </enterprise_giftregistry_index_items>
 
-     <customer_account>
+    <!--The following part is now moved to cusomter.xml-->
+	<!--customer_account>
         <block type="enterprise_giftregistry/link" name="giftregistry_link_dashboard">
             <action method="addDashboardLink" translate="label" module="enterprise_giftregistry">
                 <block>customer_account_navigation</block><name>giftregistry</name><path>enterprise_giftregistry/</path><label>Gift Registry</label>
             </action>
         </block>
-    </customer_account>
+    </customer_account-->
 
     <enterprise_giftregistry_search_index>
         <update handle="calendar"/>

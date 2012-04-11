@@ -121,7 +121,8 @@
         </reference>
     </enterprise_giftcardaccount_customer_index>
 
-    <!--customer_account>
+    <!--The following part is now moved to cusomter.xml-->
+	<!--customer_account>
         <reference name="customer_account_navigation">
             <action method="addLink" translate="label" module="enterprise_giftcardaccount">
                 <name>enterprise_giftcardaccount</name>

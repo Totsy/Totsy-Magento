@@ -347,12 +347,26 @@ Customer account pages, rendered for all tabs in dashboard
 				<action method="addLink" translate="label" module="paymentfactory"><name>paymentfactory</name><path>paymentfactory/</path><label>Manage Credit Cards</label></action>
 				<action method="addLink" translate="label" module="customer"><name>address_book</name><path>customer/address/</path><label>Address Book</label></action>
 				<action method="addLink" translate="label" module="sales"><name>orders</name><path>sales/order/history/</path><label>My Orders</label></action>
-				<action method="addLink" translate="label" module="newsletter"><name>newsletter</name><path>newsletter/manage/</path><label>Email Preference</label></action>	
+				
             </block>
+			<block type="enterprise_reward/customer_account" name="enterprise.reward.customer.account" />
+			<block type="enterprise_invitation/link" name="invitation_link_dashboard">
+				<action method="addDashboardLink" translate="label" module="enterprise_invitation"><block>customer_account_navigation</block><name>invitations</name><path>enterprise_invitation/</path><label>My Invitations</label></action>
+			</block>
+			<block type="enterprise_giftregistry/link" name="giftregistry_link_dashboard">
+				<action method="addDashboardLink" translate="label" module="enterprise_giftregistry">
+					<block>customer_account_navigation</block><name>giftregistry</name><path>enterprise_giftregistry/</path><label>Gift Registry</label>
+				</action>
+				<action method="addDashboardLink" translate="label" module="enterprise_customerbalance">
+					<block>customer_account_navigation</block><name>enterprise_customerbalance</name><path>enterprise_customerbalance/info/</path><label>Store Credit</label>
+				</action>
+				<action method="addDashboardLink" translate="label" module="newsletter">
+					<block>customer_account_navigation</block><name>newsletter</name><path>newsletter/manage/</path><label>Email Preference</label>
+				</action>
+			</block>
 			<block type="core/template" name="help-desk" template="cms/needhelp.phtml" />
             <!--block type="catalog/product_compare_sidebar" name="catalog.compare.sidebar" template="catalog/product/compare/sidebar.phtml"/-->
             <remove name="tags_popular"/>
-
         </reference>
     </customer_account>
 

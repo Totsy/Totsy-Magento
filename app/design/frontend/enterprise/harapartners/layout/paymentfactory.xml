@@ -1,5 +1,5 @@
  <layout version="0.1.0">
-	<!--The following part is not moved to cusomter.xml-->
+	<!--The following part is now moved to cusomter.xml-->
 	<!--customer_account>
         <reference name="customer_account_navigation" >
 			<action method="addLink" translate="label"><name>paymentfactory</name><path>paymentfactory/</path><label>My Credit Cards</label></action>
