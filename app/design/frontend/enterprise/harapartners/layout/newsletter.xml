@@ -47,9 +47,10 @@ Customer account pages, rendered for all tabs in dashboard
 
     <customer_account>
         <!-- Mage_Newsletter -->
-        <reference name="customer_account_navigation">
+		<!--The following part is now moved to cusomter.xml-->
+        <!--reference name="customer_account_navigation">
             <action method="addLink" translate="label" module="newsletter"><name>newsletter</name><path>newsletter/manage/</path><label>Email Preference</label></action>
-        </reference>
+        </reference-->
     </customer_account>
 
     <newsletter_manage_index translate="label">

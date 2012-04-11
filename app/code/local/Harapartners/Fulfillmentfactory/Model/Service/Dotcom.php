@@ -400,6 +400,13 @@ XML;
 					                    ->addObject($order);
 					                    
 					           	$transactionSave->save();
+					           	
+					           	//send email
+					           	$invoices = Mage::getResourceModel('sales/order_invoice_collection')->setOrderFilter($order->getId());
+					           	foreach($invoices as $invoice) {
+					           		$invoice->sendEmail(true);
+					           		$invoice->save();
+					           	}
 							}
 						}
 					}
@@ -409,6 +416,13 @@ XML;
 				$order->setStatus(Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_PAYMENT_FAILED)->save();	//payment failed
 				$message = 'Order ' . $order->getIncrementId() . ' could not place the payment. ' . $e->getMessage();
 				Mage::helper('fulfillmentfactory/log')->errorLogWithOrder($message, $order->getId());
+				
+				$customer = Mage::getModel('customer/customer')->load($order->getCustomerId());
+				
+				//send payment failed email
+				Mage::getModel('core/email_template')->setTemplateSubject('Payment Failed')
+													 ->sendTransactional(2, 'support@totsy.com', 'j.xiao@harapartners.com', $customer->getFirstname(), array(), $order->getStoreId());
+				
 				//throw new Exception($message);
 				continue;
 			}
@@ -517,11 +531,12 @@ XML;
 
 			foreach($items as $item) {
 				$quantity = intval($item->getQtyOrdered());
+				$sku = substr($item->getSku(), 0, 17);
 				
 				$xml .= <<<XML
 					<line-item>
-						<sku>{$item->getSku()}</sku>
-						<quantity>{$quantity}</quantity>
+						<sku>$sku</sku>
+						<quantity>$quantity</quantity>
 						<price>{$item->getPrice()}</price>
 						<tax>{$item->getTaxAmount()}</tax>
 						<shipping-handling>0</shipping-handling>
@@ -696,14 +711,14 @@ XML;
 	}
 	
 	public function testSubmitOrdersToFulfill() {
-		//$orders = Mage::getModel('sales/order')->getCollection()
-											   //->addAttributeToFilter('state', Mage_Sales_Model_Order::STATE_PROCESSING);
+//		$orders = Mage::getModel('sales/order')->getCollection()
+//											   ->addAttributeToFilter('state', Mage_Sales_Model_Order::STATE_NEW);
 		//$orders = Mage::getModel('sales/order')->getCollection()->addAttributeToFilter('entity_id', array('in' => array(94)));
 		//$orders = Mage::getModel('sales/order')->getCollection()->addAttributeToFilter('entity_id', array('in' => array(187, 189, 190)));
 		//echo count($orders);
-		//return $this->submitOrdersToFulfill($orders);
+		//$this->submitOrdersToFulfill($orders, true);
 		
-		//$this->submitOrderToFulfillByQueue();
-		$this->runDotcomFulfillOrder();
+		$this->submitOrderToFulfillByQueue();
+		//$this->runDotcomFulfillOrder();
 	}
 }

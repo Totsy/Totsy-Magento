@@ -170,22 +170,26 @@ class Harapartners_ShippingFactory_Model_Shipping_Carrier_Flexible
     /* Check the Shipping Method -- Start*/
 	protected function _isFreeShipping($product)
 	{
-    	return $this->_getShippingMethod($product) == 'Free Shipping';
+    	return $this->_getShippingMethod($product) == 'free_shipping';
     }
     
     protected function _isFlatRate($product)
     {
-    	return $this->_getShippingMethod($product) == 'Fix Rate'; // 'Flat Rate'
+    	return $this->_getShippingMethod($product) == 'fix_rate'; // 'Flat Rate'
     }
     
     protected function _isDimensional($product)
     {
-    	return $this->_getShippingMethod($product) == 'Dimensional';
+    	return $this->_getShippingMethod($product) == 'dimensional';
     }
     
     protected function _getShippingMethod($product)
     {
-    	return $product->getAttributeText('shipping_method');
+    	$shippingMethod = $product->getAttributeText('shipping_method');
+ 		if(!$shippingMethod){
+ 			return 'fix_rate';
+ 		}
+ 		return str_replace(' ', '_', strtolower(trim($shippingMethod)));
     }
     /* Check Shipping Method --End */
     
