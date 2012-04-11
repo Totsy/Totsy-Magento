@@ -19,8 +19,8 @@ class Harapartners_Stockhistory_Block_Adminhtml_Purchaseorder_Index_Grid extends
 	{
 		parent::__construct();
 		$this->setId('PurchaseOrderGrid');
-		$this->setDefaultSort('id');
-		$this->setDefaultDir('ASC');
+		$this->setDefaultSort('created_at');
+		$this->setDefaultDir('DESC');
 		$this->setSaveParametersInSession(true);
 	}
 	

@@ -897,3 +897,54 @@ body.enterprise-invitation-index-index  h2.account-page-title {
     padding-top: 20px;
     text-align: left;
 }
+
+/*---------------modified for hotspot-------------------------*/
+body .sp-methods select.year {
+    width: 120px;
+}
+
+body.enterprise-invitation-index-index  h2.account-page-title {
+    border-bottom-color: #DDDDDD;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    color: #707070;
+    font-size: 20px;
+    font-weight: normal;
+    margin-left: 10px;
+    margin-right: 10px;
+    padding-bottom: 20px;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 20px;
+    text-align: left;
+}
+
+/*-----------------------------Address Form---------------------------------*/
+.customer-address-form .form-list input.input-text{
+	width:290px;
+	border-radius:5px;
+	padding:5px
+}
+
+.customer-address-form .form-list select {
+	border-width:1px;
+	color:#333333 !important;
+	height:100%;
+	lineheight:14px !important;
+	left:0;
+	opacity:0;
+	position:absolute;
+	top:0;
+	width:100%;
+	background-color:transparent;
+	vertical-align: top;
+}
+
+.customer-address-form .form-list .totsy-selective-input-box {
+	width:300px;
+	background-image: url("../images/selector.png");
+    background-origin: padding-box;
+    background-position: right 7px;
+    background-repeat: no-repeat;
+    background-size: auto auto;
+}

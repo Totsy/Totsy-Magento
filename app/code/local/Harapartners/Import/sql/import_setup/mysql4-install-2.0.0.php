@@ -30,8 +30,8 @@ CREATE TABLE {$this->getTable('import/import')} (
   `action_type` smallint(5) unsigned default NULL,
   `error_message` text default NULL,
   `status` smallint(5) unsigned default NULL,
-  `created_time` datetime NULL,
-  `update_time` datetime NULL,
+  `created_at` datetime NULL,
+  `updated_at` datetime NULL,
   
   PRIMARY KEY (`import_import_id`),
   KEY `FK_IMPORT_IMPORT_VENDOR` (`vendor_id`),

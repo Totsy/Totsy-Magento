@@ -24,7 +24,7 @@
 				<select id="cybersource-use-card-method" name="payment[cybersource_subid]">
 					<option value="" class="use-new-card-control">New Credit/Debit Card</option>
 				<?php foreach( $profiles as $profile ): ?>
-					<?php if( !$profile->getSubscriptionId() ) { continue; } ?>
+					<?php if( !$profile->getSubscriptionId() || $profile->getIsDefault()== 1 ) { continue; } ?>
 					<option class="use-saved-card-control" value="<?php echo $profile->getEncryptedSubscriptionId() ?>"><?php echo $this->getFullCcCardType( $profile->getData( 'card_type' ) ) ?> ends with <?php echo $profile->getData( 'last4no' ) ?></option>
 				<?php endforeach ?>
 				</select>

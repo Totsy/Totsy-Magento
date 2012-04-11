@@ -17,9 +17,6 @@ Mage::app($mageRunCode, $mageRunType)->setCurrentStore($storeId);
  * importCsvFile
  * delmiter
  */
-$productData	= array();
-$stockData		= array();
-$urlRewriteData	= array();
 
 //$importCsvFile 	= 'product_meta_'.$startId.'_to_'.$endId.'_store'.$storeId.'_attributeSetId'.$attributeSetId.'.csv';
 $importCsvFile 	= 'affiliate.csv';
@@ -28,41 +25,68 @@ $header			= array();
 $row 			= 0;
 
 if(($handle = fopen($importCsvFile,'r')) !== FALSE){
-	while(($data = fgetcsv($handle, 4096, $delimiter, '"'))){
+	while(($data = fgetcsv($handle))){
 		$row++;
 		if($row === 1){
 			$header = $data;
 			continue;
 		}
-
-		//Test if URL Rewrite exists already
-		$affiliate = Mage::getModel('affiliate/record');
-		//$affiliate->setData('affiliate_id', $data[0]);
-		$affiliate->setData('created_at',$data[1]);
-		$affiliate->setData('status', $data[3]);
-		$affiliate->setData('affiliate_code', $data[4]);
-		if($row != 240){
-			$affiliate->setData('sub_affiliate_code', $data[5]);
-		}
-		$affiliate->setData('type', $data[6]);
-		$affiliate->setData('tracking_code', $data[7]);
-		//$affiliate->setData('referer_count', $data[8]);
+		if($row!= 74){
+			//Test if URL Rewrite exists already
+			$affiliate = Mage::getModel('affiliate/record')->loadByAffiliateCode($data[4]);
+			//$affiliate->setData('affiliate_id', $data[0]);
+			$affiliate->setData('created_at',$data[1]);
+			$affiliate->setData('status', $data[3]);
+			$affiliate->setData('affiliate_name', ucwords($data[4]));
+			$affiliate->setData('affiliate_code', strtolower($data[4]));	
+			if($data[6]){
+				$affiliate->setData('type', $data[6]);
+			}else{
+				$affiliate->setData('type', 1);
+			}	
+			
+			$trackingCode = json_decode($affiliate->getTrackingCode(),true);
 		
-		try {
-			$affiliate->save();
-		}catch (Exception $e){
-			echo $e->getMessage();
-			exit();
-		}
-		
-		echo $row.' affiliate_code: '.$affiliate->getData('affiliate_code').' ID: '.$affiliate->getData('affiliate_id')."\n";
-		//echo $row.' SKU: '.var_dump($data)."\n";
-		//echo $row.' SKU: '.$product->get()."\n";
-		if($row > 5){
+			
+			$newTrackingCode = json_decode($data[7],true);
+			if(!!$trackingCode){
+				if(isset($newTrackingCode['pixels']) && !!is_array($newTrackingCode['pixels'])){
+					foreach ($newTrackingCode['pixels'] as $pixel) {
+						$trackingCode[$pixel['page']].= $pixel['code'];
+					}				
+				}
+			}else{
+				$trackingCode = array();
+				if(isset($newTrackingCode['pixels']) && !!is_array($newTrackingCode['pixels'])){
+					foreach ($newTrackingCode['pixels'] as $pixel) {
+						$trackingCode[$pixel['page']].= $pixel['code'];
+					}				
+				}
+			}
+			if(!$affiliate->getSubAffiliateCode()){
+				$affiliate->setSubAffiliateCode(strtolower($data[5]));
+			}	
+			if($trackingCode){
+				$affiliate->setTrackingCode(json_encode($trackingCode));
+			}		
+			//$affiliate->setData('tracking_code', $data[7]);
+			//$affiliate->setData('referer_count', $data[8]);
+			
+			try {
+				$affiliate->save();
+			}catch (Exception $e){
+				echo $e->getMessage();
+				exit();
+			}
+			
+			echo $row.' affiliate_code: '.$affiliate->getData('affiliate_code').' ID: '.$affiliate->getData('affiliate_id')."\n";
+			//echo $row.' SKU: '.var_dump($data)."\n";
+			//echo $row.' SKU: '.$product->get()."\n";
+			//if($row > 5){
+				//exit();
+			//}
 			//exit();
 		}
-		//exit();
-	
 	}
 }
 

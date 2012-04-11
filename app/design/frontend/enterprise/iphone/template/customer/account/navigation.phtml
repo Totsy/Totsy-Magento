@@ -44,10 +44,14 @@
 								<a class="ui-link-inherit" href="<?php echo $_link->getUrl() ?>"><?php echo $_link->getLabel() ?>
 									<?php if ($_link->getName()=='checkout_cart') :?>
 										<span class="ui-li-count ui-btn-up-c ui-btn-corner-all"><?php echo Mage::getSingleton('checkout/cart')->getSummaryQty(); ?></span>
-									<?php elseif ($_link->getName()=='enterprise_customerbalance') : ?>
-										<?php $baseCredit = Mage::getSingleton('core/layout')->createBlock('enterprise_customerbalance/account_balance')->getBalance();?>
-										<?php $credit = Mage::helper('core')->currency($baseCredit); ?>
-										<span class="ui-li-count ui-btn-up-c ui-btn-corner-all credit-count-box"><?php echo 'Credit '.$credit ?></span>
+									<?php elseif ($_link->getName()=='enterprise_reward') : ?>
+										<?php $customer = Mage::getSingleton('customer/session')->getCustomer(); ?>
+										<?php $rewardModel = Mage::getModel('enterprise_reward/reward'); ?>
+										<?php $rewardModel->setCustomer($customer)
+														  ->setWebsiteId(Mage::app()->getWebsite()->getId())
+                										  ->loadByCustomer(); ?>
+										<?php $credit = $rewardModel->getPointsBalance(); ?>
+										<span class="ui-li-count ui-btn-up-c ui-btn-corner-all credit-count-box"><?php echo $credit.' Point(s)' ?></span>
 									<?php endif; ?>
 								</a>
 								<span class="ui-icon ui-icon-arrow-r ui-icon-shadow"></span>
