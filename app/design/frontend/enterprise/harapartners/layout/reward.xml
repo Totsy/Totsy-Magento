@@ -27,7 +27,8 @@
 -->
 <layout version="0.1.0">
     <customer_account>
-        <block type="enterprise_reward/customer_account" name="enterprise.reward.customer.account" />
+		<!--The following part is now moved to cusomter.xml-->
+        <!--block type="enterprise_reward/customer_account" name="enterprise.reward.customer.account" /-->
     </customer_account>
 
     <enterprise_reward_customer_info>

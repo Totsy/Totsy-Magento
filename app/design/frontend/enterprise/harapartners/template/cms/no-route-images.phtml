@@ -15,10 +15,10 @@
 	
 		if(isset($liveCategory['image'])){
 			//$containerProductInfo['small_image'] = $mediaBaseDir . str_ireplace('/', DS, $productInfo['small_image']);    //it call from file system like F:\www\totsy\media\catalog\product\n\e\newborn_tiered_dots_top_2pc_diaper_set.jpg
-			if ($liveCategory['image'] != 'no_selection'){
-				$smallImage = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA).'catalog/category/'.$liveCategory['image'];
-			}else {
+			if (($liveCategory['image'] == 'no_selection')||empty($liveCategory['image'])){
 				$smallImage['image'] = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA).'catalog/product/placeholder/small_image.jpg';
+			}else {
+				$smallImage = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA).'catalog/category/'.$liveCategory['image'];
 			}
 		}
 	?>
