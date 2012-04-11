@@ -75,7 +75,7 @@ class Harapartners_Paymentfactory_Model_Profile extends Mage_Core_Model_Abstract
         if(!!$dataObject->getData('cc_last4')){
     		 $this->setData('last4no',$dataObject->getData('cc_last4'));
     	}else{
-    		throw new Exception('Missing Subscription Id');
+    		throw new Exception('CC LAST 4');
     	}
             
     	if(!!$dataObject->getData('cc_type')){

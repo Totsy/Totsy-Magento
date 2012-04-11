@@ -74,7 +74,12 @@ class Harapartners_Import_Helper_Processor extends Mage_Core_Helper_Abstract {
 			//Nothing to run
 			$this->_errorMessages[] = "Nothing to run!" . "\n";
 		}else{
-	
+			
+			// ===== disable indexing for better performance ===== //
+			//Mage::unregister('batch_import_no_index');
+			//Mage::register('batch_import_no_index', true);
+			//Note catalog URL rewrite is always refreshed after product save: afterCommitCallback()
+			
 			// ===== dataflow, processing ===== //
 			try{
 				$batchModel = Mage::getModel('dataflow/batch')->load($importObject->getData('import_batch_id'));
@@ -92,10 +97,9 @@ class Harapartners_Import_Helper_Processor extends Mage_Core_Helper_Abstract {
 					
 					//Get the required fields
 					$this->_prepareRequiredFields();
-					$row = 0;
+					$row = 2; //Skip the header row
 					foreach ($importObjectIds as $importObjectId) {	
 						try{
-							$row++;	
 							$batchImportModel->load($importObjectId);
 							if (!$batchImportModel || !$batchImportModel->getId()) {
 								$this->_errorMessages[] = Mage::helper('dataflow')->__('Skip undefined row ' . $row . "\n");
@@ -107,6 +111,7 @@ class Harapartners_Import_Helper_Processor extends Mage_Core_Helper_Abstract {
 	
 							//PO Saves Here
 							$this->_savePurchaseOrderInfo($importData, $importObject);
+							$row++;	
 		
 						} catch(Exception $ex) {
 							$this->_errorMessages[] = 'Skip row ' . $row . ', ' . $ex->getMessage() . "\n";
@@ -126,6 +131,7 @@ class Harapartners_Import_Helper_Processor extends Mage_Core_Helper_Abstract {
 			$importObject->save();
 			return true;
 		}else{
+			array_unshift($this->_errorMessages[], "Please make sure the header row has all required fields. All contents are case sensitive.");
 			$filename = $this->_logErrorToFile();
 			$importObject->setStatus(Harapartners_Import_Model_Import::IMPORT_STATUS_ERROR);
 			$importObject->setErrorMessage('<a href="' . $this->_errorFileWebPath . $filename . '">Error</a>');
@@ -301,6 +307,9 @@ class Harapartners_Import_Helper_Processor extends Mage_Core_Helper_Abstract {
 	// ================================================================== //
 	protected function _logErrorToFile(){
 		$filename = date('Y_m_d'). '_' . md5(time()) . '.txt';
+		if(!is_dir($this->_errorFilePath)){
+			mkdir($this->_errorFilePath, 0777);
+		}		
 		$errorFile = fopen($this->_errorFilePath . $filename, 'w');
 		foreach($this->_errorMessages as $errorMessage){
 			fwrite($errorFile, $errorMessage);
