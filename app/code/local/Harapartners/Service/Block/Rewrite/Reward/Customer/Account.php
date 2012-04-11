@@ -44,7 +44,7 @@ class Harapartners_Service_Block_Rewrite_Reward_Customer_Account extends Enterpr
         $navigationBlock = $this->getLayout()->getBlock('customer_account_navigation');
         if ($navigationBlock && Mage::helper('enterprise_reward')->isEnabledOnFront()) {
             $navigationBlock->addLink('enterprise_reward', 'enterprise_reward/customer/info/',
-                Mage::helper('enterprise_reward')->__('My Credits'));
+                Mage::helper('enterprise_reward')->__('Reward Points'));//My Credits?Totsy Credits?
         }
         return $this;
     }
