@@ -25,9 +25,10 @@ class Harapartners_MemcacheDb_Model_Resource_Memcache {
     		}
     		
     		$this->_memcache = new Memcache;
+    		//By default use the first server available
 			$this->_hasConnection = $this->_memcache->connect(
-					(string)Mage::getConfig()->getNode('global/memcachedb_server'), 
-					(string)Mage::getConfig()->getNode('global/memcachedb_port')
+					(string)Mage::getConfig()->getNode('global/cache/memcached/servers/server/host'), 
+					(string)Mage::getConfig()->getNode('global/cache/memcached/servers/server/port')
 			);
 			if(!$this->_hasConnection){
 				$this->_memcache = null;

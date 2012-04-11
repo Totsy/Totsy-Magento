@@ -54,7 +54,8 @@
 <?php else: ?>
 <div class="category-products">
 	<ul class="products-grid">
-	<?php foreach ($_productCollection as $_product): ?>		    
+	<?php foreach ($_productCollection as $_product): ?>	
+		<?php if ( $_product->isSalable() ):?>	    
         <li class="item-list ui-btn-up-c <?php echo ' '.str_replace(',',' ',$_product->getDepartments()) ?>" department="<?php echo str_replace(',',' ',$_product->getDepartments()) ?>">     
             <div class="product-info ui-btn-text">
 	            <a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" class="event-link" >
@@ -65,6 +66,22 @@
 		        </a>
 	        </div>   
         </li>
+        <?php endif;?>
+	<?php endforeach ?>
+	<?php foreach ($_productCollection as $_product): ?>	
+		<?php if ( !$_product->isSalable() ):?>	    
+        <li class="item-list ui-btn-up-c <?php echo ' '.str_replace(',',' ',$_product->getDepartments()) ?>" department="<?php echo str_replace(',',' ',$_product->getDepartments()) ?>">     
+            <div class="product-info ui-btn-text">
+	            <a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" class="event-link" >
+	            	<img id="out-of-stock" src="<?php echo $this->getSkinUrl('images/soldout.png');?>" style="z-index:10"/>
+	            	<img src="<?php echo $this->helper('catalog/image')->init($_product, 'small_image')->resize(348,350); ?>" width="80px" height="80px" alt="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" />
+	            	<h3 class="product-name"><?php echo $_helper->productAttribute($_product, $_product->getName(), 'name') ?></h3>
+		            <?php echo $this->getPriceHtml($_product, true) ?>
+		            <span class="ui-icon ui-icon-arrow-r ui-icon-shadow hp-ui-icon-right"></span>
+		        </a>
+	        </div>   
+        </li>
+        <?php endif;?>
 	<?php endforeach ?>
 	</ul>
 </div>

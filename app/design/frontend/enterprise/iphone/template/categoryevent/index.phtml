@@ -23,7 +23,7 @@
  */
 ?>
 <?php 
-	$cdsDataObj 	= 	$this->getIndexDataObject();
+	$indexDataObj 	= 	$this->getIndexDataObject();
 	$isFaceBook 	= 	Mage::getSingleton('customer/session')->getFacebookAccountFirstCreate();
 	$baseUrl 		= 	Mage::getBaseUrl();
 	$maxPerSend 	= 	0;
@@ -32,14 +32,15 @@
 	$liveArray 		= 	'';
 	$upcomingArray  = 	'';	
 	
-	if( $cdsDataObj->hasData('toplive') ){
-		$topArray = $cdsDataObj->getData('toplive');
+	if( $indexDataObj->hasData('toplive') ){
+		$topArray = $indexDataObj->getData('toplive');
+		$topArray = array(); //Harapartners, yang: temploary block the top events
 	}
-	if( $cdsDataObj->hasData('live') ){
-		$liveArray = $cdsDataObj->getData('live');
+	if( $indexDataObj->hasData('live') ){
+		$liveArray = $indexDataObj->getData('live');
 	}
-	if( $cdsDataObj->hasData('upcoming') ){
-		$upcomingArray = $cdsDataObj->getData('upcoming');
+	if( $indexDataObj->hasData('upcoming') ){
+		$upcomingArray = $indexDataObj->getData('upcoming');
 	}
 ?>
 
@@ -113,8 +114,10 @@
 			<?php 
 				$endcountRaw = strtotime($live['event_end_date']);
 				$endcount = date("F j, Y, G:i:s", $endcountRaw);
+				$hasProduct = $this->hasProduct($live['entity_id']);
 				$imgFile = BP.DS.'media'.DS.'catalog'.DS.'category'.DS.$live['thumbnail'];
 			?>
+			<?php if ($hasProduct):?>
 			<li class="catalog-event ui-btn-up-c">
 				<div class="ui-btn-text">
 					<a class="event-link" href="<?php echo Mage::getBaseUrl().$live['url_path']; ?>">
@@ -132,7 +135,7 @@
 								onComplete: function( event ){										
 									jQuery(this).html("Completed");
 								},
-								leadingZero: true,
+								leadingZero: false,
 								direction: "down"
 							});
 						</script>
@@ -142,6 +145,7 @@
 				</div>	
 			</li>
 			<?php $timer++;?>
+			<?php endif;?>
 			<?php endforeach;?>
 		</ul>
 	</div>
@@ -152,7 +156,7 @@
 		<ul class="upcoming-events-container">
 		<?php foreach ($upcomingArray as $up):?>
 			<?php 
-				$endcountRaw = strtotime($up['event_end_date']);
+				$endcountRaw = strtotime($up['event_start_date']);
 				$endcount = date("F j, Y, G:i:s", $endcountRaw);
 			?>
 			<li class="catalog-event ui-btn-up-c">			
@@ -171,7 +175,7 @@
 								onComplete: function( event ){										
 									jQuery(this).html("Completed");
 								},
-								leadingZero: true,
+								leadingZero: false,
 								direction: "down"
 							});
 						</script>
