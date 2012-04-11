@@ -24,8 +24,6 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Mage_Cybersource_Model_
 		if(!!$this->getData('cybersource_subid')){
 				return $this;
 			}
-		
-		
 		return parent::validate();        
     }
     
@@ -59,12 +57,12 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Mage_Cybersource_Model_
 //     	IF VISA, auth 0
 //     	ELSE auth 1 and void
 		if ($profile->getCardType() == 'VI'){
-			return $this->authorize($payment,0);
+			return $this->authorize($payment, 0.0);
 		}else{
-			$validationStatus = $this->authorize($payment,1);
+			$validationStatus = $this->authorize($payment, 1.0);
 			if($validationStatus){
 				$payment->setParentTransactionId($payment->getTransactionId());
-				$this->voidSpecial($payment,1);
+				$this->voidSpecial($payment, 1.0);
 			}
 			return $validationStatus;
 		}
@@ -88,9 +86,6 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Mage_Cybersource_Model_
     
     //-----------------Create Customer Payment Profile-------//
 	public function create(Varien_Object $payment) {
-		
-		
-		//??? can we use parent::authorize() with different init param ???
         $error = false;
         $soapClient = $this->getSoapApi();
         
@@ -300,18 +295,20 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Mage_Cybersource_Model_
 	 			return 000;
 	 	}
     }
-    
-    
+
 	protected function _addSubscriptionToRequest($payment){
-        $subscription = new stdClass();
-		$subscription->title  ="On-Demand Profile Test";
-		$subscription->paymentMethod = "credit card";
-		$this->_request->subscription = $subscription;
-	
-		$recurringSubscriptionInfo = new stdClass();
-		$recurringSubscriptionInfo->frequency = "on-demand";
-		$recurringSubscriptionInfo->subscriptionID = $payment->getCybersourceSubid();
-		$this->_request->recurringSubscriptionInfo = $recurringSubscriptionInfo;
+		//For refund we do NOT need subscription info, and $payment will be null
+		if(!!$payment){
+	        $subscription = new stdClass();
+			$subscription->title  ="On-Demand Profile Test";
+			$subscription->paymentMethod = "credit card";
+			$this->_request->subscription = $subscription;
+		
+			$recurringSubscriptionInfo = new stdClass();
+			$recurringSubscriptionInfo->frequency = "on-demand";
+			$recurringSubscriptionInfo->subscriptionID = $payment->getCybersourceSubid();
+			$this->_request->recurringSubscriptionInfo = $recurringSubscriptionInfo;
+		}
 	}
 	
 	
