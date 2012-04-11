@@ -29,9 +29,7 @@ class Harapartners_Affiliate_RegisterController extends Mage_Core_Controller_Fro
         if(!!$affiliate && !!$affiliate->getId()){
         	$affiliateInfo = array();
 	        $subAffiliateCode = $this->getRequestSubAffiliateCode();
-	        if(in_array($subAffiliateCode, explode(',', $affiliate->getSubAffiliateCode()))){
-	        	$affiliateInfo['sub_affiliate_code'] = $subAffiliateCode;
-	        }
+	        $affiliateInfo['sub_affiliate_code'] = $subAffiliateCode;
 	        $affiliateInfo['registration_param'] = json_encode($request->getParams());
 	        
 	        //Additional logic: specific landing page after registration, background image can also be prepared here!
