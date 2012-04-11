@@ -64,9 +64,10 @@ class Harapartners_Import_Adminhtml_ImportController extends Mage_Adminhtml_Cont
 		//$this->getLayout()->getBlock('head')->setCanLoadExtJs(true);
 		$this->_addContent($this->getLayout()->createBlock('import/adminhtml_import_edit'))
 				->_addLeft($this->getLayout()->createBlock('import/adminhtml_import_edit_tabs'));
-		$message = 'For imports with 100+ proucts, please ONLY upload the file and run import offline.<br/>'
+		$message = 'For imports with 50+ proucts, please ONLY upload the file and run import offline.<br/>'
 					. 'For small imports, please wait and leave the window open until everything is processed.<br/>'
-					. 'If you want to see run big imports online. Please cut them in smaller pieces.';
+					. 'If you want to see run big imports online. Please cut them in smaller pieces (<50).<br/>'
+					. 'Make sure associated products stays in the same file';
 		Mage::getSingleton('adminhtml/session')->addNotice($message);
 		Mage::getSingleton('adminhtml/session')->setHpImportFormData(null);
 		$this->_initLayoutMessages('adminhtml/session');

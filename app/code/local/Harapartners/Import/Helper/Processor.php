@@ -76,8 +76,8 @@ class Harapartners_Import_Helper_Processor extends Mage_Core_Helper_Abstract {
 		}else{
 			
 			// ===== disable indexing for better performance ===== //
-			//Mage::unregister('batch_import_no_index');
-			//Mage::register('batch_import_no_index', true);
+			Mage::unregister('batch_import_no_index');
+			Mage::register('batch_import_no_index', true);
 			//Note catalog URL rewrite is always refreshed after product save: afterCommitCallback()
 			
 			// ===== dataflow, processing ===== //
