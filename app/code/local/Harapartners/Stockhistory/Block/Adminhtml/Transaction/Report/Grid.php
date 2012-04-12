@@ -44,6 +44,7 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Grid extends 
 				$uniqueProductList[$item->getProductId()] = array(
 						'total' => 0,
 						'qty'	=> 0,
+						'is_master_pack' => 'No'
 				);
 			}
 			$uniqueProductList[$item->getProductId()]['total'] += $item->getQtyDelta() * $item->getUnitCost();
@@ -64,6 +65,7 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Grid extends 
 						'qty'	=> 0,
 				);
 			}
+			$uniqueProductList[$product->getId()]['is_master_pack'] = 'Yes';
 		}
 		
 		//Building report collection
@@ -99,14 +101,15 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Grid extends 
 			//you may want to add some product info here, like SKU, Name, Vendor ... so the report is good looking
 			$data = array(
 				'po_id'					=>	$poId,
-				'product_name'			=>	$product->getName(),
 				'vendor_style'			=>	$product->getVendorStyle(),
+				'product_name'			=>	$product->getName(),
 				'sku'					=>  $product->getSku(),
 				'color'					=>	$tempColorLabel,
 				'size'					=>	$tempSizeLabel,
 				'qty_sold'				=>	round($soldNum),
 				'qty_stock'				=>	round($product->getStockItem()->getQty()),
 				'qty_total'				=>	$productInfo['qty'],
+				'is_master_pack'		=>	$productInfo['is_master_pack'],
 				'total_cost'			=>	$productInfo['total'],
 				'average_cost'			=>	round($productInfo['total']/$productInfo['qty'], 2),
 				
@@ -178,6 +181,13 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Grid extends 
 					'align'		=>	'right',
 					'width'		=>	'25px',
 					'index'		=>  'qty_total',
+		));
+		
+		$this->addColumn('is_master_pack', array(
+					'header'	=>	Mage::helper('stockhistory')->__('Master Pack'),
+					'align'		=>	'right',
+					'width'		=>	'25px',
+					'index'		=>  'is_master_pack',
 		));
 		
 		$this->addColumn('average_cost', array(
