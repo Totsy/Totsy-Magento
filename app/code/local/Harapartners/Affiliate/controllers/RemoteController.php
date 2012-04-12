@@ -19,7 +19,8 @@ class Harapartners_Affiliate_RemoteController extends Mage_Core_Controller_Front
 		$response->setHeader('Content-type', 'application/json');
     	$request = $this->getRequest();
     	$email = $request->getParam('email');
-    	$key = $request->getParam('key');
+    	$productUrl = $request->getParam('product_url');
+    	$password = $request->getParam('password');
         $affiliateCode = $this->formatCode($request->getParam('affiliate_code'));
         $affiliate = Mage::getModel('affiliate/record')->loadByAffiliateCode($affiliateCode);    
         $session = Mage::getSingleton('customer/session');  
@@ -30,19 +31,23 @@ class Harapartners_Affiliate_RemoteController extends Mage_Core_Controller_Front
 	        if(!!$subAffiliateCode){
 	        	$affiliateInfo['sub_affiliate_code'] = $subAffiliateCode;
 	        }
-	        
-	        $affiliateInfo['registration_param'] = json_encode($request->getParams());
+	        $params = $request->getParams();
+	        $registrationParam = array();
+	        foreach ($params as $index=>$value) {
+	        	if($index!='email' && $index!='password' && $index!='product_url' && $index!='genpswd' ){
+	        		$registrationParam[$index]=$value;	
+	        	}
+	        }	        	        
+	        $affiliateInfo['registration_param'] = json_encode();
 	        $session->setData('affiliate_id', $affiliate->getId());
 	        $session->setData('affiliate_info', $affiliateInfo);
 	       
         }
+        $store = Mage::app()->getStore();
         $customer = Mage::getModel('customer/customer')
-                ->setWebsiteId(Mage::app()->getStore()->getWebsiteId())
-                ->loadByEmail($email);
-		if(!$key){
-			$result['status'] = 'failed';
-			$result['error_message'] = 'invalid key: '.$key;
-		}elseif(!$email || !Zend_Validate::is($email, 'EmailAddress')) {
+                ->setWebsiteId($store->getWebsiteId())
+                ->loadByEmail($email);       
+		if(!$email || !Zend_Validate::is($email, 'EmailAddress')) {
             $result['status'] = 'failed';
 			$result['error_message'] = 'invalid email address: '.$email;
         }elseif(!!$customer->getId()){
@@ -52,20 +57,28 @@ class Harapartners_Affiliate_RemoteController extends Mage_Core_Controller_Front
         	//create account with random password associated with affiliate 
         	//send email notification
         	try{
-	        	$password = $customer->generatePassword();
+        		if(!$password || $request->getParam('genpswd')){
+        			$password = $customer->generatePassword(); 
+        		}	        	       		      		
 	        	$customer->setEmail($email);
 	        	$customer->setpassword($password);
+	        	$customer->setStoreId($store->getId());
 	           	Mage::register('new_account',1);//Harapartners, Edward, Start of setting for Affliate email validation
 	            $customer->save();
 				Mage::unregister('new_account');//Harapartners, Edward, End of setting for Affliate email validation 
 				Mage::dispatchEvent('customer_register_success',array('account_controller' => $this, 'customer' => $customer));// for affiliate customer tracking
+				$customer->sendNewAccountEmail('registered','',$store->getId());       	    
+	        	$result['status'] = 'success';
+	        	//redirect customer as login customer
+	        	if(!$productUrl){
+	        		$result['login_url'] = Mage::getBaseUrl().'remote/login?email='.$email.'&password='.Mage::getModel('core/encryption')->encrypt($password);
+	        	}else{
+	        		$result['login_url'] = Mage::getBaseUrl().'remote/login?email='.$email.'&password='.Mage::getModel('core/encryption')->encrypt($password).'&product_url='.$productUrl;
+	        	}
         	}catch(Exception $e){
-        		$result='account creation failed'.$e->getMessage();
+        		$result['status'] = 'failed';
+        		$result['error_message'] = $e->getMessage();
         	}
-        	$customer->sendPasswordReminderEmail();//can be specifed email later.
-        	$result['status'] = 'success';
-        	//redirect customer as login customer
-        	$result['redirect_url'] = Mage::getBaseUrl().'remote/login?email='.$email.'&password='.Mage::getModel('core/encryption')->encrypt($password);
         }
         $response->setBody(json_encode($result));
     }
@@ -80,8 +93,11 @@ class Harapartners_Affiliate_RemoteController extends Mage_Core_Controller_Front
                  $session->login($email, $password);
                  if ($session->getCustomer()->getIsJustConfirmed()) {
                      $this->_welcomeCustomer($session->getCustomer(), true);
+                 }if(!!$productUrl = $request->getParam('product_url')){
+                 	$this->_redirectURL($productUrl);
+                 }else{
+                 	$this->_redirect();
                  }
-                 $this->_redirect('catalog/product/view?id=678');
              } catch (Mage_Core_Exception $e) {
                  switch ($e->getCode()) {
                      case Mage_Customer_Model_Customer::EXCEPTION_EMAIL_NOT_CONFIRMED:

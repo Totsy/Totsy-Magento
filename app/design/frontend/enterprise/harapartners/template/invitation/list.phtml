@@ -71,11 +71,10 @@ if ( !$rewardCollection ) {
 
 	<div class="page-title">
 	    <h2><?php echo Mage::helper('enterprise_invitation')->__('My Invitations') ?>
-	    		<span class="fr" id="generic-invitation">
-			Share this link with your friends:<br/>
-			<textarea class="invitation-link-area" readonly="readonly" ><?php echo Mage::helper('enterprise_invitation')->getGenericInvitationLink() ?></textarea>
+	    <span class="fr" id="generic-invitation">
+				Share this link with your friends:<br/>
+				<input type="text" class="invitation-link-area" readonly="readonly" value="<?php echo Mage::helper('enterprise_invitation')->getGenericInvitationLink() ?>" />
 		</span>
-	    
 	    </h2>
 
 	</div>
