@@ -96,6 +96,13 @@
 				</children>
             </harapartners>
         </menu>
+		<layout>
+            <updates>
+                <stockhistory>
+                    <file>stockhistory.xml</file>
+                </stockhistory>
+            </updates>
+        </layout>
     </adminhtml>
 	<!--
 	<crontab>
