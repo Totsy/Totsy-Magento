@@ -29,6 +29,14 @@ class Harapartners_Stockhistory_Adminhtml_TransactionController extends Mage_Adm
 			->renderLayout();
 	}
 
+	public function printAction()
+	{
+		$this->loadLayout()
+			->_setActiveMenu('stockhistory/transaction')
+			->_addContent($this->getLayout()->createBlock('stockhistory/adminhtml_transaction_report_print'))
+			->renderLayout();
+	}
+	
 	public function newAction()
 	{
 		$this->_getSession()->setTransFormData(null);

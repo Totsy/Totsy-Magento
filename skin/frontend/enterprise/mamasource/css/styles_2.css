@@ -696,11 +696,11 @@ body .my-account .fieldset h2.legend {
 
 }
 
-.enterprise-invitation-index-index textarea.invitation-link-area {
+.enterprise-invitation-index-index input.invitation-link-area {
     color: #ED1C25;
     resize: none; 
     height:15px;
-    min-width:270px
+    min-width:310px
 }
 
 .my-account .button span{

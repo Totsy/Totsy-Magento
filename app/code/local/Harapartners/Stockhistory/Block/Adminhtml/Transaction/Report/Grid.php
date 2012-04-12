@@ -16,6 +16,7 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Grid extends 
 	
 	//protected $options = array('0' => 'Pending', '1'=>'Processed', '2'=> 'Failed');
 	protected $_reportCollection = null;
+	protected $_poObj = null;
 	
 	public function __construct() {
 		parent::__construct();
@@ -26,6 +27,14 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Grid extends 
 		$this->setTemplate('widget/grid_po_report.phtml');
 	}
 	
+	public function getPreparedCollection() {
+		return $this->_reportCollection;
+	}
+	
+	public function getPoObject() {
+		return $this->_poObj;
+	}
+	
 	protected function _prepareCollection() {
 		
 		// Gather all products to be reported
@@ -34,7 +43,7 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Grid extends 
 		if(!$poObject || !$poObject->getId()){
 			Mage::throwException('Invalid PO.');
 		}
-		
+		$this->_poObj = $poObject;
 		$rawCollection = Mage::getModel('stockhistory/transaction')->getCollection();
 		$rawCollection->getSelect()->where('po_id = ?', $poId);
 		
