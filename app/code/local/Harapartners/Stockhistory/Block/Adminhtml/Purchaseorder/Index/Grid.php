@@ -36,31 +36,44 @@ class Harapartners_Stockhistory_Block_Adminhtml_Purchaseorder_Index_Grid extends
 		$this->addColumn('id', array(
 					'header'	=>	Mage::helper('stockhistory')->__('ID'),
 					'align'		=>	'right',
-					'width'		=>	'50px',
+					'width'		=>	'25px',
 					'index'		=>	'id',
 					//'renderer'	=>	new Mage_Adminhtml_Block_Widget_Grid_Column_Renderer_Checkbox(),
 		));
 		
 		$this->addColumn('name', array(
-					'header'	=>	Mage::helper('stockhistory')->__('Purchase Order Name'),
+					'header'	=>	Mage::helper('stockhistory')->__('PO Name'),
 					'align'		=>	'right',
-					'width'		=>	'20px',
+					'width'		=>	'100px',
 					'index'		=>	'name',
 		));
 		
 		$this->addColumn('vendor_id', array(
 					'header'	=>	Mage::helper('stockhistory')->__('Vendor ID'),
 					'align'		=>	'right',
-					'width'		=>	'50px',
+					'width'		=>	'25px',
 					'index'		=>	'vendor_id',
+		));
+		
+		$this->addColumn('vendor_code', array(
+					'header'	=>	Mage::helper('stockhistory')->__('Vendor Code'),
+					'align'		=>	'right',
+					'width'		=>	'50px',
+					'index'		=>	'vendor_code',
+		));
+		
+		$this->addColumn('category_id', array(
+					'header'	=>	Mage::helper('stockhistory')->__('Category ID'),
+					'align'		=>	'right',
+					'width'		=>	'25px',
+					'index'		=>	'category_id',
 		));
 		
 		$this->addColumn('comment', array(
 					'header'	=>	Mage::helper('stockhistory')->__('Note'),
 					'align'		=>	'right',
-					'width'		=>	'50px',
+					'width'		=>	'150px',
 					'index'		=>	'comment',
-					
 		));
 		
 		$this->addColumn('created_at', array(

@@ -32,26 +32,32 @@ class Harapartners_Stockhistory_Block_Adminhtml_Purchaseorder_Edit_Form extends 
         $fieldset = $form->addFieldset('purchase_order', array('legend'=>$helper->__("Purchase Order Info")));
 		
         //Adding PO without vendor_id is not allowed
-        if(!!$dataObject->getData('vendor_id')){
-	        $fieldset->addField('vendor_id', 'text', array(
-		            	'label'     => $helper->__('Vendor ID:'),
-		            	'name'      => 'vendor_id',
+        if(!!$dataObject->getData('vendor_code')){
+	        $fieldset->addField('vendor_code', 'text', array(
+		            	'label'     => $helper->__('Vendor Code:'),
+		            	'name'      => 'vendor_code',
 		        		'readonly' 	=> true,
 		        		'required'	=> true,
 	        			'note'		=> 'Read only field. Each purchase order must be associated to a given vendor.'
 	        ));
         }else{
-        	$fieldset->addField('vendor_id', 'text', array(
-		            	'label'     => $helper->__('Vendor ID:'),
-		            	'name'      => 'vendor_id',
+        	$fieldset->addField('vendor_code', 'text', array(
+		            	'label'     => $helper->__('Vendor Code:'),
+		            	'name'      => 'vendor_code',
 		        		'required'	=> true,
 	        			'note'		=> 'Once saved, this field <b>CANNOT</b> be modified.'
 	        ));
         }
         
         $fieldset->addField('name', 'text', array(
-            'label'     => $helper->__('Purchase Order Title:'),
+            'label'     => $helper->__('Purchase Order Name:'),
             'name'      => 'name',
+        	'required'	=> true,
+        ));
+        
+        $fieldset->addField('category_id', 'text', array(
+            'label'     => $helper->__('Category/Event ID:'),
+            'name'      => 'category_id',
         	'required'	=> true,
         ));
         

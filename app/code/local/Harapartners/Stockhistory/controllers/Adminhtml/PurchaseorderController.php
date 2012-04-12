@@ -72,7 +72,7 @@ class Harapartners_Stockhistory_Adminhtml_PurchaseorderController extends Mage_A
 			if(!!$this->getRequest()->getParam('id')){
 				$model->load($this->getRequest()->getParam('id'));
 			}
-			$model->validateAndSave($data);
+			$model->importData($data)->save();
 			$this->_getSession()->addSuccess(Mage::helper('stockhistory')->__('Purchase Order saved successfully'));
 			$this->_getSession()->setPoFormData(null);
 		}catch(Exception $e){

@@ -19,7 +19,17 @@ class Harapartners_Service_Model_Rewrite_Customer_Customer extends Mage_Customer
     //Harapartners, Jun, Important logic to handle legacy customers
 	public function validatePassword($password){
 		if(!!$this->getData('legacy_customer')){
-			return (sha1($password) == $this->getPasswordHash());
+			//Legacy customers, sha1
+			if(sha1($password) == $this->getPasswordHash()){
+				return true;
+			}else{
+				//Legacy-legacy customer, hash_result:hash_salt, hashed with sha512
+				$hashData = explode(':', $this->getPasswordHash());
+				if(count($hashData) == 2){
+					return (hash('sha512', $password.$hashData[1]) == $hashData[0]);
+				}
+				return false;
+			}
 		}else{
 			return parent::validatePassword($password);
 		}

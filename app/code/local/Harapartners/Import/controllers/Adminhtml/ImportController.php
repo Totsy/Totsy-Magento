@@ -32,9 +32,14 @@ class Harapartners_Import_Adminhtml_ImportController extends Mage_Adminhtml_Cont
 	
 	public function newByCategoryAction(){
 		$categoryId = $this->getRequest()->getParam('category_id');
-		Mage::getSingleton('adminhtml/session')->setHpImportFormData(array(
-				'category_id' => $categoryId
-		));
+		$category = Mage::getModel('catalog/category')->load($categoryId);
+		if(!!$category && !!$category->getId()) {
+			Mage::getSingleton('adminhtml/session')->setHpImportFormData(array(
+					'import_title' => $category->getName(), //Default title is the event name
+					'category_id' => $category->getId(),
+					'category_name' => $category->getName()
+			));
+		}
 		$this->_forward('edit');
 	}
 
@@ -64,9 +69,10 @@ class Harapartners_Import_Adminhtml_ImportController extends Mage_Adminhtml_Cont
 		//$this->getLayout()->getBlock('head')->setCanLoadExtJs(true);
 		$this->_addContent($this->getLayout()->createBlock('import/adminhtml_import_edit'))
 				->_addLeft($this->getLayout()->createBlock('import/adminhtml_import_edit_tabs'));
-		$message = 'For imports with 100+ proucts, please ONLY upload the file and run import offline.<br/>'
+		$message = 'For imports with 50+ proucts, please ONLY upload the file and run import offline.<br/>'
 					. 'For small imports, please wait and leave the window open until everything is processed.<br/>'
-					. 'If you want to see run big imports online. Please cut them in smaller pieces.';
+					. 'If you want to see run big imports online. Please cut them in smaller pieces (<50).<br/>'
+					. 'Make sure associated products stays in the same file';
 		Mage::getSingleton('adminhtml/session')->addNotice($message);
 		Mage::getSingleton('adminhtml/session')->setHpImportFormData(null);
 		$this->_initLayoutMessages('adminhtml/session');
@@ -77,7 +83,7 @@ class Harapartners_Import_Adminhtml_ImportController extends Mage_Adminhtml_Cont
 	public function saveAction() {
 		$data = $this->getRequest()->getPost();
 		//save data in session in case of failure
-		Mage::getSingleton('adminhtml/session')->setImportFormData($data);
+		Mage::getSingleton('adminhtml/session')->setHpImportFormData($data);
 		if(!$data){
 			Mage::getSingleton('adminhtml/session')->addError(Mage::helper('import')->__('Nothing to save.'));
         	$this->_redirect('*/*/');
@@ -113,11 +119,6 @@ class Harapartners_Import_Adminhtml_ImportController extends Mage_Adminhtml_Cont
 				$path = Mage::getBaseDir('var') . DS . 'import' . DS;
 				$uploader->save($path, $_FILES['import_filename']['name'] );
 				
-				$vendor = Mage::getModel('stockhistory/vendor')->loadByCode($this->getRequest()->getPost('vendor_code'));
-				if(!$vendor || !$vendor->getId()){
-					throw new Exception('Invalid vendor.');
-				}
-				
 			} catch (Exception $e) {
 	      		Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
 	      		Mage::getSingleton('adminhtml/session')->setHpImportFormData($data);
@@ -131,23 +132,35 @@ class Harapartners_Import_Adminhtml_ImportController extends Mage_Adminhtml_Cont
 	        $data['import_batch_id'] = $processorHelper->runDataflowProfile($_FILES['import_filename']['name']);
   			$data['import_filename'] = $_FILES['import_filename']['name'];
   			$data['status'] = Harapartners_Import_Model_Import::IMPORT_STATUS_UPLOADED;
-  			$data['vendor_id'] = $vendor->getId();
 			
-  			$model->importDataWithValidation($data)->save();
+  			$model->importData($data)->save();
 			
 			Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('import')->__('Save success.'));
-			Mage::getSingleton('adminhtml/session')->setImportFormData(null); //clear form data from session
+			Mage::getSingleton('adminhtml/session')->setHpImportFormData(null); //clear form data from session
 			
-			try{
-				if(isset($data['action_type']) && $data['action_type'] == Harapartners_Import_Model_Import::ACTION_TYPE_PROCESS_IMMEDIATELY){
-					if($processorHelper->runImport($model->getId())){
-						Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('import')->__('The imported data has been processed.'));
-					}else{
-						Mage::getSingleton('adminhtml/session')->addError(Mage::helper('import')->__('There is an error processing the uploaded data. Please check the error log.'));
-					}
+			//Processing and indexing
+			$shouldRunImport = false;
+			$shouldRunIndex = false;
+			if(isset($data['action_type']) 
+					&& $data['action_type'] == Harapartners_Import_Model_Import::ACTION_TYPE_PROCESS_IMMEDIATELY){
+				$shouldRunImport = true;
+			}elseif(isset($data['action_type']) 
+					&& $data['action_type'] == Harapartners_Import_Model_Import::ACTION_TYPE_PROCESS_IMMEDIATELY_AND_INDEX
+			){
+				$shouldRunImport = true;
+				$shouldRunIndex = true;
+			}
+				
+			if($shouldRunImport){
+				try{
+					$processorHelper->runImport($model->getId(), $shouldRunIndex);
+					Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('import')->__('The imported data has been processed.'));
+				}catch(Mage_Core_Exception $mageE){
+					Mage::getSingleton('adminhtml/session')->addError(Mage::helper('import')->__($mageE->getMessage()));
+				}catch(Exception $e){
+					Mage::getSingleton('adminhtml/session')->addError(Mage::helper('import')->__('There is an error processing the uploaded data.'));
 				}
-			}catch(Exception $e){
-				Mage::getSingleton('adminhtml/session')->addError(Mage::helper('import')->__('There is an error processing the uploaded data.'));
+				
 			}
 			
 			if ($this->getRequest()->getParam('back')) {
@@ -156,9 +169,14 @@ class Harapartners_Import_Adminhtml_ImportController extends Mage_Adminhtml_Cont
 				$this->_redirect('*/*/');
 			}
 			return;
-        } catch (Exception $e) {
+        
+		}catch(Mage_Core_Exception $mageE){
+			Mage::getSingleton('adminhtml/session')->addError(Mage::helper('import')->__($mageE->getMessage()));
+			$this->_redirect('*/*/edit', array('id' => $this->getRequest()->getParam('id')));
+            return;
+		}catch(Exception $e) {
             Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
-            Mage::getSingleton('adminhtml/session')->setImportFormData($data);
+            Mage::getSingleton('adminhtml/session')->setHpImportFormData($data);
             $this->_redirect('*/*/edit', array('id' => $this->getRequest()->getParam('id')));
             return;
         }
