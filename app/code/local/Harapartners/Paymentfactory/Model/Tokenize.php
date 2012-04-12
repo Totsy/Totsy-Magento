@@ -2,6 +2,8 @@
 
 class Harapartners_Paymentfactory_Model_Tokenize extends Mage_Cybersource_Model_Soap {
     
+	const MINIMUM_AUTHORIZE_AMOUNT = 1.0;
+	
 	protected $_code  = 'paymentfactory_tokenize';
     protected $_formBlockType = 'paymentfactory/form';
     protected $_infoBlockType = 'paymentfactory/info';
@@ -58,11 +60,14 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Mage_Cybersource_Model_
 //     	ELSE auth 1 and void
 		if ($profile->getCardType() == 'VI'){
 			return $this->authorize($payment, 0.0);
+		}elseif ($profile->getCardType() == 'AE'){
+			//Amex does not allow Authorization Reversal at this moment
+			return $this->authorize($payment, self::MINIMUM_AUTHORIZE_AMOUNT);
 		}else{
-			$validationStatus = $this->authorize($payment, 1.0);
+			$validationStatus = $this->authorize($payment, self::MINIMUM_AUTHORIZE_AMOUNT);
 			if($validationStatus){
 				$payment->setParentTransactionId($payment->getTransactionId());
-				$this->voidSpecial($payment, 1.0);
+				$this->voidSpecial($payment, self::MINIMUM_AUTHORIZE_AMOUNT);
 			}
 			return $validationStatus;
 		}
@@ -200,7 +205,7 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Mage_Cybersource_Model_
     
     public function voidSpecial(Varien_Object $payment, $amount){ //for void $1 as V,Harapartners
     	$this->_payment = $payment;
-         $error = false;
+        $error = false;
         if ($payment->getTransactionId() && $payment->getCybersourceToken()) {
             $soapClient = $this->getSoapApi();
             
