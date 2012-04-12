@@ -580,8 +580,11 @@ class Mage_Customer_AccountController extends Mage_Core_Controller_Front_Action
                 	->addSuccess(Mage::helper('customer')->__('Email sent to %s , you will receive an email with a link to reset your password.', Mage::helper('customer')->htmlEscape($email)));
             }elseif ($customer->getId() && $customer->getStoreId() != $storeId) {
             	$this->_getSession()->addError($this->__('The email you entered is belong to an %s account, please check.', Mage::app()->getStore($customer->getStoreId())->getName() ));
-            }else {
-            	$this->_getSession()->addError($this->__('The email you entered is NOT associated with any account, please check.'));
+            }else {  
+            	$createLink = "<a href='" . Mage::getUrl('customer/account/create') . "'" . "> Click here to register! </a>";        	 
+            	$this->_getSession()->addError($this->__('The email entered is not currently associated with a totsy account. %s ', $createLink ));
+            	$this->_redirect('*/*/forgotpassword');
+            	return;
             }       
             $this->_redirect('*/*/');
             return;
