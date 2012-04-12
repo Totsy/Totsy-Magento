@@ -110,25 +110,36 @@ class Harapartners_Stockhistory_Helper_Data extends Mage_Core_Helper_Abstract  {
 				)
 		);
 		
-		$orderItemCollection->getSelect()->where('product_id IN(?)', implode(',', $uniqueProductIds));
+		$orderItemCollection->getSelect()->where('product_id IN('.implode(',', $uniqueProductIds).')');
 		
-		$currentLoadCount = 0;
+		$currentLoadOffset = 0;
 		do{
 			$tempCollection = clone $orderItemCollection;
-			$tempCollection->getSelect()->limit($currentLoadCount, self::ORDER_ITEM_COLLECTION_LOAD_LIMIT);
+			$tempCollection->getSelect()->limit(self::ORDER_ITEM_COLLECTION_LOAD_LIMIT, $currentLoadOffset);
 			foreach($tempCollection as $orderItem){
 				$productId = $orderItem->getProductId();
+				
+				//Forever struggle between parent and child
+				$itemWithDetailedInfo = Mage::getModel('sales/order_item');
+				if(!!$orderItem->getParentItemId()){
+					$itemWithDetailedInfo->load($orderItem->getParentItemId());
+				}
+				if(!$itemWithDetailedInfo || !$itemWithDetailedInfo->getId()){
+					$itemWithDetailedInfo = $orderItem;
+				}
+				
 				if(!array_key_exists($productId, $productSoldInfoArray)){
 					$productSoldInfoArray[$productId]= array(
 							'total' => 0.0,
 							'qty'	=> 0.0,
 					);
 				}
-				$tempQty = $orderItem->getQtyOrdered() - $orderItem->getQtyReturned() - $orderItem->getQtyCanceled();
-				$uniqueProductList[$productId]['total'] += $orderItem->getPrice() * $tempQty;
-				$uniqueProductList[$productId]['qty'] += $tempQty;
+				//Note product infor must come from the original $orderItem
+				$tempQty = $itemWithDetailedInfo->getQtyOrdered() - $itemWithDetailedInfo->getQtyReturned() - $itemWithDetailedInfo->getQtyCanceled();
+				$productSoldInfoArray[$productId]['total'] += $itemWithDetailedInfo->getPrice() * $tempQty;
+				$productSoldInfoArray[$productId]['qty'] += $tempQty;
 			}
-			$currentLoadCount += self::ORDER_ITEM_COLLECTION_LOAD_LIMIT;
+			$currentLoadOffset += self::ORDER_ITEM_COLLECTION_LOAD_LIMIT;
 		}while(count($tempCollection) >= self::ORDER_ITEM_COLLECTION_LOAD_LIMIT);
 
 		

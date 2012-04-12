@@ -133,7 +133,7 @@ class Harapartners_Import_Adminhtml_ImportController extends Mage_Adminhtml_Cont
   			$data['import_filename'] = $_FILES['import_filename']['name'];
   			$data['status'] = Harapartners_Import_Model_Import::IMPORT_STATUS_UPLOADED;
 			
-  			$model->importDataWithValidation($data)->save();
+  			$model->importData($data)->save();
 			
 			Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('import')->__('Save success.'));
 			Mage::getSingleton('adminhtml/session')->setHpImportFormData(null); //clear form data from session
@@ -172,6 +172,8 @@ class Harapartners_Import_Adminhtml_ImportController extends Mage_Adminhtml_Cont
         
 		}catch(Mage_Core_Exception $mageE){
 			Mage::getSingleton('adminhtml/session')->addError(Mage::helper('import')->__($mageE->getMessage()));
+			$this->_redirect('*/*/edit', array('id' => $this->getRequest()->getParam('id')));
+            return;
 		}catch(Exception $e) {
             Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
             Mage::getSingleton('adminhtml/session')->setHpImportFormData($data);

@@ -30,58 +30,59 @@ class Harapartners_Import_Model_Import extends Mage_Core_Model_Abstract {
     }
     
 	//Note method will throw exceptions
-    public function importDataWithValidation($data){
+    public function importData($dataObj){
     	
     	//Type casting
-    	if(is_array($data)){
-    		$data = new Varien_Object($data);
+    	if(is_array($dataObj)){
+    		$dataObj = new Varien_Object($dataObj);
     	}
-    	if(!($data instanceof Varien_Object)){
+    	if(!($dataObj instanceof Varien_Object)){
     		Mage::throwException('Invalid type for data importing, Array or Varien_Object needed.');
     	}
     	
     	//Load vendor
     	$vendor = Mage::getModel('stockhistory/vendor');
-    	if(!!$data->getdata('vendor_id')){
-    		$vendor->load($data->getdata('vendor_id'));
-    	}elseif(!!$data->getdata('vendor_code')){
-    		$vendor->loadByCode($data->getdata('vendor_code'));
+    	if(!!$dataObj->getdata('vendor_id')){
+    		$vendor->load($dataObj->getdata('vendor_id'));
+    	}elseif(!!$dataObj->getdata('vendor_code')){
+    		$vendor->loadByCode($dataObj->getdata('vendor_code'));
     	}
     	if(!$vendor || !$vendor->getId()){
 			Mage::throwException('Invalid Vendor.');
 		}
-		$data->setData('vendor_id', $vendor->getId());
-		$data->setData('vendor_code', $vendor->getVendorCode());
+		$dataObj->setData('vendor_id', $vendor->getId());
+		$dataObj->setData('vendor_code', $vendor->getVendorCode());
 		
 		//Load category
 		$category = Mage::getModel('catalog/category');
-    	if(!!$data->getdata('category_id')){
-    		$category->load($data->getdata('category_id'));
+    	if(!!$dataObj->getdata('category_id')){
+    		$category->load($dataObj->getdata('category_id'));
     	}
     	if(!$category || !$category->getId()){
 			Mage::throwException('Invalid Category/Event.');
 		}
-		$data->setData('category_id', $category->getId());
+		$dataObj->setData('category_id', $category->getId());
     	
 		//Load/Create PO
 		$purchaseOrder = Mage::getModel('stockhistory/purchaseorder');
-		if(!!$data->getdata('po_id')){
-			$purchaseOrder->load($data->getdata('po_id'));
+		if(!!$dataObj->getdata('po_id')){
+			$purchaseOrder->load($dataObj->getdata('po_id'));
 		}else{
-			$purchaseOrder->setData('vendor_id', $vendor->getId());
-			$purchaseOrder->setData('vendor_code', $vendor->getVendorCode());
-			$purchaseOrder->setData('name', $data->getData('import_title'));
-			$purchaseOrder->setData('category_id', $category->getId());
-			$purchaseOrder->setData('comment', 'Category/Event Import ' .  date('Y-n-j H:i:s'));
-			$purchaseOrder->save();
+			$purchaseOrderDataObj = new Varien_object();
+			$purchaseOrderDataObj->setData('vendor_id', $vendor->getId());
+			$purchaseOrderDataObj->setData('vendor_code', $vendor->getVendorCode());
+			$purchaseOrderDataObj->setData('name', $dataObj->getData('import_title'));
+			$purchaseOrderDataObj->setData('category_id', $category->getId());
+			$purchaseOrderDataObj->setData('comment', 'Category/Event Import ' .  date('Y-n-j H:i:s'));
+			$purchaseOrder->importData($purchaseOrderDataObj->getData())->save();
 	    }
     	if(!$purchaseOrder || !$purchaseOrder->getId()){
 			Mage::throwException('Invalid Purchase Order.');
 		}
-	    $data->setData('po_id', $purchaseOrder->getId());
+	    $dataObj->setData('po_id', $purchaseOrder->getId());
     	
     	//Forcefully overwrite existing data, certain data may need to be removed before this step
-    	$this->addData($data->getData());
+    	$this->addData($dataObj->getData());
     	
     	//Default values should go here
     	if(!$this->getData('status')){
@@ -89,7 +90,6 @@ class Harapartners_Import_Model_Import extends Mage_Core_Model_Abstract {
     	}
     	//store_id is defaulted as 0 at the DB level
     	
-		$this->validate();
 		return $this;
     }
     
