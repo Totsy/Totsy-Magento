@@ -54,9 +54,17 @@ $howMany = count($categoryDataArray);
 		<div class="category-products">
 		<ul class="products-grid">
 			<?php $j=0; ?>
+			<?php $nonSalableArray = array();?>
 			<?php $i=0; foreach ($category['product_list'] as $_product): ?>
 				<?php if ($_product['is_salable']==1): ?>
 				<li class="item">
+		        	<ul class="echoShare" 
+					data-productname="<?php echo $_product['name'];?>"  
+					data-productcap="" 
+					data-productdesc="<?php echo $_product['description'];?>" 
+					data-imageclass=""  
+					sdata-producturl="<?php echo $_product['url_path']; ?>">
+					</ul>
 					<a href="<?php echo Mage::getBaseUrl().$_product['url_path']; ?>" title="<?php echo $_product['name']; ?>" class="product-image"><img src="<?php echo $_product['small_image']; ?>" width="125" height="125" alt="<?php echo $_product['name']; ?>" /></a>
 						<a class="item-details" href="<?php echo Mage::getBaseUrl().$_product['url_path'] ?>" title="<?php echo $_product['name']; ?>"><h4 class="product-name"><?php echo $_product['name']; ?></h4>
 							<?php //echo $this->getPriceHtml($_product, true) ?>
@@ -75,12 +83,22 @@ $howMany = count($categoryDataArray);
 						break;
 					}
 				?>
+				<?php else:?>
+				<?php $nonSalableArray[] = $_product;?>
 				<?php endif; ?>
 			<?php endforeach ?>
 			<?php if (j!=6):?>
-				<?php foreach ($category['product_list'] as $_product):?>
+				<?php foreach ($nonSalableArray as $_product):?>
 					<?php if ($_product['is_salable']==0): ?>
-						<li class="item out-of-stock">
+						<li class="item">
+				        	<ul class="echoShare" 
+							data-productname="<?php echo $_product['name'];?>"  
+							data-productcap="" 
+							data-productdesc="<?php echo $_product['description'];?>" 
+							data-imageclass=""  
+							sdata-producturl="<?php echo $_product['url_path']; ?>">
+							</ul>
+							<img class="nav-out-of-stock" src="<?php echo $this->getSkinUrl('images/navsoldout.png');?>"/>
 							<a href="<?php echo Mage::getBaseUrl().$_product['url_path']; ?>" title="<?php echo $_product['name']; ?>" class="product-image"><img src="<?php echo $_product['small_image']; ?>" width="125" height="125" alt="<?php echo $_product['name']; ?>" /></a>
 								<a class="item-details" href="<?php echo Mage::getBaseUrl().$_product['url_path'] ?>" title="<?php echo $_product['name']; ?>"><h4 class="product-name"><?php echo $_product['name']; ?></h4>
 									<?php //echo $this->getPriceHtml($_product, true) ?>
