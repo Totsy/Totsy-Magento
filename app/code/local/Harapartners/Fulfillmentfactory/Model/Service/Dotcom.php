@@ -421,7 +421,7 @@ XML;
 				
 				//send payment failed email
 				Mage::getModel('core/email_template')->setTemplateSubject('Payment Failed')
-													 ->sendTransactional(2, 'support@totsy.com', 'j.xiao@harapartners.com', $customer->getFirstname(), array(), $order->getStoreId());
+													 ->sendTransactional(2, 'support@totsy.com', $customer.getEmail(), $customer->getFirstname(), array(), $order->getStoreId());
 				
 				//throw new Exception($message);
 				continue;
