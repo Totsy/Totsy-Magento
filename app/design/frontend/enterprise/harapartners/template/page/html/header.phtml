@@ -27,6 +27,7 @@
  * @var Mage_Page_Block_Html_Header $this
  */
 ?>
+<?php $customer = Mage::getSingleton('customer/session')->getCustomer();?>
 <div class="header-container">
     <div class="header">
         <?php if ($this->getIsHomePage()):?>
@@ -43,14 +44,28 @@
 	            <?php  // echo $this->getChildHtml('topSearch') ?>
 	            <?php 
 	            	$welcomeInfo = '';
-	            	$customerName = Mage::getSingleton('customer/session')->getCustomer()->getName();
+	            	$customerName = $customer->getName();
 	            	if ( empty($customerName) ){
 	            		$welcomeInfo = $customerName;
 	            	}else {
-	            		$welcomeInfo = Mage::getSingleton('customer/session')->getCustomer()->getEmail();
+	            		$welcomeInfo = $customer->getEmail();
 	            	}
 	            ?>
-	            <div id="userinfo"><strong><?php echo $this->__( 'Hi, %s ', $welcomeInfo );//$this->__('Hi, %s ', Mage::getSingleton('customer/session')->getCustomer()->getEmail()); ?> </strong><?php echo $this->getChildHtml('topLinks') ?></div>	  
+	            <div id="userinfo">
+	            	<strong><?php echo $this->__( 'Hi, %s ', $welcomeInfo );//$this->__('Hi, %s ', Mage::getSingleton('customer/session')->getCustomer()->getEmail()); ?> </strong>
+	            	<?php if ( !Mage::helper('inchoo_facebook')->isFacebookCustomer($customer) ):?>
+	            		<?php echo $this->getChildHtml('topLinks') ?>
+	            	<?php else :?>
+	            	<ul class="links">
+		            	<li class="first">
+							<a title="Log Out" onclick="logout()" style="cursor:pointer">Sign Out</a>
+						</li>
+						<li>
+							<a title="My Account" href="<?php echo Mage::getUrl('customer/account')?>">My Account</a>
+						</li>
+					</ul>
+					<?php endif;?>
+	            </div>	  
 	            <div id="usercart">
 	            	<?php //Place holder for session check, may be remove later?>
 	            	<?php if ( true ): ?>
@@ -109,6 +124,14 @@
 </div>
 
 <script type="text/javascript">
+
+function logout(){
+
+	FB.logout(function(response) {
+		window.location = "<?php echo Mage::getUrl('customer/account/logout')?>"// user is now logged out
+	});
+}
+
 jQuery(document).ready(function(){
 	jQuery(".menu li").hover(function(){
 		jQuery(this).children(".space").stop().css("height","10px").slideDown("normal");
