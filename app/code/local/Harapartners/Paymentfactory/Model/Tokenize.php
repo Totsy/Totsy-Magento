@@ -29,13 +29,35 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Mage_Cybersource_Model_
 		return parent::validate();        
     }
     
+	protected function _decryptSubscriptionId($subId){
+    	try{
+    		$testSubId = Mage::getModel('core/encryption')->decrypt(base64_decode($subId));
+    		if(is_numeric($testSubId)){
+    			$subId = $testSubId;
+    		}
+    	}catch (Exception $e){
+    	}
+    	return $subId;
+    }
+    
 	public function order(Varien_Object $payment, $amount){
 		//For totsy, no payment is allowed to be captured upon order place
 		$customerId = $payment->getOrder()->getQuote()->getCustomerId();
 		
 		$profile = Mage::getModel('paymentfactory/profile');
      	if (!!$payment->getData('cybersource_subid')){
-     		//
+     		//decrypt for the backend
+
+     	$subscriptionId = $this->_decryptSubscriptionId($payment->getData('cybersource_subid'));
+     	if(!!$subscriptionId){
+     		
+        	$payment->setData('cybersource_subid', $subscriptionId);
+	    
+     	}
+	    
+     		
+     		
+     		
      		$profile->loadBySubscriptionId($payment->getData('cybersource_subid'));
      	}elseif (!!$payment->getData('cc_number')){
      		$profile->loadByCcNumberWithId($payment->getData('cc_number').$customerId.$payment->getCcExpYear().$payment->getCcExpMonth());
