@@ -20,8 +20,9 @@ class Harapartners_Import_Model_Import extends Mage_Core_Model_Abstract {
 	const IMPORT_STATUS_COMPLETE 		= 4;//'complete';
 	const IMPORT_STATUS_ERROR 			= 5;//'error';
 	
-	const ACTION_TYPE_PROCESS_IMMEDIATELY 		= '1';
-	const ACTION_TYPE_PENDING					= '2';
+	const ACTION_TYPE_PROCESS_IMMEDIATELY_AND_INDEX 		= 1;
+	const ACTION_TYPE_PROCESS_IMMEDIATELY 					= 2;
+	const ACTION_TYPE_PENDING								= 3;
 	
     public function _construct() {
         parent::_construct();
@@ -36,20 +37,48 @@ class Harapartners_Import_Model_Import extends Mage_Core_Model_Abstract {
     		$data = new Varien_Object($data);
     	}
     	if(!($data instanceof Varien_Object)){
-    		throw new Exception('Invalid type for data importing, Array or Varien_Object needed.');
+    		Mage::throwException('Invalid type for data importing, Array or Varien_Object needed.');
     	}
     	
     	//Load vendor
+    	$vendor = Mage::getModel('stockhistory/vendor');
+    	if(!!$data->getdata('vendor_id')){
+    		$vendor->load($data->getdata('vendor_id'));
+    	}elseif(!!$data->getdata('vendor_code')){
+    		$vendor->loadByCode($data->getdata('vendor_code'));
+    	}
+    	if(!$vendor || !$vendor->getId()){
+			Mage::throwException('Invalid Vendor.');
+		}
+		$data->setData('vendor_id', $vendor->getId());
+		$data->setData('vendor_code', $vendor->getVendorCode());
+		
+		//Load category
+		$category = Mage::getModel('catalog/category');
+    	if(!!$data->getdata('category_id')){
+    		$category->load($data->getdata('category_id'));
+    	}
+    	if(!$category || !$category->getId()){
+			Mage::throwException('Invalid Category/Event.');
+		}
+		$data->setData('category_id', $category->getId());
     	
-    	if(!$data->getdata('po_id')){
-			$newPurchaseOrder = Mage::getModel('stockhistory/purchaseorder');
-			$newPurchaseOrder->setData('vendor_id', $data->getdata('vendor_id'));
-			$newPurchaseOrder->setData('name', 'Category Product Import');
-			$newPurchaseOrder->setData('comment', date('Y-n-j H:i:s'));
-			$newPurchaseOrder->save();
-			$data->setData('po_id', $newPurchaseOrder->getId());
+		//Load/Create PO
+		$purchaseOrder = Mage::getModel('stockhistory/purchaseorder');
+		if(!!$data->getdata('po_id')){
+			$purchaseOrder->load($data->getdata('po_id'));
+		}else{
+			$purchaseOrder->setData('vendor_id', $vendor->getId());
+			$purchaseOrder->setData('vendor_code', $vendor->getVendorCode());
+			$purchaseOrder->setData('name', $data->getData('import_title'));
+			$purchaseOrder->setData('category_id', $category->getId());
+			$purchaseOrder->setData('comment', 'Category/Event Import ' .  date('Y-n-j H:i:s'));
+			$purchaseOrder->save();
 	    }
-    	
+    	if(!$purchaseOrder || !$purchaseOrder->getId()){
+			Mage::throwException('Invalid Purchase Order.');
+		}
+	    $data->setData('po_id', $purchaseOrder->getId());
     	
     	//Forcefully overwrite existing data, certain data may need to be removed before this step
     	$this->addData($data->getData());
@@ -95,17 +124,5 @@ class Harapartners_Import_Model_Import extends Mage_Core_Model_Abstract {
     	$this->setData('updated_at', now());
     	$this->validate(); //Errors will be thrown as exceptions
     }
-//    
-//    
-//    
-//    
-// 	//This is for updating 'created_at' and 'updated_at'
-//    protected function _beforeSave(){
-//    	//Magento Standard, always assume UTC timezone
-//    	if(!$this->getId()){
-//    		$this->setData('created_time', now());
-//    	}
-//    	$this->setData('update_time', now());
-//    	parent::_beforeSave();
-//    }
+
 }

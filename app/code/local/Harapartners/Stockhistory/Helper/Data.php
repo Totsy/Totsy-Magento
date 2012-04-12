@@ -57,6 +57,15 @@ class Harapartners_Stockhistory_Helper_Data extends Mage_Core_Helper_Abstract  {
 
 	}
 	
+	public function getFormAllVendorsArray(){
+		$allVendorsArray = array(array('label' => '', 'value' => ''));
+		$vendorCollection = Mage::getModel('stockhistory/vendor')->getCollection();
+		foreach($vendorCollection as $vendor){
+			$allVendorsArray[] = array('label' => $vendor->getVendorCode(), 'value' => $vendor->getVendorCode());
+		}
+		return $allVendorsArray;
+	}
+	
 	public function getFormVendorTypeArray(){
 		return array(
        			array('label' => 'Vendor', 'value' => Harapartners_Stockhistory_Model_Vendor::TYPE_VENDOR),

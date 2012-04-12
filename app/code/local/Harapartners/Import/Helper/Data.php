@@ -16,10 +16,24 @@ class Harapartners_Import_Helper_Data extends Mage_Core_Helper_Abstract {
 	
 	public function getFormActionTypeArray(){
 		return array(
-       			array('label' => 'Process Immediately', 'value' => Harapartners_Import_Model_Import::ACTION_TYPE_PROCESS_IMMEDIATELY),
+       			array('label' => 'Process Immediately without Index', 'value' => Harapartners_Import_Model_Import::ACTION_TYPE_PROCESS_IMMEDIATELY),
+       			array('label' => 'Process Immediately and Index', 'value' => Harapartners_Import_Model_Import::ACTION_TYPE_PROCESS_IMMEDIATELY_AND_INDEX),
        			array('label' => 'Pending', 'value' => Harapartners_Import_Model_Import::ACTION_TYPE_PENDING)
        	);
 	}
+	
+	public function getFormPoArrayByCategoryId($categoryId){
+		$poArray = array(array('label' => '', 'value' => ''));
+		$poCollection = Mage::getModel('stockhistory/purchaseorder')->getCollection()->loadByCategoryId($categoryId);
+		if(!!$poCollection){
+			foreach($poCollection as $po){
+				$poArray[] = array('label' => $po->getName(), 'value' => $po->getId());
+			}
+		}
+		return $poArray;
+		
+	}
+	
 	public function getGridStatusArray(){
 		return array(
 				Harapartners_Import_Model_Import::IMPORT_STATUS_COMPLETE => 'Complete', 
@@ -29,6 +43,5 @@ class Harapartners_Import_Helper_Data extends Mage_Core_Helper_Abstract {
 				Harapartners_Import_Model_Import::IMPORT_STATUS_UPLOADED => 'Uploaded'
 		);
 	}
-	
 	
 }

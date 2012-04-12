@@ -26,33 +26,32 @@ class Harapartners_Import_Block_Adminhtml_Import_Edit_Tab_Form extends Mage_Admi
 		    'class'     => 'required-entry',
 		    'required'  => true,
 		    'name'		=> 'import_title',
-			'note'		=> 'For internal tracking.'
+			'note'		=> 'Should new Purchase Order be created, the PO name is also given here. Default: category/event name.'
 		));
 		
-		//Validate vendor code??
-		
-		$fieldset->addField('vendor_code', 'text', array(
+		$fieldset->addField('vendor_code', 'select', array(
 				'label'     => $helper->__('Vendor Code'),
 				'required'  => true,
 				'name'		=> 'vendor_code',
+				'values'    => Mage::helper('stockhistory')->getFormAllVendorsArray(),
 				'note'		=> $helper->__('Please make sure the vendor exists.')
 		));
 		
-		$fieldset->addField('po_id', 'text', array(
-			'label'     => $helper->__('Purchase Order ID'),
+		$fieldset->addField('po_id', 'select', array(
+			'label'     => $helper->__('Purchase Order'),
 			//'required'  => true,
 			'name'		=> 'po_id',
+			'values'    => $helper->getFormPoArrayByCategoryId($dataObj->getData('category_id')),
 			'note'		=> $helper->__('If <b>NOT</b> specified, a new purchase order will be created.')
 		));
 		
-		$category = Mage::getModel('catalog/category')->load($dataObj->getData('category_id'));
-		if($category->getId()){
+		if(!!$dataObj->getData('category_id')){
 			$fieldset->addField('category_id', 'text', array(
 				'label'     => $helper->__('Category/Event ID'),
 				'required'  => true,
 				'name'		=> 'category_id',
 				'readonly'	=> true,
-				'note'		=> $helper->__('Linked to ' . $category->getName() . '. <b>Read Only.</b>')
+				'note'		=> $helper->__('Target category/event name: "<b>' . $dataObj->getData('category_name') . '</b>". Read Only. Due to potential name conflict, ID is required.')
 			));
 		}else{
 			$fieldset->addField('category_id', 'text', array(
@@ -85,4 +84,5 @@ class Harapartners_Import_Block_Adminhtml_Import_Edit_Tab_Form extends Mage_Admi
       $this->setForm($form);
       return parent::_prepareForm();
 	}
+	
 }
