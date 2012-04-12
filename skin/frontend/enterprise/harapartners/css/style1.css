@@ -263,6 +263,7 @@ body.cms-page-view .page div.main {
 	margin-right:2px;
 	margin-left:2px;
 	height:201px;
+	position:relative;
 }
 body .events-div .products-grid li.last{
 	height:auto;
@@ -1222,5 +1223,10 @@ body .top-cart .block-content p.subtotal span.orange, .orange{
 
 .block-account .block-content ul li a:hover{
 	text-decoration: underline;
+}
+
+.nav-out-of-stock{
+    position: absolute;
+    z-index: 100;
 }
 
