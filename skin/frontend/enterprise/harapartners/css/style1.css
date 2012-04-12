@@ -1229,4 +1229,6 @@ body .top-cart .block-content p.subtotal span.orange, .orange{
     position: absolute;
     z-index: 100;
 }
-
+.sales-order-view .title-buttons .link-rss, .sales-order-view .title-buttons .separator{
+	display:none;
+}
