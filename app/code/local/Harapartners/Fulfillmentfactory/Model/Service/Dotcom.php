@@ -404,8 +404,10 @@ XML;
 					           	//send email
 					           	$invoices = Mage::getResourceModel('sales/order_invoice_collection')->setOrderFilter($order->getId());
 					           	foreach($invoices as $invoice) {
-					           		$invoice->sendEmail(true);
-					           		$invoice->save();
+						           	if (!$invoice->getOrder()->getEmailSent()) {
+				                        $invoice->sendEmail(true)
+				                            	->setEmailSent(true);
+				                    }
 					           	}
 							}
 						}
@@ -421,7 +423,7 @@ XML;
 				
 				//send payment failed email
 				Mage::getModel('core/email_template')->setTemplateSubject('Payment Failed')
-													 ->sendTransactional(2, 'support@totsy.com', $customer.getEmail(), $customer->getFirstname());
+													 ->sendTransactional(2, 'support@totsy.com', $customer->getEmail(), $customer->getFirstname());
 				
 				//throw new Exception($message);
 				continue;
@@ -711,8 +713,7 @@ XML;
 	}
 	
 	public function testSubmitOrdersToFulfill() {
-//		$orders = Mage::getModel('sales/order')->getCollection()
-//											   ->addAttributeToFilter('state', Mage_Sales_Model_Order::STATE_NEW);
+		//$orders = Mage::getModel('sales/order')->getCollection()->addAttributeToFilter('state', Mage_Sales_Model_Order::STATE_NEW);
 		//$orders = Mage::getModel('sales/order')->getCollection()->addAttributeToFilter('entity_id', array('in' => array(94)));
 		//$orders = Mage::getModel('sales/order')->getCollection()->addAttributeToFilter('entity_id', array('in' => array(187, 189, 190)));
 		//echo count($orders);
