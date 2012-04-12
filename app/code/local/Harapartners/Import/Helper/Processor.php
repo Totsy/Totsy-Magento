@@ -68,7 +68,7 @@ class Harapartners_Import_Helper_Processor extends Mage_Core_Helper_Abstract {
 		return null;
     }
     
-	public function runImport($importObjectId = null){
+	public function runImport($importObjectId = null, $shouldRunIndex = false){
 		$importObject = $this->_getUploadedImportModel($importObjectId);
 		if(!$importObject || !$importObject->getId() || !$importObject->getData('import_batch_id')){
 			//Nothing to run
@@ -76,9 +76,11 @@ class Harapartners_Import_Helper_Processor extends Mage_Core_Helper_Abstract {
 		}else{
 			
 			// ===== disable indexing for better performance ===== //
-			//Mage::unregister('batch_import_no_index');
-			//Mage::register('batch_import_no_index', true);
-			//Note catalog URL rewrite is always refreshed after product save: afterCommitCallback()
+			if(!$shouldRunIndex){
+				Mage::unregister('batch_import_no_index');
+				Mage::register('batch_import_no_index', true);
+				//Note catalog URL rewrite is always refreshed after product save: afterCommitCallback()
+			}
 			
 			// ===== dataflow, processing ===== //
 			try{
@@ -110,11 +112,11 @@ class Harapartners_Import_Helper_Processor extends Mage_Core_Helper_Abstract {
 							$adapter->saveRow($importData);
 	
 							//PO Saves Here
-							$this->_savePurchaseOrderInfo($importData, $importObject);
+							$this->_savePurchaseOrderTransaction($importData, $importObject);
 							$row++;	
 		
 						} catch(Exception $ex) {
-							$this->_errorMessages[] = 'Skip row ' . $row . ', ' . $ex->getMessage() . "\n";
+							$this->_errorMessages[] = 'Error in row ' . $row . ', ' . $ex->getMessage() . "\n";
 						}  
 					}
 				}
@@ -126,18 +128,18 @@ class Harapartners_Import_Helper_Processor extends Mage_Core_Helper_Abstract {
 		}
 		
 		//Clean up and error handling
-		if(!(count($this->_errorMessages))){
-			$importObject->setStatus(Harapartners_Import_Model_Import::IMPORT_STATUS_COMPLETE);
-			$importObject->save();
-			return true;
-		}else{
+		if(count($this->_errorMessages)){
 			array_unshift($this->_errorMessages[], "Please make sure the header row has all required fields. All contents are case sensitive.");
 			$filename = $this->_logErrorToFile();
 			$importObject->setStatus(Harapartners_Import_Model_Import::IMPORT_STATUS_ERROR);
 			$importObject->setErrorMessage('<a href="' . $this->_errorFileWebPath . $filename . '">Error</a>');
 			$importObject->save();
-			return false;
+			Mage::throwException('There is an error processing the uploaded data. Please check the error log.');
 		}
+		
+		$importObject->setStatus(Harapartners_Import_Model_Import::IMPORT_STATUS_COMPLETE);
+		$importObject->save();
+		return true;
 	}
 	
 	
@@ -280,24 +282,27 @@ class Harapartners_Import_Helper_Processor extends Mage_Core_Helper_Abstract {
 		}
 	}
 	
-	protected function _savePurchaseOrderInfo($importData, $importObject){
+	protected function _savePurchaseOrderTransaction($importData, $importObject){
 		$importDataObject = new Varien_Object($importData);
 		$stockhistoryTransaction = Mage::getModel('stockhistory/transaction');
-		//validate save results
+		
+		//Note $importObject already passed validation here!
+		//Transaction can only contain simple product!
 		$product = Mage::getModel('catalog/product')->loadByAttribute('sku', $importData['sku']);
-		if(!!$product && $product->getId()){
-			$stockhistoryTransaction->setData('vendor_id', $importObject->getData('vendor_id'));
-			$stockhistoryTransaction->setData('vendor_code', $importObject->getData('vendor_code'));
-			$stockhistoryTransaction->setData('po_id', $importObject->getData('po_id'));
-			$stockhistoryTransaction->setData('category_id', $importObject->getData('category_id'));
-			$stockhistoryTransaction->setData('product_id', $product->getId());
-			$stockhistoryTransaction->setData('vendor_sku', $product->getVendorStyle());
-			$stockhistoryTransaction->setData('product_sku', $product->getSku());
-			$stockhistoryTransaction->setData('unit_cost', $product->getData('sale_wholesale'));
-			$stockhistoryTransaction->setData('qty_delta', $importDataObject->getQty());
-			$stockhistoryTransaction->setData('action', Harapartners_Stockhistory_Model_Transaction::ACTION_TYPE_EVENT_IMPORT);
-			$stockhistoryTransaction->setData('comment', date('Y-n-j H:i:s'));
-			$stockhistoryTransaction->save(); //exceptions will be caught as _errorMessage
+		if(!!$product && !!$product->getId() && $product->getTypeId() == 'simple'){
+			$dataObj = new Varien_Object();
+			$dataObj->setData('vendor_id', $importObject->getData('vendor_id'));
+			$dataObj->setData('vendor_code', $importObject->getData('vendor_code'));
+			$dataObj->setData('po_id', $importObject->getData('po_id'));
+			$dataObj->setData('category_id', $importObject->getData('category_id'));
+			$dataObj->setData('product_id', $product->getId());
+			$dataObj->setData('product_sku', $product->getSku());
+			$dataObj->setData('vendor_style', $product->getVendorStyle());
+			$dataObj->setData('unit_cost', $product->getData('sale_wholesale'));
+			$dataObj->setData('qty_delta', $importDataObject->getQty());
+			$dataObj->setData('action_type', Harapartners_Stockhistory_Model_Transaction::ACTION_TYPE_EVENT_IMPORT);
+			$dataObj->setData('comment', date('Y-n-j H:i:s'));
+			$stockhistoryTransaction->importData($dataObj)->save(); //exceptions will be caught and added to $this->_errorMessage
 		}
 	}
 	

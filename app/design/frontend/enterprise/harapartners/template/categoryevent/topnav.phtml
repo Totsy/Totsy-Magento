@@ -53,7 +53,9 @@ $howMany = count($categoryDataArray);
 
 		<div class="category-products">
 		<ul class="products-grid">
+			<?php $j=0; ?>
 			<?php $i=0; foreach ($category['product_list'] as $_product): ?>
+				<?php if ($_product['is_salable']==1): ?>
 				<li class="item">
 					<a href="<?php echo Mage::getBaseUrl().$_product['url_path']; ?>" title="<?php echo $_product['name']; ?>" class="product-image"><img src="<?php echo $_product['small_image']; ?>" width="125" height="125" alt="<?php echo $_product['name']; ?>" /></a>
 						<a class="item-details" href="<?php echo Mage::getBaseUrl().$_product['url_path'] ?>" title="<?php echo $_product['name']; ?>"><h4 class="product-name"><?php echo $_product['name']; ?></h4>
@@ -68,11 +70,37 @@ $howMany = count($categoryDataArray);
 				</li>
 				<?php 
 					$i++; 
+					$j = $i;
 					if ($i==6){
 						break;
 					}
 				?>
+				<?php endif; ?>
 			<?php endforeach ?>
+			<?php if (j!=6):?>
+				<?php foreach ($category['product_list'] as $_product):?>
+					<?php if ($_product['is_salable']==0): ?>
+						<li class="item out-of-stock">
+							<a href="<?php echo Mage::getBaseUrl().$_product['url_path']; ?>" title="<?php echo $_product['name']; ?>" class="product-image"><img src="<?php echo $_product['small_image']; ?>" width="125" height="125" alt="<?php echo $_product['name']; ?>" /></a>
+								<a class="item-details" href="<?php echo Mage::getBaseUrl().$_product['url_path'] ?>" title="<?php echo $_product['name']; ?>"><h4 class="product-name"><?php echo $_product['name']; ?></h4>
+									<?php //echo $this->getPriceHtml($_product, true) ?>
+									<div class="price-box">
+										<span class="regular-price" id="product-price-<?php echo $_product['entity_id']; ?>">
+										<?php $price = (isset($_product['special_price']))?$_product['special_price']:$_product['price']?>
+											<span class="price">$<?php echo number_format($price,2,'.',''); ?></span>
+										</span>
+									</div>
+								</a>
+						</li>
+						<?php 
+							$j++; 
+							if ($j==6){
+								break;
+							}
+						?>
+					<?php endif; ?>
+				<?php endforeach ?>
+			<?php endif;?>
 			<li class="item last btn viewAllEvents">
 				<a href="<?php echo Mage::getBaseUrl().$category['category_info']['url_path']; ?>">
 					<img src="<?php echo $this->getSkinUrl()?>images/btn-viewevents-bug.png" />

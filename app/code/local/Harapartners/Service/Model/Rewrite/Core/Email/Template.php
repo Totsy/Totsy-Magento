@@ -53,9 +53,23 @@ class Harapartners_Service_Model_Rewrite_Core_Email_Template extends Mage_Core_M
 
 		/* @UPDATED 2012.04.10: put cusomter group into $variables array */
         $customerId = Mage::getModel('newsletter/subscriber')->loadByEmail($email)->getCustomerId();
-		$customer = Mage::getModel('customer/customer')->load($customerId);
-		$variables['istotsy'] = Mage::helper('service')->isTotsyCustomer($customer);
-		$variables['ismamasource'] = Mage::helper('service')->isMamasourceCustomer($customer);
+        if (empty($customerId)){
+        	$customer = Mage::getSingleton('customer/session')->getCustomer();
+        }else{
+        	$customer = Mage::getModel('customer/customer')->load($customerId);
+        }
+        if (!!$customer && !!$customer->getId()){
+			$variables['istotsy'] = Mage::helper('service')->isTotsyCustomer($customer);
+			$variables['ismamasource'] = Mage::helper('service')->isMamasourceCustomer($customer);
+			/* @UPDATED 2012.04.08: checks for group id rather than store id */
+			$store = "";
+			if ($customer['group_id']==1) {
+				$store = "totsy"; 
+			} else {
+				$store = "mamasource";
+			}
+			$vars = array('store'=>$store);
+        }
 		/* @UPDATED 2012.04.10: put cusomter group into $variables array */
 
         $this->setUseAbsoluteLinks(true);
@@ -70,19 +84,16 @@ class Harapartners_Service_Model_Rewrite_Core_Email_Template extends Mage_Core_M
         try {
             //Harapartners sailthru//            
             /* @UPDATED 2012.04.05: allows 1:1 template match between Magento and Sailthru*/
-			$template_name = $this['template_code'];;
-			$temails = "";
-			
-			/* @UPDATED 2012.04.08: checks for group id rather than store id */
-
-			$store = "";
-			if ($customer['group_id']==1) {
-				$store = "totsy"; 
-			} else {
-				$store = "mamasource";
+			$template_name = $this['template_code'];
+			if (!isset($template_name)){
+				if (strcmp($store,"mamasource")){
+					$template_name = "mamasource-transactional-email-template";
+				}else{
+					$template_name = "totsy-transactional-email-template";
+				}
 			}
-			$vars = array('store'=>$store);
- 			
+
+			$temails = "";
             $evars = array();
             $options = array("behalf_email" => Mage::getStoreConfig('sailthru_options/email/sailthru_sender_email'));
             for($i = 0; $i < count($emails); $i++) {

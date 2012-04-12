@@ -12,9 +12,8 @@ require_once( $rootDir.'/app/Mage.php' );
 
 Mage::app();
 //Mage::setIsDeveloperMode(true);
-
-header('Cache-Control: no-cache, must-revalidate');
-header('Content-type: application/json');
+//header('Cache-Control: no-cache, must-revalidate');
+//header('Content-type: application/json');
 
 $out = array('events'=>array(),'pending'=>array(),'closing'=>array());
 
@@ -54,35 +53,23 @@ date_default_timezone_set($defaultTimezone);
 
 /*### PROCESS DATA ###*/
 /*if user want to check upcomming products, put this parameter to url*/
-$sortentryObject = Mage::getModel('categoryevent/sortentry')->loadByDate(date('Y-m-d',$start_date), $storeId, false);
-$eventArray = processEventsJson($sortentryObject->getLiveQueue(),'entity_id');
-$pendingEventArray = processEventsJson($sortentryObject->getUpcomingQueue(),'entity_id');
-$category = Mage::getModel('catalog/category')->load($categoryId);
-$eventCollector = array();
+//$sortentryObject = Mage::getModel('categoryevent/sortentry')->loadByDate(date('Y-m-d',$start_date), $storeId, false);
+//$eventArray = processEventsJson($sortentryObject->getLiveQueue(),'entity_id');
+//$pendingEventArray = processEventsJson($sortentryObject->getUpcomingQueue(),'entity_id');
+$eventArray = $pendingEventArray = array();
+
+$category = Mage::getModel('catalog/category'); //->load($categoryId);
 
 //open&top events
 if ($category && $category->getId()) {
-	$_topCollection = $category->getCollection();
-	$_topCollection->addIdFilter($category->getChildren())
-				   ->addAttributeToSelect('*');
-	$_topCollection->load();
-	foreach($_topCollection as $_category){
-		$eventCollector[] = $_category;
-	}
-
 	/*filter event/category collection*/
 	$_collection = loadCollection('event_start_date'); 
 	foreach($_collection as $_category){
-		$eventCollector[] = $_category;
+		$maxOff = max($maxOff, getLargestSaveByCategory($_category));
+		getEventApiOutput($_category,'events',$out);
 	}
 	unset($_collection);
 }
-
-foreach ($eventCollector as $_category){
-	$maxOff = max($maxOff, getLargestSaveByCategory($_category));
-	getEventApiOutput($_category,'events',$out);
-}
-unset($eventCollector);
 
 // closing events
 if ($category && $category->getId()) {
@@ -255,7 +242,7 @@ function processEventsJson($json, $field){
 	return $eventArray;
 }
 
-function loadCollection ($fied,$plus = null){
+function loadCollection ($filed,$plus = null){
 	
 	global $category, $eventArray, $start_date, $start_time;
 	
@@ -270,10 +257,10 @@ function loadCollection ($fied,$plus = null){
 	$_collection = $category->getCollection();
 	$_collection->addAttributeToFilter('is_active',1)
 		->addAttributeToSelect('*')
-		->addFieldToFilter('entity_id',array("in"=>$eventArray))
-		->addAttributeToSort('event_start_date', 'desc')
+		//->addFieldToFilter('entity_id',array("in"=>$eventArray))
+		->addAttributeToSort($field, 'desc')
 		->addIdFilter($category->getChildren())
-		->addFieldToFilter('event_start_date', $event_date)
+		->addFieldToFilter($field, $event_date)
 		->load();
 	return $_collection;	
 }

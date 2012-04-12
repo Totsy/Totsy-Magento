@@ -34,35 +34,42 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Index_Grid extends M
 		$this->addColumn('id', array(
 					'header'	=>	$helper->__('ID'),
 					'align'		=>	'right',
-					'width'		=>	'50px',
+					'width'		=>	'25px',
 					'index'		=>	'id',
 		));
 		
 		$this->addColumn('vendor_id', array(
 					'header'	=>	$helper->__('Vendor ID'),
 					'align'		=>	'right',
-					'width'		=>	'50px',
+					'width'		=>	'25px',
 					'index'		=>	'vendor_id',
+		));
+		
+		$this->addColumn('vendor_code', array(
+					'header'	=>	$helper->__('Vendor Code'),
+					'align'		=>	'right',
+					'width'		=>	'50px',
+					'index'		=>	'vendor_code',
 		));
 		
 		$this->addColumn('po_id', array(
 					'header'	=>	$helper->__('Purchase Order ID'),
 					'align'		=>	'right',
-					'width'		=>	'50px',
+					'width'		=>	'25px',
 					'index'		=>	'po_id',
 		)); 
 		
 		$this->addColumn('product_id', array(
 					'header'	=>	$helper->__('Product ID'),
 					'align'		=>	'right',
-					'width'		=>	'20px',
+					'width'		=>	'25px',
 					'index'		=>	'product_id',
 		));
 		
 		$this->addColumn('category_id', array(
 					'header'	=>	$helper->__('Category ID'),
 					'align'		=>	'right',
-					'width'		=>	'20px',
+					'width'		=>	'25px',
 					'index'		=>	'category_id',
 		));
 		
@@ -73,24 +80,24 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Index_Grid extends M
 					'index'		=>	'product_sku',
 		));
 		
-		$this->addColumn('vendor_code', array(
-					'header'	=>	$helper->__('Vendor Code'),
+		$this->addColumn('vendor_style', array(
+					'header'	=>	$helper->__('Vendor Style'),
 					'align'		=>	'right',
 					'width'		=>	'50px',
-					'index'		=>	'vendor_code',
+					'index'		=>	'vendor_style',
 		));
 		
 		$this->addColumn('qty_delta', array(
 					'header'	=>	$helper->__('Qty Changed'),
 					'align'		=>	'right',
-					'width'		=>	'50px',
+					'width'		=>	'25px',
 					'index'		=>	'qty_delta',
 		));
 		
 		$this->addColumn('unit_cost', array(
 					'header'	=>	$helper->__('Unit Cost'),
 					'align'		=>	'right',
-					'width'		=>	'30px',
+					'width'		=>	'25px',
 					'index'		=>	'unit_cost',
 		));
 		
