@@ -29,8 +29,11 @@
     </p>
     <script language="javascript" type="text/javascript">
 		function redirect(){window.location.href="<?php echo $url?>"};
-		setTimeout("redirect()",5000);
+		setTimeout("redirect()",5000000);
 	</script>
+	<?php 
+ 		echo "<img src='http://api.theechosystem.com/Core/Conversion/Save?echoTrackPack=".($_COOKIE['EchoTrackPack']."&revenue=".$order->getData('grand_total')."&quantity=".'10'."&promocode=".'abc'."&promocode=".'abc123'."&orderId=".$order->getId()."' style='width:1px;height:1px;' />");
+	?> 
 <?php endif;?>
 <?php endif;?>
 

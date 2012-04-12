@@ -94,6 +94,13 @@
 			?>
 			<?php if ($hasProduct):?>
 				<div class="catalog-event event-counter-<?php echo $timer;?>">
+					<ul class="echoShare" 
+					data-productname="<?php echo $live['name'];?>"  
+					data-productcap="" 
+					data-productdesc="<?php echo $live['description'];?>" 
+					data-imageclass=""  
+					sdata-producturl="<?php echo Mage::getBaseUrl().$live['url_path']; ?>">
+					</ul>
 					<?php $imgFile = BP.DS.'media'.DS.'catalog'.DS.'category'.DS.$live['thumbnail'];?>	
 					<a class="event-link" href="<?php echo Mage::getBaseUrl().$live['url_path']; ?>"><img src="<?php echo Mage::helper('service/image')->loadImageFile($imgFile)->resize(228,263); ?>" width="228px" height="263px" alt="" /></a>
 					<div class="splash-details">

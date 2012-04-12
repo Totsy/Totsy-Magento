@@ -28,7 +28,7 @@ class Inchoo_Facebook_Block_Template extends Mage_Core_Block_Template
 	
 	public function getRequiredPermissions()
 	{
-		return json_encode('email,user_birthday');
+		return json_encode('email, user_birthday, user_location, user_likes');
 	}
 	
 	public function isEnabled()

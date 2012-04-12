@@ -2,6 +2,8 @@
 
 class Harapartners_Paymentfactory_Model_Tokenize extends Mage_Cybersource_Model_Soap {
     
+	const MINIMUM_AUTHORIZE_AMOUNT = 1.0;
+	
 	protected $_code  = 'paymentfactory_tokenize';
     protected $_formBlockType = 'paymentfactory/form';
     protected $_infoBlockType = 'paymentfactory/info';
@@ -27,13 +29,35 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Mage_Cybersource_Model_
 		return parent::validate();        
     }
     
+	protected function _decryptSubscriptionId($subId){
+    	try{
+    		$testSubId = Mage::getModel('core/encryption')->decrypt(base64_decode($subId));
+    		if(is_numeric($testSubId)){
+    			$subId = $testSubId;
+    		}
+    	}catch (Exception $e){
+    	}
+    	return $subId;
+    }
+    
 	public function order(Varien_Object $payment, $amount){
 		//For totsy, no payment is allowed to be captured upon order place
 		$customerId = $payment->getOrder()->getQuote()->getCustomerId();
 		
 		$profile = Mage::getModel('paymentfactory/profile');
      	if (!!$payment->getData('cybersource_subid')){
-     		//
+     		//decrypt for the backend
+
+     	$subscriptionId = $this->_decryptSubscriptionId($payment->getData('cybersource_subid'));
+     	if(!!$subscriptionId){
+     		
+        	$payment->setData('cybersource_subid', $subscriptionId);
+	    
+     	}
+	    
+     		
+     		
+     		
      		$profile->loadBySubscriptionId($payment->getData('cybersource_subid'));
      	}elseif (!!$payment->getData('cc_number')){
      		$profile->loadByCcNumberWithId($payment->getData('cc_number').$customerId.$payment->getCcExpYear().$payment->getCcExpMonth());
@@ -58,11 +82,14 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Mage_Cybersource_Model_
 //     	ELSE auth 1 and void
 		if ($profile->getCardType() == 'VI'){
 			return $this->authorize($payment, 0.0);
+		}elseif ($profile->getCardType() == 'AE'){
+			//Amex does not allow Authorization Reversal at this moment
+			return $this->authorize($payment, self::MINIMUM_AUTHORIZE_AMOUNT);
 		}else{
-			$validationStatus = $this->authorize($payment, 1.0);
+			$validationStatus = $this->authorize($payment, self::MINIMUM_AUTHORIZE_AMOUNT);
 			if($validationStatus){
 				$payment->setParentTransactionId($payment->getTransactionId());
-				$this->voidSpecial($payment, 1.0);
+				$this->voidSpecial($payment, self::MINIMUM_AUTHORIZE_AMOUNT);
 			}
 			return $validationStatus;
 		}
@@ -200,18 +227,25 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Mage_Cybersource_Model_
     
     public function voidSpecial(Varien_Object $payment, $amount){ //for void $1 as V,Harapartners
     	$this->_payment = $payment;
-         $error = false;
+        $error = false;
         if ($payment->getTransactionId() && $payment->getCybersourceToken()) {
             $soapClient = $this->getSoapApi();
             
             parent::iniRequest();
             
-            $ccAuthReversalService = new stdClass();
-            $ccAuthReversalService->run = "true";
-            $ccAuthReversalService->authRequestID = $payment->getTransactionId();
-            $ccAuthReversalService->authRequestToken = $payment->getCybersourceToken();
-            $this->_request->ccAuthReversalService = $ccAuthReversalService;
+//            $ccAuthReversalService = new stdClass();
+//            $ccAuthReversalService->run = "true";
+//            $ccAuthReversalService->authRequestID = $payment->getTransactionId();
+//            $ccAuthReversalService->authRequestToken = $payment->getCybersourceToken();
+//            $this->_request->ccAuthReversalService = $ccAuthReversalService;
 
+//             $voidService
+            $voidService = new stdClass();
+            $voidService->run = "true";
+            $voidService->authRequestID = $payment->getTransactionId();
+            $voidService->authRequestToken = $payment->getCybersourceToken();
+            $this->_request->voidService = $voidService;
+             
             $purchaseTotals = new stdClass();
             $purchaseTotals->currency = $payment->getOrder()->getBaseCurrencyCode();
             $purchaseTotals->grandTotalAmount = $amount;
