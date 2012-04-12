@@ -14,6 +14,12 @@
 
 class Harapartners_Stockhistory_Model_Purchaseorder extends Mage_Core_Model_Abstract {
 	
+	const STATUS_NEW = 1;
+	const STATUS_PEDNING = 2;
+	const STATUS_PROCESSING = 3;
+	const STATUS_COMPLETE = 4;
+	const STATUS_CANCELLED = 5;
+	
 	public function _construct() {
 		$this->_init('stockhistory/purchaseorder');
 	}
@@ -35,20 +41,44 @@ class Harapartners_Stockhistory_Model_Purchaseorder extends Mage_Core_Model_Abst
 		return $this;
 	}
 	
-//	protected function validateByVendorId($vendorId, $storeId = null){
-//		return $this->getResource()->validateByVendorId($vendorId, $storeId);
-//	}
-	
-	public function validateAndSave($data){
-		$this->addData($data);
-		if(!$this->getVendorId()){
-			throw new Exception('Vendor ID is missing');
+	public function importData($dataObj){
+		
+		//Type casting
+    	if(is_array($dataObj)){
+    		$dataObj = new Varien_Object($dataObj);
+    	}
+    	if(!($dataObj instanceof Varien_Object)){
+    		Mage::throwException('Invalid data type, Array or Varien_Object needed.');
+    	}
+		
+		$vendor = Mage::getModel('stockhistory/vendor');
+    	if(!!$dataObj->getdata('vendor_id')){
+    		$vendor->load($dataObj->getdata('vendor_id'));
+    	}elseif(!!$dataObj->getdata('vendor_code')){
+    		$vendor->loadByCode($dataObj->getdata('vendor_code'));
+    	}
+    	if(!$vendor || !$vendor->getId()){
+			Mage::throwException('Invalid Vendor.');
 		}
-//		elseif(!$this->validateByVendorId($data['vendor_id'])){
-//			//Due to foreign key constraint, this is not necessary
-//			throw new Exception('Vendor ID does not exist');
-//		}	
-		$this->save();
+		$dataObj->setData('vendor_id', $vendor->getId());
+		$dataObj->setData('vendor_code', $vendor->getVendorCode());
+		
+		//Load category
+		$category = Mage::getModel('catalog/category');
+    	if(!!$dataObj->getdata('category_id')){
+    		$category->load($dataObj->getdata('category_id'));
+    	}
+    	if(!$category || !$category->getId()){
+			Mage::throwException('Invalid Category/Event.');
+		}
+		$dataObj->setData('category_id', $category->getId());
+		
+		if(!$dataObj->getData('status')){
+			$dataObj->setData('status', self::STATUS_NEW);
+		}
+		
+		$this->addData($dataObj->getData());
+
 		return $this;
 	}
 	

@@ -19,7 +19,17 @@ class Harapartners_Service_Model_Rewrite_Customer_Customer extends Mage_Customer
     //Harapartners, Jun, Important logic to handle legacy customers
 	public function validatePassword($password){
 		if(!!$this->getData('legacy_customer')){
-			return (sha1($password) == $this->getPasswordHash());
+			//Legacy customers, sha1
+			if(sha1($password) == $this->getPasswordHash()){
+				return true;
+			}else{
+				//Legacy-legacy customer, hash_result:hash_salt, hashed with sha512
+				$hashData = explode(':', $this->getPasswordHash());
+				if(count($hashData) == 2){
+					return (hash('sha512', $password.$hashData[1]) == $hashData[0]);
+				}
+				return false;
+			}
 		}else{
 			return parent::validatePassword($password);
 		}
@@ -72,7 +82,7 @@ class Harapartners_Service_Model_Rewrite_Customer_Customer extends Mage_Customer
                 self::EXCEPTION_INVALID_STORE_ACCOUNT
             );
         }
-        //Haraparnters, yang, END
+        //Harapartners, yang, END
         if ($this->getConfirmation() && $this->isConfirmationRequired()) {
             throw Mage::exception('Mage_Core', Mage::helper('customer')->__('This account is not confirmed.'),
                 self::EXCEPTION_EMAIL_NOT_CONFIRMED
@@ -83,13 +93,19 @@ class Harapartners_Service_Model_Rewrite_Customer_Customer extends Mage_Customer
                 self::EXCEPTION_INVALID_EMAIL_OR_PASSWORD
             );
         }
-        //Haraparnters, yang, Add param for re-validate
+        //Harapartners, yang, Add param for re-validate
         if (!$reValidate){
         	Mage::dispatchEvent('customer_customer_authenticated', array(
 		           'model'    => $this,
 		           'password' => $password,
         	));
         }
+        
+        //Harapartners, set login count attribute
+        $loginCount = $this->getLoginCounter();
+        $this->setLoginCounter($loginCount + 1);
+        $this->save();
+        
 		//Haraparnters, yang, Set 15min validation time
         Mage::getSingleton('customer/session')->setData('CUSTOMER_LAST_VALIDATION_TIME', now());
         return true;
@@ -151,6 +167,12 @@ class Harapartners_Service_Model_Rewrite_Customer_Customer extends Mage_Customer
         //Harapartners, remove alias for Gmail address, add by Jing Xiao
         $email = $this->_trimGmail($this->getEmail(), true);
         $this->setEmail($email);
+        
+        //Harapartners, set default login count
+        $loginCount = $this->getLoginCounter();
+        if($loginCount === null) {
+        	$this->setLoginCounter(0);
+        }
 
         $this->getGroupId();
         return $this;

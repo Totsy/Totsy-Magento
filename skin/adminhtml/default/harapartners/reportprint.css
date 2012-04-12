@@ -1,0 +1,24 @@
+#report-container {
+	background: none repeat scroll 0 0 white;
+    margin: 0 auto;
+    padding: 20px;
+    width: 1024px;
+}
+
+#report-header-container .block {
+	display: inline-block;
+	vertical-align: top;
+	width: 500px;
+	margin-bottom: 10px;
+}
+
+#date-info, #footer-table{
+	margin: 20px auto;}
+	
+#report-header-container label {
+	font-weight: bold;
+    padding-right: 20px;
+    width: 80px;}
+	
+#report-header-container label.sigle-line {
+	float:left;}

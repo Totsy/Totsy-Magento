@@ -56,8 +56,10 @@ class Harapartners_Stockhistory_Block_Adminhtml_Purchaseorder_Edit extends Mage_
     	$dataObject = new Varien_Object(Mage::registry('stockhistory_po_data'));
     	return $this->getUrl('stockhistory/adminhtml_transaction/new', array(
     			'vendor_id' => $dataObject->getVendorId(),
-    			'po_id' => $dataObject->getId(),
     			'vendor_code' => $this->getVendorCode($dataObject->getVendorId()),
+    			'po_id' => $dataObject->getId(),
+    			'category_id' => $dataObject->getCategoryId()
+    			
     	));
     }
     

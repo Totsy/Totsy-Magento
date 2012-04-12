@@ -25,6 +25,8 @@
  */
 
 $customer = $this->getCustomer();
+$toPasswordPage = Mage::registry('changepassword');
+$isPasswordChange = isset($toPasswordPage);
 ?>
 <div class="page-title">
     <h1><?php echo $this->__('Edit Account Information') ?></h1>
@@ -58,12 +60,14 @@ $customer = $this->getCustomer();
 	        <?php if ($_gender->isEnabled()): ?>
 	            <li><?php echo $_gender->setGender($this->getCustomer()->getGender())->toHtml() ?></li>
 	        <?php endif ?>
+	        <?php if ($isPasswordChange):?>
 	            <li class="control">
 	                <input type="checkbox" name="change_password" id="change_password" value="1" onclick="setPasswordForm(this.checked)" title="<?php echo $this->__('Change Password') ?>"<?php if($this->getCustomer()->getChangePassword()==1): ?> checked="checked"<?php endif; ?> class="checkbox" /><label for="change_password"><?php echo $this->__('Change Password') ?></label>
 	            </li>
+	        <?php endif ?>
 	        </ul>
 	    </div>
-	    <div class="fieldset" style="display:none;">
+	    <div class="fieldset" style="<?php if (!$isPasswordChange) echo 'display:none;' ?>">
 	        <h2 class="legend"><?php echo $this->__('Change Password') ?></h2>
 	        <hr>
 	        <ul class="form-list">

@@ -29,6 +29,14 @@ class Harapartners_Stockhistory_Adminhtml_TransactionController extends Mage_Adm
 			->renderLayout();
 	}
 
+	public function printAction()
+	{
+		$this->loadLayout()
+			->_setActiveMenu('stockhistory/transaction')
+			->_addContent($this->getLayout()->createBlock('stockhistory/adminhtml_transaction_report_print'))
+			->renderLayout();
+	}
+	
 	public function newAction()
 	{
 		$this->_getSession()->setTransFormData(null);
@@ -40,15 +48,19 @@ class Harapartners_Stockhistory_Adminhtml_TransactionController extends Mage_Adm
 	{
 		//Create new only!
 		$data = $this->getRequest()->getParams();
-		if(empty($data['vendor_id'])){
-			$data['vendor_id'] = $this->getRequest()->getParam('vendor_id');
-		}
-		if(empty($data['vendor_code'])){
-			$data['vendor_code'] = $this->getRequest()->getParam('vendor_code');
-		}
-		if(empty($data['po_id'])){
-			$data['po_id'] = $this->getRequest()->getParam('po_id');
-		}
+		$data = $this->_getSession()->getTransFormData();
+//		if(empty($data['vendor_id'])){
+//			$data['vendor_id'] = $this->getRequest()->getParam('vendor_id');
+//		}
+//		if(empty($data['vendor_code'])){
+//			$data['vendor_code'] = $this->getRequest()->getParam('vendor_code');
+//		}
+//		if(empty($data['po_id'])){
+//			$data['po_id'] = $this->getRequest()->getParam('po_id');
+//		}
+//		if(empty($data['category_id'])){
+//			$data['category_id'] = $this->getRequest()->getParam('category_id');
+//		}
 		
 		if(!!$data){
         	Mage::unregister('stockhistory_transaction_data');
@@ -110,13 +122,17 @@ class Harapartners_Stockhistory_Adminhtml_TransactionController extends Mage_Adm
 		if(isset($data['form_key'])){
 			unset($data['form_key']);
 		}
+		$this->_getSession()->setTransFormData($data);
 		
 		try{
 			$model = Mage::getModel('stockhistory/transaction');
 			if(!!$this->getRequest()->getParam('id')){
 				$model->load($this->getRequest()->getParam('id'));
 			}
-			$model->validateAndSave($data);
+			
+			$model->importData($data)->save();
+			$model->updateProductStock();
+			
 			$this->_getSession()->addSuccess(Mage::helper('stockhistory')->__('Transaction saved'));
 			$this->_getSession()->setTransFormData(null);
 		}catch(Exception $e){
@@ -151,42 +167,27 @@ class Harapartners_Stockhistory_Adminhtml_TransactionController extends Mage_Adm
 								if($row > 0){
 									$vendorId 	= trim($fileData[0]);
 									$poId 		= trim($fileData[1]);
-									$productId 	= trim($fileData[2]);
-									$productSku = trim($fileData[3]);
-									$vendorSku 	= trim($fileData[4]);
-									$unitCost	= trim($fileData[5]);
-									$qtyDelta 	= trim($fileData[6]);
-									$comment	= trim($fileData[7]);
+									$categoryId	= trim($fileData[2]);
+									$productId 	= trim($fileData[3]);
+									$unitCost	= trim($fileData[4]);
+									$qtyDelta 	= trim($fileData[5]);
+									$comment	= trim($fileData[6]);
 									
 									$transaction = Mage::getModel('stockhistory/transaction');
-									$transaction->setData('vendor_id', $vendorId);
-									$transaction->setData('po_id', $productName);
-									$transaction->setData('product_id', $productId);
-									$transaction->setData('category_id', $category_id);
-									$transaction->setData('product_sku', $productSku);
-									$transaction->setData('vendor_sku', $vendorSku);
-									$transaction->setData('unit_cost', $unitCost);
-									$transaction->setData('qty_delta', $qtyDelta);
-									$transaction->setData('comment', $comment);
-									$transaction->setData('status', Harapartners_Stockhistory_Model_Transaction::STATUS_PROCESSING);
-									$transaction->setData('action_type', Harapartners_Stockhistory_Model_Transaction::ACTION_DIRECT_IMPORT);
-									$transaction->validateAndSave();
+									$dataObj = new Varien_Object();
+									$dataObj->setData('vendor_id', $vendorId);
+									$dataObj->setData('po_id', $poId);
+									$dataObj->setData('category_id', $categoryId);
+									$dataObj->setData('product_id', $productId);
+									$dataObj->setData('unit_cost', $unitCost);
+									$dataObj->setData('qty_delta', $qtyDelta);
+									$dataObj->setData('comment', $comment);
+									$dataObj->setData('status', Harapartners_Stockhistory_Model_Transaction::STATUS_PROCESSING);
+									$dataObj->setData('action_type', Harapartners_Stockhistory_Model_Transaction::ACTION_DIRECT_IMPORT);
 									
-//									$transaction = Mage::getModel('stockhistory/transaction')->loadByEntityId($entityId);
-//									if(! $transaction->getId()){
-//										$transaction = Mage::getModel('stockhistory/transaction');
-//										$transaction->setData('entity_id', $entityId);
-//										$transaction->setData('product_name', $productName);
-//										$transaction->setData('product_sku', $productSku);
-//										$transaction->setData('vendor_sku', $vendorSku);
-//										$transaction->setData('qty', $qtyDelta);
-//										$transaction->setData('created_at', $createdAt);
-//									}else{
-//										$qty = $transaction->getData('qty') + $qtyDelta;
-//										$transaction->setData('qty', $qty);
-//										$transaction->setData('updated_at', date('Y-m-d H:i:s'));
-//									}
-//									$transaction->save();
+									$transaction->importData($dataObj)->save();
+									$transaction->updateProductStock();
+
 								}
 								$row ++;
 							}
