@@ -1,6 +1,6 @@
 <?php 
-//error_reporting(E_ALL | E_STRICT);
-//ini_set('display_errors', 1);
+error_reporting(E_ALL | E_STRICT);
+ini_set('display_errors', 1);
 $rootDir = dirname(dirname(__DIR__));
 
 $compilerConfig = $rootDir.'/includes/config.php';
@@ -9,6 +9,8 @@ if (file_exists($compilerConfig)) {
 }
 
 require_once( $rootDir.'/app/Mage.php' );
+
+
 
 Mage::app();
 //Mage::setIsDeveloperMode(true);
@@ -61,7 +63,7 @@ $eventArray = $pendingEventArray = array();
 $category = Mage::getModel('catalog/category'); //->load($categoryId);
 
 //open&top events
-if ($category && $category->getId()) {
+if ($category) {
 	/*filter event/category collection*/
 	$_collection = loadCollection('event_start_date'); 
 	foreach($_collection as $_category){
@@ -72,9 +74,9 @@ if ($category && $category->getId()) {
 }
 
 // closing events
-if ($category && $category->getId()) {
+if ($category) {
 	/*filter event/category collection*/
-	$_collection = loadCollection('event_close_date','+1 day');
+	$_collection = loadCollection('event_end_date','+1 day');
 	foreach($_collection as $_category){
 		getEventApiOutput($_category,'closing',$out);
 	}
@@ -82,7 +84,7 @@ if ($category && $category->getId()) {
 }
 	
 //pending events       
-if ($category && $category->getId()) {
+if ($category) {
 /*filter event/category collection*/
 	$_collection = loadCollection('event_start_date','+2 days');
 	foreach($_collection as $_category){
@@ -242,7 +244,7 @@ function processEventsJson($json, $field){
 	return $eventArray;
 }
 
-function loadCollection ($filed,$plus = null){
+function loadCollection ($field,$plus = null){
 	
 	global $category, $eventArray, $start_date, $start_time;
 	
@@ -259,7 +261,7 @@ function loadCollection ($filed,$plus = null){
 		->addAttributeToSelect('*')
 		//->addFieldToFilter('entity_id',array("in"=>$eventArray))
 		->addAttributeToSort($field, 'desc')
-		->addIdFilter($category->getChildren())
+		//->addIdFilter($category->getChildren())
 		->addFieldToFilter($field, $event_date)
 		->load();
 	return $_collection;	
