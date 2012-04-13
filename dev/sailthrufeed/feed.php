@@ -1,14 +1,15 @@
 <?php 
 //error_reporting(E_ALL | E_STRICT);
 //ini_set('display_errors', 1);
-$rootDir = dirname(dirname(__DIR__));
+//$rootDir = dirname(dirname(__DIR__));
 
 //$compilerConfig = $rootDir.'/includes/config.php';
 //if (file_exists($compilerConfig)) {
 //    include $compilerConfig;
 //}
 
-require_once( $rootDir.'/app/Mage.php' );
+//require_once( $rootDir.'/app/Mage.php' );
+require_once( '../../app/Mage.php' );
 
 
 
