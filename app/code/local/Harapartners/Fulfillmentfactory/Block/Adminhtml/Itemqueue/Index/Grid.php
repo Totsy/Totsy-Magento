@@ -40,22 +40,22 @@ class Harapartners_Fulfillmentfactory_Block_Adminhtml_Itemqueue_Index_Grid exten
             'index'         => 'itemqueue_id'
         ));
         
-        $this->addColumn('order_item_id', array(
-            'header'        => Mage::helper('fulfillmentfactory')->__('Order Item ID'),
-            'align'         => 'right',
-            'width'         => '30px',
-            'index'         => 'order_item_id'
-        ));
+//        $this->addColumn('order_item_id', array(
+//            'header'        => Mage::helper('fulfillmentfactory')->__('Order Item ID'),
+//            'align'         => 'right',
+//            'width'         => '30px',
+//            'index'         => 'order_item_id'
+//        ));
         
-        $this->addColumn('order_id', array(
-            'header'        => Mage::helper('fulfillmentfactory')->__('Order ID'),
-            'align'         => 'right',
-            'width'         => '30px',
-            'index'         => 'order_id'
-        ));
+//        $this->addColumn('order_id', array(
+//            'header'        => Mage::helper('fulfillmentfactory')->__('Order ID'),
+//            'align'         => 'right',
+//            'width'         => '30px',
+//            'index'         => 'order_id'
+//        ));
         
         $this->addColumn('order_increment_id', array(
-            'header'        => Mage::helper('fulfillmentfactory')->__('Order Increment ID'),
+            'header'        => Mage::helper('fulfillmentfactory')->__('Order #'),
             'align'         => 'right',
             'width'         => '50px',
             'index'         => 'order_increment_id'
