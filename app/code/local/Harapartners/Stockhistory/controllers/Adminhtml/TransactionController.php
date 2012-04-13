@@ -16,51 +16,50 @@ class Harapartners_Stockhistory_Adminhtml_TransactionController extends Mage_Adm
 	
 	protected $_mimes = array('application/vnd.ms-excel', 'text/plain', 'text/csv', 'text/tsv');
 	
-	protected function _getSession()
-	{
+	protected function _getSession() {
 		return Mage::getSingleton('adminhtml/session');
 	}
 	
-	public function indexAction()
-	{
+	public function indexAction() {
 		$this->loadLayout()
 			->_setActiveMenu('stockhistory/transaction')
 			->_addContent($this->getLayout()->createBlock('stockhistory/adminhtml_transaction_index'))
 			->renderLayout();
 	}
 
-	public function printAction()
-	{
+	public function printAction() {
 		$this->loadLayout()
 			->_setActiveMenu('stockhistory/transaction')
 			->_addContent($this->getLayout()->createBlock('stockhistory/adminhtml_transaction_report_print'))
 			->renderLayout();
 	}
 	
-	public function newAction()
-	{
-		$this->_getSession()->setTransFormData(null);
-		$this->getRequest()->setParam('action_type', Harapartners_Stockhistory_Model_Transaction::ACTION_TYPE_AMENDMENT);
+	public function newAction() {
+		$poId = $this->getRequest()->getParam('po_id');
+		$poOjbect = Mage::getModel('stockhistory/purchaseorder')->load($poId);
+		
+		if(!$poOjbect || !$poOjbect->getId()){
+			$this->_getSession()->addError('Invalid Purchase Order.');
+			$this->_redirect('*/adminhtml_purchaseorder/edit', array('id' => $poId));
+			return;
+		}
+		
+		$prepopulateData = array(
+			'vendor_id'		=> $poOjbect->getVendorId(),
+			'vendor_code'	=> $poOjbect->getVendorCode(),
+			'po_id'			=> $poOjbect->getId(),
+			'category_id'	=> $poOjbect->getCategoryId(),	
+			'action_type' 	=> Harapartners_Stockhistory_Model_Transaction::ACTION_TYPE_AMENDMENT
+		);
+		
+		$this->_getSession()->setTransFormData($prepopulateData);
 		$this->_forward('edit');
 	}
 	
-	public function editAction()
-	{
-		//Create new only!
+	public function editAction() {
+		//Create new only! Not loading any existing ones
 		$data = $this->getRequest()->getParams();
 		$data = $this->_getSession()->getTransFormData();
-//		if(empty($data['vendor_id'])){
-//			$data['vendor_id'] = $this->getRequest()->getParam('vendor_id');
-//		}
-//		if(empty($data['vendor_code'])){
-//			$data['vendor_code'] = $this->getRequest()->getParam('vendor_code');
-//		}
-//		if(empty($data['po_id'])){
-//			$data['po_id'] = $this->getRequest()->getParam('po_id');
-//		}
-//		if(empty($data['category_id'])){
-//			$data['category_id'] = $this->getRequest()->getParam('category_id');
-//		}
 		
 		if(!!$data){
         	Mage::unregister('stockhistory_transaction_data');
@@ -73,8 +72,7 @@ class Harapartners_Stockhistory_Adminhtml_TransactionController extends Mage_Adm
 			->renderLayout();
 	}
 	
-	public function reportAction()
-	{
+	public function reportAction() {
 		$data = $this->getRequest()->getParams();
 		if(!!$data){
         	Mage::unregister('stockhistory_transaction_report_data');
@@ -86,8 +84,7 @@ class Harapartners_Stockhistory_Adminhtml_TransactionController extends Mage_Adm
 			->renderLayout();	
 	}
 	
-	public function exportPoCsvAction()
-	{
+	public function exportPoCsvAction() {
         $fileName   = 'stock_transaction_info_' . date('YmdHi'). '.csv';
         $content    = $this->getLayout()
             ->createBlock('stockhistory/adminhtml_transaction_report_grid')
@@ -97,8 +94,7 @@ class Harapartners_Stockhistory_Adminhtml_TransactionController extends Mage_Adm
         //$this->_redirect('*/*/index');	
 	}
 	
-	public function exportCsvAction()
-	{
+	public function exportCsvAction() {
         $fileName   = 'stock_transaction_info_' . date('YmdHi'). '.csv';
         $content    = $this->getLayout()
             ->createBlock('stockhistory/adminhtml_transaction_index_grid')
@@ -108,16 +104,14 @@ class Harapartners_Stockhistory_Adminhtml_TransactionController extends Mage_Adm
         //$this->_redirect('*/*/index');	
 	}
 	
-	public function importCsvAction()
-	{
+	public function importCsvAction() {
 		$this->loadLayout()
 			->_setActiveMenu('stockhistory/transaction')	
 			->_addContent($this->getLayout()->createBlock('stockhistory/adminhtml_transaction_import'))
 			->renderLayout();
 	}
 	
-	public function saveAction()
-	{
+	public function saveAction() {
 		$data = $this->getRequest()->getPost();
 		if(isset($data['form_key'])){
 			unset($data['form_key']);
@@ -143,8 +137,7 @@ class Harapartners_Stockhistory_Adminhtml_TransactionController extends Mage_Adm
 		$this->_redirect('*/*/index');
 	}
 	
-	public function saveImportAction()
-	{
+	public function saveImportAction() {
 		$data = $this->getRequest()->getParams();
 		try{
 			if(isset($_FILES) && !empty($_FILES)){
