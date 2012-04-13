@@ -164,7 +164,9 @@ class Harapartners_Fulfillmentfactory_Helper_Dotcom extends Mage_Core_Helper_Abs
 	public function submitPurchaseOrders($dataXML) {
 		$uri = self::DOTCOM_BASE_URL . '/purchase_order';
 		
-		return $this->_postXMLRequest($uri, $dataXML);
+		$response = $this->_postXMLRequest($uri, $dataXML);
+		
+		return $this->_readXMLString($response);
 	}
 	
 	/**
