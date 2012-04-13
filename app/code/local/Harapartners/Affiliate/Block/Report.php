@@ -81,7 +81,7 @@ class Harapartners_Affiliate_Block_Report extends Mage_Adminhtml_Block_Template 
 		}
 		return  $reportHtml;		
 	}
-	
+	// all affiliate customer revenue from date to date.
 	public function getReVenueHtml(){
 		$resultFilter = Mage::registry('resultFilter');
 		$reportHtml = '';
@@ -123,15 +123,15 @@ class Harapartners_Affiliate_Block_Report extends Mage_Adminhtml_Block_Template 
 				$subAffiliateArray = explode(',',$affiliate->getSubAffiliateCode());
 				foreach ($subAffiliateArray as $subAffiliate) {
 					$recordCollection = Mage::getModel('customertracking/record')->getCollection()
-																			->addFieldToFilter('created_at', array( "lt" => $to,"gt"=>$from ))
 																			->addFieldToFilter('affiliate_code', $affiliate->getAffiliateCode())
 																			->addFieldToFilter('sub_affiliate_code', $subAffiliate);				
 					$revenue = 0;
 					foreach ($recordCollection as $record) {
 						$customer = Mage::getModel('customer/customer')->setWebsiteId(1)->loadByEmail($record->getCustomerEmail());
 						$orderCollection = Mage::getModel('sales/order')->getCollection()
-																			->addFieldToFilter('customer_id',$customer->getId())
-																			->addFieldToFilter('state','complete');	
+																		->addFieldToFilter('created_at', array( "lt" => $to,"gt"=>$from ))
+																		->addFieldToFilter('customer_id',$customer->getId())
+																		->addFieldToFilter('state','complete');	
 						foreach ($orderCollection as $order) {
 							$revenue+=$order->getGrandTotal();
 						}
