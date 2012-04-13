@@ -34,11 +34,11 @@ class Harapartners_Affiliate_RemoteController extends Mage_Core_Controller_Front
 	        $params = $request->getParams();
 	        $registrationParam = array();
 	        foreach ($params as $index=>$value) {
-	        	if($index!='email' && $index!='password' && $index!='product_url' && $index!='genpswd' ){
+	        	if($index!='email' && $index!='password' && $index!='product_url' && $index!='genpswd' &&!!$value ){
 	        		$registrationParam[$index]=$value;	
 	        	}
 	        }	        	        
-	        $affiliateInfo['registration_param'] = json_encode();
+	        $affiliateInfo['registration_param'] = json_encode($registrationParam);
 	        $session->setData('affiliate_id', $affiliate->getId());
 	        $session->setData('affiliate_info', $affiliateInfo);
 	       
