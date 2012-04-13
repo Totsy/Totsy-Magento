@@ -81,6 +81,27 @@ class Harapartners_Categoryevent_Block_Adminhtml_Browse_Index_Grid extends Mage_
         	'index'         => 'description'
         ));
         
+        $this->addColumn('action',
+            array(
+                'header'    => Mage::helper('categoryevent')->__('Action'),
+                'width'     => '50px',
+                'type'      => 'action',
+                'getter'     => 'getId',
+                'actions'   => array(
+                    array(
+                        'caption' => Mage::helper('categoryevent')->__('Preview'),
+                        'url'     => array(
+                            'base'=>'*/*/preview',
+                            'params'=>array('store'=>$this->getRequest()->getParam('store'))
+                        ),
+                        'field'   => 'id'
+                    )
+                ),
+                'filter'    => false,
+                'sortable'  => false,
+                'index'     => 'stores',
+        ));
+        
         $this->addColumn('event_start_date', array(
             'header'        => Mage::helper('categoryevent')->__('Event Start Date'),
             'align'         => 'center',
