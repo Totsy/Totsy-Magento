@@ -39,8 +39,8 @@ if(($handle = fopen($importCsvFile,'r')) !== FALSE){
 			$affiliate->setData('status', $data[3]);
 			$affiliate->setData('affiliate_name', ucwords($data[4]));
 			$affiliate->setData('affiliate_code', strtolower($data[4]));	
-			if($data[6]){
-				$affiliate->setData('type', $data[6]);
+			if($data[6]=='Super Affiliate'){
+				$affiliate->setData('type', 2);
 			}else{
 				$affiliate->setData('type', 1);
 			}	
