@@ -14,8 +14,8 @@ require_once( $rootDir.'/app/Mage.php' );
 
 Mage::app();
 //Mage::setIsDeveloperMode(true);
-//header('Cache-Control: no-cache, must-revalidate');
-//header('Content-type: application/json');
+header('Cache-Control: no-cache, must-revalidate');
+header('Content-type: application/json');
 
 $out = array('events'=>array(),'pending'=>array(),'closing'=>array());
 
@@ -32,7 +32,7 @@ date_default_timezone_set($mageTimezone);
 
 $maxOff = 0;
 $start_date = strtotime(date('Y-m-d'));
-$start_time = '19:00:00';
+$start_time = '1:00:00';
 $order_desc = false;
 
 if (!empty($_GET['order'])){
@@ -249,8 +249,8 @@ function loadCollection ($field,$plus = null){
 	global $category, $eventArray, $start_date, $start_time;
 	
 	$event_date = array (
-		'gteq' => date('Y-m-d',$start_date). ' '.$start_time,
-		'lteq' => date('Y-m-d',$start_date).' 23:59:59'
+		'from' => date('Y-m-d',$start_date). ' '.$start_time,
+		'to' => date('Y-m-d',$start_date).' 23:59:59'
 	);
 	if (!empty($plus)){
 		$event_date['lteq'] = date('Y-m-d',strtotime($plus,$start_date)).' 23:59:59';
