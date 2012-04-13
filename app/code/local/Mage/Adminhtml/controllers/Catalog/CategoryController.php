@@ -519,6 +519,16 @@ class Mage_Adminhtml_Catalog_CategoryController extends Mage_Adminhtml_Controlle
             );
         }
     }
+    
+    //Harapartners, yang: add Preview function in category mangement page
+    public function previewAction(){
+    	$postInfo = $this->getRequest()->getParams();
+    	$eventId = $postInfo['id'];
+    	$cookieName = Mage::helper('service/rewrite_catalog_category')->getPreviewCookieName();
+    	$cookieValue = Mage::helper('service/rewrite_catalog_category')->getPreviewCookieEncryptedCode();
+    	Mage::getModel('core/cookie')->set($cookieName, $cookieValue);
+    	$this->_redirect('catalog/category/view/id/' . $eventId);
+    }
 
     /**
      * Check if admin has permissions to visit related pages

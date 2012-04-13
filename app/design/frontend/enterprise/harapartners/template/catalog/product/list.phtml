@@ -33,9 +33,9 @@
 ?>
 <?php
     $_productCollection=$this->getLoadedProductCollection();
-    $_cookietCode = Mage::helper('categoryevent')->getPreviewCookieName();
+    $_cookietCode = Mage::helper('service/rewrite_catalog_category')->getPreviewCookieName();
     $_cookietEnValue = Mage::getModel('core/cookie')->get($_cookietCode);
-    $_cookietDeValue = Mage::helper('categoryevent')->getPreviewCookieDecryptedCode($_cookietEnValue);
+    $_cookietDeValue = Mage::helper('service/rewrite_catalog_category')->getPreviewCookieDecryptedCode($_cookietEnValue);
     $_adminPass = false;
     $_currentCategory = Mage::getSingleton('catalog/layer')->getCurrentCategory();
     $_helper = $this->helper('catalog/output');
@@ -52,7 +52,7 @@
 		$timeOutFlag = 0;
 	}
 	
-	if ( !!$_cookietDeValue && $_cookietDeValue == Harapartners_Categoryevent_Helper_Data::ADMIN_CATEGORY_PREVIEW_CODE ) {
+	if ( !!$_cookietDeValue && $_cookietDeValue == Mage::helper('service/rewrite_catalog_category')->getPreviewCookieCode()) {
 		$timeOutFlag = 0;
 		$_adminPass = true;
     }
