@@ -38,7 +38,8 @@ class Harapartners_Stockhistory_Helper_Data extends Mage_Core_Helper_Abstract  {
 		return array(
 				Harapartners_Stockhistory_Model_Vendor::TYPE_VENDOR => 'Vendor', 
 				Harapartners_Stockhistory_Model_Vendor::TYPE_SUBVENDOR =>'Sub Vendor', 
-				Harapartners_Stockhistory_Model_Vendor::TYPE_DISTRIBUTOR => 'Distributor'
+				Harapartners_Stockhistory_Model_Vendor::TYPE_DISTRIBUTOR => 'Distributor',
+				Harapartners_Stockhistory_Model_Vendor::TYPE_MANUFACTURER => 'Manufacturer'
 		);
 	}
 	
@@ -73,13 +74,14 @@ class Harapartners_Stockhistory_Helper_Data extends Mage_Core_Helper_Abstract  {
        			array('label' => 'Vendor', 'value' => Harapartners_Stockhistory_Model_Vendor::TYPE_VENDOR),
        			array('label' => 'SubVendor', 'value' => Harapartners_Stockhistory_Model_Vendor::TYPE_SUBVENDOR),
        			array('label' => 'Distributor', 'value' => Harapartners_Stockhistory_Model_Vendor::TYPE_DISTRIBUTOR),
+       			array('label' => 'Manufacturer', 'value' => Harapartners_Stockhistory_Model_Vendor::TYPE_MANUFACTURER)
        	);
 	}
 	
 	public function getFormVendorStatusArray(){
 		return array(
 				array('label' => 'Enabled', 'value' => Harapartners_Stockhistory_Model_Vendor::STATUS_ENABLED),
-				array('label' => 'Disabled', 'value' => Harapartners_Stockhistory_Model_Vendor::STATUS_DISABLED),
+				array('label' => 'Disabled', 'value' => Harapartners_Stockhistory_Model_Vendor::STATUS_DISABLED)
 		);
 	}
 	
@@ -87,7 +89,7 @@ class Harapartners_Stockhistory_Helper_Data extends Mage_Core_Helper_Abstract  {
 		return array(
        			array('label' => 'Amendment', 'value' => Harapartners_Stockhistory_Model_Transaction::ACTION_TYPE_AMENDMENT),
        			array('label' => 'Event Import', 'value' => Harapartners_Stockhistory_Model_Transaction::ACTION_TYPE_EVENT_IMPORT),
-       			array('label' => 'Direc Import', 'value' => Harapartners_Stockhistory_Model_Transaction::ACTION_TYPE_DIRECT_IMPORT),
+       			array('label' => 'Direc Import', 'value' => Harapartners_Stockhistory_Model_Transaction::ACTION_TYPE_DIRECT_IMPORT)
        	);
 	}
 	
@@ -95,7 +97,7 @@ class Harapartners_Stockhistory_Helper_Data extends Mage_Core_Helper_Abstract  {
 		return  array(
 				array('label' => $this->__('Pending'), 'value' => Harapartners_Stockhistory_Model_Transaction::STATUS_PENDING),
 				array('label' => $this->__('Processed'), 'value' => Harapartners_Stockhistory_Model_Transaction::STATUS_PROCESSED ),
-				array('label' => $this->__('Failed'), 'value' => Harapartners_Stockhistory_Model_Transaction::STATUS_FAILED),
+				array('label' => $this->__('Failed'), 'value' => Harapartners_Stockhistory_Model_Transaction::STATUS_FAILED)
 		);
 	}
 	

@@ -214,10 +214,11 @@
     function categoryProductRowClick(grid, event){
         var trElement = Event.findElement(event, 'tr');
         var isInput   = Event.element(event).tagName == 'INPUT';
+		var isAnchor  = Event.element(event).tagName == 'A'; //Harapartners, Jun/Yang, <a> tag click should not affect the row checkbox
         if(trElement){
             var checkbox = Element.getElementsBySelector(trElement, 'input');
             if(checkbox[0]){
-                var checked = isInput ? checkbox[0].checked : !checkbox[0].checked;
+                var checked = (isInput||isAnchor) ? checkbox[0].checked : !checkbox[0].checked; ////Harapartners, Jun/Yang, <a> tag click should not affect the row checkbox
                 <?php echo $_gridJsObject ?>.setCheckboxChecked(checkbox[0], checked);
             }
         }

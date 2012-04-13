@@ -20,6 +20,7 @@ class Harapartners_Stockhistory_Model_Vendor extends Mage_Core_Model_Abstract {
 	const TYPE_VENDOR = 1;
 	const TYPE_SUBVENDOR = 2;
 	const TYPE_DISTRIBUTOR = 3;
+	const TYPE_MANUFACTURER = 4;
 	
 	public function _construct() {
 		$this->_init('stockhistory/vendor');
