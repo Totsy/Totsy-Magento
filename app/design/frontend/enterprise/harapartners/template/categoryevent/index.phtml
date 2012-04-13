@@ -94,6 +94,13 @@
 			?>
 			<?php if ($hasProduct):?>
 				<div class="catalog-event event-counter-<?php echo $timer;?>">
+					<ul class="echoShare" 
+					data-productname="<?php echo $live['name'];?>"  
+					data-productcap="" 
+					data-productdesc="<?php echo $live['description'];?>" 
+					data-imageclass=""  
+					sdata-producturl="<?php echo Mage::getBaseUrl().$live['url_path']; ?>">
+					</ul>
 					<?php $imgFile = BP.DS.'media'.DS.'catalog'.DS.'category'.DS.$live['thumbnail'];?>	
 					<a class="event-link" href="<?php echo Mage::getBaseUrl().$live['url_path']; ?>"><img src="<?php echo Mage::helper('service/image')->loadImageFile($imgFile)->resize(228,263); ?>" width="228px" height="263px" alt="" /></a>
 					<div class="splash-details">
@@ -111,7 +118,7 @@
 										jQuery(this).html("Completed");
 										jQuery("div.event-counter-<?php echo $timer;?>").hide();
 									},
-									leadingZero: false,
+									leadingZero: true,
 									direction: "down"
 								});
 							</script>
@@ -135,6 +142,13 @@
 				$endcount = date("F j, Y, G:i:s", $endcountRaw);
 			?>
 			<div class="catalog-event">
+				<ul class="echoShare" 
+				data-productname="<?php echo $up['name'];?>"  
+				data-productcap="" 
+				data-productdesc="<?php echo $up['description'];?>" 
+				data-imageclass=""  
+				sdata-producturl="<?php echo Mage::getBaseUrl().$up['url_path']; ?>">
+				</ul>
 				<?php $imgFile = BP.DS.'media'.DS.'catalog'.DS.'category'.DS.$up['thumbnail'];?>	
 				<a class="event-link" href="<?php echo Mage::getBaseUrl().$up['url_path']; ?>"><img src="<?php echo Mage::helper('service/image')->loadImageFile($imgFile)->resize(228,263); ?>" width="228px" height="263px" alt="" /></a>
 				<div class="splash-details">
@@ -145,14 +159,14 @@
 							jQuery("#time2-<?php echo $timer ?>").countdown({
 								//date: "12 10, 2011 16:11", //Counting TO a date
 								date: "<?php echo $endcount; ?>", //Counting TO a date
-								htmlTemplate: "<span>Opens in</span> %{d} <span class=\"cd-time\">Days</span> %{h}<span class=\"cd-time\">:</span>%{m}<span class=\"cd-time\">:</span>%{s}<span class=\"cd-time\"></span>",
-				
+								htmlTemplate: "<span>Opens in</span><span id=\"cd-day\"> %{d}</span> <span class=\"cd-day\">Days</span> %{h}<span class=\"cd-time\">:</span>%{m}<span class=\"cd-time\">:</span>%{s}<span class=\"cd-time\"></span>",
+								
 								onChange: function( event, timer ){
 								},
 								onComplete: function( event ){										
 									jQuery(this).html("Completed");
 								},
-								leadingZero: false,
+								leadingZero: true,
 								direction: "down"
 							});
 						</script>

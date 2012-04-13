@@ -267,21 +267,20 @@ XML;
 XML;
 
 		foreach($items as $sku => $qty) {
-			$productSku = $sku;
-			$quantity = $qty;
-			$product = Mage::getModel('catalog/product')->loadByAttribute('sku', $productSku);
+			$product = Mage::getModel('catalog/product')->loadByAttribute('sku', $sku);
 			
 			if(empty($product) || !$product->getId()) {
 				continue;
 			}
 			
+			$productSku = substr($sku, 0, 17);
 			$name = substr($product->getName(), 0, 28);
 			
 			$xml .= <<<XML
 					<item>
-						<sku><![CDATA[{$product->getSku()}]]></sku>
+						<sku><![CDATA[$productSku]]></sku>
 						<description><![CDATA[$name]]></description>
-						<quantity>$quantity</quantity>
+						<quantity>$qty</quantity>
 						<upc xsi:nil="true" />
 						<weight xsi:nil="true" />
 						<cost xsi:nil="true" />
@@ -311,7 +310,7 @@ XML;
 		$xml .=	<<<XML
 				</items>
 			</purchase_order>
-		'</purchase_orders>'
+		</purchase_orders>
 XML;
 		
 		//echo $xml;
@@ -404,8 +403,10 @@ XML;
 					           	//send email
 					           	$invoices = Mage::getResourceModel('sales/order_invoice_collection')->setOrderFilter($order->getId());
 					           	foreach($invoices as $invoice) {
-					           		$invoice->sendEmail(true);
-					           		$invoice->save();
+						           	if (!$invoice->getOrder()->getEmailSent()) {
+				                        $invoice->sendEmail(true)
+				                            	->setEmailSent(true);
+				                    }
 					           	}
 							}
 						}
@@ -421,7 +422,7 @@ XML;
 				
 				//send payment failed email
 				Mage::getModel('core/email_template')->setTemplateSubject('Payment Failed')
-													 ->sendTransactional(2, 'support@totsy.com', 'j.xiao@harapartners.com', $customer->getFirstname(), array(), $order->getStoreId());
+													 ->sendTransactional(2, 'support@totsy.com', $customer->getEmail(), $customer->getFirstname());
 				
 				//throw new Exception($message);
 				continue;
@@ -711,8 +712,7 @@ XML;
 	}
 	
 	public function testSubmitOrdersToFulfill() {
-//		$orders = Mage::getModel('sales/order')->getCollection()
-//											   ->addAttributeToFilter('state', Mage_Sales_Model_Order::STATE_NEW);
+		//$orders = Mage::getModel('sales/order')->getCollection()->addAttributeToFilter('state', Mage_Sales_Model_Order::STATE_NEW);
 		//$orders = Mage::getModel('sales/order')->getCollection()->addAttributeToFilter('entity_id', array('in' => array(94)));
 		//$orders = Mage::getModel('sales/order')->getCollection()->addAttributeToFilter('entity_id', array('in' => array(187, 189, 190)));
 		//echo count($orders);

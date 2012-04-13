@@ -45,7 +45,7 @@ class Harapartners_Service_Block_Rewrite_Page_Html_Head extends Mage_Page_Block_
 		$valueId = $typeAttributes->getSource()->getOptionId($value);
 		$label = Mage::helper('catalog')->__($value);
 		$this->setSailthruTitle($label);
-		$label = strtolower(str_replace(' ','_',$label));
+		$label = strtolower(str_replace('-and-','-',str_replace(' ','-',$label)));
     	$this->setSailthruTags($label);
     }
     
@@ -58,7 +58,37 @@ class Harapartners_Service_Block_Rewrite_Page_Html_Head extends Mage_Page_Block_
             ->setStoreId(Mage::app()->getStore()->getId())
             ->load($categoryId);
         $label = $category->getName(); 
-        $label = strtolower(str_replace(' ','_',$label));
+        $label = strtolower(str_replace(' ','-',$label));
+        
+    	$dept = $category->getDepartments();
+        $deptArray = explode(',', $dept);
+        $newDeptArray = array();
+		$attrOptions = Mage::getModel('catalog/category')->getResource()->getAttribute('departments');
+        foreach ($deptArray as $perdept){
+        	//$attrText = $attrOptions->getSource()->getOptionText($perdept);
+        	//$newDeptArray[] = 	$this->__($attrText);
+        	$labeltemp = strtolower(str_replace('-and-','-',str_replace('_','-',$perdept)));
+        	$newDeptArray[] = 	$labeltemp;
+        }
+        $deptStr = implode(',' , $newDeptArray);
+        if (count($deptArray)!=0){
+        	$deptStr = ','.$deptStr;
+        }
+        $age = $category->getAges();
+        $ageArray = explode(',', $age);
+		$newAgeArray = array();
+		$ageAttrOptions = Mage::getModel('catalog/product')->getResource()->getAttribute('ages');
+        foreach ($ageArray as $perage){
+        	//$attrText = $ageAttrOptions->getSource()->getOptionText($perage);
+        	$newAgeArray[] = 	$perage;
+        }
+        $ageStr = implode(',' , $newAgeArray);
+        if (count($ageArray)!=0){
+        	$ageStr = ','.$ageStr;
+        }
+
+        $label = trim($label.$deptStr.$ageStr , ',');
+        
     	$this->setSailthruTags($label);
     }
     
@@ -84,7 +114,7 @@ class Harapartners_Service_Block_Rewrite_Page_Html_Head extends Mage_Page_Block_
             ->setStoreId(Mage::app()->getStore()->getId())
             ->load($productId);
         $label = $product->getName(); 
-        $label = strtolower(str_replace(' ','_',$label));
+        $label = strtolower(str_replace(' ','-',$label));
         
         $dept = $product->getDepartments();
         $deptArray = explode(',', $dept);
@@ -92,7 +122,9 @@ class Harapartners_Service_Block_Rewrite_Page_Html_Head extends Mage_Page_Block_
 		$attrOptions = Mage::getModel('catalog/product')->getResource()->getAttribute('departments');
         foreach ($deptArray as $perdept){
         	$attrText = $attrOptions->getSource()->getOptionText($perdept);
-        	$newDeptArray[] = 	$this->__($attrText);
+        	//$newDeptArray[] = 	$this->__($attrText);
+        	$labeltemp = strtolower(str_replace('-and-','-',str_replace('_','-',$attrText)));
+        	$newDeptArray[] = 	$labeltemp;
         }
         $deptStr = implode(',' , $newDeptArray);
         if (count($deptArray)!=0){

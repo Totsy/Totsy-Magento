@@ -1,0 +1,165 @@
+<?php 
+	$reportCollection = $this->getPreparedCollection();
+	$poObj = $this->getPoObject();
+	$vendorInfoObj = $this->getVendorInfoObj();
+?>
+<div id="report-container">
+	<div id="report-header-container">
+		<div id="logo-box" class="block">
+			<img src="<?php echo $this->getSkinUrl('images/report_logo.png');?>"/>
+			<p id="addresss"><?php echo Mage::getStoreConfig('general/store_information/address');?></p>
+		</div>
+		<div id="order-info" class="block">
+			<h2 id="op-title"><?php echo $this->__('PURCHASE ORDER');?></h2>
+			<label class="sigle-line"><?php echo $this->__('PO Number:');?></label>
+			<p><?php echo $poObj->getData('name')?></p>
+			<label class="sigle-line"><?php echo $this->__('PO Date:');?></label>
+			<p><?php echo $poObj->getData('created_at')?></p>
+			<div id="billing-info">
+				<label><?php echo $this->__('BILL TO:');?></label>
+				<p>TOTSY <br>10 West 18th Street <br>Fourth Floor <br>New York, New York 10011 <br>payment@totsy.com</p>
+			</div>
+		</div>
+		<div id="vendor-info" class="block">
+			<label><?php echo $this->__('VENDOR:');?></label>
+			<p><?php echo $vendorInfoObj->getData('address');?></p>
+			<p><?php echo $vendorInfoObj->getData('email_list');?></p>
+		</div>	
+		<div id="shipping-info" class="block">
+			<label><?php echo $this->__('SHIP TO:');?></label>
+			<p>TOTSY <br>c/o Dotcom Distribution <br>400 Nixon Lane <br>Edison, NJ 08837</p>
+		</div>
+		<table id="date-info" border="1">
+			<colgroup>
+				<col width="400">
+				<col width="400">
+			</colgroup>
+			<tr>
+				<td>SHIP BY DATE: </td>
+				<td>IN HOUSE DATE: </td>
+			</tr>
+		</table>	
+	</div>
+	<div id="report-table-container">
+		<table id="report-table" class="data" border="1">
+			<colgroup>
+				<col width="100">
+				<col width="100">
+				<col width="450">
+				<col width="100">
+				<col width="100">
+				<col width="100">
+				<col width="100">
+				<col width="100">
+				<col width="100">
+			</colgroup>
+			<thead>
+				<tr class="headings">
+					<th>
+						<span class="nobr">
+							<a class="not-sort" title="asc" name="vendor_style" href="#">
+								<span class="sort-title">Vendor Style</span>
+							</a>
+						</span>
+					</th>
+					<th>
+						<span class="nobr">
+							<a class="not-sort" title="asc" name="sku" href="#">
+								<span class="sort-title">SKU</span>
+							</a>
+						</span>
+					</th>
+					<th>
+						<span class="nobr">
+							<a class="not-sort" title="asc" name="product_name" href="#">
+								<span class="sort-title">Product Name</span>
+							</a>
+						</span>
+					</th>
+					<th>
+						<span class="nobr">
+							<a class="not-sort" title="asc" name="color" href="#">
+								<span class="sort-title">Product Color</span>
+							</a>
+						</span>
+					</th>
+					<th>
+						<span class="nobr">
+							<a class="not-sort" title="asc" name="size" href="#">
+								<span class="sort-title">Size</span>
+							</a>
+						</span>
+					</th>
+					<th>
+						<span class="nobr">
+							<a class="not-sort" title="asc" name="qty_stock" href="#">
+								<span class="sort-title">Stock Quantity</span>
+							</a>
+						</span>
+					</th>
+					<th>
+						<span class="nobr">
+							<a class="not-sort" title="asc" name="is_master_pack" href="#">
+								<span class="sort-title">Master Pack</span>
+							</a>
+						</span>
+					</th>
+					<th>
+						<span class="nobr">
+							<a class="not-sort" title="asc" name="average_cost" href="#">
+								<span class="sort-title">Average Cost</span>
+							</a>
+						</span>
+					</th>
+					<th class=" last">
+						<span class="nobr">
+							<a class="not-sort" title="asc" name="total_cost" href="#">
+								<span class="sort-title">Total Cost</span>
+							</a>
+						</span>
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+				<?php foreach ( $reportCollection as $item ):?>
+					<tr>
+						<td><?php echo $item->getData('vendor_style');?></td>
+						<td><?php echo $item->getData('sku');?></td>
+						<td><?php echo $item->getData('product_name');?></td>
+						<td><?php echo $item->getData('color');?></td>
+						<td><?php echo $item->getData('size');?></td>
+						<td><?php echo $item->getData('qty_stock');?></td>
+						<td><?php echo $item->getData('is_master_pack');?></td>
+						<td><?php echo $item->getData('average_cost');?></td>
+						<td><?php echo $item->getData('total_cost');?></td>
+					</tr>
+				<?php endforeach;?>
+			</tbody>
+		</table>
+	</div>	
+	<div id="report-footer-container">
+		<table id="footer-table" border="1">
+			<colgroup>
+				<col width="400">
+				<col width="400">
+			</colgroup>
+			<thead>
+				<tr>
+					<th>TERMS & CONDITIONS</th>
+					<th>AUTHORIZATION</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>
+						<label><?php echo $this->__('SHIP TO:');?></label>
+						<p>TOTSY <br>c/o Dotcom Distribution <br>400 Nixon Lane <br>Edison, NJ 08837</p>
+					</td>
+					<td>
+						<p>Emmanuel Hottlet</p>
+					</td>
+				<tr>
+			</tbody>
+		</table>
+	</div>
+</div>

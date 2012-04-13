@@ -34,7 +34,22 @@ class Mage_Customer_RevalidateController extends Mage_Core_Controller_Front_Acti
     public function validationCheckPostAction(){
     	if ($this->getRequest()->isPost()) {
     		$login = $this->getRequest()->getPost('login');
+    		$pass = $this->getRequest()->getPost('mobile'); //Harapartners, Yang: for mobile get pass
     		$session = $this->_getSession();
+    		$_SERVER['HTTP_USER_AGENT'];
+    		//Harapartners, Yang: for mobile get pass
+    		if ( $pass && preg_match("/\Mobile\b/i", $_SERVER['HTTP_USER_AGENT']) ){
+    			$session->setData('CUSTOMER_LAST_VALIDATION_TIME', now());
+    			$customer = Mage::getModel('customer/customer')
+            			->setWebsiteId(Mage::app()->getStore()->getWebsiteId());
+	 		    if (!$session->getData('revalidate_before_auth_url')) {
+	                $this->getResponse()->setRedirect($this->getUrl('customer/account'));
+	        	}else {
+	                $this->getResponse()->setRedirect($session->getData('revalidate_before_auth_url'));
+	        	} 
+	        	return ;   			
+    		}
+    		//Harapartners, Yang: End
     	    if (!empty($login['username']) && !empty($login['password'])) {
                 try {
 					$customer = Mage::getModel('customer/customer')
