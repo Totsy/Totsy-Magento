@@ -44,6 +44,15 @@ class Harapartners_Service_Block_Rewrite_Adminhtml_Catalog_Category_Edit_Form ex
                         'class' => 'release'
                     ))
             );
+            // Preview button HP Yang
+            $this->setChild('event_preveiw_button',
+                $this->getLayout()->createBlock('adminhtml/widget_button')
+                    ->setData(array(
+                        'label'     => Mage::helper('catalog')->__('Preview Event'),
+                        'onclick'   => "setLocation('" . $this->getUrl('*/*/preview', array('_current' => true, 'store' => $this->_getAdminStore())) . "')",
+                        'class' => 'preview'
+                    ))
+            );            
             //Jun import products
             $this->setChild('import_product_button',
                 $this->getLayout()->createBlock('adminhtml/widget_button')
@@ -73,6 +82,15 @@ class Harapartners_Service_Block_Rewrite_Adminhtml_Catalog_Category_Edit_Form ex
     {
         if ($this->hasStoreRootCategory()) {
             return $this->getChildHtml('undo_release_button');
+        }
+        return '';
+    }
+    
+    // Undo Release button HP Yang
+    public function getPreviewButtonHtml()
+    {
+        if ($this->hasStoreRootCategory()) {
+            return $this->getChildHtml('event_preveiw_button');
         }
         return '';
     }

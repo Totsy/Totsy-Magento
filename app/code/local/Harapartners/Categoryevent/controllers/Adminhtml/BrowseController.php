@@ -18,19 +18,5 @@ class Harapartners_Categoryevent_Adminhtml_BrowseController extends Mage_Adminht
 		$this->_title($this->__('Category Event'))->_title($this->__('Browse Category Events'));
         $this->loadLayout();
         $this->renderLayout();
-    }
-    
-    public function previewAction(){
-    	$postInfo = $this->getRequest()->getParams();
-    	$eventId = $postInfo['id'];
-    	$cookieName = Mage::helper('categoryevent')->getPreviewCookieName();
-    	$cookieValue = Mage::helper('categoryevent')->getPreviewCookieEncryptedCode();
-    	$test = Mage::helper('categoryevent')->getPreviewCookieDecryptedCode( $cookieValue );
-    	//$event = Mage::getModel('catalog/category')->load($eventId);
-    	//$url = $event->getUrlPath();
-    	//Mage::getSingleton('admin/session')->setCategoryEvnetAdminPreview(true);
-    	Mage::getModel('core/cookie')->set($cookieName, $cookieValue);
-    	$this->_redirect('catalog/category/view/id/' . $eventId);
-    }
-       
+    }   
 }
