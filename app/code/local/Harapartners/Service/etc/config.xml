@@ -45,6 +45,8 @@
 					<report_refresh_statistics_grid>Harapartners_Service_Block_Rewrite_Adminhtml_Report_Refresh_Statistics_Grid</report_refresh_statistics_grid>
 					<!--Harapartners_Categoryevent-->
 					<catalog_category_edit_form>Harapartners_Service_Block_Rewrite_Adminhtml_Catalog_Category_Edit_Form</catalog_category_edit_form>
+					<!--Harapartners_Service: adding root category is NOT allowed -->
+					<catalog_category_tree>Harapartners_Service_Block_Rewrite_Adminhtml_Catalog_Category_Tree</catalog_category_tree>
 				</rewrite>
 			</adminhtml>
 			<checkout>

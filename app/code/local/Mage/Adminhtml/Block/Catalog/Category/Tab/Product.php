@@ -78,6 +78,7 @@ class Mage_Adminhtml_Block_Catalog_Category_Tab_Product extends Mage_Adminhtml_B
             ->addAttributeToSelect('image') //Harapartners, Jun: include product base image in the grid
             ->addAttributeToSelect('sku')
             ->addAttributeToSelect('price')
+            ->addAttributeToSelect('type')
             ->addAttributeToSelect('size')
             ->addAttributeToSelect('color')
             ->addStoreFilter($this->getRequest()->getParam('store'))
@@ -134,6 +135,14 @@ class Mage_Adminhtml_Block_Catalog_Category_Tab_Product extends Mage_Adminhtml_B
         $this->addColumn('name', array(
             'header'    => Mage::helper('catalog')->__('Name'),
             'index'     => 'name'
+        ));
+        $this->addColumn('type',
+            array(
+                'header'=> Mage::helper('catalog')->__('Type'),
+                'width' => '60px',
+                'index' => 'type_id',
+                'type'  => 'options',
+                'options' => Mage::getSingleton('catalog/product_type')->getOptionArray(),
         ));
         $this->addColumn('size', array(
             'header'    => Mage::helper('catalog')->__('Size'),
