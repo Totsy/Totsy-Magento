@@ -19,79 +19,34 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    design
- * @package     base_default
+ * @package     enterprise_default
  * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://www.magentocommerce.com/license/enterprise-edition
  */
 ?>
-
-    <div class="col-1 ui-collapsible-set">
-        <div class="box ui-collapsible-set">
-			<h3>
-				<a class="ui-collapsible-heading-toggle ui-btn ui-btn-icon-left ui-corner-top ui-btn-up-c" href="#" data-theme="c">
-					<span class="ui-btn-inner ui-corner-top" aria-hidden="true">
-						<span class="ui-btn-text">
-						<?php echo $this->__('Personal Information') ?>
-							<span class="ui-collapsible-heading-status"> click to collapse contents</span>
-						</span>
-						<span class="ui-icon ui-icon-shadow ui-icon-minus"></span>
-					</span>
-				</a>
-			</h3>
-            <div class="box-content ui-collapsible-content ui-body-d">
-                <p>
-                    <?php echo $this->htmlEscape($this->getCustomer()->getName()) ?><br />
-                    <?php echo $this->htmlEscape($this->getCustomer()->getEmail()) ?><br />
-                    <!--a href="<?php echo $this->getChangePasswordUrl() ?>"><?php echo $this->__('Change Password') ?></a-->
-				</p>
-				<p>
-					<a href="<?php echo $this->getUrl('customer/account/edit') ?>"><?php echo $this->__('Edit') ?></a>
-                </p>
-            </div>
+<div class="col2-set">
+    <div class="col-1">
+        <div class="info-box">
+            <h3 class="box-title"><?php echo $this->__('Contact Information') ?> <span class="separator">|</span> <a href="<?php echo $this->getUrl('customer/account/edit') ?>"><?php echo $this->__('Edit') ?></a></h3>
+            <p class="box-content">
+                <?php echo $this->htmlEscape($this->getCustomer()->getName()) ?><br />
+                <?php echo $this->htmlEscape($this->getCustomer()->getEmail()) ?><br />
+                <a href="<?php echo $this->getChangePasswordUrl() ?>"><?php echo $this->__('Change Password') ?></a>
+            </p>
         </div>
     </div>
-	
-    <div class="col-1 ui-collapsible-set">
-        <div class="box ui-collapsible-set">
-			<h3>
-				<a class="ui-collapsible-heading-toggle ui-btn ui-btn-icon-left ui-corner-top" href="#" data-theme="c">
-					<span class="ui-btn-inner ui-corner-top" aria-hidden="true">
-						<span class="ui-btn-text">
-						<?php echo $this->__('Personal Information') ?>
-							<span class="ui-collapsible-heading-status"> click to collapse contents</span>
-						</span>
-						<span class="ui-icon ui-icon-shadow ui-icon-minus"></span>
-					</span>
-				</a>
-			</h3>
-            <div class="box-content ui-collapsible-content ui-body-d">
-                <p>
-                    <?php echo $this->htmlEscape($this->getCustomer()->getName()) ?><br />
-                    <?php echo $this->htmlEscape($this->getCustomer()->getEmail()) ?><br />
-                    <!--a href="<?php echo $this->getChangePasswordUrl() ?>"><?php echo $this->__('Change Password') ?></a-->
-					<a href="<?php echo $this->getUrl('customer/account/edit') ?>"><?php echo $this->__('Edit') ?></a>
-                </p>
-            </div>
+    <?php if( $this->isNewsletterEnabled() ): ?>
+    <div class="col-2">
+        <div class="info-box">
+            <h3 class="box-title"><?php echo $this->__('Email Preferences') ?> <span class="separator">|</span> <a href="<?php echo $this->getUrl('newsletter/manage') ?>"><?php echo $this->__('Edit') ?></a></h3>
+            <p class="box-content">
+                <?php if( $this->getIsSubscribed() ): ?>
+                    <?php echo $this->__("You are currently subscribed to 'General Subscription'.") ?>
+                <?php else: ?>
+                    <?php echo $this->__('You are currently not subscribed to any newsletter.') ?>
+                <?php endif; ?>
+            </p>
         </div>
     </div>
-	
-
-    <div class="col-2 ui-collapsible-set">
-        <div class="box ui-collapsible-set">
-            <div class="box-title">
-                <h3><?php echo $this->__('Email Preferences') ?></h3>
-                <a href="<?php echo $this->getUrl('newsletter/manage') ?>"><?php echo $this->__('Edit') ?></a>
-            </div>
-            <div class="box-content">
-                <p>
-                    <?php if( $this->getIsSubscribed() ): ?>
-                        <?php echo $this->__("You are currently subscribed to 'General Subscription'.") ?>
-                    <?php else: ?>
-                        <?php echo $this->__('You are currently not subscribed to any newsletter.') ?>
-                    <?php endif; ?>
-                </p>
-            </div>
-        </div>
-    </div>
-
-
+    <?php endif; ?>
+</div>
