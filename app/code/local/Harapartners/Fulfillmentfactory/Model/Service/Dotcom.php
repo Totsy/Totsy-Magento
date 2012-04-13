@@ -267,21 +267,20 @@ XML;
 XML;
 
 		foreach($items as $sku => $qty) {
-			$productSku = $sku;
-			$quantity = $qty;
-			$product = Mage::getModel('catalog/product')->loadByAttribute('sku', $productSku);
+			$product = Mage::getModel('catalog/product')->loadByAttribute('sku', $sku);
 			
 			if(empty($product) || !$product->getId()) {
 				continue;
 			}
 			
+			$productSku = substr($sku, 0, 17);
 			$name = substr($product->getName(), 0, 28);
 			
 			$xml .= <<<XML
 					<item>
-						<sku><![CDATA[{$product->getSku()}]]></sku>
+						<sku><![CDATA[$productSku]]></sku>
 						<description><![CDATA[$name]]></description>
-						<quantity>$quantity</quantity>
+						<quantity>$qty</quantity>
 						<upc xsi:nil="true" />
 						<weight xsi:nil="true" />
 						<cost xsi:nil="true" />
@@ -311,7 +310,7 @@ XML;
 		$xml .=	<<<XML
 				</items>
 			</purchase_order>
-		'</purchase_orders>'
+		</purchase_orders>
 XML;
 		
 		//echo $xml;

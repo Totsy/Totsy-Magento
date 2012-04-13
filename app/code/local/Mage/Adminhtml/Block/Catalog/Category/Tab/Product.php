@@ -78,6 +78,8 @@ class Mage_Adminhtml_Block_Catalog_Category_Tab_Product extends Mage_Adminhtml_B
             ->addAttributeToSelect('image') //Harapartners, Jun: include product base image in the grid
             ->addAttributeToSelect('sku')
             ->addAttributeToSelect('price')
+            ->addAttributeToSelect('size')
+            ->addAttributeToSelect('color')
             ->addStoreFilter($this->getRequest()->getParam('store'))
             ->joinField('position',
                 'catalog/category_product',
@@ -99,7 +101,20 @@ class Mage_Adminhtml_Block_Catalog_Category_Tab_Product extends Mage_Adminhtml_B
     }
 
     protected function _prepareColumns()
-    {
+    { 	
+    	$productSizeAttr = Mage::getModel('catalog/product')->getResource()->getAttribute('size');
+    	$productSizeOption = $productSizeAttr->getSource()->getAllOptions();
+    	$productColorAttr = Mage::getModel('catalog/product')->getResource()->getAttribute('color');
+    	$productColorOption = $productColorAttr->getSource()->getAllOptions();
+    	$sizeArray = array();
+    	$colorArray = array();
+    	foreach ( $productSizeOption as $option ){
+    		$sizeArray[$option['value']] = $option['label'];
+    	}
+    	foreach ( $productColorOption as $option ){
+    		$colorArray[$option['value']] = $option['label'];
+    	}
+    	
         if (!$this->getCategory()->getProductsReadonly()) {
             $this->addColumn('in_category', array(
                 'header_css_class' => 'a-center',
@@ -119,6 +134,18 @@ class Mage_Adminhtml_Block_Catalog_Category_Tab_Product extends Mage_Adminhtml_B
         $this->addColumn('name', array(
             'header'    => Mage::helper('catalog')->__('Name'),
             'index'     => 'name'
+        ));
+        $this->addColumn('size', array(
+            'header'    => Mage::helper('catalog')->__('Size'),
+            'index'     => 'size',
+            'type'		=> 'options',
+        	'options'	=> $sizeArray
+        ));
+        $this->addColumn('color', array(
+            'header'    => Mage::helper('catalog')->__('Color'),
+            'index'     => 'color',
+            'type'		=> 'options',
+        	'options'	=> $colorArray
         ));
         //Harapartners, Yang: include product edit link in the grid
         $this->addColumn('edit', array(

@@ -948,3 +948,13 @@ body.enterprise-invitation-index-index  h2.account-page-title {
     background-repeat: no-repeat;
     background-size: auto auto;
 }
+
+
+/*---------------------------Cart Product Name----------------------------*/
+.checkout-cart-index .product-name a{
+	color:#ED1C25;
+}
+
+.checkout-cart-index .product-name a:hover{
+	color:#ED1C25;
+}

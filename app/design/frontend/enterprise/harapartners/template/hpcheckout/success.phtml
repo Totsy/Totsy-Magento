@@ -8,6 +8,10 @@
 <?php 
 	$orderIncrementId = $this->getOrderId();
 	$order = Mage::getModel('sales/order')->loadByIncrementId($orderIncrementId);
+	$quoteId = $order->getQuoteId();
+	$quote = Mage::getModel('sales/quote')->load($quoteId);
+	//$quote = Mage::getModel('checkout/cart')->getQuote();
+	
 ?>
 <?php if ($this->getCanViewOrder()) :?>
     <p><?php echo $this->__('Your order # is: %s.', sprintf('<a href="%s">%s</a>', $this->escapeHtml($this->getViewOrderUrl()), $this->escapeHtml($this->getOrderId()))) ?></p>
@@ -23,16 +27,18 @@
     <p class="red review-order-detail">
     	<?php 		
     		$order_id = $order->getId();
-			$url = $this->getBaseUrl().'sales/order/view/order_id/'.$order_id;
+			$url = $this->getBaseUrl().'sales/order/history/';
 		?>
-		You will redirect to order review page in 5 second. Or <a class="red" href="<?php echo $url?>">click here</a>
+		You will redirect to orders review page in 5 second. Or <a class="red" href="<?php echo $url?>">click here</a>
     </p>
     <script language="javascript" type="text/javascript">
 		function redirect(){window.location.href="<?php echo $url?>"};
-		setTimeout("redirect()",5000000);
+		setTimeout("redirect()",5000);
 	</script>
 	<?php 
- 		echo "<img src='http://api.theechosystem.com/Core/Conversion/Save?echoTrackPack=".($_COOKIE['EchoTrackPack']."&revenue=".$order->getData('grand_total')."&quantity=".'10'."&promocode=".'abc'."&promocode=".'abc123'."&orderId=".$order->getId()."' style='width:1px;height:1px;' />");
+		$coupon = $order->getCouponCode();
+		$couponStr = isset($coupon)?"&promocode=".$order->getCouponCode():"";
+ 		echo "<img src='http://api.theechosystem.com/Core/Conversion/Save?echoTrackPack=".($_COOKIE['EchoTrackPack']."&revenue=".$order->getData('grand_total')."&quantity=".$quote->getItemsQty().$couponStr."&orderId=".$order->getId()."' style='width:1px;height:1px;' />");
 	?> 
 <?php endif;?>
 <?php endif;?>

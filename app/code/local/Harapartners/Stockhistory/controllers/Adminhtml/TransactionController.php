@@ -198,4 +198,36 @@ class Harapartners_Stockhistory_Adminhtml_TransactionController extends Mage_Adm
 		}
 	}
 	
+	/**
+	 * submit PO to DOTcom
+	 *
+	 */
+	public function submitToDOTcomAction()
+	{
+		$param = $this->getRequest()->getParams();
+		
+		//get collection from session
+		$reportCollection = $this->_getSession()->getPOReportGridData();
+		
+		$itemsArray = array();
+		
+		foreach($reportCollection as $record) {
+			$itemsArray[$record['sku']] = $record['qty_total'];
+		}
+		
+		$rsp = Mage::getModel('fulfillmentfactory/service_dotcom')->submitPurchaseOrdersToDotcom($itemsArray);
+
+		$error =  $rsp->purchase_order_error;
+		if(!!$error) {
+			$this->_getSession()->addError($this->__('Fail to submit to DOTcom. ' . $error->error_description));
+		}
+		else {
+			$this->_getSession()->addSuccess($this->__('Sucessfully submit to DOTcom .'));
+		}
+		
+		//clean collection in session
+		Mage::getSingleton('adminhtml/session')->setPOReportGridData(null);
+		
+		$this->_redirect('*/*/report', array('po_id' => $param['po_id']));
+	}
 }

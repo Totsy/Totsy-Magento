@@ -126,6 +126,10 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Grid extends 
 			$reportItem->addData($data);
 			$reportCollection->addItem($reportItem);
 		}
+		
+		//set collection in session
+		Mage::getSingleton('adminhtml/session')->setPOReportGridData($reportCollection);
+		
 		$this->_reportCollection = $reportCollection;
 		$this->setCollection($reportCollection);
 		return parent::_prepareCollection();
