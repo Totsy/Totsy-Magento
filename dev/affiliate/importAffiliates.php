@@ -31,7 +31,7 @@ if(($handle = fopen($importCsvFile,'r')) !== FALSE){
 			$header = $data;
 			continue;
 		}
-		if($row!= 74||true){
+		if($row!= 74){
 			//Test if URL Rewrite exists already
 			$affiliate = Mage::getModel('affiliate/record')->loadByAffiliateCode($data[4]);
 			//$affiliate->setData('affiliate_id', $data[0]);
