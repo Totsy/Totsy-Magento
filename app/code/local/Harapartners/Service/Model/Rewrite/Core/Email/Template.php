@@ -86,7 +86,7 @@ class Harapartners_Service_Model_Rewrite_Core_Email_Template extends Mage_Core_M
             /* @UPDATED 2012.04.05: allows 1:1 template match between Magento and Sailthru*/
 			$template_name = $this['template_code'];
 			if (!isset($template_name)){
-				if (strcmp($store,"mamasource")){
+				if (strcmp($store,"mamasource")==0){
 					$template_name = "mamasource-transactional-email-template";
 				}else{
 					$template_name = "totsy-transactional-email-template";

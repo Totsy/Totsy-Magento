@@ -381,7 +381,7 @@
                 <Mage_Core/>
             </depends>
         </Mage_Dataflow>
-		<Mage_Rss>
+		<!--Mage_Rss>
             <active>true</active>
             <codePool>core</codePool>
              <depends>
@@ -389,9 +389,9 @@
                 <Mage_CatalogInventory/>
                 <Mage_Sales/>
                 <Mage_SalesRule/>
-                <!--Mage_Wishlist/-->
+                <Mage_Wishlist/>
              </depends>
-        </Mage_Rss>
+        </Mage_Rss-->
 		<!--
         <Mage_ProductAlert>
             <active>false</active>
