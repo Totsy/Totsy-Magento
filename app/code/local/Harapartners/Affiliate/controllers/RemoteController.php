@@ -71,9 +71,9 @@ class Harapartners_Affiliate_RemoteController extends Mage_Core_Controller_Front
 	        	$result['status'] = 'success';
 	        	//redirect customer as login customer
 	        	if(!$productUrl){
-	        		$result['login_url'] = Mage::getBaseUrl().'remote/login?email='.$email.'&password='.Mage::getModel('core/encryption')->encrypt($password);
+	        		$result['login_url'] = Mage::getBaseUrl().'affiliate/remote/login?email='.$email.'&password='.Mage::getModel('core/encryption')->encrypt($password);
 	        	}else{
-	        		$result['login_url'] = Mage::getBaseUrl().'remote/login?email='.$email.'&password='.Mage::getModel('core/encryption')->encrypt($password).'&product_url='.$productUrl;
+	        		$result['login_url'] = Mage::getBaseUrl().'affiliate/remote/login?email='.$email.'&password='.Mage::getModel('core/encryption')->encrypt($password).'&product_url='.$productUrl;
 	        	}
         	}catch(Exception $e){
         		$result['status'] = 'failed';

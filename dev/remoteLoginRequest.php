@@ -6,7 +6,7 @@
 // request example follow
 $baseUrlTotsy = 'http://totsy.local.com/affiliate/remote/register';                       //tosty 
 $baseUrlMamasource = 'http://totsy.local.com/mamasource/affiliate/remote/register';       //mamasource
-$email = 'asdasd@asd.com';
+$email = 'asdasdsad@asd.com';
 $productUrl = 'product_url';                                                              // parents.com only param
 $affiliateCode = 'parents_com';
 $otherfield = '';                                                                         //subaffiliate_code etc

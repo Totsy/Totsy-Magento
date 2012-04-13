@@ -1,7 +1,11 @@
 <?php 
 class Harapartners_Affiliate_FeedsController extends Mage_Core_Controller_Front_Action {
 		
-	public function keyadeAction() {
+	public function preDispatch() {
+		header ("Content-Type:text/xml");
+		parent::preDispatch ();
+	}
+	public function indexAction() {
 		$request = $this->getRequest();
 		$from = $request->getParam('from'); // format 20120401
 		$to = $request->getParam('to');

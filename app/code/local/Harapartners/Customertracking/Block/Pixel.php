@@ -73,8 +73,8 @@ class Harapartners_Customertracking_Block_Pixel extends Mage_Core_Block_Template
 				$array[$j] = explode('}}',$array[$j]);
 			}
 			if($i>1){
-				//$customer = Mage::getSingleton('customer/session')->getCustomer();
-				$customer = Mage::getModel('customer/customer')->load(14);
+				$customer = Mage::getSingleton('customer/session')->getCustomer();
+				//$customer = Mage::getModel('customer/customer')->load(14);
 				$orderId = Mage::getSingleton('checkout/session')->getLastOrderId();
 				$order = Mage::getModel('sales/order')->load($orderId);
 				for ($j=1;$j<$i;$j++){
