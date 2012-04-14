@@ -98,6 +98,12 @@
 					<convert_adapter_product>Harapartners_Service_Model_Rewrite_Catalog_Convert_Adapter_Product</convert_adapter_product>
 				</rewrite>
 			</catalog>
+			<cataloginventory>
+				<rewrite>
+					<!--Harapartner_Service: Product of the same ID (conf. with different super attr. or simple with differnt options) share the same limit!--> 
+					<observer>Harapartners_Service_Model_Rewrite_CatalogInventory_Model_Observer</observer>
+				</rewrite>
+			</cataloginventory>
 			<checkout>
 				<rewrite>
 					<!--Harapartners_HpCheckout--><!--Harapartners_Rushcheckout-->
