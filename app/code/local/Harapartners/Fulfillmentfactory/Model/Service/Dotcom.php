@@ -609,7 +609,8 @@ XML;
 					$trackingNumber = (string)$shipmentXmlItem->tracking_number;
 					
 					if(empty($trackingNumber)) {
-						continue;
+						$trackingNumber = "";
+						//continue;
 					}
 					
 					//check if tracking number exists
