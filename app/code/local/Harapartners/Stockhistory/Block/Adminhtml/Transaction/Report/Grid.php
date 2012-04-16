@@ -204,7 +204,7 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Grid extends 
         ));
 		
 		$this->addColumn('master_pack_qty', array(
-					'header'	=>	Mage::helper('stockhistory')->__('Master Pack Qty'),
+					'header'	=>	Mage::helper('stockhistory')->__('Case Pack Qty'),
 					'align'		=>	'right',
 					'width'		=>	'25px',
 					'index'		=>  'master_pack_qty',
