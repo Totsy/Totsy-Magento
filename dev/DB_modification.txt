@@ -1,4 +1,10 @@
+-- Ignore Customer First Last Name When Registering
 DELETE FROM `totsy`.`customer_form_attribute` WHERE `customer_form_attribute`.`form_code` = 'checkout_register' AND `customer_form_attribute`.`attribute_id` = 5 LIMIT 1;
 DELETE FROM `totsy`.`customer_form_attribute` WHERE `customer_form_attribute`.`form_code` = 'customer_account_create' AND `customer_form_attribute`.`attribute_id` = 5 LIMIT 1;
 DELETE FROM `totsy`.`customer_form_attribute` WHERE `customer_form_attribute`.`form_code` = 'checkout_register' AND `customer_form_attribute`.`attribute_id` = 7 LIMIT 1;
 DELETE FROM `totsy`.`customer_form_attribute` WHERE `customer_form_attribute`.`form_code` = 'customer_account_create' AND `customer_form_attribute`.`attribute_id` = 7 LIMIT 1;
+
+
+
+-- Case Pack Qty
+UPDATE `eav_attribute` SET `backend_model` = NULL, `frontend_input` = 'text' WHERE `attribute_code` = 'case_pack_qty' AND `entity_type_id` = 4 LIMIT 1 ;
