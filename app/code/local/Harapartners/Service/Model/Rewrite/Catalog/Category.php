@@ -27,13 +27,13 @@ class Harapartners_Service_Model_Rewrite_Catalog_Category extends Mage_Catalog_M
     }
     
     protected function _totsyReserveAnchorCategoryCheck(){
-    	if($this->getData('name') == 'Event' || $this->getOrigData('name') == 'Event'){
-			throw new Exception('"Event" is a reserved anchor category. You cannot modify the "Event" category or create another category with the same name. Please contact system admin if you need to make low level modifications.');
-		}
-		
-		if($this->getData('name') == 'Top Event' || $this->getOrigData('name') == 'Top Event'){
-			throw new Exception('"Top Event" is a reserved anchor category. You cannot modify the "Top Event" category or create another category with the same name. Please contact system admin if you need to make low level modifications.');
-		}
+//    	if($this->getData('name') == 'Event' || $this->getOrigData('name') == 'Event'){
+//			throw new Exception('"Event" is a reserved anchor category. You cannot modify the "Event" category or create another category with the same name. Please contact system admin if you need to make low level modifications.');
+//		}
+//		
+//		if($this->getData('name') == 'Top Event' || $this->getOrigData('name') == 'Top Event'){
+//			throw new Exception('"Top Event" is a reserved anchor category. You cannot modify the "Top Event" category or create another category with the same name. Please contact system admin if you need to make low level modifications.');
+//		}
 		return $this;
     }
     
