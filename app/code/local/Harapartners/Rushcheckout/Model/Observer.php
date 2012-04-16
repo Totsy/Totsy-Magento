@@ -14,8 +14,8 @@
  *
  */
 
-class Harapartners_Rushcheckout_Model_Observer
-{
+class Harapartners_Rushcheckout_Model_Observer {
+	
 	const CUSTOMER_VALIDATION_DURATION = 900;
 	const CUSTOMER_VALIDATION_CHECK_URL = 'customer/revalidate/index';
 	

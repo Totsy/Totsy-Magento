@@ -135,7 +135,7 @@ class Mage_Checkout_CartController extends Mage_Core_Controller_Front_Action
     public function indexAction()
     {
         $cart = $this->_getCart();
-		Mage::getSingleton('checkout/session')->cartTimeoutCheck($cart);	//Harapartners, yang, check cart time
+//		Mage::getSingleton('checkout/session')->cartTimeoutCheck($cart);	//Harapartners, yang, check cart time
 		
         if ($cart->getQuote()->getItemsCount()) {
             $cart->init();

@@ -15,7 +15,6 @@
 class Harapartners_Service_Model_Rewrite_Checkout_Session extends Mage_Checkout_Model_Session {
 	
 	protected function _getTimerconfig(){
-		$config = Mage::getModel('core/config');
 		$configKey = 'limit_timer';
 		$timer = Mage::getStoreConfig('config/rushcheckout_timer/'.$configKey);
 		return $timer;
