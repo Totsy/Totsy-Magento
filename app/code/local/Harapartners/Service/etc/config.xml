@@ -37,13 +37,15 @@
 			<!-- ===== BLOCK REWRITE START ===== -->
 			<adminhtml>
 				<rewrite>
-					<!--Harapartners_Service: widget_form 'datetime' support with Varien_Data_Form_Element_Datetime-->
-				
-					<!--Harapartners_Service: allow admin harapartner theme-->
+					<!--[Note] Moved: Harapartners_Service: widget_form 'datetime' support with Varien_Data_Form_Element_Datetime -->
+					
+					<!--Harapartners_Service: login counter disabled (not editable) in the admin panel -->
+					<customer_edit_tab_account>Harapartners_Service_Block_Rewrite_Adminhtml_Customer_Edit_Tab_Account</customer_edit_tab_account>
+					<!--Harapartners_Service: allow admin harapartner theme -->
 					<page>Harapartners_Service_Block_Rewrite_Adminhtml_Page</page>
 					<!--Harapartners_Service: avoid reporting the complete history (ignore unvalidated historical data) -->
 					<report_refresh_statistics_grid>Harapartners_Service_Block_Rewrite_Adminhtml_Report_Refresh_Statistics_Grid</report_refresh_statistics_grid>
-					<!--Harapartners_Categoryevent-->
+					<!--Harapartners_Categoryevent -->
 					<catalog_category_edit_form>Harapartners_Service_Block_Rewrite_Adminhtml_Catalog_Category_Edit_Form</catalog_category_edit_form>
 					<!--Harapartners_Service: adding root category is NOT allowed -->
 					<catalog_category_tree>Harapartners_Service_Block_Rewrite_Adminhtml_Catalog_Category_Tree</catalog_category_tree>
