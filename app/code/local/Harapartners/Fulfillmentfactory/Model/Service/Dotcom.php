@@ -595,11 +595,14 @@ XML;
 		//get data from dotcom
 		$dataXML = Mage::helper('fulfillmentfactory/dotcom')->getShipment($fromDate, $toDate);
 		
+		echo "<br><br><br>";
+		
 		foreach($dataXML as $shipment) {
 			$attr = $shipment->attributes('i', TRUE);
 			
 			if(!$attr['nil']) {
 				$orderId = (string)$shipment->client_order_number;
+				echo $orderId . "<br>";
 				
 				$shipmentXmlItems = $shipment->ship_items->children('a', TRUE);
 				foreach($shipmentXmlItems as $shipmentXmlItem) {
@@ -621,6 +624,8 @@ XML;
 							'title'=>$title,
 							'number'=>$trackingNumber
 						);
+						
+						echo print_r($trackingData, 1) . "<br>";
 						
 						$order = Mage::getModel('sales/order')->loadByIncrementId($orderId);
 						

@@ -39,7 +39,7 @@ class Inchoo_Facebook_Model_Config
     
     public function getRequiredPermissions()
     {
-    	return array('email');
+    	return array('email', 'user_birthday', 'user_location', 'user_likes');
     }
     
     public function getLocale($storeId=null)
