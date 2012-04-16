@@ -21,10 +21,10 @@ class Harapartners_Stockhistory_Block_Adminhtml_Widget_Grid_Column_Renderer_Inpu
         $html .= 'value="' . $row->getData($this->getColumn()->getIndex()) . '"';
         $html .= 'class="input-text ' . $this->getColumn()->getId() . ' ' . $this->getColumn()->getInlineCss() . '"/>';
         
-        //Average cost
+        //Unit cost
         $html .= '<input type="hidden"';
-        $html .= 'name="' . $this->getColumn()->getId() . '[' . $row->getData('sku') . '][average_cost]" ';
-        $html .= 'value="' . $row->getData('average_cost') . '"';
+        $html .= 'name="' . $this->getColumn()->getId() . '[' . $row->getData('sku') . '][unit_cost]" ';
+        $html .= 'value="' . $row->getData('unit_cost') . '"';
         $html .= 'class="input-text ' . $this->getColumn()->getId() . ' ' . $this->getColumn()->getInlineCss() . '"/>';
         return $html;
     }

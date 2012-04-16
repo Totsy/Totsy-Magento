@@ -51,30 +51,30 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Grid extends 
 		foreach($rawCollection as $item){
 			if(!array_key_exists($item->getProductId(), $uniqueProductList)){
 				$uniqueProductList[$item->getProductId()] = array(
-						'total' => 0,
-						'qty'	=> 0,
-						'case_pack_qty' => 0
+						'total' 			=> 0,
+						'qty'				=> 0,
+						'is_master_pack'	=> 'No'
 				);
 			}
 			$uniqueProductList[$item->getProductId()]['total'] += $item->getQtyDelta() * $item->getUnitCost();
 			$uniqueProductList[$item->getProductId()]['qty'] += $item->getQtyDelta();
 		}
 		
-		//Add case pack product from category
+		//Add master pack product from category
 		$categoryId = $poObject->getCategoryId();
 		$category = Mage::getModel('catalog/category')->load($categoryId);
 		$productCollection = Mage::getModel('catalog/product')->getCollection()
 				->addCategoryFilter($category)
 				->addAttributeToFilter('type_id', 'simple')
-				->addAttributeToFilter(array(array('attribute'=>'case_pack_qty', 'gt'=>0)));
+				->addAttributeToFilter(array(array('attribute'=>'is_master_pack', 'gt'=>0)));
 		foreach($productCollection as $product){
 			if(!array_key_exists($product->getId(), $uniqueProductList)){
 				$uniqueProductList[$product->getId()] = array(
-						'total' => 0,
-						'qty'	=> 0,
+						'total'	=> 0,
+						'qty'	=> 0
 				);
 			}
-			$uniqueProductList[$product->getId()]['case_pack_qty'] = $product->getData('case_pack_qty');
+			$uniqueProductList[$product->getId()]['is_master_pack']	= 'Yes';
 		}
 		
 		//Building report collection
@@ -118,10 +118,10 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Grid extends 
 				'qty_sold'				=>	round($soldNum),
 				'qty_stock'				=>	round($product->getStockItem()->getQty()),
 				'qty_total'				=>	$productInfo['qty'],
-				'case_pack_qty'		=>	round($productInfo['case_pack_qty']),
-				'total_cost'			=>	$productInfo['total'],
-				'average_cost'			=>	round($productInfo['total']/$productInfo['qty'], 2),
-				
+				'is_master_pack'		=>	$productInfo['is_master_pack'],
+				'case_pack_qty'			=>	round($product->getData('case_pack_qty')),
+				'unit_cost'				=>	round($productInfo['total']/$productInfo['qty'], 2),
+				'total_cost'			=>	$productInfo['total']
 			);
 			$reportItem->addData($data);
 			$reportCollection->addItem($reportItem);
@@ -202,6 +202,13 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Grid extends 
             'type'      => 'number',
             'renderer'  => 'stockhistory/adminhtml_widget_grid_column_renderer_input'
         ));
+        
+        $this->addColumn('is_master_pack', array(
+					'header'	=>	Mage::helper('stockhistory')->__('Master Pack'),
+					'align'		=>	'right',
+					'width'		=>	'25px',
+					'index'		=>  'is_master_pack',
+		));
 		
 		$this->addColumn('case_pack_qty', array(
 					'header'	=>	Mage::helper('stockhistory')->__('Case Pack Qty'),
@@ -210,11 +217,11 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Grid extends 
 					'index'		=>  'case_pack_qty',
 		));
 		
-		$this->addColumn('average_cost', array(
-					'header'	=>	Mage::helper('stockhistory')->__('Average Cost'),
+		$this->addColumn('unit_cost', array(
+					'header'	=>	Mage::helper('stockhistory')->__('Unit Cost'),
 					'align'		=>	'right',
 					'width'		=>	'30px',
-					'index'		=>	'average_cost',
+					'index'		=>	'unit_cost',
 		));
 		
 		$this->addColumn('total_cost', array(
