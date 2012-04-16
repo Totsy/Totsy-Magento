@@ -27,4 +27,5 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Print extends
 		}
 		return null;
 	}
+	
 }

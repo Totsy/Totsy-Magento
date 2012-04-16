@@ -64,7 +64,9 @@ FORM_WRAPPER;
 			var shouldUpdate = false;
 			jQuery("input.qty_to_amend").each(function (){
 				emptyPostForm.append(jQuery(this).clone());
-				shouldUpdate = true;
+				if(jQuery(this).is(":visible") && !!jQuery(this).val()){
+					shouldUpdate = true;
+				}
 			});
 			if(shouldUpdate){
 				emptyPostForm.submit();

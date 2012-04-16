@@ -118,8 +118,8 @@ class Harapartners_Stockhistory_Adminhtml_TransactionController extends Mage_Adm
 			}
 			//Must validate non-empty rows
 			if(!is_numeric($amendmentData['qty_to_amend'])
-					|| empty($amendmentData['average_cost']) 
-					|| !is_numeric($amendmentData['average_cost'])
+					|| empty($amendmentData['unit_cost']) 
+					|| !is_numeric($amendmentData['unit_cost'])
 			){
 				$this->_getSession()->addError('Invalid Product Amendment Info for "' . trim($productSku) . '"');
 				$isBatchSuccess = false;
@@ -129,7 +129,7 @@ class Harapartners_Stockhistory_Adminhtml_TransactionController extends Mage_Adm
 				$tempdata = array_merge($prepopulateData, array(
 						'product_id'	=> $tempProduct->getId(),
 						'qty_delta'		=> $amendmentData['qty_to_amend'],
-						'unit_cost'		=> $amendmentData['average_cost'],
+						'unit_cost'		=> $amendmentData['unit_cost'],
 						'comment'		=> 'Create by Batch Amendment'
 				));
 				$transaction = Mage::getModel('stockhistory/transaction');
@@ -147,6 +147,8 @@ class Harapartners_Stockhistory_Adminhtml_TransactionController extends Mage_Adm
 		
 		if($isBatchSuccess){
 			$this->_getSession()->addSuccess('Batch processing completed.');
+		}else{
+			$this->_getSession()->addError('Some rows in the batch processing failed.');
 		}
 		
 		$this->_redirect('*/adminhtml_transaction/report', array('po_id' => $poId));
