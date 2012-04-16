@@ -21,9 +21,16 @@ class Harapartners_Fulfillmentfactory_Block_Adminhtml_Errorlog_Index_Grid extend
 
     protected function _prepareCollection(){
         $model = Mage::getModel('fulfillmentfactory/errorlog');
+        
+        $order_table = Mage::getSingleton('core/resource')->getTableName('sales_flat_order');
+        
         $collection = $model->getCollection();
+        $collection->getSelect()
+        		   ->join($order_table, 'order_id=' . $order_table . '.entity_id', $order_table. '.increment_id');
+        
 		$this->setCollection($collection);
         parent::_prepareCollection();
+        
         return $this;
     }
 
@@ -40,19 +47,26 @@ class Harapartners_Fulfillmentfactory_Block_Adminhtml_Errorlog_Index_Grid extend
             'index'         => 'entity_id'
         ));
         
-        $this->addColumn('order_id', array(
-            'header'        => Mage::helper('fulfillmentfactory')->__('Order ID'),
+//        $this->addColumn('order_id', array(
+//            'header'        => Mage::helper('fulfillmentfactory')->__('Order ID'),
+//            'align'         => 'right',
+//            'width'         => '30px',
+//            'index'         => 'order_id'
+//        ));
+        
+        $this->addColumn('increment_id', array(
+            'header'        => Mage::helper('fulfillmentfactory')->__('Order #'),
             'align'         => 'right',
             'width'         => '30px',
-            'index'         => 'order_id'
+            'index'         => 'increment_id'
         ));
         
-        $this->addColumn('store_id', array(
-            'header'        => Mage::helper('fulfillmentfactory')->__('Store ID'),
-            'align'         => 'right',
-            'width'         => '30px',
-            'index'         => 'store_id'
-        ));
+//        $this->addColumn('store_id', array(
+//            'header'        => Mage::helper('fulfillmentfactory')->__('Store ID'),
+//            'align'         => 'right',
+//            'width'         => '30px',
+//            'index'         => 'store_id'
+//        ));
         
         $this->addColumn('message', array(
             'header'        => Mage::helper('fulfillmentfactory')->__('Error Message'),

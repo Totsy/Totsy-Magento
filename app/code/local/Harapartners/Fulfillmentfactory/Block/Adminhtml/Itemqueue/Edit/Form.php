@@ -39,7 +39,7 @@ class Harapartners_Fulfillmentfactory_Block_Adminhtml_Itemqueue_Edit_Form extend
         ));
         
         $infoFieldset->addField('order_increment_id', 'label', array(
-            'label'     => Mage::helper('fulfillmentfactory')->__('Order Increment Id'),
+            'label'     => Mage::helper('fulfillmentfactory')->__('Order #'),
             'name'      => 'order_increment_id'
         ));
         

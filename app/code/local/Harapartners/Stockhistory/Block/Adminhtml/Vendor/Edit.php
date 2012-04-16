@@ -42,7 +42,7 @@ class Harapartners_Stockhistory_Block_Adminhtml_Vendor_Edit extends Mage_Adminht
     
 	public function getCreatePoUrl()
 	{
-		return $this->getUrl('stockhistory/adminhtml_purchaseorder/new', array('vendor_id' => $this->getVendorId()));
+		return $this->getUrl('stockhistory/adminhtml_purchaseorder/newByVendor', array('vendor_id' => $this->getVendorId()));
 	}
 	
 	public function getVendorId()

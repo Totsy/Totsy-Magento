@@ -26,7 +26,7 @@ class Harapartners_Stockhistory_Block_Adminhtml_Purchaseorder_Edit extends Mage_
 		
 		if(!!$dataObject->getId()){
 			$this->_addButton('transaction_add', array(
-	            'label'     => Mage::helper('stockhistory')->__('Create Transaction'),
+	            'label'     => Mage::helper('stockhistory')->__('Create Amendment'),
 	            'onclick'   => 'setLocation(\'' . $this->getCreateAmendmentUrl() .'\')',
 				'class'		=> 'add',
 	      	));
@@ -54,11 +54,12 @@ class Harapartners_Stockhistory_Block_Adminhtml_Purchaseorder_Edit extends Mage_
     
     public function getCreateAmendmentUrl() {
     	$dataObject = new Varien_Object(Mage::registry('stockhistory_po_data'));
-    	return $this->getUrl('stockhistory/adminhtml_transaction/new', array(
-    			'vendor_id' => $dataObject->getVendorId(),
-    			'vendor_code' => $this->getVendorCode($dataObject->getVendorId()),
+    	return $this->getUrl('stockhistory/adminhtml_transaction/newAmendmentByPo', array(
+    			//All required fields are given by 'po_id'
+//    			'vendor_id' => $dataObject->getVendorId(),
+//    			'vendor_code' => $this->getVendorCode($dataObject->getVendorId()),
     			'po_id' => $dataObject->getId(),
-    			'category_id' => $dataObject->getCategoryId()
+//    			'category_id' => $dataObject->getCategoryId()
     			
     	));
     }

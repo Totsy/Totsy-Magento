@@ -123,7 +123,7 @@
 		                <?php echo $this->__('You have no items in your shopping cart.') ?>
 		            </p>
 		        <?php endif ?>
-		        <?php if($_cartQty && $this->isPossibleOnepageCheckout() && !empty($_itemsArray)): ?>
+		        <?php if($_cartQty && !empty($_itemsArray)): ?>
 		            <p class="subtotal">
 		                <?php if ($this->canApplyMsrp()): ?>
 		                    <span class="map-cart-sidebar-total"><?php echo $this->__('ORDER TOTAL WILL BE DISPLAYED BEFORE YOU SUBMIT THE ORDER'); ?></span>

@@ -51,9 +51,9 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Grid extends 
 		foreach($rawCollection as $item){
 			if(!array_key_exists($item->getProductId(), $uniqueProductList)){
 				$uniqueProductList[$item->getProductId()] = array(
-						'total' => 0,
-						'qty'	=> 0,
-						'is_master_pack' => 'No'
+						'total' 			=> 0,
+						'qty'				=> 0,
+						'is_master_pack'	=> 'No'
 				);
 			}
 			$uniqueProductList[$item->getProductId()]['total'] += $item->getQtyDelta() * $item->getUnitCost();
@@ -66,15 +66,15 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Grid extends 
 		$productCollection = Mage::getModel('catalog/product')->getCollection()
 				->addCategoryFilter($category)
 				->addAttributeToFilter('type_id', 'simple')
-				->addAttributeToFilter('is_master_pack', 1);
+				->addAttributeToFilter(array(array('attribute'=>'is_master_pack', 'gt'=>0)));
 		foreach($productCollection as $product){
 			if(!array_key_exists($product->getId(), $uniqueProductList)){
 				$uniqueProductList[$product->getId()] = array(
-						'total' => 0,
-						'qty'	=> 0,
+						'total'	=> 0,
+						'qty'	=> 0
 				);
 			}
-			$uniqueProductList[$product->getId()]['is_master_pack'] = 'Yes';
+			$uniqueProductList[$product->getId()]['is_master_pack']	= 'Yes';
 		}
 		
 		//Building report collection
@@ -119,9 +119,9 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Grid extends 
 				'qty_stock'				=>	round($product->getStockItem()->getQty()),
 				'qty_total'				=>	$productInfo['qty'],
 				'is_master_pack'		=>	$productInfo['is_master_pack'],
-				'total_cost'			=>	$productInfo['total'],
-				'average_cost'			=>	round($productInfo['total']/$productInfo['qty'], 2),
-				
+				'case_pack_qty'			=>	round($product->getData('case_pack_qty')),
+				'unit_cost'				=>	round($productInfo['total']/$productInfo['qty'], 2),
+				'total_cost'			=>	$productInfo['total']
 			);
 			$reportItem->addData($data);
 			$reportCollection->addItem($reportItem);
@@ -176,38 +176,52 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Grid extends 
 		));
 		
 		$this->addColumn('qty_sold', array(
-					'header'	=>	Mage::helper('stockhistory')->__('Quantity Sold'),
+					'header'	=>	Mage::helper('stockhistory')->__('Qty Sold'),
 					'align'		=>	'right',
 					'width'		=>	'25px',
 					'index'		=>  'qty_sold',
 		));
 		
 		$this->addColumn('qty_stock', array(
-					'header'	=>	Mage::helper('stockhistory')->__('Stock Quantity'),
+					'header'	=>	Mage::helper('stockhistory')->__('Qty Stock'),
 					'align'		=>	'right',
 					'width'		=>	'25px',
 					'index'		=>  'qty_stock',
 		));
 		
 		$this->addColumn('qty_total', array(
-					'header'	=>	Mage::helper('stockhistory')->__('PO Quantity'),
+					'header'	=>	Mage::helper('stockhistory')->__('Qty Total'),
 					'align'		=>	'right',
 					'width'		=>	'25px',
 					'index'		=>  'qty_total',
 		));
 		
-		$this->addColumn('is_master_pack', array(
+		$this->addColumn('qty_to_amend', array(
+            'header'    => Mage::helper('catalog')->__('Qty To Amend'),
+            'width'     => '1',
+            'type'      => 'number',
+            'renderer'  => 'stockhistory/adminhtml_widget_grid_column_renderer_input'
+        ));
+        
+        $this->addColumn('is_master_pack', array(
 					'header'	=>	Mage::helper('stockhistory')->__('Master Pack'),
 					'align'		=>	'right',
 					'width'		=>	'25px',
 					'index'		=>  'is_master_pack',
 		));
 		
-		$this->addColumn('average_cost', array(
-					'header'	=>	Mage::helper('stockhistory')->__('Average Cost'),
+		$this->addColumn('case_pack_qty', array(
+					'header'	=>	Mage::helper('stockhistory')->__('Case Pack Qty'),
+					'align'		=>	'right',
+					'width'		=>	'25px',
+					'index'		=>  'case_pack_qty',
+		));
+		
+		$this->addColumn('unit_cost', array(
+					'header'	=>	Mage::helper('stockhistory')->__('Unit Cost'),
 					'align'		=>	'right',
 					'width'		=>	'30px',
-					'index'		=>	'average_cost',
+					'index'		=>	'unit_cost',
 		));
 		
 		$this->addColumn('total_cost', array(
@@ -216,8 +230,6 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Grid extends 
 					'width'		=>	'30px',
 					'index'		=>	'total_cost',
 		));
-		
-		
 		
 		$this->addExportType('*/*/exportPoCsv', Mage::helper('stockhistory')->__('CSV'));
 		

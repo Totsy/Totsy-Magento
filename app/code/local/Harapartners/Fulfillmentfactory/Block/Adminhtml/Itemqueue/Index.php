@@ -16,10 +16,10 @@ class Harapartners_Fulfillmentfactory_Block_Adminhtml_Itemqueue_Index extends Ma
 	            'onclick'   => 'setLocation(\'' . $this->getUrl('*/*/getInventory/') . '\')',
 	    ));
 	    
-	    $this->_addButton('fulfillOrder', array(
-	            'label'     => 'TEST: Update Order Status',
-	            'onclick'   => 'setLocation(\'' . $this->getUrl('*/*/fulfillOrder/') . '\')',
-	    ));
+//	    $this->_addButton('fulfillOrder', array(
+//	            'label'     => 'TEST: Update Order Status',
+//	            'onclick'   => 'setLocation(\'' . $this->getUrl('*/*/fulfillOrder/') . '\')',
+//	    ));
 	    
 	    $this->_addButton('submitOrder', array(
 	            'label'     => 'TEST: Submit Orders API and Payment',
@@ -31,20 +31,20 @@ class Harapartners_Fulfillmentfactory_Block_Adminhtml_Itemqueue_Index extends Ma
 	            'onclick'   => 'setLocation(\'' . $this->getUrl('*/*/shipmentUpdate/') . '\')',
 	    ));
 	    
-	    $this->_addButton('submitProduct', array(
-	            'label'     => 'TEST: Submit Products API',
-	            'onclick'   => 'setLocation(\'' . $this->getUrl('*/*/submitProduct/') . '\')',
-	    ));
+//	    $this->_addButton('submitProduct', array(
+//	            'label'     => 'TEST: Submit Products API',
+//	            'onclick'   => 'setLocation(\'' . $this->getUrl('*/*/submitProduct/') . '\')',
+//	    ));
 	    
-	    $this->_addButton('po', array(
-	            'label'     => 'TEST: Submit Purchase Order API',
-	            'onclick'   => 'setLocation(\'' . $this->getUrl('*/*/submitPO/') . '\')',
-	    ));
+//	    $this->_addButton('po', array(
+//	            'label'     => 'TEST: Submit Purchase Order API',
+//	            'onclick'   => 'setLocation(\'' . $this->getUrl('*/*/submitPO/') . '\')',
+//	    ));
 	    
-	    $this->_addButton('dotcom', array(
-	            'label'     => 'TEST: DOTCOM',
-	            'onclick'   => 'setLocation(\'' . $this->getUrl('*/*/dotcom/') . '\')',
-	    ));
+//	    $this->_addButton('dotcom', array(
+//	            'label'     => 'TEST: DOTCOM',
+//	            'onclick'   => 'setLocation(\'' . $this->getUrl('*/*/dotcom/') . '\')',
+//	    ));
     }
  
 }

@@ -25,18 +25,29 @@ class Harapartners_Stockhistory_Adminhtml_PurchaseorderController extends Mage_A
 			->renderLayout();
 	}
 	
-	public function newAction()
-	{
-		$this->_getSession()->setPoFormData(null);
+	public function newAction(){
+		$this->_forward('edit');
+	}
+	
+	public function newByVendorAction(){
+		$vendorId = $this->getRequest()->getParam('vendor_id');
+		$vendor = Mage::getModel('stockhistory/vendor')->load($vendorId);
+		if(!$vendor || !$vendor->getId()){
+			$this->_getSession()->addError('Invalid Vendor.');
+			$this->_redirect('*/adminhtml_vendor/edit', array('id' => $vendorId));
+			return;
+		}
+		$prepopulateData = array(
+			'vendor_id'		=> $vendor->getId(),
+			'vendor_code'	=> $vendor->getVendorCode()
+		);
+		$this->_getSession()->setPoFormData($prepopulateData);
 		$this->_forward('edit');
 	}
 	
 	public function editAction() {
 		$id = $this->getRequest()->getParam('id');
 		$data = $this->_getSession()->getPoFormData();
-		if(empty($data['vendor_id'])){
-			$data['vendor_id'] = $this->getRequest()->getParam('vendor_id');
-		}
 		
        	if (!!$id ) {
        		$model  = Mage::getModel('stockhistory/purchaseorder')->load($id);

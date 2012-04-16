@@ -7,6 +7,7 @@
             <label>Speedtax</label>
 			<header_css>speedtax-header</header_css>
 			<tab>sales</tab>
+			<sort_order>304</sort_order>
 			<show_in_default>1</show_in_default>
             <show_in_website>1</show_in_website>
             <show_in_store>1</show_in_store>
