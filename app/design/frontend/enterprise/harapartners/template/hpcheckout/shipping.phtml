@@ -53,7 +53,7 @@
 	            <li class="fields">
 	                <div class="field half-of-half">
 	                    <label for="shipping:postcode" class="required"><em>*</em><?php echo $this->__('Zip/Postal Code') ?></label>
-	                    <input type="text" title="<?php echo $this->__('Zip/Postal Code') ?>" name="shipping[postcode]" id="shipping:postcode" class="input-text validate-zip-international required-entry"  value="<?php echo $this->htmlEscape($this->getAddress()->getPostcode()) ?>"/>
+	                    <input type="text" title="<?php echo $this->__('Zip/Postal Code') ?>" name="shipping[postcode]" id="shipping:postcode" class="input-text validate-zip required-entry"  value="<?php echo $this->htmlEscape($this->getAddress()->getPostcode()) ?>"/>
 	                </div>
 	                <div class="field half-of-half">
                         <label for="shipping:country_id" class="required"><em>*</em><?php echo $this->__('Country') ?></label>
