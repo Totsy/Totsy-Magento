@@ -43,6 +43,23 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Edit_Form extends Ma
 	        ));
         }
         
+		if(!!$dataObject->getData('vendor_code')){
+	         $fieldset->addField('vendor_code', 'text', array(
+		            'label'     => $helper->__('Vendor Code:'),
+		            'name'      => 'vendor_code',
+		         	'required'	=> true,
+		         	'readonly'	=> true,
+		         	'note'		=> 'Read only field.'
+	        ));
+        }else{
+	        $fieldset->addField('vendor_code', 'text', array(
+		            'label'     => $helper->__('Vendor Code:'),
+		            'name'      => 'vendor_code',
+		        	'required'	=> true,
+		        	'note'		=> 'Once saved, this field <b>CANNOT</b> be modified.'
+	        ));
+        }
+        
         if(!!$dataObject->getData('po_id')){
         	$fieldset->addField('po_id', 'text', array(
 		            'label'     => $helper->__('PO ID:'),
@@ -55,23 +72,6 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Edit_Form extends Ma
 	        $fieldset->addField('po_id', 'text', array(
 		            'label'     => $helper->__('PO ID:'),
 		            'name'      => 'po_id',
-		        	'required'	=> true,
-		        	'note'		=> 'Once saved, this field <b>CANNOT</b> be modified.'
-	        ));
-        }
-        
-        if(!!$dataObject->getData('vendor_code')){
-	         $fieldset->addField('vendor_code', 'text', array(
-		            'label'     => $helper->__('Vendor Code:'),
-		            'name'      => 'vendor_code',
-		         	'required'	=> true,
-		         	'readonly'	=> true,
-		         	'note'		=> 'Read only field.'
-	        ));
-        }else{
-	        $fieldset->addField('vendor_code', 'text', array(
-		            'label'     => $helper->__('Vendor Code:'),
-		            'name'      => 'vendor_code',
 		        	'required'	=> true,
 		        	'note'		=> 'Once saved, this field <b>CANNOT</b> be modified.'
 	        ));

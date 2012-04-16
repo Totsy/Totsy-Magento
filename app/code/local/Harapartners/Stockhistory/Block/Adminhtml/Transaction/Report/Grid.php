@@ -53,7 +53,7 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Grid extends 
 				$uniqueProductList[$item->getProductId()] = array(
 						'total' => 0,
 						'qty'	=> 0,
-						'is_master_pack' => 'No'
+						'master_pack_qty' => 0
 				);
 			}
 			$uniqueProductList[$item->getProductId()]['total'] += $item->getQtyDelta() * $item->getUnitCost();
@@ -66,7 +66,7 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Grid extends 
 		$productCollection = Mage::getModel('catalog/product')->getCollection()
 				->addCategoryFilter($category)
 				->addAttributeToFilter('type_id', 'simple')
-				->addAttributeToFilter('is_master_pack', 1);
+				->addAttributeToFilter(array(array('attribute'=>'master_pack_qty', 'gt'=>0)));
 		foreach($productCollection as $product){
 			if(!array_key_exists($product->getId(), $uniqueProductList)){
 				$uniqueProductList[$product->getId()] = array(
@@ -74,7 +74,7 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Grid extends 
 						'qty'	=> 0,
 				);
 			}
-			$uniqueProductList[$product->getId()]['is_master_pack'] = 'Yes';
+			$uniqueProductList[$product->getId()]['master_pack_qty'] = $product->getData('master_pack_qty');
 		}
 		
 		//Building report collection
@@ -118,7 +118,7 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Grid extends 
 				'qty_sold'				=>	round($soldNum),
 				'qty_stock'				=>	round($product->getStockItem()->getQty()),
 				'qty_total'				=>	$productInfo['qty'],
-				'is_master_pack'		=>	$productInfo['is_master_pack'],
+				'master_pack_qty'		=>	round($productInfo['master_pack_qty']),
 				'total_cost'			=>	$productInfo['total'],
 				'average_cost'			=>	round($productInfo['total']/$productInfo['qty'], 2),
 				
@@ -176,31 +176,38 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Grid extends 
 		));
 		
 		$this->addColumn('qty_sold', array(
-					'header'	=>	Mage::helper('stockhistory')->__('Quantity Sold'),
+					'header'	=>	Mage::helper('stockhistory')->__('Qty Sold'),
 					'align'		=>	'right',
 					'width'		=>	'25px',
 					'index'		=>  'qty_sold',
 		));
 		
 		$this->addColumn('qty_stock', array(
-					'header'	=>	Mage::helper('stockhistory')->__('Stock Quantity'),
+					'header'	=>	Mage::helper('stockhistory')->__('Qty Stock'),
 					'align'		=>	'right',
 					'width'		=>	'25px',
 					'index'		=>  'qty_stock',
 		));
 		
 		$this->addColumn('qty_total', array(
-					'header'	=>	Mage::helper('stockhistory')->__('PO Quantity'),
+					'header'	=>	Mage::helper('stockhistory')->__('Qty Total'),
 					'align'		=>	'right',
 					'width'		=>	'25px',
 					'index'		=>  'qty_total',
 		));
 		
-		$this->addColumn('is_master_pack', array(
-					'header'	=>	Mage::helper('stockhistory')->__('Master Pack'),
+		$this->addColumn('qty_to_amend', array(
+            'header'    => Mage::helper('catalog')->__('Qty To Amend'),
+            'width'     => '1',
+            'type'      => 'number',
+            'renderer'  => 'stockhistory/adminhtml_widget_grid_column_renderer_input'
+        ));
+		
+		$this->addColumn('master_pack_qty', array(
+					'header'	=>	Mage::helper('stockhistory')->__('Master Pack Qty'),
 					'align'		=>	'right',
 					'width'		=>	'25px',
-					'index'		=>  'is_master_pack',
+					'index'		=>  'master_pack_qty',
 		));
 		
 		$this->addColumn('average_cost', array(

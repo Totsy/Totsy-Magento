@@ -34,7 +34,7 @@ class Harapartners_Stockhistory_Adminhtml_TransactionController extends Mage_Adm
 			->renderLayout();
 	}
 	
-	public function newAction() {
+	public function newAmendmentByPoAction() {
 		$poId = $this->getRequest()->getParam('po_id');
 		$poOjbect = Mage::getModel('stockhistory/purchaseorder')->load($poId);
 		
@@ -82,6 +82,71 @@ class Harapartners_Stockhistory_Adminhtml_TransactionController extends Mage_Adm
 			->_setActiveMenu('stockhistory/transaction')	
 			->_addContent($this->getLayout()->createBlock('stockhistory/adminhtml_transaction_report'))
 			->renderLayout();	
+	}
+	
+	public function postBatchAmendmentAction() {
+		$poId = $this->getRequest()->getParam('po_id');
+		$poOjbect = Mage::getModel('stockhistory/purchaseorder')->load($poId);
+		
+		if(!$poOjbect || !$poOjbect->getId()){
+			$this->_getSession()->addError('Invalid Purchase Order.');
+			$this->_redirect('*/adminhtml_transaction/report', array('id' => $poId));
+			return;
+		}
+		
+		$prepopulateData = array(
+			'vendor_id'		=> $poOjbect->getVendorId(),
+			'vendor_code'	=> $poOjbect->getVendorCode(),
+			'po_id'			=> $poOjbect->getId(),
+			'category_id'	=> $poOjbect->getCategoryId(),	
+			'action_type' 	=> Harapartners_Stockhistory_Model_Transaction::ACTION_TYPE_AMENDMENT
+		);
+		
+		$productData = $this->getRequest()->getParam('qty_to_amend');
+		$product = Mage::getModel('catalog/product');
+		
+		$isBatchSuccess = true;
+		foreach($productData as $productSku => $amendmentData){
+			$tempProduct = $product->loadByAttribute('sku', trim($productSku));
+			if(!$tempProduct || !$tempProduct->getId()){
+				$this->_getSession()->addError('Invalid Product SKU "' . trim($productSku) . '"');
+				continue;
+			}
+			if(empty($amendmentData['qty_to_amend']) 
+					|| !is_numeric($amendmentData['qty_to_amend'])
+					|| empty($amendmentData['average_cost']) 
+					|| !is_numeric($amendmentData['average_cost'])
+			){
+				$this->_getSession()->addError('Invalid Product Amendment Info for "' . trim($productSku) . '"');
+				$isBatchSuccess = false;
+				continue;
+			}
+			try{
+				$tempdata = array_merge($prepopulateData, array(
+						'product_id'	=> $tempProduct->getId(),
+						'qty_delta'		=> $amendmentData['qty_to_amend'],
+						'unit_cost'		=> $amendmentData['average_cost'],
+						'comment'		=> 'Create by Batch Amendment'
+				));
+				$transaction = Mage::getModel('stockhistory/transaction');
+				$transaction->importData($tempdata);
+				if($transaction->updateProductStock()){
+					$transaction->save();
+				}else{
+					$this->_getSession()->addError('There is an error saving amendment Info for "' . trim($productSku));
+				}
+			}catch (Exception $e){
+				$isBatchSuccess = false;
+				$this->_getSession()->addError('Cannot create amendment Info for "' . trim($productSku) . '", ' . $e->getMessage());
+			}
+		}
+		
+		if($isBatchSuccess){
+			$this->_getSession()->addSuccess('Batch processing completed.');
+		}
+		
+		$this->_redirect('*/adminhtml_transaction/report', array('po_id' => $poId));
+		return;
 	}
 	
 	public function exportPoCsvAction() {
