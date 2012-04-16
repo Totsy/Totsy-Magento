@@ -112,8 +112,12 @@ class Harapartners_Stockhistory_Adminhtml_TransactionController extends Mage_Adm
 				$this->_getSession()->addError('Invalid Product SKU "' . trim($productSku) . '"');
 				continue;
 			}
-			if(empty($amendmentData['qty_to_amend']) 
-					|| !is_numeric($amendmentData['qty_to_amend'])
+			//Ignore empty rows
+			if(empty($amendmentData['qty_to_amend'])){
+				continue;
+			}
+			//Must validate non-empty rows
+			if(!is_numeric($amendmentData['qty_to_amend'])
 					|| empty($amendmentData['average_cost']) 
 					|| !is_numeric($amendmentData['average_cost'])
 			){

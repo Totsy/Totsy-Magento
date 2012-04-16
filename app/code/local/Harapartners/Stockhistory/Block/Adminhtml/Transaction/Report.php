@@ -63,10 +63,8 @@ FORM_WRAPPER;
 			var emptyPostForm = jQuery('#post_batch_amendment_form');
 			var shouldUpdate = false;
 			jQuery("input.qty_to_amend").each(function (){
-				if(!!jQuery(this).val()){
-					emptyPostForm.append(jQuery(this).clone());
-					shouldUpdate = true;
-				}
+				emptyPostForm.append(jQuery(this).clone());
+				shouldUpdate = true;
 			});
 			if(shouldUpdate){
 				emptyPostForm.submit();
