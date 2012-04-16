@@ -41,6 +41,16 @@ class Harapartners_Fulfillmentfactory_Adminhtml_ErrorlogController extends Mage_
         	Mage::helper('fulfillmentfactory')->_pushUniqueOrderIntoArray($orderArray, $order);
         }
         
-        Mage::getModel('fulfillmentfactory/service_dotcom')->submitOrdersToFulfill($orderArray, true);
+        $rsp = Mage::getModel('fulfillmentfactory/service_dotcom')->submitOrdersToFulfill($orderArray, true);
+        
+		$error = $rsp->purchase_order_error;
+		if(!!$error) {
+			$this->_getSession()->addError($this->__('Fail to submit to DOTcom. ' . $error->error_description));
+		}
+		else {
+			$this->_getSession()->addSuccess($this->__('Sucessfully submit to DOTcom.'));
+		}
+        
+        $this->_redirect('*/*/index');
     }
 }
