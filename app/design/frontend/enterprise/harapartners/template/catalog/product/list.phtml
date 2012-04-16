@@ -35,8 +35,11 @@
     $_productCollection=$this->getLoadedProductCollection();
     $_cookietCode = Mage::helper('service/rewrite_catalog_category')->getPreviewCookieName();
     $_cookietEnValue = Mage::getModel('core/cookie')->get($_cookietCode);
-    $_cookietDeValue = Mage::helper('service/rewrite_catalog_category')->getPreviewCookieDecryptedCode($_cookietEnValue);
-    $_adminPass = false;
+    if (!!$_cookietEnValue) {
+    	$_cookietDeValue = Mage::helper('service/rewrite_catalog_category')->getPreviewCookieDecryptedCode($_cookietEnValue);
+    }else {
+    	$_cookietDeValue = 0;
+    }
     $_currentCategory = Mage::getSingleton('catalog/layer')->getCurrentCategory();
     $_helper = $this->helper('catalog/output');
 
@@ -54,11 +57,10 @@
 	
 	if ( !!$_cookietDeValue && $_cookietDeValue == Mage::helper('service/rewrite_catalog_category')->getPreviewCookieCode()) {
 		$timeOutFlag = 0;
-		$_adminPass = true;
     }
 ?>
 
-<?php if( !$_productCollection->count() || $timeOutFlag || !$_adminPass ): ?>
+<?php if( !$_productCollection->count() || $timeOutFlag ): ?>
 <p class="note-msg"><?php echo $this->__('There are no products matching the selection.') ?></p>
 <?php else : ?>
 <div class="category-products">
