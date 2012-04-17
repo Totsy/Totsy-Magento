@@ -141,7 +141,7 @@
 				$endcountRaw = strtotime($up['event_start_date']);
 				$endcount = date("F j, Y, G:i:s", $endcountRaw);
 			?>
-			<div class="catalog-event">
+			<div class="catalog-event up-event-counter-<?php echo $timer;?>">
 				<ul class="echoShare" 
 				data-productname="<?php echo $up['name'];?>"  
 				data-productcap="" 
@@ -165,6 +165,7 @@
 								},
 								onComplete: function( event ){										
 									jQuery(this).html("Completed");
+									jQuery("div.up-event-counter-<?php echo $timer;?>").hide();
 								},
 								leadingZero: true,
 								direction: "down"

@@ -29,8 +29,18 @@ class Harapartners_Affiliate_FeedsController extends Mage_Core_Controller_Front_
 				$xml = $this->_createSignupsXml($simpleXml,$from,$to,$affiliateCode);
 				break;
 				
+				case 'signupsByReferral':
+				//Place holders !!!
+				$xml = $this->_createSignupsByReferralXml($simpleXml,$from,$to,$affiliateCode);
+				break;
+				
 				case 'sales':
 				$xml = $this->_createSalesXml($simpleXml,$from,$to,$affiliateCode,$period);
+				break;
+				
+				case 'referringSales':
+				//Place holders !!!
+				$xml = $this->_createReferringSalesXml($simpleXml,$from,$to,$affiliateCode,$period);
 				break;
 								
 				default:				
@@ -55,6 +65,27 @@ XML;
 		$recordCollection = Mage::getModel('customertracking/record')->getCollection()
 																	->addFieldToFilter('created_at', array( "lt" => $to,"gt"=>$from ))
 																	->addFieldToFilter('affiliate_code',$affiliateCode);	
+		foreach ($recordCollection as $record) {
+		$clickId = '';
+			foreach (json_decode($record->getRegistrationParam(),true) as $index=>$value) {						
+				if($index=="clickid"){
+					$clickId = $value;
+					$entryString = 'clickId='.$clickId.' eventMerchantId='.$record->getCustomerId().' count1="1" time='.strtotime($record->getCreatedAt());
+					$simpleXml->addChild ('entry', $entryString);	
+					break;
+				}
+			}												
+		}
+		return $simpleXml;
+	}
+	
+	protected function _createSignupsByReferralXml($simpleXml,$from,$to,$affiliateCode){
+		//Place holders !!!
+		$recordCollection = Mage::getModel('customertracking/record')->getCollection()
+																	->addFieldToFilter('created_at', array( "lt" => $to,"gt"=>$from ))
+																	->addFieldToFilter('affiliate_code',$affiliateCode);	
+		//Perpare invitation collection															
+		$invitationCollection = Mage::getModel('enterprise/inviation')->getCollection()->load();
 		foreach ($recordCollection as $record) {
 		$clickId = '';
 			foreach (json_decode($record->getRegistrationParam(),true) as $index=>$value) {						
