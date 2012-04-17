@@ -32,7 +32,7 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report extends Mage_
 		if($poObject->getStatus() == Harapartners_Stockhistory_Model_Purchaseorder::STATUS_OPEN){
 			$this->_addButton('submit_dotcom_po', array(
 	            'label'     => Mage::helper('stockhistory')->__('Submit to DOTcom'),
-	            'onclick'   => 'setLocation(\'' . $this->getUrl('stockhistory/adminhtml_transaction/submitToDotcom/po_id/' . $dataObject->getData('po_id')) . '\')',
+	            'onclick'   => 'submitDotcomPo()',
 				'class'		=> 'save'
 	        ));
 	        
@@ -65,6 +65,7 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report extends Mage_
 </div>
 FORM_WRAPPER;
 		
+		$hasEmptyMasterPackItem = Mage::registry('has_empty_master_pack_item') ? 1 : 0;
 		$html .= <<<ADDITIONAL_JAVASCRIPT
 <script type="text/javascript">
 	var postBatchAmendment = function () {
@@ -82,6 +83,17 @@ FORM_WRAPPER;
 			}else{
 				alert('Nothing to amend.');
 			}
+		}
+	}
+	
+	var hasEmptyMasterPackItem = $hasEmptyMasterPackItem;
+	var submitDotcomPo = function (){
+		if(hasEmptyMasterPackItem){
+			if(confirm('Some rows have zero Total Qty, and will be ignored. continue?')) {
+				setLocation('{$this->getUrl('stockhistory/adminhtml_transaction/submitToDotcom/po_id/' . $dataObject->getData('po_id'))}');
+			}
+		}else{
+			setLocation('{$this->getUrl('stockhistory/adminhtml_transaction/submitToDotcom/po_id/' . $dataObject->getData('po_id'))}');
 		}
 	}
 </script>

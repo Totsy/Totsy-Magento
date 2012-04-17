@@ -23,7 +23,7 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Print extends
 	}
 	
 	public function getPoNumber(){
-		return strtoupper(substr($this->getVendorObj()->getVendorCode(), 0, 3)) . strtotime($this->getPoObject()->getCreatedAt()); 
+		return $this->getPoObject()->generatePoNumber();
 	}
 	
 	public function getPoDate(){
