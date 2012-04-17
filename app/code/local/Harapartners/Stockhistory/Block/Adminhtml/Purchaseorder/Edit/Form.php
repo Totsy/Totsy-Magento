@@ -52,12 +52,13 @@ class Harapartners_Stockhistory_Block_Adminhtml_Purchaseorder_Edit_Form extends 
         
         //Once created, cannot change category
 		if(!!$dataObject->getData('category_id')){
+			$category = Mage::getModel('catalog/category')->load($dataObject->getData('category_id'));
 			$fieldset->addField('category_id', 'text', array(
 		            'label'     => $helper->__('Category/Event ID:'),
 		            'name'      => 'category_id',
 					'readonly' 	=> true,
 		        	'required'	=> true,
-					'note'		=> 'Read only field. Each purchase order must be associated to a given category/event.'
+					'note'		=> 'Read only field. Each purchase order must be associated to a given category/event.<br/>Event ends: ' . $category->getEventEndDate()
 	        ));
         }else{
         	$fieldset->addField('category_id', 'text', array(
@@ -73,6 +74,13 @@ class Harapartners_Stockhistory_Block_Adminhtml_Purchaseorder_Edit_Form extends 
             'label'     => $helper->__('Purchase Order Name:'),
             'name'      => 'name',
         	'required'	=> true,
+        ));
+        
+        $fieldset->addField('status', 'select', array(
+            'label'     => $helper->__('Status:'),
+            'name'      => 'status',
+        	'required'	=> true,
+        	'values'    => $helper->getFormPurchaseorderStatusArray(),
         ));
         
         $fieldset->addField('comment', 'textarea', array(

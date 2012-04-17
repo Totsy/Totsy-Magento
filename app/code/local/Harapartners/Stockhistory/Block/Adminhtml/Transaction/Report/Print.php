@@ -12,32 +12,21 @@
  * 
  */
 
-class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Print extends Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Grid {
+class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Print extends Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Abstract {
 	
 	const BUSINESS_DAYS_SHIP_BY = 2;
 	const BUSINESS_DAYS_IN_HOUSE = 7;
-	
-	protected $_vendorObj = null;
 	
 	public function __construct() {
 		parent::__construct();
 		$this->setTemplate('stockhistory/print.phtml');
 	}
 	
-	public function getVendorObj() {
-		if(!$this->_vendorObj){
-			$poObj = $this->getPoObject();
-			$this->_vendorObj = Mage::getModel('stockhistory/vendor')->load($poObj->getData('vendor_id'));
-		}
-		return $this->_vendorObj;
-	}
-	
 	public function getPoNumber(){
-		return $this->getVendorObj()->getVendorCode() . '-' . date("ymdHis", $this->_getCurrentTime()); 
+		return strtoupper(substr($this->getVendorObj()->getVendorCode(), 0, 3)) . strtotime($this->getPoObject()->getCreatedAt()); 
 	}
 	
 	public function getPoDate(){
-//		return $poObj->getData('created_at');
 		return date('Y-m-d', $this->_getCurrentTime());
 	}
 	
@@ -51,6 +40,17 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Print extends
 	
 	public function getAuthorizationName(){
 		return Mage::getSingleton('admin/session')->getUser()->getName();
+	}
+	
+	public function getVendorAddress(){
+		$address = $this->getVendorObj()->getData('address');
+		$address = str_ireplace("\n", "<br/>", $address);
+		return $address;
+	}
+	
+	public function getVendorEmailList(){
+		$emailList = $this->getVendorObj()->getData('email_list');
+		return implode('<br/>', explode(',', $emailList));
 	}
 	
 	// ========== Utilities ========== //

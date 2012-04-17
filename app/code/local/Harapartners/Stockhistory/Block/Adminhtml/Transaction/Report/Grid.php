@@ -12,59 +12,15 @@
  * 
  */
 
-class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Grid extends Mage_Adminhtml_Block_Widget_Grid {
+class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Grid extends Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Abstract {
 	
-	//protected $options = array('0' => 'Pending', '1'=>'Processed', '2'=> 'Failed');
-	protected $_reportCollection = null;
-	protected $_poObj = null;
-	
-	public function __construct() {
-		parent::__construct();
-		$this->setId('ReportGrid');
-		$this->setDefaultSort('product_id');
-		$this->setDefaultDir('ASC');
-		$this->setSaveParametersInSession(true);
-		$this->setTemplate('widget/grid_po_report.phtml');
-	}
-	
-	public function getPreparedCollection() {
-		return $this->_reportCollection;
-	}
-	
-	public function getPoObject() {
-		return $this->_poObj;
-	}
-	
-	protected function _prepareCollection() {
-		
-		// Gather all products to be reported
-		$poId = $this->getRequest()->getParam('po_id');
-		$poObject = Mage::getModel('stockhistory/purchaseorder')->load($poId);
-		if(!$poObject || !$poObject->getId()){
-			Mage::throwException('Invalid PO.');
-		}
-		$this->_poObj = $poObject;
-		$rawCollection = Mage::getModel('stockhistory/transaction')->getCollection();
-		$rawCollection->getSelect()->where('po_id = ?', $poId);
-		
-		$uniqueProductList = array();
-		foreach($rawCollection as $item){
-			if(!array_key_exists($item->getProductId(), $uniqueProductList)){
-				$uniqueProductList[$item->getProductId()] = array(
-						'total' 			=> 0,
-						'qty'				=> 0,
-						'is_master_pack'	=> 'No'
-				);
-			}
-			$uniqueProductList[$item->getProductId()]['total'] += $item->getQtyDelta() * $item->getUnitCost();
-			$uniqueProductList[$item->getProductId()]['qty'] += $item->getQtyDelta();
-		}
+	protected function _getUniqueProductList(){
+		$uniqueProductList = parent::_getUniqueProductList();
 		
 		//Add master pack product from category
-		$categoryId = $poObject->getCategoryId();
-		$category = Mage::getModel('catalog/category')->load($categoryId);
+		//Only for Report, not to be submitted to DotCom or Printing
 		$productCollection = Mage::getModel('catalog/product')->getCollection()
-				->addCategoryFilter($category)
+				->addCategoryFilter($this->getCategory())
 				->addAttributeToFilter('type_id', 'simple')
 				->addAttributeToFilter(array(array('attribute'=>'is_master_pack', 'gt'=>0)));
 		foreach($productCollection as $product){
@@ -76,63 +32,7 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Grid extends 
 			}
 			$uniqueProductList[$product->getId()]['is_master_pack']	= 'Yes';
 		}
-		
-		//Building report collection
-		$reportCollection = new Varien_Data_Collection();
-		$productsSoldArray = Mage::helper('stockhistory')->getProductSoldInfoByCategory($category, $uniqueProductList);
-		
-		$sizeAttribute = Mage::getSingleton('eav/config')->getAttribute('catalog_product', 'size');
-		$sizeOptions = $sizeAttribute->getSource()->getAllOptions(false);
-		$colorAttribute = Mage::getSingleton('eav/config')->getAttribute('catalog_product', 'color');
-		$colorOptions = $colorAttribute->getSource()->getAllOptions(false);
-		
-		foreach($uniqueProductList as $productId => $productInfo){
-			$reportItem = new Varien_Object();
-			$product = Mage::getModel('catalog/product')->load($productId);
-			$soldNum = (isset($productsSoldArray[$productId]['qty'])) ? $productsSoldArray[$productId]['qty'] : 0;
-			
-			$tempSizeLabel = '';
-			foreach($sizeOptions as $tempOption){
-				if($tempOption['value'] == $product->getSize()){
-					$tempSizeLabel = $tempOption['label'];
-					break;
-				}
-			}
-			
-			$tempColorLabel = '';
-			foreach($colorOptions as $tempOption){
-				if($tempOption['value'] == $product->getColor()){
-					$tempColorLabel = $tempOption['label'];
-					break;
-				}
-			}
-			
-			//you may want to add some product info here, like SKU, Name, Vendor ... so the report is good looking
-			$data = array(
-				'po_id'					=>	$poId,
-				'vendor_style'			=>	$product->getVendorStyle(),
-				'product_name'			=>	$product->getName(),
-				'sku'					=>  $product->getSku(),
-				'color'					=>	$tempColorLabel,
-				'size'					=>	$tempSizeLabel,
-				'qty_sold'				=>	round($soldNum),
-				'qty_stock'				=>	round($product->getStockItem()->getQty()),
-				'qty_total'				=>	$productInfo['qty'],
-				'is_master_pack'		=>	$productInfo['is_master_pack'],
-				'case_pack_qty'			=>	round($product->getData('case_pack_qty')),
-				'unit_cost'				=>	round($productInfo['total']/$productInfo['qty'], 2),
-				'total_cost'			=>	$productInfo['total']
-			);
-			$reportItem->addData($data);
-			$reportCollection->addItem($reportItem);
-		}
-		
-		//set collection in session
-		Mage::getSingleton('adminhtml/session')->setPOReportGridData($reportCollection);
-		
-		$this->_reportCollection = $reportCollection;
-		$this->setCollection($reportCollection);
-		return parent::_prepareCollection();
+		return $uniqueProductList;
 	}
 	
 	protected function _prepareColumns() {
@@ -197,10 +97,10 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Grid extends 
 		));
 		
 		$this->addColumn('qty_to_amend', array(
-            'header'    => Mage::helper('catalog')->__('Qty To Amend'),
-            'width'     => '1',
-            'type'      => 'number',
-            'renderer'  => 'stockhistory/adminhtml_widget_grid_column_renderer_input'
+		            'header'    => Mage::helper('catalog')->__('Final Qty'),
+		            'width'     => '1',
+		            'type'      => 'number',
+		            'renderer'  => 'stockhistory/adminhtml_widget_grid_column_renderer_input'
         ));
         
         $this->addColumn('is_master_pack', array(
@@ -236,10 +136,6 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Grid extends 
 		return parent::_prepareColumns();
 	}
 	
-	/**
-	 *	Custom csv export, sum the qty per product	
-	 * @return string $csv
-	 **/
 	public function getCsv() {
         $csv = '';
         $this->_isExport = true;
@@ -284,13 +180,9 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Grid extends 
         return $csv;
     }
 	
-	
+    //No filters for this report!
 	public function getFilterVisibility(){
 		return false;
 	}
 	
-	protected function _getStore() {
-		$storeId = (int) $this->getRequest()->getParam('store', 1); // Future change needed
-		return Mage::app()->getStore($storeId);
-	}
 }

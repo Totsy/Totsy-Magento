@@ -19,25 +19,34 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report extends Mage_
 		parent::__construct();
 		$this->_controller = 'adminhtml_transaction_report';
 		$this->_blockGroup = 'stockhistory';
-		$this->_headerText = Mage::helper('stockhistory')->__('Product Report from PO ' . $dataObject->getData('po_id'));
+		
+		$headerText = 'Product Report from PO ' . $dataObject->getData('po_id');
+		$poObject = Mage::getModel('stockhistory/purchaseorder')->load($dataObject->getData('po_id'));
+		if($poObject->getStatus() == Harapartners_Stockhistory_Model_Purchaseorder::STATUS_SUBMITTED){
+			$headerText .= ' (Submitted)';
+		}
+		
+		$this->_headerText = Mage::helper('stockhistory')->__($headerText);
 		$this->_removeButton('add');
 		
-		$this->_addButton('submit_dotcom_po', array(
-            'label'     => Mage::helper('stockhistory')->__('Submit to DOTcom'),
-            'onclick'   => 'setLocation(\'' . $this->getUrl('stockhistory/adminhtml_transaction/submitToDOTcom/po_id/' . $dataObject->getData('po_id')) . '\')',
-			'class'		=> 'save'
-        ));
-        
+		if($poObject->getStatus() == Harapartners_Stockhistory_Model_Purchaseorder::STATUS_OPEN){
+			$this->_addButton('submit_dotcom_po', array(
+	            'label'     => Mage::helper('stockhistory')->__('Submit to DOTcom'),
+	            'onclick'   => 'setLocation(\'' . $this->getUrl('stockhistory/adminhtml_transaction/submitToDotcom/po_id/' . $dataObject->getData('po_id')) . '\')',
+				'class'		=> 'save'
+	        ));
+	        
+	        $this->_addButton('post_batch_amendments', array(
+	            'label'     => Mage::helper('stockhistory')->__('Post Batch Amendments'),
+	            'onclick'   => 'postBatchAmendment()',
+				'class'		=> 'add'
+	        ));
+		}
+		
 		$this->_addButton('print_report', array(
             'label'     => Mage::helper('stockhistory')->__('Print Report'),
             'onclick'   => 'setLocation(\'' . $this->getUrl('stockhistory/adminhtml_transaction/print/po_id/' . $dataObject->getData('po_id')) . '\')',
 			'class'		=> 'save'
-        ));
-        
-        $this->_addButton('post_batch_amendments', array(
-            'label'     => Mage::helper('stockhistory')->__('Post Batch Amendments'),
-            'onclick'   => 'postBatchAmendment()',
-			'class'		=> 'add'
         ));
 	}
 	

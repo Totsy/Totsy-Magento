@@ -21,9 +21,9 @@
 			</div>
 		</div>
 		<div id="vendor-info" class="block">
-			<label><?php echo $this->__('VENDOR:');?></label>
-			<p><?php echo $vendorObj->getData('address');?></p>
-			<p><?php echo $vendorObj->getData('email_list');?></p>
+			<label><?php echo $this->__('VENDOR:'); ?></label>
+			<p><?php echo $this->getVendorAddress(); ?></p>
+			<p><?php echo $this->getVendorEmailList(); ?></p>
 		</div>	
 		<div id="shipping-info" class="block">
 			<label><?php echo $this->__('SHIP TO:');?></label>
@@ -46,7 +46,6 @@
 				<col width="100">
 				<col width="100">
 				<col width="450">
-				<col width="100">
 				<col width="100">
 				<col width="100">
 				<col width="100">
@@ -79,7 +78,7 @@
 					<th>
 						<span class="nobr">
 							<a class="not-sort" title="asc" name="color" href="#">
-								<span class="sort-title">Product Color</span>
+								<span class="sort-title">Color</span>
 							</a>
 						</span>
 					</th>
@@ -93,14 +92,7 @@
 					<th>
 						<span class="nobr">
 							<a class="not-sort" title="asc" name="qty_stock" href="#">
-								<span class="sort-title">Stock Quantity</span>
-							</a>
-						</span>
-					</th>
-					<th>
-						<span class="nobr">
-							<a class="not-sort" title="asc" name="is_master_pack" href="#">
-								<span class="sort-title">Master Pack</span>
+								<span class="sort-title">Total Qty</span>
 							</a>
 						</span>
 					</th>
@@ -128,8 +120,7 @@
 						<td><?php echo $item->getData('product_name');?></td>
 						<td><?php echo $item->getData('color');?></td>
 						<td><?php echo $item->getData('size');?></td>
-						<td><?php echo $item->getData('qty_stock');?></td>
-						<td><?php echo $item->getData('is_master_pack');?></td>
+						<td><?php echo $item->getData('qty_total');?></td>
 						<td><?php echo $item->getData('unit_cost');?></td>
 						<td><?php echo $item->getData('total_cost');?></td>
 					</tr>

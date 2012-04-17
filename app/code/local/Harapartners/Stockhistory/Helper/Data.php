@@ -43,6 +43,16 @@ class Harapartners_Stockhistory_Helper_Data extends Mage_Core_Helper_Abstract  {
 		);
 	}
 	
+	public function getGridPurchaseorderStatusArray(){
+		return array(
+				Harapartners_Stockhistory_Model_Purchaseorder::STATUS_OPEN => 'Open',
+//				Harapartners_Stockhistory_Model_Purchaseorder::STATUS_ON_HOLD => 'On Hold',
+				Harapartners_Stockhistory_Model_Purchaseorder::STATUS_SUBMITTED => 'Submitted',
+//				Harapartners_Stockhistory_Model_Purchaseorder::STATUS_COMPLETE => 'Complete',
+//				Harapartners_Stockhistory_Model_Purchaseorder::STATUS_CANCELLED => 'Cancelled'
+		);
+	}
+	
 	public function getGridTransactionTypeArray(){
 		return array(
 				Harapartners_Stockhistory_Model_Transaction::ACTION_TYPE_AMENDMENT => 'Amendment', 
@@ -57,7 +67,6 @@ class Harapartners_Stockhistory_Helper_Data extends Mage_Core_Helper_Abstract  {
 				Harapartners_Stockhistory_Model_Transaction::STATUS_PROCESSED => 'Processed', 
 				Harapartners_Stockhistory_Model_Transaction::STATUS_FAILED=> 'Failed'
 		);
-
 	}
 	
 	public function getFormAllVendorsArray(){
@@ -84,6 +93,17 @@ class Harapartners_Stockhistory_Helper_Data extends Mage_Core_Helper_Abstract  {
 				array('label' => 'Disabled', 'value' => Harapartners_Stockhistory_Model_Vendor::STATUS_DISABLED)
 		);
 	}
+	
+	public function getFormPurchaseorderStatusArray(){
+		return array(
+				array('label' => 'Open', 'value' => Harapartners_Stockhistory_Model_Purchaseorder::STATUS_OPEN),
+//				array('label' => 'On Hold', 'value' => Harapartners_Stockhistory_Model_Purchaseorder::STATUS_ON_HOLD),
+				array('label' => 'Submitted', 'value' => Harapartners_Stockhistory_Model_Purchaseorder::STATUS_SUBMITTED),
+//				array('label' => 'Complete', 'value' => Harapartners_Stockhistory_Model_Purchaseorder::STATUS_COMPLETE),
+//				array('label' => 'Cancelled', 'value' => Harapartners_Stockhistory_Model_Purchaseorder::STATUS_CANCELLED)
+		);
+	}
+
 	
 	public function getFormTransactionTypeArray(){
 		return array(

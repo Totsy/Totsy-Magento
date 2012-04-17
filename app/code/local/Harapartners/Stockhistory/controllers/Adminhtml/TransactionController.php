@@ -118,6 +118,8 @@ class Harapartners_Stockhistory_Adminhtml_TransactionController extends Mage_Adm
 			}
 			//Must validate non-empty rows
 			if(!is_numeric($amendmentData['qty_to_amend'])
+					|| empty($amendmentData['qty_total']) 
+					|| !is_numeric($amendmentData['qty_total'])
 					|| empty($amendmentData['unit_cost']) 
 					|| !is_numeric($amendmentData['unit_cost'])
 			){
@@ -128,7 +130,7 @@ class Harapartners_Stockhistory_Adminhtml_TransactionController extends Mage_Adm
 			try{
 				$tempdata = array_merge($prepopulateData, array(
 						'product_id'	=> $tempProduct->getId(),
-						'qty_delta'		=> $amendmentData['qty_to_amend'],
+						'qty_delta'		=> $amendmentData['qty_to_amend'] - $amendmentData['qty_total'], //'qty_to_amend' is forced to be the new total
 						'unit_cost'		=> $amendmentData['unit_cost'],
 						'comment'		=> 'Create by Batch Amendment'
 				));
@@ -273,32 +275,42 @@ class Harapartners_Stockhistory_Adminhtml_TransactionController extends Mage_Adm
 	 * submit PO to DOTcom
 	 *
 	 */
-	public function submitToDOTcomAction()
-	{
-		$param = $this->getRequest()->getParams();
+	public function submitToDotcomAction() {
+		$poObject = Mage::getModel('stockhistory/purchaseorder')->load($this->getRequest()->getParam('po_id'));
+		if(!$poObject || !$poObject->getId()){
+			$this->_getSession()->addError($this->__('Invalid PO.'));
+		}
 		
-		//get collection from session
-		$reportCollection = $this->_getSession()->getPOReportGridData();
+		//get report collection data from session
+		$reportData = $this->_getSession()->getPOReportGridData();
 		
 		$itemsArray = array();
-		
-		foreach($reportCollection as $record) {
-			$itemsArray[$record['sku']] = $record['qty_total'];
+		foreach($reportData as $record) {
+			//DotCom does NOT receive qty = 0 record
+			if(!empty($record['sku']) && !empty($record['qty_total'])){
+				$itemsArray[$record['sku']] = $record['qty_total'];
+			}
 		}
 		
 		$rsp = Mage::getModel('fulfillmentfactory/service_dotcom')->submitPurchaseOrdersToDotcom($itemsArray);
 
-		$error =  $rsp->purchase_order_error;
+		$error = $rsp->purchase_order_error;
 		if(!!$error) {
-			$this->_getSession()->addError($this->__('Fail to submit to DOTcom. ' . $error->error_description));
-		}
-		else {
-			$this->_getSession()->addSuccess($this->__('Sucessfully submit to DOTcom .'));
+			$this->_getSession()->addError($this->__('Fail to submit PO to DOTcom. ' . $error->error_description));
+		}else{
+			$this->_getSession()->addSuccess($this->__('Sucessfully submit to DOTcom.'));
+			//Update PO status
+			try{
+				$poObject->setStatus(Harapartners_Stockhistory_Model_Purchaseorder::STATUS_SUBMITTED);
+				$poObject->save();
+			}catch(Exception $e){
+				$this->_getSession()->addError($e->getMessage());
+			}
 		}
 		
 		//clean collection in session
 		Mage::getSingleton('adminhtml/session')->setPOReportGridData(null);
 		
-		$this->_redirect('*/*/report', array('po_id' => $param['po_id']));
+		$this->_redirect('*/*/report', array('po_id' => $this->getRequest()->getParam('po_id')));
 	}
 }

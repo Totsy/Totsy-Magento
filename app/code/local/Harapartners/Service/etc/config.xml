@@ -38,7 +38,9 @@
 			<adminhtml>
 				<rewrite>
 					<!--Harapartners_Service: widget_form 'datetime' support with Varien_Data_Form_Element_Datetime-->
-				
+					
+					<!--Harapartners_Service: customer grid optimization-->
+					<customer_grid>Harapartners_Service_Block_Rewrite_Adminhtml_Customer_Grid</customer_grid>
 					<!--Harapartners_Service: allow admin harapartner theme-->
 					<page>Harapartners_Service_Block_Rewrite_Adminhtml_Page</page>
 					<!--Harapartners_Service: avoid reporting the complete history (ignore unvalidated historical data) -->

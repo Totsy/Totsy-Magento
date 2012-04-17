@@ -14,9 +14,9 @@
 
 class Harapartners_Stockhistory_Model_Purchaseorder extends Mage_Core_Model_Abstract {
 	
-	const STATUS_NEW = 1;
-	const STATUS_PEDNING = 2;
-	const STATUS_PROCESSING = 3;
+	const STATUS_OPEN = 1;
+	const STATUS_ON_HOLD = 2;
+	const STATUS_SUBMITTED = 3;
 	const STATUS_COMPLETE = 4;
 	const STATUS_CANCELLED = 5;
 	
@@ -74,7 +74,7 @@ class Harapartners_Stockhistory_Model_Purchaseorder extends Mage_Core_Model_Abst
 		$dataObj->setData('category_id', $category->getId());
 		
 		if(!$dataObj->getData('status')){
-			$dataObj->setData('status', self::STATUS_NEW);
+			$dataObj->setData('status', self::STATUS_OPEN);
 		}
 		
 		$this->addData($dataObj->getData());

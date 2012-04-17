@@ -27,14 +27,25 @@ class Harapartners_Stockhistory_Block_Adminhtml_Purchaseorder_Index_Grid extends
 	protected function _prepareCollection()
 	{
 		$collection = Mage::getModel('stockhistory/purchaseorder')->getCollection();
+		
+		$eventEndDateAttrId = Mage::getResourceModel('eav/entity_attribute')->getIdByCode('catalog_category','event_end_date');
+		$collection->getSelect()
+				->join(
+						array('cat_dt' => 'catalog_category_entity_datetime'),
+						'main_table.category_id = cat_dt.entity_id AND main_table.store_id = cat_dt.store_id',
+						array('category_event_end_date' => 'cat_dt.value')
+				)
+				->where('cat_dt.attribute_id = ?', $eventEndDateAttrId);
+		
 		$this->setCollection($collection);
 		return parent::_prepareCollection();
 	}
 	
-	protected function _prepareColumns()
-	{
+	protected function _prepareColumns() {
+		$helper = Mage::helper('stockhistory');
+		
 		$this->addColumn('id', array(
-					'header'	=>	Mage::helper('stockhistory')->__('ID'),
+					'header'	=>	$helper->__('ID'),
 					'align'		=>	'right',
 					'width'		=>	'25px',
 					'index'		=>	'id',
@@ -42,42 +53,61 @@ class Harapartners_Stockhistory_Block_Adminhtml_Purchaseorder_Index_Grid extends
 		));
 		
 		$this->addColumn('name', array(
-					'header'	=>	Mage::helper('stockhistory')->__('PO Name'),
+					'header'	=>	$helper->__('PO Name'),
 					'align'		=>	'right',
 					'width'		=>	'100px',
 					'index'		=>	'name',
 		));
 		
 		$this->addColumn('vendor_id', array(
-					'header'	=>	Mage::helper('stockhistory')->__('Vendor ID'),
+					'header'	=>	$helper->__('Vendor ID'),
 					'align'		=>	'right',
 					'width'		=>	'25px',
 					'index'		=>	'vendor_id',
 		));
 		
 		$this->addColumn('vendor_code', array(
-					'header'	=>	Mage::helper('stockhistory')->__('Vendor Code'),
+					'header'	=>	$helper->__('Vendor Code'),
 					'align'		=>	'right',
 					'width'		=>	'50px',
 					'index'		=>	'vendor_code',
 		));
 		
 		$this->addColumn('category_id', array(
-					'header'	=>	Mage::helper('stockhistory')->__('Category ID'),
+					'header'	=>	$helper->__('Category ID'),
 					'align'		=>	'right',
 					'width'		=>	'25px',
 					'index'		=>	'category_id',
 		));
 		
+		$this->addColumn('category_event_end_date', array(
+					'header'		=>	$helper->__('Event End Date'),
+					'align'			=>	'right',
+					'width'			=>	'25px',
+					'index'			=>	'category_event_end_date', //For ORDER
+					'filter_index'	=>	'cat_dt.value',	//For WHERE
+					'type'			=>  'datetime',
+					'gmtoffset'		=> 	true,
+		));
+		
 		$this->addColumn('comment', array(
-					'header'	=>	Mage::helper('stockhistory')->__('Note'),
+					'header'	=>	$helper->__('Note'),
 					'align'		=>	'right',
 					'width'		=>	'150px',
 					'index'		=>	'comment',
 		));
 		
+		$this->addColumn('status', array(
+					'header'	=>	$helper->__('Status'),
+					'align'		=>	'right',
+					'width'		=>	'50px',
+					'index'		=>	'status',
+					'type'		=>	'options',
+					'options'	=>	$helper->getGridPurchaseorderStatusArray(),
+		));
+		
 		$this->addColumn('created_at', array(
-					'header'	=>	Mage::helper('stockhistory')->__('Created At'),
+					'header'	=>	$helper->__('Created At'),
 					'align'		=>	'right',
 					'width'		=>	'50px',
 					'index'		=>	'created_at',
@@ -86,7 +116,7 @@ class Harapartners_Stockhistory_Block_Adminhtml_Purchaseorder_Index_Grid extends
 		));
 		
 		$this->addColumn('updated_at', array(
-					'header'	=>	Mage::helper('stockhistory')->__('Updated At'),
+					'header'	=>	$helper->__('Updated At'),
 					'align'		=>	'right',
 					'width'		=>	'50px',
 					'index'		=>	'updated_at',
@@ -94,9 +124,7 @@ class Harapartners_Stockhistory_Block_Adminhtml_Purchaseorder_Index_Grid extends
 					'gmtoffset'	=> 	true,
 		));
 		
-		
-		
-		//$this->addExportType('*/*/exportCsv', Mage::helper('stockhistory')->__('CSV'));
+		//$this->addExportType('*/*/exportCsv', $helper->__('CSV'));
 		
 		return parent::_prepareColumns();
 	}
