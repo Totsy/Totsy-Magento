@@ -22,18 +22,6 @@ class Harapartners_Import_Helper_Data extends Mage_Core_Helper_Abstract {
        	);
 	}
 	
-	public function getFormPoArrayByCategoryId($categoryId){
-		$poArray = array(array('label' => '', 'value' => ''));
-		$poCollection = Mage::getModel('stockhistory/purchaseorder')->getCollection()->loadByCategoryId($categoryId);
-		if(!!$poCollection){
-			foreach($poCollection as $po){
-				$poArray[] = array('label' => $po->getName(), 'value' => $po->getId());
-			}
-		}
-		return $poArray;
-		
-	}
-	
 	public function getGridStatusArray(){
 		return array(
 				Harapartners_Import_Model_Import::IMPORT_STATUS_COMPLETE => 'Complete', 
