@@ -23,15 +23,23 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Grid extends 
 				->addCategoryFilter($this->getCategory())
 				->addAttributeToFilter('type_id', 'simple')
 				->addAttributeToFilter(array(array('attribute'=>'is_master_pack', 'gt'=>0)));
+		
+		$hasEmptyMasterPackItem = false;
 		foreach($productCollection as $product){
 			if(!array_key_exists($product->getId(), $uniqueProductList)){
 				$uniqueProductList[$product->getId()] = array(
 						'total'	=> 0,
 						'qty'	=> 0
 				);
+				$hasEmptyMasterPackItem = true;
 			}
 			$uniqueProductList[$product->getId()]['is_master_pack']	= 'Yes';
 		}
+		
+		if($hasEmptyMasterPackItem){
+			Mage::register('has_empty_master_pack_item', 1);
+		}
+		
 		return $uniqueProductList;
 	}
 	
@@ -179,10 +187,5 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Grid extends 
 
         return $csv;
     }
-	
-    //No filters for this report!
-	public function getFilterVisibility(){
-		return false;
-	}
 	
 }

@@ -20,6 +20,8 @@ class Harapartners_Stockhistory_Model_Purchaseorder extends Mage_Core_Model_Abst
 	const STATUS_COMPLETE = 4;
 	const STATUS_CANCELLED = 5;
 	
+	protected $_vendorObj;
+	
 	public function _construct() {
 		$this->_init('stockhistory/purchaseorder');
 	}
@@ -39,6 +41,17 @@ class Harapartners_Stockhistory_Model_Purchaseorder extends Mage_Core_Model_Abst
 	public function loadByVendorId($vendorId, $storeId = null){
 		$this->addData($this->getResource()->loadByVendorId($vendorId, $storeId));
 		return $this;
+	}
+	
+	public function getVendorObj() {
+		if(!$this->_vendorObj){
+			$this->_vendorObj = Mage::getModel('stockhistory/vendor')->load($this->getData('vendor_id'));
+		}
+		return $this->_vendorObj;
+	}
+	
+	public function generatePoNumber(){
+		return strtoupper(substr($this->getVendorObj()->getVendorCode(), 0, 3)) . strtotime($this->getCreatedAt()); 
 	}
 	
 	public function importData($dataObj){

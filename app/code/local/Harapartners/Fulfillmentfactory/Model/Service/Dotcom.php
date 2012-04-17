@@ -253,8 +253,7 @@ XML;
 	 * @param array $orders for orders we want to submit
 	 * @return response
 	 */
-	public function submitPurchaseOrdersToDotcom($items) {
-		$poNumber = 'po_' . date('YmdHsi');
+	public function submitPurchaseOrdersToDotcom($poNumber, $items) {
 		
 		$xml = '<purchase_orders xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">';
 		

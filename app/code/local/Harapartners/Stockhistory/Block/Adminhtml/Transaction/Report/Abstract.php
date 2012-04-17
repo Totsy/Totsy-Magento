@@ -111,11 +111,15 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Abstract exte
 		}
 		
 		//set collection in session
-		Mage::getSingleton('adminhtml/session')->setPOReportGridData($reportCollection->toArray());
+		$reportData = $reportCollection->toArray();
+		if(!empty($reportData['items'])){
+			Mage::getSingleton('adminhtml/session')->setPOReportGridData($reportData['items']);
+		}
 		
 		$this->_reportCollection = $reportCollection;
 		$this->setCollection($reportCollection);
-		return parent::_prepareCollection();
+		//return parent::_prepareCollection(); //We don't need to prepare Filter/Sort/etc...
+		return $this;
 	}
 	
 	protected function _getUniqueProductList(){
@@ -137,5 +141,15 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Abstract exte
 		}
 		return $uniqueProductList;
 	}
+	
+	//No pager for this report!
+	public function getPagerVisibility(){
+		return false;
+	}
 
+    //No filters for this report!
+	public function getFilterVisibility(){
+		return false;
+	}
+	
 }

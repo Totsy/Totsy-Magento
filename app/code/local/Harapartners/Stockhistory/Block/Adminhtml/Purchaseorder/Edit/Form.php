@@ -64,7 +64,6 @@ class Harapartners_Stockhistory_Block_Adminhtml_Purchaseorder_Edit_Form extends 
         	$fieldset->addField('category_id', 'text', array(
 		            'label'     => $helper->__('Category/Event ID:'),
 		            'name'      => 'category_id',
-					'readonly' 	=> true,
 		        	'required'	=> true,
 					'note'		=> 'Once saved, this field <b>CANNOT</b> be modified.'
 	        ));

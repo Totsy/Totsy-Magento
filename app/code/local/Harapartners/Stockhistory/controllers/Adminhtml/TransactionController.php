@@ -283,7 +283,6 @@ class Harapartners_Stockhistory_Adminhtml_TransactionController extends Mage_Adm
 		
 		//get report collection data from session
 		$reportData = $this->_getSession()->getPOReportGridData();
-		
 		$itemsArray = array();
 		foreach($reportData as $record) {
 			//DotCom does NOT receive qty = 0 record
@@ -292,7 +291,7 @@ class Harapartners_Stockhistory_Adminhtml_TransactionController extends Mage_Adm
 			}
 		}
 		
-		$rsp = Mage::getModel('fulfillmentfactory/service_dotcom')->submitPurchaseOrdersToDotcom($itemsArray);
+		$rsp = Mage::getModel('fulfillmentfactory/service_dotcom')->submitPurchaseOrdersToDotcom($poObject->generatePoNumber(), $itemsArray);
 
 		$error = $rsp->purchase_order_error;
 		if(!!$error) {
