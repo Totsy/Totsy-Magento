@@ -35,40 +35,27 @@ class Harapartners_Service_Model_Rewrite_Checkout_Session extends Mage_Checkout_
 	
     public function getQuote(){	
     	$quote = parent::getQuote();
-    	if(!Mage::registry('has_expire_cart_by_rushcheckout')){
-    		$checkoutSession = Mage::getSingleton('checkout/session');
-    		$countdown = $checkoutSession->getCountDownTimer();
-        	$timeout = $checkoutSession->getQuoteItemExpireTime();
+    	
+    	//Only check once for expiration, for non-empty quote
+    	if(!Mage::registry('has_expire_cart_by_rushcheckout')
+    			&& !!count($quote->getAllItems())
+    	){
+    		$countdown = $this->getCountDownTimer();
+        	$timeout = $this->getQuoteItemExpireTime();
     	    if($this->_getCurrentTime() - $countdown > $timeout){
-  	        	foreach($quote->getAllItems() as $item){
-					$item->delete();			
-				}
+    	    	//Remove expired ones and create a new quote
+  	        	$quote->delete();
+  	        	$this->_quote = Mage::getModel('sales/quote')->setStoreId(Mage::app()->getStore()->getId());
 	        }
+	        Mage::unregister('has_expire_cart_by_rushcheckout');
     		Mage::register('has_expire_cart_by_rushcheckout', true);
     	}
-    	$this->_quote = $quote;
+
         return $this->_quote;
     }
 
     public function getQuoteItemExpireTime(){	
     	return $this->_getTimerconfig();	
-    }
-    
-    /**
-     *  Run Crob to clean the  timeout cart
-     */
-    public function cartCleanCron(){
-    	$cart = Mage::getSingleton('checkout/cart');
-    	$this->cartTimeoutCheck($cart);
-    }
-    
-    public function cartTimeoutCheck($cart){
-        $countdown = Mage::getSingleton('checkout/session')->getCountDownTimer();
-        $timeout = $this->getQuoteItemExpireTime();
-        if($this->_getCurrentTime() - $countdown > $timeout){
-        	$cart->getQuote();
-        	$cart->truncate();
-        }
     }
 
 }

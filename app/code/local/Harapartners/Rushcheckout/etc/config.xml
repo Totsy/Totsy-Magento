@@ -90,7 +90,7 @@
                     <cron_expr>*/5 * * * *</cron_expr>
                 </schedule>
                 <run>
-                    <model>rushcheckout/helper::cartCleanCron</model>
+                    <model>rushcheckout/helper::cleanExpiredQuotes</model>
                 </run>
             </harapartners_rushcheckout>
         </jobs>

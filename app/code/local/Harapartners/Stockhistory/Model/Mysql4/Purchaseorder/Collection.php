@@ -19,13 +19,16 @@ class Harapartners_Stockhistory_Model_Mysql4_Purchaseorder_Collection extends Ma
 		$this->_init('stockhistory/purchaseorder');
 	}
 	
-	public function loadByCategoryId($categoryId) {
+	public function loadByCategoryId($categoryId, $status = null) {
 		$category = Mage::getModel('catalog/category')->load($categoryId);
     	if(!$category || !$category->getId()){
 			return null;
 		}
 		
 		$this->getSelect()->where('category_id = ?', $categoryId);
+		if(!!$status){
+			$this->getSelect()->where('status = ?', $status);
+		}
 		$this->load();
 		
 		return $this;

@@ -1,7 +1,7 @@
 <?php 
 	$reportCollection = $this->getPreparedCollection();
 	$poObj = $this->getPoObject();
-	$vendorInfoObj = $this->getVendorInfoObj();
+	$vendorObj = $this->getVendorObj();
 ?>
 <div id="report-container">
 	<div id="report-header-container">
@@ -12,18 +12,18 @@
 		<div id="order-info" class="block">
 			<h2 id="op-title"><?php echo $this->__('PURCHASE ORDER');?></h2>
 			<label class="sigle-line"><?php echo $this->__('PO Number:');?></label>
-			<p><?php echo $poObj->getData('name')?></p>
+			<p><?php echo $this->getPoNumber(); ?></p>
 			<label class="sigle-line"><?php echo $this->__('PO Date:');?></label>
-			<p><?php echo $poObj->getData('created_at')?></p>
+			<p><?php echo $this->getPoDate(); ?></p>
 			<div id="billing-info">
 				<label><?php echo $this->__('BILL TO:');?></label>
 				<p>TOTSY <br>10 West 18th Street <br>Fourth Floor <br>New York, New York 10011 <br>payment@totsy.com</p>
 			</div>
 		</div>
 		<div id="vendor-info" class="block">
-			<label><?php echo $this->__('VENDOR:');?></label>
-			<p><?php echo $vendorInfoObj->getData('address');?></p>
-			<p><?php echo $vendorInfoObj->getData('email_list');?></p>
+			<label><?php echo $this->__('VENDOR:'); ?></label>
+			<p><?php echo $this->getVendorAddress(); ?></p>
+			<p><?php echo $this->getVendorEmailList(); ?></p>
 		</div>	
 		<div id="shipping-info" class="block">
 			<label><?php echo $this->__('SHIP TO:');?></label>
@@ -35,8 +35,8 @@
 				<col width="400">
 			</colgroup>
 			<tr>
-				<td>SHIP BY DATE: </td>
-				<td>IN HOUSE DATE: </td>
+				<td>SHIP BY DATE: <?php echo $this->getShipByDate(); ?></td>
+				<td>IN HOUSE DATE: <?php echo $this->getInHouseDate(); ?></td>
 			</tr>
 		</table>	
 	</div>
@@ -46,7 +46,6 @@
 				<col width="100">
 				<col width="100">
 				<col width="450">
-				<col width="100">
 				<col width="100">
 				<col width="100">
 				<col width="100">
@@ -79,7 +78,7 @@
 					<th>
 						<span class="nobr">
 							<a class="not-sort" title="asc" name="color" href="#">
-								<span class="sort-title">Product Color</span>
+								<span class="sort-title">Color</span>
 							</a>
 						</span>
 					</th>
@@ -93,21 +92,14 @@
 					<th>
 						<span class="nobr">
 							<a class="not-sort" title="asc" name="qty_stock" href="#">
-								<span class="sort-title">Stock Quantity</span>
-							</a>
-						</span>
-					</th>
-					<th>
-						<span class="nobr">
-							<a class="not-sort" title="asc" name="is_master_pack" href="#">
-								<span class="sort-title">Master Pack</span>
+								<span class="sort-title">Total Qty</span>
 							</a>
 						</span>
 					</th>
 					<th>
 						<span class="nobr">
 							<a class="not-sort" title="asc" name="average_cost" href="#">
-								<span class="sort-title">Average Cost</span>
+								<span class="sort-title">Unit Cost</span>
 							</a>
 						</span>
 					</th>
@@ -128,9 +120,8 @@
 						<td><?php echo $item->getData('product_name');?></td>
 						<td><?php echo $item->getData('color');?></td>
 						<td><?php echo $item->getData('size');?></td>
-						<td><?php echo $item->getData('qty_stock');?></td>
-						<td><?php echo $item->getData('is_master_pack');?></td>
-						<td><?php echo $item->getData('average_cost');?></td>
+						<td><?php echo $item->getData('qty_total');?></td>
+						<td><?php echo $item->getData('unit_cost');?></td>
 						<td><?php echo $item->getData('total_cost');?></td>
 					</tr>
 				<?php endforeach;?>
@@ -156,7 +147,7 @@
 						<p>TOTSY <br>c/o Dotcom Distribution <br>400 Nixon Lane <br>Edison, NJ 08837</p>
 					</td>
 					<td>
-						<p>Emmanuel Hottlet</p>
+						<p><?php echo $this->getAuthorizationName(); ?></p>
 					</td>
 				<tr>
 			</tbody>

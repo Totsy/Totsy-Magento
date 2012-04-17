@@ -38,11 +38,14 @@ class Harapartners_Import_Block_Adminhtml_Import_Edit_Tab_Form extends Mage_Admi
 		));
 		
 		$fieldset->addField('po_id', 'select', array(
-			'label'     => $helper->__('Purchase Order'),
-			//'required'  => true,
-			'name'		=> 'po_id',
-			'values'    => $helper->getFormPoArrayByCategoryId($dataObj->getData('category_id')),
-			'note'		=> $helper->__('If <b>NOT</b> specified, a new purchase order will be created.')
+				'label'     => $helper->__('Purchase Order'),
+				//'required'  => true,
+				'name'		=> 'po_id',
+				'values'    => Mage::helper('stockhistory')->getFormPoArrayByCategoryId(
+						$dataObj->getData('category_id'), 
+						Harapartners_Stockhistory_Model_Purchaseorder::STATUS_OPEN
+				),
+				'note'		=> $helper->__('If <b>NOT</b> specified, a new purchase order will be created.')
 		));
 		
 		if(!!$dataObj->getData('category_id')){

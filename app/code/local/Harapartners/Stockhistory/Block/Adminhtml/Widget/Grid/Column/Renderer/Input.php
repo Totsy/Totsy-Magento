@@ -15,17 +15,26 @@
 class Harapartners_Stockhistory_Block_Adminhtml_Widget_Grid_Column_Renderer_Input extends Mage_Adminhtml_Block_Widget_Grid_Column_Renderer_Input {
 
     public function render(Varien_Object $row){
-    	//SKU
+    	//SKU bases
+    	
+    	//qty_to_amend: defined as FINAL quantity, i.e. forcing the quantity to the given value, instead of just the delta
         $html = '<input type="text"';
         $html .= 'name="' . $this->getColumn()->getId() . '[' . $row->getData('sku') . '][' . $this->getColumn()->getId() . ']" ';
         $html .= 'value="' . $row->getData($this->getColumn()->getIndex()) . '"';
         $html .= 'class="input-text ' . $this->getColumn()->getId() . ' ' . $this->getColumn()->getInlineCss() . '"/>';
         
-        //Average cost
+        //Current total qty
         $html .= '<input type="hidden"';
-        $html .= 'name="' . $this->getColumn()->getId() . '[' . $row->getData('sku') . '][average_cost]" ';
-        $html .= 'value="' . $row->getData('average_cost') . '"';
+        $html .= 'name="' . $this->getColumn()->getId() . '[' . $row->getData('sku') . '][qty_total]" ';
+        $html .= 'value="' . $row->getData('qty_total') . '"';
         $html .= 'class="input-text ' . $this->getColumn()->getId() . ' ' . $this->getColumn()->getInlineCss() . '"/>';
+        
+        //Unit cost
+        $html .= '<input type="hidden"';
+        $html .= 'name="' . $this->getColumn()->getId() . '[' . $row->getData('sku') . '][unit_cost]" ';
+        $html .= 'value="' . $row->getData('unit_cost') . '"';
+        $html .= 'class="input-text ' . $this->getColumn()->getId() . ' ' . $this->getColumn()->getInlineCss() . '"/>';
+        
         return $html;
     }
     

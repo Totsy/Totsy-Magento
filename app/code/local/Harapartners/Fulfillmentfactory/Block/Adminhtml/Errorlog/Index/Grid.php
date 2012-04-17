@@ -61,17 +61,17 @@ class Harapartners_Fulfillmentfactory_Block_Adminhtml_Errorlog_Index_Grid extend
             'index'         => 'increment_id'
         ));
         
-        $this->addColumn('store_id', array(
-            'header'        => Mage::helper('fulfillmentfactory')->__('Store ID'),
-            'align'         => 'right',
-            'width'         => '30px',
-            'index'         => 'store_id'
-        ));
+//        $this->addColumn('store_id', array(
+//            'header'        => Mage::helper('fulfillmentfactory')->__('Store ID'),
+//            'align'         => 'right',
+//            'width'         => '30px',
+//            'index'         => 'store_id'
+//        ));
         
         $this->addColumn('message', array(
             'header'        => Mage::helper('fulfillmentfactory')->__('Error Message'),
-            'align'         => 'right',
-            'width'         => '150px',
+            'align'         => 'left',
+            'width'         => '200px',
             'index'         => 'message'
         ));
         
