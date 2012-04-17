@@ -8,6 +8,7 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Mage_Cybersource_Model_
     protected $_formBlockType = 'paymentfactory/form';
     protected $_infoBlockType = 'paymentfactory/info';
     protected $_payment = null;
+    protected $_canRefundInvoicePartial = true;
 
     
     // =============================================== //
