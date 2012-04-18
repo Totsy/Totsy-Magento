@@ -878,6 +878,19 @@ body .sidebar .block-account li.current{
 #st_sharethis_custom .stButton{
 	display: none !important;
 }
+
+
+
+#st_sharethis_custom{
+	display:none;
+	/*display none temperory*/
+}
+
+
+
+
+
+
 h2.inline{
 	vertical-align:top;
 	margin-top:3px;
