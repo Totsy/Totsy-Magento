@@ -70,9 +70,9 @@ class Harapartners_Service_Block_Rewrite_Page_Html_Head extends Mage_Page_Block_
         	$labeltemp = strtolower(str_replace('-and-','-',str_replace('_','-',$perdept)));
         	$newDeptArray[] = 	$labeltemp;
         }
-        $deptStr = implode(',' , $newDeptArray);
-        if (count($deptArray)!=0){
-        	$deptStr = ','.$deptStr;
+        $deptStr = implode(', ' , $newDeptArray);
+        if (!empty($dept)){
+        	$deptStr = ', '.$deptStr;
         }
         $age = $category->getAges();
         $ageArray = explode(',', $age);
@@ -80,11 +80,11 @@ class Harapartners_Service_Block_Rewrite_Page_Html_Head extends Mage_Page_Block_
 		$ageAttrOptions = Mage::getModel('catalog/product')->getResource()->getAttribute('ages');
         foreach ($ageArray as $perage){
         	//$attrText = $ageAttrOptions->getSource()->getOptionText($perage);
-        	$newAgeArray[] = 	$perage;
+        	$newAgeArray[] = $perage;
         }
-        $ageStr = implode(',' , $newAgeArray);
-        if (count($ageArray)!=0){
-        	$ageStr = ','.$ageStr;
+        $ageStr = implode(', ' , $newAgeArray);
+        if (!empty($age)){
+        	$ageStr = ', '.$ageStr;
         }
 
         $label = trim($label.$deptStr.$ageStr , ',');
@@ -126,9 +126,9 @@ class Harapartners_Service_Block_Rewrite_Page_Html_Head extends Mage_Page_Block_
         	$labeltemp = strtolower(str_replace('-and-','-',str_replace('_','-',$attrText)));
         	$newDeptArray[] = 	$labeltemp;
         }
-        $deptStr = implode(',' , $newDeptArray);
-        if (count($deptArray)!=0){
-        	$deptStr = ','.$deptStr;
+        $deptStr = implode(', ' , $newDeptArray);
+        if (!empty($dept)){
+        	$deptStr = ', '.$deptStr;
         }
         $age = $product->getAges();
         $ageArray = explode(',', $age);
@@ -138,9 +138,9 @@ class Harapartners_Service_Block_Rewrite_Page_Html_Head extends Mage_Page_Block_
         	$attrText = $ageAttrOptions->getSource()->getOptionText($perage);
         	$newAgeArray[] = 	$this->__($attrText);
         }
-        $ageStr = implode(',' , $newAgeArray);
-        if (count($ageArray)!=0){
-        	$ageStr = ','.$ageStr;
+        $ageStr = implode(', ' , $newAgeArray);
+        if (!empty($age)){
+        	$ageStr = ', '.$ageStr;
         }
         $label = trim($label.$deptStr.$ageStr , ',');
         //$label = $label.$deptStr.$ageStr;

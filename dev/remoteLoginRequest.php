@@ -4,7 +4,8 @@
 //          {"status":"success","login_url":"http://totsy.local.com/affiliate/remote/login?email=xx&password=yyy&product_url=zzz"} 
 // work for both http remost post and parents.com requirement
 // request example follow
-$baseUrlTotsy = 'http://totsy.local.com/affiliate/remote/register';                       //tosty 
+//$baseUrlTotsy = 'http://totsy.local.com/affiliate/remote/register';  
+$baseUrlTotsy = 'http://totsy.local.com/affiliate/?genpswd=true';                      //tosty 
 $baseUrlMamasource = 'http://totsy.local.com/mamasource/affiliate/remote/register';       //mamasource
 $email = 'asdasdsad@asd.com';
 $productUrl = 'product_url';                                                              // parents.com only param
@@ -12,7 +13,7 @@ $affiliateCode = 'parents_com';
 $otherfield = '';                                                                         //subaffiliate_code etc
 $password = 'pwdasda';                                                                        // if null autogenerate
 //totsy mamasource
-$url = $baseUrlTotsy.'?affiliate_code='.$affiliateCode;                                   //work with mamasource too
+$url = $baseUrlTotsy.'&affiliate_code='.$affiliateCode;                                   //work with mamasource too
 $data = array(
         'email' => $email,
         'password' => $password,

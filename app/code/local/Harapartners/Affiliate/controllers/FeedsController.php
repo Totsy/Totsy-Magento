@@ -72,7 +72,7 @@ XML;
 			foreach (json_decode($record->getRegistrationParam(),true) as $index=>$value) {						
 				if($index=="clickid"){
 					$clickId = $value;
-					$entryString = 'clickId='.$clickId.' eventMerchantId='.$record->getCustomerId().' count1="1" time='.strtotime($record->getCreatedAt());
+					$entryString = 'clickId='.$clickId.'  eventMerchantId='.$record->getCustomerId().'  count1="1"  time='.strtotime($record->getCreatedAt());
 					$simpleXml->addChild ('entry', $entryString);	
 					break;
 				}
@@ -86,13 +86,14 @@ XML;
 		$recordCollection = Mage::getModel('customertracking/record')->getCollection()
 																	->addFieldToFilter('created_at', array( "lt" => $to,"gt"=>$from ))
 																	->addFieldToFilter('affiliate_code',$affiliateCode)
-																	->addFieldToFilter('level', 1);	
+																	->addFieldToFilter('level', 1)
+																	->load();	
 		foreach ($recordCollection as $record) {
 		$clickId = '';
 			foreach (json_decode($record->getRegistrationParam(),true) as $index=>$value) {						
 				if($index=="clickid"){
 					$clickId = $value;
-					$entryString = 'clickId='.$clickId.' eventMerchantId='.$record->getCustomerId().' count1="1" time='.strtotime($record->getCreatedAt());
+					$entryString = 'clickId='.$clickId.'  eventMerchantId='.$record->getCustomerId().'  count1="1"  time='.strtotime($record->getCreatedAt());
 					$simpleXml->addChild ('entry', $entryString);	
 					break;
 				}
@@ -104,7 +105,8 @@ XML;
 	protected function _createSalesXml($simpleXml,$from,$to,$affiliateCode,$period){
 		$recordCollection = Mage::getModel('customertracking/record')->getCollection()
 																->addFieldToFilter('affiliate_code', $affiliateCode)
-																->addFieldToFilter('level', 0);	
+																->addFieldToFilter('level', 0)
+																->load();	
 		foreach ($recordCollection as $record) {
 		// record may not have accurate customerId
 			$customer = Mage::getModel('customer/customer')->setWebsiteId(1)->loadByEmail($record->getCustomerEmail());
@@ -118,7 +120,8 @@ XML;
 			$orderCollection = Mage::getModel('sales/order')->getCollection()
 															->addFieldToFilter('created_at', array( "lt" => $to,"gt"=>$from ))
 															->addFieldToFilter('customer_id',$customer->getId())
-															->addFieldToFilter('state','complete');	
+															->addFieldToFilter('state','complete')
+															->load();	
 			foreach ($orderCollection as $order) {
 				if($period>0){
 					$salesTime = strtotime($order->getCreatedAt());
@@ -140,7 +143,8 @@ XML;
 		//Place holders !!!
 		$recordCollection = Mage::getModel('customertracking/record')->getCollection()
 																->addFieldToFilter('affiliate_code', $affiliateCode)
-																->addFieldToFilter('level', 1);	
+																->addFieldToFilter('level', 1)
+																->load();	
 		foreach ($recordCollection as $record) {
 		// record may not have accurate customerId
 			$customer = Mage::getModel('customer/customer')->setWebsiteId(1)->loadByEmail($record->getCustomerEmail());
@@ -154,7 +158,8 @@ XML;
 			$orderCollection = Mage::getModel('sales/order')->getCollection()
 															->addFieldToFilter('created_at', array( "lt" => $to,"gt"=>$from ))
 															->addFieldToFilter('customer_id',$customer->getId())
-															->addFieldToFilter('state','complete');	
+															->addFieldToFilter('state','complete')
+															->load();	
 			foreach ($orderCollection as $order) {
 				if($period>0){
 					$salesTime = strtotime($order->getCreatedAt());
