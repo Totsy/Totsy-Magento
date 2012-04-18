@@ -51,7 +51,7 @@ Default layout, loads most of the pages
 				<action method="addJs"><script>jquery/jquery-1.6.1.min.noConflict.js</script></action>
 				<action method="addJs"><script>jquery/jquery.jcountdown1.3.min.js</script></action>
 				<action method="addJs"><script>jquery/cloud-zoom.1.0.2.js</script></action>
-				
+				<action method="addJs"><script>harapartners/phoneformat.js</script></action>
 
                 <block type="page/js_cookie" name="js_cookies" template="page/js/cookie.phtml"/>
 
