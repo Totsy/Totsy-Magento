@@ -51,13 +51,11 @@
 		?>
 		<p class="count-down-timer" id="timer"></p>					 
 		<script type="text/javascript">
+			var html = getTimerHtml('live','<?php echo $endcount_lc ?>');
 			jQuery("#timer").countdown({
 				//date: "12 10, 2011 16:11", //Counting TO a date
 				date: "<?php echo $endcount_lc; ?>", //Counting TO a date
-				htmlTemplate: "<span>Ends in</span> %{d} <span class=\"cd-time\">Days, </span> %{h}<span class=\"cd-time\">:</span>%{m}<span class=\"cd-time\">:</span>%{s}<span class=\"cd-time\"></span>",
-	
-				onChange: function( event, timer ){
-				},
+				htmlTemplate: html,
 				onComplete: function( event ){										
 					jQuery(this).html("Completed");
 				},

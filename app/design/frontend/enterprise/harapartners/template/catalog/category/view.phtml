@@ -74,13 +74,15 @@
 	<?php endif;?>
 		<p class="count-down-timer" id="time-<?php echo $timer ?>"></p>					 
 		<script type="text/javascript">
+			if(<?php echo $upComingFlag?>){
+				var html = getTimerHtml('upcoming','<?php echo $timecount ?>');
+			}else {
+				var html = getTimerHtml('live','<?php echo $timecount ?>');
+			}
 			jQuery("#time-<?php echo $timer ?>").countdown({
 				//date: "12 10, 2011 16:11", //Counting TO a date
 				date: "<?php echo $timecount; ?>", //Counting TO a date
-				htmlTemplate: "<span><?php echo $timerFlag;?></span> %{d} <span class=\"cd-time\">Days, </span> %{h}<span class=\"cd-time\">:</span>%{m}<span class=\"cd-time\">:</span>%{s}<span class=\"cd-time\"></span>",
-	
-				onChange: function( event, timer ){
-				},
+				htmlTemplate: html,
 				onComplete: function( event ){										
 					jQuery(this).html("Completed");
 				},

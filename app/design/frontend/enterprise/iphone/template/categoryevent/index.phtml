@@ -125,18 +125,16 @@
 						<h3 class="event-name"><?php echo $live['name'];?></h3>
 						<p id="time1-<?php echo $timer ?>"></p>					 
 						<script type="text/javascript">
+							var html = getTimerHtml('live','<?php echo $endcount ?>');
 							jQuery("#time1-<?php echo $timer ?>").countdown({
 								//date: "12 10, 2011 16:11", //Counting TO a date
 								date: "<?php echo $endcount; ?>", //Counting TO a date
-								htmlTemplate: "<span>Ends in</span> %{d} <span class=\"cd-time\">Days</span> %{h}<span class=\"cd-time\">:</span>%{m}<span class=\"cd-time\">:</span>%{s}<span class=\"cd-time\"></span>",
-				
-								onChange: function( event, timer ){
-								},
+								htmlTemplate: html,
 								onComplete: function( event ){										
 									jQuery(this).html("Completed");
 									jQuery("div.live-event-<?php echo $timer?>").hide();
 								},
-								leadingZero: false,
+								leadingZero: true,
 								direction: "down"
 							});
 						</script>
@@ -166,18 +164,16 @@
 						<p class="event-name"><?php echo $up['name'];?></p>
 						<p id="time2-<?php echo $timer ?>"></p> 
 						<script type="text/javascript">
+							var html = getTimerHtml('upcoming','<?php echo $endcount ?>');
 							jQuery("#time2-<?php echo $timer ?>").countdown({
 								//date: "12 10, 2011 16:11", //Counting TO a date
 								date: "<?php echo $endcount; ?>", //Counting TO a date
-								htmlTemplate: "<span>Opens in</span> %{d} <span class=\"cd-time\">Days</span> %{h}<span class=\"cd-time\">:</span>%{m}<span class=\"cd-time\">:</span>%{s}<span class=\"cd-time\"></span>",
-				
-								onChange: function( event, timer ){
-								},
+								htmlTemplate: html,
 								onComplete: function( event ){										
 									jQuery(this).html("Completed");
 									jQuery("div.up-event-<?php echo $timer?>").hide();
 								},
-								leadingZero: false,
+								leadingZero: true,
 								direction: "down"
 							});
 						</script>
