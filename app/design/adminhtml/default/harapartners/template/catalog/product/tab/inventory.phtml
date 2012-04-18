@@ -30,8 +30,20 @@
 <?php $_readonly = '';?>
 <?php endif; ?>
 
-<?php // HP Song 
-$_qty_readonly = ' disabled="disabled" ';?>
+<?php
+//Harapartners, Jun/Song, simple product quantity update must be processed in the PO process
+//Respecting global read-only flag
+if(!!$_readonly){
+	$_qty_readonly = $_readonly;
+}else{
+	if($this->getProduct()->getTypeId() == 'simple'){
+		$_qty_readonly = ' disabled="disabled" ';
+	}else{
+		$_qty_readonly = '';
+	}
+}
+
+?>
 <div class="entry-edit">
     <div class="entry-edit-head">
         <h4 class="icon-head head-edit-form fieldset-legend"><?php echo Mage::helper('catalog')->__('Inventory') ?></h4>
@@ -59,15 +71,19 @@ $_qty_readonly = ' disabled="disabled" ';?>
         <tr>
             <td class="label"><label for="inventory_qty"><?php echo Mage::helper('catalog')->__('Qty') ?><span class="required">*</span></label></td>
             <td class="value">
-                <?php if (!$_qty_readonly)://HP Song?>
+            
+            	<?php //Harapartners, Jun/Song, START: Simple product quantity update must be processed in the PO process ?>
+                <?php if (!$_qty_readonly):?>
                 <input type="hidden" id="original_inventory_qty" name="<?php echo $this->getFieldSuffix() ?>[stock_data][original_inventory_qty]" value="<?php echo $this->getFieldValue('qty')*1 ?>"/>
                 <?php endif;?>
-                <input type="text" class="input-text required-entry validate-number" id="inventory_qty" name="<?php echo $this->getFieldSuffix() ?>[stock_data][qty]" value="<?php echo $this->getFieldValue('qty')*1 ?>" <?php echo $_qty_readonly;//HP Song?>/>
-                <?php //HP Song --Start?>
-                <p id="note_email_list" class="note">
-					<span>Read only, you must change the qty by creating amendment in PO report</span>
+                <input type="text" class="input-text required-entry validate-number" id="inventory_qty" name="<?php echo $this->getFieldSuffix() ?>[stock_data][qty]" value="<?php echo $this->getFieldValue('qty')*1 ?>" <?php echo $_qty_readonly;?>/>
+                <?php if (!!$_qty_readonly):?>
+                <p class="note">
+					<span>Read only. Qty of simple product can only be changed by initial import or creating amendments to existing purchase orders.</span>
 				</p>
-				<?php //HP Song --End?>
+				<?php endif;?>
+                <?php //Harapartners, Jun/Song, END ?>
+                
             </td>
             <td class="value scope-label"><?php echo Mage::helper('catalog')->__('[GLOBAL]') ?></td>
         </tr>

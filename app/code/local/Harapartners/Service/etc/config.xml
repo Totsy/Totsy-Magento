@@ -138,6 +138,12 @@
                     <session>Harapartners_Service_Model_Rewrite_Customer_Session</session>
                 </rewrite>
             </customer>
+			<index>
+				<rewrite>
+					<!--Harapartners_Import: Optimization irrelevant indexing processes ignore-->
+					<indexer>Harapartners_Service_Model_Rewrite_Index_Indexer</indexer>
+				</rewrite>
+			</index>
 			<sales>
 				<rewrite>
 					<!--Harapartners_Ordersplit--><!--Harapartners_Paymentfactory-->
