@@ -71,7 +71,7 @@ class Harapartners_Service_Block_Rewrite_Page_Html_Head extends Mage_Page_Block_
         	$newDeptArray[] = 	$labeltemp;
         }
         $deptStr = implode(', ' , $newDeptArray);
-        if (count($deptArray)!=0){
+        if (!empty($dept)){
         	$deptStr = ', '.$deptStr;
         }
         $age = $category->getAges();
@@ -80,10 +80,10 @@ class Harapartners_Service_Block_Rewrite_Page_Html_Head extends Mage_Page_Block_
 		$ageAttrOptions = Mage::getModel('catalog/product')->getResource()->getAttribute('ages');
         foreach ($ageArray as $perage){
         	//$attrText = $ageAttrOptions->getSource()->getOptionText($perage);
-        	$newAgeArray[] = 	$perage;
+        	$newAgeArray[] = $perage;
         }
         $ageStr = implode(', ' , $newAgeArray);
-        if (count($ageArray)!=0){
+        if (!empty($age)){
         	$ageStr = ', '.$ageStr;
         }
 
@@ -127,7 +127,7 @@ class Harapartners_Service_Block_Rewrite_Page_Html_Head extends Mage_Page_Block_
         	$newDeptArray[] = 	$labeltemp;
         }
         $deptStr = implode(', ' , $newDeptArray);
-        if (count($deptArray)!=0){
+        if (!empty($dept)){
         	$deptStr = ', '.$deptStr;
         }
         $age = $product->getAges();
@@ -139,7 +139,7 @@ class Harapartners_Service_Block_Rewrite_Page_Html_Head extends Mage_Page_Block_
         	$newAgeArray[] = 	$this->__($attrText);
         }
         $ageStr = implode(', ' , $newAgeArray);
-        if (count($ageArray)!=0){
+        if (!empty($age)){
         	$ageStr = ', '.$ageStr;
         }
         $label = trim($label.$deptStr.$ageStr , ',');
