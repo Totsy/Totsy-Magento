@@ -350,7 +350,15 @@ class Mage_Checkout_Block_Cart_Sidebar extends Mage_Checkout_Block_Cart_Abstract
     	if ( !$endDate ){
     		$endDate = now();
     	}
-    	return date('m-d-Y', $endDate + 15*24*3600 );
+
+    	for ( $i = 15; $i > 0;  ){
+    		if ( date("N",$endDate)!=6 && date("N",$endDate)!=7 ){
+    			$i--;
+    		}
+    		$endDate = $endDate + 24*3600;
+    	}
+    	
+    	return date('m-d-Y', $endDate);
     }
 	//Harapartners, yang, END
 	

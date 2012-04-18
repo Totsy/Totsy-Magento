@@ -101,11 +101,6 @@ class Harapartners_Service_Model_Rewrite_Customer_Customer extends Mage_Customer
         	));
         }
         
-        //Harapartners, set login count attribute
-        $loginCount = $this->getLoginCounter();
-        $this->setLoginCounter($loginCount + 1);
-        $this->save();
-        
 		//Haraparnters, yang, Set 15min validation time
         Mage::getSingleton('customer/session')->setData('CUSTOMER_LAST_VALIDATION_TIME', now());
         return true;

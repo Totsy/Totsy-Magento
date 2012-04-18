@@ -43,6 +43,16 @@ class Harapartners_Stockhistory_Helper_Data extends Mage_Core_Helper_Abstract  {
 		);
 	}
 	
+	public function getGridPurchaseorderStatusArray(){
+		return array(
+				Harapartners_Stockhistory_Model_Purchaseorder::STATUS_OPEN => 'Open',
+//				Harapartners_Stockhistory_Model_Purchaseorder::STATUS_ON_HOLD => 'On Hold',
+				Harapartners_Stockhistory_Model_Purchaseorder::STATUS_SUBMITTED => 'Submitted',
+//				Harapartners_Stockhistory_Model_Purchaseorder::STATUS_COMPLETE => 'Complete',
+//				Harapartners_Stockhistory_Model_Purchaseorder::STATUS_CANCELLED => 'Cancelled'
+		);
+	}
+	
 	public function getGridTransactionTypeArray(){
 		return array(
 				Harapartners_Stockhistory_Model_Transaction::ACTION_TYPE_AMENDMENT => 'Amendment', 
@@ -57,7 +67,6 @@ class Harapartners_Stockhistory_Helper_Data extends Mage_Core_Helper_Abstract  {
 				Harapartners_Stockhistory_Model_Transaction::STATUS_PROCESSED => 'Processed', 
 				Harapartners_Stockhistory_Model_Transaction::STATUS_FAILED=> 'Failed'
 		);
-
 	}
 	
 	public function getFormAllVendorsArray(){
@@ -85,6 +94,17 @@ class Harapartners_Stockhistory_Helper_Data extends Mage_Core_Helper_Abstract  {
 		);
 	}
 	
+	public function getFormPurchaseorderStatusArray(){
+		return array(
+				array('label' => 'Open', 'value' => Harapartners_Stockhistory_Model_Purchaseorder::STATUS_OPEN),
+//				array('label' => 'On Hold', 'value' => Harapartners_Stockhistory_Model_Purchaseorder::STATUS_ON_HOLD),
+				array('label' => 'Submitted', 'value' => Harapartners_Stockhistory_Model_Purchaseorder::STATUS_SUBMITTED),
+//				array('label' => 'Complete', 'value' => Harapartners_Stockhistory_Model_Purchaseorder::STATUS_COMPLETE),
+//				array('label' => 'Cancelled', 'value' => Harapartners_Stockhistory_Model_Purchaseorder::STATUS_CANCELLED)
+		);
+	}
+
+	
 	public function getFormTransactionTypeArray(){
 		return array(
        			array('label' => 'Amendment', 'value' => Harapartners_Stockhistory_Model_Transaction::ACTION_TYPE_AMENDMENT),
@@ -101,6 +121,17 @@ class Harapartners_Stockhistory_Helper_Data extends Mage_Core_Helper_Abstract  {
 		);
 	}
 	
+	public function getFormPoArrayByCategoryId($categoryId, $status){
+		$poArray = array(array('label' => '', 'value' => ''));
+		$poCollection = Mage::getModel('stockhistory/purchaseorder')->getCollection()
+				->loadByCategoryId($categoryId, $status);
+		if(!!$poCollection){
+			foreach($poCollection as $po){
+				$poArray[] = array('label' => $po->getName(), 'value' => $po->getId());
+			}
+		}
+		return $poArray;
+	}
 	
 	public function getProductSoldInfoByCategory($category, $uniqueProductList){
 		$productSoldInfoArray = array();
@@ -147,64 +178,5 @@ class Harapartners_Stockhistory_Helper_Data extends Mage_Core_Helper_Abstract  {
 		
 		return $productSoldInfoArray;
 	}
-	
-	/**
-	 * get products sold by event Id
-	 *
-	 * @param int $eventId
-	 * @return array
-	 */
-//	public function getProductSoldInfoByEvent($categoryId) {
-//		if(empty($categoryId)) {
-//			return array();
-//		}
-//		
-//		
-//		//Simple products only
-//		
-//		$category = Mage::getModel('catalog/category')->load($categoryId);
-//		
-//		$productsArray = array();
-//		
-//		if(!!$category) {
-//			$productCollection = $category->getProductCollection();
-//			
-//			foreach($productCollection as $product) {
-//				$sku = $product->getSku();
-//				$productsArray[$sku] = 0;
-//				
-//				if($product->getTypeId() == 'configurable') {
-//					$childProducts = Mage::getModel('catalog/product_type_configurable')->getUsedProducts(null,$product);
-//					
-//					foreach($childProducts as $cProduct) {
-//						$cSku = $cProduct->getSku();
-//						$productsArray[$cSku] = 0;
-//					}
-//				}
-//			}
-//			
-//			$orders = Mage::getModel('sales/order')->getCollection()
-//											->addAttributeToFilter('status', array('neq', 'canceled'))
-//											->addAttributeToFilter('created_at', array(
-//																					'from' => $category->getData('event_start_date'),
-//																					'to' => $category->getData('event_end_date'),
-//																				)
-//											);
-//			
-//			foreach($orders as $order) {
-//				$items = $order->getAllItems();
-//				
-//				foreach($items as $item) {
-//					$sku = $item->getSku();
-//					$qty = $item->getQtyOrdered();
-//					
-//					if(isset($productsArray[$sku])) {
-//						$productsArray[$sku] += $qty;
-//					}
-//				}
-//			}											
-//		}
-//		
-//		return $productsArray;
-//	}
+
 }

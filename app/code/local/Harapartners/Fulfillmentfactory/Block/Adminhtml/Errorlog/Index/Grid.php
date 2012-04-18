@@ -70,8 +70,8 @@ class Harapartners_Fulfillmentfactory_Block_Adminhtml_Errorlog_Index_Grid extend
         
         $this->addColumn('message', array(
             'header'        => Mage::helper('fulfillmentfactory')->__('Error Message'),
-            'align'         => 'right',
-            'width'         => '150px',
+            'align'         => 'left',
+            'width'         => '200px',
             'index'         => 'message'
         ));
         

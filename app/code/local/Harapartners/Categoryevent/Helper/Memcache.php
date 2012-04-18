@@ -70,9 +70,11 @@ class Harapartners_Categoryevent_Helper_Memcache extends Mage_Core_Helper_Abstra
 		$mageTimezone = Mage::getStoreConfig(Mage_Core_Model_Locale::XML_PATH_DEFAULT_TIMEZONE);
 		date_default_timezone_set($mageTimezone);
 		$sortDate = now("Y-m-d");
+		$currentTime = now();
 		date_default_timezone_set($defaultTimezone);
 		$storeId = Mage::app()->getStore()->getId();
-		$sortentry = Mage::getModel('categoryevent/sortentry')->loadByDate($sortDate, $storeId, false);
+		//$sortentry = Mage::getModel('categoryevent/sortentry')->loadByDate($sortDate, $storeId, false);
+		$sortentry = Mage::getModel('categoryevent/sortentry')->filterByCurrentTime($sortDate, $currentTime, $storeId);
 		
 		$indexData['toplive'] = json_decode($sortentry->getData('top_live_queue'), true);
 		$indexData['live'] = json_decode($sortentry->getData('live_queue'), true);

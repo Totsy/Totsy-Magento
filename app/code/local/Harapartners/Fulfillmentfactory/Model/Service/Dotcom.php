@@ -253,8 +253,7 @@ XML;
 	 * @param array $orders for orders we want to submit
 	 * @return response
 	 */
-	public function submitPurchaseOrdersToDotcom($items) {
-		$poNumber = 'po_' . date('YmdHsi');
+	public function submitPurchaseOrdersToDotcom($poNumber, $items) {
 		
 		$xml = '<purchase_orders xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">';
 		
@@ -595,18 +594,22 @@ XML;
 		//get data from dotcom
 		$dataXML = Mage::helper('fulfillmentfactory/dotcom')->getShipment($fromDate, $toDate);
 		
+		echo "<br><br><br>";
+		
 		foreach($dataXML as $shipment) {
 			$attr = $shipment->attributes('i', TRUE);
 			
 			if(!$attr['nil']) {
 				$orderId = (string)$shipment->client_order_number;
+				echo $orderId . "<br>";
 				
 				$shipmentXmlItems = $shipment->ship_items->children('a', TRUE);
 				foreach($shipmentXmlItems as $shipmentXmlItem) {
 					$trackingNumber = (string)$shipmentXmlItem->tracking_number;
 					
 					if(empty($trackingNumber)) {
-						continue;
+						$trackingNumber = "";
+						//continue;
 					}
 					
 					//check if tracking number exists
@@ -621,6 +624,8 @@ XML;
 							'title'=>$title,
 							'number'=>$trackingNumber
 						);
+						
+						echo print_r($trackingData, 1) . "<br>";
 						
 						$order = Mage::getModel('sales/order')->loadByIncrementId($orderId);
 						

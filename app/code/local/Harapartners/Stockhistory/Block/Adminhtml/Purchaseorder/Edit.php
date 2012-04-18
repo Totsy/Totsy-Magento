@@ -25,14 +25,18 @@ class Harapartners_Stockhistory_Block_Adminhtml_Purchaseorder_Edit extends Mage_
 		$this->_removeButton('add');
 		
 		if(!!$dataObject->getId()){
-			$this->_addButton('transaction_add', array(
-	            'label'     => Mage::helper('stockhistory')->__('Create Amendment'),
-	            'onclick'   => 'setLocation(\'' . $this->getCreateAmendmentUrl() .'\')',
-				'class'		=> 'add',
-	      	));
-	      	$this->_addButton('view_product', array(
+			$poObject = Mage::getModel('stockhistory/purchaseorder')->load($dataObject->getId());
+			if($poObject->getStatus() == Harapartners_Stockhistory_Model_Purchaseorder::STATUS_OPEN){
+				$this->_addButton('transaction_add', array(
+		            'label'     => Mage::helper('stockhistory')->__('Create Amendment'),
+		            'onclick'   => 'setLocation(\'' . $this->getCreateAmendmentUrl() .'\')',
+					'class'		=> 'add',
+		      	));
+			}
+			
+	      	$this->_addButton('generate_report', array(
 	      		'label'		=>	Mage::helper('stockhistory')->__('Generate Report'),
-	      		'onclick'	=> 'setLocation(\'' . $this->getViewProductsUrl() .'\')',
+	      		'onclick'	=> 'setLocation(\'' . $this->getReportUrl() .'\')',
 	      	));
 		}
 	}
@@ -45,7 +49,7 @@ class Harapartners_Stockhistory_Block_Adminhtml_Purchaseorder_Edit extends Mage_
         return $this->getUrl('*/*/save', array('_current'=>true));
     }
     
-    public function getViewProductsUrl() {
+    public function getReportUrl() {
     	$dataObject = new Varien_Object(Mage::registry('stockhistory_po_data'));
     	return $this->getUrl('stockhistory/adminhtml_transaction/report', array(
     			'po_id'	=>	$dataObject->getId(),

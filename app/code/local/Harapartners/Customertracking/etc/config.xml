@@ -13,7 +13,7 @@
 <config>
     <modules>
         <Harapartners_Customertracking>
-            <version>1.0.1</version>
+            <version>1.0.2</version>
         </Harapartners_Customertracking>
     </modules>
     <global>
