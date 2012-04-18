@@ -56,6 +56,12 @@ class Harapartners_Affiliate_Controller_Router extends Mage_Core_Controller_Vari
         	}else{
         		return false;
         	}
+        }elseif (!!$request->getParam('genpswd') && $p[0] == 'affiliate' ){
+        	//Remote register request go in here
+        	$request->setModuleName('affiliate')
+        				->setControllerName('remote')
+        				->setActionName('register');
+        	return true;       	
         }elseif(count($p) >= 1 && $p[0]=='remote'){
         	//Remote login logic
         	//All other parameters need to be sent as GET params
