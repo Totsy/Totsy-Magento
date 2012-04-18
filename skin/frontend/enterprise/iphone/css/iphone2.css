@@ -410,3 +410,7 @@ body .account-create .field {
 #hpcheckout-wrapper #hpcheckout-shipping-method-wrapper{
 	display:none;
 }
+
+p.back-link{
+	display:none;
+}

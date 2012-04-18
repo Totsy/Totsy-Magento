@@ -878,6 +878,19 @@ body .sidebar .block-account li.current{
 #st_sharethis_custom .stButton{
 	display: none !important;
 }
+
+
+
+#st_sharethis_custom{
+	display:none;
+	/*display none temperory*/
+}
+
+
+
+
+
+
 h2.inline{
 	vertical-align:top;
 	margin-top:3px;
@@ -1231,4 +1244,11 @@ body .top-cart .block-content p.subtotal span.orange, .orange{
 }
 .sales-order-view .title-buttons .link-rss, .sales-order-view .title-buttons .separator{
 	display:none;
+}
+.truste{
+    position: relative;
+    top: 13px;
+}
+.footer-container .ups, .footer-container .AuthorizeNetSeal, .footer-container .truste,.footer-container .forbes{
+	margin:0px 5px;
 }
