@@ -65,7 +65,8 @@ XML;
 		$recordCollection = Mage::getModel('customertracking/record')->getCollection()
 																	->addFieldToFilter('created_at', array( "lt" => $to,"gt"=>$from ))
 																	->addFieldToFilter('affiliate_code',$affiliateCode)
-																	->addFieldToFilter('level', 0);	
+																	->addFieldToFilter('level', 0)
+																	->load();	
 		foreach ($recordCollection as $record) {
 		$clickId = '';
 			foreach (json_decode($record->getRegistrationParam(),true) as $index=>$value) {						
