@@ -37,7 +37,7 @@
 <?php 
 		$customer = Mage::getSingleton('customer/session')->getCustomer();
         $customerName = $customer->getName();
-        if (!empty($customerName)){
+        if ($customerName!=" "){
         	$welcomeMessage = $this->getWelcome();
         }else{
         	$welcomeMessage = 'Welcome, '.$customer->getEmail();
