@@ -101,7 +101,7 @@ class Harapartners_Service_Block_Rewrite_Page_Html_Head extends Mage_Page_Block_
             ->setStoreId(Mage::app()->getStore()->getId())
             ->load($categoryId);
         $label = $category->getName(); 
-        $label = strtolower(str_replace(' ','_',$label));
+        //$label = strtolower(str_replace(' ','-',$label));
     	$this->setSailthruTitle($label);
     }
     
