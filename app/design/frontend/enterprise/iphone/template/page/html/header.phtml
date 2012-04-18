@@ -40,7 +40,7 @@
         if ($customerName!=" "){
         	$welcomeMessage = $this->getWelcome();
         }else{
-        	$welcomeMessage = 'Welcome, '.$customer->getEmail();
+        	$welcomeMessage = 'Welcome, '.$customer->getEmail().'!';
         }
 ?>        
             <p class="welcome-msg"><a class="top-account" href="<?php echo $this->getUrl('customer/account')?>"><?php echo $welcomeMessage ?></a></p>
