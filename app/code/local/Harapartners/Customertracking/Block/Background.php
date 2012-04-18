@@ -20,10 +20,25 @@ class Harapartners_Customertracking_Block_Background extends Mage_Core_Block_Tem
 		unset($images[0]);
 		unset($images[1]);
 		$imageArray = array();
+		$keyword = $this->getKeyword();
 		foreach ($images as $image){
 			$imageArray[] = $this->getSkinUrl().'images/login/'.$image;
 		}
-		return json_encode($imageArray);
-		
+		$jsonArray = array(
+			'keyword' => $keyword,
+			'dir'	  => $this->getSkinUrl().'images/login/',
+			'images'  => $imageArray,
+		);
+		return json_encode($jsonArray);	
     }
+    
+    public function getKeyword(){
+    	$keywordCookieName = Mage::helper('affiliate')->getKeywordCookieName();
+    	$keyword = Mage::getModel('core/cookie')->get($keywordCookieName);
+    	if (!!$keyword) {
+    		return $keyword;
+    	}
+    	return false;    	
+    }
+    
 }

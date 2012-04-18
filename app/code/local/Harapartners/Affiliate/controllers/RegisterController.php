@@ -33,6 +33,11 @@ class Harapartners_Affiliate_RegisterController extends Mage_Core_Controller_Fro
 	        $affiliateInfo['registration_param'] = json_encode($request->getParams());
 	        
 	        //Additional logic: specific landing page after registration, background image can also be prepared here!
+	        //Harapartners, yang: plant cookie for landing page image
+	        $keyword = $request->getParam('keyword');
+	        $keywordCookieName = Mage::helper('affiliate')->getKeywordCookieName();
+	        Mage::getModel('core/cookie')->set($keywordCookieName, $keyword, 3600);
+	        //Harapartners, yang: end
 	        
 	        Mage::getSingleton('customer/session')->setData('affiliate_id', $affiliate->getId());
 	        Mage::getSingleton('customer/session')->setData('affiliate_info', $affiliateInfo);

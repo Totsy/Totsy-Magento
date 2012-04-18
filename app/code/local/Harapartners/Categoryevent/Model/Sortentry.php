@@ -28,6 +28,10 @@ class Harapartners_Categoryevent_Model_Sortentry extends Mage_Core_Model_Abstrac
 	// Set up event collection date range
 	const EVENT_CATEGORY_DATE_RANG = '3';
 	
+	const DEFAULT_REBUILD_LIFETIME = 86400;
+	
+	const CRON_REBUILD_LIFETIME = 3600;
+	
     protected function _construct(){
         $this->_init('categoryevent/sortentry');
     }
@@ -66,7 +70,32 @@ class Harapartners_Categoryevent_Model_Sortentry extends Mage_Core_Model_Abstrac
     	return $this;
     }
     
-    protected function _rebuildEntry($sortDate, $storeId, $forceRebuild = false){
+    public function filterByCurrentTime($sortDate, $currentTime, $storeId ) {
+    	//Only use for front end to rebuild sort event base on current time
+    	$live = json_decode($this->loadByDate($sortDate, $storeId, false)->getData('live_queue'), true);
+		$upcoming = json_decode($this->loadByDate($sortDate, $storeId, false)->getData('upcoming_queue'), true);
+		
+		foreach ( $live as &$event ){
+			if (strtotime($event['event_start_date']) - strtotime($currentTime) > 0){
+				array_push( $upcoming, $event );
+				unset( $live[array_search( $event, $live )] );
+			}
+		}
+		
+		foreach ( $upcoming as &$event ){
+			if (strtotime($event['event_start_date']) - strtotime($currentTime) < 0){
+				array_push( $live, $event );
+				unset( $upcoming[array_search( $event, $upcoming )] );
+			}			
+		}
+		
+		$this->setData('live_queue', json_encode($live));
+    	$this->setData('upcoming_queue', json_encode($upcoming));
+    	$this->save();   	
+    	return $this;	
+    }
+    
+    protected function _rebuildEntry( $sortDate, $storeId, $forceRebuild = false ){
     	$eventParentCategory = $this->getParentCategory(self::EVENT_CATEGORY_NAME, $storeId);
     	$topEventParentCategory = $this->getParentCategory(self::TOP_EVENT_CATEGORY_NAME, $storeId);
     	$startDate = $sortDate;
@@ -92,7 +121,7 @@ class Harapartners_Categoryevent_Model_Sortentry extends Mage_Core_Model_Abstrac
     		//Get live and upcoming events base on default sorting logic
    	    	foreach( $eventArray as $event ){
 	        	$eventId = $event['entity_id'];
-	    		$starttimediff = strtotime( $event['event_start_date'] ) - strtotime( $sortDate ) - 86399;
+	    		$starttimediff = strtotime( $event['event_start_date'] ) - strtotime( $sortDate ) - self::DEFAULT_REBUILD_LIFETIME;
 	    		$endtimediff = strtotime( $event['event_end_date'] ) - strtotime( $sortDate );
 	    			
 	    		if ( ($starttimediff <= 0) && ($endtimediff > 0) ) {	    			
@@ -157,7 +186,7 @@ class Harapartners_Categoryevent_Model_Sortentry extends Mage_Core_Model_Abstrac
     }
     
     public function calculateEndDate($sortDate){
-    	return date("Y-m-d H:i:s", (strtotime($sortDate)+86400 * self::EVENT_CATEGORY_DATE_RANG));
+    	return date("Y-m-d H:i:s", (strtotime($sortDate)+self::DEFAULT_REBUILD_LIFETIME * self::EVENT_CATEGORY_DATE_RANG));
     }
     
     public function getParentCategory($categoryName, $storeId){

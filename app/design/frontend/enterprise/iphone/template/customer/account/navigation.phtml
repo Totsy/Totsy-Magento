@@ -43,7 +43,15 @@
 							<div class="ui-btn-text">
 								<a class="ui-link-inherit" href="<?php echo $_link->getUrl() ?>"><?php echo $_link->getLabel() ?>
 									<?php if ($_link->getName()=='checkout_cart') :?>
-										<span class="ui-li-count ui-btn-up-c ui-btn-corner-all"><?php echo Mage::getSingleton('checkout/cart')->getSummaryQty(); ?></span>
+										<span class="ui-li-count ui-btn-up-c ui-btn-corner-all">
+										<?php 
+											$qty = Mage::getSingleton('checkout/cart')->getSummaryQty(); 
+											if (empty($qty)){
+												$qty = 0;
+											}
+											echo $qty;
+										?>
+										</span>
 									<?php elseif ($_link->getName()=='enterprise_reward') : ?>
 										<?php $customer = Mage::getSingleton('customer/session')->getCustomer(); ?>
 										<?php $rewardModel = Mage::getModel('enterprise_reward/reward'); ?>

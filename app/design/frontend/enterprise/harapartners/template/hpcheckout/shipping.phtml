@@ -16,7 +16,7 @@
 	            <li class="fields">
 	                <div class="field half-of-half">
 	                    <label for="shipping:telephone" class="required"><em>*</em><?php echo $this->__('Telephone') ?></label>
-	                    <input type="text" name="shipping[telephone]" title="<?php echo $this->__('Telephone') ?>" class="input-text required-entry validate-phoneLax" id="shipping:telephone" value="<?php echo $this->htmlEscape($this->getAddress()->getTelephone()) ?>"/>
+	                    <input type="text" name="shipping[telephone]" title="<?php echo $this->__('Telephone') ?>" class="input-text required-entry validate-phoneLax" id="shipping:telephone" value="<?php echo $this->htmlEscape($this->getAddress()->getTelephone()) ?>" onkeyup="backspacerUP(this,event);" onkeydown="backspacerDOWN(this,event);"/>
 	                </div>
 	            </li>
 	            <li class="fields">

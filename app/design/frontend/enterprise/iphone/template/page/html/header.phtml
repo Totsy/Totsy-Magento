@@ -34,7 +34,16 @@
             <h1 id="logo"><a href="<?php echo $this->getUrl('') ?>"><img width="60px" src="<?php echo $this->getLogoSrc() ?>" alt="<?php echo $this->getLogoAlt() ?>" /></a></h1>
         </div>
         <div class="col-2">      
-            <p class="welcome-msg"><a class="top-account" href="<?php echo $this->getUrl('customer/account')?>"><?php echo $this->getWelcome()?></a></p>
+<?php 
+		$customer = Mage::getSingleton('customer/session')->getCustomer();
+        $customerName = $customer->getName();
+        if ($customerName!=" "){
+        	$welcomeMessage = $this->getWelcome();
+        }else{
+        	$welcomeMessage = 'Welcome, '.$customer->getEmail().'!';
+        }
+?>        
+            <p class="welcome-msg"><a class="top-account" href="<?php echo $this->getUrl('customer/account')?>"><?php echo $welcomeMessage ?></a></p>
             <?php echo $this->getChildHtml('topCart') ?>
         </div>
     </div>

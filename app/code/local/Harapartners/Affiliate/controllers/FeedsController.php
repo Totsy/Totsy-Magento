@@ -29,8 +29,18 @@ class Harapartners_Affiliate_FeedsController extends Mage_Core_Controller_Front_
 				$xml = $this->_createSignupsXml($simpleXml,$from,$to,$affiliateCode);
 				break;
 				
+				case 'signupsByReferral':
+				//Place holders !!!
+				$xml = $this->_createSignupsByReferralXml($simpleXml,$from,$to,$affiliateCode);
+				break;
+				
 				case 'sales':
 				$xml = $this->_createSalesXml($simpleXml,$from,$to,$affiliateCode,$period);
+				break;
+				
+				case 'referringSales':
+				//Place holders !!!
+				$xml = $this->_createReferringSalesXml($simpleXml,$from,$to,$affiliateCode,$period);
 				break;
 								
 				default:				
@@ -54,7 +64,29 @@ XML;
 	protected function _createSignupsXml($simpleXml,$from,$to,$affiliateCode){
 		$recordCollection = Mage::getModel('customertracking/record')->getCollection()
 																	->addFieldToFilter('created_at', array( "lt" => $to,"gt"=>$from ))
-																	->addFieldToFilter('affiliate_code',$affiliateCode);	
+																	->addFieldToFilter('affiliate_code',$affiliateCode)
+																	->addFieldToFilter('level', 0)
+																	->load();	
+		foreach ($recordCollection as $record) {
+		$clickId = '';
+			foreach (json_decode($record->getRegistrationParam(),true) as $index=>$value) {						
+				if($index=="clickid"){
+					$clickId = $value;
+					$entryString = 'clickId='.$clickId.' eventMerchantId='.$record->getCustomerId().' count1="1" time='.strtotime($record->getCreatedAt());
+					$simpleXml->addChild ('entry', $entryString);	
+					break;
+				}
+			}												
+		}
+		return $simpleXml;
+	}
+	
+	protected function _createSignupsByReferralXml($simpleXml,$from,$to,$affiliateCode){
+		//Place holders !!!
+		$recordCollection = Mage::getModel('customertracking/record')->getCollection()
+																	->addFieldToFilter('created_at', array( "lt" => $to,"gt"=>$from ))
+																	->addFieldToFilter('affiliate_code',$affiliateCode)
+																	->addFieldToFilter('level', 1);	
 		foreach ($recordCollection as $record) {
 		$clickId = '';
 			foreach (json_decode($record->getRegistrationParam(),true) as $index=>$value) {						
@@ -71,7 +103,8 @@ XML;
 	
 	protected function _createSalesXml($simpleXml,$from,$to,$affiliateCode,$period){
 		$recordCollection = Mage::getModel('customertracking/record')->getCollection()
-																->addFieldToFilter('affiliate_code', $affiliateCode);	
+																->addFieldToFilter('affiliate_code', $affiliateCode)
+																->addFieldToFilter('level', 0);	
 		foreach ($recordCollection as $record) {
 		// record may not have accurate customerId
 			$customer = Mage::getModel('customer/customer')->setWebsiteId(1)->loadByEmail($record->getCustomerEmail());
@@ -102,5 +135,41 @@ XML;
 		}			
 		return $simpleXml;
 	}
+	
+	protected function _createReferringSalesXml($simpleXml,$from,$to,$affiliateCode,$period){
+		//Place holders !!!
+		$recordCollection = Mage::getModel('customertracking/record')->getCollection()
+																->addFieldToFilter('affiliate_code', $affiliateCode)
+																->addFieldToFilter('level', 1);	
+		foreach ($recordCollection as $record) {
+		// record may not have accurate customerId
+			$customer = Mage::getModel('customer/customer')->setWebsiteId(1)->loadByEmail($record->getCustomerEmail());
+			$clickId = '';
+			foreach (json_decode($record->getRegistrationParam(),true) as $index=>$value) {						
+				if($index=="clickid"){
+					$clickId = $value;							
+					break;
+				}
+			}
+			$orderCollection = Mage::getModel('sales/order')->getCollection()
+															->addFieldToFilter('created_at', array( "lt" => $to,"gt"=>$from ))
+															->addFieldToFilter('customer_id',$customer->getId())
+															->addFieldToFilter('state','complete');	
+			foreach ($orderCollection as $order) {
+				if($period>0){
+					$salesTime = strtotime($order->getCreatedAt());
+					$registrationTime = strtotime($record->getCreatedAt());
+					if($salesTime-$registrationTime<=$period){
+						$entryString = 'clickId='.$clickId.' lifetimeId='.$record->getCustomerId().' eventMerchantId='.$order->getIncrementId().' count1="1" value1='.$order->getGrandTotal().' time='.$salesTime.' eventStatus="confirmed"';
+						$simpleXml->addChild ('entry', $entryString);	
+					}
+				}else{
+						$entryString = 'clickId='.$clickId.' lifetimeId='.$record->getCustomerId().' eventMerchantId='.$order->getIncrementId().' count1="1" value1='.$order->getGrandTotal().' time='.$salesTime.' eventStatus="confirmed"';
+						$simpleXml->addChild ('entry', $entryString);
+				}
+			}			
+		}			
+		return $simpleXml;
+	}	
 	
 }

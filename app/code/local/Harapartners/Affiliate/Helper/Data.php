@@ -15,6 +15,7 @@
 class Harapartners_Affiliate_Helper_Data extends Mage_Core_Helper_Abstract{
 	
 	const COOKIE_AFFILIATE = 'AFFILIATE';
+	const COOKIE_IMAGE_KEYWORD = 'AFFILIATEIMAGESWITCH';
 	const PAGE_NAME_AFTER_CUSTOMER_REGISTER_SUCCESS = 'after_customer_register_success';
 	
 	public function getGridTypeArray(){
@@ -73,6 +74,11 @@ class Harapartners_Affiliate_Helper_Data extends Mage_Core_Helper_Abstract{
 //	       			array('label' => 'After Customer Register Success', 'value' => self::PAGE_NAME_AFTER_CUSTOMER_REGISTER_SUCCESS),
 //
 //	       	);
+	}
+	
+	//Harapartners, yang: get cookie name for landing page's image keyword
+	public function getKeywordCookieName() {
+		return self::COOKIE_IMAGE_KEYWORD;
 	}
 	
 }
