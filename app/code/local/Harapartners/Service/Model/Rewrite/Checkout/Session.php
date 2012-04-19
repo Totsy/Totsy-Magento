@@ -44,8 +44,9 @@ class Harapartners_Service_Model_Rewrite_Checkout_Session extends Mage_Checkout_
         	$timeout = $this->getQuoteItemExpireTime();
     	    if($this->_getCurrentTime() - $countdown > $timeout){
     	    	//Remove expired ones and create a new quote
-  	        	$quote->delete();
-  	        	$this->_quote = Mage::getModel('sales/quote')->setStoreId(Mage::app()->getStore()->getId());
+    	    	foreach($quote->getAllItems() as $item){
+					$item->delete();			
+				}
 	        }
 	        Mage::unregister('has_expire_cart_by_rushcheckout');
     		Mage::register('has_expire_cart_by_rushcheckout', true);
