@@ -42,9 +42,6 @@
 <?php $sorttime = strtotime($orderdate); ?>
 <?php $orderealdate = date('m-d-Y', $sorttime); ?>
 <p class="order-date"><?php echo $this->__('Order Date: %s', $orderealdate) ?></p>
-<?php $estshipdate = Mage::app()->getLayout()->createBlock('checkout/cart_sidebar')->getShippingDate(true, $_order);?>
-
-<p class="shipping-date">Estimated Shipping Date: <?php echo $estshipdate;?></p>
 <?php if (!$_order->getIsVirtual()): ?>
 <div class="col2-set">
     <div class="col-1">

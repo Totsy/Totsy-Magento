@@ -65,4 +65,12 @@
         </tbody>
         <?php endforeach; ?>
 </table>
+<p class="savings">
+	<?php $totalSaving = Mage::app()->getLayout()->createBlock('checkout/cart_sidebar')->getTotalSaving(true, $_order);?>
+	<span class="label"><?php echo $this->__('Your savings: ') ?></span><?php echo Mage::helper('checkout')->formatPrice($totalSaving); ?>
+</p>
+<p class="shipping-date">
+	<?php $estshipdate = Mage::app()->getLayout()->createBlock('checkout/cart_sidebar')->getShippingDate(true, $_order);?>
+	<span class="label"><?php echo $this->__('Estimated Shipping Date: ') ?></span><?php echo $estshipdate;?>
+</p>
 <script type="text/javascript">decorateTable('my-orders-table', {'tbody' : ['odd', 'even'], 'tbody tr' : ['first', 'last']})</script>

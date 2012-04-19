@@ -405,7 +405,7 @@ div.cart .deals button.check-gc-status { border: 0px; padding: 0px;}
 div.cart .deals button span, div.cart .cart-table .btn-update span { background: none; padding: 0px !important; height: 16px !important; }
 div.cart .deals button span span, div.cart .cart-table .btn-update span span  { font-size: 12px; text-transform: uppercase; }
 
-div.cart .totals .savings { 
+div.cart .totals .savings, .sales-order-view .savings{ 
 	text-align: right; 
 	padding-bottom: 10px; 
 	padding-right: 5px;	    
@@ -413,6 +413,14 @@ div.cart .totals .savings {
     font-style: italic;
     font-weight: bold;}
 
+.sales-order-view .shipping-date {
+	text-align: right; 
+	padding-bottom: 10px;
+	padding-right: 5px;	
+	color: #009900;
+    font-style: italic;
+    font-weight: bold;}
+	
 div.cart-empty {
 	font-size: 24px;
 	text-align:center;

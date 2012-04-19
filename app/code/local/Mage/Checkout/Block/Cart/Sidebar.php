@@ -364,10 +364,14 @@ class Mage_Checkout_Block_Cart_Sidebar extends Mage_Checkout_Block_Cart_Abstract
 	
     //Harapartners, yang, START
 	//Return total savings
-    public function getTotalSaving() {
-    	$items = $this->getItems();
-    	$savings = (double)0;
-        if( count($items) ) {
+    public function getTotalSaving( $orderConfirmFlag = NULL , $order = NULL ) {   	
+    	$savings = (double)0;   	
+    	if ( !!$orderConfirmFlag && !!$order && ( $order instanceof Mage_Sales_Model_Order ) ){
+    		$items = $order->getItems();
+    	}else {
+    		$items = $this->getItems();
+    	}    	
+    	if( count($items) ) {
     		foreach ( $items as $item){
 				$item->getQty();
 				$product = $item->getProduct();
