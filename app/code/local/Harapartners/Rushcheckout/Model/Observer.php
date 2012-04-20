@@ -43,13 +43,11 @@ class Harapartners_Rushcheckout_Model_Observer {
 					'address',
 					'review'
 				),
-			
 				'checkout' => array(
 					'index',
 					'multishipping',
 					'onepage'
 				),
-				
 				'hpcheckout' => array(
 					'checkout',
 				)
@@ -63,6 +61,18 @@ class Harapartners_Rushcheckout_Model_Observer {
 				}
 			}
 		}
+	}
+	
+	public function updateReservationByQuoteItem($observer){
+		$quoteItem = $observer->getEvent()->getItem();
+		Mage::helper('rushcheckout/reservation')->updateReservationByQuoteItem($quoteItem);
+		return $this;
+	}
+	
+	public function updateReservationByStockItem($observer){
+		$stockItem = $observer->getEvent()->getItem();
+		Mage::helper('rushcheckout/reservation')->updateReservationByStockItem($stockItem);
+		return $this;
 	}
 	
 }

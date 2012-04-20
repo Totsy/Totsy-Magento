@@ -20,11 +20,16 @@ class Harapartners_Rushcheckout_Helper_Data extends Mage_Core_Helper_Abstract {
 	public function cleanExpiredQuotes($schedule) {
         $lifetimes = Mage::getConfig()->getStoresConfigByPath('config/rushcheckout_timer/limit_timer');
         foreach ($lifetimes as $storeId => $lifetime) {
-            $quotes = Mage::getModel('sales/quote')->getCollection();
-            $quotes->addFieldToFilter('store_id', $storeId);
-            $quotes->addFieldToFilter('updated_at', array('to' => date("Y-m-d", time() - $lifetime)));
-            $quotes->addFieldToFilter('is_active', 0);
-            $quotes->walk('delete');
+            $quoteCollection = Mage::getModel('sales/quote')->getCollection();
+            $quoteCollection->addFieldToFilter('store_id', $storeId);
+            $quoteCollection->addFieldToFilter('updated_at', array('to' => date("Y-m-d", time() - $lifetime)));
+            $quoteCollection->addFieldToFilter('is_active', 0);
+            $quoteCollection->walk('delete');
+            foreach($quoteCollection as $quote){
+            	foreach($quote->getAllItems() as $item){
+					$item->delete(); //Reservation also cancelled
+				}
+            }
         }
         return $this;
     }

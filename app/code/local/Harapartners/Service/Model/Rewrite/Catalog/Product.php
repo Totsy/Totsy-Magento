@@ -46,6 +46,11 @@ class Harapartners_Service_Model_Rewrite_Catalog_Product extends Mage_Catalog_Mo
         //Note URL rewrite is always refreshed
 		$urlModel = Mage::getSingleton('catalog/url');
 		$urlModel->refreshProductRewrite($this->getId()); //Category path also included
+		
+		//Create catalog-inventory index only upon product creation!
+		if(!$this->getOrigData('entity_id')){
+			Mage::getResourceSingleton('cataloginventory/indexer_stock')->reindexProducts(array($this->getId()));
+		}
     	
     	if(!!Mage::registry('batch_import_no_index')){
 	    	Mage::dispatchEvent('model_save_commit_after', array('object'=>$this));

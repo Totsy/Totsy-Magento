@@ -160,6 +160,11 @@ class Harapartners_Ordersplit_Helper_Data extends Mage_Core_Helper_Abstract {
 		$customer = Mage::getModel('customer/customer')
 							->setStore($store)
 							->loadByEmail($oldQuote->getCustomerEmail());
+							
+		//Harapartners, Jun, Cancel previous orders first, this will re-stock existing products
+		//Critical for cart reservation logic!
+		$oldOrder->cancel();
+		
 		//configurable products and related simple products must be configured the same fullfillment type
 		foreach($itemsArray as $itemList) {
 			if(count($itemList['items'])){
@@ -167,20 +172,22 @@ class Harapartners_Ordersplit_Helper_Data extends Mage_Core_Helper_Abstract {
 					$newQuote = Mage::getModel('sales/quote');
 					$newQuote->setStore($store);
 					$newQuote->assignCustomer($customer);
-					//$newQuote->save();		
 					$items = $itemList['items'];
 					$state = $itemList['state'];
 					$type = $itemList['type'];
-					foreach($items as $item) {
-						//Important logic to link the new quote object with the original quote object!
-						if(!$item->getOriginalQuoteItemId()){
-							$item->setOriginalQuoteItemId($item->getItemId());
+					
+					foreach($items as $oldItem) {
+						//Child item should have been cloned with parent item 
+						if(!!$oldItem->getParentItemId()){
+							continue;
 						}
-						
-						$item->setItemId(null);
-						$item->setQuote($newQuote);
-		   				//$item->setQuoteId($newQuote->getId());
-						$newQuote->addItem($item);
+						$newItem = $this->_cloneQuoteItem($oldItem);
+						$newQuote->addItem($newItem); //$newItem->setQuote($newQuote);
+						foreach($oldItem->getChildren() as $oldChildItem){
+							$newChildItem = $this->_cloneQuoteItem($oldChildItem);
+							$newChildItem->setParentItem($newItem);
+							$newQuote->addItem($newChildItem); //$newChildItem->setQuote($newQuote);
+						}
 					}
 					
 					$billingAddress = $oldQuote->getBillingAddress()
@@ -204,8 +211,8 @@ class Harapartners_Ordersplit_Helper_Data extends Mage_Core_Helper_Abstract {
 							->setData($shippingAddress)
 							->setCollectShippingRates(true)
 							->collectShippingRates();	
-					$newQuote->save();		
 					$oldPayment = $oldQuote->getPayment();
+					
 					if(!$oldPayment->getCybersourceSubid() && !!$oldOrder->getPayment()->getCybersourceSubid())	{
 						$oldPayment->setCybersourceSubid($oldOrder->getPayment()->getCybersourceSubid());
 					}				
@@ -215,12 +222,13 @@ class Harapartners_Ordersplit_Helper_Data extends Mage_Core_Helper_Abstract {
 					
 					//test payment method "free"
 					$newQuote->getPayment()->importData($oldPayment->getData(), false);
-					$newQuote->save();
+					
 					$this->_revertGiftCard($oldOrder, $newQuote);
 					$this->_revertRewardPoints($oldOrder, $newQuote);
 					$this->_revertCustomerBalance($oldOrder, $newQuote, $store);
 					//$this->_processPayment($oldQuote, $newQuote, $type); //in case there should be additional logic for payment processing
 					$newQuote->collectTotals();
+					$newQuote->save();
 					
 					//set parest order as old order
 					$oldOrderIncrementId = $oldOrder->getOriginalIncrementId();
@@ -270,14 +278,10 @@ class Harapartners_Ordersplit_Helper_Data extends Mage_Core_Helper_Abstract {
 			}
 		}
 		if($isSuccess) {
-			//cancel previous orders
-			if($newOrderCount > 1){
-				$oldOrder->setState(Mage_Sales_Model_Order::STATE_CANCELED, true)->save();
-				Mage::dispatchEvent('order_split_after', array('order' => $oldOrder));
-			}else{
-				//This is suppressed for now.
-				//throw new Exception('Split order should produce multiple orders.');
+			if($newOrderCount <= 1){
+				throw new Exception('Split order should produce multiple orders.');
 			}
+			Mage::dispatchEvent('order_split_after', array('order' => $oldOrder));
 		}else{
 			//cancel previous orders
 			if($newOrderCount > 0){
@@ -404,6 +408,30 @@ class Harapartners_Ordersplit_Helper_Data extends Mage_Core_Helper_Abstract {
             	$newQuote->setUseCustomerBalance(0);
             }		               	 	
 		}
+	}
+	
+	protected function _cloneQuoteItem(Mage_Sales_Model_Quote_Item $oldItem){
+		//Harapartners, Jun, create new item, important for maintaining the balance of cart reservation (i.e. empty origData)
+		$newItem = Mage::getModel('sales/quote_item');
+		$newItem->setData($oldItem->getData());
+		$newItem->setId(null);
+		
+		//Deep copy of $oldItem object, including all options
+		foreach($oldItem->getOptions() as $oldOption){
+			$newOption = Mage::getModel('sales/quote_item_option');
+			$newOption->setData($oldOption->getData());
+			$newOption->setProduct($oldOption->getProduct());
+			$newOption->setId(null);
+			$newOption->setItemId(null);
+			$newItem->addOption($newOption); //$newOption->setItem($newItem);
+		}
+		
+		//Important logic to link the new quote object with the original quote object!
+		if(!$oldItem->getOriginalQuoteItemId()){
+			$newItem->setOriginalQuoteItemId($oldItem->getItemId());
+		}
+		
+		return $newItem;
 	}
 	
 }
