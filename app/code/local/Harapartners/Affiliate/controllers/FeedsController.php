@@ -1,5 +1,7 @@
 <?php 
 class Harapartners_Affiliate_FeedsController extends Mage_Core_Controller_Front_Action {
+	
+	const COUNTER_LIMIT = 2000;
 		
 	public function preDispatch() {
 		header ("Content-Type:text/xml");
@@ -67,15 +69,19 @@ XML;
 																	->addFieldToFilter('affiliate_code',$affiliateCode)
 																	->addFieldToFilter('level', 0)
 																	->load();	
-		foreach ($recordCollection as $record) {
-		$clickId = '';
-			foreach (json_decode($record->getRegistrationParam(),true) as $index=>$value) {						
-				if($index=="clickid"){
-					$clickId = $value;
-					$entryString = 'clickId='.$clickId.'  eventMerchantId='.$record->getCustomerId().'  count1="1"  time='.strtotime($record->getCreatedAt());
-					$simpleXml->addChild ('entry', $entryString);	
-					break;
+		$counter = 0;
+		foreach ($recordCollection as $record) {			
+			if ($counter <= self::COUNTER_LIMIT){
+				$clickId = '';
+				foreach (json_decode($record->getRegistrationParam(),true) as $index=>$value) {						
+					if($index=="clickid"){
+						$clickId = $value;
+						$entryString = 'clickId='.$clickId.'  eventMerchantId='.$record->getCustomerId().'  count1="1"  time='.strtotime($record->getCreatedAt());
+						$simpleXml->addChild ('entry', $entryString);	
+						break;
+					}
 				}
+				$counter++;
 			}												
 		}
 		return $simpleXml;
