@@ -414,3 +414,11 @@ body .account-create .field {
 p.back-link{
 	display:none;
 }
+
+#product-options-wrapper div.select-container {
+    right: 12%;
+}
+
+.box-related li.item, .box-related li.item item-info{
+	display:inline-block;
+}
