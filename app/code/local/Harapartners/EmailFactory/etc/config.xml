@@ -98,11 +98,11 @@
     </admin>	
     <crontab>
         <jobs>
-            <rule_apply_all>
+            <emailfactory_check_register_emails>
 				<!-- every day -->
                 <schedule><cron_expr>15 * * * *</cron_expr></schedule>
                 <run><model>emailfactory/observer::checkRegisterEmails</model></run>
-            </rule_apply_all>
+            </emailfactory_check_register_emails>
         </jobs>
     </crontab>
 </config>

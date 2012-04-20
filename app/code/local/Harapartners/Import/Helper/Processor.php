@@ -113,11 +113,12 @@ class Harapartners_Import_Helper_Processor extends Mage_Core_Helper_Abstract {
 	
 							//PO Saves Here
 							$this->_savePurchaseOrderTransaction($importData, $importObject);
-							$row++;	
 		
 						} catch(Exception $ex) {
 							$this->_errorMessages[] = 'Error in row ' . $row . ', ' . $ex->getMessage() . "\n";
-						}  
+						}
+						
+						$row++;
 					}
 				}
 				$batchModel->delete();
@@ -268,7 +269,7 @@ class Harapartners_Import_Helper_Processor extends Mage_Core_Helper_Abstract {
 		//If not specified, only runs the last 'uploaded' import
 		if(!$import || !$import->getId()){
 			$collection = Mage::getModel('import/import')->getCollection();
-			$collection->addFieldToFilter('import_status', Harapartners_Import_Model_Import::IMPORT_STATUS_UPLOADED);
+			$collection->addFieldToFilter('status', Harapartners_Import_Model_Import::IMPORT_STATUS_UPLOADED);
 			$collection->getSelect()->limit(1);
 			$import = $collection->getFirstItem();
 		}
