@@ -43,7 +43,6 @@ class Harapartners_Service_Model_Rewrite_Checkout_Session extends Mage_Checkout_
     		$countdown = $this->getCountDownTimer();
         	$timeout = $this->getQuoteItemExpireTime();
     	    if($this->_getCurrentTime() - $countdown > $timeout){
-    	    	//Remove expired ones and create a new quote
     	    	foreach($this->_quote->getAllItems() as $item){
     	    		$item->isDeleted(true);
 					$item->delete();			
