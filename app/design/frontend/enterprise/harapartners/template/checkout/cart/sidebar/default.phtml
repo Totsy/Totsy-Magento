@@ -157,25 +157,21 @@
             </tr>
         </table>
         <?php if ($_options = $this->getOptionList()):?>
-        <div class="truncated">
-            <div class="truncated_full_value">
-                <div class="item-options">
-                    <p><?php echo $this->__('Options Details'); ?></p>
-                    <dl>
-                        <?php foreach ($_options as $_option) : ?>
-                        <dt><?php echo $this->htmlEscape($_option['label']) ?></dt>
-                        <dd>
-                            <?php if (is_array($_option['value'])): ?>
-                            <?php echo nl2br(implode("\n", $_option['value'])) ?>
-                            <?php else: ?>
-                            <?php echo $_option['value'] ?>
-                            <?php endif; ?>
-                        </dd>
-                        <?php endforeach; ?>
-                    </dl>
-                </div>
-            </div>
-            <a href="#" onclick="return false;" class="details"><?php echo $this->__('View Details') ?></a>
+        <div class="option-list">
+        	<ul>
+		        <?php foreach ($_options as $_option) : ?>
+		        <li>
+	                <p><?php echo $this->htmlEscape($_option['label']) ?></p>
+	                <p class="options">
+	                    <?php if (is_array($_option['value'])): ?>
+	                    	<?php echo nl2br(implode("\n", $_option['value'])) ?>
+	                    <?php else: ?>
+	                    	<?php echo $_option['value'] ?>
+	                    <?php endif; ?>
+	                </p>              
+                </li>
+                <?php endforeach; ?>
+        	</ul>
         </div>
         <?php endif; ?>
     </div>

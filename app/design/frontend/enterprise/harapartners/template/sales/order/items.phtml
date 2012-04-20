@@ -44,7 +44,7 @@
     </tfoot>
         <?php $_items = $_order->getItemsCollection(); ?>
         <?php $_index = 0; ?>
-            <?php $_count = $_items->count(); ?>
+        <?php $_count = $_items->count(); ?>
         <?php foreach ($_items as $_item): ?>
         <?php if ($_item->getParentItem()) continue; ?>
         <tbody>

@@ -5,9 +5,10 @@
 // work for both http remost post and parents.com requirement
 // request example follow
 //$baseUrlTotsy = 'http://totsy.local.com/affiliate/remote/register';  
-$baseUrlTotsy = 'http://totsy.local.com/affiliate/?genpswd=true';                      //tosty 
-$baseUrlMamasource = 'http://totsy.local.com/mamasource/affiliate/remote/register';       //mamasource
-$email = 'asdasdsad@asd.com';
+$baseUrlTotsy = 'http://magento-totsy.totsy.com/affiliate/?genpswd=true';                      //tosty 
+//$baseUrlMamasource = 'http://totsy.local.com/mamasource/affiliate/remote/register';       //mamasource
+$baseUrlMamasource = 'http://magento-mamasource.totsy.com/affiliate/?genpswd=true';       //mamasource
+$email = 'asdas123dsad@asd.com';
 $productUrl = 'product_url';                                                              // parents.com only param
 $affiliateCode = 'parents_com';
 $otherfield = '';                                                                         //subaffiliate_code etc

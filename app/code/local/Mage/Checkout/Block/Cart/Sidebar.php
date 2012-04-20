@@ -316,9 +316,10 @@ class Mage_Checkout_Block_Cart_Sidebar extends Mage_Checkout_Block_Cart_Abstract
     public function getShippingDate( $orderConfirmFlag = NULL , $order = NULL ){
     	$endDate = 0;
     	if ( !!$orderConfirmFlag && !!$order && ( $order instanceof Mage_Sales_Model_Order ) ){
-    		$items = $order->getAllItems();
+    		$items = $order->getItemsCollection();
     		if( count($items) ) {
 	    		foreach ( $items as $item){
+	    			if ($item->getParentItem()) continue;
 	    			$productId = $item->getProductId();
 	    			$product = Mage::getModel('catalog/product')->load($productId);
 	    			$categoryIdsArray = $product->getCategoryIds();
@@ -367,21 +368,34 @@ class Mage_Checkout_Block_Cart_Sidebar extends Mage_Checkout_Block_Cart_Abstract
     public function getTotalSaving( $orderConfirmFlag = NULL , $order = NULL ) {   	
     	$savings = (double)0;   	
     	if ( !!$orderConfirmFlag && !!$order && ( $order instanceof Mage_Sales_Model_Order ) ){
-    		$items = $order->getItems();
+    		$items = $order->getItemsCollection(); 
+    		if( count($items) ) {  		
+	   		    foreach ( $items as $item){
+	   		    	if ($item->getParentItem()) continue;
+	    			$productId = $item->getProductId();
+	    			$product = Mage::getModel('catalog/product')->load($productId);
+	    			if (!!$product->getSpecialPrice()) {
+						$priceDiff = (double)$product->getPrice() - (double)$product->getSpecialPrice();
+					}else {
+						$priceDiff = (double)0.00;
+					}				
+					$savings = $savings + $priceDiff * $item->getQtyOrdered();
+	    		}
+    		}
     	}else {
     		$items = $this->getItems();
-    	}    	
-    	if( count($items) ) {
-    		foreach ( $items as $item){
-				$item->getQty();
-				$product = $item->getProduct();
-				if (!!$product->getSpecialPrice()) {
-					$priceDiff = (double)$product->getPrice() - (double)$product->getSpecialPrice();
-				}else {
-					$priceDiff = (double)0.00;
-				}				
-				$savings = $savings + $priceDiff * $item->getQty();	
-    		}
+    		if( count($items) ) {
+	    		foreach ( $items as $item){
+					$item->getQty();
+					$product = $item->getProduct();
+					if (!!$product->getSpecialPrice()) {
+						$priceDiff = (double)$product->getPrice() - (double)$product->getSpecialPrice();
+					}else {
+						$priceDiff = (double)0.00;
+					}				
+					$savings = $savings + $priceDiff * $item->getQty();	
+	    		}
+    		} 
     	}    	
     	return $savings;
     }

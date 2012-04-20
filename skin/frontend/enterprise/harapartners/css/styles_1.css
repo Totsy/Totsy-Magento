@@ -79,6 +79,10 @@ div.top-cart .block-title strong { color: #F21C25; font-size: 12px; text-transfo
 #usercart table.product-top th.product-name-head { padding-left: 0px;}
 #usercart table.product-top tr.product-name-row { min-width: 233px;}
 
+#topCartContent .option-list { display: inline-block; position: relative; right: -200px;}
+#topCartContent .option-list li p { display: inline-block; color: #8f8f8f;}
+
+
 #checkoutcart-block-title{ display: none; }
 .hpcheckout-checkout-index #usercart { float: right;}
 .hpcheckout-checkout-index #usercart-block-title { display: none }
