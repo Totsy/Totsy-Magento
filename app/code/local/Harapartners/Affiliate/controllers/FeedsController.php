@@ -68,20 +68,18 @@ XML;
 																	->addFieldToFilter('created_at', array( "lt" => $to,"gt"=>$from ))
 																	->addFieldToFilter('affiliate_code',$affiliateCode)
 																	->addFieldToFilter('level', 0)
+																	->setPage(10, 1)
 																	->load();	
 		$counter = 0;
 		foreach ($recordCollection as $record) {			
-			if ($counter <= self::COUNTER_LIMIT){
-				$clickId = '';
-				foreach (json_decode($record->getRegistrationParam(),true) as $index=>$value) {						
-					if($index=="clickid"){
-						$clickId = $value;
-						$entryString = 'clickId='.$clickId.'  eventMerchantId='.$record->getCustomerId().'  count1="1"  time='.strtotime($record->getCreatedAt());
-						$simpleXml->addChild ('entry', $entryString);	
-						break;
-					}
+			$clickId = '';
+			foreach (json_decode($record->getRegistrationParam(),true) as $index=>$value) {						
+				if($index=="clickid"){
+					$clickId = $value;
+					$entryString = 'clickId='.$clickId.'  eventMerchantId='.$record->getCustomerId().'  count1="1"  time='.strtotime($record->getCreatedAt());
+					$simpleXml->addChild ('entry', $entryString);	
+					break;
 				}
-				$counter++;
 			}												
 		}
 		return $simpleXml;
