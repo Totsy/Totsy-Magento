@@ -60,11 +60,11 @@
     </global>
     <crontab>
         <jobs>
-            <run_update_unscribe_script>
+            <unsubcentral_run_update_unscribe_script>
 				<!-- 3:00AM every day -->
                 <schedule><cron_expr>0 3 * * *</cron_expr></schedule>
                 <run><model>unsubcentral/observer::runUpdateUnscribeScript</model></run>
-            </run_update_unscribe_script>
+            </unsubcentral_run_update_unscribe_script>
         </jobs>
     </crontab>
 	<frontend/>

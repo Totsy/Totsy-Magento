@@ -85,14 +85,14 @@
     </adminhtml>
 	<crontab>
         <jobs>
-            <harapartners_rushcheckout>
+            <rushcheckout_clean_expired_quotes>
                 <schedule>
                     <cron_expr>*/5 * * * *</cron_expr>
                 </schedule>
                 <run>
                     <model>rushcheckout/observer::cleanExpiredQuotes</model>
                 </run>
-            </harapartners_rushcheckout>
+            </rushcheckout_clean_expired_quotes>
         </jobs>
     </crontab>
 </config>
