@@ -92,11 +92,13 @@ XML;
 																	->addFieldToFilter('created_at', array( "lt" => $to,"gt"=>$from ))
 																	->addFieldToFilter('affiliate_code',$affiliateCode)
 																	->addFieldToFilter('level', 1)
+																	->setCurPage(1)
+																	->setPageSize(200)
 																	->load();	
 		foreach ($recordCollection as $record) {
 		$clickId = '';
 			foreach (json_decode($record->getRegistrationParam(),true) as $index=>$value) {						
-				if($index=="clickid"){
+				if($index=="clickId"){
 					$clickId = $value;
 					$entryString = 'clickId='.$clickId.'  eventMerchantId='.$record->getCustomerId().'  count1="1"  time='.strtotime($record->getCreatedAt());
 					$simpleXml->addChild ('entry', $entryString);	
@@ -111,13 +113,15 @@ XML;
 		$recordCollection = Mage::getModel('customertracking/record')->getCollection()
 																->addFieldToFilter('affiliate_code', $affiliateCode)
 																->addFieldToFilter('level', 0)
+																->setCurPage(1)
+																->setPageSize(200)
 																->load();	
 		foreach ($recordCollection as $record) {
 		// record may not have accurate customerId
 			$customer = Mage::getModel('customer/customer')->setWebsiteId(1)->loadByEmail($record->getCustomerEmail());
 			$clickId = '';
 			foreach (json_decode($record->getRegistrationParam(),true) as $index=>$value) {						
-				if($index=="clickid"){
+				if($index=="clickId"){
 					$clickId = $value;							
 					break;
 				}
@@ -149,13 +153,15 @@ XML;
 		$recordCollection = Mage::getModel('customertracking/record')->getCollection()
 																->addFieldToFilter('affiliate_code', $affiliateCode)
 																->addFieldToFilter('level', 1)
+																->setCurPage(1)
+																->setPageSize(200)
 																->load();	
 		foreach ($recordCollection as $record) {
 		// record may not have accurate customerId
 			$customer = Mage::getModel('customer/customer')->setWebsiteId(1)->loadByEmail($record->getCustomerEmail());
 			$clickId = '';
 			foreach (json_decode($record->getRegistrationParam(),true) as $index=>$value) {						
-				if($index=="clickid"){
+				if($index=="clickId"){
 					$clickId = $value;							
 					break;
 				}
