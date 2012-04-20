@@ -70,8 +70,9 @@ XML;
 																	->addFieldToFilter('level', 0)
 																	->setCurPage(1)
 																	->setPageSize(200)
-																	->load();	
+																	->load();													
 		$counter = 0;
+		echo count($recordCollection);
 		foreach ($recordCollection as $record) {			
 			$clickId = '';
 			foreach (json_decode($record->getRegistrationParam(),true) as $index=>$value) {						
