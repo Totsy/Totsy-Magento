@@ -72,11 +72,10 @@ XML;
 																	->setPageSize(200)
 																	->load();													
 		$counter = 0;
-		echo count($recordCollection);
 		foreach ($recordCollection as $record) {			
 			$clickId = '';
 			foreach (json_decode($record->getRegistrationParam(),true) as $index=>$value) {						
-				if($index=="clickid"){
+				if($index=="clickId"){
 					$clickId = $value;
 					$entryString = 'clickId='.$clickId.'  eventMerchantId='.$record->getCustomerId().'  count1="1"  time='.strtotime($record->getCreatedAt());
 					$simpleXml->addChild ('entry', $entryString);	
