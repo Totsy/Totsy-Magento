@@ -26,20 +26,23 @@ class Harapartners_Rushcheckout_Helper_Reservation extends Mage_Core_Helper_Abst
 			return $this;
 		}
 		
+		//$newQty will be 'last_reservation_qty' after successful update
+		if($quoteItem->isDeleted()){
+			$newQty = 0.0;
+		}else{
+			$newQty = $quoteItem->getData('qty');
+		}
+		
 		if($shouldRestock){
 			$deltaQty = (double) $quoteItem->getData('qty');
 		}else{
 			//Use 'last_reservation_qty' to prevent duplicate updates by duplicate saves (only saves with qty update will be effective)
-			if(!!$quoteItem->getData('last_reservation_qty')){
+			if($quoteItem->getData('last_reservation_qty') !== null){
 				$origQty = $quoteItem->getData('last_reservation_qty');
 			}else{
 				$origQty = $quoteItem->getOrigData('qty');
 			}
-			if($quoteItem->isDeleted()){
-				$newQty = 0.0;
-			}else{
-				$newQty = $quoteItem->getData('qty');
-			}
+			
 			$deltaQty = -1.0 * ($newQty - $origQty); //Quote item qty changes count as negative toward stock qty
 		}
 		
@@ -52,23 +55,22 @@ class Harapartners_Rushcheckout_Helper_Reservation extends Mage_Core_Helper_Abst
                         Mage::helper('cataloginventory')->__('The stock item for Product in option is not valid.')
                     );
                 }
-                if($this->_validateStock($stockItem, $deltaQty)){
-                	$this->_registerUpdate($stockItem, $deltaQty);
+                if($this->_registerUpdate($stockItem, $deltaQty, true)){
                 	$quoteItem->setData('last_reservation_qty', $newQty);
             	}else{
-            		Mage::throwException(
-                        Mage::helper('cataloginventory')->__('The requested quantity for \'%s\' is not available.', $quoteItem->getProduct()->getName())
-                    );
+					Mage::throwException(
+							Mage::helper('cataloginventory')->__('The requested quantity for \'%s\' is not available.', $quoteItem->getProduct()->getName())
+					);
             	}
             }
 		}else{
 			$stockItem = $quoteItem->getProduct()->getStockItem();
-			if($this->_validateStock($stockItem, $deltaQty)){
-               	$this->_registerUpdate($stockItem, $deltaQty);
+			if($this->_registerUpdate($stockItem, $deltaQty, true)){
+               	$quoteItem->setData('last_reservation_qty', $newQty);
            	}else{
-           		Mage::throwException(
-                       Mage::helper('cataloginventory')->__('The requested quantity for \'%s\' is not available.', $quoteItem->getProduct()->getName())
-                   );
+				Mage::throwException(
+						Mage::helper('cataloginventory')->__('The requested quantity for \'%s\' is not available.', $quoteItem->getProduct()->getName())
+				);
            	}
 		}
 		return $this;
@@ -93,9 +95,9 @@ class Harapartners_Rushcheckout_Helper_Reservation extends Mage_Core_Helper_Abst
 		return $this;
 	}
 	
-	protected function _validateStock($stockItem, $deltaQty){
+	protected function _validateStock($result, $deltaQty){
 		//Restock (positive delta) is always allowed
-		if($deltaQty >= -1.0 * self::PRECISION_DELTA){
+		if($deltaQty >= self::PRECISION_DELTA){
 			return true;
 		}
 		
@@ -105,21 +107,15 @@ class Harapartners_Rushcheckout_Helper_Reservation extends Mage_Core_Helper_Abst
 			return true;
 		}
 		
-		$read = Mage::getSingleton('core/resource')->getConnection('core_read');
-		$read->beginTransaction();
-		$select = $read->select()
-				->from('cataloginventory_stock_status')
-				->where('product_id = ?', $stockItem->getData('product_id'))
-				->where('website_id = ?', self::DEFAULT_WEBSITE_ID)
-            	->where('stock_id = ?', $stockItem->getData('stock_id'));
-        $result = $read->fetchRow($select);
-        if(!empty($result['qty']) && $result['qty'] + $deltaQty >= 0){
+		// == 0.00 is allowed, (-1.0 * self::PRECISION_DELTA)
+        if(!empty($result['qty']) && $result['qty'] + $deltaQty >= -1.0 * self::PRECISION_DELTA){
         	return true;
         }
+        
 		return false;
     }
 	
-	protected function _registerUpdate($stockItem, $deltaQty){
+	protected function _registerUpdate($stockItem, $deltaQty, $shouldValidate = false){
 		//No nill update
 		if(abs($deltaQty) <= self::PRECISION_DELTA){
 			return $this;
@@ -135,17 +131,37 @@ class Harapartners_Rushcheckout_Helper_Reservation extends Mage_Core_Helper_Abst
 			return $this;
 		}
 		
+		//Wrapped into a DB transaction for failure rollback
 		$write = Mage::getSingleton('core/resource')->getConnection('core_write');
+		
+		$select = $write->select()
+				->from('cataloginventory_stock_status')
+				->where('product_id = ?', $stockItem->getData('product_id'))
+				->where('website_id = ?', self::DEFAULT_WEBSITE_ID)
+            	->where('stock_id = ?', $stockItem->getData('stock_id'));
+        $result = $write->fetchRow($select);
+		
+        if($shouldValidate && !$this->_validateStock($result, $deltaQty)){
+        	return false;
+        }
+		
+        $write->beginTransaction();
+        //SQL += or -= may cause problems with nested DB transactions
 		$queryString = 'UPDATE `cataloginventory_stock_status` ';
-		if($deltaQty >= -1.0 * self::PRECISION_DELTA){
-			$queryString .= 'SET `qty` = `qty` + ' . abs($deltaQty) . ', `stock_status` = IF(`qty`>0, 1, 0) ';
+		$queryString .= 'SET `qty` = ' . ($result['qty'] + $deltaQty);
+		
+		// == 0.00 is considered as out of stock
+		if($result['qty'] + $deltaQty >= self::PRECISION_DELTA){
+			$queryString .= ', `stock_status` = 1 ';
 		}else{
-			$queryString .= 'SET `qty` = `qty` - ' . abs($deltaQty) . ', `stock_status` = IF(`qty`>0, 1, 0) ';
+			$queryString .= ', `stock_status` = 0 ';
 		}
 		$queryString .= 'WHERE `product_id` = ' . $stockItem->getData('product_id') 
 				. ' AND `website_id` = '  . self::DEFAULT_WEBSITE_ID 
 				. ' AND `stock_id` = ' . $stockItem->getData('stock_id')  . ';';
 		$write->query($queryString);
+		$write->commit();
+
 		
 		return $this;
 	}

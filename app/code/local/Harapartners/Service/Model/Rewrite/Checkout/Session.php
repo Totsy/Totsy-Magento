@@ -34,23 +34,26 @@ class Harapartners_Service_Model_Rewrite_Checkout_Session extends Mage_Checkout_
     }
 	
     public function getQuote(){	
-    	$quote = parent::getQuote();
+    	parent::getQuote();
     	
     	//Only check once for expiration, for non-empty quote
     	if(!Mage::registry('has_expire_cart_by_rushcheckout')
-    			&& !!count($quote->getAllItems())
+    			&& !!count($this->_quote->getAllItems())
     	){
     		$countdown = $this->getCountDownTimer();
         	$timeout = $this->getQuoteItemExpireTime();
     	    if($this->_getCurrentTime() - $countdown > $timeout){
     	    	//Remove expired ones and create a new quote
-    	    	foreach($quote->getAllItems() as $item){
+    	    	foreach($this->_quote->getAllItems() as $item){
+    	    		$item->isDeleted(true);
 					$item->delete();			
 				}
 	        }
-	        Mage::unregister('has_expire_cart_by_rushcheckout');
-    		Mage::register('has_expire_cart_by_rushcheckout', true);
     	}
+    	
+    	//Due to the AND condition !!count($this->_quote->getAllItems(), 
+    	Mage::unregister('has_expire_cart_by_rushcheckout');
+    	Mage::register('has_expire_cart_by_rushcheckout', true);
 
         return $this->_quote;
     }
