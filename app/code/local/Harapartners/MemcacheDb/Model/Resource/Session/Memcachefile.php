@@ -14,6 +14,7 @@
 
 class Harapartners_MemcacheDb_Model_Resource_Session_Memcachefile extends Harapartners_MemcacheDb_Model_Resource_Session_File {
 	
+	//Confirmed: this bug is caused by php-fpm, 'service php-fpm restart' must be excuted everytime!
 	//WARNING, const defined in this class will cause 'Fatal error: Undefined class constant' on magento-totsy server
 	//This bug is NOT reproducible on other servers, but for simplicity, all const are protected variable now
 	protected $_sessionDataPrefix = 'MDBS_';
