@@ -16,8 +16,8 @@ class Harapartners_MemcacheDb_Model_Resource_Session_Memcachefile extends Harapa
    	
 	const MEMCACHEDB_SESSION_PREFIX = 'MDBS_';
 	const MEMCACHEDB_SESSION_EXPIRE	= 604800; //7 days, safety value for garbage collection
-	const MEMCACHEDB_SESSION_DATA_LIFETIME = 900; //in seconds, how often Memcache sync with DB
 	
+	protected $_sessionDataSyncInterval = 900; //in seconds, how often Memcache sync with File
 	protected $_automaticCleaningFactor = 50000; //garbage Collection with 1/50000 chance per session close
 	
 	protected $_memcache = null;
@@ -101,7 +101,7 @@ class Harapartners_MemcacheDb_Model_Resource_Session_Memcachefile extends Harapa
 		//fallback to DB is memcache is not available or memcached timestamp is too old
     	if(!$this->getMemcache()->hasConnection()
     			|| !$this->_lastDbSyncTimestamp
-    			|| $this->_lastDbSyncTimestamp + self::MEMCACHEDB_SESSION_DATA_LIFETIME < Varien_Date::toTimestamp(true)){
+    			|| $this->_lastDbSyncTimestamp + $this->_sessionDataSyncInterval < Varien_Date::toTimestamp(true)){
     		$isSuccess = parent::write($sessId, $sessData);
     		if($isSuccess){
     			$this->_lastDbSyncTimestamp = Varien_Date::toTimestamp(true); //update the last sync timestamp
