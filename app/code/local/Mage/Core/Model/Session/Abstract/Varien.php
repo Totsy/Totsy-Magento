@@ -59,7 +59,7 @@ class Mage_Core_Model_Session_Abstract_Varien extends Varien_Object
             //Harapartners, Jun, START: Special session handling
             case 'memcachefile':
                 ini_set('session.save_handler', 'user');
-                $sessionResource = Mage::getResourceSingleton('memcachedb/session_memcachefile');
+                $sessionResource = Mage::getSingleton('memcachedb/resource_session_memcachefile');
                 $sessionResource->setSaveHandler();
                 break;
             //Harapartners, Jun, END
