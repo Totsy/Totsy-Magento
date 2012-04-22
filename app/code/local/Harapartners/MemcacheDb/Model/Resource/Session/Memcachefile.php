@@ -13,10 +13,11 @@
  */
 
 class Harapartners_MemcacheDb_Model_Resource_Session_Memcachefile extends Harapartners_MemcacheDb_Model_Resource_Session_File {
-   	
-	const MEMCACHEDB_SESSION_PREFIX = 'MDBS_';
-	const MEMCACHEDB_SESSION_EXPIRE	= 604800; //7 days, safety value for garbage collection
 	
+	//WARNING, const defined in this class will cause 'Fatal error: Undefined class constant' on magento-totsy server
+	//This bug is NOT reproducible on other servers, but for simplicity, all const are protected variable now
+	protected $_sessionDataPrefix = 'MDBS_';
+	protected $_sessionDataExpire = 604800; //7 days, safety value for garbage collection
 	protected $_sessionDataSyncInterval = 900; //in seconds, how often Memcache sync with File
 	protected $_automaticCleaningFactor = 50000; //garbage Collection with 1/50000 chance per session close
 	
@@ -40,7 +41,7 @@ class Harapartners_MemcacheDb_Model_Resource_Session_Memcachefile extends Harapa
     		return '';
     	}
    		try{
-   			$rawData = $memcache->read(self::MEMCACHEDB_SESSION_PREFIX . $sessId);
+   			$rawData = $memcache->read($this->_sessionDataPrefix . $sessId);
    			if(!!$rawData
    					&& !!($sessionWrapper = json_decode($rawData, true))
    					&& ($sessionWrapper['head']['expire'])
@@ -74,7 +75,7 @@ class Harapartners_MemcacheDb_Model_Resource_Session_Memcachefile extends Harapa
    			$sessionWrapper['body'] = $sessData;
    			$rawData = json_encode($sessionWrapper);
    			//$rawData = gzdeflate($rawData, 9); //'DEFLATE' compression may have a small avantage over 'ZLIB';
-   			$isSuccess = $memcache->write(self::MEMCACHEDB_SESSION_PREFIX . $sessId, $rawData, MEMCACHE_COMPRESSED, self::MEMCACHEDB_SESSION_EXPIRE);
+   			$isSuccess = $memcache->write($this->_sessionDataPrefix . $sessId, $rawData, MEMCACHE_COMPRESSED, $this->_sessionDataExpire);
    		}catch(Exception $e){
    		}
     	return $isSuccess;
@@ -112,7 +113,7 @@ class Harapartners_MemcacheDb_Model_Resource_Session_Memcachefile extends Harapa
     }
 
     public function destroy($sessId){
-    	$this->getMemcache()->delete(self::MEMCACHEDB_SESSION_PREFIX . $sessId);
+    	$this->getMemcache()->delete($this->_sessionDataPrefix . $sessId);
         parent::destroy($sessId);
         return true;
     }
