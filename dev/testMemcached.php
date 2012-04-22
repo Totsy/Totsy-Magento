@@ -13,5 +13,5 @@ $memcache->connect(
 		(string)Mage::getConfig()->getNode('global/cache/memcached/servers/server/port')
 );
 
-$memcache->set('TEST_KEY', 'THIS IS A TEST!', true, 20);
+$memcache->set('TEST_KEY', 'THIS IS A TEST!');
 echo $memcache->get('TEST_KEY');
