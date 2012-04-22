@@ -25,7 +25,6 @@ class Harapartners_MemcacheDb_Model_Resource_Session_Memcachefile extends Harapa
 	
     public function __construct(){
     	$this->_memcache = Mage::getSingleton('memcachedb/resource_memcache');
-    	parent::__construct();
     }
     
 	public function getMemcache(){

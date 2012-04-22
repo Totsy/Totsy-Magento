@@ -20,13 +20,11 @@
 		<models>
             <memcachedb>
                 <class>Harapartners_MemcacheDb_Model</class>
+				<resourceModel>memcachedb_resource</resourceModel>
             </memcachedb>
-			<!--Moved to Harapartners_Service-->
-			<!--core_resource>
-				<rewrite>
-					<session>Harapartners_MemcacheDb_Model_Resource_Session</session>
-				</rewrite>
-			</core_resource-->
+			<memcachedb_resource>
+                <class>Harapartners_MemcacheDb_Model_Resource</class>
+			</memcachedb_resource>
         </models>
     </global>
 </config>

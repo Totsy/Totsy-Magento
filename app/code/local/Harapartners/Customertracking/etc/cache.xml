@@ -4,13 +4,13 @@
             <block>customertracking/welcome</block>
             <placeholder>CUSTOMERTRACKING_WELCOME</placeholder>
             <container>Harapartners_Customertracking_Model_Cache_Welcome</container>
-            <cache_lifetime>86400</cache_lifetime>
+            <cache_lifetime>3600</cache_lifetime>
         </customertracking_welcome>
 		<customertracking_pixel>
             <block>customertracking/pixel</block>
             <placeholder>CUSTOMERTRACKING_PIXEL</placeholder>
             <container>Harapartners_Customertracking_Model_Cache_Pixel</container>
-            <cache_lifetime>86400</cache_lifetime>
+            <cache_lifetime>3600</cache_lifetime>
         </customertracking_pixel>
 	</placeholders>
 </config>	

@@ -129,12 +129,6 @@
 					<store>Harapartners_Service_Model_Rewrite_Core_Store</store>
                 </rewrite>
             </core>
-			<core_resource>
-				<rewrite>
-					<!--Harapartners_MemcacheDb-->
-					<session>Harapartners_Service_Model_Rewrite_Core_Resource_Session</session>
-				</rewrite>
-			</core_resource>
 			<customer>
                 <rewrite>
 					<!--Harapartners_Service: locking admin modifications-->
