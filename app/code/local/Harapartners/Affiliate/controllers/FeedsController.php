@@ -70,7 +70,7 @@ XML;
 																	->addFieldToFilter('registration_param', array("like" => "%clickId%"))
 																	->addFieldToFilter('level', 0)
 																	->setCurPage(1)
-																	->setPageSize(200)
+																	->setPageSize(2000)
 																	->load();													
 		$counter = 0;
 		foreach ($recordCollection as $record) {			
