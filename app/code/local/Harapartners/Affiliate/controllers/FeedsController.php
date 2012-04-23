@@ -75,7 +75,7 @@ XML;
 		foreach ($recordCollection as $record) {			
 			$clickId = '';
 			foreach (json_decode($record->getRegistrationParam(),true) as $index=>$value) {						
-				if($index=="clickId"){
+				if( $index=="clickId" || $index == 'clickid' ){
 					$clickId = $value;
 					$entryString = 'clickId='.$clickId.'  eventMerchantId='.$record->getCustomerId().'  count1="1"  time='.strtotime($record->getCreatedAt());
 					$simpleXml->addChild ('entry', $entryString);	
@@ -98,7 +98,7 @@ XML;
 		foreach ($recordCollection as $record) {
 		$clickId = '';
 			foreach (json_decode($record->getRegistrationParam(),true) as $index=>$value) {						
-				if($index=="clickId"){
+				if( $index=="clickId" || $index == 'clickid' ){
 					$clickId = $value;
 					$entryString = 'clickId='.$clickId.'  eventMerchantId='.$record->getCustomerId().'  count1="1"  time='.strtotime($record->getCreatedAt());
 					$simpleXml->addChild ('entry', $entryString);	
@@ -121,7 +121,7 @@ XML;
 			$customer = Mage::getModel('customer/customer')->setWebsiteId(1)->loadByEmail($record->getCustomerEmail());
 			$clickId = '';
 			foreach (json_decode($record->getRegistrationParam(),true) as $index=>$value) {						
-				if($index=="clickId"){
+				if( $index=="clickId" || $index == 'clickid' ){
 					$clickId = $value;							
 					break;
 				}
@@ -161,7 +161,7 @@ XML;
 			$customer = Mage::getModel('customer/customer')->setWebsiteId(1)->loadByEmail($record->getCustomerEmail());
 			$clickId = '';
 			foreach (json_decode($record->getRegistrationParam(),true) as $index=>$value) {						
-				if($index=="clickId"){
+				if( $index=="clickId" || $index == 'clickid' ){
 					$clickId = $value;							
 					break;
 				}
