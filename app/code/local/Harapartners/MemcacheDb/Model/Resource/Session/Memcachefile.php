@@ -13,11 +13,13 @@
  */
 
 class Harapartners_MemcacheDb_Model_Resource_Session_Memcachefile extends Harapartners_MemcacheDb_Model_Resource_Session_File {
-   	
-	const MEMCACHEDB_SESSION_PREFIX = 'MDBS_';
-	const MEMCACHEDB_SESSION_EXPIRE	= 604800; //7 days, safety value for garbage collection
-	const DB_UPDATE_INTERVAL = 900; //in seconds, how often Memcache sync with DB
 	
+	//Confirmed: this bug is caused by php-fpm, 'service php-fpm restart' must be excuted everytime!
+	//WARNING, const defined in this class will cause 'Fatal error: Undefined class constant' on magento-totsy server
+	//This bug is NOT reproducible on other servers, but for simplicity, all const are protected variable now
+	protected $_sessionDataPrefix = 'MDBS_';
+	protected $_sessionDataExpire = 604800; //7 days, safety value for garbage collection
+	protected $_sessionDataSyncInterval = 900; //in seconds, how often Memcache sync with File
 	protected $_automaticCleaningFactor = 50000; //garbage Collection with 1/50000 chance per session close
 	
 	protected $_memcache = null;
@@ -25,7 +27,6 @@ class Harapartners_MemcacheDb_Model_Resource_Session_Memcachefile extends Harapa
 	
     public function __construct(){
     	$this->_memcache = Mage::getSingleton('memcachedb/resource_memcache');
-    	parent::__construct();
     }
     
 	public function getMemcache(){
@@ -41,7 +42,7 @@ class Harapartners_MemcacheDb_Model_Resource_Session_Memcachefile extends Harapa
     		return '';
     	}
    		try{
-   			$rawData = $memcache->read(self::MEMCACHEDB_SESSION_PREFIX . $sessId);
+   			$rawData = $memcache->read($this->_sessionDataPrefix . $sessId);
    			if(!!$rawData
    					&& !!($sessionWrapper = json_decode($rawData, true))
    					&& ($sessionWrapper['head']['expire'])
@@ -75,7 +76,7 @@ class Harapartners_MemcacheDb_Model_Resource_Session_Memcachefile extends Harapa
    			$sessionWrapper['body'] = $sessData;
    			$rawData = json_encode($sessionWrapper);
    			//$rawData = gzdeflate($rawData, 9); //'DEFLATE' compression may have a small avantage over 'ZLIB';
-   			$isSuccess = $memcache->write(self::MEMCACHEDB_SESSION_PREFIX . $sessId, $rawData, MEMCACHE_COMPRESSED, self::MEMCACHEDB_SESSION_EXPIRE);
+   			$isSuccess = $memcache->write($this->_sessionDataPrefix . $sessId, $rawData, MEMCACHE_COMPRESSED, $this->_sessionDataExpire);
    		}catch(Exception $e){
    		}
     	return $isSuccess;
@@ -102,7 +103,7 @@ class Harapartners_MemcacheDb_Model_Resource_Session_Memcachefile extends Harapa
 		//fallback to DB is memcache is not available or memcached timestamp is too old
     	if(!$this->getMemcache()->hasConnection()
     			|| !$this->_lastDbSyncTimestamp
-    			|| $this->_lastDbSyncTimestamp + self::DB_UPDATE_INTERVAL < Varien_Date::toTimestamp(true)){
+    			|| $this->_lastDbSyncTimestamp + $this->_sessionDataSyncInterval < Varien_Date::toTimestamp(true)){
     		$isSuccess = parent::write($sessId, $sessData);
     		if($isSuccess){
     			$this->_lastDbSyncTimestamp = Varien_Date::toTimestamp(true); //update the last sync timestamp
@@ -113,7 +114,7 @@ class Harapartners_MemcacheDb_Model_Resource_Session_Memcachefile extends Harapa
     }
 
     public function destroy($sessId){
-    	$this->getMemcache()->delete(self::MEMCACHEDB_SESSION_PREFIX . $sessId);
+    	$this->getMemcache()->delete($this->_sessionDataPrefix . $sessId);
         parent::destroy($sessId);
         return true;
     }
