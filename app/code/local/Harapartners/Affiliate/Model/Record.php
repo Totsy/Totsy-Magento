@@ -103,12 +103,20 @@ class Harapartners_Affiliate_Model_Record extends Mage_Core_Model_Abstract {
     
     protected function _beforeSave(){
     	parent::_beforeSave();
+    	
+    	$isFirstTime = false;
+    	
     	//For new object which does not specify 'created_at'
     	if(!$this->getId() && !$this->getData('created_at')){
     		$this->setData('created_at', now());
+    		$isFirstTime = true;
     	}
-    	//Always specify 'updated_at'
-    	$this->setData('updated_at', now());
+    	
+    	if(!($isFirstTime && !$this->getData('created_at'))) {
+    		//Always specify 'updated_at'
+    		$this->setData('updated_at', now());
+    	}
+    	
     	$this->validate(); //Errors will be thrown as exceptions
     	return $this;
     }
