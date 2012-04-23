@@ -124,6 +124,7 @@
 	</default>
 	<crontab>
         <jobs>
+			<!--
             <fulfillmentfactory_dotcom_update_product>
                 <schedule>
 					<cron_expr>0 0 * * *</cron_expr>
@@ -132,6 +133,7 @@
 					<model>fulfillmentfactory/service_dotcom::runUpdateProduct</model>
 				</run>
             </fulfillmentfactory_dotcom_update_product>
+			-->
             <fulfillmentfactory_dotcom_fulfill_order>
                 <schedule>
 					<cron_expr>0 0 * * *</cron_expr>
