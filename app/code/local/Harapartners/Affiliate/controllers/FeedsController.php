@@ -67,8 +67,8 @@ XML;
 		$recordCollection = Mage::getModel('customertracking/record')->getCollection()
 																	->addFieldToFilter('created_at', array( "lt" => $to,"gt"=>$from ))
 																	->addFieldToFilter('affiliate_code',$affiliateCode)
-																	->addFieldToFilter('registration_param', array("like" => "%clickId%"))
 																	->addFieldToFilter('level', 0)
+																	->addFieldToFilter('registration_param', array("like" => "%clickId%"))
 																	->setCurPage(1)
 																	->setPageSize(20000)
 																	->load();													
@@ -93,8 +93,9 @@ XML;
 																	->addFieldToFilter('created_at', array( "lt" => $to,"gt"=>$from ))
 																	->addFieldToFilter('affiliate_code',$affiliateCode)
 																	->addFieldToFilter('level', 1)
+																	->addFieldToFilter('registration_param', array("like" => "%clickId%"))
 																	->setCurPage(1)
-																	->setPageSize(200)
+																	->setPageSize(20000)
 																	->load();	
 		foreach ($recordCollection as $record) {
 		$clickId = '';
@@ -114,8 +115,9 @@ XML;
 		$recordCollection = Mage::getModel('customertracking/record')->getCollection()
 																->addFieldToFilter('affiliate_code', $affiliateCode)
 																->addFieldToFilter('level', 0)
+																->addFieldToFilter('registration_param', array("like" => "%clickId%"))
 																->setCurPage(1)
-																->setPageSize(200)
+																->setPageSize(20000)
 																->load();	
 		foreach ($recordCollection as $record) {
 		// record may not have accurate customerId
@@ -154,8 +156,9 @@ XML;
 		$recordCollection = Mage::getModel('customertracking/record')->getCollection()
 																->addFieldToFilter('affiliate_code', $affiliateCode)
 																->addFieldToFilter('level', 1)
+																->addFieldToFilter('registration_param', array("like" => "%clickId%"))
 																->setCurPage(1)
-																->setPageSize(200)
+																->setPageSize(20000)
 																->load();	
 		foreach ($recordCollection as $record) {
 		// record may not have accurate customerId
