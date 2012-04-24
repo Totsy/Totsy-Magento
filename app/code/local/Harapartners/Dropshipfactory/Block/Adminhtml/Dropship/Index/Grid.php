@@ -38,10 +38,11 @@ class Harapartners_Dropshipfactory_Block_Adminhtml_Dropship_Index_Grid extends M
         								//$catalog_product_entity_int_table . '.attribute_id=' . $vendorAttributeId . ' AND ' .
         								$catalog_product_entity_varchar_table . '.attribute_id=' . $fulfillmentTypeAttributeId . ' AND ' .
         								$catalog_product_entity_varchar_table . '.value="' . Harapartners_Ordersplit_Helper_Data::TYPE_DROPSHIP . '"');
-        
-        $collection->getSelect()->joinLeft($catalog_product_entity_varchar_table . ' AS vendor_table', 'product_id=vendor_table.entity_id', 'vendor_table.value as vendor')
-                                                        ->where('vendor_table.attribute_id=' . $vendorAttributeId);
-		       						
+	
+		$collection->getSelect()->joinLeft($catalog_product_entity_varchar_table . ' AS vendor_table', 'product_id=vendor_table.entity_id', 'vendor_table.value as vendor')
+        						->where('vendor_table.attribute_id=' . $vendorAttributeId);
+
+		//echo $collection->getSelect()->assemble();		       						
 		$this->setCollection($collection);
 		parent::_prepareCollection();
        
@@ -77,7 +78,7 @@ class Harapartners_Dropshipfactory_Block_Adminhtml_Dropship_Index_Grid extends M
             'header'        => Mage::helper('dropshipfactory')->__('Sku'),
             'align'         => 'right',
             'width'         => '30px',
-            'index'         => 'sku'
+            'index'         => 'sku'
         ));
         
 //        $this->addColumn('value', array(
@@ -95,8 +96,8 @@ class Harapartners_Dropshipfactory_Block_Adminhtml_Dropship_Index_Grid extends M
             'align'         => 'right',
             'width'         => '30px',
         	'type'			=> 'text',
-            'index'         => 'value',
-        	'filter_index'	=> $catalog_product_entity_int_table . '.value'
+            'index'         => 'vendor',
+        	'filter_index'	=> 'vendor_table.value'
         ));
         
         $this->addColumn('qty_ordered', array(
