@@ -151,8 +151,10 @@
 				jQuery( 'select#cybersource-use-card-method' ).change( function(){
 					if( jQuery( this ).val() == '' ) {
 						jQuery( '.use-new-card-wrapper' ).show();
+						jQuery( 'input, select', '.use-new-card-wrapper' ).removeAttr( 'disabled' );
 					} else {
 						jQuery( '.use-new-card-wrapper' ).hide();
+						jQuery( 'input, select', '.use-new-card-wrapper' ).attr( 'disabled', 'disabled' );
 					}
 				});
 			});
