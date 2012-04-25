@@ -11,7 +11,8 @@ class Totsy_Api_Adminhtml_ClientController
 {
     public function indexAction()
     {
-        $this->loadLayout();
+        $this->loadLayout()
+            ->_setActiveMenu('system/totsyapi');
         $this->_addContent(
             $this->getLayout()->createBlock('totsyapi/adminhtml_client_index')
         );
