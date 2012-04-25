@@ -185,6 +185,12 @@ class Harapartners_Categoryevent_Helper_Memcache extends Mage_Core_Helper_Abstra
 			$valueId = $typeAttributes->getSource()->getOptionId($value);
 			$label = Mage::helper('catalog')->__($value);
 			
+			
+			$cateAttr = Mage::getModel('catalog/category')->getResource()->getAttribute($type);
+			$catelabel = $cateAttr->getSource()->getOptionText($value);
+			$categoryLabel = Mage::helper('catalog')->__($catelabel);
+			
+			
 			$productCollection = Mage::getModel('catalog/product')->getCollection();
 			$productCollection->getSelect()->where('`e`.`entity_id` IN(' . implode(',', $uniqueProductIds) . ')');
 			$productCollection->addFieldToFilter($type, array('like' => '%'.$valueId.'%'));
@@ -271,7 +277,10 @@ class Harapartners_Categoryevent_Helper_Memcache extends Mage_Core_Helper_Abstra
 				}
 			}
 			
-			$topNavData['attr_text_label'] = $label;
+			$topNavData['attr_text_label'] = $categoryLabel;
+			//$topNavData['attr_text_label'] = $label; use this if you want to show something like infant without 0-6m in the title
+			
+			
 			$topNavData['category_product_complete_data'] = $categoryProductCompleteData;
 		}catch(Exception $e){
 			$topNavData ['category_product_complete_data'] = array();
