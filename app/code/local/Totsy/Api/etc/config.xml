@@ -57,22 +57,38 @@
                 <use>admin</use>
                 <args>
                     <module>Totsy_Api</module>
-                    <frontName>totsyapi</frontName>
+                    <frontName>adminhtml_totsyapi</frontName>
                 </args>
             </totsyapi>
         </routers>
     </admin>
     <adminhtml>
         <menu>
-            <harapartners>
+            <system>
                 <children>
                     <totsyapi translate="title" module="totsyapi">
-                        <title>API Clients</title>
+                        <title>Totsy REST API Clients</title>
                         <sort_order>1000</sort_order>
                         <action>totsyapi/adminhtml_client</action>
                     </totsyapi>
                 </children>
-            </harapartners>
+            </system>
         </menu>
+        <acl>
+            <resources>
+                <admin>
+                    <children>
+                        <system>
+                            <children>
+                                <totsyapi translate="title" module="totsyapi">
+                                    <title>Totsy REST API Clients</title>
+                                    <sort_order>10</sort_order>
+                                </totsyapi>
+                            </children>
+                        </system>
+                    </children>
+                </admin>
+            </resources>
+        </acl>
     </adminhtml>
 </config>
