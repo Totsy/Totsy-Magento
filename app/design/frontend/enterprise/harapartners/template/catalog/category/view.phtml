@@ -68,9 +68,9 @@
 <div class="category-view">
 	<div class="event-title-container">
 	<?php if ( !$upComingFlag ):?>
-		<h1><a href="<?php echo $this->getBaseUrl();?>">Totsy's Sales</a><span> / <span><?php echo $_helper->categoryAttribute($_category, $_category->getName(), 'name') ?></h1>
+		<h1><a href="<?php echo $this->getBaseUrl();?>">Today's Sales</a><span> / <span><?php echo $_helper->categoryAttribute($_category, $_category->getName(), 'name') ?></h1>
 	<?php else :?>
-		<h1><a href="<?php echo $this->getBaseUrl();?>">Comming Soon Sales</a><span> / <span><?php echo $_helper->categoryAttribute($_category, $_category->getName(), 'name') ?></h1>
+		<h1><a href="<?php echo $this->getBaseUrl();?>">Upcoming Sales</a><span> / <span><?php echo $_helper->categoryAttribute($_category, $_category->getName(), 'name') ?></h1>
 	<?php endif;?>
 		<p class="count-down-timer" id="time-<?php echo $timer ?>"></p>					 
 		<script type="text/javascript">
