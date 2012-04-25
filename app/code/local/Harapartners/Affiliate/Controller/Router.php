@@ -40,8 +40,9 @@ class Harapartners_Affiliate_Controller_Router extends Mage_Core_Controller_Vari
         				->setControllerName('register')
         				->setActionName('index')
         				->setParam('affiliate_code', $p[1]);
-        				//->setParam('clickid', $p[2]);
-           
+        	if (!!$p[2] || is_numeric($p[2])){
+        		$request->setParam('clickId', $p[2]);
+        	} 				
         	return true;
         }elseif(!!$request->getParam('a')){
         	//Some legacy URLs: [keyword]?a=[affiliate_code]&...
