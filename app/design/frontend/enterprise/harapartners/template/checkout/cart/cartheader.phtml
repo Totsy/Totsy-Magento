@@ -128,7 +128,7 @@
 		                <?php if ($this->canApplyMsrp()): ?>
 		                    <span class="map-cart-sidebar-total"><?php echo $this->__('ORDER TOTAL WILL BE DISPLAYED BEFORE YOU SUBMIT THE ORDER'); ?></span>
 		                <?php else: ?>
-		                	<span class="label orange"><?php echo $this->__('Your savings: ') ?></span><?php echo Mage::helper('checkout')->formatPrice($_saving); ?>
+		                	<span class="label orange"><?php echo $this->__('Your savings: ') ?></span><span class="orange"><?php echo Mage::helper('checkout')->formatPrice($_saving); ?></span>
 		                    <span class="label"><?php echo $this->__('Subtotal:') ?></span> <?php echo Mage::helper('checkout')->formatPrice($this->getSubtotal()) ?><?php if ($_subtotalInclTax = $this->getSubtotalInclTax()): ?> / <?php echo Mage::helper('checkout')->formatPrice($_subtotalInclTax) ?> <?php echo Mage::helper('tax')->getIncExcText(true) ?><?php endif; ?>
 		                <?php endif; ?>
 		            </p>
