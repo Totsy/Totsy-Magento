@@ -49,6 +49,9 @@
 					<catalog_category_edit_form>Harapartners_Service_Block_Rewrite_Adminhtml_Catalog_Category_Edit_Form</catalog_category_edit_form>
 					<!--Harapartners_Service: adding root category is NOT allowed -->
 					<catalog_category_tree>Harapartners_Service_Block_Rewrite_Adminhtml_Catalog_Category_Tree</catalog_category_tree>
+					<!--Harapartners_Service: disable admin setting custoemr password-->
+					<customer_edit_renderer_newpass>Harapartners_Service_Block_Rewrite_Adminhtml_Customer_Edit_Renderer_Newpass</customer_edit_renderer_newpass>
+					
 				</rewrite>
 			</adminhtml>
 			<checkout>

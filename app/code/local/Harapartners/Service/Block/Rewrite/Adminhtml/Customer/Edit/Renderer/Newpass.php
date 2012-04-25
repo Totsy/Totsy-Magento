@@ -31,14 +31,14 @@
  * @package    Mage_Adminhtml
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Mage_Adminhtml_Block_Customer_Edit_Renderer_Newpass extends Mage_Adminhtml_Block_Abstract implements Varien_Data_Form_Element_Renderer_Interface
+class Harapartners_Service_Block_Rewrite_Adminhtml_Customer_Edit_Renderer_Newpass extends Mage_Adminhtml_Block_Abstract implements Varien_Data_Form_Element_Renderer_Interface
 {
     /*Hara partners Edward, hide password setting in admin, only send auto generate password is allow*/
     public function render(Varien_Data_Form_Element_Abstract $element)
     {
         $html.= '<tr>';
         $html.= '<td class="label"><label>&nbsp;</label></td>';
-        $html.= '<td class="value"><input class="required-entry" type="checkbox" id="account-send-pass" name="'.$element->getName().'" value="auto" onclick="setElementDisable(\''.$element->getHtmlId().'\', this.checked)"/>&nbsp;';
+        $html.= '<td class="value"><input type="checkbox" id="account-send-pass" name="'.$element->getName().'" value="auto" onclick="setElementDisable(\''.$element->getHtmlId().'\', this.checked)"/>&nbsp;';
         $html.= '<label for="account-send-pass">'.Mage::helper('customer')->__('Send auto-generated password').'</label></td>';
         $html.= '</tr>'."\n";
 
