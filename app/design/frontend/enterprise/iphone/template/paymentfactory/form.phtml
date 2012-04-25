@@ -150,9 +150,11 @@
 			jQuery( document ).ready( function() {
 				jQuery( '.use-new-card-control' ).click( function() {
 					jQuery( '.use-new-card-wrapper' ).show();
+					jQuery( 'input, select', '.use-new-card-wrapper' ).removeAttr( 'disabled' );
 				});
 				jQuery( '.use-saved-card-control' ).click( function() {
 					jQuery( '.use-new-card-wrapper' ).hide();
+					jQuery( 'input, select', '.use-new-card-wrapper' ).attr( 'disabled', 'disabled' );
 				});
 			});
 </script>
