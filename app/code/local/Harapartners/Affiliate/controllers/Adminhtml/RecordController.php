@@ -16,7 +16,7 @@ class Harapartners_Affiliate_Adminhtml_RecordController extends Mage_Adminhtml_C
 	
 	public function indexAction(){	
 		$this->loadLayout()
-			->_setActiveMenu('harapartners/affiliate/record')
+			->_setActiveMenu('marketing/affiliate')
 			->_addContent($this->getLayout()->createBlock('affiliate/adminhtml_record_index'))
 			->renderLayout();
     }   
@@ -48,7 +48,7 @@ class Harapartners_Affiliate_Adminhtml_RecordController extends Mage_Adminhtml_C
 			Mage::register('affiliate_form_data', $data);
 		}
 		
-		$this->loadLayout()->_setActiveMenu('harapartners/affiliate');
+		$this->loadLayout()->_setActiveMenu('marketing/affiliate');
 		$this->getLayout()->getBlock('head')->setCanLoadExtJs(true);
 		$this->_addContent($this->getLayout()->createBlock('affiliate/adminhtml_record_edit'));
 		$this->renderLayout();

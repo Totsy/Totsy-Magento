@@ -17,22 +17,22 @@
         </Harapartners_Affiliate>
     </modules>
     <global>
-		<blocks>
-			<affiliate>
-				<class>Harapartners_Affiliate_Block</class>
-			</affiliate>
-		</blocks>
+        <blocks>
+            <affiliate>
+                <class>Harapartners_Affiliate_Block</class>
+            </affiliate>
+        </blocks>
         <helpers>
             <affiliate>
-            	<class>Harapartners_Affiliate_Helper</class>
+                <class>Harapartners_Affiliate_Helper</class>
             </affiliate>
         </helpers>
-		<models>
+        <models>
             <affiliate>
                 <class>Harapartners_Affiliate_Model</class>
-				<resourceModel>affiliate_mysql4</resourceModel>
+                <resourceModel>affiliate_mysql4</resourceModel>
             </affiliate>
-			<affiliate_mysql4>
+            <affiliate_mysql4>
                 <class>Harapartners_Affiliate_Model_Mysql4</class>
                 <entities>
                     <record>
@@ -41,7 +41,7 @@
                 </entities>
             </affiliate_mysql4>
         </models>
-		<resources>
+        <resources>
             <affiliate_setup>
                 <setup>
                     <module>Harapartners_Affiliate</module>
@@ -61,12 +61,12 @@
                 </connection>
             </affiliate_read>		
         </resources>
-		<!--Moved to Harapartners_Service-->
-		<!--events>
+        <!--Moved to Harapartners_Service-->
+        <!--events>
             <controller_front_init_routers>
                 <observers>
                     <affiliate>
-						<type>singleton</type>
+                        <type>singleton</type>
                         <class>affiliate/observer</class>
                         <method>addAffiliateRouter</method>
                     </affiliate>
@@ -74,8 +74,8 @@
             </controller_front_init_routers>
         </events-->
     </global>
-	<frontend>
-	    <routers>
+    <frontend>
+        <routers>
             <affiliate>
                 <use>standard</use>
                 <args>
@@ -84,9 +84,9 @@
                 </args>
             </affiliate>
         </routers>
-	</frontend>
-	<admin>
-		<routers>
+    </frontend>
+    <admin>
+        <routers>
             <affiliate>
                 <use>admin</use>
                 <args>
@@ -95,27 +95,45 @@
                 </args>
             </affiliate>
         </routers>
-	</admin>
-	<adminhtml>
+    </admin>
+    <adminhtml>
         <menu>
-            <harapartners>
-				<children>
-					<affiliate translate="title" module="affiliate">
-		                <title>Affiliates</title>
-		                <sort_order>10</sort_order>
-						<action>adminhtml_affiliate/adminhtml_record</action>
-					</affiliate>
-				</children>
-            </harapartners>
-			<report>
-				<children>
-					<affiliate translate="title" module="affiliate">
-		                <title>Affiliate Report</title>
-		                <sort_order>0</sort_order>
-						<action>adminhtml_affiliate/adminhtml_report</action>
-					</affiliate>
-				</children>
+            <marketing>
+                <children>
+                    <affiliate translate="title" module="affiliate">
+                        <title>Affiliates</title>
+                        <sort_order>10</sort_order>
+                        <action>adminhtml_affiliate/adminhtml_record</action>
+                    </affiliate>
+                </children>
+            </marketing>
+            <report>
+                <children>
+                    <affiliate translate="title" module="affiliate">
+                        <title>Affiliates</title>
+                        <sort_order>0</sort_order>
+                        <action>adminhtml_affiliate/adminhtml_report</action>
+                    </affiliate>
+                </children>
             </report>
         </menu>
+        <acl>
+            <resources>
+                <admin>
+                    <children>
+                        <marketing translate="title" module="affiliate">
+                            <title>Marketing</title>
+                            <sort_order>300</sort_order>
+                            <children>
+                                <affiliate translate="title" module="affiliate">
+                                    <title>Affiliates</title>
+                                    <sort_order>10</sort_order>
+                                </affiliate>
+                            </children>
+                        </marketing>
+                    </children>
+                </admin>
+            </resources>
+        </acl>
     </adminhtml>
 </config>
