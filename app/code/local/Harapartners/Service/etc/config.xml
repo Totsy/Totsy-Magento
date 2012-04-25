@@ -49,6 +49,10 @@
 					<catalog_category_edit_form>Harapartners_Service_Block_Rewrite_Adminhtml_Catalog_Category_Edit_Form</catalog_category_edit_form>
 					<!--Harapartners_Service: adding root category is NOT allowed -->
 					<catalog_category_tree>Harapartners_Service_Block_Rewrite_Adminhtml_Catalog_Category_Tree</catalog_category_tree>
+					<!--Harapartners_Service: disable admin setting custoemr password-->
+					<customer_edit_renderer_newpass>Harapartners_Service_Block_Rewrite_Adminhtml_Customer_Edit_Renderer_Newpass</customer_edit_renderer_newpass>
+					<!--Harapartners_Service: sku disabled (not editable) in the admin panel -->
+					<catalog_product_edit_tab_attributes>Harapartners_Service_Block_Rewrite_Adminhtml_Catalog_Product_Edit_Tab_Attributes</catalog_product_edit_tab_attributes>
 				</rewrite>
 			</adminhtml>
 			<checkout>
@@ -399,9 +403,13 @@
 	<adminhtml>
 		<menu>
 			<harapartners translate="title" module="service">
-				<title>Hara Partners</title>
+				<title>Extras</title>
                 <sort_order>100</sort_order>
             </harapartners>
+            <marketing translate="title" module="service">
+                <title>Marketing</title>
+                <sort_order>50</sort_order>
+            </marketing>
         </menu>
     </adminhtml>
 </config>

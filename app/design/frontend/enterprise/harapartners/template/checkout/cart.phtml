@@ -55,12 +55,17 @@
 						},
 						onComplete: function( event ){
 							//location.reload();											
-							jQuery(this).html("<span class='over'>no longer reserved</span>");
+							//jQuery(this).html("<span class='over'>no longer reserved</span>");
+							setTimeout("cartRedirect();",1000);
 						},
 						leadingZero: true,
 						direction: "down"
 					});										
 				});	 
+				
+				function cartRedirect(){
+					window.location = "<?php echo Mage::getUrl('checkout/cart');?>"
+				}; 
 			</script>
         </div>
     </div>

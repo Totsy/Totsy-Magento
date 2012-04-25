@@ -16,7 +16,7 @@ class Harapartners_Customertracking_Adminhtml_RecordController extends Mage_Admi
 	
 	public function indexAction(){	
 		$this->loadLayout()
-			->_setActiveMenu('harapartners/customertracking/record')
+			->_setActiveMenu('marketing/customertracking')
 			->_addContent($this->getLayout()->createBlock('customertracking/adminhtml_record_index'))
 			->renderLayout();
     }   

@@ -17,22 +17,22 @@
         </Harapartners_Customertracking>
     </modules>
     <global>
-		<blocks>
-			<customertracking>
-				<class>Harapartners_Customertracking_Block</class>
-			</customertracking>
-		</blocks>
+        <blocks>
+            <customertracking>
+                <class>Harapartners_Customertracking_Block</class>
+            </customertracking>
+        </blocks>
         <helpers>
             <customertracking>
-            	<class>Harapartners_Customertracking_Helper</class>
+                <class>Harapartners_Customertracking_Helper</class>
             </customertracking>
         </helpers>
-		<models>
+        <models>
             <customertracking>
                 <class>Harapartners_Customertracking_Model</class>
-				<resourceModel>customertracking_mysql4</resourceModel>
+                <resourceModel>customertracking_mysql4</resourceModel>
             </customertracking>
-			<customertracking_mysql4>
+            <customertracking_mysql4>
                 <class>Harapartners_Customertracking_Model_Mysql4</class>
                 <entities>
                     <record>
@@ -41,7 +41,7 @@
                 </entities>
             </customertracking_mysql4>
         </models>
-		<resources>
+        <resources>
             <customertracking_setup>
                 <setup>
                     <module>Harapartners_Customertracking</module>
@@ -61,12 +61,12 @@
                 </connection>
             </customertracking_read>		
         </resources>
-		<!--Moved to Harapartners_Service-->
-		<!--events>
+        <!--Moved to Harapartners_Service-->
+        <!--events>
             <customer_register_success>
                 <observers>
                     <customertracking>
-						<type>singleton</type>
+                        <type>singleton</type>
                         <class>customertracking/observer</class>
                         <method>addCustomer</method>
                     </customertracking>
@@ -75,7 +75,7 @@
             <customer_login>
                 <observers>
                     <customertracking>
-						<type>singleton</type>
+                        <type>singleton</type>
                         <class>customertracking/observer</class>
                         <method>addLoginCount</method>
                     </customertracking>
@@ -84,7 +84,7 @@
             <http_response_send_before>
                 <observers>
                     <customertracking>
-						<type>singleton</type>
+                        <type>singleton</type>
                         <class>customertracking/observer</class>
                         <method>addPageViewCount</method>
                     </customertracking>
@@ -92,8 +92,8 @@
             </http_response_send_before>
         </events-->		
     </global>
-	<frontend>
-	    <routers>
+    <frontend>
+        <routers>
             <customertracking>
                 <use>standard</use>
                 <args>
@@ -102,27 +102,27 @@
                 </args>
             </customertracking>
         </routers>
-		<layout>
-			<updates>
-				<customertracking>
-					<file>customertracking.xml</file>
-				</customertracking>
-			</updates>
-		</layout>
-		<!--cache>
+        <layout>
+            <updates>
+                <customertracking>
+                    <file>customertracking.xml</file>
+                </customertracking>
+            </updates>
+        </layout>
+        <!--cache>
             <requests>
                 <customer>
-					<account>
-						<create>enterprise_pagecache/processor_default</create>
-						<forgotpassword>enterprise_pagecache/processor_default</forgotpassword>
-						<login>enterprise_pagecache/processor_default</login>
-					</account>
-				</customer>
+                    <account>
+                        <create>enterprise_pagecache/processor_default</create>
+                        <forgotpassword>enterprise_pagecache/processor_default</forgotpassword>
+                        <login>enterprise_pagecache/processor_default</login>
+                    </account>
+                </customer>
             </requests>
         </cache-->
     </frontend>
-	<admin>
-		<routers>
+    <admin>
+        <routers>
             <customertracking>
                 <use>admin</use>
                 <args>
@@ -131,18 +131,34 @@
                 </args>
             </customertracking>
         </routers>
-	</admin>
-	<adminhtml>
+    </admin>
+    <adminhtml>
         <menu>
-            <harapartners>
-				<children>
-					<customertracking translate="title" module="customertracking">
-		                <title>Affiliate Customer Tracking</title>
-		                <sort_order>20</sort_order>
-						<action>adminhtml_customertracking/adminhtml_record</action>								
-		            </customertracking>
-				</children>
-            </harapartners>
+            <marketing>
+                <children>
+                    <customertracking translate="title" module="customertracking">
+                        <title>Affiliate Customer Tracking</title>
+                        <sort_order>20</sort_order>
+                        <action>adminhtml_customertracking/adminhtml_record</action>
+                    </customertracking>
+                </children>
+            </marketing>
         </menu>
+        <acl>
+            <resources>
+                <admin>
+                    <children>
+                        <marketing>
+                            <children>
+                                <customertracking translate="title" module="customertracking">
+                                    <title>Affiliate Customer Tracking</title>
+                                    <sort_order>20</sort_order>
+                                </customertracking>
+                            </children>
+                        </marketing>
+                    </children>
+                </admin>
+            </resources>
+        </acl>
     </adminhtml>
 </config>
