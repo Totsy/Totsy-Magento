@@ -52,11 +52,20 @@ class Harapartners_Rushcheckout_Model_Observer {
 					'checkout',
 				)
 			);
+			
 			$controllerName = Mage::app()->getRequest()->getControllerName();
 			$moduleName = Mage::app()->getRequest()->getModuleName();
+			$actionName = Mage::app()->getRequest()->getActionName();
 			
 			foreach ( $moduleArrary as $module => $controllers ){
-				if ( $moduleName == $module && in_array($controllerName, $controllers) ){
+				if ( $moduleName == $module 
+						&& in_array($controllerName, $controllers)
+						&& $actionName != 'forgotpassword'
+						&& $actionName != 'forgotpasswordpost'
+						&& $actionName != 'logoutAction'
+						&& $actionName != 'logoutSuccess'
+						&& $actionName != 'resetPasswordAction'
+						&& $actionName != 'resetPasswordPost' ){
 					$this->checkLastValidation($session);
 				}
 			}
