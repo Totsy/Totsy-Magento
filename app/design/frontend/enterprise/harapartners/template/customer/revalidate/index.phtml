@@ -19,6 +19,7 @@
 	<form name="validation-check-form" method="post" action="<?php echo $this->getBaseUrl() . 'customer/revalidate/validationcheckpost'?>">
 		<div class="fieldset">
 			<h2>Require Validation</h2>
+			<p><?php echo $this->__("Sorry, for the interruption! You have been inactive for 15 minutes. Please sign in again to continue shopping. If you need help with your password, please click ")?><a href="<?php echo $this->getUrl('customer/account/forgotpassword')?>"><?php echo $this->__("Here")?></a><?php echo $this->__(" to forgot password page.")?></p>
 			<ul class="form-list emailpassword">
 				<li>
 					<label for="email" class="required">Email <em>*</em></label>

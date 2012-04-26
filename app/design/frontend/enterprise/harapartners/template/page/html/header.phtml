@@ -44,8 +44,8 @@
 	            <?php  // echo $this->getChildHtml('topSearch') ?>
 	            <?php 
 	            	$welcomeInfo = '';
-	            	$customerName = $customer->getName();
-	            	if ( empty($customerName) ){
+	            	$customerName = $customer->getFirstname();
+	            	if ( !empty($customerName) ){
 	            		$welcomeInfo = $customerName;
 	            	}else {
 	            		$welcomeInfo = $customer->getEmail();

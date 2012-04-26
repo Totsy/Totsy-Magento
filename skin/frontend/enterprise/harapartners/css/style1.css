@@ -1230,8 +1230,13 @@ body .col-left hr {
 	text-align:right;
 }
 
-body .top-cart .block-content p.subtotal span.orange, .orange{
+body .top-cart .block-content p.subtotal span.orange, .orange, .orange .price{
 	color:#FF6D1D;
+}
+
+.top-cart .block-content p.subtotal .orange span.price{
+	color:#FF6D1D; 
+	font-weight:normal;
 }
 
 .block-account .block-content ul li a:hover{

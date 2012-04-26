@@ -21,7 +21,7 @@
 			<label for="use-card-method">Choose a credit/debit card:</label>
 			<div class="totsy-selective-input-box middle-length" id="use-card-method">
 				<span>New Credit/Debit Card</span>
-				<select name="payment[cybersource_subid]">
+				<select name="payment[cybersource_subid]" id="cybersource-use-card-method" >
 					<option value="" class="use-new-card-control">New Credit/Debit Card</option>
 				<?php foreach( $profiles as $profile ): ?>
 					<?php if( ! $profile->getSubscriptionId() ) { continue; } ?>
@@ -147,14 +147,17 @@
 	</div>
 </ul>
 <script type="text/javascript">
-			jQuery( document ).ready( function() {
-				jQuery( '.use-new-card-control' ).click( function() {
-					jQuery( '.use-new-card-wrapper' ).show();
-					jQuery( 'input, select', '.use-new-card-wrapper' ).removeAttr( 'disabled' );
-				});
-				jQuery( '.use-saved-card-control' ).click( function() {
-					jQuery( '.use-new-card-wrapper' ).hide();
-					jQuery( 'input, select', '.use-new-card-wrapper' ).attr( 'disabled', 'disabled' );
-				});
-			});
+	jQuery( document ).ready( function() {
+		jQuery( 'select#cybersource-use-card-method' ).change( function(){
+			if( jQuery( this ).val() == '' ) {
+				jQuery( '.use-new-card-wrapper' ).show();
+				jQuery( 'input, select', '.use-new-card-wrapper' ).removeAttr( 'disabled' );
+	//			jQuery( 'input', '.use-new-card-wrapper' ).show();
+			} else {
+				jQuery( '.use-new-card-wrapper' ).hide();
+				jQuery( 'input, select', '.use-new-card-wrapper' ).attr( 'disabled', 'disabled' );
+	//			jQuery( 'input', '.use-new-card-wrapper' ).hide();
+			}
+		});
+	});
 </script>
