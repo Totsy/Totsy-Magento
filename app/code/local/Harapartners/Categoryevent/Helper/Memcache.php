@@ -72,7 +72,8 @@ class Harapartners_Categoryevent_Helper_Memcache extends Mage_Core_Helper_Abstra
 		$sortDate = now("Y-m-d");
 		$currentTime = now();
 		date_default_timezone_set($defaultTimezone);
-		$storeId = Mage::app()->getStore()->getId();
+		$storeId = Harapartners_Service_Helper_Data::TOTSY_STORE_ID;
+		//$storeId = Mage::app()->getStore()->getId();
 		//$sortentry = Mage::getModel('categoryevent/sortentry')->loadByDate($sortDate, $storeId, false);
 		$sortentry = Mage::getModel('categoryevent/sortentry')->filterByCurrentTime($sortDate, $currentTime, $storeId);
 		
