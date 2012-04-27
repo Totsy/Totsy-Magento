@@ -19,7 +19,9 @@ class Mage_Customer_RevalidateController extends Mage_Core_Controller_Front_Acti
     * Customer validation check
     */
     public function indexAction(){
-    	if ( !!$this->_getSession()->setCheckLastValidationFlag() && $this->_getSession()->setCheckLastValidationFlag() ){
+    	//if ( !!$this->_getSession()->setCheckLastValidationFlag() && $this->_getSession()->setCheckLastValidationFlag() ){
+    	$revalidateFlag = $this->_getSession()->getCheckLastValidationFlag();
+    	if ( isset($revalidateFlag) && !$revalidateFlag ) { //Harapartners, Yang: modify logic
     		$this->loadLayout();
     		$this->renderLayout();
     	}else {

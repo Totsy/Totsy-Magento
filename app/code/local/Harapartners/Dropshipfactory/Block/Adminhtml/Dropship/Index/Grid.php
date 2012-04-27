@@ -26,19 +26,27 @@ class Harapartners_Dropshipfactory_Block_Adminhtml_Dropship_Index_Grid extends M
         $order_table = Mage::getSingleton('core/resource')->getTableName('sales_flat_order');
         $catalog_product_entity_int_table = Mage::getSingleton('core/resource')->getTableName('catalog_product_entity_int');
         $catalog_product_entity_varchar_table = Mage::getSingleton('core/resource')->getTableName('catalog_product_entity_varchar');
+        $catalog_product_entity_table = Mage::getSingleton('core/resource')->getTableName('catalog_product_entity');
         
         $vendorAttributeId = Mage::helper('dropshipfactory')->getVendorAttributeId();
         $vendorStyleAttributeId = Mage::helper('dropshipfactory')->getVendorStyleAttributeId();
         $fulfillmentTypeAttributeId = Mage::helper('dropshipfactory')->getFulfillmentTypeAttributeId();
         
         $collection->getSelect()->join($order_table, 'order_id=' . $order_table . '.entity_id', $order_table. '.increment_id')
-        						->join($catalog_product_entity_int_table, 'product_id=' . $catalog_product_entity_int_table . '.entity_id', $catalog_product_entity_int_table . '.value')
+        						//->join($catalog_product_entity_int_table, 'product_id=' . $catalog_product_entity_int_table . '.entity_id', $catalog_product_entity_int_table . '.value')
         						->join($catalog_product_entity_varchar_table, 'product_id=' . $catalog_product_entity_varchar_table . '.entity_id', null)
         						->where($order_table . '.state="' . Mage_Sales_Model_Order::STATE_NEW . '" AND ' .
-        								$catalog_product_entity_int_table . '.attribute_id=' . $vendorAttributeId . ' AND ' .
+        								//$catalog_product_entity_int_table . '.attribute_id=' . $vendorAttributeId . ' AND ' .
         								$catalog_product_entity_varchar_table . '.attribute_id=' . $fulfillmentTypeAttributeId . ' AND ' .
         								$catalog_product_entity_varchar_table . '.value="' . Harapartners_Ordersplit_Helper_Data::TYPE_DROPSHIP . '"');
-		       						
+	
+		$collection->getSelect()->joinLeft($catalog_product_entity_varchar_table . ' AS vendor_table', 'product_id=vendor_table.entity_id', 'vendor_table.value as vendor')
+        						->where('vendor_table.attribute_id=' . $vendorAttributeId);
+
+        $collection->getSelect()->joinLeft($catalog_product_entity_table, 'product_id=' . $catalog_product_entity_table . '.entity_id', null)
+                                ->where($catalog_product_entity_table . '.type_id = "simple"');
+        						
+		//echo $collection->getSelect()->assemble();		       						
 		$this->setCollection($collection);
 		parent::_prepareCollection();
        
@@ -74,7 +82,7 @@ class Harapartners_Dropshipfactory_Block_Adminhtml_Dropship_Index_Grid extends M
             'header'        => Mage::helper('dropshipfactory')->__('Sku'),
             'align'         => 'right',
             'width'         => '30px',
-            'index'         => 'sku'
+            'index'         => 'sku'
         ));
         
 //        $this->addColumn('value', array(
@@ -92,8 +100,8 @@ class Harapartners_Dropshipfactory_Block_Adminhtml_Dropship_Index_Grid extends M
             'align'         => 'right',
             'width'         => '30px',
         	'type'			=> 'text',
-            'index'         => 'value',
-        	'filter_index'	=> $catalog_product_entity_int_table . '.value'
+            'index'         => 'vendor',
+        	'filter_index'	=> 'vendor_table.value'
         ));
         
         $this->addColumn('qty_ordered', array(
