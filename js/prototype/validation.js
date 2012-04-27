@@ -477,6 +477,14 @@ Validation.addAllThese([
 							result = false;
 						}
 					}
+					//only totsy email can have "+"
+					if ((strArray[1]!="totsy.com" )&&( strArray[1]!="gmail.com" )){
+						var username=strArray[0];
+						if ( username.indexOf("+") >= 0 ) {
+							this.error = "Please enter correct email address!";
+							result = false;
+						}
+					}
 				}
 				return result;
 				//Harapartners, yang: end
