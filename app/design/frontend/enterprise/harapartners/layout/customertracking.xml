@@ -25,6 +25,9 @@ Default layout, loads most of the pages
             <block type="customertracking/welcome" name="customertracking.welcome" template="customertracking/welcome.phtml" />
 			<block type="customertracking/pixel" name="customertracking.pixel" />
         </reference>
+		<reference name="header">
+			<block type="customertracking/headermsg" name="customertracking.headermsg" template="customertracking/headermsg.phtml" />
+		</reference>
     </default>
 
 </layout>
