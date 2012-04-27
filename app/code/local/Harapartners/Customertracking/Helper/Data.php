@@ -15,6 +15,7 @@
 class Harapartners_Customertracking_Helper_Data extends Mage_Core_Helper_Abstract{
 	
 	const COOKIE_CUSTOMER_WELCOME = 'CUSTOMER_WELCOME';
+	const COOKIE_CUSTOMER_HEADERMSG = 'CUSTOMER_HEADERMSG';
 	const COOKIE_IS_ACTIVE = '1';
 	
 	public function getGridStatusArray(){
