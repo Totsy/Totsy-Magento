@@ -11,7 +11,18 @@
  * to eula@harapartners.com so we can send you a copy immediately.
  * 
  */
- 
-class Harapartners_Categoryevent_Helper_Data extends Mage_Core_Helper_Abstract{	
-	
+
+class Harapartners_Customertracking_Block_Headermsg extends Mage_Core_Block_Template {
+    
+    public function _toHtml(){
+    	$html = '';
+
+    	    if (!$this->getTemplate()) {
+            	return '';
+        	}
+        	$html = $this->renderView();
+        	//$cookie->delete($key); //Note cookie still available till next page request
+  	
+    	return $html;
+    }
 }
