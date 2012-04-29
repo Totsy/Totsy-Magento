@@ -17,7 +17,7 @@ class Harapartners_Customertracking_Model_Cache_Headermsg extends Enterprise_Pag
 	const CACHE_TAG_PREFIX = 'CUSTOMERTRACKING_HEADERMSG';
 	
 	protected function _getIdentifier(){
-        return $this->_getCookieValue(Harapartners_Customertracking_Helper_Data::COOKIE_CUSTOMER_HEADERMSG, rand());
+        return $this->_getCookieValue(Enterprise_PageCache_Model_Cookie::COOKIE_CUSTOMER, '');
     }
 
     protected function _getCacheId(){

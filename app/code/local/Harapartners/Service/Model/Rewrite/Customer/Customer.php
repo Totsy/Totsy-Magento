@@ -82,19 +82,11 @@ class Harapartners_Service_Model_Rewrite_Customer_Customer extends Mage_Customer
         $this->loadByEmail($login);
 
         //Harapartners, yang, START
-		//Store switching, if customer has a valid account in another store/store view, redirect
-        //If customer is invalid, stay in the current store/store view
-    	if(!!$this->getStoreId()
-    			&& $this->getStoreId() != Mage::app()->getStore()->getId()){
-    		//Redirect
-    		$urlObject = Mage::getModel('core/url')->setStore($this->getStoreId());
-    		$url = $urlObject->getRouteUrl('customer/account/login');
-			Mage::getSingleton('customer/session')->setBeforeAuthUrl($url);
-			throw Mage::exception('Mage_Core', Mage::helper('customer')->__("Please login..."),
-                self::EXCEPTION_INVALID_STORE_ACCOUNT
-            );
-        }
+        //Store switching, based on customer group, if customer is invalid, stay in the current store/store view
+        $a = Mage::helper('service');
+        $a->validateStoreByCustomer($this);
         //Harapartners, yang, END
+        
         if ($this->getConfirmation() && $this->isConfirmationRequired()) {
             throw Mage::exception('Mage_Core', Mage::helper('customer')->__('This account is not confirmed.'),
                 self::EXCEPTION_EMAIL_NOT_CONFIRMED
