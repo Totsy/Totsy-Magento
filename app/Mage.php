@@ -578,6 +578,12 @@ final class Mage
             self::setRoot();
             self::$_events = new Varien_Event_Collection();
             self::$_config = new Mage_Core_Model_Config($options);
+            
+            //Harapartners, Jun, START: 'mobile' becomes a separate store view (instead of a design package) to avoid cache contamination
+        	if ( preg_match( '/iPhone|Android|BlackBerry|iPad/' ,$_SERVER['HTTP_USER_AGENT'] ) ) {
+				$correctStoreId = self::TOTSY_MOBILE_STORE_ID;
+			}
+			//Harapartners, Jun, END.
 
             Varien_Profiler::start('self::app::init');
             self::$_app->init($code, $type, $options);
