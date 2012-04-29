@@ -83,7 +83,8 @@ class Harapartners_Service_Model_Rewrite_Customer_Customer extends Mage_Customer
 
         //Harapartners, yang, START
         //Store switching, based on customer group, if customer is invalid, stay in the current store/store view
-        Mage::helper('service')->validateStoreByCustomer($this);
+        $a = Mage::helper('service');
+        $a->validateStoreByCustomer($this);
         //Harapartners, yang, END
         
         if ($this->getConfirmation() && $this->isConfirmationRequired()) {
