@@ -48,6 +48,9 @@ class Enterprise_Reward_Model_Reward extends Mage_Core_Model_Abstract
     const XML_PATH_EMAIL_IDENTITY = 'enterprise_reward/notification/email_sender';
     const XML_PATH_MIN_POINTS_BALANCE = 'enterprise_reward/general/min_points_balance';
 
+    const XML_PATH_INVITER_EMAIL_INVITEE_REGISTERED = 'enterprise_reward/notification/inviter_get_email_when_invitee_register';
+    const XML_PATH_INVITER_EMAIL_INVITEE_FIRST_PURCHASE = 'enterprise_reward/notification/inviter_get_email_when_invitee_first_purchase';
+    
     const REWARD_ACTION_ADMIN               = 0;
     const REWARD_ACTION_ORDER               = 1;
     const REWARD_ACTION_REGISTER            = 2;

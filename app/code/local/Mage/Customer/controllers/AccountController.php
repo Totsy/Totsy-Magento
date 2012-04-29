@@ -378,8 +378,13 @@ class Mage_Customer_AccountController extends Mage_Core_Controller_Front_Action
                     $existCustomer = Mage::getModel('customer/customer')->setWebsiteId(Mage::app()->getStore()->getWebsiteId())->loadByEmail($existEmail);
                     $existStoreName = '';
                     if (!!$existCustomer){
-                    	$existStoreName = Mage::app()->getStore($existCustomer->getStoreId())->getName();
-                    	$message = $this->__('There is already an account with this email address in ' . $existStoreName . '.com');
+                    	
+	                    if ( $existCustomer->getStoreId() == Harapartners_Service_Helper_Data::TOTSY_MOBILE_STORE_ID ) {
+	            			$customerStoreName = Mage::app()->getStore(Harapartners_Service_Helper_Data::TOTSY_STORE_ID)->getName();
+	            		}else {
+	            			$customerStoreName = Mage::app()->getStore($existCustomer->getStoreId())->getName();
+	            		}
+                    	$message = $this->__('There is already an account with this email address in ' . $customerStoreName . '.com');
                     }else {
                     	$message = $this->__('There is already an account with this email address. If you are sure that it is your email address, <a href="%s">click here</a> to get your password and access your account.', $url);
                     }
@@ -565,8 +570,10 @@ class Mage_Customer_AccountController extends Mage_Core_Controller_Front_Action
                 ->loadByEmail($email);
             
             $storeId = Mage::app()->getStore()->getId();
+            
+            //Harapartners, Yang: Add store id array for totsy and totsy_mobile
 
-            if ($customer->getId() && $customer->getStoreId() == $storeId) {
+            if ($customer->getId() && Mage::helper('service')->getCorrectStoreId($customer) == $storeId ) {
                 try {
                     $newResetPasswordLinkToken = Mage::helper('customer')->generateResetPasswordLinkToken();
                     $customer->changeResetPasswordLinkToken($newResetPasswordLinkToken);
@@ -578,8 +585,13 @@ class Mage_Customer_AccountController extends Mage_Core_Controller_Front_Action
                 }      
                 $this->_getSession()
                 	->addSuccess(Mage::helper('customer')->__('Email sent to %s , you will receive an email with a link to reset your password.', Mage::helper('customer')->htmlEscape($email)));
-            }elseif ($customer->getId() && $customer->getStoreId() != $storeId) {
-            	$this->_getSession()->addError($this->__('The email you entered is belong to an %s account, please check.', Mage::app()->getStore($customer->getStoreId())->getName() ));
+            }elseif ($customer->getId() && Mage::helper('service')->getCorrectStoreId($customer) != $storeId) {            	
+            	if ( $customer->getStoreId() == Harapartners_Service_Helper_Data::TOTSY_MOBILE_STORE_ID ) {
+            		$customerStoreName = Mage::app()->getStore(Harapartners_Service_Helper_Data::TOTSY_STORE_ID)->getName();
+            	}else {
+            		$customerStoreName = Mage::app()->getStore($customer->getStoreId())->getName();
+            	}
+            	$this->_getSession()->addError($this->__('The email you entered is belong to an %s account, please check.', $customerStoreName ));
             }else {  
             	$createLink = "<a href='" . Mage::getUrl('customer/account/create') . "'" . "> Click here to register! </a>";        	 
             	$this->_getSession()->addError($this->__('The email entered is not currently associated with a totsy account. %s ', $createLink ));

@@ -33,6 +33,7 @@ class Harapartners_Import_Helper_Processor extends Mage_Core_Helper_Abstract {
 	protected $_errorMessages 				= array();
 	protected $_requiredFields 				= array();
 	protected $_confSimpleProducts 			= array();
+	protected $_confAttrCodes				= array();
 	
 	public function __construct(){
 		$this->_errorFilePath = BP.DS.'var'.DS.'log'.DS.'import_error'.DS;
@@ -203,12 +204,21 @@ class Harapartners_Import_Helper_Processor extends Mage_Core_Helper_Abstract {
 		
 		// ----- Configurable/Simple products ----- //
 		if($importData['type'] == 'configurable'){
-			$importData['configurable_attribute_codes'] = self::CONFIGURABLE_ATTRIBUTE_CODE; //Hard Coded.  Need to enforce in template!
+			$importData['configurable_attribute_codes'] = implode(',', $this->_confAttrCodes);
 			$importData['conf_simple_products'] = implode(',', $this->_confSimpleProducts);
 			$this->_hideAssociatedSimpleProducts();
 			$this->_confSimpleProducts = array();
+			$this->_confAttrCodes = array();
 		}else{
 			$this->_confSimpleProducts[] = $importData['sku'];
+			foreach(explode(',', self::CONFIGURABLE_ATTRIBUTE_CODE) as $confAttrCode){
+				if(!empty($importData[$confAttrCode])
+						&& !in_array($confAttrCode, $this->_confAttrCodes)
+				){
+					$this->_confAttrCodes[] = $confAttrCode;
+				}
+			}
+			
 		}
 		
 		// ----- Default fields ----- //

@@ -72,7 +72,8 @@ class Harapartners_Categoryevent_Helper_Memcache extends Mage_Core_Helper_Abstra
 		$sortDate = now("Y-m-d");
 		$currentTime = now();
 		date_default_timezone_set($defaultTimezone);
-		$storeId = Mage::app()->getStore()->getId();
+		$storeId = Harapartners_Service_Helper_Data::TOTSY_STORE_ID;
+		//$storeId = Mage::app()->getStore()->getId();
 		//$sortentry = Mage::getModel('categoryevent/sortentry')->loadByDate($sortDate, $storeId, false);
 		$sortentry = Mage::getModel('categoryevent/sortentry')->filterByCurrentTime($sortDate, $currentTime, $storeId);
 		
@@ -293,10 +294,10 @@ class Harapartners_Categoryevent_Helper_Memcache extends Mage_Core_Helper_Abstra
 		
 		$defaultTimezone = date_default_timezone_get();
 		$mageTimezone = Mage::getStoreConfig(Mage_Core_Model_Locale::XML_PATH_DEFAULT_TIMEZONE);
+		date_default_timezone_set($mageTimezone);
 		$endcount_utc = strtotime($eventEndDate);
 		
 		//$endcount_lc: local end count date
-		date_default_timezone_set($mageTimezone);
 		$endcount_lc = date("F j, Y, G:i:s", $endcount_utc);
 		date_default_timezone_set($defaultTimezone);
 		
