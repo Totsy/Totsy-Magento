@@ -77,10 +77,10 @@
 		        	<a href="#"><em>SHOP BY<br/>CATEGORY</em></a>
 					<ul class="shop">
 						<?php $type = 'departments'; ?>
-						<?php $departmentAttr = Mage::getModel('catalog/category')->getResource()->getAttribute($type);?>
+						<?php $departmentAttr = Mage::getModel('catalog/product')->getResource()->getAttribute($type);?>
 						<?php $optionArray = $departmentAttr->getSource()->getAllOptions();?>
 						<?php foreach($optionArray as $option):?>
-							<li><a href="<?php echo $this->getBaseUrl();?>event/index/topnav/type/<?php echo $type;?>/value/<?php echo $option['value']?>"><?php echo $option['label']?></a></li>
+							<li><a href="<?php echo $this->getBaseUrl();?>event/index/topnav/<?php echo $type;?>/<?php echo $option['value']?>"><?php echo $option['label']?></a></li>
 						<?php endforeach;?>
 					</ul>        
 		        </li>
@@ -89,10 +89,10 @@
 		        	<a href="#"><em>SHOP BY<br/>AGE</em></a>
 		        	<ul class="shop">
 		        		<?php $age = 'ages'; ?>
-		        		<?php $ageAttr = Mage::getModel('catalog/category')->getResource()->getAttribute($age);?>
+		        		<?php $ageAttr = Mage::getModel('catalog/product')->getResource()->getAttribute($age);?>
 		        		<?php $ageOptionArray = $ageAttr->getSource()->getAllOptions();?>
 		        		<?php foreach($ageOptionArray as $option):?>
-		        			<li><a href="<?php echo $this->getBaseUrl();?>event/index/topnav/type/<?php echo $age;?>/value/<?php echo $option['value']?>"><?php echo $option['label']?></a></li>
+		        			<li><a href="<?php echo $this->getBaseUrl();?>event/index/topnav/<?php echo $age;?>/<?php echo $option['value']?>"><?php echo $option['label']?></a></li>
 		        		<?php endforeach;?>
 		        	</ul>
 		        </li>

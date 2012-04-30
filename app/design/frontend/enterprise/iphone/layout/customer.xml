@@ -330,7 +330,7 @@ Customer account address edit page
 				<action method="addLink" translate="label" module="sales"><name>orders</name><path>sales/order/history/</path><label>My Orders</label></action>
 				<action method="addLink" translate="label" module="enterprise_invitation"><name>invitations</name><path>invitation/</path><label>Invite Friends, Get $15</label></action>
 				<action method="addLink" translate="label" module="customer"><name>sign_out</name><path>customer/account/logout</path><label>Sign Out</label></action>
-            </block>
+			</block>
             <!--block type="catalog/product_compare_sidebar" name="catalog.compare.sidebar" template="catalog/product/compare/sidebar.phtml"/-->
             <remove name="tags_popular"/>
         </reference>

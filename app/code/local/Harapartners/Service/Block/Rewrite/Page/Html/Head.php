@@ -37,13 +37,12 @@ class Harapartners_Service_Block_Rewrite_Page_Html_Head extends Mage_Page_Block_
     }
     
     public function setTopnavKeywords(){
-    	//$type = Mage::registry('attrtype');
-		$type = Mage::app()->getRequest()->getParam('type');
-		//$value = Mage::registry('attrvalue');
-		$value = Mage::app()->getRequest()->getParam('value');
-		$typeAttributes = Mage::getModel('catalog/product')->getResource()->getAttribute($type);
-		$valueId = $typeAttributes->getSource()->getOptionId($value);
-		$label = Mage::helper('catalog')->__($value);
+    	$type = Mage::registry('attrtype');
+    	$value = Mage::registry('attrvalue');
+//		$type = Mage::app()->getRequest()->getParam('type');
+//		$value = Mage::app()->getRequest()->getParam('value');
+		$attrObj = Mage::getModel('catalog/product')->getResource()->getAttribute($type);
+		$label = Mage::helper('catalog')->__($attrObj->getSource()->getOptionText($value));
 		$this->setSailthruTitle($label);
 		$label = strtolower(str_replace('-and-','-',str_replace(' ','-',$label)));
     	$this->setSailthruTags($label);

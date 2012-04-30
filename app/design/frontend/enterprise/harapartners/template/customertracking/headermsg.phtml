@@ -14,7 +14,7 @@
  *
  */
 ?>
-<?php 
+<?php
 	$welcomeInfo = '';
 	$customer = Mage::getSingleton('customer/session')->getCustomer();
 	$customerName = $customer->getFirstname();
@@ -24,23 +24,26 @@
 		$welcomeInfo = $customer->getEmail();
 	}
 ?>
-<strong><?php echo $this->__( 'Hi, %s ', $welcomeInfo );?></strong>
-<ul class="links">
-<?php if ( !Mage::helper('inchoo_facebook')->isFacebookCustomer($customer) ):?>
-	<?php //echo $this->getChildHtml('topLinks') ?>
-	<?php //echo $this->getLayout()->createBlock('page/template_links')->toHtml();?>
-	<li class="first">
-		<a title="Log Out" href="<?php echo Mage::getUrl('customer/account/logout')?>"><?php echo $this->__('Sign Out');?></a>
-	</li>
-	<li>
-		<a title="My Account" href="<?php echo Mage::getUrl('customer/account')?>"><?php echo $this->__('My Account');?></a>
-	</li>
-<?php else :?>
-	<li class="first">
-		<a title="Log Out" onclick="logout()" style="cursor:pointer"><?php echo $this->__('Sign Out');?></a>
-	</li>
-	<li>
-		<a title="My Account" href="<?php echo Mage::getUrl('customer/account')?>"><?php echo $this->__('My Account');?></a>
-	</li>
-<?php endif;?>
-</ul>
+
+	<strong><?php echo $this->__( 'Hi, %s ', $welcomeInfo );?></strong>
+	<ul class="links">
+	<?php if ( !Mage::helper('inchoo_facebook')->isFacebookCustomer($customer) ):?>
+		<?php //echo $this->getChildHtml('topLinks') ?>
+		<?php //echo $this->getLayout()->createBlock('page/template_links')->toHtml();?>
+		<li class="first">
+			<a title="Log Out" href="<?php echo Mage::getUrl('customer/account/logout')?>"><?php echo $this->__('Sign Out');?></a>
+		</li>
+		<li>
+			<a title="My Account" href="<?php echo Mage::getUrl('customer/account')?>"><?php echo $this->__('My Account');?></a>
+		</li>
+	<?php else :?>
+		<li class="first">
+			<a title="Log Out" onclick="logout()" style="cursor:pointer"><?php echo $this->__('Sign Out');?></a>
+		</li>
+		<li>
+			<a title="My Account" href="<?php echo Mage::getUrl('customer/account')?>"><?php echo $this->__('My Account');?></a>
+		</li>
+	<?php endif;?>
+	</ul>
+
+	
