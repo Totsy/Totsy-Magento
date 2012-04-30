@@ -7,27 +7,37 @@
 			$timeout = Mage::getSingleton('checkout/session')->getQuoteItemExpireTime();	
 			$endcount_lc = date("F j, Y, G:i:s", ($countDownTimer + $timeout));
 		?>	
+		<div class="shipping-date">
+			<span>Estimated Ship Date:</span>
+			<p id="cart-shipping-date-header"><?php echo Mage::app()->getLayout()->createBlock('checkout/cart')->getShippingDate();?></p>           
+		</div>	
 		<div class="timer-control-box">
-		<span>Item Reserved For:</span>
-		<p id="checkout-timer"></p>
-		<script type="text/javascript">
-			jQuery(document).ready(function() {
-				jQuery("#checkout-timer").countdown({
-					//date: "12 10, 2011 16:11", //Counting TO a date
-					date: "<?php echo $endcount_lc; ?>", //Counting TO a date
-					htmlTemplate: "%{m} <span class=\"cd-time\">:</span> %{s} <span class=\"cd-time\">minutes</span>",
-					onChange: function( event, timer ){
-					},
-					onComplete: function( event ){										
-						jQuery(this).html("<span class='over'>no longer reserved</span>");
-					},
-					leadingZero: true,
-					direction: "down"
-				});										
-			});	 
-		</script>
+			<span>Item Reserved For:</span>
+			<p id="checkout-timer"></p>
+			<script type="text/javascript">
+				jQuery(document).ready(function() {
+					jQuery("#checkout-timer").countdown({
+						//date: "12 10, 2011 16:11", //Counting TO a date
+						date: "<?php echo $endcount_lc; ?>", //Counting TO a date
+						htmlTemplate: "%{m} <span class=\"cd-time\">:</span> %{s} <span class=\"cd-time\">minutes</span>",
+						onChange: function( event, timer ){
+						},
+						onComplete: function( event ){										
+							jQuery(this).html("<span class='over'>no longer reserved</span>");
+							setTimeout("cartRedirect();",2000);
+						},
+						leadingZero: true,
+						direction: "down"
+					});										
+				});	
+
+				function cartRedirect(){
+					window.location = "<?php echo Mage::getUrl('checkout/cart');?>"
+				}; 
+			</script>
 		</div>
 	</div>
+	<div id="error-message-wrapper"></div>
 	<?php if( count( $this->getQuote()->getAllItems() ) ): ?>
 		<?php if( ! $this->getCustomerSession()->isLoggedIn() ): ?>
 			<div id="hpcheckout-login-wrapper">
@@ -36,12 +46,28 @@
 		<?php endif ?>
 		<div class="address">
 			<div id="hpcheckout-billing-wrapper">
-				<div class="billing-title sub-title checkout-sub-title"><?php echo $this->__('Billing Address') ?></div>
+				<div class="checkout-headline">
+					<div class="billing-title sub-title checkout-sub-title"><?php echo $this->__('Billing Address') ?></div>
+					<?php if ($this->customerHasAddresses()): ?>
+					    <div class="billing-address-select totsy-selective-input-box">
+							<span>New Address</span>
+					        <?php echo $this->getAddressesHtmlSelect('billing') ?>
+					    </div>
+					<?php endif; ?>
+				</div>
 				<div class="checkout-content"><?php echo $this->getChildHtml( 'billing' ) ?></div>
 			</div>
 			<?php if( ! $this->getQuote()->isVirtual() ): ?>
 				<div id="hpcheckout-shipping-wrapper">
-					<div class="shipping-title sub-title checkout-sub-title"><?php echo $this->__('Shipping Address') ?></div>
+					<div class="checkout-headline">
+						<div class="shipping-title sub-title checkout-sub-title"><?php echo $this->__('Shipping Address') ?></div>
+						<?php if ($this->customerHasAddresses()): ?>
+						    <div class="shipping-address-select totsy-selective-input-box">
+								<span>New Address</span>
+						        <?php echo $this->getAddressesHtmlSelect('shipping') ?>
+						    </div>
+						<?php endif; ?>
+					</div>
 					<div class="checkout-content"><?php echo $this->getChildHtml( 'shipping' ) ?></div>
 				</div>
 			<?php endif ?>
@@ -54,7 +80,6 @@
 		<?php endif ?>
 		<div id="hpcheckout-payment-wrapper">
 			<div class="checkout-sub-title sub-title">Payment</div>
-			<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
 			<div class="checkout-content"><?php echo $this->getChildHtml( 'payment' ) ?></div>
 		</div>
 		<div id="hpcheckout-review-wrapper">
@@ -67,20 +92,31 @@
 	<?php endif ?>
 </div>
 <script type="text/javascript">
-	function reflash(){
-			jQuery(".totsy-selective-input-box select").each(function(){
-			var temphtml = jQuery(this).html();
-			var text = jQuery(this).find("option:selected").text();
-			var value = jQuery(this).find("option:selected").val();
-			if (value==''){
-				text = jQuery(this).find("option[selected='true']").text();
-				if (text=='')
-					text = jQuery(this).find("option[value='']").text();
+function updateSelectText(){
+	jQuery(".totsy-selective-input-box select").each(function(){
+		var temphtml = jQuery(this).html();
+		var text = jQuery(this).find("option:selected").text();
+		var value = jQuery(this).find("option:selected").val();
+		if (value==''){
+			text = jQuery(this).find("option[selected='true']").text();
+			if (text=='') {
+				text = jQuery(this).find("option[value='']").text();
 			}
-			jQuery(this).parent('div').children('span').html(text);
-	})}
-	jQuery(document).ready(function(){	
-		reflash();
-		jQuery("body").change(reflash);
-		})
+		}
+		jQuery(this).parent('div').children('span').html(text);
+	});
+}
+
+jQuery( document ).ready( function() {
+	if( jQuery( '#billing-address-select' ).val() != '' ) {
+		jQuery( '#billing-address-select' ).change();
+    }
+	if( jQuery( '#shipping-address-select' ).val() != '' ) {
+		jQuery( '#shipping-address-select' ).change();
+    }
+});
+</script>
+<script type="text/javascript">
+ 	 //code for disabling echoSahre
+     var ECHO_SYSTEM_SETTINGS = { socialCenter: { enabled: false }};
 </script>
