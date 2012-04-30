@@ -23,16 +23,22 @@ class Harapartners_Categoryevent_IndexController extends Mage_Core_Controller_Fr
     
 	public function topnavAction(){
 		
-		$attributeType = (string) $this->getRequest()->getParam('type', false);
-		$attributeValue = (string) $this->getRequest()->getParam('value', false);
-        if ((!$attributeType)||(!$attributeValue)) {
-            return false;
-        }
+		if(!!Mage::app()->getRequest()->getParam('departments')){
+			$attributeType = 'departments';
+		}elseif(!!Mage::app()->getRequest()->getParam('ages')){
+			$attributeType = 'ages';
+		}
+		$attributeValue = Mage::app()->getRequest()->getParam($attributeType);
+		
+		if(!$attributeType || !$attributeValue){
+			$this->_forward('index');
+			return;
+		}
+
 		Mage::register('attrtype', $attributeType);
 		Mage::register('attrvalue', $attributeValue);
 		$this->loadLayout();
 		$this->renderLayout();
-		
 	}
 	
     public function ageAction(){

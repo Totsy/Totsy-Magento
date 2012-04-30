@@ -15,19 +15,61 @@
 class Harapartners_Service_Helper_Data extends Mage_Core_Helper_Url{
 	
 	const TOTSY_STORE_ID 					= 1;
-	const TOTSY_CUSTOMER_GROUP_ID 			= 1;
 	const MAMASOURCE_STORE_ID 				= 3;
+	const TOTSY_MOBILE_STORE_ID 			= 4;
+	
+	const TOTSY_CUSTOMER_GROUP_ID 			= 1;
 	const MAMASOURCE_CUSTOMER_GROUP_ID 		= 2;
+	
+	public function validateStoreByCustomer($customer){
+		$correctStoreId = $this->getCorrectStoreId($customer);
+        if(Mage::app()->getStore()->getId() != $correctStoreId){
+        	//Redirect
+    		$urlObject = Mage::getModel('core/url')->setStore($correctStoreId);
+    		$url = $urlObject->getRouteUrl('customer/account/login');
+    		Mage::app()->getCookie()->setCookie('store', md5($correctStoreId));
+			Mage::getSingleton('customer/session')->setBeforeAuthUrl($url);
+			throw Mage::exception('Mage_Core', Mage::helper('customer')->__("Please login..."),
+                Harapartners_Service_Model_Rewrite_Customer_Customer::EXCEPTION_INVALID_STORE_ACCOUNT
+            );
+        }
+        return true;
+	}
+	
+	public function getCorrectStoreId($customer) {
+		switch($customer->getGroupId()){
+			case self::TOTSY_CUSTOMER_GROUP_ID:
+				if ( preg_match( '/iPhone|Android|BlackBerry|iPad/' ,$_SERVER['HTTP_USER_AGENT'] ) ) {
+					$correctStoreId = self::TOTSY_MOBILE_STORE_ID;
+				}else{
+					$correctStoreId = self::TOTSY_STORE_ID;
+				}
+				break;
+			case self::MAMASOURCE_CUSTOMER_GROUP_ID;
+				$correctStoreId = self::MAMASOURCE_STORE_ID;
+				break;
+			default:
+				$correctStoreId = self::TOTSY_STORE_ID;
+		}
+		
+		return $correctStoreId;
+	}
+	
+	public function getStoreIdByCustomerGroupId($customerGroupId){
+		
+	}
 	
 	public function isTotsyStore(){
 		return Mage::app()->getStore()->getId() == self::TOTSY_STORE_ID;
 	}
 	
+	
+	
 	public function isTotsyCustomer($customer = null){
 		if(!!$customer && !!$customer->getId()){
 			if($customer->getGroupId() == self::TOTSY_CUSTOMER_GROUP_ID){
 				return true;
-			}elseif($customer->getStoreId() == self::TOTSY_STORE_ID){
+			}elseif( $customer->getStoreId() == self::TOTSY_STORE_ID || $customer->getStoreId() == self::TOTSY_MOBILE_STORE_ID ){
 				return true;
 			}
 		}

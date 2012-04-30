@@ -12,9 +12,9 @@
  * 
  */
 
-class Harapartners_Customertracking_Model_Cache_Headermsg extends Enterprise_PageCache_Model_Container_Abstract {
+class Harapartners_Customertracking_Model_Cache_Footersignout extends Enterprise_PageCache_Model_Container_Abstract {
     
-	const CACHE_TAG_PREFIX = 'CUSTOMERTRACKING_HEADERMSG';
+	const CACHE_TAG_PREFIX = 'CUSTOMERTRACKING_FOOTERSIGNOUT';
 	
 	protected function _getIdentifier(){
         return $this->_getCookieValue(Enterprise_PageCache_Model_Cookie::COOKIE_CUSTOMER, '');
@@ -29,7 +29,7 @@ class Harapartners_Customertracking_Model_Cache_Headermsg extends Enterprise_Pag
         $template = $this->_placeholder->getAttribute('template');
 
         $block = new $block;
-        $block->setNameInLayout('customertracking.headermsg');
+        $block->setNameInLayout('customertracking.footersignout');
         $block->setTemplate($template);
         $block->setLayout(Mage::app()->getLayout());
         

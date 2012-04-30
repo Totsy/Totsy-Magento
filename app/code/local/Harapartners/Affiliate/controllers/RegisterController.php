@@ -16,7 +16,7 @@ class Harapartners_Affiliate_RegisterController extends Mage_Core_Controller_Fro
 
     public function indexAction(){
     	//Short-circuit logic, do NOT overwrite exiting affiliate
-    	if(!Mage::getSingleton('customer/session')->getAffiliateId()){
+    	if(!!Mage::getSingleton('customer/session')->getAffiliateId()){
 			$this->_redirect('customer/account/create');
 			return;
 		}

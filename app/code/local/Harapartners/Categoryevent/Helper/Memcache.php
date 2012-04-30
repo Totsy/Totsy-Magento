@@ -72,7 +72,8 @@ class Harapartners_Categoryevent_Helper_Memcache extends Mage_Core_Helper_Abstra
 		$sortDate = now("Y-m-d");
 		$currentTime = now();
 		date_default_timezone_set($defaultTimezone);
-		$storeId = Mage::app()->getStore()->getId();
+		$storeId = Harapartners_Service_Helper_Data::TOTSY_STORE_ID;
+		//$storeId = Mage::app()->getStore()->getId();
 		//$sortentry = Mage::getModel('categoryevent/sortentry')->loadByDate($sortDate, $storeId, false);
 		$sortentry = Mage::getModel('categoryevent/sortentry')->filterByCurrentTime($sortDate, $currentTime, $storeId);
 		
@@ -177,23 +178,17 @@ class Harapartners_Categoryevent_Helper_Memcache extends Mage_Core_Helper_Abstra
 				throw new Exception('No product available');
 			}
 			
-			//$type = Mage::registry('attrtype');
-			$type = Mage::app()->getRequest()->getParam('type');
-			//$value = Mage::registry('attrvalue');
-			$value = Mage::app()->getRequest()->getParam('value');
-			$typeAttributes = Mage::getModel('catalog/product')->getResource()->getAttribute($type);
-			$valueId = $typeAttributes->getSource()->getOptionId($value);
-			$label = Mage::helper('catalog')->__($value);
-			
-			
-			$cateAttr = Mage::getModel('catalog/category')->getResource()->getAttribute($type);
-			$catelabel = $cateAttr->getSource()->getOptionText($value);
-			$categoryLabel = Mage::helper('catalog')->__($catelabel);
-			
+			//$attributeType = Mage::registry('attrtype');
+			$attributeType = Mage::registry('attrtype');
+			$attributeValue = Mage::registry('attrvalue');
+			$attributeValue = Mage::app()->getRequest()->getParam($attributeType);
+			$attrObj = Mage::getModel('catalog/product')->getResource()->getAttribute($attributeType);
+//			$valueId = $attrObj->getSource()->getOptionId($attributeValue);
+			$attrLabel = Mage::helper('catalog')->__($attrObj->getSource()->getOptionText($attributeValue));
 			
 			$productCollection = Mage::getModel('catalog/product')->getCollection();
 			$productCollection->getSelect()->where('`e`.`entity_id` IN(' . implode(',', $uniqueProductIds) . ')');
-			$productCollection->addFieldToFilter($type, array('like' => '%'.$valueId.'%'));
+			$productCollection->addFieldToFilter($attributeType, array('like' => '%'.$attributeValue.'%'));
 			$productCollection->addFieldToFilter('visibility', array("in" => array(
 					Mage_Catalog_Model_Product_Visibility::VISIBILITY_IN_CATALOG,
 					Mage_Catalog_Model_Product_Visibility::VISIBILITY_BOTH
@@ -260,6 +255,8 @@ class Harapartners_Categoryevent_Helper_Memcache extends Mage_Core_Helper_Abstra
 					unset($categoryProductCompleteData[$categoryId]);
 				}
 				
+				
+				
 				//put in category info
 				$isCategoryLive = false;
 				foreach($liveCategoryInfoArray as $liveCategoryInfo){
@@ -267,8 +264,10 @@ class Harapartners_Categoryevent_Helper_Memcache extends Mage_Core_Helper_Abstra
 							&& $liveCategoryInfo['entity_id'] == $categoryId){
 						$categoryInfoContainer['category_info'] = $liveCategoryInfo;
 						$categoryInfoContainer['prepare_timer'] = $this->_prepareTimer($liveCategoryInfo['event_end_date']);
-						
-						$isCategoryLive = true;
+						//Harapartners, Jun, logic change: sort result is for 24 hours, live data update at 1 hour interval, must give an extra test!
+						if(!!$categoryInfoContainer['prepare_timer']){
+							$isCategoryLive = true;
+						}
 						break;
 					}
 				}
@@ -277,9 +276,7 @@ class Harapartners_Categoryevent_Helper_Memcache extends Mage_Core_Helper_Abstra
 				}
 			}
 			
-			$topNavData['attr_text_label'] = $categoryLabel;
-			//$topNavData['attr_text_label'] = $label; use this if you want to show something like infant without 0-6m in the title
-			
+			$topNavData['attr_text_label'] = $attrLabel;
 			
 			$topNavData['category_product_complete_data'] = $categoryProductCompleteData;
 		}catch(Exception $e){
@@ -293,10 +290,15 @@ class Harapartners_Categoryevent_Helper_Memcache extends Mage_Core_Helper_Abstra
 		
 		$defaultTimezone = date_default_timezone_get();
 		$mageTimezone = Mage::getStoreConfig(Mage_Core_Model_Locale::XML_PATH_DEFAULT_TIMEZONE);
+		date_default_timezone_set($mageTimezone);
 		$endcount_utc = strtotime($eventEndDate);
 		
+		//Harapartners, Jun, logic change: sort result is for 24 hours, live data update at 1 hour interval, must give an extra test!
+		if($endcount_utc < time()){
+			return null;
+		}
+		
 		//$endcount_lc: local end count date
-		date_default_timezone_set($mageTimezone);
 		$endcount_lc = date("F j, Y, G:i:s", $endcount_utc);
 		date_default_timezone_set($defaultTimezone);
 		
@@ -309,7 +311,7 @@ class Harapartners_Categoryevent_Helper_Memcache extends Mage_Core_Helper_Abstra
 			Mage::getSingleton('customer/session')->setData('countdown_timer', ++$timer);
 		}
 		
-		$returnparam=array('endcount_lc'=>$endcount_lc, 'timer'=>$timer);
+		$returnparam = array('endcount_lc'=>$endcount_lc, 'timer'=>$timer);
 		return $returnparam;
 	}
 	

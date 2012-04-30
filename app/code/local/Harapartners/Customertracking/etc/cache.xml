@@ -16,7 +16,13 @@
             <block>customertracking/headermsg</block>
             <placeholder>CUSTOMERTRACKING_HEADERMSG</placeholder>
             <container>Harapartners_Customertracking_Model_Cache_Headermsg</container>
-            <cache_lifetime>1</cache_lifetime>
+            <cache_lifetime>86400</cache_lifetime>
         </customertracking_headermsg>
+		<customertracking_footersignout>
+            <block>customertracking/footersignout</block>
+            <placeholder>CUSTOMERTRACKING_FOOTERSIGNOUT</placeholder>
+            <container>Harapartners_Customertracking_Model_Cache_Footersignout</container>
+            <cache_lifetime>86400</cache_lifetime>			
+		</customertracking_footersignout>
 	</placeholders>
 </config>	
