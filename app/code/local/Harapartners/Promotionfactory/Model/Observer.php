@@ -31,7 +31,6 @@ class Harapartners_Promotionfactory_Model_Observer {
 			$groupCoupon->save();	
 		}
 		
-		
 		$customer = $order->getCustomer();
 		if(!!$customer && !!$customer->getId()){
 			$emailCoupon = Mage::getModel('promotionfactory/emailcoupon')->loadByEmailCouponWithEmail($couponCode, $customer->getEmail());		
