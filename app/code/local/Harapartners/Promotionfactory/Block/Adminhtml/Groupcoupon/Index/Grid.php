@@ -26,12 +26,19 @@ class Harapartners_PromotionFactory_Block_Adminhtml_Groupcoupon_Index_Grid exten
             'width'         => '50px',
             'index'         => 'rule_id'
         ));
-        
+
         $this->addColumn('name', array(
             'header'        => Mage::helper('promotionfactory')->__('Name'),
             'align'         => 'right',
             'width'         => '150px',
             'index'         => 'name'
+        ));
+        
+        $this->addColumn('code', array(
+            'header'        => Mage::helper('promotionfactory')->__('Code'),
+            'align'         => 'right',
+            'width'         => '150px',
+            'index'         => 'code'
         ));
         
         $this->addColumn('is_active', array(
@@ -42,10 +49,9 @@ class Harapartners_PromotionFactory_Block_Adminhtml_Groupcoupon_Index_Grid exten
         	'type'			=> 'options',
             'options' => array('1'=>'Yes','0'=>'No')
         ));
-        
-        
-       $this->addColumn('created_at', array(
-            'header'        => Mage::helper('promotionfactory')->__('From'),
+                
+       $this->addColumn('from_date', array(
+            'header'        => Mage::helper('promotionfactory')->__('Created At'),
             'align'         => 'center',
             'width'         => '150px',
             'index'         => 'from_date',
@@ -54,11 +60,11 @@ class Harapartners_PromotionFactory_Block_Adminhtml_Groupcoupon_Index_Grid exten
         ));
         
         $this->addColumn('updated_at', array(
-            'header'        => Mage::helper('promotionfactory')->__('To'),
+            'header'        => Mage::helper('promotionfactory')->__('Updated At'),
             'align'         => 'center',
             'width'         => '150px',
-            'index'         => 'to_date',
-        	'type'      	=> 'datetime',
+            'index'         => 'updated_at',
+        	'type'      	=> 'date',
             'gmtoffset' 	=> true
         ));
         
