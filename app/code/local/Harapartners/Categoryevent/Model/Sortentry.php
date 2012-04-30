@@ -26,7 +26,7 @@ class Harapartners_Categoryevent_Model_Sortentry extends Mage_Core_Model_Abstrac
 	const EVENT_CATEGORY_NAME = 'Event';
 	
 	// Set up event collection date range
-	const EVENT_CATEGORY_DATE_RANG = '3';
+	const EVENT_CATEGORY_DATE_RANG = '5';
 	
 	const DEFAULT_REBUILD_LIFETIME = 86400;
 	
