@@ -36,9 +36,9 @@
             <?php $_index = 1; ?>
             <?php $_count = count($_links); ?>
             <?php foreach ($_links as $_link): ?>
-                <?php $_last = ($_index++ >= $_count); ?>
-
+                <?php $_last = ($_index++ >= $_count); ?>					
                     <li class="ui-li-has-count ui-btn ui-btn-icon-right ui-li-has-arrow ui-li ui-corner-top ui-btn-up-c<?php echo ($_last ? ' last' : '') ?>">
+                    	<?php if ( $_link->getData('name') != 'sign_out' ):?>
 						<div class="ui-btn-inner ui-li" aria-hidden="true">
 							<div class="ui-btn-text">
 								<a class="ui-link-inherit" href="<?php echo $_link->getUrl() ?>"><?php echo $_link->getLabel() ?>
@@ -65,6 +65,9 @@
 								<span class="ui-icon ui-icon-arrow-r ui-icon-shadow"></span>
 							</div>
 						</div>
+						<?php else:?>
+							<?php echo $this->getLayout()->createBlock('customertracking/footersignout')->setTemplate('customertracking/footersignout.phtml')->toHtml();//$this->getChildHtml('customertracking.footersignout');?>
+						<?php endif;?>
 					</li>
             <?php endforeach; ?>
         </ul>
