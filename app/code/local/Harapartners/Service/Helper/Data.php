@@ -16,7 +16,7 @@ class Harapartners_Service_Helper_Data extends Mage_Core_Helper_Url{
 	
 	const TOTSY_STORE_ID 					= 1;
 	const MAMASOURCE_STORE_ID 				= 3;
-	const TOTSY_MOBILE_STORE_ID 			= 5;
+	const TOTSY_MOBILE_STORE_ID 			= 4;
 	
 	const TOTSY_CUSTOMER_GROUP_ID 			= 1;
 	const MAMASOURCE_CUSTOMER_GROUP_ID 		= 2;
