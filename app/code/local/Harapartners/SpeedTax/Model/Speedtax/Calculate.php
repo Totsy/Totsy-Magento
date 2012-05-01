@@ -267,7 +267,8 @@ class Harapartners_SpeedTax_Model_Speedtax_Calculate extends Harapartners_SpeedT
 			$cacheKey = md5(serialize($this->_invoice));
 			$speedtaxResults = $this->_getCheckoutSession()->getData( 'speedtax_results' );
 			if(array_key_exists($cacheKey, $speedtaxResults)){
-				$cachedResult = unserialize(gzinflate($speedtaxResults[$cacheKey]));
+//				$cachedResult = unserialize(gzinflate($speedtaxResults[$cacheKey]));
+				$cachedResult = unserialize($speedtaxResults[$cacheKey]);
 				if(is_object($cachedResult) && isset($cachedResult->resultType)){
 					return $cachedResult;
 				}
@@ -280,7 +281,8 @@ class Harapartners_SpeedTax_Model_Speedtax_Calculate extends Harapartners_SpeedT
 	protected function _saveCachedResult(){
 		try{
 			$speedtaxResults = $this->_getCheckoutSession()->getData('speedtax_results');
-			$speedtaxResults[md5(serialize($this->_invoice))] = gzdeflate(serialize($this->_result), 9);
+//			$speedtaxResults[md5(serialize($this->_invoice))] = gzdeflate(serialize($this->_result), 9);
+			$speedtaxResults[md5(serialize($this->_invoice))] = serialize($this->_result);
 			$this->_getCheckoutSession()->setData('speedtax_results', $speedtaxResults);
 		}catch(Exception $e){
 			

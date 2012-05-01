@@ -90,6 +90,7 @@ class Harapartners_Rushcheckout_Model_Observer {
         foreach ($lifetimes as $storeId => $lifetime) {
             $quoteCollection = Mage::getModel('sales/quote')->getCollection();
             $quoteCollection->addFieldToFilter('store_id', $storeId);
+            $quoteCollection->addFieldToFilter('is_active', 1);
             $quoteCollection->addFieldToFilter('updated_at', array('to' => date("Y-m-d H:i:s", time() - $lifetime)));
             foreach($quoteCollection as $quote){
 				foreach($quote->getAllItems() as $item){
