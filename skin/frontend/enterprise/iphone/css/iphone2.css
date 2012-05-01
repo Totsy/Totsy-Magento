@@ -416,7 +416,8 @@ p.back-link{
 }
 
 #product-options-wrapper div.select-container {
-    right: 12%;
+    right: auto;
+	width:267px;
 }
 
 .box-related li.item, .box-related li.item item-info{
