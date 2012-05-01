@@ -416,7 +416,8 @@ p.back-link{
 }
 
 #product-options-wrapper div.select-container {
-    right: 12%;
+    right: auto;
+	width:267px;
 }
 
 .box-related li.item, .box-related li.item item-info{
@@ -443,3 +444,36 @@ p.back-link{
 	font-size: 13px;
 }
 /*Harapartners Li*/
+
+#hpcheckout-billing-wrapper .totsy-selective-input-box span{
+	display:none;
+}
+
+#hpcheckout-wrapper{
+	padding:0px 10px;
+}
+
+#hpcheckout-wrapper .page-title h1{
+    font-size: 15px;
+    margin: 10px 0px;
+}
+#hpcheckout-wrapper .shipping-date{
+	float:left;
+}
+#hpcheckout-wrapper .timer-control-box{
+	float:right;
+}
+
+#hpcheckout-wrapper button{
+    background-color: #EEEEEE;
+    border: 1px solid #CCCCCC;
+    border-radius: 5px 5px 5px 5px;
+    font-weight: bold;
+    height: auto;
+    padding: 6px 14px;
+    width: auto;
+}
+
+#hpcheckout-wrapper .address{
+	clear:both;
+}
