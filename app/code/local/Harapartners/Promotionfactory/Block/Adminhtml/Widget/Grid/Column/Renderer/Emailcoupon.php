@@ -6,7 +6,7 @@ class Harapartners_Promotionfactory_Block_Adminhtml_Widget_Grid_Column_Renderer_
         $ruleId = $row->getData($this->getColumn()->getIndex());
         if(!!$ruleId){
         	if(Mage::getModel('promotionfactory/emailcoupon')->ruleIdExist($ruleId)){
-        		$resultHtml = "Uploaded";
+        		$resultHtml = "Created";
         	}
         }
         return $resultHtml;

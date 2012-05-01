@@ -20,6 +20,17 @@ class Harapartners_Promotionfactory_Model_Mysql4_Groupcoupon extends Mage_Core_M
         return false;
     }
     
+	public function getTotalCodeCount($ruleId){
+		$select = $this->_getReadAdapter()
+        		->select()
+        		->distinct()
+            	->from($this->getMainTable(), 'COUNT(*)')
+            	->where('rule_id=:rule_id');
+
+        $result = $this->_getReadAdapter()->fetchRow($select, array('rule_id'=>$ruleId));
+        return (int) $result;
+    }
+    
   	public function deleteByRuleId($ruleId){
   		$coreResource = Mage::getSingleton('core/resource') ;
 		$write = $coreResource->getConnection('core_write');

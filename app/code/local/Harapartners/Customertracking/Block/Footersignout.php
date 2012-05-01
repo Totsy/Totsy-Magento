@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 /*
  * NOTICE OF LICENSE
@@ -12,7 +12,16 @@
  * 
  */
 
-class Harapartners_Promotionfactory_Helper_Data extends Mage_Core_Helper_Abstract
-{	
-	
+class Harapartners_Customertracking_Block_Footersignout extends Mage_Core_Block_Template {
+    
+    public function _toHtml(){
+    	$html = '';
+
+    	    if (!$this->getTemplate()) {
+            	return '';
+        	}
+        	$html = $this->renderView();
+  	
+    	return $html;
+    }
 }

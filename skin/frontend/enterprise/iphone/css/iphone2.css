@@ -422,3 +422,24 @@ p.back-link{
 .box-related li.item, .box-related li.item item-info{
 	display:inline-block;
 }
+
+/*Harapartners Li: HpCheckout error messages*/
+.hpcheckout-error-message {
+	color: red;
+	display: block;
+}
+
+#use-store-credit,
+#use-reward-point
+{
+	text-decoration: underline;
+	color: #ED1C25;
+	cursor: pointer;
+}
+
+#error-message-wrapper {
+	color: red;
+	padding-left: 20px;
+	font-size: 13px;
+}
+/*Harapartners Li*/

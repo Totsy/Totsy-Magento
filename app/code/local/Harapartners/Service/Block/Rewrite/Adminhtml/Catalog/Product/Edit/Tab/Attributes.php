@@ -15,8 +15,10 @@ class Harapartners_Service_Block_Rewrite_Adminhtml_Catalog_Product_Edit_Tab_Attr
 	//overwrite to disable sku textfield
 	protected function _setFieldset($attributes, $fieldset){
 		parent::_setFieldset($attributes, $fieldset);
-		if(!!$fieldset->getForm()->getElement('sku')){
-            $fieldset->getForm()->getElement('sku')->setDisabled('disabled');
+		$skuElement = $fieldset->getForm()->getElement('sku');
+		$product = Mage::registry('current_product');
+		if(!!$skuElement && !!$product && $product->getTypeId() == 'simple'){
+            $skuElement->setData('readonly', 'readonly');
         }
         return $this;
 	}

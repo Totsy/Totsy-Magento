@@ -53,18 +53,20 @@ class Harapartners_ShippingFactory_Model_Shipping_Carrier_Flexible
     	if(!!Mage::registry('split_order_force_free_shipping')){
     		return true;
     	}
-    	$quote = Mage::getSingleton('checkout/session')->getQuote();
-    	$customer = $quote->getCustomer();
-    	$storeId = $customer->getStoreId();
-    	$storeName = $customer->getStore()->getName();
-    	if(!!$customer && !!$customer->getId() && ($storeId == 1 || $storeName == 'totsy')
-    			&& strtotime($customer->getData('created_at')) + self::FREE_SHIPPING_AFTER_REGISTRATION_TIME > strtotime(now())){
-    		$address = $quote->getShippingAddress();
-    		if(!!$address && !!$address->getId() && 
-    				!count($address->getCustomerOrderCollection())){
-    			return true;
-    		}
-    	}
+    	
+    	//Harapartners, Jun, Coupon logic change: coupon code is batch generated and send by email
+//    	$quote = Mage::getSingleton('checkout/session')->getQuote();
+//    	$customer = $quote->getCustomer();
+//    	$storeId = $customer->getStoreId();
+//    	$storeName = $customer->getStore()->getName();
+//    	if(!!$customer && !!$customer->getId() && ($storeId == 1 || $storeName == 'totsy')
+//    			&& strtotime($customer->getData('created_at')) + self::FREE_SHIPPING_AFTER_REGISTRATION_TIME > strtotime(now())){
+//    		$address = $quote->getShippingAddress();
+//    		if(!!$address && !!$address->getId() && 
+//    				!count($address->getCustomerOrderCollection())){
+//    			return true;
+//    		}
+//    	}
     	return false;
     }
     

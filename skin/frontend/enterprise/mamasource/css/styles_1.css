@@ -89,7 +89,7 @@ div.top-cart .block-title strong { color: #F21C25; font-size: 12px; text-transfo
 .hpcheckout-checkout-index #usercart li a.top-link-checkout { display: none; }
 .hpcheckout-checkout-index .top-cart .block-title strong { background: none; }
 
-#usercart .top-cart .block-content ol#mini-cart { height: 220px; overflow-y: auto;}
+#usercart .top-cart .block-content ol#mini-cart { max-height: 220px; overflow-y: auto;}
  
  /* log in ================================================================================= */
  

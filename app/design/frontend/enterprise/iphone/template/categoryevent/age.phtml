@@ -18,13 +18,13 @@
 	<hr class="category-hr" />
 	<ul data-role="listview" class=" ui-listview ui-listview-inset ui-corner-all ui-shadow">
 			<?php $age = 'ages'; ?>
-			<?php $ageAttr = Mage::getModel('catalog/category')->getResource()->getAttribute($age);?>
+			<?php $ageAttr = Mage::getModel('catalog/product')->getResource()->getAttribute($age);?>
 			<?php $ageOptionArray = $ageAttr->getSource()->getAllOptions();?>
 			<?php foreach($ageOptionArray as $option):?>
 				<li data-theme="c" class="ui-btn ui-btn-icon-right ui-li-has-arrow ui-li ui-corner-top ui-btn-up-c">
 					<div class="ui-btn-inner ui-li" aria-hidden="true">
 						<div class="ui-btn-text">
-							<a class="ui-link-inherit" href="<?php echo $this->getBaseUrl();?>event/index/topnav/type/<?php echo $age;?>/value/<?php echo $option['value']?>"><?php echo $option['label']?></a>
+							<a class="ui-link-inherit" href="<?php echo $this->getBaseUrl();?>event/index/topnav/<?php echo $age;?>/<?php echo $option['value']?>"><?php echo $option['label']?></a>
 						</div>
 						<span class="ui-icon ui-icon-arrow-r ui-icon-shadow"/>
 					</div>
