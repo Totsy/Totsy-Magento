@@ -171,6 +171,12 @@ class Harapartners_Service_Model_Rewrite_Customer_Customer extends Mage_Customer
         if($loginCount === null) {
         	$this->setLoginCounter(0);
         }
+        
+        //Harapartners, add email md5 hash
+    	$emailHash = $this->getEmailMd5();
+        if($emailHash === null) {
+        	$this->setEmailMd5(md5($email));
+        }
 
         $this->getGroupId();
         return $this;
