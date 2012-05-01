@@ -24,6 +24,9 @@ class Harapartners_Service_Model_Service extends Mage_Core_Model_Abstract{
 		    Mage::dispatchEvent('adminhtml_cache_refresh_type', array('type' => $type));
 		    $updatedTypes++;
 		}
+		//Harapartners, yang, Flash cache
+		Mage::dispatchEvent('adminhtml_cache_flush_all');
+        Mage::app()->getCacheInstance()->flush();
         return $this;
     }
  
