@@ -21,6 +21,18 @@ class Harapartners_Service_Helper_Data extends Mage_Core_Helper_Url{
 	const TOTSY_CUSTOMER_GROUP_ID 			= 1;
 	const MAMASOURCE_CUSTOMER_GROUP_ID 		= 2;
 	
+	//another version of translate,which is used in sailthru tags and emails, is in Mage_Catalog.csv
+	public static function getNavAgeTranlateArray(){
+		return array( 
+		        		'0_6m' => 'Newborn 0-6M',
+		        		'6_24m' => 'Infant 6-24M',
+		        		'1_3y' => 'Toddler 1-3 Y',
+		        		'3_4y' => 'Preschool 3-4Y',
+		        		'5_up' => 'School Age 5+',
+		        		'adult' => 'Adult'
+		        	);
+	}
+	
 	public function validateStoreByCustomer($customer){
 		$correctStoreId = $this->getCorrectStoreId($customer);
         if(Mage::app()->getStore()->getId() != $correctStoreId){

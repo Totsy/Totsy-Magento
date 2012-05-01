@@ -88,14 +88,7 @@
 		        <li id="byage" class="haschild">
 		        	<a href="#"><em>SHOP BY<br/>AGE</em></a>
 		        	<ul class="shop">
-		        	<?php $translateArray = array( 
-		        		'0_6m' => 'Newborn 0-6M',
-		        		'6_24m' => 'Infant 6-24M',
-		        		'1_3y' => 'Toddler 1-3 Y',
-		        		'3_4y' => 'Preschool 3-4Y',
-		        		'5_up' => 'School Age 5+',
-		        		'adult' => 'Adult'
-		        	);?>
+		        	<?php $translateArray = Harapartners_Service_Helper_Data::getNavAgeTranlateArray();?>
 		        		<?php $age = 'ages'; ?>
 		        		<?php $ageAttr = Mage::getModel('catalog/product')->getResource()->getAttribute($age);?>
 		        		<?php $ageOptionArray = $ageAttr->getSource()->getAllOptions();?>
