@@ -39,7 +39,7 @@ class Harapartners_Service_Helper_Data extends Mage_Core_Helper_Url{
 	public function getCorrectStoreId($customer) {
 		switch($customer->getGroupId()){
 			case self::TOTSY_CUSTOMER_GROUP_ID:
-				if ( preg_match( '/iPhone|Android|BlackBerry|iPad/' ,$_SERVER['HTTP_USER_AGENT'] ) ) {
+				if ( preg_match( '/iPhone|Android|BlackBerry/' ,$_SERVER['HTTP_USER_AGENT'] ) ) {
 					$correctStoreId = self::TOTSY_MOBILE_STORE_ID;
 				}else{
 					$correctStoreId = self::TOTSY_STORE_ID;

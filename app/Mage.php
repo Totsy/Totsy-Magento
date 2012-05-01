@@ -641,7 +641,7 @@ final class Mage
             self::$_config = new Mage_Core_Model_Config($options);
             
             //Harapartners, Jun, START: Force mobile agent into mobile store, this is important to avoid caching conflict, and also important for store segregation
-        	if (preg_match('/iPhone|Android|BlackBerry|iPad/', $_SERVER['HTTP_USER_AGENT'])) {
+        	if (preg_match('/iPhone|Android|BlackBerry/', $_SERVER['HTTP_USER_AGENT'])) {
 				$code = 'mobile';
 			}
 			//Harapartners, Jun, END
