@@ -11,9 +11,32 @@
  * 
  */
 class Harapartners_Fulfillmentfactory_Helper_Dotcom extends Mage_Core_Helper_Abstract{
-	const API_KEY = '53e04657f78564b584b0ff2682ae89c4';
-	const API_PASSWORD = '36e4c4ad2ff195b7becd59dbdb23550d';
-	const DOTCOM_BASE_URL = 'https://cwa.dotcomdistribution.com/dcd_api_test/DCDAPIService.svc';
+	//const API_KEY = '53e04657f78564b584b0ff2682ae89c4';
+	//const API_PASSWORD = '36e4c4ad2ff195b7becd59dbdb23550d';
+	//const DOTCOM_BASE_URL = 'https://cwa.dotcomdistribution.com/dcd_api_test/DCDAPIService.svc';
+	
+	protected static $_apiKey = '';
+	protected static $_apiPassword = '';
+	protected static $_apiUrl = '';
+	
+	protected function _getConfig() {
+		self::$_apiKey = Mage::getStoreConfig('fulfillmentfactory_options/dotcom_setting/fulfillment_dotcom_api_key');
+		self::$_apiPassword = Mage::getStoreConfig('fulfillmentfactory_options/dotcom_setting/fulfillment_dotcom_$_apiPassword');
+		self::$_apiUrl = Mage::getStoreConfig('fulfillmentfactory_options/dotcom_setting/fulfillment_dotcom_api_base_url');
+		
+		//for default testing environment
+		if(empty(self::$_apiKey)) {
+			self::$_apiKey = '53e04657f78564b584b0ff2682ae89c4';
+		}
+		
+		if(empty(self::$_apiPassword)) {
+			self::$_apiPassword = '36e4c4ad2ff195b7becd59dbdb23550d';
+		}
+		
+		if(empty(self::$_apiUrl)) {
+			self::$_apiKey = 'https://cwa.dotcomdistribution.com/dcd_api_test/DCDAPIService.svc';
+		}
+	}
 	
 	/**
 	 * generate authorization header (HMAC encryption)
@@ -22,11 +45,13 @@ class Harapartners_Fulfillmentfactory_Helper_Dotcom extends Mage_Core_Helper_Abs
 	 * @return string encrypted string
 	 */
 	protected function _generateAuthHeader($uri) {
+		$this->_getConfig();
+		
 		//get HAMC hash string
-		$hash = hash_hmac('md5', $uri, self::API_PASSWORD);
+		$hash = hash_hmac('md5', $uri, self::$_apiPassword);
 		
 		//base64 encryption and concatenate with API KEY
-		return self::API_KEY . ':' . base64_encode(pack('H*', $hash));
+		return self::$_apiKey . ':' . base64_encode(pack('H*', $hash));
 	}
 	
 	/**
@@ -36,6 +61,8 @@ class Harapartners_Fulfillmentfactory_Helper_Dotcom extends Mage_Core_Helper_Abs
 	 * @return SimpleXMLElement $xml
 	 */
 	protected function _readXMLString($str) {
+		$this->_getConfig();
+		
 		$xml = new SimpleXMLElement($str);
 		$items = $xml->children()->children('a', TRUE);	// get items base on namespace 'a'
 		
@@ -51,6 +78,8 @@ class Harapartners_Fulfillmentfactory_Helper_Dotcom extends Mage_Core_Helper_Abs
 	 */
 	protected function _sendQueryRequest($uri, $header=array()) {
 		try {
+			$this->_getConfig();
+			
 			$client = new Zend_Http_Client($uri);
 			
 			$header['Accept-encoding'] = 'gzip,deflate';
@@ -59,7 +88,7 @@ class Harapartners_Fulfillmentfactory_Helper_Dotcom extends Mage_Core_Helper_Abs
 			
 			$response = $client->request();
 			echo print_r($response, 1); //TEST
-			
+
 			if(isset($response)) {
 				$body = $response->getBody();
 				return $body;
@@ -82,6 +111,8 @@ class Harapartners_Fulfillmentfactory_Helper_Dotcom extends Mage_Core_Helper_Abs
 	 */
 	protected function _postXMLRequest($uri, $xml, $header=array()) {
 		try {
+			$this->_getConfig();
+			
 			$client = new Zend_Http_Client($uri);
 			
 			$header['Content-type'] = 'text/xml; charset=utf-8';
@@ -111,7 +142,9 @@ class Harapartners_Fulfillmentfactory_Helper_Dotcom extends Mage_Core_Helper_Abs
 	 *
 	 */
 	public function getShippingMethodListFromDotcom() {
-		$uri = self::DOTCOM_BASE_URL . '/shipmethod';
+		$this->_getConfig();
+		
+		$uri = self::$_apiUrl . '/shipmethod';
 		
 		$body = $this->_sendQueryRequest($uri);
 		if(!empty($body)) {
@@ -129,6 +162,7 @@ class Harapartners_Fulfillmentfactory_Helper_Dotcom extends Mage_Core_Helper_Abs
 	 * @return string Dotcom shipping method code
 	 */
 	public function getDotcomShippingMethod($method) {
+		$this->_getConfig();
 		return '03';
 	}
 	
@@ -138,7 +172,8 @@ class Harapartners_Fulfillmentfactory_Helper_Dotcom extends Mage_Core_Helper_Abs
 	 * @param array $products
 	 */
 	public function submitProductItems($dataXML) {
-		$uri = self::DOTCOM_BASE_URL . '/item';
+		$this->_getConfig();
+		$uri = self::$_apiUrl . '/item';
 		$response = $this->_postXMLRequest($uri, $dataXML);
 		
 		return $this->_readXMLString($response);
@@ -150,7 +185,8 @@ class Harapartners_Fulfillmentfactory_Helper_Dotcom extends Mage_Core_Helper_Abs
 	 * @param array $orders
 	 */
 	public function submitOrders($dataXML) {
-		$uri = self::DOTCOM_BASE_URL . '/order';
+		$this->_getConfig();
+		$uri = self::$_apiUrl . '/order';
 		$response = $this->_postXMLRequest($uri, $dataXML);
 		
 		return $this->_readXMLString($response);
@@ -162,7 +198,8 @@ class Harapartners_Fulfillmentfactory_Helper_Dotcom extends Mage_Core_Helper_Abs
 	 * @param array $orders
 	 */
 	public function submitPurchaseOrders($dataXML) {
-		$uri = self::DOTCOM_BASE_URL . '/purchase_order';
+		$this->_getConfig();
+		$uri = self::$_apiUrl . '/purchase_order';
 		
 		$response = $this->_postXMLRequest($uri, $dataXML);
 		
@@ -175,7 +212,8 @@ class Harapartners_Fulfillmentfactory_Helper_Dotcom extends Mage_Core_Helper_Abs
 	 * @return SimpleXMLElement inventory
 	 */
 	public function getInventory() {
-		$uri = self::DOTCOM_BASE_URL . '/inventory';
+		$this->_getConfig();
+		$uri = self::$_apiUrl . '/inventory';
 		
 		$body = $this->_sendQueryRequest($uri);
 		if(!empty($body)) {
@@ -194,7 +232,8 @@ class Harapartners_Fulfillmentfactory_Helper_Dotcom extends Mage_Core_Helper_Abs
 	 * @return SimpleXMLElement $xml
 	 */
 	public function getStock($fromDate='', $toDate='') {
-		$uri = self::DOTCOM_BASE_URL . '/stockstatus';
+		$this->_getConfig();
+		$uri = self::$_apiUrl . '/stockstatus';
 		$uri  = $uri . '?fromDate=' . urlencode($fromDate) . '&toDate=' . urlencode($toDate);	//GET Method
 
 		$body =  $this->_sendQueryRequest($uri);
@@ -216,7 +255,8 @@ class Harapartners_Fulfillmentfactory_Helper_Dotcom extends Mage_Core_Helper_Abs
 	 * @return SimpleXMLElement $xml
 	 */
 	public function getOrderStatus($fromDate='', $toDate='') {
-		$uri = self::DOTCOM_BASE_URL . '/order';
+		$this->_getConfig();
+		$uri = self::$_apiUrl . '/order';
 		$uri  = $uri . '?fromOrdDate=' . urlencode($fromDate) . '&toOrdDate=' . urlencode($toDate);	//GET Method
 		
 		$body =  $this->_sendQueryRequest($uri);
@@ -238,7 +278,8 @@ class Harapartners_Fulfillmentfactory_Helper_Dotcom extends Mage_Core_Helper_Abs
 	 * @return SimpleXMLElement $xml
 	 */
 	public function getShipment($fromDate='', $toDate='') {
-		$uri = self::DOTCOM_BASE_URL . '/shipment';
+		$this->_getConfig();
+		$uri = self::$_apiUrl . '/shipment';
 		$uri  = $uri . '?fromShipDate=' . urlencode($fromDate) . '&toShipDate=' . urlencode($toDate);	//GET Method
 		
 		$body =  $this->_sendQueryRequest($uri);
