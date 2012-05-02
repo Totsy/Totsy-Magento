@@ -356,7 +356,10 @@ class Mage_Cybersource_Model_Soap extends Mage_Payment_Model_Method_Cc
                  $error = Mage::helper('cybersource')->__('There is an error in processing the payment. Please try again or contact us.');
             }
         } catch (Exception $e) {
-           Mage::throwException(
+           	Mage::getModel('core/email_template')->setTemplateSubject('Payment Failed')
+							->sendTransactional(6, 'support@totsy.com', $payment->getOrder()->getCustomerEmail(), $payment->getOrder()->getCustomer()->getFirstname());
+        	
+			Mage::throwException(
                 Mage::helper('cybersource')->__('Gateway request error: %s', $e->getMessage())
             );
         }

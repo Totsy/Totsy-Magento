@@ -98,8 +98,8 @@ class Harapartners_Service_Model_Rewrite_Reward_Observer extends Enterprise_Rewa
         if (!Mage::helper('enterprise_reward')->isEnabledOnFront($websiteId)) {
             return $this;
         }
-
-        if ($invitation->getCustomerId() && $invitation->getReferralId()) {
+		//The comment for import only that invitation wont interfere reward
+        /*if ($invitation->getCustomerId() && $invitation->getReferralId()) {
             $reward = Mage::getModel('enterprise_reward/reward')
                 ->setCustomerId($invitation->getCustomerId())
                 ->setWebsiteId($websiteId)
@@ -112,7 +112,7 @@ class Harapartners_Service_Model_Rewrite_Reward_Observer extends Enterprise_Rewa
             $inviter = Mage::getModel( 'customer/customer' )->load( $invitation->getCustomerId() );
 	        $emailTemplate->sendTransactional( Mage::getStoreConfig( Enterprise_Reward_Model_Reward::XML_PATH_INVITER_EMAIL_INVITEE_REGISTERED ), 'support', $inviter->getEmail(), $inviter->getName() );
             //Harapartners,Li Lu
-        }
+        }*/
 
         
         /*
