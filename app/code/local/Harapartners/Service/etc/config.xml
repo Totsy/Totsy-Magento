@@ -149,6 +149,12 @@
 					<indexer>Harapartners_Service_Model_Rewrite_Index_Indexer</indexer>
 				</rewrite>
 			</index>
+			<payment>
+				<rewrite>
+					<!--Legacy order import-->
+					<method_ccsave>Harapartners_Service_Model_Rewrite_Payment_Method_Ccsave</method_ccsave>
+				</rewrite>
+			</payment>
 			<sales>
 				<rewrite>
 					<!--Harapartners_Ordersplit--><!--Harapartners_Paymentfactory-->
