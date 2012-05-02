@@ -24,12 +24,18 @@ $orderDataArray = getOrderDataArray();
 
 Mage::register('disable_order_split', true);
 Mage::register('order_import_allow_ccsave', true);
+echo 'Processing START: ' . PHP_EOL;
+$importCount = 1;
 foreach($orderDataArray as $legacyOrderId => $orderData){
 	try{
+		if($importCount % 10 == 0){
+			echo 'Processing order #' . $importCount . PHP_EOL;
+		}
 		placeOrder($orderData);
 	}catch (Exception $e){
 		echo 'Error processing order ' . $legacyOrderId . ': ' . $e->getMessage() . PHP_EOL;
 	}
+	$importCount ++;
 }
 echo 'Import END.' . PHP_EOL;
 
@@ -145,7 +151,7 @@ function placeOrder($orderData){
 	$data = array(
 			'method'=>'ccsave',
 			'cc_type' => $ccType,
-			'cc_owner' => $orderObj->getData('firstname') . ' ' . $orderObj->getData('lastname'),
+			'cc_owner' => $orderObj->getData('cc_owner'),
 			'cc_number' => $orderObj->getData('cc_last4'),
 	);	
 	$payment = $quote->getPayment();
