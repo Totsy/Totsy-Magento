@@ -14,32 +14,42 @@
 
 class Harapartners_Service_Model_Rewrite_Salesrule_Validator extends Mage_SalesRule_Model_Validator {
 	
-	const NEW_CUSTOMER_FIRST_ORDER_TIME = 2592000; // 30day
-	const COUPON_NAME_NEW_CUSTOMER_FIRST_ORDER_IN_30_DAYS = 'NEW_CUSTOMER_FIRST_ORDER_IN_30_DAYS';
+//	const NEW_CUSTOMER_FIRST_ORDER_TIME = 2592000; // 30day
+//	const COUPON_NAME_NEW_CUSTOMER_FIRST_ORDER_IN_30_DAYS = 'NEW_CUSTOMER_FIRST_ORDER_IN_30_DAYS';
 	
-	public function canApplyFirstOrderCouponRule($address) {
-		$firstOrder = $address->getCustomerOrderCollection()->getFirstItem();
-		$firstOrderCreatedAt = $firstOrder->getData('created_at');
-		
-		//$50 limit is given by coupon rule in the admin panel
-		if (count($address->getCustomerOrderCollection()) == 1 
-				&& strtotime($firstOrderCreatedAt) + self::NEW_CUSTOMER_FIRST_ORDER_TIME > strtotime(now())
-		){
-			return TRUE;
-		}
-    	return FALSE;
-	}
+	//Important logic for free shipping (calculated out of discount collect total)
+	public function init($websiteId, $customerGroupId, $couponCode){
+    	$groupcoupon = Mage::getModel('promotionfactory/groupcoupon')->loadByPseudoCode($couponCode);
+    	if(!!$groupcoupon && !!$groupcoupon->getId() && $groupcoupon->getUsedCount() == 0){
+    		$couponCode = $groupcoupon->getCode();
+    	}
+		return parent::init($websiteId, $customerGroupId, $couponCode);
+    }
+	
+//	public function canApplyFirstOrderCouponRule($address) {
+//		$firstOrder = $address->getCustomerOrderCollection()->getFirstItem();
+//		$firstOrderCreatedAt = $firstOrder->getData('created_at');
+//		
+//		//$50 limit is given by coupon rule in the admin panel
+//		if (count($address->getCustomerOrderCollection()) == 1 
+//				&& strtotime($firstOrderCreatedAt) + self::NEW_CUSTOMER_FIRST_ORDER_TIME > strtotime(now())
+//		){
+//			return true;
+//		}
+//    	return false;
+//	}
 	
 	protected function _canProcessRule($rule, $address){
 		$ruleId = $rule->getId();
 		
-		if($rule->getName() == self::COUPON_NAME_NEW_CUSTOMER_FIRST_ORDER_IN_30_DAYS
-				&& !!$this->canApplyFirstOrderCouponRule($address)){
-			return true;
-		}// HP Song
-		elseif($rule->getName() == self::COUPON_NAME_NEW_CUSTOMER_FIRST_ORDER_IN_30_DAYS){
-			return false;
-		}
+		//Harapartners, Jun, Coupon logic change: coupon code is batch generated and send by email
+//		if($rule->getName() == self::COUPON_NAME_NEW_CUSTOMER_FIRST_ORDER_IN_30_DAYS){
+//			if(!!$this->canApplyFirstOrderCouponRule($address)){
+//				return true;
+//			}else{
+//				return false;
+//			}
+//		}
 		
 		$ruleExsit = Mage::getModel('promotionfactory/emailcoupon')->ruleIdExist($ruleId);
 		$custEmail = $address->getQuote()->getCustomer()->getEmail() ;

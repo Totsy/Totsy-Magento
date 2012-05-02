@@ -1,14 +1,17 @@
 <?php 
 //error_reporting(E_ALL | E_STRICT);
 //ini_set('display_errors', 1);
-$rootDir = dirname(dirname(__DIR__));
+//$rootDir = dirname(dirname(__DIR__));
+//
+//$compilerConfig = $rootDir.'/includes/config.php';
+//if (file_exists($compilerConfig)) {
+//    include $compilerConfig;
+//}
+//
+//require_once( $rootDir.'/app/Mage.php' );
 
-$compilerConfig = $rootDir.'/includes/config.php';
-if (file_exists($compilerConfig)) {
-    include $compilerConfig;
-}
 
-require_once( $rootDir.'/app/Mage.php' );
+require_once( '../../app/Mage.php' );
 
 
 
@@ -45,6 +48,17 @@ if (!empty($_GET['order'])){
 if (!empty($_GET['start_date']) && preg_match('/[\d]{4}[\-][\d]{2}[\-][\d]{2}/i',$_GET['start_date'],$m)){
 	$start_date = strtotime($m[0]);
 }
+
+if (!empty($_GET['start_date']) && preg_match('/[\d]{2}[\-][\d]{2}[\-][\d]{4}/i',$_GET['start_date'],$m)){
+	$ori_start_date = $m[0];
+	$date_array = explode("-",$ori_start_date); // split the array
+	$var_day = $date_array[0]; //day seqment
+	$var_month = $date_array[1]; //month segment
+	$var_year = $date_array[2]; //year segment
+	$new_date_format = $var_year.'-'.$var_month.'-'.$var_day; // join them together
+	$start_date =  strtotime($new_date_format);
+}
+
 	
 if (!empty($_GET['start_time']) && preg_match('/[\d]{2}/',$_GET['start_time'])){
 	if (strtolower($_GET['start_time']) == 'am'){

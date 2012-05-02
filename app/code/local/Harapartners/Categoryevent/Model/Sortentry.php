@@ -26,7 +26,7 @@ class Harapartners_Categoryevent_Model_Sortentry extends Mage_Core_Model_Abstrac
 	const EVENT_CATEGORY_NAME = 'Event';
 	
 	// Set up event collection date range
-	const EVENT_CATEGORY_DATE_RANG = '3';
+	const EVENT_CATEGORY_DATE_RANG = '5';
 	
 	const DEFAULT_REBUILD_LIFETIME = 86400;
 	
@@ -219,8 +219,15 @@ class Harapartners_Categoryevent_Model_Sortentry extends Mage_Core_Model_Abstrac
     }
 	
     //This is an external function to be used in Controller
-    public function rebuildSortCollection($sortDate, $storeId){ 	
+    public function rebuildSortCollection($sortDate, $storeId){	
     	return $this->loadByDate($sortDate, $storeId, true);
+    }
+    
+    // ===== Cronjob related ===== //
+    public function rebuildSortCorn($schedule){
+		$sortDate = now();
+		$storeId = Mage_Core_Model_App::DISTRO_STORE_ID; //Harapartners, Yang: for now only rebuild totsy store
+		return $this->rebuildSortCollection($sortDate, $storeId);
     }
     
     //This is an external function to be used in Controller

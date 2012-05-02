@@ -50,28 +50,6 @@ class Harapartners_Service_Model_Rewrite_Core_Email_Template extends Mage_Core_M
         foreach ($emails as $key => $email) {
             $mail->addTo($email, '=?utf-8?B?' . base64_encode($names[$key]) . '?=');
         }
-
-		/* @UPDATED 2012.04.10: put cusomter group into $variables array */
-        $customerId = Mage::getModel('newsletter/subscriber')->loadByEmail($email)->getCustomerId();
-        if (empty($customerId)){
-        	$customer = Mage::getSingleton('customer/session')->getCustomer();
-        }else{
-        	$customer = Mage::getModel('customer/customer')->load($customerId);
-        }
-        if (!!$customer && !!$customer->getId()){
-			$variables['istotsy'] = Mage::helper('service')->isTotsyCustomer($customer);
-			$variables['ismamasource'] = Mage::helper('service')->isMamasourceCustomer($customer);
-			/* @UPDATED 2012.04.08: checks for group id rather than store id */
-			$store = "";
-			if ($customer['group_id']==1) {
-				$store = "totsy"; 
-			} else {
-				$store = "mamasource";
-			}
-			$vars = array('store'=>$store);
-        }
-		/* @UPDATED 2012.04.10: put cusomter group into $variables array */
-
         $this->setUseAbsoluteLinks(true);
         $text = $this->getProcessedTemplate($variables, true);
         if($this->isPlain()) {
@@ -83,17 +61,23 @@ class Harapartners_Service_Model_Rewrite_Core_Email_Template extends Mage_Core_M
         $mail->setFrom($this->getSenderEmail(), $this->getSenderName());
         try {
             //Harapartners sailthru//            
-            /* @UPDATED 2012.04.05: allows 1:1 template match between Magento and Sailthru*/
-			$template_name = $this['template_code'];
-			if (!isset($template_name)){
-				if (strcmp($store,"mamasource")==0){
-					$template_name = "mamasource-transactional-email-template";
-				}else{
-					$template_name = "totsy-transactional-email-template";
-				}
-			}
-
+            /* @UPDATED 2012.04.05 [added back DG-2012.04.26]: allows 1:1 template match between Magento and Sailthru*/
+			$template_name = $this['template_code'];;
 			$temails = "";
+			
+			/* @UPDATED 2012.05.02: checks for store_id and cross references to code
+				- for use in sailthru, conditional logic for serving branded headers/footers */
+			$customerId = Mage::getModel('newsletter/subscriber')->loadByEmail($email)->getCustomerId();
+			$customer = Mage::getModel('customer/customer')->load($customerId);
+			$store = "";
+			$store = Mage::getModel('core/store')->load($customer['store_id']);
+			if ($store['code']=="default" || $store['code']=="mobile") {
+				$store = "totsy"; 
+			} else {
+				$store = "mamasource";
+			}
+			$vars = array('store'=>$store);
+ 			
             $evars = array();
             $options = array("behalf_email" => Mage::getStoreConfig('sailthru_options/email/sailthru_sender_email'));
             for($i = 0; $i < count($emails); $i++) {
@@ -110,7 +94,7 @@ class Harapartners_Service_Model_Rewrite_Core_Email_Template extends Mage_Core_M
                 $tempvars = array("content_html" => "{content}", "subject" => "{subj}");
                 $tempsuccess = $sailthru->saveTemplate($template_name, $tempvars);
                 $success = $sailthru->multisend($template_name, $temails, $vars, $evars, $options);
-                //not success, use magento default send...
+                //not success, use magento default send…
                 if(count($success) == 2) {
           	//magento default//
               $mail->send();

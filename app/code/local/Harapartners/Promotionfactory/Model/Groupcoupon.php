@@ -37,6 +37,10 @@ class Harapartners_Promotionfactory_Model_Groupcoupon extends Mage_Core_Model_Ab
     	return $this->getResource()->ruleIdExist($ruleId);
     }
     
+    public function getTotalCodeCount($ruleId){
+    	return $this->getResource()->getTotalCodeCount($ruleId);
+    }
+    
 	public function deleteByRuleId($ruleId){
     	return $this->getResource()->deleteByRuleId($ruleId);
     }

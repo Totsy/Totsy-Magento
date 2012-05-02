@@ -4,10 +4,9 @@ class Harapartners_PromotionFactory_Block_Adminhtml_Emailcoupon_Index extends Ma
     public function __construct(){
 		$this->_blockGroup = 'promotionfactory';
 		$this->_controller = 'adminhtml_emailcoupon_index';
-    	$this->_headerText = Mage::helper('promotionfactory')->__('Coupon With Email List');
-            parent::__construct();
-    	$this->removeButton('add');
-            
+		$this->_headerText = Mage::helper('promotionfactory')->__('Existing Original Coupons');
+		parent::__construct();
+		$this->removeButton('add');
     }
  
 }
