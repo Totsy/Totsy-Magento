@@ -28,7 +28,11 @@ class Harapartners_Ordersplit_Helper_Data extends Mage_Core_Helper_Abstract {
 		);
 	}
 	
-	public function orderSplit($oldOrder){		
+	public function orderSplit($oldOrder){
+		if(!!Mage::registry('disable_order_split')){
+			return true;
+		}
+		
 		if(!($splitInfoArray = $this->_splitQuoteItems($oldOrder))){
 			return false;
 		}
