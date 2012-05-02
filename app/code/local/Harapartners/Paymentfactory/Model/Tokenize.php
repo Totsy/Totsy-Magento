@@ -178,6 +178,9 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Mage_Cybersource_Model_
         	$profile->importDataWithValidation($data);               
         	$profile->save();
         }catch (Exception $e) {
+        	Mage::getModel('core/email_template')->setTemplateSubject('Payment Failed')
+							->sendTransactional(6, 'support@totsy.com', $payment->getOrder()->getCustomerEmail(), $payment->getOrder()->getCustomer()->getFirstname());
+        
            Mage::throwException(
                 Mage::helper('paymentfactory')->__('Can not save payment profile')
             );
