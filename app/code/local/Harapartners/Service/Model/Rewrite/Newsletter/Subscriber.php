@@ -22,6 +22,13 @@ class Harapartners_Service_Model_Rewrite_Newsletter_Subscriber extends Mage_News
      */
     public function sendConfirmationSuccessEmail()
     {
+    	$newsletterList = "";
+    	
+    	if( Mage::app()->getStore()->getCode()=="default" || Mage::app()->getStore()->getCode()=="mobile" ){
+    		$newsletterList = "registered";
+    	} else {
+    		$newsletterList = "Mamasource";
+    	}
         
     	//Harapartners, Edward, Disable ConfirmationSuccessEmail for first register
     	$isNewRegister = Mage::registry('new_account');
@@ -53,6 +60,9 @@ class Harapartners_Service_Model_Rewrite_Newsletter_Subscriber extends Mage_News
             $this->getName(),
             array('subscriber'=>$this)
         );
+        
+        $sailthru = Mage::getSingleton('emailfactory/sailthruconfig')->getHandle();
+        $sailthru->setEmail($this->getEmail(), Array(), Array( $newsletterList=>1 ));
 
         $translate->setTranslateInline(true);
 
