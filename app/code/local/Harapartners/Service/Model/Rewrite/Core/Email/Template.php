@@ -71,12 +71,21 @@ class Harapartners_Service_Model_Rewrite_Core_Email_Template extends Mage_Core_M
 			$customer = Mage::getModel('customer/customer')->load($customerId);
 			$store = "";
 			$store = Mage::getModel('core/store')->load($customer['store_id']);
+			
+/*
+			echo "<pre>";
+			print_r($store);
+			print $store['code'];
+			echo "</pre>";
+			exit();
+*/
+			
 			if ($store['code']=="default" || $store['code']=="mobile") {
-				$store = "totsy"; 
+				$store_code = "totsy"; 
 			} else {
-				$store = "mamasource";
+				$store_code = "mamasource";
 			}
-			$vars = array('store'=>$store);
+			$vars = array('store'=>$store_code);
  			
             $evars = array();
             $options = array("behalf_email" => Mage::getStoreConfig('sailthru_options/email/sailthru_sender_email'));
