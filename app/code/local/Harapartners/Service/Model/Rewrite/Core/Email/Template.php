@@ -65,11 +65,13 @@ class Harapartners_Service_Model_Rewrite_Core_Email_Template extends Mage_Core_M
 			$template_name = $this['template_code'];;
 			$temails = "";
 			
-			/* @UPDATED 2012.04.08 [added back DG-2012.04.26]: checks for group id rather than store id */
+			/* @UPDATED 2012.05.02: checks for store_id and cross references to code
+				- for use in sailthru, conditional logic for serving branded headers/footers */
 			$customerId = Mage::getModel('newsletter/subscriber')->loadByEmail($email)->getCustomerId();
 			$customer = Mage::getModel('customer/customer')->load($customerId);
 			$store = "";
-			if ($customer['group_id']==1) {
+			$store = Mage::getModel('core/store')->load($customer['store_id']);
+			if ($store['code']=="default" || $store['code']=="mobile") {
 				$store = "totsy"; 
 			} else {
 				$store = "mamasource";
