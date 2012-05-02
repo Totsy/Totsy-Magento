@@ -98,6 +98,8 @@
 			<!-- ===== MODEL REWRITE START ===== -->
 			<catalog>
 				<rewrite>
+					<!--Admin panel, Events and Top Events are immutable-->
+					<category>Harapartners_Service_Model_Rewrite_Catalog_Category</category>
 					<!--Harapartners_Import: Important logic to prevent cleaning cache and indexing for each product save.-->
 					<product>Harapartners_Service_Model_Rewrite_Catalog_Product</product>
 					<!--Harapartners_Import: Core logic parsing data -->

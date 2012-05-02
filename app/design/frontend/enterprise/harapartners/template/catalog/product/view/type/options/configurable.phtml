@@ -57,7 +57,7 @@ else{
         		jQuery("button.btn-cart").css("background-color","<?php echo $buttonColor['deactive']?>");
 	        	var selector_span_<?php echo $counter;?> = "#activechange<?php echo $counter;?>";
 	        	var selector_select_<?php echo $counter;?> = "#attribute<?php echo $_attribute->getAttributeId()?>";
-				jQuery(selector_select_<?php echo $counter;?>).click(function(){
+				jQuery(selector_select_<?php echo $counter;?>).change(function(){
 						var temphtml = jQuery(this).html();
 						var test = jQuery(this).find("option:selected").text();
 						jQuery(selector_span_<?php echo $counter;?>).html(test);
