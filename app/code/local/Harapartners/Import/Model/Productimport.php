@@ -305,9 +305,8 @@ class Harapartners_Import_Model_Productimport extends Mage_Catalog_Model_Convert
         $product->setIsMassupdate(true);
         $product->setExcludeUrlRewrite(true);
 
-	 //force save description
-         $product->setDescription($importData'description']);
-
+	 	//force save description
+        $product->setDescription($importData['description']);
 
         $product->save();
 
