@@ -20,8 +20,9 @@ class Harapartners_Fulfillmentfactory_Helper_Dotcom extends Mage_Core_Helper_Abs
 	protected static $_apiUrl = '';
 	
 	protected function _getConfig() {
+		//Please see System->Configuration->Sales->Order Fulfillment Settings
 		self::$_apiKey = Mage::getStoreConfig('fulfillmentfactory_options/dotcom_setting/fulfillment_dotcom_api_key');
-		self::$_apiPassword = Mage::getStoreConfig('fulfillmentfactory_options/dotcom_setting/fulfillment_dotcom_$_apiPassword');
+		self::$_apiPassword = Mage::getStoreConfig('fulfillmentfactory_options/dotcom_setting/fulfillment_dotcom_api_password');
 		self::$_apiUrl = Mage::getStoreConfig('fulfillmentfactory_options/dotcom_setting/fulfillment_dotcom_api_base_url');
 		
 		//for default testing environment
