@@ -28,7 +28,7 @@ echo 'Processing START: ' . PHP_EOL;
 $importCount = 1;
 foreach($orderDataArray as $legacyOrderId => $orderData){
 	try{
-		if($importCount % 10 == 0){
+		if($importCount % 20 == 0){
 			echo 'Processing order #' . $importCount . PHP_EOL;
 		}
 		placeOrder($orderData);
@@ -100,9 +100,14 @@ function getOrderDataArray(){
 
 // ========== ORDER PLACEMENT ========== //
 function placeOrder($orderData){
+	$orderObj = $orderData['order'];
+	$order = Mage::getModel('sales/order')->loadByIncrementId($orderObj->getData('legacy_order_id'));
+	if(!!$order && !!$order->getId()){
+		throw new Exception('Order already exists! ' . $orderObj->getData('legacy_order_id'));
+	}
+	
 	$quote = Mage::getModel('sales/quote');
 	
-	$orderObj = $orderData['order'];
 	$customerEmail = $orderObj->getData('customer_email');
 	$customer = Mage::getModel('customer/customer')->setWebsiteId(1)->loadByEmail($customerEmail);
 	if(!$customer || !$customer->getId()){
@@ -159,4 +164,6 @@ function placeOrder($orderData){
 	       
 	$service = Mage::getModel('sales/service_quote', $quote);
 	$service->submitAll();
+	$order = $service->getOrder();
+	$order->setIncrementId($orderObj->getData('legacy_order_id'))->save();
 }
