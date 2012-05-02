@@ -418,4 +418,16 @@
             </marketing>
         </menu>
     </adminhtml>
+	<crontab>
+        <jobs>
+            <service_clean_cache_after_sort_rebuild>
+                <schedule>
+                    <cron_expr>15 3 * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>service/service::cleanCacheAfterSortRebuild</model>
+                </run>
+            </service_clean_cache_after_sort_rebuild>
+        </jobs>
+    </crontab>
 </config>
