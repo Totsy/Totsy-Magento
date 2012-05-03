@@ -39,7 +39,8 @@ class Harapartners_Service_Model_Rewrite_Catalog_Category extends Mage_Catalog_M
 			throw new Exception('"' . Harapartners_Categoryevent_Model_Sortentry::TOP_EVENT_CATEGORY_NAME . '" is a reserved anchor category. You cannot modify the "' . Harapartners_Categoryevent_Model_Sortentry::TOP_EVENT_CATEGORY_NAME . '" category or create another category with the same name. Please contact system admin if you need to make low level modifications.');
 		}
 		
-		if($this->getData('level') <= 1 || $this->getOrigData('level') <= 1){
+		if((!!$this->getData('level') && $this->getData('level') <= 1) 
+				|| (!!$this->getData('level') && $this->getOrigData('level') <= 1)){
 			throw new Exception('Root level categories are protected. Please contact system admin if you need to make low level modifications.');
 		}
 		
