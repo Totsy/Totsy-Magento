@@ -142,6 +142,14 @@ class Harapartners_Categoryevent_Model_Sortentry extends Mage_Core_Model_Abstrac
 	    		$liveOriginal = json_decode($latestRecord->getData('live_queue'), true);
 	    		$upComingOriginal = json_decode($latestRecord->getData('upcoming_queue'), true);
 	    		
+	    		if(!$liveOriginal){
+	    			$liveOriginal = array();
+	    		}
+	    		
+	    		if(!$upComingOriginal){
+	    			$upComingOriginal = array();
+	    		}
+	    		
 			    //update live queue
 			   	foreach ( $liveOriginal as $live ){
 			   		if ( in_array($live, $liveNew) ){
