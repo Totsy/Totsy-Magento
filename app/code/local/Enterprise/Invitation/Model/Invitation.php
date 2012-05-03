@@ -154,7 +154,7 @@ class Enterprise_Invitation_Model_Invitation extends Mage_Core_Model_Abstract
             if (!(int)$this->getStoreId()) {
                 throw new Mage_Core_Exception(Mage::helper('enterprise_invitation')->__('Wrong store specified.'), self::ERROR_INVALID_DATA);
             }
-            $this->makeSureCustomerNotExists();
+            //$this->makeSureCustomerNotExists();
         }
         else {
             if ($this->dataHasChangedFor('message') && !$this->canMessageBeUpdated()) {
