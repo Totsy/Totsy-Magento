@@ -12,6 +12,9 @@
  * 
  */
 
+echo 'code obsolete, moved to /dev/orderimport/ folder;';
+exit;
+
 ini_set('memory_limit', '3G');
 ini_set('max_input_time', 0);
 require_once '../app/Mage.php';	  	  
