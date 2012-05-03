@@ -16,6 +16,7 @@ class Harapartners_Service_Model_Rewrite_Salesrule_Quote_Discount extends Mage_S
 
     public function collect(Mage_Sales_Model_Quote_Address $address) {
 <<<<<<< HEAD
+<<<<<<< HEAD
         $quote = $address->getQuote();
         $couponCode = $quote->getCouponCode();//may be a pseudo code, or a real code
         $groupcoupon = Mage::getModel('promotionfactory/groupcoupon')->loadByPseudoCode($couponCode);
@@ -33,6 +34,8 @@ class Harapartners_Service_Model_Rewrite_Salesrule_Quote_Discount extends Mage_S
         }
         return $this;
 =======
+=======
+>>>>>>> d5f275b17e2e184bbff9e84348520de3b141b4eb
     	
     	//Important logic for importing legacy orders, only apply to the correponding address once!
 		if(is_numeric(Mage::registry('order_import_discount_amount'))){
@@ -62,19 +65,22 @@ class Harapartners_Service_Model_Rewrite_Salesrule_Quote_Discount extends Mage_S
     		$quote->setCouponCode($couponCode);
     	}
 		return $this;
+<<<<<<< HEAD
 >>>>>>> hp
+=======
+>>>>>>> d5f275b17e2e184bbff9e84348520de3b141b4eb
     }
     
-    public function _updateAddressDescription($groupcoupon, $address, $separator=', '){
-        $description = $address->getDiscountDescriptionArray();
+	public function _updateAddressDescription($groupcoupon, $address, $separator=', '){
+    	$description = $address->getDiscountDescriptionArray();
         if (is_array($description) && !empty($description)) {
             $description = array_unique($description);
-            foreach($description as &$desciptionEntry){
-                if($desciptionEntry == $groupcoupon->getCode()){
-                    $desciptionEntry = $groupcoupon->getPseudoCode();
-                    break;
-                }
-            }
+        	foreach($description as &$desciptionEntry){
+	    		if($desciptionEntry == $groupcoupon->getCode()){
+	    			$desciptionEntry = $groupcoupon->getPseudoCode();
+	    			break;
+	    		}
+	    	}
             $description = implode(', ', $description);
         } else {
             $description = '';

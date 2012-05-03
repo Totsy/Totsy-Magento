@@ -12,6 +12,7 @@
  */
 class Harapartners_Service_Model_Rewrite_Sales_Quote_Address_Total_Tax extends Mage_Sales_Model_Quote_Address_Total_Abstract {
 <<<<<<< HEAD
+<<<<<<< HEAD
     
     protected $_address = null;
     
@@ -90,6 +91,8 @@ class Harapartners_Service_Model_Rewrite_Sales_Quote_Address_Total_Tax extends M
         return $this;
     }
 =======
+=======
+>>>>>>> d5f275b17e2e184bbff9e84348520de3b141b4eb
 	
 	protected $_address = null;
 	
@@ -175,5 +178,8 @@ class Harapartners_Service_Model_Rewrite_Sales_Quote_Address_Total_Tax extends M
 				'area' => null ) );
 		return $this;
 	}
+<<<<<<< HEAD
 >>>>>>> hp
+=======
+>>>>>>> d5f275b17e2e184bbff9e84348520de3b141b4eb
 }
