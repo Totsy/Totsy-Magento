@@ -12,10 +12,10 @@
  * 
  */
 
-class Harapartners_affiliate_Block_Adminhtml_Record_Edit extends Mage_Adminhtml_Block_Widget_Form_Container {	
-	
-	public function __construct(){
-    	parent::__construct();
+class Harapartners_affiliate_Block_Adminhtml_Record_Edit extends Mage_Adminhtml_Block_Widget_Form_Container {    
+    
+    public function __construct(){
+        parent::__construct();
 
         $this->_objectId = 'affiliate_id';
         $this->_blockGroup = 'affiliate';

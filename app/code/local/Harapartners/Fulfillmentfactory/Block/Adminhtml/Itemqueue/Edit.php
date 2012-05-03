@@ -10,10 +10,10 @@
  * to eula@harapartners.com so we can send you a copy immediately.
  * 
  */
-class Harapartners_Fulfillmentfactory_Block_Adminhtml_Itemqueue_Edit extends Mage_Adminhtml_Block_Widget_Form_Container {	
-	
-	public function __construct(){
-    	parent::__construct();
+class Harapartners_Fulfillmentfactory_Block_Adminhtml_Itemqueue_Edit extends Mage_Adminhtml_Block_Widget_Form_Container {    
+    
+    public function __construct(){
+        parent::__construct();
 
         $this->_objectId = 'itemqueue_id';
         $this->_blockGroup = 'fulfillmentfactory';

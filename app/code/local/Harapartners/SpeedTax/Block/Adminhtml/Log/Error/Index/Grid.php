@@ -20,7 +20,7 @@ class Harapartners_SpeedTax_Block_Adminhtml_Log_Error_Index_Grid extends Mage_Ad
     protected function _prepareCollection(){
         $model = Mage::getModel('speedtax/log_error');
         $collection = $model->getCollection();
-		$this->setCollection($collection);
+        $this->setCollection($collection);
         parent::_prepareCollection();
         return $this;
     }
@@ -43,15 +43,15 @@ class Harapartners_SpeedTax_Block_Adminhtml_Log_Error_Index_Grid extends Mage_Ad
             'align'         => 'center',
             'width'         => '50px',
             'index'         => 'event',
-       		'type'			=> 'text'
+               'type'            => 'text'
         ));
      
-		$this->addColumn('result_type', array(
+        $this->addColumn('result_type', array(
             'header'        => Mage::helper('speedtax')->__('Result Type'),
             'align'         => 'center',
             'width'         => '50px',
             'index'         => 'result_type',
-        	'type'			=> 'text'
+            'type'            => 'text'
         ));
         
         $this->addColumn('message', array(
@@ -59,7 +59,7 @@ class Harapartners_SpeedTax_Block_Adminhtml_Log_Error_Index_Grid extends Mage_Ad
             'align'         => 'center',
             'width'         => '50px',
             'index'         => 'message',
-        	'type'			=> 'text'
+            'type'            => 'text'
         ));
         
         $this->addColumn('address_shipping_from', array(
@@ -67,7 +67,7 @@ class Harapartners_SpeedTax_Block_Adminhtml_Log_Error_Index_Grid extends Mage_Ad
             'align'         => 'center',
             'width'         => '50px',
             'index'         => 'address_shipping_from',
-        	'type'			=> 'text'
+            'type'            => 'text'
         ));
         
         $this->addColumn('address_shipping_to', array(
@@ -75,7 +75,7 @@ class Harapartners_SpeedTax_Block_Adminhtml_Log_Error_Index_Grid extends Mage_Ad
             'align'         => 'center',
             'width'         => '50px',
             'index'         => 'address_shipping_to',
-        	'type'			=> 'text'
+            'type'            => 'text'
         ));
         
         $this->addColumn('customer_name', array(
@@ -83,7 +83,7 @@ class Harapartners_SpeedTax_Block_Adminhtml_Log_Error_Index_Grid extends Mage_Ad
             'align'         => 'center',
             'width'         => '50px',
             'index'         => 'customer_name',
-        	'type'			=> 'text'
+            'type'            => 'text'
         ));
         
        $this->addColumn('created_at', array(
@@ -91,8 +91,8 @@ class Harapartners_SpeedTax_Block_Adminhtml_Log_Error_Index_Grid extends Mage_Ad
             'align'         => 'center',
             'width'         => '150px',
             'index'         => 'created_at',
-        	'type'      	=> 'datetime',
-            'gmtoffset' 	=> true
+            'type'          => 'datetime',
+            'gmtoffset'     => true
         ));
         
         $this->addExportType('*/*/exportCsv', Mage::helper('speedtax')->__('CSV'));
@@ -103,8 +103,8 @@ class Harapartners_SpeedTax_Block_Adminhtml_Log_Error_Index_Grid extends Mage_Ad
 
     public function getRowUrl($row){
         return $this->getUrl('*/*/edit', array(
-	            'store'=>$this->getRequest()->getParam('store'),
-	            'id'=>$row->getId()
+                'store'=>$this->getRequest()->getParam('store'),
+                'id'=>$row->getId()
         ));
     }
     

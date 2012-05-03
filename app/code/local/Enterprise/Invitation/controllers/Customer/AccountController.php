@@ -204,78 +204,78 @@ class Enterprise_Invitation_Customer_AccountController extends Mage_Customer_Acc
     }
     
     //Harapartners, Jun
-	public function genericCreateAction()
+    public function genericCreateAction()
     {
-    	if ($this->getRequest()->getParam('product')) {
-	    	$product = Mage::getModel('catalog/product')->load($this->getRequest()->getParam('product'));
-	    	Mage::getSingleton('core/session')->setData('redirect_product', $product);
-	    	if (!Mage::registry('current_invitation')) {
-	    		Mage::register('current_invitation', Mage::getModel('enterprise_invitation/invitation'));
-	    	}
-	    	if (!Mage::registry('is_generic_invitation')) {
-	    		Mage::register('is_generic_invitation', true);
-	    	}
-	    	$this->_forward('create');
-    	}
-    	else {
-	    	if (!Mage::registry('current_invitation')) {
-	    		Mage::register('current_invitation', Mage::getModel('enterprise_invitation/invitation'));
-	    	}
-	    	if (!Mage::registry('is_generic_invitation')) {
-	    		Mage::register('is_generic_invitation', true);
-	    	}
-	    	$this->_forward('create');
-    	}
+        if ($this->getRequest()->getParam('product')) {
+            $product = Mage::getModel('catalog/product')->load($this->getRequest()->getParam('product'));
+            Mage::getSingleton('core/session')->setData('redirect_product', $product);
+            if (!Mage::registry('current_invitation')) {
+                Mage::register('current_invitation', Mage::getModel('enterprise_invitation/invitation'));
+            }
+            if (!Mage::registry('is_generic_invitation')) {
+                Mage::register('is_generic_invitation', true);
+            }
+            $this->_forward('create');
+        }
+        else {
+            if (!Mage::registry('current_invitation')) {
+                Mage::register('current_invitation', Mage::getModel('enterprise_invitation/invitation'));
+            }
+            if (!Mage::registry('is_generic_invitation')) {
+                Mage::register('is_generic_invitation', true);
+            }
+            $this->_forward('create');
+        }
     }
     
     public function genericCreatePostAction()
     {
-    	//create a invitation here
-    	$param = $this->getRequest()->getParams();
-    	$customerSession = Mage::getSingleton('customer/session');
-    	$inviterCustomerId = null;
-    	
-   		try{
-   			$customerInfo = array();
-   			if(isset($param['invitation'])){
-   				$customerId = Mage::helper( 'enterprise_invitation' )->getInviterId( $param[ 'invitation' ] );
-   			}
-   		}catch(Exception $e){
-   			$customerSession->addError('Invalid invitation key');
-   			$this->_redirect('customer/account/create');
-   			return;
-   		}
+        //create a invitation here
+        $param = $this->getRequest()->getParams();
+        $customerSession = Mage::getSingleton('customer/session');
+        $inviterCustomerId = null;
+        
+           try{
+               $customerInfo = array();
+               if(isset($param['invitation'])){
+                   $customerId = Mage::helper( 'enterprise_invitation' )->getInviterId( $param[ 'invitation' ] );
+               }
+           }catch(Exception $e){
+               $customerSession->addError('Invalid invitation key');
+               $this->_redirect('customer/account/create');
+               return;
+           }
 
-   		//$customer = Mage::getModel('customer/customer')->load($customerInfo['id']);
-   		$customer = Mage::getModel('customer/customer')->load($customerId);
-   		
-   		if(!$customer->getId()){
-   			$customerSession->addError('Unknown inviter.');
-   			$this->_redirect('customer/account/create');
-   			return;
-   		}    	
-    	
-   		try{
-	    	$invitation = Mage::getModel('enterprise_invitation/invitation');
-	    	$invitation->setData(array(
-	                        'email'    => $param['email'],
-	                        'customer' => $customer,
-	                        'message'  => ''
-	    	));
-	    	$invitation->save();
-   		}catch(Exception $e){
-   			$customerSession->addError('Invalid invitation.');
-   			$this->_redirect('customer/account/create');
-   			return;
-   		}
-   		
-    	if (!Mage::registry('current_invitation')) {
-    		Mage::register('current_invitation', $invitation);
-    	}
-    	if (!Mage::registry('is_generic_invitation')) {
-    		Mage::register('is_generic_invitation', true);
-    	}
-    	$this->_forward('createpost');
+           //$customer = Mage::getModel('customer/customer')->load($customerInfo['id']);
+           $customer = Mage::getModel('customer/customer')->load($customerId);
+           
+           if(!$customer->getId()){
+               $customerSession->addError('Unknown inviter.');
+               $this->_redirect('customer/account/create');
+               return;
+           }        
+        
+           try{
+            $invitation = Mage::getModel('enterprise_invitation/invitation');
+            $invitation->setData(array(
+                            'email'    => $param['email'],
+                            'customer' => $customer,
+                            'message'  => ''
+            ));
+            $invitation->save();
+           }catch(Exception $e){
+               $customerSession->addError('Invalid invitation.');
+               $this->_redirect('customer/account/create');
+               return;
+           }
+           
+        if (!Mage::registry('current_invitation')) {
+            Mage::register('current_invitation', $invitation);
+        }
+        if (!Mage::registry('is_generic_invitation')) {
+            Mage::register('is_generic_invitation', true);
+        }
+        $this->_forward('createpost');
     }
     //Harapartners, Jun
 }

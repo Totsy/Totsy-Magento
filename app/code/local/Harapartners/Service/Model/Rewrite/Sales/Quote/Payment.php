@@ -14,16 +14,16 @@
 
 class Harapartners_Service_Model_Rewrite_Sales_Quote_Payment extends Mage_Sales_Model_Quote_Payment {
     
-	public function importData(array $data, $shouldCollectTotal = true){
-		if( isset( $data ) && isset( $data[ 'cybersource_subid' ] ) && !! $data[ 'cybersource_subid' ] ) {
-			return $this->importDataWithToken($data, $shouldCollectTotal);
+    public function importData(array $data, $shouldCollectTotal = true){
+        if( isset( $data ) && isset( $data[ 'cybersource_subid' ] ) && !! $data[ 'cybersource_subid' ] ) {
+            return $this->importDataWithToken($data, $shouldCollectTotal);
         }else{
-        	return parent::importData($data);
+            return parent::importData($data);
         }
     }
          
     public function importDataWithToken(array $data, $shouldCollectTotal = true){
-    	$data = new Varien_Object($data);
+        $data = new Varien_Object($data);
         Mage::dispatchEvent(
             $this->_eventPrefix . '_import_data_before',
             array(
@@ -36,7 +36,7 @@ class Harapartners_Service_Model_Rewrite_Sales_Quote_Payment extends Mage_Sales_
         $method = $this->getMethodInstance();
 
         if($shouldCollectTotal){
-        	$this->getQuote()->collectTotals();
+            $this->getQuote()->collectTotals();
         }
 
         if (!$method->isAvailable($this->getQuote())) {
@@ -46,7 +46,7 @@ class Harapartners_Service_Model_Rewrite_Sales_Quote_Payment extends Mage_Sales_
         //Special logic for tokenized payments, decrypt if necessary
         $subscriptionId = $this->_decryptSubscriptionId($data->getData('cybersource_subid'));
         $this->setData('cybersource_subid', $subscriptionId);
-	    $method->setData('cybersource_subid', $subscriptionId);
+        $method->setData('cybersource_subid', $subscriptionId);
         
         /*
         * validating the payment data
@@ -56,14 +56,14 @@ class Harapartners_Service_Model_Rewrite_Sales_Quote_Payment extends Mage_Sales_
     }
     
     protected function _decryptSubscriptionId($subId){
-    	try{
-    		$testSubId = Mage::getModel('core/encryption')->decrypt(base64_decode($subId));
-    		if(is_numeric($testSubId)){
-    			$subId = $testSubId;
-    		}
-    	}catch (Exception $e){
-    	}
-    	return $subId;
+        try{
+            $testSubId = Mage::getModel('core/encryption')->decrypt(base64_decode($subId));
+            if(is_numeric($testSubId)){
+                $subId = $testSubId;
+            }
+        }catch (Exception $e){
+        }
+        return $subId;
     }
-	
+    
 }

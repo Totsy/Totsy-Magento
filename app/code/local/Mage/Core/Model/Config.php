@@ -956,16 +956,16 @@ class Mage_Core_Model_Config extends Mage_Core_Model_Config_Base
                 }
                 
                 foreach ($fileName as $configFile) {
-                	
-                	//Harapartners, Jun: powful overwrites, all modules look for local files first!
-                	//$this->_canUseLocalModules() is checked within getModuleDirInLocal function
-                	if(!!($localPath = $this->getModuleDirInLocal('etc', $modName))
-                			&& is_readable($localPath.DS.$configFile)){
-                		$configFile = $localPath.DS.$configFile;
-                	}else{
-                		$configFile = $this->getModuleDir('etc', $modName).DS.$configFile;
-                	}
-                	
+                    
+                    //Harapartners, Jun: powful overwrites, all modules look for local files first!
+                    //$this->_canUseLocalModules() is checked within getModuleDirInLocal function
+                    if(!!($localPath = $this->getModuleDirInLocal('etc', $modName))
+                            && is_readable($localPath.DS.$configFile)){
+                        $configFile = $localPath.DS.$configFile;
+                    }else{
+                        $configFile = $this->getModuleDir('etc', $modName).DS.$configFile;
+                    }
+                    
                     if ($mergeModel->loadFile($configFile)) {
                         $mergeToObject->extend($mergeModel, true);
                     }
@@ -1150,11 +1150,11 @@ class Mage_Core_Model_Config extends Mage_Core_Model_Config_Base
     }
     
     //Harapartners, Jun: powful overwrites, all modules look for local files first!
-	public function getModuleDirInLocal($type, $moduleName){
-		if(!$this->_canUseLocalModules()){
-			return null;
-		}
-		
+    public function getModuleDirInLocal($type, $moduleName){
+        if(!$this->_canUseLocalModules()){
+            return null;
+        }
+        
         $codePool = 'local';
         $dir = $this->getOptions()->getCodeDir().DS.$codePool.DS.uc_words($moduleName, DS);
 

@@ -18,7 +18,7 @@ $installer->startSetup();
 $installer->run("
 
 ALTER TABLE {$this->getTable('stockhistory/transaction')}
-	ADD `vendor_style` varchar(255) NOT NULL default '' AFTER `product_sku`;
+    ADD `vendor_style` varchar(255) NOT NULL default '' AFTER `product_sku`;
 ");
 
 $installer->endSetup();

@@ -46,7 +46,7 @@ class Enterprise_Invitation_Block_Customer_Form_Register extends Mage_Customer_B
             $data = new Varien_Object($customerFormData);
             if (empty($customerFormData)) {
                 $invitation = $this->getCustomerInvitation();
-				//$data = $invitation;
+                //$data = $invitation;
                 if ($invitation->getId()) {
                     // check, set invitation email
                     $data->setEmail($invitation->getEmail());
@@ -65,11 +65,11 @@ class Enterprise_Invitation_Block_Customer_Form_Register extends Mage_Customer_B
      */
     public function getPostActionUrl()
     {
-    	if(!!Mage::registry('is_generic_invitation')){
-    		return $this->getUrl('*/*/genericcreatepost', array('_current'=>true));
-    	}else{
-        	return $this->getUrl('*/*/createpost', array('_current'=>true));
-    	}
+        if(!!Mage::registry('is_generic_invitation')){
+            return $this->getUrl('*/*/genericcreatepost', array('_current'=>true));
+        }else{
+            return $this->getUrl('*/*/createpost', array('_current'=>true));
+        }
     }
 
     /**
@@ -91,7 +91,7 @@ class Enterprise_Invitation_Block_Customer_Form_Register extends Mage_Customer_B
             $data = new Varien_Object($customerFormData);
             if (empty($customerFormData)) {
                 $invitation = $this->getCustomerInvitation();
-				$data = $invitation;
+                $data = $invitation;
             }
             $this->setData('form_data', $data);
         }

@@ -23,12 +23,12 @@ class Harapartners_Affiliate_Block_Adminhtml_Record_Index_Grid extends Mage_Admi
         $model = Mage::getModel('affiliate/record');
         $collection = $model->getCollection();
 //        foreach ($collection->getAllItems() as $item) {
-//        	$trackingCode = json_decode($item->getTrackingCode(),true);
-//        	if(isset($trackingCode['code']) && !!$trackingCode['code']){
-//        		$item->setCode($trackingCode['code']);
-//        	}       	
+//            $trackingCode = json_decode($item->getTrackingCode(),true);
+//            if(isset($trackingCode['code']) && !!$trackingCode['code']){
+//                $item->setCode($trackingCode['code']);
+//            }           
 //        }        
-		$this->setCollection($collection);
+        $this->setCollection($collection);
         parent::_prepareCollection();
         return $this;
     }
@@ -39,8 +39,8 @@ class Harapartners_Affiliate_Block_Adminhtml_Record_Index_Grid extends Mage_Admi
     }
 
     protected function _prepareColumns(){
-    	$affilicateHelper = Mage::helper('affiliate');    
-		$this->addColumn('affiliate_id', array(
+        $affilicateHelper = Mage::helper('affiliate');    
+        $this->addColumn('affiliate_id', array(
             'header'        => $affilicateHelper->__('Affiliate ID'),
             'align'         => 'center',
             'width'         => '50px',
@@ -63,7 +63,7 @@ class Harapartners_Affiliate_Block_Adminhtml_Record_Index_Grid extends Mage_Admi
             'align'         => 'right',
             'width'         => '50px',
             'index'         => 'type',
-        	'type'			=> 'options',
+            'type'            => 'options',
             'options' => $affilicateHelper->getGridTypeArray()
         ));
         $this->addColumn('status', array(
@@ -71,35 +71,35 @@ class Harapartners_Affiliate_Block_Adminhtml_Record_Index_Grid extends Mage_Admi
             'align'         => 'right',
             'width'         => '50px',
             'index'         => 'status',
-        	'type'			=> 'options',
+            'type'            => 'options',
             'options' => $affilicateHelper->getGridStatusArray()
         ));
-		$this->addColumn('created_at', array(
+        $this->addColumn('created_at', array(
             'header'        => $affilicateHelper->__('Created At'),
             'align'         => 'center',
             'width'         => '100px',
             'index'         => 'created_at',
-        	'type'      	=> 'datetime',
-            'gmtoffset' 	=> true
+            'type'          => 'datetime',
+            'gmtoffset'     => true
         ));   
-		$this->addColumn('updated_at', array(
+        $this->addColumn('updated_at', array(
             'header'        => $affilicateHelper->__('Updated At'),
             'align'         => 'center',
             'width'         => '100px',
             'index'         => 'updated_at',
-        	'type'      	=> 'datetime',
-            'gmtoffset' 	=> true
+            'type'          => 'datetime',
+            'gmtoffset'     => true
         ));        
         
-		$this->addExportType('*/*/exportCsv', $affilicateHelper->__('CSV'));
-  		$this->addExportType('*/*/exportXml', $affilicateHelper->__('XML'));
+        $this->addExportType('*/*/exportCsv', $affilicateHelper->__('CSV'));
+          $this->addExportType('*/*/exportXml', $affilicateHelper->__('XML'));
       return parent::_prepareColumns();
     }
 
     public function getRowUrl($row){
         return $this->getUrl('*/*/edit', array(
-	            'store'=>$this->getRequest()->getParam('store'),
-	            'id'=>$row->getId()
+                'store'=>$this->getRequest()->getParam('store'),
+                'id'=>$row->getId()
         ));
     }
     

@@ -17,191 +17,191 @@
         </Harapartners_Service>
     </modules>
     <global>
-		<rewrite>
-			<!--Important Landing Page Rewrite, Complete! -->
-			<landing_page>
-				<from><![CDATA[#^/$#]]></from>
-				<to><![CDATA[/event/index/index/]]></to>
-				<complete>1</complete>
-			</landing_page>
-			<hpcheckout_checkout>
-				<from><![CDATA[#^/checkout/onepage.*#]]></from>
-				<to><![CDATA[/hpcheckout/checkout/]]></to>
-				<complete>1</complete>
-			</hpcheckout_checkout>
-		</rewrite>
-		<blocks>
-			<service>
-				<class>Harapartners_Service_Block</class>
-			</service>
-			<!-- ===== BLOCK REWRITE START ===== -->
-			<adminhtml>
-				<rewrite>
-					<!--[Note] Moved: Harapartners_Service: widget_form 'datetime' support with Varien_Data_Form_Element_Datetime -->
-					
-					<!--Harapartners_Service: login counter disabled (not editable) in the admin panel -->
-					<customer_edit_tab_account>Harapartners_Service_Block_Rewrite_Adminhtml_Customer_Edit_Tab_Account</customer_edit_tab_account>
-					<!--Harapartners_Service: allow admin harapartner theme -->
-					<page>Harapartners_Service_Block_Rewrite_Adminhtml_Page</page>
-					<!--Harapartners_Service: avoid reporting the complete history (ignore unvalidated historical data) -->
-					<report_refresh_statistics_grid>Harapartners_Service_Block_Rewrite_Adminhtml_Report_Refresh_Statistics_Grid</report_refresh_statistics_grid>
-					<!--Harapartners_Categoryevent -->
-					<catalog_category_edit_form>Harapartners_Service_Block_Rewrite_Adminhtml_Catalog_Category_Edit_Form</catalog_category_edit_form>
-					<!--Harapartners_Service: adding root category is NOT allowed -->
-					<catalog_category_tree>Harapartners_Service_Block_Rewrite_Adminhtml_Catalog_Category_Tree</catalog_category_tree>
-					<!--Harapartners_Service: disable admin setting custoemr password-->
-					<customer_edit_renderer_newpass>Harapartners_Service_Block_Rewrite_Adminhtml_Customer_Edit_Renderer_Newpass</customer_edit_renderer_newpass>
-					<!--Harapartners_Service: sku disabled (not editable) in the admin panel -->
-					<catalog_product_edit_tab_attributes>Harapartners_Service_Block_Rewrite_Adminhtml_Catalog_Product_Edit_Tab_Attributes</catalog_product_edit_tab_attributes>
-				</rewrite>
-			</adminhtml>
-			<checkout>
-				<rewrite>
-					<!--Harapartners_Hpcheckout-->
-					<links>Harapartners_Service_Block_Rewrite_Checkout_Links</links>
-					<!--Harapartners_SpeedTax-->
-					<onepage_shipping_method_available>Harapartners_Service_Block_Rewrite_Checkout_Onepage_Shipping_Method_Available</onepage_shipping_method_available>
-				</rewrite>
-			</checkout>
-			<page>
+        <rewrite>
+            <!--Important Landing Page Rewrite, Complete! -->
+            <landing_page>
+                <from><![CDATA[#^/$#]]></from>
+                <to><![CDATA[/event/index/index/]]></to>
+                <complete>1</complete>
+            </landing_page>
+            <hpcheckout_checkout>
+                <from><![CDATA[#^/checkout/onepage.*#]]></from>
+                <to><![CDATA[/hpcheckout/checkout/]]></to>
+                <complete>1</complete>
+            </hpcheckout_checkout>
+        </rewrite>
+        <blocks>
+            <service>
+                <class>Harapartners_Service_Block</class>
+            </service>
+            <!-- ===== BLOCK REWRITE START ===== -->
+            <adminhtml>
                 <rewrite>
-					<!--Harapartners_EmailFactory-->
+                    <!--[Note] Moved: Harapartners_Service: widget_form 'datetime' support with Varien_Data_Form_Element_Datetime -->
+                    
+                    <!--Harapartners_Service: login counter disabled (not editable) in the admin panel -->
+                    <customer_edit_tab_account>Harapartners_Service_Block_Rewrite_Adminhtml_Customer_Edit_Tab_Account</customer_edit_tab_account>
+                    <!--Harapartners_Service: allow admin harapartner theme -->
+                    <page>Harapartners_Service_Block_Rewrite_Adminhtml_Page</page>
+                    <!--Harapartners_Service: avoid reporting the complete history (ignore unvalidated historical data) -->
+                    <report_refresh_statistics_grid>Harapartners_Service_Block_Rewrite_Adminhtml_Report_Refresh_Statistics_Grid</report_refresh_statistics_grid>
+                    <!--Harapartners_Categoryevent -->
+                    <catalog_category_edit_form>Harapartners_Service_Block_Rewrite_Adminhtml_Catalog_Category_Edit_Form</catalog_category_edit_form>
+                    <!--Harapartners_Service: adding root category is NOT allowed -->
+                    <catalog_category_tree>Harapartners_Service_Block_Rewrite_Adminhtml_Catalog_Category_Tree</catalog_category_tree>
+                    <!--Harapartners_Service: disable admin setting custoemr password-->
+                    <customer_edit_renderer_newpass>Harapartners_Service_Block_Rewrite_Adminhtml_Customer_Edit_Renderer_Newpass</customer_edit_renderer_newpass>
+                    <!--Harapartners_Service: sku disabled (not editable) in the admin panel -->
+                    <catalog_product_edit_tab_attributes>Harapartners_Service_Block_Rewrite_Adminhtml_Catalog_Product_Edit_Tab_Attributes</catalog_product_edit_tab_attributes>
+                </rewrite>
+            </adminhtml>
+            <checkout>
+                <rewrite>
+                    <!--Harapartners_Hpcheckout-->
+                    <links>Harapartners_Service_Block_Rewrite_Checkout_Links</links>
+                    <!--Harapartners_SpeedTax-->
+                    <onepage_shipping_method_available>Harapartners_Service_Block_Rewrite_Checkout_Onepage_Shipping_Method_Available</onepage_shipping_method_available>
+                </rewrite>
+            </checkout>
+            <page>
+                <rewrite>
+                    <!--Harapartners_EmailFactory-->
                     <html_head>Harapartners_Service_Block_Rewrite_Page_Html_Head</html_head>
                 </rewrite>
             </page>
-			<enterprise_reward>
-				<rewrite>
-					<!--Harapartners_For_MANDATORY_Comment-->
-					<adminhtml_customer_edit_tab_reward_management_update>Harapartners_Service_Block_Rewrite_Reward_Adminhtml_Customer_Edit_Tab_Reward_Management_Update</adminhtml_customer_edit_tab_reward_management_update>
-					<customer_account>Harapartners_Service_Block_Rewrite_Reward_Customer_Account</customer_account>
-				</rewrite>
-			</enterprise_reward>
-			<!-- ===== BLOCK REWRITE END ===== -->
-		</blocks>
+            <enterprise_reward>
+                <rewrite>
+                    <!--Harapartners_For_MANDATORY_Comment-->
+                    <adminhtml_customer_edit_tab_reward_management_update>Harapartners_Service_Block_Rewrite_Reward_Adminhtml_Customer_Edit_Tab_Reward_Management_Update</adminhtml_customer_edit_tab_reward_management_update>
+                    <customer_account>Harapartners_Service_Block_Rewrite_Reward_Customer_Account</customer_account>
+                </rewrite>
+            </enterprise_reward>
+            <!-- ===== BLOCK REWRITE END ===== -->
+        </blocks>
         <helpers>
             <service>
-            	<class>Harapartners_Service_Helper</class>
+                <class>Harapartners_Service_Helper</class>
             </service>
-			<catalog>
+            <catalog>
                 <rewrite>
-					<!--Harapartners_Service: do NOT allow category view if expired!-->
-					<category>Harapartners_Service_Helper_Rewrite_Catalog_Category</category>
-					<!--Harapartners_Service: do NOT allow product view without category!-->
+                    <!--Harapartners_Service: do NOT allow category view if expired!-->
+                    <category>Harapartners_Service_Helper_Rewrite_Catalog_Category</category>
+                    <!--Harapartners_Service: do NOT allow product view without category!-->
                     <product>Harapartners_Service_Helper_Rewrite_Catalog_Product</product>
                 </rewrite>
             </catalog>
         </helpers>
-		<models>
+        <models>
             <service>
                 <class>Harapartners_Service_Model</class>
             </service>
-			<!-- ===== MODEL REWRITE START ===== -->
-			<catalog>
-				<rewrite>
-					<!--Admin panel, Events and Top Events are immutable-->
-					<category>Harapartners_Service_Model_Rewrite_Catalog_Category</category>
-					<!--Harapartners_Import: Important logic to prevent cleaning cache and indexing for each product save.-->
-					<product>Harapartners_Service_Model_Rewrite_Catalog_Product</product>
-					<!--Harapartners_Import: Core logic parsing data -->
-					<convert_adapter_product>Harapartners_Service_Model_Rewrite_Catalog_Convert_Adapter_Product</convert_adapter_product>
-				</rewrite>
-			</catalog>
-			<cataloginventory>
-				<rewrite>
-					<!--Harapartner_Service: Product of the same ID (conf. with different super attr. or simple with differnt options) share the same limit!--> 
-					<!--Harapartners_Rushcheckout: Successful checkout results in stock reservation cancel.-->
-					<observer>Harapartners_Service_Model_Rewrite_CatalogInventory_Observer</observer>
-				</rewrite>
-			</cataloginventory>
-			<cataloginventory_resource>
-				<rewrite>
-					<!--Harapartners_Rushcheckout: Batch update without saving 'stock_item' object, must sync with status (cart reservation for Totsy)--> 
-					<stock>Harapartners_Service_Model_Rewrite_CatalogInventory_Resource_Stock</stock>
-				</rewrite>
-			</cataloginventory_resource>
-			<checkout>
-				<rewrite>
-					<!--Harapartners_HpCheckout--><!--Harapartners_Rushcheckout: Timer and quote item removal-->
-					<session>Harapartners_Service_Model_Rewrite_Checkout_Session</session>
-					<!--Harapartners_SpeedTax-->
-					<type_multishipping>Harapartners_Service_Model_Rewrite_Checkout_Type_Multishipping</type_multishipping>
-				</rewrite>
-			</checkout>
-			<core>
+            <!-- ===== MODEL REWRITE START ===== -->
+            <catalog>
                 <rewrite>
-					<!--Harapartners_EmailFactory-->
+                    <!--Admin panel, Events and Top Events are immutable-->
+                    <category>Harapartners_Service_Model_Rewrite_Catalog_Category</category>
+                    <!--Harapartners_Import: Important logic to prevent cleaning cache and indexing for each product save.-->
+                    <product>Harapartners_Service_Model_Rewrite_Catalog_Product</product>
+                    <!--Harapartners_Import: Core logic parsing data -->
+                    <convert_adapter_product>Harapartners_Service_Model_Rewrite_Catalog_Convert_Adapter_Product</convert_adapter_product>
+                </rewrite>
+            </catalog>
+            <cataloginventory>
+                <rewrite>
+                    <!--Harapartner_Service: Product of the same ID (conf. with different super attr. or simple with differnt options) share the same limit!--> 
+                    <!--Harapartners_Rushcheckout: Successful checkout results in stock reservation cancel.-->
+                    <observer>Harapartners_Service_Model_Rewrite_CatalogInventory_Observer</observer>
+                </rewrite>
+            </cataloginventory>
+            <cataloginventory_resource>
+                <rewrite>
+                    <!--Harapartners_Rushcheckout: Batch update without saving 'stock_item' object, must sync with status (cart reservation for Totsy)--> 
+                    <stock>Harapartners_Service_Model_Rewrite_CatalogInventory_Resource_Stock</stock>
+                </rewrite>
+            </cataloginventory_resource>
+            <checkout>
+                <rewrite>
+                    <!--Harapartners_HpCheckout--><!--Harapartners_Rushcheckout: Timer and quote item removal-->
+                    <session>Harapartners_Service_Model_Rewrite_Checkout_Session</session>
+                    <!--Harapartners_SpeedTax-->
+                    <type_multishipping>Harapartners_Service_Model_Rewrite_Checkout_Type_Multishipping</type_multishipping>
+                </rewrite>
+            </checkout>
+            <core>
+                <rewrite>
+                    <!--Harapartners_EmailFactory-->
                     <email_template>Harapartners_Service_Model_Rewrite_Core_Email_Template</email_template>
-					<!--Harapartners_Service: locking admin modifications-->
-					<store>Harapartners_Service_Model_Rewrite_Core_Store</store>
+                    <!--Harapartners_Service: locking admin modifications-->
+                    <store>Harapartners_Service_Model_Rewrite_Core_Store</store>
                 </rewrite>
             </core>
-			<customer>
+            <customer>
                 <rewrite>
-					<!--Harapartners_Service: locking admin modifications-->
-					<group>Harapartners_Service_Model_Rewrite_Customer_Group</group>
-					<!--Harapartners_Customertracking, redirect customer to a different store if customer's email does not match current store but matches a different store-->
-					<customer>Harapartners_Service_Model_Rewrite_Customer_Customer</customer>
-					<!--Harapartners_Affiliate--><!--Harapartners_Customertracking--><!--Harapartners_Rushcheckout-->
+                    <!--Harapartners_Service: locking admin modifications-->
+                    <group>Harapartners_Service_Model_Rewrite_Customer_Group</group>
+                    <!--Harapartners_Customertracking, redirect customer to a different store if customer's email does not match current store but matches a different store-->
+                    <customer>Harapartners_Service_Model_Rewrite_Customer_Customer</customer>
+                    <!--Harapartners_Affiliate--><!--Harapartners_Customertracking--><!--Harapartners_Rushcheckout-->
                     <session>Harapartners_Service_Model_Rewrite_Customer_Session</session>
                 </rewrite>
             </customer>
-			<index>
-				<rewrite>
-					<!--Harapartners_Import: Optimization, ignoring irrelevant indexing processes --><!--Harapartners_Rushcheckout: Freeing stock status for cart reservation-->
-					<indexer>Harapartners_Service_Model_Rewrite_Index_Indexer</indexer>
-				</rewrite>
-			</index>
-			<payment>
-				<rewrite>
-					<!--Legacy order import-->
-					<method_ccsave>Harapartners_Service_Model_Rewrite_Payment_Method_Ccsave</method_ccsave>
-				</rewrite>
-			</payment>
-			<sales>
-				<rewrite>
-					<!--Harapartners_Ordersplit--><!--Harapartners_Paymentfactory-->
-					<quote_payment>Harapartners_Service_Model_Rewrite_Sales_Quote_Payment</quote_payment>
-					<!--Harapartners_Ordersplit--><!--Harapartners_Paymentfactory-->
-					<convert_quote>Harapartners_Service_Model_Rewrite_Sales_Convert_Quote</convert_quote>
-					<!--Harapartners_SpeedTax-->
-					<quote_address>Harapartners_Service_Model_Rewrite_Sales_Quote_Address</quote_address>
-					<!--Harapartners_SpeedTax-->
-					<quote_address_total_grand>Harapartners_Service_Model_Rewrite_Sales_Quote_Address_Total_Grand</quote_address_total_grand>
-				</rewrite>
-			</sales>
-			<tax>
-				<rewrite>
-					<!--Harapartners_SpeedTax-->
-					<sales_total_quote_tax>Harapartners_Service_Model_Rewrite_Sales_Quote_Address_Total_Tax</sales_total_quote_tax>
-				</rewrite>
-			</tax>
-			<salesrule>
-				<rewrite>
-					<!--Harapartners_Ordersplit--><!--Harapartners_Paymentfactory-->
-					<validator>Harapartners_Service_Model_Rewrite_Salesrule_Validator</validator>
-					<!--Harapartners_Ordersplit--><!--Harapartners_Paymentfactory-->
-					<quote_discount>Harapartners_Service_Model_Rewrite_Salesrule_Quote_Discount</quote_discount>
-				</rewrite>
-			</salesrule>
-			<enterprise_reward>
-				<rewrite>
-					<!--Harapartners_Rewrite_Reward_Observer-->
-					<observer>Harapartners_Service_Model_Rewrite_Reward_Observer</observer>
-				</rewrite>
-			</enterprise_reward>
-			<newsletter>
-				<rewrite>
-					<!--Harapartners_Rewrite_Newsletter_Subscriber-->
-					<subscriber>Harapartners_Service_Model_Rewrite_Newsletter_Subscriber</subscriber>
-				</rewrite>
-			</newsletter>
-			<!-- ===== MODEL REWRITE END ===== -->
+            <index>
+                <rewrite>
+                    <!--Harapartners_Import: Optimization, ignoring irrelevant indexing processes --><!--Harapartners_Rushcheckout: Freeing stock status for cart reservation-->
+                    <indexer>Harapartners_Service_Model_Rewrite_Index_Indexer</indexer>
+                </rewrite>
+            </index>
+            <payment>
+                <rewrite>
+                    <!--Legacy order import-->
+                    <method_ccsave>Harapartners_Service_Model_Rewrite_Payment_Method_Ccsave</method_ccsave>
+                </rewrite>
+            </payment>
+            <sales>
+                <rewrite>
+                    <!--Harapartners_Ordersplit--><!--Harapartners_Paymentfactory-->
+                    <quote_payment>Harapartners_Service_Model_Rewrite_Sales_Quote_Payment</quote_payment>
+                    <!--Harapartners_Ordersplit--><!--Harapartners_Paymentfactory-->
+                    <convert_quote>Harapartners_Service_Model_Rewrite_Sales_Convert_Quote</convert_quote>
+                    <!--Harapartners_SpeedTax-->
+                    <quote_address>Harapartners_Service_Model_Rewrite_Sales_Quote_Address</quote_address>
+                    <!--Harapartners_SpeedTax-->
+                    <quote_address_total_grand>Harapartners_Service_Model_Rewrite_Sales_Quote_Address_Total_Grand</quote_address_total_grand>
+                </rewrite>
+            </sales>
+            <tax>
+                <rewrite>
+                    <!--Harapartners_SpeedTax-->
+                    <sales_total_quote_tax>Harapartners_Service_Model_Rewrite_Sales_Quote_Address_Total_Tax</sales_total_quote_tax>
+                </rewrite>
+            </tax>
+            <salesrule>
+                <rewrite>
+                    <!--Harapartners_Ordersplit--><!--Harapartners_Paymentfactory-->
+                    <validator>Harapartners_Service_Model_Rewrite_Salesrule_Validator</validator>
+                    <!--Harapartners_Ordersplit--><!--Harapartners_Paymentfactory-->
+                    <quote_discount>Harapartners_Service_Model_Rewrite_Salesrule_Quote_Discount</quote_discount>
+                </rewrite>
+            </salesrule>
+            <enterprise_reward>
+                <rewrite>
+                    <!--Harapartners_Rewrite_Reward_Observer-->
+                    <observer>Harapartners_Service_Model_Rewrite_Reward_Observer</observer>
+                </rewrite>
+            </enterprise_reward>
+            <newsletter>
+                <rewrite>
+                    <!--Harapartners_Rewrite_Newsletter_Subscriber-->
+                    <subscriber>Harapartners_Service_Model_Rewrite_Newsletter_Subscriber</subscriber>
+                </rewrite>
+            </newsletter>
+            <!-- ===== MODEL REWRITE END ===== -->
         </models>
-		<events>
-			<!-- ===== GLOBAL EVENTS START ===== -->
-			<cataloginventory_stock_item_save_after>
+        <events>
+            <!-- ===== GLOBAL EVENTS START ===== -->
+            <cataloginventory_stock_item_save_after>
                 <observers>
-					<!--Harapartners_Rushcheckout: Updating only (Addition and deletion can be safely ignored) -->
+                    <!--Harapartners_Rushcheckout: Updating only (Addition and deletion can be safely ignored) -->
                     <rushcheckout>
                         <class>rushcheckout/observer</class>
                         <method>updateReservationByStockItem</method>
@@ -210,9 +210,9 @@
             </cataloginventory_stock_item_save_after>
             <controller_front_init_routers>
                 <observers>
-					<!--Harapartners_Affiliate-->
+                    <!--Harapartners_Affiliate-->
                     <affiliate>
-						<type>singleton</type>
+                        <type>singleton</type>
                         <class>affiliate/observer</class>
                         <method>addAffiliateRouter</method>
                     </affiliate>
@@ -220,19 +220,19 @@
             </controller_front_init_routers>
             <customer_register_success>
                 <observers>
-					<!--Harapartners_Customertracking-->
+                    <!--Harapartners_Customertracking-->
                     <customertracking>
-						<type>singleton</type>
+                        <type>singleton</type>
                         <class>customertracking/observer</class>
                         <method>customerRegisterSuccess</method>
                     </customertracking>
                 </observers>
             </customer_register_success>
-			<customer_save_after>
+            <customer_save_after>
                 <observers>
-					<!--Harapartners_EmailFactory-->
+                    <!--Harapartners_EmailFactory-->
                     <sailthru_subscribe_update_data>
-	                    <type>singleton</type>
+                        <type>singleton</type>
                         <class>emailfactory/observer</class>
                         <method>customerupdateObserver</method>
                     </sailthru_subscribe_update_data>
@@ -240,91 +240,91 @@
             </customer_save_after>
             <customer_login>
                 <observers>
-					<!--Harapartners_Customertracking-->
+                    <!--Harapartners_Customertracking-->
                     <customertracking>
-						<type>singleton</type>
+                        <type>singleton</type>
                         <class>customertracking/observer</class>
                         <method>loginAfter</method>
                     </customertracking>
                 </observers>
             </customer_login>
-			<customer_logout>
+            <customer_logout>
                 <observers>
-					<!--Harapartners_Customertracking-->
+                    <!--Harapartners_Customertracking-->
                     <customertracking>
-						<type>singleton</type>
+                        <type>singleton</type>
                         <class>customertracking/observer</class>
                         <method>logoutAfter</method>
                     </customertracking>
                 </observers>
             </customer_logout>
-			<harapartners_import_after>
-				<observers>
-					<!--Harapartners_Import-->
-					<import>
-						<type>singleton</type>
-						<class>import/observer</class>
-						<method>processBatch</method>
-					</import>
-				</observers>
-			</harapartners_import_after>
+            <harapartners_import_after>
+                <observers>
+                    <!--Harapartners_Import-->
+                    <import>
+                        <type>singleton</type>
+                        <class>import/observer</class>
+                        <method>processBatch</method>
+                    </import>
+                </observers>
+            </harapartners_import_after>
             <!--http_response_send_before>
                 <observers>
-					///*** Not necesarry now Removed by Andu, Harapartners_Customertracking
+                    ///*** Not necesarry now Removed by Andu, Harapartners_Customertracking
                     <customertracking>
-						<type>singleton</type>
+                        <type>singleton</type>
                         <class>customertracking/observer</class>
                         <method>addPageViewCount</method>
                     </customertracking>
                 </observers>
             </http_response_send_before-->
-			<newsletter_subscriber_save_after>
-				<observers>
-					<!--Harapartners_EmailFactory-->
-					<sailthru_customer_subscribe>
-						<type>singleton</type>
-						<class>emailfactory/observer</class>
-						<method>newsletterupdateObserver</method>						
-					</sailthru_customer_subscribe>
-					<!--Harapartners_Unsubcentral-->
+            <newsletter_subscriber_save_after>
+                <observers>
+                    <!--Harapartners_EmailFactory-->
+                    <sailthru_customer_subscribe>
+                        <type>singleton</type>
+                        <class>emailfactory/observer</class>
+                        <method>newsletterupdateObserver</method>                        
+                    </sailthru_customer_subscribe>
+                    <!--Harapartners_Unsubcentral-->
                     <unsubcentral_subscribe_observer>
-	                    <type>singleton</type>
+                        <type>singleton</type>
                         <class>unsubcentral/observer</class>
                         <method>unsubscribeCustomerObserver</method>
                     </unsubcentral_subscribe_observer>
                 </observers>
             </newsletter_subscriber_save_after>
-			<order_cancel_after>
-				<observers>
-					<!--Harapartners_Fulfillmentfactory-->
+            <order_cancel_after>
+                <observers>
+                    <!--Harapartners_Fulfillmentfactory-->
                     <fulfillmentfactory>
-                    	<type>singleton</type>
-                    	<class>fulfillmentfactory/observer</class>
+                        <type>singleton</type>
+                        <class>fulfillmentfactory/observer</class>
                         <method>cancelItemQueue</method>
                     </fulfillmentfactory>
                 </observers>
-			</order_cancel_after>
-			<sales_quote_item_save_after>
+            </order_cancel_after>
+            <sales_quote_item_save_after>
                 <observers>
-					<!--Harapartners_Rushcheckout: Adding or updating quote item -->
+                    <!--Harapartners_Rushcheckout: Adding or updating quote item -->
                     <rushcheckout>
                         <class>rushcheckout/observer</class>
                         <method>updateReservationByQuoteItem</method>
                     </rushcheckout>
                 </observers>
             </sales_quote_item_save_after>
-			<sales_quote_item_delete_after>
+            <sales_quote_item_delete_after>
                 <observers>
-					<!--Harapartners_Rushcheckout: Deleting quote item -->
+                    <!--Harapartners_Rushcheckout: Deleting quote item -->
                     <rushcheckout>
                         <class>rushcheckout/observer</class>
                         <method>updateReservationByQuoteItem</method>
                     </rushcheckout>
                 </observers>
             </sales_quote_item_delete_after>
-			<sales_order_creditmemo_refund>
+            <sales_order_creditmemo_refund>
                 <observers>
-					<!--Harapartners_SpeedTax-->
+                    <!--Harapartners_SpeedTax-->
                     <speedtax>
                         <type>singleton</type>
                         <class>speedtax/observer</class>
@@ -332,15 +332,15 @@
                     </speedtax>
                 </observers>
             </sales_order_creditmemo_refund>
-			<sales_order_invoice_pay>
+            <sales_order_invoice_pay>
                 <observers>
-					<!--Harapartners_Recurringmembership-->
-					<!--recurringmembership>
+                    <!--Harapartners_Recurringmembership-->
+                    <!--recurringmembership>
                         <type>singleton</type>
                         <class>recurringmembership/observer</class>
                         <method>saleOrderInvoicePay</method>
                     </recurringmembership-->
-					<!--Harapartners_SpeedTax-->
+                    <!--Harapartners_SpeedTax-->
                     <speedtax>
                         <type>singleton</type>
                         <class>speedtax/observer</class>
@@ -348,70 +348,70 @@
                     </speedtax>
                 </observers>
             </sales_order_invoice_pay>
-			<sales_order_place_after>
+            <sales_order_place_after>
                <observers>
-					<!--Harapartners_Ordersplit-->
+                    <!--Harapartners_Ordersplit-->
                     <ordersplit>
                         <type>singleton</type>
                         <class>ordersplit/observer</class>
                         <method>salesOrderPlaceAfterSplit</method>
                     </ordersplit>
-					<!--Harapartners_Promotionfactory-->
+                    <!--Harapartners_Promotionfactory-->
                     <promotionfactory>
                         <type>singleton</type>
                         <class>promotionfactory/observer</class>
                         <method>saleOrderPlaceAfter</method>
                     </promotionfactory>
-					<!--Harapartners_EmailFactory-->
-					<sialthru_success_purchase>
-						<type>singleton</type>
-						<class>emailfactory/observer</class>
-						<method>sailthruSuccessPurchase</method>
-					</sialthru_success_purchase>
+                    <!--Harapartners_EmailFactory-->
+                    <sialthru_success_purchase>
+                        <type>singleton</type>
+                        <class>emailfactory/observer</class>
+                        <method>sailthruSuccessPurchase</method>
+                    </sialthru_success_purchase>
                 </observers>
             </sales_order_place_after>
-			<sales_order_save_after>
-				<observers>
-					<!--Harapartners_Fulfillmentfactory-->
+            <sales_order_save_after>
+                <observers>
+                    <!--Harapartners_Fulfillmentfactory-->
                     <fulfillmentfactory>
-                    	<type>singleton</type>
-                    	<class>fulfillmentfactory/observer</class>
+                        <type>singleton</type>
+                        <class>fulfillmentfactory/observer</class>
                         <method>updateItemQueueStatus</method>
                     </fulfillmentfactory>
                 </observers>
-			</sales_order_save_after>
+            </sales_order_save_after>
         </events>
-		<!-- ===== GLOBAL EVENTS END ===== -->
+        <!-- ===== GLOBAL EVENTS END ===== -->
     </global>
-	<frontend>
-		<events>
-			<!-- ===== FRONTEND ONLY EVENTS START ===== -->
-			<customer_session_init>
-				<observers>
-					<!--Harapartners_Rushcheckout-->
+    <frontend>
+        <events>
+            <!-- ===== FRONTEND ONLY EVENTS START ===== -->
+            <customer_session_init>
+                <observers>
+                    <!--Harapartners_Rushcheckout-->
                     <rushcheckout_customer_revalidate>
                         <class>rushcheckout/observer</class>
                         <method>customerRevalidate</method>
                     </rushcheckout_customer_revalidate>
                 </observers>
-			</customer_session_init>
-			<checkout_cart_product_add_after>
-				<observers>
-					<!--Harapartners_EmailFactory-->
-					<sialthru_purchasing>
-						<type>singleton</type>
-						<class>emailfactory/observer</class>
-						<method>sailthruPurchasing</method>
-					</sialthru_purchasing>
+            </customer_session_init>
+            <checkout_cart_product_add_after>
+                <observers>
+                    <!--Harapartners_EmailFactory-->
+                    <sialthru_purchasing>
+                        <type>singleton</type>
+                        <class>emailfactory/observer</class>
+                        <method>sailthruPurchasing</method>
+                    </sialthru_purchasing>
                 </observers>
-			</checkout_cart_product_add_after>
-			<!-- ===== FRONTEND ONLY EVENTS END ===== -->
-		</events>
+            </checkout_cart_product_add_after>
+            <!-- ===== FRONTEND ONLY EVENTS END ===== -->
+        </events>
     </frontend>
-	<adminhtml>
-		<menu>
-			<harapartners translate="title" module="service">
-				<title>Extras</title>
+    <adminhtml>
+        <menu>
+            <harapartners translate="title" module="service">
+                <title>Extras</title>
                 <sort_order>100</sort_order>
             </harapartners>
             <marketing translate="title" module="service">
@@ -420,7 +420,7 @@
             </marketing>
         </menu>
     </adminhtml>
-	<crontab>
+    <crontab>
         <jobs>
             <service_clean_cache_after_sort_rebuild>
                 <schedule>

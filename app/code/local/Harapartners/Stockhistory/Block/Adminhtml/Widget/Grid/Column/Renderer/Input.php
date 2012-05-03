@@ -15,9 +15,9 @@
 class Harapartners_Stockhistory_Block_Adminhtml_Widget_Grid_Column_Renderer_Input extends Mage_Adminhtml_Block_Widget_Grid_Column_Renderer_Input {
 
     public function render(Varien_Object $row){
-    	//SKU bases
-    	
-    	//qty_to_amend: defined as FINAL quantity, i.e. forcing the quantity to the given value, instead of just the delta
+        //SKU bases
+        
+        //qty_to_amend: defined as FINAL quantity, i.e. forcing the quantity to the given value, instead of just the delta
         $html = '<input type="text"';
         $html .= 'name="' . $this->getColumn()->getId() . '[' . $row->getData('sku') . '][' . $this->getColumn()->getId() . ']" ';
         $html .= 'value="' . $row->getData($this->getColumn()->getIndex()) . '"';

@@ -19,14 +19,14 @@ class Mage_Customer_RevalidateController extends Mage_Core_Controller_Front_Acti
     * Customer validation check
     */
     public function indexAction(){
-    	//if ( !!$this->_getSession()->setCheckLastValidationFlag() && $this->_getSession()->setCheckLastValidationFlag() ){
-    	$revalidateFlag = $this->_getSession()->getCheckLastValidationFlag();
-    	if ( isset($revalidateFlag) && !$revalidateFlag ) { //Harapartners, Yang: modify logic
-    		$this->loadLayout();
-    		$this->renderLayout();
-    	}else {
-    		$this->_redirect('*/*/');
-    	}
+        //if ( !!$this->_getSession()->setCheckLastValidationFlag() && $this->_getSession()->setCheckLastValidationFlag() ){
+        $revalidateFlag = $this->_getSession()->getCheckLastValidationFlag();
+        if ( isset($revalidateFlag) && !$revalidateFlag ) { //Harapartners, Yang: modify logic
+            $this->loadLayout();
+            $this->renderLayout();
+        }else {
+            $this->_redirect('*/*/');
+        }
     }
     
     protected function _getSession(){
@@ -34,35 +34,35 @@ class Mage_Customer_RevalidateController extends Mage_Core_Controller_Front_Acti
     }
     
     public function validationCheckPostAction(){
-    	if ($this->getRequest()->isPost()) {
-    		$login = $this->getRequest()->getPost('login');
-    		$pass = $this->getRequest()->getPost('mobile'); //Harapartners, Yang: for mobile get pass
-    		$session = $this->_getSession();
-    		$_SERVER['HTTP_USER_AGENT'];
-    		//Harapartners, Yang: for mobile get pass
-    		if ( $pass && preg_match("/\Mobile\b/i", $_SERVER['HTTP_USER_AGENT']) ){
-    			$session->setData('CUSTOMER_LAST_VALIDATION_TIME', now());
-    			$customer = Mage::getModel('customer/customer')
-            			->setWebsiteId(Mage::app()->getStore()->getWebsiteId());
-	 		    if (!$session->getData('revalidate_before_auth_url')) {
-	                $this->getResponse()->setRedirect($this->getUrl('customer/account'));
-	        	}else {
-	                $this->getResponse()->setRedirect($session->getData('revalidate_before_auth_url'));
-	        	} 
-	        	return ;   			
-    		}
-    		//Harapartners, Yang: End
-    	    if (!empty($login['username']) && !empty($login['password'])) {
+        if ($this->getRequest()->isPost()) {
+            $login = $this->getRequest()->getPost('login');
+            $pass = $this->getRequest()->getPost('mobile'); //Harapartners, Yang: for mobile get pass
+            $session = $this->_getSession();
+            $_SERVER['HTTP_USER_AGENT'];
+            //Harapartners, Yang: for mobile get pass
+            if ( $pass && preg_match("/\Mobile\b/i", $_SERVER['HTTP_USER_AGENT']) ){
+                $session->setData('CUSTOMER_LAST_VALIDATION_TIME', now());
+                $customer = Mage::getModel('customer/customer')
+                        ->setWebsiteId(Mage::app()->getStore()->getWebsiteId());
+                 if (!$session->getData('revalidate_before_auth_url')) {
+                    $this->getResponse()->setRedirect($this->getUrl('customer/account'));
+                }else {
+                    $this->getResponse()->setRedirect($session->getData('revalidate_before_auth_url'));
+                } 
+                return ;               
+            }
+            //Harapartners, Yang: End
+            if (!empty($login['username']) && !empty($login['password'])) {
                 try {
-					$customer = Mage::getModel('customer/customer')
-            			->setWebsiteId(Mage::app()->getStore()->getWebsiteId());
-            		if ($customer->authenticate($login['username'], $login['password'], true)){
-          		        if (!$session->getData('revalidate_before_auth_url')) {
-			                $this->getResponse()->setRedirect($this->getUrl('customer/account'));
-			        	}else {
-			                $this->getResponse()->setRedirect($session->getData('revalidate_before_auth_url'));
-			        	}
-            		}
+                    $customer = Mage::getModel('customer/customer')
+                        ->setWebsiteId(Mage::app()->getStore()->getWebsiteId());
+                    if ($customer->authenticate($login['username'], $login['password'], true)){
+                          if (!$session->getData('revalidate_before_auth_url')) {
+                            $this->getResponse()->setRedirect($this->getUrl('customer/account'));
+                        }else {
+                            $this->getResponse()->setRedirect($session->getData('revalidate_before_auth_url'));
+                        }
+                    }
                 } catch (Mage_Core_Exception $e) {
                     switch ($e->getCode()) {
                         case Mage_Customer_Model_Customer::EXCEPTION_EMAIL_NOT_CONFIRMED:
@@ -73,7 +73,7 @@ class Mage_Customer_RevalidateController extends Mage_Core_Controller_Front_Acti
                             $message = $e->getMessage();
                             break;
                         case Harapartners_Service_Model_Rewrite_Customer_Customer::EXCEPTION_INVALID_STORE_ACCOUNT:
-                        	$message = $e->getMessage();
+                            $message = $e->getMessage();
                             break;
                         default:
                             $message = $e->getMessage();
@@ -88,8 +88,8 @@ class Mage_Customer_RevalidateController extends Mage_Core_Controller_Front_Acti
                 Mage::getSingleton('core/session')->addError($this->__('Login and password are required.'));
                 $this->_redirect('*/*/');
             }
-    	}else {
-    		$this->_redirect('*/*/');
-    	}
+        }else {
+            $this->_redirect('*/*/');
+        }
     }
 }

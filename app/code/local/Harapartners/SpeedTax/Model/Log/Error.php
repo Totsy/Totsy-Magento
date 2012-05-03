@@ -11,10 +11,10 @@
  *
  */
 class Harapartners_SpeedTax_Model_Log_Error extends Mage_Core_Model_Abstract {
-	
-	protected function _construct() {
-		//Point to the correct table
-		$this->_init ( 'speedtax_log/error' );
-	}
+    
+    protected function _construct() {
+        //Point to the correct table
+        $this->_init ( 'speedtax_log/error' );
+    }
 
 }

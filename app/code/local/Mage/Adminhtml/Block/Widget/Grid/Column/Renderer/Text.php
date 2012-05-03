@@ -57,10 +57,10 @@ class Mage_Adminhtml_Block_Widget_Grid_Column_Renderer_Text extends Mage_Adminht
             $string = is_null($data) ? $defaultValue : $data;
             $pos = strpos($string, 'import_import_error');
             if($pos === false){
-            	return htmlspecialchars($string);
+                return htmlspecialchars($string);
             }else{
-            	
-            	return str_replace('import_import_error','',$string);
+                
+                return str_replace('import_import_error','',$string);
             }
             
         }

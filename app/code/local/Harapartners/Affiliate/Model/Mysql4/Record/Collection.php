@@ -16,5 +16,5 @@ class Harapartners_Affiliate_Model_Mysql4_Record_Collection extends Mage_Core_Mo
    
     public function _construct(){
         $this->_init('affiliate/record');
-	}
+    }
 }

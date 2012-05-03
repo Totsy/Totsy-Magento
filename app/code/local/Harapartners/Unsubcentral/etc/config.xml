@@ -45,27 +45,27 @@
                 <class>Harapartners_Unsubcentral_Helper</class>
             </unsubcentral>
         </helpers>
-		<!--Moved to Harapartners_Service-->
-		<!--events>
-	        <newsletter_subscriber_save_after>
+        <!--Moved to Harapartners_Service-->
+        <!--events>
+            <newsletter_subscriber_save_after>
                 <observers>
                     <unsubcentral_subscribe_observer>
-	                    <type>singleton</type>
+                        <type>singleton</type>
                         <class>unsubcentral/observer</class>
                         <method>unsubscribeCustomerObserver</method>
                     </unsubcentral_subscribe_observer>
                 </observers>
             </newsletter_subscriber_save_after>
-		</events-->
+        </events-->
     </global>
     <crontab>
         <jobs>
             <unsubcentral_run_update_unscribe_script>
-				<!-- 3:00AM every day -->
+                <!-- 3:00AM every day -->
                 <schedule><cron_expr>0 3 * * *</cron_expr></schedule>
                 <run><model>unsubcentral/observer::runUpdateUnscribeScript</model></run>
             </unsubcentral_run_update_unscribe_script>
         </jobs>
     </crontab>
-	<frontend/>
+    <frontend/>
 </config>

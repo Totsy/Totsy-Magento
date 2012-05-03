@@ -11,20 +11,20 @@
  *
  */
 class Harapartners_SpeedTax_Helper_Data extends Mage_Core_Helper_Abstract{
-	
-	public function isAddressValidationOn($address, $storeId) {
-    	/*if(!$this->isAddressActionable($address, $storeId)) {
-    		return false;
-    	}*/
-    	return Mage::getStoreConfig('speedtax/speedtax/validate_address', $storeId);
+    
+    public function isAddressValidationOn($address, $storeId) {
+        /*if(!$this->isAddressActionable($address, $storeId)) {
+            return false;
+        }*/
+        return Mage::getStoreConfig('speedtax/speedtax/validate_address', $storeId);
     }
     
     public function getSpeedTaxLibraryDirectory(){
-    	return dirname(dirname(__FILE__)).DS.'lib'.DS;
+        return dirname(dirname(__FILE__)).DS.'lib'.DS;
     }
     
     public function loadSpeedTaxLibrary(){
-		include_once $this->getSpeedTaxLibraryDirectory().'SpeedTaxApi.inc';
-		include_once $this->getSpeedTaxLibraryDirectory().'SpeedTaxUtil.inc';
+        include_once $this->getSpeedTaxLibraryDirectory().'SpeedTaxApi.inc';
+        include_once $this->getSpeedTaxLibraryDirectory().'SpeedTaxUtil.inc';
     }
 }

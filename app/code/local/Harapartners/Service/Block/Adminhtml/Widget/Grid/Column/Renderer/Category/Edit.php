@@ -14,16 +14,16 @@
 class Harapartners_Service_Block_Adminhtml_Widget_Grid_Column_Renderer_Category_Edit extends Mage_Adminhtml_Block_Widget_Grid_Column_Renderer_Abstract {
 
     public function render(Varien_Object $row){
-//    	$attrCode = $this->getColumn()->getId();
+//        $attrCode = $this->getColumn()->getId();
 //        if(!($row instanceof Mage_Catalog_Model_Product) 
-//        		|| !$row->getId()
-//        		|| !$row->getData($attrCode)){
-//        	return '';
+//                || !$row->getId()
+//                || !$row->getData($attrCode)){
+//            return '';
 //        }
         
         $editUrl = $this->getUrl('*/catalog_product/edit', array(
-			            'store'=>$this->getRequest()->getParam('store'),
-			            'id'=>$row->getId()));
+                        'store'=>$this->getRequest()->getParam('store'),
+                        'id'=>$row->getId()));
         $html = '<a alt="' . $this->htmlEscape($row->getName()) . '" title="' . $this->htmlEscape($row->getName()) . '" href="' . $editUrl . '">Edit</>';
         return $html;
     }

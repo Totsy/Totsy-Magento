@@ -15,41 +15,41 @@
  */
 
 class Harapartners_Categoryevent_IndexController extends Mage_Core_Controller_Front_Action {
-	
+    
     public function indexAction(){
-		$this->loadLayout();
-		$this->renderLayout();		
+        $this->loadLayout();
+        $this->renderLayout();        
     }
     
-	public function topnavAction(){
-		
-		if(!!Mage::app()->getRequest()->getParam('departments')){
-			$attributeType = 'departments';
-		}elseif(!!Mage::app()->getRequest()->getParam('ages')){
-			$attributeType = 'ages';
-		}
-		$attributeValue = Mage::app()->getRequest()->getParam($attributeType);
-		
-		if(!$attributeType || !$attributeValue){
-			$this->_forward('index');
-			return;
-		}
+    public function topnavAction(){
+        
+        if(!!Mage::app()->getRequest()->getParam('departments')){
+            $attributeType = 'departments';
+        }elseif(!!Mage::app()->getRequest()->getParam('ages')){
+            $attributeType = 'ages';
+        }
+        $attributeValue = Mage::app()->getRequest()->getParam($attributeType);
+        
+        if(!$attributeType || !$attributeValue){
+            $this->_forward('index');
+            return;
+        }
 
-		Mage::register('attrtype', $attributeType);
-		Mage::register('attrvalue', $attributeValue);
-		$this->loadLayout();
-		$this->renderLayout();
-	}
-	
+        Mage::register('attrtype', $attributeType);
+        Mage::register('attrvalue', $attributeValue);
+        $this->loadLayout();
+        $this->renderLayout();
+    }
+    
     public function ageAction(){
-    	$this->loadLayout();
-    	$this->renderLayout();
+        $this->loadLayout();
+        $this->renderLayout();
     }
     
     public function categoryAction(){
-    	$this->loadLayout();
-    	$this->renderLayout();
+        $this->loadLayout();
+        $this->renderLayout();
     }
-	
+    
 
 }

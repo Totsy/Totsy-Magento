@@ -13,32 +13,32 @@
  */
 
 class Harapartners_Promotionfactory_Model_Observer {
-	
-	public function saleOrderPlaceAfter(Varien_Event_Observer $observer) {
-		$order = $observer->getEvent()->getOrder();
-		if(!$order || !$order->getId()){
-			return;
-		}
-		
-		$couponCode = $order->getQuote()->getCouponCode();
-		if(!$couponCode){
-			return;
-		}
-		
-		$groupCoupon = Mage::getModel('promotionfactory/groupcoupon')->loadByPseudoCode($couponCode);
-		if(!!$groupCoupon && !!$groupCoupon->getId()){
-			$groupCoupon->setData('used_count', $groupCoupon->getUsedCount() + 1);
-			$groupCoupon->save();	
-		}
-		
-		$customer = $order->getCustomer();
-		if(!!$customer && !!$customer->getId()){
-			$emailCoupon = Mage::getModel('promotionfactory/emailcoupon')->loadByEmailCouponWithEmail($couponCode, $customer->getEmail());		
-			if(!!$emailCoupon && !!$emailCoupon->getId()){
-				$emailCoupon->setData('used_count', $emailCoupon->getUsedCount() + 1);
-				$emailCoupon->save();	
-			}
-		}
-	}
-	
+    
+    public function saleOrderPlaceAfter(Varien_Event_Observer $observer) {
+        $order = $observer->getEvent()->getOrder();
+        if(!$order || !$order->getId()){
+            return;
+        }
+        
+        $couponCode = $order->getQuote()->getCouponCode();
+        if(!$couponCode){
+            return;
+        }
+        
+        $groupCoupon = Mage::getModel('promotionfactory/groupcoupon')->loadByPseudoCode($couponCode);
+        if(!!$groupCoupon && !!$groupCoupon->getId()){
+            $groupCoupon->setData('used_count', $groupCoupon->getUsedCount() + 1);
+            $groupCoupon->save();    
+        }
+        
+        $customer = $order->getCustomer();
+        if(!!$customer && !!$customer->getId()){
+            $emailCoupon = Mage::getModel('promotionfactory/emailcoupon')->loadByEmailCouponWithEmail($couponCode, $customer->getEmail());        
+            if(!!$emailCoupon && !!$emailCoupon->getId()){
+                $emailCoupon->setData('used_count', $emailCoupon->getUsedCount() + 1);
+                $emailCoupon->save();    
+            }
+        }
+    }
+    
 }

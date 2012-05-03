@@ -14,19 +14,19 @@
 
 class Harapartners_Unsubcentral_Model_Mysql4_Item extends Mage_Core_Model_Resource_Db_Abstract{
     
-	protected $_read;
-	
-	protected function _construct(){
+    protected $_read;
+    
+    protected function _construct(){
         $this->_init('unsubcentral/item', 'unsubcentral_request_id');
         $this->_read = $this->_getReadAdapter();
     }
-	
-	
+    
+    
     public function loadByEmail($email){
-    	$result = array();
+        $result = array();
         $select = $this->_read->select()
-            	->from($this->getMainTable())
-            	->where('subscriber_email=:subscriber_email');
+                ->from($this->getMainTable())
+                ->where('subscriber_email=:subscriber_email');
 
         $result = $this->_read->fetchRow($select, array('subscriber_email'=>$email));
 

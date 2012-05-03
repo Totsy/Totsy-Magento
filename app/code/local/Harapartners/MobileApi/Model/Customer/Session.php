@@ -14,14 +14,14 @@
 
 class Harapartners_MobileApi_Model_Customer_Session extends Mage_Customer_Model_Session
 {
-	public function logout(){
-		
-		if ($this->isLoggedIn()) {
+    public function logout(){
+        
+        if ($this->isLoggedIn()) {
             Mage::dispatchEvent('customer_logout', array('customer' => $this->getCustomer()) );
             $this->setId(null);
             $this->getCookie()->delete($this->getSessionName());
             return true;
         }
         return false;
-	}
+    }
 }

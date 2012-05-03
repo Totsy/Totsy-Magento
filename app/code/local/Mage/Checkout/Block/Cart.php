@@ -181,61 +181,61 @@ class Mage_Checkout_Block_Cart extends Mage_Checkout_Block_Cart_Abstract
     }
     
     //Harapartners, yang, START
-	//Add new function for getting estimate shipping date
- 	public function getShippingDate( $orderConfirmFlag = NULL , $order = NULL ){
-    	$endDate = 0;
-    	if ( !!$orderConfirmFlag && !!$order && ( $order instanceof Mage_Sales_Model_Order ) ){
-    		$items = $order->getAllItems();
-    		if( count($items) ) {
-	    		foreach ( $items as $item){
-	    			$productId = $item->getProductId();
-	    			$product = Mage::getModel('catalog/product')->load($productId);
-	    			$categoryIdsArray = $product->getCategoryIds();
-	    			foreach ( $categoryIdsArray as $id ){
-	    				$category = Mage::getModel('catalog/category')->load($id);
-	    				if (!!$category) {
-		    				$categoryEndDate = strtotime($category->getData('event_end_date'));
-		    				$endDate = ( $categoryEndDate > $endDate ) ? $categoryEndDate : $endDate;    					
-	    				}
-	    			}
-	    		}
-	    	}    		
-    	}else {
-    		$items = $this->getItems();
-	    	if( count($items) ) {
-	    		foreach ( $items as $item){
-	    			$categoryIdsArray = $item->getProduct()->getCategoryIds();
-	    			foreach ( $categoryIdsArray as $id ){
-	    				$category = Mage::getModel('catalog/category')->load($id);
-	    				if (!!$category) {
-		    				$categoryEndDate = strtotime($category->getData('event_end_date'));
-		    				$endDate = ( $categoryEndDate > $endDate ) ? $categoryEndDate : $endDate;    					
-	    				}
-	    			}
-	    		}
-	    	}
-    	}
+    //Add new function for getting estimate shipping date
+     public function getShippingDate( $orderConfirmFlag = NULL , $order = NULL ){
+        $endDate = 0;
+        if ( !!$orderConfirmFlag && !!$order && ( $order instanceof Mage_Sales_Model_Order ) ){
+            $items = $order->getAllItems();
+            if( count($items) ) {
+                foreach ( $items as $item){
+                    $productId = $item->getProductId();
+                    $product = Mage::getModel('catalog/product')->load($productId);
+                    $categoryIdsArray = $product->getCategoryIds();
+                    foreach ( $categoryIdsArray as $id ){
+                        $category = Mage::getModel('catalog/category')->load($id);
+                        if (!!$category) {
+                            $categoryEndDate = strtotime($category->getData('event_end_date'));
+                            $endDate = ( $categoryEndDate > $endDate ) ? $categoryEndDate : $endDate;                        
+                        }
+                    }
+                }
+            }            
+        }else {
+            $items = $this->getItems();
+            if( count($items) ) {
+                foreach ( $items as $item){
+                    $categoryIdsArray = $item->getProduct()->getCategoryIds();
+                    foreach ( $categoryIdsArray as $id ){
+                        $category = Mage::getModel('catalog/category')->load($id);
+                        if (!!$category) {
+                            $categoryEndDate = strtotime($category->getData('event_end_date'));
+                            $endDate = ( $categoryEndDate > $endDate ) ? $categoryEndDate : $endDate;                        
+                        }
+                    }
+                }
+            }
+        }
 
-    	if ( !$endDate ){
-    		$endDate = now();
-    	}
+        if ( !$endDate ){
+            $endDate = now();
+        }
 
-    	for ( $i = 15; $i > 0;  ){
-    		if ( date("N",$endDate)!=6 && date("N",$endDate)!=7 ){
-    			$i--;
-    		}
-    		$endDate = $endDate + 24*3600;
-    	}
-    	
-    	for ( $i = 10; $i >0; ){
-    	    if ( date("N",$endDate)!=6 && date("N",$endDate)!=7 ){
-    			break;
-    		}else {
-    			$endDate = $endDate + 24*3600;
-    		}
-    	}
-    	
-    	return date('m-d-Y', $endDate);
+        for ( $i = 15; $i > 0;  ){
+            if ( date("N",$endDate)!=6 && date("N",$endDate)!=7 ){
+                $i--;
+            }
+            $endDate = $endDate + 24*3600;
+        }
+        
+        for ( $i = 10; $i >0; ){
+            if ( date("N",$endDate)!=6 && date("N",$endDate)!=7 ){
+                break;
+            }else {
+                $endDate = $endDate + 24*3600;
+            }
+        }
+        
+        return date('m-d-Y', $endDate);
     }
-	//Harapartners, yang, END
+    //Harapartners, yang, END
 }

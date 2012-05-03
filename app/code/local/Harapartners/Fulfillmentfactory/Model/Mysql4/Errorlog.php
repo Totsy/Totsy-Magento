@@ -11,8 +11,8 @@
  * 
  */
 class Harapartners_Fulfillmentfactory_Model_Mysql4_Errorlog extends Mage_Core_Model_Mysql4_Abstract{
-	
-	protected function _construct(){
+    
+    protected function _construct(){
         $this->_init('fulfillmentfactory/errorlog', 'entity_id');
     }
 }

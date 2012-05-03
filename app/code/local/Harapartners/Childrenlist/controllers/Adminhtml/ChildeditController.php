@@ -2,18 +2,18 @@
 
 class Harapartners_Childrenlist_Adminhtml_ChildeditController extends Mage_Adminhtml_Controller_Action {
     
-	public function getSession() {
-		return Mage::getSingleton('adminhtml/session');
-	}
+    public function getSession() {
+        return Mage::getSingleton('adminhtml/session');
+    }
     
-    public function editAction() {	
+    public function editAction() {    
         $this->_title($this->__('Customer'))
              ->_title($this->__('Customer Childlist'));
              
         if (!!$this->getRequest()->getParam('id')){
             $this->_title($this->__('Edit Child'));
         }else{
-        	$this->_title($this->__('Add Child'));
+            $this->_title($this->__('Add Child'));
         }
         $this->loadLayout();
         $this->_setActiveMenu('customer/edit');
@@ -27,22 +27,22 @@ class Harapartners_Childrenlist_Adminhtml_ChildeditController extends Mage_Admin
     }
     
     public function saveAction() {
-    	$data = $this->getRequest()->getPost();
-    	$this->getSession()->setChildEditFormData($data);
-    	try{
-    		$child = Mage::getModel('childrenlist/child')->validateAndLoadData($data);
-    		$child->save();
-    		$this->getSession()->addSuccess(Mage::helper('childrenlist')->__('The child information has been saved.'));
-    		$this->getSession()->unsChildEditFormData();
-    	}catch(Exception $e){
-    		$this->getSession()->addError(Mage::helper('childrenlist')->__($e->getMessage()));
-    		$editUrl = $this->getSession()->getEditPage();
-    		$this->getResponse()->setRedirect($editUrl);
-    		return;
-    	}
-    	if(!!$this->getRequest()->getPost('customer_id')){
-    		$redirectParams['id'] = $this->getRequest()->getPost('customer_id');
-    	}
+        $data = $this->getRequest()->getPost();
+        $this->getSession()->setChildEditFormData($data);
+        try{
+            $child = Mage::getModel('childrenlist/child')->validateAndLoadData($data);
+            $child->save();
+            $this->getSession()->addSuccess(Mage::helper('childrenlist')->__('The child information has been saved.'));
+            $this->getSession()->unsChildEditFormData();
+        }catch(Exception $e){
+            $this->getSession()->addError(Mage::helper('childrenlist')->__($e->getMessage()));
+            $editUrl = $this->getSession()->getEditPage();
+            $this->getResponse()->setRedirect($editUrl);
+            return;
+        }
+        if(!!$this->getRequest()->getPost('customer_id')){
+            $redirectParams['id'] = $this->getRequest()->getPost('customer_id');
+        }
         $this->_redirect('adminhtml/customer/edit', $redirectParams);
     }
 

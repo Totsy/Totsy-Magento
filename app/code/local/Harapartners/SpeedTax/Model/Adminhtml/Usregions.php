@@ -17,13 +17,13 @@ class Harapartners_Speedtax_Model_Adminhtml_Usregions
     public function toOptionArray($isMultiselect=false)
     {
         if (!$this->_options) {
-	        $regionCollection = Mage::getModel( 'directory/region' )->getCollection();
-	        $regionCollection->getSelect()->where( 'country_id = ?', 'US' );
-	        $regionOptions = array();
-	        foreach( $regionCollection as $region ) {
-	        	$regionOptions[] = array( 'label' => $region->getDefaultName(), 'value' => $region->getId() ); 
-	        }
-	       	$this->_options = $regionOptions;
+            $regionCollection = Mage::getModel( 'directory/region' )->getCollection();
+            $regionCollection->getSelect()->where( 'country_id = ?', 'US' );
+            $regionOptions = array();
+            foreach( $regionCollection as $region ) {
+                $regionOptions[] = array( 'label' => $region->getDefaultName(), 'value' => $region->getId() ); 
+            }
+               $this->_options = $regionOptions;
         }
         $options = $this->_options;
         if(!$isMultiselect){

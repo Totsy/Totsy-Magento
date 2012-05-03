@@ -68,13 +68,13 @@ class Enterprise_PageCache_Model_Processor_Product extends Enterprise_PageCache_
     }
     
     //Harapartners, Jun, Catalog pages are updated at very high frequency (due to reservation fluctuation), refresh adaptively
-	public function getPageIdWithoutApp(Enterprise_PageCache_Model_Processor $processor){
-		list($usec, $sec) = explode(' ', microtime());
-		$seed = (int) ($usec * 1000000);
-		srand((int) ($seed));
-		if(rand(1, self::PAGE_REFRESH_FACTOR) == 1){
-			return md5($seed.rand());
-		}
+    public function getPageIdWithoutApp(Enterprise_PageCache_Model_Processor $processor){
+        list($usec, $sec) = explode(' ', microtime());
+        $seed = (int) ($usec * 1000000);
+        srand((int) ($seed));
+        if(rand(1, self::PAGE_REFRESH_FACTOR) == 1){
+            return md5($seed.rand());
+        }
         return parent::getPageIdWithoutApp($processor);
     }
     

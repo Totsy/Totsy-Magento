@@ -19,7 +19,7 @@ UPDATE `customertracking_record` SET `login_count` = 0;
 ALTER TABLE `customertracking_record` CHANGE `login_count` `level` INT( 10 ) UNSIGNED NOT NULL DEFAULT '0';
 UPDATE `eav_attribute` SET `backend_type` = 'varchar' WHERE `attribute_code` = 'login_counter' AND `entity_type_id` = 1 LIMIT 1 ;
 ");
-	
+    
 $installer->endSetup();
 
 ?>

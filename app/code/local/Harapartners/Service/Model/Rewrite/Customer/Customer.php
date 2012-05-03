@@ -14,71 +14,71 @@
  
 class Harapartners_Service_Model_Rewrite_Customer_Customer extends Mage_Customer_Model_Customer {
  
-    const EXCEPTION_INVALID_STORE_ACCOUNT = 5;	//Harapartners, yang, multistore sigin error control
+    const EXCEPTION_INVALID_STORE_ACCOUNT = 5;    //Harapartners, yang, multistore sigin error control
     
     //Harapartners, Jun, Important logic to handle legacy customers
     //Added, converting legacy customer password into Magento pass
-	public function validatePassword($password){
-		if(!!$this->getData('legacy_customer')){
-			//Legacy customers, sha1
-			if(sha1($password) == $this->getPasswordHash()){
-				$this->setPassword($password); //Implicit save
-				return true;
-			}else{
-				//Legacy-legacy customer, hash_result:hash_salt, hashed with sha512
-				$hashData = explode(':', $this->getPasswordHash());
-				if(count($hashData) == 2){
-					$digest = $password.$hashData[1];
-					for ($i = 0; $i < 20; $i++) {
-						$digest = hash('sha512', $digest);
-					}
-					if($digest == $hashData[0]){
-						$this->setPassword($password); //Implicit save
-						return true;
-					}else{
-						return false;
-					}
-				}
-				return false;
-			}
-		}else{
-			//Regular magento customer
-			return parent::validatePassword($password);
-		}
+    public function validatePassword($password){
+        if(!!$this->getData('legacy_customer')){
+            //Legacy customers, sha1
+            if(sha1($password) == $this->getPasswordHash()){
+                $this->setPassword($password); //Implicit save
+                return true;
+            }else{
+                //Legacy-legacy customer, hash_result:hash_salt, hashed with sha512
+                $hashData = explode(':', $this->getPasswordHash());
+                if(count($hashData) == 2){
+                    $digest = $password.$hashData[1];
+                    for ($i = 0; $i < 20; $i++) {
+                        $digest = hash('sha512', $digest);
+                    }
+                    if($digest == $hashData[0]){
+                        $this->setPassword($password); //Implicit save
+                        return true;
+                    }else{
+                        return false;
+                    }
+                }
+                return false;
+            }
+        }else{
+            //Regular magento customer
+            return parent::validatePassword($password);
+        }
     }
     
-	public function setPassword($password){
-		parent::setPassword($password);
+    public function setPassword($password){
+        parent::setPassword($password);
         if(!!$this->getData('legacy_customer')){
-	        $this->setData('legacy_customer', 0);
-	        $this->_getResource()->saveAttribute($this, 'legacy_customer');
+            $this->setData('legacy_customer', 0);
+            $this->_getResource()->saveAttribute($this, 'legacy_customer');
         }
         return $this;
     }
     
 //    //Harapartners, Jun, Legacy customer will be come concurrent after password change
-//	public function changePassword($newPassword) {
-//		parent::changePassword($newPassword);
+//    public function changePassword($newPassword) {
+//        parent::changePassword($newPassword);
 //        if(!!$this->getData('legacy_customer')){
-//	        $this->setData('legacy_customer', 0);
-//	        $this->_getResource()->saveAttribute($this, 'legacy_customer');
+//            $this->setData('legacy_customer', 0);
+//            $this->_getResource()->saveAttribute($this, 'legacy_customer');
 //        }
 //        return $this;
 //    }
 //    
 //    //Harapartners, Jun, ForgotPassWord logic does NOT route via changePassword($newPassword)
-//	public function changeResetPasswordLinkToken($newResetPasswordLinkToken) {
+//    public function changeResetPasswordLinkToken($newResetPasswordLinkToken) {
 //        parent::changeResetPasswordLinkToken($newResetPasswordLinkToken);
-//		if(!!$this->getData('legacy_customer')){
-//	        $this->setData('legacy_customer', 0);
-//	        $this->_getResource()->saveAttribute($this, 'legacy_customer');
+//        if(!!$this->getData('legacy_customer')){
+//            $this->setData('legacy_customer', 0);
+//            $this->_getResource()->saveAttribute($this, 'legacy_customer');
 //        }
 //        return $this;
 //    }
 
     public function authenticate($login, $password, $reValidate = false) {
-    	$login = $this->_trimGmail($login, false);	//Harapartners, trim gmail alias
-    	
+        $login = $this->_trimGmail($login, false);    //Harapartners, trim gmail alias
+        
         $this->loadByEmail($login);
 
         //Harapartners, yang, START
@@ -98,19 +98,19 @@ class Harapartners_Service_Model_Rewrite_Customer_Customer extends Mage_Customer
         }
         //Harapartners, yang, Add param for re-validate
         if (!$reValidate){
-        	Mage::dispatchEvent('customer_customer_authenticated', array(
-		           'model'    => $this,
-		           'password' => $password,
-        	));
+            Mage::dispatchEvent('customer_customer_authenticated', array(
+                   'model'    => $this,
+                   'password' => $password,
+            ));
         }
         
-		//Haraparnters, yang, Set 15min validation time
+        //Haraparnters, yang, Set 15min validation time
         Mage::getSingleton('customer/session')->setData('CUSTOMER_LAST_VALIDATION_TIME', now());
         return true;
     }
     
     //Haraparnters, jun: remove first name last name validation from registering
-	public function validate(){
+    public function validate(){
         $errors = array();
         $customerHelper = Mage::helper('customer');
 
@@ -169,13 +169,13 @@ class Harapartners_Service_Model_Rewrite_Customer_Customer extends Mage_Customer
         //Harapartners, set default login count
         $loginCount = $this->getLoginCounter();
         if($loginCount === null) {
-        	$this->setLoginCounter(0);
+            $this->setLoginCounter(0);
         }
         
         //Harapartners, add email md5 hash
-    	$emailHash = $this->getEmailMd5();
+        $emailHash = $this->getEmailMd5();
         if($emailHash === null) {
-        	$this->setEmailMd5(md5($email));
+            $this->setEmailMd5(md5($email));
         }
 
         $this->getGroupId();
@@ -190,43 +190,43 @@ class Harapartners_Service_Model_Rewrite_Customer_Customer extends Mage_Customer
      * @return string original email
      */
     protected function _trimGmail($email, $showMessage = false) {
-    	$strArray = explode('@', $email);
-    	
-    	if(empty($strArray) ||
-    	   empty($strArray[1]) ||
-    	   $strArray[1] != 'gmail.com') {
-    		return $email;
-    	}
-    	
-		//get username, such as 'abcd'
-		$username = $strArray[0];
-		//Get username string's length
-		$len = strlen($username);
-		$trimmedGmail = '';
-		
-		//iterate chacrates in username string
-		for($j=0; $j<$len; $j++) {
-			//if encounters '+', discard the rest of the string
-			if($username[$j] == '+') {
-				break;
-			}
-			
-			//check if it is '.', if yes, don't concatenate.
-			if($username[$j] != '.') {
-				//concatenate username chacrater
-				$trimmedGmail .= $username[$j];
-			}
-		}
-		
-		$trimmedGmail .= '@gmail.com';
-		
-		if(($email != $trimmedGmail) && $showMessage) {
-			//if gmail has been trimmed, show message.
-			$message = 'Your Gmail address alias(' . $email . ') has been trimmed as actual Gmail address(' . $trimmedGmail . '). You could still use your usual gmail address to login.';
-			Mage::getSingleton('customer/session')->addError(Mage::helper('customer')->__($message));
-		}
+        $strArray = explode('@', $email);
+        
+        if(empty($strArray) ||
+           empty($strArray[1]) ||
+           $strArray[1] != 'gmail.com') {
+            return $email;
+        }
+        
+        //get username, such as 'abcd'
+        $username = $strArray[0];
+        //Get username string's length
+        $len = strlen($username);
+        $trimmedGmail = '';
+        
+        //iterate chacrates in username string
+        for($j=0; $j<$len; $j++) {
+            //if encounters '+', discard the rest of the string
+            if($username[$j] == '+') {
+                break;
+            }
+            
+            //check if it is '.', if yes, don't concatenate.
+            if($username[$j] != '.') {
+                //concatenate username chacrater
+                $trimmedGmail .= $username[$j];
+            }
+        }
+        
+        $trimmedGmail .= '@gmail.com';
+        
+        if(($email != $trimmedGmail) && $showMessage) {
+            //if gmail has been trimmed, show message.
+            $message = 'Your Gmail address alias(' . $email . ') has been trimmed as actual Gmail address(' . $trimmedGmail . '). You could still use your usual gmail address to login.';
+            Mage::getSingleton('customer/session')->addError(Mage::helper('customer')->__($message));
+        }
 
-		return $trimmedGmail;
+        return $trimmedGmail;
     }
 
 }

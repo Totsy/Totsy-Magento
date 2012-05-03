@@ -5,13 +5,13 @@
             <version>1.0.0</version>
         </Harapartners_Paymentfactory>
     </modules>
-	<global>
+    <global>
         <blocks>
             <paymentfactory>
-				<class>Harapartners_Paymentfactory_Block</class>
+                <class>Harapartners_Paymentfactory_Block</class>
             </paymentfactory>
         </blocks>
-		<payment>
+        <payment>
             <cc>
                 <types>
                     <LASER>
@@ -27,15 +27,15 @@
                 </types>
             </cc>
         </payment>
-		<helpers>
+        <helpers>
             <paymentfactory>
-				<class>Harapartners_Paymentfactory_Helper</class>
-			</paymentfactory>
+                <class>Harapartners_Paymentfactory_Helper</class>
+            </paymentfactory>
         </helpers>
         <models>
             <paymentfactory>
                 <class>Harapartners_Paymentfactory_Model</class>
-				<resourceModel>paymentfactory_mysql4</resourceModel>
+                <resourceModel>paymentfactory_mysql4</resourceModel>
             </paymentfactory>
             <paymentfactory_mysql4>
                 <class>Harapartners_Paymentfactory_Model_Mysql4</class>
@@ -45,17 +45,17 @@
                     </profile>
                 </entities>
             </paymentfactory_mysql4>
-			<!--Moved to Harapartners_Service-->
-			<!--sales>
-				<rewrite>
-					<quote_payment>Harapartners_Paymentfactory_Model_Quote_Payment</quote_payment>
-				</rewrite>
-				<rewrite>
-					<convert_quote>Harapartners_Paymentfactory_Model_Convert_Quote</convert_quote>
-				</rewrite>
-			</sales-->
+            <!--Moved to Harapartners_Service-->
+            <!--sales>
+                <rewrite>
+                    <quote_payment>Harapartners_Paymentfactory_Model_Quote_Payment</quote_payment>
+                </rewrite>
+                <rewrite>
+                    <convert_quote>Harapartners_Paymentfactory_Model_Convert_Quote</convert_quote>
+                </rewrite>
+            </sales-->
         </models>
-		<resources>
+        <resources>
             <paymentfactory_setup>
                 <setup>
                     <module>Harapartners_Paymentfactory</module>
@@ -76,7 +76,7 @@
             </paymentfactory_read>
         </resources>
     </global>
-	<frontend>  
+    <frontend>  
         <routers>  
             <paymentfactory>  
                 <use>standard</use>  
@@ -86,36 +86,36 @@
                 </args>  
             </paymentfactory>  
         </routers>
-		<layout>
-			<updates>
-				<paymentfactory>
-					<file>paymentfactory.xml</file>
-				</paymentfactory>
-			</updates>
-		</layout>		
+        <layout>
+            <updates>
+                <paymentfactory>
+                    <file>paymentfactory.xml</file>
+                </paymentfactory>
+            </updates>
+        </layout>        
     </frontend>
-	<adminhtml>
-		<acl>
-			<resources>
-				<admin>
-					<children>
-						<system>
-							<children>
-								<config>
-									<children>
-										<payment translate="title" module="paymentfactory">
-											<title>Paymentfactory Tokenize Configuration</title>
-										</payment>
-									</children>
-								</config>
-							</children>
-						</system>
-					</children>
-				</admin>
-			</resources>
-		</acl>
-	</adminhtml>
-	<default>
+    <adminhtml>
+        <acl>
+            <resources>
+                <admin>
+                    <children>
+                        <system>
+                            <children>
+                                <config>
+                                    <children>
+                                        <payment translate="title" module="paymentfactory">
+                                            <title>Paymentfactory Tokenize Configuration</title>
+                                        </payment>
+                                    </children>
+                                </config>
+                            </children>
+                        </system>
+                    </children>
+                </admin>
+            </resources>
+        </acl>
+    </adminhtml>
+    <default>
         <payment>
             <paymentfactory_tokenize>
                 <payment_action>authorize</payment_action>

@@ -5,9 +5,9 @@ class Harapartners_Promotionfactory_Block_Adminhtml_Widget_Grid_Column_Renderer_
         $resultHtml = "N/A";
         $ruleId = $row->getData($this->getColumn()->getIndex());
         if(!!$ruleId){
-        	if(Mage::getModel('promotionfactory/groupcoupon')->ruleIdExist($ruleId)){
-        		$resultHtml = "Created";
-        	}
+            if(Mage::getModel('promotionfactory/groupcoupon')->ruleIdExist($ruleId)){
+                $resultHtml = "Created";
+            }
         }
         return $resultHtml;
     }   

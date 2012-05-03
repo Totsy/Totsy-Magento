@@ -11,11 +11,11 @@
  *
  */
 class Harapartners_SpeedTax_Block_Adminhtml_Log_Call_Index extends Mage_Adminhtml_Block_Widget_Grid_Container{
-	
+    
     public function __construct(){
-		$this->_blockGroup = 'speedtax';
-		$this->_controller = 'adminhtml_log_call_index';
-    	$this->_headerText = Mage::helper('speedtax')->__('Log Table');
+        $this->_blockGroup = 'speedtax';
+        $this->_controller = 'adminhtml_log_call_index';
+        $this->_headerText = Mage::helper('speedtax')->__('Log Table');
         parent::__construct();
     }
  

@@ -12,19 +12,19 @@
  */
  
 class Harapartners_Service_Helper_Image extends Mage_Catalog_Helper_Image{
-	
-	public function loadImageFile($file, $imageType = 'image'){
-		$this->_setModel(Mage::getModel('service/image'));
-		$this->_getModel()->setDestinationSubdir($imageType); //Important to determine which placeholder to use
-		if(is_file($file)){
-			$this->_getModel()->setBaseFile( $file );
-			$this->setImageFile($file);
-		}else{
-			//Note that Mage_Catalog_Model_Product_Image is the core image processor, use a dummy product to invoke the placeholder
-			$this->setProduct(Mage::getModel('catalog/product'));
-			$this->setImageFile(null);
-		}
-		return $this;
-	}
-	
+    
+    public function loadImageFile($file, $imageType = 'image'){
+        $this->_setModel(Mage::getModel('service/image'));
+        $this->_getModel()->setDestinationSubdir($imageType); //Important to determine which placeholder to use
+        if(is_file($file)){
+            $this->_getModel()->setBaseFile( $file );
+            $this->setImageFile($file);
+        }else{
+            //Note that Mage_Catalog_Model_Product_Image is the core image processor, use a dummy product to invoke the placeholder
+            $this->setProduct(Mage::getModel('catalog/product'));
+            $this->setImageFile(null);
+        }
+        return $this;
+    }
+    
 }

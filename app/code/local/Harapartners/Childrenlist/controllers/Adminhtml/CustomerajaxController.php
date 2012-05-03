@@ -16,10 +16,10 @@ class Harapartners_Childrenlist_Adminhtml_CustomerajaxController extends Mage_Ad
         $this->_initCustomer();
         /*$subscriber = Mage::getModel('newsletter/subscriber')
             ->loadByCustomer(Mage::registry('current_customer'));*/
-		 $customer = Mage::registry('current_customer');
+         $customer = Mage::registry('current_customer');
          if ($customer->getId()) {
             //delete operation
-			/*if($itemId = (int) $this->getRequest()->getParam('delete')) {
+            /*if($itemId = (int) $this->getRequest()->getParam('delete')) {
                 try {
                     Mage::getModel('wishlist/item')->load($itemId)
                         ->delete();

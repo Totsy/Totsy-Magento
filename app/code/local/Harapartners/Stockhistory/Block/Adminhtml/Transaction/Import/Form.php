@@ -13,14 +13,14 @@
  */
 
 class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Import_Form extends Mage_Adminhtml_Block_Widget_Form{
-	
-	protected function _prepareForm() {
+    
+    protected function _prepareForm() {
 
         $form = new Varien_Data_Form(array(
             'id'        => 'import_form',
             'action'    => $this->getUrl('*/*/saveImport', array('id' => $this->getRequest()->getParam('stock_import'))),
             'method'    => 'post',
-            'enctype'  	 => 'multipart/form-data'
+            'enctype'       => 'multipart/form-data'
         ));
         
 
@@ -31,10 +31,10 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Import_Form extends 
             'class'     => 'required-entry',
             'required'  => true,
             'name'      => 'stock_import',
-        	'note'		=> Mage::helper('stockhistory')->__('File type should be .csv')
+            'note'        => Mage::helper('stockhistory')->__('File type should be .csv')
         ));
         
-//		if($formData = Mage::getSingleton('adminhtml/session')->getFormData()) {
+//        if($formData = Mage::getSingleton('adminhtml/session')->getFormData()) {
 //            $form->setValues($formData);
 //        } elseif ( Mage::registry('itemqueue') ) {
 //            $form->setValues(Mage::registry('itemqueue')->getData());

@@ -17,14 +17,14 @@
         </Harapartners_MemcacheDb>
     </modules>
     <global>
-		<models>
+        <models>
             <memcachedb>
                 <class>Harapartners_MemcacheDb_Model</class>
-				<resourceModel>memcachedb_resource</resourceModel>
+                <resourceModel>memcachedb_resource</resourceModel>
             </memcachedb>
-			<memcachedb_resource>
+            <memcachedb_resource>
                 <class>Harapartners_MemcacheDb_Model_Resource</class>
-			</memcachedb_resource>
+            </memcachedb_resource>
         </models>
     </global>
 </config>

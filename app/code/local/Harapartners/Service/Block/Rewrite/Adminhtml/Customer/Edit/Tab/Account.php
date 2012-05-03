@@ -14,12 +14,12 @@
 
 class Harapartners_Service_Block_Rewrite_Adminhtml_Customer_Edit_Tab_Account extends Mage_Adminhtml_Block_Customer_Edit_Tab_Account {
    
-	protected function _setFieldset($attributes, $fieldset){
-		parent::_setFieldset($attributes, $fieldset);
-		if(!!$fieldset->getForm()->getElement('login_counter')){
+    protected function _setFieldset($attributes, $fieldset){
+        parent::_setFieldset($attributes, $fieldset);
+        if(!!$fieldset->getForm()->getElement('login_counter')){
             $fieldset->getForm()->getElement('login_counter')->setDisabled('disabled');
         }
         return $this;
-	}
-	
+    }
+    
 }

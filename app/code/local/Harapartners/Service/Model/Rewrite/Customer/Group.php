@@ -17,7 +17,7 @@ class Harapartners_Service_Model_Rewrite_Customer_Group extends Mage_Customer_Mo
     protected function _beforeSave(){
         $this->_prepareData();
         if(!!$this->getId()){
-        	throw new Mage_Core_Exception('Modifying existing customer group is forbidden.');
+            throw new Mage_Core_Exception('Modifying existing customer group is forbidden.');
         }
         return parent::_beforeSave();
     }

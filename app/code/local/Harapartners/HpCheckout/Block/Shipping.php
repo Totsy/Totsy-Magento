@@ -31,7 +31,7 @@ class Harapartners_HpCheckout_Block_Shipping extends Harapartners_HpCheckout_Blo
         return $this->_address;
     }
     
-	/**
+    /**
      * Return Customer Address First Name
      * If Sales Quote Address First Name is not defined - return Customer First Name
      *

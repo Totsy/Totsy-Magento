@@ -13,21 +13,21 @@
  */
 
 class Harapartners_Stockhistory_Model_Mysql4_Transaction extends Mage_Core_Model_Mysql4_Abstract {
-	
-	public function _construct() {
-		$this->_init('stockhistory/transaction', 'id');
-	}
-	
-	public function loadByProductId($productId){
-		$readAdapter = $this->_getReadAdapter();
-    	$select = $readAdapter->select()
-            	->from($this->getMainTable())
-            	->where('product_id=:product_id');
+    
+    public function _construct() {
+        $this->_init('stockhistory/transaction', 'id');
+    }
+    
+    public function loadByProductId($productId){
+        $readAdapter = $this->_getReadAdapter();
+        $select = $readAdapter->select()
+                ->from($this->getMainTable())
+                ->where('product_id=:product_id');
         $result = $readAdapter->fetchRow($select, array('product_id' => $productId));
         if (!$result) {
            $result = array(); 
         }
         return $result;
-	}
-	
+    }
+    
 }

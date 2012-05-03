@@ -14,16 +14,16 @@
 
 class Harapartners_Service_Model_Rewrite_Payment_Method_Ccsave extends Mage_Payment_Model_Method_Ccsave {
     
-	//For legacy order importing
-	public function validate(){
-    	return true;
+    //For legacy order importing
+    public function validate(){
+        return true;
     }
     
     public function isAvailable($quote = null){
         if(!!Mage::registry('order_import_allow_ccsave')){
-        	return true;
+            return true;
         }
         return parent::isAvailable($quote);
     }
-	
+    
 }

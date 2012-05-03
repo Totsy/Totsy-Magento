@@ -15,9 +15,9 @@
 class Harapartners_EmailFactory_Model_Mysql4_Record extends Mage_Core_Model_Resource_Db_Abstract
 {
     
-	protected function _construct()
+    protected function _construct()
     {
         $this->_init('emailfactory/record', 'emailfactory_record_id');
     }
-	
+    
 }

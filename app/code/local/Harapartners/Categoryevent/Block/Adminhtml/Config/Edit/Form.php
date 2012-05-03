@@ -13,9 +13,9 @@
  */
 
 class Harapartners_Categoryevent_Block_Adminhtml_Config_Edit_Form extends Mage_Adminhtml_Block_Widget_Form {
-	
-	protected function _prepareForm() {
-		
+    
+    protected function _prepareForm() {
+        
         $form = new Varien_Data_Form(array(
             'id'        => 'edit_form',
             'action'    => $this->getData('action'),
@@ -30,12 +30,12 @@ class Harapartners_Categoryevent_Block_Adminhtml_Config_Edit_Form extends Mage_A
             'class'     => 'validate-greater-than-zero',
             'required'  => true,
             'name'      => 'pagenumber_config',
-        	'note'		=> Mage::helper('categoryevent')->__('Input page number to change the default display page number e.g. 4, 8, 12')
+            'note'        => Mage::helper('categoryevent')->__('Input page number to change the default display page number e.g. 4, 8, 12')
         ));
 
-		$configKey = 'pagenumber_config';		
-		$configTimer = Mage::getStoreConfig('config/catalog_page_number/'.$configKey);
-		
+        $configKey = 'pagenumber_config';        
+        $configTimer = Mage::getStoreConfig('config/catalog_page_number/'.$configKey);
+        
         $form->setValues( array('pagenumber_config' => $configTimer) );
         
         $form->setUseContainer(true);

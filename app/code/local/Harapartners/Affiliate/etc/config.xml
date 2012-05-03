@@ -59,7 +59,7 @@
                 <connection>
                     <use>core_read</use>
                 </connection>
-            </affiliate_read>		
+            </affiliate_read>        
         </resources>
         <!--Moved to Harapartners_Service-->
         <!--events>

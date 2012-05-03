@@ -34,9 +34,9 @@ class Harapartners_Childrenlist_Block_Widget_Abstract extends Mage_Core_Block_Te
         }
         return $this->getData('field_id_format');
     }
-		
+        
     public function getObject(){
-    	return $this->getChildInfo();
+        return $this->getChildInfo();
     }
     
     public function getFieldNameFormat()
@@ -62,7 +62,7 @@ class Harapartners_Childrenlist_Block_Widget_Abstract extends Mage_Core_Block_Te
     {
         $childId = Mage::app()->getRequest()->getParam('childid', false);
         $child = Mage::getModel('childrenlist/child')->load($childId);
-    	return $child;  
+        return $child;  
     }
 
     public function getFieldName($field)

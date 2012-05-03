@@ -28,46 +28,46 @@ class Totsy_Api_Block_Adminhtml_Client_Index_Grid
     protected function _prepareColumns()
     {
         $this->addColumn('totsyapi_client_id', array(
-            'header'	=>	Mage::helper('totsyapi')->__('ID'),
-            'align'		=>	'right',
-            'width'		=>	'50px',
-            'index'		=>	'totsyapi_client_id',
+            'header'    =>    Mage::helper('totsyapi')->__('ID'),
+            'align'        =>    'right',
+            'width'        =>    '50px',
+            'index'        =>    'totsyapi_client_id',
         ));
 
         $this->addColumn('name', array(
-            'header'	=>	Mage::helper('totsyapi')->__('Client Name'),
-            'align'		=>	'right',
-            'width'		=>	'50px',
-            'index'		=>	'name',
+            'header'    =>    Mage::helper('totsyapi')->__('Client Name'),
+            'align'        =>    'right',
+            'width'        =>    '50px',
+            'index'        =>    'name',
         ));
 
         $this->addColumn('contact_info', array(
-            'header'	=>	Mage::helper('totsyapi')->__('Primary Contact'),
-            'align'		=>	'right',
-            'width'		=>	'50px',
-            'index'		=>	'contact_info',
+            'header'    =>    Mage::helper('totsyapi')->__('Primary Contact'),
+            'align'        =>    'right',
+            'width'        =>    '50px',
+            'index'        =>    'contact_info',
         ));
 
         $this->addColumn('authorization', array(
-            'header'	=>	Mage::helper('totsyapi')->__('Authorization Key'),
-            'align'		=>	'right',
-            'width'		=>	'50px',
-            'index'		=>	'authorization',
+            'header'    =>    Mage::helper('totsyapi')->__('Authorization Key'),
+            'align'        =>    'right',
+            'width'        =>    '50px',
+            'index'        =>    'authorization',
         ));
 
         $this->addColumn('last_request', array(
-            'header'	=>	Mage::helper('totsyapi')->__('Most Recent Request'),
-            'align'		=>	'right',
-            'width'		=>	'50px',
+            'header'    =>    Mage::helper('totsyapi')->__('Most Recent Request'),
+            'align'        =>    'right',
+            'width'        =>    '50px',
             'type'      =>  'datetime',
-            'index'		=>	'last_request',
+            'index'        =>    'last_request',
         ));
 
         $this->addColumn('active', array(
-            'header'	=>	Mage::helper('totsyapi')->__('Active'),
-            'align'		=>	'right',
-            'width'		=>	'50px',
-            'index'		=>	'active',
+            'header'    =>    Mage::helper('totsyapi')->__('Active'),
+            'align'        =>    'right',
+            'width'        =>    '50px',
+            'index'        =>    'active',
         ));
 
         return parent::_prepareColumns();
@@ -82,8 +82,8 @@ class Totsy_Api_Block_Adminhtml_Client_Index_Grid
     public function getRowUrl($row)
     {
         return $this->getUrl('*/*/edit', array(
-            'store'	=> $this->_getStore(),
-            'id' 	=> $row->getId(),
+            'store'    => $this->_getStore(),
+            'id'     => $row->getId(),
         ));
     }
 }

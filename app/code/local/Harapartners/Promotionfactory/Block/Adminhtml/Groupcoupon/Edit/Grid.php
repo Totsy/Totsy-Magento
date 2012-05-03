@@ -15,8 +15,8 @@
 class Harapartners_Promotionfactory_Block_Adminhtml_Groupcoupon_Edit_Grid extends Mage_Adminhtml_Block_Widget_Grid {
 
     protected $_id = NULL;
-	
-	public function __construct(){
+    
+    public function __construct(){
         parent::__construct();
         $this->setId('groupcouponPromotionEditGrid');
         $this->_id = $this->getRequest ()->getParam ( 'id' );
@@ -25,7 +25,7 @@ class Harapartners_Promotionfactory_Block_Adminhtml_Groupcoupon_Edit_Grid extend
     protected function _prepareCollection(){
         $model = Mage::getModel('promotionfactory/groupcoupon');
         $collection = $model->getCollection()->addFilter('rule_id', $this->_id);
-		$this->setCollection($collection);
+        $this->setCollection($collection);
         parent::_prepareCollection();
         return $this;
     }
@@ -69,8 +69,8 @@ class Harapartners_Promotionfactory_Block_Adminhtml_Groupcoupon_Edit_Grid extend
             'align'         => 'center',
             'width'         => '150px',
             'index'         => 'created_at',
-        	'type'      	=> 'datetime',
-            'gmtoffset' 	=> true
+            'type'          => 'datetime',
+            'gmtoffset'     => true
         ));
         
         $this->addColumn('updated_at', array(
@@ -78,8 +78,8 @@ class Harapartners_Promotionfactory_Block_Adminhtml_Groupcoupon_Edit_Grid extend
             'align'         => 'center',
             'width'         => '150px',
             'index'         => 'updated_at',
-        	'type'      	=> 'datetime',
-            'gmtoffset' 	=> true
+            'type'          => 'datetime',
+            'gmtoffset'     => true
         ));
         
         $this->addColumn('used_count', array(
@@ -96,8 +96,8 @@ class Harapartners_Promotionfactory_Block_Adminhtml_Groupcoupon_Edit_Grid extend
 
 //    public function getRowUrl($row){
 //        return $this->getUrl('*/*/edit', array(
-//	            'store'=>$this->getRequest()->getParam('store'),
-//	            'id'=>$row->getId()
+//                'store'=>$this->getRequest()->getParam('store'),
+//                'id'=>$row->getId()
 //        ));
 //    }
     

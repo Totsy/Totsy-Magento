@@ -129,8 +129,8 @@ class Mage_Adminhtml_Block_Catalog_Product_Grid extends Mage_Adminhtml_Block_Wid
         $this->addColumn('image', array(
             'header'    => Mage::helper('catalog')->__('Image'),
             'sortable'  => false,
-        	'width'     => '120px',
-        	'renderer'	=> 'Harapartners_Service_Block_Adminhtml_Widget_Grid_Column_Renderer_Product_Image'
+            'width'     => '120px',
+            'renderer'    => 'Harapartners_Service_Block_Adminhtml_Widget_Grid_Column_Renderer_Product_Image'
         ));
 
         $store = $this->_getStore();

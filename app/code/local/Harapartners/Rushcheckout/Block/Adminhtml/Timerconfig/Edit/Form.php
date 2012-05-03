@@ -1,7 +1,7 @@
 <?php
 class Harapartners_Rushcheckout_Block_Adminhtml_Timerconfig_Edit_Form extends Mage_Adminhtml_Block_Widget_Form {
-	
-	protected function _prepareForm() {
+    
+    protected function _prepareForm() {
 
         $form = new Varien_Data_Form(array(
             'id'        => 'edit_form',
@@ -17,14 +17,14 @@ class Harapartners_Rushcheckout_Block_Adminhtml_Timerconfig_Edit_Form extends Ma
             'class'     => 'validate-greater-than-zero',
             'required'  => true,
             'name'      => 'timer_config',
-        	'note'		=> Mage::helper('rushcheckout')->__('Please input time in seconds')
+            'note'        => Mage::helper('rushcheckout')->__('Please input time in seconds')
         ));
 
         //set form data, get data first
         //$form->setValues('Enable'); //$formConfigData) $configurationValue ;
-		$configKey = 'limit_timer';		
-		$configTimer = Mage::getStoreConfig('config/rushcheckout_timer/'.$configKey);
-		
+        $configKey = 'limit_timer';        
+        $configTimer = Mage::getStoreConfig('config/rushcheckout_timer/'.$configKey);
+        
         $form->setValues( array('timer_config' => $configTimer) );
         
         $form->setUseContainer(true);

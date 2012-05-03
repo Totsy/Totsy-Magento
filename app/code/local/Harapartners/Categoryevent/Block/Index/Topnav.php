@@ -16,10 +16,10 @@
  */
 
 class Harapartners_Categoryevent_Block_Index_Topnav extends Mage_Core_Block_Template {
-	
-	public function getTopNavDataObject(){
-    	$helper = Mage::helper('categoryevent/memcache');
-    	return $helper->getTopNavDataObject();
+    
+    public function getTopNavDataObject(){
+        $helper = Mage::helper('categoryevent/memcache');
+        return $helper->getTopNavDataObject();
     }
     
 }
