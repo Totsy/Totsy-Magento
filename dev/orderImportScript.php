@@ -217,7 +217,15 @@ function placeOrder($orderData){
 	$service = Mage::getModel('sales/service_quote', $quote);
 	$service->submitAll();
 	$order = $service->getOrder();
+	
+	//Timezone correction
+	$defaultTimezone = date_default_timezone_get();
+	$mageTimezone = Mage::getStoreConfig(Mage_Core_Model_Locale::XML_PATH_DEFAULT_TIMEZONE);
+	date_default_timezone_set($mageTimezone);
+	$createdAt = strtotime($orderObj->getData('created_at'));
+	date_default_timezone_set($defaultTimezone);
+	
 	$order->setIncrementId($orderObj->getData('legacy_order_id'))
-			->setCreatedAt(strtotime($orderObj->getData('created_at')))
+			->setCreatedAt($createdAt)
 			->save();
 }
