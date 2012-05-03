@@ -15,14 +15,14 @@
 class Harapartners_Customertracking_Block_Headermsg extends Mage_Core_Block_Template {
     
     public function _toHtml(){
-    	$html = '';
+        $html = '';
 
-    	    if (!$this->getTemplate()) {
-            	return '';
-        	}
-        	$html = $this->renderView();
-        	//$cookie->delete($key); //Note cookie still available till next page request
-  	
-    	return $html;
+            if (!$this->getTemplate()) {
+                return '';
+            }
+            $html = $this->renderView();
+            //$cookie->delete($key); //Note cookie still available till next page request
+      
+        return $html;
     }
 }

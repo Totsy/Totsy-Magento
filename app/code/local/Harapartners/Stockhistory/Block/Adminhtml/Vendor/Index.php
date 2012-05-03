@@ -13,11 +13,11 @@
  */
 
 class Harapartners_Stockhistory_Block_Adminhtml_Vendor_Index extends Mage_Adminhtml_Block_Widget_Grid_Container{
-	
+    
     public function __construct(){
-		$this->_blockGroup = 'stockhistory';
-		$this->_controller = 'adminhtml_vendor_index';
-    	$this->_headerText = Mage::helper('stockhistory')->__('Vendor Info');
+        $this->_blockGroup = 'stockhistory';
+        $this->_controller = 'adminhtml_vendor_index';
+        $this->_headerText = Mage::helper('stockhistory')->__('Vendor Info');
         parent::__construct();
     }
  

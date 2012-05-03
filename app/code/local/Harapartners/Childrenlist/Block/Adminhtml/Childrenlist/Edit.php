@@ -48,7 +48,7 @@ class Harapartners_Childrenlist_Block_Adminhtml_Childrenlist_Edit extends Mage_A
         if( $this->getRequest()->getParam('customerId', false) ) {
             $this->_updateButton('back', 'onclick', 'setLocation(\'' . $this->getUrl('adminhtml/customer/edit', array('id' => $this->getRequest()->getParam('customerId', false))) .'\')' );
         }else {
-        	$this->_updateButton('back', 'onclick', 'setLocation(\'' . $this->getUrl('adminhtml/customer/index') .'\')' );
+            $this->_updateButton('back', 'onclick', 'setLocation(\'' . $this->getUrl('adminhtml/customer/index') .'\')' );
         }
         Mage::getSingleton('adminhtml/session')->setEditPage(Mage::helper('core/url')->getCurrentUrl());
     }

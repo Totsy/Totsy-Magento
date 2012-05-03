@@ -14,13 +14,13 @@
 
 class Harapartners_Import_Model_Productimport extends Mage_Catalog_Model_Convert_Adapter_Product {
     
-	const MULTI_DELIMITER   = ','; //Harapartners, Jun
-	const DEFAULT_FIELD_DELIMITER   = ','; //Harapartners, Jun
+    const MULTI_DELIMITER   = ','; //Harapartners, Jun
+    const DEFAULT_FIELD_DELIMITER   = ','; //Harapartners, Jun
 
     public function saveRow(array $importData){
         $product = $this->getProductModel()
             ->reset();
-	/*
+    /*
         if (empty($importData['store'])) {
             if (!is_null($this->getBatchParams('store'))) {
                 $store = $this->getStoreById($this->getBatchParams('store'));
@@ -41,8 +41,8 @@ class Harapartners_Import_Model_Productimport extends Mage_Catalog_Model_Convert
                 $importData['store']
             );
             Mage::throwException($message);
-        }	
-	*/
+        }    
+    */
         if (empty($importData['sku'])) {
             $message = Mage::helper('catalog')->__('Skipping import row, required field "%s" is not defined.', 'sku');
             Mage::throwException($message);
@@ -74,7 +74,7 @@ class Harapartners_Import_Model_Productimport extends Mage_Catalog_Model_Convert
             /**
              * Check product define attribute set
              */
-		/*
+        /*
             if (empty($importData['attribute_set']) || !isset($productAttributeSets[$importData['attribute_set']])) {
                 $value = isset($importData['attribute_set']) ? $importData['attribute_set'] : '';
                 $message = Mage::helper('catalog')->__(
@@ -84,8 +84,8 @@ class Harapartners_Import_Model_Productimport extends Mage_Catalog_Model_Convert
                 );
                 Mage::throwException($message);
             }*/
-           	// $product->setAttributeSetId($productAttributeSets[$importData['attribute_set']]);
-		 $product->setAttributeSetId($importData['attribute_set_id']);
+               // $product->setAttributeSetId($productAttributeSets[$importData['attribute_set']]);
+         $product->setAttributeSetId($importData['attribute_set_id']);
             foreach ($this->_requiredFields as $field) {
                 $attribute = $this->getAttribute($field);
                 if (!isset($importData[$field]) && $attribute && $attribute->getIsRequired()) {
@@ -102,34 +102,34 @@ class Harapartners_Import_Model_Productimport extends Mage_Catalog_Model_Convert
              * Hara Partners START
              * Richu
              */
-		
-			if ($importData['type'] == 'configurable') {
-				$product->setCanSaveConfigurableAttributes(true);
-				$configAttributeCodes = explode(self::DEFAULT_FIELD_DELIMITER, $importData['configurable_attribute_codes']);
-				$usingAttributeIds = array();
-				foreach($configAttributeCodes as $attributeCode) {
-					$attributeCode = trim($attributeCode);
-					$attribute = $product->getResource()->getAttribute($attributeCode);
-					if ($product->getTypeInstance()->canUseAttribute($attribute)) {
-						if ($new) { // fix for duplicating attributes error
-							$usingAttributeIds[] = $attribute->getAttributeId();
-						}
-					}
-				}
-				if (!empty($usingAttributeIds)) {
-					$product->getTypeInstance()->setUsedProductAttributeIds($usingAttributeIds);
-					$product->setConfigurableAttributesData($product->getTypeInstance()->getConfigurableAttributesAsArray());
-					$product->setCanSaveConfigurableAttributes(true);
-					$product->setCanSaveCustomOptions(true);
-				}
-				if (isset($importData['conf_simple_products'])) {
-					$product->setConfigurableProductsData($this->getProductIdFromSku($importData['conf_simple_products'], $product));
-				}
-			}
-			/**
-			 * Hara Partners END
-			 * Richu
-			 */
+        
+            if ($importData['type'] == 'configurable') {
+                $product->setCanSaveConfigurableAttributes(true);
+                $configAttributeCodes = explode(self::DEFAULT_FIELD_DELIMITER, $importData['configurable_attribute_codes']);
+                $usingAttributeIds = array();
+                foreach($configAttributeCodes as $attributeCode) {
+                    $attributeCode = trim($attributeCode);
+                    $attribute = $product->getResource()->getAttribute($attributeCode);
+                    if ($product->getTypeInstance()->canUseAttribute($attribute)) {
+                        if ($new) { // fix for duplicating attributes error
+                            $usingAttributeIds[] = $attribute->getAttributeId();
+                        }
+                    }
+                }
+                if (!empty($usingAttributeIds)) {
+                    $product->getTypeInstance()->setUsedProductAttributeIds($usingAttributeIds);
+                    $product->setConfigurableAttributesData($product->getTypeInstance()->getConfigurableAttributesAsArray());
+                    $product->setCanSaveConfigurableAttributes(true);
+                    $product->setCanSaveCustomOptions(true);
+                }
+                if (isset($importData['conf_simple_products'])) {
+                    $product->setConfigurableProductsData($this->getProductIdFromSku($importData['conf_simple_products'], $product));
+                }
+            }
+            /**
+             * Hara Partners END
+             * Richu
+             */
         }
 
         $this->setProductTypeInstance($product);
@@ -143,7 +143,7 @@ class Harapartners_Import_Model_Productimport extends Mage_Catalog_Model_Convert
                 unset($importData[$field]);
             }
         }
-	/*
+    /*
         if ($store->getId() != 0) {
             $websiteIds = $product->getWebsiteIds();
             if (!is_array($websiteIds)) {
@@ -154,7 +154,7 @@ class Harapartners_Import_Model_Productimport extends Mage_Catalog_Model_Convert
             }
             $product->setWebsiteIds($websiteIds);
         }
-	*/
+    */
         if (isset($importData['websites'])) {
             $websiteIds = $product->getWebsiteIds();
             if (!is_array($websiteIds) || !$store->getId()) {
@@ -186,17 +186,17 @@ class Harapartners_Import_Model_Productimport extends Mage_Catalog_Model_Convert
                 continue;
             }
 
-            $isArray 	= false;
-            $setValue 	= $value;
+            $isArray     = false;
+            $setValue     = $value;
 
             if ($attribute->getFrontendInput() == 'multiselect') {
-            	//Harapartners, Jun, START
-            	if(!$value || empty($value)){
-            		continue;
-            	}
+                //Harapartners, Jun, START
+                if(!$value || empty($value)){
+                    continue;
+                }
                 $value = explode(self::MULTI_DELIMITER, $value);
                 foreach($value as &$valueEntry){
-                	$valueEntry = trim($valueEntry);
+                    $valueEntry = trim($valueEntry);
                 }
                 //Harapartners, Jun, END
                 $isArray = true;
@@ -234,10 +234,10 @@ class Harapartners_Import_Model_Productimport extends Mage_Catalog_Model_Convert
 
             //Hara Partners, Richu
             if(!$setValue && !!$value){
-            	$message = 'Attribute \''.$field.'\' has options that does not exists.';
-            	//Mage::throwException($message);
+                $message = 'Attribute \''.$field.'\' has options that does not exists.';
+                //Mage::throwException($message);
             }else{
-            	$product->setData($field, $setValue);
+                $product->setData($field, $setValue);
             }
             
         }
@@ -314,14 +314,14 @@ class Harapartners_Import_Model_Productimport extends Mage_Catalog_Model_Convert
     }
 
     
-	protected function getProductIdFromSku($configurableSkusData,$product) {
-		$productIds = array();
-		$configurableSkus = explode(',', str_replace(" ", "", $configurableSkusData));
-		foreach ($configurableSkus as $productSku) {
-			if (($sku = (int)$product->getIdBySku($productSku)) > 0) {
-				parse_str("position=", $productIds[$sku]);
-			}
-		}
-		return $productIds;
-	}
+    protected function getProductIdFromSku($configurableSkusData,$product) {
+        $productIds = array();
+        $configurableSkus = explode(',', str_replace(" ", "", $configurableSkusData));
+        foreach ($configurableSkus as $productSku) {
+            if (($sku = (int)$product->getIdBySku($productSku)) > 0) {
+                parse_str("position=", $productIds[$sku]);
+            }
+        }
+        return $productIds;
+    }
 }

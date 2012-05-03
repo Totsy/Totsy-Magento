@@ -423,31 +423,31 @@ class Mage_Adminhtml_Catalog_CategoryController extends Mage_Adminhtml_Controlle
     */
     
     public function releaseAction(){
-		$id = $this->getRequest()->getParam('id');
-		$control = $this->getRequest()->getParam('con');
-		$storeId = Mage::app()->getRequest()->getParam('store', 0); 
-		if (!!$id && ($control == Mage_Catalog_Model_Product_Status::STATUS_ENABLED || $control == Mage_Catalog_Model_Product_Status::STATUS_DISABLED)){
-			try {
-				$category = Mage::getModel('catalog/category')->load($id);
-				$productCollection = Mage::getResourceModel('catalog/product_collection')
-					   ->addAttributeToSelect('status')
-					   ->addCategoryFilter($category)
-					   ->load();
-				foreach ($productCollection as $product){
-					Mage::getModel('catalog/product_status')->updateProductStatus($product->getId(), $storeId, $control);
-				}
-				if ($control == Mage_Catalog_Model_Product_Status::STATUS_DISABLED){
-					Mage::getSingleton('core/session')->addSuccess($this->__('All products in this event are disabled!'));
-				}elseif ($control == Mage_Catalog_Model_Product_Status::STATUS_ENABLED){
-					Mage::getSingleton('core/session')->addSuccess($this->__('All products in this event are enabled!'));
-				}
-			}catch (Exception $e){
-				Mage::getSingleton('core/session')->addError($this->__('Request Failure!'));
-				throw new Exception($e);
-			}
-		}
+        $id = $this->getRequest()->getParam('id');
+        $control = $this->getRequest()->getParam('con');
+        $storeId = Mage::app()->getRequest()->getParam('store', 0); 
+        if (!!$id && ($control == Mage_Catalog_Model_Product_Status::STATUS_ENABLED || $control == Mage_Catalog_Model_Product_Status::STATUS_DISABLED)){
+            try {
+                $category = Mage::getModel('catalog/category')->load($id);
+                $productCollection = Mage::getResourceModel('catalog/product_collection')
+                       ->addAttributeToSelect('status')
+                       ->addCategoryFilter($category)
+                       ->load();
+                foreach ($productCollection as $product){
+                    Mage::getModel('catalog/product_status')->updateProductStatus($product->getId(), $storeId, $control);
+                }
+                if ($control == Mage_Catalog_Model_Product_Status::STATUS_DISABLED){
+                    Mage::getSingleton('core/session')->addSuccess($this->__('All products in this event are disabled!'));
+                }elseif ($control == Mage_Catalog_Model_Product_Status::STATUS_ENABLED){
+                    Mage::getSingleton('core/session')->addSuccess($this->__('All products in this event are enabled!'));
+                }
+            }catch (Exception $e){
+                Mage::getSingleton('core/session')->addError($this->__('Request Failure!'));
+                throw new Exception($e);
+            }
+        }
 
-		$this->_redirect('*/*/index');		
+        $this->_redirect('*/*/index');        
     }
 
     /**
@@ -522,12 +522,12 @@ class Mage_Adminhtml_Catalog_CategoryController extends Mage_Adminhtml_Controlle
     
     //Harapartners, yang: add Preview function in category mangement page
     public function previewAction(){
-    	$postInfo = $this->getRequest()->getParams();
-    	$eventId = $postInfo['id'];
-    	$cookieName = Mage::helper('service/rewrite_catalog_category')->getPreviewCookieName();
-    	$cookieValue = Mage::helper('service/rewrite_catalog_category')->getPreviewCookieEncryptedCode();
-    	Mage::getModel('core/cookie')->set($cookieName, $cookieValue);
-    	$this->_redirect('catalog/category/view/id/' . $eventId);
+        $postInfo = $this->getRequest()->getParams();
+        $eventId = $postInfo['id'];
+        $cookieName = Mage::helper('service/rewrite_catalog_category')->getPreviewCookieName();
+        $cookieValue = Mage::helper('service/rewrite_catalog_category')->getPreviewCookieEncryptedCode();
+        Mage::getModel('core/cookie')->set($cookieName, $cookieValue);
+        $this->_redirect('catalog/category/view/id/' . $eventId);
     }
 
     /**

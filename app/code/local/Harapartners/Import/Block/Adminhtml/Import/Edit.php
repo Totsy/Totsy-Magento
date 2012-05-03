@@ -24,7 +24,7 @@ class Harapartners_Import_Block_Adminhtml_Import_Edit extends Mage_Adminhtml_Blo
         
         $this->_updateButton('save', 'label', Mage::helper('import')->__('Import'));
         $this->_updateButton('delete', 'label', Mage::helper('import')->__('Cancel'));
-		
+        
         /*
         $this->_addButton('saveandcontinue', array(
             'label'     => Mage::helper('adminhtml')->__('Save And Continue Edit'),
@@ -32,7 +32,7 @@ class Harapartners_Import_Block_Adminhtml_Import_Edit extends Mage_Adminhtml_Blo
             'class'     => 'save',
         ), -100);
 
-		*/
+        */
         
         $this->_formScripts[] = "
             function toggleEditor() {

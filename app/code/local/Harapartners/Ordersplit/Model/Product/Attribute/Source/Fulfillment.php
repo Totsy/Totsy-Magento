@@ -14,12 +14,12 @@
 
 class Harapartners_Ordersplit_Model_Product_Attribute_Source_Fulfillment extends Mage_Eav_Model_Entity_Attribute_Source_Abstract {
 
-	
+    
     public function getAllOptions(){
         if (!$this->_options) {
-        	$helper = Mage::helper('ordersplit');
+            $helper = Mage::helper('ordersplit');
             $this->_options = array(
-            	array(
+                array(
                     'value' => '',
                     'label' => $helper->__('-- Please Select --')
                 ),

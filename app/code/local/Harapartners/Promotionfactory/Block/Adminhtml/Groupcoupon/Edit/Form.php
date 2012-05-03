@@ -14,13 +14,13 @@
 
 class Harapartners_PromotionFactory_Block_Adminhtml_Groupcoupon_Edit_Form extends Mage_Adminhtml_Block_Widget_Form {
     
-	protected function _prepareForm() {
-		
+    protected function _prepareForm() {
+        
         $form = new Varien_Data_Form(array(
             'id'        => 'edit_form',
             'action'    => $this->getData('action'),
             'method'    => 'post',
-        	'enctype' => 'multipart/form-data'
+            'enctype' => 'multipart/form-data'
         ));
         
         
@@ -30,7 +30,7 @@ class Harapartners_PromotionFactory_Block_Adminhtml_Groupcoupon_Edit_Form extend
             'label'     => Mage::helper('promotionfactory')->__('Name'),
             'name'      => 'name',
             'required'  => true,
-            'note'		=> Mage::helper('promotionfactory')->__('Rule name'),
+            'note'        => Mage::helper('promotionfactory')->__('Rule name'),
         ));
 
        $fieldset->addField('import', 'text', array(

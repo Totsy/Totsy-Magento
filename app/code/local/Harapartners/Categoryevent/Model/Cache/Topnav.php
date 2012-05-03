@@ -20,8 +20,8 @@ class Harapartners_Categoryevent_Model_Cache_Topnav extends Enterprise_PageCache
     const CACHE_TAG_PREFIX = 'catagoryevent_topnav';
 
     protected function _getIdentifier() {
-    	$cacheId = $_SERVER['REQUEST_URI']; //Different request param must be cached differently!
-    	
+        $cacheId = $_SERVER['REQUEST_URI']; //Different request param must be cached differently!
+        
         $params = Mage::registry('application_params');
         $scopeCode = '';
         if(isset($params['scope_code'])) {

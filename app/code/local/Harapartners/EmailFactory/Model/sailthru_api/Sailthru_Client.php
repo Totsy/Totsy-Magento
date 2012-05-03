@@ -220,20 +220,20 @@ class Sailthru_Client {
      * @param string $content_html the HTML-format version of the email
      * @param string $content_text the text-format version of the email
      * @param array $options associative array
-     * 		blast_id
-     * 		copy_blast
-     * 		copy_template
-     * 		replyto
-     *		report_email
-     *		is_link_tracking
-     *		is_google_analytics
-     *		is_public
-     *		suppress_list
-     *		test_vars
-     *		email_hour_range
-     *		abtest
-     *		test_percent
-     *		data_feed_url
+     *         blast_id
+     *         copy_blast
+     *         copy_template
+     *         replyto
+     *        report_email
+     *        is_link_tracking
+     *        is_google_analytics
+     *        is_public
+     *        suppress_list
+     *        test_vars
+     *        email_hour_range
+     *        abtest
+     *        test_percent
+     *        data_feed_url
      * @link http://docs.sailthru.com/api/blast
      */
     public function scheduleBlast($name,
@@ -304,20 +304,20 @@ class Sailthru_Client {
      * @param string $content_html
      * @param string $content_text
      * @param array $options associative array
-     * 		blast_id
-     * 		copy_blast
-     * 		copy_template
-     * 		replyto
-     *		report_email
-     *		is_link_tracking
-     *		is_google_analytics
-     *		is_public
-     *		suppress_list
-     *		test_vars
-     *		email_hour_range
-     *		abtest
-     *		test_percent
-     *		data_feed_url
+     *         blast_id
+     *         copy_blast
+     *         copy_template
+     *         replyto
+     *        report_email
+     *        is_link_tracking
+     *        is_google_analytics
+     *        is_public
+     *        suppress_list
+     *        test_vars
+     *        email_hour_range
+     *        abtest
+     *        test_percent
+     *        data_feed_url
      * @link http://docs.sailthru.com/api/blast
      */
     public function updateBlast($blast_id,
@@ -500,7 +500,7 @@ class Sailthru_Client {
     /**
      * Deletes a list
      * @param String $list
-	 * @link http://docs.sailthru.com/api/list
+     * @link http://docs.sailthru.com/api/list
      */
     public function deleteList($list) {
         $data = array(
@@ -581,14 +581,14 @@ class Sailthru_Client {
      * <code>
      * <?php
      * $options = array(
-     * 		'match' => array(
-     *   		'type' => array(
-     *   		'shoes', 'shirts'
-     *   	),
-     *   	'min' => array(
-     *   		 'price' => 3000
-     *   	),
-     *   	'tags' => array('blue', 'red')
+     *         'match' => array(
+     *           'type' => array(
+     *           'shoes', 'shirts'
+     *       ),
+     *       'min' => array(
+     *            'price' => 3000
+     *       ),
+     *       'tags' => array('blue', 'red')
      * );
      * $response = $sailthruClient->saveAlert("praj@sailthru.com", 'realtime', 'default', null, $options);
      * ?>
@@ -600,10 +600,10 @@ class Sailthru_Client {
      * @param String $template
      * @param String $when
      * @param array $options Associative array of additive nature
-     * 		match 		Exact-match a custom variable		match[type]=shoes
-     * 		min		 	Minimum-value variables				min[price]=30000
-     * 		max			Maximum-value match					max[price]=50000
- 	 * 		tags		Tag-match							tags[]=blue
+     *         match         Exact-match a custom variable        match[type]=shoes
+     *         min             Minimum-value variables                min[price]=30000
+     *         max            Maximum-value match                    max[price]=50000
+      *         tags        Tag-match                            tags[]=blue
      */
     public function saveAlert($email, $type, $template, $when = null, $options = array()) {
         $data = $options;
@@ -973,12 +973,12 @@ class Sailthru_Client {
             }
         }
         curl_setopt($ch, CURLOPT_URL, $url);
-		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);//for local test
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);//for local test
         curl_setopt($ch, CURLOPT_HEADER, false);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_HTTPHEADER, array("User-Agent: {$this->user_agent_string}"));
         $data = curl_exec($ch);
-		//echo $data;//for test
+        //echo $data;//for test
         $this->lastResponseInfo = curl_getinfo($ch);
         if (!$data) {
             throw new Sailthru_Client_Exception("Bad response received from $url");

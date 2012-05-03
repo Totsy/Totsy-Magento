@@ -12,10 +12,10 @@
  * 
  */
 
-class Harapartners_Categoryevent_Block_Adminhtml_Config_Edit extends Mage_Adminhtml_Block_Widget_Form_Container {	
-	
-	public function __construct(){
-    	parent::__construct();
+class Harapartners_Categoryevent_Block_Adminhtml_Config_Edit extends Mage_Adminhtml_Block_Widget_Form_Container {    
+    
+    public function __construct(){
+        parent::__construct();
         $this->_blockGroup = 'categoryevent';
         $this->_controller = 'adminhtml_config';
         $this->_removeButton('back');
@@ -24,7 +24,7 @@ class Harapartners_Categoryevent_Block_Adminhtml_Config_Edit extends Mage_Adminh
     }
     
     public function getHeaderText() {
-    	return Mage::helper('categoryevent')->__('Configuration');
+        return Mage::helper('categoryevent')->__('Configuration');
     }
 
     public function getSaveUrl(){

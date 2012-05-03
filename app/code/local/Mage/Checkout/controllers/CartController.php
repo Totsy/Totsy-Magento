@@ -114,18 +114,18 @@ class Mage_Checkout_CartController extends Mage_Core_Controller_Front_Action
     }
 
     //Harapartners, yang, START
-	//For cart timer
+    //For cart timer
     protected function _getCurrentTime(){
-    	
-   		$defaultTimezone = date_default_timezone_get();
-		$mageTimezone = Mage::getStoreConfig(Mage_Core_Model_Locale::XML_PATH_DEFAULT_TIMEZONE);			
-		date_default_timezone_set($mageTimezone);
-		$timer = now();
-		date_default_timezone_set($defaultTimezone);
-		
-		return strtotime($timer);
+        
+           $defaultTimezone = date_default_timezone_get();
+        $mageTimezone = Mage::getStoreConfig(Mage_Core_Model_Locale::XML_PATH_DEFAULT_TIMEZONE);            
+        date_default_timezone_set($mageTimezone);
+        $timer = now();
+        date_default_timezone_set($defaultTimezone);
+        
+        return strtotime($timer);
     }
-	//Harapartners, yang, END
+    //Harapartners, yang, END
     
     
     
@@ -135,7 +135,7 @@ class Mage_Checkout_CartController extends Mage_Core_Controller_Front_Action
     public function indexAction()
     {
         $cart = $this->_getCart();
-		
+        
         if ($cart->getQuote()->getItemsCount()) {
             $cart->init();
             $cart->save();
@@ -205,8 +205,8 @@ class Mage_Checkout_CartController extends Mage_Core_Controller_Front_Action
             $cart->save();
 
             $this->_getSession()->setCartWasUpdated(true);
-            $this->_getSession()->setCartUpdatedFlag(true);		//Harapartners, yang, for header flotting cart logic
-            $this->_getSession()->setCountDownTimer($this->_getCurrentTime());	//Harapartners, yang, set new cart timer
+            $this->_getSession()->setCartUpdatedFlag(true);        //Harapartners, yang, for header flotting cart logic
+            $this->_getSession()->setCountDownTimer($this->_getCurrentTime());    //Harapartners, yang, set new cart timer
 
             /**
              * @todo remove wishlist observer processAddToCart
@@ -217,7 +217,7 @@ class Mage_Checkout_CartController extends Mage_Core_Controller_Front_Action
 
             if (!$this->_getSession()->getNoCartRedirect(true)) {
                 if (!$cart->getQuote()->getHasError()){
-                	$html = '%s was added to your shopping cart.<h2 class="non-mobile-hide"><a href="'.Mage::helper('checkout/cart')->getCartUrl().'">Go to Cart</a></h2>';
+                    $html = '%s was added to your shopping cart.<h2 class="non-mobile-hide"><a href="'.Mage::helper('checkout/cart')->getCartUrl().'">Go to Cart</a></h2>';
                     $message = $this->__($html, Mage::helper('core')->htmlEscape($product->getName()));
                     $this->_getSession()->addSuccess($message);
                 }
@@ -412,7 +412,7 @@ class Mage_Checkout_CartController extends Mage_Core_Controller_Front_Action
                 $cart->updateItems($cartData)
                     ->save();
             }
-            $this->_getSession()->setCartWasUpdated(true)->setCountDownTimer($this->_getCurrentTime());		//Harapartners, yang, set new cart timer
+            $this->_getSession()->setCartWasUpdated(true)->setCountDownTimer($this->_getCurrentTime());        //Harapartners, yang, set new cart timer
         } catch (Mage_Core_Exception $e) {
             $this->_getSession()->addError($e->getMessage());
         } catch (Exception $e) {

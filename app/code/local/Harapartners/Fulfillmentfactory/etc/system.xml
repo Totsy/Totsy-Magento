@@ -30,7 +30,7 @@
                     <show_in_default>1</show_in_default>
                     <show_in_website>1</show_in_website>
                     <show_in_store>1</show_in_store>
-					<expanded>1</expanded>
+                    <expanded>1</expanded>
                     <fields>
                         <fulfillment_aging_day translate="label">
                             <label>Fulfillment Aging Day</label>
@@ -52,14 +52,14 @@
                         </shipment_aging_day>
                     </fields>
                 </aging_setting>
-				<dotcom_setting translate="label">
+                <dotcom_setting translate="label">
                     <label>DOTcom API setting</label>
                     <frontend_type>text</frontend_type>
                     <sort_order>1</sort_order>
                     <show_in_default>1</show_in_default>
                     <show_in_website>1</show_in_website>
                     <show_in_store>1</show_in_store>
-					<expanded>1</expanded>
+                    <expanded>1</expanded>
                     <fields>
                         <fulfillment_dotcom_api_key translate="label">
                             <label>DOTcom API Key</label>
@@ -70,7 +70,7 @@
                             <show_in_store>1</show_in_store>
                             <comment>API key for DOTcom</comment>
                         </fulfillment_dotcom_api_key>
-						<fulfillment_dotcom_api_password translate="label">
+                        <fulfillment_dotcom_api_password translate="label">
                             <label>DOTcom API Password</label>
                             <frontend_type>text</frontend_type>
                             <sort_order>1</sort_order>
@@ -79,7 +79,7 @@
                             <show_in_store>1</show_in_store>
                             <comment>API password for DOTcom</comment>
                         </fulfillment_dotcom_api_password>
-						<fulfillment_dotcom_api_base_url translate="label">
+                        <fulfillment_dotcom_api_base_url translate="label">
                             <label>DOTcom API Base Url</label>
                             <frontend_type>text</frontend_type>
                             <sort_order>2</sort_order>

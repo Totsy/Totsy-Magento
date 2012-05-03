@@ -14,11 +14,11 @@
 class Harapartners_Service_Block_Adminhtml_Widget_Grid_Column_Renderer_Category_Image extends Mage_Adminhtml_Block_Widget_Grid_Column_Renderer_Abstract {
 
     public function render(Varien_Object $row){
-    	$attrCode = $this->getColumn()->getId();
+        $attrCode = $this->getColumn()->getId();
         if(!($row instanceof Mage_Catalog_Model_Category) 
-        		|| !$row->getId()
-        		|| !$row->getData($attrCode)){
-        	return '';
+                || !$row->getId()
+                || !$row->getData($attrCode)){
+            return '';
         }
         $file = BP.DS.'media'.DS.'catalog'.DS.'category'.DS.$row->getData($attrCode);
         $helper = Mage::helper('service/image');

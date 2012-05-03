@@ -17,18 +17,18 @@
         </Harapartners_Ordersplit>
     </modules>
     <global>
-		<helpers>
+        <helpers>
             <ordersplit>
-				<class>Harapartners_Ordersplit_Helper</class>
-			</ordersplit>
+                <class>Harapartners_Ordersplit_Helper</class>
+            </ordersplit>
         </helpers>
-		<models>
-		    <ordersplit>
-				<class>Harapartners_Ordersplit_Model</class>
-			</ordersplit>
-		</models>
-		<!--Moved to Harapartners_Service-->
-		<!--events>
+        <models>
+            <ordersplit>
+                <class>Harapartners_Ordersplit_Model</class>
+            </ordersplit>
+        </models>
+        <!--Moved to Harapartners_Service-->
+        <!--events>
             <sales_order_place_after>
                <observers>
                     <ordersplit>
@@ -38,6 +38,6 @@
                     </ordersplit>
                 </observers> 
             </sales_order_place_after>
-        </events-->			
+        </events-->            
     </global>
 </config>

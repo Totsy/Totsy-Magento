@@ -18,11 +18,11 @@
 class Harapartners_Categoryevent_Block_Index_Index extends Mage_Core_Block_Template {
 
     public function getIndexDataObject(){
-    	$helper = Mage::helper('categoryevent/memcache');
-    	return $helper->getIndexDataObject();
+        $helper = Mage::helper('categoryevent/memcache');
+        return $helper->getIndexDataObject();
     }
     
     public function hasProduct($categoryId){
-    	return Mage::getResourceModel('categoryevent/sortentry')->checkEventProduct($categoryId);
+        return Mage::getResourceModel('categoryevent/sortentry')->checkEventProduct($categoryId);
     }
 }

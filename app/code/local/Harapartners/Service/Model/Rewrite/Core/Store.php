@@ -14,11 +14,11 @@
 
 class Harapartners_Service_Model_Rewrite_Core_Store extends Mage_Core_Model_Store {
    
-	protected function _beforeSave(){
+    protected function _beforeSave(){
         if(!!$this->getId()){
-        	throw new Mage_Core_Exception('Modifying existing store is forbidden.');
+            throw new Mage_Core_Exception('Modifying existing store is forbidden.');
         }
         return parent::_beforeSave();
     }
-	
+    
 }

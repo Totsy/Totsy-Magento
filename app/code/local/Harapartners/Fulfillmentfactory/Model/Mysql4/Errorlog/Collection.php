@@ -12,7 +12,7 @@
  */
 class Harapartners_Fulfillmentfactory_Model_Mysql4_Errorlog_Collection extends Mage_Core_Model_Mysql4_Collection_Abstract{
     
-	public function _construct(){
+    public function _construct(){
         $this->_init('fulfillmentfactory/errorlog');
     }
 }

@@ -179,7 +179,7 @@ class Mage_Adminhtml_Block_Customer_Grid extends Mage_Adminhtml_Block_Widget_Gri
 //             'url'      => $this->getUrl('*/*/massDelete'),
 //             'confirm'  => Mage::helper('customer')->__('Are you sure?')
 //        ));
-		//
+        //
 
         $this->getMassactionBlock()->addItem('newsletter_subscribe', array(
              'label'    => Mage::helper('customer')->__('Subscribe to Newsletter'),

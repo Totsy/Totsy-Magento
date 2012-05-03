@@ -101,7 +101,7 @@ class Mage_Rss_Block_Catalog_Special extends Mage_Rss_Block_Catalog_Abstract
             array(array($this, 'addSpecialXmlCallback')),
             array('rssObj'=> $rssObj, 'results'=> &$results)
         );
-		
+        
         if (sizeof($results)>0) {
             foreach($results as $result){
                 // render a row for RSS feed

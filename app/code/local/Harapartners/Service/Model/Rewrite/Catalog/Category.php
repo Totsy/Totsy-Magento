@@ -13,38 +13,38 @@
  */
 
 class Harapartners_Service_Model_Rewrite_Catalog_Category extends Mage_Catalog_Model_Category {
-	
-	//Harapartners, Jun, Event and Top Event are immutable for Totsy logic
-	
-	public function move($parentId, $afterCategoryId){
-		$this->_totsyReserveAnchorCategoryCheck();
-    	return parent::move($parentId, $afterCategoryId);
-	}
-	
-	protected function _beforeSave() {
-		$this->_totsyReserveAnchorCategoryCheck();
-    	return parent::_beforeSave();
+    
+    //Harapartners, Jun, Event and Top Event are immutable for Totsy logic
+    
+    public function move($parentId, $afterCategoryId){
+        $this->_totsyReserveAnchorCategoryCheck();
+        return parent::move($parentId, $afterCategoryId);
+    }
+    
+    protected function _beforeSave() {
+        $this->_totsyReserveAnchorCategoryCheck();
+        return parent::_beforeSave();
     }
     
     protected function _totsyReserveAnchorCategoryCheck(){
-    	if($this->getData('name') == Harapartners_Categoryevent_Model_Sortentry::EVENT_CATEGORY_NAME 
-    			|| $this->getOrigData('name') == Harapartners_Categoryevent_Model_Sortentry::EVENT_CATEGORY_NAME 
-    	){
-			throw new Exception('"' . Harapartners_Categoryevent_Model_Sortentry::EVENT_CATEGORY_NAME . '" is a reserved anchor category. You cannot modify the "' . Harapartners_Categoryevent_Model_Sortentry::EVENT_CATEGORY_NAME . '" category or create another category with the same name. Please contact system admin if you need to make low level modifications.');
-		}
-		
-		if($this->getData('name') == Harapartners_Categoryevent_Model_Sortentry::TOP_EVENT_CATEGORY_NAME 
-				|| $this->getOrigData('name') == Harapartners_Categoryevent_Model_Sortentry::TOP_EVENT_CATEGORY_NAME
-		){
-			throw new Exception('"' . Harapartners_Categoryevent_Model_Sortentry::TOP_EVENT_CATEGORY_NAME . '" is a reserved anchor category. You cannot modify the "' . Harapartners_Categoryevent_Model_Sortentry::TOP_EVENT_CATEGORY_NAME . '" category or create another category with the same name. Please contact system admin if you need to make low level modifications.');
-		}
-		
-		if((!!$this->getData('level') && $this->getData('level') <= 1) 
-				|| (!!$this->getData('level') && $this->getOrigData('level') <= 1)){
-			throw new Exception('Root level categories are protected. Please contact system admin if you need to make low level modifications.');
-		}
-		
-		return $this;
+        if($this->getData('name') == Harapartners_Categoryevent_Model_Sortentry::EVENT_CATEGORY_NAME 
+                || $this->getOrigData('name') == Harapartners_Categoryevent_Model_Sortentry::EVENT_CATEGORY_NAME 
+        ){
+            throw new Exception('"' . Harapartners_Categoryevent_Model_Sortentry::EVENT_CATEGORY_NAME . '" is a reserved anchor category. You cannot modify the "' . Harapartners_Categoryevent_Model_Sortentry::EVENT_CATEGORY_NAME . '" category or create another category with the same name. Please contact system admin if you need to make low level modifications.');
+        }
+        
+        if($this->getData('name') == Harapartners_Categoryevent_Model_Sortentry::TOP_EVENT_CATEGORY_NAME 
+                || $this->getOrigData('name') == Harapartners_Categoryevent_Model_Sortentry::TOP_EVENT_CATEGORY_NAME
+        ){
+            throw new Exception('"' . Harapartners_Categoryevent_Model_Sortentry::TOP_EVENT_CATEGORY_NAME . '" is a reserved anchor category. You cannot modify the "' . Harapartners_Categoryevent_Model_Sortentry::TOP_EVENT_CATEGORY_NAME . '" category or create another category with the same name. Please contact system admin if you need to make low level modifications.');
+        }
+        
+        if((!!$this->getData('level') && $this->getData('level') <= 1) 
+                || (!!$this->getData('level') && $this->getOrigData('level') <= 1)){
+            throw new Exception('Root level categories are protected. Please contact system admin if you need to make low level modifications.');
+        }
+        
+        return $this;
     }
     
 }

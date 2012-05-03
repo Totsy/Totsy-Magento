@@ -13,19 +13,19 @@
  */
 
 class Harapartners_Customertracking_Block_Welcome extends Mage_Core_Block_Template {
-	
+    
     public function _toHtml(){
-    	$html = '';
-    	$cookie = Mage::app()->getCookie();
-    	$key = Harapartners_Customertracking_Helper_Data::COOKIE_CUSTOMER_WELCOME;
-    	if(!!$cookie->get($key)){
-    	    if (!$this->getTemplate()) {
-            	return '';
-        	}
-        	$html = $this->renderView();
-        	$cookie->delete($key); //Note cookie still available till next page request
-    	}    	
-    	return $html;
+        $html = '';
+        $cookie = Mage::app()->getCookie();
+        $key = Harapartners_Customertracking_Helper_Data::COOKIE_CUSTOMER_WELCOME;
+        if(!!$cookie->get($key)){
+            if (!$this->getTemplate()) {
+                return '';
+            }
+            $html = $this->renderView();
+            $cookie->delete($key); //Note cookie still available till next page request
+        }        
+        return $html;
     }
     
 }

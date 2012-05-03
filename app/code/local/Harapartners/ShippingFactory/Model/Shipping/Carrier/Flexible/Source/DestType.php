@@ -14,9 +14,9 @@
 
 class Harapartners_ShippingFactory_Model_Shipping_Carrier_Flexible_Source_DestType
 {
-	public function toOptionArray()
+    public function toOptionArray()
     {
-    	$ups = Mage::helper('shippingfactory');
+        $ups = Mage::helper('shippingfactory');
         //$ups = Mage::getSingleton('shippingfactory/shipping_carrier_flexible');
         $arr = array();
         foreach ($ups->getCode('dest_type_description') as $k=>$v) {

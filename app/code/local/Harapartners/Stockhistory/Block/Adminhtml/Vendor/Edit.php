@@ -14,40 +14,40 @@
 
 class Harapartners_Stockhistory_Block_Adminhtml_Vendor_Edit extends Mage_Adminhtml_Block_Widget_Form_Container
 {
-	public function __construct()
-	{
-		parent::__construct();
-		$this->_objectId = 'id';
-		$this->_blockGroup = 'stockhistory';
-		$this->_controller = 'adminhtml_vendor';
-		//$this->_removeButton('delete');
-		
-		if($this->getVendorId()){
-			$this->_addButton('create_po', array(
-	            'label'     => Mage::helper('stockhistory')->__('Create PO'),
-	            'onclick'   => 'setLocation(\'' . $this->getCreatePoUrl() .'\')',
-				'class'		=> 'add',
-	      	));
-		}
-		//$this->_updateButton('save', 'label', Mage::helper('stockhistory')->__('Import File'));
-	}
-	
-	public function getHeaderText() {
-    	return Mage::helper('stockhistory')->__('Vendor Info');
+    public function __construct()
+    {
+        parent::__construct();
+        $this->_objectId = 'id';
+        $this->_blockGroup = 'stockhistory';
+        $this->_controller = 'adminhtml_vendor';
+        //$this->_removeButton('delete');
+        
+        if($this->getVendorId()){
+            $this->_addButton('create_po', array(
+                'label'     => Mage::helper('stockhistory')->__('Create PO'),
+                'onclick'   => 'setLocation(\'' . $this->getCreatePoUrl() .'\')',
+                'class'        => 'add',
+              ));
+        }
+        //$this->_updateButton('save', 'label', Mage::helper('stockhistory')->__('Import File'));
+    }
+    
+    public function getHeaderText() {
+        return Mage::helper('stockhistory')->__('Vendor Info');
     }
 
     public function getSaveUrl(){
         return $this->getUrl('*/*/save', array('_current'=>true));
     }
     
-	public function getCreatePoUrl()
-	{
-		return $this->getUrl('stockhistory/adminhtml_purchaseorder/newByVendor', array('vendor_id' => $this->getVendorId()));
-	}
-	
-	public function getVendorId()
-	{   
-		$vendorInfo = Mage::registry('stockhistory_vendor_data');
-		return (!empty($vendorInfo['id']))?$vendorInfo['id']:null;
-	}
+    public function getCreatePoUrl()
+    {
+        return $this->getUrl('stockhistory/adminhtml_purchaseorder/newByVendor', array('vendor_id' => $this->getVendorId()));
+    }
+    
+    public function getVendorId()
+    {   
+        $vendorInfo = Mage::registry('stockhistory_vendor_data');
+        return (!empty($vendorInfo['id']))?$vendorInfo['id']:null;
+    }
 }

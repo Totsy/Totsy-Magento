@@ -15,9 +15,9 @@
 class Harapartners_Childrenlist_Model_Mysql4_Child extends Mage_Core_Model_Resource_Db_Abstract
 {
     
-	protected function _construct()
+    protected function _construct()
     {
         $this->_init('childrenlist/child', 'child_id');
     }
-	
+    
 }

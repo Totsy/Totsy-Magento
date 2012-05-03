@@ -15,7 +15,7 @@ class Harapartners_Fulfillmentfactory_Block_Adminhtml_Errorlog_Index_Grid extend
     public function __construct(){
         parent::__construct();
         $this->setId('fulfillmentErrorLogGrid');
-        $this->setDefaultSort('created_at');	//sort by created_at desc
+        $this->setDefaultSort('created_at');    //sort by created_at desc
         $this->setDefaultDir('DESC');
     }
 
@@ -26,9 +26,9 @@ class Harapartners_Fulfillmentfactory_Block_Adminhtml_Errorlog_Index_Grid extend
         
         $collection = $model->getCollection();
         $collection->getSelect()
-        		   ->join($order_table, 'order_id=' . $order_table . '.entity_id', $order_table. '.increment_id');
+                   ->join($order_table, 'order_id=' . $order_table . '.entity_id', $order_table. '.increment_id');
         
-		$this->setCollection($collection);
+        $this->setCollection($collection);
         parent::_prepareCollection();
         
         return $this;
@@ -80,8 +80,8 @@ class Harapartners_Fulfillmentfactory_Block_Adminhtml_Errorlog_Index_Grid extend
             'align'         => 'center',
             'width'         => '150px',
             'index'         => 'created_at',
-        	'type'      	=> 'datetime',
-            'gmtoffset' 	=> true
+            'type'          => 'datetime',
+            'gmtoffset'     => true
         ));
         
         $this->addColumn('updated_at', array(
@@ -89,14 +89,14 @@ class Harapartners_Fulfillmentfactory_Block_Adminhtml_Errorlog_Index_Grid extend
             'align'         => 'center',
             'width'         => '150px',
             'index'         => 'updated_at',
-        	'type'      	=> 'datetime',
-            'gmtoffset' 	=> true
+            'type'          => 'datetime',
+            'gmtoffset'     => true
         ));
 
         return parent::_prepareColumns();
     }
     
-	protected function _prepareMassaction()
+    protected function _prepareMassaction()
     {
         $this->setMassactionIdField('entity_id');
         $this->getMassactionBlock()->setFormFieldName('entity_id');

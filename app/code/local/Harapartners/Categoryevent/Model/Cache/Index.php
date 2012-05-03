@@ -17,7 +17,7 @@
 
 class Harapartners_Categoryevent_Model_Cache_Index extends Enterprise_PageCache_Model_Container_Abstract {
     
-	const CACHE_TAG_PREFIX = 'catagoryevent_index';
+    const CACHE_TAG_PREFIX = 'catagoryevent_index';
 
     protected function _getIdentifier() {
         $params = Mage::registry('application_params');

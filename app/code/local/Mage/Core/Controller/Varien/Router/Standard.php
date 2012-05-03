@@ -368,7 +368,7 @@ class Mage_Core_Controller_Varien_Router_Standard extends Mage_Core_Controller_V
         return array_search($frontName, $this->_routes);
     }
 
-	public function getControllerFileName($realModule, $controller)
+    public function getControllerFileName($realModule, $controller)
     {
         $parts = explode('_', $realModule);
         $realModule = implode('_', array_splice($parts, 0, 2));
@@ -377,15 +377,15 @@ class Mage_Core_Controller_Varien_Router_Standard extends Mage_Core_Controller_V
         $config = Mage::getConfig();
         $relativePath = "";
         if (count($parts)) {
-        	$relativePath = implode(DS, $parts) . DS;
-	    }
+            $relativePath = implode(DS, $parts) . DS;
+        }
         $relativePath .= uc_words($controller, DS).'Controller.php';
         
         if(!!($localPath = $config->getModuleDirInLocal('controllers', $realModule))
-        		&& is_readable($localPath.DS.$relativePath)){
-        	$file = $localPath.DS.$relativePath;
+                && is_readable($localPath.DS.$relativePath)){
+            $file = $localPath.DS.$relativePath;
         }else{
-        	$file = Mage::getModuleDir('controllers', $realModule).DS.$relativePath;
+            $file = Mage::getModuleDir('controllers', $realModule).DS.$relativePath;
         }
         return $file;
     }

@@ -37,15 +37,15 @@ class Harapartners_Service_Block_Rewrite_Page_Html_Head extends Mage_Page_Block_
     }
     
     public function setTopnavKeywords(){
-    	$type = Mage::registry('attrtype');
-    	$value = Mage::registry('attrvalue');
-//		$type = Mage::app()->getRequest()->getParam('type');
-//		$value = Mage::app()->getRequest()->getParam('value');
-		$attrObj = Mage::getModel('catalog/product')->getResource()->getAttribute($type);
-		$label = Mage::helper('catalog')->__($attrObj->getSource()->getOptionText($value));
-		$this->setSailthruTitle($label);
-		$label = strtolower(str_replace('-and-','-',str_replace(' ','-',$label)));
-    	$this->setSailthruTags($label);
+        $type = Mage::registry('attrtype');
+        $value = Mage::registry('attrvalue');
+//        $type = Mage::app()->getRequest()->getParam('type');
+//        $value = Mage::app()->getRequest()->getParam('value');
+        $attrObj = Mage::getModel('catalog/product')->getResource()->getAttribute($type);
+        $label = Mage::helper('catalog')->__($attrObj->getSource()->getOptionText($value));
+        $this->setSailthruTitle($label);
+        $label = strtolower(str_replace('-and-','-',str_replace(' ','-',$label)));
+        $this->setSailthruTags($label);
     }
     
     public function setEventTags(){
@@ -53,42 +53,42 @@ class Harapartners_Service_Block_Rewrite_Page_Html_Head extends Mage_Page_Block_
         if (!$categoryId) {
             return $this;
         }
-		$category = Mage::getModel('catalog/category')
+        $category = Mage::getModel('catalog/category')
             ->setStoreId(Mage::app()->getStore()->getId())
             ->load($categoryId);
         $label = $category->getName(); 
         $label = strtolower(str_replace(' ','-',$label));
         
-    	$dept = $category->getDepartments();
+        $dept = $category->getDepartments();
         $deptArray = explode(',', $dept);
         $newDeptArray = array();
-		$attrOptions = Mage::getModel('catalog/category')->getResource()->getAttribute('departments');
+        $attrOptions = Mage::getModel('catalog/category')->getResource()->getAttribute('departments');
         foreach ($deptArray as $perdept){
-        	//$attrText = $attrOptions->getSource()->getOptionText($perdept);
-        	//$newDeptArray[] = 	$this->__($attrText);
-        	$labeltemp = strtolower(str_replace('-and-','-',str_replace('_','-',$perdept)));
-        	$newDeptArray[] = 	$labeltemp;
+            //$attrText = $attrOptions->getSource()->getOptionText($perdept);
+            //$newDeptArray[] =     $this->__($attrText);
+            $labeltemp = strtolower(str_replace('-and-','-',str_replace('_','-',$perdept)));
+            $newDeptArray[] =     $labeltemp;
         }
         $deptStr = implode(', ' , $newDeptArray);
         if (!empty($dept)){
-        	$deptStr = ', '.$deptStr;
+            $deptStr = ', '.$deptStr;
         }
         $age = $category->getAges();
         $ageArray = explode(',', $age);
-		$newAgeArray = array();
-		$ageAttrOptions = Mage::getModel('catalog/product')->getResource()->getAttribute('ages');
+        $newAgeArray = array();
+        $ageAttrOptions = Mage::getModel('catalog/product')->getResource()->getAttribute('ages');
         foreach ($ageArray as $perage){
-        	//$attrText = $ageAttrOptions->getSource()->getOptionText($perage);
-        	$newAgeArray[] = $perage;
+            //$attrText = $ageAttrOptions->getSource()->getOptionText($perage);
+            $newAgeArray[] = $perage;
         }
         $ageStr = implode(', ' , $newAgeArray);
         if (!empty($age)){
-        	$ageStr = ', '.$ageStr;
+            $ageStr = ', '.$ageStr;
         }
 
         $label = trim($label.$deptStr.$ageStr , ',');
         
-    	$this->setSailthruTags($label);
+        $this->setSailthruTags($label);
     }
     
     public function setEventSailthruTitle(){
@@ -96,12 +96,12 @@ class Harapartners_Service_Block_Rewrite_Page_Html_Head extends Mage_Page_Block_
         if (!$categoryId) {
             return $this;
         }
-		$category = Mage::getModel('catalog/category')
+        $category = Mage::getModel('catalog/category')
             ->setStoreId(Mage::app()->getStore()->getId())
             ->load($categoryId);
         $label = $category->getName(); 
         //$label = strtolower(str_replace(' ','-',$label));
-    	$this->setSailthruTitle($label);
+        $this->setSailthruTitle($label);
     }
     
     public function setProductTags(){
@@ -109,7 +109,7 @@ class Harapartners_Service_Block_Rewrite_Page_Html_Head extends Mage_Page_Block_
         if (!$productId) {
             return $this;
         }
-		$product = Mage::getModel('catalog/product')
+        $product = Mage::getModel('catalog/product')
             ->setStoreId(Mage::app()->getStore()->getId())
             ->load($productId);
         $label = $product->getName(); 
@@ -118,32 +118,32 @@ class Harapartners_Service_Block_Rewrite_Page_Html_Head extends Mage_Page_Block_
         $dept = $product->getDepartments();
         $deptArray = explode(',', $dept);
         $newDeptArray = array();
-		$attrOptions = Mage::getModel('catalog/product')->getResource()->getAttribute('departments');
+        $attrOptions = Mage::getModel('catalog/product')->getResource()->getAttribute('departments');
         foreach ($deptArray as $perdept){
-        	$attrText = $attrOptions->getSource()->getOptionText($perdept);
-        	//$newDeptArray[] = 	$this->__($attrText);
-        	$labeltemp = strtolower(str_replace('-and-','-',str_replace('_','-',$attrText)));
-        	$newDeptArray[] = 	$labeltemp;
+            $attrText = $attrOptions->getSource()->getOptionText($perdept);
+            //$newDeptArray[] =     $this->__($attrText);
+            $labeltemp = strtolower(str_replace('-and-','-',str_replace('_','-',$attrText)));
+            $newDeptArray[] =     $labeltemp;
         }
         $deptStr = implode(', ' , $newDeptArray);
         if (!empty($dept)){
-        	$deptStr = ', '.$deptStr;
+            $deptStr = ', '.$deptStr;
         }
         $age = $product->getAges();
         $ageArray = explode(',', $age);
-		$newAgeArray = array();
-		$ageAttrOptions = Mage::getModel('catalog/product')->getResource()->getAttribute('ages');
+        $newAgeArray = array();
+        $ageAttrOptions = Mage::getModel('catalog/product')->getResource()->getAttribute('ages');
         foreach ($ageArray as $perage){
-        	$attrText = $ageAttrOptions->getSource()->getOptionText($perage);
-        	$newAgeArray[] = 	$this->__($attrText);
+            $attrText = $ageAttrOptions->getSource()->getOptionText($perage);
+            $newAgeArray[] =     $this->__($attrText);
         }
         $ageStr = implode(', ' , $newAgeArray);
         if (!empty($age)){
-        	$ageStr = ', '.$ageStr;
+            $ageStr = ', '.$ageStr;
         }
         $label = trim($label.$deptStr.$ageStr , ',');
         //$label = $label.$deptStr.$ageStr;
-    	$this->setSailthruTags($label);
+        $this->setSailthruTags($label);
     }
         
     public function setProductSailthruTitle(){
@@ -151,8 +151,8 @@ class Harapartners_Service_Block_Rewrite_Page_Html_Head extends Mage_Page_Block_
         if (!$productId) {
             return $this;
         }
-		$product = Mage::getModel('catalog/product')->load($productId);
-		$label = $product->getName();
-    	$this->setSailthruTitle($label);
+        $product = Mage::getModel('catalog/product')->load($productId);
+        $label = $product->getName();
+        $this->setSailthruTitle($label);
     }
 }

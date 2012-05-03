@@ -554,28 +554,28 @@ class Enterprise_GiftCardAccount_Model_Observer
     //Harapartners Andu Splitorder will cancel original order and revert giftcard so prevent refunding to store credit  
     public function returnFundsToStoreCredit(Varien_Event_Observer $observer) 
     {
-    	if(!Mage::registry('isSplitOrder')){
-	    	/** @var Mage_Sales_Model_Order $order */
-	        $order = $observer->getEvent()->getOrder();
-	
-	        $cards = Mage::helper('enterprise_giftcardaccount')->getCards($order);
-	        if (is_array($cards)) {
-	            $balance = 0;
-	            foreach ($cards as $card) {
-	                $balance += $card['ba'];
-	            }
-	
-	            if ($balance > 0) {
-	                Mage::getModel('enterprise_customerbalance/balance')
-	                    ->setCustomerId($order->getCustomerId())
-	                    ->setWebsiteId(Mage::app()->getStore($order->getStoreId())->getWebsiteId())
-	                    ->setAmountDelta($balance)
-	                    ->setHistoryAction(Enterprise_CustomerBalance_Model_Balance_History::ACTION_REVERTED)
-	                    ->setOrder($order)
-	                    ->save();
-	            }
-	        }	
-    	}       
+        if(!Mage::registry('isSplitOrder')){
+            /** @var Mage_Sales_Model_Order $order */
+            $order = $observer->getEvent()->getOrder();
+    
+            $cards = Mage::helper('enterprise_giftcardaccount')->getCards($order);
+            if (is_array($cards)) {
+                $balance = 0;
+                foreach ($cards as $card) {
+                    $balance += $card['ba'];
+                }
+    
+                if ($balance > 0) {
+                    Mage::getModel('enterprise_customerbalance/balance')
+                        ->setCustomerId($order->getCustomerId())
+                        ->setWebsiteId(Mage::app()->getStore($order->getStoreId())->getWebsiteId())
+                        ->setAmountDelta($balance)
+                        ->setHistoryAction(Enterprise_CustomerBalance_Model_Balance_History::ACTION_REVERTED)
+                        ->setOrder($order)
+                        ->save();
+                }
+            }    
+        }       
         return $this;
     }
 }

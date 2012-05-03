@@ -16,7 +16,7 @@ class Harapartners_Service_Block_Rewrite_Adminhtml_Customer_Grid extends Mage_Ad
 
     protected function _prepareCollection() {
         $collection = Mage::getResourceModel('customer/customer_collection')
-	            ->addAttributeToSelect(array('firstname', 'lastname', 'email', 'created_at', 'group_id'));
+                ->addAttributeToSelect(array('firstname', 'lastname', 'email', 'created_at', 'group_id'));
         $this->setCollection($collection);
         
         if ($this->getCollection()) {
@@ -62,25 +62,25 @@ class Harapartners_Service_Block_Rewrite_Adminhtml_Customer_Grid extends Mage_Ad
             'header'    => Mage::helper('customer')->__('ID'),
             'width'     => '50px',
             'index'     => 'entity_id',
-            'type'		=> 'number',
+            'type'        => 'number',
         ));
         $this->addColumn('firstname', array(
             'header'    => Mage::helper('customer')->__('First Name'),
             'index'     => 'firstname',
-//        	'width'     => '150px'
+//            'width'     => '150px'
         ));
         $this->addColumn('lastname', array(
             'header'    => Mage::helper('customer')->__('Last Name'),
             'index'     => 'lastname',
-//        	'width'     => '150px'
+//            'width'     => '150px'
         ));
         parent::_prepareColumns();
         $this->removeColumn('entity_id');
         $this->removeColumn('name');
-		$this->removeColumn('Telephone');
-		$this->removeColumn('billing_postcode');
-		$this->removeColumn('billing_country_id');
-		$this->removeColumn('billing_region');
+        $this->removeColumn('Telephone');
+        $this->removeColumn('billing_postcode');
+        $this->removeColumn('billing_country_id');
+        $this->removeColumn('billing_region');
         return $this;
     }
 

@@ -1,30 +1,30 @@
 <?php
 class Harapartners_PromotionFactory_Block_Adminhtml_Emailcoupon_Export_Grid extends Mage_Adminhtml_Block_Widget_Grid {
 
-	protected $_id = NULL;
+    protected $_id = NULL;
     
-	
-	public function __construct(){
-    	
-    	
+    
+    public function __construct(){
+        
+        
         parent::__construct();
         $this->setId('gridCouponproductSold');
         $data =$this->getRequest()->getPost();
         $this->_id = $data['id'];
     }
-	
+    
     protected function _prepareCollection(){
         parent::_prepareCollection();
         $model = Mage::getModel('promotionfactory/emailcoupon');
         $collection = $model->getCollection()
         ->addFilter('rule_id',$this->_id)
         ; 
-		$this->setCollection($collection);
-       //	$this->getCollection()->initReport('promotionfactory/emailcoupon_collection');
+        $this->setCollection($collection);
+       //    $this->getCollection()->initReport('promotionfactory/emailcoupon_collection');
         return $this;
     }
     
-	protected function _prepareColumns(){
+    protected function _prepareColumns(){
 //        $this->addColumn('name', array(
 //            'header'    =>Mage::helper('reports')->__('Coupon Name'),
 //            'index'     =>'name'

@@ -13,7 +13,7 @@
 
 class Harapartners_Childrenlist_IndexController extends Mage_Core_Controller_Front_Action {
     
-	/**
+    /**
      * Get Children List
      */
     public function indexAction()
@@ -23,7 +23,7 @@ class Harapartners_Childrenlist_IndexController extends Mage_Core_Controller_Fro
         $this->renderLayout();
     }
 
-	/**
+    /**
      * Get Children List
      */
     public function editAction()
@@ -40,8 +40,8 @@ class Harapartners_Childrenlist_IndexController extends Mage_Core_Controller_Fro
     }
     
     public function isEditMode(){
-    	$childInfo = $this->getRequest()->getPost();
-    	return !!$childInfo['id'];
+        $childInfo = $this->getRequest()->getPost();
+        return !!$childInfo['id'];
     }
     
     /**
@@ -55,24 +55,24 @@ class Harapartners_Childrenlist_IndexController extends Mage_Core_Controller_Fro
         $customer = $this->_getSession()->getCustomer();
         
         if ($this->getRequest()->isPost()) {
-        	$childInfo = $this->getRequest()->getPost();
+            $childInfo = $this->getRequest()->getPost();
 
             if (($this->isEditMode())&&(!$this->isCustomerMatchChild($childInfo['id']))) {
-	            return $this->_redirect('*/*/index');
-	        }
-         	try {
-         		$child = Mage::getModel('childrenlist/child');
-         		if ($this->isEditMode()){
-	        		$child->load($childInfo['id']);
-         		}else{
-         			$childInfo['id'] = NULL;
-         		}
-	        	$childInfo['child_birthday'] = mktime(0,0,0,$childInfo['month'],$childInfo['day'],$childInfo['year']);
-        		foreach ($childInfo as $dataKey => $dataValue){
-        			$child->setData($dataKey,$dataValue);
-        		}
-	        	$child->save();
-	        	$this->_getSession()->setCustomer($customer)
+                return $this->_redirect('*/*/index');
+            }
+             try {
+                 $child = Mage::getModel('childrenlist/child');
+                 if ($this->isEditMode()){
+                    $child->load($childInfo['id']);
+                 }else{
+                     $childInfo['id'] = NULL;
+                 }
+                $childInfo['child_birthday'] = mktime(0,0,0,$childInfo['month'],$childInfo['day'],$childInfo['year']);
+                foreach ($childInfo as $dataKey => $dataValue){
+                    $child->setData($dataKey,$dataValue);
+                }
+                $child->save();
+                $this->_getSession()->setCustomer($customer)
                     ->addSuccess($this->__('You child information has been saved.'));
                 $this->_redirect('customer/account');
                 return;

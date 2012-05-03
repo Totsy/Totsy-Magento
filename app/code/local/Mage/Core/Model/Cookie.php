@@ -148,7 +148,7 @@ class Mage_Core_Model_Cookie
             $lifetime = 3600;
         }
         if(isset($_COOKIE['remember_me']) && $_COOKIE['remember_me']){
-        	$lifetime = self::REMEMBER_ME_PERIOD;
+            $lifetime = self::REMEMBER_ME_PERIOD;
         }
         return $lifetime;
     }

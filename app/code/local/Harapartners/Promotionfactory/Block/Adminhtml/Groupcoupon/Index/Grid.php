@@ -9,7 +9,7 @@ class Harapartners_PromotionFactory_Block_Adminhtml_Groupcoupon_Index_Grid exten
     protected function _prepareCollection(){
         $model = Mage::getModel('salesrule/rule');
         $collection = $model->getCollection();
-		$this->setCollection($collection);
+        $this->setCollection($collection);
         parent::_prepareCollection();
         return $this;
     }
@@ -46,7 +46,7 @@ class Harapartners_PromotionFactory_Block_Adminhtml_Groupcoupon_Index_Grid exten
             'align'         => 'right',
             'width'         => '50px',
             'index'         => 'is_active',
-        	'type'			=> 'options',
+            'type'            => 'options',
             'options' => array('1'=>'Yes','0'=>'No')
         ));
                 
@@ -55,8 +55,8 @@ class Harapartners_PromotionFactory_Block_Adminhtml_Groupcoupon_Index_Grid exten
             'align'         => 'center',
             'width'         => '150px',
             'index'         => 'from_date',
-        	'type'      	=> 'date',
-            'gmtoffset' 	=> true
+            'type'          => 'date',
+            'gmtoffset'     => true
         ));
         
         $this->addColumn('updated_at', array(
@@ -64,18 +64,18 @@ class Harapartners_PromotionFactory_Block_Adminhtml_Groupcoupon_Index_Grid exten
             'align'         => 'center',
             'width'         => '150px',
             'index'         => 'updated_at',
-        	'type'      	=> 'date',
-            'gmtoffset' 	=> true
+            'type'          => 'date',
+            'gmtoffset'     => true
         ));
         
         $this->addColumn('group_code_status', array(
             'header'        => Mage::helper('promotionfactory')->__('Group Code status'),
             'align'         => 'right',
             'width'         => '50px',
-        	'index'         => 'rule_id',
-        	'filter'    => false,
+            'index'         => 'rule_id',
+            'filter'    => false,
             'sortable'  => false,
-            'renderer' 		=> 'Harapartners_Promotionfactory_Block_Adminhtml_Widget_Grid_Column_Renderer_Groupcoupon'
+            'renderer'         => 'Harapartners_Promotionfactory_Block_Adminhtml_Widget_Grid_Column_Renderer_Groupcoupon'
         ));
 
         return parent::_prepareColumns();
@@ -83,8 +83,8 @@ class Harapartners_PromotionFactory_Block_Adminhtml_Groupcoupon_Index_Grid exten
 
     public function getRowUrl($row){
         return $this->getUrl('*/*/edit', array(
-	            'store'=>$this->getRequest()->getParam('store'),
-	            'id'=>$row->getId()
+                'store'=>$this->getRequest()->getParam('store'),
+                'id'=>$row->getId()
         ));
     }
     

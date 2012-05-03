@@ -12,6 +12,6 @@
  * 
  */
  
-class Harapartners_Categoryevent_Helper_Data extends Mage_Core_Helper_Abstract{	
-	
+class Harapartners_Categoryevent_Helper_Data extends Mage_Core_Helper_Abstract{    
+    
 }

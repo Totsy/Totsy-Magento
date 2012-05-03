@@ -13,73 +13,73 @@
  */
 
 class Harapartners_Stockhistory_Block_Adminhtml_Purchaseorder_Edit_Form extends Mage_Adminhtml_Block_Widget_Form {
-       						
-	protected function _prepareForm() {
-		
-		$dataObject = new Varien_Object(Mage::registry('stockhistory_po_data'));
-		$helper = Mage::helper('stockhistory');
-		//$data = $this->getRequest()->getParams();
-		
-		
+                               
+    protected function _prepareForm() {
+        
+        $dataObject = new Varien_Object(Mage::registry('stockhistory_po_data'));
+        $helper = Mage::helper('stockhistory');
+        //$data = $this->getRequest()->getParams();
+        
+        
         $form = new Varien_Data_Form(array(
             'id'        => 'edit_form',
             'action'    => $this->getUrl('*/*/save', array('id' => $dataObject->getId())),
             'method'    => 'post',
-            //'enctype'  	 => 'multipart/form-data'
+            //'enctype'       => 'multipart/form-data'
         ));
         
-		
+        
         $fieldset = $form->addFieldset('purchase_order', array('legend'=>$helper->__("Purchase Order Info")));
-		
+        
         //Adding PO without vendor_id is not allowed
         if(!!$dataObject->getData('vendor_code')){
-	        $fieldset->addField('vendor_code', 'text', array(
-		            	'label'     => $helper->__('Vendor Code:'),
-		            	'name'      => 'vendor_code',
-		        		'readonly' 	=> true,
-		        		'required'	=> true,
-	        			'note'		=> 'Read only field. Each purchase order must be associated to a given vendor.'
-	        ));
+            $fieldset->addField('vendor_code', 'text', array(
+                        'label'     => $helper->__('Vendor Code:'),
+                        'name'      => 'vendor_code',
+                        'readonly'     => true,
+                        'required'    => true,
+                        'note'        => 'Read only field. Each purchase order must be associated to a given vendor.'
+            ));
         }else{
-        	$fieldset->addField('vendor_code', 'select', array(
-		            	'label'     => $helper->__('Vendor Code:'),
-		            	'name'      => 'vendor_code',
-		        		'required'	=> true,
-        				'values'	=> $helper->getFormAllVendorsArray(),
-	        			'note'		=> 'Once saved, this field <b>CANNOT</b> be modified.'
-	        ));
+            $fieldset->addField('vendor_code', 'select', array(
+                        'label'     => $helper->__('Vendor Code:'),
+                        'name'      => 'vendor_code',
+                        'required'    => true,
+                        'values'    => $helper->getFormAllVendorsArray(),
+                        'note'        => 'Once saved, this field <b>CANNOT</b> be modified.'
+            ));
         }
         
         //Once created, cannot change category
-		if(!!$dataObject->getData('category_id')){
-			$category = Mage::getModel('catalog/category')->load($dataObject->getData('category_id'));
-			$fieldset->addField('category_id', 'text', array(
-		            'label'     => $helper->__('Category/Event ID:'),
-		            'name'      => 'category_id',
-					'readonly' 	=> true,
-		        	'required'	=> true,
-					'note'		=> 'Read only field. Each purchase order must be associated to a given category/event.<br/>Event ends: ' . $category->getEventEndDate()
-	        ));
+        if(!!$dataObject->getData('category_id')){
+            $category = Mage::getModel('catalog/category')->load($dataObject->getData('category_id'));
+            $fieldset->addField('category_id', 'text', array(
+                    'label'     => $helper->__('Category/Event ID:'),
+                    'name'      => 'category_id',
+                    'readonly'     => true,
+                    'required'    => true,
+                    'note'        => 'Read only field. Each purchase order must be associated to a given category/event.<br/>Event ends: ' . $category->getEventEndDate()
+            ));
         }else{
-        	$fieldset->addField('category_id', 'text', array(
-		            'label'     => $helper->__('Category/Event ID:'),
-		            'name'      => 'category_id',
-		        	'required'	=> true,
-					'note'		=> 'Once saved, this field <b>CANNOT</b> be modified.'
-	        ));
+            $fieldset->addField('category_id', 'text', array(
+                    'label'     => $helper->__('Category/Event ID:'),
+                    'name'      => 'category_id',
+                    'required'    => true,
+                    'note'        => 'Once saved, this field <b>CANNOT</b> be modified.'
+            ));
         }
         
         $fieldset->addField('name', 'text', array(
             'label'     => $helper->__('Purchase Order Name:'),
             'name'      => 'name',
-        	'required'	=> true,
+            'required'    => true,
         ));
         
         $fieldset->addField('status', 'select', array(
             'label'     => $helper->__('Status:'),
             'name'      => 'status',
-        	'required'	=> true,
-        	'values'    => $helper->getFormPurchaseorderStatusArray(),
+            'required'    => true,
+            'values'    => $helper->getFormPurchaseorderStatusArray(),
         ));
         
         $fieldset->addField('comment', 'textarea', array(
@@ -88,7 +88,7 @@ class Harapartners_Stockhistory_Block_Adminhtml_Purchaseorder_Edit_Form extends 
         ));
 
         
-		$form->setValues($dataObject->getData());
+        $form->setValues($dataObject->getData());
         $form->setUseContainer(true);
         $this->setForm($form);
         return parent::_prepareForm();

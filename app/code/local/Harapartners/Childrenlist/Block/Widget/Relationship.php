@@ -43,12 +43,12 @@ class Harapartners_Childrenlist_Block_Widget_Relationship extends Harapartners_C
     }
 
     public function getChildCustomerRelationship(){
-    	return $this->getChildInfo()->getChildCustomerRelationship();
+        return $this->getChildInfo()->getChildCustomerRelationship();
     }
     
     public function setChildCustomerRelationship($relationship){
-    	$this->getChildInfo()->setChildCustomerRelationship($relationship);
-    	return $this; 
+        $this->getChildInfo()->setChildCustomerRelationship($relationship);
+        return $this; 
     }
     /**
      * Get current customer from session

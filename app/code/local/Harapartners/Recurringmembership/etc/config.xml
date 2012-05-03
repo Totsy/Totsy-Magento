@@ -5,21 +5,21 @@
             <version>1.0.0</version>
         </Harapartners_Recurringmembership>
     </modules>
-	<global>
+    <global>
         <blocks>
             <recurringmembership>
-				<class>Harapartners_Recurringmembership_Block</class>
+                <class>Harapartners_Recurringmembership_Block</class>
             </recurringmembership>
         </blocks>
-		<helpers>
+        <helpers>
             <recurringmembership>
-				<class>Harapartners_Recurringmembership_Helper</class>
-			</recurringmembership>
+                <class>Harapartners_Recurringmembership_Helper</class>
+            </recurringmembership>
         </helpers>
         <models>
             <recurringmembership>
                 <class>Harapartners_Recurringmembership_Model</class>
-				<resourceModel>recurringmembership_mysql4</resourceModel>
+                <resourceModel>recurringmembership_mysql4</resourceModel>
             </recurringmembership>
             <recurringmembership_mysql4>
                 <class>Harapartners_Recurringmembership_Model_Mysql4</class>
@@ -30,7 +30,7 @@
                 </entities>
             </recurringmembership_mysql4>
         </models>
-		<resources>
+        <resources>
             <recurringmembership_setup>
                 <setup>
                     <module>Harapartners_Recurringmembership</module>
@@ -50,8 +50,8 @@
                 </connection>
             </recurringmembership_read>
         </resources>
-		<!--Moved to Harapartners_Service-->
-		<!--events>
+        <!--Moved to Harapartners_Service-->
+        <!--events>
             <sales_order_place_after>
                 <observers>
                     <recurringmembership>
@@ -61,9 +61,9 @@
                     </recurringmembership>
                 </observers>
             </sales_order_place_after>
-		</events-->
+        </events-->
     </global>
-	<frontend>  
+    <frontend>  
         <routers>  
             <recurringmembership>  
                 <use>standard</use>  
@@ -73,12 +73,12 @@
                 </args>  
             </recurringmembership>  
         </routers> 
-		<layout>
-			<updates>
-				<recurringmembership>
-					<file>recurringmembership.xml</file>
-				</recurringmembership>
-			</updates>
-		</layout>		
+        <layout>
+            <updates>
+                <recurringmembership>
+                    <file>recurringmembership.xml</file>
+                </recurringmembership>
+            </updates>
+        </layout>        
     </frontend>
 </config>

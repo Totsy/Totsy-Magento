@@ -13,31 +13,31 @@
  */
 
 class Harapartners_SpeedTax_Model_Log extends Mage_Core_Model_Abstract {
-	
-	public function log($log) {
-		
-		if ($log ["error"] == true) {
-			//error log
-			$logModel = Mage::getModel ( 'speedtax/log_error' );
-			$logModel->setData ( 'event', $log ['event'] );
-			$logModel->setData ( 'result_type', $log ['result_type'] );
-			$logModel->setData ( 'message', $log ['message'] );
-			$logModel->setData ( 'address_shipping_from', $log ['address_shipping_from'] );
-			$logModel->setData ( 'address_shipping_to', $log ['address_shipping_to'] );
-			$logModel->setData ( 'customer_name', $this ['customer_name'] );
-			$logModel->save ();
-		}
-		
-		if ($log ["call"] == true) {
-			//call log
-			$logModel = Mage::getModel ( 'speedtax/log_call' );
-			$logModel->setData ( 'event', $log ['event'] );
-			$logModel->setData ( 'result_type', $log ['result_type'] );
-			$logModel->setData ( 'invoice_num', $log ['invoice_num'] );
-			$logModel->setData ( 'gross', $log['gross']);
-			$logModel->setData ( 'exempt', $log ['exempt'] );
-			$logModel->setData ( 'tax', $log['tax']);
-			$logModel->save ();
-		}
-	}
+    
+    public function log($log) {
+        
+        if ($log ["error"] == true) {
+            //error log
+            $logModel = Mage::getModel ( 'speedtax/log_error' );
+            $logModel->setData ( 'event', $log ['event'] );
+            $logModel->setData ( 'result_type', $log ['result_type'] );
+            $logModel->setData ( 'message', $log ['message'] );
+            $logModel->setData ( 'address_shipping_from', $log ['address_shipping_from'] );
+            $logModel->setData ( 'address_shipping_to', $log ['address_shipping_to'] );
+            $logModel->setData ( 'customer_name', $this ['customer_name'] );
+            $logModel->save ();
+        }
+        
+        if ($log ["call"] == true) {
+            //call log
+            $logModel = Mage::getModel ( 'speedtax/log_call' );
+            $logModel->setData ( 'event', $log ['event'] );
+            $logModel->setData ( 'result_type', $log ['result_type'] );
+            $logModel->setData ( 'invoice_num', $log ['invoice_num'] );
+            $logModel->setData ( 'gross', $log['gross']);
+            $logModel->setData ( 'exempt', $log ['exempt'] );
+            $logModel->setData ( 'tax', $log['tax']);
+            $logModel->save ();
+        }
+    }
 }

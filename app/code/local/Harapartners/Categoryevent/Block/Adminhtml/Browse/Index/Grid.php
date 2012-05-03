@@ -13,8 +13,8 @@
  */
  
 class Harapartners_Categoryevent_Block_Adminhtml_Browse_Index_Grid extends Mage_Adminhtml_Block_Widget_Grid {
-	
-	const CATEGOTYEVENT_LEVEL = 3; // Only this level is considered category event
+    
+    const CATEGOTYEVENT_LEVEL = 3; // Only this level is considered category event
 
     public function __construct(){
         parent::__construct();
@@ -33,12 +33,12 @@ class Harapartners_Categoryevent_Block_Adminhtml_Browse_Index_Grid extends Mage_
         $storeCatCollection = Mage::getModel('catalog/category')->getCollection();
         $subcatIds = array();
         if (!!$store->getId()) {
-        	$storeRootId = $store->getRootCategoryId();
-        	$storeCatCollection->addFieldToFilter('parent_id', $storeRootId)->load();
-        	$this->setStoreId($store);
+            $storeRootId = $store->getRootCategoryId();
+            $storeCatCollection->addFieldToFilter('parent_id', $storeRootId)->load();
+            $this->setStoreId($store);
         }
         foreach ($storeCatCollection as $subcat){
-        	array_push($subcatIds, $subcat->getId());        
+            array_push($subcatIds, $subcat->getId());        
         } 
         //Store Select Filter End Yang      
         $collection = Mage::getModel('catalog/category')->getCollection();
@@ -57,7 +57,7 @@ class Harapartners_Categoryevent_Block_Adminhtml_Browse_Index_Grid extends Mage_
             'align'         => 'right',
             'width'         => '50px',
             'index'         => 'entity_id',
-        	'type'  		=> 'number',
+            'type'          => 'number',
         ));
         
         $this->addColumn('name', array(
@@ -69,16 +69,16 @@ class Harapartners_Categoryevent_Block_Adminhtml_Browse_Index_Grid extends Mage_
         
         $this->addColumn('thumbnail', array(
             'header'    => Mage::helper('categoryevent')->__('Event Image'),
-			'index'     => 'thumbnail',
-        	'width'     => '120px',
-        	'renderer'	=> 'Harapartners_Service_Block_Adminhtml_Widget_Grid_Column_Renderer_Category_Image'
+            'index'     => 'thumbnail',
+            'width'     => '120px',
+            'renderer'    => 'Harapartners_Service_Block_Adminhtml_Widget_Grid_Column_Renderer_Category_Image'
         ));
         
         $this->addColumn('description', array(
             'header'        => Mage::helper('categoryevent')->__('Blurb'),
             'align'         => 'right',
             'width'         => '300px',
-        	'index'         => 'description'
+            'index'         => 'description'
         ));
         
         $this->addColumn('event_start_date', array(
@@ -86,7 +86,7 @@ class Harapartners_Categoryevent_Block_Adminhtml_Browse_Index_Grid extends Mage_
             'align'         => 'center',
             'width'         => '50px',
             'index'         => 'event_start_date',
-        	'type'      	=> 'datetime',
+            'type'          => 'datetime',
             'frame_callback' => array('Harapartners_Categoryevent_Block_Adminhtml_Browse_Index_Grid', 'timetransform')
         ));
         
@@ -95,8 +95,8 @@ class Harapartners_Categoryevent_Block_Adminhtml_Browse_Index_Grid extends Mage_
             'align'         => 'center',
             'width'         => '50px',
             'index'         => 'event_end_date',
-        	'type'      	=> 'datetime',
-            'gmtoffset' 	=> true,
+            'type'          => 'datetime',
+            'gmtoffset'     => true,
         'frame_callback' => array('Harapartners_Categoryevent_Block_Adminhtml_Browse_Index_Grid', 'timetransform')
         ));
         
@@ -105,17 +105,17 @@ class Harapartners_Categoryevent_Block_Adminhtml_Browse_Index_Grid extends Mage_
 
     public function getRowUrl($row){
         return $this->getUrl('adminhtml/catalog_category/edit', array(
-	            'store'=>$this->getRequest()->getParam('store'),
-	            'id'=>$row->getId()
+                'store'=>$this->getRequest()->getParam('store'),
+                'id'=>$row->getId()
         ));
     }
     
     public static function timetransform($renderedValue, $row, $object, $bool){
-    	$beforeTime = strtotime($renderedValue);
-    	$offset = strtotime("+5 hours",0);
-    	$newTimeStamp = $beforeTime+$offset;
-    	$newdate = date("M d, Y h:i:s",$newTimeStamp);
-    	return $newdate;
+        $beforeTime = strtotime($renderedValue);
+        $offset = strtotime("+5 hours",0);
+        $newTimeStamp = $beforeTime+$offset;
+        $newdate = date("M d, Y h:i:s",$newTimeStamp);
+        return $newdate;
     }
     
 }

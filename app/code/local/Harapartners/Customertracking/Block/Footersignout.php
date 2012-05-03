@@ -15,13 +15,13 @@
 class Harapartners_Customertracking_Block_Footersignout extends Mage_Core_Block_Template {
     
     public function _toHtml(){
-    	$html = '';
+        $html = '';
 
-    	    if (!$this->getTemplate()) {
-            	return '';
-        	}
-        	$html = $this->renderView();
-  	
-    	return $html;
+            if (!$this->getTemplate()) {
+                return '';
+            }
+            $html = $this->renderView();
+      
+        return $html;
     }
 }

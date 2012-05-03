@@ -13,28 +13,28 @@
  */
 
 class Harapartners_SpeedTax_Model_Observer extends Mage_Core_Model_Abstract {
-	
-	public function saleOrderInvoicePay(Varien_Event_Observer $observer) {
-		$invoice = $observer->getEvent()->getInvoice();
-		try {
-			$calculator = Mage::getModel ( 'speedtax/speedtax_calculate' );
-			$calculator->postOrderInvoice($invoice);
-		} catch( Exception $e ) {
-			//Tax collecting is very important, bubble exceptions up
-			throw new $e;
-		}
-	}
-	
-	public function salesOrderCreditmemoRefund(Varien_Event_Observer $observer) {
-		$creditmemo = $observer->getEvent()->getCreditmemo();
-		try {
-			$calculator = Mage::getModel ( 'speedtax/speedtax_calculate' );
-			$calculator->postOrderCreditmemo($creditmemo);
-		} catch( Exception $e ) {
-			//Tax collecting is very important, bubble exceptions up
-			throw new $e;
-		}
-		
-	}
-	
+    
+    public function saleOrderInvoicePay(Varien_Event_Observer $observer) {
+        $invoice = $observer->getEvent()->getInvoice();
+        try {
+            $calculator = Mage::getModel ( 'speedtax/speedtax_calculate' );
+            $calculator->postOrderInvoice($invoice);
+        } catch( Exception $e ) {
+            //Tax collecting is very important, bubble exceptions up
+            throw new $e;
+        }
+    }
+    
+    public function salesOrderCreditmemoRefund(Varien_Event_Observer $observer) {
+        $creditmemo = $observer->getEvent()->getCreditmemo();
+        try {
+            $calculator = Mage::getModel ( 'speedtax/speedtax_calculate' );
+            $calculator->postOrderCreditmemo($creditmemo);
+        } catch( Exception $e ) {
+            //Tax collecting is very important, bubble exceptions up
+            throw new $e;
+        }
+        
+    }
+    
 }

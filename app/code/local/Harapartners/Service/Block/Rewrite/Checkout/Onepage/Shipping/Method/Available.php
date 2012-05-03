@@ -12,19 +12,19 @@
  */
 class Harapartners_Service_Block_Rewrite_Checkout_Onepage_Shipping_Method_Available extends Mage_Checkout_Block_Onepage_Shipping_Method_Available
 {
-	
-	protected function _toHtml ()
-	{
-		$additional = '';
-		
-		if(!Mage::getSingleton('speedtax/session')->getAddressIsValidForSpeedTax()){
-			$resolvedAddress = Mage::getSingleton('speedtax/session')->getResolvedAddressForSpeedTax();
-			$addressString = $resolvedAddress->address.", ".$resolvedAddress->city.", ".$resolvedAddress->state." ".$resolvedAddress->zip;
-			//Mage::getSingleton('core/session')->addNotice("Your address doen NOT match our record, The resolved address is ".$addressString);
-			//$additional = $this->getMessagesBlock()->getGroupedHtml();
-			//$additional = '<ul class="messages"><li class="notice-msg"><ul><li><span>Your address could not be verified. We found the following match ' . $addressString . ' Please correct your address if necessary. </span></li></ul></li></ul>';
-		}
-		return $additional . parent::_toHtml();
-	}
-	
+    
+    protected function _toHtml ()
+    {
+        $additional = '';
+        
+        if(!Mage::getSingleton('speedtax/session')->getAddressIsValidForSpeedTax()){
+            $resolvedAddress = Mage::getSingleton('speedtax/session')->getResolvedAddressForSpeedTax();
+            $addressString = $resolvedAddress->address.", ".$resolvedAddress->city.", ".$resolvedAddress->state." ".$resolvedAddress->zip;
+            //Mage::getSingleton('core/session')->addNotice("Your address doen NOT match our record, The resolved address is ".$addressString);
+            //$additional = $this->getMessagesBlock()->getGroupedHtml();
+            //$additional = '<ul class="messages"><li class="notice-msg"><ul><li><span>Your address could not be verified. We found the following match ' . $addressString . ' Please correct your address if necessary. </span></li></ul></li></ul>';
+        }
+        return $additional . parent::_toHtml();
+    }
+    
 }

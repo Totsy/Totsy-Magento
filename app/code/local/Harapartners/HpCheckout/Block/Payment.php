@@ -10,13 +10,13 @@ class Harapartners_HpCheckout_Block_Payment extends Harapartners_HpCheckout_Bloc
         parent::_construct();
     }
 
-	public function getPaymentMethodFormHtml(Mage_Payment_Model_Method_Abstract $method)
+    public function getPaymentMethodFormHtml(Mage_Payment_Model_Method_Abstract $method)
     {
          return $this->getChildHtml('payment.method.' . $method->getCode());
     }
     
     public function getPaymentMethodsSelectHtml() {
-    	
+        
     }
     
 //    public function getQuoteBaseGrandTotal()

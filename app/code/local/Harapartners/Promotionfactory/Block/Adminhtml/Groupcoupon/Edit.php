@@ -12,15 +12,15 @@
  * 
  */
 
-class Harapartners_PromotionFactory_Block_Adminhtml_Groupcoupon_Edit extends Mage_Adminhtml_Block_Widget_Form_Container {	
-	
-	public function __construct(){
-    	parent::__construct();
+class Harapartners_PromotionFactory_Block_Adminhtml_Groupcoupon_Edit extends Mage_Adminhtml_Block_Widget_Form_Container {    
+    
+    public function __construct(){
+        parent::__construct();
 
         $this->_objectId = 'rule_id';
         $this->_blockGroup = 'promotionfactory';
         $this->_controller = 'adminhtml_groupcoupon';
-		$this->setTemplate('promotionfactory/groupcoupon/edit.phtml');
+        $this->setTemplate('promotionfactory/groupcoupon/edit.phtml');
     }
 
     public function getHeaderText() {
@@ -32,15 +32,15 @@ class Harapartners_PromotionFactory_Block_Adminhtml_Groupcoupon_Edit extends Mag
     }
     
     protected function _prepareLayout() {
-    	$this->setChild('grid', $this->getLayout()->createBlock('promotionfactory/adminhtml_groupcoupon_edit_grid', 'adminhtml.groupcoupon.edit.grid'));
+        $this->setChild('grid', $this->getLayout()->createBlock('promotionfactory/adminhtml_groupcoupon_edit_grid', 'adminhtml.groupcoupon.edit.grid'));
         return parent::_prepareLayout();
     }
 
     public function getBackButtonHtml() {
         return $this->getChildHtml('back_button');
     }
-	public function getGridHtml(){
-		
+    public function getGridHtml(){
+        
         return $this->getChildHtml('grid');
     }
 

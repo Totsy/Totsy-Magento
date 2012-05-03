@@ -14,19 +14,19 @@
 
 class Harapartners_Unsubcentral_Model_Item extends Mage_Core_Model_Abstract
 {
-	const API_PENDING_STATUS = 0;
-	const API_PROCESSING_UNSUBSCRIBE_STATUS = 1;
-	const API_PROCESSING_REGISTER_STATUS = 2;
-	const API_PROCESSED_STATUS = 3;
-	const API_ERROR_STATUS = 4;
-	
-	protected function _construct()
+    const API_PENDING_STATUS = 0;
+    const API_PROCESSING_UNSUBSCRIBE_STATUS = 1;
+    const API_PROCESSING_REGISTER_STATUS = 2;
+    const API_PROCESSED_STATUS = 3;
+    const API_ERROR_STATUS = 4;
+    
+    protected function _construct()
     {
-    	//Point to the correct table
+        //Point to the correct table
         $this->_init('unsubcentral/item');
     }
 
-	public function loadByEmail($email)
+    public function loadByEmail($email)
     {
         $this->addData($this->getResource()->loadByEmail($email));
         return $this;

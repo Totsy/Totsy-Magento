@@ -14,7 +14,7 @@
  
 class Harapartners_Categoryevent_Block_Adminhtml_Browse_Index extends Mage_Adminhtml_Block_Widget_Container {
     
-	public function __construct(){
+    public function __construct(){
         parent::__construct();
         $this->setTemplate('categoryevent/browse/index.phtml');
     }

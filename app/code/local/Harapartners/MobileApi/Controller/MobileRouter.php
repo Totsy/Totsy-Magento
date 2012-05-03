@@ -13,40 +13,40 @@
 
 class Harapartners_MobileApi_Controller_MobileRouter extends Mage_Core_Controller_Varien_Router_Standard
 {
-	public function match(Zend_Controller_Request_Http $request){
+    public function match(Zend_Controller_Request_Http $request){
         if (!Mage::isInstalled()) {
             Mage::app()->getFrontController()->getResponse()
                 ->setRedirect(Mage::getUrl('install'))
                 ->sendResponse();
             exit;
-        }		
+        }        
         $identifier = trim($request->getPathInfo(), '/');
         $p = explode('/', $identifier);
         if(isset($p[0]) && $p[0] == 'mobileapi'){
             switch($p[1]){
-            	case 'event':
-            		$request->setModuleName($p[0])
-           			 ->setControllerName($p[1])
-           			 ->setActionName(isset($p[3]) ? $p[3] : 'index')
-            		->setParam('id', $p[2]);
-            		break;
-            	case 'user':
-            		$request->setModuleName($p[0])
-           			 ->setControllerName($p[1])
-           			 ->setActionName(isset($p[3]) ? $p[3] : 'index')
-            		->setParam('id', $p[2]);
-            		break;
-            	default:
-            		$request->setModuleName($p[0])
-           			 ->setControllerName($p[1])
-           			 ->setActionName(isset($p[3]) ? $p[3] : 'index')
-            		->setParam('id', $p[2]);
+                case 'event':
+                    $request->setModuleName($p[0])
+                        ->setControllerName($p[1])
+                        ->setActionName(isset($p[3]) ? $p[3] : 'index')
+                    ->setParam('id', $p[2]);
+                    break;
+                case 'user':
+                    $request->setModuleName($p[0])
+                        ->setControllerName($p[1])
+                        ->setActionName(isset($p[3]) ? $p[3] : 'index')
+                    ->setParam('id', $p[2]);
+                    break;
+                default:
+                    $request->setModuleName($p[0])
+                        ->setControllerName($p[1])
+                        ->setActionName(isset($p[3]) ? $p[3] : 'index')
+                    ->setParam('id', $p[2]);
             }
-        	
-            		
-        	return true;
+            
+                    
+            return true;
         }else{
-        	return false;
+            return false;
         }
     }
 }

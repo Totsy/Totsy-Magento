@@ -16,10 +16,10 @@ class Harapartners_Service_Model_Rewrite_Sales_Quote_Address_Total_Grand extends
         $grandTotal     = $address->getGrandTotal();
         parent::collect($address);
         
-	    if($address->getGrandTotal() == $grandTotal) {
-	        $address->setGrandTotal($address->getGrandTotal() + $address->getTaxAmount());
-	        $address->setBaseGrandTotal($address->getBaseGrandTotal() + $address->getBaseTaxAmount());
-	    }
+        if($address->getGrandTotal() == $grandTotal) {
+            $address->setGrandTotal($address->getGrandTotal() + $address->getTaxAmount());
+            $address->setBaseGrandTotal($address->getBaseGrandTotal() + $address->getBaseTaxAmount());
+        }
         
         return $this;
     }

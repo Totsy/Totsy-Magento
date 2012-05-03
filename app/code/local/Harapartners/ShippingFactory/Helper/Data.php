@@ -14,7 +14,7 @@
 
 class Harapartners_ShippingFactory_Helper_Data extends Mage_Core_Helper_Abstract
 {
-	public function getCode($type, $code='')
+    public function getCode($type, $code='')
     {
         $codes = array(
             'action'=>array(

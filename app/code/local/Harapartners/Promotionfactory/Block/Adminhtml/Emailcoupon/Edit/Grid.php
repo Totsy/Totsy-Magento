@@ -1,21 +1,21 @@
 <?php
 class Harapartners_Promotionfactory_Block_Adminhtml_Emailcoupon_Edit_Grid extends Mage_Adminhtml_Block_Widget_Grid {
-	
-	
-	protected $_id = NULL;
-	
+    
+    
+    protected $_id = NULL;
+    
     public function __construct(){
         parent::__construct();
         $this->setId('emailcouponPromotionEditGrid');
         $this->_id = $this->getRequest ()->getParam ( 'id' );
     }
-	
+    
     protected function _prepareCollection(){
-    	
+        
         $model = Mage::getModel('promotionfactory/emailcoupon');
         // set filter as the $this->_id
         $collection = $model->getCollection()->addFilter('rule_id', $this->_id);   
-		$this->setCollection($collection);
+        $this->setCollection($collection);
         parent::_prepareCollection();
         return $this;
     }
@@ -52,8 +52,8 @@ class Harapartners_Promotionfactory_Block_Adminhtml_Emailcoupon_Edit_Grid extend
             'align'         => 'center',
             'width'         => '150px',
             'index'         => 'created_at',
-        	'type'      	=> 'datetime',
-            'gmtoffset' 	=> true
+            'type'          => 'datetime',
+            'gmtoffset'     => true
         ));
         
         $this->addColumn('updated_at', array(
@@ -61,8 +61,8 @@ class Harapartners_Promotionfactory_Block_Adminhtml_Emailcoupon_Edit_Grid extend
             'align'         => 'center',
             'width'         => '150px',
             'index'         => 'updated_at',
-        	'type'      	=> 'datetime',
-            'gmtoffset' 	=> true
+            'type'          => 'datetime',
+            'gmtoffset'     => true
         ));
         return parent::_prepareColumns();
     }

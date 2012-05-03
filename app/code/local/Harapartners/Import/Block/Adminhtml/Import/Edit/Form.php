@@ -8,7 +8,7 @@ class Harapartners_Import_Block_Adminhtml_Import_Edit_Form extends Mage_Adminhtm
                                       'id' => 'edit_form',
                                       'action' => $this->getUrl('*/*/save', array('id' => $this->getRequest()->getParam('id'))),
                                       'method' => 'post',
-        							  'enctype' => 'multipart/form-data'
+                                      'enctype' => 'multipart/form-data'
                                    )
       );
 

@@ -67,19 +67,19 @@ class Enterprise_Invitation_IndexController extends Mage_Core_Controller_Front_A
             $customerExists = 0;
             $emails = trim(trim($data['email'], ";"));
             $emailArray = explode(',',$emails); 
-            $existEmailArray = array();	//Harapartners, yang: add for error record
+            $existEmailArray = array();    //Harapartners, yang: add for error record
             foreach ($emailArray as $email) {
                 
                 //hara partners, integrating CloudSponge
                 if (!Zend_Validate::is($email, 'EmailAddress')) {
-                	preg_match('/\<(.*?)\>/s', $email, $result);
- 					$email = $result[1];
- 					if (!Zend_Validate::is($email, 'EmailAddress')) {
-                    	continue;
- 					}
- 					$attempts++;
+                    preg_match('/\<(.*?)\>/s', $email, $result);
+                     $email = $result[1];
+                     if (!Zend_Validate::is($email, 'EmailAddress')) {
+                        continue;
+                     }
+                     $attempts++;
                 }
- 				//hara partners, integrating CloudSponge
+                 //hara partners, integrating CloudSponge
                 if ($attempts > $invPerSend) {
                     continue;
                 }
@@ -112,19 +112,19 @@ class Enterprise_Invitation_IndexController extends Mage_Core_Controller_Front_A
                 }
             }
             if ($customerExists) {
-            	//Harapartners, yang: for add error message for different existed user
-            	foreach ( $existEmailArray as $existEmail ){
-            		$customer = Mage::getModel('customer/customer')->setWebsiteId(Mage::app()->getStore()->getWebsiteId())->loadByEmail($existEmail);
-            		if ( $customer->getStoreId() == Harapartners_Service_Helper_Data::TOTSY_MOBILE_STORE_ID ) {
-            			$customerStoreName = Mage::app()->getStore(Harapartners_Service_Helper_Data::TOTSY_STORE_ID)->getName();
-            		}else {
-            			$customerStoreName = Mage::app()->getStore($customer->getStoreId())->getName();
-            		}         		
-            		Mage::getSingleton('customer/session')->addNotice(             	
-                		Mage::helper('enterprise_invitation')->__('Invitation was not sent to ' . $existEmail . ' because this customer account already exist in ' . $customerStoreName )
-                	);
-            	}
-            	//Harapartners, yang: end
+                //Harapartners, yang: for add error message for different existed user
+                foreach ( $existEmailArray as $existEmail ){
+                    $customer = Mage::getModel('customer/customer')->setWebsiteId(Mage::app()->getStore()->getWebsiteId())->loadByEmail($existEmail);
+                    if ( $customer->getStoreId() == Harapartners_Service_Helper_Data::TOTSY_MOBILE_STORE_ID ) {
+                        $customerStoreName = Mage::app()->getStore(Harapartners_Service_Helper_Data::TOTSY_STORE_ID)->getName();
+                    }else {
+                        $customerStoreName = Mage::app()->getStore($customer->getStoreId())->getName();
+                    }                 
+                    Mage::getSingleton('customer/session')->addNotice(                 
+                        Mage::helper('enterprise_invitation')->__('Invitation was not sent to ' . $existEmail . ' because this customer account already exist in ' . $customerStoreName )
+                    );
+                }
+                //Harapartners, yang: end
             }
             $this->_redirect('*/*/');
             return;

@@ -25,53 +25,53 @@ class Harapartners_Affiliate_Controller_Router extends Mage_Core_Controller_Vari
     public function match(Zend_Controller_Request_Http $request){
         if (!Mage::isInstalled()) {
             Mage::app()->getFrontController()->getResponse()
-            		->setRedirect(Mage::getUrl('install'))
-            		->sendResponse();
+                    ->setRedirect(Mage::getUrl('install'))
+                    ->sendResponse();
             exit;
-        }		
+        }        
         $identifier = trim($request->getPathInfo(), '/');
         $p = explode('/', $identifier);
         
         if(count($p) >= 2 && $p[0]=='a'){
-        	//Default Magento params in path: a/[affilate_code]?...
-        	//All other parameters need to be sent as GET params
-        	//Must at least specify affiliate code
-        	$request->setModuleName('affiliate')
-        				->setControllerName('register')
-        				->setActionName('index')
-        				->setParam('affiliate_code', $p[1]);
-        	if (!!$p[2] || is_numeric($p[2])){
-        		$request->setParam('clickId', $p[2]);
-        	} 				
-        	return true;
+            //Default Magento params in path: a/[affilate_code]?...
+            //All other parameters need to be sent as GET params
+            //Must at least specify affiliate code
+            $request->setModuleName('affiliate')
+                        ->setControllerName('register')
+                        ->setActionName('index')
+                        ->setParam('affiliate_code', $p[1]);
+            if (!!$p[2] || is_numeric($p[2])){
+                $request->setParam('clickId', $p[2]);
+            }                 
+            return true;
         }elseif(!!$request->getParam('a')){
-        	//Some legacy URLs: [keyword]?a=[affiliate_code]&...
-        	$matchResult = preg_split("/\?a=/", $identifier);
-        	if(!empty($matchResult[0])){
-        		$request->setModuleName('affiliate')
-        				->setControllerName('register')
-        				->setActionName('index')
-        				->setParam('affiliate_code', $request->getParam('a'))
-        				->setParam('keyword', $matchResult[0]);
-        		return true;
-        	}else{
-        		return false;
-        	}
+            //Some legacy URLs: [keyword]?a=[affiliate_code]&...
+            $matchResult = preg_split("/\?a=/", $identifier);
+            if(!empty($matchResult[0])){
+                $request->setModuleName('affiliate')
+                        ->setControllerName('register')
+                        ->setActionName('index')
+                        ->setParam('affiliate_code', $request->getParam('a'))
+                        ->setParam('keyword', $matchResult[0]);
+                return true;
+            }else{
+                return false;
+            }
         }elseif (!!$request->getParam('genpswd') && $p[0] == 'affiliate' ){
-        	//Remote register request go in here
-        	$request->setModuleName('affiliate')
-        				->setControllerName('remote')
-        				->setActionName('register');
-        	return true;       	
+            //Remote register request go in here
+            $request->setModuleName('affiliate')
+                        ->setControllerName('remote')
+                        ->setActionName('register');
+            return true;           
         }elseif(count($p) >= 1 && $p[0]=='remote'){
-        	//Remote login logic
-        	//All other parameters need to be sent as GET params
-        	$request->setModuleName('affiliate')
-        				->setControllerName('remote')
-        				->setActionName('login');
-        	return true;
+            //Remote login logic
+            //All other parameters need to be sent as GET params
+            $request->setModuleName('affiliate')
+                        ->setControllerName('remote')
+                        ->setActionName('login');
+            return true;
         }else{
-        	return false;
+            return false;
         }
     }
 }

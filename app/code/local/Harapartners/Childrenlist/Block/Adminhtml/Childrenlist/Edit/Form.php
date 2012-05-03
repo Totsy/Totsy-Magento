@@ -14,24 +14,24 @@
  *
  */
 class Harapartners_Childrenlist_Block_Adminhtml_Childrenlist_Edit_Form extends Mage_Adminhtml_Block_Widget_Form {
-	
+    
     protected function _prepareForm() {
-    	
-    	//Initialization
-    	$childId = $this->getRequest()->getParam('id');
-    	$child = Mage::getModel('childrenlist/child');
-    	if(!!$childId){
-    		$child->load($childId);
-    	}
-    	
-    	$customerId = $this->getRequest()->getParam('customerId');
-    	if(!$customerId && $child->getId()){
-    		$customerId = $child->getCustomerId();
-    	}
-    	$customer = Mage::getModel('customer/customer')->load($customerId);
+        
+        //Initialization
+        $childId = $this->getRequest()->getParam('id');
+        $child = Mage::getModel('childrenlist/child');
+        if(!!$childId){
+            $child->load($childId);
+        }
+        
+        $customerId = $this->getRequest()->getParam('customerId');
+        if(!$customerId && $child->getId()){
+            $customerId = $child->getCustomerId();
+        }
+        $customer = Mage::getModel('customer/customer')->load($customerId);
 
-		//Form preparation
-    	$form = new Varien_Data_Form(array(
+        //Form preparation
+        $form = new Varien_Data_Form(array(
             'id'        => 'edit_form',
             'action'    => $this->getUrl('*/*/save', array('id' => $this->getRequest()->getParam('id'))),
             'method'    => 'post'
@@ -52,14 +52,14 @@ class Harapartners_Childrenlist_Block_Adminhtml_Childrenlist_Edit_Form extends M
                 $customerText = Mage::helper('childrenlist')->__('Administrator');
             }
         }
-		
+        
         if (isset($childId)){
-	        $fieldset->addField('child_id', 'text', array(
-	            'value'      => $childId,
-	        	'name'      => 'child_id',
-	        	'style'   => "display:none",
-	        	'readonly' => true
-	        ));
+            $fieldset->addField('child_id', 'text', array(
+                'value'      => $childId,
+                'name'      => 'child_id',
+                'style'   => "display:none",
+                'readonly' => true
+            ));
         }
         
         $fieldset->addField('customer', 'note', array(
@@ -102,7 +102,7 @@ class Harapartners_Childrenlist_Block_Adminhtml_Childrenlist_Edit_Form extends M
             'label'     => Mage::helper('childrenlist')->__('Additional Data (JSON string)'),
             'name'      => 'additional_data',
             'style'     => 'height:24em;',
-        	'after_element_html' => '<small>The Additional Data Must be a valid JSON string or Blank</small>',
+            'after_element_html' => '<small>The Additional Data Must be a valid JSON string or Blank</small>',
         ));
         
         $form->setUseContainer(true);
@@ -112,18 +112,18 @@ class Harapartners_Childrenlist_Block_Adminhtml_Childrenlist_Edit_Form extends M
         //2)Try to load if ID is available
         $childData = array();
         if(Mage::getSingleton('adminhtml/session')->hasChildEditFormData()){
-        	$childData = Mage::getSingleton('adminhtml/session')->getChildEditFormData();
+            $childData = Mage::getSingleton('adminhtml/session')->getChildEditFormData();
         }
         if($child->getId()){
-        	$childData = $child->getData();
+            $childData = $child->getData();
         }
         $form->setValues($childData);
         
         $fieldset->addField('customer_id', 'text', array(
             'value'      => $customerId,
-        	'name'      => 'customer_id',
-        	'style'   => "display:none",
-        	'readonly' => true
+            'name'      => 'customer_id',
+            'style'   => "display:none",
+            'readonly' => true
         ));
         
         

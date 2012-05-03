@@ -6,23 +6,23 @@
             <container>Harapartners_Customertracking_Model_Cache_Welcome</container>
             <cache_lifetime>3600</cache_lifetime>
         </customertracking_welcome>
-		<customertracking_pixel>
+        <customertracking_pixel>
             <block>customertracking/pixel</block>
             <placeholder>CUSTOMERTRACKING_PIXEL</placeholder>
             <container>Harapartners_Customertracking_Model_Cache_Pixel</container>
             <cache_lifetime>3600</cache_lifetime>
         </customertracking_pixel>
-		<customertracking_headermsg>
+        <customertracking_headermsg>
             <block>customertracking/headermsg</block>
             <placeholder>CUSTOMERTRACKING_HEADERMSG</placeholder>
             <container>Harapartners_Customertracking_Model_Cache_Headermsg</container>
             <cache_lifetime>86400</cache_lifetime>
         </customertracking_headermsg>
-		<customertracking_footersignout>
+        <customertracking_footersignout>
             <block>customertracking/footersignout</block>
             <placeholder>CUSTOMERTRACKING_FOOTERSIGNOUT</placeholder>
             <container>Harapartners_Customertracking_Model_Cache_Footersignout</container>
-            <cache_lifetime>86400</cache_lifetime>			
-		</customertracking_footersignout>
-	</placeholders>
-</config>	
+            <cache_lifetime>86400</cache_lifetime>            
+        </customertracking_footersignout>
+    </placeholders>
+</config>    

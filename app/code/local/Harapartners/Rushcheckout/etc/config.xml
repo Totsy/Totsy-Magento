@@ -8,26 +8,26 @@
     <global>
         <blocks>
             <rushcheckout>
-				<class>Harapartners_Rushcheckout_Block</class>
+                <class>Harapartners_Rushcheckout_Block</class>
             </rushcheckout>
         </blocks>
-		<helpers>
+        <helpers>
             <rushcheckout>
-				<class>Harapartners_Rushcheckout_Helper</class>
-			</rushcheckout>
+                <class>Harapartners_Rushcheckout_Helper</class>
+            </rushcheckout>
         </helpers>
         <models>
-			<rushcheckout>
-				<class>Harapartners_Rushcheckout_Model</class>
-			</rushcheckout>
-			<!--Moved to Harapartners_Service-->
-			<!--checkout>
-				<rewrite>
-					<session>Harapartners_Rushcheckout_Model_Session</session>
-				</rewrite>
-			</checkout-->
+            <rushcheckout>
+                <class>Harapartners_Rushcheckout_Model</class>
+            </rushcheckout>
+            <!--Moved to Harapartners_Service-->
+            <!--checkout>
+                <rewrite>
+                    <session>Harapartners_Rushcheckout_Model_Session</session>
+                </rewrite>
+            </checkout-->
         </models>
-		<resources>	
+        <resources>    
         </resources>
     </global>
     <frontend>
@@ -40,26 +40,26 @@
                 </args>
             </rushcheckout>
         </routers>
-		<layout>
-			<updates>
-				<rushcheckout>
-					<file>rushcheckout.xml</file>
-				</rushcheckout>
-			</updates>
-		</layout>
-		<!--Moved to Harapartners_Service-->
-		<!--events>
-			<customer_session_init>
-				<observers>
+        <layout>
+            <updates>
+                <rushcheckout>
+                    <file>rushcheckout.xml</file>
+                </rushcheckout>
+            </updates>
+        </layout>
+        <!--Moved to Harapartners_Service-->
+        <!--events>
+            <customer_session_init>
+                <observers>
                     <rushcheckout_customer_revalidate>
                         <class>rushcheckout/observer</class>
                         <method>customerRevalidate</method>
                     </rushcheckout_customer_revalidate>
                 </observers>
-			</customer_session_init>
-		</events-->
+            </customer_session_init>
+        </events-->
     </frontend>
-	<admin>
+    <admin>
         <routers>
             <rushcheckout>
                 <use>admin</use>
@@ -70,20 +70,20 @@
             </rushcheckout>
         </routers>
     </admin>
-	<adminhtml>
+    <adminhtml>
         <menu>
             <harapartners>
-				<children>
-					<rushcheckout translate="title" module="rushcheckout">
-		                <title>Rushcheckout Timer</title>
-		                <sort_order>500</sort_order>
-						<action>rushcheckout/adminhtml_timerconfig</action>
-					</rushcheckout>
-				</children>
+                <children>
+                    <rushcheckout translate="title" module="rushcheckout">
+                        <title>Rushcheckout Timer</title>
+                        <sort_order>500</sort_order>
+                        <action>rushcheckout/adminhtml_timerconfig</action>
+                    </rushcheckout>
+                </children>
             </harapartners>
         </menu>
     </adminhtml>
-	<crontab>
+    <crontab>
         <jobs>
             <rushcheckout_clean_expired_quotes>
                 <schedule>

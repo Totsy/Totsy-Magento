@@ -20,10 +20,10 @@ class Harapartners_Affiliate_Model_Mysql4_record extends Mage_Core_Model_Mysql4_
     }
 
     public function loadByAffiliateCode($affiliateCode){
-    	$readAdapter = $this->_getReadAdapter();
-    	$select = $readAdapter->select()
-            	->from($this->getMainTable())
-            	->where('affiliate_code=:affiliate_code');
+        $readAdapter = $this->_getReadAdapter();
+        $select = $readAdapter->select()
+                ->from($this->getMainTable())
+                ->where('affiliate_code=:affiliate_code');
         $result = $readAdapter->fetchRow($select, array('affiliate_code' => $affiliateCode));
         if (!$result) {
            $result = array(); 
