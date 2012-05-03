@@ -81,10 +81,20 @@ class Harapartners_ShippingFactory_Model_Shipping_Carrier_Flexible
         $defaultShippingPrice = $this->getConfigData('default_shipping_price');
         $hasDefaultShippingItem = false;
        
+<<<<<<< HEAD
         if($this->shouldUseFreeShipping()){
             $shippingPrice = '0.00';
         //HP Song --End
         }elseif ($request->getAllItems()) {
+=======
+		if($this->shouldUseFreeShipping()){
+	        $shippingPrice = '0.00';
+	    //HP Song --End
+	    }elseif(is_numeric(Mage::registry('order_import_shipping_amount'))){
+	    	$shippingPrice = max(array(0.0, Mage::registry('order_import_shipping_amount')));
+	    	
+	    }elseif ($request->getAllItems()) {
+>>>>>>> hp
             foreach ($request->getAllItems() as $item) {
                 if ($item->getProduct()->isVirtual() || $item->getParentItem()) {
                     continue;
