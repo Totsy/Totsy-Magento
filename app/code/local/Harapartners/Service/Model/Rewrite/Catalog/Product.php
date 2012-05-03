@@ -70,5 +70,15 @@ class Harapartners_Service_Model_Rewrite_Catalog_Product extends Mage_Catalog_Mo
     	}
     	return $this;
     }
+    
+    //Important logic for legacy order import
+	public function getFinalPrice($qty=null){
+		if(Mage::registry('order_import_force_product_price')
+				&& !!$this->getOrderImportFinalPrice()
+		){
+			return max(array(0.0, $this->getOrderImportFinalPrice()));
+		}
+        return parent::getFinalPrice($qty);
+    }
 
 }

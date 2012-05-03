@@ -15,6 +15,19 @@
 class Harapartners_Service_Model_Rewrite_Salesrule_Quote_Discount extends Mage_SalesRule_Model_Quote_Discount {
 
     public function collect(Mage_Sales_Model_Quote_Address $address) {
+    	
+    	//Important logic for importing legacy orders, only apply to the correponding address once!
+		if(is_numeric(Mage::registry('order_import_discount_amount'))){
+			if(($address->getQuote()->isVirtual() && $address->getAddressType() == 'billing')
+					|| (!$address->getQuote()->isVirtual() && $address->getAddressType() == 'shipping')
+			){
+				$this->_setAddress($address);
+				$this->_addAmount(Mage::registry('order_import_discount_amount'));
+				$this->_addBaseAmount(Mage::registry('order_import_discount_amount'));
+				return $this;
+			}
+		}
+    	
     	$quote = $address->getQuote();
     	$couponCode = $quote->getCouponCode();//may be a pseudo code, or a real code
     	$groupcoupon = Mage::getModel('promotionfactory/groupcoupon')->loadByPseudoCode($couponCode);
