@@ -68,5 +68,4 @@ class Harapartners_Service_Model_Rewrite_Newsletter_Subscriber extends Mage_News
 
         return $this;
     }
-    
 }
