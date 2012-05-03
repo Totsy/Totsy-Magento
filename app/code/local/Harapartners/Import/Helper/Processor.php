@@ -20,8 +20,8 @@ class Harapartners_Import_Helper_Processor extends Mage_Core_Helper_Abstract {
     const DEFAULT_PRODUCT_ATTRIBUTE_SET                 = 'Totsy';
     const DEFAULT_PRODUCT_STATUS                         = 'Enabled';
     const DEFAULT_PRODUCT_TAX_CLASS                         = 'Taxable Goods';
-    const DEFAULT_PRODUCT_SHORT_DESCRIPTION                = 'Welcome to Totsy!';
-    const DEFAULT_PRODUCT_DESCRIPTION                    = 'Welcome to Totsy!';
+    const DEFAULT_PRODUCT_SHORT_DESCRIPTION                = '';//'Welcome to Totsy!';
+    const DEFAULT_PRODUCT_DESCRIPTION                    = '';//'Welcome to Totsy!';
     const DEFAULT_PRODUCT_WEIGHT                        = '1.0'; //Note all fields MUST be text
     const DEFAULT_PRODUCT_IS_IN_STOCK                    = '1'; //Note all fields MUST be text
     
@@ -246,6 +246,14 @@ class Harapartners_Import_Helper_Processor extends Mage_Core_Helper_Abstract {
                 }
             }
         }
+        
+        //Totsy logic, description and short_description are no longer required
+        foreach($this->_requiredFields as $key => $value){
+        	if($value == 'description' || $value == 'short_description'){
+        		unset($this->_requiredFields[$key]);
+        	}
+        }
+        
     }
     
     protected function _hideAssociatedSimpleProducts(){
