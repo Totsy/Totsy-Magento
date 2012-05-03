@@ -66,19 +66,14 @@ class Harapartners_Service_Model_Rewrite_Core_Email_Template extends Mage_Core_M
 			$temails = "";
 			
 			/* @UPDATED 2012.05.02: checks for store_id and cross references to code
-				- for use in sailthru, conditional logic for serving branded headers/footers */
+				- for use in sailthru, conditional logic for serving branded headers/footers 
+				- this is actually not being used right now, due to some issue yet to be resolved…
+				- the code is correct, it may be issue with DB and/or sailthru… resolve later date
+				*/
 			$customerId = Mage::getModel('newsletter/subscriber')->loadByEmail($email)->getCustomerId();
 			$customer = Mage::getModel('customer/customer')->load($customerId);
 			$store = "";
 			$store = Mage::getModel('core/store')->load($customer['store_id']);
-			
-/*
-			echo "<pre>";
-			print_r($store);
-			print $store['code'];
-			echo "</pre>";
-			exit();
-*/
 			
 			if ($store['code']=="default" || $store['code']=="mobile") {
 				$store_code = "totsy"; 
