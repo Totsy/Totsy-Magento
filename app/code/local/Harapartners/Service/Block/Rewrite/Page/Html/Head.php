@@ -42,10 +42,12 @@ class Harapartners_Service_Block_Rewrite_Page_Html_Head extends Mage_Page_Block_
 //        $type = Mage::app()->getRequest()->getParam('type');
 //        $value = Mage::app()->getRequest()->getParam('value');
         $attrObj = Mage::getModel('catalog/product')->getResource()->getAttribute($type);
-        $label = Mage::helper('catalog')->__($attrObj->getSource()->getOptionText($value));
+        $codeFormateLabel = $attrObj->getSource()->getOptionText($value);
+        $label = Mage::helper('catalog')->__($codeFormateLabel);
+		//$label = strtolower(str_replace('-and-','-',str_replace(' ','-',$label)));
+        $this->setSailthruTags($codeFormateLabel);
         $this->setSailthruTitle($label);
-        $label = strtolower(str_replace('-and-','-',str_replace(' ','-',$label)));
-        $this->setSailthruTags($label);
+        
     }
     
     public function setEventTags(){
@@ -76,7 +78,7 @@ class Harapartners_Service_Block_Rewrite_Page_Html_Head extends Mage_Page_Block_
         $age = $category->getAges();
         $ageArray = explode(',', $age);
         $newAgeArray = array();
-        $ageAttrOptions = Mage::getModel('catalog/product')->getResource()->getAttribute('ages');
+        $ageAttrOptions = Mage::getModel('catalog/category')->getResource()->getAttribute('ages');
         foreach ($ageArray as $perage){
             //$attrText = $ageAttrOptions->getSource()->getOptionText($perage);
             $newAgeArray[] = $perage;
@@ -114,6 +116,8 @@ class Harapartners_Service_Block_Rewrite_Page_Html_Head extends Mage_Page_Block_
             ->load($productId);
         $label = $product->getName(); 
         $label = strtolower(str_replace(' ','-',$label));
+        $TagsArray = array();
+        $TagsArray[] = $label;
         
         $dept = $product->getDepartments();
         $deptArray = explode(',', $dept);
@@ -124,26 +128,30 @@ class Harapartners_Service_Block_Rewrite_Page_Html_Head extends Mage_Page_Block_
             //$newDeptArray[] =     $this->__($attrText);
             $labeltemp = strtolower(str_replace('-and-','-',str_replace('_','-',$attrText)));
             $newDeptArray[] =     $labeltemp;
+            $TagsArray[] = $labeltemp;
         }
         $deptStr = implode(', ' , $newDeptArray);
-        if (!empty($dept)){
+        /*if (!empty($dept)){
             $deptStr = ', '.$deptStr;
-        }
+        }*/
         $age = $product->getAges();
         $ageArray = explode(',', $age);
         $newAgeArray = array();
         $ageAttrOptions = Mage::getModel('catalog/product')->getResource()->getAttribute('ages');
         foreach ($ageArray as $perage){
             $attrText = $ageAttrOptions->getSource()->getOptionText($perage);
-            $newAgeArray[] =     $this->__($attrText);
+            //$newAgeArray[] =     $this->__($attrText);
+            $newAgeArray[] =     $attrText;
+            $TagsArray[] = $attrText;
         }
         $ageStr = implode(', ' , $newAgeArray);
-        if (!empty($age)){
+        /*if (count($age)>1){
             $ageStr = ', '.$ageStr;
-        }
-        $label = trim($label.$deptStr.$ageStr , ',');
+        }*/
+        $Tags = implode(', ',$TagsArray);
+        //$label = trim($label.$deptStr.$ageStr , ',');
         //$label = $label.$deptStr.$ageStr;
-        $this->setSailthruTags($label);
+        $this->setSailthruTags($Tags);
     }
         
     public function setProductSailthruTitle(){
