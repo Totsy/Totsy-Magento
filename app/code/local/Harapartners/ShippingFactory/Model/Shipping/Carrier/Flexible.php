@@ -81,15 +81,6 @@ class Harapartners_ShippingFactory_Model_Shipping_Carrier_Flexible
         $defaultShippingPrice = $this->getConfigData('default_shipping_price');
         $hasDefaultShippingItem = false;
        
-<<<<<<< HEAD
-<<<<<<< HEAD
-        if($this->shouldUseFreeShipping()){
-            $shippingPrice = '0.00';
-        //HP Song --End
-        }elseif ($request->getAllItems()) {
-=======
-=======
->>>>>>> d5f275b17e2e184bbff9e84348520de3b141b4eb
 		if($this->shouldUseFreeShipping()){
 	        $shippingPrice = '0.00';
 	    //HP Song --End
@@ -97,10 +88,6 @@ class Harapartners_ShippingFactory_Model_Shipping_Carrier_Flexible
 	    	$shippingPrice = max(array(0.0, Mage::registry('order_import_shipping_amount')));
 	    	
 	    }elseif ($request->getAllItems()) {
-<<<<<<< HEAD
->>>>>>> hp
-=======
->>>>>>> d5f275b17e2e184bbff9e84348520de3b141b4eb
             foreach ($request->getAllItems() as $item) {
                 if ($item->getProduct()->isVirtual() || $item->getParentItem()) {
                     continue;

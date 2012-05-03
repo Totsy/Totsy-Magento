@@ -15,27 +15,6 @@
 class Harapartners_Service_Model_Rewrite_Salesrule_Quote_Discount extends Mage_SalesRule_Model_Quote_Discount {
 
     public function collect(Mage_Sales_Model_Quote_Address $address) {
-<<<<<<< HEAD
-<<<<<<< HEAD
-        $quote = $address->getQuote();
-        $couponCode = $quote->getCouponCode();//may be a pseudo code, or a real code
-        $groupcoupon = Mage::getModel('promotionfactory/groupcoupon')->loadByPseudoCode($couponCode);
-        if(!!$groupcoupon && !!$groupcoupon->getId() && $groupcoupon->getUsedCount() == 0){
-            $quote->setCouponCode($groupcoupon->getCode());
-        }
-        parent::collect($address);
-        
-        //if coupon applied successfully and also matching the groupon code, restore the pseudo code and update the description
-        if(!!$quote->getCouponCode()
-                && !!$groupcoupon && !!$groupcoupon->getId()
-                && $quote->getCouponCode() == $groupcoupon->getCode()){
-            $this->_updateAddressDescription($groupcoupon, $address);
-            $quote->setCouponCode($couponCode);
-        }
-        return $this;
-=======
-=======
->>>>>>> d5f275b17e2e184bbff9e84348520de3b141b4eb
     	
     	//Important logic for importing legacy orders, only apply to the correponding address once!
 		if(is_numeric(Mage::registry('order_import_discount_amount'))){
@@ -65,10 +44,6 @@ class Harapartners_Service_Model_Rewrite_Salesrule_Quote_Discount extends Mage_S
     		$quote->setCouponCode($couponCode);
     	}
 		return $this;
-<<<<<<< HEAD
->>>>>>> hp
-=======
->>>>>>> d5f275b17e2e184bbff9e84348520de3b141b4eb
     }
     
 	public function _updateAddressDescription($groupcoupon, $address, $separator=', '){
