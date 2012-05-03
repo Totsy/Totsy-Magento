@@ -195,7 +195,7 @@ class Enterprise_Reward_Model_Reward_Rate extends Mage_Core_Model_Abstract
              * Type casting made in such way to avoid wrong automatic type casting and calculation.
              * $amount always int and $this->getCurrencyAmount() is string or float
              */
-            $amountValue = (int)((string)$amount/(string)$this->getCurrencyAmount());
+            $amountValue = ((string)$amount/(string)$this->getCurrencyAmount());
             if ($amountValue) {
                 $points = $this->getPoints()*$amountValue;
             }
