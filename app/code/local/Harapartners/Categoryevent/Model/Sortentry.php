@@ -20,10 +20,10 @@ class Harapartners_Categoryevent_Model_Sortentry extends Mage_Core_Model_Abstrac
 	const CATEGOTYEVENT_LEVEL = 3;
 	
 	// Every Top Events' parent category should be named as 'Top Event'
-	const TOP_EVENT_CATEGORY_NAME = 'Top Event';
+	const TOP_EVENT_CATEGORY_NAME = 'Top Events';
 	
-	// Every Events' parent category should be named as 'Event'
-	const EVENT_CATEGORY_NAME = 'Event';
+	// Every Events' parent category should be named as 'Events'
+	const EVENT_CATEGORY_NAME = 'Events';
 	
 	// Set up event collection date range
 	const EVENT_CATEGORY_DATE_RANG = '5';
