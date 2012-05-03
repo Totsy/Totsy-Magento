@@ -25,20 +25,20 @@ $orderDataArray = getOrderDataArray();
 Mage::register('disable_order_split', true);
 Mage::register('order_import_allow_ccsave', true);
 Mage::register('order_import_force_product_price', true);
-echo 'Processing START: ' . PHP_EOL.'<br/>';
+echo 'Processing START: ' . PHP_EOL;
 $importCount = 1;
 foreach($orderDataArray as $legacyOrderId => $orderData){
 	try{
 		if($importCount % 20 == 0){
-			echo 'Processing order #' . $importCount . PHP_EOL.'<br/>';
+			echo 'Processing order #' . $importCount . PHP_EOL;
 		}
 		placeOrder($orderData);
 	}catch (Exception $e){
-		echo 'Error processing order ' . $legacyOrderId . ': ' . $e->getMessage() . PHP_EOL.'<br/>';
+		echo 'Error processing order ' . $legacyOrderId . ': ' . $e->getMessage() . PHP_EOL;
 	}
 	$importCount ++;
 }
-echo 'Import END.' . PHP_EOL.'<br/>';
+echo 'Import END.' . PHP_EOL;
 
 
 
