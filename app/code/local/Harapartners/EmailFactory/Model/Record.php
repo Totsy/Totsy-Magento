@@ -15,20 +15,20 @@
 class Harapartners_EmailFactory_Model_Record extends Mage_Core_Model_Abstract {
 
     
-	const SAILTHRU_API_STATUS_UNCHECK = 0;
-	const SAILTHRU_API_STATUS_CHECK = 1;
-	const SAILTHRU_API_STATUS_UNKNOWN = 2;
-	
-	
-	protected function _beforeSave(){
-    	if(!$this->getId()){
-    		$this->setData('created_at', now());
-    	}
-    	$this->setData('updated_at', now());
-    	parent::_beforeSave();  
+    const SAILTHRU_API_STATUS_UNCHECK = 0;
+    const SAILTHRU_API_STATUS_CHECK = 1;
+    const SAILTHRU_API_STATUS_UNKNOWN = 2;
+    
+    
+    protected function _beforeSave(){
+        if(!$this->getId()){
+            $this->setData('created_at', now());
+        }
+        $this->setData('updated_at', now());
+        parent::_beforeSave();  
     }
     
-	protected function _construct(){
+    protected function _construct(){
         $this->_init('emailfactory/record');
     }
 }

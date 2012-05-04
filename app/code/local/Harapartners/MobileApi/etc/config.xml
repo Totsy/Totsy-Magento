@@ -18,17 +18,17 @@
             <version>1.0.1</version>
         </Harapartners_MobileApi>
     </modules>
-	<mobileapi>
-		<routers>
-			<mobileapi>
-				<use>mobileapi</use>
-				<args>
-					<module>Harapartners_MobileApi</module>
-					<frontName>mobileapi</frontName>
-				</args>
-			</mobileapi>
-		</routers>
-	</mobileapi>
+    <mobileapi>
+        <routers>
+            <mobileapi>
+                <use>mobileapi</use>
+                <args>
+                    <module>Harapartners_MobileApi</module>
+                    <frontName>mobileapi</frontName>
+                </args>
+            </mobileapi>
+        </routers>
+    </mobileapi>
     <frontend>
         <routers>
             <mobileapi>
@@ -45,7 +45,7 @@
             <mobileapi>
                 <class>Harapartners_MobileApi_Helper</class>
             </mobileapi>
-		</helpers>
+        </helpers>
         <blocks>
             <mobileapi>
                 <class>Harapartners_MobileApi_Block</class>
@@ -57,7 +57,7 @@
             </mobileapi>
         </models>
     </global>
-	<stores>
+    <stores>
         <default>
             <web>
                 <routers>

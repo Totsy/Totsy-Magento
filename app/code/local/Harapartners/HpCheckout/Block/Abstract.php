@@ -17,7 +17,7 @@ abstract class Harapartners_HpCheckout_Block_Abstract extends Mage_Core_Block_Te
         return $this->_customer;
     }
     
-	public function getCustomerSession()
+    public function getCustomerSession()
     {
         if (empty($this->_customerSession)) {
             $this->_customerSession = Mage::getSingleton('customer/session');
@@ -64,7 +64,7 @@ abstract class Harapartners_HpCheckout_Block_Abstract extends Mage_Core_Block_Te
         }
         return $this->_regionCollection;
     }
-	
+    
     public function customerHasAddresses()
     {
         return count($this->getCustomer()->getAddresses());
@@ -75,7 +75,7 @@ abstract class Harapartners_HpCheckout_Block_Abstract extends Mage_Core_Block_Te
         if ($this->isCustomerLoggedIn()) {
             $options = array();
             if( $this->customerHasAddresses() ) {
-            	$options[] = array( 'value' => '', 'label' => 'New Address' );
+                $options[] = array( 'value' => '', 'label' => 'New Address' );
             }
             foreach ($this->getCustomer()->getAddresses() as $address) {
                 $options[] = array(
@@ -107,16 +107,16 @@ abstract class Harapartners_HpCheckout_Block_Abstract extends Mage_Core_Block_Te
     }
     
     public function getAddressesJson() {
-    	$json = array();
-    	foreach ($this->getCustomer()->getAddresses() as $address) {
-    		$addressData = $address->getData();
-    		$addressData [ 'email' ] = $this->getCustomer()->getEmail();
-    		$streetArray = explode( "\n", $addressData[ 'street' ] );
-    		$addressData[ 'street1' ] = $streetArray[0];
-    		$addressData[ 'street2' ] = isset( $streetArray[1] ) ? $streetArray[1] : '';
-    		$json[ $address->getId() ] = $addressData;
-    	}
-    	return json_encode( $json );
+        $json = array();
+        foreach ($this->getCustomer()->getAddresses() as $address) {
+            $addressData = $address->getData();
+            $addressData [ 'email' ] = $this->getCustomer()->getEmail();
+            $streetArray = explode( "\n", $addressData[ 'street' ] );
+            $addressData[ 'street1' ] = $streetArray[0];
+            $addressData[ 'street2' ] = isset( $streetArray[1] ) ? $streetArray[1] : '';
+            $json[ $address->getId() ] = $addressData;
+        }
+        return json_encode( $json );
     }
 
     public function getCountryHtmlSelect($type)

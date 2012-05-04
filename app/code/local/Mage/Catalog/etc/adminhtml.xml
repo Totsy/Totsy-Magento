@@ -35,7 +35,7 @@
                 <module>Mage_Catalog</module>
             </depends>
             <children>
-				<categories translate="title" module="catalog">
+                <categories translate="title" module="catalog">
                     <title>Manage Categories/Events</title>
                     <action>adminhtml/catalog_category/</action>
                     <sort_order>5</sort_order>

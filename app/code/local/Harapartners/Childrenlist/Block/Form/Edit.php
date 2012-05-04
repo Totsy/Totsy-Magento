@@ -26,17 +26,17 @@ class Harapartners_Childrenlist_Block_Form_Edit extends Mage_Core_Block_Template
     {
         $childId = Mage::app()->getRequest()->getParam('childid', false);
         $child = Mage::getModel('childrenlist/child')->load($childId);
-    	return $child; 
+        return $child; 
     }
 
-	public function isCustomerOwnTheChild()
+    public function isCustomerOwnTheChild()
     {
-    	return ($this->getChildInfo()->getCustomerId() == $this->getCustomer()->getId());
+        return ($this->getChildInfo()->getCustomerId() == $this->getCustomer()->getId());
     }
     
     public function isEditMode(){
-    	$childId = Mage::app()->getRequest()->getParam('childid', false);
-    	return !empty($childId);
+        $childId = Mage::app()->getRequest()->getParam('childid', false);
+        return !empty($childId);
     }
     
     
@@ -61,5 +61,5 @@ class Harapartners_Childrenlist_Block_Form_Edit extends Mage_Core_Block_Template
             return $this->getRefererUrl();
         }
         return $this->getUrl('customer/account/');
-    }	
+    }    
 }

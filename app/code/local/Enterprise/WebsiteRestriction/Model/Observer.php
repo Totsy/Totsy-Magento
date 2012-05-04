@@ -47,13 +47,13 @@ class Enterprise_WebsiteRestriction_Model_Observer
             ));
             //Harapartners, Yang/Edward/Andu adding exempted modules
             if( preg_match( "/\/(invitation|invite|faq|privacy|rss|affiliates|careers|aboutus|meet-the-moms|press|video-testimonials|being-green|totsy-blog|contact|inchoo_facebook|resetpassword|resetpasswordpost|facebook|inchoo|mobileapi|affiliate|terms|return-policy|privacy-policy|terms-of-use)\//i", Mage::app()->getRequest()->getRequestUri() ) ){
-            	return;
+                return;
             }
             //Harapartners, Yang/Jun no restrictions for Affiliate Register Controller
             if(Mage::app()->getRequest()->getModuleName('affiliate') == 'affiliate'
-            		&& Mage::app()->getRequest()->getControllerName('register') == 'register'
+                    && Mage::app()->getRequest()->getControllerName('register') == 'register'
             ){
-            	return;
+                return;
             }
             
             if (!$dispatchResult->getShouldProceed()) {
@@ -139,13 +139,13 @@ class Enterprise_WebsiteRestriction_Model_Observer
                         Mage::getSingleton('core/session')->setWebsiteRestrictionAfterLoginUrl($afterLoginUrl);
                     }
                     elseif (Mage::getSingleton('core/session')->hasWebsiteRestrictionAfterLoginUrl()) {
-                    	//Haraparnters, Jun, START: avoid unecessary redirect
-                    	$url = Mage::getSingleton('core/session')->getWebsiteRestrictionAfterLoginUrl(true);
-                    	if($url != Mage::helper('core/url')->getCurrentUrl()){
-	                        $response->setRedirect($url);
-	                        $controller->setFlag('', Mage_Core_Controller_Varien_Action::FLAG_NO_DISPATCH, true);
-                    	}
-                    	//Haraparnters, Jun, END 
+                        //Haraparnters, Jun, START: avoid unecessary redirect
+                        $url = Mage::getSingleton('core/session')->getWebsiteRestrictionAfterLoginUrl(true);
+                        if($url != Mage::helper('core/url')->getCurrentUrl()){
+                            $response->setRedirect($url);
+                            $controller->setFlag('', Mage_Core_Controller_Varien_Action::FLAG_NO_DISPATCH, true);
+                        }
+                        //Haraparnters, Jun, END 
                     }
                     break;
             }

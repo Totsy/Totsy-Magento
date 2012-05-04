@@ -12,23 +12,23 @@
  */
 class Harapartners_Fulfillmentfactory_Block_Adminhtml_Itemqueue_Index_Renderer_Status extends Mage_Adminhtml_Block_Widget_Grid_Column_Renderer_Text
 {
-	public function _getValue(Varien_Object $row) {
-		$resultHtml = "";
+    public function _getValue(Varien_Object $row) {
+        $resultHtml = "";
 
         $format = $this->getColumn()->getFormat();
 
         $data = $row->getData($this->getColumn()->getIndex());
-		
+        
         $statusList = Mage::helper('fulfillmentfactory')->getItemqueueStatusDropdownOptionList();
         
         //show status label
         foreach ($statusList as $status) {
-        	if($status['value'] == $data) {
-        		$resultHtml = '<strong>' . $status['label'] . '</strong>';
-        		break;
-        	}
+            if($status['value'] == $data) {
+                $resultHtml = '<strong>' . $status['label'] . '</strong>';
+                break;
+            }
         }
 
         return $resultHtml;
-	}
+    }
 }

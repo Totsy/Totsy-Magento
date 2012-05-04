@@ -8,18 +8,18 @@
     <global>
         <blocks>
             <promotionfactory>
-				<class>Harapartners_Promotionfactory_Block</class>
+                <class>Harapartners_Promotionfactory_Block</class>
             </promotionfactory>
         </blocks>
-		<helpers>
+        <helpers>
             <promotionfactory>
-				<class>Harapartners_Promotionfactory_Helper</class>
-			</promotionfactory>
+                <class>Harapartners_Promotionfactory_Helper</class>
+            </promotionfactory>
         </helpers>
         <models>
             <promotionfactory>
                 <class>Harapartners_Promotionfactory_Model</class>
-				<resourceModel>promotionfactory_mysql4</resourceModel>
+                <resourceModel>promotionfactory_mysql4</resourceModel>
             </promotionfactory>
             <promotionfactory_mysql4>
                 <class>Harapartners_Promotionfactory_Model_Mysql4</class>
@@ -27,20 +27,20 @@
                     <emailcoupon>
                         <table>promotionfactory_emailcoupon</table>
                     </emailcoupon>
-					<groupcoupon>
+                    <groupcoupon>
                         <table>promotionfactory_groupcoupon</table>
                     </groupcoupon>
                 </entities>
             </promotionfactory_mysql4>
-			<!--Moved to Harapartners_Service-->
-			<!--salesrule>
-				<rewrite>
-					<validator>Harapartners_Promotionfactory_Model_Validator</validator>
-					<quote_discount>Harapartners_Promotionfactory_Model_Discount</quote_discount>
-				</rewrite>
-			</salesrule-->
+            <!--Moved to Harapartners_Service-->
+            <!--salesrule>
+                <rewrite>
+                    <validator>Harapartners_Promotionfactory_Model_Validator</validator>
+                    <quote_discount>Harapartners_Promotionfactory_Model_Discount</quote_discount>
+                </rewrite>
+            </salesrule-->
         </models>
-		<resources>
+        <resources>
             <promotionfactory_setup>
                 <setup>
                     <module>Harapartners_Promotionfactory</module>
@@ -60,7 +60,7 @@
                 </connection>
             </promotionfactory_read>
         </resources>
-		<!--events>
+        <!--events>
             <checkout_cart_product_add_after>
                 <observers>
                     <caudalie_observer>
@@ -71,16 +71,16 @@
                 </observers>
             </checkout_cart_product_add_after>
         </events-->
-		<!--sales>
+        <!--sales>
             <quote>
                 <totals>
                     <buyxgety>
                         <class>promotionfactory/quote_address_total_subtotal</class>
                         <before>grand_total</before>
                     </buyxgety>
-				</totals>
-			</quote>
-		</sales-->
+                </totals>
+            </quote>
+        </sales-->
     </global>
     <frontend>
         <routers>
@@ -92,15 +92,15 @@
                 </args>
             </Harapartners_PromotionFactory>
         </routers>
-		<layout>
-			<updates>
-				<promotionfactory>
-					<file>promotionfactory.xml</file>
-				</promotionfactory>
-			</updates>
-		</layout>
+        <layout>
+            <updates>
+                <promotionfactory>
+                    <file>promotionfactory.xml</file>
+                </promotionfactory>
+            </updates>
+        </layout>
     </frontend>
-	<admin>
+    <admin>
         <routers>
             <promotionfactory>
                 <use>admin</use>
@@ -111,29 +111,29 @@
             </promotionfactory>
         </routers>
     </admin>
-	<frontend/>
+    <frontend/>
     <adminhtml>
-		<layout>
-			<updates>
-				<promotionfactory>
-					<file>promotionfactory.xml</file>
-				</promotionfactory>
-			</updates>
-		</layout>
+        <layout>
+            <updates>
+                <promotionfactory>
+                    <file>promotionfactory.xml</file>
+                </promotionfactory>
+            </updates>
+        </layout>
         <menu>
             <promo>
-				<children>
-					<emailcoupon translate="title" module="promotionfactory">
-		                <title>Coupon With Email List</title>
-		                <sort_order>200</sort_order>
-		                <action>promotionfactory/adminhtml_emailcoupon</action>
-		            </emailcoupon>
-					<groupcoupon translate="title" module="promotionfactory">
-		                <title>Group Coupon manager</title>
-		                <sort_order>300</sort_order>
-		                <action>promotionfactory/adminhtml_groupcoupon</action>
-		            </groupcoupon>
-				</children>
+                <children>
+                    <emailcoupon translate="title" module="promotionfactory">
+                        <title>Coupon With Email List</title>
+                        <sort_order>200</sort_order>
+                        <action>promotionfactory/adminhtml_emailcoupon</action>
+                    </emailcoupon>
+                    <groupcoupon translate="title" module="promotionfactory">
+                        <title>Group Coupon manager</title>
+                        <sort_order>300</sort_order>
+                        <action>promotionfactory/adminhtml_groupcoupon</action>
+                    </groupcoupon>
+                </children>
             </promo>
         </menu>
     </adminhtml>

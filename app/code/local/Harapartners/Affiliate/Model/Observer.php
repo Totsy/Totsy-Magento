@@ -13,10 +13,10 @@
  */
 
 class Harapartners_Affiliate_Model_Observer {
-	
-	public function addAffiliateRouter(Varien_Event_Observer $observer){
-	    $front = $observer->getEvent()->getFront();
-		$front->addRouter('affiliate', new Harapartners_Affiliate_Controller_Router());			
-	}
-	
+    
+    public function addAffiliateRouter(Varien_Event_Observer $observer){
+        $front = $observer->getEvent()->getFront();
+        $front->addRouter('affiliate', new Harapartners_Affiliate_Controller_Router());            
+    }
+    
 }

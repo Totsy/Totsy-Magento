@@ -1,8 +1,8 @@
 <?php 
 class Harapartners_HpCheckout_Block_Shippingmethod extends Harapartners_HpCheckout_Block_Abstract {
-	protected $_rates;
-	
-	public function getShippingRates()
+    protected $_rates;
+    
+    public function getShippingRates()
     {
         if (empty($this->_rates)) {
             $this->getAddress()->collectShippingRates()->save();
@@ -22,12 +22,12 @@ class Harapartners_HpCheckout_Block_Shippingmethod extends Harapartners_HpChecko
         return $this->_address;
     }
     
-	public function getAddressShippingMethod()
+    public function getAddressShippingMethod()
     {
         return $this->getAddress()->getShippingMethod();
     }
-	
-	public function getCarrierName($carrierCode)
+    
+    public function getCarrierName($carrierCode)
     {
         if ($name = Mage::getStoreConfig('carriers/'.$carrierCode.'/title')) {
             return $name;
@@ -36,14 +36,14 @@ class Harapartners_HpCheckout_Block_Shippingmethod extends Harapartners_HpChecko
     }
     
     protected function _prepareGroupedShippingRates( $shippingRateGroups ) {
-    	$ret = array();
-    	foreach( $shippingRateGroups as $code => $rates ) {
-    		foreach( $rates as $rate ) {
-    			if( ! $rate->getErrorMessage() ) {
-    				$ret[ $rate->getCode() ] = $this->getCarrierName( $code ) . " - " . $rate->getMethodTitle() . " - " . $this->getQuote()->getStore()->formatPrice( ( float ) $rate->getPrice() );
-    			}
-    		}
-    	}
-    	return $ret;
+        $ret = array();
+        foreach( $shippingRateGroups as $code => $rates ) {
+            foreach( $rates as $rate ) {
+                if( ! $rate->getErrorMessage() ) {
+                    $ret[ $rate->getCode() ] = $this->getCarrierName( $code ) . " - " . $rate->getMethodTitle() . " - " . $this->getQuote()->getStore()->formatPrice( ( float ) $rate->getPrice() );
+                }
+            }
+        }
+        return $ret;
     }
 }

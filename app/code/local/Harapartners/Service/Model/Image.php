@@ -13,8 +13,8 @@
  */
  
 class Harapartners_Service_Model_Image extends Mage_Catalog_Model_Product_Image {
-	
-	public function setBaseFile($file){
+    
+    public function setBaseFile($file){
         
         if ((!$file) || (!file_exists($file))) {
             throw new Exception(Mage::helper('catalog')->__('Image file was not found.'));
@@ -59,5 +59,5 @@ class Harapartners_Service_Model_Image extends Mage_Catalog_Model_Product_Image 
 
         return $this;
     }
-	
+    
 }

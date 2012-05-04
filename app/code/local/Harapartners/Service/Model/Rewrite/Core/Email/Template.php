@@ -62,22 +62,26 @@ class Harapartners_Service_Model_Rewrite_Core_Email_Template extends Mage_Core_M
         try {
             //Harapartners sailthru//            
             /* @UPDATED 2012.04.05 [added back DG-2012.04.26]: allows 1:1 template match between Magento and Sailthru*/
-			$template_name = $this['template_code'];;
-			$temails = "";
-			
-			/* @UPDATED 2012.05.02: checks for store_id and cross references to code
-				- for use in sailthru, conditional logic for serving branded headers/footers */
-			$customerId = Mage::getModel('newsletter/subscriber')->loadByEmail($email)->getCustomerId();
-			$customer = Mage::getModel('customer/customer')->load($customerId);
-			$store = "";
-			$store = Mage::getModel('core/store')->load($customer['store_id']);
-			if ($store['code']=="default" || $store['code']=="mobile") {
-				$store = "totsy"; 
-			} else {
-				$store = "mamasource";
-			}
-			$vars = array('store'=>$store);
- 			
+            $template_name = $this['template_code'];;
+            $temails = "";
+            
+            /* @UPDATED 2012.05.02: checks for store_id and cross references to code
+                - for use in sailthru, conditional logic for serving branded headers/footers 
+                - this is actually not being used right now, due to some issue yet to be resolved…
+                - the code is correct, it may be issue with DB and/or sailthru… resolve later date
+                */
+            $customerId = Mage::getModel('newsletter/subscriber')->loadByEmail($email)->getCustomerId();
+            $customer = Mage::getModel('customer/customer')->load($customerId);
+            $store = "";
+            $store = Mage::getModel('core/store')->load($customer['store_id']);
+            
+            if ($store['code']=="default" || $store['code']=="mobile") {
+                $store_code = "totsy"; 
+            } else {
+                $store_code = "mamasource";
+            }
+            $vars = array('store'=>$store_code);
+             
             $evars = array();
             $options = array("behalf_email" => Mage::getStoreConfig('sailthru_options/email/sailthru_sender_email'));
             for($i = 0; $i < count($emails); $i++) {
@@ -90,13 +94,13 @@ class Harapartners_Service_Model_Rewrite_Core_Email_Template extends Mage_Core_M
             $success = $sailthru->multisend($template_name, $temails, $vars, $evars, $options);
             //error message is a 2 values array
             if(count($success) == 2) {  
-            	//final try, to create a email template, rule http://docs.sailthru.com/api/template?s[]=savetemplate
+                //final try, to create a email template, rule http://docs.sailthru.com/api/template?s[]=savetemplate
                 $tempvars = array("content_html" => "{content}", "subject" => "{subj}");
                 $tempsuccess = $sailthru->saveTemplate($template_name, $tempvars);
                 $success = $sailthru->multisend($template_name, $temails, $vars, $evars, $options);
                 //not success, use magento default send…
                 if(count($success) == 2) {
-          	//magento default//
+              //magento default//
               $mail->send();
               //magento default//
                     Mage::throwException($this->__($success["errormsg"]));
@@ -105,11 +109,11 @@ class Harapartners_Service_Model_Rewrite_Core_Email_Template extends Mage_Core_M
             
             $isNewRegister = Mage::registry('new_account');
             if (isset($isNewRegister)){
-            	$sendId = $success['send_id'];
-            	$record = Mage::getModel('emailfactory/record');
-            	$record->setCustomerEmail($temails);
-            	$record->setSendId($sendId);
-            	$record->save();
+                $sendId = $success['send_id'];
+                $record = Mage::getModel('emailfactory/record');
+                $record->setCustomerEmail($temails);
+                $record->setSendId($sendId);
+                $record->save();
             }
             
             //Harapartners sailthru//

@@ -13,11 +13,11 @@
  */
 
 class Harapartners_Affiliate_Block_Adminhtml_Record_Index extends Mage_Adminhtml_Block_Widget_Grid_Container{
-	
+    
     public function __construct(){
-		$this->_blockGroup = 'affiliate';
-		$this->_controller = 'adminhtml_record_index';
-    	$this->_headerText = Mage::helper('affiliate')->__('Affiliate Record ');
+        $this->_blockGroup = 'affiliate';
+        $this->_controller = 'adminhtml_record_index';
+        $this->_headerText = Mage::helper('affiliate')->__('Affiliate Record ');
         parent::__construct();
     }
  

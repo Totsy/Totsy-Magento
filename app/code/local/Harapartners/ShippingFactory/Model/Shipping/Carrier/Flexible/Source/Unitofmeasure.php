@@ -16,7 +16,7 @@ class Harapartners_ShippingFactory_Model_Shipping_Carrier_Flexible_Source_Unitof
 {
     public function toOptionArray()
     {
-    	$ups = Mage::helper('shippingfactory');
+        $ups = Mage::helper('shippingfactory');
         //$unitArr = Mage::getSingleton('shippingfactory/shipping_carrier_flexible')->getCode('unit_of_measure');
         $returnArr = array();
         foreach ($ups->getCode('unit_of_measure') as $key => $val){

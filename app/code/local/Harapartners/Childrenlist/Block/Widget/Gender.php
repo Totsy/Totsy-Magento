@@ -43,12 +43,12 @@ class Harapartners_Childrenlist_Block_Widget_Gender extends Harapartners_Childre
     }
 
     public function getChildGender(){
-    	return $this->getChildInfo()->getChildGender();
+        return $this->getChildInfo()->getChildGender();
     }
     
     public function setChildGender($gender){
-    	$this->getChildInfo()->setChildGender($gender);
-    	return $this;
+        $this->getChildInfo()->setChildGender($gender);
+        return $this;
     }
     /**
      * Get current customer from session

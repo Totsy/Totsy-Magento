@@ -44,7 +44,7 @@ class Harapartners_Childrenlist_Block_Adminhtml_Childrenlist_Grid extends Mage_A
             'width'         => '100px',
             'index'         => 'child_name',
             'type'          => 'text',
-        	'truncate'      => 50,
+            'truncate'      => 50,
             'escape'        => true,
         ));
 
@@ -54,7 +54,7 @@ class Harapartners_Childrenlist_Block_Adminhtml_Childrenlist_Grid extends Mage_A
             'width'         => '50px',
             'index'         => 'child_gender',
             'type'          => 'options',
-        	'options'    => Harapartners_Childrenlist_Model_Child::getChildGenderLabels(),
+            'options'    => Harapartners_Childrenlist_Model_Child::getChildGenderLabels(),
             'truncate'      => 50,
             'escape'        => true,
         ));
@@ -65,7 +65,7 @@ class Harapartners_Childrenlist_Block_Adminhtml_Childrenlist_Grid extends Mage_A
             'width'         => '50px',
             'index'         => 'child_customer_relationship',
             'type'          => 'options',
-        	'options'    => Harapartners_Childrenlist_Model_Child::getChildRelationshipLabels(),
+            'options'    => Harapartners_Childrenlist_Model_Child::getChildRelationshipLabels(),
             'truncate'      => 50,
             'escape'        => true,
         ));
@@ -100,10 +100,10 @@ class Harapartners_Childrenlist_Block_Adminhtml_Childrenlist_Grid extends Mage_A
                         'caption' => Mage::helper('adminhtml')->__('Edit'),
                         /*'url'     => $this->getUrl('childrenlist/adminhtml_childedit/edit',array('id'=>1,'customerId' => 12)),
                         'field'   => 'child_id'*/
-	                    'url' =>array(
-	                            'base'=>'childrenlist/adminhtml_childedit/edit'
-	                         ),
-	                    'field'   => 'id'
+                        'url' =>array(
+                                'base'=>'childrenlist/adminhtml_childedit/edit'
+                             ),
+                        'field'   => 'id'
                     )
                 ),
                 'filter'    => false,

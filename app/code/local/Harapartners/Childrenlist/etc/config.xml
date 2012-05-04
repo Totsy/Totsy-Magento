@@ -51,7 +51,7 @@
             </childrenlist>
         </helpers>
     </global>
-	<frontend>
+    <frontend>
         <routers>
             <childrenlist>
                 <use>standard</use>
@@ -61,14 +61,14 @@
                 </args>
             </childrenlist>
         </routers>
-		<layout>
-			<updates>
-				<childrenlist>
-					<file>childrenlist.xml</file>
-				</childrenlist>
-			</updates>
-		</layout>
-	</frontend>
+        <layout>
+            <updates>
+                <childrenlist>
+                    <file>childrenlist.xml</file>
+                </childrenlist>
+            </updates>
+        </layout>
+    </frontend>
     <admin>
         <routers>
             <childrenlist>

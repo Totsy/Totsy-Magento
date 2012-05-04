@@ -13,26 +13,26 @@
 <config>
     <modules>
         <Harapartners_Categoryevent>
-            <version>1.0.0</version>
+            <version>1.0.1</version>
         </Harapartners_Categoryevent>
     </modules>
     <global>
-		<blocks>
-			<categoryevent>
-				<class>Harapartners_Categoryevent_Block</class>
-			</categoryevent>
-		</blocks>
+        <blocks>
+            <categoryevent>
+                <class>Harapartners_Categoryevent_Block</class>
+            </categoryevent>
+        </blocks>
         <helpers>
             <categoryevent>
-            	<class>Harapartners_Categoryevent_Helper</class>
+                <class>Harapartners_Categoryevent_Helper</class>
             </categoryevent>
         </helpers>
-		<models>
+        <models>
             <categoryevent>
                 <class>Harapartners_Categoryevent_Model</class>
-				<resourceModel>categoryevent_mysql4</resourceModel>
+                <resourceModel>categoryevent_mysql4</resourceModel>
             </categoryevent>
-			<categoryevent_mysql4>
+            <categoryevent_mysql4>
                 <class>Harapartners_Categoryevent_Model_Mysql4</class>
                 <entities>
                     <sortentry>
@@ -41,7 +41,7 @@
                 </entities>
             </categoryevent_mysql4>
         </models>
-		<resources>
+        <resources>
             <categoryevent_setup>
                 <setup>
                     <module>Harapartners_Categoryevent</module>
@@ -59,11 +59,11 @@
                 <connection>
                     <use>core_read</use>
                 </connection>
-            </categoryevent_read>		
+            </categoryevent_read>        
         </resources>
     </global>
-	<frontend>
-		<routers>
+    <frontend>
+        <routers>
             <categoryevent>
                 <use>standard</use>
                 <args>
@@ -72,20 +72,20 @@
                 </args>
             </categoryevent>
         </routers>
-		<layout>
-			<updates>
-				<categoryevent>
-					<file>categoryevent.xml</file>
-				</categoryevent>
-			</updates>
-		</layout>
-		<cache>
+        <layout>
+            <updates>
+                <categoryevent>
+                    <file>categoryevent.xml</file>
+                </categoryevent>
+            </updates>
+        </layout>
+        <cache>
             <requests>
                 <event>enterprise_pagecache/processor_default</event>
             </requests>
         </cache>
     </frontend>
-	<admin>
+    <admin>
         <routers>
             <categoryevent>
                 <use>admin</use>
@@ -99,30 +99,30 @@
     <adminhtml>
         <menu>
             <catalog>
-				<children>
-					<categoryevent translate="title" module="categoryevent">
-		                <title>Browse Categories/Events</title>
-		                <sort_order>0</sort_order>
-		                <action>categoryevent/adminhtml_browse</action>
-		            </categoryevent>
-				</children>
-				<children>
-					<sortcategoryevent translate="title" module="categoryevent">
-		                <title>Sort Categories/Events</title>
-		                <sort_order>0</sort_order>
-		                <action>categoryevent/adminhtml_sort</action>
-		            </sortcategoryevent>
-				</children>
-				<children>
-					<displaycategoryevent translate="title" module="categoryevent">
-		                <title>Category Page Setting</title>
-		                <sort_order>0</sort_order>
-		                <action>categoryevent/adminhtml_config</action>
-		            </displaycategoryevent>
-				</children>
+                <children>
+                    <categoryevent translate="title" module="categoryevent">
+                        <title>Browse Categories/Events</title>
+                        <sort_order>0</sort_order>
+                        <action>categoryevent/adminhtml_browse</action>
+                    </categoryevent>
+                </children>
+                <children>
+                    <sortcategoryevent translate="title" module="categoryevent">
+                        <title>Sort Categories/Events</title>
+                        <sort_order>0</sort_order>
+                        <action>categoryevent/adminhtml_sort</action>
+                    </sortcategoryevent>
+                </children>
+                <children>
+                    <displaycategoryevent translate="title" module="categoryevent">
+                        <title>Category Page Setting</title>
+                        <sort_order>0</sort_order>
+                        <action>categoryevent/adminhtml_config</action>
+                    </displaycategoryevent>
+                </children>
             </catalog>
         </menu>
-		<layout>
+        <layout>
             <updates>
                 <categoryevent>
                     <file>categoryevent.xml</file>
@@ -130,7 +130,7 @@
             </updates>
         </layout>
     </adminhtml>
-	<crontab>
+    <crontab>
         <jobs>
             <categoryevent_rebuild_sort_cron>
                 <schedule>

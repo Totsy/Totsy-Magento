@@ -157,49 +157,49 @@ class Enterprise_Invitation_Helper_Data extends Mage_Core_Helper_Abstract
         return Mage::getSingleton('enterprise_invitation/config')->isEnabled();
     }
     
-	public function getGenericInvitationLink() {
-    	$inviter = Mage::getSingleton( 'customer/session' );
-    	$inviterId = 0;
-    	$inviterName = '';     	
-    	if( $inviter && $inviter->getCustomer() && $inviter->getCustomer()->getId() ) {
-    		$inviterId = $inviter->getCustomer()->getId();
-    		$inviterName = $inviter->getCustomer()->getFirstname() . $inviter->getCustomer()->getLastname();
-    		$inviterEmail = $inviter->getCustomer()->getEmail();
-    		//if (empty($inviterName)) {
-   			$inviterEmailArray = explode( "@", $inviterEmail );
-   			$inviterName = preg_replace("/[^a-zA-Z0-9\s]/", "", $inviterEmailArray[0]);
-    		//}
-    	}
-    	$customerInfo = array(
-    			'id' => $inviterId
-    	);
-    	$genericInvitationKey = base64_encode( Mage::getModel( 'core/encryption' )->encrypt( serialize( $customerInfo ) ) );
-    	//return Mage::getUrl( 'invitation/customer_account/genericcreate/invitation/' . $genericInvitationKey );
-    	//return Mage::getUrl( 'invitation/customer_account/genericcreate/invitation/' . strtolower( $inviterName ) . '_' . $inviterId );
-    	return Mage::getUrl( 'invite/' . strtolower( $inviterName ) . '_' . $inviterId );
+    public function getGenericInvitationLink() {
+        $inviter = Mage::getSingleton( 'customer/session' );
+        $inviterId = 0;
+        $inviterName = '';         
+        if( $inviter && $inviter->getCustomer() && $inviter->getCustomer()->getId() ) {
+            $inviterId = $inviter->getCustomer()->getId();
+            $inviterName = $inviter->getCustomer()->getFirstname() . $inviter->getCustomer()->getLastname();
+            $inviterEmail = $inviter->getCustomer()->getEmail();
+            //if (empty($inviterName)) {
+               $inviterEmailArray = explode( "@", $inviterEmail );
+               $inviterName = preg_replace("/[^a-zA-Z0-9\s]/", "", $inviterEmailArray[0]);
+            //}
+        }
+        $customerInfo = array(
+                'id' => $inviterId
+        );
+        $genericInvitationKey = base64_encode( Mage::getModel( 'core/encryption' )->encrypt( serialize( $customerInfo ) ) );
+        //return Mage::getUrl( 'invitation/customer_account/genericcreate/invitation/' . $genericInvitationKey );
+        //return Mage::getUrl( 'invitation/customer_account/genericcreate/invitation/' . strtolower( $inviterName ) . '_' . $inviterId );
+        return Mage::getUrl( 'invite/' . strtolower( $inviterName ) . '_' . $inviterId );
     }
     
-	public function getGenericProductInvitationLink() {
-    	$inviter = Mage::getSingleton( 'customer/session' );
-    	$inviterId = 0;
-    	$inviterName = '';     	
-    	$productId = Mage::registry('current_product')->getId();
-    	if( $inviter && $inviter->getCustomer() && $inviter->getCustomer()->getId() ) {
-    		$inviterId = $inviter->getCustomer()->getId();
-    		$inviterName = $inviter->getCustomer()->getFirstname() . $inviter->getCustomer()->getLastname();
-    	}
-    	/*$customerInfo = array(
-    			'id' => $inviterId
-    	);*/
-    	#$genericInvitationKey = base64_encode( Mage::getModel( 'core/encryption' )->encrypt( serialize( $customerInfo ) ) );
-    	//return Mage::getUrl( 'invitation/customer_account/genericcreate/invitation/' . $genericInvitationKey );
-    	return Mage::getUrl( 'invitation/customer_account/genericcreate/invitation/' . strtolower( $inviterName ) . '_' . $inviterId . '/product/' . $productId);
-    	//return Mage::getUrl( 'invite/' . strtolower( $inviterName ) . '_' . $inviterId . '/product/' ) . $productId ;
+    public function getGenericProductInvitationLink() {
+        $inviter = Mage::getSingleton( 'customer/session' );
+        $inviterId = 0;
+        $inviterName = '';         
+        $productId = Mage::registry('current_product')->getId();
+        if( $inviter && $inviter->getCustomer() && $inviter->getCustomer()->getId() ) {
+            $inviterId = $inviter->getCustomer()->getId();
+            $inviterName = $inviter->getCustomer()->getFirstname() . $inviter->getCustomer()->getLastname();
+        }
+        /*$customerInfo = array(
+                'id' => $inviterId
+        );*/
+        #$genericInvitationKey = base64_encode( Mage::getModel( 'core/encryption' )->encrypt( serialize( $customerInfo ) ) );
+        //return Mage::getUrl( 'invitation/customer_account/genericcreate/invitation/' . $genericInvitationKey );
+        return Mage::getUrl( 'invitation/customer_account/genericcreate/invitation/' . strtolower( $inviterName ) . '_' . $inviterId . '/product/' . $productId);
+        //return Mage::getUrl( 'invite/' . strtolower( $inviterName ) . '_' . $inviterId . '/product/' ) . $productId ;
     }    
     
     public function getInviterId( $genericInvitationKey ) {
-    	//return unserialize( Mage::getModel( 'core/encryption' )->decrypt( base64_decode( $genericInvitationKey ) ) );
-    	$inviterArray = explode( '_', $genericInvitationKey );
-    	return $inviterArray[ count( $inviterArray ) - 1 ];
+        //return unserialize( Mage::getModel( 'core/encryption' )->decrypt( base64_decode( $genericInvitationKey ) ) );
+        $inviterArray = explode( '_', $genericInvitationKey );
+        return $inviterArray[ count( $inviterArray ) - 1 ];
     }
 }

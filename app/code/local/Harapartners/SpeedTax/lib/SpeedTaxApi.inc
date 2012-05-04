@@ -420,27 +420,27 @@ class price {
 // Do not evoke autoload for class_exists
 //if(!class_exists('address', false)){
 class address {
-	
-	    /**
-	     * @var string
-	     */
-	    public $address1;
-	
-	    /**
-	     * @var string	
-	     */
-	    public $address2;
-	
-	    /**
-	     * @var array[0, unbounded] of string
-	     */
-	    public $jurisdictions;
-	
-	    /**
-	     * @var dateTime
-	     */
-	    public $resolvedDate;
-	
+    
+        /**
+         * @var string
+         */
+        public $address1;
+    
+        /**
+         * @var string    
+         */
+        public $address2;
+    
+        /**
+         * @var array[0, unbounded] of string
+         */
+        public $jurisdictions;
+    
+        /**
+         * @var dateTime
+         */
+        public $resolvedDate;
+    
 }
 //}
 
@@ -749,213 +749,213 @@ class pingResponse {
 
 class SpeedTax
 {
-	function Version()
-	{
-		return "1.4.a";
-	}
-	
-	function CheckResult($result)
-	{
-		if (isset($result) && isset($result->faultstring) && strlen($result->faultstring) > 0)
-		{
-			throw new Exception("Error calling SpeedTax: " . $result->faultstring);
-		}
-	}
-
-	function Ping()
-	{
-		include "Credentials.inc";
-		include 'WsSecurity.inc';
-		
-		$theMethodName = 'ping';
-
-		$client = new SoapClient($wsdl, array("trace" => 0, "exceptions" => 0));
-		
-		$result = $client->__soapCall($theMethodName, array("" => ""), null, $secHeader );
-
-		$this->CheckResult($result);
-
-		return $result;
-	}
-
-	function ResolveAddress($Address)
-	{
-		include "Credentials.inc";
-		include 'WsSecurity.inc';
-		
-		$argumentsList = array ('Address'=> $Address);
-
-		$theMethodName = 'resolveAddress';
-		$theMethodSignature = CreateMethodSignature('resolveAddress', $argumentsList);
-
-		$client = new SoapClient($wsdl, array("trace" => 0, "exceptions" => 0));
-		
-		$result = $client->__soapCall($theMethodName, $theMethodSignature, null, $secHeader );
-			
-		$this->CheckResult($result);
-
-		return $result;
-	}
-
-	function CalculateInvoice($Invoice)
-	{
-		return $this->CalculateOrPostInvoice($Invoice, false);
-	}
-
-	function PostInvoice($Invoice)
-	{
-		return $this->CalculateOrPostInvoice($Invoice, true);
-	}
-
-	function PostInvoices($InvoiceNumbers)
-	{
-		include "Credentials.inc";
-		include 'WsSecurity.inc';
-		
-		$argumentsList = array ('CompanyId'=> $company, 'InvoiceNumbers'=> $InvoiceNumbers);
-
-		$theMethodName = 'postInvoices';
-		
-		$theMethodSignature = CreateMethodSignature($theMethodName, $argumentsList);
-		
-		// Need special client due to <SOAP-ENC:Struct> bug in PHP/SOAP when encoding arrays.
-		$client = new STSoapClient($wsdl, array("trace" => 1, "exceptions" => 0));
-		
-		$result = $client->__soapCall($theMethodName, $theMethodSignature, null, $secHeader );
-		
-		$this->CheckResult($result);
-		
-		return $result;
-	}
-	
-	function CalculateOrPostInvoice($Invoice, $post)
-	{
-		include "Credentials.inc";
-		include 'WsSecurity.inc';
-		
-		$argumentsList = array ('CompanyId'=> $company, 'Invoice'=> $Invoice);
-
-		if ($post)
-		{
-			$theMethodName = 'postInvoice';
-		}
-		else
-		{
-			$theMethodName = 'calculateInvoice';
-		}
-		
-		$theMethodSignature = CreateMethodSignature($theMethodName, $argumentsList);
-
-		// Need special client due to <SOAP-ENC:Struct> bug in PHP/SOAP when encoding arrays.
-		$client = new STSoapClient($wsdl, array("trace" => 1, "exceptions" => 0));
-	
-		$result = $client->__soapCall($theMethodName, $theMethodSignature, null, $secHeader );
-		
-		$this->CheckResult($result);
-		
-		return $result;
-	}
+    function Version()
+    {
+        return "1.4.a";
+    }
     
-	function VoidInvoice($InvoiceNumber)
-	{
-		include "Credentials.inc";
-		include 'WsSecurity.inc';
-		
-		$argumentsList = array ('CompanyId'=> $company, 'InvoiceNumber'=> $InvoiceNumber);
+    function CheckResult($result)
+    {
+        if (isset($result) && isset($result->faultstring) && strlen($result->faultstring) > 0)
+        {
+            throw new Exception("Error calling SpeedTax: " . $result->faultstring);
+        }
+    }
 
-		$theMethodName = 'voidInvoice';
-		
-		$theMethodSignature = CreateMethodSignature($theMethodName, $argumentsList);
-		
-		// Need special client due to <SOAP-ENC:Struct> bug in PHP/SOAP when encoding arrays.
-		$client = new STSoapClient($wsdl, array("trace" => 1, "exceptions" => 0));
-		
-		$result = $client->__soapCall($theMethodName, $theMethodSignature, null, $secHeader );
-		
-		$this->CheckResult($result);
-		
-		return $result;
-	}
+    function Ping()
+    {
+        include "Credentials.inc";
+        include 'WsSecurity.inc';
+        
+        $theMethodName = 'ping';
+
+        $client = new SoapClient($wsdl, array("trace" => 0, "exceptions" => 0));
+        
+        $result = $client->__soapCall($theMethodName, array("" => ""), null, $secHeader );
+
+        $this->CheckResult($result);
+
+        return $result;
+    }
+
+    function ResolveAddress($Address)
+    {
+        include "Credentials.inc";
+        include 'WsSecurity.inc';
+        
+        $argumentsList = array ('Address'=> $Address);
+
+        $theMethodName = 'resolveAddress';
+        $theMethodSignature = CreateMethodSignature('resolveAddress', $argumentsList);
+
+        $client = new SoapClient($wsdl, array("trace" => 0, "exceptions" => 0));
+        
+        $result = $client->__soapCall($theMethodName, $theMethodSignature, null, $secHeader );
+            
+        $this->CheckResult($result);
+
+        return $result;
+    }
+
+    function CalculateInvoice($Invoice)
+    {
+        return $this->CalculateOrPostInvoice($Invoice, false);
+    }
+
+    function PostInvoice($Invoice)
+    {
+        return $this->CalculateOrPostInvoice($Invoice, true);
+    }
+
+    function PostInvoices($InvoiceNumbers)
+    {
+        include "Credentials.inc";
+        include 'WsSecurity.inc';
+        
+        $argumentsList = array ('CompanyId'=> $company, 'InvoiceNumbers'=> $InvoiceNumbers);
+
+        $theMethodName = 'postInvoices';
+        
+        $theMethodSignature = CreateMethodSignature($theMethodName, $argumentsList);
+        
+        // Need special client due to <SOAP-ENC:Struct> bug in PHP/SOAP when encoding arrays.
+        $client = new STSoapClient($wsdl, array("trace" => 1, "exceptions" => 0));
+        
+        $result = $client->__soapCall($theMethodName, $theMethodSignature, null, $secHeader );
+        
+        $this->CheckResult($result);
+        
+        return $result;
+    }
     
-	function CreateCustomer($Customer)
-	{
-		include "Credentials.inc";
-		include 'WsSecurity.inc';
-		
-		$argumentsList = array ('CompanyId'=> $company, 'Customer'=> $Customer);
+    function CalculateOrPostInvoice($Invoice, $post)
+    {
+        include "Credentials.inc";
+        include 'WsSecurity.inc';
+        
+        $argumentsList = array ('CompanyId'=> $company, 'Invoice'=> $Invoice);
 
-		$theMethodName = 'createCustomer';
-		$theMethodSignature = CreateMethodSignature('createCustomer', $argumentsList);
+        if ($post)
+        {
+            $theMethodName = 'postInvoice';
+        }
+        else
+        {
+            $theMethodName = 'calculateInvoice';
+        }
+        
+        $theMethodSignature = CreateMethodSignature($theMethodName, $argumentsList);
+
+        // Need special client due to <SOAP-ENC:Struct> bug in PHP/SOAP when encoding arrays.
+        $client = new STSoapClient($wsdl, array("trace" => 1, "exceptions" => 0));
+    
+        $result = $client->__soapCall($theMethodName, $theMethodSignature, null, $secHeader );
+        
+        $this->CheckResult($result);
+        
+        return $result;
+    }
+    
+    function VoidInvoice($InvoiceNumber)
+    {
+        include "Credentials.inc";
+        include 'WsSecurity.inc';
+        
+        $argumentsList = array ('CompanyId'=> $company, 'InvoiceNumber'=> $InvoiceNumber);
+
+        $theMethodName = 'voidInvoice';
+        
+        $theMethodSignature = CreateMethodSignature($theMethodName, $argumentsList);
+        
+        // Need special client due to <SOAP-ENC:Struct> bug in PHP/SOAP when encoding arrays.
+        $client = new STSoapClient($wsdl, array("trace" => 1, "exceptions" => 0));
+        
+        $result = $client->__soapCall($theMethodName, $theMethodSignature, null, $secHeader );
+        
+        $this->CheckResult($result);
+        
+        return $result;
+    }
+    
+    function CreateCustomer($Customer)
+    {
+        include "Credentials.inc";
+        include 'WsSecurity.inc';
+        
+        $argumentsList = array ('CompanyId'=> $company, 'Customer'=> $Customer);
+
+        $theMethodName = 'createCustomer';
+        $theMethodSignature = CreateMethodSignature('createCustomer', $argumentsList);
         
         //dbgprint("XML Request:\n");
         //print_r($theMethodSignature);
         
-		$client = new SoapClient($wsdl, array("trace" => 0, "exceptions" => 0));
-		
-		$result = $client->__soapCall($theMethodName, $theMethodSignature, null, $secHeader );
-			
-		$this->CheckResult($result);
+        $client = new SoapClient($wsdl, array("trace" => 0, "exceptions" => 0));
+        
+        $result = $client->__soapCall($theMethodName, $theMethodSignature, null, $secHeader );
+            
+        $this->CheckResult($result);
 
-		return $result;
-	}    
+        return $result;
+    }    
     
-	function EditCustomer($Customer)
-	{
-		include "Credentials.inc";
-		include 'WsSecurity.inc';
-		
-		$argumentsList = array ('CompanyId'=> $company, 'Customer'=> $Customer);
+    function EditCustomer($Customer)
+    {
+        include "Credentials.inc";
+        include 'WsSecurity.inc';
+        
+        $argumentsList = array ('CompanyId'=> $company, 'Customer'=> $Customer);
 
-		$theMethodName = 'editCustomer';
-		$theMethodSignature = CreateMethodSignature('editCustomer', $argumentsList);
+        $theMethodName = 'editCustomer';
+        $theMethodSignature = CreateMethodSignature('editCustomer', $argumentsList);
 
-		$client = new SoapClient($wsdl, array("trace" => 0, "exceptions" => 0));
-		
-		$result = $client->__soapCall($theMethodName, $theMethodSignature, null, $secHeader );
-			
-		$this->CheckResult($result);
+        $client = new SoapClient($wsdl, array("trace" => 0, "exceptions" => 0));
+        
+        $result = $client->__soapCall($theMethodName, $theMethodSignature, null, $secHeader );
+            
+        $this->CheckResult($result);
 
-		return $result;
-	}    
+        return $result;
+    }    
     
-	function CreateExemption($ExemptionCertificate)
-	{
-		include "Credentials.inc";
-		include 'WsSecurity.inc';
-		
-		$argumentsList = array ('CompanyId'=> $company, 'Exemption'=> $ExemptionCertificate);
+    function CreateExemption($ExemptionCertificate)
+    {
+        include "Credentials.inc";
+        include 'WsSecurity.inc';
+        
+        $argumentsList = array ('CompanyId'=> $company, 'Exemption'=> $ExemptionCertificate);
 
-		$theMethodName = 'createExemption';
-		$theMethodSignature = CreateMethodSignature('createExemption', $argumentsList);
+        $theMethodName = 'createExemption';
+        $theMethodSignature = CreateMethodSignature('createExemption', $argumentsList);
 
         //dbgprint("XML Request:\n");
         //print_r($theMethodSignature);
 
-		$client = new SoapClient($wsdl, array("trace" => 0, "exceptions" => 0));
-		
-		$result = $client->__soapCall($theMethodName, $theMethodSignature, null, $secHeader );
-			
-		$this->CheckResult($result);
+        $client = new SoapClient($wsdl, array("trace" => 0, "exceptions" => 0));
+        
+        $result = $client->__soapCall($theMethodName, $theMethodSignature, null, $secHeader );
+            
+        $this->CheckResult($result);
 
-		return $result;
-	}    
+        return $result;
+    }    
     
-	function EditExemption($ExemptionCertificate)
-	{
-		include "Credentials.inc";
-		include 'WsSecurity.inc';
-		
-		$argumentsList = array ('CompanyId'=> $company, 'Exemption'=> $ExemptionCertificate);
+    function EditExemption($ExemptionCertificate)
+    {
+        include "Credentials.inc";
+        include 'WsSecurity.inc';
+        
+        $argumentsList = array ('CompanyId'=> $company, 'Exemption'=> $ExemptionCertificate);
 
-		$theMethodName = 'editExemption';
-		$theMethodSignature = CreateMethodSignature('editExemption', $argumentsList);
+        $theMethodName = 'editExemption';
+        $theMethodSignature = CreateMethodSignature('editExemption', $argumentsList);
 
-		$client = new SoapClient($wsdl, array("trace" => 0, "exceptions" => 0));
-		
-		$result = $client->__soapCall($theMethodName, $theMethodSignature, null, $secHeader );
-			
-		$this->CheckResult($result);
+        $client = new SoapClient($wsdl, array("trace" => 0, "exceptions" => 0));
+        
+        $result = $client->__soapCall($theMethodName, $theMethodSignature, null, $secHeader );
+            
+        $this->CheckResult($result);
 
-		return $result;
-	}    
+        return $result;
+    }    
 }

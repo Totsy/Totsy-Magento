@@ -12,34 +12,34 @@
  */
 class Harapartners_HpCheckout_Model_Checkout 
 {
-	const METHOD_GUEST = 'guest';
-	const METHOD_CUSTOMER = 'customer';
-	
-	protected $_quote;
-	protected $_checkoutSession;
-	protected $_customerSession;
-	protected $_helper;
-	
-	public function __construct() {
+    const METHOD_GUEST = 'guest';
+    const METHOD_CUSTOMER = 'customer';
+    
+    protected $_quote;
+    protected $_checkoutSession;
+    protected $_customerSession;
+    protected $_helper;
+    
+    public function __construct() {
         $this->_checkoutSession = Mage::getSingleton('checkout/session');
         $this->_customerSession = Mage::getSingleton('customer/session');
         $this->_quote = $this->_checkoutSession->getQuote();
         $this->_helper = Mage::helper( 'checkout' );
     }
-	
-	public function getCheckout() {
+    
+    public function getCheckout() {
         return $this->_checkoutSession;
     }
     
-	public function getCustomerSession() {
+    public function getCustomerSession() {
         return $this->_customerSession;
     }
-	
-	public function getQuote() {
+    
+    public function getQuote() {
         return $this->_quote;
-	}
-	
-	public function saveBilling( $data )
+    }
+    
+    public function saveBilling( $data )
     {
         if( empty( $data ) ) {
             return array( 'status' => -1, 'message' => $this->_helper->__('Invalid data.') );
@@ -82,7 +82,7 @@ class Harapartners_HpCheckout_Model_Checkout
         return array( 'status' => 0, 'message' => '' );
     }
     
-	protected function _validateCustomerData( array $data )
+    protected function _validateCustomerData( array $data )
     {
         $customerForm = Mage::getModel('customer/form');
         $customerForm->setFormCode('checkout_register')
@@ -131,7 +131,7 @@ class Harapartners_HpCheckout_Model_Checkout
         return true;
     }
     
-	public function saveShipping( $data )
+    public function saveShipping( $data )
     {
         if (empty($data)) {
             return array('status' => -1, 'message' => $this->_helper->__('Invalid data.'));
@@ -170,7 +170,7 @@ class Harapartners_HpCheckout_Model_Checkout
         return array( 'status' => 0, 'message' => '' );
     }
     
-	public function saveShippingMethod( $shippingMethod )
+    public function saveShippingMethod( $shippingMethod )
     {
         if (empty($shippingMethod)) {
             return array('status' => -1, 'message' => $this->_helper->__('Invalid shipping method.'));
@@ -187,7 +187,7 @@ class Harapartners_HpCheckout_Model_Checkout
         return array( 'status' => 0, 'message' => '' );
     }
     
-	public function savePayment( $data )
+    public function savePayment( $data )
     {
         if (empty($data)) {
             return array('status' => -1, 'message' => $this->_helper->__('Invalid data.'));
@@ -202,7 +202,7 @@ class Harapartners_HpCheckout_Model_Checkout
         if (!$quote->isVirtual() && $quote->getShippingAddress()) {
             $quote->getShippingAddress()->setCollectShippingRates(true);
         }
-		
+        
         
         $payment = $quote->getPayment();
         $payment->importData($data);
@@ -212,7 +212,7 @@ class Harapartners_HpCheckout_Model_Checkout
         return array( 'status' => 0, 'message' => '' );
     }
     
-	public function saveOrder()
+    public function saveOrder()
     {
         $this->validate();
         switch ($this->getCheckoutMethod()) {
@@ -223,7 +223,7 @@ class Harapartners_HpCheckout_Model_Checkout
                 $this->_prepareCustomerQuote();
                 break;
         }
-		
+        
         $service = Mage::getModel('sales/service_quote', $this->getQuote());
         $service->submitAll();
 
@@ -260,7 +260,7 @@ class Harapartners_HpCheckout_Model_Checkout
         return $this;
     }
     
-	public function validate()
+    public function validate()
     {
         $helper = Mage::helper('checkout');
         $quote  = $this->getQuote();
@@ -270,7 +270,7 @@ class Harapartners_HpCheckout_Model_Checkout
         }
     }
     
-	protected function _prepareGuestQuote()
+    protected function _prepareGuestQuote()
     {
         $quote = $this->getQuote();
         $quote->setCustomerId(null)
@@ -280,7 +280,7 @@ class Harapartners_HpCheckout_Model_Checkout
         return $this;
     }
     
-	protected function _prepareCustomerQuote()
+    protected function _prepareCustomerQuote()
     {
         $quote      = $this->getQuote();
         $billing    = $quote->getBillingAddress();
@@ -310,13 +310,13 @@ class Harapartners_HpCheckout_Model_Checkout
         $quote->setCustomer($customer);
     }
     
-	public function getCheckoutMethod()
+    public function getCheckoutMethod()
     {
         if ($this->getCustomerSession()->isLoggedIn()) {
             return self::METHOD_CUSTOMER;
         }
         if (!$this->getQuote()->getCheckoutMethod()) {
-        	$this->getQuote()->setCheckoutMethod(self::METHOD_GUEST);
+            $this->getQuote()->setCheckoutMethod(self::METHOD_GUEST);
         }
         return $this->getQuote()->getCheckoutMethod();
     }

@@ -15,14 +15,14 @@ class Harapartners_Fulfillmentfactory_Block_Adminhtml_Itemqueue_Index_Grid exten
     public function __construct(){
         parent::__construct();
         $this->setId('itemqueueGrid');
-        $this->setDefaultSort('created_at');	//sort by created_at desc
+        $this->setDefaultSort('created_at');    //sort by created_at desc
         $this->setDefaultDir('DESC');
     }
 
     protected function _prepareCollection(){
         $model = Mage::getModel('fulfillmentfactory/itemqueue');
         $collection = $model->getCollection();
-		$this->setCollection($collection);
+        $this->setCollection($collection);
         parent::_prepareCollection();
         return $this;
     }
@@ -108,9 +108,9 @@ class Harapartners_Fulfillmentfactory_Block_Adminhtml_Itemqueue_Index_Grid exten
             'align'         => 'right',
             'width'         => '100px',
             'index'         => 'status',
-        	'type'			=> 'options',
-        	'options'		=> Mage::helper('fulfillmentfactory')->getItemqueueStatusGridOptionList(),
-            'renderer'		=> 'Harapartners_Fulfillmentfactory_Block_Adminhtml_Itemqueue_Index_Renderer_Status',
+            'type'            => 'options',
+            'options'        => Mage::helper('fulfillmentfactory')->getItemqueueStatusGridOptionList(),
+            'renderer'        => 'Harapartners_Fulfillmentfactory_Block_Adminhtml_Itemqueue_Index_Renderer_Status',
         ));
         
         $this->addColumn('created_at', array(
@@ -118,8 +118,8 @@ class Harapartners_Fulfillmentfactory_Block_Adminhtml_Itemqueue_Index_Grid exten
             'align'         => 'center',
             'width'         => '150px',
             'index'         => 'created_at',
-        	'type'      	=> 'datetime',
-            'gmtoffset' 	=> true
+            'type'          => 'datetime',
+            'gmtoffset'     => true
         ));
         
         $this->addColumn('updated_at', array(
@@ -127,14 +127,14 @@ class Harapartners_Fulfillmentfactory_Block_Adminhtml_Itemqueue_Index_Grid exten
             'align'         => 'center',
             'width'         => '150px',
             'index'         => 'updated_at',
-        	'type'      	=> 'datetime',
-            'gmtoffset' 	=> true
+            'type'          => 'datetime',
+            'gmtoffset'     => true
         ));
 
         return parent::_prepareColumns();
     }
     
-	protected function _prepareMassaction()
+    protected function _prepareMassaction()
     {
         $this->setMassactionIdField('itemqueue_id');
         $this->getMassactionBlock()->setFormFieldName('itemqueue_id');
@@ -152,8 +152,8 @@ class Harapartners_Fulfillmentfactory_Block_Adminhtml_Itemqueue_Index_Grid exten
 
     public function getRowUrl($row) {
         return $this->getUrl('*/*/edit', array(
-	            'store'=>$this->getRequest()->getParam('store'),
-	            'id'=>$row->getId()
+                'store'=>$this->getRequest()->getParam('store'),
+                'id'=>$row->getId()
         ));
     }
 }

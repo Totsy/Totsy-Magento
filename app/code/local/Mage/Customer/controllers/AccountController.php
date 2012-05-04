@@ -76,9 +76,9 @@ class Mage_Customer_AccountController extends Mage_Core_Controller_Front_Action
             'resetpasswordpost',
             'confirm',
             'confirmation',
-        	'logout', 	//Harapartners, Yang, Revalidate
-            'validationcheck',	//Harapartners, Yang, Revalidate
-            'validationCheckPostAction'	//Harapartners, Yang, Revalidate
+            'logout',     //Harapartners, Yang, Revalidate
+            'validationcheck',    //Harapartners, Yang, Revalidate
+            'validationCheckPostAction'    //Harapartners, Yang, Revalidate
         );
         $pattern = '/^(' . implode('|', $openActions) . ')/i';
 
@@ -334,11 +334,11 @@ class Mage_Customer_AccountController extends Mage_Core_Controller_Front_Action
                 $validationResult = count($errors) == 0;
 
                 if (true === $validationResult) {
-                	
-                	Mage::register('new_account',1);//Harapartners, Edward, Start of setting for Affliate email validation
+                    
+                    Mage::register('new_account',1);//Harapartners, Edward, Start of setting for Affliate email validation
                     $customer->save();
-					Mage::unregister('new_account');//Harapartners, Edward, End of setting for Affliate email validation 
-					
+                    Mage::unregister('new_account');//Harapartners, Edward, End of setting for Affliate email validation 
+                    
                     Mage::dispatchEvent('customer_register_success',
                         array('account_controller' => $this, 'customer' => $customer)
                     );
@@ -354,9 +354,9 @@ class Mage_Customer_AccountController extends Mage_Core_Controller_Front_Action
                         return;
                     } else {
                         $session->setCustomerAsLoggedIn($customer);
-                    	$defaultUrl = $this->_welcomeCustomer($customer);  //Harapartners, Edward, keep this function only for sending welcome email, the real url to redirect is $url
-                        //$url = $this->_welcomeCustomer($customer);	
-                        $url = Mage::getBaseUrl();	//Harapartners, yang, set success redirect url to home page
+                        $defaultUrl = $this->_welcomeCustomer($customer);  //Harapartners, Edward, keep this function only for sending welcome email, the real url to redirect is $url
+                        //$url = $this->_welcomeCustomer($customer);    
+                        $url = Mage::getBaseUrl();    //Harapartners, yang, set success redirect url to home page
                         $this->_redirectSuccess($url);
                         return;
                     }
@@ -378,15 +378,15 @@ class Mage_Customer_AccountController extends Mage_Core_Controller_Front_Action
                     $existCustomer = Mage::getModel('customer/customer')->setWebsiteId(Mage::app()->getStore()->getWebsiteId())->loadByEmail($existEmail);
                     $existStoreName = '';
                     if (!!$existCustomer){
-                    	
-	                    if ( $existCustomer->getStoreId() == Harapartners_Service_Helper_Data::TOTSY_MOBILE_STORE_ID ) {
-	            			$customerStoreName = Mage::app()->getStore(Harapartners_Service_Helper_Data::TOTSY_STORE_ID)->getName();
-	            		}else {
-	            			$customerStoreName = Mage::app()->getStore($existCustomer->getStoreId())->getName();
-	            		}
-                    	$message = $this->__('There is already an account with this email address in ' . $customerStoreName . '.com');
+                        
+                        if ( $existCustomer->getStoreId() == Harapartners_Service_Helper_Data::TOTSY_MOBILE_STORE_ID ) {
+                            $customerStoreName = Mage::app()->getStore(Harapartners_Service_Helper_Data::TOTSY_STORE_ID)->getName();
+                        }else {
+                            $customerStoreName = Mage::app()->getStore($existCustomer->getStoreId())->getName();
+                        }
+                        $message = $this->__('There is already an account with this email address in ' . $customerStoreName . '.com');
                     }else {
-                    	$message = $this->__('There is already an account with this email address. If you are sure that it is your email address, <a href="%s">click here</a> to get your password and access your account.', $url);
+                        $message = $this->__('There is already an account with this email address. If you are sure that it is your email address, <a href="%s">click here</a> to get your password and access your account.', $url);
                     }
                     $session->setEscapeMessages(false);
                 } else {
@@ -584,19 +584,19 @@ class Mage_Customer_AccountController extends Mage_Core_Controller_Front_Action
                     return;
                 }      
                 $this->_getSession()
-                	->addSuccess(Mage::helper('customer')->__('Email sent to %s , you will receive an email with a link to reset your password.', Mage::helper('customer')->htmlEscape($email)));
-            }elseif ($customer->getId() && Mage::helper('service')->getCorrectStoreId($customer) != $storeId) {            	
-            	if ( $customer->getStoreId() == Harapartners_Service_Helper_Data::TOTSY_MOBILE_STORE_ID ) {
-            		$customerStoreName = Mage::app()->getStore(Harapartners_Service_Helper_Data::TOTSY_STORE_ID)->getName();
-            	}else {
-            		$customerStoreName = Mage::app()->getStore($customer->getStoreId())->getName();
-            	}
-            	$this->_getSession()->addError($this->__('The email you entered is belong to an %s account, please check.', $customerStoreName ));
+                    ->addSuccess(Mage::helper('customer')->__('Email sent to %s , you will receive an email with a link to reset your password.', Mage::helper('customer')->htmlEscape($email)));
+            }elseif ($customer->getId() && Mage::helper('service')->getCorrectStoreId($customer) != $storeId) {                
+                if ( $customer->getStoreId() == Harapartners_Service_Helper_Data::TOTSY_MOBILE_STORE_ID ) {
+                    $customerStoreName = Mage::app()->getStore(Harapartners_Service_Helper_Data::TOTSY_STORE_ID)->getName();
+                }else {
+                    $customerStoreName = Mage::app()->getStore($customer->getStoreId())->getName();
+                }
+                $this->_getSession()->addError($this->__('The email you entered is belong to an %s account, please check.', $customerStoreName ));
             }else {  
-            	$createLink = "<a href='" . Mage::getUrl('customer/account/create') . "'" . "> Click here to register! </a>";        	 
-            	$this->_getSession()->addError($this->__('The email entered is not currently associated with a totsy account. %s ', $createLink ));
-            	$this->_redirect('*/*/forgotpassword');
-            	return;
+                $createLink = "<a href='" . Mage::getUrl('customer/account/create') . "'" . "> Click here to register! </a>";             
+                $this->_getSession()->addError($this->__('The email entered is not currently associated with a totsy account. %s ', $createLink ));
+                $this->_redirect('*/*/forgotpassword');
+                return;
             }       
             $this->_redirect('*/*/');
             return;
@@ -747,15 +747,15 @@ class Mage_Customer_AccountController extends Mage_Core_Controller_Front_Action
         if ($this->getRequest()->getParam('changepass')==1){
             $customer->setChangePassword(1);
         }
-		
+        
         //Harapartners, Edward, for change password link start
         $passwordPageFlag = 'changepassword';
         $passwordPage = $this->getRequest()->getParam($passwordPageFlag);
         if (isset($passwordPage)){
-        	Mage::unregister('changepassword');
-        	Mage::register('changepassword',1);
+            Mage::unregister('changepassword');
+            Mage::register('changepassword',1);
         }
-		//Harapartners, Edward, for change password link end
+        //Harapartners, Edward, for change password link end
         
         $this->getLayout()->getBlock('head')->setTitle($this->__('Account Information'));
         $this->getLayout()->getBlock('messages')->setEscapeMessageFlag(true);

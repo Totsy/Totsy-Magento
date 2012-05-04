@@ -9,7 +9,7 @@
 class Totsy_Api_Block_Adminhtml_Client_Edit_Form
     extends Mage_Adminhtml_Block_Widget_Form
 {
-	protected function _prepareForm()
+    protected function _prepareForm()
     {
         $form = new Varien_Data_Form(array(
             'id'        => 'edit_form',

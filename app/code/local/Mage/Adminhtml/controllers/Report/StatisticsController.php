@@ -178,11 +178,11 @@ class Mage_Adminhtml_Report_StatisticsController extends Mage_Adminhtml_Controll
     //Harapartners, Tong/Jun, START, specify range for report
     public function refreshRangeAction(){
         try {
-        	$rangeInHours = $this->getRequest()->getParam(hours);
-        	if(!is_numeric($rangeInHours) || $rangeInHours < 25){
-        		$rangeInHours = 25;
-        	}
-        	
+            $rangeInHours = $this->getRequest()->getParam(hours);
+            if(!is_numeric($rangeInHours) || $rangeInHours < 25){
+                $rangeInHours = 25;
+            }
+            
             $collectionsNames = $this->_getCollectionNames();
             $currentDate = Mage::app()->getLocale()->date();
             $date = $currentDate->subHour($rangeInHours);

@@ -14,10 +14,10 @@
 
 class Harapartners_ShippingFactory_Model_Shipping_Carrier_Flexible_Source_Method
 {
-	public function toOptionArray()
+    public function toOptionArray()
     {
         $ups = Mage::helper('shippingfactory');
-    	//$ups = Mage::getSingleton('shippingfactory/shipping_carrier_flexible');
+        //$ups = Mage::getSingleton('shippingfactory/shipping_carrier_flexible');
         $arr = array();
         foreach ($ups->getCode('method') as $k=>$v) {
             $arr[] = array('value'=>$k, 'label'=>Mage::helper('shippingfactory')->__($v));

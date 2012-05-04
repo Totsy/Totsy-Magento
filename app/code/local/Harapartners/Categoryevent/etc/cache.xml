@@ -12,5 +12,5 @@
             <container>Harapartners_Categoryevent_Model_Cache_Topnav</container>
             <cache_lifetime>3600</cache_lifetime>
         </categoryevent_event_topnav>
-	</placeholders>
-</config>	
+    </placeholders>
+</config>    

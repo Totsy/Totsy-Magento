@@ -52,10 +52,10 @@ class Harapartners_Import_Block_Adminhtml_Import_Grid extends Mage_Adminhtml_Blo
       ));
       
       $this->addColumn('status', array(
-			'header'    => Mage::helper('import')->__('Status'),
-			'align'     =>'left',
-			'index'     => 'status',
-			'type'			=> 'options',
+            'header'    => Mage::helper('import')->__('Status'),
+            'align'     =>'left',
+            'index'     => 'status',
+            'type'            => 'options',
             'options' => Mage::helper('import')->getGridStatusArray()
       ));
       
@@ -63,7 +63,7 @@ class Harapartners_Import_Block_Adminhtml_Import_Grid extends Mage_Adminhtml_Blo
           'header'    => Mage::helper('import')->__('Error Message'),
           'align'     =>'left',
           'index'     => 'error_message',
-      	  'type'      => 'text',
+            'type'      => 'text',
       ));
       
       $this->addColumn('created_at', array(
@@ -77,7 +77,7 @@ class Harapartners_Import_Block_Adminhtml_Import_Grid extends Mage_Adminhtml_Blo
           'align'     =>'left',
           'index'     => 'updated_at',
       ));
-	  
+      
       return parent::_prepareColumns();
   }
 

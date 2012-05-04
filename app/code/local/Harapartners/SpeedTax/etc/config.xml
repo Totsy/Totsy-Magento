@@ -6,56 +6,56 @@
         </Harapartners_SpeedTax>
     </modules>
     <global>
-		<blocks>
+        <blocks>
             <speedtax>
                 <class>Harapartners_SpeedTax_Block</class>
             </speedtax>
-			<!--Moved to Harapartners_Service-->
-			<!--checkout>
-				<rewrite>
-					<onepage_shipping_method_available>Harapartners_SpeedTax_Block_Checkout_Onepage_Shipping_Method_Available</onepage_shipping_method_available>
-				</rewrite>
-			</checkout-->
-		</blocks>
+            <!--Moved to Harapartners_Service-->
+            <!--checkout>
+                <rewrite>
+                    <onepage_shipping_method_available>Harapartners_SpeedTax_Block_Checkout_Onepage_Shipping_Method_Available</onepage_shipping_method_available>
+                </rewrite>
+            </checkout-->
+        </blocks>
         <models>
             <speedtax>
                 <class>Harapartners_SpeedTax_Model</class>
             </speedtax>
-			<speedtax_log>
+            <speedtax_log>
                 <class>Harapartners_SpeedTax_Model_Log</class>
-				<resourceModel>speedtax_log_mysql4</resourceModel>
+                <resourceModel>speedtax_log_mysql4</resourceModel>
             </speedtax_log>
-			<speedtax_log_mysql4>
+            <speedtax_log_mysql4>
                 <class>Harapartners_SpeedTax_Model_Log_Mysql4</class>
                 <entities>
-					<error>
+                    <error>
                         <table>speedtax_log_error</table>
                     </error>
-					<call>
+                    <call>
                         <table>speedtax_log_call</table>
                     </call>
                 </entities>
             </speedtax_log_mysql4>
-			<!--Moved to Harapartners_Service-->
-			<!--sales>
-				<rewrite>				
-					<quote_address>Harapartners_SpeedTax_Model_Sales_Quote_Address</quote_address>
-					<quote_address_total_grand>Harapartners_SpeedTax_Model_Sales_Quote_Address_Total_Grand</quote_address_total_grand>
-					<quote_address_total_tax>Harapartners_SpeedTax_Model_Sales_Quote_Address_Total_Tax</quote_address_total_tax>
-				</rewrite>
-			</sales>
-			<checkout>
-				<rewrite>
-					<type_multishipping>Harapartners_SpeedTax_Model_Checkout_Type_Multishipping</type_multishipping>
-				</rewrite>
-			</checkout-->
-		</models>
-		<helpers>
-			<speedtax>
-				<class>Harapartners_SpeedTax_Helper</class>
-			</speedtax>
-		</helpers>
-		<resources>
+            <!--Moved to Harapartners_Service-->
+            <!--sales>
+                <rewrite>                
+                    <quote_address>Harapartners_SpeedTax_Model_Sales_Quote_Address</quote_address>
+                    <quote_address_total_grand>Harapartners_SpeedTax_Model_Sales_Quote_Address_Total_Grand</quote_address_total_grand>
+                    <quote_address_total_tax>Harapartners_SpeedTax_Model_Sales_Quote_Address_Total_Tax</quote_address_total_tax>
+                </rewrite>
+            </sales>
+            <checkout>
+                <rewrite>
+                    <type_multishipping>Harapartners_SpeedTax_Model_Checkout_Type_Multishipping</type_multishipping>
+                </rewrite>
+            </checkout-->
+        </models>
+        <helpers>
+            <speedtax>
+                <class>Harapartners_SpeedTax_Helper</class>
+            </speedtax>
+        </helpers>
+        <resources>
             <speedtax_setup>
                 <setup>
                     <module>Harapartners_SpeedTax</module>
@@ -66,7 +66,7 @@
             </speedtax_setup>
         </resources>
         <sales>
-			<!-- Test if need to rewrite the XML or should rather rewrite the tax model! -->
+            <!-- Test if need to rewrite the XML or should rather rewrite the tax model! -->
             <!--quote>
                 <totals>
                     <tax>
@@ -76,7 +76,7 @@
                     </tax>
                 </totals>
             </quote-->
-			<!--<order_invoice>
+            <!--<order_invoice>
                 <totals>
                     <tax>
                         <class>speedtax/sales_order_invoice_total_tax</class>
@@ -84,8 +84,8 @@
                 </totals>
             </order_invoice>-->
         </sales>
-		<!--Moved to Harapartners_Service-->
-		<!--events>
+        <!--Moved to Harapartners_Service-->
+        <!--events>
             <sales_order_invoice_pay>
                 <observers>
                     <speedtax>
@@ -95,7 +95,7 @@
                     </speedtax>
                 </observers>
             </sales_order_invoice_pay>
-			<nonhybrid_order_generate_after>
+            <nonhybrid_order_generate_after>
                 <observers>
                     <speedtax>
                         <type>singleton</type>
@@ -104,7 +104,7 @@
                     </speedtax>
                 </observers>
             </nonhybrid_order_generate_after>
-			<sales_order_creditmemo_refund>
+            <sales_order_creditmemo_refund>
                 <observers>
                     <speedtax>
                         <type>singleton</type>
@@ -113,7 +113,7 @@
                     </speedtax>
                 </observers>
             </sales_order_creditmemo_refund>
-			<checkout_type_multishipping_set_shipping_items>
+            <checkout_type_multishipping_set_shipping_items>
                 <observers>
                     <speedtax>
                         <type>singleton</type>
@@ -122,55 +122,55 @@
                     </speedtax>
                 </observers>
             </checkout_type_multishipping_set_shipping_items>
-		</events-->
-	</global>
-	<adminhtml>
-		<acl>
-		    <resources>
-				<admin>
-					<children>
-						<system>
-							<children>
-								<config>
-									<children>
-										<speedtax translate="title" module="speedtax">
-											<title>SpeedTax Configuration</title>
-										</speedtax>
-									</children>
-								</config>
-							</children>
-						</system>
-					</children>
-				</admin>
-		    </resources>
-		</acl>
-		<!--<menu>
+        </events-->
+    </global>
+    <adminhtml>
+        <acl>
+            <resources>
+                <admin>
+                    <children>
+                        <system>
+                            <children>
+                                <config>
+                                    <children>
+                                        <speedtax translate="title" module="speedtax">
+                                            <title>SpeedTax Configuration</title>
+                                        </speedtax>
+                                    </children>
+                                </config>
+                            </children>
+                        </system>
+                    </children>
+                </admin>
+            </resources>
+        </acl>
+        <!--<menu>
             <harapartners>
-				<children>
-					<log translate="title" module="speedtax">
-		                <title>SpeedTax Log</title>
-		                <sort_order>100</sort_order>
-		                <action>speedtax/adminhtml_log</action>
-						<children>
-							<error translate="title" module="speedtax">
-								<title>Error Log</title>
-								<sort_order>100</sort_order>
-								<action>speedtax/adminhtml_log_error</action>
-							</error>
-						</children>
-						<children>
-							<call translate="title" module="speedtax">
-								<title>Call Log</title>
-								<sort_order>200</sort_order>
-								<action>speedtax/adminhtml_log_call</action>
-							</call>
-						</children>
-		            </log>
-				</children>
+                <children>
+                    <log translate="title" module="speedtax">
+                        <title>SpeedTax Log</title>
+                        <sort_order>100</sort_order>
+                        <action>speedtax/adminhtml_log</action>
+                        <children>
+                            <error translate="title" module="speedtax">
+                                <title>Error Log</title>
+                                <sort_order>100</sort_order>
+                                <action>speedtax/adminhtml_log_error</action>
+                            </error>
+                        </children>
+                        <children>
+                            <call translate="title" module="speedtax">
+                                <title>Call Log</title>
+                                <sort_order>200</sort_order>
+                                <action>speedtax/adminhtml_log_call</action>
+                            </call>
+                        </children>
+                    </log>
+                </children>
             </harapartners>
         </menu>-->
-	</adminhtml>
-	<admin>
+    </adminhtml>
+    <admin>
         <routers>
             <speedtax>
                 <use>admin</use>
@@ -181,22 +181,22 @@
             </speedtax>
         </routers>
     </admin>
-	<default>
+    <default>
         <speedtax>
-        	<speedtax>
-        		<action>0</action>
-        		<url>https://www.speedtax.com/</url>
-        		<shipping_sku>Shipping</shipping_sku>
-        		<adjustment_positive_sku>Adjustment</adjustment_positive_sku>
-        		<adjustment_negative_sku>Adjustment</adjustment_negative_sku>
-        		<sales_person_code>Magento</sales_person_code>
-        		<error_full_stop>1</error_full_stop>
-        		<error_frontend_action>2</error_frontend_action>
-        		<error_frontend_message>Unfortunately, we could not calculate tax for your order. Please try again with a different address or contact us to complete your order.</error_frontend_message>
-        		<error_backend_message>There was an error getting tax rates from Speedtax. Please see the error log for details.</error_backend_message>
-        		<error_notification_toolbar>1</error_notification_toolbar>
-				<onepage_normalize_message>Your shipping address has been modified during our validation process.  Please confirm the address to the right is accurate.</onepage_normalize_message>
-        	</speedtax>
-		</speedtax>
-	</default>
+            <speedtax>
+                <action>0</action>
+                <url>https://www.speedtax.com/</url>
+                <shipping_sku>Shipping</shipping_sku>
+                <adjustment_positive_sku>Adjustment</adjustment_positive_sku>
+                <adjustment_negative_sku>Adjustment</adjustment_negative_sku>
+                <sales_person_code>Magento</sales_person_code>
+                <error_full_stop>1</error_full_stop>
+                <error_frontend_action>2</error_frontend_action>
+                <error_frontend_message>Unfortunately, we could not calculate tax for your order. Please try again with a different address or contact us to complete your order.</error_frontend_message>
+                <error_backend_message>There was an error getting tax rates from Speedtax. Please see the error log for details.</error_backend_message>
+                <error_notification_toolbar>1</error_notification_toolbar>
+                <onepage_normalize_message>Your shipping address has been modified during our validation process.  Please confirm the address to the right is accurate.</onepage_normalize_message>
+            </speedtax>
+        </speedtax>
+    </default>
 </config>

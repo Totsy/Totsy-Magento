@@ -17,5 +17,5 @@ class Harapartners_Customertracking_Model_Mysql4_Record_Collection extends Mage_
    
     public function _construct(){
         $this->_init('customertracking/record');
-	}
+    }
 }

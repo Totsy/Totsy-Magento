@@ -26,6 +26,14 @@ class Harapartners_Service_Model_Rewrite_Sales_Quote_Address_Total_Tax extends M
 		$this->_setAddress ( $address );
 		parent::collect ( $address );
 		
+		//Important logic for importing legacy orders
+		if(is_numeric(Mage::registry('order_import_tax_amount'))){
+			$orderImportTaxAmount = max(array(0.0, Mage::registry('order_import_tax_amount')));
+			$this->_addAmount($orderImportTaxAmount);
+			$this->_addBaseAmount($orderImportTaxAmount);
+			return $this;
+		}
+		
 		$store = $address->getQuote ()->getStore ();
 		$customer = $address->getQuote ()->getCustomer ();
 		

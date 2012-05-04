@@ -59,7 +59,7 @@
                 <connection>
                     <use>core_read</use>
                 </connection>
-            </customertracking_read>		
+            </customertracking_read>        
         </resources>
         <!--Moved to Harapartners_Service-->
         <!--events>
@@ -90,7 +90,7 @@
                     </customertracking>
                 </observers>
             </http_response_send_before>
-        </events-->		
+        </events-->        
     </global>
     <frontend>
         <routers>

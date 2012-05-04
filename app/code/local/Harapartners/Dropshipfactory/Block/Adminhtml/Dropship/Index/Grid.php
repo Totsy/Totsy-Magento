@@ -11,8 +11,8 @@
  * 
  */
 class Harapartners_Dropshipfactory_Block_Adminhtml_Dropship_Index_Grid extends Mage_Adminhtml_Block_Widget_Grid {
-	
-	
+    
+    
     public function __construct(){
         parent::__construct();
         $this->setId('dropshipGrid');
@@ -33,30 +33,30 @@ class Harapartners_Dropshipfactory_Block_Adminhtml_Dropship_Index_Grid extends M
         $fulfillmentTypeAttributeId = Mage::helper('dropshipfactory')->getFulfillmentTypeAttributeId();
         
         $collection->getSelect()->join($order_table, 'order_id=' . $order_table . '.entity_id', $order_table. '.increment_id')
-        						//->join($catalog_product_entity_int_table, 'product_id=' . $catalog_product_entity_int_table . '.entity_id', $catalog_product_entity_int_table . '.value')
-        						->join($catalog_product_entity_varchar_table, 'product_id=' . $catalog_product_entity_varchar_table . '.entity_id', null)
-        						->where($order_table . '.state="' . Mage_Sales_Model_Order::STATE_NEW . '" AND ' .
-        								//$catalog_product_entity_int_table . '.attribute_id=' . $vendorAttributeId . ' AND ' .
-        								$catalog_product_entity_varchar_table . '.attribute_id=' . $fulfillmentTypeAttributeId . ' AND ' .
-        								$catalog_product_entity_varchar_table . '.value="' . Harapartners_Ordersplit_Helper_Data::TYPE_DROPSHIP . '"');
-	
-		$collection->getSelect()->joinLeft($catalog_product_entity_varchar_table . ' AS vendor_table', 'product_id=vendor_table.entity_id', 'vendor_table.value as vendor')
-        						->where('vendor_table.attribute_id=' . $vendorAttributeId);
+                                //->join($catalog_product_entity_int_table, 'product_id=' . $catalog_product_entity_int_table . '.entity_id', $catalog_product_entity_int_table . '.value')
+                                ->join($catalog_product_entity_varchar_table, 'product_id=' . $catalog_product_entity_varchar_table . '.entity_id', null)
+                                ->where($order_table . '.state="' . Mage_Sales_Model_Order::STATE_NEW . '" AND ' .
+                                        //$catalog_product_entity_int_table . '.attribute_id=' . $vendorAttributeId . ' AND ' .
+                                        $catalog_product_entity_varchar_table . '.attribute_id=' . $fulfillmentTypeAttributeId . ' AND ' .
+                                        $catalog_product_entity_varchar_table . '.value="' . Harapartners_Ordersplit_Helper_Data::TYPE_DROPSHIP . '"');
+    
+        $collection->getSelect()->joinLeft($catalog_product_entity_varchar_table . ' AS vendor_table', 'product_id=vendor_table.entity_id', 'vendor_table.value as vendor')
+                                ->where('vendor_table.attribute_id=' . $vendorAttributeId);
 
         $collection->getSelect()->joinLeft($catalog_product_entity_table, 'product_id=' . $catalog_product_entity_table . '.entity_id', null)
                                 ->where($catalog_product_entity_table . '.type_id = "simple"');
-        						
-		//echo $collection->getSelect()->assemble();		       						
-		$this->setCollection($collection);
-		parent::_prepareCollection();
+                                
+        //echo $collection->getSelect()->assemble();                                       
+        $this->setCollection($collection);
+        parent::_prepareCollection();
        
         return $this;
     }
 
     protected function _prepareColumns(){
-		$item_table = 'main_table';
-		$catalog_product_entity_int_table = Mage::getSingleton('core/resource')->getTableName('catalog_product_entity_int');
-    	
+        $item_table = 'main_table';
+        $catalog_product_entity_int_table = Mage::getSingleton('core/resource')->getTableName('catalog_product_entity_int');
+        
         $this->addColumn('item_id', array(
             'header'        => Mage::helper('dropshipfactory')->__('Item ID'),
             'align'         => 'right',
@@ -89,19 +89,19 @@ class Harapartners_Dropshipfactory_Block_Adminhtml_Dropship_Index_Grid extends M
 //            'header'        => Mage::helper('dropshipfactory')->__('vendor'),
 //            'align'         => 'right',
 //            'width'         => '30px',
-//        	'type'			=> 'options',
-//        	'options'		=> Mage::helper('dropshipfactory')->getVendorList(),
+//            'type'            => 'options',
+//            'options'        => Mage::helper('dropshipfactory')->getVendorList(),
 //            'index'         => 'value',
-//        	'filter_index'	=> $catalog_product_entity_int_table . '.value'
+//            'filter_index'    => $catalog_product_entity_int_table . '.value'
 //        ));
 
         $this->addColumn('value', array(
             'header'        => Mage::helper('dropshipfactory')->__('vendor'),
             'align'         => 'right',
             'width'         => '30px',
-        	'type'			=> 'text',
+            'type'            => 'text',
             'index'         => 'vendor',
-        	'filter_index'	=> 'vendor_table.value'
+            'filter_index'    => 'vendor_table.value'
         ));
         
         $this->addColumn('qty_ordered', array(
@@ -117,8 +117,8 @@ class Harapartners_Dropshipfactory_Block_Adminhtml_Dropship_Index_Grid extends M
             'width'         => '150px',
             'index'         => 'created_at',
             'filter_index'  => $item_table . '.created_at',
-        	'type'      	=> 'datetime',
-            'gmtoffset' 	=> true
+            'type'          => 'datetime',
+            'gmtoffset'     => true
         ));
         
         $this->addColumn('updated_at', array(
@@ -127,8 +127,8 @@ class Harapartners_Dropshipfactory_Block_Adminhtml_Dropship_Index_Grid extends M
             'width'         => '150px',
             'index'         => 'updated_at',
             'filter_index'  => $item_table . '.updated_at',
-        	'type'      	=> 'datetime',
-            'gmtoffset' 	=> true
+            'type'          => 'datetime',
+            'gmtoffset'     => true
         ));
         
         $this->addExportType('*/*/exportCSV', Mage::helper('dropshipfactory')->__('CSV'));
@@ -141,10 +141,10 @@ class Harapartners_Dropshipfactory_Block_Adminhtml_Dropship_Index_Grid extends M
      *
      */
     public function getCsv() {
-    	$this->_isExport = true;
-    	$this->_prepareGrid();
-    	$collection = $this->getCollection();
-    	$collection->getSelect()->limit();
+        $this->_isExport = true;
+        $this->_prepareGrid();
+        $collection = $this->getCollection();
+        $collection->getSelect()->limit();
         $collection->setPageSize(0);
         $collection->load();
         $this->_afterLoadCollection();
@@ -153,47 +153,47 @@ class Harapartners_Dropshipfactory_Block_Adminhtml_Dropship_Index_Grid extends M
         $csv = implode(',', $header) . "\n";
         
         foreach($collection as $row) {
-        	$order = Mage::getModel('sales/order')->loadByIncrementId($row->getData('increment_id'));
-        	
-        	$data = array();
-        	
-        	$data[] = $row->getData('item_id');
-        	$data[] = $row->getData('name');
-        	$data[] = $row->getData('sku');
-        	$data[] = $row->getData('increment_id');
-        	$data[] = $order->getCreatedAt();
-        	
-       		$product = Mage::getModel('catalog/product')->load($row->getData('product_id'));
-        	
-        	$data[] = $product->getAttributeText('vendor_code');
-        	
-        	//customer information
-        	$data[] = $order->getCustomerFirstname() . " " . $order->getCustomerLastname();
-			
-			$billingAddress = $order->getBillingAddress();
-			$data[] = (isset($billingAddress)) ? $billingAddress->getStreet(1) . ' ' . $billingAddress->getStreet(2) : '';
-			$data[] = (isset($billingAddress)) ? $billingAddress->getCity() : '';
-			$data[] = (isset($billingAddress)) ? $billingAddress->getRegion() : '';
-			$data[] = (isset($billingAddress)) ? $billingAddress->getPostcode() : '';
-			$data[] = (isset($billingAddress)) ? $billingAddress->getTelephone() : '';
-			$data[] = $order->getCustomerEmail();
-			
-			//shipment information
-			$shipment = $order->getShippingAddress();
-			
-			$data[] = (isset($shipment)) ? $shipment->getFirstname() . ' ' . $shipment->getLastname() : '';
-			$data[] = (isset($shipment)) ? $shipment->getStreet(1) . ' ' . $shipment->getStreet(2) : '';
-			$data[] = (isset($shipment)) ? $shipment->getCity() : '';
-			$data[] = (isset($shipment)) ? $shipment->getRegion() : '';
-			$data[] = (isset($shipment)) ? $shipment->getPostcode() : '';
-        	
-        	$data[] = $row->getData('price');
-        	$data[] = $row->getData('tax_amount');
-        	$data[] = $row->getData('qty_ordered');
-			$data[] = $order->getShippingMethod();
-			$data[] = $order->getShippingAmount();
-        	
-        	$csv.= implode(',', $data) . "\n";
+            $order = Mage::getModel('sales/order')->loadByIncrementId($row->getData('increment_id'));
+            
+            $data = array();
+            
+            $data[] = $row->getData('item_id');
+            $data[] = $row->getData('name');
+            $data[] = $row->getData('sku');
+            $data[] = $row->getData('increment_id');
+            $data[] = $order->getCreatedAt();
+            
+               $product = Mage::getModel('catalog/product')->load($row->getData('product_id'));
+            
+            $data[] = $product->getAttributeText('vendor_code');
+            
+            //customer information
+            $data[] = $order->getCustomerFirstname() . " " . $order->getCustomerLastname();
+            
+            $billingAddress = $order->getBillingAddress();
+            $data[] = (isset($billingAddress)) ? $billingAddress->getStreet(1) . ' ' . $billingAddress->getStreet(2) : '';
+            $data[] = (isset($billingAddress)) ? $billingAddress->getCity() : '';
+            $data[] = (isset($billingAddress)) ? $billingAddress->getRegion() : '';
+            $data[] = (isset($billingAddress)) ? $billingAddress->getPostcode() : '';
+            $data[] = (isset($billingAddress)) ? $billingAddress->getTelephone() : '';
+            $data[] = $order->getCustomerEmail();
+            
+            //shipment information
+            $shipment = $order->getShippingAddress();
+            
+            $data[] = (isset($shipment)) ? $shipment->getFirstname() . ' ' . $shipment->getLastname() : '';
+            $data[] = (isset($shipment)) ? $shipment->getStreet(1) . ' ' . $shipment->getStreet(2) : '';
+            $data[] = (isset($shipment)) ? $shipment->getCity() : '';
+            $data[] = (isset($shipment)) ? $shipment->getRegion() : '';
+            $data[] = (isset($shipment)) ? $shipment->getPostcode() : '';
+            
+            $data[] = $row->getData('price');
+            $data[] = $row->getData('tax_amount');
+            $data[] = $row->getData('qty_ordered');
+            $data[] = $order->getShippingMethod();
+            $data[] = $order->getShippingAmount();
+            
+            $csv.= implode(',', $data) . "\n";
         }
         
         return $csv;

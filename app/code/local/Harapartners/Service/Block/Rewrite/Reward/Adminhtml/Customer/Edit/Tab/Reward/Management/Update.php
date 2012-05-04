@@ -53,7 +53,7 @@ protected function _prepareForm()
             'name'  => 'points_delta',
             'title' => Mage::helper('enterprise_reward')->__('Update Points'),
             'label' => Mage::helper('enterprise_reward')->__('Update Points'),
-        	'class' => 'update-point',
+            'class' => 'update-point',
             'note'  => Mage::helper('enterprise_reward')->__('Enter a negative number to subtract from balance.')
         ));
 
@@ -61,7 +61,7 @@ protected function _prepareForm()
             'name'  => 'comment',
             'title' => Mage::helper('enterprise_reward')->__('Comment'),
             'label' => Mage::helper('enterprise_reward')->__('Comment'),
-        	'class' => 'the-comment'
+            'class' => 'the-comment'
         ));
 
         $fieldset = $form->addFieldset('notification_fieldset', array(

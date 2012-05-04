@@ -1,7 +1,7 @@
 <?php
 class Harapartners_Promotionfactory_Model_Mysql4_Groupcoupon_Collection extends Mage_Core_Model_Mysql4_Collection_Abstract{
     
-	public function _construct(){
+    public function _construct(){
         $this->_init('promotionfactory/groupcoupon');
     }
     

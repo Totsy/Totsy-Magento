@@ -15,17 +15,17 @@
  */
 
 class Harapartners_Service_Model_Service extends Mage_Core_Model_Abstract{
-	
-	// ===== Cronjob related ===== //
-	public function cleanCacheAfterSortRebuild($schedule) {
-		$types = Mage::app()->getCacheInstance()->getTypes();
-		foreach ($types as $type) {
-		    $tags = Mage::app()->getCacheInstance()->cleanType($type);
-		    Mage::dispatchEvent('adminhtml_cache_refresh_type', array('type' => $type));
-		    $updatedTypes++;
-		}
-		//Harapartners, yang, Flash cache
-		Mage::dispatchEvent('adminhtml_cache_flush_all');
+    
+    // ===== Cronjob related ===== //
+    public function cleanCacheAfterSortRebuild($schedule) {
+        $types = Mage::app()->getCacheInstance()->getTypes();
+        foreach ($types as $type) {
+            $tags = Mage::app()->getCacheInstance()->cleanType($type);
+            Mage::dispatchEvent('adminhtml_cache_refresh_type', array('type' => $type));
+            $updatedTypes++;
+        }
+        //Harapartners, yang, Flash cache
+        Mage::dispatchEvent('adminhtml_cache_flush_all');
         Mage::app()->getCacheInstance()->flush();
         return $this;
     }

@@ -16,8 +16,8 @@
  */
 
 class Harapartners_Paymentfactory_Block_Payment_Form extends Mage_Payment_Block_Form_Cc {
-	
-	protected function _construct()
+    
+    protected function _construct()
     {
         parent::_construct();
         $this->setTemplate('paymentfactory/payment/form.phtml');
@@ -35,10 +35,10 @@ class Harapartners_Paymentfactory_Block_Payment_Form extends Mage_Payment_Block_
      */
     
     
-	public function getProfilesByCustomerId( $customerId ) {
-   		$profiles = Mage::getModel('paymentfactory/profile')->getCollection();
-   		$profiles->getSelect()->where( 'customer_id = ?', $customerId );
-   		return $profiles;
+    public function getProfilesByCustomerId( $customerId ) {
+           $profiles = Mage::getModel('paymentfactory/profile')->getCollection();
+           $profiles->getSelect()->where( 'customer_id = ?', $customerId );
+           return $profiles;
     }
     
     public function getCcAvailableTypes()
@@ -91,17 +91,17 @@ class Harapartners_Paymentfactory_Block_Payment_Form extends Mage_Payment_Block_
     
     
     public function getFullCcCardType( $shortCardType ) {
-    	switch ( $shortCardType ) {
-	 		case 'AE':
-	 			return 'American Express';
-	 		case 'VI':
-	 			return 'Visa';
-	 		case 'MC':
-	 			return 'MasterCard';
-	 		case 'DI':
-	 			return 'Discover';
-	 		default:
-	 			return $shortCardType;
-	 	}
+        switch ( $shortCardType ) {
+             case 'AE':
+                 return 'American Express';
+             case 'VI':
+                 return 'Visa';
+             case 'MC':
+                 return 'MasterCard';
+             case 'DI':
+                 return 'Discover';
+             default:
+                 return $shortCardType;
+         }
     }
 }

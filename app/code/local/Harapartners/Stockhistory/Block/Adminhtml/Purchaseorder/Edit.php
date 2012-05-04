@@ -13,36 +13,36 @@
  */
 
 class Harapartners_Stockhistory_Block_Adminhtml_Purchaseorder_Edit extends Mage_Adminhtml_Block_Widget_Form_Container {
-	
-	public function __construct() {
-		$dataObject = new Varien_Object(Mage::registry('stockhistory_po_data'));
-		
-		parent::__construct();
-		$this->_objectId = 'id';
-		$this->_blockGroup = 'stockhistory';
-		$this->_controller = 'adminhtml_purchaseorder';
+    
+    public function __construct() {
+        $dataObject = new Varien_Object(Mage::registry('stockhistory_po_data'));
+        
+        parent::__construct();
+        $this->_objectId = 'id';
+        $this->_blockGroup = 'stockhistory';
+        $this->_controller = 'adminhtml_purchaseorder';
 
-		$this->_removeButton('add');
-		
-		if(!!$dataObject->getId()){
-			$poObject = Mage::getModel('stockhistory/purchaseorder')->load($dataObject->getId());
-			if($poObject->getStatus() == Harapartners_Stockhistory_Model_Purchaseorder::STATUS_OPEN){
-				$this->_addButton('transaction_add', array(
-		            'label'     => Mage::helper('stockhistory')->__('Create Amendment'),
-		            'onclick'   => 'setLocation(\'' . $this->getCreateAmendmentUrl() .'\')',
-					'class'		=> 'add',
-		      	));
-			}
-			
-	      	$this->_addButton('generate_report', array(
-	      		'label'		=>	Mage::helper('stockhistory')->__('Generate Report'),
-	      		'onclick'	=> 'setLocation(\'' . $this->getReportUrl() .'\')',
-	      	));
-		}
-	}
-	
-	public function getHeaderText() {
-    	return Mage::helper('stockhistory')->__('Purchase Order Info');
+        $this->_removeButton('add');
+        
+        if(!!$dataObject->getId()){
+            $poObject = Mage::getModel('stockhistory/purchaseorder')->load($dataObject->getId());
+            if($poObject->getStatus() == Harapartners_Stockhistory_Model_Purchaseorder::STATUS_OPEN){
+                $this->_addButton('transaction_add', array(
+                    'label'     => Mage::helper('stockhistory')->__('Create Amendment'),
+                    'onclick'   => 'setLocation(\'' . $this->getCreateAmendmentUrl() .'\')',
+                    'class'        => 'add',
+                  ));
+            }
+            
+              $this->_addButton('generate_report', array(
+                  'label'        =>    Mage::helper('stockhistory')->__('Generate Report'),
+                  'onclick'    => 'setLocation(\'' . $this->getReportUrl() .'\')',
+              ));
+        }
+    }
+    
+    public function getHeaderText() {
+        return Mage::helper('stockhistory')->__('Purchase Order Info');
     }
 
     public function getSaveUrl(){
@@ -50,30 +50,30 @@ class Harapartners_Stockhistory_Block_Adminhtml_Purchaseorder_Edit extends Mage_
     }
     
     public function getReportUrl() {
-    	$dataObject = new Varien_Object(Mage::registry('stockhistory_po_data'));
-    	return $this->getUrl('stockhistory/adminhtml_transaction/report', array(
-    			'po_id'	=>	$dataObject->getId(),
-    	));	
+        $dataObject = new Varien_Object(Mage::registry('stockhistory_po_data'));
+        return $this->getUrl('stockhistory/adminhtml_transaction/report', array(
+                'po_id'    =>    $dataObject->getId(),
+        ));    
     }
     
     public function getCreateAmendmentUrl() {
-    	$dataObject = new Varien_Object(Mage::registry('stockhistory_po_data'));
-    	return $this->getUrl('stockhistory/adminhtml_transaction/newAmendmentByPo', array(
-    			//All required fields are given by 'po_id'
-//    			'vendor_id' => $dataObject->getVendorId(),
-//    			'vendor_code' => $this->getVendorCode($dataObject->getVendorId()),
-    			'po_id' => $dataObject->getId(),
-//    			'category_id' => $dataObject->getCategoryId()
-    			
-    	));
+        $dataObject = new Varien_Object(Mage::registry('stockhistory_po_data'));
+        return $this->getUrl('stockhistory/adminhtml_transaction/newAmendmentByPo', array(
+                //All required fields are given by 'po_id'
+//                'vendor_id' => $dataObject->getVendorId(),
+//                'vendor_code' => $this->getVendorCode($dataObject->getVendorId()),
+                'po_id' => $dataObject->getId(),
+//                'category_id' => $dataObject->getCategoryId()
+                
+        ));
     }
     
     public function getVendorCode($vendorId){
-    	$vendor = Mage::getModel('stockhistory/vendor')->load($vendorId);
-    	if(!! $vendor->getId()){
-    		return $vendor->getVendorCode();
-    	}
-    	return null;
+        $vendor = Mage::getModel('stockhistory/vendor')->load($vendorId);
+        if(!! $vendor->getId()){
+            return $vendor->getVendorCode();
+        }
+        return null;
     }
     
 }

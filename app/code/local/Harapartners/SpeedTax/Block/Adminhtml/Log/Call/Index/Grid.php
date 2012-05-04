@@ -20,7 +20,7 @@ class Harapartners_SpeedTax_Block_Adminhtml_Log_Call_Index_Grid extends Mage_Adm
     protected function _prepareCollection(){
         $model = Mage::getModel('speedtax/log_call');
         $collection = $model->getCollection();
-		$this->setCollection($collection);
+        $this->setCollection($collection);
         parent::_prepareCollection();
         return $this;
     }
@@ -43,15 +43,15 @@ class Harapartners_SpeedTax_Block_Adminhtml_Log_Call_Index_Grid extends Mage_Adm
             'align'         => 'center',
             'width'         => '50px',
             'index'         => 'event',
-       		'type'			=> 'text'
+               'type'            => 'text'
         ));
      
-		$this->addColumn('result_type', array(
+        $this->addColumn('result_type', array(
             'header'        => Mage::helper('speedtax')->__('Result Type'),
             'align'         => 'center',
             'width'         => '50px',
             'index'         => 'result_type',
-        	'type'			=> 'text'
+            'type'            => 'text'
         ));
         
         $this->addColumn('invoice_num', array(
@@ -59,28 +59,28 @@ class Harapartners_SpeedTax_Block_Adminhtml_Log_Call_Index_Grid extends Mage_Adm
             'align'         => 'center',
             'width'         => '50px',
             'index'         => 'invoice_num',
-        	'type'			=> 'int'
+            'type'            => 'int'
         ));
         $this->addColumn('gross', array(
             'header'        => Mage::helper('speedtax')->__('Gross'),
             'align'         => 'center',
             'width'         => '50px',
             'index'         => 'gross',
-        	'type'			=> 'int'
+            'type'            => 'int'
         ));
         $this->addColumn('exempt', array(
             'header'        => Mage::helper('speedtax')->__('Exempt'),
             'align'         => 'center',
             'width'         => '50px',
             'index'         => 'exempt',
-        	'type'			=> 'int'
+            'type'            => 'int'
         ));
         $this->addColumn('tax', array(
             'header'        => Mage::helper('speedtax')->__('Tax'),
             'align'         => 'center',
             'width'         => '50px',
             'index'         => 'tax',
-        	'type'			=> 'int'
+            'type'            => 'int'
         ));
         
        $this->addColumn('created_at', array(
@@ -88,8 +88,8 @@ class Harapartners_SpeedTax_Block_Adminhtml_Log_Call_Index_Grid extends Mage_Adm
             'align'         => 'center',
             'width'         => '150px',
             'index'         => 'created_at',
-        	'type'      	=> 'datetime',
-            'gmtoffset' 	=> true
+            'type'          => 'datetime',
+            'gmtoffset'     => true
         ));
         
         $this->addExportType('*/*/exportCsv', Mage::helper('speedtax')->__('CSV'));
@@ -100,8 +100,8 @@ class Harapartners_SpeedTax_Block_Adminhtml_Log_Call_Index_Grid extends Mage_Adm
 
     public function getRowUrl($row){
         return $this->getUrl('*/*/edit', array(
-	            'store'=>$this->getRequest()->getParam('store'),
-	            'id'=>$row->getId()
+                'store'=>$this->getRequest()->getParam('store'),
+                'id'=>$row->getId()
         ));
     }
     

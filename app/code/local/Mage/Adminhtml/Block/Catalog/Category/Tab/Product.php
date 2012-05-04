@@ -102,20 +102,20 @@ class Mage_Adminhtml_Block_Catalog_Category_Tab_Product extends Mage_Adminhtml_B
     }
 
     protected function _prepareColumns()
-    { 	
-    	$productSizeAttr = Mage::getModel('catalog/product')->getResource()->getAttribute('size');
-    	$productSizeOption = $productSizeAttr->getSource()->getAllOptions();
-    	$productColorAttr = Mage::getModel('catalog/product')->getResource()->getAttribute('color');
-    	$productColorOption = $productColorAttr->getSource()->getAllOptions();
-    	$sizeArray = array();
-    	$colorArray = array();
-    	foreach ( $productSizeOption as $option ){
-    		$sizeArray[$option['value']] = $option['label'];
-    	}
-    	foreach ( $productColorOption as $option ){
-    		$colorArray[$option['value']] = $option['label'];
-    	}
-    	
+    {     
+        $productSizeAttr = Mage::getModel('catalog/product')->getResource()->getAttribute('size');
+        $productSizeOption = $productSizeAttr->getSource()->getAllOptions();
+        $productColorAttr = Mage::getModel('catalog/product')->getResource()->getAttribute('color');
+        $productColorOption = $productColorAttr->getSource()->getAllOptions();
+        $sizeArray = array();
+        $colorArray = array();
+        foreach ( $productSizeOption as $option ){
+            $sizeArray[$option['value']] = $option['label'];
+        }
+        foreach ( $productColorOption as $option ){
+            $colorArray[$option['value']] = $option['label'];
+        }
+        
         if (!$this->getCategory()->getProductsReadonly()) {
             $this->addColumn('in_category', array(
                 'header_css_class' => 'a-center',
@@ -147,28 +147,28 @@ class Mage_Adminhtml_Block_Catalog_Category_Tab_Product extends Mage_Adminhtml_B
         $this->addColumn('size', array(
             'header'    => Mage::helper('catalog')->__('Size'),
             'index'     => 'size',
-            'type'		=> 'options',
-        	'options'	=> $sizeArray
+            'type'        => 'options',
+            'options'    => $sizeArray
         ));
         $this->addColumn('color', array(
             'header'    => Mage::helper('catalog')->__('Color'),
             'index'     => 'color',
-            'type'		=> 'options',
-        	'options'	=> $colorArray
+            'type'        => 'options',
+            'options'    => $colorArray
         ));
         //Harapartners, Yang: include product edit link in the grid
         $this->addColumn('edit', array(
             'header'    => Mage::helper('catalog')->__('Edit'),
-        	'width'     => '1',
-        	'sortable'  => false,
-        	'renderer'	=> 'Harapartners_Service_Block_Adminhtml_Widget_Grid_Column_Renderer_Category_Edit'
+            'width'     => '1',
+            'sortable'  => false,
+            'renderer'    => 'Harapartners_Service_Block_Adminhtml_Widget_Grid_Column_Renderer_Category_Edit'
         ));
         //Harapartners, Jun: include product base image in the grid
         $this->addColumn('image', array(
             'header'    => Mage::helper('catalog')->__('Image'),
             'sortable'  => false,
-        	'width'     => '120px',
-        	'renderer'	=> 'Harapartners_Service_Block_Adminhtml_Widget_Grid_Column_Renderer_Product_Image'
+            'width'     => '120px',
+            'renderer'    => 'Harapartners_Service_Block_Adminhtml_Widget_Grid_Column_Renderer_Product_Image'
         ));
         
         $this->addColumn('sku', array(

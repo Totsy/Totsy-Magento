@@ -16,17 +16,17 @@ class Harapartners_Service_Block_Rewrite_Adminhtml_Catalog_Category_Edit_Form ex
     
     // Get current edit store HP Yang
     protected function _getAdminStore(){
-    	return Mage::app()->getRequest()->getParam('store', 0);
+        return Mage::app()->getRequest()->getParam('store', 0);
     }
 
     protected function _prepareLayout(){
-		parent::_prepareLayout();
+        parent::_prepareLayout();
         $category = $this->getCategory();
         $categoryId = (int) $category->getId(); // 0 when we create category, otherwise some value for editing category
         
         //Haraparnters, Jun/Yang
         if (!in_array($categoryId, $this->getRootIds())) {
-        	// Release button HP Yang
+            // Release button HP Yang
             $this->setChild('release_button',
                 $this->getLayout()->createBlock('adminhtml/widget_button')
                     ->setData(array(
@@ -96,7 +96,7 @@ class Harapartners_Service_Block_Rewrite_Adminhtml_Catalog_Category_Edit_Form ex
     }
     
     // Harapartners, Jun, Import products
-	public function getImportProductButtonHtml()
+    public function getImportProductButtonHtml()
     {
         if ($this->hasStoreRootCategory()) {
             return $this->getChildHtml('import_product_button');

@@ -13,61 +13,61 @@
  */
 
 class Harapartners_Stockhistory_Block_Adminhtml_Vendor_Edit_Form extends Mage_Adminhtml_Block_Widget_Form {
-       						
-	protected function _prepareForm() {
-		$dataObject = new Varien_Object(Mage::registry('stockhistory_vendor_data'));
-		$helper = Mage::helper('stockhistory');
-		
+                               
+    protected function _prepareForm() {
+        $dataObject = new Varien_Object(Mage::registry('stockhistory_vendor_data'));
+        $helper = Mage::helper('stockhistory');
+        
         $form = new Varien_Data_Form(array(
             'id'        => 'edit_form',
             'action'    => $this->getUrl('*/*/save', array('id' => $dataObject->getId())),
             'method'    => 'post',
-            //'enctype'  	 => 'multipart/form-data'
+            //'enctype'       => 'multipart/form-data'
         ));
         
 
         $fieldset = $form->addFieldset('vendor', array('legend'=>$helper->__("Vendor Info")));
         
         if(!!$dataObject->getId()){
-	        $fieldset->addField('id', 'label', array(
-	            'label'     => $helper->__('Vendor ID:'),
-	            'name'      => 'id',
-	        ));
-		}
+            $fieldset->addField('id', 'label', array(
+                'label'     => $helper->__('Vendor ID:'),
+                'name'      => 'id',
+            ));
+        }
         
         $fieldset->addField('vendor_name', 'text', array(
             'label'     => $helper->__('Vendor Name:'),
             'name'      => 'vendor_name',
-        	'required'	=> true,
+            'required'    => true,
         ));
         
         //Harapartners, Jun/Song, very important restriction, 'vendor_code' <=> product relationship is locked. Once being set, CANNOT be changed
-		if(!!$dataObject->getId()){
-	        $fieldset->addField('vendor_code', 'label', array(
-	            'label'     => $helper->__('Vendor Code:'),
-	            'name'      => 'vendor_code',
-        	));
-		}else{
-			$fieldset->addField('vendor_code', 'text', array(
-	            'label'     => $helper->__('Vendor Code:'),
-	            'name'      => 'vendor_code',
-	        	'required'	=> true,
-	        	'note'		=> 'Once saved, this field <b>CANNOT</b> be modified. Alpha-numeric with underscore, lowercase only.'
-        	));
-		}
+        if(!!$dataObject->getId()){
+            $fieldset->addField('vendor_code', 'label', array(
+                'label'     => $helper->__('Vendor Code:'),
+                'name'      => 'vendor_code',
+            ));
+        }else{
+            $fieldset->addField('vendor_code', 'text', array(
+                'label'     => $helper->__('Vendor Code:'),
+                'name'      => 'vendor_code',
+                'required'    => true,
+                'note'        => 'Once saved, this field <b>CANNOT</b> be modified. Alpha-numeric with underscore, lowercase only.'
+            ));
+        }
         
         $fieldset->addField('vendor_type', 'select', array(
             'label'     => $helper->__('Vendor Type:'),
             'name'      => 'vendor_type',
-        	'required'	=> true,
-        	'values'    => $helper->getFormVendorTypeArray(),
+            'required'    => true,
+            'values'    => $helper->getFormVendorTypeArray(),
         ));
         
         $fieldset->addField('status', 'select', array(
             'label'     => $helper->__('Status:'),
             'name'      => 'status',
-        	'required'	=> true,
-        	'values'    => $helper->getFormVendorStatusArray(),
+            'required'    => true,
+            'values'    => $helper->getFormVendorStatusArray(),
         ));
         
         $fieldset->addField('contact_person', 'text', array(
@@ -78,13 +78,13 @@ class Harapartners_Stockhistory_Block_Adminhtml_Vendor_Edit_Form extends Mage_Ad
         $fieldset->addField('email_list', 'text', array(
             'label'     => $helper->__('Email List:'),
             'name'      => 'email_list',
-        	'note'		=> 'Multiple emails allowed, comma delimited'
+            'note'        => 'Multiple emails allowed, comma delimited'
         ));
         
         $fieldset->addField('phone', 'text', array(
             'label'     => $helper->__('Phone:'),
             'name'      => 'phone',
-        	'class'		=>	'validate-phoneLax',
+            'class'        =>    'validate-phoneLax',
         ));
         
         $fieldset->addField('address', 'textarea', array(
@@ -96,7 +96,7 @@ class Harapartners_Stockhistory_Block_Adminhtml_Vendor_Edit_Form extends Mage_Ad
             'label'     => $helper->__('Comment:'),
             'name'      => 'comment',
         ));
-		
+        
         $form->setValues($dataObject->getData());
         $form->setUseContainer(true);
         $this->setForm($form);

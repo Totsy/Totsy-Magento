@@ -13,12 +13,12 @@
  */
 
 class Harapartners_Customertracking_Adminhtml_RecordController extends Mage_Adminhtml_Controller_Action{
-	
-	public function indexAction(){	
-		$this->loadLayout()
-			->_setActiveMenu('marketing/customertracking')
-			->_addContent($this->getLayout()->createBlock('customertracking/adminhtml_record_index'))
-			->renderLayout();
+    
+    public function indexAction(){    
+        $this->loadLayout()
+            ->_setActiveMenu('marketing/customertracking')
+            ->_addContent($this->getLayout()->createBlock('customertracking/adminhtml_record_index'))
+            ->renderLayout();
     }   
 
     public function exportCsvAction(){

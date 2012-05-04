@@ -13,13 +13,13 @@
  */
 
 class Harapartners_Stockhistory_Block_Adminhtml_Purchaseorder_Index extends Mage_Adminhtml_Block_Widget_Grid_Container{
-	
+    
     public function __construct(){
-		$this->_blockGroup = 'stockhistory';
-		$this->_controller = 'adminhtml_purchaseorder_index';
-    	$this->_headerText = Mage::helper('stockhistory')->__('Purchase Order Info');
+        $this->_blockGroup = 'stockhistory';
+        $this->_controller = 'adminhtml_purchaseorder_index';
+        $this->_headerText = Mage::helper('stockhistory')->__('Purchase Order Info');
         $this->_removeButton('add');
-    	parent::__construct();
+        parent::__construct();
     }
  
 }

@@ -13,13 +13,13 @@
  */
  
 class Harapartners_Service_Block_Rewrite_Adminhtml_Report_Refresh_Statistics_Grid extends Mage_Adminhtml_Block_Report_Refresh_Statistics_Grid {
-	
-	CONST REPORT_EARLIEST_DATE = '2012-03-26';
-	   
-	protected function _prepareMassaction(){
+    
+    CONST REPORT_EARLIEST_DATE = '2012-03-26';
+       
+    protected function _prepareMassaction(){
         $this->setMassactionIdField('id');
         $this->getMassactionBlock()->setFormFieldName('code');
-		
+        
         $maxReportingHours = round((time() - strtotime(self::REPORT_EARLIEST_DATE))/3600) + 25;
         
         $this->getMassactionBlock()->addItem('refresh_fromdate', array(
@@ -49,5 +49,5 @@ class Harapartners_Service_Block_Rewrite_Adminhtml_Report_Refresh_Statistics_Gri
 
         return $this;
     }
-    	
+        
 }

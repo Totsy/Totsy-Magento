@@ -14,14 +14,14 @@
 
 class Harapartners_Affiliate_Block_Adminhtml_Record_Edit_Form extends Mage_Adminhtml_Block_Widget_Form {
     
-	       						
-	protected function _prepareForm() {
-		$affiliateHelper = Mage::helper('affiliate');
-		
-//		if(!!Mage::registry('affiliatePixelsCount')){
-//			$pixelCount = Mage::registry('affiliatePixelsCount');
-//		}
-		
+                                   
+    protected function _prepareForm() {
+        $affiliateHelper = Mage::helper('affiliate');
+        
+//        if(!!Mage::registry('affiliatePixelsCount')){
+//            $pixelCount = Mage::registry('affiliatePixelsCount');
+//        }
+        
         $form = new Varien_Data_Form(array(
             'id'        => 'edit_form',
             'action'    => $this->getData('action'),
@@ -35,40 +35,40 @@ class Harapartners_Affiliate_Block_Adminhtml_Record_Edit_Form extends Mage_Admin
             'label'     => $affiliateHelper->__('Affiliate Name'),
             'name'      => 'affiliate_name',
             'required'  => true,
-        	'note'		=> '255 characters max.'
+            'note'        => '255 characters max.'
         ));
         
         $fieldset->addField('affiliate_code', 'text', array(
             'label'     => $affiliateHelper->__('Affiliate Code'),
             'name'      => 'affiliate_code',
             'required'  => true,
-        	'note'		=> 'Alpha-numeric and underscore only. All characters in lower case. 255 characters max.'
+            'note'        => 'Alpha-numeric and underscore only. All characters in lower case. 255 characters max.'
         ));
         
         $fieldset->addField('type', 'select', array(
             'label'     => $affiliateHelper->__('Type'),
             'name'      => 'type',
             'required'  => true,
-        	'values'    => $affiliateHelper->getFormTypeArray()
+            'values'    => $affiliateHelper->getFormTypeArray()
         ));
         
         $fieldset->addField('status', 'select', array(
             'label'     => $affiliateHelper->__('Status'),
             'name'      => 'status',
             'required'  => true,
-        	'values'    => $affiliateHelper->getFormStatusArray()
+            'values'    => $affiliateHelper->getFormStatusArray()
         ));
         
         $fieldset->addField('tracking_code', 'trackingcode', array(
-			'label'		=> $affiliateHelper->__('Tracking Code'),
-			'name'		=> 'tracking_code',
-        	'note'		=> 'You must "Confirm" if you want your edits to be saved. Empty fields are cleaned automatically before save.'
-		));
+            'label'        => $affiliateHelper->__('Tracking Code'),
+            'name'        => 'tracking_code',
+            'note'        => 'You must "Confirm" if you want your edits to be saved. Empty fields are cleaned automatically before save.'
+        ));
         
         $fieldset->addField('sub_affiliate_code', 'textarea', array(
             'label'     => $affiliateHelper->__('Sub Affiliate Code'),
             'name'      => 'sub_affiliate_code',
-        	'note'		=> 'Comma delimited. Each sub-code must be alpha-numeric and underscore only. All characters in lower case.'        
+            'note'        => 'Comma delimited. Each sub-code must be alpha-numeric and underscore only. All characters in lower case.'        
         ));
         
         $fieldset->addField('comment', 'textarea', array(

@@ -12,7 +12,7 @@
  */
 
 class Mage_Catalog_Model_Category_Attribute_Source_Ages extends Mage_Eav_Model_Entity_Attribute_Source_Abstract {
-	
+    
     public function getAllOptions(){
         if (!$this->_options) {
             $this->_options = array(

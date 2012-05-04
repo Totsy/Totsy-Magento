@@ -13,32 +13,32 @@
  */
 
 class Harapartners_Customertracking_Block_Background extends Mage_Core_Block_Template {
-	
+    
     public function getBackroundImagesJsonArray(){
-		$dir = BP . DS . 'skin'. DS .'frontend'. DS .'enterprise'. DS .'harapartners'. DS .'images'. DS .'login'. DS;
-		$images = scandir($dir);
-		unset($images[0]);
-		unset($images[1]);
-		$imageArray = array();
-		$keyword = $this->getKeyword();
-		foreach ($images as $image){
-			$imageArray[] = $this->getSkinUrl().'images/login/'.$image;
-		}
-		$jsonArray = array(
-			'keyword' => $keyword,
-			'dir'	  => $this->getSkinUrl().'images/login/',
-			'images'  => $imageArray,
-		);
-		return json_encode($jsonArray);	
+        $dir = BP . DS . 'skin'. DS .'frontend'. DS .'enterprise'. DS .'harapartners'. DS .'images'. DS .'login'. DS;
+        $images = scandir($dir);
+        unset($images[0]);
+        unset($images[1]);
+        $imageArray = array();
+        $keyword = $this->getKeyword();
+        foreach ($images as $image){
+            $imageArray[] = $this->getSkinUrl().'images/login/'.$image;
+        }
+        $jsonArray = array(
+            'keyword' => $keyword,
+            'dir'      => $this->getSkinUrl().'images/login/',
+            'images'  => $imageArray,
+        );
+        return json_encode($jsonArray);    
     }
     
     public function getKeyword(){
-    	$keywordCookieName = Mage::helper('affiliate')->getKeywordCookieName();
-    	$keyword = Mage::getModel('core/cookie')->get($keywordCookieName);
-    	if (!!$keyword) {
-    		return $keyword;
-    	}
-    	return false;    	
+        $keywordCookieName = Mage::helper('affiliate')->getKeywordCookieName();
+        $keyword = Mage::getModel('core/cookie')->get($keywordCookieName);
+        if (!!$keyword) {
+            return $keyword;
+        }
+        return false;        
     }
     
 }

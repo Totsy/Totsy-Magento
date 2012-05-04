@@ -12,8 +12,8 @@
  */
 class Harapartners_Fulfillmentfactory_Block_Adminhtml_Itemqueue_Edit_Form extends Mage_Adminhtml_Block_Widget_Form {
     
-	protected function _prepareForm() {
-		$yesno = Mage::getModel('adminhtml/system_config_source_yesno');
+    protected function _prepareForm() {
+        $yesno = Mage::getModel('adminhtml/system_config_source_yesno');
 
         $form = new Varien_Data_Form(array(
             'id'        => 'edit_form',
@@ -33,9 +33,9 @@ class Harapartners_Fulfillmentfactory_Block_Adminhtml_Itemqueue_Edit_Form extend
         $infoFieldset->addField('order_id', 'custom_link', array(
             'label'     => Mage::helper('fulfillmentfactory')->__('Order Id'),
             'name'      => 'order_id',
-        	'href'		=> Mage::getModel('adminhtml/url')->getUrl('adminhtml/sales_order/view'),
-        	'keyname'	=> 'order_id',
-        	'note'		=> Mage::helper('fulfillmentfactory')->__('Click to view Order')
+            'href'        => Mage::getModel('adminhtml/url')->getUrl('adminhtml/sales_order/view'),
+            'keyname'    => 'order_id',
+            'note'        => Mage::helper('fulfillmentfactory')->__('Click to view Order')
         ));
         
         $infoFieldset->addField('order_increment_id', 'label', array(
@@ -46,9 +46,9 @@ class Harapartners_Fulfillmentfactory_Block_Adminhtml_Itemqueue_Edit_Form extend
         $infoFieldset->addField('product_id', 'custom_link', array(
             'label'     => Mage::helper('fulfillmentfactory')->__('Product Id'),
             'name'      => 'product_id',
-        	'href'		=>  Mage::getModel('adminhtml/url')->getUrl('adminhtml/catalog_product/edit'),
-        	'keyname'	=> 'id',
-        	'note'		=> Mage::helper('fulfillmentfactory')->__('Click to view Product')
+            'href'        =>  Mage::getModel('adminhtml/url')->getUrl('adminhtml/catalog_product/edit'),
+            'keyname'    => 'id',
+            'note'        => Mage::helper('fulfillmentfactory')->__('Click to view Product')
         ));
         
         $infoFieldset->addField('name', 'label', array(
@@ -82,17 +82,17 @@ class Harapartners_Fulfillmentfactory_Block_Adminhtml_Itemqueue_Edit_Form extend
             'label'     => Mage::helper('fulfillmentfactory')->__('Fulfill Count'),
             'name'      => 'fulfill_count',
             'class'     => 'validate-zero-or-greater',
-        	'note'		=> Mage::helper('fulfillmentfactory')->__('Number of items for fulfillment')
+            'note'        => Mage::helper('fulfillmentfactory')->__('Number of items for fulfillment')
         ));
         
         $queueFieldset->addField('status', 'select', array(
             'label'     => Mage::helper('fulfillmentfactory')->__('Status'),
             'name'      => 'status',
             'values'    => Mage::helper('fulfillmentfactory')->getItemqueueStatusDropdownOptionList(),
-        	'note'		=> Mage::helper('fulfillmentfactory')->__('Current status for this item')
+            'note'        => Mage::helper('fulfillmentfactory')->__('Current status for this item')
         ));
         
-		if (Mage::registry('itemqueue_form_data')) {
+        if (Mage::registry('itemqueue_form_data')) {
             $form->setValues(Mage::registry('itemqueue_form_data'));
         }
 

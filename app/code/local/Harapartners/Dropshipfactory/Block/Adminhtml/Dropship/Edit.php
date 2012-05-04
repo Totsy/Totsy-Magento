@@ -12,16 +12,16 @@
  */
 class Harapartners_Dropshipfactory_Block_Adminhtml_Dropship_Edit extends Mage_Adminhtml_Block_Widget_Form_Container
 {
-	public function __construct()
-	{
-		parent::__construct();
-		$this->_blockGroup = 'dropshipfactory';
-		$this->_controller = 'adminhtml_dropship';
-		$this->_updateButton('save', 'label', Mage::helper('dropshipfactory')->__('Import'));
-	}
-	
-	public function getHeaderText() {
-    	return Mage::helper('dropshipfactory')->__('Drop Ship Tracking Import');
+    public function __construct()
+    {
+        parent::__construct();
+        $this->_blockGroup = 'dropshipfactory';
+        $this->_controller = 'adminhtml_dropship';
+        $this->_updateButton('save', 'label', Mage::helper('dropshipfactory')->__('Import'));
+    }
+    
+    public function getHeaderText() {
+        return Mage::helper('dropshipfactory')->__('Drop Ship Tracking Import');
     }
 
     public function getSaveUrl(){

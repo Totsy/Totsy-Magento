@@ -18,15 +18,15 @@ $installer->startSetup();
 $installer->run("
 
 ALTER TABLE {$this->getTable('stockhistory/purchaseorder')}
-	ADD `vendor_code` varchar(255) NOT NULL default '' AFTER `vendor_id`,
-	ADD `category_id` int(10) unsigned default NULL AFTER `name`,
+    ADD `vendor_code` varchar(255) NOT NULL default '' AFTER `vendor_id`,
+    ADD `category_id` int(10) unsigned default NULL AFTER `name`,
     ADD KEY `FK_STOCKHISTORY_PURCHASEORDER_CATEGORY` (`category_id`),
-	ADD CONSTRAINT `FK_STOCKHISTORY_PURCHASEORDER_CATEGORY` FOREIGN KEY (`category_id`) REFERENCES {$this->getTable('catalog_category_entity')} (`entity_id`) ON DELETE SET NULL ON UPDATE CASCADE;
+    ADD CONSTRAINT `FK_STOCKHISTORY_PURCHASEORDER_CATEGORY` FOREIGN KEY (`category_id`) REFERENCES {$this->getTable('catalog_category_entity')} (`entity_id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 
 ALTER TABLE {$this->getTable('stockhistory/transaction')}
-	ADD KEY `FK_STOCKHISTORY_TRANSACTION_CATEGORY` (`category_id`),
-	ADD CONSTRAINT `FK_STOCKHISTORY_TRANSACTION_CATEGORY` FOREIGN KEY (`category_id`) REFERENCES {$this->getTable('catalog_category_entity')} (`entity_id`) ON DELETE SET NULL ON UPDATE CASCADE;
+    ADD KEY `FK_STOCKHISTORY_TRANSACTION_CATEGORY` (`category_id`),
+    ADD CONSTRAINT `FK_STOCKHISTORY_TRANSACTION_CATEGORY` FOREIGN KEY (`category_id`) REFERENCES {$this->getTable('catalog_category_entity')} (`entity_id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 ");
 

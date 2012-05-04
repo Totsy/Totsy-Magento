@@ -14,11 +14,11 @@
 
 
 class Harapartners_Ordersplit_Model_Observer {
-			
-	public function salesOrderPlaceAfterSplit(Varien_Event_Observer $observer){
-		$oldOrder = $observer->getEvent()->getOrder();		
-		Mage::helper('ordersplit')->orderSplit($oldOrder);
-	}		
-		
+            
+    public function salesOrderPlaceAfterSplit(Varien_Event_Observer $observer){
+        $oldOrder = $observer->getEvent()->getOrder();        
+        Mage::helper('ordersplit')->orderSplit($oldOrder);
+    }        
+        
 }
-			
+            

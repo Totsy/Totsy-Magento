@@ -13,9 +13,9 @@
  */
  
 class Harapartners_Categoryevent_Adminhtml_BrowseController extends Mage_Adminhtml_Controller_Action{
-	
-	public function indexAction(){
-		$this->_title($this->__('Category Event'))->_title($this->__('Browse Category Events'));
+    
+    public function indexAction(){
+        $this->_title($this->__('Category Event'))->_title($this->__('Browse Category Events'));
         $this->loadLayout();
         $this->renderLayout();
     }   
