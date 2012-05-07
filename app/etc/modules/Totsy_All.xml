@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Totsy_Customer>
+            <active>true</active>
+            <codePool>local</codePool>
+        </Totsy_Customer>
+    </modules>
+</config>
