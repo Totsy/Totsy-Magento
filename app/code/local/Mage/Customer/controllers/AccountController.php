@@ -147,11 +147,16 @@ class Mage_Customer_AccountController extends Mage_Core_Controller_Front_Action
 
         if ($this->getRequest()->isPost()) {
             $login = $this->getRequest()->getPost('login');
+
             if (!empty($login['username']) && !empty($login['password'])) {
                 try {
                     $session->login($login['username'], $login['password']);
                     if ($session->getCustomer()->getIsJustConfirmed()) {
                         $this->_welcomeCustomer($session->getCustomer(), true);
+                    }
+                    if ($session->getCustomer()->getDeactivated()) {
+                        $session->logout()->renewSession(); // destroy the new session, and recreate a new one
+                        throw new Mage_Core_Exception(Mage::helper('customer')->__('Your account has been disabled. Please contact customer service for more information.'));
                     }
                 } catch (Mage_Core_Exception $e) {
                     switch ($e->getCode()) {

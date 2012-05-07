@@ -12,14 +12,22 @@
  * 
  */
 
-class Harapartners_Service_Block_Rewrite_Adminhtml_Customer_Edit_Tab_Account extends Mage_Adminhtml_Block_Customer_Edit_Tab_Account {
-   
-    protected function _setFieldset($attributes, $fieldset){
-        parent::_setFieldset($attributes, $fieldset);
-        if(!!$fieldset->getForm()->getElement('login_counter')){
-            $fieldset->getForm()->getElement('login_counter')->setDisabled('disabled');
+class Harapartners_Service_Block_Rewrite_Adminhtml_Customer_Edit_Tab_Account
+    extends Mage_Adminhtml_Block_Customer_Edit_Tab_Account
+{
+    protected $_disabledFields = array('login_counter', 'email_md5');
+
+    protected function _setFieldset($attributes, $fieldset, $exclude=array())
+    {
+        parent::_setFieldset($attributes, $fieldset, $exclude);
+
+        foreach ($this->_disabledFields as $fieldName) {
+            if ($field = $fieldset->getForm()->getElement($fieldName)) {
+                $field->setDisabled('disabled');
+            }
         }
+
         return $this;
     }
-    
+
 }
