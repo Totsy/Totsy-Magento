@@ -60,9 +60,27 @@ class Mage_Adminhtml_Block_Customer_Edit extends Mage_Adminhtml_Block_Widget_For
         if (!Mage::registry('current_customer')->isDeleteable()) {
             $this->_removeButton('delete');
         }
-        
-        //Harapartners Li
-        $this->_removeButton('delete');
+
+        // setup the Deactivate / Activate button
+        $customer = Mage::registry('current_customer');
+
+        $labelToggleDeactivate = $customer->getDeactivated()
+            ? 'Activate'
+            : 'Deactivate';
+
+        $urlDeactivate = $this->getUrl(
+            'totsy/adminhtml_customer/toggleDeactivated',
+            array('id' => $customer->getId())
+        );
+
+        $this->_addButton(
+            'deactivate',
+            array(
+                'label'   => Mage::helper('customer')->__($labelToggleDeactivate),
+                'onclick' => "setLocation('$urlDeactivate')",
+                'class'   => 'cancel',
+            )
+        );
     }
 
     public function getCreateOrderUrl()
