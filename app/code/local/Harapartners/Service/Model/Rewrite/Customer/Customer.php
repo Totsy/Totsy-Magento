@@ -15,7 +15,10 @@
 class Harapartners_Service_Model_Rewrite_Customer_Customer extends Mage_Customer_Model_Customer {
  
     const EXCEPTION_INVALID_STORE_ACCOUNT = 5;    //Harapartners, yang, multistore sigin error control
-    
+
+    // prevent any Customer objects from being deleted
+    protected $_isDeleteable = false;
+
     //Harapartners, Jun, Important logic to handle legacy customers
     //Added, converting legacy customer password into Magento pass
     public function validatePassword($password){
