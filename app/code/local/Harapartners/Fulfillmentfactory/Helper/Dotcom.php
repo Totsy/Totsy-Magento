@@ -164,7 +164,7 @@ class Harapartners_Fulfillmentfactory_Helper_Dotcom extends Mage_Core_Helper_Abs
      */
     public function getDotcomShippingMethod($method) {
         $this->_getConfig();
-        return '03';
+        return 'NG';
     }
     
     /**

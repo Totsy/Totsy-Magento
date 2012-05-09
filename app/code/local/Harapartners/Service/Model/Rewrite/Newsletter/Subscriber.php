@@ -20,16 +20,23 @@ class Harapartners_Service_Model_Rewrite_Newsletter_Subscriber extends Mage_News
      *
      * @return Mage_Newsletter_Model_Subscriber
      */
-    public function sendConfirmationSuccessEmail()
-    {
-        $newsletterList = "";
+     
+    protected $_newsletterList = "";
+    
+    public function setNewsletterList(){
         
         if( Mage::app()->getStore()->getCode()=="default" || Mage::app()->getStore()->getCode()=="mobile" ){
-            $newsletterList = "registered";
+            $_newsletterList = "registered";
         } else {
-            $newsletterList = "Mamasource";
+            $_newsletterList = "Mamasource";
         }
-        
+            
+    }
+
+    public function sendConfirmationSuccessEmail()
+    { 
+    	$this->setNewsletterList();
+      
         //Harapartners, Edward, Disable ConfirmationSuccessEmail for first register
         $isNewRegister = Mage::registry('new_account');
         if (isset($isNewRegister)){
@@ -66,6 +73,26 @@ class Harapartners_Service_Model_Rewrite_Newsletter_Subscriber extends Mage_News
 
         $translate->setTranslateInline(true);
 
+        return $this;
+    }
+    
+    /*
+     Overriding Magento's default newsletter/unsubscribe function
+    */
+	public function unsubscribe() {
+	
+    	$this->setNewsletterList();
+	
+        if ($this->hasCheckCode() && $this->getCode() != $this->getCheckCode()) {
+            Mage::throwException(Mage::helper('newsletter')->__('Invalid subscription confirmation code.'));
+        }
+
+        $this->setSubscriberStatus(self::STATUS_UNSUBSCRIBED)->save();
+        $this->sendUnsubscriptionEmail();
+        
+        $sailthru = Mage::getSingleton('emailfactory/sailthruconfig')->getHandle();
+		$sailthru->setEmail($this->getEmail(), Array(), Array($_newsletterList=>0));
+        
         return $this;
     }
 }
