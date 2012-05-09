@@ -16,7 +16,6 @@
 
 class Harapartners_Rushcheckout_Model_Observer {
     
-    const CUSTOMER_VALIDATION_DURATION = 900;
     const CUSTOMER_VALIDATION_CHECK_URL = 'customer/revalidate/index';
     
     /**
@@ -26,15 +25,21 @@ class Harapartners_Rushcheckout_Model_Observer {
         $session->setData('revalidate_before_auth_url', Mage::helper('core/url')->getCurrentUrl());
         $lastValidationTime = $session->getData('CUSTOMER_LAST_VALIDATION_TIME');
         $timeDiff = strtotime(now()) - strtotime($lastValidationTime);
-        if ( $timeDiff >= self::CUSTOMER_VALIDATION_DURATION ){
-            $session->setCheckLastValidationFlag(false);
-            Mage::app()->getResponse()->setRedirect( Mage::getBaseUrl() . self::CUSTOMER_VALIDATION_CHECK_URL );
-        }else {
+        $limitTimer = Mage::getStoreConfig('config/rushcheckout_timer/limit_timer');
+        
+        if ( $timeDiff >= $limitTimer ) {
+            $session->setCheckLastValidationFlag(false);   
+			$url = Mage::getBaseUrl() . $limitTimer;
+			Mage::app()->getFrontController()->getResponse()->setRedirect($url);
+        } else {
             $session->setCheckLastValidationFlag(true);
         }
     }
     
     public function customerRevalidate($observer){    
+    
+   		//$test = Mage::getStoreConfig('config/rushcheckout_timer/limit_timer');
+    
         $session = $observer->getCustomerSession();    
         if ( $session->isLoggedIn() && !!$session->getData('CUSTOMER_LAST_VALIDATION_TIME') ){
             $moduleArrary = array(
@@ -46,6 +51,7 @@ class Harapartners_Rushcheckout_Model_Observer {
                 'checkout' => array(
                     'index',
                     'multishipping',
+                    'cart',
                     'onepage'
                 ),
                 'hpcheckout' => array(
