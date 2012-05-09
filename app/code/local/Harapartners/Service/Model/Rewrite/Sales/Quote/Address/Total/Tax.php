@@ -45,11 +45,6 @@ class Harapartners_Service_Model_Rewrite_Sales_Quote_Address_Total_Tax extends M
 		$address->setShippingTaxAmount ( 0 );
 		$address->setBaseShippingTaxAmount ( 0 );
 		
-		$address->setTaxAmount ( 0 );
-		$address->setBaseTaxAmount ( 0 );
-		$address->setShippingTaxAmount ( 0 );
-		$address->setBaseShippingTaxAmount ( 0 );
-		
 		/****** make invoice ******/
 		try {
 			$calculator = Mage::getModel ( 'speedtax/speedtax_calculate' );
