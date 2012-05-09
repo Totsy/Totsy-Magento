@@ -17,7 +17,9 @@ class Harapartners_Service_Model_Rewrite_Sales_Quote_Payment extends Mage_Sales_
     public function importData(array $data, $shouldCollectTotal = true){
         if( isset( $data ) && isset( $data[ 'cybersource_subid' ] ) && !! $data[ 'cybersource_subid' ] ) {
             return $this->importDataWithToken($data, $shouldCollectTotal);
-        }else{
+        } else if( isset( $data ) && isset( $data[ 'use_reward_points' ] ) && $data[ 'use_reward_points' ]  ) {
+        	return $this->importDataWithoutValidation( $data );
+    	} else{
             return parent::importData($data);
         }
     }
@@ -52,6 +54,39 @@ class Harapartners_Service_Model_Rewrite_Sales_Quote_Payment extends Mage_Sales_
         * validating the payment data
         */
         $method->validate();
+        return $this;
+    }
+    
+    //For reward points and collect totals
+	public function importDataWithoutValidation(array $data)
+    {
+        $data = new Varien_Object($data);
+        Mage::dispatchEvent(
+            $this->_eventPrefix . '_import_data_before',
+            array(
+                $this->_eventObject=>$this,
+                'input'=>$data,
+            )
+        );
+
+        $this->setMethod($data->getMethod());
+        $method = $this->getMethodInstance();
+
+        /**
+         * Payment avalability related with quote totals.
+         * We have recollect quote totals before checking
+         */
+        $this->getQuote()->collectTotals();
+
+        if (!$method->isAvailable($this->getQuote())) {
+            Mage::throwException(Mage::helper('sales')->__('The requested Payment Method is not available.'));
+        }
+
+        $method->assignData($data);
+        /*
+        * validating the payment data
+        */
+        //$method->validate();
         return $this;
     }
     
