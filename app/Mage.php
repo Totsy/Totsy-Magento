@@ -579,11 +579,11 @@ final class Mage
             self::$_events = new Varien_Event_Collection();
             self::$_config = new Mage_Core_Model_Config($options);
             
-            //Harapartners, Jun, START: 'mobile' becomes a separate store view (instead of a design package) to avoid cache contamination
-        	if ( preg_match( '/iPhone|Android|BlackBerry|iPad/' ,$_SERVER['HTTP_USER_AGENT'] ) ) {
-				$correctStoreId = self::TOTSY_MOBILE_STORE_ID;
+            //Harapartners, Jun, START: Force mobile agent into mobile store, this is important to avoid caching conflict, and also important for store segregation
+        	if (isset($_SERVER['HTTP_USER_AGENT']) && preg_match('/iPhone|Android|BlackBerry/', $_SERVER['HTTP_USER_AGENT'])) {
+				$code = 'mobile';
 			}
-			//Harapartners, Jun, END.
+			//Harapartners, Jun, END
 
             Varien_Profiler::start('self::app::init');
             self::$_app->init($code, $type, $options);
@@ -641,7 +641,7 @@ final class Mage
             self::$_config = new Mage_Core_Model_Config($options);
             
             //Harapartners, Jun, START: Force mobile agent into mobile store, this is important to avoid caching conflict, and also important for store segregation
-        	if (preg_match('/iPhone|Android|BlackBerry/', $_SERVER['HTTP_USER_AGENT'])) {
+        	if (isset($_SERVER['HTTP_USER_AGENT']) && preg_match('/iPhone|Android|BlackBerry/', $_SERVER['HTTP_USER_AGENT'])) {
 				$code = 'mobile';
 			}
 			//Harapartners, Jun, END
