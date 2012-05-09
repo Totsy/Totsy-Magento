@@ -46,7 +46,7 @@ class Enterprise_WebsiteRestriction_Model_Observer
                 'controller' => $controller, 'result' => $dispatchResult
             ));
             //Harapartners, Yang/Edward/Andu adding exempted modules
-            if( preg_match( "/\/(invitation|invite|faq|privacy|rss|affiliates|careers|aboutus|meet-the-moms|press|video-testimonials|being-green|totsy-blog|contact|inchoo_facebook|resetpassword|resetpasswordpost|facebook|inchoo|mobileapi|affiliate|terms|return-policy|privacy-policy|terms-of-use)\//i", Mage::app()->getRequest()->getRequestUri() ) ){
+            if( preg_match( "/\/(invitation|invite|pages/faq|pages/privacy|rss|affiliates|pages/careers|pages/aboutus|pages/meet-the-moms|pages/press|pages/video-testimonials|pages/being-green|totsy-blog|pages/contact|inchoo_facebook|resetpassword|resetpasswordpost|facebook|inchoo|mobileapi|affiliate|pages/terms|pages/return-policy|pages/privacy-policy|pages/terms-of-use)\//i", Mage::app()->getRequest()->getRequestUri() ) ){
                 return;
             }
             //Harapartners, Yang/Jun no restrictions for Affiliate Register Controller

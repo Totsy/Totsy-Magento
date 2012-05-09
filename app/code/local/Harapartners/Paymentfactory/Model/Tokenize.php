@@ -9,6 +9,42 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Mage_Cybersource_Model_
     protected $_infoBlockType = 'paymentfactory/info';
     protected $_payment = null;
     protected $_canRefundInvoicePartial = true;
+    
+    //HP, Payment failed emails (to customer and admin)
+    protected $_emailTemplate;
+    protected $_sender;
+    protected $_adminReceivers;
+    
+	public function __construct(){
+		$this->_prepareEmail();
+		return parent::__construct();
+    }
+    
+    protected function _prepareEmail(){
+    	//HP, load config values
+    	$this->_emailTemplate = Mage::getStoreConfig('checkout/payment_failed/template');
+    	$this->_sender = Mage::getStoreConfig('checkout/payment_failed/identity');
+    	
+    	//Different code should go to different admin, always copy to master admin
+    	$receiverCode = Mage::getStoreConfig('checkout/payment_failed/reciever');
+		$receiverEmail = 'trans_email/ident_'.$receiverCode.'/email';
+		$this->_adminReceivers = array(Mage::getStoreConfig($receiverEmail), Mage::getStoreConfig('checkout/payment_failed/copy_to'));
+		return;
+    }
+    
+    protected function _sendPaymentFailedEmail($payment){
+    	
+        	$objectsArray = array('order' => $payment->getOrder());	
+        	//To customer and also admin
+           	Mage::getModel('core/email_template')->setTemplateSubject('Payment Failed')->sendTransactional(
+					$this->_emailTemplate, 
+					$this->_sender, 
+					array_merge(array($payment->getOrder()->getCustomerEmail()), $this->_adminReceivers), 
+					$payment->getOrder()->getCustomer()->getFirstname(), 
+					$objectsArray, 
+					$this->getStore()
+			);
+    }
 
     
     // =============================================== //
@@ -48,25 +84,18 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Mage_Cybersource_Model_
         $profile = Mage::getModel('paymentfactory/profile');
          if (!!$payment->getData('cybersource_subid')){
              //decrypt for the backend
-
-         $subscriptionId = $this->_decryptSubscriptionId($payment->getData('cybersource_subid'));
-         if(!!$subscriptionId){
-             
-            $payment->setData('cybersource_subid', $subscriptionId);
-        
-         }
-        
-             
-             
-             
+	         $subscriptionId = $this->_decryptSubscriptionId($payment->getData('cybersource_subid'));
+	         if(!!$subscriptionId){
+	            $payment->setData('cybersource_subid', $subscriptionId);
+	         }
              $profile->loadBySubscriptionId($payment->getData('cybersource_subid'));
          }elseif (!!$payment->getData('cc_number')){
              $profile->loadByCcNumberWithId($payment->getData('cc_number').$customerId.$payment->getCcExpYear().$payment->getCcExpMonth());
          }
          
         if(!!$profile && !!$profile->getId() 
-                // $profile->getExpireYear() === $payment->getCcExpYear() 
-            //     $profile->getExpireMonth() === $payment->getCcExpMonth()
+            // $profile->getExpireYear() === $payment->getCcExpYear() 
+            // $profile->getExpireMonth() === $payment->getCcExpMonth()
         ){
             $profile->setIsDefault(0);
             $profile->save();
@@ -158,7 +187,13 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Mage_Cybersource_Model_
             } else {
                  $error = Mage::helper('paymentfactory')->__('There is an error in processing the payment(create). Please try again or contact us.');
             }
+
         } catch (Exception $e) {
+        	
+      		$order = $payment->getOrder();
+        	$order->setStatus(Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_PAYMENT_FAILED);
+        	$this->_sendPaymentFailedEmail($payment);
+        	        	        	
            Mage::throwException(
                 Mage::helper('paymentfactory')->__('Gateway request error: %s', $e->getMessage())
             );
@@ -191,14 +226,26 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Mage_Cybersource_Model_
 
     public function authorize(Varien_Object $payment, $amount){
         $this->_payment = $payment;
-        parent::authorize($payment, $amount);
+        try{
+        	parent::authorize($payment, $amount);      	
+        	
+        }catch (Exception $e){
+        	
+        	$order = $payment->getOrder();
+        	$order->setStatus(Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_PAYMENT_FAILED);
+        	$this->_sendPaymentFailedEmail($payment);
+        	
+			Mage::throwException(
+                Mage::helper('cybersource')->__('Gateway request error: %s', $e->getMessage())
+            );
+        }
+        
         $payment->setCybersourceSubid($payment->getCybersourceSubid());
         $profile = Mage::getModel('paymentfactory/profile')->loadBySubscriptionId($payment->getCybersourceSubid());
         $payment->setCcLast4($profile->getData('last4no'));
         $payment->setCcType($profile->getData('card_type'));
         $payment->setCcExpYear($profile->getData('expire_year'));
         $payment->setCcExpMonth($profile->getData('expire_month'));
-        
         $this->_payment = NULL; 
         return $this;
     }
@@ -218,7 +265,19 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Mage_Cybersource_Model_
 
     public function capture(Varien_Object $payment, $amount){
         $this->_payment = $payment;
-        parent::capture($payment, $amount);
+        try {
+        	parent::capture($payment, $amount);
+        }catch (Exception $e){
+        	
+        	$order = $payment->getOrder();
+        	$order->setStatus(Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_PAYMENT_FAILED)->save();
+        	$this->_sendPaymentFailedEmail($payment);
+        	
+			Mage::throwException(
+                Mage::helper('cybersource')->__('Gateway request error: %s', $e->getMessage())
+            );
+        }
+        
         $payment->setCybersourceSubid($payment->getCybersourceSubid()); //Harapartners
         $profile = Mage::getModel('paymentfactory/profile')->loadBySubscriptionId($payment->getCybersourceSubid());
         $payment->setCcLast4($profile->getData('last4no'));
@@ -413,6 +472,11 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Mage_Cybersource_Model_
                  $error = Mage::helper('paymentfactory')->__('There is an gateway error in processing the payment(create). Please try again or contact us.');
             }
         } catch (Exception $e) {
+        	
+        	$order = $payment->getOrder();
+        	$order->setStatus(Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_PAYMENT_FAILED);
+        	$this->_sendPaymentFailedEmail($payment);
+        	
            Mage::throwException(
                 Mage::helper('paymentfactory')->__('Gateway request error: %s', $e->getMessage())
             );
