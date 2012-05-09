@@ -205,6 +205,7 @@ class Harapartners_Categoryevent_Helper_Memcache extends Mage_Core_Helper_Abstra
             );
             $productInfoArray = $productCollection->load()->toArray();
             
+            $productId = 0;
             foreach($liveCategoryInfoArray as &$liveCategoryInfo){
                 $liveCategoryInfo['product_info_array'] = array();
                 foreach ($categoryProductRelations as $relation){
@@ -218,6 +219,8 @@ class Harapartners_Categoryevent_Helper_Memcache extends Mage_Core_Helper_Abstra
                 }
             }
             
+            $dummyproduct = Mage::getModel('catalog/product')->load($productId);
+            $imageHelper = Mage::Helper('catalog/image')->init($dummyproduct, 'small_image');
             // ---------- //
             // Assemble data here
             // Note pass array by reference!
@@ -234,13 +237,12 @@ class Harapartners_Categoryevent_Helper_Memcache extends Mage_Core_Helper_Abstra
                     foreach($productInfoArray as $productId => $productInfo){
                         if($containerProductId == $productId){
                             $containerProductInfo = $productInfo;
-                            if(isset($productInfo['small_image'])){
-                                //$containerProductInfo['small_image'] = $mediaBaseDir . str_ireplace('/', DS, $productInfo['small_image']);    //it call from file system like F:\www\totsy\media\catalog\product\n\e\newborn_tiered_dots_top_2pc_diaper_set.jpg
-                                if ($productInfo['small_image'] != 'no_selection'){
-                                    $containerProductInfo['small_image'] = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA).'catalog/product'.$productInfo['small_image'];
-                                }else {
-                                    $containerProductInfo['small_image'] = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA).'catalog/product/placeholder/default/small_image.jpg';
-                                }
+                            if((isset($productInfo['small_image']))&&($productInfo['small_image'] != 'no_selection')){
+                            //$containerProductInfo['small_image'] = $mediaBaseDir . str_ireplace('/', DS, $productInfo['small_image']);    //it call from file system like F:\www\totsy\media\catalog\product\n\e\newborn_tiered_dots_top_2pc_diaper_set.jpg
+                                $containerProductInfo['small_image'] = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA).'catalog/product'.$productInfo['small_image'];
+                            }else {
+                            	$placeHolder = $imageHelper->getPlaceholder();	
+                                $containerProductInfo['small_image'] = Mage::getDesign()->getSkinUrl($placeHolder);
                             }
                             $categoryHasProduct = true;
                             $productFound = true;
