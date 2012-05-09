@@ -17,7 +17,7 @@
 class Harapartners_Rushcheckout_Model_Observer {
     
     const CUSTOMER_VALIDATION_CHECK_URL = 'customer/revalidate/index';
-    
+    const CUSTOMER_REVALIDATE_TIMER_LIMIT = 3600;
     /**
      * Double validation check HP
      */
@@ -25,9 +25,8 @@ class Harapartners_Rushcheckout_Model_Observer {
         $session->setData('revalidate_before_auth_url', Mage::helper('core/url')->getCurrentUrl());
         $lastValidationTime = $session->getData('CUSTOMER_LAST_VALIDATION_TIME');
         $timeDiff = strtotime(now()) - strtotime($lastValidationTime);
-        $limitTimer = Mage::getStoreConfig('config/rushcheckout_timer/limit_timer');
         
-        if ( $timeDiff >= $limitTimer ) {
+        if ( $timeDiff >= self::CUSTOMER_REVALIDATE_TIMER_LIMIT ) {
             $session->setCheckLastValidationFlag(false);   
 			$url = Mage::getBaseUrl() . self::CUSTOMER_VALIDATION_CHECK_URL;
 			Mage::app()->getFrontController()->getResponse()->setRedirect($url);
