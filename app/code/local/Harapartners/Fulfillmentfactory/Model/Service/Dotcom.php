@@ -437,16 +437,17 @@ XML;
                 }
             }
             catch(Exception $e) {
-                $order->setStatus(Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_PAYMENT_FAILED)->save();    //payment failed
+                //$order->setStatus(Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_PAYMENT_FAILED)->save();    //payment failed
                 $message = 'Order ' . $order->getIncrementId() . ' could not place the payment. ' . $e->getMessage();
                 Mage::helper('fulfillmentfactory/log')->errorLogWithOrder($message, $order->getId());
                 
+                /*
                 $customer = Mage::getModel('customer/customer')->load($order->getCustomerId());
                 
                 //send payment failed email
                 Mage::getModel('core/email_template')->setTemplateSubject('Payment Failed')
                                                      ->sendTransactional(6, 'support@totsy.com', $customer->getEmail(), $customer->getFirstname());
-                
+                */
                 //throw new Exception($message);
                 continue;
             }
