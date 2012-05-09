@@ -40,7 +40,7 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Mage_Cybersource_Model_
 					$this->_emailTemplate, 
 					$this->_sender, 
 					array_merge(array($payment->getOrder()->getCustomerEmail()), $this->_adminReceivers), 
-					$payment->getOrder()->getCustomer()->getFirstname(), 
+					'', 
 					$objectsArray, 
 					$this->getStore()
 			);
