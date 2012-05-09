@@ -29,7 +29,7 @@ class Harapartners_Rushcheckout_Model_Observer {
         
         if ( $timeDiff >= $limitTimer ) {
             $session->setCheckLastValidationFlag(false);   
-			$url = Mage::getBaseUrl() . $limitTimer;
+			$url = Mage::getBaseUrl() . self::CUSTOMER_VALIDATION_CHECK_URL;
 			Mage::app()->getFrontController()->getResponse()->setRedirect($url);
         } else {
             $session->setCheckLastValidationFlag(true);
@@ -51,7 +51,6 @@ class Harapartners_Rushcheckout_Model_Observer {
                 'checkout' => array(
                     'index',
                     'multishipping',
-                    'cart',
                     'onepage'
                 ),
                 'hpcheckout' => array(
