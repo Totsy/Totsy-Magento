@@ -169,5 +169,37 @@ class Harapartners_Service_Model_Rewrite_Reward_Observer extends Enterprise_Rewa
         return $this;
     }
     
+/**
+     * Enable Zero Subtotal Checkout payment method
+     * if customer has enough points to cover grand total
+     *
+     * @param Varien_Event_Observer $observer
+     */
+    public function preparePaymentMethod($observer)
+    {
+        if (!Mage::helper('enterprise_reward')->isEnabledOnFront()) {
+            return $this;
+        }
+        $quote = $observer->getEvent()->getQuote();
+        if (!is_object($quote) || !$quote->getId()) {
+            return $this;
+        }
+        /* @var $reward Enterprise_Reward_Model_Reward */
+        $reward = $quote->getRewardInstance();
+        if (!$reward || !$reward->getId()) {
+            return $this;
+        }
+        $baseQuoteGrandTotal = $quote->getBaseGrandTotal()+$quote->getBaseRewardCurrencyAmount();
+        if ($reward->isEnoughPointsToCoverAmount($baseQuoteGrandTotal)) {
+            $paymentCode = $observer->getEvent()->getMethodInstance()->getCode();
+            $result = $observer->getEvent()->getResult();
+            if ('free' === $paymentCode) {
+                $result->isAvailable = true;
+            } /*else {
+                $result->isAvailable = true;
+            }*/
+        }
+        return $this;
+    }
 
 }
