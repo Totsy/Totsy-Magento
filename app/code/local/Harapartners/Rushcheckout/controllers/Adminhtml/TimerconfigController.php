@@ -11,13 +11,9 @@ class Harapartners_Rushcheckout_Adminhtml_TimerconfigController extends Mage_Adm
     public function saveAction(){
         $config = Mage::getModel('core/config');
         $configValue = $this->getRequest()->getPost('timer_config');
-        
-//        foreach($timerConfig as $configKey => $configValue){
-//            $config->saveConfig('config/rushcheckout_timer/'.$configKey, $configValue);
-//        }
-//        for multiple input -- end
 
         $configKey = 'limit_timer';
+        
         $config->saveConfig('config/rushcheckout_timer/'.$configKey, $configValue);
         
         Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('rushcheckout')->__('Configuration saved.'));
