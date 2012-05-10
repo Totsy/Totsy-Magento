@@ -401,9 +401,8 @@ XML;
         
         foreach($orders as $order) {
             try {
-                if($capturePayment) {
+                if($capturePayment && ($order->getStatus() != Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_PAYMENT_FAILED)) {
                     $invoices = Mage::getResourceModel('sales/order_invoice_collection')->setOrderFilter($order->getId());
-                    
                     //only capture once
                     if(empty($invoices) || (count($invoices) <= 0)) {
                         //capture payment
@@ -437,7 +436,7 @@ XML;
                 }
             }
             catch(Exception $e) {
-                //$order->setStatus(Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_PAYMENT_FAILED)->save();    //payment failed
+                $order->setStatus(Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_PAYMENT_FAILED)->save();    //payment failed
                 $message = 'Order ' . $order->getIncrementId() . ' could not place the payment. ' . $e->getMessage();
                 Mage::helper('fulfillmentfactory/log')->errorLogWithOrder($message, $order->getId());
                 
