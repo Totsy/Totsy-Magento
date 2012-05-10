@@ -100,7 +100,7 @@
 		    <?php if ($i++%$_columnCount==0): ?>
 		    <ul class="products-grid">
 		    <?php endif ?>
-		        <li class="item<?php if(($i-1)%$_columnCount==0): ?> first<?php elseif($i%$_columnCount==0): ?> last <?php endif; ?><?php echo ' '.str_replace(',',' ',$_product->getDepartments()) ?>" department="<?php echo str_replace(',',' ',$_product->getDepartments()) ?>">
+		        <li class="status status_sold_out item<?php if(($i-1)%$_columnCount==0): ?> first<?php elseif($i%$_columnCount==0): ?> last <?php endif; ?><?php echo ' '.str_replace(',',' ',$_product->getDepartments()) ?>" department="<?php echo str_replace(',',' ',$_product->getDepartments()) ?>">
 		            <img id="out-of-stock" src="<?php echo $this->getSkinUrl('images/soldout.png');?>"/>
 		        	<ul class="echoShare" 
 					data-productname="<?php echo $_product->getName();?>"  
