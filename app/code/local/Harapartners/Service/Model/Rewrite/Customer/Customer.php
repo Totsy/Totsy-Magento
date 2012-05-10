@@ -45,11 +45,12 @@ class Harapartners_Service_Model_Rewrite_Customer_Customer extends Mage_Customer
                 return false;
             }
         }else{
-            //Regular magento customer
-            return parent::validatePassword($password);
+            // Regular magento customer
+            $storedHash = $this->getPasswordHash();
+            return ($storedHash == crypt($password, $storedHash));
         }
     }
-    
+
     public function setPassword($password){
         parent::setPassword($password);
         if(!!$this->getData('legacy_customer')){
@@ -58,26 +59,6 @@ class Harapartners_Service_Model_Rewrite_Customer_Customer extends Mage_Customer
         }
         return $this;
     }
-    
-//    //Harapartners, Jun, Legacy customer will be come concurrent after password change
-//    public function changePassword($newPassword) {
-//        parent::changePassword($newPassword);
-//        if(!!$this->getData('legacy_customer')){
-//            $this->setData('legacy_customer', 0);
-//            $this->_getResource()->saveAttribute($this, 'legacy_customer');
-//        }
-//        return $this;
-//    }
-//    
-//    //Harapartners, Jun, ForgotPassWord logic does NOT route via changePassword($newPassword)
-//    public function changeResetPasswordLinkToken($newResetPasswordLinkToken) {
-//        parent::changeResetPasswordLinkToken($newResetPasswordLinkToken);
-//        if(!!$this->getData('legacy_customer')){
-//            $this->setData('legacy_customer', 0);
-//            $this->_getResource()->saveAttribute($this, 'legacy_customer');
-//        }
-//        return $this;
-//    }
 
     public function authenticate($login, $password, $reValidate = false) {
         $login = $this->_trimGmail($login, false);    //Harapartners, trim gmail alias
@@ -184,7 +165,7 @@ class Harapartners_Service_Model_Rewrite_Customer_Customer extends Mage_Customer
         $this->getGroupId();
         return $this;
     }
-    
+
     /**
      * Haraparnters:
      * trim gmail address, to restore alias gmail address
@@ -232,4 +213,19 @@ class Harapartners_Service_Model_Rewrite_Customer_Customer extends Mage_Customer
         return $trimmedGmail;
     }
 
+    /**
+     * Hash customer password, using bcrypt.
+     *
+     * @param   string $password
+     * @param   int    $salt
+     * @return  string
+     */
+    public function hashPassword($password, $salt = null)
+    {
+        // salt for bcrypt needs to be 22 base64 characters
+        // (but just [./0-9A-Za-z]), see http://php.net/crypt
+        $salt = substr(str_replace('+', '.', base64_encode(sha1(rand(), true))), 0, 22);
+
+        return crypt($password, '$2a$12$' . $salt);
+    }
 }

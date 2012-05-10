@@ -55,11 +55,14 @@ class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
         try {
             //fetch inventory data from DOTcom
             $inventoryList = $this->updateInventory();
+            
             //update stock info
             $service = Mage::getModel('fulfillmentfactory/service_fulfillment');
             $processingOrderCollection = $service->stockUpdate($inventoryList);
-            //update order's info
-            $service->updateOrderFulfillStatus($processingOrderCollection);
+            
+            //update order's info, disable for not triggering split orders.
+            //$service->updateOrderFulfillStatus($processingOrderCollection);
+            
             //submit orders to fulfill
             $this->submitOrderToFulfillByQueue();
         }
@@ -355,11 +358,32 @@ XML;
     public function submitOrderToFulfillByQueue() {
         $itemQueueCollection = Mage::getModel('fulfillmentfactory/itemqueue')->getCollection()->loadReadyForSubmitItemQueue();
         
+        $partialReadyOrderIds = array();
         $orderArray = array();
         
         foreach($itemQueueCollection as $itemqueue) {
             $order = Mage::getModel('sales/order')->load($itemqueue->getOrderId());
-            Mage::helper('fulfillmentfactory')->_pushUniqueOrderIntoArray($orderArray, $order);
+            $orderId = $order->getId();
+            
+            //check if this order has all items complete
+            if(isset($partialReadyOrderIds[$orderId])) {
+            	continue;
+            }
+            
+            $isReady = true;
+            $itemQueueList = Mage::getModel('fulfillmentfactory/itemqueue')->getCollection()->loadByOrderId($orderId);
+            foreach ($itemQueueList as $itemqueue) {
+            	if($itemqueue->getStatus() != Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_READY) {
+            		$partialReadyOrderIds[$orderId] = 1;
+            		$isReady = false;
+            		break;
+            	}
+            }
+            
+            //only send orders with full complete items
+            if($isReady) {
+            	Mage::helper('fulfillmentfactory')->_pushUniqueOrderIntoArray($orderArray, $order);
+            }
         }
         
         return $this->submitOrdersToFulfill($orderArray, true);
@@ -413,16 +437,17 @@ XML;
                 }
             }
             catch(Exception $e) {
-                $order->setStatus(Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_PAYMENT_FAILED)->save();    //payment failed
+                //$order->setStatus(Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_PAYMENT_FAILED)->save();    //payment failed
                 $message = 'Order ' . $order->getIncrementId() . ' could not place the payment. ' . $e->getMessage();
                 Mage::helper('fulfillmentfactory/log')->errorLogWithOrder($message, $order->getId());
                 
+                /*
                 $customer = Mage::getModel('customer/customer')->load($order->getCustomerId());
                 
                 //send payment failed email
                 Mage::getModel('core/email_template')->setTemplateSubject('Payment Failed')
                                                      ->sendTransactional(6, 'support@totsy.com', $customer->getEmail(), $customer->getFirstname());
-                
+                */
                 //throw new Exception($message);
                 continue;
             }
