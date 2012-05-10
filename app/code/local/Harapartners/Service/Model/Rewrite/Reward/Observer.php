@@ -142,11 +142,19 @@ class Harapartners_Service_Model_Rewrite_Reward_Observer extends Enterprise_Rewa
             if ($order->getBaseTotalDue() > 0) {
                 return $this;
             }
+            $orders = Mage::getResourceModel('sales/order_collection')
+                ->addFieldToSelect('*')
+                ->addFieldToFilter('customer_id', $order->getCustomerId());
+            if($orders->getSize() > 1) {
+                return $this;
+            }
+            
             $invitation = Mage::getModel('enterprise_invitation/invitation')
                 ->load($order->getCustomerId(), 'referral_id');
             if (!$invitation->getId() || !$invitation->getCustomerId()) {
                 return $this;
             }
+            
             $reward = Mage::getModel('enterprise_reward/reward')
                 ->setActionEntity($invitation)
                 ->setCustomerId($invitation->getCustomerId())
