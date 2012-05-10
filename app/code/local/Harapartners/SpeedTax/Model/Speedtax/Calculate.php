@@ -89,7 +89,7 @@ class Harapartners_SpeedTax_Model_Speedtax_Calculate extends Harapartners_SpeedT
         
         //One invoid per order, full refund only!
         if(!$this->_result){
-            $this->_result = $this->_getSpeedtax()->VoidInvoice($mageCreditmemo->getOrderIncrementId());
+            $this->_result = $this->_getSpeedtax()->VoidInvoice($mageCreditmemo->getOrder()->getIncrementId());
         }
         return $this;
     }

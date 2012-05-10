@@ -59,6 +59,7 @@ class Mage_Adminhtml_Block_Catalog_Product_Grid extends Mage_Adminhtml_Block_Wid
             ->addAttributeToSelect('sku')
             ->addAttributeToSelect('name')
             ->addAttributeToSelect('image') //Harapartners, Jun: include product base image in the grid
+            ->addAttributeToSelect('vendor_style') //Harapartners, Li: include vendor style in the grid
             ->addAttributeToSelect('attribute_set_id')
             ->addAttributeToSelect('type_id');
 
@@ -131,6 +132,13 @@ class Mage_Adminhtml_Block_Catalog_Product_Grid extends Mage_Adminhtml_Block_Wid
             'sortable'  => false,
             'width'     => '120px',
             'renderer'    => 'Harapartners_Service_Block_Adminhtml_Widget_Grid_Column_Renderer_Product_Image'
+        ));
+        
+        //Harapartners, Li: include vendor style in the grid
+        $this->addColumn('vendor_style', array(
+            'header'    => Mage::helper('catalog')->__('Vendor Style'),
+        	'width'     => '100px',
+        	'index' => 'vendor_style',
         ));
 
         $store = $this->_getStore();
