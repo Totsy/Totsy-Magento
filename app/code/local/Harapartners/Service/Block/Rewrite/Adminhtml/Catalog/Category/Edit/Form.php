@@ -49,7 +49,7 @@ class Harapartners_Service_Block_Rewrite_Adminhtml_Catalog_Category_Edit_Form ex
                 $this->getLayout()->createBlock('adminhtml/widget_button')
                     ->setData(array(
                         'label'     => Mage::helper('catalog')->__('Preview Event'),
-                        'onclick'   => "setLocation('" . $this->getUrl('*/*/preview', array('_current' => true, 'store' => $this->_getAdminStore())) . "')",
+                        'onclick'   => "window.open('" . $this->getUrl('*/*/preview', array('_current' => true, 'store' => $this->_getAdminStore())) . "')",
                         'class' => 'preview'
                     ))
             );            
