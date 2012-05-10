@@ -57,8 +57,8 @@ class Harapartners_SpeedTax_Model_Speedtax_Calculate extends Harapartners_SpeedT
         if(!$this->_result){
             $this->_result = $this->_getSpeedtax()->CalculateInvoice($this->_invoice)->CalculateInvoiceResult;
             $this->_result->_resultEvent = "Calculate Invoice"; //"Calculate Invoice" will not be logged
-            $this->_updataMageQuoteItems($mageQuoteAddress);
         }
+        $this->_updataMageQuoteItems($mageQuoteAddress);
         return $this;
     }
     
@@ -178,7 +178,7 @@ class Harapartners_SpeedTax_Model_Speedtax_Calculate extends Harapartners_SpeedT
             
             //Default tax class
             $sptxLineItem->productCode = $mageItem->getSku();
-            $sptxLineItem->customReference = $mageItem->getSku();
+            $sptxLineItem->customReference = $mageItem->getId();
             $sptxLineItem->quantity = $mageItem->getQty ();
             
             //Price of row total, not unit price

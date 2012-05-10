@@ -187,7 +187,7 @@ class Harapartners_HpCheckout_Model_Checkout
         return array( 'status' => 0, 'message' => '' );
     }
     
-    public function savePayment( $data )
+    public function savePayment( $data, $shouldCollectTotal = true, $withValidate = true )
     {
         if (empty($data)) {
             return array('status' => -1, 'message' => $this->_helper->__('Invalid data.'));
@@ -205,7 +205,7 @@ class Harapartners_HpCheckout_Model_Checkout
         
         
         $payment = $quote->getPayment();
-        $payment->importData($data);
+        $payment->importData($data, $shouldCollectTotal, $withValidate);
 
 //        $quote->save();
 
