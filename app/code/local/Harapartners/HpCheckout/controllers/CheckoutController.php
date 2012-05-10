@@ -78,11 +78,9 @@ class Harapartners_HpCheckout_CheckoutController extends Mage_Checkout_Controlle
                 $result['message'] = $message;
             }
         } catch (Mage_Core_Exception $e) {
-            Mage::helper('checkout')->sendPaymentFailedEmail($this->_getHpCheckout()->getQuote(), $e->getMessage());
             $result['status'] = 1;
             $result['message'] = $e->getMessage();
         } catch (Exception $e) {
-            Mage::helper('checkout')->sendPaymentFailedEmail($this->_getHpCheckout()->getQuote(), $e->getMessage());
             $result['status'] = 1;
             $result['message'] = $this->__('There was an error processing your order. Please contact us or try again later.');
         }
