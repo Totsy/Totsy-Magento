@@ -14,10 +14,10 @@
 
 class Harapartners_Service_Model_Rewrite_Sales_Quote_Payment extends Mage_Sales_Model_Quote_Payment {
     
-    public function importData(array $data, $shouldCollectTotal = true){
+    public function importData(array $data, $shouldCollectTotal = true, $withValidate = true ){
         if( isset( $data ) && isset( $data[ 'cybersource_subid' ] ) && !! $data[ 'cybersource_subid' ] ) {
             return $this->importDataWithToken($data, $shouldCollectTotal);
-        } else if( isset( $data ) && isset( $data[ 'use_reward_points' ] ) && $data[ 'use_reward_points' ]  ) {
+        } else if( ! $withValidate ) {
         	return $this->importDataWithoutValidation( $data );
     	} else{
             return parent::importData($data);
