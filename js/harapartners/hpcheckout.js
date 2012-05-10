@@ -186,6 +186,9 @@ HpCheckout.prototype = {
 			return;
 		}
 		var checkoutObject = this;
+		if( isEnoughPointsToCoverAmount ) {
+			jQuery( '#hpcheckout-payment-select' ).val('free');
+		}
 		var postData = this.getFormData();
 		postData += '&updatePayment=true';
 		this.throbberOn();
