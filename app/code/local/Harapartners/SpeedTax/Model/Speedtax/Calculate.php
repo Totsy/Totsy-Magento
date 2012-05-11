@@ -75,9 +75,8 @@ class Harapartners_SpeedTax_Model_Speedtax_Calculate extends Harapartners_SpeedT
             return null;
         }
         
-        if(!$this->_result){
-            $this->_result = $this->_getSpeedtax()->PostInvoice($this->_invoice)->PostInvoiceResult;
-        }
+		//No caching allowed for order invoice
+        $this->_result = $this->_getSpeedtax()->PostInvoice($this->_invoice)->PostInvoiceResult;
         return $this;
     }
     
@@ -132,7 +131,7 @@ class Harapartners_SpeedTax_Model_Speedtax_Calculate extends Harapartners_SpeedT
             //ProductCode should be SKU, and the Merchant need to setup the default tax class
             $sptxLineItem->productCode = $mageItem->getSku();
             
-            $sptxLineItem->customReference = $mageItem->getSku();
+            $sptxLineItem->customReference = $mageItem->getId();
             $sptxLineItem->quantity = $mageItem->getQty ();
             
             //Price of row total, not unit price
