@@ -98,8 +98,6 @@ class Harapartners_Paymentfactory_Block_Payment_Form extends Mage_Payment_Block_
                  return 'Visa';
              case 'MC':
                  return 'MasterCard';
-             case 'DI':
-                 return 'Discover';
              default:
                  return $shortCardType;
          }

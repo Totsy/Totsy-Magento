@@ -299,6 +299,22 @@ class Harapartners_Service_Model_Rewrite_Catalog_Convert_Adapter_Product extends
                 }
             }
         }
+        
+         
+        //Hara Partners, Richu media_gallery Start
+        if (!empty($importData['media_gallery'])) {
+        	$mediaGalleryImages = explode(self::DEFAULT_FIELD_DELIMITER, $importData['media_gallery']);
+        	foreach($mediaGalleryImages as $imageFile){
+        		$imageFile = trim($imageFile);
+        		$file = Mage::getBaseDir('media') . DS . 'import' . $imageFile;
+        		if(!empty($file) && file_exists($file)){
+        			$mediaGalleryBackendModel->addImage($product,$file);
+        		}
+        	}
+        }
+        //Hara Partners, Richu media_gallery End
+     
+     
 
         $product->setIsMassupdate(true);
         $product->setExcludeUrlRewrite(true);

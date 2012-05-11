@@ -49,6 +49,7 @@ class Harapartners_Rushcheckout_Model_Observer {
                 ),
                 'checkout' => array(
                     'index',
+                    'cart',
                     'multishipping',
                     'onepage'
                 ),

@@ -137,7 +137,7 @@
             <marketing>
                 <children>
                     <customertracking translate="title" module="customertracking">
-                        <title>Affiliate Customer Tracking</title>
+                        <title>Affiliate Customer Registrations</title>
                         <sort_order>20</sort_order>
                         <action>adminhtml_customertracking/adminhtml_record</action>
                     </customertracking>
@@ -151,7 +151,7 @@
                         <marketing>
                             <children>
                                 <customertracking translate="title" module="customertracking">
-                                    <title>Affiliate Customer Tracking</title>
+                                    <title>Affiliate Customer Registrations</title>
                                     <sort_order>20</sort_order>
                                 </customertracking>
                             </children>

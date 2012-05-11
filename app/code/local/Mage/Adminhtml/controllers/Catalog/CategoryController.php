@@ -524,10 +524,11 @@ class Mage_Adminhtml_Catalog_CategoryController extends Mage_Adminhtml_Controlle
     public function previewAction(){
         $postInfo = $this->getRequest()->getParams();
         $eventId = $postInfo['id'];
-        $cookieName = Mage::helper('service/rewrite_catalog_category')->getPreviewCookieName();
-        $cookieValue = Mage::helper('service/rewrite_catalog_category')->getPreviewCookieEncryptedCode();
-        Mage::getModel('core/cookie')->set($cookieName, $cookieValue);
-        $this->_redirect('catalog/category/view/id/' . $eventId);
+        Mage::getSingleton('core/session')->setData('secret_key_salt', Mage::getSingleton('core/session')->getFormKey());
+        Mage::getModel('core/cookie')->set('secret_key_salt', Mage::getSingleton('core/session')->getFormKey());
+        $this->_redirect('catalog/category/preview/id/' . $eventId, 
+        		array('secret_key'=>Mage::helper('catalog/category')->getSecretKey($this->getRequest(), 'category', 'preview'))
+        );
     }
 
     /**

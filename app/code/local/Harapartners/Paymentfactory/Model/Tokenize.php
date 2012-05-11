@@ -386,8 +386,6 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Mage_Cybersource_Model_
                  return '003';
              case 'MC':
                  return '002';
-             case 'DI':
-                 return '004';
              default:
                  return 000;
          }

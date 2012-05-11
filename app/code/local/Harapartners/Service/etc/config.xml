@@ -8,7 +8,7 @@
  * If you did not receive a copy of the license and are unable to
  * obtain it through the world-wide-web, please send an email
  * to eula@harapartners.com so we can send you a copy immediately.
- * 
+ *
  -->
 <config>
     <modules>
@@ -38,7 +38,7 @@
             <adminhtml>
                 <rewrite>
                     <!--[Note] Moved: Harapartners_Service: widget_form 'datetime' support with Varien_Data_Form_Element_Datetime -->
-                    
+
                     <!--Harapartners_Service: login counter disabled (not editable) in the admin panel -->
                     <customer_edit_tab_account>Harapartners_Service_Block_Rewrite_Adminhtml_Customer_Edit_Tab_Account</customer_edit_tab_account>
                     <!--Harapartners_Service: allow admin harapartner theme -->
@@ -53,6 +53,8 @@
                     <customer_edit_renderer_newpass>Harapartners_Service_Block_Rewrite_Adminhtml_Customer_Edit_Renderer_Newpass</customer_edit_renderer_newpass>
                     <!--Harapartners_Service: sku disabled (not editable) in the admin panel -->
                     <catalog_product_edit_tab_attributes>Harapartners_Service_Block_Rewrite_Adminhtml_Catalog_Product_Edit_Tab_Attributes</catalog_product_edit_tab_attributes>
+                    <!-- Totsy: select fields disabled in the admin panel -->
+                    <catalog_category_tab_general>Harapartners_Service_Block_Rewrite_Adminhtml_Catalog_Category_Tab_General</catalog_category_tab_general>
                 </rewrite>
             </adminhtml>
             <checkout>
@@ -108,14 +110,14 @@
             </catalog>
             <cataloginventory>
                 <rewrite>
-                    <!--Harapartner_Service: Product of the same ID (conf. with different super attr. or simple with differnt options) share the same limit!--> 
+                    <!--Harapartner_Service: Product of the same ID (conf. with different super attr. or simple with differnt options) share the same limit!-->
                     <!--Harapartners_Rushcheckout: Successful checkout results in stock reservation cancel.-->
                     <observer>Harapartners_Service_Model_Rewrite_CatalogInventory_Observer</observer>
                 </rewrite>
             </cataloginventory>
             <cataloginventory_resource>
                 <rewrite>
-                    <!--Harapartners_Rushcheckout: Batch update without saving 'stock_item' object, must sync with status (cart reservation for Totsy)--> 
+                    <!--Harapartners_Rushcheckout: Batch update without saving 'stock_item' object, must sync with status (cart reservation for Totsy)-->
                     <stock>Harapartners_Service_Model_Rewrite_CatalogInventory_Resource_Stock</stock>
                 </rewrite>
             </cataloginventory_resource>
@@ -284,7 +286,7 @@
                     <sailthru_customer_subscribe>
                         <type>singleton</type>
                         <class>emailfactory/observer</class>
-                        <method>newsletterupdateObserver</method>                        
+                        <method>newsletterupdateObserver</method>
                     </sailthru_customer_subscribe>
                     <!--Harapartners_Unsubcentral-->
                     <unsubcentral_subscribe_observer>
