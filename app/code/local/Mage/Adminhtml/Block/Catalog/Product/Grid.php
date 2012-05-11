@@ -137,7 +137,6 @@ class Mage_Adminhtml_Block_Catalog_Product_Grid extends Mage_Adminhtml_Block_Wid
         //Harapartners, Li: include vendor style in the grid
         $this->addColumn('vendor_style', array(
             'header'    => Mage::helper('catalog')->__('Vendor Style'),
-        	'width'     => '100px',
         	'index' => 'vendor_style',
         ));
 
