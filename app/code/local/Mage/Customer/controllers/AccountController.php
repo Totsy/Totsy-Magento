@@ -746,9 +746,23 @@ class Mage_Customer_AccountController extends Mage_Core_Controller_Front_Action
         }
         $data = $this->_getSession()->getCustomerFormData(true);
         $customer = $this->_getSession()->getCustomer();
+        
+        $lastOrder = $customer->getLastOrder();
+        
+        //getting the default billing addresse's firt and last name and populating
+        //the first and last names for a user's account info
+        $defaultBillingAddress = $this->_getSession()->getCustomer()->getDefaultBillingAddress();
+        
+        $data['firstname'] = $defaultBillingAddress->firstname;
+        $data['lastname'] = $defaultBillingAddress->lastname;                    
+                               
         if (!empty($data)) {
             $customer->addData($data);
         }
+        
+        //var_dump($data);
+        //exit();
+        
         if ($this->getRequest()->getParam('changepass')==1){
             $customer->setChangePassword(1);
         }
