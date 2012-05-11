@@ -146,17 +146,7 @@ foreach ( $rewardCollection as $item ){
 	
 	
 	    <div class="box ui-collapsible ui-collapsible-collapsed">
-			<h3>
-				<a class="ui-collapsible-heading-toggle ui-btn ui-btn-icon-left ui-corner-top ui-btn-up-c" href="##" data-theme="c">
-					<span class="ui-btn-inner ui-corner-top" aria-hidden="true">
-						<span class="ui-btn-text">
-						<?php echo Mage::helper('enterprise_invitation')->__('Open Invitations'); ?>
-							<span class="ui-collapsible-heading-status"> click to collapse contents</span>
-						</span>
-						<span class="ui-icon ui-icon-shadow ui-icon-plus"></span>
-					</span>
-				</a>
-			</h3>
+
             <div class="box-content ui-collapsible-content-collapsed ui-collapsible-content ui-body-d">
 <?php echo $this->getChildHtml('list_before')?>
 	<?php if (count($this->getInvitationCollection())): ?>
