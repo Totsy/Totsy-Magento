@@ -35,32 +35,17 @@
 	<?php foreach($paymentCollection as $payment):
 			$type = $payment->getData('card_type');
 			switch ($type) {
-		    case "SO":
-		       $cardType = 'Solo';
-		       break;
-		    case "SM":
-		        $cardType = 'Maestro/Switch';
-		        break;
-		    case "VI":
-		       $cardType = 'Visa';
-		       break;
-		    case "MC":
-		       $cardType = 'Master Card';
-		       break;       
-		    case "AE":
-		       $cardType = 'American Express';
-		       break;	
-		    case "DI":
-		       $cardType = 'Discovery';
-		       break;	
-		    case "JCB":
-		       $cardType = 'JCB';
-		       break;	
-		    case "LASER":
-		       $cardType = 'LASER';
-		       break;	}
-		   	$counter++;
-		    
+                case "VI":
+                    $cardType = 'Visa';
+                    break;
+                case "MC":
+                    $cardType = 'Master Card';
+                    break;
+                case "AE":
+                    $cardType = 'American Express';
+                    break;
+            }
+            $counter++;
 	?>
 	<?php if($payment->getIsDefault()== 0):?>
 	<li>

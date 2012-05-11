@@ -33,6 +33,13 @@ class Harapartners_Paymentfactory_IndexController extends Mage_Core_Controller_F
         $billing = new Varien_Object($data['billing']);
         $payment = new Varien_Object($data['payment']);
         
+        #Check if there is already a cybersource profile if yes, dont create a new one
+        $profile = Mage::getModel('paymentfactory/profile');
+        $profile->loadByCcNumberWithId($payment->getData('cc_number').$customerId.$payment->getCcExpYear().$payment->getCcExpMonth());
+        if($profile && $profile->getId()) {
+            $this->_redirect ( '*/*/' );
+            return $this;
+        }
         try{
             //Mage::getModel ( 'paymentfactory/profile' )->deleteById( $id );            
             Mage::getModel ( 'paymentfactory/tokenize' )->createProfile($payment,$billing,$customerId);
