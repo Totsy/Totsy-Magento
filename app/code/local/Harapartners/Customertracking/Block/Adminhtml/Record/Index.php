@@ -18,11 +18,10 @@ class Harapartners_Customertracking_Block_Adminhtml_Record_Index extends Mage_Ad
     public function __construct(){
         $this->_blockGroup = 'customertracking';
         $this->_controller = 'adminhtml_record_index';
-        $this->_headerText = Mage::helper('customertracking')->__('Customertracking');
-        //Remove add button, it should be read only!!
-          //$this->_addButtonLabel = Mage::helper('adminsecurity')->__('Add New Activity');         
-        parent::__construct();
+        $this->_headerText = Mage::helper('customertracking')->__('Affiliate Customer Registrations');
         $this->_removeButton('add');
+
+        parent::__construct();
     }
  
 }
