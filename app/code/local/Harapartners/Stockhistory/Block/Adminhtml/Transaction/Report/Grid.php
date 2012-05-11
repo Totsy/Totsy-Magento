@@ -23,7 +23,12 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Grid extends 
                 ->addCategoryFilter($this->getCategory())
                 ->addAttributeToFilter('type_id', 'simple')
                 ->addAttributeToFilter(array(array('attribute'=>'is_master_pack', 'gt'=>0)));
-        
+	    
+        //sort by vendor_style, color, size
+        $productCollection->addAttributeToSort('vendor_style', 'ASC')
+    					  ->addAttributeToSort('color', 'ASC')
+						  ->addAttributeToSort('size', 'ASC');
+
         $hasEmptyMasterPackItem = false;
         foreach($productCollection as $product){
             if(!array_key_exists($product->getId(), $uniqueProductList)){

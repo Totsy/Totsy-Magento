@@ -40,7 +40,7 @@ class Harapartners_HpCheckout_CheckoutController extends Mage_Checkout_Controlle
         try {
             $blocksSuccessFlag = true;
             $postData = $this->getRequest()->getPost();
-            $jsonArray = $this->_getBlocksArray( $postData );
+            $jsonArray = $this->_getBlocksArray( $postData, true );
             $result[ 'blocks' ] = $jsonArray;
             foreach( $jsonArray as $block ) {
                 if( $block[ 'status' ] ) {
@@ -118,7 +118,7 @@ class Harapartners_HpCheckout_CheckoutController extends Mage_Checkout_Controlle
         $this->_getHpCheckout()->getQuote()->collectTotals()->save();
     }
     
-    protected function _getBlocksArray( $postData ) {
+    protected function _getBlocksArray( $postData, $isSubmit = false ) {
         $json = array();
         $currentStep = /*isset( $postData[ 'currentStep' ] ) ? $postData[ 'currentStep' ] : */'billing';
         
@@ -141,7 +141,7 @@ class Harapartners_HpCheckout_CheckoutController extends Mage_Checkout_Controlle
                             }
                             break;
                         case 'payment':
-                            $json[ 'payment' ] = $this->_updatePayment( isset( $postData[ 'payment' ] ) ? $postData[ 'payment' ] : array() );
+                            $json[ 'payment' ] = $this->_updatePayment( isset( $postData[ 'payment' ] ) ? $postData[ 'payment' ] : array(), true, $isSubmit );
                             break;
                         case 'review':
                             $json[ 'review' ] = $this->_updateReview();
@@ -241,11 +241,11 @@ class Harapartners_HpCheckout_CheckoutController extends Mage_Checkout_Controlle
         return '';
     }
     
-    protected function _updatePayment( $paymentData ) {
+    protected function _updatePayment( $paymentData, $shouldCollectTotal = true, $withValidate = true ) {
         try {
             $result = array();
             if ( ! empty( $paymentData ) ) {
-                $result = $this->_getHpCheckout()->savePayment( $paymentData );
+                $result = $this->_getHpCheckout()->savePayment( $paymentData, $shouldCollectTotal, $withValidate );
             }
         } catch (Mage_Core_Exception $e) {
             $result[ 'status' ] = 1;
