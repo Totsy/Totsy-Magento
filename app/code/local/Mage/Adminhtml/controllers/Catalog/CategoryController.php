@@ -527,7 +527,7 @@ class Mage_Adminhtml_Catalog_CategoryController extends Mage_Adminhtml_Controlle
         $cookieName = Mage::helper('service/rewrite_catalog_category')->getPreviewCookieName();
         $cookieValue = Mage::helper('service/rewrite_catalog_category')->getPreviewCookieEncryptedCode();
         Mage::getModel('core/cookie')->set($cookieName, $cookieValue);
-        $this->_redirect('catalog/category/view/id/' . $eventId);
+        $this->_redirect('catalog/category/preview/id/' . $eventId);
     }
 
     /**
