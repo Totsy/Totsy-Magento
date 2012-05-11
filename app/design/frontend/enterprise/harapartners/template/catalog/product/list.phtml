@@ -33,13 +33,6 @@
 ?>
 <?php
     $_productCollection=$this->getLoadedProductCollection();
-    $_cookietCode = Mage::helper('service/rewrite_catalog_category')->getPreviewCookieName();
-    $_cookietEnValue = Mage::getModel('core/cookie')->get($_cookietCode);
-    if (!!$_cookietEnValue) {
-    	$_cookietDeValue = Mage::helper('service/rewrite_catalog_category')->getPreviewCookieDecryptedCode($_cookietEnValue);
-    }else {
-    	$_cookietDeValue = 0;
-    }
     $_currentCategory = Mage::getSingleton('catalog/layer')->getCurrentCategory();
     $_helper = $this->helper('catalog/output');
 
@@ -55,7 +48,7 @@
 		$timeOutFlag = 0;
 	}
 	
-	if ( !!$_cookietDeValue && $_cookietDeValue == Mage::helper('service/rewrite_catalog_category')->getPreviewCookieCode()) {
+	if (!!Mage::registry('admin_preview_mode')) {
 		$timeOutFlag = 0;
     }
 ?>
