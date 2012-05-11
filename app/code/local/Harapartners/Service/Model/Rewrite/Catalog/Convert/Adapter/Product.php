@@ -302,11 +302,11 @@ class Harapartners_Service_Model_Rewrite_Catalog_Convert_Adapter_Product extends
         
          
         //Hara Partners, Richu media_gallery Start
-        if (isset($importData['media_gallery'])) {
+        if (!empty($importData['media_gallery'])) {
         	$mediaGalleryImages = explode(self::DEFAULT_FIELD_DELIMITER, $importData['media_gallery']);
         	foreach($mediaGalleryImages as $imageFile){
         		$imageFile = trim($imageFile);
-        		$file = $this->getMediaImportPath().DS.$imageFile;
+        		$file = Mage::getBaseDir('media') . DS . 'import' . $imageFile;
         		if(!empty($file) && file_exists($file)){
         			$mediaGalleryBackendModel->addImage($product,$file);
         		}
