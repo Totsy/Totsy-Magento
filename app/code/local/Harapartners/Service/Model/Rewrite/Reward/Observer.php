@@ -108,10 +108,12 @@ class Harapartners_Service_Model_Rewrite_Reward_Observer extends Enterprise_Rewa
                 ->updateRewardPoints();
                 
             //Harapartners,Li Lu 
-            $emailTemplate = Mage::getModel( 'core/email_template' );//->loadByCode( Mage::getStoreConfig( Enterprise_Reward_Model_Reward::XML_PATH_INVITER_EMAIL_INVITEE_REGISTERED ) );
-            $inviter = Mage::getModel( 'customer/customer' )->load( $invitation->getCustomerId() );
-	        $emailTemplate->sendTransactional( Mage::getStoreConfig( Enterprise_Reward_Model_Reward::XML_PATH_INVITER_EMAIL_INVITEE_REGISTERED ), 'support', $inviter->getEmail(), $inviter->getName() );
-            //Harapartners,Li Lu
+			if( $reward->getRewardPointsUpdated() ) {
+	            $emailTemplate = Mage::getModel( 'core/email_template' );//->loadByCode( Mage::getStoreConfig( Enterprise_Reward_Model_Reward::XML_PATH_INVITER_EMAIL_INVITEE_REGISTERED ) );
+	            $inviter = Mage::getModel( 'customer/customer' )->load( $invitation->getCustomerId() );
+		        $emailTemplate->sendTransactional( Mage::getStoreConfig( Enterprise_Reward_Model_Reward::XML_PATH_INVITER_EMAIL_INVITEE_REGISTERED ), 'support', $inviter->getEmail(), $inviter->getName() );
+            }
+			//Harapartners,Li Lu
         }*/
 
         
@@ -162,10 +164,12 @@ class Harapartners_Service_Model_Rewrite_Reward_Observer extends Enterprise_Rewa
                 ->setAction(Enterprise_Reward_Model_Reward::REWARD_ACTION_INVITATION_ORDER)
                 ->updateRewardPoints();
                 
-            //Harapartners, Li Lu    
-        	$emailTemplate = Mage::getModel( 'core/email_template' );//->loadByCode( Mage::getStoreConfig( Enterprise_Reward_Model_Reward::XML_PATH_INVITER_EMAIL_INVITEE_FIRST_PURCHASE ) );
-        	$inviter = Mage::getModel( 'customer/customer' )->load( $invitation->getCustomerId() );
-	        $emailTemplate->sendTransactional( Mage::getStoreConfig( Enterprise_Reward_Model_Reward::XML_PATH_INVITER_EMAIL_INVITEE_FIRST_PURCHASE ), 'support', $inviter->getEmail(), $inviter->getName() );
+            //Harapartners, Li Lu   
+            if( $reward->getRewardPointsUpdated() ) {
+            	$emailTemplate = Mage::getModel( 'core/email_template' );//->loadByCode( Mage::getStoreConfig( Enterprise_Reward_Model_Reward::XML_PATH_INVITER_EMAIL_INVITEE_FIRST_PURCHASE ) );
+	        	$inviter = Mage::getModel( 'customer/customer' )->load( $invitation->getCustomerId() );
+		        $emailTemplate->sendTransactional( Mage::getStoreConfig( Enterprise_Reward_Model_Reward::XML_PATH_INVITER_EMAIL_INVITEE_FIRST_PURCHASE ), 'support', $inviter->getEmail(), $inviter->getName() );
+            }
             //Harapartners, Li Lu 
         }
 		
