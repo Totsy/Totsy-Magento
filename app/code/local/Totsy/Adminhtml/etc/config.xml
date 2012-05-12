@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @category    Totsy
+ * @package     Totsy_Adminhtml
+ * @author      Tharsan Bhuvanendran <tbhuvanendran@totsy.com>
+ * @copyright   Copyright (c) 2012 Totsy LLC
+ */
+-->
+<config>
+    <modules>
+        <Totsy_Adminhtml>
+            <version>0.1.0</version>
+        </Totsy_Adminhtml>
+    </modules>
+    <global>
+        <blocks>
+            <adminhtml>
+                <rewrite>
+                    <widget_grid_column_renderer_action>Totsy_Adminhtml_Block_Widget_Grid_Column_Renderer_Action</widget_grid_column_renderer_action>
+                </rewrite>
+            </adminhtml>
+        </blocks>
+    </global>
+</config>

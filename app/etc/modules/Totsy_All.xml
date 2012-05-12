@@ -5,5 +5,9 @@
             <active>true</active>
             <codePool>local</codePool>
         </Totsy_Customer>
+        <Totsy_Adminhtml>
+            <active>true</active>
+            <codePool>local</codePool>
+        </Totsy_Adminhtml>
     </modules>
 </config>

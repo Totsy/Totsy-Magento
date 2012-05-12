@@ -12,16 +12,18 @@
  * 
  */
 
-class Harapartners_Customertracking_Block_Adminhtml_Record_Index_Grid extends Mage_Adminhtml_Block_Widget_Grid {
-
-    public function __construct(){
+class Harapartners_Customertracking_Block_Adminhtml_Record_Index_Grid
+    extends Mage_Adminhtml_Block_Widget_Grid
+{
+    public function __construct()
+    {
         parent::__construct();
         $this->setId('customertrackingRecordGrid');
     }
 
-    protected function _prepareCollection(){
-        $model = Mage::getModel('customertracking/record');
-        $collection = $model->getCollection();
+    protected function _prepareCollection()
+    {
+        $collection = Mage::getModel('customertracking/record')->getCollection();
         $this->setCollection($collection);
         parent::_prepareCollection();
         return $this;
@@ -33,51 +35,47 @@ class Harapartners_Customertracking_Block_Adminhtml_Record_Index_Grid extends Ma
     }
 
     protected function _prepareColumns(){
-        
         $helper = Mage::helper('customertracking');
-        
-        $this->addColumn('customertracking_id', array(
-            'header'        => $helper->__('Customertracking ID'),
-            'align'         => 'center',
-            'width'         => '25px',
-            'index'         => 'customertracking_id'
-        ));
-        
-        $this->addColumn('customer_id', array(
-            'header'        => $helper->__('customer ID'),
-            'align'         => 'center',
-            'width'         => '25px',
-            'index'         => 'customer_id'
-        ));
-        
+
         $this->addColumn('customer_email', array(
-            'header'        => $helper->__('customer Email'),
+            'header'        => $helper->__('Customer Email'),
+            'type'          => 'action',
             'align'         => 'center',
             'width'         => '50px',
-            'index'         => 'customer_email'
+            'index'         => 'customer_email',
+            'getter'        => 'getCustomerId',
+            'actions'       => array(
+                array(
+                    'caption_data_key' => 'customer_email',
+                    'url'              => array('base'=> 'adminhtml/customer/edit'),
+                    'field'            => 'id'
+                )
+            )
         ));
-        
-        $this->addColumn('affiliate_id', array(
-            'header'        => $helper->__('Affiliate ID'),
-            'align'         => 'center',
-            'width'         => '25px',
-            'index'         => 'affiliate_id'
-        ));
-        
+
         $this->addColumn('affiliate_code', array(
             'header'        => $helper->__('Affiliate Code'),
+            'type'          => 'action',
             'align'         => 'center',
             'width'         => '50px',
-            'index'         => 'affiliate_code'
+            'index'         => 'affiliate_code',
+            'getter'        => 'getAffiliateId',
+            'actions'       => array(
+                array(
+                    'caption_data_key' => 'affiliate_code',
+                    'url'              => array('base'=> 'adminhtml_affiliate/adminhtml_record/edit'),
+                    'field'            => 'id'
+                )
+            )
         ));
-        
+
         $this->addColumn('sub_affiliate_code', array(
             'header'        => $helper->__('Sub Affiliate Code'),
             'align'         => 'center',
             'width'         => '50px',
             'index'         => 'sub_affiliate_code'
         ));
-        
+
         $this->addColumn('status', array(
             'header'        => $helper->__('Status'),
             'align'         => 'right',
@@ -86,40 +84,31 @@ class Harapartners_Customertracking_Block_Adminhtml_Record_Index_Grid extends Ma
             'type'            => 'options',
             'options' => $helper->getGridStatusArray()
         ));
+
         $this->addColumn('registration_param', array(
             'header'        => $helper->__('Registration Param'),
             'align'         => 'center',
             'width'         => '300px',
             'index'         => 'registration_param'
         ));
-        
+
         $this->addColumn('created_at', array(
-            'header'        => $helper->__('Created At'),
+            'header'        => $helper->__('Registered At'),
             'align'         => 'center',
             'width'         => '50px',
             'index'         => 'created_at',
             'type'          => 'datetime',
             'gmtoffset'     => true
-        ));  
-        $this->addColumn('updated_at', array(
-            'header'        => $helper->__('Last Activity At'),
-            'align'         => 'center',
-            'width'         => '50px',
-            'index'         => 'updated_at',
-            'type'          => 'datetime',
-            'gmtoffset'     => true
-        ));    
- 
+        ));
+
         $this->addExportType('*/*/exportCsv', $helper->__('CSV'));
-          $this->addExportType('*/*/exportXml', $helper->__('XML'));
-      return parent::_prepareColumns();
+        $this->addExportType('*/*/exportXml', $helper->__('XML'));
+
+        return parent::_prepareColumns();
     }
 
-    public function getRowUrl($row){
-        return $this->getUrl('*/*/index', array(
-                'store'=>$this->getRequest()->getParam('store'),
-                'id'=>$row->getId()
-        ));
+    public function getRowUrl($row)
+    {
+        return false;
     }
-    
 }
