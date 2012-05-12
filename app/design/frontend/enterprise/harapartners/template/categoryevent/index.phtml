@@ -52,7 +52,7 @@
 				$endcount = date("F j, Y, G:i:s", $endcountRaw);
 			?>
 			<div class="catalog-top-event event-counter-<?php echo $timer;?>">
-				<?php $imgFile = BP.DS.'media'.DS.'catalog'.DS.'category'.DS.$top['thumbnail'];?>	
+				<?php $imgFile = BP.DS.'media'.DS.'catalog'.DS.'category'.DS.$top['small_image'];?>	
 				<a class="event-link" href="<?php echo Mage::getBaseUrl().$top['url_path']; ?>"><img src="<?php echo Mage::helper('service/image')->loadImageFile($imgFile)->resize(349,403); ?>" width="349px" height="403px" alt="" /></a>
 				<div class="splash-details">
 					<div class="table-cell-left">	
@@ -101,7 +101,7 @@
 					data-imageclass=""  
 					sdata-producturl="<?php echo Mage::getBaseUrl().$live['url_path']; ?>">
 					</ul>
-					<?php $imgFile = BP.DS.'media'.DS.'catalog'.DS.'category'.DS.$live['thumbnail'];?>	
+					<?php $imgFile = BP.DS.'media'.DS.'catalog'.DS.'category'.DS.$live['small_image'];?>	
 					<a class="event-link" href="<?php echo Mage::getBaseUrl().$live['url_path']; ?>"><img src="<?php echo Mage::helper('service/image')->loadImageFile($imgFile)->resize(228,263); ?>" width="228px" height="263px" alt="" /></a>
 					<div class="splash-details">
 						<div class="table-cell-left">	
@@ -148,7 +148,7 @@
 				data-imageclass=""  
 				sdata-producturl="<?php echo Mage::getBaseUrl().$up['url_path']; ?>">
 				</ul>
-				<?php $imgFile = BP.DS.'media'.DS.'catalog'.DS.'category'.DS.$up['thumbnail'];?>	
+				<?php $imgFile = BP.DS.'media'.DS.'catalog'.DS.'category'.DS.$up['small_image'];?>	
 				<a class="event-link" href="<?php echo Mage::getBaseUrl().$up['url_path']; ?>"><img src="<?php echo Mage::helper('service/image')->loadImageFile($imgFile)->resize(228,263); ?>" width="228px" height="263px" alt="" /></a>
 				<div class="splash-details">
 					<div class="table-cell-left">	
