@@ -22,59 +22,53 @@ class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
     protected function _getYesterday() {
         return date("Y-m-d 00:00:00", mktime(0, 0, 0, date("m"),date("d")-1,date("Y")));    //UTC
     }
-    
-    //===============For Cronjob===============//
-    
+
     /**
-     * schedule to run product update
+     * Perform order fulfillment.
+     * 1) Retrieve Inventory Status from Dotcom and sync with local product
+     *    database.
+     * 2) Match available inventory to pending order line items, and update
+     *    their status accordingly.
+     * 3) Submit any Complete orders (whose line items are all Ready) for
+     *    fulfillment.
      *
-     */
-    public function runUpdateProduct() {
-        //put one day ago as default
-        $fromDate = $this->_getYesterday();
-        $this->submitProductsToDotcomByDate($fromDate);
-    }
-    
-    /**
-     * schedule to submit purchase orders
+     * @return void
      *
+     * @todo Store available inventory reported by the Inventory API response
+     *       in Product data, as an attribute.
      */
-    public function runSubmitPurchaseOrders() {
-        //put one day ago as default
-        $fromDate = $this->_getYesterday();
-        $toDate = date("Y-m-d 23:00:00");
-        
-        $this->submitPurchaseOrdersToDotcomByDate($fromDate, $toDate);
-    }
-    
-    /**
-     * schedule to run order fulfillment
-     *
-     */
-    public function runDotcomFulfillOrder() {
+    public function runDotcomFulfillOrder()
+    {
+        $log = Mage::helper('fulfillmentfactory/log');
+
         try {
             //fetch inventory data from DOTcom
             $inventoryList = $this->updateInventory();
-            
+            $log->infoLog(sprintf(
+                'Inventory Status Received for %d items.',
+                count($inventoryList)
+            ));
+
             //update stock info
             $service = Mage::getModel('fulfillmentfactory/service_fulfillment');
             $processingOrderCollection = $service->stockUpdate($inventoryList);
-            
-            //update order's info, disable for not triggering split orders.
-            //$service->updateOrderFulfillStatus($processingOrderCollection);
-            
+            $log->infoLog(sprintf(
+                'Sending %d orders for fulfillment.',
+                count($processingOrderCollection)
+            ));
+
             //submit orders to fulfill
             $this->submitOrderToFulfillByQueue();
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             Mage::helper('fulfillmentfactory/log')->errorLog($e->getMessage());
             throw new Exception($e->getMessage());
         }
     }
-    
+
     /**
-     * schedule to update shimpent
+     * Perform order shipment retrieval.
      *
+     * @return void
      */
     public function runUpdateShipment() {
         try {
@@ -83,173 +77,12 @@ class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
             $toDate = date("Y-m-d 00:00:00");
             
             $this->updateShipment($fromDate, $toDate);
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             Mage::helper('fulfillmentfactory/log')->errorLog($e->getMessage());
             //throw new Exception($e->getMessage());
         }
     }
-    
-    //===============Functions===============//
-    
-    /**
-     * post products information to Dotcom, by created date
-     *
-     * @param string $createdAfter all products' created date should after this date
-     */
-    public function submitProductsToDotcomByDate($createdAfter = '2012-01-01 00:00:00') {
-        $products = Mage::getModel('catalog/product')->getCollection()
-                                                     ->addAttributeToSelect('*')
-                                                     ->addAttributeToFilter('created_at', array('from' => $createdAfter));
-          
-                                          
-          return $this->submitProductsToDotcom($products);
-    }
-    
-    /**
-     * submit products to Dotcom By Event Id
-     *
-     * @param int $eventId
-     */
-    public function submitProductsToDotcomByEventName($eventName = '') {
-        $event = Mage::getModel('catalog/category')->loadByAttribute('name', $eventName);
-        if(!!$event) {
-            $productCollection = $event->getProductCollection();
-            $products = array();
-            
-            foreach($productCollection as $productEntity) {
-                if($productEntity->getTypeId() == 'configurable') {
-                    //need to load children products if this product is configurable product
-                    $childrenProducts = $productEntity->getTypeInstance()->getUsedProducts();
-                    
-                    foreach($childrenProducts as $cProduct) {
-                        $products[] = $cProduct;
-                    }
-                }
-                else if($productEntity->getTypeId() == 'simple') {
-                    $products[] = $productEntity;
-                }
-            }
-            
-            echo count($products) . '<br><br>';
-            
-            if(!empty($products) && count($products) > 0) {
-                $this->submitProductsToDotcom($products);
-            }
-        }
-    }
-    
-    /**
-     * post products information to Dotcom
-     *
-     * @param array $products for products we want to submit
-     * @return response
-     */
-    public function submitProductsToDotcom($products) {
-        $xml = '<items xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">';
-        
-        foreach($products as $product) {
-            //only process simple product
-            if($product->getTypeId() != 'simple') {
-                continue;
-            }
-            
-            $sku = substr($product->getSku(), 0, 17);    //In case of DOTcom length problem. For better logic, should be removed after.
-            if(empty($sku)) {
-                $sku = 'error sku';
-            }
-            
-            $name = substr($product->getName(), 0, 28);
-            if(empty($name)) {
-                $name = 'null';
-            }
-            
-//            $color = $product->getAttributeText('color');
-//            if(empty($color)) {
-//                $color = '';
-//            }
-            
-            $xml .= <<<XML
-                <item>
-                    <sku><![CDATA[$sku]]></sku>
-                    <description><![CDATA[$name]]></description>
-                    <upc xsi:nil="true" />
-                    <weight xsi:nil="true" />
-                    <cost xsi:nil="true"/>
-                    <price xsi:nil="true"/>
-                    <root-sku xsi:nil="true"/>
-                    <package-qty xsi:nil="true"/>
-                    <serial-indicator xsi:nil="true"/>
-                    <client-company xsi:nil="true"/>
-                    <client-department xsi:nil="true"/>
-                    <client-product-class xsi:nil="true"/>
-                    <client-product-type xsi:nil="true"/>
-                    <avg-cost xsi:nil="true"/>
-                    <master-pack xsi:nil="true"/>
-                    <item-barcode xsi:nil="true"/>
-                    <country-of-origin xsi:nil="true"/>
-                    <harmonized-code xsi:nil="true"/>
-                    <manufacturing-code xsi:nil="true"/>
-                    <style-number xsi:nil="true"/>
-                    <short-name xsi:nil="true"/>
-                    <color xsi:nil="true"/>
-                    <size xsi:nil="true"/>
-                    <long-description xsi:nil="true" />
-                </item>
-XML;
-        }
-        
-        $xml .= '</items>';
-        
-        echo $xml;
-        
-        $response = Mage::helper('fulfillmentfactory/dotcom')->submitProductItems($xml);
-        
-        $error = $response->item_errors;
-        if(!!$error) {
-            throw new Exception('Error response from DOTcom when submit products.');
-        }
-        
-        return $response;
-    }
-    
-    /**
-     * post purchase orders to Dotcom, by desired quantity
-     *
-     * @param int $quantity
-     */
-    public function submitPurchaseOrdersToDotcomByDate($fromDate = '', $toDate = '') {
-        $orders = Mage::getModel('sales/order')->getCollection()
-                                            ->addAttributeToFilter('state', Mage_Sales_Model_Order::STATE_NEW)
-                                            ->addAttributeToFilter('created_at', array(
-                                                                                    'from' => $fromDate,
-                                                                                    'to' => $toDate
-                                                                                )
-                                            );
-        
-        $itemsArray = array();
-        
-        foreach($orders as $order) {
-            $items = $order->getAllItems();
-            
-            foreach($items as $item) {
-                $sku = $item->getSku();
-                $qty = $item->getQtyOrdered();
-                
-                if(isset($itemsArray[$sku])) {
-                    $itemsArray[$sku] += $qty;
-                }
-                else {
-                    $itemsArray[$sku] = $qty;
-                }
-            }
-        }
-        
-        //echo print_r($itemsArray, 1);
-    
-        return $this->submitPurchaseOrdersToDotcom($itemsArray);
-    }
-    
+
     /**
      * post purchase orders to Dotcom
      *
@@ -270,14 +103,14 @@ XML;
 
         foreach($items as $sku => $qty) {
             $product = Mage::getModel('catalog/product')->loadByAttribute('sku', $sku);
-            
+
             if(empty($product) || !$product->getId()) {
                 continue;
             }
-            
+
             $productSku = substr($sku, 0, 17);
             $name = substr($product->getName(), 0, 28);
-            
+
             $xml .= <<<XML
                     <item>
                         <sku><![CDATA[$productSku]]></sku>
@@ -308,20 +141,18 @@ XML;
                     </item>
 XML;
         }
-                        
+
         $xml .=    <<<XML
                 </items>
             </purchase_order>
         </purchase_orders>
 XML;
-        
-        //echo $xml;
-        
+
         $response = Mage::helper('fulfillmentfactory/dotcom')->submitPurchaseOrders($xml);
         
         return $response;
     }
-    
+
     /**
      * get inventory from Dotcom and run stock update
      *
@@ -332,12 +163,12 @@ XML;
         
         if(!empty($dataXML)) {
             $inventoryList = array();
-            
+
             foreach($dataXML as $item) {
                 $inventory = array();
-                
+
                 $qty = (int)$item->quantity_available;
-                
+
                 if($qty > 0) {
                     $inventory['sku'] = (string)$item->sku;
                     $inventory['qty'] = $qty;
@@ -345,11 +176,11 @@ XML;
                     $inventoryList[] = $inventory;
                 }
             }
-            
+
             return $inventoryList;
         }
     }
-    
+
     /**
      * submit orders which are ready
      *
@@ -398,7 +229,7 @@ XML;
      */
     public function submitOrdersToFulfill($orders, $capturePayment=false) {
         $responseArray = array();
-        
+
         foreach($orders as $order) {
             try {
                 if($capturePayment && ($order->getStatus() != Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_PAYMENT_FAILED)) {
@@ -554,9 +385,14 @@ XML;
             $items = $order->getAllItems();
 
             foreach($items as $item) {
+                // only process root order items
+                if ($item->getParentItem()) {
+                    continue;
+                }
+
                 $quantity = intval($item->getQtyOrdered());
                 $sku = substr($item->getSku(), 0, 17);
-                
+
                 $xml .= <<<XML
                     <line-item>
                         <sku>$sku</sku>
@@ -581,7 +417,7 @@ XML;
             //change status
             $order->setStatus(Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_PROCESSING_FULFILLMENT)
                   ->save();
-                  
+
             $response = Mage::helper('fulfillmentfactory/dotcom')->submitOrders($xml);
             $responseArray[] = $response;
             
@@ -683,71 +519,5 @@ XML;
                 }
             }
         }
-    }
-    
-    
-    //===============Test Function===============//
-    
-    public function testSubmitProductsToDotcom() {
-//        $products = Mage::getModel('catalog/product')->getCollection()
-//                                                    ->addAttributeToSelect('*')
-//                                                    ->addAttributeToFilter('entity_id', array('gt' => '1075'));
-        $this->submitProductsToDotcomByEventName('Event03');
-          
-                                          
-          //return $this->submitProductsToDotcom($products);
-    }
-    
-    public function testSubmitPurchaseOrdersToDotcom() {
-        /*$testItems = array(
-            '2PK-NSS-911' => 96,
-            'BL-HT-POM' => 10,
-            '2PK-KN-911' => 100,
-            'STB-TT' => 50,
-            'MKY-FRM' => 20,
-            'OWL-FRD' => 50,
-            'LKS-123' => 50,
-            'FRY-DST' => 50,
-            'LRG-PRIN' => 50,
-            'ABA-CUS' => 50,
-            'JET-PLN' => 50,
-            '12-Your-Sku' => 50,
-            'TSOC-SKU' => 50,
-            'VSB-SKU' => 50,
-            'SKU-334-24' => 50,
-            'SKU-354-24' => 50,
-            'SKU-343-24' => 50,
-            'SKU-334-354' => 50,
-            'SKU-3487604' => 50,
-            'SKU-5346-6' => 50,
-            'SKU-334-24235' => 50,
-            'SKU-33400-24' => 50,
-            'SKU-334-2423500' => 50,
-            'SKU-33544-4324' => 50
-        );*/
-        
-        $testItems = array(
-            'diana-001' => 30,
-            '123546-blue-0-3M' => 100,
-            'diana-002' => 10,
-            'dotcom-test-01' => 40,
-            'dotcom-test-02' => 25,
-            'dotcom-test-03' => 90,
-            'dotcom-test-04' => 50,
-            'dotcom-test-05' => 50
-        );
-    
-        return $this->submitPurchaseOrdersToDotcom($testItems);
-    }
-    
-    public function testSubmitOrdersToFulfill() {
-        //$orders = Mage::getModel('sales/order')->getCollection()->addAttributeToFilter('state', Mage_Sales_Model_Order::STATE_NEW);
-        //$orders = Mage::getModel('sales/order')->getCollection()->addAttributeToFilter('entity_id', array('in' => array(94)));
-        //$orders = Mage::getModel('sales/order')->getCollection()->addAttributeToFilter('entity_id', array('in' => array(187, 189, 190)));
-        //echo count($orders);
-        //$this->submitOrdersToFulfill($orders, true);
-        
-        $this->submitOrderToFulfillByQueue();
-        //$this->runDotcomFulfillOrder();
     }
 }

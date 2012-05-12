@@ -10,26 +10,38 @@
  * to eula@harapartners.com so we can send you a copy immediately.
  * 
  */
-class Harapartners_Fulfillmentfactory_Helper_Log extends Mage_Core_Helper_Abstract{    
-    
+class Harapartners_Fulfillmentfactory_Helper_Log
+    extends Mage_Core_Helper_Abstract
+{
     /**
-     * log message
+     * Log an informational message.
      *
-     * @param string $message
-     * @return log file name
+     * @param string $message The message to log.
+     * @return string The log file name.
+     */
+    public function infoLog($message)
+    {
+        Mage::log($message, Zend_Log::INFO, 'fulfillment_info.log');
+    }
+
+    /**
+     * Log an error message.
+     *
+     * @param string $message The message to log.
+     * @return string The log file name.
      */
     public function errorLog($message) {
-        $logFileName = 'fulfillment_error_' . date('Y_m_d_his') . '.log';
-        
+        $logFileName = 'fulfillment_error.log';
+
         $errorlogModel = Mage::getModel('fulfillmentfactory/errorlog');
         $errorlogModel->setMessage($message);
         $errorlogModel->importDataWithValidation($errorlogModel->getData())->save();
-        
-        Mage::log($message, null, $logFileName);
-        
+
+        Mage::log($message, Zend_Log::ERR, $logFileName);
+
         return $logFileName;
     }
-    
+
     /**
      * log message with order id
      *
@@ -44,9 +56,9 @@ class Harapartners_Fulfillmentfactory_Helper_Log extends Mage_Core_Helper_Abstra
         $errorlogModel->setOrderId($orderId);
         $errorlogModel->setMessage($message);
         $errorlogModel->importDataWithValidation($errorlogModel->getData())->save();
-        
+
         Mage::log($message, null, $logFileName);
-        
+
         return $logFileName;
     }
 }
