@@ -143,7 +143,14 @@ class Harapartners_Stockhistory_Helper_Data extends Mage_Core_Helper_Abstract  {
                 )
         );
         
-        $orderItemCollection->getSelect()->where('product_id IN('.implode(',', $uniqueProductIds).')');
+        //Products, categories/events, vendors may be deleted, escape query accordingly
+        $idQueries = trim(implode(',', $uniqueProductIds), ', ');
+        if(!!$idQueries){
+        	$orderItemCollection->getSelect()->where('product_id IN(' . $idQueries . ')');
+        }else{
+        	//Force an empty collection for empty product ids
+        	$orderItemCollection->getSelect()->where('product_id < 0');
+        }
         
         $currentLoadOffset = 0;
         do{
