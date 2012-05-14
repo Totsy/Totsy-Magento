@@ -57,7 +57,8 @@ class Harapartners_Stockhistory_Helper_Data extends Mage_Core_Helper_Abstract  {
         return array(
                 Harapartners_Stockhistory_Model_Transaction::ACTION_TYPE_AMENDMENT => 'Amendment', 
                 Harapartners_Stockhistory_Model_Transaction::ACTION_TYPE_EVENT_IMPORT => 'Event Import', 
-                Harapartners_Stockhistory_Model_Transaction::ACTION_TYPE_DIRECT_IMPORT => 'Direct Import'
+                Harapartners_Stockhistory_Model_Transaction::ACTION_TYPE_DIRECT_IMPORT => 'Direct Import',
+                Harapartners_Stockhistory_Model_Transaction::ACTION_TYPE_REMOVE => 'Remove Item'
         );
     }
     
@@ -144,9 +145,15 @@ class Harapartners_Stockhistory_Helper_Data extends Mage_Core_Helper_Abstract  {
         );
         
         //Products, categories/events, vendors may be deleted, escape query accordingly
-        $idQueries = trim(implode(',', $uniqueProductIds), ', ');
-        if(!!$idQueries){
-        	$orderItemCollection->getSelect()->where('product_id IN(' . $idQueries . ')');
+        //Note the product id was also checked previously, here is a redundancy check
+        $cleanUniqueIds = array();
+        foreach(array_unique($uniqueProductIds) as $productIdEntry){
+        	if(is_int($productIdEntry) && $productIdEntry > 0){
+        		$cleanUniqueIds[] = $productIdEntry;
+        	}
+        }
+        if(count($cleanUniqueIds)){
+        	$orderItemCollection->getSelect()->where('product_id IN(' . trim(implode(',', $cleanUniqueIds), ', ') . ')');
         }else{
         	//Force an empty collection for empty product ids
         	$orderItemCollection->getSelect()->where('product_id < 0');
