@@ -21,6 +21,7 @@ class Harapartners_Stockhistory_Model_Transaction extends Mage_Core_Model_Abstra
     const ACTION_TYPE_AMENDMENT = 1;
     const ACTION_TYPE_EVENT_IMPORT = 2;
     const ACTION_TYPE_DIRECT_IMPORT = 3;
+    const ACTION_TYPE_REMOVE = 4;
     
     public function _construct() {
         $this->_init('stockhistory/transaction');
@@ -97,10 +98,16 @@ class Harapartners_Stockhistory_Model_Transaction extends Mage_Core_Model_Abstra
             $dataObj->setData('action_type', self::ACTION_TYPE_AMENDMENT);
         }
         
+    	if($dataObj->getData('qty_delta') == '00') {
+        	//put a flag to indicate this item should be delete remove this line item
+        	$qtyDelta = 0;
+        	$dataObj->setData('action_type', self::ACTION_TYPE_REMOVE);
+        }
+        
         $this->addData($dataObj->getData());
         return $this;
     }
-        
+    
     public function validate(){
         if(!$this->getData('vendor_id')){
             throw new Exception('Vendor ID is required.');
