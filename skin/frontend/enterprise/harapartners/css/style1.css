@@ -1258,3 +1258,9 @@ body .top-cart .block-content p.subtotal span.orange, .orange, .orange .price{
 .footer-container .ups, .footer-container .AuthorizeNetSeal, .footer-container .truste,.footer-container .forbes{
 	margin:0px 5px;
 }
+
+/*  Social Share Integration (Eric The Robot)  */
+.share { background: #F8F8F8; border:1px solid #CCC; padding: 8px; margin:0 0 5px 0;}
+.email-friend a {display:block; margin:0 10px 0 0; float:left;clear:both;width:55px;height:20px;background:url(../images/email.png) no-repeat; font-size:0;text-decoration:none; text-indent:-9999px; }
+.tweet { float: left; width: 55px; height:20px; margin-right: 10px;}
+.fbShare { float: left; width: 175px; height: 20px;}
