@@ -127,9 +127,11 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Abstract exte
         $rawCollection = Mage::getModel('stockhistory/transaction')->getCollection();
         $rawCollection->getSelect()->where('po_id = ?', $this->getPoObject()->getId());
         
+        $removeProducts = array();
+        
         $uniqueProductList = array();
         foreach($rawCollection as $item){
-            if(!array_key_exists($item->getProductId(), $uniqueProductList)){
+            if(!!$item->getProductId() && !array_key_exists($item->getProductId(), $uniqueProductList)){
                 $uniqueProductList[$item->getProductId()] = array(
                         'total'             => 0,
                         'qty'                => 0,
@@ -138,8 +140,24 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Abstract exte
             }
             $uniqueProductList[$item->getProductId()]['total'] += $item->getQtyDelta() * $item->getUnitCost();
             $uniqueProductList[$item->getProductId()]['qty'] += $item->getQtyDelta();
+            
+            //add items which should be removed
+            if($item->getActionType() == Harapartners_Stockhistory_Model_Transaction::ACTION_TYPE_REMOVE) {
+            	$removeProducts[$item->getProductId()] = 1;
+            }
         }
-        return $uniqueProductList;
+        
+        $newUniqueProductList = array();
+        
+        //use an new array to save non-removed items
+        foreach($uniqueProductList as $productId => $data) {
+        	if(!isset($removeProducts[$productId])) {
+        		$newUniqueProductList[$productId] = $data;
+        	}
+        }
+        
+        return $newUniqueProductList;
+        //return $uniqueProductList;
     }
     
     //No pager for this report!
