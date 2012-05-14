@@ -154,7 +154,7 @@ class Enterprise_Invitation_Model_Invitation extends Mage_Core_Model_Abstract
             if (!(int)$this->getStoreId()) {
                 throw new Mage_Core_Exception(Mage::helper('enterprise_invitation')->__('Wrong store specified.'), self::ERROR_INVALID_DATA);
             }
-            //$this->makeSureCustomerNotExists();
+            $this->makeSureCustomerNotExists();
         }
         else {
             if ($this->dataHasChangedFor('message') && !$this->canMessageBeUpdated()) {
@@ -191,6 +191,11 @@ class Enterprise_Invitation_Model_Invitation extends Mage_Core_Model_Abstract
         $this->makeSureCanBeSent();
         $store = Mage::app()->getStore($this->getStoreId());
         $mail  = Mage::getModel('core/email_template');
+        $inviter = $this->getInviter();
+        $inviter_name = $inviter->getName();
+        if(!trim($inviter_name) && $inviter->email) {
+            $inviter_name = $inviter->email;
+        }
         $mail->setDesignConfig(array('area'=>'frontend', 'store' => $this->getStoreId()))
             ->sendTransactional(
                 $store->getConfig(self::XML_PATH_EMAIL_TEMPLATE), $store->getConfig(self::XML_PATH_EMAIL_IDENTITY),
@@ -201,7 +206,7 @@ class Enterprise_Invitation_Model_Invitation extends Mage_Core_Model_Abstract
                     'message'       => $this->getMessage(),
                     'store'         => $store,
                     'store_name'    => $store->getGroup()->getName(), // @deprecated after 1.4.0.0-beta1
-                    'inviter_name'  => ($this->getInviter() ? $this->getInviter()->getName() : null)
+                    'inviter_name'  => $inviter_name
             ));
         if ($mail->getSentSuccess()) {
             $this->setStatus(self::STATUS_SENT)->setUpdateDate(true)->save();

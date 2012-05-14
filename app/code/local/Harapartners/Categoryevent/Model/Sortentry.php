@@ -190,6 +190,9 @@ class Harapartners_Categoryevent_Model_Sortentry extends Mage_Core_Model_Abstrac
     	$this->setData('upcoming_queue', json_encode($eventUpcomingSortedArray));
     	$this->save();
     	
+    	//Force Rebuild memcached result
+    	Mage::helper('categoryevent/memcache')->getIndexDataObject(true);
+    	
     	return $this;
     }
     
@@ -215,7 +218,7 @@ class Harapartners_Categoryevent_Model_Sortentry extends Mage_Core_Model_Abstrac
     public function getCategoryCollection($parentCategoryId, $startDate, $endDate){
 		//optimized date comparison logic, please do NOT touch!
 	    $collection = Mage::getModel('catalog/category')->getCollection()
-	       		->addAttributeToSelect(array('name','description', 'thumbnail','event_start_date', 'event_end_date', 'is_active', 'url_path', 'url_key', 'image'))
+	       		->addAttributeToSelect(array('name', 'description', 'image', 'small_image', 'thumbnail', 'logo', 'event_start_date', 'event_end_date', 'is_active', 'url_path', 'url_key'))
 	       		->addFieldToFilter('parent_id', $parentCategoryId)
 	       		->addFieldToFilter('level', self::CATEGOTYEVENT_LEVEL)
 	       		->addFieldToFilter('is_active', '1')
