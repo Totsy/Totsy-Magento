@@ -27,6 +27,14 @@ class Harapartners_Categoryevent_Block_Adminhtml_Sort_Index_Edit extends Mage_Ad
         return true;
     }
     
+    public function getSortSavePostUrl(){
+    	return $this->getUrl('categoryevent/adminhtml_sort/sortsave');
+    }
+    
+    public function getSortRebuildPostUrl(){
+    	return $this->getUrl('categoryevent/adminhtml_sort/sortrebuild');
+    }
+    
     public function getPostKey(){        
         if (!!(Mage::getSingleton('adminhtml/url')->getSecretKey("adminhtml_sort","post"))){            
             return Mage::getSingleton('adminhtml/url')->getSecretKey("adminhtml_sort","post");
