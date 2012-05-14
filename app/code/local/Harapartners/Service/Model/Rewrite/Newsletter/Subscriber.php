@@ -26,9 +26,9 @@ class Harapartners_Service_Model_Rewrite_Newsletter_Subscriber extends Mage_News
     public function setNewsletterList(){
         
         if( Mage::app()->getStore()->getCode()=="default" || Mage::app()->getStore()->getCode()=="mobile" ){
-            $_newsletterList = "registered";
+            $this->_newsletterList = "registered";
         } else {
-            $_newsletterList = "Mamasource";
+            $this->_newsletterList = "Mamasource";
         }
             
     }
@@ -69,7 +69,7 @@ class Harapartners_Service_Model_Rewrite_Newsletter_Subscriber extends Mage_News
         );
         
         $sailthru = Mage::getSingleton('emailfactory/sailthruconfig')->getHandle();
-        $sailthru->setEmail($this->getEmail(), Array(), Array( $newsletterList=>1 ));
+        $sailthru->setEmail($this->getEmail(), Array(), Array( $this->_newsletterList=>1 ));
 
         $translate->setTranslateInline(true);
 
