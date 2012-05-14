@@ -156,6 +156,11 @@ class Mage_Catalog_CategoryController extends Mage_Core_Controller_Front_Action
 
             $this->_initLayoutMessages('catalog/session');
             $this->_initLayoutMessages('checkout/session');
+            
+            if(!!Mage::registry('admin_preview_mode')){
+            	$this->getLayout()->getBlock('root')->addBodyClass('catalog-category-view');
+            }
+            
             $this->renderLayout();
         }
         elseif (!$this->getResponse()->isRedirect()) {
@@ -177,7 +182,7 @@ class Mage_Catalog_CategoryController extends Mage_Core_Controller_Front_Action
     	
     	Mage::unregister('admin_preview_mode');
     	Mage::register('admin_preview_mode', true);
-        return $this->viewAction();
+        return $this->viewAction(); //Do not use redirect here! This is a clean separation 
     }
     
 }
