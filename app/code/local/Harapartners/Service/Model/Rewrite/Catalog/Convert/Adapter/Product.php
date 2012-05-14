@@ -308,7 +308,7 @@ class Harapartners_Service_Model_Rewrite_Catalog_Convert_Adapter_Product extends
         		$imageFile = trim($imageFile);
         		$file = Mage::getBaseDir('media') . DS . 'import' . $imageFile;
         		if(!empty($file) && file_exists($file)){
-        			$mediaGalleryBackendModel->addImage($product,$file);
+        			$mediaGalleryBackendModel->addImage($product, $file, null, false, false);
         		}
         	}
         }
