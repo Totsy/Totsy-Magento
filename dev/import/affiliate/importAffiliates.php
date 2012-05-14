@@ -1,6 +1,6 @@
 <?php
 ini_set('memory_limit', '2G');	
-$mageFilename = '../../app/Mage.php';
+$mageFilename = __DIR__ . '/../../../app/Mage.php';
 require_once $mageFilename;
 umask(0);
 $mageRunCode = isset($_SERVER['MAGE_RUN_CODE']) ? $_SERVER['MAGE_RUN_CODE'] : '';
@@ -19,7 +19,7 @@ Mage::app($mageRunCode, $mageRunType)->setCurrentStore($storeId);
  */
 
 //$importCsvFile 	= 'product_meta_'.$startId.'_to_'.$endId.'_store'.$storeId.'_attributeSetId'.$attributeSetId.'.csv';
-$importCsvFile 	= 'affiliate.csv';
+$importCsvFile 	        = $argv[1];
 $delimiter		= ',';
 $header			= array();
 $row 			= 0;
@@ -31,7 +31,12 @@ if(($handle = fopen($importCsvFile,'r')) !== FALSE){
 			$header = $data;
 			continue;
 		}
-		if($row!= 74){
+
+		if (!$data[4]) {
+			echo "Skipping row $row because of an absent affiliate code.", PHP_EOL;
+			continue;
+		}
+
 			//Test if URL Rewrite exists already
 			$affiliate = Mage::getModel('affiliate/record')->loadByAffiliateCode($data[4]);
 			//$affiliate->setData('affiliate_id', $data[0]);
@@ -82,8 +87,7 @@ if(($handle = fopen($importCsvFile,'r')) !== FALSE){
 			try {
 				$affiliate->save();
 			}catch (Exception $e){
-				echo $e->getMessage();
-				exit();
+				echo $e->getMessage(), PHP_EOL;
 			}
 			
 			echo $row.' affiliate_code: '.$affiliate->getData('affiliate_code').' ID: '.$affiliate->getData('affiliate_id')."\n";
@@ -93,7 +97,6 @@ if(($handle = fopen($importCsvFile,'r')) !== FALSE){
 				//exit();
 			//}
 			//exit();
-		}
 	}
 }
 
