@@ -44,7 +44,7 @@ while ($orderData = fgetcsv($order)) {
     }
 
     foreach ($orderAddressHeaders as $idx => $name) {
-        $addressNamedData[$name] = $orderAddressData[$idx];
+        $addressNamedData[$name] = $addressData[$idx];
     }
 
     $objOrder = array(
