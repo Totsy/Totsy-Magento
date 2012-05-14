@@ -1,15 +1,4 @@
 <?php 
-//error_reporting(E_ALL | E_STRICT);
-//ini_set('display_errors', 1);
-//$rootDir = dirname(dirname(__DIR__));
-//
-//$compilerConfig = $rootDir.'/includes/config.php';
-//if (file_exists($compilerConfig)) {
-//    include $compilerConfig;
-//}
-//
-//require_once( $rootDir.'/app/Mage.php' );
-
 
 require_once( '../../app/Mage.php' );
 umask(0);
@@ -18,16 +7,14 @@ $mageRunType = isset($_SERVER['MAGE_RUN_TYPE']) ? $_SERVER['MAGE_RUN_TYPE'] : 's
 Mage::app($mageRunCode, $mageRunType);	 
 
 
-
-//Mage::setIsDeveloperMode(true);
 header('Cache-Control: no-cache, must-revalidate');
 header('Content-type: application/json');
 
-$out = array('events'=>array(),'pending'=>array(),'closing'=>array());
+$out = array('events'=>array(), 'pending'=>array(), 'closing'=>array());
 
 /*### DEFINE STORE AND CATEGORY  ###*/
-$categoryId = '8'; //totsy events category id
-$topEventCategoryId = '24'; //totsy top events category id
+//$categoryId = '8'; //totsy events category id
+//$topEventCategoryId = '24'; //totsy top events category id
 $storeId = Mage::app()->getStore()->getId(); //totsy store id
 
 
@@ -53,14 +40,13 @@ if (!empty($_GET['start_date']) && preg_match('/[\d]{4}[\-][\d]{2}[\-][\d]{2}/i'
 
 if (!empty($_GET['start_date']) && preg_match('/[\d]{2}[\-][\d]{2}[\-][\d]{4}/i',$_GET['start_date'],$m)){
 	$ori_start_date = $m[0];
-	$date_array = explode("-",$ori_start_date); // split the array
+	$date_array = explode("-", $ori_start_date); // split the array
 	$var_day = $date_array[0]; //day seqment
 	$var_month = $date_array[1]; //month segment
 	$var_year = $date_array[2]; //year segment
 	$new_date_format = $var_year.'-'.$var_month.'-'.$var_day; // join them together
-	$start_date =  strtotime($new_date_format);
+	$start_date = strtotime($new_date_format);
 }
-
 	
 if (!empty($_GET['start_time']) && preg_match('/[\d]{2}/',$_GET['start_time'])){
 	if (strtolower($_GET['start_time']) == 'am'){
@@ -77,10 +63,7 @@ date_default_timezone_set($defaultTimezone);
 //$pendingEventArray = processEventsJson($sortentryObject->getUpcomingQueue(),'entity_id');
 $eventArray = $pendingEventArray = array();
 
-$category = Mage::getModel('catalog/category'); //->load($categoryId);
-
 //open&top events
-if ($category) {
 	/*filter event/category collection*/
 	$_collection = loadCollection('event_start_date'); 
 	foreach($_collection as $_category){
@@ -88,26 +71,26 @@ if ($category) {
 		getEventApiOutput($_category,'events',$out);
 	}
 	unset($_collection);
-}
+
 
 // closing events
-if ($category) {
+
 	/*filter event/category collection*/
-	$_collection = loadCollection('event_end_date','+1 day');
+	$_collection = loadCollection('event_end_date', '+1 day');
 	foreach($_collection as $_category){
 		getEventApiOutput($_category,'closing',$out);
 	}
 	unset($_collection);
-}
+
 	
 //pending events       
-if ($category) {
+
 /*filter event/category collection*/
-	$_collection = loadCollection('event_start_date','+2 days');
+	$_collection = loadCollection('event_start_date', '+2 days');
 	foreach($_collection as $_category){
 		getEventApiOutput($_category,'pending',$out);
 	}           
-}
+
 $out['max_off'] = floor($maxOff);
 
 
@@ -116,101 +99,92 @@ echo json_encode($out);
 
 /*### END ###*/
 
+
+
+
+
+/*########################################################################*/
+/*Getting how many percent of money save for a event*/
 function getLargestSaveByCategory(Mage_Catalog_Model_Category $_category){
 	
-    /*Getting how many percent of money save for a event  START*/
-	$storeId = Mage::app()->getStore()->getId();
-  	$layer = Mage::getSingleton('catalog/layer')->setStore($storeId);
-	//$productCollection = Mage::getModel('catalog/product')->getCollection();
-	$currentCategory = $layer->setCurrentCategory($_category);
-	//$layer->prepareProductCollection($productCollection);
-	//$productCollection->addCountToCategories($_collection);
-	
-	$_category->getProductCollection()->setStoreId($storeId);
-	
-	$_productCollection = $currentCategory
-	    ->getProductCollection()
-	    ->addAttributeToSelect('*')
-	    ->addAttributeToSort('updated_at','desc')
-	    ->setVisibility(Mage::getSingleton('catalog/product_visibility')->getVisibleInCatalogIds())
-	    ->setCurPage(1)
-	    ->setPageSize(50)
-	;
-	$percent = 0;
-    foreach ($_productCollection as $_product){
-		$_finalPrice = Mage::helper('tax')->getPrice($_product, $_product->getFinalPrice());
-		$_regularPrice = Mage::helper('tax')->getPrice($_product, $_product->getPrice());
-		if ($_regularPrice != $_finalPrice && !empty($_regularPrice) && !empty($_finalPrice)){
-			$getpercentage = number_format($_finalPrice / $_regularPrice * 100, 2);
-			$finalpercentage = 100 - $getpercentage;
-			if ($finalpercentage < 100){
-				$percent = max($percent,number_format($finalpercentage, 0));
+	//Lazy loading, note 0 is allowed
+	if(is_numeric($_category->getLargestSavePercentage($percent))){
+		$storeId = Mage::app()->getStore()->getId();
+		$_category->getProductCollection()->setStoreId($storeId);
+		
+		$_productCollection = $_category
+		    ->getProductCollection()
+		    ->addAttributeToSelect('*')
+		    ->addAttributeToSort('updated_at', 'desc')
+		    ->setVisibility(Mage::getSingleton('catalog/product_visibility')->getVisibleInCatalogIds())
+		    ->setCurPage(1)
+		    ->setPageSize(50)
+		;
+		
+		$percent = 0;
+	    foreach ($_productCollection as $_product){
+			$_finalPrice = Mage::helper('tax')->getPrice($_product, $_product->getFinalPrice());
+			$_regularPrice = Mage::helper('tax')->getPrice($_product, $_product->getPrice());
+			if ($_regularPrice != $_finalPrice && !empty($_regularPrice) && !empty($_finalPrice)){
+				$getpercentage = number_format($_finalPrice / $_regularPrice * 100, 2);
+				$finalpercentage = 100 - $getpercentage;
+				if ($finalpercentage < 100){
+					$percent = max($percent, number_format($finalpercentage, 0));
+				}
 			}
-		}
-    }
-    if ($percent!=0){
-    	$_category->  setSavePercentage($percent);
-    }
-    /*Getting how many percent of money save for a event  END*/
-    return $percent;
+	    }
+	    $_category->setLargestSavePercentage($percent);
+	}
+	
+    return $_category->getLargestSavePercentage($percent);
 }
 
 function getEventApiOutput(Mage_Catalog_Model_Category $_category , $type, &$out){
 	
-	$_categoryCode = 'departments';
-	$_ageCode = 'ages';
+	$departmentOptionSource = Mage::getModel('catalog/product')->getResource()->getAttribute('departments')->getSource();
+	$ageOptionSource  = Mage::getModel('catalog/product')->getResource()->getAttribute('ages')->getSource();
 	
 	$save = getLargestSaveByCategory($_category);
-	$shortDesc = $_category->getShortDescription();
-	$keyword = $_category->getMetaKeywords();
-	$collection = $_category->getProductCollection();
-    foreach ($collection as $product) {
-        $productsId[] = $product->getEntityId();
-    }
-    $availableItems = count($collection);
-	$evnt = array();
 	$short = $_category->getShortDescription();
+	$description = $_category->getDescription();
+	$keyword = $_category->getMetaKeywords();
+
+	$evnt = array();
 	$evnt['name'] = $_category->getName();
 	$evnt['url'] = Mage::getBaseUrl().$_category->getUrlPath();
 	
-	$productCollection = $_category->getProductCollection();
+	$productCollection = $_category->getProductCollection()->addAttributeToSelect(array('departments', 'ages'));
+	$availableItems = count($productCollection);
 	foreach ($productCollection as $product){
-		$productDetail =  Mage::getModel('catalog/product')->load($product->getId());
-		$dept = $productDetail->getDepartments();
+		$productsId[] = $product->getId();
+		$dept = $product->getDepartments();
 		$deptArray = explode(',', $dept);
 		foreach($deptArray as $deptCode){
-			$attrOptions = Mage::getModel('catalog/product')->getResource()->getAttribute($_categoryCode);
-			$attrText = $attrOptions->getSource()->getOptionText($deptCode);
+			$attrText = $departmentOptionSource->getOptionText($deptCode);
 			if ($attrText != false){
 				$rawCategoriesArray[] = $attrText;
 				$rawCategoriesTranslateArray[] = Mage::helper('core')->__($attrText);
 			}
 		}
-		$ages = $productDetail->getAges();
+		$ages = $product->getAges();
 		$agesArray = explode(',', $ages);
 		foreach($agesArray as $ageCode){
-			$attrOptionsAge = Mage::getModel('catalog/product')->getResource()->getAttribute($_ageCode);
-			$attrTextAge = $attrOptionsAge->getSource()->getOptionText($ageCode);
+			$attrTextAge = $ageOptionSource->getOptionText($ageCode);
 			if ($attrTextAge != false){
 				$rawAgeArray[] = $attrTextAge;
 				$rawAgeTranslateArray[] = Mage::helper('core')->__($attrTextAge);
 			}
 		}
-		
 	}
 	
-	
+	//Cleaning up duplicate
 	$categoriesTranslateArray = array_values(array_unique($rawCategoriesTranslateArray));
 	$agesTranslateArray = array_values(array_unique($rawAgeTranslateArray));
 	$uniqueAgeArray = array_values(array_unique($rawAgeArray));
-	
-	$ageTag = implode(', ',$uniqueAgeArray);
-	
-
+	$ageTag = implode(', ', $uniqueAgeArray);
 	
 	
-	$description = $_category->getDescription();
-	
+	//Preparing results
 	if(empty($productsId)){
 		$productsId = array();
 	}
@@ -275,25 +249,23 @@ function processEventsJson($json, $field){
 	return $eventArray;
 }
 
-function loadCollection ($field,$plus = null){
+function loadCollection ($field, $plus = null){
 	
-	global $category, $eventArray, $start_date, $start_time;
+	global $eventArray, $start_date, $start_time;
 	
 	$event_date = array (
-		'from' => date('Y-m-d',$start_date). ' '.$start_time,
-		'to' => date('Y-m-d',$start_date).' 23:59:59'
+		'from' => date('Y-m-d', $start_date). ' '.$start_time,
+		'to' => date('Y-m-d', $start_date).' 23:59:59'
 	);
 	if (!empty($plus)){
-		$event_date['lteq'] = date('Y-m-d',strtotime($plus,$start_date)).' 23:59:59';
+		$event_date['lteq'] = date('Y-m-d', strtotime($plus, $start_date)).' 23:59:59';
 	}
 	
-	$_collection = $category->getCollection();
-	$_collection->addAttributeToFilter('is_active',1)
-		->addAttributeToSelect('*')
-		//->addFieldToFilter('entity_id',array("in"=>$eventArray))
-		->addAttributeToSort($field, 'desc')
-		//->addIdFilter($category->getChildren())
-		->addFieldToFilter($field, $event_date)
-		->load();
+	$_collection = Mage::getModel('catalog/category')->getCollection();
+	$_collection->addAttributeToFilter('is_active', 1)
+			->addAttributeToSelect('*')
+			->addAttributeToSort($field, 'desc')
+			->addFieldToFilter($field, $event_date)
+			->load();
 	return $_collection;	
 }
