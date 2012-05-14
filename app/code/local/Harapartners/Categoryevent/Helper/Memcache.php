@@ -17,10 +17,10 @@ class Harapartners_Categoryevent_Helper_Memcache extends Mage_Core_Helper_Abstra
     protected $_memcache = null;
     
     //Important, these lifetime should match the lifetime defined in the cache.xml for memcache!
-    protected $_indexDataLifeTime = 14400;
-    protected $_indexDataMemcachKey = 'catalog_event_index';
+    protected $_indexDataLifeTime = 3600;
+    protected $_indexDataMemcacheKey = 'catalog_event_index';
     protected $_topNavDataLifeTime = 1800;
-    protected $_topNavDataMemcachKey = 'catalog_event_topnav';
+    protected $_topNavDataMemcacheKey = 'catalog_event_topnav';
     
     
     protected function _getMemcache(){
@@ -30,12 +30,12 @@ class Harapartners_Categoryevent_Helper_Memcache extends Mage_Core_Helper_Abstra
         return $this->_memcache;
     }
     
-    public function getIndexDataObject(){
+    public function getIndexDataObject($forceRebuild = false){
         $indexData = array();
-        $memcacheKey = 'DATA_' . Mage::app()->getStore()->getCode() . '_' . $this->_indexDataMemcachKey;
+        $memcacheKey = 'DATA_' . Mage::app()->getStore()->getCode() . '_' . $this->_indexDataMemcacheKey;
         
         $indexData = $this->_getMemcache()->read($memcacheKey);
-        if(!$this->_validateIndexData($indexData)){
+        if($forceRebuild || !$this->_validateIndexData($indexData)){
             $indexData = $this->_getIndexDataFromDb();
             $this->_getMemcache()->write($memcacheKey, $indexData, $this->_indexDataLifeTime);
         }
@@ -44,7 +44,7 @@ class Harapartners_Categoryevent_Helper_Memcache extends Mage_Core_Helper_Abstra
     
     public function getTopNavDataObject(){
         $topNavData = array();
-        $memcacheKey = 'DATA_' . Mage::app()->getStore()->getCode() . '_' . $this->_topNavDataMemcachKey;
+        $memcacheKey = 'DATA_' . Mage::app()->getStore()->getCode() . '_' . $this->_topNavDataMemcacheKey;
         //Need to put request parameter in the key
         $params = Mage::app()->getRequest()->getParams();
         if(isset($params) && !!$params){

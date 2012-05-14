@@ -190,6 +190,9 @@ class Harapartners_Categoryevent_Model_Sortentry extends Mage_Core_Model_Abstrac
     	$this->setData('upcoming_queue', json_encode($eventUpcomingSortedArray));
     	$this->save();
     	
+    	//Force Rebuild memcached result
+    	Mage::helper('categoryevent/memcache')->getIndexDataObject(true);
+    	
     	return $this;
     }
     
