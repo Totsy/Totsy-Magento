@@ -138,13 +138,13 @@ class Enterprise_Reward_Model_Reward extends Mage_Core_Model_Abstract
      */
     protected function _afterSave()
     {
-    	//if ((int)$this->getPointsDelta() != 0 || $this->getCappedReward()) {
+    	if ((int)$this->getPointsDelta() != 0 || $this->getCappedReward()) {
 	        $this->_prepareCurrencyAmount();
 	        $this->getHistory()
 	            ->prepareFromReward()
 	            ->save();
 	        $this->sendBalanceUpdateNotification();
-    	//}
+    	}
         return parent::_afterSave();
     }
 
