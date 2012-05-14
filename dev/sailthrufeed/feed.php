@@ -12,11 +12,13 @@
 
 
 require_once( '../../app/Mage.php' );
+umask(0);
+$mageRunCode = isset($_SERVER['MAGE_RUN_CODE']) ? $_SERVER['MAGE_RUN_CODE'] : '';
+$mageRunType = isset($_SERVER['MAGE_RUN_TYPE']) ? $_SERVER['MAGE_RUN_TYPE'] : 'store';
+Mage::app($mageRunCode, $mageRunType);	 
 
 
 
-
-Mage::app();
 //Mage::setIsDeveloperMode(true);
 header('Cache-Control: no-cache, must-revalidate');
 header('Content-type: application/json');
@@ -171,26 +173,40 @@ function getEventApiOutput(Mage_Catalog_Model_Category $_category , $type, &$out
 	$evnt['name'] = $_category->getName();
 	$evnt['url'] = Mage::getBaseUrl().$_category->getUrlPath();
 	
-	$categories = $_category->getDepartments();
-	$categoriesArray = explode(',', $categories);
-	$categoriesTranslateArray = array();
-	foreach ($categoriesArray as $categorydepts){
-		// Load product collection
-		$attrOptions = Mage::getModel('catalog/category')->getResource()->getAttribute($_categoryCode);
-		$attrText = $attrOptions->getSource()->getOptionText($categorydepts);
-		$categoriesTranslateArray[] = $attrText;
+	$productCollection = $_category->getProductCollection();
+	foreach ($productCollection as $product){
+		$productDetail =  Mage::getModel('catalog/product')->load($product->getId());
+		$dept = $productDetail->getDepartments();
+		$deptArray = explode(',', $dept);
+		foreach($deptArray as $deptCode){
+			$attrOptions = Mage::getModel('catalog/product')->getResource()->getAttribute($_categoryCode);
+			$attrText = $attrOptions->getSource()->getOptionText($deptCode);
+			if ($attrText != false){
+				$rawCategoriesArray[] = $attrText;
+				$rawCategoriesTranslateArray[] = Mage::helper('core')->__($attrText);
+			}
+		}
+		$ages = $productDetail->getAges();
+		$agesArray = explode(',', $ages);
+		foreach($agesArray as $ageCode){
+			$attrOptionsAge = Mage::getModel('catalog/product')->getResource()->getAttribute($_ageCode);
+			$attrTextAge = $attrOptionsAge->getSource()->getOptionText($ageCode);
+			if ($attrTextAge != false){
+				$rawAgeArray[] = $attrTextAge;
+				$rawAgeTranslateArray[] = Mage::helper('core')->__($attrTextAge);
+			}
+		}
+		
 	}
 	
 	
-	$ages = $_category->getAges();
-	$ageArray = explode(',', $ages);
-	$agesTranslateArray = array();
-	foreach ($ageArray as $categoryages){
-		// Load product collection
-		$attrOptions = Mage::getModel('catalog/category')->getResource()->getAttribute($_ageCode);
-		$attrText = $attrOptions->getSource()->getOptionText($categoryages);
-		$agesTranslateArray[] = $attrText;
-	}	
+	$categoriesTranslateArray = array_values(array_unique($rawCategoriesTranslateArray));
+	$agesTranslateArray = array_values(array_unique($rawAgeTranslateArray));
+	$uniqueAgeArray = array_values(array_unique($rawAgeArray));
+	
+	$ageTag = implode(', ',$uniqueAgeArray);
+	
+
 	
 	
 	$description = $_category->getDescription();
@@ -209,10 +225,10 @@ function getEventApiOutput(Mage_Catalog_Model_Category $_category , $type, &$out
 		$evnt['image_small'] = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA).'catalog/category/'.$_category->getThumbnail();
 		$evnt['discount'] = floor($save);
 		$evnt['start_date'] = date('m-d-y g:i:s A',strtotime($_category->getEventStartDate())) ;
-		$evnt['categories'] = (!isset($categories))?array():$categoriesTranslateArray;
-		$evnt['ages'] = (!isset($ages))?array():$agesTranslateArray;
+		$evnt['categories'] = (count($categoriesTranslateArray))?$categoriesTranslateArray:array();
+		$evnt['ages'] = (count($agesTranslateArray))?$agesTranslateArray:array();
 		$evnt['items'] = $productsId;
-		$evnt['tag'] = $_category->getAges();
+		$evnt['tag'] = $ageTag;
 	}
 	
 	if (strcmp($type,'pending')!=0){
