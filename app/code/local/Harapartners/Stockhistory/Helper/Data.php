@@ -57,7 +57,8 @@ class Harapartners_Stockhistory_Helper_Data extends Mage_Core_Helper_Abstract  {
         return array(
                 Harapartners_Stockhistory_Model_Transaction::ACTION_TYPE_AMENDMENT => 'Amendment', 
                 Harapartners_Stockhistory_Model_Transaction::ACTION_TYPE_EVENT_IMPORT => 'Event Import', 
-                Harapartners_Stockhistory_Model_Transaction::ACTION_TYPE_DIRECT_IMPORT => 'Direct Import'
+                Harapartners_Stockhistory_Model_Transaction::ACTION_TYPE_DIRECT_IMPORT => 'Direct Import',
+                Harapartners_Stockhistory_Model_Transaction::ACTION_TYPE_REMOVE => 'Remove Item'
         );
     }
     
