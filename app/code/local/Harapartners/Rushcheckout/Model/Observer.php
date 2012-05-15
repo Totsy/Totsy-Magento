@@ -90,7 +90,17 @@ class Harapartners_Rushcheckout_Model_Observer {
     }
     
     // ===== Cronjob related ===== //
-    public function cleanExpiredQuotes($schedule) {
+    public function cleanExpiredQuotes() {
+        // ensure there are no other expired quote cleaners running
+        $cleanerJobs = Mage::getModel('cron/schedule')->getCollection();
+        $cleanerJobs->addFilter('job_code', 'rushcheckout_clean_expired_quotes')
+            ->addFilter('status', 'pending')
+            ->addFilter('status', 'running', 'or');
+
+        if (count($cleanerJobs)) {
+            return false;
+        }
+
         $lifetimes = Mage::getConfig()->getStoresConfigByPath('config/rushcheckout_timer/limit_timer');
         foreach ($lifetimes as $storeId => $lifetime) {
             $quoteCollection = Mage::getModel('sales/quote')->getCollection();

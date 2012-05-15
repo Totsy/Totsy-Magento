@@ -40,7 +40,10 @@ class Enterprise_WebsiteRestriction_Model_Observer
         /* @var $controller Mage_Core_Controller_Front_Action */
         $controller = $observer->getEvent()->getControllerAction();
 
-        if (!Mage::app()->getStore()->isAdmin()) {
+        //var_dump(Mage::app()->getStore()->isAdmin());
+        //exit();
+
+        if (Mage::app()->getStore()->isAdmin()==false) {
             $dispatchResult = new Varien_Object(array('should_proceed' => true, 'customer_logged_in' => false));
             Mage::dispatchEvent('websiterestriction_frontend', array(
                 'controller' => $controller, 'result' => $dispatchResult

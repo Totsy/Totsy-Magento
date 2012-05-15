@@ -38,20 +38,18 @@ class Mage_Sales_Block_Order_Recent extends Mage_Core_Block_Template
     public function __construct()
     {
         parent::__construct();
-
         //TODO: add full name logic
         $orders = Mage::getResourceModel('sales/order_collection')
             ->addAttributeToSelect('*')
             ->joinAttribute('shipping_firstname', 'order_address/firstname', 'shipping_address_id', null, 'left')
             ->joinAttribute('shipping_lastname', 'order_address/lastname', 'shipping_address_id', null, 'left')
             ->addAttributeToFilter('customer_id', Mage::getSingleton('customer/session')->getCustomer()->getId())
-            ->addFieldToFilter('state', array('in' => array_diff(Mage::getSingleton('sales/order_config')->getVisibleOnFrontStates(),array('canceled'))))
+            ->addFieldToFilter('state', array('in' => array_diff(Mage::getSingleton('sales/order_config')->getVisibleOnFrontStates(),array('splitted'))))
             //->addAttributeToFilter('relation_parent_id', array('null' => true))
             ->addAttributeToSort('created_at', 'desc')
             ->setPageSize('5')
             ->load()
         ;
-
         $this->setOrders($orders);
     }
 
