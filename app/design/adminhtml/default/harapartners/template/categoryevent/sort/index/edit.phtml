@@ -15,8 +15,6 @@
  */
 ?>
 <?php 
-	$keySortPost = $this->getPostKey();
-	$KeySortForm = $this->getFormKey();
 	$sortDate = $this->getSortDate();
 	$storeId = $this->getSortStore();
 	$arrayCollection = $this->loadSortCollection($sortDate, $storeId);
@@ -84,10 +82,10 @@
 	});
 
 	function saveOrderSubmit(){
-		var sortformkey = '<?php echo $KeySortForm; ?>';
+		var sortformkey = '<?php echo $this->getFormKey(); ?>';
 		jQuery.ajax({
 			type: 'POST',
-			url: "<?php echo $this->getBaseUrl().'categoryevent/adminhtml_sort/sortsave/key/'.$keySortPost;?>",
+			url: "<?php echo $this->getSortSavePostUrl(); ?>",
 			data: "&sortdate="+sortdate+"&storeid="+storeid+"&"+liveorder+"&"+uporder+"&form_key="+sortformkey,
 			dataType: "json",
 			success: function(jsonResponse){
@@ -102,10 +100,10 @@
 	}
 
 	function rebuildSubmit(){
-		var sortformkey = '<?php echo $KeySortForm; ?>';
+		var sortformkey = '<?php echo $this->getFormKey(); ?>';
 		jQuery.ajax({
 			type: 'POST',
-			url: "<?php echo $this->getBaseUrl().'categoryevent/adminhtml_sort/sortrebuild/key/'.$keySortPost;?>",
+			url: "<?php echo $this->getSortRebuildPostUrl(); ?>",
 			data: "&sortdate="+sortdate+"&storeid="+storeid+"&"+liveorder+"&"+uporder+"&form_key="+sortformkey,
 			dataType: "json",
 			success: function(jsonResponse){
