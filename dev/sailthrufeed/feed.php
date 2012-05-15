@@ -12,7 +12,7 @@ header('Content-type: application/json');
 
 $out = array('events'=>array(), 'pending'=>array(), 'closing'=>array());
 
-/*### DEFINE STORE AND CATEGORY  ###*/
+/*### DEFINE STORE AND CATEGORY ####*/
 //$categoryId = '8'; //totsy events category id
 //$topEventCategoryId = '24'; //totsy top events category id
 $storeId = Mage::app()->getStore()->getId(); //totsy store id
