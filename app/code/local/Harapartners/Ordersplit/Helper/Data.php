@@ -167,8 +167,7 @@ class Harapartners_Ordersplit_Helper_Data extends Mage_Core_Helper_Abstract {
                             
         //Harapartners, Jun, Cancel previous orders first, this will re-stock existing products
         //Critical for cart reservation logic!
-        $oldOrder->cancel();
-        
+        $oldOrder->cancel()->setStatus('splitted')->setState('splitted')->save();
         //configurable products and related simple products must be configured the same fullfillment type
         foreach($itemsArray as $itemList) {
             if(count($itemList['items'])){

@@ -27,6 +27,26 @@
                 <class>Harapartners_Ordersplit_Model</class>
             </ordersplit>
         </models>
+        <resources>
+            <ordersplit_setup>
+                <setup>
+                    <module>Harapartners_Ordersplit</module>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </ordersplit_setup>
+            <ordersplit_write>
+                <connection>
+                    <use>core_write</use>
+                </connection>
+            </ordersplit_write>
+            <ordersplit_read>
+                <connection>
+                    <use>core_read</use>
+                </connection>
+            </ordersplit_read>        
+        </resources>
         <!--Moved to Harapartners_Service-->
         <!--events>
             <sales_order_place_after>
