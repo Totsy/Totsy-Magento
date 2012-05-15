@@ -1228,6 +1228,7 @@ body .col-left hr {
 }
 
 .catalog-category-view .category-products ul.products-grid li.item div.product-info .price-box p.old-price{
+    width:100px;
 	text-align:right;
 }
 
