@@ -719,8 +719,8 @@ body .my-account .fieldset h2.legend {
 	display:none
 }
 /*--------------------Product View----------------------------------*/
-.catalog-category-view .category-products ul.products-grid li.item div.product-info .price-box{
-	width:80px;
+.catalog-category-view .category-products ul.products-grid li.item div.product-info .price-box {
+	width:auto;
 }
 
 body.catalog-category-view .category-products ul.products-grid li.item div.product-info h2{

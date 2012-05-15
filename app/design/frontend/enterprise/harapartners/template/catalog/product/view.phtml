@@ -92,7 +92,7 @@
 		            <?php if ($_product->getData('final_sale')): ?>
 		            	<p class="final-sale"><strong>Final Sale</strong></p>
 		            <?php endif; ?>
-		            <div class="share">    
+		            <div class="share" style="display:none;">    
      <?php if ($this->canEmailToFriend()): ?>        
          <div class="email-friend"><a href="<?php echo $this->helper('catalog/product')->getEmailToFriendUrl($_product) ?>"><?php echo $this->__('Email to a Friend') ?></a></div>    
      <?php endif; ?>    
