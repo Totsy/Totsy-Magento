@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @category    Totsy
+ * @package     Totsy_Page
+ * @author      Tharsan Bhuvanendran <tbhuvanendran@totsy.com>
+ * @copyright   Copyright (c) 2012 Totsy LLC
+ */
+-->
+<config>
+    <modules>
+        <Totsy_Page>
+            <version>0.1.0</version>
+        </Totsy_Page>
+    </modules>
+    <global>
+        <blocks>
+            <page>
+                <rewrite>
+                    <html_head>Totsy_Page_Block_Html_Head</html_head>
+                </rewrite>
+            </page>
+        </blocks>
+    </global>
+</config>

@@ -108,7 +108,7 @@ echo json_encode($out);
 function getLargestSaveByCategory(Mage_Catalog_Model_Category $_category){
 	
 	//Lazy loading, note 0 is allowed
-	if(is_numeric($_category->getLargestSavePercentage($percent))){
+	if(!is_numeric($_category->getLargestSavePercentage())){
 		$storeId = Mage::app()->getStore()->getId();
 		$_category->getProductCollection()->setStoreId($storeId);
 		
@@ -136,7 +136,7 @@ function getLargestSaveByCategory(Mage_Catalog_Model_Category $_category){
 	    $_category->setLargestSavePercentage($percent);
 	}
 	
-    return $_category->getLargestSavePercentage($percent);
+    return $_category->getLargestSavePercentage();
 }
 
 function getEventApiOutput(Mage_Catalog_Model_Category $_category , $type, &$out){

@@ -21,7 +21,7 @@ class Harapartners_Fulfillmentfactory_Helper_Log
      */
     public function infoLog($message)
     {
-        Mage::log($message, Zend_Log::INFO, 'fulfillment_info.log');
+        Mage::log($message, Zend_Log::INFO, 'fulfillment_info.log', true);
     }
 
     /**
@@ -37,7 +37,7 @@ class Harapartners_Fulfillmentfactory_Helper_Log
         $errorlogModel->setMessage($message);
         $errorlogModel->importDataWithValidation($errorlogModel->getData())->save();
 
-        Mage::log($message, Zend_Log::ERR, $logFileName);
+        Mage::log($message, Zend_Log::ERR, $logFileName, true);
 
         return $logFileName;
     }
@@ -57,7 +57,7 @@ class Harapartners_Fulfillmentfactory_Helper_Log
         $errorlogModel->setMessage($message);
         $errorlogModel->importDataWithValidation($errorlogModel->getData())->save();
 
-        Mage::log($message, null, $logFileName);
+        Mage::log($message, Zend_Log::ERR, $logFileName, true);
 
         return $logFileName;
     }
