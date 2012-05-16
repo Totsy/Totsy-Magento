@@ -36,7 +36,7 @@ class Enterprise_PageCache_Model_Processor_Product extends Enterprise_PageCache_
     
     //Harapartners, Jun, Catalog pages are updated at very high frequency (due to reservation fluctuation), refresh adaptively
     //Prime number preferred
-    const PAGE_REFRESH_FACTOR = 100;
+    const PAGE_REFRESH_FACTOR = 400;
 
     /**
      * Prepare response body before caching
