@@ -38,9 +38,7 @@
 	$_cart = $this->helper('checkout/cart')->getCart();
 		
 	$product_ids = implode(",", $_cart->getProductIds());
-	
-	print_r($_product->getAttributes());
-				
+					
 	//Harapartners, Jun, in the controller we will guarantee the current categor must exists, if not we redirect	
 	$_category  = Mage::registry('current_category');
 ?>
