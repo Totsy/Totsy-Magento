@@ -70,24 +70,17 @@ class Harapartners_Service_Model_Rewrite_Core_Email_Template extends Mage_Core_M
                 - this is actually not being used right now, due to some issue yet to be resolved…
                 - the code is correct, it may be issue with DB and/or sailthru… resolve later date
                 */
+			// look up customer, cross-ref to store
             $customerId = Mage::getModel('newsletter/subscriber')->loadByEmail($email)->getCustomerId();
             $customer = Mage::getModel('customer/customer')->load($customerId);
             $store = "";
             $store = Mage::getModel('core/store')->load($customer['store_id']);
-            
-            // store the includes used in sailthru
-            $header = 'header';
-            $footer = 'footer';
-            
+            // check which store and put in variable for use in sailthru template
             if ($store['code']=="default" || $store['code']=="mobile") {
                 $store_code = "totsy"; 
             } else {
                 $store_code = "mamasource";
-                // modified includes for mama
-                $header = 'mama_'.$header;
-                $footer = 'mama_'.$footer;
             }
-           
             $vars = array('store'=>$store_code);
              
             $evars = array();
@@ -103,10 +96,10 @@ class Harapartners_Service_Model_Rewrite_Core_Email_Template extends Mage_Core_M
             //error message is a 2 values array
             if(count($success) == 2) {  
                 //final try, to create a email template, rule http://docs.sailthru.com/api/template?s[]=savetemplate
+                /* @DG-2012.05.16: removing the $temp's here as they incorrectly overwrite existing templates on Sailthru
                 //$tempvars = array("content_html" => "{content}", "subject" => "{subj}");
-                $tempvars = array("content_html" => "{include '".$header."'}\n{content}\n{include '".$footer."'}", "subject" => "{subj}");
-
-                $tempsuccess = $sailthru->saveTemplate($template_name, $tempvars);
+                //$tempsuccess = $sailthru->saveTemplate($template_name, $tempvars);
+                */
                 $success = $sailthru->multisend($template_name, $temails, $vars, $evars, $options);
                 //not success, use magento default send…
                 if(count($success) == 2) {

@@ -176,7 +176,7 @@ class Enterprise_Invitation_Helper_Data extends Mage_Core_Helper_Abstract
         $genericInvitationKey = base64_encode( Mage::getModel( 'core/encryption' )->encrypt( serialize( $customerInfo ) ) );
         //return Mage::getUrl( 'invitation/customer_account/genericcreate/invitation/' . $genericInvitationKey );
         //return Mage::getUrl( 'invitation/customer_account/genericcreate/invitation/' . strtolower( $inviterName ) . '_' . $inviterId );
-        return Mage::getUrl( 'invite/' . strtolower( $inviterName ) . '_' . $inviterId );
+        return Mage::getUrl( 'invite/' . strtolower( $inviterName ) . '_' . $inviterId, array('_nosid' => true) );
     }
     
     public function getGenericProductInvitationLink() {
