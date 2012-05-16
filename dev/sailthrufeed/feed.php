@@ -1,6 +1,6 @@
 <?php 
 
-$chash = __DIR__. '/' .md5($_SERVER['REQUEST_URI']).'.json';
+$chash = dirname(dirname(__DIR__)). '/var/tmp/' .md5($_SERVER['REQUEST_URI']).'.json';
 $TTL = 30*60;
 if (file_exists($chash)){
 	$time = time() - filectime($chash);
