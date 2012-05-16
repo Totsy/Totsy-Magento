@@ -88,7 +88,6 @@ class Harapartners_Fulfillmentfactory_Helper_Dotcom extends Mage_Core_Helper_Abs
             $client->setHeaders($header);
             
             $response = $client->request();
-            echo print_r($response, 1); //TEST
 
             if(isset($response)) {
                 $body = $response->getBody();
