@@ -1,5 +1,21 @@
 <?php 
 
+
+$chash = __DIR__. '/' .md5($_SERVER['REQUEST_URI']).'.json';
+$TTL = 30*60;
+if (file_exists($chash)){
+	$time = time() - filectime($chash);
+	if ($time<$TTL){
+		header('Cache-Control: no-cache, must-revalidate');
+		header('Content-type: application/json');
+		echo file_get_contents($chash);
+		
+		exit(0);
+	}
+}
+
+
+
 require_once( '../../app/Mage.php' );
 umask(0);
 $mageRunCode = isset($_SERVER['MAGE_RUN_CODE']) ? $_SERVER['MAGE_RUN_CODE'] : '';
@@ -95,8 +111,12 @@ $out['max_off'] = floor($maxOff);
 
 
 /*### OUTPUT JSON ###*/
-echo json_encode($out);
 
+$data = json_encode($out);
+$fh = fopen($chash,'w');
+fwrite($fh,$data);
+fclose($fh);
+echo $data;
 /*### END ###*/
 
 
