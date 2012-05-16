@@ -405,9 +405,9 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Mage_Cybersource_Model_
             $this->_request->recurringSubscriptionInfo = $recurringSubscriptionInfo;
         }
     }
+
     
-    
-    public function createProfile($payment,$billing,$customerId) {
+    public function createProfile($payment,$billing,$customerId,$addressId) {
                 
         //??? can we use parent::authorize() with different init param ???
         $error = false;
@@ -488,6 +488,7 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Mage_Cybersource_Model_
         try{
             $data = new Varien_Object($payment->getData());
             $data->setData('customer_id', $customerId);
+            $data->setData('address_id', $addressId);
             $data->setData('cc_last4', substr($payment->getCcNumber(), -4));
             $data->setData('cybersource_subid', $result->paySubscriptionCreateReply->subscriptionID);
             $profile = Mage::getModel('paymentfactory/profile');

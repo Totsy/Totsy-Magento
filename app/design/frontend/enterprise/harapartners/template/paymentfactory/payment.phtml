@@ -1,68 +1,92 @@
 <?php 
-	$customer = Mage::getSingleton('customer/session')->getCustomer();
-	$id = $customer->getId(); 
-	$paymentCollection = Mage::getModel('paymentfactory/profile')->loadByCustomerId($id);
-	$counter = 0;
+    $customer = Mage::getSingleton('customer/session')->getCustomer();
+    $id = $customer->getId(); 
+    $paymentCollection = Mage::getModel('paymentfactory/profile')->loadByCustomerId($id);
 ?>
 
 <div class="page-title">
-	<h1>My Credit Cards</h1>
-	<div class="add-new-card">
-		<p class="add-new-card-button">Add a new credit card</p>
-		<script type="text/javascript">
-			jQuery(document).ready(function(){
-				jQuery(".add-new-card-button").click( function() {
-					jQuery(".add-new-card-form").fadeIn();
-					jQuery(this).hide();
-				});
-				jQuery(".add-new-card-close").click( function() {
-					jQuery(".add-new-card-form").fadeOut();
-					jQuery(".add-new-card-button").show();
-				});
-			})
-		</script>
-		<div class="add-new-card-form" style="display:none;">
-			<?php echo $this->getChildHtml('credit_cards_form');?>
-			<p class="add-new-card-close" >Close</p>
-		</div>
-	</div>
+    <h1>My Credit Cards</h1>
+    <div class="add-new-card">
+        <p class="add-new-card-button">Add a new credit card</p>
+        <script type="text/javascript">
+            jQuery(document).ready(function(){
+                jQuery(".add-new-card-button").click( function() {
+                    jQuery(".add-new-card-form").fadeIn();
+                    jQuery(this).hide();
+                });
+                jQuery(".add-new-card-close").click( function() {
+                    jQuery(".add-new-card-form").fadeOut();
+                    jQuery(".add-new-card-button").show();
+                });
+            })
+        </script>
+        <div class="add-new-card-form" style="display:none;">
+            <?php echo $this->getChildHtml('credit_cards_form');?>
+            <p class="add-new-card-close" >Close</p>
+        </div>
+    </div>
 </div>
 
 <div class="cards-info">
-	<h2></h2>
-	<?php if(count($paymentCollection)!=0):?>
-	<ul>
-	<?php foreach($paymentCollection as $payment):
-			$type = $payment->getData('card_type');
-			switch ($type) {
-                case "VI":
-                    $cardType = 'Visa';
-                    break;
-                case "MC":
-                    $cardType = 'Master Card';
-                    break;
-                case "AE":
-                    $cardType = 'American Express';
-                    break;
-            }
-            $counter++;
-	?>
-	<?php if($payment->getIsDefault()== 0):?>
-	<li>
-		<ul class="cards_item">
-		<form action="<?php echo $this->getBaseUrl();?>paymentfactory/index/delete/" method="post" id="payment_edit_form">
-			<li class="card_type"><?php echo $counter;?>.<?php echo $cardType ?></li>
-			<li>xxxxxxxxxxxx<?php echo $payment->getData('last4no')?></li>
-			<li><?php echo $payment->getData('expire_year').'-'.$payment->getData('expire_month')?></li>
-			<input type="hidden" name="entity_id" id="id" value="<?php echo $payment->getData('entity_id') ?>"  class="input-text hidden" /></td>
-			<li><button class="button general top" type="submit"><span><span>Delete</span></span></button></li>
-		</form>
-		</ul>
-	</li>
-	<?php endif;?>
-	<?php endforeach;?>
-	</ul>
-	<?php else:?>
-	<h2>You don't have a saved credit card with your account.</h2>
-	<?php endif;?>
+<?php if(count($paymentCollection)!=0):?>
+    <table width="650" border="0" cellspacing="0" cellpadding="0" style="margin: 10px;">
+        <?php foreach($paymentCollection as $payment):
+                        $type = $payment->getData('card_type');
+                        switch ($type) {
+                            case "VI":
+                                $creditCardImage = 'cc_visa.gif';
+                                $cardType = 'Visa';
+                                break;
+                            case "MC":
+                                $creditCardImage = 'cc_mastercard.gif';
+                                $cardType = 'Master Card';
+                                break;
+                            case "AE":
+                                $creditCardImage = 'cc_amex.gif';
+                                $cardType = 'American Express';
+                                break;
+                        }
+        ?>
+        <?php if($payment->getIsDefault()== 0):?>
+            <tr>
+                <td width="10%" align="left">
+                <img src="<?php echo $this->getSkinUrl('images/' . $creditCardImage)?>"> 
+                </td>            
+                <td width="67%">
+                    <?php echo $cardType?> ending in <strong><?php echo $payment->getData('last4no')?></strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    expires <strong><?php echo $payment->getData('expire_month');?>/<?php echo $payment->getData('expire_year');?></strong>
+                </td>
+                <td width="13%" align="right">
+                    <a href="<?php echo $this->getBaseUrl();?>paymentfactory/index/delete/?entity_id=<?php echo $payment->getData('entity_id');?>" id="remove_<?php echo $payment->getData('entity_id');?>" title="Remove Credit Card" class="creditcard_remove">Delete</a>
+                </td>
+            </tr>
+             <tr>
+    <td>&nbsp;</td>
+    <td rowspan="2">
+        <br/>
+            <?php if($payment->getData('address_id')):?>
+                <?php $address_id = $payment->getData('address_id'); ?>
+            <table width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                    <td width="141" valign="top">Cardholder Name:</td>
+                    <td width="281"><?php echo $this->htmlEscape($this->getAddress($address_id)->getFirstName(1)); ?> <?php echo $this->htmlEscape($this->getAddress($address_id)->getLastName(1)); ?></td>
+                </tr>
+                <tr>
+                    <td valign="top">Billing Address:</td>
+                    <td><?php echo $this->htmlEscape($this->getAddress($address_id)->getStreet(1)); ?><br/>    
+                        <?php //if($cyberSourceProfile[billing][address2]): ?>
+                            <?php //echo $cyberSourceProfile[billing][address2]?><br />
+                        <?php //endif ?>
+                        <?php echo $this->htmlEscape($this->getAddress($address_id)->getCity(1)); ?>, <?php echo $this->htmlEscape($this->getAddress($address_id)->getState(1)); ?> <?php echo $this->htmlEscape($this->getAddress($address_id)->getPostcode(1)); ?>
+                    </td>
+                </tr>
+            </table>
+            <?php endif; ?>
+    </td>
+    <?php endif;?>
+    <?php endforeach;?>
+    </table>
+<?php else:?>
+    <h2>You don't have a saved credit card with your account.</h2>
+<?php endif;?>
 </div>

@@ -25,14 +25,15 @@ class Harapartners_Paymentfactory_IndexController extends Mage_Core_Controller_F
         $this->_redirect ( '*/*/' );
     }
     public function createAction(){
-        
-        $customerId = Mage::getSingleton('customer/session')->getCustomer()->getId();
+        $customer = $this->_getSession()->getCustomer();
+        $customerId = $customer->getId();
         
         $data = $this->getRequest ()->getParams();
         
         $billing = new Varien_Object($data['billing']);
         $payment = new Varien_Object($data['payment']);
-        
+        #Create Address that will be link with Payment Profile
+        $addressId = $this->createAddressFromForm($customer);
         #Check if there is already a cybersource profile if yes, dont create a new one
         $profile = Mage::getModel('paymentfactory/profile');
         $profile->loadByCcNumberWithId($payment->getData('cc_number').$customerId.$payment->getCcExpYear().$payment->getCcExpMonth());
@@ -42,7 +43,7 @@ class Harapartners_Paymentfactory_IndexController extends Mage_Core_Controller_F
         }
         try{
             //Mage::getModel ( 'paymentfactory/profile' )->deleteById( $id );            
-            Mage::getModel ( 'paymentfactory/tokenize' )->createProfile($payment,$billing,$customerId);
+            Mage::getModel ( 'paymentfactory/tokenize' )->createProfile($payment,$billing,$customerId,$addressId);
             $customerSession = Mage::getSingleton('customer/session');
             $customerSession->addSuccess('Save Credit Card Successfully ');
         }catch(Exception $e){
@@ -50,8 +51,44 @@ class Harapartners_Paymentfactory_IndexController extends Mage_Core_Controller_F
                 Mage::helper('paymentfactory')->__($e->getMessage()));
         }
         
+
         $this->_redirect ( '*/*/' );
         
     }
     
+        /**
+     * Retrieve customer session object
+     *
+     * @return Mage_Customer_Model_Session
+     */
+    protected function _getSession()
+    {
+        return Mage::getSingleton('customer/session');
+    }
+    
+    public function createAddressFromForm($customer) {
+        $address = Mage::getModel('customer/address');
+        $addressForm = Mage::getModel('customer/form');
+        $addressForm->setFormCode('customer_address_edit')
+                    ->setEntity($address);
+        $addressData = $addressForm->extractData($this->getRequest(), 'billing', false);
+        $addressErrors = $addressForm->validateData($addressData);
+        if ($addressErrors === true) {
+            $addressForm->compactData($addressData);
+            $address->setCustomerId($customer->getId())
+                ->setIsDefaultBilling(false)
+                ->setIsDefaultShipping(false);
+            $addressErrors = $address->validate();
+            if (is_array($addressErrors)) {
+                $errors = array_merge($errors, $addressErrors);
+            } else {
+                $address->save();
+                return $address->getId();
+            }
+        } else {
+            $errors = array_merge($errors, $addressErrors);
+        }
+    }
+
+
 }
