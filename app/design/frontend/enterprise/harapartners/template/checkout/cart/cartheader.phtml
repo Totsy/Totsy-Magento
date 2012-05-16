@@ -148,11 +148,11 @@
     // Enterprise.TopCart.showCart(7);
 	jQuery(document).ready(function(){
 		var $topCartContent = jQuery("#topCartContent");
-		window.setTimeout('hideTopCart()', 5000);
+		window.setTimeout('hideTopCart()', 5000); // this is called each page load, needs to refined to just be called when mini-cart is initialized after adding to car - not each page load
 		jQuery(".top-cart").hover(
 			function(){
 				$topCartContent.stop().fadeTo(200,1);
-				//window.setTimeout( 'hideTopCart()', 8000 );
+				//window.setTimeout( 'hideTopCart()', 8000 ); // leave the mini-cart open when being hovered, no timeout
 			},
 			function(){
 				$topCartContent.stop().fadeTo(500,0).hide();
