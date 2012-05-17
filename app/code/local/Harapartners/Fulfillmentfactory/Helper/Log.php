@@ -33,10 +33,6 @@ class Harapartners_Fulfillmentfactory_Helper_Log
     public function errorLog($message) {
         $logFileName = 'fulfillment_error.log';
 
-        $errorlogModel = Mage::getModel('fulfillmentfactory/errorlog');
-        $errorlogModel->setMessage($message);
-        $errorlogModel->importDataWithValidation($errorlogModel->getData())->save();
-
         Mage::log($message, Zend_Log::ERR, $logFileName, true);
 
         return $logFileName;
