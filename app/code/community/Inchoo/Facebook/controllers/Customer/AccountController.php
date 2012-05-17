@@ -31,11 +31,11 @@ class Inchoo_Facebook_Customer_AccountController extends Mage_Core_Controller_Fr
 
     public function connectAction()
     {
-        /*if(!$this->_getSession()->validate()) {
+        if(!$this->_getSession()->validate()) {
             $this->_getCustomerSession()->addError($this->__('Facebook connection failed.'));
             $this->_redirect('customer/account/login');
             return;
-        }*/
+        }
 
         //login or connect
 
