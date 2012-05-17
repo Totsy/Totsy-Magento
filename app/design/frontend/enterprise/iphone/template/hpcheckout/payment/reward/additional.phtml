@@ -51,6 +51,7 @@
 
     jQuery( document ).ready( function() {
         if( isRewardUsed && isEnoughPointsToCoverAmount ) {
+        	jQuery( '#hpcheckout-payment-select' ).val('free');
         	jQuery( '#checkout-payment-method-load' ).hide();
         }
 		jQuery( '#use-reward-point' ).bind( 'click', function() {
