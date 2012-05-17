@@ -29,7 +29,6 @@
 
 <div class="cards-info">
 <?php if(count($paymentCollection)!=0):?>
-    <table width="650" border="0" cellspacing="0" cellpadding="0" style="margin: 10px;">
         <?php foreach($paymentCollection as $payment):
                         $type = $payment->getData('card_type');
                         switch ($type) {
@@ -48,6 +47,8 @@
                         }
         ?>
         <?php if($payment->getIsDefault()== 0):?>
+        <div style='border:1px solid #DDD'>
+        <table width="650" border="0" cellspacing="0" cellpadding="0" style="margin: 10px;">
             <tr>
                 <td width="10%" align="left">
                 <img src="<?php echo $this->getSkinUrl('images/' . $creditCardImage)?>"> 
@@ -57,35 +58,36 @@
                     expires <strong><?php echo $payment->getData('expire_month');?>/<?php echo $payment->getData('expire_year');?></strong>
                 </td>
                 <td width="13%" align="right">
-                    <a href="<?php echo $this->getBaseUrl();?>paymentfactory/index/delete/?entity_id=<?php echo $payment->getData('entity_id');?>" id="remove_<?php echo $payment->getData('entity_id');?>" title="Remove Credit Card" class="creditcard_remove">Delete</a>
+                    <a href="<?php echo $this->getBaseUrl();?>paymentfactory/index/delete/?entity_id=<?php echo $payment->getData('entity_id');?>" id="remove_<?php echo $payment->getData('entity_id');?>" title="Remove Credit Card" class="add-new-card-button">Delete</a>
                 </td>
             </tr>
+        <?php if($payment->getData('address_id')):?>
              <tr>
-    <td>&nbsp;</td>
-    <td rowspan="2">
-        <br/>
-            <?php if($payment->getData('address_id')):?>
-                <?php $address_id = $payment->getData('address_id'); ?>
+                <td width="10%" align="left"></td>
+            <?php $address_id = $payment->getData('address_id'); ?>
+            <td width="90%">
             <table width="100%" cellpadding="0" cellspacing="0">
                 <tr>
                     <td width="141" valign="top">Cardholder Name:</td>
-                    <td width="281"><?php echo $this->htmlEscape($this->getAddress($address_id)->getFirstName(1)); ?> <?php echo $this->htmlEscape($this->getAddress($address_id)->getLastName(1)); ?></td>
+                    <td width="281"><?php echo $this->htmlEscape($this->getAddress($address_id)->getFirstname()); ?> <?php echo $this->htmlEscape($this->getAddress($address_id)->getLastname()); ?></td>
                 </tr>
                 <tr>
                     <td valign="top">Billing Address:</td>
-                    <td><?php echo $this->htmlEscape($this->getAddress($address_id)->getStreet(1)); ?><br/>    
-                        <?php //if($cyberSourceProfile[billing][address2]): ?>
-                            <?php //echo $cyberSourceProfile[billing][address2]?><br />
-                        <?php //endif ?>
-                        <?php echo $this->htmlEscape($this->getAddress($address_id)->getCity(1)); ?>, <?php echo $this->htmlEscape($this->getAddress($address_id)->getState(1)); ?> <?php echo $this->htmlEscape($this->getAddress($address_id)->getPostcode(1)); ?>
+                    <td><?php echo $this->htmlEscape($this->getAddress($address_id)->getStreet(1)); ?>
+                        <?php if($this->getAddress($address_id)->getStreet(1)): ?>
+                            <?php echo $this->htmlEscape($this->getAddress($address_id)->getStreet(2)); ?><br />
+                        <?php endif ?>
+                        <?php echo $this->htmlEscape($this->getAddress($address_id)->getCity()); ?>, <?php echo $this->htmlEscape($this->getAddress($address_id)->getRegion()); ?> <?php echo $this->htmlEscape($this->getAddress($address_id)->getPostcode()); ?>
                     </td>
                 </tr>
             </table>
-            <?php endif; ?>
-    </td>
+            </td>
+            </tr>
+        <?php endif; ?>
+     </table>
+     </div>
     <?php endif;?>
     <?php endforeach;?>
-    </table>
 <?php else:?>
     <h2>You don't have a saved credit card with your account.</h2>
 <?php endif;?>
