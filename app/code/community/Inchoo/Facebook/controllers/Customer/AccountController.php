@@ -221,7 +221,7 @@ class Inchoo_Facebook_Customer_AccountController extends Mage_Core_Controller_Fr
 			Mage::dispatchEvent('customer_register_success',
 			                        array('account_controller' => $this, 'customer' => $customer)
 			                    );
-            //Harapartners, Andu, END
+            //Harapartners, Andu,  END
             
 			//Harapartners, Edward, for facebook speciall email   the template is  _trans_Facebook_Register
 			//also set at admin->customer configuateion->Create New Account Options->Welcome Email
