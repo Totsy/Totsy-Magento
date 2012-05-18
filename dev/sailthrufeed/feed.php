@@ -276,8 +276,12 @@ function loadCollection ($field, $plus = null){
 		'to' => date('Y-m-d', $start_date).' 23:59:59'
 	);
 	if (!empty($plus)){
-		$event_date['lteq'] = date('Y-m-d', strtotime($plus, $start_date)).' 23:59:59';
+		$event_date = array (
+			'from' => date('Y-m-d', strtotime($plus, $start_date)). ' '.$start_time,
+			'to' => date('Y-m-d', strtotime($plus, $start_date)).' 23:59:59'
+		);
 	}
+
 	
 	$_collection = Mage::getModel('catalog/category')->getCollection();
 	$_collection->addAttributeToFilter('is_active', 1)
