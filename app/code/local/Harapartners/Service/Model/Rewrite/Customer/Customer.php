@@ -61,25 +61,28 @@ class Harapartners_Service_Model_Rewrite_Customer_Customer extends Mage_Customer
     }
 
     public function authenticate($login, $password, $reValidate = false) {
-        $login = $this->_trimGmail($login, false);    //Harapartners, trim gmail alias
+        $login = $this->_trimGmail($login, false);    
+        //Harapartners, trim gmail alias
         
         $this->loadByEmail($login);
 
         //Harapartners, yang, START
         //Store switching, based on customer group, if customer is invalid, stay in the current store/store view
         Mage::helper('service')->validateStoreByCustomer($this);
-        //Harapartners, yang, END
+        //Harapartners, yang, EN        
         
         if ($this->getConfirmation() && $this->isConfirmationRequired()) {
             throw Mage::exception('Mage_Core', Mage::helper('customer')->__('This account is not confirmed.'),
                 self::EXCEPTION_EMAIL_NOT_CONFIRMED
             );
         }
+        
         if (!$this->validatePassword($password)) {
             throw Mage::exception('Mage_Core', Mage::helper('customer')->__('Invalid login or password.'),
                 self::EXCEPTION_INVALID_EMAIL_OR_PASSWORD
             );
         }
+        
         //Harapartners, yang, Add param for re-validate
         if (!$reValidate){
             Mage::dispatchEvent('customer_customer_authenticated', array(
