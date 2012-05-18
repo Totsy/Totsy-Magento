@@ -28,15 +28,19 @@
 <div class="content-header">
         <h3 class="icon-head head-categories"><?php echo $this->htmlEscape($this->getHeader()) . ($this->getCategoryId() ? ' (' . Mage::helper('catalog')->__('ID: %s', $this->getCategoryId()) . ')' : '') ?></h3>
         <p class="content-buttons form-buttons">
-            <?php echo $this->getResetButtonHtml() ?>
+            
             <?php if($this->getCategoryId()): ?>
-                    <?php echo $this->getDeleteButtonHtml(); ?>
-                    <?php echo $this->getImportProductButtonHtml();?>
+            		<?php echo $this->getDeleteButtonHtml(); ?>
+                    <?php echo $this->getDeleteProductsButtonHtml();?>
                     <?php echo $this->getReleaseButtonHtml(); ?>
                     <?php echo $this->getUndoReleaseButtonHtml();?>
-                    <?php echo $this->getPreviewButtonHtml();?>
             <?php endif; ?>
             <?php echo $this->getAdditionalButtonsHtml(); ?>
+            <?php echo $this->getResetButtonHtml() ?>
+            <?php if($this->getCategoryId()): ?>
+            		<?php echo $this->getImportProductButtonHtml();?>
+                    <?php echo $this->getPreviewButtonHtml();?>
+            <?php endif; ?>
             <?php echo $this->getSaveButtonHtml() ?>
         </p>
 </div>
@@ -189,6 +193,18 @@
 
         // Submit form
         categoryForm.submit();
+    }
+
+    function deleteProductsSubmit() {
+        var massDeleteUrl = "<?php $this->getUrl('*/*/deleteProducts', array('_current' => true, 'store' => $this->_getAdminStore())); ?>";
+        var selectedIds = "";
+    	jQuery('input.checkbox:checked:visible', '#category_edit_form').each(function (){
+			if(!!this.value){
+				selectedIds += this.value + ','; //Prototype 1.7 JSON stringify bug
+			}
+    	});
+
+    	setLocation(massDeleteUrl + 'deletedProducts/' + selectedIds);
     }
 
 <?php if(($block = $this->getLayout()->getBlock('category.product.grid')) && ($_gridJsObject=$block->getJsObjectName())): ?>

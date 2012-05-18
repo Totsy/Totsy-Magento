@@ -541,4 +541,26 @@ class Mage_Adminhtml_Catalog_CategoryController extends Mage_Adminhtml_Controlle
         return Mage::getSingleton('admin/session')->isAllowed('catalog/categories');
     }
     
+    
+	public function deleteProductsAction(){
+        $deletedProductsId = explode(trim($this->getRequest()->getParam('deletedProducts')), ',');
+        $success = true;
+		foreach( $deletedProductsId as $productId ) {
+			if(!is_numeric($productId)){
+				continue;
+			}
+			$product = Mage::getModel('catalog/product')->load($productId);
+	        try {
+                $product->delete();
+            }catch (Exception $e){
+                Mage::getSingleton('core/session')->addError($this->__('Unable to delete product ') . $product->getSku());
+                $success = false;
+            }
+        }
+        if( $success ) {
+        	Mage::getSingleton('core/session')->addSuccess($this->__('Selected products have been successfully deleted'));
+        }
+
+        $this->_redirect('*/*/index');        
+    }
 }
