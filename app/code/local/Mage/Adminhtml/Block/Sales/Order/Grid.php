@@ -72,6 +72,7 @@ class Mage_Adminhtml_Block_Sales_Order_Grid extends Mage_Adminhtml_Block_Widget_
             'width' => '80px',
             'type'  => 'text',
             'index' => 'increment_id',
+        	'filter_index' => '`main_table`.`increment_id`'
         ));
 
         if (!Mage::app()->isSingleStoreMode()) {
@@ -81,6 +82,7 @@ class Mage_Adminhtml_Block_Sales_Order_Grid extends Mage_Adminhtml_Block_Widget_
                 'type'      => 'store',
                 'store_view'=> true,
                 'display_deleted' => true,
+            	'filter_index' => '`main_table`.`store_id`'
             ));
         }
 
@@ -89,36 +91,42 @@ class Mage_Adminhtml_Block_Sales_Order_Grid extends Mage_Adminhtml_Block_Widget_
             'index' => 'created_at',
             'type' => 'datetime',
             'width' => '100px',
+        	'filter_index' => '`main_table`.`created_at`'
         ));
 
         $this->addColumn('billing_name', array(
             'header' => Mage::helper('sales')->__('Bill to Name'),
             'index' => 'billing_name',
+        	'filter_index' => '`main_table`.`billing_name`'
         ));
 
         $this->addColumn('shipping_name', array(
             'header' => Mage::helper('sales')->__('Ship to Name'),
             'index' => 'shipping_name',
+        	'filter_index' => '`main_table`.`shipping_name`'
         ));
         
         //Harapartners Li Lu: add a column for customer email
         $this->addColumn('email', array(
             'header' => Mage::helper('sales')->__('Customer Email'),
             'index' => 'email',
+        	'filter_index' => '`customer_entity`.`email`'
         ));
 
-        $this->addColumn('base_grand_total', array(
-            'header' => Mage::helper('sales')->__('G.T. (Base)'),
-            'index' => 'base_grand_total',
-            'type'  => 'currency',
-            'currency' => 'base_currency_code',
-        ));
+//        $this->addColumn('base_grand_total', array(
+//            'header' => Mage::helper('sales')->__('G.T. (Base)'),
+//            'index' => 'base_grand_total',
+//            'type'  => 'currency',
+//            'currency' => 'base_currency_code',
+//        	'filter_index' => '`main_table`.`base_grand_total`'
+//        ));
 
         $this->addColumn('grand_total', array(
             'header' => Mage::helper('sales')->__('G.T. (Purchased)'),
             'index' => 'grand_total',
             'type'  => 'currency',
             'currency' => 'order_currency_code',
+        	'filter_index' => '`main_table`.`grand_total`'
         ));
 
         $this->addColumn('status', array(
@@ -127,6 +135,7 @@ class Mage_Adminhtml_Block_Sales_Order_Grid extends Mage_Adminhtml_Block_Widget_
             'type'  => 'options',
             'width' => '70px',
             'options' => Mage::getSingleton('sales/order_config')->getStatuses(),
+        	'filter_index' => '`main_table`.`status`'
         ));
 
         if (Mage::getSingleton('admin/session')->isAllowed('sales/order/actions/view')) {

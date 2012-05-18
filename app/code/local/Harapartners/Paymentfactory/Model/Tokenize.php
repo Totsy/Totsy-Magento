@@ -297,18 +297,18 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Mage_Cybersource_Model_
             
             parent::iniRequest();
             
-//            $ccAuthReversalService = new stdClass();
-//            $ccAuthReversalService->run = "true";
-//            $ccAuthReversalService->authRequestID = $payment->getTransactionId();
-//            $ccAuthReversalService->authRequestToken = $payment->getCybersourceToken();
-//            $this->_request->ccAuthReversalService = $ccAuthReversalService;
+            $ccAuthReversalService = new stdClass();
+            $ccAuthReversalService->run = "true";
+            $ccAuthReversalService->authRequestID = $payment->getTransactionId();
+            $ccAuthReversalService->authRequestToken = $payment->getCybersourceToken();
+            $this->_request->ccAuthReversalService = $ccAuthReversalService;
 
 //             $voidService
-            $voidService = new stdClass();
-            $voidService->run = "true";
-            $voidService->authRequestID = $payment->getTransactionId();
-            $voidService->authRequestToken = $payment->getCybersourceToken();
-            $this->_request->voidService = $voidService;
+//            $voidService = new stdClass();
+//            $voidService->run = "true";
+//            $voidService->authRequestID = $payment->getTransactionId();
+//            $voidService->authRequestToken = $payment->getCybersourceToken();
+//            $this->_request->voidService = $voidService;
              
             $purchaseTotals = new stdClass();
             $purchaseTotals->currency = $payment->getOrder()->getBaseCurrencyCode();

@@ -12,17 +12,6 @@
  */
 class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
 {
-    const ONE_DAY_SECONDS = 86400;
-    
-    /**
-     * get yesterday's date string
-     *
-     * @return date
-     */
-    protected function _getYesterday() {
-        return date("Y-m-d 00:00:00", mktime(0, 0, 0, date("m"),date("d")-1,date("Y")));    //UTC
-    }
-
     /**
      * Perform order fulfillment.
      * 1) Retrieve Inventory Status from Dotcom and sync with local product
@@ -73,13 +62,16 @@ class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
     public function runUpdateShipment() {
         try {
             //put one day as default
-            $fromDate = $this->_getYesterday();
-            $toDate = date("Y-m-d 00:00:00");
-            
-            $this->updateShipment($fromDate, $toDate);
+            $fromDate = date('Y-m-d H:i:s', strtotime('-3 days'));
+            $toDate = date('Y-m-d H:i:s');
+
+            $ordersShipped = $this->updateShipment($fromDate, $toDate);
+            Mage::helper('fulfillmentfactory/log')->infoLog(sprintf(
+                'Completed processing for %d orders that have been shipped.',
+                count($ordersShipped)
+            ));
         } catch (Exception $e) {
             Mage::helper('fulfillmentfactory/log')->errorLog($e->getMessage());
-            //throw new Exception($e->getMessage());
         }
     }
 
@@ -436,88 +428,91 @@ XML;
     }
     
     /**
-     * update shipment information to Magento database
+     * Retrieve shipment information from Dotcom and add shipments for
+     * completed orders
      *
-     * @param string $fromDate    e.g. 2010-01-01 00:00:00
-     * @param string $toDate    e.g. 2012-11-11 00:00:00
+     * @param string $fromDate Begin range for searching for shipments.
+     * @param string $toDate   End range for searching for shipments.
+     * @return int The number of orders processed as shipped and completed.
      */
     public function updateShipment($fromDate = '', $toDate = '') {
-        
-        if(empty($fromDate)) {
-            $fromDate = $this->_getYesterday();    //put 1 day before
+        if (empty($fromDate)) {
+            $fromDate = date('Y-m-d H:i:s', strtotime('-1 hour'));
         }
-        
-        if(empty($toDate)) {
-            $toDate = date('Y-m-d H:i:s', (strtotime($fromDate) + self::ONE_DAY_SECONDS));    //put 1 day after from date
+        if (empty($toDate)) {
+            $toDate = date('Y-m-d H:i:s');
         }
-        
-        //get data from dotcom
-        $dataXML = Mage::helper('fulfillmentfactory/dotcom')->getShipment($fromDate, $toDate);
-        
-        echo "<br><br><br>";
-        
-        foreach($dataXML as $shipment) {
-            $attr = $shipment->attributes('i', TRUE);
-            
-            if(!$attr['nil']) {
-                $orderId = (string)$shipment->client_order_number;
-                echo $orderId . "<br>";
-                
-                $shipmentXmlItems = $shipment->ship_items->children('a', TRUE);
-                foreach($shipmentXmlItems as $shipmentXmlItem) {
-                    $trackingNumber = (string)$shipmentXmlItem->tracking_number;
-                    
-                    if(empty($trackingNumber)) {
-                        $trackingNumber = "";
-                        //continue;
-                    }
-                    
-                    //check if tracking number exists
-                    $queryTrackingResult = Mage::getModel('sales/order_shipment_track')->getCollection()
-                                                ->addFieldToFilter('track_number', $trackingNumber);
-                                                
-                    if(empty($queryTrackingResult) || (count($queryTrackingResult) <= 0)) {
-                        $title = (string)$shipmentXmlItem->carrier;
-                        $carrier = (string)$shipmentXmlItem->carrier;    //TODO mapping carrier to Magento carrier code
-                        $trackingData = array (
-                            'carrier_code'=>$carrier,
-                            'title'=>$title,
-                            'number'=>$trackingNumber
-                        );
-                        
-                        echo print_r($trackingData, 1) . "<br>";
-                        
-                        $order = Mage::getModel('sales/order')->loadByIncrementId($orderId);
-                        
-                        if(!!$order && !!$order->getId()) {
-                            $shipmentCollection = $order->getShipmentsCollection();
-                            $shipment = Mage::getModel('sales/order_shipment');
-                            
-                            if(!empty($shipmentCollection) && (count($shipmentCollection) > 0)) {
-                                $shipment = $shipmentCollection->getFirstItem();    //get first item
-                            }
-                            else {
-                                $itemQtyArray = array();
-                                foreach ($order->getAllItems() as $item){
-                                    $itemQtyArray[$item->getData('item_id')] = (int)$item->getData('qty_ordered'); 
-                                }
-                                
-                                $shipment = Mage::getModel('sales/service_order', $order)->prepareShipment($itemQtyArray);
-                            }
-                            
-                            $track = Mage::getModel('sales/order_shipment_track')->addData($trackingData);
-                            $shipment->addTrack($track);
 
-                            $shipment->sendEmail(true);
-                            $shipment->setEmailSent(true);
-                            
-                            $shipment->save();
-                            $order->setStatus('complete')
-                                  ->save();
-                        }
-                    }
+        // get data from dotcom
+        $dataXML = Mage::helper('fulfillmentfactory/dotcom')->getShipment($fromDate, $toDate);
+
+        $updatedOrders = 0;
+        foreach ($dataXML as $shipment) {
+            $attr  = $shipment->attributes('i', TRUE);
+            $order = Mage::getModel('sales/order')
+                ->loadByIncrementId($shipment->client_order_number);
+            if (!$order->getId() || $attr['nil']) {
+                continue;
+            }
+
+            // ensure there is at least one ship item
+            $shipmentItems = $shipment->ship_items->children('a', TRUE);
+            if (!$shipmentItems) {
+                continue;
+            }
+
+            // calculate the total quantity shipped, and select the last
+            // shipment carrier
+            $shipmentQty = 0;
+            $shipmentCarrier = "";
+            foreach ($shipmentItems as $shipmentItem) {
+                $shipmentQty += (int) $shipmentItem->ship_weight;
+                $shipmentCarrier = (string) $shipmentItem->carrier;
+            }
+
+            $shipmentData = array(
+                'total_weight' => (string) $shipment->ship_weight,
+                'total_qty'    => $shipmentQty,
+                'order_id'     => $order->getId(),
+                'carrier_code' => $shipmentCarrier,
+            );
+
+            $orderShipments = $order->getShipmentsCollection();
+            if(count($orderShipments) > 0) {
+                $shipment = $orderShipments->getFirstItem();
+            } else {
+                $itemQtyArray = array();
+                foreach ($order->getAllItems() as $item) {
+                    $itemQtyArray[$item->getData('item_id')] = (int) $item->getData('qty_ordered');
                 }
+
+                $shipment = Mage::getModel('sales/service_order', $order)
+                    ->prepareShipment($itemQtyArray);
+
+                // create a new shipment track item
+                $shipmentTrack = Mage::getModel('sales/order_shipment_track')
+                    ->addData($shipmentData);
+
+                // create a new shipment item
+                $shipment->addData($shipmentData)
+                    ->addTrack($shipmentTrack)
+                    ->save();
+            }
+
+            // update the order status and save
+            $order->setStatus('complete')->save();
+
+            // send a shipment notification to the customer, if one hasn't been
+            // sent already
+            if (!$shipment->getEmailSent()) {
+                $shipment->sendEmail()
+                    ->setEmailSent(true)
+                    ->save();
+
+                $updatedOrders++;
             }
         }
+
+        return $updatedOrders;
     }
 }

@@ -124,19 +124,9 @@
     </default>
     <crontab>
         <jobs>
-            <!--
-            <fulfillmentfactory_dotcom_update_product>
-                <schedule>
-                    <cron_expr>0 0 * * *</cron_expr>
-                </schedule>
-                <run>
-                    <model>fulfillmentfactory/service_dotcom::runUpdateProduct</model>
-                </run>
-            </fulfillmentfactory_dotcom_update_product>
-            -->
             <fulfillmentfactory_dotcom_fulfill_order>
                 <schedule>
-                    <cron_expr>0 0 * * *</cron_expr>
+                    <cron_expr>0 * * * *</cron_expr><!-- at the top of each hour -->
                 </schedule>
                 <run>
                     <model>fulfillmentfactory/service_dotcom::runDotcomFulfillOrder</model>
@@ -144,7 +134,7 @@
             </fulfillmentfactory_dotcom_fulfill_order>
             <fulfillmentfactory_dotcom_update_shipment>
                 <schedule>
-                    <cron_expr>0 0 * * *</cron_expr>
+                    <cron_expr>30 * * * *</cron_expr><!-- 30m past each hour -->
                 </schedule>
                 <run>
                     <model>fulfillmentfactory/service_dotcom::runUpdateShipment</model>

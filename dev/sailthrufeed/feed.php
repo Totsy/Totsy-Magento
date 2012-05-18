@@ -1,5 +1,18 @@
 <?php 
 
+$chash = dirname(dirname(__DIR__)). '/var/tmp/' .md5($_SERVER['REQUEST_URI']).'.json';
+$TTL = 30*60;
+if (file_exists($chash)){
+	$time = time() - filectime($chash);
+	if ($time<$TTL){
+		header('Cache-Control: no-cache, must-revalidate');
+		header('Content-type: application/json');
+		echo file_get_contents($chash);
+		
+		exit(0);
+	}
+}
+
 require_once( '../../app/Mage.php' );
 umask(0);
 $mageRunCode = isset($_SERVER['MAGE_RUN_CODE']) ? $_SERVER['MAGE_RUN_CODE'] : '';
@@ -12,7 +25,7 @@ header('Content-type: application/json');
 
 $out = array('events'=>array(), 'pending'=>array(), 'closing'=>array());
 
-/*### DEFINE STORE AND CATEGORY  ###*/
+/*### DEFINE STORE AND CATEGORY ####*/
 //$categoryId = '8'; //totsy events category id
 //$topEventCategoryId = '24'; //totsy top events category id
 $storeId = Mage::app()->getStore()->getId(); //totsy store id
@@ -95,8 +108,12 @@ $out['max_off'] = floor($maxOff);
 
 
 /*### OUTPUT JSON ###*/
-echo json_encode($out);
 
+$data = json_encode($out);
+$fh = fopen($chash,'w');
+fwrite($fh,$data);
+fclose($fh);
+echo $data;
 /*### END ###*/
 
 
@@ -108,7 +125,7 @@ echo json_encode($out);
 function getLargestSaveByCategory(Mage_Catalog_Model_Category $_category){
 	
 	//Lazy loading, note 0 is allowed
-	if(is_numeric($_category->getLargestSavePercentage($percent))){
+	if(!is_numeric($_category->getLargestSavePercentage())){
 		$storeId = Mage::app()->getStore()->getId();
 		$_category->getProductCollection()->setStoreId($storeId);
 		
@@ -136,7 +153,7 @@ function getLargestSaveByCategory(Mage_Catalog_Model_Category $_category){
 	    $_category->setLargestSavePercentage($percent);
 	}
 	
-    return $_category->getLargestSavePercentage($percent);
+    return $_category->getLargestSavePercentage();
 }
 
 function getEventApiOutput(Mage_Catalog_Model_Category $_category , $type, &$out){
@@ -190,13 +207,15 @@ function getEventApiOutput(Mage_Catalog_Model_Category $_category , $type, &$out
 	}
 	
 	if (strcmp($type,'events')==0){
+		$splash = $_category->getData();
 		$evnt['id'] = $_category->getEntityId();
 		$evnt['description'] = (!isset($description))?"":$description;
 		$evnt['short'] = (!isset($short))?eventsReview_default_json_cut_string($description,45):$short;
 		$evnt['availableItems'] = (!!$availableItems)?'YES':'NO';
 		$evnt['brandName'] = $_category->getVendor();
 		$evnt['image'] = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA).'catalog/category/'.$_category->getImage();
-		$evnt['image_small'] = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA).'catalog/category/'.$_category->getThumbnail();
+		$evnt['image_small'] = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA).'catalog/category/'.$splash['small_image'];
+		unset($splash);
 		$evnt['discount'] = floor($save);
 		$evnt['start_date'] = date('m-d-y g:i:s A',strtotime($_category->getEventStartDate())) ;
 		$evnt['categories'] = (count($categoriesTranslateArray))?$categoriesTranslateArray:array();
@@ -204,7 +223,6 @@ function getEventApiOutput(Mage_Catalog_Model_Category $_category , $type, &$out
 		$evnt['items'] = $productsId;
 		$evnt['tag'] = $ageTag;
 	}
-	
 	if (strcmp($type,'pending')!=0){
 		$evnt['end_date'] = date('m-d-y g:i:s A',strtotime($_category->getEventEndDate())) ;
 	}
@@ -258,8 +276,12 @@ function loadCollection ($field, $plus = null){
 		'to' => date('Y-m-d', $start_date).' 23:59:59'
 	);
 	if (!empty($plus)){
-		$event_date['lteq'] = date('Y-m-d', strtotime($plus, $start_date)).' 23:59:59';
+		$event_date = array (
+			'from' => date('Y-m-d', strtotime($plus, $start_date)). ' '.$start_time,
+			'to' => date('Y-m-d', strtotime($plus, $start_date)).' 23:59:59'
+		);
 	}
+
 	
 	$_collection = Mage::getModel('catalog/category')->getCollection();
 	$_collection->addAttributeToFilter('is_active', 1)
