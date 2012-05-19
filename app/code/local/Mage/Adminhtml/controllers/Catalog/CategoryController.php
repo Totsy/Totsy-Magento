@@ -543,7 +543,7 @@ class Mage_Adminhtml_Catalog_CategoryController extends Mage_Adminhtml_Controlle
     
     
 	public function deleteProductsAction(){
-        $deletedProductsId = explode(trim($this->getRequest()->getParam('deletedProducts')), ',');
+        $deletedProductsId = explode(',', trim($this->getRequest()->getParam('deletedProducts'), ', '));
         $success = true;
 		foreach( $deletedProductsId as $productId ) {
 			if(!is_numeric($productId)){
@@ -561,6 +561,9 @@ class Mage_Adminhtml_Catalog_CategoryController extends Mage_Adminhtml_Controlle
         	Mage::getSingleton('core/session')->addSuccess($this->__('Selected products have been successfully deleted'));
         }
 
-        $this->_redirect('*/*/index');        
+        $this->_redirect('adminhtml/catalog_category/edit', array(
+                'store' => $this->getRequest()->getParam('store'),
+                'id' => $this->getRequest()->getParam('categoryId')
+        ));        
     }
 }

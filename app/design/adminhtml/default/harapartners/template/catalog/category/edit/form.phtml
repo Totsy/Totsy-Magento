@@ -195,18 +195,6 @@
         categoryForm.submit();
     }
 
-    function deleteProductsSubmit() {
-        var massDeleteUrl = "<?php $this->getUrl('*/*/deleteProducts', array('_current' => true, 'store' => $this->_getAdminStore())); ?>";
-        var selectedIds = "";
-    	jQuery('input.checkbox:checked:visible', '#category_edit_form').each(function (){
-			if(!!this.value){
-				selectedIds += this.value + ','; //Prototype 1.7 JSON stringify bug
-			}
-    	});
-
-    	setLocation(massDeleteUrl + 'deletedProducts/' + selectedIds);
-    }
-
 <?php if(($block = $this->getLayout()->getBlock('category.product.grid')) && ($_gridJsObject=$block->getJsObjectName())): ?>
 
     var categoryProducts = $H(<?php echo $this->getProductsJson() ?>);
@@ -267,6 +255,22 @@
     <?php echo $_gridJsObject ?>.initRowCallback = categoryProductRowInit;
     <?php echo $_gridJsObject ?>.checkboxCheckCallback = registerCategoryProduct;
     <?php echo $_gridJsObject ?>.rows.each(function(row){categoryProductRowInit(<?php echo $_gridJsObject ?>, row)});
+
+    function deleteProductsSubmit() {
+        var massDeleteUrl = "<?php echo $this->getUrl('*/*/deleteProducts', array('_current' => true, 'store' => $this->_getAdminStore(), 'categoryId' => $this->getCategoryId())); ?>";
+        var selectedIds = "";
+        var selectedIdsObjects = jQuery('input.checkbox:checked:visible', '#category_edit_form');
+        for(var index = selectedIdsObjects.length - 1; index >= 0; index --){
+        	if(!isNaN(parseInt(selectedIdsObjects[index].value))){
+				selectedIds += selectedIdsObjects[index].value + ',';
+			}
+        }
+    	if(!!selectedIds){
+    		setLocation(massDeleteUrl + 'deletedProducts/' + selectedIds + '/');
+    	}else{
+        	alert('Nothing selected.');
+    	}
+    }
 
 <?php endif; ?>
 <?php if($this->isAjax() && ($block = $this->getLayout()->getBlock('tabs')) && ($_tabsJsObject=$block->getJsObjectName())): ?>
