@@ -14,6 +14,17 @@
 
 class Harapartners_Service_Model_Rewrite_Catalog_Product extends Mage_Catalog_Model_Product {
     
+	//Preview related functions
+	public function getProductUrl(){
+		if (!!Mage::registry('admin_preview_mode')) {
+        	$targetPath = 'catalog/product/preview/id/' . $this->getId();
+        	$pageKey = base64_encode(Mage::helper('core')->encrypt($targetPath));
+			return Mage::getUrl($targetPath, array('page_key' => $pageKey));
+		}else{
+			return parent::getProductUrl();
+		}
+	}
+	
     //Product out of the live event is NOT salable
     public function isSalable() {
         $eventCategoryFound = false;
