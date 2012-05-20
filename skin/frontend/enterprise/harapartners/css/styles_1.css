@@ -262,7 +262,7 @@ div.event-description-container div.std { padding: 10px 20px; width: 736px;}
 .catalog-product-view div.product-name { width: 348px;}
 .catalog-product-view div.product-name h1 { color: #707070; font-size: 19px; margin: 10px 0 20px;}
 .catalog-product-view div.product-collateral { padding: 0px; width: 348px;}
-.catalog-product-view .collateral-tabs div.tab-content {width: 348px; border: none; border-top: 2px solid #ED1C25; padding: 20px 0; text-align: justify; color: #707070; font-size: 12px}
+.catalog-product-view .collateral-tabs div.tab-content {width: 348px; border: none; border-top: 2px solid #ED1C25; padding: 8px 0; line-height: 20px; text-align: left; color: #707070; font-size: 12px}
 .catalog-product-view  div.product-shop { width:170px; }
 .catalog-product-view  .product-shop div.product-main-info { 
 	margin: 0px; 
