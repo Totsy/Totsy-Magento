@@ -16,8 +16,8 @@ class Harapartners_Service_Model_Rewrite_Catalog_Product extends Mage_Catalog_Mo
     
 	//Preview related functions
 	public function getProductUrl(){
-		if (!!Mage::registry('admin_preview_mode')) {
-        	$targetPath = 'catalog/product/preview/id/' . $this->getId();
+		if (!!Mage::registry('admin_preview_mode') && !!Mage::registry('current_category')) {
+        	$targetPath = 'catalog/product/preview/category/' . Mage::registry('current_category')->getId() . '/id/' . $this->getId();
         	$pageKey = base64_encode(Mage::helper('core')->encrypt($targetPath));
 			return Mage::getUrl($targetPath, array('page_key' => $pageKey));
 		}else{

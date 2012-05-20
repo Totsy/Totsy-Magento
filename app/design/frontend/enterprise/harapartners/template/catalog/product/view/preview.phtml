@@ -1,0 +1,15 @@
+<?php
+$product = Mage::registry('product');
+if($product instanceof Mage_Catalog_Model_Product){
+//Attribute preparation
+//$departmentAttr = 
+	
+	echo '<h3>Additional Preview Info</h3>';
+
+	if($product->getTypeId() == 'configurable' && count($product->getData('_cache_instance_products'))){
+		foreach($product->getData('_cache_instance_products') as $simpleProduct){
+//			Simple product content;
+		}
+	}
+}
+?>

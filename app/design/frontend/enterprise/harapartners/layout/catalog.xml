@@ -312,6 +312,13 @@ Product view
             </block>
         </reference>
     </catalog_product_view>
+	
+	<!-- Harapartners, Jun, Product preview -->
+	<catalog_product_preview translate="label">
+        <reference name="product.info.additional">
+			<block type="core/template" name="product.info.additional.preivew.info" template="catalog/product/view/preview.phtml" />
+		</reference>
+	</catalog_product_preview>
 
 <!--
 Additional block dependant on product type
