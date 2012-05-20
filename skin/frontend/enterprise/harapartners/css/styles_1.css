@@ -155,7 +155,7 @@ div.event-title-container h1 a, div.event-title-container p.count-down-timer { c
 div.event-description-container { margin-top: 5px; border: 1px solid #D7D7D7; background: #F0EFEF;}
 div.event-description-container div { display: inline-block; vertical-align: top; }
 div.event-description-container img { width: 156px;}
-div.event-description-container div.std { padding: 10px 20px; width: 736px;}
+div.event-description-container div.std { padding: 12px; width: 736px; font-size:12px; line-height:21px; }
 
 .catalog-category-view .category-products ul.products-grid { padding: 0px; margin: 0px;}
 .catalog-category-view .category-products ul.products-grid li.item { width: 300px; margin: 10px 5px; border: 1px solid #d7d7d7;}
