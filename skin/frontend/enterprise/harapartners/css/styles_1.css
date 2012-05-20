@@ -290,7 +290,7 @@ div.event-description-container div.std { padding: 10px 20px; width: 736px;}
 	padding: 2px 5px !important;}
 div.share-button { padding: 20px; width: 130px; }
 dl.collateral-tabs .active span {
-	color: white; 
+	color: #333; 
 	font-size: 12px;
 	text-transform: uppercase; }
 dl.collateral-tabs .tab span {
