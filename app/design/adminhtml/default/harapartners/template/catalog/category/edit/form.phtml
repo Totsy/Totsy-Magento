@@ -28,15 +28,19 @@
 <div class="content-header">
         <h3 class="icon-head head-categories"><?php echo $this->htmlEscape($this->getHeader()) . ($this->getCategoryId() ? ' (' . Mage::helper('catalog')->__('ID: %s', $this->getCategoryId()) . ')' : '') ?></h3>
         <p class="content-buttons form-buttons">
-            <?php echo $this->getResetButtonHtml() ?>
+            
             <?php if($this->getCategoryId()): ?>
-                    <?php echo $this->getDeleteButtonHtml(); ?>
-                    <?php echo $this->getImportProductButtonHtml();?>
+            		<?php echo $this->getDeleteButtonHtml(); ?>
+                    <?php echo $this->getDeleteProductsButtonHtml();?>
                     <?php echo $this->getReleaseButtonHtml(); ?>
                     <?php echo $this->getUndoReleaseButtonHtml();?>
-                    <?php echo $this->getPreviewButtonHtml();?>
             <?php endif; ?>
             <?php echo $this->getAdditionalButtonsHtml(); ?>
+            <?php echo $this->getResetButtonHtml() ?>
+            <?php if($this->getCategoryId()): ?>
+            		<?php echo $this->getImportProductButtonHtml();?>
+                    <?php echo $this->getPreviewButtonHtml();?>
+            <?php endif; ?>
             <?php echo $this->getSaveButtonHtml() ?>
         </p>
 </div>
@@ -251,6 +255,22 @@
     <?php echo $_gridJsObject ?>.initRowCallback = categoryProductRowInit;
     <?php echo $_gridJsObject ?>.checkboxCheckCallback = registerCategoryProduct;
     <?php echo $_gridJsObject ?>.rows.each(function(row){categoryProductRowInit(<?php echo $_gridJsObject ?>, row)});
+
+    function deleteProductsSubmit() {
+        var massDeleteUrl = "<?php echo $this->getUrl('*/*/deleteProducts', array('_current' => true, 'store' => $this->_getAdminStore(), 'categoryId' => $this->getCategoryId())); ?>";
+        var selectedIds = "";
+        var selectedIdsObjects = jQuery('input.checkbox:checked:visible', '#category_edit_form');
+        for(var index = selectedIdsObjects.length - 1; index >= 0; index --){
+        	if(!isNaN(parseInt(selectedIdsObjects[index].value))){
+				selectedIds += selectedIdsObjects[index].value + ',';
+			}
+        }
+    	if(!!selectedIds){
+    		setLocation(massDeleteUrl + 'deletedProducts/' + selectedIds + '/');
+    	}else{
+        	alert('Nothing selected.');
+    	}
+    }
 
 <?php endif; ?>
 <?php if($this->isAjax() && ($block = $this->getLayout()->getBlock('tabs')) && ($_tabsJsObject=$block->getJsObjectName())): ?>
