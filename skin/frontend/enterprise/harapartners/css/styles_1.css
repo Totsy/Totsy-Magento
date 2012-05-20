@@ -148,7 +148,7 @@ h1.event-collection-title {
  
 .catalog-category-view div.col-main { padding: 20px 10px; }
 .catalog-category-view div.category-view { margin: 0px;}
-div.event-title-container { padding: 10px 0 20px; border-bottom: 1px solid #D7D7D7}
+div.event-title-container { padding: 10px 0 2px; border-bottom: 1px solid #D7D7D7}
 div.event-title-container h1, div.event-title-container p.count-down-timer { display: inline-block; font-size: 20px; }
 div.event-title-container p.count-down-timer { float: right;}
 div.event-title-container h1 a, div.event-title-container p.count-down-timer { color: #ED1C25;}
