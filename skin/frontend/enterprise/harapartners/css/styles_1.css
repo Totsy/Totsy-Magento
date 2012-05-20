@@ -294,7 +294,7 @@ dl.collateral-tabs .active span {
 	font-size: 12px;
 	text-transform: uppercase; }
 dl.collateral-tabs .tab span {
-	color: white; 
+	color: #333; 
 	font-size: 12px;
 	text-transform: uppercase; }
 dl.collateral-tabs table.data-table tr th { display: none;}
