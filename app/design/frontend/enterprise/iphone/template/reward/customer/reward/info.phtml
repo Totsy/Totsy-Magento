@@ -42,10 +42,10 @@ $expireIn = $this->getExpireIn();
         <dt><?php echo $this->__('Current exchange rates:')?></dt>
 <?php if ($this->getPtsToAmountRateAmount() || $this->getAmountToPtsRatePts()): ?>
     <?php if ($this->getPtsToAmountRateAmount()): ?>
-            <dd><?php echo $this->__('Each Credit can be redeemed for %s.', $helper->formatReward($this->getPtsToAmountRatePts(), null, null, '<strong>%s</strong>'), '<strong>' . $helper->formatAmount($this->getPtsToAmountRateAmount()) . '</strong>')?></dd>
+            <dd><?php echo $this->__('Each %s can be redeemed for %s.', $helper->formatReward($this->getPtsToAmountRatePts(), null, null, '<strong>%s</strong>'), '<strong>' . $helper->formatAmount($this->getPtsToAmountRateAmount()) . '</strong>')?></dd>
     <?php endif;?>
     <?php if ($this->getAmountToPtsRatePts()): ?>
-            <dd><?php echo $this->__('Each Credit spent will earn %s.', '<strong>' . $helper->formatAmount($this->getAmountToPtsRateAmount()) . '</strong>', $helper->formatReward($this->getAmountToPtsRatePts(), null, null, '<strong>%s</strong>'))?></dd>
+            <dd><?php echo $this->__('Each %s spent will earn %s.', '<strong>' . $helper->formatAmount($this->getAmountToPtsRateAmount()) . '</strong>', $helper->formatReward($this->getAmountToPtsRatePts(), null, null, '<strong>%s</strong>'))?></dd>
     <?php endif;?>
 <?php else:?>
              <dd><?php echo $this->__('None.')?></dd>
