@@ -15,6 +15,8 @@
 			<p><?php echo $this->getPoNumber(); ?></p>
 			<label class="sigle-line"><?php echo $this->__('PO Date:');?></label>
 			<p><?php echo $this->getPoDate(); ?></p>
+			<label class="sigle-line"><?php echo $this->__('Event Name:');?></label>
+			<p><?php echo $this->getPoCategoryName(); ?></p>
 			<div id="billing-info">
 				<label><?php echo $this->__('BILL TO:');?></label>
 				<p>TOTSY <br>10 West 18th Street <br>Fourth Floor <br>New York, New York 10011 <br>payment@totsy.com</p>
@@ -22,12 +24,19 @@
 		</div>
 		<div id="vendor-info" class="block">
 			<label><?php echo $this->__('VENDOR:'); ?></label>
+			<p><?php echo $this->getVendorName(); ?></p>
 			<p><?php echo $this->getVendorAddress(); ?></p>
+			<p><?php echo $this->getContactPerson(); ?></p>
 			<p><?php echo $this->getVendorEmailList(); ?></p>
+			<p><?php echo $this->getTelephone(); ?></p>
 		</div>	
 		<div id="shipping-info" class="block">
 			<label><?php echo $this->__('SHIP TO:');?></label>
 			<p>TOTSY <br>c/o Dotcom Distribution <br>400 Nixon Lane <br>Edison, NJ 08837</p>
+		</div>
+		<div id="payment-terms" class="block">
+			<label><?php echo $this->__('PAYMENT TERMS:'); ?></label>
+			<p><?php echo $this->getPaymentTerms(); ?></p>
 		</div>
 		<table id="date-info" border="1">
 			<colgroup>
@@ -120,9 +129,21 @@
 						<td><?php echo $item->getData('product_name');?></td>
 						<td><?php echo $item->getData('color');?></td>
 						<td><?php echo $item->getData('size');?></td>
-						<td><?php echo $item->getData('qty_total');?></td>
-						<td><?php echo $item->getData('unit_cost');?></td>
-						<td><?php echo $item->getData('total_cost');?></td>
+						
+						<td>
+						<?php 
+							if($item->getData('is_master_pack') == "No") {
+								echo $item->getData('qty_sold');
+							}
+							else {
+								echo $item->getData('qty_total');
+							}
+						?>
+						
+						</td>
+						
+						<td>$<?php echo $item->getData('unit_cost');?></td>
+						<td>$<?php echo $item->getData('total_cost');?></td>
 					</tr>
 				<?php endforeach;?>
 			</tbody>
