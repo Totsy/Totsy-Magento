@@ -1,15 +1,33 @@
+<div class="product-additional-info-preview" style="margin: 20px; font-size: 16px;">
 <?php
-$product = Mage::registry('product');
-if($product instanceof Mage_Catalog_Model_Product){
-//Attribute preparation
-//$departmentAttr = 
-	
-	echo '<h3>Additional Preview Info</h3>';
-
-	if($product->getTypeId() == 'configurable' && count($product->getData('_cache_instance_products'))){
-		foreach($product->getData('_cache_instance_products') as $simpleProduct){
-//			Simple product content;
+	$product = Mage::registry('product');
+	if($product instanceof Mage_Catalog_Model_Product){
+		echo '<h3 style="color: #ED1C25; border-bottom: 2px solid #ED1C25; font-size: 20px;">Additional Preview Info</h3>';
+		echo '<strong>Style:</strong> ' . $product->getVendorStyle() . '<br/>';
+		if($product->getTypeId() == 'configurable' && count($product->getData('_cache_instance_products'))){
+			echo '<div class="product-additional-info-preview-associated" style="margin: 10px">';
+			echo '<h4 style="color: #ED1C25; border-bottom: 1px solid #D7D7D7; font-size: 16px;">Associated Products</h4>';
+			foreach($product->getData('_cache_instance_products') as $simpleProduct){
+				echo '<strong>Style:</strong> ' . $simpleProduct->getVendorStyle() . '<br/>';
+				echo '<strong>Color:</strong> ' . $simpleProduct->getAttributeText('color') . '<br/>';
+				echo '<strong>Size:</strong> ' . $simpleProduct->getAttributeText('size') . '<br/>';
+				echo '<strong>Stock Available:</strong> ' . round($simpleProduct->getStockItem()->getQty()) . '<br/>';
+				echo '<br/>';
+			}
+			echo '</div>';
+		}else{
+			echo '<strong>Stock Available:</strong> ' . round($product->getStockItem()->getQty()) . '<br/>';
 		}
+		echo '<strong>MSRP:</strong> $' . sprintf("%.2f", round($product->getPrice(), 2)) . '<br/>';
+		$salesPrice = $product->getFinalPrice();
+		echo '<strong>Sale Retail:</strong> $' . sprintf("%.2f", round($salesPrice, 2)) . '<br/>';
+		$salesPercentOff = round(($product->getPrice() - $salesPrice) / $product->getPrice(), 4) * 100;
+		echo '<strong>Percent Off:</strong> ' . sprintf("%.2f", $salesPercentOff) . '%<br/>';
+		echo '<strong>Sale Wholesale:</strong> $' . sprintf("%.2f", round($product->getSaleWholesale(), 2)) . '<br/>';
+		$imuPercentOff = round(($salesPrice - $product->getSaleWholesale()) / $salesPrice, 4) * 100;
+		echo '<strong>IMU:</strong> ' . sprintf("%.2f", $imuPercentOff) . '%<br/>';
+		echo '<strong>Departments:</strong> ' . implode(', ', $product->getAttributeText('departments')) . '<br/>';
+		echo '<strong>Ages:</strong> ' . implode(', ', $product->getAttributeText('ages')) . '<br/>';
 	}
-}
 ?>
+</div>
