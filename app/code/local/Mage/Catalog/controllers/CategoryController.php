@@ -168,14 +168,14 @@ class Mage_Catalog_CategoryController extends Mage_Core_Controller_Front_Action
         }
     }
     
+    //Harapartners, Jun/Yang
     public function previewAction() {
     	// Validation
-    	if(!!Mage::app()->getCookie()->get('secret_key_salt')){
-    		Mage::getSingleton('core/session')->setData('secret_key_salt', Mage::app()->getCookie()->get('secret_key_salt'));
-    		Mage::app()->getCookie()->delete('secret_key_salt');
-    	}
-        $secretKey = $this->getRequest()->getParam('secret_key');
-    	if($secretKey != Mage::helper('catalog/category')->getSecretKey($this->getRequest())){
+    	$eventId = $this->getRequest()->getParam('id');
+    	$pageKey = $this->getRequest()->getParam('page_key');
+        $targetPath = 'catalog/category/preview/id/' . $eventId;
+        $targetPathValidate = Mage::helper('core')->decrypt(base64_decode($pageKey));
+    	if($targetPath != $targetPathValidate){
     		$this->_forward('noRoute');
     		return;
     	}

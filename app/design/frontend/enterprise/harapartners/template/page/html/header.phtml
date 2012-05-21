@@ -94,7 +94,6 @@
 		        		<?php $ageAttr = Mage::getModel('catalog/product')->getResource()->getAttribute($age);?>
 		        		<?php $ageOptionArray = $ageAttr->getSource()->getAllOptions();?>
 		        		<?php foreach($ageOptionArray as $option):?>
-		        			<!--li><a href="<?php echo $this->getBaseUrl();?>event/index/topnav/<?php echo $age;?>/<?php echo $option['value']?>"><?php echo $translateArray[$option['label']] ?></a></li-->
 		        			<li><a href="<?php echo $this->getBaseUrl();?>age/<?php echo $option['label']?>"><?php echo $this->__($option['label']) ?></a></li>
 		        		<?php endforeach;?>
 		        	</ul>

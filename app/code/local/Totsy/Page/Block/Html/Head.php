@@ -72,8 +72,11 @@ class Totsy_Page_Block_Html_Head extends Mage_Page_Block_Html_Head
             } else {
                 foreach ($rows as $src) {
                     // determine the last modified timestamp of the asset file
-                    $mtime = filemtime(substr($src, strpos($src, '/', 8)+1));
-                    $src .= "?v=$mtime";
+                    $filename = substr($src, strpos($src, '/', 8)+1);
+                    if (file_exists($filename)) {
+                        $src .= "?v=" . filemtime($filename);
+                    }
+
                     $html .= sprintf($format, $src, $params);
                 }
             }

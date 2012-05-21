@@ -34,6 +34,7 @@ class Harapartners_Import_Helper_Processor extends Mage_Core_Helper_Abstract {
     protected $_requiredFields                 = array();
     protected $_confSimpleProducts             = array();
     protected $_confAttrCodes                = array();
+    protected $_cleanImportDataArray		 = array();
     
     public function __construct(){
         $this->_errorFilePath = BP.DS.'var'.DS.'log'.DS.'import_error'.DS;
@@ -82,7 +83,6 @@ class Harapartners_Import_Helper_Processor extends Mage_Core_Helper_Abstract {
                 Mage::register('batch_import_no_index', true);
                 //Note catalog URL rewrite is always refreshed after product save: afterCommitCallback()
             }
-            
             // ===== dataflow, processing ===== //
             try{
                 $batchModel = Mage::getModel('dataflow/batch')->load($importObject->getData('import_batch_id'));
@@ -101,26 +101,30 @@ class Harapartners_Import_Helper_Processor extends Mage_Core_Helper_Abstract {
                     //Get the required fields
                     $this->_prepareRequiredFields();
                     $row = 2; //Skip the header row
-                    foreach ($importObjectIds as $importObjectId) {    
-                        try{
-                            $batchImportModel->load($importObjectId);
-                            if (!$batchImportModel || !$batchImportModel->getId()) {
-                                $this->_errorMessages[] = Mage::helper('dataflow')->__('Skip undefined row ' . $row . "\n");
-                                continue;    
-                            }
-                            $importData = $batchImportModel->getBatchData();
-                            $importData = $this->_importDataCleaning($importData, $importObject);
-                            $adapter->saveRow($importData);
-    
-                            //PO Saves Here
-                            $this->_savePurchaseOrderTransaction($importData, $importObject);
-        
+                    
+                    //Data cleaning, also scan through all imports for simple/config detection
+                    $this->_cleanImportDataArray = array();
+                    foreach ($importObjectIds as $importObjectId) {
+                        $batchImportModel->load($importObjectId);
+                        if (!$batchImportModel || !$batchImportModel->getId()) {
+                            $this->_errorMessages[] = Mage::helper('dataflow')->__('Skip undefined row ' . $row . "\n");
+                            continue;    
+                        }
+                        $importData = $batchImportModel->getBatchData();
+                        $this->_cleanImportDataArray[$row] = $this->_importDataCleaning($importData, $importObject, $row);
+                        $row++;
+                    }
+                    
+                    //Core save logic
+                    foreach($this->_cleanImportDataArray as $cleanImportData){
+                    	try{
+                            $adapter->saveRow($cleanImportData);
+                            $this->_savePurchaseOrderTransaction($cleanImportData, $importObject); //Save PO
                         } catch(Exception $ex) {
                             $this->_errorMessages[] = 'Error in row ' . $row . ', ' . $ex->getMessage() . "\n";
                         }
-                        
-                        $row++;
                     }
+                    
                 }
                 $batchModel->delete();
             }catch(Exception $ex){
@@ -148,7 +152,7 @@ class Harapartners_Import_Helper_Processor extends Mage_Core_Helper_Abstract {
     // ================================================================== //
     // ===== Data Cleaning ============================================== //
     // ================================================================== //
-    protected function _importDataCleaning($importData, $importObject){
+    protected function _importDataCleaning($importData, $importObject, $row){
     
         // ----- Data from Import Form ----- //
         if(!$importObject->getData('vendor_id') || !$importObject->getData('vendor_code')){
@@ -205,12 +209,16 @@ class Harapartners_Import_Helper_Processor extends Mage_Core_Helper_Abstract {
         // ----- Configurable/Simple products ----- //
         if($importData['type'] == 'configurable'){
             $importData['configurable_attribute_codes'] = implode(',', $this->_confAttrCodes);
-            $importData['conf_simple_products'] = implode(',', $this->_confSimpleProducts);
-            $this->_hideAssociatedSimpleProducts();
+            $importData['conf_simple_products'] = implode(',', array_values($this->_confSimpleProducts));
+//            $this->_hideAssociatedSimpleProducts();
+            $importData['visibility'] = 'Catalog, Search'; //All products are visible by default
+            foreach($this->_confSimpleProducts as $rowKey => $rowData){
+            	$this->_cleanImportDataArray[$rowKey]['visibility'] = 'Not Visible Individually';
+            }
             $this->_confSimpleProducts = array();
             $this->_confAttrCodes = array();
         }else{
-            $this->_confSimpleProducts[] = $importData['sku'];
+            $this->_confSimpleProducts[$row] = $importData['sku'];
             foreach(explode(',', self::CONFIGURABLE_ATTRIBUTE_CODE) as $confAttrCode){
                 if(!empty($importData[$confAttrCode])
                         && !in_array($confAttrCode, $this->_confAttrCodes)
@@ -218,11 +226,11 @@ class Harapartners_Import_Helper_Processor extends Mage_Core_Helper_Abstract {
                     $this->_confAttrCodes[] = $confAttrCode;
                 }
             }
-            
+            $importData['visibility'] = 'Catalog, Search'; //All products are visible by default
         }
         
         // ----- Default fields ----- //
-        $importData['visibility'] = 'Catalog, Search'; //All products are visible by default
+        
         
         return $importData;
     }
@@ -256,15 +264,16 @@ class Harapartners_Import_Helper_Processor extends Mage_Core_Helper_Abstract {
         
     }
     
-    protected function _hideAssociatedSimpleProducts(){
-        foreach ($this->_confSimpleProducts as $sku) {
-            $product = Mage::getModel('catalog/product')->loadByAttribute('sku', $sku);
-            if(!!$product && $product->getId()){
-                $product->setData('visibility', '1');
-                $product->save(); //exceptions will be caught as _errorMessage
-            }
-        }
-    }
+//    protected function _hideAssociatedSimpleProducts(){
+//        foreach ($this->_confSimpleProducts as $sku) {
+//            $product = Mage::getModel('catalog/product')->loadByAttribute('sku', $sku);
+//            if(!!$product && $product->getId()){
+//                $product->setData('visibility', '1');
+//                //Optimization, avoid $product->save() which will trigger reindex
+//                $product->getResource()->saveAttribute($product, 'visibility');
+//            }
+//        }
+//    }
     
     protected function _generateProductSku($importData, $importObject){
         //$importObject must have 'vendor_id' here
