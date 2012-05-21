@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @category    Totsy
+ * @package     Totsy_Catalog
+ * @author      Tom Royer <troyer@totsy.com>
+ * @copyright   Copyright (c) 2012 Totsy LLC
+ */
+ -->
+<config>
+    <modules>
+        <Totsy_Catalog>
+            <version>0.1.0</version>
+        </Totsy_Catalog>
+    </modules>
+    <global>
+        <helpers>
+            <catalog>
+                <rewrite>
+                    <event>Totsy_Catalog_Helper_Event</event>
+                </rewrite>
+            </catalog>
+        </helpers>
+    </global>
+</config>

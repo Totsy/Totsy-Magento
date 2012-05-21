@@ -13,5 +13,9 @@
             <active>true</active>
             <codePool>local</codePool>
         </Totsy_Page>
+        <Totsy_Catalog>
+            <active>true</active>
+            <codePool>local</codePool>
+        </Totsy_Catalog>
     </modules>
 </config>
