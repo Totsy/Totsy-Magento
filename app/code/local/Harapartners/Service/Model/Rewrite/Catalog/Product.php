@@ -54,9 +54,6 @@ class Harapartners_Service_Model_Rewrite_Catalog_Product extends Mage_Catalog_Mo
    
     public function afterCommitCallback() {
         // ===== Index rebuild ========================================== //
-        //Note URL rewrite is always refreshed
-        $urlModel = Mage::getSingleton('catalog/url');
-        $urlModel->refreshProductRewrite($this->getId()); //Category path also included
         
         //Create catalog-inventory index only upon product creation!
         if(!$this->getOrigData('entity_id')){
@@ -68,6 +65,9 @@ class Harapartners_Service_Model_Rewrite_Catalog_Product extends Mage_Catalog_Mo
             Mage::dispatchEvent($this->_eventPrefix.'_save_commit_after', $this->_getEventData());
             return $this;
         }else{
+        	//Note URL rewrite needs to be refreshed separately, if included within default index, it is much slower
+	        $urlModel = Mage::getSingleton('catalog/url');
+	        $urlModel->refreshProductRewrite($this->getId()); //Category path also included
             return parent::afterCommitCallback();
         }
     }
