@@ -39,15 +39,14 @@ class Mage_Sales_Block_Order_History extends Mage_Core_Block_Template
     {
         parent::__construct();
         $this->setTemplate('sales/order/history.phtml');
-
+        
         $orders = Mage::getResourceModel('sales/order_collection')
             ->addFieldToSelect('*')
             ->addFieldToFilter('customer_id', Mage::getSingleton('customer/session')->getCustomer()->getId())
-            ->addFieldToFilter('state', array('in' => array_diff(Mage::getSingleton('sales/order_config')->getVisibleOnFrontStates(),array('canceled'))))
+            ->addFieldToFilter('state', array('in' => array_diff(Mage::getSingleton('sales/order_config')->getVisibleOnFrontStates(),array('splitted','updated'))))
             //->addFieldToFilter('relation_parent_id',array('null' => true))
             ->setOrder('created_at', 'desc')
         ;
-
         $this->setOrders($orders);
 
         Mage::app()->getFrontController()->getAction()->getLayout()->getBlock('root')->setHeaderTitle(Mage::helper('sales')->__('My Orders'));

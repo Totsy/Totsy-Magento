@@ -33,7 +33,7 @@ class Enterprise_PageCache_Model_Processor_Category extends Enterprise_PageCache
     
     //Harapartners, Jun, Catalog pages are updated at very high frequency (due to reservation fluctuation), refresh adaptively
     //Prime number preferred
-    const PAGE_REFRESH_FACTOR = 11;
+    const PAGE_REFRESH_FACTOR = 400;
 
     protected $_paramsMap = array(
         'display_mode'  => 'mode',

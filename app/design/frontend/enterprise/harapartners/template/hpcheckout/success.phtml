@@ -99,3 +99,12 @@
   })();
 
 </script>
+<?php $_cartQty = Mage::getModel('checkout/cart')->getCart()->get;  ?>
+
+<script type="text/javascript">
+var aid='9577';
+var oid='<?php echo $order_id ?>'; 
+var oamt='<?php echo $order->getData('grand_total'); ?>';
+var additional = '';
+(function(){steelhouse={add:function(a,b,c,d){d=d||false;if(a.addEventListener){a.addEventListener(b,c,d)}else if(a.attachEvent){a.attachEvent("on"+b,c)}},load:function(){var a;if(typeof a=='undefined'){a=Math.random()*10000000000000000}var b=document.createElement('script');var c='px.steelhousemedia.com/st?aid='+aid+'&conv=1&order_id='+oid+'&order_amt='+oamt+'&cb='+a+additional;b.type='text/javascript';b.src=('https:'==document.location.protocol?'https://':'http://')+c;var d=document.getElementsByTagName('script');var e=Number(d.length)-1;var f=document.getElementsByTagName('script')[e];f.parentNode.insertBefore(b,f)}};steelhouse.load();})();
+</script>

@@ -4,7 +4,7 @@
  *
  * @category    Inchoo
  * @package     Inchoo_Facebook
- * @author      Ivan Weiler <ivan.weiler@gmail.com>
+ * @author      Ivan Weiler  <ivan.weiler@gmail.com>
  * @copyright   Inchoo (http://inchoo.net)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -216,7 +216,19 @@ class Inchoo_Facebook_Customer_AccountController extends Mage_Core_Controller_Fr
 
         if (true === $validationResult) {
             $customer->save();
-
+            
+            //Harapartners, Andu, for affiliate information setup START
+			Mage::dispatchEvent('customer_register_success',
+			                        array('account_controller' => $this, 'customer' => $customer)
+			                    );
+            //Harapartners, Andu,  END
+            
+			//Harapartners, Edward, for facebook speciall email   the template is  _trans_Facebook_Register
+			//also set at admin->customer configuateion->Create New Account Options->Welcome Email
+			//(not like Default Welcome Email, Welcome Email is dedicate for facebook register)
+            $customer->sendNewAccountEmail('confirmed');
+			//Harapartners, Edward
+            
             //Harapartners, Yang, START
             //Harapartners, Yang, MUST dispatch 'customer_register_success' otherwise the cookies will not be set properly
             Mage::dispatchEvent('customer_register_success',
@@ -230,9 +242,7 @@ class Inchoo_Facebook_Customer_AccountController extends Mage_Core_Controller_Fr
                 '. ' .
                 $this->__('You will receive welcome email with registration info in a moment.')
             );
-
-            $customer->sendNewAccountEmail();
-
+            
             $this->_getCustomerSession()->setCustomerAsLoggedIn($customer);
             $this->_loginPostRedirect();
             return;

@@ -18,8 +18,6 @@
 	.categoryevent-adminhtml-sort-index p.event-name {color: #888888; font-weight: bold; margin-bottom: 0px; padding: 5px; background: #f2f2f2; width: 140px; overflow: hidden;}
 </style>
 <?php 
-	$keyPost = $this->getPostKey();
-	$KeyForm = $this->getFormKey();
 	$postStoreId = $this->getSortPostResponse('id');
 	$postSortDate = $this->getSortPostResponse('date');
 ?>
@@ -34,10 +32,10 @@
 	<?php echo $this->getChildHtml('store_switcher');?>
 <?php endif;?>
 <div class="sort-index-container">
-	<form id="sort-selection" action="<?php echo $this->getBaseUrl().'categoryevent/adminhtml_sort/index/key/'.$keyPost.$postStoreId;?>" method="post">
+	<form id="sort-selection" action="<?php echo $this->getUpdatePostUrl(); ?>" method="post">
 		<label for="sort_date" ><?php echo Mage::helper('categoryevent')->__('Sort on Date') ?></label>
 		<input type="text" name="sort_date" id="datepicker" value="<?php echo $postSortDate;?>"/>
-		<input type="hidden" name="form_key" value="<?php echo $KeyForm?>"/>
+		<input type="hidden" name="form_key" value="<?php echo $this->getFormKey() ?>"/>
 		<input type="hidden" name="sort_store" value="" id="sort_store_id"/>
 		<input type="hidden" name="post_active" value="1"/>
 		<button id="sort-type-submit" class="scalable" type="submit" >

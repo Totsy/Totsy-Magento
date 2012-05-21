@@ -72,7 +72,6 @@
     })();
 </script>
 
-
 <script type="text/javascript">
 	(function () {
 		var a, b, c, d, e, f; b = document.createElement("script"); b.type = "text/javascript"; b.async = true;
@@ -81,7 +80,16 @@
 		a = document.getElementsByTagName("script")[0]; a.parentNode.insertBefore(b, a);
 	}())
 </script>
+
 <script type="text/javascript">
- 	 //code for disabling echoSahre
-     var ECHO_SYSTEM_SETTINGS = { socialCenter: { enabled: false }};
+
+var moduleName = "<?php echo $this->getRequest()->getModuleName() ?>";
+
+if(moduleName=="catalog" || moduleName=="event"){
+    //code for enabling echoShare
+    var ECHO_SYSTEM_SETTINGS = { socialCenter: { enabled: true }};
+} else {
+    //code for disabling echoShare
+    var ECHO_SYSTEM_SETTINGS = { socialCenter: { enabled: false }};
+}
 </script>

@@ -131,7 +131,7 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Abstract exte
         
         $uniqueProductList = array();
         foreach($rawCollection as $item){
-            if(!array_key_exists($item->getProductId(), $uniqueProductList)){
+            if(!!$item->getProductId() && !array_key_exists($item->getProductId(), $uniqueProductList)){
                 $uniqueProductList[$item->getProductId()] = array(
                         'total'             => 0,
                         'qty'                => 0,
