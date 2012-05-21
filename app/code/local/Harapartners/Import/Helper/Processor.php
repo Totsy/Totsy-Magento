@@ -82,7 +82,6 @@ class Harapartners_Import_Helper_Processor extends Mage_Core_Helper_Abstract {
                 Mage::register('batch_import_no_index', true);
                 //Note catalog URL rewrite is always refreshed after product save: afterCommitCallback()
             }
-            
             // ===== dataflow, processing ===== //
             try{
                 $batchModel = Mage::getModel('dataflow/batch')->load($importObject->getData('import_batch_id'));
@@ -261,7 +260,8 @@ class Harapartners_Import_Helper_Processor extends Mage_Core_Helper_Abstract {
             $product = Mage::getModel('catalog/product')->loadByAttribute('sku', $sku);
             if(!!$product && $product->getId()){
                 $product->setData('visibility', '1');
-                $product->save(); //exceptions will be caught as _errorMessage
+                //Optimization, avoid $product->save() which will trigger reindex
+                $product->getResource()->saveAttribute($product, 'visibility');
             }
         }
     }

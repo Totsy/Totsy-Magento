@@ -256,8 +256,12 @@
     <?php echo $_gridJsObject ?>.checkboxCheckCallback = registerCategoryProduct;
     <?php echo $_gridJsObject ?>.rows.each(function(row){categoryProductRowInit(<?php echo $_gridJsObject ?>, row)});
 
+    <?php 
+    	//For AJAX pages, ignore get query parameters 'isAjax'
+    	$deleteUrlParts = explode('?', $this->getUrl('*/*/deleteProducts', array('_current' => true, 'store' => $this->_getAdminStore(), 'categoryId' => $this->getCategoryId()))); 
+    ?>
     function deleteProductsSubmit() {
-        var massDeleteUrl = "<?php echo $this->getUrl('*/*/deleteProducts', array('_current' => true, 'store' => $this->_getAdminStore(), 'categoryId' => $this->getCategoryId())); ?>";
+        var massDeleteUrl = "<?php echo $deleteUrlParts[0]; ?>";
         var selectedIds = "";
         var selectedIdsObjects = jQuery('input.checkbox:checked:visible', '#category_edit_form');
         for(var index = selectedIdsObjects.length - 1; index >= 0; index --){

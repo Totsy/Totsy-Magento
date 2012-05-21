@@ -137,7 +137,7 @@
                     <cron_expr>5 3 * * *</cron_expr>
                 </schedule>
                 <run>
-                    <model>categoryevent/sortentry::rebuildSortCorn</model>
+                    <model>categoryevent/sortentry::rebuildSortCron</model>
                 </run>
             </categoryevent_rebuild_sort_cron>
         </jobs>
