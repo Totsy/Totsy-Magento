@@ -116,21 +116,33 @@ class Harapartners_Stockhistory_Adminhtml_TransactionController extends Mage_Adm
             if(empty($amendmentData['qty_to_amend'])){
                 continue;
             }
+            
             //Must validate non-empty rows
             if(!is_numeric($amendmentData['qty_to_amend'])
-                    || empty($amendmentData['qty_total']) 
-                    || !is_numeric($amendmentData['qty_total'])
-                    || empty($amendmentData['unit_cost']) 
-                    || !is_numeric($amendmentData['unit_cost'])
+//                    || empty($amendmentData['qty_total']) 
+//                    || !is_numeric($amendmentData['qty_total'])
+//                    || empty($amendmentData['unit_cost']) 
+//                    || !is_numeric($amendmentData['unit_cost'])
             ){
                 $this->_getSession()->addError('Invalid Product Amendment Info for "' . trim($productSku) . '"');
                 $isBatchSuccess = false;
                 continue;
             }
+            
+            $qty_delta = 0;
+            
+            //if final qty is '00', remove item from PO
+            if($amendmentData['qty_to_amend'] == '00') {
+            	$qty_delta = '00';
+            }
+            else {
+            	$qty_delta = $amendmentData['qty_to_amend'] - $amendmentData['qty_total']; //'qty_to_amend' is forced to be the new total
+            }
+
             try{
                 $tempdata = array_merge($prepopulateData, array(
                         'product_id'    => $tempProduct->getId(),
-                        'qty_delta'        => $amendmentData['qty_to_amend'] - $amendmentData['qty_total'], //'qty_to_amend' is forced to be the new total
+                        'qty_delta'        => $qty_delta,
                         'unit_cost'        => $amendmentData['unit_cost'],
                         'comment'        => 'Create by Batch Amendment'
                 ));
