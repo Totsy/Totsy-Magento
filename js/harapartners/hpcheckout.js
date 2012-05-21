@@ -333,5 +333,5 @@ HpCheckout.prototype = {
 			preparedBlockCodes = blockCodes;
 		}
 		return preparedBlockCodes;
-	},
+	}
 }
