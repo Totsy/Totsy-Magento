@@ -522,13 +522,10 @@ class Mage_Adminhtml_Catalog_CategoryController extends Mage_Adminhtml_Controlle
     
     //Harapartners, yang: add Preview function in category mangement page
     public function previewAction(){
-        $postInfo = $this->getRequest()->getParams();
-        $eventId = $postInfo['id'];
-        Mage::getSingleton('core/session')->setData('secret_key_salt', Mage::getSingleton('core/session')->getFormKey());
-        Mage::getModel('core/cookie')->set('secret_key_salt', Mage::getSingleton('core/session')->getFormKey());
-        $this->_redirect('catalog/category/preview/id/' . $eventId, 
-        		array('secret_key'=>Mage::helper('catalog/category')->getSecretKey($this->getRequest(), 'category', 'preview'))
-        );
+        $eventId = $this->getRequest()->getParam('id');
+        $targetPath = 'catalog/category/preview/id/' . $eventId;
+        $pageKey = base64_encode(Mage::helper('core')->encrypt($targetPath));
+        $this->_redirect($targetPath, array('page_key' => $pageKey));
     }
 
     /**
@@ -541,4 +538,38 @@ class Mage_Adminhtml_Catalog_CategoryController extends Mage_Adminhtml_Controlle
         return Mage::getSingleton('admin/session')->isAllowed('catalog/categories');
     }
     
+    
+	public function deleteProductsAction(){
+        $deletedProductsId = explode(',', trim($this->getRequest()->getParam('deletedProducts'), ', '));
+        $deleteSuccessCount = 0;
+        $deleteFailureCount = 0;
+		foreach( $deletedProductsId as $productId ) {
+			if(!is_numeric($productId)){
+				continue;
+			}
+			$product = Mage::getModel('catalog/product')->load($productId);
+	        try {
+                $product->delete();
+                $deleteSuccessCount ++;
+            }catch (Exception $e){
+                Mage::getSingleton('core/session')->addError($this->__('Unable to delete product ') . $product->getSku());
+                $deleteFailureCount ++;
+            }
+        }
+        
+        if($deleteFailureCount > 0){
+        	Mage::getSingleton('core/session')->addError($this->__($deleteFailureCount . ' product(s) not deleted,  ' . $deleteSuccessCount . ' product(s) successfully deleted.'));
+        }else{
+        	if($deleteSuccessCount > 0){
+        		Mage::getSingleton('core/session')->addSuccess($this->__($deleteSuccessCount . ' product(s) successfully deleted.'));
+        	}else{
+        		Mage::getSingleton('core/session')->addNotice($this->__('Nothing deleted, please try again.'));
+        	}
+        }
+
+        $this->_redirect('adminhtml/catalog_category/edit', array(
+                'store' => $this->getRequest()->getParam('store'),
+                'id' => $this->getRequest()->getParam('categoryId')
+        ));        
+    }
 }

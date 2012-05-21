@@ -64,6 +64,17 @@ class Harapartners_Service_Block_Rewrite_Adminhtml_Catalog_Category_Edit_Form ex
                         'class' => 'add'
                     ))
             );
+            
+            
+            //Harapartners Li Lu
+            $this->setChild('delete_product_button',
+                $this->getLayout()->createBlock('adminhtml/widget_button')
+                    ->setData(array(
+                        'label'     => Mage::helper('catalog')->__('Delete Products'),
+                        'onclick'   => "if(confirm('The selected products will be deleted PERMANENTLY, are you sure?')) {deleteProductsSubmit();}",
+                        'class' => 'delete'
+                    ))
+            );
         }
         
         return $this;
@@ -102,6 +113,14 @@ class Harapartners_Service_Block_Rewrite_Adminhtml_Catalog_Category_Edit_Form ex
     {
         if ($this->hasStoreRootCategory()) {
             return $this->getChildHtml('import_product_button');
+        }
+        return '';
+    }
+    
+	public function getDeleteProductsButtonHtml()
+    {
+        if ($this->hasStoreRootCategory()) {
+            return $this->getChildHtml('delete_product_button');
         }
         return '';
     }
