@@ -1,8 +1,8 @@
 """Cap Reward Points Balance"" should be positive number or empty.","""Cap Credits Balance"" should be positive number or empty."
 """Minimum Reward Points Balance"" should be less or equal to ""Cap Reward Points Balance"".","""Minimum Credits Balance"" should be less or equal to ""Cap Credits Balance""."
 """Minimum Reward Points Balance"" should be positive number or empty.","""Minimum Credits Balance"" should be positive number or empty."
-%s Reward points,%s
-%s Reward points (%s),%s (%s)
+%s Reward points,%s Credits
+%s Reward points (%s),%s Credits (%s)
 Actions for Acquiring Reward Points by Customers,Actions for Acquiring Credits by Customers
 Add New Rate,Add New Rate
 Add Reward Points,Add Credits
