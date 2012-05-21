@@ -26,7 +26,9 @@
 ?>
 <meta charset="utf-8" />
 <title><?php echo $this->getTitle() ?></title>
-<meta http-equiv="X-UA-Compatible" content="IE=8" /> 
+<!--[if IE 8]>
+  <meta http-equiv="x-ua-compatible" content="IE=8">
+<![endif]-->
 <meta name="description" content="<?php echo htmlspecialchars($this->getDescription()) ?>" />
 <meta name="keywords" content="<?php echo htmlspecialchars($this->getKeywords()) ?>" />
 <meta name="sailthru.date" content="<?php echo date("r");?>" />
