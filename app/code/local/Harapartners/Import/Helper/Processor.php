@@ -101,7 +101,6 @@ class Harapartners_Import_Helper_Processor extends Mage_Core_Helper_Abstract {
                     //Get the required fields
                     $this->_prepareRequiredFields();
                     $row = 2; //Skip the header row
-                    
                     //Data cleaning, also scan through all imports for simple/config detection
                     $this->_cleanImportDataArray = array();
                     foreach ($importObjectIds as $importObjectId) {
@@ -116,15 +115,14 @@ class Harapartners_Import_Helper_Processor extends Mage_Core_Helper_Abstract {
                     }
                     
                     //Core save logic
-                    foreach($this->_cleanImportDataArray as $cleanImportData){
+                    foreach($this->_cleanImportDataArray as $rowKey => $cleanImportData){
                     	try{
                             $adapter->saveRow($cleanImportData);
                             $this->_savePurchaseOrderTransaction($cleanImportData, $importObject); //Save PO
                         } catch(Exception $ex) {
-                            $this->_errorMessages[] = 'Error in row ' . $row . ', ' . $ex->getMessage() . "\n";
+                            $this->_errorMessages[] = 'Error in row ' . $rowKey . ', ' . $ex->getMessage() . "\n";
                         }
                     }
-                    
                 }
                 $batchModel->delete();
             }catch(Exception $ex){
@@ -210,7 +208,6 @@ class Harapartners_Import_Helper_Processor extends Mage_Core_Helper_Abstract {
         if($importData['type'] == 'configurable'){
             $importData['configurable_attribute_codes'] = implode(',', $this->_confAttrCodes);
             $importData['conf_simple_products'] = implode(',', array_values($this->_confSimpleProducts));
-//            $this->_hideAssociatedSimpleProducts();
             $importData['visibility'] = 'Catalog, Search'; //All products are visible by default
             foreach($this->_confSimpleProducts as $rowKey => $rowData){
             	$this->_cleanImportDataArray[$rowKey]['visibility'] = 'Not Visible Individually';
@@ -230,7 +227,6 @@ class Harapartners_Import_Helper_Processor extends Mage_Core_Helper_Abstract {
         }
         
         // ----- Default fields ----- //
-        
         
         return $importData;
     }
@@ -263,17 +259,6 @@ class Harapartners_Import_Helper_Processor extends Mage_Core_Helper_Abstract {
         }
         
     }
-    
-//    protected function _hideAssociatedSimpleProducts(){
-//        foreach ($this->_confSimpleProducts as $sku) {
-//            $product = Mage::getModel('catalog/product')->loadByAttribute('sku', $sku);
-//            if(!!$product && $product->getId()){
-//                $product->setData('visibility', '1');
-//                //Optimization, avoid $product->save() which will trigger reindex
-//                $product->getResource()->saveAttribute($product, 'visibility');
-//            }
-//        }
-//    }
     
     protected function _generateProductSku($importData, $importObject){
         //$importObject must have 'vendor_id' here
