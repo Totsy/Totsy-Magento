@@ -97,6 +97,16 @@ class Harapartners_Stockhistory_Block_Adminhtml_Vendor_Edit_Form extends Mage_Ad
             'name'      => 'comment',
         ));
         
+        $fieldset->addField('payment_terms', 'textarea', array(
+            'label'     => $helper->__('Payment Terms:'),
+            'name'      => 'payment_terms',
+        ));
+        
+        $fieldset->addField('banking_info', 'textarea', array(
+            'label'     => $helper->__('Banking Info:'),
+            'name'      => 'banking_info',
+        ));
+        
         $form->setValues($dataObject->getData());
         $form->setUseContainer(true);
         $this->setForm($form);
