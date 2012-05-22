@@ -824,9 +824,6 @@ final class Mage
     public static function printException(Exception $e, $extra = '')
     {
     	
-    	print_r($e->getTrace());
-    	return; 
-    	
         if (self::$_isDeveloperMode) {
             print '<pre>';
 
