@@ -65,12 +65,6 @@
                     <onepage_shipping_method_available>Harapartners_Service_Block_Rewrite_Checkout_Onepage_Shipping_Method_Available</onepage_shipping_method_available>
                 </rewrite>
             </checkout>
-            <page>
-                <rewrite>
-                    <!--Harapartners_EmailFactory-->
-                    <html_head>Harapartners_Service_Block_Rewrite_Page_Html_Head</html_head>
-                </rewrite>
-            </page>
             <enterprise_reward>
                 <rewrite>
                     <!--Harapartners_For_MANDATORY_Comment-->
@@ -175,6 +169,12 @@
                     <quote_address_total_grand>Harapartners_Service_Model_Rewrite_Sales_Quote_Address_Total_Grand</quote_address_total_grand>
                 </rewrite>
             </sales>
+			<!-- Fixed on the Varien layer, Magento core fix for master/slave DB sync -->
+			<!--sales_resource>
+                <rewrite>
+					<order>Harapartners_Service_Model_Rewrite_Sales_Resource_Order</order>
+				</rewrite>
+			</sales_resource-->
             <tax>
                 <rewrite>
                     <!--Harapartners_SpeedTax-->
