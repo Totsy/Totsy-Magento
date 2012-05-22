@@ -3198,11 +3198,16 @@ class Varien_Db_Adapter_Pdo_Mysql extends Zend_Db_Adapter_Pdo_Mysql implements V
         }
         
         //Terminate when nothing to insert, return empty query
-        if(!($data = $this->fetchRow($select->assemble()))){
-        	return 'SELECT 1;';
+        //Note some select queries requires parameter bind and can only be handled upon making the query
+        //For such cases default logic is used
+        try{
+	        if(!($data = $this->fetchRow($select->assemble()))){
+	        	return 'SELECT 1;';
+	        }
+	        $query = sprintf('%s %s', $query, 'VALUES (' . $this->quote($data) . ')');
+        }catch (Exception $e){
+			$query = sprintf('%s %s', $query, $select->assemble());
         }
-        
-        $query = sprintf('%s %s', $query, 'VALUES (' . $this->quote($data) . ')');
 
         if ($mode == self::INSERT_ON_DUPLICATE) {
             if (!$fields) {
