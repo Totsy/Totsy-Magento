@@ -175,6 +175,12 @@
                     <quote_address_total_grand>Harapartners_Service_Model_Rewrite_Sales_Quote_Address_Total_Grand</quote_address_total_grand>
                 </rewrite>
             </sales>
+			<sales_resource>
+                <rewrite>
+					<!-- Magento core fix for master/slave DB sync -->
+					<order>Harapartners_Service_Model_Rewrite_Sales_Resource_Order</order>
+				</rewrite>
+			</sales_resource>
             <tax>
                 <rewrite>
                     <!--Harapartners_SpeedTax-->
