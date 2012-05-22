@@ -720,7 +720,7 @@ body .my-account .fieldset h2.legend {
 }
 /*--------------------Product View----------------------------------*/
 .catalog-category-view .category-products ul.products-grid li.item div.product-info .price-box {
-	width:auto;
+	width:97px;
 }
 
 body.catalog-category-view .category-products ul.products-grid li.item div.product-info h2{

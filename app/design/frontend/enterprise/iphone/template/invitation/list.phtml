@@ -243,18 +243,33 @@ foreach ( $rewardCollection as $item ){
 	
 <script type="text/javascript">var switchTo5x=true;</script>
 <script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
-			<?php $currentUrl = $this->helper('core/url')->getCurrentUrl();?>
-			<?php $localPattern = '/127/';?>
-			<?php $stagePattern = '/stage/';?>
 <script type="text/javascript">stLight.options({publisher: "fa9539d4-b1db-40d3-9e2d-9e9a8dc98b42",onhover: false}); </script>
 		<!-- Include these scripts to import address books with CloudSponge -->
-		<script src="https://api.cloudsponge.com/address_books.js" type="text/javascript"></script>
-		<script type="text/javascript">// <![CDATA[
+		<script type="text/javascript" src="https://api.cloudsponge.com/address_books.js"></script>
+		<?php $currentUrl = $this->helper('core/url')->getCurrentUrl();?>
+		<?php $dashCSPattern = '/magento-totsy/';?>
+		<?php $stageCSPattern = '/staging/';?>
+		<?php $davidCSPattern = '/david/';?>
+		<?php // store CS account domain keys for each environ
+			if (preg_match($dashCSPattern, $currentUrl)) { // magento-totsy.totsy.com
+				$domainKey = 'KLSDWXMDT54MQ8EL3RJQ';				
+			}
+			elseif (preg_match($stageCSPattern, $currentUrl)) { // staging.totsy.com
+				$domainKey = 'E2NEX4FB2FJ86UMJ3YTC';				
+			}
+			elseif (preg_match($davidCSPattern, $currentUrl)) { // david.totsy.com - for dev testing
+				$domainKey = 'RM7PRMBS7QK4VQN6PZ2L';
+			}
+			else { // prod: totsy.com
+				$domainKey = 'ZSSSM5GHM6C8S7Q5TEEG';				
+			}
+		?>
+		<script type="text/javascript" charset="utf-8">
 		var csPageOptions = {
-		  domain_key:"<?php echo (preg_match($localPattern, $currentUrl))?'LFNJ5T67DJXNEDS6QEVG':((preg_match($stagePattern, $currentUrl))?'KUS5NYD485ZVU753VVB5':'') ?>", 
+		  domain_key:"<?php echo $domainKey; ?>", 
 		  textarea_id:"contact_list"
 		};
-		// ]]></script>
+		</script>
 <script>
 	stWidget.addEntry({
         "service":"sharethis",
