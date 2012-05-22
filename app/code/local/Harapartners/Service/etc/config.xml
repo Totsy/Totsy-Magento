@@ -110,6 +110,12 @@
                     <url>Harapartners_Service_Model_Rewrite_Catalog_Url</url>
                 </rewrite>
             </catalog>
+			<catalog_resource>
+                <rewrite>
+                    <!-- Magento core fix for master/slave DB sync -->
+                    <product_flat_indexer>Harapartners_Service_Model_Rewrite_Catalog_Resource_Product_Flat_Indexer</product_flat_indexer>
+                </rewrite>
+            </catalog_resource>
             <cataloginventory>
                 <rewrite>
                     <!--Harapartner_Service: Product of the same ID (conf. with different super attr. or simple with differnt options) share the same limit!-->
@@ -175,6 +181,12 @@
                     <quote_address_total_grand>Harapartners_Service_Model_Rewrite_Sales_Quote_Address_Total_Grand</quote_address_total_grand>
                 </rewrite>
             </sales>
+			<!-- Fixed on the Varien layer, Magento core fix for master/slave DB sync -->
+			<!--sales_resource>
+                <rewrite>
+					<order>Harapartners_Service_Model_Rewrite_Sales_Resource_Order</order>
+				</rewrite>
+			</sales_resource-->
             <tax>
                 <rewrite>
                     <!--Harapartners_SpeedTax-->

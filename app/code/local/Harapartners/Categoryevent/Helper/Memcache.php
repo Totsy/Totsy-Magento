@@ -37,7 +37,7 @@ class Harapartners_Categoryevent_Helper_Memcache extends Mage_Core_Helper_Abstra
         $indexData = $this->_getMemcache()->read($memcacheKey);
         if($forceRebuild || !$this->_validateIndexData($indexData)){
             $indexData = $this->_getIndexDataFromDb();
-            $this->_getMemcache()->write($memcacheKey, $indexData, $this->_indexDataLifeTime);
+            $this->_getMemcache()->write($memcacheKey, $indexData, MEMCACHE_COMPRESSED, $this->_indexDataLifeTime);
         }
         return new Varien_Object($indexData);
     }
@@ -56,7 +56,7 @@ class Harapartners_Categoryevent_Helper_Memcache extends Mage_Core_Helper_Abstra
         $topNavData = $this->_getMemcache()->read($memcacheKey);
         if(!$this->_validateTopNavData($topNavData)){
             $topNavData = $this->_getTopNavDataFromDb();
-            $this->_getMemcache()->write($memcacheKey, $topNavData, $this->_topNavDataLifeTime);
+            $this->_getMemcache()->write($memcacheKey, $topNavData, MEMCACHE_COMPRESSED, $this->_topNavDataLifeTime);
         }
         return new Varien_Object($topNavData);
     }
