@@ -15,13 +15,13 @@
 class Harapartners_Service_Model_Rewrite_Catalog_Product extends Mage_Catalog_Model_Product {
     
 	//Preview related functions
-	public function getProductUrl(){
+	public function getProductUrl($useSid = null){
 		if (!!Mage::registry('admin_preview_mode') && !!Mage::registry('current_category')) {
         	$targetPath = 'catalog/product/preview/category/' . Mage::registry('current_category')->getId() . '/id/' . $this->getId();
         	$pageKey = base64_encode(Mage::helper('core')->encrypt($targetPath));
 			return Mage::getUrl($targetPath, array('page_key' => $pageKey));
 		}else{
-			return parent::getProductUrl();
+			return parent::getProductUrl($useSid);
 		}
 	}
 	
