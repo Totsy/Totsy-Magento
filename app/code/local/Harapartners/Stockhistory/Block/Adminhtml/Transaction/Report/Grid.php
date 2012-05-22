@@ -22,12 +22,10 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Grid extends 
         $productCollection = Mage::getModel('catalog/product')->getCollection()
                 ->addCategoryFilter($this->getCategory())
                 ->addAttributeToFilter('type_id', 'simple')
-                ->addAttributeToFilter(array(array('attribute'=>'is_master_pack', 'gt'=>0)));
-	    
-        //sort by vendor_style, color, size
-        $productCollection->addAttributeToSort('vendor_style', 'ASC')
-    					  ->addAttributeToSort('color', 'ASC')
-						  ->addAttributeToSort('size', 'ASC');
+                ->addAttributeToFilter(array(array('attribute'=>'is_master_pack', 'gt'=>0)))
+                ->setOrder('vendor_style', 'asc')
+                ->setOrder('color', 'asc')
+	    		->setOrder('size', 'asc');
 
         $hasEmptyMasterPackItem = false;
         foreach($productCollection as $product){

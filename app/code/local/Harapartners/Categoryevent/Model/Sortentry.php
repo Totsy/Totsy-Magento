@@ -44,7 +44,13 @@ class Harapartners_Categoryevent_Model_Sortentry extends Mage_Core_Model_Abstrac
     	if(!$this->getStoreId()){
     		$this->setStoreId(Mage_Core_Model_App::ADMIN_STORE_ID);
     	}
-    	parent::_beforeSave();  
+    	parent::_beforeSave();
+    }
+    
+    protected function _afterSaveCommit(){
+    	//Due to DB access, the following logic must stay here after commit, rather than _afterSave()
+    	Mage::helper('categoryevent/memcache')->getIndexDataObject(true); //Force rebuild/flush memcached result of today
+    	return parent::_afterSaveCommit();
     }
     
     public function loadOneByAttribute($attrName, $attrValue, $storeId = null) {
@@ -91,7 +97,6 @@ class Harapartners_Categoryevent_Model_Sortentry extends Mage_Core_Model_Abstrac
 		
 		$this->setData('live_queue', json_encode($live));
     	$this->setData('upcoming_queue', json_encode($upcoming));
-    	$this->save();   	
     	return $this;	
     }
     
@@ -190,9 +195,6 @@ class Harapartners_Categoryevent_Model_Sortentry extends Mage_Core_Model_Abstrac
     	$this->setData('upcoming_queue', json_encode($eventUpcomingSortedArray));
     	$this->save();
     	
-    	//Force Rebuild memcached result
-    	Mage::helper('categoryevent/memcache')->getIndexDataObject(true);
-    	
     	return $this;
     }
     
@@ -235,7 +237,7 @@ class Harapartners_Categoryevent_Model_Sortentry extends Mage_Core_Model_Abstrac
     }
     
     // ===== Cronjob related ===== //
-    public function rebuildSortCorn($schedule){
+    public function rebuildSortCron($schedule){
 		$sortDate = now();
 		$storeId = Mage_Core_Model_App::DISTRO_STORE_ID; //Harapartners, Yang: for now only rebuild totsy store
 		return $this->rebuildSortCollection($sortDate, $storeId);

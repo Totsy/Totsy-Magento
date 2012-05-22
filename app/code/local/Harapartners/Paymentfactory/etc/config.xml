@@ -76,7 +76,10 @@
             </paymentfactory_read>
         </resources>
     </global>
-    <frontend>  
+    <frontend>
+		<secure_url>
+            <paymentfactory>/paymentfactory/</paymentfactory>
+        </secure_url>
         <routers>  
             <paymentfactory>  
                 <use>standard</use>  

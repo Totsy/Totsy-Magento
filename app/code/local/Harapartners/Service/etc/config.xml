@@ -106,6 +106,8 @@
                     <product>Harapartners_Service_Model_Rewrite_Catalog_Product</product>
                     <!--Harapartners_Import: Core logic parsing data -->
                     <convert_adapter_product>Harapartners_Service_Model_Rewrite_Catalog_Convert_Adapter_Product</convert_adapter_product>
+					<!--Harapartners_Import: Optimization, no product url rewrite for root category -->
+                    <url>Harapartners_Service_Model_Rewrite_Catalog_Url</url>
                 </rewrite>
             </catalog>
             <cataloginventory>
@@ -151,6 +153,8 @@
                 <rewrite>
                     <!--Harapartners_Import: Optimization, ignoring irrelevant indexing processes --><!--Harapartners_Rushcheckout: Freeing stock status for cart reservation-->
                     <indexer>Harapartners_Service_Model_Rewrite_Index_Indexer</indexer>
+					<!--Harapartners_Import: Optimization, skip event save to DB-->
+					<event>Harapartners_Service_Model_Rewrite_Index_Event</event>
                 </rewrite>
             </index>
             <payment>
@@ -171,6 +175,12 @@
                     <quote_address_total_grand>Harapartners_Service_Model_Rewrite_Sales_Quote_Address_Total_Grand</quote_address_total_grand>
                 </rewrite>
             </sales>
+			<!-- Fixed on the Varien layer, Magento core fix for master/slave DB sync -->
+			<!--sales_resource>
+                <rewrite>
+					<order>Harapartners_Service_Model_Rewrite_Sales_Resource_Order</order>
+				</rewrite>
+			</sales_resource-->
             <tax>
                 <rewrite>
                     <!--Harapartners_SpeedTax-->

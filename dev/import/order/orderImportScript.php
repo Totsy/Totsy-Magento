@@ -90,8 +90,11 @@ while ($orderData = fgetcsv($order)) {
 
     unset($objOrder);
 }
+
 // ========== ORDER PLACEMENT ========== //
-function placeOrder($orderData){
+function placeOrder($orderData) {
+    $productPriceUpdates = array();
+
     $orderObj = $orderData['order'];
     $order = Mage::getModel('sales/order')->loadByIncrementId($orderObj->getData('legacy_order_id'));
     if(!!$order && !!$order->getId()){
@@ -117,7 +120,10 @@ function placeOrder($orderData){
             throw new Exception('Order ' . $orderObj->getData('legacy_order_id') . ':Invalid product SKU "' . $orderItemObj->getData('sku') . '"');
         }
 
+        // change the actual price of the product, if it doesn't match the price
+        // in the order line item
         if ($product->getSpecialPrice() != $orderItemObj->getData('price')) {
+            $productPriceUpdates[$product->getId()] = $product->getSpecialPrice();
             $product->setSpecialPrice($orderItemObj->getData('price'))
                 ->getResource()
                 ->saveAttribute($product, 'special_price');
@@ -202,15 +208,16 @@ function placeOrder($orderData){
     }
 
     // ==============================
+    //Discount
+    $discount = -1.0 * ($orderObj->getData('discount_amount') + abs($orderObj->getData('reward_currency_amount')));
+
+    Mage::unregister('order_import_discount_amount');
+    Mage::register('order_import_discount_amount', $discount);
+
+    // ==============================
     //Tax rate
     Mage::unregister('order_import_tax_amount');
     Mage::register('order_import_tax_amount', $orderObj->getData('tax_amount'));
-
-    // ==============================
-    //Discount
-    $discount = -1.0 * ($orderObj->getData('discount_amount') + $orderObj->getData('reward_currency_amount'));
-    Mage::unregister('order_import_discount_amount');
-    Mage::register('order_import_discount_amount', $discount);
 
     $ccType = $orderObj->getData('cc_type');
     switch($orderObj->getData('cc_type')){
@@ -252,7 +259,7 @@ function placeOrder($orderData){
 
     // ==============================
     //Placing order
-        $quote->setStoreId($orderObj->getData('store_id'));
+    $quote->setStoreId($orderObj->getData('store_id'));
     $service = Mage::getModel('sales/service_quote', $quote);
     $service->submitAll();
     $order = $service->getOrder();
@@ -274,6 +281,31 @@ function placeOrder($orderData){
     $order->setIncrementId($orderObj->getData('legacy_order_id'))
         ->setCreatedAt($createdAt)
         ->save();
+
+    // save promo code usage
+    $promoCode = $orderObj->getData('promo_code');
+    if ($promoCode) {
+        $salesRules = Mage::getModel('salesrule/coupon')->getCollection();
+        $salesRules->addFilter('code', $promoCode);
+        if (count($salesRules)) {
+            $salesRule = $salesRules->getFirstItem();
+            $salesRuleId = $salesRule->getRuleId();
+            $customerRule = Mage::getModel('salesrule/rule_customer')
+                ->loadByCustomerRule($customer->getId(), $salesRuleId);
+            $customerRule->setCustomerId($customer->getId())
+                ->setRuleId($salesRuleId)
+                ->setTimesUsed(1)
+                ->save();
+        }
+    }
+
+    // restore any product price updates
+    foreach ($productPriceUpdates as $productId => $price) {
+        $product = Mage::getModel('catalog/product')->load($productId);
+        $product->setSpecialPrice($price)
+            ->getResource()
+            ->saveAttribute($product, 'special_price');
+    }
 }
 
 // ========== Special logic for gmail accounts ========== //

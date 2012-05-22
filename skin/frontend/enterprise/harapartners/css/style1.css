@@ -2,6 +2,7 @@
 html body {
     background: none repeat scroll 0 0 #DCEDFA;
 }
+a { cursor: pointer; color: #EE1C25; }
 .wrapper {
 	background: none repeat scroll 0 0 transparent;
 }
