@@ -141,11 +141,13 @@
                         </div>
                         <div class="field half-of-half">
                             <label for="billing:region_id" class="required"><em>*</em><?php echo $this->__('State/Province') ?></label>
-                            <?php $this->getStatesValues(); ?>
                             <div class="totsy-selective-input-box">
                                 <span>State</span>
-                                <select id="billing:region_id" name="billing[region]" title="<?php echo $this->__('State/Province') ?>" class="validate-select"  >
-                                 
+                                <select id="billing:region_id" name="billing[region]" title="<?php echo $this->__('State/Province') ?>" class="validate-select">
+                                    <option value="">Please select region, state or province</option>
+                                    <?php foreach($this->getRegions() as $region) {
+                                            echo '<option value="'.$region->getId().'" >'.$region->getName().'</option>';
+                                    } ?>
                                 </select>
                             </div>
                         </div>

@@ -103,8 +103,8 @@ class Harapartners_Paymentfactory_Block_Payment_Form extends Mage_Payment_Block_
          }
     }
     
-    public function getStatesValues() {
-        $stateCollection = Mage::getModel("directory/country")->load("US")->getRegions()->toOptionArray();
-        return $stateCollection;
+    public function getRegions() {
+        $regions = Mage::getModel("directory/country")->load("US")->getRegions();
+        return $regions;
     }
 }
