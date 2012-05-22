@@ -3197,7 +3197,11 @@ class Varien_Db_Adapter_Pdo_Mysql extends Zend_Db_Adapter_Pdo_Mysql implements V
             $query = sprintf('%s (%s)', $query, join(', ', $columns));
         }
         
-        $data = $this->fetchRow($select->assemble());
+        //Terminate when nothing to insert, return empty query
+        if(!($data = $this->fetchRow($select->assemble()))){
+        	return 'SELECT 1;';
+        }
+        
         $query = sprintf('%s %s', $query, 'VALUES (' . $this->quote($data) . ')');
 
         if ($mode == self::INSERT_ON_DUPLICATE) {
