@@ -139,6 +139,13 @@ function placeOrder($orderData) {
     }
 
     // ==============================
+    //Discount
+    $discount = -1.0 * ($orderObj->getData('discount_amount') + abs($orderObj->getData('reward_currency_amount')));
+
+    Mage::unregister('order_import_discount_amount');
+    Mage::register('order_import_discount_amount', $discount);
+echo "Calculated the base discount to be $discount", PHP_EOL;
+    // ==============================
     //Set billing and shipping addresses
     $quote->assignCustomer($customer);
     $orderAddressObj = $orderData['address'];
@@ -204,15 +211,9 @@ function placeOrder($orderData) {
         Mage::register('order_import_shipping_amount',
                 $orderObj->getData('base_shipping_amount') + $orderObj->getData('shipping_amount')
         );
+        echo "Set the shipping amount as ", ($orderObj->getData('base_shipping_amount') + $orderObj->getData('shipping_amount')), PHP_EOL;
         $quote->getShippingAddress()->setPaymentMethod($data['method']);
     }
-
-    // ==============================
-    //Discount
-    $discount = -1.0 * ($orderObj->getData('discount_amount') + abs($orderObj->getData('reward_currency_amount')));
-
-    Mage::unregister('order_import_discount_amount');
-    Mage::register('order_import_discount_amount', $discount);
 
     // ==============================
     //Tax rate
@@ -247,16 +248,20 @@ function placeOrder($orderData) {
 
     $grandTotal = $totalAddress->getData('grand_total');
     $delta = $orderObj->getData('grand_total') - $grandTotal;
-
+print_r($orderObj->getData());
+echo "Calculated grand total as $grandTotal but expected ", $orderObj->getData('grand_total'), " so delta as $delta.", PHP_EOL;
     //Based on Magento calculation accurracy
     if(abs($delta) > 0.00001){
         //Force into discount
         $discount += $delta;
+        echo "Added $delta to discount, now at $discount.", PHP_EOL;
         Mage::unregister('order_import_discount_amount');
         Mage::register('order_import_discount_amount', $discount);
         $quote->setData('totals_collected_flag', false)->collectTotals();
     }
-
+echo "Now the G.T. is at ", $totalAddress->getData('grand_total'), PHP_EOL;
+print_r($quote->getData());
+return false;
     // ==============================
     //Placing order
     $quote->setStoreId($orderObj->getData('store_id'));
