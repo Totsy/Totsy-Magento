@@ -12,7 +12,9 @@
  * 
  */
 
-class Harapartners_Affiliate_RemoteController extends Mage_Core_Controller_Front_Action{
+class Harapartners_Affiliate_RemoteController
+    extends Mage_Core_Controller_Front_Action
+{
 
     public function registerAction(){
         $response = Mage::app()->getResponse();
@@ -70,10 +72,12 @@ class Harapartners_Affiliate_RemoteController extends Mage_Core_Controller_Front
                 $customer->sendNewAccountEmail('registered','',$store->getId());               
                 $result['status'] = 'success';
                 //redirect customer as login customer
-                if(!$productUrl){
-                    $result['login_url'] = Mage::getBaseUrl().'affiliate/remote/login?email='.$email.'&password='.Mage::getModel('core/encryption')->encrypt($password);
-                }else{
-                    $result['login_url'] = Mage::getBaseUrl().'affiliate/remote/login?email='.$email.'&password='.Mage::getModel('core/encryption')->encrypt($password).'&product_url='.$productUrl;
+                $result['login_url'] = Mage::getBaseUrl()
+                    . 'affiliate/remote/login'
+                    . '?email=' . urlencode($email)
+                    . '&password=' . urlencode(Mage::getModel('core/encryption')->encrypt($password));
+                if ($productUrl) {
+                    $result['login_url'] .= '&product_url=' . urlencode($productUrl);
                 }
             }catch(Exception $e){
                 $result['status'] = 'failed';
@@ -82,48 +86,59 @@ class Harapartners_Affiliate_RemoteController extends Mage_Core_Controller_Front
         }
         $response->setBody(json_encode($result));
     }
-    
-    public function loginAction(){
-        $request = $this->getRequest();
-        $email = $request->getParam('email');
-        $password = Mage::getModel('core/encryption')->decrypt($request->getParam('password'));
-        if(!!$email && !!$password){
-            $session = Mage::getSingleton('customer/session');
-            try {
-                 $session->login($email, $password);
-                 if ($session->getCustomer()->getIsJustConfirmed()) {
-                     $this->_welcomeCustomer($session->getCustomer(), true);
-                 }if(!!$productUrl = $request->getParam('product_url')){
-                     $this->_redirectURL($productUrl);
-                 }else{
-                     $this->_redirect();
-                 }
-             } catch (Mage_Core_Exception $e) {
-                 switch ($e->getCode()) {
-                     case Mage_Customer_Model_Customer::EXCEPTION_EMAIL_NOT_CONFIRMED:
-                         $value = Mage::helper('customer')->getEmailConfirmationUrl($email);
-                         $message = Mage::helper('customer')->__('This account is not confirmed. <a href="%s">Click here</a> to resend confirmation email.', $value);
-                         break;
-                     case Mage_Customer_Model_Customer::EXCEPTION_INVALID_EMAIL_OR_PASSWORD:
-                         $message = $e->getMessage();
-                         break;
-                     default:
-                         $message = $e->getMessage();
-                 }
-                 $session->addError($message);
-                 $session->setUsername($email);
-                 $this->_redirect('customer/account/login');
-             } catch (Exception $e) {
-                 // Mage::logException($e); // PA DSS violation: this exception log can disclose customer password
-                $session->addError($e->getMessage()); 
-                 $this->_redirect('customer/account/login');
-             }
-        }else{
+
+    /**
+     * Remote affiliate login.
+     *
+     * @return void
+     */
+    public function loginAction()
+    {
+        $session  = Mage::getSingleton('customer/session');
+        $request  = $this->getRequest();
+        $email    = $request->getParam('email');
+        $password = Mage::getModel('core/encryption')
+            ->decrypt($request->getParam('password'));
+
+        if (empty($email) || empty($password)) {
             $session->addError($this->__('Login and password are required.'));
             $this->_redirect('customer/account/login');
         }
+
+        try {
+            $session->login($email, $password);
+            if ($session->getCustomer()->getIsJustConfirmed()) {
+                $this->_welcomeCustomer($session->getCustomer(), true);
+            }
+
+            if ($productUrl = $request->getParam('product_url')) {
+                 $this->_redirectURL($productUrl);
+             } else {
+                 $this->_redirect('/');
+             }
+        } catch (Mage_Core_Exception $e) {
+            switch ($e->getCode()) {
+                case Mage_Customer_Model_Customer::EXCEPTION_EMAIL_NOT_CONFIRMED:
+                    $value = Mage::helper('customer')->getEmailConfirmationUrl($email);
+                    $message = Mage::helper('customer')->__('This account is not confirmed. <a href="%s">Click here</a> to resend confirmation email.', $value);
+                    break;
+                case Mage_Customer_Model_Customer::EXCEPTION_INVALID_EMAIL_OR_PASSWORD:
+                    $message = $e->getMessage();
+                    break;
+                default:
+                    $message = $e->getMessage();
+           }
+
+           $session->addError($message);
+           $session->setUsername($email);
+           $this->_redirect('customer/account/login');
+        } catch (Exception $e) {
+           // Mage::logException($e); // PA DSS violation: this exception log can disclose customer password
+          $session->addError($e->getMessage());
+          $this->_redirect('customer/account/login');
+        }
     }
-    
+
     public function formatCode($code){
         return preg_replace("/[^a-z0-9_]/", "_", trim(strtolower((urldecode($code)))));
     }

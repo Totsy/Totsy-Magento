@@ -26,26 +26,51 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Print extends
         return $this->getPoObject()->generatePoNumber();
     }
     
+	public function getPoCategoryName(){
+        $categoryId = $this->getPoObject()->getCategoryId();
+        
+        $category = Mage::getModel('catalog/category')->load($categoryId);
+		return $category->getName();
+    }
+    
     public function getPoDate(){
-        return date('Y-m-d', $this->_getCurrentTime());
+        return date('m-d-Y', $this->_getCurrentTime());
     }
     
     public function getShipByDate(){
-        return date('Y-m-d', $this->_getWorkDayTime($this->_getCurrentTime(), self::BUSINESS_DAYS_SHIP_BY));
+        return date('m-d-Y', $this->_getWorkDayTime($this->_getCurrentTime(), self::BUSINESS_DAYS_SHIP_BY));
     }
     
     public function getInHouseDate(){
-        return date('Y-m-d', $this->_getWorkDayTime($this->_getCurrentTime(), self::BUSINESS_DAYS_IN_HOUSE));
+        return date('m-d-Y', $this->_getWorkDayTime($this->_getCurrentTime(), self::BUSINESS_DAYS_IN_HOUSE));
     }
     
     public function getAuthorizationName(){
         return Mage::getSingleton('admin/session')->getUser()->getName();
     }
     
+	public function getVendorName(){
+        return $this->getVendorObj()->getData('vendor_name');
+    }
+    
+	public function getContactPerson(){
+        return $this->getVendorObj()->getData('contact_person');
+    }
+    
+	public function getTelephone(){
+        return $this->getVendorObj()->getData('telephone');
+    }
+    
     public function getVendorAddress(){
         $address = $this->getVendorObj()->getData('address');
         $address = str_ireplace("\n", "<br/>", $address);
         return $address;
+    }
+    
+	public function getPaymentTerms(){
+        $terms = $this->getVendorObj()->getData('payment_terms');
+        $terms = str_ireplace("\n", "<br/>", $terms);
+        return $terms;
     }
     
     public function getVendorEmailList(){
