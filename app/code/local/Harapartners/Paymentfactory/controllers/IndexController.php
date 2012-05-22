@@ -4,8 +4,7 @@ class Harapartners_Paymentfactory_IndexController extends Mage_Core_Controller_F
     public function indexAction() {
         $this->loadLayout();
         $this->_initLayoutMessages('customer/session');
-        $this->renderLayout();    
-
+        $this->renderLayout();
     }
     
     public function deleteAction(){
@@ -43,7 +42,7 @@ class Harapartners_Paymentfactory_IndexController extends Mage_Core_Controller_F
             Mage::getModel ( 'paymentfactory/tokenize' )->createProfile($payment,$billing,$customerId);
             $customerSession->addSuccess('Save Credit Card Successfully ');
         }catch(Exception $e){
-            $customerSession->addError(Mage::helper('paymentfactory')->__($e->getMessage()));
+            $customerSession->addError($e->getMessage());
         }
         
         $this->_redirect ( '*/*/' );
