@@ -102,4 +102,9 @@ class Harapartners_Paymentfactory_Block_Payment_Form extends Mage_Payment_Block_
                  return $shortCardType;
          }
     }
+    
+    public function getStatesValues() {
+        $stateCollection = Mage::getModel("directory/country")->load("US")->getRegions()->toOptionArray();
+        return $stateCollection;
+    }
 }

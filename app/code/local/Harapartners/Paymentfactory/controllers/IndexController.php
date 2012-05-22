@@ -50,8 +50,6 @@ class Harapartners_Paymentfactory_IndexController extends Mage_Core_Controller_F
             Mage::throwException(
                 Mage::helper('paymentfactory')->__($e->getMessage()));
         }
-        
-
         $this->_redirect ( '*/*/' );
         
     }

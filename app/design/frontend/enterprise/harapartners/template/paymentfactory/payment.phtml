@@ -50,14 +50,14 @@
         <div style='border:1px solid #DDD'>
         <table width="650" border="0" cellspacing="0" cellpadding="0" style="margin: 10px;">
             <tr>
-                <td width="10%" align="left">
+                <td width="9%" align="left">
                 <img src="<?php echo $this->getSkinUrl('images/' . $creditCardImage)?>"> 
                 </td>            
-                <td width="67%">
+                <td width="71%">
                     <?php echo $cardType?> ending in <strong><?php echo $payment->getData('last4no')?></strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     expires <strong><?php echo $payment->getData('expire_month');?>/<?php echo $payment->getData('expire_year');?></strong>
                 </td>
-                <td width="13%" align="right">
+                <td width="2%" align="right">
                     <a href="<?php echo $this->getBaseUrl();?>paymentfactory/index/delete/?entity_id=<?php echo $payment->getData('entity_id');?>" id="remove_<?php echo $payment->getData('entity_id');?>" title="Remove Credit Card" class="add-new-card-button">Delete</a>
                 </td>
             </tr>
