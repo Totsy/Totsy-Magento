@@ -23,7 +23,9 @@
 ?>
 <div class="catalog-events-container">
 	<div class="live-events-container">
-		<p class="event-list-title"><?php echo Mage::helper('categoryevent')->__('Live Events List') ?></p>
+		<p class="event-list-title"><?php echo Mage::helper('categoryevent')->__('All possible live events today') ?></p>
+		<p>This list includes <strong>ALL</strong> events that are possibly live today, regardless of the hour when the event starts. Note this may be different from the content of "Today's Sales" in the frontend.</p>
+		<p>"Today's Sales" is a filtered list of "All possible live events today", based on (1) whether the time (hour/minute/second) of the event passes the current time and (2) whether the event contains product.</p>
 		<ul id="sortable" class="ui-sortable" >
 		<?php foreach ( $liveArray as $live ):?>
 			<li class="ui-state-default" id="recordsLiveArray_<?php echo $live['entity_id'];?>" >
@@ -35,7 +37,9 @@
 		</ul>
 	</div>
 	<div class="upcoming-events-container">
-		<p class="event-list-title"><?php echo Mage::helper('categoryevent')->__('Upcoming Events List') ?></p>
+		<p class="event-list-title"><?php echo Mage::helper('categoryevent')->__('Events that starts next day (within ' . Harapartners_Categoryevent_Model_Sortentry::EVENT_CATEGORY_DATE_RANGE . ' days range )') ?></p>
+		<p>This list contains <strong>ALL</strong> events that are opening soon. The content may also be different from the frontend "Upcoming Sales".</p>
+		<p>"Upcoming Sales" contains a filtered list of "Events that starts next day", plus events in "All possible live events today" that are <strong>not live yet</strong>.</p>
 		<ul id="sortable2">
 			<?php foreach ( $upcomingArray as $up ):?>
 				<li class="ui-state-default" id="recordsUpArray_<?php echo $up['entity_id'];?>">
@@ -53,7 +57,21 @@
 		<button id="sort-rebuild-submit" class="scalable" type="button" onclick="rebuildSubmit();">
 			<span><?php echo Mage::helper('categoryevent')->__('Rebuild Sort') ?></span>
 		</button>
+		<button id="sort-order-submit" class="scalable" type="button" onclick="alert('Flush page cache');">
+			<span><?php echo Mage::helper('categoryevent')->__('Refresh home (sales) pages immediately') ?></span>
+		</button>
 	</div>
+	<form id="sort-selection" action="" method="post">
+		<label for="sort_date" ><?php echo Mage::helper('categoryevent')->__('Preview by hour') ?></label>
+		<input type="text" name="sort_date" id="datepicker" value="<?php echo $postSortDate;?>"/>
+		<input type="hidden" name="form_key" value="<?php echo $this->getFormKey() ?>"/>
+		<input type="hidden" name="sort_store" value="" id="sort_store_id"/>
+		<input type="hidden" name="post_active" value="1"/>
+		<button id="sort-type-submit" class="scalable" type="submit" >
+			<span><?php echo Mage::helper('categoryevent')->__('Preview') ?></span>
+		</button>
+		<p>Preview today's frontend home (sales) pages based on the given time</p>
+	</form>
 </div>
 		
 <script>

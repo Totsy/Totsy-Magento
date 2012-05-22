@@ -17,8 +17,9 @@ class Harapartners_Import_Helper_Data extends Mage_Core_Helper_Abstract {
     public function getFormActionTypeArray(){
         return array(
                    array('label' => 'Process Immediately and Index', 'value' => Harapartners_Import_Model_Import::ACTION_TYPE_PROCESS_IMMEDIATELY_AND_INDEX),
-                   array('label' => 'Process Immediately without Index', 'value' => Harapartners_Import_Model_Import::ACTION_TYPE_PROCESS_IMMEDIATELY),
-                   array('label' => 'Pending', 'value' => Harapartners_Import_Model_Import::ACTION_TYPE_PENDING)
+//                   array('label' => 'Process Immediately without Index', 'value' => Harapartners_Import_Model_Import::ACTION_TYPE_PROCESS_IMMEDIATELY),
+//                   array('label' => 'Pending', 'value' => Harapartners_Import_Model_Import::ACTION_TYPE_PENDING),
+                   array('label' => 'Validation Only', 'value' => Harapartners_Import_Model_Import::ACTION_TYPE_VALIDATION_ONLY)
            );
     }
     
