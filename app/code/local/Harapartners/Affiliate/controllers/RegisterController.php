@@ -15,13 +15,19 @@
 class Harapartners_Affiliate_RegisterController extends Mage_Core_Controller_Front_Action{
 
     public function indexAction(){
-    	//Logic change, current affiliate overwrites previous ones (fixed after customer registration)
+        //Logic change, current affiliate overwrites previous ones (fixed after customer registration)
         //////Short-circuit logic, do NOT overwrite exiting affiliate
 //        if(!!Mage::getSingleton('customer/session')->getAffiliateId()){
 //            $this->_redirect('customer/account/create');
 //            return;
 //        }
-        
+
+        $session = Mage::getSingleton('customer/session');
+        if ($session->isLoggedIn()) {
+            $this->_redirect('/');
+            return;
+        }
+
         //Request data can be very dirty, clean up and validate
         $request = $this->getRequest();
         $affiliateCode = $this->formatCode($request->getParam('affiliate_code'));
@@ -40,13 +46,13 @@ class Harapartners_Affiliate_RegisterController extends Mage_Core_Controller_Fro
             Mage::getModel('core/cookie')->set($keywordCookieName, $keyword, 3600);
             //Harapartners, yang: end
             
-            Mage::getSingleton('customer/session')->setData('affiliate_id', $affiliate->getId());
-            Mage::getSingleton('customer/session')->setData('affiliate_info', $affiliateInfo);
+            $session->setData('affiliate_id', $affiliate->getId());
+            $session->setData('affiliate_info', $affiliateInfo);
         }
+
         $this->_redirect('customer/account/create');
-        return;
     }
-    
+
     //Alpha-numerical, lower case only, underscore allowed
     public function formatCode($code){
         return preg_replace("/[^a-z0-9_]/", "_", trim(strtolower((urldecode($code)))));
