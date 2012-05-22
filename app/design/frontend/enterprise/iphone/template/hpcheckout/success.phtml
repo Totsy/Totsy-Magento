@@ -46,7 +46,7 @@
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-30611020-2']);  //Hara Partners, Hardcoded GA ID.  Need to get from config.
+  _gaq.push(['_setAccount', <?php echo Mage::getStoreConfig("google/analytics/account")?>);  
   _gaq.push(['_trackPageview']);
   _gaq.push(['_addTrans',
     '<?php echo $order->getData('increment_id'); ?>',           // order ID - required

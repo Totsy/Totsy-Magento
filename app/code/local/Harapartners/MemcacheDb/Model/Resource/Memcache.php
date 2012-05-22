@@ -19,7 +19,7 @@ class Harapartners_MemcacheDb_Model_Resource_Memcache {
             return;
         }
         try{
-            if(!class_exists(Memcache)){
+            if(!class_exists('Memcache')){
                 $this->_memcache = null;
                 return;
             }
@@ -49,7 +49,7 @@ class Harapartners_MemcacheDb_Model_Resource_Memcache {
         return $this->_memcache;
     }
     
-    public function read($key, $flags = null, $readFromHistory = false){
+    public function read($key, $flags = false, $readFromHistory = false){
         if($readFromHistory 
                 && isset($this->_history[$key])
                 && !!$this->_history[$key]){
@@ -61,7 +61,7 @@ class Harapartners_MemcacheDb_Model_Resource_Memcache {
         return $this->_memcache->get($key, $flags);
     }
     
-    public function write($key, $var, $flag = null, $expire = 0, $writeToHistory = true){
+    public function write($key, $var, $flag = false, $expire = 0, $writeToHistory = true){
         if(!$this->getMemcache()){
             return false;
         }
