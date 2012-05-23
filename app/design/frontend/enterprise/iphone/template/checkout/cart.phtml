@@ -30,9 +30,10 @@
  *
  * @see Mage_Checkout_Block_Cart
  */
-	$countDownTimer = Mage::getSingleton('checkout/session')->getCountDownTimer();
-	$timeout = Mage::getModel('checkout/session')->getQuoteItemExpireTime();	
-	$endcount_lc = date("F j, Y, G:i:s", ($countDownTimer + $timeout));
+    $countDownTimer = Mage::getSingleton('checkout/session')->getCountDownTimer();
+    $timeout = Mage::getModel('checkout/session')->getQuoteItemExpireTime();
+    $endcount_lc = date("F j, Y, G:i:s", ($countDownTimer + $timeout));
+    $quote = Mage::getSingleton('checkout/session')->getQuote();
 ?>
 <div class="cart">
 
@@ -44,7 +45,7 @@
     <div class="page-title title-buttons">
       	<div class="shipping-date float-left">
         	<span>Estimated Ship Date:</span>
-        	<p class="light-green" id="cart-shipping-date-header"><?php echo $this->getShippingDate();?></p>	        		
+        	<p class="light-green" id="cart-shipping-date-header"><?php echo date('Y-m-d', Mage::helper('sales/order')->calculateEstimatedShipDate($quote)); ?></p>
        	</div>
         <div class="timer-control-box float-right">
         	<span>Item Reserved For:</span>

@@ -24,7 +24,7 @@
  * @license     http://www.magentocommerce.com/license/enterprise-edition
  */
 ?>
-<?php  $_order = $this->getOrder() ?>
+<?php $_order = $this->getOrder() ?>
 <table class="data-table" id="my-orders-table" summary="<?php echo $this->__('Items Ordered') ?>">
     <col />
     <col width="1" />
@@ -66,11 +66,9 @@
         <?php endforeach; ?>
 </table>
 <p class="savings">
-	<?php $totalSaving = Mage::app()->getLayout()->createBlock('checkout/cart_sidebar')->getTotalSaving(true, $_order);?>
-	<span class="label"><?php echo $this->__('Your savings: ') ?></span><?php echo Mage::helper('checkout')->formatPrice($totalSaving); ?>
+	<span class="label"><?php echo $this->__('Your savings: ') ?></span><?php echo '$' . number_format(Mage::helper('sales/order')->calculateEstimatedSavings($_order), 2) ?>
 </p>
 <p class="shipping-date">
-	<?php $estshipdate = Mage::app()->getLayout()->createBlock('checkout/cart_sidebar')->getShippingDate(true, $_order);?>
-	<span class="label"><?php echo $this->__('Estimated Shipping Date: ') ?></span><?php echo $estshipdate;?>
+	<span class="label"><?php echo $this->__('Estimated Shipping Date: ') ?></span><?php echo date('Y-m-d', Mage::helper('sales/order')->calculateEstimatedShipDate($_order)); ?>
 </p>
 <script type="text/javascript">decorateTable('my-orders-table', {'tbody' : ['odd', 'even'], 'tbody tr' : ['first', 'last']})</script>
