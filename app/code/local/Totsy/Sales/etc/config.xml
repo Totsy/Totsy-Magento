@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @category    Totsy
+ * @package     Totsy_Sales
+ * @author      Tharsan Bhuvanendran <tbhuvanendran@totsy.com>
+ * @copyright   Copyright (c) 2012 Totsy LLC
+ */
+-->
+<config>
+    <modules>
+        <Totsy_Sales>
+            <version>0.1.0</version>
+        </Totsy_Sales>
+    </modules>
+    <global>
+        <helpers>
+            <sales>
+                <rewrite>
+                    <order>Totsy_Sales_Helper_Order</order>
+                </rewrite>
+            </sales>
+        </helpers>
+    </global>
+</config>
