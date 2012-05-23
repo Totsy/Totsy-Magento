@@ -30,16 +30,17 @@
  *
  * @see Mage_Checkout_Block_Cart
  */
-	$countDownTimer  =	Mage::getSingleton('checkout/session')->getCountDownTimer();
-	$timeout		 =	Mage::getSingleton('checkout/session')->getQuoteItemExpireTime();	
-	$endcount_lc 	 =	date("F j, Y, G:i:s", ($countDownTimer + $timeout));
+    $countDownTimer = Mage::getSingleton('checkout/session')->getCountDownTimer();
+    $timeout        = Mage::getSingleton('checkout/session')->getQuoteItemExpireTime();
+    $endcount_lc    = date("F j, Y, G:i:s", ($countDownTimer + $timeout));
+    $quote          = Mage::getSingleton('checkout/session')->getQuote();
 ?>
 <div class="cart">
     <div class="page-title title-buttons">
         <h1><?php echo $this->__('Shopping Cart') ?></h1>
       	<div class="shipping-date">
         	<span>Estimated Ship Date:</span>
-        	<p id="cart-shipping-date-header"><?php echo $this->getShippingDate();?></p>	        		
+        	<p id="cart-shipping-date-header"><?php echo date('Y-m-d', Mage::helper('sales/order')->calculateEstimatedShipDate($quote)); ?></p>
        	</div>
         <div class="timer-control-box">
         	<span>Item Reserved For:</span>
@@ -135,8 +136,8 @@
     </div>
     <div class="totals">
         <?php echo $this->getChildHtml('totals'); ?>
-        <?php $saving = Mage::app()->getLayout()->createBlock('checkout/cart_sidebar')->getTotalSaving();?>
-        <?php if (!!$saving):?>
+        <?php $saving = Mage::helper('sales/order')->calculateEstimatedSavings($quote); ?>
+        <?php if ($saving): ?>
         <p class="savings">
         	<span class="label"><?php echo $this->__('Your savings: ') ?></span><?php echo Mage::helper('checkout')->formatPrice($saving); ?>
         </p>
