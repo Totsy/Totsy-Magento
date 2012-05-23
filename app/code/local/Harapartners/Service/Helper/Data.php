@@ -35,13 +35,14 @@ class Harapartners_Service_Helper_Data extends Mage_Core_Helper_Url{
     
     public function validateStoreByCustomer($customer){
         $correctStoreId = $this->getCorrectStoreId($customer);
+        
         if(Mage::app()->getStore()->getId() != $correctStoreId){
             //Redirect
             $urlObject = Mage::getModel('core/url')->setStore($correctStoreId);
             $url = $urlObject->getRouteUrl('customer/account/login');
-            Mage::app()->getCookie()->setCookie('store', md5($correctStoreId));
+            Mage::app()->getCookie()->set('store', md5($correctStoreId));
             Mage::getSingleton('customer/session')->setBeforeAuthUrl($url);
-            throw Mage::exception('Mage_Core', Mage::helper('customer')->__("Please login..."),
+            throw Mage::exception('Mage_Core', Mage::helper('customer')->__("This account already exists on ". Mage::app()->getStore()->getName() .".com - please log in below..."),
                 Harapartners_Service_Model_Rewrite_Customer_Customer::EXCEPTION_INVALID_STORE_ACCOUNT
             );
         }
@@ -49,6 +50,7 @@ class Harapartners_Service_Helper_Data extends Mage_Core_Helper_Url{
     }
     
     public function getCorrectStoreId($customer) {
+    
         switch($customer->getGroupId()){
             case self::TOTSY_CUSTOMER_GROUP_ID:
                 if (isset($_SERVER['HTTP_USER_AGENT']) && preg_match('/iPhone|Android|BlackBerry/', $_SERVER['HTTP_USER_AGENT'])) {

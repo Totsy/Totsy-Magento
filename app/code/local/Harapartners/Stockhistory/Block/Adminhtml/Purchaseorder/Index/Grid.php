@@ -36,7 +36,7 @@ class Harapartners_Stockhistory_Block_Adminhtml_Purchaseorder_Index_Grid extends
                         array('category_event_end_date' => 'cat_dt.value')
                 )
                 ->where('cat_dt.attribute_id = ?', $eventEndDateAttrId);
-        
+
         $this->setCollection($collection);
         return parent::_prepareCollection();
     }
@@ -44,11 +44,11 @@ class Harapartners_Stockhistory_Block_Adminhtml_Purchaseorder_Index_Grid extends
     protected function _prepareColumns() {
         $helper = Mage::helper('stockhistory');
         
-        $this->addColumn('id', array(
-                    'header'    =>    $helper->__('ID'),
+        $this->addColumn('po_number', array(
+                    'header'    =>    $helper->__('PO Number'),
                     'align'        =>    'right',
-                    'width'        =>    '25px',
-                    'index'        =>    'id',
+                    'width'        =>    '45px',
+                    'index'        =>    'po_number',
                     //'renderer'    =>    new Mage_Adminhtml_Block_Widget_Grid_Column_Renderer_Checkbox(),
         ));
         

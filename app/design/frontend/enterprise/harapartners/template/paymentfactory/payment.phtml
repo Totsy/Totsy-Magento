@@ -4,7 +4,7 @@
 	$paymentCollection = Mage::getModel('paymentfactory/profile')->loadByCustomerId($id);
 	$counter = 0;
 ?>
-
+<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
 <div class="page-title">
 	<h1>My Credit Cards</h1>
 	<div class="add-new-card">

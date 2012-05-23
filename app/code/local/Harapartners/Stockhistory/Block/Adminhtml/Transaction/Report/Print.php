@@ -73,6 +73,12 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Print extends
         return $terms;
     }
     
+	public function getBankingInfo(){
+        $terms = $this->getVendorObj()->getData('banking_info');
+        $terms = str_ireplace("\n", "<br/>", $terms);
+        return $terms;
+    }
+    
     public function getVendorEmailList(){
         $emailList = $this->getVendorObj()->getData('email_list');
         return implode('<br/>', explode(',', $emailList));
