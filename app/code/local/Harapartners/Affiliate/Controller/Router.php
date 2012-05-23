@@ -38,11 +38,29 @@ class Harapartners_Affiliate_Controller_Router
             //Default Magento params in path: a/[affilate_code]?...
             //All other parameters need to be sent as GET params
             //Must at least specify affiliate code
-            $request->setModuleName('affiliate')
+
+        	/* $request->setModuleName('affiliate')
                 ->setControllerName('register')
                 ->setActionName('index')
-                ->setParam('affiliate_code', $p[1]);
-
+                ->setParam('affiliate_code', $p[1]);*/
+		
+        //Andu modify to get a/affiliate_code&subid=xxx&aaa=bbb 	
+        if(count($p) >= 2 && $p[0]=='a'){
+        	$request->setModuleName('affiliate')
+           			->setControllerName('register')
+           			->setActionName('index');
+        if(count($hp = explode('&',$p[1]))>=2){
+          	$request->setParam('affiliate_code', $hp[0]);
+          	foreach ($hp as $hhp) {
+          		if(count($hhhp=explode('=',$hhp))==2){
+            		$request->setParam($hhhp[0], $hhhp[1]);
+           		}
+         	 }          
+         }else{
+          $request->setParam('affiliate_code', $p[1]);
+         }
+        //	
+        	
             if ($p[2] && is_numeric($p[2])) {
                 $request->setParam('clickId', $p[2]);
             }
