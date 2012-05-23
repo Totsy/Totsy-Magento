@@ -126,22 +126,17 @@
 			?>
 			<tbody>
 				<?php foreach ( $reportCollection as $item ):?>
-					<?php
-						
-						if($item->getData('qty_sold') == 0) {
-							continue;
-						}
-						
-						$qty = $item->getData('qty_total');
-						
-						if($item->getData('is_master_pack') == "No") {
+					<?php					
+						if($item->getData('is_master_pack') == "Yes") {
+							$qty = $item->getData('qty_total');
+						}else{
+							if($item->getData('qty_sold') == 0) {
+								continue;
+							}
 							$qty = $item->getData('qty_sold');
 						}
-						
 						$cost = $qty * $item->getData('unit_cost');
-					
 						$totalCost += $cost;
-						
 					?>
 					<tr>
 						<td><?php echo $item->getData('vendor_style');?></td>
