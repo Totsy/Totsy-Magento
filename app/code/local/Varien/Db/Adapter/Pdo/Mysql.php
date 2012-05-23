@@ -3204,7 +3204,11 @@ class Varien_Db_Adapter_Pdo_Mysql extends Zend_Db_Adapter_Pdo_Mysql implements V
 	        if(!($data = $this->fetchRow($select->assemble(), $select->getBind()))){
 	        	return 'SELECT 1;';
 	        }
-	        $query = sprintf('%s %s', $query, 'VALUES (' . $this->quote($data) . ')');
+	        if(count($data) == count($fields)){
+	        	$query = sprintf('%s %s', $query, 'VALUES (' . $this->quote($data) . ')');
+	        }else{
+	        	throw new Exception('Missing data columns from SELECT!');
+	        }
         }catch (Exception $e){
 			$query = sprintf('%s %s', $query, $select->assemble());
         }
