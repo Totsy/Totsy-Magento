@@ -297,9 +297,20 @@ class Harapartners_Stockhistory_Adminhtml_TransactionController extends Mage_Adm
         $reportData = $this->_getSession()->getPOReportGridData();
         $itemsArray = array();
         foreach($reportData as $record) {
+			/* Mai, adjusted logic 2012-05-23 */
+        	if($record['is_master_pack'] == 'No' && $record['qty_sold'] == 0) {
+        		continue;
+        	}
+        	
+        	$qty = $record['qty_solc'];
+        	
+        	if($record['is_master_pack'] == 'Yes') {
+        		$qty = $record['qty_total'];
+        	}
+        	
             //DotCom does NOT receive qty = 0 record
-            if(!empty($record['sku']) && !empty($record['qty_total'])){
-                $itemsArray[$record['sku']] = $record['qty_total'];
+            if(!empty($record['sku']) && !empty($qty)){
+                $itemsArray[$record['sku']] = $qty;
             }
         }
         
