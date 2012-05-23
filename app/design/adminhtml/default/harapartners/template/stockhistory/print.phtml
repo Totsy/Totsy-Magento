@@ -127,15 +127,15 @@
 			<tbody>
 				<?php foreach ( $reportCollection as $item ):?>
 					<?php
-						
-						if($item->getData('qty_sold') == 0) {
+						/* Mai 2012-05-23 */
+						if($item->getData('is_master_pack') == "No" && $item->getData('qty_sold') == 0) {
 							continue;
 						}
 						
-						$qty = $item->getData('qty_total');
+						$qty = $item->getData('qty_sold');
 						
-						if($item->getData('is_master_pack') == "No") {
-							$qty = $item->getData('qty_sold');
+						if($item->getData('is_master_pack') == "Yes") {
+							$qty = $item->getData('qty_total');
 						}
 						
 						$cost = $qty * $item->getData('unit_cost');
