@@ -315,6 +315,7 @@ class Mage_Checkout_Block_Cart_Sidebar extends Mage_Checkout_Block_Cart_Abstract
     //Add new function for getting estimate shipping date
     public function getShippingDate( $orderConfirmFlag = NULL , $order = NULL ){
         $endDate = 0;
+
         if ( !!$orderConfirmFlag && !!$order && ( $order instanceof Mage_Sales_Model_Order ) ){
             $items = $order->getItemsCollection();
             if( count($items) ) {
@@ -349,7 +350,7 @@ class Mage_Checkout_Block_Cart_Sidebar extends Mage_Checkout_Block_Cart_Abstract
         }
 
         if ( !$endDate ){
-            $endDate = now();
+            $endDate = strtotime($order->getCreatedAt());
         }
 
         for ( $i = 15; $i > 0;  ){
@@ -358,7 +359,7 @@ class Mage_Checkout_Block_Cart_Sidebar extends Mage_Checkout_Block_Cart_Abstract
             }
             $endDate = $endDate + 24*3600;
         }
-        
+
         for ( $i = 10; $i >0; ){
             if ( date("N",$endDate)!=6 && date("N",$endDate)!=7 ){
                 break;
