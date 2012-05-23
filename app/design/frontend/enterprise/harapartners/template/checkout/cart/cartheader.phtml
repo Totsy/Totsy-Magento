@@ -29,11 +29,12 @@
  *
  * @see Mage_Checkout_Block_Cart_Sidebar
  */
-	$checkoutSession = Mage::getSingleton('checkout/session');
-   	$countDownTimerHeader= $checkoutSession->getCountDownTimer();
+    $checkoutSession = Mage::getSingleton('checkout/session');
+    $countDownTimerHeader= $checkoutSession->getCountDownTimer();
     $timeoutHeader = $checkoutSession->getQuoteItemExpireTime();
-    $_saving = $this->getTotalSaving();
-	$endcount_lc_header = date("F j, Y, G:i:s", ($countDownTimerHeader + $timeoutHeader));
+    $endcount_lc_header = date("F j, Y, G:i:s", ($countDownTimerHeader + $timeoutHeader));
+    $quote = $checkoutSession->getQuote();
+    $_saving = Mage::helper('sales/order')->calculateEstimatedSavings($quote);
 ?>
 
 <div class="top-cart">
@@ -75,7 +76,7 @@
 	        <div class="timer-control-box">
 	        	<div class="shipping-date">
 		        	<span>Estimated Ship Date:</span>
-		        	<p id="cart-shipping-date-header"><?php echo $this->getShippingDate();?></p>	        		
+		        	<p id="cart-shipping-date-header"><?php echo date('Y-m-d', Mage::helper('sales/order')->calculateEstimatedShipDate($quote)) ?></p>
 	        	</div>
 	        	<div class="count-down-timer">
 		        	<span>Item Reserved For:</span>
