@@ -130,10 +130,10 @@
 						if($item->getData('is_master_pack') == "Yes") {
 							$qty = $item->getData('qty_total');
 						}else{
-							if($item->getData('qty_sold') == 0) {
-								continue;
-							}
 							$qty = $item->getData('qty_sold');
+						}
+						if($qty == 0) {
+							continue;
 						}
 						$cost = $qty * $item->getData('unit_cost');
 						$totalCost += $cost;
