@@ -158,24 +158,27 @@
                     if( jQuery( this ).val() == '' ) {
                         jQuery( '.use-new-card-wrapper' ).show();
                         jQuery( 'input, select', '.use-new-card-wrapper' ).removeAttr( 'disabled' );
+                        jQuery("#billing-address-select").removeAttr('disabled');
                         //Enable Billing Inputs if credit card not selected
                         jQuery('#hpcheckout-billing-form :input').each(function(i) {
-                            jQuery(this).removeAttr('disabled');
+                            jQuery(this).removeAttr('readonly');
                         });
                     } else {
                         jQuery( '.use-new-card-wrapper' ).hide();
-                        jQuery( 'input, select', '.use-new-card-wrapper' ).attr( 'disabled', 'disabled' );
+                        jQuery( 'input, select', '.use-new-card-wrapper' ).attr( 'readonly', 'true' );
                         
                        if(jQuery("#address_" + jQuery( this ).val()).val()) {
                             jQuery("#billing-address-select").val(jQuery("#address_" + jQuery( this ).val()).val()).change();
                             //Block Billing Inputs if credit card selected
                             jQuery('#hpcheckout-billing-form :input').each(function(i) {
-                                jQuery(this).attr('disabled','disabled');
+                                if(jQuery(this).attr('id') != 'button_ship_to') {
+                                    jQuery(this).attr('readonly','true');
+                                }
                             });
                             jQuery("#billing-address-select").attr('disabled','disabled');
                         } else {
                             jQuery('#hpcheckout-billing-form :input').each(function(i) {
-                                jQuery(this).removeAttr('disabled');
+                                jQuery(this).removeAttr('readonly');
                                 jQuery("#billing-address-select").removeAttr('disabled');
                             });
                         }

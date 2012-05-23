@@ -140,15 +140,16 @@
                             <input type="text" title="<?php echo $this->__('City') ?>" name="billing[city]" class="input-text required-entry" value="<?php //echo $this->htmlEscape($this->getAddress()->getCity()) ?>" id="billing:city" />
                         </div>
                         <div class="field half-of-half">
-                            <label for="billing:region_id" class="required"><em>*</em><?php echo $this->__('State/Province') ?></label>
+                            <label for="region_id" class="required"><em>*</em><?php echo $this->__('State/Province') ?></label>
                             <div class="totsy-selective-input-box">
                                 <span>State</span>
-                                <select id="billing:region_id" name="billing[region]" title="<?php echo $this->__('State/Province') ?>" class="validate-select">
+                                <select id="billing:region_id" name="billing[region_id]" title="<?php echo $this->__('State/Province') ?>" class="validate-select">
                                     <option value="">Please select region, state or province</option>
                                     <?php foreach($this->getRegions() as $region) {
                                             echo '<option value="'.$region->getId().'" >'.$region->getName().'</option>';
                                     } ?>
                                 </select>
+                                <input type="hidden" title="<?php echo $this->__('State/Province') ?>" name="billing[region]" id="billing:region" />
                             </div>
                         </div>
                     </li>
@@ -198,4 +199,8 @@
             jQuery(this).parent('div').children('span').html(text);
         });
     };
+    jQuery('#hpcheckout-billing-form').submit(function() {
+        jQuery("#billing\\:region").val(jQuery("select#billing\\:region_id :selected").text());
+        return true;
+    });
 </script>

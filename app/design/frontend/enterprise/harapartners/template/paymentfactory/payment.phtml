@@ -3,7 +3,7 @@
     $id = $customer->getId(); 
     $paymentCollection = Mage::getModel('paymentfactory/profile')->loadByCustomerId($id);
 ?>
-
+<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
 <div class="page-title">
     <h1>My Credit Cards</h1>
     <div class="add-new-card">
@@ -58,7 +58,7 @@
                     expires <strong><?php echo $payment->getData('expire_month');?>/<?php echo $payment->getData('expire_year');?></strong>
                 </td>
                 <td width="2%" align="right">
-                    <a href="<?php echo $this->getBaseUrl();?>paymentfactory/index/delete/?entity_id=<?php echo $payment->getData('entity_id');?>" id="remove_<?php echo $payment->getData('entity_id');?>" title="Remove Credit Card" class="add-new-card-button">Delete</a>
+                    <a href="<?php echo $this->getBaseUrl();?>paymentfactory/index/delete/?entity_id=<?php echo $payment->getData('entity_id');?>" id="remove_<?php echo $payment->getData('entity_id');?>" title="Remove Credit Card" class="delete-new-card-button">Delete</a>
                 </td>
             </tr>
         <?php if($payment->getData('address_id')):?>
