@@ -26,7 +26,7 @@ class Harapartners_Categoryevent_Model_Sortentry extends Mage_Core_Model_Abstrac
 	const EVENT_CATEGORY_NAME = 'Events';
 	
 	// Set up event collection date range
-	const EVENT_CATEGORY_DATE_RANG = '5';
+	const EVENT_CATEGORY_DATE_RANGE = 5;
 	
 	const DEFAULT_REBUILD_LIFETIME = 86400;
 	
@@ -199,7 +199,7 @@ class Harapartners_Categoryevent_Model_Sortentry extends Mage_Core_Model_Abstrac
     }
     
     public function calculateEndDate($sortDate){
-    	return date("Y-m-d H:i:s", (strtotime($sortDate)+self::DEFAULT_REBUILD_LIFETIME * self::EVENT_CATEGORY_DATE_RANG));
+    	return date("Y-m-d H:i:s", (strtotime($sortDate)+self::DEFAULT_REBUILD_LIFETIME * self::EVENT_CATEGORY_DATE_RANGE));
     }
     
     public function getParentCategory($categoryName, $storeId){
@@ -238,7 +238,11 @@ class Harapartners_Categoryevent_Model_Sortentry extends Mage_Core_Model_Abstrac
     
     // ===== Cronjob related ===== //
     public function rebuildSortCron($schedule){
-		$sortDate = now();
+    	$defaultTimezone = date_default_timezone_get();
+        $mageTimezone = Mage::getStoreConfig(Mage_Core_Model_Locale::XML_PATH_DEFAULT_TIMEZONE);
+        date_default_timezone_set($mageTimezone);
+        $sortDate = now("Y-m-d");
+        date_default_timezone_set($defaultTimezone);
 		$storeId = Mage_Core_Model_App::DISTRO_STORE_ID; //Harapartners, Yang: for now only rebuild totsy store
 		return $this->rebuildSortCollection($sortDate, $storeId);
     }

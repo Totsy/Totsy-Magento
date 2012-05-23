@@ -23,6 +23,7 @@ class Harapartners_Import_Model_Import extends Mage_Core_Model_Abstract {
     const ACTION_TYPE_PROCESS_IMMEDIATELY_AND_INDEX         = 1;
     const ACTION_TYPE_PROCESS_IMMEDIATELY                     = 2;
     const ACTION_TYPE_PENDING                                = 3;
+    const ACTION_TYPE_VALIDATION_ONLY                        = 4;
     
     public function _construct() {
         parent::_construct();

@@ -121,31 +121,41 @@
 					</th>
 				</tr>
 			</thead>
+			<?php 
+				$totalCost = 0;
+			?>
 			<tbody>
 				<?php foreach ( $reportCollection as $item ):?>
+					<?php					
+						if($item->getData('is_master_pack') == "Yes") {
+							$qty = $item->getData('qty_total');
+						}else{
+							$qty = $item->getData('qty_sold');
+						}
+						if($qty == 0) {
+							continue;
+						}
+						$cost = $qty * $item->getData('unit_cost');
+						$totalCost += $cost;
+					?>
 					<tr>
 						<td><?php echo $item->getData('vendor_style');?></td>
 						<td><?php echo $item->getData('sku');?></td>
 						<td><?php echo $item->getData('product_name');?></td>
 						<td><?php echo $item->getData('color');?></td>
 						<td><?php echo $item->getData('size');?></td>
-						
-						<td>
-						<?php 
-							if($item->getData('is_master_pack') == "No") {
-								echo $item->getData('qty_sold');
-							}
-							else {
-								echo $item->getData('qty_total');
-							}
-						?>
-						
-						</td>
-						
-						<td>$<?php echo $item->getData('unit_cost');?></td>
-						<td>$<?php echo $item->getData('total_cost');?></td>
+						<td><?php echo $qty?></td>
+						<td>$<?php echo number_format($item->getData('unit_cost'), 2);?></td>
+						<td>$<?php echo number_format($cost, 2);?></td>
 					</tr>
 				<?php endforeach;?>
+				
+				<tr>
+					<td colspan=7 style="text-align:right; padding-right:15px;">
+						<strong>Total: </strong>
+					</td>
+					<td>$<?php echo number_format($totalCost, 2)?></td>
+				</tr>
 			</tbody>
 		</table>
 	</div>	
@@ -157,15 +167,14 @@
 			</colgroup>
 			<thead>
 				<tr>
-					<th>TERMS & CONDITIONS</th>
+					<th>Banking Info</th>
 					<th>AUTHORIZATION</th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr>
 					<td>
-						<label><?php echo $this->__('SHIP TO:');?></label>
-						<p>TOTSY <br>c/o Dotcom Distribution <br>400 Nixon Lane <br>Edison, NJ 08837</p>
+						<p><?php echo $this->getBankingInfo(); ?></p>
 					</td>
 					<td>
 						<p><?php echo $this->getAuthorizationName(); ?></p>

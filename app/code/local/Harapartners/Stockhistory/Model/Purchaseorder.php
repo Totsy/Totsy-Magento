@@ -90,6 +90,10 @@ class Harapartners_Stockhistory_Model_Purchaseorder extends Mage_Core_Model_Abst
             $dataObj->setData('status', self::STATUS_OPEN);
         }
         
+        if(!$dataObj->getData('po_number')) {
+        	$dataObj->setData('po_number', $this->generatePoNumber());
+        }
+        
         $this->addData($dataObj->getData());
 
         return $this;

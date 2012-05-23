@@ -3201,7 +3201,7 @@ class Varien_Db_Adapter_Pdo_Mysql extends Zend_Db_Adapter_Pdo_Mysql implements V
         //Note some select queries requires parameter bind and can only be handled upon making the query
         //For such cases default logic is used
         try{
-	        if(!($data = $this->fetchRow($select->assemble()))){
+	        if(!($data = $this->fetchRow($select->assemble(), $select->getBind()))){
 	        	return 'SELECT 1;';
 	        }
 	        $query = sprintf('%s %s', $query, 'VALUES (' . $this->quote($data) . ')');
