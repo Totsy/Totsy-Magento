@@ -131,8 +131,11 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Abstract exte
         
         $uniqueProductList = array();
         foreach($rawCollection as $item){
-        	$productId = $item->getProductId();
-        	//ignore empty rows
+        	$product = Mage::getModel('catalog/product')->load($item->getProductId());
+        	
+        	$productId = $product->getId();
+        	
+        	//ignore empty rows, some products may have been removed
         	if(empty($productId)) {
         		continue;
         	}
