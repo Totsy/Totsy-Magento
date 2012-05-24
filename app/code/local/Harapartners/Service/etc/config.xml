@@ -65,12 +65,6 @@
                     <onepage_shipping_method_available>Harapartners_Service_Block_Rewrite_Checkout_Onepage_Shipping_Method_Available</onepage_shipping_method_available>
                 </rewrite>
             </checkout>
-            <page>
-                <rewrite>
-                    <!--Harapartners_EmailFactory-->
-                    <html_head>Harapartners_Service_Block_Rewrite_Page_Html_Head</html_head>
-                </rewrite>
-            </page>
             <enterprise_reward>
                 <rewrite>
                     <!--Harapartners_For_MANDATORY_Comment-->
@@ -110,6 +104,12 @@
                     <url>Harapartners_Service_Model_Rewrite_Catalog_Url</url>
                 </rewrite>
             </catalog>
+			<catalog_resource>
+                <rewrite>
+                    <!-- Magento core fix for master/slave DB sync -->
+                    <!--product_flat_indexer>Harapartners_Service_Model_Rewrite_Catalog_Resource_Product_Flat_Indexer</product_flat_indexer-->
+                </rewrite>
+            </catalog_resource>
             <cataloginventory>
                 <rewrite>
                     <!--Harapartner_Service: Product of the same ID (conf. with different super attr. or simple with differnt options) share the same limit!-->
@@ -175,12 +175,12 @@
                     <quote_address_total_grand>Harapartners_Service_Model_Rewrite_Sales_Quote_Address_Total_Grand</quote_address_total_grand>
                 </rewrite>
             </sales>
-			<sales_resource>
+			<!-- Fixed on the Varien layer, Magento core fix for master/slave DB sync -->
+			<!--sales_resource>
                 <rewrite>
-					<!-- Magento core fix for master/slave DB sync -->
 					<order>Harapartners_Service_Model_Rewrite_Sales_Resource_Order</order>
 				</rewrite>
-			</sales_resource>
+			</sales_resource-->
             <tax>
                 <rewrite>
                     <!--Harapartners_SpeedTax-->

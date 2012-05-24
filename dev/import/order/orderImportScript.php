@@ -204,8 +204,13 @@ function placeOrder($orderData) {
         Mage::register('order_import_shipping_amount',
                 $orderObj->getData('base_shipping_amount') + $orderObj->getData('shipping_amount')
         );
-        $quote->getShippingAddress()->setPaymentMethod($data['method']);
+        $quote->getShippingAddress()->setPaymentMethod('ccsave');
     }
+
+    // ==============================
+    //Tax rate
+    Mage::unregister('order_import_tax_amount');
+    Mage::register('order_import_tax_amount', $orderObj->getData('tax_amount'));
 
     // ==============================
     //Discount
@@ -213,11 +218,6 @@ function placeOrder($orderData) {
 
     Mage::unregister('order_import_discount_amount');
     Mage::register('order_import_discount_amount', $discount);
-
-    // ==============================
-    //Tax rate
-    Mage::unregister('order_import_tax_amount');
-    Mage::register('order_import_tax_amount', $orderObj->getData('tax_amount'));
 
     $ccType = $orderObj->getData('cc_type');
     switch($orderObj->getData('cc_type')){

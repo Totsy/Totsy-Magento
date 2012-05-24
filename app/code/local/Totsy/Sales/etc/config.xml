@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @category    Totsy
+ * @package     Totsy_Sales
+ * @author      Tharsan Bhuvanendran <tbhuvanendran@totsy.com>
+ * @copyright   Copyright (c) 2012 Totsy LLC
+ */
+-->
+<config>
+    <modules>
+        <Totsy_Sales>
+            <version>0.1.5</version>
+        </Totsy_Sales>
+    </modules>
+    <global>
+        <models>
+            <sales>
+                <rewrite>
+                    <observer>Totsy_Sales_Model_Observer</observer>
+                </rewrite>
+            </sales>
+        </models>
+        <helpers>
+            <sales>
+                <rewrite>
+                    <order>Totsy_Sales_Helper_Order</order>
+                </rewrite>
+            </sales>
+        </helpers>
+        <events>
+            <sales_order_place_after>
+                <observers>
+                    <sales_observer>
+                        <type>singleton</type>
+                        <class>Totsy_Sales_Model_Observer</class>
+                        <method>incrementCustomerPurchaseCount</method>
+                    </sales_observer>
+                </observers>
+            </sales_order_place_after>
+            <order_cancel_after>
+                <observers>
+                    <sales_observer>
+                        <type>singleton</type>
+                        <class>Totsy_Sales_Model_Observer</class>
+                        <method>decrementCustomerPurchaseCount</method>
+                    </sales_observer>
+                </observers>
+            </order_cancel_after>
+        </events>
+    </global>
+</config>

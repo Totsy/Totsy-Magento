@@ -41,6 +41,7 @@
 		<button id="sort-type-submit" class="scalable" type="submit" >
 			<span><?php echo Mage::helper('categoryevent')->__('Edit/Update') ?></span>
 		</button>
+		<p>The sort content <strong>ONLY</strong> depends on the date, regardless of the current time.</p>
 	</form>
 	<div id="ajax-collection-container" >
 		<?php if (!!(Mage::getSingleton('adminhtml/session')->getData('categoryevent_sort_data_post'))):?>

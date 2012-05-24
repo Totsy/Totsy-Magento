@@ -18,7 +18,7 @@ class Harapartners_Categoryevent_Adminhtml_SortController extends Mage_Adminhtml
         $this->_title($this->__('Category Event'))->_title($this->__('Sort Category Events'));
         $sortDate = $this->getRequest()->getPost('sort_date');
         if(!$sortDate){
-            $sortDate = now();
+            $sortDate = $this->_getTodayWithTimeOffset();
         }
         $storeId = $this->getRequest()->getPost('sort_store');
         if(!$storeId){
@@ -55,7 +55,7 @@ class Harapartners_Categoryevent_Adminhtml_SortController extends Mage_Adminhtml
         if(!!$this->getRequest()->getPost('sortdate')){
             $sortDate = $this->getRequest()->getPost('sortdate');
         }else {
-            $sortDate = now();
+            $sortDate = $this->_getTodayWithTimeOffset();
         }
         if(!!$this->getRequest()->getPost('storeid')){
             $storeId = $this->getRequest()->getPost('storeid');
@@ -82,7 +82,7 @@ class Harapartners_Categoryevent_Adminhtml_SortController extends Mage_Adminhtml
         if(!!$this->getRequest()->getPost('sortdate')){
             $sortDate = $this->getRequest()->getPost('sortdate');
         }else {
-            $sortDate = now();
+            $sortDate = $this->_getTodayWithTimeOffset();
         }
         if(!!$this->getRequest()->getPost('storeid')){
             $storeId = $this->getRequest()->getPost('storeid');
@@ -101,5 +101,40 @@ class Harapartners_Categoryevent_Adminhtml_SortController extends Mage_Adminhtml
         }
         echo json_encode($jsonResponse);
         exit;
+    }
+    
+	public function sortRefreshCacheAction(){
+//        $post = $this->getRequest()->getPost();
+        if(!!$this->getRequest()->getPost('sortdate')){
+            $sortDate = $this->getRequest()->getPost('sortdate');
+        }else {
+            $sortDate = $this->_getTodayWithTimeOffset();
+        }
+        if(!!$this->getRequest()->getPost('storeid')){
+            $storeId = $this->getRequest()->getPost('storeid');
+        }else {
+            $storeId = Mage_Core_Model_App::DISTRO_STORE_ID;
+        }
+        try {
+            Mage::getModel('categoryevent/sortentry')->rebuildSortCollection($sortDate, $storeId);
+            $jsonResponse['status'] = 1;
+            $jsonResponse['error_message'] = '';     
+        }catch (Exception $e){
+            Mage::logException($e);
+            Mage::getSingleton('core/session')->addError('Rebuild Faild');
+            $jsonResponse['status'] = 0;
+            $jsonResponse['error_message'] = 'Rebuild Faild';
+        }
+        echo json_encode($jsonResponse);
+        exit;
+    }
+    
+    protected function _getTodayWithTimeOffset() {
+    	$defaultTimezone = date_default_timezone_get();
+        $mageTimezone = Mage::getStoreConfig(Mage_Core_Model_Locale::XML_PATH_DEFAULT_TIMEZONE);
+        date_default_timezone_set($mageTimezone);
+        $sortDate = now("Y-m-d");
+        date_default_timezone_set($defaultTimezone);
+        return $sortDate;
     }
 }
