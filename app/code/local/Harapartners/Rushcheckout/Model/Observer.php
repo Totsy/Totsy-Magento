@@ -91,16 +91,8 @@ class Harapartners_Rushcheckout_Model_Observer {
     
     // ===== Cronjob related ===== //
     public function cleanExpiredQuotes() {
-        // ensure there are no other expired quote cleaners running
-        $cleanerJobs = Mage::getModel('cron/schedule')->getCollection();
-        $cleanerJobs->addFilter('job_code', 'rushcheckout_clean_expired_quotes')
-            ->addFilter('status', 'pending')
-            ->addFilter('status', 'running', 'or');
-
-        if (count($cleanerJobs)) {
-            return false;
-        }
-
+        $itemCount = 0;
+        $cartCount = 0;
         $lifetimes = Mage::getConfig()->getStoresConfigByPath('config/rushcheckout_timer/limit_timer');
         foreach ($lifetimes as $storeId => $lifetime) {
             $quoteCollection = Mage::getModel('sales/quote')->getCollection();
@@ -110,11 +102,21 @@ class Harapartners_Rushcheckout_Model_Observer {
             foreach($quoteCollection as $quote){
                 foreach($quote->getAllItems() as $item){
                     $item->isDeleted(true);
-                    $item->delete();            
+                    $item->delete();
+
+                    $itemCount++;
                 }
+
+                $cartCount++;
             }
         }
+
+        Mage::log(
+            sprintf('Pruned %d items out of %d carts.', $itemCount, $cartCount),
+            Zend_Log::INFO,
+            'cart_cleaner.log'
+        );
+
         return $this;
     }
-    
 }

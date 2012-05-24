@@ -107,7 +107,7 @@
 			<catalog_resource>
                 <rewrite>
                     <!-- Magento core fix for master/slave DB sync -->
-                    <product_flat_indexer>Harapartners_Service_Model_Rewrite_Catalog_Resource_Product_Flat_Indexer</product_flat_indexer>
+                    <!--product_flat_indexer>Harapartners_Service_Model_Rewrite_Catalog_Resource_Product_Flat_Indexer</product_flat_indexer-->
                 </rewrite>
             </catalog_resource>
             <cataloginventory>
