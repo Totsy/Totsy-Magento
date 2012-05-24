@@ -99,6 +99,9 @@
                         <input id="paymentfactory_tokenize_cc_cid" class="input-text cvv required-entry validate-cc-cvn" type="text" value="" name="payment[cc_cid]" title="Card Verification Number">
                     </div>
                 </div>
+                <div>
+                     <input type="hidden" value="1" name="payment[saved_by_customer]" id="<?php echo $_code ?>_saved">
+                </div>
             </li>
         </ul>
     </div>
