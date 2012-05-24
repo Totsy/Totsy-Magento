@@ -118,7 +118,7 @@ XML;
 
             $style = '<style-number xsi:nil="true" />';
             if ($value = $product->getVendorStyle()) {
-                $style = "<style-number>$value</style-number>";
+                $style = '<style-number>' . substr($value, 0, 10) . '</style-number>';
             }
 
             $color = '<color xsi:nil="true" />';
