@@ -210,7 +210,46 @@ class Mage_Adminhtml_Block_Customer_Grid extends Mage_Adminhtml_Block_Widget_Gri
 
         return $this;
     }
+    
+    protected function _setFilterValues($data) {
+    	
+    	if ( array_key_exists('email',$data)){
+    		$data['email'] = $this->_trimGmail($data['email']);
+    	}
+    	
+    	return parent::_setFilterValues($data);
+    }
+    
+    protected function _trimGmail($email) {
+        $strArray = explode('@', $email);
+        
+        if(empty($strArray) ||
+           empty($strArray[1]) ||
+           strtolower($strArray[1]) != 'gmail.com') {
+        	echo 'Not Gmail<br>';
+            return $email;
+        }
 
+        //get username, such as 'abcd'
+        $trimmedGmail = preg_replace("/[\.]/",'',trim($strArray[0]));
+        unset($strArray);
+
+        if (strlen($trimmedGmail)==0){
+        	return $email;
+        }
+        
+        if (preg_match("/[\.]+/",$trimmedGmail)){
+        	echo 'Found plus ..+.. <br>';
+        	$u = explode('+',$trimmedGmail);
+        	$trimmedGmail = $u[0];
+        	unset($u);
+        }
+        
+        $trimmedGmail .= '@gmail.com';
+
+        return $trimmedGmail;
+    }
+    
     public function getGridUrl()
     {
         return $this->getUrl('*/*/grid', array('_current'=> true));
