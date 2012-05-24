@@ -118,7 +118,10 @@ class Harapartners_Import_Helper_Processor extends Mage_Core_Helper_Abstract {
                     foreach($this->_cleanImportDataArray as $rowKey => $cleanImportData){
                     	try{
                             $adapter->saveRow($cleanImportData);
-                            $this->_savePurchaseOrderTransaction($cleanImportData, $importObject); //Save PO
+                            //Validation mode skips product save and the following re-index logic
+        					if(!Mage::registry('import_validation_only')){
+                            	$this->_savePurchaseOrderTransaction($cleanImportData, $importObject); //Save PO
+        					}
                         } catch(Exception $ex) {
                             $this->_errorMessages[] = 'Error in row ' . $rowKey . ', ' . $ex->getMessage() . "\n";
                         }
@@ -141,7 +144,11 @@ class Harapartners_Import_Helper_Processor extends Mage_Core_Helper_Abstract {
             Mage::throwException('There is an error processing the uploaded data. Please check the error log.');
         }
         
-        $importObject->setStatus(Harapartners_Import_Model_Import::IMPORT_STATUS_COMPLETE);
+        if(!!Mage::registry('import_validation_only')){
+        	$importObject->setStatus(Harapartners_Import_Model_Import::IMPORT_STATUS_VALIDATED);
+        }else{
+        	$importObject->setStatus(Harapartners_Import_Model_Import::IMPORT_STATUS_COMPLETE);
+        }
         $importObject->save();
         return true;
     }

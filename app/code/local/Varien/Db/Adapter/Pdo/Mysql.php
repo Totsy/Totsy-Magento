@@ -3202,14 +3202,18 @@ class Varien_Db_Adapter_Pdo_Mysql extends Zend_Db_Adapter_Pdo_Mysql implements V
         //For such cases default logic is used
         //Note the default PDO::FETCH_ASSOC will create problems if same constant expressions appear more than once in the select
         try{
-	        if(!($data = $this->fetchRow($select->assemble(), $select->getBind(), PDO::FETCH_NUM))){
+	        if(!($dataArray = $this->fetchAll($select->assemble(), $select->getBind(), PDO::FETCH_NUM))){
 	        	return 'SELECT 1;'; //Null query
 	        }
-	        if(count($fields) && count($data) != count($fields)){
-	        	throw new Exception('Missing data columns from SELECT!'); //Fall back
-	        }else{
-	        	$query = sprintf('%s VALUES (%s)', $query, $this->quote($data));
+	        $valueArray = array();
+	        foreach ($dataArray as $data){
+		        if(count($fields) && count($data) != count($fields)){
+		        	throw new Exception('Missing data columns from SELECT!'); //Fall back
+		        }else{
+		        	$valueArray[] = sprintf('(%s)', $this->quote($data));
+		        }
 	        }
+	        $query = sprintf('%s VALUES %s', $query, implode(',', $valueArray));
         }catch (Exception $e){
 			$query = sprintf('%s %s', $query, $select->assemble());
         }
