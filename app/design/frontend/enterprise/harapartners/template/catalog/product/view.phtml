@@ -82,7 +82,7 @@
 	                <h1><?php echo $_helper->productAttribute($_product, $_product->getName(), 'name') ?></h1>
 	            </div>
 		        <div class="product-collateral">
-	                <dl id="collateral-tabs" class="collateral-tabs">
+	                <dl id="collateral-tabs" class="collateral-tabs wtf">
 	                    <dt class="tab"><span><?php echo $this->__('Description');?></span></dt>
 	                    <dd class="tab-container">
 	                    	<div class="tab-content"><?php echo $_product->getDescription(); ?></div>
@@ -92,7 +92,11 @@
 	                    	<div class="tab-content"><?php echo Mage::app()->getLayout()->createBlock('cms/block')->setBlockId('shipping_and_return')->toHtml()?></div>
 	                    </dd>
 	                </dl>
-	                <script type="text/javascript">new Enterprise.Tabs('collateral-tabs')</script>
+	                <script type="text/javascript">
+	                	Event.observe(window, 'load', function() {
+	                		new Enterprise.Tabs('collateral-tabs');
+	                	});
+	                </script>
 		            <?php if ($_product->getData('final_sale')): ?>
 		            	<p class="final-sale"><strong>Final Sale</strong></p>
 		            <?php endif; ?>
