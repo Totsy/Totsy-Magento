@@ -73,15 +73,6 @@
 </script>
 
 <script type="text/javascript">
-	(function () {
-		var a, b, c, d, e, f; b = document.createElement("script"); b.type = "text/javascript"; b.async = true;
-		e = new Date(); f = e.getFullYear()+""+e.getMonth()+""+e.getDate()+""+e.getHours();
-		b.src = (document.location.protocol === "https:" ? "https:"  : "http:") + "//api.theechosystem.com/core/resource/getjs?antiCache="+e;
-		a = document.getElementsByTagName("script")[0]; a.parentNode.insertBefore(b, a);
-	}())
-</script>
-
-<script type="text/javascript">
 
 var moduleName = "<?php echo $this->getRequest()->getModuleName() ?>";
 
