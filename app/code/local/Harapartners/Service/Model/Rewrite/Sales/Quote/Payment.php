@@ -20,7 +20,7 @@ class Harapartners_Service_Model_Rewrite_Sales_Quote_Payment extends Mage_Sales_
         } else if( ! $withValidate ) {
         	return $this->importDataWithoutValidation( $data );
     	} else{
-            return parent::importData($data);
+            return $this->importDataDefaultWay($data);
         }
     }
          
@@ -87,6 +87,40 @@ class Harapartners_Service_Model_Rewrite_Sales_Quote_Payment extends Mage_Sales_
         * validating the payment data
         */
         //$method->validate();
+        return $this;
+    }
+
+    public function importDataDefaultWay(array $data)
+    {
+        $data = new Varien_Object($data);
+        Mage::dispatchEvent(
+            $this->_eventPrefix . '_import_data_before',
+            array(
+                $this->_eventObject=>$this,
+                'input'=>$data,
+            )
+        );
+
+        $this->setMethod($data->getMethod());
+        $method = $this->getMethodInstance();
+
+        /**
+         * Payment avalability related with quote totals.
+         * We have recollect quote totals before checking
+         */
+        $this->getQuote()->collectTotals();
+
+        if (!$method->isAvailable($this->getQuote())) {
+            Mage::throwException(Mage::helper('sales')->__('The requested Payment Method is not available.'));
+        }
+        
+        $method->assignData($data);
+        $this->getQuote()->setData('saved_by_customer', $data[ 'saved_by_customer' ]);
+        
+        /*
+        * validating the payment data
+        */
+        $method->validate();
         return $this;
     }
     

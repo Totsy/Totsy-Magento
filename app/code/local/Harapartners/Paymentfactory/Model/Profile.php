@@ -109,7 +109,10 @@ class Harapartners_Paymentfactory_Model_Profile extends Mage_Core_Model_Abstract
         }else{
             throw new Exception('Missing Billing Address');
         }
-             
+        
+        if($dataObject->getData('saved_by_customer')){
+             $this->setData('saved_by_customer',1);
+        }
         return $this;
     }
     

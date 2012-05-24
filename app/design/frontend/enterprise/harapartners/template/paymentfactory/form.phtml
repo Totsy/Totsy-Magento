@@ -24,7 +24,7 @@
                 <select id="cybersource-use-card-method" name="payment[cybersource_subid]">
                     <option value="" class="use-new-card-control">New Credit/Debit Card</option>
                 <?php foreach( $profiles as $profile ): ?>
-                    <?php if( !$profile->getSubscriptionId() || $profile->getIsDefault()== 1 ) { continue; } ?>
+                    <?php if(!$profile->getSubscriptionId() || $profile->getIsDefault()== 1 || !$profile->getData('saved_by_customer')) { continue; } ?>
                     <option class="use-saved-card-control" value="<?php echo $profile->getEncryptedSubscriptionId() ?>"><?php echo $this->getFullCcCardType( $profile->getData( 'card_type' ) ) ?> ends with <?php echo $profile->getData( 'last4no' ) ?></option>
                 <?php endforeach ?>
                 </select>
@@ -91,6 +91,14 @@
             <div class="input-box">
                 <div class="v-fix">
                     <input type="text" title="<?php echo $this->__('Card Verification Number') ?>" class="input-text cvv required-entry validate-cc-cvn" id="<?php echo $_code ?>_cc_cid" name="payment[cc_cid]" value="" />
+                </div>
+            </div>
+        </li>
+        <li>
+            <label for="<?php echo $_code ?>_cc_save"><?php echo $this->__(' Save this Credit Card ?') ?></label>
+            <div class="check-box">
+                <div class="v-fix">
+                    <input type="checkbox" value="1" name="payment[saved_by_customer]" id="<?php echo $_code ?>_saved" />
                 </div>
             </div>
         </li>
