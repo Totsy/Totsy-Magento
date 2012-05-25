@@ -196,14 +196,14 @@ class Mage_Checkout_CartController extends Mage_Core_Controller_Front_Action
                 $this->_goBack();
                 return;
             }
-
+            
             $cart->addProduct($product, $params);
             if (!empty($related)) {
                 $cart->addProductsByIds(explode(',', $related));
             }
-
+            
             $cart->save();
-
+            
             $this->_getSession()->setCartWasUpdated(true);
             $this->_getSession()->setCartUpdatedFlag(true);        //Harapartners, yang, for header flotting cart logic
             $this->_getSession()->setCountDownTimer($this->_getCurrentTime());    //Harapartners, yang, set new cart timer
@@ -214,7 +214,7 @@ class Mage_Checkout_CartController extends Mage_Core_Controller_Front_Action
             Mage::dispatchEvent('checkout_cart_add_product_complete',
                 array('product' => $product, 'request' => $this->getRequest(), 'response' => $this->getResponse())
             );
-
+            
             if (!$this->_getSession()->getNoCartRedirect(true)) {
                 if (!$cart->getQuote()->getHasError()){
                     $html = '%s was added to your shopping cart.<h2 class="non-mobile-hide"><a href="'.Mage::helper('checkout/cart')->getCartUrl().'">Go to Cart</a></h2>';
@@ -419,6 +419,7 @@ class Mage_Checkout_CartController extends Mage_Core_Controller_Front_Action
             $this->_getSession()->addException($e, $this->__('Cannot update shopping cart.'));
             Mage::logException($e);
         }
+        Mage::dispatchEvent('checkout_cart_product_update_after', array());
         $this->_goBack();
     }
 
@@ -437,6 +438,7 @@ class Mage_Checkout_CartController extends Mage_Core_Controller_Front_Action
                 Mage::logException($e);
             }
         }
+        Mage::dispatchEvent('checkout_cart_product_update_after', array());
         $this->_redirectReferer(Mage::getUrl('*/*'));
     }
 
