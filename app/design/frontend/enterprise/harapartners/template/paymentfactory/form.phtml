@@ -165,7 +165,7 @@
                 jQuery( 'select#cybersource-use-card-method' ).change( function(){
                     if( jQuery( this ).val() == '' ) {
                         jQuery( '.use-new-card-wrapper' ).show();
-                        jQuery( 'input, select', '.use-new-card-wrapper' ).removeAttr( 'disabled' );
+                        jQuery( 'input, select', '.use-new-card-wrapper' ).removeAttr( 'readonly' );
                         jQuery("#billing-address-select").removeAttr('disabled');
                         //Enable Billing Inputs if credit card not selected
                         jQuery('#hpcheckout-billing-form :input').each(function(i) {
