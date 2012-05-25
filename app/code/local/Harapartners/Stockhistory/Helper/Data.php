@@ -123,7 +123,7 @@ class Harapartners_Stockhistory_Helper_Data extends Mage_Core_Helper_Abstract  {
     }
     
     public function getFormPoArrayByCategoryId($categoryId, $status){
-        $poArray = array(array('label' => '', 'value' => ''));
+        $poArray = array();
         $poCollection = Mage::getModel('stockhistory/purchaseorder')->getCollection()
                 ->loadByCategoryId($categoryId, $status);
         if(!!$poCollection){
@@ -131,6 +131,10 @@ class Harapartners_Stockhistory_Helper_Data extends Mage_Core_Helper_Abstract  {
                 $poArray[] = array('label' => $po->getName(), 'value' => $po->getId());
             }
         }
+        
+        //Create new PO should be the last resort
+        $poArray[] = array('label' => 'Create New PO...', 'value' => 0); //0 for new PO
+        
         return $poArray;
     }
     

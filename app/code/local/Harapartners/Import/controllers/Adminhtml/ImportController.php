@@ -33,11 +33,20 @@ class Harapartners_Import_Adminhtml_ImportController extends Mage_Adminhtml_Cont
     public function newByCategoryAction(){
         $categoryId = $this->getRequest()->getParam('category_id');
         $category = Mage::getModel('catalog/category')->load($categoryId);
+        
         if(!!$category && !!$category->getId()) {
+        	
+	        $defaultPoId = 0;
+	        $poArray = Mage::helper('stockhistory')->getFormPoArrayByCategoryId($category->getId(), Harapartners_Stockhistory_Model_Purchaseorder::STATUS_OPEN);
+	        if(count($poArray) && isset($poArray[0]['value'])){
+	        	$defaultPoId = $poArray[0]['value'];
+	        }
+        	
             Mage::getSingleton('adminhtml/session')->setHpImportFormData(array(
                     'import_title' => $category->getName(), //Default title is the event name
                     'category_id' => $category->getId(),
-                    'category_name' => $category->getName()
+                    'category_name' => $category->getName(),
+            		'po_id' => $defaultPoId
             ));
         }
         $this->_forward('edit');
@@ -69,9 +78,7 @@ class Harapartners_Import_Adminhtml_ImportController extends Mage_Adminhtml_Cont
         //$this->getLayout()->getBlock('head')->setCanLoadExtJs(true);
         $this->_addContent($this->getLayout()->createBlock('import/adminhtml_import_edit'))
                 ->_addLeft($this->getLayout()->createBlock('import/adminhtml_import_edit_tabs'));
-        $message = 'For imports with 50+ proucts, please ONLY upload the file and run import offline.<br/>'
-                    . 'For small imports, please wait and leave the window open until everything is processed.<br/>'
-                    . 'If you want to see run big imports online. Please cut them in smaller pieces (<50).<br/>'
+        $message = 'For imports with 150+ proucts, please cut them in smaller pieces (~100 lines).<br/>'
                     . 'Make sure associated products stays in the same file';
         Mage::getSingleton('adminhtml/session')->addNotice($message);
         Mage::getSingleton('adminhtml/session')->setHpImportFormData(null);
@@ -135,20 +142,27 @@ class Harapartners_Import_Adminhtml_ImportController extends Mage_Adminhtml_Cont
             
               $model->importData($data)->save();
             
-            Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('import')->__('Save success.'));
+            Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('import')->__('Import file saved successfully.'));
             Mage::getSingleton('adminhtml/session')->setHpImportFormData(null); //clear form data from session
             
             //Processing and indexing
             $shouldRunImport = false;
             $shouldRunIndex = false;
-            if(isset($data['action_type']) 
-                    && $data['action_type'] == Harapartners_Import_Model_Import::ACTION_TYPE_PROCESS_IMMEDIATELY){
-                $shouldRunImport = true;
-            }elseif(isset($data['action_type']) 
-                    && $data['action_type'] == Harapartners_Import_Model_Import::ACTION_TYPE_PROCESS_IMMEDIATELY_AND_INDEX
-            ){
-                $shouldRunImport = true;
-                $shouldRunIndex = true;
+            if(isset($data['action_type'])){
+            	switch($data['action_type']){
+            		case Harapartners_Import_Model_Import::ACTION_TYPE_PROCESS_IMMEDIATELY:
+            			$shouldRunImport = true;
+            			break;
+            		case Harapartners_Import_Model_Import::ACTION_TYPE_PROCESS_IMMEDIATELY_AND_INDEX:
+            			$shouldRunImport = true;
+                		$shouldRunIndex = true;
+                		break;
+            		case Harapartners_Import_Model_Import::ACTION_TYPE_VALIDATION_ONLY:
+            			$shouldRunImport = true;
+            			Mage::unregister('import_validation_only');
+            			Mage::register('import_validation_only', true);
+            			break;
+            	}
             }
                 
             if($shouldRunImport){

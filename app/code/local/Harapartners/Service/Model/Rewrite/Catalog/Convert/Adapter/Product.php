@@ -319,7 +319,10 @@ class Harapartners_Service_Model_Rewrite_Catalog_Convert_Adapter_Product extends
         $product->setIsMassupdate(true);
         $product->setExcludeUrlRewrite(true);
 
-        $product->save();
+        //Validation mode skips product save and the following re-index logic
+        if(!Mage::registry('import_validation_only')){
+        	$product->save();
+        }
 
         // Store affected products ids
         $this->_addAffectedEntityIds($product->getId());
