@@ -151,7 +151,7 @@ class Harapartners_Stockhistory_Helper_Data extends Mage_Core_Helper_Abstract  {
         
         $orderItemCollection = Mage::getModel('sales/order_item')->getCollection()
                 ->addAttributeToFilter('created_at', array(
-                        'from' => $toDate,
+                        'from' => $fromDate,
                         'to' => $toDate,
                 )
         );
