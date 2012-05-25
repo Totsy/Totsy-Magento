@@ -96,6 +96,9 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Mage_Cybersource_Model_
             // $profile->getExpireYear() === $payment->getCcExpYear() 
             // $profile->getExpireMonth() === $payment->getCcExpMonth()
         ){
+            if(!$profile->getData('saved_by_customer') && ($payment->getOrder()->getQuote()->getData('saved_by_customer') == '1')) {
+                $profile->setData('saved_by_customer', 1);
+            }
             $profile->setIsDefault(0);
             $profile->save();
              //Checkout with existing profile instead of creating new card

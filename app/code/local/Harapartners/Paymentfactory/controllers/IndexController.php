@@ -35,6 +35,10 @@ class Harapartners_Paymentfactory_IndexController extends Mage_Core_Controller_F
         $profile = Mage::getModel('paymentfactory/profile');
         $profile->loadByCcNumberWithId($payment->getData('cc_number').$customerId.$payment->getCcExpYear().$payment->getCcExpMonth());
         if($profile && $profile->getId()) {
+            if(!$profile->getData('saved_by_customer')) {
+                $profile->setData('saved_by_customer', 1);
+                $profile->save();
+            }
             $this->_redirect ( '*/*/' );
             return $this;
         }
