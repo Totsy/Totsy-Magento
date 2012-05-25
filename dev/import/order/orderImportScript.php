@@ -12,9 +12,9 @@
  * 
  */
 
-ini_set('memory_limit', '4G');
+ini_set('memory_limit', '3G');
 ini_set('max_input_time', 0);
-require_once __DIR__ . '/../../../app/Mage.php';          
+require_once dirname(__FILE__) . '/../../../app/Mage.php'; //Magic constant, 5.2 compatible
 umask(0);
 $mageRunCode = isset($_SERVER['MAGE_RUN_CODE']) ? $_SERVER['MAGE_RUN_CODE'] : '';
 $mageRunType = isset($_SERVER['MAGE_RUN_TYPE']) ? $_SERVER['MAGE_RUN_TYPE'] : 'store';
@@ -306,6 +306,11 @@ function placeOrder($orderData) {
             ->getResource()
             ->saveAttribute($product, 'special_price');
     }
+    
+    //Inactivate quote, so that it would not interfere with the current shopping cart contents
+    $quote->setData('is_active', 0);
+    $quote->save();
+    
 }
 
 // ========== Special logic for gmail accounts ========== //
