@@ -128,7 +128,7 @@ XML;
 
             $size = '<size xsi:nil="true" />';
             if ($value = $product->getAttributeText('size')) {
-                $size = "<size>$value</size>";
+                $size = '<size>' . substr($value, 0, 5) . '</size>';
             }
 
             $xml .= <<<XML
