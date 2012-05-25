@@ -311,25 +311,25 @@ class Harapartners_Stockhistory_Adminhtml_TransactionController extends Mage_Adm
             }
         }
         
-        $rsp = Mage::getModel('fulfillmentfactory/service_dotcom')->submitPurchaseOrdersToDotcom($poObject->generatePoNumber(), $itemsArray);
+        $rsp = Mage::getModel('fulfillmentfactory/service_dotcom')->submitPurchaseOrdersToDotcom($poObject, $itemsArray);
 
         $error = $rsp->purchase_order_error;
-        if(!!$error) {
-            $this->_getSession()->addError($this->__('Fail to submit PO to DOTcom. ' . $error->error_description));
-        }else{
-            $this->_getSession()->addSuccess($this->__('Sucessfully submit to DOTcom.'));
+        if ($error) {
+            $this->_getSession()->addError($this->__('Could not submit this Purchase Order to Dotcom: ' . $error->error_description));
+        } else {
+            $this->_getSession()->addSuccess($this->__('New Purchase Order successfully submitted to Dotcom.'));
             //Update PO status
             try{
                 $poObject->setStatus(Harapartners_Stockhistory_Model_Purchaseorder::STATUS_SUBMITTED);
                 $poObject->save();
-            }catch(Exception $e){
+            } catch(Exception $e) {
                 $this->_getSession()->addError($e->getMessage());
             }
         }
-        
+
         //clean collection in session
         Mage::getSingleton('adminhtml/session')->setPOReportGridData(null);
-        
+
         $this->_redirect('*/*/report', array('po_id' => $this->getRequest()->getParam('po_id')));
     }
 }

@@ -78,17 +78,25 @@ class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
     /**
      * post purchase orders to Dotcom
      *
-     * @param array $orders for orders we want to submit
+     * @param Harapartners_Fulfillmentfactory_Model_Purchaseorder $purchaseOrder
+     * @param array $items
      * @return response
      */
-    public function submitPurchaseOrdersToDotcom($poNumber, $items) {
-        
+    public function submitPurchaseOrdersToDotcom($purchaseOrder, $items)
+    {
+        $category = Mage::getModel('catalog/category')->load(
+            $purchaseOrder->getCategoryId()
+        );
+        list($eventEndDate, $eventEndTime) = explode(' ', $category->getEventEndDate());
+
+        $poNumber = $purchaseOrder->generatePoNumber();
+
         $xml = '<purchase_orders xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">';
-        
+
         $xml .= <<<XML
             <purchase_order>
                 <po-number><![CDATA[$poNumber]]></po-number>
-                <priority-date xsi:nil="true" />
+                <priority-date>$eventEndDate</priority-date>
                 <expected-on-dock xsi:nil="true" />
                 <items>
 XML;
@@ -103,13 +111,33 @@ XML;
             $productSku = substr($sku, 0, 17);
             $name = substr($product->getName(), 0, 28);
 
+            $vendorCode = '<manufacturing-code xsi:nil="true" />';
+            if ($value = $product->getVendorCode()) {
+                $vendorCode = '<manufacturing-code>' . substr($value, 0, 10) . '</manufacturing-code>';
+            }
+
+            $style = '<style-number xsi:nil="true" />';
+            if ($value = $product->getVendorStyle()) {
+                $style = '<style-number>' . substr($value, 0, 10) . '</style-number>';
+            }
+
+            $color = '<color xsi:nil="true" />';
+            if ($value = $product->getAttributeText('color')) {
+                $color = '<color>' . substr($value, 0, 5) . '</color>';
+            }
+
+            $size = '<size xsi:nil="true" />';
+            if ($value = $product->getAttributeText('size')) {
+                $size = '<size>' . substr($value, 0, 5) . '</size>';
+            }
+
             $xml .= <<<XML
                     <item>
                         <sku><![CDATA[$productSku]]></sku>
                         <description><![CDATA[$name]]></description>
                         <quantity>$qty</quantity>
                         <upc xsi:nil="true" />
-                        <weight xsi:nil="true" />
+                        <weight>{$product->getWeight()}</weight>
                         <cost xsi:nil="true" />
                         <price xsi:nil="true" />
                         <root-sku xsi:nil="true" />
@@ -124,11 +152,11 @@ XML;
                         <item-barcode xsi:nil="true" />
                         <country-of-origin xsi:nil="true" />
                         <harmonized-code xsi:nil="true" />
-                        <manufacturing-code xsi:nil="true" />
-                        <style-number xsi:nil="true" />
+                        $vendorCode
+                        $style
                         <short-name xsi:nil="true" />
-                        <color xsi:nil="true" />
-                        <size xsi:nil="true" />
+                        $color
+                        $size
                         <long-description xsi:nil="true" />
                     </item>
 XML;
@@ -139,7 +167,6 @@ XML;
             </purchase_order>
         </purchase_orders>
 XML;
-
         $response = Mage::helper('fulfillmentfactory/dotcom')->submitPurchaseOrders($xml);
         
         return $response;
@@ -448,10 +475,12 @@ XML;
 
         $updatedOrders = 0;
         foreach ($dataXML as $shipment) {
-            $attr  = $shipment->attributes('i', TRUE);
-            $order = Mage::getModel('sales/order')
+            $attr   = $shipment->attributes('i', TRUE);
+            $status = (string) $shipment->order_status;
+            $order  = Mage::getModel('sales/order')
                 ->loadByIncrementId($shipment->client_order_number);
-            if (!$order->getId() || $attr['nil']) {
+
+            if (!$order->getId() || $attr['nil'] || 'Shipped' != $status) {
                 continue;
             }
 
