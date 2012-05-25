@@ -44,10 +44,17 @@ class Harapartners_Stockhistory_Block_Adminhtml_Purchaseorder_Index_Grid extends
     protected function _prepareColumns() {
         $helper = Mage::helper('stockhistory');
         
+		$this->addColumn('id', array(
+                    'header'    =>    $helper->__('ID'),
+                    'align'        =>    'right',
+                    'width'        =>    '25px',
+                    'index'        =>    'id',
+        ));
+        
         $this->addColumn('po_number', array(
                     'header'    =>    $helper->__('PO Number'),
                     'align'        =>    'right',
-                    'width'        =>    '45px',
+                    'width'        =>    '30px',
                     'index'        =>    'po_number',
                     //'renderer'    =>    new Mage_Adminhtml_Block_Widget_Grid_Column_Renderer_Checkbox(),
         ));
@@ -100,7 +107,7 @@ class Harapartners_Stockhistory_Block_Adminhtml_Purchaseorder_Index_Grid extends
         $this->addColumn('status', array(
                     'header'    =>    $helper->__('Status'),
                     'align'        =>    'right',
-                    'width'        =>    '50px',
+                    'width'        =>    '25px',
                     'index'        =>    'status',
                     'type'        =>    'options',
                     'options'    =>    $helper->getGridPurchaseorderStatusArray(),

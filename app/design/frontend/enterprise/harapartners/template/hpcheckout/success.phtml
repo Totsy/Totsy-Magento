@@ -35,11 +35,24 @@
 		function redirect(){window.location.href="<?php echo $url?>"};
 		setTimeout("redirect()",5000);
 	</script>
-	<?php 
+	<?php
+	/* 
 		$coupon = $order->getCouponCode();
 		$couponStr = isset($coupon)?"&promocode=".$order->getCouponCode():"";
- 		echo "<img src='http://api.theechosystem.com/Core/Conversion/Save?echoTrackPack=".($_COOKIE['EchoTrackPack']."&revenue=".$order->getData('grand_total')."&quantity=".$quote->getItemsQty().$couponStr."&orderId=".$order->getId()."' style='width:1px;height:1px;' />");
+ 		echo "<img src='http://api.theechosystem.com/Core/Conversion/Save?echoTrackPack=".($_COOKIE['EchoTrackPack']."&revenue=".$order->getData('grand_total')."&quantity=".$quote->getItemsQty().$couponStr."&orderId=".$order->getId()."' style='width:1px;height:1px;' />"); 		
+	*/
 	?> 
+	
+	<script type='javascript/text'>
+      _esq.events.push({
+            type : 'es_conversion',
+            revenue: '<?php echo $order->getData('grand_total'); ?>',
+            quantity : '<?php echo $quote->getItemsQty();  ?>',
+            promoCodes : ['<?php echo $couponStr; ?>'],
+            orderId : '<?php echo $order->getId(); ?>'
+      });
+    </script>
+	
 <?php endif;?>
 <?php endif;?>
 

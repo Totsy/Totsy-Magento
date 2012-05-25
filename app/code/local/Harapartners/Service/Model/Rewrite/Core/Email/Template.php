@@ -12,7 +12,8 @@
  * 
  */
 
-class Harapartners_Service_Model_Rewrite_Core_Email_Template extends Mage_Core_Model_Email_Template{
+class Harapartners_Service_Model_Rewrite_Core_Email_Template extends Mage_Core_Model_Email_Template {
+	
     public function send($email, $name = null, array $variables = array()) {
         if (!$this->isValidForSend()) {
             Mage::logException(new Exception('This letter cannot be sent.')); // translation is intentionally omitted

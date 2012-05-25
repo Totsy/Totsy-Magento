@@ -76,10 +76,15 @@ class Harapartners_Service_Model_Rewrite_Catalog_Resource_Product_Flat_Indexer e
             $select->where('e.entity_id IN(?)', $productIds);
         }
         
-        //Fix for INSERT...SELECT problem for multi-DB sync
-        $select->bind($bind);
+        //Harapartners, Jun, START: Fix for INSERT...SELECT problem for multi-DB sync
+        $select->bind($bind); //Force bind
         $sql = $select->insertFromSelect($this->getFlatTableName($storeId), $fieldList);
-        $adapter->query($sql);
+        try{
+        	$adapter->query($sql);
+        }catch(Exception $e){
+        	$adapter->query($sql, $bind);
+        }
+        //Harapartners, Jun, END
 
         return $this;
     }

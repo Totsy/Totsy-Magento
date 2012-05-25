@@ -26,26 +26,26 @@ class Harapartners_Import_Block_Adminhtml_Import_Edit_Tab_Form extends Mage_Admi
             'class'     => 'required-entry',
             'required'  => true,
             'name'        => 'import_title',
-            'note'        => 'Should new Purchase Order be created, the PO name is also given here. Default: category/event name.'
-        ));
-        
-        $fieldset->addField('vendor_code', 'select', array(
-                'label'     => $helper->__('Vendor Code'),
-                'required'  => true,
-                'name'        => 'vendor_code',
-                'values'    => Mage::helper('stockhistory')->getFormAllVendorsArray(),
-                'note'        => $helper->__('Please make sure the vendor exists.')
+            'note'        => 'Should new Purchase Order be created, the PO name is also given here. Default value is the category/event name.'
         ));
         
         $fieldset->addField('po_id', 'select', array(
                 'label'     => $helper->__('Purchase Order'),
-                //'required'  => true,
+                'required'  => true,
                 'name'        => 'po_id',
                 'values'    => Mage::helper('stockhistory')->getFormPoArrayByCategoryId(
                         $dataObj->getData('category_id'), 
                         Harapartners_Stockhistory_Model_Purchaseorder::STATUS_OPEN
                 ),
-                'note'        => $helper->__('If <b>NOT</b> specified, a new purchase order will be created.')
+                'note'        => $helper->__('Products within the same event usually belong to the same PO. Be careful when creating a new PO.')
+        ));
+        
+        $fieldset->addField('vendor_code', 'select', array(
+                'label'     => $helper->__('Vendor Code'),
+                'required'  => false,
+                'name'        => 'vendor_code',
+                'values'    => Mage::helper('stockhistory')->getFormAllVendorsArray(),
+                'note'        => $helper->__('<b>Required</b> when creating new PO.')
         ));
         
         if(!!$dataObj->getData('category_id')){
@@ -76,7 +76,7 @@ class Harapartners_Import_Block_Adminhtml_Import_Edit_Tab_Form extends Mage_Admi
             'required'  => true,
             'name'        => 'action_type',
             'values'    => $helper->getFormActionTypeArray(),
-            'note'        => 'Large imports will take a long time to run and index. Please process pending imports offline.'
+            'note'        => 'Large imports (150+ lines) will take a long time to run and index, please cut them into smaller pieces..'
         ));
         
         if ( Mage::registry('import_form_data') ) {
