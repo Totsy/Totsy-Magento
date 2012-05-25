@@ -141,10 +141,18 @@ class Harapartners_Stockhistory_Helper_Data extends Mage_Core_Helper_Abstract  {
     public function getProductSoldInfoByCategory($category, $uniqueProductList){
         $productSoldInfoArray = array();
         $uniqueProductIds = array_keys($uniqueProductList);
+        
+        //Hara Partners, 2012/05/25, Solution for resolving qty_sold problem
+        $fromTime = strtotime($category->getData('event_start_date')) - 60*60*24*7;	// 7 days before
+        $toTime = strtotime($category->getData('event_end_date')) + 60*60*24*3;	// 3 days after
+        
+        $fromDate = date('Y-m-d H:i:s', $fromTime);
+        $toDate = date('Y-m-d H:i:s', $toTime);
+        
         $orderItemCollection = Mage::getModel('sales/order_item')->getCollection()
                 ->addAttributeToFilter('created_at', array(
-                        'from' => $category->getData('event_start_date'),
-                        'to' => $category->getData('event_end_date'),
+                        'from' => $toDate,
+                        'to' => $toDate,
                 )
         );
         
