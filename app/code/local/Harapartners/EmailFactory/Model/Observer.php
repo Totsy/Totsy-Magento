@@ -141,7 +141,7 @@ class Harapartners_EmailFactory_Model_Observer extends Mage_Core_Model_Abstract 
                     $name = $obi->getName();
                     $sku = $obi->getSku();
                     $obiName = isset($name)?$name:$sku;    
-                  $items[$i] = array("qty" => $obi->getQty(), "title" => $obiName, "price" => $obi["product"]->getPrice()*100, "id" => $obi->getSku(), "url" => $obi["product"]->getProductUrl());
+                  $items[$i] = array("qty" => $obi->getQty(), "title" => $obiName, "price" => $obi["product"]->getFinalPrice()*100, "id" => $obi->getSku(), "url" => $obi["product"]->getProductUrl());
                   $i++;
               }
               $data = array("email" => $email, "items" => $items, "incomplete" => $status);//0: complete ; 1: imcomplete
