@@ -161,36 +161,45 @@
     </div>
 </ul>
 <script type="text/javascript">
-            jQuery( document ).ready( function() {
-                jQuery( 'select#cybersource-use-card-method' ).change( function(){
-                    if( jQuery( this ).val() == '' ) {
-                        jQuery( '.use-new-card-wrapper' ).show();
-                        jQuery( 'input, select', '.use-new-card-wrapper' ).removeAttr( 'disabled' );
-                        jQuery("#billing-address-select").removeAttr('disabled');
-                        //Enable Billing Inputs if credit card not selected
-                        jQuery('#hpcheckout-billing-form :input').each(function(i) {
-                            jQuery(this).removeAttr('readonly');
-                        });
-                    } else {
-                        jQuery( '.use-new-card-wrapper' ).hide();
-                        jQuery( 'input, select', '.use-new-card-wrapper' ).attr( 'readonly', 'true' );
-                        
-                       if(jQuery("#address_" + jQuery( this ).val()).val()) {
-                            jQuery("#billing-address-select").val(jQuery("#address_" + jQuery( this ).val()).val()).change();
-                            //Block Billing Inputs if credit card selected
-                            jQuery('#hpcheckout-billing-form :input').each(function(i) {
-                                if(jQuery(this).attr('id') != 'button_ship_to') {
-                                    jQuery(this).attr('readonly','true');
-                                }
-                            });
-                            jQuery("#billing-address-select").attr('disabled','disabled');
-                        } else {
-                            jQuery('#hpcheckout-billing-form :input').each(function(i) {
-                                jQuery(this).removeAttr('readonly');
-                                jQuery("#billing-address-select").removeAttr('disabled');
-                            });
-                        }
+// @TODO: should abstract this out to hpcheckout.js
+// disable billing address form controls for saved credit card
+jQuery( document ).ready( function($) {
+	// cache jQuery objects
+	var $billAddySelect = $("#billing-address-select");
+	var $newCardWrap = $('.use-new-card-wrapper');
+	var $newCardCtrls = $( 'input, select', '.use-new-card-wrapper' );
+	var $selectUIWraps = $('.totsy-selective-input-box', '#hpcheckout-billing-wrapper');
+	var $billFormInputs = $('#hpcheckout-billing-form :input');
+    $( 'select#cybersource-use-card-method' ).change( function(){
+        if( $( this ).val() == '' ) {
+            $newCardWrap.show();
+            $newCardCtrls.removeAttr( 'disabled' );
+            $selectUIWraps.removeClass('disabled');
+            $billAddySelect.removeAttr('disabled');
+            //Enable Billing Inputs if credit card not selected
+            $billFormInputs.each(function(i) {
+                $(this).removeAttr('disabled');
+            });
+        } else {
+            $newCardWrap.hide();
+            $newCardCtrls.attr( 'disabled', 'disabled' ); // disable new card controls
+            $selectUIWraps.addClass('disabled'); // 'disable' select UI wrappers
+           if($("#address_" + $( this ).val()).val()) {
+                $billAddySelect.val($("#address_" + $( this ).val()).val()).change();
+                //Block Billing Inputs if credit card selected
+                $billFormInputs.each(function(i) {
+                    if($(this).attr('id') != 'button_ship_to') {
+                        $(this).attr('disabled','disabled');
                     }
                 });
-            });
+                $billAddySelect.attr('disabled','disabled');
+            } else {
+                $billAddySelect.removeAttr('disabled');
+                $billFormInputs.each(function(i) {
+                    $(this).removeAttr('disabled');
+                });
+            }
+        }
+    });
+});
 </script>
