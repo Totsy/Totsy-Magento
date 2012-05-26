@@ -88,7 +88,7 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Mage_Cybersource_Model_
                 $payment->setData('cybersource_subid', $subscriptionId);
              }
              $profile->loadBySubscriptionId($payment->getData('cybersource_subid'));
-         }elseif (!!$payment->getData('cc_number')){
+         } elseif (!!$payment->getData('cc_number')){
              $profile->loadByCcNumberWithId($payment->getData('cc_number').$customerId.$payment->getCcExpYear().$payment->getCcExpMonth());
          }
          

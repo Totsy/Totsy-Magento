@@ -181,24 +181,25 @@ jQuery( document ).ready( function($) {
                 $(this).removeAttr('disabled');
             });
         } else {
-            $newCardWrap.hide();
-            $newCardCtrls.attr( 'disabled', 'disabled' ); // disable new card controls
-            $selectUIWraps.addClass('disabled'); // 'disable' select UI wrappers
-           if($("#address_" + $( this ).val()).val()) {
-                $billAddySelect.val($("#address_" + $( this ).val()).val()).change();
-                //Block Billing Inputs if credit card selected
-                $billFormInputs.each(function(i) {
-                    if($(this).attr('id') != 'button_ship_to') {
-                        $(this).attr('disabled','disabled');
-                    }
-                });
-                $billAddySelect.attr('disabled','disabled');
-            } else {
-                $billAddySelect.removeAttr('disabled');
-                $billFormInputs.each(function(i) {
-                    $(this).removeAttr('disabled');
-                });
-            }
+			$newCardWrap.hide();
+			$newCardCtrls.attr( 'disabled', 'disabled' ); // disable new card controls
+			$selectUIWraps.addClass('disabled'); // 'disable' select UI wrappers
+			
+			if($("#address_" + $( this ).val()).val()) {
+			    $billAddySelect.val($("#address_" + $( this ).val()).val()).change();
+			    //Block Billing Inputs if credit card selected
+			    $billFormInputs.each(function(i) {
+			        if($(this).attr('id') != 'button_ship_to') {
+			            $(this).attr('disabled','disabled');
+			        }
+			    });
+			    $billAddySelect.attr('disabled','disabled');
+			} else {
+			    $billAddySelect.removeAttr('disabled');
+			    $billFormInputs.each(function(i) {
+			        $(this).removeAttr('disabled');
+			    });
+			}
         }
     });
 });

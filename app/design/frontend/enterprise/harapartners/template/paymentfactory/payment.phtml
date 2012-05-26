@@ -1,7 +1,8 @@
-<?php 
+<?php
     $customer = Mage::getSingleton('customer/session')->getCustomer();
     $id = $customer->getId(); 
     $paymentCollection = Mage::getModel('paymentfactory/profile')->loadByCustomerId($id);
+    $creditCardsCount = 0;
 ?>
 <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
 <div class="page-title">
@@ -26,28 +27,27 @@
         </div>
     </div>
 </div>
-
 <div class="cards-info">
-<?php if(count($paymentCollection)!=0):?>
-        <?php foreach($paymentCollection as $payment):
-                        $type = $payment->getData('card_type');
-                        switch ($type) {
-                            case "VI":
-                                $creditCardImage = 'cc_visa.gif';
-                                $cardType = 'Visa';
-                                break;
-                            case "MC":
-                                $creditCardImage = 'cc_mastercard.gif';
-                                $cardType = 'Master Card';
-                                break;
-                            case "AE":
-                                $creditCardImage = 'cc_amex.gif';
-                                $cardType = 'American Express';
-                                break;
-                        }
-        ?>
-        <?php if($payment->getIsDefault()== 0 && $payment->getData('saved_by_customer')):?>
-        <div style='border:1px solid #DDD'>
+    <?php foreach($paymentCollection as $payment):
+            $type = $payment->getData('card_type');
+            switch ($type) {
+                case "VI":
+                    $creditCardImage = 'cc_visa.gif';
+                    $cardType = 'Visa';
+                    break;
+                case "MC":
+                    $creditCardImage = 'cc_mastercard.gif';
+                    $cardType = 'Master Card';
+                    break;
+                case "AE":
+                    $creditCardImage = 'cc_amex.gif';
+                    $cardType = 'American Express';
+                    break;
+            }
+    ?>
+    <?php if($payment->getIsDefault()== 0 && $payment->getData('saved_by_customer')):?>
+    <?php $creditCardsCount++; ?>
+    <div style='border:1px solid #DDD'>
         <table width="650" border="0" cellspacing="0" cellpadding="0" style="margin: 10px;">
             <tr>
                 <td width="9%" align="left">
@@ -61,34 +61,36 @@
                     <a href="<?php echo $this->getBaseUrl();?>paymentfactory/index/delete/?entity_id=<?php echo $payment->getData('entity_id');?>" id="remove_<?php echo $payment->getData('entity_id');?>" title="Remove Credit Card" class="delete-new-card-button">Delete</a>
                 </td>
             </tr>
-        <?php if($payment->getData('address_id')):?>
+            <?php if($payment->getData('address_id')):?>
+                <?php $address_id = $payment->getData('address_id'); ?>
+                <?php if($this->getAddress($address_id)->getFirstname()):?>
              <tr>
                 <td width="10%" align="left"></td>
-            <?php $address_id = $payment->getData('address_id'); ?>
-            <td width="90%">
-            <table width="100%" cellpadding="0" cellspacing="0">
-                <tr>
-                    <td width="141" valign="top">Cardholder Name:</td>
-                    <td width="281"><?php echo $this->htmlEscape($this->getAddress($address_id)->getFirstname()); ?> <?php echo $this->htmlEscape($this->getAddress($address_id)->getLastname()); ?></td>
-                </tr>
-                <tr>
-                    <td valign="top">Billing Address:</td>
-                    <td><?php echo $this->htmlEscape($this->getAddress($address_id)->getStreet(1)); ?>
-                        <?php if($this->getAddress($address_id)->getStreet(1)): ?>
-                            <?php echo $this->htmlEscape($this->getAddress($address_id)->getStreet(2)); ?><br />
-                        <?php endif ?>
-                        <?php echo $this->htmlEscape($this->getAddress($address_id)->getCity()); ?>, <?php echo $this->htmlEscape($this->getAddress($address_id)->getRegion()); ?> <?php echo $this->htmlEscape($this->getAddress($address_id)->getPostcode()); ?>
-                    </td>
-                </tr>
-            </table>
-            </td>
+                <td width="90%">
+                    <table width="100%" cellpadding="0" cellspacing="0">
+                        <tr>
+                            <td width="141" valign="top">Cardholder Name:</td>
+                            <td width="281"><?php echo $this->htmlEscape($this->getAddress($address_id)->getFirstname()); ?> <?php echo $this->htmlEscape($this->getAddress($address_id)->getLastname()); ?></td>
+                        </tr>
+                        <tr>
+                            <td valign="top">Billing Address:</td>
+                            <td><?php echo $this->htmlEscape($this->getAddress($address_id)->getStreet(1)); ?>
+                                <?php if($this->getAddress($address_id)->getStreet(1)): ?>
+                                    <?php echo $this->htmlEscape($this->getAddress($address_id)->getStreet(2)); ?><br />
+                                <?php endif ?>
+                                <?php echo $this->htmlEscape($this->getAddress($address_id)->getCity()); ?>, <?php echo $this->htmlEscape($this->getAddress($address_id)->getRegion()); ?> <?php echo $this->htmlEscape($this->getAddress($address_id)->getPostcode()); ?>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
             </tr>
-        <?php endif; ?>
-     </table>
-     </div>
-    <?php endif;?>
-    <?php endforeach;?>
-<?php else:?>
+                <?php endif; ?>
+            <?php endif; ?>
+        </table>
+    </div>
+<?php endif;?>
+<?php endforeach;?>
+<?php if($creditCardsCount == 0): ?>
     <h2>You don't have a saved credit card with your account.</h2>
 <?php endif;?>
 </div>

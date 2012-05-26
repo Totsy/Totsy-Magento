@@ -49,7 +49,7 @@ class Harapartners_Service_Model_Rewrite_Sales_Quote_Payment extends Mage_Sales_
         $subscriptionId = $this->_decryptSubscriptionId($data->getData('cybersource_subid'));
         $this->setData('cybersource_subid', $subscriptionId);
         $method->setData('cybersource_subid', $subscriptionId);
-        
+        $this->getQuote()->setData('saved_by_customer', $data[ 'saved_by_customer' ]);
         /*
         * validating the payment data
         */

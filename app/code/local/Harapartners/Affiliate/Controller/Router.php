@@ -28,9 +28,9 @@ class Harapartners_Affiliate_Controller_Router extends Mage_Core_Controller_Vari
 		}
 		
 		$identifier = trim ( $request->getPathInfo (), '/' );
-		$p = explode ( '/', $identifier );
+		$pathParams = explode ( '/', $identifier );
 		
-		if (count ( $p ) >= 2 && $p [0] == 'a') {
+		if (count ( $pathParams ) >= 2 && $pathParams [0] == 'a') {
 			//Default Magento params in path: a/[affilate_code]?...
 			//All other parameters need to be sent as GET params
 			//Must at least specify affiliate code
@@ -38,23 +38,23 @@ class Harapartners_Affiliate_Controller_Router extends Mage_Core_Controller_Vari
 			/* $request->setModuleName('affiliate')
                 ->setControllerName('register')
                 ->setActionName('index')
-                ->setParam('affiliate_code', $p[1]);*/
+                ->setParam('affiliate_code', $pathParams[1]);*/
 			
 			//Andu modify to get a/affiliate_code&subid=xxx&aaa=bbb 	
-			if (count ( $p ) >= 2 && $p [0] == 'a') {
+			if (count ( $pathParams ) >= 2 && $pathParams [0] == 'a') {
 				$request->setModuleName ( 'affiliate' )->setControllerName ( 'register' )->setActionName ( 'index' );
-				if (count ( $hp = explode ( '&', $p [1] ) ) >= 2) {
-					$request->setParam ( 'affiliate_code', $hp [0] );
-					foreach ( $hp as $hhp ) {
-						if (count ( $hhhp = explode ( '=', $hhp ) ) == 2) {
-							$request->setParam ( $hhhp [0], $hhhp [1] );
+				if (count ( $rawAffiliateCode = explode ( '&', $pathParams [1] ) ) >= 2) {
+					$request->setParam ( 'affiliate_code', $rawAffiliateCode [0] );
+					foreach ( $rawAffiliateCode as $codeFragment ) {
+						if (count ( $codeParamPair = explode ( '=', $codeFragment ) ) == 2) {
+							$request->setParam ( $codeParamPair [0], $codeParamPair [1] );
 						}
 					}
 				} else {
-					$request->setParam ( 'affiliate_code', $p [1] );
+					$request->setParam ( 'affiliate_code', $pathParams [1] );
 				}
-				if (isset ( $p [2] ) && is_numeric ( $p [2] )) {
-					$request->setParam ( 'clickId', $p [2] );
+				if (isset ( $pathParams [2] ) && is_numeric ( $pathParams [2] )) {
+					$request->setParam ( 'clickId', $pathParams [2] );
 				}
 			
 			}
@@ -68,11 +68,11 @@ class Harapartners_Affiliate_Controller_Router extends Mage_Core_Controller_Vari
 			} else {
 				return false;
 			}
-		} elseif ($p [0] == 'affiliate') {
+		} elseif ($pathParams [0] == 'affiliate') {
 			//Remote register request go in here
 			$request->setModuleName ( 'affiliate' )->setControllerName ( 'remote' )->setActionName ( 'register' );
 			return true;
-		} elseif (count ( $p ) >= 1 && $p [0] == 'remote') {
+		} elseif (count ( $pathParams ) >= 1 && $pathParams [0] == 'remote') {
 			//Remote login logic
 			//All other parameters need to be sent as GET params
 			$request->setModuleName ( 'affiliate' )->setControllerName ( 'remote' )->setActionName ( 'login' );
