@@ -74,7 +74,27 @@
 	     </li>
     <?php if ($this->canShip()): ?>
         <li class="control">
-            <button type="button" class="button" onclick="hpcheckout.copyBillingToShipping()"><div class="totsy-button-white"><?php echo  $this->__('SHIP TO THIS ADDRESS') ?></div></button>
+            <button type="button" class="button" id="button_ship_to"><div class="totsy-button-white"><?php echo  $this->__('SHIP TO THIS ADDRESS') ?></div></button>
+            <script>
+            	// @TODO: abstract this out to hpcheckout.js as self-contained method
+            	// need to re-enable billing form controls before trying to send values to shipping form
+            	jQuery(document).ready(function($) {
+            		$('#button_ship_to').bind('click', function() {
+        				var $billFormInputs = $('#hpcheckout-billing-form :input');
+        				var $billAddySelect = $("#billing-address-select");
+            			// re-enable disabled controls
+        				if ($billAddySelect.attr('disabled') !== undefined) {
+		                    $billAddySelect.removeAttr('disabled');
+			                $billFormInputs.each(function(i) {
+			                    $(this).removeAttr('disabled');
+			                });
+        				}
+            			
+            			// then use hpcheckout.copyBillingToShipping() method
+            			hpcheckout.copyBillingToShipping();
+            		});
+            	});
+            </script>
         </li>
     <?php endif; ?>
     </ul>
