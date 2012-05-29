@@ -30,8 +30,49 @@ class Harapartners_Stockhistory_Helper_Data extends Mage_Core_Helper_Abstract  {
             'Comment'
     );
     
+    private $_poProductExport = array(
+    		'type',
+    		'vendor_style',
+    		'name',
+    		'qty',
+    		'color',
+    		'size',
+    		'ages',
+    		'departments',
+    		'final_sale',
+    		'fulfillment_type',
+    		'shipping_method',
+    		'price',
+    		'special_price',
+    		'original_wholesale',
+    		'sale_wholesale',
+    		'image',
+    		'small_image',
+    		'thumbnail',
+    		//'media_gallery',
+    		'description',
+    		'is_master_pack',
+    		'case_pack_qty',
+    		'shipping_rate',
+    		'shipping_length',
+    		'shipping_width',
+    		'shipping_height',
+    		'gift_wrapping_price',
+    		'short_description',	
+    		'product_class',
+    		'product_subclass',
+    		'hot_list',
+    		'featured',
+    		'weight',
+    		'msrp',
+    );
+    
     public function getCsvHeader(){
         return $this->_csvHeader;
+    }
+    
+    public function getPoProductExportHeader(){
+    	return $this->_poProductExport;
     }
     
     public function getGridVendorTypeArray(){
@@ -191,6 +232,56 @@ class Harapartners_Stockhistory_Helper_Data extends Mage_Core_Helper_Abstract  {
 
         
         return $productSoldInfoArray;
+    }
+    
+    public function getPoProductExport($poId){
+    	$baseImageUrl = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . 'catalog/product';   
+    	$poCollection = Mage::getModel('stockhistory/transaction')->getCollection()->addFieldToFilter('po_id', array('eq' => $poId));
+		$csvHeader = $this->getPoProductExportHeader();
+		$csv = implode(',', $csvHeader)."\n";
+		foreach($poCollection as $po){
+			$productSku = $po->getProductSku();
+			$product = Mage::getModel('catalog/product')->loadByAttribute('sku', $productSku);
+			$productArray = array();
+			
+			$productArray[]		= 	$product->getTypeId();
+			$productArray[]	 	= 	$product->getVendorStyle();
+			$productArray[]		= 	$product->getName();
+			$productArray[] 	=  	Mage::getModel('cataloginventory/stock_item')->loadByProduct($product)->getQty();
+			$productArray[]		=	$product->getAttributeText('color');
+			$productArray[]		=	$product->getAttributeText('size');
+			$productArray[] 	= 	$product->getAttributeText('ages');
+			$productArray[]		= 	$product->getAttributeText('departments');
+			$productArray[]		=	$product->getAttributeText('final_sale');
+			$productArray[]		=	$product->getFulfillmentType();
+			$productArray[]		=	$product->getAttributeText('shipping_method');
+			$productArray[]		=	number_format(round($product->getPrice(), 2), 2);
+			$productArray[]		=	number_format(round($product->getSpecialPrice(), 2), 2);
+			$productArray[]		=	number_format(round($product->getOriginalWholesale(), 2), 2);
+			$productArray[]		=	number_format(round($product->getSaleWholesale(), 2), 2);
+			$productArray[]		=	$baseImageUrl . $product->getImage();
+			$productArray[]		=	$product->getSmallImage();
+			$productArray[]		=	$product->getThumbnail();
+			$productArray[]		=	$product->getDescription();
+			$productArray[]		=	$product->getAttributeText('is_master_pack');
+			$productArray[]		=	$product->getCasePackQty();
+			$productArray[]		=	$product->getShippingRate();
+			$productArray[]		=	$product->getShippingLength();
+			$productArray[]		=	$product->getShippingWidth();
+			$productArray[]		=	$product->getShippingHeight();
+			$productArray[]		=	$product->getGiftWrappingPrice();
+			$productArray[]		=	$product->getShortDescription();
+			$productArray[]		=	$product->getProductClass();
+			$productArray[]		=	$product->getProductSubclass();
+			$productArray[]		= 	$product->getAttributeText('hot_list');
+			$productArray[]		=   $product->getAttributeText('featured');
+			$productArray[]		=	number_format(round($product->getWeight(), 2), 2);	
+			$productArray[]		=	number_format(round($product->getMsrp(), 2), 2);
+			
+			$csv.= implode(',', $productArray)."\n";
+			$productArray = null;
+		}
+		return $csv;
     }
 
 }
