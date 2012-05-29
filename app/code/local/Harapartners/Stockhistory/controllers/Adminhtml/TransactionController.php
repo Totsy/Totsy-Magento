@@ -172,8 +172,8 @@ class Harapartners_Stockhistory_Adminhtml_TransactionController extends Mage_Adm
     
     public function productExportAction() {
    		$poId = $this->getRequest()->getParam('po_id');
-
-    	$fileName = 'po_product_export_' . $poId . '.csv';
+		$date = date('Y_m_d_Hi');
+    	$fileName = 'po_product_export_' . $poId . '_' . $date . '.csv';
     	$content = Mage::helper('stockhistory')->getPoProductExport($poId);
 
     	$this->_prepareDownloadResponse($fileName, $content);

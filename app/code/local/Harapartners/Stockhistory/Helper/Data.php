@@ -31,6 +31,7 @@ class Harapartners_Stockhistory_Helper_Data extends Mage_Core_Helper_Abstract  {
     );
     
     private $_poProductExport = array(
+    		'sku',
     		'type',
     		'vendor_style',
     		'name',
@@ -164,7 +165,7 @@ class Harapartners_Stockhistory_Helper_Data extends Mage_Core_Helper_Abstract  {
     }
     
     public function getFormPoArrayByCategoryId($categoryId, $status){
-        $poArray = array();
+        $poArray = array(array('label' => '', 'value' => ''));
         $poCollection = Mage::getModel('stockhistory/purchaseorder')->getCollection()
                 ->loadByCategoryId($categoryId, $status);
         if(!!$poCollection){
@@ -172,28 +173,16 @@ class Harapartners_Stockhistory_Helper_Data extends Mage_Core_Helper_Abstract  {
                 $poArray[] = array('label' => $po->getName(), 'value' => $po->getId());
             }
         }
-        
-        //Create new PO should be the last resort
-        $poArray[] = array('label' => 'Create New PO...', 'value' => 0); //0 for new PO
-        
         return $poArray;
     }
     
     public function getProductSoldInfoByCategory($category, $uniqueProductList){
         $productSoldInfoArray = array();
         $uniqueProductIds = array_keys($uniqueProductList);
-        
-        //Hara Partners, 2012/05/25, Solution for resolving qty_sold problem
-        $fromTime = strtotime($category->getData('event_start_date')) - 60*60*24*7;	// 7 days before
-        $toTime = strtotime($category->getData('event_end_date')) + 60*60*24*3;	// 3 days after
-        
-        $fromDate = date('Y-m-d H:i:s', $fromTime);
-        $toDate = date('Y-m-d H:i:s', $toTime);
-        
         $orderItemCollection = Mage::getModel('sales/order_item')->getCollection()
                 ->addAttributeToFilter('created_at', array(
-                        'from' => $fromDate,
-                        'to' => $toDate,
+                        'from' => $category->getData('event_start_date'),
+                        'to' => $category->getData('event_end_date'),
                 )
         );
         
@@ -247,51 +236,54 @@ class Harapartners_Stockhistory_Helper_Data extends Mage_Core_Helper_Abstract  {
     }
     
     public function getPoProductExport($poId){
-    	$baseImageUrl = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . 'catalog/product';   
+    	//$baseImageUrl = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . 'catalog/product';   
     	$poCollection = Mage::getModel('stockhistory/transaction')->getCollection()->addFieldToFilter('po_id', array('eq' => $poId));
 		$csvHeader = $this->getPoProductExportHeader();
 		$csv = implode(',', $csvHeader)."\n";
 		foreach($poCollection as $po){
 			$productSku = $po->getProductSku();
 			$product = Mage::getModel('catalog/product')->loadByAttribute('sku', $productSku);
-			$productArray = array();
-			
-			$productArray[]		= 	$product->getTypeId();
-			$productArray[]	 	= 	$product->getVendorStyle();
-			$productArray[]		= 	$product->getName();
-			$productArray[] 	=  	Mage::getModel('cataloginventory/stock_item')->loadByProduct($product)->getQty();
-			$productArray[]		=	$product->getAttributeText('color');
-			$productArray[]		=	$product->getAttributeText('size');
-			$productArray[] 	= 	$product->getAttributeText('ages');
-			$productArray[]		= 	$product->getAttributeText('departments');
-			$productArray[]		=	$product->getAttributeText('final_sale');
-			$productArray[]		=	$product->getFulfillmentType();
-			$productArray[]		=	$product->getAttributeText('shipping_method');
-			$productArray[]		=	number_format(round($product->getPrice(), 2), 2);
-			$productArray[]		=	number_format(round($product->getSpecialPrice(), 2), 2);
-			$productArray[]		=	number_format(round($product->getOriginalWholesale(), 2), 2);
-			$productArray[]		=	number_format(round($product->getSaleWholesale(), 2), 2);
-			$productArray[]		=	$baseImageUrl . $product->getImage();
-			$productArray[]		=	$product->getSmallImage();
-			$productArray[]		=	$product->getThumbnail();
-			$productArray[]		=	$product->getDescription();
-			$productArray[]		=	$product->getAttributeText('is_master_pack');
-			$productArray[]		=	$product->getCasePackQty();
-			$productArray[]		=	$product->getShippingRate();
-			$productArray[]		=	$product->getShippingLength();
-			$productArray[]		=	$product->getShippingWidth();
-			$productArray[]		=	$product->getShippingHeight();
-			$productArray[]		=	$product->getGiftWrappingPrice();
-			$productArray[]		=	$product->getShortDescription();
-			$productArray[]		=	$product->getProductClass();
-			$productArray[]		=	$product->getProductSubclass();
-			$productArray[]		= 	$product->getAttributeText('hot_list');
-			$productArray[]		=   $product->getAttributeText('featured');
-			$productArray[]		=	number_format(round($product->getWeight(), 2), 2);	
-			$productArray[]		=	number_format(round($product->getMsrp(), 2), 2);
-			
-			$csv.= implode(',', $productArray)."\n";
-			$productArray = null;
+			if(!!$product->getId()){
+				$productArray = array();
+				
+				$productArray[] 	=	$productSku;
+				$productArray[]		= 	$product->getTypeId();
+				$productArray[]	 	= 	$product->getVendorStyle();
+				$productArray[]		= 	$product->getName();
+				$productArray[] 	=  	Mage::getModel('cataloginventory/stock_item')->loadByProduct($product)->getQty();
+				$productArray[]		=	$product->getAttributeText('color');
+				$productArray[]		=	$product->getAttributeText('size');
+				$productArray[] 	= 	$product->getAttributeText('ages');
+				$productArray[]		= 	$product->getAttributeText('departments');
+				$productArray[]		=	$product->getAttributeText('final_sale');
+				$productArray[]		=	$product->getFulfillmentType();
+				$productArray[]		=	$product->getAttributeText('shipping_method');
+				$productArray[]		=	number_format(round($product->getPrice(), 2), 2);
+				$productArray[]		=	number_format(round($product->getSpecialPrice(), 2), 2);
+				$productArray[]		=	number_format(round($product->getOriginalWholesale(), 2), 2);
+				$productArray[]		=	number_format(round($product->getSaleWholesale(), 2), 2);
+				$productArray[]		=	$product->getImage();
+				$productArray[]		=	$product->getSmallImage();
+				$productArray[]		=	$product->getThumbnail();
+				$productArray[]		=	$product->getDescription();
+				$productArray[]		=	$product->getAttributeText('is_master_pack') ? $product->getAttributeText('is_master_pack') : '';
+				$productArray[]		=	$product->getCasePackQty();
+				$productArray[]		=	$product->getShippingRate();
+				$productArray[]		=	$product->getShippingLength();
+				$productArray[]		=	$product->getShippingWidth();
+				$productArray[]		=	$product->getShippingHeight();
+				$productArray[]		=	$product->getGiftWrappingPrice();
+				$productArray[]		=	$product->getShortDescription();
+				$productArray[]		=	$product->getProductClass();
+				$productArray[]		=	$product->getProductSubclass();
+				$productArray[]		= 	$product->getAttributeText('hot_list') ? $product->getAttributeText('hot_list') : '';
+				$productArray[]		=   $product->getAttributeText('featured') ? $product->getAttributeText('featured') : '';
+				$productArray[]		=	number_format(round($product->getWeight(), 2), 2);	
+				$productArray[]		=	number_format(round($product->getMsrp(), 2), 2);
+				
+				$csv.= implode(',', $productArray)."\n";
+				$productArray = null;
+			}
 		}
 		return $csv;
     }
