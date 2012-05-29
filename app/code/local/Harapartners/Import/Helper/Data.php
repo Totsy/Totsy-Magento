@@ -16,10 +16,10 @@ class Harapartners_Import_Helper_Data extends Mage_Core_Helper_Abstract {
     
     public function getFormActionTypeArray(){
         return array(
-                   array('label' => 'Process Immediately and Index', 'value' => Harapartners_Import_Model_Import::ACTION_TYPE_PROCESS_IMMEDIATELY_AND_INDEX),
+        		array('label' => 'Validation Only', 'value' => Harapartners_Import_Model_Import::ACTION_TYPE_VALIDATION_ONLY),
+        		array('label' => 'Process Immediately and Index', 'value' => Harapartners_Import_Model_Import::ACTION_TYPE_PROCESS_IMMEDIATELY_AND_INDEX),
 //                   array('label' => 'Process Immediately without Index', 'value' => Harapartners_Import_Model_Import::ACTION_TYPE_PROCESS_IMMEDIATELY),
-//                   array('label' => 'Pending', 'value' => Harapartners_Import_Model_Import::ACTION_TYPE_PENDING),
-//                   array('label' => 'Validation Only', 'value' => Harapartners_Import_Model_Import::ACTION_TYPE_VALIDATION_ONLY)
+//                   array('label' => 'Pending', 'value' => Harapartners_Import_Model_Import::ACTION_TYPE_PENDING)
            );
     }
     
@@ -29,7 +29,8 @@ class Harapartners_Import_Helper_Data extends Mage_Core_Helper_Abstract {
                 Harapartners_Import_Model_Import::IMPORT_STATUS_ERROR => 'Error',
                 Harapartners_Import_Model_Import::IMPORT_STATUS_FINALIZING => 'Finalizing',
                 Harapartners_Import_Model_Import::IMPORT_STATUS_PROCESSING => 'Processing',
-                Harapartners_Import_Model_Import::IMPORT_STATUS_UPLOADED => 'Uploaded'
+                Harapartners_Import_Model_Import::IMPORT_STATUS_UPLOADED => 'Uploaded',
+                Harapartners_Import_Model_Import::IMPORT_STATUS_VALIDATED => 'Validated'
         );
     }
     
