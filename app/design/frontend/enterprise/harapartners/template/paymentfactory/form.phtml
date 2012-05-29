@@ -21,7 +21,7 @@
     <?php
         $profilesCounter = 0;
         foreach( $profiles as $profile ) {
-            if($profile->getSubscriptionId() && $profile->getData('saved_by_customer')) {
+            if($profile->getSubscriptionId() && $profile->getIsDefault()==0 && $profile->getData('saved_by_customer')) {
                 $profilesCounter++;
             }
         }
