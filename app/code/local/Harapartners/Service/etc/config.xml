@@ -104,12 +104,12 @@
                     <url>Harapartners_Service_Model_Rewrite_Catalog_Url</url>
                 </rewrite>
             </catalog>
-			<catalog_resource>
+			<!-- Magento core fix for master/slave DB sync. This fix increases DB load. Disable for now. -->
+			<!--catalog_resource>
                 <rewrite>
-                    <!-- Magento core fix for master/slave DB sync -->
-                    <!--product_flat_indexer>Harapartners_Service_Model_Rewrite_Catalog_Resource_Product_Flat_Indexer</product_flat_indexer-->
+                    <product_flat_indexer>Harapartners_Service_Model_Rewrite_Catalog_Resource_Product_Flat_Indexer</product_flat_indexer>
                 </rewrite>
-            </catalog_resource>
+            </catalog_resource-->
             <cataloginventory>
                 <rewrite>
                     <!--Harapartner_Service: Product of the same ID (conf. with different super attr. or simple with differnt options) share the same limit!-->
