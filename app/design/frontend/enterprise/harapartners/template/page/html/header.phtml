@@ -49,14 +49,8 @@
 	            	<?php //Place holder for session check, may be remove later?>
 	            	<?php if ( true ): ?>
 		        		<?php echo $this->getChildHtml('topCart') ?>
-	 					<strong>
 	 						<?php //echo $this->getChildHtml('checkoutLinks') ?>
-	 						<ul class="links">
-	 							<li class="links">
-	 								<a class="top-link-checkout" title="Checkout" href="<?php echo Mage::getUrl('checkout/cart')?>">Checkout</a>
-	 							</li>
-	 						</ul>
-	 					</strong>
+						<a class="btn checkout" title="Checkout" href="<?php echo Mage::getUrl('checkout/cart')?>"><strong>Checkout</strong></a>
 	 				<?php else :?>
 	 					<?php echo 'JS here'?>
  					<?php endif;?>

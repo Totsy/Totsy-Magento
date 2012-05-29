@@ -254,3 +254,19 @@ div.page-title .timer-control-box p#checkout-timer, div.page-title .timer-contro
 	padding-left: 20px;
 	font-size: 13px;
 }
+
+/* disabled/readonly form control styles
+	@ Used when a saved credit card is selected
+*/
+#hpcheckout-billing-form input[disabled],
+#hpcheckout-billing-form select[disabled],
+#hpcheckout-billing-wrapper .totsy-selective-input-box.disabled {
+	background:#ececec;
+	color:rgba(0,0,0,0.45);
+	cursor:default;
+}
+#hpcheckout-billing-wrapper .totsy-selective-input-box.disabled {
+	box-shadow: none;
+    background: #ececec url("../images/selector.png") no-repeat scroll right 7px;
+}
+#hpcheckout-billing-wrapper .totsy-selective-input-box.disabled span {color:rgba(0,0,0,0.45) !important;}

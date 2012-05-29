@@ -17,4 +17,9 @@
 
 class Harapartners_Paymentfactory_Block_Payment extends Mage_Core_Block_Template {
     
+    public function getAddress($addressId) {
+        $address = Mage::getModel('customer/address')->load((int)$addressId);
+        return $address;
+    }
+
 }

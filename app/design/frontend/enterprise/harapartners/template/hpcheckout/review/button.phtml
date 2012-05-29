@@ -1,1 +1,13 @@
-<button type="button" title="<?php echo $this->__('Place Order') ?>" class="button" onclick="hpcheckout.submit()"><div class="totsy-button"><?php echo $this->__('Place Order') ?></div></button>
+<button id="placeOrderBtn" type="button" title="<?php echo $this->__('Place Order') ?>" class="button"><div class="totsy-button"><?php echo $this->__('Place Order') ?></div></button>
+<script>
+// @TODO: abstract this out to hpcheckout.js
+jQuery(document).ready(function($) {
+    $('#placeOrderBtn').live('click', function() {
+    	// first set form controls back to enabled so POST will work
+    	$('input[disabled], select[disabled]', '#hpcheckout-billing-form').removeAttr('disabled');
+    	
+        // then submit form using hpcheckout method
+        hpcheckout.submit();
+    });
+});
+</script>
