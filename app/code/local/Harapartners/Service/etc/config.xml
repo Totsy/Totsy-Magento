@@ -175,6 +175,12 @@
                     <quote_address_total_grand>Harapartners_Service_Model_Rewrite_Sales_Quote_Address_Total_Grand</quote_address_total_grand>
                 </rewrite>
             </sales>
+			<!-- Fixed on the Varien layer, Magento core fix for master/slave DB sync -->
+			<!--sales_resource>
+                <rewrite>
+					<order>Harapartners_Service_Model_Rewrite_Sales_Resource_Order</order>
+				</rewrite>
+			</sales_resource-->
             <tax>
                 <rewrite>
                     <!--Harapartners_SpeedTax-->
@@ -403,7 +409,6 @@
             </customer_session_init>
             <checkout_cart_product_add_after>
                 <observers>
-                    <!--Harapartners_EmailFactory-->
                     <sialthru_purchasing>
                         <type>singleton</type>
                         <class>emailfactory/observer</class>
@@ -411,7 +416,16 @@
                     </sialthru_purchasing>
                 </observers>
             </checkout_cart_product_add_after>
-            <!-- ===== FRONTEND ONLY EVENTS END ===== -->
+            <checkout_cart_product_update_after>
+                <observers>
+                    <sialthru_purchasing>
+                        <type>singleton</type>
+                        <class>emailfactory/observer</class>
+                        <method>sailthruPurchasing</method>
+                    </sialthru_purchasing>
+                </observers>
+            </checkout_cart_product_update_after>
+			<!-- ===== FRONTEND ONLY EVENTS END ===== -->
         </events>
     </frontend>
     <adminhtml>

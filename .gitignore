@@ -1,5 +1,4 @@
 .idea/
-.modgit/
 .htaccess*
 app/code/community/Find/
 app/code/community/Phoenix/
@@ -41,7 +40,11 @@ app/locale/
 cron.php
 cron.sh
 downloader/
-errors/
+errors/default/
+errors/enterprise/
+errors/*.php
+errors/design.xml
+errors/local.xml.*
 favicon.ico
 get.php
 includes/
