@@ -3197,26 +3197,28 @@ class Varien_Db_Adapter_Pdo_Mysql extends Zend_Db_Adapter_Pdo_Mysql implements V
             $query = sprintf('%s (%s)', $query, join(', ', $columns));
         }
         
-        //Terminate when nothing to insert, return empty query
-        //Note some select queries requires parameter bind and can only be handled upon making the query
-        //For such cases default logic is used
-        //Note the default PDO::FETCH_ASSOC will create problems if same constant expressions appear more than once in the select
-        try{
-	        if(!($dataArray = $this->fetchAll($select->assemble(), $select->getBind(), PDO::FETCH_NUM))){
-	        	return 'SELECT 1;'; //Null query
-	        }
-	        $valueArray = array();
-	        foreach ($dataArray as $data){
-		        if(count($fields) && count($data) != count($fields)){
-		        	throw new Exception('Missing data columns from SELECT!'); //Fall back
-		        }else{
-		        	$valueArray[] = sprintf('(%s)', $this->quote($data));
-		        }
-	        }
-	        $query = sprintf('%s VALUES %s', $query, implode(',', $valueArray));
-        }catch (Exception $e){
-			$query = sprintf('%s %s', $query, $select->assemble());
-        }
+//        //Terminate when nothing to insert, return empty query
+//        //Note some select queries requires parameter bind and can only be handled upon making the query
+//        //For such cases default logic is used
+//        //Note the default PDO::FETCH_ASSOC will create problems if same constant expressions appear more than once in the select
+//        try{
+//	        if(!($dataArray = $this->fetchAll($select->assemble(), $select->getBind(), PDO::FETCH_NUM))){
+//	        	return 'SELECT 1;'; //Null query
+//	        }
+//	        $valueArray = array();
+//	        foreach ($dataArray as $data){
+//		        if(count($fields) && count($data) != count($fields)){
+//		        	throw new Exception('Missing data columns from SELECT!'); //Fall back
+//		        }else{
+//		        	$valueArray[] = sprintf('(%s)', $this->quote($data));
+//		        }
+//	        }
+//	        $query = sprintf('%s VALUES %s', $query, implode(',', $valueArray));
+//        }catch (Exception $e){
+//			$query = sprintf('%s %s', $query, $select->assemble());
+//        }
+
+        $query = sprintf('%s %s', $query, $select->assemble());
 
         if ($mode == self::INSERT_ON_DUPLICATE) {
             if (!$fields) {
