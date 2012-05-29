@@ -19,7 +19,7 @@ class Harapartners_Import_Block_Adminhtml_Import_Grid extends Mage_Adminhtml_Blo
       parent::__construct();
       $this->setId('importGrid');
       $this->setDefaultSort('import_import_id');
-      $this->setDefaultDir('ASC');
+      $this->setDefaultDir('DESC');
       $this->setSaveParametersInSession(true);
   }
 
