@@ -13,6 +13,7 @@
 	            	</div>
 	            </li>
 	            <input type="hidden" name="billing[email]" id="billing:email" value="<?php echo $this->getCustomer()->getEmail() ?>" />
+	            <input type="hidden" name="billing[selected]" id="billing:selected" />
 	            <!-- li class="fields">
 	            	<div class="field half-of-half">
 		                <label for="billing:email" class="required"><em>*</em><?php echo $this->__('Email Address') ?></label>
@@ -106,7 +107,6 @@
 //<![CDATA[
     var billingRegionUpdater = new RegionUpdater('billing:country_id', 'billing:region', 'billing:region_id', countryRegions, undefined, 'billing:postcode');
 //    var billingForm = new VarienForm('hpcheckout-billing-form');
-
     jQuery( document ).ready( function() {
         jQuery( '#billing-address-select' ).bind( 'change', hpcheckout.switchAddress );
     	//jQuery( '#billing\\:region_id, #billing\\:postcode' ).bind( 'change', hpcheckout.update );
@@ -114,6 +114,4 @@
 	});
 
 	var hpcheckoutAddresses = <?php echo $this->getAddressesJson() ?>;
-   
-//]]>
 </script>
