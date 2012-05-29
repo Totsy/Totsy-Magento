@@ -57,11 +57,11 @@
 		<button id="sort-rebuild-submit" class="scalable" type="button" onclick="rebuildSubmit();">
 			<span><?php echo Mage::helper('categoryevent')->__('Rebuild Sort') ?></span>
 		</button>
-		<button id="sort-order-submit" class="scalable" type="button" onclick="alert('Flush page cache');">
+		<!--button id="sort-order-submit" class="scalable" type="button" onclick="alert('Flush page cache');">
 			<span><?php echo Mage::helper('categoryevent')->__('Refresh home (sales) pages immediately') ?></span>
-		</button>
+		</button-->
 	</div>
-	<form id="sort-selection" action="" method="post">
+	<!--form id="sort-selection" action="" method="post">
 		<label for="sort_date" ><?php echo Mage::helper('categoryevent')->__('Preview by hour') ?></label>
 		<input type="text" name="sort_date" id="datepicker" value="<?php echo $postSortDate;?>"/>
 		<input type="hidden" name="form_key" value="<?php echo $this->getFormKey() ?>"/>
@@ -71,7 +71,7 @@
 			<span><?php echo Mage::helper('categoryevent')->__('Preview') ?></span>
 		</button>
 		<p>Preview today's frontend home (sales) pages based on the given time</p>
-	</form>
+	</form-->
 </div>
 		
 <script>
