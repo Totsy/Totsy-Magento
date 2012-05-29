@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Harapartners_Paymentfactory>
-            <version>1.0.0</version>
+            <version>1.0.2</version>
         </Harapartners_Paymentfactory>
     </modules>
     <global>
@@ -124,7 +124,7 @@
                 <payment_action>authorize</payment_action>
                 <title>Credit Card (tokenize)</title>
                 <order_status>pending</order_status>
-                <cctypes>AE,VI,MC,DI</cctypes>
+                <cctypes>AE,VI,MC</cctypes>
                 <model>paymentfactory/tokenize</model>
                 <merchant_id backend_model="adminhtml/system_config_backend_encrypted"/>
                 <security_key backend_model="adminhtml/system_config_backend_encrypted"/>

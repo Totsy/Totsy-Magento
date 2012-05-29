@@ -37,6 +37,8 @@ class Harapartners_HpCheckout_CheckoutController extends Mage_Checkout_Controlle
     public function submitAction() {
         $this->validateCart();
         $result = array();
+        $customer = Mage::getSingleton('customer/session')->getCustomer();
+        $customerId = $customer->getId(); 
         try {
             $blocksSuccessFlag = true;
             $postData = $this->getRequest()->getPost();
@@ -52,6 +54,14 @@ class Harapartners_HpCheckout_CheckoutController extends Mage_Checkout_Controlle
                 $result[ 'status' ] = 2;
             } else {
                 if ($data = $this->getRequest()->getPost('payment', false)) {
+                    $profile = Mage::getModel('paymentfactory/profile');
+                    $profile->loadByCcNumberWithId($data['cc_number'].$customerId.$data[ 'cc_exp_year' ].$data[ 'cc_exp_month' ]);
+                    if(!!$profile && !!$profile->getId()){
+                        $cybersourceIdEncrypted = $profile->getEncryptedSubscriptionId();
+                        if($cybersourceIdEncrypted) {
+                            $data['cybersource_subid'] = $cybersourceIdEncrypted;
+                        }
+                    }
                     $this->_getHpCheckout()->getQuote()->getPayment()->importData($data);
                 }
                 $this->_getHpCheckout()->saveOrder();
