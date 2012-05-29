@@ -116,7 +116,6 @@ class Harapartners_Service_Model_Rewrite_Sales_Quote_Payment extends Mage_Sales_
         
         $method->assignData($data);
         $this->getQuote()->setData('saved_by_customer', $data[ 'saved_by_customer' ]);
-        
         /*
         * validating the payment data
         */

@@ -55,6 +55,7 @@
 							<span>New Address</span>
 					        <?php echo $this->getAddressesHtmlSelect('billing') ?>
 					    </div>
+					    <input type="hidden" name="billing[selected]" id="billing:selected" value="0" />
 					<?php endif; ?>
 				</div>
 				<div class="checkout-content"><?php echo $this->getChildHtml( 'billing' ) ?></div>
@@ -119,6 +120,13 @@ jQuery( document ).ready( function() {
 });
 </script>
 <script type="text/javascript">
+    jQuery('#billing-address-select').change(function() {
+        if( jQuery( '#billing-address-select' ).val() != '' ) {
+            jQuery( '#billing\\:selected' ).val(jQuery( '#billing-address-select' ).val());
+        } else {
+            jQuery( '#billing\\:selected' ).val('0');
+        }
+    });
  	 //code for disabling echoSahre
      var ECHO_SYSTEM_SETTINGS = { socialCenter: { enabled: false }};
 </script>
