@@ -8,7 +8,9 @@
 
 use Monolog\Logger,
     Monolog\Handler\ChromePHPHandler,
-    Monolog\Handler\StreamHandler;
+    Monolog\Handler\StreamHandler,
+    Monolog\Handler\GelfHandler,
+    Gelf\MessagePublisher;
 
 class Totsy_Core_Helper_Logger
 {
@@ -40,8 +42,14 @@ class Totsy_Core_Helper_Logger
         if (is_dir($monologPath)) {
             require_once 'SplClassLoader.php';
 
+            // setup a class autoloader for Monolog
             $monologLoader = new SplClassLoader('Monolog', $monologPath);
             $monologLoader->register();
+
+            // setup a class autoloader for Gelf-PHP (logging to Graylog2)
+            $gelfPath = realpath($appRoot . '/../lib/vendor/gelf-php/src');
+            $gelfLoader = new SplClassLoader('Gelf', $gelfPath);
+            $gelfLoader->register();
 
             // use configuration to build a new MonologLogger
             $config = Mage::getConfig()->getNode('loggers');
@@ -76,8 +84,18 @@ class Totsy_Core_Helper_Logger
         }
     }
 
+    /**
+     * Create a new Monolog handler using a proprietary handler identifier, and
+     * configuration options.
+     *
+     * @param $name string A generic name for the handler, from configuration.
+     * @param $options array Configuration options for the handler.
+     *
+     * @return Monolog\Handler\HandlerInterface
+     */
     protected function _getMonologHandler($name, $options)
     {
+        $env = Mage::helper('core')->getEnvironment();
         $logLevel = Logger::DEBUG;
 
         if (isset($options['level'][$env])) {
@@ -102,14 +120,18 @@ class Totsy_Core_Helper_Logger
 
         switch ($name) {
             case 'stream':
-                // echo "Setup a new Stream handler at level ", $logLevel, " to ", $options->getAttribute('filename'), PHP_EOL;
                 return new StreamHandler(
                     $options->getAttribute('filename'),
                     $logLevel
                 );
             case 'chrome':
-                // echo "Setup a new Chrome handler at level ", $logLevel, PHP_EOL;
                 return new ChromePHPHandler($logLevel);
+            case 'gelf':
+                echo "Created a new GELF logger at ", $options->getAttribute('hostname'), PHP_EOL;
+                $publisher = new MessagePublisher(
+                    $options->getAttribute('hostname')
+                );
+                return new \Monolog\Handler\GelfHandler($publisher, $logLevel);
         }
     }
 }
