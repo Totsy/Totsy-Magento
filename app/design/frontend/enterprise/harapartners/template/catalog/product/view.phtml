@@ -171,13 +171,13 @@
 <script type="text/javascript">
 var shver='2.8.6'; 
 var shpn= '<?php echo $_product->getName() ?>';
-var shpc= '<?php echo str_replace(array("\r", "\n"), '', $_product->getDescription()) ?>';
+var shpc= '<?php echo strip_tags(html_entity(str_replace(array("\r", "\n"), '', $_product->getDescription()))) ?>';
 var shpp= '<?php echo number_format($_product->getPrice(), 2) ?>';
 var shpb= '<?php echo $_product->getCategory()->name;  ?>';
 var shpi= '<?php echo $_product->getProductUrl() ?>';
 var shps= '<?php echo $_product->getSku() ?>';
-var shcv= <?php echo number_format($_cart->getQuote()->getGrandTotal(), 2) ?>;
-var shcq= <?php echo $_cart->getItemsQty() ?>;
+var shcv= '<?php echo number_format($_cart->getQuote()->getGrandTotal(), 2) ?>';
+var shcq= '<?php echo $_cart->getItemsQty() ?>';
 var shcp= '<?php echo $product_ids ?>';
 //'SHOPPING CART COMMA SEPARATED LIST OF PRODUCT IDs'; 
 var additional='';
