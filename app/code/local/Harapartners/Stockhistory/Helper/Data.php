@@ -165,7 +165,7 @@ class Harapartners_Stockhistory_Helper_Data extends Mage_Core_Helper_Abstract  {
     }
     
     public function getFormPoArrayByCategoryId($categoryId, $status){
-        $poArray = array(array('label' => '', 'value' => ''));
+        $poArray = array();
         $poCollection = Mage::getModel('stockhistory/purchaseorder')->getCollection()
                 ->loadByCategoryId($categoryId, $status);
         if(!!$poCollection){
@@ -173,16 +173,28 @@ class Harapartners_Stockhistory_Helper_Data extends Mage_Core_Helper_Abstract  {
                 $poArray[] = array('label' => $po->getName(), 'value' => $po->getId());
             }
         }
+        
+        //Create new PO should be the last resort
+        $poArray[] = array('label' => 'Create New PO...', 'value' => 0); //0 for new PO
+        
         return $poArray;
     }
     
     public function getProductSoldInfoByCategory($category, $uniqueProductList){
         $productSoldInfoArray = array();
         $uniqueProductIds = array_keys($uniqueProductList);
+        
+        //Hara Partners, 2012/05/25, Solution for resolving qty_sold problem
+        $fromTime = strtotime($category->getData('event_start_date')) - 60*60*24*7;	// 7 days before
+        $toTime = strtotime($category->getData('event_end_date')) + 60*60*24*3;	// 3 days after
+        
+        $fromDate = date('Y-m-d H:i:s', $fromTime);
+        $toDate = date('Y-m-d H:i:s', $toTime);
+        
         $orderItemCollection = Mage::getModel('sales/order_item')->getCollection()
                 ->addAttributeToFilter('created_at', array(
-                        'from' => $category->getData('event_start_date'),
-                        'to' => $category->getData('event_end_date'),
+                        'from' => $fromDate,
+                        'to' => $toDate,
                 )
         );
         
