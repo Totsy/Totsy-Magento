@@ -1,0 +1,3 @@
+[submodule "lib/vendor/monolog"]
+	path = lib/vendor/monolog
+	url = git://github.com/Seldaek/monolog.git
