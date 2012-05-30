@@ -168,6 +168,16 @@ class Harapartners_Stockhistory_Adminhtml_TransactionController extends Mage_Adm
         $this->_redirect('*/adminhtml_transaction/report', array('po_id' => $poId));
         return;
     }
+
+    
+    public function productExportAction() {
+   		$poId = $this->getRequest()->getParam('po_id');
+		$date = date('Y_m_d_Hi');
+    	$fileName = 'po_product_export_' . $poId . '_' . $date . '.csv';
+    	$content = Mage::helper('stockhistory')->getPoProductExport($poId);
+
+    	$this->_prepareDownloadResponse($fileName, $content);
+   }
     
     public function exportPoCsvAction() {
         $fileName   = 'stock_transaction_info_' . date('YmdHi'). '.csv';
