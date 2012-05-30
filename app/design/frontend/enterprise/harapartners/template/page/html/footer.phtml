@@ -78,9 +78,9 @@ var moduleName = "<?php echo $this->getRequest()->getModuleName() ?>";
 
 if(moduleName=="catalog" || moduleName=="event"){
     //code for enabling echoShare
-    var ECHO_SYSTEM_SETTINGS = { socialCenter: { enabled: true }};
+        _esq.settings.socialCenter = { enabled: true };
 } else {
     //code for disabling echoShare
-    var ECHO_SYSTEM_SETTINGS = { socialCenter: { enabled: false }};
+        _esq.settings.socialCenter = { enabled: false };
 }
 </script>

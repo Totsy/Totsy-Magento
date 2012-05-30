@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @category    Totsy
+ * @package     Totsy_Core
+ * @author      Tharsan Bhuvanendran <tbhuvanendran@totsy.com>
+ * @copyright   Copyright (c) 2012 Totsy LLC
+ */
+-->
+<config>
+    <modules>
+        <Totsy_Core>
+            <version>0.1.0</version>
+        </Totsy_Core>
+    </modules>
+    <global>
+        <blocks>
+            <core>
+                <rewrite>
+                    <environment>Totsy_Core_Block_Environment</environment>
+                </rewrite>
+            </core>
+        </blocks>
+        <helpers>
+            <core>
+                <rewrite>
+                    <data>Totsy_Core_Helper_Data</data>
+                </rewrite>
+            </core>
+            <core>
+                <rewrite>
+                    <logger>Totsy_Core_Helper_Logger</logger>
+                </rewrite>
+            </core>
+        </helpers>
+    </global>
+</config>

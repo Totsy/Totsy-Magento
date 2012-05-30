@@ -16,6 +16,7 @@
 			<span>Item Reserved For:</span>
 			<p id="checkout-timer"></p>
 			<script type="text/javascript">
+				// @TODO: this should be abstracted out to hpcheckout.js
 				jQuery(document).ready(function() {
 					jQuery("#checkout-timer").countdown({
 						//date: "12 10, 2011 16:11", //Counting TO a date
@@ -119,5 +120,5 @@ jQuery( document ).ready( function() {
 </script>
 <script type="text/javascript">
  	 //code for disabling echoSahre
-     var ECHO_SYSTEM_SETTINGS = { socialCenter: { enabled: false }};
+        _esq.settings.socialCenter = { enabled: false };
 </script>
