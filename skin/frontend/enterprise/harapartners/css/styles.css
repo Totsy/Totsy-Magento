@@ -537,14 +537,14 @@ ul.disc li { padding-left:10px; background:url(../images/bkg_bulletsm.gif) no-re
 .header h1.logo {}
 .header .quick-access { width:410px; float:right; padding:10px 0 0; }
 .header .quick-access .links { float:right; line-height:18px; white-space:nowrap; }
-.header .quick-access .links li { /* float:left; line-height:18px; */ padding:0 7px 0 4px; background:url(../images/bkg_sep.gif) no-repeat 100% 4px; }
+.header .quick-access .links li { /* float:left; line-height:18px; */ padding:0 7px 0 4px; none no-repeat 100% 4px; }
 .header .quick-access .links li a { color:#1e75b4; text-transform:uppercase; text-decoration:none; }
 .header .quick-access .links li a:hover { color:#d33911; }
 .header .quick-access .checkout-link li { font-weight:bold; padding:0 0 0 12px; background-position:6px 4px; }
 .header .quick-access .cart-link li { font-weight:bold; padding:0 0 0 0px; background:none; }
 
 
-#invitation-send-link { background:url(../images/bkg_sep.gif) no-repeat 100% 50%; padding:0 6px 0 0; margin:0 4px 0 0; font-weight:bold; }
+#invitation-send-link { none no-repeat 100% 50%; padding:0 6px 0 0; margin:0 4px 0 0; font-weight:bold; }
 #invitation-send-link a { background:url(../images/bkg_invitation-link.gif) no-repeat 3px 6px; padding-left:23px; display:inline-block; }
 
 #invitation-send-link a, x:-moz-any-link { background-position:3px -2px; }/* FireFox 2 fix */
