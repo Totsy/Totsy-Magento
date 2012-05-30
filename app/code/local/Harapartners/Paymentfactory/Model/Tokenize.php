@@ -169,6 +169,7 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Mage_Cybersource_Model_
         $billingAdressSaved = $payment->getOrder()->getQuote()->getData('billing_selected_by_customer');
         if(!empty($billingAdressSaved)) {
             $addressId = $payment->getOrder()->getQuote()->getData('billing_selected_by_customer');
+            $this->addBillingAddress($payment->getOrder()->getBillingAddress(), $payment->getOrder()->getCustomerEmail());
         } else {
             $this->addBillingAddress($payment->getOrder()->getBillingAddress(), $payment->getOrder()->getCustomerEmail());
             $addressId = $this->saveBillingAddress($payment);
