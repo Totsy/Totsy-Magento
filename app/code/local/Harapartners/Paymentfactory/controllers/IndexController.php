@@ -14,10 +14,14 @@ class Harapartners_Paymentfactory_IndexController extends Mage_Core_Controller_F
         $customerId = $customer->getId(); 
         try{
             $profile = Mage::getModel ( 'paymentfactory/profile' )->load( $id );
-            $profile->setData('is_default',1)
-                    ->setData('customer_id',$customerId)
-                    ->save();
-            $customerSession->addSuccess('Deleted Credit Card Successfully ');
+            if($profile->getId()) {
+                $profile->setData('is_default',1)
+                        ->setData('customer_id',$customerId)
+                        ->save();
+                $customerSession->addSuccess('Deleted Credit Card Successfully ');
+            } else {
+                $customerSession->addError('Credit Card Profile Not Found');
+            }
         }catch(Exception $e){
             $customerSession->addError(Mage::helper('paymentfactory')->__($e->getMessage()));
         }
