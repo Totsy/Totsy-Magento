@@ -2243,6 +2243,12 @@ address.copyright { margin-top:6px; }
 
 
 /* Clears ================================================================================ */
+/* this is NOT the way to do this
+// a list of like this is unruly, unmanageable, and unsustainable
+// do NOT add any more selectors to this list
+// apply the .group class to any elements that contain floats which need to be cleared
+*/
+.group:after,
 .product-options dt:after,
 #bundleProduct:after,
 .events-slider:after,
@@ -2310,6 +2316,8 @@ address.copyright { margin-top:6px; }
 .new-product-spotlight .more-new .item:after,
 .addresses-list .col-2 li:after,
 .product-view .product-shop:after { display:block; content:"."; clear:both; font-size:0; line-height:0; height:0; overflow:hidden; }
+/* for IE7 */
+*:first-child+html .group:after {min-height: 1px;}
 /* ======================================================================================= */
 
 .guest-select {width:305px !important;}

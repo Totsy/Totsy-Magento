@@ -182,6 +182,9 @@ body .header .quick-access
 	line-height: 1.6;
 	}
 #usercart .checkout:hover {background-color:rgba(230,87,84,1);}
+/* remove the checkout btn on the checkout cart page */
+.checkout-cart-index #usercart .checkout,
+.hpcheckout-checkout-index #usercart .checkout {display: none;}
 /* webkit one-offs for usercart - they want pixel-perfect, this is pixel perfection*/
 @media screen and (-webkit-min-device-pixel-ratio:0) {
 	#usercart {padding-top:3px;}
