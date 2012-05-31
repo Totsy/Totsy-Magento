@@ -13,9 +13,8 @@ class Harapartners_Paymentfactory_IndexController extends Mage_Core_Controller_F
         $customer = Mage::getSingleton('customer/session')->getCustomer();
         $customerId = $customer->getId(); 
         try{
-            $profile = Mage::getModel ( 'paymentfactory/profile' );
-            $profile->load( $id )
-                    ->setData('is_default',1)
+            $profile = Mage::getModel ( 'paymentfactory/profile' )->load( $id );
+            $profile->setData('is_default',1)
                     ->setData('customer_id',$customerId)
                     ->save();
             $customerSession->addSuccess('Deleted Credit Card Successfully ');
