@@ -34,11 +34,8 @@
 <?php 
 	$_helper = $this->helper('catalog/output');
 	$_product = $this->getProduct();
-				
 	$_cart = $this->helper('checkout/cart')->getCart();
-		
 	$product_ids = implode(",", $_cart->getProductIds());
-					
 	//Harapartners, Jun, in the controller we will guarantee the current categor must exists, if not we redirect	
 	$_category  = Mage::registry('current_category');
 ?>
@@ -60,8 +57,8 @@
 				//date: "12 10, 2011 16:11", //Counting TO a date
 				date: "<?php echo $endcount_lc; ?>", //Counting TO a date
 				htmlTemplate: html,
-				onComplete: function( event ){										
-					jQuery(this).html("Completed");
+				onComplete: function( event ){
+				    jQuery(this).html("Completed");
 				},
 				leadingZero: true,
 				direction: "down"
@@ -77,48 +74,54 @@
             <div class="product-img-box product-view-block">
                 <?php echo $this->getChildHtml('media') ?>
             </div>
-			<div class="product-info-box product-view-block">
-	            <div class="product-name">
-	                <h1><?php echo $_helper->productAttribute($_product, $_product->getName(), 'name') ?></h1>
-	            </div>
-		        <div class="product-collateral">
-	                <dl id="collateral-tabs" class="collateral-tabs wtf">
-	                    <dt class="tab"><span><?php echo $this->__('Description');?></span></dt>
-	                    <dd class="tab-container">
-	                    	<div class="tab-content"><?php echo $_product->getDescription(); ?></div>
-	                    </dd>
-						<dt class="tab"><span><?php echo $this->__('Shipping & Returns');?></span></dt>
-	                    <dd class="tab-container">
-	                    	<div class="tab-content"><?php echo Mage::app()->getLayout()->createBlock('cms/block')->setBlockId('shipping_and_return')->toHtml()?></div>
-	                    </dd>
-	                </dl>
-	                <script type="text/javascript">
-	                	Event.observe(window, 'load', function() {
-	                		new Enterprise.Tabs('collateral-tabs');
-	                	});
-	                </script>
-		            <?php if ($_product->getData('final_sale')): ?>
-		            	<p class="final-sale"><strong>Final Sale</strong></p>
-		            <?php endif; ?>
-		            <div class="share" style="display:none;">    
-     <?php if ($this->canEmailToFriend()): ?>        
-         <div class="email-friend"><a href="<?php echo $this->helper('catalog/product')->getEmailToFriendUrl($_product) ?>"><?php echo $this->__('Email to a Friend') ?></a></div>    
-     <?php endif; ?>    
-     <div class="tweet"><a href="http://twitter.com/share" class="twitter-share-button" data-count="none" data-via="totsyfan">Tweet</a></div>    
-     <div class="fbShare"><script src="http://platform.twitter.com/widgets.js" type="text/javascript" ></script><div id="fb-root"></div><script src="http://connect.facebook.net/en_US/all.js#appId=130085027045086&amp;xfbml=1"></script><fb:like href="" send="true" layout="button_count" width="250" show_faces="false" font=""></fb:like></div>    
-     <br style="clear:both;" />
-</div>
-	        	</div>
-			</div>
-            <div class="product-shop product-view-block">
-                <div class="product-main-info">
-                    <p class="product-ids"><?php echo $this->__('SKU# %s', $this->htmlEscape($_product->getSku())); ?></p>
-                    <?php //echo $this->getReviewsSummaryHtml($_product, false, true)?>
-                    <?php echo $this->getChildHtml('alert_urls') ?>
-                    <?php echo $this->getChildHtml('product_type_data') ?>
-                
-                <?php echo $this->getChildHtml('tierprices') ?>
-                <?php echo $this->getChildHtml('extrahint') ?>
+            <div class="product-info-box product-view-block">
+                <div class="product-name">
+                    <h1><?php echo $_helper->productAttribute($_product, $_product->getName(), 'name') ?></h1>
+                    </div>
+                    <!-- Start Jquery Tabs -->
+                    <div class="product-collateral">
+                        <div id="tabs">
+                            <ul>
+                                <li><a href="#description">Description</a></li>
+                                <li><a href="#shipping">Shipping & Returns</a></li>
+                            </ul>
+                            <!-- Start Description Tab -->
+                            <div id="description">
+                                <?php echo $_product->getDescription(); ?>
+                                <br />
+                                </div>
+                                <!-- End Description Tab -->
+                                <!-- Start Shipping Tab -->
+                                <?php echo Mage::app()->getLayout()->createBlock('cms/block')->setBlockId('shipping_and_return')->toHtml()?>
+                                </div>
+                            </div>
+                            <!-- End Shipping Tab -->
+                            <!-- Start Final Sale Text -->
+                            <?php if ($_product->getData('final_sale')): ?>
+                                <p class="final-sale"><strong>Final Sale</strong></p>
+                                <?php endif; ?>
+                        </div>
+                    <!-- End Jquery Tabs -->
+                    <!-- Social Share Buttons (not yet implemented) -->
+                    <div class="share" style="display:none;">
+                        <?php if ($this->canEmailToFriend()): ?>
+                        <div class="email-friend"><a href="<?php echo $this->helper('catalog/product')->getEmailToFriendUrl($_product) ?>"><?php echo $this->__('Email to a Friend') ?></a></div>
+                        <?php endif; ?>
+                        <div class="tweet"><a href="http://twitter.com/share" class="twitter-share-button" data-count="none" data-via="totsyfan">Tweet</a></div>
+                        <div class="fbShare"><script src="http://platform.twitter.com/widgets.js" type="text/javascript" ></script><div id="fb-root"></div><script src="http://connect.facebook.net/en_US/all.js#appId=130085027045086&amp;xfbml=1"></script><fb:like href="" send="true" layout="button_count" width="250" show_faces="false" font=""></fb:like></div>
+                        <br style="clear:both;" />
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="product-shop product-view-block">
+                        <div class="product-main-info">
+                            <p class="product-ids"><?php echo $this->__('SKU# %s', $this->htmlEscape($_product->getSku())); ?></p>
+                                <?php //echo $this->getReviewsSummaryHtml($_product, false, true)?>
+                                    <?php echo $this->getChildHtml('alert_urls') ?>
+                                    <?php echo $this->getChildHtml('product_type_data') ?>
+                                    <?php echo $this->getChildHtml('tierprices') ?>
+                                    <?php echo $this->getChildHtml('extrahint') ?>
 
                 <?php if (!$this->hasOptions()):?>
                      <div class="add-to-box">
@@ -145,29 +148,27 @@
                 <?php endif;?>
 
                 <?php echo $this->getChildHtml('other');?>
-                 
-				<?php if ($_product->isSaleable() && $this->hasOptions() && $this->getChildChildHtml('container2') ):?>
-					<div class="options-container-big">
-					   <?php echo $this->getChildChildHtml('container2', '', true, true) ?>
-					</div>
-				<?php endif;?>
+                    <?php if ($_product->isSaleable() && $this->hasOptions() && $this->getChildChildHtml('container2') ):?>
+                    <div class="options-container-big">
+                    <?php echo $this->getChildChildHtml('container2', '', true, true) ?>
+                    </div>
+                    <?php endif;?>
+                    </div>
+                    
+                    <div class="share-button" id="st_sharethis_custom">
+                        <div class="st_sharethis_custom"></div>
+                    </div>
                 </div>
-                <div class="share-button" id="st_sharethis_custom">
-	                <div class="st_sharethis_custom"></div>
-	            </div>
-	            
             </div>
-        </div>       
-        <div class="clearer"></div>
-    </form>
-        <?php echo $this->getChildHtml('relatedProducts') ?>
-        <?php echo $this->getChildHtml('upsell_products') ?>
-        <?php echo $this->getChildHtml('productTagList') ?>
-        <?php echo $this->getChildHtml('product_additional_data') ?>
+            <div class="clearer"></div>
+        </form>
+            <?php echo $this->getChildHtml('relatedProducts') ?>
+            <?php echo $this->getChildHtml('upsell_products') ?>
+            <?php echo $this->getChildHtml('productTagList') ?>
+            <?php echo $this->getChildHtml('product_additional_data') ?>
 </div>
 
 <!-- Steelhouse Integration -->
-
 <script type="text/javascript">
 var shver='2.8.6'; 
 var shpn= '<?php echo $_product->getName() ?>';
@@ -184,7 +185,6 @@ var additional='';
 var aid='9577';var tdr='';if (top.document.referrer != ''){tdr = encodeURIComponent(top.document.referrer);}var plh='';if (parent.location.href != ''){plh = encodeURIComponent(parent.location.href);}shpi = encodeURIComponent(shpi);(function(){steelhouse={add:function(a,b,c,d){d=d||false;if(a.addEventListener){a.addEventListener(b,c,d)}else if(a.attachEvent){a.attachEvent("on"+b,c)}},load:function(){var a;if(typeof a=='undefined'){a=Math.random()*100000000000000000}var b=document.createElement('script');var c='px.steelhousemedia.com/st?aid='+aid+'&cb='+a+'&shcv='+shcv+'&shcq='+shcq+'&shcp='+shcp+'&shpn='+shpn+'&shpc='+shpc+'&shpp='+shpp+'&shpb='+shpb+'&shpi='+shpi+'&shps='+shps+'&tdr='+tdr+'&plh='+plh+additional;b.type='text/javascript';b.src=('https:'==document.location.protocol?'https://':'http://')+c;var d=document.getElementsByTagName('script');var e=Number(d.length)-1;var f=document.getElementsByTagName('script')[e];f.parentNode.insertBefore(b,f)}};steelhouse.load();})();
 </script>
 <!-- Steelhouse Integration -->
-
 <script type="text/javascript">
 //	jQuery(document).ready(function(){
 //		jQuery("button.btn-cart").css("background-color","#AAAAAA");
@@ -195,7 +195,6 @@ var aid='9577';var tdr='';if (top.document.referrer != ''){tdr = encodeURICompon
         if (this.validator.validate()) {
             var form = this.form;
             var oldUrl = form.action;
-
             if (url) {
                form.action = url;
             }
@@ -208,13 +207,11 @@ var aid='9577';var tdr='';if (top.document.referrer != ''){tdr = encodeURICompon
             if (e) {
                 throw e;
             }
-
             if (button && button != 'undefined') {
                 button.disabled = true;
             }
         }
     }.bind(productAddToCartForm);
-
     productAddToCartForm.submitLight = function(button, url){
         if(this.validator) {
             var nv = Validation.methods;
@@ -238,11 +235,11 @@ var aid='9577';var tdr='';if (top.document.referrer != ''){tdr = encodeURICompon
 
 <?php $small_img = $this->helper('catalog/image')->init($_product, 'image')->resize(100); ?>
 <script>
-	stWidget.addEntry({
+    stWidget.addEntry({
         "service":"sharethis",
         "element":document.getElementById('st_sharethis_custom'),
         "url":"<?php echo $this->helper('core/url')->getCurrentUrl();?>",
         "title":"Totsy",
         "image":"<?php echo $small_img; ?>"
-	});
+    });
 </script>
