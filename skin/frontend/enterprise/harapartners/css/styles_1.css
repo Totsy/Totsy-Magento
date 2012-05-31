@@ -84,9 +84,11 @@ div.top-cart .block-title strong { color: #F21C25; font-size: 12px; text-transfo
 
 
 #checkoutcart-block-title{ display: none; }
-.hpcheckout-checkout-index #usercart { float: right;}
+/*.hpcheckout-checkout-index #usercart { float: right;} */
 .hpcheckout-checkout-index #usercart-block-title { display: none }
-.hpcheckout-checkout-index #checkoutcart-block-title{ display: block;}
+.hpcheckout-checkout-index #checkoutcart-block-title{ display: block; color:#FF6D1D;}
+.hpcheckout-checkout-index #checkoutcart-block-title * {color:#FF6D1D;}
+.hpcheckout-checkout-index div.top-cart .block-title { background:none; padding-left:0; }
 .hpcheckout-checkout-index #usercart li a.top-link-checkout { display: none; }
 .hpcheckout-checkout-index .top-cart .block-title strong { background: none; }
 
