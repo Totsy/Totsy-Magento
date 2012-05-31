@@ -1,4 +1,5 @@
 <?php
+    $baseurl = Mage::getUrl('',array('_forced_secure'=>true));
     $customer = Mage::getSingleton('customer/session')->getCustomer();
     $id = $customer->getId(); 
     $paymentCollection = Mage::getModel('paymentfactory/profile')->loadByCustomerId($id);
@@ -58,7 +59,7 @@
                     expires <strong><?php echo $payment->getData('expire_month');?>/<?php echo $payment->getData('expire_year');?></strong>
                 </td>
                 <td width="2%" align="right">
-                    <a href="<?php echo $this->getBaseUrl();?>paymentfactory/index/delete/?entity_id=<?php echo $payment->getData('entity_id');?>" id="remove_<?php echo $payment->getData('entity_id');?>" title="Remove Credit Card" class="delete-new-card-button">Delete</a>
+                    <a href="<?php echo $baseurl ?>paymentfactory/index/delete/?entity_id=<?php echo $payment->getData('entity_id');?>" id="remove_<?php echo $payment->getData('entity_id');?>" title="Remove Credit Card" class="delete-new-card-button">Delete</a>
                 </td>
             </tr>
             <?php if($payment->getData('address_id')):?>
