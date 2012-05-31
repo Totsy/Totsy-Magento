@@ -439,6 +439,46 @@
                 <sort_order>50</sort_order>
             </marketing>
         </menu>
+		<acl>
+			<resources>
+				<all>
+					<title>Allow Everything</title>
+				</all>
+				<admin translate="title" module="adminhtml">
+					<children>
+						<harapartners>
+							<title>Extras</title>
+							<sort_order>200</sort_order>
+							<children>
+								<import translate="title" module="import">
+									<title>Import Module</title>
+									<sort_order>10</sort_order>
+								</import>
+								<stockhistory translate="title" module="stockhistory">
+									<title>Purchase Order Module</title>
+									<sort_order>20</sort_order>
+									<children>
+										<vendor translate="title" module="stockhistory">
+											<title>Vendor Report</title>
+										</vendor>
+										<purchaseorder translate="title" module="stockhistory">
+											<title>Purchase Order Report</title>
+										</purchaseorder>
+										<transaction translate="title" module="stockhistory">
+											<title>Transaction Report</title>
+										</transaction>
+									</children>
+								</stockhistory>
+								<rushcheckout translate="title" module="rushcheckout">
+									<title>Rushcheckout Timer Module</title>
+									<sort_order>30</sort_order>
+								</rushcheckout>
+							</children>
+						</harapartners>
+					</children>
+				</admin>
+			</resources>
+		</acl>
     </adminhtml>
     <crontab>
         <jobs>

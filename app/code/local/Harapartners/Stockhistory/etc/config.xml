@@ -96,21 +96,34 @@
                 </children>
             </harapartners>
         </menu>
+		<!--
 		<acl>
             <resources>
                 <all>
                     <title>Allow Everything</title>
                 </all>
-                <admin>
+                <admin translate="title" module="adminhtml">
                     <children>
-                        <Harapartners_Stockhistory>
+                        <stockhistory>
                             <title>Purchase Order Module</title>
                             <sort_order>10</sort_order>
-                        </Harapartners_Stockhistory>
+							<children>
+								<vendor translate="title" module="stockhistory">
+									<title>Vendor Report</title>
+								</vendor>
+								<purchaseorder translate="title" module="stockhistory">
+									<title>Purchase Order Report</title>
+								</purchaseorder>
+								<transaction translate="title" module="stockhistory">
+									<title>Transaction</title>
+								</transaction>
+							</children>
+                        </stockhistory>
                     </children>
                 </admin>
             </resources>
-        </acl>  
+        </acl> 
+		-->		
         <layout>
             <updates>
                 <stockhistory>

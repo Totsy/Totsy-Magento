@@ -82,6 +82,7 @@
                 </children>
             </harapartners>
         </menu>
+		<!--
 		<acl>
             <resources>
                 <all>
@@ -96,7 +97,8 @@
                     </children>
                 </admin>
             </resources>
-        </acl>  
+        </acl>
+		-->
     </adminhtml>
     <crontab>
         <jobs>
