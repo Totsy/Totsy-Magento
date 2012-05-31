@@ -1121,8 +1121,9 @@ border-top:2px solid #ed1c25;
 line-height: 20px;
 text-align: left;
 color: #707070;
-font-size: 12px
+font-size: 12px;
 margin-top:3px;
+
 }
 
 .ui-tabs .ui-tabs-hide {
