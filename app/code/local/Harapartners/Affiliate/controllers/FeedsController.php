@@ -7,6 +7,7 @@ class Harapartners_Affiliate_FeedsController extends Mage_Core_Controller_Front_
         header ("Content-Type:text/xml");
         parent::preDispatch ();
     }
+    
     public function indexAction() {
         $request = $this->getRequest();
         $from = $request->getParam('from'); // format 20120401
@@ -69,7 +70,6 @@ XML;
     	$recordCollection = $this->_prepareCollection($affiliateCode)
 								->addFieldToFilter('created_at', array( "lt" => $to,"gt"=>$from ))
 								->load();                                                    
-        $counter = 0;
         foreach ($recordCollection as $record) { 
 			$this->_signupsEntry($simpleXml,$record);  
         }
@@ -123,7 +123,7 @@ XML;
         return $simpleXml;
     }    
     
-    protected function _prepareCollection($code,$level = 0){
+    protected function _prepareCollection($affiliateCode,$level = 0){
     	return Mage::getModel('customertracking/record')->getCollection()
 	    	->addFieldToFilter('affiliate_code', $affiliateCode)
 	    	->addFieldToFilter('level', $level)
