@@ -6,7 +6,7 @@
  * @copyright   Copyright (c) 2012 Totsy LLC
  */
 
-class Totsy_Sales_Model_Observer extends Mage_Sales_Model_Observer
+class Totsy_Sales_Model_Observer
 {
     /**
      * Increment the customer purchase count attribute after an order has been

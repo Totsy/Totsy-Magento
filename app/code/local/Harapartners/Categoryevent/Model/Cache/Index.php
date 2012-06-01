@@ -29,7 +29,7 @@ class Harapartners_Categoryevent_Model_Cache_Index extends Enterprise_PageCache_
     }
 
     protected function _getCacheId() {
-        return md5(self::CACHE_TAG_PREFIX . $this->_getIdentifier());
+        return md5(self::CACHE_TAG_PREFIX . $this->_placeholder->getAttribute('cache_id') . $this->_getIdentifier());
     }
 
     protected function _renderBlock() {
