@@ -13,6 +13,18 @@
 class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
 {
     /**
+     * A place to store messages.
+     *
+     * @var Totsy_Core_Model_LoggerInterface
+     */
+    protected $_log;
+
+    public function __construct()
+    {
+        $this->_log = Mage::helper('core/logger')->getLogger('fulfillment');
+    }
+
+    /**
      * Perform order fulfillment.
      * 1) Retrieve Inventory Status from Dotcom and sync with local product
      *    database.
@@ -23,17 +35,14 @@ class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
      *
      * @return void
      *
-     * @todo Store available inventory reported by the Inventory API response
-     *       in Product data, as an attribute.
+     * @todo Store available inventory reported by the Inventory API response in Product data, as an attribute.
      */
     public function runDotcomFulfillOrder()
     {
-        $log = Mage::helper('fulfillmentfactory/log');
-
         try {
             //fetch inventory data from DOTcom
             $inventoryList = $this->updateInventory();
-            $log->infoLog(sprintf(
+            $this->_log->info(sprintf(
                 'Inventory Status Received for %d items.',
                 count($inventoryList)
             ));
@@ -41,7 +50,7 @@ class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
             //update stock info
             $service = Mage::getModel('fulfillmentfactory/service_fulfillment');
             $processingOrderCollection = $service->stockUpdate($inventoryList);
-            $log->infoLog(sprintf(
+            $this->_log->info(sprintf(
                 'Sending %d orders for fulfillment.',
                 count($processingOrderCollection)
             ));
@@ -49,8 +58,7 @@ class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
             //submit orders to fulfill
             $this->submitOrderToFulfillByQueue();
         } catch (Exception $e) {
-            Mage::helper('fulfillmentfactory/log')->errorLog($e->getMessage());
-            throw new Exception($e->getMessage());
+            $this->_log->err($e->getMessage());
         }
     }
 
@@ -59,19 +67,20 @@ class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
      *
      * @return void
      */
-    public function runUpdateShipment() {
+    public function runUpdateShipment()
+    {
         try {
             //put one day as default
-            $fromDate = date('Y-m-d H:i:s', strtotime('-3 days'));
+            $fromDate = date('Y-m-d H:i:s', strtotime('-1 day'));
             $toDate = date('Y-m-d H:i:s');
 
             $ordersShipped = $this->updateShipment($fromDate, $toDate);
-            Mage::helper('fulfillmentfactory/log')->infoLog(sprintf(
+            $this->_log->info(sprintf(
                 'Completed processing for %d orders that have been shipped.',
                 count($ordersShipped)
             ));
         } catch (Exception $e) {
-            Mage::helper('fulfillmentfactory/log')->errorLog($e->getMessage());
+            $this->_log->err($e->getMessage());
         }
     }
 

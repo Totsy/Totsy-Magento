@@ -1024,6 +1024,125 @@ ul.disc li { padding-left:10px; background:url(../images/bkg_bulletsm.gif) no-re
 .collateral-tabs .tab-content object,
 .collateral-tabs .tab-content embed { width:100% !important; height:auto !important; }
 
+/* Product detail page (Tab Content)
+----------------------------------*/
+div.product-collateral img { width:100%; }
+div.product-collateral li { list-style:disc; margin-left:15px; }
+div.product-collateral ul { margin-top: 10px; }
+div.product-collateral p { line-height: 20px; font-size: 12px; }
+#tabs { margin-top: -10px;}
+/* Interaction states
+----------------------------------*/
+.ui-state-default,.ui-widget-content .ui-state-default,.ui-widget-header .ui-state-default {
+background:url() left top no-repeat #ACACAC;
+padding:0 0 0 4px;
+}
+
+.ui-state-default a,.ui-state-default a:link,.ui-state-default a:visited {
+color:#FFF;
+text-decoration:none;
+}
+
+.ui-state-hover,.ui-widget-content .ui-state-hover,.ui-widget-header .ui-state-hover,.ui-state-focus,.ui-widget-content .ui-state-focus,.ui-widget-header .ui-state-focus {
+}
+
+.ui-state-active,.ui-widget-content .ui-state-active,.ui-widget-header .ui-state-active {
+background:#ed1c25;
+color:#FFF;
+padding:0 0 0 4px;
+}
+
+.ui-state-active a,.ui-widget-content .ui-state-active a,.ui-widget-header .ui-state-active a {
+color:#FFF;
+}
+
+.ui-state-active a,.ui-state-active a:link,.ui-state-active a:visited {
+color:#FFF;
+text-decoration:none;
+text-transform:uppercase;
+}
+
+.ui-widget :active {
+outline:none;
+}
+
+/* Tabs
+----------------------------------*/
+.ui-tabs {
+position:relative;
+z-index:1;
+zoom:1;
+float:left;
+}
+
+.ui-tabs p {
+margin:10px 0;
+}
+
+.ui-tabs .ui-tabs-nav li, ul {
+/*overflow:hidden; remove this so that drop shadows work in all browsers on navigation EDS*/ 
+list-style: none!important;
+}
+
+.ui-tabs .ui-tabs-nav li {
+float:left;
+position:relative;
+top:5px;
+font-weight:bold;
+margin:0 5px 0 0;
+white-space:nowrap;
+}
+
+.ui-tabs .ui-tabs-nav li a {
+padding:8px 12px 8px 8px;
+text-decoration:none;
+text-transform:uppercase;
+}
+
+.ui-tabs .ui-tabs-nav li.ui-tabs-selected {
+border-radius:6px 6px 0px 0px;
+-moz-border-radius:6px 6px 0px 0px;
+-webkit-border-radius:6px 6px 0px 0px;
+}
+
+.ui-tabs .ui-tabs-nav li.ui-tabs-selected a,.ui-tabs .ui-tabs-nav li.ui-state-disabled a,.ui-tabs .ui-tabs-nav li.ui-state-processing a {
+cursor:text;
+}
+
+.ui-tabs .ui-tabs-nav li a,.ui-tabs.ui-tabs-collapsible .ui-tabs-nav li.ui-tabs-selected a {
+cursor:pointer;
+display:block;
+}
+ 
+.ui-tabs .ui-tabs-panel {
+display:inline-block;
+padding:10px 0px;
+border-top:2px solid #ed1c25;
+line-height: 20px;
+text-align: left;
+color: #707070;
+font-size: 12px;
+margin-top:3px;
+
+}
+
+.ui-tabs .ui-tabs-hide {
+display:none!important;
+}
+
+.ui-corner-top {
+border-radius:6px 6px 0px 0px;
+-moz-border-radius:6px 6px 0px 0px;
+-webkit-border-radius:6px 6px 0px 0px;
+}
+
+/* Component containers
+----------------------------------*/
+
+.ui-widget-content {
+padding-top:0;
+}
+
 /* Product Images */
 .product-view .product-img-box { float:left; width:370px; padding:26px 46px 26px 45px; }
 .product-view .product-img-box .product-image img { background:#fff; } /*IE8 PNG Fix */
@@ -2243,6 +2362,12 @@ address.copyright { margin-top:6px; }
 
 
 /* Clears ================================================================================ */
+/* this is NOT the way to do this
+// a list of like this is unruly, unmanageable, and unsustainable
+// do NOT add any more selectors to this list
+// apply the .group class to any elements that contain floats which need to be cleared
+*/
+.group:after,
 .product-options dt:after,
 #bundleProduct:after,
 .events-slider:after,
@@ -2310,6 +2435,8 @@ address.copyright { margin-top:6px; }
 .new-product-spotlight .more-new .item:after,
 .addresses-list .col-2 li:after,
 .product-view .product-shop:after { display:block; content:"."; clear:both; font-size:0; line-height:0; height:0; overflow:hidden; }
+/* for IE7 */
+*:first-child+html .group:after {min-height: 1px;}
 /* ======================================================================================= */
 
 .guest-select {width:305px !important;}
