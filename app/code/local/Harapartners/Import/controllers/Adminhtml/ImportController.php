@@ -166,6 +166,10 @@ class Harapartners_Import_Adminhtml_ImportController extends Mage_Adminhtml_Cont
             }
                 
             if($shouldRunImport){
+            	//Global flag during the entire import process
+            	Mage::unregister('is_batch_import_process');
+            	Mage::register('is_batch_import_process', true);
+            	
                 try{
                     $processorHelper->runImport($model->getId(), $shouldRunIndex);
                     Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('import')->__('The imported data has been processed.'));

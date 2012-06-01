@@ -108,7 +108,8 @@
                     </import>
                 </children>
             </harapartners>
-        </menu> 
+        </menu>
+		<!--
         <acl>
             <resources>
                 <all>
@@ -123,7 +124,8 @@
                     </children>
                 </admin>
             </resources>
-        </acl>  
+        </acl>
+		-->		
         <layout>
             <updates>
                 <import>
