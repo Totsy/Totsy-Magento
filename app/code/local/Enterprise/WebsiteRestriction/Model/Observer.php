@@ -30,7 +30,7 @@
  */
 class Enterprise_WebsiteRestriction_Model_Observer
 {
-    /**
+	/**
      * Implement website stub or private sales restriction
      *
      * @param Varien_Event_Observer $observer
@@ -39,7 +39,7 @@ class Enterprise_WebsiteRestriction_Model_Observer
     {
         /* @var $controller Mage_Core_Controller_Front_Action */
         $controller = $observer->getEvent()->getControllerAction();
-
+        
         //var_dump(Mage::app()->getStore()->isAdmin());
         //exit();
 
@@ -109,7 +109,7 @@ class Enterprise_WebsiteRestriction_Model_Observer
                                 $allowedActionNames[] = $fullActionName;
                             }
                         }
-
+                        
                         // to specified landing page
                        if (Enterprise_WebsiteRestriction_Model_Mode::HTTP_302_LANDING === (int)Mage::getStoreConfig(
                            Enterprise_WebsiteRestriction_Helper_Data::XML_PATH_RESTRICTION_HTTP_REDIRECT
@@ -127,11 +127,12 @@ class Enterprise_WebsiteRestriction_Model_Observer
                         elseif (!in_array($controller->getFullActionName(), $allowedActionNames)) {
                             $redirectUrl = Mage::getUrl('customer/account/login');
                         }
-
+                        
                         if ($redirectUrl) {
                             $response->setRedirect($redirectUrl);
                             $controller->setFlag('', Mage_Core_Controller_Varien_Action::FLAG_NO_DISPATCH, true);
                         }
+                        
                         if (Mage::getStoreConfigFlag(
                             Mage_Customer_Helper_Data::XML_PATH_CUSTOMER_STARTUP_REDIRECT_TO_DASHBOARD
                         )) {
@@ -139,7 +140,17 @@ class Enterprise_WebsiteRestriction_Model_Observer
                         } else {
                             $afterLoginUrl = Mage::getUrl('');
                         }
-                        Mage::getSingleton('core/session')->setWebsiteRestrictionAfterLoginUrl($afterLoginUrl);
+                        
+                        $origin_url = substr(Mage::getUrl(''),0,-1) .$controller->getRequest()->getOriginalPathInfo();
+                        if ( preg_match('#sale|age|category#i',$origin_url) && $afterLoginUrl!=$origin_url ){
+                        	$afterLoginUrl = $origin_url;
+                        	unset($orgin_url);
+                        }
+                        $currentAfterLogin = Mage::getSingleton('core/session')->getWebsiteRestrictionAfterLoginUrl();
+                        if (!preg_match('#sale|age|category#i',$currentAfterLogin)){
+                        	Mage::getSingleton('core/session')->setWebsiteRestrictionAfterLoginUrl($afterLoginUrl);
+                        }
+                        unset($currentAfterLogin);
                     }
                     elseif (Mage::getSingleton('core/session')->hasWebsiteRestrictionAfterLoginUrl()) {
                         //Haraparnters, Jun, START: avoid unecessary redirect

@@ -130,6 +130,9 @@ HpCheckout.prototype = {
 		}
 		if( clickedAddress.val() == '' ) {
 			jQuery( '#' + hpcheckout.data.blocks[ blockType ].formId + ' input' ).val( '' );
+            if(blockType == 'billing') {
+                jQuery( '#billing\\:selected' ).val('');
+            }
 		} else {
 			if( hpcheckoutAddresses[ clickedAddress.val() ] ) {
 				jQuery('select#' + blockType +'\\:country_id').val( hpcheckoutAddresses[ clickedAddress.val() ][ 'country_id' ] );
@@ -144,6 +147,9 @@ HpCheckout.prototype = {
 				if( blockType == 'shipping' ) {
 					jQuery( '#shipping\\:postcode' ).change();
 				}
+                if(blockType == 'billing') {
+                    jQuery( '#billing\\:selected' ).val(jQuery( '#billing-address-select' ).val());
+                }
 			}
 		}
 	},
