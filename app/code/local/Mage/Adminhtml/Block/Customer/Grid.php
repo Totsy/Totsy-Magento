@@ -54,7 +54,6 @@ class Mage_Adminhtml_Block_Customer_Grid extends Mage_Adminhtml_Block_Widget_Gri
 //            ->addAttributeToSelect('email')
 //            ->addAttributeToSelect('created_at')
 //            ->addAttributeToSelect('group_id')
-//            ->addAttributeToSelect('group_id')
             ->addAttributeToSelect('firstname')
             ->addAttributeToSelect('lastname')
             ->joinAttribute('billing_postcode', 'customer_address/postcode', 'default_billing', null, 'left')
@@ -224,6 +223,11 @@ class Mage_Adminhtml_Block_Customer_Grid extends Mage_Adminhtml_Block_Widget_Gri
 //
 //        return $this;
 //    }
+    
+    //Harapartners, Jun, Query optimization, No sorting allowed
+	public function getVarNameSort() {
+        return false;
+    }
     
     //Harapartners, Jun, Query optimization, Search email must use exact string
 	protected function _addColumnFilterToCollection($column) {
