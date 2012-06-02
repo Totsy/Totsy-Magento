@@ -18,7 +18,7 @@ class Harapartners_Rushcheckout_Model_Observer {
     
     const CUSTOMER_VALIDATION_CHECK_URL = 'customer/revalidate/index';
     const CUSTOMER_REVALIDATE_TIMER_LIMIT = 3600;
-    const DEFAULT_COLLECTION_SIZE_LIMIT = 10; //in case the collection is rather large
+    const DEFAULT_COLLECTION_SIZE_LIMIT = 100; //in case the collection is rather large
     
     /**
      * Double validation check HP
