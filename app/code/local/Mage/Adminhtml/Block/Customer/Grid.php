@@ -45,8 +45,12 @@ class Mage_Adminhtml_Block_Customer_Grid extends Mage_Adminhtml_Block_Widget_Gri
 
     protected function _prepareCollection()
     {
+    	//Harapartners, Jun, Query optimization
+    	$fields = array('firstname' => 'firstname', 'lastname' => 'lastname');
+    	$nameExpr = 'CONCAT_WS(LTRIM(RTRIM(at_firstname.value)), LTRIM(RTRIM(at_lastname.value)))';
+    	
         $collection = Mage::getResourceModel('customer/customer_collection')
-            ->addNameToSelect()
+        	->addExpressionAttributeToSelect('name', $nameExpr, $fields)
             ->addAttributeToSelect('email')
             ->addAttributeToSelect('created_at')
             ->addAttributeToSelect('group_id')
@@ -211,9 +215,28 @@ class Mage_Adminhtml_Block_Customer_Grid extends Mage_Adminhtml_Block_Widget_Gri
         return $this;
     }
     
+    //Harapartners, Jun, Query optimization, Search email must use exact string
+	protected function _addColumnFilterToCollection($column) {
+        if ($this->getCollection()) {
+            $field = ( $column->getFilterIndex() ) ? $column->getFilterIndex() : $column->getIndex();
+            if ($column->getFilterConditionCallback()) {
+                call_user_func($column->getFilterConditionCallback(), $this->getCollection(), $column);
+            } else {
+            	if($field == 'email'){
+            		$cond = $column->getFilter()->getValue();
+            	}else{
+                	$cond = $column->getFilter()->getCondition();
+            	}
+                if ($field && isset($cond)) {
+                    $this->getCollection()->addFieldToFilter($field , $cond);
+                }
+            }
+        }
+        return $this;
+    }
+    
     protected function _setFilterValues($data) {
-    	
-    	if ( array_key_exists('email',$data)){
+    	if (array_key_exists('email',$data)){
     		$data['email'] = $this->_trimGmail($data['email']);
     	}
     	

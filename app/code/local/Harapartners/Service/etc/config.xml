@@ -173,6 +173,8 @@
                     <quote_address>Harapartners_Service_Model_Rewrite_Sales_Quote_Address</quote_address>
                     <!--Harapartners_SpeedTax-->
                     <quote_address_total_grand>Harapartners_Service_Model_Rewrite_Sales_Quote_Address_Total_Grand</quote_address_total_grand>
+					<!--Harapartners_Service, Query optimization, no quote item price update after product import-->
+					<observer>Harapartners_Service_Model_Rewrite_Sales_Observer</observer>
                 </rewrite>
             </sales>
 			<!-- Fixed on the Varien layer, Magento core fix for master/slave DB sync -->
