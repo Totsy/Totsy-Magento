@@ -177,12 +177,6 @@
 					<observer>Harapartners_Service_Model_Rewrite_Sales_Observer</observer>
                 </rewrite>
             </sales>
-			<!-- Fixed on the Varien layer, Magento core fix for master/slave DB sync -->
-			<!--sales_resource>
-                <rewrite>
-					<order>Harapartners_Service_Model_Rewrite_Sales_Resource_Order</order>
-				</rewrite>
-			</sales_resource-->
             <tax>
                 <rewrite>
                     <!--Harapartners_SpeedTax-->
@@ -411,6 +405,7 @@
             </customer_session_init>
             <checkout_cart_product_add_after>
                 <observers>
+                    <!--Harapartners_EmailFactory-->
                     <sialthru_purchasing>
                         <type>singleton</type>
                         <class>emailfactory/observer</class>
@@ -418,16 +413,7 @@
                     </sialthru_purchasing>
                 </observers>
             </checkout_cart_product_add_after>
-            <checkout_cart_product_update_after>
-                <observers>
-                    <sialthru_purchasing>
-                        <type>singleton</type>
-                        <class>emailfactory/observer</class>
-                        <method>sailthruPurchasing</method>
-                    </sialthru_purchasing>
-                </observers>
-            </checkout_cart_product_update_after>
-			<!-- ===== FRONTEND ONLY EVENTS END ===== -->
+            <!-- ===== FRONTEND ONLY EVENTS END ===== -->
         </events>
     </frontend>
     <adminhtml>
@@ -441,6 +427,46 @@
                 <sort_order>50</sort_order>
             </marketing>
         </menu>
+		<acl>
+			<resources>
+				<all>
+					<title>Allow Everything</title>
+				</all>
+				<admin translate="title" module="adminhtml">
+					<children>
+						<harapartners>
+							<title>Extras</title>
+							<sort_order>200</sort_order>
+							<children>
+								<import translate="title" module="import">
+									<title>Import Module</title>
+									<sort_order>10</sort_order>
+								</import>
+								<stockhistory translate="title" module="stockhistory">
+									<title>Purchase Order Module</title>
+									<sort_order>20</sort_order>
+									<children>
+										<vendor translate="title" module="stockhistory">
+											<title>Vendor Report</title>
+										</vendor>
+										<purchaseorder translate="title" module="stockhistory">
+											<title>Purchase Order Report</title>
+										</purchaseorder>
+										<transaction translate="title" module="stockhistory">
+											<title>Transaction Report</title>
+										</transaction>
+									</children>
+								</stockhistory>
+								<rushcheckout translate="title" module="rushcheckout">
+									<title>Rushcheckout Timer Module</title>
+									<sort_order>30</sort_order>
+								</rushcheckout>
+							</children>
+						</harapartners>
+					</children>
+				</admin>
+			</resources>
+		</acl>
     </adminhtml>
     <crontab>
         <jobs>

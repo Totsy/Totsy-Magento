@@ -82,6 +82,23 @@
                 </children>
             </harapartners>
         </menu>
+		<!--
+		<acl>
+            <resources>
+                <all>
+                    <title>Allow Everything</title>
+                </all>
+                <admin>
+                    <children>
+                        <Harapartners_Rushcheckout>
+                            <title>Rushcheckout Module</title>
+                            <sort_order>10</sort_order>
+                        </Harapartners_Rushcheckout>
+                    </children>
+                </admin>
+            </resources>
+        </acl>
+		-->
     </adminhtml>
     <crontab>
         <jobs>
