@@ -126,7 +126,7 @@
         <jobs>
             <fulfillmentfactory_dotcom_fulfill_order>
                 <schedule>
-                    <cron_expr>0 * * * *</cron_expr><!-- at the top of each hour -->
+                    <cron_expr>0 0,3,6,9,12,15,18,22 * * *</cron_expr><!-- at the top of each hour -->
                 </schedule>
                 <run>
                     <model>fulfillmentfactory/service_dotcom::runDotcomFulfillOrder</model>
