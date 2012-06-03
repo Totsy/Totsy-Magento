@@ -10,7 +10,10 @@
 <!-- BEGIN Inchoo Facebook Connect -->
 <div id="fb-root"></div>
 <script type="text/javascript">
-//<![CDATA[
+  $.noConflict();
+  jQuery(document).ready(function($) {
+    // Code that uses jQuery's $ can follow here.
+    //<![CDATA[
 window.fbAsyncInit = function() {
 	FB.init({
 		appId		: <?php echo json_encode($this->getApiKey()) ?>,
@@ -44,6 +47,12 @@ document.observe('click', function(e){
 		}catch(error){}
 	}
 });
+
+ _esq.settings.socialCenter = { enabled: false };
+
 //]]>
+  });
+  
+  // Code that uses other library's $ can follow here.
 </script>
 <!-- END Inchoo Facebook Connect -->

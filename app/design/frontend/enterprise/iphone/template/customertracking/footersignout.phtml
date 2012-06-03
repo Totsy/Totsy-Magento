@@ -15,25 +15,9 @@
  */
 ?>
 <?php $customer = Mage::getSingleton('customer/session')->getCustomer();?>
-<?php if ( Mage::helper('inchoo_facebook')->isFacebookCustomer($customer) ):?>
-<div class="ui-btn-inner ui-li" aria-hidden="true">
-	<div class="ui-btn-text">
-		<a class="ui-link-inherit" onclick="logout()" style="cursor:pointer; color:#ed1c24;"><?php echo $this->__('Sign Out'); ?></a>
-		<span class="ui-icon ui-icon-arrow-r ui-icon-shadow"></span>
-	</div>
-</div>
-<script type="text/javascript">
-	function logout(){	
-		FB.logout(function(response) {
-			window.location = "<?php echo Mage::getUrl('customer/account/logout')?>"// user is now logged out
-		});
-	}
-</script>
-<?php else: ?>
 <div class="ui-btn-inner ui-li" aria-hidden="true">
 	<div class="ui-btn-text">
 		<a class="ui-link-inherit" href="<?php echo $this->getUrl('customer/account/logout')?>"><?php echo $this->__('Sign Out'); ?></a>
 		<span class="ui-icon ui-icon-arrow-r ui-icon-shadow"></span>
 	</div>
 </div>
-<?php endif;?>

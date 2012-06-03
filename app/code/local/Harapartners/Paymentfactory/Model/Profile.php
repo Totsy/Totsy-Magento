@@ -98,12 +98,21 @@ class Harapartners_Paymentfactory_Model_Profile extends Mage_Core_Model_Abstract
             throw new Exception('Missing Expire Year');
         }
        
-            if(!!$dataObject->getData('cc_exp_month')){
+        if(!!$dataObject->getData('cc_exp_month')){
              $this->setData('expire_month',$dataObject->getData('cc_exp_month'));
         }else{
             throw new Exception('Missing Expire Month');
         }
-             
+        
+        if(!!$dataObject->getData('address_id')){
+             $this->setData('address_id',$dataObject->getData('address_id'));
+        }else{
+            throw new Exception('Missing Billing Address');
+        }
+        
+        if($dataObject->getData('saved_by_customer')){
+             $this->setData('saved_by_customer',1);
+        }
         return $this;
     }
     
