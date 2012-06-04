@@ -94,4 +94,28 @@ class Harapartners_Service_Model_Rewrite_Customer_Session extends Mage_Customer_
         Mage::dispatchEvent('customer_login', array('customer'=>$customer));
         return $this;
     }
+    
+    //Harapartners, Jun, When name info is missing, auto populate name info from default billing address
+	public function getCustomer() {
+        if ($this->_customer instanceof Mage_Customer_Model_Customer) {
+            return $this->_customer;
+        }
+
+        $customer = Mage::getModel('customer/customer')
+            ->setWebsiteId(Mage::app()->getStore()->getWebsiteId());
+        if ($this->getId()) {
+            $customer->load($this->getId());
+        }
+        
+        if((!$customer->getFirstname() || !$customer->getlastname())){
+			$defaultBillingAddress = $customer->getDefaultBillingAddress();
+	        if(!!$defaultBillingAddress){
+			    $customer->setFirstname($defaultBillingAddress->getFirstname());
+			    $customer->setLastname($defaultBillingAddress->getLastname());
+	        }
+        }
+
+        $this->setCustomer($customer);
+        return $this->_customer;
+    }
 }

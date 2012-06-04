@@ -282,7 +282,7 @@ class Harapartners_Ordersplit_Helper_Data extends Mage_Core_Helper_Abstract {
         }
         if($isSuccess) {
             if($newOrderCount <= 1){
-                throw new Exception('Split order should produce multiple orders.');
+                //throw new Exception('Split order should produce multiple orders.');
             }
             Mage::dispatchEvent('order_split_after', array('order' => $oldOrder));
         }else{

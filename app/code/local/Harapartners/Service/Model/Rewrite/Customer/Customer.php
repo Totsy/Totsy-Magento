@@ -215,6 +215,11 @@ class Harapartners_Service_Model_Rewrite_Customer_Customer extends Mage_Customer
 
         return $trimmedGmail;
     }
+    
+    //Harapartners, Jun, Exposing trim Gmail as a public function
+    public function trimGmail($email, $showMessage = false){
+    	return $this->trimGmail($email, $showMessage);
+    }
 
     /**
      * Hash customer password, using bcrypt.
@@ -230,5 +235,17 @@ class Harapartners_Service_Model_Rewrite_Customer_Customer extends Mage_Customer
         $salt = substr(str_replace('+', '.', base64_encode(sha1(rand(), true))), 0, 22);
 
         return crypt($password, '$2a$12$' . $salt);
+    }
+    
+	/**
+     * Load customer by email
+     *
+     * @param   string $customerEmail
+     * @return  Mage_Customer_Model_Customer
+     */
+    public function loadByEmail($customerEmail)
+    {
+        $customerEmail = $this->_trimGmail($customerEmail);
+        return parent::loadByEmail($customerEmail);
     }
 }
