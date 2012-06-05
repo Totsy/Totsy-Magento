@@ -749,28 +749,15 @@ class Mage_Customer_AccountController extends Mage_Core_Controller_Front_Action
         
         $lastOrder = $customer->getLastOrder();
         
-        //getting the default billing addresse's firt and last name and populating
-        //the first and last names for a user's account info
-        $defaultBillingAddress = $this->_getSession()->getCustomer()->getDefaultBillingAddress();
-        
-        $data['firstname'] = $defaultBillingAddress->firstname;
-        $data['lastname'] = $defaultBillingAddress->lastname;                    
+        //Harapartners, Jun, Get name info from billing address, moved to Customer Session
                                
         if (!empty($data)) {
             $customer->addData($data);
         }
         
-        //var_dump($data);
-        //exit();
-        
-        if ($this->getRequest()->getParam('changepass')==1){
-            $customer->setChangePassword(1);
-        }
-        
         //Harapartners, Edward, for change password link start
-        $passwordPageFlag = 'changepassword';
-        $passwordPage = $this->getRequest()->getParam($passwordPageFlag);
-        if (isset($passwordPage)){
+        if ($this->getRequest()->getParam('changepass') || $this->getRequest()->getParam('changepassword')){
+            $customer->setChangePassword(1);
             Mage::unregister('changepassword');
             Mage::register('changepassword',1);
         }
@@ -843,7 +830,12 @@ class Mage_Customer_AccountController extends Mage_Core_Controller_Front_Action
                 foreach ($errors as $message) {
                     $this->_getSession()->addError($message);
                 }
-                $this->_redirect('*/*/edit');
+                //Harapartners, Jun, Redirect to change password
+		        if($this->getRequest()->getParam('change_password')){
+		        	$this->_redirect('*/*/edit', array('changepass' => 1));
+		        }else{
+                	$this->_redirect('*/*/edit');
+		        }
                 return $this;
             }
 

@@ -45,11 +45,17 @@ class Mage_Adminhtml_Block_Customer_Grid extends Mage_Adminhtml_Block_Widget_Gri
 
     protected function _prepareCollection()
     {
+    	//Harapartners, Jun, Query optimization
+//    	$fields = array('firstname' => 'firstname', 'lastname' => 'lastname');
+//    	$nameExpr = 'CONCAT_WS(LTRIM(RTRIM(at_firstname.value)), " ", LTRIM(RTRIM(at_lastname.value)))';
+    	
         $collection = Mage::getResourceModel('customer/customer_collection')
-            ->addNameToSelect()
-            ->addAttributeToSelect('email')
-            ->addAttributeToSelect('created_at')
-            ->addAttributeToSelect('group_id')
+//        	->addExpressionAttributeToSelect('name', $nameExpr, $fields)
+//            ->addAttributeToSelect('email')
+//            ->addAttributeToSelect('created_at')
+//            ->addAttributeToSelect('group_id')
+            ->addAttributeToSelect('firstname')
+            ->addAttributeToSelect('lastname')
             ->joinAttribute('billing_postcode', 'customer_address/postcode', 'default_billing', null, 'left')
             ->joinAttribute('billing_city', 'customer_address/city', 'default_billing', null, 'left')
             ->joinAttribute('billing_telephone', 'customer_address/telephone', 'default_billing', null, 'left')
@@ -69,18 +75,20 @@ class Mage_Adminhtml_Block_Customer_Grid extends Mage_Adminhtml_Block_Widget_Gri
             'index'     => 'entity_id',
             'type'  => 'number',
         ));
-        /*$this->addColumn('firstname', array(
+        $this->addColumn('firstname', array(
             'header'    => Mage::helper('customer')->__('First Name'),
-            'index'     => 'firstname'
+            'index'     => 'firstname',
+        	'filter'	=> 'adminhtml/widget_grid_column_filter_abstract'
         ));
         $this->addColumn('lastname', array(
             'header'    => Mage::helper('customer')->__('Last Name'),
-            'index'     => 'lastname'
-        ));*/
-        $this->addColumn('name', array(
-            'header'    => Mage::helper('customer')->__('Name'),
-            'index'     => 'name'
+            'index'     => 'lastname',
+        	'filter'	=> 'adminhtml/widget_grid_column_filter_abstract'
         ));
+//        $this->addColumn('name', array(
+//            'header'    => Mage::helper('customer')->__('Name'),
+//            'index'     => 'name',
+//        ));
         $this->addColumn('email', array(
             'header'    => Mage::helper('customer')->__('Email'),
             'width'     => '150',
@@ -103,13 +111,15 @@ class Mage_Adminhtml_Block_Customer_Grid extends Mage_Adminhtml_Block_Widget_Gri
         $this->addColumn('Telephone', array(
             'header'    => Mage::helper('customer')->__('Telephone'),
             'width'     => '100',
-            'index'     => 'billing_telephone'
+            'index'     => 'billing_telephone',
+        	'filter'	=> 'adminhtml/widget_grid_column_filter_abstract'
         ));
 
         $this->addColumn('billing_postcode', array(
             'header'    => Mage::helper('customer')->__('ZIP'),
             'width'     => '90',
             'index'     => 'billing_postcode',
+        	'filter'	=> 'adminhtml/widget_grid_column_filter_abstract'
         ));
 
         $this->addColumn('billing_country_id', array(
@@ -117,12 +127,14 @@ class Mage_Adminhtml_Block_Customer_Grid extends Mage_Adminhtml_Block_Widget_Gri
             'width'     => '100',
             'type'      => 'country',
             'index'     => 'billing_country_id',
+        	'filter'	=> 'adminhtml/widget_grid_column_filter_abstract'
         ));
 
         $this->addColumn('billing_region', array(
             'header'    => Mage::helper('customer')->__('State/Province'),
             'width'     => '100',
             'index'     => 'billing_region',
+        	'filter'	=> 'adminhtml/widget_grid_column_filter_abstract'
         ));
 
         $this->addColumn('customer_since', array(
@@ -167,53 +179,80 @@ class Mage_Adminhtml_Block_Customer_Grid extends Mage_Adminhtml_Block_Widget_Gri
         $this->addExportType('*/*/exportXml', Mage::helper('customer')->__('Excel XML'));
         return parent::_prepareColumns();
     }
-
-    protected function _prepareMassaction()
-    {
-        $this->setMassactionIdField('entity_id');
-        $this->getMassactionBlock()->setFormFieldName('customer');
-
-        //Harapartners Li
-//        $this->getMassactionBlock()->addItem('delete', array(
-//             'label'    => Mage::helper('customer')->__('Delete'),
-//             'url'      => $this->getUrl('*/*/massDelete'),
-//             'confirm'  => Mage::helper('customer')->__('Are you sure?')
+    
+    //Harapartners, Jun, Mass action generates gigantic JSON object, ignored here
+//    protected function _prepareMassaction()
+//    {
+//        $this->setMassactionIdField('entity_id');
+//        $this->getMassactionBlock()->setFormFieldName('customer');
+//
+//        //Harapartners Li
+////        $this->getMassactionBlock()->addItem('delete', array(
+////             'label'    => Mage::helper('customer')->__('Delete'),
+////             'url'      => $this->getUrl('*/*/massDelete'),
+////             'confirm'  => Mage::helper('customer')->__('Are you sure?')
+////        ));
+//        //
+//
+//        $this->getMassactionBlock()->addItem('newsletter_subscribe', array(
+//             'label'    => Mage::helper('customer')->__('Subscribe to Newsletter'),
+//             'url'      => $this->getUrl('*/*/massSubscribe')
 //        ));
-        //
-
-        $this->getMassactionBlock()->addItem('newsletter_subscribe', array(
-             'label'    => Mage::helper('customer')->__('Subscribe to Newsletter'),
-             'url'      => $this->getUrl('*/*/massSubscribe')
-        ));
-
-        $this->getMassactionBlock()->addItem('newsletter_unsubscribe', array(
-             'label'    => Mage::helper('customer')->__('Unsubscribe from Newsletter'),
-             'url'      => $this->getUrl('*/*/massUnsubscribe')
-        ));
-
-        $groups = $this->helper('customer')->getGroups()->toOptionArray();
-
-        array_unshift($groups, array('label'=> '', 'value'=> ''));
-        $this->getMassactionBlock()->addItem('assign_group', array(
-             'label'        => Mage::helper('customer')->__('Assign a Customer Group'),
-             'url'          => $this->getUrl('*/*/massAssignGroup'),
-             'additional'   => array(
-                'visibility'    => array(
-                     'name'     => 'group',
-                     'type'     => 'select',
-                     'class'    => 'required-entry',
-                     'label'    => Mage::helper('customer')->__('Group'),
-                     'values'   => $groups
-                 )
-            )
-        ));
-
+//
+//        $this->getMassactionBlock()->addItem('newsletter_unsubscribe', array(
+//             'label'    => Mage::helper('customer')->__('Unsubscribe from Newsletter'),
+//             'url'      => $this->getUrl('*/*/massUnsubscribe')
+//        ));
+//
+//        $groups = $this->helper('customer')->getGroups()->toOptionArray();
+//
+//        array_unshift($groups, array('label'=> '', 'value'=> ''));
+//        $this->getMassactionBlock()->addItem('assign_group', array(
+//             'label'        => Mage::helper('customer')->__('Assign a Customer Group'),
+//             'url'          => $this->getUrl('*/*/massAssignGroup'),
+//             'additional'   => array(
+//                'visibility'    => array(
+//                     'name'     => 'group',
+//                     'type'     => 'select',
+//                     'class'    => 'required-entry',
+//                     'label'    => Mage::helper('customer')->__('Group'),
+//                     'values'   => $groups
+//                 )
+//            )
+//        ));
+//
+//        return $this;
+//    }
+    
+    //Harapartners, Jun, Query optimization, No sorting allowed
+	public function getVarNameSort() {
+        return false;
+    }
+    
+    //Harapartners, Jun, Query optimization, Search email must use exact string
+	protected function _addColumnFilterToCollection($column) {
+		$exactSearchColumns = array('firstname', 'lastname', 'name', 'email');
+		
+        if ($this->getCollection()) {
+            $field = ( $column->getFilterIndex() ) ? $column->getFilterIndex() : $column->getIndex();
+            if ($column->getFilterConditionCallback()) {
+                call_user_func($column->getFilterConditionCallback(), $this->getCollection(), $column);
+            } else {
+            	if(in_array($field, $exactSearchColumns)){
+            		$cond = $column->getFilter()->getValue();
+            	}else{
+                	$cond = $column->getFilter()->getCondition();
+            	}
+                if ($field && isset($cond)) {
+                    $this->getCollection()->addFieldToFilter($field , $cond);
+                }
+            }
+        }
         return $this;
     }
     
     protected function _setFilterValues($data) {
-    	
-    	if ( array_key_exists('email',$data)){
+    	if (array_key_exists('email',$data)){
     		$data['email'] = $this->_trimGmail($data['email']);
     	}
     	
