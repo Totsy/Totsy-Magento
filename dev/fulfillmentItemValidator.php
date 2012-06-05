@@ -24,16 +24,16 @@ try {
 	do {
 		$orderCollection = Mage::getModel('sales/order')->getCollection();
 		$orderCollection->addFieldToFilter('entity_id', array ('gt' => $entityIdOffset))->addFieldToFilter('status', 
-																											array(
-																												'pending',
-																												'processing',
-																												'canceled',
-																												'holded',
-																												'complete',
-																												Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_PROCESSING_FULFILLMENT,
-																												Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_FULFILLMENT_FAILED,
-																												Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_PAYMENT_FAILED
-																											));
+				array(
+						'pending',
+						'processing',
+//						'canceled',
+						'holded',
+//						'complete',
+						Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_PROCESSING_FULFILLMENT,
+						Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_FULFILLMENT_FAILED,
+						Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_PAYMENT_FAILED
+		));
 		$orderCollection->getSelect()->limit(DEFAULT_COLLECTION_SIZE_LIMIT)->order('entity_id ASC');
 		foreach($orderCollection as $order) {
 			
