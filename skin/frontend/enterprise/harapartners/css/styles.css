@@ -400,7 +400,7 @@ p.error-msg { border-color:#e9581f; background-color:#fff5f3; color:#d91a00; }
 .toolbar-bottom { /*display:none;*/ }
 
 /* Data Table */
-.table-caption { border:1px solid #ddd; border-bottom:0; margin:-1px 0 0; background:#fff url(../images/bkg_block-title.gif) 0 100% repeat-x; font:14px/1.25 Arial, Helvetica, sans-serif; padding:3px 7px 4px; color:#444; }
+.table-caption { border:1px solid #ddd; border-bottom:0; margin:-1px 0 0; background:none; font:14px/1.25 Arial, Helvetica, sans-serif; padding:3px 7px 4px; color:#444; }
 .table-caption a { font-size:11px; text-transform:lowercase; }
 .data-table { border:1px solid #d9d9d9; border-bottom:0; width:100%; border-collapse:separate; }
 .data-table th { padding:5px 12px; color:#2d2d2d; border-bottom:1px solid #d9d9d9; font-weight:normal; text-transform:uppercase; white-space:nowrap; }
@@ -777,7 +777,7 @@ ul.disc li { padding-left:10px; background:url(../images/bkg_bulletsm.gif) no-re
 .sidebar .block li a.btn-remove { float:right; width:13px; height:0; padding-top:12px; margin-top:3px; overflow:hidden; background:url(../images/btn_remove.gif) no-repeat 0 0; }
 
 .col-main .block { background:#fff; }
-.col-main .block .block-title { background:#e7e7e7 url(../images/bkg_block-title.gif) repeat-x 0 0; border:1px solid #e1e1e1; padding:5px 20px 5px; margin:0 -1px; }
+.col-main .block .block-title { background:#e7e7e7; border:1px solid #e1e1e1; padding:5px 20px 5px; margin:0 -1px; }
 .col-main .block .block-title h2,
 .col-main .block .block-title h3 { font-size:14px; line-height:1.2; color:#000333; font-weight:bold; }
 .col-main .block .block-content { padding:20px; }
@@ -1001,7 +1001,7 @@ ul.disc li { padding-left:10px; background:url(../images/bkg_bulletsm.gif) no-re
 .product-collateral .emailto-link { font-size:11px; margin:0; background:url(../images/bkg_arrow-bullet.gif) no-repeat 0 4px; padding-left:12px; }
 
 .box-collateral { background:#fff; }
-.box-collateral .box-title { background:#e7e7e7 url(../images/bkg_block-title.gif) repeat-x 0 0; border:1px solid #e1e1e1; padding:5px 20px 5px; margin:0 -1px; }
+.box-collateral .box-title { background:#e7e7e7; border:1px solid #e1e1e1; padding:5px 20px 5px; margin:0 -1px; }
 .box-collateral .box-title h2 { font-size:14px; line-height:1.2; color:#000333; font-weight:bold; }
 .box-collateral .box-content { padding:20px; }
 
@@ -2096,9 +2096,9 @@ ul.cms-menu.type-square ul { list-style-type:square; }
 .remember-me input { margin-right:6px; }
 
 .remember-me-popup { background:#fff; border:1px solid #999; left:50%; top:50%; position:absolute; margin:-85px 0 0 -200px; width:400px; text-align:left; -moz-box-shadow:0 0 6px #999; -webkit-box-shadow:0 0 6px #999; box-shadow:0 0 6px #999; z-index:1000; }
-.remember-me-popup h3 { background:url(../images/bkg_block-title.gif) repeat-x center #bbb; color:#444; font-size:14px; margin:0; padding:5px 10px; text-shadow:0 1px 0 #fff; }
+.remember-me-popup h3 { background:#bbb; color:#444; font-size:14px; margin:0; padding:5px 10px; text-shadow:0 1px 0 #fff; }
 .remember-me-popup .remember-me-popup-head { position:relative; }
-.remember-me-popup .remember-me-popup-head .remember-me-popup-close { background:url(../images/btn_window_close.gif) no-repeat; display:block; position:absolute; top:7px; right:7px; height:15px; width:15px; text-indent:-9999em; }
+.remember-me-popup .remember-me-popup-head .remember-me-popup-close { background:none; display:block; position:absolute; top:7px; right:7px; height:15px; width:15px; text-indent:-9999em; }
 .remember-me-popup .remember-me-popup-body { padding:10px; }
 .remember-me-popup .remember-me-popup-body p { margin:0 0 15px; }
 
@@ -2259,7 +2259,7 @@ ul.cms-menu.type-square ul { list-style-type:square; }
 .map-popup-heading { background:#efefef ; border-bottom:1px solid #ccc; padding:5px 30px 5px 10px; width:260px; }
 .map-popup-heading h2 { color:#333; font-size:14px; font-weight:bold; margin:0; text-shadow:0 1px 0 #f6f6f6; overflow:hidden; white-space:nowrap; word-wrap:break-word; text-align:left; text-overflow:ellipsis; }
 .map-popup-arrow { background:url(../images/map_popup_arrow.gif) no-repeat; position:absolute; left:50%; top:-10px; height:10px; width:19px; }
-.map-popup-close { background:url(../images/btn_window_close.gif) no-repeat; display:block; position:absolute; top:6px; right:8px; height:15px; width:15px; text-align:left; text-indent:-9999em; }
+.map-popup-close { background:none; display:block; position:absolute; top:6px; right:8px; height:15px; width:15px; text-align:left; text-indent:-9999em; }
 .map-popup-content { border-top:1px solid #eee; padding:10px; overflow:hidden; width:280px; }
 .map-popup-checkout { display:inline; float:right; text-align:right; }
 .map-popup-checkout span { display:block; padding-right:30px; }
