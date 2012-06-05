@@ -25,14 +25,11 @@ class Harapartners_Service_Model_Rewrite_Sales_Observer extends Mage_Sales_Model
     	if(!!Mage::registry('is_batch_import_process')){
     		return $this;
     	}
-    	
         $product = $observer->getEvent()->getProduct();
         if ($product->getStatus() == Mage_Catalog_Model_Product_Status::STATUS_ENABLED) {
             return $this;
         }
-
         Mage::getResourceSingleton('sales/quote')->markQuotesRecollect($product->getId());
-
         return $this;
     }
 
