@@ -68,7 +68,7 @@ class Harapartners_Fulfillmentfactory_Model_Service_Fulfillment
             etc......
         );
     */
-    public function stockUpdate($availableProducts = array()) {
+    public function stockUpdate($availableProducts = array(), $keepTrackAffctedOrders = false) {
         $processingOrderCollection = array();
         
         foreach($availableProducts as $aProduct) {
@@ -109,10 +109,15 @@ class Harapartners_Fulfillmentfactory_Model_Service_Fulfillment
                 //save item queue object
                 $itemQueue->save();
                 
-                $order = Mage::getModel('sales/order')->load($itemQueue->getOrderId());
+                if(!!$keepTrackAffctedOrders){
+	                $order = Mage::getModel('sales/order')->load($itemQueue->getOrderId());
+	                Mage::helper('fulfillmentfactory')->_pushUniqueOrderIntoArray($processingOrderCollection, $order);
+                }
                 
-                Mage::helper('fulfillmentfactory')->_pushUniqueOrderIntoArray($processingOrderCollection, $order);
+                unset($itemQueue);
+                
             }
+            unset($itemQueueCollection);
         }
         
         return $processingOrderCollection;

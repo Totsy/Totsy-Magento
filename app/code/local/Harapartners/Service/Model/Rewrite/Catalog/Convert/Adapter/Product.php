@@ -231,7 +231,8 @@ class Harapartners_Service_Model_Rewrite_Catalog_Convert_Adapter_Product extends
             }
 
             //Hara Partners, Richu
-            if(!$setValue && !!$value){
+            //Hara, Song added $setValue !=0 condition to fix the bug when the attribute is boolean
+            if($setValue !=0 && !$setValue && !!$value){
                 $message = 'Attribute \''.$field.'\' has options that does not exists.';
                 Mage::throwException($message);
             }else{

@@ -22,3 +22,5 @@
 	
 #report-header-container label.sigle-line {
 	float:left;}
+#report-table { width: 100%; }
+.po_print { white-space: nowrap; padding:2px;}
