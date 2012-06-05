@@ -65,7 +65,15 @@ js/prototype/
 js/scriptaculous/
 js/spacer.gif
 js/tiny_mce/
-js/varien/
+js/varien/accordion.js
+js/varien/configurable.js
+js/varien/form.js
+js/varien/iehover-fix.js
+js/varien/menu.js
+js/varien/payment.js
+js/varien/product.js
+js/varien/telephone.js
+js/varien/weee.js
 lib/3Dsecure/
 lib/Apache/
 lib/flex/
