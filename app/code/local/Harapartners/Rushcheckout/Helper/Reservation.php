@@ -51,9 +51,15 @@ class Harapartners_Rushcheckout_Helper_Reservation extends Mage_Core_Helper_Abst
             foreach ($options as $option) {
                 $stockItem = $option->getProduct()->getStockItem();
                 if (!$stockItem instanceof Mage_CatalogInventory_Model_Stock_Item) {
-                    Mage::throwException(
-                        Mage::helper('cataloginventory')->__('The stock item for Product in option is not valid.')
-                    );
+                	if(Mage::app()->getStore()->isAdmin()){
+                		Mage::getSingleton('adminhtml/session')->addError(
+                				Mage::helper('cataloginventory')->__('The stock item for Product in option is not valid.')
+                		);
+                	}else{
+                		Mage::throwException(
+	                        	Mage::helper('cataloginventory')->__('The stock item for Product in option is not valid.')
+	                    );
+                	}
                 }
                 if($this->_registerUpdate($stockItem, $deltaQty, true)){
                     $quoteItem->setData('last_reservation_qty', $newQty);
@@ -66,12 +72,19 @@ class Harapartners_Rushcheckout_Helper_Reservation extends Mage_Core_Helper_Abst
         }else{
             $stockItem = $quoteItem->getProduct()->getStockItem();
             if($this->_registerUpdate($stockItem, $deltaQty, true)){
-                   $quoteItem->setData('last_reservation_qty', $newQty);
-               }else{
-                Mage::throwException(
-                        Mage::helper('cataloginventory')->__('The requested quantity for \'%s\' is not available.', $quoteItem->getProduct()->getName())
-                );
-               }
+            	$quoteItem->setData('last_reservation_qty', $newQty);
+            }else{
+            	if(Mage::app()->getStore()->isAdmin()){
+                	Mage::getSingleton('adminhtml/session')->addError(
+                			Mage::helper('cataloginventory')->__('The requested quantity for \'%s\' is not available according to the cart reservation logic. But might be still in stock.<br/>As admin, you can proceed. But the quantity changes will be ignored in cart reservation logic.', $quoteItem->getProduct()->getName())
+                	);
+                }else{
+                	Mage::throwException(
+                        	Mage::helper('cataloginventory')->__('The requested quantity for \'%s\' is not available.', $quoteItem->getProduct()->getName())
+                	);
+                }
+            	
+            }
         }
         return $this;
     }
