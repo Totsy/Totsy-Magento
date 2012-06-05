@@ -29,6 +29,7 @@ echo 'Start:' . PHP_EOL;
 	            $quoteCollection = Mage::getModel('sales/quote')->getCollection();
 	            $quoteCollection->addFieldToFilter('store_id', $storeId)
 						->addFieldToFilter('entity_id', array('gt' => $entityIdOffset))
+						->addFieldToFilter('is_active', 1)
 	            		->addFieldToFilter('items_count', array('gt' => 0))
 	            		->addFieldToFilter('updated_at', array('to' => date("Y-m-d H:i:s", time() - $lifetime)));
             	$quoteCollection->getSelect()
