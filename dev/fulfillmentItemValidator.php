@@ -65,11 +65,6 @@ try {
 	while($collectionSize >= DEFAULT_COLLECTION_SIZE_LIMIT);
 	
 	echo 'Finish Rebulid Item Queue' . PHP_EOL;
-	
-	echo 'Start upadte Item Queue Fulfillment count from DOTcom' . PHP_EOL;
-	$inventoryList = Mage::getModel('fulfillmentfactory/service_dotcom')->updateInventory();
-	
-	Mage::getModel('fulfillmentfactory/service_fulfillment')->stockUpdate($inventoryList);
 }
 catch(Exception $e) {
 	echo $e->getMessage() . PHP_EOL;

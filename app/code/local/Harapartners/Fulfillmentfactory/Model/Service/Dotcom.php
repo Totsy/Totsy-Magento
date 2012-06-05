@@ -49,11 +49,12 @@ class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
 
             //update stock info
             $service = Mage::getModel('fulfillmentfactory/service_fulfillment');
-            $processingOrderCollection = $service->stockUpdate($inventoryList);
-            $this->_log->info(sprintf(
-                'Sending %d orders for fulfillment.',
-                count($processingOrderCollection)
-            ));
+            $service->stockUpdate($inventoryList, false);
+//            $processingOrderCollection = $service->stockUpdate($inventoryList);
+//            $this->_log->info(sprintf(
+//                'Sending %d orders for fulfillment.',
+//                count($processingOrderCollection)
+//            ));
 
             //submit orders to fulfill
             $this->submitOrderToFulfillByQueue();
