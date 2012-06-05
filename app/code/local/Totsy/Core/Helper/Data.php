@@ -16,7 +16,7 @@ class Totsy_Core_Helper_Data extends Mage_Core_Helper_Data
      */
     public function getEnvironment()
     {
-        $env = (string) Mage::getConfig()->getNode('global/environment') ?: 'dev';
+        $env = (string) Mage::getConfig()->getNode('global/environment') ?(string) Mage::getConfig()->getNode('global/environment'):'dev';
         return $env;
     }
 }

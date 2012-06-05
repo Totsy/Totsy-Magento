@@ -25,8 +25,8 @@
  */
 
 $customer = $this->getCustomer();
-$toPasswordPage = Mage::registry('changepassword');
-$isPasswordChange = isset($toPasswordPage);
+$isPasswordChange = Mage::registry('changepassword');
+
 ?>
 <div class="page-title">
     <h1><?php echo $this->__('Edit Account Information') ?></h1>
@@ -61,16 +61,18 @@ $isPasswordChange = isset($toPasswordPage);
 	            <li><?php echo $_gender->setGender($this->getCustomer()->getGender())->toHtml() ?></li>
 	        <?php endif ?>
 	        <?php if ($isPasswordChange):?>
-	            <li class="control">
-	                <input type="checkbox" name="change_password" id="change_password" value="1" onclick="setPasswordForm(this.checked)" title="<?php echo $this->__('Change Password') ?>"<?php if($this->getCustomer()->getChangePassword()==1): ?> checked="checked"<?php endif; ?> class="checkbox" /><label for="change_password"><?php echo $this->__('Change Password') ?></label>
-	            </li>
+	            
 	        <?php endif ?>
 	        </ul>
 	    </div>
-	    <div class="fieldset" style="<?php if (!$isPasswordChange) echo 'display:none;' ?>">
+	    <?php if(!!$isPasswordChange): ?>
+	    <div class="fieldset">
 	        <h2 class="legend"><?php echo $this->__('Change Password') ?></h2>
 	        <hr>
 	        <ul class="form-list">
+	        	<li class="control">
+	                <input type="hidden" name="change_password" id="change_password" value="1" />
+	            </li>
 	            <li>
 	                <label for="current_password" class="required"><em>*</em><?php echo $this->__('Current Password') ?></label>
 	                <div class="input-box">
@@ -93,6 +95,7 @@ $isPasswordChange = isset($toPasswordPage);
 	            </li>
 	        </ul>
 	    </div>
+	    <?php endif; ?>
 	    <div class="buttons-set">
 	        <p class="required"><?php echo $this->__('* Required Fields') ?></p>
 	        <p class="back-link"><a href="<?php echo $this->escapeUrl($this->getBackUrl()) ?>"><small>&laquo; </small><?php echo $this->__('Back') ?></a></p>
