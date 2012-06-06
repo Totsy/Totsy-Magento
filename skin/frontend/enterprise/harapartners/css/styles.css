@@ -1026,7 +1026,6 @@ ul.disc li { padding-left:10px; background:url(../images/bkg_bulletsm.gif) no-re
 
 /* Product detail page (Tab Content)
 ----------------------------------*/
-div.product-collateral img { max-width:100%; }
 div.product-collateral li { list-style:disc; margin-left:15px; }
 div.product-collateral ul { margin-top: 10px; }
 div.product-collateral p { line-height: 20px; font-size: 12px; }
