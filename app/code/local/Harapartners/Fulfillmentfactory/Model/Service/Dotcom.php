@@ -313,6 +313,8 @@ XML;
             $shippingName = $shippingAddress->getFirstname() . ' ' . $shippingAddress->getLastname();
             
             $state = Mage::helper('fulfillmentfactory')->getStateCodeByFullName($shippingAddress->getRegion(), $shippingAddress->getCountry());
+
+            $city = Mage::help('fulfillmentfactory')->validateAddressForDC('CITY', $shippingAddress->getCity());
             
             $xml = <<<XML
         <orders xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
@@ -360,7 +362,7 @@ XML;
                     <billing-address1><![CDATA[{$shippingAddress->getStreet(1)}]]></billing-address1>
                     <billing-address2><![CDATA[{$shippingAddress->getStreet(2)}]]></billing-address2>
                     <billing-address3 xsi:nil="true"/>
-                    <billing-city><![CDATA[{$shippingAddress->getCity()}]]></billing-city>
+                    <billing-city><![CDATA[{$city}]]></billing-city>
                     <billing-state>{$state}</billing-state>
                     <billing-zip>{$shippingAddress->getPostcode()}</billing-zip>
                     <billing-country xsi:nil="true"/>
