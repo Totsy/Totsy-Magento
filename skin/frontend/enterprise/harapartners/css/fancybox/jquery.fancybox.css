@@ -88,9 +88,7 @@
 }
 
 #fancybox-loading div {
-	width: 44px;
-	height: 44px;
-	background: url('fancybox_loading.gif') center center no-repeat;
+	background:none;
 }
 
 .fancybox-close {
