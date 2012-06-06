@@ -68,7 +68,7 @@ class Harapartners_Fulfillmentfactory_Model_Service_Fulfillment
             etc......
         );
     */
-    public function stockUpdate($availableProducts = array()) {
+    public function stockUpdate($availableProducts = array(), $keepTrackAffctedOrders = false) {
         $processingOrderCollection = array();
         
         foreach($availableProducts as $aProduct) {
@@ -109,10 +109,15 @@ class Harapartners_Fulfillmentfactory_Model_Service_Fulfillment
                 //save item queue object
                 $itemQueue->save();
                 
-                $order = Mage::getModel('sales/order')->load($itemQueue->getOrderId());
+                if(!!$keepTrackAffctedOrders){
+	                $order = Mage::getModel('sales/order')->load($itemQueue->getOrderId());
+	                Mage::helper('fulfillmentfactory')->_pushUniqueOrderIntoArray($processingOrderCollection, $order);
+                }
                 
-                Mage::helper('fulfillmentfactory')->_pushUniqueOrderIntoArray($processingOrderCollection, $order);
+                unset($itemQueue);
+                
             }
+            unset($itemQueueCollection);
         }
         
         return $processingOrderCollection;
@@ -148,6 +153,14 @@ class Harapartners_Fulfillmentfactory_Model_Service_Fulfillment
             if(!$this->_cancelItemqueue($orderId, $itemQueueList)) {
                 $isSuccess = false;
             }
+            $order = Mage::getModel('sales/order')->load($orderId);
+            $customer = Mage::getModel('customer/customer')->load($order->getCustomerId());
+            $email = $order->getCustomerEmail();
+            $sender = 'sales';
+            $storeId = $order->getStoreId();
+            $templateId = Mage::getModel('core/email_template')->loadByCode('_trans_Batch_Cancel')->getId(); 
+			Mage::getModel('core/email_template')
+			          ->sendTransactional($templateId, $sender, $email, NULL, array('customer'=>$customer, 'order'=>$order, 'item'=>$itemQueueList[0]), $storeId);
         }
         
         return $isSuccess;

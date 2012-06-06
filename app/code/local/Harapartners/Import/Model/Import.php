@@ -14,11 +14,12 @@
 
 class Harapartners_Import_Model_Import extends Mage_Core_Model_Abstract {
     //Harapartners_Import_Model_Import::IMPORT_STATUS_
-    const IMPORT_STATUS_UPLOADED         = 1;//'uploaded';
-    const IMPORT_STATUS_PROCESSING         = 2;//'processing';
-    const IMPORT_STATUS_FINALIZING         = 3;//'finalizing';
-    const IMPORT_STATUS_COMPLETE         = 4;//'complete';
-    const IMPORT_STATUS_ERROR             = 5;//'error';
+    const IMPORT_STATUS_UPLOADED			= 1;//'uploaded';
+    const IMPORT_STATUS_PROCESSING			= 2;//'processing';
+    const IMPORT_STATUS_FINALIZING			= 3;//'finalizing';
+    const IMPORT_STATUS_COMPLETE			= 4;//'complete';
+    const IMPORT_STATUS_ERROR				= 5;//'error';
+    const IMPORT_STATUS_VALIDATED			= 6;//'validated';
     
     const ACTION_TYPE_PROCESS_IMMEDIATELY_AND_INDEX         = 1;
     const ACTION_TYPE_PROCESS_IMMEDIATELY                     = 2;
@@ -41,19 +42,6 @@ class Harapartners_Import_Model_Import extends Mage_Core_Model_Abstract {
             Mage::throwException('Invalid type for data importing, Array or Varien_Object needed.');
         }
         
-        //Load vendor
-        $vendor = Mage::getModel('stockhistory/vendor');
-        if(!!$dataObj->getdata('vendor_id')){
-            $vendor->load($dataObj->getdata('vendor_id'));
-        }elseif(!!$dataObj->getdata('vendor_code')){
-            $vendor->loadByCode($dataObj->getdata('vendor_code'));
-        }
-        if(!$vendor || !$vendor->getId()){
-            Mage::throwException('Invalid Vendor.');
-        }
-        $dataObj->setData('vendor_id', $vendor->getId());
-        $dataObj->setData('vendor_code', $vendor->getVendorCode());
-        
         //Load category
         $category = Mage::getModel('catalog/category');
         if(!!$dataObj->getdata('category_id')){
@@ -66,9 +54,23 @@ class Harapartners_Import_Model_Import extends Mage_Core_Model_Abstract {
         
         //Load/Create PO
         $purchaseOrder = Mage::getModel('stockhistory/purchaseorder');
-        if(!!$dataObj->getdata('po_id')){
+        
+        //When 'Create New PO...', $dataObj->getdata('po_id') == 0
+        if(!!$dataObj->getdata('po_id') && $dataObj->getdata('po_id') > 0){
             $purchaseOrder->load($dataObj->getdata('po_id'));
         }else{
+        	
+        	//Load vendor
+	        $vendor = Mage::getModel('stockhistory/vendor');
+	        if(!!$dataObj->getdata('vendor_id')){
+	            $vendor->load($dataObj->getdata('vendor_id'));
+	        }elseif(!!$dataObj->getdata('vendor_code')){
+	            $vendor->loadByCode($dataObj->getdata('vendor_code'));
+	        }
+	        if(!$vendor || !$vendor->getId()){
+	            Mage::throwException('Invalid Vendor.');
+	        }
+        	
             $purchaseOrderDataObj = new Varien_object();
             $purchaseOrderDataObj->setData('vendor_id', $vendor->getId());
             $purchaseOrderDataObj->setData('vendor_code', $vendor->getVendorCode());
@@ -76,11 +78,16 @@ class Harapartners_Import_Model_Import extends Mage_Core_Model_Abstract {
             $purchaseOrderDataObj->setData('category_id', $category->getId());
             $purchaseOrderDataObj->setData('comment', 'Category/Event Import ' .  date('Y-n-j H:i:s'));
             $purchaseOrder->importData($purchaseOrderDataObj->getData())->save();
+            Mage::getSingleton('adminhtml/session')->addNotice(Mage::helper('import')->__('New PO created during import: ' . $purchaseOrder->getData('name')));
         }
         if(!$purchaseOrder || !$purchaseOrder->getId()){
             Mage::throwException('Invalid Purchase Order.');
         }
         $dataObj->setData('po_id', $purchaseOrder->getId());
+        
+        //By now, vendor data should be available in from PO
+        $dataObj->setData('vendor_id', $purchaseOrder->getData('vendor_id'));
+	    $dataObj->setData('vendor_code', $purchaseOrder->getData('vendor_code'));
         
         //Forcefully overwrite existing data, certain data may need to be removed before this step
         $this->addData($dataObj->getData());

@@ -84,9 +84,11 @@ div.top-cart .block-title strong { color: #F21C25; font-size: 12px; text-transfo
 
 
 #checkoutcart-block-title{ display: none; }
-.hpcheckout-checkout-index #usercart { float: right;}
+/*.hpcheckout-checkout-index #usercart { float: right;} */
 .hpcheckout-checkout-index #usercart-block-title { display: none }
-.hpcheckout-checkout-index #checkoutcart-block-title{ display: block;}
+.hpcheckout-checkout-index #checkoutcart-block-title{ display: block; color:#FF6D1D;}
+.hpcheckout-checkout-index #checkoutcart-block-title * {color:#FF6D1D;}
+.hpcheckout-checkout-index div.top-cart .block-title { background:none; padding-left:0; }
 .hpcheckout-checkout-index #usercart li a.top-link-checkout { display: none; }
 .hpcheckout-checkout-index .top-cart .block-title strong { background: none; }
 
@@ -202,6 +204,7 @@ div.event-title-container { padding: 10px 0 2px; border-bottom: 1px solid #D7D7D
 div.event-title-container h1, div.event-title-container p.count-down-timer { display: inline-block; font-size: 20px; }
 div.event-title-container p.count-down-timer { float: right;}
 div.event-title-container h1 a, div.event-title-container p.count-down-timer { color: #ED1C25;}
+div.event-title-container h1 span span {color:#707070;}
 div.event-description-container { margin-top: 5px; border: 1px solid #D7D7D7; background: #F0EFEF;}
 div.event-description-container div { display: inline-block; vertical-align: top; }
 div.event-description-container img { width: 156px;}
@@ -244,7 +247,7 @@ div.event-description-container div.std { padding: 10px 20px; width: 736px;}
 .catalog-category-preview #out-of-stock { position: absolute; z-index: 10;}
 .catalog-category-preview div.options-container-big { display: none; }
 	
- /* Product Detial ================================================================================= */
+ /* Product Detail ================================================================================= */
  
 .catalog-product-view div.breadcrumbs { display: none;}
 .catalog-product-view .page div.col-main { padding: 20px 10px;}
@@ -260,8 +263,8 @@ div.event-description-container div.std { padding: 10px 20px; width: 736px;}
 .catalog-product-view .product-img-box  p.product-image { width: 348px; height: auto;}
 .catalog-product-view .product-img-box div.more-views{ max-width:270px;}
 .catalog-product-view div.product-name { width: 348px;}
-.catalog-product-view div.product-name h1 { color: #707070; font-size: 19px; margin: 10px 0 20px;}
-.catalog-product-view div.product-collateral { padding: 0px; width: 348px;}
+.catalog-product-view div.product-name h1 { color: #707070; font-size: 20px; margin: 10px 0 20px;}
+.catalog-product-view div.product-collateral { padding: 0px; width: 370px;}
 .catalog-product-view .collateral-tabs div.tab-content {width: 348px; border: none; border-top: 2px solid #ED1C25; padding: 8px 0; line-height: 20px; text-align: left; color: #707070; font-size: 12px}
 div.tab-content p { margin: 10px 0px; }
 .tab-content img { max-width: 100%; } /* won't exceed width of nearest ancestor with explicit width set */

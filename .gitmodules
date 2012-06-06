@@ -1,0 +1,6 @@
+[submodule "lib/vendor/monolog"]
+	path = lib/vendor/monolog
+	url = git://github.com/Seldaek/monolog.git
+[submodule "lib/vendor/gelf-php"]
+	path = lib/vendor/gelf-php
+	url = git://github.com/mlehner/gelf-php.git

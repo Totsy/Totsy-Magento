@@ -52,7 +52,7 @@
 div.top-cart { float: left; padding: 8px 0 0 3px; min-width:190px}
 div.top-cart #topCartContent  .product-details table { display: inline-block; }
 div.top-cart .block-title { background: url("../images/icon-cart.png") no-repeat scroll 0 0 #FFFFFF; float:right }
-div.top-cart .block-title strong { color: #F21C25; font-size: 12px; text-transform: capitalize;}
+div.top-cart .block-title strong { color: #DE6076; font-size: 12px; text-transform: capitalize;}
 
 #usercart .links { padding-top: 7px;}
 #usercart .links li { padding: 0;}

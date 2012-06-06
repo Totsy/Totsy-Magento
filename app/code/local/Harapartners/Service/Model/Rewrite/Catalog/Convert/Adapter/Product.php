@@ -231,7 +231,8 @@ class Harapartners_Service_Model_Rewrite_Catalog_Convert_Adapter_Product extends
             }
 
             //Hara Partners, Richu
-            if(!$setValue && !!$value){
+            //Hara, Song added $setValue !=0 condition to fix the bug when the attribute is boolean
+            if($setValue !=0 && !$setValue && !!$value){
                 $message = 'Attribute \''.$field.'\' has options that does not exists.';
                 Mage::throwException($message);
             }else{
@@ -319,7 +320,10 @@ class Harapartners_Service_Model_Rewrite_Catalog_Convert_Adapter_Product extends
         $product->setIsMassupdate(true);
         $product->setExcludeUrlRewrite(true);
 
-        $product->save();
+        //Validation mode skips product save and the following re-index logic
+        if(!Mage::registry('import_validation_only')){
+        	$product->save();
+        }
 
         // Store affected products ids
         $this->_addAffectedEntityIds($product->getId());

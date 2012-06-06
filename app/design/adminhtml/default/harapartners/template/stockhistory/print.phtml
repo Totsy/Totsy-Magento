@@ -6,7 +6,7 @@
 <div id="report-container">
 	<div id="report-header-container">
 		<div id="logo-box" class="block">
-			<img src="<?php echo $this->getSkinUrl('images/report_logo.png');?>"/>
+			<img src="<?php echo $this->getSkinUrl('images/logoN.png');?>"/>
 			<p id="addresss"><?php echo Mage::getStoreConfig('general/store_information/address');?></p>
 		</div>
 		<div id="order-info" class="block">
@@ -50,16 +50,16 @@
 		</table>	
 	</div>
 	<div id="report-table-container">
-		<table id="report-table" class="data" border="1">
+		<table id="report-table" class="data" border="1" width="100%">
 			<colgroup>
-				<col width="100">
-				<col width="100">
-				<col width="450">
-				<col width="100">
-				<col width="100">
-				<col width="100">
-				<col width="100">
-				<col width="100">
+				<col>
+				<col>
+				<col>
+				<col>
+				<col>
+				<col>
+				<col>
+				<col>
 			</colgroup>
 			<thead>
 				<tr class="headings">
@@ -137,24 +137,30 @@
 						}
 						$cost = $qty * $item->getData('unit_cost');
 						$totalCost += $cost;
+						$totalQty += $qty;
 					?>
 					<tr>
-						<td><?php echo $item->getData('vendor_style');?></td>
-						<td><?php echo $item->getData('sku');?></td>
-						<td><?php echo $item->getData('product_name');?></td>
-						<td><?php echo $item->getData('color');?></td>
-						<td><?php echo $item->getData('size');?></td>
-						<td><?php echo $qty?></td>
-						<td>$<?php echo number_format($item->getData('unit_cost'), 2);?></td>
-						<td>$<?php echo number_format($cost, 2);?></td>
+						<td class="po_print" ><?php echo $item->getData('vendor_style');?></td>
+						<td class="po_print" ><?php echo $item->getData('sku');?></td>
+						<td class="po_print" ><?php echo $item->getData('product_name');?></td>
+						<td class="po_print" ><?php echo $item->getData('color');?></td>
+						<td class="po_print" ><?php echo $item->getData('size');?></td>
+						<td class="po_print" ><?php echo $qty?></td>
+						<td class="po_print">$<?php echo number_format($item->getData('unit_cost'), 2);?></td>
+						<td class="po_print">$<?php echo number_format($cost, 2);?></td>
 					</tr>
 				<?php endforeach;?>
 				
 				<tr>
-					<td colspan=7 style="text-align:right; padding-right:15px;">
-						<strong>Total: </strong>
+					<td colspan=6 style="text-align:right; padding:5px; white-space: nowrap; ">
+						<strong>Total Quantity: </strong>
+						<strong><?php echo number_format($totalQty)?></strong>
 					</td>
-					<td>$<?php echo number_format($totalCost, 2)?></td>
+					<td></td>
+					<td style="text-align:right; padding:5px; white-space: nowrap; ">
+						<strong>Total: </strong>
+						<strong>$<?php echo number_format($totalCost, 2)?></strong>
+					</td>
 				</tr>
 			</tbody>
 		</table>

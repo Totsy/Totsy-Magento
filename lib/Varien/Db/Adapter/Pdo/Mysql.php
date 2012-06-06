@@ -3184,9 +3184,6 @@ class Varien_Db_Adapter_Pdo_Mysql extends Zend_Db_Adapter_Pdo_Mysql implements V
      */
     public function insertFromSelect(Varien_Db_Select $select, $table, array $fields = array(), $mode = false)
     {
-    	//Harapatners, Jun, This is a critical fix for multi-DB master/slave sync
-    	//INSERT ... SELECT type of query is forbidden, using INSERT ... VALUES instead
-    	
         $query = 'INSERT';
         if ($mode == self::INSERT_IGNORE) {
             $query .= ' IGNORE';
@@ -3196,13 +3193,8 @@ class Varien_Db_Adapter_Pdo_Mysql extends Zend_Db_Adapter_Pdo_Mysql implements V
             $columns = array_map(array($this, 'quoteIdentifier'), $fields);
             $query = sprintf('%s (%s)', $query, join(', ', $columns));
         }
-        
-        //Terminate when nothing to insert, return empty query
-        if(!($data = $this->fetchRow($select->assemble()))){
-        	return 'SELECT 1;';
-        }
-        
-        $query = sprintf('%s %s', $query, 'VALUES (' . $this->quote($data) . ')');
+
+        $query = sprintf('%s %s', $query, $select->assemble());
 
         if ($mode == self::INSERT_ON_DUPLICATE) {
             if (!$fields) {

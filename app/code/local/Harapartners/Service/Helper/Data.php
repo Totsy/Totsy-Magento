@@ -75,9 +75,7 @@ class Harapartners_Service_Helper_Data extends Mage_Core_Helper_Url{
     
     public function isTotsyStore(){
         return Mage::app()->getStore()->getId() == self::TOTSY_STORE_ID;
-    }
-    
-    
+    }    
     
     public function isTotsyCustomer($customer = null){
         if(!!$customer && !!$customer->getId()){
