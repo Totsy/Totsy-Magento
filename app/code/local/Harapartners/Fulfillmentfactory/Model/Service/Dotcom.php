@@ -314,8 +314,7 @@ XML;
             
             $state = Mage::helper('fulfillmentfactory')->getStateCodeByFullName($shippingAddress->getRegion(), $shippingAddress->getCountry());
 
-            $city = Mage::help('fulfillmentfactory')->validateAddressForDC('CITY', $shippingAddress->getCity());
-            
+            $city = Mage::help('fulfillmentfactory')->validateAddressForDC('CITY', $shippingAddress->getCity());            
             $xml = <<<XML
         <orders xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <order>
