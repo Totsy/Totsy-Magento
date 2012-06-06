@@ -34,7 +34,7 @@
     <?php echo $this->__('Magento&trade; is a trademark of Magento Inc.<br/>Copyright &copy; %s Magento Inc.', date('Y')) ?>
 </p>
 <?php echo $this->__('Magento ver. %s', Mage::getVersion()) ?>
-<?php echo ' (', Mage::helper('core')->getEnvironment(), ' on ', gethostname(), ')'; ?>
+<?php echo ' (', Mage::helper('core')->getEnvironment(), ' on ', php_uname('n'), ')'; //Harapartners, PHP 5.2 compatible.?>
 <!-- git commit: <?php echo exec('git rev-parse --verify HEAD') ?> -->
 <script type="text/javascript">
     $('footer_bug_tracking').target = 'Varien_External';
