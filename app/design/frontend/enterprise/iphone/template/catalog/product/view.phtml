@@ -48,7 +48,7 @@
 <div class="product-view">
 	<div class="event-title-container">
 		<div class="event-title">
-			<h1><a href="<?php echo $this->getBaseUrl();?>">Totsy's Sales</a><span> / <span><a href="<?php echo $_category->getUrl();?>"><?php echo $_helper->categoryAttribute($_category, $_category->getName(), 'name') ?></a></h1>
+			<h1><a href="<?php echo $this->getUrl('event/?ref=todays_sales_mobile') ?>">Totsy's Sales</a><span> / <span><a href="<?php echo $_category->getUrl();?>"><?php echo $_helper->categoryAttribute($_category, $_category->getName(), 'name') ?></a></h1>
 			<?php
 				$endcount_utc = strtotime($_category->getEventEndDate());
 				$endcount_lc = date("F j, Y, G:i:s", $endcount_utc);
