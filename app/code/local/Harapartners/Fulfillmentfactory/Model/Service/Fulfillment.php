@@ -131,10 +131,18 @@ class Harapartners_Fulfillmentfactory_Model_Service_Fulfillment
      */
     public function batchCancel($cancelIdList) {
         $orderArray = array();
+        $errorArray = array();
         
         //group item queues by order
         foreach($cancelIdList as $id) {
             $itemQueue = Mage::getModel('fulfillmentfactory/itemqueue')->load($id);
+            
+            //vaidation
+            if($itemQueue->getStatus() != Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_PENDING){
+            	$errorArray[] = sprintf('Cannot canel item #%d. Only pending item can be cancelled.', $itemQueue->getId());
+            	continue;
+            }
+            
             $orderId = $itemQueue->getOrderId();
             if(!empty($orderId)) {
                 if(isset($orderArray[$orderId])) {
@@ -150,20 +158,23 @@ class Harapartners_Fulfillmentfactory_Model_Service_Fulfillment
         
         //cancel/split orders
         foreach($orderArray as $orderId => $itemQueueList) {
-            if(!$this->_cancelItemqueue($orderId, $itemQueueList)) {
+        	try{
+        		$this->_cancelItemqueue($orderId, $itemQueueList);
+	            $order = Mage::getModel('sales/order')->load($orderId);
+	            $customer = Mage::getModel('customer/customer')->load($order->getCustomerId());
+	            $email = $order->getCustomerEmail();
+	            $sender = 'sales';
+	            $storeId = $order->getStoreId();
+	            $templateId = Mage::getModel('core/email_template')->loadByCode('_trans_Batch_Cancel')->getId(); 
+				Mage::getModel('core/email_template')
+				          ->sendTransactional($templateId, $sender, $email, NULL, array('customer'=>$customer, 'order'=>$order, 'item'=>$itemQueueList[0]), $storeId);
+        	}catch (Exception $e){
+        		$errorArray[] = $e->getMessage();
                 $isSuccess = false;
-            }
-            $order = Mage::getModel('sales/order')->load($orderId);
-            $customer = Mage::getModel('customer/customer')->load($order->getCustomerId());
-            $email = $order->getCustomerEmail();
-            $sender = 'sales';
-            $storeId = $order->getStoreId();
-            $templateId = Mage::getModel('core/email_template')->loadByCode('_trans_Batch_Cancel')->getId(); 
-			Mage::getModel('core/email_template')
-			          ->sendTransactional($templateId, $sender, $email, NULL, array('customer'=>$customer, 'order'=>$order, 'item'=>$itemQueueList[0]), $storeId);
+        	}
         }
         
-        return $isSuccess;
+        return $errorArray;
     }
     
     /**
@@ -174,7 +185,7 @@ class Harapartners_Fulfillmentfactory_Model_Service_Fulfillment
      */
     protected function _cancelItemqueue($orderId, $updateItemQueueIdList) {
         $oldOrder = Mage::getModel('sales/order')->load($orderId);
-           $oldQuote = Mage::getModel('sales/quote')->setStoreId($oldOrder->getStoreId())->load($oldOrder->getQuoteId());
+        $oldQuote = Mage::getModel('sales/quote')->setStoreId($oldOrder->getStoreId())->load($oldOrder->getQuoteId());
         
         $restItems = array();
         

@@ -212,11 +212,13 @@ HpCheckout.prototype = {
 				if( ! response.status ) {
 					window.location = checkoutObject.data.successUrl;
 				} else {
-					checkoutObject.setBlocks( response.blocks );
-					checkoutObject.throbberOff();
-					checkoutObject.renderBlocks();
 					if( response.message ) {
 						checkoutObject.renderErrorMessage( response.message );
+						checkoutObject.throbberOff();
+					}else{
+						checkoutObject.setBlocks( response.blocks );
+						checkoutObject.throbberOff();
+						checkoutObject.renderBlocks();
 					}
 				}
 			}
@@ -317,9 +319,14 @@ HpCheckout.prototype = {
 				checkoutObject.renderErrorMessage( 'Please refresh the current page.' );
 			},
 			success: function( response ) {
-				checkoutObject.setBlocks( response );
-				checkoutObject.throbberOff();
-				checkoutObject.renderBlocks( blocksToUpdate );
+				if(response.status && response.message) {
+					checkoutObject.renderErrorMessage( response.message );
+					checkoutObject.throbberOff();
+				}else{
+					checkoutObject.setBlocks( response );
+					checkoutObject.throbberOff();
+					checkoutObject.renderBlocks( blocksToUpdate );
+				}
 			}
 		});
 	},

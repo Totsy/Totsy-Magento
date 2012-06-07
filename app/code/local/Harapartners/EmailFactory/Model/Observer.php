@@ -14,6 +14,17 @@
 
 class Harapartners_EmailFactory_Model_Observer extends Mage_Core_Model_Abstract {
     
+	protected function _sendSailthruEmailWithMageExpection($sailthruClient, $email, $vars = array(), $lists = array(), $templates = array(), $verified = 0, $optout = null, $send = null, $send_vars = array()){
+		//Convert generic exception into a Mage exception for better error descriptions
+		try{
+			$sailthruClient->setEmail($email, $vars, $lists, $templates, $verified, $optout, $send, $send_vars);
+		}catch (Exception $e){
+			Mage::logException($e);
+			Mage::throwException($e->getMessage());
+		}
+	}
+	
+	
     /*
      *  for event newsletter_subscriber_save_after,
      *  (which means after customer set their newsletter preference)
@@ -30,9 +41,9 @@ class Harapartners_EmailFactory_Model_Observer extends Mage_Core_Model_Abstract 
         if(!! $subscriber 
                 && $subscriber->getId()
                 && $subscriber->getStatus() == Mage_Newsletter_Model_Subscriber::STATUS_SUBSCRIBED){
-            $sailthru->setEmail($email, array(), array($newletterListName => 1));        
+            $this->_sendSailthruEmailWithMageExpection($sailthru, $email, array(), array($newletterListName => 1));        
         }else{
-            $sailthru->setEmail($email, array(), array($newletterListName => 0));
+            $this->_sendSailthruEmailWithMageExpection($sailthru, $email, array(), array($newletterListName => 0));
         }
         
         return $this;
@@ -57,17 +68,17 @@ class Harapartners_EmailFactory_Model_Observer extends Mage_Core_Model_Abstract 
             if (isset($oldEmail) && strcmp($email, $oldEmail) != 0){
                 //set default list(transectional list)
                 //Note Sailthru 'change' API is not working, trying work around
-                $sailthru->setEmail($oldEmail, array(), array($defaultListName => 0));
-                $sailthru->setEmail($email, array(), array($defaultListName => 1));
+                $this->_sendSailthruEmailWithMageExpection($sailthru, $oldEmail, array(), array($defaultListName => 0));
+                $this->_sendSailthruEmailWithMageExpection($sailthru, $email, array(), array($defaultListName => 1));
                 //set newsletter list
-                $sailthru->setEmail($oldEmail, array(), array($newletterListName => 0));
+                $this->_sendSailthruEmailWithMageExpection($sailthru, $oldEmail, array(), array($newletterListName => 0));
                 //Note that ALWAYS: $customer->save() >> $newsletter->save()
                 //even the newletter info of the customer is not changed
                 //e.g. customer change email
             }
         }else{
             //just register
-            $sailthru->setEmail(
+            $this->_sendSailthruEmailWithMageExpection($sailthru, 
                     $customer->getEmail(),
                     array("name" => $customer->getName()), 
                     array($defaultListName => 1)
