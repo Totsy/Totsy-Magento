@@ -31,7 +31,7 @@
 <div class="logo">
     <div class="col2-alt-set">
         <div class="col-1">
-            <h1 id="logo"><a href="<?php echo $this->getUrl('') ?>"><img width="60px" src="<?php echo $this->getLogoSrc() ?>" alt="<?php echo $this->getLogoAlt() ?>" /></a></h1>
+            <h1 id="logo"><a href="<?php echo $this->getUrl('event/?ref=logo_mobile') ?>"><img width="60px" src="<?php echo $this->getLogoSrc() ?>" alt="<?php echo $this->getLogoAlt() ?>" /></a></h1>
         </div>
         <div class="col-2">
             <?php echo $this->getChildHtml('customertracking.headermsg'); ?>
@@ -42,7 +42,7 @@
 <div class="shop-access-ob ui-navbar ui-navbar-noicons">
     <ul class="access-tag-ob ui-grid-b">
     	<li class="tag-shop ui-block-a">
-    		<a href="<?php echo $this->getBaseUrl(); ?>" class="ui-btn ui-btn-up-c"><span class="ui-btn-inner"><span class="ui-btn-text text-span">Shop<br>by Date</span></span></a>
+    		<a href="<?php echo $this->getUrl('event/?ref=shop_by_date_mobile') ?>" class="ui-btn ui-btn-up-c"><span class="ui-btn-inner"><span class="ui-btn-text text-span">Shop<br>by Date</span></span></a>
     	</li>
     	<li class="tag-shop ui-block-b">
     		<a href="<?php echo $this->getBaseUrl(); ?>event/index/age/" class="ui-btn ui-btn-up-c"><span class="ui-btn-inner"><span class="ui-btn-text text-span">Shop<br>by Age</span></span></a>

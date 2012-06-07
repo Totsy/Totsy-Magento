@@ -260,6 +260,15 @@
                     </enterprise_reward>
                 </observers>
             </checkout_multishipping_refund_all>
+			<!-- Harapartners, Jun, moved from adminhtml. Due to order split logic, orders can be cancelled in the frontend-->
+            <order_cancel_after>
+                <observers>
+                    <enterprise_reward>
+                        <class>enterprise_reward/observer</class>
+                        <method>returnRewardPoints</method>
+                    </enterprise_reward>
+                </observers>
+            </order_cancel_after>
         </events>
         <pdf>
             <totals>
@@ -391,14 +400,15 @@
                     </enterprise_reward>
                 </observers>
             </salesrule_rule_save_after>
-            <order_cancel_after>
+			<!-- Harapartners, Jun, moved to global. Due to order split logic, orders can be cancelled in the frontend-->
+            <!--order_cancel_after>
                 <observers>
                     <enterprise_reward>
                         <class>enterprise_reward/observer</class>
                         <method>returnRewardPoints</method>
                     </enterprise_reward>
                 </observers>
-            </order_cancel_after>
+            </order_cancel_after-->
             <payment_method_is_active>
                 <observers>
                     <enterprise_reward>
