@@ -5,13 +5,13 @@
 <h2 class="sub-title"><?php echo $this->__('Thank you for your purchase!') ?></h2>
 
 <?php if ($this->getOrderId()):?>
-<?php 
-	$orderIncrementId = $this->getOrderId();
-	$order = Mage::getModel('sales/order')->loadByIncrementId($orderIncrementId);
-	$quoteId = $order->getQuoteId();
-	$quote = Mage::getModel('sales/quote')->load($quoteId);
-	//$quote = Mage::getModel('checkout/cart')->getQuote();
-	
+<?php
+    $orderIncrementId = $this->getOrderId();
+$order = Mage::getModel('sales/order')->loadByIncrementId($orderIncrementId);
+$quoteId = $order->getQuoteId();
+$quote = Mage::getModel('sales/quote')->load($quoteId);
+//$quote = Mage::getModel('checkout/cart')->getQuote();
+
 ?>
 <?php if ($this->getCanViewOrder()) :?>
     <p><?php echo $this->__('Your order # is: %s.', sprintf('<a href="%s">%s</a>', $this->escapeHtml($this->getViewOrderUrl()), $this->escapeHtml($this->getOrderId()))) ?></p>
@@ -25,25 +25,68 @@
         <?php echo $this->getChildHtml() ?>
     </p>
     <p class="red review-order-detail">
-    	<?php 		
-    		$order_id = $order->getId();
-			$url = $this->getBaseUrl().'sales/order/history/';
-		?>
+    	<?php
+        $order_id = $order->getId();
+    $url = $this->getBaseUrl().'sales/order/history/';
+?>
 		You will redirect to orders review page in 5 second. Or <a class="red" href="<?php echo $url?>">click here</a>
     </p>
+    <div id="rondavu_checkout_container"></div>
     <script language="javascript" type="text/javascript">
 		function redirect(){window.location.href="<?php echo $url?>"};
-		setTimeout("redirect()",5000);
+		  //setTimeout("redirect()",5000);
 	</script>
 	<?php
-	/* 
-		$coupon = $order->getCouponCode();
-		$couponStr = isset($coupon)?"&promocode=".$order->getCouponCode():"";
- 		echo "<img src='http://api.theechosystem.com/Core/Conversion/Save?echoTrackPack=".($_COOKIE['EchoTrackPack']."&revenue=".$order->getData('grand_total')."&quantity=".$quote->getItemsQty().$couponStr."&orderId=".$order->getId()."' style='width:1px;height:1px;' />"); 		
-	*/
-	?> 
 	
-	<script type='javascript/text'>
+	$items_for_socialable_page_key = Array();
+	$items_for_socialable_mos_keys = Array();
+    
+    $items = $order->getAllVisibleItems();
+    
+    foreach ($items as $itemId => $item) {
+        
+        $product = Mage::getModel('catalog/product')->load($item->getProductId());
+        
+        $purchase_key = Array();
+        $mos_key = Array();
+        
+        $purchase_key['id'] = Array("id"=>$item->getId(), "type"=>"product", "price"=>Array("actual_paid"=>$item->getPrice(), "currency"=>"USD"));
+    
+        
+        $mos_key['id'] = Array(Array("id"=>$item->getId(), "type"=>"product"));
+        $mos_key['name'] = Array(Array("name"=> $item->getName())); 
+        $mos_key['primary_tag'] = "product_test";
+        $mos_key['tags'] = Array("test", "test1", "test2");
+        $mos_key['url'] = Array("detail"=>"http://www.google.com", "picture"=>Array("primary"=>$product->getImageUrl(), "primary_secure"=>str_replace("http", "https", $product->getImageUrl())));  
+        
+        array_push($items_for_socialable_purchase_key,$purchase_key);
+        array_push($items_for_socialable_mos_keys,$mos_key);  
+    }
+
+$rondavu_data =array("config"=>array("version"=>"1.2") ,
+    "user"=>array("id"=>array(Array("id"=> Mage::getSingleton('customer/session')->getCustomerId(),"type"=>"totsy")),
+        "tracking" =>array(Array("name" =>"refId","
+           value" =>"refrerral_code"))),
+        "page" =>array("tags" =>array("order_confirmation"),
+            "actions" =>array("purchase" =>array("order_id" =>$this->getOrderId(),"total"=>$order->getData('grand_total'),"currency" =>"USD","items"=>$items_for_socialable_purchase_keys,
+                    "price" =>array("actual_paid" =>"16.75","currency"=>"USD")))),
+                "primary_mo"=>array("id" =>array(array("id"=>"order_confirmation","type"=>"page")) ,
+                "name" =>array(array("name" =>"Totsy")) ,
+                "url" =>array("detail" =>"http://www.totsy.com","picture"=>array("primary"=>"http//www.totsy.com/img/logo-125x77.png","primary_secure" =>
+                        "https://www.totsy.com/img/logo-125x77.png"))),
+                "mos" =>$items_for_socialable_mos_keys
+        );
+        
+    // declare a path to the key
+    $key_path = "sign_private_key";
+    
+    $socialable_labs_output = rondavu_sign($rondavu_data, $key_path);
+?>
+    <script type="text/javascript">
+    var socialableLabsOutput = <?php echo $socialable_labs_output ?>;  
+</script>
+
+	<script type="javascript/text">
       _esq.events.push({
             type : 'es_conversion',
             revenue: '<?php echo $order->getData('grand_total'); ?>',
@@ -52,14 +95,14 @@
             orderId : '<?php echo $order->getId(); ?>'
       });
     </script>
-	
+
 <?php endif;?>
 <?php endif;?>
 
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', <?php echo Mage::getStoreConfig("google/analytics/account")?>);  
+  _gaq.push(['_setAccount', <?php echo Mage::getStoreConfig("google/analytics/account")?>]);
   _gaq.push(['_trackPageview']);
   _gaq.push(['_addTrans',
     '<?php echo $order->getData('increment_id'); ?>',           // order ID - required
@@ -71,21 +114,21 @@
     '<?php echo $order->getShippingAddress()->getData('region')?>',     // state or province
     'USA'             // country
   ]);
-	<?php 
-	$category = array();
-//	$productid = Mage::getModel('catalog/product')->getData('category_ids');
-//	$order  = Mage::getModel('catalog/category')->getCollection()->load($productid);
-	foreach($order->getAllItems() as $item):?>
-	<?php 	if( !! $item->getParentItemId() ) {
-			continue;
-		}
-		unset($category);
-		$product = Mage::getModel( 'catalog/product' )->load( $item->getProductId() );
-		$categoryIds = $product->getCategoryIds();
-		foreach ($categoryIds as $cateId){
-			$category[] = Mage::getModel('catalog/category')->load($cateId)->getData('name');
-		}
-	?>
+	<?php
+$category = array();
+// $productid = Mage::getModel('catalog/product')->getData('category_ids');
+// $order  = Mage::getModel('catalog/category')->getCollection()->load($productid);
+foreach($order->getAllItems() as $item):?>
+	<?php  if( !! $item->getParentItemId() ) {
+        continue;
+    }
+unset($category);
+$product = Mage::getModel( 'catalog/product' )->load( $item->getProductId() );
+$categoryIds = $product->getCategoryIds();
+foreach ($categoryIds as $cateId){
+    $category[] = Mage::getModel('catalog/category')->load($cateId)->getData('name');
+}
+?>
 
    // add item might be called for every item in the shopping cart
    // where your ecommerce engine loops through each item in the cart and
@@ -95,14 +138,14 @@
     '<?php echo $item->getData('sku'); ?>',           // SKU/code - required
     '<?php echo $item->getData('name')?>',        // product name
     '<?php foreach($category as $cat){
-    	echo $cat.',';
-    } ?>',   // category or variation
+    echo $cat.',';
+} ?>',   // category or variation
     '<?php echo $item->getPrice() ?>',          // unit price - required
     '<?php echo $item->getQtyOrdered() ?>'               // quantity - required
   ]);
-  <?php   		
-  endforeach;
-  ?>
+  <?php
+endforeach;
+?>
   _gaq.push(['_trackTrans']); //submits transaction to the Analytics servers
 
   (function() {
@@ -116,7 +159,7 @@
 
 <script type="text/javascript">
 var aid='9577';
-var oid='<?php echo $order_id ?>'; 
+var oid='<?php echo $order_id ?>';
 var oamt='<?php echo $order->getData('grand_total'); ?>';
 var additional = '';
 (function(){steelhouse={add:function(a,b,c,d){d=d||false;if(a.addEventListener){a.addEventListener(b,c,d)}else if(a.attachEvent){a.attachEvent("on"+b,c)}},load:function(){var a;if(typeof a=='undefined'){a=Math.random()*10000000000000000}var b=document.createElement('script');var c='px.steelhousemedia.com/st?aid='+aid+'&conv=1&order_id='+oid+'&order_amt='+oamt+'&cb='+a+additional;b.type='text/javascript';b.src=('https:'==document.location.protocol?'https://':'http://')+c;var d=document.getElementsByTagName('script');var e=Number(d.length)-1;var f=document.getElementsByTagName('script')[e];f.parentNode.insertBefore(b,f)}};steelhouse.load();})();
