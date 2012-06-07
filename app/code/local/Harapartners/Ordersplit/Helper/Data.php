@@ -168,7 +168,15 @@ class Harapartners_Ordersplit_Helper_Data extends Mage_Core_Helper_Abstract {
         //Harapartners, Jun, Cancel previous orders first, this will re-stock existing products
         //Critical for cart reservation logic!
         $oldOrder->cancel()->setStatus('splitted')->setState('splitted')->save();
+        
         //configurable products and related simple products must be configured the same fullfillment type
+        
+        //Gift Card, Reward Points and Customer Balance (Store credit)
+        // 1)Gift Card logic is not effective in the current logic
+        // 2)Reward Points are used during checkout, when order cancelled, it's automatically converted to customer balance
+        //    The logic of applying reward points to new quotes is taken cared of during collectTotals
+        // 3)Customer balance is not effective in the current logic
+        
         foreach($itemsArray as $itemList) {
             if(count($itemList['items'])){
                 try{
@@ -226,10 +234,17 @@ class Harapartners_Ordersplit_Helper_Data extends Mage_Core_Helper_Abstract {
                     //test payment method "free"
                     $newQuote->getPayment()->importData($oldPayment->getData(), false);
                     
-                    $this->_revertGiftCard($oldOrder, $newQuote);
-                    $this->_revertRewardPoints($oldOrder, $newQuote);
-                    $this->_revertCustomerBalance($oldOrder, $newQuote, $store);
-                    //$this->_processPayment($oldQuote, $newQuote, $type); //in case there should be additional logic for payment processing
+                    //Harapartners, Jun, to be deleted
+//                    $this->_revertGiftCard($oldOrder, $newQuote); //Gift Card logic is not effective in the current logic
+//                    $this->_revertRewardPoints($oldOrder, $newQuote); //After moving reward point related "order_cancel_after" event to global, manual reversal is no longer needed
+//                    $this->_revertCustomerBalance($oldOrder, $newQuote, $store); //Customer balance is not effective in the current logic
+                    
+                    if (!!$oldOrder->getCustomerId() && $oldOrder->getRewardPointsBalance()) {
+                    	$newQuote->setUseRewardPoints(1);
+                    }
+                    
+//                    $this->_processPayment($oldQuote, $newQuote, $type); //in case there should be additional logic for payment processing
+                    
                     $newQuote->collectTotals();
                     $newQuote->save();
                     
@@ -334,84 +349,88 @@ class Harapartners_Ordersplit_Helper_Data extends Mage_Core_Helper_Abstract {
         }
     }
     
-    protected function _revertGiftCard($oldOrder, $newQuote){
-        $cards = Mage::helper('enterprise_giftcardaccount')->getCards($oldOrder);
-        if (is_array($cards) && count($cards)) {
-            foreach ($cards as $card) {
-                if (isset($card['authorized'])) {
-                      $giftCard = Mage::getModel('enterprise_giftcardaccount/giftcardaccount')->load($card['i']);                    
-                    if (!!$giftCard && !!$giftCard->getId() 
-                            && !Mage::registry('isGiftCardReverted')) {
-                        $giftCard->revert($card['authorized'])
-                                 ->setState(0)
-                                 ->setStateText('Available')
-                                    ->unsOrder()
-                                    ->save();
-                        Mage::unregister('isGiftCardReverted');
-                           Mage::register('isGiftCardReverted', true);
-                    }
-                    $newCards[] = array(
-                            'i'=>$giftCard->getId(),        // id
-                            'c'=>$giftCard->getCode(),      // code
-                            'a'=>$giftCard->getBalance(),   // amount
-                            'ba'=>$giftCard->getBalance(),  // base amount
-                    );                        
-                }
-            }
-            //apply on new quote                
-            Mage::helper('enterprise_giftcardaccount')->setCards($newQuote, $newCards);    
-        }
-    }
-    protected function _revertRewardPoints($oldOrder, $newQuote){
-        if (!!$oldOrder->getCustomerId() && $oldOrder->getRewardPointsBalance() && !Mage::registry('isRewardPointsReverted')) {       
-            Mage::getModel('enterprise_reward/reward')
-                ->setCustomerId($oldOrder->getCustomerId())
-                ->setWebsiteId(Mage::app()->getStore($oldOrder->getStoreId())->getWebsiteId())
-                ->setPointsDelta($oldOrder->getRewardPointsBalance())
-                ->setAction(Enterprise_Reward_Model_Reward::REWARD_ACTION_REVERT)
-                ->setActionEntity($oldOrder)
-                ->updateRewardPoints();
-            Mage::unregister('isRewardPointsReverted');
-            Mage::register('isRewardPointsReverted', true);
-        }
-        if(Mage::registry('isRewardPointsReverted')){
-            $reward = Mage::getModel('enterprise_reward/reward')
-                ->setCustomerId($oldOrder->getCustomerId())
-                ->setWebsiteId(Mage::app()->getStore($oldOrder->getStoreId())->getWebsiteId())
-                ->loadByCustomer();
-           if($reward->getPointsBalance()>0){
-                   $newQuote->setUseRewardPoints(1);
-           }else{
-                   $newQuote->setUseRewardPoints(0);
-           }
-        }
-    }
-    
-    protected function _revertCustomerBalance($oldOrder, $newQuote, $store){
-        //revert store gredit. order is important must be after payment imported
-        if ($oldOrder->getCustomerId() && $oldOrder->getBaseCustomerBalanceAmount() && !Mage::registry('isStoreCreditReverted') ) {                
-              Mage::getModel('enterprise_customerbalance/balance')->setCustomerId($oldOrder->getCustomerId())
-                                                                    ->setWebsiteId(Mage::app()->getStore($oldOrder->getStoreId())->getWebsiteId())
-                                                                ->setAmountDelta($oldOrder->getBaseCustomerBalanceAmount())
-                                                                ->setHistoryAction(Enterprise_CustomerBalance_Model_Balance_History::ACTION_REVERTED)
-                                                                ->setOrder($oldOrder)
-                                                                ->save();    
-            Mage::unregister('isStoreCreditReverted');
-            Mage::register('isStoreCreditReverted', true);                                                                    
-        }
-        if(Mage::registry('isStoreCreditReverted')){
-            $balance = Mage::getModel('enterprise_customerbalance/balance')
-                    ->setCustomerId($oldOrder->getCustomerId())
-                       ->setWebsiteId($store->getWebsiteId())
-                        ->loadByCustomer();
-            if ($balance->getAmount()>0) {
-                $newQuote->setCustomerBalanceInstance($balance);
-                $newQuote->setUseCustomerBalance(1);
-            }else {
-                $newQuote->setUseCustomerBalance(0);
-            }                                
-        }
-    }
+    //Harapartners, Jun, to be deleted
+//    protected function _revertGiftCard($oldOrder, $newQuote){
+//        $cards = Mage::helper('enterprise_giftcardaccount')->getCards($oldOrder);
+//        if (is_array($cards) && count($cards)) {
+//            foreach ($cards as $card) {
+//                if (isset($card['authorized'])) {
+//                      $giftCard = Mage::getModel('enterprise_giftcardaccount/giftcardaccount')->load($card['i']);                    
+//                    if (!!$giftCard && !!$giftCard->getId() 
+//                            && !Mage::registry('isGiftCardReverted')) {
+//                        $giftCard->revert($card['authorized'])
+//                                 ->setState(0)
+//                                 ->setStateText('Available')
+//                                    ->unsOrder()
+//                                    ->save();
+//                        Mage::unregister('isGiftCardReverted');
+//                           Mage::register('isGiftCardReverted', true);
+//                    }
+//                    $newCards[] = array(
+//                            'i'=>$giftCard->getId(),        // id
+//                            'c'=>$giftCard->getCode(),      // code
+//                            'a'=>$giftCard->getBalance(),   // amount
+//                            'ba'=>$giftCard->getBalance(),  // base amount
+//                    );                        
+//                }
+//            }
+//            //apply on new quote                
+//            Mage::helper('enterprise_giftcardaccount')->setCards($newQuote, $newCards);    
+//        }
+//    }
+//    
+//    protected function _revertRewardPoints($oldOrder, $newQuote){
+//        if (!!$oldOrder->getCustomerId() && $oldOrder->getRewardPointsBalance() && !Mage::registry('isRewardPointsReverted')) {       
+//            Mage::getModel('enterprise_reward/reward')
+//                ->setCustomerId($oldOrder->getCustomerId())
+//                ->setWebsiteId(Mage::app()->getStore($oldOrder->getStoreId())->getWebsiteId())
+//                ->setPointsDelta($oldOrder->getRewardPointsBalance())
+//                ->setAction(Enterprise_Reward_Model_Reward::REWARD_ACTION_REVERT)
+//                ->setActionEntity($oldOrder)
+//                ->updateRewardPoints();
+//            Mage::unregister('isRewardPointsReverted');
+//            Mage::register('isRewardPointsReverted', true);
+//        }
+//        if(Mage::registry('isRewardPointsReverted')){
+//            $reward = Mage::getModel('enterprise_reward/reward')
+//                ->setCustomerId($oldOrder->getCustomerId())
+//                ->setWebsiteId(Mage::app()->getStore($oldOrder->getStoreId())->getWebsiteId())
+//                ->loadByCustomer();
+//           if($reward->getPointsBalance()>0){
+//                   $newQuote->setUseRewardPoints(1);
+//           }else{
+//                   $newQuote->setUseRewardPoints(0);
+//           }
+//        }
+//    }
+//    
+//    protected function _revertCustomerBalance($oldOrder, $newQuote, $store){
+//        //revert store gredit. order is important must be after payment imported
+//    	
+//        if ($oldOrder->getCustomerId() && $oldOrder->getBaseCustomerBalanceAmount() && !Mage::registry('isStoreCreditReverted') ) {                
+//              Mage::getModel('enterprise_customerbalance/balance')->setCustomerId($oldOrder->getCustomerId())
+//                                                                    ->setWebsiteId(Mage::app()->getStore($oldOrder->getStoreId())->getWebsiteId())
+//                                                                ->setAmountDelta($oldOrder->getBaseCustomerBalanceAmount())
+//                                                                ->setHistoryAction(Enterprise_CustomerBalance_Model_Balance_History::ACTION_REVERTED)
+//                                                                ->setOrder($oldOrder)
+//                                                                ->save();    
+//            Mage::unregister('isStoreCreditReverted');
+//            Mage::register('isStoreCreditReverted', true);                                                                    
+//        }
+//
+//        if(Mage::registry('isStoreCreditReverted')){
+//            $balance = Mage::getModel('enterprise_customerbalance/balance')
+//                    ->setCustomerId($oldOrder->getCustomerId())
+//                       ->setWebsiteId($store->getWebsiteId())
+//                        ->loadByCustomer();
+//            if ($balance->getAmount()>0) {
+//                $newQuote->setCustomerBalanceInstance($balance);
+//                $newQuote->setUseCustomerBalance(1);
+//            }else {
+//                $newQuote->setUseCustomerBalance(0);
+//            }                                
+//        }
+//    }
     
     protected function _cloneQuoteItem(Mage_Sales_Model_Quote_Item $oldItem){
         //Harapartners, Jun, create new item, important for maintaining the balance of cart reservation (i.e. empty origData)
