@@ -139,7 +139,7 @@ class Harapartners_Fulfillmentfactory_Model_Service_Fulfillment
             
             //vaidation
             if($itemQueue->getStatus() != Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_PENDING){
-            	$errorArray[] = sprintf('Cannot canel item #%d. Only pending item can be cancelled.', $itemQueue->getId());
+            	$errorArray[] = sprintf('Cannot canel item #%d. Only pending items can be cancelled.', $itemQueue->getId());
             	continue;
             }
             
@@ -187,55 +187,56 @@ class Harapartners_Fulfillmentfactory_Model_Service_Fulfillment
         $oldOrder = Mage::getModel('sales/order')->load($orderId);
         $oldQuote = Mage::getModel('sales/quote')->setStoreId($oldOrder->getStoreId())->load($oldOrder->getQuoteId());
         
-        $restItems = array();
-        
-        $items = $oldQuote->getAllItems();
-        
-        //add rest of items
-           foreach($items as $item) {
-               $product = Mage::getModel('catalog/product')->load($item->getProductId());
-               
-               //ignore configurable product
-               if(!empty($product) && $product->getTypeId() == 'simple') {
-                   $shouldBeAdded = true;
-                   
-                   foreach($updateItemQueueIdList as &$itemQueue) {
-                       $orderItem = Mage::getModel('sales/order_item')->load($itemQueue->getOrderItemId());
-                       
-                    if($item->getId() == $orderItem->getQuoteItemId()) {
-                           $shouldBeAdded = false;
-                           break;
-                       }
-                   }
-                   
-                   if($shouldBeAdded) {
-                       //add parent product
-                       //should always add parent product first
-                    $parentItem = $item->getParentItem();
-                    if(!empty($parentItem)) {
-                        $restItems[] = $parentItem;
-                    }
-                    
-                    $restItems[] = $item;
-                   }
-               }
-          }
+        //More secure logic, looping through order items, in case the quote item might be damaged
+        $remainingOrderItems = array();
+        $remainingQuoteItems = array();
+        foreach($oldOrder->getAllItems() as $orderItem){
+        	$shouldBeRemoved = false;
+        	
+        	$quoteItem = Mage::getModel('sales/quote_item')->load($orderItem->getQuoteItemId());
+        	if(!$quoteItem->getId()){
+        		Mage::throwException(sprintf('There is a missing quote item for order #%s, not cancelled. To modify the order, cancel the current order and create a new one from customer account.', $oldOrder->getId()));
+        	}
+        	foreach($updateItemQueueIdList as $itemQueue) {
+        		if($orderItem->getId() == $itemQueue->getOrderItemId()){
+        			$shouldBeRemoved = true;
+        			break;
+        		}
+        		foreach($orderItem->getChildrenItems() as $childItem){
+	        		if($childItem->getId() == $itemQueue->getOrderItemId()){
+	        			$shouldBeRemoved = true;
+	        			break 2;
+	        		}
+        		}
+        	}
+            if(!$shouldBeRemoved){
+            	$remainingOrderItems[] = $orderItem;
+            	
+            	//Maintaining parent-child association is very important for ordersplit (child item are used in turn to generate fulfillment item)
+            	foreach($orderItem->getChildrenItems() as $childOrderItem){
+            		$childQuoteItem = Mage::getModel('sales/quote_item')->load($childOrderItem->getQuoteItemId());
+            		$quoteItem->addChild($childQuoteItem);
+            	}
+            	
+            	$remainingQuoteItems[] = $quoteItem;
+            }
+        }
           
           //cancel orders with nothing available
-          if(empty($restItems)) {
+          if(empty($remainingQuoteItems)) {
               $oldOrder->cancel()->save();
               return true;
           }
           
-          $itemListCollection = array (
+          $quoteItemListCollection = array (
               array (
-                  'items' => $restItems,
+                  'items' => $remainingQuoteItems,
                   'state' => Mage_Sales_Model_Order::STATE_NEW,
                   'type'    => 'dotcom'
               )
           );
         
-          Mage::helper('ordersplit')->createSplitOrder($oldOrder, $itemListCollection);
+          Mage::helper('ordersplit')->createSplitOrder($oldOrder, $quoteItemListCollection);
           
           return true;
     }
