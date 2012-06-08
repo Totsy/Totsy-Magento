@@ -55,6 +55,8 @@
                     <catalog_product_edit_tab_attributes>Harapartners_Service_Block_Rewrite_Adminhtml_Catalog_Product_Edit_Tab_Attributes</catalog_product_edit_tab_attributes>
                     <!-- Totsy: select fields disabled in the admin panel -->
                     <catalog_category_tab_general>Harapartners_Service_Block_Rewrite_Adminhtml_Catalog_Category_Tab_General</catalog_category_tab_general>
+					<!--Harapartners_Promotionfactory: manage coupon button for virtual product-->
+					<catalog_product_edit>Harapartners_Service_Block_Rewrite_Adminhtml_Catalog_Product_Edit</catalog_product_edit>
                 </rewrite>
             </adminhtml>
             <checkout>
