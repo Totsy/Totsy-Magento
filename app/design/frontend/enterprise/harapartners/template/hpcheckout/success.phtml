@@ -29,16 +29,16 @@ $quote = Mage::getModel('sales/quote')->load($quoteId);
 		$order_id = $order->getId();
 	$url = $this->getBaseUrl().'sales/order/history/';
 ?>
-		You will redirect to orders review page in 10 second. Or <a class="red" href="<?php echo $url?>">click here</a>
+		You will redirect to orders review page in 10 seconds. Or <a class="red" href="<?php echo $url?>">click here</a>
     </p>
     <div id="rondavu_checkout_container"></div>
     <script language="javascript" type="text/javascript">
 		function redirect(){window.location.href="<?php echo $url?>"};
-		  //setTimeout("redirect()",10000);
+		  setTimeout("redirect()",10000);
 	</script>
 	<?php
-	
-require("dev/sociablelabs/sociable_signer.php");	
+
+require("dev/sociablelabs/sociable_signer.php");
 
 $items_for_socialable_page_key = array();
 $items_for_socialable_mos_keys = array();
