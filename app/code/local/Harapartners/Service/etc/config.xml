@@ -55,6 +55,10 @@
                     <catalog_product_edit_tab_attributes>Harapartners_Service_Block_Rewrite_Adminhtml_Catalog_Product_Edit_Tab_Attributes</catalog_product_edit_tab_attributes>
                     <!-- Totsy: select fields disabled in the admin panel -->
                     <catalog_category_tab_general>Harapartners_Service_Block_Rewrite_Adminhtml_Catalog_Category_Tab_General</catalog_category_tab_general>
+					<!--Harapartners_Service: no wishlist for creating new orders -->
+                    <sales_order_create_items_grid>Harapartners_Service_Block_Rewrite_Adminhtml_Sales_Order_Create_Items_Grid</sales_order_create_items_grid>
+					<!--Harapartners_Promotionfactory: manage coupon button for virtual product-->
+					<catalog_product_edit>Harapartners_Service_Block_Rewrite_Adminhtml_Catalog_Product_Edit</catalog_product_edit>
                 </rewrite>
             </adminhtml>
             <checkout>
@@ -175,6 +179,10 @@
                     <quote_address_total_grand>Harapartners_Service_Model_Rewrite_Sales_Quote_Address_Total_Grand</quote_address_total_grand>
 					<!--Harapartners_Service, Query optimization, no quote item price update after product import-->
 					<observer>Harapartners_Service_Model_Rewrite_Sales_Observer</observer>
+					<!--Harapartners_Service, Removing Ogone from order status-->
+                    <order_config>Harapartners_Service_Model_Rewrite_Sales_Order_Config</order_config>
+					<!--Harapartners_Service, if product does not have an live category/event, it cannot be add to cart (quote)-->
+                    <quote>Harapartners_Service_Model_Rewrite_Sales_Quote</quote>
                 </rewrite>
             </sales>
             <tax>

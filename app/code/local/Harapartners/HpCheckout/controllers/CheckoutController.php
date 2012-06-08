@@ -30,7 +30,15 @@ class Harapartners_HpCheckout_CheckoutController extends Mage_Checkout_Controlle
     public function updateAction() {
         $jsonArray = array();
         $postData = $this->getRequest()->getPost();
-        $jsonArray = $this->_getBlocksArray( $postData );
+        try{
+        	$jsonArray = $this->_getBlocksArray( $postData );
+        } catch (Mage_Core_Exception $e) {
+            $jsonArray['status'] = 1;
+            $jsonArray['message'] = $e->getMessage();
+        } catch (Exception $e) {
+            $jsonArray['status'] = 1;
+            $jsonArray['message'] = $this->__('There was an error processing your order. Please contact us or try again later.');
+        }
         $this->getResponse()->setBody( Mage::helper( 'core' )->jsonEncode( $jsonArray ) );
     }
     
