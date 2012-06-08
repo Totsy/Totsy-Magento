@@ -16,6 +16,8 @@ class Harapartners_Fulfillmentfactory_Helper_Data extends Mage_Core_Helper_Abstr
     const ORDER_STATUS_FULFILLMENT_FAILED = 'fulfillment_failed';
     const ORDER_STATUS_FULFILLMENT_AGING = 'fulfillment_aging';
     const ORDER_STATUS_SHIPMENT_AGING = 'shipment_aging';
+    const CITY_CONSTRAINT = 20;
+    const ADDRESS_CONSTRAINT = 30;
     
     /**
      * get 2-letter code for states
@@ -115,5 +117,37 @@ class Harapartners_Fulfillmentfactory_Helper_Data extends Mage_Core_Helper_Abstr
             Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_CLOSED => 'Complete',
             Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_CANCELLED => 'Cancelled'
         );
+    }
+    /**
+    * 
+    */
+    public function validateAddressForDC($validate, $data){
+
+        if (empty($data)) return null;
+
+        switch($validate) {
+            case 'CITY':
+                $restraint = self::CITY_CONSTRAINT;
+                break;
+            // case 'ADDRESS':
+            //  $restraint = self::ADDRESS_CONSTRAINT;
+            //  break;
+        }
+
+        $length = strlen($data);
+
+        if ($length > $restraint) {
+            //strip punctuations
+            $punctuations = "#[.,']#";
+            $data = preg_replace($punctuations, '', $data);
+            //check the length again, if so trim last characters according to the difference
+            $length = strlen($data);
+            if ($length > $restraint) {
+                $diff = $length - $restraint;
+                $data = substr($data, 0, -$diff);
+            }
+        }
+
+        return $data;      
     }
 }

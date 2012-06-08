@@ -57,6 +57,8 @@
                     <catalog_category_tab_general>Harapartners_Service_Block_Rewrite_Adminhtml_Catalog_Category_Tab_General</catalog_category_tab_general>
 					<!--Harapartners_Service: no wishlist for creating new orders -->
                     <sales_order_create_items_grid>Harapartners_Service_Block_Rewrite_Adminhtml_Sales_Order_Create_Items_Grid</sales_order_create_items_grid>
+					<!--Harapartners_Promotionfactory: manage coupon button for virtual product-->
+					<catalog_product_edit>Harapartners_Service_Block_Rewrite_Adminhtml_Catalog_Product_Edit</catalog_product_edit>
                 </rewrite>
             </adminhtml>
             <checkout>
