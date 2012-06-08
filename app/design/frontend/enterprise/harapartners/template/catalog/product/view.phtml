@@ -48,7 +48,7 @@ $_category = Mage::registry('current_category');
 <div id="messages_product_view"><?php echo $this->getMessagesBlock()->toHtml() ?></div>
 <div class="product-view">
 <div class="event-title-container">
-<h1><a href="<?php echo $this->getBaseUrl();?>">Today's Sales</a><span> / <span><a href="<?php echo $_category->getUrl();?>"><?php echo $_helper->categoryAttribute($_category, $_category->getName(), 'name') ?></a></h1>
+<h1><a href="<?php echo $this->getUrl('event/?ref=todays_sales') ?>">Today's Sales</a><span> / <span><a href="<?php echo $_category->getUrl();?>"><?php echo $_helper->categoryAttribute($_category, $_category->getName(), 'name') ?></a></h1>
 <?php
 $endcount_utc = strtotime($_category->getEventEndDate());
 $endcount_lc = date("F j, Y, G:i:s", $endcount_utc);
@@ -100,7 +100,7 @@ direction: "down"
 <?php echo Mage::app()->getLayout()->createBlock('cms/block')->setBlockId('shipping_and_return')->toHtml()?>
 </div>
 </div>
-
+<div style="clear:both;"></div>
 <?php if ($_product->getData('final_sale')): ?>
 <p class="final-sale"><strong>Final Sale</strong></p>
 <?php endif; ?>
@@ -242,7 +242,6 @@ stWidget.addEntry({
         "image":"<?php echo $small_img; ?>"
 });
 </script>
-
 <script>
      jQuery.noConflict();
      
@@ -251,6 +250,44 @@ stWidget.addEntry({
        jQuery("#tabs").tabs();
      });
      
-     // Use Prototype with $(…), etc.
-     
    </script>
+   
+<script type="text/javascript">
+		jQuery(document).ready(function(){
+			/*
+			 *  Simple image gallery. Uses default settings
+			 */
+
+			jQuery('.fancybox').fancybox();
+
+			/*
+			 *  Different effects
+			 */
+
+			// Change title type, overlay opening speed and opacity
+			jQuery(".fancybox-effects-a").fancybox({
+				helpers: {
+					title : {
+						type : 'outside'
+					},
+					overlay : {
+						speedIn : 500,
+						opacity : 0.95
+					}
+				}
+			});
+
+			// Disable opening and closing animations, change title type
+			jQuery(".fancybox-effects-b").fancybox({
+				openEffect  : 'none',
+				closeEffect	: 'none',
+
+				helpers : {
+					title : {
+						type : 'over'
+					}
+				}
+			});
+
+		});
+	</script>
