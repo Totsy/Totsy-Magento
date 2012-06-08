@@ -179,6 +179,8 @@
 					<observer>Harapartners_Service_Model_Rewrite_Sales_Observer</observer>
 					<!--Harapartners_Service, Removing Ogone from order status-->
                     <order_config>Harapartners_Service_Model_Rewrite_Sales_Order_Config</order_config>
+					<!--Harapartners_Service, if product does not have an live category/event, it cannot be add to cart (quote)-->
+                    <quote>Harapartners_Service_Model_Rewrite_Sales_Quote</quote>
                 </rewrite>
             </sales>
             <tax>
