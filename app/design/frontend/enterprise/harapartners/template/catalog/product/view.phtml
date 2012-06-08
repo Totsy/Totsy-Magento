@@ -48,7 +48,7 @@ $_category = Mage::registry('current_category');
 <div id="messages_product_view"><?php echo $this->getMessagesBlock()->toHtml() ?></div>
 <div class="product-view">
 <div class="event-title-container">
-<h1><a href="<?php echo $this->getBaseUrl();?>">Today's Sales</a><span> / <span><a href="<?php echo $_category->getUrl();?>"><?php echo $_helper->categoryAttribute($_category, $_category->getName(), 'name') ?></a></h1>
+<h1><a href="<?php echo $this->getUrl('event/?ref=todays_sales') ?>">Today's Sales</a><span> / <span><a href="<?php echo $_category->getUrl();?>"><?php echo $_helper->categoryAttribute($_category, $_category->getName(), 'name') ?></a></h1>
 <?php
 $endcount_utc = strtotime($_category->getEventEndDate());
 $endcount_lc = date("F j, Y, G:i:s", $endcount_utc);
@@ -100,7 +100,7 @@ direction: "down"
 <?php echo Mage::app()->getLayout()->createBlock('cms/block')->setBlockId('shipping_and_return')->toHtml()?>
 </div>
 </div>
-
+<div style="clear:both;"></div>
 <?php if ($_product->getData('final_sale')): ?>
 <p class="final-sale"><strong>Final Sale</strong></p>
 <?php endif; ?>
@@ -165,9 +165,9 @@ direction: "down"
 <!-- Social Labs BEGIN -->
 <?php
 //include the signer
-require("dev/sociable_signer.php");
+require("dev/sociablelabs/sociable_signer.php");
 
-if( Mage::getSingleton('customer/session')->getCustomerId()) {
+if( Mage::getSingleton('customer/session')->getCustomerId() ) {
 
     $customer_id = Mage::getSingleton('customer/session')->getCustomerId();
 
@@ -186,10 +186,10 @@ if( Mage::getSingleton('customer/session')->getCustomerId()) {
         ),
         "primary_mo" => array (
             "id" => array( array("id" => $_product->getId(), "type" => "product" )),
-            "name" => array(array("name" => $_product->getName() )),
-            "primary_tag" => "product_4f61c33c78d19a2e61000006",
-            "tags" => array("product", "sage-creek-organics-boys",
-                "starry-night-print-footed-playsuit-blue", "boys-apparrel"),
+            "name" => array(array("name" => $_product->getName())),
+            "primary_tag" => $_product->getCategory()->name,
+            "tags" => array("product", $_category->getName(),
+                $_product->getCategory()->name, $_category->getUrl()),
             "description"=> array(array("description" => strip_tags(html_entity_decode(str_replace(array("\r", "\n"), '', $_product->getDescription()))) )),
             "url"=> array(
                 "detail" => 
@@ -204,13 +204,12 @@ if( Mage::getSingleton('customer/session')->getCustomerId()) {
                 ,
                 "price" => array(
                     "retail_price" => $_product->getFinalPrice(),
-                    "sale_price" =>$_product->getSaleWholesale(),
+                    "sale_price" => $_product->getSaleWholesale(),
                     "currency"=> "USD"
                 )));
 
     // declare a path to the key
-    $key_path = "sign_private_key";
-    
+    $key_path = "dev/sociablelabs/sign_private_key";
     $socialable_labs_output = rondavu_sign($rondavu_data, $key_path);
 }
 ?>
@@ -305,7 +304,6 @@ stWidget.addEntry({
         "image":"<?php echo $small_img; ?>"
 });
 </script>
-
 <script>
      jQuery.noConflict();
 
@@ -313,7 +311,44 @@ stWidget.addEntry({
      jQuery(document).ready(function(){
        jQuery("#tabs").tabs();
      });
+</script>
+   
+<script type="text/javascript">
+		jQuery(document).ready(function(){
+			/*
+			 *  Simple image gallery. Uses default settings
+			 */
 
-     // Use Prototype with $(…), etc.
+			jQuery('.fancybox').fancybox();
 
-   </script>
+			/*
+			 *  Different effects
+			 */
+
+			// Change title type, overlay opening speed and opacity
+			jQuery(".fancybox-effects-a").fancybox({
+				helpers: {
+					title : {
+						type : 'outside'
+					},
+					overlay : {
+						speedIn : 500,
+						opacity : 0.95
+					}
+				}
+			});
+
+			// Disable opening and closing animations, change title type
+			jQuery(".fancybox-effects-b").fancybox({
+				openEffect  : 'none',
+				closeEffect	: 'none',
+
+				helpers : {
+					title : {
+						type : 'over'
+					}
+				}
+			});
+
+		});
+	</script>

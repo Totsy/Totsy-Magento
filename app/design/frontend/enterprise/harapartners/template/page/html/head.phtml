@@ -46,16 +46,16 @@
 <![endif]-->
 
 <?php
-    
-    if( Mage::getSingleton('customer/session')->getCustomerId()) {
+        
+    if( Mage::getSingleton('customer/session')->getCustomerId() && ($this->getRequest()->getActionName()!=="view" && $this->getRequest()->getControllerName()!=="view") &&  ($this->getRequest()->getActionName()!=="success" && $this->getRequest()->getControllerName()!=="checkout")) {
     
     $customer_id = Mage::getSingleton('customer/session')->getCustomerId();
     
     //include the signer
-    require("dev/sociable_signer.php");
+	require("dev/sociablelabs/sociable_signer.php");
     
     // declare a path to the key
-    $key_path = "sign_private_key";
+    $key_path = "dev/sociablelabs/sign_private_key";
 
     // declare RondavuData
     $rondavu_data = array (
