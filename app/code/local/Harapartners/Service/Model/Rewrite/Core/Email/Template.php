@@ -104,10 +104,10 @@ class Harapartners_Service_Model_Rewrite_Core_Email_Template extends Mage_Core_M
                 $success = $sailthru->multisend($template_name, $temails, $vars, $evars, $options);
                 //not success, use magento default send…
                 if(count($success) == 2) {
-              //magento default//
-              $mail->send();
-              //magento default//
-                    Mage::throwException($this->__($success["errormsg"]));
+					//magento default//
+					//$mail->send(); /* commenting out Magento's default send mail functionality… */
+					//magento default//
+					Mage::throwException($this->__($success["errormsg"]));
                 }
             }
             
