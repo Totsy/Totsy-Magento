@@ -13,6 +13,24 @@
  */
 
 class Harapartners_Promotionfactory_Model_Observer {
+	
+	public function reserveVirtualProductCoupon(Varien_Event_Observer $observer) {
+		$quoteItem = $observer->getEvent()->getItem();
+		//Must add logic that each qty is a separate line item
+//		if($quoteItem->getProductType != 'virtual'){
+//			return;
+//		}
+//		if($quoteItem get coupon list empty){
+//			return;
+//		}
+//		if(no available){
+//			Mage::throwException('There is no coupon code available');
+//		}else{
+//			reservation logic here;
+//			change the status;
+//			add item option;
+//		}
+	}
     
     public function saleOrderPlaceAfter(Varien_Event_Observer $observer) {
         $order = $observer->getEvent()->getOrder();

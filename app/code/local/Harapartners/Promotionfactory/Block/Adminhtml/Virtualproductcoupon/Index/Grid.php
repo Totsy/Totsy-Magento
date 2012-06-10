@@ -18,37 +18,38 @@ class Harapartners_PromotionFactory_Block_Adminhtml_Virtualproductcoupon_Index_G
         return Mage::app()->getStore($storeId);
     }
 
-    protected function _prepareColumns(){        
+    protected function _prepareColumns(){
+    	$helper = Mage::helper('promotionfactory');
         $this->addColumn('entity_id', array(
-            'header'        => Mage::helper('promotionfactory')->__('ID'),
+            'header'        => $helper->__('ID'),
             'index'         => 'entity_id'
         ));
 
         $this->addColumn('product_id', array(
-            'header'        => Mage::helper('promotionfactory')->__('Product ID'),
+            'header'        => $helper->__('Product ID'),
             'index'         => 'product_id'
         ));
         
         $this->addColumn('code', array(
-            'header'        => Mage::helper('promotionfactory')->__('Code'),
+            'header'        => $helper->__('Code'),
             'index'         => 'code'
         ));
         
        $this->addColumn('created_at', array(
-            'header'        => Mage::helper('promotionfactory')->__('Created At'),
+            'header'        => $helper->__('Created At'),
             'index'         => 'created_at',
         ));
         
         $this->addColumn('updated_at', array(
-            'header'        => Mage::helper('promotionfactory')->__('Updated At'),
+            'header'        => $helper->__('Updated At'),
             'index'         => 'updated_at',
         ));
         
         $this->addColumn('status', array(
-            'header'        => Mage::helper('promotionfactory')->__('Status'),
+            'header'        => $helper->__('Status'),
             'index'         => 'status',
         	'type'			=> 'options',
-            'options' => Mage::getModel( 'promotionfactory/virtualproductcoupon' )->toArrayOption()
+            'options' 		=> $helper->getGridStatusArray()
         ));
 
         return parent::_prepareColumns();

@@ -320,6 +320,16 @@
                     </fulfillmentfactory>
                 </observers>
             </order_cancel_after>
+			<sales_quote_item_save_before>
+                <observers>
+					<!--Harapartners_Promotionfactory: Reserve Virtual Product Coupon-->
+                    <promotionfactory>
+                        <type>singleton</type>
+                        <class>promotionfactory/observer</class>
+                        <method>reserveVirtualProductCoupon</method>
+                    </promotionfactory>
+                </observers>
+            </sales_quote_item_save_before>
             <sales_quote_item_save_after>
                 <observers>
                     <!--Harapartners_Rushcheckout: Adding or updating quote item -->

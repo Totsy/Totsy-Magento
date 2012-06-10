@@ -12,7 +12,22 @@
  * 
  */
 
-class Harapartners_Promotionfactory_Helper_Data extends Mage_Core_Helper_Abstract
-{    
+class Harapartners_Promotionfactory_Helper_Data extends Mage_Core_Helper_Abstract {
+    
+    public function getGridStatusArray(){
+        return array(
+                Harapartners_Promotionfactory_Model_Virtualproductcoupon::COUPON_STATUS_AVAILABLE => 'Available',
+                Harapartners_Promotionfactory_Model_Virtualproductcoupon::COUPON_STATUS_RESERVED => 'Reserved',
+                Harapartners_Promotionfactory_Model_Virtualproductcoupon::COUPON_STATUS_USED => 'Used'
+        );
+    }
+    
+    public function getFormStatusArray(){
+        return array(
+                   array('label' => 'Available', 'value' => Harapartners_Promotionfactory_Model_Virtualproductcoupon::COUPON_STATUS_AVAILABLE),
+                   array('label' => 'Reserved', 'value' => Harapartners_Promotionfactory_Model_Virtualproductcoupon::COUPON_STATUS_RESERVED),
+                   array('label' => 'Used', 'value' => Harapartners_Promotionfactory_Model_Virtualproductcoupon::COUPON_STATUS_USED)
+           );
+    }
     
 }

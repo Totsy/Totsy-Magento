@@ -39,12 +39,5 @@ class Harapartners_Promotionfactory_Model_Virtualproductcoupon extends Mage_Core
     	$coupons->getSelect()->where( "product_id = ?", $productId );
     	return $coupons;
     }
-    
-    public function toArrayOption() {
-    	return array(
-    		COUPON_STATUS_AVAILABLE => "Available",
-    		COUPON_STATUS_RESERVED => "Reserved",
-    		COUPON_STATUS_USED => "Used"
-    	);
-    }
+
 }
