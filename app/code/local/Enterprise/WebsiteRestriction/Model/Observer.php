@@ -138,7 +138,7 @@ class Enterprise_WebsiteRestriction_Model_Observer
                         )) {
                             $afterLoginUrl = Mage::helper('customer')->getDashboardUrl();
                         } else {
-                            $afterLoginUrl = Mage::getUrl('');
+                            $afterLoginUrl = Mage::getUrl('event');
                         }
                         
                         $origin_url = substr(Mage::getUrl(''),0,-1) .$controller->getRequest()->getOriginalPathInfo();
