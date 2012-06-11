@@ -17,7 +17,8 @@ class Harapartners_Service_Block_Rewrite_Checkout_Cart_Item_Renderer extends Mag
 		$optionList = $this->getProductOptions();
 		if($this->getItem()->getProduct()->isVirtual()){
 			$reservationCodeOption = $this->getItem()->getOptionByCode('reservation_code');
-			if($reservationCodeOption instanceof Mage_Sales_Model_Quote_Item_Option){
+			if($reservationCodeOption instanceof Mage_Sales_Model_Quote_Item_Option
+					&& $reservationCodeOption->getId()){
 				$optionList[] = array(
     					'label' => 'Reservation Code', 
     					'value' => $reservationCodeOption->getValue()

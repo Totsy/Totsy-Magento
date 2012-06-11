@@ -348,6 +348,11 @@
                         <class>rushcheckout/observer</class>
                         <method>updateReservationByQuoteItem</method>
                     </rushcheckout>
+					<!--Harapartners_Promotionfactory: Deleting quote item will release any related coupon reservation-->
+                    <promotionfactory>
+                        <class>promotionfactory/observer</class>
+                        <method>releaseVirtualProductCouponInCart</method>
+                    </promotionfactory>
                 </observers>
             </sales_quote_item_delete_after>
 			<sales_order_item_save_before>

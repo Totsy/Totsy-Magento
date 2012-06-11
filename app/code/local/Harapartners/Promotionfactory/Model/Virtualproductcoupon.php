@@ -16,7 +16,7 @@ class Harapartners_Promotionfactory_Model_Virtualproductcoupon extends Mage_Core
 	
 	const COUPON_STATUS_AVAILABLE = 0;
 	const COUPON_STATUS_RESERVED = 1;
-	const COUPON_STATUS_USED = 2;
+	const COUPON_STATUS_PURCHASED = 2;
 	
 	protected function _construct(){
         $this->_init('promotionfactory/virtualproductcoupon');

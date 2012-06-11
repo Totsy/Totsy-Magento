@@ -14,8 +14,6 @@
 
 class Harapartners_Promotionfactory_Model_Observer {
 	
-	//TODO: delete from cart and item cancelling
-	
 	public function reserveVirtualProductCouponInCart(Varien_Event_Observer $observer) {
 		$quoteItem = $observer->getEvent()->getItem();
 		$product = $quoteItem->getProduct();
@@ -53,6 +51,21 @@ class Harapartners_Promotionfactory_Model_Observer {
 		}
 	}
 	
+	public function releaseVirtualProductCouponInCart(Varien_Event_Observer $observer) {
+		$quoteItem = $observer->getEvent()->getItem();
+		$reservationCodeOption = $quoteItem->getOptionByCode('reservation_code');
+		if($reservationCodeOption instanceof Mage_Sales_Model_Quote_Item_Option
+				&& $reservationCodeOption->getId()){
+			$vpc = Mage::getModel('promotionfactory/virtualproductcoupon')->loadByCode($reservationCodeOption->getValue());
+			if($vpc instanceof Harapartners_Promotionfactory_Model_Virtualproductcoupon
+					&& $vpc->getId()
+					&& $vpc->getStatus() == Harapartners_Promotionfactory_Model_Virtualproductcoupon::COUPON_STATUS_RESERVED){
+				$vpc->setStatus(Harapartners_Promotionfactory_Model_Virtualproductcoupon::COUPON_STATUS_AVAILABLE)
+						->save();
+			}
+		}		
+	}
+	
 	public function useVirtualProductCouponInOrder(Varien_Event_Observer $observer) {
 		$orderItem = $observer->getEvent()->getItem();
 		
@@ -84,7 +97,7 @@ class Harapartners_Promotionfactory_Model_Observer {
 			
 			$vpc = Mage::getModel('promotionfactory/virtualproductcoupon')->loadByCode($reservationCodeOption->getValue());
 			if($vpc->getId()){
-				$vpc->setData('status', Harapartners_Promotionfactory_Model_Virtualproductcoupon::COUPON_STATUS_USED)
+				$vpc->setData('status', Harapartners_Promotionfactory_Model_Virtualproductcoupon::COUPON_STATUS_PURCHASED)
 	            		->save();
 			}else{
 				Mage::getSingleton('checkout/session')->addError('There was an error while placing the order with your reserved coupon code.');
