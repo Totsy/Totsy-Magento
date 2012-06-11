@@ -39,8 +39,8 @@ class Harapartners_PromotionFactory_Block_Adminhtml_Groupcoupon_Edit extends Mag
     public function getBackButtonHtml() {
         return $this->getChildHtml('back_button');
     }
+    
     public function getGridHtml(){
-        
         return $this->getChildHtml('grid');
     }
 

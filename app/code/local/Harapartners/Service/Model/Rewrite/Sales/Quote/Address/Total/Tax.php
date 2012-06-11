@@ -56,7 +56,9 @@ class Harapartners_Service_Model_Rewrite_Sales_Quote_Address_Total_Tax extends M
 			}
 		} catch( Exception $e ) {
 			//Tax collecting is very important, bubble exceptions up
-			throw new $e;
+//			Mage::throwException($e->getMessage());
+			Mage::logException($e);
+			Mage::throwException('There is an error while calculating tax.');
 		}
 		
 		return $this;

@@ -14,4 +14,17 @@ class Harapartners_Promotionfactory_Model_Couponcreator extends Mage_Core_Model_
         }        
         return;
     }
+    
+    public function createVirtualProductCoupons( $total, $productId ) {
+    	for( $pilot = 0; $pilot < $total; $pilot ++ ) {
+    		$coupon = Mage::getModel('promotionfactory/virtualproductcoupon');
+    		$coupon->setData( "product_id", $productId );
+    		$coupon->setData( "status", Harapartners_Promotionfactory_Model_Virtualproductcoupon::COUPON_STATUS_AVAILABLE );
+    		$coupon->setData( "code", strtoupper( md5( time() . $pilot ) ) );
+    		try{
+    			$coupon->save();
+    		} catch( Exception $e ) {}
+    	}
+    }
+    
 }
