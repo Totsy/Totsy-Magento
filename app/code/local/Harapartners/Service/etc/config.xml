@@ -361,7 +361,7 @@
                     <promotionfactory>
                         <type>singleton</type>
                         <class>promotionfactory/observer</class>
-                        <method>useVirtualProductCouponInOrder</method>
+                        <method>purchaseVirtualProductCouponInOrder</method>
                     </promotionfactory>
                 </observers>
             </sales_order_item_save_before>

@@ -73,7 +73,7 @@ class Harapartners_Promotionfactory_Model_Observer {
 		}		
 	}
 	
-	public function useVirtualProductCouponInOrder(Varien_Event_Observer $observer) {
+	public function purchaseVirtualProductCouponInOrder(Varien_Event_Observer $observer) {
 		$orderItem = $observer->getEvent()->getItem();
 		
 		$reservationCodeOption = Mage::getModel('sales/quote_item_option')->getCollection()
