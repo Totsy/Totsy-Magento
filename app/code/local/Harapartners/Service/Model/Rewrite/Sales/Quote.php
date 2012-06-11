@@ -19,7 +19,23 @@ class Harapartners_Service_Model_Rewrite_Sales_Quote extends Mage_Sales_Model_Qu
     	if(!$product->isSalable()){
     		Mage::throwException(sprintf('The selected item \'%s\' is not available.', $product->getName()));
     	}
+    	//Harapartners, Jun, Virtual product (coupons) should have qty=1 per line item (code reservation logic)
+    	if($product->isVirtual()){
+    		//No qty default to 1
+    		if($request->getQty() && $request->getQty() != 1){
+    			$request->setQty(1);
+    			Mage::getSingleton('checkout/session')->addNotice('Your coupon purchase is reserved, and the quantity is adjusted to 1.');
+    		}
+    	}
     	return parent::addProductAdvanced($product, $request, $processMode);
+    }
+    
+	public function getItemByProduct($product) {
+		//Harapartners, Jun, Virtual product (coupons) should always be a separate line item
+		if($product->isVirtual()) {
+			return false;
+		}
+        return parent::getItemByProduct($product);
     }
 
 }

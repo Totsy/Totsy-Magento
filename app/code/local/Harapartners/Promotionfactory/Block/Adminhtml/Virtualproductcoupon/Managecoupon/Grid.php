@@ -21,8 +21,8 @@ class Harapartners_Promotionfactory_Block_Adminhtml_Virtualproductcoupon_Managec
 
     protected function _prepareCollection(){
     	$currentProduct = Mage::registry('manage_coupon_virtual_product');
-        $coupons = Mage::getModel('promotionfactory/virtualproductcoupon')->loadByProductId( $currentProduct->getId() );
-        $this->setCollection($coupons);
+        $couponCollection = Mage::getModel('promotionfactory/virtualproductcoupon')->getCollection()->loadByProductId( $currentProduct->getId() );
+        $this->setCollection($couponCollection);
         parent::_prepareCollection();
         return $this;
     }

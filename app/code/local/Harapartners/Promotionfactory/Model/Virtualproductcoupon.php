@@ -34,10 +34,21 @@ class Harapartners_Promotionfactory_Model_Virtualproductcoupon extends Mage_Core
         parent::_beforeSave();
     }
     
-    public function loadByProductId( $productId ) {
-    	$coupons = $this->getCollection();
-    	$coupons->getSelect()->where( "product_id = ?", $productId );
-    	return $coupons;
+    //Return null when there is no coupon setup for the virtual product (i.e. no reservation logic required)
+    //Return an empty object (without ID) when there is nothing available
+	public function loadOneByProductId( $productId, $status = null ) {
+		$data = $this->getResource()->loadOneByProductId($productId, $status);
+		if($data === null){
+			return null;
+		}
+		$this->addData($data);
+		return $this;
     }
-
+    
+    public function loadByCode($code){
+		$data = $this->getResource()->loadByCode($code);
+		$this->addData($data);
+		return $this;
+    }
+    
 }
