@@ -7,6 +7,7 @@
 
 <?php
 $_item = $this->getItem();
+$isVirtual = $_item->getProduct()->isVirtual();
 $isVisibleProduct = $_item->getProduct()->isVisibleInSiteVisibility();
 $canApplyMsrp = Mage::helper('catalog')->canApplyMsrp($_item->getProduct(), Mage_Catalog_Model_Product_Attribute_Source_Msrp_Type::TYPE_BEFORE_ORDER_CONFIRM);
 $configKey = 'limit_timer';
@@ -168,7 +169,7 @@ if ( !Mage::getSingleton('checkout/session')->hasData('countdown_timer') ) {
 	<td class="qty-box">
 		<div id="qty-<?php echo $timer ?>"	/>
 			<div class="updown">
-				<div class="updown-left rush-qty"><input name="cart[<?php echo $_item->getId() ?>][qty]" value="<?php echo $this->getQty() ?>" size="4" title="<?php echo $this->__('Qty') ?>" class="input-text qty" maxlength="12" /></div>
+				<div class="updown-left rush-qty"><input name="cart[<?php echo $_item->getId() ?>][qty]" value="<?php echo $this->getQty() ?>" size="4" title="<?php echo $this->__('Qty') ?>" class="input-text qty" maxlength="12" <?php echo $isVirtual ? "disabled='disabled'" : "" ?> /></div>
 				<div class="updown-right">	
 					<div class="updown-top">
 					</div>

@@ -22,15 +22,8 @@ class Harapartners_PromotionFactory_Adminhtml_VirtualproductcouponController ext
         	 ->_addContent( $this->getLayout ()->createBlock ( 'promotionfactory/adminhtml_virtualproductcoupon_index' ) )
         	 ->renderLayout();
     }
-    
-//	public function editCouponAction() {
-//        $this->loadLayout()
-//        	 ->_setActiveMenu( 'catalog/product' )
-//        	 ->_addContent( $this->getLayout()->createBlock( 'promotionfactory/adminhtml_virtualproductcoupon_editCoupon' ) )
-//        	 ->renderLayout();
-//    }
-    
-	public function manageCouponByProductAction() {
+
+    public function manageCouponByProductAction() {
 		
 		$productId = Mage::app()->getRequest()->getParam('product_id');
 		$product = Mage::getModel('catalog/product')->load($productId);
