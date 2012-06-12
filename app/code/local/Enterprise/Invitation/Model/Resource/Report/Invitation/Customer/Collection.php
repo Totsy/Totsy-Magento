@@ -50,7 +50,8 @@ class Enterprise_Invitation_Model_Resource_Report_Invitation_Customer_Collection
                 'invitation.customer_id = e.entity_id',
                 array(
                     'sent' => new Zend_Db_Expr('COUNT(invitation.invitation_id)'),
-                    'accepted' => new Zend_Db_Expr('COUNT(invitation.referral_id) ')
+                    'accepted' => new Zend_Db_Expr('COUNT(invitation.referral_id) '),
+                	'order_increment_id' => new Zend_Db_Expr('COUNT(invitation.order_increment_id)'), // Hara Song
                 )
             )->group('e.entity_id');
 

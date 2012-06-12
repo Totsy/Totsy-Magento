@@ -120,7 +120,9 @@ class Enterprise_Invitation_Block_Adminhtml_Report_Invitation_Customer_Grid
         if(Mage::registry('customer_email')){
         	Mage::unregister('customer_email');
         }
-        Mage::register('customer_email', $email);
+        if(!!$email){
+        	Mage::register('customer_email', $email);
+        }
         $totalObj = Mage::getModel('reports/totals');
         $this->setTotals($totalObj->countTotals($this, $from, $to));
         $this->addGrandTotals($this->getTotals());
