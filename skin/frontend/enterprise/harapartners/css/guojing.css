@@ -1,0 +1,10 @@
+.ie_seven body a.facebook-button {
+	margin-top: -2px;
+	margin-left: 225px;
+}
+
+.ie_seven body.customer-account-create div .facebook-button, .enterprise-invitation-customer-account-create div .facebook-button {
+	width: 171px;
+	margin-top: 30px;
+	margin-left: 200px;
+}
