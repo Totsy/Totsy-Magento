@@ -20,7 +20,7 @@ class Harapartners_Service_Helper_Data extends Mage_Core_Helper_Url{
     
     const TOTSY_CUSTOMER_GROUP_ID             = 1;
     const MAMASOURCE_CUSTOMER_GROUP_ID         = 2;
-    
+    const DEACTIVATED_USER_GROUP_ID             = 4;
     //another version of translate,which is used in sailthru tags and emails, is in Mage_Catalog.csv
     public static function getNavAgeTranlateArray(){
         return array( 
@@ -101,6 +101,13 @@ class Harapartners_Service_Helper_Data extends Mage_Core_Helper_Url{
             }
         }
         return false;
+    }
+    
+    public function getDeactivatedId(){
+          $groupId = Mage::getModel('customer/group')->getCollection()
+          		->addFieldToFilter('customer_group_code', 'deactivated')
+          		->getFirstItem()->getCustomerGroupId();
+          return $groupId;
     }
     
 }

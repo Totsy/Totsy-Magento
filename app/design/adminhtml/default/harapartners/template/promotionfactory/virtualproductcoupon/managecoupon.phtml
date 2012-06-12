@@ -1,0 +1,57 @@
+<?php
+/*
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the End User Software Agreement (EULA).
+ * It is also available through the world-wide-web at this URL:
+ * http://www.harapartners.com/license
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to eula@harapartners.com so we can send you a copy immediately.
+ * 
+ */
+?>
+
+<div class="content-header">
+<h3 class="icon-head">Manage Virtual Product Coupons</h3>
+</div>
+<form action="<?php echo $this->getUrl('promotionfactory/adminhtml_virtualproductcoupon/generateCoupon'); ?>" method="post">
+	<input type="hidden" name="form_key" value="<?php echo $this->getFormKey(); ?>"/>
+	<input type="hidden" name="product_id" value="<?php echo $this->getRequest()->getParam('product_id'); ?>"/>
+	<table cellspacing="0" class="form-list">
+		<tbody>
+			<tr>
+				<td class="label"><label for="virtual_product_name">Virtual Product Name</label></td>
+				<td class="value">
+					<span id="virtual_product_name"><?php $coupon = Mage::getModel('promotionfactory/virtualproductcoupon')->load($this->getRequest()->getParam('product_id')); echo $coupon->getName();?></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="label"><label for="total">Number of Coupons to Generate</label></td>
+				<td class="value">
+					<input type="text" value="" name="total" id="total" size=8 >
+					<button type="submit"><span>Generate</span></button>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</form>
+
+<form action="<?php echo $this->getUrl('promotionfactory/adminhtml_virtualproductcoupon/importCoupon'); ?>" method="post" enctype="multipart/form-data" >
+	<input type="hidden" name="form_key" value="<?php echo $this->getFormKey(); ?>"/>
+	<input type="hidden" name="product_id" value="<?php echo $this->getRequest()->getParam('product_id'); ?>"/>
+	<table cellspacing="0" class="form-list">
+	<tbody>
+		<tr>
+			<td class="label"><label for="import">Import Coupon Codes</label></td>
+			<td class="value">
+				<input type="file" value="" name="import" id="import">
+				<button type="submit"><span>Import</span></button>
+			</td>
+		</tr>
+	</tbody>
+	</table>
+</form>
+<?php
+ echo $this->getGridHtml();
+?>

@@ -258,6 +258,13 @@ XML;
      */
     public function submitOrdersToFulfill($orders, $capturePayment=false) {
         $responseArray = array();
+        
+		$this->_log->info(sprintf(
+			'Trying to send %d orders for fulfillment.',
+			count($orders)
+		));
+		
+		$successCount = 0;
 
         foreach($orders as $order) {
             try {
@@ -323,7 +330,8 @@ XML;
             $shippingName = $shippingAddress->getFirstname() . ' ' . $shippingAddress->getLastname();
             
             $state = Mage::helper('fulfillmentfactory')->getStateCodeByFullName($shippingAddress->getRegion(), $shippingAddress->getCountry());
-            
+
+            //$city = Mage::help('fulfillmentfactory')->validateAddressForDC('CITY', $shippingAddress->getCity());            
             $xml = <<<XML
         <orders xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <order>
@@ -459,7 +467,15 @@ XML;
                 Mage::helper('fulfillmentfactory/log')->errorLogWithOrder($message, $order->getId());
                 //throw new Exception($message);
             }
+            else {
+            	$successCount++;
+            }
         }
+        
+        $this->_log->info(sprintf(
+			'Successfully sent %d orders for fulfillment.',
+			$successCount
+		));
 
         return $responseArray;
     }
