@@ -138,7 +138,13 @@ class Mage_Checkout_CartController extends Mage_Core_Controller_Front_Action
         
         if ($cart->getQuote()->getItemsCount()) {
             $cart->init();
-            $cart->save();
+            
+            //Harapartners, Jun, Additional handling in case Sailthru or SpeedTax lost connection
+            try{
+            	$cart->save();
+            }catch(Exception $e){
+            	$this->_getSession()->addError($this->__($e->getMessage()));
+            }
 
             if (!$this->_getQuote()->validateMinimumAmount()) {
                 $warning = Mage::getStoreConfig('sales/minimum_order/description');

@@ -55,6 +55,10 @@
                     <catalog_product_edit_tab_attributes>Harapartners_Service_Block_Rewrite_Adminhtml_Catalog_Product_Edit_Tab_Attributes</catalog_product_edit_tab_attributes>
                     <!-- Totsy: select fields disabled in the admin panel -->
                     <catalog_category_tab_general>Harapartners_Service_Block_Rewrite_Adminhtml_Catalog_Category_Tab_General</catalog_category_tab_general>
+					<!--Harapartners_Service: no wishlist for creating new orders -->
+                    <sales_order_create_items_grid>Harapartners_Service_Block_Rewrite_Adminhtml_Sales_Order_Create_Items_Grid</sales_order_create_items_grid>
+					<!--Harapartners_Promotionfactory: manage coupon button for virtual product-->
+					<catalog_product_edit>Harapartners_Service_Block_Rewrite_Adminhtml_Catalog_Product_Edit</catalog_product_edit>
                 </rewrite>
             </adminhtml>
             <checkout>
@@ -63,6 +67,8 @@
                     <links>Harapartners_Service_Block_Rewrite_Checkout_Links</links>
                     <!--Harapartners_SpeedTax-->
                     <onepage_shipping_method_available>Harapartners_Service_Block_Rewrite_Checkout_Onepage_Shipping_Method_Available</onepage_shipping_method_available>
+					<!--Harapartners_Promotionfactory: add reservation code to cart renderer-->
+					<cart_item_renderer>Harapartners_Service_Block_Rewrite_Checkout_Cart_Item_Renderer</cart_item_renderer>
                 </rewrite>
             </checkout>
             <enterprise_reward>
@@ -175,6 +181,10 @@
                     <quote_address_total_grand>Harapartners_Service_Model_Rewrite_Sales_Quote_Address_Total_Grand</quote_address_total_grand>
 					<!--Harapartners_Service, Query optimization, no quote item price update after product import-->
 					<observer>Harapartners_Service_Model_Rewrite_Sales_Observer</observer>
+					<!--Harapartners_Service, Removing Ogone from order status-->
+                    <order_config>Harapartners_Service_Model_Rewrite_Sales_Order_Config</order_config>
+					<!--Harapartners_Service, if product does not have an live category/event, it cannot be add to cart (quote)--><!--Harapartners_Promotionfactory, Virtual product (coupons) should always be a separate line item-->
+                    <quote>Harapartners_Service_Model_Rewrite_Sales_Quote</quote>
                 </rewrite>
             </sales>
             <tax>
@@ -312,6 +322,16 @@
                     </fulfillmentfactory>
                 </observers>
             </order_cancel_after>
+			<sales_quote_item_save_before>
+                <observers>
+					<!--Harapartners_Promotionfactory: Reserve Virtual Product Coupon-->
+                    <promotionfactory>
+                        <type>singleton</type>
+                        <class>promotionfactory/observer</class>
+                        <method>reserveVirtualProductCouponInCart</method>
+                    </promotionfactory>
+                </observers>
+            </sales_quote_item_save_before>
             <sales_quote_item_save_after>
                 <observers>
                     <!--Harapartners_Rushcheckout: Adding or updating quote item -->
@@ -328,8 +348,23 @@
                         <class>rushcheckout/observer</class>
                         <method>updateReservationByQuoteItem</method>
                     </rushcheckout>
+					<!--Harapartners_Promotionfactory: Deleting quote item will release any related coupon reservation-->
+                    <promotionfactory>
+                        <class>promotionfactory/observer</class>
+                        <method>releaseVirtualProductCouponInCart</method>
+                    </promotionfactory>
                 </observers>
             </sales_quote_item_delete_after>
+			<sales_order_item_save_before>
+                <observers>
+					<!--Harapartners_Promotionfactory: Use Virtual Product Coupon-->
+                    <promotionfactory>
+                        <type>singleton</type>
+                        <class>promotionfactory/observer</class>
+                        <method>purchaseVirtualProductCouponInOrder</method>
+                    </promotionfactory>
+                </observers>
+            </sales_order_item_save_before>
             <sales_order_creditmemo_refund>
                 <observers>
                     <!--Harapartners_SpeedTax-->
