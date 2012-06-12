@@ -88,7 +88,15 @@ class Enterprise_Invitation_Block_Adminhtml_Report_Invitation_Customer_Grid
             'type'      =>'number',
             'index'     => 'accepted'
         ));
-
+        
+		//Hara Song --Start
+        $this->addColumn('ordered_increment_id', array(
+        	'header'	=> Mage::helper('enterprise_invitation')->__('# of Invitees Ordered'),
+        	'type'		=> 'number',
+        	'index'		=> 'order_increment_id'
+        ));
+        //Hara Song --End
+        
         $this->addExportType('*/*/exportCustomerCsv', Mage::helper('enterprise_invitation')->__('CSV'));
         $this->addExportType('*/*/exportCustomerExcel', Mage::helper('enterprise_invitation')->__('Excel XML'));
 
