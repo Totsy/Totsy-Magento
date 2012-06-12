@@ -16,13 +16,13 @@ class Harapartners_Promotionfactory_Block_Adminhtml_Virtualproductcoupon_Managec
 
     public function __construct(){
         parent::__construct();
-        $this->setId('virtual-product-coupon-grid');
+        $this->setId('virtualProductCouponGrid');
     }
 
     protected function _prepareCollection(){
     	$currentProduct = Mage::registry('manage_coupon_virtual_product');
-        $coupons = Mage::getModel('promotionfactory/virtualproductcoupon')->loadByProductId( $currentProduct->getId() );
-        $this->setCollection($coupons);
+        $couponCollection = Mage::getModel('promotionfactory/virtualproductcoupon')->getCollection()->loadByProductId( $currentProduct->getId() );
+        $this->setCollection($couponCollection);
         parent::_prepareCollection();
         return $this;
     }
@@ -32,40 +32,54 @@ class Harapartners_Promotionfactory_Block_Adminhtml_Virtualproductcoupon_Managec
         return Mage::app()->getStore($storeId);
     }
 
-	protected function _prepareColumns(){        
+	protected function _prepareColumns(){
+		$helper = Mage::helper('promotionfactory');        
         $this->addColumn('entity_id', array(
-            'header'        => Mage::helper('promotionfactory')->__('ID'),
+            'header'        => $helper->__('ID'),
             'index'         => 'entity_id'
         ));
 
         $this->addColumn('product_id', array(
-            'header'        => Mage::helper('promotionfactory')->__('Product ID'),
+            'header'        => $helper->__('Product ID'),
             'index'         => 'product_id'
         ));
         
         $this->addColumn('code', array(
-            'header'        => Mage::helper('promotionfactory')->__('Code'),
+            'header'        => $helper->__('Code'),
             'index'         => 'code'
         ));
         
        $this->addColumn('created_at', array(
-            'header'        => Mage::helper('promotionfactory')->__('Created At'),
+            'header'        => $helper->__('Created At'),
             'index'         => 'created_at',
         ));
         
         $this->addColumn('updated_at', array(
-            'header'        => Mage::helper('promotionfactory')->__('Updated At'),
+            'header'        => $helper->__('Updated At'),
             'index'         => 'updated_at',
         ));
         
         $this->addColumn('status', array(
-            'header'        => Mage::helper('promotionfactory')->__('Status'),
+            'header'        => $helper->__('Status'),
             'index'         => 'status',
         	'type'			=> 'options',
-            'options' => Mage::getModel( 'promotionfactory/virtualproductcoupon' )->toArrayOption()
+            'options' 		=> $helper->getGridStatusArray()
         ));
 
         return parent::_prepareColumns();
+    }
+    
+	protected function _prepareMassaction() {
+        $this->setMassactionIdField('entity_id');
+        $this->getMassactionBlock()->setFormFieldName('coupon_ids');
+	
+        $this->getMassactionBlock()->addItem('deleteCoupons', array(
+        	'label'		=> Mage::helper('promotionfactory')->__('Delete Coupons'),
+        	'url'		=>$this->getUrl('*/*/massDeleteCoupons', array('_current'=>true)),
+        	'confirm'	=>Mage::helper('promotionfactory')->__('Do you want to delete these coupons?')
+        ));
+
+        return $this;
     }
 
 }
