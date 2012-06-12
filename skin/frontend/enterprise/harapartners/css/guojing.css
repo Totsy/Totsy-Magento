@@ -8,3 +8,61 @@
 	margin-top: 30px;
 	margin-left: 200px;
 }
+
+.ie_seven div.catalog-events-container .catalog-event {
+	height: 321px;
+	width: 230px;
+	display: inline;
+}
+
+.ie_seven .catalog-events-container .catalog-event .splash-details {
+	position: relative;
+}
+
+.ie_seven .menu {
+	position: relative;
+}
+
+.ie_seven #newsales {
+	margin-right: 9px;
+}
+
+.ie_seven #newsales .trileft {
+	top: 0px;
+	left: 115px;
+	position: absolute;
+}
+
+.ie_seven #ending {
+	margin-right: 9px;
+}
+
+.ie_seven #ending .trileft {
+	top: 0px;
+	left: 245px;
+	position: absolute;
+}
+
+.ie_seven #bycat {
+	margin-right: 9px;
+}
+
+.ie_seven #bycat .trileft {
+	top: 0px;
+	left: 369px;
+	position: absolute;
+}
+
+.ie_seven #byage {
+	margin-right: 9px;
+}
+
+.ie_seven #byage .trileft {
+	top: 0px;
+	left: 493px;
+	position: absolute;
+}
+
+.ie_seven .block-content {
+	margin-top: 15px;
+}
