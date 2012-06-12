@@ -154,9 +154,15 @@ class Mage_Customer_AccountController extends Mage_Core_Controller_Front_Action
                     if ($session->getCustomer()->getIsJustConfirmed()) {
                         $this->_welcomeCustomer($session->getCustomer(), true);
                     }
-                    if ($session->getCustomer()->getDeactivated()) {
+                    /*START Hara Partners Edward for deactive a customer*/
+                    /*there must be a relative customer group on admin for deactivating user, it this case the Id of it is 4*/
+                    //used to be like if ($session->getCustomer()->isDeactivated()) {
+                    $deactiveGroupId = Mage::helper('service')->getDeactivatedId();
+                    if ($session->getCustomer()->getGroupId() == $deactiveGroupId) {
+                    /*END Hara Partners Edward for deactive a customer*/
                         $session->logout()->renewSession(); // destroy the new session, and recreate a new one
                         throw new Mage_Core_Exception(Mage::helper('customer')->__('Your account has been disabled. Please contact customer service for more information.'));
+                        /*Hara Partners Edward, TODO: send email to customer to inform s/he that the account is disactived*/
                     }
                 } catch (Mage_Core_Exception $e) {
                     switch ($e->getCode()) {

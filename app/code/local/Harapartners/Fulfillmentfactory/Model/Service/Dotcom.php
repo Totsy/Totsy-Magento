@@ -258,6 +258,13 @@ XML;
      */
     public function submitOrdersToFulfill($orders, $capturePayment=false) {
         $responseArray = array();
+        
+		$this->_log->info(sprintf(
+			'Trying to send %d orders for fulfillment.',
+			count($orders)
+		));
+		
+		$successCount = 0;
 
         foreach($orders as $order) {
             try {
@@ -460,7 +467,15 @@ XML;
                 Mage::helper('fulfillmentfactory/log')->errorLogWithOrder($message, $order->getId());
                 //throw new Exception($message);
             }
+            else {
+            	$successCount++;
+            }
         }
+        
+        $this->_log->info(sprintf(
+			'Successfully sent %d orders for fulfillment.',
+			$successCount
+		));
 
         return $responseArray;
     }
