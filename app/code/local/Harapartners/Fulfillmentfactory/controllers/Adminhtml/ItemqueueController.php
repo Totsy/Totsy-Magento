@@ -107,17 +107,18 @@ class Harapartners_Fulfillmentfactory_Adminhtml_ItemqueueController extends Mage
         $ids = $this->getRequest()->getParam('itemqueue_id');
         
         try{
-            $rsp = Mage::getModel('fulfillmentfactory/service_fulfillment')->batchCancel($ids);
+            $errorArray = Mage::getModel('fulfillmentfactory/service_fulfillment')->batchCancel($ids);
             
-            if($rsp) {
+            if(!$errorArray) {
                 //show success message
                 Mage::getSingleton('adminhtml/session')->addSuccess(
                         Mage::helper('fulfillmentfactory')->__('Selected items has been cancelled'));
-            }
-            else {
+            } else {
                 //show fail message
-                Mage::getSingleton('adminhtml/session')->addError(
-                        Mage::helper('fulfillmentfactory')->__('Batch Cancellation of items failed'));
+                foreach($errorArray as $errorMessage){
+	                Mage::getSingleton('adminhtml/session')->addError(
+	                        Mage::helper('fulfillmentfactory')->__($errorMessage));
+            	}
             }
         }catch (Exception $e){
             Mage::getSingleton('adminhtml/session')->addError(

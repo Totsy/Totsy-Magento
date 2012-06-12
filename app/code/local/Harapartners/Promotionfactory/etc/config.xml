@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Harapartners_Promotionfactory>
-            <version>1.2.0</version>
+            <version>1.3.0</version>
         </Harapartners_Promotionfactory>
     </modules>
     <global>
@@ -30,6 +30,9 @@
                     <groupcoupon>
                         <table>promotionfactory_groupcoupon</table>
                     </groupcoupon>
+					<virtualproductcoupon>
+						<table>promotionfactory_virtualproductcoupon</table>
+					</virtualproductcoupon>
                 </entities>
             </promotionfactory_mysql4>
             <!--Moved to Harapartners_Service-->
@@ -133,6 +136,11 @@
                         <sort_order>300</sort_order>
                         <action>promotionfactory/adminhtml_groupcoupon</action>
                     </groupcoupon>
+					<virtualproductcoupon translate="title" module="promotionfactory">
+                        <title>Virtual Product Coupons</title>
+                        <sort_order>400</sort_order>
+                        <action>promotionfactory/adminhtml_virtualproductcoupon</action>
+                    </virtualproductcoupon>
                 </children>
             </promo>
         </menu>
