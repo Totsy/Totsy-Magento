@@ -70,6 +70,7 @@ Default layout, loads most of the pages
 				
 				<!-- Guojing @HaraPartners -->
 				<action method="addCss"><stylesheet>css/guojing.css</stylesheet></action>
+				<action method="addCss"><stylesheet>css/zhichen.css</stylesheet></action>
 				
                 <action method="addCss"><stylesheet>css/cloud-zoom.css</stylesheet></action>
                 <action method="addCss"><stylesheet>css/fancybox/jquery.fancybox.css</stylesheet></action>
