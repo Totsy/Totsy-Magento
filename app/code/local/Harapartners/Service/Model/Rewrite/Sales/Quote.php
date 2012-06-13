@@ -16,7 +16,7 @@ class Harapartners_Service_Model_Rewrite_Sales_Quote extends Mage_Sales_Model_Qu
    
     public function addProductAdvanced(Mage_Catalog_Model_Product $product, $request = null, $processMode = null) {
     	//Harapartners, Jun, check if product is salable due to category/event limit
-    	if(!$product->isSalable()){
+    	if(!Mage::app()->getStore()->isAdmin() && !$product->isSalable()){
     		Mage::throwException(sprintf('The selected item \'%s\' is not available.', $product->getName()));
     	}
     	//Harapartners, Jun, Virtual product (coupons) should have qty=1 per line item (code reservation logic)
