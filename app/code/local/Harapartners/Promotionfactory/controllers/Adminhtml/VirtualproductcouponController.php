@@ -145,7 +145,11 @@ class Harapartners_PromotionFactory_Adminhtml_VirtualproductcouponController ext
   		}else{
   			Mage::getSingleton('adminhtml/session')->addError(Mage::helper('promotionfactory')->__('Please select coupon(s) you want to delete.'));
   		}
-  		$this->_redirect('*/*/manageCouponByProduct', array('store'=> $storeId, 'product_id'=>$productId));
+  		if( $productId ) {
+  			$this->_redirect('*/*/manageCouponByProduct', array('store'=> $storeId, 'product_id'=>$productId));
+  		} else {
+  			$this->_redirect( '*/*/' );
+  		}
     }
     
     protected function _getSession() {
