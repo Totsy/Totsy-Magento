@@ -89,7 +89,7 @@ $couponStr = isset($coupon)?"&promocode=".$_latestOrder->getCouponCode():"";
 
 ?>
 
-<script type="javascript/text">
+<script type="text/javascript">
   _esq.events.push({
         type : 'es_conversion',
         revenue: '<?php echo number_format($_latestOrder->getGrandTotal(), 2, '.', ' '); ?>',
