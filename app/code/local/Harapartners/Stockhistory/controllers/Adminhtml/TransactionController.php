@@ -303,10 +303,18 @@ class Harapartners_Stockhistory_Adminhtml_TransactionController extends Mage_Adm
             $this->_getSession()->addError($this->__('Invalid PO.'));
         }
         
+        $isError = false;
+        
         //get report collection data from session
         $reportData = $this->_getSession()->getPOReportGridData();
         $itemsArray = array();
         foreach($reportData as $record) {
+        	
+        	if($record['po_id'] != $poObject->getId()) {
+        		$isError = true;
+        		break;
+        	}
+        	
         	if($record['is_master_pack'] == 'Yes') {
         		$qty = $record['qty_total'];
         	}else{
@@ -321,20 +329,25 @@ class Harapartners_Stockhistory_Adminhtml_TransactionController extends Mage_Adm
             }
         }
         
-        $rsp = Mage::getModel('fulfillmentfactory/service_dotcom')->submitPurchaseOrdersToDotcom($poObject, $itemsArray);
-
-        $error = $rsp->purchase_order_error;
-        if ($error) {
-            $this->_getSession()->addError($this->__('Could not submit this Purchase Order to Dotcom: ' . $error->error_description));
-        } else {
-            $this->_getSession()->addSuccess($this->__('New Purchase Order successfully submitted to Dotcom.'));
-            //Update PO status
-            try{
-                $poObject->setStatus(Harapartners_Stockhistory_Model_Purchaseorder::STATUS_SUBMITTED);
-                $poObject->save();
-            } catch(Exception $e) {
-                $this->_getSession()->addError($e->getMessage());
-            }
+        if(!$isError) {
+	        $rsp = Mage::getModel('fulfillmentfactory/service_dotcom')->submitPurchaseOrdersToDotcom($poObject, $itemsArray);
+	
+	        $error = $rsp->purchase_order_error;
+	        if ($error) {
+	            $this->_getSession()->addError($this->__('Could not submit this Purchase Order to Dotcom: ' . $error->error_description));
+	        } else {
+	            $this->_getSession()->addSuccess($this->__('New Purchase Order successfully submitted to Dotcom.'));
+	            //Update PO status
+	            try{
+	                $poObject->setStatus(Harapartners_Stockhistory_Model_Purchaseorder::STATUS_SUBMITTED);
+	                $poObject->save();
+	            } catch(Exception $e) {
+	                $this->_getSession()->addError($e->getMessage());
+	            }
+	        }
+        }
+        else {
+        	$this->_getSession()->addError('Incorrect session data. Please refresh the page and submit again!');
         }
 
         //clean collection in session

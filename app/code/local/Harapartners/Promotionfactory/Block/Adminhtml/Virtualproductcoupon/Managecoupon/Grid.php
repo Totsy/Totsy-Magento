@@ -16,7 +16,7 @@ class Harapartners_Promotionfactory_Block_Adminhtml_Virtualproductcoupon_Managec
 
     public function __construct(){
         parent::__construct();
-        $this->setId('virtual-product-coupon-grid');
+        $this->setId('virtualProductCouponGrid');
     }
 
     protected function _prepareCollection(){
@@ -67,6 +67,19 @@ class Harapartners_Promotionfactory_Block_Adminhtml_Virtualproductcoupon_Managec
         ));
 
         return parent::_prepareColumns();
+    }
+    
+	protected function _prepareMassaction() {
+        $this->setMassactionIdField('entity_id');
+        $this->getMassactionBlock()->setFormFieldName('coupon_ids');
+	
+        $this->getMassactionBlock()->addItem('deleteCoupons', array(
+        	'label'		=> Mage::helper('promotionfactory')->__('Delete Coupons'),
+        	'url'		=>$this->getUrl('*/*/massDeleteCoupons', array('_current'=>true)),
+        	'confirm'	=>Mage::helper('promotionfactory')->__('Do you want to delete these coupons?')
+        ));
+
+        return $this;
     }
 
 }

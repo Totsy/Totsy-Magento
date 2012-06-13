@@ -103,4 +103,11 @@ class Harapartners_Service_Helper_Data extends Mage_Core_Helper_Url{
         return false;
     }
     
+    public function getDeactivatedId(){
+          $groupId = Mage::getModel('customer/group')->getCollection()
+          		->addFieldToFilter('customer_group_code', 'deactivated')
+          		->getFirstItem()->getCustomerGroupId();
+          return $groupId;
+    }
+    
 }
