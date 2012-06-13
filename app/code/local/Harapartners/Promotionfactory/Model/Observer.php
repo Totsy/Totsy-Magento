@@ -53,7 +53,7 @@ class Harapartners_Promotionfactory_Model_Observer {
 	            $vpc->setData('status', Harapartners_Promotionfactory_Model_Virtualproductcoupon::COUPON_STATUS_RESERVED)
 	            		->save();
 			}else{
-				Mage::throwException(sprintf("%s does not have any coupon code available.", $product->getName()));
+				Mage::throwException(sprintf("'%s' does not have any coupon code available.", $product->getName()));
 			}
 		}
 	}
