@@ -215,3 +215,51 @@
 .ie_seven #topCartContent .actions .button {
 	height: 25px;
 }
+
+/*
+.ie_seven div.cart .checkout-types button.btn-checkout span {
+	line-height: 30px;
+}*/
+
+.ie_seven div.cart .checkout-types button.btn-checkout span span {
+	line-height: 21px !important; 
+}
+
+.ie_seven div.cart .cart-table .btn-update span span {
+	line-height: 16px !important;
+}
+
+.ie_seven div.cart .deals button span span {
+	line-height: 16px !important;
+}
+
+.ie_seven #items-info-wrapper .actions button.button {
+	padding-top: 0px;
+}
+
+.ie_seven .billing-address-select {
+	position: absolute;
+	display: inline;
+	top: 219px;
+	left: 548px;
+}
+
+.ie_seven .shipping-address-select {
+	position: absolute;
+	display: inline;
+	top: 219px;
+	left: 994px;
+}
+
+.ie_seven .checkout-content {
+	display: inline;
+}
+
+.ie_seven .product-view .product-essential button.btn-cart {
+	height: 30px;
+}
+
+.ie_seven .catalog-product-view .product-view .product-shop .add-to-cart button span span{
+	line-height: 27px !important;
+	padding-top: 0px !important;
+}
