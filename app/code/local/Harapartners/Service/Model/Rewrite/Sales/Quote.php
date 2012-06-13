@@ -15,7 +15,7 @@
 class Harapartners_Service_Model_Rewrite_Sales_Quote extends Mage_Sales_Model_Quote {
    
     public function addProductAdvanced(Mage_Catalog_Model_Product $product, $request = null, $processMode = null) {
-    	//Harapartners, Jun, check if product is salable due to category/event limit
+    	//Harapartners, Jun, check if product is salable due to category/event limit, frontend only
     	if(!Mage::app()->getStore()->isAdmin() && !$product->isSalable()){
     		Mage::throwException(sprintf('The selected item \'%s\' is not available.', $product->getName()));
     	}
