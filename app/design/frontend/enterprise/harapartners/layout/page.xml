@@ -54,6 +54,10 @@ Default layout, loads most of the pages
                 <action method="addJs"><script>jquery/jquery.jcountdown1.3.min.js</script></action>
                 <action method="addJs"><script>jquery/cloud-zoom.1.0.2.js</script></action>
                 <action method="addJs"><script>harapartners/phoneformat.js</script></action>
+				
+				<!-- Guojing @HaraPartners -->
+				<action method="addJs"><script>harapartners/crossbrowser.js</script></action>
+				
                 <action method="addJs"><script>jquery/jquery.fancybox.js</script></action>
                 <block type="page/js_cookie" name="js_cookies" template="page/js/cookie.phtml"/>
                 <action method="addItem"><type>skin_js</type><name>js/scripts.js</name></action>
@@ -63,6 +67,11 @@ Default layout, loads most of the pages
                 <action method="addCss"><stylesheet>css/styles_1.css</stylesheet></action>
                 <action method="addCss"><stylesheet>css/styles_2.css</stylesheet></action>
                 <action method="addCss"><stylesheet>css/styles_3.css</stylesheet></action>
+				
+				<!-- Guojing @HaraPartners -->
+				<action method="addCss"><stylesheet>css/guojing.css</stylesheet></action>
+				<action method="addCss"><stylesheet>css/zhichen.css</stylesheet></action>
+				
                 <action method="addCss"><stylesheet>css/cloud-zoom.css</stylesheet></action>
                 <action method="addCss"><stylesheet>css/fancybox/jquery.fancybox.css</stylesheet></action>
                 <action method="addItem"><type>skin_css</type><name>css/styles-ie.css</name><params/><if>lt IE 8</if></action>

@@ -148,7 +148,7 @@ $numColumns = sizeof($this->getColumns());
         <?php endif; //Hara Song --End?>
         <?php foreach ($this->getCollection()->getIntervals() as $_index => $_item): ?>
             <tr>
-            <?php if(Mage::registry('use_email_filter') && !!$email): //Hara Song --Start?>
+            <?php if(Mage::registry('use_email_filter')): //Hara Song --Start?>
             <?php $report = $this->getReportWithCustomerEmail($_item['start'], $_item['end'], $email)?>
             <?php else:?>
             <?php $report=$this->getReport($_item['start'], $_item['end']) ?>

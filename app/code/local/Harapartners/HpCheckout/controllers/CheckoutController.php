@@ -24,6 +24,7 @@ class Harapartners_HpCheckout_CheckoutController extends Mage_Checkout_Controlle
         $this->validateCart();
         $this->loadLayout();
         $this->_initLayoutMessages( 'checkout/session' );
+        $this->_resetCartTimer();
         $this->renderLayout();                                
     }
     
@@ -305,6 +306,12 @@ class Harapartners_HpCheckout_CheckoutController extends Mage_Checkout_Controlle
         return Mage::getSingleton('customer/session');
     }
     
+    protected function _resetCartTimer(){
+    	$helper = Mage::helper('hpcheckout');
+    	$checkoutSession = Mage::getSingleton('checkout/session');
+    	$checkoutSession->setCountDownTimer($helper->getCurrentTime());    //Harapartners, yang, set new cart timer
+    	return $this;
+    }
     /**
      * Action predispatch
      *

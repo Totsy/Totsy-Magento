@@ -67,6 +67,9 @@ class Harapartners_Promotionfactory_Model_Mysql4_Virtualproductcoupon extends Ma
                 ->from($this->getMainTable())
                 ->where( "code=:code");
         $result = $readAdapter->fetchRow($select, array('code' => $code));
+		if(!$result){
+        	$result = array();
+        }
         return $result;
     }
     
