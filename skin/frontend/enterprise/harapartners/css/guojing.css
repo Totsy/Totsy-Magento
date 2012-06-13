@@ -66,3 +66,109 @@
 .ie_seven .block-content {
 	margin-top: 15px;
 }
+
+.ie_seven .event-title-container {
+	position: relative;
+}
+
+.ie_seven .count-down-timer {
+	position: absolute;
+	top: 10px;
+	left: 700px;
+}
+
+.ie_seven .event-description-container {
+	position: relative;
+}
+
+.ie_seven .event-image img{
+	margin-left: 0px;
+}
+
+.ie_seven .category-description {
+	position: absolute;
+	top: 10px;
+	left: 150px;
+}
+
+.ie_seven .product-info {
+	position: relative;
+}
+
+.ie_seven .price-box {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+}
+
+.ie_seven .product-main-info .price-box {
+	position: relative;
+}
+
+.ie_seven .product-info-box {
+	position: relative;
+}
+
+.ie_seven .product-collateral {
+	position: absolute;
+	top: 70px;
+	left: 0px;
+}
+
+.ie_seven .ui-tabs-panel {
+	position: absolute;
+	left: 0px;
+	top: 42px;
+	width: 500px;
+}
+
+.ie_seven .final-sale {
+	position: absolute;
+	top: 360px;
+}
+
+.ie_seven .product-shop {
+	position: absolute;
+	right: 320px;
+	top: 180px;
+}
+
+.ie_seven .invitation-form {
+	position: relative;
+}
+
+.ie_seven .invitation-right {
+	position: absolute;
+	right: 5px;
+	top: 20px;
+}
+
+.ie_seven #invite-gmail {
+	position: absolute;
+	top: 100px;
+	left: 0px;
+}
+
+.ie_seven #invite-outlook {
+	position: absolute;
+	top: 170px;
+	left: 0px;
+}
+
+.ie_seven #invite-msn {
+	position: absolute;
+	top: 240px;
+	left: 0px;
+}
+
+.ie_seven #invite-aol {
+	position: absolute;
+	top: 170px;
+	left: 169px;
+}
+
+.ie_seven #invite-others {
+	position: absolute;
+	top: 240px;
+	left: 169px;
+}
