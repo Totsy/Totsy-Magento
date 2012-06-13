@@ -69,7 +69,7 @@
 
 /* mouse over window */
 .ie_seven .block-content {
-	margin-top: 0px;
+	margin-top: 5px;
 }
 
 /* product page */
@@ -202,4 +202,16 @@
 .ie_seven #topCartContent .product-details .option-list p {
 	display: inline;
 	padding: 1px;
+}
+
+.ie_seven #hpcheckout-billing-wrapper {
+	display: inline;
+}
+
+.ie_seven #hpcheckout-shipping-wrapper {
+	display: inline;
+}
+
+.ie_seven #topCartContent .actions .button {
+	height: 25px;
 }
