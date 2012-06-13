@@ -101,7 +101,7 @@ class Inchoo_Facebook_Customer_AccountController extends Mage_Core_Controller_Fr
 			/*START Hara Partners Edward for deactive a customer*/
             /*there must be a relative customer group on admin for deactivating user, it this case the Id of it is 4*/
             //used to be like if ($session->getCustomer()->isDeactivated()) {
-            $deactiveGroupId = Harapartners_Service_Helper_Data::DEACTIVATED_USER_GROUP_ID;
+            $deactiveGroupId = Mage::helper('service')->getDeactivatedId();
             if ($this->_getCustomerSession()->getCustomer()->getGroupId() == $deactiveGroupId) {
             /*END Hara Partners Edward for deactive a customer*/
                 $this->_getCustomerSession()->addError(

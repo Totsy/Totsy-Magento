@@ -194,5 +194,13 @@
             </depends>
         </Harapartners_Unsubcentral>
 		
+		<Harapartners_Inviteeorder>
+			<active>true</active>
+			<codePool>local</codePool>
+			<depends>
+                <Harapartners_Service/>
+            </depends>
+        </Harapartners_Inviteeorder>
+		
     </modules>
 </config>
