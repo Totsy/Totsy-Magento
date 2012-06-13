@@ -28,12 +28,15 @@ class Totsy_Sales_Helper_Order
     {
         // use the creation date for the order or quote
         $shipDate = strtotime($order->getCreatedAt());
-        
-        if($order->getRelationChildId()) {
+        if($order->getRelationParentId()) {
+            $parentOrder = Mage::getModel('sales/order')->load($order->getRelationParentId());
+            $shipDate = strtotime($parentOrder->getCreatedAt());
             do {
-                $shipDate = $oldOrder->getCreatedAt();
-                $oldOrder = Mage::getModel('sales/order')->load($order->getRelationChildId());
-            } while($oldOrder->getRelationChildId());
+                $parentOrder = Mage::getModel('sales/order')->load($parentOrder->getRelationParentId());
+                if($parentOrder->getCreatedAt()) {
+                    $shipDate = strtotime($parentOrder->getCreatedAt());
+                }
+            } while($parentOrder->getRelationParentId());
         }
         // increment the ship date to the end date of the of the event that
         // ends last, in the collection of events
