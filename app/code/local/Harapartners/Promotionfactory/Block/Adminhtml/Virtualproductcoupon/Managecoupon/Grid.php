@@ -66,6 +66,9 @@ class Harapartners_Promotionfactory_Block_Adminhtml_Virtualproductcoupon_Managec
             'options' 		=> $helper->getGridStatusArray()
         ));
 
+        $this->addExportType('*/*/exportCsv', Mage::helper('sales')->__('CSV'));
+        $this->addExportType('*/*/exportExcel', Mage::helper('sales')->__('Excel XML'));
+        
         return parent::_prepareColumns();
     }
     
