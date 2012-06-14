@@ -65,11 +65,14 @@ class Harapartners_PromotionFactory_Block_Adminhtml_Virtualproductcoupon_Index_G
             'options' 		=> $helper->getGridStatusArray()
         ));
 
+        $this->addExportType('*/*/exportCsv', Mage::helper('sales')->__('CSV'));
+        $this->addExportType('*/*/exportExcel', Mage::helper('sales')->__('Excel XML'));
+        
         return parent::_prepareColumns();
     }
 
     public function getRowUrl($row){
-    	return "";
+    	return false;
 //        return $this->getUrl('*/*/edit', array(
 //                'store'=>$this->getRequest()->getParam('store'),
 //                'id'=>$row->getId()

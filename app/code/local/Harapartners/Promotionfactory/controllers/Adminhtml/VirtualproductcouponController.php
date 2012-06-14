@@ -152,6 +152,18 @@ class Harapartners_PromotionFactory_Adminhtml_VirtualproductcouponController ext
   		}
     }
     
+	public function exportCsvAction() {
+        $fileName   = 'virtual_product_coupon.csv';
+        $grid       = $this->getLayout()->createBlock('promotionfactory/adminhtml_virtualproductcoupon_index_grid');
+        $this->_prepareDownloadResponse($fileName, $grid->getCsvFile());
+    }
+
+    public function exportExcelAction() {
+        $fileName   = 'virtual_product_coupon.xml';
+        $grid       = $this->getLayout()->createBlock('promotionfactory/adminhtml_virtualproductcoupon_index_grid');
+        $this->_prepareDownloadResponse($fileName, $grid->getExcelFile($fileName));
+    }
+    
     protected function _getSession() {
     	if( ! $this->_session ) {
     		$this->_session = Mage::getSingleton( "adminhtml/session" );
