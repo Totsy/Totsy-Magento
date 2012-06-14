@@ -46,14 +46,14 @@
 <![endif]-->
 
 <?php
-        
-    if( Mage::getSingleton('customer/session')->getCustomerId() && ($this->getRequest()->getActionName()!=="view" && $this->getRequest()->getControllerName()!=="view") &&  ($this->getRequest()->getActionName()!=="success" && $this->getRequest()->getControllerName()!=="checkout")) {
-    
+
+if( Mage::getSingleton('customer/session')->getCustomerId() && ($this->getRequest()->getActionName()!=="view" && $this->getRequest()->getControllerName()!=="catalog") &&  ($this->getRequest()->getActionName()!=="success" && $this->getRequest()->getControllerName()!=="checkout") ) {
+
     $customer_id = Mage::getSingleton('customer/session')->getCustomerId();
-    
+
     //include the signer
-	require("dev/sociablelabs/sociable_signer.php");
-    
+    require("dev/sociablelabs/sociable_signer.php");
+
     // declare a path to the key
     $key_path = "dev/sociablelabs/sign_private_key";
 
@@ -61,7 +61,7 @@
     $rondavu_data = array (
         "config" =>  array ( "version" => "1.2" ),
         //information about the currently logged in user
-        "user" => array ( 
+        "user" => array (
             "id" => array (
                 array ( "id" => $customer_id, "type" => "totsy" )
             ),
@@ -92,13 +92,19 @@
 
     //sign it
     $socialable_labs_output = rondavu_sign($rondavu_data, $key_path);
- }
-  
+
 ?>
 
+<?php if(isset($socialable_labs_output)) { ?>
 <script type="text/javascript">
-    var socialableLabsOutput = <?php echo $socialable_labs_output ?>;  
+    var socialableLabsOutput = <?php echo $socialable_labs_output ?>;
 </script>
+<?php
+
+    }
+}
+
+?>
 
 <?php echo $this->getCssJsHtml() ?>
 <?php echo $this->getChildHtml() ?>
