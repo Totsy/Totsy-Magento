@@ -65,5 +65,13 @@
             <address class="box-content"><?php echo $_order->getBillingAddress()->format('html') ?></address>
         </div>
     </div>
+<?php if ($_order->getIsVirtual()): ?>
+     <div class="col-2">
+        <div class="info-box">
+            <h2 class="box-title"><?php echo $this->__('Payment Method') ?></h2>
+            <div class="box-content"><?php echo $this->getPaymentInfoHtml() ?></div>
+        </div>
+    </div>
+<?php endif; ?>
 </div>
 </div>
