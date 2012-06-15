@@ -104,6 +104,9 @@ class Harapartners_Service_Model_Rewrite_Sales_Quote_Payment extends Mage_Sales_
         $this->setMethod($data->getMethod());
         $method = $this->getMethodInstance();
 
+        $subscriptionId = $this->_decryptSubscriptionId($data->getData('cybersource_subid'));
+        $this->setData('cybersource_subid', $subscriptionId);
+        $method->setData('cybersource_subid', $subscriptionId);
         /**
          * Payment avalability related with quote totals.
          * We have recollect quote totals before checking
