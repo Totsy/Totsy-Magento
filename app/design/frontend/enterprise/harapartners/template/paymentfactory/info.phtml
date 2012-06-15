@@ -25,7 +25,7 @@
  */
 ?>
 <?php if($_info = $this->getInfo()): ?>
-<?php echo $this->getMethod()->getTitle() ?><br />
+<?php //echo $this->getMethod()->getTitle() ?>
 <!--<?php echo $this->__('Name on the Card: %s', $this->getInfo()->getCcOwner()) ?><br />-->
 <?php echo $this->__('Credit Card Type: %s', $this->getCcTypeName()) ?><br />
 <?php echo $this->__('Credit Card Number: xxxx-%s', $this->getInfo()->getCcLast4()) ?><br />
