@@ -12,12 +12,10 @@ class Totsy_Adminhtml_Sales_Order_CreateController extends Mage_Adminhtml_Sales_
 {
     public function saveAction()
     {
-        echo 'C';
-        error_log('Yes, I did it!')
-        die()
-        $customerId = $this->_getOrderCreateModel()->getQuote()->getCustomerId();
-        $profile = Mage::getModel('paymentfactory/profile');
+        die('Controllers Created');
         try {
+            $customerId = $this->_getOrderCreateModel()->getQuote()->getCustomerId();
+            $profile = Mage::getModel('paymentfactory/profile');
             $this->_processActionData('save');
             if ($paymentData = $this->getRequest()->getPost('payment')) {
                 $profile->loadByCcNumberWithId($paymentData['cc_number'].$customerId.$paymentData[ 'cc_exp_year' ].$paymentData[ 'cc_exp_month' ]);
