@@ -198,16 +198,11 @@ class Harapartners_Ordersplit_Helper_Data extends Mage_Core_Helper_Abstract {
                             $newItem = $this->_cloneQuoteItem($oldItem);                            
                             $newItem->setQuote($newQuote); //Fixed item 'is_nominal' check bug
                             $newQuote->addItem($newItem);
-                        }
-                        foreach($oldItem->getChildren() as $oldChildItem){
-                            if($useOrderItems) {
-                                $newChildItem = $this->_createQuoteItemFromOrderItem($newQuote, $oldChildItem);
-                                $newChildItem->setParentItem($newItem);
-                            } else {
+                            foreach($oldItem->getChildren() as $oldChildItem){
                                 $newChildItem = $this->_cloneQuoteItem($oldChildItem);
                                 $newChildItem->setParentItem($newItem);
                                 $newChildItem->setQuote($newQuote);
-                                $newQuote->addItem($newChildItem);
+                                $newQuote->addItem($newChildItem);                                
                             }
                         }
                     }
