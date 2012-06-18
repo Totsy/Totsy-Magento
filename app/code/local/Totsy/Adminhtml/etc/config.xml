@@ -54,7 +54,7 @@
             <adminhtml>
                 <args>
                     <modules>
-                        <Totsy_Adminhtml before="Mage_Adminhtml">Totsy_Adminhtml_Sales_Order</Totsy_Adminhtml>
+                        <Totsy before="Mage_Adminhtml">Totsy_Adminhtml</Totsy>
                     </modules>
                 </args>
             </adminhtml>

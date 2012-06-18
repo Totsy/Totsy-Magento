@@ -6,13 +6,12 @@
  * @package    Totsy_Adminhtml
  * @author      Tom Royer <troyer@totsy.com>
  */
-require_once 'Mage/Adminhtml/controllers/Sales/Order/CreateController.php';
+require_once 'Mage/Adminhtml/controllers/Sales/Order/EditController.php';
 
-class Totsy_Adminhtml_Sales_Order_CreateController extends Mage_Adminhtml_Sales_Order_CreateController
+class Totsy_Adminhtml_Sales_Order_EditController extends Mage_Adminhtml_Sales_Order_EditController
 {
     public function saveAction()
     {
-        die('Controllers Created');
         try {
             $customerId = $this->_getOrderCreateModel()->getQuote()->getCustomerId();
             $profile = Mage::getModel('paymentfactory/profile');
