@@ -1,0 +1,31 @@
+.ie_seven div.top-check-out li, .ie_seven div.totals .checkout-types li{
+	display:inline;
+}
+
+.ie_seven button.btn-continue{
+	height:33px;
+}
+
+.ie_seven button.btn-update{
+	height:22px;
+	text-align:center;
+}
+
+.ie_seven .cart .checkout-types .btn-proceed-checkout{
+	height:34px;
+	margin-left:5px;
+	text-align:center;
+}
+
+.ie_seven div.page-title .shipping-date, .ie_seven div.page-title .timer-control-box{
+	display:inline;
+}
+
+.ie_seven table.cart-table td div.item-options li {
+	display:inline;
+}
+
+.ie_seven div.cart .totals {
+	width:500px;
+}
+
