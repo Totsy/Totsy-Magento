@@ -205,8 +205,10 @@ class Harapartners_Import_Helper_Processor extends Mage_Core_Helper_Abstract {
                         $importData['is_in_stock'] = self::DEFAULT_PRODUCT_IS_IN_STOCK;
                         break;
                     default:
-                        throw new Exception($field . ' is required.');
-                        break;
+                    	if(!$importData['sku']){
+                        	throw new Exception($field . ' is required.');
+                    	}
+                    	break;
                 }
             }
         }
@@ -319,7 +321,7 @@ class Harapartners_Import_Helper_Processor extends Mage_Core_Helper_Abstract {
             $dataObj->setData('product_sku', $product->getSku());
             $dataObj->setData('vendor_style', $product->getVendorStyle());
             $dataObj->setData('unit_cost', $product->getData('sale_wholesale'));
-            $dataObj->setData('qty_delta', $importDataObject->getQty());
+            $dataObj->setData('qty_delta', $importDataObject->getQty()? $importDataObject->getQty() : 0);
             $dataObj->setData('action_type', Harapartners_Stockhistory_Model_Transaction::ACTION_TYPE_EVENT_IMPORT);
             $dataObj->setData('comment', date('Y-n-j H:i:s'));
             $stockhistoryTransaction->importData($dataObj)->save(); //exceptions will be caught and added to $this->_errorMessage
