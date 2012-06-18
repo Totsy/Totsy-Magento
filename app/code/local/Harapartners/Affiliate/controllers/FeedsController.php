@@ -47,7 +47,7 @@ class Harapartners_Affiliate_FeedsController extends Mage_Core_Controller_Front_
                 break;
                                 
                 default:    
-                	$xml = $simpleXml->addChild('error','Unknown Type');
+                    $xml = $simpleXml->addChild('error','Unknown Type');
                 break;
             } 
            
@@ -67,100 +67,105 @@ XML;
     }
     
     protected function _createSignupsXml($simpleXml,$from,$to,$affiliateCode){
-    	$recordCollection = $this->_prepareCollection($affiliateCode)
-								->addFieldToFilter('created_at', array( "lt" => $to,"gt"=>$from ))
-								->load();                                                    
+        $recordCollection = $this->_prepareCollection($affiliateCode)
+                                ->addFieldToFilter('created_at', array("from"=>$from, "to" =>$to, 'date'=> true ))
+                                ->load();                                                    
         foreach ($recordCollection as $record) { 
-			$this->_signupsEntry($simpleXml,$record);  
+            $this->_signupsEntry($simpleXml,$record);  
         }
         return $simpleXml;
     }
     
     protected function _createSignupsByReferralXml($simpleXml,$from,$to,$affiliateCode){
         $recordCollection = $this->_prepareCollection($affiliateCode,1)
-								->addFieldToFilter('created_at', array( "lt" => $to,"gt"=>$from ))
-								->load();    
+                                ->addFieldToFilter('created_at', array("from"=>$from, "to" =>$to, 'date'=> true))
+                                ->load();    
         foreach ($recordCollection as $record) { 
-			$this->_signupsEntry($simpleXml,$record);  
+            $this->_signupsEntry($simpleXml,$record);  
         }
         return $simpleXml;
     }
     
     protected function _createSalesXml($simpleXml,$from,$to,$affiliateCode,$period){
-    	$recordCollection = $this->_prepareCollection($affiliateCode)->load();    
+       
+        $recordCollection = $this->_prepareCollection($affiliateCode)->
+            addFieldToFilter('created_at', array( "to" => $to,"from"=>$from, 'date'=>true))->
+            addFieldToFilter('customer_id', array( "notnull" => true))->
+            load();  
         foreach ($recordCollection as $record) {
         // record may not have accurate customerId
-            $customer = Mage::getModel('customer/customer')->setWebsiteId(1)->loadByEmail($record->getCustomerEmail());
             $clickId = $this->_extractClickId($record);
-            
             $orderCollection = Mage::getModel('sales/order')->getCollection()
-                                                            ->addFieldToFilter('created_at', array( "lt" => $to,"gt"=>$from ))
-                                                            ->addFieldToFilter('customer_id',$customer->getId())
-                                                            ->addFieldToFilter('state','complete')
+                                                            ->addFieldToFilter('created_at', array( "to" => $to,"from"=>$from, 'date'=>true))
+                                                            ->addFieldToFilter('customer_id',$record->getCustomerId())
+                                                            ->addFieldToFilter('status','complete')
                                                             ->load();    
+
             foreach ($orderCollection as $order) {
-                $this->_salesEntry($simpleXml,$record,$order,$period);
-            }            
+                $this->_salesEntry($simpleXml,$record,$order,$clickId,$period);
+            }   
         }            
         return $simpleXml;
     }
     
     protected function _createReferringSalesXml($simpleXml,$from,$to,$affiliateCode,$period){
-    	$recordCollection = $this->_prepareCollection($affiliateCode,1)->load();
+        $recordCollection = $this->_prepareCollection($affiliateCode,1)->
+            addFieldToFilter('created_at', array( "to" => $to,"from"=>$from, 'date'=>true))->
+            addFieldToFilter('customer_id', array( "notnull" => true))->
+            load();
         foreach ($recordCollection as $record) {
         // record may not have accurate customerId
-            $customer = Mage::getModel('customer/customer')->setWebsiteId(1)->loadByEmail($record->getCustomerEmail());
-			$clickId = $this->_extractClickId($record);
+            //$customer = Mage::getModel('customer/customer')->setWebsiteId(1)->loadByEmail($record->getCustomerEmail());
+            $clickId = $this->_extractClickId($record);
             $orderCollection = Mage::getModel('sales/order')->getCollection()
-                                                            ->addFieldToFilter('created_at', array( "lt" => $to,"gt"=>$from ))
-                                                            ->addFieldToFilter('customer_id',$customer->getId())
-                                                            ->addFieldToFilter('state','complete')
+                                                            ->addAttributeToFilter('created_at', array( "from" => $from,"to"=>$to, 'date'=>true ))
+                                                            ->addFieldToFilter('customer_id',$record->getCustomerId())
+                                                            ->addFieldToFilter('status','complete')
                                                             ->load();    
+
             foreach ($orderCollection as $order) {
-				$this->_salesEntry($simpleXml,$record,$order,$period);
+                $this->_salesEntry($simpleXml,$record,$order,$clickId,$period);
             }            
         }            
         return $simpleXml;
     }    
     
     protected function _prepareCollection($affiliateCode,$level = 0){
-    	return Mage::getModel('customertracking/record')->getCollection()
-	    	->addFieldToFilter('affiliate_code', $affiliateCode)
-	    	->addFieldToFilter('level', $level)
-	    	->addFieldToFilter('registration_param', array("like" => "%clickId%"))
-	    	->setCurPage(1)
-	    	->setPageSize(20000);
+        return Mage::getModel('customertracking/record')->getCollection()
+            ->addFieldToFilter('affiliate_code', array('like' => '%'.$affiliateCode.'%'))
+            ->addFieldToFilter('level', $level)
+            ->addFieldToFilter('registration_param', array("like" => "%clickId%"));
     }
     
     protected function _signupsEntry(&$simpleXml,&$record){
-    	$entry = $simpleXml->addChild ('entry');
-    	$entry->addAttribute('clickId',$this->_extractClickId($record));
-    	$entry->addAttribute('eventMerchantId',$record->getCustomerId());
-    	$entry->addAttribute('count1',1);
-    	$entry->addAttribute('time',strtotime($record->getCreatedAt()));
-    	$entry->addAttribute('eventStatus','confirmed');
+        $entry = $simpleXml->addChild ('entry');
+        $entry->addAttribute('clickId',$this->_extractClickId($record));
+        $entry->addAttribute('eventMerchantId',$record->getCustomerId());
+        $entry->addAttribute('count1',1);
+        $entry->addAttribute('time',strtotime($record->getCreatedAt()));
+        $entry->addAttribute('eventStatus','confirmed');
     }
     
-	protected function _salesEntry(&$simpleXml,&$record,&$order,$period){
-    	$salesTime = strtotime($order->getCreatedAt());
-    	$registrationTime = strtotime($record->getCreatedAt());
-    	$lte = ($salesTime-$registrationTime<=$period)?false:true;
-    	
-		if($period>0 && $lte===false){ 
-			return;
-		}
-    	
-    	$entry = $simpleXml->addChild('entry');
-    	$entry->addAttribute('clickId',$data['clickid']);
-    	$entry->addAttribute('lifetimeId',$record->getCustomerId());
-    	$entry->addAttribute('eventMerchantId',$order->getIncrementId());
-    	$entry->addAttribute('value1',$order->getGrandTotal());
-    	$entry->addAttribute('time',$salesTime);
+    protected function _salesEntry(&$simpleXml,&$record,&$order,&$clickId,$period){
+        $salesTime = strtotime($order->getCreatedAt());
+        $registrationTime = strtotime($record->getCreatedAt());
+        $lte = ($salesTime-$registrationTime<=$period)?false:true;
+        
+        if($period>0 && $lte===false){ 
+            return;
+        }
+        
+        $entry = $simpleXml->addChild('entry');
+        $entry->addAttribute('clickId',$clickId);
+        $entry->addAttribute('lifetimeId',$record->getCustomerId());
+        $entry->addAttribute('eventMerchantId',$order->getIncrementId());
+        $entry->addAttribute('value1',$order->getGrandTotal());
+        $entry->addAttribute('time',$salesTime);
     }
     
     protected function _extractClickId(&$record){
-    	$data = json_decode($record->getRegistrationParam(),true);
-    	$data = array_change_key_case($data,CASE_LOWER);
-    	return $data['clickid'];
+        $data = json_decode($record->getRegistrationParam(),true);
+        $data = array_change_key_case($data,CASE_LOWER);
+        return $data['clickid'];
     }
 }
