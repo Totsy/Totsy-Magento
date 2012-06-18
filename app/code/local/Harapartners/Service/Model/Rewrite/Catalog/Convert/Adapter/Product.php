@@ -53,6 +53,14 @@ class Harapartners_Service_Model_Rewrite_Catalog_Convert_Adapter_Product extends
         if ($productId) {
             $product->load($productId);
             $new = false; //Hara Partners, Richu
+            
+            //Harapartners, Jun, when import scritp updates an existing product, calculate the qty_delta for PO transactions
+            $oldStockItem = $product->getStockItem();
+            if($oldStockItem && $oldStockItem->getId() && isset($importData['qty'])){
+            	$qtyDelta = $importData['qty'] - $oldStockItem->getQty();
+            	Mage::register('temp_product_import_qty_delta_for_po_' . $importData['sku'], $qtyDelta);
+            }
+            
         } else {
             $productTypes = $this->getProductTypes();
             $productAttributeSets = $this->getProductAttributeSets();
