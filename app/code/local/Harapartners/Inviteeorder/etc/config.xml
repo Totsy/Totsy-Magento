@@ -7,9 +7,9 @@
     </modules>
     <global>
         <models>
-            <harapartners_inviteeorder>
+            <inviteeorder>
                 <class>Harapartners_Inviteeorder_Model</class>
-            </harapartners_inviteeorder>
+            </inviteeorder>
         </models>
 		<resources>
             <inviteeorder_setup>
@@ -31,7 +31,7 @@
                 </connection>
             </inviteeorder_read>        
         </resources>
-		<event>
+		<events>
 			<sales_order_invoice_pay>
                 <observers>
                     <inviteeorder>
@@ -40,6 +40,6 @@
                     </inviteeorder>
                 </observers>
             </sales_order_invoice_pay>
-		</event>
+		</events>
     </global>
 </config>

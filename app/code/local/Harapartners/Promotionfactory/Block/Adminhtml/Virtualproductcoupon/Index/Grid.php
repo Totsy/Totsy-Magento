@@ -16,7 +16,7 @@ class Harapartners_PromotionFactory_Block_Adminhtml_Virtualproductcoupon_Index_G
 
     public function __construct(){
         parent::__construct();
-        $this->setId('virtual-product-coupon-grid');
+        $this->setId('virtualProductCouponGrid');
     }
 
     protected function _prepareCollection(){
@@ -65,15 +65,31 @@ class Harapartners_PromotionFactory_Block_Adminhtml_Virtualproductcoupon_Index_G
             'options' 		=> $helper->getGridStatusArray()
         ));
 
+        $this->addExportType('*/*/exportCsv', Mage::helper('sales')->__('CSV'));
+        $this->addExportType('*/*/exportExcel', Mage::helper('sales')->__('Excel XML'));
+        
         return parent::_prepareColumns();
     }
 
     public function getRowUrl($row){
-    	return "";
+    	return false;
 //        return $this->getUrl('*/*/edit', array(
 //                'store'=>$this->getRequest()->getParam('store'),
 //                'id'=>$row->getId()
 //        ));
+    }
+    
+	protected function _prepareMassaction() {
+        $this->setMassactionIdField('entity_id');
+        $this->getMassactionBlock()->setFormFieldName('coupon_ids');
+	
+        $this->getMassactionBlock()->addItem('deleteCoupons', array(
+        	'label'		=> Mage::helper('promotionfactory')->__('Delete Coupons'),
+        	'url'		=>$this->getUrl('*/*/massDeleteCoupons', array('_current'=>true)),
+        	'confirm'	=>Mage::helper('promotionfactory')->__('Do you want to delete these coupons?')
+        ));
+
+        return $this;
     }
     
 }

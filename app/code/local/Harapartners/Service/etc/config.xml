@@ -68,7 +68,7 @@
                     <!--Harapartners_SpeedTax-->
                     <onepage_shipping_method_available>Harapartners_Service_Block_Rewrite_Checkout_Onepage_Shipping_Method_Available</onepage_shipping_method_available>
 					<!--Harapartners_Promotionfactory: add reservation code to cart renderer-->
-					<cart_item_renderer>Harapartners_Service_Block_Rewrite_Checkout_Cart_Item_Renderer</cart_item_renderer>
+					<!--cart_item_renderer>Harapartners_Service_Block_Rewrite_Checkout_Cart_Item_Renderer</cart_item_renderer-->
                 </rewrite>
             </checkout>
             <enterprise_reward>
