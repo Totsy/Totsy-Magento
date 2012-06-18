@@ -185,43 +185,42 @@ class Harapartners_Fulfillmentfactory_Model_Service_Fulfillment
      */
     protected function _cancelItemqueue($orderId, $updateItemQueueIdList) {
         $oldOrder = Mage::getModel('sales/order')->load($orderId);
-        $oldQuote = Mage::getModel('sales/quote')->setStoreId($oldOrder->getStoreId())->load($oldOrder->getQuoteId());
+        //$oldQuote = Mage::getModel('sales/quote')->setStoreId($oldOrder->getStoreId())->load($oldOrder->getQuoteId());
+        //create new quote for editing order
+        $orderCreateModel = Mage::getModel('adminhtml/sales_order_create');
+        $orderCreateModel->initFromOrder($oldOrder);
+        $newQuote = $orderCreateModel->getQuote();
+        $newQuote->setStoreId($oldOrder->getStoreId())
+                ->save();
         
         //More secure logic, looping through order items, in case the quote item might be damaged
-        $remainingOrderItems = array();
         $remainingQuoteItems = array();
-        foreach($oldOrder->getAllItems() as $orderItem){
-        	$shouldBeRemoved = false;
-        	
-        	$quoteItem = Mage::getModel('sales/quote_item')->load($orderItem->getQuoteItemId());
-        	if(!$quoteItem->getId()){
-        		Mage::throwException(sprintf('There is a missing quote item for order #%s, not cancelled. To modify the order, cancel the current order and create a new one from customer account.', $oldOrder->getId()));
-        	}
-        	foreach($updateItemQueueIdList as $itemQueue) {
-        		if($orderItem->getId() == $itemQueue->getOrderItemId()){
-        			$shouldBeRemoved = true;
-        			break;
-        		}
-        		foreach($orderItem->getChildrenItems() as $childItem){
-	        		if($childItem->getId() == $itemQueue->getOrderItemId()){
-	        			$shouldBeRemoved = true;
-	        			break 2;
-	        		}
-        		}
-        	}
-            if(!$shouldBeRemoved){
-            	$remainingOrderItems[] = $orderItem;
-            	
-            	//Maintaining parent-child association is very important for ordersplit (child item are used in turn to generate fulfillment item)
-            	foreach($orderItem->getChildrenItems() as $childOrderItem){
-            		$childQuoteItem = Mage::getModel('sales/quote_item')->load($childOrderItem->getQuoteItemId());
-            		$quoteItem->addChild($childQuoteItem);
-            	}
-            	
-            	$remainingQuoteItems[] = $quoteItem;
+        
+        foreach($newQuote->getItemsCollection() as $quoteItem) {
+            $shouldBeRemoved = false;
+            foreach($updateItemQueueIdList as $itemQueueId) {
+                $product = Mage::getModel('catalog/product')->load($itemQueueId->getProductId());
+                if($quoteItem->representProduct($product)) {
+                    $shouldBeRemoved = true;
+                }
+                foreach($quoteItem->getChildren() as $childItem) {
+                    if($childItem->representProduct($product)) {
+                        $shouldBeRemoved = true;
+                    }
+                }
+                if(!$shouldBeRemoved){
+                	//Maintaining parent-child association is very important for ordersplit (child item are used in turn to generate fulfillment item)
+                	/*foreach($orderItem->getChildrenItems() as $childOrderItem){
+                		$childQuoteItem = Mage::getModel('sales/quote_item')->load($childOrderItem->getQuoteItemId());
+                		$quoteItem->addChild($childQuoteItem);
+                	}
+                	
+                	
+                	*/
+                	$remainingQuoteItems[] = $quoteItem;
+                }
             }
-        }
-          
+        }          
           //cancel orders with nothing available
           if(empty($remainingQuoteItems)) {
               $oldOrder->cancel()->save();
@@ -236,7 +235,7 @@ class Harapartners_Fulfillmentfactory_Model_Service_Fulfillment
               )
           );
         
-          Mage::helper('ordersplit')->createSplitOrder($oldOrder, $quoteItemListCollection);
+          Mage::helper('ordersplit')->createSplitOrder($oldOrder, $quoteItemListCollection, $newQuote);
           
           return true;
     }

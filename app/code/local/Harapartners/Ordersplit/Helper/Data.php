@@ -137,7 +137,7 @@ class Harapartners_Ordersplit_Helper_Data extends Mage_Core_Helper_Abstract {
         }
     }    
 
-    public function createSplitOrder($oldOrder, $itemsArray){
+    public function createSplitOrder($oldOrder, $itemsArray, $newQuote = null){
         $isSuccess = true;        
         Mage::dispatchEvent('order_split_before', array('order'=>$oldOrder));
         Mage::unregister('isSplitOrder');
@@ -154,7 +154,11 @@ class Harapartners_Ordersplit_Helper_Data extends Mage_Core_Helper_Abstract {
         }
         
         // setStoreId is important for admin generated orders
-        $oldQuote = Mage::getModel('sales/quote')->setStoreId($masterOrder->getStoreId())->load($masterOrder->getQuoteId());    
+        if($newQuote) {
+            $oldQuote = $newQuote;
+        } else {
+            $oldQuote = Mage::getModel('sales/quote')->setStoreId($masterOrder->getStoreId())->load($masterOrder->getQuoteId());    
+        }
         if(!$oldQuote || !$oldQuote->getId()){
                 return null;
         }
