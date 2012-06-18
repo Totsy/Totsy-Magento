@@ -195,19 +195,20 @@ class Harapartners_Ordersplit_Helper_Data extends Mage_Core_Helper_Abstract {
                         if($useOrderItems) {
                             $newItem = $this->_createQuoteItemFromOrderItem($newQuote, $oldItem);
                         } else {
-                            $newItem = $this->_cloneQuoteItem($oldItem);
+                            $newItem = $this->_cloneQuoteItem($oldItem);                            
+                            $newItem->setQuote($newQuote); //Fixed item 'is_nominal' check bug
+                            $newQuote->addItem($newItem);
                         }
-                        $newItem->setQuote($newQuote); //Fixed item 'is_nominal' check bug
-                        $newQuote->addItem($newItem);
                         foreach($oldItem->getChildren() as $oldChildItem){
                             if($useOrderItems) {
                                 $newChildItem = $this->_createQuoteItemFromOrderItem($newQuote, $oldChildItem);
+                                $newChildItem->setParentItem($newItem);
                             } else {
                                 $newChildItem = $this->_cloneQuoteItem($oldChildItem);
+                                $newChildItem->setParentItem($newItem);
+                                $newChildItem->setQuote($newQuote);
+                                $newQuote->addItem($newChildItem);
                             }
-                            $newChildItem->setParentItem($newItem);
-                            $newChildItem->setQuote($newQuote);
-                            $newQuote->addItem($newChildItem);
                         }
                     }
                     

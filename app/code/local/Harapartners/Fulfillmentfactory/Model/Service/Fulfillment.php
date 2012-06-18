@@ -193,7 +193,6 @@ class Harapartners_Fulfillmentfactory_Model_Service_Fulfillment
         foreach($order->getItemsCollection(array(),true) as $orderItem) {
             $shouldBeRemoved = false;
             foreach($updateItemQueueIdList as $itemQueueId) {
-                $product = Mage::getModel('catalog/product')->load($itemQueueId->getProductId());
                 if($orderItem->getId() == $itemQueueId->getOrderItemId()) {
                     $shouldBeRemoved = true;
                 }
