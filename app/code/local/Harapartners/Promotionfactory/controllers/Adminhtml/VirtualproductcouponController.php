@@ -145,7 +145,23 @@ class Harapartners_PromotionFactory_Adminhtml_VirtualproductcouponController ext
   		}else{
   			Mage::getSingleton('adminhtml/session')->addError(Mage::helper('promotionfactory')->__('Please select coupon(s) you want to delete.'));
   		}
-  		$this->_redirect('*/*/manageCouponByProduct', array('store'=> $storeId, 'product_id'=>$productId));
+  		if( $productId ) {
+  			$this->_redirect('*/*/manageCouponByProduct', array('store'=> $storeId, 'product_id'=>$productId));
+  		} else {
+  			$this->_redirect( '*/*/' );
+  		}
+    }
+    
+	public function exportCsvAction() {
+        $fileName   = 'virtual_product_coupon.csv';
+        $grid       = $this->getLayout()->createBlock('promotionfactory/adminhtml_virtualproductcoupon_index_grid');
+        $this->_prepareDownloadResponse($fileName, $grid->getCsvFile());
+    }
+
+    public function exportExcelAction() {
+        $fileName   = 'virtual_product_coupon.xml';
+        $grid       = $this->getLayout()->createBlock('promotionfactory/adminhtml_virtualproductcoupon_index_grid');
+        $this->_prepareDownloadResponse($fileName, $grid->getExcelFile($fileName));
     }
     
     protected function _getSession() {
