@@ -10,7 +10,7 @@
 <config>
     <modules>
         <Totsy_Adminhtml>
-            <version>0.1.1</version>
+            <version>0.1.2</version>
         </Totsy_Adminhtml>
     </modules>
     <global>
@@ -49,4 +49,15 @@
             </totsy_adminhtml_read>
         </resources>
     </global>
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <Totsy before="Mage_Adminhtml">Totsy_Adminhtml</Totsy>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
 </config>
