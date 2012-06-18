@@ -184,27 +184,21 @@ class Harapartners_Fulfillmentfactory_Model_Service_Fulfillment
      * @return bool    indicate if new order has been created
      */
     protected function _cancelItemqueue($orderId, $updateItemQueueIdList) {
-        $oldOrder = Mage::getModel('sales/order')->load($orderId);
-        //$oldQuote = Mage::getModel('sales/quote')->setStoreId($oldOrder->getStoreId())->load($oldOrder->getQuoteId());
-        //create new quote for editing order
-        $orderCreateModel = Mage::getModel('adminhtml/sales_order_create');
-        $orderCreateModel->initFromOrder($oldOrder);
-        $newQuote = $orderCreateModel->getQuote();
-        $newQuote->setStoreId($oldOrder->getStoreId())
-                ->save();
+        $order = Mage::getModel('sales/order')->load($orderId);
+
         
         //More secure logic, looping through order items, in case the quote item might be damaged
-        $remainingQuoteItems = array();
+        $remainingOrderItems = array();
         
-        foreach($newQuote->getItemsCollection() as $quoteItem) {
+        foreach($order->getItemsCollection(array(),true) as $orderItem) {
             $shouldBeRemoved = false;
             foreach($updateItemQueueIdList as $itemQueueId) {
                 $product = Mage::getModel('catalog/product')->load($itemQueueId->getProductId());
-                if($quoteItem->representProduct($product)) {
+                if($orderItem->getId() == $itemQueueId->getOrderItemId()) {
                     $shouldBeRemoved = true;
                 }
-                foreach($quoteItem->getChildren() as $childItem) {
-                    if($childItem->representProduct($product)) {
+                foreach($orderItem->getChildrenItems() as $childItem) {
+                    if($childItem->getId() == $itemQueueId->getOrderItemId()) {
                         $shouldBeRemoved = true;
                     }
                 }
@@ -217,25 +211,25 @@ class Harapartners_Fulfillmentfactory_Model_Service_Fulfillment
                 	
                 	
                 	*/
-                	$remainingQuoteItems[] = $quoteItem;
+                	$remainingOrderItems[] = $orderItem;
                 }
             }
         }          
           //cancel orders with nothing available
-          if(empty($remainingQuoteItems)) {
-              $oldOrder->cancel()->save();
+          if(empty($remainingOrderItems)) {
+              $order->cancel()->save();
               return true;
           }
           
-          $quoteItemListCollection = array (
+          $orderItemListCollection = array (
               array (
-                  'items' => $remainingQuoteItems,
+                  'items' => $remainingOrderItems,
                   'state' => Mage_Sales_Model_Order::STATE_NEW,
                   'type'    => 'dotcom'
               )
           );
         
-          Mage::helper('ordersplit')->createSplitOrder($oldOrder, $quoteItemListCollection, $newQuote);
+          Mage::helper('ordersplit')->createSplitOrder($order, $orderItemListCollection, true);
           
           return true;
     }
