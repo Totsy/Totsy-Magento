@@ -68,7 +68,7 @@
 								},
 								onComplete: function( event ){										
 									jQuery(this).html("Completed");
-									jQuery("div.event-counter-<?php echo $timer;?>").hide();
+									jQuery("div.event-counter-<?php echo $timer;?>").remove();
 								},
 								leadingZero: true,
 								direction: "down"
@@ -115,7 +115,7 @@
 									htmlTemplate: html,									
 									onComplete: function( event ){										
 										jQuery(this).html("Completed");
-										jQuery("div.event-counter-<?php echo $timer;?>").hide();
+										jQuery("div.event-counter-<?php echo $timer;?>").remove();
 									},
 									leadingZero: true,
 									direction: "down"
@@ -162,7 +162,7 @@
 								htmlTemplate: html,
 								onComplete: function( event ){										
 									jQuery(this).html("Completed");
-									jQuery("div.up-event-counter-<?php echo $timer;?>").hide();
+									jQuery("div.up-event-counter-<?php echo $timer;?>").remove();
 								},
 								leadingZero: true,
 								direction: "down"
