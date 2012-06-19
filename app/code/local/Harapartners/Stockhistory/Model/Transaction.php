@@ -126,8 +126,8 @@ class Harapartners_Stockhistory_Model_Transaction extends Mage_Core_Model_Abstra
         if($product->getTypeId() != 'simple'){
             Mage::throwException('Purchase should only contain simple product. Other product types are ignored.');
         }
-        
-        if(!$this->getData('qty_delta')){
+        $qtyDelta = $this->getData('qty_delta');
+        if(!isset($qtyDelta)){
             throw new Exception('Qty Changed is required.');
         }
         if(!!$this->getData('unit_cost')){
