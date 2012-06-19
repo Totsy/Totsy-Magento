@@ -190,7 +190,10 @@ class Harapartners_Fulfillmentfactory_Model_Service_Fulfillment
         //More secure logic, looping through order items, in case the quote item might be damaged
         $remainingOrderItems = array();
         
-        foreach($order->getItemsCollection(array(),true) as $orderItem) {
+        foreach($order->getItemsCollection() as $orderItem) {
+            if($orderItem->getParentItemId()) {
+                continue;
+            }
             $shouldBeRemoved = false;
             foreach($updateItemQueueIdList as $itemQueueId) {
                 if($orderItem->getId() == $itemQueueId->getOrderItemId()) {
@@ -202,14 +205,6 @@ class Harapartners_Fulfillmentfactory_Model_Service_Fulfillment
                     }
                 }
                 if(!$shouldBeRemoved){
-                	//Maintaining parent-child association is very important for ordersplit (child item are used in turn to generate fulfillment item)
-                	/*foreach($orderItem->getChildrenItems() as $childOrderItem){
-                		$childQuoteItem = Mage::getModel('sales/quote_item')->load($childOrderItem->getQuoteItemId());
-                		$quoteItem->addChild($childQuoteItem);
-                	}
-                	
-                	
-                	*/
                 	$remainingOrderItems[] = $orderItem;
                 }
             }
