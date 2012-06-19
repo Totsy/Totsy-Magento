@@ -224,8 +224,6 @@ class Harapartners_HpCheckout_Model_Checkout
             break;
         }
 
-        $email = $this->getQuote()->getBillingAddress()->getEmail();
-
         $service = Mage::getModel('sales/service_quote', $this->getQuote());
         $service->submitAll();
 
@@ -243,32 +241,6 @@ class Harapartners_HpCheckout_Model_Checkout
 
             if (!$redirectUrl && $order->getCanSendNewEmailFlag()) {
                 try {
-                    foreach ( $order->getAllItems() as $orderItem ) {
-
-                        if ($orderItem->getProductType() == 'virtual') {
-
-                            $optionByCode = $orderItem->getProductOptionByCode();
-                            $virtualProductCode = $optionByCode['options'][0]['value'];
-
-                            $templateId =  Mage::getModel('core/email_template')->loadByCode('_trans_Virtual_Product_Redemption')->getId();
-                            
-                            print $templateId;
-                            exit();
-
-                            $name = "Evan";
-                            $sender = "evanubiera@gmail.com";
-                            $storeId = Mage::app()->getStore()->getId();
-
-                            $mailSubject = "Here is your Totsy coupon redemption code";
-
-                            try {
-                                Mage::getModel('core/email_template')
-                                ->sendTransactional($templateId, $sender, $email, NULL, array('order'=>$order, 'virtual_product_code'=>$virtualProductCode), $storeId);
-                            } catch (Exception $e) {
-                                Mage::logException($e);
-                            }
-                        }
-                    }
                     $order->sendNewOrderEmail();
                 } catch (Exception $e) {
                     Mage::logException($e);
