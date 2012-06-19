@@ -14,6 +14,7 @@ class Harapartners_HpCheckout_Model_Checkout
 {
     const METHOD_GUEST = 'guest';
     const METHOD_CUSTOMER = 'customer';
+    const EMAIL_TEMPLATE_XML_PATH = 'hpcheckout/virtual_product_code/template';
 
     protected $_quote;
     protected $_checkoutSession;
@@ -207,14 +208,13 @@ class Harapartners_HpCheckout_Model_Checkout
         $payment = $quote->getPayment();
         $payment->importData($data, $shouldCollectTotal, $withValidate);
 
-        //        $quote->save();
-
         return array( 'status' => 0, 'message' => '' );
     }
 
     public function saveOrder()
     {
         $this->validate();
+        
         switch ($this->getCheckoutMethod()) {
         case self::METHOD_GUEST:
             $this->_prepareGuestQuote();
@@ -223,6 +223,8 @@ class Harapartners_HpCheckout_Model_Checkout
             $this->_prepareCustomerQuote();
             break;
         }
+
+        $email = $this->getQuote()->getBillingAddress()->getEmail();
 
         $service = Mage::getModel('sales/service_quote', $this->getQuote());
         $service->submitAll();
@@ -240,48 +242,34 @@ class Harapartners_HpCheckout_Model_Checkout
             $redirectUrl = $this->getQuote()->getPayment()->getOrderPlaceRedirectUrl();
 
             if (!$redirectUrl && $order->getCanSendNewEmailFlag()) {
-                try {    
-                
-                    foreach($order->getAllItems() as $orderItem){
-                        
-                        if($orderItem->getProductType() == 'virtual'){
+                try {
+                    foreach ( $order->getAllItems() as $orderItem ) {
 
-                            $virtualProductCode = $orderItem->getProductOptionByCode('reservation_code');
+                        if ($orderItem->getProductType() == 'virtual') {
+
+                            $optionByCode = $orderItem->getProductOptionByCode();
+                            $virtualProductCode = $optionByCode['options'][0]['value'];
+
+                            $templateId =  Mage::getModel('core/email_template')->loadByCode('_trans_Virtual_Product_Redemption')->getId();
                             
-                            print $virtualProductCode;
-                            
-                            /*
-                            
-                            print $virtualProductCode;
+                            print $templateId;
                             exit();
-                            
-                            $templateId = 15;
 
-                            $mailer = Mage::getModel('core/email_template_mailer');
-                            $emailInfo = Mage::getModel('core/email_info');
-                            $customer = Mage::getModel('customer/customer');
+                            $name = "Evan";
+                            $sender = "evanubiera@gmail.com";
+                            $storeId = Mage::app()->getStore()->getId();
 
-                            $emailInfo->addTo($customer->getCustomerEmail(), $customer->getCustomerName());
+                            $mailSubject = "Here is your Totsy coupon redemption code";
 
-                            $mailer->addEmailInfo($emailInfo);
-                            //$mailer->setSender(Mage::getStoreConfig(XML_PATH_EMAIL_IDENTITY, $customer['store_id']));
-                            $mailer->setStoreId($customer['store_id']);
-                            $mailer->setTemplateId($templateId);
-                            $mailer->setTemplateParams( array(
-                                    'order'        => $order,
-                                    'store'        => Mage::app()->getStore(),
-                                    'store_view'=>$store = Mage::app()->getStore()->getStoreView(),
-                                    'virtual_product_code'=> $virtualProductCode
-                                )
-                            );
-                            $mailer->send();
-                            */
-                        } 
+                            try {
+                                Mage::getModel('core/email_template')
+                                ->sendTransactional($templateId, $sender, $email, NULL, array('order'=>$order, 'virtual_product_code'=>$virtualProductCode), $storeId);
+                            } catch (Exception $e) {
+                                Mage::logException($e);
+                            }
+                        }
                     }
-
                     $order->sendNewOrderEmail();
-                    exit();
-                    
                 } catch (Exception $e) {
                     Mage::logException($e);
                 }
