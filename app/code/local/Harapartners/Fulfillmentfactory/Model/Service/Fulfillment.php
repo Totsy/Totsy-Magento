@@ -184,59 +184,46 @@ class Harapartners_Fulfillmentfactory_Model_Service_Fulfillment
      * @return bool    indicate if new order has been created
      */
     protected function _cancelItemqueue($orderId, $updateItemQueueIdList) {
-        $oldOrder = Mage::getModel('sales/order')->load($orderId);
-        $oldQuote = Mage::getModel('sales/quote')->setStoreId($oldOrder->getStoreId())->load($oldOrder->getQuoteId());
+        $order = Mage::getModel('sales/order')->load($orderId);
+
         
         //More secure logic, looping through order items, in case the quote item might be damaged
         $remainingOrderItems = array();
-        $remainingQuoteItems = array();
-        foreach($oldOrder->getAllItems() as $orderItem){
-        	$shouldBeRemoved = false;
-        	
-        	$quoteItem = Mage::getModel('sales/quote_item')->load($orderItem->getQuoteItemId());
-        	if(!$quoteItem->getId()){
-        		Mage::throwException(sprintf('There is a missing quote item for order #%s, not cancelled. To modify the order, cancel the current order and create a new one from customer account.', $oldOrder->getId()));
-        	}
-        	foreach($updateItemQueueIdList as $itemQueue) {
-        		if($orderItem->getId() == $itemQueue->getOrderItemId()){
-        			$shouldBeRemoved = true;
-        			break;
-        		}
-        		foreach($orderItem->getChildrenItems() as $childItem){
-	        		if($childItem->getId() == $itemQueue->getOrderItemId()){
-	        			$shouldBeRemoved = true;
-	        			break 2;
-	        		}
-        		}
-        	}
-            if(!$shouldBeRemoved){
-            	$remainingOrderItems[] = $orderItem;
-            	
-            	//Maintaining parent-child association is very important for ordersplit (child item are used in turn to generate fulfillment item)
-            	foreach($orderItem->getChildrenItems() as $childOrderItem){
-            		$childQuoteItem = Mage::getModel('sales/quote_item')->load($childOrderItem->getQuoteItemId());
-            		$quoteItem->addChild($childQuoteItem);
-            	}
-            	
-            	$remainingQuoteItems[] = $quoteItem;
+        
+        foreach($order->getItemsCollection() as $orderItem) {
+            if($orderItem->getParentItemId()) {
+                continue;
             }
-        }
-          
+            $shouldBeRemoved = false;
+            foreach($updateItemQueueIdList as $itemQueueId) {
+                if($orderItem->getId() == $itemQueueId->getOrderItemId()) {
+                    $shouldBeRemoved = true;
+                }
+                foreach($orderItem->getChildrenItems() as $childItem) {
+                    if($childItem->getId() == $itemQueueId->getOrderItemId()) {
+                        $shouldBeRemoved = true;
+                    }
+                }
+                if(!$shouldBeRemoved){
+                	$remainingOrderItems[] = $orderItem;
+                }
+            }
+        }          
           //cancel orders with nothing available
-          if(empty($remainingQuoteItems)) {
-              $oldOrder->cancel()->save();
+          if(empty($remainingOrderItems)) {
+              $order->cancel()->save();
               return true;
           }
           
-          $quoteItemListCollection = array (
+          $orderItemListCollection = array (
               array (
-                  'items' => $remainingQuoteItems,
+                  'items' => $remainingOrderItems,
                   'state' => Mage_Sales_Model_Order::STATE_NEW,
                   'type'    => 'dotcom'
               )
           );
         
-          Mage::helper('ordersplit')->createSplitOrder($oldOrder, $quoteItemListCollection);
+          Mage::helper('ordersplit')->createSplitOrder($order, $orderItemListCollection, true);
           
           return true;
     }

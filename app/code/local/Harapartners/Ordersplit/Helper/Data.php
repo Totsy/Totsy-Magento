@@ -135,9 +135,16 @@ class Harapartners_Ordersplit_Helper_Data extends Mage_Core_Helper_Abstract {
                 //Error reporting
                 break;
         }
-    }    
+    }
 
-    public function createSplitOrder($oldOrder, $itemsArray){
+    /**
+     * @param $oldOrder
+     * @param $itemsArray
+     * @param bool $useOrderItems
+     * @return bool|null
+     * @throws Exception
+     */
+    public function createSplitOrder($oldOrder, $itemsArray, $useOrderItems = false){
         $isSuccess = true;        
         Mage::dispatchEvent('order_split_before', array('order'=>$oldOrder));
         Mage::unregister('isSplitOrder');
@@ -154,16 +161,16 @@ class Harapartners_Ordersplit_Helper_Data extends Mage_Core_Helper_Abstract {
         }
         
         // setStoreId is important for admin generated orders
-        $oldQuote = Mage::getModel('sales/quote')->setStoreId($masterOrder->getStoreId())->load($masterOrder->getQuoteId());    
+        $oldQuote = Mage::getModel('sales/quote')->setStoreId($masterOrder->getStoreId())->load($masterOrder->getQuoteId());
         if(!$oldQuote || !$oldQuote->getId()){
                 return null;
         }
         
         $newOrderCount = 0;
-        $store = Mage::getModel('core/Store')->load($oldQuote->getStoreId());
+        $store = Mage::getModel('core/Store')->load($oldOrder->getStoreId());
         $customer = Mage::getModel('customer/customer')
                             ->setStore($store)
-                            ->loadByEmail($oldQuote->getCustomerEmail());
+                            ->loadByEmail($oldOrder->getCustomerEmail());
                             
         //Harapartners, Jun, Cancel previous orders first, this will re-stock existing products
         //Critical for cart reservation logic!
@@ -189,17 +196,21 @@ class Harapartners_Ordersplit_Helper_Data extends Mage_Core_Helper_Abstract {
                     
                     foreach($items as $oldItem) {
                         //Child item should have been cloned with parent item 
-                        if(!!$oldItem->getParentItemId()){
+                        if($oldItem->getParentItemId()){
                             continue;
                         }
-                        $newItem = $this->_cloneQuoteItem($oldItem);
-                        $newItem->setQuote($newQuote); //Fixed item 'is_nominal' check bug
-                        $newQuote->addItem($newItem);
-                        foreach($oldItem->getChildren() as $oldChildItem){
-                            $newChildItem = $this->_cloneQuoteItem($oldChildItem);
-                            $newChildItem->setParentItem($newItem);
-                            $newChildItem->setQuote($newQuote);
-                            $newQuote->addItem($newChildItem);
+                        if($useOrderItems) {
+                            $newItem = $this->_createQuoteItemFromOrderItem($newQuote, $oldItem);
+                        } else {
+                            $newItem = $this->_cloneQuoteItem($oldItem);                            
+                            $newItem->setQuote($newQuote); //Fixed item 'is_nominal' check bug
+                            $newQuote->addItem($newItem);
+                            foreach($oldItem->getChildren() as $oldChildItem){
+                                $newChildItem = $this->_cloneQuoteItem($oldChildItem);
+                                $newChildItem->setParentItem($newItem);
+                                $newChildItem->setQuote($newQuote);
+                                $newQuote->addItem($newChildItem);                                
+                            }
                         }
                     }
                     
@@ -249,47 +260,62 @@ class Harapartners_Ordersplit_Helper_Data extends Mage_Core_Helper_Abstract {
                     
                     $newQuote->collectTotals();
                     $newQuote->save();
-                    
-                    //set parest order as old order
-                    $oldOrderIncrementId = $oldOrder->getOriginalIncrementId();
-                    //check if orginalId exist or if it is root master order
-                       if (!$oldOrderIncrementId || (strpos($oldOrderIncrementId, '-') <= 0)) {
-                           $oldOrderIncrementId = $oldOrder->getIncrementId();
-                       }
-                       
-                       //Try to place the order
-                       try{
-                           $newOrderCount ++;
-                           $orderData = array(
-                            'original_increment_id'     => $oldOrderIncrementId,
-                            'relation_parent_id'        => $oldOrder->getId(),
-                            'relation_parent_real_id'   => $oldOrder->getIncrementId(),
-                            'edit_increment'            => $oldOrder->getEditIncrement() + $newOrderCount,
-                            'increment_id'              => $oldOrderIncrementId.'-'.($oldOrder->getEditIncrement() + $newOrderCount)
-                        );
-                        $newQuote->setReservedOrderId($orderData['increment_id']);
-                        $service = Mage::getModel('sales/service_quote', $newQuote);
-                        $service->setOrderData($orderData);
-                        $service->submitAll();                
-                        $newOrder = $service->getOrder();                
-                        
-                           if(!!$newOrder && !!$newOrder->getId()) {
-                               if(!empty($state)) {
-                                $newOrder->setState($state, true)->save();
+
+                    //The cloning of order items to quote items seems to neglect copying the product name for the child
+                    //items. Let's copy those over if they are blank.
+                    if($useOrderItems) {
+                        foreach($newQuote->getItemsCollection() as $item) {
+                            if($item->getParentItemId()) {
+                                continue;
                             }
-                        }else{
-                            //order failed...
-                            $newOrderCount--;
-                            $isSuccess = false;
+                            foreach($item->getChildren() as $child) {
+                                if(!$child->getName()) {
+                                    $child->setName($item->getName());
+                                    $child->save();
+                                }
+                            }
                         }
-                        
-                        $newQuote->setIsActive(false)->save();
-                        
-                       }catch(Exception $e){
-                           //order failed...
-                           $newOrderCount --;
-                           $isSuccess = false;
-                       }
+                    }
+                    
+                    //set parent order as old order
+                    $oldOrderIncrementId = $oldOrder->getOriginalIncrementId();
+                    if (!$oldOrderIncrementId) {
+                        $oldOrderIncrementId = $oldOrder->getIncrementId();
+                    }
+                       
+                   //Try to place the order
+                   try{
+                       $newOrderCount ++;
+                       $orderData = array(
+                        'original_increment_id'     => $oldOrderIncrementId,
+                        'relation_parent_id'        => $oldOrder->getId(),
+                        'relation_parent_real_id'   => $oldOrder->getIncrementId(),
+                        'edit_increment'            => $oldOrder->getEditIncrement() + $newOrderCount,
+                        'increment_id'              => $oldOrderIncrementId.'-'.($oldOrder->getEditIncrement() + $newOrderCount)
+                    );
+                    $newQuote->setReservedOrderId($orderData['increment_id']);
+                    $service = Mage::getModel('sales/service_quote', $newQuote);
+                    $service->setOrderData($orderData);
+                    $service->submitAll();
+                    $newOrder = $service->getOrder();
+
+                       if(!!$newOrder && !!$newOrder->getId()) {
+                           if(!empty($state)) {
+                            $newOrder->setState($state, true)->save();
+                        }
+                    }else{
+                        //order failed...
+                        $newOrderCount--;
+                        $isSuccess = false;
+                    }
+
+                    $newQuote->setIsActive(false)->save();
+
+                   }catch(Exception $e){
+                       //order failed...
+                       $newOrderCount --;
+                       $isSuccess = false;
+                   }
                        
                 }catch (Exception $exception){
                     //order create exception add to log maybe
@@ -457,5 +483,52 @@ class Harapartners_Ordersplit_Helper_Data extends Mage_Core_Helper_Abstract {
         
         return $newItem;
     }
+
+    /**
+     * @param Mage_Sales_Model_Quote $quote
+     * @param Mage_Sales_Model_Order_Item $orderItem
+     * @param null $qty
+     * @return bool|Mage_Sales_Model_Quote_Item|string
+     */
+    protected function _createQuoteItemFromOrderItem(Mage_Sales_Model_Quote $quote, Mage_Sales_Model_Order_Item $orderItem, $qty = null)
+{
+    if (!$orderItem->getId()) {
+        return false;
+    }
+
+    $product = Mage::getModel('catalog/product')
+        ->setStoreId($orderItem->getOrder()->getStoreId())
+        ->load($orderItem->getProductId());
+
+    if ($product->getId()) {
+        $product->setSkipCheckRequiredOption(true);
+        $buyRequest = $orderItem->getBuyRequest();
+        if (is_numeric($qty)) {
+            $buyRequest->setQty($qty);
+        }
+        $item = $quote->addProduct($product, $buyRequest);
+        if (is_string($item)) {
+            return $item;
+        }
+
+        if ($additionalOptions = $orderItem->getProductOptionByCode('additional_options')) {
+            $item->addOption(new Varien_Object(
+                array(
+                    'product' => $item->getProduct(),
+                    'code' => 'additional_options',
+                    'value' => serialize($additionalOptions)
+                )
+            ));
+        }
+
+        Mage::dispatchEvent('sales_convert_order_item_to_quote_item', array(
+            'order_item' => $orderItem,
+            'quote_item' => $item
+        ));
+        return $item;
+    }
+
+    return false;
+}
     
 }
