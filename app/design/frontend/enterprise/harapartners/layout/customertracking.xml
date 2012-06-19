@@ -30,4 +30,8 @@ Default layout, loads most of the pages
 		</reference>
     </default>
 
+    <customertracking_headermsg_ajax>
+        <block type="customertracking/headermsg_ajax" name="root" template="customertracking/headermsg.phtml" />
+    </customertracking_headermsg_ajax>
+
 </layout>
