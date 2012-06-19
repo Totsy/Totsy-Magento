@@ -199,6 +199,7 @@ class Harapartners_Categoryevent_Helper_Memcache extends Mage_Core_Helper_Abstra
                     'small_image', 
                     'thumbnail',
                     'url_path',
+                    'url_key',
                     'special_price',
                     'original_price',
                     'price')
@@ -241,7 +242,7 @@ class Harapartners_Categoryevent_Helper_Memcache extends Mage_Core_Helper_Abstra
                             //$containerProductInfo['small_image'] = $mediaBaseDir . str_ireplace('/', DS, $productInfo['small_image']);    //it call from file system like F:\www\totsy\media\catalog\product\n\e\newborn_tiered_dots_top_2pc_diaper_set.jpg
                                 $containerProductInfo['small_image'] = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA).'catalog/product'.$productInfo['small_image'];
                             }else {
-                            	$placeHolder = $imageHelper->getPlaceholder();	
+                                $placeHolder = $imageHelper->getPlaceholder();  
                                 $containerProductInfo['small_image'] = Mage::getDesign()->getSkinUrl($placeHolder);
                             }
                             $categoryHasProduct = true;
