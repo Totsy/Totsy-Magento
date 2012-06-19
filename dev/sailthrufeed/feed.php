@@ -222,6 +222,7 @@ function getEventApiOutput(Mage_Catalog_Model_Category $_category , $type, &$out
 		$evnt['ages'] = (count($agesTranslateArray))?$agesTranslateArray:array();
 		$evnt['items'] = $productsId;
 		$evnt['tag'] = $ageTag;
+		$evnt['tags'] = $ageTag;
 	}
 	if (strcmp($type,'pending')!=0){
 		$evnt['end_date'] = date('m-d-y g:i:s A',strtotime($_category->getEventEndDate())) ;
