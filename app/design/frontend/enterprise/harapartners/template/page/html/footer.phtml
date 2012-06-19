@@ -41,8 +41,10 @@
 (function(){
  var s = document.createElement('script');
  s.async = true;
- s.src = ('https:' == window.location.protocol ? 'https://s3.amazonaws.com/' : 'http://') +
-               ('totsy.com' == window.location.host ? 'static.rondavu.com' : 'qa.rondavu.com') +'/C/' + ('totsy.com' == window.location.host ? 'Totsy_PROD' : 'Totsy_QA') + '/rondavu.js';
+     
+ s.src =  ('https:' == window.location.protocol ? 'https://s3.amazonaws.com/' : 'http://') +
+       ('www.totsy.com' == window.location.host ? 'static.rondavu.com' +'/C/' +  'Totsy_PROD' : 'qa.rondavu.com' +'/C/' +  'Totsy_QA')  + '/rondavu.js';  
+                              
  document.getElementsByTagName('head')[0].appendChild(s);
 })();
 </script>
