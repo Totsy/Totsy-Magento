@@ -28,10 +28,10 @@ class Harapartners_Affiliate_Model_Record extends Mage_Core_Model_Abstract {
         $this->addData($this->getResource()->loadByAffiliateCode($affiliateCode));
         return $this;
     }
-    
+
     //Note method will throw exceptions
-    public function importDataWithValidation($data){
-        
+    public function importDataWithValidation($data)
+    {
         //Type casting
         if(is_array($data)){
             $data = new Varien_Object($data);
@@ -39,7 +39,21 @@ class Harapartners_Affiliate_Model_Record extends Mage_Core_Model_Abstract {
         if(!($data instanceof Varien_Object)){
             throw new Exception('Invalid type for data importing, Array or Varien_Object needed.');
         }
-        
+
+        // compile tracking codes
+        $trackingCodes = array();
+        $reqData = $data->getData();
+        foreach ($reqData as $key => $value) {
+            if (0 === strpos($key, 'trackingcode_')) {
+                $idx = substr($key, strpos($key, '_')+1);
+                $event = $data["trackingevent_$idx"];
+                $code  = $data["trackingcode_$idx"];
+                $trackingCodes[$event] = $code;
+            }
+        }
+
+        $this->setTrackingCode(json_encode($trackingCodes));
+
         //Forcefully overwrite existing data, certain data may need to be removed before this step
         $this->addData($data->getData());
         
