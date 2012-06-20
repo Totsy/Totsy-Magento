@@ -113,6 +113,7 @@ class Harapartners_Promotionfactory_Model_Observer {
         }
     }
 
+
     public function saleOrderPlaceAfter(Varien_Event_Observer $observer) {
         
         $order = $observer->getEvent()->getOrder();
@@ -169,5 +170,4 @@ class Harapartners_Promotionfactory_Model_Observer {
             }
         }
     }
-
 }
