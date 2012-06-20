@@ -59,6 +59,8 @@ $howMany = count($categoryDataArray);
 				<?php 
 					if (empty($_product['url_path'])){
 						$_product['url_path'] = substr($category['category_info']['url_path'],0,-5).'/'.$_product['url_key'].'.html';
+					} else if (!preg_match('/slaes/', $_product['url_path'])){
+						$_product['url_path'] = substr($category['category_info']['url_path'],0,-5).'/'.$_product['url_path'];
 					}
 				?>
 				<?php if ($_product['is_salable']==1): ?>
