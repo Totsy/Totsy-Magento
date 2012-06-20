@@ -5,7 +5,10 @@
 		<?php
             $countDownTimer = Mage::getSingleton('checkout/session')->getCountDownTimer();
             $timeout = Mage::getSingleton('checkout/session')->getQuoteItemExpireTime();
-            $endcount_lc = date("F j, Y, G:i:s", ($countDownTimer + $timeout));
+            //$endcount_lc = date("F j, Y, G:i:s", ($countDownTimer + $timeout));
+            $endcount_lc = ($countDownTimer + $timeout)*1000; //ms
+		    //Harapartners, yang, get the server time with the frontend JS time
+			$serverTime = Mage::helper('service')->getServerTime();            
             $quote = Mage::getSingleton('checkout/session')->getQuote();
 		?>
 		<div class="shipping-date">
@@ -18,9 +21,16 @@
 			<script type="text/javascript">
 				// @TODO: this should be abstracted out to hpcheckout.js
 				jQuery(document).ready(function() {
+					var dateObj = new Date();
+					var countDownToTime = <?php echo $endcount_lc?>;
+					var serverTime = <?php echo $serverTime?>;
+					var localTime = new Date().getTime();
+					countDownToTime = (countDownToTime + (localTime - serverTime));
+					dateObj.setTime(countDownToTime);
+					var countToTimeTemplate = (dateObj.getMonth()+1) + ' ' + dateObj.getDate() + ', ' + dateObj.getFullYear() + ' ' + dateObj.getHours() + ':' + dateObj.getMinutes() + ':' + dateObj.getSeconds();
 					jQuery("#checkout-timer").countdown({
 						//date: "12 10, 2011 16:11", //Counting TO a date
-						date: "<?php echo $endcount_lc; ?>", //Counting TO a date
+						date: countToTimeTemplate,//"<?php //echo $endcount_lc; ?>", //Counting TO a date
 						htmlTemplate: "%{m} <span class=\"cd-time\">:</span> %{s} <span class=\"cd-time\">minutes</span>",
 						onChange: function( event, timer ){
 						},
