@@ -125,32 +125,30 @@ class Harapartners_Promotionfactory_Model_Observer {
         foreach ( $order->getAllItems() as $orderItem ) {
 
             if ($orderItem->getProductType() == 'virtual') {
-
-                $optionByCode = $orderItem->getProductOptionByCode();
-                //getting the virtual product code
-                $virtualProductCode = $optionByCode['options'][0]['value'];
+                 
+                //loading a product to get the short description        
+                $product = Mage::getModel('catalog/product')->load($orderItem->getProduct()->getId());
+                $shortDescription = $product->getShortDescription();
                 
-                $shortDescription = $orderItem->getShortDescription();
-
+                //getting the virtual product code
+                $optionByCode = $orderItem->getProductOptionByCode();
+                $virtualProductCode = $optionByCode['options'][0]['value'];
+                                
                 //picking the right template by the id set in the admin (transactional emails section)
                 $templateId =  Mage::getModel('core/email_template')->loadByCode('_trans_Virtual_Product_Redemption')->getId();
 
-                $name = "Evan";
-                $sender = "evanubiera@gmail.com";
                 $store = Mage::app()->getStore();
-
-                $mailSubject = "Here is your Totsy coupon redemption code";
 
                 //attempting to send the email
                 try {
                     Mage::getModel('core/email_template')
-                    ->sendTransactional($templateId, "support", $email,NULL, array("virtual_product_code"=>$virtualProductCode, "order"=>$order, "store"=>$store, "short_description" => $shortDescription));
+                    ->sendTransactional($templateId, "sales", $email, NULL, array("virtual_product_code"=>$virtualProductCode, "order"=>$order, "store"=>$store, "short_description" => $shortDescription));
                 } catch (Exception $e) {
                     Mage::logException($e);
                 }
             }
         }
-                
+                        
         $couponCode = $order->getQuote()->getCouponCode();
         if(!$couponCode){
             return;
