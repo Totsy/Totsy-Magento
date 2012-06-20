@@ -28,8 +28,8 @@ class Harapartners_Promotionfactory_Model_Observer {
 		
 		//Return when there is already a coupon code associated
 		$reservationCodeOption = $quoteItem->getOptionByCode('reservation_code');
-		if($reservationCodeOption instanceof Mage_Sales_Model_Quote_Item_Option
-				&& $reservationCodeOption->getId()){
+		if(($reservationCodeOption instanceof Mage_Sales_Model_Quote_Item_Option)
+				&& $reservationCodeOption->getValue()){
 			return;
 		}
 		
@@ -138,6 +138,34 @@ class Harapartners_Promotionfactory_Model_Observer {
                 $emailCoupon->save();    
             }
         }
+    }
+    
+    public function cancelVirtualProductCouponInOrder(Varien_Event_Observer $observer) {
+    	//For order split, DB access is within one transaction, cancelling logic is not required (optional)
+        $order = $observer->getEvent()->getOrder();
+        if(!$order || !$order->getId()){
+            return;
+        }
+        foreach($order->getAllItems() as $orderItem){
+        	if($orderItem->getProductType() != 'virtual'){
+        		continue;
+        	}
+        	$productOptions = unserialize($orderItem->getData('product_options'));
+			if(isset($productOptions['options'])){
+				foreach($productOptions['options'] as $optionDataArray){
+					if(isset($optionDataArray['label'])
+							&& $optionDataArray['value']
+							&& $optionDataArray['label'] == 'Reservation Code'){
+						$vpc = Mage::getModel('promotionfactory/virtualproductcoupon')->loadByCode($optionDataArray['value']);
+						if($vpc->getId()){
+							$vpc->setData('status', Harapartners_Promotionfactory_Model_Virtualproductcoupon::COUPON_STATUS_AVAILABLE)
+				            		->save();
+						}
+					}
+				}
+			}
+        }
+        return;
     }
     
 }
