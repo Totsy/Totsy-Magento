@@ -522,10 +522,18 @@ class Mage_Adminhtml_Catalog_CategoryController extends Mage_Adminhtml_Controlle
     
     //Harapartners, yang: add Preview function in category mangement page
     public function previewAction(){
+        $storeId = (int) $this->getRequest()->getParam('store');
+        if ($storeId) {
+            $store = Mage::app()->getStore($storeId);
+        } else {
+            $store = Mage::app()->getStore(1);
+        }
+
         $eventId = $this->getRequest()->getParam('id');
         $targetPath = 'catalog/category/preview/id/' . $eventId;
         $pageKey = base64_encode(Mage::helper('core')->encrypt($targetPath));
-        $this->_redirect($targetPath, array('page_key' => $pageKey));
+        $this->getResponse()->setRedirect($store->getUrl($targetPath, array('page_key' => $pageKey)));
+
     }
 
     /**

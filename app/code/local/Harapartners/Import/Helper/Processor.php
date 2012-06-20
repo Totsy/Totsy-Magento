@@ -120,6 +120,14 @@ class Harapartners_Import_Helper_Processor extends Mage_Core_Helper_Abstract {
                             $adapter->saveRow($cleanImportData);
                             //Validation mode skips product save and the following re-index logic
         					if(!Mage::registry('import_validation_only')){
+        						
+        						//Harapartners, Jun, when import scritp updates an existing product, calculate the qty_delta for PO transactions
+        						$qtyDelta = $cleanImportData['qty'];
+        						//0 is a valid value
+        						if(is_numeric(Mage::registry('temp_product_import_qty_delta_for_po_' . $cleanImportData['sku']))){
+        							$qtyDelta = Mage::registry('temp_product_import_qty_delta_for_po_' . $cleanImportData['sku']);
+        						}
+        						$cleanImportData['qty_delta'] = $qtyDelta;
                             	$this->_savePurchaseOrderTransaction($cleanImportData, $importObject); //Save PO
         					}
                         } catch(Exception $ex) {
@@ -205,8 +213,13 @@ class Harapartners_Import_Helper_Processor extends Mage_Core_Helper_Abstract {
                         $importData['is_in_stock'] = self::DEFAULT_PRODUCT_IS_IN_STOCK;
                         break;
                     default:
-                        throw new Exception($field . ' is required.');
-                        break;
+                    	if(!$importData['sku']){
+                        	throw new Exception($field . ' is required.');
+                    	}
+//                    	}else{
+//                    		unset($importData[$field]);
+//                    	}
+                    	break;
                 }
             }
         }
@@ -234,7 +247,12 @@ class Harapartners_Import_Helper_Processor extends Mage_Core_Helper_Abstract {
         }
         
         // ----- Default fields ----- //
-        
+        // HP Song remove empty column from array // 
+        foreach($importData as $key => $value){
+        	if($value==''){
+        		unset($importData[$key]);
+        	}
+        }
         return $importData;
     }
     
@@ -306,6 +324,11 @@ class Harapartners_Import_Helper_Processor extends Mage_Core_Helper_Abstract {
         $importDataObject = new Varien_Object($importData);
         $stockhistoryTransaction = Mage::getModel('stockhistory/transaction');
         
+        //No update with 0 qty.
+        if($importDataObject->getQtyDelta() == 0){
+        	return;
+        }
+        
         //Note $importObject already passed validation here!
         //Transaction can only contain simple product!
         $product = Mage::getModel('catalog/product')->loadByAttribute('sku', $importData['sku']);
@@ -319,7 +342,7 @@ class Harapartners_Import_Helper_Processor extends Mage_Core_Helper_Abstract {
             $dataObj->setData('product_sku', $product->getSku());
             $dataObj->setData('vendor_style', $product->getVendorStyle());
             $dataObj->setData('unit_cost', $product->getData('sale_wholesale'));
-            $dataObj->setData('qty_delta', $importDataObject->getQty());
+            $dataObj->setData('qty_delta', $importDataObject->getQtyDelta()? $importDataObject->getQtyDelta() : 0);
             $dataObj->setData('action_type', Harapartners_Stockhistory_Model_Transaction::ACTION_TYPE_EVENT_IMPORT);
             $dataObj->setData('comment', date('Y-n-j H:i:s'));
             $stockhistoryTransaction->importData($dataObj)->save(); //exceptions will be caught and added to $this->_errorMessage

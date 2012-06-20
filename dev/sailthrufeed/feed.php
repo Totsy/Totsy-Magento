@@ -166,12 +166,16 @@ function getEventApiOutput(Mage_Catalog_Model_Category $_category , $type, &$out
 	$description = $_category->getDescription();
 	$keyword = $_category->getMetaKeywords();
 
+	$productCollection = $_category->getProductCollection()->addAttributeToSelect(array('departments', 'ages'));
+	$availableItems = count($productCollection);
+	if ($availableItems<=0){
+		return;
+	}
+
 	$evnt = array();
 	$evnt['name'] = $_category->getName();
 	$evnt['url'] = Mage::getBaseUrl().$_category->getUrlPath();
 	
-	$productCollection = $_category->getProductCollection()->addAttributeToSelect(array('departments', 'ages'));
-	$availableItems = count($productCollection);
 	foreach ($productCollection as $product){
 		$productsId[] = $product->getId();
 		$dept = $product->getDepartments();
@@ -222,6 +226,7 @@ function getEventApiOutput(Mage_Catalog_Model_Category $_category , $type, &$out
 		$evnt['ages'] = (count($agesTranslateArray))?$agesTranslateArray:array();
 		$evnt['items'] = $productsId;
 		$evnt['tag'] = $ageTag;
+		$evnt['tags'] = $ageTag;
 	}
 	if (strcmp($type,'pending')!=0){
 		$evnt['end_date'] = date('m-d-y g:i:s A',strtotime($_category->getEventEndDate())) ;

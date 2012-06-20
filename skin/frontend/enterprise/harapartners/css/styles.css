@@ -1210,7 +1210,7 @@ p.product-image { cursor:default !important; }
 .product-view .product-ids { text-transform:uppercase; }
 .product-view .short-description { padding:10px 0; clear:both; font-size:12px; display:none; }
 .product-view .short-description h2 { margin:0 0 5px; font-size:13px; }
-.product-view .product-shop .add-to-cart { float:left; padding:2px 15px 10px 0; }
+.product-view .product-shop .add-to-cart {  padding:2px 15px 10px 0; }
 
 /* Rating */
 .rating-box { width:65px; height:13px; font-size:0; line-height:0; background:url(../images/bkg_rating.gif) 0 100% repeat-x; overflow:hidden; }
@@ -1391,7 +1391,7 @@ button.btn-cart span {}
 
 .product-view .product-options-bottom .product-pricing { clear:both; }
 .product-view .product-options-bottom { padding:0; margin:0 0 5px; }
-.product-view .product-options-bottom .add-to-cart { float:left; padding-right:15px; padding-bottom:20px; }
+.product-view .product-options-bottom .add-to-cart { padding-right:15px; padding-bottom:20px; }
 .product-view .product-options-bottom .price-box { margin:0 !important; float:right; }
 .product-view .product-options-bottom p.required { padding:5px 0 0; clear:both; text-align:right; width:auto; }
 
