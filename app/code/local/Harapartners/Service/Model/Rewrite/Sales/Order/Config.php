@@ -26,7 +26,7 @@ class Harapartners_Service_Model_Rewrite_Sales_Order_Config extends Mage_Sales_M
         foreach ($state as $_state) {
             if ($stateNode = $this->_getState($_state)) {
                 $collection = Mage::getResourceModel('sales/order_status_collection')
-                    //->addStateFilter($_state)
+                    ->addStateFilter($_state)
                     ->orderByLabel();
                 foreach ($collection as $status) {
                     $code = $status->getStatus();
