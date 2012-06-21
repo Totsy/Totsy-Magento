@@ -23,7 +23,7 @@ Default layout, loads most of the pages
     <default>
         <reference name="before_body_end">
             <block type="customertracking/welcome" name="customertracking.welcome" template="customertracking/welcome.phtml" />
-			<block type="customertracking/pixel" name="customertracking.pixel" />
+			<block type="customertracking/pixel" name="customertracking.pixel" template="customertracking/pixel.phtml" />
         </reference>
 		<reference name="header">
 			<block type="customertracking/headermsg" name="customertracking.headermsg" template="customertracking/headermsg.phtml" />

@@ -24,34 +24,26 @@ class Harapartners_Affiliate_Block_Adminhtml_Widget_Form_Element_Trackingcode ex
         $resultHtml = '';
         try{
             $resultHtml .= '<div id="tracking_code_container">';
-            //Json string with double quotation marks only
-            $resultHtml .= '<input type="hidden" id="tracking_code_final_input" name="tracking_code" value="" />';
+            $i = 0;
             $result = json_decode($this->getValue(), true);
             foreach ($result as $pageName => $trackingCode){
-                $resultHtml .= $this->getRowHtml($pageName, $trackingCode);
+                $resultHtml .= $this->getRowHtml($pageName, $trackingCode, $i++);
             }
             $resultHtml .= '</div>';
             $resultHtml .= <<<TRACKING_CODE_HTML
 <div><button class="scalable add" style="" onclick="addTrackingCode()" type="button"><span>Add Tracking Code</span></button></div>
-<div style="margin-top: 5px"><button class="scalable save" style="" onclick="confirmTrackingCode()" type="button"><span>Confirm</span></button></div>
 <script type="text/javascript">
+var codeCounter = $i;
 var addTrackingCode = function (){
     jQuery("#tracking_code_container").append('{$this->getRowHtml()}');
+    console.log(jQuery("#tracking_code_container").children(':last').children('textarea'));
+    jQuery("#tracking_code_container").children(':last')
+        .children('textarea').attr('name', 'trackingcode_' + codeCounter).end()
+        .children('select').attr('name', 'trackingevent_' + codeCounter++);
 }
-var confirmTrackingCode = function (){
-    var trackCodeJson = {};
-    jQuery(".tracking_code_row", "#tracking_code_container").each(function (){
-        trackCodeJson[jQuery("select:first", this).val()] = jQuery("textarea:first", this).val();
-    });
-    jQuery("#tracking_code_final_input").val(JSON.stringify(trackCodeJson)); //JSON.stringify requires prototype ver 1.7+ to function properly
-    alert("Tracking Code Confirmed.");
-}
-jQuery(document).ready(function (){
-    jQuery("#tracking_code_final_input").val(JSON.stringify({$this->getValue()})); //JSON.stringify requires prototype ver 1.7+ to function properly
-});
 </script>
 TRACKING_CODE_HTML;
-            
+
             return $resultHtml;
         }catch(Exception $e){
             return "";
@@ -60,17 +52,18 @@ TRACKING_CODE_HTML;
     }
     
     //Note need to escape single quotation mark
-    public function getRowHtml($currentCode = '', $currentValue = ''){
+    public function getRowHtml($currentCode = '', $currentValue = '', $index)
+    {
         $rowHtml = '<div class="tracking_code_row" style="margin-top: 10px">';
-        $rowHtml .= $this->getSelectDropdown($currentCode);
-        $rowHtml .= $this->getTextareaInput($currentValue);
+        $rowHtml .= $this->getSelectDropdown($currentCode, $index);
+        $rowHtml .= $this->getTextareaInput($currentValue, $index);
         $rowHtml .= '</div>';
         return addcslashes($rowHtml, "'");
     }
     
-    public function getSelectDropdown($currentPageName = ''){
+    public function getSelectDropdown($currentPageName = '', $id = 0){
         $trackingPageCodeArray = Mage::helper('affiliate')->getFormTrackingPageCodeArray();
-        $selectDropdownHtml = '<select style="vertical-align: top;">';
+        $selectDropdownHtml = '<select style="vertical-align: top;" name="trackingevent_' . $id . '">';
         $selectDropdownHtml .= '<option value=""></option>';
         foreach ($trackingPageCodeArray as $pageName => $pageLabel){
             $selected = '';
@@ -83,8 +76,8 @@ TRACKING_CODE_HTML;
         return $selectDropdownHtml;
     }
     
-    public function getTextareaInput($trackingCode = ''){
-        return '<textarea style="width: 500px; height: 80px; margin-left: 10px">'.$trackingCode.'</textarea>';
+    public function getTextareaInput($trackingCode = '', $id = 0){
+        return '<textarea style="width: 500px; height: 80px; margin-left: 10px" name="trackingcode_' . $id . '">' . $trackingCode . '</textarea>';
     }
     
 }
