@@ -1266,3 +1266,58 @@ body .top-cart .block-content p.subtotal span.orange, .orange, .orange .price{
 .email-friend a {display:block; margin:0 10px 0 0; float:left;clear:both;width:55px;height:20px;background:url(../images/email.png) no-repeat; font-size:0;text-decoration:none; text-indent:-9999px; }
 .tweet { float: left; width: 55px; height:20px; margin-right: 10px;}
 .fbShare { float: left; width: 175px; height: 20px;}
+
+/* Brand Promos - currently just HSN promo, should be abstracted and modularized for reuse */
+.brandpromo {
+	margin-left: auto; margin-right: auto;
+	width: 908px;
+}
+.bp-hsn header {margin:0 0 22px;}
+.bp-hsn header h2 {
+	margin: 0 auto;
+	width: 447px; height: 67px;
+	background: url('../images/brands/hsn/hsn-h2-logo.gif') 0 0 no-repeat;
+	text-indent:100%; white-space: nowrap; overflow: hidden;
+}
+.bp-hsn header h3 {
+	margin: 0 auto 12px;
+	width: 904px; height: 56px;
+	background: url('../images/brands/hsn/hsn-h3-title.gif') 0 0 no-repeat;
+	text-indent:100%; white-space: nowrap; overflow: hidden;
+}
+.brandpromo.bp-hsn header p {
+	margin: 0 auto;
+	width:670px;
+	font-size:16px; font-weight: 300; line-height: 24px;
+	text-align: center;
+}
+.brandpromo ul {margin-bottom:87px;}
+.brandpromo ul li {
+	position: relative;
+	float: left;
+	margin:0 0 0 12px; padding-bottom:60px;
+	width: 218px; min-height: 362px;
+}
+@media screen and (-webkit-min-device-pixel-ratio:0) { /* hack for webkit… i feel dirty */
+	.brandpromo ul li {min-height: 384px;}
+}
+.brandpromo ul li.first {
+	margin-left: 0;
+}
+.brands-grid li h4 {
+	position: relative;
+	margin-top: 24px;
+	color: #636466; font-size: 12px; text-transform: uppercase;
+}
+.brands-grid li h4 sup {
+	position: absolute; top: 2px; left: auto;
+	font-size: 14px;
+}
+.brandpromo .brands-grid li a:hover {text-decoration: none;}
+.brandpromo .brands-grid li p {
+	padding:0 28px 0 0;
+	color: #636466; font-size: 14px; font-weight: 300;
+}
+.brandpromo .minilogo {
+	position: absolute; bottom: 0; left: 0;
+}
