@@ -156,7 +156,8 @@ body .header .quick-access
 
 /* improved checkout btn */
 /* @TODO - abstract out all .btn styles… need design consistency / standards */
-#usercart .btn {
+#usercart .btn,
+#publicLogin .btn {
 	padding:1px 10px 0;
 	background: url(../images/btn-glass.png) 0 50.5% repeat-x;
 	border:1px solid rgba(0,0,0,0);
@@ -169,14 +170,16 @@ body .header .quick-access
 	text-transform: uppercase; 
 }
 #usercart .btn:hover {text-decoration: none;}
-#usercart .checkout {
+#usercart .checkout,
+#publicLogin .btn {
 	float: right;
 	margin-top:7px;
 	background-color:rgb(218,80,77); /* fallback */
 	background-color:rgba(218,80,77,1);
 	color:#fff;
 }
-#usercart .checkout strong {
+#usercart .checkout strong,
+#publicLogin .btn strong {
 	padding-right:9px;
 	background: url(../images/btn-arrow-s.png) 100% 25% no-repeat;
 	line-height: 1.6;
@@ -190,6 +193,42 @@ body .header .quick-access
 	#usercart {padding-top:3px;}
 	#usercart .btn {padding:0px 10px;}
 	#usercart .checkout strong {background-position:100% 50%;}
+}
+
+/* signin / signup public view */
+#publicLogin {
+    position: absolute; right: 0; top: 0;
+    z-index: 1000;
+    margin: 26px 20px 0 0;
+    width: 257px;
+}
+#publicLogin .signin {
+	text-align: right;
+}
+#publicLogin .signup {
+	margin-top:5px;
+}
+#publicLogin .signup > strong {
+	float: left;
+	margin-top:3px;
+	width:150px;
+	color:#ef4036;
+	font-size: 13.12px; font-weight: normal; line-height: 1.1;
+}
+#publicLogin .signup > strong em {
+	display: block;
+	font-size:15.9px ; font-style: normal; font-weight: bold;
+}
+
+#publicLogin .btn {
+	float:right;
+	margin-top:5px;
+	font-size:1.1em;
+}
+#publicLogin .btn strong {
+	padding-right:12px;
+	background:url(../images/btn-arrow-lg.png) 100% 25% no-repeat;
+	font-weight: 500; letter-spacing: 0.025em;
 }
 
 .nav ul
