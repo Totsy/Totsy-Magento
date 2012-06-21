@@ -320,6 +320,12 @@
                         <class>fulfillmentfactory/observer</class>
                         <method>cancelItemQueue</method>
                     </fulfillmentfactory>
+					<!--Harapartners_Promotionfactory-->
+                    <promotionfactory>
+                        <type>singleton</type>
+                        <class>promotionfactory/observer</class>
+                        <method>cancelVirtualProductCouponInOrder</method>
+                    </promotionfactory>
                 </observers>
             </order_cancel_after>
 			<sales_quote_item_save_before>
