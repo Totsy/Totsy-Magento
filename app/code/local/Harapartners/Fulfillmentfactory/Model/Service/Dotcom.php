@@ -120,10 +120,13 @@ XML;
 
             $productSku = substr($sku, 0, 17);
             $name = substr($product->getName(), 0, 28);
+            $name = Mage::helper('fulfillmentfactory')->removeBadCharacters($name);
 
             $vendorCode = '<manufacturing-code xsi:nil="true" />';
             if ($value = $product->getVendorCode()) {
-                $vendorCode = '<manufacturing-code>' . substr($value, 0, 10) . '</manufacturing-code>';
+                $value = substr($value, 0, 10);
+                $value = Mage::helper('fulfillmentfactory')->removeBadCharacters($value);
+                $vendorCode = '<manufacturing-code>' . $value . '</manufacturing-code>';
             }
 
             $style = '<style-number xsi:nil="true" />';
@@ -331,7 +334,7 @@ XML;
             
             $state = Mage::helper('fulfillmentfactory')->getStateCodeByFullName($shippingAddress->getRegion(), $shippingAddress->getCountry());
 
-            //$city = Mage::help('fulfillmentfactory')->validateAddressForDC('CITY', $shippingAddress->getCity());            
+            $city = Mage::helper('fulfillmentfactory')->validateAddressForDC('CITY', $shippingAddress->getCity());            
             $xml = <<<XML
         <orders xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <order>

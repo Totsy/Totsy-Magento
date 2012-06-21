@@ -12,84 +12,79 @@
  * 
  */
 
-class Harapartners_Customertracking_Block_Pixel extends Mage_Core_Block_Template{
-    
-    public function _toHtml(){
-        $outputHtml = '';
+class Harapartners_Customertracking_Block_Pixel
+    extends Mage_Core_Block_Template
+{
+    public function _toHtml()
+    {
         $affiliate = Mage::getSingleton('customer/session')->getAffiliate();
-        if(!!$affiliate && !!$affiliate->getId()){
-            try{
-                $trackingCode = json_decode($affiliate->getTrackingCode(), true);
-                $pixelHtml='';
-                //Page detection
-                $currentPageTag = strtolower(Mage::app()->getFrontController()->getAction()->getFullActionName());
-                //fire GA event tracking
-                $mapping = Mage::helper('affiliate')->getFormTrackingPageCodeArray();
-                foreach ($mapping as $index=>$value) {
-                    if($index == $currentPageTag){                        
-                        $affiliateEventName = $value;
-                    }
-                }                                
-                $outputHtml.="<script type='text/javascript'> var _gaq = _gaq || [];
-                _gaq.push(['_trackEvent', 'affiliate', '".$affiliateEventName."', '".$affiliate->getAffiliateCode()."']);</script>";                        
-                if(!empty($trackingCode[$currentPageTag])){
-                    $pixelHtml.= $trackingCode[$currentPageTag];
-                }
-                
-                //Additional logic
-                $cookie = Mage::app()->getCookie();
-                $key = Harapartners_Customertracking_Helper_Data::COOKIE_CUSTOMER_WELCOME;
-                if(!!$cookie->get($key)){
-                    if(!empty($trackingCode[Harapartners_Affiliate_Helper_Data::PAGE_NAME_AFTER_CUSTOMER_REGISTER_SUCCESS])){
-                        $pixelHtml.= $trackingCode[Harapartners_Affiliate_Helper_Data::PAGE_NAME_AFTER_CUSTOMER_REGISTER_SUCCESS];
-                    }
-                    //fire GA event tracking
-                    $outputHtml.="<script type='text/javascript'> var _gaq = _gaq || [];
-                    _gaq.push(['_trackEvent', 'affiliate', 'After Customer Register Success', '".$affiliate->getAffiliateCode()."']);</script>";
-                    
-                    $cookie->delete($key); //Note cookie still available till next page request
-                }
-                $varaiableArray = $this->_stringToArray($pixelHtml);         
-                foreach ($varaiableArray as $text) {
-                    if(is_array($text)){
-                        foreach ($text as $realText) {
-                            $outputHtml.= $realText;
-                        }
-                    }else{
-                        $outputHtml.= $text;    
-                    }                
-                }                
-            }catch(Exception $e){
-                //handler
-            }
-        }        
-        return $outputHtml;
-    }
-    protected function _stringToArray($string){
-        if(!!$string){
-            $array = explode('{{', $string);
-            $i=count($array);
-            for($j=1;$j<$i;$j++){
-                $array[$j] = explode('}}',$array[$j]);
-            }
-            if($i>1){
-                $customer = Mage::getSingleton('customer/session')->getCustomer();
-                //$customer = Mage::getModel('customer/customer')->load(14);
-                $orderId = Mage::getSingleton('checkout/session')->getLastOrderId();
-                $order = Mage::getModel('sales/order')->load($orderId);
-                for ($j=1;$j<$i;$j++){
-                    if(substr($array[$j][0],0,9)=='customer.'){
-                        $array[$j][0] = $customer->getData(substr($array[$j][0],9));
-                    }elseif (substr($array[$j][0],0,6)=='order.'){
-                        $array[$j][0] = $order->getData(substr($array[$j][0],6));
-                    }else{
-                        $array[$j][0] = '{{'.$array[$j][0].'}}';
-                    }
-                }
-            }
-            return $array;
-        }else{
-            return array();
+        $eventName = $this->getCurrentAffiliateEventName();
+        if ($affiliate && $affiliate->getId() && !empty($eventName)) {
+            return $this->renderView();
+        } else {
+            return '';
         }
+    }
+
+    public function getCurrentAffiliateEventName()
+    {
+        $pageMap = Mage::helper('affiliate')->getFormTrackingPageCodeArray();
+        $pageTag = strtolower(Mage::app()->getFrontController()
+            ->getAction()
+            ->getFullActionName());
+
+        return isset($pageMap[$pageTag]) ? $pageMap[$pageTag] : '';
+    }
+
+    public function getCurrentAffiliatePixel()
+    {
+        $htmlPixel = '';
+        $affiliate = Mage::getSingleton('customer/session')->getAffiliate();
+        if ($affiliate && $affiliate->getId()) {
+            $trackingCodes = json_decode($affiliate->getTrackingCode(), true);
+            $pageTag = strtolower(Mage::app()->getFrontController()
+                ->getAction()
+                ->getFullActionName());
+
+            // additional logic to ensure the post-registration pixel fires
+            // only once, by checking a tracking cookie
+            $cookie = Mage::app()->getCookie();
+            $key = Harapartners_Customertracking_Helper_Data::COOKIE_CUSTOMER_WELCOME;
+            if ($cookie->get($key)) {
+                $htmlPixel .= $trackingCodes[Harapartners_Affiliate_Helper_Data::PAGE_NAME_AFTER_CUSTOMER_REGISTER_SUCCESS];
+                $cookie->delete($key);
+            }
+
+            if (isset($trackingCodes[$pageTag])) {
+                $htmlPixel .= $trackingCodes[$pageTag];
+            }
+        }
+
+        return $this->_templateReplace($htmlPixel);
+    }
+
+    protected function _templateReplace($html)
+    {
+        $customer = Mage::getSingleton('customer/session')->getCustomer();
+        $orderId = Mage::getSingleton('checkout/session')->getLastOrderId();
+        $order = Mage::getModel('sales/order')->load($orderId);
+
+        return preg_replace_callback('/{{[\w.]+}}/', function($matches) use ($customer, $order) {
+            $parts = explode('.', substr($matches[0], 2, -2));
+
+            if (2 == count($parts)) {
+                list($modelType, $field) = $parts;
+                switch ($modelType) {
+                    case 'customer':
+                        return $customer->getData($field);
+                        break;
+                    case 'order':
+                        return $order->getData($field);
+                        break;
+                }
+
+                return $matches[0];
+            }
+        }, $html);
     }
 }

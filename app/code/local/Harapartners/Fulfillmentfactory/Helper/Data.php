@@ -150,4 +150,11 @@ class Harapartners_Fulfillmentfactory_Helper_Data extends Mage_Core_Helper_Abstr
 
         return $data;      
     }
+
+    /**
+    * Removes bad characters that affect xml, currently it focuses on the ampersand (&) character
+    */
+    public function removeBadCharacters($value) {
+        return preg_replace('/&/','and',$value);
+    }
 }

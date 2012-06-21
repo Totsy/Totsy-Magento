@@ -20,6 +20,7 @@ class Harapartners_affiliate_Block_Adminhtml_Record_Edit extends Mage_Adminhtml_
         $this->_objectId = 'affiliate_id';
         $this->_blockGroup = 'affiliate';
         $this->_controller = 'adminhtml_record';
+        $this->_headerText = Mage::helper('affiliate')->__('Affiliate Record');
     }
    
     protected function _prepareLayout() {

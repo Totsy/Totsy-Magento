@@ -43,6 +43,22 @@
         <?php echo $this->getChildHtml('global_messages') ?>
         <?php echo $this->getChildHtml('breadcrumbsContainer') ?>
         <div class="main col1-layout">
+
+<?php 
+	$currentUrlPath = $this->helper('core/url')->getCurrentUrl();
+	$temp = explode('/', $currentUrlPath);	
+	$baseUrl = $temp[3];
+			
+	if($baseUrl=="event" /*|| $currentUrlPath==$baseUrl[0]."/".$_SERVER['HTTP_HOST'] || $currentUrlPath==$baseUrl[0]."/".$_SERVER['HTTP_HOST']."/"*/ ) {
+	    //echo 'You are on the home page!';
+	    ?>
+	    <div id="hsn-banner">
+	    	<a href="/brands/hsn" title="Home Shopping Network 40% Off"><img src="/skin/frontend/enterprise/harapartners/images/brands/hsn/hsn-banner.png" alt="HSN Promotion" /></a>
+	    </div>
+	    <?php
+	} 
+?>
+
             <div class="col-main">
             
 <?php 
