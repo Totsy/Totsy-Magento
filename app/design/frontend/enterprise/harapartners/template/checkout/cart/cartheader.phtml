@@ -32,10 +32,7 @@
     $checkoutSession = Mage::getSingleton('checkout/session');
     $countDownTimerHeader= $checkoutSession->getCountDownTimer();
     $timeoutHeader = $checkoutSession->getQuoteItemExpireTime();
-    //$endcount_lc_header = date("F j, Y, G:i:s", ($countDownTimerHeader + $timeoutHeader));
-    $endcount_lc_header = ($countDownTimerHeader + $timeoutHeader)*1000; //ms
-    //Harapartners, yang, get the server time with the frontend JS time
-	$serverTime = Mage::helper('service')->getServerTime();
+    $endcount_lc_header = date("F j, Y, G:i:s", ($countDownTimerHeader + $timeoutHeader));
     $quote = $checkoutSession->getQuote();
     $_saving = Mage::helper('sales/order')->calculateEstimatedSavings($quote);
 ?>
@@ -86,17 +83,11 @@
 		        	<p id="cart-timer-header"></p>
 			        <script type="text/javascript">
 						jQuery(document).ready(function() {
-							var dateObj = new Date();
-							var countDownToTime = <?php echo $endcount_lc_header?>;
-							var serverTime = <?php echo $serverTime?>;
-							var localTime = new Date().getTime();
-							countDownToTime = (countDownToTime + (localTime - serverTime));
-							dateObj.setTime(countDownToTime);
-							var countToTimeTemplate = (dateObj.getMonth()+1) + ' ' + dateObj.getDate() + ', ' + dateObj.getFullYear() + ' ' + dateObj.getHours() + ':' + dateObj.getMinutes() + ':' + dateObj.getSeconds();
 							jQuery("#cart-timer-header").countdown({
 								//date: "12 10, 2011 16:11", //Counting TO a date
-								date: countToTimeTemplate,//Counting TO a date "<?php echo $endcount_lc_header; ?>", 
+								date: "<?php echo $endcount_lc_header; ?>", //Counting TO a date
 								htmlTemplate: "%{m} <span class=\"cd-time\">:</span> %{s} <span class=\"cd-time\">minutes</span>",
+			
 								onChange: function( event, timer ){
 								},
 								onComplete: function( event ){											
