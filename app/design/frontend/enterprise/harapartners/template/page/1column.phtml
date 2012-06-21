@@ -44,6 +44,24 @@
         <?php echo $this->getChildHtml('breadcrumbsContainer') ?>
         <div class="main col1-layout">
             <div class="col-main">
+            
+<?php 
+	
+	$currentUrlPath = $this->helper('core/url')->getCurrentUrl();
+	
+	$temp = explode('/', $currentUrlPath);
+	$baseUrl = $temp[2];
+			
+	if($baseUrl=="event" /*|| $currentUrlPath==$baseUrl[0]."/".$_SERVER['HTTP_HOST'] || $currentUrlPath==$baseUrl[0]."/".$_SERVER['HTTP_HOST']."/"*/ ) {
+	    //echo 'You are on the home page!';
+	    
+	} else {
+	    //echo 'You are NOT on the home page!';
+	    
+	}
+	
+?>
+            
                 <?php echo $this->getChildHtml('content') ?>
             </div>
         </div>
