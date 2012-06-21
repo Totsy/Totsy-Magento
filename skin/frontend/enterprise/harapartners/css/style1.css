@@ -1321,3 +1321,7 @@ body .top-cart .block-content p.subtotal span.orange, .orange, .orange .price{
 .brandpromo .minilogo {
 	position: absolute; bottom: 0; left: 0;
 }
+
+/* HSN banner on home page */
+#hsn-banner {margin-bottom:-30px;}
+#hsn-banner a {display:block;}
