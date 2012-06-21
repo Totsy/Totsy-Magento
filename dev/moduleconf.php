@@ -208,8 +208,9 @@ EOH;
 function is_override($moduleName, $classType, $className) {
     global $mageRoot;
 
+    $classDir = str_replace('_', '/', $className);
     foreach (glob($mageRoot . "/app/code/core/*", GLOB_ONLYDIR) as $namespace) {
-        $originalFile = "$namespace/$moduleName/$classType/$className.php";
+        $originalFile = "$namespace/$moduleName/$classType/$classDir.php";
         if (file_exists($originalFile)) {
             return substr($namespace, strrpos($namespace, '/')+1);
         }
