@@ -41,6 +41,11 @@
                     <observer>Totsy_Sales_Model_Observer</observer>
                 </rewrite>
             </sales-->
+            <sales>
+                <rewrite>
+                    <order>Totsy_Sales_Model_Order</order>
+                </rewrite>
+            </sales>
         </models>
         <helpers>
             <sales>
