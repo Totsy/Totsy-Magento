@@ -7,7 +7,13 @@
  */
 
 function usage() {
-    echo "Usage:\nmoduleconf <modulename> <classtype> <classname>\n";
+    echo "Usage:\nmoduleconf <modulename> <classtype> <classname>\n\n";
+    echo "<modulename> is the name of the new module. Supplying this argument "
+        . "alone will simply create an empty module, and register it in the "
+        . "module directory (in `app/etc/modules/Totsy_All.xml`).", PHP_EOL;
+    echo "<classtype> can be either `controller`, `block`, `helper`, or `model` "
+        . "(case insensitive).", PHP_EOL;
+    echo "<classname> is the name of the new class.", PHP_EOL;
     exit(1);
 }
 
@@ -30,12 +36,13 @@ if ($argc != 4) {
 }
 
 // route this request based on the class type
-switch ($argv[2]) {
+switch (strtolower($argv[2])) {
     case 'controller':
         controller($argv[1], $argv[3]);
         break;
-    case 'model':
+    case 'block':
     case 'helper':
+    case 'model':
         standard($argv[1], $argv[2], $argv[3]);
         break;
     default:
@@ -48,7 +55,7 @@ switch ($argv[2]) {
  * updating the global module directory configuration.
  *
  * @param string $moduleName The name of the module.
- * @return void
+ * @return bool
  */
 function init($moduleName) {
     global $mageRoot;
@@ -57,8 +64,9 @@ function init($moduleName) {
     $modulePath = $mageRoot . "/app/code/local/Totsy/$moduleName";
     if (!is_dir($modulePath)) {
         mkdir($modulePath);
+        echo "+ $modulePath", PHP_EOL;
         mkdir($modulePath . '/etc');
-        echo "Created new root directory for module $moduleName at $modulePath", PHP_EOL;
+        echo "+ {$modulePath}/etc", PHP_EOL;
     } else {
         return true;
     }
@@ -78,7 +86,11 @@ function init($moduleName) {
         ->addChild('version', '0.1.0');
 
     file_put_contents($modulePath . '/etc/config.xml', xmlpp($xmlModuleConf->asXML()));
+    echo "+ {$modulePath}/etc/config.xml", PHP_EOL;
     file_put_contents($mageRoot . '/app/etc/modules/Totsy_All.xml', xmlpp($xmlAppConf->asXML()));
+    echo "* {$mageRoot}/app/etc/modules/Totsy_All.xml", PHP_EOL;
+
+    return true;
 }
 
 /**
@@ -98,6 +110,7 @@ function controller($moduleName, $className) {
     $controllersPath = $mageRoot . "/app/code/local/Totsy/$moduleName/controllers";
     if (!is_dir($controllersPath)) {
         mkdir($controllersPath);
+        echo "+ $controllersPath", PHP_EOL;
     }
 
     $controllerFileContents = <<<EOH
@@ -110,22 +123,22 @@ function controller($moduleName, $className) {
  */
 
 class Totsy_{$moduleName}_{$className}Controller
-\textends Mage_Core_Controller_Front_Action
+    extends Mage_Core_Controller_Front_Action
 {
 }
 
 EOH;
     file_put_contents($controllersPath . "/$className.php", $controllerFileContents);
-    echo "Added controller {$className}Controller to module $moduleName", PHP_EOL;
+    echo "+ {$controllersPath}/$className.php", PHP_EOL;
 }
 
 /**
  * Handle a new standard class request.
  * Create a new class in the appropriate module subdirectory.
- * A standard class is currently either a Model or Helper class.
+ * A standard class is currently either a Block, Helper or Model class.
  *
  * @param string $moduleName The name of the module.
- * @param string $classType  The type of class (either 'helper' or 'data')
+ * @param string $classType  The type of class (either 'block', 'helper', or 'model')
  * @param string $className  The name of the new controller class.
  *
  * @return void
@@ -139,12 +152,18 @@ function standard($moduleName, $classType, $className) {
     $basePath = $mageRoot . "/app/code/local/Totsy/$moduleName/$classType";
     if (!is_dir($basePath)) {
         mkdir($basePath);
+        echo "+ $basePath", PHP_EOL;
     }
 
     $classPath = str_replace('_', '/', $className);
+    if (file_exists($basePath . "/$classPath.php")) {
+        echo "- skip ", $basePath . "/$classPath.php", " (already exists)", PHP_EOL;
+    }
+
     $classDir  = $basePath . '/' . dirname($classPath);
     if (!is_dir($classDir)) {
         mkdir($classDir, 0777, true);
+        echo "+ $classDir", PHP_EOL;
     }
 
     $fileContents = <<<EOH
@@ -164,6 +183,11 @@ EOH;
         $pluralClass = strtolower($classType) . 's';
         $lowerModName = strtolower($moduleName);
         $lowerClassName = strtolower($className);
+
+        // special case when the parent namespace being overriden is Enterprise
+        if ('enterprise' == strtolower($namespace)) {
+            $lowerModName = 'enterprise_' . $lowerModName;
+        }
 
         $modconf = simplexml_load_file($mageRoot . "/app/code/local/Totsy/$moduleName/etc/config.xml");
 
@@ -185,16 +209,17 @@ EOH;
         }
 
         file_put_contents($mageRoot . "/app/code/local/Totsy/$moduleName/etc/config.xml", xmlpp($modconf->asXML()));
+        echo "* {$mageRoot}/app/code/local/Totsy/$moduleName/etc/config.xml", PHP_EOL;
 
         // add the 'extends' clause to the class definition
-        $fileContents .= "\n    \nextends {$namespace}_{$moduleName}_{$classType}_{$className}";
+        $fileContents .= "\n    extends {$namespace}_{$moduleName}_{$classType}_{$className}";
     }
 
     $fileContents .= "\n{\n}\n";
 
     if (!file_exists($basePath . "/$classPath.php")) {
         file_put_contents($basePath . "/$classPath.php", $fileContents);
-        echo "Added $classType named $className to module $moduleName at $basePath/$classPath.php", PHP_EOL;
+        echo "+ {$basePath}/$classPath.php", PHP_EOL;
     }
 }
 
