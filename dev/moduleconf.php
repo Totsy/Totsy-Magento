@@ -78,7 +78,7 @@ function init($moduleName) {
         ->addChild('version', '0.1.0');
 
     file_put_contents($modulePath . '/etc/config.xml', xmlpp($xmlModuleConf->asXML()));
-    file_put_contents($mageRoot . '/app/etc/modules/Totsy_All.xml', xmlpp($xmlModuleConf->asXML()));
+    file_put_contents($mageRoot . '/app/etc/modules/Totsy_All.xml', xmlpp($xmlAppConf->asXML()));
 }
 
 /**
@@ -187,8 +187,10 @@ EOH;
         file_put_contents($mageRoot . "/app/code/local/Totsy/$moduleName/etc/config.xml", xmlpp($modconf->asXML()));
 
         // add the 'extends' clause to the class definition
-        $fileContents .= "\textends {$namespace}_{$moduleName}_{$classType}_{$className}";
+        $fileContents .= "\n    \nextends {$namespace}_{$moduleName}_{$classType}_{$className}";
     }
+
+    $fileContents .= "\n{\n}\n";
 
     if (!file_exists($basePath . "/$classPath.php")) {
         file_put_contents($basePath . "/$classPath.php", $fileContents);
