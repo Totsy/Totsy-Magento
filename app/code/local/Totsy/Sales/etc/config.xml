@@ -35,15 +35,9 @@
             </totsy_sales_read>
         </resources>
         <models>
-			<!--Harapartners, JUN, overriding the core class is unnecessary here, moved to Harapartners_Service_Model_Rewrite_Sales_Observer for query optimization-->
-            <!--sales>
-                <rewrite>
-                    <observer>Totsy_Sales_Model_Observer</observer>
-                </rewrite>
-            </sales-->
             <sales>
                 <rewrite>
-                    <order>Totsy_Sales_Model_Order</order>
+                    <observer>Totsy_Sales_Model_Observer</observer>
                 </rewrite>
             </sales>
         </models>
