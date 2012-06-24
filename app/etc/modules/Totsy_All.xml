@@ -25,5 +25,9 @@
             <active>true</active>
             <codePool>local</codePool>
         </Totsy_Sales>
+        <Totsy_WebsiteRestriction>
+            <active>true</active>
+            <codePool>local</codePool>
+        </Totsy_WebsiteRestriction>
     </modules>
 </config>
