@@ -270,8 +270,8 @@ class Harapartners_Stockhistory_Adminhtml_TransactionController extends Mage_Adm
                                     $dataObj->setData('unit_cost', $unitCost);
                                     $dataObj->setData('qty_delta', $qtyDelta);
                                     $dataObj->setData('comment', $comment);
-                                    $dataObj->setData('status', Harapartners_Stockhistory_Model_Transaction::STATUS_PROCESSING);
-                                    $dataObj->setData('action_type', Harapartners_Stockhistory_Model_Transaction::ACTION_DIRECT_IMPORT);
+                                    $dataObj->setData('status', Harapartners_Stockhistory_Model_Transaction::STATUS_PROCESSED);
+                                    $dataObj->setData('action_type', Harapartners_Stockhistory_Model_Transaction::ACTION_TYPE_DIRECT_IMPORT);
                                     
                                     $transaction->importData($dataObj)->save();
                                     $transaction->updateProductStock();
