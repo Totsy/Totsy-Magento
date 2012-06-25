@@ -38,6 +38,7 @@
             <sales>
                 <rewrite>
                     <observer>Totsy_Sales_Model_Observer</observer>
+                    <order>Totsy_Sales_Model_Order</order>
                 </rewrite>
             </sales>
         </models>
