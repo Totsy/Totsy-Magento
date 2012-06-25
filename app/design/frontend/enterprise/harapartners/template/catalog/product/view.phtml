@@ -215,33 +215,24 @@ if( Mage::getSingleton('customer/session')->getCustomerId() ) {
 ?>
 
 <script type="text/javascript">
+    //socialble labs
     var socialableLabsOutput = <?php echo $socialable_labs_output ?>;  
 </script>
 
-<!-- Social Labs END -->
-
-<!-- Steelhouse -->
 <script type="text/javascript">
-var shver='2.8.6';
-var shpn= '<?php echo urlencode($_product->getName()) ?>';
-var shpc= "<?php echo urlencode(addslashes(strip_tags(html_entity_decode(str_replace(array("\r", "\n"), '', $_product->getDescription()))))) ?>";
-var shpp= '<?php echo number_format($_product->getPrice(), 2) ?>';
-var shpb= '<?php echo urlencode($_product->getCategory()->name); ?>';
-var shpi= '<?php echo urlencode($_product->getProductUrl()) ?>';
-var shps= '<?php echo $_product->getSku() ?>';
-var shcv= '<?php echo number_format($_cart->getQuote()->getGrandTotal(), 2) ?>';
-var shcq= '<?php echo $_cart->getItemsQty() ?>';
-var shcp= '<?php echo $product_ids ?>';
-//'SHOPPING CART COMMA SEPARATED LIST OF PRODUCT IDs';
-var additional='';
-var aid='9577';var tdr='';if (top.document.referrer != ''){tdr = encodeURIComponent(top.document.referrer);}var plh='';if (parent.location.href != ''){plh = encodeURIComponent(parent.location.href);}shpi = encodeURIComponent(shpi);(function(){steelhouse={add:function(a,b,c,d){d=d||false;if(a.addEventListener){a.addEventListener(b,c,d)}else if(a.attachEvent){a.attachEvent("on"+b,c)}},load:function(){var a;if(typeof a=='undefined'){a=Math.random()*100000000000000000}var b=document.createElement('script');var c='px.steelhousemedia.com/st?aid='+aid+'&cb='+a+'&shcv='+shcv+'&shcq='+shcq+'&shcp='+shcp+'&shpn='+shpn+'&shpc='+shpc+'&shpp='+shpp+'&shpb='+shpb+'&shpi='+shpi+'&shps='+shps+'&tdr='+tdr+'&plh='+plh+additional;b.type='text/javascript';b.src=('https:'==document.location.protocol?'https://':'http://')+c;var d=document.getElementsByTagName('script');var e=Number(d.length)-1;var f=document.getElementsByTagName('script')[e];f.parentNode.insertBefore(b,f)}};steelhouse.load();})();
+
+shver='2.8.6';
+shpn= '<?php if($_product) { echo urlencode($_product->getName()); } ?>';
+shpc= "<?php if($_product) { echo urlencode(addslashes(strip_tags(html_entity_decode(str_replace(array("\r", "\n"), '', $_product->getDescription()))))); } ?>";
+shpp= '<?php if($_product) { echo number_format($_product->getPrice(), 2); } ?>';
+shpb= '<?php if($_product) { echo urlencode($_product->getCategory()->name); } ?>';
+shpi= '<?php if($_product) { echo urlencode($_product->getProductUrl()); } ?>';
+shps= '<?php if ($_product) { echo $_product->getSku(); } ?>';
+shcv= '<?php if($_cart) { echo number_format($_cart->getQuote()->getGrandTotal(), 2); } ?>';
+shcq= '<?php if($_cart) { $_cart->getItemsQty(); } ?>';
+shcp= '<?php if($product_ids) { echo $product_ids; } ?>';
+
 </script>
-<!-- Steelhouse -->
-
-<!-- Socialable labs -->
-
-<!-- Socialable labs -->
-
 
 <script type="text/javascript">
 // jQuery(document).ready(function(){
