@@ -10,17 +10,36 @@
 <config>
     <modules>
         <Totsy_Sales>
-            <version>0.1.5</version>
+            <version>0.1.6</version>
         </Totsy_Sales>
     </modules>
     <global>
+        <resources>
+            <totsy_sales_setup>
+                <setup>
+                    <module>Totsy_Sales</module>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </totsy_sales_setup>
+            <totsy_sales_write>
+                <connection>
+                    <use>core_write</use>
+                </connection>
+            </totsy_sales_write>
+            <totsy_sales_read>
+                <connection>
+                    <use>core_read</use>
+                </connection>
+            </totsy_sales_read>
+        </resources>
         <models>
-			<!--Harapartners, JUN, overriding the core class is unnecessary here, moved to Harapartners_Service_Model_Rewrite_Sales_Observer for query optimization-->
-            <!--sales>
+            <sales>
                 <rewrite>
                     <observer>Totsy_Sales_Model_Observer</observer>
                 </rewrite>
-            </sales-->
+            </sales>
         </models>
         <helpers>
             <sales>

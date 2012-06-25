@@ -56,13 +56,9 @@ $howMany = count($categoryDataArray);
 			<?php $j=0; ?>
 			<?php $nonSalableArray = array();?>
 			<?php $i=0; foreach ($category['product_list'] as $_product): ?>
-				<?php 
-					if (empty($_product['url_path'])){
-						$_product['url_path'] = substr($category['category_info']['url_path'],0,-5).'/'.$_product['url_key'].'.html';
-					} else if (!preg_match('/sales/', $_product['url_path'])){
-						$_product['url_path'] = substr($category['category_info']['url_path'],0,-5).'/'.$_product['url_path'];
-					}
-				?>
+				<?php if (empty($_product['url_path']) || !preg_match('/sales/',$_product['url_path'])){
+					$_product['url_path'] = $_product['request_path'];
+				}?>
 				<?php if ($_product['is_salable']==1): ?>
 				<li class="item">
 		        	<ul class="echoShare" 
