@@ -551,24 +551,37 @@ class Mage_Adminhtml_Catalog_CategoryController extends Mage_Adminhtml_Controlle
         $deletedProductsId = explode(',', trim($this->getRequest()->getParam('deletedProducts'), ', '));
         $deleteSuccessCount = 0;
         $deleteFailureCount = 0;
+        $deleteSuccessSkus = array();
+        $deleteFailureSkus = array();
 		foreach( $deletedProductsId as $productId ) {
 			if(!is_numeric($productId)){
 				continue;
 			}
 			$product = Mage::getModel('catalog/product')->load($productId);
+            $sku = (string) $product->getSku();
 	        try {
                 $product->delete();
+                $deleteSuccessSkus[] = $sku;
                 $deleteSuccessCount ++;
             }catch (Exception $e){
                 Mage::getSingleton('core/session')->addError($this->__('Unable to delete product ') . $product->getSku());
                 $deleteFailureCount ++;
+                $deleteFailureSkus[] = $sku;
             }
         }
         
         if($deleteFailureCount > 0){
-        	Mage::getSingleton('core/session')->addError($this->__($deleteFailureCount . ' product(s) not deleted,  ' . $deleteSuccessCount . ' product(s) successfully deleted.'));
+            Mage::log($deleteFailureCount . ' product(s) not deleted from category: '.$this->getRequest()->getParam('categoryId').' by admin user: '
+                .Mage::getSingleton('admin/session')->getUser()->getUsername().' <'.Mage::getSingleton('admin/session')->getUser()->getEmail().'>.'
+                ."\n  Product SKUs not deleted: ".implode(',',$deleteFailureSkus)
+                ,null,'adminCategoryProductsDelete.log');
+            Mage::getSingleton('core/session')->addError($this->__($deleteFailureCount . ' product(s) not deleted,  ' . $deleteSuccessCount . ' product(s) successfully deleted.'));
         }else{
         	if($deleteSuccessCount > 0){
+                Mage::log($deleteSuccessCount . ' product(s) successfully deleted from category: '.$this->getRequest()->getParam('categoryId').' by admin user: '
+                    .Mage::getSingleton('admin/session')->getUser()->getUsername().' <'.Mage::getSingleton('admin/session')->getUser()->getEmail().'>.'
+                    ."\n  Product SKUs deleted: ".implode(',',$deleteSuccessSkus)
+                    ,null,'adminCategoryProductsDelete.log');
         		Mage::getSingleton('core/session')->addSuccess($this->__($deleteSuccessCount . ' product(s) successfully deleted.'));
         	}else{
         		Mage::getSingleton('core/session')->addNotice($this->__('Nothing deleted, please try again.'));
