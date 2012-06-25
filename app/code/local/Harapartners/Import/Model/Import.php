@@ -78,6 +78,10 @@ class Harapartners_Import_Model_Import extends Mage_Core_Model_Abstract {
             $purchaseOrderDataObj->setData('category_id', $category->getId());
             $purchaseOrderDataObj->setData('comment', 'Category/Event Import ' .  date('Y-n-j H:i:s'));
             $purchaseOrder->importData($purchaseOrderDataObj->getData())->save();
+            $ponumber = strtoupper(substr($vendor->getVendorCode(), 0, 3)) . $purchaseOrder->generatePoNumber();
+            $savedData = $purchaseOrder->getData();
+            $savedData['po_number'] = $ponumber;
+            $purchaseOrder->importData($savedData)->save();
             Mage::getSingleton('adminhtml/session')->addNotice(Mage::helper('import')->__('New PO created during import: ' . $purchaseOrder->getData('name')));
         }
         if(!$purchaseOrder || !$purchaseOrder->getId()){
