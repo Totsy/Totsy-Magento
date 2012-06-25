@@ -55,4 +55,23 @@ class Totsy_Sales_Model_Observer
 
         return null;
     }
+
+    /**
+     * Harapartners, Jun
+     * Performance optimization, no action during batch import.
+     *
+     * @param Varien_Event_Observer $observer
+     * @return Totsy_Sales_Model_Observer
+     */
+    public function catalogProductSaveAfter(Varien_Event_Observer $observer) {
+        if(!!Mage::registry('is_batch_import_process')){
+            return $this;
+        }
+        $product = $observer->getEvent()->getProduct();
+        if ($product->getStatus() == Mage_Catalog_Model_Product_Status::STATUS_ENABLED) {
+            return $this;
+        }
+        Mage::getResourceSingleton('sales/quote')->markQuotesRecollect($product->getId());
+        return $this;
+    }
 }
