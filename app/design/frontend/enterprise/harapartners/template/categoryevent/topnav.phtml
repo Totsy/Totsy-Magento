@@ -21,6 +21,10 @@ $howMany = count($categoryDataArray);
 
 <h2><?php echo $topNavDataObject->getData('attr_text_label'); ?><span><?php echo ' ( '.$howMany.' Sales Found )';?></span></h2>
 
+<script type="text/javascript">
+shpn='<?php echo $topNavDataObject->getData('attr_text_label'); ?>'
+</script>
+
 <?php foreach($categoryDataArray as $category):?>
 
 <div class="events-div">
