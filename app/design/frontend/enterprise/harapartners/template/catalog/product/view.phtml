@@ -222,11 +222,11 @@ if( Mage::getSingleton('customer/session')->getCustomerId() ) {
 <!-- Steelhouse -->
 <script type="text/javascript">
 var shver='2.8.6';
-var shpn= '<?php echo $_product->getName() ?>';
-var shpc= "<?php echo strip_tags(html_entity_decode(str_replace(array("\r", "\n"), '', $_product->getDescription()))) ?>";
+var shpn= '<?php echo urlencode($_product->getName()) ?>';
+var shpc= "<?php echo urlencode(addslashes(strip_tags(html_entity_decode(str_replace(array("\r", "\n"), '', $_product->getDescription()))))) ?>";
 var shpp= '<?php echo number_format($_product->getPrice(), 2) ?>';
-var shpb= '<?php echo $_product->getCategory()->name; ?>';
-var shpi= '<?php echo $_product->getProductUrl() ?>';
+var shpb= '<?php echo urlencode($_product->getCategory()->name); ?>';
+var shpi= '<?php echo urlencode($_product->getProductUrl()) ?>';
 var shps= '<?php echo $_product->getSku() ?>';
 var shcv= '<?php echo number_format($_cart->getQuote()->getGrandTotal(), 2) ?>';
 var shcq= '<?php echo $_cart->getItemsQty() ?>';

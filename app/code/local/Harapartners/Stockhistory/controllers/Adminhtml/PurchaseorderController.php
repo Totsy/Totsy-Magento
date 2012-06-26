@@ -49,7 +49,7 @@ class Harapartners_Stockhistory_Adminhtml_PurchaseorderController extends Mage_A
         $id = $this->getRequest()->getParam('id');
         $data = $this->_getSession()->getPoFormData();
         
-           if (!!$id ) {
+        if (!!$id ) {
                $model  = Mage::getModel('stockhistory/purchaseorder')->load($id);
             if(!!$model && !!$model->getId()){
                 $data = $model->getData();

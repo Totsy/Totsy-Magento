@@ -31,7 +31,8 @@ class Harapartners_Service_Model_Rewrite_Sales_Order_Config extends Mage_Sales_M
                 foreach ($collection as $status) {
                     $code = $status->getStatus();
                     //Harapartners, Jun, Force ignore ogone, that status is by default in the DB
-                    if($code == 'processed_ogone'){
+                    $pos = strpos($code,"ogone");
+                    if($pos) {
                     	continue;
                     }
                     if ($addLabels) {
