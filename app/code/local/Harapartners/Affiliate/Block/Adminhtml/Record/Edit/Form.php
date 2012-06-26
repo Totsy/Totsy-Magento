@@ -12,70 +12,65 @@
  * 
  */
 
-class Harapartners_Affiliate_Block_Adminhtml_Record_Edit_Form extends Mage_Adminhtml_Block_Widget_Form {
-    
-                                   
+class Harapartners_Affiliate_Block_Adminhtml_Record_Edit_Form
+    extends Mage_Adminhtml_Block_Widget_Form
+{
     protected function _prepareForm() {
         $affiliateHelper = Mage::helper('affiliate');
-        
-//        if(!!Mage::registry('affiliatePixelsCount')){
-//            $pixelCount = Mage::registry('affiliatePixelsCount');
-//        }
-        
+
         $form = new Varien_Data_Form(array(
             'id'        => 'edit_form',
             'action'    => $this->getData('action'),
             'method'    => 'post'
         ));
-        
+
         $fieldset = $form->addFieldset('affiliate', array('legend'=>$affiliateHelper->__('Record')));
         $fieldset->addType('trackingcode', 'Harapartners_Affiliate_Block_Adminhtml_Widget_Form_Element_Trackingcode');
-        
+        $fieldset->addType('staticlist', 'Harapartners_Affiliate_Block_Adminhtml_Widget_Form_Element_StaticList');
+
         $fieldset->addField('affiliate_name', 'text', array(
             'label'     => $affiliateHelper->__('Affiliate Name'),
             'name'      => 'affiliate_name',
             'required'  => true,
             'note'        => '255 characters max.'
         ));
-        
+
         $fieldset->addField('affiliate_code', 'text', array(
             'label'     => $affiliateHelper->__('Affiliate Code'),
             'name'      => 'affiliate_code',
             'required'  => true,
-            'note'        => 'Alpha-numeric and underscore only. All characters in lower case. 255 characters max.'
+            'note'      => 'Alpha-numeric and underscore only. All characters in lower case. 255 characters max.'
         ));
-        
+
         $fieldset->addField('type', 'select', array(
             'label'     => $affiliateHelper->__('Type'),
             'name'      => 'type',
             'required'  => true,
             'values'    => $affiliateHelper->getFormTypeArray()
         ));
-        
+
         $fieldset->addField('status', 'select', array(
             'label'     => $affiliateHelper->__('Status'),
             'name'      => 'status',
             'required'  => true,
             'values'    => $affiliateHelper->getFormStatusArray()
         ));
-        
+
         $fieldset->addField('tracking_code', 'trackingcode', array(
-            'label'        => $affiliateHelper->__('Tracking Code'),
-            'name'        => 'tracking_code',
-            'note'        => 'You must "Confirm" if you want your edits to be saved. Empty fields are cleaned automatically before save.'
+            'label'      => $affiliateHelper->__('Tracking Codes'),
+            'name'       => 'tracking_code',
         ));
-        
-        $fieldset->addField('sub_affiliate_code', 'textarea', array(
+
+        $fieldset->addField('sub_affiliate_code', 'staticlist', array(
             'label'     => $affiliateHelper->__('Sub Affiliate Code'),
             'name'      => 'sub_affiliate_code',
-            'note'        => 'Comma delimited. Each sub-code must be alpha-numeric and underscore only. All characters in lower case.'        
         ));
-        
+
         $fieldset->addField('comment', 'textarea', array(
-            'label'     => $affiliateHelper->__('Coment'),
+            'label'     => $affiliateHelper->__('Comments'),
             'name'      => 'comment'
         ));
-        
+
         if ( Mage::registry('affiliate_form_data') ) {
             $form->setValues(Mage::registry('affiliate_form_data'));
         }
@@ -83,6 +78,5 @@ class Harapartners_Affiliate_Block_Adminhtml_Record_Edit_Form extends Mage_Admin
         $form->setUseContainer(true);
         $this->setForm($form);
         return parent::_prepareForm();
-    }    
-
+    }
 }
