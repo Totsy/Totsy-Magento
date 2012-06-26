@@ -114,7 +114,7 @@ class Harapartners_Categoryevent_Helper_Memcache extends Mage_Core_Helper_Abstra
                 'attr_text_label' => 'Results',
                 'category_product_complete_data' => array()
         );
-        
+
         try{
             $defaultTimezone = date_default_timezone_get();
             $mageTimezone = Mage::getStoreConfig(Mage_Core_Model_Locale::XML_PATH_DEFAULT_TIMEZONE);
@@ -122,12 +122,10 @@ class Harapartners_Categoryevent_Helper_Memcache extends Mage_Core_Helper_Abstra
             $sortDate = now("Y-m-d");
             date_default_timezone_set($defaultTimezone);
             $storeId = Mage::app()->getStore()->getId();
-            
             //To Jun: Note for rebuild script try not to get from cached or indexed data??
             
             // ---------- //
             // Load sorted live category info
-
             $sortentryLive = Mage::getModel('categoryevent/sortentry')->loadByDate($sortDate, $storeId, false)->getLiveQueue();
             $liveCategoryInfoArray = json_decode($sortentryLive, true);
             $liveCategoryIdArray = array();
@@ -187,7 +185,13 @@ class Harapartners_Categoryevent_Helper_Memcache extends Mage_Core_Helper_Abstra
             $attrLabel = Mage::helper('catalog')->__($attrObj->getSource()->getOptionText($attributeValue));
             
             $productCollection = Mage::getModel('catalog/product')->getCollection();
-            $productCollection->getSelect()->where('`e`.`entity_id` IN(' . implode(',', $uniqueProductIds) . ')');
+            $productCollection->getSelect()
+                              ->join(
+                                    array('table_rewrite'=>Mage::getSingleton('core/resource')->getTableName('core/url_rewrite')),
+                                    '`table_rewrite`.`product_id` = `e`.`entity_id` AND `table_rewrite`.`store_id` = \''.$storeId.'\' AND `table_rewrite`.`is_system` = 1 AND  `table_rewrite`.`request_path` LIKE \'sales%\'',
+                                    array('request_path')
+                                )
+                              ->where('`e`.`entity_id` IN(' . implode(',', $uniqueProductIds) . ')');
             $productCollection->addFieldToFilter($attributeType, array('like' => '%'.$attributeValue.'%'));
             $productCollection->addFieldToFilter('visibility', array("in" => array(
                     Mage_Catalog_Model_Product_Visibility::VISIBILITY_IN_CATALOG,
@@ -198,14 +202,13 @@ class Harapartners_Categoryevent_Helper_Memcache extends Mage_Core_Helper_Abstra
                     'type_id', 
                     'small_image', 
                     'thumbnail',
-                    'url_path',
                     'url_key',
                     'special_price',
                     'original_price',
-                    'price')
-            );
+                    'price',
+                    'request_path'
+            ));
             $productInfoArray = $productCollection->load()->toArray();
-            
             $productId = 0;
             foreach($liveCategoryInfoArray as &$liveCategoryInfo){
                 $liveCategoryInfo['product_info_array'] = array();

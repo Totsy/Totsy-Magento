@@ -20,6 +20,11 @@
     </thead>
 
     <?php $i=0; foreach ($_order->getAllItems() as $_item): ?>
+    <?php
+    //because we do NOT want to show the reservation code in the email
+    //a separate email addresses this 
+        unset($_item['product_options']); 
+    ?>
     <?php if($_item->getParentItem()) continue; else $i++; ?>
     <tbody<?php echo $i%2 ? ' bgcolor="#F6F6F6"' : '' ?>>
         <?php echo $this->getItemHtml($_item) ?>
