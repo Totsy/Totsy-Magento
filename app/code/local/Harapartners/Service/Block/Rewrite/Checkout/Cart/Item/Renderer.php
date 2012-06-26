@@ -20,7 +20,7 @@ class Harapartners_Service_Block_Rewrite_Checkout_Cart_Item_Renderer extends Mag
 			if($reservationCodeOption instanceof Mage_Sales_Model_Quote_Item_Option
 					&& $reservationCodeOption->getId()){
 				$optionList[] = array(
-    					'label' => 'Reservation Code', 
+    					'label' => 'Voucher Code', 
     					'value' => $reservationCodeOption->getValue()
     			);
 			}

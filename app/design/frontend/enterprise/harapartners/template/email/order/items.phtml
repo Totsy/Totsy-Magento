@@ -13,24 +13,21 @@
     <thead>
         <tr>
             <th align="left" bgcolor="#EAEAEA" style="font-size:13px; padding:3px 9px"><?php echo $this->__('Item') ?></th>
-            <th align="left" bgcolor="#EAEAEA" style="font-size:13px; padding:3px 9px"><?php echo $this->__('Sku') ?></th>
+            <th align="left" bgcolor="#EAEAEA"></th>
             <th align="center" bgcolor="#EAEAEA" style="font-size:13px; padding:3px 9px"><?php echo $this->__('Qty') ?></th>
             <th align="right" bgcolor="#EAEAEA" style="font-size:13px; padding:3px 9px"><?php echo $this->__('Subtotal') ?></th>
         </tr>
     </thead>
-
     <?php $i=0; foreach ($_order->getAllItems() as $_item): ?>
-    <?php
-    //because we do NOT want to show the reservation code in the email
-    //a separate email addresses this 
-        unset($_item['product_options']); 
+    <?php 
+        //we don't want the SKU in these emails
+        $_item->sku = null; 
     ?>
     <?php if($_item->getParentItem()) continue; else $i++; ?>
     <tbody<?php echo $i%2 ? ' bgcolor="#F6F6F6"' : '' ?>>
-        <?php echo $this->getItemHtml($_item) ?>
+        <?php echo $this->getItemHtml($_item); ?>
     </tbody>
     <?php endforeach; ?>
-
     <tbody>
         <?php echo $this->getChildHtml('order_totals') ?>
     </tbody>
