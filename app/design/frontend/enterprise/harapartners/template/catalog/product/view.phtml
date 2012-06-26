@@ -96,8 +96,7 @@ direction: "down"
 <!-- End Description Tab -->
 
 <!-- Start Shipping Tab -->
-
-<?php echo Mage::app()->getLayout()->createBlock('cms/block')->setBlockId('shipping_and_return')->toHtml()?>
+<?php echo $this->getChildHtml('product.shipping.return')?>
 </div>
 </div>
 <div style="clear:both;"></div>
