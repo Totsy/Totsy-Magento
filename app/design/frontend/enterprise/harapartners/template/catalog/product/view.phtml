@@ -96,11 +96,7 @@ direction: "down"
 <!-- End Description Tab -->
 
 <!-- Start Shipping Tab -->
-<?php if (!$_product->isVirtual() && Mage::getModel('cms/block')->load('shipping_and_return')->getId() ):?>
-<?php echo Mage::app()->getLayout()->createBlock('cms/block')->setBlockId('shipping_and_return')->toHtml()?>
-<?php elseif ( $_product->isVirtual() && Mage::getModel('cms/block')->load('shipping_and_return_virtual')->getId() ) :?>
-<?php echo Mage::app()->getLayout()->createBlock('cms/block')->setBlockId('shipping_and_return_virtual')->toHtml()?>
-<?php endif;?>
+<?php echo $this->getChildHtml('product.shipping.return')?>
 </div>
 </div>
 <div style="clear:both;"></div>

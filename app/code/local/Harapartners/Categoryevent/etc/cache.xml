@@ -12,5 +12,11 @@
             <container>Harapartners_Categoryevent_Model_Cache_Topnav</container>
             <cache_lifetime>1800</cache_lifetime>
         </categoryevent_event_topnav>
+        <catalog_product_view>
+            <block>categoryevent/catalog_product_view_shippingreturn</block>
+            <placeholder>PRODUCT_SHIPPING_RETURN</placeholder>
+            <container>Harapartners_Categoryevent_Model_Cache_Shippingreturn</container>
+            <cache_lifetime>3600</cache_lifetime>
+        </catalog_product_view>
     </placeholders>
 </config>    
