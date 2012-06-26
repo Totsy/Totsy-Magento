@@ -113,7 +113,8 @@ class Totsy_WebsiteRestriction_Model_Observer
                         // to the login action
                         if ('customer' != $request->getModuleName() &&
                             'account' != $request->getControllerName() &&
-                            'login' != $request->getActionName()
+                            'login' != $request->getActionName() &&
+                            '/' != $request->getRequestUri()
                         ) {
                             Mage::getSingleton('core/session')->setWebsiteRestrictionAfterLoginUrl($afterLoginUrl);
                         }
