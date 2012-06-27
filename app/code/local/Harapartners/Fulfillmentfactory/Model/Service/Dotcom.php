@@ -108,13 +108,13 @@ XML;
             }
 
             $productSku = substr($sku, 0, 17);
-            $name = substr($product->getName(), 0, 28);
             $name = Mage::helper('fulfillmentfactory')->removeBadCharacters($name);
+            $name = substr($product->getName(), 0, 28);
 
             $vendorCode = '<manufacturing-code xsi:nil="true" />';
             if ($value = $product->getVendorCode()) {
-                $value = substr($value, 0, 10);
                 $value = Mage::helper('fulfillmentfactory')->removeBadCharacters($value);
+                $value = substr($value, 0, 10);
                 $vendorCode = '<manufacturing-code>' . $value . '</manufacturing-code>';
             }
 
