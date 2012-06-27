@@ -25,6 +25,9 @@ class Harapartners_Categoryevent_Model_Sortentry extends Mage_Core_Model_Abstrac
 	// Every Events' parent category should be named as 'Events'
 	const EVENT_CATEGORY_NAME = 'Events';
 	
+	// Identify the expired events' parent category, all expired events should under this category
+	const EVENT_EXPIRED_CATEGORY_NAME = 'Expired Events';
+	
 	// Set up event collection date range
 	const EVENT_CATEGORY_DATE_RANGE = 5;
 	
@@ -230,6 +233,16 @@ class Harapartners_Categoryevent_Model_Sortentry extends Mage_Core_Model_Abstrac
 				
 		return $collection;
     }
+    
+    public function getExpCategoryCollection($parentCategoryId, $currentDate){
+	    $collection = Mage::getModel('catalog/category')->getCollection()
+	       		->addAttributeToSelect(array('name', 'event_end_date', 'is_active'))
+	       		->addFieldToFilter('parent_id', $parentCategoryId)
+	       		->addFieldToFilter('level', self::CATEGOTYEVENT_LEVEL)
+				->addFieldToFilter('event_end_date', array( "lt" => $currentDate ));
+				
+		return $collection;
+    }    
 	
     //This is an external function to be used in Controller
     public function rebuildSortCollection($sortDate, $storeId){	
@@ -245,6 +258,11 @@ class Harapartners_Categoryevent_Model_Sortentry extends Mage_Core_Model_Abstrac
         date_default_timezone_set($defaultTimezone);
 		$storeId = Mage_Core_Model_App::DISTRO_STORE_ID; //Harapartners, Yang: for now only rebuild totsy store
 		return $this->rebuildSortCollection($sortDate, $storeId);
+    }
+    
+    public function cleanUpExpiredEvents($schedule){
+    	return $this->cleanExpiredEvents();
+    	//return $this->cleanExpiredEvents(); // To revert changes in case of moving active event to expired category
     }
     
     //This is an external function to be used in Controller
@@ -280,5 +298,55 @@ class Harapartners_Categoryevent_Model_Sortentry extends Mage_Core_Model_Abstrac
 		}
 		$sortentry->save();	
     	return $sortentry;
+	}
+	
+	//For move expired categories/events to a certain category
+	public function cleanExpiredEvents( $revert = false ){		
+		//Get current clean time
+		$defaultTimezone = date_default_timezone_get();
+        $mageTimezone = Mage::getStoreConfig(Mage_Core_Model_Locale::XML_PATH_DEFAULT_TIMEZONE);
+        date_default_timezone_set($mageTimezone);
+        $currentDate = now("Y-m-d");
+        date_default_timezone_set($defaultTimezone);
+        $endDate = $this->calculateEndDate($currentDate);
+        
+        //Get store Id
+		$storeId = Mage_Core_Model_App::DISTRO_STORE_ID; //Harapartners, Yang: for now only affect on totsy store
+		
+		//Get source category and target category
+		$eventParentCat = $this->getParentCategory(self::EVENT_CATEGORY_NAME, $storeId);
+		$expiredParentCat = $this->getParentCategory(self::EVENT_EXPIRED_CATEGORY_NAME, $storeId);
+		
+		if(!!$eventParentCat 
+			&& !!$eventParentCat->getId()
+			&& !!$expiredParentCat
+			&& !!$expiredParentCat->getId()){
+				
+				$parentCategoryId = $eventParentCat->getId();
+				$expiredParentId = $expiredParentCat->getId();
+				
+				try {
+					if (!$revert){
+						$expCollection = $this->getExpCategoryCollection($parentCategoryId, $currentDate)->load();
+						foreach ( $expCollection as $cat ){
+							$cat->move($expiredParentId, null);
+						}
+					}else {
+						$collection = $this->getCategoryCollection($expiredParentId, $currentDate, $endDate)->load();
+						foreach ( $collection as $cat ){
+							$cat->move($parentCategoryId, null);
+						}						
+					}
+				}catch ( Exception $e ){
+					Mage::logException($e);
+					return null;
+				}
+		}
+		
+		$this->rebuildSortCollection($currentDate, $storeId);
+		Mage::app()->getCacheInstance()->flush();
+		Mage::app()->cleanCache(); 
+		
+		return $this;
 	}
 }
