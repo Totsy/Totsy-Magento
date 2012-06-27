@@ -139,7 +139,15 @@
                 <run>
                     <model>categoryevent/sortentry::rebuildSortCron</model>
                 </run>
-            </categoryevent_rebuild_sort_cron>
+            </categoryevent_rebuild_sort_cron>            
+			<categoryevent_clean_expired_cron>
+                <schedule>
+                    <cron_expr>0 4 * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>categoryevent/sortentry::cleanExpiredEvents</model>
+                </run>
+            </categoryevent_clean_expired_cron>
         </jobs>
     </crontab>
 </config>
