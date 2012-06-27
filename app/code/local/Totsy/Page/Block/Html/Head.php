@@ -6,7 +6,7 @@
  * @copyright   Copyright (c) 2012 Totsy LLC
  */
 
-class Totsy_Page_Block_Html_Head extends Mage_Page_Block_Html_Head
+class Totsy_Page_Block_Html_Head extends Fooman_Speedster_Block_Page_Html_Head
 {
     protected function _separateOtherHtmlHeadElements(&$lines, $itemIf, $itemType, $itemParams, $itemName, $itemThe) {
         $params = $itemParams ? ' ' . $itemParams : '';
