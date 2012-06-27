@@ -4,6 +4,9 @@
 			<action method="addJs"><script>harapartners/hpcheckout.js</script></action>
 			<action method="addCss"><stylesheet>css/hpcheckout.css</stylesheet></action>
 		</reference>
+		<reference name="header">
+                    <remove name="cart_sidebar">
+		</reference>
 	</default>
 	
 	<hpcheckout_checkout_index>
