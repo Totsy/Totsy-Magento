@@ -98,8 +98,7 @@ direction: "down"
 <!-- End Description Tab -->
 
 <!-- Start Shipping Tab -->
-
-<?php echo Mage::app()->getLayout()->createBlock('cms/block')->setBlockId('shipping_and_return')->toHtml()?>
+<?php echo $this->getChildHtml('product.shipping.return')?>
 </div>
 </div>
 <div style="clear:both;"></div>
@@ -165,7 +164,6 @@ direction: "down"
 </div>
 
 
-
 <!-- s -->
 <script type="text/javascript">
 var shver='2.8.6';
@@ -217,11 +215,6 @@ Event.observe(window,'load',function () {
 });
 </script>
 <!-- Steelhouse -->
-
-<!-- Socialable labs -->
-
-<!-- Socialable labs -->
-
 
 <script type="text/javascript">
 // jQuery(document).ready(function(){

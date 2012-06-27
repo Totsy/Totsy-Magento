@@ -13,18 +13,6 @@
 class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
 {
     /**
-     * A place to store messages.
-     *
-     * @var Totsy_Core_Model_LoggerInterface
-     */
-    protected $_log;
-
-    public function __construct()
-    {
-        $this->_log = Mage::helper('core/logger')->getLogger('fulfillment');
-    }
-
-    /**
      * Perform order fulfillment.
      * 1) Retrieve Inventory Status from Dotcom and sync with local product
      *    database.
@@ -34,32 +22,29 @@ class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
      *    fulfillment.
      *
      * @return void
-     *
-     * @todo Store available inventory reported by the Inventory API response in Product data, as an attribute.
      */
     public function runDotcomFulfillOrder()
     {
         try {
             //fetch inventory data from DOTcom
             $inventoryList = $this->updateInventory();
-            $this->_log->info(sprintf(
-                'Inventory Status Received for %d items.',
-                count($inventoryList)
-            ));
+            Mage::log(
+                sprintf(
+                    'Inventory Status Received for %d items.',
+                    count($inventoryList)
+                ),
+                Zend_Log::INFO,
+                'fulfillment.log'
+            );
 
             //update stock info
             $service = Mage::getModel('fulfillmentfactory/service_fulfillment');
             $service->stockUpdate($inventoryList, false);
-//            $processingOrderCollection = $service->stockUpdate($inventoryList);
-//            $this->_log->info(sprintf(
-//                'Sending %d orders for fulfillment.',
-//                count($processingOrderCollection)
-//            ));
 
             //submit orders to fulfill
             $this->submitOrderToFulfillByQueue();
         } catch (Exception $e) {
-            $this->_log->err($e->getMessage());
+            Mage::log($e->getMessage(), Zend_Log::ERR, 'fulfillment.log');
         }
     }
 
@@ -76,12 +61,16 @@ class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
             $toDate = date('Y-m-d H:i:s');
 
             $ordersShipped = $this->updateShipment($fromDate, $toDate);
-            $this->_log->info(sprintf(
-                'Completed processing for %d orders that have been shipped.',
-                count($ordersShipped)
-            ));
+            Mage::log(
+                sprintf(
+                    'Completed processing for %d orders that have been shipped.',
+                    count($ordersShipped)
+                ),
+                Zend_Log::INFO,
+                'fulfillment.log'
+            );
         } catch (Exception $e) {
-            $this->_log->err($e->getMessage());
+            Mage::log($e->getMessage(), Zend_Log::ERR, 'fulfillment.log');
         }
     }
 
@@ -120,10 +109,13 @@ XML;
 
             $productSku = substr($sku, 0, 17);
             $name = substr($product->getName(), 0, 28);
+            $name = Mage::helper('fulfillmentfactory')->removeBadCharacters($name);
 
             $vendorCode = '<manufacturing-code xsi:nil="true" />';
             if ($value = $product->getVendorCode()) {
-                $vendorCode = '<manufacturing-code>' . substr($value, 0, 10) . '</manufacturing-code>';
+                $value = substr($value, 0, 10);
+                $value = Mage::helper('fulfillmentfactory')->removeBadCharacters($value);
+                $vendorCode = '<manufacturing-code>' . $value . '</manufacturing-code>';
             }
 
             $style = '<style-number xsi:nil="true" />';
@@ -178,7 +170,7 @@ XML;
         </purchase_orders>
 XML;
         $response = Mage::helper('fulfillmentfactory/dotcom')->submitPurchaseOrders($xml);
-        
+
         return $response;
     }
 
@@ -189,7 +181,7 @@ XML;
     public function updateInventory() {
         //get data from dotcom
         $dataXML = Mage::helper('fulfillmentfactory/dotcom')->getInventory();
-        
+
         if(!empty($dataXML)) {
             $inventoryList = array();
 
@@ -201,7 +193,7 @@ XML;
                 if($qty > 0) {
                     $inventory['sku'] = (string)$item->sku;
                     $inventory['qty'] = $qty;
-                    
+
                     $inventoryList[] = $inventory;
                 }
             }
@@ -217,35 +209,35 @@ XML;
      */
     public function submitOrderToFulfillByQueue() {
         $itemQueueCollection = Mage::getModel('fulfillmentfactory/itemqueue')->getCollection()->loadReadyForSubmitItemQueue();
-        
+
         $partialReadyOrderIds = array();
         $orderArray = array();
-        
+
         foreach($itemQueueCollection as $itemqueue) {
             $order = Mage::getModel('sales/order')->load($itemqueue->getOrderId());
             $orderId = $order->getId();
-            
+
             //check if this order has all items complete
             if(isset($partialReadyOrderIds[$orderId])) {
-            	continue;
+                continue;
             }
-            
+
             $isReady = true;
             $itemQueueList = Mage::getModel('fulfillmentfactory/itemqueue')->getCollection()->loadByOrderId($orderId);
             foreach ($itemQueueList as $itemqueue) {
-            	if($itemqueue->getStatus() != Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_READY) {
-            		$partialReadyOrderIds[$orderId] = 1;
-            		$isReady = false;
-            		break;
-            	}
+                if($itemqueue->getStatus() != Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_READY) {
+                    $partialReadyOrderIds[$orderId] = 1;
+                    $isReady = false;
+                    break;
+                }
             }
-            
+
             //only send orders with full complete items
             if($isReady) {
-            	Mage::helper('fulfillmentfactory')->_pushUniqueOrderIntoArray($orderArray, $order);
+                Mage::helper('fulfillmentfactory')->_pushUniqueOrderIntoArray($orderArray, $order);
             }
         }
-        
+
         return $this->submitOrdersToFulfill($orderArray, true);
     }
 
@@ -258,13 +250,17 @@ XML;
      */
     public function submitOrdersToFulfill($orders, $capturePayment=false) {
         $responseArray = array();
-        
-		$this->_log->info(sprintf(
-			'Trying to send %d orders for fulfillment.',
-			count($orders)
-		));
-		
-		$successCount = 0;
+
+        Mage::log(
+            sprintf(
+                'Trying to send %d orders for fulfillment.',
+                count($orders)
+            ),
+            Zend_Log::INFO,
+            'fulfillment.log'
+        );
+
+        $successCount = 0;
 
         foreach($orders as $order) {
             try {
@@ -281,14 +277,14 @@ XML;
                                                                                 Mage_Payment_Model_Method_Abstract::ACTION_AUTHORIZE_CAPTURE);
                                 $paymentInstance->setData('cybersource_subid', $orderPayment->getCybersourceSubid());
                                 $orderPayment->place();
-                                
+
                                 //update order information
                                 $order->setStatus('processing');
                                 $transactionSave = Mage::getModel('core/resource_transaction')
                                         ->addObject($order);
-                                        
+
                                    $transactionSave->save();
-                                   
+
                                    //send email
                                    $invoices = Mage::getResourceModel('sales/order_invoice_collection')->setOrderFilter($order->getId());
                                    foreach($invoices as $invoice) {
@@ -303,13 +299,14 @@ XML;
                 }
             }
             catch(Exception $e) {
-                $order->setStatus(Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_PAYMENT_FAILED)->save();    //payment failed
+                $order->setStatus(Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_PAYMENT_FAILED)->save();
+                $order->setState(Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_PAYMENT_FAILED)->save();
                 $message = 'Order ' . $order->getIncrementId() . ' could not place the payment. ' . $e->getMessage();
                 Mage::helper('fulfillmentfactory/log')->errorLogWithOrder($message, $order->getId());
-                
+
                 /*
                 $customer = Mage::getModel('customer/customer')->load($order->getCustomerId());
-                
+
                 //send payment failed email
                 Mage::getModel('core/email_template')->setTemplateSubject('Payment Failed')
                                                      ->sendTransactional(6, 'support@totsy.com', $customer->getEmail(), $customer->getFirstname());
@@ -317,21 +314,21 @@ XML;
                 //throw new Exception($message);
                 continue;
             }
-            
+
             $orderDate = date("Y-m-d", strtotime($order->getCreatedAt()));
             $shippingMethod = Mage::helper('fulfillmentfactory/dotcom')->getDotcomShippingMethod($order->getShippingMethod());
             $shippingAddress = $order->getShippingAddress();
-            
+
             //to avoid null object
             if(empty($shippingAddress)) {
                 $shippingAddress = Mage::getModel('sales/order_address');
             }
-            
+
             $shippingName = $shippingAddress->getFirstname() . ' ' . $shippingAddress->getLastname();
-            
+
             $state = Mage::helper('fulfillmentfactory')->getStateCodeByFullName($shippingAddress->getRegion(), $shippingAddress->getCountry());
 
-            //$city = Mage::help('fulfillmentfactory')->validateAddressForDC('CITY', $shippingAddress->getCity());            
+            $city = Mage::helper('fulfillmentfactory')->validateAddressForDC('CITY', $shippingAddress->getCity());            
             $xml = <<<XML
         <orders xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <order>
@@ -450,36 +447,40 @@ XML;
             </order>
         </orders>
 XML;
-            
+
             //change status
             $order->setStatus(Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_PROCESSING_FULFILLMENT)
                   ->save();
 
             $response = Mage::helper('fulfillmentfactory/dotcom')->submitOrders($xml);
             $responseArray[] = $response;
-            
+
             $error = $response->order_error;
             if(!!$error) {
                 $order->setStatus(Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_FULFILLMENT_FAILED)
                       ->save();
-                      
+
                 $message = 'Error response from DOTcom: ' . $error->error_description;
                 Mage::helper('fulfillmentfactory/log')->errorLogWithOrder($message, $order->getId());
                 //throw new Exception($message);
             }
             else {
-            	$successCount++;
+                $successCount++;
             }
         }
-        
-        $this->_log->info(sprintf(
-			'Successfully sent %d orders for fulfillment.',
-			$successCount
-		));
+
+        Mage::log(
+            sprintf(
+                'Successfully sent %d orders for fulfillment.',
+                $successCount
+            ),
+            Zend_Log::INFO,
+            'fulfillment.log'
+        );
 
         return $responseArray;
     }
-    
+
     /**
      * Retrieve shipment information from Dotcom and add shipments for
      * completed orders

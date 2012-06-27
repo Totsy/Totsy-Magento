@@ -10,35 +10,36 @@
  * to eula@harapartners.com so we can send you a copy immediately.
  *
  */
-class Harapartners_HpCheckout_Model_Checkout 
+class Harapartners_HpCheckout_Model_Checkout
 {
     const METHOD_GUEST = 'guest';
     const METHOD_CUSTOMER = 'customer';
-    
+    const EMAIL_TEMPLATE_XML_PATH = 'hpcheckout/virtual_product_code/template';
+
     protected $_quote;
     protected $_checkoutSession;
     protected $_customerSession;
     protected $_helper;
-    
+
     public function __construct() {
         $this->_checkoutSession = Mage::getSingleton('checkout/session');
         $this->_customerSession = Mage::getSingleton('customer/session');
         $this->_quote = $this->_checkoutSession->getQuote();
         $this->_helper = Mage::helper( 'checkout' );
     }
-    
+
     public function getCheckout() {
         return $this->_checkoutSession;
     }
-    
+
     public function getCustomerSession() {
         return $this->_customerSession;
     }
-    
+
     public function getQuote() {
         return $this->_quote;
     }
-    
+
     public function saveBilling( $data )
     {
         if( empty( $data ) ) {
@@ -48,12 +49,12 @@ class Harapartners_HpCheckout_Model_Checkout
         $address = $this->getQuote()->getBillingAddress();
         $addressForm = Mage::getModel( 'customer/form' );
         $addressForm->setFormCode( 'customer_address_edit' )
-            ->setEntityType( 'customer_address' )
-            ->setIsAjaxRequest(Mage::app()->getRequest()->isAjax());
+        ->setEntityType( 'customer_address' )
+        ->setIsAjaxRequest(Mage::app()->getRequest()->isAjax());
 
         $addressForm->setEntity($address);
         $addressData = $addressForm->extractData( $addressForm->prepareRequest( $data ) );
-        
+
         $addressErrors = $addressForm->validateData( $addressData );
         if( $addressErrors !== true ) {
             return array( 'status' => 1, 'message' => $addressErrors );
@@ -66,7 +67,7 @@ class Harapartners_HpCheckout_Model_Checkout
         }
 
         $address->setData( 'email', $data[ 'email' ] );
-        
+
         if (($validateRes = $address->validate()) !== true) {
             return array('status' => 1, 'message' => $validateRes);
         }
@@ -77,16 +78,16 @@ class Harapartners_HpCheckout_Model_Checkout
             return $result;
         }
 
-//        $this->getQuote()->collectTotals();
-//        $this->getQuote()->save();
+        //        $this->getQuote()->collectTotals();
+        //        $this->getQuote()->save();
         return array( 'status' => 0, 'message' => '' );
     }
-    
+
     protected function _validateCustomerData( array $data )
     {
         $customerForm = Mage::getModel('customer/form');
         $customerForm->setFormCode('checkout_register')
-            ->setIsAjaxRequest(Mage::app()->getRequest()->isAjax());
+        ->setIsAjaxRequest(Mage::app()->getRequest()->isAjax());
 
         $quote = $this->getQuote();
         if ( $quote->getCustomerId() ) {
@@ -130,7 +131,7 @@ class Harapartners_HpCheckout_Model_Checkout
         Mage::helper('core')->copyFieldset('customer_account', 'to_quote', $customer, $quote);
         return true;
     }
-    
+
     public function saveShipping( $data )
     {
         if (empty($data)) {
@@ -140,8 +141,8 @@ class Harapartners_HpCheckout_Model_Checkout
 
         $addressForm    = Mage::getModel('customer/form');
         $addressForm->setFormCode('customer_address_edit')
-            ->setEntityType('customer_address')
-            ->setIsAjaxRequest(Mage::app()->getRequest()->isAjax());
+        ->setEntityType('customer_address')
+        ->setIsAjaxRequest(Mage::app()->getRequest()->isAjax());
 
         $addressForm->setEntity($address);
         $addressData    = $addressForm->extractData($addressForm->prepareRequest($data));
@@ -165,11 +166,11 @@ class Harapartners_HpCheckout_Model_Checkout
             return array('status' => 1, 'message' => $validateRes);
         }
 
-//        $this->getQuote()->collectTotals()->save();
+        //        $this->getQuote()->collectTotals()->save();
 
         return array( 'status' => 0, 'message' => '' );
     }
-    
+
     public function saveShippingMethod( $shippingMethod )
     {
         if (empty($shippingMethod)) {
@@ -180,13 +181,13 @@ class Harapartners_HpCheckout_Model_Checkout
             return array('status' => -1, 'message' => $this->_helper->__('Invalid shipping method.'));
         }
         $this->getQuote()->getShippingAddress()
-            ->setShippingMethod($shippingMethod);
-//        $this->getQuote()->collectTotals()
-//            ->save();
+        ->setShippingMethod($shippingMethod);
+        //        $this->getQuote()->collectTotals()
+        //            ->save();
 
         return array( 'status' => 0, 'message' => '' );
     }
-    
+
     public function savePayment( $data, $shouldCollectTotal = true, $withValidate = true )
     {
         if (empty($data)) {
@@ -202,36 +203,36 @@ class Harapartners_HpCheckout_Model_Checkout
         if (!$quote->isVirtual() && $quote->getShippingAddress()) {
             $quote->getShippingAddress()->setCollectShippingRates(true);
         }
-        
-        
+
+
         $payment = $quote->getPayment();
         $payment->importData($data, $shouldCollectTotal, $withValidate);
 
-//        $quote->save();
-
         return array( 'status' => 0, 'message' => '' );
     }
-    
+
     public function saveOrder()
     {
         $this->validate();
-        switch ($this->getCheckoutMethod()) {
-            case self::METHOD_GUEST:
-                $this->_prepareGuestQuote();
-                break;
-            default:
-                $this->_prepareCustomerQuote();
-                break;
-        }
         
+        switch ($this->getCheckoutMethod()) {
+        case self::METHOD_GUEST:
+            $this->_prepareGuestQuote();
+            break;
+        default:
+            $this->_prepareCustomerQuote();
+            break;
+        }
+
         $service = Mage::getModel('sales/service_quote', $this->getQuote());
         $service->submitAll();
 
         $this->_checkoutSession->setLastQuoteId($this->getQuote()->getId())
-            ->setLastSuccessQuoteId($this->getQuote()->getId())
-            ->clearHelperData();
+        ->setLastSuccessQuoteId($this->getQuote()->getId())
+        ->clearHelperData();
 
         $order = $service->getOrder();
+
         if ($order) {
             Mage::dispatchEvent('hpcheckout_save_order_after',
                 array('order'=>$order, 'quote'=>$this->getQuote()));
@@ -247,8 +248,8 @@ class Harapartners_HpCheckout_Model_Checkout
             }
 
             $this->_checkoutSession->setLastOrderId($order->getId())
-                ->setRedirectUrl($redirectUrl)
-                ->setLastRealOrderId($order->getIncrementId());
+            ->setRedirectUrl($redirectUrl)
+            ->setLastRealOrderId($order->getIncrementId());
         }
 
         $profiles = $service->getRecurringPaymentProfiles();
@@ -259,7 +260,7 @@ class Harapartners_HpCheckout_Model_Checkout
 
         return $this;
     }
-    
+
     public function validate()
     {
         $helper = Mage::helper('checkout');
@@ -269,17 +270,17 @@ class Harapartners_HpCheckout_Model_Checkout
             Mage::throwException($this->_helper->__('Sorry, guest checkout is not enabled. Please try again or contact store owner.'));
         }
     }
-    
+
     protected function _prepareGuestQuote()
     {
         $quote = $this->getQuote();
         $quote->setCustomerId(null)
-            ->setCustomerEmail($quote->getBillingAddress()->getEmail())
-            ->setCustomerIsGuest(true)
-            ->setCustomerGroupId(Mage_Customer_Model_Group::NOT_LOGGED_IN_ID);
+        ->setCustomerEmail($quote->getBillingAddress()->getEmail())
+        ->setCustomerIsGuest(true)
+        ->setCustomerGroupId(Mage_Customer_Model_Group::NOT_LOGGED_IN_ID);
         return $this;
     }
-    
+
     protected function _prepareCustomerQuote()
     {
         $quote      = $this->getQuote();
@@ -305,11 +306,11 @@ class Harapartners_HpCheckout_Model_Checkout
         if ($shipping && isset($customerShipping) && !$customer->getDefaultShipping()) {
             $customerShipping->setIsDefaultShipping(true);
         } else if (isset($customerBilling) && !$customer->getDefaultShipping()) {
-            $customerBilling->setIsDefaultShipping(true);
-        }
+                $customerBilling->setIsDefaultShipping(true);
+            }
         $quote->setCustomer($customer);
     }
-    
+
     public function getCheckoutMethod()
     {
         if ($this->getCustomerSession()->isLoggedIn()) {
@@ -320,5 +321,5 @@ class Harapartners_HpCheckout_Model_Checkout
         }
         return $this->getQuote()->getCheckoutMethod();
     }
-    
+
 }

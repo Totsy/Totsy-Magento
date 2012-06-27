@@ -56,10 +56,10 @@
 					var localTime = new Date().getTime();
 					countDownToTime = (countDownToTime + (localTime - serverTime));
 					dateObj.setTime(countDownToTime);
-					var countToTimeTemplate = (dateObj.getMonth()+1) + ' ' + dateObj.getDate() + ', ' + dateObj.getFullYear() + ' ' + dateObj.getHours() + ':' + dateObj.getMinutes() + ':' + dateObj.getSeconds();
+					//var countToTimeTemplate = (dateObj.getMonth()+1) + ' ' + dateObj.getDate() + ', ' + dateObj.getFullYear() + ' ' + dateObj.getHours() + ':' + dateObj.getMinutes() + ':' + dateObj.getSeconds();
 					jQuery("#cart-timer").countdown({
-						//date: "12 10, 2011 16:11", //Counting TO a date
-						date: countToTimeTemplate,//"<?php// echo $endcount_lc; ?>", //Counting TO a date
+						//date: "12 10, 2011 16:11", or an object counting to a date
+						date: dateObj,
 						htmlTemplate: "%{m} <span class=\"cd-time\">:</span> %{s} <span class=\"cd-time\">minutes</span>",
 	
 						onChange: function( event, timer ){

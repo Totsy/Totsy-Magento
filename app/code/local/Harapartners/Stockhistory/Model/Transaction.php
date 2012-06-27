@@ -98,7 +98,7 @@ class Harapartners_Stockhistory_Model_Transaction extends Mage_Core_Model_Abstra
             $dataObj->setData('action_type', self::ACTION_TYPE_AMENDMENT);
         }
         
-    	if($dataObj->getData('qty_delta') == '00') {
+    	if($dataObj->getData('qty_delta') === '00') {
         	//put a flag to indicate this item should be delete remove this line item
         	$qtyDelta = 0;
         	$dataObj->setData('action_type', self::ACTION_TYPE_REMOVE);
