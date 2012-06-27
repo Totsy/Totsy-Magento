@@ -16,9 +16,14 @@ class Harapartners_Service_Model_Rewrite_Catalog_Category extends Mage_Catalog_M
     
     //Harapartners, Jun, Event and Top Event are immutable for Totsy logic
     
-    public function move($parentId, $afterCategoryId){
-        $this->_totsyReserveAnchorCategoryCheck();
-        return parent::move($parentId, $afterCategoryId);
+    public function move($parentId, $afterCategoryId, $reIndex = false){
+    	$this->_totsyReserveAnchorCategoryCheck();
+    	//Moving categories will trigger url re-index, which is very slow for large categories, ignore by default
+    	if(!$reIndex){
+    		Mage::getSingleton('index/indexer')->lockIndexer();
+    	}
+    	return parent::move($parentId, $afterCategoryId);
+    	
     }
     
     protected function _beforeSave() {
