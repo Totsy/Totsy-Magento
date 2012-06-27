@@ -27,7 +27,6 @@
  * @var Mage_Page_Block_Html_Header $this
  */
 ?>
-<?php $customer = Mage::getSingleton('customer/session')->getCustomer();?>
 <div class="header-container">
     <div class="header">
         <?php if ($this->getIsHomePage()):?>
@@ -40,21 +39,8 @@
        </div>
        <div class="nav">
        		<div class="tri"></div>
-	        <div class="quick-access">	
-	            <?php  // echo $this->getChildHtml('topSearch') ?>
-	            <div id="userinfo">
-	            	<?php echo $this->getChildHtml('customertracking.headermsg');?>
-	            </div>	  
-	            <div id="usercart" class="group">
-	            	<?php //Place holder for session check, may be remove later?>
-	            	<?php if ( true ): ?>
-		        		<?php echo $this->getChildHtml('topCart') ?>
-	 						<?php //echo $this->getChildHtml('checkoutLinks') ?>
-						<a class="btn checkout" title="Checkout" href="<?php echo Mage::getUrl('checkout/cart')?>"><strong>Checkout</strong></a>
-	 				<?php else :?>
-	 					<?php echo 'JS here'?>
- 					<?php endif;?>
-	            </div>           
+	        <div class="quick-access" id="header-user-info">
+
 	        </div>
 	        <ul class="menu">
 		        <li id="newsales">
@@ -126,4 +112,8 @@ jQuery(document).ready(function(){
 		jQuery(this).children("ul").stop().slideUp("fast");
 		})
 	});
+
+Event.observe(document,'dom:loaded',function() {
+    new Ajax.Updater($('header-user-info'), '<?php echo $this->getUrl('customertracking/headermsg/ajax'); ?>', {method:'get'});
+});
 </script>

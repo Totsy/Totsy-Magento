@@ -1,0 +1,13 @@
+<?php if(($this->getRequest()->getActionName()!=="view" && $this->getRequest()->getControllerName()!=="catalog") &&  ($this->getRequest()->getActionName()!=="success" && $this->getRequest()->getControllerName()!=="checkout")): ?>
+<!-- Social Labs BEGIN -->
+<div id="sociable_header_pixel"></div>
+<script type="text/javascript">
+    var socialableLabsOutput = false;
+    Event.observe(window,'load',function() {
+        new Ajax.Updater($('sociable_header_pixel'), '<?php echo Mage::getUrl('pixels/sociable/header'); ?>'
+            , {method:'get',evalScripts: true});
+    });
+
+</script>
+<!-- Social Labs END -->
+<?php endif;

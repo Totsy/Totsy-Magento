@@ -16,13 +16,20 @@ class Harapartners_Customertracking_Block_Pixel extends Mage_Core_Block_Template
     
     public function _toHtml(){
         $outputHtml = '';
+        if(!($currentPageTag = Mage::app()->getFrontController()->getRequest()->getParam('pageTag'))) {
+            Mage::log('no current page tag set');
+        } else {
+            Mage::log('current page tag:'.$currentPageTag);
+        }
         $affiliate = Mage::getSingleton('customer/session')->getAffiliate();
         if(!!$affiliate && !!$affiliate->getId()){
             try{
                 $trackingCode = json_decode($affiliate->getTrackingCode(), true);
                 $pixelHtml='';
                 //Page detection
-                $currentPageTag = strtolower(Mage::app()->getFrontController()->getAction()->getFullActionName());
+                if(!($currentPageTag = Mage::app()->getFrontController()->getRequest()->getParam('pageTag'))) {
+                    $currentPageTag = strtolower(Mage::app()->getFrontController()->getAction()->getFullActionName());
+                }
                 //fire GA event tracking
                 $mapping = Mage::helper('affiliate')->getFormTrackingPageCodeArray();
                 foreach ($mapping as $index=>$value) {

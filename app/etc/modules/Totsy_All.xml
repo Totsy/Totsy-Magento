@@ -5,6 +5,10 @@
             <active>true</active>
             <codePool>local</codePool>
         </Totsy_Adminhtml>
+        <Totsy_Ajax>
+            <active>true</active>
+            <codePool>local</codePool>
+        </Totsy_Ajax>
         <Totsy_Core>
             <active>true</active>
             <codePool>local</codePool>
@@ -21,6 +25,10 @@
             <active>true</active>
             <codePool>local</codePool>
         </Totsy_Catalog>
+        <Totsy_Pixels>
+            <active>true</active>
+            <codePool>local</codePool>
+        </Totsy_Pixels>
         <Totsy_Sales>
             <active>true</active>
             <codePool>local</codePool>

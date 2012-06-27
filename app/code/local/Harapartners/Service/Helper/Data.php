@@ -111,11 +111,11 @@ class Harapartners_Service_Helper_Data extends Mage_Core_Helper_Url{
     }
     
     public function getServerTime(){
-	    $defaultTimezone = date_default_timezone_get();
-	    $mageTimezone = Mage::getStoreConfig(Mage_Core_Model_Locale::XML_PATH_DEFAULT_TIMEZONE);            
-	    date_default_timezone_set($mageTimezone);
-	    $serverTime = now();
-	    date_default_timezone_set($defaultTimezone);
+//	    $defaultTimezone = date_default_timezone_get();
+//	    $mageTimezone = Mage::getStoreConfig(Mage_Core_Model_Locale::XML_PATH_DEFAULT_TIMEZONE);
+//	    date_default_timezone_set($mageTimezone);
+	    $serverTime = Mage::getModel('core/date')->timestamp(time());
+//	    date_default_timezone_set($defaultTimezone);
 	    return strtotime($serverTime)*1000;
     }
 }

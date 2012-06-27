@@ -27,28 +27,7 @@
 <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('footer_login')->toHtml();?>
 <div id="toTop" style="display: none; ">^ Top</div>
 
-<script type="text/javascript">
-    
-    if(socialableLabsOutput) {
-        window.RondavuData = socialableLabsOutput;
-    }
 
-</script>
-
-<!-- Socialable Labs -->
-<script type="text/javascript">
-
-(function(){
- var s = document.createElement('script');
- s.async = true;
-     
- s.src =  ('https:' == window.location.protocol ? 'https://s3.amazonaws.com/' : 'http://') +
-       ('www.totsy.com' == window.location.host ? 'static.rondavu.com' +'/C/' +  'Totsy_PROD' : 'qa.rondavu.com' +'/C/' +  'Totsy_QA')  + '/rondavu.js';  
-                              
- document.getElementsByTagName('head')[0].appendChild(s);
-})();
-</script>
-<!-- Socialable Labs -->
 
 <script>
 		jQuery(document).ready(function () {
