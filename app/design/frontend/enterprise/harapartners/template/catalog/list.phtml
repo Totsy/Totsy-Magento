@@ -47,7 +47,7 @@
 <?php if ( !!$isFaceBook && $isFaceBook ):?>
 	<a id="facebook_pop" href="#facebook_window" class="hidden"></a>
 	<div style="display: none;">
-		<div id="facebook_window">
+		<div id="facebook_window" class="fancybox">
 			<div class="window_content">	
 				<h3><img src="<?php echo $this->getSkinUrl()?>images/facebook_pop.png" width="40px" height="40px"></img>Thanks for Joining Totsy!</h3>
 				<p>	Please retrieve your temporary password through your email and update it in your <a  class="needgreen" href="<?php echo $this->getBaseUrl()?>customer/account/edit/changepass/1/">account panel</a></p>
@@ -67,7 +67,7 @@
 <?php elseif( (Mage::getSingleton('customer/session')->getData('login_refer')) && (Mage::helper('enterprise_invitation')->isInvitationMessageAllowed()) && $storeId==1 ):?>
 	<a id="invite_pop" href="#invite_window" class="hidden"></a>
 	<div style="display: none;">
-		<div id="invite_window" >
+		<div id="invite_window" class="fancybox">
 			<div class="little-title">
 			    <h2><?php echo Mage::helper('enterprise_invitation')->__('Send Invitations') ?></h2>
 				<hr class="the-hr"/>
