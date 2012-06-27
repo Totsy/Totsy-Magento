@@ -19,25 +19,14 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    design
- * @package     enterprise_default
+ * @package     base_default
  * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://www.magentocommerce.com/license/enterprise-edition
  */
 ?>
-<?php
-/**
- * Category title template
- *
- * @see Mage_Catalog_Block_Category_View
- */
-?>
-<?php
-    $_helper    = $this->helper('catalog/output');
-    $_category  = $this->getCurrentCategory();
-?>
-<div class="page-title category-title">
-<?php if($this->IsRssCatalogEnable()): ?>
-    <a href="<?php echo $this->getRssLink() ?>" title="<?php echo $this->__('Subscribe to RSS Feed') ?>" class="rss-feed"><?php echo $this->__('Subscribe to RSS Feed') ?></a>
-<?php endif; ?>
-    <h1><?php echo $_helper->categoryAttribute($_category, $this->getCurrentCategory()->getName(), 'name') ?></h1>
-</div>
+<?php $_product = $this->getProduct() ?>
+<?php if (!$_product->isVirtual() && Mage::getModel('cms/block')->load('shipping_and_return')->getId() ):?>
+<?php echo Mage::app()->getLayout()->createBlock('cms/block')->setBlockId('shipping_and_return')->toHtml()?>
+<?php elseif ( $_product->isVirtual() && Mage::getModel('cms/block')->load('shipping_and_return_virtual')->getId() ) :?>
+<?php echo Mage::app()->getLayout()->createBlock('cms/block')->setBlockId('shipping_and_return_virtual')->toHtml()?>
+<?php endif;?>

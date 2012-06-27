@@ -89,15 +89,15 @@ class Harapartners_Promotionfactory_Model_Observer {
             }
             $codeExist = false;
             foreach($productOptions['options'] as &$optionDataArray){
-                if(isset($optionDataArray['label']) && $optionDataArray['label'] == 'Reservation Code'){
+                if(isset($optionDataArray['label']) && $optionDataArray['label'] == 'Voucher Code'){
                     $codeExist = true;
                     break;
                 }
             }
             if(!$codeExist){
                 $productOptions['options'][] = array(
-                    'label' => 'Reservation Code',
-                    'value' => $reservationCodeOption->getValue()
+                    'label' => 'Voucher Code',
+                    'value' => $reservationCodeOption->getValue() . "\n You will receive an additional email with details on this code"
                 );
             }
             $orderItem->setData('product_options', serialize($productOptions));
@@ -133,7 +133,11 @@ class Harapartners_Promotionfactory_Model_Observer {
                 
                 //getting the virtual product code
                 $optionByCode = $orderItem->getProductOptionByCode();
-                $virtualProductCode = $optionByCode['options'][0]['value'];
+                
+                //get only the vp code itself 
+                $vpCodeStringArray = explode("\n", $optionByCode['options'][0]['value']);
+                
+                $virtualProductCode = $vpCodeStringArray[0];
                                 
                 //picking the right template by the id set in the admin (transactional emails section)
                 $templateId =  Mage::getModel('core/email_template')->loadByCode('_trans_Virtual_Product_Redemption')->getId();

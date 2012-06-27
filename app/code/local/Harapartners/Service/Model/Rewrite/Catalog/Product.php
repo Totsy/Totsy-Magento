@@ -66,8 +66,12 @@ class Harapartners_Service_Model_Rewrite_Catalog_Product extends Mage_Catalog_Mo
             return $this;
         }else{
         	//Note URL rewrite needs to be refreshed separately, if included within default index, it is much slower
-	        $urlModel = Mage::getSingleton('catalog/url');
-	        $urlModel->refreshProductRewrite($this->getId()); //Category path also included
+        	//Invisible simple product has the same name as configurable product
+        	//Thus when indexing url, the conf product would be "{{url_key}}-{{addtional_number_to_avoid_conflict}}.html"
+        	if($this->getVisibility() != Mage_Catalog_Model_Product_Visibility::VISIBILITY_NOT_VISIBLE){
+		        $urlModel = Mage::getSingleton('catalog/url');
+		        $urlModel->refreshProductRewrite($this->getId()); //Category path also included
+        	}
             return parent::afterCommitCallback();
         }
     }
