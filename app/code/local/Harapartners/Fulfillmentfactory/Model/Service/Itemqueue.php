@@ -87,8 +87,8 @@ class Harapartners_Fulfillmentfactory_Model_Service_Itemqueue
                 $itemqueue->save();
             }
             
-            if($state != Mage_Sales_Model_Order::STATE_NEW) {
-            	$order->setState(Mage_Sales_Model_Order::STATE_NEW);
+            if($state != Mage_Sales_Model_Order::STATE_PROCESSING) {
+            	$order->setState(Mage_Sales_Model_Order::STATE_PROCESSING);
             	$order->save();
             }
         }
