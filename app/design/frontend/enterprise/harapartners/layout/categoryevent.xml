@@ -28,7 +28,9 @@
 	</categoryevent_index_topnav>
 	<catalog_product_view translate="label">
 		<reference name="product.info">
-			<block type="categoryevent/catalog_product_view_shippingreturn" name="product.shipping.return" template="catalog/product/view/shippingreturn.phtml" />
+		    <block type="cms/block" name="product.shipping.return">
+                        <action method="setBlockId"><block_id>shipping_and_return</block_id></action>
+		    </block>
 		</reference>
 	</catalog_product_view>
 </layout> 
