@@ -2441,3 +2441,5 @@ address.copyright { margin-top:6px; }
 /* ======================================================================================= */
 
 .guest-select {width:305px !important;}
+
+#ajax_loader img { vertical-align: middle;}

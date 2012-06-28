@@ -348,3 +348,9 @@ HpCheckout.prototype = {
 		return preparedBlockCodes;
 	}
 }
+
+
+
+function hideTopCart(){
+    jQuery("#topCartContent").stop().fadeTo(200,0).hide();
+}

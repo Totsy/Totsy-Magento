@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+    <catalog_product_view>
+        <reference name="after_body_start">
+            <block type="core/template" name="sociable.product.pixel" template="pixels/sociable/product/ajax.phtml" />
+        </reference>
+        <reference name="before_body_end">
+            <remove name="sociable.footer.pixel" />
+        </reference>
+    </catalog_product_view>
+
+    <default>
+        <reference name="after_body_start">
+            <block type="core/template" name="sociable.header.pixel" template="pixels/sociable/header/ajax.phtml" />
+        </reference>
+        <reference name="before_body_end">
+            <block type="core/template" name="sociable.footer.pixel" template="pixels/sociable/footer.phtml" />
+        </reference>
+    </default>
+
+    <pixels_sociable_product>
+        <block type="core/template" name="root" template="pixels/sociable/product.phtml">
+            <block type="core/template" name="sociable.footer.pixel" template="pixels/sociable/footer.phtml" />
+        </block>
+    </pixels_sociable_product>
+
+    <pixels_sociable_header>
+        <block type="core/template" name="root" template="pixels/sociable/header.phtml">
+            <block type="core/template" name="sociable.footer.pixel" template="pixels/sociable/footer.phtml" />
+        </block>
+    </pixels_sociable_header>
+</layout>

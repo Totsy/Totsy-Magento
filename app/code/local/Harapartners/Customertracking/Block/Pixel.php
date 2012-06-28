@@ -29,9 +29,12 @@ class Harapartners_Customertracking_Block_Pixel
     public function getCurrentAffiliateEventName()
     {
         $pageMap = Mage::helper('affiliate')->getFormTrackingPageCodeArray();
-        $pageTag = strtolower(Mage::app()->getFrontController()
-            ->getAction()
-            ->getFullActionName());
+
+        if(!($pageTag = Mage::app()->getFrontController()->getRequest()->getParam('pageTag'))) {
+            $pageTag = strtolower(Mage::app()->getFrontController()
+                ->getAction()
+                ->getFullActionName());
+        }
 
         return isset($pageMap[$pageTag]) ? $pageMap[$pageTag] : '';
     }
@@ -42,9 +45,11 @@ class Harapartners_Customertracking_Block_Pixel
         $affiliate = Mage::getSingleton('customer/session')->getAffiliate();
         if ($affiliate && $affiliate->getId()) {
             $trackingCodes = json_decode($affiliate->getTrackingCode(), true);
-            $pageTag = strtolower(Mage::app()->getFrontController()
-                ->getAction()
-                ->getFullActionName());
+            if(!($pageTag = Mage::app()->getFrontController()->getRequest()->getParam('pageTag'))) {
+                $pageTag = strtolower(Mage::app()->getFrontController()
+                    ->getAction()
+                    ->getFullActionName());
+            }
 
             // additional logic to ensure the post-registration pixel fires
             // only once, by checking a tracking cookie
