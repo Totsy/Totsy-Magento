@@ -18,6 +18,8 @@
                         <cms_page_view/>
                         <enterprise_invitation_customer_account_genericcreate/>
                         <inchoo_facebook_customer_account_connect/>
+                        <customer_account_resetpassword/>
+                        <customer_account_resetpasswordpost/>
                     </generic>
                 </full_action_names>
             </websiterestriction>

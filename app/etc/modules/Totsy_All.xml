@@ -5,6 +5,10 @@
             <active>true</active>
             <codePool>local</codePool>
         </Totsy_Adminhtml>
+        <Totsy_Checkout>
+            <active>true</active>
+            <codePool>local</codePool>
+        </Totsy_Checkout>
         <Totsy_Customer>
             <active>true</active>
             <codePool>local</codePool>

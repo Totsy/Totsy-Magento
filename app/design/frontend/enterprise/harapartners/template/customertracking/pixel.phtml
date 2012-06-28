@@ -1,10 +1,4 @@
-<?php
-
-//$affiliate = Mage::getSingleton('customer/session')->getAffiliate();
-$affiliate = $affiliate = Mage::getModel('affiliate/record')->loadByAffiliateCode('integrate');
-
-?>
-
+<?php $affiliate = Mage::getSingleton('customer/session')->getAffiliate(); ?>
 <script type='text/javascript'>
     var _gaq = _gaq || [];
     _gaq.push(['_trackEvent', 'affiliate', '<?php echo $this->getCurrentAffiliateEventName() ?>', '<?php echo $affiliate->getAffiliateCode() ?>']);

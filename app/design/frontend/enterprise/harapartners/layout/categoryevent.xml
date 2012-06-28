@@ -26,4 +26,11 @@
             <block type="categoryevent/index_topnav" name="categoryevent.index.topnav" template="categoryevent/topnav.phtml" />
         </reference>
 	</categoryevent_index_topnav>
+	<catalog_product_view translate="label">
+		<reference name="product.info">
+		    <block type="cms/block" name="product.shipping.return">
+                        <action method="setBlockId"><block_id>shipping_and_return</block_id></action>
+		    </block>
+		</reference>
+	</catalog_product_view>
 </layout> 

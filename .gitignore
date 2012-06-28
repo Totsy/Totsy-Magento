@@ -24,6 +24,7 @@ app/etc/modules/Mage_Connect.xml
 app/etc/modules/Mage_Downloadable.xml
 app/etc/modules/Mage_ImportExport.xml
 app/etc/modules/Mage_LoadTest.xml
+app/etc/modules/Mage_Ogone.xml
 app/etc/modules/Mage_PageCache.xml
 app/etc/modules/Mage_Persistent.xml
 app/etc/modules/Mage_Weee.xml
