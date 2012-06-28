@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Totsy_Checkout>
+            <version>0.1.0</version>
+        </Totsy_Checkout>
+    </modules>
+    <frontend>
+        <routers>
+            <checkout>
+                <args>
+                    <modules>
+                        <Totsy_Checkout before="Mage_Checkout">Totsy_Checkout</Totsy_Checkout>
+                    </modules>
+                </args>
+            </checkout>
+        </routers>
+    </frontend>
+</config>
