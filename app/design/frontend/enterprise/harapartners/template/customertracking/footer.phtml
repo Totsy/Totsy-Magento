@@ -4,4 +4,3 @@
         new Ajax.Updater($('customertracking_ajax'), '<?php echo Mage::getUrl('customertracking/index/ajax',array('_query'=>array('pageTag'=>strtolower(Mage::app()->getFrontController()->getAction()->getFullActionName())))); ?>', {method:'get'});
     });
 </script>
-    <?php Mage::log('blah:'.strtolower(Mage::app()->getFrontController()->getAction()->getFullActionName()));

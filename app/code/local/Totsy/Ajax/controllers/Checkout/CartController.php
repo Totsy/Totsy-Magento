@@ -19,7 +19,6 @@ class Totsy_Ajax_Checkout_CartController extends Mage_Checkout_CartController {
             return;
         }
         $cart   = $this->_getCart();
-        Mage::log('quote id:'.$cart->getQuote()->getId());
         $params = $this->getRequest()->getParams();
         if($this->getRequest()->getParam('isAjax') == 1){
             $response = array();
