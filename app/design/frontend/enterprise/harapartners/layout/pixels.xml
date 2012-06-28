@@ -18,6 +18,16 @@
         </reference>
     </default>
 
+    <customer_account_login>
+        <reference name="after_body_start">
+            <remove name="sociable.header.pixel" />
+        </reference>
+        <reference name="before_body_end">
+            <block name="sociable.footer.pixel" />
+        </reference>
+
+    </customer_account_login>
+
     <pixels_sociable_product>
         <block type="core/template" name="root" template="pixels/sociable/product.phtml">
             <block type="core/template" name="sociable.footer.pixel" template="pixels/sociable/footer.phtml" />
