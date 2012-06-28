@@ -18,15 +18,14 @@
         </reference>
     </default>
 
-    <customer_account_login>
+    <customer_logged_out>
         <reference name="after_body_start">
             <remove name="sociable.header.pixel" />
         </reference>
         <reference name="before_body_end">
-            <block name="sociable.footer.pixel" />
+            <remove name="sociable.footer.pixel" />
         </reference>
-
-    </customer_account_login>
+    </customer_logged_out>
 
     <pixels_sociable_product>
         <block type="core/template" name="root" template="pixels/sociable/product.phtml">
