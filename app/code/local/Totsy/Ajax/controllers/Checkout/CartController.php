@@ -10,14 +10,14 @@ require_once  'Mage/Checkout/controllers/CartController.php';
 
 class Totsy_Ajax_Checkout_CartController extends Mage_Checkout_CartController {
     public function addAction() {
-        if(!Mage::getModel('rushcheckout/observer')->isValid(Mage::getSingleton('customer/session'))) {
+        /*if(!Mage::getModel('rushcheckout/observer')->isValid(Mage::getSingleton('customer/session'))) {
             $response = array();
             $response['redirect'] = Mage::getModel('rushcheckout/observer')->getValidationUrl();
             Mage::getSingleton('customer/session')->setCheckLastValidationFlag(false);
             Mage::getModel('rushcheckout/observer')->setValidationRedirect(Mage::getSingleton('customer/session'),$this->_getRefererUrl());
             $this->getResponse()->setBody(Mage::helper('core')->jsonEncode($response));
             return;
-        }
+        }*/
         $cart   = $this->_getCart();
         $params = $this->getRequest()->getParams();
         if($this->getRequest()->getParam('isAjax') == 1){
