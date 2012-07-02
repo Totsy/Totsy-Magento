@@ -136,45 +136,7 @@ class Zend_Feed_Builder_Entry extends ArrayObject
         $this->offsetSet('content', $content);
         return $this;
     }
-    
-	
-    
-    /*Hara Partners Sailthru email feed Start*/
-    /**
-	 *  harapartners for email feed
-     */
-    public function setImage($image)
-    {
-        $this->offsetSet('image', $image);
-        return $this;
-    }
-    
-    public function setShortdescription($shortdescription)
-    {
-        $this->offsetSet('shortdescription', $shortdescription);
-        return $this;
-    }  
-      
-    public function setSave($save)
-    {
-        $this->offsetSet('save', $save);
-        return $this;
-    }    
-    
-    public function setStatus($status)
-    {
-        $this->offsetSet('status', $status);
-        return $this;
-    }  
 
-    public function setKeywords($keywords)
-    {
-        $this->offsetSet('keywords', $keywords);
-        return $this;
-    }  
-    /*Hara Partners Sailthru email feed End*/
-    
-    
     /**
      * Timestamp of the update date
      *

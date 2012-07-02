@@ -46,5 +46,9 @@
 	    </div>
 	<?php endif; ?>
 <?php else: // the end of the if for time check ?>
-    <p>Oh Shucks!  You just missed it!</p>
+	<div class="msg-expired">
+	    <h3>Oh Shucks! You just missed it!</h3>
+	    <p>This sale has expired.</p>
+	    <p><a href="<?php echo $this->getBaseUrl(); ?>event">Check out our latest sales</a>.</p>
+	</div>
 <?php endif; ?>
