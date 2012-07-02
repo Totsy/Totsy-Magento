@@ -6,21 +6,15 @@
  * Time: 10:23 AM
  */
 
-require_once  'Mage/Checkout/controllers/CartController.php';
+require_once  'Totsy/Checkout/controllers/CartController.php';
 
-class Totsy_Ajax_Checkout_CartController extends Mage_Checkout_CartController {
-    public function addAction() {
-        /*if(!Mage::getModel('rushcheckout/observer')->isValid(Mage::getSingleton('customer/session'))) {
-            $response = array();
-            $response['redirect'] = Mage::getModel('rushcheckout/observer')->getValidationUrl();
-            Mage::getSingleton('customer/session')->setCheckLastValidationFlag(false);
-            Mage::getModel('rushcheckout/observer')->setValidationRedirect(Mage::getSingleton('customer/session'),$this->_getRefererUrl());
-            $this->getResponse()->setBody(Mage::helper('core')->jsonEncode($response));
-            return;
-        }*/
+class Totsy_Ajax_Checkout_CartController extends Totsy_Checkout_CartController
+{
+    public function addAction()
+    {
         $cart   = $this->_getCart();
         $params = $this->getRequest()->getParams();
-        if($this->getRequest()->getParam('isAjax') == 1){
+        if ($this->getRequest()->getParam('isAjax') == 1) {
             $response = array();
             try {
                 if (isset($params['qty'])) {
@@ -47,22 +41,34 @@ class Totsy_Ajax_Checkout_CartController extends Mage_Checkout_CartController {
                 }
 
                 $cart->save();
-                Mage::register('product',$product);
+                Mage::register('product', $product);
 
                 $this->_getSession()->setCartWasUpdated(true);
-                $this->_getSession()->setCartUpdatedFlag(true);        //Harapartners, yang, for header flotting cart logic
-                $this->_getSession()->setCountDownTimer($this->_getCurrentTime());    //Harapartners, yang, set new cart timer
+
+                // Harapartners, yang, for header flotting cart logic
+                $this->_getSession()->setCartUpdatedFlag(true);
+
+                // Harapartners, yang, set new cart timer
+                $this->_getSession()->setCountDownTimer($this->_getCurrentTime());
 
                 /**
                  * @todo remove wishlist observer processAddToCart
                  */
-                Mage::dispatchEvent('checkout_cart_add_product_complete',
-                    array('product' => $product, 'request' => $this->getRequest(), 'response' => $this->getResponse())
+                Mage::dispatchEvent(
+                    'checkout_cart_add_product_complete',
+                    array(
+                        'product' => $product,
+                        'request' => $this->getRequest(),
+                        'response' => $this->getResponse()
+                    )
                 );
 
                 if (!$this->_getSession()->getNoCartRedirect(true)) {
-                    if (!$cart->getQuote()->getHasError()){
-                        $message = $this->__('%s was added to your shopping cart.', Mage::helper('core')->htmlEscape($product->getName()));
+                    if (!$cart->getQuote()->getHasError()) {
+                        $message = $this->__(
+                            '%s was added to your shopping cart.',
+                            Mage::helper('core')->htmlEscape($product->getName())
+                        );
                         $response['status'] = 'SUCCESS';
                         $response['message'] = $message;
 //New Code Here
@@ -92,9 +98,8 @@ class Totsy_Ajax_Checkout_CartController extends Mage_Checkout_CartController {
                 Mage::logException($e);
             }
             $this->getResponse()->setBody(Mage::helper('core')->jsonEncode($response));
-            return;
         } else {
-            return parent::addAction();
+            parent::addAction();
         }
     }
 }
