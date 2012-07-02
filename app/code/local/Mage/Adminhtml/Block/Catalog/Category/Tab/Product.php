@@ -76,6 +76,7 @@ class Mage_Adminhtml_Block_Catalog_Category_Tab_Product extends Mage_Adminhtml_B
         $collection = Mage::getModel('catalog/product')->getCollection()
             ->addAttributeToSelect('name')
             ->addAttributeToSelect('image') //Harapartners, Jun: include product base image in the grid
+            ->addAttributeToSelect('vendor_style') //Totsy, Josh: include vendor style in the grid
             ->addAttributeToSelect('sku')
             ->addAttributeToSelect('price')
             ->addAttributeToSelect('type')
@@ -169,6 +170,11 @@ class Mage_Adminhtml_Block_Catalog_Category_Tab_Product extends Mage_Adminhtml_B
             'sortable'  => false,
             'width'     => '120px',
             'renderer'    => 'Harapartners_Service_Block_Adminhtml_Widget_Grid_Column_Renderer_Product_Image'
+        ));
+        //Totsy, Josh: include vendor style in the grid
+        $this->addColumn('vendor_style', array(
+            'header'    => Mage::helper('catalog')->__('Vendor Style'),
+            'index' => 'vendor_style',
         ));
         
         $this->addColumn('sku', array(
