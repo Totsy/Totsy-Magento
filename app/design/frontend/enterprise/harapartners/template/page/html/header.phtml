@@ -57,18 +57,15 @@
 	            </div>           
 	        </div>
 	        <ul class="menu">
-		        <li id="newsales">
-		        	<div class="space"></div>
-		        	<a href="<?php echo $this->getBaseUrl()?>event/"><em>NEW<br/>SALES</em></a>
-		        </li>
-		        <div class="trileft"></div>
-		        <li id="ending">
-		        	<div class="space"></div>
-		        	<a href="<?php echo $this->getBaseUrl()?>event#event-upcoming"><em>UPCOMING<br/>SALES</em></a>
-		        </li>
-		        <div class="trileft"></div>
+	        	<li class="haschild">
+	        		<a href="<?php echo $this->getBaseUrl()?>event/"><em>ALL <br />SALES</em></a>
+	        		<ul>
+				        <li><a href="<?php echo $this->getBaseUrl()?>event/"><em>NEW<br/>SALES</em></a></li>
+				        <li><a href="<?php echo $this->getBaseUrl()?>event#event-upcoming"><em>UPCOMING<br/>SALES</em></a></li>
+	        		</ul>
+	        	</li>
 		        <li id="bycat" class="haschild">
-		        	<a href="#"><em>SHOP BY<br/>CATEGORY</em></a>
+		        	<a><em>SHOP BY<br/>CATEGORY</em></a>
 					<ul class="shop">
 						<?php $type = 'departments'; ?>
 						<?php $departmentAttr = Mage::getModel('catalog/product')->getResource()->getAttribute($type);?>
@@ -78,9 +75,8 @@
 						<?php endforeach;?>
 					</ul>        
 		        </li>
-		        <div class="trileft"></div>
 		        <li id="byage" class="haschild">
-		        	<a href="#"><em>SHOP BY<br/>AGE</em></a>
+		        	<a><em>SHOP BY<br/>AGE</em></a>
 		        	<ul class="shop">
 		        		<?php $age = 'ages'; ?>
 		        		<?php $ageAttr = Mage::getModel('catalog/product')->getResource()->getAttribute($age);?>
@@ -90,7 +86,6 @@
 		        		<?php endforeach;?>
 		        	</ul>
 		        </li>
-		        <div class="trileft"> </div>
 	        </ul>
        </div>
     </div>
