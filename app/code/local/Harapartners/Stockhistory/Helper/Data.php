@@ -114,7 +114,7 @@ class Harapartners_Stockhistory_Helper_Data extends Mage_Core_Helper_Abstract  {
     
     public function getFormAllVendorsArray(){
         $allVendorsArray = array(array('label' => '', 'value' => ''));
-        $vendorCollection = Mage::getModel('stockhistory/vendor')->getCollection();
+        $vendorCollection = Mage::getModel('stockhistory/vendor')->getCollection()->setOrder('vendor_code', 'ASC');
         foreach($vendorCollection as $vendor){
             $allVendorsArray[] = array('label' => $vendor->getVendorCode(), 'value' => $vendor->getVendorCode());
         }
