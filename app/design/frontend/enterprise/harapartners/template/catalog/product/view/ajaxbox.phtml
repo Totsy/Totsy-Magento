@@ -1,0 +1,54 @@
+<?php
+$_helper = $this->helper('catalog/output');
+$_product = $this->getProduct();
+
+Mage::log('viewing product id:'.$_product->getId());
+$_cart = $this->helper('checkout/cart')->getCart();
+
+$product_ids = implode(",", $_cart->getProductIds());
+
+//Harapartners, Jun, in the controller we will guarantee the current categor must exists, if not we redirect
+$_category = Mage::registry('current_category');
+?>
+<script type="text/javascript">
+    jQuery.noConflict();
+</script>
+<p class="product-ids"><?php echo $this->__('SKU# %s', $this->htmlEscape($_product->getSku())); ?></p>
+<?php //echo $this->getReviewsSummaryHtml($_product, false, true)?>
+<?php echo $this->getChildHtml('alert_urls') ?>
+<?php echo $this->getChildHtml('product_type_data') ?>
+
+<?php echo $this->getChildHtml('tierprices') ?>
+<?php echo $this->getChildHtml('extrahint') ?>
+
+<?php if (!$this->hasOptions()):?>
+<div class="add-to-box">
+    <?php if($_product->isSaleable()): ?>
+    <?php echo $this->getChildHtml('addtocart') ?>
+    <?php endif; ?>
+    <?php //echo $this->getChildHtml('addto') ?>
+</div>
+<?php else:?>
+<?php if ($_product->isSaleable() && $this->hasOptions() && $this->getChildChildHtml('container1') ):?>
+    <div class="options-container-small">
+        <?php echo $this->getChildChildHtml('container1', '', true, true) ?>
+    </div>
+    <?php else: ?>
+    <?php //echo $this->getChildHtml('addto') ?>
+    <?php endif;?>
+<?php endif; ?>
+
+<?php if ($_product->getShortDescription()):?>
+<div class="short-description std">
+    <h2><?php echo $this->__('Quick Overview') ?></h2>
+    <?php echo $_helper->productAttribute($_product, nl2br($_product->getShortDescription()), 'short_description') ?>
+</div>
+<?php endif;?>
+
+<?php echo $this->getChildHtml('other');?>
+
+<?php if ($_product->isSaleable() && $this->hasOptions() && $this->getChildChildHtml('container2') ):?>
+<div class="options-container-big">
+    <?php echo $this->getChildChildHtml('container2', '', true, true) ?>
+</div>
+<?php endif;?>

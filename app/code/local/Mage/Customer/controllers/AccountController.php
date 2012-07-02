@@ -193,9 +193,9 @@ class Mage_Customer_AccountController extends Mage_Core_Controller_Front_Action
         if (!$session->getBeforeAuthUrl() || $session->getBeforeAuthUrl() == Mage::getBaseUrl()) {
 
             // Set default URL to redirect customer to
-            $session->setBeforeAuthUrl(Mage::getUrl('')); //Harapartners, Jun, Home page (landing page) redirect is defined in Harapartners_Service module rewrite
-            //$session->setBeforeAuthUrl(Mage::helper('customer')->getAccountUrl());
-            
+            $session->setBeforeAuthUrl(Mage::getBaseUrl().'event'); //Harapartners, Jun, Home page (landing page) redirect is defined in Harapartners_Service module rewrite
+//            $session->setBeforeAuthUrl(Mage::helper('customer')->getAccountUrl());
+
             // Redirect customer to the last page visited after logging in
             if ($session->isLoggedIn()) {
                 if (!Mage::getStoreConfigFlag(
