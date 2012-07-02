@@ -131,6 +131,7 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Abstract exte
         
         $uniqueProductList = array();
         foreach($rawCollection as $item){
+        	$newTransactionId = $item->getId(); // Hara Song, Save current trasaction ID for certain item
         	$product = Mage::getModel('catalog/product')->load($item->getProductId());
         	
         	$productId = $product->getId();
@@ -142,14 +143,28 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Abstract exte
         	
             if(!!$item->getProductId() && !array_key_exists($item->getProductId(), $uniqueProductList)){
                 $uniqueProductList[$item->getProductId()] = array(
-                        'total'             => 0,
-                        'qty'                => 0,
-                        'is_master_pack'    => 'No'
+                        'total'             		=> 0,
+                        'qty'               	 	=> 0,
+                        'is_master_pack'    		=> 'No',
+                		'latest_transaction_id'    	=> $item->getId(),
+               			'amendment_total'			=> 0,
+                		'amendment_qty'				=> 0,
                 );
             }
-            $uniqueProductList[$item->getProductId()]['total'] += $item->getQtyDelta() * $item->getUnitCost();
-            $uniqueProductList[$item->getProductId()]['qty'] += $item->getQtyDelta();
-            if($product->getData('is_master_pack')){
+            // Hara Song only update the qty and total if the transaction is the latest
+            if($item->getActionType() == Harapartners_Stockhistory_Model_Transaction::ACTION_TYPE_EVENT_IMPORT 
+            		|| $item->getActionType() == Harapartners_Stockhistory_Model_Transaction::ACTION_TYPE_DIRECT_IMPORT){
+            
+	            if($newTransactionId >= $uniqueProductList[$item->getProductId()]['latest_transaction_id']){
+		            $uniqueProductList[$item->getProductId()]['total'] = $item->getQtyDelta() * $item->getUnitCost();
+		            $uniqueProductList[$item->getProductId()]['qty'] = $item->getQtyDelta();
+		            $uniqueProductList[$item->getProductId()]['latest_transaction_id'] = $newTransactionId;
+	            }
+            }elseif(Harapartners_Stockhistory_Model_Transaction::ACTION_TYPE_AMENDMENT){
+            		$uniqueProductList[$item->getProductId()]['amendment_total'] += $item->getQtyDelta() * $item->getUnitCost();
+            		$uniqueProductList[$item->getProductId()]['amendment_qty'] += $item->getQtyDelta();
+            }
+	        if($product->getData('is_master_pack')){
             	$uniqueProductList[$item->getProductId()]['is_master_pack'] = 'Yes';
             }
             
@@ -157,6 +172,11 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Abstract exte
             if($item->getActionType() == Harapartners_Stockhistory_Model_Transaction::ACTION_TYPE_REMOVE) {
             	$removeProducts[$item->getProductId()] = 1;
             }
+        }
+        //Hara Song Add two types import together
+        foreach($uniqueProductList as &$value){
+        	$value['total'] = $value['total'] + $value['amendment_total'];
+        	$value['qty'] = $value['qty'] + $value['amendment_qty'];
         }
         
         $newUniqueProductList = array();

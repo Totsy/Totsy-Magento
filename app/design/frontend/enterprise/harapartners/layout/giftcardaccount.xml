@@ -26,11 +26,11 @@
  */
 -->
 <layout version="0.1.0">
-    <!--checkout_cart_index>
+    <checkout_cart_index>
         <reference name="checkout.cart">
             <block type="enterprise_giftcardaccount/checkout_cart_giftcardaccount" template="giftcardaccount/cart/block.phtml" name="checkout.cart.giftcardaccount" as="giftcards" />
         </reference>
-    </checkout_cart_index-->
+    </checkout_cart_index>
 
     <enterprise_giftcardaccount_cart_check translate="label">
         <label>Gift Card Balance Check Form</label>

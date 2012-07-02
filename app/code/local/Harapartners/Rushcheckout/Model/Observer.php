@@ -24,23 +24,40 @@ class Harapartners_Rushcheckout_Model_Observer {
      * Double validation check HP
      */
     public function checkLastValidation($session){
-        $session->setData('revalidate_before_auth_url', Mage::helper('core/url')->getCurrentUrl());
-        $lastValidationTime = $session->getData('CUSTOMER_LAST_VALIDATION_TIME');
-        $timeDiff = strtotime(now()) - strtotime($lastValidationTime);
-        
-        if ( $timeDiff >= self::CUSTOMER_REVALIDATE_TIMER_LIMIT ) {
-            $session->setCheckLastValidationFlag(false);   
-			$url = Mage::getBaseUrl() . self::CUSTOMER_VALIDATION_CHECK_URL;
-			Mage::app()->getFrontController()->getResponse()->setRedirect($url);
+        if (!$this->isValid($session)) {
+            $this->setValidationRedirect($session);
+            $session->setCheckLastValidationFlag(false);
+			Mage::app()->getFrontController()->getResponse()->setRedirect($this->getValidationUrl());
         } else {
             $session->setCheckLastValidationFlag(true);
         }
     }
+
+    public function isValid($session) {
+        $lastValidationTime = $session->getData('CUSTOMER_LAST_VALIDATION_TIME');
+        $timeDiff = strtotime(now()) - strtotime($lastValidationTime);
+        if ( $timeDiff >= self::CUSTOMER_REVALIDATE_TIMER_LIMIT ) {
+            return false;
+        }
+        return true;
+    }
+
+    public function setValidationRedirect($session, $url=null){
+        if(is_null($url)) {
+            $url = Mage::helper('core/url')->getCurrentUrl();
+        }
+        $session->setData('revalidate_before_auth_url', $url);
+    }
+
+    public function getValidationUrl() {
+        return Mage::getBaseUrl() . self::CUSTOMER_VALIDATION_CHECK_URL;
+    }
+
     
     public function customerRevalidate($observer){    
     
    		//$test = Mage::getStoreConfig('config/rushcheckout_timer/limit_timer');
-    
+
         $session = $observer->getCustomerSession();    
         if ( $session->isLoggedIn() && !!$session->getData('CUSTOMER_LAST_VALIDATION_TIME') ){
             $moduleArrary = array(

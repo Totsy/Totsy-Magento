@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Totsy_Pixels>
+            <version>0.0.1</version>
+        </Totsy_Pixels>
+    </modules>
+    <global>
+        <blocks>
+            <pixels>
+                <class>Totsy_Pixels_Block</class>
+            </pixels>
+        </blocks>
+    </global>
+    <frontend>
+        <routers>
+            <pixels>
+                <use>standard</use>
+                <args>
+                    <module>Totsy_Pixels</module>
+                    <frontName>pixels</frontName>
+                </args>
+            </pixels>
+        </routers>
+        <layout>
+            <updates>
+                <pixels>
+                    <file>pixels.xml</file>
+                </pixels>
+            </updates>
+        </layout>
+    </frontend>
+</config>
