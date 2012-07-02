@@ -115,45 +115,49 @@ class Harapartners_Promotionfactory_Model_Observer {
 
 
     public function saleOrderPlaceAfter(Varien_Event_Observer $observer) {
-        
+
         $order = $observer->getEvent()->getOrder();
         $email = $order->getCustomer()->getEmail();
-                
+
         if(!$order || !$order->getId()) {
             return;
+            
         }
+        
+        if( Mage::registry('coupon_code_email_sent')==false ) {
+            foreach ($order->getAllItems() as $orderItem) {
 
-        foreach ( $order->getAllItems() as $orderItem ) {
+                if ($orderItem->getProductType() == 'virtual') {
 
-            if ($orderItem->getProductType() == 'virtual') {
-                 
-                //loading a product to get the short description        
-                $product = Mage::getModel('catalog/product')->load($orderItem->getProduct()->getId());
-                $shortDescription = $product->getShortDescription();
-                
-                //getting the virtual product code
-                $optionByCode = $orderItem->getProductOptionByCode();
-                
-                //get only the vp code itself 
-                $vpCodeStringArray = explode("\n", $optionByCode['options'][0]['value']);
-                
-                $virtualProductCode = $vpCodeStringArray[0];
-                                
-                //picking the right template by the id set in the admin (transactional emails section)
-                $templateId =  Mage::getModel('core/email_template')->loadByCode('_trans_Virtual_Product_Redemption')->getId();
+                    //loading a product to get the short description
+                    $product = Mage::getModel('catalog/product')->load($orderItem->getProduct()->getId());
+                    $shortDescription = $product->getShortDescription();
 
-                $store = Mage::app()->getStore();
+                    //getting the virtual product code
+                    $optionByCode = $orderItem->getProductOptionByCode();
 
-                //attempting to send the email
-                try {
-                    Mage::getModel('core/email_template')
-                    ->sendTransactional($templateId, "sales", $email, NULL, array("virtual_product_code"=>$virtualProductCode, "order"=>$order, "store"=>$store, "short_description" => $shortDescription));
-                } catch (Exception $e) {
-                    Mage::logException($e);
+                    //get only the vp code itself
+                    $vpCodeStringArray = explode("\n", $optionByCode['options'][0]['value']);
+
+                    $virtualProductCode = $vpCodeStringArray[0];
+
+                    //picking the right template by the id set in the admin (transactional emails section)
+                    $templateId =  Mage::getModel('core/email_template')->loadByCode('_trans_Virtual_Product_Redemption')->getId();
+
+                    $store = Mage::app()->getStore();
+
+                    //attempting to send the email
+                    try {
+                        Mage::getModel('core/email_template')
+                        ->sendTransactional($templateId, "sales", $email, NULL, array("virtual_product_code"=>$virtualProductCode, "order"=>$order, "store"=>$store, "short_description" => $shortDescription));
+                        Mage::register('coupon_code_email_sent',true); 
+                    } catch (Exception $e) {
+                        Mage::logException($e);
+                    }
                 }
             }
         }
-                        
+
         $couponCode = $order->getQuote()->getCouponCode();
         if(!$couponCode){
             return;

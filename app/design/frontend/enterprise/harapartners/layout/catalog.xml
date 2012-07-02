@@ -364,6 +364,9 @@ Additional block dependant on product type
                     <label>Product Extra Info</label>
                 </block>
             </block>
+            <block type="cms/block" name="product.shipping.return">
+                <action method="setBlockId"><block_id>shipping_and_return_virtual</block_id></action>
+            </block>
         </reference>
     </PRODUCT_TYPE_virtual>
 

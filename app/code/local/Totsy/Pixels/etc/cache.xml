@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <placeholders>
+        <pixels_sociable_product>
+            <block>pixels/</block>
+            <placeholder>HOMEPAGE_PRODUCTS</placeholder>
+            <container>Totsy_Pixels_Model_PageCache_Container_Sociable_Product</container>
+            <cache_lifetime>86400</cache_lifetime>
+        </pixels_sociable_product>
+    </placeholders>
+</config>

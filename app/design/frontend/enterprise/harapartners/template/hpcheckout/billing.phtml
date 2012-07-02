@@ -43,11 +43,11 @@
 	                    <input type="text" title="<?php echo $this->__('City') ?>" name="billing[city]" class="input-text required-entry" value="<?php echo $this->htmlEscape($this->getAddress()->getCity()) ?>" id="billing:city" />
 	                </div>
 	                <div class="field half-of-half">
-	                    <label for="billing:region_id" class="required"><em>*</em><?php echo $this->__('State/Province') ?></label>
+	                    <label for="billing:region_id" class="required"><em>*</em><?php echo $this->__('State') ?></label>
 						<div class="totsy-selective-input-box">
 							<span>State</span>
-							<select id="billing:region_id" name="billing[region_id]" title="<?php echo $this->__('State/Province') ?>" class="validate-select" style="display:none;" >
-								<option value=""><?php echo $this->__('Please select region, state or province') ?></option>
+							<select id="billing:region_id" name="billing[region_id]" title="<?php echo $this->__('State') ?>" class="validate-select" style="display:none;" >
+								<option value=""><?php echo $this->__('Please select state') ?></option>
 							</select>
 						</div>
 	                    <script type="text/javascript">
