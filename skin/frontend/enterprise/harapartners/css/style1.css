@@ -612,7 +612,6 @@ body.customer-account-login span.validation-error, div.validation-error {
 .categoryevent-index-topnav .col-main>h2{
 	margin-bottom: 6px;
 	padding-bottom: 6px;
-	text-transform:capitalize;
 	color: #707070;
 	font-size: 21px;
 }

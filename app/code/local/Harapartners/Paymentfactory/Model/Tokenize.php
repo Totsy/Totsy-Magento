@@ -211,7 +211,7 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Mage_Cybersource_Model_
 
         } catch (Exception $e) {
             
-              $order = $payment->getOrder();
+            $order = $payment->getOrder();
             $order->setStatus(Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_PAYMENT_FAILED);
             $this->_sendPaymentFailedEmail($payment);
                                     
@@ -258,8 +258,9 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Mage_Cybersource_Model_
             
             $order = $payment->getOrder();
             $order->setStatus(Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_PAYMENT_FAILED);
-            $this->_sendPaymentFailedEmail($payment);
-            
+            if($amount > 1) {
+                $this->_sendPaymentFailedEmail($payment);
+            }
             Mage::throwException(
                 Mage::helper('cybersource')->__('Gateway request error: %s', $e->getMessage())
             );

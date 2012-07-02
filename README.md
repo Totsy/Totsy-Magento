@@ -11,8 +11,8 @@ Clone the Totsy-Magento repository, and then extract the Magento Enterprise (gzi
 
     $ git clone <repository-url> totsy-magento
     $ cd totsy-magento
-    $ tar xvfz <path-to-magento-enterprise>/enterprise.tar.gz --strip-components=1
+    $ tar xfz <path-to-magento-enterprise>/enterprise.tar.gz --strip-components=1
     $ git reset --hard HEAD
 
-The last thing you'll need it a valid `app/etc/local.xml` to configure your instance of Totsy-Magento.
+The last thing that you will need is a valid `app/etc/local.xml` to configure your instance of Totsy-Magento.
 

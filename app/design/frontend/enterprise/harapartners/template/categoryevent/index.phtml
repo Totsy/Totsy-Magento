@@ -101,7 +101,11 @@
 					data-imageclass=""  
 					sdata-producturl="<?php echo Mage::getBaseUrl().$live['url_path']; ?>">
 					</ul>
-					<?php $imgFile = BP.DS.'media'.DS.'catalog'.DS.'category'.DS.$live['small_image'];?>	
+                    <?php
+                    $imgFile = (isset($live['small_image']))
+                        ? BP . DS . 'media' . DS . 'catalog' . DS . 'category' . DS . $live['small_image']
+                        : BP . DS . 'skin' . DS . 'frontend' . DS . 'enterprise ' . DS . 'harapartners' . DS . 'images' . DS . 'catalog' . DS . 'product' . DS . 'placeholder' . DS . 'small_image.jpg';
+                    ?>
 					<a class="event-link" href="<?php echo Mage::getBaseUrl().$live['url_path']; ?>"><img src="<?php echo Mage::helper('service/image')->loadImageFile($imgFile)->resize(228,263); ?>" width="228px" height="263px" alt="" /></a>
 					<div class="splash-details">
 						<div class="table-cell-left">	
@@ -148,7 +152,11 @@
 				data-imageclass=""  
 				sdata-producturl="<?php echo Mage::getBaseUrl().$up['url_path']; ?>">
 				</ul>
-				<?php $imgFile = BP.DS.'media'.DS.'catalog'.DS.'category'.DS.$up['small_image'];?>	
+				<?php
+                $imgFile = (isset($up['small_image']))
+                    ? BP . DS . 'media' . DS . 'catalog' . DS . 'category' . DS . $up['small_image']
+                    : BP . DS . 'skin' . DS . 'frontend' . DS . 'enterprise ' . DS . 'harapartners' . DS . 'images' . DS . 'catalog' . DS . 'product' . DS . 'placeholder' . DS . 'small_image.jpg';
+                ?>
 				<a class="event-link" href="<?php echo Mage::getBaseUrl().$up['url_path']; ?>"><img src="<?php echo Mage::helper('service/image')->loadImageFile($imgFile)->resize(228,263); ?>" width="228px" height="263px" alt="" /></a>
 				<div class="splash-details">
 					<div class="table-cell-left">	
