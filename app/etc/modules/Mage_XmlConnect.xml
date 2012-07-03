@@ -25,8 +25,6 @@
  * @license     http://www.magentocommerce.com/license/enterprise-edition
  */
 -->
-<config/>
-<!--
 <config>
     <modules>
         <Mage_XmlConnect>
@@ -49,4 +47,3 @@
         </Mage_XmlConnect>
     </modules>
 </config>
--->

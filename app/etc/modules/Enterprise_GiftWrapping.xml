@@ -28,7 +28,7 @@
 <config>
     <modules>
         <Enterprise_GiftWrapping>
-            <active>true</active>
+            <active>false</active>
             <codePool>core</codePool>
             <depends>
                 <Mage_GiftMessage/>

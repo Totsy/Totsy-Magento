@@ -211,7 +211,7 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Mage_Cybersource_Model_
 
         } catch (Exception $e) {
             
-              $order = $payment->getOrder();
+            $order = $payment->getOrder();
             $order->setStatus(Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_PAYMENT_FAILED);
             $this->_sendPaymentFailedEmail($payment);
                                     
@@ -258,8 +258,9 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Mage_Cybersource_Model_
             
             $order = $payment->getOrder();
             $order->setStatus(Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_PAYMENT_FAILED);
-            $this->_sendPaymentFailedEmail($payment);
-            
+            if($amount > 1) {
+                $this->_sendPaymentFailedEmail($payment);
+            }
             Mage::throwException(
                 Mage::helper('cybersource')->__('Gateway request error: %s', $e->getMessage())
             );
@@ -275,11 +276,13 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Mage_Cybersource_Model_
         return $this;
     }
     
-    public function void(Varien_Object $payment, $amount){
+    public function void(Varien_Object $payment)
+    {
         $this->_payment = $payment;
-        parent::void($payment, $amount);
-        $payment->setCybersourceSubid($payment->getCybersourceSubid()); //Harapartners
-        $profile = Mage::getModel('paymentfactory/profile')->loadBySubscriptionId($payment->getCybersourceSubid());
+        parent::void($payment);
+        $payment->setCybersourceSubid($payment->getCybersourceSubid());
+        $profile = Mage::getModel('paymentfactory/profile')
+            ->loadBySubscriptionId($payment->getCybersourceSubid());
         $payment->setCcLast4($profile->getData('last4no'));
         $payment->setCcType($profile->getData('card_type'));
         $payment->setCcExpYear($profile->getData('expire_year'));

@@ -234,6 +234,13 @@ class Harapartners_HpCheckout_Model_Checkout
         $order = $service->getOrder();
 
         if ($order) {
+            
+            //we need this in order to check if an order has virtual items
+            //we want to know that for toggling some FAQ copy about virtual products
+            if($this->getQuote()->hasVirtualItems()==1){
+                $order->hasVirtualItems = $this->getQuote()->hasVirtualItems();
+            }
+            
             Mage::dispatchEvent('hpcheckout_save_order_after',
                 array('order'=>$order, 'quote'=>$this->getQuote()));
 

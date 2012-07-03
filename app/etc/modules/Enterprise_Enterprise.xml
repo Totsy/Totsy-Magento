@@ -35,7 +35,7 @@
                 <Mage_Install/>
                 <Mage_Adminhtml/>
                 <Mage_Admin/>
-                <!--Mage_AdminNotification/-->
+                <!--<Mage_AdminNotification/>-->
                 <Mage_Widget/>
             </depends>
         </Enterprise_Enterprise>

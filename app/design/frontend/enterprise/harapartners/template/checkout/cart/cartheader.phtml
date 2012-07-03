@@ -53,6 +53,8 @@
     <?php $_myCart = $this->__('%s Items', '<span>0</span>') ?>
 <?php endif ?>
 <?php if ($this->getIsLinkMode() || !$this->getIsNeedToDisplaySideBar()):?>
+    <?php Mage::log('link mode:'.print_r($this->getIsLinkMode())); ?>
+    <?php Mage::log('display sidebar mode:'.print_r($this->getIsNeedToDisplaySideBar())); ?>
     <div class="block-title no-items">
         <ul class="links cart-link">
             <li ><a href="<?php echo $this->getUrl('checkout/cart'); ?>"><?php echo $_myCart ?><span>$0.00</span></a></li>
@@ -73,7 +75,7 @@
     		<strong id="cartHeader"><span class="orange">Your savings:</span> $0.00<span> | <span class='price'>$0.00</span></span></strong>
     	<?php endif;?>
     </div>
-    <div id="topCartContent" class="block-content" style="<?php if ( !!$_updateFlag && $_updateFlag ) {echo "display:block"; $checkoutSession->setCartUpdatedFlag(false);} else echo "display:none";?>"> 
+    <div id="topCartContent" class="block-content" style="<?php if ( !!$_updateFlag && $_updateFlag ) {echo "display:block"; $checkoutSession->setCartUpdatedFlag(false);} else echo "display:none";?>">
         <div class="inner-wrapper"><?php // extra div to smooth slideUp and slideDown ?>
         	<?php if ($_cartQty > 0 && !empty($_itemsArray)):?>
 	        <div class="timer-control-box">
@@ -157,25 +159,25 @@
     // Below can be used to show minicart after item added
     // Enterprise.TopCart.showCart(7);
 	jQuery(document).ready(function(){
-		var $topCartContent = jQuery("#topCartContent");
+		topCartContent = jQuery("#topCartContent");
 		window.setTimeout('hideTopCart()', 5000); // this is called each page load, needs to refined to just be called when mini-cart is initialized after adding to car - not each page load
 		jQuery(".top-cart").hover(
 			function(){
-				$topCartContent.stop().fadeTo(200,1);
+				topCartContent.stop().fadeTo(200,1);
 				//window.setTimeout( 'hideTopCart()', 8000 ); // leave the mini-cart open when being hovered, no timeout
 			},
 			function(){
-				$topCartContent.stop().fadeTo(500,0).hide();
+                topCartContent.stop().fadeTo(500,0).hide();
 			}
 		);
 		
 		jQuery(".hpcheckout-checkout-index .top-cart").hover(
 			function(){
-				$topCartContent.hide();}
+                topCartContent.hide();}
 		);
 		
 		jQuery("#items-info-wrapper .block-subtitle .close-btn").click(function(){
-			$topCartContent.hide();
+            topCartContent.hide();
 		});
 		
 	});

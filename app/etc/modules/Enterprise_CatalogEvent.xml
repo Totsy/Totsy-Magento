@@ -25,8 +25,6 @@
  * @license     http://www.magentocommerce.com/license/enterprise-edition
  */
 -->
-<config/>
-<!--
 <config>
     <modules>
         <Enterprise_CatalogEvent>
@@ -42,4 +40,3 @@
         </Enterprise_CatalogEvent>
     </modules>
 </config>
--->

@@ -2,7 +2,6 @@
 $_helper = $this->helper('catalog/output');
 $_product = $this->getProduct();
 
-Mage::log('viewing product id:'.$_product->getId());
 $_cart = $this->helper('checkout/cart')->getCart();
 
 $product_ids = implode(",", $_cart->getProductIds());
