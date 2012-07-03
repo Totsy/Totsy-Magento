@@ -189,6 +189,9 @@ class Mage_Customer_AccountController extends Mage_Core_Controller_Front_Action
     protected function _loginPostRedirect()
     {
         $session = $this->_getSession();
+        if($websiteRestrictionUrl = Mage::getSingleton('core/session')->getWebsiteRestrictionAfterLoginUrl(true)) {
+            $session->setBeforeAuthUrl($websiteRestrictionUrl);
+        }
 
         if (!$session->getBeforeAuthUrl() || $session->getBeforeAuthUrl() == Mage::getBaseUrl()) {
 
