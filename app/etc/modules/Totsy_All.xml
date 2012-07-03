@@ -9,6 +9,10 @@
             <active>true</active>
             <codePool>local</codePool>
         </Totsy_Ajax>
+        <Totsy_Checkout>
+            <active>true</active>
+            <codePool>local</codePool>
+        </Totsy_Checkout>
         <Totsy_Core>
             <active>true</active>
             <codePool>local</codePool>
