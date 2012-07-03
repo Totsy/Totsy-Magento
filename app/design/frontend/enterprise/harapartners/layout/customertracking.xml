@@ -46,7 +46,7 @@ Default layout, loads most of the pages
 
     <customertracking_index_ajax>
         <block type="core/template" name="root" template="customertracking/ajax.phtml">
-            <block type="customertracking/pixel" name="customertracking.pixel" />
+            <block type="customertracking/pixel" name="customertracking.pixel"  template="customertracking/pixel.phtml" />
             <block type="customertracking/welcome" name="customertracking.welcome" template="customertracking/welcome.phtml" />
         </block>
     </customertracking_index_ajax>
