@@ -152,7 +152,7 @@ button.button::-moz-focus-inner { padding:0; border:0; } /* FF Fix */
 button.button { -webkit-border-fit:lines; } /* <- Safari & Google Chrome Fix */
 
 button.button { border:0; padding:0; margin:0; background:transparent; /* line-height:21px; */ overflow:visible; cursor:pointer; vertical-align:middle; }
-
+.add-new-card-form .button {line-height: 20px; }
 a.button,
 button.button span,
 a.button span,

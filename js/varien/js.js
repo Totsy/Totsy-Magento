@@ -634,7 +634,6 @@ Element.addMethods({
     }
 });
 
-/*
 if (!("console" in window) || !("firebug" in console))
 {
     var names = ["log", "debug", "info", "warn", "error", "assert", "dir", "dirxml",
@@ -643,7 +642,7 @@ if (!("console" in window) || !("firebug" in console))
     window.console = {};
     for (var i = 0; i < names.length; ++i)
         window.console[names[i]] = function() {}
-}*/
+}
 
 /**
  * Executes event handler on the element. Works with event handlers attached by Prototype,
