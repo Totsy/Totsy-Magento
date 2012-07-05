@@ -124,7 +124,8 @@ class Harapartners_Promotionfactory_Model_Observer {
             
         }
         
-        if( Mage::registry('coupon_code_email_sent')==false ) {
+        /*
+        if( $order && Mage::registry('coupon_code_email_sent')==false ) {
             foreach ($order->getAllItems() as $orderItem) {
 
                 if ($orderItem->getProductType() == 'virtual') {
@@ -132,13 +133,9 @@ class Harapartners_Promotionfactory_Model_Observer {
                     //loading a product to get the short description
                     $product = Mage::getModel('catalog/product')->load($orderItem->getProduct()->getId());
                     $shortDescription = $product->getShortDescription();
-
-                    //getting the virtual product code
-                    $optionByCode = $orderItem->getProductOptionByCode();
-
-                    //get only the vp code itself
-                    $vpCodeStringArray = explode("\n", $optionByCode['options'][0]['value']);
-
+                    
+                    print_r(unserialize($orderItem->getOptionByCode('attributes')->getValue()));
+                                        
                     $virtualProductCode = $vpCodeStringArray[0];
 
                     //picking the right template by the id set in the admin (transactional emails section)
@@ -156,7 +153,7 @@ class Harapartners_Promotionfactory_Model_Observer {
                     }
                 }
             }
-        }
+        } */
 
         $couponCode = $order->getQuote()->getCouponCode();
         if(!$couponCode){
