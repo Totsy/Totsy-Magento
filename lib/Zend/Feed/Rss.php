@@ -202,6 +202,13 @@ class Zend_Feed_Rss extends Zend_Feed_Abstract
             $channel->appendChild($language);
         }
 
+        /*Hara Partners Sailthru email feed Start*/
+        if (!empty($array->hightestsave)) {
+            $hightestsave = $this->_element->createElement('hightestsave', $array->hightestsave);
+            $channel->appendChild($hightestsave);
+        }
+        /*Hara Partners Sailthru email feed End*/
+        
         $doc = $this->_element->createElement('docs', 'http://blogs.law.harvard.edu/tech/rss');
         $channel->appendChild($doc);
 
@@ -405,6 +412,8 @@ class Zend_Feed_Rss extends Zend_Feed_Abstract
                 $author = $this->_element->createElement('author', $dataentry->author);
                 $item->appendChild($author);
             }
+            
+
 
             $link = $this->_element->createElement('link', $dataentry->link);
             $item->appendChild($link);
@@ -426,7 +435,36 @@ class Zend_Feed_Rss extends Zend_Feed_Abstract
                 $content->appendChild($this->_element->createCDATASection($dataentry->content));
                 $item->appendChild($content);
             }
+            
+            
+            
+            
+            /*Hara Partners Sailthru email feed Start*/
+            if (isset($dataentry->image)) {
+                $image = $this->_element->createElement('image', $dataentry->image);
+                $item->appendChild($image);
+            }
+            if (isset($dataentry->shortdescription)) {
+                $shortdescription = $this->_element->createElement('shortdescription', $dataentry->shortdescription);
+                $item->appendChild($shortdescription);
+            }
+            if (isset($dataentry->save)) {
+                $save = $this->_element->createElement('save', $dataentry->save);
+                $item->appendChild($save);
+            }
+            if (isset($dataentry->status)) {
+                $status = $this->_element->createElement('status', $dataentry->status);
+                $item->appendChild($status);
+            }
+            if (isset($dataentry->keywords)) {
+                $keywords = $this->_element->createElement('keywords', $dataentry->keywords);
+                $item->appendChild($keywords);
+            }
+            /*Hara Partners Sailthru email feed End*/
 
+            
+            
+            
             $pubdate = isset($dataentry->lastUpdate) ? $dataentry->lastUpdate : time();
             $pubdate = $this->_element->createElement('pubDate', date(DATE_RSS, $pubdate));
             $item->appendChild($pubdate);
