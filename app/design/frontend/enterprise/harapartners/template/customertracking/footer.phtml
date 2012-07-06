@@ -1,6 +1,6 @@
 <div id="customertracking_ajax"></div>
 <script type="text/javascript">
     Event.observe(window,'load',function() {
-        new Ajax.Updater($('customertracking_ajax'), '<?php echo Mage::getUrl('customertracking/index/ajax',array('_query'=>array('pageTag'=>strtolower(Mage::app()->getFrontController()->getAction()->getFullActionName())))); ?>', {method:'get'});
+        new Ajax.Updater($('customertracking_ajax'), '<?php echo Mage::getUrl('customertracking/index/ajax',array('_query'=>array('pageTag'=>strtolower(Mage::app()->getFrontController()->getAction()->getFullActionName())))); ?>', {method:'get',evalScripts: true});
     });
 </script>

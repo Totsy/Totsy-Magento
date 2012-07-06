@@ -4,26 +4,17 @@
         <reference name="after_body_start">
             <block type="core/template" name="sociable.product.pixel" template="pixels/sociable/product/ajax.phtml" />
         </reference>
-        <reference name="before_body_end">
-            <remove name="sociable.footer.pixel" />
-        </reference>
     </catalog_product_view>
 
     <default>
         <reference name="after_body_start">
             <block type="core/template" name="sociable.header.pixel" template="pixels/sociable/header/ajax.phtml" />
         </reference>
-        <reference name="before_body_end">
-            <block type="core/template" name="sociable.footer.pixel" template="pixels/sociable/footer.phtml" />
-        </reference>
     </default>
 
     <customer_logged_out>
         <reference name="after_body_start">
             <remove name="sociable.header.pixel" />
-        </reference>
-        <reference name="before_body_end">
-            <remove name="sociable.footer.pixel" />
         </reference>
     </customer_logged_out>
 

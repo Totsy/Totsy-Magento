@@ -38,23 +38,20 @@
         		<a href="<?php echo $this -> getBaseUrl();?>invitation">INVITE YOUR FRIEND, <strong>GET $15 </strong></a><?php echo $this->getAdditionalHtml() ?>
        </div>
        <div class="nav">
-       		<div class="tri"></div>
 	        <div class="quick-access" id="header-user-info">
 
 	        </div>
 	        <ul class="menu">
-		        <li id="newsales">
-		        	<div class="space"></div>
-		        	<a href="<?php echo $this->getBaseUrl()?>event/"><em>NEW<br/>SALES</em></a>
-		        </li>
-		        <div class="trileft"></div>
-		        <li id="ending">
-		        	<div class="space"></div>
-		        	<a href="<?php echo $this->getBaseUrl()?>event#event-upcoming"><em>UPCOMING<br/>SALES</em></a>
-		        </li>
-		        <div class="trileft"></div>
+	        	<li class="haschild">
+	        		<a href="<?php echo $this->getBaseUrl()?>event/"><em>ALL <br />SALES</em></a>
+	        		<ul>
+				        <li><a href="<?php echo $this->getBaseUrl()?>event/">New Sales</a></li>
+				        <li><a href="<?php echo $this->getBaseUrl()?>event#event-upcoming">Upcoming Sales</a></li>
+	        		</ul>
+	        	</li>
+	        	<li id="navSocial"><a href="#" title="Social Feed"><em>SOCIAL <br/>FEED</em></a></li>
 		        <li id="bycat" class="haschild">
-		        	<a href="#"><em>SHOP BY<br/>CATEGORY</em></a>
+		        	<a><em>SHOP BY<br/>CATEGORY</em></a>
 					<ul class="shop">
 						<?php $type = 'departments'; ?>
 						<?php $departmentAttr = Mage::getModel('catalog/product')->getResource()->getAttribute($type);?>
@@ -64,9 +61,8 @@
 						<?php endforeach;?>
 					</ul>        
 		        </li>
-		        <div class="trileft"></div>
 		        <li id="byage" class="haschild">
-		        	<a href="#"><em>SHOP BY<br/>AGE</em></a>
+		        	<a><em>SHOP BY<br/>AGE</em></a>
 		        	<ul class="shop">
 		        		<?php $age = 'ages'; ?>
 		        		<?php $ageAttr = Mage::getModel('catalog/product')->getResource()->getAttribute($age);?>
@@ -76,7 +72,6 @@
 		        		<?php endforeach;?>
 		        	</ul>
 		        </li>
-		        <div class="trileft"> </div>
 	        </ul>
        </div>
     </div>
@@ -112,8 +107,9 @@ jQuery(document).ready(function(){
 		jQuery(this).children("ul").stop().slideUp("fast");
 		})
 	});
+var topCartContent;
 
 Event.observe(document,'dom:loaded',function() {
-    new Ajax.Updater($('header-user-info'), '<?php echo $this->getUrl('customertracking/headermsg/ajax',array('_secure'=>Mage::app()->getStore()->isCurrentlySecure())); ?>', {method:'get'});
+    new Ajax.Updater($('header-user-info'), '<?php echo $this->getUrl('customertracking/headermsg/ajax',array('_secure'=>Mage::app()->getStore()->isCurrentlySecure())); ?>', {method:'get',evalScripts: true});
 });
 </script>

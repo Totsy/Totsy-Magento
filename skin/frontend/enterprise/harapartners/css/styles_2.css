@@ -121,6 +121,8 @@
 
 body .header .quick-access
 {
+	position: relative;
+	margin-right:9px;
 	background-color: #FFFFFF;
 	border-color: #CCCCCC;
 	border-bottom-left-radius: 10px;
@@ -231,14 +233,42 @@ body .header .quick-access
 	font-weight: 500; letter-spacing: 0.025em;
 }
 
+/* main nav */
+.nav ul.menu li#ending{
+	padding: 0 6px 0 0;
+}
+
+ul.menu .haschild ul li a:hover {
+    background: none repeat scroll 0 0 #F7D7D6;
+    color: rgba(0, 0, 0, 0.9);
+}
+body .nav ul.menu li {
+	padding: 0 0px 0 0;
+}
+body ul.menu ul, body .nav ul.menu li {
+    width: 113px;
+}
+body .nav ul.menu li a {
+    line-height: 17px;
+    padding: 19px 10px 1px;
+}
+body .nav ul.menu>li>a {
+    padding: 19px 10px 6px;
+}
+ul.menu>li>ul{
+	margin-bottom: 10px !important;
+}
+
 .nav ul
 {
 	float: left;
 	margin-left:0
 
 }
-.nav ul.menu li
+.nav ul.menu > li
 {
+	position: relative;
+	margin-right:9px;
 	background-color: #FFFFFF;
 	border-color: #CCCCCC;
 	border-bottom-left-radius: 10px;
@@ -255,11 +285,14 @@ body .header .quick-access
 {
 	color:#636466;
 	display:block;
+}
+.nav ul.menu > li > a 
+{
 	font-weight:bold;
 	padding: 19px 10px 5px 10px;
 }
 
-.nav ul.menu li a em
+.nav ul.menu > li > a em
 {
 	background-image:url("../images/icons-nav.png");
 	background-repeat:no-repeat;
@@ -287,7 +320,7 @@ body .header .quick-access
  	padding-right: 33px;
 
 }
-
+li#navSocial a em {background-position: 0 -34px;}
 
 .customer-account-login .nav
 {
@@ -295,14 +328,14 @@ body .header .quick-access
 
 }
 
-.trileft{
-	float:left;
-	background-image: url("../images/nav-tri.png");
-	height: 9px;
-	right:-10px;
-	top:-1px;
-	width:9px
-
+/* triangle embellishment */
+.nav > ul > li:after,
+#header-user-info:after {
+	content: "";
+	position: absolute; top:-1px; right:-10px;
+	display: block;
+	width:9px; height:9px;
+	background: url(../images/nav-tri.png) 0 0 no-repeat;
 }
 
 .space
@@ -313,10 +346,9 @@ body .header .quick-access
 .haschild ul{
 	display:none;
 	padding-top:0;
-
 }
 
-ul.menu ul.shop li{
+ul.menu .haschild ul li {
 	background-image:none;
 	background-repeat:no-repeat;
 	padding-left: 0px;
@@ -327,9 +359,15 @@ ul.menu ul.shop li{
 	box-shadow:none;
 }
 
-ul.menu ul.shop li a{
+ul.menu .haschild ul li a {
 	font-weight:normal;
 	padding-top:0;
+}
+ul.menu .haschild ul li a:hover{
+	transition-duration: 0.4s;
+	-moz-transition-duration: 0.4s; /* Firefox 4 */
+	-webkit-transition-duration: 0.4s; /* Safari and Chrome */
+	-o-transition-duration: 0.4s; /* Opera */ 
 }
 
 .header .cart{
@@ -841,14 +879,6 @@ body.catalog-category-view .category-products ul.products-grid li.item div.produ
 	width:500px;
 	height:500px;
 	overflow:auto;
-}
-
-/*-----------------------header fade----------------------*/
-ul.menu ul.shop li a:hover{
-	transition-duration: 0.4s;
-	-moz-transition-duration: 0.4s; /* Firefox 4 */
-	-webkit-transition-duration: 0.4s; /* Safari and Chrome */
-	-o-transition-duration: 0.4s; /* Opera */ 
 }
 
 /*-------------------------Reset Password-------------------------------------*/
