@@ -232,23 +232,6 @@ class Zend_Feed_Builder_Header extends ArrayObject
         $this->offsetSet('language', $language);
         return $this;
     }
-    
-    
-    /*START: Hara Partners for sailthru email template*/
-    /**
-     * Sets the language of the feed
-     *
-     * @param  string $language
-     * @return Zend_Feed_Builder_Header
-     */
-    public function setHightestsave($hightestsave)
-    {
-        $this->offsetSet('hightestsave', $hightestsave);
-        return $this;
-    }
-    /*END: Hara Partners for sailthru email template*/
-    
-    
 
     /**
      * Email address for person responsible for technical issues

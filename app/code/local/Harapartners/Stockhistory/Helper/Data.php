@@ -114,7 +114,7 @@ class Harapartners_Stockhistory_Helper_Data extends Mage_Core_Helper_Abstract  {
     
     public function getFormAllVendorsArray(){
         $allVendorsArray = array(array('label' => '', 'value' => ''));
-        $vendorCollection = Mage::getModel('stockhistory/vendor')->getCollection();
+        $vendorCollection = Mage::getModel('stockhistory/vendor')->getCollection()->setOrder('vendor_code', 'ASC');
         foreach($vendorCollection as $vendor){
             $allVendorsArray[] = array('label' => $vendor->getVendorCode(), 'value' => $vendor->getVendorCode());
         }
@@ -252,8 +252,14 @@ class Harapartners_Stockhistory_Helper_Data extends Mage_Core_Helper_Abstract  {
     	$poCollection = Mage::getModel('stockhistory/transaction')->getCollection()->addFieldToFilter('po_id', array('eq' => $poId));
 		$csvHeader = $this->getPoProductExportHeader();
 		$csv = implode(',', $csvHeader)."\n";
+		$uniqueProducts = Array();
 		foreach($poCollection as $po){
 			$productSku = $po->getProductSku();
+			if(in_array($productSku, $uniqueProducts)){
+				continue;
+			}else{
+				$uniqueProducts[] = $productSku;
+			}
 			$product = Mage::getModel('catalog/product')->loadByAttribute('sku', $productSku);
 			if(!!$product->getId()){
 				$productArray = array();

@@ -123,13 +123,13 @@
     </frontend>
     <admin>
         <routers>
-            <customertracking>
-                <use>admin</use>
+            <adminhtml>
                 <args>
-                    <module>Harapartners_Customertracking</module>
-                    <frontName>adminhtml_customertracking</frontName>
+                    <modules>
+                        <customertracking before="Mage_Adminhtml">Harapartners_Customertracking_Adminhtml</customertracking>
+                    </modules>
                 </args>
-            </customertracking>
+            </adminhtml>
         </routers>
     </admin>
     <adminhtml>
@@ -139,7 +139,7 @@
                     <customertracking translate="title" module="customertracking">
                         <title>Affiliate Customer Registrations</title>
                         <sort_order>20</sort_order>
-                        <action>adminhtml_customertracking/adminhtml_record</action>
+                        <action>adminhtml/customertracking_record</action>
                     </customertracking>
                 </children>
             </marketing>

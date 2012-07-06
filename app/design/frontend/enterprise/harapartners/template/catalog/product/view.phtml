@@ -88,7 +88,10 @@ direction: "down"
 <li><a href="#description">Description</a></li>
 <li><a href="#shipping">Shipping & Returns</a></li>
 </ul>
-
+<?php 
+    $event_end_date = strtotime($_category->getEventEndDate());
+    $today = strtotime('NOW');
+?>
 <!-- Start Description Tab -->
 <div id="description">
 <?php echo $_product->getDescription(); ?> <br />
@@ -104,48 +107,46 @@ direction: "down"
 <p class="final-sale"><strong>Final Sale</strong></p>
 <?php endif; ?>
 </div>
-
 <div class="product-shop product-view-block">
                 <div class="product-main-info">
+                    
                     <p class="product-ids"><?php echo $this->__('SKU# %s', $this->htmlEscape($_product->getSku())); ?></p>
                     <?php //echo $this->getReviewsSummaryHtml($_product, false, true)?>
                     <?php echo $this->getChildHtml('alert_urls') ?>
-                    <?php echo $this->getChildHtml('product_type_data') ?>
-
-                <?php echo $this->getChildHtml('tierprices') ?>
-                <?php echo $this->getChildHtml('extrahint') ?>
-
-                <?php if (!$this->hasOptions()):?>
-                     <div class="add-to-box">
-                         <?php if($_product->isSaleable()): ?>
-                             <?php echo $this->getChildHtml('addtocart') ?>
-                         <?php endif; ?>
-                         <?php //echo $this->getChildHtml('addto') ?>
-                     </div>
-                <?php else:?>
-                     <?php if ($_product->isSaleable() && $this->hasOptions() && $this->getChildChildHtml('container1') ):?>
-                         <div class="options-container-small">
-                             <?php echo $this->getChildChildHtml('container1', '', true, true) ?>
-                         </div>
-                     <?php else: ?>
-                         <?php //echo $this->getChildHtml('addto') ?>
-                     <?php endif;?>
-                <?php endif; ?>
-
+                    <?php if($today <= $event_end_date):  ?>
+                        <?php echo $this->getChildHtml('product_type_data') ?>
+                    <?php endif; ?>
+                    <?php echo $this->getChildHtml('tierprices') ?>
+                    <?php echo $this->getChildHtml('extrahint') ?>
+                        <?php if (!$this->hasOptions()):?>
+                             <div class="add-to-box">
+                                 <?php if($_product->isSaleable()): ?>
+                                     <?php echo $this->getChildHtml('addtocart') ?>
+                                 <?php endif; ?>
+                                 <?php //echo $this->getChildHtml('addto') ?>
+                             </div>
+                        <?php else:?>
+                             <?php if ($_product->isSaleable() && $this->hasOptions() && $this->getChildChildHtml('container1') ):?>
+                                 <div class="options-container-small">
+                                     <?php echo $this->getChildChildHtml('container1', '', true, true) ?>
+                                 </div>
+                             <?php else: ?>
+                                 <?php //echo $this->getChildHtml('addto') ?>
+                             <?php endif;?>
+                        <?php endif; ?>
                 <?php if ($_product->getShortDescription()):?>
                      <div class="short-description std">
                          <h2><?php echo $this->__('Quick Overview') ?></h2>
                          <?php echo $_helper->productAttribute($_product, nl2br($_product->getShortDescription()), 'short_description') ?>
                      </div>
                 <?php endif;?>
-
                 <?php echo $this->getChildHtml('other');?>
+    <?php if ($_product->isSaleable() && $this->hasOptions() && $this->getChildChildHtml('container2') ):?>
+        <div class="options-container-big">
+            <?php echo $this->getChildChildHtml('container2', '', true, true) ?>
+        </div>
+    <?php endif;?>
 
-<?php if ($_product->isSaleable() && $this->hasOptions() && $this->getChildChildHtml('container2') ):?>
-<div class="options-container-big">
-<?php echo $this->getChildChildHtml('container2', '', true, true) ?>
-</div>
-<?php endif;?>
                 </div>
                 <div class="share-button" id="st_sharethis_custom">
 <div class="st_sharethis_custom"></div>

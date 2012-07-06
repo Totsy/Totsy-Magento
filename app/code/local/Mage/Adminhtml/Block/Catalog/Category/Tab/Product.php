@@ -76,6 +76,7 @@ class Mage_Adminhtml_Block_Catalog_Category_Tab_Product extends Mage_Adminhtml_B
         $collection = Mage::getModel('catalog/product')->getCollection()
             ->addAttributeToSelect('name')
             ->addAttributeToSelect('image') //Harapartners, Jun: include product base image in the grid
+            ->addAttributeToSelect('vendor_style') //Totsy, Josh: include vendor style in the grid
             ->addAttributeToSelect('sku')
             ->addAttributeToSelect('price')
             ->addAttributeToSelect('type')
@@ -170,6 +171,11 @@ class Mage_Adminhtml_Block_Catalog_Category_Tab_Product extends Mage_Adminhtml_B
             'width'     => '120px',
             'renderer'    => 'Harapartners_Service_Block_Adminhtml_Widget_Grid_Column_Renderer_Product_Image'
         ));
+        //Totsy, Josh: include vendor style in the grid
+        $this->addColumn('vendor_style', array(
+            'header'    => Mage::helper('catalog')->__('Vendor Style'),
+            'index' => 'vendor_style',
+        ));
         
         $this->addColumn('sku', array(
             'header'    => Mage::helper('catalog')->__('SKU'),
@@ -208,6 +214,20 @@ class Mage_Adminhtml_Block_Catalog_Category_Tab_Product extends Mage_Adminhtml_B
             return array_keys($products);
         }
         return $products;
+    }
+
+    public function getAdditionalJavaScript ()
+    {
+        /**
+         *  The row click event was used to select/deselect rows which was leading to products accidentally being removed
+         *  from categories. The code below will disable the row click event on this particular grid.  See MGN-759.
+         */
+        return "\n\nthis.rows = $$('#catalog_category_products_table tbody tr');\n"
+            . "for (var row=0; row<this.rows.length; row++) {\n"
+            . "Event.stopObserving(this.rows[row],'mouseover');\n"
+            . "Event.stopObserving(this.rows[row],'mouseout');\n"
+            . "Event.stopObserving(this.rows[row],'click');\n"
+            . "}\n";
     }
     
 }

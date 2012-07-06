@@ -24,16 +24,31 @@
  * @license     http://www.magentocommerce.com/license/enterprise-edition
  */
 ?>
-<?php $_product = $this->getProduct(); ?>
+<?php 
+	$_product = $this->getProduct(); 
+	$_category = Mage::registry('current_category');
+    $event_end_date = strtotime($_category->getEventEndDate());
+    $today = strtotime('NOW');
+?>
+
 <?php $buttonTitle = $this->__('Add to Cart'); ?>
-<?php if($_product->isSaleable()): ?>
-    <div class="add-to-cart">
-        <?php if(!$_product->isGrouped() && !$_product->isVirtual() ): ?>
-        <label for="qty"><?php echo $this->__('Qty:') ?></label>
-        <input type="text" name="qty" id="qty" maxlength="12" value="1" title="<?php echo $this->__('Qty') ?>" class="input-text qty" />
-        <?php //echo $this->getProductDefaultQty() * 1 ?>
-        <?php endif; ?>
-        <button type="button" title="<?php echo $buttonTitle ?>" class="button btn-cart" onclick="productAddToCartForm.submit(this)"><span><span><?php echo $buttonTitle ?></span></span></button>
-        <?php echo $this->getChildHtml('', true, true) ?>
-    </div>
+
+<?php if($today <= $event_end_date):  ?>
+	<?php if($_product->isSaleable()): ?>
+	    <div class="add-to-cart">
+	        <?php if(!$_product->isGrouped() && !$_product->isVirtual() ): ?>
+	        <label for="qty"><?php echo $this->__('Qty:') ?></label>
+	        <input type="text" name="qty" id="qty" maxlength="12" value="1" title="<?php echo $this->__('Qty') ?>" class="input-text qty" />
+	        <?php //echo $this->getProductDefaultQty() * 1 ?>
+	        <?php endif; ?>
+	        <button type="button" title="<?php echo $buttonTitle ?>" class="button btn-cart" onclick="productAddToCartForm.submit(this)"><span><span><?php echo $buttonTitle ?></span></span></button>
+	        <?php echo $this->getChildHtml('', true, true) ?>
+	    </div>
+	<?php endif; ?>
+<?php else: // the end of the if for time check ?>
+	<div class="msg-expired">
+	    <h3>Oh Shucks! You just missed it!</h3>
+	    <p>This sale has expired.</p>
+	    <p><a href="<?php echo $this->getBaseUrl(); ?>event">Check out our latest sales</a>.</p>
+	</div>
 <?php endif; ?>

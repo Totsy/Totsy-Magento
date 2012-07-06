@@ -113,6 +113,7 @@ function placeOrder($orderData) {
 
     // ==============================
     //Add products
+    Mage::register('order_import_ignore_stockcheck', true);
     foreach($orderData['items'] as $orderItemObj){
         $product = Mage::getModel('catalog/product')->loadByAttribute('sku', $orderItemObj->getData('sku'));
 
@@ -133,8 +134,6 @@ function placeOrder($orderData) {
 
         if ($qty > 0 || $orderObj->getData('cancel') == '1') {
             $item = $quote->addProduct($product, $qty);
-            //$item->setCustomPrice($orderItemObj->getData('price'));
-            //$item->getProduct()->setOrderImportFinalPrice($orderItemObj->getData('price'));
         }
     }
 
