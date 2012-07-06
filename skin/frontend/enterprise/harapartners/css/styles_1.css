@@ -40,7 +40,7 @@
 .top-cart .block-content p.subtotal {padding: 10px; display: block; text-align: right;}
 .top-cart .block-content p.subtotal span.label {font-size: 15px; color: #777777;}
 .top-cart .block-content p.subtotal span.price {font-size: 14px; font-weight: bold; color: #009900;}
-#topCartContent { min-width: 460px;}
+#topCartContent { min-width: 460px; z-index: 1000;}
 #topCartContent .timer-control-box { padding: 10px 0px 10px 183px;}
 #topCartContent .timer-control-box span { color: #707070; font-size: 12px; }
 #topCartContent .timer-control-box p, #topCartContent .timer-control-box p span { color: #009900; font-size: 14px; font-weight: bold;}
