@@ -38,7 +38,16 @@ class Mage_Customer_RevalidateController extends Mage_Core_Controller_Front_Acti
             $login = $this->getRequest()->getPost('login');
             $pass = $this->getRequest()->getPost('mobile'); //Harapartners, Yang: for mobile get pass
             $session = $this->_getSession();
+            $loggedInEmail = $session->getCustomer()->getEmail();
             $_SERVER['HTTP_USER_AGENT'];
+            //cdavidowski@crownpartners - Adding in a sanity check to make sure they are trying to log in as the already
+            //logged in user
+            if(strcasecmp(trim($login['username']),trim($loggedInEmail)) !== 0) {
+                $message = $this->__('The login entered does not match the currently logged in user.');
+                Mage::getSingleton('core/session')->addError($message);
+                $this->getResponse()->setRedirect(Mage::getModel('rushcheckout/observer')->getValidationUrl());
+                return;
+            }
             //Harapartners, Yang: for mobile get pass
             if ( $pass && preg_match("/\Mobile\b/i", $_SERVER['HTTP_USER_AGENT']) ){
                 $session->setData('CUSTOMER_LAST_VALIDATION_TIME', now());
@@ -49,9 +58,9 @@ class Mage_Customer_RevalidateController extends Mage_Core_Controller_Front_Acti
                 }else {
                     $this->getResponse()->setRedirect($session->getData('revalidate_before_auth_url'));
                 } 
-                return ;               
+                return ;
             }
-            //Harapartners, Yang: End
+            //Harapartners, Yang: End\\
             if (!empty($login['username']) && !empty($login['password'])) {
                 try {
                     $customer = Mage::getModel('customer/customer')
