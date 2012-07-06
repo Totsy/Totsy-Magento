@@ -232,6 +232,8 @@ shcv= '<?php if($_cart) { echo number_format($_cart->getQuote()->getGrandTotal()
 shcq= '<?php if($_cart) { $_cart->getItemsQty(); } ?>';
 shcp= '<?php if($product_ids) { echo $product_ids; } ?>';
 
+console.log("<?php echo $_product->getProductUrl(); ?>");
+
 </script>
 
 <script type="text/javascript">

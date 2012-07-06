@@ -248,43 +248,44 @@ class Harapartners_HpCheckout_Model_Checkout
             if (!$redirectUrl && $order->getCanSendNewEmailFlag()) {
                 try {
                     $order->sendNewOrderEmail();
-
-                    foreach ($order->getAllItems() as $orderItem) {
-
-                        $product = Mage::getModel('catalog/product')->load($orderItem->getProduct()->getId());
-
-                        if ( $product->getIsVirtual()==true ) {
-                            //loading a product to get the short description
-
-                            $shortDescription = $product->getShortDescription();
-
-                            $options = $orderItem->getProductOptions();
-
-                            $temp = explode("\n", $options['options'][0]['value']);
-
-                            $virtualProductCode = $temp[0];
-
-                            //picking the right template by the id set in the admin (transactional emails section)
-                            $templateId =  Mage::getModel('core/email_template')->loadByCode('_trans_Virtual_Product_Redemption')->getId();
-
-                            $store = Mage::app()->getStore();
-
-                            $email = $order->getCustomer()->getEmail();
-
-                            //attempting to send the email
-                            try {
-                                Mage::getModel('core/email_template')
-                                ->sendTransactional($templateId, "sales", $email, NULL, array("virtual_product_code"=>$virtualProductCode, "order"=>$order, "store"=>$store, "short_description" => $shortDescription));
-                                //Mage::register('coupon_code_email_sent',true);
-                            } catch (Exception $e) {
-                                Mage::logException($e);
-                            }
-                        }
-                    }
+                    
                 } catch (Exception $e) {
                     Mage::logException($e);
                 }
             }
+            
+            foreach ($order->getAllItems() as $orderItem) {
+
+                $product = Mage::getModel('catalog/product')->load($orderItem->getProduct()->getId());
+
+                if ( $product->getIsVirtual()==true ) {
+                    //loading a product to get the short description
+
+                    $shortDescription = $product->getShortDescription();
+
+                    $options = $orderItem->getProductOptions();
+
+                    $temp = explode("\n", $options['options'][0]['value']);
+
+                    $virtualProductCode = $temp[0];
+
+                    //picking the right template by the id set in the admin (transactional emails section)
+                    $templateId =  Mage::getModel('core/email_template')->loadByCode('_trans_Virtual_Product_Redemption')->getId();
+
+                    $store = Mage::app()->getStore();
+
+                    $email = $order->getCustomer()->getEmail();
+
+                    //attempting to send the email
+                    try {
+                        Mage::getModel('core/email_template')
+                        ->sendTransactional($templateId, "sales", $email, NULL, array("virtual_product_code"=>$virtualProductCode, "order"=>$order, "store"=>$store, "short_description" => $shortDescription));
+                        //Mage::register('coupon_code_email_sent',true);
+                    } catch (Exception $e) {
+                        Mage::logException($e);
+                    }
+                }
+            }              
 
             $this->_checkoutSession->setLastOrderId($order->getId())
             ->setRedirectUrl($redirectUrl)
