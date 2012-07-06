@@ -98,5 +98,32 @@ class Harapartners_Stockhistory_Model_Purchaseorder extends Mage_Core_Model_Abst
 
         return $this;
     }
+
+    public function totalUnitsSold($collection) {
+        foreach($collection as $result) {
+         //   var_dump('PO ID:  ' . 727);
+            $transactionsColl = Mage::getModel('stockhistory/transaction')->getCollection();
+            $transactionsColl->getSelect()->where('po_id=' . $result->getId() . ' and product_id IS NOT null and action_type= 2');
+            if ($transactionsColl->getSize()) {
+                $product_ids = array();
+                foreach($transactionsColl as $trans) {
+                    $product_ids[] = $trans['product_id'];
+                }
+            //    var_dump($product_ids);
+                $ordersColl = Mage::getModel('sales/order_item')->getCollection();
+                $ordersColl->getSelect()->where('product_id in ('. implode(',', $product_ids) .')' );
+               $total_units = 0;
+               foreach($ordersColl as $order) {
+                    $qty = $order->getQtyOrdered() - $order->getQtyReturned() - $order->getQtyCanceled();
+                    $total_units += $qty;
+               }
+           }
+         //   var_dump($total_units);
+
+          //  die();
+            $result->setData('unit_total', $total_units);
+        }
+        return $collection;
+    }
     
 }

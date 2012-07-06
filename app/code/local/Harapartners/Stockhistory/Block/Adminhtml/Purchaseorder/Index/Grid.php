@@ -36,7 +36,7 @@ class Harapartners_Stockhistory_Block_Adminhtml_Purchaseorder_Index_Grid extends
                         array('category_event_end_date' => 'cat_dt.value')
                 )
                 ->where('cat_dt.attribute_id = ?', $eventEndDateAttrId);
-
+        $collection = Mage::getModel('stockhistory/purchaseorder')->totalUnitsSold($collection);
         $this->setCollection($collection);
         return parent::_prepareCollection();
     }
@@ -85,6 +85,14 @@ class Harapartners_Stockhistory_Block_Adminhtml_Purchaseorder_Index_Grid extends
                     'align'        =>    'right',
                     'width'        =>    '25px',
                     'index'        =>    'category_id',
+        ));
+
+        $this->addColumn('unit_total', array(
+                    'header'    =>    $helper->__('# of Units'),
+                    'align'        =>    'right',
+                    'width'        =>    '15px',
+                    'index'        =>    'unit_total',
+                    'filter'    =>  false
         ));
         
         $this->addColumn('category_event_end_date', array(
