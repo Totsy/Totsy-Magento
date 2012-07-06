@@ -255,9 +255,6 @@ class Zend_Feed_Builder implements Zend_Feed_Builder_Interface
         if (isset($data['language'])) {
             $this->_header->setLanguage($data['language']);
         }
-        if (isset($data['hightestsave'])) {
-            $this->_header->setHightestsave($data['hightestsave']);
-        }
         if (isset($data['ttl'])) {
             $this->_header->setTtl($data['ttl']);
         }
@@ -366,25 +363,6 @@ class Zend_Feed_Builder implements Zend_Feed_Builder_Interface
             if (isset($row['content'])) {
                 $entry->setContent($row['content']);
             }
-            
-            /*Hara Partners Sailthru email feed Start*/
-            if (isset($row['image'])) {
-            	$entry->setImage($row['image']);
-        	}
-        	if (isset($row['shortdescription'])) {
-                $entry->setShortdescription($row['shortdescription']);
-            }
-            if (isset($row['save'])) {
-                $entry->setSave($row['save']);
-            }
-            if (isset($row['status'])) {
-                $entry->setStatus($row['status']);
-            }
-            if (isset($row['keywords'])) {
-                $entry->setKeywords($row['keywords']);
-            }
-            /*Hara Partners Sailthru email feed End*/
-            
             if (isset($row['lastUpdate'])) {
                 $entry->setLastUpdate($row['lastUpdate']);
             }
