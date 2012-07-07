@@ -21,6 +21,11 @@
 				$smallImage = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA).'catalog/category/'.$liveCategory['image'];
 			}
 		}
+		else{
+			echo "dink";
+				//$smallImage = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA).'catalog/product/placeholder/small_image.jpg';
+				$smallImage = "/skin/frontend/enterprise/harapartners/images/catalog/product/placeholder/small_image.jpg";
+		}
 	?>
 	<div class="big-div-not-found">
 	<a href="<?php echo $this->getBaseUrl().$liveCategory['url_path']?>">
