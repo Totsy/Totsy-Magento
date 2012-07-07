@@ -44,6 +44,10 @@
                     $creditCardImage = 'cc_amex.gif';
                     $cardType = 'American Express';
                     break;
+                case "DI":
+                    $creditCardImage = 'cc_discover.gif';
+                    $cardType = 'Discover';
+                    break;
             }
     ?>
     <?php if($payment->getIsDefault()== 0 && $payment->getData('saved_by_customer')):?>
