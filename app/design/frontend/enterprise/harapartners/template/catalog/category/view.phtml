@@ -70,7 +70,7 @@
 	<?php if ( !$upComingFlag ):?>
 		<h1><a href="<?php echo $this->getUrl('event/?ref=todays_sales') ?>">Today's Sales</a><span> / <span><?php echo $_helper->categoryAttribute($_category, $_category->getName(), 'name') ?></h1>
 	<?php else :?>
-		<h1><a href="<?php echo $this->getUrl('event#event-upcoming');?>">Upcoming Sales</a><span> / <span><?php echo $_helper->categoryAttribute($_category, $_category->getName(), 'name') ?></h1>
+		<h1><a href="/event#event-upcoming">Upcoming Sales</a><span> / <span><?php echo $_helper->categoryAttribute($_category, $_category->getName(), 'name') ?></h1>
 	<?php endif;?>
 		<p class="count-down-timer" id="time-<?php echo $timer ?>"></p>					 
 		<script type="text/javascript">
