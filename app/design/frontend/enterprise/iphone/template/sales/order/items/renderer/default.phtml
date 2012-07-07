@@ -1,4 +1,3 @@
-
 <?php $_item = $this->getItem() ?>
 <tr class="border" id="order-item-row-<?php echo $_item->getId() ?>">
     <td><h3 class="product-name"><?php echo $this->htmlEscape($_item->getName()) ?></h3>
@@ -9,14 +8,14 @@
             <?php if (!$this->getPrintStatus()): ?>
                 <?php $_formatedOptionValue = $this->getFormatedOptionValue($_option) ?>
                 <dd<?php if (isset($_formatedOptionValue['full_view'])): ?> class="truncated"<?php endif; ?>>
-                    <?php echo $_formatedOptionValue['value'] ?>
                     <?php if (isset($_formatedOptionValue['full_view'])): ?>
                     <div class="truncated_full_value">
                         <dl class="item-options">
-                            <dt><?php echo $this->escapeHtml($_option['label']) ?></dt>
                             <dd><?php echo $_formatedOptionValue['full_view'] ?></dd>
                         </dl>
                     </div>
+		            <?php else: ?>
+                    	<?php echo $_formatedOptionValue['value'] ?>
                     <?php endif; ?>
                 </dd>
             <?php else: ?>
