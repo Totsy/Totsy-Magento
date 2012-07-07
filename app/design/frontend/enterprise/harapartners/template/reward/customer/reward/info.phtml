@@ -42,7 +42,8 @@ $expireIn = $this->getExpireIn();
         <dt><?php echo $this->__('Current exchange rates:')?></dt>
 <?php if ($this->getPtsToAmountRateAmount() || $this->getAmountToPtsRatePts()): ?>
     <?php if ($this->getPtsToAmountRateAmount()): ?>
-            <dd><?php echo $this->__('Each %s can be redeemed for %s.', $helper->formatReward($this->getPtsToAmountRatePts(), null, null, '<strong>%s</strong>'), '<strong>' . $helper->formatAmount($this->getPtsToAmountRateAmount()) . '</strong>')?></dd>
+           <!-- <dd><?php //echo $this->__('Each %s can be redeemed for %s.', $helper->formatReward($this->getPtsToAmountRatePts(), null, null, '<strong>%s</strong>'), '<strong>' . $helper->formatAmount($this->getPtsToAmountRateAmount()) . '</strong>')?></dd>-->
+            <dd>Each Totsy Credit is worth <b>$0.01</b>, or 100 Totsy Credits for <b>$1.00</b>.</dd>
     <?php endif;?>
     <?php if ($this->getAmountToPtsRatePts()): ?>
             <dd><?php echo $this->__('Each %s spent will earn %s.', '<strong>' . $helper->formatAmount($this->getAmountToPtsRateAmount()) . '</strong>', $helper->formatReward($this->getAmountToPtsRatePts(), null, null, '<strong>%s</strong>'))?></dd>
