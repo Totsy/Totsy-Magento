@@ -11,11 +11,11 @@
  * to eula@harapartners.com so we can send you a copy immediately.
  * 
  -->
-
+ 
 <config>
     <modules>
         <Harapartners_EmailFactory>
-            <version>1.0.0</version>
+            <version>1.0.1</version>
         </Harapartners_EmailFactory>
     </modules>
     <global>
