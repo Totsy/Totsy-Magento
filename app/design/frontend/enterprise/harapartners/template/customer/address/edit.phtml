@@ -93,17 +93,17 @@
                     </div>
                 </div>
                 <div class="field">
-                    <label for="region_id" class="required"><em>*</em><?php echo $this->__('State/Province') ?></label>
+                    <label for="region_id" class="required"><em>*</em><?php echo $this->__('State') ?></label>
                     
                     <div class="input-box totsy-selective-input-box">
-                    <span>Please select region, state or province</span>
-                        <select id="region_id" name="region_id" title="<?php echo $this->__('State/Province') ?>" class="validate-select" style="display:none;">
-                           <option value=""><?php echo $this->__('Please select region, state or province') ?></option>
+                    <span>Please select state</span>
+                        <select id="region_id" name="region_id" title="<?php echo $this->__('State') ?>" class="validate-select" style="display:none;">
+                           <option value=""><?php echo $this->__('Please select state') ?></option>
                         </select>
                         <script type="text/javascript">
                             $('region_id').setAttribute('defaultValue',  "<?php echo $this->getAddress()->getRegionId() ?>");
                         </script>
-                        <input type="text" id="region" name="region" value="<?php echo $this->htmlEscape($this->getAddress()->getRegion()) ?>"  title="<?php echo $this->__('State/Province') ?>" class="input-text hidden" />
+                        <input type="text" id="region" name="region" value="<?php echo $this->htmlEscape($this->getAddress()->getRegion()) ?>"  title="<?php echo $this->__('State') ?>" class="input-text hidden" />
                     </div>
                 </div>
             </li>
