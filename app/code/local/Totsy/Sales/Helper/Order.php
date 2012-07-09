@@ -89,7 +89,7 @@ class Totsy_Sales_Helper_Order
             );
 
             $productDiscount = $product->getPrice() - $product->getSpecialPrice();
-            $savings += $productDiscount * $orderItem->getQtyOrdered();
+            $savings += $productDiscount * $orderItem->getQty();
         }
 
         return $savings;
