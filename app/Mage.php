@@ -578,6 +578,12 @@ final class Mage
             self::setRoot();
             self::$_events = new Varien_Event_Collection();
             self::$_config = new Mage_Core_Model_Config($options);
+            
+            //Harapartners, Jun, START: Force mobile agent into mobile store, this is important to avoid caching conflict, and also important for store segregation
+        	if (isset($_SERVER['HTTP_USER_AGENT']) && preg_match('/iPhone|Android|BlackBerry/', $_SERVER['HTTP_USER_AGENT'])) {
+				$code = 'mobile';
+			}
+			//Harapartners, Jun, END
 
             Varien_Profiler::start('self::app::init');
             self::$_app->init($code, $type, $options);
@@ -633,6 +639,13 @@ final class Mage
             self::$_app    = new Mage_Core_Model_App();
             self::$_events = new Varien_Event_Collection();
             self::$_config = new Mage_Core_Model_Config($options);
+            
+            //Harapartners, Jun, START: Force mobile agent into mobile store, this is important to avoid caching conflict, and also important for store segregation
+        	if (isset($_SERVER['HTTP_USER_AGENT']) && preg_match('/iPhone|Android|BlackBerry/', $_SERVER['HTTP_USER_AGENT'])) {
+				$code = 'mobile';
+			}
+			//Harapartners, Jun, END
+            
             self::$_app->run(array(
                 'scope_code' => $code,
                 'scope_type' => $type,
@@ -810,6 +823,7 @@ final class Mage
      */
     public static function printException(Exception $e, $extra = '')
     {
+    	
         if (self::$_isDeveloperMode) {
             print '<pre>';
 
