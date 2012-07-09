@@ -161,7 +161,7 @@
         	<ul>
 		        <?php foreach ($_options as $_option) : ?>
 		        <li>
-	                <p><?php echo $this->htmlEscape($_option['label']) ?></p>
+	                <p><?php echo $this->htmlEscape($_option['label']) ?>: </p>
 	                <p class="options">
 	                    <?php if (is_array($_option['value'])): ?>
 	                    	<?php echo nl2br(implode("\n", $_option['value'])) ?>
