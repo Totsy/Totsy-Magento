@@ -17,7 +17,21 @@ class Harapartners_EmailFactory_Model_Observer extends Mage_Core_Model_Abstract 
 	protected function _sendSailthruEmailWithMageExpection($sailthruClient, $email, $vars = array(), $lists = array(), $templates = array(), $verified = 0, $optout = null, $send = null, $send_vars = array()){
 		//Convert generic exception into a Mage exception for better error descriptions
 		try{
-			$sailthruClient->setEmail($email, $vars, $lists, $templates, $verified, $optout, $send, $send_vars);
+			//$sailthruClient->setEmail($email, $vars, $lists, $templates, $verified, $optout, $send, $send_vars);
+			$queueData = array(
+					'call' => array(
+						'class' => 'emailfactory/sailthruconfig',
+						'methods' => array(
+							'getHandle',
+							'setEmail'
+						)
+					),
+					'params' => array(
+						'setEmail' => compact('email', 'vars', 'lists', 'templates', 'verified', 'optout', 'send', 'send_vars')
+					)
+			);
+			$queue = Mage::getModel('emailfactory/sailthruqueue');
+			$queue->addToQueue($queueData);
 		}catch (Exception $e){
 			Mage::logException($e);
 			Mage::throwException($e->getMessage());
@@ -160,10 +174,24 @@ class Harapartners_EmailFactory_Model_Observer extends Mage_Core_Model_Abstract 
 	              if (isset($_COOKIE['sailthru_bid'])) {
 	                  $data['message_id'] = $_COOKIE['sailthru_bid'];
 	              }                  
-	              $success = $sailthru->apiPost("purchase", $data);
-	              if(count($success) == 2) {
-	                  Mage::throwException($this->__($success["errormsg"]));
-	              }
+	             // $success = $sailthru->apiPost("purchase", $data);
+	              $queueData = array(
+	              		'call' => array(
+	              				'class' => 'emailfactory/sailthruconfig',
+	              				'methods' => array(
+	              						'getHandle',
+	              						'apiPost'
+	              				)
+	              		),
+	              		'params' => array(
+	              				'apiPost' => array('purchase') + compact('data')
+	              		)
+	              );
+	              $queue = Mage::getModel('emailfactory/sailthruqueue');
+	              $queue->addToQueue($queueData);
+	              //if(count($success) == 2) {
+	              //    Mage::throwException($this->__($success["errormsg"]));
+	              //}
 	          }
 	          return $this;
     	}catch(Exception $e){
