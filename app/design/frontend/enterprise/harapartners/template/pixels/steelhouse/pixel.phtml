@@ -1,0 +1,76 @@
+<?php
+$_product = Mage::registry('current_product');
+$_category = Mage::registry('current_category');
+$_cart = $this->helper('checkout/cart')->getCart();
+
+$product_ids = implode(",", $_cart->getProductIds());
+?>
+
+<!-- s -->
+<script type="text/javascript">
+    var shver='2.8.6';
+<?php if($_product && $_category): ?>
+    var shpn= '<?php echo addslashes($_product->getName()) ?>';
+    var shpc= "<?php echo addslashes(strip_tags(html_entity_decode(str_replace(array("\r", "\n"), '', $_product->getDescription())))) ?>";
+    var shpp= '<?php echo number_format($_product->getPrice(), 2) ?>';
+    var shpb= '<?php echo addslashes($_product->getCategory()->name); ?>';
+    var shpi= '<?php echo $_product->getProductUrl() ?>';
+    var shps= '<?php echo $_product->getSku() ?>';
+<?php else: ?>
+    var shpn= '';
+    var shpc= '';
+    var shpp= '';
+    var shpb= '';
+    var shpi= '';
+    var shps= '';
+<?php endif; ?>
+    var shcv= '<?php echo number_format($_cart->getQuote()->getGrandTotal(), 2) ?>';
+    var shcq= '<?php echo $_cart->getItemsQty() ?>';
+    var shcp= '<?php echo $product_ids ?>';
+    //'SHOPPING CART COMMA SEPARATED LIST OF PRODUCT IDs';
+    var additional = '';
+    var aid = '9577';
+<?php if($referrer = Mage::registry('referrer_url')): ?>
+    var tdr = encodeURIComponent('<?php echo addslashes($referrer); ?>');
+<?php else: ?>
+    var tdr = '';
+    if (top.document.referrer != '') {
+        tdr = encodeURIComponent(top.document.referrer);
+    }
+<?php endif;?>
+<?php if($current_url = Mage::registry('current_url')): ?>
+    var plh = encodeURIComponent('<?php echo addslashes($current_url); ?>');
+<?php else: ?>
+    var plh = '';
+    if (parent.location.href != '') {
+        plh = encodeURIComponent(parent.location.href);
+    }
+<?php endif; ?>
+    shpi = encodeURIComponent(shpi);
+
+    Event.observe(window,'load',function () {
+        steelhouse = {add:function (a, b, c, d) {
+            d = d || false;
+            if (a.addEventListener) {
+                a.addEventListener(b, c, d)
+            } else if (a.attachEvent) {
+                a.attachEvent("on" + b, c)
+            }
+        }, load:function () {
+            var a;
+            if (typeof a == 'undefined') {
+                a = Math.random() * 100000000000000000
+            }
+            var b = document.createElement('script');
+            var c = 'px.steelhousemedia.com/st?aid=' + aid + '&cb=' + a + '&shcv=' + shcv + '&shcq=' + shcq + '&shcp=' + shcp + '&shpn=' + shpn + '&shpc=' + shpc + '&shpp=' + shpp + '&shpb=' + shpb + '&shpi=' + shpi + '&shps=' + shps + '&tdr=' + tdr + '&plh=' + plh + additional;
+            b.type = 'text/javascript';
+            b.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + c;
+            var d = document.getElementsByTagName('script');
+            var e = Number(d.length) - 1;
+            var f = document.getElementsByTagName('script')[e];
+            f.parentNode.insertBefore(b, f)
+        }};
+        steelhouse.load();
+    });
+</script>
+<!-- Steelhouse -->

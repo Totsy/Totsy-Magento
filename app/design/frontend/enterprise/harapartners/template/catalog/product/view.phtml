@@ -35,10 +35,6 @@
 $_helper = $this->helper('catalog/output');
 $_product = $this->getProduct();
 
-$_cart = $this->helper('checkout/cart')->getCart();
-
-$product_ids = implode(",", $_cart->getProductIds());
-
 //Harapartners, Jun, in the controller we will guarantee the current categor must exists, if not we redirect
 $_category = Mage::registry('current_category');
 ?>
@@ -162,57 +158,6 @@ direction: "down"
 </div>
 
 
-<!-- s -->
-<script type="text/javascript">
-var shver='2.8.6';
-var shpn= '<?php echo addslashes($_product->getName()) ?>';
-var shpc= "<?php echo addslashes(strip_tags(html_entity_decode(str_replace(array("\r", "\n"), '', $_product->getDescription())))) ?>";
-var shpp= '<?php echo number_format($_product->getPrice(), 2) ?>';
-var shpb= '<?php echo addslashes($_product->getCategory()->name); ?>';
-var shpi= '<?php echo $_product->getProductUrl() ?>';
-var shps= '<?php echo $_product->getSku() ?>';
-var shcv= '<?php echo number_format($_cart->getQuote()->getGrandTotal(), 2) ?>';
-var shcq= '<?php echo $_cart->getItemsQty() ?>';
-var shcp= '<?php echo $product_ids ?>';
-//'SHOPPING CART COMMA SEPARATED LIST OF PRODUCT IDs';
-var additional = '';
-var aid = '9577';
-var tdr = '';
-if (top.document.referrer != '') {
-    tdr = encodeURIComponent(top.document.referrer);
-}
-var plh = '';
-if (parent.location.href != '') {
-    plh = encodeURIComponent(parent.location.href);
-}
-shpi = encodeURIComponent(shpi);
-
-Event.observe(window,'load',function () {
-    steelhouse = {add:function (a, b, c, d) {
-        d = d || false;
-        if (a.addEventListener) {
-            a.addEventListener(b, c, d)
-        } else if (a.attachEvent) {
-            a.attachEvent("on" + b, c)
-        }
-    }, load:function () {
-        var a;
-        if (typeof a == 'undefined') {
-            a = Math.random() * 100000000000000000
-        }
-        var b = document.createElement('script');
-        var c = 'px.steelhousemedia.com/st?aid=' + aid + '&cb=' + a + '&shcv=' + shcv + '&shcq=' + shcq + '&shcp=' + shcp + '&shpn=' + shpn + '&shpc=' + shpc + '&shpp=' + shpp + '&shpb=' + shpb + '&shpi=' + shpi + '&shps=' + shps + '&tdr=' + tdr + '&plh=' + plh + additional;
-        b.type = 'text/javascript';
-        b.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + c;
-        var d = document.getElementsByTagName('script');
-        var e = Number(d.length) - 1;
-        var f = document.getElementsByTagName('script')[e];
-        f.parentNode.insertBefore(b, f)
-    }};
-    steelhouse.load();
-});
-</script>
-<!-- Steelhouse -->
 
 <script type="text/javascript">
 // jQuery(document).ready(function(){
