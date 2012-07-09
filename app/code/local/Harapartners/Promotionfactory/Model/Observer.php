@@ -29,7 +29,7 @@ class Harapartners_Promotionfactory_Model_Observer {
         //Return when there is already a coupon code associated
         $reservationCodeOption = $quoteItem->getOptionByCode('reservation_code');
         if($reservationCodeOption instanceof Mage_Sales_Model_Quote_Item_Option
-            && $reservationCodeOption->getId()){
+            && $reservationCodeOption->getValue()){
             return;
         }
 
@@ -113,6 +113,34 @@ class Harapartners_Promotionfactory_Model_Observer {
         }
     }
 
+    public function cancelVirtualProductCouponInOrder(Varien_Event_Observer $observer) {
+        //For order split, DB access is within one transaction, cancelling logic is not required (optional)
+        $order = $observer->getEvent()->getOrder();
+
+        if(!$order || !$order->getId()){
+            return;
+        }
+        foreach($order->getAllItems() as $orderItem){
+            if($orderItem->getProductType() != 'virtual'){
+                continue;
+            }
+            $productOptions = unserialize($orderItem->getData('product_options'));
+            if(isset($productOptions['options'])){
+                foreach($productOptions['options'] as $optionDataArray){
+                    if(isset($optionDataArray['label'])
+                        && $optionDataArray['value']
+                        && $optionDataArray['label'] == 'Reservation Code'){
+                        $vpc = Mage::getModel('promotionfactory/virtualproductcoupon')->loadByCode($optionDataArray['value']);
+                        if($vpc->getId()){
+                            $vpc->setData('status', Harapartners_Promotionfactory_Model_Virtualproductcoupon::COUPON_STATUS_AVAILABLE)
+                            ->save();
+                        }
+                    }
+                }
+            }
+        }
+        return;
+    }
 
     public function saleOrderPlaceAfter(Varien_Event_Observer $observer) {
 
@@ -121,39 +149,8 @@ class Harapartners_Promotionfactory_Model_Observer {
 
         if(!$order || !$order->getId()) {
             return;
-            
+
         }
-        
-        /*
-        if( $order && Mage::registry('coupon_code_email_sent')==false ) {
-            foreach ($order->getAllItems() as $orderItem) {
-
-                if ($orderItem->getProductType() == 'virtual') {
-
-                    //loading a product to get the short description
-                    $product = Mage::getModel('catalog/product')->load($orderItem->getProduct()->getId());
-                    $shortDescription = $product->getShortDescription();
-                    
-                    print_r(unserialize($orderItem->getOptionByCode('attributes')->getValue()));
-                                        
-                    $virtualProductCode = $vpCodeStringArray[0];
-
-                    //picking the right template by the id set in the admin (transactional emails section)
-                    $templateId =  Mage::getModel('core/email_template')->loadByCode('_trans_Virtual_Product_Redemption')->getId();
-
-                    $store = Mage::app()->getStore();
-
-                    //attempting to send the email
-                    try {
-                        Mage::getModel('core/email_template')
-                        ->sendTransactional($templateId, "sales", $email, NULL, array("virtual_product_code"=>$virtualProductCode, "order"=>$order, "store"=>$store, "short_description" => $shortDescription));
-                        Mage::register('coupon_code_email_sent',true); 
-                    } catch (Exception $e) {
-                        Mage::logException($e);
-                    }
-                }
-            }
-        } */
 
         $couponCode = $order->getQuote()->getCouponCode();
         if(!$couponCode){
