@@ -62,4 +62,14 @@
             </totsy>
         </routers>
     </admin>
+    <phpunit>
+        <suite>
+            <modules>
+                <Totsy_Customer/>
+            </modules>
+            <fixture>
+                <totsycustomer_autoregistration>Totsy_Customer_Model_Autoregistration</totsycustomer_autoregistration>
+            </fixture>
+        </suite>
+    </phpunit>
 </config>
