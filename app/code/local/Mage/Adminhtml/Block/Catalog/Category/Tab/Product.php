@@ -215,6 +215,20 @@ class Mage_Adminhtml_Block_Catalog_Category_Tab_Product extends Mage_Adminhtml_B
         }
         return $products;
     }
+
+    public function getAdditionalJavaScript ()
+    {
+        /**
+         *  The row click event was used to select/deselect rows which was leading to products accidentally being removed
+         *  from categories. The code below will disable the row click event on this particular grid.  See MGN-759.
+         */
+        return "\n\nthis.rows = $$('#catalog_category_products_table tbody tr');\n"
+            . "for (var row=0; row<this.rows.length; row++) {\n"
+            . "Event.stopObserving(this.rows[row],'mouseover');\n"
+            . "Event.stopObserving(this.rows[row],'mouseout');\n"
+            . "Event.stopObserving(this.rows[row],'click');\n"
+            . "}\n";
+    }
     
 }
 
