@@ -48,7 +48,7 @@ $product_ids = implode(",", $_cart->getProductIds());
 <?php endif; ?>
     shpi = encodeURIComponent(shpi);
 
-    Event.observe(window,'load',function () {
+
         steelhouse = {add:function (a, b, c, d) {
             d = d || false;
             if (a.addEventListener) {
@@ -71,6 +71,5 @@ $product_ids = implode(",", $_cart->getProductIds());
             f.parentNode.insertBefore(b, f)
         }};
         steelhouse.load();
-    });
 </script>
 <!-- Steelhouse -->

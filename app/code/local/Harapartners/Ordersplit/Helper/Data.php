@@ -163,7 +163,7 @@ class Harapartners_Ordersplit_Helper_Data extends Mage_Core_Helper_Abstract {
         // setStoreId is important for admin generated orders
         $oldQuote = Mage::getModel('sales/quote')->setStoreId($masterOrder->getStoreId())->load($masterOrder->getQuoteId());
         if(!$oldQuote || !$oldQuote->getId()){
-                return null;
+            $oldQuote = false;
         }
         
         $newOrderCount = 0;
@@ -174,7 +174,11 @@ class Harapartners_Ordersplit_Helper_Data extends Mage_Core_Helper_Abstract {
                             
         //Harapartners, Jun, Cancel previous orders first, this will re-stock existing products
         //Critical for cart reservation logic!
-        $oldOrder->cancel()->setStatus('splitted')->setState('splitted')->save();
+
+        $oldOrder
+            ->cancel()
+            ->setState('splitted','splitted',$this->__('Order Canceled by Split Process'),false)
+            ->save();
         
         //configurable products and related simple products must be configured the same fullfillment type
         
@@ -213,39 +217,65 @@ class Harapartners_Ordersplit_Helper_Data extends Mage_Core_Helper_Abstract {
                             }
                         }
                     }
+
+                    if($oldQuote) {
                     
-                    $billingAddress = $oldQuote->getBillingAddress()
-                                                ->setQuote($newQuote)
-                                                //->setQuoteId($newQuote->getId())
-                                                ->setAddressId(null)
-                                                ->setEntityId(null)
-                                                ->getData();
-                                            
-                    $shippingAddress = $oldQuote->getShippingAddress()
-                                                 ->setQuote($newQuote)
-                                                 //->setQuoteId($newQuote->getId())
-                                                 ->setAddressId(null)
-                                                 ->setEntityId(null)
-                                                 ->setShippingMethod($masterOrder->getShippingMethod())
-                                                 ->getData();
-                                                 
-                    $newQuote->getBillingAddress()
-                            ->setData($billingAddress);
-                    $newQuote->getShippingAddress()
-                            ->setData($shippingAddress)
-                            ->setCollectShippingRates(true)
-                            ->collectShippingRates();    
-                    $oldPayment = $oldQuote->getPayment();
-                    
-                    if(!$oldPayment->getCybersourceSubid() && !!$oldOrder->getPayment()->getCybersourceSubid())    {
-                        $oldPayment->setCybersourceSubid($oldOrder->getPayment()->getCybersourceSubid());
-                    }                
-                    $oldPayment->setPaymentId(null)
+                        $billingAddress = $oldQuote->getBillingAddress()
+                                                    ->setQuote($newQuote)
+                                                    //->setQuoteId($newQuote->getId())
+                                                    ->setAddressId(null)
+                                                    ->setEntityId(null)
+                                                    ->getData();
+
+                        $shippingAddress = $oldQuote->getShippingAddress()
+                                                     ->setQuote($newQuote)
+                                                     //->setQuoteId($newQuote->getId())
+                                                     ->setAddressId(null)
+                                                     ->setEntityId(null)
+                                                     ->setShippingMethod($masterOrder->getShippingMethod())
+                                                      ->getData();
+
+                        $newQuote->getBillingAddress()
+                                ->setData($billingAddress);
+                        $newQuote->getShippingAddress()
+                                ->setData($shippingAddress)
+                        ;
+
+                        $oldPayment = $oldQuote->getPayment();
+
+
+                        if(!$oldPayment->getCybersourceSubid() && !!$oldOrder->getPayment()->getCybersourceSubid())    {
+                            $oldPayment->setCybersourceSubid($oldOrder->getPayment()->getCybersourceSubid());
+                        }
+                        $oldPayment->setPaymentId(null)
                             ->setQuoteId($newQuote->getId())
                             ->setQuote($newQuote);
-                    
-                    //test payment method "free"
-                    $newQuote->getPayment()->importData($oldPayment->getData(), false);
+
+                        //test payment method "free"
+                        $newQuote->getPayment()->importData($oldPayment->getData(), false);
+                    } else {
+                        //2012-07-08 Using logic from Magento Admin Order Edit to handle the copying of the addresses when no quote exists
+                        $newQuote->getBillingAddress()->setCustomerAddressId('');
+                        Mage::helper('core')->copyFieldset(
+                            'sales_copy_order_billing_address',
+                            'to_order',
+                            $oldOrder->getBillingAddress(),
+                            $newQuote->getBillingAddress()
+                        );
+
+                        $newQuote->getShippingAddress()->setCustomerAddressId('');
+                        Mage::helper('core')->copyFieldset(
+                            'sales_copy_order_shipping_address',
+                            'to_order',
+                            $oldOrder->getShippingAddress(),
+                            $newQuote->getShippingAddress()
+                        );
+
+                        $newQuote->getPayment()->addData($oldOrder->getPayment()->getData());
+                    }
+
+                    $newQuote->setCollectShippingRates(true)
+                            ->collectShippingRates();
                     
                     //Harapartners, Jun, to be deleted
 //                    $this->_revertGiftCard($oldOrder, $newQuote); //Gift Card logic is not effective in the current logic
@@ -301,7 +331,7 @@ class Harapartners_Ordersplit_Helper_Data extends Mage_Core_Helper_Abstract {
 
                        if(!!$newOrder && !!$newOrder->getId()) {
                            if(!empty($state)) {
-                            $newOrder->setState($state, true)->save();
+                            $newOrder->setState($state, true, $this->__('Order Created by Split/Batch Cancel Process'))->save();
                         }
                     }else{
                         //order failed...
