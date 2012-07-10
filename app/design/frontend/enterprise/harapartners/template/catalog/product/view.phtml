@@ -35,10 +35,6 @@
 $_helper = $this->helper('catalog/output');
 $_product = $this->getProduct();
 
-$_cart = $this->helper('checkout/cart')->getCart();
-
-$product_ids = implode(",", $_cart->getProductIds());
-
 //Harapartners, Jun, in the controller we will guarantee the current categor must exists, if not we redirect
 $_category = Mage::registry('current_category');
 ?>
@@ -108,8 +104,7 @@ direction: "down"
 <?php endif; ?>
 </div>
 <div class="product-shop product-view-block">
-                <div class="product-main-info">
-                    
+                <div id="product-main-info" class="product-main-info">
                     <p class="product-ids"><?php echo $this->__('SKU# %s', $this->htmlEscape($_product->getSku())); ?></p>
                     <?php //echo $this->getReviewsSummaryHtml($_product, false, true)?>
                     <?php echo $this->getChildHtml('alert_urls') ?>
@@ -162,77 +157,7 @@ direction: "down"
         <?php echo $this->getChildHtml('product_additional_data') ?>
 </div>
 
-<!-- Social Labs BEGIN -->
-<?php
-//include the signer
-require("dev/sociablelabs/sociable_signer.php");
 
-if( Mage::getSingleton('customer/session')->getCustomerId() ) {
-
-    $customer_id = Mage::getSingleton('customer/session')->getCustomerId();
-
-    $rondavu_data = array (
-        "config" =>  array ( "version" => "1.2" ),
-        "user" => array (
-            "id" => array (
-                array ( "id" => $customer_id, "type" => "totsy" )
-            ),
-            "tracking" => array (
-                array (
-                    "name" => "refId",
-                    "value" => $customer_id
-                )
-            )
-        ),
-        "primary_mo" => array (
-            "id" => array( array("id" => $_product->getId(), "type" => "product" )),
-            "name" => array(array("name" => $_product->getName())),
-            "primary_tag" => $_product->getCategory()->name,
-            "tags" => array("product", $_category->getName(),
-                $_product->getCategory()->name, $_category->getUrl()),
-            "description"=> array(array("description" => strip_tags(html_entity_decode(str_replace(array("\r", "\n"), '', $_product->getDescription()))) )),
-            "url"=> array(
-                "detail" => 
-                    $_product->getProductUrl(),
-                    "picture" => array(
-                        "primary" => 
-                            (string) $this->helper('catalog/image')->init($_product, 'image')->resize(500),
-                        "primary_secure" => 
-                            str_replace("http:","https:", $this->helper('catalog/image')->init($_product, 'image')->resize(500))
-                    )
-                )
-                ,
-                "price" => array(
-                    "retail_price" => $_product->getFinalPrice(),
-                    "sale_price" => $_product->getSaleWholesale(),
-                    "currency"=> "USD"
-                )));
-
-    // declare a path to the key
-    $key_path = "dev/sociablelabs/sign_private_key";
-    $socialable_labs_output = rondavu_sign($rondavu_data, $key_path);
-}
-?>
-
-<script type="text/javascript">
-    //socialble labs
-    var socialableLabsOutput = <?php echo $socialable_labs_output ?>;  
-</script>
-
-<script type="text/javascript">
-
-shver='2.8.6';
-shpn= '<?php if($_product) { echo urlencode($_product->getName()); } ?>';
-shpc= "<?php if($_product) { echo urlencode(addslashes(strip_tags(html_entity_decode(str_replace(array("\r", "\n"), '', $_product->getDescription()))))); } ?>";
-shpp= '<?php if($_product) { echo number_format($_product->getPrice(), 2); } ?>';
-shpb= '<?php if($_product) { echo urlencode($_product->getCategory()->name); } ?>';
-shpi= '<?php if($_product) { echo urlencode($_product->getProductUrl()); } ?>';
-shps= '<?php if ($_product) { echo $_product->getSku(); } ?>';
-shcv= '<?php if($_cart) { echo number_format($_cart->getQuote()->getGrandTotal(), 2); } ?>';
-shcq= '<?php if($_cart) { $_cart->getItemsQty(); } ?>';
-shcp= '<?php if($product_ids) { echo $product_ids; } ?>';
-
-</script>
 
 <script type="text/javascript">
 // jQuery(document).ready(function(){
@@ -249,10 +174,47 @@ shcp= '<?php if($product_ids) { echo $product_ids; } ?>';
                form.action = url;
             }
             var e = null;
+            //Start of our new ajax code
+            if(!url){
+                url = jQuery('#product_addtocart_form').attr('action');
+            }
+            url = url.replace("checkout/cart","ajax/checkout_cart")
+            var data = jQuery('#product_addtocart_form').serialize();
+            data += '&isAjax=1';
+            jQuery('#ajax_loader').show();
             try {
-                this.form.submit();
+                jQuery.ajax({
+                    url: url,
+                    dataType: 'json',
+                    type : 'post',
+                    data: data,
+                    success: function(data){
+                        if(data.redirect) {
+                            window.location.href = data.redirect;
+                        }
+                        jQuery('#ajax_loader').hide();
+                        //alert(data.status + ": " + data.message);
+                        if(data.headercart && $('header-user-info')){
+                            $('header-user-info').update(data.headercart);
+                        }
+//                        if($('product-main-info')){
+//                            $('product-main-info').update(data.productbox);
+//                        }
+                        if(data.status && data.message) {
+                            var html = '<ul class="messages"><li class="'+data.status.toLowerCase()+'-msg"><ul><li>' + data.message + '</li></ul></li></ul>';
+                            $('messages_product_view').update(html);
+                            (function() {$('messages_product_view').update(null)}).delay(2);
+                        }
+
+                        if (button && button != 'undefined') {
+                            button.disabled = false;
+                        }
+
+                    }
+                });
             } catch (e) {
             }
+            //End of our new ajax code
             this.form.action = oldUrl;
             if (e) {
                 throw e;
