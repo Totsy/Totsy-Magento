@@ -118,7 +118,9 @@
                     <label for="country" class="required"><em>*</em><?php echo $this->__('Country') ?></label>
                     <div class="input-box totsy-selective-input-box">
                     <span>Please select your country</span>
-                        <?php echo $this->getCountryHtmlSelect() ?>
+                        <?php //echo $this->getCountryHtmlSelect() ?>
+							<select name="[country_id]" id="country_id" class="validate-select" title="Country" ><option value="US" selected="selected" >United States</option></select>
+                        
                     </div>
                 </div>
             </li>
