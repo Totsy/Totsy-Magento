@@ -1298,3 +1298,29 @@ body .top-cart .block-content p.subtotal span.orange, .orange, .orange .price{
 /* HSN banner on home page */
 #hsn-banner {margin-bottom:-30px;}
 #hsn-banner a {display:block;}
+
+.badgecity_log{
+	top:400px;
+	background:url('/skin/frontend/enterprise/harapartners/images/FreeShippingButton.png') top left no-repeat;
+	position:absolute;
+	right:-20px;
+	width:108px;
+	height:108px;
+	z-index:10;
+	margin-top:-80px;
+	float:right;
+	margin-right:-50px;
+}
+
+.badgecity_reg{
+	top:520px;
+	background:url('/skin/frontend/enterprise/harapartners/images/FreeShippingButton.png') top left no-repeat;
+	position:absolute;
+	right:-20px;
+	width:108px;
+	height:108px;
+	z-index:10;
+	margin-top:-80px;
+	float:right;
+	margin-right:-50px;
+}
