@@ -185,7 +185,7 @@ body.cms-page-view .page div.main {
     border-radius: 10px 10px 10px 10px;
 }
 
-.catalog-category-list .events-div{
+.categoryevent-index-topnav .events-div {
 	border:1px solid #CCCCCC;
 	padding: 12px 6px 12px 5px;
 	margin-bottom:30px;
@@ -236,22 +236,25 @@ body.cms-page-view .page div.main {
 	display:none;
 }
 
-.catalog-category-list .italic{
+.categoryevent-index-topnav .italic{
 	font-style:italic;
 }   
 	
 .events-div .category-products .product-name{
-  color:#636466;
-  font-size:11px;
-  margin-bottom:0;
-  margin-left:5px;
-  margin-right:5px;
-  margin-top:0;
-  padding-bottom:5px;
-  padding-left:0;
-  padding-right:0;
-  padding-top:0;	
-  font-weight:normal;
+	height: 45px;
+	line-height: 16px;
+	overflow: hidden;
+	color:#636466;
+	font-size:11px;
+	margin-bottom:0;
+	margin-left:5px;
+	margin-right:5px;
+	margin-top:0;
+	padding-bottom:5px;
+	padding-left:0;
+	padding-right:0;
+	padding-top:0;	
+	font-weight:normal;
 }
 
 .events-div .products-grid {
@@ -265,8 +268,7 @@ body.cms-page-view .page div.main {
 body .events-div .products-grid li.last{
 	height:auto;
 }
-.categoryevent-index-topnav .col-main,
-.catalog-category-list .col-main {
+.categoryevent-index-topnav .col-main {
 	padding:20px 10px;
 }
 
@@ -605,14 +607,14 @@ body.customer-account-login span.validation-error, div.validation-error {
 	padding-right: 0px;
 	background: none;
 }
-.catalog-category-list .col-main>h2{
+.categoryevent-index-topnav .col-main>h2{
 	margin-bottom: 6px;
 	padding-bottom: 6px;
 	text-transform:capitalize;
 	color: #707070;
 	font-size: 21px;
 }
-.catalog-category-list .col-main>h2 span{
+.categoryevent-index-topnav .col-main>h2 span{
 	color: #919294;
 	font-size: 12px;
 	font-weight: bold;	
@@ -1151,3 +1153,6 @@ body .col-left hr {
 	line-height: 19px;
 }
 
+.categoryevent-index-topnav .products-grid .product-image {
+    margin: 0 auto 3px;
+}
