@@ -177,7 +177,7 @@ class Harapartners_Ordersplit_Helper_Data extends Mage_Core_Helper_Abstract {
 
         $oldOrder
             ->cancel()
-            ->setState('splitted','splitted',$this->__('Order Canceled by Split Process'),false)
+            ->setStatus('splitted','splitted',$this->__('Order Canceled by Split Process'),false)
             ->save();
         
         //configurable products and related simple products must be configured the same fullfillment type
@@ -329,7 +329,7 @@ class Harapartners_Ordersplit_Helper_Data extends Mage_Core_Helper_Abstract {
                     $service->submitAll();
                     $newOrder = $service->getOrder();
 
-                       if(!!$newOrder && !!$newOrder->getId()) {
+                   if(!!$newOrder && !!$newOrder->getId()) {
                            if(!empty($state)) {
                             $newOrder->setState($state, true, $this->__('Order Created by Split/Batch Cancel Process'))->save();
                         }
