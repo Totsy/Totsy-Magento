@@ -274,8 +274,10 @@ class Harapartners_Ordersplit_Helper_Data extends Mage_Core_Helper_Abstract {
                         $newQuote->getPayment()->addData($oldOrder->getPayment()->getData());
                     }
 
-                    $newQuote->setCollectShippingRates(true)
-                            ->collectShippingRates();
+                    $newQuote
+                        ->getShippingAddress()
+                        ->setCollectShippingRates(true)
+                        ->collectShippingRates();
                     
                     //Harapartners, Jun, to be deleted
 //                    $this->_revertGiftCard($oldOrder, $newQuote); //Gift Card logic is not effective in the current logic
@@ -348,6 +350,7 @@ class Harapartners_Ordersplit_Helper_Data extends Mage_Core_Helper_Abstract {
                    }
                        
                 }catch (Exception $exception){
+                    Mage::logException($exception);
                     //order create exception add to log maybe
                     $isSuccess = false;
                 }
