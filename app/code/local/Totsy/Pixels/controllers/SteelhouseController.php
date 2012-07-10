@@ -10,15 +10,15 @@ class Totsy_Pixels_SteelhouseController extends Mage_Core_Controller_Front_Actio
             && $_category && $_category->getId()) {
                 Mage::register('current_product',$_product);
                 Mage::register('current_category',$_category);
-                if($current_url = $this->getRequest()->getParam('current_url')) {
-                    Mage::register('current_url',base64_decode($current_url));
-                }
-                if($referrer_url = $this->getRequest()->getParam('referrer_url')) {
-                    Mage::register('referrer_url',base64_decode($referrer_url));
-                }
-                $this->loadLayout()->renderLayout();
             }
         }
+        if($current_url = $this->getRequest()->getParam('current_url')) {
+            Mage::register('current_url',base64_decode($current_url));
+        }
+        if($referrer_url = $this->getRequest()->getParam('referrer_url')) {
+            Mage::register('referrer_url',base64_decode($referrer_url));
+        }
+        $this->loadLayout()->renderLayout();
     }
 
     public function headerAction(){
