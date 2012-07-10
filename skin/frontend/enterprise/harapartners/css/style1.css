@@ -1326,7 +1326,7 @@ body .top-cart .block-content p.subtotal span.orange, .orange, .orange .price{
 #hsn-banner a {display:block;}
 
 .badgecity_log{
-	top:445px;
+	top:400px;
 	background:url('/skin/frontend/enterprise/harapartners/images/FreeShippingButton.png') top left no-repeat;
 	position:absolute;
 	right:-20px;
@@ -1339,10 +1339,10 @@ body .top-cart .block-content p.subtotal span.orange, .orange, .orange .price{
 }
 
 .badgecity_reg{
-	top:545px;
+	top:520px;
 	background:url('/skin/frontend/enterprise/harapartners/images/FreeShippingButton.png') top left no-repeat;
 	position:absolute;
-	right:-50px;
+	right:-20px;
 	width:108px;
 	height:108px;
 	z-index:10;
