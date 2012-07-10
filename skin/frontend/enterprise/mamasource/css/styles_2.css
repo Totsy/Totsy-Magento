@@ -371,7 +371,7 @@ ul.menu ul.shop li a{
 }
 
 .category-products .product-image{
-	width:125px;
+	width:125px; height: 125px;
 }
 
 /*--------------------------My Account-------------------------------------*/ 

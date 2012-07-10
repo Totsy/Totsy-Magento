@@ -35,11 +35,11 @@
 	                    <input type="text" title="<?php echo $this->__('City') ?>" name="shipping[city]" class="inputbox ui-input-text ui-body-c ui-corner-all ui-shadow-inset  input-text required-entry" value="<?php echo $this->htmlEscape($this->getAddress()->getCity()) ?>" id="shipping:city" />
 	                </div>
 	                <div class="field half-of-half">
-	                    <label for="shipping:region_id" class="required"><em>*</em><?php echo $this->__('State/Province') ?></label>
+	                    <label for="shipping:region_id" class="required"><em>*</em><?php echo $this->__('State') ?></label>
 						<div class="totsy-selective-input-box">
 							<span>State</span>
-							<select id="shipping:region_id" name="shipping[region_id]" title="<?php echo $this->__('State/Province') ?>" class="validate-select ui-input-text "  style="display:none;" >
-								<option value=""><?php echo $this->__('Please select region, state or province') ?></option>
+							<select id="shipping:region_id" name="shipping[region_id]" title="<?php echo $this->__('State') ?>" class="validate-select ui-input-text "  style="display:none;" >
+								<option value=""><?php echo $this->__('Please select state') ?></option>
 							</select>
 						</div>
 	                    <script type="text/javascript">
@@ -47,7 +47,7 @@
                             $('shipping:region_id').setAttribute('defaultValue',  "<?php echo $this->getAddress()->getRegionId() ?>");
                         //]]>
                         </script>
-                        <input type="text" id="shipping:region" name="shipping[region]" value="<?php echo $this->htmlEscape($this->getAddress()->getRegion()) ?>"  title="<?php echo $this->__('State/Province') ?>" class="inputbox ui-input-text ui-body-c ui-corner-all ui-shadow-inset input-text hidden-state" style="display:none;" />
+                        <input type="text" id="shipping:region" name="shipping[region]" value="<?php echo $this->htmlEscape($this->getAddress()->getRegion()) ?>"  title="<?php echo $this->__('State') ?>" class="inputbox ui-input-text ui-body-c ui-corner-all ui-shadow-inset input-text hidden-state" style="display:none;" />
 	                </div>
 	            </li>
 	            <li class="fields">
@@ -59,7 +59,8 @@
                         <label for="shipping:country_id" class="ui-input-text required"><em>*</em><?php echo $this->__('Country') ?></label>
 						<div class="totsy-selective-input-box totsy-selective-input-box-billing-country">
 							<span>United States</span>
-							<?php echo $this->getCountryHtmlSelect('shipping') ?>
+							<?php //echo $this->getCountryHtmlSelect('shipping') ?>
+							<select name="shipping[country_id]" id="shipping:country_id" class="validate-select" title="Country" ><option value="US" selected="selected" >United States</option></select>
 						</div>
                     </div>
 	            </li>
