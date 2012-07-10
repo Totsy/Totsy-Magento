@@ -15,7 +15,11 @@
 class Harapartners_Service_Model_Rewrite_Sales_Quote
     extends Mage_Sales_Model_Quote
 {
-    public function addProductAdvanced(Mage_Catalog_Model_Product $product, $request = null, $processMode = null) {
+    public function addProductAdvanced(
+        Mage_Catalog_Model_Product $product,
+        $request = null,
+        $processMode = null
+    ) {
         // Harapartners, Jun
         // check if product is salable due to category/event limit,
         // frontend only
@@ -48,12 +52,53 @@ class Harapartners_Service_Model_Rewrite_Sales_Quote
         return parent::addProductAdvanced($product, $request, $processMode);
     }
 
-    public function getItemByProduct($product) {
-        //Harapartners, Jun, Virtual product (coupons) should always be a separate line item
-        if($product->isVirtual()) {
-            return false;
+    /**
+     * Adding catalog product object data to quote.
+     * Refuse to add new virtual products, so that a new line item is created.
+     *
+     * @param   Mage_Catalog_Model_Product $product
+     * @param   int $qty
+     * @return  Mage_Sales_Model_Quote_Item
+     */
+    protected function _addCatalogProduct(
+        Mage_Catalog_Model_Product $product,
+        $qty = 1
+    ) {
+        $newItem = false;
+        if ($product->isVirtual()) {
+            $item = null;
+        } else {
+            $item = $this->getItemByProduct($product);
         }
-        return parent::getItemByProduct($product);
-    }
 
+        if (!$item) {
+            $item = Mage::getModel('sales/quote_item');
+            $item->setQuote($this);
+            if (Mage::app()->getStore()->isAdmin()) {
+                $item->setStoreId($this->getStore()->getId());
+            }
+            else {
+                $item->setStoreId(Mage::app()->getStore()->getId());
+            }
+            $newItem = true;
+        }
+
+        /**
+         * We can't modify existing child items
+         */
+        if ($item->getId() && $product->getParentProductId()) {
+            return $item;
+        }
+
+        $item->setOptions($product->getCustomOptions())
+            ->setProduct($product);
+
+        // Add only item that is not in quote already (there can be other new
+        // or already saved item
+        if ($newItem) {
+            $this->addItem($item);
+        }
+
+        return $item;
+    }
 }
