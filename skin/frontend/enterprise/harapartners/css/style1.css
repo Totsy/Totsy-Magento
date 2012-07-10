@@ -165,8 +165,9 @@ body .header-container {
 }
 
 
-.haschild ul li{
+.haschild .shop li{
 	display:block;
+	
 }
 
 ul.menu ul , .nav ul.menu li{
@@ -645,6 +646,31 @@ body .sidebar .block-account{
   margin:0px 10px;
   color:#707070;
   border-bottom: 1px solid #DDDDDD;
+}
+.nav ul.menu li#ending{
+	padding: 0 6px 0 0;
+}
+
+
+ul.menu ul.shop li a:hover {
+    background: none repeat scroll 0 0 #F7D7D6;
+    color: rgba(0, 0, 0, 0.9);
+}
+body .nav ul.menu li {
+	padding: 0 0px 0 0;
+}
+body ul.menu ul, body .nav ul.menu li {
+    width: 113px;
+}
+body .nav ul.menu li a {
+    line-height: 17px;
+    padding: 19px 10px 1px;
+}
+body .nav ul.menu>li>a {
+    padding: 19px 10px 6px;
+}
+ul.menu>li>ul{
+	margin-bottom: 10px !important;
 }
 
 body.cms-page-view .col1-layout .col-main {
@@ -1298,29 +1324,3 @@ body .top-cart .block-content p.subtotal span.orange, .orange, .orange .price{
 /* HSN banner on home page */
 #hsn-banner {margin-bottom:-30px;}
 #hsn-banner a {display:block;}
-
-.badgecity_log{
-	top:400px;
-	background:url('/skin/frontend/enterprise/harapartners/images/FreeShippingButton.png') top left no-repeat;
-	position:absolute;
-	right:-20px;
-	width:108px;
-	height:108px;
-	z-index:10;
-	margin-top:-80px;
-	float:right;
-	margin-right:-50px;
-}
-
-.badgecity_reg{
-	top:520px;
-	background:url('/skin/frontend/enterprise/harapartners/images/FreeShippingButton.png') top left no-repeat;
-	position:absolute;
-	right:-20px;
-	width:108px;
-	height:108px;
-	z-index:10;
-	margin-top:-80px;
-	float:right;
-	margin-right:-50px;
-}

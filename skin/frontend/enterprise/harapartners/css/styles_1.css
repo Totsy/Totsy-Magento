@@ -40,7 +40,7 @@
 .top-cart .block-content p.subtotal {padding: 10px; display: block; text-align: right;}
 .top-cart .block-content p.subtotal span.label {font-size: 15px; color: #777777;}
 .top-cart .block-content p.subtotal span.price {font-size: 14px; font-weight: bold; color: #009900;}
-#topCartContent { min-width: 460px; z-index: 1000;}
+#topCartContent { min-width: 460px;}
 #topCartContent .timer-control-box { padding: 10px 0px 10px 183px;}
 #topCartContent .timer-control-box span { color: #707070; font-size: 12px; }
 #topCartContent .timer-control-box p, #topCartContent .timer-control-box p span { color: #009900; font-size: 14px; font-weight: bold;}
@@ -276,11 +276,6 @@ div.tab-content p { margin: 10px 0px; }
 	border: 1px solid #d7d7d7;
 	border-radius: 5px;
 	text-align: center;}
-	
-/* expired event product view messaging */
-.product-main-info .msg-expired p {font-size:12px;}
-.product-main-info .msg-expired p + p {margin:1em 0 0;}
-
 .product-view .product-shop div.price-box p.special-price { position:relative; top: -25px;}
 .product-view .product-shop div.price-box p.old-price { position: relative; top: 25px;}
 .product-view .product-shop div.price-box p.special-price .price, .product-view .product-shop div.price-box span.regular-price .price {
