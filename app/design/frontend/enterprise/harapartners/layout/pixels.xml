@@ -9,6 +9,7 @@
     <default>
         <reference name="after_body_start">
             <block type="core/template" name="sociable.header.pixel" template="pixels/sociable/header/ajax.phtml" />
+            <block type="core/template" name="steelhouse.product.pixel" template="pixels/steelhouse/header/ajax.phtml" />
         </reference>
     </default>
 
@@ -17,6 +18,10 @@
             <remove name="sociable.header.pixel" />
         </reference>
     </customer_logged_out>
+
+    <pixels_steelhouse_index>
+        <block type="core/template" name="root" template="pixels/steelhouse/pixel.phtml" />
+    </pixels_steelhouse_index>
 
     <pixels_sociable_product>
         <block type="core/template" name="root" template="pixels/sociable/product.phtml">

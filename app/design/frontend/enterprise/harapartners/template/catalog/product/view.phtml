@@ -35,10 +35,6 @@
 $_helper = $this->helper('catalog/output');
 $_product = $this->getProduct();
 
-$_cart = $this->helper('checkout/cart')->getCart();
-
-$product_ids = implode(",", $_cart->getProductIds());
-
 //Harapartners, Jun, in the controller we will guarantee the current categor must exists, if not we redirect
 $_category = Mage::registry('current_category');
 ?>
@@ -109,8 +105,7 @@ direction: "down"
 </div>
 
 <div class="product-shop product-view-block">
-                <div class="product-main-info">
-                    
+                <div id="product-main-info" class="product-main-info">
                     <p class="product-ids"><?php echo $this->__('SKU# %s', $this->htmlEscape($_product->getSku())); ?></p>
                     <?php //echo $this->getReviewsSummaryHtml($_product, false, true)?>
                     <?php echo $this->getChildHtml('alert_urls') ?>
@@ -221,22 +216,6 @@ if( Mage::getSingleton('customer/session')->getCustomerId() ) {
     var socialableLabsOutput = <?php echo $socialable_labs_output ?>;  
 </script>
 
-<script type="text/javascript">
-
-shver='2.8.6';
-shpn= '<?php if($_product) { echo urlencode($_product->getName()); } ?>';
-shpc= "<?php if($_product) { echo urlencode(addslashes(strip_tags(html_entity_decode(str_replace(array("\r", "\n"), '', $_product->getDescription()))))); } ?>";
-shpp= '<?php if($_product) { echo number_format($_product->getPrice(), 2); } ?>';
-shpb= '<?php if($_product) { echo urlencode($_product->getCategory()->name); } ?>';
-shpi= '<?php if($_product) { echo urlencode($_product->getProductUrl()); } ?>';
-shps= '<?php if ($_product) { echo $_product->getSku(); } ?>';
-shcv= '<?php if($_cart) { echo number_format($_cart->getQuote()->getGrandTotal(), 2); } ?>';
-shcq= '<?php if($_cart) { $_cart->getItemsQty(); } ?>';
-shcp= '<?php if($product_ids) { echo $product_ids; } ?>';
-
-console.log("<?php echo $_product->getProductUrl(); ?>");
-
-</script>
 
 <script type="text/javascript">
 // jQuery(document).ready(function(){
@@ -253,10 +232,47 @@ console.log("<?php echo $_product->getProductUrl(); ?>");
                form.action = url;
             }
             var e = null;
+            //Start of our new ajax code
+            if(!url){
+                url = jQuery('#product_addtocart_form').attr('action');
+            }
+            url = url.replace("checkout/cart","ajax/checkout_cart")
+            var data = jQuery('#product_addtocart_form').serialize();
+            data += '&isAjax=1';
+            jQuery('#ajax_loader').show();
             try {
-                this.form.submit();
+                jQuery.ajax({
+                    url: url,
+                    dataType: 'json',
+                    type : 'post',
+                    data: data,
+                    success: function(data){
+                        if(data.redirect) {
+                            window.location.href = data.redirect;
+                        }
+                        jQuery('#ajax_loader').hide();
+                        //alert(data.status + ": " + data.message);
+                        if(data.headercart && $('header-user-info')){
+                            $('header-user-info').update(data.headercart);
+                        }
+//                        if($('product-main-info')){
+//                            $('product-main-info').update(data.productbox);
+//                        }
+                        if(data.status && data.message) {
+                            var html = '<ul class="messages"><li class="'+data.status.toLowerCase()+'-msg"><ul><li>' + data.message + '</li></ul></li></ul>';
+                            $('messages_product_view').update(html);
+                            (function() {$('messages_product_view').update(null)}).delay(2);
+                        }
+
+                        if (button && button != 'undefined') {
+                            button.disabled = false;
+                        }
+
+                    }
+                });
             } catch (e) {
             }
+            //End of our new ajax code
             this.form.action = oldUrl;
             if (e) {
                 throw e;
