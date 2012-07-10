@@ -10,13 +10,22 @@
 <config>
     <modules>
         <Totsy_Customer>
-            <version>0.1.0</version>
+            <version>0.2.0</version>
         </Totsy_Customer>
     </modules>
     <global>
         <models>
+            <totsycustomer_mysql4>
+                <class>Totsy_Customer_Model_Mysql4</class>
+                <entities>
+                    <autoregistration>
+                        <table>customer_autoregistration</table>
+                    </autoregistration>
+                </entities>
+            </totsycustomer_mysql4>
             <totsycustomer>
                 <class>Totsy_Customer_Model</class>
+                <resourceModel>totsycustomer_mysql4</resourceModel>
             </totsycustomer>
         </models>
         <resources>
@@ -30,6 +39,17 @@
                 </connection>
             </totsycustomer_setup>
         </resources>
+        <events>
+            <controller_action_predispatch>
+                <observers>
+                    <totsycustomer>
+                        <type>singleton</type>
+                        <class>totsycustomer/observer</class>
+                        <method>processAutoregistration</method>
+                    </totsycustomer>
+                </observers>
+            </controller_action_predispatch>
+        </events>
     </global>
     <admin>
         <routers>
@@ -42,4 +62,14 @@
             </totsy>
         </routers>
     </admin>
+    <phpunit>
+        <suite>
+            <modules>
+                <Totsy_Customer/>
+            </modules>
+            <fixture>
+                <totsycustomer_autoregistration>Totsy_Customer_Model_Autoregistration</totsycustomer_autoregistration>
+            </fixture>
+        </suite>
+    </phpunit>
 </config>
