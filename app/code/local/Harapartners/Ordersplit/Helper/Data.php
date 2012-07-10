@@ -376,9 +376,9 @@ class Harapartners_Ordersplit_Helper_Data extends Mage_Core_Helper_Abstract {
         }else{
             //cancel previous orders
             if($newOrderCount > 0){
-                throw new Exception('Split order failed, but some of the splitted order(s) have been created, a manual check is required.');
+                throw new Exception('Split order failed for order: '.$oldOrder->getIncrementId().', but some of the splitted order(s) have been created, a manual check is required.');
             }else{
-                throw new Exception('Split order failed, no new order created.');
+                throw new Exception('Split order failed for order: '.$oldOrder->getIncrementId().', no new order created.');
             }
         }
         return $isSuccess;        
