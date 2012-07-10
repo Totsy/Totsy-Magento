@@ -122,9 +122,22 @@ class Harapartners_Service_Block_Rewrite_Adminhtml_Catalog_Category_Edit_Form ex
     
 	public function getDeleteProductsButtonHtml()
     {
-        if ($this->hasStoreRootCategory()) {
-            return $this->getChildHtml('delete_product_button');
-        }
+        $category = $this->getCategory();
+
+	  	$defaultTimezone = date_default_timezone_get();
+		$mageTimezone = Mage::getStoreConfig(Mage_Core_Model_Locale::XML_PATH_DEFAULT_TIMEZONE);
+		date_default_timezone_set($mageTimezone);
+		$now = now();
+		date_default_timezone_set($defaultTimezone);
+		
+		$startcount_utc = strtotime($category->getEventStartDate());
+		$startcount_lc = date("F j, Y, G:i:s", $startcount_utc);
+		
+		if (strtotime($now) <= strtotime( $startcount_lc )){
+	        if ($this->hasStoreRootCategory()) {
+	            return $this->getChildHtml('delete_product_button');
+	        }
+		}
         return '';
     }
 

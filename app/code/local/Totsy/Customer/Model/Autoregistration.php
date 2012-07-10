@@ -58,7 +58,8 @@ class Totsy_Customer_Model_Autoregistration extends Mage_Core_Model_Abstract
         return $customer;
     }
 
-    protected function _beforeSave(){
+    protected function _beforeSave()
+    {
         parent::_beforeSave();
 
         if (!$this->getId() && !$this->getData('created_at')) {
