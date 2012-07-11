@@ -216,6 +216,7 @@ function createMixedValueSignature($MixedVals)
     $mixedParamsList = null;
     if (is_object($MixedVals)) 
     {
+        $mixedParamsList = new StdClass;
         dbgprint("[CMVS] got an object\n");
         foreach ($MixedVals as $name => $value) 
         {        

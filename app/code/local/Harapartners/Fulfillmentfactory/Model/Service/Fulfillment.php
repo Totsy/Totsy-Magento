@@ -211,7 +211,7 @@ class Harapartners_Fulfillmentfactory_Model_Service_Fulfillment
         }          
           //cancel orders with nothing available
           if(empty($remainingOrderItems)) {
-              $order->cancel()->addStatusHistoryComment(Mage::helper('core')->__('Order Canceled by Batch Cancel Process'),false)->save();
+              $order->cancel()->save()->addStatusHistoryComment(Mage::helper('core')->__('Order Canceled by Batch Cancel Process'),false)->save();
               return true;
           }
           

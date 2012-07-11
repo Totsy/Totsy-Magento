@@ -263,6 +263,8 @@ class Harapartners_Ordersplit_Helper_Data extends Mage_Core_Helper_Abstract {
                             $newQuote->getBillingAddress()
                         );
 
+                        $newQuote->getBillingAddress()->setQuote($newQuote);
+
                         $newQuote->getShippingAddress()->setCustomerAddressId('');
                         Mage::helper('core')->copyFieldset(
                             'sales_copy_order_shipping_address',
@@ -271,7 +273,17 @@ class Harapartners_Ordersplit_Helper_Data extends Mage_Core_Helper_Abstract {
                             $newQuote->getShippingAddress()
                         );
 
-                        $newQuote->getPayment()->addData($oldOrder->getPayment()->getData());
+                        if (!$newQuote->isVirtual() && $newQuote->getShippingAddress()->getSameAsBilling()) {
+                            $newQuote->setShippingAsBilling(1);
+                        }
+
+                        $newQuote->getShippingAddress()->setShippingMethod($oldOrder->getShippingMethod());
+                        $newQuote->getShippingAddress()->setShippingDescription($oldOrder->getShippingDescription());
+
+                        $newQuote->getPayment()->importData($oldOrder->getPayment()->getData());
+                        if(!!$oldOrder->getPayment()->getCybersourceSubid())    {
+                            $newQuote->getPayment()->setCybersourceSubid(base64_encode(Mage::getModel('core/encryption')->encrypt($oldOrder->getPayment()->getCybersourceSubid())));
+                        }
                     }
 
                     $newQuote
@@ -324,27 +336,30 @@ class Harapartners_Ordersplit_Helper_Data extends Mage_Core_Helper_Abstract {
                         'relation_parent_real_id'   => $oldOrder->getIncrementId(),
                         'edit_increment'            => $oldOrder->getEditIncrement() + $newOrderCount,
                         'increment_id'              => $oldOrderIncrementId.'-'.($oldOrder->getEditIncrement() + $newOrderCount)
-                    );
-                    $newQuote->setReservedOrderId($orderData['increment_id']);
-                    $service = Mage::getModel('sales/service_quote', $newQuote);
-                    $service->setOrderData($orderData);
-                    $service->submitAll();
-                    $newOrder = $service->getOrder();
+                        );
+                        $newQuote->setReservedOrderId($orderData['increment_id']);
+                        $service = Mage::getModel('sales/service_quote', $newQuote);
+                        $service->setOrderData($orderData);
+                        $service->submitAll();
+                        $newOrder = $service->getOrder();
 
-                   if(!!$newOrder && !!$newOrder->getId()) {
+                       if(!!$newOrder && !!$newOrder->getId()) {
                            if(!empty($state)) {
-                            $newOrder->setState($state, true, $this->__('Order Created by Split/Batch Cancel Process'))->save();
+                                $newOrder->setState($state, true, $this->__('Order Created by Split/Batch Cancel Process'))->save();
+                            } else {
+                               $newOrder->addStatusHistoryComment($this->__('Order Created by Split/Batch Cancel Process'))->save();
+                           }
+                        }else{
+                            //order failed...
+                            $newOrderCount--;
+                            $isSuccess = false;
                         }
-                    }else{
-                        //order failed...
-                        $newOrderCount--;
-                        $isSuccess = false;
-                    }
 
-                    $newQuote->setIsActive(false)->save();
+                        $newQuote->setIsActive(false)->save();
 
                    }catch(Exception $e){
                        //order failed...
+                       Mage::logException($e);
                        $newOrderCount --;
                        $isSuccess = false;
                    }
@@ -364,9 +379,9 @@ class Harapartners_Ordersplit_Helper_Data extends Mage_Core_Helper_Abstract {
         }else{
             //cancel previous orders
             if($newOrderCount > 0){
-                throw new Exception('Split order failed, but some of the splitted order(s) have been created, a manual check is required.');
+                throw new Exception('Split order failed for order: '.$oldOrder->getIncrementId().', but some of the splitted order(s) have been created, a manual check is required.');
             }else{
-                throw new Exception('Split order failed, no new order created.');
+                throw new Exception('Split order failed for order: '.$oldOrder->getIncrementId().', no new order created.');
             }
         }
         return $isSuccess;        
