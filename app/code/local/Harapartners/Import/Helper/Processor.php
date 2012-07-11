@@ -166,6 +166,13 @@ class Harapartners_Import_Helper_Processor extends Mage_Core_Helper_Abstract {
     // ===== Data Cleaning ============================================== //
     // ================================================================== //
     protected function _importDataCleaning($importData, $importObject, $row){
+
+        // Check for failed import
+        if (!$importData) {
+            throw new Exception('Row #'.$row.' failed to import, please check for special characters.');
+            return $importData;
+        }
+        //echo count($importData); var_dump($importData); exit;
     
         // ----- Data from Import Form ----- //
         if(!$importObject->getData('vendor_id') || !$importObject->getData('vendor_code')){
