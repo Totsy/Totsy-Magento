@@ -31,7 +31,7 @@
             </totsycustomer_setup>
         </resources>
         <events>
-            <controller_action_predispatch>
+            <customer_session_init>
                 <observers>
                     <totsycustomer_autoreg>
                         <type>singleton</type>
@@ -39,7 +39,7 @@
                         <method>autoAuthorization</method>
                     </totsycustomer_autoreg>
                 </observers>
-            </controller_action_predispatch>
+            </customer_session_init>
         </events>
     </global>
     <admin>
