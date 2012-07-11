@@ -277,10 +277,13 @@ class Harapartners_Ordersplit_Helper_Data extends Mage_Core_Helper_Abstract {
                             $newQuote->setShippingAsBilling(1);
                         }
 
-                        $newQuote->setShippingMethod($oldOrder->getShippingMethod());
+                        $newQuote->getShippingAddress()->setShippingMethod($oldOrder->getShippingMethod());
                         $newQuote->getShippingAddress()->setShippingDescription($oldOrder->getShippingDescription());
 
-                        $newQuote->getPayment()->addData($oldOrder->getPayment()->getData());
+                        $newQuote->getPayment()->importData($oldOrder->getPayment()->getData());
+                        if(!!$oldOrder->getPayment()->getCybersourceSubid())    {
+                            $newQuote->getPayment()->setCybersourceSubid(base64_encode(Mage::getModel('core/encryption')->encrypt($oldOrder->getPayment()->getCybersourceSubid())));
+                        }
                     }
 
                     $newQuote
