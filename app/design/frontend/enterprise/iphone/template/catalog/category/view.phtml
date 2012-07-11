@@ -40,11 +40,36 @@
         $_imgHtml = '<p class="category-image"><img src="'.$_imgUrl.'" alt="'.$this->htmlEscape($_category->getName()).'" title="'.$this->htmlEscape($_category->getName()).'" /></p>';
         $_imgHtml = $_helper->categoryAttribute($_category, $_imgHtml, 'image');
     }
+  	$defaultTimezone = date_default_timezone_get();
+	$mageTimezone = Mage::getStoreConfig(Mage_Core_Model_Locale::XML_PATH_DEFAULT_TIMEZONE);
+	date_default_timezone_set($mageTimezone);
+	$now = now();
+	date_default_timezone_set($defaultTimezone);
+	
+	$endcount_utc = strtotime($_category->getEventEndDate());
+	$startcount_utc = strtotime($_category->getEventStartDate());
+	$endcount_lc = date("F j, Y, G:i:s", $endcount_utc);
+	$startcount_lc = date("F j, Y, G:i:s", $startcount_utc);
+	
+	if (strtotime($now) >= strtotime( $startcount_lc )){
+		$timecount = $endcount_lc;
+		$timerFlag = 'Ends in';
+		$upComingFlag = 0;
+	}else {
+		$timecount = $startcount_lc;
+		$timerFlag = 'Opens in';
+		$upComingFlag = 1;
+	}
+	
 ?>
 <?php echo $this->getMessagesBlock()->toHtml() ?>
 <div class="category-view">
 	<div class="event-title-container">
+	<?php if ( !$upComingFlag ):?>
 		<h1><a href="<?php echo $this->getUrl('event/?ref=todays_sales_mobile') ?>">Today's Sales</a><span> / <span><?php echo $_helper->categoryAttribute($_category, $_category->getName(), 'name') ?></h1>
+	<?php else :?>
+		<h1><a href="/event#event-upcoming">Upcoming Sales</a><span> / <span><?php echo $_helper->categoryAttribute($_category, $_category->getName(), 'name') ?></h1>
+	<?php endif;?>
 	</div>
 	<hr/>
 	<div class="event-description-container">	

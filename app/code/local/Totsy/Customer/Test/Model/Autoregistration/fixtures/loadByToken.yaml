@@ -1,6 +1,0 @@
-tables:
-  totsycustomer/autoregistration:
-    - customer_autoregistration_id: 100
-      store_id: 1
-      email: tbhuvanendran+autoregtest1@totsy.com
-      token: e3d34caed57b74235aa01e1dba626054570df08750e5955d6672c232601757d8
