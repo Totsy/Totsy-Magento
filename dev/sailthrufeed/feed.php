@@ -135,8 +135,8 @@ $data = json_encode($out);
 $fh = fopen($chash,'w');
 fwrite($fh,$data);
 fclose($fh);
-if (file_exists($cash.'.new')){
-	unlink($cash.'new');
+if (file_exists($chash.'.new')){
+	unlink($chash.'new');
 }
 echo $data;
 /*### END ###*/
