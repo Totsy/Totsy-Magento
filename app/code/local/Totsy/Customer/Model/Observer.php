@@ -18,8 +18,8 @@ class Totsy_Customer_Model_Observer
      */
     public function autoAuthorization(Varien_Event_Observer $obs)
     {
-        $request  = $obs->getEvent()->getControllerAction()->getRequest();
-        $response = $obs->getEvent()->getControllerAction()->getResponse();
+        $request  = Mage::app()->getFrontController()->getRequest();
+        $response = Mage::app()->getFrontController()->getResponse();
 
         if ($token = $request->getQuery('auto_access_token')) {
             $storeId = $request->has('auto_access_store')
