@@ -15,21 +15,20 @@
  */
 ?>
 <?php
-	$welcomeInfo = '';
-	$customer = Mage::getSingleton('customer/session')->getCustomer();
-	$customerName = $customer->getFirstname();
-	if ( !empty($customerName)) {
-		$welcomeInfo = $customerName;
-	}else {
-		$welcomeInfo = $customer->getEmail();
-	}
-?>	   
+$welcomeInfo = '';
+$customer = Mage::getSingleton('customer/session')->getCustomer();
+$customerName = $customer->getFirstname();
+if ( !empty($customerName)) {
+    $welcomeInfo = $customerName;
+}else {
+    $welcomeInfo = $customer->getEmail();
+}
+?>
     <strong><?php echo $this->__( 'Hi, %s ', $welcomeInfo );?></strong>
-	<div class="links">
-		<!--
-			 <div>
-			     <a title="My Account" style="float:left !important" href="<?php //echo Mage::getUrl('customer/account')?>"><?php //echo $this->__('My Account');?></a>
-            </div> -->
-                <div id="rondavu_welcome_container" style="width:100px !important">
-                </div>    
-	</ul>
+    <span class="links">
+        <span style="width:70px !important; float:left !important">
+	         <a title="My Account" href="<?php echo Mage::getUrl('customer/account')?>"><?php echo $this->__('My Account');?></a>
+        </span>
+        <div id="rondavu_welcome_container" style="width:100px !important; float:right !important">
+        </div>
+    </span>

@@ -130,7 +130,7 @@ body .header .quick-access
 	border-width: 1px;
 	border-style: solid;
 	float:right;
-	max-width:32%;
+	max-width:35%;
 	min-width:210px;
 	padding: 2px 14px 5px 10px;
 	box-shadow: 2px 1px 6px rgba(0, 0, 0, 0.25);
@@ -257,6 +257,14 @@ body .nav ul.menu>li>a {
 }
 ul.menu>li>ul{
 	margin-bottom: 10px !important;
+}
+
+#navAllEvents {
+    width: 95px;
+}
+
+#navSocial {
+    width: 100px;
 }
 
 .nav ul
