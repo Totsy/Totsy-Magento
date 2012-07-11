@@ -23,10 +23,11 @@ body.customer-account-login #footer {
     background: none repeat scroll 0 0 #FFFFFF;
     bottom: 0;
     left: 0;
-    margin: 0;
+    margin:0;
     overflow: hidden;
     position: fixed;
     width: 100%;
+    z-index: 100;
 }
 #footer {
     font-size: 11px;
@@ -1324,3 +1325,31 @@ body .top-cart .block-content p.subtotal span.orange, .orange, .orange .price{
 /* HSN banner on home page */
 #hsn-banner {margin-bottom:-30px;}
 #hsn-banner a {display:block;}
+
+/* Badge area for login and register 
+@TODO: optimize for ipad/small screens
+*/
+.badgecity_log {
+    background: url("../images/FreeShippingButton.png") no-repeat scroll left top transparent;
+    float: right;
+    height: 108px;
+    margin-right: -50px;
+    margin-top: -80px;
+    position: absolute;
+    right: -20px;
+    top: 400px;
+    width: 108px;
+    z-index: 10;
+}
+.badgecity_reg {
+    background: url("../images/FreeShippingButton.png") no-repeat scroll left top transparent;
+    float: right;
+    height: 108px;
+    margin-right: -50px;
+    margin-top: -80px;
+    position: absolute;
+    right: -20px;
+    top: 520px;
+    width: 108px;
+    z-index: 10;
+}
