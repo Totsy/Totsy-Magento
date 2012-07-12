@@ -90,27 +90,71 @@ class Harapartners_Service_Model_Rewrite_Core_Email_Template extends Mage_Core_M
                 $evars[$emails[$i]] = array("content" => $text, "subj" => $this->getProcessedTemplateSubject($variables));
                 $temails .= $emails[$i].",";
             }
+            
             $temails = substr($temails, 0, -1);
-            $sailthru = Mage::getSingleton('emailfactory/sailthruconfig')->getHandle();
+            $isNewRegister = Mage::registry('new_account');
+            $queue = Mage::getModel('emailfactory/sailthruqueue');
+            $queueData = array(
+            	'call' => array(
+					'class' => 'emailfactory/sailthruconfig',
+            		'methods' => array(
+            			'getHandle',
+            			'multisend'
+            		)
+            	),
+            	'params' => array(
+            		'multisend' => compact('template_name', 'temails', 'vars', 'evars', 'options')
+            	)
+            );
+            $isNewRegister = Mage::registry('new_account');
+            if (isset($isNewRegister)){
+            	$queueData['additinal_calls'] = array(
+            		array(
+            			'class' =>	'emailfactory/record',
+            			'methods' => array(
+            				'setCustomerEmail',
+            				'setSendId',
+            				'save'
+            			),
+            			'params' => array(
+            				'setCustomerEmail' => $temails,
+            				'setSendId' => array( 
+            					'#useExtVar#' => array(
+            						'name'=>'result',
+            						'elements'=>'send_id'
+            					)
+            				)
+            			)	
+            		)		
+            	);
+            }
+            $queue->addToQueue($queueData);
+            unset($queue, $queueData);
+            
+            //echo 'check the queue';
+            //exit(0);
+            
+           // $sailthru = Mage::getSingleton('emailfactory/sailthruconfig')->getHandle();
             //send template, rule: http://docs.sailthru.com/api/send?s[]=send
-            $success = $sailthru->multisend($template_name, $temails, $vars, $evars, $options);
+           // $success = $sailthru->multisend($template_name, $temails, $vars, $evars, $options);
             //error message is a 2 values array
-            if(count($success) == 2) {  
+           // if(count($success) == 2) {  
                 //final try, to create a email template, rule http://docs.sailthru.com/api/template?s[]=savetemplate
                 /* @DG-2012.05.16: removing the $temp's here as they incorrectly overwrite existing templates on Sailthru
                 //$tempvars = array("content_html" => "{content}", "subject" => "{subj}");
                 //$tempsuccess = $sailthru->saveTemplate($template_name, $tempvars);
                 */
-                $success = $sailthru->multisend($template_name, $temails, $vars, $evars, $options);
+             //   $success = $sailthru->multisend($template_name, $temails, $vars, $evars, $options);
                 //not success, use magento default send…
-                if(count($success) == 2) {
+                //if(count($success) == 2) {
 					//magento default//
 					//$mail->send(); /* commenting out Magento's default send mail functionality… */
 					//magento default//
-					Mage::throwException($this->__($success["errormsg"]));
-                }
-            }
-            
+					
+                	//Mage::throwException($this->__($success["errormsg"]));
+               // }
+           // }
+            /*
             $isNewRegister = Mage::registry('new_account');
             if (isset($isNewRegister)){
                 $sendId = $success['send_id'];
@@ -119,7 +163,7 @@ class Harapartners_Service_Model_Rewrite_Core_Email_Template extends Mage_Core_M
                 $record->setSendId($sendId);
                 $record->save();
             }
-            
+            */
             //Harapartners sailthru//
             $this->_mail = null;
         }

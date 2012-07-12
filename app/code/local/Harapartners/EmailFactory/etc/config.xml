@@ -11,11 +11,11 @@
  * to eula@harapartners.com so we can send you a copy immediately.
  * 
  -->
-
+ 
 <config>
     <modules>
         <Harapartners_EmailFactory>
-            <version>1.0.0</version>
+            <version>1.0.1</version>
         </Harapartners_EmailFactory>
     </modules>
     <global>
@@ -36,8 +36,15 @@
                     <record>
                         <table>emailfactory_record</table>
                     </record>
+                    <sailthruqueue>
+                        <table>sailthru_queue</table>
+                    </sailthruqueue>
                 </entities>
             </emailfactory_mysql4>
+            <emailfactory_sailthuqueue>
+            	<class>Harapartners_EmailFactory_Model_Sailthruqueue</class>
+            	<resourceModel>emailfactory_mysql4</resourceModel>
+            </emailfactory_sailthuqueue>
         </models>
         <resources>
             <emailfactory_setup>

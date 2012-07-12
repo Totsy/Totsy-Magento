@@ -21,10 +21,16 @@ if ( !Mage::getSingleton('checkout/session')->hasData('countdown_timer') ) {
 	$timer = Mage::getSingleton('checkout/session')->getData('countdown_timer');
 	Mage::getSingleton('checkout/session')->setData('countdown_timer', ++$timer);
 }
+
+//hack for thumbnail
+//points to storeid 4 for mobile, but we have thumbs in 1
+//fixes it for now suckassssss - jonathan dinkers
+$badthumbnailurl = $this->getProductThumbnail()->resize(60,60);
+$thumbnailurl = str_replace("cache/4/", "cache/1/", $badthumbnailurl);
 ?>
 <tr>
     <td class="first">
-    	<?php if ($this->hasProductUrl()):?><a href="<?php echo $this->getProductUrl() ?>" title="<?php echo $this->htmlEscape($this->getProductName()) ?>" class="product-image"><?php endif;?><img src="<?php echo $this->getProductThumbnail()->resize(60,60); ?>" width="60" height="60" alt="<?php echo $this->htmlEscape($this->getProductName()) ?>" /><?php if ($this->hasProductUrl()):?></a><?php endif;?>
+    	<?php if ($this->hasProductUrl()):?><a href="<?php echo $this->getProductUrl() ?>" title="<?php echo $this->htmlEscape($this->getProductName()) ?>" class="product-image"><?php endif;?><img src="<?php echo $thumbnailurl; ?>" width="60" height="60" alt="<?php echo $this->htmlEscape($this->getProductName()) ?>" /><?php if ($this->hasProductUrl()):?></a><?php endif;?>
     </td>
     <td>
         <h2 class="product-name">
