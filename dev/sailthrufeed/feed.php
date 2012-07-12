@@ -136,7 +136,7 @@ $fh = fopen($chash,'w');
 fwrite($fh,$data);
 fclose($fh);
 if (file_exists($chash.'.new')){
-	unlink($chash.'new');
+	unlink($chash.'.new');
 }
 echo $data;
 /*### END ###*/
