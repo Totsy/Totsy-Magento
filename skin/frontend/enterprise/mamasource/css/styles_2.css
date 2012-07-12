@@ -228,7 +228,7 @@ body .header .quick-access
 
 /* signin / signup public view */
 #publicLogin {
-    position: absolute; right: 0; top: 0;
+    position: absolute; right: 0; top:50px;
     z-index: 1000;
     margin: 26px 20px 0 0;
     width: 257px;
