@@ -126,7 +126,7 @@
         <jobs>
             <fulfillmentfactory_dotcom_fulfill_order>
                 <schedule>
-                    <cron_expr>0 7 * * *</cron_expr><!--2am and 12pm Monday through Friday -->
+                    <cron_expr>0 12 * * *</cron_expr><!--2am and 12pm Monday through Friday -->
                 </schedule>
                 <run>
                     <model>fulfillmentfactory/service_dotcom::runDotcomFulfillOrder</model>
