@@ -785,12 +785,11 @@ body .my-account .fieldset h2.legend {
 	font-size:12px;
 	font-weight:bold;
 	border-radius:5px;
-	padding:0px
+	padding:3px 5px 6px 5px;
 }
 
 .my-account .button span span{
 	margin:0;
-	padding:3px 10px 3px 10px;
 	font-weight:bold;
 }
 
