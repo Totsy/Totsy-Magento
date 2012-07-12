@@ -42,11 +42,11 @@
 	                    <input type="text" title="<?php echo $this->__('City') ?>" name="billing[city]" class="ui-input-text ui-body-c ui-corner-all ui-shadow-inset input-text required-entry" value="<?php echo $this->htmlEscape($this->getAddress()->getCity()) ?>" id="billing:city" />
 	                </div>
 	                <div class="field half-of-half">
-	                    <label for="billing:region_id" class="required"><em>*</em><?php echo $this->__('State/Province') ?></label>
+	                    <label for="billing:region_id" class="required"><em>*</em><?php echo $this->__('State') ?></label>
 						<div class="totsy-selective-input-box">
 							<span>State</span>
-							<select id="billing:region_id" name="billing[region_id]" title="<?php echo $this->__('State/Province') ?>" class="validate-select" style="display:none;" >
-								<option value=""><?php echo $this->__('Please select region, state or province') ?></option>
+							<select id="billing:region_id" name="billing[region_id]" title="<?php echo $this->__('State') ?>" class="validate-select" style="display:none;" >
+								<option value=""><?php echo $this->__('Please select state') ?></option>
 							</select>
 						</div>
 	                    <script type="text/javascript">
@@ -54,7 +54,7 @@
                             $('billing:region_id').setAttribute('defaultValue',  "<?php echo $this->getAddress()->getRegionId() ?>");
                         //]]>
                         </script>
-                        <input type="text" id="billing:region" name="billing[region]" value="<?php echo $this->htmlEscape($this->getAddress()->getRegion()) ?>"  title="<?php echo $this->__('State/Province') ?>" class="input-text hidden-state ui-input-text ui-body-c ui-corner-all ui-shadow-inset" style="display:none;" />
+                        <input type="text" id="billing:region" name="billing[region]" value="<?php echo $this->htmlEscape($this->getAddress()->getRegion()) ?>"  title="<?php echo $this->__('State') ?>" class="input-text hidden-state ui-input-text ui-body-c ui-corner-all ui-shadow-inset" style="display:none;" />
 	                </div>
 	            </li>
 	            <li class="fields">
@@ -66,7 +66,8 @@
                         <label for="billing:country_id" class="ui-input-text required"><em>*</em><?php echo $this->__('Country') ?></label>
 						<div class="totsy-selective-input-box totsy-selective-input-box-billing-country">
 							<span>United States</span>
-							<?php echo $this->getCountryHtmlSelect('billing') ?>
+							<?php //echo $this->getCountryHtmlSelect('billing') ?>
+							<select name="billing[country_id]" id="billing:country_id" class="validate-select" title="Country" ><option value="US" selected="selected" >United States</option></select>
 						</div>
                     </div>
 	            </li>

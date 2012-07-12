@@ -120,6 +120,9 @@ class Mage_Catalog_ProductController extends Mage_Core_Controller_Front_Action
         $productId  = (int) $this->getRequest()->getParam('id');
         $specifyOptions = $this->getRequest()->getParam('options');
 
+        //20120709 - CJD - adding referring url to registry for use in steelhouse pixel call
+        Mage::register('referring_url',$this->_getRefererUrl());
+
         // Prepare helper and params
         $viewHelper = Mage::helper('catalog/product_view');
 
