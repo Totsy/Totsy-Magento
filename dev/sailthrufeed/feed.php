@@ -1,7 +1,8 @@
 <?php 
 $full_path = dirname(dirname(__DIR__));
 $skip_cache_check = false;
-$TTL = 30*60;
+// set cache time for 3 days
+$TTL =3*24*60*60;
 
 if (php_sapi_name()=='cli'){
 	$skip_cache_check = true;	
