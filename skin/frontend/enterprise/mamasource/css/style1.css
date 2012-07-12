@@ -490,10 +490,9 @@ body.customer-account-create .page div.main{
 }
 
 #sign-up, #join-now, #redtrerm{
-	color:red;
+	color:#DE6076;
 }
 #sign-up:hover, #join-now:hover{
-	color:red;
 	text-decoration: underline;
 }
 body.customer-account-create .account-login{
