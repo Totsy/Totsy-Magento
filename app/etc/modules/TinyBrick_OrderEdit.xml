@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <modules>
+        <TinyBrick_OrderEdit>
+            <active>True</active>
+            <codePool>community</codePool>
+        </TinyBrick_OrderEdit>
+    </modules>
+</config>
