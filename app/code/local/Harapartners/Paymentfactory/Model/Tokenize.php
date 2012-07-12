@@ -449,7 +449,6 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Mage_Cybersource_Model_
         $paySubscriptionCreateService->run = "true";
         
         $this->_request->paySubscriptionCreateService = $paySubscriptionCreateService;    
-        
         $billTo = new stdClass();
         $billTo->firstName = $billing->getFirstname();
         $billTo->lastName = $billing->getLastname();
