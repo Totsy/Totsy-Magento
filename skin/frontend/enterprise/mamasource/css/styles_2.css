@@ -207,8 +207,7 @@ body .header .quick-access
 #publicLogin .btn {
 	float: right;
 	margin-top:7px;
-	background-color:rgb(218,80,77); /* fallback */
-	background-color:rgba(218,80,77,1);
+	background-color:#DE6076;
 	color:#fff;
 }
 #usercart .checkout strong,
@@ -217,7 +216,6 @@ body .header .quick-access
 	background: url(../images/btn-arrow-s.png) 100% 25% no-repeat;
 	line-height: 1.6;
 	}
-#usercart .checkout:hover {background-color:rgba(230,87,84,1);}
 /* remove the checkout btn on the checkout cart page */
 .checkout-cart-index #usercart .checkout,
 .hpcheckout-checkout-index #usercart .checkout {display: none;}
