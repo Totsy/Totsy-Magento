@@ -46,7 +46,7 @@
         <?php $_index = 0; ?>
         <?php $_count = $_items->count(); ?>
         <?php foreach ($_items as $_item): ?>
-        <?php if ($_item->getParentItem()) continue; ?>
+        <?php if ($_item->getParentItem()) continue; ?>        
         <tbody>
             <?php echo $this->getItemHtml($_item) ?>
             <?php if($this->helper('giftmessage/message')->getIsMessagesAvailable('order_item', $_item) && $_item->getGiftMessageId()): ?>
@@ -72,3 +72,12 @@
 	<span class="label"><?php echo $this->__('Estimated Shipping Date: ') ?></span><?php echo date('Y-m-d', Mage::helper('sales/order')->calculateEstimatedShipDate($_order)); ?>
 </p>
 <script type="text/javascript">decorateTable('my-orders-table', {'tbody' : ['odd', 'even'], 'tbody tr' : ['first', 'last']})</script>
+
+<script>
+
+jQuery(document).ready(function(){
+    
+  //virtual product div toggling code goes here      
+});
+
+</script>
