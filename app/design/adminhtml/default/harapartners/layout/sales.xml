@@ -93,8 +93,8 @@
                         <block type="core/text_list" name="order_item_extra_info" />
                     </block>
                     <block type="adminhtml/sales_order_payment" name="order_payment"/>
-                    <block type="adminhtml/sales_order_create_billing_method" template="sales/order/create/abstract.phtml" name="billing_method">
-                        <block type="adminhtml/sales_order_create_billing_method_form" template="sales/order/create/billing/method/form.phtml" name="form" />
+                    <block type="adminhtml/sales_order_create_billing_method" template="sales/order/create/abstract.phtml" name="edit_billing_method">
+                        <block type="adminhtml/sales_order_edit_billing_method_form" template="sales/order/create/billing/method/form.phtml" name="form" />
                     </block>
                     <block type="adminhtml/sales_order_view_history" name="order_history" template="sales/order/view/history.phtml"></block>
                     <block type="adminhtml/template" name="gift_options" template="sales/order/giftoptions.phtml">
