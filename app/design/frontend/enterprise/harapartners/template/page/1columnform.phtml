@@ -1,0 +1,81 @@
+<?php
+if($_POST['pinterestsubmit']){
+
+	$to      = 'jwidro@totsy.com';
+	$subject = 'pinterest fever';
+	$message = $_POST['field1'];
+	$headers = 'From: webmaster@example.com' . "\r\n" .
+	    'Reply-To: webmaster@example.com' . "\r\n" .
+	    'X-Mailer: PHP/' . phpversion();
+	
+	mail($to, $subject, $message, $headers);
+}
+
+?><!DOCTYPE html>
+<html lang="<?php echo $this->getLang() ?>" class="store-<?php echo Mage::app()->getStore()->getCode(); ?>">
+<head>
+<?php echo $this->getChildHtml('head') ?>
+</head>
+<body<?php echo $this->getBodyClass()?' class="'.$this->getBodyClass().'"':'' ?>>
+<?php echo $this->getChildHtml('after_body_start') ?>
+<div class="wrapper">
+    <?php echo $this->getChildHtml('global_notices') ?>
+    <div class="page">
+        <?php echo $this->getChildHtml('header') ?>
+        <?php echo $this->getChildHtml('global_messages') ?>
+        <?php echo $this->getChildHtml('breadcrumbsContainer') ?>
+        <div class="main col1-layout">
+
+<?php 
+	$currentUrlPath = $this->helper('core/url')->getCurrentUrl();
+	$temp = explode('/', $currentUrlPath);	
+	$baseUrl = $temp[3];
+?>
+            <div class="col-main">
+                <?php echo $this->getChildHtml('content') ?>
+                
+				<img src="/skin/frontend/enterprise/harapartners/images/pinterest/">                
+                
+                <form method="post">
+                	<input type="text" id="totsyemail" name="totsyemail">
+                	<br>
+                	ENTER TOTSY EMAIL
+                	<br>
+                	Not a member? <a href="">Join Here!</a>
+                	<br><br>
+                	<select id="region" name="region">
+                		<option value=""></option>
+                		<option value="totsywest">#totsywest</option>
+                		<option value="totsymidwest">#totsymidwest</option>
+                		<option value="totsyeast">#totsyeast</option>
+                		<option value="totsysouth">#totsysouth</option>
+                	</select>
+                	<br>
+                	REGION BASED ON MAP
+                	<br>
+                	i.e. if you live in Chicago choose Midwest
+                	<br><br>
+                	<input type="text" id="totsyemail" name="totsyemail">
+                	<br>
+                	ENTER TOTSY EMAIL
+                	<br>
+                	Not a member? <a href="">Join Here!</a>
+                	<br><br>
+                	
+                	
+
+
+
+                	<input type="submit" id="pinterestsubmit" name="pinterestsubmit">
+                
+                </form>
+            </div>
+        </div>
+        <?php echo $this->getChildHtml('footer_before') ?>
+        <?php echo $this->getChildHtml('footer') ?>
+        <?php echo $this->getChildHtml('before_body_end') ?>
+    </div>
+</div>
+<?php echo $this->getAbsoluteFooter() ?>
+</body>
+</html>
