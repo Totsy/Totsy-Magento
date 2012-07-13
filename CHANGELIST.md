@@ -1,6 +1,34 @@
 Totsy-Magento Release Notes
 ===========================
 
+20120713
+--------
+
+* pinterest form page building
+* Sailthru feed - add mamaource support
+* pink nav icons
+* remove height from image to fix event page
+* pinterest form page building
+* pinterest form page building
+* pinterest form page building
+* removing header
+* pinterest form page building
+* building form page
+* adding config.xml to local core for new cms page type
+* redirect to 10 seconds
+* revision to badgecity
+* new badge for login and reg
+* Added unit test cases for Totsy_Customer_Model_Observer class.
+* remove tmp cron file fix
+* fixed message wording and timezone issue - no longer removes add to cart button 4 hours ahead of time.
+* removing copy from blank popup cart
+* button padding
+* remove debug output from sailthru queue
+* Sailthru Api events feed - increase content cache time
+* adding some images
+* padding on add to cart btn
+* branched orders from core to local and added order status to orders grid widget in customer view in admin
+
 20120712
 --------
 
