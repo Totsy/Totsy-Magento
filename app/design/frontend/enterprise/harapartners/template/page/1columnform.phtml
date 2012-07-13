@@ -9,10 +9,46 @@
     <?php echo $this->getChildHtml('global_notices') ?>
     <div class="page">
         <?php echo $this->getChildHtml('header') ?>
+<style>
+
+.pinterestform{
+	text-align:center;
+	font-size:14px;
+	padding-top: 25px;
+	color:#444444;
+}
+
+.pinterestform a{
+	color:#000000;
+}
+
+.pinterestform input{
+	width:400px;
+	height:25px;
+	border:1px solid #999999;
+	margin:5px;
+}
+
+.pinterestform select{
+	width:200px;
+	height:25px;
+	border:1px solid #999999;
+	margin:5px;
+}
+
+.pinterestfooter{
+	margin-top:30px;
+	padding:20px;
+	color:#666666;
+	size:12px;
+
+}
+
+</style>
 
 
     <div class="page">
-        <div class="main">
+        <div class="main pinterestform">
 
 
 <?php
@@ -62,7 +98,6 @@ function submit(){
 }
 
 </script>
-
 				<img src="/skin/frontend/enterprise/harapartners/images/pinterest/SummerSpiritContest-header.jpeg">                
 				<img src="/skin/frontend/enterprise/harapartners/images/pinterest/PinterestMap.jpeg">                
 				<img src="/skin/frontend/enterprise/harapartners/images/pinterest/PinterestPrizeInfo.jpeg">                
@@ -70,46 +105,49 @@ function submit(){
                 <form method="post" id="pinterestform" name="pinterestform">
                 	<input type="text" id="totsyemail" name="totsyemail">
                 	<br>
-                	ENTER TOTSY EMAIL
+                	<b>ENTER TOTSY EMAIL</b>
                 	<br>
                 	Not a member? <a href="">Join Here!</a>
                 	<br><br>
                 	<select id="region" name="region">
-                		<option value=""></option>
+                		<option value="-- choose region --"></option>
                 		<option value="totsywest">#totsywest</option>
                 		<option value="totsymidwest">#totsymidwest</option>
                 		<option value="totsyeast">#totsyeast</option>
                 		<option value="totsysouth">#totsysouth</option>
                 	</select>
                 	<br>
-                	REGION BASED ON MAP
+                	<b>REGION BASED ON MAP</b>
                 	<br>
                 	i.e. if you live in Chicago choose Midwest
                 	<br><br>
                 	<input type="text" id="pinterestuser" name="pinterestuser">
                 	<br>
-                	PINTEREST USER/URL
+                	<b>PINTEREST USER/URL</b>
                 	<br>
                 	i.e. pinterest.com/user
                 	<input type="hidden" id="pinterestsubmit" name="pinterestsubmit">
                 	<br><br>
                 	
                 	
-				<img src="/skin/frontend/enterprise/harapartners/images/pinterest/PinterestSubmitButton.jpeg" onclick="submit(); return false;">                
+				<img src="/skin/frontend/enterprise/harapartners/images/pinterest/PinterestSubmitButton.jpeg" style="cursor:pointer;" onclick="submit(); return false;">                
 				<br>
 				<img src="/skin/frontend/enterprise/harapartners/images/pinterest/PinterestSun.jpeg">        
+
+                </form>
 				<br>
-RULES
+<div class="pinterestfooter">
+<b>RULES</b><br>
 
 <li>Follow Totsy on Pinterest http://pinterest.com/totsyfan </li>
 <li>Join your team based on the map above</li>
 <li>Pin a picture to the designated board, located on Totsy's Pinterest page, with the specified hashtag (up to 3 pins per participant)</li>
 <li>The most repinned board wins! We will pick one lucky winner from the winning board, good luck!</li>
 
-TERMS & CONDITIONS
+<br><br>
+<b>TERMS & CONDITIONS</b><br>
 No purchase necessary. Must be 18+ to enter and must be U.S. resident to be eligible. Contest valid until 11:59pm EST 07/25/12
-
-                </form>
+</div>
 
 <?php
 }
