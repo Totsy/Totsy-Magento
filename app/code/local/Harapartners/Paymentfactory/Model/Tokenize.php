@@ -444,7 +444,7 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Mage_Cybersource_Model_
         $soapClient = $this->getSoapApi();
         
         parent::iniRequest();
-
+        var_dump('createProfile');
         $paySubscriptionCreateService = new stdClass();
         $paySubscriptionCreateService->run = "true";
         
@@ -520,6 +520,7 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Mage_Cybersource_Model_
             $data->setData('address_id', $addressId);
             $data->setData('cc_last4', substr($payment->getCcNumber(), -4));
             $data->setData('cybersource_subid', $result->paySubscriptionCreateReply->subscriptionID);
+            var_dump($result->paySubscriptionCreateReply->subscriptionID);
             $profile = Mage::getModel('paymentfactory/profile');
             $profile->importDataWithValidation($data);
             $profile->save();

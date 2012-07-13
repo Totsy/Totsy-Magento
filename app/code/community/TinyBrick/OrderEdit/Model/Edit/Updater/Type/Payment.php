@@ -5,7 +5,7 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Payment extends TinyBrick_Orde
     {
         $customerId = $order->getCustomerId();
         $billing = $order->getBillingAddress();
-        $payment = new Varien_Object($data);
+        $payment = new Varien_Object($data['payment']);
         Mage::getModel('paymentfactory/tokenize')->createProfile($payment, $billing, $customerId, $billing->getId());
     }
 
