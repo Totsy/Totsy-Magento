@@ -1,14 +1,3 @@
-<!DOCTYPE html>
-<html lang="<?php echo $this->getLang() ?>" class="store-<?php echo Mage::app()->getStore()->getCode(); ?>">
-<head>
-<?php echo $this->getChildHtml('head') ?>
-</head>
-<body<?php echo $this->getBodyClass()?' class="'.$this->getBodyClass().'"':'' ?>>
-<?php echo $this->getChildHtml('after_body_start') ?>
-<div class="wrapper">
-    <?php echo $this->getChildHtml('global_notices') ?>
-    <div class="page">
-        <?php echo $this->getChildHtml('header') ?>
 <style>
 
 .pinterestform{
@@ -16,6 +5,7 @@
 	font-size:14px;
 	padding-top: 25px;
 	color:#444444;
+	margin-left:-20px;
 }
 
 .pinterestform a{
@@ -47,39 +37,9 @@
 </style>
 
 
-    <div class="page">
-        <div class="main pinterestform">
+        <div class="pinterestform">
 
 
-<?php
-if($_POST['totsyemail']){
-
-	$to      = 'jwidro@totsy.com';
-	$subject = 'pinterest fever';
-	$totsyemail = $_POST['totsyemail'];
-	$region = $_POST['region'];
-	$pinterestuser = $_POST['pinterestuser'];
-	
-	$message ="
-	email - $totsyemail
-	
-	region - $region
-	
-	pinterest - $pinterestuser
-	";
-	
-	$headers = 'From: ' . $totsyemail . "\r\n" .
-	    'X-Mailer: PHP/' . phpversion();
-	
-	mail($to, $subject, $message, $headers);
-?>
-				<img src="/skin/frontend/enterprise/harapartners/images/pinterest/SummerSpiritContest-header2.jpeg">                
-				<a href="http://pinterest.com/totsyfan"><img src="/skin/frontend/enterprise/harapartners/images/pinterest/PinButton.jpeg" style="cursor:pointer;border:0px;"></a>                
-				<br>
-				<img src="/skin/frontend/enterprise/harapartners/images/pinterest/PinterestSun.jpeg">        
-
-				<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-<?php } else{ ?>
 
 <script>
 
@@ -106,7 +66,7 @@ function submitpinterest(){
 				<img src="/skin/frontend/enterprise/harapartners/images/pinterest/PinterestMap.jpeg">                
 				<img src="/skin/frontend/enterprise/harapartners/images/pinterest/PinterestPrizeInfo.jpeg">                
                 
-                <form method="post" id="pinterestform" name="pinterestform">
+                <form action="<?php echo $this->getUrl('pinterestform/index/indexPost');?>" method="post" id="pinterestform" name="pinterestform">
                 	<input type="text" id="totsyemail" name="totsyemail">
                 	<br>
                 	<b>ENTER TOTSY EMAIL</b>
@@ -139,10 +99,6 @@ function submitpinterest(){
 				<img src="/skin/frontend/enterprise/harapartners/images/pinterest/PinterestSun.jpeg">        
 
                 </form>
-
-<?php
-}
-?>
 			<div class="pinterestfooter">
 			<b>RULES</b><br>
 			
@@ -159,20 +115,3 @@ function submitpinterest(){
 
 
 		</div>
-	</div>
-
-
-
-
-
-
-
-
-        <?php echo $this->getChildHtml('footer_before') ?>
-        <?php echo $this->getChildHtml('footer') ?>
-        <?php echo $this->getChildHtml('before_body_end') ?>
-    </div>
-</div>
-<?php echo $this->getAbsoluteFooter() ?>
-</body>
-</html>
