@@ -1,0 +1,117 @@
+<style>
+
+.pinterestform{
+	text-align:center;
+	font-size:14px;
+	padding-top: 25px;
+	color:#444444;
+	margin-left:-20px;
+}
+
+.pinterestform a{
+	color:#000000;
+}
+
+.pinterestform input{
+	width:400px;
+	height:25px;
+	border:1px solid #999999;
+	margin:5px;
+}
+
+.pinterestform select{
+	width:200px;
+	height:25px;
+	border:1px solid #999999;
+	margin:5px;
+}
+
+.pinterestfooter{
+	margin-top:30px;
+	padding:20px;
+	color:#666666;
+	size:12px;
+
+}
+
+</style>
+
+
+        <div class="pinterestform">
+
+
+
+<script>
+
+function submitpinterest(){
+
+	if(document.getElementById("totsyemail").value==""){
+		alert("email is required!");	
+	}
+	else if(document.getElementById("region").value==""){
+		alert("region is required!");	
+	}
+	else if(document.getElementById("pinterestuser").value==""){
+		alert("pinterest url is required!");	
+	}
+	else{
+		document.forms["pinterestform"].submit();
+	}
+	
+
+}
+
+</script>
+				<img src="/skin/frontend/enterprise/harapartners/images/pinterest/SummerSpiritContest-header.jpeg">                
+				<img src="/skin/frontend/enterprise/harapartners/images/pinterest/PinterestMap.jpeg">                
+				<img src="/skin/frontend/enterprise/harapartners/images/pinterest/PinterestPrizeInfo.jpeg">                
+                
+                <form action="<?php echo $this->getUrl('pinterestform/index/indexPost');?>" method="post" id="pinterestform" name="pinterestform">
+                	<input type="text" id="totsyemail" name="totsyemail">
+                	<br>
+                	<b>ENTER TOTSY EMAIL</b>
+                	<br>
+                	Not a member? <a href="/a/pinterestsummerspirit">Join Here!</a>
+                	<br><br>
+                	<select id="region" name="region">
+                		<option value="">-- choose region --</option>
+                		<option value="totsywest">#totsywest</option>
+                		<option value="totsymidwest">#totsymidwest</option>
+                		<option value="totsyeast">#totsyeast</option>
+                		<option value="totsysouth">#totsysouth</option>
+                	</select>
+                	<br>
+                	<b>REGION BASED ON MAP</b>
+                	<br>
+                	i.e. if you live in Chicago choose #totsymidwest
+                	<br><br>
+                	<input type="text" id="pinterestuser" name="pinterestuser">
+                	<br>
+                	<b>PINTEREST USER/URL</b>
+                	<br>
+                	i.e. pinterest.com/user
+                	<input type="hidden" id="pinterestsubmit" name="pinterestsubmit">
+                	<br><br>
+                	
+                	
+				<img src="/skin/frontend/enterprise/harapartners/images/pinterest/PinterestSubmitButton.jpeg" style="cursor:pointer;" onclick="submitpinterest(); return false;">                
+				<br>
+				<img src="/skin/frontend/enterprise/harapartners/images/pinterest/PinterestSun.jpeg">        
+
+                </form>
+			<div class="pinterestfooter">
+			<b>RULES</b><br>
+			
+			<li>Follow Totsy on Pinterest <a href="http://pinterest.com/totsyfan">http://pinterest.com/totsyfan</a> </li>
+			<li>Join your team based on the map above</li>
+			<li>Pin a picture to the designated board, located on Totsy's Pinterest page, with the specified hashtag (up to 3 pins per participant)</li>
+			<li>The most repinned board wins! We will pick one lucky winner from the winning board, good luck!</li>
+			
+			<br><br>
+			<b>TERMS & CONDITIONS</b><br>
+			No purchase necessary. Must be 18+ to enter and must be U.S. resident to be eligible. Contest valid until 11:59pm EST 07/25/12
+			</div>
+
+
+
+		</div>
