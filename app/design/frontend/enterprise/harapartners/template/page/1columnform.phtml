@@ -68,8 +68,7 @@ if($_POST['totsyemail']){
 	pinterest - $pinterestuser
 	";
 	
-	$headers = 'From: webmaster@example.com' . "\r\n" .
-	    'Reply-To: webmaster@example.com' . "\r\n" .
+	$headers = 'From: ' . $totsyemail . "\r\n" .
 	    'X-Mailer: PHP/' . phpversion();
 	
 	mail($to, $subject, $message, $headers);
@@ -124,7 +123,7 @@ function submit(){
                 	<br>
                 	<b>REGION BASED ON MAP</b>
                 	<br>
-                	i.e. if you live in Chicago choose Midwest
+                	i.e. if you live in Chicago choose #totsymidwest
                 	<br><br>
                 	<input type="text" id="pinterestuser" name="pinterestuser">
                 	<br>
