@@ -1,17 +1,4 @@
-<?php
-if($_POST['pinterestsubmit']){
-
-	$to      = 'jwidro@totsy.com';
-	$subject = 'pinterest fever';
-	$message = $_POST['field1'];
-	$headers = 'From: webmaster@example.com' . "\r\n" .
-	    'Reply-To: webmaster@example.com' . "\r\n" .
-	    'X-Mailer: PHP/' . phpversion();
-	
-	mail($to, $subject, $message, $headers);
-}
-
-?><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="<?php echo $this->getLang() ?>" class="store-<?php echo Mage::app()->getStore()->getCode(); ?>">
 <head>
 <?php echo $this->getChildHtml('head') ?>
@@ -22,21 +9,65 @@ if($_POST['pinterestsubmit']){
     <?php echo $this->getChildHtml('global_notices') ?>
     <div class="page">
         <?php echo $this->getChildHtml('header') ?>
-        <?php echo $this->getChildHtml('global_messages') ?>
-        <?php echo $this->getChildHtml('breadcrumbsContainer') ?>
-        <div class="main col1-layout">
 
-<?php 
-	$currentUrlPath = $this->helper('core/url')->getCurrentUrl();
-	$temp = explode('/', $currentUrlPath);	
-	$baseUrl = $temp[3];
+
+    <div class="page">
+        <div class="main">
+
+
+<?php
+if($_POST['totsyemail']){
+
+	$to      = 'jwidro@totsy.com';
+	$subject = 'pinterest fever';
+	$totsyemail = $_POST['totsyemail'];
+	$region = $_POST['region'];
+	$pinterestuser = $_POST['pinterestuser'];
+	
+	$message ="
+	email - $totsyemail
+	
+	region - $region
+	
+	pinterest - $pinterestuser
+	";
+	
+	$headers = 'From: webmaster@example.com' . "\r\n" .
+	    'Reply-To: webmaster@example.com' . "\r\n" .
+	    'X-Mailer: PHP/' . phpversion();
+	
+	mail($to, $subject, $message, $headers);
 ?>
-            <div class="col-main">
-                <?php echo $this->getChildHtml('content') ?>
+				<img src="/skin/frontend/enterprise/harapartners/images/pinterest/SummerSpiritContest-header2.jpeg">                
+<?php } else{ ?>
+
+<script>
+
+function submit(){
+	alert('dinkers');
+	if(document.getElementById("totsyemail").value==""){
+		alert("email is required!");	
+	}
+	else if(document.getElementById("region").value==""){
+		alert("region is required!");	
+	}
+	else if(document.getElementById("pinterestuser").value==""){
+		alert("pinterest url is required!");	
+	}
+	else{
+		document.forms["pinterestform"].submit();
+	}
+	
+
+}
+
+</script>
+
+				<img src="/skin/frontend/enterprise/harapartners/images/pinterest/SummerSpiritContest-header.jpeg">                
+				<img src="/skin/frontend/enterprise/harapartners/images/pinterest/PinterestMap.jpeg">                
+				<img src="/skin/frontend/enterprise/harapartners/images/pinterest/PinterestPrizeInfo.jpeg">                
                 
-				<img src="/skin/frontend/enterprise/harapartners/images/pinterest/">                
-                
-                <form method="post">
+                <form method="post" id="pinterestform" name="pinterestform">
                 	<input type="text" id="totsyemail" name="totsyemail">
                 	<br>
                 	ENTER TOTSY EMAIL
@@ -55,22 +86,45 @@ if($_POST['pinterestsubmit']){
                 	<br>
                 	i.e. if you live in Chicago choose Midwest
                 	<br><br>
-                	<input type="text" id="totsyemail" name="totsyemail">
+                	<input type="text" id="pinterestuser" name="pinterestuser">
                 	<br>
-                	ENTER TOTSY EMAIL
+                	PINTEREST USER/URL
                 	<br>
-                	Not a member? <a href="">Join Here!</a>
+                	i.e. pinterest.com/user
+                	<input type="hidden" id="pinterestsubmit" name="pinterestsubmit">
                 	<br><br>
                 	
                 	
+				<img src="/skin/frontend/enterprise/harapartners/images/pinterest/PinterestSubmitButton.jpeg" onclick="submit(); return false;">                
+				<br>
+				<img src="/skin/frontend/enterprise/harapartners/images/pinterest/PinterestSun.jpeg">        
+				<br>
+RULES
 
+<li>Follow Totsy on Pinterest http://pinterest.com/totsyfan </li>
+<li>Join your team based on the map above</li>
+<li>Pin a picture to the designated board, located on Totsy's Pinterest page, with the specified hashtag (up to 3 pins per participant)</li>
+<li>The most repinned board wins! We will pick one lucky winner from the winning board, good luck!</li>
 
+TERMS & CONDITIONS
+No purchase necessary. Must be 18+ to enter and must be U.S. resident to be eligible. Contest valid until 11:59pm EST 07/25/12
 
-                	<input type="submit" id="pinterestsubmit" name="pinterestsubmit">
-                
                 </form>
-            </div>
-        </div>
+
+<?php
+}
+?>
+
+		</div>
+	</div>
+
+
+
+
+
+
+
+
         <?php echo $this->getChildHtml('footer_before') ?>
         <?php echo $this->getChildHtml('footer') ?>
         <?php echo $this->getChildHtml('before_body_end') ?>
