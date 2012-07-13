@@ -1304,26 +1304,26 @@ body .top-cart .block-content p.subtotal span.orange, .orange, .orange .price{
 @TODO: optimize for ipad/small screens
 */
 .badgecity_log {
-    background: url("../images/FreeShippingButton.png") no-repeat scroll left top transparent;
+    background: url("../images/freeship30_days.png") no-repeat scroll left top transparent;
     float: right;
-    height: 108px;
+    height: 169px;
     margin-right: -50px;
     margin-top: -80px;
     position: absolute;
     right: -20px;
-    top: 400px;
-    width: 108px;
+    top: 380px;
+    width: 161px;
     z-index: 10;
 }
 .badgecity_reg {
-    background: url("../images/FreeShippingButton.png") no-repeat scroll left top transparent;
+    background: url("../images/freeship30_days.png") no-repeat scroll left top transparent;
     float: right;
-    height: 108px;
+    height: 169px;
     margin-right: -50px;
     margin-top: -80px;
     position: absolute;
-    right: -20px;
-    top: 520px;
-    width: 108px;
+    right: -60px;
+    top: 500px;
+    width: 161px;
     z-index: 10;
 }

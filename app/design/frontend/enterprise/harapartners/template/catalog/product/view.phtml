@@ -85,8 +85,9 @@ direction: "down"
 <li><a href="#shipping">Shipping & Returns</a></li>
 </ul>
 <?php 
-    $event_end_date = strtotime($_category->getEventEndDate());
-    $today = strtotime('NOW');
+    $reformat = date("m/d/Y H:i:s", strtotime($_category->getEventEndDate()));
+    $event_end_date = Mage::app()->getLocale()->date($reformat, null, null, false);
+    $today = Mage::app()->getLocale()->date(null,null,null, true);
 ?>
 <!-- Start Description Tab -->
 <div id="description">
@@ -109,7 +110,7 @@ direction: "down"
                     <p class="product-ids"><?php echo $this->__('SKU# %s', $this->htmlEscape($_product->getSku())); ?></p>
                     <?php //echo $this->getReviewsSummaryHtml($_product, false, true)?>
                     <?php echo $this->getChildHtml('alert_urls') ?>
-                    <?php if($today <= $event_end_date):  ?>
+                    <?php if(!$today->isLater($event_end_date)):  ?>
                         <?php echo $this->getChildHtml('product_type_data') ?>
                     <?php endif; ?>
                     <?php echo $this->getChildHtml('tierprices') ?>

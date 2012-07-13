@@ -1,18 +1,23 @@
 <?php 
 $full_path = dirname(dirname(__DIR__));
 $skip_cache_check = false;
-$TTL = 30*60;
+// set cache time for 3 days
+$TTL =3*24*60*60;
 
 if (php_sapi_name()=='cli'){
 	$skip_cache_check = true;	
 	$index=array_search('--get', $argv);
 	if ( $index!==false && $argc>$index+1) {
-		 parse_str($argv[$index+1],$_GET);
 		 $_SERVER['REQUEST_URI'] = $argv[$index+1];
+	}
+	
+	$index=array_search('--domain', $argv);
+	if ( $index!==false && $argc>$index+1) {
+		$_SERVER['HTTP_HOST'] = $argv[$index+1];
 	}
 }
 
-$chash = $full_path. '/var/tmp/' .md5($_SERVER['REQUEST_URI']).'.json';
+$chash = $full_path. '/var/tmp/' .md5($_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']).'.json';
 if ($skip_cache_check===true){
 	file_put_contents($chash.'.new','addin some cache');
 }
@@ -136,7 +141,7 @@ $fh = fopen($chash,'w');
 fwrite($fh,$data);
 fclose($fh);
 if (file_exists($chash.'.new')){
-	unlink($chash.'new');
+	unlink($chash.'.new');
 }
 echo $data;
 /*### END ###*/

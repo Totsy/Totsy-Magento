@@ -234,7 +234,7 @@ div.event-description-container div.std { padding: 10px 20px; width: 736px;}
 	width: 100px;}
 .catalog-product-view .product-view .product-shop .add-to-cart button span, .catalog-product-view .product-view .product-shop .add-to-cart button span span{
 	background: none;
-	padding: 0px !important;}
+	padding: 2px 5px !important;}
 div.share-button { padding: 20px; width: 130px; }
 dl.collateral-tabs .active span {
 	color: white; 

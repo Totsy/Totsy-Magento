@@ -188,7 +188,7 @@ body .header .quick-access
 }
 
 /* improved checkout btn */
-/* @TODO - abstract out all .btn styles‚Ä¶ need design consistency / standards */
+/* @TODO - abstract out all .btn styles… need design consistency / standards */
 #usercart .btn,
 #publicLogin .btn {
 	padding:1px 10px 0;
@@ -402,7 +402,7 @@ ul.menu ul.shop li a{
 }
 
 .category-products .product-image{
-	width:125px; height: 125px;
+	width:125px; 
 }
 
 /*--------------------------My Account-------------------------------------*/ 
@@ -617,7 +617,7 @@ body.customer-account-create .col1-layout .col-main, body.enterprise-invitation-
 
 .customer-account-create h2.tagline{
 	padding-top:10px;
-	color:#ED1C25;
+	color:#DE6076;
 	font-size:18px;
 	font-weight:normal;
 	padding-bottom:10px
@@ -785,12 +785,11 @@ body .my-account .fieldset h2.legend {
 	font-size:12px;
 	font-weight:bold;
 	border-radius:5px;
-	padding:0px
+	padding:3px 5px 6px 5px;
 }
 
 .my-account .button span span{
 	margin:0;
-	padding:3px 10px 3px 10px;
 	font-weight:bold;
 }
 
