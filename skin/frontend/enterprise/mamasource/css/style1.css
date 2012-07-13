@@ -1155,3 +1155,9 @@ body .col-left hr {
 .categoryevent-index-topnav .products-grid .product-image {
     margin: 0 auto 3px;
 }
+
+/* more styles copied over from totsy/default - i hate doing this… hara really bunked this themeing up */
+.left_needhelp .main-nav a {
+    color: #DE6076;
+    font-size: 12px;
+}
