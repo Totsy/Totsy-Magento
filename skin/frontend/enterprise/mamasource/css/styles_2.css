@@ -188,7 +188,7 @@ body .header .quick-access
 }
 
 /* improved checkout btn */
-/* @TODO - abstract out all .btn styles‚Ä¶ need design consistency / standards */
+/* @TODO - abstract out all .btn styles… need design consistency / standards */
 #usercart .btn,
 #publicLogin .btn {
 	padding:1px 10px 0;
@@ -228,7 +228,7 @@ body .header .quick-access
 
 /* signin / signup public view */
 #publicLogin {
-    position: absolute; right: 0; top: 0;
+    position: absolute; right: 0; top:50px;
     z-index: 1000;
     margin: 26px 20px 0 0;
     width: 257px;
@@ -617,7 +617,7 @@ body.customer-account-create .col1-layout .col-main, body.enterprise-invitation-
 
 .customer-account-create h2.tagline{
 	padding-top:10px;
-	color:#ED1C25;
+	color:#DE6076;
 	font-size:18px;
 	font-weight:normal;
 	padding-bottom:10px
