@@ -42,13 +42,26 @@ class Totsy_Customer_Model_Observer
                 $response->setRedirect($urlRedirect);
                 return $this;
             } else if (preg_match("/\b[A-Z0-9._%-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b/i", $email)) {
-                $customer = Mage::getModel('customer/customer')
-                    ->setWebsiteId(1)
+                $customer = Mage::getModel('customer/customer');
+                $newPassword = $customer->generatePassword();
+                $customer->setWebsiteId(1)
                     ->setStoreId($storeId)
                     ->setEmail($email)
-                    ->setPassword($customer->generatePassword())
+                    ->setPassword($newPassword)
                     ->save();
 
+//                $templateVars = array(
+//                    'customer' => $customer,
+//                    'new_password' => $newPassword
+//                );
+//                Mage::getModel('core/email_template')
+//                    ->sendTransactional(
+//                        '_trans_Newsletter_Login_Mamasource',
+//                        null,
+//                        $email,
+//                        '',
+//                        $templateVars
+//                    );
                 Mage::getSingleton('customer/session')
                     ->setCustomerAsLoggedIn($customer)
                     ->setCheckLastValidationFlag(false)
