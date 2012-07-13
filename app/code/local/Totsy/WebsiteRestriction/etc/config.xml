@@ -20,6 +20,9 @@
                         <inchoo_facebook_customer_account_connect/>
                         <customer_account_resetpassword/>
                         <customer_account_resetpasswordpost/>
+                        <pinterestform_index_index/>
+                        <pinterestform_index_indexPost/>
+                        <pinterestform_index_success/>
                     </generic>
                 </full_action_names>
             </websiterestriction>
