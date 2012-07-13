@@ -114,6 +114,7 @@ class TinyBrick_OrderEdit_OrderController extends Mage_Adminhtml_Controller_Acti
 	protected function _initOrder()
     {
         $id = $this->getRequest()->getParam('order_id');
+        var_dump($id);
         $order = Mage::getModel('orderedit/order')->load($id);
 
         if (!$order->getId()) {
