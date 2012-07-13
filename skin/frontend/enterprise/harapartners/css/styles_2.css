@@ -263,8 +263,47 @@ ul.menu>li>ul{
     width: 95px;
 }
 
+#navAllEvents ul li:hover {
+    width: 95px !important;
+}
+
 #navSocial {
-    width: 100px;
+    width: 105px;
+}
+
+
+#myAccount ul{ 
+    border: 1px solid #DDDDDD !important;
+    border-radius: 12px 12px 12px 12px;
+    box-shadow: 0 3px 5px 1px rgba(0, 0, 0, 0.4);
+    background-color: white;
+    border: 1px solid grey;
+    list-style-type: none;
+    min-width: 4.5em;
+    height:50px;
+    width: 150px;
+    /*top:14px;*/
+    font-weight:bold;
+    color: #ED1C25;
+    margin: 0px !important;
+    display: none; 
+    position: relative;
+    z-index: 100;
+}
+
+#myAccount {
+    font-weight: bold;
+    display: block;
+    width:165px !important;
+    cursor: pointer;
+}
+
+#myAccount:hover ul{ 
+    display:block; 
+}
+
+#myAccount ul li {
+    margin:5px !important;
 }
 
 .nav ul

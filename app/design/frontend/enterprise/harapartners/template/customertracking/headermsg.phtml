@@ -24,11 +24,13 @@ if ( !empty($customerName)) {
     $welcomeInfo = $customer->getEmail();
 }
 ?>
-    <strong><?php echo $this->__( 'Hi, %s ', $welcomeInfo );?></strong>
-    <span class="links">
-        <span style="width:70px !important; float:left !important">
-	         <a title="My Account" href="<?php echo Mage::getUrl('customer/account')?>"><?php echo $this->__('My Account');?></a>
-        </span>
-        <div id="rondavu_welcome_container" style="width:100px !important; float:right !important">
-        </div>
-    </span>
+<span class="links">
+    <div id="myAccount" style="float:left"><?php echo $this->__( 'Hi, %s ', $welcomeInfo );?>
+       <ul>
+	       <li><a title="My Account" href="<?php echo Mage::getUrl('customer/account')?>"><?php echo $this->__('My Account');?></a></li>
+	       <li><a title="My Account" href="<?php echo Mage::getUrl('customer/account/logout')?>">Sign Out</a></li>
+	   </ul>
+    </div>
+    <div id="rondavu_welcome_container" style="width:100px !important; float:right !important">
+    </div>
+</span>
