@@ -58,6 +58,8 @@ class Mage_Adminhtml_Block_Catalog_Product_Grid extends Mage_Adminhtml_Block_Wid
         $collection = Mage::getModel('catalog/product')->getCollection()
             ->addAttributeToSelect('sku')
             ->addAttributeToSelect('name')
+            ->addAttributeToSelect('size')
+            ->addAttributeToSelect('color')
             ->addAttributeToSelect('image') //Harapartners, Jun: include product base image in the grid
             ->addAttributeToSelect('vendor_style') //Harapartners, Li: include vendor style in the grid
             ->addAttributeToSelect('attribute_set_id')
@@ -113,6 +115,19 @@ class Mage_Adminhtml_Block_Catalog_Product_Grid extends Mage_Adminhtml_Block_Wid
 
     protected function _prepareColumns()
     {
+        $productSizeAttr = Mage::getModel('catalog/product')->getResource()->getAttribute('size');
+        $productSizeOption = $productSizeAttr->getSource()->getAllOptions();
+        $productColorAttr = Mage::getModel('catalog/product')->getResource()->getAttribute('color');
+        $productColorOption = $productColorAttr->getSource()->getAllOptions();
+        $sizeArray = array();
+        $colorArray = array();
+        foreach ( $productSizeOption as $option ){
+            $sizeArray[$option['value']] = $option['label'];
+        }
+        foreach ( $productColorOption as $option ){
+            $colorArray[$option['value']] = $option['label'];
+        }
+        
         $this->addColumn('entity_id',
             array(
                 'header'=> Mage::helper('catalog')->__('ID'),
@@ -124,6 +139,18 @@ class Mage_Adminhtml_Block_Catalog_Product_Grid extends Mage_Adminhtml_Block_Wid
             array(
                 'header'=> Mage::helper('catalog')->__('Name'),
                 'index' => 'name',
+        ));
+        $this->addColumn('size', array(
+            'header'    => Mage::helper('catalog')->__('Size'),
+            'index'     => 'size',
+            'type'        => 'options',
+            'options'    => $sizeArray
+        ));
+        $this->addColumn('color', array(
+            'header'    => Mage::helper('catalog')->__('Color'),
+            'index'     => 'color',
+            'type'        => 'options',
+            'options'    => $colorArray
         ));
         
         //Harapartners, Jun: include product base image in the grid

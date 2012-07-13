@@ -1,0 +1,6 @@
+tables:
+  customer/entity:
+    - entity_id: 100
+      email: autologin+3@test.net
+      store_id: 1
+      website_id: 1
