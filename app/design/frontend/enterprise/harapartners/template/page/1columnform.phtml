@@ -75,12 +75,17 @@ if($_POST['totsyemail']){
 	mail($to, $subject, $message, $headers);
 ?>
 				<img src="/skin/frontend/enterprise/harapartners/images/pinterest/SummerSpiritContest-header2.jpeg">                
+				<a href="/a/pinterestsummerspirit"><img src="/skin/frontend/enterprise/harapartners/images/pinterest/PinButton.jpeg" style="cursor:pointer;border:0px;"></a>                
+				<br>
+				<img src="/skin/frontend/enterprise/harapartners/images/pinterest/PinterestSun.jpeg">        
+
+				<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 <?php } else{ ?>
 
 <script>
 
 function submit(){
-	alert('dinkers');
+
 	if(document.getElementById("totsyemail").value==""){
 		alert("email is required!");	
 	}
@@ -107,10 +112,10 @@ function submit(){
                 	<br>
                 	<b>ENTER TOTSY EMAIL</b>
                 	<br>
-                	Not a member? <a href="">Join Here!</a>
+                	Not a member? <a href="/customer/account/create/">Join Here!</a>
                 	<br><br>
                 	<select id="region" name="region">
-                		<option value="-- choose region --"></option>
+                		<option value="">-- choose region --</option>
                 		<option value="totsywest">#totsywest</option>
                 		<option value="totsymidwest">#totsymidwest</option>
                 		<option value="totsyeast">#totsyeast</option>
@@ -135,23 +140,24 @@ function submit(){
 				<img src="/skin/frontend/enterprise/harapartners/images/pinterest/PinterestSun.jpeg">        
 
                 </form>
-				<br>
-<div class="pinterestfooter">
-<b>RULES</b><br>
-
-<li>Follow Totsy on Pinterest http://pinterest.com/totsyfan </li>
-<li>Join your team based on the map above</li>
-<li>Pin a picture to the designated board, located on Totsy's Pinterest page, with the specified hashtag (up to 3 pins per participant)</li>
-<li>The most repinned board wins! We will pick one lucky winner from the winning board, good luck!</li>
-
-<br><br>
-<b>TERMS & CONDITIONS</b><br>
-No purchase necessary. Must be 18+ to enter and must be U.S. resident to be eligible. Contest valid until 11:59pm EST 07/25/12
-</div>
 
 <?php
 }
 ?>
+			<div class="pinterestfooter">
+			<b>RULES</b><br>
+			
+			<li>Follow Totsy on Pinterest <a href="http://pinterest.com/totsyfan">http://pinterest.com/totsyfan</a> </li>
+			<li>Join your team based on the map above</li>
+			<li>Pin a picture to the designated board, located on Totsy's Pinterest page, with the specified hashtag (up to 3 pins per participant)</li>
+			<li>The most repinned board wins! We will pick one lucky winner from the winning board, good luck!</li>
+			
+			<br><br>
+			<b>TERMS & CONDITIONS</b><br>
+			No purchase necessary. Must be 18+ to enter and must be U.S. resident to be eligible. Contest valid until 11:59pm EST 07/25/12
+			</div>
+
+
 
 		</div>
 	</div>
