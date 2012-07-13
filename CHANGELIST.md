@@ -1,6 +1,20 @@
 Totsy-Magento Release Notes
 ===========================
 
+20120713-1
+----------
+
+* change text MGN 738
+* add url to webstire restriction whitelist
+* new module pinterest xml
+* new template phtml for pinterest form
+* module config xml
+* new module for pinterest form page
+* MGN-820 #resolve #comment Fixing font-size and adding bg image for content blocks on My Account page
+* fix form submit js MGN790
+* MGN-805 #resolve #comment Moar fixins on mamasource linkage
+* fixing Google order success tracking
+
 20120713
 --------
 
