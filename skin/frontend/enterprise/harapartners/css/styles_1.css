@@ -175,6 +175,7 @@ div.event-description-container div.std { padding: 12px; width: 736px; font-size
 	font-size: 10px;
 	text-decoration: none;}
 .catalog-category-view .category-products ul.products-grid li.item div.product-info .price-box p.old-price span.price {text-decoration: none;}
+.catalog-category-view .category-products ul.products-grid li.item div.product-info .price-box p.old-price span.percent {display: none;}
 .catalog-category-view .category-products ul.products-grid li.item div.product-info .price-box p.special-price{ 
 	top:-20px;
 	color:#009900;
