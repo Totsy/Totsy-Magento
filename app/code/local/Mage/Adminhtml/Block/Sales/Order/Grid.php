@@ -257,8 +257,10 @@ class Mage_Adminhtml_Block_Sales_Order_Grid extends Mage_Adminhtml_Block_Widget_
         
         $trimmedGmail .= '@gmail.com';
 
+
         return $trimmedGmail;
     }
+    
     
     public function getRowUrl($row)
     {
