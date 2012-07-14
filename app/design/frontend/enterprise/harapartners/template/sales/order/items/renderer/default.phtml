@@ -25,6 +25,22 @@
  */
 ?>
 <?php $_item = $this->getItem() ?>
+
+<?php
+
+if($_item->is_virtual==1) {  
+	$product_options = $_item->getProductOptions();
+	$voucher_label = $product_options['options'][0]['label'];
+	$voucher_code_string = explode("\n",$product_options['options'][0]['value']);
+	$voucher_value = $voucher_code_string[0];
+	
+	$options =  $_item->getProductOptions();
+	unset($options['options']);
+	$_item->setProductOptions($options); 
+}
+
+?>
+
 <tr class="border" id="order-item-row-<?php echo $_item->getId() ?>">
     <td><h3 class="product-name"><?php echo $this->htmlEscape($_item->getName()) ?></h3>
         <?php if($_options = $this->getItemOptions()): ?>
@@ -323,29 +339,27 @@
 <?php if($_item->is_virtual==1) {  ?>
 <tr>
     <td>
-        <div class="toggleable-order-items" href="#">
-            <a href="#" class="sales-order-virtual-items-toggle-link">CLICK HERE FOR MORE INFORMATION ON THIS DEAL</a>
-            <div id="sales-order-virtual-item-content">
-            <?php
-                 //unset the product options
-                $options =  $_item->getProductOptions();
-                unset($options['options']);
-                $_item->setProductOptions($options); 
-              
+        <div class="toggleable-order-items">
+        		<div>
+                	<span style="font-weight:bold; font-size:12px; color: #707070"><?php echo $voucher_label; ?>:</span>
+        		</div>
+            	<div>
+            		<a href="#" style="float:left">CLICK HERE FOR MORE INFORMATION ON THIS DEAL</a>
+            		<img src="https://evan.totsy.com/skin/frontend/enterprise/harapartners/images/orders-history-virtual-items-arrow.gif" width="13.5" height="10.5" id="<?php echo $_item->getProductId() + $_item->getId(); ?>" class="sales-order-virtual-items-toggle-link"><br>
+            	</div>
+            	<div id="sales-order-virtual-item-content-<?php echo $_item->getProductId() + $_item->getId() ; ?>" class="sales-order-virtual-item-content">
+            <?php      			
                 $_product = Mage::getModel('catalog/product')->load($_item->getProductId());
                 
                 $product_short_description = $_product->getShortDescription();
                 $product_description = $_product->getDescription();
                                 
-                $product_thumbnail = $_product->getImageUrl();
-                $product_options = $_item->getProductOptions();
-                $voucher_label = $product_options['options'][0]['label'];
-                
-                $voucher_code_string = explode("\n",$product_options['options'][0]['value']);
-                
-                $voucher_value = $voucher_code_string[0];
-                
+                $product_thumbnail = $_product->getImageUrl();                
                 ?>
+                <div class="sales-order-virtual-item-code">
+                	<span><?php echo $voucher_label; ?>:</span>
+                	<span><?php echo $voucher_value; ?></span>
+                </div>
                 <div class="sales-order-virtual-item-thumbnail"><img src="<?php echo $product_thumbnail; ?>"></div>
                 <div class="sales-order-virtual-item-shortdescription"><?php echo $product_short_description; ?></div>
                 <div class="sales-order-virtual-item-description"><?php echo $product_description; ?></div>

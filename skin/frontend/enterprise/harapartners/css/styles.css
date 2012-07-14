@@ -455,7 +455,14 @@ font-weight:bold;
 text-decoration:underline;
 /* */ 
 }
-.sales-order-virtual-item-content { /* */ }
+
+.sales-order-virtual-item-code {
+line-height:40px;
+}
+
+.sales-order-virtual-item-content { 
+	display:none;	
+}
 .sales-order-virtual-item-thumbnail { /* */ }
 .sales-order-virtual-item-shortdescription { /* */ }
 .sales-order-virtual-item-description { /* */ }

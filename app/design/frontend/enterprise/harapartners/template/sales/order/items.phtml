@@ -48,7 +48,11 @@
         <?php foreach ($_items as $_item): ?>
         <?php if ($_item->getParentItem()) continue; ?>        
         <tbody>
-            <?php echo $this->getItemHtml($_item) ?>
+            <?php 
+            //unset the product options            
+            echo $this->getItemHtml($_item) 
+            
+            ?>
             <?php if($this->helper('giftmessage/message')->getIsMessagesAvailable('order_item', $_item) && $_item->getGiftMessageId()): ?>
             <tr class="border<?php echo ($_index++ > $_count ?' last':'') ?>" id="order-item-gift-message-<?php echo $_item->getId() ?>" style="display:none;">
                 <?php $_giftMessage=$this->helper('giftmessage/message')->getGiftMessageForEntity($_item); ?>
@@ -76,8 +80,17 @@
 <script>
 
 jQuery(document).ready(function(){
-    
-  //virtual product div toggling code goes here      
+  //virtual product div toggling code goes here   
+  jQuery(".sales-order-virtual-items-toggle-link").click( function() {
+  	
+  	if(jQuery("#" + this.id).attr("src")=="https://evan.totsy.com/skin/frontend/enterprise/harapartners/images/orders-history-virtual-items-arrow.gif") {
+		jQuery("#" + this.id).attr("src", "https://evan.totsy.com/skin/frontend/enterprise/harapartners/images/orders-history-virtual-items-down-arrow.gif");  	
+	} else {
+		jQuery("#" + this.id).attr("src", "https://evan.totsy.com/skin/frontend/enterprise/harapartners/images/orders-history-virtual-items-arrow.gif");  	
+	}
+
+  	jQuery("#sales-order-virtual-item-content-" + this.id + "" ).toggle();
+  });   
 });
 
 </script>
