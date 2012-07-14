@@ -150,7 +150,7 @@ h1.event-collection-title {
 div.event-title-container { padding: 10px 0 20px; border-bottom: 1px solid #D7D7D7}
 div.event-title-container h1, div.event-title-container p.count-down-timer { display: inline-block; font-size: 20px; }
 div.event-title-container p.count-down-timer { float: right;}
-div.event-title-container h1 a, div.event-title-container p.count-down-timer { color: #ED1C25;}
+div.event-title-container h1 a, div.event-title-container p.count-down-timer { color: #DE6076;}
 div.event-description-container { margin-top: 5px; border: 1px solid #D7D7D7; background: #F0EFEF;}
 div.event-description-container div { display: inline-block; vertical-align: top; }
 div.event-description-container img { width: 156px;}
@@ -172,6 +172,7 @@ div.event-description-container div.std { padding: 10px 20px; width: 736px;}
 	font-size: 10px;
 	text-decoration: none;}
 .catalog-category-view .category-products ul.products-grid li.item div.product-info .price-box p.old-price span.price {text-decoration: none;}
+.catalog-category-view .category-products ul.products-grid li.item div.product-info .price-box p.old-price span.percent {display: none;}
 .catalog-category-view .category-products ul.products-grid li.item div.product-info .price-box p.special-price{ 
 	top:-20px;
 	color:#009900;
@@ -299,7 +300,7 @@ p.totsy-price {
 	text-transform: uppercase;
 	color: #707070;}
 p.totsy-price:hover {
-	color: #ED1C25;
+	color: #DE6076;
 	cursor: default;}
 	
 
@@ -497,7 +498,7 @@ body.customer-account-resetpassword .col1-layout .col-main { width: 380px;}
 
 /* customer credit cart ================================================================================= */
 body.paymentfactory-index-index div.page-title { padding: 10px 0 0 0; }
-.paymentfactory-index-index .add-new-card-button ,   .paymentfactory-index-index .add-new-card-close { margin: 10px 0 0px 0; text-align: right; color: #ED1C25; cursor: pointer;}
+.paymentfactory-index-index .add-new-card-button ,   .paymentfactory-index-index .add-new-card-close { margin: 10px 0 0px 0; text-align: right; color: #DE6076; cursor: pointer;}
 .paymentfactory-index-index	img.cart-type { margin: 10px 0; }
 .paymentfactory-index-index  label.required, .paymentfactory-index-index  label {    
 	display: block;
@@ -517,7 +518,7 @@ body.paymentfactory-index-index div.page-title { padding: 10px 0 0 0; }
     position: relative;
     text-align: center;
     width: 64px;}
-.paymentfactory-index-index .billing-addr-title { color: #ED1C25; margin: 20px 0 15px 0; border-bottom: 1px solid #dddddd;}
+.paymentfactory-index-index .billing-addr-title { color: #DE6076; margin: 20px 0 15px 0; border-bottom: 1px solid #dddddd;}
 .paymentfactory-index-index .cards-info h2 { text-align: center;}
 
 /* customer account info ================================================================================= */
