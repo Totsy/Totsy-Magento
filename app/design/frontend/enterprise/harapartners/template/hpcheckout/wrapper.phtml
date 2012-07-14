@@ -11,10 +11,12 @@
 			$serverTime = Mage::helper('service')->getServerTime();            
             $quote = Mage::getSingleton('checkout/session')->getQuote();
 		?>
+        <?php if(!$quote->hasVirtualItems()) { ?>
 		<div class="shipping-date">
 			<span>Estimated Ship Date:</span>
 			<p id="cart-shipping-date-header"><?php echo date('Y-m-d', Mage::helper('sales/order')->calculateEstimatedShipDate($quote)); ?></p>
-		</div>	
+		</div>
+       	<?php } ?>
 		<div class="timer-control-box">
 			<span>Item Reserved For:</span>
 			<p id="checkout-timer"></p>
