@@ -299,6 +299,7 @@ p.error-msg { border-style:solid !important; padding:10px; border-width:1px !imp
 .messages li.error-msg a { color:#d91a00; }
 .messages li.error-msg ul { /* background-image:url(../images/bkg_msg-error.gif); */ }
 p.error-msg { border-color:#e9581f; background-color:#fff5f3; color:#d91a00; }
+.cart .messages .error-msg {margin-left: 18px}
 /* Success Message */
 .messages li.success-msg { border-color:#446423; background-color:#eff5ea; color:#3d6611; }
 .messages li.success-msg a { color:#3d6611; }
