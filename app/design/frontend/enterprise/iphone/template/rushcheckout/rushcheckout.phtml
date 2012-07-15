@@ -29,8 +29,10 @@ $badthumbnailurl = $this->getProductThumbnail()->resize(60,60);
 $thumbnailurl = str_replace("cache/4/", "cache/1/", $badthumbnailurl);
 ?>
 <tr>
+
     <td class="first">
-    	<?php if ($this->hasProductUrl()):?><a href="<?php echo $this->getProductUrl() ?>" title="<?php echo $this->htmlEscape($this->getProductName()) ?>" class="product-image"><?php endif;?><img src="<?php echo $thumbnailurl; ?>" width="60" height="60" alt="<?php echo $this->htmlEscape($this->getProductName()) ?>" /><?php if ($this->hasProductUrl()):?></a><?php endif;?>
+    	<?php if ($this->hasProductUrl()):?><a href="<?php echo $this->getProductUrl() ?>" title="<?php echo $this->htmlEscape($this->getProductName()) ?>" class="product-image"><?php endif;?><img src="<?php echo $thumbnailurl; ?>" width="30" height="30" alt="<?php echo $this->htmlEscape($this->getProductName()) ?>" /><?php if ($this->hasProductUrl()):?></a><?php endif;?>
+
     </td>
     <td>
         <h2 class="product-name">
