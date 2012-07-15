@@ -34,7 +34,9 @@ if ( !Mage::getSingleton('checkout/session')->hasData('countdown_timer') ) {
             <?php echo $this->htmlEscape($this->getProductName()) ?>
         <?php endif; ?>
         </h2>
-        <?php if ($_options = $this->getOptionList()):?>
+        <?php
+        if($isVirtual==false) { 
+        	if ($_options = $this->getOptionList()) { ?>
         <div class="item-options">
             <ul>
             <?php foreach ($_options as $_option) : ?>
@@ -55,7 +57,12 @@ if ( !Mage::getSingleton('checkout/session')->hasData('countdown_timer') ) {
             <?php endforeach; ?>
             </ul>
         </div>
-        <?php endif;?>
+       	<?php } 
+        } else { ?>
+        <div>
+        	You will receive an email with details on this voucher code.
+        </div>
+        <?php } ?>
         <?php if ($messages = $this->getMessages()): ?>
         <?php foreach ($messages as $message): ?>
             <p class="item-msg <?php echo $message['type'] ?>">* <?php echo $message['text'] ?></p>
