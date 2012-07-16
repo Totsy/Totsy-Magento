@@ -36,7 +36,6 @@ class Harapartners_Stockhistory_Block_Adminhtml_Purchaseorder_Index_Grid extends
                         array('category_event_end_date' => 'cat_dt.value')
                 )
                 ->where('cat_dt.attribute_id = ?', $eventEndDateAttrId);
-        $collection = Mage::getModel('stockhistory/purchaseorder')->totalUnitsSold($collection);
         $this->setCollection($collection);
         return parent::_prepareCollection();
     }
@@ -87,12 +86,12 @@ class Harapartners_Stockhistory_Block_Adminhtml_Purchaseorder_Index_Grid extends
                     'index'        =>    'category_id',
         ));
 
-        $this->addColumn('unit_total', array(
+        $this->addColumn('total_units', array(
                     'header'    =>    $helper->__('# of Units'),
                     'align'        =>    'right',
                     'width'        =>    '15px',
-                    'index'        =>    'unit_total',
-                    'filter'    =>  false
+                    'index'        =>    'total_units',
+                    'regex'     => false
         ));
         
         $this->addColumn('category_event_end_date', array(
@@ -142,6 +141,22 @@ class Harapartners_Stockhistory_Block_Adminhtml_Purchaseorder_Index_Grid extends
         //$this->addExportType('*/*/exportCsv', $helper->__('CSV'));
         
         return parent::_prepareColumns();
+    }
+
+    protected function _prepareMassaction()
+    {
+        $this->setMassactionIdField('po_id');
+        $this->getMassactionBlock()->setFormFieldName('po_id');
+        $this->getMassactionBlock()->setUseSelectAll(false);
+
+        //batch cancel function
+        $this->getMassactionBlock()->addItem('update_total', array(
+             'label'=> Mage::helper('stockhistory')->__('Update Unit Totals'),
+             'url'  => $this->getUrl('*/*/updateTotalUnits'),
+             'confirm' => Mage::helper('stockhistory')->__('Are you sure?')
+        ));
+
+        return $this;
     }
     
 

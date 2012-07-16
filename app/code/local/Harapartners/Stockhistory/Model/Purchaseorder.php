@@ -104,21 +104,31 @@ class Harapartners_Stockhistory_Model_Purchaseorder extends Mage_Core_Model_Abst
             $transactionsColl = Mage::getModel('stockhistory/transaction')->getCollection();
             $transactionsColl->getSelect()->where('po_id=' . $result->getId() . ' and product_id IS NOT null and action_type= 2');
             if ($transactionsColl->getSize()) {
-                $product_ids = array();
+                $total_units = $qty = 0;
                 foreach($transactionsColl as $trans) {
-                    $product_ids[] = $trans['product_id'];
+                    $product_id = $trans->getProductId();
+                    $product = Mage::getModel('catalog/product')
+                        ->setStoreId(Mage::app()->getStore()->getId())
+                        ->load($product_id);
+                    $pre_buys = array();
+                    if($product->getIsMasterPack() && !in_array($product_id, $pre_buys)) {
+                            $qty = (int)$trans->getQtyDelta();
+                            $pre_buys[] = $product_id;
+                            $total_units += $qty;
+                    } else {
+                        $ordersColl = Mage::getModel('sales/order_item')->getCollection();
+                        $ordersColl->getSelect()->where('product_id =' . $product_id);
+                        foreach($ordersColl as $order) {
+                            $qty = $order->getQtyOrdered() - $order->getQtyReturned() - $order->getQtyCanceled();
+                            $total_units += $qty;
+                       }
+                    }
+                    $qty = 0;
                 }
-                $ordersColl = Mage::getModel('sales/order_item')->getCollection();
-                $ordersColl->getSelect()->where('product_id in ('. implode(',', $product_ids) .')' );
-               $total_units = 0;
-               foreach($ordersColl as $order) {
-                    $qty = $order->getQtyOrdered() - $order->getQtyReturned() - $order->getQtyCanceled();
-                    $total_units += $qty;
-               }
            }
-            $result->setData('unit_total', $total_units);
+            $result->setData('total_units', $total_units);
+            $result->save();
         }
-        return $collection;
     }
     
 }
