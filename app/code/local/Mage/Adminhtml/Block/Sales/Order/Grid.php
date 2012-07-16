@@ -221,6 +221,47 @@ class Mage_Adminhtml_Block_Sales_Order_Grid extends Mage_Adminhtml_Block_Widget_
         return $this;
     }
 
+    
+    protected function _setFilterValues($data) {
+    	if (array_key_exists('email',$data)){
+    		$data['email'] = $this->_trimGmail($data['email']);
+    	}
+    	
+    	return parent::_setFilterValues($data);
+    }
+    
+    protected function _trimGmail($email) {
+        $strArray = explode('@', $email);
+        
+        if(empty($strArray) ||
+           empty($strArray[1]) ||
+           strtolower($strArray[1]) != 'gmail.com') {
+        	echo 'Not Gmail<br>';
+            return $email;
+        }
+
+        //get username, such as 'abcd'
+        $trimmedGmail = preg_replace("/[\.]/",'',trim($strArray[0]));
+        unset($strArray);
+
+        if (strlen($trimmedGmail)==0){
+        	return $email;
+        }
+        
+        if (preg_match("/[\.]+/",$trimmedGmail)){
+        	echo 'Found plus ..+.. <br>';
+        	$u = explode('+',$trimmedGmail);
+        	$trimmedGmail = $u[0];
+        	unset($u);
+        }
+        
+        $trimmedGmail .= '@gmail.com';
+
+
+        return $trimmedGmail;
+    }
+    
+    
     public function getRowUrl($row)
     {
         if (Mage::getSingleton('admin/session')->isAllowed('sales/order/actions/view')) {

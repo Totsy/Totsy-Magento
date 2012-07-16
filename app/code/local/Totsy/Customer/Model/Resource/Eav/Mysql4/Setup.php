@@ -32,6 +32,13 @@ class Totsy_Customer_Model_Resource_Eav_Mysql4_Setup
                         'position'       => 10,
                         'adminhtml_only' => 1,
                     ),
+                    'login_counter'        => array(
+                        'type'           => 'int',
+                        'label'          => 'Login Counter',
+                        'sort_order'     => 15,
+                        'position'       => 15,
+                        'adminhtml_only' => 1,
+                    ),
                 )
             )
         );
