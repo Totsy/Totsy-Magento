@@ -79,14 +79,14 @@
 
 <script>
 
-jQuery(document).ready(function(){
+jQuery(document).ready( function() {
   //virtual product div toggling code goes here   
   jQuery(".sales-order-virtual-items-toggle-link").click( function() {
   	
-  	if(jQuery("#" + this.id).attr("src")=="https://evan.totsy.com/skin/frontend/enterprise/harapartners/images/orders-history-virtual-items-arrow.gif") {
-		jQuery("#" + this.id).attr("src", "https://evan.totsy.com/skin/frontend/enterprise/harapartners/images/orders-history-virtual-items-down-arrow.gif");  	
+  	if(jQuery("#" + this.id + " img").attr("src")=="https://evan.totsy.com/skin/frontend/enterprise/harapartners/images/orders-history-virtual-items-arrow.gif") {
+		jQuery("#" + this.id + " img").attr("src", "https://evan.totsy.com/skin/frontend/enterprise/harapartners/images/orders-history-virtual-items-down-arrow.gif");  	
 	} else {
-		jQuery("#" + this.id).attr("src", "https://evan.totsy.com/skin/frontend/enterprise/harapartners/images/orders-history-virtual-items-arrow.gif");  	
+		jQuery("#" + this.id + " img").attr("src", "https://evan.totsy.com/skin/frontend/enterprise/harapartners/images/orders-history-virtual-items-arrow.gif");  	
 	}
 
   	jQuery("#sales-order-virtual-item-content-" + this.id + "" ).toggle();

@@ -454,17 +454,27 @@ tr.summary-details-excluded { font-style:italic; }
 .sales-order-virtual-items-toggle-link { 
 font-weight:bold;
 text-decoration:underline;
-/* */ 
 }
 
+.sales-order-virtual-items-toggle-link a{
+color: #707070 !important;
+font-size:12px;
+float:left;
+text-transform:uppercase;
+} 
+
 .sales-order-virtual-item-code {
-line-height:40px;
+line-height:30px;
+}
+
+.sales-order-virtual-item-code-value {
+font-weight:bold;
 }
 
 .sales-order-virtual-item-content { 
 	display:none;	
 }
-.sales-order-virtual-item-thumbnail { /* */ }
+.sales-order-virtual-item-thumbnail { padding-bottom: 10px; }
 .sales-order-virtual-item-shortdescription { /* */ }
 .sales-order-virtual-item-description { /* */ }
 
