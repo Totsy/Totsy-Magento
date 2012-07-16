@@ -444,7 +444,6 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Mage_Cybersource_Model_
         $soapClient = $this->getSoapApi();
         
         parent::iniRequest();
-        var_dump('createProfile');
         $paySubscriptionCreateService = new stdClass();
         $paySubscriptionCreateService->run = "true";
         
@@ -482,7 +481,6 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Mage_Cybersource_Model_
         try {
             $result = $soapClient->runTransaction($this->_request);
             if ($result->reasonCode==self::RESPONSE_CODE_SUCCESS && $result->paySubscriptionCreateReply->reasonCode==self::RESPONSE_CODE_SUCCESS ) {
-                
                 $payment->setLastTransId($result->requestID)
                         ->setCcTransId($result->requestID)
                         ->setIsTransactionClosed(0)
@@ -499,7 +497,6 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Mage_Cybersource_Model_
                  $error = Mage::helper('paymentfactory')->__('There is an gateway error in processing the payment(create). Please try again or contact us.');
             }
         } catch (Exception $e) {
-            
             $order = $payment->getOrder();
             $order->setStatus(Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_PAYMENT_FAILED);
             $this->_sendPaymentFailedEmail($payment);
@@ -520,13 +517,12 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Mage_Cybersource_Model_
             $data->setData('address_id', $addressId);
             $data->setData('cc_last4', substr($payment->getCcNumber(), -4));
             $data->setData('cybersource_subid', $result->paySubscriptionCreateReply->subscriptionID);
-            var_dump($result->paySubscriptionCreateReply->subscriptionID);
             $profile = Mage::getModel('paymentfactory/profile');
             $profile->importDataWithValidation($data);
             $profile->save();
         }catch (Exception $e) {
-           Mage::throwException(
-                Mage::helper('paymentfactory')->__('Can not save payment profile')
+            Mage::throwException(
+                Mage::helper('paymentfactory')->__('Can not save payment profile : ' . $e->getMessage())
             );
         }
         

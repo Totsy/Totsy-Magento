@@ -49,17 +49,17 @@
     		$('billing-static').hide();
     		$('payment_form_paymentfactory_tokenize').show();
     		$('billing-static').hide();
-    		$('shipping-edit-form').show();
-    		$('shipping-static').hide();
-    		$('shippingmethod-edit-form').show();
-    		//$('shippingmethod-static').hide();
-    		$$('.e-item-price').invoke('show');
-    		$$('.e-item-qty').invoke('show');
-    		$$('.e-item-discount').invoke('show');
-    		$$('.e-item-remove').invoke('show');
-    		$('items-add-btn').show();
+    		//$('shipping-edit-form').show();
+    		//$('shipping-static').hide();
+    		//$('shippingmethod-edit-form').show();
+    		$('shippingmethod-static').hide();
+    		//$$('.e-item-price').invoke('show');
+    		//$$('.e-item-qty').invoke('show');
+    		//$$('.e-item-discount').invoke('show');
+    		//$$('.e-item-remove').invoke('show');
+    		//$('items-add-btn').show();
     		$('comment-field').show();
-    		calcShipping();
+    		//calcShipping();
     	} else {
     		var params = {};
     		if($('edit-order-comment').value == "") {
@@ -75,7 +75,7 @@
     		params['billing'] = Object.toJSON(billing);
     		params['payment'] = Object.toJSON(payment);
     		//get values for shipping address
-			var	shipping = $('shipping-fields').serialize(true);
+			/**var	shipping = $('shipping-fields').serialize(true);
 			params['shipping'] = Object.toJSON(shipping);
 			//get values for shipping method 
 			var	shippingmethod = $('shippingmethod-fields').serialize(true);
@@ -126,7 +126,7 @@
 				nitems.discount.push(s.value);
 			});
 			params['nitems'] = Object.toJSON(nitems);
-			
+			**/
 			//send request for saving
 			new Ajax.Request('<?php echo Mage::getModel('adminhtml/url')->getUrl('orderedit/order/edit') ?>', {
 				method: 'get',
@@ -135,7 +135,7 @@
 					$('orderEdit').innerHTML = 'Edit Order';
     				$('billing-edit-form').hide();
     				$('billing-static').show();
-    				$('shipping-edit-form').hide();
+    				/**$('shipping-edit-form').hide();
     				$('shipping-static').show();
     				$('shippingmethod-edit-form').hide();
     				$('shippingmethod-static').show();
@@ -144,7 +144,7 @@
     				$$('.e-item-discount').invoke('hide');
     				$$('.e-item-remove').invoke('hide');
     				$$('.add-item-form').invoke('hide');
-    				$('items-add-btn').hide();
+    				$('items-add-btn').hide();**/
     				$('comment-field').hide();
     				if(transport.responseText == 'Order updated successfully. The page will now refresh.') {
     					window.location.reload();

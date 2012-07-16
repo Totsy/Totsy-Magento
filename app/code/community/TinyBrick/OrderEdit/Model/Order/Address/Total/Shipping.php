@@ -122,7 +122,7 @@ class TinyBrick_OrderEdit_Model_Order_Address_Total_Shipping extends TinyBrick_O
         $address->getOrder()->setWeight($addressWeight);
         $address->getOrder()->setFreeMethodWeight($freeMethodWeight);
         
-        $address->recalculateShippingRates($address->getOrder());
+        //$address->recalculateShippingRates($address->getOrder());
 
         $method = $address->getOrder()->getShippingMethod();
         
