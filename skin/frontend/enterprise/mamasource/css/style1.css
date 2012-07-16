@@ -314,7 +314,7 @@ body.customer-account-login .header-container {
 	border-top-right-radius:12px;
 	box-shadow:none;
 }
-body.customer-account-login .main {
+body.customer-account-login .page .main {
 	width: 780px;
 	padding:0px 10px 0px;
 	border-left: 1px solid rgba(255, 255, 255, 0.8);
@@ -490,10 +490,9 @@ body.customer-account-create .page div.main{
 }
 
 #sign-up, #join-now, #redtrerm{
-	color:red;
+	color:#DE6076;
 }
 #sign-up:hover, #join-now:hover{
-	color:red;
 	text-decoration: underline;
 }
 body.customer-account-create .account-login{
@@ -1155,4 +1154,10 @@ body .col-left hr {
 
 .categoryevent-index-topnav .products-grid .product-image {
     margin: 0 auto 3px;
+}
+
+/* more styles copied over from totsy/default - i hate doing this… hara really bunked this themeing up */
+.left_needhelp .main-nav a {
+    color: #DE6076;
+    font-size: 12px;
 }
