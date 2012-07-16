@@ -216,7 +216,7 @@
             </depends>
         </Mage_PaypalUk>
         <Mage_GoogleCheckout>
-            <active>false</active>
+            <active>true</active>
             <codePool>core</codePool>
             <depends>
                 <Mage_Sales/>
