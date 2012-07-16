@@ -1,6 +1,29 @@
 Totsy-Magento Release Notes
 ===========================
 
+20120716
+--------
+
+* Test cases for Totsy_Customer_Model_Observer class.
+* Reverted timing for the dotcom fulfill orders cronjob.
+* MGN-790 marketing copy changes
+* MGN-530 reduce thumbnail size on mobile checkout
+* MGN-821 mms css fix
+* MGN-821 mms 404 missing images
+* MGN-813 button css for mms
+* MGN-756 order id on dashboard column width
+* hide percent on event page css mms
+* hide percent on event page css
+* MGN-454 percent off changes
+* MGN-516 new adminhtml block to fix recent orders grid on admin > view customer
+* MGN-812 MGN-815 find and replace #ED1C25 for #DE6076 in mms styles
+* MGN-822 separate breadcrumbs file from base template, make blank
+* MGN-740 add strip gmail to sales > orders grid
+* MGN-740 add strip gmail to sales > orders grid
+* MGN-790 revised image/messaging on pinterest splash
+* MGN-205 css fix
+* MGN-476 #resolve #comment Fixing display of logged-in view of reset password page
+
 20120713-1
 ----------
 
