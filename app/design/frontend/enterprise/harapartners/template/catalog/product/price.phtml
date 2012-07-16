@@ -322,6 +322,9 @@
                 <span class="price" id="old-price-<?php echo $_id ?><?php echo $this->getIdSuffix() ?>">
                     <?php echo $_coreHelper->currency($_regularPrice,true,false) ?>
                 </span>
+                <span class="percent" id="percent-price-<?php echo $_id ?><?php echo $this->getIdSuffix() ?>">
+                    (<?php echo $_percentOff ?>% off)
+                </span>
             </p>
 
             <?php if ($_taxHelper->displayBothPrices()): ?>
