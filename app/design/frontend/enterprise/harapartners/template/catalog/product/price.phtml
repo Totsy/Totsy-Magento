@@ -61,7 +61,7 @@
     <?php $_finalPrice = $_taxHelper->getPrice($_product, $_product->getFinalPrice()) ?>
     <?php $_finalPriceInclTax = $_taxHelper->getPrice($_product, $_product->getFinalPrice(), true) ?>
     <?php $_weeeDisplayType = $_weeeHelper->getPriceDisplayType(); ?>
-    <?php $_percentOff = round(($_price-$_finalPrice)/$_price, 0); ?>
+    <?php $_percentOff = round((($_price-$_finalPrice)/$_price)*100, 0); ?>
     <?php if ($_finalPrice == $_price): ?>
         <?php if ($_taxHelper->displayBothPrices()): ?>
             <?php if ($_weeeTaxAmount && $_weeeHelper->typeOfDisplay($_product, 0)): // including ?>
