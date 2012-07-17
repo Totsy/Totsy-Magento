@@ -13,7 +13,14 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Payment extends TinyBrick_Orde
             $profile = Mage::getModel('paymentfactory/profile');
             $profile->loadByCcNumberWithId($payment->getData('cc_number').$customerId.$payment->getCcExpYear().$payment->getCcExpMonth());
             if($profile && $profile->getId()) {
-                return true;
+                $paymentObject = Mage::getModel('sales/order_payment')->getCollection()
+                    ->addAttributeToFilter('cybersource_subid',$profile->getData('subscription_id'))
+                    ->getFirstItem();
+                $payment = $paymentObject->getData();
+                $payment['cybersource_subid'] = null;
+                if(!$payment) {
+                    return false;
+                }
             }
             Mage::getModel('paymentfactory/tokenize')->createProfile($payment, $billing, $customerId, $billingId);
             $this->replacePaymentInformation($order, $payment);
