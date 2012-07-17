@@ -44,9 +44,9 @@ class TinyBrick_OrderEdit_OrderController extends Mage_Adminhtml_Controller_Acti
             $msgs = array();
             
             $changes = array();
-          /**  foreach($edits as $edit) {
+            foreach($edits as $edit) {
                 if($edit['type']) {
-                    if($edit['type'] == 'shipping' || $edit['type'] == 'billing' || $edit['type'] == 'shippingmethod' || $edit['type'] == 'eitems' || $edit['type'] == 'nitems') {
+                    if($edit['type'] == 'billing') {
                         $model = Mage::getModel('orderedit/edit_updater_type_'.$edit['type']);
                         if(!$changes[] = $model->edit($order,$edit)) {
                             $msgs[] = "Error updating " . $edit['type'];
@@ -54,8 +54,7 @@ class TinyBrick_OrderEdit_OrderController extends Mage_Adminhtml_Controller_Acti
                     }
                 }
             }
-            $order->collectTotals()->save(); **/
-
+            //$order->collectTotals()->save();
             foreach($edits as $edit) {
                 if($edit['type']) {
                     if($edit['type'] == 'payment') {
@@ -100,10 +99,10 @@ class TinyBrick_OrderEdit_OrderController extends Mage_Adminhtml_Controller_Acti
     
     protected function _orderRollBack($order, $orderArray, $billingArray, $shippingArray)
     {
-        $order->setData($orderArray)->save();
-        $order->getBillingAddress()->setData($billingArray)->save();
-        $order->getShippingAddress()->setData($shippingArray)->save();
-        $order->collectTotals()->save();
+        //$order->setData($orderArray)->save();
+        //$order->getBillingAddress()->setData($billingArray)->save();
+        //$order->getShippingAddress()->setData($shippingArray)->save();
+        //$order->collectTotals()->save();
     }
     
     protected function _logChanges($order, $comment, $user, $array = array()) 
