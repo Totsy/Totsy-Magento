@@ -69,15 +69,20 @@
         </tbody>
         <?php endforeach; ?>
 </table>
+
 <p class="savings">
 	<span class="label"><?php echo $this->__('Your savings: ') ?></span><?php echo '$' . number_format(Mage::helper('sales/order')->calculateEstimatedSavings($_order), 2) ?>
 </p>
+
+<?php if(!$_order->getIsNotVirtual()==0): ?>
 <p class="shipping-date">
 	<span class="label"><?php echo $this->__('Estimated Shipping Date: ') ?></span><?php echo date('Y-m-d', Mage::helper('sales/order')->calculateEstimatedShipDate($_order)); ?>
 </p>
+<?php endif; ?>
+
 <script type="text/javascript">decorateTable('my-orders-table', {'tbody' : ['odd', 'even'], 'tbody tr' : ['first', 'last']})</script>
 
-<script>
+<script type="text/javascript">
 
 jQuery(document).ready( function() {
   //virtual product div toggling code goes here   
