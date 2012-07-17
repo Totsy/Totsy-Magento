@@ -429,6 +429,15 @@
                     </fulfillmentfactory>
                 </observers>
             </sales_order_save_after>
+            <sales_order_item_save_after>
+                <observers>
+                    <fulfillmentfactory>
+                        <type>singleton</type>
+                        <class>fulfillmentfactory/observer</class>
+                        <method>updateItemQueueAfterItemSave</method>
+                    </fulfillmentfactory>
+                </observers>
+            </sales_order_item_save_after>
         </events>
         <!-- ===== GLOBAL EVENTS END ===== -->
     </global>

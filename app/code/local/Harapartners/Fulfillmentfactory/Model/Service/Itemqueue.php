@@ -171,4 +171,13 @@ class Harapartners_Fulfillmentfactory_Model_Service_Itemqueue
             $itemqueue->save();
         }
     }
+
+    public function cancelItemqueueByOrderItemId($orderItemId) {
+        $collection = Mage::getModel('fulfillmentfactory/itemqueue')->getCollection()->loadByOrderItemId($orderItemId);
+
+        foreach($collection as $itemqueue) {
+            $itemqueue->setStatus(Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_CANCELLED);
+            $itemqueue->save();
+        }
+    }
 }

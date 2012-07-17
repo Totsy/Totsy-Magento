@@ -8,73 +8,17 @@
 
 class Totsy_Sales_Model_Order extends Mage_Sales_Model_Order
 {
-        /**
-     * Retrieve order cancel availability
+   /**
+     * This method will check the order for items that have been canceled
      *
      * @return bool
      */
-    public function canCancel()
-    {
-        if ($this->canUnhold()) {  // $this->isPaymentReview()
-            return false;
-        }
-
-        $allInvoiced = true;
-        foreach ($this->getAllItems() as $item) {
-            if ($item->getQtyToInvoice()) {
-                $allInvoiced = false;
-                break;
-            }
-        }
-        if ($allInvoiced) {
-            return true;
-        }
-
-        $state = $this->getState();
-        if ($this->isCanceled() || $state === self::STATE_COMPLETE || $state === self::STATE_CLOSED) {
-            return false;
-        }
-
-        if ($this->getActionFlag(self::ACTION_FLAG_CANCEL) === false) {
-            return false;
-        }
-
-        /**
-         * Use only state for availability detect
-         */
-        /*foreach ($this->getAllItems() as $item) {
-            if ($item->getQtyToCancel()>0) {
+    public function containsCanceledItems() {
+        foreach($this->getItemsCollection() as $item) {
+            if($item->getQtyCanceled()) {
                 return true;
             }
         }
-        return false;*/
-        return true;
-    }
-
-    /**
-     * Retrieve order invoice availability
-     *
-     * @return bool
-     */
-    public function canInvoice()
-    {
-        if ($this->canUnhold() || $this->isPaymentReview()) {
-            return false;
-        }
-        $state = $this->getState();
-        if ($this->isCanceled() || $state === self::STATE_COMPLETE || $state === self::STATE_CLOSED) {
-            return false;
-        }
-
-        if ($this->getActionFlag(self::ACTION_FLAG_INVOICE) === false) {
-            return false;
-        }
-
-        foreach ($this->getAllItems() as $item) {
-            if ($item->getQtyToInvoice()>0 && !$item->getLockedDoInvoice()) {
-                return true;
-            }
-        }
-        return true;
+        return false;
     }
 }

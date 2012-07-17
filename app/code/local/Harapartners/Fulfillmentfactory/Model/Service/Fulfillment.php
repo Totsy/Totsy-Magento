@@ -183,49 +183,49 @@ class Harapartners_Fulfillmentfactory_Model_Service_Fulfillment
      * @param array $updateItemQueueIdList
      * @return bool    indicate if new order has been created
      */
-    protected function _cancelItemqueue($orderId, $updateItemQueueIdList) {
+    protected function _cancelItemqueue($orderId, $updateItemQueueIdList)
+    {
         $order = Mage::getModel('sales/order')->load($orderId);
 
-        
-        //More secure logic, looping through order items, in case the quote item might be damaged
-        $remainingOrderItems = array();
-        
-        foreach($order->getItemsCollection() as $orderItem) {
-            if($orderItem->getParentItemId()) {
+        $itemsToCancel = array();
+        $remainingOrderItems = false;
+
+        foreach ($order->getItemsCollection() as $orderItem) {
+            if ($orderItem->getParentItemId()) {
                 continue;
             }
             $shouldBeRemoved = false;
-            foreach($updateItemQueueIdList as $itemQueueId) {
-                if($orderItem->getId() == $itemQueueId->getOrderItemId()) {
+            foreach ($updateItemQueueIdList as $itemQueueId) {
+                if ($orderItem->getId() == $itemQueueId->getOrderItemId()) {
                     $shouldBeRemoved = true;
                 }
-                foreach($orderItem->getChildrenItems() as $childItem) {
-                    if($childItem->getId() == $itemQueueId->getOrderItemId()) {
+                foreach ($orderItem->getChildrenItems() as $childItem) {
+                    if ($childItem->getId() == $itemQueueId->getOrderItemId()) {
                         $shouldBeRemoved = true;
                     }
                 }
-                if(!$shouldBeRemoved){
-                	$remainingOrderItems[] = $orderItem;
+                if ($shouldBeRemoved) {
+                    $itemsToCancel[] = $orderItem;
+                }
+                if (!$shouldBeRemoved) {
+                    $remainingOrderItems = true;
                 }
             }
-        }          
-          //cancel orders with nothing available
-          if(empty($remainingOrderItems)) {
-              $order->cancel()->save()->addStatusHistoryComment(Mage::helper('core')->__('Order Canceled by Batch Cancel Process'),false)->save();
-              return true;
-          }
-          
-          $orderItemListCollection = array (
-              array (
-                  'items' => $remainingOrderItems,
-                  'state' => Mage_Sales_Model_Order::STATE_NEW,
-                  'type'    => 'dotcom'
-              )
-          );
-        
-          Mage::helper('ordersplit')->createSplitOrder($order, $orderItemListCollection, true);
-          
-          return true;
+        }
+        //cancel orders with nothing available
+        if (!$remainingOrderItems) {
+            $order->cancel()->save()->addStatusHistoryComment(Mage::helper('core')->__('Order Canceled by Batch Cancel Process'), false)->save();
+            return true;
+        }
+
+        foreach($itemsToCancel as $item) {
+            $order->addStatusHistoryComment(Mage::helper('core')->__('Item ' . $item->getSku() . ' canceled by Batch Cancel Process'), false);
+            $item->cancel();
+            $item->save();
+        }
+        $order->save();
+
+        return true;
     }
 
     /**

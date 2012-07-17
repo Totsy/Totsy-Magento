@@ -51,4 +51,20 @@ class Harapartners_Fulfillmentfactory_Model_Observer
         
         return $this;
     }
+
+    function updateItemQueueAfterItemSave(Varien_Event_Observer $observer) {
+        try {
+            $event = $observer->getEvent();
+
+
+            $orderItem = $event->getDataObject();
+            if(!!$orderItem && !!$orderItem->getId()){
+                Mage::getModel('fulfillmentfactory/service_itemqueue')->cancelItemqueueByOrderItemId($orderItem->getId());
+            }
+        } catch(Exception $e) {
+            Mage::logException($e);
+        }
+
+        return $this;
+    }
 }    
