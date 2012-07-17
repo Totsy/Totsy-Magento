@@ -19,6 +19,7 @@ class Harapartners_Service_Block_Rewrite_Adminhtml_Catalog_Category_Tree extends
         //Harapartners, Jun do NOT allow adding root category, rename 'Add Subcategory'
         $this->unsetChild('add_root_button');
         $this->getChild('add_sub_button')->setData('label', Mage::helper('catalog')->__('Add Category/Event'));
+        $this->getChild('add_sub_button')->setData('disabled', 'disabled');
         return $this;
     }
 

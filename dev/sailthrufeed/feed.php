@@ -1,19 +1,37 @@
 <?php 
+$full_path = dirname(dirname(__DIR__));
+$skip_cache_check = false;
+// set cache time for 3 days
+$TTL =3*24*60*60;
 
-$chash = dirname(dirname(__DIR__)). '/var/tmp/' .md5($_SERVER['REQUEST_URI']).'.json';
-$TTL = 30*60;
-if (file_exists($chash)){
+if (php_sapi_name()=='cli'){
+	$skip_cache_check = true;	
+	$index=array_search('--get', $argv);
+	if ( $index!==false && $argc>$index+1) {
+		 $_SERVER['REQUEST_URI'] = $argv[$index+1];
+	}
+	
+	$index=array_search('--domain', $argv);
+	if ( $index!==false && $argc>$index+1) {
+		$_SERVER['HTTP_HOST'] = $argv[$index+1];
+	}
+}
+
+$chash = $full_path. '/var/tmp/' .md5($_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']).'.json';
+if ($skip_cache_check===true){
+	file_put_contents($chash.'.new','addin some cache');
+}
+if (file_exists($chash) && $skip_cache_check===false){
 	$time = time() - filectime($chash);
-	if ($time<$TTL){
+	if ($time<$TTL || file_exists($chash.'.new')){
 		header('Cache-Control: no-cache, must-revalidate');
 		header('Content-type: application/json');
 		echo file_get_contents($chash);
-		
 		exit(0);
 	}
 }
 
-require_once( '../../app/Mage.php' );
+require_once( $full_path.'/app/Mage.php' );
 umask(0);
 $mageRunCode = isset($_SERVER['MAGE_RUN_CODE']) ? $_SERVER['MAGE_RUN_CODE'] : '';
 $mageRunType = isset($_SERVER['MAGE_RUN_TYPE']) ? $_SERVER['MAGE_RUN_TYPE'] : 'store';
@@ -61,12 +79,21 @@ if (!empty($_GET['start_date']) && preg_match('/[\d]{2}[\-][\d]{2}[\-][\d]{4}/i'
 	$start_date = strtotime($new_date_format);
 }
 	
-if (!empty($_GET['start_time']) && preg_match('/[\d]{2}/',$_GET['start_time'])){
-	if (strtolower($_GET['start_time']) == 'am'){
-		$start_time = '08:00:00';
+if (!empty($_GET['start_time']) && 
+	preg_match('/[\w]{2}/',$_GET['start_time']) && 
+	strtolower($_GET['start_time']) == 'am' )
+{
+	$start_time = '08:00:00';
+}
+
+if (!empty($_GET['start_time']) && preg_match('/[\d]{2}[\:][\d]{2}[\:][\d]{2}/',$_GET['start_time'])){
+	$st = preg_replace('/[^\d\:]+/','', $_GET['start_time']);
+	if (strlen($st)==8){
+		$start_time = $st;
+		unset($st);
 	}
 }
-	
+
 date_default_timezone_set($defaultTimezone);
 
 /*### PROCESS DATA ###*/
@@ -113,6 +140,9 @@ $data = json_encode($out);
 $fh = fopen($chash,'w');
 fwrite($fh,$data);
 fclose($fh);
+if (file_exists($chash.'.new')){
+	unlink($chash.'.new');
+}
 echo $data;
 /*### END ###*/
 

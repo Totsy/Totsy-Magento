@@ -29,13 +29,14 @@
     		$order_id = $order->getId();
 			$url = $this->getBaseUrl().'sales/order/history/';
 		?>
-		You will redirect to orders review page in 5 second. Or <a class="red" href="<?php echo $url?>">click here</a>
+		You will redirect to orders review page in 10 seconds. Or <a class="red" href="<?php echo $url?>">click here</a>
     </p>
     <script language="javascript" type="text/javascript">
 		function redirect(){window.location.href="<?php echo $url?>"};
-		setTimeout("redirect()",5000);
+		setTimeout("redirect()",10000);
 	</script>
-	<?php/* 
+	<?php
+		/* 
 		$coupon = $order->getCouponCode();
 		$couponStr = isset($coupon)?"&promocode=".$order->getCouponCode():"";
  		echo "<img src='http://api.theechosystem.com/Core/Conversion/Save?echoTrackPack=".($_COOKIE['EchoTrackPack']."&revenue=".$order->getData('grand_total')."&quantity=".$quote->getItemsQty().$couponStr."&orderId=".$order->getId()."' style='width:1px;height:1px;' />");*/

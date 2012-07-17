@@ -35,9 +35,7 @@ class Harapartners_EmailFactory_Model_Sailthruqueue extends Mage_Core_Model_Abst
 			}	
 		}
 		$details['response'] = $result;
-		
-		print_r($details);
-		
+
 		if (is_array($result) && (count($result) >= 2 || !empty($result['purchase']))){
 			if (!empty($details['additional_calls'])){
 				$acs = unserialize($details['additional_calls']);

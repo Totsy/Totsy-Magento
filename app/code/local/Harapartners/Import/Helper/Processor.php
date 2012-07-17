@@ -214,7 +214,7 @@ class Harapartners_Import_Helper_Processor extends Mage_Core_Helper_Abstract {
                         break;
                     default:
                     	if(!$importData['sku']){
-                        	throw new Exception($field . ' is required.');
+                        	throw new Exception($field . ' is required in row #'.$row.'.');
                     	}
 //                    	}else{
 //                    		unset($importData[$field]);

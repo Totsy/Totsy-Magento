@@ -79,7 +79,7 @@ body.cms-page-view .left_column li{
 }
 
 body.cms-page-view .left_column a:link, a:visited{
-    color: #ED1C25;
+    color: #DE6076;
     font-size:12px;
     line-height:19px;
 }
@@ -129,38 +129,38 @@ body.cms-page-view .right_column{
 }
 
 
-.catalog-category-list .category-products .products-grid .price-box, .category-products .products-list .price-box{
+.categoryevent-index-topnav .category-products .products-grid .price-box, .category-products .products-list .price-box{
 	text-align:right;
 	background:url("../images/link-arrow-gr.png") no-repeat 110px 5px;
 	border-top:1px solid #E1E0E0;
 	margin:0 4px;
 }
 
-.catalog-category-list .category-products .price{
+.categoryevent-index-topnav .category-products .price{
 	color:#070;
 	font-size:16px;
 	padding-right:15px;
 }
 
-.catalog-category-list .category-products .products-grid{
+.categoryevent-index-topnav .category-products .products-grid{
 	margin-bottom:15px;
 }
 
-.catalog-category-list .category-products .products-grid a{
+.categoryevent-index-topnav .category-products .products-grid a{
 	text-decoration:none;
 }
 
-.catalog-category-list .vuall{
+.categoryevent-index-topnav .vuall{
 	text-align:right;
 	font-size:13px;
 }
 
-.catalog-category-list .catalog-category-list .vuall a{
+.categoryevent-index-topnav .vuall a{
 	text-decoration:none;
-	color:#ED1C25;
+	color:#DE6076;
 }
 
-.catalog-category-list .products-grid .item{
+.categoryevent-index-topnav .products-grid .item{
 	background:#F0EFEF;
 }
 
@@ -214,7 +214,8 @@ body.enterprise-invitation-index-index .block-content li a, body.enterprise-rewa
 
 body.enterprise-invitation-index-index .block-content li a:hover,body.enterprise-reward-customer-info .block-content li a:hover,body.enterprise-giftregistry-index-index .block-content li a:hover,body.enterprise-giftcardaccount-customer-index .block-content li a:hover,body.newsletter-manage-index .block-content li a:hover, body.sales-order-history .block-content li a:hover, body.customer-account-index .block-content li a:hover,body.customer-account-edit .block-content li a:hover,body.customer-address-index .block-content li a:hover{
 	background:none;
-	color:#ED1C25;
+	color:#DE6076; 
+	text-decoration: underline;
 }
 
 body.enterprise-invitation-index-index .block-content li a, body.enterprise-reward-customer-info .block-content li a ,body.enterprise-giftregistry-index-index .block-content li a, body.enterprise-giftcardaccount-customer-index .block-content li a ,body.newsletter-manage-index .block-content li a, body.sales-order-history .block-content li a,body.customer-account-index .block-content li a,body.customer-account-edit .block-content li a,body.customer-address-index .block-content li a{

@@ -175,6 +175,7 @@ div.event-description-container div.std { padding: 12px; width: 736px; font-size
 	font-size: 10px;
 	text-decoration: none;}
 .catalog-category-view .category-products ul.products-grid li.item div.product-info .price-box p.old-price span.price {text-decoration: none;}
+.catalog-category-view .category-products ul.products-grid li.item div.product-info .price-box p.old-price span.percent {display: none;}
 .catalog-category-view .category-products ul.products-grid li.item div.product-info .price-box p.special-price{ 
 	top:-20px;
 	color:#009900;
@@ -276,11 +277,6 @@ div.tab-content p { margin: 10px 0px; }
 	border: 1px solid #d7d7d7;
 	border-radius: 5px;
 	text-align: center;}
-	
-/* expired event product view messaging */
-.product-main-info .msg-expired p {font-size:12px;}
-.product-main-info .msg-expired p + p {margin:1em 0 0;}
-
 .product-view .product-shop div.price-box p.special-price { position:relative; top: -25px;}
 .product-view .product-shop div.price-box p.old-price { position: relative; top: 25px;}
 .product-view .product-shop div.price-box p.special-price .price, .product-view .product-shop div.price-box span.regular-price .price {

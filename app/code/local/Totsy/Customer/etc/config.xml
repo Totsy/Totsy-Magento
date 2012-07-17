@@ -30,6 +30,17 @@
                 </connection>
             </totsycustomer_setup>
         </resources>
+        <events>
+            <controller_action_predispatch>
+                <observers>
+                    <totsycustomer_autoreg>
+                        <type>singleton</type>
+                        <class>totsycustomer/observer</class>
+                        <method>autoAuthorization</method>
+                    </totsycustomer_autoreg>
+                </observers>
+            </controller_action_predispatch>
+        </events>
     </global>
     <admin>
         <routers>
@@ -42,4 +53,14 @@
             </totsy>
         </routers>
     </admin>
+    <phpunit>
+        <suite>
+            <modules>
+                <Totsy_Customer/>
+            </modules>
+            <fixture>
+                <totsycustomer_observer>Totsy_Customer_Model_Observer</totsycustomer_observer>
+            </fixture>
+        </suite>
+    </phpunit>
 </config>

@@ -14,7 +14,6 @@ class Harapartners_HpCheckout_Model_Checkout
 {
     const METHOD_GUEST = 'guest';
     const METHOD_CUSTOMER = 'customer';
-    const EMAIL_TEMPLATE_XML_PATH = 'hpcheckout/virtual_product_code/template';
 
     protected $_quote;
     protected $_checkoutSession;
@@ -214,7 +213,7 @@ class Harapartners_HpCheckout_Model_Checkout
     public function saveOrder()
     {
         $this->validate();
-        
+
         switch ($this->getCheckoutMethod()) {
         case self::METHOD_GUEST:
             $this->_prepareGuestQuote();
@@ -233,14 +232,14 @@ class Harapartners_HpCheckout_Model_Checkout
 
         $order = $service->getOrder();
 
-        if ($order) {
-            
+        if ( $order ) {
+
             //we need this in order to check if an order has virtual items
             //we want to know that for toggling some FAQ copy about virtual products
-            if($this->getQuote()->hasVirtualItems()==1){
+            if( $this->getQuote()->hasVirtualItems()==1 ) {
                 $order->hasVirtualItems = $this->getQuote()->hasVirtualItems();
             }
-            
+
             Mage::dispatchEvent('hpcheckout_save_order_after',
                 array('order'=>$order, 'quote'=>$this->getQuote()));
 
@@ -249,6 +248,39 @@ class Harapartners_HpCheckout_Model_Checkout
             if (!$redirectUrl && $order->getCanSendNewEmailFlag()) {
                 try {
                     $order->sendNewOrderEmail();
+
+                    foreach ($order->getAllItems() as $orderItem) {
+
+                        $product = Mage::getModel('catalog/product')->load($orderItem->getProduct()->getId());
+
+                        if ( $product->getIsVirtual()==true ) {
+                            //loading a product to get the short description
+
+                            $shortDescription = $product->getShortDescription();
+
+                            $options = $orderItem->getProductOptions();
+
+                            $temp = explode("\n", $options['options'][0]['value']);
+
+                            $virtualProductCode = $temp[0];
+
+                            //picking the right template by the id set in the admin (transactional emails section)
+                            $templateId =  Mage::getModel('core/email_template')->loadByCode('_trans_Virtual_Product_Redemption')->getId();
+
+                            $store = Mage::app()->getStore();
+
+                            $email = $order->getCustomer()->getEmail();
+
+                            //attempting to send the email
+                            try {
+                                Mage::getModel('core/email_template')
+                                ->sendTransactional($templateId, "sales", $email, NULL, array("virtual_product_code"=>$virtualProductCode, "order"=>$order, "store"=>$store, "short_description" => $shortDescription));
+                                //Mage::register('coupon_code_email_sent',true);
+                            } catch (Exception $e) {
+                                Mage::logException($e);
+                            }
+                        }
+                    }
                 } catch (Exception $e) {
                     Mage::logException($e);
                 }
