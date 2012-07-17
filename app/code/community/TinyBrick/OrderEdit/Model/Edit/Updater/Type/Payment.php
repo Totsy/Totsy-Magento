@@ -5,7 +5,8 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Payment extends TinyBrick_Orde
     {
         try {
             $customerId = $order->getCustomerId();
-            $billing = $order->getBillingAddress();
+            $billingId = $order->getData('billing_address_id');
+            $billing = Mage::getModel('sales/order_address')->load($billingId);
             $data = $this->cleanPaymentData($data);
             $payment = new Varien_Object($data);
             #Check if there is already a cybersource profile if yes, dont create a new one
@@ -14,14 +15,12 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Payment extends TinyBrick_Orde
             if($profile && $profile->getId()) {
                 return true;
             }
-            Mage::getModel('paymentfactory/tokenize')->createProfile($payment, $billing, $customerId, $billing->getId());
+            Mage::getModel('paymentfactory/tokenize')->createProfile($payment, $billing, $customerId, $billingId);
             $this->replacePaymentInformation($order, $payment);
         } catch(Exception $e){
-            $array['status'] = 'error';
-            $array['msg'] = "Error updating payment informations : ".$e->getMessage();
-            return false;
+            return "Error updating payment informations : ".$e->getMessage();
         }
-        return true;
+        return false;
     }
 
     public function cleanPaymentData($datas) {

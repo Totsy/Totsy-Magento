@@ -32,7 +32,7 @@
     
     <?php if($this->canEditOrder($_order->getStatus())): ?>
 	    <div class="clear"></div>
-	    <button type="button" onclick="saveMe()" id="orderEdit" style="height:25px; width:280px; font-size:16px;">Edit Order</button>
+	    <button type="button" onclick="saveMe()" id="orderEdit" style="height:25px; width:280px; font-size:16px;">Edit Payment Informations</button>
 	    <div id="comment-field" style="display:none;"><br />Reason for editing order: <span id="required-comment" style="color:red; display:none;">This is required to edit an order</span><br />
 	    <textarea id="edit-order-comment" style="width:450px;"></textarea>
 	    </div>
@@ -43,7 +43,7 @@
     <script>
     function saveMe()
     {
-    	if($('orderEdit').innerHTML == 'Edit Order') {
+    	if($('orderEdit').innerHTML == 'Edit Payment Informations') {
     		$('orderEdit').innerHTML = 'Save Changes';
     		$('billing-edit-form').show();
     		$('billing-static').hide();
@@ -132,7 +132,7 @@
 				method: 'get',
 				parameters: params,
 				onSuccess: function(transport) {
-					$('orderEdit').innerHTML = 'Edit Order';
+					$('orderEdit').innerHTML = 'Edit Payment Informations';
     				$('billing-edit-form').hide();
     				$('billing-static').show();
     				/**$('shipping-edit-form').hide();
@@ -147,6 +147,7 @@
     				$('items-add-btn').hide();**/
     				$('comment-field').hide();
     				if(transport.responseText == 'Order updated successfully. The page will now refresh.') {
+    				    alert(transport.responseText);
     					window.location.reload();
     				} else {
     					alert(transport.responseText);

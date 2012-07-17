@@ -59,8 +59,8 @@ class TinyBrick_OrderEdit_OrderController extends Mage_Adminhtml_Controller_Acti
                 if($edit['type']) {
                     if($edit['type'] == 'payment') {
                         $model = Mage::getModel('orderedit/edit_updater_type_'.$edit['type']);
-                        if(!$changes[] = $model->edit($order,$edit)) {
-                            $msgs[] = "Error updating " . $edit['type'];
+                        if($mess = $model->edit($order,$edit)) {
+                            $msgs[] = $mess;
                         }
                     }
                 }
@@ -88,7 +88,7 @@ class TinyBrick_OrderEdit_OrderController extends Mage_Adminhtml_Controller_Acti
                 echo "Order updated successfully. The page will now refresh.";
             } else {
                 $this->_orderRollBack($order, $orderArr, $billingArr, $shippingArr);
-                echo "There was an error saving information, please try again.";
+                echo "There was an error saving information, please try again. : " . $msgs[0];
             }
         } catch(Exception $e) {
             echo $e->getMessage();

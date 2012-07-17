@@ -36,10 +36,8 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Billing extends TinyBrick_Orde
 		$billing->setData($data);
 		try{
 			$billing->save();
-			//$order->setData('billing_address_id', $billing->getId())
-                //->save();
-			$order->setBillingAddress($billing);
-			     ->save();
+            $order->setData('billing_address_id', $billing->getId())
+                    ->save();
 			//logging for changes in billing address
 			$newArray = $billing->getData();
 			$results = array_diff($oldArray, $newArray);

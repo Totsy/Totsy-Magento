@@ -438,16 +438,13 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Mage_Cybersource_Model_
 
     
     public function createProfile($payment,$billing,$customerId,$addressId) {
-                
-        //??? can we use parent::authorize() with different init param ???
         $error = false;
         $soapClient = $this->getSoapApi();
-        
         parent::iniRequest();
         $paySubscriptionCreateService = new stdClass();
         $paySubscriptionCreateService->run = "true";
         
-        $this->_request->paySubscriptionCreateService = $paySubscriptionCreateService;    
+        $this->_request->paySubscriptionCreateService = $paySubscriptionCreateService;
         $billTo = new stdClass();
         $billTo->firstName = $billing->getFirstname();
         $billTo->lastName = $billing->getLastname();
@@ -459,12 +456,11 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Mage_Cybersource_Model_
         $billTo->postalCode = $billing->getPostcode();
         $billTo->country = 'US';
         $billTo->phoneNumber = $billing->getTelephone();
-        $billTo->email = ($email ? $email : Mage::getStoreConfig('trans_email/ident_general/email'));
+        $billTo->email = Mage::getStoreConfig('trans_email/ident_general/email');
         $billTo->ipAddress = $this->getIpAddress();
-        $this->_request->billTo = $billTo;        
-        
+        $this->_request->billTo = $billTo;
         $this->addCcInfo($payment);
-        
+
         $purchaseTotals = new stdClass();
         $purchaseTotals->currency = 'USD';
         $this->_request->purchaseTotals = $purchaseTotals; 
@@ -485,7 +481,7 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Mage_Cybersource_Model_
                         ->setCcTransId($result->requestID)
                         ->setIsTransactionClosed(0)
                         ->setCybersourceToken($result->requestToken)
-                            ->setCcAvsStatus($result->ccAuthReply->avsCode);                                              
+                            ->setCcAvsStatus($result->ccAuthReply->avsCode);
                 /*
                  * checking if we have cvCode in response bc
                  * if we don't send cvn we don't get cvCode in response
@@ -494,7 +490,7 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Mage_Cybersource_Model_
                     $payment->setCcCidStatus($result->ccAuthReply->cvCode);
                 }
             } else {
-                 $error = Mage::helper('paymentfactory')->__('There is an gateway error in processing the payment(create). Please try again or contact us.');
+                $error = Mage::helper('paymentfactory')->__('There is an gateway error in processing the payment. Please try again or contact us.');
             }
         } catch (Exception $e) {
             $order = $payment->getOrder();
