@@ -60,6 +60,7 @@ if(($handle = fopen($importCsvFile,'r')) !== FALSE){
 		$customerTracking->setData('registration_param', $data[8]);
 		$customerTracking->setData('login_count', $data[9]);
 		$customerTracking->setData('page_view_count', $data[10]);
+        $customerTracking->setData('created_at', $data[1]);
 		
 		try {
 			$customerTracking->save();

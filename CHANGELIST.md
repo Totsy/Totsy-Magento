@@ -1,6 +1,37 @@
 Totsy-Magento Release Notes
 ===========================
 
+20120717
+--------
+
+* Setup registry in one place at the top of the script.
+* Removed ship date for virtual orders on My Orders page
+* MGN-604: added support for affiliate tracking codes to use registration params for dynamic template replacement.
+* MGN-823 added asterik to image
+* MGN-676 - forgot to add the new mysql4 setup script
+* MGN-454 correctly percent off calculation
+* display total quantity sold/casepack for an event in the PO grid
+* MGN-454 correctly percent off calculation
+* MGN-454 correctly percent off calculation
+* MGN-454 correctly percent off calculation
+* Restored Google_Checkout module because of warnings.
+* Adding product title and description to the coupon code emails
+* MGN-454 correctly percent off calculation
+* MGN-205 fix for css cart message
+* MGN-533 #resolve #comment Adding correct favicon.ico for IE compatibility, implementing via code rather than admin, updating .gitignore
+* Removed the call to load() to eliminate PHP warnings.
+* MGN-823 legal copy to login/register
+* Added test fixture for a test case for Totsy_Customer_Model_Observer class.
+* Removed unnecessary order status/states from config file, because custom states should be administered in admin (and are added by data sql scripts).
+* Restored the Mage_AdminNotification module, which should be disabled via admin instead, since the Enterprise_Enterprise module depends on it.
+* Finished up last test cases for Totsy_Customer_Model_Observer class.
+* Removed the locking down of store models by Harapartners.
+* Tightened up spacing and changed some copy as per ticket MGN-818 (steps 1-4)
+* Moving estimated ship date on orders that have virtual items to below the item's row in the cart as opposed to the top of the cart
+* Started making edits. Still to do are the main cart and review pages
+* Added toggleable div for vouchers
+* Started new sales order layout changes for virtual items
+
 20120716
 --------
 
