@@ -188,10 +188,12 @@
         <div class="buttons-set form-buttons">
 			<p><?php echo $this->__('By joining you accept our ')?> <a id="redtrerm" href="<?php echo $this->getBaseUrl()?>pages/terms/">terms and condititons.</a> </p>
             <button type="submit" class="button" id="submit-button" title="<?php echo $this->__('Submit') ?>"><div class="sign-in-button"><?php echo $this->__('JOIN NOW') ?></div></button>
+
         </div>
         <?php if (Mage::helper('checkout')->isContextCheckout()): ?>
             <input name="context" type="hidden" value="checkout" />
         <?php endif; ?>
+*offer expires 30 days after registration
     </form>
 	    <script type="text/javascript">
     //<![CDATA[

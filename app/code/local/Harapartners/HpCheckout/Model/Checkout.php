@@ -261,28 +261,29 @@ class Harapartners_HpCheckout_Model_Checkout
                 if ( $product->getIsVirtual()==true ) {
                     //loading a product to get the short description
 
-                    $shortDescription = $product->getShortDescription();
-
-                    $options = $orderItem->getProductOptions();
-
-                    $temp = explode("\n", $options['options'][0]['value']);
-
-                    $virtualProductCode = $temp[0];
+                            $shortDescription = $product->getShortDescription();
+                            $description = $product->getDescription();
+                            $title = $product->getName();
+                            
+                            $options = $orderItem->getProductOptions();
+                            $temp = explode("\n", $options['options'][0]['value']);
+                            $virtualProductCode = $temp[0];
 
                     //picking the right template by the id set in the admin (transactional emails section)
                     $templateId =  Mage::getModel('core/email_template')->loadByCode('_trans_Virtual_Product_Redemption')->getId();
 
-                    $store = Mage::app()->getStore();
+                            $store = Mage::app()->getStore();
+                            $email = $order->getCustomer()->getEmail();
 
-                    $email = $order->getCustomer()->getEmail();
-
-                    //attempting to send the email
-                    try {
-                        Mage::getModel('core/email_template')
-                        ->sendTransactional($templateId, "sales", $email, NULL, array("virtual_product_code"=>$virtualProductCode, "order"=>$order, "store"=>$store, "short_description" => $shortDescription));
-                        //Mage::register('coupon_code_email_sent',true);
-                    } catch (Exception $e) {
-                        Mage::logException($e);
+                            //attempting to send the email
+                            try {
+                                Mage::getModel('core/email_template')
+                                ->sendTransactional($templateId, "sales", $email, NULL, array("virtual_product_code"=>$virtualProductCode, "order"=>$order, "store"=>$store, "title"=>$title,"description"=>$description,"short_description" => $shortDescription));
+                                //Mage::register('coupon_code_email_sent',true);
+                            } catch (Exception $e) {
+                                Mage::logException($e);
+                            }
+                        }
                     }
                 }
             }              

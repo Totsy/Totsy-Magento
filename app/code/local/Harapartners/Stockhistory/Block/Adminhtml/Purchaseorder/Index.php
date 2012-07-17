@@ -21,5 +21,4 @@ class Harapartners_Stockhistory_Block_Adminhtml_Purchaseorder_Index extends Mage
         $this->_removeButton('add');
         parent::__construct();
     }
- 
 }

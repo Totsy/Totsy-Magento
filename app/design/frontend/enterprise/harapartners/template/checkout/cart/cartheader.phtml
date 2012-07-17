@@ -78,11 +78,13 @@
     <div id="topCartContent" class="block-content" style="<?php if ( !!$_updateFlag && $_updateFlag ) {echo "display:block"; $checkoutSession->setCartUpdatedFlag(false);} else echo "display:none";?>">
         <div class="inner-wrapper">
         	<?php if ($_cartQty > 0 && !empty($_itemsArray)):?>
-	        <div class="timer-control-box">
+	        <div class="timer-control-box" style="float:right">
+	        	<?php if(!$quote->hasVirtualItems()) { ?>
 	        	<div class="shipping-date">
-		        	<span>Estimated Ship Date:</span>
+		        	<span>Estimated Ship Date test:</span>
 		        	<p id="cart-shipping-date-header"><?php echo date('Y-m-d', Mage::helper('sales/order')->calculateEstimatedShipDate($quote)) ?></p>
 	        	</div>
+	        	<?php } ?>
 	        	<div class="count-down-timer">
 		        	<span>Item Reserved For:</span>
 		        	<p id="cart-timer-header"></p>
@@ -115,6 +117,7 @@
 					</script>
 				</div>
 	        </div>
+	        <div style="clear:both"></div>
 	        <?php  endif;?>
 		    <div id="items-info-wrapper">
 		        <?php $_items = $this->getItems(); //change from getRecentItems()?> 

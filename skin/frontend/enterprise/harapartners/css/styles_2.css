@@ -785,7 +785,7 @@ body.customer-account-login ul.form-list label {
 body .col-main div.my-account{
 	padding-left:15px
 }
-
+.my-account .box-content {font-size:12px;}
 .my-account p{
 	font-size:12px;
 	line-height:19px;

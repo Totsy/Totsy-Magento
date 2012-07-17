@@ -104,16 +104,33 @@ class Totsy_Customer_Test_Model_Observer extends
 
     /**
      * Register for a specific store.
+     *
+     * @test
+     * @loadFixture
      */
     public function registerAltStore()
     {
-    }
+        $observer = Mage::getSingleton('totsycustomer/observer');
 
-    /**
-     * Login to a specific store.
-     */
-    public function loginAltStore()
-    {
+        // generate an encrypted e-mail address for an non-existent user
+        $token = Mage::getSingleton('core/encryption')->encrypt('autologin@test.net');
 
+        // setup the HTTP Request
+        $request  = Mage::app()->getFrontController()->getRequest();
+        $request->setRequestUri('/event');
+        $request->setPathInfo('/event');
+        $request->setPathInfo(null);
+        $request->setQuery('auto_access_token', $token);
+        $request->setQuery('auto_access_store', 2);
+
+        $observer->autoAuthorization();
+
+        // verify that the user has been created
+        $customer = Mage::getModel('customer/customer')
+            ->setWebsiteId(1)
+            ->setStoreId(1)
+            ->loadByEmail('autologin@test.net');
+        $this->assertNotNull($customer->getId());
+        $this->assertEquals($customer->getStoreId(), 2);
     }
 }

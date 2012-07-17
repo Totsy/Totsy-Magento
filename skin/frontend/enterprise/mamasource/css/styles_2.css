@@ -388,7 +388,7 @@ ul.menu ul.shop li a{
 }
 
 #usercart a{
-	color:#ED1C25;	
+	color:#DE6076;	
 }
 
 #usercart a.cart em{
@@ -416,7 +416,7 @@ div.need_help,body .sidebar div.block-account{
 }
 
 body.paymentfactory-index-index .need_help a, body.enterprise-customerbalance-info-index .need_help a{
-	color:#ED1C25;
+	color:#DE6076;
 }
 
 body.paymentfactory-index-index .account-page-title, body.enterprise-customerbalance-info-index .account-page-title{
@@ -446,12 +446,15 @@ body.paymentfactory-index-index .sidebar .block-account .block-title, body.enter
 }
 
 body.paymentfactory-index-index .block-content li a, body.enterprise-customerbalance-info-index .block-content li a{
-	color:#ED1C25; 
+	color:#DE6076; 
+}
+body .block-content li a, body.enterprise-customerbalance-info-index .block-content li a{
+	color:#DE6076; 
 }
 
 body.paymentfactory-index-index .block-content li a:hover, body.enterprise-customerbalance-info-index .block-content li a:hover{
 	background:none;
-	color:#ED1C25;
+	color:#DE6076;
 }
 
 body.paymentfactory-index-index .block-content li a, body.enterprise-customerbalance-info-index .block-content li a{
@@ -459,7 +462,7 @@ body.paymentfactory-index-index .block-content li a, body.enterprise-customerbal
 }
 
 body.paymentfactory-index-index .block-content li.current, body.enterprise-customerbalance-info-index .block-content li.current{
-	color:#ED1C25;
+	color:#DE6076;
 	font-weight:lighter;
 	background:none;
 	padding-left:0px;
@@ -494,7 +497,7 @@ body.customer-address-form .need_help,body.recurringmembership-index-index .need
 }
 
 body.customer-address-form .need_help a, body.recurringmembership-index-index .need_help a{
-	color:#ED1C25;
+	color:#DE6076;
 }
 
 body.customer-address-form .account-page-title, body.recurringmembership-index-index .account-page-title{
@@ -524,12 +527,12 @@ body.customer-address-form .block-account .block-title, body.recurringmembership
 }
 
 body.customer-address-form .block-content li a, body.recurringmembership-index-index .block-content li a{
-	color:#ED1C25; 
+	color:#DE6076; 
 }
 
 body.customer-address-form .block-content li a:hover, body.recurringmembership-index-index .block-content li a:hover{
 	background:none;
-	color:#ED1C25;
+	color:#DE6076;
 }
 
 body.customer-address-form .block-content li a, body.recurringmembership-index-index .block-content li a{
@@ -537,7 +540,7 @@ body.customer-address-form .block-content li a, body.recurringmembership-index-i
 }
 
 body.customer-address-form .block-content li.current, body.recurringmembership-index-index .block-content li.current{
-	color:#ED1C25;
+	color:#DE6076;
 	font-weight:lighter;
 	background:none;
 	padding-left:0px;
@@ -735,6 +738,7 @@ body .col-main div.my-account{
 	padding-left:15px
 }
 
+.my-account .box-content {font-size:12px;}
 .my-account p{
 	font-size:12px;
 	line-height:19px;
@@ -772,7 +776,7 @@ body .my-account .fieldset h2.legend {
 }
 
 .enterprise-invitation-index-index input.invitation-link-area {
-    color: #ED1C25;
+    color: #DE6076;
     resize: none; 
     height:15px;
     min-width:310px
@@ -785,7 +789,7 @@ body .my-account .fieldset h2.legend {
 	font-size:12px;
 	font-weight:bold;
 	border-radius:5px;
-	padding:3px 5px 6px 5px;
+	padding:5px
 }
 
 .my-account .button span span{
@@ -1026,9 +1030,9 @@ body.enterprise-invitation-index-index  h2.account-page-title {
 
 /*---------------------------Cart Product Name----------------------------*/
 .checkout-cart-index .product-name a{
-	color:#ED1C25;
+	color:#DE6076;
 }
 
 .checkout-cart-index .product-name a:hover{
-	color:#ED1C25;
+	color:#DE6076;
 }

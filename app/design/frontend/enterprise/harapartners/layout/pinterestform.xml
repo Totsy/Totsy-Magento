@@ -19,25 +19,31 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Enterprise
- * @package     Enterprise_Enterprise
+ * @category    design
+ * @package     enterprise_default
  * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://www.magentocommerce.com/license/enterprise-edition
  */
+
 -->
-<config>
-    <modules>
-        <Enterprise_Enterprise>
-            <active>true</active>
-            <codePool>core</codePool>
-            <depends>
-                <Mage_Cms/>
-                <Mage_Install/>
-                <Mage_Adminhtml/>
-                <Mage_Admin/>
-                <!--<Mage_AdminNotification/>-->
-                <Mage_Widget/>
-            </depends>
-        </Enterprise_Enterprise>
-    </modules>
-</config>
+<layout version="0.1.0">
+   
+   <pinterestform_index_index>
+        <reference name="root">
+            <action method="setTemplate"><template>page/1column.phtml</template></action>
+        </reference>
+        <reference name="content">
+        <block type="core/template" name="form.content" template="pinterest/form.phtml" />
+        </reference>
+    </pinterestform_index_index>
+    
+   <pinterestform_index_success>
+        <reference name="root">
+            <action method="setTemplate"><template>page/1column.phtml</template></action>
+        </reference>
+        <reference name="content">
+        <block type="core/template" name="form.content" template="pinterest/success.phtml" />
+        </reference>
+    </pinterestform_index_success>
+    
+</layout>

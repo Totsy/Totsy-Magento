@@ -297,3 +297,6 @@ body.customer-account-index  .dashboard a{
 #badges{
 	text-align:center;
 }
+/* don't show badges on reset password screen */
+.customer-account-forgotpassword #badges {display:none;}
+
