@@ -111,4 +111,22 @@ class Harapartners_Stockhistory_Adminhtml_PurchaseorderController extends Mage_A
         $this->_redirect('*/*/index');
     }
 
+    public function updateTotalUnitsAction() {
+        $ids = $this->getRequest()->getParam('po_id');
+        if($ids) {
+            try{
+                $purchase_collection = Mage::getModel('stockhistory/purchaseorder')->getCollection();
+                $purchase_collection->getSelect()->where('category_id IS NOT NULL and id IN ('. implode(',', $ids) . ')');
+                Mage::getModel('stockhistory/purchaseorder')->totalUnitsSold($purchase_collection);
+            } catch(Exception $e) {
+                $this->_getSession()->addError(Mage::helper('stockhistory')->__('Unable to update, please try again'));
+            }
+            $this->_getSession()->addSuccess(Mage::helper('stockhistory')->__('Total Unit Quantity Sold Update successful'));
+        } else {
+            $this->_getSession()->addError(Mage::helper('stockhistory')->__('You did not make a selection'));
+        }
+        
+        $this->_redirect('*/*/index');
+    }
+
 }
