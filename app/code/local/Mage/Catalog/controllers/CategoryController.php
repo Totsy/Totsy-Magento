@@ -125,6 +125,17 @@ class Mage_Catalog_CategoryController extends Mage_Core_Controller_Front_Action
             $update = $this->getLayout()->getUpdate();
             $update->addHandle('default');
 
+            $event_startdate = $category->getEventStartDate();
+            $event_startdate = date("m/d/Y H:i:s", strtotime($event_startdate));
+            $event_startdate = Mage::app()->getLocale()->date($event_startdate, null, null, true);
+            $today = Mage::app()->getLocale()->date(null, null, null, true);
+            if($category->getProductCount() == 1 && $today->isLater($event_startdate)) {
+                $productId = $category->getProductCollection()->getFirstItem()->getId();
+                $product = Mage::getModel('catalog/product')->load($productId); 
+                $product_url = $category->getUrlKey() . "/" . $product->getUrlKey() . ".html";
+                Mage::app()->getFrontController()->getResponse()->setRedirect($product_url);
+            }
+
             if (!$category->hasChildren()) {
                 $update->addHandle('catalog_category_layered_nochildren');
             }
