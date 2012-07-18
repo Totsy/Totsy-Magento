@@ -33,12 +33,10 @@
             <active>true</active>
             <codePool>local</codePool>
         </Totsy_Pixels>
-        
-    <Totsy_Pinterestform>
-      <active>true</active>
-      <codePool>local</codePool>
-      <version>0.1.0</version>
-    </Totsy_Pinterestform>
+        <Totsy_Pinterestform>
+          <active>true</active>
+          <codePool>local</codePool>
+        </Totsy_Pinterestform>
         <Totsy_Sales>
             <active>true</active>
             <codePool>local</codePool>
