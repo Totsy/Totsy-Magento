@@ -4,25 +4,42 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Payment extends TinyBrick_Orde
     public function edit(TinyBrick_OrderEdit_Model_Order $order, $data = array())
     {
         try {
+            $savingNewCreditCard = true;
             $customerId = $order->getCustomerId();
             $billingId = $order->getData('billing_address_id');
             $billing = Mage::getModel('sales/order_address')->load($billingId);
             $data = $this->cleanPaymentData($data);
             $payment = new Varien_Object($data);
-            #Check if there is already a cybersource profile if yes, dont create a new one
-            $profile = Mage::getModel('paymentfactory/profile');
-            $profile->loadByCcNumberWithId($payment->getData('cc_number').$customerId.$payment->getCcExpYear().$payment->getCcExpMonth());
-            if($profile && $profile->getId()) {
+            #If credit Card saved retrieve payment profile
+            if($payment->getData('cybersource_subid')) {
                 $paymentObject = Mage::getModel('sales/order_payment')->getCollection()
-                    ->addAttributeToFilter('cybersource_subid',$profile->getData('subscription_id'))
+                    ->addAttributeToFilter('cybersource_subid',$payment->getData('cybersource_subid'))
                     ->getFirstItem();
                 $payment = $paymentObject->getData();
-                $payment['cybersource_subid'] = null;
                 if(!$payment) {
                     return false;
+                } else {
+                	$savingNewCreditCard = false;
+                }
+            } else {
+                #Check if there is already a cybersource profile if yes, dont create a new one
+                $profile = Mage::getModel('paymentfactory/profile');
+                $profile->loadByCcNumberWithId($payment->getData('cc_number').$customerId.$payment->getCcExpYear().$payment->getCcExpMonth());
+                if($profile && $profile->getId()) {
+                    $paymentObject = Mage::getModel('sales/order_payment')->getCollection()
+                        ->addAttributeToFilter('cybersource_subid',$profile->getData('subscription_id'))
+                        ->getFirstItem();
+                    $payment = $paymentObject->getData();
+                    if(!$payment) {
+                        return false;
+                    } else {
+                    	$savingNewCreditCard = false;
+                    }
                 }
             }
-            Mage::getModel('paymentfactory/tokenize')->createProfile($payment, $billing, $customerId, $billingId);
+            if($savingNewCreditCard) {
+                Mage::getModel('paymentfactory/tokenize')->createProfile($payment, $billing, $customerId, $billingId);
+            }
             $this->replacePaymentInformation($order, $payment);
         } catch(Exception $e){
             return "Error updating payment informations : ".$e->getMessage();

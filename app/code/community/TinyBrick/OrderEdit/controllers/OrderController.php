@@ -30,7 +30,9 @@ class TinyBrick_OrderEdit_OrderController extends Mage_Adminhtml_Controller_Acti
         //arrays for restoring order if error is thrown or payment is declined
         $orderArr = $order->getData();
         $billingArr = $order->getBillingAddress()->getData();
-        $shippingArr = $order->getShippingAddress()->getData();
+        if($order->getShippingAddress()) {
+            $shippingArr = $order->getShippingAddress()->getData();
+        }
         try {
             $preTotal = $order->getGrandTotal();
             $edits = array();
