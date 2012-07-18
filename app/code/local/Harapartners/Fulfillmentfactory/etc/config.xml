@@ -64,44 +64,6 @@
                 </connection>
             </fulfillmentfactory_read>
         </resources>
-        <sales>
-            <order>
-                <statuses>
-                    <processing_fulfillment translate="label"><label>Processing Fulfillment</label></processing_fulfillment>
-                    <payment_failed translate="label"><label>Payment Failed</label></payment_failed>
-                    <fulfillment_failed translate="label"><label>Fulfillment Failed</label></fulfillment_failed>
-                    <fulfillment_aging translate="label"><label>Fulfillment Aging</label></fulfillment_aging>
-                    <shipment_aging translate="label"><label>Shipment Aging</label></shipment_aging>
-                </statuses>
-                <states>
-                    <processing_fulfillment>
-                        <statuses>
-                            <processing_fulfillment/>
-                        </statuses>
-                    </processing_fulfillment>
-                    <payment_failed>
-                        <statuses>
-                            <payment_failed/>
-                        </statuses>
-                    </payment_failed>
-                    <fulfillment_failed>
-                        <statuses>
-                            <fulfillment_failed/>
-                        </statuses>
-                    </fulfillment_failed>
-                    <fulfillment_aging>
-                        <statuses>
-                            <fulfillment_aging/>
-                        </statuses>
-                    </fulfillment_aging>
-                    <shipment_aging>
-                        <statuses>
-                            <shipment_aging/>
-                        </statuses>
-                    </shipment_aging>
-                </states>
-            </order>
-        </sales>
     </global>
     <admin>
         <routers>
@@ -126,7 +88,7 @@
         <jobs>
             <fulfillmentfactory_dotcom_fulfill_order>
                 <schedule>
-                    <cron_expr>0 12 * * *</cron_expr><!--2am and 12pm Monday through Friday -->
+                    <cron_expr>0 2,11 * * 1-5</cron_expr><!--2am and 12pm Monday through Friday -->
                 </schedule>
                 <run>
                     <model>fulfillmentfactory/service_dotcom::runDotcomFulfillOrder</model>
