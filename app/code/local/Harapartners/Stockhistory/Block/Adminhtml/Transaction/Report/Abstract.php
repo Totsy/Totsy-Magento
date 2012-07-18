@@ -92,6 +92,7 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Abstract exte
             
             //you may want to add some product info here, like SKU, Name, Vendor ... so the report is good looking
             $data = array(
+                'product_id'            => $product->getId(),
                 'po_id'                    =>    $this->getPoObject()->getId(),
                 'vendor_style'            =>    $product->getVendorStyle(),
                 'product_name'            =>    $product->getName(),
@@ -125,7 +126,7 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Abstract exte
     protected function _getUniqueProductList(){
         // Gather all products to be reported
         $rawCollection = Mage::getModel('stockhistory/transaction')->getCollection();
-        $rawCollection->getSelect()->where('po_id = ?', $this->getPoObject()->getId());
+        $rawCollection->getSelect()->where('po_id = ?', $this->getPoObject()->getId())->order('vendor_style ASC');
         
         $removeProducts = array();
         
