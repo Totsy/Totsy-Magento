@@ -46,9 +46,13 @@
         <?php $_index = 0; ?>
         <?php $_count = $_items->count(); ?>
         <?php foreach ($_items as $_item): ?>
-        <?php if ($_item->getParentItem()) continue; ?>
+        <?php if ($_item->getParentItem()) continue; ?>        
         <tbody>
-            <?php echo $this->getItemHtml($_item) ?>
+            <?php 
+            //unset the product options            
+            echo $this->getItemHtml($_item) 
+            
+            ?>
             <?php if($this->helper('giftmessage/message')->getIsMessagesAvailable('order_item', $_item) && $_item->getGiftMessageId()): ?>
             <tr class="border<?php echo ($_index++ > $_count ?' last':'') ?>" id="order-item-gift-message-<?php echo $_item->getId() ?>" style="display:none;">
                 <?php $_giftMessage=$this->helper('giftmessage/message')->getGiftMessageForEntity($_item); ?>
@@ -65,10 +69,33 @@
         </tbody>
         <?php endforeach; ?>
 </table>
+
 <p class="savings">
 	<span class="label"><?php echo $this->__('Your savings: ') ?></span><?php echo '$' . number_format(Mage::helper('sales/order')->calculateEstimatedSavings($_order), 2) ?>
 </p>
+
+<?php if(!$_order->getIsNotVirtual()==0): ?>
 <p class="shipping-date">
 	<span class="label"><?php echo $this->__('Estimated Shipping Date: ') ?></span><?php echo date('Y-m-d', Mage::helper('sales/order')->calculateEstimatedShipDate($_order)); ?>
 </p>
+<?php endif; ?>
+
 <script type="text/javascript">decorateTable('my-orders-table', {'tbody' : ['odd', 'even'], 'tbody tr' : ['first', 'last']})</script>
+
+<script type="text/javascript">
+
+jQuery(document).ready( function() {
+  //virtual product div toggling code goes here   
+  jQuery(".sales-order-virtual-items-toggle-link").click( function() {
+  	
+  	if(jQuery("#" + this.id + " img").attr("src")=="https://evan.totsy.com/skin/frontend/enterprise/harapartners/images/orders-history-virtual-items-arrow.gif") {
+		jQuery("#" + this.id + " img").attr("src", "https://evan.totsy.com/skin/frontend/enterprise/harapartners/images/orders-history-virtual-items-down-arrow.gif");  	
+	} else {
+		jQuery("#" + this.id + " img").attr("src", "https://evan.totsy.com/skin/frontend/enterprise/harapartners/images/orders-history-virtual-items-arrow.gif");  	
+	}
+
+  	jQuery("#sales-order-virtual-item-content-" + this.id + "" ).toggle();
+  });   
+});
+
+</script>
