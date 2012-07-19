@@ -48,6 +48,8 @@
     		$('billing-edit-form').show();
     		$('billing-static').hide();
     		$('payment_form_paymentfactory_tokenize').show();
+    		$('payment-edit-form').show();
+    		$('payment-infos').hide();
     		$('billing-static').hide();
     		//$('shipping-edit-form').show();
     		//$('shipping-static').hide();
@@ -135,6 +137,8 @@
 					$('orderEdit').innerHTML = 'Edit Payment Informations';
     				$('billing-edit-form').hide();
     				$('billing-static').show();
+    				$('payment-edit-form').hide();
+    				$('payment-infos').show();
     				/**$('shipping-edit-form').hide();
     				$('shipping-static').show();
     				$('shippingmethod-edit-form').hide();
@@ -243,15 +247,17 @@
             <div class="entry-edit-head">
                 <h4 class="icon-head head-payment-method"><?php echo Mage::helper('sales')->__('Payment Information') ?></h4>
             </div>
-            <fieldset>
+            <fieldset id="payment-infos">
                 <?php echo $this->getPaymentHtml() ?>
                 <div><?php echo Mage::helper('sales')->__('Order was placed using %s', $_order->getOrderCurrencyCode()) ?></div>
             </fieldset>
+            <fieldset id="payment-edit-form" style="display:none;">
                 <form id="payment-fields">
                     <input type="hidden" value="payment" name="type">
                     <input type="hidden" value="troyer@totsy.com" name="admin_user">
                     <?php echo $this->getChildHtml('edit_billing_method') ?>
                 </form>
+            </fieldset>
         </div>
     </div>
     <?php if (!$_order->getIsVirtual()): ?>

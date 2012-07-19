@@ -29,6 +29,14 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Billing extends TinyBrick_Orde
         $array = array();
         $billing = $order->getBillingAddress();
         $oldArray = $billing->getData();
+        #check if infos are empty 
+        foreach($data as $key => $value) {
+            if($key == 'street' || $key == 'city' || $key == 'firstname' || $key == 'lastname') {
+                if(!$value) {
+                    return "Error updating billing address, you should fill all the fields required.";
+                }
+            }
+        }
         $data['street'] = $data['street1'];
         if($data['street2']) {
             $data['street'] .= "\n" . $data['street2'];
@@ -51,13 +59,11 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Billing extends TinyBrick_Orde
             }
             if($count != 0) {
                 $comment = "Changed billing address:<br />" . $comment . "<br />";
-                return $comment;
+                return false;
             }
             return true;
         }catch(Exception $e){
-            $array['status'] = 'error';
-            $array['msg'] = "Error updating billing address";
-            return false;
+            return "Error updating billing address";
         }
     }
 }
