@@ -18,12 +18,8 @@
     </li>*/ ?>
     <?php $customerId = Mage::getSingleton('adminhtml/session_quote')->getCustomerId() ?>
     <?php $orderId = $this->getRequest()->getParam('order_id'); ?>
-    <?php if($orderId) {
-        $order = Mage::getModel('orderedit/order')->load($orderId); 
-        $customerId = $order->getCustomerId();
-    } ?>
     <?php $profiles = $this->getProfilesByCustomerId( $customerId ) ?>
-    <?php if( $customerId && $profiles && count( $profiles->getItems() ) ): ?>
+    <?php if( $customerId && $profiles && count( $profiles->getItems() ) && !$orderId ): ?>
         <li class="switch-card-control">
             <label for="use-card-method">Choose a credit/debit card:</label>
             <div class="totsy-selective-input-box middle-length" id="use-card-method">
