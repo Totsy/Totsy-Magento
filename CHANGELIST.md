@@ -1,6 +1,19 @@
 Totsy-Magento Release Notes
 ===========================
 
+20120718
+--------
+
+* removing infamous 'test' text in mini-cart huzzahhhhhh
+* fixed issue with redirect issue after create account
+* MGN-676 fixing calculation of case pack total, included check for amended records
+* added affiliate pixel to mobile
+* fixed layout issue in pinterest module that caused pixels module layout to not be shown. moved pixels module code to default theme so that pixels will fire for mobile as well as regular site
+* MNG-682. Remove SLAV"s dev mode ;)
+* Adding estimated ship date below tangible prods in rush checkout
+* MGN-682. Hide not upcoming events on age/categoty page(s)
+* MGN-826 : any event that has only one product will now be redirected straight to the item instead of the event page and the event page is viewable while it is still an upcoming sale
+
 20120717
 --------
 

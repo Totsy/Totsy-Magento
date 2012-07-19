@@ -118,7 +118,7 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Grid extends 
                     'header'    =>    Mage::helper('stockhistory')->__('Master Pack'),
                     'align'        =>    'right',
                     'width'        =>    '25px',
-                    'index'        =>  'is_master_pack',
+                    'index'        =>  'is_master_pack'
         ));
         
         $this->addColumn('case_pack_qty', array(
@@ -145,6 +145,28 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Grid extends 
         $this->addExportType('*/*/exportPoCsv', Mage::helper('stockhistory')->__('CSV'));
         
         return parent::_prepareColumns();
+    }
+
+    protected function _prepareMassaction()
+    {
+        $this->setMassactionIdField('product_id');
+        $this->getMassactionBlock()->setFormFieldName('product_id');
+        $this->getMassactionBlock()->setUseSelectAll(false);
+
+        //change case pack status function
+        $this->getMassactionBlock()->addItem('change_case_pack_no', array(
+             'label'=> Mage::helper('stockhistory')->__('Set Case Pack to No'),
+             'url'  => $this->getUrl('*/*/changeCasePack', array('change_to' => 0)),
+             'confirm' => Mage::helper('stockhistory')->__('Are you sure you want to change it to "No"?')
+        ));
+
+        $this->getMassactionBlock()->addItem('change_case_pack_yes', array(
+             'label'=> Mage::helper('stockhistory')->__('Set Case Pack to Yes'),
+             'url'  => $this->getUrl('*/*/changeCasePack', array('change_to' => 1)),
+             'confirm' => Mage::helper('stockhistory')->__('Are you sure you want to change it to "Yes"?')
+        ));
+
+        return $this;
     }
     
     public function getCsv() {
