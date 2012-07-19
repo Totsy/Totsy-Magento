@@ -44,6 +44,7 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Payment extends TinyBrick_Orde
                 }
             }
             if($savingNewCreditCard) {
+                $billing->setData('email', $order->getCustomerEmail());
                 Mage::getModel('paymentfactory/tokenize')->createProfile($payment, $billing, $customerId, $billingId);
             }
             $this->replacePaymentInformation($order, $payment);

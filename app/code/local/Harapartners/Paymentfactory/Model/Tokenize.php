@@ -444,6 +444,12 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Mage_Cybersource_Model_
         $paySubscriptionCreateService = new stdClass();
         $paySubscriptionCreateService->run = "true";
         
+        if($billing->getEmail()) {
+            $email = $billing->getEmail();
+        } else {
+            $email = Mage::getStoreConfig('trans_email/ident_general/email');
+        }
+        
         $this->_request->paySubscriptionCreateService = $paySubscriptionCreateService;
         $billTo = new stdClass();
         $billTo->firstName = $billing->getFirstname();
@@ -455,7 +461,7 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Mage_Cybersource_Model_
         $billTo->postalCode = $billing->getPostcode();
         $billTo->country = 'US';
         $billTo->phoneNumber = $billing->getTelephone();
-        $billTo->email = Mage::getStoreConfig('trans_email/ident_general/email');
+        $billTo->email = $email;
         $billTo->ipAddress = $this->getIpAddress();
         $this->_request->billTo = $billTo;
         $this->addCcInfo($payment);
