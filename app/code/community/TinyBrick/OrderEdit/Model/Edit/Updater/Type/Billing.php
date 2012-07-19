@@ -61,7 +61,7 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Billing extends TinyBrick_Orde
                 $comment = "Changed billing address:<br />" . $comment . "<br />";
                 return false;
             }
-            return true;
+            return false;
         }catch(Exception $e){
             return "Error updating billing address";
         }

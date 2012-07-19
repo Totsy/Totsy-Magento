@@ -68,7 +68,6 @@ class TinyBrick_OrderEdit_OrderController extends Mage_Adminhtml_Controller_Acti
                     }
                 }
             }
-            
             $postTotal = $order->getGrandTotal();
             if(count($msgs) < 1) {
                 //auth for more if the total has increased and configured to do so

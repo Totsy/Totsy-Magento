@@ -19,7 +19,7 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Payment extends TinyBrick_Orde
             $payment = new Varien_Object($data);
             #If credit Card saved retrieve payment profile
             if($payment->getData('cybersource_subid')) {
-                $decryptedCybersourceId = Mage::getModel('core/encryption')->decrypt(base64_decode($payment->getData('cybersource_subid')));
+                /**$decryptedCybersourceId = Mage::getModel('core/encryption')->decrypt(base64_decode($payment->getData('cybersource_subid')));
                 $payment = Mage::getModel('sales/order_payment')->getCollection()
                     ->addAttributeToFilter('cybersource_subid',$decryptedCybersourceId)
                     ->getFirstItem();
@@ -27,7 +27,7 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Payment extends TinyBrick_Orde
                     return false;
                 } else {
                 	$savingNewCreditCard = false;
-                }
+                }**/
             } else {
                 #Check if there is already a cybersource profile if yes, dont create a new one
                 $profile = Mage::getModel('paymentfactory/profile');
