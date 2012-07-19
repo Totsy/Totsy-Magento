@@ -9,7 +9,6 @@ if($_product && $_category && $_product->getId() && $_category->getId()) {
 }
 $urlParams['current_url'] = base64_encode(Mage::helper('core/url')->getCurrentUrl());
 $urlParams['referrer_url'] = base64_encode($referring_url);
-Mage::log('testing in steelhouse pixel');
 ?>
 <!-- Steelhouse BEGIN -->
 <div id="steelhouse_pixel"></div>
