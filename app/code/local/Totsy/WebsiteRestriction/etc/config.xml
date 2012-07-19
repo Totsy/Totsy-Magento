@@ -15,6 +15,7 @@
                             restriction rules) -->
                         <affiliate_remote_register/>
                         <affiliate_register_index/>
+                        <affiliate_feeds_index/>
                         <cms_page_view/>
                         <enterprise_invitation_customer_account_genericcreate/>
                         <inchoo_facebook_customer_account_connect/>

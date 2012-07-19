@@ -141,8 +141,6 @@
                 <rewrite>
                     <!--Harapartners_EmailFactory-->
                     <email_template>Harapartners_Service_Model_Rewrite_Core_Email_Template</email_template>
-                    <!--Harapartners_Service: locking admin modifications-->
-                    <store>Harapartners_Service_Model_Rewrite_Core_Store</store>
                 </rewrite>
             </core>
             <customer>

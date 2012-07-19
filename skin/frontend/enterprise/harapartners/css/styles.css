@@ -304,6 +304,7 @@ p.error-msg { border-color:#e9581f; background-color:#fff5f3; color:#d91a00; }
 .messages li.success-msg { border-color:#446423; background-color:#eff5ea; color:#3d6611; }
 .messages li.success-msg a { color:#3d6611; }
 .messages li.success-msg ul { /* background-image:url(../images/bkg_msg-success.gif); */ }
+.cart .messages .success-msg {margin-left: 18px}
 /* Notification Message */
 .messages li.note-msg,
 .messages li.notice-msg { border-color:#fcd344; background-color:#fafaec; color:#3d6611; }
@@ -448,6 +449,43 @@ tr.summary-details-excluded { font-style:italic; }
 .cart-tax-info .cart-price { display:block; padding-right:20px; }
 .cart-tax-total { display:block; padding-right:20px; background:url(../images/bkg_collapse.gif) 100% 3px no-repeat; cursor:pointer; }
 .cart-tax-total-expanded { background-position:100% -54px; }
+
+/* Sales Order Virtaul items */
+#toggleable-order-items { /* */ }
+.sales-order-virtual-items-toggle-link { 
+font-weight:bold;
+text-decoration:underline;
+}
+
+.sales-order-virtual-items-toggle-link a{
+color: #707070 !important;
+font-size:px;
+float:left;
+text-transform:uppercase;
+} 
+
+.sales-order-virtual-items-toggle-link img{
+padding-left:3px; 
+}
+
+.sales-order-virtual-item-code {
+line-height:30px;
+}
+
+.sales-order-item-table-cells {
+vertical-align:middle !important; 
+}
+
+.sales-order-virtual-item-code-value {
+font-weight:bold;
+}
+
+.sales-order-virtual-item-content { 
+	display:none;	
+}
+.sales-order-virtual-item-thumbnail { padding-bottom: 8px; }
+.sales-order-virtual-item-shortdescription { /* */ }
+.sales-order-virtual-item-description { /* */ }
 
 /* Links */
 ul.links,

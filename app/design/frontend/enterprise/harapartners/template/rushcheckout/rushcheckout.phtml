@@ -4,7 +4,6 @@
 * by Harapartners
 */
 ?>
-
 <?php
 $_item = $this->getItem();
 $isVisibleProduct = $_item->getProduct()->isVisibleInSiteVisibility();
@@ -12,6 +11,7 @@ $isVirtual = $_item->getProduct()->isVirtual();
 $canApplyMsrp = Mage::helper('catalog')->canApplyMsrp($_item->getProduct(), Mage_Catalog_Model_Product_Attribute_Source_Msrp_Type::TYPE_BEFORE_ORDER_CONFIRM);
 $configKey = 'limit_timer';
 $countdownTime = Mage::getStoreConfig('config/rushcheckout_timer/'.$configKey);
+$quote = Mage::getSingleton('checkout/session')->getQuote();
 
 if ( !Mage::getSingleton('checkout/session')->hasData('countdown_timer') ) {
 	$timer = 0;
@@ -34,7 +34,9 @@ if ( !Mage::getSingleton('checkout/session')->hasData('countdown_timer') ) {
             <?php echo $this->htmlEscape($this->getProductName()) ?>
         <?php endif; ?>
         </h2>
-        <?php if ($_options = $this->getOptionList()):?>
+        <?php
+        if($isVirtual==false) { 
+        	if ($_options = $this->getOptionList()) { ?>
         <div class="item-options">
             <ul>
             <?php foreach ($_options as $_option) : ?>
@@ -46,7 +48,8 @@ if ( !Mage::getSingleton('checkout/session')->hasData('countdown_timer') ) {
 	                <div class="truncated_full_value">
 	                    <div class="item-options">
 	                        <label><?php echo $this->htmlEscape($_option['label']) ?></label>
-	                        <div><?php echo $_formatedOptionValue['full_view'] ?></div>
+	                        <div><?php echo $_formatedOptionValue['full_view'] ?>
+	                        </div>
 	                    </div>
 	                </div>
 	                <?php endif; ?>
@@ -55,7 +58,13 @@ if ( !Mage::getSingleton('checkout/session')->hasData('countdown_timer') ) {
             <?php endforeach; ?>
             </ul>
         </div>
-        <?php endif;?>
+        <div style="font-size:12px; color: #707070"><span style="font-weight:bold">Estimated ship date:</span>&nbsp;<?php echo date('Y-m-d', Mage::helper('sales/order')->calculateEstimatedShipDate($quote)); ?></div>
+       	<?php } 
+        } else { ?>
+        <div>
+        	You will receive an email with details on this voucher code.
+        </div>
+        <?php } ?>
         <?php if ($messages = $this->getMessages()): ?>
         <?php foreach ($messages as $message): ?>
             <p class="item-msg <?php echo $message['type'] ?>">* <?php echo $message['text'] ?></p>

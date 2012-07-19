@@ -1,5 +1,6 @@
 .idea/
 .htaccess*
+/favicon.ico
 app/code/community/Find/
 app/code/community/Phoenix/
 app/code/core/
@@ -31,7 +32,6 @@ errors/enterprise/
 errors/*.php
 errors/design.xml
 errors/local.xml.*
-favicon.ico
 get.php
 includes/
 index.php

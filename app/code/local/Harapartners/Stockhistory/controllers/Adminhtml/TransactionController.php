@@ -355,4 +355,22 @@ class Harapartners_Stockhistory_Adminhtml_TransactionController extends Mage_Adm
 
         $this->_redirect('*/*/report', array('po_id' => $this->getRequest()->getParam('po_id')));
     }
+
+    public function changeCasePackAction() {
+      //  var_dump($this->getRequest()->getParams()); die();
+        $change_to = $this->getRequest()->getParam('change_to');
+        $items = $this->getRequest()->getParam('product_id');
+        if($items) {
+            try{
+                Mage::getModel('stockhistory/transaction')->changeCasePackStatus($items, $change_to);
+                $this->_getSession()->addSuccess(Mage::helper('stockhistory')->__('Successfully updated!'));
+            }catch(Exception $e){
+                $this->_getSession()->addError(Mage::helper('stockhistory')->__('Unable to update, please try again.  Error: ' . $e->getMessage()));
+            }
+        } else {
+            $this->_getSession()->addError(Mage::helper('stockhistory')->__('You did not select any items'));
+        }
+        Mage::getSingleton('adminhtml/session')->setPOReportGridData(null);
+        $this->_redirectReferer(null);
+    }
 }

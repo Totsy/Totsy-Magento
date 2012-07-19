@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<config>
+   <sections>
+        <toe translate="label" module="orderedit">
+            <label>True Order Edit</label>
+            <tab>general</tab>
+            <frontend_type>text</frontend_type>
+            <sort_order>701</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>1</show_in_store>
+            <groups>
+                <orderedit translate="label" module="orderedit">
+                    <label>True Order Edit</label>
+                    <sort_order>670</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>0</show_in_store>
+                    <fields>
+                        <active translate="label">
+                            <label>Enabled</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </active>
+                        <auth translate="label">
+                            <label>Re-Authorize Payment? (your payment methods must be able to re-authorize, enabling this will call authorize on the orders current method)</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>5</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </auth>
+                        <calc translate="label">
+                            <label>Calculate Shipping Rates? (Most shipping methods are not setup to calculate based on an order. We include the flatrate method. Custom rates can still be entered.)</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>6</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </calc>
+                        <statuses translate="label">
+                            <label>Order status allowed to be edited</label>
+                            <frontend_type>multiselect</frontend_type>
+                            <sort_order>51</sort_order>
+                            <source_model>adminhtml/system_config_source_order_status</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </statuses>
+                    </fields>
+                </orderedit>
+            </groups>
+        </toe>
+    </sections>
+</config>

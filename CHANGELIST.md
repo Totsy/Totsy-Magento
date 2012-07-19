@@ -1,6 +1,73 @@
 Totsy-Magento Release Notes
 ===========================
 
+20120719
+--------
+
+* fix Event name in Order Page
+* Last Fix Order Payment module
+* hide saved credit card
+* Add correct Email when Profile is created
+* Payment Module : Billing Required Fields
+* the variable totalQty was not initialized, which prevented logistics from printing the PO.
+* fixed a couple 404 errors on the mobile site related to missing js and css files. finished up header include of user's name and cart info via ajax
+* tweaked the after login and after registration redirects to force the user to go the events page if no redirect is already set in their session.
+* MGN-695 - Add Payment Informations Module to Order Admin Page
+* MGN-676 Almost made a mistake of never setting the qty variable, which would have caused the result for prebuys to always be zero
+* MGN-669 logistics can now change item case pack status from the PO Report view
+* print credit card profile in order page
+* MGN-747: Rebuilt the Affiliate Feeds controller, and allowed public access to the action.
+* further changes for header ajax piece to mobile
+* Finished tweaks realetd to MGN-802 as per Rob's comment on order stati on virtual orders
+* tweaks as per Rob's 07/17/12 comments
+* Add All statuses for Order Edit Extension
+* manage saved credit card
+* Change Text Button, Way how to get Billing Address
+
+20120718
+--------
+
+* removing infamous 'test' text in mini-cart huzzahhhhhh
+* fixed issue with redirect issue after create account
+* MGN-676 fixing calculation of case pack total, included check for amended records
+* added affiliate pixel to mobile
+* fixed layout issue in pinterest module that caused pixels module layout to not be shown. moved pixels module code to default theme so that pixels will fire for mobile as well as regular site
+* MNG-682. Remove SLAV"s dev mode ;)
+* Adding estimated ship date below tangible prods in rush checkout
+* MGN-682. Hide not upcoming events on age/categoty page(s)
+* MGN-826 : any event that has only one product will now be redirected straight to the item instead of the event page and the event page is viewable while it is still an upcoming sale
+
+20120717
+--------
+
+* Setup registry in one place at the top of the script.
+* Removed ship date for virtual orders on My Orders page
+* MGN-604: added support for affiliate tracking codes to use registration params for dynamic template replacement.
+* MGN-823 added asterik to image
+* MGN-676 - forgot to add the new mysql4 setup script
+* MGN-454 correctly percent off calculation
+* display total quantity sold/casepack for an event in the PO grid
+* MGN-454 correctly percent off calculation
+* MGN-454 correctly percent off calculation
+* MGN-454 correctly percent off calculation
+* Restored Google_Checkout module because of warnings.
+* Adding product title and description to the coupon code emails
+* MGN-454 correctly percent off calculation
+* MGN-205 fix for css cart message
+* MGN-533 #resolve #comment Adding correct favicon.ico for IE compatibility, implementing via code rather than admin, updating .gitignore
+* Removed the call to load() to eliminate PHP warnings.
+* MGN-823 legal copy to login/register
+* Added test fixture for a test case for Totsy_Customer_Model_Observer class.
+* Removed unnecessary order status/states from config file, because custom states should be administered in admin (and are added by data sql scripts).
+* Restored the Mage_AdminNotification module, which should be disabled via admin instead, since the Enterprise_Enterprise module depends on it.
+* Finished up last test cases for Totsy_Customer_Model_Observer class.
+* Removed the locking down of store models by Harapartners.
+* Tightened up spacing and changed some copy as per ticket MGN-818 (steps 1-4)
+* Moving estimated ship date on orders that have virtual items to below the item's row in the cart as opposed to the top of the cart
+* Started making edits. Still to do are the main cart and review pages
+* Added toggleable div for vouchers
+* Started new sales order layout changes for virtual items
+
 20120716
 --------
 

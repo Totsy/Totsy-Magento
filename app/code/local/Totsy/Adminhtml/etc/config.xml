@@ -18,6 +18,7 @@
             <adminhtml>
                 <rewrite>
                     <widget_grid_column_renderer_action>Totsy_Adminhtml_Block_Widget_Grid_Column_Renderer_Action</widget_grid_column_renderer_action>
+                    <sales_order_edit_billing_method_form>Totsy_Adminhtml_Block_Sales_Order_Edit_Billing_Method_Form</sales_order_edit_billing_method_form>
                 </rewrite>
             </adminhtml>
         </blocks>
@@ -25,6 +26,7 @@
             <adminhtml>
                 <rewrite>
                     <sales_order_create>Totsy_Adminhtml_Model_Sales_Order_Create</sales_order_create>
+                    <system_config_source_order_status>Totsy_Adminhtml_Model_System_Config_Source_Order_Status</system_config_source_order_status>
                 </rewrite>
             </adminhtml>
         </models>
