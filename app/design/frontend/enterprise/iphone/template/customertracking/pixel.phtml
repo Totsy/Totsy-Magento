@@ -1,0 +1,7 @@
+<?php $affiliate = Mage::getSingleton('customer/session')->getAffiliate(); ?>
+<script type='text/javascript'>
+    if(typeof _gaq != "undefined") {
+        _gaq.push(['_trackEvent', 'affiliate', '<?php echo $this->getCurrentAffiliateEventName() ?>', '<?php echo $affiliate->getAffiliateCode() ?>']);
+    }
+</script>
+<?php echo $this->getCurrentAffiliatePixel() ?>

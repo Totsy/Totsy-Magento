@@ -25,9 +25,9 @@
         </routers>
         <layout>
             <updates>
-                <pixels>
+                <pinterestform>
                     <file>pinterestform.xml</file>
-                </pixels>
+                </pinterestform>
             </updates>
         </layout>
     </frontend>
