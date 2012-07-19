@@ -115,8 +115,9 @@ class Harapartners_Stockhistory_Model_Purchaseorder extends Mage_Core_Model_Abst
                     if($product->getIsMasterPack() && !in_array($product_id, $pre_buys)) {
                            $amend_prod = Mage::getModel('stockhistory/transaction')->getCollection();
                             $amend_prod->getSelect()->where('po_id=' . $result->getId() . ' and product_id='. $product_id .' and action_type= 1');
+                            $qty = (int)$trans->getQtyDelta();
                             foreach ($amend_prod as $value) {
-                                $qty = (int)$trans->getQtyDelta() + $value->getQtyDelta();
+                                $qty += $value->getQtyDelta();
                             }
                             $pre_buys[] = $product_id;
                             $total_units += $qty;

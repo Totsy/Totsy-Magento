@@ -438,35 +438,33 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Mage_Cybersource_Model_
 
     
     public function createProfile($payment,$billing,$customerId,$addressId) {
-                
-        //??? can we use parent::authorize() with different init param ???
         $error = false;
         $soapClient = $this->getSoapApi();
-        
         parent::iniRequest();
-
         $paySubscriptionCreateService = new stdClass();
         $paySubscriptionCreateService->run = "true";
         
-        $this->_request->paySubscriptionCreateService = $paySubscriptionCreateService;    
+        if($billing->getEmail()) {
+            $email = $billing->getEmail();
+        } else {
+            $email = Mage::getStoreConfig('trans_email/ident_general/email');
+        }
         
+        $this->_request->paySubscriptionCreateService = $paySubscriptionCreateService;
         $billTo = new stdClass();
         $billTo->firstName = $billing->getFirstname();
         $billTo->lastName = $billing->getLastname();
         $billTo->company = $billing->getCompany();
-        $billTo->street1 = $billing->getStreet(0);
-        $billTo->street2 = $billing->getStreet(1);
+        $billTo->street1 = $billing->getData('street');
         $billTo->city = $billing->getCity();
         $billTo->state = $billing->getRegion();
         $billTo->postalCode = $billing->getPostcode();
         $billTo->country = 'US';
         $billTo->phoneNumber = $billing->getTelephone();
-        $billTo->email = ($email ? $email : Mage::getStoreConfig('trans_email/ident_general/email'));
+        $billTo->email = $email;
         $billTo->ipAddress = $this->getIpAddress();
-        $this->_request->billTo = $billTo;        
-        
+        $this->_request->billTo = $billTo;
         $this->addCcInfo($payment);
-        
         $purchaseTotals = new stdClass();
         $purchaseTotals->currency = 'USD';
         $this->_request->purchaseTotals = $purchaseTotals; 
@@ -479,16 +477,14 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Mage_Cybersource_Model_
         $recurringSubscriptionInfo = new stdClass();
         $recurringSubscriptionInfo->frequency = "on-demand";
         $this->_request->recurringSubscriptionInfo = $recurringSubscriptionInfo;
-
         try {
             $result = $soapClient->runTransaction($this->_request);
             if ($result->reasonCode==self::RESPONSE_CODE_SUCCESS && $result->paySubscriptionCreateReply->reasonCode==self::RESPONSE_CODE_SUCCESS ) {
-                
                 $payment->setLastTransId($result->requestID)
                         ->setCcTransId($result->requestID)
                         ->setIsTransactionClosed(0)
                         ->setCybersourceToken($result->requestToken)
-                            ->setCcAvsStatus($result->ccAuthReply->avsCode);                                              
+                            ->setCcAvsStatus($result->ccAuthReply->avsCode);
                 /*
                  * checking if we have cvCode in response bc
                  * if we don't send cvn we don't get cvCode in response
@@ -497,14 +493,9 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Mage_Cybersource_Model_
                     $payment->setCcCidStatus($result->ccAuthReply->cvCode);
                 }
             } else {
-                 $error = Mage::helper('paymentfactory')->__('There is an gateway error in processing the payment(create). Please try again or contact us.');
+                $error = Mage::helper('paymentfactory')->__('There is an gateway error in processing the payment. Please try again or contact us.');
             }
         } catch (Exception $e) {
-            
-            $order = $payment->getOrder();
-            $order->setStatus(Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_PAYMENT_FAILED);
-            $this->_sendPaymentFailedEmail($payment);
-            
            Mage::throwException(
                 Mage::helper('paymentfactory')->__('Gateway request error: %s', $e->getMessage())
             );
@@ -525,8 +516,8 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Mage_Cybersource_Model_
             $profile->importDataWithValidation($data);
             $profile->save();
         }catch (Exception $e) {
-           Mage::throwException(
-                Mage::helper('paymentfactory')->__('Can not save payment profile')
+            Mage::throwException(
+                Mage::helper('paymentfactory')->__('Can not save payment profile : ' . $e->getMessage())
             );
         }
         

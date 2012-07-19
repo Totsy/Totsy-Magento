@@ -196,7 +196,7 @@ class Mage_Customer_AccountController extends Mage_Core_Controller_Front_Action
         if (!$session->getBeforeAuthUrl() || $session->getBeforeAuthUrl() == Mage::getBaseUrl()) {
 
             // Set default URL to redirect customer to
-            $session->setBeforeAuthUrl(Mage::getBaseUrl().'event'); //Harapartners, Jun, Home page (landing page) redirect is defined in Harapartners_Service module rewrite
+            $session->setBeforeAuthUrl(Mage::getBaseUrl().'event/'); //Harapartners, Jun, Home page (landing page) redirect is defined in Harapartners_Service module rewrite
 //            $session->setBeforeAuthUrl(Mage::helper('customer')->getAccountUrl());
 
             // Redirect customer to the last page visited after logging in
@@ -364,7 +364,7 @@ class Mage_Customer_AccountController extends Mage_Core_Controller_Front_Action
                         $session->setCustomerAsLoggedIn($customer);
                         $defaultUrl = $this->_welcomeCustomer($customer);  //Harapartners, Edward, keep this function only for sending welcome email, the real url to redirect is $url
                         //$url = $this->_welcomeCustomer($customer);    
-                        $url = Mage::getBaseUrl().'event';    //Harapartners, yang, set success redirect url to home page
+                        $url = Mage::getBaseUrl().'event/';    //Harapartners, yang, set success redirect url to home page
                         $this->_redirectSuccess($url);
                         return;
                     }
