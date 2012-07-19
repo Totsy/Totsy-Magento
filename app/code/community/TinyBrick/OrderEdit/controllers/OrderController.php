@@ -21,18 +21,18 @@
  * @package    TinyBrick_OrderEdit
  * @copyright  Copyright (c) 2010 TinyBrick Inc. LLC
  * @license    http://store.delorumcommerce.com/license/commercial-extension
+ * @Modifications : Tom Royer troyer@totsy.com
  */
 class TinyBrick_OrderEdit_OrderController extends Mage_Adminhtml_Controller_Action
 {   
+    #Only Payment/Billing Informations can be Edited
     public function editAction()
     {
         $order = $this->_initOrder();
         //arrays for restoring order if error is thrown or payment is declined
         $orderArr = $order->getData();
         $billingArr = $order->getBillingAddress()->getData();
-        if($order->getShippingAddress()) {
-            $shippingArr = $order->getShippingAddress()->getData();
-        }
+        //$shippingArr = $order->getShippingAddress()->getData();
         try {
             $preTotal = $order->getGrandTotal();
             $edits = array();
@@ -57,6 +57,7 @@ class TinyBrick_OrderEdit_OrderController extends Mage_Adminhtml_Controller_Acti
                 }
             }
             //$order->collectTotals()->save();
+            #After Editing Billing Informations use it to Update Payment Infos
             foreach($edits as $edit) {
                 if($edit['type']) {
                     if($edit['type'] == 'payment') {
@@ -77,7 +78,7 @@ class TinyBrick_OrderEdit_OrderController extends Mage_Adminhtml_Controller_Acti
                         $orderMethod = $payment->getMethod();
                         if($orderMethod != 'free' && $orderMethod != 'checkmo' && $orderMethod != 'purchaseorder') {
                             if(!$payment->authorize(1, $postTotal)) {
-                                $this->_orderRollBack($order, $orderArr, $billingArr, $shippingArr);
+                                //$this->_orderRollBack($order, $orderArr, $billingArr, $shippingArr);
                                 echo "There was an error re-authorizing payment.";
                                 return $this;
                             }
@@ -89,22 +90,22 @@ class TinyBrick_OrderEdit_OrderController extends Mage_Adminhtml_Controller_Acti
                 $this->_logChanges($order, $this->getRequest()->getParam('comment'), $this->getRequest()->getParam('admin_user'), $changes);
                 echo "Order updated successfully. The page will now refresh.";
             } else {
-                $this->_orderRollBack($order, $orderArr, $billingArr, $shippingArr);
+                //$this->_orderRollBack($order, $orderArr, $billingArr, $shippingArr);
                 echo "There was an error saving information, please try again. : " . $msgs[0];
             }
         } catch(Exception $e) {
             echo $e->getMessage();
-            $this->_orderRollBack($order, $orderArr, $billingArr, $shippingArr);
+            //$this->_orderRollBack($order, $orderArr, $billingArr, $shippingArr);
         }
         return $this;
     }
     
     protected function _orderRollBack($order, $orderArray, $billingArray, $shippingArray)
     {
-        //$order->setData($orderArray)->save();
-        //$order->getBillingAddress()->setData($billingArray)->save();
-        //$order->getShippingAddress()->setData($shippingArray)->save();
-        //$order->collectTotals()->save();
+        $order->setData($orderArray)->save();
+        $order->getBillingAddress()->setData($billingArray)->save();
+        $order->getShippingAddress()->setData($shippingArray)->save();
+        $order->collectTotals()->save();
     }
     
     protected function _logChanges($order, $comment, $user, $array = array()) 
@@ -150,12 +151,6 @@ class TinyBrick_OrderEdit_OrderController extends Mage_Adminhtml_Controller_Acti
         echo $this->getLayout()->createBlock('orderedit/adminhtml_sales_order_shipping_update')->setTemplate('sales/order/view/tab/shipping-form.phtml')->toHtml();
     }
     
-    /*
-public function newItemAction()
-    {
-        echo $this->getLayout()->createBlock('adminhtml/sales_order_create_search_grid')->toHtml();
-    }
-*/
     public function newItemAction()
     {
         echo $this->getLayout()->createBlock('orderedit/adminhtml_sales_order_view_items_add')->setTemplate('sales/order/view/items/add.phtml')->toHtml();
