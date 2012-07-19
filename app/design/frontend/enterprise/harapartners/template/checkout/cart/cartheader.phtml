@@ -81,7 +81,7 @@
 	        <div class="timer-control-box" style="float:right">
 	        	<?php if(!$quote->hasVirtualItems()) { ?>
 	        	<div class="shipping-date">
-		        	<span>Estimated Ship Date test:</span>
+		        	<span>Estimated Ship Date:</span>
 		        	<p id="cart-shipping-date-header"><?php echo date('Y-m-d', Mage::helper('sales/order')->calculateEstimatedShipDate($quote)) ?></p>
 	        	</div>
 	        	<?php } ?>

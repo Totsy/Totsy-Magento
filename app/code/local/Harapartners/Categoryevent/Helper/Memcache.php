@@ -129,12 +129,18 @@ class Harapartners_Categoryevent_Helper_Memcache extends Mage_Core_Helper_Abstra
             $sortentryLive = Mage::getModel('categoryevent/sortentry')->loadByDate($sortDate, $storeId, false)->getLiveQueue();
             $liveCategoryInfoArray = json_decode($sortentryLive, true);
             $liveCategoryIdArray = array();
-            foreach ($liveCategoryInfoArray as $category){
+            $mageTimezone = Mage::getStoreConfig(Mage_Core_Model_Locale::XML_PATH_DEFAULT_TIMEZONE);
+            date_default_timezone_set($mageTimezone);
+            foreach ($liveCategoryInfoArray as $key=>$category){
+            	if (isset($category['event_start_date']) && strtotime($category['event_start_date'])>time()){
+            		unset($liveCategoryInfoArray[$key]);
+            		continue;
+            	}
                 if(isset($category['entity_id']) && $category['entity_id']){
                     $liveCategoryIdArray[] = $category['entity_id'];
                 }
             }
-            
+            date_default_timezone_set($defaultTimezone);
             //To Jun: these code need to moved into the resource models
             // ---------- //
             // Load category <==> product relationship
@@ -230,6 +236,7 @@ class Harapartners_Categoryevent_Helper_Memcache extends Mage_Core_Helper_Abstra
             // Note pass array by reference!
             $mediaBaseDir = Mage::getSingleton('catalog/product_media_config')->getBaseMediaPath();
             $emptyCategoryIds = array();
+            
             foreach($categoryProductCompleteData as $categoryId => &$categoryInfoContainer){
                 //put in product info
                 if(empty($categoryInfoContainer['product_list'])){
@@ -260,26 +267,26 @@ class Harapartners_Categoryevent_Helper_Memcache extends Mage_Core_Helper_Abstra
                 if(!$categoryHasProduct){
                     unset($categoryProductCompleteData[$categoryId]);
                 }
-                
-                
-                
-                //put in category info
-                $isCategoryLive = false;
-                foreach($liveCategoryInfoArray as $liveCategoryInfo){
-                    if(isset($liveCategoryInfo['entity_id'])
-                            && $liveCategoryInfo['entity_id'] == $categoryId){
-                        $categoryInfoContainer['category_info'] = $liveCategoryInfo;
-                        $categoryInfoContainer['prepare_timer'] = $this->_prepareTimer($liveCategoryInfo['event_end_date']);
+
+                foreach($liveCategoryInfoArray as $lci){
+                    if(isset($lci['entity_id'])
+                            && $lci['entity_id'] == $categoryId){
+                        $categoryInfoContainer['category_info'] = $lci;
+                        $categoryInfoContainer['prepare_timer'] = $this->_prepareTimer($lci['event_end_date']);
                         //Harapartners, Jun, logic change: sort result is for 24 hours, live data update at 1 hour interval, must give an extra test!
                         if(!!$categoryInfoContainer['prepare_timer']){
                             $isCategoryLive = true;
                         }
                         break;
                     }
+                    unset($lci);
                 }
+                
                 if(!$isCategoryLive){
                     unset($categoryProductCompleteData[$categoryId]);
                 }
+                
+                
             }
             
             $topNavData['attr_text_label'] = $attrLabel;
@@ -291,14 +298,13 @@ class Harapartners_Categoryevent_Helper_Memcache extends Mage_Core_Helper_Abstra
         
         return $topNavData;
     }
-
+    
     protected function _prepareTimer($eventEndDate){
         
         $defaultTimezone = date_default_timezone_get();
         $mageTimezone = Mage::getStoreConfig(Mage_Core_Model_Locale::XML_PATH_DEFAULT_TIMEZONE);
         date_default_timezone_set($mageTimezone);
         $endcount_utc = strtotime($eventEndDate);
-        
         //Harapartners, Jun, logic change: sort result is for 24 hours, live data update at 1 hour interval, must give an extra test!
         if($endcount_utc < time()){
             return null;
