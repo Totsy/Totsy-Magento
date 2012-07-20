@@ -10,15 +10,6 @@
 ?>
 
 <?php $_order = $this->getOrder() ?>
-
-
-<?php if(!$_order->getIsNotVirtual()==0): ?>
-<p class="shipping-date">
-	<span class="label"><?php echo $this->__('Estimated Shipping Date: ') ?></span><?php echo date('Y-m-d', Mage::helper('sales/order')->calculateEstimatedShipDate($_order)); ?> &nbsp;booyah!
-</p>
-<?php endif; ?>
-
-
 <table cellspacing="0" cellpadding="0" border="0" width="530" style="border:1px solid #EAEAEA;">
     <thead>
         <tr>
