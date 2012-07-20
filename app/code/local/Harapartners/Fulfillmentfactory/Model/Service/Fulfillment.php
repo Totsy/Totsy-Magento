@@ -221,7 +221,22 @@ class Harapartners_Fulfillmentfactory_Model_Service_Fulfillment
         foreach($itemsToCancel as $item) {
             $order->addStatusHistoryComment(Mage::helper('core')->__('Item ' . $item->getSku() . ' canceled by Batch Cancel Process'), false);
             $item->cancel();
+            foreach ($item->getChildrenItems() as $childItem) {
+                $childItem->cancel();
+                $childItem->save();
+            }
             $item->save();
+        }
+
+        $shouldCancel = true;
+        foreach($order->getItemsCollection() as $item) {
+            if(!$item->getParentItemId() && ($item->getStatusId() != Mage_Sales_Model_Order_Item::STATUS_CANCELED)) {
+                $shouldCancel = false;
+                break;
+            }
+        }
+        if($shouldCancel) {
+            $order->cancel()->save()->addStatusHistoryComment(Mage::helper('core')->__('Order Canceled by Batch Cancel Process'), false)->save();
         }
         $order->save();
 

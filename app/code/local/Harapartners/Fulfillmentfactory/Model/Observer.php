@@ -58,8 +58,15 @@ class Harapartners_Fulfillmentfactory_Model_Observer
 
 
             $orderItem = $event->getDataObject();
-            if(!!$orderItem && !!$orderItem->getId()){
+
+            if($orderItem->getParentItemId()) {
+                return $this;
+            }
+            if(!!$orderItem && !!$orderItem->getId() && $orderItem->getStatusId() === Mage_Sales_Model_Order_Item::STATUS_CANCELED){
                 Mage::getModel('fulfillmentfactory/service_itemqueue')->cancelItemqueueByOrderItemId($orderItem->getId());
+                foreach($orderItem->getChildrenItems() as $childItem) {
+                    Mage::getModel('fulfillmentfactory/service_itemqueue')->cancelItemqueueByOrderItemId($childItem->getId());
+                }
             }
         } catch(Exception $e) {
             Mage::logException($e);

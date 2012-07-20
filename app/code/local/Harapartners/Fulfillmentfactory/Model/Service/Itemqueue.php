@@ -77,14 +77,18 @@ class Harapartners_Fulfillmentfactory_Model_Service_Itemqueue
         //to avoid the status is not consistent with state problem!
         if($status == 'complete') {
             foreach($collection as $itemqueue) {
-                $itemqueue->setStatus(Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_CLOSED);
-                $itemqueue->save();
+                if($itemqueue->getStatus() != Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_CANCELLED) {
+                    $itemqueue->setStatus(Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_CLOSED);
+                    $itemqueue->save();
+                }
             }
         }
         else if($status == 'pending'){
             foreach($collection as $itemqueue) {
-                $itemqueue->setStatus(Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_PENDING);
-                $itemqueue->save();
+                if($itemqueue->getStatus() != Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_CANCELLED) {
+                    $itemqueue->setStatus(Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_PENDING);
+                    $itemqueue->save();
+                }
             }
             
             if($state != Mage_Sales_Model_Order::STATE_PROCESSING) {
@@ -94,9 +98,11 @@ class Harapartners_Fulfillmentfactory_Model_Service_Itemqueue
         }
         else if($status == 'processing'){
             foreach($collection as $itemqueue) {
-                $itemqueue->setStatus(Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_PROCESSING);
-                $itemqueue->setFulfillCount($itemqueue->getQtyOrdered());    //fulfill all items
-                $itemqueue->save();
+                if($itemqueue->getStatus() != Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_CANCELLED) {
+                    $itemqueue->setStatus(Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_PROCESSING);
+                    $itemqueue->setFulfillCount($itemqueue->getQtyOrdered());    //fulfill all items
+                    $itemqueue->save();
+                }
             }
             
 			if($state != Mage_Sales_Model_Order::STATE_PROCESSING) {
@@ -117,10 +123,12 @@ class Harapartners_Fulfillmentfactory_Model_Service_Itemqueue
         }
         else if($status == 'holded'){
             foreach($collection as $itemqueue) {
-                $itemqueue->setStatus(Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_SUSPENDED);
-                $itemqueue->save();
+                if($itemqueue->getStatus() != Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_CANCELLED) {
+                    $itemqueue->setStatus(Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_SUSPENDED);
+                    $itemqueue->save();
+                }
             }
-            
+
 			if($state != Mage_Sales_Model_Order::STATE_HOLDED) {
             	$order->setState(Mage_Sales_Model_Order::STATE_HOLDED);
             	$order->save();
@@ -128,32 +136,42 @@ class Harapartners_Fulfillmentfactory_Model_Service_Itemqueue
         }
         else if($status == Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_PROCESSING_FULFILLMENT){
             foreach($collection as $itemqueue) {
-                $itemqueue->setStatus(Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_SUBMITTED);
-                $itemqueue->save();
+                if($itemqueue->getStatus() != Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_CANCELLED) {
+                    $itemqueue->setStatus(Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_SUBMITTED);
+                    $itemqueue->save();
+                }
             }
         }
         else if($status == Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_FULFILLMENT_FAILED){
             foreach($collection as $itemqueue) {
-                $itemqueue->setStatus(Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_SUSPENDED);
-                $itemqueue->save();
+                if($itemqueue->getStatus() != Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_CANCELLED) {
+                    $itemqueue->setStatus(Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_SUSPENDED);
+                    $itemqueue->save();
+                }
             }
         } 
         else if($status == Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_PAYMENT_FAILED){
             foreach($collection as $itemqueue) {
-                $itemqueue->setStatus(Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_SUSPENDED);
-                $itemqueue->save();
+                if($itemqueue->getStatus() != Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_CANCELLED) {
+                    $itemqueue->setStatus(Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_SUSPENDED);
+                    $itemqueue->save();
+                }
             }
         }
     	else if($status == Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_FULFILLMENT_AGING){
             foreach($collection as $itemqueue) {
-                $itemqueue->setStatus(Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_PENDING);
-                $itemqueue->save();
+                if($itemqueue->getStatus() != Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_CANCELLED) {
+                    $itemqueue->setStatus(Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_PENDING);
+                    $itemqueue->save();
+                }
             }
         }
         else if($status == Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_SHIPMENT_AGING){
             foreach($collection as $itemqueue) {
-                $itemqueue->setStatus(Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_SUBMITTED);
-                $itemqueue->save();
+                if($itemqueue->getStatus() != Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_CANCELLED) {
+                    $itemqueue->setStatus(Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_SUBMITTED);
+                    $itemqueue->save();
+                }
             }
         }
     }
@@ -176,6 +194,7 @@ class Harapartners_Fulfillmentfactory_Model_Service_Itemqueue
         $collection = Mage::getModel('fulfillmentfactory/itemqueue')->getCollection()->loadByOrderItemId($orderItemId);
 
         foreach($collection as $itemqueue) {
+            $itemqueue = Mage::getModel('fulfillmentfactory/itemqueue')->load($itemqueue->getId());
             $itemqueue->setStatus(Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_CANCELLED);
             $itemqueue->save();
         }
