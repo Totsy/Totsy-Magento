@@ -16,7 +16,7 @@ class Totsy_Catalog_Helper_Event
     {
         $productId = Mage::getModel('sales/order_item')->load($itemId)->getProductId();
         $product = Mage::getModel('catalog/product')->load($productId);
-        $eventName = $product->getCategoryCollection()->getFirstItem()->getName();
+        $eventName = $product->getCategoryCollection()->getFirstItem()->load(null)->getName();
         return $eventName;
     }
 }

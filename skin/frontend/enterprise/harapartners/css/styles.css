@@ -459,13 +459,21 @@ text-decoration:underline;
 
 .sales-order-virtual-items-toggle-link a{
 color: #707070 !important;
-font-size:12px;
+font-size:px;
 float:left;
 text-transform:uppercase;
 } 
 
+.sales-order-virtual-items-toggle-link img{
+padding-left:3px; 
+}
+
 .sales-order-virtual-item-code {
 line-height:30px;
+}
+
+.sales-order-item-table-cells {
+vertical-align:middle !important; 
 }
 
 .sales-order-virtual-item-code-value {
@@ -475,7 +483,7 @@ font-weight:bold;
 .sales-order-virtual-item-content { 
 	display:none;	
 }
-.sales-order-virtual-item-thumbnail { padding-bottom: 10px; }
+.sales-order-virtual-item-thumbnail { padding-bottom: 8px; }
 .sales-order-virtual-item-shortdescription { /* */ }
 .sales-order-virtual-item-description { /* */ }
 

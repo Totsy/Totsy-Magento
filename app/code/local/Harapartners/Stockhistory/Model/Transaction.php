@@ -159,5 +159,16 @@ class Harapartners_Stockhistory_Model_Transaction extends Mage_Core_Model_Abstra
         $stock->save();
         return true;
     }
+
+    public function changeCasePackStatus($items, $changeto) {
+
+        $product_collection = Mage::getModel('catalog/product')->getCollection();
+        $product_collection->getSelect()->where('entity_id in (' . implode(',' , $items) . ')' );
+        foreach($product_collection as $product) {
+            $product->setData('fulfillment_type', 'dotcom');
+            $product->setData('is_master_pack', (int)$changeto);
+            $product->save();
+        }
+    }
     
 }
