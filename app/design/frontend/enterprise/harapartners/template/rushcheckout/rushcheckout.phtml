@@ -58,9 +58,10 @@ if ( !Mage::getSingleton('checkout/session')->hasData('countdown_timer') ) {
             <?php endforeach; ?>
             </ul>
         </div>
-        <div style="font-size:12px; color: #707070"><span style="font-weight:bold">Estimated ship date:</span>&nbsp;<?php echo date('Y-m-d', Mage::helper('sales/order')->calculateEstimatedShipDate($quote)); ?></div>
-       	<?php } 
-        } else { ?>
+        
+       	<?php } ?>
+       	<div style="font-size:12px; color: #707070"><span style="font-weight:bold">Estimated ship date:</span>&nbsp;<?php echo date('Y-m-d', Mage::helper('sales/order')->calculateEstimatedShipDate($quote)); ?></div>
+        <?php } else { ?>
         <div>
         	You will receive an email with details on this voucher code.
         </div>

@@ -126,7 +126,7 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Abstract exte
     protected function _getUniqueProductList(){
         // Gather all products to be reported
         $rawCollection = Mage::getModel('stockhistory/transaction')->getCollection();
-        $rawCollection->getSelect()->where('po_id = ?', $this->getPoObject()->getId())->order('vendor_style ASC');
+        $rawCollection->getSelect()->where('po_id = ?', $this->getPoObject()->getId());
         
         $removeProducts = array();
         
