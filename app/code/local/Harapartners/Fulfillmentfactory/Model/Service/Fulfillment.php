@@ -228,15 +228,57 @@ class Harapartners_Fulfillmentfactory_Model_Service_Fulfillment
             $item->save();
         }
 
+        //Let's see if we need to cancel the order outright and if not, we need to get the various totals to update the order
         $shouldCancel = true;
+        $subtotalCanceled = 0;
+        $baseSubtotalCanceled = 0;
+        $taxCanceled = 0;
+        $baseTaxCanceled = 0;
+        $shippingCanceled = 0;
+        $baseShippingCanceled = 0;
+        $discountCanceled = 0;
+        $baseDiscountCanceled = 0;
+        $totalCanceled = 0;
+        $baseTotalCanceled = 0;
         foreach($order->getItemsCollection() as $item) {
-            if(!$item->getParentItemId() && ($item->getStatusId() != Mage_Sales_Model_Order_Item::STATUS_CANCELED)) {
+            if($item->getParentItemId()) {
+                continue;
+            }
+            if($shouldCancel && ($item->getStatusId() != Mage_Sales_Model_Order_Item::STATUS_CANCELED)) {
                 $shouldCancel = false;
                 break;
             }
+            $subtotalCanceled += $item->getRowTotal();
+            $baseSubtotalCanceled += $item->getBaseRowTotal();
+            $taxCanceled += ($item->getRowTotalInclTax() - $item->getRowTotal());
+            $baseTaxCanceled += ($item->getBaseRowTotalInclTax() - $item->getBaseRowTotal());
+            $discountCanceled += $item->getDiscountAmount();
+            $baseDiscountCanceled += $item->getBaseDiscountAmount();
+            $totalCanceled += $item->getRowTotal() + ($item->getRowTotalInclTax() - $item->getRowTotal());
+            $baseTotalCanceled += $item->getBaseRowTotal() + ($item->getBaseRowTotalInclTax() - $item->getBaseRowTotal());
         }
         if($shouldCancel) {
             $order->cancel()->save()->addStatusHistoryComment(Mage::helper('core')->__('Order Canceled by Batch Cancel Process'), false)->save();
+        } else {
+            //let's save some cancel totals to the order.
+            $order
+                ->setSubtotalCanceled($subtotalCanceled)
+                ->setBaseSubtotalCanceled($baseSubtotalCanceled)
+
+                ->setTaxCanceled($taxCanceled)
+                ->setBaseTaxCanceled($baseTaxCanceled)
+
+            //TODO: The shipping amounts need to be figured out if flat rate shipping is ever scrapped.
+            // ->setShippingCanceled($this->getShippingAmount() - $this->getShippingInvoiced());
+            // ->setBaseShippingCanceled($this->getBaseShippingAmount() - $this->getBaseShippingInvoiced());
+
+                ->setDiscountCanceled($discountCanceled)
+                ->setBaseDiscountCanceled($baseDiscountCanceled)
+
+                ->setTotalCanceled($totalCanceled)
+                ->setBaseTotalCanceled($baseTotalCanceled)
+            ;
+
         }
         $order->save();
 
