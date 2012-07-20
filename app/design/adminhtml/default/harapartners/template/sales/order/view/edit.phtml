@@ -58,6 +58,10 @@ $orderStoreDate = $this->formatDate($_order->getCreatedAtStoreDate(), 'medium', 
             </tr>
             <?php endif;?>
             <tr>
+                <td class="label"><label><?php echo Mage::helper('sales')->__('Estimated Shipping Date') ?></label></td>
+                <td class="value"><strong><?php echo date('M j, Y', Mage::helper('sales/order')->calculateEstimatedShipDate($_order)); ?></strong></td>
+            </tr>
+            <tr>
                 <td class="label"><label><?php echo Mage::helper('sales')->__('Order Status') ?></label></td>
                 <td><strong><span id="order_status"><?php echo $_order->getStatusLabel() ?></span></strong></td>
             </tr>
@@ -205,6 +209,7 @@ $orderStoreDate = $this->formatDate($_order->getCreatedAtStoreDate(), 'medium', 
     <div class="entry-edit">
         <div class="entry-edit-head">
             <h4 class="icon-head head-shipping-address"><?php echo Mage::helper('sales')->__('Shipping Address') ?></h4>
+            <div class="tools"><?php echo $this->getAddressEditLink($_order->getShippingAddress())?></div>
         </div>
         <fieldset id="shipping-static">
             <address id="shipping-static-text"><?php echo $_order->getShippingAddress()->getFormated(true) ?></address>
