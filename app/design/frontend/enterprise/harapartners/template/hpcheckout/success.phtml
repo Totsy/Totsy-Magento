@@ -14,7 +14,7 @@ $quote = Mage::getModel('sales/quote')->load($quoteId);
 
 ?>
 <?php if ($this->getCanViewOrder()) :?>
-    <p><?php echo $this->__('Your order # is: %s.', sprintf('<a href="%s">%s</a>', $this->escapeHtml($this->getViewOrderUrl()), $this->escapeHtml($this->getOrderId()))) ?></p>
+    <p><?php echo $this->__('Your order # is: %s.', "<strong>" . $this->getOrderId()). "</strong>" ?></p>
 <?php  else :?>
     <p><?php echo $this->__('Your order # is: %s.', $this->escapeHtml($this->getOrderId())) ?></p>
 <?php endif;?>
@@ -34,7 +34,7 @@ $quote = Mage::getModel('sales/quote')->load($quoteId);
     <div id="rondavu_checkout_container"></div>
     <script language="javascript" type="text/javascript">
 		function redirect(){window.location.href="<?php echo $url?>"};
-		  setTimeout("redirect()",10000);
+            setTimeout("redirect()",10000);
 	</script>
 	<?php
 
