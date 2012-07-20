@@ -294,6 +294,12 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Mage_Cybersource_Model_
     public function capture(Varien_Object $payment, $amount){
         $this->_payment = $payment;
         try {
+            #Get Existing Transaction
+            Mage::getSingleton('sales/order_payment')
+            if(!$payment->getData('base_amount_authorized')) {
+                $payment->setParentTransactionId(null)
+                        ->save();
+            }
             parent::capture($payment, $amount);
         }catch (Exception $e){
             
