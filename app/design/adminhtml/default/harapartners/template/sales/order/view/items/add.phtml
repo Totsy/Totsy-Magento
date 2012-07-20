@@ -1,0 +1,30 @@
+<tr class="border" class="add-item-form" id="additem-row-<?php echo $this->getRequest()->getParam('num') ?>">
+    <td class="a-left">SKU: <input type="text" class="n-item-sku" id="sku-<?php echo $this->getRequest()->getParam('num') ?>" style="width:130px;" name="item_sku" />
+    </td>
+        <td class="a-right">Qty:</td>
+    <td>
+    <div id="qty-select-<?php echo $this->getRequest()->getParam('num') ?>"></div>
+    </td>
+    <td class="a-right">Price:</td><td class="a-left"><input class="n-item-price" id="price-<?php echo $this->getRequest()->getParam('num') ?>" size="5" </td>
+    <td class="a-right">Discount:</td><td class="a-left"><input class="n-item-discount" id="discount-<?php echo $this->getRequest()->getParam('num') ?>" size="5" </td>
+    <td class="a-left last" id="desc-<?php echo $this->getRequest()->getParam('num') ?>" colspan="3"></td>
+    <td>
+    <button id="cancel-item-btn"onclick="cancelAddItem(<?php echo $this->getRequest()->getParam('num') ?>);"><span>Remove</span></button>
+    </td>
+    <script>
+	Event.observe('sku-<?php echo $this->getRequest()->getParam('num') ?>', 'blur', function(event) {
+		var params = {};
+		params['sku'] = $F('sku-<?php echo $this->getRequest()->getParam('num') ?>');
+		new Ajax.Request('<?php echo Mage::getModel('adminhtml/url')->getUrl('orderedit/order/getqtyanddesc') ?>', {
+			method: 'get',
+			parameters: params,
+			onSuccess: function(transport) {
+				var fields = transport.responseText.evalJSON();
+				$('desc-<?php echo $this->getRequest()->getParam('num') ?>').innerHTML = fields.name;
+				$('qty-select-<?php echo $this->getRequest()->getParam('num') ?>').innerHTML = fields.select;
+				$('price-<?php echo $this->getRequest()->getParam('num') ?>').value = fields.price;
+			}
+		});	
+	});
+	</script>
+</tr>

@@ -1,6 +1,42 @@
 Totsy-Magento Release Notes
 ===========================
 
+20120719
+--------
+
+* fix Event name in Order Page
+* Last Fix Order Payment module
+* hide saved credit card
+* Add correct Email when Profile is created
+* Payment Module : Billing Required Fields
+* the variable totalQty was not initialized, which prevented logistics from printing the PO.
+* fixed a couple 404 errors on the mobile site related to missing js and css files. finished up header include of user's name and cart info via ajax
+* tweaked the after login and after registration redirects to force the user to go the events page if no redirect is already set in their session.
+* MGN-695 - Add Payment Informations Module to Order Admin Page
+* MGN-676 Almost made a mistake of never setting the qty variable, which would have caused the result for prebuys to always be zero
+* MGN-669 logistics can now change item case pack status from the PO Report view
+* print credit card profile in order page
+* MGN-747: Rebuilt the Affiliate Feeds controller, and allowed public access to the action.
+* further changes for header ajax piece to mobile
+* Finished tweaks realetd to MGN-802 as per Rob's comment on order stati on virtual orders
+* tweaks as per Rob's 07/17/12 comments
+* Add All statuses for Order Edit Extension
+* manage saved credit card
+* Change Text Button, Way how to get Billing Address
+
+20120718
+--------
+
+* removing infamous 'test' text in mini-cart huzzahhhhhh
+* fixed issue with redirect issue after create account
+* MGN-676 fixing calculation of case pack total, included check for amended records
+* added affiliate pixel to mobile
+* fixed layout issue in pinterest module that caused pixels module layout to not be shown. moved pixels module code to default theme so that pixels will fire for mobile as well as regular site
+* MNG-682. Remove SLAV"s dev mode ;)
+* Adding estimated ship date below tangible prods in rush checkout
+* MGN-682. Hide not upcoming events on age/categoty page(s)
+* MGN-826 : any event that has only one product will now be redirected straight to the item instead of the event page and the event page is viewable while it is still an upcoming sale
+
 20120717
 --------
 

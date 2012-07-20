@@ -429,6 +429,7 @@ p.error-msg { border-color:#e9581f; background-color:#fff5f3; color:#d91a00; }
 .data-table th.label { font-weight:bold; text-transform:none; border-color:#fff; background-color:#f7f7f7; }
 .data-table td.value { float:none !important; }
 .data-table .link-rss { display:block; }
+.data-table td {padding: 5px 12px 0px 10px; !important}
 
 .page-popup .data-table td,
 .page-popup .data-table th { border-bottom:1px solid #d9d9d9; }
@@ -451,21 +452,35 @@ tr.summary-details-excluded { font-style:italic; }
 .cart-tax-total-expanded { background-position:100% -54px; }
 
 /* Sales Order Virtaul items */
-#toggleable-order-items { /* */ }
+.toggleable-order-items { /* */ }
 .sales-order-virtual-items-toggle-link { 
 font-weight:bold;
 text-decoration:underline;
 }
 
+.toggleable-order-items ul { 
+list-style-type: circle !important; 
+margin-left: 15px;
+}
+
 .sales-order-virtual-items-toggle-link a{
 color: #707070 !important;
-font-size:12px;
+font-size:px;
 float:left;
 text-transform:uppercase;
 } 
 
+.sales-order-virtual-items-toggle-link img{
+padding-left:3px; 
+line-height: 10px !important;
+}
+
 .sales-order-virtual-item-code {
 line-height:30px;
+}
+
+.sales-order-item-table-cells {
+vertical-align:middle !important; 
 }
 
 .sales-order-virtual-item-code-value {
@@ -475,7 +490,7 @@ font-weight:bold;
 .sales-order-virtual-item-content { 
 	display:none;	
 }
-.sales-order-virtual-item-thumbnail { padding-bottom: 10px; }
+.sales-order-virtual-item-thumbnail { padding-bottom: 8px; padding-top: 15px;}
 .sales-order-virtual-item-shortdescription { /* */ }
 .sales-order-virtual-item-description { /* */ }
 

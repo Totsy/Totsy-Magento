@@ -56,8 +56,8 @@ Default layout, loads most of the pages
                 <action method="addItem"><type>skin_js</type><name>js/scripts.js</name></action>
 				<!--action method="addItem"><type>skin_js</type><name>js/jquerymobile.js</name></action-->
 				<action method="addItem"><type>skin_js</type><name>js/jquerymobile.js</name></action>
-				<action method="addCss"><stylesheet>css/cloud-zoom.css</stylesheet></action>
-				<action method="addCss"><stylesheet>css/fancybox/jquery.fancybox-1.3.4.css</stylesheet></action>
+				<!--<action method="addCss"><stylesheet>css/cloud-zoom.css</stylesheet></action>-->
+				<!--<action method="addCss"><stylesheet>css/fancybox/jquery.fancybox-1.3.4.css</stylesheet></action>-->
                 <action method="addCss"><stylesheet>css/widgets.css</stylesheet></action>
                 <action method="addCss"><stylesheet>css/print.css</stylesheet><params>media="print"</params></action>
                 <action method="addCss"><stylesheet>css/iphone.css</stylesheet></action>

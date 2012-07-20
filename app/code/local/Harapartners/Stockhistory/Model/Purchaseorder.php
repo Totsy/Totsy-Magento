@@ -102,17 +102,23 @@ class Harapartners_Stockhistory_Model_Purchaseorder extends Mage_Core_Model_Abst
     public function totalUnitsSold($collection) {
         foreach($collection as $result) {
             $transactionsColl = Mage::getModel('stockhistory/transaction')->getCollection();
-            $transactionsColl->getSelect()->where('po_id=' . $result->getId() . ' and product_id IS NOT null and action_type= 2');
+            $transactionsColl->getSelect()->where('po_id=' . $result->getId() . ' and product_id IS NOT null and action_type= 2')->order('id DESC');
+
             if ($transactionsColl->getSize()) {
                 $total_units = $qty = 0;
+                $pre_buys = array();
                 foreach($transactionsColl as $trans) {
                     $product_id = $trans->getProductId();
                     $product = Mage::getModel('catalog/product')
                         ->setStoreId(Mage::app()->getStore()->getId())
                         ->load($product_id);
-                    $pre_buys = array();
                     if($product->getIsMasterPack() && !in_array($product_id, $pre_buys)) {
+                           $amend_prod = Mage::getModel('stockhistory/transaction')->getCollection();
+                            $amend_prod->getSelect()->where('po_id=' . $result->getId() . ' and product_id='. $product_id .' and action_type= 1');
                             $qty = (int)$trans->getQtyDelta();
+                            foreach ($amend_prod as $value) {
+                                $qty += $value->getQtyDelta();
+                            }
                             $pre_buys[] = $product_id;
                             $total_units += $qty;
                     } else {

@@ -66,6 +66,28 @@ class Totsy_Sales_Helper_Order
 
         return $shipDate;
     }
+    
+    public function getOrderStatus($order)
+    {
+        $_virtual_item_count = 0;
+        $_total_item_qty = 0;
+        
+        $_items = $order->getItemsCollection();
+        
+        foreach($_items as $_item) {
+        
+            if($_item->is_virtual==1) {
+               $_virtual_item_count ++;
+            }
+            $_total_item_qty += $_item->getQtyOrdered();
+        }
+                        
+        if ($_virtual_item_count == $_total_item_qty) {
+            return "Emailed";
+        } else {
+            return $order->getStatusLabel(); 
+        }        
+     }
 
     /**
      * Calculate the estimated total savings for an Order or Quote object, by
