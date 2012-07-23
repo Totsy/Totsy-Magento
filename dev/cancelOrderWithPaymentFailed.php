@@ -16,7 +16,7 @@ try {
                     ->addAttributeToFilter('status',Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_PAYMENT_FAILED);
     foreach($orderCollection as $order) {
         $errorLogCollection = Mage::getModel('fulfillmentfactory/errorlog')->getCollection()
-                    ->addFieldToFilter('order_id',$order->getId());
+                    ->addFieldToFilter('order_id', $order->getId());
         $cancel = false;
         #Check If There were already ReAuthorization Records
         $lastDateFailed = strtotime("-365 day");
@@ -28,7 +28,9 @@ try {
             }
         }
         if($lastDateFailed < $limitDate ) {
-            echo 'has to be cancel';
+            $order->cancel()
+                ->save();
+            $count++;
         }
     }
 } catch(Exception $e) {
