@@ -1,0 +1,64 @@
+<?php
+/**
+ * Magento Enterprise Edition
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Magento Enterprise Edition License
+ * that is bundled with this package in the file LICENSE_EE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://www.magentocommerce.com/license/enterprise-edition
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     enterprise_default
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://www.magentocommerce.com/license/enterprise-edition
+ */
+
+/**
+ * Product media data template
+ *
+ * @see Mage_Catalog_Block_Product_View_Media
+ */
+?>
+<?php
+    $_product = $this->getProduct();
+    $_helper = $this->helper('catalog/output');
+    $_nativeZoom = false;
+?>
+
+<?php /* --------- Cloud Zoom --------- */ ?>
+<p class="product-image">
+	<?php $big_img = $this->helper('catalog/image')->init($_product, 'image')->resize(500);?>
+	<a class="cloud-zoom" id="zoom1" href="<?php echo $this->helper('catalog/image')->init($_product, 'image')->resize(500) ?>" rel="showTitle: false, position:'inside'" >
+    <?php
+        $_img = '<img title="Optional title display" src="'.$this->helper('catalog/image')->init($_product, 'image')->resize(370).'" height="370" width="370" alt="'.$this->htmlEscape($_product->getImageLabel()).'"  />';
+        echo $_helper->productAttribute($_product, $_img, 'image-thumb');
+    ?>
+    </a>
+</p>
+
+<?php /* --------- Gallery Images using Cloud Zoom --------- */ ?>
+<?php if (count($this->getGalleryImages()) > 0): ?>
+<div class="more-views">
+    <!-- h2><?php //echo $this->__('More Views') ?></h2 -->
+    <ul>
+    <?php foreach ($this->getGalleryImages() as $_image): ?>
+        <li>
+            <a href="<?php echo $this->helper('catalog/image')->init($_product, 'image', $_image->getFile())->resize(500);?>" class='cloud-zoom-gallery' title='<?php echo $this->htmlEscape($_image->getLabel()) ?>' rel="useZoom: 'zoom1', smallImage: '<?php echo $this->helper('catalog/image')->init($_product, 'image', $_image->getFile())->resize(370);; ?>' ">
+        		<img src="<?php echo $this->helper('catalog/image')->init($_product, 'thumbnail', $_image->getFile())->resize(75); ?>" alt = "<?php echo $this->htmlEscape($_image->getLabel()) ?>" width="75px" height="75px"/>
+        	</a>
+        </li>
+    <?php endforeach; ?>
+    </ul>
+</div>
+<?php endif; ?>

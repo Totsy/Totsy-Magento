@@ -1,0 +1,134 @@
+<script type="text/javascript">countryRegions = <?php echo $this->helper('directory')->getRegionJson() ?></script>
+<div id="hpcheckout-wrapper">
+	<div class="page-title title-buttons">
+		<h1><?php echo $this->__('Checkout') ?></h1>
+		<?php
+            $countDownTimer = Mage::getSingleton('checkout/session')->getCountDownTimer();
+            $timeout = Mage::getSingleton('checkout/session')->getQuoteItemExpireTime();
+            //$endcount_lc = date("F j, Y, G:i:s", ($countDownTimer + $timeout));
+            $endcount_lc = ($countDownTimer + $timeout)*1000; //ms
+		    //Harapartners, yang, get the server time with the frontend JS time
+			$serverTime = Mage::helper('service')->getServerTime();            
+            $quote = Mage::getSingleton('checkout/session')->getQuote();
+		?>
+		<div class="shipping-date">
+			<span>Estimated Ship Date:</span>
+			<p id="cart-shipping-date-header"><?php echo date('Y-m-d', Mage::helper('sales/order')->calculateEstimatedShipDate($quote)); ?></p>
+		</div>	
+		<div class="timer-control-box">
+			<span>Item Reserved For:</span>
+			<p id="checkout-timer"></p>
+			<script type="text/javascript">
+				// @TODO: this should be abstracted out to hpcheckout.js
+				jQuery(document).ready(function() {
+					var dateObj = new Date();
+					var countDownToTime = <?php echo $endcount_lc?>;
+					var serverTime = <?php echo $serverTime?>;
+					var localTime = new Date().getTime();
+					countDownToTime = (countDownToTime + (localTime - serverTime));
+					dateObj.setTime(countDownToTime);
+					//var countToTimeTemplate = (dateObj.getMonth()+1) + ' ' + dateObj.getDate() + ', ' + dateObj.getFullYear() + ' ' + dateObj.getHours() + ':' + dateObj.getMinutes() + ':' + dateObj.getSeconds();
+					jQuery("#checkout-timer").countdown({
+						//date: "12 10, 2011 16:11", or an object counting to a date
+						date: dateObj,
+						htmlTemplate: "%{m} <span class=\"cd-time\">:</span> %{s} <span class=\"cd-time\">minutes</span>",
+						onChange: function( event, timer ){
+						},
+						onComplete: function( event ){										
+							jQuery(this).html("<span class='over'>no longer reserved</span>");
+							setTimeout("cartRedirect();",2000);
+						},
+						leadingZero: true,
+						direction: "down"
+					});										
+				});	
+
+				function cartRedirect(){
+					window.location = "<?php echo Mage::getUrl('checkout/cart');?>"
+				}; 
+			</script>
+		</div>
+	</div>
+	<div id="error-message-wrapper"></div>
+	<?php if( count( $this->getQuote()->getAllItems() ) ): ?>
+		<?php if( ! $this->getCustomerSession()->isLoggedIn() ): ?>
+			<div id="hpcheckout-login-wrapper">
+				<?php echo $this->getChildHtml( 'login' ) ?>
+			</div>
+		<?php endif ?>
+		<div class="address">
+			<div id="hpcheckout-billing-wrapper">
+				<div class="checkout-headline">
+					<div class="billing-title sub-title checkout-sub-title"><?php echo $this->__('Billing Address') ?></div>
+					<?php if ($this->customerHasAddresses()): ?>
+					    <div class="billing-address-select totsy-selective-input-box">
+							<span>New Address</span>
+					        <?php echo $this->getAddressesHtmlSelect('billing') ?>
+					    </div>
+					<?php endif; ?>
+				</div>
+				<div class="checkout-content"><?php echo $this->getChildHtml( 'billing' ) ?></div>
+			</div>
+			<?php if( ! $this->getQuote()->isVirtual() ): ?>
+				<div id="hpcheckout-shipping-wrapper">
+					<div class="checkout-headline">
+						<div class="shipping-title sub-title checkout-sub-title"><?php echo $this->__('Shipping Address') ?></div>
+						<?php if ($this->customerHasAddresses()): ?>
+						    <div class="shipping-address-select totsy-selective-input-box">
+								<span>New Address</span>
+						        <?php echo $this->getAddressesHtmlSelect('shipping') ?>
+						    </div>
+						<?php endif; ?>
+					</div>
+					<div class="checkout-content"><?php echo $this->getChildHtml( 'shipping' ) ?></div>
+				</div>
+			<?php endif ?>
+		</div>
+		<?php if( false && ! $this->getQuote()->isVirtual() ): ?>
+			<div id="hpcheckout-shipping-method-wrapper">
+				<div class="checkout-sub-title sub-title">Shipping Method</div>
+				<div class="checkout-content"><?php echo $this->getChildHtml( 'shipping_method' ) ?></div>
+			</div>
+		<?php endif ?>
+		<div id="hpcheckout-payment-wrapper">
+			<div class="checkout-sub-title sub-title">Payment</div>
+			<div class="checkout-content"><?php echo $this->getChildHtml( 'payment' ) ?></div>
+		</div>
+		<div id="hpcheckout-review-wrapper">
+			<div class="checkout-sub-title sub-title">Review</div>
+			<div class="checkout-content"><?php echo $this->getChildHtml( 'review' ) ?></div>
+		</div>
+		<?php echo $this->getChildHtml( 'script' ) ?>
+	<?php else: ?>
+		<?php echo $this->__( 'Your cart is empty.' ) ?>
+	<?php endif ?>
+</div>
+<script type="text/javascript">
+function updateSelectText(){
+	jQuery(".totsy-selective-input-box select").each(function(){
+		var temphtml = jQuery(this).html();
+		var text = jQuery(this).find("option:selected").text();
+		var value = jQuery(this).find("option:selected").val();
+		if (value==''){
+			text = jQuery(this).find("option[selected='true']").text();
+			if (text=='') {
+				text = jQuery(this).find("option[value='']").text();
+			}
+		}
+		jQuery(this).parent('div').children('span').html(text);
+	});
+}
+
+jQuery( document ).ready( function() {
+	if( jQuery( '#billing-address-select' ).val() != '' ) {
+		jQuery( '#billing-address-select' ).change();
+    }
+	if( jQuery( '#shipping-address-select' ).val() != '' ) {
+		jQuery( '#shipping-address-select' ).change();
+    }
+});
+</script>
+<script type="text/javascript">
+ 	 //code for disabling echoSahre
+        _esq.settings.socialCenter = { enabled: false };
+</script>

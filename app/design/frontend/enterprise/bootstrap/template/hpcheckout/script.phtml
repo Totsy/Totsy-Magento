@@ -1,0 +1,49 @@
+<?php $formInfo = array( array( 'code' => 'billing',
+								'formId' => 'hpcheckout-billing-form',
+								'wrapperId' => 'hpcheckout-billing-wrapper',
+						   	   ),
+						 array( 'code' => 'shipping',
+								'formId' => 'hpcheckout-shipping-form',
+						 		'wrapperId' => 'hpcheckout-shipping-wrapper',
+							   ),
+						 /*array( 'code' => 'shipping_method',
+								'formId' => 'hpcheckout-shipping-method-form',
+						 		'wrapperId' => 'hpcheckout-shipping-method-wrapper',
+							   ) ,*/
+						 array( 'code' => 'payment',
+								'formId' => 'hpcheckout-payment-form',
+						 		'wrapperId' => 'hpcheckout-payment-wrapper',
+							   ),
+						 array( 'code' => 'review',
+						 		'wrapperId' => 'hpcheckout-review-wrapper',
+								'formId' => '',
+							   )
+									) ?>
+<?php $virtualQuoteFormInfo = array( array( 'code' => 'billing',
+											'formId' => 'hpcheckout-billing-form',
+	 										'wrapperId' => 'hpcheckout-billing-wrapper',
+									   	   ),
+									 array( 'code' => 'payment',
+											'formId' => 'hpcheckout-payment-form',
+									 		'wrapperId' => 'hpcheckout-payment-wrapper',
+										   ),
+									 array( 'code' => 'review',
+									 		'wrapperId' => 'hpcheckout-review-wrapper',
+											'formId' => '',
+										   )
+									) ?>
+<script type="text/javascript">
+<?php if( ! Mage::getSingleton( 'checkout/session' )->getQuote()->isVirtual() ): ?>
+	var hpcheckout = new HpCheckout( "<?php echo Mage::getUrl( 'hpcheckout/checkout/update' ) ?>",
+									 "<?php echo Mage::getUrl( 'hpcheckout/checkout/submit' ) ?>",
+									 "<?php echo Mage::getUrl( 'hpcheckout/checkout/success' ) ?>",
+									 <?php echo json_encode( $formInfo )?>
+									);
+<?php else: ?>
+	var hpcheckout = new HpCheckout( "<?php echo Mage::getUrl( 'hpcheckout/checkout/update' ) ?>",
+			 "<?php echo Mage::getUrl( 'hpcheckout/checkout/submit' ) ?>",
+			 "<?php echo Mage::getUrl( 'hpcheckout/checkout/success' ) ?>",
+			 <?php echo json_encode( $virtualQuoteFormInfo )?>
+			);
+<?php endif ?>
+</script>

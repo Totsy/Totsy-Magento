@@ -1,0 +1,54 @@
+/* Additional styles for the Magento Bootstrap theme */
+html,
+body { height: 100%; background:none;}
+html { background: #f7f5f5 url(../img/paper.jpg) repeat }
+footer {
+    color: #666;
+    padding: 17px 0 18px 0;
+}
+
+a{color:#ed1c25;text-decoration:none;}
+a:hover{color:#af0e15;text-decoration:underline;}
+
+.wrapper {
+    min-height: 100%;
+    height: auto !important;
+    margin: 0 auto -63px;
+}
+.wrapper > .container { padding-top: 90px }
+#toTop {
+    background-color: #EB132C;
+    border-color: #EB132C;
+    border-radius: 6px 6px 6px 6px;
+    border-style: solid;
+    border-width: 1px;
+    bottom: 10px;
+    color: #FFFFFF;
+    cursor: pointer;
+    display: none;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: bold;
+    padding: 5px;
+    position: fixed;
+    right: 10px;
+    text-align: center;
+    text-transform: uppercase;
+    width: auto;
+    z-index: 999;
+}
+/* 960.gs Grid Reset Classes. */
+.alpha { margin-left: 0 }
+.omega { margin-right: 0 }
+
+.inset {
+    border-radius: 8px 8px 8px 8px;
+    box-shadow: 0 1px 2px rgba(50, 50, 50, 0.5) inset;
+    height: 40px;
+    left: 50%;
+    margin: 0 0 0 10px;
+    min-width: 200px;
+    padding: 5px;
+    position: absolute;
+    top: 0;
+}

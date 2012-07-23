@@ -1,0 +1,112 @@
+<?php
+/**
+ * Magento Enterprise Edition
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Magento Enterprise Edition License
+ * that is bundled with this package in the file LICENSE_EE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://www.magentocommerce.com/license/enterprise-edition
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     enterprise_default
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://www.magentocommerce.com/license/enterprise-edition
+ */
+?>
+<?php
+/**
+ * Customer login form template
+ *
+ * @var $this Mage_Customer_Block_Form_Login
+ * @see app/design/frontend/enterprise/default/template/customer/form/login.phtml
+ */
+?>
+
+
+<?php 
+	/*prepare image for login, in order to insert more image, 
+	just put them to \skin\frontend\enterprise\harapartners\images\login foler */
+//	$dir = BP . DS . 'skin'. DS .'frontend'. DS .'enterprise'. DS .'harapartners'. DS .'images'. DS .'login'. DS . '*.jpg';
+//	$dir2 = BP . DS . 'skin'. DS .'frontend'. DS .'enterprise'. DS .'harapartners'. DS .'images'. DS .'login'. DS;
+//	$images = scandir($dir2);
+//	unset($images[0]);
+//	unset($images[1]);
+//	shuffle($images);
+//	if(!!$affiliateId = Mage::getSingleton('core/session')->getAffiliateId()){
+//		switch ($affiliateId){
+//			case '1';
+//				$images[0] = 'ShareNonMember.jpg';
+//				break;
+//			case'2';
+//				$images[0] = 'fieldGrass.jpg';
+//				break;
+//			default;			
+//		}
+//	}
+?>
+<style>
+body {  padding-top:30px;}
+</style>
+<div class="page-header">
+	<h1><?php echo $this->__('Sign In') ?> <small> or <a href="/customer/account/create/" style="font-weight:normal;">Sign Up</a></small>
+	</h1>
+</div>
+<div class="row">
+<div class="span6">
+<div class="the-account-login account-login<?php if (!$this->helper('customer')->isRegistrationAllowed()) echo ' login-only' ?>">
+    <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+    <form action="<?php echo $this->getPostActionUrl() ?>" method="post" id="login-form">
+    <label for="email" class="required"><?php echo $this->__('Email') ?><em> *</em></label>
+    <input name="login[username]" value="<?php echo $this->htmlEscape($this->getUsername()) ?>" id="email" type="text" class="input-text required-entry validate-email" title="<?php echo $this->__('Email Address') ?>" />
+    <label for="pass" class="required"><?php echo $this->__('Password') ?><em> *</em></label>
+    <input name="login[password]" type="password" class="input-text required-entry validate-password" id="pass" title="<?php echo $this->__('Password') ?>" />
+    
+    <?php echo $this->getChildHtml('persistent.remember.me'); ?>
+	
+	<?php echo $this->getChildHtml('persistent.remember.me.tooltip'); ?>
+	<p><input type="checkbox" name="rememberme" value="remember" class="rememberme" align="middle"/>
+	<span><?php echo $this->__( ' Remember me' ); ?></span>
+	|  <a href="<?php echo $this->getForgotPasswordUrl() ?>"><?php echo $this->__('Forgot Your Password?') ?></a></p>
+	
+	<div class="well buttons-set form-buttons">
+            <button type="submit" id="submit-button" class="btn btn-primary">Sign In</button>
+            
+            <small>or</small>
+           
+    	<a rel="facebook-connect" style="cursor:pointer;" title="<?php echo $this->__('Connect with Facebook') ?>" class="facebook-button btn btn-primary"><img src="http://ucsf-hastingsconsortium.org/sites/default/files/facebook_icon_00115.png" width="17" style="margin:-4px 4px 0px 0px;" />   Connect with Facebook</a>
+        </div>
+</div>
+	                
+					<!--div class="free_shipping_banner_reg_new rollover_img">
+						<a href="javascript:;" title="Free Shipping">
+							<span/>
+						</a>
+					</div-->
+        </div>
+        
+</div>
+        <?php if (Mage::helper('checkout')->isContextCheckout()): ?>
+            <input name="context" type="hidden" value="checkout" />
+        <?php endif; ?>
+    </form>
+    <script type="text/javascript">
+    //<![CDATA[
+        var dataForm = new VarienForm('login-form', true);
+    //]]>
+    </script>
+</div>
+
+
+
+

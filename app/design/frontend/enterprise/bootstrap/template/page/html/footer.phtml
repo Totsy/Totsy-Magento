@@ -1,0 +1,153 @@
+<?php
+/**
+ * Magento Enterprise Edition
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Magento Enterprise Edition License
+ * that is bundled with this package in the file LICENSE_EE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://www.magentocommerce.com/license/enterprise-edition
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://www.magentocommerce.com/license/enterprise-edition
+ */
+?>
+<div class="container wrapper">
+<div class="row">
+
+<footer>
+    <div class="span4">
+	<!-- <div class="ups">
+		<a title="Shipping provided by UPS" target="_blank" href="https://www.ups.com/"><img alt="ups" src="/skin/frontend/enterprise/harapartners/images/ups_logo.png"></a>
+	</div> -->
+	<img src="/skin/frontend/enterprise/bootstrap/images/logo.png" width="50px" class="pull-left" />
+	<p class="pull-left">&copy;2012 TOTSY.COM. ALL RIGHTS RESERVED.</p>
+	<div style="clear:both;"></div>
+	<a href="//privacy-policy.truste.com/click-with-confidence/wps/en/www.totsy.com/seal_m" title="TRUSTe online privacy certification" target="_blank"><img style="border: none" src="//privacy-policy.truste.com/certified-seal/wps/en/www.totsy.com/seal_m.png" alt="TRUSTe online privacy certification"/></a>
+	<img width="96" height="72" alt="Forbes 2011 America's Most Promising Companies" src="/skin/frontend/enterprise/harapartners/images/badges-forbes-96x72.png">
+	</div>
+    
+    <div class="span2">
+    <ul>
+    <li><strong>Company</strong></li>
+        <li><a href="/pages/aboutus/" title="About Us">About Us</a></li>
+        <li><a href="/pages/careers/" title="Careers">Careers</a></li>
+        <li><a href="http://blog.totsy.com" title="Blog" target="_blank">Blog</a></li>
+        <li><a href="/pages/affiliates/" title="Affiliates">Affiliates</a></li>
+        <li><a href="http://nytm.org/made" title="Made in NYC" target="_blank">Made in NYC</a></li>
+    </ul>
+    </div>
+    
+    <div class="span2">
+    <ul>
+    <li><strong>Customer Service</strong></li>
+        <li><a href="/pages/faq/" title="FAQ">FAQ</a></li>
+        <li><a href="/pages/contact/" title="Contact Us">Contact Us</a></li>
+    </ul>
+    </div>
+    
+    <div class="span2">
+    <ul>
+    <li><strong>Policies</strong></li>
+    <li class="first"><a href="/pages/terms/" title="Terms of Use">Terms of Use</a></li>
+      <li><a href="/pages/privacy/" title="Privacy Policy">Privacy Policy</a></li>
+      </ul>
+</div>
+<div class="span2">
+    <ul>
+    <li><strong>Social</strong></li>
+    <li><a href="http://www.facebook.com/totsyfan" target="_blank"><img src="/skin/frontend/enterprise/bootstrap/images/facebook_16.png"/></a></li>
+    <li><a href="http://twitter.com/MyTotsy" target="_blank"><img src="/skin/frontend/enterprise/bootstrap/images/twitter_16.png"/></a></li>
+    <li><a href="http://twitter.com/MyTotsy" target="_blank"><img src="/skin/frontend/enterprise/bootstrap/images/twitter_16.png"/></a></li>
+    <li><a href="http://twitter.com/MyTotsy" target="_blank"><img src="/skin/frontend/enterprise/bootstrap/images/twitter_16.png"/></a></li>
+    <li><a href="http://twitter.com/MyTotsy" target="_blank"><img src="/skin/frontend/enterprise/bootstrap/images/twitter_16.png"/></a></li>
+    <li><a href="http://twitter.com/MyTotsy" target="_blank"><img src="/skin/frontend/enterprise/bootstrap/images/twitter_16.png"/></a></li>
+    </ul>
+</div>
+</footer>
+</div>
+</div>
+<div id="toTop" style="display: none;">^ Top</div>
+
+<script>
+		jQuery(document).ready(function () {
+			jQuery(window).scroll(function () {
+				if (jQuery(this).scrollTop() != 0) {
+					jQuery('#toTop').fadeIn();
+				} else {
+					jQuery('#toTop').fadeOut();
+				}
+			});
+			jQuery('#toTop').click(function () {
+				jQuery('body,html').animate({
+					scrollTop: 0
+				},
+				800);
+			});
+		});
+</script>
+<!-- Sailthru Horizon --> 
+<script type="text/javascript">
+    (function() {
+        function loadHorizon() { 
+            var s = document.createElement('script'); 
+            s.type = 'text/javascript'; 
+            s.async = true;
+            s.src = ('https:' === location.protocol?'https://d1gp8joe0evc8s.cloudfront.net':'http://cdn.sail-horizon.com')+'/horizon/v1.js';
+            var x = document.getElementsByTagName('script')[0]; 
+            x.parentNode.insertBefore(s, x);
+        }
+        loadHorizon();
+        var oldOnLoad = window.onload;
+        window.onload = function() {
+            if (typeof oldOnLoad === 'function') {
+                oldOnLoad();
+            }
+            Sailthru.setup({
+                domain: '<?php echo Mage::getStoreConfig('sailthru_options/horizon/sailthru_horizon_domain')?>',
+				spider: true,
+                concierge: <?php echo (Mage::getStoreConfig('sailthru_options/horizon/sailthru_concierge_enabled'))?'true':'false'?>,
+            });
+        };
+    })();
+</script>
+
+<script type="text/javascript">
+var moduleName = "<?php echo $this->getRequest()->getModuleName() ?>";
+if(moduleName=="catalog" || moduleName=="event"){
+    //code for enabling echoShare
+        _esq.settings.socialCenter = { enabled: true };
+} else {
+    //code for disabling echoShare
+        _esq.settings.socialCenter = { enabled: false };
+}
+</script>
+    <!-- begin loading twitter bootstrap components / plugins -->
+    <script src="/skin/frontend/enterprise/bootstrap/js/prettify.js"></script>
+    <script src="/skin/frontend/enterprise/bootstrap/js/bootstrap-transition.js"></script>
+    <script src="/skin/frontend/enterprise/bootstrap/js/bootstrap-alert.js"></script>
+    <script src="/skin/frontend/enterprise/bootstrap/js/bootstrap-modal.js"></script>
+    <script src="/skin/frontend/enterprise/bootstrap/js/bootstrap-dropdown.js"></script>
+    <script src="/skin/frontend/enterprise/bootstrap/js/bootstrap-scrollspy.js"></script>
+    <script src="/skin/frontend/enterprise/bootstrap/js/bootstrap-tab.js"></script>
+    <script src="/skin/frontend/enterprise/bootstrap/js/bootstrap-tooltip.js"></script>
+    <script src="/skin/frontend/enterprise/bootstrap/js/bootstrap-popover.js"></script>
+    <script src="/skin/frontend/enterprise/bootstrap/js/bootstrap-button.js"></script>
+    <script src="/skin/frontend/enterprise/bootstrap/js/bootstrap-collapse.js"></script>
+    <script src="/skin/frontend/enterprise/bootstrap/js/bootstrap-carousel.js"></script>
+    <script src="/skin/frontend/enterprise/bootstrap/js/bootstrap-typeahead.js"></script>
+    <script src="/skin/frontend/enterprise/bootstrap/js/application.js"></script>
+
+
