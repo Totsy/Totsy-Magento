@@ -31,10 +31,43 @@ $quote = Mage::getModel('sales/quote')->load($quoteId);
 ?>
 		You will redirect to orders review page in 10 seconds. Or <a class="red" href="<?php echo $url?>">click here</a>
     </p>
+    <div style="clear:both; padding-bottom:10px"></div>
     <div id="rondavu_checkout_container"></div>
     <script language="javascript" type="text/javascript">
-		function redirect(){window.location.href="<?php echo $url?>"};
-            setTimeout("redirect()",10000);
+		function redirect() { 
+		  window.location.href="<?php echo $url?>"
+        };
+            
+        var c=0;
+        var t;
+        var timer_is_on = 0;
+        
+        function timeRedirect() {
+            t = setTimeout("redirect()",10000);
+        };
+        
+        function startRedirectTimer() {
+            if(!timer_is_on){
+                timer_is_on=1;
+                timeRedirect();
+            }
+        };
+        
+        function stopRedirectTimer() {
+            clearTimeout(t);
+            timer_is_on=0;
+        };
+        
+        //stop redirect on timeout when div is hovered over
+        jQuery(document).ready( function(){ 
+            jQuery("#rondavu_checkout_container").hover(function(){
+                stopCount();    
+            });
+        });
+        
+        startRedirectTimer();
+        
+            
 	</script>
 	<?php
 
@@ -73,7 +106,7 @@ $rondavu_data =array("config"=>array("version"=>"1.2") ,
                 "price" =>array("actual_paid" =>$order->getData('grand_total'),"currency"=>"USD")))),
     "primary_mo"=>array("id" =>array(array("id"=>"order_confirmation","type"=>"page")) ,
         "name" =>array(array("name" =>"Totsy")) ,
-        "url" =>array("detail" =>"http//www.totsy.com","picture"=>array("primary"=>"http//www.totsy.com/img/logo-125x77.png","primary_secure" =>
+        "url" =>array("detail" =>"https://www.totsy.com","picture"=>array("primary"=>"https://www.totsy.com/img/logo-125x77.png","primary_secure" =>
                 "https://www.totsy.com/img/logo-125x77.png"))),
     "mos" => $items_for_socialable_mos_keys
 );
@@ -84,9 +117,27 @@ $socialable_labs_output = rondavu_sign($rondavu_data, $key_path);
 
 if($socialable_labs_output) {
 ?>
+
 <script type="text/javascript">
-    var socialableLabsOutput = <?php echo $socialable_labs_output ?>;
+    window.RondavuData = <?php echo $socialable_labs_output ?>;
 </script>
+
+<script type="text/javascript">
+
+    (function(){
+        var s = document.createElement('script');
+        s.async = true;
+
+        s.src =  ('https:' == window.location.protocol ? 'https://s3.amazonaws.com/' : 'http://') +
+            ('www.totsy.com' == window.location.host ? 'static.rondavu.com' +'/C/' +  'Totsy_PROD' : 'qa.rondavu.com' +'/C/' +  'Totsy_QA')  + '/rondavu.js';
+
+        document.getElementsByTagName('head')[0].appendChild(s);
+        
+    })();
+    
+</script>
+
+<!-- Socialable Labs -->
 
 <?php } ?>
 
