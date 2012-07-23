@@ -248,7 +248,6 @@ class Harapartners_HpCheckout_Model_Checkout
             if (!$redirectUrl && $order->getCanSendNewEmailFlag()) {
                 try {
                     $order->sendNewOrderEmail();
-                    
                 } catch (Exception $e) {
                     Mage::logException($e);
                 }
@@ -285,8 +284,6 @@ class Harapartners_HpCheckout_Model_Checkout
                             }
                         }
                     }
-                }
-            }              
 
             $this->_checkoutSession->setLastOrderId($order->getId())
             ->setRedirectUrl($redirectUrl)

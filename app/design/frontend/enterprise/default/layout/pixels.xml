@@ -28,6 +28,12 @@
             <block type="core/template" name="sociable.footer.pixel" template="pixels/sociable/footer.phtml" />
         </block>
     </pixels_sociable_product>
+    
+    <pixels_sociable_checkout>
+        <block type="core/template" name="root" template="pixels/sociable/checkout.phtml">
+            <block type="core/template" name="sociable.footer.pixel" template="pixels/sociable/footer.phtml" />
+        </block>
+    </pixels_sociable_checkout>
 
     <pixels_sociable_header>
         <block type="core/template" name="root" template="pixels/sociable/header.phtml">

@@ -86,5 +86,9 @@
     <ajax_pixels_sociable_product>
         <block type="core/template" name="root" template="pixels/sociable/product.phtml"></block>
     </ajax_pixels_sociable_product>
+    
+    <ajax_pixels_sociable_checkout>
+        <block type="core/template" name="root" template="pixels/sociable/checkout.phtml"></block>
+    </ajax_pixels_sociable_checkout>
 
 </layout>

@@ -1,7 +1,7 @@
 <?php
 class Totsy_Pixels_SociableController extends Mage_Core_Controller_Front_Action
 {
-    public function productAction(){
+    public function productAction() {
         if(($_product = $this->getRequest()->getParam('product'))
         && ($_category = $this->getRequest()->getParam('category'))) {
             $_product = Mage::getModel('catalog/product')->load($_product);
@@ -16,7 +16,21 @@ class Totsy_Pixels_SociableController extends Mage_Core_Controller_Front_Action
         }
     }
 
-    public function headerAction(){
+    public function headerAction() {
         $this->loadLayout()->renderLayout();
+    }
+    
+    public function checkoutAction() {
+        print "test";
+    
+        if($_order = $this->getRequest()->getParam('order')) {
+        
+            $_order = Mage::getModel('sales/order')->load($_order);
+            if($_order && $_order->getId()) {
+                Mage::register('current_order',$_order);
+                
+                $this->loadLayout()->renderLayout();
+            }
+        }    
     }
 }
