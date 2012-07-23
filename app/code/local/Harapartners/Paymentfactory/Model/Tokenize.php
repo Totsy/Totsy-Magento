@@ -295,11 +295,11 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Mage_Cybersource_Model_
         $this->_payment = $payment;
         try {
             #Get Existing Transaction
-            Mage::getSingleton('sales/order_payment')
-            if(!$payment->getData('base_amount_authorized')) {
+            //Mage::getSingleton('sales/order_payment')
+            //if(!$payment->getData('base_amount_authorized')) {
                 $payment->setParentTransactionId(null)
                         ->save();
-            }
+            //}
             parent::capture($payment, $amount);
         }catch (Exception $e){
             
