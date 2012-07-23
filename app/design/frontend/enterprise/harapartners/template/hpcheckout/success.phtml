@@ -14,7 +14,7 @@ $quote = Mage::getModel('sales/quote')->load($quoteId);
 
 ?>
 <?php if ($this->getCanViewOrder()) :?>
-    <p><?php echo $this->__('Your order # is: %s.', sprintf('<a href="%s">%s</a>', $this->escapeHtml($this->getViewOrderUrl()), $this->escapeHtml($this->getOrderId()))) ?></p>
+    <p><?php echo $this->__('Your order # is: %s.', "<strong>" . $this->getOrderId()). "</strong>" ?></p>
 <?php  else :?>
     <p><?php echo $this->__('Your order # is: %s.', $this->escapeHtml($this->getOrderId())) ?></p>
 <?php endif;?>
@@ -26,8 +26,6 @@ $quote = Mage::getModel('sales/quote')->load($quoteId);
     </p>
     <p class="red review-order-detail">
     	<?php
-    	Mage::register('current_order', $order->getId());
-    	
         $order_id = $order->getId();
         $url = $this->getBaseUrl().'sales/order/history/';
 ?>
@@ -36,7 +34,7 @@ $quote = Mage::getModel('sales/quote')->load($quoteId);
     <div id="rondavu_checkout_container"></div>
     <script language="javascript" type="text/javascript">
 		function redirect(){window.location.href="<?php echo $url?>"};
-            //setTimeout("redirect()",10000);
+            setTimeout("redirect()",10000);
 	</script>
 	<?php
 
@@ -58,9 +56,7 @@ foreach ($items as $itemId => $item) {
 
     $mos_key['id'] = array(array("id"=>$item->getId(), "type"=>"product"));
     $mos_key['name'] = array(array("name"=> $item->getName()));
-    if ($product->getCategory()) {
-        $mos_key['primary_tag'] = $product->getCategory()->getName();
-    }
+    $mos_key['primary_tag'] = $product->getCategory()->name;
     $mos_key['tags'] = array("ordered_item",$product->getId(),$product->getName());
     $mos_key['url'] = array("detail"=>$product->getProductUrl(), "picture"=>array("primary"=>$product->getProductUrl(), "primary_secure"=>str_replace("http", "https", $product->getProductUrl())));
 
@@ -93,7 +89,6 @@ if($socialable_labs_output) {
 </script>
 
 <?php } ?>
->>>>>>> ef3c8983aec0733a6dc1b82f1a1eb15fb75fcd2f
 
 <?php endif;?>
 <?php endif;?>
@@ -154,7 +149,7 @@ endforeach;
   })();
 
 </script>
-<?php //$_cartQty = Mage::getModel('checkout/cart')->getCart()->getCartQty;  ?>
+<?php $_cartQty = Mage::getModel('checkout/cart')->getCart()->get;  ?>
 
 <script type="text/javascript">
 var aid='9577';
@@ -163,21 +158,3 @@ var oamt='<?php echo $order->getData('grand_total'); ?>';
 var additional = '';
 (function(){steelhouse={add:function(a,b,c,d){d=d||false;if(a.addEventListener){a.addEventListener(b,c,d)}else if(a.attachEvent){a.attachEvent("on"+b,c)}},load:function(){var a;if(typeof a=='undefined'){a=Math.random()*10000000000000000}var b=document.createElement('script');var c='px.steelhousemedia.com/st?aid='+aid+'&conv=1&order_id='+oid+'&order_amt='+oamt+'&cb='+a+additional;b.type='text/javascript';b.src=('https:'==document.location.protocol?'https://':'http://')+c;var d=document.getElementsByTagName('script');var e=Number(d.length)-1;var f=document.getElementsByTagName('script')[e];f.parentNode.insertBefore(b,f)}};steelhouse.load();})();
 </script>
-<!-- Google Code for Sales Conversion Page -->
-<script type="text/javascript">
-    /* <![CDATA[ */
-    var google_conversion_id = 1019183989;
-    var google_conversion_language = "en";
-    var google_conversion_format = "3";
-    var google_conversion_color = "ffffff";
-    var google_conversion_label = "M0y9CNn9iQMQ9Yb-5QM";
-    var google_conversion_value = 0;
-    /* ]]> */
-</script>
-<script type="text/javascript" src="https://www.googleadservices.com/pagead/conversion.js">
-</script>
-<noscript>
-    <div style="display:inline;">
-        <img height="1" width="1" style="border-style:none;" alt="" src="https://www.googleadservices.com/pagead/conversion/1019183989/?value=0&amp;label=M0y9CNn9iQMQ9Yb-5QM&amp;guid=ON&amp;script=0"/>
-    </div>
-</noscript>
