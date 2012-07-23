@@ -4,8 +4,6 @@ Totsy-Magento Release Notes
 20120723
 --------
 * MGN-718 #resolve #comment Adding Estimated Shipping Date to order confirmation email for physical products.
-* MGN-454 correctly percent off calculation
-* Fixing PO
 * Updated a few feed names for the keyade feeds.
 * Populating additional event information (departments/ages/max discount pct) by inspecting event products, and storing this in category sort entries.
 * MGN-728: Added the 'Not you?' link, and updated the title on the Revalidation page.
