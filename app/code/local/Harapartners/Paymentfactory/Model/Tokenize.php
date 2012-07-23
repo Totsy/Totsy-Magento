@@ -1,6 +1,6 @@
 <?php
 
-class Harapartners_Paymentfactory_Model_Tokenize extends Mage_Cybersource_Model_Soap {
+class Harapartners_Paymentfactory_Model_Tokenize extends Totsy_Cybersource_Model_Soap {
     
     const MINIMUM_AUTHORIZE_AMOUNT = 1.0;
     
@@ -206,7 +206,7 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Mage_Cybersource_Model_
                     $payment->setCcCidStatus($result->ccAuthReply->cvCode);
                 }
             } else {
-                 $error = Mage::helper('paymentfactory')->__('There is an error in processing the payment(create). Please try again or contact us.');
+                 $error = Mage::helper('paymentfactory')->__('AAThere is an error in processing the payment. ' . $this->_errors[$result->reasonCode] . ' Please try again or contact us.');
             }
 
         } catch (Exception $e) {
