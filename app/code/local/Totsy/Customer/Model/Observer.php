@@ -8,6 +8,8 @@
 
 class Totsy_Customer_Model_Observer
 {
+    const XML_PATH_REGISTER_EMAIL_TEMPLATE_AUTOGEN = 'customer/create_account/email_template_autogen';
+
     /**
      * Process any automatic login requests by inspecting the incoming
      * request for the 'auto_access_token' variable.
@@ -50,18 +52,33 @@ class Totsy_Customer_Model_Observer
                     ->setPassword($newPassword)
                     ->save();
 
-//                $templateVars = array(
-//                    'customer' => $customer,
-//                    'new_password' => $newPassword
-//                );
-//                Mage::getModel('core/email_template')
-//                    ->sendTransactional(
-//                        '_trans_Newsletter_Login_Mamasource',
-//                        null,
-//                        $email,
-//                        '',
-//                        $templateVars
-//                    );
+                $templateParams = array(
+                    'customer' => $customer,
+                    'new_password' => $newPassword
+                );
+
+                $mailer = Mage::getModel('core/email_template_mailer');
+                $emailInfo = Mage::getModel('core/email_info');
+                $emailInfo->addTo($email);
+                $mailer->addEmailInfo($emailInfo);
+
+                // Set all required params and send emails
+                $mailer->setSender(
+                    Mage::getStoreConfig(
+                        Mage_Customer_Model_Customer::XML_PATH_REGISTER_EMAIL_IDENTITY,
+                        $storeId
+                    )
+                );
+                $mailer->setStoreId($storeId);
+                $mailer->setTemplateId(
+                    Mage::getStoreConfig(
+                        self::XML_PATH_REGISTER_EMAIL_TEMPLATE_AUTOGEN,
+                        $storeId
+                    )
+                );
+                $mailer->setTemplateParams($templateParams);
+                $mailer->send();
+
                 Mage::getSingleton('customer/session')
                     ->setCustomerAsLoggedIn($customer)
                     ->setCheckLastValidationFlag(false)
