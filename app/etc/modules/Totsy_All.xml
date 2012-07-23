@@ -34,8 +34,8 @@
             <codePool>local</codePool>
         </Totsy_Pixels>
         <Totsy_Pinterestform>
-          <active>true</active>
-          <codePool>local</codePool>
+            <active>true</active>
+            <codePool>local</codePool>
         </Totsy_Pinterestform>
         <Totsy_Sales>
             <active>true</active>
@@ -45,5 +45,9 @@
             <active>true</active>
             <codePool>local</codePool>
         </Totsy_WebsiteRestriction>
+        <Totsy_Cybersource>
+            <active>true</active>
+            <codePool>local</codePool>
+        </Totsy_Cybersource>
     </modules>
 </config>
