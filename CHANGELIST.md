@@ -3,7 +3,6 @@ Totsy-Magento Release Notes
 
 20120723
 --------
-* Batch Cancel Process now only cancels the items off the orders. Required modifying the sales order model to allow orders to be canceled when items have already been canceled individually. Also modified invoicing process to not invoice canceled items.
 * MGN-718 #resolve #comment Adding Estimated Shipping Date to order confirmation email for physical products.
 * MGN-454 correctly percent off calculation
 * Fixing PO
