@@ -121,7 +121,7 @@ class Harapartners_Fulfillmentfactory_Model_Service_Itemqueue
             	$order->save();
             }
         }
-        else if($status == 'holded'){
+        else if($status == 'holded' || $status == Totsy_Sales_Model_Order::STATUS_BATCH_CANCEL_CSR_REVIEW){
             foreach($collection as $itemqueue) {
                 if($itemqueue->getStatus() != Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_CANCELLED) {
                     $itemqueue->setStatus(Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_SUSPENDED);
@@ -129,7 +129,7 @@ class Harapartners_Fulfillmentfactory_Model_Service_Itemqueue
                 }
             }
 
-			if($state != Mage_Sales_Model_Order::STATE_HOLDED) {
+			if($state != Mage_Sales_Model_Order::STATE_HOLDED && $status == 'holded') {
             	$order->setState(Mage_Sales_Model_Order::STATE_HOLDED);
             	$order->save();
             }

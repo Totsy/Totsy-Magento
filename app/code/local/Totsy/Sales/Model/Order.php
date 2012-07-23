@@ -8,6 +8,7 @@
 
 class Totsy_Sales_Model_Order extends Mage_Sales_Model_Order
 {
+    const STATUS_BATCH_CANCEL_CSR_REVIEW = 'batch_cancel_csr_review';
    /**
      * This method will check the order for items that have been canceled
      *
@@ -75,4 +76,27 @@ class Totsy_Sales_Model_Order extends Mage_Sales_Model_Order
         return true;
     }
 
+    /**
+     * Retrieve order total due value
+     *
+     * @return float
+     */
+    public function getTotalDue()
+    {
+        $total = $this->getGrandTotal()-$this->getTotalPaid()-$this->getTotalCanceled();
+        $total = Mage::app()->getStore($this->getStoreId())->roundPrice($total);
+        return max($total, 0);
+    }
+
+    /**
+     * Retrieve order total due value
+     *
+     * @return float
+     */
+    public function getBaseTotalDue()
+    {
+        $total = $this->getBaseGrandTotal()-$this->getBaseTotalPaid()-$this->getBaseTotalCanceled();
+        $total = Mage::app()->getStore($this->getStoreId())->roundPrice($total);
+        return max($total, 0);
+    }
 }

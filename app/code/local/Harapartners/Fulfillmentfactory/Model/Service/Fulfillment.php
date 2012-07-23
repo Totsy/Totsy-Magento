@@ -278,7 +278,23 @@ class Harapartners_Fulfillmentfactory_Model_Service_Fulfillment
                 ->setTotalCanceled($totalCanceled)
                 ->setBaseTotalCanceled($baseTotalCanceled)
             ;
-
+            //If the order involves store credit, reward points, or discounts
+            //we need to put the order into the review status for manual intervention
+            if($order->getDiscountAmount() > 0 || $order->getDiscountCanceled() > 0) {
+                $order->addStatusToHistory(Totsy_Sales_Model_Order::STATUS_BATCH_CANCEL_CSR_REVIEW
+                    ,Mage::helper('core')->__('Order contains Discounts and requires CSR Review.'
+                    .' Please review and move to processing when corrected.'));
+            }
+            if($order->getRewardCurrencyAmount() > 0 || $order->getRewardPointsBalance() > 0) {
+                $order->addStatusToHistory(Totsy_Sales_Model_Order::STATUS_BATCH_CANCEL_CSR_REVIEW
+                    ,Mage::helper('core')->__('Order contains Reward Points and requires CSR Review.'
+                        .' Please review and move to processing when corrected.'));
+            }
+            if($order->getCustomerBalanceAmount() > 0) {
+                $order->addStatusToHistory(Totsy_Sales_Model_Order::STATUS_BATCH_CANCEL_CSR_REVIEW
+                    ,Mage::helper('core')->__('Order contains Store Credit and requires CSR Review.'
+                        .' Please review and move to processing when corrected.'));
+            }
         }
         $order->save();
 
