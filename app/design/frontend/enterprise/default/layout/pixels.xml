@@ -16,6 +16,7 @@
     <customer_logged_out>
         <reference name="after_body_start">
             <remove name="sociable.header.pixel" />
+            <remove name="steelhouse.product.pixel" />
         </reference>
     </customer_logged_out>
 
