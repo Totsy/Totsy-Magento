@@ -132,7 +132,13 @@ class Harapartners_Categoryevent_Helper_Memcache extends Mage_Core_Helper_Abstra
             $mageTimezone = Mage::getStoreConfig(Mage_Core_Model_Locale::XML_PATH_DEFAULT_TIMEZONE);
             date_default_timezone_set($mageTimezone);
             foreach ($liveCategoryInfoArray as $key=>$category){
+            	// do not show upcomign events
             	if (isset($category['event_start_date']) && strtotime($category['event_start_date'])>time()){
+            		unset($liveCategoryInfoArray[$key]);
+            		continue;
+            	}
+            	// hide expired events
+            	if (isset($category['event_end_date']) && strtotime($category['event_end_date'])<time()){
             		unset($liveCategoryInfoArray[$key]);
             		continue;
             	}

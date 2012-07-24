@@ -59,9 +59,6 @@ Default layout, loads most of the pages
                 <action method="addJs"><script>jquery/cloud-zoom.1.0.2.js</script></action>
                 <action method="addJs"><script>harapartners/phoneformat.js</script></action>
 
-				<!-- Guojing @HaraPartners -->
-				<action method="addJs"><script>harapartners/crossbrowser.js</script></action>
-				
                 <action method="addJs"><script>jquery/jquery.fancybox.js</script></action>
                 <block type="page/js_cookie" name="js_cookies" template="page/js/cookie.phtml"/>
                 <action method="addItem"><type>skin_js</type><name>lib/html5shiv/src/html5shiv.js</name><params/><if>lt IE 9</if></action>
