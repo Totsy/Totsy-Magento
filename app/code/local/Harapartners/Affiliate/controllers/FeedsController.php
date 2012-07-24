@@ -89,7 +89,7 @@ XML;
                 $this->_createSignups($from, $to);
                 break;
 
-            case 'signupsByReferral':
+            case 'referralsignups':
                 $this->_createSignupsByReferral($from, $to);
                 break;
 
@@ -97,7 +97,7 @@ XML;
                 $this->_createSales($from, $to, $period);
                 break;
 
-            case 'referringSales':
+            case 'referringsales':
                 $this->_createReferringSales($from, $to, $period);
                 break;
 
@@ -130,7 +130,7 @@ XML;
         $this->_entries->addFieldToFilter(
             'created_at',
             array('from' => $from, 'to' => $to, 'date'=> true)
-        );
+        )->addFieldToFilter('level', 1);
         foreach ($this->_entries as $record) {
             $this->_signupsEntry($record);
         }
@@ -185,8 +185,13 @@ XML;
 
     protected function _signupsEntry($record)
     {
+        $clickId = $this->_extractClickId($record);
+        if (false === $clickId) {
+            return false;
+        }
+
         $entry = $this->_xml->addChild('entry');
-        $entry->addAttribute('clickId', $this->_extractClickId($record));
+        $entry->addAttribute('clickId', $clickId);
         $entry->addAttribute('eventMerchantId', $record->getCustomerId());
         $entry->addAttribute('count1', 1);
         $entry->addAttribute('time', strtotime($record->getCreatedAt()));
@@ -219,6 +224,7 @@ XML;
     {
         $data = json_decode($record->getRegistrationParam(), true);
         $data = array_change_key_case($data, CASE_LOWER);
-        return $data['clickid'];
+
+        return isset($data['clickid']) ? $data['clickid'] : false;
     }
 }

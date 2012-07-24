@@ -1,6 +1,25 @@
 Totsy-Magento Release Notes
 ===========================
 
+20120723
+--------
+* MGN-718 #resolve #comment Adding Estimated Shipping Date to order confirmation email for physical products.
+* Updated a few feed names for the keyade feeds.
+* Populating additional event information (departments/ages/max discount pct) by inspecting event products, and storing this in category sort entries.
+* MGN-728: Added the 'Not you?' link, and updated the title on the Revalidation page.
+* MGN-835: added adwords conversion tags.
+* Fixing payment update module when a credit card entered is identical as one of the saved credit card.
+
+
+20120720-1
+--------
+* Tweaking order history layout and status message in order history.
+
+20120720
+--------
+* Put back estimated shipdate / shipping edit functionality
+* Fix PO quantity total : Removing order by vendor style
+
 20120719
 --------
 
