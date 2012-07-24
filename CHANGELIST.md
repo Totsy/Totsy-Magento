@@ -1,6 +1,27 @@
 Totsy-Magento Release Notes
 ===========================
 
+20120724
+--------
+
+* changed the item queue batch cancel to allow the cancelling of suspended items
+* change error message 203
+* remove caracter from payment failed message
+* MGN-821 adding missing css for mms 404 view
+* MGN-841 add switch to category preview controller to allow disabled events to be previewed in admin
+* changed order view in admin to show total canceled. fixed total due line to take into account canceled amounts. when items are batch canceled and items remain in order, if order contains discounts, points, or store credit the order will be marked as 'Batch Cancel - CSR Review' so CSRs can manually adjust order accordingly.
+* MGN693 - Cancel an Order if the payment failed status is older than 7 days
+* Add script to cancel Orders with 7 days older payment failed update
+* Adding configuration section for e-mail template to use for auto-generated customer welcome e-mails.
+* MGN-704: Sending an e-mail containing the auto-generated password when creating customer accounts automagically.
+* Dotcom test fulfillment script can accept the order ID as a single parameter on the command line, or will execute the full fulfillment process when no arguments are supplied.
+* tweaked page cache to not cache pages on a customer by customer basis, but only for customer groups
+* MGN846: Print more informations when a payment failed
+* Fix for 500 problen on category/age langing page
+* fix steelhouse pixel issue
+* modified dotcom fulfillment to invoice the order and then capture the invoice rather than use order payments for capturing payment. also added in calculation of canceled amounts for order in batch cancel process
+* Batch Cancel Process now only cancels the items off the orders. Required modifying the sales order model to allow orders to be canceled when items have already been canceled individually. Also modified invoicing process to not invoice canceled items.
+
 20120723
 --------
 * MGN-718 #resolve #comment Adding Estimated Shipping Date to order confirmation email for physical products.

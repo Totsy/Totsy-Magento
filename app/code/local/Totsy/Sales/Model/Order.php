@@ -8,7 +8,22 @@
 
 class Totsy_Sales_Model_Order extends Mage_Sales_Model_Order
 {
-        /**
+    const STATUS_BATCH_CANCEL_CSR_REVIEW = 'batch_cancel_csr_review';
+   /**
+     * This method will check the order for items that have been canceled
+     *
+     * @return bool
+     */
+    public function containsCanceledItems() {
+        foreach($this->getItemsCollection() as $item) {
+            if($item->getQtyCanceled()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * Retrieve order cancel availability
      *
      * @return bool
@@ -26,8 +41,18 @@ class Totsy_Sales_Model_Order extends Mage_Sales_Model_Order
                 break;
             }
         }
-        if ($allInvoiced) {
-            return true;
+
+        // 201207 - CJD - Added in logic so that you can cancel an order that has had the items canceled individually
+        $allCanceled = true;
+        foreach($this->getAllItems() as $item) {
+            if(!$item->getParentItemId() && ($item->getQtyCanceled() != $item->getQtyOrdered())) {
+                $allCanceled = false;
+                break;
+            }
+        }
+
+        if ($allInvoiced  && !$allCanceled) {
+            return false;
         }
 
         $state = $this->getState();
@@ -52,30 +77,27 @@ class Totsy_Sales_Model_Order extends Mage_Sales_Model_Order
     }
 
     /**
-     * Retrieve order invoice availability
+     * Retrieve order total due value
      *
-     * @return bool
+     * @return float
      */
-    public function canInvoice()
+    public function getTotalDue()
     {
-        if ($this->canUnhold() || $this->isPaymentReview()) {
-            return false;
-        }
-        $state = $this->getState();
-        if ($this->isCanceled() || $state === self::STATE_COMPLETE || $state === self::STATE_CLOSED) {
-            return false;
-        }
+        $total = $this->getGrandTotal()-$this->getTotalPaid()-$this->getTotalCanceled();
+        $total = Mage::app()->getStore($this->getStoreId())->roundPrice($total);
+        return max($total, 0);
+    }
 
-        if ($this->getActionFlag(self::ACTION_FLAG_INVOICE) === false) {
-            return false;
-        }
-
-        foreach ($this->getAllItems() as $item) {
-            if ($item->getQtyToInvoice()>0 && !$item->getLockedDoInvoice()) {
-                return true;
-            }
-        }
-        return true;
+    /**
+     * Retrieve order total due value
+     *
+     * @return float
+     */
+    public function getBaseTotalDue()
+    {
+        $total = $this->getBaseGrandTotal()-$this->getBaseTotalPaid()-$this->getBaseTotalCanceled();
+        $total = Mage::app()->getStore($this->getStoreId())->roundPrice($total);
+        return max($total, 0);
     }
     
     /**
