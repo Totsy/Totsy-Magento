@@ -138,8 +138,10 @@ class Harapartners_Fulfillmentfactory_Model_Service_Fulfillment
             $itemQueue = Mage::getModel('fulfillmentfactory/itemqueue')->load($id);
             
             //vaidation
-            if($itemQueue->getStatus() != Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_PENDING){
-            	$errorArray[] = sprintf('Cannot canel item #%d. Only pending items can be cancelled.', $itemQueue->getId());
+            if(!in_array($itemQueue->getStatus(),
+                array(Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_PENDING,
+                Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_SUSPENDED))){
+            	$errorArray[] = sprintf('Cannot cancel item #%d. Only pending or suspended items can be cancelled.', $itemQueue->getId());
             	continue;
             }
             
