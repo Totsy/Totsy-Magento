@@ -206,7 +206,7 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Totsy_Cybersource_Model
                     $payment->setCcCidStatus($result->ccAuthReply->cvCode);
                 }
             } else {
-                 $error = Mage::helper('paymentfactory')->__('AAThere is an error in processing the payment. ' . $this->_errors[$result->reasonCode] . ' Please try again or contact us.');
+                 $error = Mage::helper('paymentfactory')->__('There is an error in processing the payment. ' . $this->_errors[$result->reasonCode] . ' Please try again or contact us.');
             }
 
         } catch (Exception $e) {

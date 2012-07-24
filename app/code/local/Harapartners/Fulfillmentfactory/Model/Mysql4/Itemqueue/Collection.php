@@ -15,7 +15,7 @@ class Harapartners_Fulfillmentfactory_Model_Mysql4_Itemqueue_Collection extends 
     public function _construct(){
         $this->_init('fulfillmentfactory/itemqueue');
     }
-    
+
     /**
      * get Itemqueue collection by order Id
      *
@@ -24,7 +24,20 @@ class Harapartners_Fulfillmentfactory_Model_Mysql4_Itemqueue_Collection extends 
      */
     public function loadByOrderId($orderId) {
         $this->getSelect()
-             ->where('order_id=' . $orderId);
+            ->where('order_id=' . $orderId);
+
+        return $this;
+    }
+
+    /**
+     * get Itemqueue collection by order Id
+     *
+     * @param int $orderId
+     * @return Collection
+     */
+    public function loadByOrderItemId($orderItemId) {
+        $this->getSelect()
+            ->where('order_item_id=' . $orderItemId);
 
         return $this;
     }
