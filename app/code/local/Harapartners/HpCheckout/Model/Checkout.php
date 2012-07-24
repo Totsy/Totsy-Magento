@@ -272,8 +272,10 @@ class Harapartners_HpCheckout_Model_Checkout
 
                             //attempting to send the email
                             try {
-                                Mage::getModel('core/email_template')
-                                ->sendTransactional($templateId, "sales", $email, NULL, array("virtual_product_code"=>$virtualProductCode, "order"=>$order, "store"=>$store, "title"=>$title,"description"=>$description,"short_description" => $shortDescription));
+                                if($order->getStatus() != 'payment_failed') {
+                                    Mage::getModel('core/email_template')
+                                        ->sendTransactional($templateId, "sales", $email, NULL, array("virtual_product_code"=>$virtualProductCode, "order"=>$order, "store"=>$store, "title"=>$title,"description"=>$description,"short_description" => $shortDescription));
+                                }    
                                 //Mage::register('coupon_code_email_sent',true);
                             } catch (Exception $e) {
                                 Mage::logException($e);
