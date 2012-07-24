@@ -17,6 +17,7 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Payment extends TinyBrick_Orde
             $billing = Mage::getModel('sales/order_address')->load($billingId);
             $data = $this->cleanPaymentData($data);
             $payment = new Varien_Object($data);
+            $payment->setData('cc_last4', substr($payment->getCcNumber(), -4));
             #If credit Card saved retrieve payment profile
             if($payment->getData('cybersource_subid')) {
                 /**$decryptedCybersourceId = Mage::getModel('core/encryption')->decrypt(base64_decode($payment->getData('cybersource_subid')));
@@ -36,7 +37,7 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Payment extends TinyBrick_Orde
                     $payment = Mage::getModel('sales/order_payment')->getCollection()
                         ->addAttributeToFilter('cybersource_subid',$profile->getData('subscription_id'))
                         ->getFirstItem();
-                    if(!$payment) {
+                    if(!$result) {
                         return false;
                     } else {
                     	$savingNewCreditCard = false;
@@ -83,7 +84,7 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Payment extends TinyBrick_Orde
     public function replacePaymentInformation($order, $payment) {
         $paymentOrder = $order->getPayment();
         $paymentOrder->setData('cc_exp_month', $payment->getData('cc_exp_month'));
-        $paymentOrder->setData('cc_last4', substr($payment->getCcNumber(), -4));
+        $paymentOrder->setData('cc_last4', $payment->getData('cc_last4'));
         $paymentOrder->setData('cc_type', $payment->getData('cc_type'));
         $paymentOrder->setData('cc_exp_year', $payment->getData('cc_exp_year'));
         $paymentOrder->setData('cc_trans_id', $payment->getData('cc_trans_id'));

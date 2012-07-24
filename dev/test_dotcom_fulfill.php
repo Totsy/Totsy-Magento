@@ -1,21 +1,24 @@
 <?php
-require_once '../app/Mage.php';
+
+require_once __DIR__ . '/../app/Mage.php';
 Mage::app();
 
-try{
-    $longopts  = array("order_id::");
-    $parameters = getopt(null,$longopts);
-    
-    if($parameters['order_id']) {
+$obs = Mage::getModel('fulfillmentfactory/service_dotcom');
+
+try {
+    if($argc == 2) {
         $orderArray = array();
-        $order = Mage::getModel('sales/order')->load($parameters['order_id']);
+        $order = Mage::getModel('sales/order')->load($argv[1]);
         if($order) {
-            Mage::helper('fulfillmentfactory')->_pushUniqueOrderIntoArray($orderArray, $order);
-            $obs = Mage::getModel('fulfillmentfactory/service_dotcom');
+            Mage::helper('fulfillmentfactory')
+                ->_pushUniqueOrderIntoArray($orderArray, $order);
             $obs->submitOrdersToFulfill($orderArray, true);
         }
+    } else {
+        $obs->runDotcomFulfillOrder();
     }
 } catch(Exception $e) {
-    echo $e->getMessage();
+    echo "ERROR: ", $e->getMessage();
 }
-echo 'End!';
+
+echo "Complete", PHP_EOL;

@@ -50,8 +50,10 @@ class Mage_Catalog_CategoryController extends Mage_Core_Controller_Front_Action
             ->setStoreId(Mage::app()->getStore()->getId())
             ->load($categoryId);
 
-        if (!Mage::helper('catalog/category')->canShow($category)) {
-            return false;
+        if(!Mage::registry('admin_preview_mode')){
+	        if (!Mage::helper('catalog/category')->canShow($category)) {
+	            return false;
+	        }
         }
         Mage::getSingleton('catalog/session')->setLastVisitedCategoryId($category->getId());
         Mage::register('current_category', $category);
