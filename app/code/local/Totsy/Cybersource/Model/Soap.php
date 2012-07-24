@@ -49,7 +49,7 @@ class Totsy_Cybersource_Model_Soap extends Mage_Cybersource_Model_Soap
             authorization code programmatically, but you might receive one verbally by calling
             the processor.',
         202 => 'Either the card provided is expired or the date provided is incorrect.',
-        203 => 'General decline of the card. No information was provided.',
+        203 => 'General decline of the card. No other information provided by the issuing bank.',
         204 => 'Insufficient funds in the account.',
         205 => 'This card has been reported stolen or lost.',
         207 => 'The issuing bank for this card is currently not available. Try again soon.',
