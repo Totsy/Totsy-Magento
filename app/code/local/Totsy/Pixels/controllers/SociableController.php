@@ -15,6 +15,10 @@ class Totsy_Pixels_SociableController extends Mage_Core_Controller_Front_Action
             }
         }
     }
+    
+    public function feedAction(){
+        $this->loadLayout()->renderLayout();
+    }
 
     public function headerAction(){
         $this->loadLayout()->renderLayout();

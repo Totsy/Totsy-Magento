@@ -67,7 +67,7 @@ Default layout, loads most of the pages
             <action method="addLink" translate="label title" module="catalog" ifconfig="catalog/seo/site_map"><label>Site Map</label><url helper="catalog/map/getCategoryUrl" /><title>Site Map</title></action>
         </reference>
         <block type="catalog/product_price_template" name="catalog_product_price_template" />
-    </default>
+    </default>x
 
 	
 <!--
