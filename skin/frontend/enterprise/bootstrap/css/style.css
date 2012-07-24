@@ -52,3 +52,9 @@ a:hover{color:#af0e15;text-decoration:underline;}
     position: absolute;
     top: 0;
 }
+
+.messages li, ul { list-style: none; }
+.messages { display: block; padding: 10px; margin: 0px 0px 10px 0px; background-color: #ed1c25; color:#fff; }
+
+.well { background-color: #fff!important; }
+.nav .nav-header { color:#444!important; font-size: 12px!important; } 

@@ -35,41 +35,40 @@ $maxBalance = $this->getMaxBalance();
 $minBalance = $this->getMinBalance();
 $expireIn = $this->getExpireIn();
 ?>
-<div class="box info-box">
-    <h2 class="box-title"><?php echo $this->__('Reward points balance Information'); ?> </h2>
-    <dl class="box-content">
-        <dt><?php echo $this->__('Your current balance is %s.', $helper->formatReward($this->getPointsBalance(), $this->getCurrencyBalance()))?></dt>
-        <dt><?php echo $this->__('Current exchange rates:')?></dt>
+<div class="box info-box well">
+    <h4 class="box-title"><?php echo $this->__('Balance'); ?> </h4>
+    <hr />
+        <p><strong><?php echo $this->__('Your current balance is %s', $helper->formatReward($this->getPointsBalance(), $this->getCurrencyBalance()))?></strong></p>
+        <p><?php echo $this->__('Current exchange rates:')?></p>
 <?php if ($this->getPtsToAmountRateAmount() || $this->getAmountToPtsRatePts()): ?>
     <?php if ($this->getPtsToAmountRateAmount()): ?>
-            <dd><?php echo $this->__('Each %s can be redeemed for %s.', $helper->formatReward($this->getPtsToAmountRatePts(), null, null, '<strong>%s</strong>'), '<strong>' . $helper->formatAmount($this->getPtsToAmountRateAmount()) . '</strong>')?></dd>
+            <p><?php echo $this->__('Each %s can be redeemed for %s.', $helper->formatReward($this->getPtsToAmountRatePts(), null, null, '<strong>%s</strong>'), '<strong>' . $helper->formatAmount($this->getPtsToAmountRateAmount()) . '</strong>')?></p>
     <?php endif;?>
     <?php if ($this->getAmountToPtsRatePts()): ?>
-            <dd><?php echo $this->__('Each %s spent will earn %s.', '<strong>' . $helper->formatAmount($this->getAmountToPtsRateAmount()) . '</strong>', $helper->formatReward($this->getAmountToPtsRatePts(), null, null, '<strong>%s</strong>'))?></dd>
+            <p><?php echo $this->__('Each %s spent will earn %s.', '<strong>' . $helper->formatAmount($this->getAmountToPtsRateAmount()) . '</strong>', $helper->formatReward($this->getAmountToPtsRatePts(), null, null, '<strong>%s</strong>'))?></p>
     <?php endif;?>
 <?php else:?>
-             <dd><?php echo $this->__('None.')?></dd>
+             <p><?php echo $this->__('None.')?></p>
 <?php endif;?>
 <?php if ($maxBalance || $minBalance):?>
-        <dt><?php echo $this->__('Balance limitations:')?></dt>
+        <p><?php echo $this->__('Balance limitations:')?></p>
     <?php if ($maxBalance):?>
-            <dd><?php echo $this->__('Balance is capped at %s.', $helper->formatReward($maxBalance))?></dd>
+            <p><?php echo $this->__('Balance is capped at %s.', $helper->formatReward($maxBalance))?></p>
         <?php if ($this->getIsMaxBalanceReached()):?>
-            <dd class="warning"><?php echo $this->__('Maximum balance is reached.')?></dd>
+            <p class="warning"><?php echo $this->__('Maximum balance is reached.')?></p>
         <?php endif;?>
     <?php endif;?>
     <?php if ($minBalance):?>
-            <dd><?php echo $this->__('Minimum Balance in order to redeem: %s.', $helper->formatReward($minBalance))?></dd>
+            <p><?php echo $this->__('Minimum Balance in order to redeem: %s.', $helper->formatReward($minBalance))?></p>
         <?php if (!$this->getIsMinBalanceReached()):?>
-            <dd class="warning"><?php echo $this->__('Minimum balance for redeeming points is not reached.')?></dd>
+            <p class="warning"><?php echo $this->__('Minimum balance for redeeming points is not reached.')?></p>
         <?php endif;?>
     <?php endif;?>
 <?php endif;?>
 <?php if ($expireIn):?>
-    <dt><?php echo $this->__('Each earned reward points record expires in %s days.', '<span>' . $expireIn . '</span>')?></dt>
+    <p><?php echo $this->__('Each earned reward points record expires in %s days.', '<span>' . $expireIn . '</span>')?></p>
     <?php if ($this->getIsHistoryPublished()):?>
-            <dd><?php echo $this->__('Refer to reward points history to see if a specific record expires and when.')?></dd>
+            <p><?php echo $this->__('Refer to reward points history to see if a specific record expires and when.')?></p>
     <?php endif;?>
 <?php endif;?>
-    </dl>
 </div>

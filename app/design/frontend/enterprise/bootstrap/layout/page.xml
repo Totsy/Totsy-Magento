@@ -64,7 +64,6 @@ Default layout, loads most of the pages
                 <action method="addItem"><type>skin_js</type><name>lib/html5shiv/src/html5shiv.js</name><params/><if>lt IE 9</if></action>
 
                 <action method="addCss"><stylesheet>lib/bootstrap/bootstrap.css</stylesheet></action>
-                <action method="addCss"><stylesheet>lib/bootstrap/bootstrap-responsive.css</stylesheet></action>
                 <action method="addCss"><stylesheet>css/style.css</stylesheet></action>
                 
             </block>
