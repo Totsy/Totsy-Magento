@@ -10,7 +10,7 @@
 <config>
     <modules>
         <Totsy_Sales>
-            <version>0.1.8</version>
+            <version>0.1.9</version>
         </Totsy_Sales>
     </modules>
     <global>
@@ -38,6 +38,8 @@
             <sales>
                 <rewrite>
                     <observer>Totsy_Sales_Model_Observer</observer>
+                    <order>Totsy_Sales_Model_Order</order>
+                    <order_invoice_total_subtotal>Totsy_Sales_Model_Order_Invoice_Total_Subtotal</order_invoice_total_subtotal>
                 </rewrite>
             </sales>
         </models>

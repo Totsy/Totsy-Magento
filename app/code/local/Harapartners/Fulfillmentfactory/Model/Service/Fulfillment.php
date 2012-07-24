@@ -183,49 +183,122 @@ class Harapartners_Fulfillmentfactory_Model_Service_Fulfillment
      * @param array $updateItemQueueIdList
      * @return bool    indicate if new order has been created
      */
-    protected function _cancelItemqueue($orderId, $updateItemQueueIdList) {
+    protected function _cancelItemqueue($orderId, $updateItemQueueIdList)
+    {
         $order = Mage::getModel('sales/order')->load($orderId);
 
-        
-        //More secure logic, looping through order items, in case the quote item might be damaged
-        $remainingOrderItems = array();
-        
-        foreach($order->getItemsCollection() as $orderItem) {
-            if($orderItem->getParentItemId()) {
+        $itemsToCancel = array();
+        $remainingOrderItems = false;
+
+        foreach ($order->getItemsCollection() as $orderItem) {
+            if ($orderItem->getParentItemId()) {
                 continue;
             }
             $shouldBeRemoved = false;
-            foreach($updateItemQueueIdList as $itemQueueId) {
-                if($orderItem->getId() == $itemQueueId->getOrderItemId()) {
+            foreach ($updateItemQueueIdList as $itemQueueId) {
+                if ($orderItem->getId() == $itemQueueId->getOrderItemId()) {
                     $shouldBeRemoved = true;
                 }
-                foreach($orderItem->getChildrenItems() as $childItem) {
-                    if($childItem->getId() == $itemQueueId->getOrderItemId()) {
+                foreach ($orderItem->getChildrenItems() as $childItem) {
+                    if ($childItem->getId() == $itemQueueId->getOrderItemId()) {
                         $shouldBeRemoved = true;
                     }
                 }
-                if(!$shouldBeRemoved){
-                	$remainingOrderItems[] = $orderItem;
+                if ($shouldBeRemoved) {
+                    $itemsToCancel[] = $orderItem;
+                }
+                if (!$shouldBeRemoved) {
+                    $remainingOrderItems = true;
                 }
             }
-        }          
-          //cancel orders with nothing available
-          if(empty($remainingOrderItems)) {
-              $order->cancel()->save()->addStatusHistoryComment(Mage::helper('core')->__('Order Canceled by Batch Cancel Process'),false)->save();
-              return true;
-          }
-          
-          $orderItemListCollection = array (
-              array (
-                  'items' => $remainingOrderItems,
-                  'state' => Mage_Sales_Model_Order::STATE_NEW,
-                  'type'    => 'dotcom'
-              )
-          );
-        
-          Mage::helper('ordersplit')->createSplitOrder($order, $orderItemListCollection, true);
-          
-          return true;
+        }
+        //cancel orders with nothing available
+        if (!$remainingOrderItems) {
+            $order->cancel()->save()->addStatusHistoryComment(Mage::helper('core')->__('Order Canceled by Batch Cancel Process'), false)->save();
+            return true;
+        }
+
+        foreach($itemsToCancel as $item) {
+            $order->addStatusHistoryComment(Mage::helper('core')->__('Item ' . $item->getSku() . ' canceled by Batch Cancel Process'), false);
+            $item->cancel();
+            foreach ($item->getChildrenItems() as $childItem) {
+                $childItem->cancel();
+                $childItem->save();
+            }
+            $item->save();
+        }
+
+        //Let's see if we need to cancel the order outright and if not, we need to get the various totals to update the order
+        $shouldCancel = true;
+        $subtotalCanceled = 0;
+        $baseSubtotalCanceled = 0;
+        $taxCanceled = 0;
+        $baseTaxCanceled = 0;
+        $shippingCanceled = 0;
+        $baseShippingCanceled = 0;
+        $discountCanceled = 0;
+        $baseDiscountCanceled = 0;
+        $totalCanceled = 0;
+        $baseTotalCanceled = 0;
+        foreach($order->getItemsCollection() as $item) {
+            if($item->getParentItemId()) {
+                continue;
+            }
+            if($shouldCancel && ($item->getStatusId() != Mage_Sales_Model_Order_Item::STATUS_CANCELED)) {
+                $shouldCancel = false;
+                break;
+            }
+            $subtotalCanceled += $item->getRowTotal();
+            $baseSubtotalCanceled += $item->getBaseRowTotal();
+            $taxCanceled += ($item->getRowTotalInclTax() - $item->getRowTotal());
+            $baseTaxCanceled += ($item->getBaseRowTotalInclTax() - $item->getBaseRowTotal());
+            $discountCanceled += $item->getDiscountAmount();
+            $baseDiscountCanceled += $item->getBaseDiscountAmount();
+            $totalCanceled += $item->getRowTotal() + ($item->getRowTotalInclTax() - $item->getRowTotal());
+            $baseTotalCanceled += $item->getBaseRowTotal() + ($item->getBaseRowTotalInclTax() - $item->getBaseRowTotal());
+        }
+        if($shouldCancel) {
+            $order->cancel()->save()->addStatusHistoryComment(Mage::helper('core')->__('Order Canceled by Batch Cancel Process'), false)->save();
+        } else {
+            //let's save some cancel totals to the order.
+            $order
+                ->setSubtotalCanceled($subtotalCanceled)
+                ->setBaseSubtotalCanceled($baseSubtotalCanceled)
+
+                ->setTaxCanceled($taxCanceled)
+                ->setBaseTaxCanceled($baseTaxCanceled)
+
+            //TODO: The shipping amounts need to be figured out if flat rate shipping is ever scrapped.
+            // ->setShippingCanceled($this->getShippingAmount() - $this->getShippingInvoiced());
+            // ->setBaseShippingCanceled($this->getBaseShippingAmount() - $this->getBaseShippingInvoiced());
+
+                ->setDiscountCanceled($discountCanceled)
+                ->setBaseDiscountCanceled($baseDiscountCanceled)
+
+                ->setTotalCanceled($totalCanceled)
+                ->setBaseTotalCanceled($baseTotalCanceled)
+            ;
+            //If the order involves store credit, reward points, or discounts
+            //we need to put the order into the review status for manual intervention
+            if($order->getDiscountAmount() > 0 || $order->getDiscountCanceled() > 0) {
+                $order->addStatusToHistory(Totsy_Sales_Model_Order::STATUS_BATCH_CANCEL_CSR_REVIEW
+                    ,Mage::helper('core')->__('Order contains Discounts and requires CSR Review.'
+                    .' Please review and move to processing when corrected.'));
+            }
+            if($order->getRewardCurrencyAmount() > 0 || $order->getRewardPointsBalance() > 0) {
+                $order->addStatusToHistory(Totsy_Sales_Model_Order::STATUS_BATCH_CANCEL_CSR_REVIEW
+                    ,Mage::helper('core')->__('Order contains Reward Points and requires CSR Review.'
+                        .' Please review and move to processing when corrected.'));
+            }
+            if($order->getCustomerBalanceAmount() > 0) {
+                $order->addStatusToHistory(Totsy_Sales_Model_Order::STATUS_BATCH_CANCEL_CSR_REVIEW
+                    ,Mage::helper('core')->__('Order contains Store Credit and requires CSR Review.'
+                        .' Please review and move to processing when corrected.'));
+            }
+        }
+        $order->save();
+
+        return true;
     }
 
     /**
