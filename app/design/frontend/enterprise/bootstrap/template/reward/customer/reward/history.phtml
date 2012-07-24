@@ -29,19 +29,20 @@
  * @see Enterprise_Reward_Block_Customer_Reward_History
  */
 ?>
-<div class="box">
-    <h2 class="sub-title"><?php echo $this->__('Balance History'); ?></h2>
+<div class="well">
+    <h4 class="sub-title"><?php echo $this->__('History'); ?></h4>
+    <hr />
 
     <?php if ($history = $this->getHistory()):?>
 
     <?php echo $this->getChildHtml('pager') ?>
 
-    <table id="reward-history" class="data-table">
-        <col width="1" />
-        <col width="1" />
-        <col width="1" />
+    <table id="reward-history" class="data-table table table-striped">
         <col />
-        <col width="1" />
+        <col />
+        <col />
+        <col />
+        <col />
         <thead>
             <tr>
             	<th><?php echo $this->__('Date'); ?></th>

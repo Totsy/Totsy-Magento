@@ -27,7 +27,8 @@
 
 <div class="well alpha">
 <?php $_orders = $this->getOrders(); ?>
-    <h2 class="table-caption"><?php echo $this->__('Recent Orders') ?><?php if( sizeof($_orders->getItems()) > 0 ): ?> <span class="separator">|</span> <a href="<?php echo $this->getUrl('sales/order/history') ?>"><?php echo $this->__('View All') ?></a><?php endif; ?></h2>
+    <h3 class="table-caption"><?php echo $this->__('Recent Orders') ?><?php if( sizeof($_orders->getItems()) > 0 ): ?> <a class="btn btn-primary pull-right" href="<?php echo $this->getUrl('sales/order/history') ?>">View All</a><?php endif; ?></h3>
+    <hr />
     <?php echo $this->getChildHtml()?>
 <?php if( sizeof($_orders->getItems()) > 0 ): ?>
     <table class="data-table table table-striped" id="my-orders-table">

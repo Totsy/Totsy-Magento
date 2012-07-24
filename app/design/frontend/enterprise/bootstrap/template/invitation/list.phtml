@@ -68,7 +68,25 @@ if ( !$rewardCollection ) {
 
 
 ?>
-
+    <ul class="nav nav-tabs" id="myTab">
+    <li class="active"><a href="#home">Home</a></li>
+    <li><a href="#profile">Profile</a></li>
+    <li><a href="#messages">Messages</a></li>
+    <li><a href="#settings">Settings</a></li>
+    </ul>
+     
+    <div class="tab-content">
+    <div class="tab-pane active" id="home">aaaaaa</div>
+    <div class="tab-pane" id="profile">ddddd</div>
+    <div class="tab-pane" id="messages">ssss</div>
+    <div class="tab-pane" id="settings">ffff</div>
+    </div>
+     
+    <script>
+    jQuery(function () {
+    jQuery('#myTab a:last').tab('show');
+    })
+    </script>
 	<div class="page-title">
 	    <h2><?php echo Mage::helper('enterprise_invitation')->__('My Invitations') ?>
 	    <span class="fr" id="generic-invitation">
