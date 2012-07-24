@@ -121,6 +121,9 @@ Default layout, loads most of the pages
         <block type="core/profiler" output="toHtml" name="core_profiler"/>
     </default>
 
+<!--
+Print layout
+-->
     <print translate="label" module="page">
         <label>All Pages (Print Version)</label>
         <!-- Mage_Page -->
