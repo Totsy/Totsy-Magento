@@ -1161,3 +1161,29 @@ body .col-left hr {
     color: #DE6076;
     font-size: 12px;
 }
+
+
+.hpcheckout-checkout-index .billing-address-select , .hpcheckout-checkout-index .shipping-address-select{
+    float: right;
+    left: 4px;
+    margin-bottom: 9px;
+    margin-right: 0;
+    position: relative;
+    width: 200px;
+}
+
+.big-div-not-found{
+	display:inline-block;
+	width: 120px;
+}
+
+.not-found-names{
+	color:#222222;
+	font-size:12px;
+}
+
+.big-div-not-found a:hover .not-found-names{
+	color:#EF1C25;
+}
+
+
