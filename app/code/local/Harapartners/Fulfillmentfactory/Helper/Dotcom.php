@@ -226,19 +226,26 @@ class Harapartners_Fulfillmentfactory_Helper_Dotcom extends Mage_Core_Helper_Abs
     /**
      * get Current Inventory
      *
-     * @return SimpleXMLElement inventory
+     * @return object stream
      */
     public function getInventory() {
         $this->_getConfig();
         $uri = self::$_apiUrl . '/inventory';
-        
-        $body = $this->_sendQueryRequest($uri);
-        if(!empty($body)) {
-            $items = $this->_readXMLString($body);
-            return $items;
+
+        try {
+            $client = new Zend_Http_Client($uri);
+
+            $header['Accept-encoding'] = 'gzip,deflate';
+            $header['Authorization'] = $this->_generateAuthHeader($uri);
+            $client->setHeaders($header);
+            $client->setStream('/tmp/dotcom-inventory.xml');
+
+            $response = $client->request();
+            return $response->getStreamName();
         }
-        
-        return false;
+        catch(Exception $e) {
+            throw new Exception('Send query to DOTcom failed: ' . $e->getMessage());
+        }
     }
     
     /**

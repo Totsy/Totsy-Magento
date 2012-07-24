@@ -26,26 +26,24 @@ class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
     public function runDotcomFulfillOrder()
     {
         try {
-            //fetch inventory data from DOTcom
-            $inventoryList = $this->updateInventory();
-            Mage::log(
-                sprintf(
-                    'Inventory Status Received for %d items.',
-                    count($inventoryList)
-                ),
-                Zend_Log::INFO,
-                'fulfillment.log'
-            );
+            // fulfill orders using available quantities
+            $this->orderFulfillment();
 
-            //update stock info
-            $service = Mage::getModel('fulfillmentfactory/service_fulfillment');
-            $service->stockUpdate($inventoryList, false);
-
-            //submit orders to fulfill
+            // submit orders to fulfill
             $this->submitOrderToFulfillByQueue();
         } catch (Exception $e) {
             Mage::log($e->getMessage(), Zend_Log::ERR, 'fulfillment.log');
         }
+    }
+
+    /**
+     * Fulfill order items from the fulfillment item queue using quantities
+     * stored locally.
+     *
+     * @return void
+     */
+    public function orderFulfillment()
+    {
     }
 
     /**
@@ -175,30 +173,53 @@ XML;
     }
 
     /**
-     * get inventory from Dotcom and run stock update
+     * Update local inventory statistics with the latest counts from Dotcom.
      *
+     * @return void
      */
-    public function updateInventory() {
-        //get data from dotcom
-        $dataXML = Mage::helper('fulfillmentfactory/dotcom')->getInventory();
+    public function updateInventory()
+    {
+        $xmlStreamName = Mage::helper('fulfillmentfactory/dotcom')
+            ->getInventory();
 
-        if(!empty($dataXML)) {
-            $inventoryList = array();
+        $reader = new XMLReader();
+        $reader->open($xmlStreamName, 'utf8');
 
-            foreach($dataXML as $item) {
-                $inventory = array();
+        $state = 'waiting';
+        $sku = -1;
+        $qty = -1;
+        while ($reader->read()) {
+            // this node is an opening <item> tag
+            if ('item' == $reader->localName &&
+                XMLReader::ELEMENT === $reader->nodeType
+            ) {
+                $state = 'item';
 
-                $qty = (int)$item->quantity_available;
+            // this node is an opening <sku> tag
+            } else if ('sku' == $reader->localName &&
+                XMLReader::ELEMENT == $reader->nodeType &&
+                'item' == $state
+            ) {
+                $sku = $reader->readString();
 
-                if($qty > 0) {
-                    $inventory['sku'] = (string)$item->sku;
-                    $inventory['qty'] = $qty;
+            // this node is an opening <quantity_available> tag
+            } else if ('quantity_available' == $reader->localName &&
+                XMLReader::ELEMENT == $reader->nodeType &&
+                'item' == $state
+            ) {
+                $qty = $reader->readString();
 
-                    $inventoryList[] = $inventory;
-                }
+            // this node is a closing <item> tag
+            } else if ('item' == $reader->localName &&
+                XMLReader::END_ELEMENT == $reader->nodeType
+            ) {
+                $state = 'waiting';
+                /* @todo update a local data store for product $sku to have quantity $qty
+                $product = Mage::getModel('catalog/product')->loadBySku($sku);
+                $product->setFulfillmentInventory($qty);
+                $product->getResource()->saveAttribute($product, 'fulfillment_inventory');
+                */
             }
-
-            return $inventoryList;
         }
     }
 
@@ -225,8 +246,7 @@ XML;
             $isReady = true;
             $itemQueueList = Mage::getModel('fulfillmentfactory/itemqueue')->getCollection()->loadByOrderId($orderId);
             foreach ($itemQueueList as $itemqueue) {
-                if(!in_array($itemqueue->getStatus(),array(Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_READY,
-                    Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_CANCELLED))) {
+                if($itemqueue->getStatus() != Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_READY) {
                     $partialReadyOrderIds[$orderId] = 1;
                     $isReady = false;
                     break;
@@ -265,36 +285,37 @@ XML;
 
         foreach($orders as $order) {
             try {
-                $continue = true;
-                if(!$capturePayment || ($order->getStatus() == Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_PAYMENT_FAILED)) {
-                    $continue = false;
-                }
+                if($capturePayment && ($order->getStatus() != Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_PAYMENT_FAILED)) {
+                    $invoices = Mage::getResourceModel('sales/order_invoice_collection')->setOrderFilter($order->getId());
+                    //only capture once
+                    if(empty($invoices) || (count($invoices) <= 0)) {
+                        //capture payment
+                        $orderPayment = $order->getPayment();
+                        if(!!$orderPayment) {
+                            $paymentInstance = $orderPayment->getMethodInstance();
+                            if(!!$paymentInstance) {
+                                $paymentInstance->setData('forced_payment_action', 
+                                                                                Mage_Payment_Model_Method_Abstract::ACTION_AUTHORIZE_CAPTURE);
+                                $paymentInstance->setData('cybersource_subid', $orderPayment->getCybersourceSubid());
+                                $orderPayment->place();
 
-                if($continue && ($order->canInvoice() === false)) {
-                    $continue = false;
-                }
+                                //update order information
+                                $order->setStatus('processing');
+                                $transactionSave = Mage::getModel('core/resource_transaction')
+                                        ->addObject($order);
 
-                if($continue && (($invoice = $order->prepareInvoice()) == false)) {
-                    $continue = false;
-                }
+                                   $transactionSave->save();
 
-                if($continue && (($invoice->register()) === false)) {
-                    $continue = false;
-                }
-
-                if($continue && $invoice->canCapture()) {
-                    $invoice->capture();
-
-                    $order->setStatus('processing');
-                    $order->setState('processing');
-
-                    $transactionSave = Mage::getModel('core/resource_transaction');
-                    $transactionSave->addObject($invoice);
-                    $transactionSave->addObject($invoice->getOrder());
-                    $transactionSave->save();
-                    if (!$invoice->getOrder()->getEmailSent()) {
-                        $invoice->sendEmail(true)
-                            ->setEmailSent(true);
+                                   //send email
+                                   $invoices = Mage::getResourceModel('sales/order_invoice_collection')->setOrderFilter($order->getId());
+                                   foreach($invoices as $invoice) {
+                                       if (!$invoice->getOrder()->getEmailSent()) {
+                                        $invoice->sendEmail(true)
+                                                ->setEmailSent(true);
+                                    }
+                                   }
+                            }
+                        }
                     }
                 }
             }
@@ -348,10 +369,10 @@ XML;
                 <ok-partial-ship xsi:nil="true"/>
                 <declared-value xsi:nil="true"/>
                 <cancel-date xsi:nil="true"/>
-                <total-tax>{$order->getTaxInvoiced()}</total-tax>
+                <total-tax>{$order->getTaxAmount()}</total-tax>
                 <total-shipping-handling>{$order->getShippingAmount()}</total-shipping-handling>
                 <total-discount xsi:nil="true"/>
-                <total-order-amount>{$order->getTotalInvoiced()}</total-order-amount>
+                <total-order-amount>{$order->getGrandTotal()}</total-order-amount>
                 <po-number xsi:nil="true"/>
                 <salesman xsi:nil="true"/>
                 <credit-card-number xsi:nil="true"/>
@@ -429,12 +450,10 @@ XML;
                     continue;
                 }
 
-                $quantity = intval($item->getQtyToShip());
+                $quantity = intval($item->getQtyOrdered());
                 $sku = substr($item->getSku(), 0, 17);
 
-                if($quantity) {
-
-                    $xml .= <<<XML
+                $xml .= <<<XML
                     <line-item>
                         <sku>$sku</sku>
                         <quantity>$quantity</quantity>
@@ -447,7 +466,6 @@ XML;
                         <gift-box-wrap-type xsi:nil="true"/>
                     </line-item>
 XML;
-                }
             }
 
             $xml .= <<<XML
@@ -547,7 +565,7 @@ XML;
             } else {
                 $itemQtyArray = array();
                 foreach ($order->getAllItems() as $item) {
-                    $itemQtyArray[$item->getData('item_id')] = (int) $item->getQtyToShip();
+                    $itemQtyArray[$item->getData('item_id')] = (int) $item->getData('qty_ordered');
                 }
 
                 $shipment = Mage::getModel('sales/service_order', $order)
