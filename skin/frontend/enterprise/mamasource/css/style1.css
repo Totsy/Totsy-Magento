@@ -1182,8 +1182,17 @@ body .col-left hr {
 	font-size:12px;
 }
 
+.big-div-not-found a{
+	color: #DE6076; 
+}
+
+.not-found-names{
+	color: #DE6076; 
+}
+
+
 .big-div-not-found a:hover .not-found-names{
-	color:#EF1C25;
+	color: #DE6076; 
 }
 
 
