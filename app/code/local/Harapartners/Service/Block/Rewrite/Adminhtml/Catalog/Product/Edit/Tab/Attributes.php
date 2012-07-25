@@ -13,7 +13,7 @@
 class Harapartners_Service_Block_Rewrite_Adminhtml_Catalog_Product_Edit_Tab_Attributes extends Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Attributes
 {
     //overwrite to disable sku textfield
-    protected function _setFieldset($attributes, $fieldset){
+    protected function _setFieldset($attributes, $fieldset, $exclude=array()){
         parent::_setFieldset($attributes, $fieldset);
         $skuElement = $fieldset->getForm()->getElement('sku');
         $product = Mage::registry('current_product');
