@@ -15,7 +15,7 @@ a:hover{color:#af0e15;text-decoration:underline;}
     height: auto !important;
     margin: 0 auto -63px;
 }
-.wrapper > .container { padding-top: 90px }
+.wrapper &gt; .container { padding-top: 90px }
 #toTop {
     background-color: #EB132C;
     border-color: #EB132C;
@@ -57,4 +57,15 @@ a:hover{color:#af0e15;text-decoration:underline;}
 .messages { display: block; padding: 10px; margin: 0px 0px 10px 0px; background-color: #ed1c25; color:#fff; }
 
 .well { background-color: #fff!important; }
-.nav .nav-header { color:#444!important; font-size: 12px!important; } 
+.nav .nav-header { color:#444!important; font-size: 12px!important; }
+.navbar {color:#EB132C!important;}
+.navbar-inner {
+    background-color: #2C2C2C;
+    background-image: -moz-linear-gradient(center top , #FFFFFF, #FFFFFF);
+    background-repeat: repeat-x;
+    border-radius: 4px 4px 4px 4px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25), 0 -1px 0 rgba(0, 0, 0, 0.1) inset;
+    min-height: 40px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
