@@ -61,9 +61,10 @@ Default layout, loads most of the pages
 
                 <action method="addJs"><script>jquery/jquery.fancybox.js</script></action>
                 <block type="page/js_cookie" name="js_cookies" template="page/js/cookie.phtml"/>
-                <action method="addItem"><type>skin_js</type><name>lib/html5shiv/src/html5shiv.js</name><params/><if>lt IE 9</if></action>
+                <action method="addItem"><type>skin_js</type><name>js/html5shiv.js</name><params/><if>lt IE 9</if></action>
 
                 <action method="addCss"><stylesheet>lib/bootstrap/bootstrap.css</stylesheet></action>
+                <action method="addCss"><stylesheet>lib/bootstrap/bootstrap-responsive.css</stylesheet></action>
                 <action method="addCss"><stylesheet>css/style.css</stylesheet></action>
                 
             </block>
@@ -114,7 +115,26 @@ Default layout, loads most of the pages
 
             <block type="core/text_list" name="before_body_end" as="before_body_end" translate="label">
                 <label>Page Bottom</label>
+                <!-- global scripts -->
+                <block type="totsy_page/html_script_footer" name="footer_scripts">
+                    <!-- bootstrap components / plugins -->
+                    <action method="addItem"><type>skin_js</type><name>js/prettify.js</name><params/></action>
+                    <action method="addItem"><type>skin_js</type><name>js/bootstrap-transition.js</name><params/></action>
+                    <action method="addItem"><type>skin_js</type><name>js/bootstrap-alert.js</name><params/></action>
+                    <action method="addItem"><type>skin_js</type><name>js/bootstrap-modal.js</name><params/></action>
+                    <action method="addItem"><type>skin_js</type><name>js/bootstrap-dropdown.js</name><params/></action>
+                    <action method="addItem"><type>skin_js</type><name>js/bootstrap-scrollspy.js</name><params/></action>
+                    <action method="addItem"><type>skin_js</type><name>js/bootstrap-tab.js</name><params/></action>
+                    <action method="addItem"><type>skin_js</type><name>js/bootstrap-tooltip.js</name><params/></action>
+                    <action method="addItem"><type>skin_js</type><name>js/bootstrap-popover.js</name><params/></action>
+                    <action method="addItem"><type>skin_js</type><name>js/bootstrap-button.js</name><params/></action>
+                    <action method="addItem"><type>skin_js</type><name>js/bootstrap-collapse.js</name><params/></action>
+                    <action method="addItem"><type>skin_js</type><name>js/bootstrap-carousel.js</name><params/></action>
+                    <action method="addItem"><type>skin_js</type><name>js/bootstrap-typeahead.js</name><params/></action>
+                    <action method="addItem"><type>skin_js</type><name>js/application.js</name><params/></action>
+                </block>
             </block>
+            
         </block>
 
         <block type="core/profiler" output="toHtml" name="core_profiler"/>
