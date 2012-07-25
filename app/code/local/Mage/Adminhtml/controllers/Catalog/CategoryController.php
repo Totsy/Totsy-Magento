@@ -536,6 +536,34 @@ class Mage_Adminhtml_Catalog_CategoryController extends Mage_Adminhtml_Controlle
 
     }
 
+   //
+    public function emailPreviewAction(){
+        
+        if ($this->getRequest()->isAjax()){
+           $emails = $this->getRequest()->getParam('email');
+           try {
+                $emails = explode(';', $emails);
+                debug($emails);
+                $category = Mage::getModel('catalog/category')->load($this->getRequest()->getParam('id'));
+                $store = Mage::app()->getStore();
+                $shortDescription = $category->getShortDescription();
+                $description = $category->getDescription();
+                $title = $category->getName();
+                $virtualProductCode = "AAAA-BBBBBB-CCCCC-TOTSY";
+                $templateId =  Mage::getModel('core/email_template')->loadByCode('_trans_Virtual_Product_Redemption')->getId();
+                foreach($emails as $email) {
+                    $email = trim($email);
+                    Mage::getModel('core/email_template')
+                        ->sendTransactional($templateId, "sales", $email, NULL, 
+                            array("virtual_product_code"=>$virtualProductCode, "store"=>$store, "title"=>$title,"description"=>$description,"short_description" => $shortDescription)); 
+                }
+            } catch (Exception $e) {
+                Mage::logException($e);
+            }  
+       }
+        die();
+    }
+
     /**
      * Check if admin has permissions to visit related pages
      *

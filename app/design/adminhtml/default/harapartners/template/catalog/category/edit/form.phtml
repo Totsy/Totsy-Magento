@@ -40,6 +40,7 @@
             <?php if($this->getCategoryId()): ?>
             		<?php echo $this->getImportProductButtonHtml();?>
                     <?php echo $this->getPreviewButtonHtml();?>
+                    <?php echo $this->getEmailPreviewButtonHtml();?>
             <?php endif; ?>
             <?php echo $this->getSaveButtonHtml() ?>
         </p>
@@ -249,6 +250,25 @@
         }
     }
 
+    function sendPreviewEmailSubmit() {
+       var reply = prompt('Which email do you want to send the preview?','Type your email');
+
+       <?php
+            $request_url = $this->getUrl('*/*/emailPreview', array('_current'=>true,'_nosid' => false));
+            /*$baseUrl = Mage::getBaseUrl();
+            $len = strlen($baseUrl);
+            $request_url = substr($request_url, $len);*/
+            debug($request_url);
+        ?>
+        var request_url = "<?php echo $request_url;?>";
+        if(reply) {
+           // reply = reply.replace('@', '%40');
+            new Ajax.Request(request_url, {parameters:{email:reply}});
+        } else {
+            alert("You didn't enter anything.");
+        }
+        
+    }
     //There is a conflict between row click and checkbox check call back
 	//Haraparters, Jun: categoryProductRowClick should apply default action (redirect to product detail page)
     <?php echo $_gridJsObject ?>.rowClickCallback = categoryProductRowClick;
