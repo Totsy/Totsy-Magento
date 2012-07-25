@@ -57,46 +57,41 @@ $rewardCollection = $this->getCreditHistory();
 //}
 
 if ( !$rewardCollection ) {
-	$rewardCollection = false;
-	$currentBalance = '0.00';
+    $rewardCollection = false;
+    $currentBalance = '0.00';
 } else {
-	foreach ( $rewardCollection as $item ){
-		$currentBalance = Mage::helper('core')->currency($item->getCurrencyAmount());
-		break; // return first item's balance which is the last record
-	}	
-}
-
-
+    foreach ( $rewardCollection as $item ){
+    $currentBalance = Mage::helper('core')->currency($item->getCurrencyAmount());
+    break; // return first item's balance which is the last record
+    }
+  }
 ?>
-    <ul class="nav nav-tabs" id="myTab">
-    <li class="active"><a href="#home">Home</a></li>
-    <li><a href="#profile">Profile</a></li>
-    <li><a href="#messages">Messages</a></li>
-    <li><a href="#settings">Settings</a></li>
-    </ul>
-     
-    <div class="tab-content">
-    <div class="tab-pane active" id="home">aaaaaa</div>
-    <div class="tab-pane" id="profile">ddddd</div>
-    <div class="tab-pane" id="messages">ssss</div>
-    <div class="tab-pane" id="settings">ffff</div>
+<div class="page-title">
+    <h2><?php echo Mage::helper('enterprise_invitation')->__('My Invitations') ?>
+    <span class="fr" id="generic-invitation">Share this link with your friends:<br/>
+    <input type="text" class="invitation-link-area" readonly="readonly" value="<?php echo Mage::helper('enterprise_invitation')->getGenericInvitationLink() ?>" />
+    </span>
+    </h2>
+</div>
+
+<ul id="myTab" class="nav nav-tabs">
+    <li class="active"><a href="#send" data-toggle="tab">Send</a></li>
+    <li><a href="#history" data-toggle="tab">Invitation </a></li>
+</ul>
+    <div id="invitationTabsContent" class="tab-content">
+        <div class="tab-pane fade in active" id="send">
+        <p>Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro keffiyeh dreamcatcher synth. Cosby sweater eu banh mi, qui irure terry richardson ex squid. Aliquip placeat salvia cillum iphone. Seitan aliquip quis cardigan american apparel, butcher voluptate nisi qui.</p>
+        </div>
+        <div class="tab-pane fade" id="history">
+        <p>Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid. Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts ullamco ad vinyl cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit. Keytar helvetica VHS salvia yr, vero magna velit sapiente labore stumptown. Vegan fanny pack odio cillum wes anderson 8-bit, sustainable jean shorts beard ut DIY ethical culpa terry richardson biodiesel. Art party scenester stumptown, tumblr butcher vero sint qui sapiente accusamus tattooed echo park.</p>
+        </div>
     </div>
-     
     <script>
     jQuery(function () {
     jQuery('#myTab a:last').tab('show');
     })
     </script>
-	<div class="page-title">
-	    <h2><?php echo Mage::helper('enterprise_invitation')->__('My Invitations') ?>
-	    <span class="fr" id="generic-invitation">
-				Share this link with your friends:<br/>
-				<input type="text" class="invitation-link-area" readonly="readonly" value="<?php echo Mage::helper('enterprise_invitation')->getGenericInvitationLink() ?>" />
-		</span>
-	    </h2>
-
-	</div>
-
+    
 <div class="tabs-nav">
 <ul class="tabs ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
 	<li class="ui-state-default ui-corner-top ui-tabs-selected">

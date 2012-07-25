@@ -30,6 +30,17 @@
  */
 ?>
 <!DOCTYPE html>
+<!-- 
+ooooooooooooo               .                        
+8'   888   `8             .o8                        
+     888       .ooooo.  .o888oo  .oooo.o oooo    ooo 
+     888      d88' `88b   888   d88(  "8  `88.  .8'  
+     888      888   888   888   `"Y88b.    `88..8'   
+     888      888   888   888 . o.  )88b    `888'    
+    o888o     `Y8bod8P'   "888" 8""888P'     .8'     
+                                         .o..P'      
+                                         `Y8P'  
+-->
 <html lang="<?php echo $this->getLang() ?>">
 <head>
 <?php echo $this->getChildHtml('head') ?>
@@ -38,15 +49,15 @@
 <?php echo $this->getChildHtml('header') ?>
 <?php echo $this->getChildHtml('after_body_start') ?>
 <div class="wrapper">
-<div class="container">
+<div class="container content_push">
     <?php echo $this->getChildHtml('global_notices') ?>
     <div class="row">
         <?php echo $this->getChildHtml('global_messages') ?>
         <?php echo $this->getChildHtml('breadcrumbsContainer') ?>
         <div class="row">
-          <?php echo $this->getChildHtml('account_title') ?>
-		</div>
-		<div class="span3"><?php echo $this->getChildHtml('left') ?></div>
+            <?php echo $this->getChildHtml('account_title') ?>
+        </div>
+        <div class="span3"><?php echo $this->getChildHtml('left') ?></div>
             <div class="span9">
                 <?php echo $this->getChildHtml('content') ?>
             </div>

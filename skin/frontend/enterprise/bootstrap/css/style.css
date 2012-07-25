@@ -1,7 +1,7 @@
 /* Additional styles for the Magento Bootstrap theme */
 html,
 body { height: 100%; background:none;}
-html { background: #f7f5f5 url(../img/paper.jpg) repeat }
+html { background: #f7f5f5 url(../img/paper.jpg) repeat fixed }
 footer {
     color: #666;
     padding: 17px 0 18px 0;
@@ -15,6 +15,7 @@ a:hover{color:#af0e15;text-decoration:underline;}
     height: auto !important;
     margin: 0 auto -63px;
 }
+.content_push { margin-top:90px; }
 .wrapper &gt; .container { padding-top: 90px }
 #toTop {
     background-color: #EB132C;
@@ -69,3 +70,10 @@ a:hover{color:#af0e15;text-decoration:underline;}
     padding-left: 20px;
     padding-right: 20px;
 }
+
+footer hr {margin:5px 0px; background: aqua;}
+
+.well {
+    box-shadow: 0 1px 3px rgba(34, 25, 25, 0.2);
+}
+.thumbnail {padding:10px;}
