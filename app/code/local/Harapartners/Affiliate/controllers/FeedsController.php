@@ -45,6 +45,14 @@ class Harapartners_Affiliate_FeedsController
             $period = 3600 * 24 * $period;
         }
 
+        // rewrite the $from and $to dates from keyade-requested formats
+        if (preg_match('/\d{6}/', $from)) {
+            $from = substr($from, 0, 4) . '-' . substr($from, 4, 2) . '-' . substr($from, 6, 2);
+        }
+        if (preg_match('/\d{6}/', $to)) {
+            $to = substr($to, 0, 4) . '-' . substr($to, 4, 2) . '-' . substr($to, 6, 2);
+        }
+
         if ($token != '7cf7e9d58a213b2ebb401517d342475e') {
             $this->getResponse()
                 ->setHeader('Content-Type', 'text/plain', true)
