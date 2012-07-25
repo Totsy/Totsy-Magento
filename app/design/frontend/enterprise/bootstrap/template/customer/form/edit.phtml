@@ -37,10 +37,11 @@ $isPasswordChange = Mage::registry('changepassword');
 </div>
 <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
 <div class="well">
-  <?php if (!$isPasswordChange):?>
-  <div id="account-info" class="span5 alpha">
-    <form action="<?php echo $this->getUrl('customer/account/editPost') ?>" method="post" id="form-validate">
+<form action="<?php echo $this->getUrl('customer/account/editPost') ?>" method="post" id="form-validate">
     <?php echo $this->getBlockHtml('formkey')?>
+      <?php if (!$isPasswordChange):?>
+  <div id="account-info" class="span5 alpha">
+
     <strong class="legend"><?php echo $this->__('Account Information') ?></strong>
     <hr />
     <?php echo $this->getLayout()->createBlock('customer/widget_name')->setObject($this->getCustomer())->toHtml() ?>
