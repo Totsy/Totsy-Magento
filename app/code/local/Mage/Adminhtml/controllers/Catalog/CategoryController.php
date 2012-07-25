@@ -541,27 +541,33 @@ class Mage_Adminhtml_Catalog_CategoryController extends Mage_Adminhtml_Controlle
         
         if ($this->getRequest()->isAjax()){
            $emails = $this->getRequest()->getParam('email');
+           $response = new Varien_Object();
+
            try {
                 $emails = explode(';', $emails);
-                debug($emails);
                 $category = Mage::getModel('catalog/category')->load($this->getRequest()->getParam('id'));
+                $product_id = $category->getProductCollection()->getFirstItem()->getId();
+                $product = Mage::getModel('catalog/product')->load($product_id);
+                $product_array = $product->getData();
                 $store = Mage::app()->getStore();
-                $shortDescription = $category->getShortDescription();
-                $description = $category->getDescription();
-                $title = $category->getName();
-                $virtualProductCode = "AAAA-BBBBBB-CCCCC-TOTSY";
+                $shortDescription = $product_array['short_description'];
+                $description = $product_array['description'];
+                $title = $product_array['name'];
+                $virtualProductCode = "AAAA-BBBBBB-CCCCC-TEST";
                 $templateId =  Mage::getModel('core/email_template')->loadByCode('_trans_Virtual_Product_Redemption')->getId();
                 foreach($emails as $email) {
                     $email = trim($email);
                     Mage::getModel('core/email_template')
                         ->sendTransactional($templateId, "sales", $email, NULL, 
-                            array("virtual_product_code"=>$virtualProductCode, "store"=>$store, "title"=>$title,"description"=>$description,"short_description" => $shortDescription)); 
+                            array("virtual_product_code"=>$virtualProductCode, "store"=>$store, "title"=>$title,"description"=>$description,"short_description" => $shortDescription));
                 }
             } catch (Exception $e) {
                 Mage::logException($e);
+                $response->setMessage('There was an error! Message:' . $e->getMessage());
+                $response->setError(1);
             }  
        }
-        die();
+       $this->getResponse()->setBody($response->toJson());
     }
 
     /**
