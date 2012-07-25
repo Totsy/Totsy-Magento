@@ -8,7 +8,18 @@ require("dev/sociablelabs/sociable_signer.php");
 if( Mage::getSingleton('customer/session')->getCustomerId() ) {
 
     $customer_id = Mage::getSingleton('customer/session')->getCustomerId();
-
+    $_tags = Array();
+        
+    if($_product->getAttributeText("departments")) {    
+        if(!is_array($_product->getAttributeText("departments"))) {
+            $_tags[] = $_product->getAttributeText("departments");
+        } else { 
+            foreach($_product->getAttributeText("departments") as $tag){
+                $_tags[] = $tag;
+            }        
+        }
+    }
+   
     $rondavu_data = array (
         "config" =>  array ( "version" => "1.2" ),
         "user" => array (
@@ -26,8 +37,7 @@ if( Mage::getSingleton('customer/session')->getCustomerId() ) {
             "id" => array( array("id" => $_product->getId(), "type" => "product" )),
             "name" => array(array("name" => $_product->getName())),
             "primary_tag" => $_product->getCategory()->name,
-            "tags" => array("product", $_category->getName(),
-                $_product->getCategory()->name, $_category->getUrl()),
+            "tags" => $_tags,
             "description"=> array(array("description" => strip_tags(html_entity_decode(str_replace(array("\r", "\n"), '', $_product->getDescription()))) )),
             "url"=> array(
                 "detail" =>
@@ -44,7 +54,7 @@ if( Mage::getSingleton('customer/session')->getCustomerId() ) {
                 "retail_price" => $_product->getFinalPrice(),
                 "sale_price" => $_product->getSaleWholesale(),
                 "currency"=> "USD"
-            )));
+            )));      
 
     // declare a path to the key
     $key_path = "dev/sociablelabs/sign_private_key";
@@ -53,7 +63,7 @@ if( Mage::getSingleton('customer/session')->getCustomerId() ) {
 ?>
 
 <script type="text/javascript">
-    socialableLabsOutput = <?php echo $socialable_labs_output ?>;
+    socialableLabsOutput = <?php echo $socialable_labs_output ?>;    
 </script>
 
 <?php echo $this->getChildHtml('sociable.footer.pixel');
