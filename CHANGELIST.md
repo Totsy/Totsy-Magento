@@ -1,6 +1,23 @@
 Totsy-Magento Release Notes
 ===========================
 
+20120725
+--------
+
+* MGN-718 #comment Fixing ESD check for virtual to be item-based
+* MGN-815 mms color changes ;
+* MGN-813 buton padding on mms
+* MGN-840 change grand total to total for legal/confusion
+* MGN-840 new sales view with cart disclaimer
+* MGN-583 adding sales order view to iphone template to remove track link
+* MGN-783 adding discover to add new cc page (will require akamai flush on production push)
+* MGN850 - Always print status in order comment section
+* Fix incompatible with  Mage_Adminhtml_Block_Widget_Form::_setFieldset()
+* Dont show voucher if payment failed on order page
+* Disable email Order Confirmation/ Voucher Email when payment failed
+* MGN-821 adding link color to 404 cells for mms
+* hide expired events at category/age landing page
+
 20120724
 --------
 
