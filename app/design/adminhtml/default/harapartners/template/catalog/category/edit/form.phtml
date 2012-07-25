@@ -251,7 +251,11 @@
     }
 
     function sendPreviewEmailSubmit() {
-       var reply = prompt('Which email do you want to send the preview?  For multiple email, separate with semicolon (;)','Type emails here...');
+        <?php
+            $admin_user_email = Mage::getSingleton('admin/session')->getUser()->getEmail();
+        ?>
+        var admin_user_email = "<?php echo $admin_user_email; ?>";
+       var reply = prompt('Which email do you want to send the preview?  For multiple email, separate with semicolon (;)',admin_user_email);
 
        <?php
             $request_url = $this->getUrl('*/*/emailPreview', array('_current'=>true,'_nosid' => false));
