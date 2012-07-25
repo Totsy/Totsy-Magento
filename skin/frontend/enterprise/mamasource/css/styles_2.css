@@ -794,6 +794,7 @@ body .my-account .fieldset h2.legend {
 
 .my-account .button span span{
 	margin:0;
+	padding:3px 10px 3px 10px;
 	font-weight:bold;
 }
 
