@@ -132,16 +132,16 @@ class Harapartners_Categoryevent_Helper_Memcache extends Mage_Core_Helper_Abstra
             $mageTimezone = Mage::getStoreConfig(Mage_Core_Model_Locale::XML_PATH_DEFAULT_TIMEZONE);
             date_default_timezone_set($mageTimezone);
             foreach ($liveCategoryInfoArray as $key=>$category){
-            	// do not show upcomign events
-            	if (isset($category['event_start_date']) && strtotime($category['event_start_date'])>time()){
-            		unset($liveCategoryInfoArray[$key]);
-            		continue;
-            	}
-            	// hide expired events
-            	if (isset($category['event_end_date']) && strtotime($category['event_end_date'])<time()){
-            		unset($liveCategoryInfoArray[$key]);
-            		continue;
-            	}
+                // do not show upcoming events
+                if (isset($category['event_start_date']) && strtotime($category['event_start_date'])>time()){
+                    unset($liveCategoryInfoArray[$key]);
+                    continue;
+                }
+                // hide expired events
+                if (isset($category['event_end_date']) && strtotime($category['event_end_date'])<time()){
+                    unset($liveCategoryInfoArray[$key]);
+                    continue;
+                }
                 if(isset($category['entity_id']) && $category['entity_id']){
                     $liveCategoryIdArray[] = $category['entity_id'];
                 }
@@ -162,6 +162,7 @@ class Harapartners_Categoryevent_Helper_Memcache extends Mage_Core_Helper_Abstra
             // Also, group products by category
             $uniqueProductIds = array();
             $categoryProductCompleteData = array();
+
             foreach($categoryProductRelations as $relation){
                 if(isset($relation['category_id']) 
                         && !!$relation['category_id']
@@ -195,13 +196,21 @@ class Harapartners_Categoryevent_Helper_Memcache extends Mage_Core_Helper_Abstra
             $attrObj = Mage::getModel('catalog/product')->getResource()->getAttribute($attributeType);
 //            $valueId = $attrObj->getSource()->getOptionId($attributeValue);
             $attrLabel = Mage::helper('catalog')->__($attrObj->getSource()->getOptionText($attributeValue));
-            
             $productCollection = Mage::getModel('catalog/product')->getCollection();
             $productCollection->getSelect()
                               ->join(
                                     array('table_rewrite'=>Mage::getSingleton('core/resource')->getTableName('core/url_rewrite')),
                                     '`table_rewrite`.`product_id` = `e`.`entity_id` AND `table_rewrite`.`store_id` = \''.$storeId.'\' AND `table_rewrite`.`is_system` = 1 AND  `table_rewrite`.`request_path` LIKE \'sales%\'',
                                     array('request_path')
+                                )
+                              ->join(
+                                    array('table_csi'=>'cataloginventory_stock_item'),
+                                    '`table_csi`.`product_id` = `e`.`entity_id` AND `table_csi`.`qty` > 0',
+                                    array('qty')
+                                )
+                              ->join(
+                                    array('table_cpei'=>'catalog_product_entity_int'),
+                                    '`table_cpei`.`entity_id` = `e`.`entity_id` AND `table_cpei`.`attribute_id` = 89 AND `table_cpei`.`value`=\'1\''
                                 )
                               ->where('`e`.`entity_id` IN(' . implode(',', $uniqueProductIds) . ')');
             $productCollection->addFieldToFilter($attributeType, array('like' => '%'.$attributeValue.'%'));
