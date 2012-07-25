@@ -30,6 +30,17 @@
  */
 ?>
 <!DOCTYPE html>
+<!-- 
+ooooooooooooo               .                        
+8'   888   `8             .o8                        
+     888       .ooooo.  .o888oo  .oooo.o oooo    ooo 
+     888      d88' `88b   888   d88(  "8  `88.  .8'  
+     888      888   888   888   `"Y88b.    `88..8'   
+     888      888   888   888 . o.  )88b    `888'    
+    o888o     `Y8bod8P'   "888" 8""888P'     .8'     
+                                         .o..P'      
+                                         `Y8P'  
+-->
 <html lang="<?php echo $this->getLang() ?>">
 <head>
 <?php echo $this->getChildHtml('head') ?>
@@ -47,25 +58,24 @@
   $currentUrlPath = $this->helper('core/url')->getCurrentUrl();
   $temp = explode('/', $currentUrlPath);
   $baseUrl = $temp[3];
-	
-	if($baseUrl=="event") {
-	    // let's put something like a promo banner on the home page
-	    /* 
-	    <!--
-	    <div id="hsn-banner" class="promo-banner">
-	        <a href="/brands/hsn" title="HSN"><img src="/skin/frontend/enterprise/harapartners/images/brands/hsn/hsn-banner.png" alt="HSN" /></a>
-	    </div>
-	    -->
-	    */
-	} 
+  if($baseUrl=="event") {
+  // let's put something like a promo banner on the home page
+  /* 
+  <!--
+  <div id="hsn-banner" class="promo-banner">
+  <a href="/brands/hsn" title="HSN"><img src="/skin/frontend/enterprise/harapartners/images/brands/hsn/hsn-banner.png" alt="HSN" /></a>
+  </div>
+  -->
+  */
+} 
 ?>
-        <?php echo $this->getChildHtml('content') ?>
-        </div>
-        <div class="push"><!--//--></div>
-        </div>
-        <?php echo $this->getChildHtml('footer_before') ?>
-        <?php echo $this->getChildHtml('footer') ?>
-        <?php echo $this->getChildHtml('before_body_end') ?>
+    <?php echo $this->getChildHtml('content') ?>
+    </div>
+    <div class="push"><!--//--></div>
+    </div>
+    <?php echo $this->getChildHtml('footer_before') ?>
+    <?php echo $this->getChildHtml('footer') ?>
+    <?php echo $this->getChildHtml('before_body_end') ?>
 </div>
 <?php //echo $this->getAbsoluteFooter() ?>
 </body>
