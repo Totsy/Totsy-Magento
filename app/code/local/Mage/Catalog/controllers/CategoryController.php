@@ -129,9 +129,13 @@ class Mage_Catalog_CategoryController extends Mage_Core_Controller_Front_Action
 
             $event_startdate = $category->getEventStartDate();
             $event_startdate = date("m/d/Y H:i:s", strtotime($event_startdate));
-            $event_startdate = Mage::app()->getLocale()->date($event_startdate, null, null, true);
+            $event_startdate = Mage::app()->getLocale()->date($event_startdate, null, null, false);
             $today = Mage::app()->getLocale()->date(null, null, null, true);
-            if($category->getProductCount() == 1 && $today->isLater($event_startdate)) {
+
+            $preview = Mage::registry('admin_preview_mode');
+            debug($today->toString());
+            debug($event_startdate->toString());
+            if(($category->getProductCount() == 1 && $today->isLater($event_startdate)) && !$preview) {
                 $productId = $category->getProductCollection()->getFirstItem()->getId();
                 $product = Mage::getModel('catalog/product')->load($productId); 
                 $product_url = $category->getUrlKey() . "/" . $product->getUrlKey() . ".html";
