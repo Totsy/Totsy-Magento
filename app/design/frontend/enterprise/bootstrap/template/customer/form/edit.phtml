@@ -29,11 +29,16 @@ $isPasswordChange = Mage::registry('changepassword');
 
 ?>
 <div class="page-header">
-    <h2><?php echo $this->__('My Account') ?></h2>
+    <?php if (!$isPasswordChange):?>
+    <h2><?php echo $this->__('Account Information') ?></h2>
+    <?php else : ?>
+    <h2><?php echo $this->__('Change Password') ?></h2>
+    <?php endif; ?>
 </div>
 <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
 <div class="well">
-  <div id="account-info">
+  <?php if (!$isPasswordChange):?>
+  <div id="account-info" class="span5 alpha">
     <form action="<?php echo $this->getUrl('customer/account/editPost') ?>" method="post" id="form-validate">
     <?php echo $this->getBlockHtml('formkey')?>
     <strong class="legend"><?php echo $this->__('Account Information') ?></strong>
@@ -44,20 +49,21 @@ $isPasswordChange = Mage::registry('changepassword');
     <?php $_dob = $this->getLayout()->createBlock('customer/widget_dob') ?>
     <?php if ($_dob->isEnabled()): ?>
     <?php echo $_dob->setDate($this->getCustomer()->getDob())->toHtml() ?>
-    <?php endif ?>
+    <?php endif; ?>
     <?php $_taxvat = $this->getLayout()->createBlock('customer/widget_taxvat') ?>
     <?php if ($_taxvat->isEnabled()): ?>
     <?php echo $_taxvat->setTaxvat($this->getCustomer()->getTaxvat())->toHtml() ?>
-    <?php endif ?>
+    <?php endif; ?>
     <?php $_gender = $this->getLayout()->createBlock('customer/widget_gender') ?>
     <?php if ($_gender->isEnabled()): ?>
     <?php echo $_gender->setGender($this->getCustomer()->getGender())->toHtml() ?>
-    <?php endif ?>
-    <?php if ($isPasswordChange):?>
-    <?php endif ?>
+    <?php endif; ?>
 </div>
+    <?php endif; ?>
+
+
     <?php if($isPasswordChange): ?>
-    <div id="password-info">
+    <div id="password-info" class="span5 alpha">
     <strong class="legend"><?php echo $this->__('Change Password') ?></strong>
     <hr />
     <input type="hidden" name="change_password" id="change_password" value="1" />
@@ -69,13 +75,10 @@ $isPasswordChange = Mage::registry('changepassword');
     <input type="password" title="<?php echo $this->__('Confirm New Password') ?>" class="input-text validate-cpassword" name="confirmation" id="confirmation" />
     </div>
     <?php endif; ?>
-    <div class="form-actions">
-        <button type="submit" class="btn btn-primary">Save</button>
-    </div>
-</form>
+
     <?php if ( Mage::helper('inchoo_facebook')->isFacebookCustomer($customer) ):?>
-    <div id="facebook-info">
-    <h2 class="legend"><?php echo $this->__("You're Connected With Totsy");?></h2>
+    <div id="facebook-info" class="span3">
+    <h4 class="legend"><?php echo $this->__("You're Connected With Totsy");?></h4>
     <hr />
     <?php 
         $facebookUid = $customer->getFacebookUid();
@@ -85,13 +88,21 @@ $isPasswordChange = Mage::registry('changepassword');
     <?php if (!empty($resultArray)):?>
     <img id="facebook-photo" src="https://graph.facebook.com/<?php echo $resultArray['id']?>/picture"/>
     <p id="facebook-name"><?php echo $resultArray['name']?></p>
-    <?php else :?>
+    <?php else : ?>
     <p class="error"><?php $this->__('Can not get your information from Facebook.')?></p>
     <?php endif;?>
-    </div>
+
     <?php endif;?>
   </div>
+  
+    <div class="span9 alpha">
+        <button type="submit" class="btn btn-primary">Save</button>
+    </div>
+    
+    <div class="clear"></div>
+    </form>
 </div>
+
 <script type="text/javascript">
 //<![CDATA[
     var dataForm = new VarienForm('form-validate', true);

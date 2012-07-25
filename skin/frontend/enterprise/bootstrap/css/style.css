@@ -41,7 +41,7 @@ a:hover{color:#af0e15;text-decoration:underline;}
 /* 960.gs Grid Reset Classes. */
 .alpha { margin-left: 0 }
 .omega { margin-right: 0 }
-
+.clear { clear:both; }
 .inset {
     border-radius: 8px 8px 8px 8px;
     box-shadow: 0 1px 2px rgba(50, 50, 50, 0.5) inset;
@@ -59,7 +59,15 @@ a:hover{color:#af0e15;text-decoration:underline;}
 
 .well { background-color: #fff!important; }
 .nav .nav-header { color:#444!important; font-size: 12px!important; }
-.navbar {color:#EB132C!important;}
+.navbar a: link, a:hover {color:#ed1c25!important;}
+.navbar .divider-vertical {
+    background-color: #FFFFFF;
+    border-right: 1px solid #FFFFFF;
+    height: 70px;
+    margin: 0 9px;
+    overflow: hidden;
+    width: 1px;
+}
 .navbar-inner {
     background-color: #2C2C2C;
     background-image: -moz-linear-gradient(center top , #FFFFFF, #FFFFFF);
@@ -71,7 +79,7 @@ a:hover{color:#af0e15;text-decoration:underline;}
     padding-right: 20px;
 }
 
-footer hr {margin:5px 0px; background: aqua;}
+footer hr {margin:5px 0px; }
 
 .well {
     box-shadow: 0 1px 3px rgba(34, 25, 25, 0.2);
