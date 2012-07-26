@@ -58,59 +58,59 @@ shpn='<?php echo $topNavDataObject->getData('attr_text_label'); ?>'
     <div class="category-products">
     <ul class="products-grid thumbnails">
         <?php $j=0; ?>
-			<?php $nonSalableArray = array();?>
-			<?php $i=0; foreach ($category['product_list'] as $_product): ?>
-				<?php if (empty($_product['url_path']) || !preg_match('/sales/',$_product['url_path'])){
-					$_product['url_path'] = $_product['request_path'];
-				}?>
-				<?php if ($_product['is_salable']==1): ?>
-				<li class="span2">
-		        	<div class="thumbnail">
-		        	<ul class="echoShare" 
-					data-productname="<?php echo $_product['name'];?>"  
-					data-productcap="" 
-					data-productdesc="<?php echo $_product['description'];?>" 
-					data-imageclass=""  
-					sdata-producturl="<?php echo $_product['url_path']; ?>">
-					</ul>
-					
-					<a href="<?php echo Mage::getBaseUrl().$_product['url_path']; ?>" title="<?php echo $_product['name']; ?>" class="product-image"><img src="<?php echo $_product['small_image']; ?>" width="148" alt="<?php echo $_product['name']; ?>" /></a>
-						<a class="item-details" href="<?php echo Mage::getBaseUrl().$_product['url_path'] ?>" title="<?php echo $_product['name']; ?>">
-							<h5 class="product-name">
-								<?php echo $_product['name']; ?>
-							</h5>
-							<?php //echo $this->getPriceHtml($_product, true) ?>
-							<div class="price-box">
-								<span class="regular-price" id="product-price-<?php echo $_product['entity_id']; ?>">
-								<?php $price = (isset($_product['special_price']))?$_product['special_price']:$_product['price']?>
-									<span class="price">$<?php echo number_format($price,2,'.',''); ?></span>
-								</span>
-							</div>
-						</a>
-						</div>
-				</li>
-				</li>
-				<?php 
-					$i++; 
-					$j = $i;
-					if ($i==6){
-						break;
-					}
-				?>
-				<?php else:?>
-				<?php $nonSalableArray[] = $_product;?>
-				<?php endif; ?>
-			<?php endforeach; ?>
-			</div>
-			<li class="item last btn viewAllEvents">
-				<a href="<?php echo Mage::getBaseUrl().$category['category_info']['url_path']; ?>">
-					<img src="<?php echo $this->getSkinUrl()?>images/btn-viewevents-bug.png" />
-				</a>
-			</li>
-		</ul>
+        <?php $nonSalableArray = array();?>
+        <?php $i=0; foreach ($category['product_list'] as $_product): ?>
+        <?php if (empty($_product['url_path']) || !preg_match('/sales/',$_product['url_path'])){
+            $_product['url_path'] = $_product['request_path'];
+        } 
+        ?>
+        <?php if ($_product['is_salable']==1): ?>
+        <li class="span2">
+        <div class="thumbnail">
+            <ul class="echoShare" 
+            data-productname="<?php echo $_product['name'];?>" 
+            data-productcap="" 
+            data-productdesc="<?php echo $_product['description'];?>" 
+            data-imageclass=""  
+            data-producturl="<?php echo $_product['url_path']; ?>">
+        </ul>
+        <a href="<?php echo Mage::getBaseUrl().$_product['url_path']; ?>" title="<?php echo $_product['name']; ?>" class="product-image"><img src="<?php echo $_product['small_image']; ?>" width="148" alt="<?php echo $_product['name']; ?>" /></a>
+        <a class="item-details" href="<?php echo Mage::getBaseUrl().$_product['url_path'] ?>" title="<?php echo $_product['name']; ?>">
+        <h5 class="product-name">
+            <?php echo $_product['name']; ?>
+        </h5>
+        <?php //echo $this->getPriceHtml($_product, true) ?>
+        <div class="price-box">
+        <span class="regular-price" id="product-price-<?php echo $_product['entity_id']; ?>">
+        <?php $price = (isset($_product['special_price']))?$_product['special_price']:$_product['price']?>
+        <span class="price">$<?php echo number_format($price,2,'.',''); ?></span>
+        </span>
+        </div>
+        </a>
+        </div>
+        </li>
+        </li>
+        <?php 
+            $i++; 
+            $j = $i;
+                if ($i==6){
+            break;
+            }
+        ?>
+        <?php else: ?>
+        <?php $nonSalableArray[] = $_product;?>
+        <?php endif; ?>
+        <?php endforeach; ?>
+    </div>
+    <li class="item last btn viewAllEvents">
+        <a href="<?php echo Mage::getBaseUrl().$category['category_info']['url_path']; ?>">
+        <img src="<?php echo $this->getSkinUrl()?>images/btn-viewevents-bug.png" />
+        </a>
+    </li>
+</ul>
 
-			<script type="text/javascript">decorateGeneric($$('ul.products-grid'), ['odd','even','first','last'])</script>
-			<div class="vuall pull-right">View all items from <a href="<?php echo Mage::getBaseUrl().$category['category_info']['url_path']; ?>"><?php echo $category['category_info']['name']; ?></a></div>
-		</div>
+<script type="text/javascript">decorateGeneric($$('ul.products-grid'), ['odd','even','first','last'])</script>
+<div class="vuall pull-right">View all items from <a href="<?php echo Mage::getBaseUrl().$category['category_info']['url_path']; ?>"><?php echo $category['category_info']['name']; ?></a></div>
+</div>
 </div>
 <?php endforeach ?>
