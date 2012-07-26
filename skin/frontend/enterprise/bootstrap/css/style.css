@@ -6,17 +6,14 @@ footer {
     color: #666;
     padding: 17px 0 18px 0;
 }
-
-a{color:#ed1c25;text-decoration:none;}
-a:hover{color:#af0e15;text-decoration:underline;}
-
+a {color:#ed1c25;text-decoration:none;}
+a:hover{color:#ed1c25;text-decoration:underline;}
 .wrapper {
     min-height: 100%;
     height: auto !important;
     margin: 0 auto -63px;
 }
 .content_push { margin-top:115px; }
-.wrapper &gt; .container { padding-top: 90px }
 #toTop {
     background-color: #EB132C;
     border-color: #EB132C;
@@ -53,25 +50,20 @@ a:hover{color:#af0e15;text-decoration:underline;}
     position: absolute;
     top: 0;
 }
-
 .messages li, ul { list-style: none; }
 .messages { display: block; padding: 10px; margin: 0px 0px 10px 0px; background-color: #ed1c25; color:#fff; }
-
 .well { background-color: #fff!important; }
 .navLinks {padding-top: 21px;}
-.nav .nav-header { color:#ed1c25!important; font-size: 12px!important; }
-.navbar a:link, a:hover {color:#ed1c25!important;}
 .navbar .divider-vertical {
     background-color: #FFFFFF;
     border-right: 1px solid #FFFFFF;
     height: 70px;
     margin: 0 9px;
     overflow: hidden;
-    width: 1px;
 }
 .brand {margin-top:10px;}
 .navbar-inner {
-    background-color: #2C2C2C;
+    background-color: #fff;
     background-image: -moz-linear-gradient(center top , #FFFFFF, #FFFFFF);
     background-repeat: repeat-x;
     border-radius: 4px 4px 4px 4px;
@@ -80,13 +72,11 @@ a:hover{color:#af0e15;text-decoration:underline;}
     padding-left: 20px;
     padding-right: 20px;
 }
-
-footer {margin-top:45px;}
-footer hr {margin:5px 0px; }
+footer { margin-top:45px;}
+footer hr { margin:5px 0px; }
 footer p, img {
     color: #777777;
     font-size: 10px;
-    padding: 4px;
 }
 
 .well {
@@ -94,3 +84,4 @@ footer p, img {
 }
 .thumbnail {padding:10px;}
 .page-header {border-bottom: 4px solid #E5E5E5; margin:18px 0;}
+.zoomImage { padding:10px; z-imdex:500!important; }

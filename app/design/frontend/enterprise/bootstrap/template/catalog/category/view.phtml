@@ -65,115 +65,116 @@
 	
 ?>
 <section id="pageheader" class="jumbotron subhead">
-  <div class="page-header subnav">
-  <?php if ( !$upComingFlag ):?>
-		<h1><a href="<?php echo $this->getUrl('event/?ref=todays_sales') ?>">Today's Sales</a><span> / <span><?php echo $_helper->categoryAttribute($_category, $_category->getName(), 'name') ?><small class="pull-right"><p class="count-down-timer" id="time-<?php echo $timer ?>"></p></small></h1>
-	<?php else :?>
-		<h1><a href="/event#event-upcoming">Upcoming Sales</a><span> / <span><?php echo $_helper->categoryAttribute($_category, $_category->getName(), 'name') ?><small class="pull-right"><p class="count-down-timer" id="time-<?php echo $timer ?>"></p></small></h1>
-	<?php endif;?>
-	<script type="text/javascript">
-			if(<?php echo $upComingFlag?>){
-				var html = getTimerHtml('upcoming','<?php echo $timecount ?>');
-			}else {
-				var html = getTimerHtml('live','<?php echo $timecount ?>');
-			}
-			jQuery("#time-<?php echo $timer ?>").countdown({
-				//date: "12 10, 2011 16:11", //Counting TO a date
-				date: "<?php echo $timecount; ?>", //Counting TO a date
-				htmlTemplate: html,
-				onComplete: function( event ){										
-					jQuery(this).html("Completed");
-				},
-				leadingZero: true,
-				direction: "down"
-			});
-		</script>
-  </div>
+    <div class="page-header subnav">
+        <?php if (!$upComingFlag): ?>
+        <h2><a href="<?php echo $this->getUrl('event/?ref=todays_sales') ?>">Today's Sales</a><span> / <span><?php echo $_helper->categoryAttribute($_category, $_category->getName(), 'name') ?><small class="pull-right"><p class="count-down-timer" id="time-<?php echo $timer ?>"></p></small>
+        </h2>
+        <?php else :?>
+        <h2><a href="/event#event-upcoming">Upcoming Sales</a><span> / <span><?php echo $_helper->categoryAttribute($_category, $_category->getName(), 'name') ?><small class="pull-right"><p class="count-down-timer" id="time-<?php echo $timer ?>"></p></small>
+        </h2>
+        <?php endif;?>
+        <script type="text/javascript">
+            if(<?php echo $upComingFlag?>){
+                var html = getTimerHtml('upcoming','<?php echo $timecount ?>');
+            } else {
+                var html = getTimerHtml('live','<?php echo $timecount ?>');
+            }
+            jQuery("#time-<?php echo $timer ?>").countdown({
+                //date: "12 10, 2011 16:11", //Counting TO a date
+                date: "<?php echo $timecount; ?>", //Counting TO a date
+                htmlTemplate: html,
+                onComplete: function( event ){
+                    jQuery(this).html("Completed");
+                },
+                leadingZero: true,
+                direction: "down"
+            });
+        </script>
+    </div>
 </section>
-<?php echo $this->getMessagesBlock()->toHtml() ?>
-
-<div class="well">
-
-	    <?php if($_imgUrl): ?>
-	    	<div class="span3 alpha omega">
-	        	<?php echo $_imgHtml ?>
-	        </div>
-	    <?php endif; ?>
-	    <?php if($_description=$this->getCurrentCategory()->getDescription()): ?>
-	        <div class="span8">
-	            <?php echo $_helper->categoryAttribute($_category, $_description, 'description') ?>
-	        </div>
-	    <?php endif; ?>
-		<div class="row">
-			<div id="st_sharethis_custom">
-				<div class="st_sharethis_custom"></div>
-			</div>
-		</div>
-</div>
-		<?php 
-			$depts = $_category->getDepartments();
-			$_attributes = array();
-			$_attributes = explode(',',$depts);
-			$allowAttrArray = array('boys','girls','moms_dads');
-		?>
-		<div class="options-container-big pull-right">	
-			<fieldset id="product-options-wrapper" class="product-options">	
-				<dl>
-			        <dd>
-			            <div class="input-box">
-			            	<span style="-moz-user-select: none;" id="activechange"><?php echo $this->__('All') ?></span>
-			                <select name="departments" id="attribute" onchange="showProductWithAttributeNum(document.getElementById('attribute').value);" class="required-entry">
-			                	<option value="all"><?php echo $this->__('All') ?></option>
-			                	<?php foreach($_attributes as $_attribute): ?>
-			                		<?php if (in_array($_attribute,$allowAttrArray)): ?>
-				                	<?php 	
-				                			$productAttrOption = Mage::getModel('catalog/product')->getResource()->getAttribute('departments');
-				                			$value = $productAttrOption->getSource()->getOptionId($_attribute);
-				                			$categoryAttrOption = Mage::getModel('catalog/category')->getResource()->getAttribute('departments');
-				                			$label = $categoryAttrOption->getSource()->getOptionText($_attribute);
-			                		?>
-			                		<option value="<?php echo $value; ?>"><?php echo $label ?></option>
-			                		<?php endif;?>
-			                	<?php endforeach;?>
-			                </select>
-			            </div>
-			        </dd>
-				</dl>
-			</fieldset>
-			
-			<script type="text/javascript">
-	        	jQuery(document).ready(function(){
-		        	var selector_span = "#activechange";
-		        	var selector_select = "#attribute";
-					jQuery(selector_select).change(function(){
-							var temphtml = jQuery(this).html();
-							var test = jQuery(this).find("option:selected").text();
-							jQuery(selector_span).html(test);
-							if( jQuery(this).val() == ''){
-								jQuery("button.btn-cart").css("background-color","#AAAAAA");
-							}else {
-								jQuery("button.btn-cart").css("background-color","#ED1C25");
-							}
-						});
-	
-	            })
-	        </script>
-		</div>
-</div>
-	<?php echo $this->getProductListHtml() ?>
-	
-</div>
-
-<script>
-	function showProductWithAttributeNum(valueNum){
-		if (valueNum == 'all'){
-			jQuery('.products-grid li').show();
-		}else{
-			var position = '.products-grid li.'+valueNum;
-			jQuery('.products-grid li').hide();
-			jQuery(position).show();
-		}
-	}
+    
+    <?php echo $this->getMessagesBlock()->toHtml() ?>
+    
+    <div class="well">
+        <?php if($_imgUrl): ?>
+            <div class="span3 alpha omega">
+                <?php echo $_imgHtml ?>
+            </div>
+            <?php endif; ?>
+            <?php if($_description=$this->getCurrentCategory()->getDescription()): ?>
+            <div class="span8">
+                <?php echo $_helper->categoryAttribute($_category, $_description, 'description') ?>
+            </div>
+            <?php endif; ?>
+            <div class="row">
+                <div id="st_sharethis_custom">
+                    <div class="st_sharethis_custom"></div>
+                </div>
+            </div>
+    </div>
+        <?php
+            $depts = $_category->getDepartments();
+            $_attributes = array();
+            $_attributes = explode(',',$depts);
+            $allowAttrArray = array('boys','girls','moms_dads');
+        ?>
+        <div class="options-container-big pull-right">
+            <fieldset id="product-options-wrapper" class="product-options">
+                <dl>
+                    <dd>
+                        <div class="input-box">
+                            <span style="-moz-user-select: none;" id="activechange"><?php echo $this->__('All') ?></span>
+                            <select name="departments" id="attribute" onchange="showProductWithAttributeNum(document.getElementById('attribute').value);" class="required-entry">
+                                <option value="all"><?php echo $this->__('All') ?></option>
+                                <?php foreach($_attributes as $_attribute): ?>
+                                <?php if (in_array($_attribute,$allowAttrArray)): ?>
+                                <?php
+                                    $productAttrOption = Mage::getModel('catalog/product')->getResource()->getAttribute('departments');
+                                    $value = $productAttrOption->getSource()->getOptionId($_attribute);
+                                    $categoryAttrOption = Mage::getModel('catalog/category')->getResource()->getAttribute('departments');
+                                    $label = $categoryAttrOption->getSource()->getOptionText($_attribute);
+                                ?>
+                                <option value="<?php echo $value; ?>"><?php echo $label ?></option>
+                                <?php endif;?>
+                                <?php endforeach;?>
+                            </select>
+                        </div>
+                    </dd>
+                </dl>
+            </fieldset>
+            <script type="text/javascript">
+                jQuery(document).ready(function(){
+                    var selector_span = "#activechange";
+                    var selector_select = "#attribute";
+                        jQuery(selector_select).change(function(){
+                            var temphtml = jQuery(this).html();
+                            var test = jQuery(this).find("option:selected").text();
+                                jQuery(selector_span).html(test);
+                            if (jQuery(this).val() == ''){
+                            jQuery("button.btn-cart").css("background-color","#AAAAAA");
+                            } else {
+                            jQuery("button.btn-cart").css("background-color","#ED1C25");
+                        }
+                    });
+                })
+            </script>
+        </div>
+    </div>
+    
+    <?php echo $this->getProductListHtml() ?>
+    
+    </div>
+    
+    <script>
+    function showProductWithAttributeNum(valueNum){
+        if (valueNum == 'all'){
+            jQuery('.products-grid li').show();
+        } else{
+        var position = '.products-grid li.'+valueNum;
+            jQuery('.products-grid li').hide();
+            jQuery(position).show();
+        }
+    }
 	/*  The older version was obsolete because of the bug of click event to option in Chrome
 		jQuery(document).ready(function(){
 		jQuery('#attribute option').click(function(){
@@ -192,11 +193,11 @@
 <script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
 <script type="text/javascript">stLight.options({publisher: "fa9539d4-b1db-40d3-9e2d-9e9a8dc98b42",onhover: false}); </script>
 <script>
-	stWidget.addEntry({
+    stWidget.addEntry({
         "service":"sharethis",
         "element":document.getElementById('st_sharethis_custom'),
         "url":"<?php echo $this->helper('core/url')->getCurrentUrl();?>",
         "title":"Totsy",
         "image":"<?php echo $_imgUrl; ?>"
-	});
+    });
 </script>

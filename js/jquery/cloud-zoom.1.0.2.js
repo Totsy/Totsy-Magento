@@ -347,7 +347,7 @@
                 // Wrap an outer div around the link so we can attach things without them becoming part of the link.
                 // But not if wrap already exists.
                 if ($(this).parent().attr('id') != 'wrap') {
-                    $(this).wrap('<div id="wrap" style="top:0px;z-index:9999;position:relative;"></div>');
+                    $(this).wrap('<div id="wrap" style="top:0px;z-index:500;position:relative;"></div>');
                 }
                 opts = $.extend({}, $.fn.CloudZoom.defaults, options);
                 opts = $.extend({}, opts, relOpts);

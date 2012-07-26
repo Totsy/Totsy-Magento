@@ -29,8 +29,8 @@
  * @see Mage_Core_Block_Template
  */
 ?>
-<div class="page-title">
-    <h1><?php echo Mage::helper('enterprise_invitation')->__('Send Invitations') ?></h1>
+<div class="page-header">
+    <h2><?php echo Mage::helper('enterprise_invitation')->__('Send Invitations') ?></h2>
 </div>
 <div id="messages"><?php echo $this->getMessagesBlock()->getGroupedHtml() ?></div>
 <?php echo $this->getChildHtml('form_before')?>
@@ -60,7 +60,7 @@
    <p class="required"><?php echo Mage::helper('enterprise_invitation')->__('* Required Fields') ?></p>
     <div class="buttons-set form-buttons">
         <p class="back-link"><a href="<?php echo Mage::helper('enterprise_invitation')->getCustomerInvitationUrl() ?>"><small>&laquo; </small><?php  echo Mage::helper('enterprise_invitation')->__('Back to Invitations') ?></a></p>
-        <button class="button" type="submit"><span><span><?php echo Mage::helper('enterprise_invitation')->__('Send Invitations') ?></span></span></button>
+        <button class="button btn btn-primary" type="submit"><span><span><?php echo Mage::helper('enterprise_invitation')->__('Send Invitations') ?></span></span></button>
     </div>
 
 </form>
