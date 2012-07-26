@@ -133,8 +133,6 @@ class Mage_Catalog_CategoryController extends Mage_Core_Controller_Front_Action
             $today = Mage::app()->getLocale()->date(null, null, null, true);
 
             $preview = Mage::registry('admin_preview_mode');
-            debug($today->toString());
-            debug($event_startdate->toString());
             if(($category->getProductCount() == 1 && $today->isLater($event_startdate)) && !$preview) {
                 $productId = $category->getProductCollection()->getFirstItem()->getId();
                 $product = Mage::getModel('catalog/product')->load($productId); 
