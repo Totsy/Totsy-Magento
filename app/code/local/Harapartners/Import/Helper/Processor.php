@@ -110,6 +110,21 @@ class Harapartners_Import_Helper_Processor extends Mage_Core_Helper_Abstract {
                             continue;    
                         }
                         $importData = $batchImportModel->getBatchData();
+                        // Check for failed import
+                        if (!$importData) {
+                            // Get batch data fails when trying to unserialize the broken array string so we have to get the serialized data
+                            $importData = $batchImportModel->getBatchDataSerialized();
+
+                            if ($importData)
+                                // Use some shody string manipulation to get the column description and broken string
+                                throw new Exception(
+                                    'Row #'.$row.' failed to import, the '
+                                    .substr(strrchr(substr($importData, 0, strrpos($importData,';')-1),'"'),1)
+                                    .' column has a special character after "'.substr(strrchr($importData,'"'),1).'"'
+                                );
+                            else
+                                throw new Exception('Row #'.$row.' failed to import');
+                        }
                         $this->_cleanImportDataArray[$row] = $this->_importDataCleaning($importData, $importObject, $row);
                         $row++;
                     }
@@ -166,13 +181,6 @@ class Harapartners_Import_Helper_Processor extends Mage_Core_Helper_Abstract {
     // ===== Data Cleaning ============================================== //
     // ================================================================== //
     protected function _importDataCleaning($importData, $importObject, $row){
-
-        // Check for failed import
-        if (!$importData) {
-            throw new Exception('Row #'.$row.' failed to import, please check for special characters.');
-            return $importData;
-        }
-        //echo count($importData); var_dump($importData); exit;
     
         // ----- Data from Import Form ----- //
         if(!$importObject->getData('vendor_id') || !$importObject->getData('vendor_code')){
