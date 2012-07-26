@@ -58,7 +58,8 @@ class Harapartners_Customertracking_Block_Pixel
             $cookie = Mage::app()->getCookie();
             $key = Harapartners_Customertracking_Helper_Data::COOKIE_CUSTOMER_WELCOME;
             if ($cookie->get($key)) {
-                $htmlPixel .= $trackingCodes[Harapartners_Affiliate_Helper_Data::PAGE_NAME_AFTER_CUSTOMER_REGISTER_SUCCESS];
+                $idx = Harapartners_Affiliate_Helper_Data::PAGE_NAME_AFTER_CUSTOMER_REGISTER_SUCCESS;
+                $htmlPixel .= $trackingCodes[$idx];
                 $cookie->delete($key);
             }
 
@@ -78,6 +79,7 @@ class Harapartners_Customertracking_Block_Pixel
         $regParams = json_decode($trackingInfo['registration_param'], true);
 
         $order = Mage::getModel('sales/order')->load($orderId);
+        $order->getCommission();
 
         return preg_replace_callback(
             '/{{[\w.]+}}/',
