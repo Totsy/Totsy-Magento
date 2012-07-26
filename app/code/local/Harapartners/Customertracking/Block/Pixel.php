@@ -86,6 +86,8 @@ class Harapartners_Customertracking_Block_Pixel
             function($matches) use ($customer, $order, $regParams) {
                 $parts = explode('.', substr($matches[0], 2, -2));
 
+                $customPixels = Mage::helper('customertracking/customPixel');
+
                 if (2 == count($parts)) {
                     list($modelType, $field) = $parts;
                     switch ($modelType) {
@@ -97,6 +99,11 @@ class Harapartners_Customertracking_Block_Pixel
                             break;
                         case 'regparam':
                             return $regParams[$field];
+                            break;
+                        case 'custom':
+                            if (method_exists($customPixels, $field)) {
+                                return $customPixels->$field();
+                            }
                             break;
                     }
 
