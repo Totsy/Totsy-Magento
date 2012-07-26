@@ -15,7 +15,7 @@ a:hover{color:#af0e15;text-decoration:underline;}
     height: auto !important;
     margin: 0 auto -63px;
 }
-.content_push { margin-top:90px; }
+.content_push { margin-top:115px; }
 .wrapper &gt; .container { padding-top: 90px }
 #toTop {
     background-color: #EB132C;
@@ -58,8 +58,9 @@ a:hover{color:#af0e15;text-decoration:underline;}
 .messages { display: block; padding: 10px; margin: 0px 0px 10px 0px; background-color: #ed1c25; color:#fff; }
 
 .well { background-color: #fff!important; }
-.nav .nav-header { color:#444!important; font-size: 12px!important; }
-.navbar a: link, a:hover {color:#ed1c25!important;}
+.navLinks {padding-top: 21px;}
+.nav .nav-header { color:#ed1c25!important; font-size: 12px!important; }
+.navbar a:link, a:hover {color:#ed1c25!important;}
 .navbar .divider-vertical {
     background-color: #FFFFFF;
     border-right: 1px solid #FFFFFF;
@@ -68,6 +69,7 @@ a:hover{color:#af0e15;text-decoration:underline;}
     overflow: hidden;
     width: 1px;
 }
+.brand {margin-top:10px;}
 .navbar-inner {
     background-color: #2C2C2C;
     background-image: -moz-linear-gradient(center top , #FFFFFF, #FFFFFF);
@@ -79,9 +81,16 @@ a:hover{color:#af0e15;text-decoration:underline;}
     padding-right: 20px;
 }
 
+footer {margin-top:45px;}
 footer hr {margin:5px 0px; }
+footer p, img {
+    color: #777777;
+    font-size: 10px;
+    padding: 4px;
+}
 
 .well {
     box-shadow: 0 1px 3px rgba(34, 25, 25, 0.2);
 }
 .thumbnail {padding:10px;}
+.page-header {border-bottom: 4px solid #E5E5E5; margin:18px 0;}
