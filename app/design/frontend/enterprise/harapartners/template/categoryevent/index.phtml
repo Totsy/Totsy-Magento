@@ -42,6 +42,9 @@
         $upcomingArray = $indexDataObj->getData('upcoming');
     }
 ?>
+
+<?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('home_banner')->toHtml();?>
+
 <div class="catalog-events-container">
     <div class="live-events-container">
         <h1 class="event-collection-title">Today's Sales</h1>
