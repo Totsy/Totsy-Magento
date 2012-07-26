@@ -69,6 +69,8 @@ TRACKING_CODE_HTML;
     {
         $rowHtml = '<div class="tracking_code_row" style="margin-top: 10px">';
         $rowHtml .= $this->getSelectDropdown($currentCode, $index);
+        $rowHtml .= '<button class="scalable delete" onclick="jQuery(this).parent().remove();" type="button">'
+            . '<span>Remove</span></button>';
         $rowHtml .= $this->getTextareaInput($currentValue, $index);
         $rowHtml .= '</div>';
         return addcslashes($rowHtml, "'");
