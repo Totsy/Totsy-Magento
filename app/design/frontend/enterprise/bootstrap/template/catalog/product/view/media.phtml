@@ -35,7 +35,7 @@
     $_helper = $this->helper('catalog/output');
     $_nativeZoom = false;
 ?>
-
+<div class="well">
 <?php /* --------- Cloud Zoom --------- */ ?>
 <p class="product-image">
 	<?php $big_img = $this->helper('catalog/image')->init($_product, 'image')->resize(500);?>
@@ -46,7 +46,7 @@
     ?>
     </a>
 </p>
-
+</div>
 <?php /* --------- Gallery Images using Cloud Zoom --------- */ ?>
 <?php if (count($this->getGalleryImages()) > 0): ?>
 <div class="more-views">

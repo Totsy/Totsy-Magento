@@ -7,13 +7,14 @@
 ?>
 <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
 <div class="page-header">
-    <h1><?php echo $this->__('My Account') ?></h1>
+    <h2><?php echo $this->__('Manage Credit Cards') ?></h2>
 </div>
+
 <div class="well">
 <div class="page-title">
-    <h1>My Credit Cards</h1>
+    <h4>My Credit Cards <button class="add-new-card-button btn btn-primary pull-right">Add New Card</button></h4>
+    <hr />
     <div class="add-new-card">
-        <p class="add-new-card-button">Add a new credit card</p>
         <script type="text/javascript">
             jQuery(document).ready(function(){
                 jQuery(".add-new-card-button").click( function() {
@@ -57,8 +58,8 @@
     ?>
     <?php if($payment->getIsDefault()== 0 && $payment->getData('saved_by_customer')):?>
     <?php $creditCardsCount++; ?>
-    <div style='border:1px solid #DDD'>
-        <table width="650" border="0" cellspacing="0" cellpadding="0" style="margin: 10px;">
+
+        <table class="table">
             <tr>
                 <td width="9%" align="left">
                 <img src="<?php echo $this->getSkinUrl('images/' . $creditCardImage)?>"> 
@@ -97,11 +98,12 @@
                 <?php endif; ?>
             <?php endif; ?>
         </table>
-    </div>
+
 <?php endif;?>
 <?php endforeach;?>
 <?php if($creditCardsCount == 0): ?>
-    <h2>You don't have a saved credit card with your account.</h2>
+    <h3>Sorry, You don't have any credit cards on file with Totsy. </h3>
+    <p><span class="label label-info">NOTE:</span> Adding a credit card helps speed up the checkout process.</p>
 <?php endif;?>
 </div>
 </div>
