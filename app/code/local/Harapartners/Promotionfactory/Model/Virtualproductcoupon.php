@@ -50,5 +50,27 @@ class Harapartners_Promotionfactory_Model_Virtualproductcoupon extends Mage_Core
 		$this->addData($data);
 		return $this;
     }
-    
+
+    public function cancelVirtualProductCouponInOrder($order) {
+        foreach($order->getAllItems() as $orderItem){
+            if($orderItem->getProductType() != 'virtual'){
+                continue;
+            }
+            $productOptions = unserialize($orderItem->getData('product_options'));
+            if(isset($productOptions['options'])){
+                foreach($productOptions['options'] as $optionDataArray){
+                    if(isset($optionDataArray['label'])
+                        && $optionDataArray['value']){
+                        $vpc = Mage::getModel('promotionfactory/virtualproductcoupon')->loadByCode($optionDataArray['value']);
+                        if($vpc->getId()){
+                            $vpc->setData('status', Harapartners_Promotionfactory_Model_Virtualproductcoupon::COUPON_STATUS_AVAILABLE)
+                            ->save();
+                        }
+                    }
+                }
+            }
+        }
+        return;
+    }
+
 }
