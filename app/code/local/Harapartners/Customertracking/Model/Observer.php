@@ -60,6 +60,7 @@ class Harapartners_Customertracking_Model_Observer {
     }
     
     protected function _prepareAffiliateByReferer($customer){
+        $invtation = null;
         //Harapartners, Jun: prepare referer / inviter affiliate
         $customerSession = Mage::getSingleton('customer/session');
         //Check referer, add to affiliate if not exceeding max level allowed for customer tracking (level begins with 0)

@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Totsy_Dataflow>
+            <version>0.1.0</version>
+        </Totsy_Dataflow>
+    </modules>
+    <global>
+        <models>
+            <dataflow>
+                <rewrite>
+                    <batch_import>Totsy_Dataflow_Model_Batch_Import</batch_import>
+                </rewrite>
+            </dataflow>
+        </models>
+    </global>
+</config>

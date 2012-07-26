@@ -41,7 +41,7 @@ class Totsy_Customer_Model_Observer
                     ->setCheckLastValidationFlag(false)
                     ->setData('CUSTOMER_LAST_VALIDATION_TIME', -1);
 
-                $response->setRedirect($urlRedirect);
+                $response->setRedirect($urlRedirect . '?auto=login');
                 return $this;
             } else if (preg_match("/\b[A-Z0-9._%-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b/i", $email)) {
                 $customer = Mage::getModel('customer/customer');
@@ -84,7 +84,7 @@ class Totsy_Customer_Model_Observer
                     ->setCheckLastValidationFlag(false)
                     ->setData('CUSTOMER_LAST_VALIDATION_TIME', -1);
 
-                $response->setRedirect($urlRedirect);
+                $response->setRedirect($urlRedirect . '?auto=register');
                 return $this;
             }
 
