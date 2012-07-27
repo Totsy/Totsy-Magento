@@ -37,7 +37,7 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Payment extends TinyBrick_Orde
                     $payment = Mage::getModel('sales/order_payment')->getCollection()
                         ->addAttributeToFilter('cybersource_subid',$profile->getData('subscription_id'))
                         ->getFirstItem();
-                    if(!$result) {
+                    if(!$payment) {
                         return false;
                     } else {
                     	$savingNewCreditCard = false;

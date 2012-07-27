@@ -21,6 +21,10 @@
             <active>true</active>
             <codePool>local</codePool>
         </Totsy_Customer>
+        <Totsy_Dataflow>
+            <active>true</active>
+            <codePool>local</codePool>
+        </Totsy_Dataflow>
         <Totsy_Page>
             <active>true</active>
             <codePool>local</codePool>
