@@ -29,7 +29,8 @@
         <h3 class="icon-head head-categories"><?php echo Mage::helper('catalog')->__('Categories') ?></h3>
         <?php if ($this->getRoot()): ?>
             <?php echo $this->getAddRootButtonHtml() ?><br />
-            <?php echo $this->getAddSubButtonHtml() ?>
+            <?php echo $this->getAddSubButtonHtml() ?><br />
+            <?php echo $this->getClearExpireButtonHtml() ?>
         <?php endif; ?>
     </div>
     <?php echo $this->getStoreSwitcherHtml();?>

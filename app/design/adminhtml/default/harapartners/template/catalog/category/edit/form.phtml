@@ -28,6 +28,9 @@
 <div class="content-header">
         <h3 class="icon-head head-categories"><?php echo $this->htmlEscape($this->getHeader()) . ($this->getCategoryId() ? ' (' . Mage::helper('catalog')->__('ID: %s', $this->getCategoryId()) . ')' : '') ?></h3>
         <p class="content-buttons form-buttons">
+            <?php if($this->getCategoryId()): ?>
+                    <?php echo $this->getRevertMoveButtonHtml(); ?>
+            <?php endif; ?>
             
             <?php if($this->getCategoryId()): ?>
             		<?php echo $this->getDeleteButtonHtml(); ?>

@@ -49,15 +49,9 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Payment extends TinyBrick_Orde
                 Mage::getModel('paymentfactory/tokenize')->createProfile($payment, $billing, $customerId, $billingId);
             }
             $this->replacePaymentInformation($order, $payment);
-            if($order->getStatus() == Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_PAYMENT_FAILED) {
-                $order->setStatus('pending')
-                    ->save();
-                $collection = Mage::getModel('fulfillmentfactory/itemqueue')->getCollection()->loadByOrderId($order->getId());
-                foreach($collection as $itemqueue) {
-                    $itemqueue->setStatus(Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_PENDING);
-                    $itemqueue->save();
-                }
-            }
+            $this->makeOrderReadyToBeProcessed($order);
+            $virtualproductcoupon = Mage::getModel('promotionfactory/virtualproductcoupon');
+            $virtualproductcoupon->openVirtualProductCouponInOrder($order);
         } catch(Exception $e){
             return "Error updating payment informations : ".$e->getMessage();
         }
@@ -91,5 +85,17 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Payment extends TinyBrick_Orde
         $paymentOrder->setData('cybersource_token', $payment->getData('cybersource_token'));
         $paymentOrder->setData('cybersource_subid', $payment->getData('cybersource_subid'));
         $paymentOrder->save();
+    }
+    
+    public function makeOrderReadyToBeProcessed($order) {
+      if($order->getStatus() == Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_PAYMENT_FAILED) {
+            $order->setStatus('pending')
+                ->save();
+            $collection = Mage::getModel('fulfillmentfactory/itemqueue')->getCollection()->loadByOrderId($order->getId());
+            foreach($collection as $itemqueue) {
+                $itemqueue->setStatus(Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_PENDING);
+                $itemqueue->save();
+            }
+        }
     }
 }

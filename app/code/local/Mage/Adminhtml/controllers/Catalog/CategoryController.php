@@ -627,4 +627,18 @@ class Mage_Adminhtml_Catalog_CategoryController extends Mage_Adminhtml_Controlle
                 'id' => $this->getRequest()->getParam('categoryId')
         ));        
     }
+
+    public function clearExpiredEventsAction() {
+        $revert = $this->getRequest()->getParam('revert');
+        if ($revert){
+			$categoryId = $this->getRequest()->getParam('category_id');
+			Mage::getModel('categoryevent/sortentry')->moveSingleCategoryFromExpiredToEvent($categoryId);
+		} else{
+			$categorysort = Mage::getModel('categoryevent/sortentry')->cleanExpiredEvents();
+		}
+        $this->_redirect('adminhtml/catalog_category/edit', array(
+                'store' => $this->getRequest()->getParam('store'),
+                'id' => $this->getRequest()->getParam('id')
+        ));
+    }
 }
