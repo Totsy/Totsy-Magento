@@ -196,21 +196,21 @@ class Totsy_Sales_Model_Order extends Mage_Sales_Model_Order
     }
 
     /**
-     * Calculate the commission amount on this order.
+     * Calculate the amount of profit on this order.
      *
      * @return float
      */
-    public function getCommission()
+    public function getProfit()
     {
-        $commission = 0;
+        $profit = 0;
         foreach ($this->getAllVisibleItems() as $item) {
             $productId = $item->getProductId();
             $product = Mage::getModel('catalog/product')->load($productId);
-            $profit = $product->getPrice() - $product->getSpecialPrice();
-            $commission += $profit * $item->getQtyToInvoice();
+            $priceDiff = $product->getPrice() - $product->getSpecialPrice();
+            $profit += $priceDiff * $item->getQtyToInvoice();
         }
 
-        $this->setData('commission', (float) $commission);
-        return $this->getData('commission');
+        $this->setData('profit', (float) $profit);
+        return $this->getData('profit');
     }
 }

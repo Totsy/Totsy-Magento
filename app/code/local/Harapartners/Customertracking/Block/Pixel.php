@@ -79,7 +79,6 @@ class Harapartners_Customertracking_Block_Pixel
         $regParams = json_decode($trackingInfo['registration_param'], true);
 
         $order = Mage::getModel('sales/order')->load($orderId);
-        $order->getCommission();
 
         return preg_replace_callback(
             '/{{[\w.]+}}/',

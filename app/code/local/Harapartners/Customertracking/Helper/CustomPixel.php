@@ -19,7 +19,6 @@ class Harapartners_Customertracking_Helper_CustomPixel
      */
     public function trialpay()
     {
-        $customer = Mage::getSingleton('customer/session')->getCustomer();
         $trackingInfo = Mage::getSingleton('customer/session')
             ->getData('affiliate_info');
         $regParams = json_decode($trackingInfo['registration_param'], true);
@@ -37,5 +36,22 @@ class Harapartners_Customertracking_Helper_CustomPixel
         );
 
         return http_build_query($queryParams);
+    }
+
+    /**
+     * Calculate the total commission value for the last order placed, as 50% of
+     * the total profit.
+     * NOTE: the commission percentage should ideally be a method argument, but
+     * the way this method is invoked (via tracking code template variables)
+     * makes it awkward.
+     *
+     * @return string
+     */
+    public function commision50()
+    {
+        $orderId = Mage::getSingleton('checkout/session')->getLastOrderId();
+        $order = Mage::getModel('sales/order')->load($orderId);
+
+        return number_format($order->getProfit() / 2, 2);
     }
 }

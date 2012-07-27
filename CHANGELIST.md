@@ -1,6 +1,25 @@
 Totsy-Magento Release Notes
 ===========================
 
+20120727
+--------
+* MGN-604: Correctly calculate commission as a percentage of profit.
+* MGN-754 Auto select the vendor code when importing to an existing event
+* MGN-745: added custom pixel helper for returning customized text in an affiliate pixel, with TrialPay's HMAC-MD5 signed querystring as the first usage of this functionality.
+* Added 'Remove' button for affiliate tracking codes.
+* MGN-604: Added commission calculation to orders, for usage in affiliate pixels.
+* Added 'auto' parameter to the redirect URL after autoregistration/autologin.
+* Fixing Status not Updated when Payment Edit Order with same Credit Card
+* MGN-278 Better error handling when special characters break product import
+* adding reference to home_banner on homepage
+* MGN-847 admin user's email for default prompt value
+* fix event preview for virtual events, MGN-826 fix instant direct for events with one product event is not live
+* MGN-847 : You can now send yourself a test email for virtual products by providing email(s) in the prompt
+* MGN-783 add discover image to add credit card on mms
+* MGN-747: Accepting Keyade-requested date formats in affiliate data feeds.
+* MGN-835: Defensive check for shipping address on an order, which fails for virtual orders.
+* MGN-278 Improved error handling for product imports
+
 20120725
 --------
 
