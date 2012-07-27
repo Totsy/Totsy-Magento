@@ -4,7 +4,7 @@ $_category = Mage::registry('current_category');
 
 if($_product && $_category && $_product->getId() && $_category->getId()):
 ?>
-<!-- Social Labs BEGIN -->
+<!-- Social Labs BEGIN 
 <div id="sociable_product_pixel"></div>
 <script type="text/javascript">
     var socialableLabsOutput = false;
@@ -15,5 +15,5 @@ if($_product && $_category && $_product->getId() && $_category->getId()):
     });
 
 </script>
-<!-- Social Labs END -->
+ Social Labs END -->
 <?php endif;
