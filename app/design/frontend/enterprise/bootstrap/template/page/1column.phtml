@@ -51,7 +51,6 @@ ooooooooooooo               .
     <?php echo $this->getChildHtml('global_notices') ?>
     <?php echo $this->getChildHtml('global_messages') ?>
     <?php echo $this->getChildHtml('breadcrumbsContainer') ?>
-    <div class="main col1-layout">
 <?php 
   $currentUrlPath = $this->helper('core/url')->getCurrentUrl();
   $temp = explode('/', $currentUrlPath);
@@ -68,7 +67,6 @@ ooooooooooooo               .
 } 
 ?>
     <?php echo $this->getChildHtml('content') ?>
-    </div>
     <?php echo $this->getChildHtml('footer_before') ?>
     <?php echo $this->getChildHtml('after_body_start') ?>
     <?php echo $this->getChildHtml('footer') ?>

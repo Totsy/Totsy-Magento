@@ -1,12 +1,12 @@
 <div id="userinfo">
-    <?php echo $this->getChildHtml('customertracking.headermsg');?>
+    <?php // echo $this->getChildHtml('customertracking.headermsg');?>
 </div>
-<div id="usercart" class="group">
+<div id="usercart" class="group pull-right span3">
     <?php //Place holder for session check, may be remove later?>
     <?php if ( true ): ?>
     <?php echo $this->getChildHtml('topCart') ?>
     <?php //echo $this->getChildHtml('checkoutLinks') ?>
-    <a class="btn checkout" title="Checkout" href="<?php echo Mage::getUrl('checkout/cart')?>"><strong>Checkout</strong></a>
+    <a class="btn checkout btn-primary pull-right btn-large" style="margin-top:-31px" title="Checkout" href="<?php echo Mage::getUrl('checkout/cart')?>">Checkout</a>
     <?php else :?>
     <?php echo 'JS here'?>
     <?php endif;?>

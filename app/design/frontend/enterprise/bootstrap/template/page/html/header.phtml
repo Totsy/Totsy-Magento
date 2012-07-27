@@ -48,7 +48,7 @@ if ( $this->getIsHomePage() ):
     echo $this->getLogoSrc();
 ?>" alt="<?php
     echo $this->getLogoAlt();
-?>" width="80px" /></a></h1>
+?>" width="100px" /></a></h1>
         <?php
 else:
 ?>
@@ -60,7 +60,7 @@ else:
     echo $this->getLogoSrc();
 ?>" alt="<?php
     echo $this->getLogoAlt();
-?>" width="80px" /></a>
+?>" width="100px" /></a>
         <?php
 endif;
 ?>
@@ -140,12 +140,9 @@ endforeach;
                 <li><a href="/customer/account/logout">Logout</a></li>
                 </ul>
             </li>
-            <li class="divider-vertical"></li>
-            <li class="dropdown">
-            <!-- 
-                <div class="quick-access" id="header-user-info"></div>
-            -->
-            </li>
+             
+                <li class="quick-access" id="header-user-info"></li>
+            
           </ul>
         </div><!-- /.nav-collapse -->
     </div><!-- /navbar-inner -->

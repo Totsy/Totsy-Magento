@@ -219,16 +219,27 @@ body {  padding-top:30px;}
     </script>
 </div>
 <div class="span6">
-	<h3>Why savvy moms shop at Totsy?</h3>
-	<hr />
-	<ul id="bug_bullets">
-		<li>Membership is free</li>
-		<li>Exclusive sales for kids, moms and families</li>
-		<li>Savings of up to 90% off retail</li>
-		<li>Sales last up to 3 days</li>
-		<li>A tree is planted for your first purchase</li>
-		<li>Refer friends and earn Totsy credits</li>
-	</ul>
+    <h3>Why savvy moms shop at Totsy?</h3>
+    <hr />
+    <div id="myCarousel" class="carousel slide">
+    <!-- Carousel items -->
+    <div class="carousel-inner">
+    <div class="active item">Membership is free</div>
+    <div class="item">Exclusive sales for kids, moms and families</div>
+    <div class="item">Savings of up to 90% off retail</div>
+    <div class="item">Sales last up to 3 days</div>
+    <div class="item">A tree is planted for your first purchase</div>
+    <div class="item">Refer friends and earn Totsy credits</div>
+    </div>
+    <!-- Carousel nav -->
+    <a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
+    <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
+    </div>
+    <script>
+    jQuery('.carousel').carousel({
+    interval: 2000
+    })
+    </script>
 </div>
 </div>
 <!--div class="free_shipping_banner_reg_new rollover_img">

@@ -2,18 +2,9 @@
 html,
 body { height: 100%; background:none;}
 html { background: #f7f5f5 url(../img/paper.jpg) repeat fixed }
-footer {
-    color: #666;
-    padding: 17px 0 18px 0;
-}
 a {color:#ed1c25;text-decoration:none;}
 a:hover{color:#ed1c25;text-decoration:underline;}
-.wrapper {
-    min-height: 100%;
-    height: auto !important;
-    margin: 0 auto -63px;
-}
-.content_push { margin-top:115px; }
+.content_push { margin-top:112px; }
 #toTop {
     background-color: #EB132C;
     border-color: #EB132C;
@@ -61,22 +52,31 @@ a:hover{color:#ed1c25;text-decoration:underline;}
     margin: 0 9px;
     overflow: hidden;
 }
-.brand {margin-top:10px;}
+.brand {margin-top:10px; padding:6px 20px 12px;}
 .navbar-inner {
-    background-color: #fff;
-    background-image: -moz-linear-gradient(center top , #FFFFFF, #FFFFFF);
+    background-color: #f7f7f7;
+    background-image: -moz-linear-gradient(center top , #f7f7f7, #eee);
     background-repeat: repeat-x;
-    border-radius: 4px 4px 4px 4px;
+    border-radius: 0px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25), 0 -1px 0 rgba(0, 0, 0, 0.1) inset;
     min-height: 40px;
     padding-left: 20px;
     padding-right: 20px;
 }
-footer { margin-top:45px;}
+/* Footer Classes */
+footer {
+    padding: 17px 0 18px 0;
+    margin-top:45px;
+}
 footer hr { margin:5px 0px; }
 footer p, img {
     color: #777777;
     font-size: 10px;
+}
+footer strong {
+    color: #aaa;
+    font-size: 14px;
+    padding: 17px 0 18px 0;
 }
 
 .well {
@@ -85,3 +85,8 @@ footer p, img {
 .thumbnail {padding:10px;}
 .page-header {border-bottom: 4px solid #E5E5E5; margin:18px 0;}
 .zoomImage { padding:10px; z-imdex:500!important; }
+
+.item {
+    font-size: 30px;
+}
+

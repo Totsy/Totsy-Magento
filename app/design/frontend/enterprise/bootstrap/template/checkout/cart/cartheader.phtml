@@ -57,7 +57,7 @@
     <?php Mage::log('display sidebar mode:'.print_r($this->getIsNeedToDisplaySideBar())); ?>
     <div class="block-title no-items">
         <ul class="links cart-link">
-            <li ><a href="<?php echo $this->getUrl('checkout/cart'); ?>"><?php echo $_myCart ?><span>$0.00</span></a></li>
+            <li ><a href="<?php echo $this->getUrl('checkout/cart'); ?>"><?php echo $_myCart ?><span class="badge badge-inverse">$0.00</span></a></li>
         </ul>
     </div>
 <?php else:?>
@@ -65,7 +65,7 @@
     	<?php if ($_cartQty > 0 && !empty($_itemsArray)):?>
         	<strong id="cartHeader"><?php echo $_myCart ?><span><?php echo ' | '.Mage::helper('checkout')->formatPrice($this->getSubtotal()) ?><?php if ($_subtotalInclTax = $this->getSubtotalInclTax()): ?> / <?php echo ' | '.Mage::helper('checkout')->formatPrice($_subtotalInclTax) ?> <?php echo ' | '.Mage::helper('tax')->getIncExcText(true) ?><?php endif; ?></span></strong>
     	<?php else :?>
-    		<strong id="cartHeader"><span>0</span> Items<span> | <span class='price'>$0.00</span></span></strong>
+    		<strong id="cartHeader"><span class="badge badge-inverse">0 Items = $0.00</span></strong>
     	<?php endif;?>
     </div>
     <div id="checkoutcart-block-title" class="block-title<?php if(!$_cartQty) { echo (' no-items'); } ?>">

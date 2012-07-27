@@ -50,7 +50,7 @@
     <ul class="thumbnails">
     <?php foreach ($this->getGalleryImages() as $_image): ?>
         <li>
-        <div class="thumbnail" style="padding:3px;">
+        <div class="thumbnail" style="padding:5px;">
             <a href="<?php echo $this->helper('catalog/image')->init($_product, 'image', $_image->getFile())->resize(1000);?>" class='cloud-zoom-gallery' title='<?php echo $this->htmlEscape($_image->getLabel()) ?>' rel="useZoom: 'zoom1', smallImage: '<?php echo $this->helper('catalog/image')->init($_product, 'image', $_image->getFile())->resize(370);; ?>' ">
             <img src="<?php echo $this->helper('catalog/image')->init($_product, 'thumbnail', $_image->getFile())->resize(75); ?>" alt = "<?php echo $this->htmlEscape($_image->getLabel()) ?>" width="75px" height="75px"/>
             </a>
