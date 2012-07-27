@@ -10,10 +10,9 @@ class Totsy_Pixels_SociableController extends Mage_Core_Controller_Front_Action
             && $_category && $_category->getId()) {
                 Mage::register('current_product',$_product);
                 Mage::register('current_category',$_category);
-
                 $this->loadLayout()->renderLayout();
             }
-        }
+        } 
     }
     
     public function feedAction(){
