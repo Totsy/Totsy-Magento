@@ -47,12 +47,12 @@
 <!-- Sailthru Horizon --> 
 <script type="text/javascript">
     (function() {
-        function loadHorizon() { 
-            var s = document.createElement('script'); 
-            s.type = 'text/javascript'; 
+        function loadHorizon() {
+            var s = document.createElement('script');
+            s.type = 'text/javascript';
             s.async = true;
-            s.src = ('https:' === location.protocol?'https://d1gp8joe0evc8s.cloudfront.net':'http://cdn.sail-horizon.com')+'/horizon/v1.js';
-            var x = document.getElementsByTagName('script')[0]; 
+            s.src = location.protocol + '//ak.sail-horizon.com/horizon/v1.js';
+            var x = document.getElementsByTagName('script')[0];
             x.parentNode.insertBefore(s, x);
         }
         loadHorizon();

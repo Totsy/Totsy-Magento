@@ -28,7 +28,7 @@
 	$_product = $this->getProduct(); 
 	$_category = Mage::registry('current_category');
 	$reformat = date("m/d/Y H:i:s", strtotime($_category->getEventEndDate()));
-    $event_end_date = Mage::app()->getLocale()->date($reformat, null, null, true);
+    $event_end_date = Mage::app()->getLocale()->date($reformat, null, null, false);
     $today = Mage::app()->getLocale()->date(null,null,null, true);
 ?>
 

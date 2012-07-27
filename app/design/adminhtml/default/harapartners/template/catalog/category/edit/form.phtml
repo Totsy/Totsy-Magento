@@ -28,6 +28,9 @@
 <div class="content-header">
         <h3 class="icon-head head-categories"><?php echo $this->htmlEscape($this->getHeader()) . ($this->getCategoryId() ? ' (' . Mage::helper('catalog')->__('ID: %s', $this->getCategoryId()) . ')' : '') ?></h3>
         <p class="content-buttons form-buttons">
+            <?php if($this->getCategoryId()): ?>
+                    <?php echo $this->getRevertMoveButtonHtml(); ?>
+            <?php endif; ?>
             
             <?php if($this->getCategoryId()): ?>
             		<?php echo $this->getDeleteButtonHtml(); ?>
@@ -40,6 +43,7 @@
             <?php if($this->getCategoryId()): ?>
             		<?php echo $this->getImportProductButtonHtml();?>
                     <?php echo $this->getPreviewButtonHtml();?>
+                    <?php echo $this->getEmailPreviewButtonHtml();?>
             <?php endif; ?>
             <?php echo $this->getSaveButtonHtml() ?>
         </p>
@@ -249,6 +253,55 @@
         }
     }
 
+    function sendPreviewEmailSubmit() {
+        <?php
+            $admin_user_email = Mage::getSingleton('admin/session')->getUser()->getEmail();
+        ?>
+        var admin_user_email = "<?php echo $admin_user_email; ?>";
+       var reply = prompt('Which email do you want to send the preview?  For multiple email, separate with semicolon (;)',admin_user_email);
+
+       <?php
+            $request_url = $this->getUrl('*/*/emailPreview', array('_current'=>true,'_nosid' => false));
+        ?>
+        var request_url = "<?php echo $request_url;?>";
+        if(reply) {
+            var email_list = reply.split(';');
+            var bad_emails = [];
+            var good_emails = [];
+            email_list.each(function(val){
+                result = validateEmail(val);
+                if (!result) {
+                    bad_emails.push(val);
+                }else{
+                    good_emails.push(val);
+                }
+            });
+            if(bad_emails.length) {
+                alert('Cannot send to ' + bad_emails.toString() +'. Please check email.');
+            }
+            var reply = good_emails.join(';');
+            new Ajax.Request(request_url, {
+                parameters:{email:reply},
+                evalJSON: true,
+                onSuccess: function(result) {
+                    if (result.responseText.isJSON()) {
+                        response = result.responseText.evalJSON()
+                        if (response.error) {
+                            alert(response.message);
+                        }
+                    }
+                    console.log(result);
+                }
+            });
+        } else {
+            alert("You didn't enter anything.");
+        }
+        
+    }
+    function validateEmail(elementValue){
+       var emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+       return emailPattern.test(elementValue);
+    }
     //There is a conflict between row click and checkbox check call back
 	//Haraparters, Jun: categoryProductRowClick should apply default action (redirect to product detail page)
     <?php echo $_gridJsObject ?>.rowClickCallback = categoryProductRowClick;

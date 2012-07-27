@@ -1,6 +1,42 @@
 Totsy-Magento Release Notes
 ===========================
 
+20120727
+--------
+* MGN-604: Correctly calculate commission as a percentage of profit.
+* MGN-754 Auto select the vendor code when importing to an existing event
+* MGN-745: added custom pixel helper for returning customized text in an affiliate pixel, with TrialPay's HMAC-MD5 signed querystring as the first usage of this functionality.
+* Added 'Remove' button for affiliate tracking codes.
+* MGN-604: Added commission calculation to orders, for usage in affiliate pixels.
+* Added 'auto' parameter to the redirect URL after autoregistration/autologin.
+* Fixing Status not Updated when Payment Edit Order with same Credit Card
+* MGN-278 Better error handling when special characters break product import
+* adding reference to home_banner on homepage
+* MGN-847 admin user's email for default prompt value
+* fix event preview for virtual events, MGN-826 fix instant direct for events with one product event is not live
+* MGN-847 : You can now send yourself a test email for virtual products by providing email(s) in the prompt
+* MGN-783 add discover image to add credit card on mms
+* MGN-747: Accepting Keyade-requested date formats in affiliate data feeds.
+* MGN-835: Defensive check for shipping address on an order, which fails for virtual orders.
+* MGN-278 Improved error handling for product imports
+
+20120725
+--------
+
+* MGN-718 #comment Fixing ESD check for virtual to be item-based
+* MGN-815 mms color changes ;
+* MGN-813 buton padding on mms
+* MGN-840 change grand total to total for legal/confusion
+* MGN-840 new sales view with cart disclaimer
+* MGN-583 adding sales order view to iphone template to remove track link
+* MGN-783 adding discover to add new cc page (will require akamai flush on production push)
+* MGN850 - Always print status in order comment section
+* Fix incompatible with  Mage_Adminhtml_Block_Widget_Form::_setFieldset()
+* Dont show voucher if payment failed on order page
+* Disable email Order Confirmation/ Voucher Email when payment failed
+* MGN-821 adding link color to 404 cells for mms
+* hide expired events at category/age landing page
+
 20120724
 --------
 

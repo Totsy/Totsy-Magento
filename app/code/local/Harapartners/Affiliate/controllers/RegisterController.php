@@ -50,7 +50,7 @@ class Harapartners_Affiliate_RegisterController extends Mage_Core_Controller_Fro
             $session->setData('affiliate_info', $affiliateInfo);
         }
 
-        $this->_redirect('customer/account/create');
+        $this->_forward('create', 'account', 'customer', $this->getRequest()->getParams());
     }
 
     //Alpha-numerical, lower case only, underscore allowed
