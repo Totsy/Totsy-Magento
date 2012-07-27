@@ -428,7 +428,6 @@ class Harapartners_Categoryevent_Model_Sortentry extends Mage_Core_Model_Abstrac
                 $expiredParentId = $expiredParentCat->getId();
                 try {
                         $collection = Mage::getModel('catalog/category')->load($categoryId);
-                        debug('Result found : ' . $collection->getSize());
                         $collection->move($parentCategoryId, null);
                 }catch ( Exception $e ){
                     Mage::logException($e);
