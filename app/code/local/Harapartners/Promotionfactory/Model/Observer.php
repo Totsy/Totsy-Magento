@@ -105,6 +105,8 @@ class Harapartners_Promotionfactory_Model_Observer {
             $vpc = Mage::getModel('promotionfactory/virtualproductcoupon')->loadByCode($reservationCodeOption->getValue());
             if($vpc->getId()){
                 $vpc->setData('status', Harapartners_Promotionfactory_Model_Virtualproductcoupon::COUPON_STATUS_PURCHASED)
+                ->setData('order_id', $observer->getEvent()->getOrder()->getId())
+                ->setData('order_increment_id', $observer->getEvent()->getOrder()->getIncrementId())
                 ->save();
             }else{
                 Mage::getSingleton('checkout/session')->addError('There was an error while placing the order with your reserved coupon code.');
