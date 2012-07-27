@@ -225,7 +225,8 @@ XML;
             $isReady = true;
             $itemQueueList = Mage::getModel('fulfillmentfactory/itemqueue')->getCollection()->loadByOrderId($orderId);
             foreach ($itemQueueList as $itemqueue) {
-                if($itemqueue->getStatus() != Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_READY) {
+                if(!in_array($itemqueue->getStatus(),array(Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_READY,
+                    Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_CANCELLED))) {
                     $partialReadyOrderIds[$orderId] = 1;
                     $isReady = false;
                     break;
@@ -264,37 +265,36 @@ XML;
 
         foreach($orders as $order) {
             try {
-                if($capturePayment && ($order->getStatus() != Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_PAYMENT_FAILED)) {
-                    $invoices = Mage::getResourceModel('sales/order_invoice_collection')->setOrderFilter($order->getId());
-                    //only capture once
-                    if(empty($invoices) || (count($invoices) <= 0)) {
-                        //capture payment
-                        $orderPayment = $order->getPayment();
-                        if(!!$orderPayment) {
-                            $paymentInstance = $orderPayment->getMethodInstance();
-                            if(!!$paymentInstance) {
-                                $paymentInstance->setData('forced_payment_action', 
-                                                                                Mage_Payment_Model_Method_Abstract::ACTION_AUTHORIZE_CAPTURE);
-                                $paymentInstance->setData('cybersource_subid', $orderPayment->getCybersourceSubid());
-                                $orderPayment->place();
+                $continue = true;
+                if(!$capturePayment || ($order->getStatus() == Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_PAYMENT_FAILED)) {
+                    $continue = false;
+                }
 
-                                //update order information
-                                $order->setStatus('processing');
-                                $transactionSave = Mage::getModel('core/resource_transaction')
-                                        ->addObject($order);
+                if($continue && ($order->canInvoice() === false)) {
+                    $continue = false;
+                }
 
-                                   $transactionSave->save();
+                if($continue && (($invoice = $order->prepareInvoice()) == false)) {
+                    $continue = false;
+                }
 
-                                   //send email
-                                   $invoices = Mage::getResourceModel('sales/order_invoice_collection')->setOrderFilter($order->getId());
-                                   foreach($invoices as $invoice) {
-                                       if (!$invoice->getOrder()->getEmailSent()) {
-                                        $invoice->sendEmail(true)
-                                                ->setEmailSent(true);
-                                    }
-                                   }
-                            }
-                        }
+                if($continue && (($invoice->register()) === false)) {
+                    $continue = false;
+                }
+
+                if($continue && $invoice->canCapture()) {
+                    $invoice->capture();
+
+                    $order->setStatus('processing');
+                    $order->setState('processing');
+
+                    $transactionSave = Mage::getModel('core/resource_transaction');
+                    $transactionSave->addObject($invoice);
+                    $transactionSave->addObject($invoice->getOrder());
+                    $transactionSave->save();
+                    if (!$invoice->getOrder()->getEmailSent()) {
+                        $invoice->sendEmail(true)
+                            ->setEmailSent(true);
                     }
                 }
             }
@@ -343,10 +343,10 @@ XML;
                 <ok-partial-ship xsi:nil="true"/>
                 <declared-value xsi:nil="true"/>
                 <cancel-date xsi:nil="true"/>
-                <total-tax>{$order->getTaxAmount()}</total-tax>
+                <total-tax>{$order->getTaxInvoiced()}</total-tax>
                 <total-shipping-handling>{$order->getShippingAmount()}</total-shipping-handling>
                 <total-discount xsi:nil="true"/>
-                <total-order-amount>{$order->getGrandTotal()}</total-order-amount>
+                <total-order-amount>{$order->getTotalInvoiced()}</total-order-amount>
                 <po-number xsi:nil="true"/>
                 <salesman xsi:nil="true"/>
                 <credit-card-number xsi:nil="true"/>
@@ -424,10 +424,12 @@ XML;
                     continue;
                 }
 
-                $quantity = intval($item->getQtyOrdered());
+                $quantity = intval($item->getQtyToShip());
                 $sku = substr($item->getSku(), 0, 17);
 
-                $xml .= <<<XML
+                if($quantity) {
+
+                    $xml .= <<<XML
                     <line-item>
                         <sku>$sku</sku>
                         <quantity>$quantity</quantity>
@@ -440,6 +442,7 @@ XML;
                         <gift-box-wrap-type xsi:nil="true"/>
                     </line-item>
 XML;
+                }
             }
 
             $xml .= <<<XML
@@ -539,7 +542,7 @@ XML;
             } else {
                 $itemQtyArray = array();
                 foreach ($order->getAllItems() as $item) {
-                    $itemQtyArray[$item->getData('item_id')] = (int) $item->getData('qty_ordered');
+                    $itemQtyArray[$item->getData('item_id')] = (int) $item->getQtyToShip();
                 }
 
                 $shipment = Mage::getModel('sales/service_order', $order)

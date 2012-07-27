@@ -54,7 +54,7 @@ body.cms-page-view .right_column{
 }
 
 body.cms-page-view .right_column a{
-	color:#ED1C25;
+	color:#DE6076;
 }
 
 body.cms-page-view .left_column,.right_column{
@@ -79,7 +79,7 @@ body.cms-page-view .left_column li{
 }
 
 body.cms-page-view .left_column a:link, a:visited{
-    color: #ED1C25;
+    color: #DE6076;
     font-size:12px;
     line-height:19px;
 }
@@ -179,7 +179,7 @@ body.enterprise-invitation-index-index .need_help, body.enterprise-reward-custom
 }
 
 body.enterprise-invitation-index-index .need_help a, body.enterprise-reward-customer-info .need_help a,body.enterprise-giftregistry-index-index .need_help a,body.enterprise-giftcardaccount-customer-index .need_help a, body.newsletter-manage-index .need_help a,body.sales-order-history .need_help a,body.customer-address-index .need_help a,body.customer-account-edit .need_help a,body.customer-account-index .need_help a{
-	color:#ED1C25;
+	color:#DE6076;
 }
 
 body.enterprise-invitation-index-index .account-page-title, body.enterprise-reward-customer-info .account-page-title,body.enterprise-giftregistry-index-index .account-page-title,body.enterprise-giftcardaccount-customer-index .account-page-title, body.newsletter-manage-index .account-page-title,body.sales-order-history .account-page-title,body.customer-address-index .account-page-title,body.customer-account-edit .account-page-title,body.customer-account-index .account-page-title{
@@ -214,7 +214,8 @@ body.enterprise-invitation-index-index .block-content li a, body.enterprise-rewa
 
 body.enterprise-invitation-index-index .block-content li a:hover,body.enterprise-reward-customer-info .block-content li a:hover,body.enterprise-giftregistry-index-index .block-content li a:hover,body.enterprise-giftcardaccount-customer-index .block-content li a:hover,body.newsletter-manage-index .block-content li a:hover, body.sales-order-history .block-content li a:hover, body.customer-account-index .block-content li a:hover,body.customer-account-edit .block-content li a:hover,body.customer-address-index .block-content li a:hover{
 	background:none;
-	color:#ED1C25;
+	color:#DE6076; 
+	text-decoration: underline;
 }
 
 body.enterprise-invitation-index-index .block-content li a, body.enterprise-reward-customer-info .block-content li a ,body.enterprise-giftregistry-index-index .block-content li a, body.enterprise-giftcardaccount-customer-index .block-content li a ,body.newsletter-manage-index .block-content li a, body.sales-order-history .block-content li a,body.customer-account-index .block-content li a,body.customer-account-edit .block-content li a,body.customer-address-index .block-content li a{

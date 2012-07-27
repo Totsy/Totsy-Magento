@@ -37,6 +37,7 @@ class Harapartners_Categoryevent_Model_Cache_Topnav extends Enterprise_PageCache
     }
 
     protected function _renderBlock() {
+    	$this->_checkAttributes();
         $block = $this->_placeholder->getAttribute('block');
         //you can use a hard coded template here like xxxx_cached.phtml
         $template = $this->_placeholder->getAttribute('template');
@@ -46,5 +47,20 @@ class Harapartners_Categoryevent_Model_Cache_Topnav extends Enterprise_PageCache
         $block->setLayout(Mage::app()->getLayout());
         return $block->toHtml();
     }
-
+	
+    
+	protected function _checkAttributes(){
+		$attributeType = $attributeValue = null;
+		if(!!Mage::app()->getRequest()->getParam('departments')){
+			$attributeType = 'departments';
+		}elseif(!!Mage::app()->getRequest()->getParam('ages')){
+			$attributeType = 'ages';
+		}
+		
+		if (!empty($attributeType)){
+			$attributeValue = Mage::app()->getRequest()->getParam($attributeType);
+			Mage::register('attrtype', $attributeType);
+			Mage::register('attrvalue', $attributeValue);
+		}
+	}
 }

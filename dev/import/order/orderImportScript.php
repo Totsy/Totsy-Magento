@@ -27,6 +27,9 @@ $order_item = fopen('order_item.csv', 'r');
 $offsetStart = isset($argv[1]) ? intval($argv[1]) : 0;
 $limit = isset($argv[2]) ? intval($argv[2]) : 1000;
 
+Mage::register('order_import_ignore_stockcheck', true);
+Mage::register('order_import_allow_ccsave', true);
+
 $i = 0;
 $lastOrderItem = null;
 while ($orderData = fgetcsv($order)) {
@@ -113,7 +116,6 @@ function placeOrder($orderData) {
 
     // ==============================
     //Add products
-    Mage::register('order_import_ignore_stockcheck', true);
     foreach($orderData['items'] as $orderItemObj){
         $product = Mage::getModel('catalog/product')->loadByAttribute('sku', $orderItemObj->getData('sku'));
 

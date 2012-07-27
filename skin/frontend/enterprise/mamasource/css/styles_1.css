@@ -58,7 +58,7 @@ div.top-cart .block-title strong { color: #DE6076; font-size: 12px; text-transfo
 #usercart .links li { padding: 0;}
 #usercart .actions a {
 	background: none repeat scroll 0 0 #FFFFFF;
-	border: 1px solid #ed1c25;
+	border: 1px solid #DE6076;
 	border-radius: 4px;
 	font-weight: bold;
 	padding: 0 8px;
@@ -66,8 +66,8 @@ div.top-cart .block-title strong { color: #DE6076; font-size: 12px; text-transfo
 	text-transform: uppercase;}
 #usercart .actions button.button span, #usercart .actions button.button span span { background: none; color: #FFFFFF; font-weight: bold; font-size: 12px;}
 #usercart .actions button.button {
-	background: none repeat scroll 0 0 #ed1c25;
-	border: 1px solid #ed1c25;
+	background: none repeat scroll 0 0 #DE6076;
+	border: 1px solid #DE6076;
 	border-radius: 4px;
 	font-weight: bold;
 	padding: 2px 8px 0px;
@@ -150,7 +150,7 @@ h1.event-collection-title {
 div.event-title-container { padding: 10px 0 20px; border-bottom: 1px solid #D7D7D7}
 div.event-title-container h1, div.event-title-container p.count-down-timer { display: inline-block; font-size: 20px; }
 div.event-title-container p.count-down-timer { float: right;}
-div.event-title-container h1 a, div.event-title-container p.count-down-timer { color: #ED1C25;}
+div.event-title-container h1 a, div.event-title-container p.count-down-timer { color: #DE6076;}
 div.event-description-container { margin-top: 5px; border: 1px solid #D7D7D7; background: #F0EFEF;}
 div.event-description-container div { display: inline-block; vertical-align: top; }
 div.event-description-container img { width: 156px;}
@@ -172,6 +172,7 @@ div.event-description-container div.std { padding: 10px 20px; width: 736px;}
 	font-size: 10px;
 	text-decoration: none;}
 .catalog-category-view .category-products ul.products-grid li.item div.product-info .price-box p.old-price span.price {text-decoration: none;}
+.catalog-category-view .category-products ul.products-grid li.item div.product-info .price-box p.old-price span.percent {display: none;}
 .catalog-category-view .category-products ul.products-grid li.item div.product-info .price-box p.special-price{ 
 	top:-20px;
 	color:#009900;
@@ -234,7 +235,7 @@ div.event-description-container div.std { padding: 10px 20px; width: 736px;}
 	width: 100px;}
 .catalog-product-view .product-view .product-shop .add-to-cart button span, .catalog-product-view .product-view .product-shop .add-to-cart button span span{
 	background: none;
-	padding: 0px !important;}
+	padding: 2px 5px !important;}
 div.share-button { padding: 20px; width: 130px; }
 dl.collateral-tabs .active span {
 	color: white; 
@@ -247,7 +248,7 @@ dl.collateral-tabs .tab span {
 dl.collateral-tabs table.data-table tr th { display: none;}
 dl.collateral-tabs table.data-table tr td.data { padding: 0px; border: 0px;}
 dl.collateral-tabs table.data-table { border: 0;}
-dl.collateral-tabs div#shipping a { color: #ED1C25}
+dl.collateral-tabs div#shipping a { color: #DE6076}
 div.options-container-big { 
 	border-top: none;
 	background: none;
@@ -299,7 +300,7 @@ p.totsy-price {
 	text-transform: uppercase;
 	color: #707070;}
 p.totsy-price:hover {
-	color: #ED1C25;
+	color: #DE6076;
 	cursor: default;}
 	
 
@@ -342,7 +343,7 @@ div.page-title h1 { color: #707070; font-weight: bold; font-size: 20px;}
 div.page-title .timer-control-box, div.page-title .shipping-date { display: inline-block; padding-left: 9px;}
 div.page-title .timer-control-box span , div.page-title .shipping-date span { font-size: 14px; color: #707070; }
 div.page-title .timer-control-box p#cart-timer, div.page-title .timer-control-box p#cart-timer span, div.page-title .shipping-date p#cart-shipping-date-header { color: #009900; font-weight: bold; font-size: 14px;}
-div.page-title .timer-control-box p#cart-timer span.over { color: #EB132C;}
+div.page-title .timer-control-box p#cart-timer span.over { color: #DE6076;}
 div.top-check-out { display: inline-block; margin: 0 20px; padding: 20px 0; width: 918px; border-top: 1px solid #DDDDDD;}
 div.top-check-out li { display: inline-block;}
 
@@ -402,10 +403,10 @@ div.cart .totals { width: 530px;}
 div.cart .cart-collaterals { width: 400px;}
 div.cart .totals .checkout-types li { display: inline-block;}
 div.cart .checkout-types .btn-proceed-checkout span, div.cart .checkout-types .btn-continue span, div.cart .checkout-types .btn-proceed-checkout span span, div.cart .checkout-types .btn-continue span span{ background: none; padding: 0px !important; height: 21px !important;}
-div.cart .checkout-types .btn-proceed-checkout { background: #ED1C25; border: 1px solid #ED1C25; border-radius: 4px; padding: 5px 8px; vertical-align: middle ;}
-div.cart .checkout-types .btn-continue { background: #FFFFFF; border: 1px solid #ED1C25; border-radius: 4px; padding: 5px 8px; vertical-align: middle ;}
+div.cart .checkout-types .btn-proceed-checkout { background: #DE6076; border: 1px solid #DE6076; border-radius: 4px; padding: 5px 8px; vertical-align: middle ;}
+div.cart .checkout-types .btn-continue { background: #FFFFFF; border: 1px solid #DE6076; border-radius: 4px; padding: 5px 8px; vertical-align: middle ;}
 div.cart .checkout-types .btn-proceed-checkout span span, div.cart .checkout-types .btn-continue span span{ font-size: 12px; text-transform: uppercase; }
-div.cart .deals button, div.cart .cart-table .btn-update { background: #FFFFFF; border: 1px solid #ED1C25; border-radius: 4px; padding: 1px 8px; vertical-align: middle ;}
+div.cart .deals button, div.cart .cart-table .btn-update { background: #FFFFFF; border: 1px solid #DE6076; border-radius: 4px; padding: 1px 8px; vertical-align: middle ;}
 div.cart .deals button.check-gc-status { border: 0px; padding: 0px;}
 div.cart .deals button span, div.cart .cart-table .btn-update span { background: none; padding: 0px !important; height: 16px !important; }
 div.cart .deals button span span, div.cart .cart-table .btn-update span span  { font-size: 12px; text-transform: uppercase; }
@@ -497,7 +498,7 @@ body.customer-account-resetpassword .col1-layout .col-main { width: 380px;}
 
 /* customer credit cart ================================================================================= */
 body.paymentfactory-index-index div.page-title { padding: 10px 0 0 0; }
-.paymentfactory-index-index .add-new-card-button ,   .paymentfactory-index-index .add-new-card-close { margin: 10px 0 0px 0; text-align: right; color: #ED1C25; cursor: pointer;}
+.paymentfactory-index-index .add-new-card-button ,   .paymentfactory-index-index .add-new-card-close { margin: 10px 0 0px 0; text-align: right; color: #DE6076; cursor: pointer;}
 .paymentfactory-index-index	img.cart-type { margin: 10px 0; }
 .paymentfactory-index-index  label.required, .paymentfactory-index-index  label {    
 	display: block;
@@ -517,7 +518,7 @@ body.paymentfactory-index-index div.page-title { padding: 10px 0 0 0; }
     position: relative;
     text-align: center;
     width: 64px;}
-.paymentfactory-index-index .billing-addr-title { color: #ED1C25; margin: 20px 0 15px 0; border-bottom: 1px solid #dddddd;}
+.paymentfactory-index-index .billing-addr-title { color: #DE6076; margin: 20px 0 15px 0; border-bottom: 1px solid #dddddd;}
 .paymentfactory-index-index .cards-info h2 { text-align: center;}
 
 /* customer account info ================================================================================= */

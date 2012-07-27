@@ -30,10 +30,11 @@ class Harapartners_Customertracking_Block_Pixel
     {
         $pageMap = Mage::helper('affiliate')->getFormTrackingPageCodeArray();
 
-        if(!($pageTag = Mage::app()->getFrontController()->getRequest()->getParam('pageTag'))) {
-            $pageTag = strtolower(Mage::app()->getFrontController()
+        if (!($pageTag = Mage::app()->getFrontController()->getRequest()->getParam('pageTag'))) {
+            $pageTag = Mage::app()->getFrontController()
                 ->getAction()
-                ->getFullActionName());
+                ->getFullActionName();
+            $pageTag = strtolower($pageTag);
         }
 
         return isset($pageMap[$pageTag]) ? $pageMap[$pageTag] : '';
@@ -45,10 +46,11 @@ class Harapartners_Customertracking_Block_Pixel
         $affiliate = Mage::getSingleton('customer/session')->getAffiliate();
         if ($affiliate && $affiliate->getId()) {
             $trackingCodes = json_decode($affiliate->getTrackingCode(), true);
-            if(!($pageTag = Mage::app()->getFrontController()->getRequest()->getParam('pageTag'))) {
-                $pageTag = strtolower(Mage::app()->getFrontController()
+            if (!($pageTag = Mage::app()->getFrontController()->getRequest()->getParam('pageTag'))) {
+                $pageTag = Mage::app()->getFrontController()
                     ->getAction()
-                    ->getFullActionName());
+                    ->getFullActionName();
+                $pageTag = strtolower($pageTag);
             }
 
             // additional logic to ensure the post-registration pixel fires
@@ -56,7 +58,8 @@ class Harapartners_Customertracking_Block_Pixel
             $cookie = Mage::app()->getCookie();
             $key = Harapartners_Customertracking_Helper_Data::COOKIE_CUSTOMER_WELCOME;
             if ($cookie->get($key)) {
-                $htmlPixel .= $trackingCodes[Harapartners_Affiliate_Helper_Data::PAGE_NAME_AFTER_CUSTOMER_REGISTER_SUCCESS];
+                $idx = Harapartners_Affiliate_Helper_Data::PAGE_NAME_AFTER_CUSTOMER_REGISTER_SUCCESS;
+                $htmlPixel .= $trackingCodes[$idx];
                 $cookie->delete($key);
             }
 
@@ -72,24 +75,41 @@ class Harapartners_Customertracking_Block_Pixel
     {
         $customer = Mage::getSingleton('customer/session')->getCustomer();
         $orderId = Mage::getSingleton('checkout/session')->getLastOrderId();
+        $trackingInfo = Mage::getSingleton('customer/session')->getData('affiliate_info');
+        $regParams = json_decode($trackingInfo['registration_param'], true);
+
         $order = Mage::getModel('sales/order')->load($orderId);
 
-        return preg_replace_callback('/{{[\w.]+}}/', function($matches) use ($customer, $order) {
-            $parts = explode('.', substr($matches[0], 2, -2));
+        return preg_replace_callback(
+            '/{{[\w.]+}}/',
+            function($matches) use ($customer, $order, $regParams) {
+                $parts = explode('.', substr($matches[0], 2, -2));
 
-            if (2 == count($parts)) {
-                list($modelType, $field) = $parts;
-                switch ($modelType) {
-                    case 'customer':
-                        return $customer->getData($field);
-                        break;
-                    case 'order':
-                        return $order->getData($field);
-                        break;
+                $customPixels = Mage::helper('customertracking/customPixel');
+
+                if (2 == count($parts)) {
+                    list($modelType, $field) = $parts;
+                    switch ($modelType) {
+                        case 'customer':
+                            return $customer->getData($field);
+                            break;
+                        case 'order':
+                            return $order->getData($field);
+                            break;
+                        case 'regparam':
+                            return $regParams[$field];
+                            break;
+                        case 'custom':
+                            if (method_exists($customPixels, $field)) {
+                                return $customPixels->$field();
+                            }
+                            break;
+                    }
+
+                    return $matches[0];
                 }
-
-                return $matches[0];
-            }
-        }, $html);
+            },
+            $html
+        );
     }
 }

@@ -57,7 +57,7 @@ div.billing-title, div.shipping-title{
 
 
 .checkout-sub-title{
-	color: #ED1C25;
+	color: #DE6076;
 	margin:20px 0px 10px 19px;
 	border-bottom:1px solid #DDDDDD;
 	padding-bottom:5px;
@@ -185,7 +185,7 @@ div.billing-title, div.shipping-title{
 }
 
 .totsy-button {
-    background-color: #ED1C25;
+    background-color: #DE6076;
     border-color: #8B9FC2;
     border-radius: 5px 5px 5px 5px;
     border-style: solid;
@@ -196,11 +196,11 @@ div.billing-title, div.shipping-title{
 }
 .totsy-button-white {
     background-color: white;
-    border-color: #ED1C25;
+    border-color: #DE6076;
     border-radius: 5px 5px 5px 5px;
     border-style: solid;
     border-width: 1px;
-    color: #ED1C25;
+    color: #DE6076;
     font-weight: bold;
     padding: 5px 30px;
 }

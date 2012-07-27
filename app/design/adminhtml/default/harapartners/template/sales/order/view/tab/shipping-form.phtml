@@ -1,0 +1,43 @@
+<?php if(Mage::getStoreConfig('toe/orderedit/calc')): ?>
+	<?php $status = $this->getOrderStatus() ?>
+	<?php $widgetName = "" ?>
+	<?php $shippingRates = $this->getShippingAddressRates($this->getRequest()->getParams()) ?>
+	<?php if($this->getRequest()->getParam('newAddressCalc') == 'true'): ?>
+		<?php $widgetName = "shipping" ?>
+	<?php elseif($this->getRequest()->getParam('newMethodCalc') == 'true'): ?>
+		<?php $widgetName = "shippingmethod" ?>
+	<?php endif ?>
+	
+	<?php $currentCheck = "" ?>
+		<form id="shipping-radio">
+		
+	<?php if(count($shippingRates) > 0): ?>
+		
+		<div id='<?php echo $widgetName ?>-radio-select'>
+			<?php foreach($shippingRates as $key => $shippingRate): ?>
+					<h4><?php echo $key ?></h4>
+					<?php foreach($shippingRate as $rate): ?>
+						<span class='shipping-rate-item'>
+							<span><input class="admin-widget-edit-req-field" type="radio" name="rateid" value="<?php echo $rate['rate_id'] ?>" id="rateid" /></span>
+							<b><?php echo $this->getFormattedPrice($rate['price']) ?></b>
+							<span> - <?php echo $rate['carrier_title'] ?> - <?php echo $rate['method_title'] ?></span>
+						</span><br />
+					<?php endforeach; ?>
+			<?php endforeach ?><br />
+		</div>
+		
+	<?php else: ?>
+		<br />No updated shipping rates were found. Enter a custom rate below:<br /><br />
+	<?php endif ?>
+<?php endif ?>
+<span><input class="admin-widget-edit-req-field" type="radio" name="rateid" value="custom" id="rateid" <?php if(!Mage::getStoreConfig('toe/orderedit/calc')): ?>checked="checked"<?php endif ?> /></span>
+Custom Carrier: <select id="customCarrier">
+	        		<option value="">None</option>
+	        		<option value="UPS">UPS</option>
+	        		<option value="FedEx">FedEx</option>
+	        		<option value="USPS">USPS</option>
+	        		<option value="Other">Other</option>
+	        		</select>
+	        		Method: <input name="customMethod" type="text" id="customMethod" size="15" />
+	        		Price: <input name="customPrice" type="text" id="customPrice" size="5" /><br />
+</form>

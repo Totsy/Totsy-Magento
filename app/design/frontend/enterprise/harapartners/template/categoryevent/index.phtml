@@ -23,167 +23,187 @@
  */
 ?>
 <?php 
-	$indexDataObj 	= 	$this->getIndexDataObject();
-	$baseUrl 		= 	Mage::getBaseUrl();
-	$maxPerSend 	= 	0;
-	$timer 			= 	0;
-	$topArray 		= 	'';
-	$liveArray 		= 	'';
-	$upcomingArray  = 	'';	
-	
-	if( $indexDataObj->hasData('toplive') ){
-		$topArray = $indexDataObj->getData('toplive');
-		$topArray = array(); //Harapartners, yang: temploary block the top events
-	}
-	if( $indexDataObj->hasData('live') ){
-		$liveArray = $indexDataObj->getData('live');
-	}
-	if( $indexDataObj->hasData('upcoming') ){
-		$upcomingArray = $indexDataObj->getData('upcoming');
-	}
+    $indexDataObj 	= 	$this->getIndexDataObject();
+    $baseUrl 		= 	Mage::getBaseUrl();
+    $maxPerSend 	= 	0;
+    $timer 			= 	0;
+    $topArray 		= 	'';
+    $liveArray 		= 	'';
+    $upcomingArray  = 	'';
+
+    if( $indexDataObj->hasData('toplive') ){
+        $topArray = $indexDataObj->getData('toplive');
+        $topArray = array(); //Harapartners, yang: temploary block the top events
+    }
+    if( $indexDataObj->hasData('live') ){
+        $liveArray = $indexDataObj->getData('live');
+    }
+    if( $indexDataObj->hasData('upcoming') ){
+        $upcomingArray = $indexDataObj->getData('upcoming');
+    }
 ?>
+
+<?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('home_banner')->toHtml();?>
+
 <div class="catalog-events-container">
-	<div class="live-events-container">
-		<h1 class="event-collection-title">Today's Sales</h1>
-		<div class="top-events">
-			<?php foreach ($topArray as $top):?>
-			<?php
-				$endcountRaw = strtotime($top['event_end_date']);
-				$endcount = date("F j, Y, G:i:s", $endcountRaw);
-			?>
-			<div class="catalog-top-event event-counter-<?php echo $timer;?>">
-				<?php $imgFile = BP.DS.'media'.DS.'catalog'.DS.'category'.DS.$top['small_image'];?>	
-				<a class="event-link" href="<?php echo Mage::getBaseUrl().$top['url_path']; ?>"><img src="<?php echo Mage::helper('service/image')->loadImageFile($imgFile)->resize(349,403); ?>" width="349px" height="403px" alt="" /></a>
-				<div class="splash-details">
-					<div class="table-cell-left">	
-						<p class="event-name"><?php echo $top['name'];?></p>
-						<p id="time1-top-<?php echo $timer ?>"></p>					 
-						<script type="text/javascript">
-							jQuery("#time1-top-<?php echo $timer ?>").countdown({
-								//date: "12 10, 2011 16:11", //Counting TO a date
-								date: "<?php echo $endcount; ?>", //Counting TO a date
-								htmlTemplate: "<span>Ends in</span> %{d} <span class=\"cd-time\">Days</span> %{h}<span class=\"cd-time\">:</span>%{m}<span class=\"cd-time\">:</span>%{s}<span class=\"cd-time\"></span>",
-				
-								onChange: function( event, timer ){
-								},
-								onComplete: function( event ){										
-									jQuery(this).html("Completed");
-									jQuery("div.event-counter-<?php echo $timer;?>").remove();
-								},
-								leadingZero: true,
-								direction: "down"
-							});
-						</script>
-					</div>
-					<div class="table-cell-right">
-						<a class="shop-button" href="<?php echo Mage::getBaseUrl().$top['url_path']; ?>">Shop</a>
-					</div>
-				</div>	
-			</div>	
-			<?php $timer++;?>		
-			<?php endforeach;?>
-			<div class="catalog-top-event">
-				<?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('topcms')->toHtml()?>
-			</div>
-		</div>	
-		<?php foreach ($liveArray as $live):?>
-			<?php
-				$endcountRaw = strtotime($live['event_end_date']);
-				$endcount = date("F j, Y, G:i:s", $endcountRaw);
-				$hasProduct = $this->hasProduct($live['entity_id']);
-			?>
-			<?php if ($hasProduct):?>
-				<div class="catalog-event event-counter-<?php echo $timer;?>">
-					<ul class="echoShare" 
-					data-productname="<?php echo $live['name'];?>"  
-					data-productcap="" 
-					data-productdesc="<?php echo $live['description'];?>" 
-					data-imageclass=""  
-					sdata-producturl="<?php echo Mage::getBaseUrl().$live['url_path']; ?>">
-					</ul>
+    <div class="live-events-container">
+        <h1 class="event-collection-title">Today's Sales</h1>
+        <div class="top-events">
+            <?php foreach ($topArray as $top):?>
+            <?php
+                $endcountRaw = strtotime($top['event_end_date']);
+                $endcount = date("F j, Y, G:i:s", $endcountRaw);
+            ?>
+            <div class="catalog-top-event event-counter-<?php echo $timer;?>">
+                <?php $imgFile = BP.DS.'media'.DS.'catalog'.DS.'category'.DS.$top['small_image'];?>
+                <a class="event-link" href="<?php echo Mage::getBaseUrl().$top['url_path']; ?>"><img src="<?php echo Mage::helper('service/image')->loadImageFile($imgFile)->resize(349,403); ?>" width="349px" height="403px" alt="" /></a>
+                <div class="splash-details">
+                    <div class="table-cell-left">
+                        <p class="event-name"><?php echo $top['name'];?></p>
+                        <p id="time1-top-<?php echo $timer ?>"></p>
+                        <script type="text/javascript">
+                            jQuery("#time1-top-<?php echo $timer ?>").countdown({
+                                //date: "12 10, 2011 16:11", //Counting TO a date
+                                date: "<?php echo $endcount; ?>", //Counting TO a date
+                                htmlTemplate: "<span>Ends in</span> %{d} <span class=\"cd-time\">Days</span> %{h}<span class=\"cd-time\">:</span>%{m}<span class=\"cd-time\">:</span>%{s}<span class=\"cd-time\"></span>",
+                                onChange: function( event, timer ){
+                                },
+                                onComplete: function( event ){
+                                    jQuery(this).html("Completed");
+                                    jQuery("div.event-counter-<?php echo $timer;?>").remove();
+                                },
+                                leadingZero: true,
+                                direction: "down"
+                            });
+                        </script>
+                    </div>
+                    <div class="table-cell-right">
+                        <a class="shop-button" href="<?php echo Mage::getBaseUrl().$top['url_path']; ?>">Shop</a>
+                    </div>
+                </div>
+            </div>
+            <?php $timer++;?>
+            <?php endforeach;?>
+            <div class="catalog-top-event">
+                <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('topcms')->toHtml()?>
+            </div>
+        </div>
+        <?php foreach ($liveArray as $live):?>
+            <?php
+                $endcountRaw = strtotime($live['event_end_date']);
+                $endcount = date("F j, Y, G:i:s", $endcountRaw);
+                $hasProduct = $this->hasProduct($live['entity_id']);
+            ?>
+            <?php if ($hasProduct):?>
+                <div class="catalog-event event-counter-<?php echo $timer;?>">
+                    <ul class="echoShare"
+                    data-productname="<?php echo $live['name'];?>"
+                    data-productcap=""
+                    data-productdesc="<?php echo $live['description'];?>"
+                    data-imageclass=""
+                    sdata-producturl="<?php echo Mage::getBaseUrl().$live['url_path']; ?>">
+                    </ul>
                     <?php
                     $imgFile = (isset($live['small_image']))
                         ? BP . DS . 'media' . DS . 'catalog' . DS . 'category' . DS . $live['small_image']
                         : BP . DS . 'skin' . DS . 'frontend' . DS . 'enterprise ' . DS . 'harapartners' . DS . 'images' . DS . 'catalog' . DS . 'product' . DS . 'placeholder' . DS . 'small_image.jpg';
                     ?>
-					<a class="event-link" href="<?php echo Mage::getBaseUrl().$live['url_path']; ?>"><img src="<?php echo Mage::helper('service/image')->loadImageFile($imgFile)->resize(228,263); ?>" width="228px" height="263px" alt="" /></a>
-					<div class="splash-details">
-						<div class="table-cell-left">	
-							<p class="event-name"><?php echo $live['name'];?></p>
-							<p id="time1-<?php echo $timer ?>"></p>					 
-							<script type="text/javascript">
-								var html = getTimerHtml('live','<?php echo $endcount ?>');
-								jQuery("#time1-<?php echo $timer ?>").countdown({									
-									//date: "12 10, 2011 16:11", //Counting TO a date
-									date: "<?php echo $endcount; ?>", //Counting TO a date
-									htmlTemplate: html,									
-									onComplete: function( event ){										
-										jQuery(this).html("Completed");
-										jQuery("div.event-counter-<?php echo $timer;?>").remove();
-									},
-									leadingZero: true,
-									direction: "down"
-								});
-							</script>
-						</div>
-						<div class="table-cell-right">
-							<a class="shop-button" href="<?php echo Mage::getBaseUrl().$live['url_path']; ?>">Shop</a>
-						</div>
-					</div>	
-				</div>
-				<?php $timer++;?>
-			<?php endif;?>
-		<?php endforeach;?>
-	</div>
+                    <a class="event-link" href="<?php echo Mage::getBaseUrl().$live['url_path']; ?>"><img src="<?php echo Mage::helper('service/image')->loadImageFile($imgFile)->resize(228,263); ?>" width="228px" height="263px" alt="" /></a>
+                    <div class="splash-details">
+                        <div class="table-cell-left">
+                            <p class="event-name"><?php echo $live['name'];?></p>
+                            <p id="time1-<?php echo $timer ?>"></p>
+                            <script type="text/javascript">
+                                var html = getTimerHtml('live','<?php echo $endcount ?>');
+                                jQuery("#time1-<?php echo $timer ?>").countdown({
+                                    //date: "12 10, 2011 16:11", //Counting TO a date
+                                    date: "<?php echo $endcount; ?>", //Counting TO a date
+                                    htmlTemplate: html,
+                                    onComplete: function( event ){
+                                        jQuery(this).html("Completed");
+                                        jQuery("div.event-counter-<?php echo $timer;?>").remove();
+                                    },
+                                    leadingZero: true,
+                                    direction: "down"
+                                });
+                            </script>
+                        </div>
+                        <div class="table-cell-right">
+                            <a class="shop-button" href="<?php echo Mage::getBaseUrl().$live['url_path']; ?>">Shop</a>
+                        </div>
+                    </div>
+                </div>
+                <?php $timer++;?>
+            <?php endif;?>
+        <?php endforeach;?>
+    </div>
 
-	<?php if (!!$upcomingArray && !empty($upcomingArray)):?>	
-	<div class="upcoming-events-container">
-		<h1 class="event-collection-title" id="event-upcoming">Upcoming Sales</h1>
-		<?php foreach ($upcomingArray as $up):?>
-			<?php
-				$endcountRaw = strtotime($up['event_start_date']);
-				$endcount = date("F j, Y, G:i:s", $endcountRaw);
-			?>
-			<div class="catalog-event up-event-counter-<?php echo $timer;?>">
-				<ul class="echoShare" 
-				data-productname="<?php echo $up['name'];?>"  
-				data-productcap="" 
-				data-productdesc="<?php echo $up['description'];?>" 
-				data-imageclass=""  
-				sdata-producturl="<?php echo Mage::getBaseUrl().$up['url_path']; ?>">
-				</ul>
-				<?php
+    <?php if (!!$upcomingArray && !empty($upcomingArray)):?>
+    <div class="upcoming-events-container">
+        <h1 class="event-collection-title" id="event-upcoming">Upcoming Sales</h1>
+        <?php foreach ($upcomingArray as $up):?>
+            <?php
+                $endcountRaw = strtotime($up['event_start_date']);
+                $endcount = date("F j, Y, G:i:s", $endcountRaw);
+            ?>
+            <div class="catalog-event up-event-counter-<?php echo $timer;?>">
+                <ul class="echoShare"
+                data-productname="<?php echo $up['name'];?>"
+                data-productcap=""
+                data-productdesc="<?php echo $up['description'];?>"
+                data-imageclass=""
+                sdata-producturl="<?php echo Mage::getBaseUrl().$up['url_path']; ?>">
+                </ul>
+                <?php
                 $imgFile = (isset($up['small_image']))
                     ? BP . DS . 'media' . DS . 'catalog' . DS . 'category' . DS . $up['small_image']
                     : BP . DS . 'skin' . DS . 'frontend' . DS . 'enterprise ' . DS . 'harapartners' . DS . 'images' . DS . 'catalog' . DS . 'product' . DS . 'placeholder' . DS . 'small_image.jpg';
                 ?>
-				<a class="event-link" href="<?php echo Mage::getBaseUrl().$up['url_path']; ?>"><img src="<?php echo Mage::helper('service/image')->loadImageFile($imgFile)->resize(228,263); ?>" width="228px" height="263px" alt="" /></a>
-				<div class="splash-details">
-					<div class="table-cell-left">	
-						<p class="event-name"><?php echo $up['name'];?></p>
-						<p id="time2-<?php echo $timer ?>"></p> 
-						<script type="text/javascript">
-							var html = getTimerHtml('upcoming','<?php echo $endcount ?>');
-							jQuery("#time2-<?php echo $timer ?>").countdown({
-								//date: "12 10, 2011 16:11", //Counting TO a date
-								date: "<?php echo $endcount; ?>", //Counting TO a date
-								htmlTemplate: html,
-								onComplete: function( event ){										
-									jQuery(this).html("Completed");
-									jQuery("div.up-event-counter-<?php echo $timer;?>").remove();
-								},
-								leadingZero: true,
-								direction: "down"
-							});
-						</script>
-					</div>
-					<div class="table-cell-right">
-						<a class="shop-button" href="<?php echo Mage::getBaseUrl().$up['url_path']; ?>">View</a>
-					</div>
-				</div>	
-			</div>
-			<?php $timer++;?>
-		<?php endforeach;?>		
-	</div>
-	<?php endif;?>	
+                <a class="event-link" href="<?php echo Mage::getBaseUrl().$up['url_path']; ?>"><img src="<?php echo Mage::helper('service/image')->loadImageFile($imgFile)->resize(228,263); ?>" width="228px" height="263px" alt="" /></a>
+                <div class="splash-details">
+                    <div class="table-cell-left">
+                        <p class="event-name"><?php echo $up['name'];?></p>
+                        <p id="time2-<?php echo $timer ?>"></p>
+                        <script type="text/javascript">
+                            var html = getTimerHtml('upcoming','<?php echo $endcount ?>');
+                            jQuery("#time2-<?php echo $timer ?>").countdown({
+                                //date: "12 10, 2011 16:11", //Counting TO a date
+                                date: "<?php echo $endcount; ?>", //Counting TO a date
+                                htmlTemplate: html,
+                                onComplete: function( event ){
+                                    jQuery(this).html("Completed");
+                                    jQuery("div.up-event-counter-<?php echo $timer;?>").remove();
+                                },
+                                leadingZero: true,
+                                direction: "down"
+                            });
+                        </script>
+                    </div>
+                    <div class="table-cell-right">
+                        <a class="shop-button" href="<?php echo Mage::getBaseUrl().$up['url_path']; ?>">View</a>
+                    </div>
+                </div>
+            </div>
+            <?php $timer++;?>
+        <?php endforeach;?>
+    </div>
+    <?php endif;?>
 </div>
+<!-- Google Code for Signups Conversion Page -->
+<script type="text/javascript">
+    /* <![CDATA[ */
+    var google_conversion_id = 1019183989;
+    var google_conversion_language = "en";
+    var google_conversion_format = "1";
+    var google_conversion_color = "ffffff";
+    var google_conversion_label = "AVJ-CKmdmgIQ9Yb-5QM";
+    var google_conversion_value = 0;
+    /* ]]> */
+</script>
+<script type="text/javascript" src="http://www.googleadservices.com/pagead/conversion.js">
+</script>
+<noscript>
+    <div style="display:inline;">
+        <img height="1" width="1" style="border-style:none;" alt="" src="http://www.googleadservices.com/pagead/conversion/1019183989/?value=0&amp;label=AVJ-CKmdmgIQ9Yb-5QM&amp;guid=ON&amp;script=0"/>
+    </div>
+</noscript>

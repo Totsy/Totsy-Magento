@@ -201,7 +201,7 @@ body.cms-page-view .page div.main {
 }
 
 .events-div .category-name:hover{
-	color:#ED1C25;
+	color:#DE6076;
 }
 
 .events-div .layer-description{
@@ -314,7 +314,7 @@ body.customer-account-login .header-container {
 	border-top-right-radius:12px;
 	box-shadow:none;
 }
-body.customer-account-login .main {
+body.customer-account-login .page .main {
 	width: 780px;
 	padding:0px 10px 0px;
 	border-left: 1px solid rgba(255, 255, 255, 0.8);
@@ -490,10 +490,9 @@ body.customer-account-create .page div.main{
 }
 
 #sign-up, #join-now, #redtrerm{
-	color:red;
+	color:#DE6076;
 }
 #sign-up:hover, #join-now:hover{
-	color:red;
 	text-decoration: underline;
 }
 body.customer-account-create .account-login{
@@ -760,7 +759,7 @@ body .sidebar .block-account li.current{
 .invite-button{
   background-attachment:initial;
   background-clip:initial;
-  background-color:#ED1C25;
+  background-color:#DE6076;
   background-image:initial;
   background-origin:initial;
   background-position:initial initial;
@@ -827,7 +826,7 @@ body .sidebar .block-account li.current{
 	line-height: 15px;
 }
 .enterprise-invitation-index-index .invitation-link-area{
-	color:#ED1C25;
+	color:#DE6076;
 }
 .fr{
 	float: right;
@@ -929,7 +928,7 @@ a.invite-btn {
 
 .ui-tabs-nav li.ui-tabs-selected {
     border-radius: 6px 6px 0 0;
-	background-color:#EB132C ;
+	background-color:#DE6076 ;
 }
 .ui-tabs-nav li {
     float: left;
@@ -1035,7 +1034,7 @@ body .col2-left-layout .need_help{
 }
 
 body .col2-left-layout .need_help a{
-	color:#ED1C25;
+	color:#DE6076;
 }
 
 body .col2-left-layout .account-page-title{
@@ -1065,12 +1064,12 @@ body .col2-left-layout .block-account .block-title{
 }
 
 body .col2-left-layout .block-content li a{
-	color:#ED1C25; 
+	color:#DE6076; 
 }
 
 body .col2-left-layout .block-content li a:hover{
 	background:none;
-	color:#ED1C25;
+	color:#DE6076;
 }
 
 body .col2-left-layout .block-content li a{
@@ -1078,7 +1077,7 @@ body .col2-left-layout .block-content li a{
 }
 
 body .col2-left-layout .block-content li.current{
-	color:#ED1C25;
+	color:#DE6076;
 	font-weight:lighter;
 	background:none;
 	padding-left:0px;
@@ -1104,7 +1103,7 @@ body .col2-left-layout .page-title{
 }
 
 .red{
-	color: #ED1C25;
+	color: #DE6076;
 }
 .childrenlist-index-index .pager{
 	display:none;
@@ -1156,3 +1155,44 @@ body .col-left hr {
 .categoryevent-index-topnav .products-grid .product-image {
     margin: 0 auto 3px;
 }
+
+/* more styles copied over from totsy/default - i hate doing this… hara really bunked this themeing up */
+.left_needhelp .main-nav a {
+    color: #DE6076;
+    font-size: 12px;
+}
+
+
+.hpcheckout-checkout-index .billing-address-select , .hpcheckout-checkout-index .shipping-address-select{
+    float: right;
+    left: 4px;
+    margin-bottom: 9px;
+    margin-right: 0;
+    position: relative;
+    width: 200px;
+}
+
+.big-div-not-found{
+	display:inline-block;
+	width: 120px;
+}
+
+.not-found-names{
+	color:#222222;
+	font-size:12px;
+}
+
+.big-div-not-found a{
+	color: #DE6076; 
+}
+
+.not-found-names{
+	color: #DE6076; 
+}
+
+
+.big-div-not-found a:hover .not-found-names{
+	color: #DE6076; 
+}
+
+

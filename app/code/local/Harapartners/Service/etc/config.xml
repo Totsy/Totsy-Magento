@@ -141,8 +141,6 @@
                 <rewrite>
                     <!--Harapartners_EmailFactory-->
                     <email_template>Harapartners_Service_Model_Rewrite_Core_Email_Template</email_template>
-                    <!--Harapartners_Service: locking admin modifications-->
-                    <store>Harapartners_Service_Model_Rewrite_Core_Store</store>
                 </rewrite>
             </core>
             <customer>
@@ -429,6 +427,15 @@
                     </fulfillmentfactory>
                 </observers>
             </sales_order_save_after>
+            <sales_order_item_save_after>
+                <observers>
+                    <fulfillmentfactory>
+                        <type>singleton</type>
+                        <class>fulfillmentfactory/observer</class>
+                        <method>updateItemQueueAfterItemSave</method>
+                    </fulfillmentfactory>
+                </observers>
+            </sales_order_item_save_after>
         </events>
         <!-- ===== GLOBAL EVENTS END ===== -->
     </global>

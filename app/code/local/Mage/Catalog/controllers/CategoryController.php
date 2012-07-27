@@ -50,8 +50,10 @@ class Mage_Catalog_CategoryController extends Mage_Core_Controller_Front_Action
             ->setStoreId(Mage::app()->getStore()->getId())
             ->load($categoryId);
 
-        if (!Mage::helper('catalog/category')->canShow($category)) {
-            return false;
+        if(!Mage::registry('admin_preview_mode')){
+	        if (!Mage::helper('catalog/category')->canShow($category)) {
+	            return false;
+	        }
         }
         Mage::getSingleton('catalog/session')->setLastVisitedCategoryId($category->getId());
         Mage::register('current_category', $category);
@@ -124,6 +126,19 @@ class Mage_Catalog_CategoryController extends Mage_Core_Controller_Front_Action
 
             $update = $this->getLayout()->getUpdate();
             $update->addHandle('default');
+
+            $event_startdate = $category->getEventStartDate();
+            $event_startdate = date("m/d/Y H:i:s", strtotime($event_startdate));
+            $event_startdate = Mage::app()->getLocale()->date($event_startdate, null, null, false);
+            $today = Mage::app()->getLocale()->date(null, null, null, true);
+
+            $preview = Mage::registry('admin_preview_mode');
+            if(($category->getProductCount() == 1 && $today->isLater($event_startdate)) && !$preview) {
+                $productId = $category->getProductCollection()->getFirstItem()->getId();
+                $product = Mage::getModel('catalog/product')->load($productId); 
+                $product_url = $category->getUrlKey() . "/" . $product->getUrlKey() . ".html";
+                Mage::app()->getFrontController()->getResponse()->setRedirect($product_url);
+            }
 
             if (!$category->hasChildren()) {
                 $update->addHandle('catalog_category_layered_nochildren');

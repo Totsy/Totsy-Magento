@@ -92,6 +92,7 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Abstract exte
             
             //you may want to add some product info here, like SKU, Name, Vendor ... so the report is good looking
             $data = array(
+                'product_id'            => $product->getId(),
                 'po_id'                    =>    $this->getPoObject()->getId(),
                 'vendor_style'            =>    $product->getVendorStyle(),
                 'product_name'            =>    $product->getName(),

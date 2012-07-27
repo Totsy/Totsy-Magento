@@ -69,7 +69,7 @@ shpn='<?php echo $topNavDataObject->getData('attr_text_label'); ?>'
 		        	<ul class="echoShare" 
 					data-productname="<?php echo $_product['name'];?>"  
 					data-productcap="" 
-					data-productdesc="<?php echo $_product['description'];?>" 
+					data-productdesc="<?php echo (isset($_product['description'])? $_product['description']:'');?>" 
 					data-imageclass=""  
 					sdata-producturl="<?php echo $_product['url_path']; ?>">
 					</ul>
