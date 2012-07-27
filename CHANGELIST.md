@@ -1,6 +1,17 @@
 Totsy-Magento Release Notes
 ===========================
 
+20120727-1
+----------
+
+* Changed the header login block to deliver different markup based on controller action instead of request URL.
+* MGN-591 fix the call to the move expired categories and added a revert move button that will move an expired event in the Expired folder back to the Event folder
+* Using a controller forward instead of a redirect for affiliate registration links.
+* MGN851 - Make Voucher Supsender if Payment Failed and available after sucessfull Edit
+* Makes Voucher Available if Payment Failed
+* removing the logic that keeps the cache from being cleared when models are saved in the catalog
+* Changed Full Page Cache to not cache pages by customer and only by customer group. Also, removed strange logic from Category and Product cache processors that randomly showed a non-cached page
+
 20120727
 --------
 * MGN-604: Correctly calculate commission as a percentage of profit.
