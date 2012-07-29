@@ -72,10 +72,10 @@
     	<?php if ($_cartQty > 0 && !empty($_itemsArray)):?>
         	<strong id="cartHeader"><?php echo $_mySaving ?><span><?php echo ' | '.Mage::helper('checkout')->formatPrice($this->getSubtotal()) ?><?php if ($_subtotalInclTax = $this->getSubtotalInclTax()): ?> / <?php echo ' | '.Mage::helper('checkout')->formatPrice($_subtotalInclTax) ?> <?php echo ' | '.Mage::helper('tax')->getIncExcText(true) ?><?php endif; ?></span></strong>
     	<?php else :?>
-    		<strong id="cartHeader"><span class="orange">Your savings:</span> $0.00<span> | <span class='price'>$0.00</span></span></strong>
+    		<strong id="cartHeader"><span class="badge badge-inverse">Your savings:</span> $0.00<span> | <span class='price'>$0.00</span></span></strong>
     	<?php endif;?>
     </div>
-    <div id="topCartContent" class="block-content" style="<?php if ( !!$_updateFlag && $_updateFlag ) {echo "display:block"; $checkoutSession->setCartUpdatedFlag(false);} else echo "display:none";?>">
+    <div id="topCartContent" class="block-content well alpha span4" style="<?php if ( !!$_updateFlag && $_updateFlag ) {echo "display:block"; $checkoutSession->setCartUpdatedFlag(false);} else echo "display:none";?>">
         <div class="inner-wrapper"><?php // extra div to smooth slideUp and slideDown ?>
         	<?php if ($_cartQty > 0 && !empty($_itemsArray)):?>
 	        <div class="timer-control-box">
@@ -119,16 +119,16 @@
 		    <div id="items-info-wrapper">
 		        <?php $_items = $this->getItems(); //change from getRecentItems()?> 
 		        <?php if( count($_items) && !empty($_itemsArray) ): ?>
-		            <ol id="mini-cart" class="mini-products-list">
+		            <div id="mini-cart" class="mini-products-list ">
 		            <?php foreach($_items as $_item): ?>
 		                <!-- Add Customerize Cart item info -->
 		                <?php echo $this->getItemHtml($_item) ?>
 		            <?php endforeach; ?>
-		            </ol>
+		            </div>
 		            <script type="text/javascript">decorateList('mini-cart', 'none-recursive')</script>
 		        <?php else: ?>
 		            <p class="block-subtitle">
-		                <span onclick="Enterprise.TopCart.hideCart()" class="close-btn"><?php echo $this->__('Close'); ?></span>
+		                <span onclick="Enterprise.TopCart.hideCart()" class="close-btn close" data-dismiss="alert"><?php echo $this->__('Close'); ?></span>
 		                <?php echo $this->__('Recently added item(s)') ?>
 		            </p>
 		            <p class="cart-empty">
@@ -146,7 +146,7 @@
 		            </p>
 		            <div class="actions">
 		                <?php echo $this->getChildHtml('extra_actions') ?>
-		                <button class="button" type="button" onclick="setLocation('<?php echo $this->getUrl('checkout/cart') ?>')"><span><span><?php echo $this->__('Checkout') ?></span></span></button>
+		                <button class="button btn btn-primary" type="button" onclick="setLocation('<?php echo $this->getUrl('checkout/cart') ?>')"><span><span><?php echo $this->__('Checkout') ?></span></span></button>
 		                <a href="<?php echo $this->getUrl('/'); ?>"><span><?php echo $this->__('Continue Shopping') ?></span></a>
 		            </div>
 		        <?php endif ?>

@@ -42,59 +42,41 @@
 		$upcomingArray = $indexDataObj->getData('upcoming');
 	}
 ?>
-<!-- 
-<div class="alert alert-block">
-    <a class="close" data-dismiss="alert" href="#">×</a>
-    <h4 class="alert-heading">Warning!</h4>
-    Best check yo self, you're not…
-</div>
-<div class="alert alert-info">
-    <strong>Heads up!</strong>
-    Notification about something awesome goes here.
-</div>
-<div class="alert alert-success">
-    <strong>Heads up!</strong>
-    Notification about something awesome goes here.
-</div>
-<div class="alert alert-error">
-    <strong>Heads up!</strong>
-    Notification about something awesome goes here.
-</div>
-          
-          <div id="myCarousel" class="carousel slide">
-            <div class="carousel-inner">
-              <div class="item active">
-                <img src="http://placekitten.com/1400/300" alt="">
-                <div class="carousel-caption">
-                  <h4>First Thumbnail label</h4>
-                  <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
-                </div>
-              </div>
-              <div class="item">
-                <img src="http://placekitten.com/1400/300" alt="">
-                <div class="carousel-caption">
-                  <h4>Second Thumbnail label</h4>
-                  <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
-                </div>
-              </div>
-              <div class="item">
-                <img src="http://placekitten.com/1400/300" alt="">
-                <div class="carousel-caption">
-                  <h4>Third Thumbnail label</h4>
-                  <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
-                </div>
-              </div>
-            </div>
-            <a class="left carousel-control" href="#myCarousel" data-slide="prev">&lsaquo;</a>
-            <a class="right carousel-control" href="#myCarousel" data-slide="next">&rsaquo;</a>
-          </div>
-          
-          
-</div>
+<div id="myCarousel" class="carousel slide">
+    <div class="carousel-inner">
+      <div class="item active">
+        <img src="http://www.totsy.com/media/import/banners/Paul_Frank_homepage_bannerV4.jpg" alt="">
+        <!--
+        <div class="carousel-caption">
+          <h4>Paul Frank</h4>
+        </div>
+        -->
+      </div>
+      <!--
+<div class="item">
+        <img src="http://placekitten.com/1400/300" alt="">
+        <div class="carousel-caption">
+          <h4>Second Thumbnail label</h4>
+          <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+        </div>
+      </div>
+      <div class="item">
+        <img src="http://placekitten.com/1400/300" alt="">
+        <div class="carousel-caption">
+          <h4>Third Thumbnail label</h4>
+          <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+        </div>
+      </div>
 -->
+    </div>
+<!--
+<a class="left carousel-control" href="#myCarousel" data-slide="prev">&lsaquo;</a>
+<a class="right carousel-control" href="#myCarousel" data-slide="next">&rsaquo;</a>
+-->
+</div>
 <section id="pageheader" class="jumbotron subhead">
   <div class="page-header subnav">
-    <h2>Today's Sales <small class="pull-right"><a href="<?php echo $this -> getBaseUrl();?>invitation">INVITE YOUR FRIENDS, <strong>GET $15 </strong></a><?php echo $this->getAdditionalHtml() ?></a></small></h2>
+    <h2><img src="/skin/frontend/enterprise/bootstrap/images/iconmonstr-time-8-icon.png" width="50px" style="margin-right:5px;" /> Today's Sales <small class="pull-right"><a href="<?php echo $this -> getBaseUrl();?>invitation">INVITE YOUR FRIENDS, <strong>GET $15 </strong></a><?php echo $this->getAdditionalHtml() ?></small></h2>
   </div>
 </section>
 
@@ -159,7 +141,7 @@
     ? BP . DS . 'media' . DS . 'catalog' . DS . 'category' . DS . $live['small_image']
     : BP . DS . 'skin' . DS . 'frontend' . DS . 'enterprise ' . DS . 'harapartners' . DS . 'images' . DS . 'catalog' . DS . 'product' . DS . 'placeholder' . DS . 'small_image.jpg';
     ?>
-    <a class="event-link" href="<?php echo Mage::getBaseUrl().$live['url_path']; ?>"><img src="<?php echo Mage::helper('service/image')->loadImageFile($imgFile)->resize(260, 300); ?>" width="260px" height="300px" alt="" /></a>
+    <a class="event-link" href="<?php echo Mage::getBaseUrl().$live['url_path']; ?>"><img src="<?php echo Mage::helper('service/image')->loadImageFile($imgFile)->resize(260, 300); ?>" width="260px" alt="" /></a>
     <script type="text/javascript">
     var html = getTimerHtml('live','<?php echo $endcount ?>');
     jQuery("#time1-<?php echo $timer ?>").countdown({//date: "12 10, 2011 16:11", //Counting TO a date
@@ -182,7 +164,7 @@
 </div>
 <?php if (!!$upcomingArray && !empty($upcomingArray)):?>
 <div class="page-header">
-    <h2>Upcoming Sales</h2>
+    <h2><img src="/skin/frontend/enterprise/bootstrap/images/iconmonstr-calendar-5-icon.png" width="50px" style="margin-right:5px;" /> Upcoming Sales</h2>
 </div>
     <div class="upcoming-events-container">
         <ul class="thumbnails">
@@ -234,6 +216,6 @@
     <?php endif;?>	
     </div>
     <div class="page-header">
-        <h2>Something Else</h2>
+        <h2><img src="/skin/frontend/enterprise/bootstrap/images/iconmonstr-time-8-icon.png" width="50px" style="margin-right:5px;" /> Hurry, Ending Soon!</h2>
     </div>
 </div>
