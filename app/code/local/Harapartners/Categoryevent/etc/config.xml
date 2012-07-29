@@ -145,7 +145,7 @@
                     <cron_expr>0 4 * * *</cron_expr>
                 </schedule>
                 <run>
-                    <model>categoryevent/sortentry::cleanExpiredEvents</model>
+                    <model>categoryevent/sortentry::cleanUpExpiredEvents</model>
                 </run>
             </categoryevent_clean_expired_cron>
         </jobs>

@@ -26,6 +26,7 @@ class Harapartners_Service_Block_Rewrite_Adminhtml_Catalog_Category_Edit_Form ex
         parent::_prepareLayout();
         $category = $this->getCategory();
         $categoryId = (int) $category->getId(); // 0 when we create category, otherwise some value for editing category
+        $expiredEventCategory = Mage::getModel('categoryevent/sortentry')->getParentCategory('Expired Events',Mage::app()->getStore()->getId());
         
         //Haraparnters, Jun/Yang
         if (!in_array($categoryId, $this->getRootIds())) {
@@ -57,7 +58,26 @@ class Harapartners_Service_Block_Rewrite_Adminhtml_Catalog_Category_Edit_Form ex
                         'onclick'   => "window.open('" . $this->getUrl('*/*/preview', array('_current' => true, 'store' => $this->_getPreviewStore())) . "')",
                         'class' => 'preview'
                     ))
-            );            
+            );
+            if($category->getIsVirtualEvent()) {
+                $this->setChild('email_preview_button',
+                $this->getLayout()->createBlock('adminhtml/widget_button')
+                    ->setData(array(
+                        'label'     => Mage::helper('catalog')->__('Preview Event Email'),
+                        'onclick'   => "sendPreviewEmailSubmit();",
+                        'class' => 'preview'
+                    ))
+                );
+            }
+            if($category->getParentId() == $expiredEventCategory->getId()) {
+                $this->setChild('revert_move',
+                $this->getLayout()->createBlock('adminhtml/widget_button')
+                    ->setData(array(
+                        'label'     => Mage::helper('catalog')->__('Revert Event Move'),
+                        'onclick'   => "if(confirm('You sure want to move this event back to the \'Events\' folder?')) {setLocation('" . $this->getUrl('*/*/clearExpiredEvents', array('revert' => true,'category_id' => $categoryId)) . "')}"
+                    ))
+                );
+            }          
             //Jun import products
             $this->setChild('import_product_button',
                 $this->getLayout()->createBlock('adminhtml/widget_button')
@@ -107,6 +127,21 @@ class Harapartners_Service_Block_Rewrite_Adminhtml_Catalog_Category_Edit_Form ex
     {
         if ($this->hasStoreRootCategory()) {
             return $this->getChildHtml('event_preveiw_button');
+        }
+        return '';
+    }
+
+    public function getEmailPreviewButtonHtml()
+    {
+        if ($this->hasStoreRootCategory()) {
+            return $this->getChildHtml('email_preview_button');
+        }
+        return '';
+    }
+    public function getRevertMoveButtonHtml()
+    {
+        if ($this->hasStoreRootCategory()) {
+            return $this->getChildHtml('revert_move');
         }
         return '';
     }
