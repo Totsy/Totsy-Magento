@@ -24,8 +24,21 @@
  * @license     http://www.magentocommerce.com/license/enterprise-edition
  */
 ?>
-<?php if($_heading = $this->getContentHeading()): ?>
-    <div class="page-header">
-        <h2><?php echo $_heading; ?></h2>
-    </div>
+<?php
+/**
+ * @see Mage_Page_Block_Html_Notices
+ */
+?>
+<?php if ($this->displayNoscriptNotice()): ?>
+    <noscript>
+        <div class="noscript">
+            <div class="noscript-inner">
+                <p><strong><?php echo $this->__('JavaScript seem to be disabled in your browser.'); ?></strong></p>
+                <p><?php echo $this->__('You must have JavaScript enabled in your browser to utilize the functionality of this website.'); ?></p>
+            </div>
+        </div>
+    </noscript>
+<?php endif; ?>
+<?php if ($this->displayDemoNotice()): ?>
+    <p class="demo-notice"><?php echo $this->__('This is a demo store. Any orders placed through this store will not be honored or fulfilled.') ?></p>
 <?php endif; ?>

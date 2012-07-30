@@ -140,7 +140,7 @@ class Totsy_Checkout_CartController extends Mage_Checkout_CartController
 
             if (!$this->_getSession()->getNoCartRedirect(true)) {
                 if (!$cart->getQuote()->getHasError()) {
-                    $html = '%s was added to your shopping cart.<h2 class="non-mobile-hide"><a href="'.Mage::helper('checkout/cart')->getCartUrl().'">Go to Cart</a></h2>';
+                    $html = '%s was added to your shopping cart.<strong class="non-mobile-hide"> <a href="'.Mage::helper('checkout/cart')->getCartUrl().'" class="">Checkout</a></strong>';
                     $message = $this->__(
                         $html,
                         Mage::helper('core')->htmlEscape($product->getName())

@@ -1,4 +1,8 @@
-<hr />
+<div class="well">
+    <div class="page-title">
+        <h4>Other Sales</h4>
+        <hr />
+    </div>
 <?php
     $defaultTimezone = date_default_timezone_get();
     $mageTimezone = Mage::getStoreConfig(Mage_Core_Model_Locale::XML_PATH_DEFAULT_TIMEZONE);
@@ -22,7 +26,7 @@
         $smallImage = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA).'catalog/category/'.$liveCategory['image'];
         }
         } else {
-        $smallImage = "/skin/frontend/enterprise/harapartners/images/catalog/product/placeholder/small_image.jpg";
+        $smallImage = "/skin/frontend/enterprise/bootstrap/images/catalog/product/placeholder/small_image.jpg";
         }
     ?>
     <img width="160px" height="120px" src="<?php echo $smallImage; ?>" /></a>
@@ -39,3 +43,4 @@
     ?>
     <?php endforeach; ?>
 </ul>
+</div>
