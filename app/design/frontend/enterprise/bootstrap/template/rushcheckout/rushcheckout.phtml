@@ -27,13 +27,13 @@ if ( !Mage::getSingleton('checkout/session')->hasData('countdown_timer') ) {
     	<?php if ($this->hasProductUrl()):?><a href="<?php echo $this->getProductUrl() ?>" title="<?php echo $this->htmlEscape($this->getProductName()) ?>" class="product-image"><?php endif;?><img src="<?php echo $this->getProductThumbnail()->resize(60,60); ?>" width="60" height="60" alt="<?php echo $this->htmlEscape($this->getProductName()) ?>" /><?php if ($this->hasProductUrl()):?></a><?php endif;?>
     </td>
     <td>
-        <h2 class="product-name">
+        <h5 class="product-name">
         <?php if ($this->hasProductUrl()):?>
             <a href="<?php echo $this->getProductUrl() ?>"><?php echo $this->htmlEscape($this->getProductName()) ?></a>
         <?php else: ?>
             <?php echo $this->htmlEscape($this->getProductName()) ?>
         <?php endif; ?>
-        </h2>
+        </h5>
         <?php if ($_options = $this->getOptionList()):?>
         <div class="item-options">
             <ul>

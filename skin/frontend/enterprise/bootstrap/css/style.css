@@ -4,7 +4,9 @@ body { height: 100%; background:none;}
 html { background: #f7f5f5 url(../img/paper.jpg) repeat fixed }
 a {color:#ed1c25;text-decoration:none;}
 a:hover{color:#ed1c25;text-decoration:underline;}
-.content_push { margin-top:112px; }
+.content_push { margin-top:65px; }
+.content_push_2col { margin-top:80px; }
+#myCarousel { margin-top:20px; }
 #toTop {
     background-color: #EB132C;
     border-color: #EB132C;
@@ -44,7 +46,8 @@ a:hover{color:#ed1c25;text-decoration:underline;}
 .messages li, ul { list-style: none; }
 .messages { display: block; padding: 10px; margin: 0px 0px 10px 0px; background-color: #ed1c25; color:#fff; }
 .well { background-color: #fff!important; }
-.navLinks {padding-top: 21px;}
+.navLinks { padding-top: 7px; }
+.navbar, .brand { padding:0px!important; }
 .navbar .divider-vertical {
     background-color: #FFFFFF;
     border-right: 1px solid #FFFFFF;
@@ -52,16 +55,38 @@ a:hover{color:#ed1c25;text-decoration:underline;}
     margin: 0 9px;
     overflow: hidden;
 }
-.brand {margin-top:10px; padding:6px 20px 12px;}
+.navbar .nav > li > a {
+  color: #777777;
+  float: none;
+  font-size: 17px;
+  letter-spacing: -0.3px;
+  line-height: 19px;
+  padding: 12px 10px 11px;
+  text-decoration: none;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.85);
+}
+.navbar .nav li.dropdown .dropdown-toggle .caret, .navbar .nav li.dropdown.open .caret {
+  border-bottom-color: #000000;
+  border-top-color: #000000;
+}
+.brand {
+  color: #999999;
+  display: block;
+  float: left;
+  font-size: 20px;
+  font-weight: 200;
+  line-height: 1;
+  margin-left: -20px;
+  margin-top: 3px;
+  padding: 0px;
+}
 .navbar-inner {
-    background-color: #f7f7f7;
-    background-image: -moz-linear-gradient(center top , #f7f7f7, #eee);
-    background-repeat: repeat-x;
-    border-radius: 0px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25), 0 -1px 0 rgba(0, 0, 0, 0.1) inset;
-    min-height: 40px;
-    padding-left: 20px;
-    padding-right: 20px;
+  background-color: #F7F7F7;
+  background-image: -moz-linear-gradient(center top , #F7F7F7, #e7e7e7);
+  background-repeat: repeat-x;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25), 0 -1px 0 rgba(0, 0, 0, 0.1) inset;
+  min-height: 40px;
+  height:55px;
 }
 /* Footer Classes */
 footer {
@@ -85,8 +110,3 @@ footer strong {
 .thumbnail {padding:10px;}
 .page-header {border-bottom: 4px solid #E5E5E5; margin:18px 0;}
 .zoomImage { padding:10px; z-imdex:500!important; }
-
-.item {
-    font-size: 30px;
-}
-

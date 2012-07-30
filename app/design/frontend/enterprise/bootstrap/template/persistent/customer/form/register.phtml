@@ -47,15 +47,15 @@ body {  padding-top:30px;}
 </style>
 
 <div class="page-header">
-	<h1><?php echo $this->__('Sign Up') ?><small> or <a href="/customer/account/login/" style="font-weight:normal;">Sign In</a></small>
-	</h1>
+    <h1><?php echo $this->__('Sign Up') ?><small> or <a href="/customer/account/login/" style="font-weight:normal;">Sign In</a></small>
+    </h1>
 </div>
 <div class="row">
-<div class="span6">
-    <?php //echo $this->getChildHtml('form_fields_before')?>
-	<?php //the up child is a reward html ?>
-	<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
-    <form action="<?php echo $this->getPostActionUrl() ?>" method="post" id="form-validate" enctype="multipart/form-data">
+    <div class="span6">
+        <?php //echo $this->getChildHtml('form_fields_before')?>
+        <?php //the up child is a reward html ?>
+        <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+        <form action="<?php echo $this->getPostActionUrl() ?>" method="post" id="form-validate" enctype="multipart/form-data">
         <div class="fieldset">
             <input type="hidden" name="success_url" value="<?php echo $this->getSuccessUrl() ?>" />
             <input type="hidden" name="error_url" value="<?php echo $this->getErrorUrl() ?>" />
@@ -66,7 +66,7 @@ body {  padding-top:30px;}
                         <input type="text" name="email" id="email_address" value="<?php echo $this->htmlEscape($this->getFormData()->getEmail()) ?>" title="<?php echo $this->__('Email Address') ?>" class="input-text validate-email required-entry" />
                     </div>
                 </li>
-			    <li class="fields">
+                <li class="fields">
                     <div class="field">
                         <label for="password" class="required"><em>*</em><?php echo $this->__('Password') ?></label>
                         <div class="input-box">
@@ -80,9 +80,8 @@ body {  padding-top:30px;}
                         </div>
                     </div>
                 </li>
-                <?php echo $this->getChildHtml('persistent.remember.me'); ?>	
-				
-            <input type="hidden" checked name="is_subscribed" title="<?php echo $this->__('Sign Up for Newsletter') ?>" value="1" id="is_subscribed"<?php if($this->getFormData()->getIsSubscribed()): ?> checked="checked"<?php endif; ?> class="checkbox" />
+                <?php echo $this->getChildHtml('persistent.remember.me'); ?>
+                <input type="hidden" checked name="is_subscribed" title="<?php echo $this->__('Sign Up for Newsletter') ?>" value="1" id="is_subscribed"<?php if($this->getFormData()->getIsSubscribed()): ?> checked="checked"<?php endif; ?> class="checkbox" />
             <?php $_dob = $this->getLayout()->createBlock('customer/widget_dob') ?>
             <?php if ($_dob->isEnabled()): ?>
                 <li><?php echo $_dob->setDate($this->getFormData()->getDob())->toHtml() ?></li>
@@ -184,34 +183,24 @@ body {  padding-top:30px;}
         </div>
     <?php endif; ?>
         <div class="fieldset">
-            <ul class="form-list">
-
-            </ul>
             <?php echo $this->getChildHtml('persistent.remember.me.tooltip'); ?>
        <p style="font-size:11px;"><?php echo $this->__('By joining you accept our ')?> <a id="redtrerm" href="<?php echo $this->getBaseUrl()?>pages/terms/">terms and condititons.</a> </p>
         </div>
         <div class="well buttons-set form-buttons">
             <button type="submit" id="submit-button" class="btn btn-primary">Sign Up</button>
-            
             <small>or</small>
-           
-    	<a rel="facebook-connect" style="cursor:pointer;" title="<?php echo $this->__('Connect with Facebook') ?>" class="facebook-button btn btn-primary"><img src="http://ucsf-hastingsconsortium.org/sites/default/files/facebook_icon_00115.png" width="17" style="margin:-4px 4px 0px 0px;" />   Connect with Facebook</a>
-  
+            <a rel="facebook-connect" style="cursor:pointer;" title="<?php echo $this->__('Connect with Facebook') ?>" class="facebook-button btn btn-primary"><img src="http://ucsf-hastingsconsortium.org/sites/default/files/facebook_icon_00115.png" width="17" style="margin:-4px 4px 0px 0px;" />   Connect with Facebook</a>
         </div>
         <?php if (Mage::helper('checkout')->isContextCheckout()): ?>
             <input name="context" type="hidden" value="checkout" />
         <?php endif; ?>
     </form>
-	
-
-	
     <script type="text/javascript">
     //<![CDATA[
         var dataForm = new VarienForm('form-validate', true);
         <?php if($this->getShowAddressFields()): ?>
         new RegionUpdater('country', 'region', 'region_id', <?php echo $this->helper('directory')->getRegionJson() ?>, undefined, 'zip');
         <?php endif; ?>
-
         Form.getElements('form-validate').each(function(element) {
             element.setAttribute('autocomplete', 'off');
         });

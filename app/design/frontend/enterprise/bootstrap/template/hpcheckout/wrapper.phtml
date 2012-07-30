@@ -1,23 +1,23 @@
 <script type="text/javascript">countryRegions = <?php echo $this->helper('directory')->getRegionJson() ?></script>
+<?php
+    $countDownTimer = Mage::getSingleton('checkout/session')->getCountDownTimer();
+    $timeout = Mage::getSingleton('checkout/session')->getQuoteItemExpireTime();
+    //$endcount_lc = date("F j, Y, G:i:s", ($countDownTimer + $timeout));
+    $endcount_lc = ($countDownTimer + $timeout)*1000; //ms
+    //Harapartners, yang, get the server time with the frontend JS time
+    $serverTime = Mage::helper('service')->getServerTime();            
+    $quote = Mage::getSingleton('checkout/session')->getQuote();
+?>
+<div class="page-header">
+    <h2><?php echo $this->__('Checkout') ?> <small class="pull-right" id="checkout-timer"> </small> </h2>
+</div>
+
 <div id="hpcheckout-wrapper">
 	<div class="page-title title-buttons">
-		<h1><?php echo $this->__('Checkout') ?></h1>
-		<?php
-            $countDownTimer = Mage::getSingleton('checkout/session')->getCountDownTimer();
-            $timeout = Mage::getSingleton('checkout/session')->getQuoteItemExpireTime();
-            //$endcount_lc = date("F j, Y, G:i:s", ($countDownTimer + $timeout));
-            $endcount_lc = ($countDownTimer + $timeout)*1000; //ms
-		    //Harapartners, yang, get the server time with the frontend JS time
-			$serverTime = Mage::helper('service')->getServerTime();            
-            $quote = Mage::getSingleton('checkout/session')->getQuote();
-		?>
 		<div class="shipping-date">
-			<span>Estimated Ship Date:</span>
-			<p id="cart-shipping-date-header"><?php echo date('Y-m-d', Mage::helper('sales/order')->calculateEstimatedShipDate($quote)); ?></p>
+			<p id="cart-shipping-date-header"><span>Estimated Ship Date:</span> <?php echo date('Y-m-d', Mage::helper('sales/order')->calculateEstimatedShipDate($quote)); ?></p>
 		</div>	
 		<div class="timer-control-box">
-			<span>Item Reserved For:</span>
-			<p id="checkout-timer"></p>
 			<script type="text/javascript">
 				// @TODO: this should be abstracted out to hpcheckout.js
 				jQuery(document).ready(function() {
@@ -31,7 +31,7 @@
 					jQuery("#checkout-timer").countdown({
 						//date: "12 10, 2011 16:11", or an object counting to a date
 						date: dateObj,
-						htmlTemplate: "%{m} <span class=\"cd-time\">:</span> %{s} <span class=\"cd-time\">minutes</span>",
+						htmlTemplate: "%{m}<span class=\"cd-time\">:</span>%{s}<span class=\"cd-time\"> Minutes Remaining</span>",
 						onChange: function( event, timer ){
 						},
 						onComplete: function( event ){										
@@ -52,14 +52,15 @@
 	<div id="error-message-wrapper"></div>
 	<?php if( count( $this->getQuote()->getAllItems() ) ): ?>
 		<?php if( ! $this->getCustomerSession()->isLoggedIn() ): ?>
-			<div id="hpcheckout-login-wrapper">
+			<div id="hpcheckout-login-wrapper" class="well">
 				<?php echo $this->getChildHtml( 'login' ) ?>
 			</div>
 		<?php endif ?>
 		<div class="address">
-			<div id="hpcheckout-billing-wrapper">
+			<div id="hpcheckout-billing-wrapper" class="well">
 				<div class="checkout-headline">
-					<div class="billing-title sub-title checkout-sub-title"><?php echo $this->__('Billing Address') ?></div>
+				<h4 class="legend"><?php echo $this->__('Billing Address') ?></h4>
+				<hr />
 					<?php if ($this->customerHasAddresses()): ?>
 					    <div class="billing-address-select totsy-selective-input-box">
 							<span>New Address</span>
@@ -70,7 +71,7 @@
 				<div class="checkout-content"><?php echo $this->getChildHtml( 'billing' ) ?></div>
 			</div>
 			<?php if( ! $this->getQuote()->isVirtual() ): ?>
-				<div id="hpcheckout-shipping-wrapper">
+				<div id="hpcheckout-shipping-wrapper" class="well">
 					<div class="checkout-headline">
 						<div class="shipping-title sub-title checkout-sub-title"><?php echo $this->__('Shipping Address') ?></div>
 						<?php if ($this->customerHasAddresses()): ?>
@@ -85,16 +86,16 @@
 			<?php endif ?>
 		</div>
 		<?php if( false && ! $this->getQuote()->isVirtual() ): ?>
-			<div id="hpcheckout-shipping-method-wrapper">
+			<div id="hpcheckout-shipping-method-wrapper" class="well">
 				<div class="checkout-sub-title sub-title">Shipping Method</div>
 				<div class="checkout-content"><?php echo $this->getChildHtml( 'shipping_method' ) ?></div>
 			</div>
 		<?php endif ?>
-		<div id="hpcheckout-payment-wrapper">
+		<div id="hpcheckout-payment-wrapper" class="well">
 			<div class="checkout-sub-title sub-title">Payment</div>
 			<div class="checkout-content"><?php echo $this->getChildHtml( 'payment' ) ?></div>
 		</div>
-		<div id="hpcheckout-review-wrapper">
+		<div id="hpcheckout-review-wrapper" class="well">
 			<div class="checkout-sub-title sub-title">Review</div>
 			<div class="checkout-content"><?php echo $this->getChildHtml( 'review' ) ?></div>
 		</div>

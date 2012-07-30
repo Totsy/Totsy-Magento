@@ -15,27 +15,6 @@
 	text-align:left;
 	padding:6px 15px 0 0;
 }
-.form-half-left{
-	
-}
-.form-half-right{
-	
-}
-.form-list input.long-input{
-	width:404px;
-}
-
-.half-of-half input.input-text{
-	width: 190px;
-}
-.half-of-half select{
-	width: 195px;
-}
-.half-of-half{
-	width: 400px;
-    display: inline-block;
-    vertical-align: top;
-}
 .form-list li.fields div.minus-padding{
 	padding: 0 0 5px;
 }
@@ -77,44 +56,7 @@ div.billing-title, div.shipping-title{
 .place-order{
 	float:right;
 }
-#checkout-review-table-wrapper{
-	border-bottom:1px solid #dddddd;
-}
-#checkout-review-table td a:hover{
-	text-decoration: underline;
-}
-#review-buttons-container{
-	padding: 20px;
-}
 
-#hpcheckout-review-wrapper button.btn-checkout{
-	padding: 4px;
-}
-#hpcheckout-review-wrapper button.btn-checkout span span{
-	font-size: 17px;
-}
-.hpcheckout-checkout-index input{
-	background: rgb(234,234,234); /* Old browsers */
-	background: -moz-linear-gradient(top,  rgba(234,234,234,1) 0%, rgba(255,255,255,1) 100%); /* FF3.6+ */
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(234,234,234,1)), color-stop(100%,rgba(255,255,255,1))); /* Chrome,Safari4+ */
-	background: -webkit-linear-gradient(top,  rgba(234,234,234,1) 0%,rgba(255,255,255,1) 100%); /* Chrome10+,Safari5.1+ */
-	background: -o-linear-gradient(top,  rgba(234,234,234,1) 0%,rgba(255,255,255,1) 100%); /* Opera 11.10+ */
-	background: -ms-linear-gradient(top,  rgba(234,234,234,1) 0%,rgba(255,255,255,1) 100%); /* IE10+ */
-	background: linear-gradient(top,  rgba(234,234,234,1) 0%,rgba(255,255,255,1) 100%); /* W3C */
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#eaeaea', endColorstr='#ffffff',GradientType=0 ); /* IE6-9 */
-	border-radius: 5px;
-    padding: 5px;
-}
-.hpcheckout-checkout-index input:hover{
-	background: rgb(224,224,224); /* Old browsers */
-	background: -moz-linear-gradient(top,  rgba(224,224,224,1) 0%, rgba(255,255,255,1) 100%); /* FF3.6+ */
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(224,224,224,1)), color-stop(100%,rgba(255,255,255,1))); /* Chrome,Safari4+ */
-	background: -webkit-linear-gradient(top,  rgba(224,224,224,1) 0%,rgba(255,255,255,1) 100%); /* Chrome10+,Safari5.1+ */
-	background: -o-linear-gradient(top,  rgba(224,224,224,1) 0%,rgba(255,255,255,1) 100%); /* Opera 11.10+ */
-	background: -ms-linear-gradient(top,  rgba(224,224,224,1) 0%,rgba(255,255,255,1) 100%); /* IE10+ */
-	background: linear-gradient(top,  rgba(224,224,224,1) 0%,rgba(255,255,255,1) 100%); /* W3C */
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e0e0e0', endColorstr='#ffffff',GradientType=0 ); /* IE6-9 */
-}
 
 
 .hpcheckout-checkout-index .form-list .validation-advice{

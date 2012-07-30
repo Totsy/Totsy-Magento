@@ -355,10 +355,9 @@ class Harapartners_Categoryevent_Model_Sortentry extends Mage_Core_Model_Abstrac
         $defaultTimezone = date_default_timezone_get();
         $mageTimezone = Mage::getStoreConfig(Mage_Core_Model_Locale::XML_PATH_DEFAULT_TIMEZONE);
         date_default_timezone_set($mageTimezone);
-        $currentDate = now("Y-m-d");
+        $currentDate = date("Y-m-d H:i:s");
         date_default_timezone_set($defaultTimezone);
         $endDate = $this->calculateEndDate($currentDate);
-
         //Get store Id
         $storeId = Mage_Core_Model_App::DISTRO_STORE_ID; //Harapartners, Yang: for now only affect on totsy store
 
@@ -373,14 +372,16 @@ class Harapartners_Categoryevent_Model_Sortentry extends Mage_Core_Model_Abstrac
 
                 $parentCategoryId = $eventParentCat->getId();
                 $expiredParentId = $expiredParentCat->getId();
-
+                
                 try {
                     if (!$revert){
+                        Mage::log('In if block', null, 'ExpireEventCleanUp.log');
                         $expCollection = $this->getExpCategoryCollection($parentCategoryId, $currentDate)->load();
                         foreach ( $expCollection as $cat ){
                             $cat->move($expiredParentId, null);
                         }
                     }else {
+                        Mage::log('In else block', null, 'ExpireEventCleanUp.log');
                         $collection = $this->getCategoryCollection($expiredParentId, $currentDate, $endDate)->load();
                         foreach ( $collection as $cat ){
                             $cat->move($parentCategoryId, null);
@@ -398,4 +399,46 @@ class Harapartners_Categoryevent_Model_Sortentry extends Mage_Core_Model_Abstrac
 
         return $this;
     }
+    
+    /*
+     * This function is for moving a single category that was in the 
+     * expired parent category, back to the event or main category
+    **/
+    public function moveSingleCategoryFromExpiredToEvent($categoryId) {
+		//Get current clean time
+        $defaultTimezone = date_default_timezone_get();
+        $mageTimezone = Mage::getStoreConfig(Mage_Core_Model_Locale::XML_PATH_DEFAULT_TIMEZONE);
+        date_default_timezone_set($mageTimezone);
+        $currentDate = date("Y-m-d H:i:s");
+        date_default_timezone_set($defaultTimezone);
+        //Get store Id
+        $storeId = Mage_Core_Model_App::DISTRO_STORE_ID; //Harapartners, Yang: for now only affect on totsy store
+
+        //Get source category and target category
+        $eventParentCat = $this->getParentCategory(self::EVENT_CATEGORY_NAME, $storeId);
+        $expiredParentCat = $this->getParentCategory(self::EVENT_EXPIRED_CATEGORY_NAME, $storeId);
+
+        if($eventParentCat
+            && $eventParentCat->getId()
+            && $expiredParentCat
+            && $expiredParentCat->getId()
+            && $categoryId){
+
+                $parentCategoryId = $eventParentCat->getId();
+                $expiredParentId = $expiredParentCat->getId();
+                try {
+                        $collection = Mage::getModel('catalog/category')->load($categoryId);
+                        $collection->move($parentCategoryId, null);
+                }catch ( Exception $e ){
+                    Mage::logException($e);
+                    return null;
+                }
+        }
+
+        $this->rebuildSortCollection($currentDate, $storeId);
+        Mage::app()->getCacheInstance()->flush();
+        Mage::app()->cleanCache();
+
+        return $this;
+	}
 }

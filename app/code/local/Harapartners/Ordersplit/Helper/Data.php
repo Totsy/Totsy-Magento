@@ -406,8 +406,11 @@ class Harapartners_Ordersplit_Helper_Data extends Mage_Core_Helper_Abstract {
 //                       $order->addStatusToHistory($order->getStatus(), 'Auto Complete Virtual Order', false);
                     }
                     catch (Exception $exception){
+                        $virtualproductcoupon = Mage::getModel('promotionfactory/virtualproductcoupon');
+                        $virtualproductcoupon->cancelVirtualProductCouponInOrder($order);
                         // order create exception add to log maybe
                         //invoice failed
+                        
                         return null;
                     }
                 }            

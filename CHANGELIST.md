@@ -1,6 +1,36 @@
 Totsy-Magento Release Notes
 ===========================
 
+20120727-1
+----------
+
+* Changed the header login block to deliver different markup based on controller action instead of request URL.
+* MGN-591 fix the call to the move expired categories and added a revert move button that will move an expired event in the Expired folder back to the Event folder
+* Using a controller forward instead of a redirect for affiliate registration links.
+* MGN851 - Make Voucher Supsender if Payment Failed and available after sucessfull Edit
+* Makes Voucher Available if Payment Failed
+* removing the logic that keeps the cache from being cleared when models are saved in the catalog
+* Changed Full Page Cache to not cache pages by customer and only by customer group. Also, removed strange logic from Category and Product cache processors that randomly showed a non-cached page
+
+20120727
+--------
+* MGN-604: Correctly calculate commission as a percentage of profit.
+* MGN-754 Auto select the vendor code when importing to an existing event
+* MGN-745: added custom pixel helper for returning customized text in an affiliate pixel, with TrialPay's HMAC-MD5 signed querystring as the first usage of this functionality.
+* Added 'Remove' button for affiliate tracking codes.
+* MGN-604: Added commission calculation to orders, for usage in affiliate pixels.
+* Added 'auto' parameter to the redirect URL after autoregistration/autologin.
+* Fixing Status not Updated when Payment Edit Order with same Credit Card
+* MGN-278 Better error handling when special characters break product import
+* adding reference to home_banner on homepage
+* MGN-847 admin user's email for default prompt value
+* fix event preview for virtual events, MGN-826 fix instant direct for events with one product event is not live
+* MGN-847 : You can now send yourself a test email for virtual products by providing email(s) in the prompt
+* MGN-783 add discover image to add credit card on mms
+* MGN-747: Accepting Keyade-requested date formats in affiliate data feeds.
+* MGN-835: Defensive check for shipping address on an order, which fails for virtual orders.
+* MGN-278 Improved error handling for product imports
+
 20120725
 --------
 
