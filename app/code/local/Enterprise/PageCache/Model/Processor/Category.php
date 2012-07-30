@@ -80,12 +80,14 @@ class Enterprise_PageCache_Model_Processor_Category extends Enterprise_PageCache
 
     //Harapartners, Jun, Catalog pages are updated at very high frequency (due to reservation fluctuation), refresh adaptively
     public function getPageIdWithoutApp(Enterprise_PageCache_Model_Processor $processor){
+        /** 2012-07-12 CJD - removing this functionality. we will let magento handle clearing the page cache for category pages
         list($usec, $sec) = explode(' ', microtime());
         $seed = (int) ($usec * 1000000);
         srand((int) ($seed));
         if(rand(1, self::PAGE_REFRESH_FACTOR) == 1){
             return md5($seed.rand());
-        }    
+        }
+         */
         
         $this->_updateCategoryViewedCookie($processor);
         $queryParams = $_GET;
