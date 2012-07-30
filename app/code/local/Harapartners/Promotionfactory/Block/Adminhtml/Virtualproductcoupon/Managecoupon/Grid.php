@@ -33,11 +33,6 @@ class Harapartners_Promotionfactory_Block_Adminhtml_Virtualproductcoupon_Managec
         return Mage::app()->getStore($storeId);
     }
 
-    protected function _getOrderLinked(){
-        $couponCollection = Mage::getModel('promotionfactory/virtualproductcoupon')->getCollection()->loadByProductId( $currentProduct->getId() );
-        return Mage::app()->getStore($storeId);
-    }
-
 	protected function _prepareColumns(){
 		$helper = Mage::helper('promotionfactory');        
         $this->addColumn('entity_id', array(
@@ -50,9 +45,12 @@ class Harapartners_Promotionfactory_Block_Adminhtml_Virtualproductcoupon_Managec
             'index'         => 'product_id'
         ));
         
+
         $this->addColumn('order_increment_id', array(
             'header'        => $helper->__('Order #'),
-            'index'         => 'order_increment_id'
+            'index'         => 'order_increment_id',
+            'type'   => 'text',
+            'renderer' => 'Harapartners_Promotionfactory_Block_Adminhtml_Virtualproductcoupon_Managecoupon_Grid_Column_Order'
         ));
         
         $this->addColumn('code', array(
