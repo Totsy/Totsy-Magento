@@ -10,22 +10,6 @@
 class Harapartners_Affiliate_FeedsController
     extends Mage_Core_Controller_Front_Action
 {
-    const COUNTER_LIMIT = 2000;
-
-    /**
-     * The XML feed being constructed.
-     *
-     * @var SimpleXmlElement
-     */
-    protected $_xml;
-
-    /**
-     * The collection of entries in this feed.
-     *
-     * @var object
-     */
-    protected $_entries;
-
     /**
      * Default action.
      *
@@ -40,10 +24,6 @@ class Harapartners_Affiliate_FeedsController
         $type   = $request->getParam('type');
         $token  = $request->getParam('token');
         $period = $request->getParam('period');
-
-        if ($period) {
-            $period = 3600 * 24 * $period;
-        }
 
         // rewrite the $from and $to dates from keyade-requested formats
         if (preg_match('/\d{6}/', $from)) {
@@ -62,12 +42,14 @@ class Harapartners_Affiliate_FeedsController
             return;
         }
 
+        // ensure the the request is for a valid affiliate code
         $affiliateCode = Mage::getSingleton('core/encryption')->decrypt($token);
-        if (empty($affiliateCode)) {
+        $affiliate = Mage::getSingleton('affiliate/record')->loadByAffiliateCode($affiliateCode);
+        if (!$affiliate || !$affiliate->getId()) {
             $this->getResponse()
                 ->setHeader('Content-Type', 'text/plain', true)
                 ->setHttpResponseCode(400)
-                ->setBody("An affiliate code must be specified.");
+                ->setBody("A valid affiliate code must be specified.");
             return;
         }
 
@@ -86,28 +68,86 @@ class Harapartners_Affiliate_FeedsController
 <report></report>
 XML;
 
-        $this->_xml = new SimpleXMLElement($xmlStr);
+        $xml = new SimpleXMLElement($xmlStr);
 
-        $this->_entries = Mage::getModel('customertracking/record')
-            ->getCollection()
-            ->addFieldToFilter('affiliate_code', $affiliateCode)
-            ->addFieldToFilter('level', 0);
+        $adapter = Mage::getSingleton('core/resource')->getConnection('core_read');
+        $select  = new Zend_Db_Select($adapter);
+        $staticOne = new Zend_Db_Expr("'1'");
+        $staticConfirmed = new Zend_Db_Expr("'confirmed'");
 
         switch ($type) {
             case 'signups':
-                $this->_createSignups($from, $to);
+                $select->from(array('c' => 'customertracking_record'), 'c.registration_param')
+                    ->joinInner(
+                        array('e' => 'customer_entity'),
+                        'c.customer_id = e.entity_id',
+                        array('eventMerchantId' => 'e.entity_id')
+                    )->columns(array('time' => 'UNIX_TIMESTAMP(c.created_at)'))
+                    ->columns(array('count1' => $staticOne))
+                    ->columns(array('eventStatus' => $staticConfirmed))
+                    ->where('c.affiliate_code = ?', $affiliateCode)
+                    ->where("c.created_at BETWEEN '$from' AND '$to'");
                 break;
 
             case 'referralsignups':
-                $this->_createSignupsByReferral($from, $to);
+                $select->from(array('c' => 'customertracking_record'), 'c.registration_param')
+                    ->joinInner(
+                        array('e' => 'customer_entity'),
+                        'c.customer_id = e.entity_id',
+                        array('eventMerchantId' => 'e.entity_id')
+                    )->columns(array('time' => 'UNIX_TIMESTAMP(c.created_at)'))
+                    ->columns(array('count1' => $staticOne))
+                    ->columns(array('eventStatus' => $staticConfirmed))
+                    ->where('c.affiliate_code = ?', $affiliateCode)
+                    ->where("c.created_at BETWEEN '$from' AND '$to'")
+                    ->where("c.level = 1");
                 break;
 
             case 'sales':
-                $this->_createSales($from, $to, $period);
+                $select->from(array('c' => 'customertracking_record'), 'c.registration_param')
+                    ->joinInner(
+                        array('e' => 'customer_entity'),
+                        'c.customer_id = e.entity_id',
+                        array('lifetimeId' => 'e.entity_id')
+                    )->joinInner(
+                        array('s' => 'sales_flat_order'),
+                        's.customer_id = e.entity_id',
+                        array('eventMerchantId' => 's.increment_id')
+                    )->columns(array('count1' => $staticOne))
+                    ->columns(array('value1' => 's.grand_total'))
+                    ->columns(array('time' => 'UNIX_TIMESTAMP(c.created_at)'))
+                    ->columns(array('eventStatus' => $staticConfirmed))
+                    ->where('c.affiliate_code = ?', $affiliateCode)
+                    ->where("c.created_at BETWEEN '$from' AND '$to'");
+
+                if ($period) {
+                    $select->where("DATEDIFF(s.created_at, e.created_at) < ?", $period);
+                }
+
                 break;
 
             case 'referringsales':
-                $this->_createReferringSales($from, $to, $period);
+                $select->from(array('c' => 'customertracking_record'), 'c.registration_param')
+                    ->joinInner(
+                        array('e' => 'customer_entity'),
+                        'c.customer_id = e.entity_id',
+                        array('lifetimeId' => 'e.entity_id')
+                    )->joinInner(
+                        array('s' => 'sales_flat_order'),
+                        's.customer_id = e.entity_id',
+                        array('eventMerchantId' => 's.increment_id')
+                    )->columns(array('count1' => $staticOne))
+                    ->columns(array('value1' => 's.grand_total'))
+                    ->columns(array('time' => 'UNIX_TIMESTAMP(c.created_at)'))
+                    ->columns(array('eventStatus' => $staticConfirmed))
+                    ->where('c.affiliate_code = ?', $affiliateCode)
+                    ->where("c.created_at BETWEEN '$from' AND '$to'")
+                    ->where("c.level = 1");
+
+                if ($period) {
+                    $select->where("DATEDIFF(s.created_at, e.created_at) < ?", $period);
+                }
+
                 break;
 
             default:
@@ -118,122 +158,39 @@ XML;
                 return;
         }
 
+        foreach ($select->query() as $entry) {
+            if ($this->_rewriteEntry($entry)) {
+                $xmlEntry = $xml->addChild('entry');
+                foreach ($entry as $key => $value) {
+                    $xmlEntry->addAttribute($key, $value);
+                }
+            }
+        }
+
         $this->getResponse()
-            ->setBody($this->_xml->asXML())
+            ->setBody($xml->asXML())
             ->setHeader('Content-Type', 'application/xml', true);
     }
 
-    protected function _createSignups($from, $to)
+    /**
+     * Rewrite a feed entry, represented as an associative array.
+     *
+     * @param array $entry
+     *
+     * @return bool
+     */
+    protected function _rewriteEntry(&$entry)
     {
-        $this->_entries->addFieldToFilter(
-            'created_at',
-            array('from' => $from, 'to' => $to, 'date'=> true)
-        );
-        foreach ($this->_entries as $record) {
-            $this->_signupsEntry($record);
-        }
-    }
-
-    protected function _createSignupsByReferral($from, $to)
-    {
-        $this->_entries->addFieldToFilter(
-            'created_at',
-            array('from' => $from, 'to' => $to, 'date'=> true)
-        )->addFieldToFilter('level', 1);
-        foreach ($this->_entries as $record) {
-            $this->_signupsEntry($record);
-        }
-    }
-
-    protected function _createSales($from, $to, $period)
-    {
-       
-        $this->_entries->addFieldToFilter(
-            'created_at',
-            array('to' => $to, 'from' => $from, 'date'=>true)
-        )->addFieldToFilter('customer_id', array( "notnull" => true));
-
-        foreach ($this->_entries as $record) {
-            // record may not have accurate customerId
-            $clickId = $this->_extractClickId($record);
-            $orderCollection = Mage::getModel('sales/order')->getCollection()
-                ->addFieldToFilter(
-                    'created_at',
-                    array('to' => $to, 'from' => $from, 'date'=>true)
-                )->addFieldToFilter('customer_id', $record->getCustomerId())
-                ->addFieldToFilter('status', 'complete');
-
-            foreach ($orderCollection as $order) {
-                $this->_salesEntry($record, $order, $clickId, $period);
+        if (isset($entry['registration_param'])) {
+            $regParams = json_decode($entry['registration_param'], true);
+            if (!isset($regParams['clickId'])) {
+                return false;
             }
-        }
-    }
 
-    protected function _createReferringSales($from, $to, $period)
-    {
-        $this->_entries->addFieldToFilter(
-            'created_at',
-            array('to' => $to, 'from' => $from, 'date'=>true)
-        )->addFieldToFilter('customer_id', array("notnull" => true));
-
-        foreach ($this->_entries as $record) {
-            // record may not have accurate customerId
-            $clickId = $this->_extractClickId($record);
-            $orderCollection = Mage::getModel('sales/order')->getCollection()
-                ->addAttributeToFilter(
-                    'created_at',
-                    array('from' => $from, 'to' => $to, 'date'=>true)
-                )->addFieldToFilter('customer_id', $record->getCustomerId())
-                ->addFieldToFilter('status', 'complete');
-
-            foreach ($orderCollection as $order) {
-                $this->_salesEntry($record, $order, $clickId, $period);
-            }            
-        }
-    }
-
-    protected function _signupsEntry($record)
-    {
-        $clickId = $this->_extractClickId($record);
-        if (false === $clickId) {
-            return false;
+            $entry['clickId'] = $regParams['clickId'];
+            unset($entry['registration_param']);
         }
 
-        $entry = $this->_xml->addChild('entry');
-        $entry->addAttribute('clickId', $clickId);
-        $entry->addAttribute('eventMerchantId', $record->getCustomerId());
-        $entry->addAttribute('count1', 1);
-        $entry->addAttribute('time', strtotime($record->getCreatedAt()));
-        $entry->addAttribute('eventStatus', 'confirmed');
-
-        return $entry;
-    }
-
-    protected function _salesEntry($record, $order, $clickId, $period)
-    {
-        $salesTime = strtotime($order->getCreatedAt());
-        $registrationTime = strtotime($record->getCreatedAt());
-        $lte = !($salesTime - $registrationTime <= $period);
-
-        if ($period > 0 && $lte === false) {
-            return false;
-        }
-
-        $entry = $this->_xml->addChild('entry');
-        $entry->addAttribute('clickId', $clickId);
-        $entry->addAttribute('lifetimeId', $record->getCustomerId());
-        $entry->addAttribute('eventMerchantId', $order->getIncrementId());
-        $entry->addAttribute('value1', $order->getGrandTotal());
-        $entry->addAttribute('time', $salesTime);
-
-        return $entry;
-    }
-
-    protected function _extractClickId($record)
-    {
-        $data = json_decode($record->getRegistrationParam(), true);
-        $data = array_change_key_case($data, CASE_LOWER);
-
-        return isset($data['clickid']) ? $data['clickid'] : false;
+        return true;
     }
 }
