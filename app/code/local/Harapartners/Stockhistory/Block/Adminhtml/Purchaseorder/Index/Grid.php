@@ -100,7 +100,7 @@ class Harapartners_Stockhistory_Block_Adminhtml_Purchaseorder_Index_Grid extends
                     'width'            =>    '25px',
                     'index'            =>    'category_event_end_date', //For ORDER
                     'filter_index'    =>    'cat_dt.value',    //For WHERE
-                    'type'            =>  'datetime',
+                   // 'type'            =>  'datetime',
                     'gmtoffset'        =>     true,
         ));
         
