@@ -203,7 +203,18 @@ class Harapartners_Categoryevent_Helper_Memcache extends Mage_Core_Helper_Abstra
                                     '`table_rewrite`.`product_id` = `e`.`entity_id` AND `table_rewrite`.`store_id` = \''.$storeId.'\' AND `table_rewrite`.`is_system` = 1 AND  `table_rewrite`.`request_path` LIKE \'sales%\'',
                                     array('request_path')
                                 )
+                                ->join(
+                                    array('table_csi'=>'cataloginventory_stock_item'),
+                                    '`table_csi`.`product_id` = `e`.`entity_id`',
+                                    array('qty')
+                                )
+                                ->join(
+                                    array('table_cpei'=>'catalog_product_entity_int'),
+                                    '`table_cpei`.`entity_id` = `e`.`entity_id` AND `table_cpei`.`attribute_id` = 89',
+                                    array('table_cpei.value as status')
+                                )
                               ->where('`e`.`entity_id` IN(' . implode(',', $uniqueProductIds) . ')');
+
             $productCollection->addFieldToFilter($attributeType, array('like' => '%'.$attributeValue.'%'));
             $productCollection->addFieldToFilter('visibility', array("in" => array(
                     Mage_Catalog_Model_Product_Visibility::VISIBILITY_IN_CATALOG,
@@ -218,9 +229,12 @@ class Harapartners_Categoryevent_Helper_Memcache extends Mage_Core_Helper_Abstra
                     'special_price',
                     'original_price',
                     'price',
-                    'request_path'
+                    'request_path',
+                    'status',
+                    'qty'
             ));
             $productInfoArray = $productCollection->load()->toArray();
+
             $productId = 0;
             foreach($liveCategoryInfoArray as &$liveCategoryInfo){
                 $liveCategoryInfo['product_info_array'] = array();
@@ -252,6 +266,9 @@ class Harapartners_Categoryevent_Helper_Memcache extends Mage_Core_Helper_Abstra
                 foreach($categoryInfoContainer['product_list'] as $containerProductId => &$containerProductInfo){
                     $productFound = false;
                     foreach($productInfoArray as $productId => $productInfo){
+                        if(intval($productInfo['qty'])==0 || $productInfo['status']!=1){
+                            continue;
+                        }
                         if($containerProductId == $productId){
                             $containerProductInfo = $productInfo;
                             if((isset($productInfo['small_image']))&&($productInfo['small_image'] != 'no_selection')){
@@ -270,6 +287,7 @@ class Harapartners_Categoryevent_Helper_Memcache extends Mage_Core_Helper_Abstra
                         unset($categoryInfoContainer['product_list'][$containerProductId]);
                     }
                 }
+
                 if(!$categoryHasProduct){
                     unset($categoryProductCompleteData[$categoryId]);
                 }
@@ -287,7 +305,7 @@ class Harapartners_Categoryevent_Helper_Memcache extends Mage_Core_Helper_Abstra
                     }
                     unset($lci);
                 }
-                
+
                 if(!$isCategoryLive){
                     unset($categoryProductCompleteData[$categoryId]);
                 }
