@@ -58,8 +58,6 @@ $endcount_lc = date("F j, Y, G:i:s", $endcount_utc); ?>
     <h2><?php echo $_product->getName(); ?> <small></small></h2>
 </div>
 <div class="well" style="margin-top:56px;">
-
-
     <ul class="nav nav-tabs" id="myTabs" style="margin-top:-56px; margin-left:-21px; border-bottom:2px solid #fff; width:105%;">
         <li><a href="#desc" data-toggle="tab">Description</a></li>
         <li><a href="#shipping" data-toggle="tab">Shipping & Returns</a></li>
@@ -81,7 +79,6 @@ $endcount_lc = date("F j, Y, G:i:s", $endcount_utc); ?>
             </div>
             </form>
 </div>
-
 <script type="text/javascript">
     var optionsPrice = new Product.OptionsPrice(<?php echo $this->getJsonConfig() ?>);
 </script>
