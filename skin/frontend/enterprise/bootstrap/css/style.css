@@ -44,7 +44,12 @@ a:hover{color:#ed1c25;text-decoration:underline;}
     top: 0;
 }
 .messages li, ul { list-style: none; }
-.messages { display: block; padding: 10px; margin: 0px 0px 10px 0px; background-color: #ed1c25; color:#fff; }
+.messages { display: block; padding: 10px; margin: 0px 0px 10px 0px;}
+.success-msg {
+    background-color: #DFF0D8;
+    border-color: #D6E9C6;
+    color: #468847;
+}
 .well { background-color: #fff!important; }
 .navLinks { padding-top: 7px; }
 .navbar, .brand { padding:0px!important; }
@@ -68,6 +73,15 @@ a:hover{color:#ed1c25;text-decoration:underline;}
 .navbar .nav li.dropdown .dropdown-toggle .caret, .navbar .nav li.dropdown.open .caret {
   border-bottom-color: #000000;
   border-top-color: #000000;
+}
+.navbar .nav > li > a:hover {
+    background-color: transparent;
+    color: #ed1c25;
+    text-decoration: none;
+}
+.navbar .nav .active > a, .navbar .nav .active > a:hover {
+    color: #ed1c25;
+    text-decoration: none;
 }
 .brand {
   color: #999999;
