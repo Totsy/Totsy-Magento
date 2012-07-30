@@ -266,7 +266,7 @@ class Harapartners_Categoryevent_Helper_Memcache extends Mage_Core_Helper_Abstra
                 foreach($categoryInfoContainer['product_list'] as $containerProductId => &$containerProductInfo){
                     $productFound = false;
                     foreach($productInfoArray as $productId => $productInfo){
-                        if(intval($productInfo['qty'])==0 || $productInfo['status']!=1){
+                        if(intval($productInfo['qty'])==0 || intval($productInfo['status'])!=1){
                             continue;
                         }
                         if($containerProductId == $productId){
