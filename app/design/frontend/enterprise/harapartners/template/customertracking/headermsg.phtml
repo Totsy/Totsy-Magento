@@ -25,7 +25,7 @@ if ( !empty($customerName)) {
 }
 ?>
 <span class="links">
-    <div id="myAccount" style="float:left"><?php echo $this->__( 'Hi, %s ', $welcomeInfo );?>
+    <div id="myAccount" style="float:left"><?php echo $this->__( 'Hi, %s ', $welcomeInfo );?>&nbsp;<a href="#" class="sl_menu_arrow">▾</a>
        <ul>
 	       <li><a title="My Account" href="<?php echo Mage::getUrl('customer/account')?>"><?php echo $this->__('My Account');?></a></li>
 	       <li><a title="My Account" href="<?php echo Mage::getUrl('customer/account/logout')?>">Sign Out</a></li>
