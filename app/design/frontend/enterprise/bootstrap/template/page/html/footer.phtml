@@ -123,14 +123,16 @@
         };
     })();
     
-    var moduleName = "<?php echo $this->getRequest()->getModuleName() ?>";
-    if(moduleName=="catalog" || moduleName=="event"){
+    if(typeof _esq!='undefined') {
+        var moduleName = "<?php echo $this->getRequest()->getModuleName() ?>";
+        if(moduleName=="catalog" || moduleName=="event"){
         //code for enabling echoShare
-        _esq.settings.socialCenter = { enabled: true };
+            _esq.settings.socialCenter = { enabled: true };
         } else {
         //code for disabling echoShare
-        _esq.settings.socialCenter = { enabled: false };
+            _esq.settings.socialCenter = { enabled: false };
         }
+    }
 </script>
 
 <?php echo $this->getIncludes() ?>

@@ -61,9 +61,9 @@ else{
 						var temphtml = jQuery(this).html();
 						var test = jQuery(this).find("option:selected").text();
 						jQuery(selector_span_<?php echo $counter;?>).html(test);
-						if( jQuery(this).val() == ''){
+						if ( jQuery(this).val() == ''){
 							jQuery("button.btn-cart").css("background-color","<?php echo $buttonColor['deactive']?>");
-						}else {
+						} else {
 							jQuery("button.btn-cart").css("background-color","<?php echo $buttonColor['active']?>");
 						}
 				});
