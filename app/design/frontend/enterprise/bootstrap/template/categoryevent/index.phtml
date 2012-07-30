@@ -124,14 +124,14 @@
     ?>
     <?php if ($hasProduct):?>
     <div class="catalog-event event-counter-<?php echo $timer;?>">
-        <ul class="echoShare" 
+        <span class="echoShare" 
         data-productname="<?php echo $live['name'];?>" 
         data-productcap="" 
         data-productdesc="<?php echo 
         strip_tags(html_entity_decode($this->getDescription($live['description'])));?>" 
         data-imageclass="" 
         data-producturl="<?php echo Mage::getBaseUrl().$live['url_path']; ?>">
-        </ul>
+        </span>
     </div>
     <li class="span3">
     <div class="thumbnail">
@@ -156,9 +156,9 @@
     });
     </script>
 <?php $timer++;?>
-<?php endif;?>
 </div>
 </li>
+<?php endif;?>
 <?php endforeach;?>
 </ul>
 </div>
@@ -174,13 +174,13 @@
             $endcount = date("F j, Y, G:i:s", $endcountRaw);
         ?>
         <div class="catalog-event up-event-counter-<?php echo $timer;?>">
-            <ul class="echoShare" 
+            <span class="echoShare" 
                 data-productname="<?php echo $up['name'];?>" 
                 data-productcap="" 
                 data-productdesc="<?php echo strip_tags(html_entity_decode($this->getDescription($up['description'])));?>" 
                 data-imageclass="" 
                 data-producturl="<?php echo Mage::getBaseUrl().$up['url_path']; ?>">
-            </ul>
+            </span>
         </div>
         <li class="span2">
             <div class="thumbnail">
