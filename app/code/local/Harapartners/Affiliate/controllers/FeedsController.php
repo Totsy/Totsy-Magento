@@ -63,11 +63,12 @@ class Harapartners_Affiliate_FeedsController
         }
 
         $affiliateCode = Mage::getSingleton('core/encryption')->decrypt($token);
-        if (empty($affiliateCode)) {
+        $affiliate = Mage::getSingleton('affiliate/record')->loadByAffiliateCode($affiliateCode);
+        if (!$affiliate || !$affiliate->getId()) {
             $this->getResponse()
                 ->setHeader('Content-Type', 'text/plain', true)
                 ->setHttpResponseCode(400)
-                ->setBody("An affiliate code must be specified.");
+                ->setBody("A valid affiliate code must be specified.");
             return;
         }
 
@@ -212,7 +213,8 @@ XML;
     protected function _salesEntry($record, $order, $clickId, $period)
     {
         $salesTime = strtotime($order->getCreatedAt());
-        $registrationTime = strtotime($record->getCreatedAt());
+        $customer = Mage::getModel('customer/customer')->load($record->getCustomerId());
+        $registrationTime = strtotime($customer->getCreatedAt());
         $lte = !($salesTime - $registrationTime <= $period);
 
         if ($period > 0 && $lte === false) {
