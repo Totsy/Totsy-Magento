@@ -186,11 +186,9 @@ XML;
             if (!isset($regParams['clickId'])) {
                 return false;
             }
-
             $entry['clickId'] = $regParams['clickId'];
             unset($entry['registration_param']);
         }
-
         return true;
     }
 }
