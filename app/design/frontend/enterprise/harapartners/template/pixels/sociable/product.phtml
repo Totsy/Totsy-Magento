@@ -10,17 +10,9 @@ if( Mage::getSingleton('customer/session')->getCustomerId() ) {
 
     $customer_id = Mage::getSingleton('customer/session')->getCustomerId();
     $_tags = Array();
-        
-    if($_product->getAttributeText("departments")) {    
-        if(!is_array($_product->getAttributeText("departments"))) {
-            $_tags[] = $_product->getAttributeText("departments");
-        } else { 
-            foreach($_product->getAttributeText("departments") as $tag){
-                $_tags[] = $tag;
-            }        
-        }
-    }
-   
+    
+    $_tags =  Mage::helper('pixels/data')->getProductTags($_product, "departments");
+    
     $rondavu_data = array (
         "config" =>  array ( "version" => "1.2" ),
         "user" => array (
@@ -55,7 +47,7 @@ if( Mage::getSingleton('customer/session')->getCustomerId() ) {
                 "retail_price" => $_product->getFinalPrice(),
                 "sale_price" => $_product->getSaleWholesale(),
                 "currency"=> "USD"
-            )));      
+            )));     
 
     // declare a path to the key
     $key_path = "dev/sociablelabs/sign_private_key";
