@@ -14,8 +14,7 @@ class Totsy_Sales_Model_Order_Invoice extends Mage_Sales_Model_Order_Invoice
      * @return Mage_Sales_Model_Order_Invoice
      */
     public function cancel()
-    {   
-        echo 'test Totsy';
+    {
         $order = $this->getOrder();
         $order->getPayment()->cancelInvoice($this);
         foreach ($this->getAllItems() as $item) {
@@ -53,6 +52,27 @@ class Totsy_Sales_Model_Order_Invoice extends Mage_Sales_Model_Order_Invoice
         }
         $this->setState(self::STATE_CANCELED);
         Mage::dispatchEvent('sales_order_invoice_cancel', array($this->_eventObject=>$this));
+        return $this;
+    }
+    
+    /**
+     * Capture invoice
+     *
+     * @return Mage_Sales_Model_Order_Invoice
+     */
+    public function capture()
+    {   
+        try{
+            $this->getOrder()->getPayment()->capture($this);
+            if ($this->getIsPaid()) {
+                $this->pay();
+            }
+        } catch(Exception $e) {
+            //Deleting Invoices Created during Payment Process
+            $this->cancel()->save();
+            $this->getOrder()->save();
+            throw $e;
+        }
         return $this;
     }
 }
