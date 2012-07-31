@@ -399,6 +399,9 @@ class Harapartners_Ordersplit_Helper_Data extends Mage_Core_Helper_Abstract {
                         //NOTE: important events like 'sales_order_invoice_pay' are automatically dispatched
                         $orderPayment->place();
                         
+                        $virtualproductcoupon = Mage::getModel('promotionfactory/virtualproductcoupon');
+                        $virtualproductcoupon->openVirtualProductCouponInOrder($order);
+                        
 //                        $invoiceId = Mage::getModel('sales/order_invoice_api')->create($order->getIncrementId(), array());                
 //                        $invoice = Mage::getModel('sales/order_invoice')->loadByIncrementId($invoiceId);                
 //                        $invoice->capture()->save();                            

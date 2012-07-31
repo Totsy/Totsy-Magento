@@ -29,8 +29,7 @@
     <div id="order-messages">
         <?php echo $this->getChildHtml('order_messages') ?>
     </div>
-    
-    <?php if($this->canEditOrder($_order->getStatus())): ?>
+    <?php if($this->canEditOrder($_order->getStatus()) && !$this->isOrderInvoiced($_order)): ?>
 	    <div class="clear"></div>
 	    <button type="button" onclick="saveMe()" id="orderEdit" style="height:25px; width:280px; font-size:16px;">Edit Payment Informations</button>
 	    <div id="comment-field" style="display:none;"><br />Reason for editing order: <span id="required-comment" style="color:red; display:none;">This is required to edit an order</span><br />

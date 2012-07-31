@@ -30,4 +30,16 @@ class TinyBrick_OrderEdit_Block_Adminhtml_Sales_Order_View_Tab_Info extends Mage
     	}
     	return false;
     }
+    
+    public function isOrderInvoiced($order) 
+    {
+        $invoiced = false;
+        foreach($order->getItemsCollection() as $orderItem) {
+            $qtyInvoiced = (int) $orderItem->getQtyInvoiced();
+            if(!empty($qtyInvoiced)) {
+                $invoiced = true;
+            }
+        }
+        return $invoiced;
+    }
 }
