@@ -52,7 +52,7 @@ $endcount_lc = date("F j, Y, G:i:s", $endcount_utc); ?>
     <?php echo $this->getChildHtml('media') ?>
 </div>
 
-<div class="span8">
+<div class="span4">
 <div class="page-header">
     <h2><?php echo $_product->getName(); ?> <small></small></h2>
 </div>
@@ -91,8 +91,8 @@ $endcount_lc = date("F j, Y, G:i:s", $endcount_utc); ?>
     $today = strtotime('NOW');
 ?>
 </div>
-    <div id="product-main-info" class="product-main-info well">
-<div class="page-header">
+<div class="well">
+<div class="span4">
         <h2>Options <small>something else here…</small></h2>
 </div>
         <p class="product-ids"><?php echo $this->__('SKU# %s', $this->htmlEscape($_product->getSku())); ?></p>
