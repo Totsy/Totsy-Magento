@@ -457,7 +457,7 @@ class Mage_Core_Controller_Varien_Router_Standard extends Mage_Core_Controller_V
             return Mage::getBaseUrl('link', true).ltrim($alias, '/');
         }
 
-        return Mage::getBaseUrl('link', true).ltrim($request->getPathInfo(), '/');
+        return Mage::getBaseUrl('link', true).ltrim($request->getRequestUri(), '/');
     }
 
     protected function _shouldBeSecure($path)
