@@ -29,7 +29,7 @@ class Harapartners_Import_Block_Adminhtml_Import_Edit_Tab_Form extends Mage_Admi
             'note'        => 'Should new Purchase Order be created, the PO name is also given here. Default value is the category/event name.'
         ));
         
-        $fieldset->addField('po_id', 'select', array(
+        $poField = $fieldset->addField('po_id', 'select', array(
                 'label'     => $helper->__('Purchase Order'),
                 'required'  => true,
                 'name'        => 'po_id',
@@ -39,13 +39,32 @@ class Harapartners_Import_Block_Adminhtml_Import_Edit_Tab_Form extends Mage_Admi
                 ),
                 'note'        => $helper->__('Products within the same event usually belong to the same PO. Be careful when creating a new PO.')
         ));
+
+        $poField->setAfterElementHtml('<script>
+            function updateVendorCodeSelect() {
+                if ($(\'po_id\').value==0)
+                    $("vendor_code").disabled=false;
+                else {
+                    $("vendor_code").clear();
+                    $("vendor_code").disabled=true;
+                }
+            }
+
+            $(\'po_id\').observe(\'change\', function(event) { 
+                updateVendorCodeSelect(); 
+            });
+
+            document.observe(\'dom:loaded\', function(){
+              updateVendorCodeSelect();
+            });
+        </script>');
         
         $fieldset->addField('vendor_code', 'select', array(
                 'label'     => $helper->__('Vendor Code'),
                 'required'  => false,
                 'name'        => 'vendor_code',
                 'values'    => Mage::helper('stockhistory')->getFormAllVendorsArray(),
-                'note'        => $helper->__('<b>Required</b> when creating new PO.')
+                'note'        => $helper->__('<b>Required</b> when creating new PO, otherwise the vendor code from the selected PO will be used.')
         ));
         
         if(!!$dataObj->getData('category_id')){
