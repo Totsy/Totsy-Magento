@@ -72,13 +72,15 @@
 
 <script type="text/javascript">
 
-var moduleName = "<?php echo $this->getRequest()->getModuleName() ?>";
-
-if(moduleName=="catalog" || moduleName=="event"){
-    //code for enabling echoShare
-        _esq.settings.socialCenter = { enabled: true };
-} else {
-    //code for disabling echoShare
-        _esq.settings.socialCenter = { enabled: false };
+if(typeof _esq!='undefined'){
+    var moduleName = "<?php echo $this->getRequest()->getModuleName() ?>";
+    
+    if(moduleName=="catalog" || moduleName=="event"){
+        //code for enabling echoShare
+            _esq.settings.socialCenter = { enabled: true };
+    } else {
+        //code for disabling echoShare
+            _esq.settings.socialCenter = { enabled: false };
+    }
 }
 </script>
