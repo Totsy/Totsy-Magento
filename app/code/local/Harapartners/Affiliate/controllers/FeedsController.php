@@ -53,7 +53,8 @@ class Harapartners_Affiliate_FeedsController
             $to = substr($to, 0, 4) . '-' . substr($to, 4, 2) . '-' . substr($to, 6, 2);
         }
 
-        if ($token != '7cf7e9d58a213b2ebb401517d342475e') {
+        // authenticate the request
+        if (!$token) {
             $this->getResponse()
                 ->setHeader('Content-Type', 'text/plain', true)
                 ->setHttpResponseCode(400)
@@ -61,12 +62,13 @@ class Harapartners_Affiliate_FeedsController
             return;
         }
 
-        $affiliateCode = $request->getParam('affiliate_code');
-        if (empty($affiliateCode)) {
+        $affiliateCode = Mage::getSingleton('core/encryption')->decrypt($token);
+        $affiliate = Mage::getSingleton('affiliate/record')->loadByAffiliateCode($affiliateCode);
+        if (!$affiliate || !$affiliate->getId()) {
             $this->getResponse()
                 ->setHeader('Content-Type', 'text/plain', true)
                 ->setHttpResponseCode(400)
-                ->setBody("An affiliate code must be specified.");
+                ->setBody("A valid affiliate code must be specified.");
             return;
         }
 
@@ -113,7 +115,7 @@ XML;
                 $this->getResponse()
                     ->setHeader('Content-Type', 'text/plain', true)
                     ->setHttpResponseCode(400)
-                    ->setBody("An affiliate code must be specified.");
+                    ->setBody("Invalid feed name: $type");
                 return;
         }
 
@@ -211,7 +213,8 @@ XML;
     protected function _salesEntry($record, $order, $clickId, $period)
     {
         $salesTime = strtotime($order->getCreatedAt());
-        $registrationTime = strtotime($record->getCreatedAt());
+        $customer = Mage::getModel('customer/customer')->load($record->getCustomerId());
+        $registrationTime = strtotime($customer->getCreatedAt());
         $lte = !($salesTime - $registrationTime <= $period);
 
         if ($period > 0 && $lte === false) {

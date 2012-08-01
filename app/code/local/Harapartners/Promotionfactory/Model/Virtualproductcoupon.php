@@ -90,6 +90,8 @@ class Harapartners_Promotionfactory_Model_Virtualproductcoupon extends Mage_Core
                         $vpc = Mage::getModel('promotionfactory/virtualproductcoupon')->loadByCode($codeCoupon);
                         if($vpc->getId()){
                             $vpc->setData('status', Harapartners_Promotionfactory_Model_Virtualproductcoupon::COUPON_STATUS_PURCHASED)
+                                ->setData('order_id', $order->getId())
+                                ->setData('order_increment_id', $order->getIncrementId())
                             ->save();
                         }
                     }
@@ -98,5 +100,7 @@ class Harapartners_Promotionfactory_Model_Virtualproductcoupon extends Mage_Core
         }
         return;
     }
+    
+    
 
 }
