@@ -3,6 +3,9 @@
 $_product = Mage::registry('current_product');
 $_category = Mage::registry('current_category');
 
+$_description = "";
+$_description = Mage::helper('pixels/data')->stripHTMLContent($_product->getDescription());
+
 //include the signer
 require("dev/sociablelabs/sociable_signer.php");
 
@@ -31,7 +34,7 @@ if( Mage::getSingleton('customer/session')->getCustomerId() ) {
             "name" => array(array("name" => $_product->getName())),
             "primary_tag" => $_product->getCategory()->name,
             "tags" => $_tags,
-            "description"=> array(array("description" => strip_tags(html_entity_decode(str_replace(array("\r", "\n"), '', $_product->getDescription()))) )),
+            "description"=> array(array("description" => strip_tags(html_entity_decode(str_replace(array("\r", "\n"), '', $_description))) )),
             "url"=> array(
                 "detail" =>
                 $_product->getProductUrl(),
@@ -47,7 +50,7 @@ if( Mage::getSingleton('customer/session')->getCustomerId() ) {
                 "retail_price" => $_product->getFinalPrice(),
                 "sale_price" => $_product->getSaleWholesale(),
                 "currency"=> "USD"
-            )));     
+            )));  
 
     // declare a path to the key
     $key_path = "dev/sociablelabs/sign_private_key";
