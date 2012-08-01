@@ -27,16 +27,10 @@
  * @var Mage_Page_Block_Html_Header $this
  */
 ?>
-<div class="navbar navbar-fixed-top">
-    <div class="navbar-inner">
-      <div class="container">
-        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </a>
-        <?php if ( $this->getIsHomePage() ): ?>
-        <h1 class="logo"><strong><?php echo $this->getLogoAlt(); ?></strong><a href="<?php
+<header class="navbar navbar-fixed-top" style="background-color:#fff;">
+
+<div class="container">        
+        <h1 class="logo"><a href="<?php
     echo $this->getUrl( 'event/?ref=logo' );
 ?>" title="<?php
     echo $this->getLogoAlt();
@@ -44,23 +38,31 @@
     echo $this->getLogoSrc();
 ?>" alt="<?php
     echo $this->getLogoAlt();
-?>" width="100px" /></a></h1>
-        <?php
-else:
-?>
-        <a href="<?php
-    echo $this->getUrl( 'event/?ref=logo' );
-?>" title="<?php
-    echo $this->getLogoAlt();
-?>" class="logo brand"><img src="<?php
-    echo $this->getLogoSrc();
-?>" alt="<?php
-    echo $this->getLogoAlt();
-?>" width="100px" /></a>
-        <?php
-endif;
-?>
-          <div class="nav-collapse">
+?>" width="85px" /></a></h1>
+
+
+          <ul class="nav pull-right navLinks">
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><img src="/skin/frontend/enterprise/bootstrap/images/iconmonstr-user-icon.png" width="20" height="20" style="margin-top:-5px;" /> My Account <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a href="/customer/account/">Account Dashboard</a></li>
+                <li><a href="/customer/account/edit/">Account Information</a></li>
+                <li><a href="/paymentfactory/">Manage Credit Cards</a></li>
+                <li><a href="/customer/account/edit/changepassword/1/">Change Password</a></li>
+                <li><a href="/customer/address/">Address Book</a></li>
+                <li><a href="/sales/order/history/">My Orders</a></li>
+                <li><a href="/reward/customer/info/">My Credits</a></li>
+                <li><a href="/invitation/">My Invitations</a></li>
+                <li class="divider"></li>
+                <li><a href="/customer/account/logout">Logout</a></li>
+                </ul>
+            </li>
+                <li class="quick-access" id="header-user-info"></li>
+          </ul>
+
+</div>
+
+<nav>
           <ul class="nav navLinks">
             <li><a href="<?php
 echo $this->getBaseUrl();
@@ -118,28 +120,15 @@ foreach ( $ageOptionArray as $option ):
           </form>
           -->
           </ul>
-          <ul class="nav pull-right navLinks">
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><img src="/skin/frontend/enterprise/bootstrap/images/iconmonstr-user-icon.png" width="20" height="20" style="margin-top:-5px;" /> My Account <b class="caret"></b></a>
-              <ul class="dropdown-menu">
-                <li><a href="/customer/account/">Account Dashboard</a></li>
-                <li><a href="/customer/account/edit/">Account Information</a></li>
-                <li><a href="/paymentfactory/">Manage Credit Cards</a></li>
-                <li><a href="/customer/account/edit/changepassword/1/">Change Password</a></li>
-                <li><a href="/customer/address/">Address Book</a></li>
-                <li><a href="/sales/order/history/">My Orders</a></li>
-                <li><a href="/reward/customer/info/">My Credits</a></li>
-                <li><a href="/invitation/">My Invitations</a></li>
-                <li class="divider"></li>
-                <li><a href="/customer/account/logout">Logout</a></li>
-                </ul>
-            </li>
-                <li class="quick-access" id="header-user-info"></li>
-          </ul>
-        </div><!-- /.nav-collapse -->
-    </div><!-- /navbar-inner -->
-  </div><!-- /navbar -->
-</div>
+
+<a href="<?php echo $this -> getBaseUrl();?>invitation">INVITE YOUR FRIENDS, <strong>GET $15 </strong></a><?php echo $this->getAdditionalHtml() ?>
+
+</nav>
+          
+        
+  </header><!-- /navbar -->
+  
+  
 <div id="sociable_recent_activity_container"></div>
 <script type="text/javascript">
     function logout(){
