@@ -1,6 +1,18 @@
 Totsy-Magento Release Notes
 ===========================
 
+20120730
+----------
+
+* MGN-617 - Event End date on the Purchase Order Report page should be displayed in EST. Since the event date was stored as EST, it was not necessary to set the datetime in the grid layout.
+* Update Sailthru horizon javascript
+* MGN648 - Add Link to Order on Coupons Management Page 
+* MGN861 - Hide Edit Payment Option if Items are Invoiced
+* Merging affiliate info from previous requests with affiliate info from the current request.
+* Replaced the affiliate_code parameter for affiliate feeds with the token parameter, which is now the encrypted affiliate_code value.
+* When redirecting to a secure URL, use the full request URI (to include query string parameters) instead of only the path info.
+* Checking for an affiliate_code from the decrypted token.
+
 20120727-1
 ----------
 
