@@ -92,9 +92,8 @@ $endcount_lc = date("F j, Y, G:i:s", $endcount_utc); ?>
 ?>
 </div>
 <div class="well">
-<div class="span4">
-        <h2>Options <small>something else here…</small></h2>
-</div>
+<div class="span3">
+        <h2>Options</h2>
         <p class="product-ids"><?php echo $this->__('SKU# %s', $this->htmlEscape($_product->getSku())); ?></p>
         <?php //echo $this->getReviewsSummaryHtml($_product, false, true)?>
         <?php echo $this->getChildHtml('alert_urls') ?>
@@ -132,6 +131,8 @@ $endcount_lc = date("F j, Y, G:i:s", $endcount_utc); ?>
         </div>
     <?php endif;?>
     </div>
+</div>
+
     <div class="share-button" id="st_sharethis_custom">
         <div class="st_sharethis_custom"></div>
     </div>
