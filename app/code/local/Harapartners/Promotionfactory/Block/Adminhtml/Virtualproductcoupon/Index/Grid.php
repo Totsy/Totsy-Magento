@@ -20,7 +20,7 @@ class Harapartners_PromotionFactory_Block_Adminhtml_Virtualproductcoupon_Index_G
     }
 
     protected function _prepareCollection(){
-        $coupons = Mage::getModel('promotionfactory/virtualproductcoupon')->getCollection();
+        $coupons = Mage::getModel('promotionfactory/virtualproductcoupon')->getCollection()->addFilter('product_id' ,$this->getRequest()->getParam('product_id'), 'eq');
         $this->setCollection($coupons);
         parent::_prepareCollection();
         return $this;
