@@ -90,7 +90,6 @@ $endcount_lc = date("F j, Y, G:i:s", $endcount_utc); ?>
     $event_end_date = strtotime($_category->getEventEndDate());
     $today = strtotime('NOW');
 ?>
-</div>
     <div id="product-main-info" class="product-main-info well">
 <div class="page-header">
         <h2>Options <small>something else here…</small></h2>
@@ -135,15 +134,12 @@ $endcount_lc = date("F j, Y, G:i:s", $endcount_utc); ?>
     <div class="share-button" id="st_sharethis_custom">
         <div class="st_sharethis_custom"></div>
     </div>
-    <div class="span12">
         <?php echo $this->getChildHtml('relatedProducts') ?>
         <?php echo $this->getChildHtml('upsell_products') ?>
         <?php // echo $this->getChildHtml('productTagList') ?>
         <?php echo $this->getChildHtml('product_additional_data') ?>
     </div>
-</div>
-</div>
-
+     </div>
 
 <script type="text/javascript">
 
