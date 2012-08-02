@@ -32,7 +32,9 @@ class Harapartners_Paymentfactory_IndexController extends Mage_Core_Controller_F
         $customer = Mage::getSingleton('customer/session')->getCustomer();
         $customerId = $customer->getId(); 
         $data = $this->getRequest ()->getParams();
-        
+        #Clean Address
+        $data['billing']['street'] = ($data['billing']['street'][0] . ' ' . $data['billing']['street'][1]);
+
         $billing = new Varien_Object($data['billing']);
         $payment = new Varien_Object($data['payment']);
         #Create Address that will be link with Payment Profile
