@@ -292,10 +292,10 @@ Product view
                     <label>Bottom Block Options Wrapper</label>
                     <action method="append"><block>product.info.addtocart</block></action>
                     <action method="append"><block>product.info.addto</block></action>
+                    <!--
                     <block type="catalog/product_view" name="product.clone_prices" as="prices" template="catalog/product/view/price_clone.phtml"/>
-                    <action method="append"><block>product.tierprices</block></action>
+                    <action method="append"><block>product.tierprices</block></action> -->
                 </block>
-
                 <block type="core/template_facade" name="product.info.container1" as="container1">
                     <action method="setDataByKey"><key>alias_in_layout</key><value>container1</value></action>
                     <action method="setDataByKeyFromRegistry"><key>options_container</key><key_in_registry>product</key_in_registry></action>
