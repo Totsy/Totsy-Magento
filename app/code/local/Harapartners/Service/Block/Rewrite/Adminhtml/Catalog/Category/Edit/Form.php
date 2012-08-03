@@ -59,16 +59,7 @@ class Harapartners_Service_Block_Rewrite_Adminhtml_Catalog_Category_Edit_Form ex
                         'class' => 'preview'
                     ))
             );
-            if($category->getIsVirtualEvent()) {
-                $this->setChild('email_preview_button',
-                $this->getLayout()->createBlock('adminhtml/widget_button')
-                    ->setData(array(
-                        'label'     => Mage::helper('catalog')->__('Preview Event Email'),
-                        'onclick'   => "sendPreviewEmailSubmit();",
-                        'class' => 'preview'
-                    ))
-                );
-            }
+            
             if($category->getParentId() == $expiredEventCategory->getId()) {
                 $this->setChild('revert_move',
                 $this->getLayout()->createBlock('adminhtml/widget_button')
@@ -131,13 +122,6 @@ class Harapartners_Service_Block_Rewrite_Adminhtml_Catalog_Category_Edit_Form ex
         return '';
     }
 
-    public function getEmailPreviewButtonHtml()
-    {
-        if ($this->hasStoreRootCategory()) {
-            return $this->getChildHtml('email_preview_button');
-        }
-        return '';
-    }
     public function getRevertMoveButtonHtml()
     {
         if ($this->hasStoreRootCategory()) {
