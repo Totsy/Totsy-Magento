@@ -16,7 +16,8 @@ class Harapartners_Service_Model_Rewrite_Catalog_Convert_Adapter_Product extends
     
     const MULTI_DELIMITER   = ','; //Harapartners, Jun
     const DEFAULT_FIELD_DELIMITER   = ','; //Harapartners, Jun
-
+	
+    
     public function saveRow(array $importData){
         $product = $this->getProductModel()
             ->reset();
@@ -109,6 +110,7 @@ class Harapartners_Service_Model_Rewrite_Catalog_Convert_Adapter_Product extends
              * Richu
              */
         
+            
             if ($importData['type'] == 'configurable') {
                 $product->setCanSaveConfigurableAttributes(true);
                 $configAttributeCodes = explode(self::DEFAULT_FIELD_DELIMITER, $importData['configurable_attribute_codes']);
@@ -272,11 +274,29 @@ class Harapartners_Service_Model_Rewrite_Catalog_Convert_Adapter_Product extends
         $mediaGalleryBackendModel = $this->getAttribute('media_gallery')->getBackend();
 
         $arrayToMassAdd = array();
+		
+        // Hara Song: Remove all  images before setting
 
+        $mediaGallery = $product->getMediaGallery();
+        $mediaGallery = $mediaGallery['images'];
+        
         foreach ($product->getMediaAttributes() as $mediaAttributeCode => $mediaAttribute) {
             if (isset($importData[$mediaAttributeCode])) {
                 $file = trim($importData[$mediaAttributeCode]);
-                if (!empty($file) && !$mediaGalleryBackendModel->getImage($product, $file)) {
+                
+                if (!empty($file) && !$mediaGalleryBackendModel->getImage($product, $file)){
+                	//$fileName       = Mage_Core_Model_File_Uploader::getCorrectFileName(ltrim($product->getData($mediaAttributeCode),'/'));
+       				//$dispretionPath = Mage_Core_Model_File_Uploader::getDispretionPath($fileName);
+//         			$fileName       = Mage::getBaseDir('media') . DS . 'catalog' . DS . 'product' . $dispretionPath . DS . $fileName;
+
+       				foreach($mediaGallery as $image){
+       					if($image['file'] == $product->getOrigData($mediaAttributeCode) ){
+       						$mediaGalleryBackendModel->removeImage ( $product, $image['file']);
+       						break;
+       					}
+       				}
+
+         			
                     $arrayToMassAdd[] = array('file' => trim($file), 'mediaAttribute' => $mediaAttributeCode);
                 }
             }
@@ -350,5 +370,23 @@ class Harapartners_Service_Model_Rewrite_Catalog_Convert_Adapter_Product extends
             }
         }
         return $productIds;
+    }
+    
+	protected function _getNotDuplicatedFilename($fileName, $dispretionPath)
+    {
+        $fileMediaName = $dispretionPath . DS
+                  . Mage_Core_Model_File_Uploader::getNewFileName($this->_getConfig()->getMediaPath($fileName));
+        $fileTmpMediaName = $dispretionPath . DS
+                  . Mage_Core_Model_File_Uploader::getNewFileName($this->_getConfig()->getTmpMediaPath($fileName));
+
+        if ($fileMediaName != $fileTmpMediaName) {
+            if ($fileMediaName != $fileName) {
+                return $this->_getNotDuplicatedFileName($fileMediaName, $dispretionPath);
+            } elseif ($fileTmpMediaName != $fileName) {
+                return $this->_getNotDuplicatedFilename($fileTmpMediaName, $dispretionPath);
+            }
+        }
+
+        return $fileMediaName;
     }
 }
