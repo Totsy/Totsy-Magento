@@ -96,6 +96,16 @@ if (!empty($_GET['start_time']) && preg_match('/[\d]{2}[\:][\d]{2}[\:][\d]{2}/',
 
 date_default_timezone_set($defaultTimezone);
 
+$exclude = array();
+if (!empty($_GET['exclude']) && preg_match('/[\d\,]+/',$_GET['exclude'])){
+	$exclude_list = explode(',', $_GET['exclude']);
+	foreach($exclude_list as $el){
+		if (is_numeric($el)) $exclude[] = $el;
+	}
+	unset($exclude_list);
+}
+
+
 /*### PROCESS DATA ###*/
 /*if user want to check upcomming products, put this parameter to url*/
 //$sortentryObject = Mage::getModel('categoryevent/sortentry')->loadByDate(date('Y-m-d',$start_date), $storeId, false);
@@ -187,7 +197,12 @@ function getLargestSaveByCategory(Mage_Catalog_Model_Category $_category){
 }
 
 function getEventApiOutput(Mage_Catalog_Model_Category $_category , $type, &$out){
-	
+	global $exclude;
+
+	if (!empty($exclude) && in_array($_category->getEntityId(), $exclude)){
+		return;
+	}
+
 	$departmentOptionSource = Mage::getModel('catalog/product')->getResource()->getAttribute('departments')->getSource();
 	$ageOptionSource  = Mage::getModel('catalog/product')->getResource()->getAttribute('ages')->getSource();
 	
