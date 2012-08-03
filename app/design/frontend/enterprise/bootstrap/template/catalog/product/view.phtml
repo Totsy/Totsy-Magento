@@ -52,7 +52,7 @@ $endcount_lc = date("F j, Y, G:i:s", $endcount_utc); ?>
     <?php echo $this->getChildHtml('media') ?>
 </div>
 
-<div class="span8">
+<div class="span4">
 <div class="page-header">
     <h2><?php echo $_product->getName(); ?> <small></small></h2>
 </div>
@@ -81,20 +81,18 @@ $endcount_lc = date("F j, Y, G:i:s", $endcount_utc); ?>
     var optionsPrice = new Product.OptionsPrice(<?php echo $this->getJsonConfig() ?>);
 </script>
 <script>
-        jQuery(function () {
+    jQuery(function () {
         jQuery('#myTabs a:first').tab('show');
     })
 </script>
-
 <?php 
     $event_end_date = strtotime($_category->getEventEndDate());
     $today = strtotime('NOW');
 ?>
 </div>
-    <div id="product-main-info" class="product-main-info well">
-<div class="page-header">
-        <h2>Options <small>something else here…</small></h2>
-</div>
+<!-- <div class="well"> -->
+<div class="span3">
+        <h2>Options</h2>
         <p class="product-ids"><?php echo $this->__('SKU# %s', $this->htmlEscape($_product->getSku())); ?></p>
         <?php //echo $this->getReviewsSummaryHtml($_product, false, true)?>
         <?php echo $this->getChildHtml('alert_urls') ?>
@@ -132,19 +130,16 @@ $endcount_lc = date("F j, Y, G:i:s", $endcount_utc); ?>
         </div>
     <?php endif;?>
     </div>
+<!-- </div> -->
     <div class="share-button" id="st_sharethis_custom">
         <div class="st_sharethis_custom"></div>
     </div>
-    <div class="span12">
         <?php echo $this->getChildHtml('relatedProducts') ?>
         <?php echo $this->getChildHtml('upsell_products') ?>
         <?php // echo $this->getChildHtml('productTagList') ?>
         <?php echo $this->getChildHtml('product_additional_data') ?>
     </div>
 </div>
-</div>
-
-
 <script type="text/javascript">
 
 jQuery(document).ready( function() {
@@ -154,7 +149,6 @@ jQuery(document).ready( function() {
         if (this.validator.validate()) {
             var form = this.form;
             var oldUrl = form.action;
-
             if (url) {
                form.action = url;
             }
@@ -173,7 +167,7 @@ jQuery(document).ready( function() {
                     dataType: 'json',
                     type : 'post',
                     data: data,
-                    success: function(data){
+                    success: function(data){                    
                         if(data.redirect) {
                             window.location.href = data.redirect;
                         }
@@ -186,6 +180,7 @@ jQuery(document).ready( function() {
 //                            $('product-main-info').update(data.productbox);
 //                        }
                         if(data.status && data.message) {
+                        
                             var html = '<ul class="alert alert-success"><li class="'+data.status.toLowerCase()+'-msg"><ul><li>' + data.message + '</li></ul></li></ul>';
                             $('messages_product_view').update(html);
                             (function() {$('messages_product_view').update(null)}).delay(2);
@@ -198,6 +193,7 @@ jQuery(document).ready( function() {
                     }
                 });
             } catch (e) {
+                alert(e);
             }
             //End of our new ajax code
             this.form.action = oldUrl;
@@ -229,7 +225,6 @@ jQuery(document).ready( function() {
     
     });
 </script>
-
 <script type="text/javascript">var switchTo5x=true;</script>
 <script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
 <script type="text/javascript">stLight.options({publisher: "fa9539d4-b1db-40d3-9e2d-9e9a8dc98b42",onhover: false}); </script>
@@ -244,56 +239,48 @@ stWidget.addEntry({
         "image":"<?php echo $small_img; ?>"
 });
 </script>
-   
 <script type="text/javascript">
-		jQuery(document).ready(function(){
-			/*
-			 *  Simple image gallery. Uses default settings
-			 */
-
-			jQuery('.fancybox').fancybox();
-
-			/*
-			 *  Different effects
-			 */
-
-			// Change title type, overlay opening speed and opacity
-			jQuery(".fancybox-effects-a").fancybox({
-				helpers: {
-					title : {
-						type : 'outside'
-					},
-					overlay : {
-						speedIn : 500,
-						opacity : 0.95
-					}
-				}
-			});
-
-			// Disable opening and closing animations, change title type
-			jQuery(".fancybox-effects-b").fancybox({
-				openEffect  : 'none',
-				closeEffect	: 'none',
-
-				helpers : {
-					title : {
-						type : 'over'
-					}
-				}
-			});
-
-		});
-	</script>
+    jQuery(document).ready(function(){
+        /*
+         *  Simple image gallery. Uses default settings
+         */
+        jQuery('.fancybox').fancybox();
+        // Change title type, overlay opening speed and opacity
+        jQuery(".fancybox-effects-a").fancybox({
+            helpers: {
+            	title : {
+            		type : 'outside'
+            	},
+            	overlay : {
+            		speedIn : 500,
+            		opacity : 0.95
+            	}
+            }
+        });
+        // Disable opening and closing animations, change title type
+        jQuery(".fancybox-effects-b").fancybox({
+            openEffect  : 'none',
+            closeEffect	: 'none',
+            helpers : {
+            	title : {
+            		type : 'over'
+            	}
+            }
+        });
+        
+    });
+</script>
 <script type="text/javascript">
-var html = getTimerHtml('live','<?php echo $endcount_lc ?>');
-jQuery("#timer").countdown({
-//date: "12 10, 2011 16:11", //Counting TO a date
-date: "<?php echo $endcount_lc; ?>", //Counting TO a date
-htmlTemplate: html,
-onComplete: function( event ){
-jQuery(this).html("Completed");
-},
-leadingZero: true,
-direction: "down"
-});
+    var html = getTimerHtml('live','<?php echo $endcount_lc ?>');
+    
+    jQuery("#timer").countdown({
+    //date: "12 10, 2011 16:11", //Counting TO a date
+        date: "<?php echo $endcount_lc; ?>", //Counting TO a date
+        htmlTemplate: html,
+        onComplete: function( event ){
+            jQuery(this).html("Completed");
+        },
+        leadingZero: true,
+        direction: "down"
+    });
 </script>
