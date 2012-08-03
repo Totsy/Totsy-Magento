@@ -92,7 +92,10 @@ a:hover{color:#ed1c25;text-decoration:underline;}
     text-decoration: none;
 }
 /* dropdown nav menus */
-.nav .dropdown-menu {display: none;}
+.nav .dropdown-menu {
+    display: none;
+    
+}
 .nav li:hover .dropdown-menu {display: block;}
 
 .brand {
