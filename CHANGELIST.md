@@ -1,5 +1,16 @@
 Totsy-Magento Release Notes
 ===========================
+20120803
+----------
+* MGN-617 Event End date now display as EST in Purchase Order Grid. 
+* MGN-847 Moved preview email button to product level
+* MGN-486 adding logo to event view
+* MGN-873 hiding subtotal on cart view for cs purposes
+* MGN-404 Hide splitted orders form Order History
+* Fixing Warning in HP Checkout SocialLabs with Evan
+* Sanitizing address street data before making Cybersource requests.
+* MGN-862 remove invite friends banner to make way for monetate
+
 20120801
 ----------
 * MGN-855 manage coupons btn open to new tab
