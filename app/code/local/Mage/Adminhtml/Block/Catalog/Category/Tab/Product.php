@@ -193,7 +193,8 @@ class Mage_Adminhtml_Block_Catalog_Category_Tab_Product extends Mage_Adminhtml_B
             'header'    => Mage::helper('catalog')->__('Position'),
             'width'     => '1',
             'type'      => 'number',
-            'editable'  => !$this->getCategory()->getProductsReadonly()
+            'editable'  => !$this->getCategory()->getProductsReadonly(),
+            'index' => 'position'
             //'renderer'  => 'adminhtml/widget_grid_column_renderer_input'
         ));
 

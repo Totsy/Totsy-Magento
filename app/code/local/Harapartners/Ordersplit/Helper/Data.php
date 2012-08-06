@@ -250,9 +250,12 @@ class Harapartners_Ordersplit_Helper_Data extends Mage_Core_Helper_Abstract {
                         $oldPayment->setPaymentId(null)
                             ->setQuoteId($newQuote->getId())
                             ->setQuote($newQuote);
-
+                        $paymentData = $oldPayment->getData();
+                        if($paymentData['method'] == 'free') {
+                            $paymentData['use_reward_points'] = 1;
+                        }
                         //test payment method "free"
-                        $newQuote->getPayment()->importData($oldPayment->getData(), false);
+                        $newQuote->getPayment()->importData($paymentData);
                     } else {
                         //2012-07-08 Using logic from Magento Admin Order Edit to handle the copying of the addresses when no quote exists
                         $newQuote->getBillingAddress()->setCustomerAddressId('');
@@ -280,7 +283,11 @@ class Harapartners_Ordersplit_Helper_Data extends Mage_Core_Helper_Abstract {
                         $newQuote->getShippingAddress()->setShippingMethod($oldOrder->getShippingMethod());
                         $newQuote->getShippingAddress()->setShippingDescription($oldOrder->getShippingDescription());
 
-                        $newQuote->getPayment()->importData($oldOrder->getPayment()->getData());
+                        $paymentData = $oldPayment->getData();
+                        if($paymentData['method'] == 'free') {
+                            $paymentData['use_reward_points'] = 1;
+                        }
+                        $newQuote->getPayment()->importData($paymentData);
                         if(!!$oldOrder->getPayment()->getCybersourceSubid())    {
                             $newQuote->getPayment()->setCybersourceSubid(base64_encode(Mage::getModel('core/encryption')->encrypt($oldOrder->getPayment()->getCybersourceSubid())));
                         }
