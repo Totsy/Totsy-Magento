@@ -33,6 +33,10 @@ class Harapartners_Affiliate_FeedsController
             $to = substr($to, 0, 4) . '-' . substr($to, 4, 2) . '-' . substr($to, 6, 2);
         }
 
+        // set time endpoints for the date range
+        $from .= ' 00:00:00';
+        $to   .= ' 23:59:59';
+
         // authenticate the request
         if (!$token) {
             $this->getResponse()
@@ -86,7 +90,7 @@ XML;
                     ->columns(array('count1' => $staticOne))
                     ->columns(array('eventStatus' => $staticConfirmed))
                     ->where('c.affiliate_code = ?', $affiliateCode)
-                    ->where("c.created_at BETWEEN '$from' AND '$to'");
+                    ->where("CONVERT_TZ(c.created_at, '+00:00', '-04:00') BETWEEN '$from' AND '$to'");
                 break;
 
             case 'referralsignups':
@@ -99,7 +103,7 @@ XML;
                     ->columns(array('count1' => $staticOne))
                     ->columns(array('eventStatus' => $staticConfirmed))
                     ->where('c.affiliate_code = ?', $affiliateCode)
-                    ->where("c.created_at BETWEEN '$from' AND '$to'")
+                    ->where("CONVERT_TZ(c.created_at, '+00:00', '-04:00') BETWEEN '$from' AND '$to'")
                     ->where("c.level = 1");
                 break;
 
@@ -118,7 +122,7 @@ XML;
                     ->columns(array('time' => 'UNIX_TIMESTAMP(c.created_at)'))
                     ->columns(array('eventStatus' => $staticConfirmed))
                     ->where('c.affiliate_code = ?', $affiliateCode)
-                    ->where("c.created_at BETWEEN '$from' AND '$to'");
+                    ->where("CONVERT_TZ(c.created_at, '+00:00', '-04:00') BETWEEN '$from' AND '$to'");
 
                 if ($period) {
                     $select->where("DATEDIFF(s.created_at, e.created_at) < ?", $period);
@@ -141,7 +145,7 @@ XML;
                     ->columns(array('time' => 'UNIX_TIMESTAMP(c.created_at)'))
                     ->columns(array('eventStatus' => $staticConfirmed))
                     ->where('c.affiliate_code = ?', $affiliateCode)
-                    ->where("c.created_at BETWEEN '$from' AND '$to'")
+                    ->where("CONVERT_TZ(c.created_at, '+00:00', '-04:00') BETWEEN '$from' AND '$to'")
                     ->where("c.level = 1");
 
                 if ($period) {
