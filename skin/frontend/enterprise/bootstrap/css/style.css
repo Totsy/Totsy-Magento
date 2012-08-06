@@ -1,9 +1,16 @@
 /**
  @Base styles for the Magento Bootstrap theme
  */
+/*
 html,
-body { height: 100%; background:none;}
-html { background: #f7f5f5 url(../img/paper.jpg) repeat fixed }
+body { height: 100%;}
+*/
+html {
+    margin:0;
+    background-color:#fff;
+    background-image: -moz-linear-gradient(center top, #eef6fc, #fff);
+/*     background-attachment: fixed; */
+}
 a {color:#ed1c25;text-decoration:none;}
 a:hover{color:#ed1c25;text-decoration:underline;}
 .content_push { margin-top:65px; }
@@ -72,35 +79,50 @@ html.test .container .row {outline:1px dotted green;}
 .navLinks { padding-top: 7px; }
 
 /**
- @Layout Overrides
- */
-
-
-/**
  @Header
  - "navbar" class from bootstrap
  - incl: branding, actual nav, user & checkout modules
  */
-.navbar {background:#fff;}
-#logo {margin-left:0;}
-/* nav */
-.navbar nav {background-color:#f9f9f9;}
-/*
-.navbar-inner {
-  background-color: #F7F7F7;
-  background-image: -moz-linear-gradient(center top , #F7F7F7, #e7e7e7);
-  background-repeat: repeat-x;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25), 0 -1px 0 rgba(0, 0, 0, 0.1) inset;
-  min-height: 40px;
-  height:55px;
+.navbar {
+    background:#fff;
+    border-bottom:1px solid #d1d9de;
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.086);
 }
+
+/* masthead */
+#masthead {
+    margin-bottom: 5px;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.35);
+}
+#logo {margin-left:0;}
+
+/* nav */
+.navbar nav {
+    padding-top: 5px;
+    background-color:#f9f9f9;
+/*
+    background-image: -moz-linear-gradient(0% 12% 90deg,#f9f9f9, #999);
+    background: -webkit-gradient(linear, 0% 0%, 0% 12%, from(#999), to(#f9f9f9));
+    background-image: -webkit-linear-gradient(0% 12% 90deg,#f9f9f9, #999);
+    background-image: linear-gradient(0% 12% 90deg,#f9f9f9, #999);
 */
+}
+.navbar .nav {margin:0;}
+.navbar .nav > li {
+/*     margin-left:5px; */
+    padding: 0 9px 10px 10px; 
+    background: url('../images/div-nav.png') 0 50% no-repeat;
+}
+.navbar .nav > li:first-child {padding-left:0; background-image: none;}
 .navbar .nav > li > a {
-    padding: 0;
+    padding: 0 33px 0 0;
     color: #636466;
     font-size: 12px; font-weight: bold;
     line-height: 13px;
     text-shadow: 0 1px 0 rgba(255, 255, 255, 0.85); text-transform: uppercase;
+}
+.navbar .nav > li.dropdown > a {
+    background: url('../images/icon-nav-drop.png') 100% 50% no-repeat;
 }
 .navbar .nav > li > a:hover {
     background-color: transparent;
@@ -114,11 +136,39 @@ html.test .container .row {outline:1px dotted green;}
 }
 .navbar .nav > li > a em {font-style: normal;}
 /* dropdown nav menus */
+.navbar .nav > li:hover {
+    padding-left:9px; 
+    background-color:#fff; 
+    background-image:none; 
+    border-left:1px solid rgba(0,0,0,0.2);
+    cursor: pointer;
+}
 .nav .dropdown-menu {
     display: none;
-    
+    left:-1px;
+    margin-top:0;
+    border-top:none;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    box-shadow:0 5px 5px rgba(0, 0, 0, 0.10)
 }
-.nav li:hover .dropdown-menu {display: block;}
+.nav li:hover .dropdown-menu {
+    display: block;
+}
+.navShop .dropdown-menu li:first-child {display: none;}
+.navbar .dropdown-menu:after,
+.navbar .dropdown-menu:before {display: none;} /* not using these cool dropdown tooltip things… boo */
+
+/* invite CTA */
+#inviteCTA a {color: #636466; font-weight: bold;}
+#inviteCTA strong {display: block;}
+#inviteCTA strong em {color:#d84643; font-style:normal;}
+
+/**
+ @Minicart
+ */
+#usercart {position: relative;} 
+#topCartContent {position: absolute; top: 100%; left: 0;}
 
 /**
  @Footer

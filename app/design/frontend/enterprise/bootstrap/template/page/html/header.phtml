@@ -72,7 +72,7 @@
                         <li><a href="<?php echo $this->getBaseUrl()?>event#event-upcoming">Upcoming</a></li>
                     </ul>
                 </li>
-                <li id="navByCat" class="dropdown">
+                <li id="navByCat" class="dropdown navShop">
                     <a><em>SHOP BY<br/>CATEGORY</em></a>
                     <ul class="dropdown-menu">
                     <?php $type = 'departments'; ?>
@@ -83,7 +83,7 @@
                     <?php endforeach;?>
                     </ul>        
                 </li>
-                <li id="navByAge" class="dropdown">
+                <li id="navByAge" class="dropdown navShop">
                     <a><em>SHOP BY<br/>AGE</em></a>
                     <ul class="dropdown-menu">
                     <?php $age = 'ages'; ?>
@@ -96,8 +96,8 @@
                 </li>
                 <li id="navSocial"><a href="/pixels/sociable/feed" title="Social Feed"><em>WHAT'S <br/>HOT</em></a></li>
             </ul>
-            <div class="span2 offset2">
-                <a href="<?php echo $this -> getBaseUrl();?>invitation">INVITE YOUR FRIENDS, <strong>GET $15 </strong></a><?php echo $this->getAdditionalHtml() ?>
+            <div id="inviteCTA" class="span2 offset2">
+                <a href="<?php echo $this -> getBaseUrl();?>invitation">INVITE FRIENDS <strong>GET A <em>$15</em> CREDIT</strong></a><?php echo $this->getAdditionalHtml() ?>
             </div>
         </div>
     </nav>
