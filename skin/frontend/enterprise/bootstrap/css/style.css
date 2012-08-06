@@ -30,6 +30,15 @@ a:hover{color:#ed1c25;text-decoration:underline;}
     width: auto;
     z-index: 999;
 }
+/**
+ @Diagnostics
+ */
+html.test body > .container,
+html.test body > header {outline:1px dotted red;}
+html.test .container .container,
+html.test body > header .container {outline:1px dotted blue;}
+html.test .container .row {outline:1px dotted green;}
+ 
 /** 
  @960.gs Grid Reset Classes
  */
@@ -58,38 +67,37 @@ a:hover{color:#ed1c25;text-decoration:underline;}
 .navLinks { padding-top: 7px; }
 
 /**
- @Layout
+ @Layout Overrides
  */
 
 
 /**
  @Header
- - branding, nav, user & checkout modules
+ - "navbar" class from bootstrap
+ - incl: branding, actual nav, user & checkout modules
  */
 .navbar {background:#fff;}
-.navbar, .brand { padding:0px!important; }
-.navbar nav > li > a {
-  color: #777777;
-  float: none;
-  font-size: 17px;
-  letter-spacing: -0.3px;
-  line-height: 19px;
-  padding: 12px 10px 11px;
-  text-decoration: none;
-  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.85);
-}
+#logo {margin-left:0;}
 /* nav */
 .navbar nav {background-color:#f9f9f9;}
-.navbar nav > li > a:hover {
+.navbar .nav > li > a {
+    padding: 0;
+    color: #636466;
+    font-size: 12px; font-weight: bold;
+    line-height: 13px;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.85); text-transform: uppercase;
+}
+.navbar .nav > li > a:hover {
     background-color: transparent;
     color: #ed1c25;
     text-decoration: none;
 }
-.navbar nav .active > a,
-.navbar nav .active > a:hover {
+.navbar .nav .active > a,
+.navbar .nav .active > a:hover {
     color: #ed1c25;
     text-decoration: none;
 }
+.navbar .nav > li > a em {font-style: normal;}
 /* dropdown nav menus */
 .nav .dropdown-menu {
     display: none;

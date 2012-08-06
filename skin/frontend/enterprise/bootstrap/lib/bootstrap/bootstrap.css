@@ -32,7 +32,7 @@ textarea{overflow:auto;vertical-align:top;}
 body{margin:0;font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:13px;line-height:18px;color:#333333;}
 a{color:#ed1c25;text-decoration:none;}
 a:hover{color:#af0e15;text-decoration:underline;}
-.row{margin-left:-20px;*zoom:1;}.row:before,.row:after{display:table;content:"";}
+.row{margin-left:-10px;*zoom:1;}.row:before,.row:after{display:table;content:"";}
 .row:after{clear:both;}
 [class*="span"]{float:left;margin-left:10px;}
 .container,.navbar-fixed-top .container,.navbar-fixed-bottom .container{width:950px;}

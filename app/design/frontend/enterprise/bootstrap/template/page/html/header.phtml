@@ -30,18 +30,18 @@
 <header class="navbar navbar-fixed-top">
     <!-- begin masthead -->
     <div id="masthead">
-        <div class="container">   
-            <h1 class="logo"><a href="<?php
+        <div class="container row">   
+            <h1 id="logo" class="span2"><a href="<?php
             echo $this->getUrl( 'event/?ref=logo' );
             ?>" title="<?php
             echo $this->getLogoAlt();
-            ?>" class="logo brand"><img src="<?php
+            ?>"><img src="<?php
             echo $this->getLogoSrc();
             ?>" alt="<?php
             echo $this->getLogoAlt();
             ?>" width="85px" /></a></h1>
         
-            <ul>
+            <ul class="span4 offset6">
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown"><img src="/skin/frontend/enterprise/bootstrap/images/iconmonstr-user-icon.png" width="20" height="20" style="margin-top:-5px;" /> My Account</a>
                     <ul class="dropdown-menu">
@@ -63,8 +63,8 @@
     </div><!--/#masthead -->
     <!-- begin nav -->
     <nav>
-        <div class="container">
-            <ul class="nav">
+        <div class="container row">
+            <ul class="nav span8">
                 <li id="navAllEvents" class="dropdown">
                     <a href="<?php echo $this->getBaseUrl()?>event/"><em>ALL <br />SALES</em></a>
                     <ul class="dropdown-menu">
@@ -96,7 +96,9 @@
                 </li>
                 <li id="navSocial"><a href="/pixels/sociable/feed" title="Social Feed"><em>WHAT'S <br/>HOT</em></a></li>
             </ul>
-            <a href="<?php echo $this -> getBaseUrl();?>invitation">INVITE YOUR FRIENDS, <strong>GET $15 </strong></a><?php echo $this->getAdditionalHtml() ?>
+            <div class="span2 offset2">
+                <a href="<?php echo $this -> getBaseUrl();?>invitation">INVITE YOUR FRIENDS, <strong>GET $15 </strong></a><?php echo $this->getAdditionalHtml() ?>
+            </div>
         </div>
     </nav>
 </header><!-- /.navbar -->
