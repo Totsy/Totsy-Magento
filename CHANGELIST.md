@@ -1,5 +1,15 @@
 Totsy-Magento Release Notes
 ===========================
+
+20120806
+----------
+* MGN-873 removing subtotal from cart page on mobile
+* MGN-859 Improved import error handling to catch invalid attribute values
+* MGN-441 Display the position value on the event products tab
+* Add exclude method for sailthru events api feed
+* MGN-887 Allow customer to purchase an hybrid order with credits
+* MGN-817 Update an Order with Credits will set status to Updated
+
 20120803
 ----------
 * MGN-617 Event End date now display as EST in Purchase Order Grid. 
