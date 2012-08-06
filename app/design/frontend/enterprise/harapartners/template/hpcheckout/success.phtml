@@ -42,6 +42,7 @@ require("dev/sociablelabs/sociable_signer.php");
 
 $items_for_socialable_page_key = array();
 $items_for_socialable_mos_keys = array();
+$items_for_socialable_purchase_key = array();
 
 $items = $order->getAllVisibleItems();
 
@@ -71,7 +72,7 @@ $rondavu_data =array("config"=>array("version"=>"1.2") ,
         "tracking" =>array(array("name" =>"refId","
            value" =>"refrerral_code"))),
     "page" =>array("tags" =>array("order_confirmation"),
-        "actions" =>array("purchase" =>array("order_id" =>$this->getOrderId(),"total"=>$order->getData('grand_total'),"currency" =>"USD","items"=> $items_for_socialable_purchase_keys,
+        "actions" =>array("purchase" =>array("order_id" =>$this->getOrderId(),"total"=>$order->getData('grand_total'),"currency" =>"USD","items"=> $items_for_socialable_purchase_key,
                 "price" =>array("actual_paid" =>$order->getData('grand_total'),"currency"=>"USD")))),
     "primary_mo"=>array("id" =>array(array("id"=>"order_confirmation","type"=>"page")) ,
         "name" =>array(array("name" =>"Totsy")) ,
@@ -151,7 +152,7 @@ endforeach;
   })();
 
 </script>
-<?php $_cartQty = Mage::getModel('checkout/cart')->getCart()->get;  ?>
+<?php $_cartQty = Mage::getModel('checkout/cart')->getCart()->getQty();  ?>
 
 <script type="text/javascript">
 var aid='9577';

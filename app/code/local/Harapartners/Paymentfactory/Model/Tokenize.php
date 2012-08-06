@@ -458,7 +458,13 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Totsy_Cybersource_Model
         $billTo->firstName = $billing->getFirstname();
         $billTo->lastName = $billing->getLastname();
         $billTo->company = $billing->getCompany();
-        $billTo->street1 = $billing->getData('street');
+
+        // sanitize the incoming address street data
+        $street = $billing->getData('street');
+        $billTo->street1 = (is_array($street))
+            ? $street[0] . ' ' . $street[1]
+            : $street;
+
         $billTo->city = $billing->getCity();
         $billTo->state = $billing->getRegion();
         $billTo->postalCode = $billing->getPostcode();
