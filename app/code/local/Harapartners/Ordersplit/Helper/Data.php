@@ -349,7 +349,7 @@ class Harapartners_Ordersplit_Helper_Data extends Mage_Core_Helper_Abstract {
                         $service->setOrderData($orderData);
                         $service->submitAll();
                         $newOrder = $service->getOrder();
-
+                        
                        if(!!$newOrder && !!$newOrder->getId()) {
                            if(!empty($state)) {
                                 $newOrder->setState($state, true, $this->__('Order Created by Split/Batch Cancel Process'))->save();
@@ -361,6 +361,10 @@ class Harapartners_Ordersplit_Helper_Data extends Mage_Core_Helper_Abstract {
                             $newOrderCount--;
                             $isSuccess = false;
                         }
+
+/**                        if(!$order->getTotalDue()) {
+                            $order->setStatus('complete')->setState('complete')->save();
+                        }**/
 
                         $newQuote->setIsActive(false)->save();
 
@@ -397,7 +401,7 @@ class Harapartners_Ordersplit_Helper_Data extends Mage_Core_Helper_Abstract {
     public function processNonHybridOrder($order, $type){
         switch($type){
             case self::TYPE_VIRTUAL;
-                if($order->canInvoice()) {                
+                if($order->canInvoice()) {
                     try{
                         $action = Mage_Payment_Model_Method_Abstract::ACTION_AUTHORIZE_CAPTURE;
                         $orderPayment = $order->getPayment();
@@ -408,19 +412,16 @@ class Harapartners_Ordersplit_Helper_Data extends Mage_Core_Helper_Abstract {
                         
                         $virtualproductcoupon = Mage::getModel('promotionfactory/virtualproductcoupon');
                         $virtualproductcoupon->openVirtualProductCouponInOrder($order);
-                        
-//                        $invoiceId = Mage::getModel('sales/order_invoice_api')->create($order->getIncrementId(), array());                
+                        $order->setStatus('complete')->setState('complete')->save();
+//                        $invoiceId = Mage::getModel('sales/order_invoice_api')->create($order->getIncrementId(), array());
 //                        $invoice = Mage::getModel('sales/order_invoice')->loadByIncrementId($invoiceId);                
-//                        $invoice->capture()->save();                            
-//                        $order->setStatus('complete');
+//                        $invoice->capture()->save();
 //                       $order->addStatusToHistory($order->getStatus(), 'Auto Complete Virtual Order', false);
                     }
                     catch (Exception $exception){
+                        #Payment Failed
                         $virtualproductcoupon = Mage::getModel('promotionfactory/virtualproductcoupon');
                         $virtualproductcoupon->cancelVirtualProductCouponInOrder($order);
-                        // order create exception add to log maybe
-                        //invoice failed
-                        
                         return null;
                     }
                 }            
