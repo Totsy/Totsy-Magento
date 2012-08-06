@@ -1,5 +1,27 @@
 Totsy-Magento Release Notes
 ===========================
+20120803
+----------
+* MGN-617 Event End date now display as EST in Purchase Order Grid. 
+* MGN-847 Moved preview email button to product level
+* MGN-486 adding logo to event view
+* MGN-873 hiding subtotal on cart view for cs purposes
+* MGN-404 Hide splitted orders form Order History
+* Fixing Warning in HP Checkout SocialLabs with Evan
+* Sanitizing address street data before making Cybersource requests.
+* MGN-862 remove invite friends banner to make way for monetate
+
+20120801
+----------
+* MGN-855 manage coupons btn open to new tab
+* MGN-754 The vendor code box is now disabled during import when an existing PO is selected
+* MGN-653 Prevent Events with start dates that have a later than the end dates from being saved
+* MGN-676 corrected total unit quantity
+* MGN-617 enabled date range search
+* MGN-381 add a query to look for that specific product
+* MGN-747: Rebuilt the Affiliate Feeds controller using direct SQL queries instead of objects to construct XML feed data.
+* MGN-701 Delete invoices created during payment process if the capture failed
+* Cleaning Methods from CyberSource Totsy that dont need to be overwritten
 
 20120730
 ----------

@@ -303,7 +303,6 @@ XML;
                 $order->setState(Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_PAYMENT_FAILED)->save();
                 $message = 'Order ' . $order->getIncrementId() . ' could not place the payment. ' . $e->getMessage();
                 Mage::helper('fulfillmentfactory/log')->errorLogWithOrder($message, $order->getId());
-
                 /*
                 $customer = Mage::getModel('customer/customer')->load($order->getCustomerId());
 

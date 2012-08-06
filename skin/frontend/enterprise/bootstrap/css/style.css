@@ -8,6 +8,10 @@ a {color:#ed1c25;text-decoration:none;}
 a:hover{color:#ed1c25;text-decoration:underline;}
 .content_push { margin-top:65px; }
 .content_push_2col { margin-top:80px; }
+/* 960.gs Grid Reset Classes. */
+.alpha { margin-left: 0 }
+.omega { margin-right: 0 }
+.clear { clear:both; }
 #myCarousel { margin-top:20px; }
 #toTop {
     background-color: #EB132C;
@@ -30,6 +34,7 @@ a:hover{color:#ed1c25;text-decoration:underline;}
     width: auto;
     z-index: 999;
 }
+
 /**
  @Diagnostics
  */
@@ -80,6 +85,16 @@ html.test .container .row {outline:1px dotted green;}
 #logo {margin-left:0;}
 /* nav */
 .navbar nav {background-color:#f9f9f9;}
+/*
+.navbar-inner {
+  background-color: #F7F7F7;
+  background-image: -moz-linear-gradient(center top , #F7F7F7, #e7e7e7);
+  background-repeat: repeat-x;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25), 0 -1px 0 rgba(0, 0, 0, 0.1) inset;
+  min-height: 40px;
+  height:55px;
+}
+*/
 .navbar .nav > li > a {
     padding: 0;
     color: #636466;
@@ -105,25 +120,6 @@ html.test .container .row {outline:1px dotted green;}
 }
 .nav li:hover .dropdown-menu {display: block;}
 
-.brand {
-  color: #999999;
-  display: block;
-  float: left;
-  font-size: 20px;
-  font-weight: 200;
-  line-height: 1;
-  margin-left: -20px;
-  margin-top: 3px;
-  padding: 0px;
-}
-.navbar-inner {
-  background-color: #F7F7F7;
-  background-image: -moz-linear-gradient(center top , #F7F7F7, #e7e7e7);
-  background-repeat: repeat-x;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25), 0 -1px 0 rgba(0, 0, 0, 0.1) inset;
-  min-height: 40px;
-  height:55px;
-}
 /**
  @Footer
  */
@@ -141,7 +137,6 @@ footer strong {
     font-size: 14px;
     padding: 17px 0 18px 0;
 }
-
 .well {
     box-shadow: 0 1px 3px rgba(34, 25, 25, 0.2);
 }

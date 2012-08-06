@@ -545,8 +545,9 @@ class Mage_Adminhtml_Catalog_CategoryController extends Mage_Adminhtml_Controlle
 
            try {
                 $emails = explode(';', $emails);
-                $category = Mage::getModel('catalog/category')->load($this->getRequest()->getParam('id'));
-                $product_id = $category->getProductCollection()->getFirstItem()->getId();
+               // $category = Mage::getModel('catalog/category')->load($this->getRequest()->getParam('id'));
+                //$product_id = $category->getProductCollection()->getFirstItem()->getId();
+                $product_id = $this->getRequest()->getParam('id');
                 $product = Mage::getModel('catalog/product')->load($product_id);
                 $product_array = $product->getData();
                 $store = Mage::app()->getStore();

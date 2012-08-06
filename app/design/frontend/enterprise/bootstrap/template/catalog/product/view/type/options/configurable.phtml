@@ -52,6 +52,21 @@ else{
                 </select>
             </div>
         </dd>
+        
+        <script type="text/javascript">
+$(document).ready(function() {
+$('select[id$=<%=DropDownList1.ClientID%>]').bind("keyup
+change", function() {
+if ($(this).val() != "")
+$('#message').text("Text: " + $(this).
+find(":selected").text()
++ ' Value: ' + $(this).val());
+else
+$('#message').text("");
+});
+});
+</script>
+
         <script type="text/javascript">
 		jQuery(document).ready(function(){
 				jQuery("button.btn-cart").css("background-color","<?php echo $buttonColor['deactive']?>");

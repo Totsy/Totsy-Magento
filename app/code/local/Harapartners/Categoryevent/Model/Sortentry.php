@@ -154,7 +154,7 @@ class Harapartners_Categoryevent_Model_Sortentry extends Mage_Core_Model_Abstrac
                     if (is_array($departments)) {
                         $event['department'] = $event['department'] + $departments;
                     } else if (is_string($departments)) {
-                        $event['department'][] = $event;
+                        $event['department'][] = $departments;
                     }
 
                     if (is_array($ages)) {

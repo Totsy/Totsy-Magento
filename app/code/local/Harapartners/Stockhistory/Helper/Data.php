@@ -179,25 +179,6 @@ class Harapartners_Stockhistory_Helper_Data extends Mage_Core_Helper_Abstract  {
         
         return $poArray;
     }
-
-    public function getFormVendorArrayByCategoryId($categoryId, $status){
-        $vendorArray = array();
-
-        if($categoryId){
-            $poCollection = Mage::getModel('stockhistory/purchaseorder')->getCollection()
-                    ->loadByCategoryId($categoryId, $status);
-            if (!!$poCollection) {
-                $poCollection->clear();
-                $poCollection->getSelect()->group('vendor_id');
-                $poCollection->load();
-                foreach($poCollection as $po){
-                    $vendorArray[] = array('label' => $po->getVendorCode(), 'value' => $po->getVendorId());
-                }
-            }
-        }
-        
-        return $vendorArray;
-    }
     
     public function getProductSoldInfoByCategory($category, $uniqueProductList){
         $productSoldInfoArray = array();
