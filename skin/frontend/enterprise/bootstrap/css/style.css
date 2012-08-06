@@ -60,8 +60,7 @@ a:hover{color:#ed1c25;text-decoration:underline;}
 /**
  @Layout
  */
-.container,
-.nav-bar .container {width:950px; margin: 0 auto;}
+
 
 /**
  @Header
