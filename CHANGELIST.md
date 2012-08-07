@@ -1,6 +1,12 @@
 Totsy-Magento Release Notes
 ===========================
 
+20120807
+----------
+* Change copy on invites to include 'after your friend's first order ships
+* MGN-838. Send welcome email with password
+* MGN-747: converting affiliate registration dates to 'America/New_York' (GMT-04:00) when fetching data for feeds.
+
 20120806
 ----------
 * MGN-873 removing subtotal from cart page on mobile
