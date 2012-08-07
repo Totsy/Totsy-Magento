@@ -354,17 +354,16 @@ class Harapartners_Ordersplit_Helper_Data extends Mage_Core_Helper_Abstract {
                            if(!empty($state)) {
                                 $newOrder->setState($state, true, $this->__('Order Created by Split/Batch Cancel Process'))->save();
                             } else {
-                               $newOrder->addStatusHistoryComment($this->__('Order Created by Split/Batch Cancel Process'))->save();
-                           }
+                                $newOrder->addStatusHistoryComment($this->__('Order Created by Split/Batch Cancel Process'))->save();
+                            }
+                            if(!$newOrder->getTotalDue() == 0) {
+                                //$newOrder->setStatus('complete')->setState('complete')->save();
+                            }
                         }else{
                             //order failed...
                             $newOrderCount--;
                             $isSuccess = false;
                         }
-
-/**                        if(!$order->getTotalDue()) {
-                            $order->setStatus('complete')->setState('complete')->save();
-                        }**/
 
                         $newQuote->setIsActive(false)->save();
 
