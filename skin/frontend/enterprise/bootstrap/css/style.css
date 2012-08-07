@@ -171,8 +171,12 @@ html.test .container .row {outline:1px dotted green;}
 #inviteCTA strong em {color:#d84643; font-style:normal;}
 
 /**
- @Minicart
+ @User Utils
+ - global in header: my account dropdown, minicart
  */
+#userUtils > li {float: left; width:50%;} 
+ 
+/* Minicart */
 #usercart {position: relative;} 
 #topCartContent {position: absolute; top: 100%; left: 0;}
 
