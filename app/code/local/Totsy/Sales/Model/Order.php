@@ -252,5 +252,22 @@ class Totsy_Sales_Model_Order extends Mage_Sales_Model_Order
         }
         return $this;
     }
+    
+    public function isVirtual()
+    {
+        $isVirtual = true;
+        $countItems = 0;
+        foreach ($this->getItemsCollection() as $_item) {
+
+            if ($_item->isDeleted() || $_item->getParentItemId()) {
+                continue;
+            }
+            $countItems ++;
+            if (!$_item->getProduct()->getIsVirtual()) {
+                $isVirtual = false;
+            }
+        }
+        return $countItems == 0 ? false : $isVirtual;
+    }
 
 }

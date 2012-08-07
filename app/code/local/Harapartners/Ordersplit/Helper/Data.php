@@ -356,8 +356,10 @@ class Harapartners_Ordersplit_Helper_Data extends Mage_Core_Helper_Abstract {
                             } else {
                                 $newOrder->addStatusHistoryComment($this->__('Order Created by Split/Batch Cancel Process'))->save();
                             }
-                            if(!$newOrder->getTotalDue() == 0) {
-                                //$newOrder->setStatus('complete')->setState('complete')->save();
+                            if($newOrder->getTotalDue() == 0 && $newOrder->isVirtual()) {
+                                $newOrder->setData('state', 'complete')
+                                    ->setStatus('complete')
+                                    ->save();
                             }
                         }else{
                             //order failed...
@@ -411,7 +413,9 @@ class Harapartners_Ordersplit_Helper_Data extends Mage_Core_Helper_Abstract {
                         
                         $virtualproductcoupon = Mage::getModel('promotionfactory/virtualproductcoupon');
                         $virtualproductcoupon->openVirtualProductCouponInOrder($order);
-                        $order->setStatus('complete')->setState('complete')->save();
+                        $order->setData('state', 'complete')
+                            ->setStatus('complete')
+                            ->save();
 //                        $invoiceId = Mage::getModel('sales/order_invoice_api')->create($order->getIncrementId(), array());
 //                        $invoice = Mage::getModel('sales/order_invoice')->loadByIncrementId($invoiceId);                
 //                        $invoice->capture()->save();
