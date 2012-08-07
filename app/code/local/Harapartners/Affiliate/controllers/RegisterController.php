@@ -24,7 +24,7 @@ class Harapartners_Affiliate_RegisterController extends Mage_Core_Controller_Fro
 
         $session = Mage::getSingleton('customer/session');
         if ($session->isLoggedIn()) {
-            $this->_redirect('/');
+            $this->_redirect('/event/');
             return;
         }
 
@@ -32,13 +32,24 @@ class Harapartners_Affiliate_RegisterController extends Mage_Core_Controller_Fro
         $request = $this->getRequest();
         $affiliateCode = $this->formatCode($request->getParam('affiliate_code'));
         $affiliate = Mage::getModel('affiliate/record')->loadByAffiliateCode($affiliateCode);
-        
-        if(!!$affiliate && !!$affiliate->getId()){
+
+        $affiliateInfo = $session->getData('affiliate_info');
+        if (!$affiliateInfo) {
             $affiliateInfo = array();
-            $subAffiliateCode = $this->getRequestSubAffiliateCode();
-            $affiliateInfo['sub_affiliate_code'] = $subAffiliateCode;
-            $affiliateInfo['registration_param'] = json_encode($request->getParams());
-            
+        }
+
+        if($affiliate && $affiliate->getId()) {
+            if ($subAffiliateCode = $this->getRequestSubAffiliateCode()) {
+                $affiliateInfo['sub_affiliate_code'] = $subAffiliateCode;
+            }
+
+            $regParams = isset($affiliateInfo['registration_param'])
+                ? json_decode($affiliateInfo['registration_param'], true)
+                : array();
+
+            $regParams = array_merge($regParams, $request->getParams());
+            $affiliateInfo['registration_param'] = json_encode($regParams);
+
             //Additional logic: specific landing page after registration, background image can also be prepared here!
             //Harapartners, yang: plant cookie for landing page image
             $keyword = $request->getParam('keyword');
@@ -50,7 +61,7 @@ class Harapartners_Affiliate_RegisterController extends Mage_Core_Controller_Fro
             $session->setData('affiliate_info', $affiliateInfo);
         }
 
-        $this->_forward('create', 'account', 'customer', $this->getRequest()->getParams());
+        $this->_forward('create', 'account', 'customer');
     }
 
     //Alpha-numerical, lower case only, underscore allowed

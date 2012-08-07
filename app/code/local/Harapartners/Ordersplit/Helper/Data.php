@@ -250,9 +250,12 @@ class Harapartners_Ordersplit_Helper_Data extends Mage_Core_Helper_Abstract {
                         $oldPayment->setPaymentId(null)
                             ->setQuoteId($newQuote->getId())
                             ->setQuote($newQuote);
-
+                        $paymentData = $oldPayment->getData();
+                        if($paymentData['method'] == 'free') {
+                            $paymentData['use_reward_points'] = 1;
+                        }
                         //test payment method "free"
-                        $newQuote->getPayment()->importData($oldPayment->getData(), false);
+                        $newQuote->getPayment()->importData($paymentData);
                     } else {
                         //2012-07-08 Using logic from Magento Admin Order Edit to handle the copying of the addresses when no quote exists
                         $newQuote->getBillingAddress()->setCustomerAddressId('');
@@ -280,7 +283,11 @@ class Harapartners_Ordersplit_Helper_Data extends Mage_Core_Helper_Abstract {
                         $newQuote->getShippingAddress()->setShippingMethod($oldOrder->getShippingMethod());
                         $newQuote->getShippingAddress()->setShippingDescription($oldOrder->getShippingDescription());
 
-                        $newQuote->getPayment()->importData($oldOrder->getPayment()->getData());
+                        $paymentData = $oldPayment->getData();
+                        if($paymentData['method'] == 'free') {
+                            $paymentData['use_reward_points'] = 1;
+                        }
+                        $newQuote->getPayment()->importData($paymentData);
                         if(!!$oldOrder->getPayment()->getCybersourceSubid())    {
                             $newQuote->getPayment()->setCybersourceSubid(base64_encode(Mage::getModel('core/encryption')->encrypt($oldOrder->getPayment()->getCybersourceSubid())));
                         }
@@ -342,13 +349,18 @@ class Harapartners_Ordersplit_Helper_Data extends Mage_Core_Helper_Abstract {
                         $service->setOrderData($orderData);
                         $service->submitAll();
                         $newOrder = $service->getOrder();
-
+                        
                        if(!!$newOrder && !!$newOrder->getId()) {
                            if(!empty($state)) {
                                 $newOrder->setState($state, true, $this->__('Order Created by Split/Batch Cancel Process'))->save();
                             } else {
-                               $newOrder->addStatusHistoryComment($this->__('Order Created by Split/Batch Cancel Process'))->save();
-                           }
+                                $newOrder->addStatusHistoryComment($this->__('Order Created by Split/Batch Cancel Process'))->save();
+                            }
+                            if($newOrder->getTotalDue() == 0 && $newOrder->isVirtual()) {
+                                $newOrder->setData('state', 'complete')
+                                    ->setStatus('complete')
+                                    ->save();
+                            }
                         }else{
                             //order failed...
                             $newOrderCount--;
@@ -390,7 +402,7 @@ class Harapartners_Ordersplit_Helper_Data extends Mage_Core_Helper_Abstract {
     public function processNonHybridOrder($order, $type){
         switch($type){
             case self::TYPE_VIRTUAL;
-                if($order->canInvoice()) {                
+                if($order->canInvoice()) {
                     try{
                         $action = Mage_Payment_Model_Method_Abstract::ACTION_AUTHORIZE_CAPTURE;
                         $orderPayment = $order->getPayment();
@@ -399,18 +411,20 @@ class Harapartners_Ordersplit_Helper_Data extends Mage_Core_Helper_Abstract {
                         //NOTE: important events like 'sales_order_invoice_pay' are automatically dispatched
                         $orderPayment->place();
                         
-//                        $invoiceId = Mage::getModel('sales/order_invoice_api')->create($order->getIncrementId(), array());                
+                        $virtualproductcoupon = Mage::getModel('promotionfactory/virtualproductcoupon');
+                        $virtualproductcoupon->openVirtualProductCouponInOrder($order);
+                        $order->setData('state', 'complete')
+                            ->setStatus('complete')
+                            ->save();
+//                        $invoiceId = Mage::getModel('sales/order_invoice_api')->create($order->getIncrementId(), array());
 //                        $invoice = Mage::getModel('sales/order_invoice')->loadByIncrementId($invoiceId);                
-//                        $invoice->capture()->save();                            
-//                        $order->setStatus('complete');
+//                        $invoice->capture()->save();
 //                       $order->addStatusToHistory($order->getStatus(), 'Auto Complete Virtual Order', false);
                     }
                     catch (Exception $exception){
+                        #Payment Failed
                         $virtualproductcoupon = Mage::getModel('promotionfactory/virtualproductcoupon');
                         $virtualproductcoupon->cancelVirtualProductCouponInOrder($order);
-                        // order create exception add to log maybe
-                        //invoice failed
-                        
                         return null;
                     }
                 }            

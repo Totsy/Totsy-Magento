@@ -21,8 +21,17 @@ class Harapartners_Service_Block_Rewrite_Adminhtml_Catalog_Product_Edit extends 
                 $this->getLayout()->createBlock('adminhtml/widget_button')
                     ->setData(array(
                         'label'     => Mage::helper('catalog')->__('Manage Coupon'),
-                        'onclick'   => 'setLocation(\''.$this->getUrl('promotionfactory/adminhtml_virtualproductcoupon/manageCouponByProduct', array('product_id'=>$this->getProduct()->getId())).'\')',
+                        'onclick'   => 'window.open(\''.$this->getUrl('promotionfactory/adminhtml_virtualproductcoupon/manageCouponByProduct', array('product_id'=>$this->getProduct()->getId())).'\')',
                     	'class'  	=> 'add'
+                    ))
+            );
+
+            $this->setChild('email_preview_button',
+                $this->getLayout()->createBlock('adminhtml/widget_button')
+                    ->setData(array(
+                        'label'     => Mage::helper('catalog')->__('Preview Product Email'),
+                        'onclick'   => "sendPreviewEmailSubmit();",
+                        'class' => 'preview'
                     ))
             );
         }
@@ -31,6 +40,11 @@ class Harapartners_Service_Block_Rewrite_Adminhtml_Catalog_Product_Edit extends 
     
     public function getManageCouponButtonHtml(){
     	return $this->getChildHtml('manage_coupon_button');
+    }
+
+    public function getEmailPreviewButtonHtml()
+    {
+        return $this->getChildHtml('email_preview_button');
     }
 
 }
