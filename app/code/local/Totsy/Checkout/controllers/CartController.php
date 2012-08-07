@@ -88,8 +88,10 @@ class Totsy_Checkout_CartController extends Mage_Checkout_CartController
      */
     public function addAction()
     {
+    
         $cart   = $this->_getCart();
         $params = $this->getRequest()->getParams();
+        
         try {
             if (isset($params['qty'])) {
                 $filter = new Zend_Filter_LocalizedToNormalized(
@@ -100,7 +102,6 @@ class Totsy_Checkout_CartController extends Mage_Checkout_CartController
 
             $product = $this->_initProduct();
             $related = $this->getRequest()->getParam('related_product');
-
             /**
              * Check product availability
              */
