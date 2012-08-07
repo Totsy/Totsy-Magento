@@ -8,8 +8,13 @@ body { height: 100%;}
 html {
     margin:0;
     background-color:#fff;
-    background-image: -moz-linear-gradient(center top, #eef6fc, #fff);
-/*     background-attachment: fixed; */
+    background-image: -moz-linear-gradient(top, #eef6fc, #ffffff);
+    background-image: -ms-linear-gradient(top, #eef6fc, #ffffff);
+    background-image: -o-linear-gradient(top, #eef6fc, #ffffff);
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#eef6fc), to(#ffffff));
+    background-image: -webkit-linear-gradient(top, #eef6fc, #ffffff);
+    background-image: linear-gradient(top, #eef6fc, #ffffff);
+    background-attachment: fixed;
 }
 a {color:#ed1c25;text-decoration:none;}
 a:hover{color:#ed1c25;text-decoration:underline;}
