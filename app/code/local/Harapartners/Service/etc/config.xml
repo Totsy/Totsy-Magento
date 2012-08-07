@@ -502,6 +502,14 @@
 										</purchaseorder>
 										<transaction translate="title" module="stockhistory">
 											<title>Transaction Report</title>
+                                            <children>
+                                                <actions translate="title"> 
+                                                    <title>Actions</title>
+                                                    <children>
+                                                        <submit_dotcom translate="title"><title>Submit To Dotcom</title></submit_dotcom>
+                                                    </children>
+                                                </actions>
+                                            </children>
 										</transaction>
 									</children>
 								</stockhistory>
