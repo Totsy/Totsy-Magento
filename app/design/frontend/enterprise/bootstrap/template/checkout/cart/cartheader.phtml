@@ -74,7 +74,7 @@
     <div id="checkoutcart-block-title" class="block-title<?php if(!$_cartQty) { echo (' no-items'); } ?>">
     <?php if ($_cartQty > 0 && !empty($_itemsArray)):?>
     <strong id="cartHeader"><?php echo $_mySaving ?><span><?php echo ' | '.Mage::helper('checkout')->formatPrice($this->getSubtotal()) ?><?php if ($_subtotalInclTax = $this->getSubtotalInclTax()): ?> / <?php echo ' | '.Mage::helper('checkout')->formatPrice($_subtotalInclTax) ?> <?php echo ' | '.Mage::helper('tax')->getIncExcText(true) ?><?php endif; ?></span></strong>
-    <?php else :?>
+    <?php //else :?>
     <strong id="cartHeader"><span class="badge badge-inverse">Your savings:</span> $0.00<span> | <span class='price'>$0.00</span></span></strong>
     <?php endif;?>
     </div>
