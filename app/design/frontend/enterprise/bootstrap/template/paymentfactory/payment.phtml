@@ -12,9 +12,15 @@
 
 <div class="well">
 <div class="page-title">
-    <h4>My Credit Cards <button class="add-new-card-button btn btn-primary pull-right">Add New Card</button></h4>
+    <h4>My Credit Cards <button class="add-new-card-button btn btn-primary pull-right">Add New Card</button>
+        <button class="add-new-card-close btn pull-right add-new-card-form" style="display:none;">Close</button>
+    </h4>
     <hr />
     <div class="add-new-card">
+    <?php if($creditCardsCount == 0): ?>
+    <h3>Sorry, You don't have any credit cards on file with Totsy. </h3>
+    <p><span class="label label-info">NOTE:</span> Adding a credit card helps speed up the checkout process.</p>
+    <?php endif;?>
         <script type="text/javascript">
             jQuery(document).ready(function(){
                 jQuery(".add-new-card-button").click( function() {
@@ -28,12 +34,12 @@
             })
         </script>
         <div class="add-new-card-form" style="display:none;">
+        <hr />
+        <h4>Add New Credit Card</h4>
             <?php echo $this->getChildHtml('credit_cards_form');?>
-            <p class="add-new-card-close" >Close</p>
         </div>
     </div>
 </div>
-
 <div class="cards-info">
     <?php foreach($paymentCollection as $payment):
             $type = $payment->getData('card_type');
@@ -101,9 +107,5 @@
 
 <?php endif;?>
 <?php endforeach;?>
-<?php if($creditCardsCount == 0): ?>
-    <h3>Sorry, You don't have any credit cards on file with Totsy. </h3>
-    <p><span class="label label-info">NOTE:</span> Adding a credit card helps speed up the checkout process.</p>
-<?php endif;?>
 </div>
 </div>

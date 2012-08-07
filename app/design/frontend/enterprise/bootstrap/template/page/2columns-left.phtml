@@ -56,11 +56,12 @@ ooooooooooooo               .
         <div class="row">
             <?php echo $this->getChildHtml('account_title') ?>
         </div>
-        <div class="span3"><?php echo $this->getChildHtml('left') ?></div>
-            <div class="span9">
-                <?php echo $this->getChildHtml('content') ?>
-            </div>
-            
+        <div class="span3">
+            <?php echo $this->getChildHtml('left') ?>
+        </div>
+        <div class="span9 <?php echo $this->getChild('content')->getChild('my.account.wrapper')->getElementClass() ?>-wrap">
+            <?php echo $this->getChildHtml('content') ?>
+        </div>
         </div>
         <?php echo $this->getChildHtml('footer_before') ?>
         <?php echo $this->getChildHtml('footer') ?>

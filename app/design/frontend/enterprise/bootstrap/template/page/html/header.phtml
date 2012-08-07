@@ -27,145 +27,108 @@
  * @var Mage_Page_Block_Html_Header $this
  */
 ?>
-<div class="navbar navbar-fixed-top">
-    <div class="navbar-inner">
-      <div class="container">
-        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </a>
-        <?php if ( $this->getIsHomePage() ): ?>
-        <h1 class="logo"><strong><?php echo $this->getLogoAlt(); ?></strong><a href="<?php
-    echo $this->getUrl( 'event/?ref=logo' );
-?>" title="<?php
-    echo $this->getLogoAlt();
-?>" class="logo brand"><img src="<?php
-    echo $this->getLogoSrc();
-?>" alt="<?php
-    echo $this->getLogoAlt();
-?>" width="100px" /></a></h1>
-        <?php
-else:
-?>
-        <a href="<?php
-    echo $this->getUrl( 'event/?ref=logo' );
-?>" title="<?php
-    echo $this->getLogoAlt();
-?>" class="logo brand"><img src="<?php
-    echo $this->getLogoSrc();
-?>" alt="<?php
-    echo $this->getLogoAlt();
-?>" width="100px" /></a>
-        <?php
-endif;
-?>
-          <div class="nav-collapse">
-          <ul class="nav navLinks">
-            <li><a href="<?php
-echo $this->getBaseUrl();
-?>event/">ALL SALES</a></li>
-            
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">CATEGORY <b class="caret"></b></a>
-              
-              <ul class="dropdown-menu">
-                <?php
-$type = 'departments';
-?><?php
-$departmentAttr = Mage::getModel( 'catalog/product' )->getResource()->getAttribute( $type );
-?><?php
-$optionArray = $departmentAttr->getSource()->getAllOptions();
-?><?php
-foreach ( $optionArray as $option ):
-?><li><a href="<?php
-    echo $this->getBaseUrl();
-?>category/<?php
-    echo $option[ 'label' ];
-?>"><?php
-    echo $this->__( $option[ 'label' ] );
-?></a></li>
-                <?php
-endforeach;
-?>
-              </ul>
-            </li>
-            
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">AGE <b class="caret"></b></a>
-              <ul class="dropdown-menu">
-              <?php
-$age = 'ages';
-?><?php
-$ageAttr = Mage::getModel( 'catalog/product' )->getResource()->getAttribute( $age );
-?><?php
-$ageOptionArray = $ageAttr->getSource()->getAllOptions();
-?><?php
-foreach ( $ageOptionArray as $option ):
-?>
-              <li><a href="<?php
-    echo $this->getBaseUrl();
-?>age/<?php
-    echo $option[ 'label' ];
-?>"><?php
-    echo $this->__( $option[ 'label' ] );
-?></a></li>
-<?php endforeach; ?>
-          </ul>
-          </li>
-          <!-- <form class="navbar-search pull-left" action="">
-            <input type="text" class="search-query span4" placeholder="Search">
-          </form>
-          -->
-          </ul>
-          <ul class="nav pull-right navLinks">
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><img src="/skin/frontend/enterprise/bootstrap/images/iconmonstr-user-icon.png" width="20" height="20" style="margin-top:-5px;" /> My Account <b class="caret"></b></a>
-              <ul class="dropdown-menu">
-                <li><a href="/customer/account/">Account Dashboard</a></li>
-                <li><a href="/customer/account/edit/">Account Information</a></li>
-                <li><a href="/paymentfactory/">Manage Credit Cards</a></li>
-                <li><a href="/customer/account/edit/changepassword/1/">Change Password</a></li>
-                <li><a href="/customer/address/">Address Book</a></li>
-                <li><a href="/sales/order/history/">My Orders</a></li>
-                <li><a href="/reward/customer/info/">My Credits</a></li>
-                <li><a href="/invitation/">My Invitations</a></li>
-                <li class="divider"></li>
-                <li><a href="/customer/account/logout">Logout</a></li>
-                </ul>
-            </li>
+<header class="navbar navbar-fixed-top">
+    <!-- begin masthead -->
+    <div id="masthead">
+        <div class="container row">   
+            <h1 id="logo" class="span2"><a href="<?php
+            echo $this->getUrl( 'event/?ref=logo' );
+            ?>" title="<?php
+            echo $this->getLogoAlt();
+            ?>"><img src="<?php
+            echo $this->getLogoSrc();
+            ?>" alt="<?php
+            echo $this->getLogoAlt();
+            ?>" width="85px" /></a></h1>
+        
+            <ul id="userUtils" class="span4 offset6">
+                <li id="userAccount" class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><img src="/skin/frontend/enterprise/bootstrap/images/iconmonstr-user-icon.png" width="20" height="20" style="margin-top:-5px;" /> My Account</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/customer/account/">Account Dashboard</a></li>
+                        <li><a href="/customer/account/edit/">Account Information</a></li>
+                        <li><a href="/paymentfactory/">Manage Credit Cards</a></li>
+                        <li><a href="/customer/account/edit/changepassword/1/">Change Password</a></li>
+                        <li><a href="/customer/address/">Address Book</a></li>
+                        <li><a href="/sales/order/history/">My Orders</a></li>
+                        <li><a href="/reward/customer/info/">My Credits</a></li>
+                        <li><a href="/invitation/">My Invitations</a></li>
+                        <li class="divider"></li>
+                        <li><a href="/customer/account/logout">Logout</a></li>
+                    </ul>
+                </li>
                 <li class="quick-access" id="header-user-info"></li>
-          </ul>
-        </div><!-- /.nav-collapse -->
-    </div><!-- /navbar-inner -->
-  </div><!-- /navbar -->
-</div>
+            </ul>
+        </div>
+    </div><!--/#masthead -->
+    <!-- begin nav -->
+    <nav>
+        <div class="container row">
+            <ul class="nav span8">
+                <li id="navAllEvents" class="dropdown">
+                    <a href="<?php echo $this->getBaseUrl()?>event/"><em>ALL <br />SALES</em></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="<?php echo $this->getBaseUrl()?>event/">New </a></li>
+                        <li><a href="<?php echo $this->getBaseUrl()?>event#event-upcoming">Upcoming</a></li>
+                    </ul>
+                </li>
+                <li id="navByCat" class="dropdown navShop">
+                    <a><em>SHOP BY<br/>CATEGORY</em></a>
+                    <ul class="dropdown-menu">
+                    <?php $type = 'departments'; ?>
+                    <?php $departmentAttr = Mage::getModel('catalog/product')->getResource()->getAttribute($type);?>
+                    <?php $optionArray = $departmentAttr->getSource()->getAllOptions();?>
+                    <?php foreach($optionArray as $option):?>
+                        <li><a href="<?php echo $this->getBaseUrl();?>category/<?php echo $option['label']?>" title="<?php echo $this->__($option['label']) ?>"><?php echo $this->__($option['label']) ?></a></li>
+                    <?php endforeach;?>
+                    </ul>        
+                </li>
+                <li id="navByAge" class="dropdown navShop">
+                    <a><em>SHOP BY<br/>AGE</em></a>
+                    <ul class="dropdown-menu">
+                    <?php $age = 'ages'; ?>
+                    <?php $ageAttr = Mage::getModel('catalog/product')->getResource()->getAttribute($age);?>
+                    <?php $ageOptionArray = $ageAttr->getSource()->getAllOptions();?>
+                    <?php foreach($ageOptionArray as $option):?>
+                        <li><a href="<?php echo $this->getBaseUrl();?>age/<?php echo $option['label']?>" title="<?php echo $this->__($option['label']) ?>"><?php echo $this->__($option['label']) ?></a></li>
+                    <?php endforeach;?>
+                    </ul>
+                </li>
+                <li id="navSocial"><a href="/pixels/sociable/feed" title="Social Feed"><em>WHAT'S <br/>HOT</em></a></li>
+            </ul>
+            <div id="inviteCTA" class="span2 offset2">
+                <a class="cta-link" href="<?php echo $this -> getBaseUrl();?>invitation">INVITE FRIENDS <strong>GET A <em>$15</em> CREDIT</strong></a><?php echo $this->getAdditionalHtml() ?>
+            </div>
+        </div>
+    </nav>
+</header><!-- /.navbar -->
+
 <div id="sociable_recent_activity_container"></div>
 <script type="text/javascript">
     function logout(){
-        FB.logout(function(response) {
-            window.location = "<?php echo Mage::getUrl('customer/account/logout')?>"// user is now logged out
-            });
-        }
-        jQuery(document).ready(function(){
-        jQuery(".menu li").hover(function(){
-        jQuery(this).children(".space").stop().css("height","10px").slideDown("normal");
-        },function(){
-        jQuery(this).children(".space").stop().slideUp("fast");
-            })
-        });
-        jQuery(document).ready(function(){
-        jQuery(".haschild").mouseenter(function(){
-        jQuery(this).children("ul").stop().css("height","auto").slideDown("normal");
-            })
-        });
-        jQuery(document).ready(function(){
-        jQuery(".haschild").mouseleave(function(){
-        jQuery(this).children("ul").stop().slideUp("fast");
-        })
+    	FB.logout(function(response) {
+    		window.location = "<?php echo Mage::getUrl('customer/account/logout')?>"// user is now logged out
+    	});
+    }
+    jQuery(document).ready(function(){
+    	jQuery(".menu li").hover(function(){
+    		jQuery(this).children(".space").stop().css("height","10px").slideDown("normal");
+    		},function(){
+    		jQuery(this).children(".space").stop().slideUp("fast");
+    		})
+    	});
+    jQuery(document).ready(function(){
+    	jQuery(".haschild").mouseenter(function(){
+    		jQuery(this).children("ul").stop().css("height","auto").slideDown("normal");
+    		})
+    	});
+    jQuery(document).ready(function(){
+    	jQuery(".haschild").mouseleave(function(){
+    		jQuery(this).children("ul").stop().slideUp("fast");
+    		})
+    	});
+    var topCartContent;
+    Event.observe(document,'dom:loaded',function() {
+        new Ajax.Updater($('header-user-info'), '<?php echo $this->getUrl('customertracking/headermsg/ajax',array('_secure'=>Mage::app()->getStore()->isCurrentlySecure())); ?>', {method:'get',evalScripts: true});
     });
-        var topCartContent;
-            Event.observe(document,'dom:loaded',function() {
-            new Ajax.Updater($('header-user-info'), '<?php echo $this->getUrl('customertracking/headermsg/ajax',array('_secure'=>Mage::app()->getStore()->isCurrentlySecure())); ?>', {method:'get',evalScripts: true});
-        });
 </script>

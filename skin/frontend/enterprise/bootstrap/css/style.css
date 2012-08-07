@@ -1,12 +1,30 @@
-/* Additional styles for the Magento Bootstrap theme */
+/**
+ @Base styles for the Magento Bootstrap theme
+ */
+/*
 html,
-body { height: 100%; background:none;}
-html { background: #f7f5f5 url(../img/paper.jpg) repeat fixed }
+body { height: 100%;}
+*/
+html {
+    margin:0;
+    background-color:#fff;
+    background-image: -moz-linear-gradient(top, #eef6fc, #ffffff);
+    background-image: -ms-linear-gradient(top, #eef6fc, #ffffff);
+    background-image: -o-linear-gradient(top, #eef6fc, #ffffff);
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#eef6fc), to(#ffffff));
+    background-image: -webkit-linear-gradient(top, #eef6fc, #ffffff);
+    background-image: linear-gradient(top, #eef6fc, #ffffff);
+    background-attachment: fixed;
+}
 a {color:#ed1c25;text-decoration:none;}
 a:hover{color:#ed1c25;text-decoration:underline;}
-.content_push { margin-top:65px; }
+.content_push { margin-top:150px; }
 .content_push_2col { margin-top:80px; }
-#myCarousel { margin-top:20px; }
+/* 960.gs Grid Reset Classes. */
+.alpha { margin-left: 0 }
+.omega { margin-right: 0 }
+.clear { clear:both; }
+/* #myCarousel { margin-top:20px; } */
 #toTop {
     background-color: #EB132C;
     border-color: #EB132C;
@@ -28,7 +46,19 @@ a:hover{color:#ed1c25;text-decoration:underline;}
     width: auto;
     z-index: 999;
 }
-/* 960.gs Grid Reset Classes. */
+
+/**
+ @Diagnostics
+ */
+html.test body > .container,
+html.test body > header {outline:1px dotted red;}
+html.test .container .container,
+html.test body > header .container {outline:1px dotted blue;}
+html.test .container .row {outline:1px dotted green;}
+ 
+/** 
+ @960.gs Grid Reset Classes
+ */
 .alpha { margin-left: 0 }
 .omega { margin-right: 0 }
 .clear { clear:both; }
@@ -52,57 +82,126 @@ a:hover{color:#ed1c25;text-decoration:underline;}
 }
 .well { background-color: #fff!important; }
 .navLinks { padding-top: 7px; }
-.navbar, .brand { padding:0px!important; }
-.navbar .divider-vertical {
-    background-color: #FFFFFF;
-    border-right: 1px solid #FFFFFF;
-    height: 70px;
-    margin: 0 9px;
-    overflow: hidden;
+
+/**
+ @General / Modular
+ */
+.cta-link {
+    padding-right:10px;
+    background: url('../images/glyph-arrow-rt.png') 100% 85% no-repeat;
+}
+ 
+/**
+ @Header
+ - "navbar" class from bootstrap
+ - incl: branding, actual nav, user & checkout modules
+ */
+.navbar {
+    background:#fff;
+    border-bottom:1px solid #d1d9de;
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.086);
+}
+
+/* masthead */
+#masthead {
+    position: relative; z-index: 10;
+    padding:3px 0;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.35);
+}
+#logo {margin-left:0;}
+
+/* nav */
+.navbar nav {
+    background-color:#f9f9f9;
+    position: relative; z-index: 1;
+}
+.navbar .nav {margin:0;}
+.navbar .nav > li {
+    padding: 8px 9px 9px 10px; 
+    background: url('../images/div-nav.png') 0 50% no-repeat;
+}
+.navbar .nav > li:first-child {
+    padding-left:0; 
+    background-image: none;
+    border-left:1px solid transparent;
 }
 .navbar .nav > li > a {
-  color: #777777;
-  float: none;
-  font-size: 17px;
-  letter-spacing: -0.3px;
-  line-height: 19px;
-  padding: 12px 10px 11px;
-  text-decoration: none;
-  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.85);
+    color: #636466;
+    font-size: 12px; font-weight: bold;
+    line-height: 13px;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.85); text-transform: uppercase;
 }
-.navbar .nav li.dropdown .dropdown-toggle .caret, .navbar .nav li.dropdown.open .caret {
-  border-bottom-color: #000000;
-  border-top-color: #000000;
+.navbar .nav > li.dropdown > a {
+    padding: 0 33px 0 0;
+    background: url('../images/icon-nav-drop.png') 100% 50% no-repeat;
+}
+#navSocial {}
+#navSocial > a {
+    padding:0 5px 0 33px;
+    background: url('../images/icon-like-whot.png') 0 50% no-repeat;
 }
 .navbar .nav > li > a:hover {
-    background-color: transparent;
+    color: #636466;
+    text-decoration: none;
+}
+.navbar .nav .active > a,
+.navbar .nav .active > a:hover {
     color: #ed1c25;
     text-decoration: none;
 }
-.navbar .nav .active > a, .navbar .nav .active > a:hover {
-    color: #ed1c25;
-    text-decoration: none;
+.navbar .nav > li > a em {font-style: normal;}
+
+/* dropdown nav menus */
+.navbar .nav > li:hover {
+    padding-left:9px; 
+    background-color:#fff; 
+    background-image:none; 
+    border-left:1px solid rgba(0,0,0,0.2);
+    cursor: pointer;
 }
-.brand {
-  color: #999999;
-  display: block;
-  float: left;
-  font-size: 20px;
-  font-weight: 200;
-  line-height: 1;
-  margin-left: -20px;
-  margin-top: 3px;
-  padding: 0px;
+.navbar .nav > li:first-child:hover {
+    padding-left:0;
 }
-.navbar-inner {
-  background-color: #F7F7F7;
-  background-image: -moz-linear-gradient(center top , #F7F7F7, #e7e7e7);
-  background-repeat: repeat-x;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25), 0 -1px 0 rgba(0, 0, 0, 0.1) inset;
-  min-height: 40px;
-  height:55px;
+.nav .dropdown-menu {
+    display: none;
+    left:-1px;
+    margin-top:0;
+    border-top:none;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    box-shadow:0 5px 5px rgba(0, 0, 0, 0.10)
 }
-/* Footer Classes */
+.nav li:hover .dropdown-menu {
+    display: block;
+}
+.navShop .dropdown-menu li:first-child {display: none;}
+.navbar .dropdown-menu:after,
+.navbar .dropdown-menu:before {display: none;} /* not using these cool dropdown tooltip things… boo */
+
+/* invite CTA */
+#inviteCTA {padding: 7px 0 0;}
+#inviteCTA a {float:right; color: #636466; font-weight: bold; line-height:1.18;}
+#inviteCTA a:hover {text-decoration: none;}
+#inviteCTA strong {display: block;}
+#inviteCTA strong em {color:#d84643; font-style:normal;}
+
+/**
+ @User Utils
+ - global in header: my account dropdown, minicart
+ */
+#userUtils > li {float: left; width:50%;} 
+ 
+/* Minicart */
+#usercart {position: relative;} 
+#topCartContent {position: absolute; top: 100%; left: 0;}
+
+/**
+ @My Account
+ */
+
+/**
+ @Footer
+ */
 footer {
     padding: 17px 0 18px 0;
     margin-top:45px;
@@ -117,18 +216,9 @@ footer strong {
     font-size: 14px;
     padding: 17px 0 18px 0;
 }
-
 .well {
     box-shadow: 0 1px 3px rgba(34, 25, 25, 0.2);
 }
 .thumbnail {padding:10px;}
 .page-header {border-bottom: 4px solid #E5E5E5; margin:18px 0;}
 .zoomImage { padding:10px; z-imdex:500!important; }
-.navbar-inner {
-    background: #F2F0F1;
-    background-image: -moz-linear-gradient(center top , #F5F5F5 0%, #EEEEEE 100%)!important;
-    background-repeat: repeat-x;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25), 0 -1px 0 rgba(0, 0, 0, 0.1) inset;
-    height: 55px;
-    min-height: 40px;
-}
