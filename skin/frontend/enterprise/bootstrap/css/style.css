@@ -203,8 +203,9 @@ html.test .container .row {outline:1px dotted green;}
  @Footer
  */
 footer {
-    padding: 17px 0 18px 0;
     margin-top:45px;
+    padding: 17px 0 18px 0;
+    background: #e5e5e5;
 }
 footer hr { margin:5px 0px; }
 footer p, img {
