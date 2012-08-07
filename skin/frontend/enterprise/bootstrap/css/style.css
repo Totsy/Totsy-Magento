@@ -79,6 +79,14 @@ html.test .container .row {outline:1px dotted green;}
 .navLinks { padding-top: 7px; }
 
 /**
+ @General / Modular
+ */
+.cta-link {
+    padding-right:10px;
+    background: url('../images/glyph-arrow-rt.png') 100% 85% no-repeat;
+}
+ 
+/**
  @Header
  - "navbar" class from bootstrap
  - incl: branding, actual nav, user & checkout modules
@@ -166,7 +174,8 @@ html.test .container .row {outline:1px dotted green;}
 .navbar .dropdown-menu:before {display: none;} /* not using these cool dropdown tooltip things… boo */
 
 /* invite CTA */
-#inviteCTA a {float:right; color: #636466; font-weight: bold;}
+#inviteCTA {padding: 7px 0 0;}
+#inviteCTA a {float:right; color: #636466; font-weight: bold; line-height:1.18;}
 #inviteCTA a:hover {text-decoration: none;}
 #inviteCTA strong {display: block;}
 #inviteCTA strong em {color:#d84643; font-style:normal;}
