@@ -13,13 +13,13 @@ html {
 }
 a {color:#ed1c25;text-decoration:none;}
 a:hover{color:#ed1c25;text-decoration:underline;}
-.content_push { margin-top:65px; }
+.content_push { margin-top:150px; }
 .content_push_2col { margin-top:80px; }
 /* 960.gs Grid Reset Classes. */
 .alpha { margin-left: 0 }
 .omega { margin-right: 0 }
 .clear { clear:both; }
-#myCarousel { margin-top:20px; }
+/* #myCarousel { margin-top:20px; } */
 #toTop {
     background-color: #EB132C;
     border-color: #EB132C;
@@ -91,8 +91,9 @@ html.test .container .row {outline:1px dotted green;}
 
 /* masthead */
 #masthead {
-    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.35);
     position: relative; z-index: 10;
+    padding:3px 0;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.35);
 }
 #logo {margin-left:0;}
 
@@ -103,7 +104,7 @@ html.test .container .row {outline:1px dotted green;}
 }
 .navbar .nav {margin:0;}
 .navbar .nav > li {
-    padding: 6px 9px 10px 10px; 
+    padding: 8px 9px 9px 10px; 
     background: url('../images/div-nav.png') 0 50% no-repeat;
 }
 .navbar .nav > li:first-child {
