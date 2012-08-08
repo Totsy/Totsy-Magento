@@ -73,22 +73,29 @@ html.test .container .row {outline:1px dotted green;}
     position: absolute;
     top: 0;
 }
+
+/**
+ @General / Modular Classes
+ */
+.well {
+    box-shadow: 0 1px 3px rgba(34, 25, 25, 0.2);
+    background-color: #fff!important;
+}
+.thumbnail {padding:10px;}
+.page-header {border-bottom: 4px solid #E5E5E5; margin:18px 0;}
+.zoomImage { padding:10px; z-imdex:500!important; }
+.navLinks { padding-top: 7px; }
+.cta-link {
+    padding-right:10px;
+    background: url('../images/glyph-arrow-rt.png') 100% 85% no-repeat;
+}
+/* states / messaging */
 .messages li, ul { list-style: none; }
 .messages { display: block; padding: 10px; margin: 0px 0px 10px 0px;}
 .success-msg {
     background-color: #DFF0D8;
     border-color: #D6E9C6;
     color: #468847;
-}
-.well { background-color: #fff!important; }
-.navLinks { padding-top: 7px; }
-
-/**
- @General / Modular
- */
-.cta-link {
-    padding-right:10px;
-    background: url('../images/glyph-arrow-rt.png') 100% 85% no-repeat;
 }
  
 /**
@@ -176,7 +183,7 @@ html.test .container .row {outline:1px dotted green;}
 }
 .navShop .dropdown-menu li:first-child {display: none;}
 .navbar .dropdown-menu:after,
-.navbar .dropdown-menu:before {display: none;} /* not using these cool dropdown tooltip things… boo */
+.navbar .dropdown-menu:before {display: none;} /* not using these cool dropdown tooltip bootstrap things… boo */
 
 /* invite CTA */
 #inviteCTA {padding: 7px 0 0;}
@@ -196,30 +203,33 @@ html.test .container .row {outline:1px dotted green;}
 #topCartContent {position: absolute; top: 100%; left: 0;}
 
 /**
- @My Account
+ @My_Account
  */
 
 /**
  @Footer
  */
-footer {
-    margin-top:45px;
-    padding: 17px 0 18px 0;
+body > footer {
+    position: relative;
+    margin-top:45px; padding: 17px 0 18px 0;
     background: #e5e5e5;
+    border:1px solid #fff;
 }
-footer hr { margin:5px 0px; }
+body > footer:before {
+    content: "";
+    position: absolute; top: 0; left: 0;
+    display: block;
+    width:100%; height: 1px;
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.50);
+
+}
 footer p, img {
     color: #777777;
     font-size: 10px;
 }
+body > footer ul {margin:0;}
 footer strong {
     color: #aaa;
     font-size: 14px;
     padding: 17px 0 18px 0;
 }
-.well {
-    box-shadow: 0 1px 3px rgba(34, 25, 25, 0.2);
-}
-.thumbnail {padding:10px;}
-.page-header {border-bottom: 4px solid #E5E5E5; margin:18px 0;}
-.zoomImage { padding:10px; z-imdex:500!important; }
