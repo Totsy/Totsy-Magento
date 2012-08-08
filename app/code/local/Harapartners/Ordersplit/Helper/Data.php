@@ -425,6 +425,9 @@ class Harapartners_Ordersplit_Helper_Data extends Mage_Core_Helper_Abstract {
                         #Payment Failed
                         $virtualproductcoupon = Mage::getModel('promotionfactory/virtualproductcoupon');
                         $virtualproductcoupon->cancelVirtualProductCouponInOrder($order);
+                        $order->setData('state', 'payment_failed')
+                            ->setStatus('payment_failed')
+                            ->save();
                         return null;
                     }
                 }            

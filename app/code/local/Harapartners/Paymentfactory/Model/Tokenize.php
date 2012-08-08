@@ -303,7 +303,6 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Totsy_Cybersource_Model
             $order = $payment->getOrder();
             $order->setStatus(Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_PAYMENT_FAILED)->save();
             $this->_sendPaymentFailedEmail($payment);
-            
             Mage::throwException(
                 Mage::helper('cybersource')->__('Gateway request error: %s', $e->getMessage())
             );
