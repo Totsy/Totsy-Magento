@@ -1,6 +1,11 @@
 Totsy-Magento Release Notes
 ===========================
 
+20120808
+----------
+* MGN-903 Can now amend 400+ PO lines, MGN-676 fix count for non-casepack items; no longer count canceled items that have configurables
+* MGN-830 If virtual order has been paid by credits, mark the order as complete.
+
 20120807
 ----------
 * Change copy on invites to include 'after your friend's first order ships
