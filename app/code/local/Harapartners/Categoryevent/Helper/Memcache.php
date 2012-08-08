@@ -203,16 +203,26 @@ class Harapartners_Categoryevent_Helper_Memcache extends Mage_Core_Helper_Abstra
                                     '`table_rewrite`.`product_id` = `e`.`entity_id` AND `table_rewrite`.`store_id` = \''.$storeId.'\' AND `table_rewrite`.`is_system` = 1 AND  `table_rewrite`.`request_path` LIKE \'sales%\'',
                                     array('request_path')
                                 )
+                                // Filter disabled products
+                                ->join(
+                                    array('table_cpei'=>'catalog_product_entity_int'),
+                                    '`table_cpei`.`entity_id` = `e`.`entity_id` AND `table_cpei`.`attribute_id` = 89 AND `table_cpei`.`value`=\'1\''
+                                )
+                                
+                                /*
+                                ->join(
+                                    array('table_csi'=>'cataloginventory_stock_item'),
+                                    '`table_csi`.`product_id` = `e`.`entity_id` AND `table_csi`.`qty` > 0',
+                                    array('qty')
+                                )
+                                */
+                                // Filter sold-out products and possibly events
                                 ->join(
                                     array('table_csi'=>'cataloginventory_stock_item'),
                                     '`table_csi`.`product_id` = `e`.`entity_id`',
                                     array('qty')
                                 )
-                                ->join(
-                                    array('table_cpei'=>'catalog_product_entity_int'),
-                                    '`table_cpei`.`entity_id` = `e`.`entity_id` AND `table_cpei`.`attribute_id` = 89',
-                                    array('table_cpei.value as status')
-                                )
+                                
                               ->where('`e`.`entity_id` IN(' . implode(',', $uniqueProductIds) . ')');
 
             $productCollection->addFieldToFilter($attributeType, array('like' => '%'.$attributeValue.'%'));
@@ -266,9 +276,6 @@ class Harapartners_Categoryevent_Helper_Memcache extends Mage_Core_Helper_Abstra
                 foreach($categoryInfoContainer['product_list'] as $containerProductId => &$containerProductInfo){
                     $productFound = false;
                     foreach($productInfoArray as $productId => $productInfo){
-                        if(intval($productInfo['qty'])==0 || intval($productInfo['status'])!=1){
-                            continue;
-                        }
                         if($containerProductId == $productId){
                             $containerProductInfo = $productInfo;
                             if((isset($productInfo['small_image']))&&($productInfo['small_image'] != 'no_selection')){
