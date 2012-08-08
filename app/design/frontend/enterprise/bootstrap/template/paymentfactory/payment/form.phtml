@@ -28,28 +28,27 @@
         //]]>
         </script>
         <img class="cart-type"  width="180px;" src="<?php echo $this->getSkinUrl('images/creditcards.jpg')?>"/>
-        <ul id="payment_form_paymentfactory_tokenize" class="form-list" style="">
-            <li>
+        <div id="payment_form_paymentfactory_tokenize" class="form-list" style="">
+
                 <label class="required" for="paymentfactory_tokenize_cc_type"><em>*</em><?php echo $this->__('Card Type');?></label>
+                
                 <div class="input-box">
                     <div class="totsy-selective-input-box middle-length">
-                        <span><?php echo $this->__('American Express');?></span>
                         <select id="paymentfactory_tokenize_cc_type" class="required-entry validate-cybsersource-cc-type-select" name="payment[cc_type]">
                             <option value="AE"><?php echo $this->__('American Express');?></option>
                             <option value="VI"><?php echo $this->__('Visa');?></option>
                             <option value="MC"><?php echo $this->__('MasterCard');?></option>
                             <option value="DI"><?php echo $this->__('Discover');?></option>
                         </select>
+                    <span><?php echo $this->__('American Express');?></span>
                     </div>
                 </div>
-            </li>
-            <li>
+
                 <label class="required" for="paymentfactory_tokenize_cc_number"><em>*</em><?php echo $this->__('Card Number');?></label>
                 <div class="input-box">
                     <input id="paymentfactory_tokenize_cc_number" class="input-text validate-cc-number validate-cc-type" type="text" value="" title="Credit Card Number" name="payment[cc_number]">
                 </div>
-            </li>
-            <li>
+
                 <label class="required" for="paymentfactory_tokenize_expiration"><em>*</em><?php echo $this->__('Expiration Date');?></label>
                 <div class="input-box">
                     <div class="v-fix right-margin">
@@ -92,8 +91,7 @@
                         </div>
                     </div>
                 </div>
-            </li>
-            <li>
+
                 <label class="required" for="paymentfactory_tokenize_cc_cid"><em>*</em><?php echo $this->__('Security Code');?></label>
                 <div class="input-box">
                     <div class="v-fix">
@@ -103,8 +101,8 @@
                 <div>
                      <input type="hidden" value="1" name="payment[saved_by_customer]" id="<?php echo $_code ?>_saved">
                 </div>
-            </li>
-        </ul>
+
+        </div>
     </div>
     
     <div id="billing-info">
