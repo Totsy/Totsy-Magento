@@ -179,6 +179,14 @@ class Harapartners_Service_Model_Rewrite_Catalog_Convert_Adapter_Product extends
             unset($websiteIds);
         }
 
+        $ordersplit = Mage::helper('ordersplit');
+        if(!in_array($importData['fulfillment_type'], $ordersplit->getAllowedFulfillmentTypeArray())){
+            $error_message = 'fulfillment type "'.$importData['fulfillment_type'].'" is unknown.  Valid fulfillment types are: ';
+            foreach($ordersplit->getAllowedFulfillmentTypeArray() as $fulfillment_type)
+                $error_message .= $fulfillment_type.', ';
+            Mage::throwException(substr($error_message,0,-2));
+        }
+
         foreach ($importData as $field => $value) {
             if (in_array($field, $this->_inventoryFields)) {
                 continue;
