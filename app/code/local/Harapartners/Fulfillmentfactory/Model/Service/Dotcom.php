@@ -328,6 +328,15 @@ XML;
             $state = Mage::helper('fulfillmentfactory')->getStateCodeByFullName($shippingAddress->getRegion(), $shippingAddress->getCountry());
 
             $city = Mage::helper('fulfillmentfactory')->validateAddressForDC('CITY', $shippingAddress->getCity());            
+
+			//country code hack for US territories, will need to be revisited for international shipping changes
+            $country = "US";
+            $territoryStates = array('AS', 'FM', 'GU', 'MH', 'MP', 'PW', 'PR', 'VI');
+            
+            if(in_array($state, $territoryStates)){
+            	$country = $state;
+            }
+
             $xml = <<<XML
         <orders xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <order>
@@ -377,7 +386,7 @@ XML;
                     <billing-city><![CDATA[{$shippingAddress->getCity()}]]></billing-city>
                     <billing-state>{$state}</billing-state>
                     <billing-zip>{$shippingAddress->getPostcode()}</billing-zip>
-                    <billing-country xsi:nil="true"/>
+                    <billing-country>{$country}</billing-country>
                     <billing-phone xsi:nil="true"/>
                     <billing-email xsi:nil="true"/>
                 </billing-information>
