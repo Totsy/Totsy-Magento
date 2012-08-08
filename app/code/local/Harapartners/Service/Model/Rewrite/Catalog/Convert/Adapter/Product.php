@@ -187,6 +187,9 @@ class Harapartners_Service_Model_Rewrite_Catalog_Convert_Adapter_Product extends
             Mage::throwException(substr($error_message,0,-2));
         }
 
+        if($importData['case_pack_qty'] && !is_numeric($importData['case_pack_qty']))
+            Mage::throwException('case_pack_qty must be a valid number when included, please correct or remove the current value: "'.$importData['case_pack_qty'].'".');
+
         foreach ($importData as $field => $value) {
             if (in_array($field, $this->_inventoryFields)) {
                 continue;
