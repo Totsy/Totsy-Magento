@@ -329,13 +329,7 @@ XML;
 
             $city = Mage::helper('fulfillmentfactory')->validateAddressForDC('CITY', $shippingAddress->getCity());            
 
-			//country code hack for US territories, will need to be revisited for international shipping changes
-            $country = "US";
-            $territoryStates = array('AS', 'FM', 'GU', 'MH', 'MP', 'PW', 'PR', 'VI');
-            
-            if(in_array($state, $territoryStates)){
-            	$country = $state;
-            }
+            $country = Mage::helper('fulfillmentfactory/dotcom')->getCountryCodeUsTerritories($state);
 
             $xml = <<<XML
         <orders xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
