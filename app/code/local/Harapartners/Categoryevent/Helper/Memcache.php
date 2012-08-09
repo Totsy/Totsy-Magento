@@ -19,7 +19,7 @@ class Harapartners_Categoryevent_Helper_Memcache extends Mage_Core_Helper_Abstra
     //Important, these lifetime should match the lifetime defined in the cache.xml for memcache!
     protected $_indexDataLifeTime = 3600;
     protected $_indexDataMemcacheKey = 'catalog_event_index';
-    protected $_topNavDataLifeTime = 1800;
+    protected $_topNavDataLifeTime = 900;
     protected $_topNavDataMemcacheKey = 'catalog_event_topnav';
     
     
@@ -53,10 +53,16 @@ class Harapartners_Categoryevent_Helper_Memcache extends Mage_Core_Helper_Abstra
             }
         }
         
+        echo 'memcacheKey: '.$memcacheKey.'<br>';
+        //exit(0);
+
         $topNavData = $this->_getMemcache()->read($memcacheKey);
         if(!$this->_validateTopNavData($topNavData)){
+            echo 'refresh cache<br>';
             $topNavData = $this->_getTopNavDataFromDb();
             $this->_getMemcache()->write($memcacheKey, $topNavData, MEMCACHE_COMPRESSED, $this->_topNavDataLifeTime);
+        } else {
+            echo 'cached<br>';
         }
         return new Varien_Object($topNavData);
     }
@@ -203,19 +209,12 @@ class Harapartners_Categoryevent_Helper_Memcache extends Mage_Core_Helper_Abstra
                                     '`table_rewrite`.`product_id` = `e`.`entity_id` AND `table_rewrite`.`store_id` = \''.$storeId.'\' AND `table_rewrite`.`is_system` = 1 AND  `table_rewrite`.`request_path` LIKE \'sales%\'',
                                     array('request_path')
                                 )
+                              
                                 // Filter disabled products
                                 ->join(
                                     array('table_cpei'=>'catalog_product_entity_int'),
                                     '`table_cpei`.`entity_id` = `e`.`entity_id` AND `table_cpei`.`attribute_id` = 89 AND `table_cpei`.`value`=\'1\''
                                 )
-                                
-                                /*
-                                ->join(
-                                    array('table_csi'=>'cataloginventory_stock_item'),
-                                    '`table_csi`.`product_id` = `e`.`entity_id` AND `table_csi`.`qty` > 0',
-                                    array('qty')
-                                )
-                                */
                                 // Filter sold-out products and possibly events
                                 ->join(
                                     array('table_csi'=>'cataloginventory_stock_item'),
