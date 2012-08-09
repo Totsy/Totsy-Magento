@@ -165,6 +165,23 @@ class Harapartners_Fulfillmentfactory_Helper_Dotcom extends Mage_Core_Helper_Abs
         $this->_getConfig();
         return 'NG';
     }
+
+    /**converting us territories to countrycode
+     *
+     * @param string $method Magento shipping method
+     * @return string Dotcom shipping method code
+     */
+    public function getCountryCodeUsTerritories($state) {
+		//country code hack for US territories, will need to be revisited for international shipping changes
+		$country = "US";
+		$territoryStates = array('AS', 'FM', 'GU', 'MH', 'MP', 'PW', 'PR', 'VI');
+		
+		if(in_array($state, $territoryStates)){
+			$country = $state;
+		}
+		
+		return $country;
+    }
     
     /**
      * submit products (items API of Dotcom) to Dotcom
