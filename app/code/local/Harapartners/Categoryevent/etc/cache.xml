@@ -10,7 +10,7 @@
             <block>categoryevent/index_topnav</block>
             <placeholder>EVENT_INDEX_TOPNAV</placeholder>
             <container>Harapartners_Categoryevent_Model_Cache_Topnav</container>
-            <cache_lifetime>1800</cache_lifetime>
+            <cache_lifetime>900</cache_lifetime>
         </categoryevent_event_topnav>
         <catalog_product_view>
             <block>categoryevent/catalog_product_view_shippingreturn</block>
