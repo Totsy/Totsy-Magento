@@ -117,10 +117,6 @@ class Harapartners_Paymentfactory_Model_Profile extends Mage_Core_Model_Abstract
     }
     
 
-    
-    
-    
-    
     //This is for updating 'created_at', 'updated_at' and 'store_id'
     protected function _beforeSave(){
         //Timezone manipulation ignored. Use Magento default timezone (UTC)

@@ -41,8 +41,13 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Billing extends TinyBrick_Orde
         if($data['street2']) {
             $data['street'] .= "\n" . $data['street2'];
         }
-        $billing->setData($data);
+        #If address is identical, dont save it
+        $duplicate = $this->checkDuplicate($billing, $data);
+        if($duplicate) {
+            return 'not_updated';
+        }
         try{
+            $billing->setData($data);
             $billing->save();
             $order->setData('billing_address_id', $billing->getId())
                     ->save();
@@ -65,5 +70,17 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Billing extends TinyBrick_Orde
         }catch(Exception $e){
             return "Error updating billing address";
         }
+    }
+    
+    public function checkDuplicate($billing, $data) 
+    {
+        $duplicate = true;
+        $keys = array('street','telephone','postcode','city','lastname','firstname');
+        foreach($keys as $key) {
+            if($billing->getData($key) != $data[$key]) {
+                $duplicate = false;
+            }
+        }
+        return $duplicate;
     }
 }

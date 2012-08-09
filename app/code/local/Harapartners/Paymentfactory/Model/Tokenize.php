@@ -439,7 +439,6 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Totsy_Cybersource_Model
         }
     }
 
-    
     public function createProfile($payment,$billing,$customerId,$addressId) {
         $error = false;
         $soapClient = $this->getSoapApi();
@@ -522,8 +521,11 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Totsy_Cybersource_Model
             $data->setData('cc_last4', substr($payment->getCcNumber(), -4));
             $data->setData('cybersource_subid', $result->paySubscriptionCreateReply->subscriptionID);
             $profile = Mage::getModel('paymentfactory/profile');
-            $profile->importDataWithValidation($data);
-            $profile->save();
+            $profile->loadByCcNumberWithId($payment->getData('cc_number').$customerId.$payment->getCcExpYear().$payment->getCcExpMonth());
+            if(!$profile && !$profile->getId()) {
+                $profile->importDataWithValidation($data);
+                $profile->save();
+            }
         }catch (Exception $e) {
             Mage::throwException(
                 Mage::helper('paymentfactory')->__('Can not save payment profile : ' . $e->getMessage())
@@ -532,5 +534,5 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Totsy_Cybersource_Model
         
         return $this;
     }
-    
+
 }

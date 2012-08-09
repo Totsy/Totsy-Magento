@@ -46,13 +46,19 @@ class TinyBrick_OrderEdit_OrderController extends Mage_Adminhtml_Controller_Acti
             $msgs = array();
             
             $changes = array();
+            $addressUpdated = true;
+         
             foreach($edits as $edit) {
                 if($edit['type']) {
                     if($edit['type'] == 'billing') {
                         $model = Mage::getModel('orderedit/edit_updater_type_'.$edit['type']);
                         if($mess = $model->edit($order,$edit)) {
-                            $msgs[] = $mess;
-                        }
+                            if($mess == 'not_updated') {
+                                $addressUpdated = false;
+                            } else {
+                                $msgs[] = $mess;
+                            }
+                        } 
                     }
                 }
             }
@@ -61,6 +67,7 @@ class TinyBrick_OrderEdit_OrderController extends Mage_Adminhtml_Controller_Acti
             foreach($edits as $edit) {
                 if($edit['type']) {
                     if($edit['type'] == 'payment') {
+                        $edit['addressUpdated'] = $addressUpdated;
                         $model = Mage::getModel('orderedit/edit_updater_type_'.$edit['type']);
                         if($mess = $model->edit($order,$edit)) {
                             $msgs[] = $mess;
