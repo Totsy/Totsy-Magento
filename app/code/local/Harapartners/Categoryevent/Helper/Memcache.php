@@ -53,16 +53,11 @@ class Harapartners_Categoryevent_Helper_Memcache extends Mage_Core_Helper_Abstra
             }
         }
         
-        echo 'memcacheKey: '.$memcacheKey.'<br>';
-        //exit(0);
-
         $topNavData = $this->_getMemcache()->read($memcacheKey);
         if(!$this->_validateTopNavData($topNavData)){
             echo 'refresh cache<br>';
             $topNavData = $this->_getTopNavDataFromDb();
             $this->_getMemcache()->write($memcacheKey, $topNavData, MEMCACHE_COMPRESSED, $this->_topNavDataLifeTime);
-        } else {
-            echo 'cached<br>';
         }
         return new Varien_Object($topNavData);
     }
