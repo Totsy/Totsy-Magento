@@ -42,8 +42,8 @@ else{
 <?php if ($_product->isSaleable() && count($_attributes)):?>
     <dl>
     <?php $counter = 0;?>
-    <?php foreach($_attributes as $_attribute): ?>
-        <dd<?php if ($_attribute->decoratedIsLast){?> class="last"<?php }?>>
+    <?php foreach ($_attributes as $_attribute): ?>
+        <dd<?php if ($_attribute->decoratedIsLast) {?> class="last"<?php }?>>
             <div class="input-box">
             	<span style="-moz-user-select: none;" id="activechange<?php echo $counter;?>">
             	    <?php echo $this->__('Please Select ').$_attribute->getLabel() ?></span>
@@ -53,6 +53,7 @@ else{
             </div>
         </dd>
         
+        <!--
         <script type="text/javascript">
 $(document).ready(function() {
 $('select[id$=<%=DropDownList1.ClientID%>]').bind("keyup
@@ -66,9 +67,10 @@ $('#message').text("");
 });
 });
 </script>
+-->
 
         <script type="text/javascript">
-		jQuery(document).ready(function(){
+		jQuery(document).ready( function() {
 				jQuery("button.btn-cart").css("background-color","<?php echo $buttonColor['deactive']?>");
 				var selector_span_<?php echo $counter;?> = "#activechange<?php echo $counter;?>";
 				var selector_select_<?php echo $counter;?> = "#attribute<?php echo $_attribute->getAttributeId()?>";
@@ -87,6 +89,7 @@ $('#message').text("");
 				//Harapartners, Jun, Auto choose the first option when the first select only has one valid option
 				//spConfig is for calculation/validation, jQuery is used for special view rendering
 				var firstSelect = spConfig.settings[0];
+								
 				if(firstSelect.options.length == 2){
 					firstSelect.options[1].selected = true;
 					firstSelect.value = firstSelect.options[1].value;

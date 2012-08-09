@@ -34,11 +34,32 @@
 <?php
 $_helper = $this->helper('catalog/output');
 $_product = $this->getProduct();
+$_category = "";
 
 //Harapartners, Jun, in the controller we will guarantee the current categor must exists, if not we redirect
-$_category = Mage::registry('current_category');
+if (!Mage::registry('current_category')){	
+		$_categories = $_product->getCategoryIds();
+		$_category = Mage::getModel( 'catalog/category' )->load( $_categories[1] );
+	} else {		
+		$_category  = Mage::registry('current_category');
+	}
 ?>
 
+<style>
+
+select {
+	width: auto !important;
+}
+
+input, textarea{
+	width: auto !important;
+}
+
+</style>
+
+<script type="text/javascript">
+    var optionsPrice = new Product.OptionsPrice(<?php echo $this->getJsonConfig() ?>);
+</script>
 <section id="pageheader" class="jumbotron subhead">
     <div class="page-header subnav">
         <h2>Today's Sales <span> / </span><a href="<?php echo $_category->getUrl();?>"><?php echo $_helper->categoryAttribute($_category, $_category->getName(), 'name') ?></a> <small class="pull-right"><?php $endcount_utc = strtotime($_category->getEventEndDate());
@@ -46,13 +67,14 @@ $endcount_lc = date("F j, Y, G:i:s", $endcount_utc); ?>
 <span class="count-down-timer alert alert-success" id="timer"></span></small></h2>
     </div>
 </section>
-<?php echo $this->getMessagesBlock()->toHtml() ?>
+<?php echo $this->getMessagesBlock()->toHtml(); ?>
 <div class="row">
+    
 <div class="span4">
-    <?php echo $this->getChildHtml('media') ?>
+    <?php echo $this->getChildHtml('media'); ?>
 </div>
 
-<div class="span4">
+<div class="span6">
 <div class="page-header">
     <h2><?php echo $_product->getName(); ?> <small></small></h2>
 </div>
@@ -65,22 +87,12 @@ $endcount_lc = date("F j, Y, G:i:s", $endcount_utc); ?>
     <div class="tab-pane active" id="desc">
     <?php echo $_product->getDescription(); ?>
     </div>
-    <div class="tab-pane" id="shipping"><?php echo $this->getChildHtml('product.shipping.return')?></div>
+    <div id="shipping" class="tab-pane"><?php echo $this->getChildHtml('product.shipping.return')?></div>
     </div>
-    <?php if ($_product->getData('final_sale')): ?>
-            <p class="final-sale"><strong>Final Sale</strong></p>
-            <?php endif; ?>
-            <form action="<?php echo $this->getSubmitUrl($_product) ?>" method="post" id="product_addtocart_form"<?php if($_product->getOptions()): ?> enctype="multipart/form-data"<?php endif; ?>>
-            <div class="no-display">
-            <input type="hidden" name="product" value="<?php echo $_product->getId() ?>" />
-            <input type="hidden" name="related_product" id="related-products-field" value="" />
-            </div>
-            </form>
-</div>
+</div>    <?php if ($_product->getData('final_sale')): ?>
+    <p class="final-sale"><strong>Final Sale</strong></p>
+    <?php endif; ?>
 <script type="text/javascript">
-    var optionsPrice = new Product.OptionsPrice(<?php echo $this->getJsonConfig() ?>);
-</script>
-<script>
     jQuery(function () {
         jQuery('#myTabs a:first').tab('show');
     })
@@ -91,8 +103,15 @@ $endcount_lc = date("F j, Y, G:i:s", $endcount_utc); ?>
 ?>
 </div>
 <!-- <div class="well"> -->
-<div class="span3">
-        <h2>Options</h2>
+<div class="span2">
+    <h2>Options</h2>
+        
+        <form action="<?php echo $this->getSubmitUrl($_product) ?>" method="post" id="product_addtocart_form" <?php if($_product->getOptions()): ?> enctype="multipart/form-data" <?php endif; ?> >
+            <div class="no-display">
+                <input type="hidden" name="product" value="<?php echo $_product->getId() ?>" />
+                <input type="hidden" name="related_product" id="related-products-field" value="" />
+            </div>
+    <div id="product-main-info">
         <p class="product-ids"><?php echo $this->__('SKU# %s', $this->htmlEscape($_product->getSku())); ?></p>
         <?php //echo $this->getReviewsSummaryHtml($_product, false, true)?>
         <?php echo $this->getChildHtml('alert_urls') ?>
@@ -124,42 +143,44 @@ $endcount_lc = date("F j, Y, G:i:s", $endcount_utc); ?>
                      </div>
                 <?php endif;?>
                 <?php echo $this->getChildHtml('other');?>
-    <?php if ($_product->isSaleable() && $this->hasOptions() && $this->getChildChildHtml('container2') ):?>
+    <?php if ($_product->isSaleable() && $this->hasOptions() && $this->getChildChildHtml('container2')):?>
         <div class="options-container-big">
             <?php echo $this->getChildChildHtml('container2', '', true, true) ?>
         </div>
+        </div>
     <?php endif;?>
+        </div>
+        </form>
     </div>
 <!-- </div> -->
     <div class="share-button" id="st_sharethis_custom">
         <div class="st_sharethis_custom"></div>
     </div>
         <?php echo $this->getChildHtml('relatedProducts') ?>
-        <?php echo $this->getChildHtml('upsell_products') ?>
-        <?php // echo $this->getChildHtml('productTagList') ?>
-        <?php echo $this->getChildHtml('product_additional_data') ?>
-    </div>
+        <?php //echo $this->getChildHtml('upsell_products') ?>
+        <?php //echo $this->getChildHtml('productTagList') ?>
+        <?php //echo $this->getChildHtml('product_additional_data') ?>
 </div>
 <script type="text/javascript">
-
-jQuery(document).ready( function() {
-	
     var productAddToCartForm = new VarienForm('product_addtocart_form');
-    productAddToCartForm.submit = function(button, url) {
-        if (this.validator.validate()) {
+    productAddToCartForm.submit = function(button, url) {        
+        if (this.validator.validate()) {        
             var form = this.form;
             var oldUrl = form.action;
             if (url) {
                form.action = url;
             }
+            
             var e = null;
             //Start of our new ajax code
-            if(!url){
+            if(!url) {
                 url = jQuery('#product_addtocart_form').attr('action');
             }
+            
             url = url.replace("checkout/cart","ajax/checkout_cart")
             var data = jQuery('#product_addtocart_form').serialize();
             data += '&isAjax=1';
+                        
             jQuery('#ajax_loader').show();
             try {
                 jQuery.ajax({
@@ -193,7 +214,6 @@ jQuery(document).ready( function() {
                     }
                 });
             } catch (e) {
-                alert(e);
             }
             //End of our new ajax code
             this.form.action = oldUrl;
@@ -223,7 +243,6 @@ jQuery(document).ready( function() {
         }
     }.bind(productAddToCartForm);
     
-    });
 </script>
 <script type="text/javascript">var switchTo5x=true;</script>
 <script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>

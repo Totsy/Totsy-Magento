@@ -42,7 +42,7 @@ $isPasswordChange = Mage::registry('changepassword');
       <?php if (!$isPasswordChange):?>
   <div id="account-info" class="span5 alpha">
 
-    <strong class="legend"><?php echo $this->__('Account Information') ?></strong>
+    <h4 class="legend"><?php echo $this->__('Account Information') ?></h4>
     <hr />
     <?php echo $this->getLayout()->createBlock('customer/widget_name')->setObject($this->getCustomer())->toHtml() ?>
     <label for="email" class="required"><em>*</em><?php echo $this->__('Email Address') ?></label>
@@ -68,11 +68,11 @@ $isPasswordChange = Mage::registry('changepassword');
     <strong class="legend"><?php echo $this->__('Change Password') ?></strong>
     <hr />
     <input type="hidden" name="change_password" id="change_password" value="1" />
-    <label for="current_password" class="required"><em>*</em><?php echo $this->__('Current Password') ?></label>
+    <label for="current_password" class="required"><em>*</em> <?php echo $this->__('Current Password') ?></label>
     <input type="password" title="<?php echo $this->__('Current Password') ?>" class="input-text" name="current_password" id="current_password" />
-    <label for="password" class="required"><em>*</em><?php echo $this->__('New Password') ?></label>
+    <label for="password" class="required"><em>*</em> <?php echo $this->__('New Password') ?></label>
     <input type="password" title="<?php echo $this->__('New Password') ?>" class="input-text strong-validate-password" name="password" id="password" />
-    <label for="confirmation" class="required"><em>*</em><?php echo $this->__('Confirm New Password') ?></label>
+    <label for="confirmation" class="required"><em>*</em> <?php echo $this->__('Confirm New Password') ?></label>
     <input type="password" title="<?php echo $this->__('Confirm New Password') ?>" class="input-text validate-cpassword" name="confirmation" id="confirmation" />
     </div>
     <?php endif; ?>
@@ -87,8 +87,8 @@ $isPasswordChange = Mage::registry('changepassword');
         $resultArray = $client->graph($facebookUid, array('id','name','picture','access_token'));
     ?>
     <?php if (!empty($resultArray)):?>
-    <img id="facebook-photo" src="https://graph.facebook.com/<?php echo $resultArray['id']?>/picture"/>
-    <p id="facebook-name"><?php echo $resultArray['name']?></p>
+    <h5><img src="https://eric.totsy.com/skin/frontend/enterprise/bootstrap/images/iconmonstr-facebook-5-icon.png" width="20px" align="middle" /> <?php echo $resultArray['name']?></h5>
+    <img id="facebook-photo" src="https://graph.facebook.com/<?php echo $resultArray['id']?>/picture" />
     <?php else : ?>
     <p class="error"><?php $this->__('Can not get your information from Facebook.')?></p>
     <?php endif;?>
