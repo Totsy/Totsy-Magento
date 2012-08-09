@@ -89,6 +89,12 @@ html.test .container .row {outline:1px dotted green;}
     padding-right:10px;
     background: url('../images/glyph-arrow-rt.png') 100% 85% no-repeat;
 }
+.dropdown-toggle {
+    padding-right:12px;
+    background: url('../images/glyph-arrow-d.png') 100% 65% no-repeat;
+}
+
+
 /* states / messaging */
 .messages li, ul { list-style: none; }
 .messages { display: block; padding: 10px; margin: 0px 0px 10px 0px;}
@@ -116,6 +122,9 @@ html.test .container .row {outline:1px dotted green;}
     box-shadow: 0 1px 5px rgba(0, 0, 0, 0.35);
 }
 #logo {margin-left:0;}
+
+/* #userAccount - my account module */
+#userAccount > a:hover {text-decoration: none;}
 
 /* nav */
 .navbar nav {
