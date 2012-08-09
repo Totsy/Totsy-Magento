@@ -42,9 +42,9 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Billing extends TinyBrick_Orde
             $data['street'] .= "\n" . $data['street2'];
         }
         #If address is identical, dont save it
-        $duplicate = $this->checkDuplicate($billing, $data);     
+        $duplicate = $this->checkDuplicate($billing, $data);
         if($duplicate) {
-            return false;
+            return 'not_updated';
         }
         try{
             $billing->setData($data);
