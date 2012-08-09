@@ -33,11 +33,14 @@
 <html lang="<?php echo $this->getLang() ?>">
 <head>
 <?php echo $this->getChildHtml('head') ?>
+<style>
+body {  padding-top:65px;}
+</style>
 </head>
 <body<?php echo $this->getBodyClass()?' class="customer-account-login '.$this->getBodyClass().'"':'' ?> data-spy="scroll" data-target=".subnav" data-offset="50">
 <?php echo $this->getChildHtml('after_body_start') ?>
 <div class="container">
-<div class="well">
+<div class="well offset3 span4">
     <?php echo $this->getChildHtml('global_notices') ?>
         <?php echo $this->getChildHtml('header') ?>
 		<div class="login-border-bottom">
@@ -54,10 +57,10 @@
 						<div class="clear"/>
 					<?php endif;?>
 			</div>
-        <?php echo $this->getChildHtml('footer') ?>
-        <?php echo $this->getChildHtml('before_body_end') ?>
     </div>
 </div>
+        <?php echo $this->getChildHtml('footer') ?>
+        <?php echo $this->getChildHtml('before_body_end') ?>
 </div>
 <?php echo $this->getAbsoluteFooter() ?>
 </body>

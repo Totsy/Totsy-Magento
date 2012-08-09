@@ -55,47 +55,33 @@
 //		}
 //	}
 ?>
-<style>
-body {  padding-top:30px;}
-</style>
-<div class="">
 <div class="page-header">
-	<h1><?php echo $this->__('Sign In') ?> <small> or <a href="/customer/account/create/" style="font-weight:normal;">Sign Up</a></small>
-	</h1>
+<h2><?php echo $this->__('Sign In') ?> <small> or <a href="/customer/account/create/" style="font-weight:normal;">Sign Up</a></small></h2>
 </div>
 <div class="row">
-<div class="span6">
+<div class="span4">
 <div class="the-account-login account-login<?php if (!$this->helper('customer')->isRegistrationAllowed()) echo ' login-only' ?>">
     <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
     <form action="<?php echo $this->getPostActionUrl() ?>" method="post" id="login-form">
     <label for="email" class="required"><?php echo $this->__('Email') ?><em> *</em></label>
-    <input name="login[username]" value="<?php echo $this->htmlEscape($this->getUsername()) ?>" id="email" type="text" class="input-text required-entry validate-email" title="<?php echo $this->__('Email Address') ?>" />
+    <input name="login[username]" value="<?php echo $this->htmlEscape($this->getUsername()) ?>" id="email" type="text" class="input-text required-entry validate-email span4" title="<?php echo $this->__('Email Address') ?>" />
     <label for="pass" class="required"><?php echo $this->__('Password') ?><em> *</em></label>
-    <input name="login[password]" type="password" class="input-text required-entry validate-password" id="pass" title="<?php echo $this->__('Password') ?>" />
-    
+    <input name="login[password]" type="password" class="input-text required-entry validate-password span4" id="pass" title="<?php echo $this->__('Password') ?>" />
     <?php echo $this->getChildHtml('persistent.remember.me'); ?>
-	
-	<?php echo $this->getChildHtml('persistent.remember.me.tooltip'); ?>
-	<p><input type="checkbox" name="rememberme" value="remember" class="rememberme" align="middle"/>
-	<span><?php echo $this->__( ' Remember me' ); ?></span>
-	|  <a href="<?php echo $this->getForgotPasswordUrl() ?>"><?php echo $this->__('Forgot Your Password?') ?></a></p>
-	
-	<div class="buttons-set form-buttons">
-            <button type="submit" id="submit-button" class="btn btn-primary">Sign In</button>
-            
-            <small>or</small>
-           
-    	<a rel="facebook-connect" style="cursor:pointer;" title="<?php echo $this->__('Connect with Facebook') ?>" class="facebook-button btn btn-primary"><img src="http://ucsf-hastingsconsortium.org/sites/default/files/facebook_icon_00115.png" width="17" style="margin:-4px 4px 0px 0px;" />   Connect with Facebook</a>
-        </div>
+    <?php echo $this->getChildHtml('persistent.remember.me.tooltip'); ?>
+    <p><input type="checkbox" name="rememberme" value="remember" class="rememberme" align="middle"/>
+    <span><?php echo $this->__( ' Remember me' ); ?></span>
+    |   <a href="<?php echo $this->getForgotPasswordUrl() ?>"><?php echo $this->__('Forgot Your Password?') ?></a></p>
+    <div class="buttons-set form-buttons" style="margin:21px 0px -16px 0px">
+    <button type="submit" id="submit-button" class="btn btn-primary">Sign In</button>
+    <small>or</small>
+    <a rel="facebook-connect" style="cursor:pointer;" title="<?php echo $this->__('Connect with Facebook') ?>" class="facebook-button btn btn-primary"><img src="http://ucsf-hastingsconsortium.org/sites/default/files/facebook_icon_00115.png" width="17" style="margin:-4px 4px 0px 0px;" />Connect with Facebook</a>
+    </div>
 </div>
-	                
-					<!--div class="free_shipping_banner_reg_new rollover_img">
-						<a href="javascript:;" title="Free Shipping">
-							<span/>
-						</a>
-					</div-->
-        </div>
-        
+    <div class="free_shipping_banner_reg_new rollover_img">
+        <a href="javascript:;" title="Free Shipping"></a>
+    </div>
+</div>
 </div>
         <?php if (Mage::helper('checkout')->isContextCheckout()): ?>
             <input name="context" type="hidden" value="checkout" />
@@ -107,7 +93,3 @@ body {  padding-top:30px;}
     //]]>
     </script>
 </div>
-</div>
-
-
-

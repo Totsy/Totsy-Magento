@@ -35,16 +35,13 @@
             <?php $loginPattern = '/login/';?>
             <?php $forgetpasswordPattern = '/forgotpassword/';?>
             <?php if (preg_match($createPattern, $currentUrl)):?>
-            <h1 class="logo"><img src="<?php echo $this->getSkinUrl() ?>images/logo.png" alt="<?php echo $this->getLogoAlt() ?>" /></h1>
-            <p class="right-top pull-right">Already a member? <a href="<?php echo $this->getBaseUrl()?>customer/account/login/" id="sign-up">Sign In</a></p>
+            <h1 class="logo"><img src="<?php echo $this->getSkinUrl() ?>images/logoN.png" alt="<?php echo $this->getLogoAlt() ?>" /></h1>
             <?php elseif (preg_match($loginPattern, $currentUrl)||preg_match($forgetpasswordPattern, $currentUrl)):?>
-            <p class="right-top pull-right">Not a member yet? <a href="<?php echo $this->getBaseUrl()?>customer/account/create/" id="join-now">Join now!</a></p>
-            <h1 class="logo"><img src="<?php echo $this->getSkinUrl() ?>images/logo.png" alt="<?php echo $this->getLogoAlt() ?>" /></h1>
+            <h1 class="logo"><img src="<?php echo $this->getSkinUrl() ?>images/logoN.png" alt="<?php echo $this->getLogoAlt() ?>" /></h1>
             <?php else:?>
-            <a href="<?php echo $this->getBaseUrl()?>"><h1 class="logo"><img src="<?php echo $this->getSkinUrl() ?>images/logo.png" alt="<?php echo $this->getLogoAlt() ?>" /></h1></a>
-            
+            <a href="<?php echo $this->getBaseUrl()?>"><h1 class="logo"><img src="<?php echo $this->getSkinUrl() ?>images/logoN.png" alt="<?php echo $this->getLogoAlt() ?>" /></h1></a>
+            https://www.totsy.com/skin/frontend/enterprise/harapartners/images/logoN.png
             <div id="publicLogin">
-                <p class="signin">Already a member? <a href="<?php echo $this->getBaseUrl()?>customer/account/login/" title="Sign In">Sign in here</a></p>
                 <p class="signup group">
                 <strong><em>Up to 90% off retail</em> for mom, baby, and child.</strong>
                 <a title="Register a Totsy account" class="btn" href="<?php echo $this->getBaseUrl()?>customer/account/create/"><strong>Join Now</strong></a>
