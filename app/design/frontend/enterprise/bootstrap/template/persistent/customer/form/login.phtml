@@ -56,7 +56,7 @@
 //	}
 ?>
 <div class="page-header">
-<h2><?php echo $this->__('Sign In') ?> <small> or <a href="/customer/account/create/" style="font-weight:normal;">Sign Up</a></small></h2>
+<h2 style="font-size:18px;"><?php echo $this->__('Sign In') ?> <small> or <a href="/customer/account/create/" style="font-weight:normal;">Sign Up</a></small></h2>
 </div>
 <div class="row">
 <div class="span4">
@@ -71,11 +71,11 @@
     <?php echo $this->getChildHtml('persistent.remember.me.tooltip'); ?>
     <p><input type="checkbox" name="rememberme" value="remember" class="rememberme" align="middle"/>
     <span><?php echo $this->__( ' Remember me' ); ?></span>
-    |   <a href="<?php echo $this->getForgotPasswordUrl() ?>"><?php echo $this->__('Forgot Your Password?') ?></a></p>
-    <div class="buttons-set form-buttons" style="margin:21px 0px -16px 0px">
-    <button type="submit" id="submit-button" class="btn btn-primary">Sign In</button>
+    <a href="<?php echo $this->getForgotPasswordUrl() ?>" class="pull-right"><?php echo $this->__('Forgot Your Password?') ?></a></p>
+    <div class="buttons-set form-buttons align-center" style="margin:21px 0px -16px 0px">
+    <button type="submit" id="submit-button" class="btn btn-primary btn-large">Sign In</button>
     <small>or</small>
-    <a rel="facebook-connect" style="cursor:pointer;" title="<?php echo $this->__('Connect with Facebook') ?>" class="facebook-button btn btn-primary"><img src="http://ucsf-hastingsconsortium.org/sites/default/files/facebook_icon_00115.png" width="17" style="margin:-4px 4px 0px 0px;" />Connect with Facebook</a>
+    <a rel="facebook-connect" style="cursor:pointer;" title="<?php echo $this->__('Connect with Facebook') ?>" class="facebook-button btn btn-large"><img src="http://ucsf-hastingsconsortium.org/sites/default/files/facebook_icon_00115.png" width="17" style="margin:-4px 4px 0px 0px;" />Connect with Facebook</a>
     </div>
 </div>
     <div class="free_shipping_banner_reg_new rollover_img">

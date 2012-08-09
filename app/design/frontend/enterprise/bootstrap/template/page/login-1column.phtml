@@ -43,25 +43,20 @@ body {  padding-top:65px;}
 <div class="well offset3 span4">
     <?php echo $this->getChildHtml('global_notices') ?>
         <?php echo $this->getChildHtml('header') ?>
-		<div class="login-border-bottom">
-			<div class="main-container col1-layout">
-
-					<?php echo $this->getChildHtml('breadcrumbs') ?>
-						<?php echo $this->getChildHtml('global_messages') ?>
-						<?php echo $this->getChildHtml('content') ?>
-						<?php $currentUrl = $this->helper('core/url')->getCurrentUrl();?>
-					<?php $loginPattern = '/login/';?>
-					<?php if (!preg_match($loginPattern, $currentUrl)):?>
-						<div class="clear"/>
-							<img src="<?php echo $this->getSkinUrl()?>images/featured_on_long.png"  alt=""/>
-						<div class="clear"/>
-					<?php endif;?>
-			</div>
-    </div>
-</div>
+            <?php echo $this->getChildHtml('breadcrumbs') ?>
+            <?php echo $this->getChildHtml('global_messages') ?>
+            <?php echo $this->getChildHtml('content') ?>
+            <?php $currentUrl = $this->helper('core/url')->getCurrentUrl();?>
+            <?php $loginPattern = '/customer/account/login/';?>
+    <?php if (!preg_match($loginPattern, $currentUrl)):?>
+            <div class="well span10 align-center">
+                <img src="<?php echo $this->getSkinUrl()?>images/featured_on_long.png"  alt="" />
+            </div>
+    <?php endif;?>
         <?php echo $this->getChildHtml('footer') ?>
         <?php echo $this->getChildHtml('before_body_end') ?>
 </div>
+
 <?php echo $this->getAbsoluteFooter() ?>
 </body>
 </html>

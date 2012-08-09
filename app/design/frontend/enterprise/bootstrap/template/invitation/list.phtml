@@ -74,9 +74,106 @@ if ( !$rewardCollection ) {
     </h4>
 </div>
 <div class="well">
-    <div class="span6 alpha">
+    <div class="span alpha">
     <h4><?php echo Mage::helper('enterprise_invitation')->__('Invitations') ?></h4>
     <hr />
+
+
+
+ <!-- Collapse
+    ================================================== -->
+    <section id="collapse">
+      <div class="row">
+        <div class="span">
+
+          <div class="accordion" id="accordion2">
+            <div class="accordion-group">
+              <div class="accordion-heading">
+                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
+                  Send Invitations
+                </a>
+              </div>
+              <div id="collapseOne" class="accordion-body collapse in">
+                <div class="accordion-inner">
+                    <h5><?php echo Mage::helper('enterprise_invitation')->__('Send Invitations') ?></h5>
+                    <hr />
+                    <p><?php if ( Mage::Helper('service')->isTotsyStore() ) {
+                            $inviteFriendNotes = "For each friend you invite, Totsy will credit your account with <span class='needgreen'>$15</span> after your friend's place their first order.";
+                        } else {
+                            $inviteFriendNotes = "For each friend you invite, we will credit your account with <span class='needgreen'>$15</span> after your friend's place their first order.";
+                        }
+                        ?>
+                        <?php echo Mage::helper('enterprise_invitation')->__($inviteFriendNotes); ?>
+                        </p>
+                        	<div id="messages"><?php echo $this->getMessagesBlock()->getGroupedHtml() ?></div>
+<?php echo $this->getChildHtml('form_before')?>
+<?php if ($maxPerSend = (int)Mage::helper('enterprise_invitation')->getMaxInvitationsPerSend()): ?>
+<form id="invitationForm" action="<?php echo $this->helper('enterprise_invitation')->getCustomerInvitationFormUrl()?>" method="post">
+<div class="fieldset">	
+<ul class="form-list">
+<?php //$_perRow = ceil($maxPerSend/3); for($_index = 1; $_index <= $maxPerSend; $_index ++): ?>
+<li class="email-add-box">
+<label for="email"><?php echo Mage::helper('enterprise_invitation')->__('Enter Your Friends Email Addresses:');?> </label>
+<div class="input-box">
+<textarea id="contact_list" tabindex="<?php //echo $_index+1 ?>" name="email" id="inviteemailaddress" title="<?php echo Mage::helper('enterprise_invitation')->__('email') ?>" class="input-text" rows="3" cols="4"></textarea>
+</div>
+
+</li>
+<?php //endfor; ?>
+<?php if (Mage::helper('enterprise_invitation')->isInvitationMessageAllowed()): ?>
+<li class="email-msg-box">
+<label for="message"><?php echo Mage::helper('enterprise_invitation')->__('Personalized Message To Friends:');?> </label>
+<div class="input-box">
+<?php if ( Mage::Helper('service')->isTotsyStore() ):?>
+<textarea tabindex="<?php //echo $_index+1 ?>" name="message" id="message" title="<?php echo Mage::helper('enterprise_invitation')->__('Message') ?>" class="input-text" rows="3" cols="4"><?php echo 'Please accept this invitation to join Totsy'; ?></textarea>
+<?php else :?>
+<textarea tabindex="<?php //echo $_index+1 ?>" name="message" id="message" title="<?php echo Mage::helper('enterprise_invitation')->__('Message') ?>" class="input-text" rows="3" cols="4"><?php echo 'Please accept this invitation to join Mamasource Private Sales powered by Totsy'; ?></textarea>
+<?php endif;?>
+</div>
+</li>
+</ul>
+<?php endif;?>
+</div>
+<!--p class="required"><?php echo Mage::helper('enterprise_invitation')->__('* Required Fields') ?></p-->
+<div class="buttons-set form-buttons">
+<!--p class="back-link"><a href="<?php echo Mage::helper('enterprise_invitation')->getCustomerInvitationUrl() ?>"><small>&laquo; </small><?php echo Mage::helper('enterprise_invitation')->__('Back to Invitations') ?></a></p-->
+<button class="button" onclick="modifyform()" type="button"><div class="invite-button"><?php echo Mage::helper('enterprise_invitation')->__('Send Invitations') ?></div></button>
+</div>	
+</form>
+                </div>
+              </div>
+            </div>
+            <div class="accordion-group">
+              <div class="accordion-heading">
+                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
+                  Collapsible Group Item #2
+                </a>
+              </div>
+              <div id="collapseTwo" class="accordion-body collapse">
+                <div class="accordion-inner">
+                  Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                </div>
+              </div>
+            </div>
+            <div class="accordion-group">
+              <div class="accordion-heading">
+                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseThree">
+                  Collapsible Group Item #3
+                </a>
+              </div>
+              <div id="collapseThree" class="accordion-body collapse">
+                <div class="accordion-inner">
+                  Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+
 
     <ul id="myTab" class="nav nav-tabs">
         <li class="active"><a href="#send" data-toggle="tab">Send</a></li>
@@ -85,89 +182,18 @@ if ( !$rewardCollection ) {
 
     <div id="invitationTabsContent" class="tab-content">
         <div class="tab-pane fade in active" id="send">
-        	<h2><?php echo Mage::helper('enterprise_invitation')->__('Send Invitations') ?></h2>
-<hr class="the-hr"/>
-<p class="invite-notes">
-<?php
-if ( Mage::Helper('service')->isTotsyStore() ) {
-$inviteFriendNotes = "For each friend you invite, Totsy will credit your account with <span class='needgreen'>$15</span> after your friend's place their first order.";
-}else {
-$inviteFriendNotes = "For each friend you invite, we will credit your account with <span class='needgreen'>$15</span> after your friend's place their first order.";
-}
-?>
-<?php echo Mage::helper('enterprise_invitation')->__($inviteFriendNotes); ?>
-</p>
+        	
         </div>
         <div class="tab-pane fade" id="history">
            <div class="page-title-main">
         <h1><?php echo Mage::helper('enterprise_invitation')->__('Invitation History'); ?></h1>
     </div>
-    <div id="messages"><?php echo $this->getMessagesBlock()->getGroupedHtml() ?></div>
-    <?php echo $this->getChildHtml('list_before')?>
-    <?php if (count($this->getInvitationCollection())): ?>
-    <table class="data-table table table-striped" id="invitations-list-table" cellpadding="0">
-        <col />
-        <col />
-        <col />
-        <tbody>
-        <?php if($rewardCollection):?>
-            <?php $counter_1 = 1;?>
-                <?php foreach ( $rewardCollection as $reward ): ?>
-                <tr class="<?php if ( $counter_1++ %2 ) echo 'odd'; else echo 'even';?>">
-                <td class="his-list date">
-                <?php $arrayDate = explode(" ", $item->getCreatedAt());?>
-                <?php echo $this->htmlEscape(str_replace("-","/",$arrayDate[0])); ?>
-                </td>
-                <td class="his-list events">
-                    <?php echo $this->escapeHtml($reward->getMessage());?>
-                </td>
-                <td class="his-list status">
-                <?php echo Mage::helper('enterprise_invitation')->__('$25 Credit Awarde to You')?>
-                </td>
-                </tr>
-                <?php endforeach; ?>
-                <?php 
-                if($counter_1 % 2) 
-                    $counter = 1;
-                else 
-                    $counter = 2;
-                ?>
-                <?php else :?>
-                <?php   $counter = 1;?>
-                <?php endif;?>
-                <?php foreach ($this->getInvitationCollection() as $invitation): ?>
-                <tr class="<?php if ( $counter++ %2 ) echo 'odd'; else echo 'even';?>">
-                <td class="his-list date">
-                <?php $arrayDate = explode(" ", $invitation->getInvitationDate());?>
-                <?php echo $this->htmlEscape(str_replace("-","/",$arrayDate[0])); ?>
-                </td>
-                <td class="his-list events">
-                <?php if($this->helper('enterprise_invitation')->getInvitationStatusText($invitation) == 'Sent'):?>
-                <span><?php echo Mage::helper('enterprise_invitation')->__('Invitation sent to ');?></span><?php echo $this->htmlEscape($invitation->getEmail()); ?>
-                <?php elseif ($this->helper('enterprise_invitation')->getInvitationStatusText($invitation) == 'Accepted'):?>
-                <span><?php echo $this->htmlEscape($invitation->getEmail()); ?></span><?php echo Mage::helper('enterprise_invitation')->__(' joined Totsy');?>
-                <?php else :?>
-                <span><?php echo $this->htmlEscape($invitation->getEmail()); ?></span><?php echo Mage::helper('enterprise_invitation')->__(' email not send');?>
-                <?php endif;?>
-                </td>
-                <td class="his-list status">
-                <?php if($this->helper('enterprise_invitation')->getInvitationStatusText($invitation) == 'Accepted'):?>
-                <?php echo Mage::helper('enterprise_invitation')->__('Membership Registration');?>
-                <?php endif;?>
-                </td>
-                </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
+    
         
         <?php else: ?>
-        <div id="cookie-notice">
-        <ul class="messages"><li class="notice-msg">
-        <ul>
-            <li><?php echo Mage::helper('enterprise_invitation')->__('There are no sent invitations yet'); ?>
-            </li>
-        </ul>
-    </div>
+        <div id="cookie-notice" class="messages">
+            <?php echo Mage::helper('enterprise_invitation')->__('There are no sent invitations yet'); ?>
+        </div>
     
     <?php endif; ?>
     
@@ -175,13 +201,12 @@ $inviteFriendNotes = "For each friend you invite, we will credit your account wi
     <p class="back-link"><a href="<?php echo $this->escapeUrl($this->getBackUrl()) ?>"><small>&laquo; </small><?php echo $this->__('Back') ?></a></p>
     <a href="<?php echo $this->helper('enterprise_invitation')->getCustomerInvitationFormUrl(); ?>" class="button"><span><?php echo $this->__('Send Invitations') ?></span></a>
     </div-->
-        </div>
-    </div>
-</div><!-- well end -->
-
+   
+<!-- well end -->
+</div>
 <script>
         jQuery(function () {
-        jQuery('#myTab a:last').tab('show');
+        jQuery('#myTab a:first').tab('show');
     })
 </script>
 
@@ -215,8 +240,6 @@ $inviteFriendNotes = "For each friend you invite, we will credit your account wi
             <!-- <div id="rondavu_invitation_container"></div> -->
     </div>
 </div>
-
-
 <script type="text/javascript">var switchTo5x=true;</script>
 <script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
 <script type="text/javascript">stLight.options({publisher: "fa9539d4-b1db-40d3-9e2d-9e9a8dc98b42",onhover: false}); </script>
