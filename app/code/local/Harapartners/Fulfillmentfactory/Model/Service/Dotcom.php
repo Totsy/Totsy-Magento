@@ -215,28 +215,16 @@ XML;
             ) {
                 $state = 'waiting';
 
-                //update product attribute 
-		        //$product = $this->getProductModel();
-	            //$productId = $product->getIdBySku((string)$item->sku);		        
-	            //$product->load($productId);
-                
-                
-                //$product = Mage::getModel('catalog/product')->loadBySku($sku);
-		        $product = Mage::getModel('catalog/product');
+				//stores inventory as eav attribute at product level
+		        $productModel = Mage::getModel('catalog/product');
 		        
-	            $productId = $product->getIdBySku((string)$item->sku);		        
-	            $product->load($productId);
+	            $productId = $productModel->getIdBySku($sku);		        
+	            $product = $productModel->load($productId);
 	            
 	            if($product&&$product->getId()){
 	                $product->setData('fulfillment_inventory', $qty);                
 	                $product->getResource()->saveAttribute($product, 'fulfillment_inventory');
 				}                
-
-                /* @todo update a local data store for product $sku to have quantity $qty
-                $product = Mage::getModel('catalog/product')->loadBySku($sku);
-                $product->setFulfillmentInventory($qty);
-                $product->getResource()->saveAttribute($product, 'fulfillment_inventory');
-                */
             }
         }
     }
