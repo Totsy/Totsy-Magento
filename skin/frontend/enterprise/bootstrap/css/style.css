@@ -233,3 +233,152 @@ footer strong {
     font-size: 14px;
     padding: 17px 0 18px 0;
 }
+
+/* login/register pages footer */
+body.customer-account-login #footer ul {
+    float: left;
+}
+body.customer-account-login #footer {
+    background: none repeat scroll 0 0 #FFFFFF;
+    bottom: 0;
+    left: 0;
+    margin: 0;
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
+    z-index: 100;
+}
+#footer {
+    font-size: 11px;
+    line-height: normal;
+    margin: 0 auto;
+    min-height: 32px!important;
+    text-transform: uppercase;
+    width: 960px;
+}
+body .footer {
+    background: none repeat scroll 0 0 transparent;
+    font-weight: normal;
+}
+#footer li {
+    border-right: 1px solid #AAAAAA;
+    float: left;
+    margin-right: 8px;
+    padding: 4px 5px 0 0;
+}
+body .footer-container {
+    background: none repeat scroll 0 0 transparent;
+    border: 0 solid transparent;
+    padding: 0;
+}
+body .footer ul {
+    width: auto;
+}
+#footer ul {
+    margin: 0px;
+    overflow: hidden;
+}
+#footer a:link, #footer a:visited {
+    color: #707070;
+}
+.socialLink {
+    background: url("../images/sprite_social.png") no-repeat scroll 0 0 #FFFFFF;
+    border-right: 1px solid #C5C5C5;
+    display: inline;
+    float: right;
+    height: 30px;
+    text-indent: -9999em;
+    width: 30px;
+}
+#footer address {
+    float: left;
+    padding: 4px 5px 0 0;
+}
+body.customer-account-login #footer ul {
+  float: left;
+  height: 27px;
+  margin: 0;
+  padding: 5px 0 0 5px;
+}
+#tumblrLink {
+    background-position: -60px -2px;
+}
+#twitterLink {
+    background-position: -30px -2px;
+}
+#facebookLink {
+    background-position: 0 -2px;
+}
+
+
+/* Old Hara Partners Classes for Invitations */
+a#invite-gmail {
+    background-position: 0 -51px;
+}
+.ui-widget *:active {
+    outline: medium none;
+}
+a#invite-yahoo {
+    background-position: 129px -51px;
+}
+a#invite-outlook {
+    background-position: 0 -102px;
+}
+a#invite-aol {
+    background-position: 129px -102px;
+}
+a#invite-msn {
+    background-position: 0 -153px;
+}
+a#invite-others {
+    background-position: 129px -153px;
+}
+a.invite-btn {
+    background-image: url("../images/invite-btns.gif");
+    border: 1px solid #CCCCCC;
+    display: inline-block;
+    height: 51px;
+    margin-bottom: 10px;
+    text-indent: -9999px;
+    width: 129px;
+}
+
+/* Validation / Error Classes */
+.validation-advice {background:#FEEFB3; color:#9F6000; padding:10px; margin:-10px 0 10px 0px; border: 1px solid #CCCCCC; }
+
+/* Sign In / Sign Up Classes */
+.badgecity_log {
+    background: url("../images/freeship30_days.png") no-repeat scroll left top transparent;
+    float: right;
+    height: 169px;
+    margin-right: -50px;
+    margin-top: -80px;
+    position: absolute;
+    right: 755px;
+    top: 76px;
+    width: 185px;
+    z-index: 10;
+}
+.badgecity_reg {
+    background: url("../images/freeship30_days.png") no-repeat scroll left top transparent;
+    float: right;
+    height: 169px;
+    margin-right: -50px;
+    margin-top: -80px;
+    position: absolute;
+    right: 755px;
+    top: 76px;
+    width: 161px;
+    z-index: 10;
+}
+.badgecity_fine_print {font-size:11px; color:#999; margin:2px 0px 0px 0px; text-align:center; padding:15px 0px 0px 0px;}
+
+/* Forms Override */
+textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input {
+  -moz-transition: border 0.2s linear 0s, box-shadow 0.2s linear 0s;
+  background-color: #f9f9f9;
+  border: 1px solid #CCCCCC;
+  padding:8px 4px;
+  border-radius: 3px 3px 3px 3px;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+}
