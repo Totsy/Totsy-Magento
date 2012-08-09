@@ -90,7 +90,8 @@ XML;
                     ->columns(array('count1' => $staticOne))
                     ->columns(array('eventStatus' => $staticConfirmed))
                     ->where('c.affiliate_code = ?', $affiliateCode)
-                    ->where("CONVERT_TZ(c.created_at, '+00:00', '-04:00') BETWEEN '$from' AND '$to'");
+                    ->where("CONVERT_TZ(c.created_at, '+00:00', '-04:00') BETWEEN '$from' AND '$to'")
+                    ->where('c.level = 0');
                 break;
 
             case 'referralsignups':
@@ -122,7 +123,8 @@ XML;
                     ->columns(array('time' => 'UNIX_TIMESTAMP(c.created_at)'))
                     ->columns(array('eventStatus' => $staticConfirmed))
                     ->where('c.affiliate_code = ?', $affiliateCode)
-                    ->where("CONVERT_TZ(c.created_at, '+00:00', '-04:00') BETWEEN '$from' AND '$to'");
+                    ->where("CONVERT_TZ(c.created_at, '+00:00', '-04:00') BETWEEN '$from' AND '$to'")
+                    ->where('c.level = 0');
 
                 if ($period) {
                     $select->where("DATEDIFF(s.created_at, e.created_at) < ?", $period);
