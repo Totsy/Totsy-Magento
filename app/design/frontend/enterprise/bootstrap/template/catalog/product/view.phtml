@@ -44,6 +44,19 @@ if (!Mage::registry('current_category')){
 		$_category  = Mage::registry('current_category');
 	}
 ?>
+
+<style>
+
+select {
+	width: auto !important;
+}
+
+input, textarea{
+	width: auto !important;
+}
+
+</style>
+
 <script type="text/javascript">
     var optionsPrice = new Product.OptionsPrice(<?php echo $this->getJsonConfig() ?>);
 </script>
@@ -61,7 +74,7 @@ $endcount_lc = date("F j, Y, G:i:s", $endcount_utc); ?>
     <?php echo $this->getChildHtml('media'); ?>
 </div>
 
-<div class="span4">
+<div class="span6">
 <div class="page-header">
     <h2><?php echo $_product->getName(); ?> <small></small></h2>
 </div>
@@ -90,7 +103,7 @@ $endcount_lc = date("F j, Y, G:i:s", $endcount_utc); ?>
 ?>
 </div>
 <!-- <div class="well"> -->
-<div class="span3">
+<div class="span2">
     <h2>Options</h2>
         
         <form action="<?php echo $this->getSubmitUrl($_product) ?>" method="post" id="product_addtocart_form" <?php if($_product->getOptions()): ?> enctype="multipart/form-data" <?php endif; ?> >
