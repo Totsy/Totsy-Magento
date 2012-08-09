@@ -55,7 +55,6 @@ class Harapartners_Categoryevent_Helper_Memcache extends Mage_Core_Helper_Abstra
         
         $topNavData = $this->_getMemcache()->read($memcacheKey);
         if(!$this->_validateTopNavData($topNavData)){
-            echo 'refresh cache<br>';
             $topNavData = $this->_getTopNavDataFromDb();
             $this->_getMemcache()->write($memcacheKey, $topNavData, MEMCACHE_COMPRESSED, $this->_topNavDataLifeTime);
         }
