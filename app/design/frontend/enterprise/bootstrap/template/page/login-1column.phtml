@@ -33,32 +33,30 @@
 <html lang="<?php echo $this->getLang() ?>">
 <head>
 <?php echo $this->getChildHtml('head') ?>
+<style>
+body {  padding-top:65px;}
+</style>
 </head>
 <body<?php echo $this->getBodyClass()?' class="customer-account-login '.$this->getBodyClass().'"':'' ?> data-spy="scroll" data-target=".subnav" data-offset="50">
 <?php echo $this->getChildHtml('after_body_start') ?>
 <div class="container">
-<div class="well">
+<div class="well offset3 span4">
     <?php echo $this->getChildHtml('global_notices') ?>
         <?php echo $this->getChildHtml('header') ?>
-		<div class="login-border-bottom">
-			<div class="main-container col1-layout">
-
-					<?php echo $this->getChildHtml('breadcrumbs') ?>
-						<?php echo $this->getChildHtml('global_messages') ?>
-						<?php echo $this->getChildHtml('content') ?>
-						<?php $currentUrl = $this->helper('core/url')->getCurrentUrl();?>
-					<?php $loginPattern = '/login/';?>
-					<?php if (!preg_match($loginPattern, $currentUrl)):?>
-						<div class="clear"/>
-							<img src="<?php echo $this->getSkinUrl()?>images/featured_on_long.png"  alt=""/>
-						<div class="clear"/>
-					<?php endif;?>
-			</div>
+            <?php echo $this->getChildHtml('breadcrumbs') ?>
+            <?php echo $this->getChildHtml('global_messages') ?>
+            <?php echo $this->getChildHtml('content') ?>
+            <?php $currentUrl = $this->helper('core/url')->getCurrentUrl();?>
+            <?php $loginPattern = '/customer/account/login/';?>
+    <?php if (!preg_match($loginPattern, $currentUrl)):?>
+            <div class="well span10 align-center">
+                <img src="<?php echo $this->getSkinUrl()?>images/featured_on_long.png"  alt="" />
+            </div>
+    <?php endif;?>
         <?php echo $this->getChildHtml('footer') ?>
         <?php echo $this->getChildHtml('before_body_end') ?>
-    </div>
 </div>
-</div>
+
 <?php echo $this->getAbsoluteFooter() ?>
 </body>
 </html>

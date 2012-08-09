@@ -44,7 +44,7 @@
 <div id="myCarousel" class="carousel slide">
     <div class="carousel-inner">
       <div class="item active">
-        <img src="http://www.totsy.com/media/import/banners/Paul_Frank_homepage_bannerV4.jpg" alt="">
+        <img src="http://www.totsy.com/media/import/banners/Paul_Frank_homepage_bannerV4.jpg" alt="" height="300px">
         <!--
         <div class="carousel-caption">
           <h4>Paul Frank</h4>
@@ -97,10 +97,10 @@
         ?>
         <div class="catalog-top-event event-counter-<?php echo $timer;?>">
         <?php $imgFile = BP.DS.'media'.DS.'catalog'.DS.'category'.DS.$top['small_image'];?>
-        <a class="event-link" href="<?php echo Mage::getBaseUrl().$top['url_path']; ?>"><img src="<?php echo Mage::helper('service/image')->loadImageFile($imgFile)->resize(349,403); ?>" width="349px" height="403px" alt="" /></a>
+        <a class="event-link" href="<?php echo Mage::getBaseUrl().$top['url_path']; ?>"><img src="<?php echo Mage::helper('service/image')->loadImageFile($imgFile)->resize(208,403); ?>" width="208px" alt="" /></a>
         <div class="splash-details">
         <div class="table-cell-left">
-        <p class="event-name"><?php echo $top['name'];?></p>
+        <p class="event-name ellipsis"><?php echo $top['name'];?></p>
         <p id="time1-top-<?php echo $timer ?>"></p>
         <script type="text/javascript">
         jQuery("#time1-top-<?php echo $timer ?>").countdown({
@@ -142,13 +142,13 @@
     </div>
     <li class="span3">
     <div class="thumbnail">
-    <h5><?php echo $live['name'];?></h5>
+    <h5 class="ellipsis"><?php echo $live['name'];?></h5>
     <p id="time1-<?php echo $timer ?>"></p>
     <?php $imgFile = (!isset($live['small_image']))
     ? BP . DS . 'media' . DS . 'catalog' . DS . 'category' . DS . $live['small_image']
     : BP . DS . 'skin' . DS . 'frontend' . DS . 'enterprise ' . DS . 'harapartners' . DS . 'images' . DS . 'catalog' . DS . 'product' . DS . 'placeholder' . DS . 'small_image.jpg';
     ?>
-    <a class="event-link" href="<?php echo Mage::getBaseUrl().$live['url_path']; ?>"><img src="<?php echo Mage::helper('service/image')->loadImageFile($imgFile)->resize(260, 300); ?>" width="260px" alt="" /></a>
+    <a class="event-link" href="<?php echo Mage::getBaseUrl().$live['url_path']; ?>"><img src="<?php echo Mage::helper('service/image')->loadImageFile($imgFile)->resize(208); ?>" width="208px" alt="" /></a>
     <script type="text/javascript">
     var html = getTimerHtml('live','<?php echo $endcount ?>');
     jQuery("#time1-<?php echo $timer ?>").countdown({//date: "12 10, 2011 16:11", //Counting TO a date
@@ -191,7 +191,7 @@
         </div>
         <li class="span2">
             <div class="thumbnail">
-            <h5><?php echo $up['name'];?></h5>
+            <h5 class="ellipsis"><?php echo $up['name'];?></h5>
             <p id="time1-<?php echo $timer ?>"></p>
             <?php
                 $imgFile = (isset($up['small_image']))
@@ -199,7 +199,7 @@
                 $up['small_image']
                 : BP . DS . 'skin' . DS . 'frontend' . DS . 'enterprise ' . DS . 'harapartners' . DS . 'images' . DS . 'catalog' . DS . 'product' . DS . 'placeholder' . DS . 'small_image.jpg';
             ?>
-            <a class="event-link" href="<?php echo Mage::getBaseUrl().$up['url_path']; ?>"><img src="<?php echo Mage::helper('service/image')->loadImageFile($imgFile)->resize(165,263); ?>" width="165px" alt="" /></a>
+            <a class="event-link" href="<?php echo Mage::getBaseUrl().$up['url_path']; ?>"><img src="<?php echo Mage::helper('service/image')->loadImageFile($imgFile)->resize(165); ?>" width="165px" alt="" /></a>
             <script type="text/javascript">
             var html = getTimerHtml('upcoming','<?php echo $endcount ?>');
             jQuery("#time2-<?php echo $timer ?>").countdown({
