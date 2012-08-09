@@ -23,7 +23,7 @@ class Totsy_Catalog_Model_Resource_Eav_Mysql4_Setup extends Mage_Eav_Model_Entit
                 'entity_attribute_collection'    => 'catalog/product_attribute_collection',
                 'attributes'                     => array(
                     'fulfillment_inventory'               => array(
-                        'type'                       => 'decimal',
+                        'type'                       => 'int',
                         'label'                      => 'Fulfillment Inventory',
                         'input'                      => 'text',
                         'sort_order'                 => 5,
