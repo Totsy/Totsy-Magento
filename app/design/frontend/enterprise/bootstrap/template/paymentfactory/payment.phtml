@@ -18,9 +18,9 @@
     <hr />
     <div class="add-new-card">
     <?php if($creditCardsCount == 0): ?>
-    <h3>Sorry, You don't have any credit cards on file with Totsy. </h3>
+    <h3>Sorry, You don't have any credit cards on file with Totsy.</h3>
     <p><span class="label label-info">NOTE:</span> Adding a credit card helps speed up the checkout process.</p>
-    <?php endif;?>
+    <?php endif; ?>
         <script type="text/javascript">
             jQuery(document).ready(function(){
                 jQuery(".add-new-card-button").click( function() {
@@ -37,8 +37,8 @@
         <hr />
         <h4>Add New Credit Card</h4>
             <?php echo $this->getChildHtml('credit_cards_form');?>
-        </div>
     </div>
+</div>
 <div class="cards-info">
     <?php foreach($paymentCollection as $payment):
             $type = $payment->getData('card_type');
@@ -64,17 +64,17 @@
     <?php if($payment->getIsDefault()== 0 && $payment->getData('saved_by_customer')):?>
     <?php $creditCardsCount++; ?>
 
-        <table class="table">
+        <table class="table table-striped table-bordered">
             <tr>
-                <td width="9%" align="left">
+                <td>
                 <img src="<?php echo $this->getSkinUrl('images/' . $creditCardImage)?>"> 
                 </td>            
                 <td width="71%">
                     <?php echo $cardType?> ending in <strong><?php echo $payment->getData('last4no')?></strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     expires <strong><?php echo $payment->getData('expire_month');?>/<?php echo $payment->getData('expire_year');?></strong>
                 </td>
-                <td width="2%" align="right">
-                    <a href="<?php echo $baseurl ?>paymentfactory/index/delete/?entity_id=<?php echo $payment->getData('entity_id');?>" id="remove_<?php echo $payment->getData('entity_id');?>" title="Remove Credit Card" class="delete-new-card-button">Delete</a>
+                <td width="2%">
+                    <a href="<?php echo $baseurl ?>paymentfactory/index/delete/?entity_id=<?php echo $payment->getData('entity_id');?>" id="remove_<?php echo $payment->getData('entity_id');?>" title="Remove Credit Card" class="delete-new-card-button btn">Delete</a>
                 </td>
             </tr>
             <?php if($payment->getData('address_id')):?>
@@ -83,7 +83,7 @@
              <tr>
                 <td width="10%" align="left"></td>
                 <td width="90%">
-                    <table width="100%" cellpadding="0" cellspacing="0">
+                    <table class="table table-condensed">
                         <tr>
                             <td width="141" valign="top">Cardholder Name:</td>
                             <td width="281"><?php echo $this->htmlEscape($this->getAddress($address_id)->getFirstname()); ?> <?php echo $this->htmlEscape($this->getAddress($address_id)->getLastname()); ?></td>
@@ -103,8 +103,8 @@
                 <?php endif; ?>
             <?php endif; ?>
         </table>
-
 <?php endif;?>
 <?php endforeach;?>
 </div>
+<div class="clear"></div>
 </div>

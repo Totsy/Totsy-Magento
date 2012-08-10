@@ -18,12 +18,29 @@ html {
 }
 a {color:#ed1c25;text-decoration:none;}
 a:hover{color:#ed1c25;text-decoration:underline;}
-.content_push { margin-top:150px; }
-.content_push_2col { margin-top:80px; }
+.content_push { margin-top:120px; }
+.content_push_2col { margin-top:120px; }
 /* 960.gs Grid Reset Classes. */
 .alpha { margin-left: 0 }
 .omega { margin-right: 0 }
 .clear { clear:both; }
+/* Alignment classes */
+.align-center {
+  text-align: center;
+}
+
+.align-right {
+  text-align: right;
+}
+
+/* Ellipsis classes for truncating long titles */
+.ellipsis {
+    white-space:nowrap;
+    overflow:hidden;
+}
+.ellipsis:after {
+    content:'...';
+}
 /* #myCarousel { margin-top:20px; } */
 #toTop {
     background-color: #EB132C;
@@ -41,12 +58,17 @@ a:hover{color:#ed1c25;text-decoration:underline;}
     padding: 5px;
     position: fixed;
     right: 10px;
-    text-align: center;
+    text-align: center; 
     text-transform: uppercase;
     width: auto;
     z-index: 999;
 }
-
+.carousel-inner {
+  min-height: 300px;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+}
 /**
  @Diagnostics
  */
@@ -82,7 +104,7 @@ html.test .container .row {outline:1px dotted green;}
     background-color: #fff!important;
 }
 .thumbnail {padding:10px;}
-.page-header {border-bottom: 4px solid #E5E5E5; margin:18px 0;}
+.page-header {border-bottom: 4px solid #E5E5E5; margin:10px 0; padding-bottom:5px;}
 .zoomImage { padding:10px; z-imdex:500!important; }
 .navLinks { padding-top: 7px; }
 .cta-link {
@@ -185,12 +207,12 @@ html.test .container .row {outline:1px dotted green;}
 .navbar .dropdown-menu:after,
 .navbar .dropdown-menu:before {display: none;} /* not using these cool dropdown tooltip bootstrap things… boo */
 
-/* CTA area in header */
-header nav .cta {padding: 7px 0 0;}
-header nav .cta a {float:right; color: #636466; font-weight: bold; line-height:1.18;}
-header nav .cta a:hover {text-decoration: none;}
-header nav .cta strong {display: block;}
-header nav .cta strong em {color:#d84643; font-style:normal;}
+/* invite CTA */
+#inviteCTA {padding: 7px 0 0;}
+#inviteCTA a {float:right; color: #636466; font-weight: bold; line-height:1.18;}
+#inviteCTA a:hover {text-decoration: none;}
+#inviteCTA strong {display: block;}
+#inviteCTA strong em {color:#d84643; font-style:normal;}
 
 /**
  @User Utils
@@ -233,8 +255,38 @@ footer strong {
     font-size: 14px;
     padding: 17px 0 18px 0;
 }
+/* Old Hara Partners Classes for Invitations */
+a#invite-gmail {
+    background-position: 0 -51px;
+}
+.ui-widget *:active {
+    outline: medium none;
+}
+a#invite-yahoo {
+    background-position: 129px -51px;
+}
+a#invite-outlook {
+    background-position: 0 -102px;
+}
+a#invite-aol {
+    background-position: 129px -102px;
+}
+a#invite-msn {
+    background-position: 0 -153px;
+}
+a#invite-others {
+    background-position: 129px -153px;
+}
+a.invite-btn {
+    background-image: url("../images/invite-btns.gif");
+    border: 1px solid #CCCCCC;
+    display: inline-block;
+    height: 51px;
+    margin-bottom: 10px;
+    text-indent: -9999px;
+    width: 129px;
+}
 
-/* login/register pages footer */
 body.customer-account-login #footer ul {
     float: left;
 }
@@ -294,6 +346,7 @@ body .footer ul {
     float: left;
     padding: 4px 5px 0 0;
 }
+
 body.customer-account-login #footer ul {
   float: left;
   height: 27px;
@@ -308,39 +361,6 @@ body.customer-account-login #footer ul {
 }
 #facebookLink {
     background-position: 0 -2px;
-}
-
-
-/* Old Hara Partners Classes for Invitations */
-a#invite-gmail {
-    background-position: 0 -51px;
-}
-.ui-widget *:active {
-    outline: medium none;
-}
-a#invite-yahoo {
-    background-position: 129px -51px;
-}
-a#invite-outlook {
-    background-position: 0 -102px;
-}
-a#invite-aol {
-    background-position: 129px -102px;
-}
-a#invite-msn {
-    background-position: 0 -153px;
-}
-a#invite-others {
-    background-position: 129px -153px;
-}
-a.invite-btn {
-    background-image: url("../images/invite-btns.gif");
-    border: 1px solid #CCCCCC;
-    display: inline-block;
-    height: 51px;
-    margin-bottom: 10px;
-    text-indent: -9999px;
-    width: 129px;
 }
 
 /* Validation / Error Classes */
@@ -375,10 +395,23 @@ a.invite-btn {
 
 /* Forms Override */
 textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input {
-  -moz-transition: border 0.2s linear 0s, box-shadow 0.2s linear 0s;
-  background-color: #f9f9f9;
-  border: 1px solid #CCCCCC;
-  padding:8px 4px;
-  border-radius: 3px 3px 3px 3px;
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+    -moz-transition: border 0.2s linear 0s, box-shadow 0.2s linear 0s;
+    background-color: #F9F9F9;
+    border: 1px solid #CCCCCC;
+    border-radius: 3px 3px 3px 3px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+    padding: 8px 4px;
+    color: #555555;
+}
+select, textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input {
+    color: #555555;
+    display: inline-block;
+    font-size: 13px;
+    margin-bottom: 9px;
+    padding: 4px;
+    background-color: #F9F9F9;
+    border: 1px solid #CCCCCC;
+    border-radius: 3px 3px 3px 3px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+    padding: 4px;
 }

@@ -30,7 +30,7 @@
         </script>
         <div id="payment_form_paymentfactory_tokenize" class="form-list" style="">
 
-                <label class="required" for="paymentfactory_tokenize_cc_type"><em>*</em><?php echo $this->__('Card Type');?></label>
+                <label class="required" for="paymentfactory_tokenize_cc_type"><em>*</em> <?php echo $this->__('Card Type');?></label>
                 
                 <div class="input-box">
                     <div class="totsy-selective-input-box middle-length">
@@ -40,20 +40,18 @@
                             <option value="MC"><?php echo $this->__('MasterCard');?></option>
                             <option value="DI"><?php echo $this->__('Discover');?></option>
                         </select>
-                    <span><?php echo $this->__('American Express');?></span>
                     </div>
                 </div>
 
-                <label class="required" for="paymentfactory_tokenize_cc_number"><em>*</em><?php echo $this->__('Card Number');?></label>
+                <label class="required" for="paymentfactory_tokenize_cc_number"><em>*</em> <?php echo $this->__('Card Number');?></label>
                 <div class="input-box">
                     <input id="paymentfactory_tokenize_cc_number" class="input-text validate-cc-number validate-cc-type" type="text" value="" title="Credit Card Number" name="payment[cc_number]">
                 </div>
 
-                <label class="required" for="paymentfactory_tokenize_expiration"><em>*</em><?php echo $this->__('Expiration Date');?></label>
-                <div class="input-box">
+                <label class="required" for="paymentfactory_tokenize_expiration"><em>*</em> <?php echo $this->__('Expiration Date');?></label>
+                <div class="input-box row">
                     <div class="v-fix right-margin">
                         <div class="totsy-selective-input-box short-length span2">
-                            <span>Month</span>
                             <select id="paymentfactory_tokenize_expiration" class="month validate-cc-exp required-entry span2" name="payment[cc_exp_month]">
                                 <option selected="selected" value="">Month</option>
                                 <option value="1">01 - January</option>
@@ -73,7 +71,6 @@
                     </div>
                     <div class="v-fix">
                         <div class="totsy-selective-input-box short-length span2">
-                            <span>Year</span>
                             <select id="paymentfactory_tokenize_expiration_yr" class="year required-entry span2" name="payment[cc_exp_year]">
                                 <option selected="selected" value="">Year</option>
                                 <option value="2012">2012</option>
@@ -92,36 +89,28 @@
                     </div>
                 </div>
                 
-                <div class="span2">
-                <label class="required" for="paymentfactory_tokenize_cc_cid"><em>*</em><?php echo $this->__('Security Code');?></label>
-                <div class="input-box">
-                    <div class="v-fix">
-                        <input id="paymentfactory_tokenize_cc_cid" class="input-text cvv required-entry validate-cc-cvn" type="text" value="" name="payment[cc_cid]" title="Card Verification Number">
-                    </div>
-                </div>
                 <div>
-                     <input type="hidden" value="1" name="payment[saved_by_customer]" id="<?php echo $_code ?>_saved">
-                </div>
-                </div>
-
+                <label class="required" for="paymentfactory_tokenize_cc_cid"><em>*</em> <?php echo $this->__('Security Code');?></label>
+                <input id="paymentfactory_tokenize_cc_cid" class="input-text cvv required-entry validate-cc-cvn span2" type="text" value="" name="payment[cc_cid]" title="Card Verification Number">
+                <input type="hidden" value="1" name="payment[saved_by_customer]" id="<?php echo $_code ?>_saved">
     </div>
     
-    <div id="billing-info" class="span8">
-        <p class="billing-addr-title"><?php echo $this->__('Billing Address');?></p>
-            <label for="billing:firstname" class="required"><em>*</em><?php echo $this->__('First Name') ?></label>
+    <div id="billing-info" style="margin-top:25px;">
+        <h4 class="billing-addr-title"><?php echo $this->__('Billing Address');?></h4>
+        <hr />
+            <label for="billing:firstname" class="required"><em>*</em> <?php echo $this->__('First Name') ?></label>
             <input type="text" name="billing[firstname]" title="<?php echo $this->__('First Name') ?>" class="input-text required-entry" value="<?php //echo $this->htmlEscape($this->getFirstname()) ?>" id="billing:firstname" />
-            <label for="billing:lastname" class="required"><em>*</em><?php echo $this->__('Last Name') ?></label>
+            <label for="billing:lastname" class="required"><em>*</em> <?php echo $this->__('Last Name') ?></label>
             <input type="text" name="billing[lastname]" title="<?php echo $this->__('Last Name') ?>" class="input-text required-entry" value="<?php //echo $this->htmlEscape($this->getLastname()) ?>" id="billing:lastname" />
-            <label for="billing:telephone" class="required"><em>*</em><?php echo $this->__('Telephone') ?></label>
+            <label for="billing:telephone" class="required"><em>*</em> <?php echo $this->__('Telephone') ?></label>
             <input type="text" name="billing[telephone]" title="<?php echo $this->__('Telephone') ?>" class="input-text required-entry validate-phoneLax" id="billing:telephone" value="<?php //echo $this->htmlEscape($this->getAddress()->getTelephone()) ?>" onkeyup="backspacerUP(this,event);" onkeydown="backspacerDOWN(this,event);"/>
-            <label for="billing:street1" class="required"><em>*</em><?php echo $this->__('Street Address 1') ?></label>
+            <label for="billing:street1" class="required"><em>*</em> <?php echo $this->__('Street Address 1') ?></label>
             <input type="text" title="<?php echo $this->__('Street Address Line 1') ?>" name="billing[street][0]" id="billing:street1" value="<?php //echo $this->htmlEscape($this->getAddress()->getStreet(1)) ?>" class="input-text required-entry" />
             <label for="billing:street2">&nbsp;&nbsp;<?php echo $this->__('Street Address 2') ?></label>
             <input type="text" title="<?php echo $this->__('Street Address Line 2') ?>" name="billing[street][1]" id="billing:street2" value="<?php //echo $this->htmlEscape($this->getAddress()->getStreet(2)) ?>" class="input-text" />
-            <label for="billing:city" class="required"><em>*</em><?php echo $this->__('City') ?></label>
+            <label for="billing:city" class="required"><em>*</em> <?php echo $this->__('City') ?></label>
             <input type="text" title="<?php echo $this->__('City') ?>" name="billing[city]" class="input-text required-entry" value="<?php //echo $this->htmlEscape($this->getAddress()->getCity()) ?>" id="billing:city" />
-            <label for="region_id" class="required"><em>*</em><?php echo $this->__('State/Province') ?></label>
-            <span>State</span>
+            <label for="region_id" class="required"><em>*</em> <?php echo $this->__('State/Province') ?></label>
             <select id="billing:region_id" name="billing[region_id]" title="<?php echo $this->__('State/Province') ?>" class="validate-select">
                 <option value="">Please select region, state or province</option>
                 <?php foreach($this->getRegions() as $region) {
@@ -129,17 +118,19 @@
             } ?>
             </select>
             <input type="hidden" title="<?php echo $this->__('State/Province') ?>" name="billing[region]" id="billing:region" />
-            <label for="billing:postcode" class="required"><em>*</em><?php echo $this->__('Zip/Postal Code') ?></label>
+            <label for="billing:postcode" class="required"><em>*</em> <?php echo $this->__('Zip/Postal Code') ?></label>
             <input type="text" title="<?php echo $this->__('Zip/Postal Code') ?>" name="billing[postcode]" id="billing:postcode" class="input-text validate-zip-international required-entry" value="<?php //echo $this->htmlEscape($this->getAddress()->getPostcode()) ?>" />
-           <label for="billing:country_id" class="required"><em>*</em><?php echo $this->__('Country') ?></label>
-           <span>Country</span>
+           <label for="billing:country_id" class="required"><em>*</em> <?php echo $this->__('Country') ?></label>
            <select id="billing:country_id" name="billing[country_id]" title="<?php echo $this->__('Country') ?>" class="validate-select">
            <option value="US">United States</option>
            </select>
-           <button class="button general top btn btn-primary" type="submit"><?php echo $this->__('Submit');?></button>
+           <div>
+           <hr />
+           <button class="button general top btn btn-primary" type="submit"><?php echo $this->__('Add Credit Card');?></button>
+           </div>
 </form>
 </div>
-</div></div>
+</div>
 <script type="text/javascript">
 
     var paymentForm = new VarienForm( 'hpcheckout-billing-form' );
