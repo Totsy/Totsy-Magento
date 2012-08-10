@@ -273,12 +273,13 @@ footer p, img {
     color: #777777;
     font-size: 10px;
 }
-body > footer ul {margin:0;}
 footer strong {
-    color: #aaa;
-    font-size: 14px;
-    padding: 17px 0 18px 0;
+    color: #666;
+    font-size: 12px; font-weight: bold;
 }
+body > footer ul {margin:0;}
+body > footer ul li a,
+body > footer ul li a:hover {color:#666; font-size: 12px;}
 
 /* login/register pages footer */
 body.customer-account-login #footer ul {
