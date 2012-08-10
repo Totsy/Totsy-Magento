@@ -224,9 +224,9 @@ class Harapartners_Fulfillmentfactory_Helper_Dotcom extends Mage_Core_Helper_Abs
     }
     
     /**
-     * get Current Inventory
+     * Get Current Inventory, loaded into a stream.
      *
-     * @return object stream
+     * @return string The name of the stream.
      */
     public function getInventory() {
         $this->_getConfig();

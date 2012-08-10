@@ -13,30 +13,6 @@
 class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
 {
     /**
-     * Perform order fulfillment.
-     * 1) Retrieve Inventory Status from Dotcom and sync with local product
-     *    database.
-     * 2) Match available inventory to pending order line items, and update
-     *    their status accordingly.
-     * 3) Submit any Complete orders (whose line items are all Ready) for
-     *    fulfillment.
-     *
-     * @return void
-     */
-    public function runDotcomFulfillOrder()
-    {
-        try {
-            // fulfill orders using available quantities
-            $this->orderFulfillment();
-
-            // submit orders to fulfill
-            $this->submitOrderToFulfillByQueue();
-        } catch (Exception $e) {
-            Mage::log($e->getMessage(), Zend_Log::ERR, 'fulfillment.log');
-        }
-    }
-
-    /**
      * Fulfill order items from the fulfillment item queue using quantities
      * stored locally.
      *
@@ -44,6 +20,110 @@ class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
      */
     public function orderFulfillment()
     {
+        // locate all products with fulfillment inventory available
+        $products = Mage::getModel('catalog/product')->getCollection();
+        $products->addAttributeToFilter('fulfillment_inventory', array('gt' => 0));
+
+        foreach ($products as $product) {
+            $itemqueues = Mage::getModel('fulfillmentfactory/itemqueue')
+                ->getCollection()
+                ->loadIncompleteItemQueueByProductSku($product->getSku());
+
+            foreach ($itemqueues as $item) {
+                $qtyFufilled  = 0;
+                $qtyOrdered   = $item->getQtyOrdered();
+                $qtyAvailable = $product->getFulfillmentInventory();
+
+                // there is sufficient quantity to completely fulfill this item
+                if ($qtyOrdered <= $qtyAvailable) {
+                    $qtyFulfilled = $qtyOrdered;
+                    $qtyAvailable -= $qtyOrdered;
+                    $item->setStatus(
+                        Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_READY
+                    );
+
+                    // there is an insufficient quantity available to fulfill this
+                    // item
+                } else {
+                    $qtyFulfilled = $qtyAvailable;
+                    $qtyAvailable = 0;
+                    $item->setStatus(
+                        Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_PARTIAL
+                    );
+                }
+
+                // update the item
+                $item->setData('fulfill_count', $qtyFulfilled);
+                $item->save();
+
+                // update the available fulfillment inventory
+                $product->setData('fulfillment_inventory', $qtyAvailable);
+                $product->getResource()->saveAttribute(
+                    $product,
+                    'fulfillment_inventory'
+                );
+            }
+
+            unset($itemqueues);
+        }
+    }
+
+    /**
+     * Update local inventory statistics with the latest counts from Dotcom.
+     *
+     * @return void
+     */
+    public function updateInventory()
+    {
+        $xmlStreamName = Mage::helper('fulfillmentfactory/dotcom')
+            ->getInventory();
+
+        $reader = new XMLReader();
+        $reader->open($xmlStreamName, 'utf8');
+
+        $state = 'waiting';
+        $sku = -1;
+        $qty = -1;
+        while ($reader->read()) {
+            // this node is an opening <item> tag
+            if ('item' == $reader->localName &&
+                XMLReader::ELEMENT === $reader->nodeType
+            ) {
+                $state = 'item';
+
+                // this node is an opening <sku> tag
+            } else if ('sku' == $reader->localName &&
+                XMLReader::ELEMENT == $reader->nodeType &&
+                'item' == $state
+            ) {
+                $sku = $reader->readString();
+
+                // this node is an opening <quantity_available> tag
+            } else if ('quantity_available' == $reader->localName &&
+                XMLReader::ELEMENT == $reader->nodeType &&
+                'item' == $state
+            ) {
+                $qty = $reader->readString();
+
+                // this node is a closing <item> tag
+            } else if ('item' == $reader->localName &&
+                XMLReader::END_ELEMENT == $reader->nodeType
+            ) {
+                $state = 'waiting';
+
+                //stores inventory as eav attribute at product level
+                $product = Mage::getModel('catalog/product')
+                    ->loadByAttribute('sku', $sku);
+
+                if ($product && $product->getId()) {
+                    $product->setData('fulfillment_inventory', $qty);
+                    $product->getResource()->saveAttribute(
+                        $product,
+                        'fulfillment_inventory'
+                    );
+                }
+            }
+        }
     }
 
     /**
@@ -173,102 +253,6 @@ XML;
     }
 
     /**
-     * Update local inventory statistics with the latest counts from Dotcom.
-     *
-     * @return void
-     */
-    public function updateInventory()
-    {
-        $xmlStreamName = Mage::helper('fulfillmentfactory/dotcom')
-            ->getInventory();
-
-        $reader = new XMLReader();
-        $reader->open($xmlStreamName, 'utf8');
-
-        $state = 'waiting';
-        $sku = -1;
-        $qty = -1;
-        while ($reader->read()) {
-            // this node is an opening <item> tag
-            if ('item' == $reader->localName &&
-                XMLReader::ELEMENT === $reader->nodeType
-            ) {
-                $state = 'item';
-
-            // this node is an opening <sku> tag
-            } else if ('sku' == $reader->localName &&
-                XMLReader::ELEMENT == $reader->nodeType &&
-                'item' == $state
-            ) {
-                $sku = $reader->readString();
-
-            // this node is an opening <quantity_available> tag
-            } else if ('quantity_available' == $reader->localName &&
-                XMLReader::ELEMENT == $reader->nodeType &&
-                'item' == $state
-            ) {
-                $qty = $reader->readString();
-
-            // this node is a closing <item> tag
-            } else if ('item' == $reader->localName &&
-                XMLReader::END_ELEMENT == $reader->nodeType
-            ) {
-                $state = 'waiting';
-
-				//stores inventory as eav attribute at product level
-		        $productModel = Mage::getModel('catalog/product');
-		        
-	            $productId = $productModel->getIdBySku($sku);		        
-	            $product = $productModel->load($productId);
-	            
-	            if($product&&$product->getId()){
-	                $product->setData('fulfillment_inventory', $qty);                
-	                $product->getResource()->saveAttribute($product, 'fulfillment_inventory');
-				}                
-            }
-        }
-    }
-
-    /**
-     * submit orders which are ready
-     *
-     * @return response
-     */
-    public function submitOrderToFulfillByQueue() {
-        $itemQueueCollection = Mage::getModel('fulfillmentfactory/itemqueue')->getCollection()->loadReadyForSubmitItemQueue();
-
-        $partialReadyOrderIds = array();
-        $orderArray = array();
-
-        foreach($itemQueueCollection as $itemqueue) {
-            $order = Mage::getModel('sales/order')->load($itemqueue->getOrderId());
-            $orderId = $order->getId();
-
-            //check if this order has all items complete
-            if(isset($partialReadyOrderIds[$orderId])) {
-                continue;
-            }
-
-            $isReady = true;
-            $itemQueueList = Mage::getModel('fulfillmentfactory/itemqueue')->getCollection()->loadByOrderId($orderId);
-            foreach ($itemQueueList as $itemqueue) {
-                if($itemqueue->getStatus() != Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_READY) {
-                    $partialReadyOrderIds[$orderId] = 1;
-                    $isReady = false;
-                    break;
-                }
-            }
-
-            //only send orders with full complete items
-            if($isReady) {
-                Mage::helper('fulfillmentfactory')->_pushUniqueOrderIntoArray($orderArray, $order);
-            }
-        }
-
-        return $this->submitOrdersToFulfill($orderArray, true);
-    }
-
-    /**
      * submit orders to Dotcom for fulfillment, by quantity
      *
      * @param array $orders for orders we want to submit
@@ -291,37 +275,36 @@ XML;
 
         foreach($orders as $order) {
             try {
-                if($capturePayment && ($order->getStatus() != Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_PAYMENT_FAILED)) {
-                    $invoices = Mage::getResourceModel('sales/order_invoice_collection')->setOrderFilter($order->getId());
-                    //only capture once
-                    if(empty($invoices) || (count($invoices) <= 0)) {
-                        //capture payment
-                        $orderPayment = $order->getPayment();
-                        if(!!$orderPayment) {
-                            $paymentInstance = $orderPayment->getMethodInstance();
-                            if(!!$paymentInstance) {
-                                $paymentInstance->setData('forced_payment_action', 
-                                                                                Mage_Payment_Model_Method_Abstract::ACTION_AUTHORIZE_CAPTURE);
-                                $paymentInstance->setData('cybersource_subid', $orderPayment->getCybersourceSubid());
-                                $orderPayment->place();
+                $continue = true;
+                if(!$capturePayment || ($order->getStatus() == Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_PAYMENT_FAILED)) {
+                    $continue = false;
+                }
 
-                                //update order information
-                                $order->setStatus('processing');
-                                $transactionSave = Mage::getModel('core/resource_transaction')
-                                        ->addObject($order);
+                if($continue && ($order->canInvoice() === false)) {
+                    $continue = false;
+                }
 
-                                   $transactionSave->save();
+                if($continue && (($invoice = $order->prepareInvoice()) == false)) {
+                    $continue = false;
+                }
 
-                                   //send email
-                                   $invoices = Mage::getResourceModel('sales/order_invoice_collection')->setOrderFilter($order->getId());
-                                   foreach($invoices as $invoice) {
-                                       if (!$invoice->getOrder()->getEmailSent()) {
-                                        $invoice->sendEmail(true)
-                                                ->setEmailSent(true);
-                                    }
-                                   }
-                            }
-                        }
+                if($continue && (($invoice->register()) === false)) {
+                    $continue = false;
+                }
+
+                if($continue && $invoice->canCapture()) {
+                    $invoice->capture();
+
+                    $order->setStatus('processing');
+                    $order->setState('processing');
+
+                    $transactionSave = Mage::getModel('core/resource_transaction');
+                    $transactionSave->addObject($invoice);
+                    $transactionSave->addObject($invoice->getOrder());
+                    $transactionSave->save();
+                    if (!$invoice->getOrder()->getEmailSent()) {
+                        $invoice->sendEmail(true)
+                            ->setEmailSent(true);
                     }
                 }
             }
@@ -375,10 +358,10 @@ XML;
                 <ok-partial-ship xsi:nil="true"/>
                 <declared-value xsi:nil="true"/>
                 <cancel-date xsi:nil="true"/>
-                <total-tax>{$order->getTaxAmount()}</total-tax>
+                <total-tax>{$order->getTaxInvoiced()}</total-tax>
                 <total-shipping-handling>{$order->getShippingAmount()}</total-shipping-handling>
                 <total-discount xsi:nil="true"/>
-                <total-order-amount>{$order->getGrandTotal()}</total-order-amount>
+                <total-order-amount>{$order->getTotalInvoiced()}</total-order-amount>
                 <po-number xsi:nil="true"/>
                 <salesman xsi:nil="true"/>
                 <credit-card-number xsi:nil="true"/>
@@ -456,10 +439,12 @@ XML;
                     continue;
                 }
 
-                $quantity = intval($item->getQtyOrdered());
+                $quantity = intval($item->getQtyToShip());
                 $sku = substr($item->getSku(), 0, 17);
 
-                $xml .= <<<XML
+                if($quantity) {
+
+                    $xml .= <<<XML
                     <line-item>
                         <sku>$sku</sku>
                         <quantity>$quantity</quantity>
@@ -472,6 +457,7 @@ XML;
                         <gift-box-wrap-type xsi:nil="true"/>
                     </line-item>
 XML;
+                }
             }
 
             $xml .= <<<XML
@@ -571,7 +557,7 @@ XML;
             } else {
                 $itemQtyArray = array();
                 foreach ($order->getAllItems() as $item) {
-                    $itemQtyArray[$item->getData('item_id')] = (int) $item->getData('qty_ordered');
+                    $itemQtyArray[$item->getData('item_id')] = (int) $item->getQtyToShip();
                 }
 
                 $shipment = Mage::getModel('sales/service_order', $order)
