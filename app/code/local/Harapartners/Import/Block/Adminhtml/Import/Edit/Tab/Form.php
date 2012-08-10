@@ -45,12 +45,12 @@ class Harapartners_Import_Block_Adminhtml_Import_Edit_Tab_Form extends Mage_Admi
                 if ($(\'po_id\').value==0)
                     $("vendor_code").disabled=false;
                 else {
-                    $("vendor_code").clear();
                     $("vendor_code").disabled=true;
                 }
             }
 
             $(\'po_id\').observe(\'change\', function(event) { 
+                $("vendor_code").clear();
                 updateVendorCodeSelect(); 
             });
 
