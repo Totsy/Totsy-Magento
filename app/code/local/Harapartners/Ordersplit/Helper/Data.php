@@ -174,7 +174,6 @@ class Harapartners_Ordersplit_Helper_Data extends Mage_Core_Helper_Abstract {
                             
         //Harapartners, Jun, Cancel previous orders first, this will re-stock existing products
         //Critical for cart reservation logic!
-
         $oldOrder
             ->cancel()
             ->setStatus('splitted','splitted',$this->__('Order Canceled by Split Process'),false)
@@ -349,7 +348,9 @@ class Harapartners_Ordersplit_Helper_Data extends Mage_Core_Helper_Abstract {
                         $service->setOrderData($orderData);
                         $service->submitAll();
                         $newOrder = $service->getOrder();
-                        
+                        if($newOrder->getStatus() == 'payment_failed') {
+                            $paymentFailed = true;
+                        }
                        if(!!$newOrder && !!$newOrder->getId()) {
                            if(!empty($state)) {
                                 $newOrder->setState($state, true, $this->__('Order Created by Split/Batch Cancel Process'))->save();
@@ -359,6 +360,11 @@ class Harapartners_Ordersplit_Helper_Data extends Mage_Core_Helper_Abstract {
                             if($newOrder->getTotalDue() == 0 && $newOrder->isVirtual()) {
                                 $newOrder->setData('state', 'complete')
                                     ->setStatus('complete')
+                                    ->save();
+                            }
+                            if($paymentFailed) {
+                                 $newOrder->setData('state', 'payment_failed')
+                                    ->setStatus('payment_failed')
                                     ->save();
                             }
                         }else{
@@ -425,6 +431,9 @@ class Harapartners_Ordersplit_Helper_Data extends Mage_Core_Helper_Abstract {
                         #Payment Failed
                         $virtualproductcoupon = Mage::getModel('promotionfactory/virtualproductcoupon');
                         $virtualproductcoupon->cancelVirtualProductCouponInOrder($order);
+                        $order->setData('state', 'payment_failed')
+                            ->setStatus('payment_failed')
+                            ->save();
                         return null;
                     }
                 }            

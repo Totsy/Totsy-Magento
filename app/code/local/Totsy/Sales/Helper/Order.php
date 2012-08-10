@@ -82,7 +82,7 @@ class Totsy_Sales_Helper_Order
             $_total_item_qty += $_item->getQtyOrdered();
         }
                         
-        if ($_virtual_item_count == $_total_item_qty) {
+        if (($_virtual_item_count == $_total_item_qty) && ($order->getStatus() != 'payment_failed')) {
             return "Emailed";
         } else {
             return $order->getStatusLabel(); 
