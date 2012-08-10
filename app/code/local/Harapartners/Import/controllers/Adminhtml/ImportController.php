@@ -41,12 +41,20 @@ class Harapartners_Import_Adminhtml_ImportController extends Mage_Adminhtml_Cont
 	        if(count($poArray) && isset($poArray[0]['value'])){
 	        	$defaultPoId = $poArray[0]['value'];
 	        }
+
+            $defaultVendorCode = "";
+            $vendorArray = Mage::helper('stockhistory')->getFormVendorArrayByCategoryId($category->getId(), Harapartners_Stockhistory_Model_Purchaseorder::STATUS_OPEN);
+            // If there is only 1 vendor that has been used for previous imports, set it as the default
+            if(count($vendorArray)==1 && isset($vendorArray[0]['label'])){
+                $defaultVendorCode = $vendorArray[0]['label'];
+            }
         	
             Mage::getSingleton('adminhtml/session')->setHpImportFormData(array(
                     'import_title' => $category->getName(), //Default title is the event name
                     'category_id' => $category->getId(),
                     'category_name' => $category->getName(),
-            		'po_id' => $defaultPoId
+            		'po_id' => $defaultPoId,
+                    'vendor_code' => $defaultVendorCode
             ));
         }
         $this->_forward('edit');

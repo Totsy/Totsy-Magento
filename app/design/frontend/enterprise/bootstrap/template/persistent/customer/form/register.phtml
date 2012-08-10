@@ -58,8 +58,11 @@
             <input type="text" name="email" id="email_address" value="<?php echo $this->htmlEscape($this->getFormData()->getEmail()) ?>" title="<?php echo $this->__('Email Address') ?>" class="input-text validate-email required-entry span4" />
             <label for="password" class="required"><em>*</em> <?php echo $this->__('Password') ?></label>
             <input type="password" name="password" id="password" title="<?php echo $this->__('Password') ?>" class="input-text required-entry strong-validate-password span4" />
+            <!-- 
             <label for="confirmation" class="required"><em>*</em> <?php echo $this->__('Confirm Password') ?></label>
+            
             <input type="password" name="confirmation" title="<?php echo $this->__('Confirm Password') ?>" id="confirmation" class="input-text required-entry validate-cpassword span4" />
+            -->
             <?php echo $this->getChildHtml('persistent.remember.me'); ?>
             <input type="hidden" checked name="is_subscribed" title="<?php echo $this->__('Sign Up for Newsletter') ?>" value="1" id="is_subscribed"<?php if($this->getFormData()->getIsSubscribed()): ?> checked="checked"<?php endif; ?> class="checkbox" />
             <?php $_dob = $this->getLayout()->createBlock('customer/widget_dob') ?>
@@ -169,7 +172,7 @@
         <div class="buttons-set form-buttons align-center" style="margin:21px 0px -16px 0px">
             <button type="submit" id="submit-button" class="btn btn-primary btn-large pull-left">Sign Up</button>
             <!-- <small>or</small> -->
-            <button rel="facebook-connect" style="cursor:pointer;" title="<?php echo $this->__('Connect with Facebook') ?>" class="facebook-button btn btn-large pull-right"><img src="http://ucsf-hastingsconsortium.org/sites/default/files/facebook_icon_00115.png" width="17" style="margin:-4px 4px 0px 0px;" />Join with Facebook</button>
+            <button rel="facebook-connect" style="cursor:pointer;" title="<?php echo $this->__('Connect with Facebook') ?>" class="facebook-button btn btn-large pull-right"><img src="/skin/frontend/enterprise/bootstrap/images/facebook_icon_00115.png" width="17" style="margin:-4px 4px 0px 0px;" />Join with Facebook</button>
         </div>
         <?php if (Mage::helper('checkout')->isContextCheckout()): ?>
             <input name="context" type="hidden" value="checkout" />
