@@ -114,7 +114,7 @@ html.test .container .row {outline:1px dotted green;}
     font-weight: normal;
     text-transform: uppercase;
 }
-.btn-primary:hover {background-color:rgba(237,45,33,0.8); background-position: 0 50.5%;}
+.btn-primary:hover {background-color:rgba(237,45,33,0.9); background-position: 0 50.5%;}
 
 /* states / messaging */
 .messages li, ul { list-style: none; }
