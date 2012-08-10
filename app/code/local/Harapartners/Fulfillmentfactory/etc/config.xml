@@ -86,25 +86,25 @@
     </default>
     <crontab>
         <jobs>
-            <fulfillmentfactory_dotcom_update_inventory>
+            <fulfillmentfactory_dotcom_inventory_update>
                 <schedule>
-                    <cron_expr>0 * * * *</cron_expr><!-- every hour -->
+                    <cron_expr>0 0,6,12,18 * * *</cron_expr><!-- every six hours -->
                 </schedule>
                 <run>
                     <model>fulfillmentfactory/service_dotcom::updateInventory</model>
                 </run>
-            </fulfillmentfactory_dotcom_update_inventory>
-            <fulfillmentfactory_dotcom_fulfill_order>
+            </fulfillmentfactory_dotcom_inventory_update>
+            <fulfillmentfactory_dotcom_order_fulfill>
                 <schedule>
-                    <cron_expr>30 9 * * 1-5</cron_expr><!--2am and 12pm Monday through Friday -->
+                    <cron_expr>0 3,9,15,21 * * *</cron_expr><!-- every six hours -->
                 </schedule>
                 <run>
-                    <model>fulfillmentfactory/service_dotcom::runDotcomFulfillOrder</model>
+                    <model>fulfillmentfactory/service_dotcom::orderFulfillment</model>
                 </run>
-            </fulfillmentfactory_dotcom_fulfill_order>
+            </fulfillmentfactory_dotcom_order_fulfill>
             <fulfillmentfactory_dotcom_update_shipment>
                 <schedule>
-                    <cron_expr>30 * * * *</cron_expr><!-- 30m past each hour -->
+                    <cron_expr>30 * * * *</cron_expr><!-- half past each hour -->
                 </schedule>
                 <run>
                     <model>fulfillmentfactory/service_dotcom::runUpdateShipment</model>
@@ -112,7 +112,7 @@
             </fulfillmentfactory_dotcom_update_shipment>
             <fulfillmentfactory_dotcom_mark_fulfillment_aging_order>
                 <schedule>
-                    <cron_expr>0 0 * * *</cron_expr>
+                    <cron_expr>0 0 * * *</cron_expr><!-- midnight daily -->
                 </schedule>
                 <run>
                     <model>fulfillmentfactory/service_fulfillment::markFulfillmentAgingOrders</model>
@@ -120,7 +120,7 @@
             </fulfillmentfactory_dotcom_mark_fulfillment_aging_order>
             <fulfillmentfactory_dotcom_mark_shipment_aging_order>
                 <schedule>
-                    <cron_expr>0 0 * * *</cron_expr>
+                    <cron_expr>0 0 * * *</cron_expr><!-- midnight daily -->
                 </schedule>
                 <run>
                     <model>fulfillmentfactory/service_fulfillment::markShipmentAgingOrders</model>

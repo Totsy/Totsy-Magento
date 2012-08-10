@@ -63,16 +63,15 @@ class Harapartners_Fulfillmentfactory_Model_Mysql4_Itemqueue_Collection extends 
      * @param int $limit
      * @return Collection
      */
-    public function loadIncompleteItemQueueByProductSku($productSku, $limit) {
+    public function loadIncompleteItemQueueByProductSku($productSku)
+    {
         $collection = $this->addFieldToFilter('sku', $productSku)
-                           ->addFieldToFilter('status', array(
-                                        array('eq' => Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_PENDING),
-                                        array('eq' => Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_PARTIAL)
-                                        )
-                           )
-                           ->setOrder('created_at', 'ASC')
-                           ->setPageSize($limit);
-        
+            ->addFieldToFilter('status', array('in' => array(
+                Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_PENDING,
+                Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_PARTIAL
+            )))
+            ->setOrder('created_at');
+
         return $collection;
     }
 }
