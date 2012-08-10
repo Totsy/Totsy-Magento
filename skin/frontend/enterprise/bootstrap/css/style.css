@@ -115,6 +115,10 @@ html.test .container .row {outline:1px dotted green;}
     text-transform: uppercase;
 }
 .btn-primary:hover {background-color:rgba(237,45,33,0.9); background-position: 0 50.5%;}
+@media screen and (-webkit-min-device-pixel-ratio:0) { /* webkit fixin's */
+    .btn.checkout {padding:2px 8px 1px; line-height:17px;}
+    .btn.checkout strong {background-position:100% 49%;}
+}
 
 /* states / messaging */
 .messages li, ul { list-style: none; }
