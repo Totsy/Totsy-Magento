@@ -90,8 +90,7 @@ class Harapartners_Stockhistory_Block_Adminhtml_Purchaseorder_Index_Grid extends
                     'header'    =>    $helper->__('# of Units'),
                     'align'        =>    'right',
                     'width'        =>    '15px',
-                    'index'        =>    'total_units',
-                    'regex'     => false
+                    'index'        =>    'total_units'
         ));
         
         $this->addColumn('category_event_end_date', array(
@@ -101,7 +100,8 @@ class Harapartners_Stockhistory_Block_Adminhtml_Purchaseorder_Index_Grid extends
                     'index'            =>    'category_event_end_date', //For ORDER
                     'filter_index'    =>    'cat_dt.value',    //For WHERE
                     'type'            =>  'datetime',
-                    'gmtoffset'        =>     true,
+                    'gmtoffset'        =>     false,
+                    'renderer'		=> new Harapartners_Stockhistory_Block_Adminhtml_Widget_Grid_Column_Renderer_Date()
         ));
         
         $this->addColumn('comment', array(

@@ -10,16 +10,18 @@ class Totsy_Sales_Model_Order extends Mage_Sales_Model_Order
 {
     const STATUS_BATCH_CANCEL_CSR_REVIEW = 'batch_cancel_csr_review';
    /**
-     * This method will check the order for items that have been canceled
-     *
-     * @return bool
-     */
-    public function containsCanceledItems() {
-        foreach($this->getItemsCollection() as $item) {
-            if($item->getQtyCanceled()) {
+    * This method will check the order for items that have been canceled
+    *
+    * @return bool
+    */
+    public function containsCanceledItems()
+    {
+        foreach ($this->getItemsCollection() as $item) {
+            if ($item->getQtyCanceled()) {
                 return true;
             }
         }
+
         return false;
     }
 
@@ -42,10 +44,13 @@ class Totsy_Sales_Model_Order extends Mage_Sales_Model_Order
             }
         }
 
-        // 201207 - CJD - Added in logic so that you can cancel an order that has had the items canceled individually
+        // 201207 - CJD - Added in logic so that you can cancel an order that
+        // has had the items canceled individually
         $allCanceled = true;
-        foreach($this->getAllItems() as $item) {
-            if(!$item->getParentItemId() && ($item->getQtyCanceled() != $item->getQtyOrdered())) {
+        foreach ($this->getAllItems() as $item) {
+            if (!$item->getParentItemId() &&
+                ($item->getQtyCanceled() != $item->getQtyOrdered())
+            ) {
                 $allCanceled = false;
                 break;
             }
@@ -56,7 +61,10 @@ class Totsy_Sales_Model_Order extends Mage_Sales_Model_Order
         }
 
         $state = $this->getState();
-        if ($this->isCanceled() || $state === self::STATE_COMPLETE || $state === self::STATE_CLOSED) {
+        if ($this->isCanceled() ||
+            $state === self::STATE_COMPLETE ||
+            $state === self::STATE_CLOSED
+        ) {
             return false;
         }
 
@@ -113,7 +121,7 @@ class Totsy_Sales_Model_Order extends Mage_Sales_Model_Order
             return $this;
         }
         
-        if($this->getStatus() == 'payment_failed') {
+        if ($this->getStatus() == 'payment_failed') {
             return false;
         }
         // Get the destination email addresses to send copies to
@@ -172,7 +180,8 @@ class Totsy_Sales_Model_Order extends Mage_Sales_Model_Order
         $mailer->setSender(Mage::getStoreConfig(self::XML_PATH_EMAIL_IDENTITY, $storeId));
         $mailer->setStoreId($storeId);
         $mailer->setTemplateId($templateId);
-        $mailer->setTemplateParams(array(
+        $mailer->setTemplateParams(
+            array(
                 'order'        => $this,
                 'billing'      => $this->getBillingAddress(),
                 'payment_html' => $paymentBlockHtml
@@ -185,4 +194,80 @@ class Totsy_Sales_Model_Order extends Mage_Sales_Model_Order
 
         return $this;
     }
+
+    /**
+     * Calculate the amount of profit on this order.
+     *
+     * @return float
+     */
+    public function getProfit()
+    {
+        $profit = 0;
+        foreach ($this->getAllVisibleItems() as $item) {
+            $productId = $item->getProductId();
+            $product = Mage::getModel('catalog/product')->load($productId);
+            $priceDiff = $product->getPrice() - $product->getSpecialPrice();
+            $profit += $priceDiff * $item->getQtyToInvoice();
+        }
+
+        $this->setData('profit', (float) $profit);
+        return $this->getData('profit');
+    }
+    
+    /**
+     * Check order state before saving
+     */
+    protected function _checkState()
+    {
+        if (!$this->getId()) {
+            return $this;
+        }
+
+        $userNotification = $this->hasCustomerNoteNotify() ? $this->getCustomerNoteNotify() : null;
+
+        if (!$this->isCanceled()
+            && !$this->canUnhold()
+            && !$this->canInvoice()
+            && !$this->canShip()) {
+            if (0 == $this->getBaseGrandTotal() || $this->canCreditmemo()) {
+                if ($this->getState() !== self::STATE_COMPLETE && $this->getState() !== 'updated') {
+                    $this->_setState(self::STATE_COMPLETE, true, '', $userNotification);
+                }
+            }
+            /**
+             * Order can be closed just in case when we have refunded amount.
+             * In case of "0" grand total order checking ForcedCanCreditmemo flag
+             */
+            elseif (floatval($this->getTotalRefunded()) || (!$this->getTotalRefunded()
+                && $this->hasForcedCanCreditmemo())
+            ) {
+                if ($this->getState() !== self::STATE_CLOSED) {
+                    $this->_setState(self::STATE_CLOSED, true, '', $userNotification);
+                }
+            }
+        }
+
+        if ($this->getState() == self::STATE_NEW && $this->getIsInProcess()) {
+            $this->setState(self::STATE_PROCESSING, true, '', $userNotification);
+        }
+        return $this;
+    }
+    
+    public function isVirtual()
+    {
+        $isVirtual = true;
+        $countItems = 0;
+        foreach ($this->getItemsCollection() as $_item) {
+
+            if ($_item->isDeleted() || $_item->getParentItemId()) {
+                continue;
+            }
+            $countItems ++;
+            if (!$_item->getProduct()->getIsVirtual()) {
+                $isVirtual = false;
+            }
+        }
+        return $countItems == 0 ? false : $isVirtual;
+    }
+
 }

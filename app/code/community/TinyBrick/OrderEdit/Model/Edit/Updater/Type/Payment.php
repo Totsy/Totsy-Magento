@@ -11,37 +11,25 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Payment extends TinyBrick_Orde
     public function edit(TinyBrick_OrderEdit_Model_Order $order, $data = array())
     {
         try {
+            $addressUpdated = $data['addressUpdated'];
             $savingNewCreditCard = true;
             $customerId = $order->getCustomerId();
             $billingId = $order->getData('billing_address_id');
             $billing = Mage::getModel('sales/order_address')->load($billingId);
             $data = $this->cleanPaymentData($data);
             $payment = new Varien_Object($data);
-            $payment->setData('cc_last4', substr($payment->getCcNumber(), -4));
-            #If credit Card saved retrieve payment profile
-            if($payment->getData('cybersource_subid')) {
-                /**$decryptedCybersourceId = Mage::getModel('core/encryption')->decrypt(base64_decode($payment->getData('cybersource_subid')));
+            $payment->setData('cc_last4', substr($payment->getCcNumber(), -4));   
+            #Check if there is already a cybersource profile if yes, dont create a new one
+            $profile = Mage::getModel('paymentfactory/profile');
+            $profile->loadByCcNumberWithId($payment->getData('cc_number').$customerId.$payment->getCcExpYear().$payment->getCcExpMonth());
+            if($profile && $profile->getId() && !$addressUpdated) {
                 $payment = Mage::getModel('sales/order_payment')->getCollection()
-                    ->addAttributeToFilter('cybersource_subid',$decryptedCybersourceId)
+                    ->addAttributeToFilter('cybersource_subid',$profile->getData('subscription_id'))
                     ->getFirstItem();
                 if(!$payment) {
                     return false;
                 } else {
                 	$savingNewCreditCard = false;
-                }**/
-            } else {
-                #Check if there is already a cybersource profile if yes, dont create a new one
-                $profile = Mage::getModel('paymentfactory/profile');
-                $profile->loadByCcNumberWithId($payment->getData('cc_number').$customerId.$payment->getCcExpYear().$payment->getCcExpMonth());
-                if($profile && $profile->getId()) {
-                    $payment = Mage::getModel('sales/order_payment')->getCollection()
-                        ->addAttributeToFilter('cybersource_subid',$profile->getData('subscription_id'))
-                        ->getFirstItem();
-                    if(!$result) {
-                        return false;
-                    } else {
-                    	$savingNewCreditCard = false;
-                    }
                 }
             }
             if($savingNewCreditCard) {
@@ -49,15 +37,9 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Payment extends TinyBrick_Orde
                 Mage::getModel('paymentfactory/tokenize')->createProfile($payment, $billing, $customerId, $billingId);
             }
             $this->replacePaymentInformation($order, $payment);
-            if($order->getStatus() == Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_PAYMENT_FAILED) {
-                $order->setStatus('pending')
-                    ->save();
-                $collection = Mage::getModel('fulfillmentfactory/itemqueue')->getCollection()->loadByOrderId($order->getId());
-                foreach($collection as $itemqueue) {
-                    $itemqueue->setStatus(Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_PENDING);
-                    $itemqueue->save();
-                }
-            }
+            $this->makeOrderReadyToBeProcessed($order);
+            $virtualproductcoupon = Mage::getModel('promotionfactory/virtualproductcoupon');
+            $virtualproductcoupon->openVirtualProductCouponInOrder($order);
         } catch(Exception $e){
             return "Error updating payment informations : ".$e->getMessage();
         }
@@ -91,5 +73,17 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Payment extends TinyBrick_Orde
         $paymentOrder->setData('cybersource_token', $payment->getData('cybersource_token'));
         $paymentOrder->setData('cybersource_subid', $payment->getData('cybersource_subid'));
         $paymentOrder->save();
+    }
+    
+    public function makeOrderReadyToBeProcessed($order) {
+      if($order->getStatus() == Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_PAYMENT_FAILED) {
+            $order->setStatus('pending')
+                ->save();
+            $collection = Mage::getModel('fulfillmentfactory/itemqueue')->getCollection()->loadByOrderId($order->getId());
+            foreach($collection as $itemqueue) {
+                $itemqueue->setStatus(Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_PENDING);
+                $itemqueue->save();
+            }
+        }
     }
 }

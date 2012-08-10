@@ -20,7 +20,19 @@ class Harapartners_Service_Block_Rewrite_Adminhtml_Catalog_Category_Tree extends
         $this->unsetChild('add_root_button');
         $this->getChild('add_sub_button')->setData('label', Mage::helper('catalog')->__('Add Category/Event'));
         $this->getChild('add_sub_button')->setData('disabled', 'disabled');
+         $this->setChild('clear_expire',
+                $this->getLayout()->createBlock('adminhtml/widget_button')
+                    ->setData(array(
+                        'label'     => Mage::helper('catalog')->__('Move Expired Events'),
+                        'onclick'   => "setLocation('" . $this->getUrl('*/*/clearExpiredEvents', array('_current' => true, '_nosid' => true)) . "')"
+                    ))
+            );
         return $this;
+    }
+
+    public function getClearExpireButtonHtml()
+    {
+       // return $this->getChildHtml('clear_expire');
     }
 
 }

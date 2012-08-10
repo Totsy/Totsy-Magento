@@ -47,8 +47,8 @@
         <?php echo $this->escapeHtml($_item->getDescription()) ?>
         
 		<?php 
-		// Estimated Shipping Date
-		if(!$_order->getIsNotVirtual()==0): ?>
+		// Estimated Shipping Date for non-virtual items
+		if ($_item->getProduct()->isVirtual()==0) : ?>
 			<p style="margin:0;">
 				<span style="font-weight:bold;"><?php echo $this->__('Estimated Shipping Date: ') ?></span><?php echo date('Y-m-d', Mage::helper('sales/order')->calculateEstimatedShipDate($_order)); ?>
 			</p>

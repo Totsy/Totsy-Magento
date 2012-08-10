@@ -330,7 +330,6 @@ XML;
                 $order->setState(Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_PAYMENT_FAILED)->save();
                 $message = 'Order ' . $order->getIncrementId() . ' could not place the payment. ' . $e->getMessage();
                 Mage::helper('fulfillmentfactory/log')->errorLogWithOrder($message, $order->getId());
-
                 /*
                 $customer = Mage::getModel('customer/customer')->load($order->getCustomerId());
 
@@ -351,11 +350,17 @@ XML;
                 $shippingAddress = Mage::getModel('sales/order_address');
             }
 
+            $customerId = $order->getCustomerId();
+            $customer   = Mage::getModel('customer/customer')->load($customerId);
+
             $shippingName = $shippingAddress->getFirstname() . ' ' . $shippingAddress->getLastname();
 
             $state = Mage::helper('fulfillmentfactory')->getStateCodeByFullName($shippingAddress->getRegion(), $shippingAddress->getCountry());
 
-            $city = Mage::helper('fulfillmentfactory')->validateAddressForDC('CITY', $shippingAddress->getCity());            
+            $city = Mage::helper('fulfillmentfactory')->validateAddressForDC('CITY', $shippingAddress->getCity());
+
+            $country = Mage::helper('fulfillmentfactory/dotcom')->getCountryCodeUsTerritories($state);
+
             $xml = <<<XML
         <orders xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <order>
@@ -402,12 +407,12 @@ XML;
                     <billing-address1><![CDATA[{$shippingAddress->getStreet(1)}]]></billing-address1>
                     <billing-address2><![CDATA[{$shippingAddress->getStreet(2)}]]></billing-address2>
                     <billing-address3 xsi:nil="true"/>
-                    <billing-city><![CDATA[{$shippingAddress->getCity()}]]></billing-city>
+                    <billing-city><![CDATA[$city]]></billing-city>
                     <billing-state>{$state}</billing-state>
                     <billing-zip>{$shippingAddress->getPostcode()}</billing-zip>
-                    <billing-country xsi:nil="true"/>
+                    <billing-country>{$country}</billing-country>
                     <billing-phone xsi:nil="true"/>
-                    <billing-email xsi:nil="true"/>
+                    <billing-email>{$customer->getEmail()}</billing-email>
                 </billing-information>
                 <shipping-information>
                     <shipping-customer-number xsi:nil="true"/>

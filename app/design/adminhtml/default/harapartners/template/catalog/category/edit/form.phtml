@@ -28,6 +28,9 @@
 <div class="content-header">
         <h3 class="icon-head head-categories"><?php echo $this->htmlEscape($this->getHeader()) . ($this->getCategoryId() ? ' (' . Mage::helper('catalog')->__('ID: %s', $this->getCategoryId()) . ')' : '') ?></h3>
         <p class="content-buttons form-buttons">
+            <?php if($this->getCategoryId()): ?>
+                    <?php echo $this->getRevertMoveButtonHtml(); ?>
+            <?php endif; ?>
             
             <?php if($this->getCategoryId()): ?>
             		<?php echo $this->getDeleteButtonHtml(); ?>
@@ -69,7 +72,8 @@
         this.errorSections = $H({});
         this.canShowError = true;
         this.submitUrl = url;
-        if (this.validator && this.validator.validate()) {
+        if (this.validator && this.validator.validate() && 
+       !this.dateValidate()) {
             if(this.validationUrl){
                 this._validate();
             }
@@ -77,6 +81,7 @@
                 if (this.isSubmitted) {
                     return false;
                 }
+
                 this.isSubmitted = true;
                 this._submit();
             }
@@ -116,6 +121,19 @@
                 }
         );
 
+    };
+
+    categoryForm.dateValidate = function () {
+
+        var startdate = $$('input[name="general[event_start_date]"]')[0].value;
+        var enddate = $$('input[name="general[event_end_date]"]')[0].value;
+        if (this.validator && this.validator.validate()) {
+            if (startdate > enddate) {
+                alert("Error: Event starting date is later than the ending date.  Please double check the dates and try saving again");
+                return true;
+            }
+        }
+        return false;
     };
 
     categoryForm.getCategoryId = function () {
@@ -248,7 +266,7 @@
             Event.observe(position,'keyup',positionChange);
         }
     }
-
+    
     //There is a conflict between row click and checkbox check call back
 	//Haraparters, Jun: categoryProductRowClick should apply default action (redirect to product detail page)
     <?php echo $_gridJsObject ?>.rowClickCallback = categoryProductRowClick;

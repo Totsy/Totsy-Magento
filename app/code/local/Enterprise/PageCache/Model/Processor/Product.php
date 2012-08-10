@@ -68,6 +68,7 @@ class Enterprise_PageCache_Model_Processor_Product extends Enterprise_PageCache_
     }
     
     //Harapartners, Jun, Catalog pages are updated at very high frequency (due to reservation fluctuation), refresh adaptively
+    /** 2012-07-12 CJD - removing this functionality. we will let magento handle clearing the page cache for product pages
     public function getPageIdWithoutApp(Enterprise_PageCache_Model_Processor $processor){
         list($usec, $sec) = explode(' ', microtime());
         $seed = (int) ($usec * 1000000);
@@ -77,5 +78,6 @@ class Enterprise_PageCache_Model_Processor_Product extends Enterprise_PageCache_
         }
         return parent::getPageIdWithoutApp($processor);
     }
+     */
     
 }

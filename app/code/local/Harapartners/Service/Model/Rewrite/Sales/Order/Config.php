@@ -24,7 +24,7 @@ class Harapartners_Service_Model_Rewrite_Sales_Order_Config extends Mage_Sales_M
             $state = array($state);
         }
         foreach ($state as $_state) {
-            if ($stateNode = $this->_getState($_state)) {
+            //if ($stateNode = $this->_getState($_state)) {
                 $collection = Mage::getResourceModel('sales/order_status_collection')
                     ->addStateFilter($_state)
                     ->setOrder('is_default','DESC');
@@ -40,7 +40,7 @@ class Harapartners_Service_Model_Rewrite_Sales_Order_Config extends Mage_Sales_M
                         $statuses[] = $code;
                     }
                 }
-            }
+            //}
         }
         $this->_stateStatuses[$key] = $statuses;
         return $statuses;

@@ -1,6 +1,108 @@
 Totsy-Magento Release Notes
 ===========================
 
+20120808
+----------
+* MGN-903 Can now amend 400+ PO lines, MGN-676 fix count for non-casepack items; no longer count canceled items that have configurables
+* MGN-830 If virtual order has been paid by credits, mark the order as complete.
+
+20120807
+----------
+* Change copy on invites to include 'after your friend's first order ships
+* MGN-838. Send welcome email with password
+* MGN-747: converting affiliate registration dates to 'America/New_York' (GMT-04:00) when fetching data for feeds.
+
+20120806
+----------
+* MGN-873 removing subtotal from cart page on mobile
+* MGN-859 Improved import error handling to catch invalid attribute values
+* MGN-441 Display the position value on the event products tab
+* Add exclude method for sailthru events api feed
+* MGN-887 Allow customer to purchase an hybrid order with credits
+* MGN-817 Update an Order with Credits will set status to Updated
+
+20120803
+----------
+* MGN-617 Event End date now display as EST in Purchase Order Grid. 
+* MGN-847 Moved preview email button to product level
+* MGN-486 adding logo to event view
+* MGN-873 hiding subtotal on cart view for cs purposes
+* MGN-404 Hide splitted orders form Order History
+* Fixing Warning in HP Checkout SocialLabs with Evan
+* Sanitizing address street data before making Cybersource requests.
+* MGN-862 remove invite friends banner to make way for monetate
+
+20120801
+----------
+* MGN-855 manage coupons btn open to new tab
+* MGN-754 The vendor code box is now disabled during import when an existing PO is selected
+* MGN-653 Prevent Events with start dates that have a later than the end dates from being saved
+* MGN-676 corrected total unit quantity
+* MGN-617 enabled date range search
+* MGN-381 add a query to look for that specific product
+* MGN-747: Rebuilt the Affiliate Feeds controller using direct SQL queries instead of objects to construct XML feed data.
+* MGN-701 Delete invoices created during payment process if the capture failed
+* Cleaning Methods from CyberSource Totsy that dont need to be overwritten
+
+20120730
+----------
+
+* MGN-617 - Event End date on the Purchase Order Report page should be displayed in EST. Since the event date was stored as EST, it was not necessary to set the datetime in the grid layout.
+* Update Sailthru horizon javascript
+* MGN648 - Add Link to Order on Coupons Management Page 
+* MGN861 - Hide Edit Payment Option if Items are Invoiced
+* Merging affiliate info from previous requests with affiliate info from the current request.
+* Replaced the affiliate_code parameter for affiliate feeds with the token parameter, which is now the encrypted affiliate_code value.
+* When redirecting to a secure URL, use the full request URI (to include query string parameters) instead of only the path info.
+* Checking for an affiliate_code from the decrypted token.
+
+20120727-1
+----------
+
+* Changed the header login block to deliver different markup based on controller action instead of request URL.
+* MGN-591 fix the call to the move expired categories and added a revert move button that will move an expired event in the Expired folder back to the Event folder
+* Using a controller forward instead of a redirect for affiliate registration links.
+* MGN851 - Make Voucher Supsender if Payment Failed and available after sucessfull Edit
+* Makes Voucher Available if Payment Failed
+* removing the logic that keeps the cache from being cleared when models are saved in the catalog
+* Changed Full Page Cache to not cache pages by customer and only by customer group. Also, removed strange logic from Category and Product cache processors that randomly showed a non-cached page
+
+20120727
+--------
+* MGN-604: Correctly calculate commission as a percentage of profit.
+* MGN-754 Auto select the vendor code when importing to an existing event
+* MGN-745: added custom pixel helper for returning customized text in an affiliate pixel, with TrialPay's HMAC-MD5 signed querystring as the first usage of this functionality.
+* Added 'Remove' button for affiliate tracking codes.
+* MGN-604: Added commission calculation to orders, for usage in affiliate pixels.
+* Added 'auto' parameter to the redirect URL after autoregistration/autologin.
+* Fixing Status not Updated when Payment Edit Order with same Credit Card
+* MGN-278 Better error handling when special characters break product import
+* adding reference to home_banner on homepage
+* MGN-847 admin user's email for default prompt value
+* fix event preview for virtual events, MGN-826 fix instant direct for events with one product event is not live
+* MGN-847 : You can now send yourself a test email for virtual products by providing email(s) in the prompt
+* MGN-783 add discover image to add credit card on mms
+* MGN-747: Accepting Keyade-requested date formats in affiliate data feeds.
+* MGN-835: Defensive check for shipping address on an order, which fails for virtual orders.
+* MGN-278 Improved error handling for product imports
+
+20120725
+--------
+
+* MGN-718 #comment Fixing ESD check for virtual to be item-based
+* MGN-815 mms color changes ;
+* MGN-813 buton padding on mms
+* MGN-840 change grand total to total for legal/confusion
+* MGN-840 new sales view with cart disclaimer
+* MGN-583 adding sales order view to iphone template to remove track link
+* MGN-783 adding discover to add new cc page (will require akamai flush on production push)
+* MGN850 - Always print status in order comment section
+* Fix incompatible with  Mage_Adminhtml_Block_Widget_Form::_setFieldset()
+* Dont show voucher if payment failed on order page
+* Disable email Order Confirmation/ Voucher Email when payment failed
+* MGN-821 adding link color to 404 cells for mms
+* hide expired events at category/age landing page
+
 20120724
 --------
 
