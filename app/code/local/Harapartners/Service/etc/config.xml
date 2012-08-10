@@ -499,17 +499,21 @@
 										</vendor>
 										<purchaseorder translate="title" module="stockhistory">
 											<title>Purchase Order Report</title>
-										</purchaseorder>
-										<transaction translate="title" module="stockhistory">
-											<title>Transaction Report</title>
                                             <children>
                                                 <actions translate="title"> 
                                                     <title>Actions</title>
                                                     <children>
+                                                        <reset translate="title"><title>Reset PO</title></reset>
+                                                        <delete translate="title"><title>Delete PO</title></delete>
+                                                        <create_amendment translate="title"><title>Create Amendment(PO Info Edit)</title></create_amendment>
                                                         <submit_dotcom translate="title"><title>Submit To Dotcom</title></submit_dotcom>
+                                                        <post_amendment translate="title"><title>Post Amendment(Item Line Edit)</title></post_amendment>
                                                     </children>
                                                 </actions>
                                             </children>
+										</purchaseorder>
+										<transaction translate="title" module="stockhistory">
+											<title>Transaction Report</title>
 										</transaction>
 									</children>
 								</stockhistory>
@@ -519,6 +523,37 @@
 								</rushcheckout>
 							</children>
 						</harapartners>
+                        <catalog>
+                            <children>
+                                <categories>
+                                    <children>
+                                        <actions translate="title"> 
+                                            <title>Category/Event Edit Actions</title>
+                                            <children>
+                                                <reset translate="title"><title>Reset</title></reset>
+                                                <delete_category translate="title"><title>Delete Categories</title></delete_category>
+                                                <delete_product translate="title"><title>Delete Product</title></delete_product>
+                                                <import translate="title"><title>Product Import</title></import>
+                                                <add_category translate="title"><title>Add Category/Event</title></add_category>
+                                                <save translate="title"><title>Save Category/Event</title></save>
+                                            </children>
+                                        </actions>
+                                    </children>
+                                </categories>
+                                <products>
+                                    <children>
+                                        <actions translate="title"> 
+                                            <title>Product Edit Actions</title>
+                                            <children>
+                                                <reset translate="title"><title>Reset</title></reset>
+                                                <delete translate="title"><title>Delete</title></delete>
+                                                <save translate="title"><title>Save</title></save>
+                                            </children>
+                                        </actions>
+                                    </children>
+                                </products>
+                            </children>
+                        </catalog>
 					</children>
 				</admin>
 			</resources>
