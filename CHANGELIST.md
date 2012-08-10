@@ -1,6 +1,14 @@
 Totsy-Magento Release Notes
 ===========================
 
+20120810
+--------
+
+* MGN-831 Set status as Payment failed while order with physical and virtual that fail capture
+* Added links to Fulfillment error log Order Number column.
+* MGN-763: Removing error log entries when processing re-fulfillment requests.
+* MGN-900 Adding feature to update billing address with the same Credit Card with Edit Order Payment Module
+
 20120809
 ----------
 * MGN-898 adding country code to order info sent via dotcom api
