@@ -158,9 +158,9 @@ html.test .container .row {outline:1px dotted green;}
     background: url('../images/div-nav.png') 0 50% no-repeat;
 }
 .navbar .nav > li:first-child {
-    padding-left:0; 
+/*     padding-left:0;  */
     background-image: none;
-    border-left:1px solid transparent;
+/*     border-left:1px solid transparent; */
 }
 .navbar .nav > li > a {
     color: #636466;
@@ -197,7 +197,7 @@ html.test .container .row {outline:1px dotted green;}
     cursor: pointer;
 }
 .navbar .nav > li:first-child:hover {
-    padding-left:0;
+/*     padding-left:0; */
 }
 .nav .dropdown-menu {
     display: none;
