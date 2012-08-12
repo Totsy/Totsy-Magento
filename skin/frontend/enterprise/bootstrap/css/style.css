@@ -18,29 +18,12 @@ html {
 }
 a {color:#ed1c25;text-decoration:none;}
 a:hover{color:#ed1c25;text-decoration:underline;}
-.content_push { margin-top:120px; }
-.content_push_2col { margin-top:120px; }
+.content_push { margin-top:150px; }
+.content_push_2col { margin-top:80px; }
 /* 960.gs Grid Reset Classes. */
 .alpha { margin-left: 0 }
 .omega { margin-right: 0 }
 .clear { clear:both; }
-/* Alignment classes */
-.align-center {
-  text-align: center;
-}
-
-.align-right {
-  text-align: right;
-}
-
-/* Ellipsis classes for truncating long titles */
-.ellipsis {
-    white-space:nowrap;
-    overflow:hidden;
-}
-.ellipsis:after {
-    content:'...';
-}
 /* #myCarousel { margin-top:20px; } */
 #toTop {
     background-color: #EB132C;
@@ -58,17 +41,12 @@ a:hover{color:#ed1c25;text-decoration:underline;}
     padding: 5px;
     position: fixed;
     right: 10px;
-    text-align: center; 
+    text-align: center;
     text-transform: uppercase;
     width: auto;
     z-index: 999;
 }
-.carousel-inner {
-  min-height: 300px;
-  overflow: hidden;
-  position: relative;
-  width: 100%;
-}
+
 /**
  @Diagnostics
  */
@@ -104,13 +82,44 @@ html.test .container .row {outline:1px dotted green;}
     background-color: #fff!important;
 }
 .thumbnail {padding:10px;}
-.page-header {border-bottom: 4px solid #E5E5E5; margin:10px 0; padding-bottom:5px;}
+.page-header {border-bottom: 4px solid #E5E5E5; margin:18px 0;}
 .zoomImage { padding:10px; z-imdex:500!important; }
+
+/* link classes */
 .navLinks { padding-top: 7px; }
 .cta-link {
     padding-right:10px;
     background: url('../images/glyph-arrow-rt.png') 100% 85% no-repeat;
 }
+.dropdown-toggle {
+    padding-right:12px;
+    background: url('../images/glyph-arrow-d.png') 100% 65% no-repeat;
+}
+
+/* btn classes */
+.btn {
+    background-image:url("../images/btn-glass.png");
+    background-repeat: repeat-x;
+    background-position:0 50.5%;
+}
+.btn-primary {background-color:rgba(237,45,33,1);}
+.btn.checkout {
+    padding: 1px 8px 2px;
+    margin: 8px 0 0;
+}
+.btn.checkout strong {
+    background: url("../images/btn-arrow-s.png") no-repeat scroll 100% 50% transparent;
+    padding-right: 9px;
+    font-size: 13px;
+    font-weight: normal;
+    text-transform: uppercase;
+}
+.btn-primary:hover {background-color:rgba(237,45,33,0.9); background-position: 0 50.5%;}
+@media screen and (-webkit-min-device-pixel-ratio:0) { /* webkit fixin's */
+    .btn.checkout {padding:2px 8px 1px; line-height:17px;}
+    .btn.checkout strong {background-position:100% 49%;}
+}
+
 /* states / messaging */
 .messages li, ul { list-style: none; }
 .messages { display: block; padding: 10px; margin: 0px 0px 10px 0px;}
@@ -139,6 +148,9 @@ html.test .container .row {outline:1px dotted green;}
 }
 #logo {margin-left:0;}
 
+/* #userAccount - my account module */
+#userAccount > a:hover {text-decoration: none;}
+
 /* nav */
 .navbar nav {
     background-color:#f9f9f9;
@@ -150,9 +162,9 @@ html.test .container .row {outline:1px dotted green;}
     background: url('../images/div-nav.png') 0 50% no-repeat;
 }
 .navbar .nav > li:first-child {
-    padding-left:0; 
+/*     padding-left:0;  */
     background-image: none;
-    border-left:1px solid transparent;
+/*     border-left:1px solid transparent; */
 }
 .navbar .nav > li > a {
     color: #636466;
@@ -189,7 +201,7 @@ html.test .container .row {outline:1px dotted green;}
     cursor: pointer;
 }
 .navbar .nav > li:first-child:hover {
-    padding-left:0;
+/*     padding-left:0; */
 }
 .nav .dropdown-menu {
     display: none;
@@ -207,26 +219,38 @@ html.test .container .row {outline:1px dotted green;}
 .navbar .dropdown-menu:after,
 .navbar .dropdown-menu:before {display: none;} /* not using these cool dropdown tooltip bootstrap things… boo */
 
-/* invite CTA */
-#inviteCTA {padding: 7px 0 0;}
-#inviteCTA a {float:right; color: #636466; font-weight: bold; line-height:1.18;}
-#inviteCTA a:hover {text-decoration: none;}
-#inviteCTA strong {display: block;}
-#inviteCTA strong em {color:#d84643; font-style:normal;}
+/* CTA area in header */
+header nav .cta {padding: 7px 0 0;}
+header nav .cta a {float:right; color: #636466; font-weight: bold; line-height:1.18;}
+header nav .cta a:hover {text-decoration: none;}
+header nav .cta strong {display: block;}
+header nav .cta strong em {color:#d84643; font-style:normal;}
 
 /**
  @User Utils
  - global in header: my account dropdown, minicart
  */
+#userUtils {margin-bottom: 0;}
 #userUtils > li {float: left; width:50%;} 
  
-/* Minicart */
-#usercart {position: relative;} 
+/* header cart */
+#usercart {
+    position: relative;
+    float:right;
+} 
 #topCartContent {position: absolute; top: 100%; left: 0;}
+
+/* checkout btn in non-mini-cart header */
+#header-checkoutBtn {
+    float: right; clear: right;
+}
+#header-checkoutBtn a { /* not styling this specifically, for now - see generic .btn.checkout styles */
+}
 
 /**
  @My_Account
  */
+
 
 /**
  @Footer
@@ -249,44 +273,15 @@ footer p, img {
     color: #777777;
     font-size: 10px;
 }
-body > footer ul {margin:0;}
 footer strong {
-    color: #aaa;
-    font-size: 14px;
-    padding: 17px 0 18px 0;
+    color: #666;
+    font-size: 12px; font-weight: bold;
 }
-/* Old Hara Partners Classes for Invitations */
-a#invite-gmail {
-    background-position: 0 -51px;
-}
-.ui-widget *:active {
-    outline: medium none;
-}
-a#invite-yahoo {
-    background-position: 129px -51px;
-}
-a#invite-outlook {
-    background-position: 0 -102px;
-}
-a#invite-aol {
-    background-position: 129px -102px;
-}
-a#invite-msn {
-    background-position: 0 -153px;
-}
-a#invite-others {
-    background-position: 129px -153px;
-}
-a.invite-btn {
-    background-image: url("../images/invite-btns.gif");
-    border: 1px solid #CCCCCC;
-    display: inline-block;
-    height: 51px;
-    margin-bottom: 10px;
-    text-indent: -9999px;
-    width: 129px;
-}
+body > footer ul {margin:0;}
+body > footer ul li a,
+body > footer ul li a:hover {color:#666; font-size: 12px;}
 
+/* login/register pages footer */
 body.customer-account-login #footer ul {
     float: left;
 }
@@ -346,7 +341,6 @@ body .footer ul {
     float: left;
     padding: 4px 5px 0 0;
 }
-
 body.customer-account-login #footer ul {
   float: left;
   height: 27px;
@@ -361,6 +355,39 @@ body.customer-account-login #footer ul {
 }
 #facebookLink {
     background-position: 0 -2px;
+}
+
+
+/* Old Hara Partners Classes for Invitations */
+a#invite-gmail {
+    background-position: 0 -51px;
+}
+.ui-widget *:active {
+    outline: medium none;
+}
+a#invite-yahoo {
+    background-position: 129px -51px;
+}
+a#invite-outlook {
+    background-position: 0 -102px;
+}
+a#invite-aol {
+    background-position: 129px -102px;
+}
+a#invite-msn {
+    background-position: 0 -153px;
+}
+a#invite-others {
+    background-position: 129px -153px;
+}
+a.invite-btn {
+    background-image: url("../images/invite-btns.gif");
+    border: 1px solid #CCCCCC;
+    display: inline-block;
+    height: 51px;
+    margin-bottom: 10px;
+    text-indent: -9999px;
+    width: 129px;
 }
 
 /* Validation / Error Classes */
@@ -395,23 +422,10 @@ body.customer-account-login #footer ul {
 
 /* Forms Override */
 textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input {
-    -moz-transition: border 0.2s linear 0s, box-shadow 0.2s linear 0s;
-    background-color: #F9F9F9;
-    border: 1px solid #CCCCCC;
-    border-radius: 3px 3px 3px 3px;
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
-    padding: 8px 4px;
-    color: #555555;
-}
-select, textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input {
-    color: #555555;
-    display: inline-block;
-    font-size: 13px;
-    margin-bottom: 9px;
-    padding: 4px;
-    background-color: #F9F9F9;
-    border: 1px solid #CCCCCC;
-    border-radius: 3px 3px 3px 3px;
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
-    padding: 4px;
+  -moz-transition: border 0.2s linear 0s, box-shadow 0.2s linear 0s;
+  background-color: #f9f9f9;
+  border: 1px solid #CCCCCC;
+  padding:8px 4px;
+  border-radius: 3px 3px 3px 3px;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
 }
