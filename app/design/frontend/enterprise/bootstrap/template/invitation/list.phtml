@@ -95,8 +95,6 @@ if ( !$rewardCollection ) {
               </div>
               <div id="collapseOne" class="accordion-body collapse in">
                 <div class="accordion-inner">
-                    <h5><?php echo Mage::helper('enterprise_invitation')->__('Send Invitations') ?></h5>
-                    <hr />
                     <p><?php if ( Mage::Helper('service')->isTotsyStore() ) {
                             $inviteFriendNotes = "For each friend you invite, Totsy will credit your account with <span class='needgreen'>$15</span> after your friend's place their first order.";
                         } else {
@@ -109,29 +107,19 @@ if ( !$rewardCollection ) {
 <?php echo $this->getChildHtml('form_before')?>
 <?php if ($maxPerSend = (int)Mage::helper('enterprise_invitation')->getMaxInvitationsPerSend()): ?>
 <form id="invitationForm" action="<?php echo $this->helper('enterprise_invitation')->getCustomerInvitationFormUrl()?>" method="post">
-<div class="fieldset">	
-<ul class="form-list">
 <?php //$_perRow = ceil($maxPerSend/3); for($_index = 1; $_index <= $maxPerSend; $_index ++): ?>
-<li class="email-add-box">
 <label for="email"><?php echo Mage::helper('enterprise_invitation')->__('Enter Your Friends Email Addresses:');?> </label>
-<div class="input-box">
 <textarea id="contact_list" tabindex="<?php //echo $_index+1 ?>" name="email" id="inviteemailaddress" title="<?php echo Mage::helper('enterprise_invitation')->__('email') ?>" class="input-text" rows="3" cols="4"></textarea>
-</div>
 
-</li>
 <?php //endfor; ?>
 <?php if (Mage::helper('enterprise_invitation')->isInvitationMessageAllowed()): ?>
-<li class="email-msg-box">
 <label for="message"><?php echo Mage::helper('enterprise_invitation')->__('Personalized Message To Friends:');?> </label>
-<div class="input-box">
 <?php if ( Mage::Helper('service')->isTotsyStore() ):?>
 <textarea tabindex="<?php //echo $_index+1 ?>" name="message" id="message" title="<?php echo Mage::helper('enterprise_invitation')->__('Message') ?>" class="input-text" rows="3" cols="4"><?php echo 'Please accept this invitation to join Totsy'; ?></textarea>
 <?php else :?>
 <textarea tabindex="<?php //echo $_index+1 ?>" name="message" id="message" title="<?php echo Mage::helper('enterprise_invitation')->__('Message') ?>" class="input-text" rows="3" cols="4"><?php echo 'Please accept this invitation to join Mamasource Private Sales powered by Totsy'; ?></textarea>
 <?php endif;?>
 </div>
-</li>
-</ul>
 <?php endif;?>
 </div>
 <!--p class="required"><?php echo Mage::helper('enterprise_invitation')->__('* Required Fields') ?></p-->

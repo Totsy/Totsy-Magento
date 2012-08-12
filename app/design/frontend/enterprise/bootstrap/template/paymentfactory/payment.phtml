@@ -6,6 +6,11 @@
     $creditCardsCount = 0;
 ?>
 <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+<?php if($creditCardsCount == 0): ?>
+
+sdfsadasdasd
+
+<?php endif; ?>
 <div class="page-header">
     <h2><?php echo $this->__('Manage Credit Cards') ?> <img class="cart-type pull-right"  width="180px;" src="<?php echo $this->getSkinUrl('images/creditcards.jpg')?>"/></h2>
 </div>

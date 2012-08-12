@@ -19,27 +19,30 @@
  * needs please refer to http://www.magentocommerce.com for more information.
  *
  * @category    design
- * @package     base_default
+ * @package     enterprise_default
  * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://www.magentocommerce.com/license/enterprise-edition
  */
 ?>
-<div class="well" style="padding: 8px 0;">
-    <ul class="nav nav-list">
-        <li class="nav-header">My Account</li>
-<?php $_links = $this->getLinks(); $_index = 1;$_count = count($_links); foreach ($_links as $_link): $_last = ($_index++ >= $_count); 
+<?php
+/**
+ * Create account form template
+ *
+ * @see Enterprise_Customer_Block_Form
+ */
+/* @var $this Enterprise_Customer_Block_Form */
 ?>
-        <li<?php echo ($_last ? ' class="last"' : '') ?>><a href="<?php echo $_link->getUrl() ?>"><?php echo $_link->getLabel() ?></a></li>
-        <?php endforeach; ?>
-    </ul>
+<?php if ($this->hasUserDefinedAttributes()): ?>
+    <?php if ($this->isShowContainer()): ?>
+<div>
+    <?php endif;?>
+    <?php foreach ($this->getUserDefinedAttributes() as $attribute):?>
+        <?php $attributeContent = $this->getAttributeHtml($attribute);?>
+        <?php if ($attributeContent): ?>
+        <?php echo $attributeContent;?>
+        <?php endif;?>
+    <?php endforeach;?>
+    <?php if ($this->isShowContainer()): ?>
 </div>
-
-<div class="well" style="padding: 8px 0;">
-    <ul class="nav nav-list">
-      <li class="nav-header">Need Help?</li>
-      <li><a href="/pages/contact/" title="Contact Us">Help Desk</a></li>
-      <li><a href="/pages/faq/" title="Frequently Asked Questions">FAQ's</a></li>
-      <li><a href="/pages/privacy/" title="Privacy Policy">Privacy Policy</a></li>
-      <li><a href="/pages/terms/" title="Terms Of Use">Terms Of Use</a></li>
-    </ul>
-</div>
+    <?php endif;?>
+<?php endif; ?>
