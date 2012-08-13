@@ -44,8 +44,8 @@
 <div class="cart">
     <div class="page-title title-buttons">
             <div class="shipping-date">
-            <span>Estimated Ship Date:</span>
-            <p id="cart-shipping-date-header"><?php echo date('Y-m-d', Mage::helper('sales/order')->calculateEstimatedShipDate($quote)); ?></p>
+            
+            <p id="cart-shipping-date-header" class="label label-info span4 offset8"><span>Estimated Ship Date:</span> <?php echo date('Y-m-d', Mage::helper('sales/order')->calculateEstimatedShipDate($quote)); ?></p>
             </div>
             <div class="timer-control-box">
             <script type="text/javascript">
@@ -60,7 +60,7 @@
                     jQuery("#cart-timer").countdown({
                         //date: "12 10, 2011 16:11", or an object counting to a date
                         date: dateObj,
-                        htmlTemplate: "%{m} <small class=\"cd-time\">:</small> %{s} <small class=\"cd-time\">minutes</small>",
+                        htmlTemplate: "%{m}<small class=\"cd-time\">:</small>%{s} <small class=\"cd-time\">minutes remaining</small>",
                         onChange: function( event, timer ){
                         },
                         onComplete: function( event ){
@@ -90,19 +90,18 @@
         <?php endforeach; ?>
         <?php endif; ?>
     </div>
-    <div style="clear:both;"></div>
+    <div class="clear"></div>
     <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
     <?php echo $this->getChildHtml('form_before') ?>
     <div class="cart-form-container">
     <form action="<?php echo $this->getUrl('checkout/cart/updatePost') ?>" method="post">
         <fieldset>
-            <table id="shopping-cart-table" class="data-table cart-table table table-bordered well">
+            <table id="shopping-cart-table" class="data-table cart-table table table-bordered well table-condensed">
             <?php $mergedCells = ($this->helper('tax')->displayCartBothPrices() ? 2 : 1); ?>
                 <thead>
                     <tr>
                         <th rowspan="<?php echo $mergedCells; ?>">&nbsp;</th>
                         <th rowspan="<?php echo $mergedCells; ?>"><span class="nobr"><?php echo $this->__('Product Name') ?></span></th>
-                        <th rowspan="<?php echo $mergedCells; ?>"></th>
                         <?php if ($this->helper('wishlist')->isAllowInCart()) : ?>
                         <th rowspan="<?php echo $mergedCells; ?>" class="a-center"><span class="nobr"><?php echo $this->__('Move to Wishlist') ?></span></th>
                         <?php endif ?>
@@ -131,7 +130,7 @@
         <button type="submit" title="<?php echo $this->__('Update Shopping Cart') ?>" class="button btn-update btn btn-primary"><?php echo $this->__('Update Shopping Cart') ?></button>
     </form>
     </div>
-    <div class="totals">
+    <div class="totals pull-right">
         <?php echo $this->getChildHtml('totals'); ?>
         <?php $saving = Mage::helper('sales/order')->calculateEstimatedSavings($quote); ?>
         <?php if ($saving): ?>

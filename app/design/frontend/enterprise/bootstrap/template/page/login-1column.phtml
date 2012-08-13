@@ -34,7 +34,7 @@
 <head>
 <?php echo $this->getChildHtml('head') ?>
 <style>
-body {  padding-top:65px;}
+body {  padding-top:75px;}
 </style>
 </head>
 <body<?php echo $this->getBodyClass()?' class="customer-account-login '.$this->getBodyClass().'"':'' ?> data-spy="scroll" data-target=".subnav" data-offset="50">
@@ -47,16 +47,15 @@ body {  padding-top:65px;}
             <?php echo $this->getChildHtml('global_messages') ?>
             <?php echo $this->getChildHtml('content') ?>
             <?php $currentUrl = $this->helper('core/url')->getCurrentUrl();?>
-            <?php $loginPattern = '/customer/account/login/';?>
-    <?php if (!preg_match($loginPattern, $currentUrl)):?>
-            <div class="well span10 align-center">
-                <img src="<?php echo $this->getSkinUrl()?>images/featured_on_long.png"  alt="" />
-            </div>
-    <?php endif;?>
+            <?php $loginPattern = '/customer/account/create/';?>
+            <?php if (preg_match($loginPattern, $currentUrl)):?>
+                    <div class="well span10 align-center">
+                        <img src="<?php echo $this->getSkinUrl()?>images/featured_on_long.png"  alt="" />
+                    </div>
+            <?php endif;?>
         <?php echo $this->getChildHtml('footer') ?>
         <?php echo $this->getChildHtml('before_body_end') ?>
 </div>
-
 <?php echo $this->getAbsoluteFooter() ?>
 </body>
 </html>

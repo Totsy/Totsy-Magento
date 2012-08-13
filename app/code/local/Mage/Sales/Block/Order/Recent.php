@@ -38,7 +38,6 @@ class Mage_Sales_Block_Order_Recent extends Mage_Core_Block_Template
     public function __construct()
     {
         parent::__construct();
-        //TODO: add full name logic
         $orders = Mage::getResourceModel('sales/order_collection')
             ->addAttributeToSelect('*')
             ->joinAttribute('shipping_firstname', 'order_address/firstname', 'shipping_address_id', null, 'left')

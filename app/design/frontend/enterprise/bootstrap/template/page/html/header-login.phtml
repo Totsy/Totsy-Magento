@@ -27,6 +27,46 @@
  * @var Mage_Page_Block_Html_Header $this
  */
 ?>
+<?php $currentUrl = $this->helper('core/url')->getCurrentUrl();?>
+<?php $createPattern = '/create/';?>
+<?php $loginPattern = '/login/';?>
+<?php $forgetpasswordPattern = '/forgotpassword/';?>
+<?php if (preg_match($createPattern, $currentUrl)):?>
+<header class="navbar navbar-fixed-top">
+    <!-- begin masthead -->
+    <div id="masthead">
+        <div class="container row">
+            <h1 id="logo" class="span2"><a href="<?php
+            echo $this->getUrl( 'event/?ref=logo' );
+            ?>" title="<?php
+            echo $this->getLogoAlt();
+            ?>"><img src="<?php
+            echo $this->getLogoSrc();
+            ?>" alt="<?php
+            echo $this->getLogoAlt();
+            ?>" width="85px" /></a></h1>
+            <div class="span7 offset3">
+                <p>Up to 90% off retail for mom, baby, and child.</p>
+                <p><a title="Register a Totsy account" class="btn" href="<?php echo $this->getBaseUrl()?>customer/account/create/"><strong>Sign Up</strong></a>
+                </p>
+            </div>
+        </div>
+    </div><!--/#masthead -->
+    <!-- begin nav -->
+    <nav>
+        <div class="container row">
+            
+            <div class="cta span2 offset2">
+            <!--<a class="cta-link" href="<?php echo $this -> getBaseUrl();?>invitation">INVITE FRIENDS <strong>GET A <em>$15</em> CREDIT</strong></a><?php echo $this->getAdditionalHtml() ?>
+-->
+            </div>
+        </div>
+    </nav>
+</header><!-- /.navbar -->
+<?php endif;?>
+
+<div id="sociable_recent_activity_container"></div>
+
 <div class="login-border-top">
     <div class="header-container">
         <div class="header">
@@ -40,7 +80,6 @@
             <h1 class="logo"><img src="<?php echo $this->getSkinUrl() ?>images/logoN.png" alt="<?php echo $this->getLogoAlt() ?>" /></h1>
             <?php else:?>
             <a href="<?php echo $this->getBaseUrl()?>"><h1 class="logo"><img src="<?php echo $this->getSkinUrl() ?>images/logoN.png" alt="<?php echo $this->getLogoAlt() ?>" /></h1></a>
-            https://www.totsy.com/skin/frontend/enterprise/harapartners/images/logoN.png
             <div id="publicLogin">
                 <p class="signup group">
                 <strong><em>Up to 90% off retail</em> for mom, baby, and child.</strong>
