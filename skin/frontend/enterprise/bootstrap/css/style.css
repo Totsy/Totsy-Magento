@@ -24,6 +24,23 @@ a:hover{color:#ed1c25;text-decoration:underline;}
 .alpha { margin-left: 0 }
 .omega { margin-right: 0 }
 .clear { clear:both; }
+/* Alignment classes */
+.align-center {
+  text-align: center;
+}
+
+.align-right {
+  text-align: right;
+}
+
+/* Ellipsis classes for truncating long titles */
+.ellipsis {
+    white-space:nowrap;
+    overflow:hidden;
+}
+.ellipsis:after {
+    content:'...';
+}
 /* #myCarousel { margin-top:20px; } */
 #toTop {
     background-color: #EB132C;
@@ -46,7 +63,12 @@ a:hover{color:#ed1c25;text-decoration:underline;}
     width: auto;
     z-index: 999;
 }
-
+.carousel-inner {
+  min-height: 300px;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+}
 /**
  @Diagnostics
  */
