@@ -58,8 +58,10 @@ input, textarea{
 </style>
 
 <script type="text/javascript">
-    var optionsPrice = new Product.OptionsPrice(<?php echo $this->getJsonConfig() ?>);
+    var optionsPrice = new Product.OptionsPrice(<?php echo $this->getJsonConfig() ?>
+    );
 </script>
+<div id="messages_product_view"><?php echo $this->getMessagesBlock()->toHtml() ?></div>
 <section id="pageheader" class="jumbotron subhead">
     <div class="page-header subnav">
         <h2>Today's Sales <span> / </span><a href="<?php echo $_category->getUrl();?>"><?php echo $_helper->categoryAttribute($_category, $_category->getName(), 'name') ?></a> <small class="pull-right"><?php $endcount_utc = strtotime($_category->getEventEndDate());
@@ -104,15 +106,16 @@ $endcount_lc = date("F j, Y, G:i:s", $endcount_utc); ?>
 </div>
 <!-- <div class="well"> -->
 <div class="span2">
-    <h2>Options</h2>
-        
+    <div class="page-header">
+        <h2>Options</h2>
+    </div>
         <form action="<?php echo $this->getSubmitUrl($_product) ?>" method="post" id="product_addtocart_form" <?php if($_product->getOptions()): ?> enctype="multipart/form-data" <?php endif; ?> >
             <div class="no-display">
                 <input type="hidden" name="product" value="<?php echo $_product->getId() ?>" />
                 <input type="hidden" name="related_product" id="related-products-field" value="" />
             </div>
     <div id="product-main-info">
-        <p class="product-ids"><?php echo $this->__('SKU# %s', $this->htmlEscape($_product->getSku())); ?></p>
+        <p class="product-ids"><?php //echo $this->__('SKU# %s', $this->htmlEscape($_product->getSku())); ?></p>
         <?php //echo $this->getReviewsSummaryHtml($_product, false, true)?>
         <?php echo $this->getChildHtml('alert_urls') ?>
         <?php if($today <= $event_end_date):  ?>
@@ -222,7 +225,7 @@ $endcount_lc = date("F j, Y, G:i:s", $endcount_utc); ?>
             }
 
             if (button && button != 'undefined') {
-                button.disabled = true;
+                //button.disabled = true;
             }
         }
     }.bind(productAddToCartForm);

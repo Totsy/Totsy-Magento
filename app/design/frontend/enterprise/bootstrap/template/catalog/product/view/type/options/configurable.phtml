@@ -40,10 +40,10 @@ else{
 }
 ?>
 <?php if ($_product->isSaleable() && count($_attributes)):?>
-    <dl>
+    <div>
     <?php $counter = 0;?>
     <?php foreach ($_attributes as $_attribute): ?>
-        <dd<?php if ($_attribute->decoratedIsLast) {?> class="last"<?php }?>>
+        <div <?php if ($_attribute->decoratedIsLast) {?> class="last"<?php }?>>
             <div class="input-box">
             	<span style="-moz-user-select: none;" id="activechange<?php echo $counter;?>">
             	    <?php echo $this->__('Please Select ').$_attribute->getLabel() ?></span>
@@ -51,7 +51,7 @@ else{
                     <option><?php echo $this->__('Please Select ').$_attribute->getLabel() ?></option>
                 </select>
             </div>
-        </dd>
+        </div>
         
         <!--
         <script type="text/javascript">
@@ -75,9 +75,6 @@ $('#message').text("");
 				var selector_span_<?php echo $counter;?> = "#activechange<?php echo $counter;?>";
 				var selector_select_<?php echo $counter;?> = "#attribute<?php echo $_attribute->getAttributeId()?>";
 				jQuery(selector_select_<?php echo $counter;?>).change(function(){
-						var temphtml = jQuery(this).html();
-						var test = jQuery(this).find("option:selected").text();
-						jQuery(selector_span_<?php echo $counter;?>).html(test);
 						if ( jQuery(this).val() == ''){
 							jQuery("button.btn-cart").css("background-color","<?php echo $buttonColor['deactive']?>");
 						} else {
@@ -102,7 +99,7 @@ $('#message').text("");
         </script>
         <?php $counter++; ?>
     <?php endforeach; ?>
-    </dl>
+    </div>
     <script type="text/javascript">
         var spConfig = new Product.Config(<?php echo $this->getJsonConfig() ?>);
     </script>

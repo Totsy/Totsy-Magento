@@ -28,8 +28,8 @@
 <?php $_product = $this->getProduct() ?>
 
 <?php if ($_product->isAvailable()): ?>
-    <p class="availability in-stock"><?php echo $this->__('Availability:') ?> <span><?php echo $this->__('In stock') ?></span></p>
-    <p class="totsy-price"><?php echo $this->__('Totsy Price') ?></p>
+    <p class="availability in-stock"><?php //echo $this->__('Availability:') ?> <span><?php //echo $this->__('In stock') ?></span></p>
+    <!-- <p class="totsy-price"><?php //echo $this->__('Totsy Price') ?></p> -->
 <?php else: ?>
     <p class="availability out-of-stock"><?php echo $this->__('Availability:') ?> <span><?php echo $this->__('Out of stock') ?></span></p>
 <?php endif; ?>

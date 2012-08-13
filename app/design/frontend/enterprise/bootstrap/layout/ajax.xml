@@ -1,16 +1,16 @@
 <?xml version="1.0"?>
 <layout version="0.1.0">
-
     <ajax_checkout_cart_add>
         <block type="core/template" name="header.cart" as="headerCart" template="page/html/header_cart_ajax.phtml">
             <block type="customertracking/headermsg" name="customertracking.headermsg" template="customertracking/headermsg.phtml" />
-
             <block type="checkout/cart_sidebar" name="cart_sidebar" as="topCart" template="checkout/cart/cartheader.phtml">
                 <action method="addItemRender"><type>simple</type><block>checkout/cart_item_renderer</block><template>checkout/cart/sidebar/default.phtml</template></action>
                 <action method="addItemRender"><type>grouped</type><block>checkout/cart_item_renderer_grouped</block><template>checkout/cart/sidebar/default.phtml</template></action>
                 <action method="addItemRender"><type>configurable</type><block>checkout/cart_item_renderer_configurable</block><template>checkout/cart/sidebar/default.phtml</template></action>
                 <block type="core/text_list" name="topCart.extra_actions" as="extra_actions" translate="label" module="checkout">
                     <label>My Cart Extra Actions</label>
+                </block>
+                <block type="checkout/cart_sidebar" name="mini_cart" as="minicart" template="checkout/cart/minicart.phtml">
                 </block>
             </block>
         </block>
@@ -20,7 +20,6 @@
                 <label>Alert Urls</label>
             </block>
             <block type="catalog/product_view" name="product.tierprices" as="tierprices" template="catalog/product/view/tierprices.phtml"/>
-
             <block type="catalog/product_list_upsell" name="product.info.upsell" as="upsell_products" template="catalog/product/list/upsell.phtml">
                 <action method="setColumnCount"><columns>4</columns></action>
                 <action method="setItemLimit"><type>upsell</type><limit>4</limit></action>

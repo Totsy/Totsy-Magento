@@ -27,7 +27,7 @@
 						<action method="addItemRender"><type>default</type><block>checkout/cart_item_renderer</block><template>hpcheckout/review/item.phtml</template></action>
 						<action method="addItemRender"><type>grouped</type><block>checkout/cart_item_renderer_grouped</block><template>hpcheckout/review/item.phtml</template></action>
 						<action method="addItemRender"><type>configurable</type><block>checkout/cart_item_renderer_configurable</block><template>hpcheckout/review/item.phtml</template></action>
-						<block type="checkout/cart_totals" name="hpcheckout.review.totals" as="totals" template="hpcheckout/review/totals.phtml"/>
+                            <block type="checkout/cart_totals" name="hpcheckout.review.totals" as="totals" template="hpcheckout/review/totals.phtml"/>
 						<block type="core/template" name="hpcheckout.review.button" as="button" template="hpcheckout/review/button.phtml"/>
 					</block>
 				</block>

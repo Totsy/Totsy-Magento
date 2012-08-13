@@ -222,7 +222,7 @@ html.test .container .row {outline:1px dotted green;}
  
 /* Minicart */
 #usercart {position: relative;} 
-#topCartContent {position: absolute; top: 100%; left: 0;}
+#topCartContent {position: absolute; top: 100%; left: -170px; width: 333px! important}
 
 /**
  @My_Account

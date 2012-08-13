@@ -560,7 +560,7 @@ button.btn.btn-mini,input[type="submit"].btn.btn-mini{*padding-top:1px;*padding-
 .navbar .nav.pull-right{float:right;}
 .navbar .nav>li{display:block;float:left;}
 .navbar .nav>li>a{float:none;padding:9px 10px 11px;line-height:19px;color:#999999;text-decoration:none;text-shadow:0 -1px 0 rgba(0, 0, 0, 0.25);}
-.navbar .btn{display:inline-block;padding:4px 10px 4px;margin:5px 5px 6px;line-height:18px;}
+.navbar .btn{display:inline-block;padding:4px 10px 4px;margin:5px 0px 0px;line-height:18px;}
 .navbar .btn-group{margin:0;padding:5px 5px 6px;}
 .navbar .nav>li>a:hover{background-color:transparent;color:#ffffff;text-decoration:none;}
 .navbar .nav .active>a,.navbar .nav .active>a:hover{color:#ffffff;text-decoration:none;background-color:#222222;}

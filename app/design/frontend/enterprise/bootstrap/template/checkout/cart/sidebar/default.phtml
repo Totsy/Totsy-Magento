@@ -26,7 +26,7 @@
 ?>
 <?php $_item = $this->getItem() ?>
 <?php $canApplyMsrp = Mage::helper('catalog')->canApplyMsrp($_item->getProduct(), Mage_Catalog_Model_Product_Attribute_Source_Msrp_Type::TYPE_BEFORE_ORDER_CONFIRM); ?>
-<li class="item">
+<li class="item" style="height:48px !important">
     <?php if ($this->hasProductUrl()): ?>
         <a href="<?php echo $this->getProductUrl()?>" title="<?php echo $this->htmlEscape($this->getProductName()) ?>" class="product-image"><img src="<?php echo $this->getProductThumbnail()->resize(50)->setWatermarkSize('30x10'); ?>" alt="<?php echo $this->htmlEscape($this->getProductName()) ?>" /></a>
     <?php else: ?>
@@ -43,11 +43,12 @@
                 <?php echo $this->htmlEscape($this->getProductName()) ?>
             <?php endif; ?>
         </p>
-        <table cellpadding="0" class="table table-striped">
+        <table cellpadding="0" class="table table-condensed">
 
         <?php if ($canApplyMsrp): ?>
 
-            <tr><th><?php echo $this->__('Price'); ?></th><td><span class="map-cart-sidebar-item"><?php echo $this->__('See price before order confirmation.'); ?></span></td></tr>
+            <tr><!-- <th><?php //echo $this->__('Price'); ?></th>-->
+            <td><span class="map-cart-sidebar-item"><?php echo $this->__('See price before order confirmation.'); ?></span></td></tr>
 
         <?php else: ?>
 
@@ -156,23 +157,6 @@
                 <td><?php echo $this->getQty() ?></td>
             </tr>
         </table>
-        <?php if ($_options = $this->getOptionList()):?>
-        <div class="option-list">
-        	<ul>
-		        <?php foreach ($_options as $_option) : ?>
-		        <li>
-	                <p><?php echo $this->htmlEscape($_option['label']) ?></p>
-	                <p class="options">
-	                    <?php if (is_array($_option['value'])): ?>
-	                    	<?php echo nl2br(implode("\n", $_option['value'])) ?>
-	                    <?php else: ?>
-	                    	<?php echo $_option['value'] ?>
-	                    <?php endif; ?>
-	                </p>              
-                </li>
-                <?php endforeach; ?>
-        	</ul>
-        </div>
-        <?php endif; ?>
+
     </div>
 </li>

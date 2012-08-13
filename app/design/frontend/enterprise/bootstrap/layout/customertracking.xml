@@ -40,6 +40,8 @@ Default layout, loads most of the pages
                 <block type="core/text_list" name="topCart.extra_actions" as="extra_actions" translate="label" module="checkout">
                     <label>My Cart Extra Actions</label>
                 </block>
+                <block type="checkout/cart_sidebar" name="mini_cart" as="minicart" template="checkout/cart/minicart.phtml">
+                </block>
             </block>
         </block>
     </customertracking_headermsg_ajax>
