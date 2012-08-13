@@ -83,21 +83,20 @@
     
     <div class="inner-wrapper"><?php // extra div to smooth slideUp and slideDown ?>
     <?php if ($_cartQty > 0 && !empty($_itemsArray)):?>
-    <!--
     <div class="timer-control-box">
         <div class="shipping-date">
-        <span>Estimated Ship Date:</span>
-        <span id="cart-shipping-date-header"><?php //echo date('Y-m-d', Mage::helper('sales/order')->calculateEstimatedShipDate($quote)) ?></span>
+        <!-- <span>Estimated Ship Date:</span> -->
+        <span id="cart-shipping-date-header" style="display:none"><?php echo date('Y-m-d', Mage::helper('sales/order')->calculateEstimatedShipDate($quote)) ?></span>
         </div>
         <div class="count-down-timer">
-        <span>Item Reserved For:</span>
-        <span id="cart-timer-header"></span>
+        <!-- <span>Item Reserved For:</span> --> 
+        <span id="cart-timer-header" style="display:none"></span>
         <script type="text/javascript">
             jQuery(document).ready(function() {
             
             var dateObj = new Date();
-            var countDownToTime = <?php //echo $endcount_lc_header?>;
-            var serverTime = <?php //echo $serverTime?>;
+            var countDownToTime = <?php echo $endcount_lc_header?>;
+            var serverTime = <?php echo $serverTime?>;
             var localTime = new Date().getTime();
             countDownToTime = (countDownToTime + (localTime - serverTime));
             dateObj.setTime(countDownToTime);
@@ -120,9 +119,8 @@
                 });
             });
         </script>
-        </div>
+       <!--  </div> -->
     </div>
-    -->
     <?php  endif;?>
     
     <div id="items-info-wrapper">
@@ -178,7 +176,7 @@
     </div>
 </div>
     <script type="text/javascript">
-    // Enterprise.TopCart.initialize('topCartContent');
+    Enterprise.TopCart.initialize('topCartContent');
     // Below can be used to show minicart after item added
     // Enterprise.TopCart.showCart(7);
     jQuery(document).ready( function() {
