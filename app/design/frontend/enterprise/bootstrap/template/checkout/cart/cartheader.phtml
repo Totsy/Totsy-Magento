@@ -94,18 +94,18 @@
     <?php if ($_cartQty > 0 && !empty($_itemsArray)):?>
     <div class="timer-control-box">
         <div class="shipping-date">
-        <span>Estimated Ship Date:</span>
-        <span id="cart-shipping-date-header"><?php //echo date('Y-m-d', Mage::helper('sales/order')->calculateEstimatedShipDate($quote)) ?></span>
+        <!-- <span>Estimated Ship Date:</span> -->
+        <span id="cart-shipping-date-header" style="display:none"><?php echo date('Y-m-d', Mage::helper('sales/order')->calculateEstimatedShipDate($quote)) ?></span>
         </div>
         <div class="count-down-timer">
-        <span>Item Reserved For:</span>
-        <span id="cart-timer-header"></span>
+        <!-- <span>Item Reserved For:</span> --> 
+        <span id="cart-timer-header" style="display:none"></span>
         <script type="text/javascript">
             jQuery(document).ready(function() {
             
             var dateObj = new Date();
-            var countDownToTime = <?php //echo $endcount_lc_header?>;
-            var serverTime = <?php //echo $serverTime?>;
+            var countDownToTime = <?php echo $endcount_lc_header?>;
+            var serverTime = <?php echo $serverTime?>;
             var localTime = new Date().getTime();
             countDownToTime = (countDownToTime + (localTime - serverTime));
             dateObj.setTime(countDownToTime);
@@ -128,7 +128,7 @@
                 });
             });
         </script>
-        </div>
+       <!--  </div> -->
     </div>
     <?php  endif;?>
     <div id="items-info-wrapper">
@@ -153,49 +153,60 @@
     <?php endif ?>
     <!-- end mini-cart -->
     <?php if($_cartQty && !empty($_itemsArray)): ?>
-    <p class="subtotal">
+    <div>
+    <div class="subtotal" style="float:left">
     <?php if ($this->canApplyMsrp()): ?>
     <span class="map-cart-sidebar-total"><?php echo $this->__('ORDER TOTAL WILL BE DISPLAYED BEFORE YOU SUBMIT THE ORDER'); ?></span>
     <?php else: ?>
-    <span class="label"><?php echo $this->__('Your savings: ') ?><?php echo Mage::helper('checkout')->formatPrice($_saving); ?></span>
-    <span class="label"><?php echo $this->__('Subtotal: ') ?><?php echo Mage::helper('checkout')->formatPrice($this->getSubtotal()) ?><?php if ($_subtotalInclTax = $this->getSubtotalInclTax()): ?> / <?php echo Mage::helper('checkout')->formatPrice($_subtotalInclTax) ?> <?php echo Mage::helper('tax')->getIncExcText(true) ?><?php endif; ?>
+    <span><?php echo $this->__('Subtotal: ') ?><?php echo Mage::helper('checkout')->formatPrice($this->getSubtotal()) ?>
+    <?php if ($_subtotalInclTax = $this->getSubtotalInclTax()): ?> / <?php echo Mage::helper('checkout')->formatPrice($_subtotalInclTax) ?> <?php echo Mage::helper('tax')->getIncExcText(true) ?><?php endif; ?>
     <?php endif; ?>
-    </p>
-    <div class="actions">
-    <?php echo $this->getChildHtml('extra_actions') ?>
-    <a class="btn pull-left" href="<?php echo $this->getUrl('/event/'); ?>"><?php echo $this->__('Continue Shopping') ?></a>
+    </span>
     </div>
-    <button class="button btn btn-primary pull-right" type="button" onclick="setLocation('<?php echo $this->getUrl('checkout/cart') ?>')"><?php echo $this->__('Checkout') ?></button>
+    <div style="float:right">
+        <a class="btn checkout btn-primary" title="Checkout" href="http://ben.totsy.com/checkout/cart/"><strong>Checkout</strong></a>
+    </div>
+    </div>
+    </div>
+</div>
+    <!--
+    <div class="actions">
+    <?php //echo $this->getChildHtml('extra_actions') ?>
+    <a class="btn pull-left" href="<?php //echo $this->getUrl('/event/'); ?>"><?php //echo $this->__('Continue Shopping') ?></a>
+    </div>
+  
+    <button class="button btn btn-primary pull-right" type="button" onclick="setLocation('<?php //echo $this->getUrl('checkout/cart') ?>')"><?php //echo $this->__('Checkout') ?></button>
     <?php endif ?>
     </div>
+      -->
     <div id="items-timer-passed" style="display:none;"><p class="cart-empty"><?php echo $this->__('You have no items in your shopping cart.')?></p>
     </div>
     </div>
 </div>
     <script type="text/javascript">
-    // Enterprise.TopCart.initialize('topCartContent');
+    Enterprise.TopCart.initialize('topCartContent');
     // Below can be used to show minicart after item added
     // Enterprise.TopCart.showCart(7);
     jQuery(document).ready( function() {
         
         topCartContent = jQuery("#topCartContent");
-        //window.setTimeout('hideTopCart()', 5000); // this is called each page load, needs to refined to just be called when mini-cart is initialized after adding to car - not each page load
+        window.setTimeout('hideTopCart()', 5000); // this is called each page load, needs to refined to just be called when mini-cart is initialized after adding to car - not each page load
         jQuery(".top-cart").hover(
         function(){
             topCartContent.stop().fadeTo(200,1);
-        //window.setTimeout( 'hideTopCart()', 8000 ); // leave the mini-cart open when being hovered, no timeout
+        window.setTimeout( 'hideTopCart()', 8000 ); // leave the mini-cart open when being hovered, no timeout
         },
         function(){
-            //topCartContent.stop().fadeTo(500,0).hide();
+            topCartContent.stop().fadeTo(500,0).hide();
         }
     );
     jQuery(".hpcheckout-checkout-index .top-cart").hover(
         function(){
-            //topCartContent.hide();
+            topCartContent.hide();
         }
         );
         jQuery("#items-info-wrapper .block-subtitle .close-btn").click(function(){
-                //topCartContent.hide();
+                topCartContent.hide();
             });
     });
     </script>
