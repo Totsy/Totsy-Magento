@@ -70,7 +70,7 @@ class Harapartners_Fulfillmentfactory_Model_Mysql4_Itemqueue_Collection extends 
                 Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_PENDING,
                 Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_PARTIAL
             )))
-            ->setOrder('created_at', 'DESC');
+            ->setOrder('itemqueue_id', 'ASC');
 
         return $collection;
     }
