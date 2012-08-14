@@ -259,9 +259,21 @@ header nav .cta strong em {color:#d84643; font-style:normal;}
 #usercart {
     position: relative;
     float:right;
+}
+#usercart-block-title[data-miniCart*="active"] {
+    border:1px dotted red;
 } 
 /* Minicart */
-#topCartContent {position: absolute; top: 100%; left: -170px; width: 333px! important}
+#topCartContent {
+    position: absolute; top: 100%; right:0; 
+    width:334px;
+    background:#fff;
+    border:1px solid #ccc; /* old browser fallback */
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    box-shadow:0 5px 5px rgba(0, 0, 0, 0.10);
+}
 
 /* checkout btn in non-mini-cart header */
 #header-checkoutBtn {
