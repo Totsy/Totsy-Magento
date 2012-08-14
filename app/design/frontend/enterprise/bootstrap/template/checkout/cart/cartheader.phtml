@@ -66,7 +66,7 @@
         </ul>
     </div>
     <?php else:?>
-    <div id="usercart-block-title" class="block-title<?php if(!$_cartQty) { echo (' no-items'); } ?>">
+    <div id="usercart-block-title" class="block-title<?php if(!$_cartQty) { echo (' no-items'); } ?>" data-minicart="active">
     <?php if ($_cartQty > 0 && !empty($_itemsArray)):?>
         <strong id="cartHeader"><?php echo $_myCart ?><span class="dropdown-toggle"><?php echo ' | '.Mage::helper('checkout')->formatPrice($this->getSubtotal()) ?><?php if ($_subtotalInclTax = $this->getSubtotalInclTax()): ?> / <?php echo ' | '.Mage::helper('checkout')->formatPrice($_subtotalInclTax) ?> <?php echo ' | '.Mage::helper('tax')->getIncExcText(true) ?><?php endif; ?></span></strong>
     <?php else :?>
