@@ -282,6 +282,16 @@ header nav .cta strong em {color:#d84643; font-style:normal;}
 #header-checkoutBtn a { /* not styling this specifically, for now - see generic .btn.checkout styles */
 }
 
+#hpcheckout-billing-wrapper label{
+    float:left;
+    margin:0px 10px 0px 0px;
+}
+
+#hpcheckout-shipping-wrapper label{
+    float:left;
+    margin:0px 10px 0px 0px;
+}
+
 /**
  @My_Account
  */
