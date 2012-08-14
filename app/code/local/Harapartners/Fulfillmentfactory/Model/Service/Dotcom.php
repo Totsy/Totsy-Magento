@@ -134,14 +134,14 @@ class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
                     'fulfillment.log'
                 );
 
-                // there is an insufficient quantity available to fulfill this
-                // item
+            // there is an insufficient quantity available to fulfill this item
             } else {
                 $qtyFulfilled = $qtyAvailable;
                 $qtyAvailable = 0;
-                $item->setStatus(
-                    Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_PARTIAL
-                );
+                $status = (0 === $item->getFulfillCount())
+                    ? Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_PENDING
+                    : Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_PARTIAL;
+                $item->setStatus($status);
 
                 Mage::log(
                     sprintf(
