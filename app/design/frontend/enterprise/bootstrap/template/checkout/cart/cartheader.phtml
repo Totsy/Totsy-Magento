@@ -49,9 +49,11 @@
     $_mySaving = $this->__('Your savings: %s', Mage::helper('checkout')->formatPrice($_saving));
 ?>
     <?php if ($_cartQty > 0 && !empty($_itemsArray)): ?>
+<!--
     <div class="badge badge-inverse">
         <?php $_myCart = $this->__('%s Items', '<span>' . $_cartQty . '</span>') ?>
     </div>
+-->
     <?php else: ?>
     <?php $_myCart = $this->__('%s Items', '<span>0</span>') ?>
     <?php endif ?>
@@ -66,20 +68,27 @@
     <?php else:?>
     <div id="usercart-block-title" class="block-title<?php if(!$_cartQty) { echo (' no-items'); } ?>">
     <?php if ($_cartQty > 0 && !empty($_itemsArray)):?>
-        <strong id="cartHeader"><?php echo $_myCart ?><span><?php echo ' | '.Mage::helper('checkout')->formatPrice($this->getSubtotal()) ?><?php if ($_subtotalInclTax = $this->getSubtotalInclTax()): ?> / <?php echo ' | '.Mage::helper('checkout')->formatPrice($_subtotalInclTax) ?> <?php echo ' | '.Mage::helper('tax')->getIncExcText(true) ?><?php endif; ?></span></strong>
+        <strong id="cartHeader"><?php echo $_myCart ?><span class="dropdown-toggle"><?php echo ' | '.Mage::helper('checkout')->formatPrice($this->getSubtotal()) ?><?php if ($_subtotalInclTax = $this->getSubtotalInclTax()): ?> / <?php echo ' | '.Mage::helper('checkout')->formatPrice($_subtotalInclTax) ?> <?php echo ' | '.Mage::helper('tax')->getIncExcText(true) ?><?php endif; ?></span></strong>
     <?php else :?>
-        <strong id="cartHeader"><span class="badge badge-inverse">0 Items = $0.00</span></strong>
+        <strong id="cartHeader"><span class="dropdown-toggle">0 Items = $0.00</span></strong>
     <?php endif;?>
     </div>
+    
+    <?php
+        // @TODO: #checkoutcart-block-title block is assumed redundant, not needed
+        // update display conditional logic rather than commenting out html ?>
+<!-- 
     <div id="checkoutcart-block-title" class="block-title<?php if(!$_cartQty) { echo (' no-items'); } ?>">
     <?php if ($_cartQty > 0 && !empty($_itemsArray)):?>
         <strong id="cartHeader"><?php echo $_mySaving ?><span><?php echo ' | '.Mage::helper('checkout')->formatPrice($this->getSubtotal()) ?><?php if ($_subtotalInclTax = $this->getSubtotalInclTax()): ?> / <?php echo ' | '.Mage::helper('checkout')->formatPrice($_subtotalInclTax) ?> <?php echo ' | '.Mage::helper('tax')->getIncExcText(true) ?><?php endif; ?></span></strong>
-    <?php //else :?>
+    <?php else :?>
         <strong id="cartHeader"><span class="badge badge-inverse">Your savings:</span> $0.00<span> | <span class='price'>$0.00</span></span></strong>
     <?php endif;?>
     </div>
+-->
+    
     <!-- start mini-cart -->
-<div id="topCartContent" class="block-content well alpha span3" style="<?php if ( !!$_updateFlag && $_updateFlag ) {echo "display:block"; $checkoutSession->setCartUpdatedFlag(false);} else echo "display:none";?>">
+<div id="topCartContent" class="block-content well" style="<?php if ( !!$_updateFlag && $_updateFlag ) {echo "display:block"; $checkoutSession->setCartUpdatedFlag(false);} else echo "display:none";?>">
     
     <div class="inner-wrapper"><?php // extra div to smooth slideUp and slideDown ?>
     <?php if ($_cartQty > 0 && !empty($_itemsArray)):?>
@@ -122,7 +131,6 @@
        <!--  </div> -->
     </div>
     <?php  endif;?>
-    
     <div id="items-info-wrapper">
         <?php $_items = $this->getItems(); //change from getRecentItems()?>
         <?php if( count($_items) && !empty($_itemsArray) ): ?>
