@@ -40,17 +40,17 @@ if ( !Mage::getSingleton('checkout/session')->hasData('countdown_timer') ) {
             <?php foreach ($_options as $_option) : ?>
             <?php $_formatedOptionValue = $this->getFormatedOptionValue($_option) ?> 
             <li>
-            	<label><?php echo $this->htmlEscape($_option['label']) ?> :</label>
-	            <div <?php if (isset($_formatedOptionValue['full_view'])): ?> class="truncated"<?php endif; ?>><?php echo $_formatedOptionValue['value'] ?>
+            	<span><?php echo $this->htmlEscape($_option['label']) ?> :</span>
+	            <span <?php if (isset($_formatedOptionValue['full_view'])): ?> class="truncated"<?php endif; ?>><?php echo $_formatedOptionValue['value'] ?>
 	                <?php if (isset($_formatedOptionValue['full_view'])): ?>
 	                <div class="truncated_full_value">
 	                    <div class="item-options">
-	                        <label><?php echo $this->htmlEscape($_option['label']) ?></label>
-	                        <div><?php echo $_formatedOptionValue['full_view'] ?></div>
+	                        <span><?php echo $this->htmlEscape($_option['label']) ?></span>
+	                        <span><?php echo $_formatedOptionValue['full_view'] ?></span>
 	                    </div>
 	                </div>
 	                <?php endif; ?>
-	            </div>
+	            </span>
             </li>          
             <?php endforeach; ?>
             </ul>
