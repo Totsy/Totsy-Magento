@@ -514,20 +514,27 @@ XML;
             $order->setStatus(Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_PROCESSING_FULFILLMENT)
                   ->save();
 
-            $response = Mage::helper('fulfillmentfactory/dotcom')->submitOrders($xml);
-            $responseArray[] = $response;
+            try {
+                $response = Mage::helper('fulfillmentfactory/dotcom')->submitOrders($xml);
+                $responseArray[] = $response;
 
-            $error = $response->order_error;
-            if(!!$error) {
+                $error = $response->order_error;
+                if ($error) {
+                    $order->setStatus(Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_FULFILLMENT_FAILED)
+                        ->save();
+
+                    Mage::helper('fulfillmentfactory/log')->errorLogWithOrder(
+                        $error->error_description,
+                        $order->getId()
+                    );
+                } else {
+                    $successCount++;
+                }
+            } catch(Exception $e) {
                 $order->setStatus(Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_FULFILLMENT_FAILED)
-                      ->save();
+                    ->save();
 
-                $message = 'Error response from DOTcom: ' . $error->error_description;
-                Mage::helper('fulfillmentfactory/log')->errorLogWithOrder($message, $order->getId());
-                //throw new Exception($message);
-            }
-            else {
-                $successCount++;
+                Mage::helper('fulfillmentfactory/log')->errorLogWithOrder($e->getMessage(), $order->getId());
             }
         }
 
