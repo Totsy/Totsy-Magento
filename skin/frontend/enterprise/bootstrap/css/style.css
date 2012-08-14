@@ -260,10 +260,13 @@ header nav .cta strong em {color:#d84643; font-style:normal;}
     position: relative;
     float:right;
 }
+#usercart-block-title {
+    cursor: pointer;
+}
 #usercart-block-title[data-minicart="active"] {
     position: relative; z-index: 100;
     background:#fff;
-    border:1px dotted red;
+    outline:1px dotted red; /* temp */
 } 
 /* Minicart */
 #topCartContent {
