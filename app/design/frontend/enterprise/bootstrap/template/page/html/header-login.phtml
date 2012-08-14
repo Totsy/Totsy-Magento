@@ -31,7 +31,7 @@
 <?php $createPattern = '/create/';?>
 <?php $loginPattern = '/login/';?>
 <?php $forgetpasswordPattern = '/forgotpassword/';?>
-<?php if (preg_match($createPattern, $currentUrl)):?>
+<?php if (preg_match($createPattern, $loginPattern, $forgetpasswordPattern, $currentUrl)):?>
 <header class="navbar navbar-fixed-top">
     <!-- begin masthead -->
     <div id="masthead">
