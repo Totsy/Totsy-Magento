@@ -58,11 +58,9 @@
             <input type="text" name="email" id="email_address" value="<?php echo $this->htmlEscape($this->getFormData()->getEmail()) ?>" title="<?php echo $this->__('Email Address') ?>" class="input-text validate-email required-entry span4" />
             <label for="password" class="required"><em>*</em> <?php echo $this->__('Password') ?></label>
             <input type="password" name="password" id="password" title="<?php echo $this->__('Password') ?>" class="input-text required-entry strong-validate-password span4" />
-            <!-- 
             <label for="confirmation" class="required"><em>*</em> <?php echo $this->__('Confirm Password') ?></label>
             
             <input type="password" name="confirmation" title="<?php echo $this->__('Confirm Password') ?>" id="confirmation" class="input-text required-entry validate-cpassword span4" />
-            -->
             <?php echo $this->getChildHtml('persistent.remember.me'); ?>
             <input type="hidden" checked name="is_subscribed" title="<?php echo $this->__('Sign Up for Newsletter') ?>" value="1" id="is_subscribed"<?php if($this->getFormData()->getIsSubscribed()): ?> checked="checked"<?php endif; ?> class="checkbox" />
             <?php $_dob = $this->getLayout()->createBlock('customer/widget_dob') ?>

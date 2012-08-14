@@ -254,7 +254,7 @@ header nav .cta strong em {color:#d84643; font-style:normal;}
  */
 #userUtils {margin-bottom: 0;}
 #userUtils > li {float: left; width:50%;} 
-
+ 
 /* header cart */
 #usercart {
     position: relative;
@@ -268,6 +268,7 @@ header nav .cta strong em {color:#d84643; font-style:normal;}
     background:#fff;
     outline:1px dotted red; /* temp */
 } 
+
 /* Minicart */
 #topCartContent {
     position: absolute; top: 100%; right:0; z-index: 10;
@@ -287,6 +288,16 @@ header nav .cta strong em {color:#d84643; font-style:normal;}
     float: right; clear: right;
 }
 #header-checkoutBtn a { /* not styling this specifically, for now - see generic .btn.checkout styles */
+}
+
+#hpcheckout-billing-wrapper label{
+    float:left;
+    margin:0px 10px 0px 0px;
+}
+
+#hpcheckout-shipping-wrapper label{
+    float:left;
+    margin:0px 10px 0px 0px;
 }
 
 /**

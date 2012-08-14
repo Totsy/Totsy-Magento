@@ -1,7 +1,7 @@
 <form id="hpcheckout-billing-form" action="">
     <ul class="row">
 	    <li id="billing-new-address-form">
-	        <ul class="alert alpha">
+	        <ul class="alpha">
 	            <li class="fields">
 	            	<div class="field half-of-half">
 	            		<label for="billing:firstname" class="required"><em>*</em><?php echo $this->__('First Name') ?></label>
@@ -16,7 +16,7 @@
 	            <input type="hidden" name="billing[selected]" id="billing:selected" />
 	            <!-- li class="fields">
 	            	<div class="field half-of-half">
-		                <label for="billing:email" class="required"><em>*</em><?php echo $this->__('Email Address') ?></label>
+		                <span for="billing:email" class="required"><em>*</em><?php echo $this->__('Email Address') ?></span>
 		                <input type="text" name="billing[email]" id="billing:email" title="<?php echo $this->__('Email Address') ?>" class="input-text validate-email required-entry" value="<?php echo $this->htmlEscape($this->getAddress()->getEmail()) ?>" />
 		            </div>
 	            </li-->
@@ -45,7 +45,6 @@
 	                <div class="field half-of-half">
 	                    <label for="billing:region_id" class="required"><em>*</em><?php echo $this->__('State') ?></label>
 						<div class="totsy-selective-input-box">
-							<span>State</span>
 							<select id="billing:region_id" name="billing[region_id]" title="<?php echo $this->__('State') ?>" class="validate-select" style="display:none;" >
 								<option value=""><?php echo $this->__('Please select state') ?></option>
 							</select>
@@ -66,7 +65,6 @@
 	                <div class="field half-of-half">
                         <label for="billing:country_id" class="required"><em>*</em><?php echo $this->__('Country') ?></label>
 						<div class="totsy-selective-input-box totsy-selective-input-box-billing-country">
-							<span>United States</span>
 							<?php echo $this->getCountryHtmlSelect('billing') ?>
 						</div>
                     </div>

@@ -57,10 +57,10 @@
 			</div>
 		<?php endif ?>
 		<div class="address">
-			<div id="hpcheckout-billing-wrapper" class="well">
+			<div id="hpcheckout-billing-wrapper" class="span5 pull-left">
 				<div class="checkout-headline">
-				<h4 class="legend"><?php echo $this->__('Billing Address') ?></h4>
-				<hr />
+				    <h4 class="legend"><?php echo $this->__('Billing Address') ?></h4>
+				    <hr />
 					<?php if ($this->customerHasAddresses()): ?>
 					    <div class="billing-address-select totsy-selective-input-box">
 							<span>New Address</span>
@@ -71,9 +71,10 @@
 				<div class="checkout-content"><?php echo $this->getChildHtml( 'billing' ) ?></div>
 			</div>
 			<?php if( ! $this->getQuote()->isVirtual() ): ?>
-				<div id="hpcheckout-shipping-wrapper" class="well">
+				<div id="hpcheckout-shipping-wrapper" class="span5">
 					<div class="checkout-headline">
-						<div class="shipping-title sub-title checkout-sub-title"><?php echo $this->__('Shipping Address') ?></div>
+						<h4 class="legend"><?php echo $this->__('Shipping Address') ?></h4>
+						<hr />
 						<?php if ($this->customerHasAddresses()): ?>
 						    <div class="shipping-address-select totsy-selective-input-box">
 								<span>New Address</span>
@@ -85,7 +86,8 @@
 				</div>
 			<?php endif ?>
 		</div>
-		<?php if( false && ! $this->getQuote()->isVirtual() ): ?>
+		<div style="clear:both"></div>
+				<?php if( false && ! $this->getQuote()->isVirtual() ): ?>
 			<div id="hpcheckout-shipping-method-wrapper" class="well">
 				<div class="checkout-sub-title sub-title">Shipping Method</div>
 				<div class="checkout-content"><?php echo $this->getChildHtml( 'shipping_method' ) ?></div>
