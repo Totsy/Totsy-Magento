@@ -265,7 +265,7 @@ class Harapartners_SpeedTax_Model_Speedtax_Calculate extends Harapartners_SpeedT
         try{
             $cacheKey = md5(serialize($this->_invoice));
             $speedtaxResults = $this->_getCheckoutSession()->getData( 'speedtax_results' );
-            if(array_key_exists($cacheKey, $speedtaxResults)){
+            if(is_array($speedtaxResults) && array_key_exists($cacheKey, $speedtaxResults)){
 //                $cachedResult = unserialize(gzinflate($speedtaxResults[$cacheKey]));
                 $cachedResult = unserialize($speedtaxResults[$cacheKey]);
                 if(is_object($cachedResult) && isset($cachedResult->resultType)){
