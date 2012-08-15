@@ -65,7 +65,7 @@ class Harapartners_Fulfillmentfactory_Model_Itemqueue
         
         if(($qtyOrdered >= $fulfillCount) && ($fulfillCount >= 0)){
             if(($qtyOrdered != $fulfillCount) && ($status == self::STATUS_READY)) {
-                throw new Exception('Fulfill count is not matching with status!');
+                throw new Exception('Fulfill count $fulfillCount is not matching with status (Ready)!');
             }
         }else{
             throw new Exception('Invalid fulfill count for item queue object!');
