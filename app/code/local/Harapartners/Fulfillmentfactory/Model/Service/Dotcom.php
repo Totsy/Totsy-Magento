@@ -138,7 +138,7 @@ class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
             } else {
                 $qtyFulfilled = $qtyAvailable;
                 $qtyAvailable = 0;
-                $status = (0 === $item->getFulfillCount())
+                $status = (0 === $qtyFulfilled)
                     ? Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_PENDING
                     : Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_PARTIAL;
                 $item->setStatus($status);
