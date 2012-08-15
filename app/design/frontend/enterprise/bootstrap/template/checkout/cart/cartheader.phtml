@@ -66,11 +66,11 @@
         </ul>
     </div>
     <?php else:?>
-    <div id="usercart-block-title" class="block-title<?php if(!$_cartQty) { echo (' no-items'); } ?>" data-minicart="active">
+    <div id="usercart-block-title" class="block-title<?php if(!$_cartQty) { echo (' no-items'); } ?>" data-minicart="inactive">
     <?php if ($_cartQty > 0 && !empty($_itemsArray)):?>
-        <strong id="cartHeader"><?php echo $_myCart ?><span class="dropdown-toggle"><?php echo ' | '.Mage::helper('checkout')->formatPrice($this->getSubtotal()) ?><?php if ($_subtotalInclTax = $this->getSubtotalInclTax()): ?> / <?php echo ' | '.Mage::helper('checkout')->formatPrice($_subtotalInclTax) ?> <?php echo ' | '.Mage::helper('tax')->getIncExcText(true) ?><?php endif; ?></span></strong>
+        <strong id="cartHeader" class="dropdown-toggle"><?php echo $_myCart ?><span><?php echo ' | '.Mage::helper('checkout')->formatPrice($this->getSubtotal()) ?><?php if ($_subtotalInclTax = $this->getSubtotalInclTax()): ?> / <?php echo ' | '.Mage::helper('checkout')->formatPrice($_subtotalInclTax) ?> <?php echo ' | '.Mage::helper('tax')->getIncExcText(true) ?><?php endif; ?></span></strong>
     <?php else :?>
-        <strong id="cartHeader"><span class="dropdown-toggle">0 Items = $0.00</span></strong>
+        <strong id="cartHeader" class="dropdown-toggle"><span>0 Items = $0.00</span></strong>
     <?php endif;?>
     </div>
     
@@ -184,12 +184,30 @@
     </div>
 </div>
     <script type="text/javascript">
-    Enterprise.TopCart.initialize('topCartContent');
+    //Enterprise.TopCart.initialize('topCartContent');
     // Below can be used to show minicart after item added
     // Enterprise.TopCart.showCart(7);
     jQuery(document).ready( function() {
+                
+        var topCartContent = jQuery("#topCartContent");
         
-        topCartContent = jQuery("#topCartContent");
+        // top cart toggle
+        var topCartToggle = jQuery('#usercart-block-title');
+        topCartToggle.on('click', function() {
+            topCartContent.toggle(0, function() {
+                var toggleState = topCartToggle.attr('data-minicart');
+                if ( toggleState == 'active' ) {
+                    topCartToggle.attr('data-minicart', 'inactive');
+                }
+                else if ( toggleState == 'inactive' ) {
+                    topCartToggle.attr('data-minicart', 'active');
+                }
+            });
+        });
+
+
+        
+/*
         window.setTimeout('hideTopCart()', 5000); // this is called each page load, needs to refined to just be called when mini-cart is initialized after adding to car - not each page load
         jQuery(".top-cart").hover(
         function(){
@@ -208,6 +226,9 @@
         jQuery("#items-info-wrapper .block-subtitle .close-btn").click(function(){
                 topCartContent.hide();
             });
+            
+*/
+            
     });
     </script>
     <!-- end mini-cart -->
