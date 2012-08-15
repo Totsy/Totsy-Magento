@@ -29,8 +29,8 @@ if (isset($options['o']) || isset($options['order'])) {
 }
 
 if (isset($options['f']) || isset($options['fulfillment'])) {
-    echo "Updating inventory levels ...", PHP_EOL;
-    $service->updateInventory();
+    echo "Processing Fulfillment ...", PHP_EOL;
+    $service->fulfillment();
 }
 
 $end = time();

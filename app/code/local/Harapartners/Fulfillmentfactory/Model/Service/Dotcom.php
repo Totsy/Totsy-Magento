@@ -13,11 +13,13 @@
 class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
 {
     /**
-     * Update local inventory statistics with the latest counts from Dotcom.
+     * Process fulfillment operations: retrieve inventory levels from our
+     * fulfillment centre, and then attempt to fulfill any order items for each
+     * product in stock at the fulfillment centre.
      *
      * @return void
      */
-    public function updateInventory()
+    public function fulfillment()
     {
         $xmlStreamName = Mage::helper('fulfillmentfactory/dotcom')
             ->getInventory();
@@ -83,20 +85,25 @@ class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
                         );
                     }
 
-                    $this->_fulfillOrderItems($product, $qty);
+                    $this->fulfillOrderItems($product, $qty);
                     $count++;
                 }
             }
         }
 
-        Mage::log(
-            sprintf("Retrieved and stored inventory updates for %d products", $count),
-            Zend_Log::INFO,
-            'fulfillment.log'
-        );
+        Mage::log("Retrieved and stored inventory updates for $count products", Zend_Log::INFO, 'fulfillment.log');
     }
 
-    protected function _fulfillOrderItems($product, $qty)
+    /**
+     * Fulfill any order items for a given product, using the quantity reported
+     * by fulfillment centres.
+     *
+     * @param $product The product to fulfill order items for.
+     * @param $qty     The available quantity at the fulfillment centre.
+     *
+     * @return void
+     */
+    public function fulfillOrderItems($product, $qty)
     {
         $sku = $product->getSku();
         $qtyAvailable = $qty - Mage::helper('fulfillmentfactory')->getAllocatedCount($sku);

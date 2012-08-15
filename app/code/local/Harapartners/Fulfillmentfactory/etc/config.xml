@@ -86,14 +86,14 @@
     </default>
     <crontab>
         <jobs>
-            <fulfillmentfactory_dotcom_inventory_update>
+            <fulfillmentfactory_process_fulfillment>
                 <schedule>
                     <cron_expr>0 * * * *</cron_expr><!-- every six hours -->
                 </schedule>
                 <run>
-                    <model>fulfillmentfactory/service_dotcom::updateInventory</model>
+                    <model>fulfillmentfactory/service_dotcom::fulfillment</model>
                 </run>
-            </fulfillmentfactory_dotcom_inventory_update>
+            </fulfillmentfactory_process_fulfillment>
             <fulfillmentfactory_dotcom_update_shipment>
                 <schedule>
                     <cron_expr>30 * * * *</cron_expr><!-- half past each hour -->
