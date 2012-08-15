@@ -18,8 +18,8 @@ html {
 }
 a {color:#ed1c25;text-decoration:none;}
 a:hover{color:#ed1c25;text-decoration:underline;}
-.content_push { margin-top:150px; }
-.content_push_2col { margin-top:80px; }
+.content_push { margin-top:100px; }
+.content_push_2col { margin-top:115px; }
 /* 960.gs Grid Reset Classes. */
 .alpha { margin-left: 0 }
 .omega { margin-right: 0 }
@@ -64,10 +64,10 @@ a:hover{color:#ed1c25;text-decoration:underline;}
     z-index: 999;
 }
 .carousel-inner {
-  min-height: 300px;
-  overflow: hidden;
-  position: relative;
-  width: 100%;
+    min-height: 150px;
+    overflow: hidden;
+    position: relative;
+    width: 100%;
 }
 /**
  @Diagnostics
@@ -482,3 +482,18 @@ textarea, input[type="text"], input[type="password"], input[type="datetime"], in
   border-radius: 3px 3px 3px 3px;
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
 }
+select, textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input {
+    color: #555555;
+    display: inline-block;
+    font-size: 13px;
+    margin-bottom: 9px;
+    padding: 4px;
+    background-color: #F9F9F9;
+    border: 1px solid #CCCCCC;
+    border-radius: 3px 3px 3px 3px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+    padding: 4px;
+}
+.price-box { margin-top:10px; font-size: 11px; }
+.old-price { font-weight:normal; }
+.old-price { font-weight:normal; }
