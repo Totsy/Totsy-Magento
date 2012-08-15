@@ -19,7 +19,7 @@ html {
 a {color:#ed1c25;text-decoration:none;}
 a:hover{color:#ed1c25;text-decoration:underline;}
 .content_push { margin-top:150px; }
-.content_push_2col { margin-top:80px; }
+.content_push_2col { margin-top:115px; }
 /* 960.gs Grid Reset Classes. */
 .alpha { margin-left: 0 }
 .omega { margin-right: 0 }
