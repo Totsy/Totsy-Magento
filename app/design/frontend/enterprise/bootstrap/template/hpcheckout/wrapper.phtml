@@ -56,14 +56,14 @@
 				<?php echo $this->getChildHtml( 'login' ) ?>
 			</div>
 		<?php endif ?>
-		<div class="address">
-			<div id="hpcheckout-billing-wrapper" class="span5 pull-left">
+		<div class="address row well">
+			<div id="hpcheckout-billing-wrapper" class="span6 pull-left">
 				<div class="checkout-headline">
 				    <h4 class="legend"><?php echo $this->__('Billing Address') ?></h4>
 				    <hr />
 					<?php if ($this->customerHasAddresses()): ?>
 					    <div class="billing-address-select totsy-selective-input-box">
-							<span>New Address</span>
+							<label>New Address</label>
 					        <?php echo $this->getAddressesHtmlSelect('billing') ?>
 					    </div>
 					<?php endif; ?>
@@ -77,7 +77,7 @@
 						<hr />
 						<?php if ($this->customerHasAddresses()): ?>
 						    <div class="shipping-address-select totsy-selective-input-box">
-								<span>New Address</span>
+								<label>New Address</label>
 						        <?php echo $this->getAddressesHtmlSelect('shipping') ?>
 						    </div>
 						<?php endif; ?>
@@ -86,7 +86,6 @@
 				</div>
 			<?php endif ?>
 		</div>
-		<div style="clear:both"></div>
 				<?php if( false && ! $this->getQuote()->isVirtual() ): ?>
 			<div id="hpcheckout-shipping-method-wrapper" class="well">
 				<div class="checkout-sub-title sub-title">Shipping Method</div>
