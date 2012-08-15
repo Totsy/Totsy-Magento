@@ -451,3 +451,18 @@ textarea, input[type="text"], input[type="password"], input[type="datetime"], in
   border-radius: 3px 3px 3px 3px;
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
 }
+select, textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input {
+    color: #555555;
+    display: inline-block;
+    font-size: 13px;
+    margin-bottom: 9px;
+    padding: 4px;
+    background-color: #F9F9F9;
+    border: 1px solid #CCCCCC;
+    border-radius: 3px 3px 3px 3px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+    padding: 4px;
+}
+.price-box { margin-top:10px; font-size: 11px; }
+.old-price { font-weight:normal; }
+.old-price { font-weight:normal; }
