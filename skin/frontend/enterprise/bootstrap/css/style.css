@@ -64,7 +64,7 @@ a:hover{color:#ed1c25;text-decoration:underline;}
     z-index: 999;
 }
 .carousel-inner {
-    min-height: 300px;
+    min-height: 150px;
     overflow: hidden;
     position: relative;
     width: 100%;
