@@ -112,16 +112,17 @@ class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
             ->loadIncompleteItemQueueByProductSku($sku);
 
         foreach ($itemqueues as $item) {
-            $qtyRequired = $item->getQtyOrdered() - $item->getFulfillCount();
+            $qtyFulfilled = $item->getFulfillCount();
+            $qtyRequired  = $item->getQtyOrdered() - $item->getFulfillCount();
 
             // there is no quantity remaining to be allocated
-            if ($qtyAvailable === 0) {
+            if (0 === $qtyAvailable) {
                 Mage::log("No more inventory available for SKU '$sku' during fulfillment.", Zend_Log::INFO, 'fulfillment.log');
                 break;
 
             // there is sufficient quantity to completely fulfill this item
             } else if ($qtyRequired <= $qtyAvailable) {
-                $qtyFulfilled = $qtyRequired;
+                $qtyFulfilled += $qtyRequired;
                 $qtyAvailable -= $qtyRequired;
                 $item->setStatus(
                     Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_READY
@@ -140,7 +141,7 @@ class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
 
             // there is an insufficient quantity available to fulfill this item
             } else {
-                $qtyFulfilled = $qtyAvailable;
+                $qtyFulfilled += $qtyAvailable;
                 $qtyAvailable = 0;
                 $status = (0 === $qtyFulfilled)
                     ? Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_PENDING
