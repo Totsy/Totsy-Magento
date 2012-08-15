@@ -41,7 +41,7 @@
     $_saving = Mage::helper('sales/order')->calculateEstimatedSavings($quote);
 ?>
 
-<div class="top-cart">
+<div class="top-cart dropdown">
 <?php
     $_cartQty = Mage::getModel('checkout/cart')->getSummaryQty();
     $_itemsArray = $this->getItems();
@@ -66,11 +66,11 @@
         </ul>
     </div>
     <?php else:?>
-    <div id="usercart-block-title" class="block-title<?php if(!$_cartQty) { echo (' no-items'); } ?>" data-minicart="inactive">
+    <div id="usercart-block-title" class="dropdown-toggle block-title<?php if(!$_cartQty) { echo (' no-items'); } ?>" data-toggle="dropdown">
     <?php if ($_cartQty > 0 && !empty($_itemsArray)):?>
-        <strong id="cartHeader" class="dropdown-toggle"><?php echo $_myCart ?><span><?php echo ' | '.Mage::helper('checkout')->formatPrice($this->getSubtotal()) ?><?php if ($_subtotalInclTax = $this->getSubtotalInclTax()): ?> / <?php echo ' | '.Mage::helper('checkout')->formatPrice($_subtotalInclTax) ?> <?php echo ' | '.Mage::helper('tax')->getIncExcText(true) ?><?php endif; ?></span></strong>
+        <strong id="cartHeader"><?php echo $_myCart ?><span><?php echo ' | '.Mage::helper('checkout')->formatPrice($this->getSubtotal()) ?><?php if ($_subtotalInclTax = $this->getSubtotalInclTax()): ?> / <?php echo ' | '.Mage::helper('checkout')->formatPrice($_subtotalInclTax) ?> <?php echo ' | '.Mage::helper('tax')->getIncExcText(true) ?><?php endif; ?></span></strong>
     <?php else :?>
-        <strong id="cartHeader" class="dropdown-toggle"><span>0 Items = $0.00</span></strong>
+        <strong id="cartHeader"><span>0 Items = $0.00</span></strong>
     <?php endif;?>
     </div>
     
@@ -88,7 +88,9 @@
 -->
     
     <!-- start mini-cart -->
-<div id="topCartContent" class="block-content well" style="<?php if ( !!$_updateFlag && $_updateFlag ) {echo "display:block"; $checkoutSession->setCartUpdatedFlag(false);} else echo "display:none";?>">
+<div id="topCartContent" class="block-content well dropdown-menu" data-item-added="<?php if ( !!$_updateFlag && $_updateFlag ) {echo "true"; $checkoutSession->setCartUpdatedFlag(false);} else echo "false";?>">
+
+<!-- @TODO: remove after testing    <pre><?php //echo $_updateFlag; ?></pre> -->
     
     <div class="inner-wrapper"><?php // extra div to smooth slideUp and slideDown ?>
     <?php if ($_cartQty > 0 && !empty($_itemsArray)):?>
@@ -182,24 +184,52 @@
     jQuery(document).ready( function() {
                 
         var topCartContent = jQuery("#topCartContent");
+        var topCartUpdated = topCartContent.attr('data-item-added');
         
-        // top cart toggle
+        if ( topCartUpdated == 'true' ) {
+            topCartContent.show().delay(5000).queue(function(n) {
+                jQuery(this).removeAttr('style'); n();
+            });
+            
+            //alert("PAGE RELOADED - Cart Updated: " + topCartUpdated);
+            
+
+        }
+        else {
+            //alert('CART NOT UPDATED');
+        }
+        
+        // temp solution for updated cart set with display:block;
+/*
         var topCartToggle = jQuery('#usercart-block-title');
         topCartToggle.on('click', function() {
+            if ( topCartContent.attr('style') !== undefined ) {
+                topCartContent.removeAttr('style');
+            }
+        });
+*/
+        
+        // top cart toggler - @TODO: COMMENTED OUT in favor of (test) use of bootstrap dropdown plugin, pls do not delete for now
+/*
+        var topCartToggle = jQuery('#usercart-block-title');
+        var toggleState = topCartToggle.attr('data-minicart');
+        topCartToggle.on('click', function() {
+            // get and set state of toggler
+            toggleState = (toggleState === 'inactive' || undefined) ? 'active' : 'inactive'; 
+            // toggle top cart display
             topCartContent.toggle(0, function() {
-                var toggleState = topCartToggle.attr('data-minicart');
                 if ( toggleState == 'active' ) {
                     topCartToggle.attr('data-minicart', 'inactive');
                 }
-                else if ( toggleState == 'inactive' ) {
+                else if ( toggleState == 'inactive' || undefined) {
                     topCartToggle.attr('data-minicart', 'active');
                 }
             });
         });
-
-
+*/
         
-/*
+/* @TODO: delete after testing / confirmed not needed
+
         window.setTimeout('hideTopCart()', 5000); // this is called each page load, needs to refined to just be called when mini-cart is initialized after adding to car - not each page load
         jQuery(".top-cart").hover(
         function(){
