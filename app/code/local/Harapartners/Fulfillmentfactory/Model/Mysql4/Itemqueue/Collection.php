@@ -69,8 +69,9 @@ class Harapartners_Fulfillmentfactory_Model_Mysql4_Itemqueue_Collection extends 
             ->addFieldToFilter('status', array('in' => array(
                 Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_PENDING,
                 Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_PARTIAL
-            )))
-            ->setOrder('order_item_id', 'ASC');
+            )));
+
+        $this->getSelect()->order('created_at');
 
         return $collection;
     }
