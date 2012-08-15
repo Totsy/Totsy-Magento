@@ -51,6 +51,14 @@ Default layout, loads most of the pages
         </block>
     </customertracking_index_ajax>
 
+    <hpcheckout_checkout_success>
+        <reference name="before_body_end">
+            <remove name="customertracking.footer"/>
+            <block type="customertracking/pixel" name="customertracking.pixel"  template="customertracking/pixel.phtml" />
+        </reference>
+    </hpcheckout_checkout_success>
+
+
 
     <customer_logged_out>
         <reference name="before_body_end">
