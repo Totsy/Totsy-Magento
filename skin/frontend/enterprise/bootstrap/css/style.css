@@ -293,11 +293,13 @@ header nav .cta strong em {color:#d84643; font-style:normal;}
 #hpcheckout-billing-wrapper label {
     float:left;
     margin:0px 10px 0px 0px;
+    width: 135px;
 }
 
 #hpcheckout-shipping-wrapper label {
     float:left;
     margin:0px 10px 0px 0px;
+    width: 135px;
 }
 
 /**
