@@ -178,79 +178,15 @@
     </div>
 </div>
     <script type="text/javascript">
-    //Enterprise.TopCart.initialize('topCartContent');
-    // Below can be used to show minicart after item added
-    // Enterprise.TopCart.showCart(7);
+    // Show minicart after item added, then hide after 5 sec
     jQuery(document).ready( function() {
-                
         var topCartContent = jQuery("#topCartContent");
         var topCartUpdated = topCartContent.attr('data-item-added');
-        
         if ( topCartUpdated == 'true' ) {
             topCartContent.show().delay(5000).queue(function(n) {
                 jQuery(this).removeAttr('style'); n();
             });
-            
-            //alert("PAGE RELOADED - Cart Updated: " + topCartUpdated);
-            
-
         }
-        else {
-            //alert('CART NOT UPDATED');
-        }
-        
-        // temp solution for updated cart set with display:block;
-/*
-        var topCartToggle = jQuery('#usercart-block-title');
-        topCartToggle.on('click', function() {
-            if ( topCartContent.attr('style') !== undefined ) {
-                topCartContent.removeAttr('style');
-            }
-        });
-*/
-        
-        // top cart toggler - @TODO: COMMENTED OUT in favor of (test) use of bootstrap dropdown plugin, pls do not delete for now
-/*
-        var topCartToggle = jQuery('#usercart-block-title');
-        var toggleState = topCartToggle.attr('data-minicart');
-        topCartToggle.on('click', function() {
-            // get and set state of toggler
-            toggleState = (toggleState === 'inactive' || undefined) ? 'active' : 'inactive'; 
-            // toggle top cart display
-            topCartContent.toggle(0, function() {
-                if ( toggleState == 'active' ) {
-                    topCartToggle.attr('data-minicart', 'inactive');
-                }
-                else if ( toggleState == 'inactive' || undefined) {
-                    topCartToggle.attr('data-minicart', 'active');
-                }
-            });
-        });
-*/
-        
-/* @TODO: delete after testing / confirmed not needed
-
-        window.setTimeout('hideTopCart()', 5000); // this is called each page load, needs to refined to just be called when mini-cart is initialized after adding to car - not each page load
-        jQuery(".top-cart").hover(
-        function(){
-            topCartContent.stop().fadeTo(200,1);
-        window.setTimeout( 'hideTopCart()', 8000 ); // leave the mini-cart open when being hovered, no timeout
-        },
-        function(){
-            topCartContent.stop().fadeTo(500,0).hide();
-        }
-    );
-    jQuery(".hpcheckout-checkout-index .top-cart").hover(
-        function(){
-            topCartContent.hide();
-        }
-        );
-        jQuery("#items-info-wrapper .block-subtitle .close-btn").click(function(){
-                topCartContent.hide();
-            });
-            
-*/
-            
     });
     </script>
     <!-- end mini-cart -->
