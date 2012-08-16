@@ -13,7 +13,7 @@
 <config>
     <modules>
         <Harapartners_Affiliate>
-            <version>1.0.1</version>
+            <version>1.0.2</version>
         </Harapartners_Affiliate>
     </modules>
     <global>
@@ -107,15 +107,6 @@
                     </affiliate>
                 </children>
             </marketing>
-            <report>
-                <children>
-                    <affiliate translate="title" module="affiliate">
-                        <title>Affiliates</title>
-                        <sort_order>0</sort_order>
-                        <action>adminhtml_affiliate/adminhtml_report</action>
-                    </affiliate>
-                </children>
-            </report>
         </menu>
         <acl>
             <resources>

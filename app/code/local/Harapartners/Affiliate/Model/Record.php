@@ -66,6 +66,7 @@ class Harapartners_Affiliate_Model_Record extends Mage_Core_Model_Abstract {
         }
         //store_id is defaulted as 0 at the DB level
         
+        /*
         //Data cleaning
         if(!!($this->getData('sub_affiliate_code'))){
             $rawSubCode = explode(',', trim(trim($this->getData('sub_affiliate_code'), ',')));
@@ -77,7 +78,7 @@ class Harapartners_Affiliate_Model_Record extends Mage_Core_Model_Abstract {
             }
             $this->setData('sub_affiliate_code', implode(',', $cleanSubCode));
         }        
-        
+        */
         $this->validate();
         return $this;
     }
@@ -102,7 +103,7 @@ class Harapartners_Affiliate_Model_Record extends Mage_Core_Model_Abstract {
                 throw new Exception('Tracking code must be valid JSON');
             }
         }
-        
+        /*
         if(!!($this->getData('sub_affiliate_code'))){
             $cleanSubCode = explode(',', $this->getData('sub_affiliate_code'));
             foreach($cleanSubCode as $subCodeValue){
@@ -111,7 +112,7 @@ class Harapartners_Affiliate_Model_Record extends Mage_Core_Model_Abstract {
                 }
             }
         }
-        
+        */
         return $this;
     }
     
