@@ -67,21 +67,19 @@
         <em class="container">&copy;2012 Totsy.com. All Rights Reserved.</em>
     </small>
 </footer>
-    <div id="toTop" style="display: none;">^ Top</div>
+    <div id="toTop" style="display: none;"><a class="btn btn-primary">^ Top</a></div>
 <script>
     jQuery(document).ready(function () {
         jQuery(window).scroll(function () {
             if (jQuery(this).scrollTop() != 0) {
-            jQuery('#toTop').fadeIn();
+                jQuery('#toTop').fadeIn();
             } else {
                 jQuery('#toTop').fadeOut();
             }
             });
-            jQuery('#toTop').click(function () {
-            jQuery('body,html').animate({
-                scrollTop: 0
-            },
-                800);
+            jQuery('#toTop a').click(function (e) {
+                e.preventDefault();
+                jQuery('body,html').animate({scrollTop: 0},800);
             });
         });
         
