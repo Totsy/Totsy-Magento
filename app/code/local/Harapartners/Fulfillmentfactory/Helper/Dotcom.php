@@ -116,14 +116,13 @@ class Harapartners_Fulfillmentfactory_Helper_Dotcom extends Mage_Core_Helper_Abs
             $client = new Zend_Http_Client($uri);
             
             $header['Content-type'] = 'text/xml; charset=utf-8';
-            $header['Accept-encoding'] = 'gzip,deflate';
+            $header['Accept-encoding'] = ''; //'gzip,deflate';
             $header['Authorization'] = $this->_generateAuthHeader($uri);    
             $client->setHeaders($header);
             
             $client->setRawData($xml);
             
             $response = $client->request('POST');
-            echo print_r($response, 1);//TEST
             
             if(isset($response)) {
                 $body = $response->getBody();
@@ -235,7 +234,7 @@ class Harapartners_Fulfillmentfactory_Helper_Dotcom extends Mage_Core_Helper_Abs
         try {
             $client = new Zend_Http_Client($uri);
 
-            $header['Accept-encoding'] = 'gzip,deflate';
+            $header['Accept-encoding'] = ''; //'gzip,deflate'; [dotcom doesn't support gzip encoding anyway]
             $header['Authorization'] = $this->_generateAuthHeader($uri);
             $client->setHeaders($header);
             $client->setStream('/tmp/dotcom-inventory.xml');
