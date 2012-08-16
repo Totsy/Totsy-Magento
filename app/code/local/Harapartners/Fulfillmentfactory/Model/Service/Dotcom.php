@@ -85,7 +85,7 @@ class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
                         );
                     }
 
-                    $this->fulfillOrderItems($product, $qty);
+                    //$this->fulfillOrderItems($product, $qty);
                     $count++;
                 }
             }
@@ -168,7 +168,7 @@ class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
                 $qtyAvailable = 0;
                 $status = ($qtyFulfilled)
                     ? Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_PARTIAL
-                    : Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_READYL;
+                    : Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_PENDING;
                 $item->setStatus($status);
             }
 

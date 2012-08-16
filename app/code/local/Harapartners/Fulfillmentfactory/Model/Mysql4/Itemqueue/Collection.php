@@ -69,13 +69,10 @@ class Harapartners_Fulfillmentfactory_Model_Mysql4_Itemqueue_Collection extends 
         $collection = $this->addFieldToFilter('sku', $productSku)
             ->addFieldToFilter('status', array('in' => array(
                 Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_PENDING,
-                Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_PARTIAL,
-                Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_SUSPENDED
+                Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_PARTIAL
             )));
 
-        $this->getSelect()
-            ->where('fulfill_count < qty_ordered')
-            ->order('created_at');
+        $this->getSelect()->order('created_at');
 
         return $collection;
     }
