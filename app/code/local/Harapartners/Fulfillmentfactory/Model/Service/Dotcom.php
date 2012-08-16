@@ -85,7 +85,7 @@ class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
                         );
                     }
 
-                    //$this->fulfillOrderItems($product, $qty);
+                    $this->fulfillOrderItems($product, $qty);
                     $count++;
                 }
             }
