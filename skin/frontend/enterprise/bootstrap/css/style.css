@@ -301,11 +301,15 @@ header nav .cta strong em {color:#d84643; font-style:normal;}
 }
 
 .onepage-address-form {
-	padding: 15px;
+	/* padding: 15px; */
 }
 
 .onepage-address-form form{
 	margin-bottom: 0px !important;
+}
+
+.onepage-address-form input[type="text"]{
+	width: 300px !important;
 }
 
 #hpcheckout-billing-wrapper label {
