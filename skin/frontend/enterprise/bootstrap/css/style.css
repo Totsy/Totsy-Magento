@@ -334,9 +334,9 @@ header nav .cta strong em {color:#d84643; font-style:normal;}
  */
 body > footer {
     position: relative;
-    margin-top:45px; padding: 17px 0 18px 0;
+    margin-top:45px; padding: 17px 0 0 0;
     background: #e5e5e5;
-    border:1px solid #fff;
+    border-top:1px solid #fff;
 }
 body > footer:before {
     content: "";
@@ -357,6 +357,17 @@ footer strong {
 body > footer ul {margin:0;}
 body > footer ul li a,
 body > footer ul li a:hover {color:#666; font-size: 12px;}
+body > footer small {
+    display: block;
+    margin-top:18px; padding: 16px 16px 18px;
+    background: none repeat scroll 0% 0% rgb(178, 178, 178); 
+    border-top: 2px solid rgb(136, 136, 136); 
+    font-size: 11px; 
+}
+body > footer small .container {
+    display: block; 
+    font-style: normal;
+}
 
 /* login/register pages footer */
 body.customer-account-login #footer ul {
