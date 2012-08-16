@@ -267,7 +267,7 @@ header nav .cta strong em {color:#d84643; font-style:normal;}
 /* Minicart */
 #topCartContent {
     position: absolute; top: 100%; left: auto; right:0; z-index: 10;
-    margin-top:-1px;
+    margin-top:-1px; padding:19px;
     width:334px;
     background:#fff;
     border:1px solid #ccc; /* old browser fallback */
