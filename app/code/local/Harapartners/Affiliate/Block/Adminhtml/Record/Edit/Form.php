@@ -60,12 +60,7 @@ class Harapartners_Affiliate_Block_Adminhtml_Record_Edit_Form
             'label'      => $affiliateHelper->__('Tracking Codes'),
             'name'       => 'tracking_code',
         ));
-/*
-        $fieldset->addField('sub_affiliate_code', 'staticlist', array(
-            'label'     => $affiliateHelper->__('Sub Affiliate Code'),
-            'name'      => 'sub_affiliate_code',
-        ));
-*/
+
         $fieldset->addField('comment', 'textarea', array(
             'label'     => $affiliateHelper->__('Comments'),
             'name'      => 'comment'
