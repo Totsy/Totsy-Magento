@@ -129,7 +129,11 @@ html.test .container .row {outline:1px dotted green;}
     background-repeat: repeat-x;
     background-position:0 50.5%;
 }
-.btn-primary {background-color:rgba(237,45,33,1);}
+.btn-primary,
+a.btn-primary /* req to override '.dropdown a' ruleset */ {
+    background-color:rgba(237,45,33,1);
+    color:#fff;
+}
 .btn.checkout {
     padding: 1px 8px 2px;
     margin: 8px 0 0;
@@ -276,7 +280,7 @@ header nav .cta strong em {color:#d84643; font-style:normal;}
 
 /* Minicart */
 #topCartContent {
-    position: absolute; top: 100%; right:0; z-index: 10;
+    position: absolute; top: 100%; left: auto; right:0; z-index: 10;
     margin-top:-1px;
     width:334px;
     background:#fff;
@@ -287,22 +291,42 @@ header nav .cta strong em {color:#d84643; font-style:normal;}
     border-bottom-right-radius: 5px;
     box-shadow:0 5px 5px rgba(0, 0, 0, 0.10);
 }
+#topCartContent.dropdown-menu .product-name a { /* overrides 'dropdown-menu a' ruleset */
+    clear: none;
+    padding: 0;
+    color:#ED1C25;
+}
 
 /* checkout btn in non-mini-cart header */
 #header-checkoutBtn {
-    float: right; clear: right;
+    float: right; 
+    clear: right;
 }
 #header-checkoutBtn a { /* not styling this specifically, for now - see generic .btn.checkout styles */
 }
 
-#hpcheckout-billing-wrapper label{
-    float:left;
-    margin:0px 10px 0px 0px;
+.onepage-address-form {
+	/* padding: 15px; */
 }
 
-#hpcheckout-shipping-wrapper label{
+.onepage-address-form form{
+	margin-bottom: 0px !important;
+}
+
+.onepage-address-form input[type="text"]{
+	width: 300px !important;
+}
+
+#hpcheckout-billing-wrapper label {
     float:left;
     margin:0px 10px 0px 0px;
+    width: 135px;
+}
+
+#hpcheckout-shipping-wrapper label {
+    float:left;
+    margin:0px 10px 0px 0px;
+    width: 135px;
 }
 
 /**
@@ -315,9 +339,9 @@ header nav .cta strong em {color:#d84643; font-style:normal;}
  */
 body > footer {
     position: relative;
-    margin-top:45px; padding: 17px 0 18px 0;
+    margin-top:45px; padding: 17px 0 0 0;
     background: #e5e5e5;
-    border:1px solid #fff;
+    border-top:1px solid #fff;
 }
 body > footer:before {
     content: "";
@@ -338,6 +362,17 @@ footer strong {
 body > footer ul {margin:0;}
 body > footer ul li a,
 body > footer ul li a:hover {color:#666; font-size: 12px;}
+body > footer small {
+    display: block;
+    margin-top:18px; padding: 16px 16px 18px;
+    background: none repeat scroll 0% 0% rgb(178, 178, 178); 
+    border-top: 2px solid rgb(136, 136, 136); 
+    font-size: 11px; 
+}
+body > footer small .container {
+    display: block; 
+    font-style: normal;
+}
 
 /* login/register pages footer */
 body.customer-account-login #footer ul {

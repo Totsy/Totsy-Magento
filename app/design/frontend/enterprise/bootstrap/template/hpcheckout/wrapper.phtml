@@ -56,34 +56,38 @@
 				<?php echo $this->getChildHtml( 'login' ) ?>
 			</div>
 		<?php endif ?>
-		<div class="address">
-			<div id="hpcheckout-billing-wrapper" class="span5 pull-left">
-				<div class="checkout-headline">
-				    <h4 class="legend"><?php echo $this->__('Billing Address') ?></h4>
-				    <hr />
-					<?php if ($this->customerHasAddresses()): ?>
-					    <div class="billing-address-select totsy-selective-input-box">
-							<span>New Address</span>
-					        <?php echo $this->getAddressesHtmlSelect('billing') ?>
-					    </div>
-					<?php endif; ?>
-				</div>
+		<div class="address span12">
+			<div class="row checkout-headline">
+				<h4 class="legend"><?php echo $this->__('Billing Address') ?></h4>
+				<hr />
+				<?php if ($this->customerHasAddresses()): ?>
+				    <div class="billing-address-select totsy-selective-input-box">
+				    	<label>New Address</label>
+				        <?php echo $this->getAddressesHtmlSelect('billing') ?>
+				    </div>
+				<?php endif; ?>
+			</div>
+			<div id="hpcheckout-billing-wrapper" class="onepage-address-form">
 				<div class="checkout-content"><?php echo $this->getChildHtml( 'billing' ) ?></div>
 			</div>
+		</div>
+		<div style="clear:both"></div>
+		<div style="clear:both"></div>
+		<div class="address span12">
+			<div class="row checkout-headline">
+			   <h4 class="legend"><?php echo $this->__('Shipping Address') ?></h4>
+			   <hr />
+			   <?php if ($this->customerHasAddresses()): ?>
+			       <div class="shipping-address-select totsy-selective-input-box">
+			       	<label>New Address</label>
+			           <?php echo $this->getAddressesHtmlSelect('shipping') ?>
+			       </div>
+			   <?php endif; ?>
+			</div>	
 			<?php if( ! $this->getQuote()->isVirtual() ): ?>
-				<div id="hpcheckout-shipping-wrapper" class="span5">
-					<div class="checkout-headline">
-						<h4 class="legend"><?php echo $this->__('Shipping Address') ?></h4>
-						<hr />
-						<?php if ($this->customerHasAddresses()): ?>
-						    <div class="shipping-address-select totsy-selective-input-box">
-								<span>New Address</span>
-						        <?php echo $this->getAddressesHtmlSelect('shipping') ?>
-						    </div>
-						<?php endif; ?>
-					</div>
-					<div class="checkout-content"><?php echo $this->getChildHtml( 'shipping' ) ?></div>
-				</div>
+			<div id="hpcheckout-shipping-wrapper" class="onepage-address-form">
+			    <div class="checkout-content"><?php echo $this->getChildHtml( 'shipping' ) ?></div>
+			</div>
 			<?php endif ?>
 		</div>
 		<div style="clear:both"></div>
