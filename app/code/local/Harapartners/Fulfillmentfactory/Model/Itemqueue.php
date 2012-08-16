@@ -105,7 +105,9 @@ class Harapartners_Fulfillmentfactory_Model_Itemqueue
         // inspect each sibling item's status
         $orderReady = true;
         foreach ($orderItems as $item) {
-            if (self::STATUS_READY !== intval($item->getStatus())) {
+            if (self::STATUS_READY != $item->getStatus() &&
+                self::STATUS_CANCELLED != $item->getStatus()
+            ) {
                 $orderReady = false;
             }
         }
