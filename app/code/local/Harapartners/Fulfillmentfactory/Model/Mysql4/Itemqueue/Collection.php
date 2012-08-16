@@ -65,13 +65,17 @@ class Harapartners_Fulfillmentfactory_Model_Mysql4_Itemqueue_Collection extends 
      */
     public function loadIncompleteItemQueueByProductSku($productSku)
     {
+        // allow for suspended items due to sibling items batch cancelled
         $collection = $this->addFieldToFilter('sku', $productSku)
             ->addFieldToFilter('status', array('in' => array(
                 Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_PENDING,
-                Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_PARTIAL
+                Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_PARTIAL,
+                Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_SUSPENDED
             )));
 
-        $this->getSelect()->order('created_at');
+        $this->getSelect()
+            ->where('fulfill_count < qty_ordered')
+            ->order('created_at');
 
         return $collection;
     }

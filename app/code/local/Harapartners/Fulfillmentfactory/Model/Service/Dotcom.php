@@ -111,7 +111,7 @@ class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
         Mage::log(
             "Attempting to allocate $qty ($qtyAvailable available) inventory for SKU '$sku'",
             Zend_log::DEBUG,
-            'fulfillment_allocation.log'
+            'fulfillment.log'
         );
 
         $itemqueues = Mage::getModel('fulfillmentfactory/itemqueue')
@@ -123,48 +123,53 @@ class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
             $qtyRequired  = $item->getQtyOrdered() - $item->getFulfillCount();
 
             // there is no quantity remaining to be allocated
-            if (0 === $qtyAvailable) {
-                Mage::log("No more inventory available for SKU '$sku' during fulfillment.", Zend_Log::INFO, 'fulfillment.log');
+            if (!$qtyAvailable) {
                 break;
 
             // there is sufficient quantity to completely fulfill this item
             } else if ($qtyRequired <= $qtyAvailable) {
-                $qtyFulfilled += $qtyRequired;
-                $qtyAvailable -= $qtyRequired;
-                $item->setStatus(
-                    Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_READY
-                );
-
                 Mage::log(
                     sprintf(
-                        "Shifted %d stock units from available fulfillment inventory to order %s (SKU '%s' now ready)",
-                        $qtyFulfilled,
+                        "Item Queue %d receives %d stock units from the %d available fulfillment inventory for '%s' to order %s/%s and is now READY",
+                        $item->getId(),
+                        $qtyRequired,
+                        $qtyAvailable,
+                        $product->getSku(),
                         $item->getOrderId(),
-                        $product->getSku()
+                        $item->getOrderIncrementId()
                     ),
                     Zend_log::INFO,
                     'fulfillment.log'
                 );
+
+                $qtyFulfilled += $qtyRequired;
+                $qtyAvailable -= $qtyRequired;
+                if ($item->getStatus() < Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_READY) {
+                    $item->setStatus(Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_READY);
+                }
 
             // there is an insufficient quantity available to fulfill this item
             } else {
-                $qtyFulfilled += $qtyAvailable;
-                $qtyAvailable = 0;
-                $status = (0 === $qtyFulfilled)
-                    ? Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_PENDING
-                    : Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_PARTIAL;
-                $item->setStatus($status);
-
                 Mage::log(
                     sprintf(
-                        "Shifted %d stock units from available fulfillment inventory to order %s (SKU '%s' partially fulfilled)",
-                        $qtyFulfilled,
+                        "Item Queue %d receives %d stock units from the %d available fulfillment inventory for '%s' to order %s/%s and is now PARTIAL",
+                        $item->getId(),
+                        $qtyAvailable,
+                        $qtyAvailable,
+                        $product->getSku(),
                         $item->getOrderId(),
-                        $product->getSku()
+                        $item->getOrderIncrementId()
                     ),
                     Zend_log::INFO,
                     'fulfillment.log'
                 );
+
+                $qtyFulfilled += $qtyAvailable;
+                $qtyAvailable = 0;
+                $status = ($qtyFulfilled)
+                    ? Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_PARTIAL
+                    : Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_READYL;
+                $item->setStatus($status);
             }
 
             // update the item
