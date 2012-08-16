@@ -175,6 +175,8 @@ class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
             // update the item
             $item->setData('fulfill_count', $qtyFulfilled);
             $item->save();
+
+            Mage::helper('fulfillmentfactory')->submitOrderForFulfillment($item->getOrderId());
         }
 
         // update the available fulfillment inventory

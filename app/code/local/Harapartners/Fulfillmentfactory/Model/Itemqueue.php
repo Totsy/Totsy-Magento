@@ -90,41 +90,6 @@ class Harapartners_Fulfillmentfactory_Model_Itemqueue
     }
 
     /**
-     * Execute order submission if all sibling order items are in the READY
-     * state.
-     *
-     * @return Mage_Core_Model_Abstract|void
-     */
-    protected function _afterSave()
-    {
-        // locate all order items (those that belong to the same order)
-        // including itself
-        $orderItems = Mage::getModel($this->_resourceName)->getCollection();
-        $orderItems->addFieldToFilter('order_id', $this->getOrderId());
-
-        // inspect each sibling item's status
-        $orderReady = true;
-        foreach ($orderItems as $item) {
-            if (self::STATUS_READY != $item->getStatus() &&
-                self::STATUS_CANCELLED != $item->getStatus()
-            ) {
-                $orderReady = false;
-            }
-        }
-
-        // submit this order for fulfillment if all items were READY
-        if ($orderReady) {
-            $order = Mage::getModel('sales/order')->load($this->getOrderId());
-            $orderArray = array($order);
-
-            Mage::getSingleton('fulfillmentfactory/service_dotcom')
-                ->submitOrdersToFulfill($orderArray, true);
-        }
-
-        return parent::_afterSave();
-    }
-
-    /**
      * Load item queue object by order item id
      *
      * @param int $orderItemId
