@@ -124,7 +124,11 @@ html.test .container .row {outline:1px dotted green;}
     background-repeat: repeat-x;
     background-position:0 50.5%;
 }
-.btn-primary {background-color:rgba(237,45,33,1);}
+.btn-primary,
+a.btn-primary /* req to override '.dropdown a' ruleset */ {
+    background-color:rgba(237,45,33,1);
+    color:#fff;
+}
 .btn.checkout {
     padding: 1px 8px 2px;
     margin: 8px 0 0;
@@ -271,7 +275,7 @@ header nav .cta strong em {color:#d84643; font-style:normal;}
 
 /* Minicart */
 #topCartContent {
-    position: absolute; top: 100%; right:0; z-index: 10;
+    position: absolute; top: 100%; left: auto; right:0; z-index: 10;
     margin-top:-1px;
     width:334px;
     background:#fff;
@@ -281,6 +285,11 @@ header nav .cta strong em {color:#d84643; font-style:normal;}
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
     box-shadow:0 5px 5px rgba(0, 0, 0, 0.10);
+}
+#topCartContent.dropdown-menu .product-name a { /* overrides 'dropdown-menu a' ruleset */
+    clear: none;
+    padding: 0;
+    color:#ED1C25;
 }
 
 /* checkout btn in non-mini-cart header */

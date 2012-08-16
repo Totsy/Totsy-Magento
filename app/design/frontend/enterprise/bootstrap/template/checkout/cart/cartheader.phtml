@@ -41,7 +41,7 @@
     $_saving = Mage::helper('sales/order')->calculateEstimatedSavings($quote);
 ?>
 
-<div class="top-cart">
+<div class="top-cart dropdown">
 <?php
     $_cartQty = Mage::getModel('checkout/cart')->getSummaryQty();
     $_itemsArray = $this->getItems();
@@ -66,11 +66,11 @@
         </ul>
     </div>
     <?php else:?>
-    <div id="usercart-block-title" class="block-title<?php if(!$_cartQty) { echo (' no-items'); } ?>" data-minicart="inactive">
+    <div id="usercart-block-title" class="dropdown-toggle block-title<?php if(!$_cartQty) { echo (' no-items'); } ?>" data-toggle="dropdown">
     <?php if ($_cartQty > 0 && !empty($_itemsArray)):?>
-        <strong id="cartHeader" class="dropdown-toggle"><?php echo $_myCart ?><span><?php echo ' | '.Mage::helper('checkout')->formatPrice($this->getSubtotal()) ?><?php if ($_subtotalInclTax = $this->getSubtotalInclTax()): ?> / <?php echo ' | '.Mage::helper('checkout')->formatPrice($_subtotalInclTax) ?> <?php echo ' | '.Mage::helper('tax')->getIncExcText(true) ?><?php endif; ?></span></strong>
+        <strong id="cartHeader"><?php echo $_myCart ?><span><?php echo ' | '.Mage::helper('checkout')->formatPrice($this->getSubtotal()) ?><?php if ($_subtotalInclTax = $this->getSubtotalInclTax()): ?> / <?php echo ' | '.Mage::helper('checkout')->formatPrice($_subtotalInclTax) ?> <?php echo ' | '.Mage::helper('tax')->getIncExcText(true) ?><?php endif; ?></span></strong>
     <?php else :?>
-        <strong id="cartHeader" class="dropdown-toggle"><span>0 Items = $0.00</span></strong>
+        <strong id="cartHeader"><span>0 Items = $0.00</span></strong>
     <?php endif;?>
     </div>
     
@@ -88,7 +88,9 @@
 -->
     
     <!-- start mini-cart -->
-<div id="topCartContent" class="block-content well" style="<?php if ( !!$_updateFlag && $_updateFlag ) {echo "display:block"; $checkoutSession->setCartUpdatedFlag(false);} else echo "display:none";?>">
+<div id="topCartContent" class="block-content well dropdown-menu" data-item-added="<?php if ( !!$_updateFlag && $_updateFlag ) {echo "true"; $checkoutSession->setCartUpdatedFlag(false);} else echo "false";?>">
+
+<!-- @TODO: remove after testing    <pre><?php //echo $_updateFlag; ?></pre> -->
     
     <div class="inner-wrapper"><?php // extra div to smooth slideUp and slideDown ?>
     <?php if ($_cartQty > 0 && !empty($_itemsArray)):?>
@@ -176,51 +178,15 @@
     </div>
 </div>
     <script type="text/javascript">
-    //Enterprise.TopCart.initialize('topCartContent');
-    // Below can be used to show minicart after item added
-    // Enterprise.TopCart.showCart(7);
+    // Show minicart after item added, then hide after 5 sec
     jQuery(document).ready( function() {
-                
         var topCartContent = jQuery("#topCartContent");
-        
-        // top cart toggle
-        var topCartToggle = jQuery('#usercart-block-title');
-        topCartToggle.on('click', function() {
-            topCartContent.toggle(0, function() {
-                var toggleState = topCartToggle.attr('data-minicart');
-                if ( toggleState == 'active' ) {
-                    topCartToggle.attr('data-minicart', 'inactive');
-                }
-                else if ( toggleState == 'inactive' ) {
-                    topCartToggle.attr('data-minicart', 'active');
-                }
+        var topCartUpdated = topCartContent.attr('data-item-added');
+        if ( topCartUpdated == 'true' ) {
+            topCartContent.show().delay(5000).queue(function(n) {
+                jQuery(this).removeAttr('style'); n();
             });
-        });
-
-
-        
-/*
-        window.setTimeout('hideTopCart()', 5000); // this is called each page load, needs to refined to just be called when mini-cart is initialized after adding to car - not each page load
-        jQuery(".top-cart").hover(
-        function(){
-            topCartContent.stop().fadeTo(200,1);
-        window.setTimeout( 'hideTopCart()', 8000 ); // leave the mini-cart open when being hovered, no timeout
-        },
-        function(){
-            topCartContent.stop().fadeTo(500,0).hide();
         }
-    );
-    jQuery(".hpcheckout-checkout-index .top-cart").hover(
-        function(){
-            topCartContent.hide();
-        }
-        );
-        jQuery("#items-info-wrapper .block-subtitle .close-btn").click(function(){
-                topCartContent.hide();
-            });
-            
-*/
-            
     });
     </script>
     <!-- end mini-cart -->
