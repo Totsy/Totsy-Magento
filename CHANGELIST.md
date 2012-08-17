@@ -1,6 +1,27 @@
 Totsy-Magento Release Notes
 ===========================
 
+20120810
+--------
+
+* MGN-831 Set status as Payment failed while order with physical and virtual that fail capture
+* Added links to Fulfillment error log Order Number column.
+* MGN-763: Removing error log entries when processing re-fulfillment requests.
+* MGN-900 Adding feature to update billing address with the same Credit Card with Edit Order Payment Module
+
+20120809
+----------
+* MGN-898 adding country code to order info sent via dotcom api
+* MGN-885 hiding qty under add to cart on mobile product view
+* MGN-456 adding color to simple product/item view
+* MGN-730 adding credit card image to mobile checkout
+* MGN-898 helper method for country code conversion
+* Changing dotcom ship method from NG to SP
+* MGN-859 Added fulfillment type check to validation only import / Added import validation for case pack quantity
+* MGN-754 Display vendor code when possible if importing to an existing event
+* MGN-747: Restricting sales & signups feed to first-level registrations only, to prevent polluting feed data with second-level (referral) registrations.
+* MGN-899: Added e-mail address to order XML sent to Dotcom.
+
 20120808
 ----------
 * MGN-903 Can now amend 400+ PO lines, MGN-676 fix count for non-casepack items; no longer count canceled items that have configurables
