@@ -88,7 +88,7 @@
 -->
     
     <!-- start mini-cart -->
-<div id="topCartContent" class="block-content well dropdown-menu" data-item-added="<?php if ( !!$_updateFlag && $_updateFlag ) {echo "true"; $checkoutSession->setCartUpdatedFlag(false);} else echo "false";?>">
+<div id="topCartContent" class="block-content dropdown-menu" data-item-added="<?php if ( !!$_updateFlag && $_updateFlag ) {echo "true"; $checkoutSession->setCartUpdatedFlag(false);} else echo "false";?>">
     
     <div class="inner-wrapper"><?php // extra div to smooth slideUp and slideDown ?>
     <?php if ($_cartQty > 0 && !empty($_itemsArray)):?>

@@ -114,6 +114,7 @@ Default layout, loads most of the pages
                     <action method="addItem"><type>skin_js</type><name>js/bootstrap-carousel.js</name><params/></action>
                     <action method="addItem"><type>skin_js</type><name>js/bootstrap-typeahead.js</name><params/></action>
                     <action method="addItem"><type>skin_js</type><name>js/application.js</name><params/></action>
+                    <action method="addItem"><type>skin_js</type><name>js/global.js</name><params/></action>
                 </block>
             </block>
         </block>
