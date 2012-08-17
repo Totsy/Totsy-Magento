@@ -300,18 +300,62 @@ header nav .cta strong em {color:#d84643; font-style:normal;}
 #header-checkoutBtn a { /* not styling this specifically, for now - see generic .btn.checkout styles */
 }
 
-.onepage-address-form {
-	/* padding: 15px; */
+.onepage-address-columns {
+   margin-left: 0px !important; 
+   padding: 10px;
+}
+
+.onepage-address-form label {
+    /* font-style: italic; */
+    font-weight: bold;
 }
 
 .onepage-address-form form{
 	margin-bottom: 0px !important;
 }
 
-.onepage-address-form input[type="text"]{
-	width: 300px !important;
+.onepage-address-form input[type="text"], select {
+	margin-right: 10px !important; 
 }
 
+.onepage-address-form .firstname {
+    width:150px !important;
+}
+
+.onepage-address-form .lastname {
+    width:200px !important;
+}
+
+.onepage-address-form .telephone {
+    width:120px !important;
+}
+
+.onepage-address-form .streetaddress1 {
+    width:380px !important;
+}
+
+.onepage-address-form .streetaddress2 {
+    width:380px !important;
+}
+
+.onepage-address-form .zip {
+    width:120px !important;
+}
+
+.onepage-address-form .city {
+    width:210px !important;
+}
+
+.onepage-address-form .state {
+    width: auto !important;
+}
+
+.onepage-address-form .country {
+    width: auto !important;
+}
+
+
+/*
 #hpcheckout-billing-wrapper label {
     float:left;
     margin:0px 10px 0px 0px;
@@ -323,6 +367,7 @@ header nav .cta strong em {color:#d84643; font-style:normal;}
     margin:0px 10px 0px 0px;
     width: 135px;
 }
+*/
 
 /**
  @My_Account
