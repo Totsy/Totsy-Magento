@@ -103,14 +103,15 @@
         </span>
     </div>
     <li class="span3">
-    <div class="thumbnail">
-    <h5 class="ellipsis"><?php echo $live['name'];?></h5>
-    <p id="time1-<?php echo $timer ?>"></p>
-    <?php $imgFile = (!isset($live['small_image']))
-    ? BP . DS . 'media' . DS . 'catalog' . DS . 'category' . DS . $live['small_image']
-    : BP . DS . 'skin' . DS . 'frontend' . DS . 'enterprise ' . DS . 'harapartners' . DS . 'images' . DS . 'catalog' . DS . 'product' . DS . 'placeholder' . DS . 'small_image.jpg';
-    ?>
-    <a class="event-link" href="<?php echo Mage::getBaseUrl().$live['url_path']; ?>"><img src="<?php echo Mage::helper('service/image')->loadImageFile($imgFile)->resize(208); ?>" width="208px" alt="" /></a>
+    <div class="thumbnail" style="margin:0px; padding:0px;">
+    <h5 class="ellipsis" style="font-size:14px; padding:5px 5px 0px 5px;"><?php echo $live['name'];?></h5>
+    <p id="time1-<?php echo $timer ?>" style="color:#808080; font-size:12px; padding:0px 5px;"></p>
+    <?php
+                    $imgFile = (isset($live['small_image']))
+                        ? BP . DS . 'media' . DS . 'catalog' . DS . 'category' . DS . $live['small_image']
+                        : BP . DS . 'skin' . DS . 'frontend' . DS . 'enterprise ' . DS . 'harapartners' . DS . 'images' . DS . 'catalog' . DS . 'product' . DS . 'placeholder' . DS . 'small_image.jpg';
+                    ?>
+    <a class="event-link" href="<?php echo Mage::getBaseUrl().$live['url_path']; ?>"><img src="<?php echo Mage::helper('service/image')->loadImageFile($imgFile)->resize(230)->keepFrame(FALSE); ?>" width="230px" alt="" /></a>
     <script type="text/javascript">
     var html = getTimerHtml('live','<?php echo $endcount ?>');
     jQuery("#time1-<?php echo $timer ?>").countdown({//date: "12 10, 2011 16:11", //Counting TO a date
