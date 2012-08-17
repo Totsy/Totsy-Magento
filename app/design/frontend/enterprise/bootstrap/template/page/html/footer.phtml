@@ -115,27 +115,6 @@
             window.location = "<?php echo Mage::getUrl('customer/account/logout')?>"// user is now logged out
         });
     }
-    jQuery(document).ready(function(){
-        jQuery(".menu li").hover(function(){
-            jQuery(this).children(".space").stop().css("height","10px").slideDown("normal");
-        },function(){
-            jQuery(this).children(".space").stop().slideUp("fast");
-        })
-    });
-    
-    jQuery(document).ready(function(){
-        jQuery(".haschild").mouseenter(function(){
-            jQuery(this).children("ul").stop().css("height","auto").slideDown("normal");
-        })
-    });
-    
-    jQuery(document).ready(function(){
-        jQuery(".haschild").mouseleave(function(){
-            jQuery(this).children("ul").stop().slideUp("fast");
-            })
-    });
-        var topCartContent;
-        
         Event.observe(document,'dom:loaded',function() {
         new Ajax.Updater($('header-user-info'), '<?php echo $this->getUrl('customertracking/headermsg/ajax',array('_secure'=>Mage::app()->getStore()->isCurrentlySecure())); ?>', {method:'get',evalScripts: true});
     });
