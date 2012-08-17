@@ -376,6 +376,7 @@ header nav .cta strong em {color:#d84643; font-style:normal;}
 body > footer {
     position: relative;
     margin-top:45px; padding: 17px 0 0 0;
+    min-width:950px; /* temp hackish fix for iPad display, prevent content of fixed width from bleeding in. @TODO: get responsive! */
     background: #e5e5e5;
     border-top:1px solid #fff;
 }
