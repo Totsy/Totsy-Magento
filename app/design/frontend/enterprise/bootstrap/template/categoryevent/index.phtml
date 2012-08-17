@@ -42,7 +42,8 @@
     }
 ?>
 <?php // include banner if it is enabled
-    if (Mage::getModel('cms/block')->load('home_banner')->getIsActive()) {
+    $bannerActive = Mage::getModel('cms/block')->load('home_banner')->getIsActive();
+    if ($bannerActive) {
         echo '<div class="banner">';
         echo $this->getLayout()->createBlock('cms/block')->setBlockId('home_banner')->toHtml();
         echo '</div>';
@@ -97,9 +98,13 @@
     <?php // Live Events ?>
     <?php if (!!$liveArray && !empty($liveArray)) : ?>
         <section class="events-grid events-current">
-            <header  class="page-header subnav">
-                <h2><img src="/skin/frontend/enterprise/bootstrap/images/iconmonstr-time-8-icon.png" width="50px" style="margin-right:5px;" /> Today's Sales</h2>
+        <?php if (!$bannerActive) : ?>
+<!--
+            <header class="page-header">
+                <h2><img src="/skin/frontend/enterprise/bootstrap/images/iconmonstr-time-8-icon.png" width="50" /> Today's Sales</h2>
             </header>
+-->
+        <?php endif; ?>
             <ul class="thumbnails">
             <?php foreach ($liveArray as $live): ?>
                 <?php
