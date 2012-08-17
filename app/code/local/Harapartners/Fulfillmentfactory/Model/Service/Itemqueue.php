@@ -86,7 +86,14 @@ class Harapartners_Fulfillmentfactory_Model_Service_Itemqueue
         else if($status == 'pending'){
             foreach($collection as $itemqueue) {
                 if($itemqueue->getStatus() != Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_CANCELLED) {
-                    $itemqueue->setStatus(Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_PENDING);
+                    if ($itemqueue->getFulfillCount() == $itemqueue->getQtyOrdered()) {
+                        $itemqueue->setStatus(Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_READY);
+                    } else if (0 == $itemqueue->getFulfillCount()) {
+                        $itemqueue->setStatus(Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_PENDING);
+                    } else {
+                        $itemqueue->setStatus(Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_PARTIAL);
+                    }
+
                     $itemqueue->save();
                 }
             }
