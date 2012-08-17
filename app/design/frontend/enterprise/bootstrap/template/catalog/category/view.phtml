@@ -38,7 +38,7 @@
     $timer = 'category';
     
     if ($_imgUrl = $_category->getImageUrl()) {
-        $_imgHtml = '<p class="category-image"><img src="'.$_imgUrl.'" alt="'.$this->htmlEscape($_category->getName()).'" title="'.$this->htmlEscape($_category->getName()).'" /></p>';
+        $_imgHtml = '<div class="category-image"><img src="'.$_imgUrl.'" alt="'.$this->htmlEscape($_category->getName()).'" title="'.$this->htmlEscape($_category->getName()).'" /></div>';
         $_imgHtml = $_helper->categoryAttribute($_category, $_imgHtml, 'image');
     }
     
@@ -67,29 +67,13 @@
 <section id="pageheader" class="jumbotron subhead">
     <div class="page-header subnav">
         <?php if (!$upComingFlag): ?>
-        <h2><a href="<?php echo $this->getUrl('event/?ref=todays_sales') ?>">Today's Sales</a><span> / <span><?php echo $_helper->categoryAttribute($_category, $_category->getName(), 'name') ?><small class="pull-right"><p class="count-down-timer" id="time-<?php echo $timer ?>"></p></small>
+        <h2><a href="<?php echo $this->getUrl('event/?ref=todays_sales') ?>">Today's Sales</a><span> / <span><?php echo $_helper->categoryAttribute($_category, $_category->getName(), 'name') ?>
+        
         </h2>
         <?php else :?>
-        <h2><a href="/event#event-upcoming">Upcoming Sales</a><span> / <span><?php echo $_helper->categoryAttribute($_category, $_category->getName(), 'name') ?><small class="pull-right"><p class="count-down-timer" id="time-<?php echo $timer ?>"></p></small>
+        <h2><a href="/event#event-upcoming">Upcoming Sales</a><span> / <span><?php echo $_helper->categoryAttribute($_category, $_category->getName(), 'name') ?>
         </h2>
         <?php endif;?>
-        <script type="text/javascript">
-            if(<?php echo $upComingFlag?>){
-                var html = getTimerHtml('upcoming','<?php echo $timecount ?>');
-            } else {
-                var html = getTimerHtml('live','<?php echo $timecount ?>');
-            }
-            jQuery("#time-<?php echo $timer ?>").countdown({
-                //date: "12 10, 2011 16:11", //Counting TO a date
-                date: "<?php echo $timecount; ?>", //Counting TO a date
-                htmlTemplate: html,
-                onComplete: function( event ){
-                    jQuery(this).html("Completed");
-                },
-                leadingZero: true,
-                direction: "down"
-            });
-        </script>
     </div>
 </section>
     
@@ -118,12 +102,30 @@
             $_attributes = explode(',',$depts);
             $allowAttrArray = array('boys','girls','moms_dads');
         ?>
-        <div class="options-container-big pull-right">
-            <fieldset id="product-options-wrapper" class="product-options">
-                <dl>
-                    <dd>
-                        <div class="input-box">
-                            <span style="-moz-user-select: none;" id="activechange"><?php echo $this->__('All') ?></span>
+        <div class="options-container-big row">
+            <fieldset id="product-options-wrapper" class="product-options ">
+                        <div class="span7">
+                        <img src="/skin/frontend/enterprise/bootstrap/images/iconmonstr-time-icon.png" width="35px" style="margin:-8px 5px 0px 0px;" class="pull-left" /><div class="count-down-timer pull-left" id="time-<?php echo $timer ?>"></div>
+                        <script type="text/javascript">
+            if(<?php echo $upComingFlag?>){
+                var html = getTimerHtml('upcoming','<?php echo $timecount ?>');
+            } else {
+                var html = getTimerHtml('live','<?php echo $timecount ?>');
+            }
+            jQuery("#time-<?php echo $timer ?>").countdown({
+                //date: "12 10, 2011 16:11", //Counting TO a date
+                date: "<?php echo $timecount; ?>", //Counting TO a date
+                htmlTemplate: html,
+                onComplete: function( event ){
+                    jQuery(this).html("Completed");
+                },
+                leadingZero: true,
+                direction: "down"
+            });
+        </script>
+                        </div>
+                        <div class="input-box offset9">
+                            
                             <select name="departments" id="attribute" onchange="showProductWithAttributeNum(document.getElementById('attribute').value);" class="required-entry">
                                 <option value="all"><?php echo $this->__('All') ?></option>
                                 <?php foreach($_attributes as $_attribute): ?>
@@ -139,8 +141,6 @@
                                 <?php endforeach;?>
                             </select>
                         </div>
-                    </dd>
-                </dl>
             </fieldset>
             <script type="text/javascript">
                 jQuery(document).ready(function(){

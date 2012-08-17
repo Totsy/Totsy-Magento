@@ -16,8 +16,9 @@ html {
     background-image: linear-gradient(top, #eef6fc, #ffffff);
     background-attachment: fixed;
 }
-a {color:#ed1c25;text-decoration:none;}
+a {color:#ed1c25;text-decoration:none; outline: none;}
 a:hover{color:#ed1c25;text-decoration:underline;}
+a:focus{outline: none;}
 .content_push { margin-top:100px; }
 .content_push_2col { margin-top:115px; }
 /* 960.gs Grid Reset Classes. */
@@ -43,24 +44,9 @@ a:hover{color:#ed1c25;text-decoration:underline;}
 }
 /* #myCarousel { margin-top:20px; } */
 #toTop {
-    background-color: #EB132C;
-    border-color: #EB132C;
-    border-radius: 6px 6px 6px 6px;
-    border-style: solid;
-    border-width: 1px;
     bottom: 10px;
-    color: #FFFFFF;
-    cursor: pointer;
-    display: none;
-    font-family: inherit;
-    font-size: 13px;
-    font-weight: bold;
-    padding: 5px;
     position: fixed;
     right: 10px;
-    text-align: center;
-    text-transform: uppercase;
-    width: auto;
     z-index: 999;
 }
 .carousel-inner {
@@ -100,8 +86,13 @@ html.test .container .row {outline:1px dotted green;}
  @General / Modular Classes
  */
 .well {
-    box-shadow: 0 1px 3px rgba(34, 25, 25, 0.2);
-    background-color: #fff!important;
+    background: none repeat scroll 0 0 #FFFFFF;
+    border: 1px solid #DDDDDD;
+    border-radius: 4px 4px 4px 4px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075);
+    display: block;
+    color:#808080;
+    padding: 10px;
 }
 .thumbnail {padding:10px;}
 .page-header {border-bottom: 4px solid #E5E5E5; margin:18px 0;}
@@ -119,7 +110,8 @@ html.test .container .row {outline:1px dotted green;}
 }
 
 /* btn classes */
-.btn {
+.btn,
+.navbar .btn {
     background-image:url("../images/btn-glass.png");
     background-repeat: repeat-x;
     background-position:0 50.5%;
@@ -128,17 +120,17 @@ html.test .container .row {outline:1px dotted green;}
 a.btn-primary /* req to override '.dropdown a' ruleset */ {
     background-color:rgba(237,45,33,1);
     color:#fff;
+    font-size: 13px;
 }
 .btn.checkout {
-    padding: 1px 8px 2px;
     margin: 8px 0 0;
+    padding: 1px 8px 2px;
+    text-transform: uppercase;
 }
 .btn.checkout strong {
     background: url("../images/btn-arrow-s.png") no-repeat scroll 100% 50% transparent;
     padding-right: 9px;
-    font-size: 13px;
     font-weight: normal;
-    text-transform: uppercase;
 }
 .btn-primary:hover {background-color:rgba(237,45,33,0.9); background-position: 0 50.5%;}
 @media screen and (-webkit-min-device-pixel-ratio:0) { /* webkit fixin's */
@@ -276,7 +268,7 @@ header nav .cta strong em {color:#d84643; font-style:normal;}
 /* Minicart */
 #topCartContent {
     position: absolute; top: 100%; left: auto; right:0; z-index: 10;
-    margin-top:-1px;
+    margin-top:-1px; padding:19px;
     width:334px;
     background:#fff;
     border:1px solid #ccc; /* old browser fallback */
@@ -379,9 +371,9 @@ header nav .cta strong em {color:#d84643; font-style:normal;}
  */
 body > footer {
     position: relative;
-    margin-top:45px; padding: 17px 0 18px 0;
+    margin-top:45px; padding: 17px 0 0 0;
     background: #e5e5e5;
-    border:1px solid #fff;
+    border-top:1px solid #fff;
 }
 body > footer:before {
     content: "";
@@ -402,6 +394,17 @@ footer strong {
 body > footer ul {margin:0;}
 body > footer ul li a,
 body > footer ul li a:hover {color:#666; font-size: 12px;}
+body > footer small {
+    display: block;
+    margin-top:18px; padding: 16px 16px 18px;
+    background: none repeat scroll 0% 0% rgb(178, 178, 178); 
+    border-top: 2px solid rgb(136, 136, 136); 
+    font-size: 11px; 
+}
+body > footer small .container {
+    display: block; 
+    font-style: normal;
+}
 
 /* login/register pages footer */
 body.customer-account-login #footer ul {
@@ -566,3 +569,7 @@ select, textarea, input[type="text"], input[type="password"], input[type="dateti
 .price-box { margin-top:10px; font-size: 11px; }
 .old-price { font-weight:normal; }
 .old-price { font-weight:normal; }
+.options-container-big {margin:0px;}
+.count-down-timer {font-size:18px;}
+.input-box {padding:0px 0px 5px;}
+.pdp_tabs {width:105%; margin-top:-45px; margin-left:-11px;}
