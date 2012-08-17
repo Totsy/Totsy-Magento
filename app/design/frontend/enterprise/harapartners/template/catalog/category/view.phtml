@@ -35,6 +35,7 @@
     $_helper    = $this->helper('catalog/output');
     $_category  = $this->getCurrentCategory();
     $_imgHtml   = '';
+    $_logoHtml   = '';
     $timer = 'category';
     
     if ($_imgUrl = $_category->getImageUrl()) {
@@ -105,7 +106,7 @@
 	    <?php if($_description=$this->getCurrentCategory()->getDescription()): ?>
 	        <div class="category-description std">
 	            <?php echo $_helper->categoryAttribute($_category, $_description, 'description') ?>
-				<?php if(isset($_logoHtml)) echo $_logoHtml; ?>	            
+				<?php if($_logoHtml){ echo $_logoHtml; } ?>	            
 	        </div>
 	    <?php endif; ?>
 	</div>

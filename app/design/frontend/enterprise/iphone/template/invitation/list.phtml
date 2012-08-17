@@ -32,6 +32,7 @@
 <?php $default_msg = 'Please accept this insider invitation to join Totsy.'?>
 
 <?php
+$currentBalance = false;
 $numberSent = 0;
 $memberReg = 0; 
 foreach ($this->getInvitationCollection() as $invitation) {
@@ -45,15 +46,16 @@ foreach ($this->getInvitationCollection() as $invitation) {
 
 $rewardCollection = $this->getCreditHistory();
 
-
-if ( $rewardCollection ) {
-    $rewardCollection = false;
+if ( !$rewardCollection ) {
+	$rewardCollection = false;
+	$currentBalance = '0.00';
+} else {
+	foreach ( $rewardCollection as $item ){
+		$currentBalance = Mage::helper('core')->currency($item->getCurrencyAmount());
+		break; // return first item's balance which is the last record
+	}	
 }
 
-foreach ( $rewardCollection as $item ){
-	$currentBalance = Mage::helper('core')->currency($item->getCurrencyAmount());
-	break; // return first item's balance which is the last record
-}
 
 
 ?>
