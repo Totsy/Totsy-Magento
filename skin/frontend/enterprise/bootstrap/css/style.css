@@ -21,6 +21,7 @@ a:hover{color:#ed1c25;text-decoration:underline;}
 a:focus{outline: none;}
 .content_push { margin-top:100px; }
 .content_push_2col { margin-top:115px; }
+
 /* 960.gs Grid Reset Classes. */
 .alpha { margin-left: 0 }
 .omega { margin-right: 0 }
@@ -29,7 +30,6 @@ a:focus{outline: none;}
 .align-center {
   text-align: center;
 }
-
 .align-right {
   text-align: right;
 }
@@ -55,6 +55,10 @@ a:focus{outline: none;}
     position: relative;
     width: 100%;
 }
+#mainContent > .banner {
+    margin-top:50px;
+}
+
 /**
  @Diagnostics
  */

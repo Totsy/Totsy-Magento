@@ -41,7 +41,13 @@
         $upcomingArray = $indexDataObj->getData('upcoming');
     }
 ?>
-<?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('home_banner')->toHtml();?>
+<?php // include banner if it is enabled
+    if (Mage::getModel('cms/block')->load('home_banner')->getIsActive()) {
+        echo '<div class="banner">';
+        echo $this->getLayout()->createBlock('cms/block')->setBlockId('home_banner')->toHtml();
+        echo '</div>';
+    }
+?>
 
 <section id="pageheader" class="jumbotron subhead">
   <div class="page-header subnav">
