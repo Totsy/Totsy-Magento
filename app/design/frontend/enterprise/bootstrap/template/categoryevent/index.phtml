@@ -57,8 +57,8 @@
         // @GOTCHA: We are currently not showing top events. This entire block never renders…
     ?>
     <?php if (!!$topArray && !empty($topArray)) : ?>
-        <section class="events-grid top-events">
-        <?php foreach ($topArray as $top):?>
+        <section class="events-grid events-top">
+        <?php foreach ($topArray as $top): ?>
             <?php
                 $endcountRaw = strtotime($top['event_end_date']);
                 $endcount = date("F j, Y, G:i:s", $endcountRaw);
@@ -89,25 +89,25 @@
                     </div>
                 </div>
             </div>
-            <?php $timer++;?>
-            <?php endforeach;?>
-        </section><!-- /.top-events -->
+            <?php $timer++; ?>
+            <?php endforeach; ?>
+        </section><!-- /.events-top -->
     <?php endif; ?>
 
     <?php // Live Events ?>
     <?php if (!!$liveArray && !empty($liveArray)) : ?>
-        <section class="events-grid current-events">
+        <section class="events-grid events-current">
             <header  class="page-header subnav">
                 <h2><img src="/skin/frontend/enterprise/bootstrap/images/iconmonstr-time-8-icon.png" width="50px" style="margin-right:5px;" /> Today's Sales</h2>
             </header>
             <ul class="thumbnails">
-            <?php foreach ($liveArray as $live):?>
+            <?php foreach ($liveArray as $live): ?>
                 <?php
                     $endcountRaw = strtotime($live['event_end_date']);
                     $endcount = date("F j, Y, G:i:s", $endcountRaw);
                     $hasProduct = $this->hasProduct($live['entity_id']);
                 ?>
-                <?php if ($hasProduct):?>
+                <?php if ($hasProduct): ?>
                     <li class="span3 catalog-event event-counter-<?php echo $timer;?>">
                         <span class="echoShare" 
                             data-productname="<?php echo $live['name'];?>" 
@@ -142,70 +142,81 @@
                                 direction: "down"
                                 });
                             </script>
-                            <?php $timer++;?>
+                            <?php $timer++; ?>
                         </div>
                     </li>
-                <?php endif;?>
-            <?php endforeach;?>
+                <?php endif; ?>
+            <?php endforeach; ?>
             </ul>
-        </section><!-- /.current-events -->
+        </section><!-- /.events-current -->
     <?php endif; ?>
 
+    <?php // Upcoming Events ?>
+    <?php if (!!$upcomingArray && !empty($upcomingArray)): ?>
+        <section class="events-grid events-upcoming">
+            <header class="page-header">
+                <h2><img src="/skin/frontend/enterprise/bootstrap/images/iconmonstr-calendar-5-icon.png" width="50px" style="margin-right:5px;" class="pull-left" /> Upcoming Sales</h2>
+            </header>
+            <ul class="thumbnails">
+            <?php foreach ($upcomingArray as $up): ?>
+                <?php
+                    $endcountRaw = strtotime($up['event_start_date']);
+                    $endcount = date("F j, Y, G:i:s", $endcountRaw);
+                ?>
+                <li class="span2 catalog-event up-event-counter-<?php echo $timer;?>">
+                    <span class="echoShare" 
+                        data-productname="<?php echo $up['name'];?>" 
+                        data-productcap="" 
+                        data-productdesc="<?php echo strip_tags(html_entity_decode($this->getDescription($up['description'])));?>" 
+                        data-imageclass="" 
+                        data-producturl="<?php echo Mage::getBaseUrl().$up['url_path']; ?>">
+                    </span>
+                    <div class="thumbnail">
+                        <h5 class="ellipsis"><?php echo $up['name'];?></h5>
+                        <p id="time1-<?php echo $timer ?>"></p>
+                        <?php
+                            $imgFile = (isset($up['small_image']))
+                            ? BP . DS . 'media' . DS . 'catalog' . DS . 'category' . DS .
+                            $up['small_image']
+                            : BP . DS . 'skin' . DS . 'frontend' . DS . 'enterprise ' . DS . 'harapartners' . DS . 'images' . DS . 'catalog' . DS . 'product' . DS . 'placeholder' . DS . 'small_image.jpg';
+                        ?>
+                        <a class="event-link" href="<?php echo Mage::getBaseUrl().$up['url_path']; ?>">
+                            <img src="<?php echo Mage::helper('service/image')->loadImageFile($imgFile)->resize(165); ?>" width="165px" alt="" />
+                        </a>
+                        <script type="text/javascript">
+                            // @TODO: all countdown jQuery should be externalized
+                            var html = getTimerHtml('upcoming','<?php echo $endcount ?>');
+                            jQuery("#time2-<?php echo $timer ?>").countdown({
+                                //date: "12 10, 2011 16:11", //Counting TO a date
+                                date: "<?php echo $endcount; ?>", //Counting TO a date
+                                htmlTemplate: html,
+                                onComplete: function( event ){
+                                    jQuery(this).html("Completed");
+                                    jQuery("div.up-event-counter-<?php echo $timer; ?>").remove();
+                                },
+                                leadingZero: true,
+                                direction: "down"
+                            });
+                        </script>
+                        <?php $timer++; ?>
+                    </div>
+                </li>
+            <?php endforeach; ?>
+            </ul>
+        </section><!-- /.events-upcoming -->
+    <?php endif; ?>
+    
+    <?php // ENDING SOON - not functioning, no $endingArray exists - just placeholder code ?>
+    <?php if (!!$endingArray && !empty($endingArray)): ?>
+        <section class="events-grid events-ending">
+            <header class="page-header">
+                <h2><img src="/skin/frontend/enterprise/bootstrap/images/iconmonstr-time-8-icon.png" width="50px" style="margin-right:5px;" /> Hurry, Ending Soon!</h2>
+            </header>
+            <ul>
+            <?php // foreach block here ?>
+            </ul>
+        </section><!-- /.events-ending -->
+    <?php endif; ?>
 
-<?php if (!!$upcomingArray && !empty($upcomingArray)):?>
-<div class="page-header">
-    <h2><img src="/skin/frontend/enterprise/bootstrap/images/iconmonstr-calendar-5-icon.png" width="50px" style="margin-right:5px;" class="pull-left" /> Upcoming Sales</h2>
-</div>
-    <div class="upcoming-events-container">
-        <ul class="thumbnails">
-        <?php foreach ($upcomingArray as $up):?>
-        <?php
-            $endcountRaw = strtotime($up['event_start_date']);
-            $endcount = date("F j, Y, G:i:s", $endcountRaw);
-        ?>
-        <div class="catalog-event up-event-counter-<?php echo $timer;?>">
-            <span class="echoShare" 
-                data-productname="<?php echo $up['name'];?>" 
-                data-productcap="" 
-                data-productdesc="<?php echo strip_tags(html_entity_decode($this->getDescription($up['description'])));?>" 
-                data-imageclass="" 
-                data-producturl="<?php echo Mage::getBaseUrl().$up['url_path']; ?>">
-            </span>
-        </div>
-        <li class="span2">
-            <div class="thumbnail">
-            <h5 class="ellipsis"><?php echo $up['name'];?></h5>
-            <p id="time1-<?php echo $timer ?>"></p>
-            <?php
-                $imgFile = (isset($up['small_image']))
-                ? BP . DS . 'media' . DS . 'catalog' . DS . 'category' . DS .
-                $up['small_image']
-                : BP . DS . 'skin' . DS . 'frontend' . DS . 'enterprise ' . DS . 'harapartners' . DS . 'images' . DS . 'catalog' . DS . 'product' . DS . 'placeholder' . DS . 'small_image.jpg';
-            ?>
-            <a class="event-link" href="<?php echo Mage::getBaseUrl().$up['url_path']; ?>"><img src="<?php echo Mage::helper('service/image')->loadImageFile($imgFile)->resize(165); ?>" width="165px" alt="" /></a>
-            <script type="text/javascript">
-            var html = getTimerHtml('upcoming','<?php echo $endcount ?>');
-            jQuery("#time2-<?php echo $timer ?>").countdown({
-            //date: "12 10, 2011 16:11", //Counting TO a date
-            date: "<?php echo $endcount; ?>", //Counting TO a date
-            htmlTemplate: html,
-            onComplete: function( event ){
-            jQuery(this).html("Completed");
-            jQuery("div.up-event-counter-<?php echo $timer;?>").remove();
-            },
-            leadingZero: true,
-            direction: "down"
-            });
-            </script>
-            <?php $timer++;?>
-            </div>
-        </li>
-<?php endforeach;?>
-        </ul>
-        </div>
-    <?php endif;?>	
-    </div>
-    <!-- div class="page-header">
-        <h2><img src="/skin/frontend/enterprise/bootstrap/images/iconmonstr-time-8-icon.png" width="50px" style="margin-right:5px;" /> Hurry, Ending Soon!</h2>
-    </div -->
-</div>
+    </div><!-- /.live-events-container -->
+</div><!-- /.catalog-events-container -->
