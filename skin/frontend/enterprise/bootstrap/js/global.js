@@ -34,7 +34,8 @@
         //SillyExample.init();
         //MyNameSpace.init();
  
- 
+        // Following are one-offs… should still be namespaced
+        
         /* Prevent default if menu links are "#" */
         $('nav a').each( function() {
         	var nav = $(this); 
@@ -49,7 +50,20 @@
         		}
         	}
         }); 
- 
+
+        /* Back to Top */
+        $(window).scroll(function () {
+            if ($(this).scrollTop() != 0) {
+                $('#toTop').fadeIn();
+            } else {
+                $('#toTop').fadeOut();
+            }
+        });
+        $('#toTop a').click(function (e) {
+            e.preventDefault();
+            $('body,html').animate({scrollTop: 0},800);
+        });
+         
     
     });
     
