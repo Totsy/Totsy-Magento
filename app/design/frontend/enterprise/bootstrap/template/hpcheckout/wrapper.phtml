@@ -56,52 +56,56 @@
 				<?php echo $this->getChildHtml( 'login' ) ?>
 			</div>
 		<?php endif ?>
-		<div class="address span12">
-		    <div class="span5 row onepage-address-columns pull-left well" style="margin-right:100px !important">
-		    	<div class="checkout-headline">
-		    		<h4 class="legend"><?php echo $this->__('Billing Address') ?></h4>
-		    		<br />
-		    		<?php if ($this->customerHasAddresses()): ?>
-		    		    <div class="billing-address-select totsy-selective-input-box">
-		    		        <?php echo $this->getAddressesHtmlSelect('billing') ?>
-		    		    </div>
-		    		<?php endif; ?>
-		    	</div>
-		    	<div id="hpcheckout-billing-wrapper" class="onepage-address-form">
-		    		<div class="checkout-content"><?php echo $this->getChildHtml( 'billing' ) ?></div>
-		    	</div>
+		<div class="address well span12">
+		    <div class="onepage-address-columns pull-left span6">
+		    	    <div class="checkout-headline">
+		    	    	<h4 class="legend"><?php echo $this->__('Billing Address') ?></h4>
+		    	    	<br />
+		    	    	<?php if ($this->customerHasAddresses()): ?>
+		    	    	    <div class="billing-address-select totsy-selective-input-box">
+		    	    	        <?php echo $this->getAddressesHtmlSelect('billing') ?>
+		    	    	    </div>
+		    	    	<?php endif; ?>
+		    	    </div>
+		    	    <div id="hpcheckout-billing-wrapper" class="onepage-address-form">
+		    	    	<div class="checkout-content"><?php echo $this->getChildHtml('billing') ?></div>
+		    	    </div>
             </div>
-		    <div class="span5 row onepage-address-columns well">
-			    <div class="checkout-headline">
-			       <h4 class="legend"><?php echo $this->__('Shipping Address') ?></h4>
-			       <br />
-			       <?php if ($this->customerHasAddresses()): ?>
-			           <div class="shipping-address-select totsy-selective-input-box">
-			               <?php echo $this->getAddressesHtmlSelect('shipping') ?>
-			           </div>
-			       <?php endif; ?>
-			    </div>	
-			    <?php if( ! $this->getQuote()->isVirtual() ): ?>
-			    <div id="hpcheckout-shipping-wrapper" class="onepage-address-form">
-			        <div class="checkout-content"><?php echo $this->getChildHtml( 'shipping' ) ?></div>
-			    </div>
-			    <?php endif ?>
-            </div>
+		    <div class="onepage-address-columns pull-right">
+			        <div class="checkout-headline">
+			           <h4 class="legend"><?php echo $this->__('Shipping Address') ?></h4>
+			           <br />
+			           <?php if ($this->customerHasAddresses()): ?>
+			               <div class="shipping-address-select totsy-selective-input-box">
+			                   <?php echo $this->getAddressesHtmlSelect('shipping') ?>
+			               </div>
+			           <?php endif; ?>
+			        </div>	
+			        <?php if( ! $this->getQuote()->isVirtual() ): ?>
+			        <div id="hpcheckout-shipping-wrapper" class="onepage-address-form">
+			            <div class="checkout-content"><?php echo $this->getChildHtml( 'shipping' ) ?></div>
+			        </div>
+			        <?php endif ?>
+                    </div>
+		      </div>
 		</div>
-		<div style="clear:both"></div>
-				<?php if( false && ! $this->getQuote()->isVirtual() ): ?>
-			<div id="hpcheckout-shipping-method-wrapper" class="well">
-				<div class="checkout-sub-title sub-title">Shipping Method</div>
-				<div class="checkout-content"><?php echo $this->getChildHtml( 'shipping_method' ) ?></div>
-			</div>
+        <?php if( false && ! $this->getQuote()->isVirtual() ): ?>
+        <div id="hpcheckout-shipping-method-wrapper" class="span12 well">
+            <h4 class="legend">Shipping Method</h4>	
+            <br />
+            <div class="checkout-content"><?php echo $this->getChildHtml('shipping_method') ?></div>
+        </div>
 		<?php endif ?>
-		<div id="hpcheckout-payment-wrapper" class="well">
-			<div class="checkout-sub-title sub-title">Payment</div>
+		<div id="hpcheckout-payment-wrapper" class="span12 well">
+			<h4 class="legend">Payment</h4>
+			<br />
 			<div class="checkout-content"><?php echo $this->getChildHtml( 'payment' ) ?></div>
 		</div>
-		<div id="hpcheckout-review-wrapper" class="well">
-			<div class="checkout-sub-title sub-title">Review</div>
+		<div id="hpcheckout-review-wrapper" class="span12 well">
+			<h4 class="legend">Review</h4>
+			<br />
 			<div class="checkout-content"><?php echo $this->getChildHtml( 'review' ) ?></div>
+		</div>
 		</div>
 		<?php echo $this->getChildHtml( 'script' ) ?>
 	<?php else: ?>

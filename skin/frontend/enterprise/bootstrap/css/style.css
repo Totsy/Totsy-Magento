@@ -357,17 +357,49 @@ header nav .cta strong em {color:#d84643; font-style:normal;}
 #header-checkoutBtn a { /* not styling this specifically, for now - see generic .btn.checkout styles */
 }
 
+.address{
+    margin-left: 0px !important; 
+}
+
+#hpcheckout-shipping-method-wrapper {
+    margin-left: 0px !important; 
+}
+
+#hpcheckout-payment-form ul {
+    margin: 0px !important; 
+}
+
+#hpcheckout-payment-form {
+	margin: 0px !important;
+}
+
+#hpcheckout-review-wrapper {
+    margin-left: 0px !important; 
+}
+
+#hpcheckout-payment-wrapper {
+    margin-left: 0px !important; 
+}
+
 .onepage-address-columns {
    margin-left: 0px !important; 
-   padding: 10px;
 }
 
 .onepage-address-form label {
-    /* font-style: italic; */
+    display: none;
     font-weight: bold;
 }
 
-.onepage-address-form form{
+#hpcheckout-payment-form label{
+    display: none;
+}
+
+#hpcheckout-payment-form label{
+    font-weight: bold;
+    text-transform:lowercase;
+}
+
+.onepage-address-form form {
 	margin-bottom: 0px !important;
 }
 
@@ -380,11 +412,11 @@ header nav .cta strong em {color:#d84643; font-style:normal;}
 }
 
 .onepage-address-form .lastname {
-    width:200px !important;
+    width:210px !important;
 }
 
 .onepage-address-form .telephone {
-    width:120px !important;
+    width:150px !important;
 }
 
 .onepage-address-form .streetaddress1 {
@@ -410,21 +442,6 @@ header nav .cta strong em {color:#d84643; font-style:normal;}
 .onepage-address-form .country {
     width: auto !important;
 }
-
-
-/*
-#hpcheckout-billing-wrapper label {
-    float:left;
-    margin:0px 10px 0px 0px;
-    width: 135px;
-}
-
-#hpcheckout-shipping-wrapper label {
-    float:left;
-    margin:0px 10px 0px 0px;
-    width: 135px;
-}
-*/
 
 /**
  @My_Account
