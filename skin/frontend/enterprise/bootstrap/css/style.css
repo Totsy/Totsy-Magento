@@ -152,7 +152,10 @@ a.btn-primary /* req to override '.dropdown a' ruleset */ {
 .page-header img {margin-right: 5px;}
 
 /* event tiles */
-.events-grid .span3 {max-height: 311px; overflow: hidden;}
+.events-grid .thumbnail {
+    position: relative;
+    margin: 0; padding: 0;
+}
 .events-grid .span3 hgroup {
     padding: 8px 4px;
     height: 30px; overflow: hidden;
@@ -172,13 +175,12 @@ a.btn-primary /* req to override '.dropdown a' ruleset */ {
 } 
 .events-grid .span2 h5 {
     font-size: 12px;
-} 
-.events-grid .thumbnail {
-    position: relative;
-    margin: 0; padding: 0;
 }
 .events-grid .thumbnail .event-link {
     display: block;
+}
+.events-grid .span3 .thumbnail .event-link img {
+    max-height: 263px;
 }
 .events-grid .thumbnail .more {
     display: none;
