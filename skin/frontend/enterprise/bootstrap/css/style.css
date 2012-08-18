@@ -83,7 +83,10 @@ html.test .container .row {outline:1px dotted green;}
     padding: 10px;
 }
 .thumbnail {padding:10px;}
-.page-header {border-bottom: 4px solid #E5E5E5; margin:10px 0; padding-bottom:20px;}
+.page-header {
+    margin:20px 0 10px; padding-bottom:5px;
+    border-bottom:1px solid #E5E5E5; 
+}
 .zoomImage { padding:10px; z-index:500!important; }
 
 /* Ellipsis classes for truncating long titles */
