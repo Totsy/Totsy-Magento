@@ -98,7 +98,7 @@ html.test .container .row {outline:1px dotted green;}
     padding: 10px;
 }
 .thumbnail {padding:10px;}
-.page-header {border-bottom: 4px solid #E5E5E5; margin:10px 0; padding-bottom:5px;}
+.page-header {border-bottom: 4px solid #E5E5E5; margin:10px 0; padding-bottom:20px;}
 .zoomImage { padding:10px; z-index:500!important; }
 
 /* link classes */

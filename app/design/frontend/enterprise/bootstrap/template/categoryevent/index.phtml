@@ -50,15 +50,6 @@
     }
 ?>
 
-<<<<<<< HEAD
-<section id="pageheader" class="jumbotron subhead">
-  <div class="page-header subnav">
-    <h2><img src="/skin/frontend/enterprise/bootstrap/images/iconmonstr-time-8-icon.png" width="35px" style="margin-right:5px;" /> Today's Sales</h2>
-  </div>
-</section>
-
-=======
->>>>>>> df3cee20dc6d5c46965c604d36eed28dc33bcfeb
 <div class="catalog-events-container">
     <div class="live-events-container">
     
@@ -66,77 +57,9 @@
         // Top Events
         // @GOTCHA: We are currently not showing top events. This entire block never renders…
     ?>
-<<<<<<< HEAD
-    <?php if ($hasProduct):?>
-    <div class="catalog-event event-counter-<?php echo $timer;?>">
-        <span class="echoShare" 
-        data-productname="<?php echo $live['name'];?>" 
-        data-productcap="" 
-        data-productdesc="<?php echo 
-        strip_tags(html_entity_decode($this->getDescription($live['description'])));?>" 
-        data-imageclass="" 
-        data-producturl="<?php echo Mage::getBaseUrl().$live['url_path']; ?>">
-        </span>
-    </div>
-    <li class="span3">
-    <div class="thumbnail" style="margin:0px; padding:0px;">
-    <h5 class="ellipsis" style="font-size:14px; padding:5px 5px 0px 5px;"><?php echo $live['name'];?></h5>
-    <p id="time1-<?php echo $timer ?>" style="color:#808080; font-size:12px; padding:0px 5px;"></p>
-    <?php
-                    $imgFile = (isset($live['small_image']))
-                        ? BP . DS . 'media' . DS . 'catalog' . DS . 'category' . DS . $live['small_image']
-                        : BP . DS . 'skin' . DS . 'frontend' . DS . 'enterprise ' . DS . 'harapartners' . DS . 'images' . DS . 'catalog' . DS . 'product' . DS . 'placeholder' . DS . 'small_image.jpg';
-                    ?>
-    <a class="event-link" href="<?php echo Mage::getBaseUrl().$live['url_path']; ?>"><img src="<?php echo Mage::helper('service/image')->loadImageFile($imgFile)->resize(230)->keepFrame(FALSE); ?>" width="230px" alt="" /></a>
-    <script type="text/javascript">
-    var html = getTimerHtml('live','<?php echo $endcount ?>');
-    jQuery("#time1-<?php echo $timer ?>").countdown({//date: "12 10, 2011 16:11", //Counting TO a date
-    date: "<?php echo $endcount; ?>", //Counting TO a date
-    htmlTemplate: html,
-    onComplete: function( event ){
-    jQuery(this).html("Completed");
-    jQuery("div.event-counter-<?php echo $timer;?>").remove();
-    },
-    leadingZero: true,
-    direction: "down"
-    });
-    </script>
-<?php $timer++;?>
-</div>
-</li>
-<?php endif;?>
-<?php endforeach;?>
-</ul>
-</div>
-<?php if (!!$upcomingArray && !empty($upcomingArray)):?>
-<div class="page-header">
-    <h2><img src="/skin/frontend/enterprise/bootstrap/images/iconmonstr-calendar-5-icon.png" width="35px" style="margin-right:5px;" class="pull-left" /> Upcoming Sales</h2>
-</div>
-    <div class="upcoming-events-container">
-        <ul class="thumbnails">
-        <?php foreach ($upcomingArray as $up):?>
-        <?php
-            $endcountRaw = strtotime($up['event_start_date']);
-            $endcount = date("F j, Y, G:i:s", $endcountRaw);
-        ?>
-        <div class="catalog-event up-event-counter-<?php echo $timer;?>">
-            <span class="echoShare" 
-                data-productname="<?php echo $up['name'];?>" 
-                data-productcap="" 
-                data-productdesc="<?php echo strip_tags(html_entity_decode($this->getDescription($up['description'])));?>" 
-                data-imageclass="" 
-                data-producturl="<?php echo Mage::getBaseUrl().$up['url_path']; ?>">
-            </span>
-        </div>
-        <li class="span2">
-            <div class="thumbnail">
-            <h5 class="ellipsis"><?php echo $up['name'];?></h5>
-            <p id="time1-<?php echo $timer ?>"></p>
-=======
     <?php if (!!$topArray && !empty($topArray)) : ?>
         <section class="events-grid events-top">
         <?php foreach ($topArray as $top): ?>
->>>>>>> df3cee20dc6d5c46965c604d36eed28dc33bcfeb
             <?php
                 $endcountRaw = strtotime($top['event_end_date']);
                 $endcount = date("F j, Y, G:i:s", $endcountRaw);
