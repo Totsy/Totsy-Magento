@@ -152,10 +152,13 @@ a.btn-primary /* req to override '.dropdown a' ruleset */ {
 .page-header img {margin-right: 5px;}
 .events-grid .span3 hgroup {
     padding: 8px 4px;
+    height: 30px; overflow: hidden;
 }
 .events-grid .span3 h5 {
+    width:220px; overflow: hidden;
     color:#000;
     font-size: 16px; font-weight: normal;
+    white-space:nowrap; text-overflow: ellipsis;
 } 
 .events-grid .thumbnail {
     position: relative;
