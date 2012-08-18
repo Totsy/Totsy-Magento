@@ -1,5 +1,4 @@
 <?php if ($this->getTotals()): ?>
-<tfoot class="pull-right" style="width:auto" colspan="4">
     <?php $_colspan = $this->helper('tax')->displayCartBothPrices() ? 5 : 3; ?>
     <?php echo $this->renderTotals(null, $_colspan); ?>
     <?php echo $this->renderTotals('footer', $_colspan); ?>
@@ -13,5 +12,4 @@
         </td>
     </tr>
     <?php endif?>
-</tfoot>
 <?php endif; ?>
