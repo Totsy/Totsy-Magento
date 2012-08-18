@@ -97,7 +97,11 @@
 
     <?php // Live Events ?>
     <?php if (!!$liveArray && !empty($liveArray)) : ?>
+<<<<<<< HEAD
         <section class="events-grid events-current">
+=======
+        <section id="events-live" class="events-grid">
+>>>>>>> 46e77f91691e945c1213c1918301bb180fe4180e
         <?php if (!$bannerActive) : ?>
 <!--
             <header class="page-header">
@@ -153,12 +157,20 @@
                 <?php endif; ?>
             <?php endforeach; ?>
             </ul>
+<<<<<<< HEAD
         </section><!-- /.events-current -->
+=======
+        </section><!-- /#events-live -->
+>>>>>>> 46e77f91691e945c1213c1918301bb180fe4180e
     <?php endif; ?>
 
     <?php // Upcoming Events ?>
     <?php if (!!$upcomingArray && !empty($upcomingArray)): ?>
+<<<<<<< HEAD
         <section class="events-grid events-upcoming">
+=======
+        <section id="events-upcoming" class="events-grid">
+>>>>>>> 46e77f91691e945c1213c1918301bb180fe4180e
             <header class="page-header">
                 <h2><img src="/skin/frontend/enterprise/bootstrap/images/iconmonstr-calendar-5-icon.png" width="50px" style="margin-right:5px;" class="pull-left" /> Upcoming Sales</h2>
             </header>
@@ -208,19 +220,31 @@
                 </li>
             <?php endforeach; ?>
             </ul>
+<<<<<<< HEAD
         </section><!-- /.events-upcoming -->
+=======
+        </section><!-- /#events-upcoming -->
+>>>>>>> 46e77f91691e945c1213c1918301bb180fe4180e
     <?php endif; ?>
     
     <?php // ENDING SOON - not functioning, no $endingArray exists - just placeholder code ?>
     <?php if (!!$endingArray && !empty($endingArray)): ?>
+<<<<<<< HEAD
         <section class="events-grid events-ending">
+=======
+        <section id="events-ending" class="events-grid">
+>>>>>>> 46e77f91691e945c1213c1918301bb180fe4180e
             <header class="page-header">
                 <h2><img src="/skin/frontend/enterprise/bootstrap/images/iconmonstr-time-8-icon.png" width="50px" style="margin-right:5px;" /> Hurry, Ending Soon!</h2>
             </header>
             <ul>
             <?php // foreach block here ?>
             </ul>
+<<<<<<< HEAD
         </section><!-- /.events-ending -->
+=======
+        </section><!-- /#events-ending -->
+>>>>>>> 46e77f91691e945c1213c1918301bb180fe4180e
     <?php endif; ?>
 
     </div><!-- /.live-events-container -->
