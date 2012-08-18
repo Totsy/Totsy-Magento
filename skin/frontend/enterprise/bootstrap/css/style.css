@@ -259,19 +259,17 @@ a.btn-primary /* req to override '.dropdown a' ruleset */ {
     background-image: none;
 }
 .navbar .nav > li > a {
+    padding:0 33px 0 0; /* christophery - all icons on right */
     color: #636466;
     font-size: 12px; font-weight: bold;
     line-height: 13px;
     text-shadow: 0 1px 0 rgba(255, 255, 255, 0.85); text-transform: uppercase;
 }
 .navbar .nav > li.dropdown > a {
-    padding: 0 33px 0 0;
     background: url('../images/icon-nav-drop.png') 100% 50% no-repeat;
 }
-#navSocial {}
 #navSocial > a {
-    padding:0 5px 0 33px;
-    background: url('../images/icon-like-whot.png') 0 50% no-repeat;
+    background: url('../images/icon-like-whot.png') 100% 50% no-repeat;
 }
 .navbar .nav > li > a:hover {
     color: #636466;
