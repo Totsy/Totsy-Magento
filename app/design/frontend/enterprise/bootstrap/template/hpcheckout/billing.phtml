@@ -1,7 +1,6 @@
 <form id="hpcheckout-billing-form" action="">
-    <div class="row">
 	    <div id="billing-new-address-form fields alpha">
-	    	    <div class="span5"> 
+	    	    <div > 
 	    		    <div class="pull-left field half-of-half">
 	    	           <label for="billing:firstname" class="required"><em>*&nbsp;</em><?php echo $this->__('first name') ?></label>
 	    	           <input type="text" name="billing[firstname]" title="<?php echo $this->__('First Name') ?>" class="input-text required-entry firstname" value="<?php echo $this->htmlEscape($this->getFirstname()) ?>" id="billing:firstname" />
@@ -19,25 +18,25 @@
 			            <input type="text" name="billing[email]" id="billing:email" title="<?php echo $this->__('Email Address') ?>" class="input-text validate-email required-entry" value="<?php echo $this->htmlEscape($this->getAddress()->getEmail()) ?>" />
 			        </div>
 	    	    </div-->
-	    	    <div class="span5">
+	    	    <div >
 	    	        <div class="pull-left field half-of-half">
 	    	            <label for="billing:telephone" class="required"><em>*&nbsp;</em><?php echo $this->__('telephone') ?></label>
 	    	            <input type="text" name="billing[telephone]" title="<?php echo $this->__('Telephone') ?>" class="input-text required-entry validate-phoneLax telephone" id="billing:telephone" value="<?php echo $this->htmlEscape($this->getAddress()->getTelephone()) ?>" onkeyup="backspacerUP(this,event);" onkeydown="backspacerDOWN(this,event);"/>
 	    	        </div>
 	    	     </div> 
-	    	     <div class="span5">
+	    	     <div >
 	    	         <div class="field half-of-half">
 			            <label for="billing:street1" class="required"><em>*&nbsp;</em><?php echo $this->__('street address line 1') ?></label>
 			            <input type="text" title="<?php echo $this->__('Street Address Line 1') ?>" name="billing[street][0]" id="billing:street1" value="<?php echo $this->htmlEscape($this->getAddress()->getStreet(1)) ?>" class="input-text required-entry streetaddress1" />
 	    	        </div>
 	    	     </div>
-	    	     <div class="span5">
+	    	     <div >
 	    	         <div class="pull-left field half-of-half">
 	                   <label for="billing:street2">&nbsp;<?php echo $this->__('street address line 2') ?></label>
 	                   <input type="text" title="<?php echo $this->__('Street Address Line 2') ?>" name="billing[street][1]" id="billing:street2" value="<?php echo $this->htmlEscape($this->getAddress()->getStreet(2)) ?>" class="input-text streetaddress2" />
 	                 </div>
 	    	     </div>
-	    	     <div class="span5"> 
+	    	     <div > 
                      <div class=" pull-left field half-of-half">
 	                     <label for="billing:city" class="required"><em>*&nbsp;</em><?php echo $this->__('city') ?></label>
 	                     <input type="text" title="<?php echo $this->__('City') ?>" name="billing[city]" class="input-text required-entry city" value="<?php echo $this->htmlEscape($this->getAddress()->getCity()) ?>" id="billing:city" />
@@ -55,7 +54,7 @@
                          <input type="text" id="billing:region" name="billing[region]" value="<?php echo $this->htmlEscape($this->getAddress()->getRegion()) ?>"  title="<?php echo $this->__('State/Province') ?>" class="input-text hidden-state" style="display:none;" />
 	                  </div>
 	              </div>
-	              <div class="span5">
+	              <div >
 	                  <div class="pull-left field half-of-half">
 	                      <label for="billing:postcode" class="required"><em>*&nbsp;</em><?php echo $this->__('zip/postal code') ?></label>
 	                      <input type="text" title="<?php echo $this->__('Zip/Postal Code') ?>" name="billing[postcode]" id="billing:postcode" class="input-text validate-zip required-entry zip" value="<?php echo $this->htmlEscape($this->getAddress()->getPostcode()) ?>" />
@@ -67,34 +66,7 @@
 			             </div>
                      </div>
                  </div>
-             </div>
-             <div style="clear:both"></div>
-    		 <?php if ($this->canShip()): ?>
-    		     <div class="control">
-    		         <button type="button" class="button" id="button_ship_to"><div class="totsy-button-white"><?php echo  $this->__('SHIP TO THIS ADDRESS') ?></div></button>
-    		         <script>
-    		         	// @TODO: abstract this out to hpcheckout.js as self-contained method
-    		         	// need to re-enable billing form controls before trying to send values to shipping form
-    		         	jQuery(document).ready(function($) {
-    		         		$('#button_ship_to').bind('click', function() {
-    		     				var $billFormInputs = $('#hpcheckout-billing-form :input');
-    		     				var $billAddySelect = $("#billing-address-select");
-    		         			// re-enable disabled controls
-    		     				if ($billAddySelect.attr('disabled') !== undefined) {
-			                         $billAddySelect.removeAttr('disabled');
-			     	                $billFormInputs.each(function(i) {
-			     	                    $(this).removeAttr('disabled');
-			     	                });
-    		     				}
-    		         			
-    		         			// then use hpcheckout.copyBillingToShipping() method
-    		         			hpcheckout.copyBillingToShipping();
-    		         		});
-    		         	});
-    		         </script>
-    		 <?php endif; ?>
-		</div>
-	</div>
+            </div>
 </form>
 
 <div class="spinner" style="display: none;"><img src="<?php echo $this->getSkinUrl( 'images/ajax-loader.gif' ) ?>"></div>
