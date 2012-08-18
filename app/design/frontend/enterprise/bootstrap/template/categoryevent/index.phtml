@@ -58,7 +58,7 @@
         // @GOTCHA: We are currently not showing top events. This entire block never renders…
     ?>
     <?php if (!!$topArray && !empty($topArray)) : ?>
-        <section class="events-grid events-top">
+        <section id="events-top" class="events-grid">
         <?php foreach ($topArray as $top): ?>
             <?php
                 $endcountRaw = strtotime($top['event_end_date']);
@@ -92,7 +92,7 @@
             </div>
             <?php $timer++; ?>
             <?php endforeach; ?>
-        </section><!-- /.events-top -->
+        </section><!-- /#events-top -->
     <?php endif; ?>
 
     <?php // Live Events ?>
@@ -160,7 +160,7 @@
     <?php if (!!$upcomingArray && !empty($upcomingArray)): ?>
         <section id="events-upcoming" class="events-grid">
             <header class="page-header">
-                <h2><img src="/skin/frontend/enterprise/bootstrap/images/iconmonstr-calendar-5-icon.png" width="50px" style="margin-right:5px;" class="pull-left" /> Upcoming Sales</h2>
+                <h2><img src="/skin/frontend/enterprise/bootstrap/images/iconmonstr-calendar-5-icon.png" width="35px" class="pull-left" /> Upcoming Sales</h2>
             </header>
             <ul class="thumbnails">
             <?php foreach ($upcomingArray as $up): ?>
@@ -176,9 +176,9 @@
                         data-imageclass="" 
                         data-producturl="<?php echo Mage::getBaseUrl().$up['url_path']; ?>">
                     </span>
-                    <div class="thumbnail">
-                        <h5 class="ellipsis"><?php echo $up['name'];?></h5>
-                        <p id="time1-<?php echo $timer ?>"></p>
+                    <div class="thumbnail" style="margin:0px; padding:0px;">
+                        <h5 class="ellipsis" style="font-size:14px; padding:5px 5px 0px 5px;"><?php echo $up['name'];?></h5>
+                        <p id="time1-<?php echo $timer ?>" style="color:#808080; font-size:12px; padding:0px 5px;"></p>
                         <?php
                             $imgFile = (isset($up['small_image']))
                             ? BP . DS . 'media' . DS . 'catalog' . DS . 'category' . DS .
@@ -186,7 +186,7 @@
                             : BP . DS . 'skin' . DS . 'frontend' . DS . 'enterprise ' . DS . 'harapartners' . DS . 'images' . DS . 'catalog' . DS . 'product' . DS . 'placeholder' . DS . 'small_image.jpg';
                         ?>
                         <a class="event-link" href="<?php echo Mage::getBaseUrl().$up['url_path']; ?>">
-                            <img src="<?php echo Mage::helper('service/image')->loadImageFile($imgFile)->resize(165); ?>" width="165px" alt="" />
+                            <img src="<?php echo Mage::helper('service/image')->loadImageFile($imgFile)->resize(165)->keepFrame(FALSE); ?>" width="165px" alt="" />
                         </a>
                         <script type="text/javascript">
                             // @TODO: all countdown jQuery should be externalized
@@ -215,7 +215,7 @@
     <?php if (!!$endingArray && !empty($endingArray)): ?>
         <section id="events-ending" class="events-grid">
             <header class="page-header">
-                <h2><img src="/skin/frontend/enterprise/bootstrap/images/iconmonstr-time-8-icon.png" width="50px" style="margin-right:5px;" /> Hurry, Ending Soon!</h2>
+                <h2><img src="/skin/frontend/enterprise/bootstrap/images/iconmonstr-time-8-icon.png" width="35px" style="margin-right:5px;" /> Hurry, Ending Soon!</h2>
             </header>
             <ul>
             <?php // foreach block here ?>
