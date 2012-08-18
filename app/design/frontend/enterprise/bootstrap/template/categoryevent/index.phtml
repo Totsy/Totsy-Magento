@@ -97,11 +97,7 @@
 
     <?php // Live Events ?>
     <?php if (!!$liveArray && !empty($liveArray)) : ?>
-<<<<<<< HEAD
         <section class="events-grid events-current">
-=======
-        <section id="events-live" class="events-grid">
->>>>>>> 46e77f91691e945c1213c1918301bb180fe4180e
         <?php if (!$bannerActive) : ?>
 <!--
             <header class="page-header">
@@ -157,22 +153,14 @@
                 <?php endif; ?>
             <?php endforeach; ?>
             </ul>
-<<<<<<< HEAD
         </section><!-- /.events-current -->
-=======
-        </section><!-- /#events-live -->
->>>>>>> 46e77f91691e945c1213c1918301bb180fe4180e
     <?php endif; ?>
 
     <?php // Upcoming Events ?>
     <?php if (!!$upcomingArray && !empty($upcomingArray)): ?>
-<<<<<<< HEAD
         <section class="events-grid events-upcoming">
-=======
-        <section id="events-upcoming" class="events-grid">
->>>>>>> 46e77f91691e945c1213c1918301bb180fe4180e
             <header class="page-header">
-                <h2><img src="/skin/frontend/enterprise/bootstrap/images/iconmonstr-calendar-5-icon.png" width="50px" style="margin-right:5px;" class="pull-left" /> Upcoming Sales</h2>
+                <h2><img src="/skin/frontend/enterprise/bootstrap/images/iconmonstr-calendar-5-icon.png" width="35px" style="margin-right:5px;" class="pull-left" /> Upcoming Sales</h2>
             </header>
             <ul class="thumbnails">
             <?php foreach ($upcomingArray as $up): ?>
@@ -188,9 +176,9 @@
                         data-imageclass="" 
                         data-producturl="<?php echo Mage::getBaseUrl().$up['url_path']; ?>">
                     </span>
-                    <div class="thumbnail">
-                        <h5 class="ellipsis"><?php echo $up['name'];?></h5>
-                        <p id="time1-<?php echo $timer ?>"></p>
+                    <div class="thumbnail" style="margin:0px; padding:0px;">
+                        <h5 class="ellipsis" style="font-size:14px; padding:5px 5px 0px 5px;"><?php echo $up['name'];?></h5>
+                        <p id="time1-<?php echo $timer ?>" style="color:#808080; font-size:12px; padding:0px 5px;"></p>
                         <?php
                             $imgFile = (isset($up['small_image']))
                             ? BP . DS . 'media' . DS . 'catalog' . DS . 'category' . DS .
@@ -198,7 +186,7 @@
                             : BP . DS . 'skin' . DS . 'frontend' . DS . 'enterprise ' . DS . 'harapartners' . DS . 'images' . DS . 'catalog' . DS . 'product' . DS . 'placeholder' . DS . 'small_image.jpg';
                         ?>
                         <a class="event-link" href="<?php echo Mage::getBaseUrl().$up['url_path']; ?>">
-                            <img src="<?php echo Mage::helper('service/image')->loadImageFile($imgFile)->resize(165); ?>" width="165px" alt="" />
+                            <img src="<?php echo Mage::helper('service/image')->loadImageFile($imgFile)->resize(165)->keepFrame(FALSE); ?>" width="165px" alt="" />
                         </a>
                         <script type="text/javascript">
                             // @TODO: all countdown jQuery should be externalized
@@ -220,31 +208,19 @@
                 </li>
             <?php endforeach; ?>
             </ul>
-<<<<<<< HEAD
         </section><!-- /.events-upcoming -->
-=======
-        </section><!-- /#events-upcoming -->
->>>>>>> 46e77f91691e945c1213c1918301bb180fe4180e
     <?php endif; ?>
     
     <?php // ENDING SOON - not functioning, no $endingArray exists - just placeholder code ?>
     <?php if (!!$endingArray && !empty($endingArray)): ?>
-<<<<<<< HEAD
         <section class="events-grid events-ending">
-=======
-        <section id="events-ending" class="events-grid">
->>>>>>> 46e77f91691e945c1213c1918301bb180fe4180e
             <header class="page-header">
-                <h2><img src="/skin/frontend/enterprise/bootstrap/images/iconmonstr-time-8-icon.png" width="50px" style="margin-right:5px;" /> Hurry, Ending Soon!</h2>
+                <h2><img src="/skin/frontend/enterprise/bootstrap/images/iconmonstr-time-8-icon.png" width="35px" style="margin-right:5px;" /> Hurry, Ending Soon!</h2>
             </header>
             <ul>
             <?php // foreach block here ?>
             </ul>
-<<<<<<< HEAD
         </section><!-- /.events-ending -->
-=======
-        </section><!-- /#events-ending -->
->>>>>>> 46e77f91691e945c1213c1918301bb180fe4180e
     <?php endif; ?>
 
     </div><!-- /.live-events-container -->
