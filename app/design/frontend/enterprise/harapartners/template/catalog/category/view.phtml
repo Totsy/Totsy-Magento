@@ -105,7 +105,7 @@
 	    <?php if($_description=$this->getCurrentCategory()->getDescription()): ?>
 	        <div class="category-description std">
 	            <?php echo $_helper->categoryAttribute($_category, $_description, 'description') ?>
-				<?php if($_logoHtml){ echo $_logoHtml; } ?>	            
+				<?php if(isset($_logoHtml)) echo $_logoHtml; ?>	            
 	        </div>
 	    <?php endif; ?>
 	</div>
