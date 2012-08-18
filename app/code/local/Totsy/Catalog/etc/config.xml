@@ -16,10 +16,22 @@
     <global>
         <helpers>
             <catalog>
+            
                 <rewrite>
                     <event>Totsy_Catalog_Helper_Event</event>
                 </rewrite>
             </catalog>
         </helpers>
+        <resources>
+            <totsycatalog_setup>
+                <setup>
+                    <module>Totsy_Catalog</module>
+                    <class>Totsy_Catalog_Model_Resource_Eav_Mysql4_Setup</class>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </totsycatalog_setup>
+        </resources>
     </global>
 </config>

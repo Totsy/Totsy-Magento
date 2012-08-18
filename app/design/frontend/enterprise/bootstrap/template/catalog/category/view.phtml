@@ -81,13 +81,27 @@
     
     <div class="well">
         <?php if($_imgUrl): ?>
-            <div class="span3 alpha omega">
+            <div class="span2 alpha omega">
                 <?php echo $_imgHtml ?>
             </div>
             <?php endif; ?>
             <?php if($_description=$this->getCurrentCategory()->getDescription()): ?>
-            <div class="span8">
-                <?php echo $_helper->categoryAttribute($_category, $_description, 'description') ?>
+            <div class="span7" style="padding: 11px;">
+            <h3 style="color: #555555;
+font-size: 16px;
+line-height: 20px;"><?php echo $_helper->categoryAttribute($_category, $_category->getName(), 'name') ?>
+            </h3>
+            <hr style="margin:5px 0px; padding:0px;"/>
+                <p style="color: #555555;
+
+font-size: 14px;
+line-height: 20px;"><?php echo $_helper->categoryAttribute($_category, $_description, 'description') ?></p>
+            </div>
+            <div class="span2">
+            <strong>Share with your friends</strong>
+            <hr />
+            <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+            
             </div>
             <?php endif; ?>
             <div class="row">

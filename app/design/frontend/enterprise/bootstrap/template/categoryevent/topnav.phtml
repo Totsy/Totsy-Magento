@@ -20,7 +20,7 @@ $howMany = count($categoryDataArray);
 ?>
 
 <div class="page-header">
-    <h2><?php echo $topNavDataObject->getData('attr_text_label'); ?><span><?php echo ' ( '.$howMany.' Sales Found )';?></span></h2>
+    <h2><?php echo $topNavDataObject->getData('attr_text_label'); ?><small class="pull-right"><?php echo ' '.$howMany.' Sales Found';?></small></h2>
 </div>
 
 <script type="text/javascript">
@@ -37,7 +37,7 @@ shpn='<?php echo $topNavDataObject->getData('attr_text_label'); ?>'
     $timer = $timerParam['timer'];
 ?>
 <div class="well">
-    <h3 class="category-name"><a href="<?php echo Mage::getBaseUrl().$category['category_info']['url_path']; ?>"><?php echo $category['category_info']['name']; ?></a><small class="pull-right"><p class="the-topnav-timer" id="time-layer-<?php echo $timer ?>"></p></small>
+    <h3 class="category-name"><?php echo $category['category_info']['name']; ?> <small class="pull-right"><p class="the-topnav-timer" id="time-layer-<?php echo $timer ?>"></p></small>
     </h3>
     <hr />
     <script type="text/javascript">
@@ -54,7 +54,6 @@ shpn='<?php echo $topNavDataObject->getData('attr_text_label'); ?>'
             direction: "down"
         });
     </script>
-    <p><?php echo $category['category_info']['description']; ?></p>
     <div class="category-products">
     <ul class="products-grid thumbnails">
         <?php $j=0; ?>
@@ -65,15 +64,15 @@ shpn='<?php echo $topNavDataObject->getData('attr_text_label'); ?>'
         } 
         ?>
         <?php if ($_product['is_salable']==1): ?>
-        <li class="span2" style="width:143px;">
+        <li class="span2" style="width:146px;">
         <div class="thumbnail">
-            <ul class="echoShare" 
+            <span class="echoShare" 
             data-productname="<?php echo $_product['name'];?>" 
             data-productcap="" 
             data-productdesc="<?php echo $_product['description'];?>" 
             data-imageclass=""  
             data-producturl="<?php echo $_product['url_path']; ?>">
-        </ul>
+        </span>
         <a href="<?php echo Mage::getBaseUrl().$_product['url_path']; ?>" title="<?php echo $_product['name']; ?>" class="product-image"><img src="<?php echo $_product['small_image']; ?>" width="148" alt="<?php echo $_product['name']; ?>" /></a>
         <h5 class="product-name ellipsis">
             <?php echo $_product['name']; ?>
@@ -92,7 +91,7 @@ shpn='<?php echo $topNavDataObject->getData('attr_text_label'); ?>'
         <?php 
             $i++; 
             $j = $i;
-                if ($i==5){
+                if ($i==6){
             break;
             }
         ?>
@@ -100,16 +99,20 @@ shpn='<?php echo $topNavDataObject->getData('attr_text_label'); ?>'
         <?php $nonSalableArray[] = $_product;?>
         <?php endif; ?>
         <?php endforeach; ?>
-    </div>
-    <li class="item last btn viewAllEvents">
+        <!--
+        <li class="item last btn viewAllEvents">
         <a href="<?php echo Mage::getBaseUrl().$category['category_info']['url_path']; ?>">
         <img src="<?php echo $this->getSkinUrl()?>images/btn-viewevents-bug.png" />
         </a>
     </li>
+    -->
+    </div>
+    
 </ul>
-
 <script type="text/javascript">decorateGeneric($$('ul.products-grid'), ['odd','even','first','last'])</script>
-<div class="vuall pull-right">View all items from <a href="<?php echo Mage::getBaseUrl().$category['category_info']['url_path']; ?>"><?php echo $category['category_info']['name']; ?></a></div>
+ <?php echo $this->stripTags($this->helper('core/string')->truncate($category['category_info']['description'],200,' …read more<')) ?> 
+<a href="<?php echo Mage::getBaseUrl().$category['category_info']['url_path']; ?>" class="btn btn-primary pull-right">View All</a>
+<div class="clear"></div>
 </div>
 </div>
 <?php endforeach ?>

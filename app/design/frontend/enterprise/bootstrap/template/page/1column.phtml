@@ -47,7 +47,7 @@ ooooooooooooo               .
 </head>
 <body<?php echo $this->getBodyClass()?' class="'.$this->getBodyClass().'"':'' ?> data-spy="scroll" data-target=".subnav" data-offset="50">
     <?php echo $this->getChildHtml('header') ?>
-<div class="container content_push">
+<div id="mainContent" class="container content_push">
     <?php echo $this->getChildHtml('global_notices') ?>
     <?php echo $this->getChildHtml('global_messages') ?>
     <?php echo $this->getChildHtml('breadcrumbsContainer') ?>

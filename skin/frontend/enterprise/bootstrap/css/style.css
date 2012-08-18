@@ -21,40 +21,7 @@ a:hover{color:#ed1c25;text-decoration:underline;}
 a:focus{outline: none;}
 .content_push { margin-top:100px; }
 .content_push_2col { margin-top:115px; }
-/* 960.gs Grid Reset Classes. */
-.alpha { margin-left: 0 }
-.omega { margin-right: 0 }
-.clear { clear:both; }
-/* Alignment classes */
-.align-center {
-  text-align: center;
-}
 
-.align-right {
-  text-align: right;
-}
-
-/* Ellipsis classes for truncating long titles */
-.ellipsis {
-    white-space:nowrap;
-    overflow:hidden;
-}
-.ellipsis:after {
-    content:'...';
-}
-/* #myCarousel { margin-top:20px; } */
-#toTop {
-    bottom: 10px;
-    position: fixed;
-    right: 10px;
-    z-index: 999;
-}
-.carousel-inner {
-    min-height: 150px;
-    overflow: hidden;
-    position: relative;
-    width: 100%;
-}
 /**
  @Diagnostics
  */
@@ -81,22 +48,43 @@ html.test .container .row {outline:1px dotted green;}
     position: absolute;
     top: 0;
 }
+/* Alignment classes */
+.align-center {
+  text-align: center;
+}
+.align-right {
+  text-align: right;
+}
 
 /**
  @General / Modular Classes
  */
+ #toTop {
+    bottom: 10px;
+    position: fixed;
+    right: 10px;
+    z-index: 999;
+}
 .well {
     background: none repeat scroll 0 0 #FFFFFF;
     border: 1px solid #DDDDDD;
     border-radius: 4px 4px 4px 4px;
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075);
     display: block;
-    color:#808080;
     padding: 10px;
 }
 .thumbnail {padding:10px;}
-.page-header {border-bottom: 4px solid #E5E5E5; margin:18px 0;}
-.zoomImage { padding:10px; z-imdex:500!important; }
+.page-header {border-bottom: 4px solid #E5E5E5; margin:10px 0; padding-bottom:20px;}
+.zoomImage { padding:10px; z-index:500!important; }
+
+/* Ellipsis classes for truncating long titles */
+.ellipsis {
+    white-space:nowrap;
+    overflow:hidden;
+}
+.ellipsis:after {
+    content:'...';
+}
 
 /* link classes */
 .navLinks { padding-top: 7px; }
@@ -146,6 +134,22 @@ a.btn-primary /* req to override '.dropdown a' ruleset */ {
     border-color: #D6E9C6;
     color: #468847;
 }
+
+/**
+ @Home page
+ */
+.carousel-inner {
+    min-height: 150px;
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+}
+#mainContent > .banner {
+    margin:50px auto;
+}
+.catalog-events-container {margin-top:50px;}
+.banner + .catalog-events-container {margin-top:0;}
+.page-header img {margin-right: 5px;}
  
 /**
  @Header
@@ -157,8 +161,6 @@ a.btn-primary /* req to override '.dropdown a' ruleset */ {
     border-bottom:1px solid #d1d9de;
     box-shadow: 0 2px 2px rgba(0, 0, 0, 0.086);
 }
-
-/* masthead */
 #masthead {
     position: relative; z-index: 10;
     padding:3px 0;
@@ -180,9 +182,7 @@ a.btn-primary /* req to override '.dropdown a' ruleset */ {
     background: url('../images/div-nav.png') 0 50% no-repeat;
 }
 .navbar .nav > li:first-child {
-/*     padding-left:0;  */
     background-image: none;
-/*     border-left:1px solid transparent; */
 }
 .navbar .nav > li > a {
     color: #636466;
@@ -389,6 +389,7 @@ header nav .cta strong em {color:#d84643; font-style:normal;}
 body > footer {
     position: relative;
     margin-top:45px; padding: 17px 0 0 0;
+    min-width:950px; /* temp hackish fix for iPad display, prevent content of fixed width from bleeding in. @TODO: get responsive! */
     background: #e5e5e5;
     border-top:1px solid #fff;
 }
