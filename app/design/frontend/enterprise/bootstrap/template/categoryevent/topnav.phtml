@@ -109,11 +109,9 @@ shpn='<?php echo $topNavDataObject->getData('attr_text_label'); ?>'
     </div>
     
 </ul>
-
 <script type="text/javascript">decorateGeneric($$('ul.products-grid'), ['odd','even','first','last'])</script>
- <?php echo $this->stripTags($this->helper('core/string')->truncate($category['category_info']['description'],150,' …read more<')) ?> 
+ <?php echo $this->stripTags($this->helper('core/string')->truncate($category['category_info']['description'],200,' …read more<')) ?> 
 <a href="<?php echo Mage::getBaseUrl().$category['category_info']['url_path']; ?>" class="btn btn-primary pull-right">View All</a>
-
 <div class="clear"></div>
 </div>
 </div>
