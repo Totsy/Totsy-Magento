@@ -57,14 +57,23 @@ html.test .container .row {outline:1px dotted green;}
 }
 
 /**
- @General / Modular Classes
+ @One-off Modules & 3rd Party
  */
+#monetateBanner {
+    display: none; /* hide for monetate activation */
+    height: 75px;
+    margin-top: -3px;
+}
  #toTop {
     bottom: 10px;
     position: fixed;
     right: 10px;
     z-index: 999;
 }
+
+/**
+ @General / Modular Classes
+ */
 .well {
     background: none repeat scroll 0 0 #FFFFFF;
     border: 1px solid #DDDDDD;
