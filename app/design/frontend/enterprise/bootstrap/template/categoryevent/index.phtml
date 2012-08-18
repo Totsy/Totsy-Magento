@@ -123,8 +123,14 @@
                             data-producturl="<?php echo Mage::getBaseUrl().$live['url_path']; ?>">
                         </span>
                         <div class="thumbnail" style="margin:0px; padding:0px;">
-                            <h5 class="ellipsis" style="font-size:14px; padding:5px 5px 0px 5px;"><?php echo $live['name'];?></h5>
-                            <p id="time1-<?php echo $timer ?>" style="color:#808080; font-size:12px; padding:0px 5px;"></p>
+                            <hgroup>
+                                <h5><?php echo $live['name'];?></h5>
+                                <!-- <h6><?php //echo $live['short_description'];?></h6> -->
+                            </hgroup>
+                            <div class="more">
+                                <p id="time1-<?php echo $timer ?>"></p>
+                                <a class="btn btn-primary checkout" href="<?php echo Mage::getBaseUrl().$live['url_path']; ?>">Buy Now!</a>
+                            </div>
                             <?php
                                 $imgFile = (isset($live['small_image']))
                                 ? BP . DS . 'media' . DS . 'catalog' . DS . 'category' . DS . $live['small_image']
@@ -137,14 +143,14 @@
                                 // @TODO: all countdown jQuery should be externalized
                                 var html = getTimerHtml('live','<?php echo $endcount ?>');
                                 jQuery("#time1-<?php echo $timer ?>").countdown({//date: "12 10, 2011 16:11", //Counting TO a date
-                                date: "<?php echo $endcount; ?>", //Counting TO a date
-                                htmlTemplate: html,
-                                onComplete: function( event ){
-                                    jQuery(this).html("Completed");
-                                    jQuery(".event-counter-<?php echo $timer;?>").remove();
-                                },
-                                leadingZero: true,
-                                direction: "down"
+                                    date: "<?php echo $endcount; ?>", //Counting TO a date
+                                    htmlTemplate: html,
+                                    onComplete: function( event ){
+                                        jQuery(this).html("Completed");
+                                        jQuery(".event-counter-<?php echo $timer;?>").remove();
+                                    },
+                                    leadingZero: true,
+                                    direction: "down"
                                 });
                             </script>
                             <?php $timer++; ?>
