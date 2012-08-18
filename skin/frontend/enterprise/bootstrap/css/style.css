@@ -150,6 +150,9 @@ a.btn-primary /* req to override '.dropdown a' ruleset */ {
 .catalog-events-container {margin-top:50px;}
 .banner + .catalog-events-container {margin-top:0;}
 .page-header img {margin-right: 5px;}
+
+/* event tiles */
+.events-grid .span3 {max-height: 311px; overflow: hidden;}
 .events-grid .span3 hgroup {
     padding: 8px 4px;
     height: 30px; overflow: hidden;
