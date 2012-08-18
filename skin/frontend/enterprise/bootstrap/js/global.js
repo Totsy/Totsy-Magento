@@ -63,6 +63,14 @@
             e.preventDefault();
             $('body,html').animate({scrollTop: 0},800);
         });
+        
+        /* Monetate */
+        // if banner is display:block, add 75px to margin-top of #mainContent.content_push
+        //$('#monetateBanner').show(); /* test */
+        if ( $('#monetateBanner').is(':visible') ) {
+            $('#mainContent').css('margin-top', '+=75');
+        }
+        
          
     
     });
