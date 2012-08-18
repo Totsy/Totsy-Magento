@@ -66,7 +66,7 @@
         <li>
             <label for="<?php echo $_code ?>_cc_number" class="required"><em>*</em><?php echo $this->__('Credit Card Number') ?></label>
             <div class="input-box">
-                <input type="text" id="<?php echo $_code ?>_cc_number" name="payment[cc_number]" title="<?php echo $this->__('Credit Card Number') ?>" class="input-text validate-cc-number validate-cc-type" value="<?php echo $this->__('Credit Card Number') ?>" />
+                <input type="text" id="<?php echo $_code ?>_cc_number" name="payment[cc_number]" title="<?php echo $this->__('Credit Card Number') ?>" class="input-text validate-cc-number validate-cc-type" value="<?php echo (($this->__('Credit Card Number')!=='Credit Card Number') ? $this->__('Credit Card Number') : "") ?>" placeholder="<?php echo $this->__('Credit Card Number') ?>" />
             </div>
         </li>
         <li>
@@ -111,7 +111,7 @@
             <label for="<?php echo $_code ?>_cc_cid" class="required"><em>*</em><?php echo $this->__('Card Verification Number') ?></label>
             <div class="input-box">
                 <div class="v-fix">
-                    <input type="text" title="<?php echo $this->__('Card Verification Number') ?>" class="input-text cvv required-entry validate-cc-cvn" id="<?php echo $_code ?>_cc_cid" name="payment[cc_cid]" value="<?php echo $this->__('Card Verification Number') ?>" />
+                    <input type="text" title="<?php echo $this->__('Card Verification Number') ?>" class="input-text cvv required-entry validate-cc-cvn" id="<?php echo $_code ?>_cc_cid" name="payment[cc_cid]" value="<?php echo (($this->__('Card Verification Number')!=="Card Verification Number") ? $this->__('Card Verification Number') : "") ?>" placeholder="<?php echo $this->__('Card Verification Number') ?>" />
                 </div>
             </div>
         </li>
