@@ -322,7 +322,7 @@ header nav .cta strong em {color:#d84643; font-style:normal;}
  @User Utils
  - global in header: my account dropdown, minicart
  */
-#userUtils {margin-bottom: 0;}
+#userUtils {margin-top:18px; margin-bottom: 0;}
 #userUtils > li {float: left; width:50%;} 
  
 /* header cart */
@@ -360,8 +360,9 @@ header nav .cta strong em {color:#d84643; font-style:normal;}
 
 /* checkout btn in non-mini-cart header */
 #header-checkoutBtn {
-    float: right; 
-    clear: right;
+    float: right; clear: right;
+    margin-top:3px;
+    text-align: right;
 }
 #header-checkoutBtn a { /* not styling this specifically, for now - see generic .btn.checkout styles */
 }
