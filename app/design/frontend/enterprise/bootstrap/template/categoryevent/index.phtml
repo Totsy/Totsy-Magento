@@ -155,6 +155,18 @@
             </ul>
         </section><!-- /#events-live -->
     <?php endif; ?>
+    
+    <?php // ENDING SOON - not functioning, no $endingArray exists - just placeholder code ?>
+    <?php if (!!$endingArray && !empty($endingArray)): ?>
+        <section id="events-ending" class="events-grid">
+            <header class="page-header">
+                <h2><img src="/skin/frontend/enterprise/bootstrap/images/iconmonstr-time-8-icon.png" width="35px" style="margin-right:5px;" /> Hurry, Ending Soon!</h2>
+            </header>
+            <ul>
+            <?php // foreach block here ?>
+            </ul>
+        </section><!-- /#events-ending -->
+    <?php endif; ?>
 
     <?php // Upcoming Events ?>
     <?php if (!!$upcomingArray && !empty($upcomingArray)): ?>
@@ -209,18 +221,6 @@
             <?php endforeach; ?>
             </ul>
         </section><!-- /#events-upcoming -->
-    <?php endif; ?>
-    
-    <?php // ENDING SOON - not functioning, no $endingArray exists - just placeholder code ?>
-    <?php if (!!$endingArray && !empty($endingArray)): ?>
-        <section id="events-ending" class="events-grid">
-            <header class="page-header">
-                <h2><img src="/skin/frontend/enterprise/bootstrap/images/iconmonstr-time-8-icon.png" width="35px" style="margin-right:5px;" /> Hurry, Ending Soon!</h2>
-            </header>
-            <ul>
-            <?php // foreach block here ?>
-            </ul>
-        </section><!-- /#events-ending -->
     <?php endif; ?>
 
     </div><!-- /.live-events-container -->
