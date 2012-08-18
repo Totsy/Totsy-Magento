@@ -122,7 +122,7 @@
                             data-imageclass="" 
                             data-producturl="<?php echo Mage::getBaseUrl().$live['url_path']; ?>">
                         </span>
-                        <div class="thumbnail" style="margin:0px; padding:0px;">
+                        <div class="thumbnail">
                             <hgroup>
                                 <h5><?php echo $live['name'];?></h5>
                                 <!-- <h6><?php //echo $live['short_description'];?></h6> -->
@@ -166,7 +166,7 @@
     <?php if (!!$endingArray && !empty($endingArray)): ?>
         <section id="events-ending" class="events-grid">
             <header class="page-header">
-                <h2><img src="/skin/frontend/enterprise/bootstrap/images/iconmonstr-time-8-icon.png" width="35px" style="margin-right:5px;" /> Hurry, Ending Soon!</h2>
+                <h2><img src="/skin/frontend/enterprise/bootstrap/images/iconmonstr-time-8-icon.png" width="35px" /> Hurry, Ending Soon!</h2>
             </header>
             <ul>
             <?php // foreach block here ?>
@@ -194,9 +194,10 @@
                         data-imageclass="" 
                         data-producturl="<?php echo Mage::getBaseUrl().$up['url_path']; ?>">
                     </span>
-                    <div class="thumbnail" style="margin:0px; padding:0px;">
-                        <h5 class="ellipsis" style="font-size:14px; padding:5px 5px 0px 5px;"><?php echo $up['name'];?></h5>
-                        <p id="time1-<?php echo $timer ?>" style="color:#808080; font-size:12px; padding:0px 5px;"></p>
+                    <div class="thumbnail">
+                        <hgroup>
+                            <h5><?php echo $up['name'];?></h5>
+                        </hgroup>
                         <?php
                             $imgFile = (isset($up['small_image']))
                             ? BP . DS . 'media' . DS . 'catalog' . DS . 'category' . DS .
@@ -206,21 +207,6 @@
                         <a class="event-link" href="<?php echo Mage::getBaseUrl().$up['url_path']; ?>">
                             <img src="<?php echo Mage::helper('service/image')->loadImageFile($imgFile)->resize(165)->keepFrame(FALSE); ?>" width="165px" alt="" />
                         </a>
-                        <script type="text/javascript">
-                            // @TODO: all countdown jQuery should be externalized
-                            var html = getTimerHtml('upcoming','<?php echo $endcount ?>');
-                            jQuery("#time2-<?php echo $timer ?>").countdown({
-                                //date: "12 10, 2011 16:11", //Counting TO a date
-                                date: "<?php echo $endcount; ?>", //Counting TO a date
-                                htmlTemplate: html,
-                                onComplete: function( event ){
-                                    jQuery(this).html("Completed");
-                                    jQuery("div.up-event-counter-<?php echo $timer; ?>").remove();
-                                },
-                                leadingZero: true,
-                                direction: "down"
-                            });
-                        </script>
                         <?php $timer++; ?>
                     </div>
                 </li>
