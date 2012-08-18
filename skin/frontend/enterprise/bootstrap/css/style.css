@@ -163,6 +163,9 @@ a.btn-primary /* req to override '.dropdown a' ruleset */ {
 .events-grid .thumbnail {
     position: relative;
 }
+.events-grid .thumbnail .event-link {
+    display: block;
+}
 .events-grid .thumbnail .more {
     display: none;
     position: absolute; bottom: 0; left: 0;
