@@ -30,16 +30,16 @@
     <hr />
     <div class="col-1 span4">
     <div class="info-box">
-            <h3 class="box-title"><?php echo $this->__('Default Billing Address') ?> <a href="<?php echo $this->getPrimaryBillingAddressEditUrl() ?>" class="btn btn-primary pull-right"><?php echo $this->__('Edit') ?></a></h3>
+            <h4 class="box-title"><?php echo $this->__('Default Billing Address') ?> <a href="<?php echo $this->getPrimaryBillingAddressEditUrl() ?>" class="btn btn-primary pull-right"><?php echo $this->__('Edit') ?></a></h4>
             <hr />
             <address class="box-content">
                 <?php echo $this->getPrimaryBillingAddressHtml() ?>
             </address>
         </div>
     </div>
-    <div class="col-2 span4">
+    <div class="col-2 span4 pull-right">
         <div class="info-box">
-            <h3 class="box-title"><?php echo $this->__('Default Shipping Address') ?> <a href="<?php echo $this->getPrimaryShippingAddressEditUrl() ?>" class="btn btn-primary pull-right"><?php echo $this->__('Edit') ?></a></h3>
+            <h4 class="box-title"><?php echo $this->__('Default Shipping Address') ?> <a href="<?php echo $this->getPrimaryShippingAddressEditUrl() ?>" class="btn btn-primary pull-right"><?php echo $this->__('Edit') ?></a></h4>
             <hr />
             <address class="box-content">
                 <?php echo $this->getPrimaryShippingAddressHtml() ?>
@@ -48,3 +48,4 @@
     </div>
     <div class="clear"></div>
 </div>
+

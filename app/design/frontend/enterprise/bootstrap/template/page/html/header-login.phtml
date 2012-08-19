@@ -27,67 +27,53 @@
  * @var Mage_Page_Block_Html_Header $this
  */
 ?>
+
+<div id="sociable_recent_activity_container"></div>
+
 <?php $currentUrl = $this->helper('core/url')->getCurrentUrl();?>
 <?php $createPattern = '/create/';?>
 <?php $loginPattern = '/login/';?>
 <?php $forgetpasswordPattern = '/forgotpassword/';?>
-<?php if (preg_match($createPattern, $loginPattern, $forgetpasswordPattern, $currentUrl)):?>
-<header class="navbar navbar-fixed-top">
-    <!-- begin masthead -->
-    <div id="masthead">
-        <div class="container row">
-            <h1 id="logo" class="span2"><a href="<?php
-            echo $this->getUrl( 'event/?ref=logo' );
-            ?>" title="<?php
-            echo $this->getLogoAlt();
-            ?>"><img src="<?php
-            echo $this->getLogoSrc();
-            ?>" alt="<?php
-            echo $this->getLogoAlt();
-            ?>" width="85px" /></a></h1>
-            <div class="span7 offset3">
-                <p>Up to 90% off retail for mom, baby, and child.</p>
-                <p><a title="Register a Totsy account" class="btn" href="<?php echo $this->getBaseUrl()?>customer/account/create/"><strong>Sign Up</strong></a>
-                </p>
+    <?php if (preg_match($createPattern, $currentUrl)):?>
+    <header class="navbar navbar-fixed-top"><!-- begin masthead -->
+        <div id="masthead" style="padding:20px;">
+            <div class="container row">
+                <h1 id="logo" class="span2"><a href="<?php 
+                    echo $this->getUrl( 'event/?ref=logo' ); ?>" title="<?php
+                    echo $this->getLogoAlt();
+                    ?>"><img src="<?php 
+                    echo $this->getLogoSrc(); ?>" alt="<?php 
+                    echo $this->getLogoAlt(); ?>" width="85px" /></a>
+                </h1>
             </div>
         </div>
-    </div><!--/#masthead -->
-    <!-- begin nav -->
-    <nav>
-        <div class="container row">
-            
-            <div class="cta span2 offset2">
-            <!--<a class="cta-link" href="<?php echo $this -> getBaseUrl();?>invitation">INVITE FRIENDS <strong>GET A <em>$15</em> CREDIT</strong></a><?php echo $this->getAdditionalHtml() ?>
--->
+    </header>
+    <?php elseif (preg_match($loginPattern, $currentUrl)||preg_match($forgetpasswordPattern, $currentUrl)):?>
+    <h1 id="logo" class="span4"><a href="<?php 
+                    echo $this->getUrl( 'event/?ref=logo' ); ?>" title="<?php
+                    echo $this->getLogoAlt();
+                    ?>"><img src="<?php 
+                    echo $this->getLogoSrc(); ?>" alt="<?php 
+                    echo $this->getLogoAlt(); ?>" width="85px" /></a>
+    </h1>
+    <?php else:?>
+    <header class="navbar navbar-fixed-top"><!-- begin masthead -->
+        <div id="masthead" style="padding:20px;">
+            <div class="container row">
+                <h1 id="logo" class="span2"><a href="<?php 
+                    echo $this->getUrl( 'event/?ref=logo' ); ?>" title="<?php
+                    echo $this->getLogoAlt();
+                    ?>"><img src="<?php 
+                    echo $this->getLogoSrc(); ?>" alt="<?php 
+                    echo $this->getLogoAlt(); ?>" width="85px" /></a>
+                </h1>
+                <div class="span5 align-right offset3" style="padding-top:14px;"><p>Up to 90% off retail for mom, baby, and child.</p></div>
+                <div class="span2 align-right" style="padding-top:4px;">
+                    <a title="Register a Totsy account" class="btn btn-primary" href="<?php echo $this->getBaseUrl()?>customer/account/create/"><strong>Sign Up</strong></a>
+                    <a title="Login" class="btn btn-primary" href="<?php echo $this->getBaseUrl()?>customer/account/login/"><strong>Sign In</strong></a>
+                </div>
             </div>
         </div>
-    </nav>
-</header><!-- /.navbar -->
-<?php endif;?>
-
-<div id="sociable_recent_activity_container"></div>
-
-<div class="login-border-top">
-    <div class="header-container">
-        <div class="header">
-            <?php $currentUrl = $this->helper('core/url')->getCurrentUrl();?>
-            <?php $createPattern = '/create/';?>
-            <?php $loginPattern = '/login/';?>
-            <?php $forgetpasswordPattern = '/forgotpassword/';?>
-            <?php if (preg_match($createPattern, $currentUrl)):?>
-            <h1 class="logo"><img src="<?php echo $this->getSkinUrl() ?>images/logoN.png" alt="<?php echo $this->getLogoAlt() ?>" /></h1>
-            <?php elseif (preg_match($loginPattern, $currentUrl)||preg_match($forgetpasswordPattern, $currentUrl)):?>
-            <h1 class="logo"><img src="<?php echo $this->getSkinUrl() ?>images/logoN.png" alt="<?php echo $this->getLogoAlt() ?>" /></h1>
-            <?php else:?>
-            <a href="<?php echo $this->getBaseUrl()?>"><h1 class="logo"><img src="<?php echo $this->getSkinUrl() ?>images/logoN.png" alt="<?php echo $this->getLogoAlt() ?>" /></h1></a>
-            <div id="publicLogin">
-                <p class="signup group">
-                <strong><em>Up to 90% off retail</em> for mom, baby, and child.</strong>
-                <a title="Register a Totsy account" class="btn" href="<?php echo $this->getBaseUrl()?>customer/account/create/"><strong>Join Now</strong></a>
-                </p>
-            </div>
-            <?php endif;?>
-            <?php //echo $this->getChildHtml('topContainer'); ?>
-        </div>
-    </div>
-</div>
+    </header>
+    <?php endif;?>
+    <?php //echo $this->getChildHtml('topContainer'); ?>

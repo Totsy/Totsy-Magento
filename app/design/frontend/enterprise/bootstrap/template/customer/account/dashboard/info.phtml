@@ -24,24 +24,26 @@
  * @license     http://www.magentocommerce.com/license/enterprise-edition
  */
 ?>
-<div class="row">
-        <div class="span4 well">
-          <h3><?php echo $this->__('Contact Information') ?> <a class="btn btn-primary pull-right" href="<?php echo $this->getUrl('customer/account/edit') ?>">Edit</a></h3>
-          <hr />
+<div class="well">
+    <h3 class="sub-title table-caption"><?php echo $this->__('Contact Information') ?> <a class="btn btn-primary pull-right" href="<?php echo $this->getUrl('customer/account/edit') ?>">Edit</a></h3>
+    <hr/>
            <p><strong>Name:</strong> <?php echo $this->htmlEscape($this->getCustomer()->getName()) ?><br /><strong>Email:</strong> 
 <?php echo $this->htmlEscape($this->getCustomer()->getEmail()) ?>
 </p>
-        </div>
+    <div class="clear"></div>
+</div>
+
         <?php if( $this->isNewsletterEnabled() ): ?>
-        <div class="span4 well">
-          <h3><?php echo $this->__('Newsletter Management') ?>
-          <a class="btn btn-primary pull-right" href="<?php echo $this->getUrl('newsletter/manage') ?>">Edit</a></h3>
-           <hr />
+        <div class="well">
+    <h3 class="sub-title table-caption"><?php echo $this->__('Newsletter Management') ?> <a class="btn btn-primary pull-right" href="<?php echo $this->getUrl('newsletter/manage') ?>">Edit</a></h3>
+    <hr/>
           <p><?php if( $this->getIsSubscribed() ): ?>
                     <?php echo $this->__("You are currently subscribed to 'General Subscription'.") ?>
                 <?php else: ?>
                     <?php echo $this->__('You are currently not subscribed to any newsletter.') ?>
                 <?php endif; ?></p>
+                
         </div>
-        <?php endif; ?>
+                <div class="clear"></div>
 </div>
+        <?php endif; ?>
