@@ -104,11 +104,11 @@ html.test .container .row {outline:1px dotted green;}
     padding-right:10px;
     background: url('../images/glyph-arrow-rt.png') 100% 85% no-repeat;
 }
-.dropdown-toggle {
+.dropdown-toggle,
+#cartHeader {
     padding-right:12px;
     background: url('../images/glyph-arrow-d.png') 100% 65% no-repeat;
 }
-
 /* btn classes */
 .btn,
 .navbar .btn {
@@ -330,11 +330,15 @@ header nav .cta strong em {color:#d84643; font-style:normal;}
 }
 #usercart-block-title {
     cursor: pointer;
+    margin-top:-1px; padding-right:8px; 
+    background-image: none; /* override .dropdown-toggle, reapplied that image to child element #cartHeader */
+    border:1px solid transparent; border-bottom: none;
 }
-#usercart-block-title[data-minicart="active"] {
+.open > #usercart-block-title {
     position: relative; z-index: 100;
-    background:#fff;
-    outline:1px dotted red; /* temp */
+    margin:-8px 0 0 3px; padding:7px 8px 13px;
+    background: #fff;
+    border:1px solid rgba(0, 0, 0, 0.2); border-bottom:none;
 } 
 
 /* Minicart */
@@ -362,7 +366,8 @@ header nav .cta strong em {color:#d84643; font-style:normal;}
     margin-top:3px;
     text-align: right;
 }
-#header-checkoutBtn a { /* not styling this specifically, for now - see generic .btn.checkout styles */
+#header-checkoutBtn a { 
+    position:relative; left:-8px /* need to move this a bit to align with top cart (which moved to keep dropdown within 950 grid), tho now this is bit off grid… */
 }
 
 .address{
