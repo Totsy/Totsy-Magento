@@ -338,7 +338,11 @@ header nav .cta strong em {color:#d84643; font-style:normal;}
     position: relative; z-index: 100;
     margin:-8px 0 0 3px; padding:7px 8px 13px;
     background: #fff;
-    border:1px solid rgba(0, 0, 0, 0.2); border-bottom:none;
+    border:1px solid #ccc; /* old browser fallback */
+    border:1px solid rgba(0, 0, 0, 0.15); border-bottom:none;
+    -moz-box-shadow:1px -3px 4px rgba(0, 0, 0, 0.05);
+    -webkit-box-shadow:1px -3px 4px rgba(0, 0, 0, 0.05);
+    box-shadow:1px -3px 4px rgba(0, 0, 0, 0.05);
 } 
 
 /* Minicart */
@@ -348,11 +352,13 @@ header nav .cta strong em {color:#d84643; font-style:normal;}
     width:334px;
     background:#fff;
     border:1px solid #ccc; /* old browser fallback */
-    border: 1px solid rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(0, 0, 0, 0.15);
     border-radius: 0;
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
-    box-shadow:0 5px 5px rgba(0, 0, 0, 0.10);
+    -moz-box-shadow:0 0 6px rgba(0, 0, 0, 0.1);
+    -webkit-box-shadow:0 0 6px rgba(0, 0, 0, 0.1);
+    box-shadow:0 0 6px rgba(0, 0, 0, 0.1);
 }
 #topCartContent.dropdown-menu .product-name a { /* overrides 'dropdown-menu a' ruleset */
     clear: none;
