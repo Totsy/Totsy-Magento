@@ -71,7 +71,8 @@
         });
         
         /*
-         * Monetate placeholder div
+         * Monetate Placeholder div
+         *
          * - if banner is display:block, add 75px to margin-top of #mainContent.content_push
          * - requires Monetate to set to display:block in their script
          * - https://totsy1.jira.com/browse/MGN-919
@@ -81,24 +82,6 @@
             $('#mainContent').css('margin-top', '+=75');
         }
         
-        /*
-         * Monetate JS
-         * - commenting out temporarily
-         * - remove from here if including in header.phtml or admin include instead
-         */
-/*
-        var monetateT = new Date().getTime(); 
-        (function() {
-            var p = document.location.protocol; 
-            if (p == "http:" || p == "https:") { 
-                var m = document.createElement('script'); m.type ='text/javascript'; 
-                m.async = true; 
-                m.src = (p == "https:" ? "https://s" : "http://") + "b.monetate.net/js/1/a-6ac93b84/p/totsy.com/" + Math.floor((monetateT + 2372868) / 3600000) + "/g";
-                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(m, s);
-            }
-        })();        
-*/
-         
     
     });
     
