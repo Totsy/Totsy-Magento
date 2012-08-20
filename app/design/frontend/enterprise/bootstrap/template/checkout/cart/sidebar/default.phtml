@@ -27,7 +27,7 @@
 <?php $_item = $this->getItem() ?>
 <?php $canApplyMsrp = Mage::helper('catalog')->canApplyMsrp($_item->getProduct(), Mage_Catalog_Model_Product_Attribute_Source_Msrp_Type::TYPE_BEFORE_ORDER_CONFIRM); ?>
 <div class="item" style="height:48px !important">
-    <div style="float:left; border: 1px solid; margin:5px">
+    <div style="float:left; border: 0px solid; margin:0px">
     <?php if ($this->hasProductUrl()): ?>
         <a href="<?php echo $this->getProductUrl()?>" title="<?php echo $this->htmlEscape($this->getProductName()) ?>" class="product-image"><img src="<?php echo $this->getProductThumbnail()->resize(30)->setWatermarkSize('30x10'); ?>" /></a>
     <?php else: ?>
@@ -48,28 +48,6 @@
         <div>
             <span><?php echo $this->__('Qty'); ?></span>
             <span style="font-weight:bold"><?php echo $this->getQty() ?></span>
-            <!--
-            <?php //if ($_options = $this->getOptionList()):?>
-            <span class="item-options">
-            <?php //foreach ($_options as $_option) : ?>
-            <?php //$_formatedOptionValue = $this->getFormatedOptionValue($_option) ?>
-            <span>
-            <span style="font-weight:bold"><?php //echo $this->htmlEscape($_option['label']) ?></span>
-            <span<?php //if (isset($_formatedOptionValue['full_view'])): ?> class="truncated"<?php //endif; ?>><?php //echo $_formatedOptionValue['value'] ?>
-                <?php //if (isset($_formatedOptionValue['full_view'])): ?>
-                <span class="truncated_full_value">
-                    <span class="item-options">
-                        <span style="font-weight:bold"><?php //echo $this->htmlEscape($_option['label']) ?></span>
-                        <span><?php //echo $_formatedOptionValue['full_view'] ?></span>
-                    </span>
-                </span>
-                <?php //endif; ?>
-            </span>
-            <?php //endforeach; ?>
-            -->
-        </div>
-        </div>
-            <?php endif;?>
         <?php if ($canApplyMsrp): ?>
             <span class="map-cart-sidebar-item"><?php echo $this->__('See price before order confirmation.'); ?></span>
         <?php else: ?>
@@ -149,8 +127,25 @@
                 <?php endif; ?>
             <?php endif; ?>
         <?php endif; ?>
-
         <?php endif; //Can apply MSRP ?>
+        <?php if ($_options = $this->getOptionList()):?>
+        <span class="item-options" style="float:right">
+        <?php foreach ($_options as $_option) : ?>
+        <?php $_formatedOptionValue = $this->getFormatedOptionValue($_option) ?>
+        <span>
+        <span style="font-weight:bold"><?php echo $this->htmlEscape($_option['label']) ?></span>
+        <span<?php if (isset($_formatedOptionValue['full_view'])): ?> class="truncated"<?php endif; ?>><?php echo $_formatedOptionValue['value'] ?>
+            <?php if (isset($_formatedOptionValue['full_view'])): ?>
+            <span class="truncated_full_value">
+                <span class="item-options">
+                    <span style="font-weight:bold"><?php echo $this->htmlEscape($_option['label']) ?></span>
+                    <span><?php echo $_formatedOptionValue['full_view'] ?></span>
+                </span>
+            </span>
+            <?php endif; ?>
+        </span>
+        <?php endforeach; ?>
+        <?php endif;?>
     </div>
 </div>
 </div>
