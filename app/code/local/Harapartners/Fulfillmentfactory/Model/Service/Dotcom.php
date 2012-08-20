@@ -108,9 +108,14 @@ class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
         $sku = $product->getSku();
         $qtyAvailable = $qty - Mage::helper('fulfillmentfactory')->getAllocatedCount($sku);
 
+        if ($qtyAvailable < 0) {
+            Mage::log("Skipping allocation of $qty units for SKU '$sku' because none are available ($qtyAvailable)", Zend_Log::DEBUG, 'fulfillment.log');
+            return;
+        }
+
         Mage::log(
             "Attempting to allocate $qty ($qtyAvailable available) inventory for SKU '$sku'",
-            Zend_log::DEBUG,
+            Zend_Log::DEBUG,
             'fulfillment.log'
         );
 
