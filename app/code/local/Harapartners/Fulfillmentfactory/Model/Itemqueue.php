@@ -65,10 +65,12 @@ class Harapartners_Fulfillmentfactory_Model_Itemqueue
         
         if(($qtyOrdered >= $fulfillCount) && ($fulfillCount >= 0)){
             if(($qtyOrdered != $fulfillCount) && ($status == self::STATUS_READY)) {
-                throw new Exception("Fulfill count $fulfillCount is not matching with status (Ready)!");
+//                throw new Exception("Fulfill count $fulfillCount is not matching with status (Ready)!");
+                  Mage::log("Item queue " . $this->getId() . " failed validation: Fulfill count $fulfillCount is not matching with status (Ready)!", Zend_Log::WARN, 'fulfillment.log');
             }
         }else{
-            throw new Exception('Invalid fulfill count for item queue object!');
+//            throw new Exception('Invalid fulfill count for item queue object!');
+            Mage::log("Item queue " . $this->getId() . " failed validation: Invalid fulfill count", Zend_Log::WARN, 'fulfillment.log');
         }
         
         return $this;
