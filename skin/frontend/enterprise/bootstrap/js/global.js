@@ -80,9 +80,6 @@
         //$('#monetateBanner').show(); /* test */
         if ( $('#monetateBanner').is(':visible') ) {
             $('#mainContent').css('margin-top', '+=75');
-        }
-        
-    
-    });
-    
+        }  
+    });               
 })(jQuery);
