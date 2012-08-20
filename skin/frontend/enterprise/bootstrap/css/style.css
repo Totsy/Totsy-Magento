@@ -74,6 +74,7 @@ html.test .container .row {outline:1px dotted green;}
 /**
  @General / Modular Classes
  */
+.dropdown-toggle {cursor: pointer;}
 .well {
     background: none repeat scroll 0 0 #FFFFFF;
     border: 1px solid #DDDDDD;
@@ -336,7 +337,6 @@ header nav .cta strong em {color:#d84643; font-style:normal;}
     float:right;
 }
 #usercart-block-title {
-    cursor: pointer;
     margin-top:-1px; padding-right:8px; 
     background-image: none; /* override .dropdown-toggle, reapplied that image to child element #cartHeader */
     border:1px solid transparent; border-bottom: none;
@@ -375,6 +375,7 @@ header nav .cta strong em {color:#d84643; font-style:normal;}
 
 /* checkout btn in non-mini-cart header */
 #header-checkoutBtn {
+    display: none; /* hide by default, ajax topcart logic displays when items in cart */
     float: right; clear: right;
     margin-top:3px;
     text-align: right;
