@@ -34,9 +34,13 @@
         //SillyExample.init();
         //MyNameSpace.init();
  
-        // Following are one-offs… should still be namespaced
-        
-        /* Prevent default if menu links are "#" */
+        /**
+         * Following are one-offs… should still be namespaced
+         */
+                      
+        /*
+        * Prevent default if menu links are "#"
+        */
         $('nav a').each( function() {
         	var nav = $(this); 
         	if( nav.length > 0 ) {
@@ -51,7 +55,9 @@
         	}
         }); 
 
-        /* Back to Top */
+        /*
+         * Back to Top
+         */
         $(window).scroll(function () {
             if ($(this).scrollTop() != 0) {
                 $('#toTop').fadeIn();
@@ -64,13 +70,23 @@
             $('body,html').animate({scrollTop: 0},800);
         });
         
-        /* Monetate */
-        // if banner is display:block, add 75px to margin-top of #mainContent.content_push
+        /*
+         * Monetate placeholder div
+         * - if banner is display:block, add 75px to margin-top of #mainContent.content_push
+         * - requires Monetate to set to display:block in their script
+         * - https://totsy1.jira.com/browse/MGN-919
+         */
         //$('#monetateBanner').show(); /* test */
         if ( $('#monetateBanner').is(':visible') ) {
             $('#mainContent').css('margin-top', '+=75');
         }
         
+        /*
+         * Monetate JS
+         * - commenting out temporarily
+         * - remove from here if including in header.phtml or admin include instead
+         */
+/*
         var monetateT = new Date().getTime(); 
         (function() {
             var p = document.location.protocol; 
@@ -81,6 +97,7 @@
                 var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(m, s);
             }
         })();        
+*/
          
     
     });
