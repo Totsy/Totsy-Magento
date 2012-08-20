@@ -34,9 +34,13 @@
         //SillyExample.init();
         //MyNameSpace.init();
  
-        // Following are one-offs… should still be namespaced
-        
-        /* Prevent default if menu links are "#" */
+        /**
+         * Following are one-offs… should still be namespaced
+         */
+                      
+        /*
+        * Prevent default if menu links are "#"
+        */
         $('nav a').each( function() {
         	var nav = $(this); 
         	if( nav.length > 0 ) {
@@ -51,7 +55,9 @@
         	}
         }); 
 
-        /* Back to Top */
+        /*
+         * Back to Top
+         */
         $(window).scroll(function () {
             if ($(this).scrollTop() != 0) {
                 $('#toTop').fadeIn();
@@ -64,24 +70,18 @@
             $('body,html').animate({scrollTop: 0},800);
         });
         
-        /* Monetate */
-        // if banner is display:block, add 75px to margin-top of #mainContent.content_push
+        /*
+         * Monetate Placeholder div
+         *
+         * - if banner is display:block, add 75px to margin-top of #mainContent.content_push
+         * - requires Monetate to set to display:block in their script
+         * - https://totsy1.jira.com/browse/MGN-919
+         */
         //$('#monetateBanner').show(); /* test */
         if ( $('#monetateBanner').is(':visible') ) {
             $('#mainContent').css('margin-top', '+=75');
         }
         
-        var monetateT = new Date().getTime(); 
-        (function() {
-            var p = document.location.protocol; 
-            if (p == "http:" || p == "https:") { 
-                var m = document.createElement('script'); m.type ='text/javascript'; 
-                m.async = true; 
-                m.src = (p == "https:" ? "https://s" : "http://") + "b.monetate.net/js/1/a-6ac93b84/p/totsy.com/" + Math.floor((monetateT + 2372868) / 3600000) + "/g";
-                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(m, s);
-            }
-        })();        
-         
     
     });
     

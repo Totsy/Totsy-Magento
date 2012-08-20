@@ -47,8 +47,11 @@
     $_itemsArray = $this->getItems();
     $_updateFlag = $checkoutSession->getCartUpdatedFlag();
     $_mySaving = $this->__('Your savings: %s', Mage::helper('checkout')->formatPrice($_saving));
+    
+    // store value of cart quantity check
+    $_itemsInCart = ( ($_cartQty > 0 && !empty($_itemsArray)) ? true : false );
 ?>
-    <?php if ($_cartQty > 0 && !empty($_itemsArray)): ?>
+    <?php if ($_itemsInCart): ?>
 <!--
     <div class="badge badge-inverse">
         <?php $_myCart = $this->__('%s Items', '<span>' . $_cartQty . '</span>') ?>
@@ -67,10 +70,10 @@
     </div>
     <?php else:?>
     <div id="usercart-block-title" class="dropdown-toggle block-title<?php if(!$_cartQty) { echo (' no-items'); } ?>" data-toggle="dropdown">
-    <?php if ($_cartQty > 0 && !empty($_itemsArray)):?>
+    <?php if ($_itemsInCart):?>
         <strong id="cartHeader"><?php echo $_myCart ?><span><?php echo ' | '.Mage::helper('checkout')->formatPrice($this->getSubtotal()) ?><?php if ($_subtotalInclTax = $this->getSubtotalInclTax()): ?> / <?php echo ' | '.Mage::helper('checkout')->formatPrice($_subtotalInclTax) ?> <?php echo ' | '.Mage::helper('tax')->getIncExcText(true) ?><?php endif; ?></span></strong>
     <?php else :?>
-        <strong id="cartHeader"><span>0 Items = $0.00</span></strong>
+        <strong id="cartHeader" class="cartempty"><span>You have no items in your cart.</span></strong>
     <?php endif;?>
     </div>
     
@@ -102,7 +105,7 @@
         <span id="cart-timer-header" style="display:none"></span>
         <script type="text/javascript">
             jQuery(document).ready(function() {
-            // @TODO: this countdown JS should be abstracted out to external file            
+            // @TODO: this countdown JS should be abstracted out to external file if possible (mabye not: cart is ajaxy)            
                 var dateObj = new Date();
                 var countDownToTime = <?php echo $endcount_lc_header?>;
                 var serverTime = <?php echo $serverTime?>;
@@ -176,8 +179,8 @@
     </div>
 </div>
     <script type="text/javascript">
+    // Cart related JS needs to stay here as this page loads in ajax call, no page load
     // Show minicart after item added, then hide after 5 sec
-    // This JS needs to stay here as this page loads in ajax call, no page load
     jQuery(document).ready( function() {
         var topCartContent = jQuery("#topCartContent");
         var topCartUpdated = topCartContent.attr('data-item-added');
