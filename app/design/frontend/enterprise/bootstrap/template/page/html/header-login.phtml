@@ -67,7 +67,7 @@
                     echo $this->getLogoSrc(); ?>" alt="<?php 
                     echo $this->getLogoAlt(); ?>" width="85px" /></a>
                 </h1>
-                <div class="span4 align-right offset1" style="padding-top:14px;"><p>Up to 90% off retail for mom, baby, and child.</p></div>
+                <div class="span4 align-right offset1" style="padding-top:14px;"></div>
                 <div class="span5 align-right" style="padding-top:4px;">
                     <a title="Register a Totsy account" class="btn btn-primary" data-toggle="modal" href="#Signup" ><strong>Sign Up</strong></a>
                     <a title="Login" class="btn btn-primary"  data-toggle="modal" href="#Signin"><strong>Sign In</strong></a>
@@ -76,6 +76,11 @@
             </div>
         </div>
     </header>
+    <div style="background:#fff; padding:40px; margin:-82px 0px 0px 0px; opacity:0.50;
+filter:alpha(opacity=40); /* For IE8 and earlier */" class="well"><p style="font-size:40px; color:#000; font-weight:bold;">Up to 90% off retail for mom, baby, and child.</p>
+</div>
+    
+
     <?php endif;?>
     <?php //echo $this->getChildHtml('topContainer'); ?>
     
@@ -86,21 +91,125 @@
     <h3>Sign Up</h3>
     </div>
     <div class="modal-body">
-    form goes here
+    <form action="https://eric.totsy.com/customer/account/createpost/" method="post" id="form-validate" enctype="multipart/form-data">
+        <div class="fieldset">
+            <input type="hidden" name="success_url" value="" />
+            <input type="hidden" name="error_url" value="" />
+            <label for="email_address" class="required"><em>*</em> Email Address</label>
+            <input type="text" name="email" id="email_address" value="" title="Email Address" class="big-input input-text validate-email required-entry span4" />
+            <label for="password" class="required"><em>*</em> Password</label>
+            <input type="password" name="password" id="password" title="Password" class="big-input input-text required-entry strong-validate-password span4" />
+            <label for="confirmation" class="required"><em>*</em> Confirm Password</label>
+            
+            <input type="password" name="confirmation" title="Confirm Password" id="confirmation" class="big-input input-text required-entry validate-cpassword span4" />
+                        <input type="hidden" checked name="is_subscribed" title="Sign Up for Newsletter" value="1" id="is_subscribed" class="checkbox" />
+                                                                                                                                                            
+        </div>
+            <div class="fieldset">
+            <div id="window-overlay" class="window-overlay" style="display:none;"></div>
+<div id="remember-me-popup" class="remember-me-popup" style="display:none;">
+    <div class="remember-me-popup-head">
+        <h3>What's this?</h3>
+        <a href="#" class="remember-me-popup-close" title="Close">Close</a>
     </div>
-    <div class="modal-footer">
-    <a href="#" class="btn" data-dismiss="modal">Close</a>
-    <a href="#" class="btn btn-primary">Save changes</a>
+    <div class="remember-me-popup-body">
+        <p>Checking &quot;Remember Me&quot; will let you access your shopping cart on this computer when you are logged out</p>
+        <div class="remember-me-popup-close-button a-right">
+            <a href="#" class="remember-me-popup-close button" title="Close"><span>Close</span></a>
+        </div>
     </div>
+</div>
+<script type="text/javascript">
+//<![CDATA[
+    function toggleRememberMepopup(event){
+        if($('remember-me-popup')){
+            var viewportHeight = document.viewport.getHeight(),
+                docHeight      = $$('body')[0].getHeight(),
+                height         = docHeight > viewportHeight ? docHeight : viewportHeight;
+            $('remember-me-popup').toggle();
+            $('window-overlay').setStyle({ height: height + 'px' }).toggle();
+        }
+        Event.stop(event);
+    }
+
+    document.observe("dom:loaded", function() {
+        new Insertion.Bottom($$('body')[0], $('window-overlay'));
+        new Insertion.Bottom($$('body')[0], $('remember-me-popup'));
+
+        $$('.remember-me-popup-close').each(function(element){
+            Event.observe(element, 'click', toggleRememberMepopup);
+        })
+        $$('#remember-me-box a').each(function(element) {
+            Event.observe(element, 'click', toggleRememberMepopup);
+        });
+    });
+//]]>
+</script>
+       <p style="font-size:11px;">By joining you accept our  <a id="redtrerm" href="http://eric.totsy.com/pages/terms/">terms and conditions.</a> </p>
+        </div>
+        <div class="modal-footer">
+        <div class="buttons-set form-buttons align-center" >
+            <button type="submit" id="submit-button" class="btn btn-primary btn-large pull-left">Sign Up</button>
+            <!-- <small>or</small> -->
+            <button rel="facebook-connect" style="cursor:pointer;" title="Connect with Facebook" class="facebook-button btn btn-large pull-right"><img src="/skin/frontend/enterprise/bootstrap/images/facebook_icon_00115.png" width="17" style="margin:-4px 4px 0px 0px;" />Join with Facebook</button>
+        </div>
+        <!-- <div class="badgecity_log"></div> -->
+<div class="badgecity_fine_print">
+<!-- <img src="/skin/frontend/enterprise/bootstrap/images/iconmonstr-badge-2-icon.png" width="20" height="20" style="margin-top:-2px;" /> -->
+<strong>FREE SHIPPING ON YOUR FIRST ORDER</strong><br />
+<small>Offer expires 30 days after sign up.</small>
     </div>
-    
-        
-    
+        </div>
+            </form>
+        <script type="text/javascript">
+    //<![CDATA[
+        var dataForm = new VarienForm('form-validate', true);
+        <?php if($this->getShowAddressFields()): ?>
+        new RegionUpdater('country', 'region', 'region_id', <?php echo $this->helper('directory')->getRegionJson() ?>, undefined, 'zip');
+        <?php endif; ?>
+        Form.getElements('form-validate').each(function(element) {
+            element.setAttribute('autocomplete', 'off');
+        });
+    //]]>
+    </script>
+</div>
+
+<!-- 
+<div class="span6">
+    <h3>Why savvy moms shop at Totsy?</h3>
+    <hr />
+    <div id="myCarousel" class="carousel slide">
+    <div class="carousel-inner">
+    <div class="active item">Membership is free</div>
+    <div class="item">Exclusive sales for kids, moms and families</div>
+    <div class="item">Savings of up to 90% off retail</div>
+    <div class="item">Sales last up to 3 days</div>
+    <div class="item">A tree is planted for your first purchase</div>
+    <div class="item">Refer friends and earn Totsy credits</div>
+    </div>
+        <a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
+    <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
+    </div>
+    <script>
+    jQuery('.carousel').carousel({
+    interval: 2000
+    })
+    </script>
+</div>
+</div>
+-->
+<!--div class="free_shipping_banner_reg_new rollover_img">
+	<a href="javascript:;" title="Free Shipping">
+		<span/>
+	</a>
+</div-->
+
+
+    </div>
     <div class="modal hide span4" id="Signin">
     <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal">×</button>
     <h3>Sign In</h3>
-    
     </div>
     <div class="modal-body">
 
