@@ -109,6 +109,13 @@ html.test .container .row {outline:1px dotted green;}
     padding-right:12px;
     background: url('../images/glyph-arrow-d.png') 100% 65% no-repeat;
 }
+#cartHeader.cartempty {
+    position: relative; top:-6px; left: 25px; /* a bit hackish but gets it done */
+    background-image: none;
+    font-weight: normal;
+    line-height: 14px;
+}
+
 /* btn classes */
 .btn,
 .navbar .btn {
