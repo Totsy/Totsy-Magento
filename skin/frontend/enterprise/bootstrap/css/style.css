@@ -687,3 +687,16 @@ select, textarea, input[type="text"], input[type="password"], input[type="dateti
 }
 
 #Signin.modal {width:340px!important; margin:-250px 0 0 -200px!important;}
+#Signup.modal {
+    max-height: 470px!important;
+    overflow-y: auto;
+    padding: 15px;
+}
+.page_center{
+    width:auto;
+    height:auto;
+    position:absolute;
+    left:50%;
+    top:50%;
+    margin:-280px 0 0 -165px;
+}

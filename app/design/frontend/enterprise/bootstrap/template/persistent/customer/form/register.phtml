@@ -42,7 +42,13 @@
 //	unset($images[1]);
 //	shuffle($images);
 ?>
-<div class="page-header">
+<div class="well span4 page_center">
+    <h1 id="logo" class="span4"><a href="<?php 
+                    echo $this->getUrl( 'event/?ref=logo' ); ?>" title="<?php
+                    echo $this->getLogoAlt();
+                    ?>"><img src="/skin/frontend/enterprise/bootstrap/images/logo.png" alt="Totsy.com" width="85px" /></a>
+    </h1>
+<div class="page-header" style="margin:0px 0px 10px;">
     <h2 style="font-size:18px;"><?php echo $this->__('Sign Up') ?><small> or <a href="/customer/account/login/" style="font-weight:normal;">Sign In</a></small></h2>
 </div>
 <div class="row">
@@ -54,13 +60,13 @@
         <div class="fieldset">
             <input type="hidden" name="success_url" value="<?php echo $this->getSuccessUrl() ?>" />
             <input type="hidden" name="error_url" value="<?php echo $this->getErrorUrl() ?>" />
-            <label for="email_address" class="required"><em>*</em> <?php echo $this->__('Email Address') ?></label>
-            <input type="text" name="email" id="email_address" value="<?php echo $this->htmlEscape($this->getFormData()->getEmail()) ?>" title="<?php echo $this->__('Email Address') ?>" class="input-text validate-email required-entry span4" />
-            <label for="password" class="required"><em>*</em> <?php echo $this->__('Password') ?></label>
-            <input type="password" name="password" id="password" title="<?php echo $this->__('Password') ?>" class="input-text required-entry strong-validate-password span4" />
-            <label for="confirmation" class="required"><em>*</em> <?php echo $this->__('Confirm Password') ?></label>
+            <!--<label for="email_address" class="required"><em>*</em> <?php echo $this->__('Email Address') ?></label>-->
+            <input placeholder="Email Address" type="text" name="email" id="email_address" value="<?php echo $this->htmlEscape($this->getFormData()->getEmail()) ?>" title="<?php echo $this->__('Email Address') ?>" class="big-input input-text validate-email required-entry span4" />
+            <!--<label for="password" class="required"><em>*</em> <?php echo $this->__('Password') ?></label>-->
+            <input placeholder="Password" type="password" name="password" id="password" title="<?php echo $this->__('Password') ?>" class="big-input input-text required-entry strong-validate-password span4" />
+            <!--<label for="confirmation" class="required"><em>*</em> <?php echo $this->__('Confirm Password') ?></label>-->
             
-            <input type="password" name="confirmation" title="<?php echo $this->__('Confirm Password') ?>" id="confirmation" class="input-text required-entry validate-cpassword span4" />
+            <input placeholder="Confirm Password" type="password" name="confirmation" title="<?php echo $this->__('Confirm Password') ?>" id="confirmation" class="big-input input-text required-entry validate-cpassword span4" />
             <?php echo $this->getChildHtml('persistent.remember.me'); ?>
             <input type="hidden" checked name="is_subscribed" title="<?php echo $this->__('Sign Up for Newsletter') ?>" value="1" id="is_subscribed"<?php if($this->getFormData()->getIsSubscribed()): ?> checked="checked"<?php endif; ?> class="checkbox" />
             <?php $_dob = $this->getLayout()->createBlock('customer/widget_dob') ?>
@@ -226,4 +232,5 @@
 <!-- <img src="/skin/frontend/enterprise/bootstrap/images/iconmonstr-badge-2-icon.png" width="20" height="20" style="margin-top:-2px;" /> -->
 <strong>FREE SHIPPING ON YOUR FIRST ORDER</strong><br />
 <small>Offer expires 30 days after sign up.</small>
+</div>
 </div>
