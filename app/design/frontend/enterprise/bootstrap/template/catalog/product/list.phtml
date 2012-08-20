@@ -74,8 +74,8 @@
             <li class="item<?php if(($i-1)%$_columnCount==0): ?> first<?php elseif($i%$_columnCount==0): ?> last <?php endif; ?><?php echo ' '.str_replace(',',' ',$_product->getDepartments()) ?>" department="<?php echo str_replace(',',' ',$_product->getDepartments()) ?>" style="display:none;"></li>
         </ul>
         <li class="span4">
-            <div class="thumbnail">
-                <a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" class="product-image"><img src="<?php echo $this->helper('catalog/image')->init($_product, 'small_image')->resize(288)->keepFrame(FALSE); ?>" width="288px" alt="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" /></a>
+            <div class="thumbnail" style="padding:0px;">
+                <a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" class="product-image"><img src="<?php echo $this->helper('catalog/image')->init($_product, 'small_image')->resize(308, 400)->keepFrame(FALSE); ?>" width="308px" alt="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" /></a>
             <div class="caption">
             <h5 class="ellipsis"><a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $this->stripTags($_product->getName(), null, true) ?>"><?php echo $_helper->productAttribute($_product, $_product->getName(), 'name') ?></a></h5>
             <?php if($_product->getRatingSummary()): ?>
