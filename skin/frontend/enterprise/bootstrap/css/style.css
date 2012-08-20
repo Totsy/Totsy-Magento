@@ -678,3 +678,12 @@ select, textarea, input[type="text"], input[type="password"], input[type="dateti
 
 .faq_answer {background:#f0f0f0; padding:5px;}
 .faq_question {background:#fff; padding:5px;}
+
+.big-input {
+  font-size: 20px !important;
+  padding: 12px 9px !important;
+  height:25px!important;
+  width: 290px!important;
+}
+
+#Signin.modal {width:340px!important; margin:-250px 0 0 -200px!important;}

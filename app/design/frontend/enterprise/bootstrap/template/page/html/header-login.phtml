@@ -48,7 +48,7 @@
             </div>
         </div>
     </header>
-    <?php elseif (preg_match($loginPattern, $currentUrl)||preg_match($forgetpasswordPattern, $currentUrl)):?>
+    <?php elseif (preg_match($createPattern, $currentUrl)||preg_match($forgetpasswordPattern, $currentUrl)):?>
     <h1 id="logo" class="span4"><a href="<?php 
                     echo $this->getUrl( 'event/?ref=logo' ); ?>" title="<?php
                     echo $this->getLogoAlt();
@@ -67,13 +67,113 @@
                     echo $this->getLogoSrc(); ?>" alt="<?php 
                     echo $this->getLogoAlt(); ?>" width="85px" /></a>
                 </h1>
-                <div class="span5 align-right offset3" style="padding-top:14px;"><p>Up to 90% off retail for mom, baby, and child.</p></div>
-                <div class="span2 align-right" style="padding-top:4px;">
-                    <a title="Register a Totsy account" class="btn btn-primary" href="<?php echo $this->getBaseUrl()?>customer/account/create/"><strong>Sign Up</strong></a>
-                    <a title="Login" class="btn btn-primary" href="<?php echo $this->getBaseUrl()?>customer/account/login/"><strong>Sign In</strong></a>
+                <div class="span4 align-right offset1" style="padding-top:14px;"><p>Up to 90% off retail for mom, baby, and child.</p></div>
+                <div class="span5 align-right" style="padding-top:4px;">
+                    <a title="Register a Totsy account" class="btn btn-primary" data-toggle="modal" href="#Signup" ><strong>Sign Up</strong></a>
+                    <a title="Login" class="btn btn-primary"  data-toggle="modal" href="#Signin"><strong>Sign In</strong></a>
+                    <a rel="facebook-connect" style="cursor:pointer;" title="<?php echo $this->__('Connect with Facebook') ?>" class="facebook-button btn btn-large"><img src="/skin/frontend/enterprise/bootstrap/images/facebook_icon_00115.png" width="17" style="margin:-4px 4px 0px 0px;"/>Connect with Facebook</a>
                 </div>
             </div>
         </div>
     </header>
     <?php endif;?>
     <?php //echo $this->getChildHtml('topContainer'); ?>
+    
+    
+    <div class="modal hide" id="Signup">
+    <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal">×</button>
+    <h3>Sign Up</h3>
+    </div>
+    <div class="modal-body">
+    form goes here
+    </div>
+    <div class="modal-footer">
+    <a href="#" class="btn" data-dismiss="modal">Close</a>
+    <a href="#" class="btn btn-primary">Save changes</a>
+    </div>
+    </div>
+    
+        
+    
+    <div class="modal hide span4" id="Signin">
+    <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal">×</button>
+    <h3>Sign In</h3>
+    
+    </div>
+    <div class="modal-body">
+
+<div class="the-account-login account-login span4 alpha">
+        <form action="/customer/account/loginPost/" method="post" id="login-form">
+    <label for="email" class="required">Email<em> *</em></label>
+    <input name="login[username]" value="" id="email" type="text" class="big-input input-text required-entry validate-email span4" title="Email Address" />
+    <label for="pass" class="required">Password<em> *</em></label>
+    <input name="login[password]" type="password" class="big-input input-text required-entry validate-password span4" id="pass" title="Password" />
+        <div id="window-overlay" class="window-overlay" style="display:none;"></div>
+<div id="remember-me-popup" class="remember-me-popup" style="display:none;">
+    <div class="remember-me-popup-head">
+        <h3>What's this?</h3>
+        <a href="#" class="remember-me-popup-close" title="Close">Close</a>
+    </div>
+    <div class="remember-me-popup-body">
+        <p>Checking &quot;Remember Me&quot; will let you access your shopping cart on this computer when you are logged out</p>
+        <div class="remember-me-popup-close-button a-right">
+            <a href="#" class="remember-me-popup-close button" title="Close"><span>Close</span></a>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+//<![CDATA[
+    function toggleRememberMepopup(event){
+        if($('remember-me-popup')){
+            var viewportHeight = document.viewport.getHeight(),
+                docHeight      = $$('body')[0].getHeight(),
+                height         = docHeight > viewportHeight ? docHeight : viewportHeight;
+            $('remember-me-popup').toggle();
+            $('window-overlay').setStyle({ height: height + 'px' }).toggle();
+        }
+        Event.stop(event);
+    }
+
+    document.observe("dom:loaded", function() {
+        new Insertion.Bottom($$('body')[0], $('window-overlay'));
+        new Insertion.Bottom($$('body')[0], $('remember-me-popup'));
+
+        $$('.remember-me-popup-close').each(function(element){
+            Event.observe(element, 'click', toggleRememberMepopup);
+        })
+        $$('#remember-me-box a').each(function(element) {
+            Event.observe(element, 'click', toggleRememberMepopup);
+        });
+    });
+//]]>
+</script>
+    <p><input type="checkbox" name="rememberme" value="remember" class="rememberme" align="middle"/>
+    <span> Remember me</span>
+    <a href="/customer/account/forgotpassword/" class="pull-right" style="font-size:11px;">Forgot Your Password?</a></p>
+    <div class="buttons-set form-buttons modal-footer">
+    <button type="submit" id="submit-button" class="btn btn-primary btn-large pull-left"><strong>Sign In</strong></button>
+    <p class="pull-left" style="padding:8px 8px 8px 20px;"><a title="Register a Totsy account" data-toggle="modal" href="#Signup" >Sign Up</a>
+    </p>
+    </div>
+    
+</div>
+ <a rel="facebook-connect" style="cursor:pointer; margin:5px 43px" title="Connect with Facebook" class="facebook-button btn btn-large"><img src="/skin/frontend/enterprise/bootstrap/images/facebook_icon_00115.png" width="17" style="margin:-4px 4px 0px 0px;"/>Connect with Facebook</a>
+    <div class="free_shipping_banner_reg_new rollover_img">
+        <a href="javascript:;" title="Free Shipping"></a>
+    </div>
+</div>
+
+</div>
+            </form>
+    <script type="text/javascript">
+    //<![CDATA[
+        var dataForm = new VarienForm('login-form', true);
+    //]]>
+    </script>
+</div>        
+    </div>
+    </div>
+    
+    
