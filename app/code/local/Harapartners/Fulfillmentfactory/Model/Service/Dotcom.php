@@ -115,7 +115,7 @@ class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
 
         Mage::log(
             "Attempting to allocate $qty ($qtyAvailable available) inventory for SKU '$sku'",
-            Zend_log::DEBUG,
+            Zend_Log::DEBUG,
             'fulfillment.log'
         );
 
