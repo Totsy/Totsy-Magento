@@ -165,7 +165,7 @@ a.btn-primary /* req to override '.dropdown a' ruleset */ {
     width: 100%;
 }
 #mainContent > .banner {
-    margin:50px auto;
+    margin:5px auto;
 }
 .catalog-events-container {margin-top:50px;}
 .banner + .catalog-events-container {margin-top:0;}
