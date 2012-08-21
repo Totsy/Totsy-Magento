@@ -426,18 +426,6 @@ header nav .cta strong em {color:#d84643; font-style:normal;}
     text-transform:lowercase;
 }
 
-.cart-collaterals-buttons {
-	margin-top:10px;
-}
-
-.btn-continue {
-	margin: 0px 10px 10px 10px;
-}
-
-.cart-coupon {
-	margin:0px !important;
-}
-
 .onepage-address-form form {
 	margin-bottom: 0px !important;
 }
@@ -482,13 +470,6 @@ header nav .cta strong em {color:#d84643; font-style:normal;}
     width: auto !important;
 }
 
-.cart-form-container .qty {
-	width: auto !important;
-}
-
-.product-name {
-	width: 400px;
-}
 /**
  @My_Account
  */
@@ -695,9 +676,9 @@ select, textarea, input[type="text"], input[type="password"], input[type="dateti
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
     padding: 4px;
 }
-.price-box { margin-top:10px; font-size: 11px; }
-.old-price { font-weight:normal; }
-.old-price { font-weight:normal; }
+.price-box { margin-top:10px; font-size: 14px; }
+.old-price { font-weight:normal; float: right; }
+.old-price { font-weight:normal; float:right; }
 .options-container-big {margin:0px;}
 .count-down-timer {font-size:18px;}
 .input-box {padding:0px 0px 5px;}
