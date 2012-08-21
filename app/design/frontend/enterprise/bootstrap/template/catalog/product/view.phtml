@@ -45,15 +45,6 @@ if (!Mage::registry('current_category')){
 	}
 ?>
 
-<style>
-select {
-    width: auto !important;
-}
-input, textarea{
-    width: auto !important;
-}
-</style>
-
 <script type="text/javascript">
     var optionsPrice = new Product.OptionsPrice(<?php echo $this->getJsonConfig() ?>
     );
@@ -61,9 +52,9 @@ input, textarea{
 <div id="messages_product_view"><?php echo $this->getMessagesBlock()->toHtml() ?></div>
 <section id="pageheader" class="jumbotron subhead">
     <div class="page-header subnav">
-        <h2>Today's Sales <span> / </span><a href="<?php echo $_category->getUrl();?>"><?php echo $_helper->categoryAttribute($_category, $_category->getName(), 'name') ?></a> <small class="pull-right"><?php $endcount_utc = strtotime($_category->getEventEndDate());
+        <h2><a href="<?php echo $_category->getUrl();?>"><?php echo $_helper->categoryAttribute($_category, $_category->getName(), 'name') ?></a> <small class="pull-right"><?php $endcount_utc = strtotime($_category->getEventEndDate());
 $endcount_lc = date("F j, Y, G:i:s", $endcount_utc); ?>
-<span class="count-down-timer" id="timer"></span></small></h2>
+<img src="/skin/frontend/enterprise/bootstrap/images/iconmonstr-time-icon.png" width="35px" style="margin:0px 3px 0px 0px;" class="pull-left" /><span class="count-down-timer" id="timer" style="color:#000; font-weight:bold;"></span></small></h2>
     </div>
 </section>
 <?php echo $this->getMessagesBlock()->toHtml(); ?>
@@ -75,23 +66,30 @@ $endcount_lc = date("F j, Y, G:i:s", $endcount_utc); ?>
 
 <div class="span5">
 <div class="page-header">
-    <h2><?php echo $_product->getName(); ?> <small></small></h2>
+    <h2><?php echo $_product->getName(); ?></h2>
 </div>
 <div class="well" style="margin-top:56px;">
     <ul class="nav nav-tabs pdp_tabs" id="myTabs">
         <li><a href="#desc" data-toggle="tab">Description</a></li>
         <li><a href="#shipping" data-toggle="tab">Shipping & Returns</a></li>
         <?php if($this->getProduct()->isVirtual()): ?>
-        <li><a href="#overview">Quick Overview</li>
+        <li><a href="#overview" data-toggle="tab">Quick Overview</a></li>
         <?php endif; ?>
     </ul>
     <div class="tab-content">
     <div class="tab-pane active" id="desc">
-    <?php echo $_product->getDescription(); ?>
+        <?php echo $_product->getDescription(); ?>
     </div>
-    <div id="shipping" class="tab-pane"><?php echo $this->getChildHtml('product.shipping.return')?></div>
+    <div id="shipping" class="tab-pane">
+        <?php echo $this->getChildHtml('product.shipping.return')?>
     </div>
-</div>    <?php if ($_product->getData('final_sale')): ?>
+    <div class="tab-pane" id="overview">
+            <?php echo $_helper->productAttribute($_product, nl2br($_product->getShortDescription()), 'short_description') ?>
+    </div>
+    </div>
+</div>
+
+    <?php if ($_product->getData('final_sale')): ?>
     <p class="final-sale"><strong>Final Sale</strong></p>
     <?php endif; ?>
 <script type="text/javascript">
@@ -136,26 +134,31 @@ $endcount_lc = date("F j, Y, G:i:s", $endcount_utc); ?>
                                  <?php //echo $this->getChildHtml('addto') ?>
                              <?php endif;?>
                         <?php endif; ?>
-                <?php if ($_product->getShortDescription()):?>
-                     <div class="short-description std">
-                         <h2><?php echo $this->__('Quick Overview') ?></h2>
-                         <?php echo $_helper->productAttribute($_product, nl2br($_product->getShortDescription()), 'short_description') ?>
-                     </div>
-                <?php endif;?>
-                <?php echo $this->getChildHtml('other');?>
+                        <?php echo $this->getChildHtml('other');?>
     <?php if ($_product->isSaleable() && $this->hasOptions() && $this->getChildChildHtml('container2')):?>
         <div class="options-container-big">
             <?php echo $this->getChildChildHtml('container2', '', true, true) ?>
         </div>
-        </div>
+
+<div>
+<script type="text/javascript">var switchTo5x=true;</script>
+<script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
+<script type="text/javascript">stLight.options({publisher: "ur-9cc9581d-d77b-def7-ed25-5e247f0520ad"}); </script>
+<br/><strong>Share</strong>
+<hr style="margin:10px 0px;"/>
+<span class='st_pinterest_large pull-right' displayText='Pinterest'></span>
+<span class='st_facebook_large pull-right' displayText='Facebook'></span>
+<span class='st_twitter_large pull-right' displayText='Tweet'></span>
+<span class='st_email_large pull-right' displayText='Email'></span>
+<div class="clear"></div>
+
+</div>
+</div>
     <?php endif;?>
         </div>
         </form>
-    </div>
+</div>
 <!-- </div> -->
-    <div class="share-button" id="st_sharethis_custom">
-        <div class="st_sharethis_custom"></div>
-    </div>
         <?php echo $this->getChildHtml('relatedProducts') ?>
         <?php //echo $this->getChildHtml('upsell_products') ?>
         <?php //echo $this->getChildHtml('productTagList') ?>
