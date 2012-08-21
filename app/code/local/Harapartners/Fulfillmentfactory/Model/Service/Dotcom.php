@@ -13,6 +13,13 @@
 class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
 {
     /**
+     * A map of order IDs to order objects that need to be sent for fulfillment.
+     *
+     * @var array
+     */
+    protected $_orderQueue = array();
+
+    /**
      * Process fulfillment operations: retrieve inventory levels from our
      * fulfillment centre, and then attempt to fulfill any order items for each
      * product in stock at the fulfillment centre.
@@ -65,19 +72,7 @@ class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
 
                 if ($product && $product->getId()) {
                     $currentInventory = $product->getData('fulfillment_inventory');
-                    $inventoryDiff = $qty - $currentInventory;
-
-                    if ($inventoryDiff !== 0) {
-                        if ($inventoryDiff > 0) {
-                            $inventoryDiff = '+' . $inventoryDiff;
-                        }
-
-                        Mage::log(
-                            "Updated inventory for SKU '$sku' by $inventoryDiff from $currentInventory to $qty units.",
-                            Zend_Log::INFO,
-                            'fulfillment_inventory.log'
-                        );
-
+                    if ($qty != $currentInventory) {
                         $product->setData('fulfillment_inventory', $qty);
                         $product->getResource()->saveAttribute(
                             $product,
@@ -92,6 +87,11 @@ class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
         }
 
         Mage::log("Retrieved and stored inventory updates for $count products", Zend_Log::INFO, 'fulfillment.log');
+
+        if (count($this->_orderQueue)) {
+            $orders = array_values($this->_orderQueue);
+            $this->submitOrdersToFulfill($orders, true);
+        }
     }
 
     /**
@@ -105,11 +105,14 @@ class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
      */
     public function fulfillOrderItems($product, $qty)
     {
+        if ($qty < 1) {
+            return;
+        }
+
         $sku = $product->getSku();
         $qtyAvailable = $qty - Mage::helper('fulfillmentfactory')->getAllocatedCount($sku);
 
         if ($qtyAvailable < 1) {
-            Mage::log("Skipping allocation of $qty units for SKU '$sku' because none are available ($qtyAvailable)", Zend_Log::DEBUG, 'fulfillment.log');
             return;
         }
 
@@ -128,14 +131,14 @@ class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
             $qtyRequired  = $item->getQtyOrdered() - $item->getFulfillCount();
 
             // there is no quantity remaining to be allocated
-            if (!$qtyAvailable) {
+            if ($qtyAvailable < 1) {
                 break;
 
             // there is sufficient quantity to completely fulfill this item
             } else if ($qtyRequired <= $qtyAvailable) {
                 Mage::log(
                     sprintf(
-                        "Item Queue %d receives %d stock units from the %d available fulfillment inventory for '%s' to order %s/%s and is now READY",
+                        "[READY] Item Queue %d recv %d of %d available units for '%s' to order %s/%s",
                         $item->getId(),
                         $qtyRequired,
                         $qtyAvailable,
@@ -144,7 +147,7 @@ class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
                         $item->getOrderIncrementId()
                     ),
                     Zend_log::INFO,
-                    'fulfillment.log'
+                    'fulfillment_allocation.log'
                 );
 
                 $qtyFulfilled += $qtyRequired;
@@ -157,7 +160,7 @@ class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
             } else {
                 Mage::log(
                     sprintf(
-                        "Item Queue %d receives %d stock units from the %d available fulfillment inventory for '%s' to order %s/%s and is now PARTIAL",
+                        "[PARTL] Item Queue %d recv %d of %d available units for '%s' to order %s/%s",
                         $item->getId(),
                         $qtyAvailable,
                         $qtyAvailable,
@@ -166,7 +169,7 @@ class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
                         $item->getOrderIncrementId()
                     ),
                     Zend_log::INFO,
-                    'fulfillment.log'
+                    'fulfillment_allocation.log'
                 );
 
                 $qtyFulfilled += $qtyAvailable;
@@ -181,7 +184,10 @@ class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
             $item->setData('fulfill_count', $qtyFulfilled);
             $item->save();
 
-            Mage::helper('fulfillmentfactory')->submitOrderForFulfillment($item->getOrderId());
+            $order = Mage::getModel('sales/order')->load($item->getOrderId());
+            if ($order->isReadyForFulfillment()) {
+                $this->_orderQueue[$item->getOrderId()] = $order;
+            }
         }
 
         // update the available fulfillment inventory
