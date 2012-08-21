@@ -208,6 +208,22 @@
                             <img src="<?php echo Mage::helper('service/image')->loadImageFile($imgFile)->resize(165)->keepFrame(FALSE); ?>" width="165px" height="171" alt="<?php echo $up['name'];?>" />
                         </a>
                         <?php $timer++; ?>
+                        <p class="opens_in" id="time2-<?php echo $timer ?>"></p>
+                        <script type="text/javascript">
+                            // @TODO: externalize countdown script
+                            var html = getTimerHtml('upcoming','<?php echo $endcount ?>');
+                            jQuery("#time2-<?php echo $timer ?>").countdown({
+                                //date: "12 10, 2011 16:11", //Counting TO a date
+                                date: "<?php echo $endcount; ?>", //Counting TO a date
+                                htmlTemplate: html,
+                                onComplete: function( event ){
+                                    jQuery(this).html("Completed");
+                                    jQuery(".up-event-counter-<?php echo $timer;?>").remove();
+                                },
+                                leadingZero: true,
+                                direction: "down"
+                            });
+                        </script>                    
                     </div>
                 </li>
             <?php endforeach; ?>

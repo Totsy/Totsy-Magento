@@ -97,9 +97,11 @@
                 </li>
 <!--                 <li id="navSocial"><a href="/pixels/sociable/feed" title="Social Feed"><em>WHAT'S <br/>HOT</em></a></li> -->
             </ul>
+            <?php if ($this->getRequest()->getModuleName()!=="checkout" && $this->getRequest()->getModuleName()!=="hpcheckout"): ?>
             <div class="span2 offset2" id="header-checkoutBtn">
                 <a class="btn checkout btn-primary" title="Checkout" href="<?php echo Mage::getUrl('checkout/cart')?>"><strong>Checkout</strong></a>
-            </div>            
+            </div>     
+            <?php endif; ?>       
 <!--
             <div class="cta span2 offset2">
                 <a class="cta-link" href="<?php echo $this -> getBaseUrl();?>invitation">INVITE FRIENDS <strong>GET A <em>$15</em> CREDIT</strong></a><?php echo $this->getAdditionalHtml() ?>
@@ -117,6 +119,9 @@
     	});
     }
     Event.observe(document,'dom:loaded',function() {
-        new Ajax.Updater($('header-user-info'), '<?php echo $this->getUrl('customertracking/headermsg/ajax',array('_secure'=>Mage::app()->getStore()->isCurrentlySecure())); ?>', {method:'get',evalScripts: true});
+        new Ajax.Updater($('header-user-info'), '<?php echo $this->getUrl('customertracking/headermsg/ajax',array('_secure'=>Mage::app()->getStore()->isCurrentlySecure())); ?>', {
+            method:'get',
+            evalScripts: true
+        });
     });
 </script>
