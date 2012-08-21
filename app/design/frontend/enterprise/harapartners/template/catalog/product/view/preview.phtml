@@ -2,6 +2,8 @@
 <?php
 	$product = Mage::registry('product');
 	if($product instanceof Mage_Catalog_Model_Product){
+        $departments = is_array($product->getAttributeText('departments')) ? implode(', ', $product->getAttributeText('departments')) : '';
+        $ages = is_array($product->getAttributeText('ages')) ? implode(', ', $product->getAttributeText('ages')) : '';
 		echo '<h3 style="color: #ED1C25; border-bottom: 2px solid #ED1C25; font-size: 20px;">Additional Preview Info</h3>';
 		echo '<strong>Style:</strong> ' . $product->getVendorStyle() . '<br/>';
 		if($product->getTypeId() == 'configurable' && count($product->getData('_cache_instance_products'))){
@@ -26,8 +28,8 @@
 		echo '<strong>Sale Wholesale:</strong> $' . sprintf("%.2f", round($product->getSaleWholesale(), 2)) . '<br/>';
 		$imuPercentOff = round(($salesPrice - $product->getSaleWholesale()) / $salesPrice, 4) * 100;
 		echo '<strong>IMU:</strong> ' . sprintf("%.2f", $imuPercentOff) . '%<br/>';
-		echo '<strong>Departments:</strong> ' . implode(', ', $product->getAttributeText('departments')) . '<br/>';
-		echo '<strong>Ages:</strong> ' . implode(', ', $product->getAttributeText('ages')) . '<br/>';
+		echo '<strong>Departments:</strong> ' . $departments . '<br/>';
+		echo '<strong>Ages:</strong> ' . $ages . '<br/>';
 	}
 ?>
 </div>
