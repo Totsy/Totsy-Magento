@@ -351,6 +351,23 @@ header nav .cta strong em {color:#d84643; font-style:normal;}
     -webkit-box-shadow:1px -3px 4px rgba(0, 0, 0, 0.05);
     box-shadow:1px -3px 4px rgba(0, 0, 0, 0.05);
 } 
+#usercart .count-down-timer {
+    position: absolute;
+    top: 45px;
+    left: -191px;
+    font-size: 13px;
+    line-height: 15px;
+}
+body[class*='checkout'] #usercart .count-down-timer {
+    display: none;
+}
+#usercart .count-down-timer strong {
+    font-weight: normal;
+}
+#cart-timer-header {
+    color: #ED1C25;
+    font-weight: bold;
+}
 
 /* Minicart */
 #topCartContent {
