@@ -71,6 +71,56 @@
     <?php else:?>
     
         <?php if ($_itemsInCart):?>
+
+            <?php
+            /*
+             * Cart Timer
+             * @GOTCHA: this countdown JS must stay in ajax call
+             * - @kludge: css positioning hack to have timer display elsewhere (nav bar)
+             * - @todo: new block/module/magento-whatever-the-f and/or new ajax call to drop this in DOM where needed
+             * - https://totsy1.jira.com/browse/MGN-935
+             */
+            ?>         
+            <div class="count-down-timer">
+                <strong>Your bag is reserved <br/>for <span id="cart-timer-header"></span></strong>
+                <script type="text/javascript">
+                    jQuery(document).ready(function() {
+                        var dateObj = new Date();
+                        var countDownToTime = <?php echo $endcount_lc_header?>;
+                        var serverTime = <?php echo $serverTime?>;
+                        var localTime = new Date().getTime();
+                        countDownToTime = (countDownToTime + (localTime - serverTime));
+                        dateObj.setTime(countDownToTime);
+                        //var countToTimeTemplate = (dateObj.getMonth()+1) + ' ' + dateObj.getDate() + ', ' + dateObj.getFullYear() + ' ' + dateObj.getHours() + ':' + dateObj.getMinutes() + ':' + dateObj.getSeconds();
+                        jQuery("#cart-timer-header").countdown({
+                            //date: "12 10, 2011 16:11", or an object counting to a date
+                            date: dateObj,
+                            htmlTemplate: "%{m} <span class=\"cd-time\">min</span> %{s} <span class=\"cd-time\">sec</span>",
+                            onChange: function( event, timer ){
+                            },
+                            onComplete: function( event ) {            
+                                jQuery('#usercart .top-cart').addClass('expired').removeClass('open');
+                                jQuery('#usercart .count-down-timer').hide();
+                                jQuery('#usercart-block-title').removeClass('dropdown-toggle')
+                                    .removeAttr('data-toggle');
+                                var _cartHeader = jQuery("#cartHeader");
+                                _cartHeader.addClass('cartempty')
+                                    .html("Your shopping bag is <span class='over'>no longer reserved</span>");
+                                jQuery("#topCartContent").hide();
+                                jQuery('#header-checkoutBtn').hide()
+                                    .delay(5000)
+                                    .queue(function(n) {
+                                        _cartHeader.html("<?php echo $this->__('You have no items in your shopping cart.'); ?>")
+                                        n();
+                                    });
+                            },
+                            leadingZero: true,
+                            direction: "down"
+                        });
+                    });
+                </script>
+            </div>
+        
             <div id="usercart-block-title" class="dropdown-toggle block-title" data-toggle="dropdown">
                 <strong id="cartHeader"><?php echo $_myCart ?><span><?php echo ' | '.Mage::helper('checkout')->formatPrice($this->getSubtotal()) ?><?php if ($_subtotalInclTax = $this->getSubtotalInclTax()): ?> / <?php echo ' | '.Mage::helper('checkout')->formatPrice($_subtotalInclTax) ?> <?php echo ' | '.Mage::helper('tax')->getIncExcText(true) ?><?php endif; ?></span></strong>
             </div>
@@ -81,97 +131,49 @@
         <?php endif;?>
     
     
-    <!-- start mini-cart -->
+<!-- start top cart dropdown (aka "minicart") -->
 <div id="topCartContent" class="block-content dropdown-menu" data-item-added="<?php if ( !!$_updateFlag && $_updateFlag ) {echo "true"; $checkoutSession->setCartUpdatedFlag(false);} else echo "false";?>">
     
     <div class="inner-wrapper"><?php // extra div to smooth slideUp and slideDown ?>
-    <?php if ($_cartQty > 0 && !empty($_itemsArray)):?>
-    <div class="timer-control-box">
-        <div class="shipping-date">
-        <!-- <span>Estimated Ship Date:</span> -->
-        <span id="cart-shipping-date-header" style="display:none"><?php echo date('Y-m-d', Mage::helper('sales/order')->calculateEstimatedShipDate($quote)) ?></span>
-        </div>
-        <div class="count-down-timer">
-        <!-- <span>Item Reserved For:</span> --> 
-        <span id="cart-timer-header" style="display:none"></span>
-        <script type="text/javascript">
-            jQuery(document).ready(function() {
-            // @TODO: this countdown JS should be abstracted out to external file if possible (mabye not: cart is ajaxy)            
-                var dateObj = new Date();
-                var countDownToTime = <?php echo $endcount_lc_header?>;
-                var serverTime = <?php echo $serverTime?>;
-                var localTime = new Date().getTime();
-                countDownToTime = (countDownToTime + (localTime - serverTime));
-                dateObj.setTime(countDownToTime);
-                //var countToTimeTemplate = (dateObj.getMonth()+1) + ' ' + dateObj.getDate() + ', ' + dateObj.getFullYear() + ' ' + dateObj.getHours() + ':' + dateObj.getMinutes() + ':' + dateObj.getSeconds();
-                jQuery("#cart-timer-header").countdown({
-                    //date: "12 10, 2011 16:11", or an object counting to a date
-                    date: dateObj,
-                    htmlTemplate: "%{m} <span class=\"cd-time\">:</span> %{s} <span class=\"cd-time\">minutes</span>",
-                    onChange: function( event, timer ){
-                    },
-                    onComplete: function( event ) {            
-                        jQuery(this).html("<span class='over'>no longer reserved</span>");
-                        //jQuery("#cartHeader").html("<span>0</span> Items<span> | <span class='price'>$0.00</span></span>");
-                        jQuery("#items-info-wrapper").hide();
-                        jQuery("div.shipping-date").hide();
-                        jQuery("#items-timer-passed").show();
-                    },
-                        leadingZero: true,
-                        direction: "down"
-                });
-            });
-        </script>
-       <!--  </div> -->
-    </div>
-    <?php  endif;?>
-    <div id="items-info-wrapper">
+        
+        <div id="items-info-wrapper">
         <?php $_items = $this->getItems(); //change from getRecentItems()?>
         <?php if( count($_items) && !empty($_itemsArray) ): ?>
-    </div>
-    <div id="mini-cart" class="mini-products-list ">
-        <?php foreach($_items as $_item): ?>
-        <!-- Add Customerize Cart item info -->
-        <?php echo $this->getItemHtml($_item) ?>
-        <?php endforeach; ?>
-    </div>
-    <script type="text/javascript">decorateList('mini-cart', 'none-recursive')</script>
-    <?php else: ?>
-    <p class="block-subtitle">
+        
+            <div id="mini-cart" class="mini-products-list ">
+                <?php foreach($_items as $_item): ?>
+                    <!-- Add Customerize Cart item info -->
+                    <?php echo $this->getItemHtml($_item); ?>
+                <?php endforeach; ?>
+            </div>
+            <script type="text/javascript">decorateList('mini-cart', 'none-recursive')</script>
+            
+        <?php else: ?>
     
-        <?php // @GOTCHA: not using Enterprise.TopCart methods in new design ?>
-<!--     <span onclick="Enterprise.TopCart.hideCart()" class="close-btn close" data-dismiss="alert"><?php //echo $this->__('Close'); ?></span> -->
-    
-        <?php echo $this->__('Recently added item(s)') ?>
-    </p>
-    <p class="cart-empty">
-        <?php echo $this->__('REMOVE You have no items in your shopping cart.'); ?>
-    </p>
-    <?php endif ?>
-    <!-- end mini-cart -->
-    <?php if($_cartQty && !empty($_itemsArray)): ?>
-    <div>
-    <div class="subtotal" style="float:left">
-    <?php if ($this->canApplyMsrp()): ?>
-    <span class="map-cart-sidebar-total"><?php echo $this->__('ORDER TOTAL WILL BE DISPLAYED BEFORE YOU SUBMIT THE ORDER'); ?></span>
-    <?php else: ?>
-    <span><?php echo $this->__('Subtotal: ') ?><?php echo Mage::helper('checkout')->formatPrice($this->getSubtotal()) ?>
-    <?php if ($_subtotalInclTax = $this->getSubtotalInclTax()): ?> / <?php echo Mage::helper('checkout')->formatPrice($_subtotalInclTax) ?> <?php echo Mage::helper('tax')->getIncExcText(true) ?><?php endif; ?>
-    <?php endif; ?>
-    </span>
-    </div>
-    <div style="float:right">
-        <a class="btn checkout btn-primary" title="Checkout" href="/checkout/cart/"><strong>Checkout</strong></a>
-    </div>
-    </div>
-    </div>
-</div>
-    <?php endif ?>
-    </div>
-    <div id="items-timer-passed" style="display:none;"><p class="cart-empty"><?php echo $this->__('TIMER OUT You have no items in your shopping cart.'); ?></p>
-    </div>
-    </div>
-</div>
+            <p class="cart-empty">
+                <?php echo $this->__('You have zero items in your cart.'); // @TODO: remove after confirmed not needed ?>
+            </p>
+        <?php endif; ?>
+        
+        <?php if($_cartQty && !empty($_itemsArray)): ?>
+            <div class="clearfix">
+                <div class="subtotal" style="float:left">
+                <?php if ($this->canApplyMsrp()): ?>
+                    <span class="map-cart-sidebar-total"><?php echo $this->__('ORDER TOTAL WILL BE DISPLAYED BEFORE YOU SUBMIT THE ORDER'); ?></span>
+                <?php else: ?>
+                    <span><?php echo $this->__('Subtotal: ') ?><?php echo Mage::helper('checkout')->formatPrice($this->getSubtotal()) ?>
+                        <?php if ($_subtotalInclTax = $this->getSubtotalInclTax()): ?> / <?php echo Mage::helper('checkout')->formatPrice($_subtotalInclTax) ?> <?php echo Mage::helper('tax')->getIncExcText(true) ?><?php endif; ?>
+                    </span>
+                <?php endif; ?>
+                </div>
+                <div class="action" style="float:right">
+                <a class="btn checkout btn-primary" title="Checkout" href="/checkout/cart/"><strong>Checkout</strong></a>
+                </div>
+            </div>
+        <?php endif; ?>
+    </div><!-- /.inner-wrapper -->
+</div><!-- /#topCartContent -->
+
     <script type="text/javascript">
     // Cart related JS needs to stay here, load in ajax call
     jQuery(document).ready( function() {
@@ -198,5 +200,5 @@
     });
     </script>
     <!-- end mini-cart -->
-    <?php endif;?>
+    <?php endif; ?>
 </div>

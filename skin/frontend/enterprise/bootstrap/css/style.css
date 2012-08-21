@@ -19,7 +19,7 @@ html {
 a {color:#ed1c25;text-decoration:none; outline: none;}
 a:hover{color:#ed1c25;text-decoration:underline;}
 a:focus{outline: none;}
-.content_push { margin-top:100px; }
+.content_push { margin-top:115px; }
 .content_push_2col { margin-top:115px; }
 
 /**
@@ -165,10 +165,10 @@ a.btn-primary /* req to override '.dropdown a' ruleset */ {
     width: 100%;
 }
 #mainContent > .banner {
-    margin:5px auto;
+    margin:5px auto 0;
 }
-.catalog-events-container {margin-top:50px;}
-.banner + .catalog-events-container {margin-top:0;}
+.catalog-events-container {margin-top:8px;}
+.banner + .catalog-events-container {margin-top:18px;}
 .page-header img {margin-right: 5px;}
 
 /* event tiles */
@@ -351,6 +351,27 @@ header nav .cta strong em {color:#d84643; font-style:normal;}
     -webkit-box-shadow:1px -3px 4px rgba(0, 0, 0, 0.05);
     box-shadow:1px -3px 4px rgba(0, 0, 0, 0.05);
 } 
+#usercart .count-down-timer { /* @KLUDGE: hackish placement into nav area, see MGN-935 */
+    position: absolute;
+    top: 45px;
+    left: -191px;
+    font-size: 13px;
+    line-height: 15px;
+}
+#usercart .top-cart.expired .count-down-timer { /* @KLUDGE */
+    left:-180px;
+}
+body[class*='checkout'] #usercart .count-down-timer {
+    display: none;
+}
+#usercart .count-down-timer strong {
+    font-weight: normal;
+}
+#cart-timer-header,
+#usercart .over {
+    color: #ED1C25;
+    font-weight: bold;
+}
 
 /* Minicart */
 #topCartContent {
