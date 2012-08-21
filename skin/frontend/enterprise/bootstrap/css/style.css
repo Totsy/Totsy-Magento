@@ -358,13 +358,17 @@ header nav .cta strong em {color:#d84643; font-style:normal;}
     font-size: 13px;
     line-height: 15px;
 }
+#usercart .top-cart.expired .count-down-timer { /* @KLUDGE */
+    left:-180px;
+}
 body[class*='checkout'] #usercart .count-down-timer {
     display: none;
 }
 #usercart .count-down-timer strong {
     font-weight: normal;
 }
-#cart-timer-header {
+#cart-timer-header,
+#usercart .over {
     color: #ED1C25;
     font-weight: bold;
 }
