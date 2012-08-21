@@ -198,6 +198,8 @@ a.btn-primary /* req to override '.dropdown a' ruleset */ {
 }
 .events-grid .thumbnail .event-link {
     display: block;
+    border-top:1px solid #ddd; /* fallback */
+    border-top: 1px solid rgba(0, 0, 0, 0.15);
 }
 .events-grid .thumbnail .more {
     display: none;
