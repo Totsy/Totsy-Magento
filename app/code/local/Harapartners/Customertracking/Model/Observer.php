@@ -101,13 +101,14 @@ class Harapartners_Customertracking_Model_Observer {
 
             //Create new customer tracking
             if(!$customerTrackingRecord->getId()){
+                $level = Mage::getSingleton('customer/session')->getData('referer_tracking_level');
                 $data = array(
                         'customer_id' => $customer->getId(),
                         'customer_email' => $customer->getEmail(),
                         'affiliate_id' => $affiliate->getId(),
                         'affiliate_code' => $affiliate->getAffiliateCode(),
                         'status' => Harapartners_Customertracking_Model_Record::STATUS_NEW,
-                        'level' => Mage::getSingleton('customer/session')->getData('referer_tracking_level') + 1,
+                        'level' => (is_null($level) ? 0 : $level + 1),
                         'registration_param' => Mage::getSingleton('customer/session')->getData('registration_param')
 //                        'login_count' => 1
                         //make login_count 'level' (since they are both unsigned int), login_count is handled for all customers
@@ -115,14 +116,6 @@ class Harapartners_Customertracking_Model_Observer {
                 $affiliateInfo = Mage::getSingleton('customer/session')->getData('affiliate_info');
                 if(!empty($affiliateInfo['sub_affiliate_code'])){
                     $data['sub_affiliate_code'] = $affiliateInfo['sub_affiliate_code'];
-                     if(!in_array($data['sub_affiliate_code'] , explode(',', $affiliate->getSubAffiliateCode()))){       
-                         if(!!$affiliate->getSubAffiliateCode())  {  
-                            $affiliate->setSubAffiliateCode($affiliate->getSubAffiliateCode().','.$data['sub_affiliate_code']);
-                         }else{
-                             $affiliate->setSubAffiliateCode($data['sub_affiliate_code']);
-                         }
-                        $affiliate->save();
-                        }
                 }
                 if(!empty($affiliateInfo['registration_param'])){
                     $data['registration_param'] = $affiliateInfo['registration_param'];

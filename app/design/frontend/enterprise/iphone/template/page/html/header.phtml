@@ -53,6 +53,6 @@
 
 <script type="text/javascript">
 Event.observe(document,'dom:loaded',function() {
-new Ajax.Updater($('header-user-info'), '<?php echo $this->getUrl('customertracking/headermsg/ajax',array('_secure'=>Mage::app()->getStore()->isCurrentlySecure())); ?>', {method:'get',evalScripts: true});
+new Ajax.Updater({success:'header-user-info'}, '<?php echo $this->getUrl('customertracking/headermsg/ajax',array('_secure'=>Mage::app()->getStore()->isCurrentlySecure())); ?>', {method:'get',evalScripts: true});
 });
 </script>

@@ -18,8 +18,13 @@ class Harapartners_Service_Block_Rewrite_Adminhtml_Catalog_Category_Tree extends
         parent::_prepareLayout();
         //Harapartners, Jun do NOT allow adding root category, rename 'Add Subcategory'
         $this->unsetChild('add_root_button');
-        $this->getChild('add_sub_button')->setData('label', Mage::helper('catalog')->__('Add Category/Event'));
-        $this->getChild('add_sub_button')->setData('disabled', 'disabled');
+        if($this->_isAllowedAction('add_category')) {
+            $this->getChild('add_sub_button')->setData('label', Mage::helper('catalog')->__('Add Category/Event'));
+            $this->getChild('add_sub_button')->setData('disabled', 'disabled');
+        } else {
+            $this->unsetChild('add_sub_button');
+        }
+        
          $this->setChild('clear_expire',
                 $this->getLayout()->createBlock('adminhtml/widget_button')
                     ->setData(array(
@@ -28,6 +33,12 @@ class Harapartners_Service_Block_Rewrite_Adminhtml_Catalog_Category_Tree extends
                     ))
             );
         return $this;
+    }
+
+    protected function _isAllowedAction($action)
+    {
+        //return null;
+        return Mage::getSingleton('admin/session')->isAllowed('catalog/categories/actions/' . $action);
     }
 
     public function getClearExpireButtonHtml()

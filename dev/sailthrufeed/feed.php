@@ -17,6 +17,10 @@ if (php_sapi_name()=='cli'){
 	}
 }
 
+if (!empty($_GET['domain']) && strtolower($_GET['domain']) == 'mamasource.totsy.com'){
+	$_SERVER['HTTP_HOST'] = 'mamasource.totsy.com';
+}
+
 $chash = $full_path. '/var/tmp/' .md5($_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']).'.json';
 if ($skip_cache_check===true){
 	file_put_contents($chash.'.new','addin some cache');

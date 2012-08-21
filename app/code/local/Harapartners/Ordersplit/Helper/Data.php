@@ -348,6 +348,7 @@ class Harapartners_Ordersplit_Helper_Data extends Mage_Core_Helper_Abstract {
                         $service->setOrderData($orderData);
                         $service->submitAll();
                         $newOrder = $service->getOrder();
+                        $paymentFailed = false;
                         if($newOrder->getStatus() == 'payment_failed') {
                             $paymentFailed = true;
                         }
