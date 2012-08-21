@@ -35,7 +35,7 @@
     $_helper = $this->helper('catalog/output');
     $_nativeZoom = false;    
 ?>
-<div class="well zoomImage">
+<div class="well zoomImage" style="margin-bottom:9px;">
 <?php /* --------- Cloud Zoom --------- */ ?>
     <?php $big_img = $this->helper('catalog/image')->init($_product, 'image')->resize(800)->keepFrame(FALSE);?>
     <a class="cloud-zoom" id="zoom1" href="<?php echo $this->helper('catalog/image')->init($_product, 'image')->resize(800)->keepFrame(FALSE); ?>" rel="showTitle: false, position:'inside'" >
@@ -50,7 +50,7 @@
     <ul class="thumbnails">
     <?php foreach ($this->getGalleryImages() as $_image): ?>
         <li>
-        <div class="thumbnail" style="padding:5px;">
+        <div class="thumbnail" style="padding:0px;">
             <a href="<?php echo $this->helper('catalog/image')->init($_product, 'image', $_image->getFile())->resize(800)->keepFrame(FALSE);?>" class='cloud-zoom-gallery' title='<?php echo $this->htmlEscape($_image->getLabel()) ?>' rel="useZoom: 'zoom1', smallImage: '<?php echo $this->helper('catalog/image')->init($_product, 'image', $_image->getFile())->resize(800)->keepFrame(FALSE); ?>' ">
             <img src="<?php echo $this->helper('catalog/image')->init($_product, 'thumbnail', $_image->getFile())->resize(75)->keepFrame(FALSE); ?>" alt = "<?php echo $this->htmlEscape($_image->getLabel()) ?>" />
             </a>

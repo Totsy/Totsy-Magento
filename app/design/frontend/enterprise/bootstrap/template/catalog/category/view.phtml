@@ -130,11 +130,13 @@
             <h3 style="color: #555555;
 font-size: 16px;
 line-height: 20px;"><?php echo $_helper->categoryAttribute($_category, $_category->getName(), 'name') ?>
+   <span style="display: block; width: 153px; float: right; margin: -14px -18px 0px 0px;">
     <span class='st_pinterest_large pull-right' displayText='Pinterest'></span>
     <span class='st_facebook_large pull-right' displayText='Facebook'></span>
     <span class='st_twitter_large pull-right' displayText='Tweet'></span>
     <span class='st_email_large pull-right' displayText='Email'></span></h3>
-    <hr style="margin:5px 0px; padding:0px;"/>
+   </span>
+    <hr style="margin:5px 0px; padding:0px; clear:both;"/>
         <p style="color: #555555; font-size: 14px; line-height: 20px;"><?php echo $_helper->categoryAttribute($_category, $_description, 'description') ?></p>
     </div>
      <div class="clear"></div>

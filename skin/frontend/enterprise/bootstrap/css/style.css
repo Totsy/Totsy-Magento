@@ -7,7 +7,7 @@ body { height: 100%;}
 */
 html {
     margin:0;
-    background-color:#fff;
+    background-color:#f9f9f9;
     background-image: -moz-linear-gradient(top, #eef6fc, #ffffff);
     background-image: -ms-linear-gradient(top, #eef6fc, #ffffff);
     background-image: -o-linear-gradient(top, #eef6fc, #ffffff);
@@ -21,7 +21,7 @@ a:hover{color:#ed1c25;text-decoration:underline;}
 a:focus{outline: none;}
 .content_push { margin-top:115px; }
 .content_push_2col { margin-top:115px; }
-
+h2 {font-size:22px!important; /* header override */ }
 /**
  @Diagnostics
  */
@@ -88,7 +88,7 @@ html.test .container .row {outline:1px dotted green;}
     margin:20px 0 10px; padding-bottom:5px;
     border-bottom:1px solid #E5E5E5; 
 }
-.zoomImage { padding:10px; z-index:500!important; }
+.zoomImage { padding:0px; z-index:500!important; }
 
 /* Ellipsis classes for truncating long titles */
 .ellipsis {
@@ -758,8 +758,12 @@ select, textarea, input[type="text"], input[type="password"], input[type="dateti
     padding: 4px;
 }
 .price-box { margin-top:10px; font-size: 14px; }
-.old-price { font-weight:normal; float: right; }
-.old-price { font-weight:normal; float:right; }
+.old-price { color: #999999;
+float: right;
+text-decoration: line-through;
+font-weight: normal;
+font-size: 11px; }
+
 .options-container-big {margin:0px;}
 .count-down-timer {font-size:18px;}
 .input-box {padding:0px 0px 5px;}

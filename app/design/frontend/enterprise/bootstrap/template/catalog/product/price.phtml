@@ -317,7 +317,7 @@
             </p>
         <?php else : // excl. ?>
             <p class="old-price">
-                <span class="price-label"><?php echo $this->__('Original') ?>:</span>
+                <!--<span class="price-label"><?php echo $this->__('Original') ?>:</span>-->
                 <span class="price" id="old-price-<?php echo $_id ?><?php echo $this->getIdSuffix() ?>">
                     <?php echo $_coreHelper->currency($_regularPrice,true,false) ?>
                 </span>
@@ -341,8 +341,8 @@
                 </p>
             <?php else : ?>
             <p class="special-price">
-                <span class="price-label"><?php echo $this->__('Totsy Price:') ?></span>
-                <span class="price" id="product-price-<?php echo $_id ?><?php echo $this->getIdSuffix() ?>">
+                <!--<span class="price-label"><?php echo $this->__('Totsy Price:') ?></span>-->
+                <span class="price" id="product-price-<?php echo $_id ?><?php echo $this->getIdSuffix() ?>" style="font-size:20px; color:#070; font-weight:bold;">
                     <?php echo $_coreHelper->currency($_finalPrice,true,false) ?>
                 </span>
             </p>
