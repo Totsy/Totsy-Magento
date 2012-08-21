@@ -173,10 +173,10 @@
     </div>
 </div>
     <script type="text/javascript">
-    // Cart related JS needs to stay here as this page loads in ajax call, no page load
+    // Cart related JS needs to stay here, load in ajax call
     jQuery(document).ready( function() {
         // Show checkout button if items in cart
-        var itemsInCartBool = <?php echo $_itemsInCart; ?>;
+        var itemsInCartBool = "<?php echo $_itemsInCart; ?>";
         var headCheckoutBtn = jQuery('#header-checkoutBtn');
         if ( itemsInCartBool == true ) {
             headCheckoutBtn.show();

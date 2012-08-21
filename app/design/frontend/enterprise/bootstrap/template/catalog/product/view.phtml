@@ -81,6 +81,9 @@ $endcount_lc = date("F j, Y, G:i:s", $endcount_utc); ?>
     <ul class="nav nav-tabs pdp_tabs" id="myTabs">
         <li><a href="#desc" data-toggle="tab">Description</a></li>
         <li><a href="#shipping" data-toggle="tab">Shipping & Returns</a></li>
+        <?php if($this->getProduct()->isVirtual()): ?>
+        <li><a href="#overview">Quick Overview</li>
+        <?php endif; ?>
     </ul>
     <div class="tab-content">
     <div class="tab-pane active" id="desc">
