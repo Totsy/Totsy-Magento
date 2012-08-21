@@ -376,7 +376,7 @@ body[class*='checkout'] #usercart .count-down-timer {
 /* Minicart */
 #topCartContent {
     position: absolute; top: 100%; left: auto; right:0; z-index: 10;
-    margin-top:-1px; padding:19px;
+    margin-top:-1px; padding:12px 12px 30px;
     width:334px;
     background:#fff;
     border:1px solid #ccc; /* old browser fallback */
@@ -393,6 +393,38 @@ body[class*='checkout'] #usercart .count-down-timer {
     padding: 0;
     color:#ED1C25;
 }
+#topCartContent .minifoot {
+    background:#f9f9f9;
+    position: absolute; bottom: 0; left: 0;
+    width: 100%;
+    padding:6px 0;
+}
+#topCartContent .minifoot .subtotal {
+    float: left;
+    margin:2px 0 0 12px;
+    font-size:16px;
+    text-shadow: 0 1px 1px rgba(250,250,250,0.2);
+}
+#topCartContent .minifoot .subtotal .price {
+    color: #ED1C25;
+    font-weight: normal;
+}
+#topCartContent .minifoot .action {
+    float: right;
+    margin-right:12px;
+}
+#topCartContent .minifoot .action a {
+    margin-top:0;
+}
+#mini-cart .even {
+    margin: 0 0 5px;
+    border-top:1px solid #ddd; /* fallback old browsers */
+    border-top: 1px solid rgba(0, 0, 0, 0.065);
+}
+#mini-cart .last {
+    border:none;
+}
+
 
 /* checkout btn in non-mini-cart header */
 #header-checkoutBtn {

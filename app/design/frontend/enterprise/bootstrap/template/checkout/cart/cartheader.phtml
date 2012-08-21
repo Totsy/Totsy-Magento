@@ -156,8 +156,8 @@
         <?php endif; ?>
         
         <?php if($_cartQty && !empty($_itemsArray)): ?>
-            <div class="clearfix">
-                <div class="subtotal" style="float:left">
+            <div class="minifoot clearfix">
+                <div class="subtotal">
                 <?php if ($this->canApplyMsrp()): ?>
                     <span class="map-cart-sidebar-total"><?php echo $this->__('ORDER TOTAL WILL BE DISPLAYED BEFORE YOU SUBMIT THE ORDER'); ?></span>
                 <?php else: ?>
@@ -166,7 +166,7 @@
                     </span>
                 <?php endif; ?>
                 </div>
-                <div class="action" style="float:right">
+                <div class="action">
                 <a class="btn checkout btn-primary" title="Checkout" href="/checkout/cart/"><strong>Checkout</strong></a>
                 </div>
             </div>
