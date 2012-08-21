@@ -461,6 +461,19 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
 .cart-collaterals-buttons {
     margin-top:10px;
 }
+
+.cart-form-container .qty {
+    width: auto !important;
+}
+
+.remove-button {
+    width:auto !important;
+}
+
+.product-name {
+    width: 400px;
+}
+
 .btn-continue {
     margin: 0px 10px 10px 10px;
 }
