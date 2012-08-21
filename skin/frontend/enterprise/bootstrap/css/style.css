@@ -426,6 +426,14 @@ header nav .cta strong em {color:#d84643; font-style:normal;}
     text-transform:lowercase;
 }
 
+.cart-collaterals-buttons {
+	margin-top:10px;
+}
+
+.cart-coupon {
+	margin:0px !important;
+}
+
 .onepage-address-form form {
 	margin-bottom: 0px !important;
 }
@@ -470,6 +478,13 @@ header nav .cta strong em {color:#d84643; font-style:normal;}
     width: auto !important;
 }
 
+.cart-form-container .qty {
+	width: auto !important;
+}
+
+.product-name {
+	width: 400px;
+}
 /**
  @My_Account
  */

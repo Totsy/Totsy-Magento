@@ -75,39 +75,38 @@
                     window.location = "<?php echo Mage::getUrl('checkout/cart');?>"
                     };
             </script>
-    </div>
+	</div>
 </div>
 <div class="top-check-out">
         <?php if(!$this->hasError()): ?>
-        <?php if($this->getContinueShoppingUrl()): ?>
-        <button style="margin: 0px 10px 10px 10px" type="button" title="<?php echo $this->__('Continue Shopping') ?>" class="pull-right button btn-continue btn" onclick="setLocation('<?php echo $this->getContinueShoppingUrl() ?>')"><?php echo $this->__('Continue Shopping') ?></button>
-        <?php endif; ?>
-        <?php foreach ($this->getMethods('top_methods') as $method): ?>
-            <?php if ($methodHtml = $this->getMethodHtml($method)): ?>
-            <?php echo $methodHtml; ?>
-            <?php endif; ?>
-        <?php endforeach; ?>
+        	<?php foreach ($this->getMethods('top_methods') as $method): ?>
+        	    <?php if ($methodHtml = $this->getMethodHtml($method)): ?>
+        	    	<?php echo $methodHtml; ?>
+        	    <?php endif; ?>
+        	<?php endforeach; ?>
+			<?php if($this->getContinueShoppingUrl()): ?>
+        	    <button style="margin: 0px 10px 10px 10px" type="button" title="<?php echo $this->__('Continue Shopping') ?>" class="pull-right button btn-continue btn" onclick="setLocation('<?php echo $this->getContinueShoppingUrl() ?>')"><?php echo $this->__('Continue Shopping') ?></button>
+        	<?php endif; ?>        
         <?php endif; ?>
     </div>
     <div class="clear"></div>
     <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
     <?php echo $this->getChildHtml('form_before') ?>
-    <div class="cart-form-container">
+    <div class="cart-form-container well">
     <form action="<?php echo $this->getUrl('checkout/cart/updatePost') ?>" method="post">
         <fieldset>
-            <table id="shopping-cart-table" class="data-table cart-table table table-bordered well table-condensed">
+            <table id="shopping-cart-table" class="data-table table table-bordered table-condensed">
             <?php $mergedCells = ($this->helper('tax')->displayCartBothPrices() ? 2 : 1); ?>
-                <thead>
                     <tr>
-                        <th rowspan="<?php echo $mergedCells; ?>">&nbsp;</th>
-                        <th rowspan="<?php echo $mergedCells; ?>"><span class="nobr"><?php echo $this->__('Product Name') ?></span></th>
+                        <th colspan="1" rowspan="<?php echo $mergedCells; ?>">&nbsp;</th>
+                        <th rowspan="<?php echo $mergedCells; ?>" colspan="1"><span class="nobr"><?php echo $this->__('Product Name') ?></span></th>
                         <?php if ($this->helper('wishlist')->isAllowInCart()) : ?>
-                        <th rowspan="<?php echo $mergedCells; ?>" class="a-center"><span class="nobr"><?php echo $this->__('Move to Wishlist') ?></span></th>
+                        <th colspan="1" rowspan="<?php echo $mergedCells; ?>" class="a-center"><span class="nobr"><?php echo $this->__('Move to Wishlist') ?></span></th>
                         <?php endif ?>
                         <th class="a-center" colspan="<?php echo $mergedCells; ?>"><span class="nobr"><?php echo $this->__('Unit Price') ?></span></th>
-                        <th rowspan="<?php echo $mergedCells; ?>" class="a-center"><?php echo $this->__('Qty') ?></th>
-                        <th class="a-center" colspan="<?php echo $mergedCells; ?>"><?php echo $this->__('Subtotal') ?></th>
-                        <th rowspan="<?php echo $mergedCells; ?>" class="a-center"><?php echo $this->__('Remove') ?></th>
+                        <th colspan="1" rowspan="<?php echo $mergedCells; ?>" class="a-center"><?php echo $this->__('Qty') ?></th>
+                        <th class="a-center" colspan="1"><?php echo $this->__('Subtotal') ?></th>
+                        <th colspan="1" rowspan="<?php echo $mergedCells; ?>" class="a-center"><?php echo $this->__('Remove') ?></th>
                     </tr>
                     <?php if ($this->helper('tax')->displayCartBothPrices()): ?>
                     <tr>
@@ -117,53 +116,43 @@
                         <th><?php echo $this->helper('tax')->getIncExcTaxLabel(true) ?></th>
                     </tr>
                     <?php endif; ?>
-                </thead>
                 <tbody>
                 <?php foreach($this->getItems() as $_item): ?>
                     <?php echo $this->getItemHtml($_item) ?>
                 <?php endforeach ?>
                 </tbody>
+                <tr>
+                	<td colspan="6">
+                		<button type="submit" class="pull-right btn btn-primary" title="<?php echo $this->__('Update Shopping Cart') ?>" ><?php echo $this->__('Update Shopping Cart') ?></button>
+                	</td>
+                </tr>
             </table>
             <script type="text/javascript">decorateTable('shopping-cart-table')</script>
         </fieldset>
-        <button style="margin: 0px 10px 0px 10px" type="submit" title="<?php echo $this->__('Update Shopping Cart') ?>" class="button btn-update btn btn-primary"><?php echo $this->__('Update Shopping Cart') ?></button>
     </form>
     </div>
-    <div style="clear:both"></div>
     <div class="totals pull-right">
-    	<div style="float:right; width:200px !important">
-        <?php echo $this->getChildHtml('totals'); ?>
-        <?php $saving = Mage::helper('sales/order')->calculateEstimatedSavings($quote); ?>
-        <?php if ($saving): ?>
-        <p class="savings">
-            <span><?php echo $this->__('Your savings: ') ?></span><?php echo Mage::helper('checkout')->formatPrice($saving); ?>
-        </p>
-        <?php endif;?>
-        </div>
-        <div style="clear:right"></div>
+        <div class="top-check-out">
         <?php if(!$this->hasError()): ?>
-        <div class="checkout-types">
-        <?php if($this->getContinueShoppingUrl()): ?>
-            <span>
-                <button style="margin: 0px 10px 0px 10px" type="button" title="<?php echo $this->__('Continue Shopping') ?>" class="button btn-continue btn" onclick="setLocation('<?php echo $this->getContinueShoppingUrl() ?>')"><?php echo $this->__('Continue Shopping') ?></button>
-            </span>
-        <?php endif; ?> 
-        <?php foreach ($this->getMethods('methods') as $method): ?>
-            <?php if ($methodHtml = $this->getMethodHtml($method)): ?>
-            <span><?php echo $methodHtml; ?></span>
-            <?php endif; ?>
-        <?php endforeach; ?>
-        </div>
+        	<?php foreach ($this->getMethods('top_methods') as $method): ?>
+        	    <?php if ($methodHtml = $this->getMethodHtml($method)): ?>
+        	    	<?php echo $methodHtml; ?>
+        	    <?php endif; ?>
+        	<?php endforeach; ?>
+			<?php if($this->getContinueShoppingUrl()): ?>
+        	    <button style="margin: 0px 10px 10px 10px" type="button" title="<?php echo $this->__('Continue Shopping') ?>" class="pull-right button btn-continue btn" onclick="setLocation('<?php echo $this->getContinueShoppingUrl() ?>')"><?php echo $this->__('Continue Shopping') ?></button>
+        	<?php endif; ?>        
         <?php endif; ?>
+        </div>
     </div>
     <div style="clear:both"></div>
     <?php if ( Mage::helper('service')->isTotsyStore() ):?>
-    <div style="margin:10px 0px 0px 0px" class="cart-collaterals<?php if($this->getChildHtml('crosssell')) echo ' cross-inside'; ?>">
+    <div class="cart-collaterals<?php if($this->getChildHtml('crosssell')) echo ' cross-inside'; ?>">
         <?php //echo $this->getChildHtml('crosssell') ?>
-        <div class="deals" style="float:left; margin:10px; padding: 10px">
+        <div class="deals pull-left span5 well cart-coupon">
             <?php echo $this->getChildHtml('coupon') ?>
         </div>
-        <div class="deals" style="margin:10px;">    
+        <div class="deals span5 well pull-right">    
             <?php echo $this->getChildHtml('giftcards') ?>
         </div>
         <?php //if (!$this->getIsVirtual()): echo $this->getChildHtml('shipping'); endif; ?>
