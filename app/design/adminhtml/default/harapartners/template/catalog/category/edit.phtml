@@ -65,6 +65,7 @@
      * Update category content area
      */
     function updateContent(url, params, refreshTree) {
+		console.log(url);
         if (!params) {
             params = {};
         }
@@ -98,11 +99,13 @@
                         }
                         toolbarToggle.start();
                     } catch (e) {
+						console.log("I made into the catch block on line #102")
                         alert(e.message);
                     };
                 }, 25);
             },
             onSuccess: function(transport) {
+				console.log(transport);
                 try {
                     if (transport.responseText.isJSON()) {
                         var response = transport.responseText.evalJSON();
@@ -129,9 +132,20 @@
                         //$(categoryContainer).update(transport.responseText);
 						jQuery(categoryContainer).html(transport.responseText);
                     }
-                }
-                catch (e) {
-                    $(categoryContainer).update(transport.responseText);
+                } catch (e) {
+					if(transport.responseText.isJson()){
+						var response = transport.responseText.evalJSON();
+						if (response.messages){
+							$(messagesContainer).update(response.messages);
+						}
+						if (response.content){
+							//HP Yang, solve the JS load conflict
+							//$(categoryContainer).update(response.content);
+							jQuery(categoryContainer).html(response.content);
+						}
+					} else{
+						$(categoryContainer).update(transport.responseText);
+					}
                 }
             }
         });

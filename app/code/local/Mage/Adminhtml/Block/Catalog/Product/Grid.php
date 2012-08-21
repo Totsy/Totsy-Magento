@@ -287,12 +287,13 @@ class Mage_Adminhtml_Block_Catalog_Product_Grid extends Mage_Adminhtml_Block_Wid
     {
         $this->setMassactionIdField('entity_id');
         $this->getMassactionBlock()->setFormFieldName('product');
-
-        $this->getMassactionBlock()->addItem('delete', array(
-             'label'=> Mage::helper('catalog')->__('Delete'),
-             'url'  => $this->getUrl('*/*/massDelete'),
-             'confirm' => Mage::helper('catalog')->__('Are you sure?')
-        ));
+        if($this->_isAllowedAction('delete')) {
+            $this->getMassactionBlock()->addItem('delete', array(
+                 'label'=> Mage::helper('catalog')->__('Delete'),
+                 'url'  => $this->getUrl('*/*/massDelete'),
+                 'confirm' => Mage::helper('catalog')->__('Are you sure?')
+            ));
+        }        
 
         $statuses = Mage::getSingleton('catalog/product_status')->getOptionArray();
 
@@ -324,6 +325,12 @@ class Mage_Adminhtml_Block_Catalog_Product_Grid extends Mage_Adminhtml_Block_Wid
     public function getGridUrl()
     {
         return $this->getUrl('*/*/grid', array('_current'=>true));
+    }
+
+    protected function _isAllowedAction($action)
+    {
+        //return null;
+        return Mage::getSingleton('admin/session')->isAllowed('catalog/products/actions/' . $action);
     }
 
     public function getRowUrl($row)

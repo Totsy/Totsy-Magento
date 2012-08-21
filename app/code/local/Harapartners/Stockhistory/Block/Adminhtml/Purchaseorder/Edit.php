@@ -27,11 +27,21 @@ class Harapartners_Stockhistory_Block_Adminhtml_Purchaseorder_Edit extends Mage_
         if(!!$dataObject->getId()){
             $poObject = Mage::getModel('stockhistory/purchaseorder')->load($dataObject->getId());
             if($poObject->getStatus() == Harapartners_Stockhistory_Model_Purchaseorder::STATUS_OPEN){
-                $this->_addButton('transaction_add', array(
-                    'label'     => Mage::helper('stockhistory')->__('Create Amendment'),
-                    'onclick'   => 'setLocation(\'' . $this->getCreateAmendmentUrl() .'\')',
-                    'class'        => 'add',
-                  ));
+                if ($this->_isAllowedAction('create_amendment')) {
+                    $this->_addButton('transaction_add', array(
+                        'label'     => Mage::helper('stockhistory')->__('Create Amendment'),
+                        'onclick'   => 'setLocation(\'' . $this->getCreateAmendmentUrl() .'\')',
+                        'class'        => 'add',
+                      ));
+                }
+            }
+
+            if (!$this->_isAllowedAction('delete')) {
+                $this->_removeButton('delete');
+            }
+
+            if (!$this->_isAllowedAction('reset')) {
+                $this->_removeButton('reset');
             }
             
               $this->_addButton('generate_report', array(
@@ -44,6 +54,12 @@ class Harapartners_Stockhistory_Block_Adminhtml_Purchaseorder_Edit extends Mage_
               		'onclick'	=>	'setLocation(\'' . $this->getProductExportUrl() .'\')',
               ));
         }
+    }
+
+    protected function _isAllowedAction($action)
+    {
+        //return null;
+        return Mage::getSingleton('admin/session')->isAllowed('harapartners/stockhistory/purchaseorder/actions/' . $action);
     }
     
     public function getHeaderText() {
