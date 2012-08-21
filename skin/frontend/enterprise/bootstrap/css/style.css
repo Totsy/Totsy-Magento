@@ -430,6 +430,10 @@ header nav .cta strong em {color:#d84643; font-style:normal;}
 	margin-top:10px;
 }
 
+.btn-continue {
+	margin: 0px 10px 10px 10px;
+}
+
 .cart-coupon {
 	margin:0px !important;
 }
