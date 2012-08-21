@@ -228,6 +228,26 @@ a.btn-primary /* req to override '.dropdown a' ruleset */ {
     display: inline-block;
 }
 
+/* upcoming */
+#events-upcoming .thumbnails li >div {position: relative;}
+#events-upcoming .opens_in {
+    position: absolute; bottom: 0; left: 0;
+    margin: 0; padding:4px 0;
+    width:100%;
+    background: rgba(255,255,255,0.65);
+    border-top:1px solid #ddd;
+    color:#0e0e0e;
+    font-size: 11px;
+    text-indent: 4px;
+}
+#events-upcoming .opens_in span:first-child {
+    color:#4e4e4e;
+    font-style: italic;
+}
+#events-upcoming .opens_in span:first-child:after {
+    content: ":";
+    display: inline;
+}
 
 /**
  @Header
