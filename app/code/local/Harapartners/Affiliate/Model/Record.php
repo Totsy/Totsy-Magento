@@ -65,19 +65,7 @@ class Harapartners_Affiliate_Model_Record extends Mage_Core_Model_Abstract {
             $this->setData('status', self::STATUS_ENABLED);
         }
         //store_id is defaulted as 0 at the DB level
-        
-        //Data cleaning
-        if(!!($this->getData('sub_affiliate_code'))){
-            $rawSubCode = explode(',', trim(trim($this->getData('sub_affiliate_code'), ',')));
-            $cleanSubCode = array();
-            foreach($rawSubCode as $subCodeValue){
-                if(!!trim($subCodeValue)){
-                    $cleanSubCode[] = strtolower(trim($subCodeValue));
-                }
-            }
-            $this->setData('sub_affiliate_code', implode(',', $cleanSubCode));
-        }        
-        
+
         $this->validate();
         return $this;
     }
@@ -102,16 +90,7 @@ class Harapartners_Affiliate_Model_Record extends Mage_Core_Model_Abstract {
                 throw new Exception('Tracking code must be valid JSON');
             }
         }
-        
-        if(!!($this->getData('sub_affiliate_code'))){
-            $cleanSubCode = explode(',', $this->getData('sub_affiliate_code'));
-            foreach($cleanSubCode as $subCodeValue){
-                if(!preg_match("/^[a-z0-9_]+$/",  $subCodeValue)){
-                    throw new Exception('Sub-affilicate code must be alphanumerical (lowercase) with underscore. Error value: ' . $subCodeValue);
-                }
-            }
-        }
-        
+
         return $this;
     }
     

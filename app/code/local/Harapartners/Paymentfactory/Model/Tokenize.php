@@ -520,7 +520,7 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Totsy_Cybersource_Model
             $data->setData('cybersource_subid', $result->paySubscriptionCreateReply->subscriptionID);
             $profile = Mage::getModel('paymentfactory/profile');
             $profile->loadByCcNumberWithId($payment->getData('cc_number').$customerId.$payment->getCcExpYear().$payment->getCcExpMonth());
-            if(!$profile && !$profile->getId()) {
+            if(!$profile || !$profile->getId()) {
                 $profile->importDataWithValidation($data);
                 $profile->save();
             }
