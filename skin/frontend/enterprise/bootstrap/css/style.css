@@ -408,8 +408,8 @@ header nav .cta strong em {color:#d84643; font-style:normal;}
     margin-left: 0px !important; 
 }
 
-.onepage-address-columns {
-   margin-left: 0px !important; 
+.onepage-blocks {
+   padding: 20px;
 }
 
 .onepage-address-form label {
@@ -443,43 +443,50 @@ header nav .cta strong em {color:#d84643; font-style:normal;}
 }
 
 .onepage-address-form input[type="text"], select {
-	margin-right: 10px !important; 
+	/* margin-right: 10px !important; */
 }
 
 .onepage-address-form .firstname {
-    width:150px !important;
+    width:200px !important;
 }
 
 .onepage-address-form .lastname {
-    width:210px !important;
+    width:200px !important;
+    margin-left: 10px !important;
 }
 
 .onepage-address-form .telephone {
-    width:150px !important;
+    width:205px !important;
 }
 
 .onepage-address-form .streetaddress1 {
-    width:380px !important;
+    width:420px !important;
+}
+
+.onepage-address-form .address-select {
+	width:220px !important;
 }
 
 .onepage-address-form .streetaddress2 {
-    width:380px !important;
+    width:420px !important;
 }
 
 .onepage-address-form .zip {
-    width:120px !important;
+    width:80px !important;
+    margin-left: 10px !important;
 }
 
 .onepage-address-form .city {
-    width:210px !important;
+    width:165px !important;
+    margin-left: 10px !important;
 }
 
 .onepage-address-form .state {
-    width: auto !important;
+    width: 145px !important;
 }
 
 .onepage-address-form .country {
-    width: auto !important;
+    display:none;
 }
 
 .cart-form-container .qty {
