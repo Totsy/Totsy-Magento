@@ -131,7 +131,7 @@ a.btn-primary /* req to override '.dropdown a' ruleset */ {
     font-size: 13px;
 }
 .btn.checkout {
-    margin: 8px 0 0;
+    margin: 8px 0 0; /* @TODO: remove margin from button, but on checkout container div */
     padding: 1px 8px 2px;
     text-transform: uppercase;
 }
@@ -228,6 +228,10 @@ a.btn-primary /* req to override '.dropdown a' ruleset */ {
 .events-grid .thumbnail .more [id*="time1-"] :first-child:after {
     content: ":";
     display: inline-block;
+}
+.events-grid .thumbnail .more .btn {
+    text-transform: capitalize;
+    font-size:14px;
 }
 
 /* upcoming */
