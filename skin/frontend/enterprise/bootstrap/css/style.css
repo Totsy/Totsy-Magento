@@ -7,7 +7,8 @@ body { height: 100%;}
 */
 html {
     margin:0;
-    background-color:#f9f9f9;
+    background-color:#fff;
+/*
     background-image: -moz-linear-gradient(top, #eef6fc, #ffffff);
     background-image: -ms-linear-gradient(top, #eef6fc, #ffffff);
     background-image: -o-linear-gradient(top, #eef6fc, #ffffff);
@@ -15,6 +16,7 @@ html {
     background-image: -webkit-linear-gradient(top, #eef6fc, #ffffff);
     background-image: linear-gradient(top, #eef6fc, #ffffff);
     background-attachment: fixed;
+*/
 }
 a {color:#ed1c25;text-decoration:none; outline: none;}
 a:hover{color:#ed1c25;text-decoration:underline;}
@@ -115,6 +117,9 @@ html.test .container .row {outline:1px dotted green;}
     background-image: none;
     font-weight: normal;
     line-height: 14px;
+}
+.dropdown-menu li > a:hover, .dropdown-menu .active > a, .dropdown-menu .active > a:hover {
+    background-color: #acacac;
 }
 
 /* btn classes */
@@ -356,7 +361,10 @@ header nav .cta strong em {color:#d84643; font-style:normal;}
  */
 #userUtils {margin-top:18px; margin-bottom: 0;}
 #userUtils > li {float: left; width:50%;} 
- 
+#userUtils > li .dropdown-toggle {
+    color:#000;
+    text-transform: uppercase;
+}
 /* header cart */
 #usercart {
     position: relative;
