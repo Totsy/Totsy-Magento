@@ -361,8 +361,9 @@ header nav .cta strong em {color:#d84643; font-style:normal;}
 #usercart .top-cart.expired .count-down-timer { /* @KLUDGE */
     left:-180px;
 }
-body[class*='checkout'] #usercart .count-down-timer {
-    display: none;
+body[class*='checkout'] #usercart .count-down-timer,
+body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */ 
+    display: none !important;
 }
 #usercart .count-down-timer strong {
     font-weight: normal;
