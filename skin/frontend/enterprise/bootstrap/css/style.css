@@ -165,7 +165,7 @@ a.btn-primary /* req to override '.dropdown a' ruleset */ {
     width: 100%;
 }
 #mainContent > .banner {
-    margin:50px auto;
+    margin:5px auto;
 }
 .catalog-events-container {margin-top:50px;}
 .banner + .catalog-events-container {margin-top:0;}
@@ -447,6 +447,18 @@ body[class*='checkout'] #usercart .count-down-timer {
     text-transform:lowercase;
 }
 
+.cart-collaterals-buttons {
+	margin-top:10px;
+}
+
+.btn-continue {
+	margin: 0px 10px 10px 10px;
+}
+
+.cart-coupon {
+	margin:0px !important;
+}
+
 .onepage-address-form form {
 	margin-bottom: 0px !important;
 }
@@ -491,6 +503,13 @@ body[class*='checkout'] #usercart .count-down-timer {
     width: auto !important;
 }
 
+.cart-form-container .qty {
+	width: auto !important;
+}
+
+.product-name {
+	width: 400px;
+}
 /**
  @My_Account
  */
