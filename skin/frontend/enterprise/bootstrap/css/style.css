@@ -188,10 +188,10 @@ a.btn-primary /* req to override '.dropdown a' ruleset */ {
     width:100%; overflow: hidden;
     color:#000;
     font-weight: normal;
-    white-space:nowrap; text-overflow: ellipsis;
+/*     white-space:nowrap; text-overflow: ellipsis; */
 } 
 .events-grid .span3 h5 {
-    font-size: 16px;
+    font-size: 14px;
 } 
 .events-grid .span2 h5 {
     font-size: 12px;
