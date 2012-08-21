@@ -458,6 +458,30 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
     position:relative; left:-8px /* need to move this a bit to align with top cart (which moved to keep dropdown within 950 grid), tho now this is bit off grid… */
 }
 
+.cart-collaterals-buttons {
+    margin-top:10px;
+}
+
+.cart-form-container .qty {
+    width: auto !important;
+}
+
+.remove-button {
+    width:auto !important;
+}
+
+.product-name {
+    width: 400px;
+}
+
+.btn-continue {
+    margin: 0px 10px 10px 10px;
+}
+
+.cart-coupon {
+    margin:0px !important;
+}
+
 .address{
     margin-left: 0px !important; 
 }
