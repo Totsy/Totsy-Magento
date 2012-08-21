@@ -56,31 +56,31 @@
 				<?php echo $this->getChildHtml( 'login' ) ?>
 			</div>
 		<?php endif ?>
-		<div class="address well span12">
-		    <div class="onepage-address-columns pull-left span6">
+		<div class="address">
+		    <div class="onepage-blocks pull-left well">
 		    	    <div class="checkout-headline">
-		    	    	<h4 class="legend"><?php echo $this->__('Billing Address') ?></h4>
-		    	    	<br />
+		    	    	<h4 class="legend pull-left"><?php echo $this->__('Billing Address') ?></h4>
 		    	    	<?php if ($this->customerHasAddresses()): ?>
-		    	    	    <div class="billing-address-select totsy-selective-input-box">
+		    	    	    <span class="billing-address-select totsy-selective-input-box pull-right">
 		    	    	        <?php echo $this->getAddressesHtmlSelect('billing') ?>
-		    	    	    </div>
+		    	    	    </span>
 		    	    	<?php endif; ?>
 		    	    </div>
+		    	    <div style="clear:both"></div>
 		    	    <div id="hpcheckout-billing-wrapper" class="onepage-address-form">
 		    	    	<div class="checkout-content"><?php echo $this->getChildHtml('billing') ?></div>
 		    	    </div>
             </div>
-		    <div class="onepage-address-columns pull-right">
+		    <div class="onepage-blocks pull-right well">
 			        <div class="checkout-headline">
-			           <h4 class="legend"><?php echo $this->__('Shipping Address') ?></h4>
-			           <br />
+			           <h4 class="legend pull-left"><?php echo $this->__('Shipping Address') ?></h4>
 			           <?php if ($this->customerHasAddresses()): ?>
-			               <div class="shipping-address-select totsy-selective-input-box">
+			               <span class="shipping-address-select totsy-selective-input-box pull-right">
 			                   <?php echo $this->getAddressesHtmlSelect('shipping') ?>
-			               </div>
+			               </span>
 			           <?php endif; ?>
 			        </div>	
+		    	    <div style="clear:both"></div>
 			        <?php if( ! $this->getQuote()->isVirtual() ): ?>
 			        <div id="hpcheckout-shipping-wrapper" class="onepage-address-form">
 			            <div class="checkout-content"><?php echo $this->getChildHtml( 'shipping' ) ?></div>
@@ -89,19 +89,20 @@
                     </div>
 		      </div>
 		</div>
+		<div style="clear:both">
         <?php if( false && ! $this->getQuote()->isVirtual() ): ?>
-        <div id="hpcheckout-shipping-method-wrapper" class="span12 well">
+        <div id="hpcheckout-shipping-method-wrapper" class="well onepage-blocks">
             <h4 class="legend">Shipping Method</h4>	
             <br />
             <div class="checkout-content"><?php echo $this->getChildHtml('shipping_method') ?></div>
         </div>
 		<?php endif ?>
-		<div id="hpcheckout-payment-wrapper" class="span12 well">
-			<h4 class="legend">Payment</h4>
-			<br />
+		<div id="hpcheckout-payment-wrapper" class="well onepage-blocks">		
+            <h4 class="legend">Payment</h4>	
+            <br />
 			<div class="checkout-content"><?php echo $this->getChildHtml( 'payment' ) ?></div>
 		</div>
-		<div id="hpcheckout-review-wrapper" class="span12 well">
+		<div id="hpcheckout-review-wrapper" class="well onepage-blocks">
 			<h4 class="legend">Review</h4>
 			<br />
 			<div class="checkout-content"><?php echo $this->getChildHtml( 'review' ) ?></div>
