@@ -19,7 +19,7 @@ html {
 a {color:#ed1c25;text-decoration:none; outline: none;}
 a:hover{color:#ed1c25;text-decoration:underline;}
 a:focus{outline: none;}
-.content_push { margin-top:100px; }
+.content_push { margin-top:115px; }
 .content_push_2col { margin-top:115px; }
 
 /**
@@ -165,10 +165,10 @@ a.btn-primary /* req to override '.dropdown a' ruleset */ {
     width: 100%;
 }
 #mainContent > .banner {
-    margin:5px auto;
+    margin:5px auto 0;
 }
-.catalog-events-container {margin-top:50px;}
-.banner + .catalog-events-container {margin-top:0;}
+.catalog-events-container {margin-top:8px;}
+.banner + .catalog-events-container {margin-top:18px;}
 .page-header img {margin-right: 5px;}
 
 /* event tiles */
