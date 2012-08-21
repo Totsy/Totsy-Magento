@@ -48,11 +48,11 @@ body {  padding:25px 0px 0px 15px;}
             <?php echo $this->getChildHtml('content') ?>
             <?php $currentUrl = $this->helper('core/url')->getCurrentUrl();?>
             <?php $loginPattern = '/customer/account/create/';?>
-            <?php if (preg_match($loginPattern, $currentUrl)):?>
-                    <div class="well span10 align-center">
-                        <img src="<?php echo $this->getSkinUrl()?>images/featured_on_long.png"  alt="" />
+            <?php //if (preg_match($loginPattern, $currentUrl)):?>
+                    <div style="text-align:center; position: absolute; background: #fff; padding: 0px; bottom: 32px; opacity: 0.93; width: 100%; left: 0px;">
+                        <img src="<?php echo $this->getSkinUrl()?>images/featured_on_long.png"  alt=""  />
                     </div>
-            <?php endif;?>
+            <?php //endif;?>
         <?php echo $this->getChildHtml('footer') ?>
         <?php echo $this->getChildHtml('before_body_end') ?>
 </div>

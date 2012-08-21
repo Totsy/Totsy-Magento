@@ -75,7 +75,7 @@
             <div class="thumbnail" style="padding:0px;">
                 <a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" class="product-image"><img src="<?php echo $this->helper('catalog/image')->init($_product, 'small_image')->resize(308, 400)->keepFrame(FALSE); ?>" width="308px" alt="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" /></a>
             <div class="caption">
-            <h5 class="ellipsis"><?php echo $_helper->productAttribute($_product, $_product->getName(), 'name') ?></h5>
+            <h5 style="font-weight: normal; color: #444; font-size: 13px;"><?php echo $_helper->productAttribute($_product, $_product->getName(), 'name') ?></h5>
             <?php if($_product->getRatingSummary()): ?>
             <?php echo $this->getReviewsSummaryHtml($_product, 'short') ?>
             <?php endif; ?>
