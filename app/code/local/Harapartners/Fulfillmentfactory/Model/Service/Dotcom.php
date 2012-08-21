@@ -138,7 +138,7 @@ class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
             } else if ($qtyRequired <= $qtyAvailable) {
                 Mage::log(
                     sprintf(
-                        "[READY] Item Queue %d recv %d of %d available units for '%s' to order %s/%s",
+                        "Item Queue %d recv %d of %d available units for '%s' to order %s/%s -> READY",
                         $item->getId(),
                         $qtyRequired,
                         $qtyAvailable,
@@ -160,7 +160,7 @@ class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
             } else {
                 Mage::log(
                     sprintf(
-                        "[PARTL] Item Queue %d recv %d of %d available units for '%s' to order %s/%s",
+                        "Item Queue %d recv %d of %d available units for '%s' to order %s/%s -> READY",
                         $item->getId(),
                         $qtyAvailable,
                         $qtyAvailable,
