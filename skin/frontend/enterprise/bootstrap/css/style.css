@@ -588,6 +588,30 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
     text-transform:lowercase;
 }
 
+.cart-collaterals-buttons {
+	margin-top:10px;
+}
+  	
+.cart-form-container .qty {
+	width: auto !important;
+}
+ 	
+.remove-button {
+    width: auto !important;
+}
+  	
+.product-name {
+    width: 400px;
+}
+ 	
+.btn-continue {
+    margin: 0px 10px 10px 10px;
+}
+  	
+.cart-coupon {
+    margin:0px !important;
+}
+
 .cc { height: 36px; }
 .cc div { background:url(http://cdn.edoceo.com/img/cc.png); border:1px solid #666; float:left; }
 .cc .mc { background-position:0px 0px; height:32px; margin:2px; width:56px; }
