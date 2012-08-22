@@ -179,7 +179,12 @@ a.btn-primary /* req to override '.dropdown a' ruleset */ {
 /* event tiles */
 .events-grid .thumbnail {
     position: relative;
+    display: block;
     margin: 0; padding: 0;
+}
+.events-grid .thumbnail:hover {
+    border-color:#ddd;
+    text-decoration: none;
 }
 .events-grid .span3 hgroup {
     padding: 8px 4px;
@@ -191,6 +196,7 @@ a.btn-primary /* req to override '.dropdown a' ruleset */ {
 }
 .events-grid h5 {
     width:100%; overflow: hidden;
+    color:#333;
     font-weight: normal;
 /*     white-space:nowrap; text-overflow: ellipsis; */
 } 
@@ -285,6 +291,10 @@ a.btn-primary /* req to override '.dropdown a' ruleset */ {
     font-size:11px; font-weight: bold;
     line-height: 1;
     text-transform: capitalize;
+}
+.events-grid .thumbnail .more .labels li i {
+    font-style: normal;
+    text-transform: lowercase;
 }
 .events-grid .thumbnail .more .labels li:before {
     content: ',';

@@ -125,9 +125,9 @@
                             data-imageclass="" 
                             data-producturl="<?php echo Mage::getBaseUrl().$live['url_path']; ?>">
                         </span>
-                        <div class="thumbnail">
+                        <a href="<?php echo Mage::getBaseUrl().$live['url_path']; ?>" class="thumbnail">
                             <hgroup>
-                                <h5><a href="<?php echo Mage::getBaseUrl().$live['url_path']; ?>"><?php echo $live['name'];?></a></h5>
+                                <h5><?php echo $live['name'];?></h5>
                                 <!-- <h6><?php //echo $live['short_description'];?></h6> -->
                             </hgroup>
                             <div class="more">
@@ -137,7 +137,10 @@
                                         <h6>Categories:</h6>
                                         <ul>
                                         <?php foreach ($eventDepts as $eventDept) : ?>
-                                            <li><?php echo $eventDept; ?></li>
+                                            <?php // convert slugs to labels
+                                                $deptLabel = str_replace('-', ' <i>and</i> ', $eventDept);
+                                            ?>
+                                            <li><?php echo $deptLabel; ?></li>
                                         <?php endforeach; ?>
                                         </ul>
                                     </section>
@@ -150,7 +153,7 @@
                                         </ul>                                  
                                     </section>
                                     <p id="time1-<?php echo $timer ?>"></p>
-                                    <a class="btn btn-primary" href="<?php echo Mage::getBaseUrl().$live['url_path']; ?>">Shop Now!</a>
+                                    <span class="btn btn-primary">Shop Now!</span>
                                 </div>
                             </div>
                             <?php
@@ -158,9 +161,9 @@
                                 ? BP . DS . 'media' . DS . 'catalog' . DS . 'category' . DS . $live['small_image']
                                 : BP . DS . 'skin' . DS . 'frontend' . DS . 'enterprise ' . DS . 'harapartners' . DS . 'images' . DS . 'catalog' . DS . 'product' . DS . 'placeholder' . DS . 'small_image.jpg';
                             ?>
-                            <a class="event-link" href="<?php echo Mage::getBaseUrl().$live['url_path']; ?>">
+                            <span class="event-link">
                                 <img src="<?php echo Mage::helper('service/image')->loadImageFile($imgFile)->resize(228)->keepFrame(FALSE); ?>" width="228" height="263" alt="<?php echo $live['name'];?>" />
-                            </a>
+                            </span>
                             <script type="text/javascript">
                                 // @TODO: all countdown jQuery should be externalized
                                 var html = getTimerHtml('live','<?php echo $endcount ?>');
@@ -176,7 +179,7 @@
                                 });
                             </script>
                             <?php $timer++; ?>
-                        </div>
+                        </a>
                     </li>
                 <?php endif; ?>
             <?php endforeach; ?>
