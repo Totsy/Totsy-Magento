@@ -13,6 +13,11 @@
 class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
 {
     /**
+     * The maximum number of orders to send for fulfillment in a single batch.
+     */
+    const ORDER_FULFILLMENT_CHUNK_SIZE = 128;
+
+    /**
      * Process fulfillment operations:
      * 1) Retrieve inventory levels from our fulfillment centre.
      * 2) Fulfill any order items for each product in stock at the fulfillment centre.
@@ -94,6 +99,8 @@ class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
                         );
                     }
 
+                    Mage::log("Inventory update for '$sku': $qty", Zend_Log::DEBUG, 'fulfillment_inventory.log');
+
                     $count++;
                 }
 
@@ -130,11 +137,7 @@ SET fulfill_count = fulfill_count + IF(
     i.value >= (qty_ordered - fulfill_count),
     3,
     IF (fulfill_count + i.value > 0, 2, 1)
-), i.value = i.value - IF(
-    i.value >= (qty_ordered - fulfill_count),
-    (qty_ordered - fulfill_count),
-    i.value
-)
+), q.updated_at = NOW()
 WHERE q.product_id = p.entity_id
     AND i.entity_id = p.entity_id
     AND i.attribute_id = 223
@@ -178,6 +181,10 @@ SQL;
 
         foreach ($results as $orderId) {
             $orders[] = Mage::getModel('sales/order')->load($orderId);
+            if (self::ORDER_FULFILLMENT_CHUNK_SIZE == count($orders)) {
+                $this->submitOrdersToFulfill($orders, true);
+                $orders = array();
+            }
         }
 
         $this->submitOrdersToFulfill($orders, true);
