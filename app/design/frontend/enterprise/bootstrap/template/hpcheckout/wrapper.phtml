@@ -96,15 +96,13 @@
             <br />
             <div class="checkout-content"><?php echo $this->getChildHtml('shipping_method') ?></div>
         </div>
+        </div>
 		<?php endif ?>
 		<div id="hpcheckout-payment-wrapper" class="well onepage-blocks">		
-            <h4 class="legend">Payment</h4>	
-            <br />
 			<div class="checkout-content"><?php echo $this->getChildHtml( 'payment' ) ?></div>
 		</div>
+		<div>
 		<div id="hpcheckout-review-wrapper" class="well onepage-blocks">
-			<h4 class="legend">Review</h4>
-			<br />
 			<div class="checkout-content"><?php echo $this->getChildHtml( 'review' ) ?></div>
 		</div>
 		</div>
