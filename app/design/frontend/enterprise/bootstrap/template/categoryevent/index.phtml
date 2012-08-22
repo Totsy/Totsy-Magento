@@ -111,6 +111,9 @@
                     $endcountRaw = strtotime($live['event_end_date']);
                     $endcount = date("F j, Y, G:i:s", $endcountRaw);
                     $hasProduct = $this->hasProduct($live['entity_id']);
+                    $eventDepts = $live['department'];
+                    $eventAges = $live['age'];
+                    $maxDiscount = $live['max_discount_pct'];
                 ?>
                 <?php if ($hasProduct): ?>
                     <li class="span3 catalog-event event-counter-<?php echo $timer;?>">
@@ -124,12 +127,31 @@
                         </span>
                         <div class="thumbnail">
                             <hgroup>
-                                <h5><?php echo $live['name'];?></h5>
+                                <h5><a href="<?php echo Mage::getBaseUrl().$live['url_path']; ?>"><?php echo $live['name'];?></a></h5>
                                 <!-- <h6><?php //echo $live['short_description'];?></h6> -->
                             </hgroup>
                             <div class="more">
-                                <p id="time1-<?php echo $timer ?>"></p>
-                                <a class="btn btn-primary" href="<?php echo Mage::getBaseUrl().$live['url_path']; ?>">Shop Now!</a>
+                                    <em class="maxDiscount">up to <span><?php echo $maxDiscount; ?>%</span> off</em>
+                                <div class="more-content">
+                                    <section class="labels container">
+                                        <h6>Categories:</h6>
+                                        <ul>
+                                        <?php foreach ($eventDepts as $eventDept) : ?>
+                                            <li><?php echo $eventDept; ?></li>
+                                        <?php endforeach; ?>
+                                        </ul>
+                                    </section>
+                                    <section class="labels container">
+                                        <h6>Ages:</h6>
+                                        <ul>
+                                        <?php foreach ($eventAges as $eventAge) : ?>
+                                            <li><?php echo $eventAge; ?></li>
+                                        <?php endforeach; ?>  
+                                        </ul>                                  
+                                    </section>
+                                    <p id="time1-<?php echo $timer ?>"></p>
+                                    <a class="btn btn-primary" href="<?php echo Mage::getBaseUrl().$live['url_path']; ?>">Shop Now!</a>
+                                </div>
                             </div>
                             <?php
                                 $imgFile = (isset($live['small_image']))
@@ -196,7 +218,7 @@
                     </span>
                     <div class="thumbnail">
                         <hgroup>
-                            <h5><?php echo $up['name'];?></h5>
+                            <h5><a href="<?php echo Mage::getBaseUrl().$up['url_path']; ?>"><?php echo $up['name'];?></a></h5>
                         </hgroup>
                         <?php
                             $imgFile = (isset($up['small_image']))
