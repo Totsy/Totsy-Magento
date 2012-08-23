@@ -226,13 +226,6 @@ SQL;
             }
         }
 
-        // update the available fulfillment inventory
-        $product->setData('fulfillment_inventory', $qty);
-        $product->getResource()->saveAttribute(
-            $product,
-            'fulfillment_inventory'
-        );
-
         unset($itemqueues);
 
         return $qty;
