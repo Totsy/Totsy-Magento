@@ -64,18 +64,17 @@ class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
                     continue;
                 }
 
-                if (!$qty) {
+                $sku = trim($sku);
+                if ($qty) {
                     $qty -= Mage::helper('fulfillmentfactory')->getAllocatedCount($sku);
-                    $qty = max(0, $qty);
                 }
+                $qty = max(0, $qty);
 
                 // stores inventory as eav attribute at product level
                 $product = Mage::getModel('catalog/product')
                     ->loadByAttribute('sku', $sku);
 
                 if ($product && $product->getId()) {
-                    $qty = $this->fulfillOrderItems($product, $qty);
-
                     $currentInventory = $product->getData('fulfillment_inventory');
                     if ($qty != $currentInventory) {
                         $product->setData('fulfillment_inventory', $qty);
@@ -101,6 +100,23 @@ class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
             Zend_Log::INFO,
             'fulfillment.log'
         );
+
+        $availableProducts = Mage::getModel('catalog/product')->getCollection()
+            ->addAttributeToFilter('fulfillment_inventory', array('gt' => 0));
+        foreach ($availableProducts as $product) {
+            $qty = $this->fulfillOrderItems(
+                $product->getSku(),
+                $product->getFulfillmentInventory()
+            );
+
+            if ($qty != $product->getData('fulfillment_inventory')) {
+                $product->setData('fulfillment_inventory', $qty);
+                $product->getResource()->saveAttribute(
+                    $product,
+                    'fulfillment_inventory'
+                );
+            }
+        }
 
         $resource   = Mage::getSingleton('core/resource');
         $connection = $resource->getConnection('core_read');
@@ -134,20 +150,13 @@ SQL;
      * Fulfill any order items for a given product, using the quantity reported
      * by fulfillment centres.
      *
-     * @param $product The product to fulfill order items for.
-     * @param $qty     The available quantity at the fulfillment centre.
+     * @param $sku The product SKU to fulfill order items for.
+     * @param $qty The available quantity at the fulfillment centre.
      *
      * @return int The updated available quantity after item fulfillment.
      */
-    public function fulfillOrderItems($product, $qty)
+    public function fulfillOrderItems($sku, $qty)
     {
-        if ($qty < 1) {
-            return 0;
-        }
-
-        $sku = $product->getSku();
-        $qty -= Mage::helper('fulfillmentfactory')->getAllocatedCount($sku);
-
         if ($qty < 1) {
             return 0;
         }
@@ -178,7 +187,7 @@ SQL;
                         $item->getId(),
                         $qtyRequired,
                         $qty,
-                        $product->getSku(),
+                        $sku,
                         $item->getOrderId(),
                         $item->getOrderIncrementId()
                     ),
@@ -200,7 +209,7 @@ SQL;
                         $item->getId(),
                         $qty,
                         $qty,
-                        $product->getSku(),
+                        $sku,
                         $item->getOrderId(),
                         $item->getOrderIncrementId()
                     ),
@@ -219,11 +228,6 @@ SQL;
             // update the item
             $item->setData('fulfill_count', $qtyFulfilled);
             $item->save();
-
-            $order = Mage::getModel('sales/order')->load($item->getOrderId());
-            if ($order->isReadyForFulfillment()) {
-                $this->_orderQueue[$item->getOrderId()] = $order;
-            }
         }
 
         unset($itemqueues);
