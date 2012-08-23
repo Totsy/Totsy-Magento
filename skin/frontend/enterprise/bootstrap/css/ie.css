@@ -6,7 +6,7 @@
 .events-grid .thumbnail .more {
     visibility: hidden;
     background: none;
-    background:url('../images/trans-50.png') 0 0 repeat;
+    background:url('../images/trans-65.png') 0 0 repeat;
 }
 .events-grid .thumbnail:hover .more {
     visibility: visible;
