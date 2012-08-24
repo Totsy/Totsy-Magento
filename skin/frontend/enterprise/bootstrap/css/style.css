@@ -119,13 +119,23 @@ html.test .container .row {outline:1px dotted green;}
 .dropdown-toggle,
 #cartHeader {
     padding-right:12px;
-    background: url('../images/glyph-arrow-d.png') 100% 65% no-repeat;
+    background: url('../images/glyph-arrow-d.png') 100% 50% no-repeat;
+}
+.dropdown > a,
+.navbar .nav > li > a,
+#cartHeader {
+    color:#636466;
+    font-size: 12px; font-weight: bold;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.85);
+    text-transform: uppercase;
 }
 #cartHeader.cartempty {
     position: relative; top:-6px; left: 25px; /* a bit hackish but gets it done */
     background-image: none;
-    font-weight: normal;
+    color:#999;
+    font-size:13px; font-weight: normal;
     line-height: 14px;
+    text-transform: none;
 }
 .dropdown-menu li > a:hover, .dropdown-menu .active > a, .dropdown-menu .active > a:hover {
     background-color: #acacac;
@@ -282,7 +292,7 @@ a.btn-primary /* req to override '.dropdown a' ruleset */ {
     display: inline-block;
     position: absolute; top:-50px; left:4px; z-index:-1;
     width: 0; height: 0;
-    border-bottom: 80px solid #ed2d21;
+    border-bottom: 80px solid #ed1c25;
     border-left: 80px solid transparent;
     border-right: 80px solid transparent;
 }
@@ -411,10 +421,7 @@ a.btn-primary /* req to override '.dropdown a' ruleset */ {
 }
 .navbar .nav > li > a {
     padding:0 33px 0 0; /* christophery - all icons on right */
-    color: #636466;
-    font-size: 12px; font-weight: bold;
     line-height: 13px;
-    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.85); text-transform: uppercase;
 }
 .navbar .nav > li.dropdown > a {
     background: url('../images/icon-nav-drop.png') 100% 50% no-repeat;
@@ -473,11 +480,7 @@ header nav .cta strong em {color:#d84643; font-style:normal;}
  */
 #userUtils {margin-top:18px; margin-bottom: 0;}
 #userUtils > li {float: left; width:50%;} 
-#userUtils > li .dropdown-toggle {
-    color:#000;
-    font-size: 12px;
-    text-transform: uppercase;
-}
+
 /* header cart */
 #usercart {
     position: relative;
@@ -539,7 +542,7 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
 #topCartContent.dropdown-menu .product-name a { /* overrides 'dropdown-menu a' ruleset */
     clear: none;
     padding: 0;
-    color:#ED1C25;
+    color:#ed1c25;
 }
 #topCartContent .minifoot {
     background:#f9f9f9;
