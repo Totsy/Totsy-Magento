@@ -11,3 +11,16 @@
 .events-grid .thumbnail:hover .more {
     visibility: visible;
 }
+.events-grid .more .maxDiscount {
+    display: block;
+    padding:8px 0;
+    width:100%; height: auto;
+    background:  #ed2d21;
+}
+.events-grid .more .maxDiscount em {
+    position: static;
+}
+.events-grid .more .maxDiscount em span {
+    display: inline;
+}
+.events-grid .more .maxDiscount em:before {display: none;}

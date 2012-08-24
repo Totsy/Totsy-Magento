@@ -263,23 +263,7 @@ a.btn-primary /* req to override '.dropdown a' ruleset */ {
     display: inline-block;
 }
 
-/* for older browsers - move to IE.css */
-/*
-.events-grid .thumbnail .more .maxDiscount {
-    position: absolute; top:0; left:0; z-index: 3;
-    display: block;
-    padding: 8px 0; width:100%;
-    background:#ED2D21;
-    border-bottom:1px solid rgba(0,0,0,0.15);
-    -moz-box-shadow: 0 2px 2px rgba(0, 0, 0, 0.09);
-    -webkit-box-shadow: 0 2px 2px rgba(0, 0, 0, 0.09);
-    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.09);
-    text-align: center;
-    color:#fff;
-    font-size:10px;
-    text-shadow: 0 -1px 0px rgba(0,0,0,0.25);
-}
-*/
+/* discount banner */
 .events-grid .more .maxDiscount {
     position: absolute; top:0; left:0; z-index: 3;
     display: block;
@@ -304,14 +288,16 @@ a.btn-primary /* req to override '.dropdown a' ruleset */ {
     text-align: center;
     text-shadow: 0 -1px 0px rgba(0,0,0,0.25);
     -moz-transform: rotate(-45deg);
-    -webkit-transform: rotate(45deg);
-    transform: rotate(45deg);
+    -ms-transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
+    transform: rotate(-45deg);
 }
-.events-grid .more .maxDiscount span {
-    font-size:13px; font-weight:bold;
-}
-.events-grid .more .maxDiscount em strong {
+.events-grid .more .maxDiscount em span {
     display: block;
+    font
+}
+.events-grid .more .maxDiscount strong {
+    font-size:14px; font-weight:bold;
 }
 
 .events-grid .thumbnail .more .labels {
