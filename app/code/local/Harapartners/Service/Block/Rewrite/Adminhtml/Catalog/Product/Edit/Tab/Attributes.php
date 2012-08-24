@@ -10,16 +10,24 @@
  * to eula@harapartners.com so we can send you a copy immediately.
  * 
  */
-class Harapartners_Service_Block_Rewrite_Adminhtml_Catalog_Product_Edit_Tab_Attributes extends Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Attributes
+class Harapartners_Service_Block_Rewrite_Adminhtml_Catalog_Product_Edit_Tab_Attributes
+    extends Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Attributes
 {
-    //overwrite to disable sku textfield
-    protected function _setFieldset($attributes, $fieldset, $exclude=array()){
+    protected function _setFieldset($attributes, $fieldset, $exclude = array())
+    {
         parent::_setFieldset($attributes, $fieldset);
-        $skuElement = $fieldset->getForm()->getElement('sku');
+
         $product = Mage::registry('current_product');
-        if(!!$skuElement && !!$product && $product->getTypeId() == 'simple'){
+
+        $skuElement = $fieldset->getForm()->getElement('sku');
+        if ($skuElement && $product && $product->getTypeId() == 'simple') {
             $skuElement->setData('readonly', 'readonly');
         }
+
+        if ($inventoryElement = $fieldset->getForm()->getElement('fulfillment_inventory')) {
+            $inventoryElement->setData('readonly', 'readonly');
+        }
+
         return $this;
     }
 }

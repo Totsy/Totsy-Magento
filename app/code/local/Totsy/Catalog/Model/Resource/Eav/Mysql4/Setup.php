@@ -28,6 +28,7 @@ class Totsy_Catalog_Model_Resource_Eav_Mysql4_Setup extends Mage_Eav_Model_Entit
                         'input'                      => 'text',
                         'sort_order'                 => 5,
                         'apply_to'                   => Mage_Catalog_Model_Product_Type::TYPE_SIMPLE,
+                        'is_required'                => 0,
                     ),
                 )
             )

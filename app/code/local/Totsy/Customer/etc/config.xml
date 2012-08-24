@@ -18,6 +18,13 @@
             <totsycustomer>
                 <class>Totsy_Customer_Model</class>
             </totsycustomer>
+            <customer>
+                <rewrite>
+                    <customer>Totsy_Customer_Model_Customer</customer>
+                    <group>Totsy_Customer_Model_Group</group>
+                    <session>Totsy_Customer_Model_Session</session>
+                </rewrite>
+            </customer>
         </models>
         <resources>
             <totsycustomer_setup>
@@ -41,6 +48,13 @@
                 </observers>
             </controller_action_predispatch>
         </events>
+        <helpers>
+            <customer>
+                <rewrite>
+                    <data>Totsy_Customer_Helper_Data</data>
+                </rewrite>
+            </customer>
+        </helpers>
     </global>
     <admin>
         <routers>
