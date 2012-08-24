@@ -165,14 +165,6 @@ class Harapartners_Fulfillmentfactory_Model_Service_Itemqueue
                 }
             }
         }
-    	else if($status == Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_FULFILLMENT_AGING){
-            foreach($collection as $itemqueue) {
-                if($itemqueue->getStatus() != Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_CANCELLED) {
-                    $itemqueue->setStatus(Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_PENDING);
-                    $itemqueue->save();
-                }
-            }
-        }
         else if($status == Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_SHIPMENT_AGING){
             foreach($collection as $itemqueue) {
                 if($itemqueue->getStatus() != Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_CANCELLED) {
@@ -182,7 +174,7 @@ class Harapartners_Fulfillmentfactory_Model_Service_Itemqueue
             }
         }
     }
-    
+
     /**
      * remove all itemqueue objects which belong to one order
      *
