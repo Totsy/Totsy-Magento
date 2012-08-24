@@ -1,6 +1,10 @@
 /**
- @Base styles for the Magento Bootstrap theme
+ * @Base styles for the Magento Bootstrap theme
+ *
+ * @Typography notes
+ * - red: #ed2d21;
  */
+ 
 /*
 html,
 body { height: 100%;}
@@ -25,7 +29,7 @@ a:focus{outline: none;}
 .content_push_2col { margin-top:115px; }
 h2 {font-size:20px!important; /* header override */ }
 /**
- @Diagnostics
+ * @Diagnostics
  */
 html.test body > .container,
 html.test body > header {outline:1px dotted red;}
@@ -34,7 +38,7 @@ html.test body > header .container {outline:1px dotted blue;}
 html.test .container .row {outline:1px dotted green;}
  
 /** 
- @960.gs Grid Reset Classes
+ * @960.gs Grid Reset Classes
  */
 .alpha { margin-left: 0 }
 .omega { margin-right: 0 }
@@ -59,7 +63,7 @@ html.test .container .row {outline:1px dotted green;}
 }
 
 /**
- @One-off Modules & 3rd Party
+ * @One-off Modules & 3rd Party
  */
 #monetateBanner {
     display: none; /* hide for monetate activation */
@@ -74,7 +78,7 @@ html.test .container .row {outline:1px dotted green;}
 }
 
 /**
- @General / Modular Classes
+ * @General / Modular Classes
  */
 .dropdown-toggle {cursor: pointer;}
 .well {
@@ -161,7 +165,7 @@ a.btn-primary /* req to override '.dropdown a' ruleset */ {
 }
 
 /**
- @Home page
+ * @Home page
  */
 .carousel-inner {
     min-height: 150px;
@@ -223,8 +227,8 @@ a.btn-primary /* req to override '.dropdown a' ruleset */ {
 .events-grid .thumbnail .more {
     position: absolute; bottom: 0; left: 0;
     opacity:0;
-    width:100%; height: 263px;
-    background: rgba(255,255,255,0.5);
+    width:100%; height: 263px; overflow: hidden;
+    background: rgba(255,255,255,0.65);
     -moz-transition:opacity 0.5s ease;
     -webkit-transition:opacity 0.5s ease;
     transition:opacity 0.5s ease;
@@ -258,23 +262,44 @@ a.btn-primary /* req to override '.dropdown a' ruleset */ {
     content: ":";
     display: inline-block;
 }
-.events-grid .thumbnail .more .maxDiscount {
+
+/* discount banner */
+.events-grid .more .maxDiscount {
     position: absolute; top:0; left:0; z-index: 3;
     display: block;
-    padding: 8px 0; width:100%;
-    background:#ED2D21;
-    border-bottom:1px solid rgba(0,0,0,0.15);
-    -moz-box-shadow: 0 2px 2px rgba(0, 0, 0, 0.09);
-    -webkit-box-shadow: 0 2px 2px rgba(0, 0, 0, 0.09);
-    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.09);
-    text-align: center;
+    width: 90px; height: 90px;
+}
+.events-grid .more .maxDiscount em:before {
+    content: "";
+    display: inline-block;
+    position: absolute; top:-50px; left:4px; z-index:-1;
+    width: 0; height: 0;
+    border-bottom: 80px solid #ed2d21;
+    border-left: 80px solid transparent;
+    border-right: 80px solid transparent;
+}
+.events-grid .more .maxDiscount em {
+    display: block;
+    position: absolute; left:-5px; top:-5px; z-index:100;
+    margin-top: 0;
+    width: 100%; height: 100%;
     color:#fff;
-    font-size:10px;
+    font-size: 13px;
+    text-align: center;
     text-shadow: 0 -1px 0px rgba(0,0,0,0.25);
+    -moz-transform: rotate(-45deg);
+    -ms-transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
+    transform: rotate(-45deg);
 }
-.events-grid .thumbnail .more .maxDiscount span {
-    font-size:13px; font-weight:bold;
+.events-grid .more .maxDiscount em span {
+    display: block;
+    font
 }
+.events-grid .more .maxDiscount strong {
+    font-size:14px; font-weight:bold;
+}
+
 .events-grid .thumbnail .more .labels {
     margin:1px 0; padding:0 2px 0 8px; width: auto;
     text-align:left;
@@ -340,9 +365,9 @@ a.btn-primary /* req to override '.dropdown a' ruleset */ {
 }
 
 /**
- @Header
- - "navbar" class from bootstrap
- - incl: branding, actual nav, user & checkout modules
+ * @Header
+ * - "navbar" class from bootstrap
+ * - incl: branding, actual nav, user & checkout modules
  */
 .navbar {
     background:#fff;
@@ -435,8 +460,8 @@ header nav .cta strong {display: block;}
 header nav .cta strong em {color:#d84643; font-style:normal;}
 
 /**
- @User Utils
- - global in header: my account dropdown, minicart
+ * @User Utils
+ * - global in header: my account dropdown, minicart
  */
 #userUtils {margin-top:18px; margin-bottom: 0;}
 #userUtils > li {float: left; width:50%;} 
@@ -737,7 +762,7 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
     width: 418px;
 }
 /**
- @Footer
+ * @Footer
  */
 body > footer {
     position: relative;
