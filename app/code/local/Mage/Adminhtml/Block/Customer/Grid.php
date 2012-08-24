@@ -45,10 +45,10 @@ class Mage_Adminhtml_Block_Customer_Grid extends Mage_Adminhtml_Block_Widget_Gri
 
     protected function _prepareCollection()
     {
-    	//Harapartners, Jun, Query optimization
+        //Harapartners, Jun, Query optimization
 //    	$fields = array('firstname' => 'firstname', 'lastname' => 'lastname');
 //    	$nameExpr = 'CONCAT_WS(LTRIM(RTRIM(at_firstname.value)), " ", LTRIM(RTRIM(at_lastname.value)))';
-    	
+
         $collection = Mage::getResourceModel('customer/customer_collection')
 //        	->addExpressionAttributeToSelect('name', $nameExpr, $fields)
 //            ->addAttributeToSelect('email')
@@ -78,12 +78,12 @@ class Mage_Adminhtml_Block_Customer_Grid extends Mage_Adminhtml_Block_Widget_Gri
         $this->addColumn('firstname', array(
             'header'    => Mage::helper('customer')->__('First Name'),
             'index'     => 'firstname',
-        	'filter'	=> 'adminhtml/widget_grid_column_filter_abstract'
+            'filter'	=> 'adminhtml/widget_grid_column_filter_abstract'
         ));
         $this->addColumn('lastname', array(
             'header'    => Mage::helper('customer')->__('Last Name'),
             'index'     => 'lastname',
-        	'filter'	=> 'adminhtml/widget_grid_column_filter_abstract'
+            'filter'	=> 'adminhtml/widget_grid_column_filter_abstract'
         ));
 //        $this->addColumn('name', array(
 //            'header'    => Mage::helper('customer')->__('Name'),
@@ -112,14 +112,14 @@ class Mage_Adminhtml_Block_Customer_Grid extends Mage_Adminhtml_Block_Widget_Gri
             'header'    => Mage::helper('customer')->__('Telephone'),
             'width'     => '100',
             'index'     => 'billing_telephone',
-        	'filter'	=> 'adminhtml/widget_grid_column_filter_abstract'
+            'filter'	=> 'adminhtml/widget_grid_column_filter_abstract'
         ));
 
         $this->addColumn('billing_postcode', array(
             'header'    => Mage::helper('customer')->__('ZIP'),
             'width'     => '90',
             'index'     => 'billing_postcode',
-        	'filter'	=> 'adminhtml/widget_grid_column_filter_abstract'
+            'filter'	=> 'adminhtml/widget_grid_column_filter_abstract'
         ));
 
         $this->addColumn('billing_country_id', array(
@@ -127,14 +127,14 @@ class Mage_Adminhtml_Block_Customer_Grid extends Mage_Adminhtml_Block_Widget_Gri
             'width'     => '100',
             'type'      => 'country',
             'index'     => 'billing_country_id',
-        	'filter'	=> 'adminhtml/widget_grid_column_filter_abstract'
+            'filter'	=> 'adminhtml/widget_grid_column_filter_abstract'
         ));
 
         $this->addColumn('billing_region', array(
             'header'    => Mage::helper('customer')->__('State/Province'),
             'width'     => '100',
             'index'     => 'billing_region',
-        	'filter'	=> 'adminhtml/widget_grid_column_filter_abstract'
+            'filter'	=> 'adminhtml/widget_grid_column_filter_abstract'
         ));
 
         $this->addColumn('customer_since', array(
@@ -179,7 +179,7 @@ class Mage_Adminhtml_Block_Customer_Grid extends Mage_Adminhtml_Block_Widget_Gri
         $this->addExportType('*/*/exportXml', Mage::helper('customer')->__('Excel XML'));
         return parent::_prepareColumns();
     }
-    
+
     //Harapartners, Jun, Mass action generates gigantic JSON object, ignored here
 //    protected function _prepareMassaction()
 //    {
@@ -223,26 +223,26 @@ class Mage_Adminhtml_Block_Customer_Grid extends Mage_Adminhtml_Block_Widget_Gri
 //
 //        return $this;
 //    }
-    
+
     //Harapartners, Jun, Query optimization, No sorting allowed
-	public function getVarNameSort() {
+    public function getVarNameSort() {
         return false;
     }
-    
+
     //Harapartners, Jun, Query optimization, Search email must use exact string
-	protected function _addColumnFilterToCollection($column) {
-		$exactSearchColumns = array('firstname', 'lastname', 'name', 'email');
-		
+    protected function _addColumnFilterToCollection($column) {
+        $exactSearchColumns = array('firstname', 'lastname', 'name', 'email');
+
         if ($this->getCollection()) {
             $field = ( $column->getFilterIndex() ) ? $column->getFilterIndex() : $column->getIndex();
             if ($column->getFilterConditionCallback()) {
                 call_user_func($column->getFilterConditionCallback(), $this->getCollection(), $column);
             } else {
-            	if(in_array($field, $exactSearchColumns)){
-            		$cond = $column->getFilter()->getValue();
-            	}else{
-                	$cond = $column->getFilter()->getCondition();
-            	}
+                if(in_array($field, $exactSearchColumns)){
+                    $cond = $column->getFilter()->getValue();
+                }else{
+                    $cond = $column->getFilter()->getCondition();
+                }
                 if ($field && isset($cond)) {
                     $this->getCollection()->addFieldToFilter($field , $cond);
                 }
@@ -250,45 +250,16 @@ class Mage_Adminhtml_Block_Customer_Grid extends Mage_Adminhtml_Block_Widget_Gri
         }
         return $this;
     }
-    
-    protected function _setFilterValues($data) {
-    	if (array_key_exists('email',$data)){
-    		$data['email'] = $this->_trimGmail($data['email']);
-    	}
-    	
-    	return parent::_setFilterValues($data);
+
+    protected function _setFilterValues($data)
+    {
+        if (array_key_exists('email',$data)) {
+            $data['email'] = Mage::helper('customer')->sanitizeEmail($data['email']);
+        }
+
+        return parent::_setFilterValues($data);
     }
-    
-    protected function _trimGmail($email) {
-        $strArray = explode('@', $email);
-        
-        if(empty($strArray) ||
-           empty($strArray[1]) ||
-           strtolower($strArray[1]) != 'gmail.com') {
-        	echo 'Not Gmail<br>';
-            return $email;
-        }
 
-        //get username, such as 'abcd'
-        $trimmedGmail = preg_replace("/[\.]/",'',trim($strArray[0]));
-        unset($strArray);
-
-        if (strlen($trimmedGmail)==0){
-        	return $email;
-        }
-        
-        if (preg_match("/[\.]+/",$trimmedGmail)){
-        	echo 'Found plus ..+.. <br>';
-        	$u = explode('+',$trimmedGmail);
-        	$trimmedGmail = $u[0];
-        	unset($u);
-        }
-        
-        $trimmedGmail .= '@gmail.com';
-
-        return $trimmedGmail;
-    }
-    
     public function getGridUrl()
     {
         return $this->getUrl('*/*/grid', array('_current'=> true));

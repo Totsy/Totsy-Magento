@@ -172,7 +172,11 @@ class Harapartners_Fulfillmentfactory_Helper_Data extends Mage_Core_Helper_Abstr
         $select    = new Zend_Db_Select($model->getResource()->getReadConnection());
         $tableName = $model->getResource()->getMainTable();
 
-        $statuses = array($model::STATUS_READY, $model::STATUS_PARTIAL);
+        $statuses = array(
+            Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_READY,
+            Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_PARTIAL,
+            Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_SUBMITTED
+        );
 
         $select->from($tableName)
             ->reset(Zend_Db_Select::COLUMNS)
@@ -184,48 +188,5 @@ class Harapartners_Fulfillmentfactory_Helper_Data extends Mage_Core_Helper_Abstr
         $result = $stmt->fetch(Zend_Db::FETCH_COLUMN);
 
         return (int) $result;
-    }
-
-    /**
-     * Attempt to submit an order for fulfillment.
-     * First check all child order items to ensure they are either in READY or
-     * CANCELLED status.
-     *
-     * @param Mage_Sales_Model_Order|int $orderId
-     *
-     * @return bool TRUE when the order was submitted successfully.
-     */
-    public function submitOrderForFulfillment($orderId) {
-        if ($orderId instanceof Mage_Sales_Model_Order) {
-            $orderId = $orderId->getId();
-        }
-
-        // locate all order items (those that belong to the same order)
-        // including itself
-        $orderItems = Mage::getModel('fulfillmentfactory/itemqueue')->getCollection();
-        $orderItems->addFieldToFilter('order_id', $orderId);
-
-        // inspect each order item's status
-        $orderReady = true;
-        foreach ($orderItems as $item) {
-            if (Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_READY != $item->getStatus() &&
-                Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_CANCELLED != $item->getStatus()
-            ) {
-                $orderReady = false;
-            }
-        }
-
-        // submit this order for fulfillment if all items were READY or CANCELLED
-        if ($orderReady) {
-            $order = Mage::getModel('sales/order')->load($orderId);
-            $orderArray = array($order);
-
-            Mage::getSingleton('fulfillmentfactory/service_dotcom')
-                ->submitOrdersToFulfill($orderArray, true);
-
-            return true;
-        }
-
-        return false;
     }
 }
