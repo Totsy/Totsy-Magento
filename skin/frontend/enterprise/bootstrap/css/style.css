@@ -193,6 +193,9 @@ a.btn-primary /* req to override '.dropdown a' ruleset */ {
     -webkit-box-shadow: 0 1px 4px rgba(0, 105, 214, 0.15);
     box-shadow: 0 1px 4px rgba(0, 105, 214, 0.15);
 }
+.events-grid hgroup {
+    border-bottom:1px solid #ddd;
+}
 .events-grid .span3 hgroup {
     padding: 8px 4px;
     height: 30px; overflow: hidden;
