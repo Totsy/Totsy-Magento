@@ -1,6 +1,10 @@
 /**
- @Base styles for the Magento Bootstrap theme
+ * @Base styles for the Magento Bootstrap theme
+ *
+ * @Typography notes
+ * - red: #ed2d21;
  */
+ 
 /*
 html,
 body { height: 100%;}
@@ -25,7 +29,7 @@ a:focus{outline: none;}
 .content_push_2col { margin-top:115px; }
 h2 {font-size:20px!important; /* header override */ }
 /**
- @Diagnostics
+ * @Diagnostics
  */
 html.test body > .container,
 html.test body > header {outline:1px dotted red;}
@@ -34,7 +38,7 @@ html.test body > header .container {outline:1px dotted blue;}
 html.test .container .row {outline:1px dotted green;}
  
 /** 
- @960.gs Grid Reset Classes
+ * @960.gs Grid Reset Classes
  */
 .alpha { margin-left: 0 }
 .omega { margin-right: 0 }
@@ -59,7 +63,7 @@ html.test .container .row {outline:1px dotted green;}
 }
 
 /**
- @One-off Modules & 3rd Party
+ * @One-off Modules & 3rd Party
  */
 #monetateBanner {
     display: none; /* hide for monetate activation */
@@ -74,7 +78,7 @@ html.test .container .row {outline:1px dotted green;}
 }
 
 /**
- @General / Modular Classes
+ * @General / Modular Classes
  */
 .dropdown-toggle {cursor: pointer;}
 .well {
@@ -161,7 +165,7 @@ a.btn-primary /* req to override '.dropdown a' ruleset */ {
 }
 
 /**
- @Home page
+ * @Home page
  */
 .carousel-inner {
     min-height: 150px;
@@ -218,22 +222,27 @@ a.btn-primary /* req to override '.dropdown a' ruleset */ {
 .events-grid .thumbnail .event-link {
     display: block;
 }
+
+/* .more rollovers */
 .events-grid .thumbnail .more {
-    opacity:0; filter: alpha(opacity=0); /* barf IE hack */
     position: absolute; bottom: 0; left: 0;
-    width:100%; height: 263px;
+    opacity:0;
+    width:100%; height: 263px; overflow: hidden;
     background: rgba(255,255,255,0.65);
     -moz-transition:opacity 0.5s ease;
     -webkit-transition:opacity 0.5s ease;
     transition:opacity 0.5s ease;
 }
-.events-grid .thumbnail .more:hover {
-    opacity:1; filter: alpha(opacity=100); /* barf IE hack */
+.events-grid .thumbnail:hover .more {
+    opacity:1;
 }
 .events-grid .thumbnail .more-content {
-    position: absolute; bottom: 0; left: 0;
+    position: absolute; bottom: 0; left: 0; z-index: 2;
     padding:0 0 18px; width:100%;
     text-align: center;
+    -moz-transition: opacity 0.5s ease;
+    -webkit-transition:opacity 0.5s ease;
+    transition:opacity 0.5s ease;
 }
 .events-grid .thumbnail .more [id*="time1-"] {
     margin:10px 0 18px; padding:8px 0;
@@ -253,23 +262,44 @@ a.btn-primary /* req to override '.dropdown a' ruleset */ {
     content: ":";
     display: inline-block;
 }
-.events-grid .thumbnail .more .maxDiscount {
-    position: absolute; top:0; left:0;
+
+/* discount banner */
+.events-grid .more .maxDiscount {
+    position: absolute; top:0; left:0; z-index: 3;
     display: block;
-    padding: 8px 0; width:100%;
-    background:#ED2D21;
-    border-bottom:1px solid rgba(0,0,0,0.15);
-    -moz-box-shadow: 0 2px 2px rgba(0, 0, 0, 0.09);
-    -webkit-box-shadow: 0 2px 2px rgba(0, 0, 0, 0.09);
-    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.09);
-    text-align: center;
+    width: 90px; height: 90px;
+}
+.events-grid .more .maxDiscount em:before {
+    content: "";
+    display: inline-block;
+    position: absolute; top:-50px; left:4px; z-index:-1;
+    width: 0; height: 0;
+    border-bottom: 80px solid #ed2d21;
+    border-left: 80px solid transparent;
+    border-right: 80px solid transparent;
+}
+.events-grid .more .maxDiscount em {
+    display: block;
+    position: absolute; left:-5px; top:-5px; z-index:100;
+    margin-top: 0;
+    width: 100%; height: 100%;
     color:#fff;
-    font-size:10px;
+    font-size: 13px;
+    text-align: center;
     text-shadow: 0 -1px 0px rgba(0,0,0,0.25);
+    -moz-transform: rotate(-45deg);
+    -ms-transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
+    transform: rotate(-45deg);
 }
-.events-grid .thumbnail .more .maxDiscount span {
-    font-size:13px; font-weight:bold;
+.events-grid .more .maxDiscount em span {
+    display: block;
+    font
 }
+.events-grid .more .maxDiscount strong {
+    font-size:14px; font-weight:bold;
+}
+
 .events-grid .thumbnail .more .labels {
     margin:1px 0; padding:0 2px 0 8px; width: auto;
     text-align:left;
@@ -335,9 +365,9 @@ a.btn-primary /* req to override '.dropdown a' ruleset */ {
 }
 
 /**
- @Header
- - "navbar" class from bootstrap
- - incl: branding, actual nav, user & checkout modules
+ * @Header
+ * - "navbar" class from bootstrap
+ * - incl: branding, actual nav, user & checkout modules
  */
 .navbar {
     background:#fff;
@@ -430,8 +460,8 @@ header nav .cta strong {display: block;}
 header nav .cta strong em {color:#d84643; font-style:normal;}
 
 /**
- @User Utils
- - global in header: my account dropdown, minicart
+ * @User Utils
+ * - global in header: my account dropdown, minicart
  */
 #userUtils {margin-top:18px; margin-bottom: 0;}
 #userUtils > li {float: left; width:50%;} 
@@ -612,12 +642,16 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
     margin:0px !important;
 }
 
-.cc { height: 36px; }
-.cc div { background:url(http://cdn.edoceo.com/img/cc.png); border:1px solid #666; float:left; }
+.cc { 
+    height: 36px;
+}
+
+.cc span { background:url('../images/cc_sprite.png'); border:0px solid #666; float:left; }
+
 .cc .mc { background-position:0px 0px; height:32px; margin:2px; width:56px; }
-.cc .vc { background-position:-56px 0px; height:32px; margin:2px; width:56px; }
+.cc .vi { background-position:-56px 0px; height:32px; margin:2px; width:56px; }
 .cc .dc { background-position:-112px 0px; height:32px; margin:2px; width:56px; }
-.cc .ac { background-position:-168px 0px; height:32px; margin:2px; width:56px; }
+.cc .ae { background-position:-168px 0px; height:32px; margin:2px; width:56px; }
 .cc .mb { background-position:0px 32px; height:32px; margin:2px; width:56px; }
 .cc .vb { background-position:-56px 32px; height:32px; margin:2px; width:56px; }
 .cc .db { background-position:-112px 32px; height:32px; margin:2px; width:56px; }
@@ -693,11 +727,12 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
 }
 
 .cc_types {
+    text-align: center !important;
     width:450px !important;
 }
 
 .cc_saved_cards {
-    width:268px;
+    width:218px;
 }
 
 .cc_num input[type="text"]{
@@ -712,6 +747,12 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
     width: 90px;
 }
 
+.cc_exp .lbl{
+    float: left;
+    margin-right:10px;
+    line-height: inherit;
+}
+
 .cc_exp {
     margin-left: 75px !important;
     width: 315px;
@@ -721,7 +762,7 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
     width: 418px;
 }
 /**
- @Footer
+ * @Footer
  */
 body > footer {
     position: relative;
@@ -809,7 +850,7 @@ body .footer ul {
     color: #707070;
 }
 .socialLink {
-    background: url("../images/sprite_social.png") no-repeat scroll 0 0 #FFFFFF;
+    background: url('../images/sprite_social.png') no-repeat scroll 0 0 #FFFFFF;
     border-right: 1px solid #C5C5C5;
     display: inline;
     float: right;
