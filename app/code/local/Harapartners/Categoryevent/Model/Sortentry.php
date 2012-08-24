@@ -121,8 +121,9 @@ class Harapartners_Categoryevent_Model_Sortentry extends Mage_Core_Model_Abstrac
         $eventArray = array();
         if(!!$eventParentCategory && !!$eventParentCategory->getId()){
             $eventArray = $this->getCategoryCollection($eventParentCategory->getId(), $startDate, $endDate)
-                    ->load()
-                    ->toArray();
+                ->addAttributeToSelect('short_description')
+                ->load()
+                ->toArray();
             $liveNew = array();
             $upComingNew = array();
 

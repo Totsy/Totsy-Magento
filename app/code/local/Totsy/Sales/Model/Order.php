@@ -270,4 +270,29 @@ class Totsy_Sales_Model_Order extends Mage_Sales_Model_Order
         return $countItems == 0 ? false : $isVirtual;
     }
 
+    /**
+     * Check all child order items to ensure they are either in READY or
+     * CANCELLED status.
+     *
+     * @return bool
+     */
+    public function isReadyForFulfillment()
+    {
+        // locate all order items (those that belong to the same order)
+        // including itself
+        $orderItems = Mage::getModel('fulfillmentfactory/itemqueue')->getCollection();
+        $orderItems->addFieldToFilter('order_id', $this->getId());
+
+        // inspect each order item's status
+        $orderReady = true;
+        foreach ($orderItems as $item) {
+            if (Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_READY != $item->getStatus() &&
+                Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_CANCELLED != $item->getStatus()
+            ) {
+                $orderReady = false;
+            }
+        }
+
+        return $orderReady;
+    }
 }

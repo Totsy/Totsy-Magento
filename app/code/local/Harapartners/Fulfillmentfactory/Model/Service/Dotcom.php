@@ -13,9 +13,11 @@
 class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
 {
     /**
-     * Process fulfillment operations: retrieve inventory levels from our
-     * fulfillment centre, and then attempt to fulfill any order items for each
-     * product in stock at the fulfillment centre.
+     * The maximum number of orders to send for fulfillment in a single batch.
+     */
+    const ORDER_FULFILLMENT_CHUNK_SIZE = 128;
+
+    /**
      *
      * @return void
      */
@@ -28,8 +30,8 @@ class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
         $reader->open($xmlStreamName, 'utf8');
 
         $state = 'waiting';
-        $sku = -1;
-        $qty = -1;
+        $sku = null;
+        $qty = null;
         $count = 0;
 
         while ($reader->read()) {
@@ -57,64 +59,110 @@ class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
             } else if ('item' == $reader->localName &&
                 XMLReader::END_ELEMENT == $reader->nodeType
             ) {
-                $state = 'waiting';
+                // ignore this item if either of sku or qty wasn't populated
+                if (null == $sku || null == $qty) {
+                    continue;
+                }
 
-                //stores inventory as eav attribute at product level
+                $sku = trim($sku);
+                if ($qty) {
+                    $qty -= Mage::helper('fulfillmentfactory')->getAllocatedCount($sku);
+                }
+                $qty = max(0, $qty);
+
+                // stores inventory as eav attribute at product level
                 $product = Mage::getModel('catalog/product')
                     ->loadByAttribute('sku', $sku);
 
                 if ($product && $product->getId()) {
                     $currentInventory = $product->getData('fulfillment_inventory');
-                    $inventoryDiff = $qty - $currentInventory;
-
-                    if ($inventoryDiff !== 0) {
-                        if ($inventoryDiff > 0) {
-                            $inventoryDiff = '+' . $inventoryDiff;
-                        }
-
-                        Mage::log(
-                            "Updated inventory for SKU '$sku' by $inventoryDiff from $currentInventory to $qty units.",
-                            Zend_Log::INFO,
-                            'fulfillment_inventory.log'
-                        );
-
+                    if ($qty != $currentInventory) {
                         $product->setData('fulfillment_inventory', $qty);
                         $product->getResource()->saveAttribute(
                             $product,
                             'fulfillment_inventory'
                         );
+
+                        Mage::log("Inventory update for '$sku': $qty", Zend_Log::DEBUG, 'fulfillment_inventory.log');
                     }
 
-                    $this->fulfillOrderItems($product, $qty);
                     $count++;
                 }
+
+                $state = 'waiting';
+                $qty = null;
+                $sku = null;
             }
         }
 
-        Mage::log("Retrieved and stored inventory updates for $count products", Zend_Log::INFO, 'fulfillment.log');
+        Mage::log(
+            "Retrieved and stored inventory updates for $count products",
+            Zend_Log::INFO,
+            'fulfillment.log'
+        );
+
+        $availableProducts = Mage::getModel('catalog/product')->getCollection()
+            ->addAttributeToFilter('fulfillment_inventory', array('gt' => 0));
+        foreach ($availableProducts as $product) {
+            $qty = $this->fulfillOrderItems(
+                $product->getSku(),
+                $product->getFulfillmentInventory()
+            );
+
+            if ($qty != $product->getData('fulfillment_inventory')) {
+                $product->setData('fulfillment_inventory', $qty);
+                $product->getResource()->saveAttribute(
+                    $product,
+                    'fulfillment_inventory'
+                );
+            }
+        }
+
+        $resource   = Mage::getSingleton('core/resource');
+        $connection = $resource->getConnection('core_read');
+
+        $query = <<<SQL
+SELECT DISTINCT sfo.entity_id
+FROM            {$resource->getTableName('sales/order')} sfo
+  INNER JOIN    {$resource->getTableName('sales/order_item')} sfoi ON sfoi.order_id = sfo.entity_id
+  INNER JOIN    {$resource->getTableName('fulfillmentfactory/itemqueue')} fi ON fi.order_item_id = sfoi.item_id and fi.status in (3,8)
+WHERE sfo.status IN ('fulfillment_aging', 'pending')
+  AND 0 = (
+    SELECT count(*) FROM {$resource->getTableName('fulfillmentfactory/itemqueue')} fiq WHERE fiq.order_id = sfo.entity_id and fiq.status NOT IN (3,8)
+  )
+SQL;
+
+        $results = $connection->fetchCol($query);
+        $orders  = array();
+
+        foreach ($results as $orderId) {
+            $orders[] = Mage::getModel('sales/order')->load($orderId);
+            if (self::ORDER_FULFILLMENT_CHUNK_SIZE == count($orders)) {
+                $this->submitOrdersToFulfill($orders, true);
+                $orders = array();
+            }
+        }
+
+        $this->submitOrdersToFulfill($orders, true);
     }
 
     /**
      * Fulfill any order items for a given product, using the quantity reported
      * by fulfillment centres.
      *
-     * @param $product The product to fulfill order items for.
-     * @param $qty     The available quantity at the fulfillment centre.
+     * @param $sku The product SKU to fulfill order items for.
+     * @param $qty The available quantity at the fulfillment centre.
      *
-     * @return void
+     * @return int The updated available quantity after item fulfillment.
      */
-    public function fulfillOrderItems($product, $qty)
+    public function fulfillOrderItems($sku, $qty)
     {
-        $sku = $product->getSku();
-        $qtyAvailable = $qty - Mage::helper('fulfillmentfactory')->getAllocatedCount($sku);
-
-        if ($qtyAvailable < 0) {
-            Mage::log("Skipping allocation of $qty units for SKU '$sku' because none are available ($qtyAvailable)", Zend_Log::DEBUG, 'fulfillment.log');
-            return;
+        if ($qty < 1) {
+            return 0;
         }
 
         Mage::log(
-            "Attempting to allocate $qty ($qtyAvailable available) inventory for SKU '$sku'",
+            "Allocating $qty units of inventory for SKU '$sku'",
             Zend_Log::DEBUG,
             'fulfillment.log'
         );
@@ -128,27 +176,27 @@ class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
             $qtyRequired  = $item->getQtyOrdered() - $item->getFulfillCount();
 
             // there is no quantity remaining to be allocated
-            if (!$qtyAvailable) {
+            if ($qty < 1) {
                 break;
 
             // there is sufficient quantity to completely fulfill this item
-            } else if ($qtyRequired <= $qtyAvailable) {
+            } else if ($qtyRequired <= $qty) {
                 Mage::log(
                     sprintf(
-                        "Item Queue %d receives %d stock units from the %d available fulfillment inventory for '%s' to order %s/%s and is now READY",
+                        "Item Queue %d recv %d of %d available units for '%s' to order %s/%s -> READY",
                         $item->getId(),
                         $qtyRequired,
-                        $qtyAvailable,
-                        $product->getSku(),
+                        $qty,
+                        $sku,
                         $item->getOrderId(),
                         $item->getOrderIncrementId()
                     ),
                     Zend_log::INFO,
-                    'fulfillment.log'
+                    'fulfillment_allocation.log'
                 );
 
                 $qtyFulfilled += $qtyRequired;
-                $qtyAvailable -= $qtyRequired;
+                $qty -= $qtyRequired;
                 if ($item->getStatus() < Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_READY) {
                     $item->setStatus(Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_READY);
                 }
@@ -157,20 +205,20 @@ class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
             } else {
                 Mage::log(
                     sprintf(
-                        "Item Queue %d receives %d stock units from the %d available fulfillment inventory for '%s' to order %s/%s and is now PARTIAL",
+                        "Item Queue %d recv %d of %d available units for '%s' to order %s/%s -> PENDING/PARTIAL",
                         $item->getId(),
-                        $qtyAvailable,
-                        $qtyAvailable,
-                        $product->getSku(),
+                        $qty,
+                        $qty,
+                        $sku,
                         $item->getOrderId(),
                         $item->getOrderIncrementId()
                     ),
                     Zend_log::INFO,
-                    'fulfillment.log'
+                    'fulfillment_allocation.log'
                 );
 
-                $qtyFulfilled += $qtyAvailable;
-                $qtyAvailable = 0;
+                $qtyFulfilled += $qty;
+                $qty = 0;
                 $status = ($qtyFulfilled)
                     ? Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_PARTIAL
                     : Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_PENDING;
@@ -180,18 +228,11 @@ class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
             // update the item
             $item->setData('fulfill_count', $qtyFulfilled);
             $item->save();
-
-            Mage::helper('fulfillmentfactory')->submitOrderForFulfillment($item->getOrderId());
         }
 
-        // update the available fulfillment inventory
-        $product->setData('fulfillment_inventory', $qtyAvailable);
-        $product->getResource()->saveAttribute(
-            $product,
-            'fulfillment_inventory'
-        );
-
         unset($itemqueues);
+
+        return $qty;
     }
 
     /**
