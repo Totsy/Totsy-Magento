@@ -2,7 +2,12 @@
  * @Base styles for the Magento Bootstrap theme
  *
  * @Typography notes
- * - red: #ed2d21;
+ * - Red:           ??              #ed2d21; UPDATE TO #ed1c25
+ * - Black:         text headings   #000
+ * - Dark Grey      subheadings     #636466
+ * - Medium Grey    copy font       #999999
+ * - Light Grey     borders         #e5e5e5
+ * - Green          buttons         #C1D82F 
  */
  
 /*
@@ -470,6 +475,7 @@ header nav .cta strong em {color:#d84643; font-style:normal;}
 #userUtils > li {float: left; width:50%;} 
 #userUtils > li .dropdown-toggle {
     color:#000;
+    font-size: 12px;
     text-transform: uppercase;
 }
 /* header cart */
