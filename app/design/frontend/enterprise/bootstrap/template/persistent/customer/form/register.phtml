@@ -176,7 +176,8 @@
         <div class="buttons-set form-buttons align-center" style="margin:21px 0px -16px 0px">
             <button type="submit" id="submit-button" class="btn btn-primary btn-large pull-left">Sign Up</button>
             <!-- <small>or</small> -->
-            <button rel="facebook-connect" style="cursor:pointer;" title="<?php echo $this->__('Connect with Facebook') ?>" class="facebook-button btn btn-large pull-right"><img src="/skin/frontend/enterprise/bootstrap/images/facebook_icon_00115.png" width="17" style="margin:-4px 4px 0px 0px;" />Join with Facebook</button>
+            <small>or</small>
+        <a rel="facebook-connect" style="color:#fff;cursor:pointer;background:#39569a;" title="<?php echo $this->__('Connect with Facebook') ?>" class="facebook-button btn btn-mini" ><img src="/skin/frontend/enterprise/bootstrap/images/facebook_icon_00115.png" width="17" style="margin:-4px 4px 0px 0px;"/>Connect with Facebook</a>
         </div>
         <?php if (Mage::helper('checkout')->isContextCheckout()): ?>
             <input name="context" type="hidden" value="checkout" />
