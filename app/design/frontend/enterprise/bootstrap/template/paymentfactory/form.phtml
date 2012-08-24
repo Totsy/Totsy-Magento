@@ -24,15 +24,20 @@
         <div class="pull-left">
             <h4 class="legend">Payment Information</h4>
         </div>
-        <div class="pull-left cc_types use-new-card-wrapper" style="text-align:center !important">
+        <div class="cc_types use-new-card-wrapper offset4">
             <label for="<?php echo $_code ?>_cc_type" class="required"><em>*</em><?php echo $this->__('Credit Card Type') ?></label>
             <div class="input-box">
                <div class="totsy-selective-input-box middle-length">
               <?php $_ccType = $this->getInfoData('cc_type') ?>
-               <?php foreach ($this->getCcAvailableTypes() as $_typeCode => $_typeName): ?>
-                   <input type="radio" class="required-entry validate-cybsersource-cc-type-select" id="<?php echo $_code ?>_cc_type" name="payment[cc_type]" value="<?php echo $_typeCode ?>" <?php if($_typeCode==$_ccType) { echo "checked"; } ?> ><?php echo $_typeName ?>
-               <?php endforeach ?>
-               </select>
+                   <div id="<?php echo $_code ?>_cc_type">
+                   <?php foreach ($this->getCcAvailableTypes() as $_typeCode => $_typeName): ?>
+                       <input type="radio" style="float:left" class="validate-cybsersource-cc-type-select validate-one-required-by-name" name="payment[cc_type]" value="<?php echo $_typeCode ?>" <?php if($_typeCode==$_ccType) { echo "checked"; } ?> >
+                       <span class="cc">
+                           <span title="<?php echo $_typeName; ?>" class="<?php echo strtolower($_typeCode); ?>" >
+                           </span>
+                       </span>
+                   <?php endforeach ?>
+                   </div>
                </div>
             </div>
         </div>       
@@ -84,7 +89,7 @@
         <?php endif; ?>
         <div class="cc_exp pull-left use-new-card-wrapper">
             <div>
-                <div for="<?php echo $_code ?>_expiration" class="required pull-left"><em>*</em><?php echo $this->__('Expiration') ?></div>
+                <div for="<?php echo $_code ?>_expiration" class="required lbl"><em>*</em><?php echo $this->__('Expiration') ?></div>
                 <div class="pull-left">
                     <div class="totsy-selective-input-box short-length">
                     <label><?php echo $this->__('Month') ?></label>
