@@ -40,39 +40,35 @@
                 </span>
             </span>
         </div>
-
     <?php else: ?>
         <div class="fieldset giftcard-amount-form">
-            
-                    <?php if ($this->isAmountAvailable($_product)): ?>
-                        <label for="giftcard_amount" id="amount_label_select" class="required"><em>*</em><?php echo Mage::helper('enterprise_giftcard')->__('Amount'); ?></label>
-                    <?php endif; ?>
-                    <?php if ($this->isOpenAmountAvailable($_product)): ?>
-                        <label for="giftcard_amount_input" id="amount_label_input" class="required"><em>*</em><?php echo Mage::helper('enterprise_giftcard')->__('Amount in %s', $this->getCurrentCurrency()); ?></label>
-                    <?php endif; ?>
-                    <?php if ($this->isOpenAmountAvailable($_product)): ?>
-                    <div id="giftcard_amount_box" class="input-box">
-                        <span class="v-fix"><input type="text" id="giftcard_amount_input" name="custom_giftcard_amount" class="validate-number required-entry input-text giftcard-amount-entry giftcard-min-amount giftcard-max-amount" value="<?php echo $this->escapeHtml($this->getDefaultValue('custom_giftcard_amount')) ?>" /></span>
-
-                        <?php if ($_product->getOpenAmountMin() || $_product->getOpenAmountMax()): ?>
-                            <?php $_min = Mage::helper('core')->currency($_product->getOpenAmountMin(), true, false); ?>
-                            <?php $_max = Mage::helper('core')->currency($_product->getOpenAmountMax(), true, false); ?>
-                            <p class="notice">
-                                <?php if ($_product->getOpenAmountMax() && $_product->getOpenAmountMin()): ?>
-                                    <span><?php echo Mage::helper('enterprise_giftcard')->__('Minimum: %s', $_min); ?></span>
-                                    <span><?php echo Mage::helper('enterprise_giftcard')->__('Maximum: %s', $_max); ?></span>
-                                <?php elseif ($_product->getOpenAmountMin()): ?>
-                                    <span><?php echo Mage::helper('enterprise_giftcard')->__('Minimum: %s', $_min); ?></span>
-                                <?php elseif ($_product->getOpenAmountMax()): ?>
-                                    <span><?php echo Mage::helper('enterprise_giftcard')->__('Maximum: %s', $_max); ?></span>
-                                <?php endif; ?>
-                            </p>
-                            <script type="text/javascript">
-                            //<![CDATA[
-                                minAllowedAmount = <?php echo Mage::helper('core')->currency($_product->getOpenAmountMin(), false, false) ?>;
-                                maxAllowedAmount = <?php echo Mage::helper('core')->currency($_product->getOpenAmountMax(), false, false) ?>;
-
-                                function parsePrice(value) {
+            <?php if ($this->isAmountAvailable($_product)): ?>
+            <label for="giftcard_amount" id="amount_label_select" class="required"><em>*</em><?php echo Mage::helper('enterprise_giftcard')->__('Amount'); ?></label>
+            <?php endif; ?>
+            <?php if ($this->isOpenAmountAvailable($_product)): ?>
+            <label for="giftcard_amount_input" id="amount_label_input" class="required"><em>*</em><?php echo Mage::helper('enterprise_giftcard')->__('Amount in %s', $this->getCurrentCurrency()); ?></label>
+            <?php endif; ?>
+            <?php if ($this->isOpenAmountAvailable($_product)): ?>
+            <div id="giftcard_amount_box" class="input-box">
+            <span class="v-fix"><input type="text" id="giftcard_amount_input" name="custom_giftcard_amount" class="validate-number required-entry input-text giftcard-amount-entry giftcard-min-amount giftcard-max-amount" value="<?php echo $this->escapeHtml($this->getDefaultValue('custom_giftcard_amount')) ?>" /></span>
+            <?php if ($_product->getOpenAmountMin() || $_product->getOpenAmountMax()): ?>
+            <?php $_min = Mage::helper('core')->currency($_product->getOpenAmountMin(), true, false); ?>
+            <?php $_max = Mage::helper('core')->currency($_product->getOpenAmountMax(), true, false); ?>
+            <p class="notice">
+            <?php if ($_product->getOpenAmountMax() && $_product->getOpenAmountMin()): ?>
+            <span><?php echo Mage::helper('enterprise_giftcard')->__('Minimum: %s', $_min); ?></span>
+            <span><?php echo Mage::helper('enterprise_giftcard')->__('Maximum: %s', $_max); ?></span>
+            <?php elseif ($_product->getOpenAmountMin()): ?>
+            <span><?php echo Mage::helper('enterprise_giftcard')->__('Minimum: %s', $_min); ?></span>
+            <?php elseif ($_product->getOpenAmountMax()): ?>
+            <span><?php echo Mage::helper('enterprise_giftcard')->__('Maximum: %s', $_max); ?></span>
+            <?php endif; ?>
+            </p>
+            <script type="text/javascript">
+            //<![CDATA[
+                minAllowedAmount = <?php echo Mage::helper('core')->currency($_product->getOpenAmountMin(), false, false) ?>;
+                maxAllowedAmount = <?php echo Mage::helper('core')->currency($_product->getOpenAmountMax(), false, false) ?>;
+                function parsePrice(value) {
                                     value = value.replace('\'', '').replace(' ', '');
                                     separatorComa = value.indexOf(',');
                                     separatorDot  = value.indexOf('.');
@@ -273,7 +269,6 @@
         	return false;
         }
     }
-
     jQuery("#giftcard_recipient_email").focusout(function(){
         updateValidateButton.change();
     });
