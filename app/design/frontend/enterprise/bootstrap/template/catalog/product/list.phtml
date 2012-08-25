@@ -72,7 +72,7 @@
             </li>
         </span>
         <li class="span4">
-            <div class="thumbnail" style="padding:0px; min-height:370px;">
+            <div class="thumbnail" style="padding:0px; min-height:420px;">
                 <a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" class="product-image"><img src="<?php echo $this->helper('catalog/image')->init($_product, 'small_image')->resize(308, 400)->keepFrame(FALSE); ?>" width="308px" height="361px" alt="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" /></a>
             <div class="caption">
             <h5 style="display:block; min-height:35px; width:195px; font-weight: normal; color: #636466; font-size: 13px;"><?php echo $_helper->productAttribute($_product, $_product->getName(), 'name') ?></h5>
