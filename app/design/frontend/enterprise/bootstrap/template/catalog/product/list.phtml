@@ -72,14 +72,18 @@
             </li>
         </span>
         <li class="span4">
-            <div class="thumbnail" style="padding:0px;">
+            <div class="thumbnail" style="padding:0px; min-height:368px;">
                 <a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" class="product-image"><img src="<?php echo $this->helper('catalog/image')->init($_product, 'small_image')->resize(308, 400)->keepFrame(FALSE); ?>" width="308px" alt="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" /></a>
             <div class="caption">
-            <h5 style="font-weight: normal; color: #444; font-size: 13px;"><?php echo $_helper->productAttribute($_product, $_product->getName(), 'name') ?></h5>
+            <h5 style="display:block; min-height:35px; width:195px; font-weight: normal; color: #636466; font-size: 13px;"><?php echo $_helper->productAttribute($_product, $_product->getName(), 'name') ?></h5>
             <?php if($_product->getRatingSummary()): ?>
             <?php echo $this->getReviewsSummaryHtml($_product, 'short') ?>
             <?php endif; ?>
+            <div style="float:right; width:95px; margin-top:-46px; text-align:right;  ">
             <?php echo $this->getPriceHtml($_product, true) ?>
+            </div>
+            <div class="clear"></div>
+            
             </div>
           </div>
         </li>

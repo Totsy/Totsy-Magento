@@ -68,7 +68,7 @@ $endcount_lc = date("F j, Y, G:i:s", $endcount_utc); ?>
 </div>
 
 <div class="span5">
-<div class="well" style="margin-top:10px;">
+<div class="well" style="margin-top:10px; border:none; padding:0px;">
        
     <h4>Description</h4>
     <hr style="margin:7px auto; padding:0px;"/>
@@ -117,14 +117,16 @@ $endcount_lc = date("F j, Y, G:i:s", $endcount_utc); ?>
     <div id="product-main-info">
         <p class="product-ids"><?php //echo $this->__('SKU# %s', $this->htmlEscape($_product->getSku())); ?></p>
         <?php //echo $this->getReviewsSummaryHtml($_product, false, true)?>
+        <div class="alert">
         <?php echo $this->getChildHtml('alert_urls') ?>
         <?php if($today <= $event_end_date):  ?>
         <?php echo $this->getChildHtml('product_type_data') ?>
         <?php endif; ?>
+        </div>
                     <?php echo $this->getChildHtml('tierprices') ?>
                     <?php echo $this->getChildHtml('extrahint') ?>
                         <?php if (!$this->hasOptions()):?>
-                             <div class="add-to-box">
+                             <div class="add-to-box" pull-right>
                                  <?php if($_product->isSaleable()): ?>
                                      <?php echo $this->getChildHtml('addtocart') ?>
                                  <?php endif; ?>
