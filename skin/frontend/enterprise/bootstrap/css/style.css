@@ -983,13 +983,35 @@ select, textarea, input[type="text"], input[type="password"], input[type="dateti
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
     padding: 4px;
 }
-.price-box { margin-top:10px; font-size: 14px; }
-.old-price { color: #999999;
-float: right;
-text-decoration: line-through;
-font-weight: normal;
-font-size: 11px;
-min-width:95px; }
+
+/* prices */
+.price-box { 
+    margin-top:10px; 
+    font-size: 14px; 
+}
+.old-price { 
+    color: #999999;
+    float: right;
+    text-decoration: line-through;
+    font-weight: normal;
+    font-size: 11px;
+    min-width:95px;
+}
+
+/* @GOTCHA: putting .price-box positioning hacks in here… b/c price view is used some many places the markup is rather untouchable */
+body.catalog-category-view .price-box {
+    position: relative;
+}
+body.catalog-category-view .price-box .old-price { 
+    position: relative; top: 28px;
+} 
+.price-box .price.special-price {
+    color: #000;
+    font-size: 20px; font-weight: bold;
+}
+body.catalog-category-view .price-box .special-price {
+    position: relative; top: -19px;
+}
 
 .options-container-big {margin:0px;}
 .count-down-timer {font-size:18px;}
