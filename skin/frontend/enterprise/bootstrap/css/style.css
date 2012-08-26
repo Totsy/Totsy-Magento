@@ -7,7 +7,7 @@
  * - Dark Grey      subheadings     #636466
  * - Medium Grey    copy font       #999999
  * - Light Grey     borders         #e5e5e5
- * - Green          buttons         #C1D82F 
+ * - Green          buttons         #c1d82f or #adc222
  */
  
 /*
@@ -223,10 +223,10 @@ a.btn-primary /* req to override '.dropdown a' ruleset */ {
     width:100%; overflow: hidden;
     color:#333;
     font-weight: normal;
-    white-space:nowrap; text-overflow: ellipsis;
+/*     white-space:nowrap; text-overflow: ellipsis; */ /* leave this out, see MGN-882 */
 } 
 .events-grid .span3 h5 {
-    font-size: 16px;
+    font-size: 14px;
 } 
 .events-grid .span2 h5 {
     font-size: 12px;
