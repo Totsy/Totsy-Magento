@@ -177,7 +177,7 @@ line-height: 20px;"><?php echo $_helper->categoryAttribute($_category, $_categor
                             var test = jQuery(this).find("option:selected").text();
                                 jQuery(selector_span).html(test);
                             if (jQuery(this).val() == ''){
-                            jQuery("button.btn-cart").css("background-color","#AAAAAA");
+                            jQuery("button.btn-cart").css("background-color","#AAAAAA"); // @TODO: do NOT apply styles via '.css' method - create and apply dynamic classes (in style.css file) via '.addClass' / '.removeClass' methods
                             } else {
                             jQuery("button.btn-cart").css("background-color","#ED1C25");
                         }
