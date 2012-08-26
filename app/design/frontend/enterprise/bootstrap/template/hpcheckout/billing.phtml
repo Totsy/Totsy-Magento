@@ -39,7 +39,7 @@
 		                     </select>
 		                 </div>
 	                     <script type="text/javascript">
-                            $('billing:region_id').setAttribute('defadivtValue',  "<?php echo $this->getAddress()->getRegionId() ?>");
+                            $('billing:region_id').setAttribute('defaultValue',  "<?php echo $this->getAddress()->getRegionId() ?>");
                          </script>
                          <input type="text" id="billing:region" name="billing[region]" value="<?php echo $this->htmlEscape($this->getAddress()->getRegion()) ?>"  title="<?php echo $this->__('State/Province') ?>" class="input-text hidden-state" style="display:none;" />
 	                  </div>
@@ -52,12 +52,17 @@
 	                      <input type="text" title="<?php echo $this->__('Zip/Postal Code') ?>" name="billing[postcode]" id="billing:postcode" class="input-text validate-zip required-entry zip" value="<?php echo $this->getAddress()->getPostcode() ?>" placeholder="<?php echo $this->__('Zip/Postal Code') ?>" />
 	                  </div>
 	              </div>
-	              <div>
-	    	          <div class="field half-of-half">
+	              <div class="last-billing-form-row">
+	    	          <div class="field half-of-half pull-left">
 	    	        	    <label for="billing:telephone" class="required"><em>*&nbsp;</em><?php echo $this->__('telephone') ?></label>
 	    	        	    <input type="text" name="billing[telephone]" title="<?php echo $this->__('Telephone') ?>" class="input-text required-entry validate-phoneLax telephone" id="billing:telephone" value="<?php echo $this->htmlEscape($this->getAddress()->getTelephone()) ?>" placeholder="Telephone" onkeyup="backspacerUP(this,event);" onkeydown="backspacerDOWN(this,event);"/>
 	    	        	</div>
-	    	         </div> 
+	    	         </div>
+	    	         <div class="field half-of-half">
+                 		<button type="button" class="button button-exception ship-to-billing" onclick="hpcheckout.copyBillingToShipping()">
+                 			<div class="totsy-button-white"><?php echo  $this->__('SHIP TO THIS ADDRESS') ?></div>
+                 		</button>
+                 	</div> 
 	                 <div class="field half-of-half">
                          <label for="billing:country_id" class="required"><em>*&nbsp;</em><?php echo $this->__('country') ?></label>
 			             <div class="totsy-selective-input-box totsy-selective-input-box-billing-country country">
