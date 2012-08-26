@@ -290,19 +290,19 @@ a.btn-primary /* req to override '.dropdown a' ruleset */ {
 .events-grid .more .maxDiscount em:before {
     content: "";
     display: inline-block;
-    position: absolute; top:-50px; left:4px; z-index:-1;
+    position: absolute; top:-53px; left:0; z-index:-1;
     width: 0; height: 0;
-    border-bottom: 80px solid #ed1c25;
-    border-left: 80px solid transparent;
-    border-right: 80px solid transparent;
+    border-bottom: 85px solid #ed1c25;
+    border-left: 85px solid transparent;
+    border-right: 85px solid transparent;
 }
 .events-grid .more .maxDiscount em {
     display: block;
-    position: absolute; left:-5px; top:-5px; z-index:100;
+    position: absolute; left:-3px; top:-3px; z-index:100;
     margin-top: 0;
     width: 100%; height: 100%;
     color:#fff;
-    font-size: 13px;
+    font-size: 13px; font-style: normal;
     text-align: center;
     text-shadow: 0 -1px 0px rgba(0,0,0,0.25);
     -moz-transform: rotate(-45deg);
