@@ -14,8 +14,8 @@
  *
  */
 ?>
-    <div class="hero-unit" style="margin-top:155px;">
-    <h1>Password Revalidation</h1>
+    <div class="hero-unit">
+    <h2>Password Revalidation</h2>
     <hr />
     <p><?php echo $this->__("Sorry, for the interruption! Please sign in again to continue shopping. If you need help with your password, click ")?><a style="font-weight:bold; color:#ED1C25" href="<?php echo $this->getUrl('customer/account/forgotpassword')?>"><?php echo $this->__("here")?></a><?php echo $this->__(" to forgot password page.")?></p>
     </div>
@@ -36,12 +36,10 @@
         <input name="login[password]" id="password" autocomplete="off" type="password" class="input-text required-entry validate-password" title="Password" value=""/>
         </div>
     <div class="modal-footer">
-        <button type="submit" class=" btn btn-primary" name="send" id="send2">
-        <div class="sign-in-button">Confirm Password</div>
-        </button>
-            </div>
-        </div>
+        <button type="submit" class=" btn btn-primary" name="send" id="send2">Confirm Password</button>
+    </div>
         </form>
+    </div>
 </div>
 <script type='text/javascript'>//<![CDATA[ 
     jQuery(window).load(function(){

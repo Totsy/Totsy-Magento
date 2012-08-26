@@ -20,7 +20,7 @@
  *
  * @category    design
  * @package     enterprise_default
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright © 2011 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://www.magentocommerce.com/license/enterprise-edition
  */
 ?>
@@ -44,7 +44,8 @@ foreach ($this->getInvitationCollection() as $invitation) {
 
 //HP get balance per item
 
-    $rewardCollection = $this->getCreditHistory();
+$rewardCollection = $this->getCreditHistory();
+
 
 //if ( !$rewardCollection ) {
 //    $rewardCollection = false;
@@ -56,216 +57,262 @@ foreach ($this->getInvitationCollection() as $invitation) {
 //}
 
 if ( !$rewardCollection ) {
-    $rewardCollection = false;
-    $currentBalance = '0.00';
+	$rewardCollection = false;
+	$currentBalance = '0.00';
 } else {
-    foreach ( $rewardCollection as $item ){
-    $currentBalance = Mage::helper('core')->currency($item->getCurrencyAmount());
-    break; // return first item's balance which is the last record
-    }
-  }
+	foreach ( $rewardCollection as $item ){
+		$currentBalance = Mage::helper('core')->currency($item->getCurrencyAmount());
+		break; // return first item's balance which is the last record
+	}	
+}
+
+
 ?>
+
 <div class="page-header">
     <h2><?php echo Mage::helper('enterprise_invitation')->__('My Invitations'); ?></h2>
 </div>
 <div class="alert alert-info">
-    <h4>Share this link with your friends 
-    <input type="text" class="invitation-link-area" readonly="readonly" value="<?php echo Mage::helper('enterprise_invitation')->getGenericInvitationLink() ?>" style="margin:10px 0px; padding:10px; width:100%; background:#f7f7f7" /> 
+    <h4>Share this link with your friends
+    <input type="text" class="invitation-link-area" readonly="readonly" value="<?php echo Mage::helper('enterprise_invitation')->getGenericInvitationLink() ?>" style="margin:10px 0px; padding:10px; width:100%; background:#f7f7f7" />
     </h4>
 </div>
-<div class="well">
     <div class="span alpha">
     <h4><?php echo Mage::helper('enterprise_invitation')->__('Invitations') ?></h4>
     <hr />
+    <div class="span5 alpha">
+        <ul id="myTab" class="nav nav-tabs">
+            <li class="active"><a href="#home" data-toggle="tab">Send</a></li>
+              <li><a href="#profile" data-toggle="tab">Invitation History</a></li>
+            </ul>
+            <div id="myTabContent" class="tab-content">
+              <div class="tab-pane fade in active" id="home">
+                <div class="little-title">
+		    <h4><?php echo Mage::helper('enterprise_invitation')->__('Send Invitations') ?></h4>
+			<hr style="margin:5px 0px; padding:0px;"/>
+			<p class="invite-notes">
+			<?php 
+				if ( Mage::Helper('service')->isTotsyStore() ) {
+					$inviteFriendNotes = "For each friend you invite, Totsy will credit your account with <span class='needgreen'>$15</span> after your friend's first order ships.";
+				}else {
+					$inviteFriendNotes = "For each friend you invite, we will credit your account with <span class='needgreen'>$15</span> after your friend's first order ships.";
+				}
+			?>
+			<?php echo Mage::helper('enterprise_invitation')->__($inviteFriendNotes); ?>
+			</p>
+		</div>
+		<div id="messages"><?php echo $this->getMessagesBlock()->getGroupedHtml() ?></div>
+		<?php echo $this->getChildHtml('form_before')?>
+		<?php if ($maxPerSend = (int)Mage::helper('enterprise_invitation')->getMaxInvitationsPerSend()): ?>
+		<form id="invitationForm" action="<?php echo $this->helper('enterprise_invitation')->getCustomerInvitationFormUrl()?>" method="post">
+		    <div class="fieldset">		
+		        <ul class="form-list">
+		            <?php //$_perRow = ceil($maxPerSend/3); for($_index = 1; $_index <= $maxPerSend; $_index ++): ?>
+		            <li class="email-add-box">
+						<label for="email"><?php echo Mage::helper('enterprise_invitation')->__('Enter Your Friends Email Addresses:');?> </label>
+		                <div class="input-box">
+		                    <textarea id="contact_list" tabindex="<?php //echo $_index+1 ?>" name="email" id="inviteemailaddress" title="<?php echo Mage::helper('enterprise_invitation')->__('email') ?>"  class="input-text" rows="3" cols="4"></textarea>
+		                </div>
+		               
+		            </li>
+		            <?php //endfor; ?>
+		        <?php if (Mage::helper('enterprise_invitation')->isInvitationMessageAllowed()): ?>
+		            <li class="email-msg-box">
+		                <label for="message"><?php echo Mage::helper('enterprise_invitation')->__('Personalized Message To Friends:');?> </label>
+		                <div class="input-box">
+		                	<?php if ( Mage::Helper('service')->isTotsyStore() ):?>
+		                    	<textarea tabindex="<?php //echo $_index+1 ?>" name="message" id="message" title="<?php echo Mage::helper('enterprise_invitation')->__('Message') ?>"  class="input-text" rows="3" cols="4"><?php echo 'Please accept this invitation to join Totsy'; ?></textarea>
+		                	<?php else :?>
+		                		<textarea tabindex="<?php //echo $_index+1 ?>" name="message" id="message" title="<?php echo Mage::helper('enterprise_invitation')->__('Message') ?>"  class="input-text" rows="3" cols="4"><?php echo 'Please accept this invitation to join Mamasource Private Sales powered by Totsy'; ?></textarea>
+		                	<?php endif;?>
+		                </div>
+		            </li>
+		        </ul>
+		        <?php endif;?>
+		    </div>
+		   <!--p class="required"><?php echo Mage::helper('enterprise_invitation')->__('* Required Fields') ?></p-->
+		    <div class="buttons-set form-buttons">
+		        <!--p class="back-link"><a href="<?php echo Mage::helper('enterprise_invitation')->getCustomerInvitationUrl() ?>"><small>&laquo; </small><?php  echo Mage::helper('enterprise_invitation')->__('Back to Invitations') ?></a></p-->
+		        <button class="button btn btn-primary" onclick="modifyform()" type="button"><div class="invite-button"><?php echo Mage::helper('enterprise_invitation')->__('Send Invitations') ?></div></button>
+		    </div>		
+		</form>
+		
 
+		<script>
+		function modifyform(){
+			var invitationForm = jQuery('#invitationForm');
+			var txtArea = document.getElementById('contact_list');
+			txtArea.value = document.getElementById('contact_list').value.replace(/;/gi,',').replace(/\n/gi,',').replace(/,,/gi,',');
+			invitationForm.submit();
+		}
+		</script>
+		
+		<script type="text/javascript">
+		    var contactForm = new VarienForm('invitationForm', false);
+		</script>
+		<?php else:?>
+		<p><?php echo Mage::helper('enterprise_invitation')->__('You cannot send more invitations'); ?></p>
+		<?php endif; ?>
+	</div>
+              <div class="tab-pane fade" id="profile">
+                <div class="invitation-list no-show section acceptedinvites">
+	<div class="page-title-main">
+		<h2><?php echo Mage::helper('enterprise_invitation')->__('Invitation History'); ?></h2>
+	</div>
+	<div id="messages"><?php echo $this->getMessagesBlock()->getGroupedHtml() ?></div>
+	<?php echo $this->getChildHtml('list_before')?>
+	<?php if (count($this->getInvitationCollection())): ?>
+	<table class="data-table table table-striped" id="invitations-list-table" cellpadding="0">
+		<col />
+		<col />
+		<col />
+		<tbody>
+		
+		<?php if($rewardCollection):?>
+			<?php $counter_1 = 1;?>
+			<?php foreach ( $rewardCollection as $reward ): ?>
+				<tr class="<?php if ( $counter_1++ %2 ) echo 'odd'; else echo 'even';?>">
+					<td class="his-list date">
+						<?php $arrayDate = explode(" ", $item->getCreatedAt());?>
+						<?php echo $this->htmlEscape(str_replace("-","/",$arrayDate[0])); ?>
+					</td>
+					<td class="his-list events">
+						<?php echo $this->escapeHtml($reward->getMessage());?>					
+					</td>
+					<td class="his-list status">
+						<?php echo Mage::helper('enterprise_invitation')->__('$25 Credit Awarde to You')?>
+					</td>
+				</tr>
+			<?php endforeach; ?>
+			<?php 
+				if($counter_1 % 2) 
+					$counter = 1;
+				else 
+					$counter = 2;
+			?>
+		<?php else :?>
+			<?php   $counter = 1;?>
+		<?php endif;?>
 
+		<?php foreach ($this->getInvitationCollection() as $invitation): ?>
+			<tr class="<?php if ( $counter++ %2 ) echo 'odd'; else echo 'even';?>">
+				<td class="his-list date">
+					<?php $arrayDate = explode(" ", $invitation->getInvitationDate());?>
+					<?php echo $this->htmlEscape(str_replace("-","/",$arrayDate[0])); ?>
+				</td>
+				<td class="his-list events">
+				<?php if($this->helper('enterprise_invitation')->getInvitationStatusText($invitation) == 'Sent'):?>
+					<span><?php echo Mage::helper('enterprise_invitation')->__('Invitation sent to ');?></span><?php echo $this->htmlEscape($invitation->getEmail()); ?>
+				<?php elseif ($this->helper('enterprise_invitation')->getInvitationStatusText($invitation) == 'Accepted'):?>
+					<span><?php echo $this->htmlEscape($invitation->getEmail()); ?></span><?php echo Mage::helper('enterprise_invitation')->__(' joined Totsy');?>
+				<?php else :?>
+					<span><?php echo $this->htmlEscape($invitation->getEmail()); ?></span><?php echo Mage::helper('enterprise_invitation')->__(' email not send');?>
+				<?php endif;?>
+				</td>
+				<td class="his-list status">
+					<?php if($this->helper('enterprise_invitation')->getInvitationStatusText($invitation) == 'Accepted'):?>
+						<?php echo Mage::helper('enterprise_invitation')->__('Membership Registration');?>
+					<?php endif;?>
+				</td>
+			</tr>
+		<?php endforeach; ?>
+		</tbody>
+	</table>
 
- <!-- Collapse
-    ================================================== -->
-    <section id="collapse">
-      <div class="row">
-        <div class="span">
+	<?php else: ?>
 
-          <div class="accordion" id="accordion2">
-            <div class="accordion-group">
-              <div class="accordion-heading">
-                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
-                  Send Invitations
-                </a>
-              </div>
-              <div id="collapseOne" class="accordion-body collapse in">
-                <div class="accordion-inner">
-                    <p><?php if ( Mage::Helper('service')->isTotsyStore() ) {
-                            $inviteFriendNotes = "For each friend you invite, Totsy will credit your account with <span class='needgreen'>$15</span> after your friend's place their first order.";
-                        } else {
-                            $inviteFriendNotes = "For each friend you invite, we will credit your account with <span class='needgreen'>$15</span> after your friend's place their first order.";
-                        }
-                        ?>
-                        <?php echo Mage::helper('enterprise_invitation')->__($inviteFriendNotes); ?>
-                        </p>
-                        	<div id="messages"><?php echo $this->getMessagesBlock()->getGroupedHtml() ?></div>
-<?php echo $this->getChildHtml('form_before')?>
-<?php if ($maxPerSend = (int)Mage::helper('enterprise_invitation')->getMaxInvitationsPerSend()): ?>
-<form id="invitationForm" action="<?php echo $this->helper('enterprise_invitation')->getCustomerInvitationFormUrl()?>" method="post">
-<?php //$_perRow = ceil($maxPerSend/3); for($_index = 1; $_index <= $maxPerSend; $_index ++): ?>
-<label for="email"><?php echo Mage::helper('enterprise_invitation')->__('Enter Your Friends Email Addresses:');?> </label>
-<textarea id="contact_list" tabindex="<?php //echo $_index+1 ?>" name="email" id="inviteemailaddress" title="<?php echo Mage::helper('enterprise_invitation')->__('email') ?>" class="input-text" rows="3" cols="4"></textarea>
+	<div id="cookie-notice">
+		<ul class="messages"><li class="notice-msg">
+			<ul><li><?php echo Mage::helper('enterprise_invitation')->__('There are no sent invitations yet'); ?></li></ul>
+		</li></ul>
+	</div>
 
-<?php //endfor; ?>
-<?php if (Mage::helper('enterprise_invitation')->isInvitationMessageAllowed()): ?>
-<label for="message"><?php echo Mage::helper('enterprise_invitation')->__('Personalized Message To Friends:');?> </label>
-<?php if ( Mage::Helper('service')->isTotsyStore() ):?>
-<textarea tabindex="<?php //echo $_index+1 ?>" name="message" id="message" title="<?php echo Mage::helper('enterprise_invitation')->__('Message') ?>" class="input-text" rows="3" cols="4"><?php echo 'Please accept this invitation to join Totsy'; ?></textarea>
-<?php else :?>
-<textarea tabindex="<?php //echo $_index+1 ?>" name="message" id="message" title="<?php echo Mage::helper('enterprise_invitation')->__('Message') ?>" class="input-text" rows="3" cols="4"><?php echo 'Please accept this invitation to join Mamasource Private Sales powered by Totsy'; ?></textarea>
-<?php endif;?>
+	<?php endif; ?>
+
+	<!--div class="buttons-set">
+		
+		<a href="<?php echo $this->helper('enterprise_invitation')->getCustomerInvitationFormUrl(); ?>" class="button"><span><?php echo $this->__('Send Invitations') ?></span></a>
+	</div-->
+
 </div>
-<?php endif;?>
-</div>
-<!--p class="required"><?php echo Mage::helper('enterprise_invitation')->__('* Required Fields') ?></p-->
-<div class="buttons-set form-buttons">
-<!--p class="back-link"><a href="<?php echo Mage::helper('enterprise_invitation')->getCustomerInvitationUrl() ?>"><small>&laquo; </small><?php echo Mage::helper('enterprise_invitation')->__('Back to Invitations') ?></a></p-->
-<button class="button" onclick="modifyform()" type="button"><div class="invite-button"><?php echo Mage::helper('enterprise_invitation')->__('Send Invitations') ?></div></button>
-</div>	
-</form>
-                </div>
-              </div>
-            </div>
-            <div class="accordion-group">
-              <div class="accordion-heading">
-                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
-                  Collapsible Group Item #2
-                </a>
-              </div>
-              <div id="collapseTwo" class="accordion-body collapse">
-                <div class="accordion-inner">
-                  Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-                </div>
-              </div>
-            </div>
-            <div class="accordion-group">
-              <div class="accordion-heading">
-                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseThree">
-                  Collapsible Group Item #3
-                </a>
-              </div>
-              <div id="collapseThree" class="accordion-body collapse">
-                <div class="accordion-inner">
-                  Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-                </div>
               </div>
             </div>
           </div>
-        </div>
-      </div>
-    </section>
+          
+<div class="open-invitations no-show section openinvites" style="display:none;">
+	<div class="page-title-main">
+		<h2><?php echo Mage::helper('enterprise_invitation')->__('Invitations'); ?></h2>
+	</div>
+	<div class="invitation-info-block">
+		<div class="inside-block invitation-info-send"><p class="title">Invitations Sent</p><p><?php echo $numberSent; ?></p></div>
+		<div class="inside-block invitation-info-member"><p class="title">Membership Registrations</p><p><?php if($memberReg) echo $memberReg; else echo '0'; ?></p></div>
+		<div class="inside-block invitation-info-credits"><p class="title">Totsy Credits Available</p><p><?php if($currentBalance) echo $currentBalance; else echo '0';//put real numbers here?></p></div>
+	</div>
+</div>
 
 
+		
+	
+	<div class="span4">
+		
 
+		
+		<!-- Any link with a class="cs_import" will start the import process -->
+		<h4 class="gray clear mar-b">Invite friends from address book</h4>
+		<hr style="padding:0px;"/>
+		
+		<a id="invite-gmail" class="invite-btn fl cs_import" title="Invite friends from your Gmail contacts" href="#" >Gmail</a>
+		<a id="invite-yahoo" class="invite-btn fr cs_import" title="Invite friends from your Yahoo! contacts" href="#" >Yahoo!</a>
+		<a id="invite-outlook" class="invite-btn fl cs_import" title="Invite friends from your Outlook address book" href="#" ="true">Outlook</a>
+		<a id="invite-aol" class="invite-btn fr cs_import" title="Invite friends from your AOL contacts" href="#" >AOL</a>
+		<a id="invite-msn" class="invite-btn fl cs_import" title="Invite friends from your MSN address book" href="#" >MSN</a>
+		<a id="invite-others" class="invite-btn fr cs_import" title="Invite friends" href="#">Others</a>
+		<!-- <div id="rondavu_invitation_container"></div> -->
+		
+	</div>
 
-    <ul id="myTab" class="nav nav-tabs">
-        <li class="active"><a href="#send" data-toggle="tab">Send</a></li>
-        <li><a href="#history" data-toggle="tab">Invitation History</a></li>
-    </ul>
-
-    <div id="invitationTabsContent" class="tab-content">
-        <div class="tab-pane fade in active" id="send">
-        	
-        </div>
-        <div class="tab-pane fade" id="history">
-           <div class="page-title-main">
-        <h1><?php echo Mage::helper('enterprise_invitation')->__('Invitation History'); ?></h1>
-    </div>
+</div>
     
-        
-        <?php else: ?>
-        <div id="cookie-notice" class="messages">
-            <?php echo Mage::helper('enterprise_invitation')->__('There are no sent invitations yet'); ?>
-        </div>
-    
-    <?php endif; ?>
-    
-    <!--div class="buttons-set">
-    <p class="back-link"><a href="<?php echo $this->escapeUrl($this->getBackUrl()) ?>"><small>&laquo; </small><?php echo $this->__('Back') ?></a></p>
-    <a href="<?php echo $this->helper('enterprise_invitation')->getCustomerInvitationFormUrl(); ?>" class="button"><span><?php echo $this->__('Send Invitations') ?></span></a>
-    </div-->
-   
-<!-- well end -->
-</div>
-<script>
-        jQuery(function () {
-        jQuery('#myTab a:first').tab('show');
-    })
-</script>
 
-    <div class="open-invitations no-show section openinvites">
-        <div class="invitation-info-block">
-            <div class="inside-block invitation-info-send"><p class="title">Invitations Sent</p><p><?php echo $numberSent; ?></p></div>
-            <div class="inside-block invitation-info-member"><p class="title">Membership Registrations</p><p><?php if($memberReg) echo $memberReg; else echo '0'; ?></p></div>
-            <div class="inside-block invitation-info-credits"><p class="title">Totsy Credits Available</p><p><?php if($currentBalance) echo $currentBalance; else echo '0';//put real numbers here?></p></div>
-        </div>
-    </div>
 
-<div class="invitation-form section sendinvites">
-    <div class="invitation-left">
-        
-        
-        <div class="invitation-right">
-            <h4 class="inline">Share with your friends</h4>
-            <span id="st_sharethis_custom">
-                <div class="st_sharethis_custom-2"></div>
-            </span>
-            <hr class="modify-hr the-hr"/>
-            <!-- Any link with a class="cs_import" will start the import process -->
-            <h4 class="gray clear mar-b">Invite friends from your address book</h4>
-            <hr class="the-hr"/>
-            <a id="invite-gmail" class="invite-btn fl cs_import" title="Invite friends from your Gmail contacts" href="#" >Gmail</a>
-            <a id="invite-yahoo" class="invite-btn fr cs_import" title="Invite friends from your Yahoo! contacts" href="#" >Yahoo!</a>
-            <a id="invite-outlook" class="invite-btn fl cs_import" title="Invite friends from your Outlook address book" href="#" ="true">Outlook</a>
-            <a id="invite-aol" class="invite-btn fr cs_import" title="Invite friends from your AOL contacts" href="#" >AOL</a>
-            <a id="invite-msn" class="invite-btn fl cs_import" title="Invite friends from your MSN address book" href="#" >MSN</a>
-            <a id="invite-others" class="invite-btn fr cs_import" title="Invite friends" href="#">Others</a>
-            <!-- <div id="rondavu_invitation_container"></div> -->
-    </div>
-</div>
-</div>
-</div>
-<div class="clear"></div>
+
 </div>
 <script type="text/javascript">var switchTo5x=true;</script>
 <script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
 <script type="text/javascript">stLight.options({publisher: "fa9539d4-b1db-40d3-9e2d-9e9a8dc98b42",onhover: false}); </script>
-    <!-- Include these scripts to import address books with CloudSponge -->
-    <script type="text/javascript" src="https://api.cloudsponge.com/address_books.js"></script>
-    <?php $currentUrl = $this->helper('core/url')->getCurrentUrl();?>
-    <?php $dashCSPattern = '/magento-totsy/';?>
-    <?php $stageCSPattern = '/staging/';?>
-    <?php $davidCSPattern = '/david/';?>
-    <?php // store CS account domain keys for each environ
-        if (preg_match($dashCSPattern, $currentUrl)) { // magento-totsy.totsy.com
-            $domainKey = 'KLSDWXMDT54MQ8EL3RJQ';
-            }
-            elseif (preg_match($stageCSPattern, $currentUrl)) { // staging.totsy.com
-            $domainKey = 'E2NEX4FB2FJ86UMJ3YTC';
-            }
-            elseif (preg_match($davidCSPattern, $currentUrl)) { // david.totsy.com - for dev testing
-            $domainKey = 'RM7PRMBS7QK4VQN6PZ2L';
-            }
-            else { // prod: totsy.com
-            $domainKey = 'ZSSSM5GHM6C8S7Q5TEEG';
-            }
-    ?>
-<script type="text/javascript" charset="utf-8">
-    var csPageOptions = {domain_key:"<?php echo $domainKey; //echo (preg_match($localPattern, $currentUrl))?'YFTQRG87V58ADFMUECZ6':((preg_match($stagePattern, $currentUrl))?'T4YQVH6GQB7MNFQYT5TQ':'') ?>",
-        textarea_id:"contact_list"
-        };
-        
-        stWidget.addEntry({
+		<!-- Include these scripts to import address books with CloudSponge -->
+		<script type="text/javascript" src="https://api.cloudsponge.com/address_books.js"></script>
+		<?php $currentUrl = $this->helper('core/url')->getCurrentUrl();?>
+		<?php $dashCSPattern = '/magento-totsy/';?>
+		<?php $stageCSPattern = '/staging/';?>
+		<?php $davidCSPattern = '/david/';?>
+		<?php // store CS account domain keys for each environ
+			if (preg_match($dashCSPattern, $currentUrl)) { // magento-totsy.totsy.com
+				$domainKey = 'KLSDWXMDT54MQ8EL3RJQ';				
+			}
+			elseif (preg_match($stageCSPattern, $currentUrl)) { // staging.totsy.com
+				$domainKey = 'E2NEX4FB2FJ86UMJ3YTC';				
+			}
+			elseif (preg_match($davidCSPattern, $currentUrl)) { // david.totsy.com - for dev testing
+				$domainKey = 'RM7PRMBS7QK4VQN6PZ2L';
+			}
+			else { // prod: totsy.com
+				$domainKey = 'ZSSSM5GHM6C8S7Q5TEEG';				
+			}
+		?>
+		<script type="text/javascript" charset="utf-8">
+		var csPageOptions = {
+		  domain_key:"<?php echo $domainKey; //echo (preg_match($localPattern, $currentUrl))?'YFTQRG87V58ADFMUECZ6':((preg_match($stagePattern, $currentUrl))?'T4YQVH6GQB7MNFQYT5TQ':'') ?>", 
+		  textarea_id:"contact_list"
+		};
+		</script>
+<script>
+	stWidget.addEntry({
         "service":"sharethis",
         "element":document.getElementById('st_sharethis_custom'),
         "url":"<?php echo Mage::helper('enterprise_invitation')->getGenericInvitationLink(); ?>",
         "title":"Let's Join Totsy",
         "image":"<?php echo $this->getSkinUrl('images/logo.png');?>",
-        "summary":"Totsy has this super cool find available now and so much more for kids and moms! Score the best brands for your family at up to 90% off."
-        });
+        "summary":"Totsy has this super cool find available now and so much more for kids and moms! Score the best brands for your family at up to 90% off."    
+	});
 </script>

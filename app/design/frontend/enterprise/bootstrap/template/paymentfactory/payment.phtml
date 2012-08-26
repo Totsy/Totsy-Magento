@@ -6,8 +6,6 @@
     $creditCardsCount = 0;
 ?>
 <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
-<?php if($creditCardsCount == 0): ?>
-<?php endif; ?>
 <div class="page-header">
     <h2><?php echo $this->__('Manage Credit Cards') ?> <img class="cart-type pull-right"  width="180px;" src="<?php echo $this->getSkinUrl('images/creditcards.jpg')?>"/></h2>
 </div>
@@ -18,10 +16,7 @@
     </h4>
     <hr />
     <div class="add-new-card">
-    <?php if($creditCardsCount == 0): ?>
-    <h3>Sorry, You don't have any credit cards on file with Totsy.</h3>
-    <p><span class="label label-info">NOTE:</span> Adding a credit card helps speed up the checkout process.</p>
-    <?php endif; ?>
+    
         <script type="text/javascript">
             jQuery(document).ready(function(){
                 jQuery(".add-new-card-button").click( function() {
@@ -109,6 +104,8 @@
 </div>
 <div class="clear"></div>
 </div>
+<?php if($creditCardsCount == 0): ?>
+    <h3>You don't have a saved credit card with your account.</h3>
+<?php endif;?>
 </div>
-
 </div>
