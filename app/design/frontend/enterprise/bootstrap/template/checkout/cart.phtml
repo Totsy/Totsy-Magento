@@ -39,7 +39,7 @@
     $quote          = Mage::getSingleton('checkout/session')->getQuote();
 ?>
 <div class="page-header">
-    <h2><?php echo $this->__('Shopping Cart') ?> <small class="pull-right" id="cart-timer"></small> </h2>
+    <h2><?php echo $this->__('Shopping Cart') ?> <small class="pull-right" id="cart-timer" style="color:#000;"></small> </h2>
 </div>
 <div class="cart">
     <div class="page-title title-buttons">
@@ -59,7 +59,7 @@
                     jQuery("#cart-timer").countdown({
                         //date: "12 10, 2011 16:11", or an object counting to a date
                         date: dateObj,
-                        htmlTemplate: "%{m}<small class=\"cd-time\">:</small>%{s} <small class=\"cd-time\">minutes remaining</small>",
+                        htmlTemplate: "%{m}:%{s} minutes remaining in cart",
                         onChange: function( event, timer ){
                         },
                         onComplete: function( event ){
@@ -92,7 +92,7 @@
     <div class="clear"></div>
     <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
     <?php echo $this->getChildHtml('form_before') ?>
-    <div class="cart-form-container well">
+    <div class="cart-form-container">
     <form action="<?php echo $this->getUrl('checkout/cart/updatePost') ?>" method="post">
         <fieldset>
             <table id="shopping-cart-table" class="data-table table table-bordered table-condensed">
@@ -106,7 +106,7 @@
                         <th class="a-center" colspan="<?php echo $mergedCells; ?>"><span class="nobr"><?php echo $this->__('Unit Price') ?></span></th>
                         <th colspan="1" rowspan="<?php echo $mergedCells; ?>" class="a-center"><?php echo $this->__('Qty') ?></th>
                         <th class="a-center" colspan="1"><?php echo $this->__('Subtotal') ?></th>
-                        <th colspan="1" rowspan="<?php echo $mergedCells; ?>" class="a-center"><?php echo $this->__('Remove') ?></th>
+                        <th colspan="1" rowspan="<?php echo $mergedCells; ?>" class="a-center"></th>
                     </tr>
                     <?php if ($this->helper('tax')->displayCartBothPrices()): ?>
                     <tr>
