@@ -2,12 +2,12 @@
  * @Base styles for the Magento Bootstrap theme
  *
  * @Typography notes
- * - Red:           ??              #ed1c25
+ * - Red:           ??              #ed1c25 | rgba(237,45,33,1)
  * - Black:         text headings   #000
  * - Dark Grey      subheadings     #636466
  * - Medium Grey    copy font       #999999
  * - Light Grey     borders         #e5e5e5
- * - Green          buttons         #c1d82f or #adc222
+ * - Green          buttons         #c1d82f or #adc222 | rgba(173,194,34,1)
  */
  
 /*
@@ -143,28 +143,28 @@ html.test .container .row {outline:1px dotted green;}
 
 /* btn classes */
 .btn,
-.navbar .btn {
+.navbar .btn { /* MGN-951: ALL btns have consistent font-size and typography - DO NOT use '.btn-large' class override */
+    padding:2px 8px 2px;
     background-image:url("../images/btn-glass.png");
     background-repeat: repeat-x;
     background-position:0 50.5%;
+    font-size: 12px; font-weight: bold;
+    line-height: 17px;
+    text-transform: uppercase;
 }
 .btn-primary,
 a.btn-primary /* req to override '.dropdown a' ruleset */ {
-    background-color:rgba(237,45,33,1);
+    background-color:rgba(173,194,34,1);
     color:#fff;
-    font-size: 13px;
 }
 .btn.checkout {
     margin: 8px 0 0;
-    padding: 1px 8px 2px;
-    text-transform: uppercase;
 }
 .btn.checkout strong {
-    background: url("../images/btn-arrow-s.png") no-repeat scroll 100% 50% transparent;
+    background: url("../images/btn-arrow-s.png") no-repeat scroll 100% 46% transparent;
     padding-right: 9px;
-    font-weight: normal;
 }
-.btn-primary:hover {background-color:rgba(237,45,33,0.9); background-position: 0 50.5%;}
+.btn-primary:hover {background-color:rgba(173,194,34,0.9); background-position: 0 50.5%;}
 @media screen and (-webkit-min-device-pixel-ratio:0) { /* webkit fixin's */
     .btn.checkout {padding:2px 8px 1px; line-height:17px;}
     .btn.checkout strong {background-position:100% 49%;}
