@@ -67,7 +67,7 @@
 <section id="pageheader" class="jumbotron subhead">
     <div class="page-header subnav">
         <?php if (!$upComingFlag): ?>
-        <h2><a href="<?php echo $this->getUrl('event/?ref=todays_sales') ?>">Today's Sales</a><span> / <span><?php echo $_helper->categoryAttribute($_category, $_category->getName(), 'name') ?>
+        <h2><a href="<?php echo $this->getUrl('event/?ref=todays_sales') ?>" style="color:#000;">Today's Sales</a><span> / <span><?php echo $_helper->categoryAttribute($_category, $_category->getName(), 'name') ?>
         
         <div class="pull-right">
                         <img src="/skin/frontend/enterprise/bootstrap/images/iconmonstr-time-icon.png" width="35px" style="margin:0px 3px 0px 0px;" class="pull-left" /><div class="count-down-timer pull-left" id="time-<?php echo $timer ?>"></div>

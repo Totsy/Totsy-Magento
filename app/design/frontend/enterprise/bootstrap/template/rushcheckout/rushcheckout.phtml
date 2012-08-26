@@ -27,16 +27,16 @@ if ( !Mage::getSingleton('checkout/session')->hasData('countdown_timer') ) {
     	<?php if ($this->hasProductUrl()):?><a href="<?php echo $this->getProductUrl() ?>" title="<?php echo $this->htmlEscape($this->getProductName()) ?>" class="product-image"><?php endif;?><img src="<?php echo $this->getProductThumbnail()->resize(60,60); ?>" width="60" height="60" alt="<?php echo $this->htmlEscape($this->getProductName()) ?>" /><?php if ($this->hasProductUrl()):?></a><?php endif;?>
     </td>
     <td>
-        <h5 class="product-name">
+        <h4 class="product-name">
         <?php if ($this->hasProductUrl()):?>
-            <a href="<?php echo $this->getProductUrl() ?>"><?php echo $this->htmlEscape($this->getProductName()) ?></a>
+            <a href="<?php echo $this->getProductUrl() ?>" style="color:#000"><?php echo $this->htmlEscape($this->getProductName()) ?></a>
         <?php else: ?>
             <?php echo $this->htmlEscape($this->getProductName()) ?>
         <?php endif; ?>
-        </h5>
+        </h4>
         <?php if ($_options = $this->getOptionList()):?>
         <div class="item-options">
-            <ul>
+            <ul style="margin:0px; padding:0px;">
             <?php foreach ($_options as $_option) : ?>
             <?php $_formatedOptionValue = $this->getFormatedOptionValue($_option) ?> 
             <li>
@@ -289,7 +289,7 @@ if ( !Mage::getSingleton('checkout/session')->hasData('countdown_timer') ) {
 		<?php endif; ?>
 	</td>
 	<td class="remove-box">
-		<div class="remove-button"><a href="<?php echo $this->getDeleteUrl()?>" title="<?php echo $this->__('Remove item')?>" class="btn-remove btn-remove2"><?php echo $this->__('Remove item')?></a></div>
+		<div class="remove-button"><a href="<?php echo $this->getDeleteUrl()?>" title="<?php echo $this->__('Remove item')?>" class="btn-remove btn-remove2 pull-right"><img src="/skin/frontend/enterprise/bootstrap/images/iconmonstr-x-mark-icon.png" width="30px" style="margin:0px 5px 0 -15px;" /></a></div>
 	</td>
 </tr>
 
