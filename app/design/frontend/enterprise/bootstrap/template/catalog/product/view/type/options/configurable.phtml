@@ -29,6 +29,12 @@ $_product    = $this->getProduct();
 $_attributes = Mage::helper('core')->decorateArray($this->getAllowAttributes());
 $storeId = Mage::app()->getStore()->getId();
 $buttonColor = array();
+
+/*
+ * @GOTCHA
+ * Not sure why we check storeId to set colors (mamasource?) but colors should be set via CSS classes, not inline styles
+ * Updating inline JS (which should also be externalize…) with proper '.addClass' / '.removeClass' methods
+ */
 if($storeId ==1)
 {
 	$buttonColor['deactive'] = '#AAAAAA';
@@ -71,14 +77,12 @@ $('#message').text("");
 
         <script type="text/javascript">
 		jQuery(document).ready( function() {
-				jQuery("button.btn-cart").css("background-color","<?php echo $buttonColor['deactive']?>");
+				jQuery("button.btn-cart").addClass('btn-nogo');
 				var selector_span_<?php echo $counter;?> = "#activechange<?php echo $counter;?>";
 				var selector_select_<?php echo $counter;?> = "#attribute<?php echo $_attribute->getAttributeId()?>";
 				jQuery(selector_select_<?php echo $counter;?>).change(function(){
-						if ( jQuery(this).val() == ''){
-							jQuery("button.btn-cart").css("background-color","<?php echo $buttonColor['deactive']?>");
-						} else {
-							jQuery("button.btn-cart").css("background-color","<?php echo $buttonColor['active']?>");
+						if ( jQuery(this).val() !== ''){
+							jQuery("button.btn-cart").removeClass('btn-nogo');
 						}
 				});
 				

@@ -2,7 +2,12 @@
  * @Base styles for the Magento Bootstrap theme
  *
  * @Typography notes
- * - red: #ed2d21;
+ * - Red:           ??              #ed1c25 | rgba(237,45,33,1)
+ * - Black:         text headings   #000
+ * - Dark Grey      subheadings     #636466
+ * - Medium Grey    copy font       #999999
+ * - Light Grey     borders         #e5e5e5
+ * - Green          buttons         #c1d82f or #adc222 | rgba(173,194,34,1)
  */
  
 /*
@@ -114,13 +119,23 @@ html.test .container .row {outline:1px dotted green;}
 .dropdown-toggle,
 #cartHeader {
     padding-right:12px;
-    background: url('../images/glyph-arrow-d.png') 100% 65% no-repeat;
+    background: url('../images/glyph-arrow-d.png') 100% 50% no-repeat;
+}
+.dropdown > a,
+.navbar .nav > li > a,
+#cartHeader {
+    color:#636466;
+    font-size: 12px; font-weight: bold;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.85);
+    text-transform: uppercase;
 }
 #cartHeader.cartempty {
     position: relative; top:-6px; left: 25px; /* a bit hackish but gets it done */
     background-image: none;
-    font-weight: normal;
+    color:#999;
+    font-size:13px; font-weight: normal;
     line-height: 14px;
+    text-transform: none;
 }
 .dropdown-menu li > a:hover, .dropdown-menu .active > a, .dropdown-menu .active > a:hover {
     background-color: #acacac;
@@ -128,28 +143,37 @@ html.test .container .row {outline:1px dotted green;}
 
 /* btn classes */
 .btn,
-.navbar .btn {
+.navbar .btn { /* MGN-951: ALL btns have consistent font-size and typography - DO NOT use '.btn-large' class override */
+    padding:2px 8px 2px;
     background-image:url("../images/btn-glass.png");
     background-repeat: repeat-x;
     background-position:0 50.5%;
+    font-size: 12px; font-weight: bold;
+    line-height: 17px;
+    text-transform: uppercase;
 }
 .btn-primary,
 a.btn-primary /* req to override '.dropdown a' ruleset */ {
-    background-color:rgba(237,45,33,1);
+    background-color:rgba(173,194,34,1);
     color:#fff;
-    font-size: 13px;
+}
+.btn-nogo {
+    background-color: rgb(170, 170, 170);
 }
 .btn.checkout {
     margin: 8px 0 0;
-    padding: 1px 8px 2px;
-    text-transform: uppercase;
 }
 .btn.checkout strong {
-    background: url("../images/btn-arrow-s.png") no-repeat scroll 100% 50% transparent;
+    background: url("../images/btn-arrow-s.png") no-repeat scroll 100% 46% transparent;
     padding-right: 9px;
-    font-weight: normal;
 }
-.btn-primary:hover {background-color:rgba(237,45,33,0.9); background-position: 0 50.5%;}
+.btn-primary:hover {
+    background-color:rgba(173,194,34,0.9);
+    background-position: 0 50.5%;
+}
+.btn-nogo:hover {
+    background-color: rgb(170, 170, 170);
+}
 @media screen and (-webkit-min-device-pixel-ratio:0) { /* webkit fixin's */
     .btn.checkout {padding:2px 8px 1px; line-height:17px;}
     .btn.checkout strong {background-position:100% 49%;}
@@ -193,6 +217,9 @@ a.btn-primary /* req to override '.dropdown a' ruleset */ {
     -webkit-box-shadow: 0 1px 4px rgba(0, 105, 214, 0.15);
     box-shadow: 0 1px 4px rgba(0, 105, 214, 0.15);
 }
+.events-grid hgroup {
+    border-bottom:1px solid #ddd;
+}
 .events-grid .span3 hgroup {
     padding: 8px 4px;
     height: 30px; overflow: hidden;
@@ -205,10 +232,10 @@ a.btn-primary /* req to override '.dropdown a' ruleset */ {
     width:100%; overflow: hidden;
     color:#333;
     font-weight: normal;
-    white-space:nowrap; text-overflow: ellipsis;
+/*     white-space:nowrap; text-overflow: ellipsis; */ /* leave this out, see MGN-882 */
 } 
 .events-grid .span3 h5 {
-    font-size: 16px;
+    font-size: 14px;
 } 
 .events-grid .span2 h5 {
     font-size: 12px;
@@ -272,19 +299,19 @@ a.btn-primary /* req to override '.dropdown a' ruleset */ {
 .events-grid .more .maxDiscount em:before {
     content: "";
     display: inline-block;
-    position: absolute; top:-50px; left:4px; z-index:-1;
+    position: absolute; top:-53px; left:0; z-index:-1;
     width: 0; height: 0;
-    border-bottom: 80px solid #ed2d21;
-    border-left: 80px solid transparent;
-    border-right: 80px solid transparent;
+    border-bottom: 85px solid #ed1c25;
+    border-left: 85px solid transparent;
+    border-right: 85px solid transparent;
 }
 .events-grid .more .maxDiscount em {
     display: block;
-    position: absolute; left:-5px; top:-5px; z-index:100;
+    position: absolute; left:-3px; top:-3px; z-index:100;
     margin-top: 0;
     width: 100%; height: 100%;
     color:#fff;
-    font-size: 13px;
+    font-size: 13px; font-style: normal;
     text-align: center;
     text-shadow: 0 -1px 0px rgba(0,0,0,0.25);
     -moz-transform: rotate(-45deg);
@@ -403,10 +430,7 @@ a.btn-primary /* req to override '.dropdown a' ruleset */ {
 }
 .navbar .nav > li > a {
     padding:0 33px 0 0; /* christophery - all icons on right */
-    color: #636466;
-    font-size: 12px; font-weight: bold;
     line-height: 13px;
-    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.85); text-transform: uppercase;
 }
 .navbar .nav > li.dropdown > a {
     background: url('../images/icon-nav-drop.png') 100% 50% no-repeat;
@@ -465,10 +489,7 @@ header nav .cta strong em {color:#d84643; font-style:normal;}
  */
 #userUtils {margin-top:18px; margin-bottom: 0;}
 #userUtils > li {float: left; width:50%;} 
-#userUtils > li .dropdown-toggle {
-    color:#000;
-    text-transform: uppercase;
-}
+
 /* header cart */
 #usercart {
     position: relative;
@@ -530,7 +551,7 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
 #topCartContent.dropdown-menu .product-name a { /* overrides 'dropdown-menu a' ruleset */
     clear: none;
     padding: 0;
-    color:#ED1C25;
+    color:#ed1c25;
 }
 #topCartContent .minifoot {
     background:#f9f9f9;
@@ -962,12 +983,35 @@ select, textarea, input[type="text"], input[type="password"], input[type="dateti
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
     padding: 4px;
 }
-.price-box { margin-top:10px; font-size: 14px; }
-.old-price { color: #999999;
-float: right;
-text-decoration: line-through;
-font-weight: normal;
-font-size: 11px; }
+
+/* prices */
+.price-box { 
+    margin-top:10px; 
+    font-size: 14px; 
+}
+.old-price { 
+    color: #999999;
+    float: right;
+    text-decoration: line-through;
+    font-weight: normal;
+    font-size: 11px;
+    min-width:95px;
+}
+
+/* @GOTCHA: putting .price-box positioning hacks in here… b/c price view is used some many places the markup is rather untouchable */
+body.catalog-category-view .price-box {
+    position: relative;
+}
+body.catalog-category-view .price-box .old-price { 
+    position: relative; top: 28px;
+} 
+.price-box .price.special-price {
+    color: #000;
+    font-size: 20px; font-weight: bold;
+}
+body.catalog-category-view .price-box .special-price {
+    position: relative; top: -19px;
+}
 
 .options-container-big {margin:0px;}
 .count-down-timer {font-size:18px;}
