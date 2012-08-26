@@ -39,7 +39,7 @@
 		                     </select>
 		                 </div>
 	                     <script type="text/javascript">
-                            $('shipping:region_id').setAttribute('defadivtValue',  "<?php echo $this->getAddress()->getRegionId() ?>");
+                            $('shipping:region_id').setAttribute('defaultValue',  "<?php echo $this->getAddress()->getRegionId() ?>");
                          </script>
                          <input type="text" id="shipping:region" name="shipping[region]" value="<?php echo $this->htmlEscape($this->getAddress()->getRegion()) ?>"  title="<?php echo $this->__('State/Province') ?>" class="input-text hidden-state" style="display:none;" />
 	                  </div>
