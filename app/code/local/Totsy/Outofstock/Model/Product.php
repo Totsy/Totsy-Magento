@@ -17,6 +17,12 @@ class Totsy_Outofstock_Model_Product extends Mage_Core_Model_Abstract {
     }
 
     public function adminAfterSaveUpdateQty($item){
+        $item_id = 0;
+        if (is_object($item)){
+            $item_id = $item->getProductId();
+        } else if (is_numeric($item)){
+            $item_id = $item;
+        }
         $parentIds = Mage::getResourceSingleton('catalog/product_type_configurable')
                        		->getParentIdsByChild($item->getProductId());
         if (!empty($parentIds) && !empty($parentIds[0])){

@@ -10,18 +10,19 @@
             <product>
                 <class>Totsy_Outofstock_Model</class>
                 <rewrite>
-                    <outofstock>Totsy_Outofstock_Model_Product</outofstock>
+                    <outofstock>Totsy_Outofstock_Helper_Product</outofstock>
                 </rewrite>
             </product>
         </models>
-        <routers>
-            <Totsy_Outofstock>
-                <use>standard</use>
-                <args>
-                    <module>Totsy_Outofstock</module>
-                    <frontName>Outofstock</frontName>
-                </args>
-            </Totsy_Outofstock>
-        </routers>
+        <events>
+            <checkout_submit_all_after>
+                    <observers>
+                        <outofstock_observer>
+                            <class>Totsy_Outofstock_Model_Observer</class>
+                            <method>catalogProductUpdate</method>
+                        </outofstock_observer>
+                    </observers>
+            </checkout_submit_all_after>
+        </events>
     </global>
 </config>
