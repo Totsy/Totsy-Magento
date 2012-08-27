@@ -67,15 +67,14 @@
 <section id="pageheader" class="jumbotron subhead">
     <div class="page-header subnav">
         <?php if (!$upComingFlag): ?>
-        <h2><a href="<?php echo $this->getUrl('event/?ref=todays_sales') ?>" style="color:#000;">Today's Sales</a><span> / <span><?php echo $_helper->categoryAttribute($_category, $_category->getName(), 'name') ?>
-        
+        <h2><a href="<?php echo $this->getUrl('event/?ref=todays_sales') ?>" >Today's Sales</a><span style="color:#ddd;"> / </span><?php echo $_helper->categoryAttribute($_category, $_category->getName(), 'name') ?>
         <div class="pull-right">
-                        <img src="/skin/frontend/enterprise/bootstrap/images/iconmonstr-time-icon.png" width="35px" style="margin:0px 3px 0px 0px;" class="pull-left" /><div class="count-down-timer pull-left" id="time-<?php echo $timer ?>"></div>
-                        <script type="text/javascript">
-            if(<?php echo $upComingFlag?>){
-                var html = getTimerHtml('upcoming','<?php echo $timecount ?>');
-            } else {
-                var html = getTimerHtml('live','<?php echo $timecount ?>');
+            <img src="/skin/frontend/enterprise/bootstrap/images/iconmonstr-time-icon.png" width="35px" style="margin:0px 3px 0px 0px;" class="pull-left" /><div class="count-down-timer pull-left" id="time-<?php echo $timer ?>"></div>
+            <script type="text/javascript">
+                if(<?php echo $upComingFlag?>){
+                    var html = getTimerHtml('upcoming','<?php echo $timecount ?>');
+                } else {
+                    var html = getTimerHtml('live','<?php echo $timecount ?>');
             }
             jQuery("#time-<?php echo $timer ?>").countdown({
                 //date: "12 10, 2011 16:11", //Counting TO a date
@@ -88,13 +87,13 @@
                 direction: "down"
             });
         </script>
-                        </div>
-                        </h2>
+        </div>
+        </h2>
         <?php else :?>
         <h2><a href="/event#event-upcoming">Upcoming Sales</a><span> / <span><?php echo $_helper->categoryAttribute($_category, $_category->getName(), 'name') ?>
         <div class="pull-right">
-                        <img src="/skin/frontend/enterprise/bootstrap/images/iconmonstr-time-icon.png" width="35px" style="margin:0px 3px 0px 0px;" class="pull-left" /><div class="count-down-timer pull-left" id="time-<?php echo $timer ?>"></div>
-                        <script type="text/javascript">
+        <img src="/skin/frontend/enterprise/bootstrap/images/iconmonstr-time-icon.png" width="35px" style="margin:0px 3px 0px 0px;" class="pull-left" /><div class="count-down-timer pull-left" id="time-<?php echo $timer ?>"></div>
+        <script type="text/javascript">
             if(<?php echo $upComingFlag?>){
                 var html = getTimerHtml('upcoming','<?php echo $timecount ?>');
             } else {
@@ -111,8 +110,8 @@
                 direction: "down"
             });
         </script>
-                        </div>
-                        </h2>
+        </div>
+        </h2>
         <?php endif;?>
     </div>
 </section>
@@ -131,13 +130,14 @@
 font-size: 16px;
 line-height: 20px;"><?php echo $_helper->categoryAttribute($_category, $_category->getName(), 'name') ?>
    <span style="display: block; width: 153px; float: right; margin: -14px -18px 0px 0px;">
+    <!--
     <span class='st_pinterest_large pull-right' displayText='Pinterest'></span>
     <span class='st_facebook_large pull-right' displayText='Facebook'></span>
     <span class='st_twitter_large pull-right' displayText='Tweet'></span>
-    <span class='st_email_large pull-right' displayText='Email'></span></h3>
+    <span class='st_email_large pull-right' displayText='Email'></span>--></h3>
    </span>
     <hr style="margin:5px 0px; padding:0px; clear:both;"/>
-        <p style="color: #555555; font-size: 14px; line-height: 20px;"><?php echo $_helper->categoryAttribute($_category, $_description, 'description') ?></p>
+        <p style="font-size: 14px; line-height: 20px;"><?php echo $_helper->categoryAttribute($_category, $_description, 'description') ?></p>
     </div>
      <div class="clear"></div>
              <?php endif; ?>
