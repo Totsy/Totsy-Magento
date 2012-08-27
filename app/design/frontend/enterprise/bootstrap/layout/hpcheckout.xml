@@ -19,7 +19,7 @@
 				<!--block type="hpcheckout/shippingmethod" name="hpcheckout.shipping_method" as="shipping_method" template="hpcheckout/shipping_method.phtml"/-->
 				<block type="hpcheckout/payment" name="hpcheckout.payment" as="payment" template="hpcheckout/payment.phtml">
 					<block type="enterprise_customerbalance/checkout_onepage_payment_additional" template="hpcheckout/payment/customerbalance/additional.phtml" as="customerbalance" name="hpcheckout.customerbalance" />
-					<block type="enterprise_reward/checkout_payment_additional" template="hpcheckout/payment/reward/additional.phtml" as="reward" name="hpcheckout.reward.points" />
+					<block type="enterprise_reward/checkout_payment_additional" template="hpcheckout/payment/reward/additional.phtml" as="reward" name="hpcheckout.reward.points" /> 
 					<block type="hpcheckout/payment_methods" name="hpcheckout.payment.methods" as="methods" template="hpcheckout/payment/methods.phtml" /> 
 				</block>
 				<block type="hpcheckout/review" name="hpcheckout.review" as="review" template="hpcheckout/review.phtml">
