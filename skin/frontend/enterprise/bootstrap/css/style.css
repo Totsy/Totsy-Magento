@@ -365,10 +365,6 @@ a.btn-primary /* req to override '.dropdown a' ruleset */ {
 .events-grid .thumbnail .more .labels li:first-child:before {
     content:''
 }
-.events-grid .thumbnail .more .btn {
-    text-transform: capitalize;
-    font-size:14px;
-}
 
 /* upcoming */
 #events-upcoming .thumbnails li >div {position: relative;}
