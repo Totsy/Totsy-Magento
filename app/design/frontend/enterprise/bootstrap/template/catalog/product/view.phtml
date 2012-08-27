@@ -115,13 +115,22 @@ $endcount_lc = date("F j, Y, G:i:s", $endcount_utc); ?>
                 <input type="hidden" name="related_product" id="related-products-field" value="" />
             </div>
     <div id="product-main-info">
-        <p class="product-ids"><?php //echo $this->__('SKU# %s', $this->htmlEscape($_product->getSku())); ?></p>
+        <p class="product-ids">
+        <?php //echo $this->__('SKU# %s', $this->htmlEscape($_product->getSku())); ?></p>
         <?php //echo $this->getReviewsSummaryHtml($_product, false, true)?>
         <div class="">
         <?php echo $this->getChildHtml('alert_urls') ?>
         <?php if($today <= $event_end_date):  ?>
         <?php echo $this->getChildHtml('product_type_data') ?>
+        
         <?php endif; ?>
+        <div style="float:left; display:block; background:#fff; padding:10px 3px; margin:10px 0px 10px 0px;">
+            <div style="float:left; display:block; width:72px; text-align:center; font-size:18px; border-right:2px solid #ddd;">$46<br/><span style="font-size:12px;">Original</span></div>
+            <div style="float:left; display:block; width:72px; text-align:center; font-size:18px; border-right:2px solid #ddd;">60%<br/><span style="font-size:12px;">Discount</span></div>
+            <div style="float:left; display:block; width:74px; text-align:center; font-size:18px;">$18.25<br/><span style="font-size:12px;">Savings</span></div>
+        </div>
+        <div class="clear"></div>
+        <hr style="margin:3px 0px 8px 0px;"/>
         </div>
                     <?php echo $this->getChildHtml('tierprices') ?>
                     <?php echo $this->getChildHtml('extrahint') ?>
