@@ -658,7 +658,7 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
     width: auto !important;
 }
   	
-#mini-cart .product-name {
+#mini-cart .product-name a {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
