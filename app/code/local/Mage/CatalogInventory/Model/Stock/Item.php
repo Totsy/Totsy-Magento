@@ -903,7 +903,7 @@ class Mage_CatalogInventory_Model_Stock_Item extends Mage_Core_Model_Abstract
     public function save(){
         $return = parent::save();
         if ($return!==false){
-            Mage::getModel('product/outofstock')->adminAfterSaveUpdateQty($this);
+            Mage::helper('product/outofstock')->adminAfterSaveUpdateQty($this);
         }
         return $return;
     }

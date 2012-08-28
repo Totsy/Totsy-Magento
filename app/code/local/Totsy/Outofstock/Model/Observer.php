@@ -11,7 +11,7 @@ class Totsy_Outofstock_Model_Observer {
 		$items = $observer->getEvent()->getOrder()->getAllItems();   
 
         foreach ($items as $item){
-            Mage::getModel('product/outofstock')->adminAfterSaveUpdateQty($item);
+            Mage::helper('product/outofstock')->adminAfterSaveUpdateQty($item);
         }
 	}
 }
