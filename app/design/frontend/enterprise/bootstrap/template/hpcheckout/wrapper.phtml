@@ -9,9 +9,7 @@
     $quote = Mage::getSingleton('checkout/session')->getQuote();
 ?>
 <div class="page-header">
-    <h2><?php echo $this->__('Checkout') ?> 
-    <small class="pull-right" id="checkout-timer" style="color:#000;"></small><img src="/skin/frontend/enterprise/bootstrap/images/iconmonstr-time-icon.png" width="35px" style="margin:0px 3px 0px 0px;" class="pull-right" />
-    </h2>
+    <h2><?php echo $this->__('Checkout') ?></h2>
 </div>
 
 <div id="hpcheckout-wrapper">
@@ -19,37 +17,6 @@
 		<div class="shipping-date">
 			<p id="cart-shipping-date-header"><span>Estimated Ship Date:</span> <?php echo date('Y-m-d', Mage::helper('sales/order')->calculateEstimatedShipDate($quote)); ?></p>
 		</div>	
-		<div class="timer-control-box">
-			<script type="text/javascript">
-				// @TODO: this should be abstracted out to hpcheckout.js
-				jQuery(document).ready(function() {
-					var dateObj = new Date();
-					var countDownToTime = <?php echo $endcount_lc?>;
-					var serverTime = <?php echo $serverTime?>;
-					var localTime = new Date().getTime();
-					countDownToTime = (countDownToTime + (localTime - serverTime));
-					dateObj.setTime(countDownToTime);
-					//var countToTimeTemplate = (dateObj.getMonth()+1) + ' ' + dateObj.getDate() + ', ' + dateObj.getFullYear() + ' ' + dateObj.getHours() + ':' + dateObj.getMinutes() + ':' + dateObj.getSeconds();
-					jQuery("#checkout-timer").countdown({
-						//date: "12 10, 2011 16:11", or an object counting to a date
-						date: dateObj,
-						htmlTemplate: "%{m}:%{s} minutes remaining in cart",
-						onChange: function( event, timer ){
-						},
-						onComplete: function( event ){										
-							jQuery(this).html("<span class='over'>no longer reserved</span>");
-							setTimeout("cartRedirect();",2000);
-						},
-						leadingZero: true,
-						direction: "down"
-					});										
-				});	
-
-				function cartRedirect(){
-					window.location = "<?php echo Mage::getUrl('checkout/cart');?>"
-				}; 
-			</script>
-		</div>
 	</div>
 	<div id="error-message-wrapper"></div>
 	<?php if( count( $this->getQuote()->getAllItems() ) ): ?>

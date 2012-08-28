@@ -90,6 +90,7 @@
                         var serverTime = <?php echo $serverTime?>;
                         var localTime = new Date().getTime();
                         countDownToTime = (countDownToTime + (localTime - serverTime));
+                        //countDownToTime = (countDownToTime - 890000); // for testing
                         dateObj.setTime(countDownToTime);
                         //var countToTimeTemplate = (dateObj.getMonth()+1) + ' ' + dateObj.getDate() + ', ' + dateObj.getFullYear() + ' ' + dateObj.getHours() + ':' + dateObj.getMinutes() + ':' + dateObj.getSeconds();
                         jQuery("#cart-timer-header").countdown({
@@ -107,12 +108,21 @@
                                 _cartHeader.addClass('cartempty')
                                     .html("Your shopping bag is <span class='over'>no longer reserved</span>");
                                 jQuery("#topCartContent").hide();
-                                jQuery('#header-checkoutBtn').hide()
-                                    .delay(5000)
-                                    .queue(function(n) {
-                                        _cartHeader.html("<?php echo $this->__('You have no items in your shopping cart.'); ?>")
-                                        n();
-                                    });
+                                
+                                // if on cart or checkout, redirect; otherwise remove btn and update cart msg
+                                var UrlPath = window.location.pathname;
+                                if ( UrlPath == '/checkout/onepage/' || UrlPath == '/checkout/cart/' ) {
+                                    setTimeout(function() {
+                                        window.location.replace("<?php echo Mage::getUrl('checkout/cart');?>");
+                                    }, 5000);
+                                }
+                                else {
+                                    jQuery('#header-checkoutBtn').hide();
+                                    setTimeout(function() {
+                                        //_cartHeader.html("<?php echo $this->__('You have no items in your shopping cart.'); ?>");
+                                        window.location.reload();
+                                    }, 5000);
+                                }
                             },
                             leadingZero: true,
                             direction: "down"
