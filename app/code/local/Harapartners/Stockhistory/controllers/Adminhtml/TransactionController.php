@@ -167,9 +167,8 @@ class Harapartners_Stockhistory_Adminhtml_TransactionController extends Mage_Adm
         }else{
             $this->_getSession()->addError('Some rows in the batch processing failed.');
         }
-
-       $this->_redirect('*/adminhtml_transaction/report', array('po_id' => $poId));
-       return;
+		Mage::app()->getFrontController()->getResponse()->setRedirect('*/adminhtml_transaction/report', array('po_id' => $poId));
+      // return;
     }
 
     

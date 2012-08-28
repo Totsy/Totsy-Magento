@@ -37,12 +37,13 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report extends Mage_
                     'class'        => 'save'
                 ));
             }
-            
-            $this->_addButton('post_batch_amendments', array(
-                'label'     => Mage::helper('stockhistory')->__('Post Batch Amendments'),
-                'onclick'   => 'postBatchAmendment()',
-                'class'        => 'add'
-            ));
+            if ($this->_isAllowedAction('post_amendment')) {
+                $this->_addButton('post_batch_amendments', array(
+                    'label'     => Mage::helper('stockhistory')->__('Post Batch Amendments'),
+                    'onclick'   => 'postBatchAmendment()',
+                    'class'        => 'add'
+                ));
+            }
         }
         
         $this->_addButton('print_report', array(
@@ -54,7 +55,7 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report extends Mage_
     protected function _isAllowedAction($action)
     {
         //return null;
-        return Mage::getSingleton('admin/session')->isAllowed('harapartners/stockhistory/transaction/actions/' . $action);
+        return Mage::getSingleton('admin/session')->isAllowed('harapartners/stockhistory/purchaseorder/actions/' . $action);
     }
     
     //Addtional JS, added to the page in a clean way without touching the template

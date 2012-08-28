@@ -93,4 +93,5 @@ class Harapartners_Stockhistory_Block_Adminhtml_Purchaseorder_Edit_Form extends 
         $this->setForm($form);
         return parent::_prepareForm();
     }
+
 }

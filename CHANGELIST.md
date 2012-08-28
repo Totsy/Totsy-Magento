@@ -1,6 +1,20 @@
 Totsy-Magento Release Notes
 ===========================
 
+20120817
+--------
+
+* removed sub_affiliate_code column from the affiliate_record table due to performance issues and the lack of need of the column
+* fixed affilate pixel issue on the order confirmation page
+* MGN-747: Fixing the registration level recorded.
+* changed all the ajax pixel and header calls to only show stuff on success. this should stop the oops pages from showing on ajax failures
+* add domain parameter (to sailthru feed)
+* Fixed a typo that prevents new credit cards from being added.
+* Fixed PHP warning on undefined variable.
+* MGN-356 Updated ACL included extra levels for POaccess, categories access, and product access
+* MGN-356 Update ACL functionality
+* cleaned up many PHP warnings
+
 20120810
 --------
 

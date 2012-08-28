@@ -55,4 +55,18 @@ class Totsy_Adminhtml_Sales_Order_EditController extends Mage_Adminhtml_Sales_Or
             $this->_redirect('*/*/');
         }
     }
+
+    public function submitFulfillmentAction()
+    {
+        $orderId = $this->getRequest()->getParam('id');
+        $result = Mage::helper('fulfillmentfactory')->submitOrderForFulfillment($orderId);
+
+        if ($result) {
+            Mage::getSingleton('adminhtml/session')->addSuccess('Order successfully submitted to Dotcom for fulfillment');
+        } else {
+            Mage::getSingleton('adminhtml/session')->addError('Order could not be submitted for fulfillment at this time, because at least one order item has not yet been fulfilled.');
+        }
+
+        $this->_redirect('*/sales_order/view', array('order_id' => $orderId));
+    }
 }

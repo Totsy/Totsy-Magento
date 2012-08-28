@@ -157,4 +157,36 @@ class Harapartners_Fulfillmentfactory_Helper_Data extends Mage_Core_Helper_Abstr
     public function removeBadCharacters($value) {
         return preg_replace('/&/','and',$value);
     }
+
+    /**
+     * Calculate and return the actual available quantity for a product after
+     * accounting for order items that already have stock allocated.
+     *
+     * @param string $sku The SKU of the product to get an allocated count for.
+     *
+     * @return int
+     */
+    public function getAllocatedCount($sku)
+    {
+        $model     = Mage::getSingleton('fulfillmentfactory/itemqueue');
+        $select    = new Zend_Db_Select($model->getResource()->getReadConnection());
+        $tableName = $model->getResource()->getMainTable();
+
+        $statuses = array(
+            Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_READY,
+            Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_PARTIAL,
+            Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_SUBMITTED
+        );
+
+        $select->from($tableName)
+            ->reset(Zend_Db_Select::COLUMNS)
+            ->columns("SUM(fulfill_count+0)")
+            ->where('sku = ?', $sku)
+            ->where('status IN (?)', $statuses);
+
+        $stmt   = $select->query();
+        $result = $stmt->fetch(Zend_Db::FETCH_COLUMN);
+
+        return (int) $result;
+    }
 }

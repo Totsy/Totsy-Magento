@@ -14,7 +14,7 @@ $urlParams['referrer_url'] = base64_encode($referring_url);
 <div id="steelhouse_pixel"></div>
 <script type="text/javascript">
     Event.observe(window,'load',function() {
-        new Ajax.Updater($('steelhouse_pixel'), '<?php echo Mage::getUrl('pixels/steelhouse/index', $urlParams); ?>'
+        new Ajax.Updater({success:'steelhouse_pixel'}, '<?php echo Mage::getUrl('pixels/steelhouse/index', $urlParams); ?>'
             , {method:'get',evalScripts: true});
     });
 
