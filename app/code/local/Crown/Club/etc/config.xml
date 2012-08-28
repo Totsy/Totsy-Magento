@@ -1,0 +1,100 @@
+<?xml version="1.0"?>
+<config>
+	<modules>
+		<Crown_Club>
+			<version>0.1.1</version>
+		</Crown_Club>
+	</modules>
+	<global>
+		<models>
+			<crownclub>
+				<class>Crown_Club_Model</class>
+				<resourceModel>crownclub_resource</resourceModel>
+			</crownclub>
+			<crownclub_resource>
+				<class>Crown_Club_Model_Resource</class>
+			</crownclub_resource>
+			<sales>
+				<rewrite>
+					<quote>Crown_Club_Model_Sales_Quote</quote>
+					<service_quote>Crown_Club_Model_Sales_Service_Quote</service_quote>
+				</rewrite>
+			</sales>
+		</models>
+		<resources>
+			<crownclub_setup>
+				<setup>
+					<module>Crown_Club</module>
+					<class>Crown_Club_Model_Resource_Eav_Mysql4_Setup</class>
+				</setup>
+				<connection>
+					<use>core_setup</use>
+				</connection>
+			</crownclub_setup>
+			<crownclub_write>
+				<connection>
+					<use>core_write</use>
+				</connection>
+			</crownclub_write>
+			<crownclub_read>
+				<connection>
+					<use>core_read</use>
+				</connection>
+			</crownclub_read>
+		</resources>
+		<helpers>
+			<crownclub>
+				<class>Crown_Club_Helper</class>
+			</crownclub>
+		</helpers>
+		<template>
+			<email>
+				<club_expired_email_template translate="label" module="crownclub">
+					<label>Club Expired Notification</label>
+					<file>club_expired_notification.html</file>
+					<type>html</type>
+				</club_expired_email_template>
+				<club_cancelled_email_template translate="label" module="crownclub">
+					<label>Club Cancelled Notification</label>
+					<file>club_cancelled_notification.html</file>
+					<type>html</type>
+				</club_cancelled_email_template>
+			</email>
+		</template>
+	</global>
+	<default>
+		<Crown_Club>
+			<clubgeneral>
+				<grace_period>7</grace_period>
+				<nonclub_customer_group>-1</nonclub_customer_group>
+				<club_customer_group>-1</club_customer_group>
+			</clubgeneral>
+		</Crown_Club>
+		<trans_email>
+            <ident_club>
+                <email>club@example.com</email>
+                <name>Club Notification</name>
+            </ident_club>
+        </trans_email>
+	</default>
+	<crontab>
+		<jobs>
+			<club_clean_expired>
+				<schedule>
+					<cron_expr>0 0 * * *</cron_expr>
+					<run>
+						<model>crownclub/observer::removeExpiredClubMembers</model>
+					</run>
+				</schedule>
+			</club_clean_expired>
+			<club_warn_expired>
+				<schedule>
+					<cron_expr>0 0 * * *</cron_expr>
+					<run>
+						<model>crownclub/observer::warnExpiredClubMembers</model>
+					</run>
+				</schedule>
+			</club_warn_expired>
+		</jobs>
+	</crontab>
+</config>

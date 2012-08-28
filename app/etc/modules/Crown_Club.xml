@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <modules>
+        <Crown_Club>
+            <active>true</active>
+            <codePool>local</codePool>
+            <depends>
+            	<Harapartners_Service />
+            </depends>
+        </Crown_Club>
+    </modules>
+</config>
