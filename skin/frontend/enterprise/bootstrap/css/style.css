@@ -638,6 +638,10 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
     text-transform:lowercase;
 }
 
+#use-reward-point {
+    cursor: pointer;
+}
+
 .ship-to-billing {
 	margin-left:25px;
 }
