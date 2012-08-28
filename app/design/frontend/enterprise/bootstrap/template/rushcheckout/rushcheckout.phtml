@@ -12,6 +12,7 @@ $isVirtual = $_item->getProduct()->isVirtual();
 $canApplyMsrp = Mage::helper('catalog')->canApplyMsrp($_item->getProduct(), Mage_Catalog_Model_Product_Attribute_Source_Msrp_Type::TYPE_BEFORE_ORDER_CONFIRM);
 $configKey = 'limit_timer';
 $countdownTime = Mage::getStoreConfig('config/rushcheckout_timer/'.$configKey);
+$quote = Mage::getSingleton('checkout/session')->getQuote();
 
 if ( !Mage::getSingleton('checkout/session')->hasData('countdown_timer') ) {
 	$timer = 0;
@@ -34,6 +35,7 @@ if ( !Mage::getSingleton('checkout/session')->hasData('countdown_timer') ) {
             <?php echo $this->htmlEscape($this->getProductName()) ?>
         <?php endif; ?>
         </h4>
+        <?php if($isVirtual==false) {  ?>
         <?php if ($_options = $this->getOptionList()):?>
         <div class="item-options">
             <ul style="margin:0px; padding:0px;">
@@ -56,6 +58,10 @@ if ( !Mage::getSingleton('checkout/session')->hasData('countdown_timer') ) {
             </ul>
         </div>
         <?php endif;?>
+        <div>Estimated ship date:&nbsp;<?php echo date('Y-m-d', Mage::helper('sales/order')->calculateEstimatedShipDate($quote)); ?></div>
+        <?php } else { ?>
+        <div>You will receive an email with details on this voucher code.</div>
+        <?php } ?>
         <?php if ($messages = $this->getMessages()): ?>
         <?php foreach ($messages as $message): ?>
             <p class="item-msg <?php echo $message['type'] ?>">* <?php echo $message['text'] ?></p>
