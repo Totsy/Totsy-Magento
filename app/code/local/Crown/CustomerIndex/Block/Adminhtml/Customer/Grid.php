@@ -62,13 +62,6 @@ class Crown_CustomerIndex_Block_Adminhtml_Customer_Grid extends Mage_Adminhtml_B
             'index'     => 'billing_postcode',
         ));
 
-        $this->addColumn('billing_country_id', array(
-            'header'    => Mage::helper('customer')->__('Country'),
-            'width'     => '100',
-            'type'      => 'country',
-            'index'     => 'billing_country_id',
-        ));
-
         $this->addColumn('billing_region', array(
             'header'    => Mage::helper('customer')->__('State/Province'),
             'width'     => '100',
@@ -82,17 +75,6 @@ class Crown_CustomerIndex_Block_Adminhtml_Customer_Grid extends Mage_Adminhtml_B
             'index'     => 'created_at',
             'gmtoffset' => true
         ));
-
-        if (!Mage::app()->isSingleStoreMode()) {
-            $this->addColumn('website_id', array(
-                'header'    => Mage::helper('customer')->__('Website'),
-                'align'     => 'center',
-                'width'     => '80px',
-                'type'      => 'options',
-                'options'   => Mage::getSingleton('adminhtml/system_store')->getWebsiteOptionHash(true),
-                'index'     => 'website_id',
-            ));
-        }
 
         $this->addColumn('action',
             array(
