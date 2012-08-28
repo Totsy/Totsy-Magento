@@ -5,7 +5,7 @@
 	<input type="hidden" name="payment[method]" value="<?php echo $methods[0]->getCode() ?>">
 	<div><?php echo $this->getPaymentMethodFormHtml( $methods[0] ) ?></div>
 	<script type="text/javascript">
-		jQuery( "ul#payment_form_<?php echo $methods[0]->getCode() ?>" ).show();
+		jQuery( "payment_form_<?php echo $methods[0]->getCode() ?>" ).show();
 	</script>
 <?php else: ?>
 	<!--span class="payment-title">Payment</span-->

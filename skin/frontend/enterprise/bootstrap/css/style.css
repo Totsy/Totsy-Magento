@@ -16,7 +16,7 @@ body { height: 100%;}
 */
 html {
     margin:0;
-    background-color:#fff;
+    background:#fff;
 /*
     background-image: -moz-linear-gradient(top, #eef6fc, #ffffff);
     background-image: -ms-linear-gradient(top, #eef6fc, #ffffff);
@@ -1041,4 +1041,18 @@ body.catalog-category-view .price-box .special-price {
     left:50%;
     top:50%;
     margin:-280px 0 0 -165px;
+}
+/* My Account / Public Pages side bar navigation links */
+.nav-list > li > a {
+    padding: 3px 15px;
+    color:#636466;
+}
+.nav-list > li > a:hover {
+    padding: 3px 15px;
+    color:#fff;
+    background: #acacac;
+}
+
+.product_desc li {
+    list-style: disc outside none;
 }
