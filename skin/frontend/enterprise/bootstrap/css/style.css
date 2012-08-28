@@ -789,6 +789,10 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
 .cc_save_card {
     width: 418px;
 }
+
+.discount-buttons {
+    padding-top: 10px;
+}
 /**
  * @Footer
  */
