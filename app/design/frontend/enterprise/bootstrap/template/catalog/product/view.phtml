@@ -31,6 +31,7 @@
  * @see Mage_Review_Block_Product_View
  */
 ?>
+
 <?php
 $_helper = $this->helper('catalog/output');
 $_product = $this->getProduct();
@@ -46,30 +47,20 @@ if (!Mage::registry('current_category')){
 ?>
 <style>
 .old-price {display:none;}
-.price-box {text-align: center; display: block; margin-top: 28px;}
-.price, .special-price {font-size: 35px!important; }
+.price-box {text-align: center; display: block; margin:15px 0px;}
+.price-label {font-size:20px; font-weight: bold; }
 </style>
-<?php // print_r($_product);
-//exit();
-//echo $_product->price();
-//echo $_product->special_price();
-//echo $_product->original_wholesale();
-//echo $_product->sale_wholesale();
-?>
 
 <?php
+$special_price = $_product->getPrice();
+$final_price = $_product->getSpecialPrice();
 
-$number = $_product->getPrice();
-
-echo number_format((float)$number, 2, '.', '');
+$originalPrice = money_format('%n', $special_price);
+$discountPrice = money_format('%n', $final_price);
+$percent = number_format(($originalPrice - $discountPrice) * (100 / $originalPrice));
+$savings = money_format('%n', $discountPrice) - money_format('%n', $originalPrice);
 
 ?>
-
-<ul>
-<li>Totsy Price: <?php echo $_product->getSpecialPrice(); ?></li>
-<li>Original Price: <?php echo $_product->getPrice(); ?></li>
-<li>Discount: <?php echo $_product->getPrice(); ?></li>
-</ul>
 <script type="text/javascript">
     var optionsPrice = new Product.OptionsPrice(<?php echo $this->getJsonConfig() ?>
     );
@@ -93,7 +84,7 @@ $endcount_lc = date("F j, Y, G:i:s", $endcount_utc); ?>
 </div>
 
 <div class="span5">
-<div class="well" style="margin-top:10px; border:none; padding:0px;box-shadow: none;">
+<div class="well" style="margin-top:10px; border:none; padding:0px;box-shadow: none; background:none;">
        
     <h4>Description</h4>
     <hr style="margin:7px auto; padding:0px;"/>
@@ -151,14 +142,16 @@ $endcount_lc = date("F j, Y, G:i:s", $endcount_utc); ?>
         <?php echo $this->getChildHtml('product_type_data') ?>
         
         <?php endif; ?>
-        <div style="float:left; display:block; background:#fff; padding:10px 3px; margin:10px 0px 10px 0px;">
-            <div style="float:left; display:block; width:72px; text-align:center; font-size:18px; border-right:2px solid #ddd;">$<?php echo number_format((float)$number, 2, '.', '');
+        <hr style="margin:15px 0px 3px 0px;"/>
+        <div style="float:left; display:block; padding:10px 3px; margin:10px 0px 10px 0px;">
+            <div style="float:left; display:block; width:72px; text-align:center; font-size:16px; border-right:2px solid #ddd;">$<?php echo number_format((float)$special_price, 2, '.', '');
  ?><br/><span style="font-size:12px;">Original</span></div>
-            <div style="float:left; display:block; width:72px; text-align:center; font-size:18px; border-right:2px solid #ddd;">60%<br/><span style="font-size:12px;">Discount</span></div>
-            <div style="float:left; display:block; width:74px; text-align:center; font-size:18px;">$18.25<br/><span style="font-size:12px;">Savings</span></div>
+            <div style="float:left; display:block; width:72px; text-align:center; font-size:16px; border-right:2px solid #ddd;"><?php echo number_format((float)$percent, 0, '.', '');
+ ?>%<br/><span style="font-size:12px;">Discount</span></div>
+            <div style="float:left; display:block; width:74px; text-align:center; font-size:16px;">$<?php echo $savings; ?><br/><span style="font-size:12px;">Savings</span></div>
         </div>
         <div class="clear"></div>
-        <hr style="margin:3px 0px 8px 0px;"/>
+        <hr style="margin:3px 0px 15px 0px;"/>
         </div>
                     <?php echo $this->getChildHtml('tierprices') ?>
                     <?php echo $this->getChildHtml('extrahint') ?>
