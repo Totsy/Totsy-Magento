@@ -7,6 +7,13 @@
  */
 
 class Totsy_Outofstock_Model_Observer {
+
+	/**
+    * Updates configurable product qty after purchase
+    *   
+    * @param object $observer
+    * @return void
+    */
 	public function catalogProductUpdate ($observer){	
 		$items = $observer->getEvent()->getOrder()->getAllItems();   
 
