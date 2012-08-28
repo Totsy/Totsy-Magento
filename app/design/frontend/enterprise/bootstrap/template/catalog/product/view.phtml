@@ -44,7 +44,32 @@ if (!Mage::registry('current_category')){
 		$_category  = Mage::registry('current_category');
 	}
 ?>
+<style>
+.old-price {display:none;}
+.price-box {text-align: center; display: block; margin-top: 28px;}
+.price, .special-price {font-size: 35px!important; }
+</style>
+<?php // print_r($_product);
+//exit();
+//echo $_product->price();
+//echo $_product->special_price();
+//echo $_product->original_wholesale();
+//echo $_product->sale_wholesale();
+?>
 
+<?php
+
+$number = $_product->getPrice();
+
+echo number_format((float)$number, 2, '.', '');
+
+?>
+
+<ul>
+<li>Totsy Price: <?php echo $_product->getSpecialPrice(); ?></li>
+<li>Original Price: <?php echo $_product->getPrice(); ?></li>
+<li>Discount: <?php echo $_product->getPrice(); ?></li>
+</ul>
 <script type="text/javascript">
     var optionsPrice = new Product.OptionsPrice(<?php echo $this->getJsonConfig() ?>
     );
@@ -127,7 +152,8 @@ $endcount_lc = date("F j, Y, G:i:s", $endcount_utc); ?>
         
         <?php endif; ?>
         <div style="float:left; display:block; background:#fff; padding:10px 3px; margin:10px 0px 10px 0px;">
-            <div style="float:left; display:block; width:72px; text-align:center; font-size:18px; border-right:2px solid #ddd;">$46<br/><span style="font-size:12px;">Original</span></div>
+            <div style="float:left; display:block; width:72px; text-align:center; font-size:18px; border-right:2px solid #ddd;">$<?php echo number_format((float)$number, 2, '.', '');
+ ?><br/><span style="font-size:12px;">Original</span></div>
             <div style="float:left; display:block; width:72px; text-align:center; font-size:18px; border-right:2px solid #ddd;">60%<br/><span style="font-size:12px;">Discount</span></div>
             <div style="float:left; display:block; width:74px; text-align:center; font-size:18px;">$18.25<br/><span style="font-size:12px;">Savings</span></div>
         </div>
@@ -137,7 +163,7 @@ $endcount_lc = date("F j, Y, G:i:s", $endcount_utc); ?>
                     <?php echo $this->getChildHtml('tierprices') ?>
                     <?php echo $this->getChildHtml('extrahint') ?>
                         <?php if (!$this->hasOptions()):?>
-                             <div class="add-to-box" pull-right>
+                             <div class="add-to-box">
                                  <?php if($_product->isSaleable()): ?>
                                      <?php echo $this->getChildHtml('addtocart') ?>
                                  <?php endif; ?>
