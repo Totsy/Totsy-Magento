@@ -42,11 +42,6 @@
     <h2><?php echo $this->__('Shopping Cart') ?></h2>
 </div>
 <div class="cart">
-    <div class="page-title title-buttons">
-            <div class="shipping-date">
-            <div id="cart-shipping-date-header" class="span4"><span>Estimated Ship Date:</span> <?php echo date('Y-m-d', Mage::helper('sales/order')->calculateEstimatedShipDate($quote)); ?></div>
-            </div>
-</div>
 <div class="top-check-out">
         <?php if(!$this->hasError()): ?>
         	<?php foreach ($this->getMethods('top_methods') as $method): ?>

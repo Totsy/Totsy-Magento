@@ -667,8 +667,11 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
     width: auto !important;
 }
   	
-.product-name {
-    width: 400px;
+#mini-cart .product-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 250px;
 }
  	
 .btn-continue {
@@ -800,7 +803,7 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
 }
 
 .discount-buttons {
-    padding-top: 10px;
+    margin-top: 10px;
 }
 /**
  * @Footer
