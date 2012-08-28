@@ -17,7 +17,6 @@ body { height: 100%;}
 html {
     margin:0;
     background:#fff;
-/*
     background-image: -moz-linear-gradient(top, #eef6fc, #ffffff);
     background-image: -ms-linear-gradient(top, #eef6fc, #ffffff);
     background-image: -o-linear-gradient(top, #eef6fc, #ffffff);
@@ -25,7 +24,6 @@ html {
     background-image: -webkit-linear-gradient(top, #eef6fc, #ffffff);
     background-image: linear-gradient(top, #eef6fc, #ffffff);
     background-attachment: fixed;
-*/
 }
 a {color:#ed1c25;text-decoration:none; outline: none;}
 a:hover{color:#ed1c25;text-decoration:underline;}
@@ -154,7 +152,7 @@ html.test .container .row {outline:1px dotted green;}
 }
 .btn-primary,
 a.btn-primary /* req to override '.dropdown a' ruleset */ {
-    background-color:rgba(173,194,34,1);
+    background-color:rgba(237,45,33,1);
     color:#fff;
 }
 .btn-nogo {
@@ -168,7 +166,7 @@ a.btn-primary /* req to override '.dropdown a' ruleset */ {
     padding-right: 9px;
 }
 .btn-primary:hover {
-    background-color:rgba(173,194,34,0.9);
+    background-color:rgba(237,45,33,0.9);
     background-position: 0 50.5%;
 }
 .btn-nogo:hover {
