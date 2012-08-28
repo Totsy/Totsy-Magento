@@ -662,7 +662,7 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    width: 350px; /* whatever width */
+    width: 250px;
 }
  	
 .btn-continue {
