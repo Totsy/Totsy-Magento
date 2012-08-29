@@ -37,10 +37,6 @@
             <active>true</active>
             <codePool>local</codePool>
         </Totsy_Pixels>
-        <Totsy_Pinterestform>
-            <active>true</active>
-            <codePool>local</codePool>
-        </Totsy_Pinterestform>
         <Totsy_Sales>
             <active>true</active>
             <codePool>local</codePool>
