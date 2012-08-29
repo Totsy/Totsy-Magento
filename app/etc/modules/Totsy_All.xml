@@ -53,5 +53,9 @@
             <active>true</active>
             <codePool>local</codePool>
         </Totsy_CatalogInventory>
+        <Totsy_Sailthru>
+            <active>true</active>
+            <codePool>local</codePool>
+        </Totsy_Sailthru>
     </modules>
 </config>

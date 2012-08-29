@@ -1,45 +1,6 @@
 <?php 
+
 $full_path = dirname(dirname(__DIR__));
-$skip_cache_check = false;
-// set cache time for 3 days
-$TTL =3*24*60*60;
-
-// HTTP HOST settings
-$originHttpHost = !empty($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : 'totsy.com';
-$isHttpHostChanged = false;
-
-if (php_sapi_name()=='cli'){
-	$skip_cache_check = true;	
-	$index=array_search('--get', $argv);
-	if ( $index!==false && $argc>$index+1) {
-		 $_SERVER['REQUEST_URI'] = $argv[$index+1];
-	}
-	
-	$index=array_search('--domain', $argv);
-	if ( $index!==false && $argc>$index+1) {
-		$_SERVER['HTTP_HOST'] = $argv[$index+1];
-		$isHttpHostChanged = true;
-	}
-}
-
-if (!empty($_GET['domain']) && strtolower($_GET['domain']) == 'mamasource.totsy.com'){
-	$_SERVER['HTTP_HOST'] = 'mamasource.totsy.com';
-	$isHttpHostChanged = true;
-}
-
-$chash = $full_path. '/var/tmp/' .md5($_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']).'.json';
-if ($skip_cache_check===true){
-	file_put_contents($chash.'.new','addin some cache');
-}
-if (file_exists($chash) && $skip_cache_check===false){
-	$time = time() - filectime($chash);
-	if ($time<$TTL || file_exists($chash.'.new')){
-		header('Cache-Control: no-cache, must-revalidate');
-		header('Content-type: application/json');
-		echo file_get_contents($chash);
-		exit(0);
-	}
-}
 
 require_once( $full_path.'/app/Mage.php' );
 umask(0);
@@ -47,9 +8,12 @@ $mageRunCode = isset($_SERVER['MAGE_RUN_CODE']) ? $_SERVER['MAGE_RUN_CODE'] : ''
 $mageRunType = isset($_SERVER['MAGE_RUN_TYPE']) ? $_SERVER['MAGE_RUN_TYPE'] : 'store';
 Mage::app($mageRunCode, $mageRunType);	 
 
-
-header('Cache-Control: no-cache, must-revalidate');
-header('Content-type: application/json');
+$cache = Mage::helper('sailthru/helper_cache')->runner($full_path);
+if ($cache !== false) {
+	Mage::helper('sailtru/helper_feed')->getHeaders();
+	echo $cache;
+	exit(0);
+}
 
 $out = array('events'=>array(), 'pending'=>array(), 'closing'=>array());
 
@@ -165,6 +129,8 @@ fclose($fh);
 if (file_exists($chash.'.new')){
 	unlink($chash.'.new');
 }
+
+Mage::helper('sailtru/helper_feed')->getHeaders();
 echo $data;
 /*### END ###*/
 
