@@ -136,10 +136,10 @@ html.test .container .row {outline:1px dotted green;}
     text-transform: none;
 }
 .dropdown-menu li > a:hover, .dropdown-menu .active > a, .dropdown-menu .active > a:hover {
-    background-color: #acacac;
+    background-color: #ed1c25;
 }
 
-/* btn classes */
+/* btn classes - overrides bootstrap */
 .btn,
 .navbar .btn { /* MGN-951: ALL btns have consistent font-size and typography - DO NOT use '.btn-large' class override */
     padding:2px 8px 2px;
@@ -189,6 +189,11 @@ body.customer-account-login .btn.btn-large {
     background-color: #DFF0D8;
     border-color: #D6E9C6;
     color: #468847;
+}
+
+/* labels / badges - overrides bootstrap */
+.label-success, .badge-success {
+    background-color: #adc222;
 }
 
 /**
@@ -499,6 +504,12 @@ header nav .cta strong em {color:#d84643; font-style:normal;}
     background-image: none; /* override .dropdown-toggle, reapplied that image to child element #cartHeader */
     border:1px solid transparent; border-bottom: none;
 }
+.top-cart.onCheckout #usercart-block-title .label { /* @KLUDGE: when on onepage checkout */
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.15;
+    text-transform: capitalize;
+}
 .open > #usercart-block-title {
     position: relative; z-index: 100;
     margin:-8px 0 0 3px; padding:7px 8px 13px;
@@ -519,6 +530,9 @@ header nav .cta strong em {color:#d84643; font-style:normal;}
 #usercart .top-cart.expired .count-down-timer { /* @KLUDGE */
     left:-180px;
 }
+#usercart .top-cart.onCheckout .count-down-timer { /* @KLUDGE: when on onepage checkout */
+    left:-153px;
+}
 body[class*='checkout'] #usercart .count-down-timer,
 body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */ 
 /*     display: none !important; */
@@ -535,7 +549,7 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
 /* Minicart */
 #topCartContent {
     position: absolute; top: 100%; left: auto; right:0; z-index: 10;
-    margin-top:-1px; padding:12px 12px 30px;
+    margin-top:-1px; padding:12px 12px 48px;
     width:334px;
     background:#fff;
     border:1px solid #ccc; /* old browser fallback */
@@ -553,24 +567,34 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
     color:#ed1c25;
 }
 #topCartContent .minifoot {
-    background:#f9f9f9;
     position: absolute; bottom: 0; left: 0;
+    padding:8px 0 5px;
     width: 100%;
-    padding:6px 0;
+    background:#f9f9f9;
+    border-top:1px solid #e5e5e5;
 }
 #topCartContent .minifoot .subtotal {
     float: left;
-    margin:2px 0 0 12px;
-    font-size:16px;
-    text-shadow: 0 1px 1px rgba(250,250,250,0.2);
+    margin:0 0 0 12px;
 }
-#topCartContent .minifoot .subtotal .price {
+#topCartContent .minifoot .subtotal-savings {
+    display: block;
+    margin-bottom:5px;
+/*     color: #adc222; */
+    font-size: 13px; font-weight: 500;
+    line-height: 1.15;
+}
+#topCartContent .minifoot .subtotal-cost {
+    font-size:16px; font-weight: 500;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+#topCartContent .minifoot .subtotal-cost .price {
     color: #ED1C25;
-    font-weight: normal;
+    font-weight: bold;
 }
 #topCartContent .minifoot .action {
     float: right;
-    margin-right:12px;
+    margin:8px 12px 0 0;
 }
 #topCartContent .minifoot .action a {
     margin-top:0;
@@ -596,6 +620,9 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
     position:relative; left:-8px /* need to move this a bit to align with top cart (which moved to keep dropdown within 950 grid), tho now this is bit off grid… */
 }
 
+/**
+ * @Cart & Checkout
+ */
 .address{
     margin-left: 0px !important; 
 }
@@ -658,8 +685,11 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
     width: auto !important;
 }
   	
-.product-name {
-    width: 400px;
+#mini-cart .product-name a {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 250px;
 }
  	
 .btn-continue {
@@ -668,6 +698,13 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
   	
 .cart-coupon {
     margin:0px !important;
+}
+.cart .savings.label {
+    float: right;
+    width:320px;
+    font-size: 14px; font-weight: 500;
+    line-height: 1.15;
+    text-align: right;
 }
 
 .cc { 
@@ -791,7 +828,7 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
 }
 
 .discount-buttons {
-    padding-top: 10px;
+    margin-top: 10px;
 }
 /**
  * @Footer
