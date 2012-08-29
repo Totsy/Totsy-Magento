@@ -139,7 +139,7 @@ html.test .container .row {outline:1px dotted green;}
     background-color: #acacac;
 }
 
-/* btn classes */
+/* btn classes - overrides bootstrap */
 .btn,
 .navbar .btn { /* MGN-951: ALL btns have consistent font-size and typography - DO NOT use '.btn-large' class override */
     padding:2px 8px 2px;
@@ -189,6 +189,11 @@ body.customer-account-login .btn.btn-large {
     background-color: #DFF0D8;
     border-color: #D6E9C6;
     color: #468847;
+}
+
+/* labels / badges - overrides bootstrap */
+.label-success, .badge-success {
+    background-color: #adc222;
 }
 
 /**
@@ -499,6 +504,12 @@ header nav .cta strong em {color:#d84643; font-style:normal;}
     background-image: none; /* override .dropdown-toggle, reapplied that image to child element #cartHeader */
     border:1px solid transparent; border-bottom: none;
 }
+.top-cart.onCheckout #usercart-block-title .label { /* @KLUDGE: when on onepage checkout */
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.15;
+    text-transform: capitalize;
+}
 .open > #usercart-block-title {
     position: relative; z-index: 100;
     margin:-8px 0 0 3px; padding:7px 8px 13px;
@@ -519,6 +530,9 @@ header nav .cta strong em {color:#d84643; font-style:normal;}
 #usercart .top-cart.expired .count-down-timer { /* @KLUDGE */
     left:-180px;
 }
+#usercart .top-cart.onCheckout .count-down-timer { /* @KLUDGE: when on onepage checkout */
+    left:-153px;
+}
 body[class*='checkout'] #usercart .count-down-timer,
 body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */ 
 /*     display: none !important; */
@@ -535,7 +549,7 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
 /* Minicart */
 #topCartContent {
     position: absolute; top: 100%; left: auto; right:0; z-index: 10;
-    margin-top:-1px; padding:12px 12px 45px;
+    margin-top:-1px; padding:12px 12px 48px;
     width:334px;
     background:#fff;
     border:1px solid #ccc; /* old browser fallback */
@@ -554,7 +568,7 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
 }
 #topCartContent .minifoot {
     position: absolute; bottom: 0; left: 0;
-    padding:6px 0;
+    padding:8px 0 5px;
     width: 100%;
     background:#f9f9f9;
     border-top:1px solid #e5e5e5;
@@ -565,9 +579,10 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
 }
 #topCartContent .minifoot .subtotal-savings {
     display: block;
-    margin-bottom:2px;
-    color: #adc222;
-    font-size: 13px;
+    margin-bottom:5px;
+/*     color: #adc222; */
+    font-size: 13px; font-weight: 500;
+    line-height: 1.15;
 }
 #topCartContent .minifoot .subtotal-cost {
     font-size:16px; font-weight: 500;
@@ -605,6 +620,9 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
     position:relative; left:-8px /* need to move this a bit to align with top cart (which moved to keep dropdown within 950 grid), tho now this is bit off grid… */
 }
 
+/**
+ * @Cart & Checkout
+ */
 .address{
     margin-left: 0px !important; 
 }
@@ -680,6 +698,13 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
   	
 .cart-coupon {
     margin:0px !important;
+}
+.cart .savings.label {
+    float: right;
+    width:320px;
+    font-size: 14px; font-weight: 500;
+    line-height: 1.15;
+    text-align: right;
 }
 
 .cc { 
