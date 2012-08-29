@@ -24,7 +24,7 @@
  * @license     http://www.magentocommerce.com/license/enterprise-edition
  */
 
-require_once('CreateController.php');
+require_once('Mage/Adminhtml/controllers/Sales/Order/CreateController.php');
 /**
  * Adminhtml sales order edit controller
  *
