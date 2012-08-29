@@ -104,7 +104,7 @@
                             jQuery('#usercart-block-title').removeClass('dropdown-toggle')
                                 .removeAttr('data-toggle');
                             jQuery('#cartHeader').css('background-image', 'none')
-                                .html('<span class="label label-success"><?php echo $_mySaving; ?></span>');
+                                .html('<span class="savings"><?php echo $_mySaving; ?></span>');
                         }
 
                         jQuery("#cart-timer-header").countdown({
@@ -183,7 +183,7 @@
                 <?php if ($this->canApplyMsrp()): ?>
                     <span class="map-cart-sidebar-total"><?php echo $this->__('ORDER TOTAL WILL BE DISPLAYED BEFORE YOU SUBMIT THE ORDER'); ?></span>
                 <?php else: ?>
-                    <span class="subtotal-savings label label-success"><?php echo $_mySaving; ?></span>
+                    <span class="subtotal-savings"><?php echo $_mySaving; ?></span>
                     <span class="subtotal-cost"><?php echo $this->__('Subtotal: ') ?><?php echo Mage::helper('checkout')->formatPrice($this->getSubtotal()) ?>
                         <?php if ($_subtotalInclTax = $this->getSubtotalInclTax()): ?> / <?php echo Mage::helper('checkout')->formatPrice($_subtotalInclTax) ?> <?php echo Mage::helper('tax')->getIncExcText(true) ?><?php endif; ?>
                     </span>

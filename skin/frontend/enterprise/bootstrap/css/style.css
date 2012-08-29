@@ -504,7 +504,9 @@ header nav .cta strong em {color:#d84643; font-style:normal;}
     background-image: none; /* override .dropdown-toggle, reapplied that image to child element #cartHeader */
     border:1px solid transparent; border-bottom: none;
 }
-.top-cart.onCheckout #usercart-block-title .label { /* @KLUDGE: when on onepage checkout */
+.top-cart.onCheckout #usercart-block-title .savings { /* @KLUDGE: when on onepage checkout */
+    margin-bottom: 5px;
+    color: rgba(237, 45, 33, 0.78);
     font-size: 13px;
     font-weight: 500;
     line-height: 1.15;
@@ -531,7 +533,7 @@ header nav .cta strong em {color:#d84643; font-style:normal;}
     left:-180px;
 }
 #usercart .top-cart.onCheckout .count-down-timer { /* @KLUDGE: when on onepage checkout */
-    left:-153px;
+    left:-160px;
 }
 body[class*='checkout'] #usercart .count-down-timer,
 body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */ 
@@ -580,7 +582,7 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
 #topCartContent .minifoot .subtotal-savings {
     display: block;
     margin-bottom:5px;
-/*     color: #adc222; */
+    color:rgba(237,45,33,0.78);
     font-size: 13px; font-weight: 500;
     line-height: 1.15;
 }
@@ -699,9 +701,10 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
 .cart-coupon {
     margin:0px !important;
 }
-.cart .savings.label {
+.cart .savings {
     float: right;
     width:320px;
+    color: rgba(237,45,33,0.78);
     font-size: 14px; font-weight: 500;
     line-height: 1.15;
     text-align: right;
@@ -830,6 +833,7 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
 .discount-buttons {
     margin-top: 10px;
 }
+
 /**
  * @Footer
  */
