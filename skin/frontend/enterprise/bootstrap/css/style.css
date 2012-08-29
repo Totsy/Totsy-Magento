@@ -307,11 +307,11 @@ body.customer-account-login .btn.btn-large {
 .events-grid .more .maxDiscount em:before {
     content: "";
     display: inline-block;
-    position: absolute; top:-53px; left:0; z-index:-1;
+    position: absolute; top:-70px; left:-10px; z-index:-1;
     width: 0; height: 0;
-    border-bottom: 85px solid #ed1c25;
-    border-left: 85px solid transparent;
-    border-right: 85px solid transparent;
+    border-bottom: 100px solid #ed1c25;
+    border-left: 100px solid transparent;
+    border-right: 100px solid transparent;
 }
 .events-grid .more .maxDiscount em {
     display: block;
@@ -338,7 +338,7 @@ body.customer-account-login .btn.btn-large {
 .events-grid .thumbnail .more .labels {
     margin:1px 0; padding:0 2px 0 8px; width: auto;
     text-align:left;
-    text-shadow: -1px -1px 1px rgba(255,255,255,0.5);
+    text-shadow:0px -1px 0px rgba(255, 255, 255, 0.45);
 }
 .events-grid .thumbnail .more .labels h6 {
     float: left;
