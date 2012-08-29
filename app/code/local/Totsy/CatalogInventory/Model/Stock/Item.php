@@ -12,7 +12,7 @@ class Totsy_CatalogInventory_Model_Stock_Item extends Mage_CatalogInventory_Mode
     public function save(){
         $return = parent::save();
         if ($return!==false){
-            Mage::helper('product/outofstock')->adminAfterSaveUpdateQty($this);
+            Mage::helper('catalog/product_outofstock')->adminAfterSaveUpdateQty($this);
         }
         return $return;
     }

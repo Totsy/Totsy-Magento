@@ -7,7 +7,7 @@
  * @copyright   Copyright (c) 2012 Totsy LLC
  */
 
-class Totsy_Outofstock_Helper_Product extends Mage_Core_Helper_Abstract {
+class Totsy_Catalog_Helper_Product extends Mage_Core_Helper_Abstract {
 
 
     /**
