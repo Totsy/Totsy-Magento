@@ -52,6 +52,9 @@
     <h2 style="font-size:18px;"><?php echo $this->__('Sign Up') ?><small> or <a href="/customer/account/login/" style="font-weight:normal;">Sign In</a></small></h2>
 </div>
 <div class="row">
+<div style="text-align:center; margin:0px 0px 13px">
+    <a rel="facebook-connect" style="margin:10px 0px; cursor:pointer;" title="<?php echo $this->__('Connect with Facebook') ?>" class="facebook-button" ><img src="http://www.wiliam.com.au/content/upload/ablog1.jpg" /></a>
+    </div>
     <div class="span4">
         <?php //echo $this->getChildHtml('form_fields_before')?>
         <?php //the up child is a reward html ?>
@@ -174,10 +177,7 @@
        <p style="font-size:11px;"><?php echo $this->__('By joining you accept our ')?> <a id="redtrerm" href="<?php echo $this->getBaseUrl()?>pages/terms/">terms and conditions.</a> </p>
         </div>
         <div class="buttons-set form-buttons align-center" style="margin:21px 0px -16px 0px">
-            <button type="submit" id="submit-button" class="btn btn-primary btn-large pull-left">Sign Up</button>
-            <!-- <small>or</small> -->
-            <small>or</small>
-        <a rel="facebook-connect" style="color:#fff;cursor:pointer;background:#39569a;" title="<?php echo $this->__('Connect with Facebook') ?>" class="facebook-button btn btn-mini" ><img src="/skin/frontend/enterprise/bootstrap/images/facebook_icon_00115.png" width="17" style="margin:-4px 4px 0px 0px;"/>Connect with Facebook</a>
+            <button type="submit" id="submit-button" class="btn btn-primary btn-large pull-left" style="width:100%;">Sign Up</button>
         </div>
         <?php if (Mage::helper('checkout')->isContextCheckout()): ?>
             <input name="context" type="hidden" value="checkout" />
