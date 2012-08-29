@@ -170,11 +170,10 @@ echo $data;
 
 
 
-
-
 /*########################################################################*/
 function getRightHttpHost(&$json){
 	global $isHttpHostChanged, $originHttpHost;
+	
 	if ( $isHttpHostChanged==true ){
 		$json = str_replace($originHttpHost, $_SERVER['HTTP_HOST'], $json);
 	}
