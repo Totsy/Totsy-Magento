@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Totsy_CatalogInventory>
+            <version>0.1.0</version>
+        </Totsy_CatalogInventory>
+    </modules>
+    <global>
+        <models>
+            <cataloginventory>
+                <!-- <class>Totsy_CatalogInventory_Model_Stock_Item</class> -->
+                <rewrite>
+                    <stock_item>Totsy_CatalogInventory_Model_Stock_Item</stock_item>
+                </rewrite>
+            </cataloginventory>
+        </models>
+    </global>
+</config>
