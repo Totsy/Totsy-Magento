@@ -102,3 +102,4 @@ skin/frontend/default/modern/
 skin/frontend/enterprise/default/
 skin/install/
 var/
+.DS_Store
