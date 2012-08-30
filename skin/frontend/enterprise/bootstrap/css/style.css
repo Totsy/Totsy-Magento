@@ -87,10 +87,16 @@ html.test .container .row {outline:1px dotted green;}
 .well {
     background: none repeat scroll 0 0 #FFFFFF;
     border: 1px solid #DDDDDD;
-    border-radius: 4px 4px 4px 4px;
+    -moz-border-radius: 5px; -webkit-border-radius: 5px; border-radius: 5px;
+    -moz-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075);
+    -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075);
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075);
     display: block;
     padding: 10px;
+}
+.table-bordered,
+.thumbnail {
+    -moz-border-radius:5px; -webkit-border-radius:5px; border-radius:5px;
 }
 .thumbnail {padding:10px;}
 .page-header {
