@@ -16,8 +16,7 @@ body { height: 100%;}
 */
 html {
     margin:0;
-    background-color:#fff;
-/*
+    background:#fff;
     background-image: -moz-linear-gradient(top, #eef6fc, #ffffff);
     background-image: -ms-linear-gradient(top, #eef6fc, #ffffff);
     background-image: -o-linear-gradient(top, #eef6fc, #ffffff);
@@ -25,7 +24,6 @@ html {
     background-image: -webkit-linear-gradient(top, #eef6fc, #ffffff);
     background-image: linear-gradient(top, #eef6fc, #ffffff);
     background-attachment: fixed;
-*/
 }
 a {color:#ed1c25;text-decoration:none; outline: none;}
 a:hover{color:#ed1c25;text-decoration:underline;}
@@ -89,10 +87,16 @@ html.test .container .row {outline:1px dotted green;}
 .well {
     background: none repeat scroll 0 0 #FFFFFF;
     border: 1px solid #DDDDDD;
-    border-radius: 4px 4px 4px 4px;
+    -moz-border-radius: 5px; -webkit-border-radius: 5px; border-radius: 5px;
+    -moz-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075);
+    -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075);
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075);
     display: block;
     padding: 10px;
+}
+.table-bordered,
+.thumbnail {
+    -moz-border-radius:5px; -webkit-border-radius:5px; border-radius:5px;
 }
 .thumbnail {padding:10px;}
 .page-header {
@@ -101,13 +105,13 @@ html.test .container .row {outline:1px dotted green;}
 }
 .zoomImage { padding:0px; z-index:500!important; }
 
-/* Ellipsis classes for truncating long titles */
+/* Ellipsis class for truncating long titles 
+ * to use, the element must also have a fixed width, either implicit (inherited) or explicit
+ */
 .ellipsis {
     white-space:nowrap;
     overflow:hidden;
-}
-.ellipsis:after {
-    content:'...';
+    text-overflow: ellipsis;
 }
 
 /* link classes */
@@ -138,10 +142,10 @@ html.test .container .row {outline:1px dotted green;}
     text-transform: none;
 }
 .dropdown-menu li > a:hover, .dropdown-menu .active > a, .dropdown-menu .active > a:hover {
-    background-color: #acacac;
+    background-color: #ed1c25;
 }
 
-/* btn classes */
+/* btn classes - overrides bootstrap */
 .btn,
 .navbar .btn { /* MGN-951: ALL btns have consistent font-size and typography - DO NOT use '.btn-large' class override */
     padding:2px 8px 2px;
@@ -154,8 +158,13 @@ html.test .container .row {outline:1px dotted green;}
 }
 .btn-primary,
 a.btn-primary /* req to override '.dropdown a' ruleset */ {
-    background-color:rgba(173,194,34,1);
+    background-color:rgba(237,45,33,1);
     color:#fff;
+}
+body.customer-account-login .btn.btn-large {
+    font-size: 15px;
+    line-height: normal;
+    padding: 9px 14px;
 }
 .btn-nogo {
     background-color: rgb(170, 170, 170);
@@ -168,7 +177,7 @@ a.btn-primary /* req to override '.dropdown a' ruleset */ {
     padding-right: 9px;
 }
 .btn-primary:hover {
-    background-color:rgba(173,194,34,0.9);
+    background-color:rgba(237,45,33,0.9);
     background-position: 0 50.5%;
 }
 .btn-nogo:hover {
@@ -186,6 +195,11 @@ a.btn-primary /* req to override '.dropdown a' ruleset */ {
     background-color: #DFF0D8;
     border-color: #D6E9C6;
     color: #468847;
+}
+
+/* labels / badges - overrides bootstrap */
+.label-success, .badge-success {
+    background-color: #adc222;
 }
 
 /**
@@ -299,11 +313,11 @@ a.btn-primary /* req to override '.dropdown a' ruleset */ {
 .events-grid .more .maxDiscount em:before {
     content: "";
     display: inline-block;
-    position: absolute; top:-53px; left:0; z-index:-1;
+    position: absolute; top:-70px; left:-10px; z-index:-1;
     width: 0; height: 0;
-    border-bottom: 85px solid #ed1c25;
-    border-left: 85px solid transparent;
-    border-right: 85px solid transparent;
+    border-bottom: 100px solid #ed1c25;
+    border-left: 100px solid transparent;
+    border-right: 100px solid transparent;
 }
 .events-grid .more .maxDiscount em {
     display: block;
@@ -330,7 +344,7 @@ a.btn-primary /* req to override '.dropdown a' ruleset */ {
 .events-grid .thumbnail .more .labels {
     margin:1px 0; padding:0 2px 0 8px; width: auto;
     text-align:left;
-    text-shadow: -1px -1px 1px rgba(255,255,255,0.5);
+    text-shadow:0px -1px 0px rgba(255, 255, 255, 0.45);
 }
 .events-grid .thumbnail .more .labels h6 {
     float: left;
@@ -496,6 +510,14 @@ header nav .cta strong em {color:#d84643; font-style:normal;}
     background-image: none; /* override .dropdown-toggle, reapplied that image to child element #cartHeader */
     border:1px solid transparent; border-bottom: none;
 }
+.top-cart.onCheckout #usercart-block-title .savings { /* @KLUDGE: when on onepage checkout */
+    margin-bottom: 5px;
+    color: rgba(237, 45, 33, 0.78);
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.15;
+    text-transform: capitalize;
+}
 .open > #usercart-block-title {
     position: relative; z-index: 100;
     margin:-8px 0 0 3px; padding:7px 8px 13px;
@@ -516,9 +538,12 @@ header nav .cta strong em {color:#d84643; font-style:normal;}
 #usercart .top-cart.expired .count-down-timer { /* @KLUDGE */
     left:-180px;
 }
+#usercart .top-cart.onCheckout .count-down-timer { /* @KLUDGE: when on onepage checkout */
+    left:-160px;
+}
 body[class*='checkout'] #usercart .count-down-timer,
 body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */ 
-    display: none !important;
+/*     display: none !important; */
 }
 #usercart .count-down-timer strong {
     font-weight: normal;
@@ -532,7 +557,7 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
 /* Minicart */
 #topCartContent {
     position: absolute; top: 100%; left: auto; right:0; z-index: 10;
-    margin-top:-1px; padding:12px 12px 30px;
+    margin-top:-1px; padding:12px 12px 48px;
     width:334px;
     background:#fff;
     border:1px solid #ccc; /* old browser fallback */
@@ -550,24 +575,34 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
     color:#ed1c25;
 }
 #topCartContent .minifoot {
-    background:#f9f9f9;
     position: absolute; bottom: 0; left: 0;
+    padding:8px 0 5px;
     width: 100%;
-    padding:6px 0;
+    background:#f9f9f9;
+    border-top:1px solid #e5e5e5;
 }
 #topCartContent .minifoot .subtotal {
     float: left;
-    margin:2px 0 0 12px;
-    font-size:16px;
-    text-shadow: 0 1px 1px rgba(250,250,250,0.2);
+    margin:0 0 0 12px;
 }
-#topCartContent .minifoot .subtotal .price {
+#topCartContent .minifoot .subtotal-savings {
+    display: block;
+    margin-bottom:5px;
+    color:rgba(237,45,33,0.78);
+    font-size: 13px; font-weight: 500;
+    line-height: 1.15;
+}
+#topCartContent .minifoot .subtotal-cost {
+    font-size:16px; font-weight: 500;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+#topCartContent .minifoot .subtotal-cost .price {
     color: #ED1C25;
-    font-weight: normal;
+    font-weight: bold;
 }
 #topCartContent .minifoot .action {
     float: right;
-    margin-right:12px;
+    margin:8px 12px 0 0;
 }
 #topCartContent .minifoot .action a {
     margin-top:0;
@@ -593,6 +628,9 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
     position:relative; left:-8px /* need to move this a bit to align with top cart (which moved to keep dropdown within 950 grid), tho now this is bit off grid… */
 }
 
+/**
+ * @Cart & Checkout
+ */
 .address{
     margin-left: 0px !important; 
 }
@@ -635,6 +673,10 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
     text-transform:lowercase;
 }
 
+#use-reward-point {
+    cursor: pointer;
+}
+
 .ship-to-billing {
 	margin-left:25px;
 }
@@ -651,8 +693,11 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
     width: auto !important;
 }
   	
-.product-name {
-    width: 400px;
+#mini-cart .product-name a {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 250px;
 }
  	
 .btn-continue {
@@ -661,6 +706,14 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
   	
 .cart-coupon {
     margin:0px !important;
+}
+.cart .savings {
+    float: right;
+    width:320px;
+    color: rgba(237,45,33,0.78);
+    font-size: 14px; font-weight: 500;
+    line-height: 1.15;
+    text-align: right;
 }
 
 .cc { 
@@ -738,6 +791,15 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
     display:none;
 }
 
+.hpcheckout-payment-title {
+	width:215px;
+	float: left;
+}
+
+#hpcheckout-payment-select {
+	margin-left: 10px;
+}
+
 .block_label {
     width: 230px;
 }
@@ -750,6 +812,14 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
 .cc_types {
     text-align: center !important;
     width: 600px !important;
+}
+
+.cc_types input[type="radio"] {
+	float:left; 
+	height:32px; 
+	vertical-align:middle; 
+	margin-left:10px !important; 
+	margin-right:10px !important;
 }
 
 .cc_saved_cards {
@@ -782,6 +852,11 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
 .cc_save_card {
     width: 418px;
 }
+
+.discount-buttons {
+    margin-top: 10px;
+}
+
 /**
  * @Footer
  */
@@ -997,6 +1072,9 @@ select, textarea, input[type="text"], input[type="password"], input[type="dateti
     font-size: 11px;
     min-width:95px;
 }
+/* ZOOM Image Goodness */
+#zoom1 img {border-radius:3px; }
+.cloud-zoom-big {border-radius:3px;}
 
 /* @GOTCHA: putting .price-box positioning hacks in here… b/c price view is used some many places the markup is rather untouchable */
 body.catalog-category-view .price-box {
@@ -1041,4 +1119,18 @@ body.catalog-category-view .price-box .special-price {
     left:50%;
     top:50%;
     margin:-280px 0 0 -165px;
+}
+/* My Account / Public Pages side bar navigation links */
+.nav-list > li > a {
+    padding: 3px 15px;
+    color:#636466;
+}
+.nav-list > li > a:hover {
+    padding: 3px 15px;
+    color:#fff;
+    background: #acacac;
+}
+
+.product_desc li {
+    list-style: disc outside none;
 }

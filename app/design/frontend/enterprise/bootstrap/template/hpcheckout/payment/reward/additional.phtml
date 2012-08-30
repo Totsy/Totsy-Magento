@@ -36,9 +36,11 @@
 		<?php if( ! $this->useRewardPoints() ): ?>
 	        <?php $balance = Mage::helper('enterprise_reward')->formatReward($this->getPointsBalance(), $this->getCurrencyAmount()) ?>
 	        <span id="use-reward-point">
+	           <a href="#">
 	            <?php echo Mage::helper('enterprise_reward')->__('Use Reward Points'); ?>
 	            (<span id="reward_available_amount"><?php echo $balance; ?></span>
 	            <?php echo Mage::helper('enterprise_reward')->__('available'); ?>)
+	            </a>
 	        </span>
 	    <?php elseif( $this->isEnoughPoints() ): ?>
 	    	<span class="reward-full-cover"><?php echo Mage::helper('enterprise_reward')->__('Paid by Reward Points') ?></span>
@@ -52,13 +54,13 @@
     jQuery( document ).ready( function() {
         if( isRewardUsed && isEnoughPointsToCoverAmount ) {
         	jQuery( '#hpcheckout-payment-select' ).val('free');
-        	jQuery( '#checkout-payment-method-load' ).hide();
+        	//jQuery( '#checkout-payment-method-load' ).hide();
         }
 		jQuery( '#use-reward-point' ).bind( 'click', function() {
 			jQuery( '#reward-points-input' ).val( 1 );
 			if( isEnoughPointsToCoverAmount ) {
 	        	jQuery( '#hpcheckout-payment-select' ).val('');
-	        	jQuery( '[id^="payment_form_"]' ).hide();
+	        	//jQuery( '[id^="payment_form_"]' ).hide();
 	        }
 			hpcheckout.updatePayment();
 		});

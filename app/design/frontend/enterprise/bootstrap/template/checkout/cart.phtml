@@ -31,53 +31,18 @@
  * @see Mage_Checkout_Block_Cart
  */
     $countDownTimer = Mage::getSingleton('checkout/session')->getCountDownTimer();
-    $timeout        = Mage::getSingleton('checkout/session')->getQuoteItemExpireTime();
-    //$endcount_lc    = date("F j, Y, G:i:s", ($countDownTimer + $timeout));
-    $endcount_lc    = ($countDownTimer + $timeout)*1000; //ms
+    $timeout = Mage::getSingleton('checkout/session')->getQuoteItemExpireTime();
+    //$endcount_lc = date("F j, Y, G:i:s", ($countDownTimer + $timeout));
+    $endcount_lc = ($countDownTimer + $timeout)*1000; //ms
     //Harapartners, yang, get the server time with the frontend JS time
 	$serverTime = Mage::helper('service')->getServerTime();
-    $quote          = Mage::getSingleton('checkout/session')->getQuote();
+    $quote = Mage::getSingleton('checkout/session')->getQuote();
+    $saving = Mage::helper('sales/order')->calculateEstimatedSavings($quote);
 ?>
 <div class="page-header">
-    <h2><?php echo $this->__('Shopping Cart') ?> <small class="pull-right" id="cart-timer" style="color:#000;"></small><img src="/skin/frontend/enterprise/bootstrap/images/iconmonstr-time-icon.png" width="35px" style="margin:0px 3px 0px 0px;" class="pull-right" /> 
-    </h2>
+    <h2><?php echo $this->__('Shopping Cart') ?></h2>
 </div>
 <div class="cart">
-    <div class="page-title title-buttons">
-            <div class="shipping-date">
-            <div id="cart-shipping-date-header" class="span4"><span>Estimated Ship Date:</span> <?php echo date('Y-m-d', Mage::helper('sales/order')->calculateEstimatedShipDate($quote)); ?></div>
-            </div>
-            <div class="timer-control-box">
-            <script type="text/javascript">
-                jQuery(document).ready(function() {
-                    var dateObj = new Date();
-                    var countDownToTime = <?php echo $endcount_lc?>;
-                    var serverTime = <?php echo $serverTime?>;
-                    var localTime = new Date().getTime();
-                    countDownToTime = (countDownToTime + (localTime - serverTime));
-                    dateObj.setTime(countDownToTime);
-                    //var countToTimeTemplate = (dateObj.getMonth()+1) + ' ' + dateObj.getDate() + ', ' + dateObj.getFullYear() + ' ' + dateObj.getHours() + ':' + dateObj.getMinutes() + ':' + dateObj.getSeconds();
-                    jQuery("#cart-timer").countdown({
-                        //date: "12 10, 2011 16:11", or an object counting to a date
-                        date: dateObj,
-                        htmlTemplate: "%{m}:%{s} minutes remaining in cart",
-                        onChange: function( event, timer ){
-                        },
-                        onComplete: function( event ){
-                            //location.reload();
-                            //jQuery(this).html("<span class='over'>no longer reserved</span>");
-                            setTimeout("cartRedirect();",1000);
-                        },
-                        leadingZero: true,
-                        direction: "down"
-                        });
-                    });
-                    function cartRedirect(){
-                    window.location = "<?php echo Mage::getUrl('checkout/cart');?>"
-                    };
-            </script>
-	</div>
-</div>
 <div class="top-check-out">
         <?php if(!$this->hasError()): ?>
         	<?php foreach ($this->getMethods('top_methods') as $method): ?>
@@ -133,7 +98,12 @@
     </form>
     </div>
     <div class="totals pull-right">
-        <div class="top-check-out">
+        <?php if ($saving): ?>
+            <p class="savings">
+            	<span><?php echo $this->__('Your savings: ') ?></span><?php echo Mage::helper('checkout')->formatPrice($saving); ?>
+            </p>
+        <?php endif;?>
+        <div class="top-check-out clear">
         <?php if(!$this->hasError()): ?>
         	<?php foreach ($this->getMethods('top_methods') as $method): ?>
         	    <?php if ($methodHtml = $this->getMethodHtml($method)): ?>

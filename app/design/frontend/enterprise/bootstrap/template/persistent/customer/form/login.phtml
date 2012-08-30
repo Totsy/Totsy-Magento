@@ -55,16 +55,20 @@
 //		}
 //	}
 ?>
-<div class="well span4 page_center">
+<div class="well page_center">
     <div class="page-header" style="margin:0px 0px 10px;">
     <h1 id="logo" class="span4"><a href="<?php 
                     echo $this->getUrl( 'event/?ref=logo' ); ?>" title="<?php
                     echo $this->getLogoAlt();
                     ?>"><img src="/skin/frontend/enterprise/bootstrap/images/logo.png" alt="Totsy.com" width="85px" /></a>
     </h1>
+    <br />
     <h2 style="font-size:18px;"><?php echo $this->__('Sign In') ?> <small> or <a href="/customer/account/create/" style="font-weight:normal;">Sign Up</a></small></h2>
     </div>
     <div class="row">
+    <div style="text-align:center; margin:0px 0px 13px">
+    <a rel="facebook-connect" style="margin:10px 0px; cursor:pointer;" title="<?php echo $this->__('Connect with Facebook') ?>" class="facebook-button" ><img src="http://www.wiliam.com.au/content/upload/ablog1.jpg" /></a>
+    </div>
     <div class="span4">
     <div class="the-account-login account-login<?php if (!$this->helper('customer')->isRegistrationAllowed()) echo ' login-only' ?>">
         <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
@@ -75,13 +79,11 @@
         <input placeholder="Password" name="login[password]" type="password" class="big-input input-text required-entry validate-password span4" id="pass" title="<?php echo $this->__('Password') ?>" />
         <?php echo $this->getChildHtml('persistent.remember.me'); ?>
         <?php echo $this->getChildHtml('persistent.remember.me.tooltip'); ?>
-        <p><input type="checkbox" name="rememberme" value="remember" class="rememberme" align="middle"/>
-        <span><?php echo $this->__( ' Remember me' ); ?></span>
-        <a href="<?php echo $this->getForgotPasswordUrl() ?>" class="pull-right"><?php echo $this->__('Forgot Your Password?') ?></a></p>
+        <input type="checkbox" name="rememberme" value="remember" class="rememberme" align="middle"/>
+        <span style="padding:2px 0px;"><?php echo $this->__( ' Remember me' ); ?></span>
+        <a href="<?php echo $this->getForgotPasswordUrl() ?>" class="pull-right"><?php echo $this->__('Forgot Your Password?') ?></a>
         <div class="buttons-set form-buttons align-center" style="margin:21px 0px -16px 0px">
-        <button type="submit" id="submit-button" class="btn btn-primary btn-large">Sign In</button>
-        <small>or</small>
-        <a rel="facebook-connect" style="color:#fff;cursor:pointer;background:#39569a;" title="<?php echo $this->__('Connect with Facebook') ?>" class="facebook-button btn btn-mini" ><img src="/skin/frontend/enterprise/bootstrap/images/facebook_icon_00115.png" width="17" style="margin:-4px 4px 0px 0px;"/>Connect with Facebook</a>
+        <button type="submit" id="submit-button" class="btn btn-primary btn-large" style="width:100%;">Sign In</button>
         </div>
     </div>
         <div class="free_shipping_banner_reg_new rollover_img">

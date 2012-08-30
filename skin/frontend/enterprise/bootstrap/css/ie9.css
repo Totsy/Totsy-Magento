@@ -1,0 +1,8 @@
+/**
+ * IE9 Conditional Style Sheet
+ */
+
+/* body gradient */
+html {
+    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='#eef6fc', EndColorStr='#ffffff')"; /* IE8+ */
+}

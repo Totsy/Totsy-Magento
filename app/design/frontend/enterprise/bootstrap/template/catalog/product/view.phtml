@@ -31,6 +31,7 @@
  * @see Mage_Review_Block_Product_View
  */
 ?>
+
 <?php
 $_helper = $this->helper('catalog/output');
 $_product = $this->getProduct();
@@ -44,7 +45,22 @@ if (!Mage::registry('current_category')){
 		$_category  = Mage::registry('current_category');
 	}
 ?>
+<style>
+.old-price {display:none;}
+.price-box {text-align: center; display: block; margin:15px 0px;}
+.big_price {font-size:25px!important; font-weight: bold; }
+</style>
 
+<?php
+$special_price = $_product->getPrice();
+$final_price = $_product->getSpecialPrice();
+
+$originalPrice = money_format('%n', $special_price);
+$discountPrice = money_format('%n', $final_price);
+$percent = number_format(($originalPrice - $discountPrice) * (100 / $originalPrice));
+$savings = money_format('%n', $originalPrice) - money_format('%n', $discountPrice);
+
+?>
 <script type="text/javascript">
     var optionsPrice = new Product.OptionsPrice(<?php echo $this->getJsonConfig() ?>
     );
@@ -52,7 +68,7 @@ if (!Mage::registry('current_category')){
 <div id="messages_product_view"><?php echo $this->getMessagesBlock()->toHtml() ?></div>
 <section id="pageheader" class="jumbotron subhead">
     <div class="page-header subnav">
-        <h2><a href="<?php echo $_category->getUrl();?>" style="color:#000;"><?php echo $_helper->categoryAttribute($_category, $_category->getName(), 'name') ?></a> <small class="pull-right"><?php $endcount_utc = strtotime($_category->getEventEndDate());
+        <h2><a href="<?php echo $_category->getUrl();?>"><?php echo $_helper->categoryAttribute($_category, $_category->getName(), 'name') ?></a> <small class="pull-right"><?php $endcount_utc = strtotime($_category->getEventEndDate());
 $endcount_lc = date("F j, Y, G:i:s", $endcount_utc); ?>
 <img src="/skin/frontend/enterprise/bootstrap/images/iconmonstr-time-icon.png" width="35px" style="margin:0px 3px 0px 0px;" class="pull-left" /><span class="count-down-timer" id="timer" style="color:#000; font-weight:bold;"></span></small></h2>
     </div>
@@ -68,11 +84,12 @@ $endcount_lc = date("F j, Y, G:i:s", $endcount_utc); ?>
 </div>
 
 <div class="span5">
-<div class="well" style="margin-top:10px; border:none; padding:0px;box-shadow: none;">
-       
+<div class="well" style="margin-top:10px; border:none; padding:0px;box-shadow: none; background:none;">
     <h4>Description</h4>
     <hr style="margin:7px auto; padding:0px;"/>
+     <div class="product_desc">
      <?php echo $_product->getDescription(); ?>
+     </div>
     <div class="clear"></div>
 <br/>
     
@@ -124,18 +141,22 @@ $endcount_lc = date("F j, Y, G:i:s", $endcount_utc); ?>
         <?php echo $this->getChildHtml('product_type_data') ?>
         
         <?php endif; ?>
-        <div style="float:left; display:block; background:#fff; padding:10px 3px; margin:10px 0px 10px 0px;">
-            <div style="float:left; display:block; width:72px; text-align:center; font-size:18px; border-right:2px solid #ddd;">$46<br/><span style="font-size:12px;">Original</span></div>
-            <div style="float:left; display:block; width:72px; text-align:center; font-size:18px; border-right:2px solid #ddd;">60%<br/><span style="font-size:12px;">Discount</span></div>
-            <div style="float:left; display:block; width:74px; text-align:center; font-size:18px;">$18.25<br/><span style="font-size:12px;">Savings</span></div>
+        <hr style="margin:15px 0px 3px 0px;"/>
+        <div style="float:left; display:block; padding:10px 3px; margin:10px 0px 10px 0px;">
+            <div style="float:left; display:block; width:72px; text-align:center; font-size:16px; border-right:2px solid #ddd;">$<?php echo number_format((float)$special_price, 2, '.', '');
+ ?><br/><span style="font-size:12px;">Original</span></div>
+            <div style="float:left; display:block; width:72px; text-align:center; font-size:16px; border-right:2px solid #ddd;"><?php echo number_format((float)$percent, 0, '.', '');
+ ?>%<br/><span style="font-size:12px;">Discount</span></div>
+            <div style="float:left; display:block; width:74px; text-align:center; font-size:16px;">$<?php echo number_format((float)$savings, 2, '.', '');
+ ?><br/><span style="font-size:12px;">Savings</span></div>
         </div>
         <div class="clear"></div>
-        <hr style="margin:3px 0px 8px 0px;"/>
+        <hr style="margin:3px 0px 15px 0px;"/>
         </div>
                     <?php echo $this->getChildHtml('tierprices') ?>
                     <?php echo $this->getChildHtml('extrahint') ?>
                         <?php if (!$this->hasOptions()):?>
-                             <div class="add-to-box" pull-right>
+                             <div class="add-to-box">
                                  <?php if($_product->isSaleable()): ?>
                                      <?php echo $this->getChildHtml('addtocart') ?>
                                  <?php endif; ?>
@@ -157,7 +178,7 @@ $endcount_lc = date("F j, Y, G:i:s", $endcount_utc); ?>
         </div>
 
 <div>
-<script type="text/javascript">var switchTo5x=true;</script>
+<!-- <script type="text/javascript">var switchTo5x=true;</script>
 <script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
 <script type="text/javascript">stLight.options({publisher: "ur-9cc9581d-d77b-def7-ed25-5e247f0520ad"}); </script>
 <br/><strong>Share</strong>
@@ -169,6 +190,7 @@ $endcount_lc = date("F j, Y, G:i:s", $endcount_utc); ?>
 <div class="clear"></div>
 
 </div>
+-->
 </div>
     <?php endif;?>
         </div>

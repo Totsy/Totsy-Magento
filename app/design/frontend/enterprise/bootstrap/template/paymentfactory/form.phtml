@@ -70,7 +70,7 @@
 ?>
 <div>
     <div>
-        <div class="pull-left" style="width:215px">
+        <div class="hpcheckout-payment-title">
             <h4 class="legend">Payment Information</h4>
         </div>
         <div class="cc_types use-new-card-wrapper">
@@ -80,7 +80,7 @@
               <?php $_ccType = $this->getInfoData('cc_type') ?>
                    <div id="<?php echo $_code ?>_cc_type">
                    <?php foreach ($this->getCcAvailableTypes() as $_typeCode => $_typeName): ?>
-                       <input type="radio" style="float:left; height:32px; vertical-align:middle; margin-left:10px !important; margin-right:10px !important" class="validate-cybsersource-cc-type validate-one-required-by-name" name="payment[cc_type]" value="<?php echo $_typeCode ?>" <?php if($_typeCode==$_ccType) { echo "checked"; } ?> > 
+                       <input type="radio" class="validate-cybsersource-cc-type validate-one-required-by-name" name="payment[cc_type]" value="<?php echo $_typeCode ?>" <?php if($_typeCode==$_ccType) { echo "checked"; } ?> > 
                        <span class="cc">
                            <span title="<?php echo $_typeName; ?>"  class="<?php echo strtolower($_typeCode); ?>" >
                            </span>
@@ -121,7 +121,7 @@
             </div>
         </div>
         <div class="rewards_points use-new-card-wrapper">
-            Text goes here....
+            <?php echo $this->getLayout()->getBlock('hpcheckout.reward.points')->toHtml(); ?>
         </div>
     </div>
     <div style="clear:both"></div>
