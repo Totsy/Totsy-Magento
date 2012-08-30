@@ -1045,6 +1045,9 @@ select, textarea, input[type="text"], input[type="password"], input[type="dateti
     font-size: 11px;
     min-width:95px;
 }
+/* ZOOM Image Goodness */
+#zoom1 img {border-radius:3px; }
+.cloud-zoom-big {border-radius:3px;}
 
 /* @GOTCHA: putting .price-box positioning hacks in here… b/c price view is used some many places the markup is rather untouchable */
 body.catalog-category-view .price-box {

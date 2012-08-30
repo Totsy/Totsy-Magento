@@ -58,7 +58,7 @@ $final_price = $_product->getSpecialPrice();
 $originalPrice = money_format('%n', $special_price);
 $discountPrice = money_format('%n', $final_price);
 $percent = number_format(($originalPrice - $discountPrice) * (100 / $originalPrice));
-$savings = money_format('%n', $discountPrice) - money_format('%n', $originalPrice);
+$savings = money_format('%n', $originalPrice) - money_format('%n', $discountPrice);
 
 ?>
 <script type="text/javascript">
@@ -68,7 +68,7 @@ $savings = money_format('%n', $discountPrice) - money_format('%n', $originalPric
 <div id="messages_product_view"><?php echo $this->getMessagesBlock()->toHtml() ?></div>
 <section id="pageheader" class="jumbotron subhead">
     <div class="page-header subnav">
-        <h2><a href="<?php echo $_category->getUrl();?>" style="color:#000;"><?php echo $_helper->categoryAttribute($_category, $_category->getName(), 'name') ?></a> <small class="pull-right"><?php $endcount_utc = strtotime($_category->getEventEndDate());
+        <h2><a href="<?php echo $_category->getUrl();?>"><?php echo $_helper->categoryAttribute($_category, $_category->getName(), 'name') ?></a> <small class="pull-right"><?php $endcount_utc = strtotime($_category->getEventEndDate());
 $endcount_lc = date("F j, Y, G:i:s", $endcount_utc); ?>
 <img src="/skin/frontend/enterprise/bootstrap/images/iconmonstr-time-icon.png" width="35px" style="margin:0px 3px 0px 0px;" class="pull-left" /><span class="count-down-timer" id="timer" style="color:#000; font-weight:bold;"></span></small></h2>
     </div>
@@ -85,7 +85,6 @@ $endcount_lc = date("F j, Y, G:i:s", $endcount_utc); ?>
 
 <div class="span5">
 <div class="well" style="margin-top:10px; border:none; padding:0px;box-shadow: none; background:none;">
-       
     <h4>Description</h4>
     <hr style="margin:7px auto; padding:0px;"/>
      <div class="product_desc">
@@ -148,7 +147,8 @@ $endcount_lc = date("F j, Y, G:i:s", $endcount_utc); ?>
  ?><br/><span style="font-size:12px;">Original</span></div>
             <div style="float:left; display:block; width:72px; text-align:center; font-size:16px; border-right:2px solid #ddd;"><?php echo number_format((float)$percent, 0, '.', '');
  ?>%<br/><span style="font-size:12px;">Discount</span></div>
-            <div style="float:left; display:block; width:74px; text-align:center; font-size:16px;">$<?php echo $savings; ?><br/><span style="font-size:12px;">Savings</span></div>
+            <div style="float:left; display:block; width:74px; text-align:center; font-size:16px;">$<?php echo number_format((float)$savings, 2, '.', '');
+ ?><br/><span style="font-size:12px;">Savings</span></div>
         </div>
         <div class="clear"></div>
         <hr style="margin:3px 0px 15px 0px;"/>
