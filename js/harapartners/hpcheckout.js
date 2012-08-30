@@ -115,9 +115,9 @@ HpCheckout.prototype = {
 	}, 
 	
 	switchPaymentMethod: function() {
-		var selection = jQuery( '#hpcheckout-payment-select :selected' ).eq(0).val();
+		var selection = jQuery( '#hpcheckout-payment-select :selected' ).eq(0).val();		
 		jQuery( '[id^="payment_form_"]' ).hide();
-		jQuery( 'ul#payment_form_' + selection ).show();
+		jQuery( '#payment_form_' + selection ).show();
 	},
 	
 	switchAddress: function() {

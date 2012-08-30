@@ -87,10 +87,16 @@ html.test .container .row {outline:1px dotted green;}
 .well {
     background: none repeat scroll 0 0 #FFFFFF;
     border: 1px solid #DDDDDD;
-    border-radius: 4px 4px 4px 4px;
+    -moz-border-radius: 5px; -webkit-border-radius: 5px; border-radius: 5px;
+    -moz-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075);
+    -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075);
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075);
     display: block;
     padding: 10px;
+}
+.table-bordered,
+.thumbnail {
+    -moz-border-radius:5px; -webkit-border-radius:5px; border-radius:5px;
 }
 .thumbnail {padding:10px;}
 .page-header {
@@ -307,11 +313,11 @@ body.customer-account-login .btn.btn-large {
 .events-grid .more .maxDiscount em:before {
     content: "";
     display: inline-block;
-    position: absolute; top:-53px; left:0; z-index:-1;
+    position: absolute; top:-70px; left:-10px; z-index:-1;
     width: 0; height: 0;
-    border-bottom: 85px solid #ed1c25;
-    border-left: 85px solid transparent;
-    border-right: 85px solid transparent;
+    border-bottom: 100px solid #ed1c25;
+    border-left: 100px solid transparent;
+    border-right: 100px solid transparent;
 }
 .events-grid .more .maxDiscount em {
     display: block;
@@ -338,7 +344,7 @@ body.customer-account-login .btn.btn-large {
 .events-grid .thumbnail .more .labels {
     margin:1px 0; padding:0 2px 0 8px; width: auto;
     text-align:left;
-    text-shadow: -1px -1px 1px rgba(255,255,255,0.5);
+    text-shadow:0px -1px 0px rgba(255, 255, 255, 0.45);
 }
 .events-grid .thumbnail .more .labels h6 {
     float: left;
@@ -504,7 +510,9 @@ header nav .cta strong em {color:#d84643; font-style:normal;}
     background-image: none; /* override .dropdown-toggle, reapplied that image to child element #cartHeader */
     border:1px solid transparent; border-bottom: none;
 }
-.top-cart.onCheckout #usercart-block-title .label { /* @KLUDGE: when on onepage checkout */
+.top-cart.onCheckout #usercart-block-title .savings { /* @KLUDGE: when on onepage checkout */
+    margin-bottom: 5px;
+    color: rgba(237, 45, 33, 0.78);
     font-size: 13px;
     font-weight: 500;
     line-height: 1.15;
@@ -531,7 +539,7 @@ header nav .cta strong em {color:#d84643; font-style:normal;}
     left:-180px;
 }
 #usercart .top-cart.onCheckout .count-down-timer { /* @KLUDGE: when on onepage checkout */
-    left:-153px;
+    left:-160px;
 }
 body[class*='checkout'] #usercart .count-down-timer,
 body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */ 
@@ -580,7 +588,7 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
 #topCartContent .minifoot .subtotal-savings {
     display: block;
     margin-bottom:5px;
-/*     color: #adc222; */
+    color:rgba(237,45,33,0.78);
     font-size: 13px; font-weight: 500;
     line-height: 1.15;
 }
@@ -699,9 +707,10 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
 .cart-coupon {
     margin:0px !important;
 }
-.cart .savings.label {
+.cart .savings {
     float: right;
     width:320px;
+    color: rgba(237,45,33,0.78);
     font-size: 14px; font-weight: 500;
     line-height: 1.15;
     text-align: right;
@@ -782,6 +791,15 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
     display:none;
 }
 
+.hpcheckout-payment-title {
+	width:215px;
+	float: left;
+}
+
+#hpcheckout-payment-select {
+	margin-left: 10px;
+}
+
 .block_label {
     width: 230px;
 }
@@ -794,6 +812,14 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
 .cc_types {
     text-align: center !important;
     width: 600px !important;
+}
+
+.cc_types input[type="radio"] {
+	float:left; 
+	height:32px; 
+	vertical-align:middle; 
+	margin-left:10px !important; 
+	margin-right:10px !important;
 }
 
 .cc_saved_cards {
@@ -830,6 +856,7 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
 .discount-buttons {
     margin-top: 10px;
 }
+
 /**
  * @Footer
  */
