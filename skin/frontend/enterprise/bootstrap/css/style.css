@@ -791,6 +791,15 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
     display:none;
 }
 
+.hpcheckout-payment-title {
+	width:215px;
+	float: left;
+}
+
+#hpcheckout-payment-select {
+	margin-left: 10px;
+}
+
 .block_label {
     width: 230px;
 }
@@ -803,6 +812,14 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
 .cc_types {
     text-align: center !important;
     width: 600px !important;
+}
+
+.cc_types input[type="radio"] {
+	float:left; 
+	height:32px; 
+	vertical-align:middle; 
+	margin-left:10px !important; 
+	margin-right:10px !important;
 }
 
 .cc_saved_cards {
