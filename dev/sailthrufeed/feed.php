@@ -8,9 +8,10 @@ $mageRunCode = isset($_SERVER['MAGE_RUN_CODE']) ? $_SERVER['MAGE_RUN_CODE'] : ''
 $mageRunType = isset($_SERVER['MAGE_RUN_TYPE']) ? $_SERVER['MAGE_RUN_TYPE'] : 'store';
 Mage::app($mageRunCode, $mageRunType);	 
 
-$cache = Mage::helper('sailthru/helper_cache')->runner($full_path);
+$cache_object = Mage::helper('sailthru/helper_cache');
+$cache = $cache_object->runner($full_path);
 if ($cache !== false) {
-	Mage::helper('sailtru/helper_feed')->getHeaders();
+	Mage::helper('sailtru/helper_feed')->sendHeaders();
 	echo $cache;
 	exit(0);
 }
@@ -123,14 +124,8 @@ $out['max_off'] = floor($maxOff);
 $data = json_encode($out);
 getRightHttpHost($data);
 
-$fh = fopen($chash,'w');
-fwrite($fh,$data);
-fclose($fh);
-if (file_exists($chash.'.new')){
-	unlink($chash.'.new');
-}
-
-Mage::helper('sailtru/helper_feed')->getHeaders();
+$cache_object->rememberCache($data);
+Mage::helper('sailtru/helper_feed')->sendHeaders();
 echo $data;
 /*### END ###*/
 

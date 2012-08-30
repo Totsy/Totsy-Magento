@@ -55,6 +55,28 @@ class Totsy_Sailthru_Helper_Cache{
  	}
 
  	/**
+ 	* Save processed data into cache file
+ 	*
+ 	* @param string* $data json encoded sting
+ 	* @return void
+ 	*/
+ 	public function rememberCache(&$data){
+ 		
+ 		// rewrite doamin name, if needed
+ 		$this->_setRightHttpHost($data);
+ 		
+ 		// write all data into cache file
+		$fh = fopen($this->_getFullCacheFileName(),'w');
+		fwrite($fh,$data);
+		fclose($fh);
+
+		// remove unused cache file
+		if (file_exists($this->_getFullCacheFileName().'.new')){
+			unlink($this->_getFullCacheFileName().'.new');
+		}
+	}
+
+ 	/**
  	* Makes a decision weather get data from cached file or not
  	*
  	* @param void
@@ -160,7 +182,7 @@ class Totsy_Sailthru_Helper_Cache{
  	* In Case we need to override current HTTP_HOST (domain) value,
  	* we doing it here. 
  	*
- 	* @param string* $json referenced string to json decoded string  
+ 	* @param string* $json referenced string to json encoded string  
  	* @return void
  	*/
 	private function _setRightHttpHost(&$json){

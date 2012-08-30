@@ -12,7 +12,7 @@ class Totsy_Sailthru_Helper_Feed {
 	/**
 	* send NO CACHE json headers 
 	*/
-	public function getHeaders() {
+	public function sendHeaders() {
 		header('Cache-Control: no-cache, must-revalidate');
 		header('Content-type: application/json');
 	}
