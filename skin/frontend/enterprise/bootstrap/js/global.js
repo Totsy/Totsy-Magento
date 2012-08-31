@@ -73,8 +73,8 @@
         /*
          * Monetate Placeholder div
          *
-         * - if banner is display:block, add 75px to margin-top of #mainContent.content_push
-         * - requires Monetate to set to display:block in their script
+         * - if banner holder div#monetateBanner is display:block, add 75px to margin-top of #mainContent.content_push
+         * - requires Monetate to set #monetateBanner to display:block in their script
          * - https://totsy1.jira.com/browse/MGN-919
          */
         //$('#monetateBanner').show(); /* test */

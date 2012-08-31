@@ -40,7 +40,7 @@
     <?php $big_img = $this->helper('catalog/image')->init($_product, 'image')->resize(500)->keepFrame(FALSE);?>
     <a class="cloud-zoom" id="zoom1" href="<?php echo $this->helper('catalog/image')->init($_product, 'image')->resize(500)->keepFrame(FALSE); ?>" rel="showTitle: false, position:'inside'" >
     <?php
-        $_img = '<img src="'.$this->helper('catalog/image')->init($_product, 'image')->resize(500)->keepFrame(FALSE).'"  alt="'.$this->htmlEscape($_product->getImageLabel()).'"  />';
+        $_img = '<img src="'.$this->helper('catalog/image')->init($_product, 'image')->resize(500)->keepFrame(FALSE).'"  alt="'.$this->htmlEscape($_product->getImageLabel()).'" />';
         echo $_helper->productAttribute($_product, $_img, 'image-thumb');
     ?></a>
 <?php /* --------- Gallery Images using Cloud Zoom --------- */ ?>
@@ -52,7 +52,7 @@
         <li>
         <div class="thumbnail" style="padding:0px;">
             <a href="<?php echo $this->helper('catalog/image')->init($_product, 'image', $_image->getFile())->resize(500)->keepFrame(FALSE);?>" class='cloud-zoom-gallery' title='<?php echo $this->htmlEscape($_image->getLabel()) ?>' rel="useZoom: 'zoom1', smallImage: '<?php echo $this->helper('catalog/image')->init($_product, 'image', $_image->getFile())->resize(500)->keepFrame(FALSE); ?>' ">
-            <img src="<?php echo $this->helper('catalog/image')->init($_product, 'thumbnail', $_image->getFile())->resize(75)->keepFrame(FALSE); ?>" alt = "<?php echo $this->htmlEscape($_image->getLabel()) ?>" />
+            <img src="<?php echo $this->helper('catalog/image')->init($_product, 'thumbnail', $_image->getFile())->resize(75)->keepFrame(FALSE); ?>" alt = "<?php echo $this->htmlEscape($_image->getLabel()) ?>" style="display: block; border-radius: 3px 3px 3px 3px;" />
             </a>
         </div>
         </li>
