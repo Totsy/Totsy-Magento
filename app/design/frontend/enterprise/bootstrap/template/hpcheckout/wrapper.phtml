@@ -25,7 +25,7 @@
 				<?php echo $this->getChildHtml( 'login' ) ?>
 			</div>
 		<?php endif ?>
-		<div class="address">
+		<div class="address container row">
 		    <div class="onepage-blocks pull-left well">
 		    	    <div class="checkout-headline">
 		    	    	<h4 class="legend pull-left"><?php echo $this->__('Billing Address') ?></h4>
@@ -65,22 +65,19 @@
             <br />
             <div class="checkout-content"><?php echo $this->getChildHtml('shipping_method') ?></div>
         </div>
-        </div>
 		<?php endif ?>
 		<div id="hpcheckout-payment-wrapper" class="well onepage-blocks">		
 			<div class="checkout-content"><?php echo $this->getChildHtml( 'payment' ) ?></div>
 			<?php echo $this->getChildHtml( 'reward' ); ?>
 		</div>
-		<div>
 		<div id="hpcheckout-review-wrapper" class="well onepage-blocks">
 			<div class="checkout-content"><?php echo $this->getChildHtml( 'review' ) ?></div>
 		</div>
-		</div>
+</div>
 		<?php echo $this->getChildHtml( 'script' ) ?>
 	<?php else: ?>
 		<?php echo $this->__( 'Your cart is empty.' ) ?>
 	<?php endif ?>
-</div>
 <script type="text/javascript">
 function updateSelectText(){
 	jQuery(".totsy-selective-input-box select").each(function(){
