@@ -347,6 +347,8 @@ class Harapartners_Service_Model_Rewrite_Catalog_Convert_Adapter_Product extends
 
         // Store affected products ids
         $this->_addAffectedEntityIds($product->getId());
+        // Update configrable product qty counter
+        Mage::helper('catalog/product_outofstock')->updateConfigurableProductQty($product);
 
         return true;
     }

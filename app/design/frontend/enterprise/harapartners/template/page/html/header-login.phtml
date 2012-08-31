@@ -31,7 +31,7 @@
 	<div class="header-container">
 	    <div class="header">
             <?php $currentAction = $this->getAction()->getFullActionName(); ?>
-			<?php if ('customer_account_create' == $currentAction): ?>
+			<?php if ('customer_account_create' == $currentAction || 'enterprise_invitation_customer_account_create' == $currentAction): ?>
 				<h1 class="logo"><strong><?php echo $this->getLogoAlt() ?></strong><img src="<?php echo $this->getSkinUrl() ?>images/logoN.png" alt="<?php echo $this->getLogoAlt() ?>" /></h1>
 				<p class="right-top">Already a member? <a href="<?php echo $this->getUrl('customer/account/login')?>" id="sign-up">Sign In</a></p>
 			<?php elseif ('customer_account_login' == $currentAction || 'customer_account_forgotpassword' == $currentAction): ?>

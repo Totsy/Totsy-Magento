@@ -142,6 +142,13 @@ class Totsy_Customer_Model_Customer
             $errors[] = $customerHelper->__('Please make sure your passwords match.');
         }
 
+        if (strlen($password) && !preg_match('/\d/', $password)) {
+            $errors[] = $customerHelper->__('The password must contain at least one number/digit.');
+        }
+        if (strlen($password) && !preg_match('/[a-zA-Z]/', $password)) {
+            $errors[] = $customerHelper->__('The password must contain at least one alphanumeric character.');
+        }
+
         $entityType = Mage::getSingleton('eav/config')->getEntityType('customer');
         $attribute = Mage::getModel('customer/attribute')->loadByCode($entityType, 'dob');
         if ($attribute->getIsRequired() && '' == trim($this->getDob())) {
