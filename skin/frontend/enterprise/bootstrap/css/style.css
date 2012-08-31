@@ -667,6 +667,10 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
     text-transform:lowercase;
 }
 
+#payment_form_paypal_express label {
+    display: block !important;
+}
+
 #use-reward-point {
     cursor: pointer;
 }

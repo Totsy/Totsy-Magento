@@ -5,16 +5,9 @@
 	<input type="hidden" name="payment[method]" value="<?php echo $methods[0]->getCode() ?>">
 	<div><?php echo $this->getPaymentMethodFormHtml( $methods[0] ) ?></div>
 	<script type="text/javascript">
-		jQuery( "payment_form_<?php echo $methods[0]->getCode() ?>" ).show();
+		jQuery( "#payment_form_<?php echo $methods[0]->getCode() ?>" ).show();
 	</script>
 <?php else: ?>	
-	<?php foreach ($methods as $_method): ?>
-		<?php if ($html = $this->getPaymentMethodFormHtml($_method)): ?>
-		    <div>
-		        <?php echo $html; ?>
-		    </div>
-	    <?php endif; ?>
-	<?php endforeach; ?>
 	
 	<div class="totsy-selective-input-box middle-length">
 		<div class="hpcheckout-payment-title">
@@ -30,7 +23,15 @@
 			</select>
 		</div>
 	</div>
-
+	
+<?php foreach ($methods as $_method): ?>
+		<?php if ($html = $this->getPaymentMethodFormHtml($_method)): ?>
+		    <div>
+		        <?php echo $html; ?>
+		    </div>
+	    <?php endif; ?>
+	<?php endforeach; ?>
+	
 	<script type="text/javascript">
 		jQuery( document ).ready( function() {
 			hpcheckout.switchPaymentMethod();
