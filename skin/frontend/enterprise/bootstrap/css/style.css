@@ -28,7 +28,7 @@ html {
 a {color:#ed1c25;text-decoration:none; outline: none;}
 a:hover{color:#ed1c25;text-decoration:underline;}
 a:focus{outline: none;}
-.content_push { margin-top:115px; }
+.content_push { margin-top:115px; } /* not in use, was for 1col */
 .content_push_2col { margin-top:115px; }
 h2 {font-size:20px!important; /* header override */ }
 /**
@@ -69,7 +69,7 @@ html.test .container .row {outline:1px dotted green;}
  * @One-off Modules & 3rd Party
  */
 #monetateBanner {
-    display: none; /* hide for monetate activation */
+    /* display: none; */ /* hide for monetate activation */
     height: 75px;
     margin-top: -3px;
 }
@@ -210,6 +210,9 @@ body.customer-account-login .btn.btn-large {
     overflow: hidden;
     position: relative;
     width: 100%;
+}
+#mainContent {
+    margin-top:190px; 
 }
 #mainContent > .banner {
     margin:5px auto 0;
