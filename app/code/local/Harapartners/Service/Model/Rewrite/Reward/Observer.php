@@ -206,4 +206,16 @@ class Harapartners_Service_Model_Rewrite_Reward_Observer extends Enterprise_Rewa
         return $this;
     }
 
+    /**
+     * Update reward points after customer register
+     *
+     * @param Varien_Event_Observer $observer
+     * @return Enterprise_Reward_Model_Observer
+     */
+    public function customerRegister($observer)
+    {
+        //20120831 - CJD - Disabling this observer due to performance issues during registration and it throwing
+        // exceptions due to db contentions.
+        return $this;
+    }
 }
