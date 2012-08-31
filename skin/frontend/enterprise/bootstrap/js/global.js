@@ -76,10 +76,13 @@
          * - if banner holder div#monetateBanner is display:block, add 75px to margin-top of #mainContent.content_push
          * - requires Monetate to set #monetateBanner to display:block in their script
          * - https://totsy1.jira.com/browse/MGN-919
+         * - update: won't be used now, as monetate banner will "always" be live… only commenting out just in case that changes.
          */
         //$('#monetateBanner').show(); /* test */
+/*
         if ( $('#monetateBanner').is(':visible') ) {
             $('#mainContent').css('margin-top', '+=75');
         }  
+*/
     });               
 })(jQuery);
