@@ -703,6 +703,14 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
 .remove-button {
     width: auto !important;
 }
+
+.cart-prod-thumb {
+    float:left;
+    padding-right: 10px;
+}
+
+.cart-prod-desription {
+}
   	
 #mini-cart .product-name a {
     overflow: hidden;
