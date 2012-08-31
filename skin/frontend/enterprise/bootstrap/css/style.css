@@ -659,6 +659,10 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
    padding: 20px;
 }
 
+.btn-proceed-checkout {
+    float:right;
+}
+
 .onepage-address-form label {
     display: none;
     font-weight: bold;
@@ -816,6 +820,14 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
 .cc_types {
     text-align: center !important;
     width: 600px !important;
+}
+
+.btn-checkout-group {
+    float:right;
+}
+
+.top-check-out .btn-continue {
+    vertical-align: top !important;
 }
 
 .cc_types input[type="radio"] {
