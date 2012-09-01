@@ -1,11 +1,11 @@
 <form id="hpcheckout-billing-form" action="">
 	    <div id="billing-new-address-form fields alpha">
-	    	    <div > 
-	    		    <div class="pull-left field half-of-half">
+	    	    <div> 
+	    		    <div class="pull-left">
 	    	           <label for="billing:firstname" class="required"><em>*&nbsp;</em><?php echo $this->__('first name') ?></label>
 	    	     <input type="text" name="billing[firstname]" title="<?php echo $this->__('First Name') ?>" class="input-text required-entry firstname"  value="<?php echo $this->htmlEscape($this->getFirstName()) ?>" placeholder="<?php echo $this->__('First Name') ?>" id="billing:firstname" />
 	    	        </div>
-	    	        <div class="field half-of-half">
+	    	        <div>
 	    	            <label for="billing:lastname" class="required"><em>*&nbsp;</em><?php echo $this->__('last name') ?></label>
 	    	            <input type="text" name="billing[lastname]" title="<?php echo $this->__('Last Name') ?>" class="input-text required-entry lastname" value="<?php echo $this->htmlEscape($this->getLastName()) ?>" placeholder="<?php echo $this->__('Last Name') ?>" id="billing:lastname" />
 	    	        </div>
@@ -78,12 +78,12 @@
 	// need to re-enable billing form controls before trying to send values to shipping form
 	jQuery(document).ready(function($) {
 	    $('#button_ship_to').bind('click', function() {
-	    	var $billFormInputs = $('#hpcheckout-billing-form :input');
-	    	var $billAddySelect = $("#billing-address-select");
+	    	var billFormInputs = $('#hpcheckout-billing-form :input');
+	    	var billAddySelect = $("#billing-address-select");
 	    	// re-enable disabled controls
-	    	if ($billAddySelect.attr('disabled') !== undefined) {
-	            $billAddySelect.removeAttr('disabled');
-	            $billFormInputs.each(function(i) {
+	    	if (billAddySelect.attr('disabled') !== undefined) {
+	            billAddySelect.removeAttr('disabled');
+	            billFormInputs.each(function(i) {
 	                $(this).removeAttr('disabled');
 	            });
 	    	}

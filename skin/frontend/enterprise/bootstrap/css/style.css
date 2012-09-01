@@ -662,7 +662,13 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
 }
 
 .onepage-blocks {
-   padding: 20px;
+   padding: 10px;
+   margin-left:0px !important;
+   width:930px;
+}
+
+.address .onepage-blocks {
+   width:445px !important; 
 }
 
 .btn-proceed-checkout {
@@ -771,11 +777,11 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
 }
 
 .onepage-address-form .firstname {
-    width:200px !important;
+    width:205px !important;
 }
 
 .onepage-address-form .lastname {
-    width:200px !important;
+    width:205px !important;
     margin-left: 10px !important;
 }
 
@@ -784,7 +790,7 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
 }
 
 .onepage-address-form .streetaddress1 {
-    width:420px !important;
+    width:430px !important;
 }
 
 .onepage-address-form .address-select {
@@ -792,7 +798,7 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
 }
 
 .onepage-address-form .streetaddress2 {
-    width:420px !important;
+    width:430px !important;
 }
 
 .onepage-address-form .zip {
@@ -801,7 +807,7 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
 }
 
 .onepage-address-form .city {
-    width:165px !important;
+    width:175px !important;
     margin-left: 10px !important;
 }
 
@@ -833,7 +839,7 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
 
 .cc_types {
     text-align: center !important;
-    width: 600px !important;
+    width: 620px !important;
 }
 
 .btn-checkout-group {

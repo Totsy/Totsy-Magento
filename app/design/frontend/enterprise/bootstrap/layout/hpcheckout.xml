@@ -2,7 +2,6 @@
 	<default>
 		<reference name="head">
 			<action method="addJs"><script>harapartners/hpcheckout.js</script></action>
-			<action method="addCss"><stylesheet>css/hpcheckout.css</stylesheet></action>
 		</reference>
 	</default>
 	
