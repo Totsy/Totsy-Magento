@@ -214,6 +214,9 @@ body.customer-account-login .btn.btn-large {
 #mainContent {
     margin-top:190px; 
 }
+.logged-out ~ #mainContent {
+    margin-top:115px;
+}
 #mainContent > .banner {
     margin:5px auto 0;
 }

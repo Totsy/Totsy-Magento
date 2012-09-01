@@ -48,7 +48,7 @@ ooooooooooooo               .
 <body<?php echo $this->getBodyClass()?' class="'.$this->getBodyClass().'"':'' ?> data-spy="scroll" data-target=".subnav" data-offset="50">
     <?php echo $this->getChildHtml('header') ?>
     <?php echo $this->getChildHtml('after_body_start') ?>
-<div class="container content_push_2col">
+<div id="mainContent" class="container">
     <?php echo $this->getChildHtml('global_notices') ?>
     <div class="row">
         <?php echo $this->getChildHtml('global_messages') ?>
