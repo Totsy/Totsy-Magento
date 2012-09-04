@@ -46,27 +46,29 @@ ooooooooooooo               .
 <?php echo $this->getChildHtml('head') ?>
 </head>
 <body<?php echo $this->getBodyClass()?' class="'.$this->getBodyClass().'"':'' ?> data-spy="scroll" data-target=".subnav" data-offset="50">
-    <?php echo $this->getChildHtml('header') ?>
-    <?php echo $this->getChildHtml('after_body_start') ?>
-<div class="container content_push_2col">
-    <?php echo $this->getChildHtml('global_notices') ?>
-    <div class="row">
-        <?php echo $this->getChildHtml('global_messages') ?>
-        <?php echo $this->getChildHtml('breadcrumbsContainer') ?>
-        <div class="row">
-            <?php echo $this->getChildHtml('account_title') ?>
-        </div>
-        <div class="span3">
-            <?php echo $this->getChildHtml('left') ?>
-        </div>
-        <div class="span9 <?php echo $this->getChild('content')->getChild('my.account.wrapper')->getElementClass() ?>-wrap">
-            <?php echo $this->getChildHtml('content') ?>
-        </div>
-        </div>
-        <?php echo $this->getChildHtml('footer_before') ?>
-        <?php echo $this->getChildHtml('footer') ?>
-        <?php echo $this->getChildHtml('before_body_end') ?>
-</div>
-<?php echo $this->getAbsoluteFooter() ?>
+    <div id="stickywrap">
+        <?php echo $this->getChildHtml('header') ?>
+        <?php echo $this->getChildHtml('after_body_start') ?>
+        <div id="mainContent" class="container l-2col">
+            <?php echo $this->getChildHtml('global_notices') ?>
+            <div class="row">
+                <?php echo $this->getChildHtml('global_messages') ?>
+                <?php echo $this->getChildHtml('breadcrumbsContainer') ?>
+                <div class="row">
+                    <?php echo $this->getChildHtml('account_title') ?>
+                </div>
+                <div class="span3">
+                    <?php echo $this->getChildHtml('left') ?>
+                </div>
+                <div class="span9 <?php echo $this->getChild('content')->getChild('my.account.wrapper')->getElementClass() ?>-wrap">
+                    <?php echo $this->getChildHtml('content') ?>
+                </div>
+            </div>
+        </div><!-- /#mainContent -->
+    </div><!-- /#stickywrap -->
+    <?php echo $this->getChildHtml('footer_before') ?>
+    <?php echo $this->getChildHtml('footer') ?>
+    <?php echo $this->getChildHtml('before_body_end') ?>
+    <?php echo $this->getAbsoluteFooter() ?>
 </body>
 </html>

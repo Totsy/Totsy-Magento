@@ -149,8 +149,8 @@ class Harapartners_Categoryevent_Model_Sortentry extends Mage_Core_Model_Abstrac
                 // maximum discount percentage by finding the highest discount
                 // percentage across all products
                 foreach ($products as $product) {
-                    $departments = $product->getAttributeText('departments');
-                    $ages = $product->getAttributeText('ages');
+                    $departments = $product->getAttributeTextByStore('departments', Harapartners_Service_Helper_Data::TOTSY_STORE_ID);
+                    $ages = $product->getAttributeTextByStore('ages', Harapartners_Service_Helper_Data::TOTSY_STORE_ID);
 
                     if (is_array($departments)) {
                         $event['department'] = $event['department'] + $departments;

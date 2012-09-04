@@ -10,10 +10,12 @@
  * - Green          buttons         #c1d82f or #adc222 | rgba(173,194,34,1)
  */
  
-/*
 html,
 body { height: 100%;}
-*/
+#stickywrap { /* @sticky */
+    height: auto;
+    min-height: 100%;
+}
 html {
     margin:0;
     background:#fff;
@@ -212,7 +214,11 @@ body.customer-account-login .btn.btn-large {
     width: 100%;
 }
 #mainContent {
-    margin-top:190px; 
+    padding-top:190px; 
+    padding-bottom:250px; overflow: auto; /* @sticky, +more padding */
+}
+.logged-out ~ #mainContent {
+    margin-top:115px;
 }
 #mainContent > .banner {
     margin:5px auto 0;
@@ -659,7 +665,13 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
 }
 
 .onepage-blocks {
-   padding: 20px;
+   padding: 10px;
+   margin-left:0px !important;
+   width:930px;
+}
+
+.address .onepage-blocks {
+   width:445px !important; 
 }
 
 .btn-proceed-checkout {
@@ -768,11 +780,11 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
 }
 
 .onepage-address-form .firstname {
-    width:200px !important;
+    width:205px !important;
 }
 
 .onepage-address-form .lastname {
-    width:200px !important;
+    width:205px !important;
     margin-left: 10px !important;
 }
 
@@ -781,7 +793,7 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
 }
 
 .onepage-address-form .streetaddress1 {
-    width:420px !important;
+    width:430px !important;
 }
 
 .onepage-address-form .address-select {
@@ -789,7 +801,7 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
 }
 
 .onepage-address-form .streetaddress2 {
-    width:420px !important;
+    width:430px !important;
 }
 
 .onepage-address-form .zip {
@@ -798,7 +810,7 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
 }
 
 .onepage-address-form .city {
-    width:165px !important;
+    width:175px !important;
     margin-left: 10px !important;
 }
 
@@ -830,7 +842,7 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
 
 .cc_types {
     text-align: center !important;
-    width: 600px !important;
+    width: 620px !important;
 }
 
 .btn-checkout-group {
@@ -889,7 +901,8 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
  */
 body > footer {
     position: relative;
-    margin-top:45px; padding: 17px 0 0 0;
+    margin-top:-221px; height: 203px; /* @sticky */
+    padding: 17px 0 0 0;
     min-width:950px; /* temp hackish fix for iPad display, prevent content of fixed width from bleeding in. @TODO: get responsive! */
     background: #e5e5e5;
     border-top:1px solid #fff;

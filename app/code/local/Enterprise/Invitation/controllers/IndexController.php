@@ -65,11 +65,14 @@ class Enterprise_Invitation_IndexController extends Mage_Core_Controller_Front_A
             $attempts = 0;
             $sent     = 0;
             $customerExists = 0;
-            $emails = trim(trim($data['email'], ";"));
-            $emailArray = explode(',',$emails); 
+            $emailArray = preg_split('/;|,|\s/', $data['email']);
             $existEmailArray = array();    //Harapartners, yang: add for error record
             foreach ($emailArray as $email) {
-                
+                $email = trim($email);
+                if (!$email) {
+                    continue;
+                }
+
                 //hara partners, integrating CloudSponge
                 if (!Zend_Validate::is($email, 'EmailAddress')) {
                     preg_match('/\<(.*?)\>/s', $email, $result);

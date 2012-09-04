@@ -4,6 +4,10 @@ $skip_cache_check = false;
 // set cache time for 3 days
 $TTL =3*24*60*60;
 
+// HTTP HOST settings
+$originHttpHost = !empty($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : 'totsy.com';
+$isHttpHostChanged = false;
+
 if (php_sapi_name()=='cli'){
 	$skip_cache_check = true;	
 	$index=array_search('--get', $argv);
@@ -14,11 +18,13 @@ if (php_sapi_name()=='cli'){
 	$index=array_search('--domain', $argv);
 	if ( $index!==false && $argc>$index+1) {
 		$_SERVER['HTTP_HOST'] = $argv[$index+1];
+		$isHttpHostChanged = true;
 	}
 }
 
 if (!empty($_GET['domain']) && strtolower($_GET['domain']) == 'mamasource.totsy.com'){
 	$_SERVER['HTTP_HOST'] = 'mamasource.totsy.com';
+	$isHttpHostChanged = true;
 }
 
 $chash = $full_path. '/var/tmp/' .md5($_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']).'.json';
@@ -151,6 +157,8 @@ $out['max_off'] = floor($maxOff);
 /*### OUTPUT JSON ###*/
 
 $data = json_encode($out);
+getRightHttpHost($data);
+
 $fh = fopen($chash,'w');
 fwrite($fh,$data);
 fclose($fh);
@@ -162,9 +170,14 @@ echo $data;
 
 
 
-
-
 /*########################################################################*/
+function getRightHttpHost(&$json){
+	global $isHttpHostChanged, $originHttpHost;
+	
+	if ( $isHttpHostChanged==true ){
+		$json = str_replace($originHttpHost, $_SERVER['HTTP_HOST'], $json);
+	}
+}
 /*Getting how many percent of money save for a event*/
 function getLargestSaveByCategory(Mage_Catalog_Model_Category $_category){
 	
