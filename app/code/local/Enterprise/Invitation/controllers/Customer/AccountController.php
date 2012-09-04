@@ -118,6 +118,10 @@ class Enterprise_Invitation_Customer_AccountController extends Mage_Customer_Acc
         $this->_redirect('customer/account/login');
     }
 
+    public function indexAction() {
+        echo "hello World";
+    }
+
     /**
      * Create customer account action
      */

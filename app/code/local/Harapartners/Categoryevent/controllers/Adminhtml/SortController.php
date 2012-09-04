@@ -24,6 +24,7 @@ class Harapartners_Categoryevent_Adminhtml_SortController extends Mage_Adminhtml
         if(!$storeId){
             $storeId = Mage_Core_Model_App::DISTRO_STORE_ID;
         }
+
         if (!!$this->getRequest()->getPost('post_active') ) {
             Mage::getSingleton('adminhtml/session')->setData('categoryevent_sort_data_post', true); 
             try {            
@@ -99,6 +100,51 @@ class Harapartners_Categoryevent_Adminhtml_SortController extends Mage_Adminhtml
             $jsonResponse['status'] = 0;
             $jsonResponse['error_message'] = 'Rebuild Faild';
         }
+        echo json_encode($jsonResponse);
+        exit;
+    }
+
+    public function sortByDateAction() {
+//      $this->_title($this->__('Category Event'))->_title($this->__('Sort Category Events'));
+        $sortDate = $this->getRequest()->getPost('sort_date');
+        if(!$sortDate){
+            $sortDate = $this->_getTodayWithTimeOffset();
+        }
+        $storeId = $this->getRequest()->getPost('sort_store');
+        
+        if(!$storeId){
+            $storeId = Mage_Core_Model_App::DISTRO_STORE_ID;
+        }
+        
+
+        Mage::getSingleton('adminhtml/session')->setData('categoryevent_sort_data_post', true); 
+        try {            
+            $sortentry = Mage::getModel('categoryevent/sortentry')->loadByDate($sortDate, $storeId, false);
+            $arrayLive = json_decode($sortentry->getData('live_queue'), true);
+            $sorted = Mage::getModel('categoryevent/sortentry')->sortByStartDate($arrayLive);
+
+           echo "<pre>";
+            foreach($arrayLive as $event){
+                var_dump($event['event_end_date']);
+            }
+            echo "<br/>";
+            foreach($sorted as $event){
+                var_dump($event['event_end_date']);
+            }
+          //  var_dump(array_keys($arrayLive));
+            echo "</pre>";
+            die();
+            $arrayUpcoming = json_decode($sortentry->getData('upcoming_queue'), true);
+            Mage::getSingleton('adminhtml/session')->setData('categoryevent_sort_date', $sortDate);
+            Mage::getSingleton('adminhtml/session')->setData('categoryevent_sort_storeid', $storeId);
+            Mage::getSingleton('adminhtml/session')->setData('categoryevent_sort_live_queue', $arrayLive);
+            Mage::getSingleton('adminhtml/session')->setData('categoryevent_sort_upcoming_queue', $arrayUpcoming); 
+        }catch (Exception $e){
+            Mage::logException($e);
+            Mage::getSingleton('core/session')->addError('Cannot Load Events');
+            Mage::getSingleton('adminhtml/session')->setData('categoryevent_sort_data_post', false);
+        }
+
         echo json_encode($jsonResponse);
         exit;
     }

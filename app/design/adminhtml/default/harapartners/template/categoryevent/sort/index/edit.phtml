@@ -56,7 +56,7 @@
                         $imgFile = BP.DS.'skin'.DS.'frontend'.DS.'enterprise'.DS.'harapartners'.DS.'images'.DS.'catalog'.DS.'product'.DS.'placeholder'.DS.'thumbnail.jpg';
                     }
                     ?>
-					<p class="event-name"><?php echo $up['name'];?></p>
+					<p class="event-name"><?php echo $up['name'] . "<br/> (" . date("m-d-Y H:i:s" , strtotime($up['event_start_date'])) .")";?></p>
 					<a class="event-link" href=""><img src="<?php echo Mage::helper('service/image')->loadImageFile($imgFile)->resize(150,173); ?>" width="150px" height="173px" alt="" /></a>
 				</li>
 			<?php endforeach; ?>
@@ -68,6 +68,9 @@
 		</button>
 		<button id="sort-rebuild-submit" class="scalable" type="button" onclick="rebuildSubmit();">
 			<span><?php echo Mage::helper('categoryevent')->__('Rebuild Sort') ?></span>
+		</button>
+		<button id="sort-auto-submit" class="scalable" type="button" onclick="AutoSortSubmit();">
+			<span><?php echo Mage::helper('categoryevent')->__('Auto Sort') ?></span>
 		</button>
 		<!--button id="sort-order-submit" class="scalable" type="button" onclick="alert('Flush page cache');">
 			<span><?php// echo Mage::helper('categoryevent')->__('Refresh home (sales) pages immediately') ?></span>
@@ -145,5 +148,22 @@
 				}
 			},
 		});
-	}	
+	}
+	function AutoSortSubmit() {
+		var sortformkey = '<?php echo $this->getFormKey(); ?>';
+		jQuery.ajax({
+			type: 'POST',
+			url: "<?php echo $this->getAutoSortPostUrl(); ?>",
+			data: "&sortdate="+sortdate+"&storeid="+storeid+"&"+liveorder+"&"+uporder+"&form_key="+sortformkey,
+			dataType: "json",
+			success: function(jsonResponse){
+				/*if(jsonResponse.status){
+					alert('Auto Sort Completed');
+					jQuery("#sort-type-submit").click();					
+				}else {
+					alert(jsonResponse.error_message);
+				}*/
+			},
+		});
+	}
 </script>
