@@ -107,13 +107,13 @@ html.test .container .row {outline:1px dotted green;}
 }
 .zoomImage { padding:0px; z-index:500!important; }
 
-/* Ellipsis classes for truncating long titles */
+/* Ellipsis class for truncating long titles 
+ * to use, the element must also have a fixed width, either implicit (inherited) or explicit
+ */
 .ellipsis {
     white-space:nowrap;
     overflow:hidden;
-}
-.ellipsis:after {
-    content:'...';
+    text-overflow: ellipsis;
 }
 
 /* link classes */
@@ -204,209 +204,12 @@ body.customer-account-login .btn.btn-large {
     background-color: #adc222;
 }
 
-/**
- * @Home page
- */
-.carousel-inner {
-    min-height: 150px;
-    overflow: hidden;
-    position: relative;
-    width: 100%;
-}
-#mainContent {
-    padding-top:190px; 
-    padding-bottom:250px; overflow: auto; /* @sticky, +more padding */
-}
-.logged-out ~ #mainContent {
-    margin-top:115px;
-}
-#mainContent > .banner {
-    margin:5px auto 0;
-}
-.catalog-events-container {margin-top:8px;}
-.banner + .catalog-events-container {margin-top:18px;}
-.page-header img {margin-right: 5px;}
-
-/* event tiles */
-.events-grid .thumbnail {
-    position: relative;
+/* social links - …for now. perhaps can be expanded/abstracted to more modular class */
+.social-links {
     display: block;
-    margin: 0; padding: 0;
-}
-.events-grid .thumbnail:hover {
-    border-color:#ddd;
-    text-decoration: none;
-    -moz-box-shadow: 0 1px 4px rgba(0, 105, 214, 0.15);
-    -webkit-box-shadow: 0 1px 4px rgba(0, 105, 214, 0.15);
-    box-shadow: 0 1px 4px rgba(0, 105, 214, 0.15);
-}
-.events-grid hgroup {
-    border-bottom:1px solid #ddd;
-}
-.events-grid .span3 hgroup {
-    padding: 8px 4px;
-    height: 30px; overflow: hidden;
-}
-.events-grid .span2 hgroup {
-    padding: 4px 4px;
-    height: 18px; overflow: hidden;
-}
-.events-grid h5 {
-    width:100%; overflow: hidden;
-    color:#333;
-    font-weight: normal;
-/*     white-space:nowrap; text-overflow: ellipsis; */ /* leave this out, see MGN-882 */
-} 
-.events-grid .span3 h5 {
-    font-size: 14px;
-} 
-.events-grid .span2 h5 {
-    font-size: 12px;
-}
-.events-grid h5 a,
-.events-grid h5 a:hover {
-    display: block;
-    color: #000;
-    text-decoration: none;
-}
-.events-grid .thumbnail .event-link {
-    display: block;
-}
-
-/* .more rollovers */
-.events-grid .thumbnail .more {
-    position: absolute; bottom: 0; left: 0;
-    opacity:0;
-    width:100%; height: 263px; overflow: hidden;
-    background: rgba(255,255,255,0.65);
-    -moz-transition:opacity 0.5s ease;
-    -webkit-transition:opacity 0.5s ease;
-    transition:opacity 0.5s ease;
-}
-.events-grid .thumbnail:hover .more {
-    opacity:1;
-}
-.events-grid .thumbnail .more-content {
-    position: absolute; bottom: 0; left: 0; z-index: 2;
-    padding:0 0 18px; width:100%;
-    text-align: center;
-    -moz-transition: opacity 0.5s ease;
-    -webkit-transition:opacity 0.5s ease;
-    transition:opacity 0.5s ease;
-}
-.events-grid .thumbnail .more [id*="time1-"] {
-    margin:10px 0 18px; padding:8px 0;
-    background:#fff;
-    -moz-box-shadow: 0 2px 2px rgba(0, 0, 0, 0.086);
-    -webkit-box-shadow: 0 2px 2px rgba(0, 0, 0, 0.086);
-    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.086);
-    border-bottom:1px solid #d1d9de;
-    font-weight: bold;
-}
-.events-grid .thumbnail .more [id*="time1-"] :first-child {
-    color:#999;
-    font-size:11px; font-style: italic; font-weight: normal;
-    text-transform: lowercase;
-}
-.events-grid .thumbnail .more [id*="time1-"] :first-child:after {
-    content: ":";
-    display: inline-block;
-}
-
-/* discount banner */
-.events-grid .more .maxDiscount {
-    position: absolute; top:0; left:0; z-index: 3;
-    display: block;
-    width: 90px; height: 90px;
-}
-.events-grid .more .maxDiscount em:before {
-    content: "";
-    display: inline-block;
-    position: absolute; top:-70px; left:-10px; z-index:-1;
-    width: 0; height: 0;
-    border-bottom: 100px solid #ed1c25;
-    border-left: 100px solid transparent;
-    border-right: 100px solid transparent;
-}
-.events-grid .more .maxDiscount em {
-    display: block;
-    position: absolute; left:-3px; top:-3px; z-index:100;
-    margin-top: 0;
-    width: 100%; height: 100%;
-    color:#fff;
-    font-size: 13px; font-style: normal;
-    text-align: center;
-    text-shadow: 0 -1px 0px rgba(0,0,0,0.25);
-    -moz-transform: rotate(-45deg);
-    -ms-transform: rotate(-45deg);
-    -webkit-transform: rotate(-45deg);
-    transform: rotate(-45deg);
-}
-.events-grid .more .maxDiscount em span {
-    display: block;
-}
-.events-grid .more .maxDiscount strong {
-    font-size:14px; font-weight:bold;
-}
-
-.events-grid .thumbnail .more .labels {
-    margin:1px 0; padding:0 2px 0 8px; width: auto;
-    text-align:left;
-    text-shadow:0px -1px 0px rgba(255, 255, 255, 0.45);
-}
-.events-grid .thumbnail .more .labels h6 {
-    float: left;
-    width:65px;
-    color:#000;
-    font-size:11px;
-    line-height: 1.4;
-    text-transform: capitalize;
-}
-.events-grid .thumbnail .more .labels ul {
+    width: 153px;
     float: right;
-    margin:0; width:150px;
-    line-height: 1;
-}
-.events-grid .thumbnail .more .labels li {
-    display: inline;
-    margin: 0 1px 0 0;
-    color:#000;
-    font-size:11px; font-weight: bold;
-    line-height: 1;
-    text-transform: capitalize;
-}
-.events-grid .thumbnail .more .labels li i {
-    font-style: normal;
-    text-transform: lowercase;
-}
-.events-grid .thumbnail .more .labels li:before {
-    content: ',';
-    display: inline-block;
-    position:relative; left:-5px;
-}
-.events-grid .thumbnail .more .labels li:first-child:before {
-    content:''
-}
-
-/* upcoming */
-#events-upcoming .thumbnails li >div {position: relative;}
-#events-upcoming .opens_in {
-    position: absolute; bottom: 0; left: 0;
-    margin: 0; padding:4px 0;
-    width:100%;
-    background: rgba(255,255,255,0.65);
-    border-top:1px solid #ddd;
-    color:#0e0e0e;
-    font-size: 11px;
-    text-indent: 4px;
-}
-#events-upcoming .opens_in span:first-child {
-    color:#4e4e4e;
-    font-style: italic;
-}
-#events-upcoming .opens_in span:first-child:after {
-    content: ":";
-    display: inline;
+    margin: -14px -18px 0px 0px;
 }
 
 /**
@@ -625,6 +428,210 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
     border:none;
 }
 
+/**
+ * @Home page
+ */
+.carousel-inner {
+    min-height: 150px;
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+}
+#mainContent {
+    padding-top:190px; 
+    padding-bottom:250px; overflow: auto; /* @sticky, +more padding */
+}
+.logged-out ~ #mainContent {
+    margin-top:115px;
+}
+#mainContent > .banner {
+    margin:5px auto 0;
+}
+.catalog-events-container {margin-top:8px;}
+.banner + .catalog-events-container {margin-top:18px;}
+.page-header img {margin-right: 5px;}
+
+/* event tiles */
+.events-grid .thumbnail {
+    position: relative;
+    display: block;
+    margin: 0; padding: 0;
+}
+.events-grid .thumbnail:hover {
+    border-color:#ddd;
+    text-decoration: none;
+    -moz-box-shadow: 0 1px 4px rgba(0, 105, 214, 0.15);
+    -webkit-box-shadow: 0 1px 4px rgba(0, 105, 214, 0.15);
+    box-shadow: 0 1px 4px rgba(0, 105, 214, 0.15);
+}
+.events-grid hgroup {
+    border-bottom:1px solid #ddd;
+}
+.events-grid .span3 hgroup {
+    padding: 8px 4px;
+    height: 30px; overflow: hidden;
+}
+.events-grid .span2 hgroup {
+    padding: 4px 4px;
+    height: 18px; overflow: hidden;
+}
+.events-grid h5 {
+    width:100%; overflow: hidden;
+    color:#333;
+    font-weight: normal;
+/*     white-space:nowrap; text-overflow: ellipsis; */ /* leave this out, see MGN-882 */
+} 
+.events-grid .span3 h5 {
+    font-size: 14px;
+} 
+.events-grid .span2 h5 {
+    font-size: 12px;
+}
+.events-grid h5 a,
+.events-grid h5 a:hover {
+    display: block;
+    color: #000;
+    text-decoration: none;
+}
+.events-grid .thumbnail .event-link {
+    display: block;
+}
+
+/* .more rollovers */
+.events-grid .thumbnail .more {
+    position: absolute; bottom: 0; left: 0;
+    opacity:0;
+    width:100%; height: 263px; overflow: hidden;
+    background: rgba(255,255,255,0.65);
+    -moz-transition:opacity 0.5s ease;
+    -webkit-transition:opacity 0.5s ease;
+    transition:opacity 0.5s ease;
+}
+.events-grid .thumbnail:hover .more {
+    opacity:1;
+}
+.events-grid .thumbnail .more-content {
+    position: absolute; bottom: 0; left: 0; z-index: 2;
+    padding:0 0 18px; width:100%;
+    text-align: center;
+    -moz-transition: opacity 0.5s ease;
+    -webkit-transition:opacity 0.5s ease;
+    transition:opacity 0.5s ease;
+}
+.events-grid .thumbnail .more [id*="time1-"] {
+    margin:10px 0 18px; padding:8px 0;
+    background:#fff;
+    -moz-box-shadow: 0 2px 2px rgba(0, 0, 0, 0.086);
+    -webkit-box-shadow: 0 2px 2px rgba(0, 0, 0, 0.086);
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.086);
+    border-bottom:1px solid #d1d9de;
+    font-weight: bold;
+}
+.events-grid .thumbnail .more [id*="time1-"] :first-child {
+    color:#999;
+    font-size:11px; font-style: italic; font-weight: normal;
+    text-transform: lowercase;
+}
+.events-grid .thumbnail .more [id*="time1-"] :first-child:after {
+    content: ":";
+    display: inline-block;
+}
+
+/* discount banner */
+.events-grid .more .maxDiscount {
+    position: absolute; top:0; left:0; z-index: 3;
+    display: block;
+    width: 90px; height: 90px;
+}
+.events-grid .more .maxDiscount em:before {
+    content: "";
+    display: inline-block;
+    position: absolute; top:-70px; left:-10px; z-index:-1;
+    width: 0; height: 0;
+    border-bottom: 100px solid #ed1c25;
+    border-left: 100px solid transparent;
+    border-right: 100px solid transparent;
+}
+.events-grid .more .maxDiscount em {
+    display: block;
+    position: absolute; left:-3px; top:-3px; z-index:100;
+    margin-top: 0;
+    width: 100%; height: 100%;
+    color:#fff;
+    font-size: 13px; font-style: normal;
+    text-align: center;
+    text-shadow: 0 -1px 0px rgba(0,0,0,0.25);
+    -moz-transform: rotate(-45deg);
+    -ms-transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+}
+.events-grid .more .maxDiscount em span {
+    display: block;
+}
+.events-grid .more .maxDiscount strong {
+    font-size:14px; font-weight:bold;
+}
+
+.events-grid .thumbnail .more .labels {
+    margin:1px 0; padding:0 2px 0 8px; width: auto;
+    text-align:left;
+    text-shadow:0px -1px 0px rgba(255, 255, 255, 0.45);
+}
+.events-grid .thumbnail .more .labels h6 {
+    float: left;
+    width:65px;
+    color:#000;
+    font-size:11px;
+    line-height: 1.4;
+    text-transform: capitalize;
+}
+.events-grid .thumbnail .more .labels ul {
+    float: right;
+    margin:0; width:150px;
+    line-height: 1;
+}
+.events-grid .thumbnail .more .labels li {
+    display: inline;
+    margin: 0 1px 0 0;
+    color:#000;
+    font-size:11px; font-weight: bold;
+    line-height: 1;
+    text-transform: capitalize;
+}
+.events-grid .thumbnail .more .labels li i {
+    font-style: normal;
+    text-transform: lowercase;
+}
+.events-grid .thumbnail .more .labels li:before {
+    content: ',';
+    display: inline-block;
+    position:relative; left:-5px;
+}
+.events-grid .thumbnail .more .labels li:first-child:before {
+    content:''
+}
+
+/* upcoming */
+#events-upcoming .thumbnails li >div {position: relative;}
+#events-upcoming .opens_in {
+    position: absolute; bottom: 0; left: 0;
+    margin: 0; padding:4px 0;
+    width:100%;
+    background: rgba(255,255,255,0.65);
+    border-top:1px solid #ddd;
+    color:#0e0e0e;
+    font-size: 11px;
+    text-indent: 4px;
+}
+#events-upcoming .opens_in span:first-child {
+    color:#4e4e4e;
+    font-style: italic;
+}
+#events-upcoming .opens_in span:first-child:after {
+    content: ":";
+    display: inline;
+}
 
 /* checkout btn in non-mini-cart header */
 #header-checkoutBtn {
