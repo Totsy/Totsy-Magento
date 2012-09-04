@@ -10,10 +10,12 @@
  * - Green          buttons         #c1d82f or #adc222 | rgba(173,194,34,1)
  */
  
-/*
 html,
 body { height: 100%;}
-*/
+#stickywrap { /* @sticky */
+    height: auto;
+    min-height: 100%;
+}
 html {
     margin:0;
     background:#fff;
@@ -212,7 +214,8 @@ body.customer-account-login .btn.btn-large {
     width: 100%;
 }
 #mainContent {
-    margin-top:190px; 
+    padding-top:190px; 
+    padding-bottom:250px; overflow: auto; /* @sticky, +more padding */
 }
 .logged-out ~ #mainContent {
     margin-top:115px;
@@ -898,7 +901,8 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
  */
 body > footer {
     position: relative;
-    margin-top:45px; padding: 17px 0 0 0;
+    margin-top:-221px; height: 203px; /* @sticky */
+    padding: 17px 0 0 0;
     min-width:950px; /* temp hackish fix for iPad display, prevent content of fixed width from bleeding in. @TODO: get responsive! */
     background: #e5e5e5;
     border-top:1px solid #fff;
