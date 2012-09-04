@@ -67,10 +67,8 @@
     </small>
 </footer>
     <div id="toTop" style="display: none;"><a class="btn btn-primary">^ Top</a></div>
+  
 <script type="text/javascript">
-    jQuery('input[placeholder], textarea[placeholder]').placeholder();
-</script>   
-<script>
         (function() {
         function loadHorizon() { 
             var s = document.createElement('script'); 
@@ -117,4 +115,6 @@
         new Ajax.Updater($('header-user-info'), '<?php echo $this->getUrl('customertracking/headermsg/ajax',array('_secure'=>Mage::app()->getStore()->isCurrentlySecure())); ?>', {method:'get',evalScripts: true});
     });
 </script>
-
+<script type="text/javascript">
+    jQuery('input[placeholder], textarea[placeholder]').placeholder();
+</script>
