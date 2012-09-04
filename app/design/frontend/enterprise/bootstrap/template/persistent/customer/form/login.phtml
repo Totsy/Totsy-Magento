@@ -67,7 +67,7 @@
     </div>
     <div class="row">
     <div style="text-align:center; margin:0px 0px 13px">
-    <a rel="facebook-connect" style="margin:10px 0px; cursor:pointer;" title="<?php echo $this->__('Connect with Facebook') ?>" class="facebook-button" ><img src="http://www.wiliam.com.au/content/upload/ablog1.jpg" /></a>
+    <a rel="facebook-connect" style="margin:10px 0px; cursor:pointer;" title="<?php echo $this->__('Connect with Facebook') ?>" class="facebook-button" ><img src="/skin/frontend/enterprise/bootstrap/images/facebook_connect_button.png" /></a>
     </div>
     <div class="span4">
     <div class="the-account-login account-login<?php if (!$this->helper('customer')->isRegistrationAllowed()) echo ' login-only' ?>">
@@ -80,9 +80,9 @@
         <?php echo $this->getChildHtml('persistent.remember.me'); ?>
         <?php echo $this->getChildHtml('persistent.remember.me.tooltip'); ?>
         <input type="checkbox" name="rememberme" value="remember" class="rememberme" align="middle"/>
-        <span style="padding:2px 0px;"><?php echo $this->__( ' Remember me' ); ?></span>
+        <span style="font-size:11px; color:#999;"><?php echo $this->__( ' Remember me' ); ?></span>
         <a href="<?php echo $this->getForgotPasswordUrl() ?>" class="pull-right"><?php echo $this->__('Forgot Your Password?') ?></a>
-        <div class="buttons-set form-buttons align-center" style="margin:21px 0px -16px 0px">
+        <div class="buttons-set form-buttons align-center" style="margin:5px 0px -16px 0px">
         <button type="submit" id="submit-button" class="btn btn-primary btn-large" style="width:100%;">Sign In</button>
         </div>
     </div>
@@ -100,5 +100,7 @@
             var dataForm = new VarienForm('login-form', true);
         //]]>
         </script>
+    <div class="badgecity_reg"></div>
+<p class="badgecity_fine_print">*Offer expires 30 days after sign up.</p>
     </div>
 </div>

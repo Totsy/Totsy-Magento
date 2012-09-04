@@ -105,13 +105,13 @@ html.test .container .row {outline:1px dotted green;}
 }
 .zoomImage { padding:0px; z-index:500!important; }
 
-/* Ellipsis class for truncating long titles 
- * to use, the element must also have a fixed width, either implicit (inherited) or explicit
- */
+/* Ellipsis classes for truncating long titles */
 .ellipsis {
     white-space:nowrap;
     overflow:hidden;
-    text-overflow: ellipsis;
+}
+.ellipsis:after {
+    content:'...';
 }
 
 /* link classes */
@@ -1039,30 +1039,30 @@ a.invite-btn {
 
 /* Sign In / Sign Up Classes */
 .badgecity_log {
-    background: url("../images/freeship30_days.png") no-repeat scroll left top transparent;
-    float: right;
-    height: 169px;
-    margin-right: -50px;
-    margin-top: -80px;
-    position: absolute;
-    right: 755px;
-    top: 76px;
-    width: 185px;
-    z-index: 10;
+  background: url("../images/freeship30_days.png") no-repeat scroll left top transparent;
+  float: right;
+  height: 99px;
+  margin-right: 0px;
+  margin-top: -21px;
+  position: absolute;
+  right: -30px;
+  top: -10px;
+  width: 98px;
+  z-index: 10;
 }
 .badgecity_reg {
-    background: url("../images/freeship30_days.png") no-repeat scroll left top transparent;
-    float: right;
-    height: 169px;
-    margin-right: -50px;
-    margin-top: -80px;
-    position: absolute;
-    right: 755px;
-    top: 76px;
-    width: 161px;
-    z-index: 10;
+  background: url("../images/freeship30_days.png") no-repeat scroll left top transparent;
+  float: right;
+  height: 99px;
+  margin-right: 0px;
+  margin-top: -21px;
+  position: absolute;
+  right: -30px;
+  top: -10px;
+  width: 98px;
+  z-index: 10;
 }
-.badgecity_fine_print {font-size:11px; color:#999; margin:2px 0px 0px 0px; text-align:center; padding:0px;}
+p.badgecity_fine_print {font-size:11px; color:#999; margin:2px 0px 0px 0px; text-align:center; padding:0px;}
 
 /* Forms Override */
 textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input {
@@ -1140,7 +1140,7 @@ body.catalog-category-view .price-box .special-price {
     padding: 15px;
 }
 .page_center{
-    width:auto;
+    width:310px;
     height:auto;
     position:absolute;
     left:50%;
@@ -1161,3 +1161,5 @@ body.catalog-category-view .price-box .special-price {
 .product_desc li {
     list-style: disc outside none;
 }
+
+.size_chart {top:446px; margin-left:134px; position: absolute;}
