@@ -25,7 +25,7 @@ class Harapartners_Categoryevent_Helper_Memcache extends Mage_Core_Helper_Abstra
     
     protected function _getMemcache(){
         if(!$this->_memcache){
-            $this->_memcache = Mage::getSingleton('memcachedb/resource_memcache');
+            $this->_memcache = Mage::app()->getCache();
         }
         return $this->_memcache;
     }
@@ -33,11 +33,11 @@ class Harapartners_Categoryevent_Helper_Memcache extends Mage_Core_Helper_Abstra
     public function getIndexDataObject($forceRebuild = false){
         $indexData = array();
         $memcacheKey = 'DATA_' . Mage::app()->getStore()->getCode() . '_' . $this->_indexDataMemcacheKey;
-        
-        $indexData = $this->_getMemcache()->read($memcacheKey);
+
+        $indexData = unserialize($this->_getMemcache()->load($memcacheKey));
         if($forceRebuild || !$this->_validateIndexData($indexData)){
             $indexData = $this->_getIndexDataFromDb();
-            $this->_getMemcache()->write($memcacheKey, $indexData, MEMCACHE_COMPRESSED, $this->_indexDataLifeTime);
+            $this->_getMemcache()->save(serialize($indexData), $memcacheKey, array(), $this->_indexDataLifeTime);
         }
         return new Varien_Object($indexData);
     }
@@ -53,10 +53,10 @@ class Harapartners_Categoryevent_Helper_Memcache extends Mage_Core_Helper_Abstra
             }
         }
         
-        $topNavData = $this->_getMemcache()->read($memcacheKey);
+        $topNavData = unserialize($this->_getMemcache()->load($memcacheKey));
         if(!$this->_validateTopNavData($topNavData)){
             $topNavData = $this->_getTopNavDataFromDb();
-            $this->_getMemcache()->write($memcacheKey, $topNavData, MEMCACHE_COMPRESSED, $this->_topNavDataLifeTime);
+            $this->_getMemcache()->save(serialize($topNavData), $memcacheKey, array(), $this->_topNavDataLifeTime);
         }
         return new Varien_Object($topNavData);
     }
