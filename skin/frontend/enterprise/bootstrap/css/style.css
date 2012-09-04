@@ -107,13 +107,13 @@ html.test .container .row {outline:1px dotted green;}
 }
 .zoomImage { padding:0px; z-index:500!important; }
 
-/* Ellipsis classes for truncating long titles */
+/* Ellipsis class for truncating long titles 
+ * to use, the element must also have a fixed width, either implicit (inherited) or explicit
+ */
 .ellipsis {
     white-space:nowrap;
     overflow:hidden;
-}
-.ellipsis:after {
-    content:'...';
+    text-overflow: ellipsis;
 }
 
 /* link classes */
