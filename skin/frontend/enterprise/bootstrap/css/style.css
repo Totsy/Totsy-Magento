@@ -204,14 +204,6 @@ body.customer-account-login .btn.btn-large {
     background-color: #adc222;
 }
 
-/* social links - …for now. perhaps can be expanded/abstracted to more modular class */
-.social-links {
-    display: block;
-    width: 153px;
-    float: right;
-    margin: -14px -18px 0px 0px;
-}
-
 /**
  * @Header
  * - "navbar" class from bootstrap
@@ -428,6 +420,17 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
     border:none;
 }
 
+/* checkout btn in non-mini-cart header */
+#header-checkoutBtn {
+    display: none; /* hide by default, ajax topcart logic displays when items in cart */
+    float: right; clear: right;
+    margin-top:3px;
+    text-align: right;
+}
+#header-checkoutBtn a { 
+    position:relative; left:-8px /* need to move this a bit to align with top cart (which moved to keep dropdown within 950 grid), tho now this is bit off grid… */
+}
+
 /**
  * @Home page
  */
@@ -442,7 +445,7 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
     padding-bottom:250px; overflow: auto; /* @sticky, +more padding */
 }
 .logged-out ~ #mainContent {
-    margin-top:115px;
+    padding-top:115px;
 }
 #mainContent > .banner {
     margin:5px auto 0;
@@ -633,15 +636,30 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
     display: inline;
 }
 
-/* checkout btn in non-mini-cart header */
-#header-checkoutBtn {
-    display: none; /* hide by default, ajax topcart logic displays when items in cart */
-    float: right; clear: right;
-    margin-top:3px;
-    text-align: right;
+
+/**
+ * @Event Landing Page
+ *
+ * @TODO: Refactor required post-MVP launch:
+ * - the event landing template files require more work
+ * - see MGN-978 & MGN-883
+ */
+/* social links - …for now. perhaps can be expanded/abstracted to more modular class */
+.social-links {
+    display: block;
+    width: 153px;
+    float: right;
+    margin: -14px -18px 0px 0px;
 }
-#header-checkoutBtn a { 
-    position:relative; left:-8px /* need to move this a bit to align with top cart (which moved to keep dropdown within 950 grid), tho now this is bit off grid… */
+.price-wrap {
+    float:right; 
+    margin-top:-46px; 
+    width:95px; 
+    text-align:right;
+} 
+body.catalog-category-view .thumbnails > li {position: relative;}
+.out-of-stock {
+    position: absolute; top: 0; right: 0;
 }
 
 /**
