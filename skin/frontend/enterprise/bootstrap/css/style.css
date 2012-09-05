@@ -665,7 +665,7 @@ body.catalog-category-view .thumbnails > li {position: relative;}
 /**
  * @Cart & Checkout
  */
-.address{
+.onepage-checkout {
     margin-left: 0px !important; 
 }
 
@@ -695,8 +695,12 @@ body.catalog-category-view .thumbnails > li {position: relative;}
    width:930px;
 }
 
-.address .onepage-blocks {
+.onepage-checkout .addresses {
    width:445px !important; 
+}
+
+.onepage-checkout .review-payment-blocks {
+   width:928px !important; 
 }
 
 .btn-proceed-checkout {
