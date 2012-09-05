@@ -143,6 +143,10 @@ class Harapartners_Categoryevent_Model_Sortentry extends Mage_Core_Model_Abstrac
 
                 $event['department'] = array();
                 $event['age'] = array();
+                $event['categories'] = array(
+                    'departments' => array(),
+                    'ages' => array()
+                );
                 $event['max_discount_pct'] = 0;
 
                 // populate event metadata (classifications) and calculate the
@@ -181,6 +185,12 @@ class Harapartners_Categoryevent_Model_Sortentry extends Mage_Core_Model_Abstrac
                 $event['age'] = array_values(
                     array_unique($event['age'])
                 );
+
+                Mage::helper('categoryevent/sortentry')
+                    ->getCategories($event,'department');
+
+                Mage::helper('categoryevent/sortentry')
+                    ->getCategories($event,'age');
 
                 if ( ($starttimediff <= 0) && ($endtimediff > 0) ) {
                     array_push( $liveNew, $event );
