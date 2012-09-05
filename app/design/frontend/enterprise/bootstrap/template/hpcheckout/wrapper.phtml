@@ -27,20 +27,21 @@
 		<?php endif ?>
 		<div class="address container row">
 		    <div class="onepage-blocks pull-left well">
-		    	    <div class="checkout-headline">
-		    	    	<h4 class="legend pull-left"><?php echo $this->__('Billing Address') ?></h4>
-		    	    	<?php if ($this->customerHasAddresses()): ?>
-		    	    	    <span class="billing-address-select totsy-selective-input-box pull-right">
+		   		<div class="checkout-headline">
+		    	    <h4 class="legend pull-left"><?php echo $this->__('Billing Address') ?></h4>
+		    	    <?php if ($this->customerHasAddresses()): ?>
+		    	   		<span class="billing-address-select totsy-selective-input-box pull-right">
 		    	    	        <?php echo $this->getAddressesHtmlSelect('billing') ?>
-		    	    	    </span>
-		    	    	<?php endif; ?>
-		    	    </div>
-		    	    <div style="clear:both"></div>
-		    	    <div id="hpcheckout-billing-wrapper" class="onepage-address-form">
+		    	    	</span>
+		    	    <?php endif; ?>
+		    	</div>
+		    	<div style="clear:both"></div>
+		    	<div id="hpcheckout-billing-wrapper" class="onepage-address-form">
 		    	    	<div class="checkout-content"><?php echo $this->getChildHtml('billing') ?></div>
-		    	    </div>
-            </div>
-		    <div class="onepage-blocks pull-right well">
+		    	</div>
+         </div>
+		 	<div class="onepage-blocks pull-right well">
+				<?php if( ! $this->getQuote()->isVirtual() ): ?>
 			        <div class="checkout-headline">
 			           <h4 class="legend pull-left"><?php echo $this->__('Shipping Address') ?></h4>
 			           <?php if ($this->customerHasAddresses()): ?>
@@ -50,13 +51,12 @@
 			           <?php endif; ?>
 			        </div>	
 		    	    <div style="clear:both"></div>
-			        <?php if( ! $this->getQuote()->isVirtual() ): ?>
 			        <div id="hpcheckout-shipping-wrapper" class="onepage-address-form">
 			            <div class="checkout-content"><?php echo $this->getChildHtml( 'shipping' ) ?></div>
 			        </div>
-			        <?php endif ?>
                     </div>
-		      </div>
+            	<?php endif ?>
+		    </div>
 		</div>
 		<div style="clear:both">
         <?php if( false && ! $this->getQuote()->isVirtual() ): ?>
