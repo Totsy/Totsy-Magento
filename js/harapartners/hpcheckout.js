@@ -81,7 +81,7 @@ HpCheckout.prototype = {
 				} else {
 					var message = blocksData[ blockCode ].message;
 				}
-				errorMessage = '<div class="hpcheckout-error-message">' + message + '</div>';
+				errorMessage = '<div class="hpcheckout-error-messages error-msg onepage">' + message + '</div>';
 			}
 			
 			var content = errorMessage + blocksData[ blockCode ].html;

@@ -829,6 +829,17 @@ body.catalog-category-view .thumbnails > li {position: relative;}
 	width:220px !important;
 }
 
+.error-msg {
+	color: red !important;
+	font-weight: bold;
+	font-size: 16px;
+	line-height:18px;
+}
+
+.error-msg .onepage {
+	padding-bottom: 20px;
+}
+
 .onepage-address-form .streetaddress2 {
     width:430px !important;
 }
