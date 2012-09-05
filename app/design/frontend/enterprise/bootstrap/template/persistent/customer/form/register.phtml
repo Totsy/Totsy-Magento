@@ -174,9 +174,9 @@
     <?php endif; ?>
         <div class="fieldset">
             <?php echo $this->getChildHtml('persistent.remember.me.tooltip'); ?>
-       <p style="font-size:11px;"><?php echo $this->__('By joining you accept our ')?> <a id="redtrerm" href="<?php echo $this->getBaseUrl()?>pages/terms/">terms and conditions.</a> </p>
+       <p style="font-size:11px; color:#999; text-align:center;"><?php echo $this->__('By joining you accept our ')?> <a id="redtrerm" href="<?php echo $this->getBaseUrl()?>pages/terms/">terms and conditions.</a> </p>
         </div>
-        <div class="buttons-set form-buttons align-center" style="margin:21px 0px -16px 0px">
+        <div class="buttons-set form-buttons align-center" style="margin:0px 0px -16px 0px">
             <button type="submit" id="submit-button" class="btn btn-primary btn-large pull-left" style="width:100%;">Sign Up</button>
         </div>
         <?php if (Mage::helper('checkout')->isContextCheckout()): ?>
@@ -227,11 +227,6 @@
 </div-->
 
 </div>
-<!-- <div class="badgecity_log"></div> -->
-<div class="clear"></div>
-<div class="badgecity_fine_print">
-<!-- <img src="/skin/frontend/enterprise/bootstrap/images/iconmonstr-badge-2-icon.png" width="20" height="20" style="margin-top:-2px;" /> -->
-<strong>FREE SHIPPING ON YOUR FIRST ORDER</strong><br />
-<small>Offer expires 30 days after sign up.</small>
-</div>
+<div class="badgecity_reg"></div>
+<p class="badgecity_fine_print">*Offer expires 30 days after sign up.</p>
 </div>

@@ -81,9 +81,12 @@ HpCheckout.prototype = {
 				} else {
 					var message = blocksData[ blockCode ].message;
 				}
-				errorMessage = '<div class="hpcheckout-error-message">' + message + '</div>';
+				errorMessage = '<div class="hpcheckout-error-messages error-msg onepage">' + message + '</div>';
 			}
-			jQuery( '#' + blocksData[ blockCode ].wrapperId + ' .checkout-content' ).html( errorMessage + blocksData[ blockCode ].html );
+			
+			var content = errorMessage + blocksData[ blockCode ].html;
+			
+			jQuery( '#' + blocksData[ blockCode ].wrapperId + ' .checkout-content' ).html(content);
 		}
 	},
 	
@@ -183,8 +186,9 @@ HpCheckout.prototype = {
 		var blocksToUpdate = hpcheckoutObject.getBlocksToUpdate( step );
 		// var postData = hpcheckoutObject.getFormData( step );
 		var postData = hpcheckoutObject.getFormData();
-		postData += '&currentStep=' + step + '&updatePayment=true';
+		postData += '&currentStep=' + step + '&updatePayment=true';		
 		hpcheckoutObject.ajaxRequest( postData );
+        //location.reload();
 	},
 	
 	submit: function() {
@@ -300,7 +304,7 @@ HpCheckout.prototype = {
 		var affectedFormIds = this.getFormIds( blockCodes ) ;
 		var returnFormDataArray = [];
 		for( var blockIndex = 0; blockIndex < affectedFormIds.length; blockIndex ++ ) {
-			returnFormDataArray.push( jQuery( '#' + affectedFormIds[ blockIndex ] ).serialize() );
+			returnFormDataArray.push( jQuery( '#' + affectedFormIds[ blockIndex ] + ' :input[value!="."]').serialize() );
 		}
 		return returnFormDataArray.join( '&' );
 	}, 
@@ -326,6 +330,7 @@ HpCheckout.prototype = {
 					checkoutObject.setBlocks( response );
 					checkoutObject.throbberOff();
 					checkoutObject.renderBlocks( blocksToUpdate );
+					jQuery('input[placeholder], textarea[placeholder]').placeholder();
 				}
 			}
 		});

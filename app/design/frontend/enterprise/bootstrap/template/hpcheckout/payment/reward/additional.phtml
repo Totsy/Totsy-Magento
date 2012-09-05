@@ -60,7 +60,7 @@
 			jQuery( '#reward-points-input' ).val( 1 );
 			if( isEnoughPointsToCoverAmount ) {
 	        	jQuery( '#hpcheckout-payment-select' ).val('');
-	        	//jQuery( '[id^="payment_form_"]' ).hide();
+	        	jQuery( '[id^="payment_form_"]' ).hide();
 	        }
 			hpcheckout.updatePayment();
 		});

@@ -25,62 +25,63 @@
 				<?php echo $this->getChildHtml( 'login' ) ?>
 			</div>
 		<?php endif ?>
-		<div class="address">
-		    <div class="onepage-blocks pull-left well">
-		    	    <div class="checkout-headline">
-		    	    	<h4 class="legend pull-left"><?php echo $this->__('Billing Address') ?></h4>
-		    	    	<?php if ($this->customerHasAddresses()): ?>
-		    	    	    <span class="billing-address-select totsy-selective-input-box pull-right">
+		<div class="onepage-checkout container row">
+		    <div class="addresses pull-left well">
+		   		<div class="checkout-headline">
+		    	    <h4 class="legend pull-left"><?php echo $this->__('Billing Address') ?></h4>
+		    	    <?php if ($this->customerHasAddresses()): ?>
+		    	   		<span class="billing-address-select totsy-selective-input-box pull-right">
 		    	    	        <?php echo $this->getAddressesHtmlSelect('billing') ?>
-		    	    	    </span>
-		    	    	<?php endif; ?>
-		    	    </div>
-		    	    <div style="clear:both"></div>
-		    	    <div id="hpcheckout-billing-wrapper" class="onepage-address-form">
+		    	    	</span>
+		    	    <?php endif; ?>
+		    	</div>
+		    	<div style="clear:both"></div>
+		    	<div id="hpcheckout-billing-wrapper" class="onepage-address-form">
 		    	    	<div class="checkout-content"><?php echo $this->getChildHtml('billing') ?></div>
-		    	    </div>
-            </div>
-		    <div class="onepage-blocks pull-right well">
-			        <div class="checkout-headline">
-			           <h4 class="legend pull-left"><?php echo $this->__('Shipping Address') ?></h4>
-			           <?php if ($this->customerHasAddresses()): ?>
-			               <span class="shipping-address-select totsy-selective-input-box pull-right">
-			                   <?php echo $this->getAddressesHtmlSelect('shipping') ?>
-			               </span>
-			           <?php endif; ?>
-			        </div>	
-		    	    <div style="clear:both"></div>
-			        <?php if( ! $this->getQuote()->isVirtual() ): ?>
-			        <div id="hpcheckout-shipping-wrapper" class="onepage-address-form">
-			            <div class="checkout-content"><?php echo $this->getChildHtml( 'shipping' ) ?></div>
-			        </div>
-			        <?php endif ?>
-                    </div>
-		      </div>
-		</div>
-		<div style="clear:both">
+		    	</div>
+         </div>
+		 <?php if( ! $this->getQuote()->isVirtual() ): ?>
+		 <div class="addresses pull-right well">
+	         <div class="checkout-headline">
+			     <h4 class="legend pull-left"><?php echo $this->__('Shipping Address') ?></h4>
+			     <?php if ($this->customerHasAddresses()): ?>
+			         <span class="shipping-address-select totsy-selective-input-box pull-right">
+			         <?php echo $this->getAddressesHtmlSelect('shipping') ?>
+			         </span>
+			     <?php endif; ?>
+			  </div>	
+		      <div style="clear:both"></div>
+		  	  <div id="hpcheckout-shipping-wrapper" class="onepage-address-form">
+	      	      <div class="checkout-content">
+	      	          <?php echo $this->getChildHtml( 'shipping' ) ?>
+	      	      </div>
+		  	  </div>
+         </div>
+        <?php endif ?>
+		<div style="clear:both"></div>
         <?php if( false && ! $this->getQuote()->isVirtual() ): ?>
-        <div id="hpcheckout-shipping-method-wrapper" class="well onepage-blocks">
+        <div id="hpcheckout-shipping-method-wrapper" class="well review-payment-blocks">
             <h4 class="legend">Shipping Method</h4>	
             <br />
             <div class="checkout-content"><?php echo $this->getChildHtml('shipping_method') ?></div>
         </div>
-        </div>
 		<?php endif ?>
-		<div id="hpcheckout-payment-wrapper" class="well onepage-blocks">		
+		<div style="clear:both"></div>
+		<div id="hpcheckout-payment-wrapper" class="well review-payment-blocks">		
 			<div class="checkout-content"><?php echo $this->getChildHtml( 'payment' ) ?></div>
 			<?php echo $this->getChildHtml( 'reward' ); ?>
 		</div>
-		<div>
-		<div id="hpcheckout-review-wrapper" class="well onepage-blocks">
+		<div id="hpcheckout-review-wrapper" class="well review-payment-blocks">
 			<div class="checkout-content"><?php echo $this->getChildHtml( 'review' ) ?></div>
 		</div>
 		</div>
+	</div>
+</div>
+</div>
 		<?php echo $this->getChildHtml( 'script' ) ?>
 	<?php else: ?>
 		<?php echo $this->__( 'Your cart is empty.' ) ?>
 	<?php endif ?>
-</div>
 <script type="text/javascript">
 function updateSelectText(){
 	jQuery(".totsy-selective-input-box select").each(function(){
