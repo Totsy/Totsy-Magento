@@ -445,7 +445,7 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
     padding-bottom:250px; overflow: auto; /* @sticky, +more padding */
 }
 .logged-out ~ #mainContent {
-    margin-top:115px;
+    padding-top:115px;
 }
 #mainContent > .banner {
     margin:5px auto 0;
