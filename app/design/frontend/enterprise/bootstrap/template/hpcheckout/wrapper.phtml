@@ -25,8 +25,8 @@
 				<?php echo $this->getChildHtml( 'login' ) ?>
 			</div>
 		<?php endif ?>
-		<div class="address container row">
-		    <div class="onepage-blocks pull-left well">
+		<div class="onepage-checkout container row">
+		    <div class="addresses pull-left well">
 		   		<div class="checkout-headline">
 		    	    <h4 class="legend pull-left"><?php echo $this->__('Billing Address') ?></h4>
 		    	    <?php if ($this->customerHasAddresses()): ?>
@@ -40,7 +40,7 @@
 		    	    	<div class="checkout-content"><?php echo $this->getChildHtml('billing') ?></div>
 		    	</div>
          </div>
-		 	<div class="onepage-blocks pull-right well">
+		 	<div class="addresses pull-right well">
 				<?php if( ! $this->getQuote()->isVirtual() ): ?>
 			        <div class="checkout-headline">
 			           <h4 class="legend pull-left"><?php echo $this->__('Shipping Address') ?></h4>
@@ -56,23 +56,25 @@
 			        </div>
                     </div>
             	<?php endif ?>
-		    </div>
-		</div>
-		<div style="clear:both">
+		<div style="clear:both"></div>
         <?php if( false && ! $this->getQuote()->isVirtual() ): ?>
-        <div id="hpcheckout-shipping-method-wrapper" class="well onepage-blocks">
+        <div id="hpcheckout-shipping-method-wrapper" class="well review-payment-blocks">
             <h4 class="legend">Shipping Method</h4>	
             <br />
             <div class="checkout-content"><?php echo $this->getChildHtml('shipping_method') ?></div>
         </div>
 		<?php endif ?>
-		<div id="hpcheckout-payment-wrapper" class="well onepage-blocks">		
+		<div style="clear:both"></div>
+		<div id="hpcheckout-payment-wrapper" class="well review-payment-blocks">		
 			<div class="checkout-content"><?php echo $this->getChildHtml( 'payment' ) ?></div>
 			<?php echo $this->getChildHtml( 'reward' ); ?>
 		</div>
-		<div id="hpcheckout-review-wrapper" class="well onepage-blocks">
+		<div id="hpcheckout-review-wrapper" class="well review-payment-blocks">
 			<div class="checkout-content"><?php echo $this->getChildHtml( 'review' ) ?></div>
 		</div>
+		</div>
+	</div>
+</div>
 </div>
 		<?php echo $this->getChildHtml( 'script' ) ?>
 	<?php else: ?>
