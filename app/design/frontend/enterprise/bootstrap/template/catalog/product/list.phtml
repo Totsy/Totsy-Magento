@@ -58,17 +58,20 @@
     <div class="row">
         <div class="span12">
         <?php // Grid Only Mode ?>
-        <?php $_collectionSize = $_productCollection->count() ?>
-        <?php $_columnCount = 3; //for the elements number will be changed by the filter ?>
+        <?php 
+            /*
+             * @GOTCHA: these collecitonSize and columnCount vars are not being used
+             * - no longer needing to count colleciton size to close ULs (all products are now in one big UL)
+             * - no longer need to count columns - their dependent "first" and "last" css classnames are not being used
+             */
+        ?>
+        <?php //$_collectionSize = $_productCollection->count() ?>
+        <?php //$_columnCount = 3; //for the elements number will be changed by the filter ?>
         <?php //$_columnCount = $this->getColumnCount(); ?>
             <ul class="thumbnails">
-            <?php $i=0; foreach ($_productCollection as $_product): ?>
-                    <?php if ($i++%$_columnCount==0): // @TODO: what is this for? ?>
-                    <?php endif; ?>
-                    <li class="span4<?php if ( !$_product->isSalable() ): ?> status status_sold_out<?php endif; ?> item<?php if(($i-1)%$_columnCount==0): ?> first<?php elseif($i%$_columnCount==0): ?> last <?php endif; ?><?php echo ' '.str_replace(',',' ',$_product->getDepartments()) ?>" data-department="<?php echo str_replace(',',' ',$_product->getDepartments()) ?>">
-                        <?php if ( !$_product->isSalable() ): ?>
-                            <img class="out-of-stock" src="<?php echo $this->getSkinUrl('images/soldout.png');?>"/>
-                        <?php endif; ?>
+        	<?php foreach ($_productCollection as $_product): ?>
+        		<?php if ( $_product->isSalable() ):?>
+                    <li class="span4 item<?php echo ' '.str_replace(',',' ',$_product->getDepartments()) ?>" data-department="<?php echo str_replace(',',' ',$_product->getDepartments()) ?>">
                         <span class="echoShare" 
                             data-productname="<?php echo $_product->getName();?>"
                             data-productcap="" 
@@ -90,9 +93,35 @@
                             </div>
                         </div>
                     </li>
-                    <?php if ($i%$_columnCount==0 || $i==$_collectionSize): // @TODO: what is this for ? ?>
-                    <?php endif; ?>
-            <?php endforeach ?>
+                <?php endif; ?>
+            <?php endforeach; ?>
+        	<?php foreach ($_productCollection as $_product): ?>
+        		<?php if ( !$_product->isSalable() ):?>
+                    <li class="span4 status status_sold_out item<?php echo ' '.str_replace(',',' ',$_product->getDepartments()) ?>" data-department="<?php echo str_replace(',',' ',$_product->getDepartments()) ?>">
+                        <img class="out-of-stock" src="<?php echo $this->getSkinUrl('images/soldout.png');?>"/>
+                        <span class="echoShare" 
+                            data-productname="<?php echo $_product->getName();?>"
+                            data-productcap="" 
+                            data-productdesc="<?php echo $_product->getShortDescription();?>" 
+                            data-imageclass="" 
+                            data-producturl="<?php echo $_product->getProductUrl(); ?>">
+                        </span>
+                        <div class="thumbnail" style="padding:0px; min-height:369px;">
+                            <a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" class="product-image"><img src="<?php echo $this->helper('catalog/image')->init($_product, 'small_image')->resize(308, 310)->keepFrame(FALSE); ?>" width="308px" alt="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" /></a>
+                            <div class="caption">
+                                <h5 style="display:block; min-height:35px; width:195px; font-weight: normal; color: #636466; font-size: 13px;"><?php echo $_helper->productAttribute($_product, $_product->getName(), 'name') ?></h5>
+                                <?php if($_product->getRatingSummary()): ?>
+                                <?php echo $this->getReviewsSummaryHtml($_product, 'short') ?>
+                                <?php endif; ?>
+                                <div class="price-wrap">
+                                    <?php echo $this->getPriceHtml($_product, true) ?>
+                                </div>
+                                <div class="clear"></div>
+                            </div>
+                        </div>
+                    </li>
+                <?php endif;?>
+            <?php endforeach; ?>
             </ul>
         </div><!-- /.span12 -->
     </div><!-- /.row -->
