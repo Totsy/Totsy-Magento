@@ -42,9 +42,9 @@
                         <button type="button" title="<?php echo $this->__('Add to Cart') ?>" class="button btn-cart" onclick="setLocation('<?php echo $this->getAddToCartUrl($_product) ?>')"><span><span><?php echo $this->__('Add to Cart') ?></span></span></button>
                     <?php else: ?>
                         <?php if ($_product->getIsSalable()): ?>
-                            <p class="availability in-stock"><span><?php echo $this->__('In stock') ?></span></p>
+                            <p class="availability in-stock error-msg"><span><?php echo $this->__('In stock') ?></span></p>
                         <?php else: ?>
-                            <p class="availability out-of-stock"><span><?php echo $this->__('Out of stock') ?></span></p>
+                            <p class="availability out-of-stock error-msg"><span><?php echo $this->__('Out of stock') ?></span></p>
                         <?php endif; ?>
                     <?php endif; ?>
                     <ul class="add-to-links">
