@@ -24,6 +24,9 @@
  * @license     http://www.magentocommerce.com/license/enterprise-edition
  */
 ?>
+<div class="clear"></div>
+<!-- clear the content -->
+
 <footer>
     <div class="container row">
             <div class="span4 alpha">
@@ -56,7 +59,7 @@
                     <li><a href="http://www.facebook.com/totsy" target="_blank"><img src="<?php echo $this->getSkinUrl('images/iconmonstr-facebook-3-icon.png') ?>" width="30px"/></a> 
                     <a href="http://twitter.com/mytotsy" target="_blank"><img src="<?php echo $this->getSkinUrl('images/iconmonstr-twitter-3-icon.png') ?>" width="30px"/></a>
                     <a href="http://pinterest.com/totsyfan/" target="_blank"><img src="<?php echo $this->getSkinUrl('images/iconmonstr-pinterest-3-icon.png') ?>" width="30px"/></a>
-                    <a href="http://www.youtube.com/user/totsy" target="_blank"><img src="<?php echo $this->getSkinUrl('images/iconmonstr-youtube-3-icon.png') ?>" width="30px"/></a></li>
+                    <a href="http://www.youtube.com/user/totsy" target="_blank"><img src="<?php echo $this->getSkinUrl('images/youtube.png') ?>" width="30px"/></a></li>
                     <hr />
                     <li><a href="//privacy-policy.truste.com/click-with-confidence/wps/en/www.totsy.com/seal_m" title="TRUSTe online privacy certification" target="_blank"><img src="//privacy-policy.truste.com/certified-seal/wps/en/www.totsy.com/seal_m.png" alt="TRUSTe online privacy certification"/></a></li>
                 </ul>
@@ -67,8 +70,12 @@
     </small>
 </footer>
     <div id="toTop" style="display: none;"><a class="btn btn-primary">^ Top</a></div>
-  
-<script type="text/javascript">
+
+<script>
+    jQuery('input[placeholder], textarea[placeholder]').placeholder();
+</script>
+    
+<script>
         (function() {
         function loadHorizon() { 
             var s = document.createElement('script'); 
@@ -111,7 +118,7 @@
             window.location = "<?php echo Mage::getUrl('customer/account/logout')?>"// user is now logged out
         });
     }
-</script>
-<script type="text/javascript">
-    jQuery('input[placeholder], textarea[placeholder]').placeholder();
+        Event.observe(document,'dom:loaded',function() {
+        new Ajax.Updater($('header-user-info'), '<?php echo $this->getUrl('customertracking/headermsg/ajax',array('_secure'=>Mage::app()->getStore()->isCurrentlySecure())); ?>', {method:'get',evalScripts: true});
+    });
 </script>
