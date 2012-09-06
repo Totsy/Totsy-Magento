@@ -111,16 +111,10 @@
                     $endcountRaw = strtotime($live['event_end_date']);
                     $endcount = date("F j, Y, G:i:s", $endcountRaw);
                     $hasProduct = $this->hasProduct($live['entity_id']);
-                    $eventDepts = $live['department'];
-                    $eventAges = $live['age'];
+                    $eventDepts = $live['department_label'];
+                    $eventAges = $live['age_label'];
                     $maxDiscount = $live['max_discount_pct'];
                 ?>
-                <?php
-                    echo '<pre>';
-                    echo print_r($live);
-                    echo '</pre>';
-                ?>
-
                 <?php if ($hasProduct): ?>
                     <li class="span3 catalog-event event-counter-<?php echo $timer;?>">
                         <span class="echoShare" 
@@ -143,10 +137,7 @@
                                         <h6>Categories:</h6>
                                         <ul>
                                         <?php foreach ($eventDepts as $eventDept) : ?>
-                                            <?php // convert slugs to labels
-                                                $deptLabel = str_replace('-', ' <i>and</i> ', $eventDept);
-                                            ?>
-                                            <li><?php echo $deptLabel; ?></li>
+                                            <li><?php echo $eventDept; ?></li>
                                         <?php endforeach; ?>
                                         </ul>
                                     </section>
