@@ -2,7 +2,7 @@
 <layout version="0.1.0">
     <checkout_cart_index>
 		<reference name="head">
-			<!--<action method="addJs"><script>jquery/jquery.jcountdown1.3.min.js</script></action> -->
+			<action method="addJs"><script>jquery/jquery.jcountdown1.3.min.js</script></action>
 		</reference>
         <reference name="checkout.cart">
 			<action method="addItemRender"><type>simple</type><block>checkout/cart_item_renderer</block><template>rushcheckout/rushcheckout.phtml</template></action>

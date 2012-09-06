@@ -20,7 +20,7 @@
  *
  * @category    design
  * @package     base_default
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright © 2011 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://www.magentocommerce.com/license/enterprise-edition
  */
 ?>
@@ -52,3 +52,24 @@
     </div>
 </footer>
 </div>
+<script>
+    var jsonArray =  <?php echo Mage::app()->getLayout()->createBlock('customertracking/background')->getBackroundImagesJsonArray();?>;
+    var keyword   =  jsonArray['keyword'];
+    var imgDir 	  =  jsonArray['dir'];
+    var items     =  jsonArray['images'];
+    if (!!keyword) {
+        var item = imgDir + keyword + ".jpg";
+    } else {
+    var item  =  items[Math.floor(Math.random()*items.length)];
+    }
+    jQuery.backstretch(item);
+</script>
+<script>
+    jQuery('input[placeholder], textarea[placeholder]').placeholder();
+</script>
+<script type="text/javascript">
+    //code for disabling echoSahre
+    if(typeof _esq!='undefined'){
+        _esq.settings.socialCenter = { enabled: false };
+    }
+</script>
