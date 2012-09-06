@@ -79,6 +79,10 @@ Catalog List layout
 	    <reference name="root">
             <action method="setTemplate"><template>page/1column.phtml</template></action>			
         </reference>	
+		<reference name="head">
+			<action method="addJs"><script>jquery/jquery.fancybox-1.3.4.pack.js</script></action>
+			<action method="addJs"><script>jquery/jquery.mousewheel-3.0.4.pack.js</script></action>
+		</reference>
 		<reference name="content">
             <block type="catalog/catalog_list" name="category.list" template="catalog/list.phtml" />
         </reference>
