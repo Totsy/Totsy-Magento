@@ -20,8 +20,6 @@
 	$arrayCollection = $this->loadSortCollection($sortDate, $storeId);
 	$liveArray = $arrayCollection['live'];
 	$upcomingArray = $arrayCollection['upcoming'];
-	$eventurl = $this->getEventUrl($liveArray[0]);
-	debug($eventurl);
 ?>
 <div class="catalog-events-container">
 	<div class="live-events-container">
@@ -117,7 +115,6 @@
 	});
 
 	function saveOrderSubmit(){
-		console.log(liveorder);
 		var sortformkey = '<?php echo $this->getFormKey(); ?>';
 		jQuery.ajax({
 			type: 'POST',
