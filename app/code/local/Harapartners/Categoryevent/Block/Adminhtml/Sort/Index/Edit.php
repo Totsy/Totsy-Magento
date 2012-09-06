@@ -46,6 +46,13 @@ class Harapartners_Categoryevent_Block_Adminhtml_Sort_Index_Edit extends Mage_Ad
             return false;
         }
     }
+
+    public function getEventUrl($event){
+        return $this->getUrl('adminhtml/catalog_category/edit', array(
+                'store'=>$this->getRequest()->getParam('store'),
+                'id'=>$event['entity_id']
+        ));
+    }
     
     public function getSortDate(){        
         $sortDate = Mage::getSingleton('adminhtml/session')->getData('categoryevent_sort_date');

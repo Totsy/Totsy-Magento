@@ -52,6 +52,7 @@ class Harapartners_Categoryevent_Adminhtml_SortController extends Mage_Adminhtml
         $liveSortedIdArray = array();
         $upComingSortedIdArray = array();
         $liveSortedIdArray = $this->getRequest()->getPost('recordsLiveArray');
+        
         $upComingSortedIdArray = $this->getRequest()->getPost('recordsUpArray');
         if(!!$this->getRequest()->getPost('sortdate')){
             $sortDate = $this->getRequest()->getPost('sortdate');
@@ -106,7 +107,8 @@ class Harapartners_Categoryevent_Adminhtml_SortController extends Mage_Adminhtml
 
     public function sortByDateAction() {
 //      $this->_title($this->__('Category Event'))->_title($this->__('Sort Category Events'));
-        $sortDate = $this->getRequest()->getPost('sort_date');
+        $sortDate = $this->getRequest()->getPost('sortdate');
+
         if(!$sortDate){
             $sortDate = $this->_getTodayWithTimeOffset();
         }
@@ -116,33 +118,25 @@ class Harapartners_Categoryevent_Adminhtml_SortController extends Mage_Adminhtml
             $storeId = Mage_Core_Model_App::DISTRO_STORE_ID;
         }
         
-
         Mage::getSingleton('adminhtml/session')->setData('categoryevent_sort_data_post', true); 
         try {            
             $sortentry = Mage::getModel('categoryevent/sortentry')->loadByDate($sortDate, $storeId, false);
             $arrayLive = json_decode($sortentry->getData('live_queue'), true);
-            $sorted = Mage::getModel('categoryevent/sortentry')->sortByStartDate($arrayLive);
+            $arrayLive = Mage::getModel('categoryevent/sortentry')->sortByStartDate($arrayLive);
 
-           echo "<pre>";
+            $liveids = array();
             foreach($arrayLive as $event){
-                var_dump($event['event_end_date']);
+                $liveids[] = $event['entity_id'];
             }
-            echo "<br/>";
-            foreach($sorted as $event){
-                var_dump($event['event_end_date']);
-            }
-          //  var_dump(array_keys($arrayLive));
-            echo "</pre>";
-            die();
-            $arrayUpcoming = json_decode($sortentry->getData('upcoming_queue'), true);
-            Mage::getSingleton('adminhtml/session')->setData('categoryevent_sort_date', $sortDate);
-            Mage::getSingleton('adminhtml/session')->setData('categoryevent_sort_storeid', $storeId);
-            Mage::getSingleton('adminhtml/session')->setData('categoryevent_sort_live_queue', $arrayLive);
-            Mage::getSingleton('adminhtml/session')->setData('categoryevent_sort_upcoming_queue', $arrayUpcoming); 
+            $jsonResponse['status'] = 1;
+            $jsonResponse['liveids'] = $liveids;
+            $jsonResponse['error_message'] = ''; 
         }catch (Exception $e){
             Mage::logException($e);
-            Mage::getSingleton('core/session')->addError('Cannot Load Events');
+            Mage::getSingleton('core/session')->addError('Cannot Sort Events By Date');
             Mage::getSingleton('adminhtml/session')->setData('categoryevent_sort_data_post', false);
+            $jsonResponse['status'] = 0;
+            $jsonResponse['error_message'] = 'Auto Sort Failed';
         }
 
         echo json_encode($jsonResponse);

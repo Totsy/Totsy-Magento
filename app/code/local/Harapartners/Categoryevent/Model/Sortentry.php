@@ -355,14 +355,9 @@ class Harapartners_Categoryevent_Model_Sortentry extends Mage_Core_Model_Abstrac
            $left_start_date = new Zend_Date($left['event_start_date'],"mm-dd-yyyy hh:ii:ss");
            $right_start_date = new Zend_Date($right['event_start_date'],"mm-dd-yyyy");
            $bool = $left_start_date->isEarlier($right_start_date);
-          // debug($left_start_date->toString() . " <-left right-> " .$right_start_date->toString() . " result: " . $bool);
            return $bool;
         };
         usort($events, $sortFunction);
-        foreach($events as $event) {
-            debug($event['event_start_date']);
-        }
-       // var_dump($events);
         return $events;
     }
 
