@@ -97,7 +97,6 @@ Default layout, loads most of the pages
                 <action method="addItem"><type>skin_js</type><name>js/html5shiv.js</name><params/><if>lt IE 9</if></action>
                 <action method="addItem"><type>skin_js</type><name>js/scripts.js</name></action>
                     <action method="addJs"><script>jquery/cloud-zoom.1.0.2.js</script></action>
-                    <action method="addJs"><script>jquery/jquery.fancybox.js</script></action>
                     <action method="addJs"><script>jquery/jquery.placeholder.min.js</script></action>
                     <!-- bootstrap components / plugins -->
                     <action method="addItem"><type>skin_js</type><name>js/prettify.js</name><params/></action>
