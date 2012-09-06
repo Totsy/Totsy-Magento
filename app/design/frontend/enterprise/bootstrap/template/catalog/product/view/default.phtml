@@ -25,8 +25,7 @@
  */
 ?>
 <?php /* @var $this Mage_Catalog_Block_Product_View_Abstract */?>
-<?php $_product = $this->getProduct() ?>
-
+<?php $_product = $this->getProduct(); ?>
 <?php if ($_product->isAvailable()): ?>
     <p class="availability in-stock error-msg"><?php echo $this->__('Availability:') ?> <span><?php echo $this->__('In stock') ?></span></p>
 <?php else: ?>
