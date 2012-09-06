@@ -12,46 +12,37 @@
                 // remove credit card number delimiters such as "-" and space
                 elm.value = removeDelimiters(elm.value);
                 v         = removeDelimiters(v);
-                
                 var ccType = $$('input:checked[type="radio"][name="payment[cc_type]"]').pluck('value');
-                
 				if (typeof Validation.creditCartTypes.get(ccType) == 'undefined') {
                     return false;
                 } 
-                
                 // Other card type or switch or solo card
                 if (Validation.creditCartTypes.get(ccType)[0]==false) {
                     return true;
                 }
                 // Matched credit card type
                 var ccMatchedType = '';
-                
 				Validation.creditCartTypes.each(function (pair) {
                     if (pair.value[0] && v.match(pair.value[0])) {
                         ccMatchedType = pair.key;
                         throw $break;
                     }
                 });
-               	
                	if(ccMatchedType != ccType) {
                     return false;
                 } 
                 return true;
             }],
             ['validate-cc-cvn-radio', 'Please enter a valid credit card verification number.', function(v, elm) {
-
                 var ccType = $$('input:checked[type="radio"][name="payment[cc_type]"]').pluck('value');
-                
                 if (typeof Validation.creditCartTypes.get(ccType) == 'undefined') {
                     return false;
                 }
-
                 var re = Validation.creditCartTypes.get(ccType)[1];
 
                 if (v.match(re)) {
                     return true;
                 }
-
                 return false;
             }]);
 
@@ -70,26 +61,31 @@
 ?>
 <div>
     <div>
-        <div class="hpcheckout-payment-title">
-            <h4 class="legend">Payment Information</h4>
-        </div>
-        <div class="cc_types use-new-card-wrapper">
-            <label for="<?php echo $_code ?>_cc_type" class="required"><em>*</em><?php echo $this->__('Credit Card Type') ?></label>
-            <div class="input-box">
-               <div class="totsy-selective-input-box middle-length">
-              <?php $_ccType = $this->getInfoData('cc_type') ?>
-                   <div id="<?php echo $_code ?>_cc_type">
-                   <?php foreach ($this->getCcAvailableTypes() as $_typeCode => $_typeName): ?>
-                       <input type="radio" class="validate-cybsersource-cc-type validate-one-required-by-name" name="payment[cc_type]" value="<?php echo $_typeCode ?>" <?php if($_typeCode==$_ccType) { echo "checked"; } ?> > 
-                       <span class="cc">
-                           <span title="<?php echo $_typeName; ?>"  class="<?php echo strtolower($_typeCode); ?>" >
-                           </span>
-                       </span>
-                   <?php endforeach ?>
-                   </div>
-               </div>
-            </div>
-        </div>       
+    	<div>
+        	<div class="hpcheckout-payment-title" class="pull-left">
+        	    <h4 class="legend">Payment Information</h4>
+        	</div>
+        	<!-- part A of a hack for the radio button error message-->
+        	<div>
+        	</div>
+        	<div class="cc_types use-new-card-wrapper input-box validation-error pull-left">
+        		<?php $_ccType = $this->getInfoData('cc_type') ?>
+        		 <div id="<?php echo $_code ?>_cc_type">
+        		 <?php $i=0; ?>
+        		 <?php foreach ($this->getCcAvailableTypes() as $_typeCode => $_typeName): ?>
+        		     	<input type="radio" class="validate-cybsersource-cc-type <?php if($i==3) { echo "validate-one-required"; } ?>" name="payment[cc_type]" value="<?php echo $_typeCode ?>" <?php if($_typeCode==$_ccType) { echo "checked"; } ?> > 
+        		 <?php $i++; ?>
+        		 	<span class="cc">
+        		 	    <span title="<?php echo $_typeName; ?>"  class="<?php echo strtolower($_typeCode); ?>" >
+        		 	    </span>
+        		 	</span> 
+        		 <?php endforeach ?>
+        		<!-- part B of a hack for the radio button error message-->
+        		 <div style="clear:both; height:10px"></div>
+        	    </div>
+        	    
+        	</div>  
+        </div>     
         <div class="pull-right cc_saved_cards">
             <?php if( $customerId && $profiles && ($profilesCounter>0) ): ?>
             <div class="switch-card-control">
@@ -137,31 +133,23 @@
         </div>
         <?php endif; ?>
         <div class="cc_exp pull-left use-new-card-wrapper">
-            <div>
-                <div for="<?php echo $_code ?>_expiration" class="required lbl"><em>*</em><?php echo $this->__('Expiration') ?></div>
-                <div class="pull-left">
-                    <div class="totsy-selective-input-box short-length">
-                    <label><?php echo $this->__('Month') ?></label>
-                        <select id="<?php echo $_code ?>_expiration" name="payment[cc_exp_month]" class="month validate-cc-exp required-entry">
-                        <?php $_ccExpMonth = $this->getInfoData('cc_exp_month') ?>
-                        <?php foreach ($this->getCcMonths() as $k=>$v): ?>
-                            <option value="<?php echo $k?$k:'' ?>" <?php if($k==$_ccExpMonth): ?>selected="selected"<?php endif ?>><?php echo $v ?></option>
-                        <?php endforeach ?>
-                        </select>
-                    </div>
+            <div class="pull-left">
+                <div for="<?php echo $_code ?>_expiration" class="lbl"><em>*</em><?php echo $this->__('Expiration') ?></div>
+                	<select id="<?php echo $_code ?>_expiration" name="payment[cc_exp_month]" class="month validate-cc-exp required-entry">
+                	<?php $_ccExpMonth = $this->getInfoData('cc_exp_month') ?>
+                	<?php foreach ($this->getCcMonths() as $k=>$v): ?>
+                	    <option value="<?php echo $k?$k:'' ?>" <?php if($k==$_ccExpMonth): ?>selected="selected"<?php endif ?>><?php echo $v ?></option>
+                	<?php endforeach ?>
+                	</select>	
             </div>
             <div>
-                <div class="totsy-selective-input-box short-length use-new-card-wrapper">
-                    <label><?php echo $this->__('Year') ?></label>
-                        <?php $_ccExpYear = $this->getInfoData('cc_exp_year') ?>
-                    <select id="<?php echo $_code ?>_expiration_yr" name="payment[cc_exp_year]" class="year required-entry">
-                        <?php foreach ($this->getCcYears() as $k=>$v): ?>
-                            <option value="<?php echo $k?$k:'' ?>" <?php if($k==$_ccExpYear): ?>selected="selected"<?php endif ?>><?php echo $v ?></option>
-                        <?php endforeach ?>
-                    </select>
-                </div>
+                <select id="<?php echo $_code ?>_expiration_yr" name="payment[cc_exp_year]" class="year required-entry">
+                <?php $_ccExpYear = $this->getInfoData('cc_exp_year') ?>
+                <?php foreach ($this->getCcYears() as $k=>$v): ?>
+                    <option value="<?php echo $k?$k:'' ?>" <?php if($k==$_ccExpYear): ?>selected="selected"<?php endif ?>><?php echo $v ?></option>
+                <?php endforeach ?>
+                </select>
             </div>
-        </div>
         </div>
         <div class="cc_save_card pull-right use-new-card-wrapper">
             <span>
