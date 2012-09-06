@@ -143,10 +143,8 @@ class Harapartners_Categoryevent_Model_Sortentry extends Mage_Core_Model_Abstrac
 
                 $event['department'] = array();
                 $event['age'] = array();
-                $event['categories'] = array(
-                    'departments' => array(),
-                    'ages' => array()
-                );
+                $event['department_label'] = array();
+                $event['age_label'] = array();
                 $event['max_discount_pct'] = 0;
 
                 // populate event metadata (classifications) and calculate the
@@ -168,6 +166,22 @@ class Harapartners_Categoryevent_Model_Sortentry extends Mage_Core_Model_Abstrac
                         $event['age'][] = $ages;
                     }
 
+                    // store user-friendly labels also
+                    $departments = $product->getAttributeTextByStore('departments', 0);
+                    $ages = $product->getAttributeTextByStore('ages', 0);
+
+                    if (is_array($departments)) {
+                        $event['department_label'] = $event['department_label'] + $departments;
+                    } else if (is_string($departments)) {
+                        $event['department_label'][] = $departments;
+                    }
+
+                    if (is_array($ages)) {
+                        $event['age_label'] = $event['age_label'] + $ages;
+                    } else if (is_string($ages)) {
+                        $event['age_label'][] = $ages;
+                    }
+
                     // calculate discount percentage for the event
                     $priceDiff = $product->getPrice() - $product->getSpecialPrice();
                     if ($product->getPrice()) {
@@ -186,11 +200,12 @@ class Harapartners_Categoryevent_Model_Sortentry extends Mage_Core_Model_Abstrac
                     array_unique($event['age'])
                 );
 
-                Mage::helper('categoryevent/sortentry')
-                    ->getCategories($event,'department');
-
-                Mage::helper('categoryevent/sortentry')
-                    ->getCategories($event,'age');
+                $event['department_label'] = array_values(
+                    array_unique($event['department_label'])
+                );
+                $event['age_label'] = array_values(
+                    array_unique($event['age_label'])
+                );
 
                 if ( ($starttimediff <= 0) && ($endtimediff > 0) ) {
                     array_push( $liveNew, $event );
