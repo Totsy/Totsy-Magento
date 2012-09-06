@@ -47,6 +47,7 @@ Default layout, loads most of the pages
                 <action method="addCss"><stylesheet>css/style.css</stylesheet></action>
                 <action method="addItem"><type>skin_css</type><name>css/ie9.css</name><params/><if>IE 9</if></action>
                 <action method="addItem"><type>skin_css</type><name>css/ie.css</name><params/><if>lt IE 9</if></action>
+                <action method="addItem"><type>skin_js</type><name>js/html5shiv.js</name><params/><if>lt IE 9</if></action>
             </block>
             <block type="core/text_list" name="after_body_start" as="after_body_start" translate="label">
                 <label>Page Top</label>
