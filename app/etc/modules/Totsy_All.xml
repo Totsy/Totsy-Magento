@@ -53,10 +53,6 @@
             <active>true</active>
             <codePool>local</codePool>
         </Totsy_Cybersource>
-        <Totsy_Categoryevent>
-            <active>true</active>
-            <codePool>local</codePool>
-        </Totsy_Categoryevent>    
         <Totsy_CatalogInventory>
             <active>true</active>
             <codePool>local</codePool>
