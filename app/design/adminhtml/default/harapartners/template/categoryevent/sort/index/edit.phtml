@@ -20,6 +20,8 @@
 	$arrayCollection = $this->loadSortCollection($sortDate, $storeId);
 	$liveArray = $arrayCollection['live'];
 	$upcomingArray = $arrayCollection['upcoming'];
+	$eventurl = $this->getEventUrl($liveArray[0]);
+	debug($eventurl);
 ?>
 <div class="catalog-events-container">
 	<div class="live-events-container">
@@ -36,8 +38,8 @@
                         $imgFile = BP.DS.'skin'.DS.'frontend'.DS.'enterprise'.DS.'harapartners'.DS.'images'.DS.'catalog'.DS.'product'.DS.'placeholder'.DS.'thumbnail.jpg';
                     }
                 ?>
-				<p class="event-name"><?php echo $live['name'];?></p>
-				<a class="event-link" href=""><img src="<?php echo Mage::helper('service/image')->loadImageFile($imgFile)->resize(150,173); ?>" width="150px" height="173px" alt="" /></a>
+				<p class="event-name"><?php echo $live['name'] . "<br/> (" . date("m-d-Y H:i:s" , strtotime($live['event_start_date'])) .")";?></p>
+				<a class="event-link" href="<?php echo $this->getEventUrl($live)?>" target='_blank'><img src="<?php echo Mage::helper('service/image')->loadImageFile($imgFile)->resize(150,173); ?>" width="150px" height="173px" alt="" /></a>
 			</li>
 		<?php endforeach; ?>
 		</ul>
@@ -56,8 +58,8 @@
                         $imgFile = BP.DS.'skin'.DS.'frontend'.DS.'enterprise'.DS.'harapartners'.DS.'images'.DS.'catalog'.DS.'product'.DS.'placeholder'.DS.'thumbnail.jpg';
                     }
                     ?>
-					<p class="event-name"><?php echo $up['name'];?></p>
-					<a class="event-link" href=""><img src="<?php echo Mage::helper('service/image')->loadImageFile($imgFile)->resize(150,173); ?>" width="150px" height="173px" alt="" /></a>
+					<p class="event-name"><?php echo $up['name'] . "<br/> (" . date("m-d-Y H:i:s" , strtotime($up['event_start_date'])) .")";?></p>
+					<a class="event-link" href="<?php echo $this->getEventUrl($up)?>" target='_blank'><img src="<?php echo Mage::helper('service/image')->loadImageFile($imgFile)->resize(150,173); ?>" width="150px" height="173px" alt="" /></a>
 				</li>
 			<?php endforeach; ?>
 		</ul>
@@ -68,6 +70,9 @@
 		</button>
 		<button id="sort-rebuild-submit" class="scalable" type="button" onclick="rebuildSubmit();">
 			<span><?php echo Mage::helper('categoryevent')->__('Rebuild Sort') ?></span>
+		</button>
+		<button id="sort-auto-submit" class="scalable" type="button" onclick="AutoSortSubmit();">
+			<span><?php echo Mage::helper('categoryevent')->__('Auto Sort') ?></span>
 		</button>
 		<!--button id="sort-order-submit" class="scalable" type="button" onclick="alert('Flush page cache');">
 			<span><?php// echo Mage::helper('categoryevent')->__('Refresh home (sales) pages immediately') ?></span>
@@ -112,6 +117,7 @@
 	});
 
 	function saveOrderSubmit(){
+		console.log(liveorder);
 		var sortformkey = '<?php echo $this->getFormKey(); ?>';
 		jQuery.ajax({
 			type: 'POST',
@@ -121,7 +127,7 @@
 			success: function(jsonResponse){
 				if(jsonResponse.status){
 					alert('Sort Order Saved');
-					jQuery("#sort-type-submit").click();					
+					jQuery("#sort-type-submit").click();	
 				}else {
 					alert(jsonResponse.error_message);
 				}
@@ -145,5 +151,48 @@
 				}
 			},
 		});
-	}	
+	}
+	function AutoSortSubmit() {
+		var sortformkey = '<?php echo $this->getFormKey(); ?>';
+		jQuery.ajax({
+			type: 'POST',
+			url: "<?php echo $this->getAutoSortPostUrl(); ?>",
+			data: "&sortdate="+sortdate+"&storeid="+storeid+"&"+liveorder+"&"+uporder+"&form_key="+sortformkey,
+			dataType: "json",
+			success: function(jsonResponse){
+
+				if(jsonResponse.status){
+					liveids = jsonResponse.liveids;
+
+					var livelist = jQuery('#sortable');
+					var events = livelist.children('li');
+					events = changeOrder(events);
+
+					jQuery.each(events, function(index, item){
+						livelist.append(item);
+					});
+					liveorder = livelist.sortable("serialize");
+					alert('Auto Sort Completed');
+					saveOrderSubmit();			
+				}else {
+					alert(jsonResponse.error_message);
+				}
+			},
+		});
+	}
+
+	function changeOrder(events) {
+		events.sort(function(left,right){
+			leftid = jQuery(left).attr('id');
+			leftid = leftid.substr(17);
+			leftid_pos = liveids.indexOf(leftid);
+
+			rightid = jQuery(right).attr('id');
+			rightid = rightid.substr(17);
+			rightid_pos = liveids.indexOf(rightid);
+			return (leftid_pos < rightid_pos) ? -1 : (leftid_pos > rightid_pos)? 1 : 0;
+		});
+
+		return events;
+	}
 </script>

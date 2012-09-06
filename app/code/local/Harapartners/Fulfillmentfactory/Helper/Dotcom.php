@@ -69,7 +69,7 @@ class Harapartners_Fulfillmentfactory_Helper_Dotcom extends Mage_Core_Helper_Abs
         
         return $items;
     }
-    
+
     /**
      * Send query request
      *
@@ -77,30 +77,26 @@ class Harapartners_Fulfillmentfactory_Helper_Dotcom extends Mage_Core_Helper_Abs
      * @param array $header
      * @return array response body
      */
-    protected function _sendQueryRequest($uri, $header=array()) {
-        try {
-            $this->_getConfig();
-            
-            $client = new Zend_Http_Client($uri);
-            
-            $header['Accept-encoding'] = 'gzip,deflate';
-            $header['Authorization'] = $this->_generateAuthHeader($uri);
-            $client->setHeaders($header);
-            
-            $response = $client->request();
+    protected function _sendQueryRequest($uri, $header = array())
+    {
+        $this->_getConfig();
 
-            if(isset($response)) {
-                $body = $response->getBody();
-                return $body;
-            }
+        $client = new Zend_Http_Client($uri);
+
+        $header['Accept-encoding'] = 'gzip,deflate';
+        $header['Authorization'] = $this->_generateAuthHeader($uri);
+        $client->setHeaders($header);
+
+        $response = $client->request();
+
+        // handle error conditions (400 or 500 level statuses)
+        if (($code = $response->getStatus()) > 399) {
+            Mage::throwException("Error $code received from Dotcom (" . $response->getBody() . ')');
         }
-        catch(Exception $e) {
-            throw new Exception('Send query to DOTcom failed: ' . $e->getMessage());
-        }
-        
-        return false;
+
+        return $response->getBody();
     }
-    
+
     /**
      * post xml request
      *
@@ -221,51 +217,82 @@ class Harapartners_Fulfillmentfactory_Helper_Dotcom extends Mage_Core_Helper_Abs
     /**
      * Get Current Inventory, loaded into a stream.
      *
-     * @return string The name of the stream.
+     * @return string The name of the stream to which the response is sent.
      */
     public function getInventory() {
         $this->_getConfig();
         $uri = self::$_apiUrl . '/inventory';
 
-        try {
-            $client = new Zend_Http_Client($uri);
+        $client = new Zend_Http_Client($uri);
 
-            $header['Accept-encoding'] = ''; //'gzip,deflate'; [dotcom doesn't support gzip encoding anyway]
-            $header['Authorization'] = $this->_generateAuthHeader($uri);
-            $client->setHeaders($header);
-            $client->setStream('/tmp/dotcom-inventory.xml');
+        $header['Accept-encoding'] = ''; //'gzip,deflate'; [dotcom doesn't support gzip encoding anyway]
+        $header['Authorization'] = $this->_generateAuthHeader($uri);
+        $client->setHeaders($header);
+        $client->setStream('/tmp/dotcom-inventory.xml');
 
-            $response = $client->request();
-            return $response->getStreamName();
-        }
-        catch(Exception $e) {
-            throw new Exception('Send query to DOTcom failed: ' . $e->getMessage());
-        }
+        $response = $client->request();
+        return $response->getStreamName();
     }
-    
+
     /**
-     * get stock info
+     * Get receipts information.
      *
-     * @param string $fromDate
-     * @param string $toDate
-     * @return SimpleXMLElement $xml
+     * @param string $from The beginning of the date range to search
+     * @param string $to   The end of the date range to search
+     *
+     * @return SimpleXMLElement|bool
      */
-    public function getStock($fromDate='', $toDate='') {
+    public function getReceipts($from = '', $to = '') {
         $this->_getConfig();
-        $uri = self::$_apiUrl . '/stockstatus';
-        $uri  = $uri . '?fromDate=' . urlencode($fromDate) . '&toDate=' . urlencode($toDate);    //GET Method
 
-        $body =  $this->_sendQueryRequest($uri);
-        
-        if(!empty($body)) {
-            $stock = $this->_readXMLString($body);
-            
-            return $stock;
+        if (empty($from)) {
+            $from = date('Y-m-d', strtotime('-1 day'));
         }
-        
-        return false;
+        if (empty($to)) {
+            $to = date('Y-m-d');
+        }
+        $uri = self::$_apiUrl . sprintf(
+            '/receipt?fromReceiptDate=%s&toReceiptDate=%s',
+            urlencode($from),
+            urlencode($to)
+        );
+
+        return $this->_sendQueryRequest($uri);
     }
-    
+
+    /**
+     * Get stock status information.
+     *
+     * @param string $from The beginning of the date range to search
+     * @param string $to   The end of the date range to search
+     *
+     * @return string The name of the stream to which the response is sent.
+     */
+    public function getStockStatus($from = '', $to = '') {
+        $this->_getConfig();
+
+        if (empty($from)) {
+            $from = date('Y-m-d', strtotime('-1 day')) . ' 0:00:00 AM';
+        }
+        if (empty($to)) {
+            $to = date('Y-m-d') . ' 0:00:00 AM';
+        }
+        $uri = self::$_apiUrl . sprintf(
+            '/stockstatus?fromDate=%s&toDate=%s',
+            urlencode($from),
+            urlencode($to)
+        );
+
+        $client = new Zend_Http_Client($uri);
+
+        $header['Authorization'] = $this->_generateAuthHeader($uri);
+        $client->setHeaders($header);
+        $client->setStream('/tmp/dotcom-stockstatus.xml');
+
+        $response = $client->request();
+        return $response->getStreamName();
+    }
+
     /**
      * get order status
      *

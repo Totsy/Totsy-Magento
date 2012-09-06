@@ -24,6 +24,7 @@ class Harapartners_Categoryevent_Adminhtml_SortController extends Mage_Adminhtml
         if(!$storeId){
             $storeId = Mage_Core_Model_App::DISTRO_STORE_ID;
         }
+
         if (!!$this->getRequest()->getPost('post_active') ) {
             Mage::getSingleton('adminhtml/session')->setData('categoryevent_sort_data_post', true); 
             try {            
@@ -51,6 +52,7 @@ class Harapartners_Categoryevent_Adminhtml_SortController extends Mage_Adminhtml
         $liveSortedIdArray = array();
         $upComingSortedIdArray = array();
         $liveSortedIdArray = $this->getRequest()->getPost('recordsLiveArray');
+        
         $upComingSortedIdArray = $this->getRequest()->getPost('recordsUpArray');
         if(!!$this->getRequest()->getPost('sortdate')){
             $sortDate = $this->getRequest()->getPost('sortdate');
@@ -99,6 +101,44 @@ class Harapartners_Categoryevent_Adminhtml_SortController extends Mage_Adminhtml
             $jsonResponse['status'] = 0;
             $jsonResponse['error_message'] = 'Rebuild Faild';
         }
+        echo json_encode($jsonResponse);
+        exit;
+    }
+
+    public function sortByDateAction() {
+//      $this->_title($this->__('Category Event'))->_title($this->__('Sort Category Events'));
+        $sortDate = $this->getRequest()->getPost('sortdate');
+
+        if(!$sortDate){
+            $sortDate = $this->_getTodayWithTimeOffset();
+        }
+        $storeId = $this->getRequest()->getPost('sort_store');
+        
+        if(!$storeId){
+            $storeId = Mage_Core_Model_App::DISTRO_STORE_ID;
+        }
+        
+        Mage::getSingleton('adminhtml/session')->setData('categoryevent_sort_data_post', true); 
+        try {            
+            $sortentry = Mage::getModel('categoryevent/sortentry')->loadByDate($sortDate, $storeId, false);
+            $arrayLive = json_decode($sortentry->getData('live_queue'), true);
+            $arrayLive = Mage::getModel('categoryevent/sortentry')->sortByStartDate($arrayLive);
+
+            $liveids = array();
+            foreach($arrayLive as $event){
+                $liveids[] = $event['entity_id'];
+            }
+            $jsonResponse['status'] = 1;
+            $jsonResponse['liveids'] = $liveids;
+            $jsonResponse['error_message'] = ''; 
+        }catch (Exception $e){
+            Mage::logException($e);
+            Mage::getSingleton('core/session')->addError('Cannot Sort Events By Date');
+            Mage::getSingleton('adminhtml/session')->setData('categoryevent_sort_data_post', false);
+            $jsonResponse['status'] = 0;
+            $jsonResponse['error_message'] = 'Auto Sort Failed';
+        }
+
         echo json_encode($jsonResponse);
         exit;
     }
