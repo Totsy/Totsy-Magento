@@ -115,6 +115,12 @@
                     $eventAges = $live['age'];
                     $maxDiscount = $live['max_discount_pct'];
                 ?>
+                <?php
+                    echo '<pre>';
+                    echo print_r($live);
+                    echo '</pre>';
+                ?>
+
                 <?php if ($hasProduct): ?>
                     <li class="span3 catalog-event event-counter-<?php echo $timer;?>">
                         <span class="echoShare" 
