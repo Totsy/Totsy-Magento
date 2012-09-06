@@ -118,7 +118,4 @@
             window.location = "<?php echo Mage::getUrl('customer/account/logout')?>"// user is now logged out
         });
     }
-        Event.observe(document,'dom:loaded',function() {
-        new Ajax.Updater($('header-user-info'), '<?php echo $this->getUrl('customertracking/headermsg/ajax',array('_secure'=>Mage::app()->getStore()->isCurrentlySecure())); ?>', {method:'get',evalScripts: true});
-    });
 </script>
