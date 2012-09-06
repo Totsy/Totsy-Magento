@@ -42,7 +42,7 @@
             <div style="display: none;">
                 <div id="invite_window" >
                     <div class="little-title">
-                        <h2><?php echo Mage::helper('enterprise_invitation')->__('Send Invitations') ?></h2>
+                        <h2><?php echo Mage::helper('enterprise_invitation')->__('Invite Your Friends') ?></h2>
                         <hr />
                         <p class="invite-notes">
                             <?php $inviteFriendNotes = "For each friend you invite, Totsy will credit your account with <span class='needgreen'>$15</span> after your friend's place their first order."; ?>
@@ -51,30 +51,24 @@
                     </div>
                 <form id="invitationForm" action="<?php echo $this->helper('enterprise_invitation')->getCustomerInvitationFormUrl()?>" method="post">
                 <div class="fieldset">
-                    <ul class="form-list">
                     <?php //$_perRow = ceil($maxPerSend/3); for($_index = 1; $_index <= $maxPerSend; $_index ++): ?>
-                        <li class="email-add-box">
-                        <label for="email"><?php echo Mage::helper('enterprise_invitation')->__('Enter Your Friends Email Addresses:');?> </label>
+                        <label for="email"><strong><?php echo Mage::helper('enterprise_invitation')->__('Enter Your Friends Email Addresses:');?></strong> (separated by comma)</label>
                         <div class="input-box">
-                        <textarea id="contact_list" tabindex="<?php //echo $_index+1 ?>" name="email" id="inviteemailaddress" title="<?php echo Mage::helper('enterprise_invitation')->__('email') ?>"  class="input-text" rows="3" cols="4"></textarea>
+                        <textarea id="contact_list" tabindex="<?php //echo $_index+1 ?>" name="email" id="inviteemailaddress" title="<?php echo Mage::helper('enterprise_invitation')->__('email') ?>"  class="input-text span7" rows="5" cols="4"></textarea>
                         </div>
-                        </li>
                     <?php //endfor; ?>
                     <?php if (Mage::helper('enterprise_invitation')->isInvitationMessageAllowed()): ?>
-                        <li class="email-msg-box">
-                        <label for="message"><?php echo Mage::helper('enterprise_invitation')->__('Personalized Message To Friends:');?> </label>
+                        <label for="message"><strong><?php echo Mage::helper('enterprise_invitation')->__('Personalized Message To Friends:');?></strong></label>
                         <div class="input-box">
-                        <textarea tabindex="<?php //echo $_index+1 ?>" name="message" id="message" title="<?php echo Mage::helper('enterprise_invitation')->__('Message') ?>"  class="input-text" rows="3" cols="4"><?php echo 'Please accept this invitation to join Totsy'; ?></textarea>
+                        <textarea tabindex="<?php //echo $_index+1 ?>" name="message" id="message" title="<?php echo Mage::helper('enterprise_invitation')->__('Message') ?>"  class="input-text span7" rows="5" cols="4"><?php echo 'Please accept this invitation to join Totsy'; ?></textarea>
                         </div>
-                        </li>
-                    </ul>
                     <?php endif;?>
                 </div>
                 <!--p class="required">
                 <?php echo Mage::helper('enterprise_invitation')->__('* Required Fields') ?></p-->
                 <div class="buttons-set form-buttons">
                 <!--p class="back-link"><a href="<?php echo Mage::helper('enterprise_invitation')->getCustomerInvitationUrl() ?>"><small>&laquo; </small><?php  echo Mage::helper('enterprise_invitation')->__('Back to Invitations') ?></a></p-->
-                <button class="button" type="submit"><div class="invite-button"><?php echo Mage::helper('enterprise_invitation')->__('Send Invitations') ?></div></button>
+                <button class="button btn btn-primary pull-right" type="submit"><div class="invite-button"><?php echo Mage::helper('enterprise_invitation')->__('Send Invitations') ?></div></button>
                 </div>
                 </form>
                 <script type="text/javascript">
