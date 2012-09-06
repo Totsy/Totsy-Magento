@@ -1,0 +1,75 @@
+<?php
+/**
+ * Magento Enterprise Edition
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Magento Enterprise Edition License
+ * that is bundled with this package in the file LICENSE_EE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://www.magentocommerce.com/license/enterprise-edition
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright © 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://www.magentocommerce.com/license/enterprise-edition
+ */
+?>
+<?php
+/**
+ * @see Mage_Page_Block_Template_Links
+ */
+?>
+<?php // echo $this->getLayout()->createBlock('cms/block')-> setBlockId('footer_logout')->toHtml(); ?>
+<div id="footer">
+<ul>
+    <li><a href="/pages/terms/" title="Terms of Use">Terms of Use</a></li>
+    <li><a href="/pages/privacy/" title="Privacy Policy">Privacy Policy</a></li>
+    <li><a href="/pages/aboutus/" title="About Us">About Us</a></li>
+    <li><a href="http://blog.totsy.com" title="Blog" target="_blank">Blog</a></li>
+    <li><a href="/pages/faq/" title="FAQ">FAQ</a></li>
+    <li><a href="/pages/affiliates/" title="Affiliates">Affiliates</a></li>
+    <li><a href="/pages/careers/" title="Careers">Careers</a></li>
+    <li><a href="/pages/contact/" title="Contact Us">Contact Us</a></li>
+    <li><a href="http://nytm.org/made" title="Made in NYC" target="_blank">Made in NYC</a></li>
+    <address >&copy; 2012 Totsy.com. All Rights Reserved.</address>
+</ul>
+<footer id="loginFooter" class="footer-block">
+    <div id="socialLinks">
+        <a href="http://www.facebook.com/totsyfan" id="facebookLink" class="socialLink" target="_blank" title="Totsy.com on Facebook">F</a>
+        <a href="http://blog.totsy.com/" id="tumblrLink" class="socialLink" target="_blank" title="Totsy on Tumblr">T</a>
+        <a href="http://twitter.com/MyTotsy" id="twitterLink" class="socialLink" target="_blank" title="Totsy on Twitter">T</a>
+        <div class="clear"></div>
+    </div>
+</footer>
+</div>
+<script>
+    var jsonArray =  <?php echo Mage::app()->getLayout()->createBlock('customertracking/background')->getBackroundImagesJsonArray();?>;
+    var keyword   =  jsonArray['keyword'];
+    var imgDir 	  =  jsonArray['dir'];
+    var items     =  jsonArray['images'];
+    if (!!keyword) {
+        var item = imgDir + keyword + ".jpg";
+    } else {
+    var item  =  items[Math.floor(Math.random()*items.length)];
+    }
+    jQuery.backstretch(item);
+</script>
+<script>
+    jQuery('input[placeholder], textarea[placeholder]').placeholder();
+</script>
+<script type="text/javascript">
+    //code for disabling echoSahre
+    if(typeof _esq!='undefined'){
+        _esq.settings.socialCenter = { enabled: false };
+    }
+</script>
