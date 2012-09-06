@@ -207,12 +207,6 @@ class Harapartners_Categoryevent_Model_Sortentry extends Mage_Core_Model_Abstrac
                     array_unique($event['age_label'])
                 );
 
-                Mage::helper('categoryevent/sortentry')
-                    ->getCategories($event,'department');
-
-                Mage::helper('categoryevent/sortentry')
-                    ->getCategories($event,'age');
-
                 if ( ($starttimediff <= 0) && ($endtimediff > 0) ) {
                     array_push( $liveNew, $event );
                 }elseif ( ($starttimediff > 0) && ($endtimediff > 0) ) {
