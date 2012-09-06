@@ -1,0 +1,116 @@
+<script type="text/javascript">countryRegions = <?php echo $this->helper('directory')->getRegionJson() ?></script>
+<?php
+    $countDownTimer = Mage::getSingleton('checkout/session')->getCountDownTimer();
+    $timeout = Mage::getSingleton('checkout/session')->getQuoteItemExpireTime();
+    //$endcount_lc = date("F j, Y, G:i:s", ($countDownTimer + $timeout));
+    $endcount_lc = ($countDownTimer + $timeout)*1000; //ms
+    //Harapartners, yang, get the server time with the frontend JS time
+    $serverTime = Mage::helper('service')->getServerTime();            
+    $quote = Mage::getSingleton('checkout/session')->getQuote();
+?>
+<div class="page-header">
+    <h2><?php echo $this->__('Checkout') ?></h2>
+</div>
+
+<div id="hpcheckout-wrapper">
+	<div class="page-title title-buttons">
+		<div class="shipping-date">
+			<p id="cart-shipping-date-header"><span>Estimated Ship Date:</span> <?php echo date('Y-m-d', Mage::helper('sales/order')->calculateEstimatedShipDate($quote)); ?></p>
+		</div>	
+	</div>
+	<div id="error-message-wrapper"></div>
+	<?php if( count( $this->getQuote()->getAllItems() ) ): ?>
+		<?php if( ! $this->getCustomerSession()->isLoggedIn() ): ?>
+			<div id="hpcheckout-login-wrapper" class="well">
+				<?php echo $this->getChildHtml( 'login' ) ?>
+			</div>
+		<?php endif ?>
+		<div class="onepage-checkout container row">
+		    <div class="addresses pull-left well">
+		   		<div class="checkout-headline">
+		    	    <h4 class="legend pull-left"><?php echo $this->__('Billing Address') ?></h4>
+		    	    <?php if ($this->customerHasAddresses()): ?>
+		    	   		<span class="billing-address-select totsy-selective-input-box pull-right">
+		    	    	        <?php echo $this->getAddressesHtmlSelect('billing') ?>
+		    	    	</span>
+		    	    <?php endif; ?>
+		    	</div>
+		    	<div style="clear:both"></div>
+		    	<div id="hpcheckout-billing-wrapper" class="onepage-address-form">
+		    	    	<div class="checkout-content"><?php echo $this->getChildHtml('billing') ?></div>
+		    	</div>
+         </div>
+		 <?php if( ! $this->getQuote()->isVirtual() ): ?>
+		 <div class="addresses pull-right well">
+	         <div class="checkout-headline">
+			     <h4 class="legend pull-left"><?php echo $this->__('Shipping Address') ?></h4>
+			     <?php if ($this->customerHasAddresses()): ?>
+			         <span class="shipping-address-select totsy-selective-input-box pull-right">
+			         <?php echo $this->getAddressesHtmlSelect('shipping') ?>
+			         </span>
+			     <?php endif; ?>
+			  </div>	
+		      <div style="clear:both"></div>
+		  	  <div id="hpcheckout-shipping-wrapper" class="onepage-address-form">
+	      	      <div class="checkout-content">
+	      	          <?php echo $this->getChildHtml( 'shipping' ) ?>
+	      	      </div>
+		  	  </div>
+         </div>
+        <?php endif ?>
+		<div style="clear:both"></div>
+        <?php if( false && ! $this->getQuote()->isVirtual() ): ?>
+        <div id="hpcheckout-shipping-method-wrapper" class="well review-payment-blocks">
+            <h4 class="legend">Shipping Method</h4>	
+            <br />
+            <div class="checkout-content"><?php echo $this->getChildHtml('shipping_method') ?></div>
+        </div>
+		<?php endif ?>
+		<div style="clear:both"></div>
+		<div id="hpcheckout-payment-wrapper" class="well review-payment-blocks">		
+			<div class="checkout-content"><?php echo $this->getChildHtml( 'payment' ) ?></div>
+			<?php echo $this->getChildHtml( 'reward' ); ?>
+		</div>
+		<div id="hpcheckout-review-wrapper" class="well review-payment-blocks">
+			<div class="checkout-content"><?php echo $this->getChildHtml( 'review' ) ?></div>
+		</div>
+		</div>
+	</div>
+</div>
+</div>
+		<?php echo $this->getChildHtml( 'script' ) ?>
+	<?php else: ?>
+		<?php echo $this->__( 'Your cart is empty.' ) ?>
+	<?php endif ?>
+<script type="text/javascript">
+function updateSelectText(){
+
+	jQuery(".totsy-selective-input-box select").each(function(){
+		var temphtml = jQuery(this).html();
+		var text = jQuery(this).find("option:selected").text();
+		var value = jQuery(this).find("option:selected").val();
+		if (value==''){
+			text = jQuery(this).find("option[selected='true']").text();
+			if (text=='') {
+				text = jQuery(this).find("option[value='']").text();
+			}
+		}
+		jQuery(this).parent('div').children('span').html(text);
+	});
+}
+
+jQuery( document ).ready( function() {
+	if( jQuery( '#billing-address-select' ).val() != '' ) {
+		jQuery( '#billing-address-select' ).change();
+    }
+	if( jQuery( '#shipping-address-select' ).val() != '' ) {
+		jQuery( '#shipping-address-select' ).change();
+    }
+});
+</script>
+<script type="text/javascript">
+ 	 //code for disabling echoSahre
+     if(typeof _esq!='undefined'){
+        _esq.settings.socialCenter = { enabled: false };
+     }
+</script>

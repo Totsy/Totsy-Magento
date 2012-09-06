@@ -1,0 +1,51 @@
+<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+<?php $collection = $this->getCollection(); ?>
+<div class="page-title">
+    <h1><?php echo $this->__('My Children List') ?></h1>
+</div>
+<?php echo $this->getPagerHtml(); ?>
+<?php if($collection->getSize()): ?>
+<table class="data-table" id="children-list-table">
+    <col width="1" />
+    <col width="1" />
+    <col width="1" />
+    <col width="1" />
+    <col width="1" />
+    <thead>
+        <tr>
+            <th><?php echo $this->__('Name') ?></th>
+            <th><?php echo $this->__('Gender') ?></th>
+            <th><?php echo $this->__('Relationship') ?></th>
+            <th><?php echo $this->__('Birthday') ?></th>
+            <th><?php echo $this->__('Edit') ?></th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php $_odd = ''; ?>
+        <?php foreach ($collection as $_obj): ?>
+        <tr>
+	        <?php
+	        $child_gender = Harapartners_Childrenlist_Model_Child::getChildGenderLabels();
+	        $child_customer_relationship = Harapartners_Childrenlist_Model_Child::getChildRelationshipLabels();
+	        ?>
+        	<td><?php echo $_obj->getChildName(); ?></td>
+            <td><?php echo $child_gender[$_obj->getChildGender()]; ?></td>
+            <td><?php echo $child_customer_relationship[$_obj->getChildCustomerRelationship()]; ?></td>
+            <td><?php echo $_obj->getChildBirthday(); ?></td>
+            <td><a class="red" href="<?php echo $this->getBaseUrl().'childrenlist/index/edit/childid/'.$_obj->getChildId(); ?>">Edit</a></td>
+        </tr>
+        <?php endforeach; ?>
+    </tbody>
+</table>
+
+<div class="align-to-right little-margin-top">
+	<button class="button" onclick="location.href='<?php echo $this->getBaseUrl().'childrenlist/index/edit/'?>'" title="Add more" type="button">
+		<div class="totsy-button">Add more</div>
+	</button>
+</div>
+
+<script type="text/javascript">decorateTable('children-list-table');</script>
+<?php echo $this->getPagerHtml(); ?>
+<?php else: ?>
+    <h2 class="to-add"><?php echo $this->__('You Children list is empty. '); ?><a href="<?php echo $this->getBaseUrl().'childrenlist/index/edit/' ?>">Add</a></h2>
+<?php endif ?>

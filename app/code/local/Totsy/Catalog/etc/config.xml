@@ -16,7 +16,6 @@
     <global>
         <helpers>
             <catalog>
-            
                 <rewrite>
                     <event>Totsy_Catalog_Helper_Event</event>
                     <product_outofstock>Totsy_Catalog_Helper_Product</product_outofstock>
@@ -34,5 +33,12 @@
                 </connection>
             </totsycatalog_setup>
         </resources>
+        <blocks>
+            <catalog>
+                <rewrite>
+                    <product_view_type_configurable>Totsy_Catalog_Block_Product_View_Type_Configurable</product_view_type_configurable>
+                </rewrite>
+            </catalog>
+        </blocks>
     </global>
 </config>

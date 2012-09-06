@@ -1,0 +1,227 @@
+<?php
+/**
+ * Magento Enterprise Edition
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Magento Enterprise Edition License
+ * that is bundled with this package in the file LICENSE_EE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://www.magentocommerce.com/license/enterprise-edition
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     enterprise_default
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://www.magentocommerce.com/license/enterprise-edition
+ */
+
+/**
+ * Shoping cart sidebar
+ *
+ * @see Mage_Checkout_Block_Cart_Sidebar
+ */
+
+    $checkoutSession = Mage::getSingleton('checkout/session');
+    $countDownTimerHeader= $checkoutSession->getCountDownTimer();
+    $timeoutHeader = $checkoutSession->getQuoteItemExpireTime();
+    //$endcount_lc_header = date("F j, Y, G:i:s", ($countDownTimerHeader + $timeoutHeader));
+    $endcount_lc_header = ($countDownTimerHeader + $timeoutHeader)*1000; //ms
+    //Harapartners, yang, get the server time with the frontend JS time
+    $serverTime = Mage::helper('service')->getServerTime();
+    $quote = $checkoutSession->getQuote();
+    $_saving = Mage::helper('sales/order')->calculateEstimatedSavings($quote);
+?>
+
+<div class="top-cart dropdown">
+<?php
+    $_cartQty = Mage::getModel('checkout/cart')->getSummaryQty();
+    $_itemsArray = $this->getItems();
+    $_updateFlag = $checkoutSession->getCartUpdatedFlag();
+    $_mySaving = $this->__('Your savings: %s', Mage::helper('checkout')->formatPrice($_saving));
+    
+    // store value of cart quantity check
+    $_itemsInCart = ( ($_cartQty > 0 && !empty($_itemsArray)) ? true : false );
+
+    // set cart message
+    if ($_itemsInCart) :
+        $_myCart = $this->__('%s Items', '<span>' . $_cartQty . '</span>');
+    else :
+        $_myCart = $this->__('%s Items', '<span>0</span> - NO ITEMS');
+    endif; 
+?>
+    
+    <?php if ($this->getIsLinkMode() || !$this->getIsNeedToDisplaySideBar()):?>
+    <?php Mage::log('link mode:'.print_r($this->getIsLinkMode())); ?>
+    <?php Mage::log('display sidebar mode:'.print_r($this->getIsNeedToDisplaySideBar())); ?>
+        <div class="block-title no-items">
+            <ul class="links cart-link">
+                <li ><a href="<?php echo $this->getUrl('checkout/cart'); ?>"><?php echo $_myCart ?><span class="badge badge-inverse">$0.00</span></a></li>
+            </ul>
+        </div>
+        
+    <?php else:?>
+    
+        <?php if ($_itemsInCart):?>
+        
+            <div id="usercart-block-title" class="dropdown-toggle block-title" data-toggle="dropdown">
+                <strong id="cartHeader"><?php echo $_myCart ?><span><?php echo ' | '.Mage::helper('checkout')->formatPrice($this->getSubtotal()) ?><?php if ($_subtotalInclTax = $this->getSubtotalInclTax()): ?> / <?php echo ' | '.Mage::helper('checkout')->formatPrice($_subtotalInclTax) ?> <?php echo ' | '.Mage::helper('tax')->getIncExcText(true) ?><?php endif; ?></span></strong>
+            </div>
+
+            <?php
+            /*
+             * Cart Timer
+             * @GOTCHA: this countdown JS must stay in ajax call
+             * - @kludge: css positioning hack to have timer display elsewhere (nav bar)
+             * - @todo: new block/module/magento-whatever-the-f and/or new ajax call to drop this in DOM where needed
+             * - https://totsy1.jira.com/browse/MGN-935
+             */
+            ?>         
+            <div class="count-down-timer">
+                <strong>Your cart is reserved <br/>for <span id="cart-timer-header"></span></strong>
+                <script type="text/javascript">
+                    jQuery(document).ready(function() {
+                        var dateObj = new Date();
+                        var countDownToTime = <?php echo $endcount_lc_header?>;
+                        var serverTime = <?php echo $serverTime?>;
+                        var localTime = new Date().getTime();
+                        countDownToTime = (countDownToTime + (localTime - serverTime));
+                        //countDownToTime = (countDownToTime - 890000); // for testing
+                        dateObj.setTime(countDownToTime);
+                        //var countToTimeTemplate = (dateObj.getMonth()+1) + ' ' + dateObj.getDate() + ', ' + dateObj.getFullYear() + ' ' + dateObj.getHours() + ':' + dateObj.getMinutes() + ':' + dateObj.getSeconds();
+                        var UrlPath = window.location.pathname;
+                        var onCheckout = (UrlPath == '/checkout/onepage/') ? true : false;
+                        if (onCheckout) {
+                            jQuery('.top-cart').addClass('onCheckout');
+                            jQuery('#usercart-block-title').removeClass('dropdown-toggle')
+                                .removeAttr('data-toggle');
+                            jQuery('#cartHeader').css('background-image', 'none')
+                                .html('<span class="savings"><?php echo $_mySaving; ?></span>');
+                        }
+
+                        jQuery("#cart-timer-header").countdown({
+                            //date: "12 10, 2011 16:11", or an object counting to a date
+                            date: dateObj,
+                            htmlTemplate: "%{m} <span class=\"cd-time\">min</span> %{s} <span class=\"cd-time\">sec</span>",
+                            onChange: function( event, timer ){
+                            },
+                            onComplete: function( event ) {            
+                                jQuery('#usercart .top-cart').addClass('expired').removeClass('open');
+                                jQuery('#usercart .count-down-timer').hide();
+                                jQuery('#usercart-block-title').removeClass('dropdown-toggle')
+                                    .removeAttr('data-toggle');
+                                var _cartHeader = jQuery("#cartHeader");
+                                _cartHeader.addClass('cartempty')
+                                    .html("Your shopping cart is <span class='over'>no longer reserved</span>");
+                                jQuery("#topCartContent").hide();
+                                
+                                // if on cart or checkout, redirect; otherwise remove btn and update cart msg
+                                var UrlPath = window.location.pathname;
+                                if ( UrlPath == '/checkout/onepage/' || UrlPath == '/checkout/cart/' ) {
+                                    setTimeout(function() {
+                                        window.location.replace("<?php echo Mage::getUrl('checkout/cart');?>");
+                                    }, 5000);
+                                }
+                                else {
+                                    jQuery('#header-checkoutBtn').hide();
+                                    setTimeout(function() {
+                                        //_cartHeader.html("<?php echo $this->__('You have no items in your shopping cart.'); ?>");
+                                        window.location.reload();
+                                    }, 5000);
+                                }
+                            },
+                            leadingZero: true,
+                            direction: "down"
+                        });
+                    });
+                </script>
+            </div>
+
+        <?php else :?>
+            <div id="usercart-block-title" class="block-title no-items">
+                <strong id="cartHeader" class="cartempty"><span><?php echo $this->__('You have no items in your shopping cart.'); ?></span></strong>
+            </div>
+
+        <?php endif;?>
+    
+    
+<!-- start top cart dropdown (aka "minicart") -->
+<div id="topCartContent" class="block-content dropdown-menu" data-item-added="<?php if ( !!$_updateFlag && $_updateFlag ) {echo "true"; $checkoutSession->setCartUpdatedFlag(false);} else echo "false";?>">
+    
+    <div class="inner-wrapper"><?php // extra div to smooth slideUp and slideDown ?>
+        
+        <div id="items-info-wrapper">
+        <?php $_items = $this->getItems(); //change from getRecentItems()?>
+        <?php if( count($_items) && !empty($_itemsArray) ): ?>
+        
+            <div id="mini-cart" class="mini-products-list ">
+                <?php foreach($_items as $_item): ?>
+                    <!-- Add Customerize Cart item info -->
+                    <?php echo $this->getItemHtml($_item); ?>
+                <?php endforeach; ?>
+            </div>
+            <script type="text/javascript">decorateList('mini-cart', 'none-recursive')</script>
+            
+        <?php else: ?>
+    
+            <p class="cart-empty">
+                <?php echo $this->__('You have zero items in your cart.'); // @TODO: remove after confirmed not needed ?>
+            </p>
+        <?php endif; ?>
+        
+        <?php if($_cartQty && !empty($_itemsArray)): ?>
+            <div class="minifoot clearfix">
+                <div class="subtotal">
+                <?php if ($this->canApplyMsrp()): ?>
+                    <span class="map-cart-sidebar-total"><?php echo $this->__('ORDER TOTAL WILL BE DISPLAYED BEFORE YOU SUBMIT THE ORDER'); ?></span>
+                <?php else: ?>
+                    <span class="subtotal-savings"><?php echo $_mySaving; ?></span>
+                    <span class="subtotal-cost"><?php echo $this->__('Subtotal: ') ?><?php echo Mage::helper('checkout')->formatPrice($this->getSubtotal()) ?>
+                        <?php if ($_subtotalInclTax = $this->getSubtotalInclTax()): ?> / <?php echo Mage::helper('checkout')->formatPrice($_subtotalInclTax) ?> <?php echo Mage::helper('tax')->getIncExcText(true) ?><?php endif; ?>
+                    </span>
+                <?php endif; ?>
+                </div>
+                <div class="action">
+                <a class="btn checkout btn-primary" title="Checkout" href="/checkout/cart/"><strong>Checkout</strong></a>
+                </div>
+            </div>
+        <?php endif; ?>
+    </div><!-- /.inner-wrapper -->
+</div><!-- /#topCartContent -->
+
+    <script type="text/javascript">
+    // Cart related JS needs to stay here, load in ajax call
+    jQuery(document).ready( function() {
+        // Show checkout button if items in cart
+        var itemsInCartBool = "<?php echo $_itemsInCart; ?>";
+        var headCheckoutBtn = jQuery('#header-checkoutBtn');
+        if ( itemsInCartBool == true ) {
+            headCheckoutBtn.show();
+        }
+        
+        // Show minicart after item added, then hide after 5 sec
+        var topCartContent = jQuery("#topCartContent");
+        var topCartUpdated = topCartContent.attr('data-item-added');
+        if ( topCartUpdated == 'true' ) {
+            topCartContent.show()
+            .parent('.top-cart').addClass('open')
+            .delay(5000)
+            .queue(function(n) {
+                topCartContent.removeAttr('style');
+                jQuery('.top-cart').removeClass('open');
+                n();
+            });
+        }
+    });
+    </script>
+    <!-- end mini-cart -->
+    <?php endif; ?>
+</div>

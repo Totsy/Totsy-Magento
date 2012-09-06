@@ -1,0 +1,232 @@
+<?php
+/**
+ * Magento Enterprise Edition
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Magento Enterprise Edition License
+ * that is bundled with this package in the file LICENSE_EE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://www.magentocommerce.com/license/enterprise-edition
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     enterprise_default
+ * @copyright   Copyright © 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://www.magentocommerce.com/license/enterprise-edition
+ */
+?>
+<?php
+/**
+ * Create account form template
+ *
+ * @var $this Mage_Customer_Block_Form_Register
+ * @see app/design/frontend/enterprise/default/template/customer/form/register.phtml
+ */
+?>
+<?php 
+	/*prepare image for login, in order to insert more image, 
+	just put them to \skin\frontend\enterprise\harapartners\images\login foler */
+//	$dir = BP . DS . 'skin'. DS .'frontend'. DS .'enterprise'. DS .'harapartners'. DS .'images'. DS .'login'. DS . '*.jpg';
+//	$dir2 = BP . DS . 'skin'. DS .'frontend'. DS .'enterprise'. DS .'harapartners'. DS .'images'. DS .'login'. DS;
+//	$images = scandir($dir2);
+//	unset($images[0]);
+//	unset($images[1]);
+//	shuffle($images);
+?>
+<div class="well span4 page_center">
+    <h1 id="logo" class="span4"><a href="<?php 
+                    echo $this->getUrl( 'event/?ref=logo' ); ?>" title="<?php
+                    echo $this->getLogoAlt();
+                    ?>"><img src="/skin/frontend/enterprise/bootstrap/images/logo.png" alt="Totsy.com" width="85px" /></a>
+    </h1>
+<div class="page-header" style="margin:0px 0px 10px;">
+    <h2 style="font-size:18px;"><?php echo $this->__('Sign Up') ?><small> or <a href="/customer/account/login/" style="font-weight:normal;">Sign In</a></small></h2>
+</div>
+<div class="row">
+<div style="text-align:center; margin:0px 0px 13px">
+    <a rel="facebook-connect" style="margin:10px 0px; cursor:pointer;" title="<?php echo $this->__('Connect with Facebook') ?>" class="facebook-button" ><img src="http://www.wiliam.com.au/content/upload/ablog1.jpg" /></a>
+    </div>
+    <div class="span4">
+        <?php //echo $this->getChildHtml('form_fields_before')?>
+        <?php //the up child is a reward html ?>
+        <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+        <form action="<?php echo $this->getPostActionUrl() ?>" method="post" id="form-validate" enctype="multipart/form-data">
+        <div class="fieldset">
+            <input type="hidden" name="success_url" value="<?php echo $this->getSuccessUrl() ?>" />
+            <input type="hidden" name="error_url" value="<?php echo $this->getErrorUrl() ?>" />
+            <!--<label for="email_address" class="required"><em>*</em> <?php echo $this->__('Email Address') ?></label>-->
+            <input placeholder="Email Address" type="text" name="email" id="email_address" value="<?php echo $this->htmlEscape($this->getFormData()->getEmail()) ?>" title="<?php echo $this->__('Email Address') ?>" class="big-input input-text validate-email required-entry span4" />
+            <!--<label for="password" class="required"><em>*</em> <?php echo $this->__('Password') ?></label>-->
+            <input placeholder="Password" type="password" name="password" id="password" title="<?php echo $this->__('Password') ?>" class="big-input input-text required-entry strong-validate-password span4" />
+            <!--<label for="confirmation" class="required"><em>*</em> <?php echo $this->__('Confirm Password') ?></label>-->
+            
+            <input placeholder="Confirm Password" type="password" name="confirmation" title="<?php echo $this->__('Confirm Password') ?>" id="confirmation" class="big-input input-text required-entry validate-cpassword span4" />
+            <?php echo $this->getChildHtml('persistent.remember.me'); ?>
+            <input type="hidden" checked name="is_subscribed" title="<?php echo $this->__('Sign Up for Newsletter') ?>" value="1" id="is_subscribed"<?php if($this->getFormData()->getIsSubscribed()): ?> checked="checked"<?php endif; ?> class="checkbox" />
+            <?php $_dob = $this->getLayout()->createBlock('customer/widget_dob') ?>
+            <?php if ($_dob->isEnabled()): ?>
+                <?php echo $_dob->setDate($this->getFormData()->getDob())->toHtml() ?>
+            <?php endif ?>
+            <?php $_taxvat = $this->getLayout()->createBlock('customer/widget_taxvat') ?>
+            <?php if ($_taxvat->isEnabled()): ?>
+            <?php echo $_taxvat->setTaxvat($this->getFormData()->getTaxvat())->toHtml() ?>
+            <?php endif ?>
+            <?php $_gender = $this->getLayout()->createBlock('customer/widget_gender') ?>
+            <?php if ($_gender->isEnabled()): ?>
+            <?php echo $_gender->setGender($this->getFormData()->getGender())->toHtml() ?>
+            <?php endif ?>
+            <?php $customerAttributes = $this->getChild('customer_form_user_attributes');?>
+            <?php if ($customerAttributes): ?>
+            <?php $customerAttributes->setShowContainer(false);?>
+            <?php $this->restoreSessionData($customerAttributes->getForm());?>
+            <?php echo $customerAttributes->toHtml()?>
+            <?php endif;?>
+            
+        </div>
+    <?php if($this->getShowAddressFields()): ?>
+        <div class="fieldset">
+            <input type="hidden" name="create_address" value="1" />
+            <h2 class="legend"><?php echo $this->__('Address Information') ?></h2>
+            <ul class="form-list">
+                <li class="fields">
+                    <div class="field">
+                        <label for="company"><?php echo $this->__('Company') ?></label>
+                        <div class="input-box">
+                            <input type="text" name="company" id="company" value="<?php echo $this->htmlEscape($this->getFormData()->getCompany()) ?>" title="<?php echo $this->__('Company') ?>" class="input-text" />
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label for="telephone" class="required"><em>*</em><?php echo $this->__('Telephone') ?></label>
+                        <div class="input-box">
+                            <input type="text" name="telephone" id="telephone" value="<?php echo $this->htmlEscape($this->getFormData()->getTelephone()) ?>" title="<?php echo $this->__('Telephone') ?>" class="input-text required-entry" />
+                        </div>
+                    </div>
+                </li>
+                <li class="wide">
+                    <label for="street_1" class="required"><em>*</em><?php echo $this->__('Street Address') ?></label>
+                    <div class="input-box">
+                        <input type="text" name="street[]" value="<?php echo $this->htmlEscape($this->getFormData()->getStreet(0)) ?>" title="<?php echo $this->__('Street Address') ?>" id="street_1" class="input-text required-entry" />
+                    </div>
+                </li>
+            <?php for ($_i=2, $_n=$this->helper('customer/address')->getStreetLines(); $_i<=$_n; $_i++): ?>
+                <li class="add-field">
+                    <div class="input-box">
+                        <input type="text" name="street[]" value="<?php echo $this->htmlEscape($this->getFormData()->getStreet($_i - 1)) ?>" title="<?php echo $this->__('Street Address '.$_i) ?>" id="street_<?php echo $_i?>" class="input-text" />
+                    </div>
+                </li>
+            <?php endfor ?>
+                <li class="fields">
+                    <div class="field">
+                        <label for="city" class="required"><em>*</em><?php echo $this->__('City') ?></label>
+                        <div class="input-box">
+                            <input type="text" name="city" value="<?php echo $this->htmlEscape($this->getFormData()->getCity()) ?>" title="<?php echo $this->__('City') ?>" class="input-text required-entry" id="city" />
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label for="region_id" class="required"><em>*</em><?php echo $this->__('State/Province') ?></label>
+                        <div class="input-box">
+                            <select id="region_id" name="region_id" title="<?php echo $this->__('State/Province') ?>" class="validate-select" style="display:none;">
+                                <option value=""><?php echo $this->__('Please select region, state or province') ?></option>
+                            </select>
+                            <script type="text/javascript">
+                            //<![CDATA[
+                                $('region_id').setAttribute('defaultValue',  "<?php echo $this->getFormData()->getRegionId() ?>");
+                            //]]>
+                            </script>
+                            <input type="text" id="region" name="region" value="<?php echo $this->htmlEscape($this->getRegion()) ?>" title="<?php echo $this->__('State/Province') ?>" class="input-text" style="display:none;" />
+                        </div>
+                    </div>
+                </li>
+                <li class="fields">
+                    <div class="field">
+                        <label for="zip" class="required"><em>*</em><?php echo $this->__('Zip/Postal Code') ?></label>
+                        <div class="input-box">
+                            <input type="text" name="postcode" value="<?php echo $this->htmlEscape($this->getFormData()->getPostcode()) ?>" title="<?php echo $this->__('Zip/Postal Code') ?>" id="zip" class="input-text validate-zip-international required-entry" />
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label for="country" class="required"><em>*</em><?php echo $this->__('Country') ?></label>
+                        <div class="input-box">
+                            <?php echo $this->getCountryHtmlSelect() ?>
+                        </div>
+                    </div>
+                </li>
+                <?php $addressAttributes = $this->getChild('customer_form_address_user_attributes');?>
+                <?php if ($addressAttributes): ?>
+                    <?php $addressAttributes->setEntity($this->getAddress());?>
+                    <?php $addressAttributes->setFieldIdFormat('address:%1$s')->setFieldNameFormat('address[%1$s]');?>
+                    <?php $this->restoreSessionData($addressAttributes->getForm(), 'address');?>
+                    <?php echo $addressAttributes->setShowContainer(false)->toHtml()?>
+                <?php endif;?>
+            </ul>
+            <input type="hidden" name="default_billing" value="1" />
+            <input type="hidden" name="default_shipping" value="1" />
+        </div>
+    <?php endif; ?>
+        <div class="fieldset">
+            <?php echo $this->getChildHtml('persistent.remember.me.tooltip'); ?>
+       <p style="font-size:11px; color:#999; text-align:center;"><?php echo $this->__('By joining you accept our ')?> <a id="redtrerm" href="<?php echo $this->getBaseUrl()?>pages/terms/">terms and conditions.</a> </p>
+        </div>
+        <div class="buttons-set form-buttons align-center" style="margin:0px 0px -16px 0px">
+            <button type="submit" id="submit-button" class="btn btn-primary btn-large pull-left" style="width:100%;">Sign Up</button>
+        </div>
+        <?php if (Mage::helper('checkout')->isContextCheckout()): ?>
+            <input name="context" type="hidden" value="checkout" />
+        <?php endif; ?>
+    </form>
+    <script type="text/javascript">
+    //<![CDATA[
+        var dataForm = new VarienForm('form-validate', true);
+        <?php if($this->getShowAddressFields()): ?>
+        new RegionUpdater('country', 'region', 'region_id', <?php echo $this->helper('directory')->getRegionJson() ?>, undefined, 'zip');
+        <?php endif; ?>
+        Form.getElements('form-validate').each(function(element) {
+            element.setAttribute('autocomplete', 'off');
+        });
+    //]]>
+    </script>
+</div>
+
+<!-- 
+<div class="span6">
+    <h3>Why savvy moms shop at Totsy?</h3>
+    <hr />
+    <div id="myCarousel" class="carousel slide">
+    <div class="carousel-inner">
+    <div class="active item">Membership is free</div>
+    <div class="item">Exclusive sales for kids, moms and families</div>
+    <div class="item">Savings of up to 90% off retail</div>
+    <div class="item">Sales last up to 3 days</div>
+    <div class="item">A tree is planted for your first purchase</div>
+    <div class="item">Refer friends and earn Totsy credits</div>
+    </div>
+        <a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
+    <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
+    </div>
+    <script>
+    jQuery('.carousel').carousel({
+    interval: 2000
+    })
+    </script>
+</div>
+</div>
+-->
+<!--div class="free_shipping_banner_reg_new rollover_img">
+	<a href="javascript:;" title="Free Shipping">
+		<span/>
+	</a>
+</div-->
+
+</div>
+<div class="badgecity_reg"></div>
+<p class="badgecity_fine_print">*Offer expires 30 days after sign up.</p>
+</div>

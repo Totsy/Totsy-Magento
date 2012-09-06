@@ -1,0 +1,78 @@
+<?php
+/**
+ * Magento Enterprise Edition
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Magento Enterprise Edition License
+ * that is bundled with this package in the file LICENSE_EE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://www.magentocommerce.com/license/enterprise-edition
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://www.magentocommerce.com/license/enterprise-edition
+ */
+?>
+<?php
+/**
+ * Template for Mage_Page_Block_Html
+ */
+?>
+<!DOCTYPE html>
+<html lang="<?php echo $this->getLang() ?>">
+<head>
+<?php echo $this->getChildHtml('head') ?>
+</head>
+<body<?php echo $this->getBodyClass()?' class="customer-account-login '.$this->getBodyClass().'"':'' ?>>
+<?php echo $this->getChildHtml('after_body_start') ?>
+<div class="container">
+<div class="">
+    <?php // echo $this->getChildHtml('global_notices') ?>
+        <?php echo $this->getChildHtml('header') ?>
+            <?php // echo $this->getChildHtml('breadcrumbs') ?>
+            <?php // echo $this->getChildHtml('global_messages') ?>
+            <?php echo $this->getChildHtml('content') ?>
+            <?php $currentUrl = $this->helper('core/url')->getCurrentUrl();?>
+            <?php $loginPattern = '/customer/account/create/';?>
+            <?php //if (preg_match($loginPattern, $currentUrl)):?>
+                    <div style="text-align:center; position: absolute; background: #fff; padding: 0px; bottom: 32px; opacity: 0.93; width: 100%; left: 0px;">
+                        <img src="<?php echo $this->getSkinUrl()?>images/featured_on_long.png"  alt=""  />
+                    </div>
+            <?php //endif;?>
+        <?php echo $this->getChildHtml('footer') ?>
+        <?php echo $this->getChildHtml('before_body_end') ?>
+</div>
+</div>
+<?php echo $this->getAbsoluteFooter() ?>
+<script>
+    var jsonArray =  <?php echo Mage::app()->getLayout()->createBlock('customertracking/background')->getBackroundImagesJsonArray();?>;
+    var keyword   =  jsonArray['keyword'];
+    var imgDir 	  =  jsonArray['dir'];
+    var items     =  jsonArray['images'];
+    if (!!keyword) {
+        var item = imgDir + keyword + ".jpg";
+    } else {
+    var item  =  items[Math.floor(Math.random()*items.length)];
+    }
+    jQuery.backstretch(item);
+
+    jQuery('input[placeholder], textarea[placeholder]').placeholder();
+
+    //code for disabling echoSahre
+    if(typeof _esq!='undefined'){
+        _esq.settings.socialCenter = { enabled: false };
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,24 @@
+<?php
+/**
+ * Harapartners
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Harapartners License
+ * that is bundled with this package in the file LICENSE_EE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://www.Harapartners.com/license
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@Harapartners.com so we can send you a copy immediately.
+ *
+ */
+?>
+<div class="<?php echo $this->getContainerClassName()?>">
+    <div class="field name-firstname">
+        <label for="<?php echo $this->getFieldId('child_name')?>" class="required"><em>*</em>Name</label>
+        <div class="input-box">
+            <input type="text" id="<?php echo $this->getFieldId('child_name')?>" name="<?php echo $this->getFieldName('child_name')?>" title='name' value="<?php echo $this->htmlEscape($this->getObject()->getChildName()) ?>" class="input-text required-entry" />
+        </div>
+    </div>
+</div>

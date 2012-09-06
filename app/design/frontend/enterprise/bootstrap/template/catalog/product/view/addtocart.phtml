@@ -1,0 +1,56 @@
+<?php
+/**
+ * Magento Enterprise Edition
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Magento Enterprise Edition License
+ * that is bundled with this package in the file LICENSE_EE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://www.magentocommerce.com/license/enterprise-edition
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://www.magentocommerce.com/license/enterprise-edition
+ */
+?>
+<?php
+    $_product = $this->getProduct();
+    $_category = Mage::registry('current_category');
+    $event_end_date = strtotime($_category->getEventEndDate());
+    $today = strtotime('NOW');
+?>
+
+<?php $buttonTitle = $this->__('Add to Cart'); ?>
+
+<?php if($today <= $event_end_date):  ?>
+	<?php if($_product->isSaleable()): ?>
+	    <div class="add-to-cart">
+	        <?php if(!$_product->isGrouped() && !$_product->isVirtual() ): ?>
+	        <label for="qty"><?php echo $this->__('Qty:') ?></label>
+	        <input type="text" name="qty" id="qty" maxlength="2" value="1" title="<?php echo $this->__('Qty') ?>" class="input-text qty span1" />
+	        <div class="clear"></div>
+	        <?php //echo $this->getProductDefaultQty() * 1 ?>
+	        <?php endif; ?>
+	        <button type="button" title="<?php echo $buttonTitle ?>" class="button btn-cart btn btn-primary" onclick="productAddToCartForm.submit(this)"><span><span><?php echo $buttonTitle ?></span></span></button> 
+        <span id="ajax_loader" style="display:none"><img src='<?php echo $this->getSkinUrl('images/ajax-loader.gif')?>'/></span>
+	        <?php echo $this->getChildHtml('', true, true) ?>
+	    </div>
+	<?php endif; ?>
+<?php else: // the end of the if for time check ?>
+	<div class="msg-expired">
+	    <h3>Oh Shucks! You just missed it!</h3>
+	    <p>This sale has expired.</p>
+	    <p><a href="<?php echo $this->getBaseUrl(); ?>event">Check out our latest sales</a>.</p>
+	</div>
+<?php endif; ?>

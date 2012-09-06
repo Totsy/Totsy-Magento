@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<!--
+
+/*
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the End User Software Agreement (EULA).
+ * It is also available through the world-wide-web at this URL:
+ * http://www.harapartners.com/license
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to eula@harapartners.com so we can send you a copy immediately.
+ * 
+ */
+
+-->
+<layout version="0.1.0">
+
+<!--
+Default layout, loads most of the pages
+-->
+
+    <default>
+        <reference name="before_body_end">
+            <block type="core/template" name="customertracking.footer" template="customertracking/footer.phtml" />
+        </reference>
+		<reference name="header">
+			<block type="customertracking/headermsg" name="customertracking.headermsg" template="customertracking/headermsg.phtml" />
+		</reference>
+    </default>
+
+    <customertracking_headermsg_ajax>
+        <block type="core/template" name="root" template="page/html/header_cart_ajax.phtml">
+            <block type="customertracking/headermsg" name="customertracking.headermsg" template="customertracking/headermsg.phtml" />
+
+            <block type="checkout/cart_sidebar" name="cart_sidebar" as="topCart" template="checkout/cart/cartheader.phtml">
+                <action method="addItemRender"><type>simple</type><block>checkout/cart_item_renderer</block><template>checkout/cart/sidebar/default.phtml</template></action>
+                <action method="addItemRender"><type>grouped</type><block>checkout/cart_item_renderer_grouped</block><template>checkout/cart/sidebar/default.phtml</template></action>
+                <action method="addItemRender"><type>configurable</type><block>checkout/cart_item_renderer_configurable</block><template>checkout/cart/sidebar/default.phtml</template></action>
+                <block type="core/text_list" name="topCart.extra_actions" as="extra_actions" translate="label" module="checkout">
+                    <label>My Cart Extra Actions</label>
+                </block>
+                <block type="checkout/cart_sidebar" name="mini_cart" as="minicart" template="checkout/cart/minicart.phtml">
+                </block>
+            </block>
+        </block>
+    </customertracking_headermsg_ajax>
+
+    <customertracking_index_ajax>
+        <block type="core/template" name="root" template="customertracking/ajax.phtml">
+            <block type="customertracking/pixel" name="customertracking.pixel"  template="customertracking/pixel.phtml" />
+            <block type="customertracking/welcome" name="customertracking.welcome" template="customertracking/welcome.phtml" />
+        </block>
+    </customertracking_index_ajax>
+
+
+    <customer_logged_out>
+        <reference name="before_body_end">
+            <remove name="customertracking.footer" />
+        </reference>
+    </customer_logged_out>
+</layout>
