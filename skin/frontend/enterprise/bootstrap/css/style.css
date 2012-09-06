@@ -669,14 +669,32 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
     margin: -14px -18px 0px 0px;
 }
 .price-wrap {
+    position: absolute; top:0; right:9px;
     float:right; 
-    margin-top:-46px; 
     width:95px; 
     text-align:right;
 } 
 body.catalog-category-view .thumbnails > li {position: relative;}
 .out-of-stock {
     position: absolute; top: 0; right: 0;
+}
+.event_prod_grid .thumbnail {
+    padding:0px; 
+    min-height:382px;
+}
+.event_prod_grid .thumbnail .product-image{
+    display: block;
+}
+.event_prod_grid .thumbnail .caption {
+    position: relative;
+    height: 54px;
+}
+.event_prod_grid .thumbnail .caption h5 {
+    display:block; 
+    width:195px; min-height:35px; max-height: 54px; 
+    overflow: hidden;
+    color: #636466; 
+    font-size: 13px; font-weight: bold; 
 }
 
 /**
