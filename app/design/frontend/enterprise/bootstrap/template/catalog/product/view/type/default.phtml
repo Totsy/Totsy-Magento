@@ -34,3 +34,9 @@
 <?php endif; ?>
 <?php echo $this->getChildHtml('product_type_data_extra') ?>
 <?php echo $this->getPriceHtml($_product) ?>
+<?php if($_product->getAttributeText('color')): ?>
+	<p>Color: <?php echo $_product->getAttributeText('color');  ?></p>
+<?php endif; ?>
+<?php if($_product->getAttributeText('size')): ?>
+	<p>Size: <?php echo $_product->getAttributeText('size');  ?></p>
+<?php endif; ?>
