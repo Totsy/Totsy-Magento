@@ -133,7 +133,7 @@
         <?php foreach ($_options as $_option) : ?>
         <?php $_formatedOptionValue = $this->getFormatedOptionValue($_option) ?>
         <span>
-        <span style="font-weight:bold"><?php echo $this->htmlEscape($_option['label']) ?></span>
+        <span style="font-weight:bold"><?php echo $this->htmlEscape($_option['label']) ?>: </span>
         <span<?php if (isset($_formatedOptionValue['full_view'])): ?> class="truncated"<?php endif; ?>><?php echo $_formatedOptionValue['value'] ?>
             <?php if (isset($_formatedOptionValue['full_view'])): ?>
             <span class="truncated_full_value">
