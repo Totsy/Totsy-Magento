@@ -17,10 +17,6 @@ class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
      */
     const ORDER_FULFILLMENT_CHUNK_SIZE = 128;
 
-    const STOCKSTATUS_XML_TAG_NAME_ITEM = 'inventory_item';
-    const STOCKSTATUS_XML_TAG_NAME_SKU = 'sku';
-    const STOCKSTATUS_XML_TAG_NAME_QTY = 'quantity_available';
-
     /**
      *
      * @return void
@@ -28,7 +24,7 @@ class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
     public function fulfillment()
     {
         $xmlStreamName = Mage::helper('fulfillmentfactory/dotcom')
-            ->getStockStatus();
+            ->getInventory();
 
         $reader = new XMLReader();
         $reader->open($xmlStreamName, 'utf8');
@@ -40,31 +36,31 @@ class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
 
         while ($reader->read()) {
             // this node is an opening <item> tag
-            if (self::STOCKSTATUS_XML_TAG_NAME_ITEM == $reader->localName &&
+            if ('item' == $reader->localName &&
                 XMLReader::ELEMENT === $reader->nodeType
             ) {
-                $state = self::STOCKSTATUS_XML_TAG_NAME_ITEM;
+                $state = 'item';
 
                 // this node is an opening <sku> tag
-            } else if (self::STOCKSTATUS_XML_TAG_NAME_SKU == $reader->localName &&
+            } else if ('sku' == $reader->localName &&
                 XMLReader::ELEMENT == $reader->nodeType &&
-                self::STOCKSTATUS_XML_TAG_NAME_ITEM == $state
+                'item' == $state
             ) {
                 $sku = $reader->readString();
 
                 // this node is an opening <quantity_available> tag
-            } else if (self::STOCKSTATUS_XML_TAG_NAME_QTY == $reader->localName &&
+            } else if ('quantity_available' == $reader->localName &&
                 XMLReader::ELEMENT == $reader->nodeType &&
-                self::STOCKSTATUS_XML_TAG_NAME_ITEM == $state
+                'item' == $state
             ) {
                 $qty = $reader->readString();
 
                 // this node is a closing <item> tag
-            } else if (self::STOCKSTATUS_XML_TAG_NAME_ITEM == $reader->localName &&
+            } else if ('item' == $reader->localName &&
                 XMLReader::END_ELEMENT == $reader->nodeType
             ) {
                 // ignore this item if either of sku or qty wasn't populated
-                if (empty($sku) || empty($qty)) {
+                if (null == $sku || null == $qty) {
                     continue;
                 }
 
@@ -87,7 +83,7 @@ class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
                             'fulfillment_inventory'
                         );
 
-                        Mage::log("Inventory update for '$sku' => $qty", Zend_Log::DEBUG, 'fulfillment_inventory.log');
+                        Mage::log("Inventory update for '$sku': $qty", Zend_Log::DEBUG, 'fulfillment_inventory.log');
                     }
 
                     $count++;
