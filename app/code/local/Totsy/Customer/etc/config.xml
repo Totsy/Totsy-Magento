@@ -39,7 +39,8 @@
             <totsycustomer_setup>
                 <setup>
                     <module>Totsy_Customer</module>
-                    <class>Totsy_Customer_Model_Resource_Eav_Mysql4_Setup</class>
+                    <class>Totsy_Customer_Model_Resource_Eav_Mysql4_Setup
+                    </class>
                 </setup>
                 <connection>
                     <use>core_setup</use>
@@ -65,6 +66,17 @@
             </customer>
         </helpers>
     </global>
+    <frontend>
+        <routers>
+            <totsycustomer>
+                <use>standard</use>
+                <args>
+                    <module>Totsy_Customer</module>
+                    <frontName>totsycustomer</frontName>
+                </args>
+            </totsycustomer>
+        </routers>
+    </frontend>
     <admin>
         <routers>
             <totsy>
@@ -82,7 +94,8 @@
                 <Totsy_Customer/>
             </modules>
             <fixture>
-                <totsycustomer_observer>Totsy_Customer_Model_Observer</totsycustomer_observer>
+                <totsycustomer_observer>Totsy_Customer_Model_Observer
+                </totsycustomer_observer>
             </fixture>
         </suite>
     </phpunit>
