@@ -1,6 +1,27 @@
 Totsy-Magento Release Notes
 ===========================
 
+20120907
+--------
+
+* MGN-998 scale down youtube to width=30
+* MGN-1012 add clear both to show additional preview data at bottom
+* MGN-1012 uncomment echo for product_additional_data
+* MGN-972 fix youtube link in footer
+* MGN-985 adding addition class for unique id of save btn
+* MGN-1001 remove stop icon from text field
+* MGN-1002 restore creditcard images
+* MGN-1002 restore cc images
+* MGN-964 add color to attributes in mini cart
+* MGN-975 restore color/size to simples
+* Declaring var for  Ending Soon array to stop notice in error log... not in use, but on page for future use
+* Removing non-used Top Events collection loop and associated comments
+* fixing displaced Discover card icon in one page checkout for IE8 and 9
+* MGN-905 Event Sorting: can now auto sort by date with a click of a button, and click on event image icon now opens the event edit screen in a new tab
+* Added a simple script to find simple products, whose parent configurable product is part of an event, but itself isn't. Then empty the inventory for these products. A '--dry-run' option is provided to only display products found.
+* Fixing merge conflict
+* disabling the reward observer from firing during customer registration
+
 20120817
 --------
 
