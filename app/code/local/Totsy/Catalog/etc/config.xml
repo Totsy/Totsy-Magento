@@ -18,7 +18,6 @@
             <catalog>
                 <rewrite>
                     <event>Totsy_Catalog_Helper_Event</event>
-                    <product_outofstock>Totsy_Catalog_Helper_Product</product_outofstock>
                 </rewrite>
             </catalog>
         </helpers>
