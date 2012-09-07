@@ -35,12 +35,23 @@ class Harapartners_Categoryevent_Block_Adminhtml_Sort_Index_Edit extends Mage_Ad
     	return $this->getUrl('categoryevent/adminhtml_sort/sortrebuild');
     }
     
+    public function getAutoSortPostUrl(){
+        return $this->getUrl('categoryevent/adminhtml_sort/sortByDate');
+    }
+    
     public function getPostKey(){        
         if (!!(Mage::getSingleton('adminhtml/url')->getSecretKey("adminhtml_sort","post"))){            
             return Mage::getSingleton('adminhtml/url')->getSecretKey("adminhtml_sort","post");
         }else {           
             return false;
         }
+    }
+
+    public function getEventUrl($event){
+        return $this->getUrl('adminhtml/catalog_category/edit', array(
+                'store'=>$this->getRequest()->getParam('store'),
+                'id'=>$event['entity_id']
+        ));
     }
     
     public function getSortDate(){        

@@ -219,7 +219,7 @@ class Harapartners_Categoryevent_Model_Sortentry extends Mage_Core_Model_Abstrac
             }else {
                 $latestRecord = Mage::getModel('categoryevent/sortentry')->loadLatestRecord('date', $sortDate, $storeId);
             }
-
+            
             //Update live and upcoming sort base on customerize logic which is drag and drop result for totsy
             if ( $latestRecord->hasData() ) {
                 $liveOriginal = json_decode($latestRecord->getData('live_queue'), true);
@@ -373,6 +373,17 @@ class Harapartners_Categoryevent_Model_Sortentry extends Mage_Core_Model_Abstrac
         }
         $sortentry->save();
         return $sortentry;
+    }
+
+    public function sortByStartDate($events){
+        $sortFunction = function($left , $right){
+           $left_start_date = new Zend_Date($left['event_start_date'],"mm-dd-yyyy hh:ii:ss");
+           $right_start_date = new Zend_Date($right['event_start_date'],"mm-dd-yyyy");
+           $bool = $left_start_date->isEarlier($right_start_date);
+           return $bool;
+        };
+        usort($events, $sortFunction);
+        return $events;
     }
 
     //For move expired categories/events to a certain category
