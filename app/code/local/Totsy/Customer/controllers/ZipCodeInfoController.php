@@ -5,14 +5,17 @@ class Totsy_Customer_ZipCodeInfoController
 {
     public function lookupAction()
     {
-        $fake = array(
-            array('New York', 'NY'),
-            array('Miami', 'FL'),
-            array('Philadelphia', 'PA'),
-            array('Crystal Springs', 'MI')
-        );
+        $zip = $this->getRequest()->getParam('zip');
+
+        $zipCodeInfo = Mage::getModel('totsycustomer/zipCodeInfo')->getCollection();
+        $zipCodeInfo->addFieldToFilter('zip', $zip);
+
+        $results = array();
+        foreach ($zipCodeInfo as $zipInfo) {
+            $results[] = array($zipInfo['city'], $zipInfo['state']);
+        }
 
         $this->getResponse()->setHeader('Content-Type', 'application/json')
-            ->setBody(json_encode($fake));
+            ->setBody(json_encode($results));
     }
 }
