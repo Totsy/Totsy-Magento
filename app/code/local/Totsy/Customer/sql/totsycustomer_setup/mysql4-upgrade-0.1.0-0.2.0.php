@@ -17,7 +17,8 @@ $installer->run("
         `city` varchar(255) DEFAULT NULL COMMENT 'City',
         `state` char(2) DEFAULT NULL COMMENT 'State',
         `type` varchar(32) DEFAULT 'STANDARD' COMMENT 'Zip Code Type',
-        PRIMARY KEY (`customer_zip_code_info_id`)
+        PRIMARY KEY (`customer_zip_code_info_id`),
+        INDEX (`zip`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='ZIP Code Information';
 ");
 
