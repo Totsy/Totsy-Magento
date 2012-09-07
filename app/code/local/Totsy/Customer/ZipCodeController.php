@@ -9,7 +9,7 @@ class Totsy_Customer_ZipCodeController extends Mage_Customer_AddressController {
 			'Philadelphia' => 'PA',
 			'Crystal Springs' => 'MI'
 		);
-		echo json_encode();
+		echo json_encode($fake);
 	}
 	
 }
