@@ -68,13 +68,13 @@
     </global>
     <frontend>
         <routers>
-            <totsycustomer>
-                <use>standard</use>
+            <customer>
                 <args>
-                    <module>Totsy_Customer</module>
-                    <frontName>totsycustomer</frontName>
+                    <modules>
+                        <totsy_customer before="Mage_Customer">Totsy_Customer</totsy_customer>
+                    </modules>
                 </args>
-            </totsycustomer>
+            </customer>
         </routers>
     </frontend>
     <admin>
