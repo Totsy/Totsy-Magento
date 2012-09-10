@@ -8,6 +8,11 @@
 
 class Totsy_Akamai_Helper_Service_Ccu
 {
+    const CCU_API_WDSL_URL = 'https://ccuapi.akamai.com/ccuapi-axis.wsdl';
+
+    const CCU_CONFIG_PATH_USERNAME = 'web/akamai/username';
+    const CCU_CONFIG_PATH_PASSWORD = 'web/akamai/password';
+
     /**
      * The SOAP client.
      *
@@ -31,9 +36,9 @@ class Totsy_Akamai_Helper_Service_Ccu
 
     public function __construct($username = null, $password = null)
     {
-        $this->_client = new SoapClient("https://ccuapi.akamai.com/ccuapi-axis.wsdl");
-        $this->_username = $username ?: Mage::getStoreConfig('web/akamai/username');
-        $this->_password = $password ?: Mage::getStoreConfig('web/akamai/password');
+        $this->_client = new SoapClient(self::CCU_API_WDSL_URL);
+        $this->_username = $username ?: Mage::getStoreConfig(self::CCU_CONFIG_PATH_USERNAME);
+        $this->_password = $password ?: Mage::getStoreConfig(self::CCU_CONFIG_PATH_PASSWORD);
     }
 
     /**
@@ -49,7 +54,7 @@ class Totsy_Akamai_Helper_Service_Ccu
         $this->_client->purgeRequest(
             $this->_username, // name
             $this->_password, // pwd
-            '',               // network
+            '',               // network (default: production)
             array(),          // opt
             $url              // uri
         );
