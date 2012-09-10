@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Totsy_Akamai>
+            <version>0.1.0</version>
+        </Totsy_Akamai>
+    </modules>
+    <global>
+        <helpers>
+            <akamai>
+                <class>Totsy_Akamai_Helper</class>
+            </akamai>
+        </helpers>
+    </global>
+</config>

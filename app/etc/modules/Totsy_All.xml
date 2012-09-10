@@ -53,5 +53,9 @@
             <active>true</active>
             <codePool>local</codePool>
         </Totsy_Cybersource>
+        <Totsy_Akamai>
+            <active>true</active>
+            <codePool>local</codePool>
+        </Totsy_Akamai>
     </modules>
 </config>
