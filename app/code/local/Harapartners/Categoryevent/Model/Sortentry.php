@@ -121,8 +121,9 @@ class Harapartners_Categoryevent_Model_Sortentry extends Mage_Core_Model_Abstrac
         $eventArray = array();
         if(!!$eventParentCategory && !!$eventParentCategory->getId()){
             $eventArray = $this->getCategoryCollection($eventParentCategory->getId(), $startDate, $endDate)
-                    ->load()
-                    ->toArray();
+                ->addAttributeToSelect('short_description')
+                ->load()
+                ->toArray();
             $liveNew = array();
             $upComingNew = array();
 
@@ -142,14 +143,16 @@ class Harapartners_Categoryevent_Model_Sortentry extends Mage_Core_Model_Abstrac
 
                 $event['department'] = array();
                 $event['age'] = array();
+                $event['department_label'] = array();
+                $event['age_label'] = array();
                 $event['max_discount_pct'] = 0;
 
                 // populate event metadata (classifications) and calculate the
                 // maximum discount percentage by finding the highest discount
                 // percentage across all products
                 foreach ($products as $product) {
-                    $departments = $product->getAttributeText('departments');
-                    $ages = $product->getAttributeText('ages');
+                    $departments = $product->getAttributeTextByStore('departments', Harapartners_Service_Helper_Data::TOTSY_STORE_ID);
+                    $ages = $product->getAttributeTextByStore('ages', Harapartners_Service_Helper_Data::TOTSY_STORE_ID);
 
                     if (is_array($departments)) {
                         $event['department'] = $event['department'] + $departments;
@@ -161,6 +164,22 @@ class Harapartners_Categoryevent_Model_Sortentry extends Mage_Core_Model_Abstrac
                         $event['age'] = $event['age'] + $ages;
                     } else if (is_string($ages)) {
                         $event['age'][] = $ages;
+                    }
+
+                    // store user-friendly labels also
+                    $departments = $product->getAttributeTextByStore('departments', 0);
+                    $ages = $product->getAttributeTextByStore('ages', 0);
+
+                    if (is_array($departments)) {
+                        $event['department_label'] = $event['department_label'] + $departments;
+                    } else if (is_string($departments)) {
+                        $event['department_label'][] = $departments;
+                    }
+
+                    if (is_array($ages)) {
+                        $event['age_label'] = $event['age_label'] + $ages;
+                    } else if (is_string($ages)) {
+                        $event['age_label'][] = $ages;
                     }
 
                     // calculate discount percentage for the event
@@ -181,6 +200,13 @@ class Harapartners_Categoryevent_Model_Sortentry extends Mage_Core_Model_Abstrac
                     array_unique($event['age'])
                 );
 
+                $event['department_label'] = array_values(
+                    array_unique($event['department_label'])
+                );
+                $event['age_label'] = array_values(
+                    array_unique($event['age_label'])
+                );
+
                 if ( ($starttimediff <= 0) && ($endtimediff > 0) ) {
                     array_push( $liveNew, $event );
                 }elseif ( ($starttimediff > 0) && ($endtimediff > 0) ) {
@@ -193,7 +219,7 @@ class Harapartners_Categoryevent_Model_Sortentry extends Mage_Core_Model_Abstrac
             }else {
                 $latestRecord = Mage::getModel('categoryevent/sortentry')->loadLatestRecord('date', $sortDate, $storeId);
             }
-
+            
             //Update live and upcoming sort base on customerize logic which is drag and drop result for totsy
             if ( $latestRecord->hasData() ) {
                 $liveOriginal = json_decode($latestRecord->getData('live_queue'), true);
@@ -347,6 +373,17 @@ class Harapartners_Categoryevent_Model_Sortentry extends Mage_Core_Model_Abstrac
         }
         $sortentry->save();
         return $sortentry;
+    }
+
+    public function sortByStartDate($events){
+        $sortFunction = function($left , $right){
+           $left_start_date = new Zend_Date($left['event_start_date'],"mm-dd-yyyy hh:ii:ss");
+           $right_start_date = new Zend_Date($right['event_start_date'],"mm-dd-yyyy");
+           $bool = $left_start_date->isEarlier($right_start_date);
+           return $bool;
+        };
+        usort($events, $sortFunction);
+        return $events;
     }
 
     //For move expired categories/events to a certain category

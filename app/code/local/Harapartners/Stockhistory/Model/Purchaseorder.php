@@ -112,25 +112,34 @@ class Harapartners_Stockhistory_Model_Purchaseorder extends Mage_Core_Model_Abst
                     $product = Mage::getModel('catalog/product')
                         ->setStoreId(Mage::app()->getStore()->getId())
                         ->load($product_id);
-                    if($product->getIsMasterPack() && !in_array($product_id, $pre_buys)) {
-                        $amend_prod = Mage::getModel('stockhistory/transaction')->getCollection();
-                        $amend_prod->getSelect()->where('po_id=' . $result->getId() . ' and product_id='. $product_id .' and action_type= 4');
-                        if ($amend_prod->getSize()  == 0) {
-                            ++$count;
-                            unset($amend_prod);
+                    if($product->getIsMasterPack()) {
+                        if ( !in_array($product_id, $pre_buys)) {
                             $amend_prod = Mage::getModel('stockhistory/transaction')->getCollection();
-                            $amend_prod->getSelect()->where('po_id=' . $result->getId() . ' and product_id='. $product_id .' and action_type= 1');
-                            $qty = (int)$trans->getQtyDelta();
-                            foreach ($amend_prod as $value) {
-                                $qty += $value->getQtyDelta();
+                            $amend_prod->getSelect()->where('po_id=' . $result->getId() . ' and product_id='. $product_id .' and action_type= 4');
+                            if ($amend_prod->getSize()  == 0) {
+                                ++$count;
+                                unset($amend_prod);
+                                $amend_prod = Mage::getModel('stockhistory/transaction')->getCollection();
+                                $amend_prod->getSelect()->where('po_id=' . $result->getId() . ' and product_id='. $product_id .' and action_type= 1');
+                                $qty = (int)$trans->getQtyDelta();
+                                foreach ($amend_prod as $value) {
+                                    $qty += $value->getQtyDelta();
+                                }
+                                $pre_buys[] = $product_id;
+                                $total_units += $qty;
                             }
-                            $pre_buys[] = $product_id;
-                            $total_units += $qty;
                         }
                     } else {
                         $ordersColl = Mage::getModel('sales/order_item')->getCollection();
                         $ordersColl->getSelect()->where('product_id =' . $product_id);
                         foreach($ordersColl as $order) {
+
+                            if($order->getParentItemId()) {
+                                $parent_item_id = $order->getParentItemId();
+                                $parent_order_line = Mage::getModel('sales/order_item')->getCollection();
+                                $parent_order_line->getSelect()->where('item_id =' . $parent_item_id);
+                                $order = $parent_order_line->getFirstItem();
+                            }
                             $qty = $order->getQtyOrdered() - $order->getQtyReturned() - $order->getQtyCanceled();
                             $total_units += $qty;
                        }

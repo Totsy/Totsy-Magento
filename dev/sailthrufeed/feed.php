@@ -4,6 +4,10 @@ $skip_cache_check = false;
 // set cache time for 3 days
 $TTL =3*24*60*60;
 
+// HTTP HOST settings
+$originHttpHost = !empty($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : 'totsy.com';
+$isHttpHostChanged = false;
+
 if (php_sapi_name()=='cli'){
 	$skip_cache_check = true;	
 	$index=array_search('--get', $argv);
@@ -14,7 +18,13 @@ if (php_sapi_name()=='cli'){
 	$index=array_search('--domain', $argv);
 	if ( $index!==false && $argc>$index+1) {
 		$_SERVER['HTTP_HOST'] = $argv[$index+1];
+		$isHttpHostChanged = true;
 	}
+}
+
+if (!empty($_GET['domain']) && strtolower($_GET['domain']) == 'mamasource.totsy.com'){
+	$_SERVER['HTTP_HOST'] = 'mamasource.totsy.com';
+	$isHttpHostChanged = true;
 }
 
 $chash = $full_path. '/var/tmp/' .md5($_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']).'.json';
@@ -96,6 +106,16 @@ if (!empty($_GET['start_time']) && preg_match('/[\d]{2}[\:][\d]{2}[\:][\d]{2}/',
 
 date_default_timezone_set($defaultTimezone);
 
+$exclude = array();
+if (!empty($_GET['exclude']) && preg_match('/[\d\,]+/',$_GET['exclude'])){
+	$exclude_list = explode(',', $_GET['exclude']);
+	foreach($exclude_list as $el){
+		if (is_numeric($el)) $exclude[] = $el;
+	}
+	unset($exclude_list);
+}
+
+
 /*### PROCESS DATA ###*/
 /*if user want to check upcomming products, put this parameter to url*/
 //$sortentryObject = Mage::getModel('categoryevent/sortentry')->loadByDate(date('Y-m-d',$start_date), $storeId, false);
@@ -137,6 +157,8 @@ $out['max_off'] = floor($maxOff);
 /*### OUTPUT JSON ###*/
 
 $data = json_encode($out);
+getRightHttpHost($data);
+
 $fh = fopen($chash,'w');
 fwrite($fh,$data);
 fclose($fh);
@@ -148,9 +170,14 @@ echo $data;
 
 
 
-
-
 /*########################################################################*/
+function getRightHttpHost(&$json){
+	global $isHttpHostChanged, $originHttpHost;
+	
+	if ( $isHttpHostChanged==true ){
+		$json = str_replace($originHttpHost, $_SERVER['HTTP_HOST'], $json);
+	}
+}
 /*Getting how many percent of money save for a event*/
 function getLargestSaveByCategory(Mage_Catalog_Model_Category $_category){
 	
@@ -187,7 +214,12 @@ function getLargestSaveByCategory(Mage_Catalog_Model_Category $_category){
 }
 
 function getEventApiOutput(Mage_Catalog_Model_Category $_category , $type, &$out){
-	
+	global $exclude;
+
+	if (!empty($exclude) && in_array($_category->getEntityId(), $exclude)){
+		return;
+	}
+
 	$departmentOptionSource = Mage::getModel('catalog/product')->getResource()->getAttribute('departments')->getSource();
 	$ageOptionSource  = Mage::getModel('catalog/product')->getResource()->getAttribute('ages')->getSource();
 	

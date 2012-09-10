@@ -104,16 +104,19 @@ class Harapartners_Stockhistory_Adminhtml_TransactionController extends Mage_Adm
         
         $productData = $this->getRequest()->getParam('qty_to_amend');
         $product = Mage::getModel('catalog/product');
-        
+        $productData = json_decode($productData, true);
         $isBatchSuccess = true;
         foreach($productData as $productSku => $amendmentData){
+            
             $tempProduct = $product->loadByAttribute('sku', trim($productSku));
             if(!$tempProduct || !$tempProduct->getId()){
                 $this->_getSession()->addError('Invalid Product SKU "' . trim($productSku) . '"');
                 continue;
             }
+
             //Ignore empty rows
             if(empty($amendmentData['qty_to_amend'])){
+                debug("Product Sku " . $productSku . "did not have anything to ammend.");
                 continue;
             }
             
@@ -158,15 +161,14 @@ class Harapartners_Stockhistory_Adminhtml_TransactionController extends Mage_Adm
                 $this->_getSession()->addError('Cannot create amendment Info for "' . trim($productSku) . '", ' . $e->getMessage());
             }
         }
-        
+
         if($isBatchSuccess){
             $this->_getSession()->addSuccess('Batch processing completed.');
         }else{
             $this->_getSession()->addError('Some rows in the batch processing failed.');
         }
-        
-        $this->_redirect('*/adminhtml_transaction/report', array('po_id' => $poId));
-        return;
+		Mage::app()->getFrontController()->getResponse()->setRedirect('*/adminhtml_transaction/report', array('po_id' => $poId));
+      // return;
     }
 
     

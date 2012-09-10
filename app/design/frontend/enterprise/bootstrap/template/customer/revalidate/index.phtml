@@ -1,0 +1,50 @@
+<?php
+/**
+ * Harapartners
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Harapartners License
+ * that is bundled with this package in the file LICENSE_EE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://www.Harapartners.com/license
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@Harapartners.com so we can send you a copy immediately.
+ *
+ */
+?>
+    <div class="hero-unit">
+    <h2>Password Revalidation</h2>
+    <hr />
+    <p><?php echo $this->__("Sorry, for the interruption! Please sign in again to continue shopping. If you need help with your password, click ")?><a style="font-weight:bold; color:#ED1C25" href="<?php echo $this->getUrl('customer/account/forgotpassword')?>"><?php echo $this->__("here")?></a><?php echo $this->__(" to forgot password page.")?></p>
+    </div>
+<div id="myModal" class="modal hide fade">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h3>Password Revalidation</h3>
+    </div>
+    <div class="modal-body">
+        <div class="validation-form-container">
+        <?php $customer = Mage::getSingleton('customer/session')->getCustomer();?>
+        <form name="validation-check-form" method="post" action="<?php echo $this->getUrl('customer/revalidate/validationcheckpost',array('_secure'=>true));  ?>">
+        <div class="fieldset">
+        <p><?php echo $this->__("Sorry, for the interruption! Please sign in again to continue shopping.")?><br /><a style="font-weight:bold; color:#ED1C25" href="<?php echo $this->getUrl('customer/account/forgotpassword')?>">If you need help with your password, please reset it.</a></p>
+        <label for="email" class="required">Email <em>*</em></label>
+        <input name="login[username]" id="email" type="text" class="input-text required-entry validate-email" title="Email Address" value="<?php echo $customer->getEmail();?>"/>
+        <label for="password" class="required">Password <em>*</em></label>
+        <input name="login[password]" id="password" autocomplete="off" type="password" class="input-text required-entry validate-password" title="Password" value=""/>
+        </div>
+    <div class="modal-footer">
+        <button type="submit" class=" btn btn-primary" name="send" id="send2">Confirm Password</button>
+    </div>
+        </form>
+    </div>
+</div>
+<script type='text/javascript'>//<![CDATA[ 
+    jQuery(window).load(function(){
+    jQuery('#myModal').modal({
+        keyboard: false
+    })
+});//]]>
+</script>

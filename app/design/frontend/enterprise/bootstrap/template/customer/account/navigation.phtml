@@ -1,0 +1,46 @@
+<?php
+/**
+ * Magento Enterprise Edition
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Magento Enterprise Edition License
+ * that is bundled with this package in the file LICENSE_EE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://www.magentocommerce.com/license/enterprise-edition
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://www.magentocommerce.com/license/enterprise-edition
+ */
+?>
+
+<div class="well" style="padding: 8px 0;">
+    <ul class="nav nav-list">
+        <li class="nav-header">My Account</li>
+<?php $_links = $this->getLinks(); $_index = 1;$_count = count($_links); foreach ($_links as $_link): $_last = ($_index++ >= $_count); 
+?>
+        <li<?php echo ($_last ? ' class="last"' : '') ?>><a href="<?php echo $_link->getUrl() ?>"><?php echo $_link->getLabel() ?></a></li>
+        <?php endforeach; ?>
+    </ul>
+</div>
+
+<div class="well" style="padding: 8px 0;">
+    <ul class="nav nav-list">
+      <li class="nav-header">Need Help?</li>
+      <li><a href="/pages/contact/" title="Contact Us">Help Desk</a></li>
+      <li><a href="/pages/faq/" title="Frequently Asked Questions">FAQ's</a></li>
+      <li><a href="/pages/privacy/" title="Privacy Policy">Privacy Policy</a></li>
+      <li><a href="/pages/terms/" title="Terms Of Use">Terms Of Use</a></li>
+    </ul>
+</div>

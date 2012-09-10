@@ -65,11 +65,11 @@ class Harapartners_Affiliate_RemoteController
                 $customer->setEmail($email);
                 $customer->setpassword($password);
                 $customer->setStoreId($store->getId());
-                   Mage::register('new_account',1);//Harapartners, Edward, Start of setting for Affliate email validation
+                Mage::register('new_account',1);//Harapartners, Edward, Start of setting for Affliate email validation
                 $customer->save();
                 Mage::unregister('new_account');//Harapartners, Edward, End of setting for Affliate email validation 
                 Mage::dispatchEvent('customer_register_success',array('account_controller' => $this, 'customer' => $customer));// for affiliate customer tracking
-                $customer->sendNewAccountEmail('registered','',$store->getId());               
+                $customer->sendNewAccountEmail('confirmed','',$store->getId());               
                 $result['status'] = 'success';
                 //redirect customer as login customer
                 $result['login_url'] = Mage::getBaseUrl()

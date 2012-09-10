@@ -34,9 +34,11 @@
         <?php else:?>
         <a href="<?php echo $this->getUrl('event/?ref=logo') ?>" title="<?php echo $this->getLogoAlt() ?>" class="logo"><strong><?php echo $this->getLogoAlt() ?></strong><img src="<?php echo $this->getLogoSrc() ?>" alt="<?php echo $this->getLogoAlt() ?>" /></a>
         <?php endif?>
+<!--
         <div id="invite">
-        		<a href="<?php echo $this -> getBaseUrl();?>invitation">INVITE YOUR FRIEND, <strong>GET $15 </strong></a><?php echo $this->getAdditionalHtml() ?>
+        		<a href="<?php //echo $this -> getBaseUrl();?>invitation">INVITE YOUR FRIEND, <strong>GET $15 </strong></a><?php //echo $this->getAdditionalHtml() ?>
        </div>
+-->
        <div class="nav">
 	        <div class="quick-access" id="header-user-info">
 
@@ -110,6 +112,6 @@ jQuery(document).ready(function(){
 var topCartContent;
 
 Event.observe(document,'dom:loaded',function() {
-    new Ajax.Updater($('header-user-info'), '<?php echo $this->getUrl('customertracking/headermsg/ajax',array('_secure'=>Mage::app()->getStore()->isCurrentlySecure())); ?>', {method:'get',evalScripts: true});
+    new Ajax.Updater({ success:'header-user-info'}, '<?php echo $this->getUrl('customertracking/headermsg/ajax',array('_secure'=>Mage::app()->getStore()->isCurrentlySecure())); ?>', {method:'get',evalScripts: true});
 });
 </script>

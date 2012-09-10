@@ -213,4 +213,86 @@ class Totsy_Sales_Model_Order extends Mage_Sales_Model_Order
         $this->setData('profit', (float) $profit);
         return $this->getData('profit');
     }
+    
+    /**
+     * Check order state before saving
+     */
+    protected function _checkState()
+    {
+        if (!$this->getId()) {
+            return $this;
+        }
+
+        $userNotification = $this->hasCustomerNoteNotify() ? $this->getCustomerNoteNotify() : null;
+
+        if (!$this->isCanceled()
+            && !$this->canUnhold()
+            && !$this->canInvoice()
+            && !$this->canShip()) {
+            if (0 == $this->getBaseGrandTotal() || $this->canCreditmemo()) {
+                if ($this->getState() !== self::STATE_COMPLETE && $this->getState() !== 'updated') {
+                    $this->_setState(self::STATE_COMPLETE, true, '', $userNotification);
+                }
+            }
+            /**
+             * Order can be closed just in case when we have refunded amount.
+             * In case of "0" grand total order checking ForcedCanCreditmemo flag
+             */
+            elseif (floatval($this->getTotalRefunded()) || (!$this->getTotalRefunded()
+                && $this->hasForcedCanCreditmemo())
+            ) {
+                if ($this->getState() !== self::STATE_CLOSED) {
+                    $this->_setState(self::STATE_CLOSED, true, '', $userNotification);
+                }
+            }
+        }
+
+        if ($this->getState() == self::STATE_NEW && $this->getIsInProcess()) {
+            $this->setState(self::STATE_PROCESSING, true, '', $userNotification);
+        }
+        return $this;
+    }
+    
+    public function isVirtual()
+    {
+        $isVirtual = true;
+        $countItems = 0;
+        foreach ($this->getItemsCollection() as $_item) {
+
+            if ($_item->isDeleted() || $_item->getParentItemId()) {
+                continue;
+            }
+            $countItems ++;
+            if (!$_item->getProduct()->getIsVirtual()) {
+                $isVirtual = false;
+            }
+        }
+        return $countItems == 0 ? false : $isVirtual;
+    }
+
+    /**
+     * Check all child order items to ensure they are either in READY or
+     * CANCELLED status.
+     *
+     * @return bool
+     */
+    public function isReadyForFulfillment()
+    {
+        // locate all order items (those that belong to the same order)
+        // including itself
+        $orderItems = Mage::getModel('fulfillmentfactory/itemqueue')->getCollection();
+        $orderItems->addFieldToFilter('order_id', $this->getId());
+
+        // inspect each order item's status
+        $orderReady = true;
+        foreach ($orderItems as $item) {
+            if (Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_READY != $item->getStatus() &&
+                Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_CANCELLED != $item->getStatus()
+            ) {
+                $orderReady = false;
+            }
+        }
+
+        return $orderReady;
+    }
 }

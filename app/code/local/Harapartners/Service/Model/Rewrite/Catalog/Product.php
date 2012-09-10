@@ -76,16 +76,6 @@ class Harapartners_Service_Model_Rewrite_Catalog_Product extends Mage_Catalog_Mo
         }
     }
     
-    protected function _beforeSave() {
-        //Additional logic here, vender_code, (vender_style) required..
-        parent::_beforeSave();
-        $helper = Mage::helper('ordersplit');
-        if(!in_array($this->getData('fulfillment_type'), $helper->getAllowedFulfillmentTypeArray())){
-            Mage::throwException('Unknown fulfillment type.');
-        }
-        return $this;
-    }
-    
     //Important logic for legacy order import
 	public function getFinalPrice($qty=null){
 		if(Mage::registry('order_import_force_product_price')
@@ -96,4 +86,20 @@ class Harapartners_Service_Model_Rewrite_Catalog_Product extends Mage_Catalog_Mo
         return parent::getFinalPrice($qty);
     }
 
+    /**
+     * Get attribute label text, for a given store.
+     *
+     * @param string $attributeCode
+     * @param int    $storeId
+     *
+     * @return string
+     */
+    public function getAttributeTextByStore($attributeCode, $storeId)
+    {
+        return $this->getResource()
+            ->getAttribute($attributeCode)
+            ->setStoreId($storeId)
+            ->getSource()
+            ->getOptionText($this->getData($attributeCode));
+    }
 }

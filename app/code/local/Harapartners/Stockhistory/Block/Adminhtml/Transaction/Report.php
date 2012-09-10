@@ -30,17 +30,20 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report extends Mage_
         $this->_removeButton('add');
         
         if($poObject->getStatus() == Harapartners_Stockhistory_Model_Purchaseorder::STATUS_OPEN){
-            $this->_addButton('submit_dotcom_po', array(
-                'label'     => Mage::helper('stockhistory')->__('Submit to DOTcom'),
-                'onclick'   => 'submitDotcomPo()',
-                'class'        => 'save'
-            ));
-            
-            $this->_addButton('post_batch_amendments', array(
-                'label'     => Mage::helper('stockhistory')->__('Post Batch Amendments'),
-                'onclick'   => 'postBatchAmendment()',
-                'class'        => 'add'
-            ));
+           if ($this->_isAllowedAction('submit_dotcom')) {
+                $this->_addButton('submit_dotcom_po', array(
+                    'label'     => Mage::helper('stockhistory')->__('Submit to DOTcom'),
+                    'onclick'   => 'submitDotcomPo()',
+                    'class'        => 'save'
+                ));
+            }
+            if ($this->_isAllowedAction('post_amendment')) {
+                $this->_addButton('post_batch_amendments', array(
+                    'label'     => Mage::helper('stockhistory')->__('Post Batch Amendments'),
+                    'onclick'   => 'postBatchAmendment()',
+                    'class'        => 'add'
+                ));
+            }
         }
         
         $this->_addButton('print_report', array(
@@ -49,6 +52,11 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report extends Mage_
             'class'        => 'save'
         ));
     }
+    protected function _isAllowedAction($action)
+    {
+        //return null;
+        return Mage::getSingleton('admin/session')->isAllowed('harapartners/stockhistory/purchaseorder/actions/' . $action);
+    }
     
     //Addtional JS, added to the page in a clean way without touching the template
     protected function _toHtml(){
@@ -56,6 +64,7 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report extends Mage_
         $postFormKey = $this->getFormKey();
         $postFormUrl = $this->getUrl('stockhistory/adminhtml_transaction/postBatchAmendment/', array('po_id' => $dataObject->getData('po_id')));
         $html = parent::_toHtml();
+        $localUrl = $this->getUrl();
         //Wrapping HTML as a form, we use the Grid Widget for the look only, not for any functionalities
         $html .= <<<FORM_WRAPPER
 <div style="display: none;">
@@ -78,11 +87,16 @@ FORM_WRAPPER;
                     shouldUpdate = true;
                 }
             });
-            if(shouldUpdate){
-                emptyPostForm.submit();
-            }else{
-                alert('Nothing to amend.');
-            }
+            goodData = getNonEmptyFields();
+            goodData = JSON.stringify(goodData);
+            request_url = emptyPostForm[0].action;
+            new Ajax.Request(request_url, {
+                parameters:{qty_to_amend: goodData, form_key: emptyPostForm[0].form_key.value},
+                onSuccess: function() {
+                    alert("About to refresh the page...");
+                    setLocation("{$this->getUrl('*/adminhtml_transaction/report', array("_current" => true))}");
+                }
+            });
         }
     }
     
@@ -95,6 +109,28 @@ FORM_WRAPPER;
         }else{
             setLocation('{$this->getUrl('stockhistory/adminhtml_transaction/submitToDotcom/po_id/' . $dataObject->getData('po_id'))}');
         }
+    }
+    var getNonEmptyFields = function(){
+        initial = $$('input[name*=[qty_to_amend]]');
+        goodData = {};
+
+        initial.each(function(index){
+            if(index.value){
+                name = index.name;
+                breakup = name.split('[');
+                sku = breakup[1];
+                sku = sku.substring(0,sku.length-1);
+                if (!goodData[sku]) {
+                    data = $$('input[name*=[' + sku + ']]');
+                    goodData[sku] = {};
+                    goodData[sku]['qty_to_amend'] = index.value;
+                    goodData[sku]['qty_total'] = data[1].value;
+                    goodData[sku]['unit_cost'] = data[2].value;
+                }
+                
+            }
+        });
+        return goodData;
     }
 </script>
 ADDITIONAL_JAVASCRIPT;

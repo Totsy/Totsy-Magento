@@ -109,34 +109,29 @@ class Harapartners_Fulfillmentfactory_Helper_Dotcom extends Mage_Core_Helper_Abs
      * @param array $header
      * @return array response body
      */
-    protected function _postXMLRequest($uri, $xml, $header=array()) {
-        try {
-            $this->_getConfig();
-            
-            $client = new Zend_Http_Client($uri);
-            
-            $header['Content-type'] = 'text/xml; charset=utf-8';
-            $header['Accept-encoding'] = 'gzip,deflate';
-            $header['Authorization'] = $this->_generateAuthHeader($uri);    
-            $client->setHeaders($header);
-            
-            $client->setRawData($xml);
-            
-            $response = $client->request('POST');
-            echo print_r($response, 1);//TEST
-            
-            if(isset($response)) {
-                $body = $response->getBody();
-                return $body;
-            }
+    protected function _postXMLRequest($uri, $xml, $header = array())
+    {
+        $this->_getConfig();
+
+        $client = new Zend_Http_Client($uri);
+
+        $header['Content-type'] = 'text/xml; charset=utf-8';
+        $header['Accept-encoding'] = ''; //'gzip,deflate';
+        $header['Authorization'] = $this->_generateAuthHeader($uri);
+        $client->setHeaders($header);
+
+        $client->setRawData($xml);
+
+        $response = $client->request('POST');
+
+        // handle error conditions (400 or 500 level statuses)
+        if (($code = $response->getStatus()) > 399) {
+            Mage::throwException("Error $code received from Dotcom (" . $response->getBody() . ')');
         }
-        catch(Exception $e) {
-            throw new Exception('Post xml data to DOTcom failed: ' . $e->getMessage());
-        }
-        
-        return false;
+
+        return $response->getBody();
     }
-    
+
     /**
      * get shipping methods list from Dotcom API
      *
@@ -163,7 +158,24 @@ class Harapartners_Fulfillmentfactory_Helper_Dotcom extends Mage_Core_Helper_Abs
      */
     public function getDotcomShippingMethod($method) {
         $this->_getConfig();
-        return 'NG';
+        return 'SP';
+    }
+
+    /**converting us territories to countrycode
+     *
+     * @param string $method Magento shipping method
+     * @return string Dotcom shipping method code
+     */
+    public function getCountryCodeUsTerritories($state) {
+		//country code hack for US territories, will need to be revisited for international shipping changes
+		$country = "US";
+		$territoryStates = array('AS', 'FM', 'GU', 'MH', 'MP', 'PW', 'PR', 'VI');
+		
+		if(in_array($state, $territoryStates)){
+			$country = $state;
+		}
+		
+		return $country;
     }
     
     /**
@@ -207,21 +219,28 @@ class Harapartners_Fulfillmentfactory_Helper_Dotcom extends Mage_Core_Helper_Abs
     }
     
     /**
-     * get Current Inventory
+     * Get Current Inventory, loaded into a stream.
      *
-     * @return SimpleXMLElement inventory
+     * @return string The name of the stream.
      */
     public function getInventory() {
         $this->_getConfig();
         $uri = self::$_apiUrl . '/inventory';
-        
-        $body = $this->_sendQueryRequest($uri);
-        if(!empty($body)) {
-            $items = $this->_readXMLString($body);
-            return $items;
+
+        try {
+            $client = new Zend_Http_Client($uri);
+
+            $header['Accept-encoding'] = ''; //'gzip,deflate'; [dotcom doesn't support gzip encoding anyway]
+            $header['Authorization'] = $this->_generateAuthHeader($uri);
+            $client->setHeaders($header);
+            $client->setStream('/tmp/dotcom-inventory.xml');
+
+            $response = $client->request();
+            return $response->getStreamName();
         }
-        
-        return false;
+        catch(Exception $e) {
+            throw new Exception('Send query to DOTcom failed: ' . $e->getMessage());
+        }
     }
     
     /**

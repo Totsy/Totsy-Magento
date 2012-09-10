@@ -1,6 +1,105 @@
 Totsy-Magento Release Notes
 ===========================
 
+20120907
+--------
+
+* MGN-998 scale down youtube to width=30
+* MGN-1012 add clear both to show additional preview data at bottom
+* MGN-1012 uncomment echo for product_additional_data
+* MGN-972 fix youtube link in footer
+* MGN-985 adding addition class for unique id of save btn
+* MGN-1001 remove stop icon from text field
+* MGN-1002 restore creditcard images
+* MGN-1002 restore cc images
+* MGN-964 add color to attributes in mini cart
+* MGN-975 restore color/size to simples
+* Declaring var for  Ending Soon array to stop notice in error log... not in use, but on page for future use
+* Removing non-used Top Events collection loop and associated comments
+* fixing displaced Discover card icon in one page checkout for IE8 and 9
+* MGN-905 Event Sorting: can now auto sort by date with a click of a button, and click on event image icon now opens the event edit screen in a new tab
+* Added a simple script to find simple products, whose parent configurable product is part of an event, but itself isn't. Then empty the inventory for these products. A '--dry-run' option is provided to only display products found.
+* Fixing merge conflict
+* disabling the reward observer from firing during customer registration
+
+20120817
+--------
+
+* removed sub_affiliate_code column from the affiliate_record table due to performance issues and the lack of need of the column
+* fixed affilate pixel issue on the order confirmation page
+* MGN-747: Fixing the registration level recorded.
+* changed all the ajax pixel and header calls to only show stuff on success. this should stop the oops pages from showing on ajax failures
+* add domain parameter (to sailthru feed)
+* Fixed a typo that prevents new credit cards from being added.
+* Fixed PHP warning on undefined variable.
+* MGN-356 Updated ACL included extra levels for POaccess, categories access, and product access
+* MGN-356 Update ACL functionality
+* cleaned up many PHP warnings
+
+20120810
+--------
+
+* MGN-831 Set status as Payment failed while order with physical and virtual that fail capture
+* Added links to Fulfillment error log Order Number column.
+* MGN-763: Removing error log entries when processing re-fulfillment requests.
+* MGN-900 Adding feature to update billing address with the same Credit Card with Edit Order Payment Module
+
+20120809
+----------
+* MGN-898 adding country code to order info sent via dotcom api
+* MGN-885 hiding qty under add to cart on mobile product view
+* MGN-456 adding color to simple product/item view
+* MGN-730 adding credit card image to mobile checkout
+* MGN-898 helper method for country code conversion
+* Changing dotcom ship method from NG to SP
+* MGN-859 Added fulfillment type check to validation only import / Added import validation for case pack quantity
+* MGN-754 Display vendor code when possible if importing to an existing event
+* MGN-747: Restricting sales & signups feed to first-level registrations only, to prevent polluting feed data with second-level (referral) registrations.
+* MGN-899: Added e-mail address to order XML sent to Dotcom.
+
+20120808
+----------
+* MGN-903 Can now amend 400+ PO lines, MGN-676 fix count for non-casepack items; no longer count canceled items that have configurables
+* MGN-830 If virtual order has been paid by credits, mark the order as complete.
+
+20120807
+----------
+* Change copy on invites to include 'after your friend's first order ships
+* MGN-838. Send welcome email with password
+* MGN-747: converting affiliate registration dates to 'America/New_York' (GMT-04:00) when fetching data for feeds.
+
+20120806
+----------
+* MGN-873 removing subtotal from cart page on mobile
+* MGN-859 Improved import error handling to catch invalid attribute values
+* MGN-441 Display the position value on the event products tab
+* Add exclude method for sailthru events api feed
+* MGN-887 Allow customer to purchase an hybrid order with credits
+* MGN-817 Update an Order with Credits will set status to Updated
+
+20120803
+----------
+* MGN-617 Event End date now display as EST in Purchase Order Grid. 
+* MGN-847 Moved preview email button to product level
+* MGN-486 adding logo to event view
+* MGN-873 hiding subtotal on cart view for cs purposes
+* MGN-404 Hide splitted orders form Order History
+* Fixing Warning in HP Checkout SocialLabs with Evan
+* Sanitizing address street data before making Cybersource requests.
+* MGN-862 remove invite friends banner to make way for monetate
+
+20120801
+----------
+* MGN-855 manage coupons btn open to new tab
+* MGN-754 The vendor code box is now disabled during import when an existing PO is selected
+* MGN-653 Prevent Events with start dates that have a later than the end dates from being saved
+* MGN-676 corrected total unit quantity
+* MGN-617 enabled date range search
+* MGN-381 add a query to look for that specific product
+* MGN-747: Rebuilt the Affiliate Feeds controller using direct SQL queries instead of objects to construct XML feed data.
+* MGN-701 Delete invoices created during payment process if the capture failed
+* Cleaning Methods from CyberSource Totsy that dont need to be overwritten
+
 20120730
 ----------
 

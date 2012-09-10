@@ -59,16 +59,7 @@ class Harapartners_Service_Block_Rewrite_Adminhtml_Catalog_Category_Edit_Form ex
                         'class' => 'preview'
                     ))
             );
-            if($category->getIsVirtualEvent()) {
-                $this->setChild('email_preview_button',
-                $this->getLayout()->createBlock('adminhtml/widget_button')
-                    ->setData(array(
-                        'label'     => Mage::helper('catalog')->__('Preview Event Email'),
-                        'onclick'   => "sendPreviewEmailSubmit();",
-                        'class' => 'preview'
-                    ))
-                );
-            }
+            
             if($category->getParentId() == $expiredEventCategory->getId()) {
                 $this->setChild('revert_move',
                 $this->getLayout()->createBlock('adminhtml/widget_button')
@@ -77,32 +68,53 @@ class Harapartners_Service_Block_Rewrite_Adminhtml_Catalog_Category_Edit_Form ex
                         'onclick'   => "if(confirm('You sure want to move this event back to the \'Events\' folder?')) {setLocation('" . $this->getUrl('*/*/clearExpiredEvents', array('revert' => true,'category_id' => $categoryId)) . "')}"
                     ))
                 );
-            }          
-            //Jun import products
-            $this->setChild('import_product_button',
-                $this->getLayout()->createBlock('adminhtml/widget_button')
-                    ->setData(array(
-                        'label'     => Mage::helper('catalog')->__('Import Products'),
-                        'onclick'   => "setLocation('" . $this->getUrl('import/adminhtml_import/newByCategory', array('category_id' => $categoryId)) . "')",
-                        'class' => 'add'
-                    ))
-            );
+            }
             
+			if(!$this->_isAllowedAction('delete_category')) {
+				$this->unsetChild('delete_button');
+			}
+
+			if(!$this->_isAllowedAction('reset')) {
+				$this->unsetChild('reset_button');
+			}
+			
+			if(!$this->_isAllowedAction('save')) {
+				$this->unsetChild('save_button');
+			}
+			
+            if($this->_isAllowedAction('import')) {
+                //Jun import products
+                $this->setChild('import_product_button',
+                    $this->getLayout()->createBlock('adminhtml/widget_button')
+                        ->setData(array(
+                            'label'     => Mage::helper('catalog')->__('Import Products'),
+                            'onclick'   => "setLocation('" . $this->getUrl('import/adminhtml_import/newByCategory', array('category_id' => $categoryId)) . "')",
+                            'class' => 'add'
+                        ))
+                );
+            }                
             
-            //Harapartners Li Lu
-            $this->setChild('delete_product_button',
-                $this->getLayout()->createBlock('adminhtml/widget_button')
-                    ->setData(array(
-                        'label'     => Mage::helper('catalog')->__('Delete Products'),
-                        'onclick'   => "if(confirm('The selected products will be deleted PERMANENTLY, are you sure?')) {deleteProductsSubmit();}",
-                        'class' => 'delete'
-                    ))
-            );
+            if($this->_isAllowedAction('delete_product')) {
+                //Harapartners Li Lu
+                $this->setChild('delete_product_button',
+                    $this->getLayout()->createBlock('adminhtml/widget_button')
+                        ->setData(array(
+                            'label'     => Mage::helper('catalog')->__('Delete Products'),
+                            'onclick'   => "if(confirm('The selected products will be deleted PERMANENTLY, are you sure?')) {deleteProductsSubmit();}",
+                            'class' => 'delete'
+                        ))
+                );
+            }
         }
         
         return $this;
     }
 
+    protected function _isAllowedAction($action)
+    {
+        //return null;
+        return Mage::getSingleton('admin/session')->isAllowed('catalog/categories/actions/' . $action);
+    }
     
     // Release button HP Yang
     public function getReleaseButtonHtml()
@@ -131,13 +143,6 @@ class Harapartners_Service_Block_Rewrite_Adminhtml_Catalog_Category_Edit_Form ex
         return '';
     }
 
-    public function getEmailPreviewButtonHtml()
-    {
-        if ($this->hasStoreRootCategory()) {
-            return $this->getChildHtml('email_preview_button');
-        }
-        return '';
-    }
     public function getRevertMoveButtonHtml()
     {
         if ($this->hasStoreRootCategory()) {

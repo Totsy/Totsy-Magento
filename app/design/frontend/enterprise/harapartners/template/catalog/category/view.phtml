@@ -35,11 +35,16 @@
     $_helper    = $this->helper('catalog/output');
     $_category  = $this->getCurrentCategory();
     $_imgHtml   = '';
+    $_logoHtml   = '';
     $timer = 'category';
     
     if ($_imgUrl = $_category->getImageUrl()) {
         $_imgHtml = '<p class="category-image"><img src="'.$_imgUrl.'" alt="'.$this->htmlEscape($_category->getName()).'" title="'.$this->htmlEscape($_category->getName()).'" /></p>';
         $_imgHtml = $_helper->categoryAttribute($_category, $_imgHtml, 'image');
+    }
+    
+    if ($_category->getLogo()) {
+	    $_logoHtml = "<img src=\"/media/catalog/category/" . $_category->getLogo() . "\" style=\"float:right;\">";
     }
     
   	$defaultTimezone = date_default_timezone_get();
@@ -65,7 +70,6 @@
 	
 ?>
 <?php echo $this->getMessagesBlock()->toHtml() ?>
-
 <div class="category-view">
 	<div class="event-title-container">
 	<?php if ( !$upComingFlag ):?>
@@ -102,6 +106,7 @@
 	    <?php if($_description=$this->getCurrentCategory()->getDescription()): ?>
 	        <div class="category-description std">
 	            <?php echo $_helper->categoryAttribute($_category, $_description, 'description') ?>
+				<?php if($_logoHtml){ echo $_logoHtml; } ?>	            
 	        </div>
 	    <?php endif; ?>
 	</div>

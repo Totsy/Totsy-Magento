@@ -1,0 +1,23 @@
+<layout version="0.1.0">
+	<!--customer_account>
+		<reference name="customer_account_navigation">
+			<action method="addLink" translate="label" module="childrenlist"><name>childrenlist</name><path>childrenlist/index/index/</path><label>My Children List</label></action>
+		</reference>
+	</customer_account-->
+	
+    <childrenlist_index_index translate="label">
+		<label>Children Lists</label>
+        <update handle="customer_account"/>
+		<reference name="my.account.wrapper">
+            <block type="childrenlist/collection" name="collection" template="childrenlist/collection.phtml" />
+        </reference>
+    </childrenlist_index_index>
+	
+	<childrenlist_index_edit translate="label">
+		<label>Children Lists</label>
+        <update handle="customer_account"/>
+		<reference name="my.account.wrapper">
+            <block type="childrenlist/form_edit" name="collection" template="childrenlist/edit.phtml" />
+        </reference>		
+	</childrenlist_index_edit>
+</layout>

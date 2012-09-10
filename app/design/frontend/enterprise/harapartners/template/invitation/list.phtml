@@ -128,9 +128,9 @@ if ( !$rewardCollection ) {
 			<p class="invite-notes">
 			<?php 
 				if ( Mage::Helper('service')->isTotsyStore() ) {
-					$inviteFriendNotes = "For each friend you invite, Totsy will credit your account with <span class='needgreen'>$15</span> after your friend's place their first order.";
+					$inviteFriendNotes = "For each friend you invite, Totsy will credit your account with <span class='needgreen'>$15</span> after your friend's first order ships.";
 				}else {
-					$inviteFriendNotes = "For each friend you invite, we will credit your account with <span class='needgreen'>$15</span> after your friend's place their first order.";
+					$inviteFriendNotes = "For each friend you invite, we will credit your account with <span class='needgreen'>$15</span> after your friend's first order ships.";
 				}
 			?>
 			<?php echo Mage::helper('enterprise_invitation')->__($inviteFriendNotes); ?>

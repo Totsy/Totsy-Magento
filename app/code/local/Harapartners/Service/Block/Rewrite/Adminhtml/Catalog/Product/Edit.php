@@ -16,7 +16,7 @@ class Harapartners_Service_Block_Rewrite_Adminhtml_Catalog_Product_Edit extends 
     protected function _prepareLayout() {
     	
     	//Only allowed for existing product, not while creating new product!
-        if ($this->getProduct()->getId() &&  $this->getProduct()->isVirtual()) {
+        if ($this->getProduct()->getId() &&  $this->getProduct()->isVirtual()) { 
             $this->setChild('manage_coupon_button',
                 $this->getLayout()->createBlock('adminhtml/widget_button')
                     ->setData(array(
@@ -25,12 +25,42 @@ class Harapartners_Service_Block_Rewrite_Adminhtml_Catalog_Product_Edit extends 
                     	'class'  	=> 'add'
                     ))
             );
+            $this->setChild('email_preview_button',
+                $this->getLayout()->createBlock('adminhtml/widget_button')
+                    ->setData(array(
+                        'label'     => Mage::helper('catalog')->__('Preview Product Email'),
+                        'onclick'   => "sendPreviewEmailSubmit();",
+                        'class' => 'preview'
+                    ))
+            );
+        }
+        if(!$this->_isAllowedAction('delete')) {
+            $this->getChildHtml('delete_button');
+        }
+        
+        if(!$this->_isAllowedAction('reset')) {
+            $this->getChildHtml('reset_button');
+        }
+        if(!$this->_isAllowedAction('save')) {
+            $this->getChildHtml('save_button');
+            $this->getChildHtml('save_and_edit_button');
         }
         return parent::_prepareLayout();
+    }
+
+    protected function _isAllowedAction($action)
+    {
+        //return null;
+        return Mage::getSingleton('admin/session')->isAllowed('catalog/products/actions/' . $action);
     }
     
     public function getManageCouponButtonHtml(){
     	return $this->getChildHtml('manage_coupon_button');
+    }
+
+    public function getEmailPreviewButtonHtml()
+    {
+        return $this->getChildHtml('email_preview_button');
     }
 
 }

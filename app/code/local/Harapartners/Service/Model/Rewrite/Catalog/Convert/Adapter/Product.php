@@ -179,6 +179,17 @@ class Harapartners_Service_Model_Rewrite_Catalog_Convert_Adapter_Product extends
             unset($websiteIds);
         }
 
+        $ordersplit = Mage::helper('ordersplit');
+        if(!in_array($importData['fulfillment_type'], $ordersplit->getAllowedFulfillmentTypeArray())){
+            $error_message = 'fulfillment type "'.$importData['fulfillment_type'].'" is unknown.  Valid fulfillment types are: ';
+            foreach($ordersplit->getAllowedFulfillmentTypeArray() as $fulfillment_type)
+                $error_message .= $fulfillment_type.', ';
+            Mage::throwException(substr($error_message,0,-2));
+        }
+
+        if($importData['case_pack_qty'] && !is_numeric($importData['case_pack_qty']))
+            Mage::throwException('case_pack_qty must be a valid number when included, please correct or remove the current value: "'.$importData['case_pack_qty'].'".');
+
         foreach ($importData as $field => $value) {
             if (in_array($field, $this->_inventoryFields)) {
                 continue;
@@ -241,8 +252,8 @@ class Harapartners_Service_Model_Rewrite_Catalog_Convert_Adapter_Product extends
             //Hara Partners, Richu
             //Hara, Song added $setValue === 0 && !$value condition to fix the bug when the attribute is boolean type
            
-            if( ($setValue === 0 && !$value) || ($setValue === false && !$setValue && !!$value) ){
-                $message = 'Attribute \''.$field.'\' has options that does not exists.';
+            if( ($setValue === 0 && !$value) || ($setValue === false && !$setValue && !!$value) || (is_array($setValue) && empty($setValue)) ){
+                $message = 'the value in the \''.$field.'\' column does not exist. Please correct it or add it to the attribute set.';
                 Mage::throwException($message);
             }else{
                 $product->setData($field, $setValue);

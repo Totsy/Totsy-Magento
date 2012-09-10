@@ -148,7 +148,7 @@
     </form>
     </div>
     <div class="totals">
-        <?php echo $this->getChildHtml('totals'); ?>
+        <?php //echo $this->getChildHtml('totals'); ?>
         <?php $saving = Mage::helper('sales/order')->calculateEstimatedSavings($quote); ?>
         <?php if ($saving): ?>
         <p class="savings">

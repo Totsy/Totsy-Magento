@@ -1,0 +1,127 @@
+<?php
+/**
+ * Magento Enterprise Edition
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Magento Enterprise Edition License
+ * that is bundled with this package in the file LICENSE_EE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://www.magentocommerce.com/license/enterprise-edition
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://www.magentocommerce.com/license/enterprise-edition
+ */
+/**
+ * @var Mage_Page_Block_Html_Header $this
+ */
+?>
+<header class="navbar navbar-fixed-top">
+    <div id="monetateBanner"><i><a href="/invitation/" title="Invite Friends, get $15">Invite Friends</a></i></div>
+    <!-- begin masthead -->
+    <div id="masthead">
+        <div class="container row">   
+            <h1 id="logo" class="span2"><a href="<?php
+            echo $this->getUrl( 'event/?ref=logo' );
+            ?>" title="<?php
+            echo $this->getLogoAlt();
+            ?>"><img src="<?php
+            echo $this->getLogoSrc();
+            ?>" alt="<?php
+            echo $this->getLogoAlt();
+            ?>" width="85px" /></a></h1>
+        
+            <div id="userUtils" class="span4 offset6">
+                <div id="userAccount" class="dropdown">
+                    <a href="/customer/account/#" class="dropdown-toggle" data-toggle="dropdown"><img src="/skin/frontend/enterprise/bootstrap/images/iconmonstr-user-icon.png" width="20" height="20" style="margin-top:-5px;" /> My Account</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/customer/account/">Account Dashboard</a></li>
+                        <li><a href="/customer/account/edit/">Account Information</a></li>
+                        <li><a href="/paymentfactory/">Manage Credit Cards</a></li>
+                        <li><a href="/customer/account/edit/changepassword/1/">Change Password</a></li>
+                        <li><a href="/customer/address/">Address Book</a></li>
+                        <li><a href="/sales/order/history/">My Orders</a></li>
+                        <li><a href="/reward/customer/info/">My Credits</a></li>
+                        <li><a href="/invitation/">My Invitations</a></li>
+                        <li class="divider"></li>
+                        <li><a href="/customer/account/logout">Logout</a></li>
+                    </ul>
+                </div>
+                <div class="quick-access" id="header-user-info"></div>
+            </div>
+        </div>
+    </div><!--/#masthead -->
+    <!-- begin nav -->
+    <nav>
+        <div class="container row">
+            <ul class="nav span8">
+                <li id="navAllEvents" class="dropdown">
+                    <a href="<?php echo $this->getBaseUrl()?>event/"><em>ALL <br />SALES</em></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="<?php echo $this->getBaseUrl()?>event/">New </a></li>
+                        <li><a href="<?php echo $this->getBaseUrl()?>event#events-upcoming">Upcoming</a></li>
+                    </ul>
+                </li>
+                <li id="navByCat" class="dropdown navShop">
+                    <a href="#"><em>SHOP BY<br/>CATEGORY</em></a>
+                    <ul class="dropdown-menu">
+                    <?php $type = 'departments'; ?>
+                    <?php $departmentAttr = Mage::getModel('catalog/product')->getResource()->getAttribute($type);?>
+                    <?php $optionArray = $departmentAttr->getSource()->getAllOptions();?>
+                    <?php foreach($optionArray as $option):?>
+                        <li><a href="<?php echo $this->getBaseUrl();?>category/<?php echo $option['label']?>" title="<?php echo $this->__($option['label']) ?>"><?php echo $this->__($option['label']) ?></a></li>
+                    <?php endforeach;?>
+                    </ul>        
+                </li>
+                <li id="navByAge" class="dropdown navShop">
+                    <a href="#"><em>SHOP BY<br/>AGE</em></a>
+                    <ul class="dropdown-menu">
+                    <?php $age = 'ages'; ?>
+                    <?php $ageAttr = Mage::getModel('catalog/product')->getResource()->getAttribute($age);?>
+                    <?php $ageOptionArray = $ageAttr->getSource()->getAllOptions();?>
+                    <?php foreach($ageOptionArray as $option):?>
+                        <li><a href="<?php echo $this->getBaseUrl();?>age/<?php echo $option['label']?>" title="<?php echo $this->__($option['label']) ?>"><?php echo $this->__($option['label']) ?></a></li>
+                    <?php endforeach;?>
+                    </ul>
+                </li>
+                 <li id="navSocial" class="dropdown navShop"><a href="/pixels/sociable/feed" title="Social Feed"><em>WHAT'S <br/>HOT</em></a></li> 
+            </ul>
+            <?php if ($this->getRequest()->getModuleName()!=="checkout" && $this->getRequest()->getModuleName()!=="hpcheckout"): ?>
+            <div class="span2 offset2" id="header-checkoutBtn">
+                <a class="btn checkout btn-primary" title="Checkout" href="<?php echo Mage::getUrl('checkout/cart')?>"><strong>Checkout</strong></a>
+            </div>     
+            <?php endif; ?>       
+<!--
+            <div class="cta span2 offset2">
+                <a class="cta-link" href="<?php echo $this -> getBaseUrl();?>invitation">INVITE FRIENDS <strong>GET A <em>$15</em> CREDIT</strong></a><?php echo $this->getAdditionalHtml() ?>
+            </div>
+-->
+        </div>
+    </nav>
+</header><!-- /.navbar -->
+
+<div id="sociable_recent_activity_container"></div>
+<script type="text/javascript">
+    function logout(){
+    	FB.logout(function(response) {
+    		window.location = "<?php echo Mage::getUrl('customer/account/logout')?>"// user is now logged out
+    	});
+    }
+    Event.observe(document,'dom:loaded',function() {
+        new Ajax.Updater($('header-user-info'), '<?php echo $this->getUrl('customertracking/headermsg/ajax',array('_secure'=>Mage::app()->getStore()->isCurrentlySecure())); ?>', {
+            method:'get',
+            evalScripts: true
+        });
+    });
+</script>

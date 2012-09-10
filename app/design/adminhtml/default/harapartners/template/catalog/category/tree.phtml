@@ -174,12 +174,14 @@ Ext.extend(Ext.tree.TreePanel.Enhanced, Ext.tree.TreePanel, {
     {
         // Disable the add category/event button for all nodes except Totsy->Event (id==8)
         var button = $('add_subcategory_button');
-        if (node.id == 8) {
-            button.enable();
-            button.removeClassName('disabled');
-        } else {
-            button.disable();
-            button.addClassName('disabled');
+        if(button){
+            if (node.id == 8) {
+                button.enable();
+                button.removeClassName('disabled');
+            } else {
+                button.disable();
+                button.addClassName('disabled');
+            }
         }
 
         var baseUrl = '<?php echo $this->getEditUrl() ?>';

@@ -15,6 +15,9 @@
     </modules>
     <global>
         <blocks>
+            <totsy_page>
+                <class>Totsy_Page_Block</class>
+            </totsy_page>
             <page>
                 <rewrite>
                     <html_head>Totsy_Page_Block_Html_Head</html_head>
