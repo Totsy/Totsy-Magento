@@ -91,9 +91,13 @@ $endcount_lc = date("F j, Y, G:i:s", $endcount_utc); ?>
      <?php echo $_product->getDescription(); ?> 
      </div>
     <?php if($this->getProduct()->isVirtual()): ?>
-        <?php echo $this->getChildHtml('product.shipping.return')?>
+        <?php // echo $this->getChildHtml('shipping_and_return_virtual'); ?>
+        <div id="shipping">
+        <h4>Shipping</h4>
+        <hr style="margin:7px auto; padding:0px;"/>This is a voucher code sale, which means there's no product being shipped to you at this time. Instead, shortly after your purchase, you will receive an email containing a voucher code, along with instructions on how to use and redeem that code. There is no shipment from Totsy, which means there are no shipping costs for this item. If you have any questions, please contact us at <a href="mailto:support@totsy.com">support@totsy.com</a>.<br /><br />
+All vouchers are final sale and nonrefundable.</div>
     <?php else : ?>
-        <?php echo $this->getChildHtml('shipping_and_return_virtual') ?>
+        <?php echo $this->getChildHtml('product.shipping.return'); ?>
     <?php endif; ?>
         <?php if ($_product->getData('final_sale')): ?>
         <br />
