@@ -34,7 +34,7 @@ $quote = Mage::getModel('sales/quote')->load($quoteId);
     <div id="rondavu_checkout_container"></div>
     <script language="javascript" type="text/javascript">
 		function redirect(){window.location.href="<?php echo $url?>"};
-		  setTimeout("redirect()",10000);
+        //setTimeout("redirect()",10000);
 	</script>
 	<?php
 
@@ -42,6 +42,7 @@ require("dev/sociablelabs/sociable_signer.php");
 
 $items_for_socialable_page_key = array();
 $items_for_socialable_mos_keys = array();
+$items_for_socialable_purchase_key = array();
 
 $items = $order->getAllVisibleItems();
 
@@ -52,11 +53,21 @@ foreach ($items as $itemId => $item) {
     $purchase_key = array();
     $mos_key = array();
 
-    $purchase_key['id'] = array("id"=>$item->getId(), "type"=>"product", "price"=>array("actual_paid"=>$item->getPrice(), "currency"=>"USD"));
-
+    $purchase_key = array("id"=>$item->getId(), "type"=>"product", "price"=>array("actual_paid"=> number_format($item->getPrice(), 2, '.', ''), "currency"=>"USD"));
+    
     $mos_key['id'] = array(array("id"=>$item->getId(), "type"=>"product"));
     $mos_key['name'] = array(array("name"=> $item->getName()));
-    $mos_key['primary_tag'] = $product->getCategory()->name;
+    
+    //get category(s) for this product    
+    $categoryIds = $product->getCategoryIds($product->getId());
+    $categoryNames = "";
+        
+    foreach($categoryIds as $categoryId) {
+        $category = Mage::getModel('catalog/category')->load($categoryId);
+        $categoryNames = $category->getName();
+    }
+            
+    $mos_key['primary_tag'] = $categoryNames;
     $mos_key['tags'] = array("ordered_item",$product->getId(),$product->getName());
     $mos_key['url'] = array("detail"=>$product->getProductUrl(), "picture"=>array("primary"=>$product->getProductUrl(), "primary_secure"=>str_replace("http", "https", $product->getProductUrl())));
 
@@ -67,28 +78,41 @@ foreach ($items as $itemId => $item) {
 $rondavu_data =array("config"=>array("version"=>"1.2") ,
     "user"=>array("id"=>array(array("id"=> Mage::getSingleton('customer/session')->getCustomerId(),"type"=>"totsy")),
         "tracking" =>array(array("name" =>"refId","
-           value" =>"refrerral_code"))),
+           value" =>"referral_code"))),
     "page" =>array("tags" =>array("order_confirmation"),
-        "actions" =>array("purchase" =>array("order_id" =>$this->getOrderId(),"total"=>$order->getData('grand_total'),"currency" =>"USD","items"=> $items_for_socialable_purchase_keys,
-                "price" =>array("actual_paid" =>$order->getData('grand_total'),"currency"=>"USD")))),
+        "actions" =>array("purchase" =>array("order_id" =>$this->getOrderId(),"total"=>number_format($order->getData('grand_total'), 2, '.', '')
+,"currency" =>"USD","items"=> $items_for_socialable_purchase_key,
+                "price" =>array("actual_paid" =>number_format($order->getData('grand_total'), 2, '.', ''),"currency"=>"USD")))),
     "primary_mo"=>array("id" =>array(array("id"=>"order_confirmation","type"=>"page")) ,
         "name" =>array(array("name" =>"Totsy")) ,
-        "url" =>array("detail" =>"http//www.totsy.com","picture"=>array("primary"=>"http//www.totsy.com/img/logo-125x77.png","primary_secure" =>
+        "url" =>array("detail" =>"https://www.totsy.com","picture"=>array("primary"=>"https://www.totsy.com/img/logo-125x77.png","primary_secure" =>
                 "https://www.totsy.com/img/logo-125x77.png"))),
     "mos" => $items_for_socialable_mos_keys
 );
 
 // declare a path to the key
 $key_path = "dev/sociablelabs/sign_private_key";
-$socialable_labs_output = rondavu_sign($rondavu_data, $key_path);
+$socialableLabsOutput = rondavu_sign($rondavu_data, $key_path);
 
-if($socialable_labs_output) {
 ?>
 <script type="text/javascript">
-    var socialableLabsOutput = <?php echo $socialable_labs_output ?>;
+    window.RondavuData = <?php echo $socialableLabsOutput ?>;
 </script>
 
-<?php } ?>
+<script type="text/javascript">
+
+    (function(){
+        var s = document.createElement('script');
+        s.async = true;
+
+        s.src =  ('https:' == window.location.protocol ? 'https://s3.amazonaws.com/' : 'http://') +
+            ('www.totsy.com' == window.location.host ? 'static.rondavu.com' +'/C/' +  'Totsy_PROD' : 'qa.rondavu.com' +'/C/' +  'Totsy_QA')  + '/rondavu.js';
+
+        document.getElementsByTagName('head')[0].appendChild(s);
+        
+    })();
+    
+</script>
 
 <?php endif;?>
 <?php endif;?>
@@ -149,7 +173,7 @@ endforeach;
   })();
 
 </script>
-<?php $_cartQty = Mage::getModel('checkout/cart')->getCart()->get;  ?>
+<?php //$_cartQty = Mage::getModel('checkout/cart')->getCart()->get;  ?>
 
 <script type="text/javascript">
 var aid='9577';

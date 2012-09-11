@@ -96,7 +96,6 @@ $endcount_lc = date("F j, Y, G:i:s", $endcount_utc); ?>
 	<?php if($this->getProduct()->isVirtual()): ?>
 	<?php echo $this->getChildHtml('product.shipping.return')?>
     <?php else: ?>
-    <!--
      <h4>Shipping &amp; Returns</h4>
     <hr style="margin:7px auto; padding:0px;"/>
     <p>
@@ -111,9 +110,7 @@ $endcount_lc = date("F j, Y, G:i:s", $endcount_utc); ?>
 	Totsy accept returns on selected items only. You will get a merchandise credit and free shipping (AK &amp; HI: air shipping rates apply). Simply be sure that we receive the merchandise you wish to return within 30 days from the date you originally received it in its original condition with all the packaging intact. Please note: Final Sale items cannot be returned. Want to learn more? Read more in our
 	<a href="/pages/return-policy/">returns section</a>
 	</p>
-	-->
     <?php endif; ?>
-	<div id="rondavu_pdp_container"></div>
     <?php if($this->getProduct()->isVirtual()): ?>
         <h4>Shipping &amp; Returns</h4>
         <hr style="margin:7px auto; padding:0px;"/>
@@ -123,6 +120,7 @@ $endcount_lc = date("F j, Y, G:i:s", $endcount_utc); ?>
     <?php if ($_product->getData('final_sale')): ?>
     <p class="final-sale"><strong>Final Sale</strong></p>
     <?php endif; ?>
+    <div id="rondavu_pdp_container"></div>
  </div>
 <?php 
     $event_end_date = strtotime($_category->getEventEndDate());
