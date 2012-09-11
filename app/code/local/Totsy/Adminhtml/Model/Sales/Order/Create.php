@@ -48,7 +48,6 @@ class Totsy_Adminhtml_Model_Sales_Order_Create extends Mage_Adminhtml_Model_Sale
                 ->sendNewAccountEmail('registered', '', $quote->getStoreId());;
         }
         if ($this->getSession()->getOrder()->getId()) {
-            $oldOrder = $this->getSession()->getOrder();
 
             $this->getSession()->getOrder()->setRelationChildId($order->getId());
             $this->getSession()->getOrder()->setRelationChildRealId($order->getIncrementId());
@@ -94,7 +93,16 @@ class Totsy_Adminhtml_Model_Sales_Order_Create extends Mage_Adminhtml_Model_Sale
                                 $item->setIsQtyDecimal(1);
                             }
                         }
-                        if($itemQty > (int)$item->getProduct()->getStockItem()->getQty()) {
+                        $oldItemQty = 0;
+                        if($this->getSession()->getOrder()) {
+                            $oldOrderItems = $this->getSession()->getOrder()->getItemsCollection();
+                            foreach ($oldOrderItems as $oldItem){
+                                if($oldItem->product_id == $item->getProductId()) {
+                                       $oldItemQty = (int)$oldItem->getQtyOrdered();
+                                }
+                            }
+                        }
+                        if($itemQty > ((int)$item->getProduct()->getStockItem()->getQty() + $oldItemQty)) {
                             Mage::throwException(
                                 Mage::helper('adminhtml')->__('The quantity requested for "%s" is not available', $item->getProduct()->getName())
                             );
@@ -165,7 +173,18 @@ class Totsy_Adminhtml_Model_Sales_Order_Create extends Mage_Adminhtml_Model_Sale
         if ($stockItem && $stockItem->getIsQtyDecimal()) {
             $product->setIsQtyDecimal(1);
         }
-        if($config->getQty() > (int) $stockItem->getQty()) {
+
+        $oldItemQty = 0;
+        if($this->getSession()->getOrder()) {
+            $oldOrderItems = $this->getSession()->getOrder()->getItemsCollection();
+            foreach ($oldOrderItems as $oldItem){
+                if($oldItem->product_id == $product->getId()) {
+                    $oldItemQty = (int)$oldItem->getQtyOrdered();
+                }
+            }
+        }
+
+        if($config->getQty() > ((int) $stockItem->getQty() + $oldItemQty)) {
             Mage::throwException(
                 Mage::helper('adminhtml')->__('The quantity requested for "%s" is not available', $product->getName())
             );

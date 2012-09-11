@@ -205,6 +205,15 @@
         </models>
         <events>
             <!-- ===== GLOBAL EVENTS START ===== -->
+            <cataloginventory_stock_item_save_after>
+                <observers>
+                    <!--Harapartners_Rushcheckout: Updating only (Addition and deletion can be safely ignored) -->
+                    <rushcheckout>
+                        <class>rushcheckout/observer</class>
+                        <method>updateReservationByStockItem</method>
+                    </rushcheckout>
+                </observers>
+            </cataloginventory_stock_item_save_after>
             <controller_front_init_routers>
                 <observers>
                     <!--Harapartners_Affiliate-->
@@ -409,15 +418,6 @@
     <frontend>
         <events>
             <!-- ===== FRONTEND ONLY EVENTS START ===== -->
-            <cataloginventory_stock_item_save_after>
-                <observers>
-                    <!--Harapartners_Rushcheckout: Updating only (Addition and deletion can be safely ignored) -->
-                    <rushcheckout>
-                        <class>rushcheckout/observer</class>
-                        <method>updateReservationByStockItem</method>
-                    </rushcheckout>
-                </observers>
-            </cataloginventory_stock_item_save_after>
             <sales_quote_item_save_after>
                 <observers>
                     <!--Harapartners_Rushcheckout: Adding or updating quote item -->
