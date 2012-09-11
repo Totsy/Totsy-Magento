@@ -1,12 +1,12 @@
 <?php
 /**
  * @category    Totsy
- * @package     Totsy_Akamai_Helper
+ * @package     Totsy_Cdn_Model_Network
  * @author      Tharsan Bhuvanendran <tbhuvanendran@totsy.com>
  * @copyright   Copyright (c) 2012 Totsy LLC
  */
 
-class Totsy_Akamai_Helper_Service_Ccu
+class Totsy_Cdn_Model_Network_AkamaiCcu implements Totsy_Cdn_Model_CdnInterface
 {
     const CCU_API_WDSL_URL = 'https://ccuapi.akamai.com/ccuapi-axis.wsdl';
 
@@ -44,14 +44,14 @@ class Totsy_Akamai_Helper_Service_Ccu
     /**
      * Issue a purge request to the Akamai Content Control Utility.
      *
-     * @param array|string $url
+     * @param array|string $url The URL(s) to purge cache for.
      *
-     * @return int
+     * @return bool TRUE when successful, or FALSE otherwise.
      */
     public function purge($url)
     {
         $url = (array) $url;
-        $this->_client->purgeRequest(
+        $result = $this->_client->purgeRequest(
             $this->_username, // name
             $this->_password, // pwd
             '',               // network (default: production)
@@ -59,7 +59,9 @@ class Totsy_Akamai_Helper_Service_Ccu
             $url              // uri
         );
 
-        return 0;
+        // @todo inspect the $result here
+
+        return true;
     }
 
     /**

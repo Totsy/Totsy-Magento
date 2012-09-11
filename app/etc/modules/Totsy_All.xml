@@ -9,6 +9,10 @@
             <active>true</active>
             <codePool>local</codePool>
         </Totsy_Ajax>
+        <Totsy_Cdn>
+            <active>true</active>
+            <codePool>local</codePool>
+        </Totsy_Cdn>
         <Totsy_Checkout>
             <active>true</active>
             <codePool>local</codePool>
@@ -53,9 +57,5 @@
             <active>true</active>
             <codePool>local</codePool>
         </Totsy_Cybersource>
-        <Totsy_Akamai>
-            <active>true</active>
-            <codePool>local</codePool>
-        </Totsy_Akamai>
     </modules>
 </config>
