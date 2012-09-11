@@ -90,35 +90,18 @@ $endcount_lc = date("F j, Y, G:i:s", $endcount_utc); ?>
      <div class="product_desc">
      <?php echo $_product->getDescription(); ?> 
      </div>
-    <div class="clear"></div>
-<br/>
-    
-	<?php if($this->getProduct()->isVirtual()): ?>
-	<?php echo $this->getChildHtml('product.shipping.return')?>
-    <?php else: ?>
-     <h4>Shipping &amp; Returns</h4>
-    <hr style="margin:7px auto; padding:0px;"/>
-    <p>
-    <strong class="label">Shipping:</strong>
-	Totsy will ship this item via Standard UPS or Standard US Mail shipping based on your selection at the end of your
-	<a href="/checkout/cart/">checkout process</a>
-         Complete shipping details are available at
-	<a href="/pages/shipping/">shipping terms</a>
-	</p>
-	<p>
-	<strong class="label">Returns:</strong>
-	Totsy accept returns on selected items only. You will get a merchandise credit and free shipping (AK &amp; HI: air shipping rates apply). Simply be sure that we receive the merchandise you wish to return within 30 days from the date you originally received it in its original condition with all the packaging intact. Please note: Final Sale items cannot be returned. Want to learn more? Read more in our
-	<a href="/pages/return-policy/">returns section</a>
-	</p>
-    <?php endif; ?>
     <?php if($this->getProduct()->isVirtual()): ?>
-        <h4>Shipping &amp; Returns</h4>
-        <hr style="margin:7px auto; padding:0px;"/>
-        <?php echo $_helper->productAttribute($_product, nl2br($_product->getShortDescription()), 'short_description') ?>
+        <?php // echo $this->getChildHtml('shipping_and_return_virtual'); ?>
+        <div id="shipping">
+        <h4>Shipping</h4>
+        <hr style="margin:7px auto; padding:0px;"/>This is a voucher code sale, which means there's no product being shipped to you at this time. Instead, shortly after your purchase, you will receive an email containing a voucher code, along with instructions on how to use and redeem that code. There is no shipment from Totsy, which means there are no shipping costs for this item. If you have any questions, please contact us at <a href="mailto:support@totsy.com">support@totsy.com</a>.<br /><br />
+All vouchers are final sale and nonrefundable.</div>
+    <?php else : ?>
+        <?php echo $this->getChildHtml('product.shipping.return'); ?>
     <?php endif; ?>
-
-    <?php if ($_product->getData('final_sale')): ?>
-    <p class="final-sale"><strong>Final Sale</strong></p>
+        <?php if ($_product->getData('final_sale')): ?>
+        <br />
+        <p class="final-sale"><strong>All Sales Are Final</strong></p>
     <?php endif; ?>
  </div>
 <?php 

@@ -60,14 +60,14 @@
     <h1 id="logo" class="span4"><a href="<?php 
                     echo $this->getUrl( 'event/?ref=logo' ); ?>" title="<?php
                     echo $this->getLogoAlt();
-                    ?>"><img src="/skin/frontend/enterprise/bootstrap/images/logo.png" alt="Totsy.com" width="85px" /></a>
+                    ?>"><img src="<?php echo $this->getSkinUrl() ?>images/logo.png" alt="Totsy.com" width="85px" /></a>
     </h1>
     <br />
     <h2 style="font-size:18px;"><?php echo $this->__('Sign In') ?> <small> or <a href="/customer/account/create/" style="font-weight:normal;">Sign Up</a></small></h2>
     </div>
     <div class="row">
     <div style="text-align:center; margin:0px 0px 13px">
-    <a rel="facebook-connect" style="margin:10px 0px; cursor:pointer;" title="<?php echo $this->__('Connect with Facebook') ?>" class="facebook-button" ><img src="/skin/frontend/enterprise/bootstrap/images/facebook_connect_button.png" /></a>
+    <a rel="facebook-connect" style="margin:10px 0px; cursor:pointer;" title="<?php echo $this->__('Connect with Facebook') ?>" class="facebook-button" ><img src="<?php echo $this->getSkinUrl() ?>images/facebook_connect_button.png" /></a>
     </div>
     <div class="span4">
     <div class="the-account-login account-login<?php if (!$this->helper('customer')->isRegistrationAllowed()) echo ' login-only' ?>">
