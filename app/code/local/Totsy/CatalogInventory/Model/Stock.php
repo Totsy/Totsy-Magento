@@ -3,7 +3,7 @@
 /**
  * @category    Totsy
  * @package     Totsy_CatalogInventory_Model_Stock
- * @author      Tom Royer <troyer@totsy.com>
+ * @author      Tom Royer <skosh@totsy.com>
  * @copyright   Copyright (c) 2012 Totsy LLC
  */
 
