@@ -113,13 +113,6 @@
                         <action>categoryevent/adminhtml_sort</action>
                     </sortcategoryevent>
                 </children>
-                <children>
-                    <displaycategoryevent translate="title" module="categoryevent">
-                        <title>Category Page Setting</title>
-                        <sort_order>0</sort_order>
-                        <action>categoryevent/adminhtml_config</action>
-                    </displaycategoryevent>
-                </children>
             </catalog>
         </menu>
         <layout>
@@ -140,7 +133,7 @@
                     <model>categoryevent/sortentry::rebuildSortCron</model>
                 </run>
             </categoryevent_rebuild_sort_cron>            
-			<categoryevent_clean_expired_cron>
+            <categoryevent_clean_expired_cron>
                 <schedule>
                     <cron_expr>0 4 * * *</cron_expr>
                 </schedule>

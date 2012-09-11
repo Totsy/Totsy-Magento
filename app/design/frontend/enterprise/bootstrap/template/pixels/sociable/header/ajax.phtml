@@ -4,7 +4,7 @@
 <script type="text/javascript">
     var socialableLabsOutput = false;
     Event.observe(window,'load',function() {
-        new Ajax.Updater($('sociable_header_pixel'), '<?php echo Mage::getUrl('pixels/sociable/header',array('_secure'=>Mage::app()->getStore()->isCurrentlySecure())); ?>'
+        new Ajax.Updater({success: 'sociable_header_pixel'}, '<?php echo Mage::getUrl('pixels/sociable/header',array('_secure'=>Mage::app()->getStore()->isCurrentlySecure())); ?>'
             , {method:'get',evalScripts: true});
     });
 

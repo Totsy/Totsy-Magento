@@ -55,24 +55,5 @@
 </div>
 </div>
 <?php echo $this->getAbsoluteFooter() ?>
-<script>
-    var jsonArray =  <?php echo Mage::app()->getLayout()->createBlock('customertracking/background')->getBackroundImagesJsonArray();?>;
-    var keyword   =  jsonArray['keyword'];
-    var imgDir 	  =  jsonArray['dir'];
-    var items     =  jsonArray['images'];
-    if (!!keyword) {
-        var item = imgDir + keyword + ".jpg";
-    } else {
-    var item  =  items[Math.floor(Math.random()*items.length)];
-    }
-    jQuery.backstretch(item);
-
-    jQuery('input[placeholder], textarea[placeholder]').placeholder();
-
-    //code for disabling echoSahre
-    if(typeof _esq!='undefined'){
-        _esq.settings.socialCenter = { enabled: false };
-    }
-</script>
 </body>
 </html>
