@@ -10,13 +10,14 @@
 <config>
     <modules>
         <Totsy_Customer>
-            <version>0.1.0</version>
+            <version>0.2.0</version>
         </Totsy_Customer>
     </modules>
     <global>
         <models>
             <totsycustomer>
                 <class>Totsy_Customer_Model</class>
+                <resourceModel>totsycustomer_mysql4</resourceModel>
             </totsycustomer>
             <customer>
                 <rewrite>
@@ -25,12 +26,21 @@
                     <session>Totsy_Customer_Model_Session</session>
                 </rewrite>
             </customer>
+            <totsycustomer_mysql4>
+                <class>Totsy_Customer_Model_Mysql4</class>
+                <entities>
+                    <zipCodeInfo>
+                        <table>customer_zip_code_info</table>
+                    </zipCodeInfo>
+                </entities>
+            </totsycustomer_mysql4>
         </models>
         <resources>
             <totsycustomer_setup>
                 <setup>
                     <module>Totsy_Customer</module>
-                    <class>Totsy_Customer_Model_Resource_Eav_Mysql4_Setup</class>
+                    <class>Totsy_Customer_Model_Resource_Eav_Mysql4_Setup
+                    </class>
                 </setup>
                 <connection>
                     <use>core_setup</use>
@@ -56,6 +66,17 @@
             </customer>
         </helpers>
     </global>
+    <frontend>
+        <routers>
+            <customer>
+                <args>
+                    <modules>
+                        <totsy_customer before="Mage_Customer">Totsy_Customer</totsy_customer>
+                    </modules>
+                </args>
+            </customer>
+        </routers>
+    </frontend>
     <admin>
         <routers>
             <totsy>
@@ -73,7 +94,8 @@
                 <Totsy_Customer/>
             </modules>
             <fixture>
-                <totsycustomer_observer>Totsy_Customer_Model_Observer</totsycustomer_observer>
+                <totsycustomer_observer>Totsy_Customer_Model_Observer
+                </totsycustomer_observer>
             </fixture>
         </suite>
     </phpunit>
