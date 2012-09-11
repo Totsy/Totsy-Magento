@@ -12,7 +12,14 @@ class Totsy_Customer_ZipCodeInfoController
 
         $results = array();
         foreach ($zipCodeInfo as $zipInfo) {
-            $results[] = array($zipInfo['city'], $zipInfo['state']);
+            $country = Mage::getModel('directory/country')->loadByCode('US');
+            $region = Mage::getModel('directory/region')->loadByCode($zipInfo['state'], $country->getId());
+
+            $results[] = array(
+                'city' => $zipInfo['city'],
+                'state' => $zipInfo['state'],
+                'region_id' => $region->getId()
+            );
         }
 
         $this->getResponse()->setHeader('Content-Type', 'application/json')
