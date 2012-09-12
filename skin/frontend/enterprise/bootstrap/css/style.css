@@ -730,6 +730,7 @@ body.catalog-category-view .thumbnails > li {position: relative;}
 }
 
 #hpcheckout-payment-form ul {
+	float: left;
     margin: 0px !important; 
 }
 
