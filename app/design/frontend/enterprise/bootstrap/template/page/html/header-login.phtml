@@ -34,8 +34,9 @@
 <?php $createPattern = '/create/';?>
 <?php $loginPattern = '/login/';?>
 <?php $forgetpasswordPattern = '/forgotpassword/';?>
+<?php $resetpasswordPattern = '/resetpassword/' ;?>
 
-    <?php if (preg_match($createPattern, $currentUrl)||preg_match($loginPattern, $currentUrl)||preg_match($forgetpasswordPattern, $currentUrl)):?>
+    <?php if (preg_match($createPattern, $currentUrl)||preg_match($loginPattern, $currentUrl)||preg_match($resetpasswordPattern, $currentUrl)||preg_match($forgetpasswordPattern, $currentUrl)):?>
     <?php else:?>
     <header class="navbar navbar-fixed-top logged-out"><!-- begin masthead -->
         <div id="masthead" style="padding:20px 0px;">
