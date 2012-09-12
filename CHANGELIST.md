@@ -1,6 +1,17 @@
 Totsy-Magento Release Notes
 ===========================
 
+20120911
+--------
+* Adding shipping and returns CMS blocks for virtual and non virtual items
+* Fixing IE bug on login registration page for HTTPS error popup and missing image
+* Fixing double input field on login and registration pages
+* Adding virtual product display shipping and returns fix
+* Adding virtual product shipping and returns CMS block
+* MGN-961 replacing default ladybug images
+* Removed unused Catalog/Event configuration page/logic.
+* Injecting AJAX data into containers only on successful AJAX requests.
+
 20120907
 --------
 
