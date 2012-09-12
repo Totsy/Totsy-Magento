@@ -91,22 +91,26 @@
                             <div class="more">
                                 <div class="maxDiscount"><em>up to <span><strong><?php echo $maxDiscount; ?>%</strong> off</span></em></div>
                                 <div class="more-content">
-                                    <section class="labels container">
-                                        <h6>Categories:</h6>
-                                        <ul>
-                                        <?php foreach ($eventDepts as $eventDept) : ?>
-                                            <li><?php echo $eventDept; ?></li>
-                                        <?php endforeach; ?>
-                                        </ul>
-                                    </section>
-                                    <section class="labels container">
-                                        <h6>Ages:</h6>
-                                        <ul>
-                                        <?php foreach ($eventAges as $eventAge) : ?>
-                                            <li><?php echo $eventAge; ?></li>
-                                        <?php endforeach; ?>  
-                                        </ul>                                  
-                                    </section>
+                                    <?php if ( !empty($eventDepts) ) : ?>
+                                        <section class="labels container">
+                                            <h6>Categories:</h6>
+                                            <ul>
+                                            <?php foreach ($eventDepts as $eventDept) : ?>
+                                                <li><?php echo $eventDept; ?></li>
+                                            <?php endforeach; ?>
+                                            </ul>
+                                        </section>
+                                    <?php endif; ?>
+                                    <?php if ( !empty($eventAges) ) : ?>
+                                        <section class="labels container">
+                                            <h6>Ages:</h6>
+                                            <ul>
+                                            <?php foreach ($eventAges as $eventAge) : ?>
+                                                <li><?php echo $eventAge; ?></li>
+                                            <?php endforeach; ?>  
+                                            </ul>                                  
+                                        </section>
+                                    <?php endif; ?>
                                     <p id="time1-<?php echo $timer ?>"></p>
                                     <span class="btn btn-primary">Shop Now!</span>
                                 </div>
