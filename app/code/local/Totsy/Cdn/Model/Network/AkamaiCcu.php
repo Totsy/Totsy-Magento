@@ -44,24 +44,44 @@ class Totsy_Cdn_Model_Network_AkamaiCcu implements Totsy_Cdn_Model_CdnInterface
     /**
      * Issue a purge request to the Akamai Content Control Utility.
      *
-     * @param array|string $url The URL(s) to purge cache for.
+     * @param array|string $url  The URL(s) to purge cache for.
+     * @param int          $type The type of purge request to send.
      *
      * @return bool TRUE when successful, or FALSE otherwise.
      */
-    public function purge($url)
+    public function purge($url, $type = self::PURGE_TYPE_REMOVE)
     {
         $url = (array) $url;
+
+        $action = 'remove';
+        switch ($type) {
+            case self::PURGE_TYPE_REMOVE:
+                $action = 'remove';
+                break;
+            case self::PURGE_TYPE_INVALIDATE:
+                $action = 'invalidate';
+                break;
+        }
+
         $result = $this->_client->purgeRequest(
             $this->_username, // name
             $this->_password, // pwd
-            '',               // network (default: production)
-            array(),          // opt
+            '',               // network (deprecated)
+            array(            // opt
+                "action=$action",
+                'type=arl',
+                'email-notification=tbhuvanendran@totsy.com'
+            ),
             $url              // uri
         );
 
-        // @todo inspect the $result here
-
-        return true;
+        if ($result->resultCode < 300) {
+            Mage::log("Akamai purge request for URLs " . implode(', ', $url) . " succeeded", Zend_Log::INFO, 'akamai.log');
+            return true;
+        } else {
+            Mage::log("Akamai purge request for URLs " . implode(', ', $url) . " failed: " . $result->resultMsg, Zend_Log::ERR, 'akamai.log');
+            return false;
+        }
     }
 
     /**
