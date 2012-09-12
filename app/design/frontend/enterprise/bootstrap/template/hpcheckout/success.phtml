@@ -40,7 +40,7 @@ $quote = Mage::getModel('sales/quote')->load($quoteId);
 
 require("dev/sociablelabs/sociable_signer.php");
 
-$items_for_socialable_page_key = array();
+$items_for_socialable_purchase_key = array();
 $items_for_socialable_mos_keys = array();
 
 $items = $order->getAllVisibleItems();
@@ -56,7 +56,7 @@ foreach ($items as $itemId => $item) {
 
     $mos_key['id'] = array(array("id"=>$item->getId(), "type"=>"product"));
     $mos_key['name'] = array(array("name"=> $item->getName()));
-    $mos_key['primary_tag'] = $product->getCategory()->name;
+    $mos_key['primary_tag'] = ""; //$product->getCategory()->name;
     $mos_key['tags'] = array("ordered_item",$product->getId(),$product->getName());
     $mos_key['url'] = array("detail"=>$product->getProductUrl(), "picture"=>array("primary"=>$product->getProductUrl(), "primary_secure"=>str_replace("http", "https", $product->getProductUrl())));
 
@@ -69,7 +69,7 @@ $rondavu_data =array("config"=>array("version"=>"1.2") ,
         "tracking" =>array(array("name" =>"refId","
            value" =>"refrerral_code"))),
     "page" =>array("tags" =>array("order_confirmation"),
-        "actions" =>array("purchase" =>array("order_id" =>$this->getOrderId(),"total"=>$order->getData('grand_total'),"currency" =>"USD","items"=> $items_for_socialable_purchase_keys,
+        "actions" =>array("purchase" =>array("order_id" =>$this->getOrderId(),"total"=>$order->getData('grand_total'),"currency" =>"USD","items"=> $items_for_socialable_purchase_key,
                 "price" =>array("actual_paid" =>$order->getData('grand_total'),"currency"=>"USD")))),
     "primary_mo"=>array("id" =>array(array("id"=>"order_confirmation","type"=>"page")) ,
         "name" =>array(array("name" =>"Totsy")) ,
