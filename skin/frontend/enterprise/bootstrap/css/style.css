@@ -669,6 +669,27 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
     float: right;
     margin: -14px -18px 0px 0px;
 }
+.event-landing .page-header i {color:#ddd;}
+.event-landing .count-down-timer {
+    float: right;
+    padding-left:38px;
+    background:url('../images/iconmonstr-time-icon.png') 0 50% no-repeat;
+}
+.event-landing .intro-content {
+    padding:11px;
+    width:746px;
+}
+.event-landing .intro-content h3 {
+    margin-bottom:5px; padding-bottom:5px;
+    border-bottom:1px solid #eee;
+    color: #555; 
+    font-size: 16px; 
+    line-height: 20px;
+}
+.event-landing .intro-content p {
+    font-size: 14px; 
+    line-height: 20px;
+}
 .price-wrap {
     position: absolute; top:0; right:9px;
     float:right; 

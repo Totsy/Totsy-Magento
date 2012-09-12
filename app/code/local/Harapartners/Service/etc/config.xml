@@ -205,6 +205,15 @@
         </models>
         <events>
             <!-- ===== GLOBAL EVENTS START ===== -->
+            <cataloginventory_stock_item_save_after>
+                <observers>
+                    <!--Harapartners_Rushcheckout: Updating only (Addition and deletion can be safely ignored) -->
+                    <rushcheckout>
+                        <class>rushcheckout/observer</class>
+                        <method>updateReservationByStockItem</method>
+                    </rushcheckout>
+                </observers>
+            </cataloginventory_stock_item_save_after>
             <controller_front_init_routers>
                 <observers>
                     <!--Harapartners_Affiliate-->
@@ -317,8 +326,22 @@
                     </promotionfactory>
                 </observers>
             </sales_quote_item_save_before>
+            <sales_quote_item_save_after>
+                <observers>
+                    <!--Harapartners_Rushcheckout: Adding or updating quote item -->
+                    <rushcheckout>
+                        <class>rushcheckout/observer</class>
+                        <method>updateReservationByQuoteItem</method>
+                    </rushcheckout>
+                </observers>
+            </sales_quote_item_save_after>
             <sales_quote_item_delete_after>
                 <observers>
+                    <!--Harapartners_Rushcheckout: Deleting quote item -->
+                    <rushcheckout>
+                        <class>rushcheckout/observer</class>
+                        <method>updateReservationByQuoteItem</method>
+                    </rushcheckout>
 					<!--Harapartners_Promotionfactory: Deleting quote item will release any related coupon reservation-->
                     <promotionfactory>
                         <class>promotionfactory/observer</class>
@@ -409,33 +432,6 @@
     <frontend>
         <events>
             <!-- ===== FRONTEND ONLY EVENTS START ===== -->
-            <cataloginventory_stock_item_save_after>
-                <observers>
-                    <!--Harapartners_Rushcheckout: Updating only (Addition and deletion can be safely ignored) -->
-                    <rushcheckout>
-                        <class>rushcheckout/observer</class>
-                        <method>updateReservationByStockItem</method>
-                    </rushcheckout>
-                </observers>
-            </cataloginventory_stock_item_save_after>
-            <sales_quote_item_save_after>
-                <observers>
-                    <!--Harapartners_Rushcheckout: Adding or updating quote item -->
-                    <rushcheckout>
-                        <class>rushcheckout/observer</class>
-                        <method>updateReservationByQuoteItem</method>
-                    </rushcheckout>
-                </observers>
-            </sales_quote_item_save_after>
-            <sales_quote_item_delete_after>
-                <observers>
-                    <!--Harapartners_Rushcheckout: Deleting quote item -->
-                    <rushcheckout>
-                        <class>rushcheckout/observer</class>
-                        <method>updateReservationByQuoteItem</method>
-                    </rushcheckout>
-                </observers>
-            </sales_quote_item_delete_after>
             <customer_session_init>
                 <observers>
                     <!--Harapartners_Rushcheckout-->
