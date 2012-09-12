@@ -73,108 +73,81 @@
 	}
 	
 ?>
-<section class="event-landing">
+<section class="event-landing event-<?php echo ($upComingFlag ? 'upcoming' : 'current'); ?>">
     <header class="page-header">
+        <h2>
         <?php if (!$upComingFlag): ?>
-        <h2><a href="<?php echo $this->getUrl('event/?ref=todays_sales') ?>" >Today's Sales</a><span style="color:#ddd;"> / </span><?php echo $_helper->categoryAttribute($_category, $_category->getName(), 'name') ?>
-            <div class="pull-right">
-                <img src="/skin/frontend/enterprise/bootstrap/images/iconmonstr-time-icon.png" width="35px" style="margin:0px 3px 0px 0px;" class="pull-left" /><div class="count-down-timer pull-left" id="time-<?php echo $timer ?>"></div>
-                <script type="text/javascript">
-                    if(<?php echo $upComingFlag?>){
-                        var html = getTimerHtml('upcoming','<?php echo $timecount ?>');
-                    } else {
-                        var html = getTimerHtml('live','<?php echo $timecount ?>');
-                    }
-                    jQuery("#time-<?php echo $timer ?>").countdown({
-                        //date: "12 10, 2011 16:11", //Counting TO a date
-                        date: "<?php echo $timecount; ?>", //Counting TO a date
-                        htmlTemplate: html,
-                        onComplete: function( event ){
-                            jQuery(this).html("Completed");
-                        },
-                        leadingZero: true,
-                        direction: "down"
-                    });
-                </script>
-            </div>
-        </h2>
+            <a href="<?php echo $this->getUrl('event/?ref=todays_sales') ?>" >Today's Sales</a><i> / </i><?php echo $_helper->categoryAttribute($_category, $_category->getName(), 'name') ?>
+            <span class="count-down-timer"><span id="time-<?php echo $timer ?>"></span></span>
         <?php else :?>
-        <h2><a href="/event#event-upcoming">Upcoming Sales</a><span> / <span><?php echo $_helper->categoryAttribute($_category, $_category->getName(), 'name') ?>
-            <div class="pull-right">
-                <img src="/skin/frontend/enterprise/bootstrap/images/iconmonstr-time-icon.png" width="35px" style="margin:0px 3px 0px 0px;" class="pull-left" /><div class="count-down-timer pull-left" id="time-<?php echo $timer ?>"></div>
-                <script type="text/javascript">
-                    if(<?php echo $upComingFlag?>){
-                        var html = getTimerHtml('upcoming','<?php echo $timecount ?>');
-                    } else {
-                        var html = getTimerHtml('live','<?php echo $timecount ?>');
-                    }
-                    jQuery("#time-<?php echo $timer ?>").countdown({
-                        //date: "12 10, 2011 16:11", //Counting TO a date
-                        date: "<?php echo $timecount; ?>", //Counting TO a date
-                        htmlTemplate: html,
-                        onComplete: function( event ){
-                            jQuery(this).html("Completed");
-                        },
-                        leadingZero: true,
-                        direction: "down"
-                    });
-                </script>
-            </div>
-        </h2>
+            <a href="/event#event-upcoming">Upcoming Sales</a><i> / </i><?php echo $_helper->categoryAttribute($_category, $_category->getName(), 'name') ?>
+            <span class="count-down-timer"><span id="time-<?php echo $timer ?>"></span></span>
         <?php endif;?>
+        </h2>
+        <script type="text/javascript">
+            // @TODO: externalize the timer script
+            if(<?php echo $upComingFlag?>){
+                var html = getTimerHtml('upcoming','<?php echo $timecount ?>');
+            } else {
+                var html = getTimerHtml('live','<?php echo $timecount ?>');
+            }
+            jQuery("#time-<?php echo $timer ?>").countdown({
+                //date: "12 10, 2011 16:11", //Counting TO a date
+                date: "<?php echo $timecount; ?>", //Counting TO a date
+                htmlTemplate: html,
+                onComplete: function( event ){
+                    jQuery(this).html("Completed");
+                },
+                leadingZero: true,
+                direction: "down"
+            });
+        </script>
     </header>
-    
     <?php echo $this->getMessagesBlock()->toHtml() ?>
     
-    <div class="well">
+    <div class="well intro clearfix">
         <?php if($_imgUrl): ?>
             <div class="span2 alpha omega">
                 <?php echo $_imgHtml ?>
             </div>
         <?php endif; ?>
         <?php if($_description=$this->getCurrentCategory()->getDescription()): ?>
-            <div class="span9" style="padding: 11px; width:746px;">
-                <h3 style="color: #555555; font-size: 16px; line-height: 20px;"><?php echo $_helper->categoryAttribute($_category, $_category->getName(), 'name') ?></h3>
+            <div class="span9 intro-content">
+                <h3><?php echo $_helper->categoryAttribute($_category, $_category->getName(), 'name') ?></h3>
                 <!-- 
                 <div class="social-links">
-                    <span class='st_pinterest_large pull-right' displayText='Pinterest'></span>
-                    <span class='st_facebook_large pull-right' displayText='Facebook'></span>
-                    <span class='st_twitter_large pull-right' displayText='Tweet'></span>
-                    <span class='st_email_large pull-right' displayText='Email'></span>
+                <span class='st_pinterest_large pull-right' displayText='Pinterest'></span>
+                <span class='st_facebook_large pull-right' displayText='Facebook'></span>
+                <span class='st_twitter_large pull-right' displayText='Tweet'></span>
+                <span class='st_email_large pull-right' displayText='Email'></span>
                 </div>
                 -->
-                <hr style="margin:5px 0px; padding:0px; clear:both;"/>
-                <p style="font-size: 14px; line-height: 20px;"><?php echo $_helper->categoryAttribute($_category, $_description, 'description') ?></p>
+                <p><?php echo $_helper->categoryAttribute($_category, $_description, 'description') ?></p>
             </div>
-            <div class="clear"></div>
         <?php endif; ?>
-    </div>
-        
-    <?php echo $this->getProductListHtml() ?>
-</section>
+    </div><!-- /.well -->
     
-<script>
-    function showProductWithAttributeNum(valueNum){
-        if (valueNum == 'all'){
-            jQuery('.products-grid li').show();
-        } else{
-        var position = '.products-grid li.'+valueNum;
-            jQuery('.products-grid li').hide();
-            jQuery(position).show();
-        }
-    }
-</script>
-<!--
-<script type="text/javascript">var switchTo5x=true;</script>
-<script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
-<script type="text/javascript">stLight.options({publisher: "fa9539d4-b1db-40d3-9e2d-9e9a8dc98b42",onhover: false}); </script>
-<script>
+    <?php
+    $depts = $_category->getDepartments();
+    $_attributes = array();
+    $_attributes = explode(',',$depts);
+    $allowAttrArray = array('boys','girls','moms_dads');
+    ?>
+    
+    <?php echo $this->getProductListHtml() ?>
+    
+    <!--
+    <script type="text/javascript">var switchTo5x=true;</script>
+    <script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
+    <script type="text/javascript">stLight.options({publisher: "fa9539d4-b1db-40d3-9e2d-9e9a8dc98b42",onhover: false}); </script>
+    <script>
     stWidget.addEntry({
-        "service":"sharethis",
-        "element":document.getElementById('st_sharethis_custom'),
-        "url":"<?php echo $this->helper('core/url')->getCurrentUrl();?>",
-        "title":"Totsy",
-        "image":"<?php echo $_imgUrl; ?>"
+    "service":"sharethis",
+    "element":document.getElementById('st_sharethis_custom'),
+    "url":"<?php echo $this->helper('core/url')->getCurrentUrl();?>",
+    "title":"Totsy",
+    "image":"<?php echo $_imgUrl; ?>"
     });
-</script>
--->
+    </script>
+    -->    
+</section>
