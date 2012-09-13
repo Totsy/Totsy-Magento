@@ -52,11 +52,10 @@ class Totsy_Adminhtml_Model_Sales_Order_Create extends Mage_Adminhtml_Model_Sale
             $indexerStock = Mage::getModel('cataloginventory/stock_status');
             $indexerStock->updateStatus($item->getProductId());
             //Make Sure that parent product status stay 1
-            $configurable_product_model = Mage::getModel('catalog/product_type_configurable');
-            $parentIds = $configurable_product_model->getParentIdsByChild($item->getProductId());
+            $configurableProductModel = Mage::getModel('catalog/product_type_configurable');
+            $parentIds = $configurableProductModel->getParentIdsByChild($item->getProductId());
             if ($parentIds) {
                 foreach ($parentIds as $parentId) {
-                    var_dump($parentId);
                     $stockStatus = Mage::getModel('cataloginventory/stock_status')->load($parentId,'product_id');
                     $stockStatus->setData('stock_status','1')
                                 ->save();
