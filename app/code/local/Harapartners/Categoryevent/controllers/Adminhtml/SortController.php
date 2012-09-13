@@ -68,13 +68,25 @@ class Harapartners_Categoryevent_Adminhtml_SortController extends Mage_Adminhtml
             $sortentry = Mage::getModel('categoryevent/sortentry')->loadByDate($sortDate, $storeId, false);
             Mage::getModel('categoryevent/sortentry')->saveUpdateSortCollection($liveSortedIdArray, $upComingSortedIdArray, $sortentry);   
             $jsonResponse['status'] = 1;
-            $jsonResponse['error_message'] = '';         
+            $jsonResponse['error_message'] = '';
         }catch (Exception $e){
             Mage::logException($e);
             Mage::getSingleton('core/session')->addError('Cannot Save Sort');
             $jsonResponse['status'] = 0;
             $jsonResponse['error_message'] = 'Cannot Save Sort';
         }
+
+        $url     = array();
+        $baseUrl = Mage::getStoreConfig('web/unsecure/base_url');
+        $url[]   = $baseUrl . 'event/';
+        $url[]   = $baseUrl;
+
+        $baseUrl = Mage::getStoreConfig('web/secure/base_url');
+        $url[]   = $baseUrl . 'event/';
+        $url[]   = $baseUrl;
+
+        //Mage::helper('cdn')->purge(array_unique($url));
+
         echo json_encode($jsonResponse);
         exit;
     }
