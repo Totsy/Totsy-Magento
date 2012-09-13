@@ -1,6 +1,15 @@
 Totsy-Magento Release Notes
 ===========================
 
+20120912
+--------
+* MGN-1013 - Fixing password reset form from email link 
+* fixing password revalidation issue on modal popup with registration accounts
+* Preventing placeholder text from getting submitted in IE browsers
+* MGN-883 Wrapping up pending items from orig Jira + refactoring/cleaning up template code, removing cruft markup and inline styles.
+* MGN-1024 Putting Monetate JS back in for M's continued dev integration efforts
+
+
 20120911
 --------
 * Adding shipping and returns CMS blocks for virtual and non virtual items
