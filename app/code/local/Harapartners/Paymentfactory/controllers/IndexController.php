@@ -39,7 +39,7 @@ class Harapartners_Paymentfactory_IndexController extends Mage_Core_Controller_F
         $addressId = $this->createAddressFromForm($customer);
         #Check if there is already a cybersource profile if yes, dont create a new one
         $profile = Mage::getModel('paymentfactory/profile');
-        if(array_key_exists('cc_number', $paymentData)) {
+        if(array_key_exists('cc_number', $payment)) {
             $profile->loadByCcNumberWithId($payment->getData('cc_number').$customerId.$payment->getCcExpYear().$payment->getCcExpMonth());
         }
         if($profile && $profile->getId()) {
