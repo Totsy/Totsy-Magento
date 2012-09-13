@@ -601,7 +601,7 @@ class Mage_Customer_AccountController extends Mage_Core_Controller_Front_Action
                 }
                 $this->_getSession()->addError($this->__('The email you entered is belong to an %s account, please check.', $customerStoreName ));
             }else {  
-                $createLink = "<a href='" . Mage::getUrl('customer/account/create') . "'" . "> Click here to register! </a>";             
+                $createLink = '';             
                 $this->_getSession()->addError($this->__('The email entered is not currently associated with a totsy account. %s ', $createLink ));
                 $this->_redirect('*/*/forgotpassword');
                 return;
