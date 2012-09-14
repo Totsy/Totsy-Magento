@@ -62,7 +62,17 @@ class TinyBrick_OrderEdit_OrderController extends Mage_Adminhtml_Controller_Acti
                     }
                 }
             }
-            //$order->collectTotals()->save();
+
+            foreach($edits as $edit) {
+                if($edit['type']) {
+                    if($edit['type'] == 'eitems' || $edit['type'] == 'nitems') {
+                        $model = Mage::getModel('orderedit/edit_updater_type_'.$edit['type']);
+                        if(!$changes[] = $model->edit($order,$edit)) {
+                            $msgs[] = "Error updating " . $edit['type'];
+                        }
+                    }
+                }
+            }
             #After Editing Billing Informations use it to Update Payment Infos
             foreach($edits as $edit) {
                 if($edit['type']) {
@@ -75,6 +85,7 @@ class TinyBrick_OrderEdit_OrderController extends Mage_Adminhtml_Controller_Acti
                     }
                 }
             }
+            $order->collectTotals()->save();
             $postTotal = $order->getGrandTotal();
             if(count($msgs) < 1) {
                 //auth for more if the total has increased and configured to do so
