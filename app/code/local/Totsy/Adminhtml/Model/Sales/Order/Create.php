@@ -229,4 +229,55 @@ class Totsy_Adminhtml_Model_Sales_Order_Create extends Mage_Adminhtml_Model_Sale
         $this->setRecollect(true);
         return $this;
     }
+
+    /**
+     * Initialize creation data from existing order Item
+     *
+     * @param Mage_Sales_Model_Order_Item $orderItem
+     * @param int $qty
+     * @return Mage_Sales_Model_Quote_Item | string
+     */
+    public function initFromOrderItem(Mage_Sales_Model_Order_Item $orderItem, $qty = null)
+    {
+        if (!$orderItem->getId()) {
+            return $this;
+        }
+
+        $product = Mage::getModel('catalog/product')
+            ->setStoreId($this->getSession()->getStoreId())
+            ->load($orderItem->getProductId());
+
+        if ($product->getId()) {
+            if($qty > (int)$product->getStockItem()->getQty()) {
+                return false;
+            }
+            $product->setSkipCheckRequiredOption(true);
+            $buyRequest = $orderItem->getBuyRequest();
+            if (is_numeric($qty)) {
+                $buyRequest->setQty($qty);
+            }
+            $item = $this->getQuote()->addProduct($product, $buyRequest);
+            if (is_string($item)) {
+                return $item;
+            }
+
+            if ($additionalOptions = $orderItem->getProductOptionByCode('additional_options')) {
+                $item->addOption(new Varien_Object(
+                    array(
+                        'product' => $item->getProduct(),
+                        'code' => 'additional_options',
+                        'value' => serialize($additionalOptions)
+                    )
+                ));
+            }
+
+            Mage::dispatchEvent('sales_convert_order_item_to_quote_item', array(
+                'order_item' => $orderItem,
+                'quote_item' => $item
+            ));
+            return $item;
+        }
+
+        return $this;
+    }
 }
