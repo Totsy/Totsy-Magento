@@ -27,6 +27,17 @@
  * @var Mage_Page_Block_Html_Header $this
  */
 ?>
+
+<script type="text/javascript">
+    
+    jQuery(document).ready(function() {
+            jQuery(".sl_hover_menu_container").hide();
+            jQuery(".sl_hover_menu").show();
+            jQuery("#rondavu_welcome_container").html(jQuery(".sl_hover_menu").html());
+    });
+
+</script>
+
 <header class="navbar navbar-fixed-top">
     <div id="monetateBanner"><i><a href="/invitation/" title="Invite Friends, get $15">Invite Friends</a></i></div>
     <!-- begin masthead -->
@@ -45,18 +56,23 @@
             <div id="userUtils" class="span4 offset6">
                 <div id="userAccount" class="dropdown">
                     <a href="/customer/account/#" class="dropdown-toggle" data-toggle="dropdown"><img src="/skin/frontend/enterprise/bootstrap/images/iconmonstr-user-icon.png" width="20" height="20" style="margin-top:-5px;" /> My Account</a>
-                    <ul class="dropdown-menu">
-                        <li><a href="/customer/account/">Account Dashboard</a></li>
-                        <li><a href="/customer/account/edit/">Account Information</a></li>
-                        <li><a href="/paymentfactory/">Manage Credit Cards</a></li>
-                        <li><a href="/customer/account/edit/changepassword/1/">Change Password</a></li>
-                        <li><a href="/customer/address/">Address Book</a></li>
-                        <li><a href="/sales/order/history/">My Orders</a></li>
-                        <li><a href="/reward/customer/info/">My Credits</a></li>
-                        <li><a href="/invitation/">My Invitations</a></li>
-                        <li class="divider"></li>
-                        <li><a href="/customer/account/logout">Logout</a></li>
-                    </ul>
+                    <div class="dropdown-menu" style="min-width: 400px !important;">
+                        <div class="pull-left">
+                            <div><a href="/customer/account/">Account Dashboard</a></div>
+                            <div><a href="/customer/account/edit/">Account Information</a></div>
+                            <div><a href="/paymentfactory/">Manage Credit Cards</a></div>
+                            <div><a href="/customer/account/edit/changepassword/1/">Change Password</a></div>
+                            <div><a href="/customer/address/">Address Book</a></div>
+                            <div><a href="/sales/order/history/">My Orders</a></div>
+                            <div><a href="/reward/customer/info/">My Credits</a></div>
+                            <div><a href="/invitation/">My Invitations</a></div>
+                            <div class="divider"></div>
+                            <div><a href="/customer/account/logout">Logout</a></div>
+                        </div>
+                        <div class="pull-right">
+                            <div id="rondavu_welcome_container"></div>
+                        </div>
+                    </div>
                 </div>
                 <div class="quick-access" id="header-user-info"></div>
             </div>

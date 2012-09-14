@@ -8,13 +8,12 @@ if((($this->getRequest()->getActionName()!=="view" && $this->getRequest()->getCo
         jQuery.ajax({
             url: '<?php echo Mage::getUrl('pixels/sociable/header', array('_secure'=>Mage::app()->getStore()->isCurrentlySecure())); ?>',
             success: function (data) {
-                if (data) {
+                if (data) {                                        
                     jQuery('#sociable_header_pixel').html(data);
                 }    
             }
         });       
-    } );
-
+    });
 </script>
 <!-- Social Labs END -->
 <?php endif;

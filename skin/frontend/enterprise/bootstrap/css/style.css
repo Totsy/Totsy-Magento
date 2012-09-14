@@ -100,8 +100,10 @@ html.test .container .row {outline:1px dotted green;}
 }
 
 /**
- * @General / Modular Classes
+ * @General /
+  Modular Classes
  */
+
 .dropdown-toggle {cursor: pointer;}
 .well {
     background: none repeat scroll 0 0 #FFFFFF;
