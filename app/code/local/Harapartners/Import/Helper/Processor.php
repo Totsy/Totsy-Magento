@@ -137,7 +137,7 @@ class Harapartners_Import_Helper_Processor extends Mage_Core_Helper_Abstract {
         					if(!Mage::registry('import_validation_only')){
         						
         						//Harapartners, Jun, when import scritp updates an existing product, calculate the qty_delta for PO transactions
-        						$qtyDelta = $cleanImportData['qty'];
+        						$qtyDelta = array_key_exists('qty',$cleanImportData) ? $cleanImportData['qty'] : null;
         						//0 is a valid value
         						if(is_numeric(Mage::registry('temp_product_import_qty_delta_for_po_' . $cleanImportData['sku']))){
         							$qtyDelta = Mage::registry('temp_product_import_qty_delta_for_po_' . $cleanImportData['sku']);
@@ -159,7 +159,7 @@ class Harapartners_Import_Helper_Processor extends Mage_Core_Helper_Abstract {
         
         //Clean up and error handling
         if(count($this->_errorMessages)){
-            array_unshift($this->_errorMessages[], "Please make sure the header row has all required fields. All contents are case sensitive.");
+            array_unshift($this->_errorMessages, "Please make sure the header row has all required fields. All contents are case sensitive.");
             $filename = $this->_logErrorToFile();
             $importObject->setStatus(Harapartners_Import_Model_Import::IMPORT_STATUS_ERROR);
             $importObject->setErrorMessage('<a href="' . $this->_errorFileWebPath . $filename . '">Error</a>');

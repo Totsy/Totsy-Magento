@@ -37,7 +37,6 @@ class Totsy_Adminhtml_Model_Sales_Order_Create extends Mage_Adminhtml_Model_Sale
             $quote->setReservedOrderId($orderData['increment_id']);
             $service->setOrderData($orderData);
         }
-
         $order = $service->submit();
         if ((!$quote->getCustomer()->getId() || !$quote->getCustomer()->isInStore($this->getSession()->getStore()))
             && !$quote->getCustomerIsGuest()
@@ -47,6 +46,18 @@ class Totsy_Adminhtml_Model_Sales_Order_Create extends Mage_Adminhtml_Model_Sale
                 ->save()
                 ->sendNewAccountEmail('registered', '', $quote->getStoreId());;
         }
+
+        if ($this->getSession()->getOrder()->getId()) {
+
+            $this->getSession()->getOrder()->setRelationChildId($order->getId());
+            $this->getSession()->getOrder()->setRelationChildRealId($order->getIncrementId());
+            $this->getSession()->getOrder()->cancel()
+                ->setStatus('updated')
+                ->setState('updated')
+                ->save();
+            $order->save();
+        }
+
         //Sync Item Stock with Item Stock Status
         foreach($order->getItemsCollection() as $item) {
             $indexerStock = Mage::getModel('cataloginventory/stock_status');
@@ -58,23 +69,9 @@ class Totsy_Adminhtml_Model_Sales_Order_Create extends Mage_Adminhtml_Model_Sale
                 foreach ($parentIds as $parentId) {
                     $stockStatus = Mage::getModel('cataloginventory/stock_status')->load($parentId,'product_id');
                     $stockStatus->setData('stock_status','1')
-                                ->save();
+                        ->save();
                 }
-            }        }
-        if ($this->getSession()->getOrder()->getId()) {
-
-            $this->getSession()->getOrder()->setRelationChildId($order->getId());
-            $this->getSession()->getOrder()->setRelationChildRealId($order->getIncrementId());
-            $this->getSession()->getOrder()->cancel()
-                ->setStatus('updated')
-                ->setState('updated')
-                ->save();
-            $order->save();
-        }
-        //Sync Item Stock with Item Stock Status
-        foreach($order->getItemsCollection() as $item) {
-            $indexerStock = Mage::getModel('cataloginventory/stock_status');
-            $indexerStock->updateStatus($item->getProductId());
+            }
         }
         if ($this->getSendConfirmation()) {
             $order->sendNewOrderEmail();
