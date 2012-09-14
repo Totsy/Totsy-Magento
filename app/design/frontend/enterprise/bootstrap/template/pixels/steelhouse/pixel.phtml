@@ -11,11 +11,11 @@ $product_ids = implode(",", $_cart->getProductIds());
     var shver='2.8.6';
 <?php if($_product && $_category): ?>
     var shpn= encodeURIComponent('<?php echo addslashes($_product->getName()) ?>');
-    var shpc= '<?php echo addslashes(strip_tags(html_entity_decode(str_replace(array("\r", "\n"), '', $_product->getDescription())))) ?>';
-    var shpp= '<?php echo number_format($_product->getPrice(), 2) ?>';
-    var shpb= '<?php echo addslashes($_product->getCategory()->name); ?>';
-    var shpi= '<?php echo $_product->getProductUrl() ?>';
-    var shps= '<?php echo $_product->getSku() ?>';
+    var shpc= encodeURIComponent('<?php echo addslashes(strip_tags(html_entity_decode(str_replace(array("\r", "\n"), '', $_product->getDescription())))) ?>');
+    var shpp= encodeURIComponent('<?php echo number_format($_product->getPrice(), 2) ?>');
+    var shpb= encodeURIComponent('<?php echo addslashes($_product->getCategory()->name); ?>');
+    var shpi= encodeURIComponent('<?php echo $_product->getProductUrl() ?>');
+    var shps= encodeURIComponent('<?php echo $_product->getSku() ?>');
 <?php else: ?>
     var shpn= '';
     var shpc= '';
@@ -24,9 +24,9 @@ $product_ids = implode(",", $_cart->getProductIds());
     var shpi= '';
     var shps= '';
 <?php endif; ?>
-    var shcv= '<?php echo number_format($_cart->getQuote()->getGrandTotal(), 2) ?>';
-    var shcq= '<?php echo $_cart->getItemsQty() ?>';
-    var shcp= '<?php echo $product_ids ?>';
+    var shcv= encodeURIComponent('<?php echo number_format($_cart->getQuote()->getGrandTotal(), 2) ?>');
+    var shcq= encodeURIComponent('<?php echo $_cart->getItemsQty() ?>');
+    var shcp= encodeURIComponent('<?php echo $product_ids ?>');
     //'SHOPPING CART COMMA SEPARATED LIST OF PRODUCT IDs';
     var additional = '';
     var aid = '9577';
