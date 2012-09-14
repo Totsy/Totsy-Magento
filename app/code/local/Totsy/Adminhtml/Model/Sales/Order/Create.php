@@ -71,11 +71,6 @@ class Totsy_Adminhtml_Model_Sales_Order_Create extends Mage_Adminhtml_Model_Sale
                 ->save();
             $order->save();
         }
-        //Sync Item Stock with Item Stock Status
-        foreach($order->getItemsCollection() as $item) {
-            $indexerStock = Mage::getModel('cataloginventory/stock_status');
-            $indexerStock->updateStatus($item->getProductId());
-        }
         if ($this->getSendConfirmation()) {
             $order->sendNewOrderEmail();
         }
