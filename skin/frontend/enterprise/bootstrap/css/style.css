@@ -152,14 +152,6 @@ html.test .container .row {outline:1px dotted green;}
     text-shadow: 0 1px 0 rgba(255, 255, 255, 0.85);
     text-transform: uppercase;
 }
-#cartHeader.cartempty {
-    position: relative; top:-6px; left: 25px; /* a bit hackish but gets it done */
-    background-image: none;
-    color:#999;
-    font-size:13px; font-weight: normal;
-    line-height: 14px;
-    text-transform: none;
-}
 .dropdown-menu li > a:hover, .dropdown-menu .active > a, .dropdown-menu .active > a:hover {
     background-color: #ed1c25;
 }
@@ -236,10 +228,10 @@ body.customer-account-login .btn.btn-large {
 #masthead {
     position: relative; z-index: 10;
     padding:3px 0;
+    min-height: 54px;
     -moz-box-shadow: 0 3px 3px rgba(0, 0, 0, 0.18);
     -webkit-box-shadow: 0 3px 3px rgba(0, 0, 0, 0.18);
     box-shadow: 0 3px 3px rgba(0, 0, 0, 0.18);
-/*     box-shadow: 0 1px 5px rgba(0, 0, 0, 0.35); */
 }
 #logo {margin-left:0;}
 
@@ -373,6 +365,14 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
 #usercart .over {
     color: #ED1C25;
     font-weight: bold;
+}
+#cartHeader.cartempty {
+    position: relative; top:-6px; left: 25px; /* a bit hackish but gets it done */
+    background-image: none;
+    color:#999;
+    font-size:13px; font-weight: normal;
+    line-height: 14px;
+    text-transform: none;
 }
 
 /* Minicart */
