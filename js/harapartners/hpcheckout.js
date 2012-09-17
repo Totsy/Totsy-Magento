@@ -61,7 +61,6 @@ HpCheckout.prototype = {
                 d = '<div class="hpcheckout-error-messages error-msg onepage">' + e + "</div>"
             }
             var f = b[c].html;
-            this.validate();
             jQuery("#" + b[c].wrapperId + " .checkout-content").html(f);
         }
     },
