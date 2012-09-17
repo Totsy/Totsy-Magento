@@ -135,6 +135,9 @@ HpCheckout.prototype = {
     updatePayment: function() {
         var a = jQuery(this).parents("form").eq(0).attr("id");
         var b = HpCheckout.prototype;
+        
+        console.log(b);
+        
         var c = b.data.forms[a];
         var d = b.getBlocksToUpdate(c);
         var e = b.getFormData();

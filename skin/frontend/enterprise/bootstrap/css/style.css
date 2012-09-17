@@ -762,6 +762,7 @@ body.catalog-category-view .thumbnails > li {position: relative;}
 
 .btn-proceed-checkout {
     float:right;
+    margin-left: 10px;
 }
 
 .onepage-address-form label {
