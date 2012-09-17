@@ -192,6 +192,49 @@ class Totsy_Sales_Model_Order extends Mage_Sales_Model_Order
         $this->setEmailSent(true);
         $this->_getResource()->saveAttribute($this, 'email_sent');
 
+        // also send an e-mail for each virtual product that is part of this
+        // order, with the appropriate redemption code
+        foreach ($this->getAllItems() as $orderItem) {
+            $product = Mage::getModel('catalog/product')
+                ->load($orderItem->getProduct()->getId());
+
+            if ($product->getIsVirtual()) {
+                $shortDescription = $product->getShortDescription();
+                $description = $product->getDescription();
+                $title = $product->getName();
+
+                $options = $orderItem->getProductOptions();
+                $temp = explode("\n", $options['options'][0]['value']);
+                $virtualProductCode = $temp[0];
+
+                //picking the right template by the id set in the admin
+                // (transactional emails section)
+                $templateId =  Mage::getModel('core/email_template')
+                    ->loadByCode('_trans_Virtual_Product_Redemption')->getId();
+
+                $store = Mage::app()->getStore();
+                $email = $this->getCustomer()->getEmail();
+
+                if ($this->getStatus() != 'payment_failed') {
+                    Mage::getModel('core/email_template')->sendTransactional(
+                        $templateId,
+                        "sales",
+                        $email,
+                        NULL,
+                        array(
+                            "virtual_product_code" => $virtualProductCode,
+                            "order" => $this,
+                            "store" => $store,
+                            "title" => $title,
+                            "description" => $description,
+                            "short_description" => $shortDescription
+                        )
+                    );
+                }
+
+                //Mage::register('coupon_code_email_sent',true);
+            }
+        }
         return $this;
     }
 
@@ -294,5 +337,38 @@ class Totsy_Sales_Model_Order extends Mage_Sales_Model_Order
         }
 
         return $orderReady;
+    }
+    
+    /**
+     * Cancel order
+     *
+     * @return Mage_Sales_Model_Order
+     */
+    public function cancel()
+    {
+        if ($this->canCancel()) {
+            $this->getPayment()->cancel();
+            $this->registerCancellation();
+
+            //Sync Item Stock Status with Item Stock
+            foreach($this->getItemsCollection() as $item) {
+                $indexerStock = Mage::getModel('cataloginventory/stock_status');
+                $indexerStock->updateStatus($item->getProductId());
+                //Make Sure that parent product status stay 1
+                $configurableProductModel = Mage::getModel('catalog/product_type_configurable');
+                $parentIds = $configurableProductModel->getParentIdsByChild($item->getProductId());
+                if ($parentIds) {
+                    foreach ($parentIds as $parentId) {
+                        $stockStatus = Mage::getModel('cataloginventory/stock_status')->load($parentId,'product_id');
+                        $stockStatus->setData('stock_status','1')
+                            ->save();
+                    }
+                }
+            }
+
+            Mage::dispatchEvent('order_cancel_after', array('order' => $this));
+        }
+
+        return $this;
     }
 }

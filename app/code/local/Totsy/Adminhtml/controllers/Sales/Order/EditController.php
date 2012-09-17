@@ -17,7 +17,10 @@ class Totsy_Adminhtml_Sales_Order_EditController extends Mage_Adminhtml_Sales_Or
             $profile = Mage::getModel('paymentfactory/profile');
             $this->_processActionData('save');
             if ($paymentData = $this->getRequest()->getPost('payment')) {
-                $profile->loadByCcNumberWithId($paymentData['cc_number'].$customerId.$paymentData[ 'cc_exp_year' ].$paymentData[ 'cc_exp_month' ]);
+                
+                if(array_key_exists('cc_number', $paymentData)) {
+                    $profile->loadByCcNumberWithId($paymentData['cc_number'].$customerId.$paymentData[ 'cc_exp_year' ].$paymentData[ 'cc_exp_month' ]);
+                }
                 if(!!$profile && !!$profile->getId()){
                     $cybersourceIdEncrypted = $profile->getEncryptedSubscriptionId();
                     if($cybersourceIdEncrypted) {
