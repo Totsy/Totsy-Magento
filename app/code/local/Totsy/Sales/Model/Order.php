@@ -338,4 +338,37 @@ class Totsy_Sales_Model_Order extends Mage_Sales_Model_Order
 
         return $orderReady;
     }
+    
+    /**
+     * Cancel order
+     *
+     * @return Mage_Sales_Model_Order
+     */
+    public function cancel()
+    {
+        if ($this->canCancel()) {
+            $this->getPayment()->cancel();
+            $this->registerCancellation();
+
+            //Sync Item Stock Status with Item Stock
+            foreach($this->getItemsCollection() as $item) {
+                $indexerStock = Mage::getModel('cataloginventory/stock_status');
+                $indexerStock->updateStatus($item->getProductId());
+                //Make Sure that parent product status stay 1
+                $configurableProductModel = Mage::getModel('catalog/product_type_configurable');
+                $parentIds = $configurableProductModel->getParentIdsByChild($item->getProductId());
+                if ($parentIds) {
+                    foreach ($parentIds as $parentId) {
+                        $stockStatus = Mage::getModel('cataloginventory/stock_status')->load($parentId,'product_id');
+                        $stockStatus->setData('stock_status','1')
+                            ->save();
+                    }
+                }
+            }
+
+            Mage::dispatchEvent('order_cancel_after', array('order' => $this));
+        }
+
+        return $this;
+    }
 }
