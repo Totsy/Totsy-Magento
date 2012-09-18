@@ -1,0 +1,183 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Unirgy LLC
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the EULA
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://www.unirgy.com/LICENSE-M1.txt
+ *
+ * @category   Unirgy
+ * @package    Unirgy_RapidFlow
+ * @copyright  Copyright (c) 2008-2009 Unirgy LLC (http://www.unirgy.com)
+ * @license    http:///www.unirgy.com/LICENSE-M1.txt
+ */
+-->
+<config>
+    <sections>
+        <urapidflow>
+            <tab>advanced</tab>
+            <label>RapidFlow</label>
+            <frontend_type>text</frontend_type>
+            <sort_order>100</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>1</show_in_store>
+            <groups>
+                <finetune translate="label" module="urapidflow">
+                    <label>Fine Tuning</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>10</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>0</show_in_website>
+                    <show_in_store>0</show_in_store>
+                    <fields>
+                        <import_page_size translate="label" module="urapidflow">
+                            <label>Import Data Page Size (rows)</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </import_page_size>
+                        <export_page_size translate="label comment" module="urapidflow">
+                            <label>Export Data Page Size (rows)</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <comment><![CDATA[Number of rows to be processed in one batch. Higher number may yield better performance, but will require more memory.]]></comment>
+                        </export_page_size>
+                        <page_sleep_delay translate="label comment" module="urapidflow">
+                            <label>Page Process Sleep Delay (sec)</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <comment><![CDATA[Time to wait between processing data batches, may help with server load]]></comment>
+                        </page_sleep_delay>
+                        <status_refresh_delay translate="label comment" module="urapidflow">
+                            <label>Status Refresh Delay (sec)</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>40</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <comment><![CDATA[How often to refresh profile status, while it's running]]></comment>
+                        </status_refresh_delay>
+<!--
+                        <save_attributes_method>
+                            <label>Save Attributes Method</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>urapidflow/source</source_model>
+                            <sort_order>50</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <comment><![CDATA[Use PDOStatement if you have long text attributes (>10KB)]]></comment>
+                        </save_attributes_method>
+-->
+                    </fields>
+                </finetune>
+
+                <dirs translate="label comment" module="urapidflow">
+                    <label>Default Directories</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>15</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <import_dir translate="label comment" module="urapidflow">
+                            <label>Import Dir</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment><![CDATA[Use the following roots: {magento}, {var}, {media}]]></comment>
+                        </import_dir>
+                        <export_dir translate="label comment" module="urapidflow">
+                            <label>Export Dir</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </export_dir>
+                        <log_dir translate="label comment" module="urapidflow">
+                            <label>Log Dir</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </log_dir>
+                        <report_dir translate="label comment" module="urapidflow">
+                            <label>Report Dir</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>40</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </report_dir>
+                        <images_dir translate="label comment" module="urapidflow">
+                            <label>Images Dir</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>50</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment><![CDATA[If not absolute path, it is relative to the CSV file]]></comment>
+                        </images_dir>
+                    </fields>
+                </dirs>
+                
+                <import_options translate="label" module="urapidflow">
+                    <label>Global Import Options</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>17</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>0</show_in_website>
+                    <show_in_store>0</show_in_store>
+                    <fields>
+                        <date_processor translate="label" module="urapidflow">
+                            <label>Dates processor</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>urapidflow/source</source_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </date_processor>
+                    </fields>
+                </import_options>
+                
+                <admin>
+                    <label>Administrative Configuration</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>20</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>0</show_in_website>
+                    <show_in_store>0</show_in_store>
+                    <fields>
+                        <notifications translate="label comment">
+                            <label>Subscribe for extension update notifications</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </notifications>
+                    </fields>
+                </admin>
+            </groups>
+        </urapidflow>
+    </sections>
+</config>

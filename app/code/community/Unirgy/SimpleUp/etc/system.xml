@@ -1,0 +1,155 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Unirgy_SimpleUp extension
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/osl-3.0.php
+ *
+ * @category   Unirgy
+ * @package    Unirgy_SimpleUp
+ * @copyright  Copyright (c) 2011 Unirgy LLC
+ * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ */
+
+/**
+ * @category   Unirgy
+ * @package    Unirgy_SimpleUp
+ * @author     Boris (Moshe) Gurvich <support@unirgy.com>
+ */
+-->
+<config>
+    <sections>
+        <usimpleup translate="label comment" module="usimpleup">
+            <tab>advanced</tab>
+            <label>Unirgy Installer</label>
+            <frontend_type>text</frontend_type>
+            <sort_order>300</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>0</show_in_website>
+            <show_in_store>0</show_in_store>
+            <groups>
+                <general translate="label comment" module="usimpleup">
+                    <label>General Settings</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>10</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>0</show_in_website>
+                    <show_in_store>0</show_in_store>
+                    <fields>
+<!--
+                        <auto_check translate="label">
+                            <label>Check For New Versions Automatically and Notify</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </auto_check>
+-->
+                        <check_ioncube translate="label">
+                            <label>Check ionCube Loaders Installation</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </check_ioncube>
+<!--
+                        <dir_perm translate="label">
+                            <label>Permissions to create directories</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </dir_perm>
+                        <file_perm translate="label">
+                            <label>Permissions to create files</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </file_perm>
+-->
+                    </fields>
+                </general>
+
+                <ftp translate="label comment" module="usimpleup">
+                    <label>FTP Settings</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>20</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>0</show_in_website>
+                    <show_in_store>0</show_in_store>
+                    <fields>
+                        <active translate="label">
+                            <label>Use FTP To Install Files</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <comment><![CDATA[If you have issues with file permissions during extensions installation, enable this and configure a local FTP user.]]></comment>
+                        </active>
+
+                        <host translate="label">
+                            <label>FTP Host</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <comment><![CDATA[Usually "localhost" or "127.0.0.1"]]></comment>
+                        </host>
+                        <port translate="label">
+                            <label>FTP Port</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <comment><![CDATA[Usually "21"]]></comment>
+                        </port>
+                        <user translate="label">
+                            <label>FTP User name</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>40</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <comment><![CDATA[FTP information will be used only locally,<br/>to work around file write permissions.]]></comment>
+                        </user>
+                        <password translate="label">
+                            <label>FTP Password</label>
+                            <frontend_type>obscure</frontend_type>
+                            <backend_model>adminhtml/system_config_backend_encrypted</backend_model>
+                            <sort_order>40</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <comment><![CDATA[FTP password is stored locally and encrypted,<br/>the same way as your payment gateway credentials.]]></comment>
+                        </password>
+                        <path translate="label">
+                            <label>FTP Path to Magento</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>60</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <comment><![CDATA[Path relative to FTP account root folder.]]></comment>
+                        </path>
+                    </fields>
+                </ftp>
+            </groups>
+        </usimpleup>
+    </sections>
+</config>
