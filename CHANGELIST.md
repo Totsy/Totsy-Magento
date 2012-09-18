@@ -1,6 +1,10 @@
 Totsy-Magento Release Notes
 ===========================
 
+20120914
+--------
+* MGN-1045 : Fixing empty payment informations for orders when customer has used same credit card number with white spaces.
+
 20120913
 --------
 * Fixes warning/notices messages
