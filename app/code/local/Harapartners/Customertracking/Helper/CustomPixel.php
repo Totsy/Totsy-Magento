@@ -54,4 +54,30 @@ class Harapartners_Customertracking_Helper_CustomPixel
 
         return number_format($order->getProfit() / 2, 2);
     }
+
+    public function linkshare($pixel) {
+        $customer = Mage::getSingleton('customer/session')->getCustomer();
+        $orderId = Mage::getSingleton('checkout/session')->getLastOrderId();
+        $trackingInfo = Mage::getSingleton('customer/session')->getData('affiliate_info');
+        $regParams = json_decode($trackingInfo['registration_param'], true);
+        
+        $order = Mage::getModel('sales/order')->load($orderId);
+
+        $html = '';
+       // var_dump($orderId);
+        if($order->getStatus() == "splitted") {
+            $cust_order_id = $order->getIncrementId();
+            $split_orders = Mage::getModel('sales/order')->getCollection();
+            $split_orders->getSelect()->where('increment_id like "' . $cust_order_id . '-%"');
+            foreach($split_orders as $order) {
+                $message = Mage::helper('customertracking/linkshare')->linkshareRaw($order, $regParams['siteID'],$customer->getCreatedAt(),$order->getStatus());
+                $html .= $pixel . $message . "/> \n";
+            }
+        } else {
+            $message = $this->linkshareRaw($order, $regParams['siteID'],$customer->getCreatedAt(),$order->getStatus());
+            $html .= $pixel . $message . "/> <br/>";
+        }
+
+        return $html;
+    }
 }

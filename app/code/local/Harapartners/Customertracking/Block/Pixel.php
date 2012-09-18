@@ -52,6 +52,7 @@ class Harapartners_Customertracking_Block_Pixel
                     ->getFullActionName();
                 $pageTag = strtolower($pageTag);
             }
+            debug(Mage::app()->getFrontController()->getRequest()->getParam('pageTag'));
 
             // additional logic to ensure the post-registration pixel fires
             // only once, by checking a tracking cookie
@@ -68,7 +69,11 @@ class Harapartners_Customertracking_Block_Pixel
             }
         }
 
-        return $this->_templateReplace($htmlPixel);
+        if (class_exists("Harapartners_Customertracking_Helper_". ucfirst(strtolower($affiliate->getAffiliateName())))) {
+            debug("It lives! Muwahahahah");
+        } else {
+            return $this->_templateReplace($htmlPixel);
+        }
     }
 
     protected function _templateReplace($html)
@@ -101,7 +106,7 @@ class Harapartners_Customertracking_Block_Pixel
                             break;
                         case 'custom':
                             if (method_exists($customPixels, $field)) {
-                                return $customPixels->$field();
+                                return $customPixels->$field($html);
                             }
                             break;
                     }

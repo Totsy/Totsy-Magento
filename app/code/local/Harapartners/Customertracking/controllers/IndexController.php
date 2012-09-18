@@ -2,6 +2,7 @@
 class Harapartners_Customertracking_IndexController extends Mage_Core_Controller_Front_Action
 {
     public function ajaxAction(){
+    	debug("Harapartners_Customertracking_IndexController");
         $this->loadLayout()->renderLayout();
     }
 }
