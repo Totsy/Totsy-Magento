@@ -81,7 +81,7 @@ class Crown_Import_Adminhtml_ImportController extends Mage_Adminhtml_Controller_
 	 * @return void
 	 */
 	public function newAction() {
-		$importModel = Mage::helper ( 'import' )->setImportModel();
+		$importModel = Mage::helper ( 'crownimport' )->setImportModel();
 		$this->_redirect ( '*/*/edit', array ('id' => $importModel->getId() ) );
 		return;
 	}
@@ -192,11 +192,12 @@ class Crown_Import_Adminhtml_ImportController extends Mage_Adminhtml_Controller_
 		switch ($importModel->getStep()) {
 			case 'validation':
 				if (!is_null($importModel->getUrapidflowProfileId())) {
-					$profile = Mage::getModel('urapidflow/profile')->load($importModel->getUrapidflowProfileId());
+					$profile = $importModel->getUrapidflowProfile();
 					if ($profile->getRowsErrors() > 0) {
 						Mage::getSingleton ( 'adminhtml/session' )->addError ( Mage::helper ( 'crownimport' )->__ ( 'Errors found in the import. Please correct then try again.' ) );
 						$importModel->setData('step', 'import')->save();
 						$this->_redirect ( '*/*/edit', array ('id' => $importModel->getId() ) );
+						return;
 					} else {
 						$importModel->setStatus(Crown_Import_Model_Importhistory::IMPORT_STATUS_RUNNING)->save();
 						$this->runProductImport();

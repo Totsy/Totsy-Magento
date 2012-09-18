@@ -19,7 +19,7 @@ class Crown_Import_Block_Adminhtml_Profile_Edit extends Unirgy_RapidFlow_Block_A
 		$importHistoryProfileIds = array();
 		
 		if (!is_null($id)) {
-			$importCollection = Mage::getModel('import/importhistory')->getCollection();
+			$importCollection = Mage::getModel('crownimport/importhistory')->getCollection();
 			$importCollection->getSelect()->reset(Zend_Db_Select::COLUMNS)
 				->columns(array('urapidflow_profile_id','urapidflow_profile_id_product_extra'));
 				

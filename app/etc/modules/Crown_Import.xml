@@ -8,6 +8,7 @@
                 <Unirgy_RapidFlowPro/>
                 <Unirgy_RapidFlow/>
                 <Harapartners_Stockhistory/>
+                <Harapartners_Service/>
             </depends>
         </Crown_Import>
     </modules>
