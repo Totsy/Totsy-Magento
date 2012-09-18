@@ -42,54 +42,48 @@
 //	unset($images[1]);
 //	shuffle($images);
 ?>
+<div class="well page_center">
+
 <div class="account-create">
-    <?php //echo $this->getChildHtml('form_fields_before')?>
-	<?php //the up child is a reward html ?>
 	<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
-	<div class="facebook-part">
-		<h2 class="join-with-fb"><?php echo $this->__('Sign in with Facebook') ?></h2>
-		<a rel="facebook-connect" title="<?php echo $this->__('Connect with Facebook') ?>" class="facebook-button"><span><img src="<?php echo $this->getSkinUrl()?>images/sign_in_fb.png"/></span></a>
-	</div>
+	<div class="page-header" style="margin:0px 0px 10px;">
+	   <h1 class="span4" id="logo"><a title="" href="http://evan.totsy.com/event/?ref=logo/"><img width="85px" alt="Totsy.com" src="https://evan.totsy.com/skin/frontend/enterprise/bootstrap/images/logo.png"></a>
+       </h1>
+	   <h2 class="join-with-email" >Join with email</h2>
+    </div>
+    <div style="text-align:center; margin:0px 0px 13px">
+        <a class="facebook-button" title="Connect with Facebook" style="margin:10px 0px; cursor:pointer;" rel="facebook-connect"><img src="https://evan.totsy.com/skin/frontend/enterprise/bootstrap/images/facebook_connect_button.png">
+        </a>
+    </div>
     <form action="<?php echo $this->getPostActionUrl() ?>" method="post" id="form-validate" enctype="multipart/form-data">
-	<h2 class="join-with-email" >Join with email</h2>
         <div class="fieldset">
             <input type="hidden" name="success_url" value="<?php echo $this->getSuccessUrl() ?>" />
             <input type="hidden" name="error_url" value="<?php echo $this->getErrorUrl() ?>" />
-            <ul class="form-list">
-                <li>
-                    <label for="email_address" class="required"><em>*</em><?php echo $this->__('Email Address') ?></label>
+            <div class="form-list">
                     <div class="input-box" id="input-email-box">
-                        <input type="text" name="email" id="email_address" value="<?php echo $this->htmlEscape($this->getFormData()->getEmail()) ?>" title="<?php echo $this->__('Email Address') ?>" class="input-text validate-email required-entry" />
+                        <input type="text" name="email" id="email_address" value="<?php echo $this->htmlEscape($this->getFormData()->getEmail()) ?>" title="<?php echo $this->__('Email Address') ?>" class="big-input input-text required-entry validate-email span4" />
                     </div>
-                </li>
-			    <li class="fields">
-                    <div class="field">
-                        <label for="password" class="required"><em>*</em><?php echo $this->__('Password') ?></label>
                         <div class="input-box">
-                            <input type="password" name="password" id="password" title="<?php echo $this->__('Password') ?>" class="input-text required-entry strong-validate-password" />
+                            <input type="password" name="password" id="password" title="<?php echo $this->__('Password') ?>" class="big-input input-text required-entry strong-validate-password" placeholder="<?php echo $this->__('Password') ?>" />
                         </div>
                     </div>
-                    <div class="field">
-                        <label for="confirmation" class="required"><em>*</em><?php echo $this->__('Confirm Password') ?></label>
                         <div class="input-box">
-                            <input type="password" name="confirmation" title="<?php echo $this->__('Confirm Password') ?>" id="confirmation" class="input-text required-entry validate-cpassword" />
+                            <input type="password" name="confirmation" title="<?php echo $this->__('Confirm Password') ?>" id="confirmation" class="big-input input-text required-entry required-entry validate-cpassword" placeholder="<?php echo $this->__('Confirm Password') ?>" />
                         </div>
-                    </div>
-                </li>
                 <?php echo $this->getChildHtml('persistent.remember.me'); ?>	
 				
             <input type="hidden" checked name="is_subscribed" title="<?php echo $this->__('Sign Up for Newsletter') ?>" value="1" id="is_subscribed"<?php if($this->getFormData()->getIsSubscribed()): ?> checked="checked"<?php endif; ?> class="checkbox" />
             <?php $_dob = $this->getLayout()->createBlock('customer/widget_dob') ?>
             <?php if ($_dob->isEnabled()): ?>
-                <li><?php echo $_dob->setDate($this->getFormData()->getDob())->toHtml() ?></li>
+                <div><?php echo $_dob->setDate($this->getFormData()->getDob())->toHtml() ?></div>
             <?php endif ?>
             <?php $_taxvat = $this->getLayout()->createBlock('customer/widget_taxvat') ?>
             <?php if ($_taxvat->isEnabled()): ?>
-                <li><?php echo $_taxvat->setTaxvat($this->getFormData()->getTaxvat())->toHtml() ?></li>
+                <div><?php echo $_taxvat->setTaxvat($this->getFormData()->getTaxvat())->toHtml() ?></div>
             <?php endif ?>
             <?php $_gender = $this->getLayout()->createBlock('customer/widget_gender') ?>
             <?php if ($_gender->isEnabled()): ?>
-                <li><?php echo $_gender->setGender($this->getFormData()->getGender())->toHtml() ?></li>
+                <div><?php echo $_gender->setGender($this->getFormData()->getGender())->toHtml() ?></div>
             <?php endif ?>
             <?php $customerAttributes = $this->getChild('customer_form_user_attributes');?>
             <?php if ($customerAttributes): ?>
@@ -97,14 +91,14 @@
                 <?php $this->restoreSessionData($customerAttributes->getForm());?>
                 <?php echo $customerAttributes->toHtml()?>
             <?php endif;?>
-            </ul>
+            </udiv>
         </div>
     <?php if($this->getShowAddressFields()): ?>
         <div class="fieldset">
             <input type="hidden" name="create_address" value="1" />
             <h2 class="legend"><?php echo $this->__('Address Information') ?></h2>
-            <ul class="form-list">
-                <li class="fields">
+            <div class="form-list">
+                <div class="fields">
                     <div class="field">
                         <label for="company"><?php echo $this->__('Company') ?></label>
                         <div class="input-box">
@@ -117,21 +111,21 @@
                             <input type="text" name="telephone" id="telephone" value="<?php echo $this->htmlEscape($this->getFormData()->getTelephone()) ?>" title="<?php echo $this->__('Telephone') ?>" class="input-text required-entry" />
                         </div>
                     </div>
-                </li>
-                <li class="wide">
+                </div>
+                <div class="wide">
                     <label for="street_1" class="required"><em>*</em><?php echo $this->__('Street Address') ?></label>
                     <div class="input-box">
                         <input type="text" name="street[]" value="<?php echo $this->htmlEscape($this->getFormData()->getStreet(0)) ?>" title="<?php echo $this->__('Street Address') ?>" id="street_1" class="input-text required-entry" />
                     </div>
-                </li>
+                </div>
             <?php for ($_i=2, $_n=$this->helper('customer/address')->getStreetLines(); $_i<=$_n; $_i++): ?>
-                <li class="add-field">
+                <div class="add-field">
                     <div class="input-box">
                         <input type="text" name="street[]" value="<?php echo $this->htmlEscape($this->getFormData()->getStreet($_i - 1)) ?>" title="<?php echo $this->__('Street Address '.$_i) ?>" id="street_<?php echo $_i?>" class="input-text" />
                     </div>
-                </li>
+                </div>
             <?php endfor ?>
-                <li class="fields">
+                <div class="fields">
                     <div class="field">
                         <label for="city" class="required"><em>*</em><?php echo $this->__('City') ?></label>
                         <div class="input-box">
@@ -152,8 +146,8 @@
                             <input type="text" id="region" name="region" value="<?php echo $this->htmlEscape($this->getRegion()) ?>" title="<?php echo $this->__('State/Province') ?>" class="input-text" style="display:none;" />
                         </div>
                     </div>
-                </li>
-                <li class="fields">
+                </div>
+                <div class="fields">
                     <div class="field">
                         <label for="zip" class="required"><em>*</em><?php echo $this->__('Zip/Postal Code') ?></label>
                         <div class="input-box">
@@ -166,7 +160,7 @@
                             <?php echo $this->getCountryHtmlSelect() ?>
                         </div>
                     </div>
-                </li>
+                </div>
                 <?php $addressAttributes = $this->getChild('customer_form_address_user_attributes');?>
                 <?php if ($addressAttributes): ?>
                     <?php $addressAttributes->setEntity($this->getAddress());?>
@@ -174,26 +168,26 @@
                     <?php $this->restoreSessionData($addressAttributes->getForm(), 'address');?>
                     <?php echo $addressAttributes->setShowContainer(false)->toHtml()?>
                 <?php endif;?>
-            </ul>
+            </div>
             <input type="hidden" name="default_billing" value="1" />
             <input type="hidden" name="default_shipping" value="1" />
         </div>
     <?php endif; ?>
         <div class="fieldset">
-            <ul class="form-list">
+            <div class="form-list">
 
-            </ul>
+            </div>
             <?php echo $this->getChildHtml('persistent.remember.me.tooltip'); ?>
         </div>
         <div class="buttons-set form-buttons">
 			<p><?php echo $this->__('By joining you accept our ')?> <a id="redtrerm" href="<?php echo $this->getBaseUrl()?>pages/terms/">terms and condititons.</a></p>
-            <button type="submit" class="button" id="submit-button" title="<?php echo $this->__('Submit') ?>"><div class="sign-in-button"><?php echo $this->__('JOIN NOW') ?></div></button>
+            <button type="submit" class="button btn btn-primary btn-large" id="submit-button" style="width:100%" title="<?php echo $this->__('Submit') ?>"><div class="sign-in-button"><?php echo $this->__('JOIN NOW') ?></div></button>
         </div>
         <?php if (Mage::helper('checkout')->isContextCheckout()): ?>
             <input name="context" type="hidden" value="checkout" />
         <?php endif; ?>
     </form>
-	
+</div>	
 
 	
     <script type="text/javascript">
@@ -209,17 +203,19 @@
     //]]>
     </script>
 </div>
+<!--
 <div class="desc-box">
 	<h2 class="tagline" style="margin-top:2px;">Why savvy moms shop at Totsy?</h2>
-	<ul id="bug_bullets">
-		<li>Membership is free</li>
-		<li>Exclusive sales for kids, moms and families</li>
-		<li>Savings of up to 90% off retail</li>
-		<li>Sales last up to 3 days</li>
-		<li>A tree is planted for your first purchase</li>
-		<li>Refer friends and earn Totsy credits</li>
-	</ul>
+	<div id="bug_bullets">
+		<div>Membership is free</div>
+		<div>Exclusive sales for kids, moms and families</div>
+		<div>Savings of up to 90% off retail</div>
+		<div>Sales last up to 3 days</div>
+		<div>A tree is planted for your first purchase</div>
+		<div>Refer friends and earn Totsy credits</div>
+	</div>
 </div>
+-->
 <!--div class="free_shipping_banner_reg_new rollover_img">
 	<a href="javascript:;" title="Free Shipping">
 		<span/>

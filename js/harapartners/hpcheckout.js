@@ -60,8 +60,8 @@ HpCheckout.prototype = {
                 }
                 d = '<div class="hpcheckout-error-messages error-msg onepage">' + e + "</div>"
             }
-            var f = d + b[c].html;
-            jQuery("#" + b[c].wrapperId + " .checkout-content").html(f)
+            var f = b[c].html;
+            jQuery("#" + b[c].wrapperId + " .checkout-content").html(f);
         }
     },
     copyBillingToShipping: function() {
