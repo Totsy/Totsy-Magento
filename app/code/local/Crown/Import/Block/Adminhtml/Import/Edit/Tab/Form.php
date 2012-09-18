@@ -58,7 +58,7 @@ class Crown_Import_Block_Adminhtml_Import_Edit_Tab_Form extends Mage_Adminhtml_B
 			'label' => $helper->__ ( 'Purchase Order' ), 
 			'required' => true, 
 			'name' => 'po_id', 
-			'values' => Mage::helper ( 'stockhistory' )->getFormPoArrayByCategoryId ( $importModel->getData ( 'category_id' ), Crown_Stockhistory_Model_Purchaseorder::STATUS_OPEN ), 
+			'values' => Mage::helper ( 'stockhistory' )->getFormPoArrayByCategoryId ( $importModel->getData ( 'category_id' ), Harapartners_Stockhistory_Model_Purchaseorder::STATUS_OPEN ), 
 			'note' => $helper->__ ( 'Products within the same event usually belong to the same PO. Be careful when creating a new PO.' ) 
 		) );
 		

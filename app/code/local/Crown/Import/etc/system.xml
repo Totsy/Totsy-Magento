@@ -128,6 +128,15 @@
 							<show_in_website>1</show_in_website>
 							<show_in_store>1</show_in_store>
 						</profile_product_extra>
+						<invalid_characters translate="label">
+							<label>Invalid Characters</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>30</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<comment>Seperate all invalid characters with a space.</comment>
+						</invalid_characters>
 					</fields>
 				</urapidflow>
 			</groups>

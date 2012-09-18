@@ -9,6 +9,8 @@ class Crown_Import_Block_Adminhtml_Import_Edit_Tabs extends Mage_Adminhtml_Block
 	
 	/**
 	 * 
+	 * @since 1.0.0
+	 * @return void
 	 */
 	public function __construct() {
 		parent::__construct ();
@@ -22,14 +24,15 @@ class Crown_Import_Block_Adminhtml_Import_Edit_Tabs extends Mage_Adminhtml_Block
 	 * @see Mage_Adminhtml_Block_Widget_Tabs::_beforeToHtml()
 	 */
 	protected function _beforeToHtml() {
-		$importModel = Mage::helper('import')->getImportModel();
+		$importModel = Mage::helper('crownimport')->getImportModel();
+		$isRunning = Crown_Import_Model_Importhistory::IMPORT_STATUS_RUNNING == $importModel->getStatus();
 		switch ($this->getStep()) {
 			case 'validation' :
 				$profile = $importModel->getUrapidflowProfile();
 				$this->addTab ( 'validate_section', array (
-					'label' => Mage::helper ( 'import' )->__ ( 'Validating Import' ), 
-					'title' => Mage::helper ( 'import' )->__ ( 'Validating Import' ), 
-					'content' => $this->getLayout ()->createBlock ( 'import/adminhtml_profile_status' )
+					'label' => $isRunning ? Mage::helper ( 'crownimport' )->__ ( 'Running Validation' ): Mage::helper ( 'crownimport' )->__ ( 'Validation Status' ),
+					'title' => $isRunning ? Mage::helper ( 'crownimport' )->__ ( 'Running Validation' ): Mage::helper ( 'crownimport' )->__ ( 'Validation Status' ),
+					'content' => $this->getLayout ()->createBlock ( 'crownimport/adminhtml_profile_status' )
 						->setProfile($profile)
 						->setImportModel($importModel)
 						->setCategoryId($importModel->getCategoryId())
@@ -40,9 +43,9 @@ class Crown_Import_Block_Adminhtml_Import_Edit_Tabs extends Mage_Adminhtml_Block
 			case 'product-import':
 				$profile = $importModel->getUrapidflowProfile();
 				$this->addTab ( 'running_product_section', array (
-					'label' => Mage::helper ( 'import' )->__ ( 'Running Product Import' ), 
-					'title' => Mage::helper ( 'import' )->__ ( 'Running Product Import' ), 
-					'content' => $this->getLayout ()->createBlock ( 'import/adminhtml_profile_status' )
+					'label' => $isRunning ? Mage::helper ( 'crownimport' )->__ ( 'Running Product Import' ): Mage::helper ( 'crownimport' )->__ ( 'Product Import Status' ), 
+					'title' => $isRunning ? Mage::helper ( 'crownimport' )->__ ( 'Running Product Import' ): Mage::helper ( 'crownimport' )->__ ( 'Product Import Status' ), 
+					'content' => $this->getLayout ()->createBlock ( 'crownimport/adminhtml_profile_status' )
 						->setProfile($profile)
 						->setImportModel($importModel)
 						->setCategoryId($importModel->getCategoryId())
@@ -53,9 +56,9 @@ class Crown_Import_Block_Adminhtml_Import_Edit_Tabs extends Mage_Adminhtml_Block
 			case 'product-extra-import':
 				$profile = $importModel->getUrapidflowProfileProductExtra();
 				$this->addTab ( 'running_product_extra_section', array (
-					'label' => Mage::helper ( 'import' )->__ ( 'Running Product Extra Import' ), 
-					'title' => Mage::helper ( 'import' )->__ ( 'Running Product Extra Import' ), 
-					'content' => $this->getLayout ()->createBlock ( 'import/adminhtml_profile_status' )
+					'label' => $isRunning ? Mage::helper ( 'crownimport' )->__ ( 'Running Product Extra Import' ): Mage::helper ( 'crownimport' )->__ ( 'Product Extra Import Status' ),
+					'title' => $isRunning ? Mage::helper ( 'crownimport' )->__ ( 'Running Product Extra Import' ): Mage::helper ( 'crownimport' )->__ ( 'Product Extra Import Status' ),
+					'content' => $this->getLayout ()->createBlock ( 'crownimport/adminhtml_profile_status' )
 						->setProfile($profile)
 						->setImportModel($importModel)
 						->setCategoryId($importModel->getCategoryId())
@@ -67,9 +70,9 @@ class Crown_Import_Block_Adminhtml_Import_Edit_Tabs extends Mage_Adminhtml_Block
 				
 				if ($profile = $importModel->getUrapidflowProfile()) {
 					$this->addTab ( 'running_product_section', array (
-						'label' => Mage::helper ( 'import' )->__ ( 'Product Import' ), 
-						'title' => Mage::helper ( 'import' )->__ ( 'Product Import' ), 
-						'content' => $this->getLayout ()->createBlock ( 'import/adminhtml_profile_status' )
+						'label' => Mage::helper ( 'crownimport' )->__ ( 'Product Import Status' ), 
+						'title' => Mage::helper ( 'crownimport' )->__ ( 'Product Import Status' ), 
+						'content' => $this->getLayout ()->createBlock ( 'crownimport/adminhtml_profile_status' )
 							->setProfile($profile)
 							->setImportModel($importModel)
 							->setCategoryId($importModel->getCategoryId())
@@ -79,9 +82,9 @@ class Crown_Import_Block_Adminhtml_Import_Edit_Tabs extends Mage_Adminhtml_Block
 				
 				if ( $importModel->getHasConfigurable() && ( $profileExtra = $importModel->getUrapidflowProfileProductExtra()) ) {
 					$this->addTab ( 'running_product_extra_section', array (
-						'label' => Mage::helper ( 'import' )->__ ( 'Product Extra Import' ), 
-						'title' => Mage::helper ( 'import' )->__ ( 'Product Extra Import' ), 
-						'content' => $this->getLayout ()->createBlock ( 'import/adminhtml_profile_status' )
+						'label' => Mage::helper ( 'crownimport' )->__ ( 'Product Extra Import Status' ), 
+						'title' => Mage::helper ( 'crownimport' )->__ ( 'Product Extra Import Status' ), 
+						'content' => $this->getLayout ()->createBlock ( 'crownimport/adminhtml_profile_status' )
 							->setProfile($profileExtra)
 							->setImportModel($importModel)
 							->setCategoryId($importModel->getCategoryId())
@@ -92,9 +95,9 @@ class Crown_Import_Block_Adminhtml_Import_Edit_Tabs extends Mage_Adminhtml_Block
 				$category = Mage::getModel('catalog/category')->load($importModel->getCategoryId());
 				
 				$this->addTab ( 'complete_section', array (
-						'label' => Mage::helper ( 'import' )->__ ( 'Complete' ), 
-						'title' => Mage::helper ( 'import' )->__ ( 'Complete' ), 
-						'content' => $this->getLayout ()->createBlock ( 'import/adminhtml_import_complete' )
+						'label' => Mage::helper ( 'crownimport' )->__ ( 'Complete' ), 
+						'title' => Mage::helper ( 'crownimport' )->__ ( 'Complete' ), 
+						'content' => $this->getLayout ()->createBlock ( 'crownimport/adminhtml_import_complete' )
 							->setImportModel($importModel)
 							->setCategory($category)
 							->toHtml (),
@@ -103,9 +106,9 @@ class Crown_Import_Block_Adminhtml_Import_Edit_Tabs extends Mage_Adminhtml_Block
 				break;
 			default:
 				$this->addTab ( 'form_section', array (
-					'label' => Mage::helper ( 'import' )->__ ( 'Import File' ), 
-					'title' => Mage::helper ( 'import' )->__ ( 'Import File' ), 
-					'content' => $this->getLayout ()->createBlock ( 'import/adminhtml_import_edit_tab_form' )->toHtml () 
+					'label' => Mage::helper ( 'crownimport' )->__ ( 'Import File' ), 
+					'title' => Mage::helper ( 'crownimport' )->__ ( 'Import File' ), 
+					'content' => $this->getLayout ()->createBlock ( 'crownimport/adminhtml_import_edit_tab_form' )->toHtml () 
 				));
 		}
 		

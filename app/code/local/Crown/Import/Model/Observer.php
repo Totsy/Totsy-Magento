@@ -24,11 +24,17 @@ class Crown_Import_Model_Observer {
 		$importModel = Mage::helper ( 'crownimport' )->getImportModel();
 		
 		foreach ( $newProducts as $sku => $changeArray ) {
-			$newStock = $changeArray ['qty'];
-			if (!isset($skuMap[$sku]) || !isset($oldData[ $skuMap[$sku] ][0]['stock.qty'])) continue;
-			$id = $skuMap[$sku];
-			$oldStock = $oldData[ $id ][0]['stock.qty'];
-			$qtyDelta = $newStock - $oldStock;
+			$new = ( !isset($skuMap[$sku]) || !isset($oldData[ $skuMap[$sku] ][0]['stock.qty']) );
+			
+			if ( $new ) {
+				$newStock = $changeArray ['qty'];
+				$qtyDelta = $newStock;
+			} else {
+				$newStock = $changeArray ['qty'];
+				$id = $skuMap[$sku];
+				$oldStock = $oldData[ $id ][0]['stock.qty'];
+				$qtyDelta = $newStock - $oldStock;
+			}
 			
 			$stockhistoryTransaction = Mage::getModel ( 'stockhistory/transaction' );
 			

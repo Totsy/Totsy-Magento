@@ -9,7 +9,8 @@ class Crown_Import_Block_Adminhtml_Import_Grid extends Mage_Adminhtml_Block_Widg
 	
 	/**
 	 * 
-	 * Enter description here ...
+	 * @since 1.0.0
+	 * @return void
 	 */
 	public function __construct() {
 		parent::__construct ();
@@ -31,7 +32,7 @@ class Crown_Import_Block_Adminhtml_Import_Grid extends Mage_Adminhtml_Block_Widg
 		$nameattrid = $nameattr->getAttributeId ();
 		
 		/* @var $collection Crown_Import_Model_Mysql4_Importhistory_Collection */
-		$collection = Mage::getModel ( 'import/importhistory' )->getCollection ();
+		$collection = Mage::getModel ( 'crownimport/importhistory' )->getCollection ();
 		$collection->getSelect()->joinLeft( $nametable, "entity_id=category_id AND attribute_id={$nameattrid}", array ('category_name' => 'value' ));
 		$this->setCollection ( $collection );
 		return parent::_prepareCollection ();
@@ -43,55 +44,55 @@ class Crown_Import_Block_Adminhtml_Import_Grid extends Mage_Adminhtml_Block_Widg
 	 */
 	protected function _prepareColumns() {
 		$this->addColumn ( 'import_id', array (
-			'header' => Mage::helper ( 'import' )->__ ( 'ID' ), 
+			'header' => Mage::helper ( 'crownimport' )->__ ( 'ID' ), 
 			'align' => 'right', 
 			'width' => '50px', 
 			'index' => 'import_id' 
 		));
 		
 		$this->addColumn ( 'category_id', array (
-			'header' => Mage::helper ( 'import' )->__ ( 'Category ID' ), 
+			'header' => Mage::helper ( 'crownimport' )->__ ( 'Category ID' ), 
 			'align' => 'left', 
 			'width' => '50px', 
 			'index' => 'category_id' 
 		));
 		
 		$this->addColumn ( 'category_name', array (
-			'header' => Mage::helper ( 'import' )->__ ( 'Category Name' ), 
+			'header' => Mage::helper ( 'crownimport' )->__ ( 'Category Name' ), 
 			'align' => 'left', 
 			'index' => 'category_name' 
 		));
 		
 		$this->addColumn ( 'import_title', array (
-			'header' => Mage::helper ( 'import' )->__ ( 'Title' ), 
+			'header' => Mage::helper ( 'crownimport' )->__ ( 'Title' ), 
 			'align' => 'left', 
 			'index' => 'import_title' 
 		));
 		
 		$this->addColumn ( 'import_filename', array (
-			'header' => Mage::helper ( 'import' )->__ ( 'Filename' ), 
+			'header' => Mage::helper ( 'crownimport' )->__ ( 'Filename' ), 
 			'align' => 'left', 
 			'index' => 'import_filename'
 		));
 		
 		$this->addColumn ( 'status', array (
-			'header' => Mage::helper ( 'import' )->__ ( 'Status' ), 
+			'header' => Mage::helper ( 'crownimport' )->__ ( 'Status' ), 
 			'align' => 'left', 
 			'index' => 'status',
 			'width' => '100px', 
 			'type'  => 'options',
-			'options' => Mage::getModel ( 'import/importhistory' )->getGridStatusArray(),
+			'options' => Mage::getModel ( 'crownimport/importhistory' )->getGridStatusArray(),
 		));
 		
 		$this->addColumn ( 'created_at', array (
-			'header' => Mage::helper ( 'import' )->__ ( 'Created' ), 
+			'header' => Mage::helper ( 'crownimport' )->__ ( 'Created' ), 
 			'align' => 'left', 
 			'width' => '150px', 
 			'index' => 'created_at' 
 		));
 		
 		$this->addColumn ( 'updated_at', array (
-			'header' => Mage::helper ( 'import' )->__ ( 'Updated' ), 
+			'header' => Mage::helper ( 'crownimport' )->__ ( 'Updated' ), 
 			'align' => 'left', 
 			'width' => '150px',
 			'index' => 'updated_at' 

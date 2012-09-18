@@ -44,6 +44,11 @@
             <crownimport>
                 <class>Crown_Import_Block</class>
             </crownimport>
+            <adminhtml>
+            	<rewrite>
+            		<catalog_category_edit_form>Crown_Import_Block_Adminhtml_Catalog_Category_Edit_Form</catalog_category_edit_form>
+            	</rewrite>
+            </adminhtml>
             <urapidflow>
             	<rewrite>
             		<adminhtml_profile_edit>Crown_Import_Block_Adminhtml_Profile_Edit</adminhtml_profile_edit>
@@ -145,4 +150,11 @@
 			</crownimport_clean_old_profiles>
 		</jobs>
 	</crontab>
+	<default>
+		<crownimport>
+			<urapidflow>
+				<invalid_characters>‘ ’ “ ” é — – ÿ</invalid_characters>
+			</urapidflow>
+		</crownimport>
+	</default>
 </config>
