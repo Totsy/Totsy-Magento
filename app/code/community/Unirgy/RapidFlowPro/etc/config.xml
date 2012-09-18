@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Unirgy_RapidFlowPro>
+            <version>2.0.0.1</version>
+            <usimpleup remote="http://download.unirgy.com/simple/client_api/version/"
+                changelog="http://unirgy.com/support/portal/announcements"
+                uninstall="urapidflowpro/observer::usimpleup_uninstall"/>
+        </Unirgy_RapidFlowPro>
+    </modules>
+
+    <global>
+        <blocks>
+            <urapidflowpro>
+                <class>Unirgy_RapidFlowPro_Block</class>
+            </urapidflowpro>
+        </blocks>
+
+        <models>
+            <urapidflowpro>
+                <class>Unirgy_RapidFlowPro_Model</class>
+                <resourceModel>urapidflowpro_mysql4</resourceModel>
+            </urapidflowpro>
+            <urapidflowpro_mysql4>
+                <class>Unirgy_RapidFlowPro_Model_Mysql4</class>
+            </urapidflowpro_mysql4>
+        </models>
+
+        <helpers>
+            <urapidflowpro>
+                <class>Unirgy_RapidFlowPro_Helper</class>
+            </urapidflowpro>
+        </helpers>
+
+        <urapidflow>
+            <modules>
+                <Unirgy_RapidFlowPro />
+            </modules>
+        </urapidflow>
+    </global>
+
+    <adminhtml>
+        <translate>
+            <modules>
+                <Unirgy_RapidFlowPro>
+                    <files>
+                        <default>Unirgy_RapidFlowPro.csv</default>
+                    </files>
+                </Unirgy_RapidFlowPro>
+            </modules>
+        </translate>
+
+        <events>
+            <controller_action_layout_render_before_urapidflowadmin_adminhtml_profile_index>
+                <observers><urapidflowpro><type>singleton</type><class>urapidflowpro/observer</class><method>adminhtml_version</method></urapidflowpro></observers>
+            </controller_action_layout_render_before_urapidflowadmin_adminhtml_profile_index>
+        </events>
+    </adminhtml>
+</config>
