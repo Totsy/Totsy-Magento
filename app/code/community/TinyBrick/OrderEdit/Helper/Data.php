@@ -36,5 +36,26 @@ class TinyBrick_OrderEdit_Helper_Data extends Mage_Core_Helper_Data
 	}
 		return $this;
 	}
+
+    public function checkItemAvailability($product, $qty) {
+        $stockItem = $product->getStockItem();
+        if ($stockItem && $stockItem->getIsQtyDecimal()) {
+            $product->setIsQtyDecimal(1);
+        }
+        $oldItemQty = 0;
+        if($this->getSession()->getOrder()) {
+            $oldOrderItems = $this->getSession()->getOrder()->getItemsCollection();
+            foreach ($oldOrderItems as $oldItem){
+                if($oldItem->product_id == $product->getId()) {
+                    $oldItemQty = (int)$oldItem->getQtyOrdered();
+                }
+            }
+        }
+        if($qty > ((int) $stockItem->getQty() + $oldItemQty)) {
+            return false;
+        } else {
+            return true;
+        }
+    }
 }
 

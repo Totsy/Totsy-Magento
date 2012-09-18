@@ -31,7 +31,7 @@
     </div>
     <?php if($this->canEditOrder($_order->getStatus()) && !$this->isOrderInvoiced($_order)): ?>
 	    <div class="clear"></div>
-	    <button type="button" onclick="saveMe()" id="orderEdit" style="height:25px; width:280px; font-size:16px;">Edit Payment Informations</button>
+	    <button type="button" onclick="saveMe()" id="orderEdit" style="height:25px; width:280px; font-size:16px;">Edit Order</button>
 	    <div id="comment-field" style="display:none;"><br />Reason for editing order: <span id="required-comment" style="color:red; display:none;">This is required to edit an order</span><br />
 	    <textarea id="edit-order-comment" style="width:450px;"></textarea>
 	    </div>
@@ -42,7 +42,7 @@
     <script>
     function saveMe()
     {
-    	if($('orderEdit').innerHTML == 'Edit Payment Informations') {
+    	if($('orderEdit').innerHTML == 'Edit Order') {
     		$('orderEdit').innerHTML = 'Save Changes';
     		$('billing-edit-form').show();
     		$('billing-static').hide();
@@ -52,8 +52,8 @@
     		$('billing-static').hide();
     		$('shipping-edit-form').show();
     		$('shipping-static').hide();
-    		$('shippingmethod-edit-form').show();
-    		$('shippingmethod-static').hide();
+    		//$('shippingmethod-edit-form').show();
+    		//$('shippingmethod-static').hide();
     		$$('.e-item-price').invoke('show');
     		$$('.e-item-qty').invoke('show');
     		$$('.e-item-discount').invoke('show');
@@ -133,15 +133,15 @@
 				method: 'get',
 				parameters: params,
 				onSuccess: function(transport) {
-					$('orderEdit').innerHTML = 'Edit Payment Informations';
+					$('orderEdit').innerHTML = 'Edit Order';
     				$('billing-edit-form').hide();
     				$('billing-static').show();
     				$('payment-edit-form').hide();
     				$('payment-infos').show();
     				$('shipping-edit-form').hide();
     				$('shipping-static').show();
-    				$('shippingmethod-edit-form').hide();
-    				$('shippingmethod-static').show();
+    				//$('shippingmethod-edit-form').hide();
+    				//$('shippingmethod-static').show();
     				$$('.e-item-price').invoke('hide');
     				$$('.e-item-qty').invoke('hide');
     				$$('.e-item-discount').invoke('hide');
@@ -242,15 +242,18 @@
     <div class="box-left">
     <?php endif; ?>
         <!--Payment Method-->
-        <div class="entry-edit">
+        <div class="entry-edit" id="payment-infos">
             <div class="entry-edit-head">
                 <h4 class="icon-head head-payment-method"><?php echo Mage::helper('sales')->__('Payment Information') ?></h4>
             </div>
-            <fieldset id="payment-infos">
+            <fieldset>
                 <?php echo $this->getPaymentHtml() ?>
                 <div><?php echo Mage::helper('sales')->__('Order was placed using %s', $_order->getOrderCurrencyCode()) ?></div>
             </fieldset>
-            <fieldset id="payment-edit-form" style="display:none;">
+
+        </div>
+        <div id="payment-edit-form"  style="display:none;">
+            <fieldset>
                 <form id="payment-fields">
                     <input type="hidden" value="payment" name="type">
                     <input type="hidden" value="troyer@totsy.com" name="admin_user">

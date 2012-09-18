@@ -34,7 +34,10 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Nitems extends TinyBrick_Order
 				->addAttributeToFilter('sku', $sku)
 				->addAttributeToSelect('*')
 				->getFirstItem();
-			
+            $itemAvailable = Mage::helper('orderedit')->checkItemAvailability($product, $qty);
+            if(!$itemAvailable) {
+                return false;
+            }
 			$quoteItem = Mage::getModel('sales/quote_item')->setProduct($product)
 				->setQuote(Mage::getModel('sales/quote')->load($order->getQuoteId()));
 			

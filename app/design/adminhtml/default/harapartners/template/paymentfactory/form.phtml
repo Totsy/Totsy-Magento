@@ -16,10 +16,10 @@
             <input type="text" title="<?php echo $this->__('Name on Card') ?>" class="input-text required-entry" id="<?php echo $_code ?>_cc_owner" name="payment[cc_owner]" value="<?php echo $this->htmlEscape($this->getInfoData('cc_owner')) ?>" />
         </div>
     </li>*/ ?>
-    <?php $customerId = Mage::getSingleton('adminhtml/session_quote')->getCustomerId() ?>
     <?php $orderId = $this->getRequest()->getParam('order_id'); ?>
-    <?php $profiles = $this->getProfilesByCustomerId( $customerId ) ?>
-    <?php if( $customerId && $profiles && count( $profiles->getItems() ) && !$orderId ): ?>
+    <?php $order = Mage::getModel('sales/order')->load($orderId); ?>
+    <?php $profiles = $this->getProfilesByCustomerId($order->getCustomerId()); ?>
+    <?php if( $order->getCustomerId() && $profiles && count( $profiles->getItems() )): ?>
         <li class="switch-card-control">
             <label for="use-card-method">Choose a credit/debit card:</label>
             <div class="totsy-selective-input-box middle-length" id="use-card-method">

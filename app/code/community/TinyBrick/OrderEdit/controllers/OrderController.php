@@ -65,7 +65,7 @@ class TinyBrick_OrderEdit_OrderController extends Mage_Adminhtml_Controller_Acti
 
             foreach($edits as $edit) {
                 if($edit['type']) {
-                    if($edit['type'] == 'eitems' || $edit['type'] == 'nitems') {
+                    if($edit['type'] == 'eitems' || $edit['type'] == 'nitems' || $edit['type'] == 'shipping') {
                         $model = Mage::getModel('orderedit/edit_updater_type_'.$edit['type']);
                         if(!$changes[] = $model->edit($order,$edit)) {
                             $msgs[] = "Error updating " . $edit['type'];

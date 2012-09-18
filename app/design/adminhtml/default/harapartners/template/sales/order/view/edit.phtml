@@ -209,7 +209,6 @@ $orderStoreDate = $this->formatDate($_order->getCreatedAtStoreDate(), 'medium', 
     <div class="entry-edit">
         <div class="entry-edit-head">
             <h4 class="icon-head head-shipping-address"><?php echo Mage::helper('sales')->__('Shipping Address') ?></h4>
-            <div class="tools"><?php echo $this->getAddressEditLink($_order->getShippingAddress())?></div>
         </div>
         <fieldset id="shipping-static">
             <address id="shipping-static-text"><?php echo $_order->getShippingAddress()->getFormated(true) ?></address>
