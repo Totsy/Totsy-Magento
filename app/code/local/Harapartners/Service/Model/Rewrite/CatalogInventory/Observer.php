@@ -59,6 +59,9 @@ class Harapartners_Service_Model_Rewrite_CatalogInventory_Observer extends Mage_
         foreach ($quote->getAllItems() as $quoteItem) {
             $reservationHelper->updateReservationByQuoteItem($quoteItem, true); //Restock all reservation qty, qty also modified by true stock change
         }
+        foreach ($this->_itemsForReindex as $item) {
+            $item->save();
+        }
         return $this;
     }
     

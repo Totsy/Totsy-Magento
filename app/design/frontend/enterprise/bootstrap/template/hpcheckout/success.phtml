@@ -30,7 +30,9 @@ $quote = Mage::getModel('sales/quote')->load($quoteId);
 ?>
 		You will redirect to orders review page in 10 seconds. Or <a class="red" href="<?php echo $url?>">click here</a>
     </p>
-    <div id="rondavu_checkout_container"></div>
+    <p>
+    	<div id="rondavu_checkout_container"></div>
+    </p>
     <script language="javascript" type="text/javascript">
 		function redirect(){ window.location.href="<?php echo $url?>" };
         setTimeout("redirect()",10000);
@@ -39,7 +41,7 @@ $quote = Mage::getModel('sales/quote')->load($quoteId);
 
 require("dev/sociablelabs/sociable_signer.php");
 
-$items_for_socialable_page_key = array();
+$items_for_socialable_purchase_key = array();
 $items_for_socialable_mos_keys = array();
 $items_for_socialable_purchase_key = array();
 
@@ -79,9 +81,8 @@ $rondavu_data =array("config"=>array("version"=>"1.2") ,
         "tracking" =>array(array("name" =>"refId","
            value" =>"referral_code"))),
     "page" =>array("tags" =>array("order_confirmation"),
-        "actions" =>array("purchase" =>array("order_id" =>$this->getOrderId(),"total"=>number_format($order->getData('grand_total'), 2, '.', '')
-,"currency" =>"USD","items"=> $items_for_socialable_purchase_key,
-                "price" =>array("actual_paid" =>number_format($order->getData('grand_total'), 2, '.', ''),"currency"=>"USD")))),
+        "actions" =>array("purchase" =>array("order_id" =>$this->getOrderId(),"total"=>$order->getData('grand_total'),"currency" =>"USD","items"=> $items_for_socialable_purchase_key,
+                "price" =>array("actual_paid" =>$order->getData('grand_total'),"currency"=>"USD")))),
     "primary_mo"=>array("id" =>array(array("id"=>"order_confirmation","type"=>"page")) ,
         "name" =>array(array("name" =>"Totsy")) ,
         "url" =>array("detail" =>"https://www.totsy.com","picture"=>array("primary"=>"https://www.totsy.com/img/logo-125x77.png","primary_secure" =>
