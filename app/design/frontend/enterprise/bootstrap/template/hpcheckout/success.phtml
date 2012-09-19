@@ -1,16 +1,15 @@
 <div class="page-title">
-     <h1><?php echo $this->__('Your order has been received') ?></h1>
+    <h1><?php echo $this->__('Your order has been received') ?></h1>
 </div>
 <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
 <h2 class="sub-title"><?php echo $this->__('Thank you for your purchase!') ?></h2>
 
 <?php if ($this->getOrderId()):?>
 <?php
-    $orderIncrementId = $this->getOrderId();
+$orderIncrementId = $this->getOrderId();
 $order = Mage::getModel('sales/order')->loadByIncrementId($orderIncrementId);
 $quoteId = $order->getQuoteId();
 $quote = Mage::getModel('sales/quote')->load($quoteId);
-//$quote = Mage::getModel('checkout/cart')->getQuote();
 
 ?>
 <?php if ($this->getCanViewOrder()) :?>
@@ -25,7 +24,7 @@ $quote = Mage::getModel('sales/quote')->load($quoteId);
         <?php echo $this->getChildHtml() ?>
     </p>
     <p class="red review-order-detail">
-    	<?php
+    <?php
         $order_id = $order->getId();
         $url = $this->getBaseUrl().'sales/order/history/';
 ?>
@@ -33,10 +32,10 @@ $quote = Mage::getModel('sales/quote')->load($quoteId);
     </p>
     <div id="rondavu_checkout_container"></div>
     <script language="javascript" type="text/javascript">
-		function redirect(){window.location.href="<?php echo $url?>"};
-        //setTimeout("redirect()",10000);
+		function redirect(){ window.location.href="<?php echo $url?>" };
+        setTimeout("redirect()",10000);
 	</script>
-	<?php
+<?php
 
 require("dev/sociablelabs/sociable_signer.php");
 
@@ -136,36 +135,38 @@ $socialableLabsOutput = rondavu_sign($rondavu_data, $key_path);
 $category = array();
 // $productid = Mage::getModel('catalog/product')->getData('category_ids');
 // $order  = Mage::getModel('catalog/category')->getCollection()->load($productid);
-foreach($order->getAllItems() as $item):?>
-	<?php  if( !! $item->getParentItemId() ) {
-        continue;
-    }
+foreach($order->getAllItems() as $item):
+  if( !! $item->getParentItemId() ) {
+  	continue;
+  }
+  
 unset($category);
 $product = Mage::getModel( 'catalog/product' )->load( $item->getProductId() );
 $categoryIds = $product->getCategoryIds();
-foreach ($categoryIds as $cateId){
-    $category[] = Mage::getModel('catalog/category')->load($cateId)->getData('name');
-}
-?>
 
+foreach ($categoryIds as $cateId){
+	$category[] = Mage::getModel('catalog/category')->load($cateId)->getData('name');
+}
+
+?>
    // add item might be called for every item in the shopping cart
    // where your ecommerce engine loops through each item in the cart and
    // prints out _addItem for each
   _gaq.push(['_addItem',
-    '<?php echo $order->getData('increment_id'); ?>',           // order ID - required
-    '<?php echo $item->getData('sku'); ?>',           // SKU/code - required
-    '<?php echo $item->getData('name')?>',        // product name
+    '<?php echo $order->getData('increment_id'); ?>', // order ID - required
+    '<?php echo $item->getData('sku'); ?>',          // SKU/code - required
+    '<?php echo $item->getData('name')?>',          // product name
     '<?php foreach($category as $cat){
-    echo $cat.',';
-} ?>',   // category or variation
-    '<?php echo $item->getPrice() ?>',          // unit price - required
-    '<?php echo $item->getQtyOrdered() ?>'               // quantity - required
+    	       echo $cat . ','; 				  // category or variation
+    	   } 
+    ?>',   
+    '<?php echo $item->getPrice() ?>',         // unit price - required
+    '<?php echo $item->getQtyOrdered() ?>'    // quantity - required
   ]);
-  <?php
+<?php
 endforeach;
 ?>
-  _gaq.push(['_trackTrans']); //submits transaction to the Analytics servers
-
+  _gaq.push(['_trackTrans']); 			  //submits transaction to the Analytics servers
   (function() {
     var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
     ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
@@ -173,7 +174,6 @@ endforeach;
   })();
 
 </script>
-<?php //$_cartQty = Mage::getModel('checkout/cart')->getCart()->get;  ?>
 
 <script type="text/javascript">
 var aid='9577';
