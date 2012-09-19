@@ -11,6 +11,11 @@
                 <class>Crown_Import_Model</class>
                 <resourceModel>crownimport_mysql4</resourceModel>
             </crownimport>
+            <urapidflow_mysql4>
+            	<rewrite>
+            		<catalog_product>Crown_Import_Model_Urapidflow_Mysql4_Catalog_Product</catalog_product>
+            	</rewrite>
+            </urapidflow_mysql4>
             <crownimport_mysql4>
                 <class>Crown_Import_Model_Mysql4</class>
                 <entities>

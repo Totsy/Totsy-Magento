@@ -47,6 +47,20 @@ class Crown_Import_Helper_Data extends Mage_Core_Helper_Abstract {
     	return $importModel;
     }
     
+	/**
+     * Gets the invalid characters for a uRapidFlow import
+     * @since 1.0.0
+     * @return array
+     */
+    public function getInvalidCharacters() {
+    	if ( !isset($this->_invalid_characters) ) {
+    		$info = Mage::getStoreConfig ( 'crownimport/urapidflow/invalid_characters' );
+    		$info = preg_replace('/\s+/', ' ', $info);
+    		$this->_invalid_characters = explode(' ', $info);
+    	}
+    	return $this->_invalid_characters;
+    }
+    
     /**
      * Gets the name of the default product store.
      * @since 1.0.0
