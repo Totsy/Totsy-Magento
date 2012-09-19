@@ -249,6 +249,10 @@ class Crown_Import_Model_Urapidflow_Mysql4_Catalog_Product extends Unirgy_RapidF
 						}
 					}
 					
+					if ('name' == $k) {
+						Mage::log(mb_detect_encoding($newValue, "auto"), null, 'pickles.log');
+					}
+					
 					// Check for invalid characters
 					if ($selectable) {
 						if ($attr ['frontend_input'] == 'multiselect' && is_array ( $newValue )) {
@@ -263,8 +267,6 @@ class Crown_Import_Model_Urapidflow_Mysql4_Catalog_Product extends Unirgy_RapidF
 						}
 					} else {
 						if (!$this->_checkForInvalidCharacter ( $newValue )){
-							if ('name' == $k)
-								mage::log($k, null,'pickles.log');
 							$profile->addValue ( 'num_errors' );
 							$logger->error ( $this->__ ( "Invalid character found" ) );
 							$this->_valid [$sku] = false;
@@ -291,17 +293,9 @@ class Crown_Import_Model_Urapidflow_Mysql4_Catalog_Product extends Unirgy_RapidF
 	 * @return boolean
 	 */
 	protected function _checkForInvalidCharacter($value) {
-		$invalidCharacters = Mage::helper('crownimport')->getInvalidCharacters();
-		$chars = implode('', $invalidCharacters);
-		if ( 0 !== mb_ereg_match("/[{$chars}]/", $value, $matches)) {
-			Mage::log($chars,null,'pickles.log');
-			Mage::log($matches,null,'pickles.log');
-			return false;
-		}
-		return true;
-		
+		$invalidCharacters = Mage::helper ( 'crownimport' )->getInvalidCharacters ();
 		foreach ( $invalidCharacters as $invalidCharacter ) {
-			$pos = strpos($value, $invalidCharacter);
+			$pos = iconv_strpos($value, $invalidCharacter);
 			if ( false !== $pos ) {
 				return false;
 			}
