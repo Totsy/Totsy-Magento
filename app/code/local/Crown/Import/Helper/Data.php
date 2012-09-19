@@ -60,6 +60,25 @@ class Crown_Import_Helper_Data extends Mage_Core_Helper_Abstract {
     	}
     	return $this->_invalid_characters;
     }
+	
+	/**
+	 * Gets the invalid characters for a uRapidFlow import in binary format
+	 * @since 1.0.1
+	 * @return array
+	 */
+	public function getInvalidCharactersBinary() {
+		if (! isset ( $this->_invalid_characters_binary )) {
+			$invalidCharacters = $this->getInvalidCharacters();
+			if (! empty ( $invalidCharacters )) {
+				foreach ( $invalidCharacters as $char ) {
+					$this->_invalid_characters_binary[] = iconv('UTF-8', 'ASCII//TRANSLIT', $char);
+				}
+			} else {
+				$this->_invalid_characters_binary = array();
+			}
+		}
+		return $this->_invalid_characters_binary;
+    }
     
     /**
      * Gets the name of the default product store.
