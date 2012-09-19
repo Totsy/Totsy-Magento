@@ -52,35 +52,6 @@ class Harapartners_Service_Model_Rewrite_Catalog_Product extends Mage_Catalog_Mo
         }
     }
 
-    /**
-     * Flush the remote CDN network for this product's URLs.
-     *
-     * @return Mage_Core_Model_Abstract
-     */
-    public function cleanModelCache()
-    {
-        $url = array();
-        $categories = $this->getCategoryCollection();
-        foreach ($categories as $event) {
-            $url[] = $event->getUrl(); // the category (event) page
-
-            // every rewrite for the product page
-            $idPath = sprintf("product/%d/%d", $this->getId(), $event->getId());
-            $rewrite = Mage::getSingleton('core/url_rewrite')->loadByIdPath($idPath);
-            if ($rewrite) {
-                $productUrl = $rewrite->getRequestPath();
-                $url[] = $baseUrl = Mage::getStoreConfig('web/unsecure/base_url') .
-                    $productUrl;
-                $url[] = $baseUrl = Mage::getStoreConfig('web/secure/base_url') .
-                    $productUrl;
-            }
-        }
-
-        Mage::helper('cdn')->purge(array_unique($url));
-
-        return parent::cleanModelCache();
-    }
-
     public function afterCommitCallback() {
         // ===== Index rebuild ========================================== //
         

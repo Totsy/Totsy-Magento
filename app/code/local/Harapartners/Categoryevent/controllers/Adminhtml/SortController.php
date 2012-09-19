@@ -62,19 +62,6 @@ class Harapartners_Categoryevent_Adminhtml_SortController
             $jsonResponse['error_message'] = 'A system error prevented the sort order save operation.';
         }
 
-        if ($sortDate == $this->_getTodayWithTimeOffset()) {
-            $url     = array();
-            $baseUrl = Mage::getStoreConfig('web/unsecure/base_url');
-            $url[]   = $baseUrl . 'event/';
-            $url[]   = $baseUrl;
-
-            $baseUrl = Mage::getStoreConfig('web/secure/base_url');
-            $url[]   = $baseUrl . 'event/';
-            $url[]   = $baseUrl;
-
-            Mage::helper('cdn')->purge(array_unique($url));
-        }
-
         $this->getResponse()->setHeader('Content-Type', 'application/json')
             ->setBody(json_encode($jsonResponse));
     }
