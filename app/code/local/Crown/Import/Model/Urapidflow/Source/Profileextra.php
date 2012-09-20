@@ -10,6 +10,7 @@ class Crown_Import_Model_Urapidflow_Source_Profileextra extends Mage_Core_Model_
 	/**
 	 * Gets a list of the uRapidFlow profiles
 	 * @since 1.0.0
+	 * @todo Restrict to profiles not being used by import profiles
 	 * @return array
 	 */
 	public function getAllOptions() {
