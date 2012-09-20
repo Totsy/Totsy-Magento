@@ -59,7 +59,6 @@ class Crown_Import_Model_Productimport extends Crown_Import_Model_Import_Abstrac
 		$this->addRowFilter ( array (&$this, 'filterVendorCode'), 1 );
 		$this->addRowFilter ( array (&$this, 'filterPoId'), 1 );
 		$this->addRowFilter ( array (&$this, 'filterSku'), 2 );
-		//$this->addRowFilter ( array (&$this, 'filterStore'), 2 );
 		$this->addRowFilter ( array (&$this, 'filterWebsites'), 2 );
 		$this->addRowFilter ( array (&$this, 'filterAttributeSet'), 2 );
 		$this->addRowFilter ( array (&$this, 'filterStatus'), 2 );
@@ -97,7 +96,6 @@ class Crown_Import_Model_Productimport extends Crown_Import_Model_Import_Abstrac
 		$this->setDefaultProductIsInStock($helper->getDefaultIsInStock());
 		$this->setDefaultProductShortDescription($helper->getDefaultShortDescription());
 		$this->setDefaultProductStatus($helper->getDefaultStatus());
-		$this->setDefaultProductStoreCode($helper->getDefaultStore());
 		$this->setDefaultProductTaxClass($helper->getDefaultTaxClass());
 		$this->setDefaultProductWebsiteCode($helper->getDefaultWebsite());
 		$this->setDefaultProductWeight($helper->getDefaultWeight());
@@ -153,21 +151,6 @@ class Crown_Import_Model_Productimport extends Crown_Import_Model_Import_Abstrac
 			$this->_fields[] = 'stock.is_in_stock';
 		}
 		
-		return $data;
-	}
-	
-	/**
-	 * Sets the default store if it's not set
-	 * @param mixed int|string $_id
-	 * @param array $data
-	 * @since 1.0.0
-	 * @return array
-	 */
-	public function filterStore($_id, $data) {
-		if (!isset($data['store'])) {
-			$data['store'] = $this->getDefaultProductStoreCode();
-			$this->_fields[] = 'store';
-		}
 		return $data;
 	}
 	

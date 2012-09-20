@@ -81,20 +81,6 @@ class Crown_Import_Helper_Data extends Mage_Core_Helper_Abstract {
     }
     
     /**
-     * Gets the name of the default product store.
-     * @since 1.0.0
-     * @return string
-     */
-    public function getDefaultStore() {
-    	if ( !isset($this->_store) ) {
-    		$info = abs ( ( int ) Mage::getStoreConfig ( 'crownimport/general/store' ) );
-    		$store = Mage::getModel('core/store')->load($info);
-    		$this->_store = $store->getName();
-    	}
-    	return $this->_store;
-    }
-    
-    /**
      * Gest the default website name for products.
      * @since 1.0.0
      * @return string
