@@ -59,7 +59,7 @@ class Crown_Import_Model_Productimport extends Crown_Import_Model_Import_Abstrac
 		$this->addRowFilter ( array (&$this, 'filterVendorCode'), 1 );
 		$this->addRowFilter ( array (&$this, 'filterPoId'), 1 );
 		$this->addRowFilter ( array (&$this, 'filterSku'), 2 );
-		$this->addRowFilter ( array (&$this, 'filterStore'), 2 );
+		//$this->addRowFilter ( array (&$this, 'filterStore'), 2 );
 		$this->addRowFilter ( array (&$this, 'filterWebsites'), 2 );
 		$this->addRowFilter ( array (&$this, 'filterAttributeSet'), 2 );
 		$this->addRowFilter ( array (&$this, 'filterStatus'), 2 );

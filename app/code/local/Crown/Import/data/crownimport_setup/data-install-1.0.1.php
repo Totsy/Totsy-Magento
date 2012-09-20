@@ -27,7 +27,9 @@ $productProfileData = array(
 											'create_options' 		=> '1',
 											'image_files' 			=> '1',
 											'image_files_remote' 	=> '1',
-											
+							),
+							'log'		=> array(
+											'min_level'				=> 'SUCCESS',
 							),
 	),
 	
@@ -43,6 +45,11 @@ $productExtraProfileData = array(
 	'data_type' 		=> 'product_extra',
 	'filename' 			=> 'non.csv',
 	'store_id' 			=> '0',
+	'options' 			=> array(
+							'log'		=> array(
+											'min_level'				=> 'SUCCESS',
+							),
+	),
 );
 
 
