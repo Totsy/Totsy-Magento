@@ -12,72 +12,51 @@
  * 
  */
  
-class Harapartners_Categoryevent_Block_Adminhtml_Sort_Index_Edit extends Mage_Adminhtml_Block_Widget_Container {
-    
-       
-    public function __construct(){
+class Harapartners_Categoryevent_Block_Adminhtml_Sort_Index_Edit
+    extends Mage_Adminhtml_Block_Widget_Container
+{
+    public function __construct()
+    {
         parent::__construct();
         $this->setTemplate('categoryevent/sort/index/edit.phtml');
     }
 
-    public function isSingleStoreMode() {
-        if (!Mage::app()->isSingleStoreMode()) {
-               return false;
-        }
-        return true;
-    }
-    
-    public function getSortSavePostUrl(){
-    	return $this->getUrl('categoryevent/adminhtml_sort/sortsave');
-    }
-    
-    public function getSortRebuildPostUrl(){
-    	return $this->getUrl('categoryevent/adminhtml_sort/sortrebuild');
-    }
-    
-    public function getAutoSortPostUrl(){
-        return $this->getUrl('categoryevent/adminhtml_sort/sortByDate');
-    }
-    
-    public function getPostKey(){        
-        if (!!(Mage::getSingleton('adminhtml/url')->getSecretKey("adminhtml_sort","post"))){            
-            return Mage::getSingleton('adminhtml/url')->getSecretKey("adminhtml_sort","post");
-        }else {           
-            return false;
-        }
+    public function getSortSavePostUrl()
+    {
+        return $this->getUrl('categoryevent/adminhtml_sort/sortsave');
     }
 
-    public function getEventUrl($event){
-        return $this->getUrl('adminhtml/catalog_category/edit', array(
-                'store'=>$this->getRequest()->getParam('store'),
-                'id'=>$event['entity_id']
-        ));
+    public function getSortRebuildPostUrl()
+    {
+        return $this->getUrl('categoryevent/adminhtml_sort/sortrebuild');
     }
-    
-    public function getSortDate(){        
-        $sortDate = Mage::getSingleton('adminhtml/session')->getData('categoryevent_sort_date');
-        if (!!$sortDate) {
-            return $sortDate;
-        }else {
-            return date("Y-m-d");
-        }    
+
+    public function getAutoSortPostUrl()
+    {
+        return $this->getUrl('categoryevent/adminhtml_sort/sortByDate');
     }
-    
-    public function getSortStore(){       
-        $storeId = Mage::getSingleton('adminhtml/session')->getData('categoryevent_sort_storeid');
-        if (!!$storeId) {
-            return $storeId;
-        }else {
-            return $storeId = Mage_Core_Model_App::DISTRO_STORE_ID;
+
+    public function getEventUrl($event)
+    {
+        return $this->getUrl('adminhtml/catalog_category/edit',
+            array(
+                'store' => $this->getRequest()->getParam('store'),
+                'id'    => $event['entity_id']
+            )
+        );
+    }
+
+    public function getSortentry()
+    {
+        $sortDate = $this->getRequest()->getParam('sort_date');
+
+        if ($sortentry = Mage::getSingleton('adminhtml/session')->getData("sortentry_$sortDate")) {
+            return $sortentry;
         }
+
+        $sortentry = Mage::getModel('categoryevent/sortentry')->loadByDate($sortDate);
+
+        Mage::getSingleton('adminhtml/session')->setData("sortentry_$sortDate", $sortentry);
+        return $sortentry;
     }
-    
-    public function loadSortCollection($sortDate,$storeId) {
-        $sortedLive = array();
-        $sortedUpcoming = array();
-        $sortedLive = Mage::getSingleton('adminhtml/session')->getData('categoryevent_sort_live_queue');
-        $sortedUpcoming = Mage::getSingleton('adminhtml/session')->getData('categoryevent_sort_upcoming_queue');
-        return array('live' => $sortedLive, 'upcoming' => $sortedUpcoming);
-    }
-    
 }

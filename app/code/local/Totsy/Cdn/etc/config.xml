@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Totsy_Cdn>
+            <version>0.1.0</version>
+        </Totsy_Cdn>
+    </modules>
+    <global>
+        <helpers>
+            <cdn>
+                <class>Totsy_Cdn_Helper</class>
+            </cdn>
+        </helpers>
+    </global>
+    <default>
+        <cdn>
+            <default>akamai</default>
+            <networks>
+                <akamai>Totsy_Cdn_Model_Network_AkamaiCcu</akamai>
+            </networks>
+        </cdn>
+    </default>
+</config>
