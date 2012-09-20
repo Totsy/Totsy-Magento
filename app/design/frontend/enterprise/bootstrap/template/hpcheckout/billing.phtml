@@ -114,7 +114,7 @@
     	//jQuery( '#billing\\:region_id, #billing\\:postcode' ).bind( 'change', hpcheckout.update );
 //    	/jQuery( '#billing\\:postcode, #billing\\:country_id' ).bind( 'change', hpcheckout.update );
 	});
-    <?php if(!$this->getAddressesJson()) { ?>
+    <?php if($this->getAddressesJson()) { ?>
         var hpcheckoutAddresses = <?php echo $this->getAddressesJson() ?>;
     <?php }  ?>
     
