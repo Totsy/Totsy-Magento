@@ -175,15 +175,15 @@
         <?php endif; ?>
 
     </td>
-    <td><?php echo $this->getColumnHtml($_item, 'qty') ?><input type="text" size="3" style="display:none;" value="<?php echo round($_item->getQtyOrdered(), 0) ?>" class="e-item-qty" /></td>
 
     <td>
-        <select class="e-item-qty">
-            <?php $maxAvailable = Mage::helper('orderedit')->getItemQuantitiesAvailable($_item); ?>
-            <?php for($i=1;$i<$maxAvailable;$i++): ?>
-                <option value="<?php echo $i ?>" <?php if($i==round($_item->getQtyOrdered(), 0)): ?>selected="selected"<?php endif ?>>
-                    <?php echo $i ?>
-                </option>
+        <?php echo $this->getColumnHtml($_item, 'qty') ?>
+        <?php $maxAvailable = Mage::helper('orderedit')->getItemQuantitiesAvailable($_item); ?>
+        <select class="e-item-qty" style="display:none;">
+            <?php for($i=1;$i<=$maxAvailable;$i++): ?>
+            <option value="<?php echo $i ?>" <?php if($i==round($_item->getQtyOrdered(), 0)): ?>selected="selected"<?php endif ?>>
+                <?php echo $i ?>
+            </option>
             <?php endfor; ?>
         </select>
     </td>
