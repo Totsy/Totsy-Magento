@@ -176,6 +176,7 @@ class TinyBrick_OrderEdit_OrderController extends Mage_Adminhtml_Controller_Acti
     public function getQtyAndDescAction()
     {
         $sku = $this->getRequest()->getParam('sku');
+
         $product = Mage::getModel('catalog/product')->getCollection()
             ->addAttributeToSelect('*')
             ->addAttributeToFilter('sku', $sku)

@@ -37,6 +37,15 @@ class TinyBrick_OrderEdit_Helper_Data extends Mage_Core_Helper_Data
 		return $this;
 	}
 
+    public function getItemQuantitiesAvailable($item) {
+        $maxAvailable = ((int)$item->getQtyOrdered()
+            + (int) Mage::getModel('catalog/product')->load($item->getProductId())->getStockItem()->getQty());
+        if($maxAvailable > 9) {
+            $maxAvailable = 9;
+        }
+        return $maxAvailable;
+    }
+
     public function checkItemAvailability($product, $qty) {
         $stockItem = $product->getStockItem();
         if ($stockItem && $stockItem->getIsQtyDecimal()) {
