@@ -6,9 +6,17 @@
  * @since 		1.0.0
  */
 
+/* @var $this Crown_Import_Model_Resource_Setup */
 $installer = $this;
 $installer->startSetup();
 
+$query = "
+
+";
+
+/**
+ * Create required tables
+ */
 $installer->run("
 DROP TABLE IF EXISTS {$this->getTable('crownimport/importhistory')};
 CREATE TABLE {$this->getTable('crownimport/importhistory')} (
