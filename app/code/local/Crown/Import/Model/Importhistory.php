@@ -143,7 +143,7 @@ class Crown_Import_Model_Importhistory extends Mage_Core_Model_Abstract {
      */
     protected function _getUrapidflowProfile() {
     	if ( !$this->hasData('urapidflow_profile') && !$this->getData('urapidflow_profile_id') && self::IMPORT_STATUS_COMPLETE != $this->getStatus()) {
-	    	$uRapidFlowProfileId = Mage::getStoreConfig ( 'import/urapidflow/profile' );
+	    	$uRapidFlowProfileId = Mage::getStoreConfig ( 'crownimport/urapidflow/profile' );
 			$profile = $this->_cloneUrapidflowProfile($uRapidFlowProfileId);
 			$this->setData('urapidflow_profile', $profile);
 	    	$this->setData('urapidflow_profile_id', $profile->getId());
@@ -201,7 +201,7 @@ class Crown_Import_Model_Importhistory extends Mage_Core_Model_Abstract {
      */
     protected function _getUrapidflowProfileProductExtra() {
     	if ( !$this->hasData('urapidflow_profile_product_extra') && !$this->getData('urapidflow_profile_id_product_extra') && self::IMPORT_STATUS_COMPLETE != $this->getStatus()) {
-	    	$uRapidFlowProfileId = Mage::getStoreConfig ( 'import/urapidflow/profile_product_extra' );
+	    	$uRapidFlowProfileId = Mage::getStoreConfig ( 'crownimport/urapidflow/profile_product_extra' );
 			$profile = $this->_cloneUrapidflowProfile($uRapidFlowProfileId);
 			$this->setData('urapidflow_profile_product_extra', $profile);
 	    	$this->setData('urapidflow_profile_id_product_extra', $profile->getId());
