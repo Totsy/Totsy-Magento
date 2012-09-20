@@ -916,11 +916,11 @@ body.catalog-category-view .thumbnails > li {position: relative;}
 
 .onepage-address-form .city {
     width:175px !important;
-    margin-left: 10px !important;
 }
 
 .onepage-address-form .state {
     width: 145px !important;
+    margin-left: 10px !important;
 }
 
 .onepage-address-form .country {

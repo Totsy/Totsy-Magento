@@ -9,15 +9,6 @@
 	</script>
 <?php else: ?>	
 <div>
-<!--
-<select id="hpcheckout-payment-select" name="payment[method]" class="validate-select" >
-				<option value=""><?php //echo $this->__('Please select payment method') ?></option>
-				<?php //foreach ($methods as $_method): $_code = $_method->getCode() ?>
-			    	<option value="<?php //echo $_code ?>" <?php //if($this->getSelectedMethodCode()==$_code): ?> selected="true"<?php //endif; ?>><?php //echo $_method->getTitle() ?></option>
-			    	<?php //echo $_code; ?>
-				<?php //endforeach; ?>
-			</select>
-			-->
 </div>
 <?php foreach ($methods as $_method): ?>
 		<?php if ($html = $this->getPaymentMethodFormHtml($_method)): ?>
@@ -32,7 +23,6 @@
     	   jQuery('.validate-cybsersource-cc-type').attr("checked", false);
     		hpcheckout.switchPaymentMethod(jQuery('input[name=payment[method]]:checked', '#hpcheckout-payment-form').val());				
         });
-        
         jQuery('.validate-cybsersource-cc-type').click( function() {
             jQuery('#payment_method').attr("checked", false);
             jQuery("#payment_form_paypal_express").hide();

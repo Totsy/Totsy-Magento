@@ -26,6 +26,10 @@
 			</div>
 		<?php endif ?>
 		<div class="onepage-checkout container row">
+		    <div id="hpcheckout-payment-wrapper" class="well review-payment-blocks">		
+                <div class="checkout-content"><?php echo $this->getChildHtml( 'payment' ) ?></div>
+			    <?php echo $this->getChildHtml( 'reward' ); ?>
+		        </div>
 		    <div class="addresses pull-left well">
 		   		<div class="checkout-headline">
 		    	    <h4 class="legend pull-left"><?php echo $this->__('Billing Address') ?></h4>
@@ -67,10 +71,6 @@
         </div>
 		<?php endif ?>
 		<div style="clear:both"></div>
-		<div id="hpcheckout-payment-wrapper" class="well review-payment-blocks">		
-			<div class="checkout-content"><?php echo $this->getChildHtml( 'payment' ) ?></div>
-			<?php echo $this->getChildHtml( 'reward' ); ?>
-		</div>
 		<div id="hpcheckout-review-wrapper" class="well review-payment-blocks">
 			<div class="checkout-content"><?php echo $this->getChildHtml( 'review' ) ?></div>
 		</div>

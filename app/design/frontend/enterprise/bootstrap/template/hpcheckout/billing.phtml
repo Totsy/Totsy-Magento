@@ -30,7 +30,11 @@
 	                   <input type="text" title="<?php echo $this->__('Street Address Line 2') ?>" name="billing[street][1]" id="billing:street2" value="<?php echo $this->getAddress()->getStreet(2) ?>" class="input-text streetaddress2" placeholder="<?php echo $this->__('Street Address Line 2') ?>"/>
 	                 </div>
 	    	     </div>
-	    	     <div> 
+	    	     <div>
+	    	         <div class="pull-left field half-of-half">
+	                     <label for="billing:city" class="required"><em>*&nbsp;</em><?php echo $this->__('city') ?></label>
+	                     <input type="text" title="<?php echo $this->__('City') ?>" name="billing[city]" class="input-text required-entry city" value="<?php echo $this->getAddress()->getCity() ?>" placeholder="<?php echo $this->__('City') ?>" id="billing:city" />
+	                 </div>	 
 	    	     	 <div class="pull-left half-of-half">
 	                     <label for="billing:region_id" class="required"><em>*&nbsp;</em><?php echo $this->__('state') ?></label>
 		                 <div class="totsy-selective-input-box">
@@ -43,10 +47,6 @@
                          </script>
                          <input type="text" id="billing:region" name="billing[region]" value="<?php echo $this->htmlEscape($this->getAddress()->getRegion()) ?>"  title="<?php echo $this->__('State/Province') ?>" class="input-text hidden-state" style="display:none;" />
 	                  </div>
-                      <div class="pull-left field half-of-half">
-	                     <label for="billing:city" class="required"><em>*&nbsp;</em><?php echo $this->__('city') ?></label>
-	                     <input type="text" title="<?php echo $this->__('City') ?>" name="billing[city]" class="input-text required-entry city" value="<?php echo $this->getAddress()->getCity() ?>" placeholder="<?php echo $this->__('City') ?>" id="billing:city" />
-	                 </div>	 
 	                  <div class="field half-of-half">
 	                      <label for="billing:postcode" class="required"><em>*&nbsp;</em><?php echo $this->__('zip/postal code') ?></label>
 	                      <input type="text" title="<?php echo $this->__('Zip/Postal Code') ?>" name="billing[postcode]" id="billing:postcode" class="input-text validate-zip required-entry zip" value="<?php echo $this->getAddress()->getPostcode() ?>" placeholder="<?php echo $this->__('Zip/Postal Code') ?>" />
