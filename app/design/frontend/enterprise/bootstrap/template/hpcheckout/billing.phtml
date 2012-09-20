@@ -1,3 +1,13 @@
+<?php 
+    /*
+    $customer = Mage::getSingleton('customer/session')->getCustomer();
+    $id = $customer->getId(); 
+    $paymentCollection = Mage::getModel('paymentfactory/profile')->loadByCustomerId($id);
+    
+    var_dump($paymentCollection);
+    */
+ ?>
+
 <form id="hpcheckout-billing-form" action="">
 	    <div id="billing-new-address-form fields alpha">
 	    	    <div> 
@@ -49,7 +59,7 @@
 	                  </div>
 	                  <div class="field half-of-half">
 	                      <label for="billing:postcode" class="required"><em>*&nbsp;</em><?php echo $this->__('zip/postal code') ?></label>
-	                      <input type="text" title="<?php echo $this->__('Zip/Postal Code') ?>" name="billing[postcode]" id="billing:postcode" class="input-text validate-zip required-entry zip" value="<?php echo $this->getAddress()->getPostcode() ?>" placeholder="<?php echo $this->__('Zip/Postal Code') ?>" />
+	                      <input type="text" title="<?php echo $this->__('Zip Code') ?>" name="billing[postcode]" id="billing:postcode" class="input-text validate-zip required-entry zip" value="<?php echo $this->getAddress()->getPostcode() ?>" placeholder="<?php echo $this->__('Zip/Postal Code') ?>" />
 	                  </div>
 	              </div>
 	              <div class="last-billing-form-row">
@@ -104,6 +114,8 @@
     	//jQuery( '#billing\\:region_id, #billing\\:postcode' ).bind( 'change', hpcheckout.update );
 //    	/jQuery( '#billing\\:postcode, #billing\\:country_id' ).bind( 'change', hpcheckout.update );
 	});
-
-	var hpcheckoutAddresses = <?php echo $this->getAddressesJson() ?>;
+    <?php if(!$this->getAddressesJson()) { ?>
+        var hpcheckoutAddresses = <?php echo $this->getAddressesJson() ?>;
+    <?php }  ?>
+    
 </script>
