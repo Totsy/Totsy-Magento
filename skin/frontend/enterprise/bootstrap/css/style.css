@@ -730,7 +730,6 @@ body.catalog-category-view .thumbnails > li {position: relative;}
 }
 
 #hpcheckout-payment-form ul {
-	float: left;
     margin: 0px !important; 
 }
 
@@ -849,6 +848,14 @@ body.catalog-category-view .thumbnails > li {position: relative;}
 .cc .db { background-position:-112px 32px; height:32px; margin:2px; width:56px; }
 .cc .ab { background-position:-168px 32px; height:32px; margin:2px; width:56px; }
 
+.paypal {
+    height:34px; 
+    width:56px;
+    background:url('../images/paypal_icon.gif'); 
+    background-repeat: no-repeat;
+    float:left;
+}
+
 .month {
     width: auto;
     margin-right:10px;
@@ -921,7 +928,7 @@ body.catalog-category-view .thumbnails > li {position: relative;}
 }
 
 .hpcheckout-payment-title {
-	width:215px;
+	width:175px;
 	float: left;
 }
 
@@ -940,7 +947,7 @@ body.catalog-category-view .thumbnails > li {position: relative;}
 
 .cc_types {
     text-align: center !important;
-    width: 400px !important;
+    width: 500px !important;
 }
 
 .btn-checkout-group {

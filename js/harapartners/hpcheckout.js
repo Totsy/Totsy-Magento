@@ -80,10 +80,14 @@ HpCheckout.prototype = {
         });
         jQuery("#shipping\\:postcode").change()
     },
-    switchPaymentMethod: function() {
-        var a = jQuery("#hpcheckout-payment-select :selected").eq(0).val();
-        jQuery('[id^="payment_form_"]').hide();
-        jQuery("#payment_form_" + a).show()
+    switchPaymentMethod: function(payment_method) {
+        
+        if (payment_method=="paypal_express") {
+            jQuery("#cc_data").hide();
+        }
+    
+        //jQuery('[id^="payment_form_"]').hide();
+        jQuery("#payment_form_" + payment_method).show();
     },
     switchAddress: function() {
         var a = jQuery(this);

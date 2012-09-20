@@ -80,10 +80,16 @@
         		 	    </span>
         		 	</span> 
         		 <?php endforeach ?>
-        		<!-- part B of a hack for the radio button error message-->
+        		 <?php $methods = $this->getLayout()->getBlock('hpcheckout.payment.methods')->getMethods();  ?> 
+                 <?php if(count($methods)): ?>
+			    	<input type="radio" value="paypal_express" id="payment_method" name="payment[method]">
+        		 	    <span title="Paypal Express" class="paypal"></span>
+                 <?php foreach ($methods as $_method): $_code = $_method->getCode() ?>
+        		 <?php if($this->getSelectedMethodCode()==$_code){ echo "checked"; } //echo $_code; ?>
+        		 <?php endforeach; ?>
+                 <?php endif; ?>                 
         		 <div style="clear:both; height:10px"></div>
         	    </div>
-        	    
         	</div>  
         </div>     
         <div class="pull-right cc_saved_cards">
@@ -109,6 +115,7 @@
         </div>
     </div>
     <div style="clear:both"></div>
+    <div id="cc_data">
     <div>
         <div class="pull-left cc_num use-new-card-wrapper">
             
@@ -160,6 +167,7 @@
         </div>
     </div> 
     <div style="clear:both"></div>
+</div>
 </div>
         <?php if ($this->hasSsCardType()): ?>
         <li id="<?php echo $_code ?>_cc_type_ss_div">
