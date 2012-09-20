@@ -1,8 +1,6 @@
 <?php
 /**
  * 
- * @method Crown_Import_Model_Productimport setDefaultProductStoreCode(string $value)
- * @method string getDefaultProductStoreCode()
  * @method Crown_Import_Model_Productimport setDefaultProductWebsiteCode(string $value)
  * @method string getDefaultProductWebsiteCode()
  * @method Crown_Import_Model_Productimport setDefaultProductAttributeSet(string $value)
