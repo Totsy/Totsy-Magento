@@ -125,7 +125,7 @@ class Harapartners_Categoryevent_Model_Sortentry
 
             // add new live events since the date of the most recent sortentry
             $startDate = date('Y-m-d', strtotime($recentSortentry->getDate()));
-            $endDate   = $date;
+            $endDate   = date('Y-m-d', strtotime($date));
         } else {
             $startDate = $date;
             $endDate   = $this->calculateEndDate($date);
@@ -136,11 +136,15 @@ class Harapartners_Categoryevent_Model_Sortentry
             return $this;
         }
 
+        $condEventDates = array(
+            array('attribute' => 'event_start_date', 'from' => $startDate . ' 00:00:00', 'to' => $endDate . ' 23:59:59', 'datetime' => true),
+            array('attribute' => 'event_end_date', 'from' => $startDate . ' 00:00:00', 'to' => $endDate . ' 23:59:59', 'datetime' => true),
+        );
         $newEvents = Mage::getModel('catalog/category')->getCollection()
             ->addAttributeToFilter('parent_id', $eventParentCategory->getId())
             ->addAttributeToFilter('level', self::CATEGORYEVENT_LEVEL)
             ->addAttributeToFilter('is_active', '1')
-            ->addAttributeToFilter('event_start_date', array('from' => $startDate . ' 00:00:00', 'to' => $endDate . ' 23:59:59', 'datetime' => true))
+            ->addAttributeToFilter($condEventDates)
             ->addAttributeToSort('event_start_date', 'asc');
 
         if (!empty($copiedEventIds)) {
