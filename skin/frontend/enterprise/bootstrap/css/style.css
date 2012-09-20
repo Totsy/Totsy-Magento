@@ -6,7 +6,7 @@
  * - Black:         text headings   #000
  * - Dark Grey      subheadings     #636466
  * - Medium Grey    copy font       #999999
- * - Light Grey     borders         #e5e5e5
+ * - Light Grey     borders         #e5e5e5 | rgba(229,229,229,1)
  * - Green          buttons         #c1d82f or #adc222 | rgba(173,194,34,1)
  */
  
@@ -120,7 +120,7 @@ html.test .container .row {outline:1px dotted green;}
 .thumbnail {padding:10px;}
 .page-header {
     margin:20px 0 10px; padding-bottom:5px;
-    border-bottom:1px solid #E5E5E5; 
+    border-bottom:1px solid #e5e5e5; 
 }
 .zoomImage { padding:0px; z-index:500!important; }
 
@@ -1241,8 +1241,58 @@ body.catalog-category-view .price-box .special-price {
 .input-box {padding:0px 0px 5px;}
 .pdp_tabs {width:105%; margin-top:-45px; margin-left:-11px;}
 
-.faq_answer {background:#f0f0f0; padding:5px;}
-.faq_question {background:#fff; padding:5px;}
+/* FAQ */
+.faq_links {
+    margin-bottom:1.75em;
+}
+.faq_links h4 {
+    margin-bottom:0.5em;
+    border-bottom:1px solid rgb(229,229,229);
+    line-height: 1.8;
+}
+.faq_links ul {
+    margin: 0; padding: 0;
+}
+.faq_links li > a {
+    position: relative; z-index: 100;
+    padding: 2px 3px;
+    color:#636466;
+    text-decoration: underline;
+}
+.faq_links li > a:hover {
+    color: #ed1c25;
+}
+.faq_anchors {
+    margin-top:2em;
+}
+.faq_question {
+    position: relative;
+    margin-top:-190px; padding:10px 5px 5px;
+    background:rgb(229,229,229); /* fallback */
+    background:rgba(229,229,229,0.6); background-clip: padding-box; -webkit-background-clip: padding-box;
+    border-top:190px solid transparent;
+    /* margin-top & border-top place the jump link in viewport after fixed-header */
+}
+.logged-out ~ .container .faq_question {
+    margin-top:-100px; border-top-width: 100px;
+}
+.faq_question:before {
+    display: block;
+    content: "";
+    position: absolute; top:0; left: 0; right: 0;
+    border-top:1px solid rgb(229,229,229);
+}
+.faq_question:target {
+    background:rgba(237,45,33,0.2); background-clip: padding-box; -webkit-background-clip: padding-box;
+    font-weight: bold;
+    text-shadow: 0 1px 0 rgba(255,255,255,0.8)
+}
+.faq_answer {
+    margin-bottom:1.75em; padding:5px;
+    background:#fff;
+}
+.faq_answer > a {position: relative; z-index: 100;}
+
 
 .big-input {
   font-size: 20px !important;

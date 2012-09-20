@@ -1,6 +1,31 @@
 Totsy-Magento Release Notes
 ===========================
 
+20120914
+--------
+* MGN-1045 : Fixing empty payment informations for orders when customer has used same credit card number with white spaces.
+
+20120913
+--------
+* Fixes warning/notices messages
+* MGN-1022 - Preventing display of categories/ages in event tile rollover if no category/age assigned
+* MGN-269 - Fixing Steelhouse errors
+* MGN-982 - removing error message text from billing and shipping forms
+* MGN-1007 - Styling invitation acceptance form
+* Moved the virtual coupon e-mail logic from the checkout model to the order model.
+* Cleaned up various PHP errors/warnings during checkout.
+* MGN-782 - Improving Edit Order, Create Order logic in Admin. It will result in fixing Products Stock inconsistency in DB
+* MGN-1017 - Check product stock quantity properly while creating New Order in Admin
+* Fixing Undefined Variables for PaymentFactory
+
+20120912
+--------
+* MGN-1013 - Fixing password reset form from email link 
+* fixing password revalidation issue on modal popup with registration accounts
+* Preventing placeholder text from getting submitted in IE browsers
+* MGN-883 Wrapping up pending items from orig Jira + refactoring/cleaning up template code, removing cruft markup and inline styles.
+* MGN-1024 Putting Monetate JS back in for M's continued dev integration efforts
+
 20120911
 --------
 * Adding shipping and returns CMS blocks for virtual and non virtual items

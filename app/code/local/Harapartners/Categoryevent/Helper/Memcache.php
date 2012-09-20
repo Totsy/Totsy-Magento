@@ -29,19 +29,7 @@ class Harapartners_Categoryevent_Helper_Memcache extends Mage_Core_Helper_Abstra
         }
         return $this->_memcache;
     }
-    
-    public function getIndexDataObject($forceRebuild = false){
-        $indexData = array();
-        $memcacheKey = 'DATA_' . Mage::app()->getStore()->getCode() . '_' . $this->_indexDataMemcacheKey;
 
-        $indexData = unserialize($this->_getMemcache()->load($memcacheKey));
-        if($forceRebuild || !$this->_validateIndexData($indexData)){
-            $indexData = $this->_getIndexDataFromDb();
-            $this->_getMemcache()->save(serialize($indexData), $memcacheKey, array(), $this->_indexDataLifeTime);
-        }
-        return new Varien_Object($indexData);
-    }
-    
     public function getTopNavDataObject(){
         $topNavData = array();
         $memcacheKey = 'DATA_' . Mage::app()->getStore()->getCode() . '_' . $this->_topNavDataMemcacheKey;
@@ -60,39 +48,6 @@ class Harapartners_Categoryevent_Helper_Memcache extends Mage_Core_Helper_Abstra
         }
         return new Varien_Object($topNavData);
     }
-    
-    
-    // ===== Internal processing ===== //
-    // ===== Index ===== //
-    protected function _getIndexDataFromDb(){
-        $indexData = array();
-        $defaultTimezone = date_default_timezone_get();
-        $mageTimezone = Mage::getStoreConfig(Mage_Core_Model_Locale::XML_PATH_DEFAULT_TIMEZONE);
-        date_default_timezone_set($mageTimezone);
-        $sortDate = now("Y-m-d");
-        $currentTime = now();
-        date_default_timezone_set($defaultTimezone);
-        $storeId = Harapartners_Service_Helper_Data::TOTSY_STORE_ID;
-        //$storeId = Mage::app()->getStore()->getId();
-        //$sortentry = Mage::getModel('categoryevent/sortentry')->loadByDate($sortDate, $storeId, false);
-        $sortentry = Mage::getModel('categoryevent/sortentry')->filterByCurrentTime($sortDate, $currentTime, $storeId);
-        
-        $indexData['toplive'] = json_decode($sortentry->getData('top_live_queue'), true);
-        $indexData['live'] = json_decode($sortentry->getData('live_queue'), true);
-        $indexData['upcoming'] = json_decode($sortentry->getData('upcoming_queue'), true);
-        return $indexData;
-    }
-    
-    protected function _validateIndexData($indexData){
-        if(!isset($indexData['toplive'])){
-            return false;
-        }
-        if(!isset($indexData['live'])){
-            return false;
-        }
-        return true;
-    }
-    
 
     // ===== Top Nav ===== //
     protected function _getTopNavDataFromDb(){
