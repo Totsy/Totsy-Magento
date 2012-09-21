@@ -3,7 +3,7 @@
  * 
  * @category Crown
  * @package Crown_Import
- * @since 1.0.0
+ * @since 1.0.1
  */
 class Crown_Import_Model_Urapidflow_Mysql4_Catalog_Product extends Unirgy_RapidFlow_Model_Mysql4_Catalog_Product {
 	
@@ -289,7 +289,7 @@ class Crown_Import_Model_Urapidflow_Mysql4_Catalog_Product extends Unirgy_RapidF
 	/**
 	 * Checks the attribute value to see if it has an invalid character.
 	 * @param mixed $value
-	 * @since 1.0.0
+	 * @since 1.0.1
 	 * @return boolean
 	 */
 	protected function _checkForInvalidCharacter($value) {
