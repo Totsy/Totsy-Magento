@@ -81,12 +81,10 @@ HpCheckout.prototype = {
         jQuery("#shipping\\:postcode").change()
     },
     switchPaymentMethod: function(payment_method) {
-        
         if (payment_method=="paypal_express") {
             jQuery("#cc_data").hide();
-        }
-    
-        //jQuery('[id^="payment_form_"]').hide();
+            jQuery().hide();
+        }        
         jQuery("#payment_form_" + payment_method).show();
     },
     switchAddress: function() {
@@ -149,6 +147,7 @@ HpCheckout.prototype = {
         b.ajaxRequest(e)
     },
     submit: function() {
+    
         if (!this.validate()) {
             return
         }
@@ -163,31 +162,34 @@ HpCheckout.prototype = {
                 }
             }
         });
-        
+                
         var a = this;
         var b = this.getFormData();
         b += "&updatePayment=true";
-        this.throbberOn();
+        this.throbberOn();        
+        
         jQuery.ajax({
             url: this.data.submitUrl,
             dataType: "json",
             type: "POST",
             data: b,
-            error: function() {
+            error: function(data) {
                 a.throbberOff();
                 a.renderErrorMessage("Please refresh the current page.")
             },
-            success: function(b) {
-                if (!b.status) {
+            success: function(b) {                            
+                if (!b.status) {                
                     window.location = a.data.successUrl;
                 } else {
                     if (b.message) {
                         a.renderErrorMessage(b.message);
                         a.throbberOff()
                     } else {
+                        //alert(this.data);
+                        //return false;
                         a.setBlocks(b.blocks);
                         a.throbberOff();
-                        a.renderBlocks()
+                        a.renderBlocks();
                     }
                 }
             }

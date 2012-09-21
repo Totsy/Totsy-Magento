@@ -9,7 +9,7 @@
 	
 	//extending validation JS to include validation for rules for cc types displayed with radio buttons
 	Validation.add(['validate-cc-type-radio', 'Credit card number does not match credit card type.', function(v, elm) {
-                // remove credit card number delimiters such as "-" and space
+                // remove credit cardf number delimiters such as "-" and space
                 elm.value = removeDelimiters(elm.value);
                 v         = removeDelimiters(v);
                 var ccType = $$('input:checked[type="radio"][name="payment[cc_type]"]').pluck('value');
@@ -82,7 +82,7 @@
         		 <?php endforeach ?>
         		 <?php $methods = $this->getLayout()->getBlock('hpcheckout.payment.methods')->getMethods();  ?> 
                  <?php if(count($methods)): ?>
-			    	<input type="radio" value="paypal_express" id="payment_method" name="payment[method]">
+			    	<input type="radio" value="paypal_express" id="paypal_payment" name="paypal_payment">
         		 	    <span title="Paypal Express" class="paypal"></span>
                  <?php foreach ($methods as $_method): $_code = $_method->getCode() ?>
         		 <?php if($this->getSelectedMethodCode()==$_code){ echo "checked"; } //echo $_code; ?>
@@ -239,6 +239,9 @@ jQuery( document ).ready( function($) {
     $('select#cybersource-use-card-method').change( function() {
     
         if( $( this ).val() == '' ) {
+            jQuery('#paypal_payment').attr("checked", false);
+            $("#payment_form_paymentfactory_tokenize").show();
+            jQuery("#cc_data").show();
             $newCardWrap.show();
             $newCardCtrls.removeAttr('disabled');
             $selectUIWraps.removeClass('disabled');
@@ -248,7 +251,8 @@ jQuery( document ).ready( function($) {
                 $(this).removeAttr('disabled');
                 $(this).val('');
             });
-        } else {	
+        } else { 
+            $("#payment_form_paypal_express").hide();           	
 			$newCardWrap.hide();
 			$newCardCtrls.attr( 'disabled', 'disabled' ); // disable new card controls
 			$selectUIWraps.addClass('disabled'); // 'disable' select UI wrappers
