@@ -55,8 +55,9 @@ $upcomingArray = json_decode($sortentry->getUpcomingQueue(), true);
                         $imgFile = BP.DS.'skin'.DS.'frontend'.DS.'enterprise'.DS.'harapartners'.DS.'images'.DS.'catalog'.DS.'product'.DS.'placeholder'.DS.'thumbnail.jpg';
                     }
                     ?>
-					<p class="event-name"><?php echo $up['name'] . "<br/> (" . date("m-d-Y H:i:s" , strtotime($up['event_start_date'])) .")";?></p>
-					<a class="event-link" href="<?php echo $this->getEventUrl($up)?>" target='_blank'><img src="<?php echo Mage::helper('service/image')->loadImageFile($imgFile)->resize(150,173); ?>" width="150px" height="173px" alt="" /></a>
+                    <p class="event-name"><?php echo $up['name'] ?><time datetime="<?php echo date('Y-m-d H:i:s', strtotime($up['event_start_date'])) ?>"><?php echo date('Y-m-d H:i:s', strtotime($up['event_start_date'])) ?></time></p>
+                    <img src="<?php echo Mage::helper('service/image')->loadImageFile($imgFile)->resize(150,173); ?>" width="150px" height="173px" alt="" />
+                    <a href="<?php echo $this->getEventUrl($up)?>" target="_blank" class="event-control btn-ctrl-view"><img src="/skin/adminhtml/default/enterprise/images/btn_go.gif" width="11" height="12" alt="View (in new window)"/></a>
 				</li>
 			<?php endforeach; ?>
 		</ul>

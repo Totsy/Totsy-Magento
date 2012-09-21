@@ -39,6 +39,7 @@ class Harapartners_Categoryevent_Model_Sortentry
     protected function _construct()
     {
         $this->_init('categoryevent/sortentry');
+        $this->setData('rebuilt', false);
     }
 
     protected function _beforeSave()
@@ -56,7 +57,7 @@ class Harapartners_Categoryevent_Model_Sortentry
         $storeId  = $this->getStoreId();
         $date     = date('Y-m-d', strtotime($this->getDate()));
         $cacheKey = "categoryevent_sortentry_{$storeId}_{$date}";
-        Mage::app()->getCache()->remove($cacheKey);
+        Mage::app()->getCache()->save(serialize($this->getData()), $cacheKey);
 
         parent::_beforeSave();
     }
@@ -82,9 +83,9 @@ class Harapartners_Categoryevent_Model_Sortentry
             // ensure that a record was loaded
             if (!$this->getId()) {
                 $this->setDate($date)->setStoreId($storeId)->rebuild();
+            } else {
+                $cache->save(serialize($this->getData()), $cacheKey);
             }
-
-            $cache->save(serialize($this->getData()), $cacheKey);
         }
 
         return $this;
@@ -92,6 +93,10 @@ class Harapartners_Categoryevent_Model_Sortentry
 
     public function rebuild()
     {
+        if ($this->getData('rebuilt') == true) {
+            return $this;
+        }
+
         $date    = $this->getDate();
         $storeId = $this->getStoreId();
 
@@ -111,21 +116,17 @@ class Harapartners_Categoryevent_Model_Sortentry
             $recentUpcoming = json_decode($recentSortentry->getUpcomingQueue(), true);
             $recentEvents = array_merge($recentLive, $recentUpcoming);
 
-            foreach ($recentEvents as $event) {
-                if (strtotime($event['event_start_date']) < strtotime($date) &&
-                    strtotime($event['event_end_date']) > strtotime($date)
-                ) {
+            foreach ($recentLive as $event) {
+                if (strtotime($event['event_start_date']) < strtotime($date)) { // is this event still live?
+                    Mage::log('copying live ' . $event['entity_id']);
                     $live[] = $this->_prepareEvent($event['entity_id']);
-                    $copiedEventIds[] = $event['entity_id'];
-                } else if (strtotime($event['event_end_date']) < strtotime($date) + self::DEFAULT_REBUILD_LIFETIME * self::EVENT_CATEGORY_DATE_RANGE) {
-                    $upcoming[] = $this->_prepareEvent($event['entity_id']);
                     $copiedEventIds[] = $event['entity_id'];
                 }
             }
 
             // add new live events since the date of the most recent sortentry
             $startDate = date('Y-m-d', strtotime($recentSortentry->getDate()));
-            $endDate   = date('Y-m-d', strtotime($date));
+            $endDate   = $this->calculateEndDate($date);
         } else {
             $startDate = $date;
             $endDate   = $this->calculateEndDate($date);
@@ -137,7 +138,7 @@ class Harapartners_Categoryevent_Model_Sortentry
         }
 
         $condEventDates = array(
-            array('attribute' => 'event_start_date', 'from' => $startDate . ' 00:00:00', 'to' => $endDate . ' 23:59:59', 'datetime' => true),
+            array('attribute' => 'event_start_date', 'to' => $endDate . ' 23:59:59', 'datetime' => true),
             array('attribute' => 'event_end_date', 'from' => $startDate . ' 00:00:00', 'to' => $endDate . ' 23:59:59', 'datetime' => true),
         );
         $newEvents = Mage::getModel('catalog/category')->getCollection()
@@ -160,7 +161,8 @@ class Harapartners_Categoryevent_Model_Sortentry
             }
         }
 
-        $this->setData('date', $date)
+        $this->setData('rebuilt', true)
+            ->setData('date', $date)
             ->setData('live_queue', json_encode($live))
             ->setData('upcoming_queue', json_encode($upcoming));
 
