@@ -31,6 +31,7 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Eitems extends TinyBrick_Order
 			$item = $order->getItemById($itemId);
 			if($data['remove'][$key]) {
 				$comment .= "Removed Item(SKU): " . $item->getSku() . "<br />";
+                Mage::getSingleton('cataloginventory/stock')->backItemQty($item->getProductId(),$item->getQtyOrdered());
 				$order->removeItem($itemId);
 			} else {
 				$oldArray = array('price'=>$item->getPrice(), 'discount'=>$item->getDiscountAmount(), 'qty'=>$item->getQtyOrdered());
@@ -59,9 +60,9 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Eitems extends TinyBrick_Order
 						$comment .= "Qty FROM: " . $oldArray['qty'] . " TO: " . $newArray['qty'] . "<br />";
 					}
 				}
-
 			}
 		}
+        Mage::getSingleton('cataloginventory/stock_status')->syncStatusWithStock($order);
 		if($comment != "") {
 			$comment = "Edited items:<br />" . $comment . "<br />";
 			return $comment;

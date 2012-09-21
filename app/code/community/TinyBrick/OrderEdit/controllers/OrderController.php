@@ -47,7 +47,7 @@ class TinyBrick_OrderEdit_OrderController extends Mage_Adminhtml_Controller_Acti
             
             $changes = array();
             $addressUpdated = true;
-         
+
             foreach($edits as $edit) {
                 if($edit['type']) {
                     if($edit['type'] == 'billing') {
@@ -190,11 +190,9 @@ class TinyBrick_OrderEdit_OrderController extends Mage_Adminhtml_Controller_Acti
             $return['price'] = round($product->getPrice(), 2);
         }
 
-        if($product->getManageStock()) {
-            $qty = $product->getQty();
-        } else {
-            $qty = 10;
-        }
+        $qty = (int) Mage::getModel('catalog/product')->load($product->getId())->getStockItem()->getQty();
+
+
         $select = "<select class='n-item-qty'>";
         $x = 1;
         while($x <= $qty) {

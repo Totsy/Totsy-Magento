@@ -29,21 +29,18 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Nitems extends TinyBrick_Order
 		$comment = "";
 		foreach($data['sku'] as $key => $sku) {
 			$qty = $data['qty'][$key];
-			
+
 			$product = Mage::getModel('catalog/product')->getCollection()
 				->addAttributeToFilter('sku', $sku)
 				->addAttributeToSelect('*')
 				->getFirstItem();
-            $itemAvailable = Mage::helper('orderedit')->checkItemAvailability($product, $qty);
-            if(!$itemAvailable) {
-                return false;
-            }
+
 			$quoteItem = Mage::getModel('sales/quote_item')->setProduct($product)
 				->setQuote(Mage::getModel('sales/quote')->load($order->getQuoteId()));
 			
 			$orderItem = Mage::getModel('sales/convert_quote')->itemToOrderItem($quoteItem)->setProduct($product);
 			$productPrice = $data['price'][$key];
-			
+
 			$orderItem->setPrice($productPrice);
 			$orderItem->setBasePrice($productPrice);
 			$orderItem->setBaseOriginalPrice($productPrice);
@@ -55,9 +52,13 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Nitems extends TinyBrick_Order
 				$orderItem->setDiscountAmount(0);
 			}
 			$orderItem->setOrderId($order->getId());
-			
+
 			$orderItem->setOrder($order);
 			$orderItem->save();
+
+            Mage::getSingleton('cataloginventory/stock')->registerItemSale($orderItem);
+            Mage::getSingleton('cataloginventory/stock_status')->syncStatusWithStock($order);
+
 			$order->addItem($orderItem);
 			$order->save();
 			$comment .= "Added item(SKU): " . $sku . "<br />";
