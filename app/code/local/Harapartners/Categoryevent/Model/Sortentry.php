@@ -39,7 +39,6 @@ class Harapartners_Categoryevent_Model_Sortentry
     protected function _construct()
     {
         $this->_init('categoryevent/sortentry');
-        $this->setData('rebuilt', false);
     }
 
     protected function _beforeSave()
@@ -83,8 +82,6 @@ class Harapartners_Categoryevent_Model_Sortentry
             // ensure that a record was loaded
             if (!$this->getId()) {
                 $this->setDate($date)->setStoreId($storeId)->rebuild();
-            } else {
-                $cache->save(serialize($this->getData()), $cacheKey);
             }
         }
 
@@ -93,10 +90,6 @@ class Harapartners_Categoryevent_Model_Sortentry
 
     public function rebuild()
     {
-        if ($this->getData('rebuilt') == true) {
-            return $this;
-        }
-
         $date    = $this->getDate();
         $storeId = $this->getStoreId();
 
@@ -118,7 +111,6 @@ class Harapartners_Categoryevent_Model_Sortentry
 
             foreach ($recentLive as $event) {
                 if (strtotime($event['event_start_date']) < strtotime($date)) { // is this event still live?
-                    Mage::log('copying live ' . $event['entity_id']);
                     $live[] = $this->_prepareEvent($event['entity_id']);
                     $copiedEventIds[] = $event['entity_id'];
                 }
@@ -161,8 +153,7 @@ class Harapartners_Categoryevent_Model_Sortentry
             }
         }
 
-        $this->setData('rebuilt', true)
-            ->setData('date', $date)
+        $this->setData('date', $date)
             ->setData('live_queue', json_encode($live))
             ->setData('upcoming_queue', json_encode($upcoming));
 
@@ -376,7 +367,7 @@ class Harapartners_Categoryevent_Model_Sortentry
                 }
         }
 
-        $this->rebuildSortCollection($currentDate, $storeId);
+        //$this->rebuildSortCollection($currentDate, $storeId);
         Mage::app()->getCacheInstance()->flush();
         Mage::app()->cleanCache();
 
@@ -418,7 +409,7 @@ class Harapartners_Categoryevent_Model_Sortentry
                 }
         }
 
-        $this->rebuildSortCollection($currentDate, $storeId);
+        //$this->rebuildSortCollection($currentDate, $storeId);
         Mage::app()->getCacheInstance()->flush();
         Mage::app()->cleanCache();
 

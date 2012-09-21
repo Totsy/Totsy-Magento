@@ -83,7 +83,9 @@ class Harapartners_Categoryevent_Adminhtml_SortController
 
         try {
             $sortentry = Mage::getModel('categoryevent/sortentry')->loadByDate($sortDate, $storeId);
-            $sortentry->rebuild();
+            if ($sortentry->getId()) {
+                $sortentry->rebuild();
+            }
             Mage::getSingleton('adminhtml/session')->setData("sortentry_$sortDate", $sortentry);
 
             $jsonResponse['status'] = 1;
