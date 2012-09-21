@@ -30,3 +30,9 @@ html {
     display: inline;
 }
 .events-grid .more .maxDiscount em:before {display: none;}
+
+/* FAQ */
+.faq_question {
+    background: none;
+    font-weight: bold;
+}

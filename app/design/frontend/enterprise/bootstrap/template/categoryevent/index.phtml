@@ -34,11 +34,11 @@
         $topArray = $indexDataObj->getData('toplive');
         $topArray = array(); //Harapartners, yang: "temporarily" block the top events
     }
-    if ( $indexDataObj->hasData('live') ){
-        $liveArray = $indexDataObj->getData('live');
+    if ( $indexDataObj->hasData('live_queue') ){
+        $liveArray = json_decode($indexDataObj->getData('live_queue'), true);
     }
-    if ( $indexDataObj->hasData('upcoming') ){
-        $upcomingArray = $indexDataObj->getData('upcoming');
+    if ( $indexDataObj->hasData('upcoming_queue') ){
+        $upcomingArray = json_decode($indexDataObj->getData('upcoming_queue'), true);
     }
 ?>
 <?php // include banner if it is enabled
@@ -52,7 +52,7 @@
 
 <div class="catalog-events-container">
     <div class="live-events-container">
-    
+
     <?php // Live Events ?>
     <?php if (!!$liveArray && !empty($liveArray)) : ?>
         <section id="events-live" class="events-grid">
@@ -68,7 +68,7 @@
                 <?php
                     $endcountRaw = strtotime($live['event_end_date']);
                     $endcount = date("F j, Y, G:i:s", $endcountRaw);
-                    $hasProduct = $this->hasProduct($live['entity_id']);
+                    $hasProduct = $this->countCategoryProducts($live['entity_id']);
                     $eventDepts = $live['department_label'];
                     $eventAges = $live['age_label'];
                     $maxDiscount = $live['max_discount_pct'];
@@ -91,26 +91,22 @@
                             <div class="more">
                                 <div class="maxDiscount"><em>up to <span><strong><?php echo $maxDiscount; ?>%</strong> off</span></em></div>
                                 <div class="more-content">
-                                    <?php if ( !empty($eventDepts) ) : ?>
-                                        <section class="labels container">
-                                            <h6>Categories:</h6>
-                                            <ul>
-                                            <?php foreach ($eventDepts as $eventDept) : ?>
-                                                <li><?php echo $eventDept; ?></li>
-                                            <?php endforeach; ?>
-                                            </ul>
-                                        </section>
-                                    <?php endif; ?>
-                                    <?php if ( !empty($eventAges) ) : ?>
-                                        <section class="labels container">
-                                            <h6>Ages:</h6>
-                                            <ul>
-                                            <?php foreach ($eventAges as $eventAge) : ?>
-                                                <li><?php echo $eventAge; ?></li>
-                                            <?php endforeach; ?>  
-                                            </ul>                                  
-                                        </section>
-                                    <?php endif; ?>
+                                    <section class="labels container">
+                                        <h6>Categories:</h6>
+                                        <ul>
+                                        <?php foreach ($eventDepts as $eventDept) : ?>
+                                            <li><?php echo $eventDept; ?></li>
+                                        <?php endforeach; ?>
+                                        </ul>
+                                    </section>
+                                    <section class="labels container">
+                                        <h6>Ages:</h6>
+                                        <ul>
+                                        <?php foreach ($eventAges as $eventAge) : ?>
+                                            <li><?php echo $eventAge; ?></li>
+                                        <?php endforeach; ?>  
+                                        </ul>                                  
+                                    </section>
                                     <p id="time1-<?php echo $timer ?>"></p>
                                     <span class="btn btn-primary">Shop Now!</span>
                                 </div>
