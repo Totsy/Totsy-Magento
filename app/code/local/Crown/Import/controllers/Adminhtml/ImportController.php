@@ -495,7 +495,7 @@ class Crown_Import_Adminhtml_ImportController extends Mage_Adminhtml_Controller_
 		} else {
 			try {
 				foreach ( $importIds as $importId ) {
-					$import = Mage::getModel ( 'import/importhistory' )->load ( $importId );
+					$import = Mage::getModel ( 'crownimport/importhistory' )->load ( $importId );
 					if ( $import->getUrapidflowProfileId() )
 						Mage::getModel('urapidflow/profile')->load($import->getUrapidflowProfileId())->delete();
 					if ( $import->getUrapidflowProfileIdProductExtra() )

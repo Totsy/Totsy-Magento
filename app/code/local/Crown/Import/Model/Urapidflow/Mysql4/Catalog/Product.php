@@ -249,26 +249,26 @@ class Crown_Import_Model_Urapidflow_Mysql4_Catalog_Product extends Unirgy_RapidF
 						}
 					}
 					
-					if ('name' == $k) {
-						Mage::log(mb_detect_encoding($newValue, "auto"), null, 'pickles.log');
-					}
-					
 					// Check for invalid characters
 					if ($selectable) {
 						if ($attr ['frontend_input'] == 'multiselect' && is_array ( $newValue )) {
 							$newValue = array_unique ( $newValue );
 						}
 						foreach ( ( array ) $newValue as $i => $v ) {
-							if (!$this->_checkForInvalidCharacter ( $v )){
+							try { 
+								$this->_checkForInvalidCharacter ( $v );
+							} catch (Exception $e ) {
 								$profile->addValue ( 'num_errors' );
-								$logger->error ( $this->__ ( "Invalid character found" ) );
+								$logger->error ( $this->__ ( $e->getMessage() ) );
 								$this->_valid [$sku] = false;
 							}
 						}
 					} else {
-						if (!$this->_checkForInvalidCharacter ( $newValue )){
+						try { 
+							$this->_checkForInvalidCharacter ( $newValue );
+						} catch (Exception $e ) {
 							$profile->addValue ( 'num_errors' );
-							$logger->error ( $this->__ ( "Invalid character found" ) );
+							$logger->error ( $this->__ ( $e->getMessage() ) );
 							$this->_valid [$sku] = false;
 						}
 					}
@@ -294,9 +294,11 @@ class Crown_Import_Model_Urapidflow_Mysql4_Catalog_Product extends Unirgy_RapidF
 	 */
 	protected function _checkForInvalidCharacter($value) {
 		$invalidCharacters = Mage::helper ( 'crownimport' )->getInvalidCharacters ();
+		$value = Mage::helper('crownimport/encoding')->toUTF8($value);
 		foreach ( $invalidCharacters as $invalidCharacter ) {
-			$pos = iconv_strpos($value, $invalidCharacter);
+			$pos = iconv_strpos($value, $invalidCharacter, null, 'UTF-8');
 			if ( false !== $pos ) {
+					throw new Exception("Invalid Character found");
 				return false;
 			}
 		}
