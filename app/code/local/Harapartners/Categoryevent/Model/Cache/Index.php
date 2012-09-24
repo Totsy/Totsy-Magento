@@ -80,10 +80,6 @@ class Harapartners_Categoryevent_Model_Cache_Index
                     $lifetime = $eventStart;
                 }
             }
-
-            if ($lifetime < 0) {
-                $lifetime = null;
-            }
         }
 
         return parent::_saveCache($data, $id, $tags, $lifetime);
