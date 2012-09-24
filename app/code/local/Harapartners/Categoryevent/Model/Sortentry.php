@@ -306,6 +306,40 @@ class Harapartners_Categoryevent_Model_Sortentry
         return $this;
     }
 
+    /**
+     * Adjust the queues (live & upcoming) to reflect the current date & time.
+     *
+     * @return Harapartners_Categoryevent_Model_Sortentry
+     */
+    public function adjustQueuesForCurrentTime()
+    {
+        $currentTime = Mage::helper('service')->getServerTime() / 1000;
+
+        $live     = json_decode($this->getData('live_queue'), true);
+        $upcoming = json_decode($this->getData('upcoming_queue'), true);
+
+        foreach ($live as $idx => $event) {
+            if (strtotime($event['event_start_date']) > $currentTime) {
+                // move this event to Upcoming
+                array_unshift($upcoming, $event);
+                unset($live[$idx]);
+            }
+        }
+
+        foreach ($upcoming as $idx => $event) {
+            if (strtotime($event['event_start_date']) < $currentTime) {
+                // move this event to Live
+                array_unshift($live, $event);
+                unset($upcoming[$idx]);
+            }
+        }
+
+        $this->setData('live_queue', json_encode($live))
+            ->setData('upcoming_queue', json_encode($upcoming));
+
+        return $this;
+    }
+
     //For move expired categories/events to a certain category
     public function cleanExpiredEvents( $revert = false ){
         //Get current clean time
