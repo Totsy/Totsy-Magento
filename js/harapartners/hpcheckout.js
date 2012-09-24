@@ -182,8 +182,6 @@ HpCheckout.prototype = {
                         a.renderErrorMessage(b.message);
                         a.throbberOff()
                     } else {
-                        //alert(this.data);
-                        //return false;
                         a.setBlocks(b.blocks);
                         a.throbberOff();
                         a.renderBlocks();
