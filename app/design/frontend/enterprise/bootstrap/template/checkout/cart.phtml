@@ -50,7 +50,7 @@
         	        <button type="button" title="<?php echo $this->__('Continue Shopping') ?>" class="button btn-continue btn" onclick="setLocation('<?php echo $this->getContinueShoppingUrl() ?>')"><?php echo $this->__('Continue Shopping') ?></button>
         	    <?php endif; ?>
         	    </div>
-                <div class="pull-right">
+                <div class="btn-cart-checkout">
         	    <?php foreach ($this->getMethods('top_methods') as $method): ?>
         	        <?php if ($methodHtml = $this->getMethodHtml($method)): ?>
         	        	<?php echo $methodHtml; ?>
@@ -113,7 +113,7 @@
         	        <button type="button" title="<?php echo $this->__('Continue Shopping') ?>" class="button btn-continue btn" onclick="setLocation('<?php echo $this->getContinueShoppingUrl() ?>')"><?php echo $this->__('Continue Shopping') ?></button>
         	    <?php endif; ?>
         	    </div>
-                <div class="pull-right">
+                <div class="btn-cart-checkout">
         	    <?php foreach ($this->getMethods('top_methods') as $method): ?>
         	        <?php if ($methodHtml = $this->getMethodHtml($method)): ?>
         	        	<?php echo $methodHtml; ?>

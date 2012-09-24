@@ -824,6 +824,12 @@ body.catalog-category-view .thumbnails > li {position: relative;}
 .cart-coupon {
     margin:0px !important;
 }
+
+.btn-cart-checkout {
+    float:right;
+    width: 330px !important;
+}
+
 .cart .savings {
     float: right;
     width:320px;
