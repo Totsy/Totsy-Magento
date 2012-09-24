@@ -53,6 +53,11 @@ class Harapartners_Categoryevent_Adminhtml_SortController
                 Mage::getSingleton('adminhtml/session')->setData("sortentry_$sortDate", $sortentry);
             }
 
+            // wipe the cache entry for the homepage events block
+            Mage::app()->getCacheInstance()->clean(
+                Harapartners_Categoryevent_Model_Cache_Index::CACHE_TAG_PREFIX
+            );
+
             $jsonResponse['status'] = 1;
             $jsonResponse['error_message'] = '';
         } catch (Exception $e) {
@@ -83,7 +88,9 @@ class Harapartners_Categoryevent_Adminhtml_SortController
 
         try {
             $sortentry = Mage::getModel('categoryevent/sortentry')->loadByDate($sortDate, $storeId);
-            $sortentry->rebuild();
+            if ($sortentry->getId()) {
+                $sortentry->rebuild();
+            }
             Mage::getSingleton('adminhtml/session')->setData("sortentry_$sortDate", $sortentry);
 
             $jsonResponse['status'] = 1;
