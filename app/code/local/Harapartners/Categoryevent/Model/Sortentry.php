@@ -97,9 +97,10 @@ class Harapartners_Categoryevent_Model_Sortentry
 
             foreach ($recentLive as $event) {
                 if (strtotime($event['event_start_date']) < strtotime($date) &&
-                    strtotime($event['event_end_date']) > strtotime($date)
+                    strtotime($event['event_end_date']) > strtotime($date) &&
+                    $preparedEvent = $this->_prepareEvent($event['entity_id'])
                 ) {
-                    $live[] = $this->_prepareEvent($event['entity_id']);
+                    $live[] = $preparedEvent;
                     $copiedEventIds[] = $event['entity_id'];
                 }
             }
@@ -127,6 +128,10 @@ class Harapartners_Categoryevent_Model_Sortentry
 
         foreach($newEvents as $event) {
             $event = $this->_prepareEvent($event->getId());
+            if ($event === false) {
+                continue;
+            }
+
             if (strtotime($event['event_start_date']) < strtotime($date) + 86400) {
                 array_unshift($live, $event);
             } else {
@@ -155,6 +160,10 @@ class Harapartners_Categoryevent_Model_Sortentry
             ->addAttributeToSelect('ages')
             ->addAttributeToSelect('price')
             ->addAttributeToSelect('special_price');
+
+        if (!$event['is_active']) {
+            return false;
+        }
 
         $event['department'] = array();
         $event['age'] = array();
@@ -302,6 +311,40 @@ class Harapartners_Categoryevent_Model_Sortentry
 
         $this->setData('live_queue', json_encode($updatedLive))
             ->setData('upcoming_queue', json_encode($updatedUpcoming));
+
+        return $this;
+    }
+
+    /**
+     * Adjust the queues (live & upcoming) to reflect the current date & time.
+     *
+     * @return Harapartners_Categoryevent_Model_Sortentry
+     */
+    public function adjustQueuesForCurrentTime()
+    {
+        $currentTime = Mage::helper('service')->getServerTime() / 1000;
+
+        $live     = json_decode($this->getData('live_queue'), true);
+        $upcoming = json_decode($this->getData('upcoming_queue'), true);
+
+        foreach ($live as $idx => $event) {
+            if (strtotime($event['event_start_date']) > $currentTime) {
+                // move this event to Upcoming
+                array_unshift($upcoming, $event);
+                unset($live[$idx]);
+            }
+        }
+
+        foreach ($upcoming as $idx => $event) {
+            if (strtotime($event['event_start_date']) < $currentTime) {
+                // move this event to Live
+                array_unshift($live, $event);
+                unset($upcoming[$idx]);
+            }
+        }
+
+        $this->setData('live_queue', json_encode($live))
+            ->setData('upcoming_queue', json_encode($upcoming));
 
         return $this;
     }
