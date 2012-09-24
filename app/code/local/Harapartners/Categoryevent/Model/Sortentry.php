@@ -97,9 +97,10 @@ class Harapartners_Categoryevent_Model_Sortentry
 
             foreach ($recentLive as $event) {
                 if (strtotime($event['event_start_date']) < strtotime($date) &&
-                    strtotime($event['event_end_date']) > strtotime($date)
+                    strtotime($event['event_end_date']) > strtotime($date) &&
+                    $preparedEvent = $this->_prepareEvent($event['entity_id'])
                 ) {
-                    $live[] = $this->_prepareEvent($event['entity_id']);
+                    $live[] = $preparedEvent;
                     $copiedEventIds[] = $event['entity_id'];
                 }
             }
@@ -127,6 +128,10 @@ class Harapartners_Categoryevent_Model_Sortentry
 
         foreach($newEvents as $event) {
             $event = $this->_prepareEvent($event->getId());
+            if ($event === false) {
+                continue;
+            }
+
             if (strtotime($event['event_start_date']) < strtotime($date) + 86400) {
                 array_unshift($live, $event);
             } else {
@@ -155,6 +160,10 @@ class Harapartners_Categoryevent_Model_Sortentry
             ->addAttributeToSelect('ages')
             ->addAttributeToSelect('price')
             ->addAttributeToSelect('special_price');
+
+        if (!$event['is_active']) {
+            return false;
+        }
 
         $event['department'] = array();
         $event['age'] = array();
