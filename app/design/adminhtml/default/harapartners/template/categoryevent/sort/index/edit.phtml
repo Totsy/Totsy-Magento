@@ -55,8 +55,9 @@ $upcomingArray = json_decode($sortentry->getUpcomingQueue(), true);
                         $imgFile = BP.DS.'skin'.DS.'frontend'.DS.'enterprise'.DS.'harapartners'.DS.'images'.DS.'catalog'.DS.'product'.DS.'placeholder'.DS.'thumbnail.jpg';
                     }
                     ?>
-					<p class="event-name"><?php echo $up['name'] . "<br/> (" . date("m-d-Y H:i:s" , strtotime($up['event_start_date'])) .")";?></p>
-					<a class="event-link" href="<?php echo $this->getEventUrl($up)?>" target='_blank'><img src="<?php echo Mage::helper('service/image')->loadImageFile($imgFile)->resize(150,173); ?>" width="150px" height="173px" alt="" /></a>
+                    <p class="event-name"><?php echo $up['name'] ?><time datetime="<?php echo date('Y-m-d H:i:s', strtotime($up['event_start_date'])) ?>"><?php echo date('Y-m-d H:i:s', strtotime($up['event_start_date'])) ?></time></p>
+                    <img src="<?php echo Mage::helper('service/image')->loadImageFile($imgFile)->resize(150,173); ?>" width="150px" height="173px" alt="" />
+                    <a href="<?php echo $this->getEventUrl($up)?>" target="_blank" class="event-control btn-ctrl-view"><img src="/skin/adminhtml/default/enterprise/images/btn_go.gif" width="11" height="12" alt="View (in new window)"/></a>
 				</li>
 			<?php endforeach; ?>
 		</ul>
@@ -88,41 +89,28 @@ $upcomingArray = json_decode($sortentry->getUpcomingQueue(), true);
 		jQuery( "#sortable2" ).disableSelection();
 	});
 
-	function saveOrderSubmit(){
-		var sortformkey = '<?php echo $this->getFormKey(); ?>';
-		jQuery.ajax({
-			type: 'POST',
-			url: "<?php echo $this->getSortSavePostUrl(); ?>",
-			data: "&sortdate="+sortdate+"&storeid="+storeid+"&"+liveorder+"&"+uporder+"&form_key="+sortformkey,
-			dataType: "json",
-			success: function(jsonResponse){
-				if(jsonResponse.status){
-					alert('Sort Order Saved');
-					jQuery("#sort-type-submit").click();
-				}else {
-					alert(jsonResponse.error_message);
-				}
-			}
-		});
-	}
+    function saveOrderSubmit(){
+        var sortformkey = '<?php echo $this->getFormKey(); ?>';
 
-	function rebuildSubmit(){
-		var sortformkey = '<?php echo $this->getFormKey(); ?>';
-		jQuery.ajax({
-			type: 'POST',
-			url: "<?php echo $this->getSortRebuildPostUrl(); ?>",
-			data: "&sortdate="+sortdate+"&storeid="+storeid+"&"+liveorder+"&"+uporder+"&form_key="+sortformkey,
-			dataType: "json",
-			success: function(jsonResponse){
-				if(jsonResponse.status){
-					alert('Sort Rebuild Completed');
-					jQuery("#sort-type-submit").click();
-				}else {
-					alert(jsonResponse.error_message);
-				}
-			}
-		});
-	}
+        var result = new Ajax.Request("<?php echo $this->getSortSavePostUrl(); ?>", {
+            parameters: "sortdate="+sortdate+"&storeid="+storeid+"&"+liveorder+"&"+uporder+"&form_key="+sortformkey,
+            onSuccess: function() {
+                alert("Sort order saved.");
+            }
+        });
+    }
+
+    function rebuildSubmit(){
+        var sortformkey = '<?php echo $this->getFormKey(); ?>';
+
+        var result = new Ajax.Request("<?php echo $this->getSortRebuildPostUrl(); ?>", {
+            parameters: "sortdate="+sortdate+"&storeid="+storeid+"&"+liveorder+"&"+uporder+"&form_key="+sortformkey,
+            onSuccess: function() {
+                alert("Sort order has been rebuilt.");
+                jQuery("#sort-type-submit").click();
+            }
+        });
+    }
 
 	function changeOrder(events) {
 		events.sort(function(left,right){

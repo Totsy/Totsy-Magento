@@ -1,6 +1,27 @@
 Totsy-Magento Release Notes
 ===========================
 
+20120921
+--------
+* MGN-1006/MGN-1056 - Fixing FAQ anchors/answers to display properly in viewport, styling the FAQ links, refactored CMS code (that last part is in admin/DB)
+* MGN-1064 - Better domain/query_string handling
+* MGN-1063 - Tax not charging properly for each product (during invoice)
+* MGN-1058 - Added UPC field to the Dotcom purchase order XML.
+* Removing all fulfillment error log entries associated with an order when the order is sent for fulfillment, or otherwise completed.
+* Tweaked the date ranges used in rebuilding sort entries.
+* Added Totsy_Akamai module with interface to the Akamai CCU for issuing content purge requests.
+* Refactored strings in class Totsy_Akamai_Helper_Service_Ccu to declarations at the top.
+* Renamed Totsy_Akamai to Totsy_Cdn, and added an interface for CDNs for flexibility.
+* Finished up the Totsy_Cdn Akamai purge request functionality, to accept the purge type and inspect the SOAP response upon completion.
+* Saving stock item records during inventory reindex, so that stock tables stay in sync.
+* Rebuilt the Categoryevent Sortentry model and the admin sort controller from the ground up, and integrated Akamai URL purging on sort saves.
+* Removed calls to the CDN purge request, to disable Akamai CCU integration.
+* Adding back the details while item out of stock during checkout.
+
+20120920
+--------
+* Disabling the cache subprocessors from appending url params to the cache id.
+
 20120914
 --------
 * MGN-1045 : Fixing empty payment informations for orders when customer has used same credit card number with white spaces.
