@@ -320,12 +320,17 @@ XML;
                 $size = '<size>' . substr($value, 0, 5) . '</size>';
             }
 
+            $upc = '<upc xsi:nil="true" />';
+            if ($value = $product->getUpc()) {
+                $upc = "<upc>$value</upc>"; // no need to limit string length here
+            }
+
             $xml .= <<<XML
                     <item>
                         <sku><![CDATA[$productSku]]></sku>
                         <description><![CDATA[$name]]></description>
                         <quantity>$qty</quantity>
-                        <upc xsi:nil="true" />
+                        $upc
                         <weight>{$product->getWeight()}</weight>
                         <cost xsi:nil="true" />
                         <price xsi:nil="true" />
@@ -356,6 +361,7 @@ XML;
             </purchase_order>
         </purchase_orders>
 XML;
+
         $response = Mage::helper('fulfillmentfactory/dotcom')->submitPurchaseOrders($xml);
 
         return $response;
