@@ -161,6 +161,14 @@ $orderStoreDate = $this->formatDate($_order->getCreatedAtStoreDate(), 'medium', 
         <div class="entry-edit-head">
             <h4 class="icon-head head-billing-address"><?php echo Mage::helper('sales')->__('Billing Address') ?></h4>
         </div>
+        <?php if ($this->customerHasAddresses()): ?>
+        <li class="wide">
+            <label for="billing-address-select"><?php echo $this->__('Select a billing address from your address book or enter a new address.') ?></label>
+            <div class="input-box">
+                <?php echo $this->getAddressesHtmlSelect('billing') ?>
+            </div>
+        </li>
+        <?php endif; ?>
         <fieldset id="billing-static">
             <address id="billing-static-text"><?php echo $_order->getBillingAddress()->getFormated(true); ?>
             </address>

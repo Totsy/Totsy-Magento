@@ -20,6 +20,7 @@
                     <widget_grid_column_renderer_action>Totsy_Adminhtml_Block_Widget_Grid_Column_Renderer_Action</widget_grid_column_renderer_action>
                     <sales_order_edit_billing_method_form>Totsy_Adminhtml_Block_Sales_Order_Edit_Billing_Method_Form</sales_order_edit_billing_method_form>
                     <sales_order_view>Totsy_Adminhtml_Block_Sales_Order_View</sales_order_view>
+                    <sales_order_view_edit>Totsy_Adminhtml_Block_Sales_Order_View_Edit</sales_order_view_edit>
                 </rewrite>
             </adminhtml>
         </blocks>
