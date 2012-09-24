@@ -86,6 +86,7 @@ class TinyBrick_OrderEdit_OrderController extends Mage_Adminhtml_Controller_Acti
                 }
             }
             $order->collectTotals()->save();
+            Mage::getSingleton('cataloginventory/stock_status')->syncStatusWithStock($order);
             $postTotal = $order->getGrandTotal();
             if(count($msgs) < 1) {
                 //auth for more if the total has increased and configured to do so
@@ -191,7 +192,9 @@ class TinyBrick_OrderEdit_OrderController extends Mage_Adminhtml_Controller_Acti
         }
 
         $qty = (int) Mage::getModel('catalog/product')->load($product->getId())->getStockItem()->getQty();
-
+        if($qty>9) {
+            $qty = 9;
+        }
 
         $select = "<select class='n-item-qty'>";
         $x = 1;

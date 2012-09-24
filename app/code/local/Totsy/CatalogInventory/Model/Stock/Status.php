@@ -9,7 +9,8 @@
 
 class Totsy_CatalogInventory_Model_Stock_Status extends Mage_CatalogInventory_Model_Stock_Status {
 
-    public function syncStatusWithStock($order){
+    public function syncStatusWithStock($order)
+    {
         //Sync Item Stock with Item Stock Status
         foreach($order->getItemsCollection() as $item) {
             $indexerStock = Mage::getModel('cataloginventory/stock_status');

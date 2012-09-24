@@ -47,6 +47,13 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Eitems extends TinyBrick_Order
 					$item->setQtyOrdered($data['qty'][$key]);
 				}
 				$item->save();
+                if((int)$oldArray['qty'] > (int)$data['qty'][$key]) {
+                    $returnedQuantity = ((int)$oldArray['qty'] - (int)$data['qty'][$key]);
+                    Mage::getSingleton('cataloginventory/stock')->backItemQty($item->getProductId(),$returnedQuantity);
+                } else {
+                    Mage::getSingleton('cataloginventory/stock')->backItemQty($item->getProductId(),(int)$oldArray['qty']);
+                    Mage::getSingleton('cataloginventory/stock')->registerItemSale($item);
+                }
 				$newArray = array('price'=>$item->getPrice(), 'discount'=>$item->getDiscountAmount(), 'qty'=>$item->getQtyOrdered());
 				if($newArray['price'] != $oldArray['price'] || $newArray['discount'] != $oldArray['discount'] || $newArray['qty'] != $oldArray['qty']) {
 					$comment = "Edited item " . $item->getSku() . "<br />";
@@ -62,7 +69,6 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Eitems extends TinyBrick_Order
 				}
 			}
 		}
-        Mage::getSingleton('cataloginventory/stock_status')->syncStatusWithStock($order);
 		if($comment != "") {
 			$comment = "Edited items:<br />" . $comment . "<br />";
 			return $comment;

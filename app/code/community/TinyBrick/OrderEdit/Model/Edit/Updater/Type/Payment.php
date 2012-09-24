@@ -33,7 +33,7 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Payment extends TinyBrick_Orde
                 if(!$payment) {
                     return false;
                 } else {
-                	$savingNewCreditCard = false;
+                    $savingNewCreditCard = false;
                 }
             }
             if($savingNewCreditCard) {
@@ -42,8 +42,8 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Payment extends TinyBrick_Orde
             }
             $this->replacePaymentInformation($order, $payment);
             $this->makeOrderReadyToBeProcessed($order);
-            $virtualproductcoupon = Mage::getModel('promotionfactory/virtualproductcoupon');
-            $virtualproductcoupon->openVirtualProductCouponInOrder($order);
+            $virtualProductCoupon = Mage::getModel('promotionfactory/virtualproductcoupon');
+            $virtualProductCoupon->openVirtualProductCouponInOrder($order);
         } catch(Exception $e){
             return "Error updating payment informations : ".$e->getMessage();
         }

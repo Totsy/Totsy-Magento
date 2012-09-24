@@ -56,11 +56,11 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Nitems extends TinyBrick_Order
 			$orderItem->setOrder($order);
 			$orderItem->save();
 
-            Mage::getSingleton('cataloginventory/stock')->registerItemSale($orderItem);
-            Mage::getSingleton('cataloginventory/stock_status')->syncStatusWithStock($order);
-
 			$order->addItem($orderItem);
 			$order->save();
+
+            Mage::getSingleton('cataloginventory/stock')->registerItemSale($orderItem);
+
 			$comment .= "Added item(SKU): " . $sku . "<br />";
 		}
 		if($comment != "") {
