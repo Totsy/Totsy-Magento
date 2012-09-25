@@ -80,8 +80,12 @@ class Harapartners_Categoryevent_Model_Cache_Index
                     $lifetime = $eventStart;
                 }
             }
+
+            Mage::log("Calculated index block cache lifetime at $lifetime", Zend_Log::DEBUG, 'index_block_cache.log');
+            $lifetime = null;
         }
 
         return parent::_saveCache($data, $id, $tags, $lifetime);
     }
 }
+
