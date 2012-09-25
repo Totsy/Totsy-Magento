@@ -231,44 +231,48 @@
 // disable billing address form controls for saved credit card
 jQuery( document ).ready( function($) {
 	// cache jQuery objects
-	var $billAddySelect = $("#billing-address-select");
-	var $newCardWrap = $('.use-new-card-wrapper');
-	var $newCardCtrls = $( 'input, select', '.use-new-card-wrapper' );
-	var $selectUIWraps = $('.totsy-selective-input-box', '#hpcheckout-billing-wrapper');
-	var $billFormInputs = $('#hpcheckout-billing-form :input');
-    $('select#cybersource-use-card-method').change( function() {
-    
+	var billAddySelect = jQuery("#billing-address-select");
+	var newCardWrap = jQuery('.use-new-card-wrapper');
+	//var newCardCtrls = jQuery( 'input, select', '.use-new-card-wrapper' );
+	var selectUIWraps = jQuery('.totsy-selective-input-box', '#hpcheckout-billing-wrapper');
+	var billFormInputs = jQuery('#hpcheckout-billing-form :input');
+    jQuery('#cybersource-use-card-method').change( function() {    
         if( $( this ).val() == '' ) {
             jQuery('#paypal_payment').attr("checked", false);
-            $("#payment_form_paymentfactory_tokenize").show();
+            
+            //if(jQuery("#payment_form_paypal_express").length > 0) {
+                //jQuery("#payment_form_paypal_express").show();           	
+            //}
             jQuery("#cc_data").show();
-            $newCardWrap.show();
-            $newCardCtrls.removeAttr('disabled');
-            $selectUIWraps.removeClass('disabled');
-            $billAddySelect.removeAttr('disabled');
+            newCardWrap.show();
+            //newCardCtrls.removeAttr('disabled');
+            selectUIWraps.removeClass('disabled');
+            billAddySelect.removeAttr('disabled');
             //Enable Billing Inputs if credit card not selected
-            $billFormInputs.each(function(i) {
-                $(this).removeAttr('disabled');
-                $(this).val('');
+            billFormInputs.each(function(i) {
+                jQuery(this).removeAttr('disabled');
+                jQuery(this).val('');
             });
         } else { 
-            $("#payment_form_paypal_express").hide();           	
-			$newCardWrap.hide();
-			$newCardCtrls.attr( 'disabled', 'disabled' ); // disable new card controls
-			$selectUIWraps.addClass('disabled'); // 'disable' select UI wrappers
+            if(jQuery("#payment_form_paypal_express").length > 0){
+                jQuery("#payment_form_paypal_express").hide();           	
+            }
+			newCardWrap.hide();
+			//newCardCtrls.attr( 'disabled', 'disabled' ); // disable new card controls
+			selectUIWraps.addClass('disabled'); // 'disable' select UI wrappers
 			
-			if($("#address_" + $( this ).val()).val()) {
-			    $billAddySelect.val($("#address_" + $( this ).val()).val()).change();
+			if(jQuery("#address_" + jQuery( this ).val()).val()) {
+			    billAddySelect.val(jQuery("#address_" + $( this ).val()).val()).change();
 			    //Block Billing Inputs if credit card selected
-			    $billFormInputs.each(function(i) {
-			        if($(this).attr('id') != 'button_ship_to') {
-			            $(this).attr('disabled','disabled');
+			    billFormInputs.each(function(i) {
+			        if(jQuery(this).attr('id') != 'button_ship_to') {
+			            jQuery(this).attr('disabled','disabled');
 			        }
 			    });
-			    $billAddySelect.attr('disabled','disabled');
+			    billAddySelect.attr('disabled','disabled');
 			} else {
-			    $billAddySelect.removeAttr('disabled');
-			    $billFormInputs.each(function(i) {
+			    billAddySelect.removeAttr('disabled');
+			    billFormInputs.each(function(i) {
 			        $(this).removeAttr('disabled');
 			    });
 			}

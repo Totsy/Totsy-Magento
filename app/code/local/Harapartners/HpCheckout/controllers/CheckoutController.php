@@ -52,8 +52,10 @@ class Harapartners_HpCheckout_CheckoutController extends Mage_Checkout_Controlle
         try {
             $blocksSuccessFlag = true;
             $postData = $this->getRequest()->getPost();
+            
             $jsonArray = $this->_getBlocksArray( $postData, true );
             $result[ 'blocks' ] = $jsonArray;
+            
             $this->_getHpCheckout()->getQuote()->setData('billing_selected_by_customer', $postData['billing']['selected']);
             foreach( $jsonArray as $block ) {
                 if(isset($block['status']) && $block['status']) {
