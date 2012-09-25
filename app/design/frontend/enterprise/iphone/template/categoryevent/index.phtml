@@ -36,12 +36,12 @@
 		$topArray = $indexDataObj->getData('toplive');
 		$topArray = array(); //Harapartners, yang: temploary block the top events
 	}
-	if( $indexDataObj->hasData('live') ){
-		$liveArray = $indexDataObj->getData('live');
-	}
-	if( $indexDataObj->hasData('upcoming') ){
-		$upcomingArray = $indexDataObj->getData('upcoming');
-	}
+    if ( $indexDataObj->hasData('live_queue') ){
+        $liveArray = json_decode($indexDataObj->getData('live_queue'), true);
+    }
+    if ( $indexDataObj->hasData('upcoming_queue') ){
+        $upcomingArray = json_decode($indexDataObj->getData('upcoming_queue'), true);
+    }
 ?>
 
 
@@ -75,46 +75,11 @@
 	</form>
 	<div class="live-events-box">
 		<ul class="live-events-container">
-			<?php foreach ($topArray as $top):?>
-			<?php 
-				$endcountRaw = strtotime($top['event_end_date']);
-				$endcount = date("F j, Y, G:i:s", $endcountRaw);
-				$imgFile = BP.DS.'media'.DS.'catalog'.DS.'category'.DS.$top['thumbnail'];
-			?>
-			<li class="catalog-top-event ui-btn-up-c">
-				<div class="ui-btn-text">	
-					<a class="event-link" href="<?php echo Mage::getBaseUrl().$top['url_path']; ?>">
-						<img src="<?php echo Mage::helper('service/image')->loadImageFile($imgFile)->resize(80,92); ?>" width="80px" height="80px" alt="" ></img>
-						<h3 class="event-name"><?php echo $top['name'];?></h3>
-						<p id="time1-top-<?php echo $timer ?>"></p>					 
-						<script type="text/javascript">
-							jQuery("#time1-top-<?php echo $timer ?>").countdown({
-								//date: "12 10, 2011 16:11", //Counting TO a date
-								date: "<?php echo $endcount; ?>", //Counting TO a date
-								htmlTemplate: "<span>Ends in</span> %{d} <span class=\"cd-time\">Days</span> %{h}<span class=\"cd-time\">:</span>%{m}<span class=\"cd-time\">:</span>%{s}<span class=\"cd-time\"></span>",
-				
-								onChange: function( event, timer ){
-								},
-								onComplete: function( event ){										
-									jQuery(this).html("Completed");
-								},
-								leadingZero: true,
-								direction: "down"
-							});
-						</script>
-						<span class="ui-icon ui-icon-arrow-r ui-icon-shadow hp-ui-icon-right "></span>
-						<div class="clear"></div>
-					</a>
-				</div>	
-			</li>	
-			<?php $timer++;?>		
-			<?php endforeach;?>
-	
 			<?php foreach ($liveArray as $live):?>
-			<?php 
+			<?php
 				$endcountRaw = strtotime($live['event_end_date']);
 				$endcount = date("F j, Y, G:i:s", $endcountRaw);
-				$hasProduct = $this->hasProduct($live['entity_id']);
+				$hasProduct = $this->countCategoryProducts($live['entity_id']);
 				$imgFile = BP.DS.'media'.DS.'catalog'.DS.'category'.DS.$live['thumbnail'];
 			?>
 			<?php if ($hasProduct):?>

@@ -20,7 +20,9 @@ class Harapartners_Categoryevent_Block_Index_Index
 {
     public function getIndexDataObject()
     {
-        return Mage::getModel('categoryevent/sortentry')->loadCurrent();
+        return Mage::getModel('categoryevent/sortentry')
+            ->loadCurrent()
+            ->adjustQueuesForCurrentTime();
     }
 
     /**
