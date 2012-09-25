@@ -55,7 +55,7 @@ class Harapartners_Categoryevent_Adminhtml_SortController
 
             // wipe the cache entry for the homepage events block
             Mage::app()->getCacheInstance()->clean(
-                Harapartners_Categoryevent_Model_Cache_Index::CACHE_TAG_PREFIX
+                Harapartners_Categoryevent_Model_Cache_Index::CACHE_TAG
             );
 
             $jsonResponse['status'] = 1;
