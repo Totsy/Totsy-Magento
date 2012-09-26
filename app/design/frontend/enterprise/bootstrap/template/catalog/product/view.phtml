@@ -37,13 +37,9 @@ $_helper = $this->helper('catalog/output');
 $_product = $this->getProduct();
 $_category = "";
 
-//Harapartners, Jun, in the controller we will guarantee the current categor must exists, if not we redirect
-if (!Mage::registry('current_category')){	
-		$_categories = $_product->getCategoryIds();
-		$_category = Mage::getModel( 'catalog/category' )->load( $_categories[1] );
-	} else {		
-		$_category  = Mage::registry('current_category');
-	}
+$_categories = $_product->getCategoryIds();
+$_category = Mage::getModel('catalog/category')->load(end($_categories));
+
 ?>
 <style>
 .old-price {display:none;}
