@@ -117,8 +117,8 @@ class Harapartners_Categoryevent_Model_Sortentry
             $recentLive = json_decode($recentSortentry->getLiveQueue(), true);
 
             foreach ($recentLive as $event) {
-                if (strtotime($event['event_start_date']) < strtotime($date) &&
-                    strtotime($event['event_end_date']) > strtotime($date) &&
+                if ((strtotime($event['event_start_date']) < strtotime($date) ||
+                    strtotime($event['event_end_date']) > strtotime($date)) &&
                     $preparedEvent = $this->_prepareEvent($event['entity_id'])
                 ) {
                     $live[] = $preparedEvent;
