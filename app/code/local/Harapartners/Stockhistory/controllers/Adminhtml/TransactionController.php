@@ -36,19 +36,19 @@ class Harapartners_Stockhistory_Adminhtml_TransactionController extends Mage_Adm
     
     public function newAmendmentByPoAction() {
         $poId = $this->getRequest()->getParam('po_id');
-        $poOjbect = Mage::getModel('stockhistory/purchaseorder')->load($poId);
+        $poObject = Mage::getModel('stockhistory/purchaseorder')->load($poId);
         
-        if(!$poOjbect || !$poOjbect->getId()){
+        if(!$poObject || !$poObject->getId()){
             $this->_getSession()->addError('Invalid Purchase Order.');
             $this->_redirect('*/adminhtml_purchaseorder/edit', array('id' => $poId));
             return;
         }
         
         $prepopulateData = array(
-            'vendor_id'        => $poOjbect->getVendorId(),
-            'vendor_code'    => $poOjbect->getVendorCode(),
-            'po_id'            => $poOjbect->getId(),
-            'category_id'    => $poOjbect->getCategoryId(),    
+            'vendor_id'        => $poObject->getVendorId(),
+            'vendor_code'    => $poObject->getVendorCode(),
+            'po_id'            => $poObject->getId(),
+            'category_id'    => $poObject->getCategoryId(),    
             'action_type'     => Harapartners_Stockhistory_Model_Transaction::ACTION_TYPE_AMENDMENT
         );
         
@@ -86,23 +86,24 @@ class Harapartners_Stockhistory_Adminhtml_TransactionController extends Mage_Adm
     
     public function postBatchAmendmentAction() {
         $poId = $this->getRequest()->getParam('po_id');
-        $poOjbect = Mage::getModel('stockhistory/purchaseorder')->load($poId);
+        $poObject = Mage::getModel('stockhistory/purchaseorder')->load($poId);
         
-        if(!$poOjbect || !$poOjbect->getId()){
+        if(!$poObject || !$poObject->getId()){
             $this->_getSession()->addError('Invalid Purchase Order.');
             $this->_redirect('*/adminhtml_transaction/report', array('id' => $poId));
             return;
         }
         
         $prepopulateData = array(
-            'vendor_id'        => $poOjbect->getVendorId(),
-            'vendor_code'    => $poOjbect->getVendorCode(),
-            'po_id'            => $poOjbect->getId(),
-            'category_id'    => $poOjbect->getCategoryId(),    
+            'vendor_id'        => $poObject->getVendorId(),
+            'vendor_code'    => $poObject->getVendorCode(),
+            'po_id'            => $poObject->getId(),
+            'category_id'    => $poObject->getCategoryId(),    
             'action_type'     => Harapartners_Stockhistory_Model_Transaction::ACTION_TYPE_AMENDMENT
         );
         
         $productData = $this->getRequest()->getParam('qty_to_amend');
+        $productIds = array_keys();
         $product = Mage::getModel('catalog/product');
         $productData = json_decode($productData, true);
         $isBatchSuccess = true;
@@ -116,7 +117,6 @@ class Harapartners_Stockhistory_Adminhtml_TransactionController extends Mage_Adm
 
             //Ignore empty rows
             if(empty($amendmentData['qty_to_amend'])){
-                debug("Product Sku " . $productSku . "did not have anything to ammend.");
                 continue;
             }
             
@@ -151,6 +151,8 @@ class Harapartners_Stockhistory_Adminhtml_TransactionController extends Mage_Adm
                 ));
                 $transaction = Mage::getModel('stockhistory/transaction');
                 $transaction->importData($tempdata);
+                
+               // die();
                 if($transaction->updateProductStock()){
                     $transaction->save();
                 }else{
