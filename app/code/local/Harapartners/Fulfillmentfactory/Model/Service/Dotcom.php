@@ -549,8 +549,10 @@ XML;
             $items = $order->getAllItems();
 
             foreach($items as $item) {
+                $product = Mage::getModel('catalog/product')->load($item->getProductId());
+
                 // only process root order items
-                if ($item->getParentItem()) {
+                if ($item->getParentItem() || $product->getIsVirtual()) {
                     continue;
                 }
 

@@ -64,22 +64,28 @@ class Harapartners_Categoryevent_Model_Cache_Index
     protected function _saveCache($data, $id, $tags = array(), $lifetime = null)
     {
         $tags[] = self::CACHE_TAG;
-/* @todo calculate the correct cache entry lifetime here
-        if (!$lifetime) {
+
+        if (null == $lifetime) {
             $lifetime = null;
+            $now      = Mage::helper('service')->getServerTime() / 1000;
+
+            $sortentry = Mage::getModel('categoryevent/sortentry')->loadCurrent();
+            $liveEvents = json_decode($sortentry->getLiveQueue(), true);
 
             // calculate the lifetime of this cache entry as the the earliest
             // start date of all events in the current sortentry
-            $sortentry = Mage::getModel('categoryevent/sortentry')->loadCurrent();
-            $liveEvents = json_decode($sortentry->getLiveQueue(), true);
             foreach ($liveEvents as $event) {
-                $eventStart = strtotime($event['event_start_date']);
-                if (null === $lifetime || $eventStart > $lifetime) {
+                $eventStart = strtotime($event['event_start_date']) - $now;
+                if ($eventStart > 0 && (null === $lifetime || $eventStart < $lifetime)) {
                     $lifetime = $eventStart;
                 }
             }
+
+            Mage::log("Calculated index block cache lifetime at $lifetime", Zend_Log::DEBUG, 'index_block_cache.log');
+            $lifetime = null;
         }
-*/
+
         return parent::_saveCache($data, $id, $tags, $lifetime);
     }
 }
+

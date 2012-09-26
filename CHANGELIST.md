@@ -1,6 +1,14 @@
 Totsy-Magento Release Notes
 ===========================
 
+20120925
+--------
+* fixes notice ERR (3): Notice: Undefined index: is_salable  in /var/www/releases/20120920195612/app/design/frontend/enterprise/iphone/template/categoryevent/topnav.phtml on line 63
+* MGN-1080: Ensuring only non-virtual products are sent to Dotcom as part of an order.
+* Only calculating, but not setting the cache expiry on the homepage block.
+* Fixed the homepage product listing on mobile.
+* fixes error ERR (3): Notice: Undefined index: description  in /var/www/releases/20120924163531/app/design/frontend/enterprise/bootstrap/template/categoryevent/topnav.phtml on line 72
+
 20120921
 --------
 * MGN-1006/MGN-1056 - Fixing FAQ anchors/answers to display properly in viewport, styling the FAQ links, refactored CMS code (that last part is in admin/DB)
