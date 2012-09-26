@@ -68,26 +68,27 @@ class Harapartners_Customertracking_Block_Pixel
                 $htmlPixel .= $trackingCodes[$pageTag];
             }
         }
-
-        if (class_exists("Harapartners_Customertracking_Helper_". ucfirst(strtolower($affiliate->getAffiliateName())))) {
-            debug("It lives! Muwahahahah");
-        } else {
-            return $this->_templateReplace($htmlPixel);
-        }
+        
+        return $this->_templateReplace($htmlPixel);
     }
 
     protected function _templateReplace($html)
     {
         $customer = Mage::getSingleton('customer/session')->getCustomer();
         $orderId = Mage::getSingleton('checkout/session')->getLastOrderId();
+
         $trackingInfo = Mage::getSingleton('customer/session')->getData('affiliate_info');
-        $regParams = json_decode($trackingInfo['registration_param'], true);
+        if ($trackingInfo) {
+            $regParams = json_decode($trackingInfo['registration_param'], true);
+        } else {
+            $regParams =  json_decode(Mage::getSingleton('customer/session')->getData('registration_param'));
+        }
 
         $order = Mage::getModel('sales/order')->load($orderId);
 
         return preg_replace_callback(
             '/{{[\w.]+}}/',
-            function($matches) use ($customer, $order, $regParams) {
+            function($matches) use ($customer, $order, $regParams, $html) {
                 $parts = explode('.', substr($matches[0], 2, -2));
 
                 $customPixels = Mage::helper('customertracking/customPixel');
