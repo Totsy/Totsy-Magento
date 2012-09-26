@@ -109,6 +109,9 @@ class Harapartners_Categoryevent_Model_Sortentry
             ->addOrder('date', 'DESC')
             ->getFirstItem();
 
+        $startDate = date('Y-m-d', strtotime($date));
+        $endDate   = $this->calculateEndDate($date);
+
         $live = array();
         $upcoming = array();
         $copiedEventIds = array();
@@ -117,8 +120,8 @@ class Harapartners_Categoryevent_Model_Sortentry
             $recentLive = json_decode($recentSortentry->getLiveQueue(), true);
 
             foreach ($recentLive as $event) {
-                if ((strtotime($event['event_start_date']) < strtotime($date) ||
-                    strtotime($event['event_end_date']) > strtotime($date)) &&
+                if (strtotime($event['event_start_date']) < strtotime($endDate) &&
+                    strtotime($event['event_end_date']) > strtotime($startDate) &&
                     $preparedEvent = $this->_prepareEvent($event['entity_id'])
                 ) {
                     $live[] = $preparedEvent;
@@ -126,9 +129,6 @@ class Harapartners_Categoryevent_Model_Sortentry
                 }
             }
         }
-
-        $startDate = date('Y-m-d', strtotime($date));
-        $endDate   = $this->calculateEndDate($date);
 
         $eventParentCategory = $this->getParentCategory(self::EVENT_CATEGORY_NAME, $storeId);
         if (!$eventParentCategory) {
