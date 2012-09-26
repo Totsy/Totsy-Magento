@@ -18,7 +18,7 @@ class Totsy_Linkshare_Model_Transactions extends Mage_Core_Model_Abstract
 
     public function recordTransaction($record) {
 
-        /*$dataObj = new Varien_Object();
+        $dataObj = new Varien_Object();
 
         if(!$record['success']) {
             $dataObj->setData('trans_status', 'Failed');
@@ -36,25 +36,6 @@ class Totsy_Linkshare_Model_Transactions extends Mage_Core_Model_Abstract
         $dataObj->setData('trans_id', $record['trans_id']);
 
         $this->setData($dataObj->getData());
-        $this->setTransId($record['trans_id']);
-        $this->save();
-        $this->unsetData();*/
-
-
-        if(!$record['success']) {
-            $this->setData('trans_status', 'Failed');
-        } else {
-            $this->setData('trans_status', 'Success');
-        }
-
-        $this->setData('customertracking_id', $record['customertracking_id']);
-        $this->setData('message', $record['message']);
-        $this->setData('order_id', $record['order_id']);
-        $this->setData('raw_data', $record['raw_data']);
-        $this->setData('created_at', date('Y-m-d H:i:s'));
-        $this->setData('updated_at', date('Y-m-d H:i:s'));
-        $this->setData('order_status', $record['order_status']);
-        $this->setData('trans_id', $record['trans_id']);
         $this->save();
         $this->unsetData();
     }

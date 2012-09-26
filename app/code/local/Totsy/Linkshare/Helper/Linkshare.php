@@ -85,7 +85,6 @@
         xml_parse_into_struct($parser, file_get_contents($data), $response, $index);
         xml_parser_free($parser);
         $status = $response[1]['value'];
-        var_dump($status);
         if( $status == 'Access denied' ) {
              $success = false;
              $message = 'Access Denied';
@@ -99,7 +98,6 @@
         $trans['success'] = $success;
         $trans['order_id'] = $orderid;
         $trans['message'] = $message;
-        $trans['created_at'] = date(strtotime('now'));
         return $trans;
     }
 }

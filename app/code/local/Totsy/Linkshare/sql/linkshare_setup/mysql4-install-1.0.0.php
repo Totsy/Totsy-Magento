@@ -15,7 +15,7 @@ $installer = $this;
 $installer->startSetup();
 
 $installer->run("
- DROP TABLE IF EXISTS {$this->getTable('customertracking/linkshare_transactions')};
+--DROP TABLE IF EXISTS {$this->getTable('customertracking/linkshare_transactions')};
 CREATE TABLE {$this->getTable('customertracking/linkshare_transactions')} (
   `id` int(10) unsigned NOT NULL auto_increment,
   `trans_id` int(10) unsigned default NULL default 0,

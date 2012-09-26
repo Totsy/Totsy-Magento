@@ -19,28 +19,4 @@ class Totsy_Linkshare_Model_Mysql4_transactions extends Mage_Core_Model_Mysql4_A
     protected function _construct(){
         $this->_init('linkshare/transactions', 'id');
     }
-    
-    /*public function loadByCustomerId($customerId){
-        $readAdapter = $this->_getReadAdapter();
-        $select = $readAdapter->select()
-                ->from($this->getMainTable())
-                ->where('customer_id=:customer_id');
-        $result = $readAdapter->fetchRow($select, array('customer_id' => $customerId));
-        if (!$result) {
-           $result = array(); 
-        }
-        return $result;        
-    }
-
-    public function loadByCustomerEmail($customerEmail){
-        $readAdapter = $this->_getReadAdapter();
-        $select = $readAdapter->select()
-                ->from($this->getMainTable())
-                ->where('customer_email=:customer_email');
-        $result = $readAdapter->fetchRow($select, array('customer_email' => $customerEmail));
-        if (!$result) {
-           $result = array(); 
-        }
-        return $result;        
-    }*/
 }
