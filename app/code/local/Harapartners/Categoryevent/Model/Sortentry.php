@@ -105,7 +105,7 @@ class Harapartners_Categoryevent_Model_Sortentry
         // first look for an earlier sortentry
         $recentSortentry = Mage::getModel('categoryevent/sortentry')
             ->getCollection()
-            ->addFieldToFilter('date', array('lt' => $date, 'date' => true))
+            ->addFieldToFilter('date', array('lte' => $date, 'date' => true))
             ->addOrder('date', 'DESC')
             ->getFirstItem();
 
