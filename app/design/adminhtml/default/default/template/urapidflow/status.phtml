@@ -1,0 +1,70 @@
+<?php
+$_p = $this->getProfile();
+$_isRunning = $_p->getRunStatus()=='running';
+$_dryRun = $_p->getData('options/import/dryrun');
+$_percent = $_p->getRowsFound() ? ceil(100*($_p->getRowsProcessed()/$_p->getRowsFound())) : 0;
+$_snapshot = strtotime($_p->getSnapshotAt());
+$_started = strtotime($_p->getStartedAt());
+$_runtime = $_snapshot && $_started ? max(1, $_snapshot-$_started) : 0;
+$_rate = $_runtime ? round($_p->getRowsProcessed()/$_runtime, 2) : 0;
+$_estRuntime = $_p->getRowsProcessed() ? floor($_runtime/$_p->getRowsProcessed()*$_p->getRowsFound()) : null;
+$_logTail = (array)$_p->getLogTail();
+$_runtimeString = $this->__('%d:%02d', floor($_runtime/60), $_runtime%60);
+$_estRuntimeString = $this->__('%d:%02d', floor($_estRuntime/60), $_estRuntime%60);
+?>
+
+<?php if ($_isRunning): ?>
+<h4><?php echo $this->__('Progress').': '.($_dryRun ? '<strong>'.$this->__('(DRY RUN)').'</strong>' : '') ?></h4>
+<div class="profile-progress-bar <?php echo $_dryRun ? 'dry-run' : '' ?>"><div style="width:<?php echo $_percent?>%;">&nbsp;<?php echo $_percent?>%&nbsp;</div></div>
+<?php endif ?>
+
+<table cellspacing="0" class="profile-status-wrapper"><tr><td class="td-wrapper">
+
+<h4><?php echo $this->__('Status') ?>:</h4>
+<table cellspacing="0" class="profile-status-numbers">
+<tbody>
+<tr><td class="label"><?php echo $this->__('Activity')?>:</td><td class="value"><?php echo $this->__($_p->getCurrentActivity()) ?></td></tr>
+<tr><td class="label"><?php echo $this->__('Rows Found')?>:</td><td class="value"><?php echo number_format($_p->getRowsFound()) ?></td></tr>
+<tr><td class="label"><?php echo $this->__('Rows Processed')?>:</td><td class="value"><?php echo number_format($_p->getRowsProcessed()) ?></td></tr>
+<tr <?php if ($_p->getRowsSuccess()): ?>class="tr-success"<?php endif ?>><td class="label"><?php echo $this->__('Rows Successful')?>:</td><td class="value"><?php echo number_format($_p->getRowsSuccess()) ?></td></tr>
+<tr <?php if ($_p->getRowsDepends()): ?>class="tr-depends"<?php endif ?>><td class="label"><?php echo $this->__('Rows Depends')?>:</td><td class="value"><?php echo number_format($_p->getRowsDepends()) ?></td></tr>
+<tr><td class="label"><?php echo $this->__('Rows Not Changed')?>:</td><td class="value"><?php echo number_format($_p->getRowsNochange()) ?></td></tr>
+<tr><td class="label"><?php echo $this->__('Rows Empty/Comment')?>:</td><td class="value"><?php echo number_format($_p->getRowsEmpty()) ?></td></tr>
+<tr <?php if ($_p->getRowsErrors()): ?>class="tr-error"<?php endif ?>><td class="label"><?php echo $this->__('Rows With Errors')?>:</td><td class="value"><?php echo number_format($_p->getRowsErrors()) ?></td></tr>
+<tr <?php if ($_p->getNumErrors()): ?>class="tr-error"<?php endif ?>><td class="label"><?php echo $this->__('Total Errors')?>:</td><td class="value"><?php echo number_format($_p->getNumErrors()) ?></td></tr>
+<tr <?php if ($_p->getNumWarnings()): ?>class="tr-warning"<?php endif ?>><td class="label"><?php echo $this->__('Total Warnings')?>:</td><td class="value"><?php echo number_format($_p->getNumWarnings()) ?></td></tr>
+<tr><td class="label"><?php echo $this->__('Crunch Rate')?>:</td><td class="value"><?php echo number_format($_rate) ?> <?php echo $this->__('rows/second')?></td></tr>
+<tr><td class="label"><?php echo $this->__('Running For')?>:</td><td class="value"><?php echo $_runtimeString ?></td></tr>
+<?php if ($_isRunning): ?>
+<tr><td class="label"><?php echo $this->__('Estimate Run Time')?>:</td><td class="value"><?php echo !is_null($_estRuntime) ? $_estRuntimeString : 'Unknown' ?></td></tr>
+<tr><td class="label"><?php echo $this->__('Estimate Finish')?>:</td><td class="value"><?php echo !is_null($_estRuntime) ? date('Y-m-d H:i:s', strtotime($_p->getStartedAt())+$_estRuntime).' ('.$this->__('server time').')' : $this->__('Unknown') ?></td></tr>
+<?php endif ?>
+
+<tr><td class="label"><?php echo $this->__('Memory Used')?>:</td><td class="value"><?php echo number_format($_p->getMemoryUsage()) ?></td></tr>
+<tr><td class="label"><?php echo $this->__('Peak Memory Used')?>:</td><td class="value"><?php echo number_format($_p->getMemoryPeakUsage()) ?></td></tr>
+</tbody>
+</table>
+
+</td><td class="td-wrapper">
+<?php if (!$_isRunning): ?>
+<button type="button" class="log-report" onclick="location.href='<?php echo $this->getUrl('*/*/downloadLog', array('id'=>$_p->getId())) ?>'"><span><?php echo $this->__('Download Plain Log') ?></span></button>
+<button type="button" class="log-report" onclick="location.href='<?php echo $this->getUrl('*/*/exportExcelReport', array('id'=>$_p->getId())) ?>'"><span><?php echo $this->__('Export Excel Report') ?></span></button>
+<?php endif ?>
+<h4><?php echo $this->__('Log Tail') ?>:</h4>
+<table cellspacing="0" class="profile-log-tail"><thead><tr>
+    <th><?php echo $this->__('Type') ?></th>
+    <th><?php echo $this->__('Line') ?></th>
+    <th><?php echo $this->__('Column') ?></th>
+    <th><?php echo $this->__('Message') ?></th>
+</tr></thead><tbody>
+<?php foreach ($_logTail as $_l): ?>
+    <tr class="tr-<?php echo strtolower($_l['type']) ?>">
+        <td class="td-type"><?php echo $this->__($_l['type']) ?></td>
+        <td class="td-line"><?php echo $_l['line'] ? number_format($_l['line']) : $_l['line'] ?></td>
+        <td class="td-col"><?php echo $_l['col'] ?></td>
+        <td class="td-msg"><?php echo $_l['msg'] ?></td>
+    </tr>
+<?php endforeach ?>
+</tbody></table>
+
+</td></tr></table>
