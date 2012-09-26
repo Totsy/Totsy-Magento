@@ -161,14 +161,6 @@ $orderStoreDate = $this->formatDate($_order->getCreatedAtStoreDate(), 'medium', 
         <div class="entry-edit-head">
             <h4 class="icon-head head-billing-address"><?php echo Mage::helper('sales')->__('Billing Address') ?></h4>
         </div>
-        <?php if ($this->customerHasAddresses()): ?>
-        <li class="wide">
-            <label for="billing-address-select"><?php echo $this->__('Select a billing address from your address book or enter a new address.') ?></label>
-            <div class="input-box">
-                <?php echo $this->getAddressesHtmlSelect('billing') ?>
-            </div>
-        </li>
-        <?php endif; ?>
         <fieldset id="billing-static">
             <address id="billing-static-text"><?php echo $_order->getBillingAddress()->getFormated(true); ?>
             </address>
@@ -177,7 +169,10 @@ $orderStoreDate = $this->formatDate($_order->getCreatedAtStoreDate(), 'medium', 
         
         <fieldset id="billing-edit-form" style="display:none;">
         	<?php $billing = $_order->getBillingAddress() ?>
-
+            <?php if ($this->customerHasAddresses()): ?>
+                <?php echo $this->getAddressesHtmlSelect('billing') ?>
+            <?php endif; ?>
+            <br />
         	<form id="billing-fields">
         		
         		<input type="hidden" name="type" value="billing" />
@@ -224,6 +219,10 @@ $orderStoreDate = $this->formatDate($_order->getCreatedAtStoreDate(), 'medium', 
         
         
         <fieldset id="shipping-edit-form" style="display:none;">
+            <?php if ($this->customerHasAddresses()): ?>
+                <?php echo $this->getAddressesHtmlSelect('shipping') ?>
+            <?php endif; ?>
+            <br />
         	<?php $shipping = $_order->getShippingAddress() ?>
 			
         	<form id="shipping-fields">
@@ -260,3 +259,29 @@ $orderStoreDate = $this->formatDate($_order->getCreatedAtStoreDate(), 'medium', 
 </div>
 <div class="clear"></div>
 <?php endif; ?>
+<script type="text/javascript">
+    jQuery( document ).ready( function() {
+        jQuery('#billing-address-select').change( function() {
+            var $billFormInputs = jQuery('#billing-fields :input');
+            if( jQuery( this ).val() == '' ) {
+                $billFormInputs.each(function(i) {
+                    $(this).val('');
+                });
+            } else {
+                var params = {};
+                params['addressId'] = jQuery('select#billing-address-select').val();
+                new Ajax.Request('<?php echo Mage::getModel('adminhtml/url')->getUrl('orderedit/order/getorderaddressinformations') ?>', {
+                    method: 'get',
+                    parameters: params,
+                    onSuccess: function(transport) {
+                        var data = jQuery.parseJSON(transport);
+                        alert(data.firstname);
+                    }
+                });
+                $billFormInputs.each(function(i) {
+                    //alert(jQuery(this).val());
+                });
+            }
+        })
+    });
+</script>

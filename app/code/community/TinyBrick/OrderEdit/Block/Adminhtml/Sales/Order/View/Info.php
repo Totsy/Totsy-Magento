@@ -32,4 +32,36 @@ class TinyBrick_OrderEdit_Block_Adminhtml_Sales_Order_View_Info extends Mage_Adm
 		return $states;
     }
 
+    public function customerHasAddresses()
+    {
+        $orderId = $this->getRequest()->getParam('order_id');
+        $order = Mage::getModel('sales/order')->load($orderId);
+        $customer = Mage::getModel('customer/customer')->load($order->getCustomerId());
+        return count($customer->getAddresses());
+    }
+
+    public function getAddressesHtmlSelect($type)
+    {
+        $orderId = $this->getRequest()->getParam('order_id');
+        $order = Mage::getModel('sales/order')->load($orderId);
+        $customer = Mage::getModel('customer/customer')->load($order->getCustomerId());
+        $options = array();
+        foreach ($customer->getAddresses() as $address) {
+            $options[] = array(
+                'value' => $address->getId(),
+                'label' => $address->format('oneline')
+            );
+        }
+        $addressId = $order->getData($type.'_address_id');
+        $select = $this->getLayout()->createBlock('core/html_select')
+            ->setName($type.'_address_id')
+            ->setId($type.'-address-select')
+            ->setClass('address-select')
+            ->setOptions($options);
+
+        $select->addOption('', Mage::helper('checkout')->__('New Address'));
+
+        return $select->getHtml();
+    }
+
 }

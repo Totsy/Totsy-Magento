@@ -206,4 +206,11 @@ class TinyBrick_OrderEdit_OrderController extends Mage_Adminhtml_Controller_Acti
         $return['select'] = $select;
         echo Zend_Json::encode($return);
     }
+
+    public function getOrderAddressInformationsAction()
+    {
+        $addressId = $this->getRequest()->getParam('addressId');
+        $address = Mage::getModel('sales/order_address')->load($addressId);
+        echo Zend_Json::encode($address->getData());
+    }
 }
