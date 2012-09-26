@@ -13,19 +13,21 @@
 class Harapartners_Service_Block_Rewrite_Adminhtml_Catalog_Product_Edit_Tab_Attributes
     extends Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Attributes
 {
+    /**
+     * Product attribute codes for attributes that should be set as read-only
+     * in the product view.
+     *
+     * @var array
+     */
+    protected $_readonlyFields = array('sku', 'fulfillment_inventory', 'upc');
+
     protected function _setFieldset($attributes, $fieldset, $exclude = array())
     {
         parent::_setFieldset($attributes, $fieldset);
-
-        $product = Mage::registry('current_product');
-
-        $skuElement = $fieldset->getForm()->getElement('sku');
-        if ($skuElement && $product && $product->getTypeId() == 'simple') {
-            $skuElement->setData('readonly', 'readonly');
-        }
-
-        if ($inventoryElement = $fieldset->getForm()->getElement('fulfillment_inventory')) {
-            $inventoryElement->setData('readonly', 'readonly');
+        foreach ($this->_readonlyFields as $readonlyFieldName) {
+            if ($elt = $fieldset->getForm()->getElement($readonlyFieldName)) {
+                $elt->setData('readonly', 'readonly');
+            }
         }
 
         return $this;

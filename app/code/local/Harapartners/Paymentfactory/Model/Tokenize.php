@@ -386,9 +386,9 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Totsy_Cybersource_Model
                  
             $card = new stdClass();
             $card->fullName = $payment->getCcOwner();
-            $card->accountNumber = $payment->getCcNumber();
-            $card->expirationMonth = $payment->getCcExpMonth();
-            $card->expirationYear =  $payment->getCcExpYear();
+            $card->accountNumber = preg_replace('/[\s\-]/', '', $payment->getCcNumber());
+            $card->expirationMonth = preg_replace('/[\s\-]/', '', $payment->getCcExpMonth());
+            $card->expirationYear =  preg_replace('/[\s\-]/', '', $payment->getCcExpYear());
         
                 $card->cardType = $this->getTypeNumber($payment->getCcType()) ;
         

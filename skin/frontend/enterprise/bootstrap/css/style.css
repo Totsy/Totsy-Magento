@@ -6,7 +6,7 @@
  * - Black:         text headings   #000
  * - Dark Grey      subheadings     #636466
  * - Medium Grey    copy font       #999999
- * - Light Grey     borders         #e5e5e5
+ * - Light Grey     borders         #e5e5e5 | rgba(229,229,229,1)
  * - Green          buttons         #c1d82f or #adc222 | rgba(173,194,34,1)
  */
  
@@ -120,7 +120,7 @@ html.test .container .row {outline:1px dotted green;}
 .thumbnail {padding:10px;}
 .page-header {
     margin:20px 0 10px; padding-bottom:5px;
-    border-bottom:1px solid #E5E5E5; 
+    border-bottom:1px solid #e5e5e5; 
 }
 .zoomImage { padding:0px; z-index:500!important; }
 
@@ -151,14 +151,6 @@ html.test .container .row {outline:1px dotted green;}
     font-size: 12px; font-weight: bold;
     text-shadow: 0 1px 0 rgba(255, 255, 255, 0.85);
     text-transform: uppercase;
-}
-#cartHeader.cartempty {
-    position: relative; top:-6px; left: 25px; /* a bit hackish but gets it done */
-    background-image: none;
-    color:#999;
-    font-size:13px; font-weight: normal;
-    line-height: 14px;
-    text-transform: none;
 }
 .dropdown-menu li > a:hover, .dropdown-menu .active > a, .dropdown-menu .active > a:hover {
     background-color: #ed1c25;
@@ -236,10 +228,10 @@ body.customer-account-login .btn.btn-large {
 #masthead {
     position: relative; z-index: 10;
     padding:3px 0;
+    min-height: 54px;
     -moz-box-shadow: 0 3px 3px rgba(0, 0, 0, 0.18);
     -webkit-box-shadow: 0 3px 3px rgba(0, 0, 0, 0.18);
     box-shadow: 0 3px 3px rgba(0, 0, 0, 0.18);
-/*     box-shadow: 0 1px 5px rgba(0, 0, 0, 0.35); */
 }
 #logo {margin-left:0;}
 
@@ -373,6 +365,14 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
 #usercart .over {
     color: #ED1C25;
     font-weight: bold;
+}
+#cartHeader.cartempty {
+    position: relative; top:-6px; left: 25px; /* a bit hackish but gets it done */
+    background-image: none;
+    color:#999;
+    font-size:13px; font-weight: normal;
+    line-height: 14px;
+    text-transform: none;
 }
 
 /* Minicart */
@@ -518,8 +518,9 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
 }
 
 /* .more rollovers */
-.events-grid .thumbnail .more {
+.events-grid .catalog-event .more {
     position: absolute; bottom: 0; left: 0;
+    visibility: hidden;
     opacity:0;
     width:100%; height: 263px; overflow: hidden;
     background: rgba(255,255,255,0.75);
@@ -527,7 +528,8 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
     -webkit-transition:opacity 0.5s ease;
     transition:opacity 0.5s ease;
 }
-.events-grid .thumbnail:hover .more {
+.events-grid .catalog-event:hover .more {
+    visibility: visible;
     opacity:1;
 }
 .events-grid .thumbnail .more-content {
@@ -730,6 +732,7 @@ body.catalog-category-view .thumbnails > li {position: relative;}
 }
 
 #hpcheckout-payment-form ul {
+	float: left;
     margin: 0px !important; 
 }
 
@@ -1232,8 +1235,58 @@ body.catalog-category-view .price-box .special-price {
 .input-box {padding:0px 0px 5px;}
 .pdp_tabs {width:105%; margin-top:-45px; margin-left:-11px;}
 
-.faq_answer {background:#f0f0f0; padding:5px;}
-.faq_question {background:#fff; padding:5px;}
+/* FAQ */
+.faq_links {
+    margin-bottom:1.75em;
+}
+.faq_links h4 {
+    margin-bottom:0.5em;
+    border-bottom:1px solid rgb(229,229,229);
+    line-height: 1.8;
+}
+.faq_links ul {
+    margin: 0; padding: 0;
+}
+.faq_links li > a {
+    position: relative; z-index: 100;
+    padding: 2px 3px;
+    color:#636466;
+    text-decoration: underline;
+}
+.faq_links li > a:hover {
+    color: #ed1c25;
+}
+.faq_anchors {
+    margin-top:2em;
+}
+.faq_item {
+    position: relative;
+    margin-top:-190px; margin-bottom:1.75em; 
+    border-top:190px solid transparent;
+    /* margin-top & border-top place the jump link in viewport after fixed-header */
+}
+.logged-out ~ .container .faq_item {
+    margin-top:-100px; border-top-width: 100px;
+}
+.faq_question {
+    position: relative; z-index: 100;
+    padding:10px 5px 5px;
+    background:rgb(229,229,229); /* fallback */
+    background:rgba(229,229,229,0.6); /* background-clip: padding-box; -webkit-background-clip: padding-box; */
+    border-top:1px solid rgb(229,229,229);
+}
+.faq_item:target .faq_question {
+    background:rgba(237,45,33,0.2); background-clip: padding-box; -webkit-background-clip: padding-box;
+    font-weight: bold;
+    text-shadow: 0 1px 0 rgba(255,255,255,0.8)
+}
+.faq_answer {
+    position: relative; z-index: 100;
+    padding:5px;
+    background:#fff;
+}
+.faq_answer > a {position: relative; z-index: 100;}
+
 
 .big-input {
   font-size: 20px !important;
