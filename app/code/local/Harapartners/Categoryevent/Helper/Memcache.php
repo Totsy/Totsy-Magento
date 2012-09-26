@@ -81,7 +81,7 @@ class Harapartners_Categoryevent_Helper_Memcache extends Mage_Core_Helper_Abstra
             
             // ---------- //
             // Load sorted live category info
-            $sortentryLive = Mage::getModel('categoryevent/sortentry')->loadByDate($sortDate, $storeId, false)->getLiveQueue();
+            $sortentryLive = Mage::getModel('categoryevent/sortentry')->loadByDate($sortDate)->getLiveQueue();
             $liveCategoryInfoArray = json_decode($sortentryLive, true);
             $liveCategoryIdArray = array();
             $mageTimezone = Mage::getStoreConfig(Mage_Core_Model_Locale::XML_PATH_DEFAULT_TIMEZONE);
