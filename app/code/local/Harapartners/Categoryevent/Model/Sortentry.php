@@ -78,10 +78,15 @@ class Harapartners_Categoryevent_Model_Sortentry
         $cache = Mage::app()->getCache();
         if ($cache->test($this->_getCacheKey())) {
             $this->addData(unserialize($cache->load($this->_getCacheKey())));
-            Mage::log('fetched from cache: ' . $this->getId());
         } else {
-            Mage::log('no cache entry for ' . $this->_getCacheKey());
             $this->getResource()->load($this, $date, 'date');
+            if ($this->getId()) {
+                Mage::app()->getCache()->save(
+                    serialize($this->getData()),
+                    $this->_getCacheKey(),
+                    array($this->_cacheTag)
+                );
+            }
         }
 
         // ensure that a record was loaded
