@@ -115,10 +115,12 @@ HpCheckout.prototype = {
 		jQuery( '#shipping\\:postcode' ).change();
 	}, 
 	
-	switchPaymentMethod: function() {
-		var selection = jQuery( '#hpcheckout-payment-select :selected' ).eq(0).val();		
-		jQuery( '[id^="payment_form_"]' ).hide();
-		jQuery( '#payment_form_' + selection ).show();
+    switchPaymentMethod: function(payment_method) {
+        if (payment_method=="paypal_express") {
+            jQuery("#cc_data").hide();
+            jQuery().hide();
+        }        
+        jQuery("#payment_form_" + payment_method).show();
 	},
 	
 	switchAddress: function() {
@@ -202,7 +204,8 @@ HpCheckout.prototype = {
                 }
             }
         });
-		var checkoutObject = this;
+
+        var checkoutObject = this;
 		var postData = this.getFormData();
 		postData += '&updatePayment=true';
 		this.throbberOn();
@@ -211,7 +214,7 @@ HpCheckout.prototype = {
 			dataType: "json",
 			type: "POST",
 			data: postData,
-			error: function() {
+			error: function(data) {
 				checkoutObject.throbberOff();
 				checkoutObject.renderErrorMessage( 'Please refresh the current page.' );
 			},
