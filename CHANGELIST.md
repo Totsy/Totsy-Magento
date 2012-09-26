@@ -1,6 +1,15 @@
 Totsy-Magento Release Notes
 ===========================
 
+20120926
+--------
+* Ensuring that AJAX requests for the customer tracking pixel are sent securely.
+* Cleaned up all calls to loadByDate() on the sortentry model.
+* Saving the db-loaded sortentry into cache afer loading.
+* Using the product's category instead of the registry's current_category for the product page.
+* Added a layer of caching to the category sortentry model, to reduce database access.
+* MGN-944 Resolving issue with rollovers on iPad, single tap for rollover, double tap for click through
+
 20120925
 --------
 * fixes notice ERR (3): Notice: Undefined index: is_salable  in /var/www/releases/20120920195612/app/design/frontend/enterprise/iphone/template/categoryevent/topnav.phtml on line 63
