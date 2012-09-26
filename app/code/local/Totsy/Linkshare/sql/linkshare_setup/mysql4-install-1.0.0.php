@@ -15,10 +15,10 @@ $installer = $this;
 $installer->startSetup();
 
 $installer->run("
---DROP TABLE IF EXISTS {$this->getTable('customertracking/linkshare_transactions')};
-CREATE TABLE {$this->getTable('customertracking/linkshare_transactions')} (
+DROP TABLE IF EXISTS {$this->getTable('linkshare/transactions')};
+CREATE TABLE {$this->getTable('linkshare/transactions')} (
   `id` int(10) unsigned NOT NULL auto_increment,
-  `trans_id` varchar default NULL,
+  `trans_id` varchar(10) default NULL,
   `customertracking_id` int(10) unsigned NOT NULL default 0,
   `order_id` varchar(50) default NULL,
   `raw_data` varchar(255) NOT NULL default '',
