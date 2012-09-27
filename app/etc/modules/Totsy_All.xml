@@ -9,6 +9,14 @@
             <active>true</active>
             <codePool>local</codePool>
         </Totsy_Ajax>
+        <Totsy_Cdn>
+            <active>true</active>
+            <codePool>local</codePool>
+        </Totsy_Cdn>
+        <Totsy_CatalogInventory>
+            <active>true</active>
+            <codePool>local</codePool>
+        </Totsy_CatalogInventory>
         <Totsy_Checkout>
             <active>true</active>
             <codePool>local</codePool>
@@ -37,6 +45,10 @@
             <active>true</active>
             <codePool>local</codePool>
         </Totsy_Pixels>
+        <Totsy_Pinterestform>
+            <active>true</active>
+            <codePool>local</codePool>
+        </Totsy_Pinterestform>
         <Totsy_Sales>
             <active>true</active>
             <codePool>local</codePool>
@@ -49,7 +61,7 @@
             <active>true</active>
             <codePool>local</codePool>
         </Totsy_Cybersource>
-        <Totsy_CatalogInventory>
+        <Totsy_Linkshare>
             <active>true</active>
             <codePool>local</codePool>
         </Totsy_CatalogInventory>
@@ -57,5 +69,10 @@
             <active>true</active>
             <codePool>local</codePool>
         </Totsy_Sailthru>
+        </Totsy_Linkshare>
+        <Totsy_Categoryevent>
+            <active>true</active>
+            <codePool>local</codePool>
+        </Totsy_Categoryevent>
     </modules>
 </config>

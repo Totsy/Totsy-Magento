@@ -1,0 +1,40 @@
+<div class="sp-methods" id="checkout-payment-method-load">
+<?php if( ! count( $methods = $this->getMethods() ) ): ?>
+	<div>No payment methods available, please try again later or contact us.</div>
+<?php elseif( count( $methods ) == 1 ): ?>
+	<input type="hidden" name="payment[method]" value="<?php echo $methods[0]->getCode() ?>">
+	<div><?php echo $this->getPaymentMethodFormHtml( $methods[0] ) ?></div>
+	<script type="text/javascript">
+		jQuery( "#payment_form_<?php echo $methods[0]->getCode() ?>" ).show();
+	</script>
+<?php else: ?>	
+	
+	<div class="totsy-selective-input-box middle-length">
+		<div class="hpcheckout-payment-title">
+			<h4 class="legend"><?php echo $this->__('Please select payment method') ?></h4>
+		</div>
+		<div>
+			<select id="hpcheckout-payment-select" name="payment[method]" onchange="hpcheckout.switchPaymentMethod()" class="validate-select" >
+				<option value=""><?php echo $this->__('Please select payment method') ?></option>
+				<?php foreach ($methods as $_method): $_code = $_method->getCode() ?>
+			    	<option value="<?php echo $_code ?>" <?php if($this->getSelectedMethodCode()==$_code): ?> selected="true"<?php endif; ?>><?php echo $_method->getTitle() ?></option>
+			    	<?php echo $_code; ?>
+				<?php endforeach; ?>
+			</select>
+		</div>
+	</div>
+	
+<?php foreach ($methods as $_method): ?>
+		<?php if ($html = $this->getPaymentMethodFormHtml($_method)): ?>
+		    <div>
+		        <?php echo $html; ?>
+		    </div>
+	    <?php endif; ?>
+	<?php endforeach; ?>
+	
+	<script type="text/javascript">
+		jQuery( document ).ready( function() {
+			hpcheckout.switchPaymentMethod();
+		});
+	</script>
+<?php endif ?>

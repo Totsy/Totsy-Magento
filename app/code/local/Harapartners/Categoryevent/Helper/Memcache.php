@@ -25,23 +25,11 @@ class Harapartners_Categoryevent_Helper_Memcache extends Mage_Core_Helper_Abstra
     
     protected function _getMemcache(){
         if(!$this->_memcache){
-            $this->_memcache = Mage::getSingleton('memcachedb/resource_memcache');
+            $this->_memcache = Mage::app()->getCache();
         }
         return $this->_memcache;
     }
-    
-    public function getIndexDataObject($forceRebuild = false){
-        $indexData = array();
-        $memcacheKey = 'DATA_' . Mage::app()->getStore()->getCode() . '_' . $this->_indexDataMemcacheKey;
-        
-        $indexData = $this->_getMemcache()->read($memcacheKey);
-        if($forceRebuild || !$this->_validateIndexData($indexData)){
-            $indexData = $this->_getIndexDataFromDb();
-            $this->_getMemcache()->write($memcacheKey, $indexData, MEMCACHE_COMPRESSED, $this->_indexDataLifeTime);
-        }
-        return new Varien_Object($indexData);
-    }
-    
+
     public function getTopNavDataObject(){
         $topNavData = array();
         $memcacheKey = 'DATA_' . Mage::app()->getStore()->getCode() . '_' . $this->_topNavDataMemcacheKey;
@@ -53,46 +41,13 @@ class Harapartners_Categoryevent_Helper_Memcache extends Mage_Core_Helper_Abstra
             }
         }
         
-        $topNavData = $this->_getMemcache()->read($memcacheKey);
+        $topNavData = unserialize($this->_getMemcache()->load($memcacheKey));
         if(!$this->_validateTopNavData($topNavData)){
             $topNavData = $this->_getTopNavDataFromDb();
-            $this->_getMemcache()->write($memcacheKey, $topNavData, MEMCACHE_COMPRESSED, $this->_topNavDataLifeTime);
+            $this->_getMemcache()->save(serialize($topNavData), $memcacheKey, array(), $this->_topNavDataLifeTime);
         }
         return new Varien_Object($topNavData);
     }
-    
-    
-    // ===== Internal processing ===== //
-    // ===== Index ===== //
-    protected function _getIndexDataFromDb(){
-        $indexData = array();
-        $defaultTimezone = date_default_timezone_get();
-        $mageTimezone = Mage::getStoreConfig(Mage_Core_Model_Locale::XML_PATH_DEFAULT_TIMEZONE);
-        date_default_timezone_set($mageTimezone);
-        $sortDate = now("Y-m-d");
-        $currentTime = now();
-        date_default_timezone_set($defaultTimezone);
-        $storeId = Harapartners_Service_Helper_Data::TOTSY_STORE_ID;
-        //$storeId = Mage::app()->getStore()->getId();
-        //$sortentry = Mage::getModel('categoryevent/sortentry')->loadByDate($sortDate, $storeId, false);
-        $sortentry = Mage::getModel('categoryevent/sortentry')->filterByCurrentTime($sortDate, $currentTime, $storeId);
-        
-        $indexData['toplive'] = json_decode($sortentry->getData('top_live_queue'), true);
-        $indexData['live'] = json_decode($sortentry->getData('live_queue'), true);
-        $indexData['upcoming'] = json_decode($sortentry->getData('upcoming_queue'), true);
-        return $indexData;
-    }
-    
-    protected function _validateIndexData($indexData){
-        if(!isset($indexData['toplive'])){
-            return false;
-        }
-        if(!isset($indexData['live'])){
-            return false;
-        }
-        return true;
-    }
-    
 
     // ===== Top Nav ===== //
     protected function _getTopNavDataFromDb(){
@@ -126,7 +81,7 @@ class Harapartners_Categoryevent_Helper_Memcache extends Mage_Core_Helper_Abstra
             
             // ---------- //
             // Load sorted live category info
-            $sortentryLive = Mage::getModel('categoryevent/sortentry')->loadByDate($sortDate, $storeId, false)->getLiveQueue();
+            $sortentryLive = Mage::getModel('categoryevent/sortentry')->loadByDate($sortDate)->getLiveQueue();
             $liveCategoryInfoArray = json_decode($sortentryLive, true);
             $liveCategoryIdArray = array();
             $mageTimezone = Mage::getStoreConfig(Mage_Core_Model_Locale::XML_PATH_DEFAULT_TIMEZONE);

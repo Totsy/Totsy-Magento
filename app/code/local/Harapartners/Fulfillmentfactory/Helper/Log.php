@@ -30,7 +30,8 @@ class Harapartners_Fulfillmentfactory_Helper_Log
      * @param string $message The message to log.
      * @return string The log file name.
      */
-    public function errorLog($message) {
+    public function errorLog($message)
+    {
         $logFileName = 'fulfillment_error.log';
 
         Mage::log($message, Zend_Log::ERR, $logFileName, true);
@@ -45,7 +46,8 @@ class Harapartners_Fulfillmentfactory_Helper_Log
      * @param unknown_type $orderId
      * @return log file name
      */
-    public function errorLogWithOrder($message, $orderId) {
+    public function errorLogWithOrder($message, $orderId)
+    {
         $logFileName = 'fulfillment_error_' . date('Y_m_d_his') . '.log';
 
         $errorlogModel = Mage::getModel('fulfillmentfactory/errorlog');
@@ -56,5 +58,22 @@ class Harapartners_Fulfillmentfactory_Helper_Log
         Mage::log($message, Zend_Log::ERR, $logFileName, true);
 
         return $logFileName;
+    }
+
+    /**
+     * Remove all existing fulfillment error log entries associated with an order.
+     *
+     * @param $order
+     * @return int
+     */
+    public function removeErrorLogEntriesForOrder($order)
+    {
+        $logs = Mage::getModel('fulfillmentfactory/errorlog')->getCollection();
+        $logs->addFieldToFilter('order_id', $order->getId());
+
+        foreach ($logs as $errorlog) {
+            $errorlog->isDeleted(true);
+            $errorlog->delete();
+        }
     }
 }

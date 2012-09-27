@@ -1,0 +1,141 @@
+<?php
+/**
+ * Magento Enterprise Edition
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Magento Enterprise Edition License
+ * that is bundled with this package in the file LICENSE_EE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://www.magentocommerce.com/license/enterprise-edition
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     enterprise_default
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://www.magentocommerce.com/license/enterprise-edition
+ */
+?>
+<?php
+/**
+ * Shopping cart template
+ *
+ * @see Mage_Checkout_Block_Cart
+ */
+    $countDownTimer = Mage::getSingleton('checkout/session')->getCountDownTimer();
+    $timeout = Mage::getSingleton('checkout/session')->getQuoteItemExpireTime();
+    //$endcount_lc = date("F j, Y, G:i:s", ($countDownTimer + $timeout));
+    $endcount_lc = ($countDownTimer + $timeout)*1000; //ms
+    //Harapartners, yang, get the server time with the frontend JS time
+	$serverTime = Mage::helper('service')->getServerTime();
+    $quote = Mage::getSingleton('checkout/session')->getQuote();
+    $saving = Mage::helper('sales/order')->calculateEstimatedSavings($quote);
+?>
+<div class="page-header">
+    <h2><?php echo $this->__('Shopping Cart') ?></h2>
+</div>
+<div class="cart">
+<div class="top-check-out">
+        <?php if(!$this->hasError()): ?>
+            <span class="pull-right">
+        	<?php foreach ($this->getMethods('top_methods') as $method): ?>
+        	    <?php if ($methodHtml = $this->getMethodHtml($method)): ?>
+        	    	<?php echo $methodHtml; ?>
+        	    <?php endif; ?>
+        	<?php endforeach; ?>
+			<?php if($this->getContinueShoppingUrl()): ?>
+        	    <button type="button" title="<?php echo $this->__('Continue Shopping') ?>" class="button btn-checkout-continue btn-continue btn" onclick="setLocation('<?php echo $this->getContinueShoppingUrl() ?>')"><?php echo $this->__('Continue Shopping') ?></button>
+        	<?php endif; ?>        
+        	</span>
+        <?php endif; ?>
+    </div>
+    <div class="clear"></div>
+    <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+    <?php echo $this->getChildHtml('form_before') ?>
+    <div class="cart-form-container">
+    <form action="<?php echo $this->getUrl('checkout/cart/updatePost') ?>" method="post">
+        <fieldset>
+            <table id="shopping-cart-table" class="data-table table table-bordered table-condensed">
+            <?php $mergedCells = ($this->helper('tax')->displayCartBothPrices() ? 2 : 1); ?>
+                    <tr>
+                        <th rowspan="<?php echo $mergedCells; ?>" colspan="1"><span class="nobr"><?php echo $this->__('Product Name') ?></span></th>
+                        <?php if ($this->helper('wishlist')->isAllowInCart()) : ?>
+                        <th colspan="1" rowspan="<?php echo $mergedCells; ?>" class="a-center"><span class="nobr"><?php echo $this->__('Move to Wishlist') ?></span></th>
+                        <?php endif ?>
+                        <th class="a-center" colspan="<?php echo $mergedCells; ?>"><span class="nobr"><?php echo $this->__('Unit Price') ?></span></th>
+                        <th colspan="1" rowspan="<?php echo $mergedCells; ?>" class="a-center"><?php echo $this->__('Qty') ?></th>
+                        <th class="a-center" colspan="1"><span class="nobr"><?php echo $this->__('Subtotal') ?></span></th>
+                        <th colspan="1" rowspan="<?php echo $mergedCells; ?>" class="a-center"><span class="nobr"></span></th>
+                    </tr>
+                    <?php if ($this->helper('tax')->displayCartBothPrices()): ?>
+                    <tr>
+                        <th class="a-right"><?php echo $this->helper('tax')->getIncExcTaxLabel(false) ?></th>
+                        <th><?php echo $this->helper('tax')->getIncExcTaxLabel(true) ?></th>
+                        <th class="a-right"><?php echo $this->helper('tax')->getIncExcTaxLabel(false) ?></th>
+                        <th><?php echo $this->helper('tax')->getIncExcTaxLabel(true) ?></th>
+                    </tr>
+                    <?php endif; ?>
+                <tbody>
+                <?php foreach($this->getItems() as $_item): ?>
+                    <?php echo $this->getItemHtml($_item) ?>
+                <?php endforeach ?>
+                </tbody>
+                <tr>
+                	<td colspan="6">
+                		<button type="submit" class="pull-right btn button" title="<?php echo $this->__('Update Shopping Cart') ?>" ><?php echo $this->__('Update Shopping Cart') ?></button>
+                	</td>
+                </tr>
+            </table>
+            <script type="text/javascript">decorateTable('shopping-cart-table')</script>
+        </fieldset>
+    </form>
+    </div>
+    <div class="totals pull-right">
+        <?php if ($saving): ?>
+            <p class="savings">
+            	<span><?php echo $this->__('Your savings: ') ?></span><?php echo Mage::helper('checkout')->formatPrice($saving); ?>
+            </p>
+        <?php endif;?>
+        <div class="top-check-out clear">
+        <?php if(!$this->hasError()): ?>
+            <span class="btn-checkout-group">
+        	<?php foreach ($this->getMethods('top_methods') as $method): ?>
+        	    <?php if ($methodHtml = $this->getMethodHtml($method)): ?>
+        	    	<?php echo $methodHtml; ?>
+        	    <?php endif; ?>
+        	<?php endforeach; ?>
+			<?php if($this->getContinueShoppingUrl()): ?>
+        	    <button type="button" title="<?php echo $this->__('Continue Shopping') ?>" class="button btn-continue btn" onclick="setLocation('<?php echo $this->getContinueShoppingUrl() ?>')"><?php echo $this->__('Continue Shopping') ?></button>
+        	<?php endif; ?>
+        	</span>        
+        <?php endif; ?>
+        </div>
+    </div>
+    <div style="clear:both"></div>
+    <?php if ( Mage::helper('service')->isTotsyStore() ):?>
+    <div class="cart-collaterals<?php if($this->getChildHtml('crosssell')) echo ' cross-inside'; ?>">
+        <?php //echo $this->getChildHtml('crosssell') ?>
+        <div class="deals pull-left span5 well cart-coupon">
+            <?php echo $this->getChildHtml('coupon') ?>
+        </div>
+        <div class="deals span5 well pull-right">    
+            <?php echo $this->getChildHtml('giftcards') ?>
+        </div>
+        <?php //if (!$this->getIsVirtual()): echo $this->getChildHtml('shipping'); endif; ?>
+    </div>
+    <?php endif;?>
+</div>
+<script type="text/javascript">
+//code for disabling echoSahre
+if(typeof _esq!='undefined') {
+    _esq.settings.socialCenter = { enabled: true };
+}
+</script>

@@ -57,6 +57,8 @@ class Enterprise_PageCache_Model_Processor_Category extends Enterprise_PageCache
      */
     public function getPageIdInApp(Enterprise_PageCache_Model_Processor $processor)
     {
+        //2012-09-19 CJD - disabling the addition of parameters to the cache tag.
+        return $processor->getRequestId();
         $queryParams = $this->_getQueryParams();
 
         Enterprise_PageCache_Model_Cookie::setCategoryCookieValue($queryParams);
@@ -80,6 +82,8 @@ class Enterprise_PageCache_Model_Processor_Category extends Enterprise_PageCache
 
     //Harapartners, Jun, Catalog pages are updated at very high frequency (due to reservation fluctuation), refresh adaptively
     public function getPageIdWithoutApp(Enterprise_PageCache_Model_Processor $processor){
+        //2012-09-19 CJD - disabling the addition of parameters to the cache tag.
+        return $processor->getRequestId();
         /** 2012-07-12 CJD - removing this functionality. we will let magento handle clearing the page cache for category pages
         list($usec, $sec) = explode(' ', microtime());
         $seed = (int) ($usec * 1000000);
@@ -88,7 +92,7 @@ class Enterprise_PageCache_Model_Processor_Category extends Enterprise_PageCache
             return md5($seed.rand());
         }
          */
-        
+
         $this->_updateCategoryViewedCookie($processor);
         $queryParams = $_GET;
 

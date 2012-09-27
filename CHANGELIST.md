@@ -1,6 +1,101 @@
 Totsy-Magento Release Notes
 ===========================
 
+20120926
+--------
+* Ensuring that AJAX requests for the customer tracking pixel are sent securely.
+* Cleaned up all calls to loadByDate() on the sortentry model.
+* Saving the db-loaded sortentry into cache afer loading.
+* Using the product's category instead of the registry's current_category for the product page.
+* Added a layer of caching to the category sortentry model, to reduce database access.
+* MGN-944 Resolving issue with rollovers on iPad, single tap for rollover, double tap for click through
+
+20120925
+--------
+* fixes notice ERR (3): Notice: Undefined index: is_salable  in /var/www/releases/20120920195612/app/design/frontend/enterprise/iphone/template/categoryevent/topnav.phtml on line 63
+* MGN-1080: Ensuring only non-virtual products are sent to Dotcom as part of an order.
+* Only calculating, but not setting the cache expiry on the homepage block.
+* Fixed the homepage product listing on mobile.
+* fixes error ERR (3): Notice: Undefined index: description  in /var/www/releases/20120924163531/app/design/frontend/enterprise/bootstrap/template/categoryevent/topnav.phtml on line 72
+
+20120921
+--------
+* MGN-1006/MGN-1056 - Fixing FAQ anchors/answers to display properly in viewport, styling the FAQ links, refactored CMS code (that last part is in admin/DB)
+* MGN-1064 - Better domain/query_string handling
+* MGN-1063 - Tax not charging properly for each product (during invoice)
+* MGN-1058 - Added UPC field to the Dotcom purchase order XML.
+* Removing all fulfillment error log entries associated with an order when the order is sent for fulfillment, or otherwise completed.
+* Tweaked the date ranges used in rebuilding sort entries.
+* Added Totsy_Akamai module with interface to the Akamai CCU for issuing content purge requests.
+* Refactored strings in class Totsy_Akamai_Helper_Service_Ccu to declarations at the top.
+* Renamed Totsy_Akamai to Totsy_Cdn, and added an interface for CDNs for flexibility.
+* Finished up the Totsy_Cdn Akamai purge request functionality, to accept the purge type and inspect the SOAP response upon completion.
+* Saving stock item records during inventory reindex, so that stock tables stay in sync.
+* Rebuilt the Categoryevent Sortentry model and the admin sort controller from the ground up, and integrated Akamai URL purging on sort saves.
+* Removed calls to the CDN purge request, to disable Akamai CCU integration.
+* Adding back the details while item out of stock during checkout.
+
+20120920
+--------
+* Disabling the cache subprocessors from appending url params to the cache id.
+
+20120914
+--------
+* MGN-1045 : Fixing empty payment informations for orders when customer has used same credit card number with white spaces.
+
+20120913
+--------
+* Fixes warning/notices messages
+* MGN-1022 - Preventing display of categories/ages in event tile rollover if no category/age assigned
+* MGN-269 - Fixing Steelhouse errors
+* MGN-982 - removing error message text from billing and shipping forms
+* MGN-1007 - Styling invitation acceptance form
+* Moved the virtual coupon e-mail logic from the checkout model to the order model.
+* Cleaned up various PHP errors/warnings during checkout.
+* MGN-782 - Improving Edit Order, Create Order logic in Admin. It will result in fixing Products Stock inconsistency in DB
+* MGN-1017 - Check product stock quantity properly while creating New Order in Admin
+* Fixing Undefined Variables for PaymentFactory
+
+20120912
+--------
+* MGN-1013 - Fixing password reset form from email link 
+* fixing password revalidation issue on modal popup with registration accounts
+* Preventing placeholder text from getting submitted in IE browsers
+* MGN-883 Wrapping up pending items from orig Jira + refactoring/cleaning up template code, removing cruft markup and inline styles.
+* MGN-1024 Putting Monetate JS back in for M's continued dev integration efforts
+
+20120911
+--------
+* Adding shipping and returns CMS blocks for virtual and non virtual items
+* Fixing IE bug on login registration page for HTTPS error popup and missing image
+* Fixing double input field on login and registration pages
+* Adding virtual product display shipping and returns fix
+* Adding virtual product shipping and returns CMS block
+* MGN-961 replacing default ladybug images
+* Removed unused Catalog/Event configuration page/logic.
+* Injecting AJAX data into containers only on successful AJAX requests.
+
+20120907
+--------
+
+* MGN-998 scale down youtube to width=30
+* MGN-1012 add clear both to show additional preview data at bottom
+* MGN-1012 uncomment echo for product_additional_data
+* MGN-972 fix youtube link in footer
+* MGN-985 adding addition class for unique id of save btn
+* MGN-1001 remove stop icon from text field
+* MGN-1002 restore creditcard images
+* MGN-1002 restore cc images
+* MGN-964 add color to attributes in mini cart
+* MGN-975 restore color/size to simples
+* Declaring var for  Ending Soon array to stop notice in error log... not in use, but on page for future use
+* Removing non-used Top Events collection loop and associated comments
+* fixing displaced Discover card icon in one page checkout for IE8 and 9
+* MGN-905 Event Sorting: can now auto sort by date with a click of a button, and click on event image icon now opens the event edit screen in a new tab
+* Added a simple script to find simple products, whose parent configurable product is part of an event, but itself isn't. Then empty the inventory for these products. A '--dry-run' option is provided to only display products found.
+* Fixing merge conflict
+* disabling the reward observer from firing during customer registration
+
 20120817
 --------
 

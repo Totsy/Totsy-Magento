@@ -14,16 +14,17 @@
  *
  */
 
-class Harapartners_Categoryevent_Model_Sortentry extends Mage_Core_Model_Abstract{
+class Harapartners_Categoryevent_Model_Sortentry
+    extends Mage_Core_Model_Abstract
+{
+    protected $_cacheTag = 'categoryevent_sortentry';
 
     // Only this level is considered category event
-    const CATEGOTYEVENT_LEVEL = 3;
-
-    // Every Top Events' parent category should be named as 'Top Event'
-    const TOP_EVENT_CATEGORY_NAME = 'Top Events';
+    const CATEGORYEVENT_LEVEL = 3;
 
     // Every Events' parent category should be named as 'Events'
     const EVENT_CATEGORY_NAME = 'Events';
+    const TOP_EVENT_CATEGORY_NAME = 'Top Events';
 
     // Identify the expired events' parent category, all expired events should under this category
     const EVENT_EXPIRED_CATEGORY_NAME = 'Expired Events';
@@ -35,224 +36,228 @@ class Harapartners_Categoryevent_Model_Sortentry extends Mage_Core_Model_Abstrac
 
     const CRON_REBUILD_LIFETIME = 3600;
 
-    protected function _construct(){
+    protected function _construct()
+    {
         $this->_init('categoryevent/sortentry');
     }
 
-    protected function _beforeSave(){
-        if(!$this->getId()){
+    protected function _beforeSave()
+    {
+        if (!$this->getId()) {
             $this->setData('created_at', now());
         }
+
         $this->setData('updated_at', now());
-        if(!$this->getStoreId()){
+
+        if (!$this->getStoreId()) {
             $this->setStoreId(Mage_Core_Model_App::ADMIN_STORE_ID);
         }
+
+        Mage::app()->getCache()->save(
+            serialize($this->getData()),
+            $this->_getCacheKey(),
+            array($this->_cacheTag)
+        );
+
         parent::_beforeSave();
     }
 
-    protected function _afterSaveCommit(){
-        //Due to DB access, the following logic must stay here after commit, rather than _afterSave()
-        Mage::helper('categoryevent/memcache')->getIndexDataObject(true); //Force rebuild/flush memcached result of today
-        return parent::_afterSaveCommit();
+    public function loadCurrent($storeId = Mage_Core_Model_App::ADMIN_STORE_ID)
+    {
+        return $this->loadByDate(date('Y-m-d'), $storeId);
     }
 
-    public function loadOneByAttribute($attrName, $attrValue, $storeId = null) {
-        $this->addData($this->getResource()->loadByAttribute($attrName, $attrValue, $storeId));
-        return $this;
-    }
-
-    public function loadLatestRecord($attrName, $attrValue, $storeId = null){
-        $this->addData($this->getResource()->loadLatestRecord($attrName, $attrValue, $storeId));
-        return $this;
-    }
-
-    //This is an external function to be used in Controller
-    public function loadByDate($sortDate, $storeId, $forceRebuild = false){
-        try {
-            $this->loadOneByAttribute('date', $sortDate, $storeId);
-            if($forceRebuild || !$this->hasData()){
-                $this->_rebuildEntry($sortDate, $storeId, $forceRebuild);
-            }
-        }catch (Exception $e){
-            return null;
-        }
-        return $this;
-    }
-
-    public function filterByCurrentTime($sortDate, $currentTime, $storeId ) {
-        //Only use for front end to rebuild sort event base on current time
-        $live = json_decode($this->loadByDate($sortDate, $storeId, false)->getData('live_queue'), true);
-        $upcoming = json_decode($this->loadByDate($sortDate, $storeId, false)->getData('upcoming_queue'), true);
-
-        foreach ( $live as &$event ){
-            if (strtotime($event['event_start_date']) - strtotime($currentTime) > 0){
-                array_push( $upcoming, $event );
-                unset( $live[array_search( $event, $live )] );
-            }
+    public function loadByDate($date, $storeId = Mage_Core_Model_App::ADMIN_STORE_ID) {
+        if (!$storeId) {
+            $storeId = Mage_Core_Model_App::ADMIN_STORE_ID;
         }
 
-        foreach ( $upcoming as &$event ){
-            if (strtotime($event['event_start_date']) - strtotime($currentTime) < 0){
-                array_push( $live, $event );
-                unset( $upcoming[array_search( $event, $upcoming )] );
-            }
-        }
-
-        $this->setData('live_queue', json_encode($live));
-        $this->setData('upcoming_queue', json_encode($upcoming));
-        return $this;
-    }
-
-    protected function _rebuildEntry( $sortDate, $storeId, $forceRebuild = false ){
-        $eventParentCategory = $this->getParentCategory(self::EVENT_CATEGORY_NAME, $storeId);
-        $topEventParentCategory = $this->getParentCategory(self::TOP_EVENT_CATEGORY_NAME, $storeId);
-        $startDate = $sortDate;
-        $endDate = $this->calculateEndDate($sortDate);
-
-        //Top events are always on top with default sort order
-        $topEventArray = array();
-        if(!!$topEventParentCategory && !!$topEventParentCategory->getId()){
-            $topEventArray = $this->getCategoryCollection($topEventParentCategory->getId(), $startDate, $endDate)
-                    ->load()
-                    ->toArray();
-        }
-
-        //Regular events may subject to additional sorting logic, also split into live vs. upcoming
-        $eventArray = array();
-        if(!!$eventParentCategory && !!$eventParentCategory->getId()){
-            $eventArray = $this->getCategoryCollection($eventParentCategory->getId(), $startDate, $endDate)
-                ->addAttributeToSelect('short_description')
-                ->load()
-                ->toArray();
-            $liveNew = array();
-            $upComingNew = array();
-
-            //Get live and upcoming events base on default sorting logic
-            foreach($eventArray as $event) {
-                $eventId = $event['entity_id'];
-                $starttimediff = strtotime( $event['event_start_date'] ) - strtotime( $sortDate ) - self::DEFAULT_REBUILD_LIFETIME;
-                $endtimediff = strtotime( $event['event_end_date'] ) - strtotime( $sortDate );
-
-                // fetch all products part of this category/event
-                $category = Mage::getModel('catalog/category')->load($eventId);
-                $products = $category->getProductCollection()
-                    ->addAttributeToSelect('departments')
-                    ->addAttributeToSelect('ages')
-                    ->addAttributeToSelect('price')
-                    ->addAttributeToSelect('special_price');
-
-                $event['department'] = array();
-                $event['age'] = array();
-                $event['max_discount_pct'] = 0;
-
-                // populate event metadata (classifications) and calculate the
-                // maximum discount percentage by finding the highest discount
-                // percentage across all products
-                foreach ($products as $product) {
-                    $departments = $product->getAttributeTextByStore('departments', Harapartners_Service_Helper_Data::TOTSY_STORE_ID);
-                    $ages = $product->getAttributeTextByStore('ages', Harapartners_Service_Helper_Data::TOTSY_STORE_ID);
-
-                    if (is_array($departments)) {
-                        $event['department'] = $event['department'] + $departments;
-                    } else if (is_string($departments)) {
-                        $event['department'][] = $departments;
-                    }
-
-                    if (is_array($ages)) {
-                        $event['age'] = $event['age'] + $ages;
-                    } else if (is_string($ages)) {
-                        $event['age'][] = $ages;
-                    }
-
-                    // calculate discount percentage for the event
-                    $priceDiff = $product->getPrice() - $product->getSpecialPrice();
-                    if ($product->getPrice()) {
-                        $discount = round($priceDiff / $product->getPrice() * 100);
-                        $event['max_discount_pct'] = max(
-                            $event['max_discount_pct'],
-                            $discount
-                        );
-                    }
-                }
-
-                $event['department'] = array_values(
-                    array_unique($event['department'])
-                );
-                $event['age'] = array_values(
-                    array_unique($event['age'])
-                );
-
-                if ( ($starttimediff <= 0) && ($endtimediff > 0) ) {
-                    array_push( $liveNew, $event );
-                }elseif ( ($starttimediff > 0) && ($endtimediff > 0) ) {
-                    array_push( $upComingNew, $event );
-                }
-            }
-
-            if ($forceRebuild){
-                $latestRecord = $this;
-            }else {
-                $latestRecord = Mage::getModel('categoryevent/sortentry')->loadLatestRecord('date', $sortDate, $storeId);
-            }
-
-            //Update live and upcoming sort base on customerize logic which is drag and drop result for totsy
-            if ( $latestRecord->hasData() ) {
-                $liveOriginal = json_decode($latestRecord->getData('live_queue'), true);
-                $upComingOriginal = json_decode($latestRecord->getData('upcoming_queue'), true);
-
-                if(!$liveOriginal){
-                    $liveOriginal = array();
-                }
-
-                if(!$upComingOriginal){
-                    $upComingOriginal = array();
-                }
-
-                //update live queue
-                foreach ( $liveOriginal as $live ){
-                    if ( in_array($live, $liveNew) ){
-                        unset( $liveNew[array_search( $live, $liveNew )] );
-                    }else {
-                        unset( $liveOriginal[array_search( $live, $liveOriginal )] );
-                    }
-                }
-                foreach ( $liveNew as $new ){
-                    array_push( $liveOriginal, $new );
-                }
-
-                //update upcoming queue
-                foreach ( $upComingOriginal as $up ){
-                    if ( in_array($up, $upComingNew) ){
-                        unset( $upComingNew[array_search( $up, $upComingNew )] );
-                    }else {
-                        unset( $upComingOriginal[array_search( $up, $upComingOriginal )] );
-                    }
-                }
-                foreach ( $upComingNew as $new ){
-                    array_push( $upComingOriginal, $new );
-                }
-
-                $eventLiveSortedArray = $liveOriginal;
-                $eventUpcomingSortedArray = $upComingOriginal;
-            }else {
-                $eventLiveSortedArray = $liveNew;
-                $eventUpcomingSortedArray = $upComingNew;
-                $this->setData('id', NULL);
-            }
-        }
-        //save
-        $this->setData('date', $sortDate);
         $this->setData('store_id', $storeId);
-        $this->setData('top_live_queue', json_encode($topEventArray));
-        $this->setData('live_queue', json_encode($eventLiveSortedArray));
-        $this->setData('upcoming_queue', json_encode($eventUpcomingSortedArray));
-        $this->save();
+        $this->setData('date', $date);
+
+        $cache = Mage::app()->getCache();
+        if ($cache->test($this->_getCacheKey())) {
+            $this->addData(unserialize($cache->load($this->_getCacheKey())));
+        } else {
+            $this->getResource()->load($this, $date, 'date');
+            if ($this->getId()) {
+                Mage::app()->getCache()->save(
+                    serialize($this->getData()),
+                    $this->_getCacheKey(),
+                    array($this->_cacheTag)
+                );
+            }
+        }
+
+        // ensure that a record was loaded
+        if (!$this->getId()) {
+            $this->setDate($date)->setStoreId($storeId)->rebuild();
+        }
+
+        return $this;
+    }
+
+    public function rebuild()
+    {
+        $date    = $this->getDate();
+        $storeId = $this->getStoreId();
+
+        // first look for an earlier sortentry
+        $recentSortentry = Mage::getModel('categoryevent/sortentry')
+            ->getCollection()
+            ->addFieldToFilter('date', array('to' => $date, 'date' => true))
+            ->addOrder('date', 'DESC')
+            ->getFirstItem();
+
+        $startDate = date('Y-m-d', strtotime($date));
+        $endDate   = $this->calculateEndDate($date);
+
+        $live = array();
+        $upcoming = array();
+        $copiedEventIds = array();
+        if ($recentSortentry && $recentSortentry->getId()) {
+            // copy all live events from the most recent sortentry
+            $recentLive = json_decode($recentSortentry->getLiveQueue(), true);
+            foreach ($recentLive as $event) {
+                if ($preparedEvent = $this->_prepareEvent($event['entity_id'])) {
+                    $live[] = $preparedEvent;
+                    $copiedEventIds[] = $event['entity_id'];
+                }
+            }
+        }
+
+        $eventParentCategory = $this->getParentCategory(self::EVENT_CATEGORY_NAME, $storeId);
+        if (!$eventParentCategory) {
+            return $this;
+        }
+
+        $newEvents = Mage::getModel('catalog/category')->getCollection()
+            ->addAttributeToFilter('parent_id', $eventParentCategory->getId())
+            ->addAttributeToFilter('level', self::CATEGORYEVENT_LEVEL)
+            ->addAttributeToFilter('is_active', '1')
+            ->addAttributeToFilter('event_start_date', array('to' => $endDate, 'date' => true ))
+            ->addAttributeToFilter('event_end_date', array('from' => $startDate, 'date' => true ))
+            ->addAttributeToSort('event_start_date', 'asc');
+
+        if (!empty($copiedEventIds)) {
+            $newEvents->addAttributeToFilter('entity_id', array('nin' => $copiedEventIds));
+        }
+
+        foreach($newEvents as $event) {
+            if ($event = $this->_prepareEvent($event->getId())) {
+                if (strtotime($event['event_start_date']) < strtotime($date) + self::DEFAULT_REBUILD_LIFETIME) {
+                    array_unshift($live, $event);
+                } else {
+                    array_push($upcoming, $event);
+                }
+            }
+        }
+
+        $this->setData('date', $date)
+            ->setData('live_queue', json_encode($live))
+            ->setData('upcoming_queue', json_encode($upcoming));
 
         return $this;
     }
 
     public function calculateEndDate($sortDate){
-        return date("Y-m-d H:i:s", (strtotime($sortDate)+self::DEFAULT_REBUILD_LIFETIME * self::EVENT_CATEGORY_DATE_RANGE));
+        return date("Y-m-d", (strtotime($sortDate)+self::DEFAULT_REBUILD_LIFETIME * self::EVENT_CATEGORY_DATE_RANGE));
+    }
+
+    protected function _prepareEvent($categoryId)
+    {
+        // fetch all products part of this category/event
+        $category = Mage::getModel('catalog/category')->load($categoryId);
+        $event    = $category->getData();
+        $products = $category->getProductCollection()
+            ->addAttributeToSelect('departments')
+            ->addAttributeToSelect('ages')
+            ->addAttributeToSelect('price')
+            ->addAttributeToSelect('special_price');
+
+        $startDate = strtotime($this->getDate());
+        $endDate   = strtotime($this->calculateEndDate($this->getDate()));
+
+        if (!$event['is_active'] ||
+            strtotime($event['event_start_date']) > $endDate ||
+            strtotime($event['event_end_date']) < $startDate
+        ) {
+            return false;
+        }
+
+        $event['department'] = array();
+        $event['age'] = array();
+        $event['department_label'] = array();
+        $event['age_label'] = array();
+        $event['max_discount_pct'] = 0;
+
+        // populate event metadata (classifications) and calculate the
+        // maximum discount percentage by finding the highest discount
+        // percentage across all products
+        foreach ($products as $product) {
+            $departments = $product->getAttributeTextByStore(
+                'departments',
+                Harapartners_Service_Helper_Data::TOTSY_STORE_ID
+            );
+            $ages = $product->getAttributeTextByStore(
+                'ages',
+                Harapartners_Service_Helper_Data::TOTSY_STORE_ID
+            );
+
+            if (is_array($departments)) {
+                $event['department'] = $event['department'] + $departments;
+            } else if (is_string($departments)) {
+                $event['department'][] = $departments;
+            }
+
+            if (is_array($ages)) {
+                $event['age'] = $event['age'] + $ages;
+            } else if (is_string($ages)) {
+                $event['age'][] = $ages;
+            }
+
+            // store user-friendly labels also
+            $departments = $product->getAttributeTextByStore('departments', 0);
+            $ages = $product->getAttributeTextByStore('ages', 0);
+
+            if (is_array($departments)) {
+                $event['department_label'] = $event['department_label'] + $departments;
+            } else if (is_string($departments)) {
+                $event['department_label'][] = $departments;
+            }
+
+            if (is_array($ages)) {
+                $event['age_label'] = $event['age_label'] + $ages;
+            } else if (is_string($ages)) {
+                $event['age_label'][] = $ages;
+            }
+
+            // calculate discount percentage for the event
+            $priceDiff = $product->getPrice() - $product->getSpecialPrice();
+            if ($product->getPrice()) {
+                $discount = round($priceDiff / $product->getPrice() * 100);
+                $event['max_discount_pct'] = max(
+                    $event['max_discount_pct'],
+                    $discount
+                );
+            }
+        }
+
+        $event['department'] = array_values(
+            array_unique($event['department'])
+        );
+        $event['age'] = array_values(
+            array_unique($event['age'])
+        );
+
+        $event['department_label'] = array_values(
+            array_unique($event['department_label'])
+        );
+        $event['age_label'] = array_values(
+            array_unique($event['age_label'])
+        );
+
+        return $event;
     }
 
     public function getParentCategory($categoryName, $storeId){
@@ -275,11 +280,11 @@ class Harapartners_Categoryevent_Model_Sortentry extends Mage_Core_Model_Abstrac
         $collection = Mage::getModel('catalog/category')->getCollection()
                 ->addAttributeToSelect(array('name', 'description', 'image', 'small_image', 'thumbnail', 'logo', 'event_start_date', 'event_end_date', 'is_active', 'url_path', 'url_key'))
                 ->addFieldToFilter('parent_id', $parentCategoryId)
-                ->addFieldToFilter('level', self::CATEGOTYEVENT_LEVEL)
+                ->addFieldToFilter('level', self::CATEGORYEVENT_LEVEL)
                 ->addFieldToFilter('is_active', '1')
-                ->addFieldToFilter('event_start_date', array( "lt" => $endDate ))
-                ->addFieldToFilter('event_end_date', array( "gt" => $startDate ))
-                ->addAttributeToSort('event_start_date', 'desc');
+                ->addFieldToFilter('event_start_date', array( "to" => $endDate, 'date' => true ))
+                ->addFieldToFilter('event_end_date', array( "from" => $startDate, 'date' => true ))
+                ->addAttributeToSort('event_start_date', 'asc');
 
         return $collection;
     }
@@ -288,66 +293,80 @@ class Harapartners_Categoryevent_Model_Sortentry extends Mage_Core_Model_Abstrac
         $collection = Mage::getModel('catalog/category')->getCollection()
                 ->addAttributeToSelect(array('name', 'event_end_date', 'is_active'))
                 ->addFieldToFilter('parent_id', $parentCategoryId)
-                ->addFieldToFilter('level', self::CATEGOTYEVENT_LEVEL)
+                ->addFieldToFilter('level', self::CATEGORYEVENT_LEVEL)
                 ->addFieldToFilter('event_end_date', array( "lt" => $currentDate ));
 
         return $collection;
     }    
 
-    //This is an external function to be used in Controller
-    public function rebuildSortCollection($sortDate, $storeId){	
-        return $this->loadByDate($sortDate, $storeId, true);
-    }
+    public function updateSortCollection(
+        array $sortedLive = array(),
+        array $sortedUpcoming = array()
+    ) {
+        $currentLive = json_decode($this->getData('live_queue'), true);
+        $currentUpcoming = json_decode($this->getData('upcoming_queue'), true);
 
-    // ===== Cronjob related ===== //
-    public function rebuildSortCron($schedule){
-        $defaultTimezone = date_default_timezone_get();
-        $mageTimezone = Mage::getStoreConfig(Mage_Core_Model_Locale::XML_PATH_DEFAULT_TIMEZONE);
-        date_default_timezone_set($mageTimezone);
-        $sortDate = now("Y-m-d");
-        date_default_timezone_set($defaultTimezone);
-        $storeId = Mage_Core_Model_App::DISTRO_STORE_ID; //Harapartners, Yang: for now only rebuild totsy store
-        return $this->rebuildSortCollection($sortDate, $storeId);
-    }
+        $updatedLive = array();
+        $updatedUpcoming = array();
 
-    public function cleanUpExpiredEvents($schedule){
-        return $this->cleanExpiredEvents();
-        //return $this->cleanExpiredEvents(); // To revert changes in case of moving active event to expired category
-    }
-
-    //This is an external function to be used in Controller
-    public function saveUpdateSortCollection($liveSortedIdArray, $upComingSortedIdArray, $sortentry){
-        $arrayLive = json_decode($sortentry->getData('live_queue'), true);
-        $arrayUpcoming = json_decode($sortentry->getData('upcoming_queue'), true);
-        $arrayLiveTemp = array();
-        $arrayUpcomingTemp = array();
-        //update original event array by dragging and dropping result
-        if (!!$liveSortedIdArray && !empty($liveSortedIdArray)){
-            foreach ($liveSortedIdArray as $liveId){
-                foreach ($arrayLive as $live){
-                    if($live['entity_id'] == $liveId){
-                        array_push($arrayLiveTemp, $live);
-                        unset($live);
-                        break;
-                    }
-                }
+        if (!empty($sortedLive)) {
+            foreach ($currentLive as $event) {
+                $idx = array_search($event['entity_id'], $sortedLive);
+                $updatedLive[$idx] = $event;
             }
-            $sortentry->setData('live_queue',json_encode($arrayLiveTemp));
+            ksort($updatedLive);
+        } else {
+            $updatedLive = $currentLive;
         }
-        if (!!$upComingSortedIdArray && !empty($upComingSortedIdArray)){
-            foreach ($upComingSortedIdArray as $upId){
-                foreach ($arrayUpcoming as $up){
-                    if($up['entity_id'] == $upId){
-                        array_push($arrayUpcomingTemp, $up);
-                        unset($up);
-                        break;
-                    }
-                }
+
+        if (!empty($sortedUpcoming)) {
+            foreach ($currentUpcoming as $event) {
+                $idx = array_search($event['entity_id'], $sortedUpcoming);
+                $updatedUpcoming[$idx] = $event;
             }
-            $sortentry->setData('upcoming_queue',json_encode($arrayUpcomingTemp));
+            ksort($updatedUpcoming);
+        } else {
+            $updatedUpcoming = $currentUpcoming;
         }
-        $sortentry->save();
-        return $sortentry;
+
+        $this->setData('live_queue', json_encode($updatedLive))
+            ->setData('upcoming_queue', json_encode($updatedUpcoming));
+
+        return $this;
+    }
+
+    /**
+     * Adjust the queues (live & upcoming) to reflect the current date & time.
+     *
+     * @return Harapartners_Categoryevent_Model_Sortentry
+     */
+    public function adjustQueuesForCurrentTime()
+    {
+        $currentTime = Mage::helper('service')->getServerTime() / 1000;
+
+        $live     = json_decode($this->getData('live_queue'), true);
+        $upcoming = json_decode($this->getData('upcoming_queue'), true);
+
+        foreach ($live as $idx => $event) {
+            if (strtotime($event['event_start_date']) > $currentTime) {
+                // move this event to Upcoming
+                array_unshift($upcoming, $event);
+                unset($live[$idx]);
+            }
+        }
+
+        foreach ($upcoming as $idx => $event) {
+            if (strtotime($event['event_start_date']) < $currentTime) {
+                // move this event to Live
+                array_unshift($live, $event);
+                unset($upcoming[$idx]);
+            }
+        }
+
+        $this->setData('live_queue', json_encode($live))
+            ->setData('upcoming_queue', json_encode($upcoming));
+
+        return $this;
     }
 
     //For move expired categories/events to a certain category
@@ -376,13 +395,11 @@ class Harapartners_Categoryevent_Model_Sortentry extends Mage_Core_Model_Abstrac
                 
                 try {
                     if (!$revert){
-                        Mage::log('In if block', null, 'ExpireEventCleanUp.log');
                         $expCollection = $this->getExpCategoryCollection($parentCategoryId, $currentDate)->load();
                         foreach ( $expCollection as $cat ){
                             $cat->move($expiredParentId, null);
                         }
                     }else {
-                        Mage::log('In else block', null, 'ExpireEventCleanUp.log');
                         $collection = $this->getCategoryCollection($expiredParentId, $currentDate, $endDate)->load();
                         foreach ( $collection as $cat ){
                             $cat->move($parentCategoryId, null);
@@ -394,7 +411,7 @@ class Harapartners_Categoryevent_Model_Sortentry extends Mage_Core_Model_Abstrac
                 }
         }
 
-        $this->rebuildSortCollection($currentDate, $storeId);
+        //$this->rebuildSortCollection($currentDate, $storeId);
         Mage::app()->getCacheInstance()->flush();
         Mage::app()->cleanCache();
 
@@ -436,10 +453,17 @@ class Harapartners_Categoryevent_Model_Sortentry extends Mage_Core_Model_Abstrac
                 }
         }
 
-        $this->rebuildSortCollection($currentDate, $storeId);
+        //$this->rebuildSortCollection($currentDate, $storeId);
         Mage::app()->getCacheInstance()->flush();
         Mage::app()->cleanCache();
 
         return $this;
-	}
+    }
+
+    protected function _getCacheKey()
+    {
+        return $this->_cacheTag . '_' .
+            $this->getStoreId() . '_' .
+            date('Y-m-d', strtotime($this->getDate()));
+    }
 }

@@ -1,0 +1,32 @@
+/**
+ * < IE9 (IE8 and below) Conditional Style Sheet
+ */
+
+/* body gradient */
+html {
+    filter:  progid:DXImageTransform.Microsoft.gradient(startColorStr='#eef6fc', EndColorStr='#ffffff'); /* IE6,IE7 */
+    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='#eef6fc', EndColorStr='#ffffff')"; /* IE8 */
+}
+ 
+/* event tiles rollovers */
+.events-grid .thumbnail .more {
+    visibility: hidden;
+    background: none;
+    background:url('../images/trans-65.png') 0 0 repeat;
+}
+.events-grid .thumbnail:hover .more {
+    visibility: visible;
+}
+.events-grid .more .maxDiscount {
+    display: block;
+    padding:8px 0;
+    width:100%; height: auto;
+    background:  #ed2d21;
+}
+.events-grid .more .maxDiscount em {
+    position: static;
+}
+.events-grid .more .maxDiscount em span {
+    display: inline;
+}
+.events-grid .more .maxDiscount em:before {display: none;}

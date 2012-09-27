@@ -12,20 +12,23 @@
  * 
  */
 
-class Harapartners_Service_Helper_Rewrite_Catalog_Product extends Mage_Catalog_Helper_Product {
-   
-    public function initProduct($productId, $controller, $params = null) {
+class Harapartners_Service_Helper_Rewrite_Catalog_Product
+    extends Mage_Catalog_Helper_Product
+{
+    public function initProduct($productId, $controller, $params = null)
+    {
         // Prepare data for routine
         if (!$params) {
             $params = new Varien_Object();
         }
 
+        /* SKIP THIS INIT FOR NOW . Slav September 27 2012
         // Init and load product
         Mage::dispatchEvent('catalog_controller_product_init_before', array(
             'controller_action' => $controller,
             'params' => $params,
         ));
-
+        */
         if (!$productId) {
             return false;
         }
@@ -75,19 +78,26 @@ class Harapartners_Service_Helper_Rewrite_Catalog_Product extends Mage_Catalog_H
         }
         return $product;
     }
-    
-    // Search for the latest matching live event
-    public function getLiveCategoryIdFromCategoryEventSort($product){
+
+    /**
+     * Search for the latest matching live event.
+     *
+     * @param $product
+     * @return null|int
+     */
+    public function getLiveCategoryIdFromCategoryEventSort($product)
+    {
         $categoryIds = $product->getCategoryIds();
-        $helper = Mage::helper('categoryevent/memcache');
-        $indexData = $helper->getIndexDataObject();
-        foreach($indexData->getLive() as $liveCategoryData){
-            if(isset($liveCategoryData['entity_id']) 
-                    && in_array($liveCategoryData['entity_id'], $categoryIds)){
-                return $liveCategoryData['entity_id'];
+        $sortentry = Mage::getModel('categoryevent/sortentry')->loadCurrent();
+        $liveEvents = json_decode($sortentry->getLiveQueue(), true);
+        foreach ($liveEvents as $event){
+            if (isset($event['entity_id']) &&
+                in_array($event['entity_id'], $categoryIds)
+            ) {
+                return $event['entity_id'];
             }
         }
+
         return null;
     }
-    
 }

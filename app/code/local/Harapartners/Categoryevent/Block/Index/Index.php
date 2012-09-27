@@ -15,14 +15,31 @@
  * 
  */
 
-class Harapartners_Categoryevent_Block_Index_Index extends Mage_Core_Block_Template {
-
-    public function getIndexDataObject(){
-        $helper = Mage::helper('categoryevent/memcache');
-        return $helper->getIndexDataObject();
+class Harapartners_Categoryevent_Block_Index_Index
+    extends Mage_Core_Block_Template
+{
+    public function getIndexDataObject()
+    {
+        return Mage::getModel('categoryevent/sortentry')
+            ->loadCurrent()
+            ->adjustQueuesForCurrentTime();
     }
-    
-    public function hasProduct($categoryId){
-        return Mage::getResourceModel('categoryevent/sortentry')->checkEventProduct($categoryId);
+
+    /**
+     * Get the number of products associated with a category/event.
+     *
+     * @param int $categoryId
+     *
+     * @return int
+     */
+    public function countCategoryProducts($categoryId)
+    {
+        /** @var $read Varien_Db_Adapter_Interface */
+        $read   = Mage::getSingleton('core/resource')->getConnection('core_read');
+        $select = $read->select()
+            ->from('catalog_category_product', 'count(*)')
+            ->where('category_id = ?', $categoryId);
+
+        return $read->fetchOne($select);
     }
 }

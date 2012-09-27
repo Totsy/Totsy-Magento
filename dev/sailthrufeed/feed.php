@@ -1,5 +1,4 @@
 <?php 
-
 $full_path = dirname(dirname(__DIR__));
 
 require_once( $full_path.'/app/Mage.php' );
@@ -21,8 +20,8 @@ $out = array('events'=>array(), 'pending'=>array(), 'closing'=>array());
 /*### DEFINE STORE AND CATEGORY ####*/
 //$categoryId = '8'; //totsy events category id
 //$topEventCategoryId = '24'; //totsy top events category id
-$storeId = Mage::app()->getStore()->getId(); //totsy store id
-
+$storeId = Mage::app()->getStore($cache_object->getStoreCode())->getId(); //store id
+Mage::app()->setCurrentStore($store_id);
 
 /*### DEFINE DATE&TIME AND VAR ###*/
 $defaultTimezone = date_default_timezone_get();

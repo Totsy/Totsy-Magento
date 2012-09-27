@@ -1,0 +1,47 @@
+<layout version="0.1.0">
+	<default>
+		<reference name="head">
+			<action method="addJs"><script>harapartners/hpcheckout.js</script></action>
+		</reference>
+	</default>
+	
+	<hpcheckout_checkout_index>
+		<label>Checkout</label>
+		<reference name="root">
+            <action method="setTemplate"><template>page/1column.phtml</template></action>
+        </reference>
+		<reference name="content">
+			<block type="hpcheckout/wrapper" name="hpcheckout.wrapper" as="wrapper" template="hpcheckout/wrapper.phtml">
+				<block type="hpcheckout/login" name="hpcheckout.login" as="login" template="hpcheckout/login.phtml"/>
+				<block type="hpcheckout/billing" name="hpcheckout.billing" as="billing" template="hpcheckout/billing.phtml"/>
+				<block type="hpcheckout/shipping" name="hpcheckout.shipping" as="shipping" template="hpcheckout/shipping.phtml"/>
+				<!--block type="hpcheckout/shippingmethod" name="hpcheckout.shipping_method" as="shipping_method" template="hpcheckout/shipping_method.phtml"/-->
+				<block type="hpcheckout/payment" name="hpcheckout.payment" as="payment" template="hpcheckout/payment.phtml">
+					<block type="enterprise_customerbalance/checkout_onepage_payment_additional" template="hpcheckout/payment/customerbalance/additional.phtml" as="customerbalance" name="hpcheckout.customerbalance" />
+					<block type="enterprise_reward/checkout_payment_additional" template="hpcheckout/payment/reward/additional.phtml" as="reward" name="hpcheckout.reward.points" /> 
+					<block type="hpcheckout/payment_methods" name="hpcheckout.payment.methods" as="methods" template="hpcheckout/payment/methods.phtml" /> 
+				</block>
+				<block type="hpcheckout/review" name="hpcheckout.review" as="review" template="hpcheckout/review.phtml">
+					<block type="hpcheckout/review_info" name="info" template="hpcheckout/review/info.phtml">
+						<action method="addItemRender"><type>default</type><block>checkout/cart_item_renderer</block><template>hpcheckout/review/item.phtml</template></action>
+						<action method="addItemRender"><type>grouped</type><block>checkout/cart_item_renderer_grouped</block><template>hpcheckout/review/item.phtml</template></action>
+						<action method="addItemRender"><type>configurable</type><block>checkout/cart_item_renderer_configurable</block><template>hpcheckout/review/item.phtml</template></action>
+                            <block type="checkout/cart_totals" name="hpcheckout.review.totals" as="totals" template="hpcheckout/review/totals.phtml"/>
+						<block type="core/template" name="hpcheckout.review.button" as="button" template="hpcheckout/review/button.phtml"/>
+					</block>
+				</block>
+				<block type="core/template" name="hpcheckout.script" as="script" template="hpcheckout/script.phtml"/>
+			</block>
+		</reference>
+	</hpcheckout_checkout_index>
+	
+	<hpcheckout_checkout_success translate="label">
+        <label>Checkout Success</label>
+        <reference name="root">
+            <action method="setTemplate"><template>page/1column.phtml</template></action>
+        </reference>
+        <reference name="content">
+            <block type="hpcheckout/success" name="hpcheckout.success" as="success" template="hpcheckout/success.phtml"/>
+        </reference>
+    </hpcheckout_checkout_success>
+</layout>

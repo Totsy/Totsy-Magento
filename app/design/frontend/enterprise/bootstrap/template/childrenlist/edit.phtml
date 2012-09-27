@@ -1,0 +1,59 @@
+<?php
+/*
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the End User Software Agreement (EULA).
+ * It is also available through the world-wide-web at this URL:
+ * http://www.harapartners.com/license
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to eula@harapartners.com so we can send you a copy immediately.
+ * 
+ */
+?>
+<?php 
+	if ($this->isEditMode()){
+		$_childInfo = $this->getChildInfo();
+	}else{
+		$_childInfo = Mage::getModel('childrenlist/child');
+	}
+?>
+
+<div class="page-title">
+    <h1><?php echo ($this->isEditMode())?$this->__('Edit Children Information'):$this->__('Create Children Information') ?></h1>
+</div>
+<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+<form action="<?php echo $this->getUrl('childrenlist/index/editPost') ?>" method="post" id="form-validate" enctype="multipart/form-data">
+<div class="fieldset">
+    <?php echo $this->getBlockHtml('formkey')?>
+    <h2 class="legend"><?php echo $this->__('Children Information') ?></h2>
+    <ul class="form-list">
+        <li class="fields">
+            <?php echo $this->getLayout()->createBlock('childrenlist/widget_name')->setObject($this->getChildInfo())->toHtml() ?>
+        </li>
+        <?php $_dob = $this->getLayout()->createBlock('childrenlist/widget_dob') ?>
+        <?php $_gender = $this->getLayout()->createBlock('childrenlist/widget_gender') ?>
+		<?php $_relationship = $this->getLayout()->createBlock('childrenlist/widget_relationship') ?>
+        <li class="fields">
+        	<input type="hidden" name="id" value="<?php echo $this->getChildInfo()->getId() ?>" />
+        	<input type="hidden" name="customer_id" value="<?php echo $this->getCustomer()->getId() ?>" />
+            <div class="field"><?php echo $_dob->setChildBirthday($_childInfo->getChildBirthday())->toHtml() ?></div>
+            <div class="field"><?php echo $_gender->setChildGender($_childInfo->getChildGender())->toHtml() ?></div>
+			<div class="field"><?php echo $_relationship->setChildCustomerRelationship($_childInfo->getChildCustomerRelationship())->toHtml() ?></div>
+        </li>
+    </ul>
+</div>
+
+<div class="buttons-set form-buttons">
+    <p class="back-link"><a href="<?php echo $this->escapeUrl($this->getBackUrl()) ?>"><small>&laquo; </small><?php echo $this->__('Go back') ?></a></p>
+    <button type="submit" class="button" title="<?php echo $this->__('Save') ?>"><span><span><?php echo $this->__('Save') ?></span></span></button>
+</div>
+<p class="required"><?php echo $this->__('* Required Fields') ?></p>
+</form>
+
+
+<script type="text/javascript">
+//<![CDATA[
+    var dataForm = new VarienForm('form-validate', true);
+//]]>
+</script>

@@ -144,7 +144,7 @@ class Harapartners_SpeedTax_Model_Speedtax_Calculate extends Harapartners_SpeedT
             
             $this->_invoice->lineItems[] = $sptxLineItem;
         }
-        
+
         // ----- Other line items ----- //
         //If global store config specifies: "tax_shipping", then create shipping cost line item. Note this is different from "Tax_Shipping" tax class of a product
         if(!!Mage::getStoreConfig("speedtax/speedtax/tax_shipping")){
@@ -194,7 +194,7 @@ class Harapartners_SpeedTax_Model_Speedtax_Calculate extends Harapartners_SpeedT
         // ----- Other line items ----- //
         //If global store config specifies: "tax_shipping", then create shipping cost line item. Note this is different from "Tax_Shipping" tax class of a product
         if(!!Mage::getStoreConfig("speedtax/speedtax/tax_shipping")){
-            $this->_addLineItemFromShippingCost($mageOrderAddress);
+            $this->_addLineItemFromShippingCost($mageOrderInvoice);
         }
         return $this;
     }
@@ -202,13 +202,17 @@ class Harapartners_SpeedTax_Model_Speedtax_Calculate extends Harapartners_SpeedT
     
     //Mage_Sales_Model_Quote_Address or Mage_Sales_Model_Order_Address
     protected function _addLineItemFromShippingCost($mageAddress) {
+        $shippingAmount =$mageAddress->getShippingAmount();
+        if ($mageAddress instanceof Totsy_Sales_Model_Order_Invoice){
+            $mageAddress=$mageAddress->getShippingAddress();
+        }
         $sptxLineItem = new lineItem();
         $sptxLineItem->lineItemNumber = count( $this->_invoice->lineItems ); //Append to end
         $sptxLineItem->productCode = self::TAX_SHIPPING_LINEITEM_TAX_CLASS;
         $sptxLineItem->customReference = self::TAX_SHIPPING_LINEITEM_REFERNCE_NAME;
         $sptxLineItem->quantity = 1;
         $sptxPrice = new price();
-        $sptxPrice->decimalValue = $mageAddress->getShippingAmount ();
+        $sptxPrice->decimalValue = $shippingAmount;
         $sptxLineItem->salesAmount = $sptxPrice;
         $sptxLineItem->shipFromAddress = $this->_getShipFromAddress ();
         $sptxLineItem->shipToAddress = $this->_getShippingToAddress ($mageAddress); //Note, address type is validated at the entry point 'queryQuoteAddress'
@@ -454,5 +458,4 @@ class Harapartners_SpeedTax_Model_Speedtax_Calculate extends Harapartners_SpeedT
         }
         return $log;
     }
-
 }

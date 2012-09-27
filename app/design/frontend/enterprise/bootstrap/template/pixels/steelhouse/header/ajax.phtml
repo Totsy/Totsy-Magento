@@ -1,0 +1,19 @@
+<?php
+$_product = Mage::registry('current_product');
+$_category = Mage::registry('current_category');
+$referring_url = Mage::registry('referring_url');
+if($_product && $_category && $_product->getId() && $_category->getId()):
+?>
+<!-- Steelhouse BEGIN -->
+<div id="steelhouse_product_pixel"></div>
+<script type="text/javascript">
+    Event.observe(window,'load',function() {
+        new Ajax.Updater({success: 'steelhouse_product_pixel'}, '<?php echo Mage::getUrl('pixels/steelhouse/index'
+            , array('product'=>$_product->getId(),'category'=>$_category->getId()
+                ,'current_url'=> base64_encode(Mage::helper('core/url')->getCurrentUrl()),'referrer_url'=> base64_encode($referring_url))); ?>'
+            , {method:'get',evalScripts: true});
+    });
+
+</script>
+<!-- Steelhouse END -->
+<?php endif;

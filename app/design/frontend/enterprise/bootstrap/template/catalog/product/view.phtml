@@ -1,0 +1,212 @@
+<?php
+/**
+ * Magento Enterprise Edition
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Magento Enterprise Edition License
+ * that is bundled with this package in the file LICENSE_EE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://www.magentocommerce.com/license/enterprise-edition
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category design
+ * @package enterprise_default
+ * @copyright Copyright © 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license http://www.magentocommerce.com/license/enterprise-edition
+ */
+
+/**
+ * Product view template
+ *
+ * @see Mage_Catalog_Block_Product_View
+ * @see Mage_Review_Block_Product_View
+ */
+?>
+
+<?php
+$_helper = $this->helper('catalog/output');
+$_product = $this->getProduct();
+$_category = "";
+
+$_categories = $_product->getCategoryIds();
+$_category = Mage::getModel('catalog/category')->load(end($_categories));
+
+?>
+<style>
+.old-price {display:none;}
+.price-box {text-align: center; display: block; margin:15px 0px;}
+.big_price {font-size:25px!important; font-weight: bold; }
+</style>
+
+<?php
+$special_price = $_product->getPrice();
+$final_price = $_product->getSpecialPrice();
+
+$originalPrice = money_format('%n', $special_price);
+$discountPrice = money_format('%n', $final_price);
+$percent = number_format(($originalPrice - $discountPrice) * (100 / $originalPrice));
+$savings = money_format('%n', $originalPrice) - money_format('%n', $discountPrice);
+
+?>
+<script type="text/javascript">
+    var optionsPrice = new Product.OptionsPrice(<?php echo $this->getJsonConfig() ?>
+    );
+</script>
+<div id="messages_product_view"><?php echo $this->getMessagesBlock()->toHtml() ?></div>
+<section id="pageheader" class="jumbotron subhead">
+    <div class="page-header subnav">
+        <h2><a href="<?php echo $_category->getUrl();?>"><?php echo $_helper->categoryAttribute($_category, $_category->getName(), 'name') ?></a> <small class="pull-right"><?php $endcount_utc = strtotime($_category->getEventEndDate());
+$endcount_lc = date("F j, Y, G:i:s", $endcount_utc); ?>
+<img src="/skin/frontend/enterprise/bootstrap/images/iconmonstr-time-icon.png" width="35px" style="margin:0px 3px 0px 0px;" class="pull-left" /><span class="count-down-timer" id="timer" style="color:#000; font-weight:bold;"></span></small></h2>
+    </div>
+</section>
+<?php echo $this->getMessagesBlock()->toHtml(); ?>
+<div class="row">
+<div class="span4">
+    <?php echo $this->getChildHtml('media'); ?>
+</div>
+<div>
+<div class="page-header" style="float: right; width: 630px; margin: 0px; border-bottom: 4px solid #ddd;">
+    <h2><?php echo $_product->getName(); ?></h2>
+</div>
+
+<div class="span5">
+<div class="well" style="margin-top:10px; border:none; padding:0px;box-shadow: none; background:none;">
+    <h4>Description</h4>
+    <hr style="margin:7px auto; padding:0px;"/>
+     <div class="product_desc">
+     <?php echo $_product->getDescription(); ?> 
+     </div>
+    <?php if($this->getProduct()->isVirtual()): ?>
+        <?php // echo $this->getChildHtml('shipping_and_return_virtual'); ?>
+        <div id="shipping">
+        <h4>Shipping</h4>
+        <hr style="margin:7px auto; padding:0px;"/>This is a voucher code sale, which means there's no product being shipped to you at this time. Instead, shortly after your purchase, you will receive an email containing a voucher code, along with instructions on how to use and redeem that code. There is no shipment from Totsy, which means there are no shipping costs for this item. If you have any questions, please contact us at <a href="mailto:support@totsy.com">support@totsy.com</a>.<br /><br />
+All vouchers are final sale and nonrefundable.</div>
+    <?php else : ?>
+        <?php echo $this->getChildHtml('product.shipping.return'); ?>
+    <?php endif; ?>
+        <?php if ($_product->getData('final_sale')): ?>
+        <br />
+        <p class="final-sale"><strong>All Sales Are Final</strong></p>
+    <?php endif; ?>
+ </div>
+<?php 
+    $event_end_date = strtotime($_category->getEventEndDate());
+    $today = strtotime('NOW');
+?>
+</div>
+<!-- <div class="well"> -->
+<div class="span3">
+    <form action="<?php echo $this->getSubmitUrl($_product) ?>" method="post" id="product_addtocart_form" <?php if($_product->getOptions()): ?> enctype="multipart/form-data" <?php endif; ?> >
+            <div class="no-display">
+                <input type="hidden" name="product" value="<?php echo $_product->getId() ?>" />
+                <input type="hidden" name="related_product" id="related-products-field" value="" />
+            </div>
+    <div id="product-main-info">
+        <p class="product-ids">
+        <?php //echo $this->__('SKU# %s', $this->htmlEscape($_product->getSku())); ?></p>
+        <?php //echo $this->getReviewsSummaryHtml($_product, false, true)?>
+        <div class="">
+        <?php echo $this->getChildHtml('alert_urls') ?>
+        <?php if($today <= $event_end_date):  ?>
+        <?php echo $this->getChildHtml('product_type_data') ?>
+        
+        <?php endif; ?>
+        <hr style="margin:15px 0px 3px 0px;"/>
+        <div style="float:left; display:block; padding:10px 3px; margin:10px 0px 10px 0px;">
+            <div style="float:left; display:block; width:72px; text-align:center; font-size:16px; border-right:2px solid #ddd;">$<?php echo number_format((float)$special_price, 2, '.', '');
+ ?><br/><span style="font-size:12px;">Original</span></div>
+            <div style="float:left; display:block; width:72px; text-align:center; font-size:16px; border-right:2px solid #ddd;"><?php echo number_format((float)$percent, 0, '.', '');
+ ?>%<br/><span style="font-size:12px;">Discount</span></div>
+            <div style="float:left; display:block; width:74px; text-align:center; font-size:16px;">$<?php echo number_format((float)$savings, 2, '.', '');
+ ?><br/><span style="font-size:12px;">Savings</span></div>
+        </div>
+        <div class="clear"></div>
+        <hr style="margin:3px 0px 15px 0px;"/>
+        </div>
+                    <?php echo $this->getChildHtml('tierprices') ?>
+                    <?php echo $this->getChildHtml('extrahint') ?>
+                        <?php if (!$this->hasOptions()):?>
+                             <div class="add-to-box">
+                                 <?php if($_product->isSaleable()): ?>
+                                     <?php echo $this->getChildHtml('addtocart') ?>
+                                 <?php endif; ?>
+                                 <?php //echo $this->getChildHtml('addto') ?>
+                             </div>
+                        <?php else:?>
+                             <?php if ($_product->isSaleable() && $this->hasOptions() && $this->getChildChildHtml('container1') ):?>
+                                 <div class="options-container-small">
+                                     <?php echo $this->getChildChildHtml('container1', '', true, true) ?>
+                                 </div>
+                             <?php else: ?>
+                                 <?php //echo $this->getChildHtml('addto') ?>
+                             <?php endif;?>
+                        <?php endif; ?>
+                        <?php echo $this->getChildHtml('other');?>
+    <?php if ($_product->isSaleable() && $this->hasOptions() && $this->getChildChildHtml('container2')):?>
+        <div class="options-container-big">
+            <?php echo $this->getChildChildHtml('container2', '', true, true) ?>
+        </div>
+
+<div>
+<!-- <script type="text/javascript">var switchTo5x=true;</script>
+<script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
+<script type="text/javascript">stLight.options({publisher: "ur-9cc9581d-d77b-def7-ed25-5e247f0520ad"}); </script>
+<br/><strong>Share</strong>
+<hr style="margin:10px 0px;"/>
+<span class='st_pinterest_large pull-right' displayText='Pinterest'></span>
+<span class='st_facebook_large pull-right' displayText='Facebook'></span>
+<span class='st_twitter_large pull-right' displayText='Tweet'></span>
+<span class='st_email_large pull-right' displayText='Email'></span>
+<div class="clear"></div>
+
+</div>
+-->
+</div>
+    <?php endif;?>
+        </div>
+        </form>
+</div>
+<!-- </div> -->
+        <?php echo $this->getChildHtml('relatedProducts') ?>
+        <?php //echo $this->getChildHtml('upsell_products') ?>
+        <?php //echo $this->getChildHtml('productTagList') ?>
+        <?php echo $this->getChildHtml('product_additional_data') ?>
+</div>
+</div>
+<script type="text/javascript">
+/* cart stuff minified */
+var productAddToCartForm=new VarienForm("product_addtocart_form");productAddToCartForm.submit=function(a,b){if(this.validator.validate()){var c=this.form;var d=c.action;if(b){c.action=b}var e=null;if(!b){b=jQuery("#product_addtocart_form").attr("action")}b=b.replace("checkout/cart","ajax/checkout_cart");var f=jQuery("#product_addtocart_form").serialize();f+="&isAjax=1";jQuery("#ajax_loader").show();try{jQuery.ajax({url:b,dataType:"json",type:"post",data:f,success:function(b){if(b.redirect){window.location.href=b.redirect}jQuery("#ajax_loader").hide();if(b.headercart&&$("header-user-info")){$("header-user-info").update(b.headercart)}if(b.status&&b.message){var c='<ul class="alert alert-success"><li class="'+b.status.toLowerCase()+'-msg"><ul><li>'+b.message+"</li></ul></li></ul>";$("messages_product_view").update(c);(function(){$("messages_product_view").update(null)}).delay(2)}if(a&&a!="undefined"){a.disabled=false}}})}catch(e){}this.form.action=d;if(e){throw e}if(a&&a!="undefined"){}}}.bind(productAddToCartForm);productAddToCartForm.submitLight=function(a,b){if(this.validator){var c=Validation.methods;delete Validation.methods["required-entry"];delete Validation.methods["validate-one-required"];delete Validation.methods["validate-one-required-by-name"];if(this.validator.validate()){if(b){this.form.action=b}this.form.submit()}Object.extend(Validation.methods,c)}}.bind(productAddToCartForm)
+    
+    /*fancy box stuff minified */
+    jQuery(document).ready(function(){jQuery(".fancybox").fancybox();jQuery(".fancybox-effects-a").fancybox({helpers:{title:{type:"outside"},overlay:{speedIn:500,opacity:.95}}});jQuery(".fancybox-effects-b").fancybox({openEffect:"none",closeEffect:"none",helpers:{title:{type:"over"}}})})
+    
+    /* cart timer minified */
+    var html=getTimerHtml("live","<?php echo $endcount_lc ?>");jQuery("#timer").countdown({date:"<?php echo $endcount_lc; ?>",htmlTemplate:html,onComplete:function(a){jQuery(this).html("Completed")},leadingZero:true,direction:"down"})
+</script>
+<!--
+<script type="text/javascript">var switchTo5x=true;</script>
+<script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
+<script type="text/javascript">stLight.options({publisher: "fa9539d4-b1db-40d3-9e2d-9e9a8dc98b42",onhover: false}); </script>
+
+<?php $small_img = $this->helper('catalog/image')->init($_product, 'image')->resize(100); ?>
+<script>
+stWidget.addEntry({
+        "service":"sharethis",
+        "element":document.getElementById('st_sharethis_custom'),
+        "url":"<?php echo $this->helper('core/url')->getCurrentUrl();?>",
+        "title":"Totsy",
+        "image":"<?php echo $small_img; ?>"
+});
+</script>
+-->

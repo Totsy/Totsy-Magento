@@ -1,0 +1,215 @@
+<?php
+/**
+ * Harapartners
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Harapartners License
+ * that is bundled with this package in the file LICENSE_EE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://www.Harapartners.com/license
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@Harapartners.com so we can send you a copy immediately.
+ *
+ */
+?>
+
+<?php
+/**
+ * Catalog index list template
+ * Load Top, Live, Upcoming events
+ * 
+ */
+?>
+<?php    $indexDataObj 	= 	$this->getIndexDataObject();
+    $baseUrl 		= 	Mage::getBaseUrl();
+    $maxPerSend 	= 	0;
+    $timer 			= 	0;
+    $topArray 		= 	'';
+    $liveArray 		= 	'';
+    $upcomingArray  = 	'';	
+    if ( $indexDataObj->hasData('toplive') ){
+        $topArray = $indexDataObj->getData('toplive');
+        $topArray = array(); //Harapartners, yang: "temporarily" block the top events
+    }
+    if ( $indexDataObj->hasData('live_queue') ){
+        $liveArray = json_decode($indexDataObj->getData('live_queue'), true);
+    }
+    if ( $indexDataObj->hasData('upcoming_queue') ){
+        $upcomingArray = json_decode($indexDataObj->getData('upcoming_queue'), true);
+    }
+?>
+<?php // include banner if it is enabled
+    $bannerActive = Mage::getModel('cms/block')->load('home_banner')->getIsActive();
+    if ($bannerActive) {
+        echo '<div class="banner">';
+        echo $this->getLayout()->createBlock('cms/block')->setBlockId('home_banner')->toHtml();
+        echo '</div>';
+    }
+?>
+
+<div class="catalog-events-container">
+    <div class="live-events-container">
+
+    <?php // Live Events ?>
+    <?php if (!!$liveArray && !empty($liveArray)) : ?>
+        <section id="events-live" class="events-grid">
+        <?php if (!$bannerActive) : ?>
+<!--
+            <header class="page-header">
+                <h2><img src="/skin/frontend/enterprise/bootstrap/images/iconmonstr-time-8-icon.png" width="50" /> Today's Sales</h2>
+            </header>
+-->
+        <?php endif; ?>
+            <ul class="thumbnails">
+            <?php foreach ($liveArray as $live): ?>
+                <?php
+                    $endcountRaw = strtotime($live['event_end_date']);
+                    $endcount = date("F j, Y, G:i:s", $endcountRaw);
+                    $hasProduct = $this->countCategoryProducts($live['entity_id']);
+                    $eventDepts = $live['department_label'];
+                    $eventAges = $live['age_label'];
+                    $maxDiscount = $live['max_discount_pct'];
+                ?>
+                <?php if ($hasProduct): ?>
+                    <li class="span3 catalog-event event-counter-<?php echo $timer;?>">
+                        <span class="echoShare" 
+                            data-productname="<?php echo $live['name'];?>" 
+                            data-productcap="" 
+                            data-productdesc="<?php echo 
+                            strip_tags(html_entity_decode($this->getDescription($live['description'])));?>" 
+                            data-imageclass="" 
+                            data-producturl="<?php echo Mage::getBaseUrl().$live['url_path']; ?>">
+                        </span>
+                        <a href="<?php echo Mage::getBaseUrl().$live['url_path']; ?>" class="thumbnail">
+                            <hgroup>
+                                <h5><?php echo $live['name'];?></h5>
+                                <!-- <h6><?php //echo $live['short_description'];?></h6> -->
+                            </hgroup>
+                            <div class="more">
+                                <div class="maxDiscount"><em>up to <span><strong><?php echo $maxDiscount; ?>%</strong> off</span></em></div>
+                                <div class="more-content">
+                                    <section class="labels container">
+                                        <h6>Categories:</h6>
+                                        <ul>
+                                        <?php foreach ($eventDepts as $eventDept) : ?>
+                                            <li><?php echo $eventDept; ?></li>
+                                        <?php endforeach; ?>
+                                        </ul>
+                                    </section>
+                                    <section class="labels container">
+                                        <h6>Ages:</h6>
+                                        <ul>
+                                        <?php foreach ($eventAges as $eventAge) : ?>
+                                            <li><?php echo $eventAge; ?></li>
+                                        <?php endforeach; ?>  
+                                        </ul>                                  
+                                    </section>
+                                    <p id="time1-<?php echo $timer ?>"></p>
+                                    <span class="btn btn-primary">Shop Now!</span>
+                                </div>
+                            </div>
+                            <?php
+                                $imgFile = (isset($live['small_image']))
+                                ? BP . DS . 'media' . DS . 'catalog' . DS . 'category' . DS . $live['small_image']
+                                : BP . DS . 'skin' . DS . 'frontend' . DS . 'enterprise ' . DS . 'harapartners' . DS . 'images' . DS . 'catalog' . DS . 'product' . DS . 'placeholder' . DS . 'small_image.jpg';
+                            ?>
+                            <span class="event-link">
+                                <img src="<?php echo Mage::helper('service/image')->loadImageFile($imgFile)->resize(228)->keepFrame(FALSE); ?>" width="228" height="263" alt="<?php echo $live['name'];?>" />
+                            </span>
+                            <script type="text/javascript">
+                                // @TODO: all countdown jQuery should be externalized
+                                var html = getTimerHtml('live','<?php echo $endcount ?>');
+                                jQuery("#time1-<?php echo $timer ?>").countdown({//date: "12 10, 2011 16:11", //Counting TO a date
+                                    date: "<?php echo $endcount; ?>", //Counting TO a date
+                                    htmlTemplate: html,
+                                    onComplete: function( event ){
+                                        jQuery(this).html("Completed");
+                                        jQuery(".event-counter-<?php echo $timer;?>").hide();
+                                    },
+                                    leadingZero: true,
+                                    direction: "down"
+                                });
+                            </script>
+                            <?php $timer++; ?>
+                        </a>
+                    </li>
+                <?php endif; ?>
+            <?php endforeach; ?>
+            </ul>
+        </section><!-- /#events-live -->
+    <?php endif; ?>
+    
+    <?php // ENDING SOON - not functioning, no $endingArray exists - just a placeholder var and code for now ?>
+    <?php $endingArray = ''; ?>
+    <?php if (!!$endingArray && !empty($endingArray)): ?>
+        <section id="events-ending" class="events-grid">
+            <header class="page-header">
+                <h2><img src="/skin/frontend/enterprise/bootstrap/images/iconmonstr-time-8-icon.png" width="35px" /> Hurry, Ending Soon!</h2>
+            </header>
+            <ul>
+            <?php // foreach block here ?>
+            </ul>
+        </section><!-- /#events-ending -->
+    <?php endif; ?>
+
+    <?php // Upcoming Events ?>
+    <?php if (!!$upcomingArray && !empty($upcomingArray)): ?>
+        <section id="events-upcoming" class="events-grid">
+            <header class="page-header">
+                <h2><img src="/skin/frontend/enterprise/bootstrap/images/iconmonstr-calendar-5-icon.png" width="35px" class="pull-left" /> Upcoming Sales</h2>
+            </header>
+            <ul class="thumbnails">
+            <?php foreach ($upcomingArray as $up): ?>
+                <?php
+                    $endcountRaw = strtotime($up['event_start_date']);
+                    $endcount = date("F j, Y, G:i:s", $endcountRaw);
+                ?>
+                <li class="span2 catalog-event up-event-counter-<?php echo $timer;?>">
+                    <span class="echoShare" 
+                        data-productname="<?php echo $up['name'];?>" 
+                        data-productcap="" 
+                        data-productdesc="<?php echo strip_tags(html_entity_decode($this->getDescription($up['description'])));?>" 
+                        data-imageclass="" 
+                        data-producturl="<?php echo Mage::getBaseUrl().$up['url_path']; ?>">
+                    </span>
+                    <div class="thumbnail">
+                        <hgroup>
+                            <h5><a href="<?php echo Mage::getBaseUrl().$up['url_path']; ?>"><?php echo $up['name'];?></a></h5>
+                        </hgroup>
+                        <?php
+                            $imgFile = (isset($up['small_image']))
+                            ? BP . DS . 'media' . DS . 'catalog' . DS . 'category' . DS .
+                            $up['small_image']
+                            : BP . DS . 'skin' . DS . 'frontend' . DS . 'enterprise ' . DS . 'harapartners' . DS . 'images' . DS . 'catalog' . DS . 'product' . DS . 'placeholder' . DS . 'small_image.jpg';
+                        ?>
+                        <a class="event-link" href="<?php echo Mage::getBaseUrl().$up['url_path']; ?>">
+                            <img src="<?php echo Mage::helper('service/image')->loadImageFile($imgFile)->resize(165)->keepFrame(FALSE); ?>" width="165px" height="171" alt="<?php echo $up['name'];?>" />
+                        </a>
+                        <?php $timer++; ?>
+                        <p class="opens_in" id="time2-<?php echo $timer ?>"></p>
+                        <script type="text/javascript">
+                            // @TODO: externalize countdown script
+                            var html = getTimerHtml('upcoming','<?php echo $endcount ?>');
+                            jQuery("#time2-<?php echo $timer ?>").countdown({
+                                //date: "12 10, 2011 16:11", //Counting TO a date
+                                date: "<?php echo $endcount; ?>", //Counting TO a date
+                                htmlTemplate: html,
+                                onComplete: function( event ){
+                                    jQuery(this).html("Completed");
+                                    jQuery(".up-event-counter-<?php echo $timer;?>").remove();
+                                },
+                                leadingZero: true,
+                                direction: "down"
+                            });
+                        </script>                    
+                    </div>
+                </li>
+            <?php endforeach; ?>
+            </ul>
+        </section><!-- /#events-upcoming -->
+    <?php endif; ?>
+
+    </div><!-- /.live-events-container -->
+</div><!-- /.catalog-events-container -->

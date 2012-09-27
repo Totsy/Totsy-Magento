@@ -21,6 +21,7 @@ class Totsy_Sailthru_Helper_Cache
     private $_cache_file = null;
     private $_cache_file_ext = '.json';
     private $_cache_skip_check = false;
+    private $_cache_store = null;
 
     /**
     * This method does all diry caching job.
@@ -48,7 +49,7 @@ class Totsy_Sailthru_Helper_Cache
         // handle cli params first
         $this->_doCliParams();
         // make sure all cache related params are taking its place
-        $this->_handleGetParams();
+        //$this->_handleGetParams();
         // how we have domain and get params, so generate a cache filename
         $this->_generateCacheFileName();
         // touch cache file
@@ -59,6 +60,16 @@ class Totsy_Sailthru_Helper_Cache
         $this->_setRightHttpHost($cached);
 
         return $cached;
+    }
+
+    /**
+    * Return store code. This walue chages for mamasource otherwise is NULL
+    *
+    * @return string
+    */
+    public function getStoreCode() 
+    {
+        return $this->_cache_store;
     }
 
     /**
@@ -119,12 +130,20 @@ class Totsy_Sailthru_Helper_Cache
     private function _handleGetParams()
     {
     
-        if (!empty($_GET['domain']) 
-            && stripos($_GET['domain'], 'mamasource.totsy.com')
-        ) {
-            $this->_setHttHost('mamasource.totsy.com');
+        if (!empty($_GET['domain']) {
+            switch ($_GET['domain']){
+                case 'mamasource.totsy.com':
+                    $this->_setHttHost('mamasource.totsy.com');
+                    $this->_cache_store = 'mamasource';
+                break;
+
+                case 'totsy.com':
+                case 'www.totsy.com':    
+                default:
+                    $this->_setHttHost('www.totsy.com');        
+                break;
+            }
         }
-    
     }
 
     /**
