@@ -22,8 +22,7 @@
  * 
  */
 ?>
-<?php 
-    $indexDataObj 	= 	$this->getIndexDataObject();
+<?php    $indexDataObj 	= 	$this->getIndexDataObject();
     $baseUrl 		= 	Mage::getBaseUrl();
     $maxPerSend 	= 	0;
     $timer 			= 	0;
@@ -127,7 +126,7 @@
                                     htmlTemplate: html,
                                     onComplete: function( event ){
                                         jQuery(this).html("Completed");
-                                        jQuery(".event-counter-<?php echo $timer;?>").remove();
+                                        jQuery(".event-counter-<?php echo $timer;?>").hide();
                                     },
                                     leadingZero: true,
                                     direction: "down"

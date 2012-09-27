@@ -147,17 +147,30 @@ class Harapartners_Stockhistory_Model_Transaction extends Mage_Core_Model_Abstra
         if($product->getTypeId() != 'simple'){
             Mage::throwException('Purchase should only contain simple product. Other product types are ignored.');
         }
+
+        $productData = $product->getData();
+
+        $tempProductId = $this->getData('product_id');
+        $category = Mage::getModel('catalog/category')->load($this->getData('category_id'));
+        $sold = Mage::helper('stockhistory')->getProductSoldInfoByCategory($category, array( $tempProductId => $tempProductId ));
         
-        $stock = $product->getStockItem();
-        $qtyStock = $stock->getQty();
-        $qtyDelta = $this->getData('qty_delta');
-        if(($qtyStock + $qtyDelta) < 0){
-            throw new Exception('This stock update will result in a negative value. Ignored.');
+        $bool = $sold[$tempProductId]['qty'] || $product->getData('is_master_pack');
+        $bool = $bool && ($this->getData('action_type') == 4);
+
+        if (!$bool) {
+            $stock = $product->getStockItem();
+            $qtyStock = $stock->getQty();
+            $qtyDelta = $this->getData('qty_delta');
+            if(($qtyStock + $qtyDelta) < 0){
+                throw new Exception('This stock update will result in a negative value. Ignored.');
+            }
+            
+            $stock->setQty($qtyStock + $qtyDelta);
+            $stock->save();
+            return true;
+        } else {
+            throw new Exception('Cannot remove item that ' . ($product->getData('is_master_pack')) ? 'is a case pack ' : 'has been sold');
         }
-        
-        $stock->setQty($qtyStock + $qtyDelta);
-        $stock->save();
-        return true;
     }
 
     public function changeCasePackStatus($items, $changeto) {
