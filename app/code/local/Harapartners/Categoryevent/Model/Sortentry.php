@@ -105,9 +105,12 @@ class Harapartners_Categoryevent_Model_Sortentry
         // first look for an earlier sortentry
         $recentSortentry = Mage::getModel('categoryevent/sortentry')
             ->getCollection()
-            ->addFieldToFilter('date', array('lte' => $date, 'date' => true))
+            ->addFieldToFilter('date', array('to' => $date, 'date' => true))
             ->addOrder('date', 'DESC')
             ->getFirstItem();
+
+        $startDate = date('Y-m-d', strtotime($date));
+        $endDate   = $this->calculateEndDate($date);
 
         $live = array();
         $upcoming = array();
@@ -115,20 +118,13 @@ class Harapartners_Categoryevent_Model_Sortentry
         if ($recentSortentry && $recentSortentry->getId()) {
             // copy all live events from the most recent sortentry
             $recentLive = json_decode($recentSortentry->getLiveQueue(), true);
-
             foreach ($recentLive as $event) {
-                if ((strtotime($event['event_start_date']) < strtotime($date) ||
-                    strtotime($event['event_end_date']) > strtotime($date)) &&
-                    $preparedEvent = $this->_prepareEvent($event['entity_id'])
-                ) {
+                if ($preparedEvent = $this->_prepareEvent($event['entity_id'])) {
                     $live[] = $preparedEvent;
                     $copiedEventIds[] = $event['entity_id'];
                 }
             }
         }
-
-        $startDate = date('Y-m-d', strtotime($date));
-        $endDate   = $this->calculateEndDate($date);
 
         $eventParentCategory = $this->getParentCategory(self::EVENT_CATEGORY_NAME, $storeId);
         if (!$eventParentCategory) {
@@ -148,15 +144,12 @@ class Harapartners_Categoryevent_Model_Sortentry
         }
 
         foreach($newEvents as $event) {
-            $event = $this->_prepareEvent($event->getId());
-            if ($event === false) {
-                continue;
-            }
-
-            if (strtotime($event['event_start_date']) < strtotime($date) + 86400) {
-                array_unshift($live, $event);
-            } else {
-                array_push($upcoming, $event);
+            if ($event = $this->_prepareEvent($event->getId())) {
+                if (strtotime($event['event_start_date']) < strtotime($date) + self::DEFAULT_REBUILD_LIFETIME) {
+                    array_unshift($live, $event);
+                } else {
+                    array_push($upcoming, $event);
+                }
             }
         }
 
@@ -182,7 +175,13 @@ class Harapartners_Categoryevent_Model_Sortentry
             ->addAttributeToSelect('price')
             ->addAttributeToSelect('special_price');
 
-        if (!$event['is_active']) {
+        $startDate = strtotime($this->getDate());
+        $endDate   = strtotime($this->calculateEndDate($this->getDate()));
+
+        if (!$event['is_active'] ||
+            strtotime($event['event_start_date']) > $endDate ||
+            strtotime($event['event_end_date']) < $startDate
+        ) {
             return false;
         }
 

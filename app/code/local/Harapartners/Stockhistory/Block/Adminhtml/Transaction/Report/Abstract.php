@@ -63,7 +63,6 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Abstract exte
         //Building report collection
         $reportCollection = new Varien_Data_Collection();
         $productsSoldArray = Mage::helper('stockhistory')->getProductSoldInfoByCategory($this->getCategory(), $uniqueProductList);
-        debug($productsSoldArray);
         $sizeAttribute = Mage::getSingleton('eav/config')->getAttribute('catalog_product', 'size');
         $sizeOptions = $sizeAttribute->getSource()->getAllOptions(false);
         $colorAttribute = Mage::getSingleton('eav/config')->getAttribute('catalog_product', 'color');

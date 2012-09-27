@@ -152,11 +152,18 @@ class Harapartners_Stockhistory_Adminhtml_TransactionController extends Mage_Adm
                 $transaction = Mage::getModel('stockhistory/transaction');
                 $transaction->importData($tempdata);
                 
-               // die();
-                if($transaction->updateProductStock()){
-                    $transaction->save();
-                }else{
-                    $this->_getSession()->addError('There is an error saving amendment Info for "' . trim($productSku));
+                $category = Mage::getModel('catalog/category')->load($poObject->getCategoryId());
+                $event_end_date = strtotime($category->getEventEndDate());
+                $today = strtotime('NOW');
+
+                if (!($event_end_date <= $today) ) {
+                    if($transaction->updateProductStock()){
+                        $transaction->save();
+                    }else{
+                        $this->_getSession()->addError('There is an error saving amendment Info for "' . trim($productSku));
+                    }
+                } else {
+                        $transaction->save();
                 }
             }catch (Exception $e){
                 $isBatchSuccess = false;

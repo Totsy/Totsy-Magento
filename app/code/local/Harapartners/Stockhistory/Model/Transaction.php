@@ -148,24 +148,15 @@ class Harapartners_Stockhistory_Model_Transaction extends Mage_Core_Model_Abstra
             Mage::throwException('Purchase should only contain simple product. Other product types are ignored.');
         }
 
-      //  var_dump($this->getData());
-     //  var_dump($product->getData());
         $productData = $product->getData();
 
         $tempProductId = $this->getData('product_id');
         $category = Mage::getModel('catalog/category')->load($this->getData('category_id'));
         $sold = Mage::helper('stockhistory')->getProductSoldInfoByCategory($category, array( $tempProductId => $tempProductId ));
-        debug('Sold is : ' . $sold[$tempProductId]['qty'] . " It's boolean is " . (bool)$sold[$tempProductId]['qty']) ;
-        debug("Action type is " . $this->getData('action_type') );
-        debug("Product is a case pack? " . (bool)$product->getData('is_master_pack') );
-      //  var_dump($sold[$tempProductId]['qty']);
         
         $bool = $sold[$tempProductId]['qty'] || $product->getData('is_master_pack');
-        debug('First condition result ~sold_qty || is case pack:' . $bool);
         $bool = $bool && ($this->getData('action_type') == 4);
-        debug('Second condition result First bool && action_type == 4' . $bool);
-       // var_dump(!$bool);
-       // die();
+
         if (!$bool) {
             $stock = $product->getStockItem();
             $qtyStock = $stock->getQty();
