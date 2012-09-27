@@ -47,8 +47,8 @@ $_estRuntimeString = $this->__('%d:%02d', floor($_estRuntime/60), $_estRuntime%6
 
 </td><td class="td-wrapper">
 <?php if (!$_isRunning): ?>
-<button type="button" class="log-report" onclick="location.href='<?php echo $this->getUrl('*/*/downloadLog', array('id'=>$_p->getId())) ?>'"><span><?php echo $this->__('Download Plain Log') ?></span></button>
-<button type="button" class="log-report" onclick="location.href='<?php echo $this->getUrl('*/*/exportExcelReport', array('id'=>$_p->getId())) ?>'"><span><?php echo $this->__('Export Excel Report') ?></span></button>
+<button type="button" class="log-report" onclick="location.href='<?php echo $this->getUrl('urapidflowadmin/adminhtml_profile/downloadLog', array('id'=>$_p->getId())) ?>'"><span><?php echo $this->__('Download Plain Log') ?></span></button>
+<button type="button" class="log-report" onclick="location.href='<?php echo $this->getUrl('urapidflowadmin/adminhtml_profile/exportExcelReport', array('id'=>$_p->getId())) ?>'"><span><?php echo $this->__('Export Excel Report') ?></span></button>
 <?php endif ?>
 <h4><?php echo $this->__('Log Tail') ?>:</h4>
 <table cellspacing="0" class="profile-log-tail"><thead><tr>
