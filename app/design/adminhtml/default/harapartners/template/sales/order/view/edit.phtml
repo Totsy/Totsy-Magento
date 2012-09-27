@@ -222,7 +222,7 @@ $orderStoreDate = $this->formatDate($_order->getCreatedAtStoreDate(), 'medium', 
             <?php if ($this->customerHasAddresses()): ?>
                 <?php echo $this->getAddressesHtmlSelect('shipping') ?>
             <?php endif; ?>
-            <br />
+            <br /><br />
         	<?php $shipping = $_order->getShippingAddress() ?>
 			
         	<form id="shipping-fields">
@@ -260,28 +260,28 @@ $orderStoreDate = $this->formatDate($_order->getCreatedAtStoreDate(), 'medium', 
 <div class="clear"></div>
 <?php endif; ?>
 <script type="text/javascript">
-    function changeAddress() {
-            var $formInputs = jQuery('#billing-fields :input');
-            if( jQuery( this ).val() == '' ) {
-                $formInputs.each(function(i) {
-                    $(this).val('');
-                });
-            } else {
-                var params = {};
-                params['addressId'] = jQuery('select#billing-address-select').val();
-                new Ajax.Request('<?php echo Mage::getModel('adminhtml/url')->getUrl('orderedit/order/getorderaddressinformations') ?>', {
-                    method: 'get',
-                    parameters: params,
-                    onSuccess: function(transport) {
-                        var fields = transport.responseText.evalJSON();
-                        $formInputs.each(function(i) {
-                            if (this.name in fields) {
-                                this.value = fields[this.name];
-                                this.text = fields[this.name];
-                            }
-                        })
-                    }
-                });
-            }
+    function changeAddress(type) {
+        var $formInputs = jQuery('#'+type+'-fields :input');
+        if( jQuery('select#'+type+'-address-select').val() == '' ) {
+            $formInputs.each(function(i) {
+                $(this).val('');
+            });
+        } else {
+            var params = {};
+            params['addressId'] = jQuery('select#'+type+'-address-select').val();
+            new Ajax.Request('<?php echo Mage::getModel('adminhtml/url')->getUrl('orderedit/order/getorderaddressinformations') ?>', {
+                method: 'get',
+                parameters: params,
+                onSuccess: function(transport) {
+                    var fields = transport.responseText.evalJSON();
+                    $formInputs.each(function(i) {
+                        if (this.name in fields) {
+                            this.value = fields[this.name];
+                            this.text = fields[this.name];
+                        }
+                    })
+                }
+            });
+        }
      }
 </script>

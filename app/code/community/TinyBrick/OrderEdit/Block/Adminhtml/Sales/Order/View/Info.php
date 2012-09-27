@@ -56,6 +56,7 @@ class TinyBrick_OrderEdit_Block_Adminhtml_Sales_Order_View_Info extends Mage_Adm
         $select = $this->getLayout()->createBlock('core/html_select')
             ->setName($type.'_address_id')
             ->setId($type.'-address-select')
+            ->setExtraParams('onchange="changeAddress(' ."'". $type ."'". ')"')
             ->setClass('address-select')
             ->setOptions($options);
 
