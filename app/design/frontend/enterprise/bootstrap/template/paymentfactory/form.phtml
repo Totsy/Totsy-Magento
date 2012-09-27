@@ -123,7 +123,7 @@
                 <input type="text" id="<?php echo $_code ?>_cc_number" name="payment[cc_number]" title="<?php echo $this->__('Credit Card Number') ?>" class="input-text validate-cc-number validate-cc-type-radio" value="<?php echo (($this->__('Credit Card Number')!=='Credit Card Number') ? $this->__('Credit Card Number') : "") ?>" placeholder="<?php echo $this->__('Credit Card Number') ?>" />
             </div>
         </div>
-        <div class="rewards_points use-new-card-wrapper">
+        <div class="rewards_points use-new-card-wrapper pull-left">
             <?php echo $this->getLayout()->getBlock('hpcheckout.reward.points')->toHtml(); ?>
         </div>
     </div>
@@ -158,12 +158,16 @@
                 </select>
             </div>
         </div>
-        <div class="cc_save_card pull-right use-new-card-wrapper">
+        <div class="cc_save_card pull-left use-new-card-wrapper">
             <span>
                 <input type="checkbox" value="1" name="payment[saved_by_customer]" id="<?php echo $_code ?>_saved" />
             </span>
             <span for="<?php echo $_code ?>_cc_save"><?php echo $this->__(' Save this Credit Card ?') ?>
             </span>
+        </div>
+        <div class="cc_security">
+            <div class="cc_secure_icon"><img src="https://ben.totsy.com/skin/frontend/enterprise/bootstrap/images/security-lock.png" width="19" height="32"></div>
+            <div class="cc_secure_text">Totsy.com makes sure your information<br> is private and secure.</div>
         </div>
     </div> 
     <div style="clear:both"></div>
