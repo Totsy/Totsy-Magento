@@ -260,11 +260,10 @@ $orderStoreDate = $this->formatDate($_order->getCreatedAtStoreDate(), 'medium', 
 <div class="clear"></div>
 <?php endif; ?>
 <script type="text/javascript">
-    jQuery( document ).ready( function() {
-        jQuery('#billing-address-select').change( function() {
-            var $billFormInputs = jQuery('#billing-fields :input');
+    function changeAddress() {
+            var $formInputs = jQuery('#billing-fields :input');
             if( jQuery( this ).val() == '' ) {
-                $billFormInputs.each(function(i) {
+                $formInputs.each(function(i) {
                     $(this).val('');
                 });
             } else {
@@ -274,14 +273,15 @@ $orderStoreDate = $this->formatDate($_order->getCreatedAtStoreDate(), 'medium', 
                     method: 'get',
                     parameters: params,
                     onSuccess: function(transport) {
-                        var data = jQuery.parseJSON(transport);
-                        alert(data.firstname);
+                        var fields = transport.responseText.evalJSON();
+                        $formInputs.each(function(i) {
+                            if (this.name in fields) {
+                                this.value = fields[this.name];
+                                this.text = fields[this.name];
+                            }
+                        })
                     }
                 });
-                $billFormInputs.each(function(i) {
-                    //alert(jQuery(this).val());
-                });
             }
-        })
-    });
+     }
 </script>

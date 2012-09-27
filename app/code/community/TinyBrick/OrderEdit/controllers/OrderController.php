@@ -210,7 +210,7 @@ class TinyBrick_OrderEdit_OrderController extends Mage_Adminhtml_Controller_Acti
     public function getOrderAddressInformationsAction()
     {
         $addressId = $this->getRequest()->getParam('addressId');
-        $address = Mage::getModel('sales/order_address')->load($addressId);
+        $address = Mage::getModel('customer/address')->load($addressId);
         echo Zend_Json::encode($address->getData());
     }
 }
