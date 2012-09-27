@@ -13,13 +13,11 @@
  * to license@Harapartners.com so we can send you a copy immediately.
  *
  */
-?>
-<?php 
-	$sortDate = $this->getSortDate();
-	$storeId = $this->getSortStore();
-	$arrayCollection = $this->loadSortCollection($sortDate, $storeId);
-	$liveArray = $arrayCollection['live'];
-	$upcomingArray = $arrayCollection['upcoming'];
+$sortDate = $this->getRequest()->getPost('sort_date');
+$storeId = $this->getRequest()->getPost('sort_store');
+$sortentry = $this->getSortentry();
+$liveArray = json_decode($sortentry->getLiveQueue(), true);
+$upcomingArray = json_decode($sortentry->getUpcomingQueue(), true);
 ?>
 <div class="catalog-events-container">
 	<div class="live-events-container">
@@ -36,8 +34,9 @@
                         $imgFile = BP.DS.'skin'.DS.'frontend'.DS.'enterprise'.DS.'harapartners'.DS.'images'.DS.'catalog'.DS.'product'.DS.'placeholder'.DS.'thumbnail.jpg';
                     }
                 ?>
-				<p class="event-name"><?php echo $live['name'];?></p>
-				<a class="event-link" href=""><img src="<?php echo Mage::helper('service/image')->loadImageFile($imgFile)->resize(150,173); ?>" width="150px" height="173px" alt="" /></a>
+				<p class="event-name"><?php echo $live['name'] ?><time datetime="<?php echo date('Y-m-d H:i:s', strtotime($live['event_start_date'])) ?>"><?php echo date('Y-m-d H:i:s', strtotime($live['event_start_date'])) ?></time></p>
+				<img src="<?php echo Mage::helper('service/image')->loadImageFile($imgFile)->resize(150,173); ?>" width="150px" height="173px" alt="" />
+                <a href="<?php echo $this->getEventUrl($live)?>" target="_blank" class="event-control btn-ctrl-view"><img src="/skin/adminhtml/default/enterprise/images/btn_go.gif" width="11" height="12" alt="View (in new window)"/></a>
 			</li>
 		<?php endforeach; ?>
 		</ul>
@@ -46,7 +45,7 @@
 		<p class="event-list-title"><?php echo Mage::helper('categoryevent')->__('Events that starts next day (within ' . Harapartners_Categoryevent_Model_Sortentry::EVENT_CATEGORY_DATE_RANGE . ' days range )') ?></p>
 		<p>This list contains <strong>ALL</strong> events that are opening soon. The content may also be different from the frontend "Upcoming Sales".</p>
 		<p>"Upcoming Sales" contains a filtered list of "Events that starts next day", plus events in "All possible live events today" that are <strong>not live yet</strong>.</p>
-		<ul id="sortable2">
+		<ul id="sortable2" class="ui-sortable">
 			<?php foreach ( $upcomingArray as $up ):?>
 				<li class="ui-state-default" id="recordsUpArray_<?php echo $up['entity_id'];?>">
                     <?php
@@ -56,43 +55,22 @@
                         $imgFile = BP.DS.'skin'.DS.'frontend'.DS.'enterprise'.DS.'harapartners'.DS.'images'.DS.'catalog'.DS.'product'.DS.'placeholder'.DS.'thumbnail.jpg';
                     }
                     ?>
-					<p class="event-name"><?php echo $up['name'];?></p>
-					<a class="event-link" href=""><img src="<?php echo Mage::helper('service/image')->loadImageFile($imgFile)->resize(150,173); ?>" width="150px" height="173px" alt="" /></a>
+                    <p class="event-name"><?php echo $up['name'] ?><time datetime="<?php echo date('Y-m-d H:i:s', strtotime($up['event_start_date'])) ?>"><?php echo date('Y-m-d H:i:s', strtotime($up['event_start_date'])) ?></time></p>
+                    <img src="<?php echo Mage::helper('service/image')->loadImageFile($imgFile)->resize(150,173); ?>" width="150px" height="173px" alt="" />
+                    <a href="<?php echo $this->getEventUrl($up)?>" target="_blank" class="event-control btn-ctrl-view"><img src="/skin/adminhtml/default/enterprise/images/btn_go.gif" width="11" height="12" alt="View (in new window)"/></a>
 				</li>
 			<?php endforeach; ?>
 		</ul>
 	</div>
-	<div class="control-button-set">
-		<button id="sort-order-submit" class="scalable" type="button" onclick="saveOrderSubmit();">
-			<span><?php echo Mage::helper('categoryevent')->__('Save Sort') ?></span>
-		</button>
-		<button id="sort-rebuild-submit" class="scalable" type="button" onclick="rebuildSubmit();">
-			<span><?php echo Mage::helper('categoryevent')->__('Rebuild Sort') ?></span>
-		</button>
-		<!--button id="sort-order-submit" class="scalable" type="button" onclick="alert('Flush page cache');">
-			<span><?php// echo Mage::helper('categoryevent')->__('Refresh home (sales) pages immediately') ?></span>
-		</button-->
-	</div>
-	<!--form id="sort-selection" action="" method="post">
-		<label for="sort_date" ><?php// echo Mage::helper('categoryevent')->__('Preview by hour') ?></label>
-		<input type="text" name="sort_date" id="datepicker" value="<?php //echo $postSortDate;?>"/>
-		<input type="hidden" name="form_key" value="<?php //echo $this->getFormKey() ?>"/>
-		<input type="hidden" name="sort_store" value="" id="sort_store_id"/>
-		<input type="hidden" name="post_active" value="1"/>
-		<button id="sort-type-submit" class="scalable" type="submit" >
-			<span><?php// echo Mage::helper('categoryevent')->__('Preview') ?></span>
-		</button>
-		<p>Preview today's frontend home (sales) pages based on the given time</p>
-	</form-->
 </div>
-		
+
 <script>
 
 	var liveorder = 0;
 	var uporder = 0;
 	var sortdate = '<?php echo $sortDate; ?>';
 	var storeid = '<?php echo $storeId; ?>';
-	
+
 	jQuery(function() {
 		jQuery( "#sortable" ).sortable({
 				update: function(){
@@ -111,39 +89,73 @@
 		jQuery( "#sortable2" ).disableSelection();
 	});
 
-	function saveOrderSubmit(){
-		var sortformkey = '<?php echo $this->getFormKey(); ?>';
-		jQuery.ajax({
-			type: 'POST',
-			url: "<?php echo $this->getSortSavePostUrl(); ?>",
-			data: "&sortdate="+sortdate+"&storeid="+storeid+"&"+liveorder+"&"+uporder+"&form_key="+sortformkey,
-			dataType: "json",
-			success: function(jsonResponse){
-				if(jsonResponse.status){
-					alert('Sort Order Saved');
-					jQuery("#sort-type-submit").click();					
-				}else {
-					alert(jsonResponse.error_message);
-				}
-			}
-		});
-	}
+    function saveOrderSubmit(){
+        var sortformkey = '<?php echo $this->getFormKey(); ?>';
 
-	function rebuildSubmit(){
-		var sortformkey = '<?php echo $this->getFormKey(); ?>';
-		jQuery.ajax({
-			type: 'POST',
-			url: "<?php echo $this->getSortRebuildPostUrl(); ?>",
-			data: "&sortdate="+sortdate+"&storeid="+storeid+"&"+liveorder+"&"+uporder+"&form_key="+sortformkey,
-			dataType: "json",
-			success: function(jsonResponse){
-				if(jsonResponse.status){
-					alert('Sort Rebuild Completed');
-					jQuery("#sort-type-submit").click();					
-				}else {
-					alert(jsonResponse.error_message);
-				}
-			},
+        var result = new Ajax.Request("<?php echo $this->getSortSavePostUrl(); ?>", {
+            parameters: "sortdate="+sortdate+"&storeid="+storeid+"&"+liveorder+"&"+uporder+"&form_key="+sortformkey,
+            onSuccess: function() {
+                alert("Sort order saved.");
+            }
+        });
+    }
+
+    function rebuildSubmit(){
+        var sortformkey = '<?php echo $this->getFormKey(); ?>';
+
+        var result = new Ajax.Request("<?php echo $this->getSortRebuildPostUrl(); ?>", {
+            parameters: "sortdate="+sortdate+"&storeid="+storeid+"&"+liveorder+"&"+uporder+"&form_key="+sortformkey,
+            onSuccess: function() {
+                alert("Sort order has been rebuilt.");
+                jQuery("#sort-type-submit").click();
+            }
+        });
+    }
+
+	function changeOrder(events) {
+		events.sort(function(left,right){
+			leftid = jQuery(left).attr('id');
+			leftid = leftid.substr(17);
+			leftid_pos = liveids.indexOf(leftid);
+
+			rightid = jQuery(right).attr('id');
+			rightid = rightid.substr(17);
+			rightid_pos = liveids.indexOf(rightid);
+			return (leftid_pos < rightid_pos) ? -1 : (leftid_pos > rightid_pos)? 1 : 0;
 		});
-	}	
+
+		return events;
+	}
 </script>
+<style type="text/css">
+    .ui-sortable {
+    }
+    .ui-sortable > li {
+        width: 150px;
+        position: relative;
+        padding: 4px;
+        margin: 8px;
+        border: solid 1px #ccc;
+        cursor: move;
+    }
+    .ui-sortable .event-name {
+        height: 50px;
+    }
+    .ui-sortable > li time {
+        display: block;
+        color: #666;
+        font-size: smaller;
+        font-weight: normal;
+    }
+    .ui-sortable > li > .event-control {
+        position: absolute;
+        display: none;
+    }
+    .ui-sortable > li:hover > .event-control {
+        display: block;
+    }
+    .ui-sortable > li > .btn-ctrl-view {
+        top: 4px;
+        right: 4px;
+    }
+</style>

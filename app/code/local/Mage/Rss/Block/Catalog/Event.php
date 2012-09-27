@@ -81,7 +81,7 @@ class Mage_Rss_Block_Catalog_Event extends Mage_Rss_Block_Catalog_Abstract
 
         /*if user want to check upcomming products, put this parameter to url*/
         $isCheckingUpcomming = $upcomming;
-        $sortentryObject = Mage::getModel('categoryevent/sortentry')->loadByDate($sortDate, $storeId, false);
+        $sortentryObject = Mage::getModel('categoryevent/sortentry')->loadByDate($sortDate);
         if (!isset($isCheckingUpcomming)){
             $sortentry = $sortentryObject->getLiveQueue();
         }else {

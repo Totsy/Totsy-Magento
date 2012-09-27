@@ -83,7 +83,8 @@ HpCheckout.prototype = {
 				}
 				errorMessage = '<div class="hpcheckout-error-message">' + message + '</div>';
 			}
-			jQuery( '#' + blocksData[ blockCode ].wrapperId + ' .checkout-content' ).html( errorMessage + blocksData[ blockCode ].html );
+            var messageHtml = blocksData[blockCode].html;
+			jQuery( '#' + blocksData[ blockCode ].wrapperId + ' .checkout-content' ).html( messageHtml );
 		}
 	},
 	
@@ -114,10 +115,12 @@ HpCheckout.prototype = {
 		jQuery( '#shipping\\:postcode' ).change();
 	}, 
 	
-	switchPaymentMethod: function() {
-		var selection = jQuery( '#hpcheckout-payment-select :selected' ).eq(0).val();		
-		jQuery( '[id^="payment_form_"]' ).hide();
-		jQuery( '#payment_form_' + selection ).show();
+    switchPaymentMethod: function(payment_method) {
+        if (payment_method=="paypal_express") {
+            jQuery("#cc_data").hide();
+            jQuery().hide();
+        }        
+        jQuery("#payment_form_" + payment_method).show();
 	},
 	
 	switchAddress: function() {
@@ -191,7 +194,18 @@ HpCheckout.prototype = {
 		if( ! this.validate() ) {
 			return;
 		}
-		var checkoutObject = this;
+        //IE grabs placeholder text from orders in lew of of an actual value
+        //this fix removes values explicitly when they match their placeholder text
+        jQuery("#hpcheckout-wrapper").find('input[placeholder]').each(function() {
+            var e = $(this);
+            if (e.id) {
+                if (jQuery("[id='" + e.id + "']").attr('value') === jQuery("[id='" + e.id + "']").attr('placeholder')) {
+                    jQuery("[id='" + e.id + "']").val('');
+                }
+            }
+        });
+
+        var checkoutObject = this;
 		var postData = this.getFormData();
 		postData += '&updatePayment=true';
 		this.throbberOn();
@@ -200,15 +214,15 @@ HpCheckout.prototype = {
 			dataType: "json",
 			type: "POST",
 			data: postData,
-			error: function() {
+			error: function(data) {
 				checkoutObject.throbberOff();
 				checkoutObject.renderErrorMessage( 'Please refresh the current page.' );
 			},
 			success: function( response ) {
-				// if ( response.redirect ) {
-					// location.href = response.redirect;
-					// return;
-				// }
+				 if ( response.redirect ) {
+					 location.href = response.redirect;
+					 return;
+				 }
 				if( ! response.status ) {
 					window.location = checkoutObject.data.successUrl;
 				} else {
@@ -347,10 +361,4 @@ HpCheckout.prototype = {
 		}
 		return preparedBlockCodes;
 	}
-}
-
-
-
-function hideTopCart(){
-    jQuery("#topCartContent").stop().fadeTo(200,0).hide();
 }

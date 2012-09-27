@@ -30,6 +30,23 @@ class Totsy_Catalog_Model_Resource_Eav_Mysql4_Setup extends Mage_Eav_Model_Entit
                         'apply_to'                   => Mage_Catalog_Model_Product_Type::TYPE_SIMPLE,
                         'is_required'                => 0,
                     ),
+                    'tax_class'                  => array(
+                        'type'                       => 'int',
+                        'label'                      => 'Speed Tax Class',
+                        'input'                      => 'select',
+                        'source'                     => 'catalog/product_attribute_source_tax',
+                        'sort_order'                 => 6,
+                        'apply_to'                   => Mage_Catalog_Model_Product_Type::TYPE_SIMPLE,
+                        'is_required'                => 0,                                                    
+                    ),
+                    'upc'                        => array(
+                        'type'                       => 'varchar',
+                        'label'                      => 'UPC',
+                        'input'                      => 'text',
+                        'sort_order'                 => 10,
+                        'apply_to'                   => Mage_Catalog_Model_Product_Type::TYPE_SIMPLE,
+                        'is_required'                => 0,
+                    ),
                 )
             )
         );

@@ -49,83 +49,80 @@
         $timeOutFlag = 0;
     }
 ?>
-    <?php if( !$_productCollection->count() || $timeOutFlag ): ?>
+    <?php if( !$_productCollection->count() || $timeOutFlag ): 
+        // display nothing if no collections or event expired
+        // @TODO: this logic seems flawed, better to test negation? Refactor post-MVP launch.
+        // i.e. " if ( $_productCollection->count() && !$timeOutFlag ): //render the events grid… 
+    ?>
     <?php else : ?>
     <div class="row">
-        <div class="span12">
+        <div class="span12 event-products">
         <?php // Grid Only Mode ?>
-        <?php $_collectionSize = $_productCollection->count() ?>
-        <?php $_columnCount = 3; //for the elements number will be changed by the filter?>
-    <?php //$_columnCount = $this->getColumnCount(); ?>
-    <ul class="thumbnails">
-    <?php $i=0; foreach ($_productCollection as $_product): ?>
-        <?php if ( $_product->isSalable() ):?>
-        <?php if ($i++%$_columnCount==0): ?>
-        <?php endif ?>
-        <span class="echoShare" 
-            data-productname="<?php echo $_product->getName();?>"
-            data-productcap="" 
-            data-productdesc="<?php echo $_product->getShortDescription();?>" 
-            data-imageclass="" 
-            data-producturl="<?php echo $_product->getProductUrl(); ?>">
-            <li class="item<?php if(($i-1)%$_columnCount==0): ?> first<?php elseif($i%$_columnCount==0): ?> last <?php endif; ?><?php echo ' '.str_replace(',',' ',$_product->getDepartments()) ?>" department="<?php echo str_replace(',',' ',$_product->getDepartments()) ?>" style="display:none;">
-            </li>
-        </span>
-        <li class="span4">
-            <div class="thumbnail" style="padding:0px; min-height:420px;">
-                <a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" class="product-image"><img src="<?php echo $this->helper('catalog/image')->init($_product, 'small_image')->resize(308, 400)->keepFrame(FALSE); ?>" width="308px" height="361px" alt="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" /></a>
-            <div class="caption">
-            <h5 style="display:block; min-height:35px; width:195px; font-weight: normal; color: #636466; font-size: 13px;"><?php echo $_helper->productAttribute($_product, $_product->getName(), 'name') ?></h5>
-            <?php if($_product->getRatingSummary()): ?>
-            <?php echo $this->getReviewsSummaryHtml($_product, 'short') ?>
-            <?php endif; ?>
-            <div style="float:right; width:95px; margin-top:-46px; text-align:right;">
-            <?php echo $this->getPriceHtml($_product, true) ?>
-            </div>
-            <div class="clear"></div>
-            
-            </div>
-          </div>
-        </li>
-    <?php if ($i%$_columnCount==0 || $i==$_collectionSize): ?>
-        <?php endif ?>
-        <?php endif;?>
-    <?php endforeach ?>
-    </ul>
-    </div>
-    </div>
-    <?php foreach ($_productCollection as $_product): ?>
-        <?php if ( !$_product->isSalable() ):?>
-        <?php if ($i++%$_columnCount==0): ?>
-            <ul class="products-grid">
-                <?php endif ?>
-                <li class="status status_sold_out item<?php if(($i-1)%$_columnCount==0): ?> first<?php elseif($i%$_columnCount==0): ?> last <?php endif; ?><?php echo ' '.str_replace(',',' ',$_product->getDepartments()) ?>" department="<?php echo str_replace(',',' ',$_product->getDepartments()) ?>">
-                    <img id="out-of-stock" src="<?php echo $this->getSkinUrl('images/soldout.png');?>"/>
+        <?php 
+            /*
+             * @GOTCHA: these collecitonSize and columnCount vars are not being used
+             * - no longer needing to count colleciton size to close ULs (all products are now in one big UL)
+             * - no longer need to count columns - their dependent "first" and "last" css classnames are not being used
+             */
+        ?>
+        <?php //$_collectionSize = $_productCollection->count() ?>
+        <?php //$_columnCount = 3; //for the elements number will be changed by the filter ?>
+        <?php //$_columnCount = $this->getColumnCount(); ?>
+            <ul class="thumbnails event_prod_grid">
+        	<?php foreach ($_productCollection as $_product): ?>
+        		<?php if ( $_product->isSalable() ):?>
+                    <li class="span4 item<?php echo ' '.str_replace(',',' ',$_product->getDepartments()) ?>" data-department="<?php echo str_replace(',',' ',$_product->getDepartments()) ?>">
                         <span class="echoShare" 
-                            data-productname="<?php echo $_product->getName();?>" 
+                            data-productname="<?php echo $_product->getName();?>"
                             data-productcap="" 
-                            data-productdesc="<?php echo $_product->getDescription();?>"
+                            data-productdesc="<?php echo $_product->getShortDescription();?>" 
                             data-imageclass="" 
-                            sdata-producturl="<?php echo $_product->getProductUrl(); ?>">
+                            data-producturl="<?php echo $_product->getProductUrl(); ?>">
                         </span>
-                        <a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" class="product-image"><img src="<?php echo $this->helper('catalog/image')->init($_product, 'small_image')->resize(350,350); ?>" width="350px" height="350px" alt="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" /></a>
-                        <div class="product-info">
-                            <h2 class="product-name"><a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $this->stripTags($_product->getName(), null, true) ?>"><?php echo $_helper->productAttribute($_product, $_product->getName(), 'name') ?></a></h2>
-                            <?php if($_product->getRatingSummary()): ?>
+                        <div class="thumbnail">
+                            <a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" class="product-image"><img src="<?php echo $this->helper('catalog/image')->init($_product, 'small_image')->resize(308, 310)->keepFrame(FALSE); ?>" width="308" height="310" alt="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" /></a>
+                            <div class="caption">
+                                <h5><?php echo $_helper->productAttribute($_product, $_product->getName(), 'name') ?></h5>
+                                <?php if($_product->getRatingSummary()): ?>
                                 <?php echo $this->getReviewsSummaryHtml($_product, 'short') ?>
-                            <?php endif; ?>
-                        <?php echo $this->getPriceHtml($_product, true) ?>
+                                <?php endif; ?>
+                                <div class="price-wrap">
+                                    <?php echo $this->getPriceHtml($_product, true) ?>
+                                </div>
+                                <div class="clear"></div>
+                            </div>
                         </div>
-                </li>
-            <?php if ($i%$_columnCount==0 || $i==$_collectionSize): ?>
+                    </li>
+                <?php endif; ?>
+            <?php endforeach; ?>
+        	<?php foreach ($_productCollection as $_product): ?>
+        		<?php if ( !$_product->isSalable() ):?>
+                    <li class="span4 status status_sold_out item<?php echo ' '.str_replace(',',' ',$_product->getDepartments()) ?>" data-department="<?php echo str_replace(',',' ',$_product->getDepartments()) ?>">
+                        <img class="out-of-stock" src="<?php echo $this->getSkinUrl('images/soldout.png');?>"/>
+                        <span class="echoShare" 
+                            data-productname="<?php echo $_product->getName();?>"
+                            data-productcap="" 
+                            data-productdesc="<?php echo $_product->getShortDescription();?>" 
+                            data-imageclass="" 
+                            data-producturl="<?php echo $_product->getProductUrl(); ?>">
+                        </span>
+                        <div class="thumbnail">
+                            <a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" class="product-image"><img src="<?php echo $this->helper('catalog/image')->init($_product, 'small_image')->resize(308, 310)->keepFrame(FALSE); ?>" width="308px" height="310" alt="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" /></a>
+                            <div class="caption">
+                                <h5><?php echo $_helper->productAttribute($_product, $_product->getName(), 'name') ?></h5>
+                                <?php if($_product->getRatingSummary()): ?>
+                                <?php echo $this->getReviewsSummaryHtml($_product, 'short') ?>
+                                <?php endif; ?>
+                                <div class="price-wrap">
+                                    <?php echo $this->getPriceHtml($_product, true) ?>
+                                </div>
+                                <div class="clear"></div>
+                            </div>
+                        </div>
+                    </li>
+                <?php endif;?>
+            <?php endforeach; ?>
             </ul>
-            <?php endif ?>
-        <?php endif;?>
-        <?php endforeach ?>
-        <script type="text/javascript">
-            decorateGeneric($$('ul.products-grid'), ['odd','even','first','last'])
-        </script>
-        </div>
-        <?php endif; ?>
-    </div>
-</div>
+        </div><!-- /.span12 -->
+    </div><!-- /.row -->
+    <?php endif; ?>

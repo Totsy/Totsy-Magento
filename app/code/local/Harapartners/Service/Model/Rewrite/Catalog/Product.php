@@ -43,7 +43,7 @@ class Harapartners_Service_Model_Rewrite_Catalog_Product extends Mage_Catalog_Mo
             return false;
         }
     }
-    
+
     public function cleanCache(){
         if(!!Mage::registry('batch_import_no_index')) {
             return $this;
@@ -51,7 +51,7 @@ class Harapartners_Service_Model_Rewrite_Catalog_Product extends Mage_Catalog_Mo
             return parent::cleanCache();
         }
     }
-   
+
     public function afterCommitCallback() {
         // ===== Index rebuild ========================================== //
         
@@ -86,4 +86,20 @@ class Harapartners_Service_Model_Rewrite_Catalog_Product extends Mage_Catalog_Mo
         return parent::getFinalPrice($qty);
     }
 
+    /**
+     * Get attribute label text, for a given store.
+     *
+     * @param string $attributeCode
+     * @param int    $storeId
+     *
+     * @return string
+     */
+    public function getAttributeTextByStore($attributeCode, $storeId)
+    {
+        return $this->getResource()
+            ->getAttribute($attributeCode)
+            ->setStoreId($storeId)
+            ->getSource()
+            ->getOptionText($this->getData($attributeCode));
+    }
 }

@@ -33,18 +33,15 @@
 <html lang="<?php echo $this->getLang() ?>">
 <head>
 <?php echo $this->getChildHtml('head') ?>
-<style>
-body {  padding:25px 0px 0px 15px;}
-</style>
 </head>
-<body<?php echo $this->getBodyClass()?' class="customer-account-login '.$this->getBodyClass().'"':'' ?> data-spy="scroll" data-target=".subnav" data-offset="50">
+<body<?php echo $this->getBodyClass()?' class="customer-account-login '.$this->getBodyClass().'"':'' ?>>
 <?php echo $this->getChildHtml('after_body_start') ?>
 <div class="container">
 <div class="">
-    <?php echo $this->getChildHtml('global_notices') ?>
+    <?php // echo $this->getChildHtml('global_notices') ?>
         <?php echo $this->getChildHtml('header') ?>
-            <?php echo $this->getChildHtml('breadcrumbs') ?>
-            <?php echo $this->getChildHtml('global_messages') ?>
+            <?php // echo $this->getChildHtml('breadcrumbs') ?>
+            <?php // echo $this->getChildHtml('global_messages') ?>
             <?php echo $this->getChildHtml('content') ?>
             <?php $currentUrl = $this->helper('core/url')->getCurrentUrl();?>
             <?php $loginPattern = '/customer/account/create/';?>
@@ -55,6 +52,7 @@ body {  padding:25px 0px 0px 15px;}
             <?php //endif;?>
         <?php echo $this->getChildHtml('footer') ?>
         <?php echo $this->getChildHtml('before_body_end') ?>
+</div>
 </div>
 <?php echo $this->getAbsoluteFooter() ?>
 </body>

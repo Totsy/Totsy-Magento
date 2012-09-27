@@ -37,7 +37,7 @@ shpn='<?php echo $topNavDataObject->getData('attr_text_label'); ?>'
     $timer = $timerParam['timer'];
 ?>
 <div class="well">
-    <h3 class="category-name"><?php echo $category['category_info']['name']; ?> <small class="pull-right"><p class="the-topnav-timer" id="time-layer-<?php echo $timer ?>"></p></small>
+    <h3 class="category-name"><?php echo $category['category_info']['name']; ?> <a href="<?php echo Mage::getBaseUrl().$category['category_info']['url_path']; ?>">View All</a> <small class="pull-right"><p class="the-topnav-timer" id="time-layer-<?php echo $timer ?>"></p></small>
     </h3>
     <hr />
     <script type="text/javascript">
@@ -59,17 +59,19 @@ shpn='<?php echo $topNavDataObject->getData('attr_text_label'); ?>'
         <?php $j=0; ?>
         <?php $nonSalableArray = array();?>
         <?php $i=0; foreach ($category['product_list'] as $_product): ?>
+        <?php $_description = array_key_exists('description',$_product) ? $_product['description'] : '';  ?>
+        <?php $_is_salable = array_key_exists('is_salable',$_product) ? $_product['is_salable'] : 0;  ?>
         <?php if (empty($_product['url_path']) || !preg_match('/sales/',$_product['url_path'])){
             $_product['url_path'] = $_product['request_path'];
         } 
         ?>
-        <?php if ($_product['is_salable']==1): ?>
+        <?php if ($_is_salable): ?>
         <li class="span2" style="width:146px;">
         <div class="thumbnail">
             <span class="echoShare" 
             data-productname="<?php echo $_product['name'];?>" 
             data-productcap="" 
-            data-productdesc="<?php echo $_product['description'];?>" 
+            data-productdesc="<?php echo $_description; ?>" 
             data-imageclass=""  
             data-producturl="<?php echo $_product['url_path']; ?>">
         </span>
@@ -110,8 +112,7 @@ shpn='<?php echo $topNavDataObject->getData('attr_text_label'); ?>'
     
 </ul>
 <script type="text/javascript">decorateGeneric($$('ul.products-grid'), ['odd','even','first','last'])</script>
- <?php echo $this->stripTags($this->helper('core/string')->truncate($category['category_info']['description'],200,' …read more<')) ?> 
-<a href="<?php echo Mage::getBaseUrl().$category['category_info']['url_path']; ?>" class="btn btn-primary pull-right">View All</a>
+ <?php echo $this->stripTags($category['category_info']['description']) ?> 
 <div class="clear"></div>
 </div>
 </div>

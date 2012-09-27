@@ -3,25 +3,34 @@ $full_path = dirname(dirname(__DIR__));
 $skip_cache_check = false;
 // set cache time for 3 days
 $TTL =3*24*60*60;
+// HTTP HOST settings
+$originHttpHost = !empty($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : 'totsy.com';
+$isHttpHostChanged = false;
 
 if (php_sapi_name()=='cli'){
 	$skip_cache_check = true;	
 	$index=array_search('--get', $argv);
 	if ( $index!==false && $argc>$index+1) {
-		 $_SERVER['REQUEST_URI'] = $argv[$index+1];
+		 $_SERVER['QUERY_STRING'] = $argv[$index+1];
 	}
 	
 	$index=array_search('--domain', $argv);
 	if ( $index!==false && $argc>$index+1) {
 		$_SERVER['HTTP_HOST'] = $argv[$index+1];
+		$isHttpHostChanged = true;
 	}
 }
 
 if (!empty($_GET['domain']) && strtolower($_GET['domain']) == 'mamasource.totsy.com'){
 	$_SERVER['HTTP_HOST'] = 'mamasource.totsy.com';
+	$isHttpHostChanged = true;
+}
+if (!empty($_GET['domain']) && (strtolower($_GET['domain']) == 'totsy.com' || strtolower($_GET['domain']) == 'www.totsy.com') ){
+	$_SERVER['HTTP_HOST'] = 'www.totsy.com';
+	$isHttpHostChanged = true;
 }
 
-$chash = $full_path. '/var/tmp/' .md5($_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']).'.json';
+$chash = $full_path. '/var/tmp/' .md5($_SERVER['HTTP_HOST'].$_SERVER['QUERY_STRING']).'.json';
 if ($skip_cache_check===true){
 	file_put_contents($chash.'.new','addin some cache');
 }
@@ -33,6 +42,15 @@ if (file_exists($chash) && $skip_cache_check===false){
 		echo file_get_contents($chash);
 		exit(0);
 	}
+}
+
+switch ($_SERVER['HTTP_HOST']) {
+	case 'mamasource.totsy.com':
+		$store = 'mamasource';
+	break;
+	default:
+		$store = null;
+	break;
 }
 
 require_once( $full_path.'/app/Mage.php' );
@@ -50,8 +68,7 @@ $out = array('events'=>array(), 'pending'=>array(), 'closing'=>array());
 /*### DEFINE STORE AND CATEGORY ####*/
 //$categoryId = '8'; //totsy events category id
 //$topEventCategoryId = '24'; //totsy top events category id
-$storeId = Mage::app()->getStore()->getId(); //totsy store id
-
+$storeId = Mage::app()->getStore($store)->getId(); //totsy store id
 
 /*### DEFINE DATE&TIME AND VAR ###*/
 $defaultTimezone = date_default_timezone_get();
@@ -151,6 +168,8 @@ $out['max_off'] = floor($maxOff);
 /*### OUTPUT JSON ###*/
 
 $data = json_encode($out);
+getRightHttpHost($data);
+
 $fh = fopen($chash,'w');
 fwrite($fh,$data);
 fclose($fh);
@@ -162,9 +181,14 @@ echo $data;
 
 
 
-
-
 /*########################################################################*/
+function getRightHttpHost(&$json){
+	global $isHttpHostChanged, $originHttpHost;
+	
+	if ( $isHttpHostChanged==true ){
+		$json = str_replace($originHttpHost, $_SERVER['HTTP_HOST'], $json);
+	}
+}
 /*Getting how many percent of money save for a event*/
 function getLargestSaveByCategory(Mage_Catalog_Model_Category $_category){
 	

@@ -12,6 +12,7 @@ class Harapartners_Paymentfactory_Model_Profile extends Mage_Core_Model_Abstract
     }
     
     public function loadByCcNumberWithId($ccNumberWithId){
+        $ccNumberWithId = preg_replace('/[\s\-]/', '', $ccNumberWithId);
         return $this->loadByCcNumberHash(md5($ccNumberWithId));
     }
     

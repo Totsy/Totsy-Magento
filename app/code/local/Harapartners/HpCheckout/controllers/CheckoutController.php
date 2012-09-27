@@ -39,6 +39,7 @@ class Harapartners_HpCheckout_CheckoutController extends Mage_Checkout_Controlle
         } catch (Exception $e) {
             $jsonArray['status'] = 1;
             $jsonArray['message'] = $this->__('There was an error processing your order. Please contact us or try again later.');
+            Mage::logException($e);
         }
         $this->getResponse()->setBody( Mage::helper( 'core' )->jsonEncode( $jsonArray ) );
     }
@@ -51,11 +52,13 @@ class Harapartners_HpCheckout_CheckoutController extends Mage_Checkout_Controlle
         try {
             $blocksSuccessFlag = true;
             $postData = $this->getRequest()->getPost();
+            
             $jsonArray = $this->_getBlocksArray( $postData, true );
             $result[ 'blocks' ] = $jsonArray;
+            
             $this->_getHpCheckout()->getQuote()->setData('billing_selected_by_customer', $postData['billing']['selected']);
             foreach( $jsonArray as $block ) {
-                if( $block[ 'status' ] ) {
+                if(isset($block['status']) && $block['status']) {
                     $blocksSuccessFlag = false;
                     break;
                 }
@@ -64,9 +67,15 @@ class Harapartners_HpCheckout_CheckoutController extends Mage_Checkout_Controlle
                 $result[ 'status' ] = 2;
             } else {
                 if ($data = $this->getRequest()->getPost('payment', false)) {
+                	
+                	
+                	
                     $profile = Mage::getModel('paymentfactory/profile');
-                    $profile->loadByCcNumberWithId($data['cc_number'].$customerId.$data[ 'cc_exp_year' ].$data[ 'cc_exp_month' ]);
-                    if(!!$profile && !!$profile->getId()){
+                    if (isset($data['cc_number']) && isset($data['cc_exp_year']) && isset($data['cc_exp_month'])) {
+                        $profile->loadByCcNumberWithId($data['cc_number'].$customerId.$data[ 'cc_exp_year' ].$data[ 'cc_exp_month' ]);
+                    }
+
+                    if ($profile && $profile->getId()) {
                         $cybersourceIdEncrypted = $profile->getEncryptedSubscriptionId();
                         if($cybersourceIdEncrypted) {
                             $data['cybersource_subid'] = $cybersourceIdEncrypted;
@@ -77,6 +86,14 @@ class Harapartners_HpCheckout_CheckoutController extends Mage_Checkout_Controlle
 
                 $service = Mage::getModel('sales/service_quote', $this->_getHpCheckout()->getQuote());
                 $order = $service->getQuote();
+                
+                // Paypal Express Checkout method
+                if($data['method'] == Mage_Paypal_Model_Config::METHOD_WPP_EXPRESS) {
+                	$result['redirect'] = Mage::getUrl('paypal/express/start/');
+                	
+                	$this->getResponse()->setBody(Mage::helper('core')->jsonEncode($result));
+                	return;
+                }
                 
                 $this->_getHpCheckout()->saveOrder();
 
@@ -107,6 +124,7 @@ class Harapartners_HpCheckout_CheckoutController extends Mage_Checkout_Controlle
         } catch (Exception $e) {
             $result['status'] = 1;
             $result['message'] = $this->__('There was an error processing your order. Please contact us or try again later.');
+            Mage::logException($e);
         }
         $this->_getHpCheckout()->getQuote()->save();
         //        if (isset($redirectUrl)) {

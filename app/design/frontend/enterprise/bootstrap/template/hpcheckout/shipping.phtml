@@ -31,6 +31,10 @@
 	                 </div>
 	    	     </div>
 	    	     <div> 
+	    	         <div class="pull-left field half-of-half">
+	                     <label for="shipping:city" class="required"><em>*&nbsp;</em><?php echo $this->__('city') ?></label>
+	                     <input type="text" title="<?php echo $this->__('City') ?>" name="shipping[city]" class="input-text required-entry city" value="<?php echo $this->getAddress()->getCity() ?>" placeholder="<?php echo $this->__('City') ?>" id="shipping:city" />
+	                 </div>	
 	    	     	 <div class="pull-left half-of-half">
 	                     <label for="shipping:region_id" class="required"><em>*&nbsp;</em><?php echo $this->__('state') ?></label>
 		                 <div class="totsy-selective-input-box">
@@ -42,14 +46,10 @@
                             $('shipping:region_id').setAttribute('defaultValue',  "<?php echo $this->getAddress()->getRegionId() ?>");
                          </script>
                          <input type="text" id="shipping:region" name="shipping[region]" value="<?php echo $this->htmlEscape($this->getAddress()->getRegion()) ?>"  title="<?php echo $this->__('State/Province') ?>" class="input-text hidden-state" style="display:none;" />
-	                  </div>
-                      <div class="pull-left field half-of-half">
-	                     <label for="shipping:city" class="required"><em>*&nbsp;</em><?php echo $this->__('city') ?></label>
-	                     <input type="text" title="<?php echo $this->__('City') ?>" name="shipping[city]" class="input-text required-entry city" value="<?php echo $this->getAddress()->getCity() ?>" placeholder="<?php echo $this->__('City') ?>" id="shipping:city" />
-	                 </div>	 
+	                  </div> 
 	                  <div class="field half-of-half">
 	                      <label for="shipping:postcode" class="required"><em>*&nbsp;</em><?php echo $this->__('zip/postal code') ?></label>
-	                      <input type="text" title="<?php echo $this->__('Zip/Postal Code') ?>" name="shipping[postcode]" id="shipping:postcode" class="input-text validate-zip required-entry zip" value="<?php echo $this->getAddress()->getPostcode() ?>" placeholder="<?php echo $this->__('Zip/Postal Code') ?>" />
+	                      <input type="text" title="<?php echo $this->__('Zip Code') ?>" name="shipping[postcode]" id="shipping:postcode" class="input-text validate-zip required-entry zip" value="<?php echo $this->getAddress()->getPostcode() ?>" placeholder="<?php echo $this->__('Zip/Postal Code') ?>" />
 	                  </div>
 	              </div>
 	              <div>
@@ -66,9 +66,7 @@
                      </div>
                  </div>
 </form>
-
 <div class="spinner" style="display: none;"><img src="<?php echo $this->getSkinUrl( 'images/ajax-loader.gif' ) ?>"></div>
-
 <script type="text/javascript">
 //<![CDATA[
     var shippingRegionUpdater = new RegionUpdater('shipping:country_id', 'shipping:region', 'shipping:region_id', countryRegions, undefined, 'shipping:postcode');

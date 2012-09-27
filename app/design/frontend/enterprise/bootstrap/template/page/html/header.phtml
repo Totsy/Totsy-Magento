@@ -28,9 +28,9 @@
  */
 ?>
 <header class="navbar navbar-fixed-top">
+    <div id="monetateBanner"><i><a href="/invitation/" title="Invite Friends, get $15">Invite Friends</a></i></div>
     <!-- begin masthead -->
     <div id="masthead">
-        <div id="monetateBanner"></div>
         <div class="container row">   
             <h1 id="logo" class="span2"><a href="<?php
             echo $this->getUrl( 'event/?ref=logo' );
@@ -119,7 +119,7 @@
     	});
     }
     Event.observe(document,'dom:loaded',function() {
-        new Ajax.Updater($('header-user-info'), '<?php echo $this->getUrl('customertracking/headermsg/ajax',array('_secure'=>Mage::app()->getStore()->isCurrentlySecure())); ?>', {
+        new Ajax.Updater({success: 'header-user-info'}, '<?php echo $this->getUrl('customertracking/headermsg/ajax',array('_secure'=>Mage::app()->getStore()->isCurrentlySecure())); ?>', {
             method:'get',
             evalScripts: true
         });

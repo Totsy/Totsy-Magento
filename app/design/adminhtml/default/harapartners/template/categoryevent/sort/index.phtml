@@ -17,7 +17,7 @@
 	.categoryevent-adminhtml-sort-index div.control-button-set {margin: 20px 0;}
 	.categoryevent-adminhtml-sort-index p.event-name {color: #888888; font-weight: bold; margin-bottom: 0px; padding: 5px; background: #f2f2f2; width: 140px; overflow: hidden;}
 </style>
-<?php 
+<?php
 	$postStoreId = $this->getSortPostResponse('id');
 	$postSortDate = $this->getSortPostResponse('date');
 ?>
@@ -25,6 +25,16 @@
 <table cellspacing="0">
     <tr>
         <td style="width:50%;"><h3 class="icon-head head-products"><?php echo Mage::helper('categoryevent')->__('Sort Category Events') ?></h3></td>
+<?php if ($this->getRequest()->isPost()): ?>
+        <td class="control-button-set" align="right">
+            <button id="sort-order-submit" class="scalable" type="button" onclick="saveOrderSubmit();">
+                <span><?php echo Mage::helper('categoryevent')->__('Save Sort') ?></span>
+            </button>
+            <button id="sort-rebuild-submit" class="scalable" type="button" onclick="rebuildSubmit();">
+                <span><?php echo Mage::helper('categoryevent')->__('Rebuild Sort') ?></span>
+            </button>
+        </td>
+<?php endif; ?>
     </tr>
 </table>
 </div>
@@ -44,9 +54,11 @@
 		<p>The sort content <strong>ONLY</strong> depends on the date, regardless of the current time.</p>
 	</form>
 	<div id="ajax-collection-container" >
-		<?php if (!!(Mage::getSingleton('adminhtml/session')->getData('categoryevent_sort_data_post'))):?>
-			<?php echo $this->getEventListHtml();?>
-		<?php endif;?>
+<?php
+if ($this->getRequest()->isPost()):
+    echo $this->getChildHtml('categoryevent_adminhtml_sort_edit');
+endif;
+?>
 	</div>
 </div>
 
@@ -55,7 +67,7 @@
 	jQuery(document).ready(function(){
 
 		var store_id = jQuery("#store_switcher option[selected = 'selected']").val();
-		
+
 		if(typeof(store_id) != "undefined" && store_id !== null){
 			jQuery("#sort_store_id").attr("value", store_id);
 		}

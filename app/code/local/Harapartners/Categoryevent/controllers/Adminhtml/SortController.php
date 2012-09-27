@@ -12,125 +12,103 @@
  * 
  */
  
-class Harapartners_Categoryevent_Adminhtml_SortController extends Mage_Adminhtml_Controller_Action{
-    
-    public function indexAction(){
-        $this->_title($this->__('Category Event'))->_title($this->__('Sort Category Events'));
-        $sortDate = $this->getRequest()->getPost('sort_date');
-        if(!$sortDate){
-            $sortDate = $this->_getTodayWithTimeOffset();
-        }
-        $storeId = $this->getRequest()->getPost('sort_store');
-        if(!$storeId){
-            $storeId = Mage_Core_Model_App::DISTRO_STORE_ID;
-        }
-        if (!!$this->getRequest()->getPost('post_active') ) {
-            Mage::getSingleton('adminhtml/session')->setData('categoryevent_sort_data_post', true); 
-            try {            
-                $sortentry = Mage::getModel('categoryevent/sortentry')->loadByDate($sortDate, $storeId, false);
-                $arrayLive = json_decode($sortentry->getData('live_queue'), true);
-                $arrayUpcoming = json_decode($sortentry->getData('upcoming_queue'), true);
-                Mage::getSingleton('adminhtml/session')->setData('categoryevent_sort_date', $sortDate);
-                Mage::getSingleton('adminhtml/session')->setData('categoryevent_sort_storeid', $storeId);
-                Mage::getSingleton('adminhtml/session')->setData('categoryevent_sort_live_queue', $arrayLive);
-                Mage::getSingleton('adminhtml/session')->setData('categoryevent_sort_upcoming_queue', $arrayUpcoming); 
-            }catch (Exception $e){
-                Mage::logException($e);
-                Mage::getSingleton('core/session')->addError('Cannot Load Events');
-                Mage::getSingleton('adminhtml/session')->setData('categoryevent_sort_data_post', false);
-            }
-        }else {
-            Mage::getSingleton('adminhtml/session')->setData('categoryevent_sort_data_post', false);
-        }
+class Harapartners_Categoryevent_Adminhtml_SortController
+    extends Mage_Adminhtml_Controller_Action
+{
+    /**
+     * Default action.
+     */
+    public function indexAction()
+    {
         $this->loadLayout();
         $this->renderLayout();
     }
-    
-    public function sortSaveAction(){
-//        $post = $this->getRequest()->getPost();
-        $liveSortedIdArray = array();
-        $upComingSortedIdArray = array();
-        $liveSortedIdArray = $this->getRequest()->getPost('recordsLiveArray');
-        $upComingSortedIdArray = $this->getRequest()->getPost('recordsUpArray');
-        if(!!$this->getRequest()->getPost('sortdate')){
-            $sortDate = $this->getRequest()->getPost('sortdate');
-        }else {
-            $sortDate = $this->_getTodayWithTimeOffset();
-        }
-        if(!!$this->getRequest()->getPost('storeid')){
-            $storeId = $this->getRequest()->getPost('storeid');
-        }else {
-            $storeId = Mage_Core_Model_App::DISTRO_STORE_ID;
-        }
+
+    /**
+     * Save sort action.
+     * Update the live & upcoming event order in the sortentry for a specified
+     * date.
+     */
+    public function sortSaveAction()
+    {
+        $liveSortedIdArray = (array) $this->getRequest()->getPost('recordsLiveArray');
+        $upComingSortedIdArray = (array) $this->getRequest()->getPost('recordsUpArray');
+
+        $sortDate = ($this->getRequest()->getPost('sortdate'))
+            ? $this->getRequest()->getPost('sortdate')
+            : $this->_getTodayWithTimeOffset();
+
+        $storeId = ($this->getRequest()->getPost('storeid'))
+            ? $this->getRequest()->getPost('storeid')
+            : Mage_Core_Model_App::ADMIN_STORE_ID;
+
         try {
-            $sortentry = Mage::getModel('categoryevent/sortentry')->loadByDate($sortDate, $storeId, false);
-            Mage::getModel('categoryevent/sortentry')->saveUpdateSortCollection($liveSortedIdArray, $upComingSortedIdArray, $sortentry);   
+            if ($sortentry = Mage::getSingleton('adminhtml/session')->getData("sortentry_$sortDate")) {
+                $sortentry->updateSortCollection($liveSortedIdArray, $upComingSortedIdArray)->save();
+            } else {
+                $sortentry = Mage::getModel('categoryevent/sortentry')
+                    ->loadByDate($sortDate, $storeId)
+                    ->updateSortCollection($liveSortedIdArray, $upComingSortedIdArray)
+                    ->save();
+                Mage::getSingleton('adminhtml/session')->setData("sortentry_$sortDate", $sortentry);
+            }
+
+            // wipe the cache entry for the homepage events block
+            Mage::app()->getCacheInstance()->clean(
+                Harapartners_Categoryevent_Model_Cache_Index::CACHE_TAG
+            );
+
             $jsonResponse['status'] = 1;
-            $jsonResponse['error_message'] = '';         
-        }catch (Exception $e){
+            $jsonResponse['error_message'] = '';
+        } catch (Exception $e) {
             Mage::logException($e);
-            Mage::getSingleton('core/session')->addError('Cannot Save Sort');
+
             $jsonResponse['status'] = 0;
-            $jsonResponse['error_message'] = 'Cannot Save Sort';
+            $jsonResponse['error_message'] = 'A system error prevented the sort order save operation.';
         }
-        echo json_encode($jsonResponse);
-        exit;
+
+        $this->getResponse()->setHeader('Content-Type', 'application/json')
+            ->setBody(json_encode($jsonResponse));
     }
-    
-    public function sortRebuildAction(){
-//        $post = $this->getRequest()->getPost();
-        if(!!$this->getRequest()->getPost('sortdate')){
-            $sortDate = $this->getRequest()->getPost('sortdate');
-        }else {
-            $sortDate = $this->_getTodayWithTimeOffset();
-        }
-        if(!!$this->getRequest()->getPost('storeid')){
-            $storeId = $this->getRequest()->getPost('storeid');
-        }else {
-            $storeId = Mage_Core_Model_App::DISTRO_STORE_ID;
-        }
+
+    /**
+     * Rebuild sort action.
+     * Reset the live & upcoming event order in the sortentry for a specified
+     * date, to the default sort order.
+     */
+    public function sortRebuildAction()
+    {
+        $sortDate = ($this->getRequest()->getPost('sortdate'))
+            ? $this->getRequest()->getPost('sortdate')
+            : $this->_getTodayWithTimeOffset();
+
+        $storeId = ($this->getRequest()->getPost('storeid'))
+            ? $this->getRequest()->getPost('storeid')
+            : Mage_Core_Model_App::ADMIN_STORE_ID;
+
         try {
-            Mage::getModel('categoryevent/sortentry')->rebuildSortCollection($sortDate, $storeId);
-            $jsonResponse['status'] = 1;
-            $jsonResponse['error_message'] = '';     
-        }catch (Exception $e){
-            Mage::logException($e);
-            Mage::getSingleton('core/session')->addError('Rebuild Faild');
-            $jsonResponse['status'] = 0;
-            $jsonResponse['error_message'] = 'Rebuild Faild';
-        }
-        echo json_encode($jsonResponse);
-        exit;
-    }
-    
-	public function sortRefreshCacheAction(){
-//        $post = $this->getRequest()->getPost();
-        if(!!$this->getRequest()->getPost('sortdate')){
-            $sortDate = $this->getRequest()->getPost('sortdate');
-        }else {
-            $sortDate = $this->_getTodayWithTimeOffset();
-        }
-        if(!!$this->getRequest()->getPost('storeid')){
-            $storeId = $this->getRequest()->getPost('storeid');
-        }else {
-            $storeId = Mage_Core_Model_App::DISTRO_STORE_ID;
-        }
-        try {
-            Mage::getModel('categoryevent/sortentry')->rebuildSortCollection($sortDate, $storeId);
+            $sortentry = Mage::getModel('categoryevent/sortentry')->loadByDate($sortDate, $storeId);
+            if ($sortentry->getId()) {
+                $sortentry->rebuild();
+            }
+            Mage::getSingleton('adminhtml/session')->setData("sortentry_$sortDate", $sortentry);
+
             $jsonResponse['status'] = 1;
             $jsonResponse['error_message'] = '';     
-        }catch (Exception $e){
+        } catch (Exception $e){
             Mage::logException($e);
-            Mage::getSingleton('core/session')->addError('Rebuild Faild');
+
             $jsonResponse['status'] = 0;
-            $jsonResponse['error_message'] = 'Rebuild Faild';
+            $jsonResponse['error_message'] = 'A system error prevented the sort order rebuild operation.';
         }
-        echo json_encode($jsonResponse);
-        exit;
+
+        $this->getResponse()->setHeader('Content-Type', 'application/json')
+            ->setBody(json_encode($jsonResponse));
     }
-    
-    protected function _getTodayWithTimeOffset() {
-    	$defaultTimezone = date_default_timezone_get();
+
+    protected function _getTodayWithTimeOffset()
+    {
+        $defaultTimezone = date_default_timezone_get();
         $mageTimezone = Mage::getStoreConfig(Mage_Core_Model_Locale::XML_PATH_DEFAULT_TIMEZONE);
         date_default_timezone_set($mageTimezone);
         $sortDate = now("Y-m-d");

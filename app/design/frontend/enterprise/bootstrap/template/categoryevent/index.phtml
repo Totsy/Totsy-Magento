@@ -22,23 +22,22 @@
  * 
  */
 ?>
-<?php 
-    $indexDataObj 	= 	$this->getIndexDataObject();
+<?php    $indexDataObj 	= 	$this->getIndexDataObject();
     $baseUrl 		= 	Mage::getBaseUrl();
     $maxPerSend 	= 	0;
     $timer 			= 	0;
     $topArray 		= 	'';
     $liveArray 		= 	'';
     $upcomingArray  = 	'';	
-    if( $indexDataObj->hasData('toplive') ){
+    if ( $indexDataObj->hasData('toplive') ){
         $topArray = $indexDataObj->getData('toplive');
         $topArray = array(); //Harapartners, yang: "temporarily" block the top events
     }
-    if( $indexDataObj->hasData('live') ){
-        $liveArray = $indexDataObj->getData('live');
+    if ( $indexDataObj->hasData('live_queue') ){
+        $liveArray = json_decode($indexDataObj->getData('live_queue'), true);
     }
-    if( $indexDataObj->hasData('upcoming') ){
-        $upcomingArray = $indexDataObj->getData('upcoming');
+    if ( $indexDataObj->hasData('upcoming_queue') ){
+        $upcomingArray = json_decode($indexDataObj->getData('upcoming_queue'), true);
     }
 ?>
 <?php // include banner if it is enabled
@@ -52,48 +51,6 @@
 
 <div class="catalog-events-container">
     <div class="live-events-container">
-    
-    <?php
-        // Top Events
-        // @GOTCHA: We are currently not showing top events. This entire block never renders…
-    ?>
-    <?php if (!!$topArray && !empty($topArray)) : ?>
-        <section id="events-top" class="events-grid">
-        <?php foreach ($topArray as $top): ?>
-            <?php
-                $endcountRaw = strtotime($top['event_end_date']);
-                $endcount = date("F j, Y, G:i:s", $endcountRaw);
-            ?>
-            <div class="catalog-top-event event-counter-<?php echo $timer;?>">
-                <?php $imgFile = BP.DS.'media'.DS.'catalog'.DS.'category'.DS.$top['small_image'];?>
-                <a class="event-link" href="<?php echo Mage::getBaseUrl().$top['url_path']; ?>"><img src="<?php echo Mage::helper('service/image')->loadImageFile($imgFile)->resize(208,403); ?>" width="208px" alt="" /></a>
-                <div class="splash-details">
-                    <div class="table-cell-left">
-                        <p class="event-name ellipsis"><?php echo $top['name'];?></p>
-                        <p id="time1-top-<?php echo $timer ?>"></p>
-                        <script type="text/javascript">
-                            // @TODO: all countdown jQuery should be externalized
-                            jQuery("#time1-top-<?php echo $timer ?>").countdown({
-                                //date: "12 10, 2011 16:11", //Counting TO a date
-                                date: "<?php echo $endcount; ?>", //Counting TO a date
-                                htmlTemplate: "<span>Ends in</span> %{d} <span class=\"cd-time\">Days</span> %{h}<span class=\"cd-time\">:</span>%{m}<span class=\"cd-time\">:</span>%{s}<span class=\"cd-time\"></span>",
-                                onChange: function( event, timer ){
-                                },
-                                onComplete: function( event ){
-                                    jQuery(this).html("Completed");
-                                    jQuery("div.event-counter-<?php echo $timer;?>").remove();
-                                },
-                                leadingZero: true,
-                                direction: "down"
-                            });
-                        </script>
-                    </div>
-                </div>
-            </div>
-            <?php $timer++; ?>
-            <?php endforeach; ?>
-        </section><!-- /#events-top -->
-    <?php endif; ?>
 
     <?php // Live Events ?>
     <?php if (!!$liveArray && !empty($liveArray)) : ?>
@@ -110,9 +67,9 @@
                 <?php
                     $endcountRaw = strtotime($live['event_end_date']);
                     $endcount = date("F j, Y, G:i:s", $endcountRaw);
-                    $hasProduct = $this->hasProduct($live['entity_id']);
-                    $eventDepts = $live['department'];
-                    $eventAges = $live['age'];
+                    $hasProduct = $this->countCategoryProducts($live['entity_id']);
+                    $eventDepts = $live['department_label'];
+                    $eventAges = $live['age_label'];
                     $maxDiscount = $live['max_discount_pct'];
                 ?>
                 <?php if ($hasProduct): ?>
@@ -137,10 +94,7 @@
                                         <h6>Categories:</h6>
                                         <ul>
                                         <?php foreach ($eventDepts as $eventDept) : ?>
-                                            <?php // convert slugs to labels
-                                                $deptLabel = str_replace('-', ' <i>and</i> ', $eventDept);
-                                            ?>
-                                            <li><?php echo $deptLabel; ?></li>
+                                            <li><?php echo $eventDept; ?></li>
                                         <?php endforeach; ?>
                                         </ul>
                                     </section>
@@ -172,7 +126,7 @@
                                     htmlTemplate: html,
                                     onComplete: function( event ){
                                         jQuery(this).html("Completed");
-                                        jQuery(".event-counter-<?php echo $timer;?>").remove();
+                                        jQuery(".event-counter-<?php echo $timer;?>").hide();
                                     },
                                     leadingZero: true,
                                     direction: "down"
@@ -187,7 +141,8 @@
         </section><!-- /#events-live -->
     <?php endif; ?>
     
-    <?php // ENDING SOON - not functioning, no $endingArray exists - just placeholder code ?>
+    <?php // ENDING SOON - not functioning, no $endingArray exists - just a placeholder var and code for now ?>
+    <?php $endingArray = ''; ?>
     <?php if (!!$endingArray && !empty($endingArray)): ?>
         <section id="events-ending" class="events-grid">
             <header class="page-header">

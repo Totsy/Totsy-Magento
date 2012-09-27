@@ -21,7 +21,9 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Payment extends TinyBrick_Orde
             $payment->setData('cc_last4', substr($payment->getCcNumber(), -4));   
             #Check if there is already a cybersource profile if yes, dont create a new one
             $profile = Mage::getModel('paymentfactory/profile');
-            $profile->loadByCcNumberWithId($payment->getData('cc_number').$customerId.$payment->getCcExpYear().$payment->getCcExpMonth());
+            if($payment->getData('cc_number')) {
+                $profile->loadByCcNumberWithId($payment->getData('cc_number').$customerId.$payment->getCcExpYear().$payment->getCcExpMonth());
+            }
             if($profile && $profile->getId() && !$addressUpdated) {
                 $payment = Mage::getModel('sales/order_payment')->getCollection()
                     ->addAttributeToFilter('cybersource_subid',$profile->getData('subscription_id'))

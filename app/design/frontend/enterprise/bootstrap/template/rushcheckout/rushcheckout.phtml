@@ -25,16 +25,19 @@ if ( !Mage::getSingleton('checkout/session')->hasData('countdown_timer') ) {
 ?>
 <tr>
     <td class="first">
+        <div class="cart-prod-thumb" >
     	<?php if ($this->hasProductUrl()):?><a href="<?php echo $this->getProductUrl() ?>" title="<?php echo $this->htmlEscape($this->getProductName()) ?>" class="product-image"><?php endif;?><img src="<?php echo $this->getProductThumbnail()->resize(60,60); ?>" width="60" height="60" alt="<?php echo $this->htmlEscape($this->getProductName()) ?>" /><?php if ($this->hasProductUrl()):?></a><?php endif;?>
-    </td>
-    <td>
-        <h4 class="product-name">
-        <?php if ($this->hasProductUrl()):?>
-            <a href="<?php echo $this->getProductUrl() ?>" style="color:#000"><?php echo $this->htmlEscape($this->getProductName()) ?></a>
-        <?php else: ?>
-            <?php echo $this->htmlEscape($this->getProductName()) ?>
-        <?php endif; ?>
-        </h4>
+        </div>
+        <div class="cart-prod-description" st>
+            <div>
+                <h4 class="product-name">
+                <?php if ($this->hasProductUrl()):?>
+                    <a href="<?php echo $this->getProductUrl() ?>" style="color:#000"><?php echo $this->htmlEscape($this->getProductName()) ?></a>
+                <?php else: ?>
+                    <?php echo $this->htmlEscape($this->getProductName()) ?>
+                <?php endif; ?>
+                </h4>
+            </div>
         <?php if($isVirtual==false) {  ?>
         <?php if ($_options = $this->getOptionList()):?>
         <div class="item-options">
@@ -58,9 +61,9 @@ if ( !Mage::getSingleton('checkout/session')->hasData('countdown_timer') ) {
             </ul>
         </div>
         <?php endif;?>
-        <div>Estimated ship date:&nbsp;<?php echo date('Y-m-d', Mage::helper('sales/order')->calculateEstimatedShipDate($quote)); ?></div>
+        <span>Estimated ship date:&nbsp;<?php echo date('Y-m-d', Mage::helper('sales/order')->calculateEstimatedShipDate($quote)); ?></span>
         <?php } else { ?>
-        <div>You will receive an email with details on this voucher code.</div>
+        <span>You will receive an email with details on this voucher code.</span>
         <?php } ?>
         <?php if ($messages = $this->getMessages()): ?>
         <?php foreach ($messages as $message): ?>
@@ -70,6 +73,7 @@ if ( !Mage::getSingleton('checkout/session')->hasData('countdown_timer') ) {
         <?php if ($addtInfoBlock = $this->getProductAdditionalInformationBlock()):?>
             <?php echo $addtInfoBlock->setItem($_item)->toHtml() ?>
         <?php endif;?>
+        </div>
     </td>
 	<td class="rush-price-box">
 		<div class="rush-price-container">

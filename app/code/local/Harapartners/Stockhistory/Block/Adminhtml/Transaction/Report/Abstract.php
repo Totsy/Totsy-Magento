@@ -63,7 +63,6 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Abstract exte
         //Building report collection
         $reportCollection = new Varien_Data_Collection();
         $productsSoldArray = Mage::helper('stockhistory')->getProductSoldInfoByCategory($this->getCategory(), $uniqueProductList);
-        
         $sizeAttribute = Mage::getSingleton('eav/config')->getAttribute('catalog_product', 'size');
         $sizeOptions = $sizeAttribute->getSource()->getAllOptions(false);
         $colorAttribute = Mage::getSingleton('eav/config')->getAttribute('catalog_product', 'color');
@@ -104,7 +103,8 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Abstract exte
                 'qty_total'                =>    $productInfo['qty'],
                 'is_master_pack'        =>    $productInfo['is_master_pack'],
                 'case_pack_qty'            =>    round($product->getData('case_pack_qty')),
-                'unit_cost'                =>    round($productInfo['total']/$productInfo['qty'], 2),
+                'unit_cost'                =>    $productInfo['qty'] ?
+                                    round($productInfo['total']/$productInfo['qty'], 2) : $productInfo['total'],
                 'total_cost'            =>    $productInfo['total']
             );
             $reportItem->addData($data);

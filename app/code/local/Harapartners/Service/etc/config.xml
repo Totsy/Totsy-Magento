@@ -116,13 +116,6 @@
                     <product_flat_indexer>Harapartners_Service_Model_Rewrite_Catalog_Resource_Product_Flat_Indexer</product_flat_indexer>
                 </rewrite>
             </catalog_resource-->
-            <cataloginventory>
-                <rewrite>
-                    <!--Harapartner_Service: Product of the same ID (conf. with different super attr. or simple with differnt options) share the same limit!-->
-                    <!--Harapartners_Rushcheckout: Successful checkout results in stock reservation cancel.-->
-                    <observer>Harapartners_Service_Model_Rewrite_CatalogInventory_Observer</observer>
-                </rewrite>
-            </cataloginventory>
             <cataloginventory_resource>
                 <rewrite>
                     <!--Harapartners_Rushcheckout: Batch update without saving 'stock_item' object, must sync with status (cart reservation for Totsy)-->
@@ -205,15 +198,6 @@
         </models>
         <events>
             <!-- ===== GLOBAL EVENTS START ===== -->
-            <cataloginventory_stock_item_save_after>
-                <observers>
-                    <!--Harapartners_Rushcheckout: Updating only (Addition and deletion can be safely ignored) -->
-                    <rushcheckout>
-                        <class>rushcheckout/observer</class>
-                        <method>updateReservationByStockItem</method>
-                    </rushcheckout>
-                </observers>
-            </cataloginventory_stock_item_save_after>
             <controller_front_init_routers>
                 <observers>
                     <!--Harapartners_Affiliate-->
@@ -326,22 +310,8 @@
                     </promotionfactory>
                 </observers>
             </sales_quote_item_save_before>
-            <sales_quote_item_save_after>
-                <observers>
-                    <!--Harapartners_Rushcheckout: Adding or updating quote item -->
-                    <rushcheckout>
-                        <class>rushcheckout/observer</class>
-                        <method>updateReservationByQuoteItem</method>
-                    </rushcheckout>
-                </observers>
-            </sales_quote_item_save_after>
             <sales_quote_item_delete_after>
                 <observers>
-                    <!--Harapartners_Rushcheckout: Deleting quote item -->
-                    <rushcheckout>
-                        <class>rushcheckout/observer</class>
-                        <method>updateReservationByQuoteItem</method>
-                    </rushcheckout>
 					<!--Harapartners_Promotionfactory: Deleting quote item will release any related coupon reservation-->
                     <promotionfactory>
                         <class>promotionfactory/observer</class>
@@ -432,6 +402,33 @@
     <frontend>
         <events>
             <!-- ===== FRONTEND ONLY EVENTS START ===== -->
+            <cataloginventory_stock_item_save_after>
+                <observers>
+                    <!--Harapartners_Rushcheckout: Updating only (Addition and deletion can be safely ignored) -->
+                    <rushcheckout>
+                        <class>rushcheckout/observer</class>
+                        <method>updateReservationByStockItem</method>
+                    </rushcheckout>
+                </observers>
+            </cataloginventory_stock_item_save_after>
+            <sales_quote_item_save_after>
+                <observers>
+                    <!--Harapartners_Rushcheckout: Adding or updating quote item -->
+                    <rushcheckout>
+                        <class>rushcheckout/observer</class>
+                        <method>updateReservationByQuoteItem</method>
+                    </rushcheckout>
+                </observers>
+            </sales_quote_item_save_after>
+            <sales_quote_item_delete_after>
+                <observers>
+                    <!--Harapartners_Rushcheckout: Deleting quote item -->
+                    <rushcheckout>
+                        <class>rushcheckout/observer</class>
+                        <method>updateReservationByQuoteItem</method>
+                    </rushcheckout>
+                </observers>
+            </sales_quote_item_delete_after>
             <customer_session_init>
                 <observers>
                     <!--Harapartners_Rushcheckout-->
