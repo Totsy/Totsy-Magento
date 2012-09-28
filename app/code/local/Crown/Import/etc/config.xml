@@ -2,7 +2,7 @@
 <config>
 	<modules>
 		<Crown_Import>
-			<version>1.0.1</version>
+			<version>1.0.4</version>
 		</Crown_Import>
 	</modules>
 	<global>
@@ -67,24 +67,15 @@
 			</crownimport>
 		</helpers>
 		<events>
-			<urapidflow_product_import_after_diff>
+			<urapidflow_product_import_after_save>
 				<observers>
-					<dopurchaseordertransactions>
+					<createpurchaseordertransactions>
 						<type>singleton</type>
 						<class>Crown_Import_Model_Observer</class>
 						<method>savePurchaseOrderTransaction</method>
-					</dopurchaseordertransactions>
+					</createpurchaseordertransactions>
 				</observers>
-			</urapidflow_product_import_after_diff>
-			<urapidflow_product_import_after_fetch>
-				<observers>
-					<dopurchaseordertransactions>
-						<type>singleton</type>
-						<class>Crown_Import_Model_Observer</class>
-						<method>getCurrentProductQtyForDiff</method>
-					</dopurchaseordertransactions>
-				</observers>
-			</urapidflow_product_import_after_fetch>
+			</urapidflow_product_import_after_save>
 		</events>
 	</global>
 	<frontend>

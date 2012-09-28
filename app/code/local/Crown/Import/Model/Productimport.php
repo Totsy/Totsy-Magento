@@ -37,7 +37,7 @@ class Crown_Import_Model_Productimport extends Crown_Import_Model_Import_Abstrac
 	 * @since 1.0.0
 	 * @var array
 	 */
-	protected  $_configurableAttributes = 'color,size';
+	protected  $_configurableAttributes = array('color','size');
 	
 	/**
 	 * Max length for a sku. Restricted by DotCom.
@@ -67,8 +67,14 @@ class Crown_Import_Model_Productimport extends Crown_Import_Model_Import_Abstrac
 		$this->addRowFilter ( array (&$this, 'filterIsInStock'), 2 );
 		$this->addRowFilter ( array (&$this, 'filterProductVisibility'), 2 );
 		$this->addRowFilter ( array (&$this, 'filterConfigurableProductInventory'), 2 );
+		$this->addRowFilter ( array (&$this, 'filterMediaGallery'), 10 );
 		
 		$this->addAfterParseEvent( array (&$this, 'filterFindConfigurables') );
+		
+		$this->addAttributeFilter( 'image', array (&$this, 'filterRemoveBeginngSlash') );
+		$this->addAttributeFilter( 'small_image', array (&$this, 'filterRemoveBeginngSlash') );
+		$this->addAttributeFilter( 'thumbnail', array (&$this, 'filterRemoveBeginngSlash') );
+		
 		return parent::loadfilters();
 	}
 	
@@ -103,6 +109,17 @@ class Crown_Import_Model_Productimport extends Crown_Import_Model_Import_Abstrac
 		$this->addColumnNameMap('qty','stock.qty');
 		$this->addColumnNameMap('category_id','category.ids');
 		$this->addColumnNameMap('websites','product.websites');
+	}
+	
+	/**
+	 * Removes the begging slash off of pathes
+	 * @param string $value
+	 * @since 1.0.4
+	 * @return string
+	 */
+	public function filterRemoveBeginngSlash($value) {
+		$value = ltrim($value, '/');
+		return $value;
 	}
 	
 	/**
@@ -353,6 +370,24 @@ class Crown_Import_Model_Productimport extends Crown_Import_Model_Import_Abstrac
 		if (!isset($data['po_id'])) {
 			$data['po_id'] = $this->getDefaultProductPoId();
 			$this->_fields[] = 'po_id';
+		}
+		return $data;
+	}
+	
+	/**
+	 * Add media gallery images
+	 * @param mixed int|string $_id
+	 * @param array $data
+	 * @since 1.0.4
+	 * @return array
+	 */
+	public function filterMediaGallery($_id, $data) {
+		if (isset($data['media_gallery']) && isset($data['sku'])) {
+			$this->_media_gallery[$data['sku']] = explode(',', $data['media_gallery']);
+			unset($data['media_gallery']);
+			if (isset($this->_fields['media_gallery'])) {
+				unset($this->_fields['media_gallery']);
+			}
 		}
 		return $data;
 	}
