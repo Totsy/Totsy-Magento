@@ -42,8 +42,12 @@
         <div class="row">
         <?php if($_pAddsses = Mage::getSingleton('customer/session')->getCustomer()->getDefaultBilling()): ?>
             <div class="info-box span4">
-                <h4 class="box-title"><?php echo $this->__('Default Billing Address') ?> <a href="<?php echo $this->getAddressEditUrl(Mage::getSingleton('customer/session')->getCustomer()->getAddressById($_pAddsses)) ?>" class="btn btn-primary"><?php echo $this->__('Edit') ?></a></h4>
-                
+                <h4 class="box-title">
+                <?php echo $this->__('Default Billing Address') ?> 
+                    <?php if(!$this->isAddressLinkWithPaymentProfile($_pAddsses)): ?>
+                    <a href="<?php echo $this->getAddressEditUrl(Mage::getSingleton('customer/session')->getCustomer()->getAddressById($_pAddsses)) ?>" class="btn btn-primary"><?php echo $this->__('Edit') ?></a>
+                    <?php endif; ?>
+                </h4>
                 <address class="box-content">
                 <?php echo $this->getAddressHtml(Mage::getSingleton('customer/session')->getCustomer()->getAddressById($_pAddsses)) ?>
                 </address>
@@ -57,7 +61,12 @@
 
         <?php if($_pAddsses = Mage::getSingleton('customer/session')->getCustomer()->getDefaultShipping()): ?>
             <div class="info-box span4">
-                <h4 class="box-title"><?php echo $this->__('Default Shipping Address') ?> <a href="<?php echo $this->getAddressEditUrl(Mage::getSingleton('customer/session')->getCustomer()->getAddressById($_pAddsses)) ?>" class="btn btn-primary"><?php echo $this->__('Edit') ?></a></h4>
+            
+                <h4 class="box-title"><?php echo $this->__('Default Shipping Address') ?>
+                <?php if(!$this->isAddressLinkWithPaymentProfile($_pAddsses)): ?>
+                    <a href="<?php echo $this->getAddressEditUrl(Mage::getSingleton('customer/session')->getCustomer()->getAddressById($_pAddsses)) ?>" class="btn btn-primary"><?php echo $this->__('Edit') ?></a>
+                <?php endif; ?>
+                </h4>
                 <address class="box-content">
                     <?php echo $this->getAddressHtml(Mage::getSingleton('customer/session')->getCustomer()->getAddressById($_pAddsses)) ?>
                 </address>
@@ -80,10 +89,12 @@
                 <address>
                     <?php echo $this->getAddressHtml($_address) ?><br />
                 </address>
-                <p class="actions">
-                    <a href="<?php echo $this->getUrl('customer/address/edit', array('id'=>$_address->getId())) ?>" class="btn btn-primary btn-mini"><?php echo $this->__('Edit') ?></a>
-                    <a href="#" class="btn btn-primary btn-mini" onclick="return deleteAddress('<?php echo $_address->getId() ?>');"><?php echo $this->__('Delete') ?></a>
-                </p>
+                <?php if(!$this->isAddressLinkWithPaymentProfile($_address->getId())): ?>
+                    <p class="actions">
+                        <a href="<?php echo $this->getUrl('customer/address/edit', array('id'=>$_address->getId())) ?>" class="btn btn-primary btn-mini"><?php echo $this->__('Edit') ?></a>
+                        <a href="#" class="btn btn-primary btn-mini" onclick="return deleteAddress('<?php echo $_address->getId() ?>');"><?php echo $this->__('Delete') ?></a>
+                    </p>
+                <?php endif; ?>
             </li>
             <?php endforeach; ?>
         <?php else: ?>
