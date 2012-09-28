@@ -12,13 +12,6 @@
 	    	    </div>
 	    	    <input type="hidden" name="shipping[email]" id="shipping:email" value="<?php echo $this->getCustomer()->getEmail() ?>" />
 	    	    <input type="hidden" name="shipping[selected]" id="shipping:selected" />
-	    	    <!-- li class="fields">
-	    	        <div class="field half-of-half">
-			            <span for="shipping:email" class="required"><em>*</em><?php echo $this->__('Email Address') ?></span>
-			            <input type="text" name="shipping[email]" id="shipping:email" title="<?php echo $this->__('Email Address') ?>" class="input-text validate-email required-entry" value="<?php echo $this->htmlEscape($this->getAddress()->getEmail()) ?>" />
-			        </div>
-	    	    </div-->
-	    	     <div >
 	    	         <div class="field half-of-half">
 			            <label for="shipping:street1" class="required"><em>*&nbsp;</em><?php echo $this->__('street address line 1') ?></label>
 			            <input type="text" title="<?php echo $this->__('Street Address Line 1') ?>" name="shipping[street][0]" id="shipping:street1" value="<?php echo $this->getAddress()->getStreet(1) ?>" placeholder="<?php echo $this->__('Street Address Line 1') ?>" class="input-text required-entry streetaddress1" />
@@ -73,7 +66,7 @@
 //    var shippingForm = new VarienForm('hpcheckout-shipping-form');
     jQuery( document ).ready( function() {
         jQuery( '#shipping\\:postcode, #shipping\\:region_id' ).blur(function() { hpcheckout.update(true); } );
-        //jQuery( '#shipping-address-select' ).change(function() { hpcheckout.switchAddress(); } );
+        jQuery( '#shipping-address-select' ).change( function() { hpcheckout.switchAddress(); } );
         jQuery( '#billing\\:selected' ).val(jQuery( '#billing-address-select' ).val());
     });
     
