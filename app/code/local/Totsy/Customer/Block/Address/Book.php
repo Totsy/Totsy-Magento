@@ -5,6 +5,7 @@
  * @author      Tom Royer <troyer@totsy.com>
  * @copyright   Copyright (c) 2012 Totsy LLC
  */
+ 
 class Totsy_Customer_Block_Address_Book extends Mage_Customer_Block_Address_Book
 {
     public function isAddressLinkWithPaymentProfile($addressId)
