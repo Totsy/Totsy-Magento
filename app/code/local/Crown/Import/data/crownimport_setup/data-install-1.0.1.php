@@ -124,6 +124,7 @@ $productExtraProfile->save ();
  */
 Mage::getConfig()->saveConfig('crownimport/urapidflow/profile_product_extra', $productExtraProfile->getId());
 Mage::getConfig()->saveConfig('crownimport/urapidflow/profile', $productProfile->getId());
+Mage::getConfig()->saveConfig('urapidflow/dirs/images_dir', '{media}/import');
 Mage::getConfig()->reinit();
 Mage::app()->reinitStores();
 
