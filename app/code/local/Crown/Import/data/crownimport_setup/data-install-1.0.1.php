@@ -24,12 +24,20 @@ $productProfileData = array(
 							'import' 	=> array(
 											'dryrun' 				=> '0',
 											'reindex_type' 			=> 'realtime',
-											'create_options' 		=> '1',
+											'create_options' 		=> '0',
 											'image_files' 			=> '1',
 											'image_files_remote' 	=> '1',
 							),
 							'log'		=> array(
 											'min_level'				=> 'SUCCESS',
+							),
+							'columns'	=> array(
+											0	=> array(
+													'field'					=> 'ages',
+													'alias'					=> 'ages',
+													'default_multiselect'	=> '1',
+													'separator'				=> ',',
+											),
 							),
 	),
 	
