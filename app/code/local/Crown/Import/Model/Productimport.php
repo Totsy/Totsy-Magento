@@ -37,7 +37,7 @@ class Crown_Import_Model_Productimport extends Crown_Import_Model_Import_Abstrac
 	 * @since 1.0.0
 	 * @var array
 	 */
-	protected  $_configurableAttributes = 'color,size';
+	protected  $_configurableAttributes = array('color','size');
 	
 	/**
 	 * Max length for a sku. Restricted by DotCom.
