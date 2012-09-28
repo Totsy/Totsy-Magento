@@ -22,5 +22,12 @@
                 </rewrite>
             </sailthru>
         </helpers>
+        <models>
+            <sailythru>
+                <rewrite>
+                    <feed>Totsy_Sailthru_Model_Feed</feed>
+                </rewrite>
+            </sailthru>
+        </models>
     </global>
 </config>

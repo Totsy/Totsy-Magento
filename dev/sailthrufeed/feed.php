@@ -7,10 +7,12 @@ $mageRunCode = isset($_SERVER['MAGE_RUN_CODE']) ? $_SERVER['MAGE_RUN_CODE'] : ''
 $mageRunType = isset($_SERVER['MAGE_RUN_TYPE']) ? $_SERVER['MAGE_RUN_TYPE'] : 'store';
 Mage::app($mageRunCode, $mageRunType);	 
 
-$cache_object = Mage::helper('sailthru/helper_cache');
+$feed = Mage::getModel('sailthru/feed');
+$cache_object = $feed->getCacheHelper();
+
 $cache = $cache_object->runner($full_path);
 if ($cache !== false) {
-	Mage::helper('sailtru/helper_feed')->sendHeaders();
+	$feed->getFeedHelper()->sendHeaders();
 	echo $cache;
 	exit(0);
 }
@@ -32,7 +34,7 @@ $maxOff = 0;
 $start_date = strtotime(date('Y-m-d'));
 $start_time = '1:00:00';
 $order_desc = false;
-
+/*
 if (!empty($_GET['order'])){
 	if (strtolower($_GET['order']) == 'desc'){
 		$order_desc = true; //DESC
@@ -78,7 +80,7 @@ if (!empty($_GET['exclude']) && preg_match('/[\d\,]+/',$_GET['exclude'])){
 	}
 	unset($exclude_list);
 }
-
+*/
 
 /*### PROCESS DATA ###*/
 /*if user want to check upcomming products, put this parameter to url*/

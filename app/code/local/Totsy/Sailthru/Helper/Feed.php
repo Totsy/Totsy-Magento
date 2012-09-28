@@ -7,7 +7,7 @@
  * @copyright   Copyright (c) 2012 Totsy LLC
  */
 
-class Totsy_Sailthru_Helper_Feed
+class Totsy_Sailthru_Helper_Feed extends Mage_Core_Helper_Abstract
 {
 
     private $_timeDiff = 0;
@@ -16,14 +16,41 @@ class Totsy_Sailthru_Helper_Feed
     private $_startDate = null;
     private $_startTime = null;
     private $_order = false; // true = DESC; false = ACS
+    private $_excludeList = array();
+
+    public function __call($name,$argiments){
+        if (substr($name,0,3) == 'get'){
+            $name = substr($name,3);
+            $name = lcfirst($name);
+            if (isset($this->{'_'.$name})){
+                return $this->{'_'.$name};
+            }
+        }
+    }
 
     /**
     * send NO CACHE json headers 
+    *
+    * @return void
     */
     public function sendHeaders()
     {
         header('Cache-Control: no-cache, must-revalidate');
         header('Content-type: application/json');
+    }
+
+    /**
+    * Process feed parameters
+    *
+    * @return void
+    */
+    public function processor()
+    {
+        $this->setMagentoTimeDiff();
+        $this->_processOrder();
+        $this->_processStartDate();
+        $this->_processStartTime();
+        $this->_processExclude();
     }
 
     public function setMagentoTimeDiff()
@@ -46,6 +73,20 @@ class Totsy_Sailthru_Helper_Feed
         }
 
     } 
+
+    public function timeMachine(&$time,$format=null){
+        $time = strtotime($time);
+        
+        if ($this->_timeIsAhead){
+            $time = $time - $this->_timeDiff;
+        } else {
+            $time = $time + $this->_timeDiff;
+        }
+
+        if (!is_null($format)){
+            $time = date($format,$time);
+        }
+    }
 
     private function _processStartDate()
     {
@@ -77,8 +118,8 @@ class Totsy_Sailthru_Helper_Feed
                 $this->_startTime = $st;
                 unset($st);
             }
+            $this->timeMachine($this->_startTime,'H:i:s');
         }
-
     }
 
     private function _processOrder ()
@@ -92,5 +133,18 @@ class Totsy_Sailthru_Helper_Feed
             $this->_order = true; //DESC
         }
 
+    }
+
+    private function _processExclude()
+    {
+        if (!empty($_GET['exclude']) && preg_match('/[\d\,]+/',$_GET['exclude'])) {
+            $exclude_list = explode(',', $_GET['exclude']);
+            foreach($exclude_list as $el){
+                if (is_numeric($el)) {
+                    $this->_excludeList[] = $el;
+                }
+            }
+            unset($exclude_list);
+        }
     }
 }
