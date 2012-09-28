@@ -26,8 +26,12 @@
 		echo '<strong>Sale Wholesale:</strong> $' . sprintf("%.2f", round($product->getSaleWholesale(), 2)) . '<br/>';
 		$imuPercentOff = round(($salesPrice - $product->getSaleWholesale()) / $salesPrice, 4) * 100;
 		echo '<strong>IMU:</strong> ' . sprintf("%.2f", $imuPercentOff) . '%<br/>';
-		echo '<strong>Departments:</strong> ' . implode(', ', $product->getAttributeText('departments')) . '<br/>';
-		echo '<strong>Ages:</strong> ' . implode(', ', $product->getAttributeText('ages')) . '<br/>';
+		if($product->getAttributeText('departments')) {
+		    echo '<strong>Departments:</strong> ' . implode(', ', $product->getAttributeText('departments')) . '<br/>';
+		}
+		if($product->getAttributeText('ages')) {
+		    echo '<strong>Ages:</strong> ' . implode(', ', $product->getAttributeText('ages')) . '<br/>';
+		}
 	}
 ?>
 </div>
