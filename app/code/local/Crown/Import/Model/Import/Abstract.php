@@ -317,7 +317,7 @@ class Crown_Import_Model_Import_Abstract extends Mage_Core_Model_Abstract {
 			$headerRow = true;
 			$hasSku = false;
 			$line = 0;
-			while ( ($data = fgetcsv ( $handle, 1000, "," )) !== false ) {
+			while ( ($data = fgetcsv ( $handle, 0, "," )) !== false ) {
 				$this->_offset = count ( $data );
 				$line++;
 				
@@ -433,20 +433,21 @@ class Crown_Import_Model_Import_Abstract extends Mage_Core_Model_Abstract {
 							fputcsv ( $fp, $data );
 						}
 					}
-					fclose ( $fp );
 				}
 				
-				// Add product media gallery
+				// Media gallery import
 				if (!empty($this->_media_gallery)) {
 					$data = array(
-						'##CPI','image_url','label','position','disabled'
+						'##CPI', 'sku', 'image_url','label','position','disabled'
 					);
 					fputcsv ( $fp, $data );
-					foreach ( $this->_media_gallery as $_sku => $_image_url ) {
-						$data = array(
-							'CPI',$_sku,$_image_url
-						);
-						fputcsv ( $fp, $data );
+					foreach ( $this->_media_gallery as $_sku => $_image_urls ) {
+						foreach ($_image_urls as $_image_url) {
+							$data = array(
+								'CPI',$_sku, ltrim($_image_url,'/')
+							);
+							fputcsv ( $fp, $data );
+						}
 					}
 				}
 				
