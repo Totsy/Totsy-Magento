@@ -166,19 +166,26 @@ HpCheckout.prototype = {
 	/*******************************
 	* Handler when listened fields are updated
 	*/
-	update: function() {
+	update: function( doUpdatePayment ) {
 		var formId = jQuery( this ).parents( 'form' ).eq( 0 ).attr( 'id' );
 		var hpcheckoutObject = HpCheckout.prototype;
 		var step = hpcheckoutObject.data.forms[ formId ];
-		var blocksToUpdate = hpcheckoutObject.getBlocksToUpdate( step );
+		var blocksToUpdate = "";
+		
+		if(!doUpdatePayment) {		
+            blocksToUpdate = hpcheckoutObject.getBlocksToUpdate( step );
+		} else {
+		    blocksToUpdate = ['shipping','billing','review'];
+		}
+				
 		if( hpcheckoutObject.validate( step ) ) {
 			// var postData = hpcheckoutObject.getFormData( step );
 			var postData = hpcheckoutObject.getFormData();
 			postData += '&currentStep=' + step;
-			hpcheckoutObject.ajaxRequest( postData );
+			hpcheckoutObject.ajaxRequest( postData, doUpdatePayment );
 		}
 	},
-	
+		
 	updatePayment: function() {
 		var formId = jQuery( this ).parents( 'form' ).eq( 0 ).attr( 'id' );
 		var hpcheckoutObject = HpCheckout.prototype;
@@ -319,9 +326,18 @@ HpCheckout.prototype = {
 		return returnFormDataArray.join( '&' );
 	}, 
 	
-	ajaxRequest: function( postData ) {
+	ajaxRequest: function( postData, doUpdatePayment ) {
 		var checkoutObject = this;
-		var blocksToUpdate = this.getBlocksToUpdate( postData[ 'currentStep' ] );
+		
+		var blocksToUpdate = "";
+		
+		//chekig if payment block should be updated or not
+		if(!doUpdatePayment) {
+            blocksToUpdate = this.getBlocksToUpdate( postData[ 'currentStep' ] );
+		} else {
+            blocksToUpdate = ['shipping','billing','review'];	
+		}
+				
 		this.throbberOn( blocksToUpdate );
 		jQuery.ajax({
 			url: this.data.updateUrl,
