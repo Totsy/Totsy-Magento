@@ -25,53 +25,40 @@
  */
 ?>
 <?php  $_order = $this->getOrder() ?>
-<div class="order-page well">
-<div class="page-title title-buttons">
-    <h1><?php echo $this->__('Order #%s - %s', $_order->getRealOrderId(), $_order->getStatusLabel()) ?></h1>
-    <?php echo $this->getChildHtml('buttons') ?>
-</div>
-<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
-<?php  //echo $this->getStatusHistoryRssUrl($_order) ?>
-<dl class="order-info">
-    <dt><?php echo $this->__('About This Order:') ?></dt>
-    <dd>
-
-    </dd>
-</dl>
-<?php $orderdate = $this->formatDate($_order->getCreatedAtStoreDate(), Mage_Core_Model_Locale::FORMAT_TYPE_MEDIUM);?>
-<?php $sorttime = strtotime($orderdate); ?>
-<?php $orderealdate = date('m-d-Y', $sorttime); ?>
-<p class="order-date"><?php echo $this->__('Order Date: %s', $orderealdate) ?></p>
-<?php if (!$_order->getIsVirtual()): ?>
-<div class="col2-set">
-    <div class="col-1">
-        <div class="info-box">
-            <h2 class="box-title"><?php echo $this->__('Shipping Address') ?></h2>
+<div class="well">
+    <div class="page-title title-buttons">
+        <h3><?php echo $this->__('Order #%s - %s', $_order->getRealOrderId(), $_order->getStatusLabel()) ?></h3>
+        <?php //echo $this->getChildHtml('buttons') ?>
+    </div>
+    <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+    <div class="order-info">
+        <span><?php //echo $this->__('About This Order:') ?></span>
+    </div>
+    <?php $orderdate = $this->formatDate($_order->getCreatedAtStoreDate(), Mage_Core_Model_Locale::FORMAT_TYPE_MEDIUM);?>
+    <?php $sorttime = strtotime($orderdate); ?>
+    <?php $orderealdate = date('m-d-Y', $sorttime); ?>
+        <div class="order-date"><?php echo $this->__('Order Date: %s', $orderealdate) ?></div>
+        
+    <div style="margin-top:10px">
+    <?php if (!$_order->getIsVirtual()): ?>
+        <div class="col1 span3">
+            <h4 class="box-title"><?php echo $this->__('Payment Method') ?></h3>
+            <div class="box-content"><?php echo $this->getPaymentInfoHtml() ?></div>
+        </div>
+        <div class="col1 span3">
+            <h4 class="box-title"><?php echo $this->__('Shipping Address') ?></h3>
             <address class="box-content"><?php echo $_order->getShippingAddress()->format('html') ?></address>
         </div>
-    </div>
-    <div class="col-2">
-        <div class="info-box">
-            <h2 class="box-title"><?php echo $this->__('Payment Method') ?></h2>
-            <div class="box-content"><?php echo $this->getPaymentInfoHtml() ?></div>
-        </div>
-    </div>
-</div>
-<?php endif; ?>
-<div class="col2-set">
-    <div class="col-1">
-        <div class="info-box">
-            <h2 class="box-title"><?php echo $this->__('Billing Address') ?></h2>
+        <?php endif; ?>
+        <div class="col1 span2">
+            <h4 class="box-title"><?php echo $this->__('Billing Address') ?></h3>
             <address class="box-content"><?php echo $_order->getBillingAddress()->format('html') ?></address>
         </div>
-    </div>
-<?php if ($_order->getIsVirtual()): ?>
-     <div class="col-2">
-        <div class="info-box">
-            <h2 class="box-title"><?php echo $this->__('Payment Method') ?></h2>
+        <?php if ($_order->getIsVirtual()): ?>
+        <div class="col1 span2">
+            <h4 class="box-title"><?php echo $this->__('Payment Method') ?></h3>
             <div class="box-content"><?php echo $this->getPaymentInfoHtml() ?></div>
         </div>
+    <?php endif; ?>
     </div>
-<?php endif; ?>
-</div>
-</div>
+<div class="clear"></div>
