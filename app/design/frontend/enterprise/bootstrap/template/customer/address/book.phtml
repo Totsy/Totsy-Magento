@@ -40,7 +40,8 @@
         <h4 class="sub-title"><?php echo $this->__('Default Addresses') ?></h4>
         <hr />
         <div class="row">
-        <?php if($_pAddsses = Mage::getSingleton('customer/session')->getCustomer()->getDefaultBilling()): ?>
+        <?php $_pAddsses = Mage::getSingleton('customer/session')->getCustomer()->getDefaultBilling(); ?>
+        <?php if($_pAddsses && !$this->isAddressLinkWithPaymentProfileHidden($_pAddsses)): ?>
             <div class="info-box span4">
                 <h4 class="box-title">
                 <?php echo $this->__('Default Billing Address') ?> 
@@ -58,8 +59,8 @@
                 <p class="box-content"><?php echo $this->__('You have no default billing address in your address book.') ?></p>
             </div>
         <?php endif ?>
-
-        <?php if($_pAddsses = Mage::getSingleton('customer/session')->getCustomer()->getDefaultShipping()): ?>
+        <?php $_pAddsses = Mage::getSingleton('customer/session')->getCustomer()->getDefaultShipping(); ?>
+        <?php if($_pAddsses && !$this->isAddressLinkWithPaymentProfileHidden($_pAddsses)): ?>
             <div class="info-box span4">
             
                 <h4 class="box-title"><?php echo $this->__('Default Shipping Address') ?>
@@ -85,6 +86,7 @@
         <ol>
         <?php if($_pAddsses = $this->getAdditionalAddresses()): ?>
             <?php foreach($_pAddsses as $_address): ?>
+            <?php if(!$this->isAddressLinkWithPaymentProfileHidden($_address->getId())): ?>
             <li class="item">
                 <address>
                     <?php echo $this->getAddressHtml($_address) ?><br />
@@ -96,6 +98,7 @@
                     </p>
                 <?php endif; ?>
             </li>
+            <?php endif; ?>
             <?php endforeach; ?>
         <?php else: ?>
             <li class="item empty">
