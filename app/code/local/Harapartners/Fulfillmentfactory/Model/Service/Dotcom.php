@@ -539,7 +539,7 @@ XML;
                     <shipping-address3 xsi:nil="true"/>
                     <shipping-city><![CDATA[$city]]></shipping-city>
                     <shipping-state><![CDATA[$state]]></shipping-city>
-                    <shipping-zip/>{$shippingAddress->getPostcode()}</shipping-zip>
+                    <shipping-zip>{$shippingAddress->getPostcode()}</shipping-zip>
                     <shipping-country >{$country}</shipping-country>
                     <shipping-iso-country-code xsi:nil="true"/>
                     <shipping-phone xsi:nil="true"/>
