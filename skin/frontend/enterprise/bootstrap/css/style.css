@@ -518,8 +518,9 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
 }
 
 /* .more rollovers */
-.events-grid .thumbnail .more {
+.events-grid .catalog-event .more {
     position: absolute; bottom: 0; left: 0;
+    visibility: hidden;
     opacity:0;
     width:100%; height: 263px; overflow: hidden;
     background: rgba(255,255,255,0.75);
@@ -527,7 +528,8 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
     -webkit-transition:opacity 0.5s ease;
     transition:opacity 0.5s ease;
 }
-.events-grid .thumbnail:hover .more {
+.events-grid .catalog-event:hover .more {
+    visibility: visible;
     opacity:1;
 }
 .events-grid .thumbnail .more-content {
@@ -1257,30 +1259,30 @@ body.catalog-category-view .price-box .special-price {
 .faq_anchors {
     margin-top:2em;
 }
-.faq_question {
+.faq_item {
     position: relative;
-    margin-top:-190px; padding:10px 5px 5px;
-    background:rgb(229,229,229); /* fallback */
-    background:rgba(229,229,229,0.6); background-clip: padding-box; -webkit-background-clip: padding-box;
+    margin-top:-190px; margin-bottom:1.75em; 
     border-top:190px solid transparent;
     /* margin-top & border-top place the jump link in viewport after fixed-header */
 }
-.logged-out ~ .container .faq_question {
+.logged-out ~ .container .faq_item {
     margin-top:-100px; border-top-width: 100px;
 }
-.faq_question:before {
-    display: block;
-    content: "";
-    position: absolute; top:0; left: 0; right: 0;
+.faq_question {
+    position: relative; z-index: 100;
+    padding:10px 5px 5px;
+    background:rgb(229,229,229); /* fallback */
+    background:rgba(229,229,229,0.6); /* background-clip: padding-box; -webkit-background-clip: padding-box; */
     border-top:1px solid rgb(229,229,229);
 }
-.faq_question:target {
+.faq_item:target .faq_question {
     background:rgba(237,45,33,0.2); background-clip: padding-box; -webkit-background-clip: padding-box;
     font-weight: bold;
     text-shadow: 0 1px 0 rgba(255,255,255,0.8)
 }
 .faq_answer {
-    margin-bottom:1.75em; padding:5px;
+    position: relative; z-index: 100;
+    padding:5px;
     background:#fff;
 }
 .faq_answer > a {position: relative; z-index: 100;}
