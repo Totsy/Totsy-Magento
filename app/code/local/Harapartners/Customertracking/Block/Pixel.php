@@ -52,7 +52,6 @@ class Harapartners_Customertracking_Block_Pixel
                     ->getFullActionName();
                 $pageTag = strtolower($pageTag);
             }
-            debug(Mage::app()->getFrontController()->getRequest()->getParam('pageTag'));
 
             // additional logic to ensure the post-registration pixel fires
             // only once, by checking a tracking cookie
