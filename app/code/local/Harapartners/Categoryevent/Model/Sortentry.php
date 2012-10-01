@@ -53,21 +53,26 @@ class Harapartners_Categoryevent_Model_Sortentry
             $this->setStoreId(Mage_Core_Model_App::ADMIN_STORE_ID);
         }
 
+        parent::_beforeSave();
+    }
+
+    protected function _afterSave()
+    {
         Mage::app()->getCache()->save(
             serialize($this->getData()),
             $this->_getCacheKey(),
             array($this->_cacheTag)
         );
 
-        parent::_beforeSave();
+        return parent::_afterSave();
     }
 
     public function loadCurrent($storeId = Mage_Core_Model_App::ADMIN_STORE_ID)
     {
-        return $this->loadByDate(date('Y-m-d'), $storeId);
+        return $this->loadByDate(Mage::getModel('core/date')->date('Y-m-d'), $storeId, true);
     }
 
-    public function loadByDate($date, $storeId = Mage_Core_Model_App::ADMIN_STORE_ID) {
+    public function loadByDate($date, $storeId = Mage_Core_Model_App::ADMIN_STORE_ID, $useRecent = false) {
         if (!$storeId) {
             $storeId = Mage_Core_Model_App::ADMIN_STORE_ID;
         }
@@ -79,7 +84,7 @@ class Harapartners_Categoryevent_Model_Sortentry
         if ($cache->test($this->_getCacheKey())) {
             $this->addData(unserialize($cache->load($this->_getCacheKey())));
         } else {
-            $this->getResource()->load($this, $date, 'date');
+            $this->getResource()->loadByDate($this, $date, $useRecent);
             if ($this->getId()) {
                 Mage::app()->getCache()->save(
                     serialize($this->getData()),
