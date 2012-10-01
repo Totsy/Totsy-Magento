@@ -468,7 +468,7 @@ XML;
                 $billingAddress = Mage::getModel('sales/order_address');
              }
 
-            $billingAddress = $billingAddress->getFirstname() . ' ' . $billingAddress->getLastname();
+            $billingName = $billingAddress->getFirstname() . ' ' . $billingAddress->getLastname();
 
             $billing_state = Mage::helper('fulfillmentfactory')->getStateCodeByFullName($billingAddress->getRegion(), $billingAddress->getCountry());
 
