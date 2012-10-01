@@ -19,4 +19,14 @@ class Totsy_Customer_Block_Address_Book extends Mage_Customer_Block_Address_Book
         }
         return $linked;
     }
+
+    public function isAddressLinkWithPaymentProfileHidden($addressId)
+    {
+        $linked = false;
+        $profile = Mage::getModel('paymentfactory/profile')->load($addressId, 'address_id');
+        if($profile->getId() && $profile->getIsDefault()) {
+            $linked = true;
+        }
+        return $linked;
+    }
 }

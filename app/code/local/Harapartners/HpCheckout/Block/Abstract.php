@@ -78,10 +78,18 @@ abstract class Harapartners_HpCheckout_Block_Abstract extends Mage_Core_Block_Te
                 $options[] = array( 'value' => '', 'label' => 'New Address' );
             }
             foreach ($this->getCustomer()->getAddresses() as $address) {
-                $options[] = array(
-                    'value' => $address->getId(),
-                    'label' => $address->format('oneline')
-                );
+
+                $profile = Mage::getModel('paymentfactory/profile')->load($address->getId(), 'address_id');
+                $addressSkipped = false;
+                if($profile->getId() && $profile->getIsDefault()) {
+                    $addressSkipped = true;
+                }
+                if(!$addressSkipped) {
+                    $options[] = array(
+                        'value' => $address->getId(),
+                        'label' => $address->format('oneline')
+                    );
+                }
             }
             
             $addressId = '';
