@@ -126,34 +126,40 @@ HpCheckout.prototype = {
 	switchAddress: function() {
 		var clickedAddress = jQuery( this ); 
 		var blockType = '';
+		
 		if( clickedAddress.attr( 'id' ) == 'billing-address-select' ) {
 			blockType = 'billing';
 		} else if( clickedAddress.attr( 'id' ) == 'shipping-address-select' ) {
 			blockType = 'shipping';
 		}
+		
 		if( clickedAddress.val() == '' ) {
 			jQuery( '#' + hpcheckout.data.blocks[ blockType ].formId + ' input' ).val( '' );
             if(blockType == 'billing') {
                 jQuery( '#billing\\:selected' ).val('');
             }
-		} else {
+		} else {	
 			if( hpcheckoutAddresses[ clickedAddress.val() ] ) {
 				jQuery('select#' + blockType +'\\:country_id').val( hpcheckoutAddresses[ clickedAddress.val() ][ 'country_id' ] );
+
 				if( blockType == 'billing' ) {
 					billingRegionUpdater.update();
 				} else if ( blockType == 'shipping' ) {
 					shippingRegionUpdater.update();
 				}
+				
 				jQuery( 'input, select', '#' + hpcheckout.data.blocks[ blockType ].formId ).each( function(){
 					jQuery( this ).val( hpcheckoutAddresses[ clickedAddress.val() ][ jQuery( this ).attr( 'id' ).replace( blockType + ':', '' ) ] );
 				});
+								
 				if( blockType == 'shipping' ) {
 					jQuery( '#shipping\\:postcode' ).change();
-				}
+				}	
+								
                 if(blockType == 'billing') {
                     jQuery( '#billing\\:selected' ).val(jQuery( '#billing-address-select' ).val());
                 }
-			}
+			} 
 		}
 	},
 

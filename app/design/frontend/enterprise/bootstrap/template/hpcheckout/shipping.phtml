@@ -49,7 +49,6 @@
 	    	          <div class="field half-of-half">
 	    	        	    <label for="shipping:telephone" class="required"><em>*&nbsp;</em><?php echo $this->__('telephone') ?></label>
 	    	        	    <input type="text" name="shipping[telephone]" title="<?php echo $this->__('Telephone') ?>" class="input-text required-entry validate-phoneLax telephone" id="shipping:telephone" value="<?php echo $this->htmlEscape($this->getAddress()->getTelephone()) ?>" placeholder="Telephone" onkeyup="backspacerUP(this,event);" onkeydown="backspacerDOWN(this,event);"/>
-	    	        	</div>
 	    	         </div> 
 	                 <div class="field half-of-half">
                          <label for="shipping:country_id" class="required"><em>*&nbsp;</em><?php echo $this->__('country') ?></label>
@@ -63,12 +62,14 @@
 <script type="text/javascript">
 //<![CDATA[
     var shippingRegionUpdater = new RegionUpdater('shipping:country_id', 'shipping:region', 'shipping:region_id', countryRegions, undefined, 'shipping:postcode');
-//    var shippingForm = new VarienForm('hpcheckout-shipping-form');
+
     jQuery( document ).ready( function() {
-        jQuery( '#shipping\\:postcode, #shipping\\:region_id' ).blur(function() { hpcheckout.update(true); } );
-        jQuery( '#shipping-address-select' ).change( function() { hpcheckout.switchAddress(); } );
+
+        //console.log(shippingRegionUpdater);
+        
+        jQuery( '#shipping\\:postcode, #shipping\\:region_id' ).blur( function() { hpcheckout.update(true); } );
+        jQuery( '#shipping-address-select' ).bind( 'change', hpcheckout.switchAddress );
         jQuery( '#billing\\:selected' ).val(jQuery( '#billing-address-select' ).val());
     });
-    
 //]]>
 </script>
