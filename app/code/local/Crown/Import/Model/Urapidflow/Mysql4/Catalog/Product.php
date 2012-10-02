@@ -250,13 +250,15 @@ class Crown_Import_Model_Urapidflow_Mysql4_Catalog_Product extends Unirgy_RapidF
 					}
 
 					// Check for invalid characters
+                    /* @var Crown_Import_Helper_Encoding $encodingHlpr */
+                    $encodingHlpr = Mage::getModel('crownimport/encoding');
 					if ($selectable) {
 						if ($attr ['frontend_input'] == 'multiselect' && is_array ( $newValue )) {
 							$newValue = array_unique ( $newValue );
 						}
 						foreach ( ( array ) $newValue as $i => $v ) {
 							try {
-								$this->_checkForInvalidCharacter ( $v );
+                                $encodingHlpr->checkForInvalidCharacter ( $v );
 							} catch (Exception $e ) {
 								$profile->addValue ( 'num_errors' );
 								$logger->error ( $this->__ ( $e->getMessage() ) );
@@ -265,7 +267,7 @@ class Crown_Import_Model_Urapidflow_Mysql4_Catalog_Product extends Unirgy_RapidF
 						}
 					} else {
 						try {
-							$this->_checkForInvalidCharacter ( $newValue );
+                            $encodingHlpr->checkForInvalidCharacter ( $newValue );
 						} catch (Exception $e ) {
 							$profile->addValue ( 'num_errors' );
 							$logger->error ( $this->__ ( $e->getMessage() ) );
@@ -274,13 +276,30 @@ class Crown_Import_Model_Urapidflow_Mysql4_Catalog_Product extends Unirgy_RapidF
 					}
 
                     // Check for media image on server or remote host
-                    if ($attr['frontend_input']=='media_image' && $newValue) {
-                        try {
-                            $this->_checkForValidImageFiles( $newValue );
-                        } catch (Exception $e ) {
-                            $profile->addValue ( 'num_errors' );
-                            $logger->error ( $this->__ ( $e->getMessage() ) );
-                            $this->_valid [$sku] = false;
+                    /* @var $mediaHlper Crown_Import_Helper_Data */
+                    $mediaHlper = Mage::getModel('crownimport');
+                    if ($attr['frontend_input']=='media_image') {
+                        if ($selectable) {
+                            if ($attr ['frontend_input'] == 'multiselect' && is_array ( $newValue )) {
+                                $newValue = array_unique ( $newValue );
+                            }
+                            foreach ( ( array ) $newValue as $i => $v ) {
+                                try {
+                                    $mediaHlper->checkForValidImageFiles( $v, $profile );
+                                } catch (Exception $e ) {
+                                    $profile->addValue ( 'num_errors' );
+                                    $logger->error ( $this->__ ( $e->getMessage() ) );
+                                    $this->_valid [$sku] = false;
+                                }
+                            }
+                        } else {
+                            try {
+                                $mediaHlper->checkForValidImageFiles( $newValue, $profile );
+                            } catch (Exception $e ) {
+                                $profile->addValue ( 'num_errors' );
+                                $logger->error ( $this->__ ( $e->getMessage() ) );
+                                $this->_valid [$sku] = false;
+                            }
                         }
                     }
 
@@ -296,90 +315,4 @@ class Crown_Import_Model_Urapidflow_Mysql4_Catalog_Product extends Unirgy_RapidF
 		} // foreach ($this->_newData as $p)
 		unset ( $p );
 	}
-
-	/**
-	 * Checks the attribute value to see if it has an invalid character.
-	 * @param mixed $value
-	 * @since 1.0.1
-	 * @return boolean
-	 */
-	protected function _checkForInvalidCharacter($value) {
-		$invalidCharacters = Mage::helper ( 'crownimport' )->getInvalidCharacters ();
-		$value = Mage::helper('crownimport/encoding')->toUTF8($value);
-		foreach ( $invalidCharacters as $invalidCharacter ) {
-			$pos = iconv_strpos($value, $invalidCharacter, null, 'UTF-8');
-			if ( false !== $pos ) {
-					throw new Exception("Invalid Character found");
-				return false;
-			}
-		}
-		return true;
-	}
-
-    /**
-     * Checks to see if a valid image file exist.
-     * @param $filename
-     * @since 1.1.0
-     * @return boolean
-     */
-    protected function _checkForValidImageFiles( $filename ) {
-        $remote = preg_match('#^https?:#', $filename);
-        if ($remote) {
-            return $this->_checkImageFileRemote($filename);
-        } else {
-            return $this->_checkImageFileLocal($filename);
-        }
-    }
-
-    /**
-     * Checks to see if a local file image exist for import.
-     * @param $filename
-     * @throws Exception
-     * @since 1.1.0
-     * @return bool
-     */
-    protected function _checkImageFileLocal( $filename ) {
-        $profile = $this->_profile;
-
-        // Check if file exist
-        $imagesFromDir = $profile->getImagesBaseDir();
-
-        $fromFilename = $imagesFromDir . DS . ltrim($filename, DS);
-        $fromExists = is_readable($fromFilename);
-
-        if (!$fromExists) {
-            throw new Exception('Image file not found.');
-            return false;
-        }
-        return true;
-    }
-
-    /**
-     * Checks to see if a remote file exist.
-     * @param $filename
-     * @throws Exception
-     * @since 1.1.0
-     * @return bool
-     */
-    protected function _checkImageFileRemote( $filename ) {
-        if (!$this->_downloadRemoteImages) {
-            throw new Exception('Remote image file download is not allowed.');
-            return false;
-        }
-
-        $ch = curl_init($filename);
-
-        curl_setopt($ch, CURLOPT_NOBODY, true);
-        curl_exec($ch);
-        $retcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        curl_close($ch);
-
-        $result = $retcode == '200';
-
-        if ( !$result ) {
-            throw new Exception('Remote image file not found.');
-            return false;
-        }
-        return true;
-    }
 }

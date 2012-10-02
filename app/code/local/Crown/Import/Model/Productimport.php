@@ -1,6 +1,6 @@
 <?php
 /**
- * 
+ *
  * @method Crown_Import_Model_Productimport setDefaultProductWebsiteCode(string $value)
  * @method string getDefaultProductWebsiteCode()
  * @method Crown_Import_Model_Productimport setDefaultProductAttributeSet(string $value)
@@ -25,27 +25,27 @@
  * @method string getDefaultProductVendorCode()
  * @method Crown_Import_Model_Productimport setDefaultProductPoId(int $value)
  * @method int getDefaultProductPoId()
- * 
+ *
  * @category 	Crown
- * @package 	Crown_Import 
+ * @package 	Crown_Import
  * @since 		1.0.0
  */
 class Crown_Import_Model_Productimport extends Crown_Import_Model_Import_Abstract {
-	
+
 	/**
 	 * Attributes to be used for creating a configurable product.
 	 * @since 1.0.0
 	 * @var array
 	 */
 	protected  $_configurableAttributes = array('color','size');
-	
+
 	/**
 	 * Max length for a sku. Restricted by DotCom.
 	 * @since 1.0.0
 	 * @var int
 	 */
 	const PRODUCT_SKU_MAX_LENGTH = 17;
-	
+
 	/**
 	 * Load the core filters
 	 * @since 1.0.0
@@ -53,9 +53,7 @@ class Crown_Import_Model_Productimport extends Crown_Import_Model_Import_Abstrac
 	 */
 	protected function loadFilters() {
 		$this->addRowFilter ( array (&$this, 'filterCategoryId'), 1 );
-		$this->addRowFilter ( array (&$this, 'filterVendorId'), 1 );
 		$this->addRowFilter ( array (&$this, 'filterVendorCode'), 1 );
-		$this->addRowFilter ( array (&$this, 'filterPoId'), 1 );
 		$this->addRowFilter ( array (&$this, 'filterSku'), 2 );
 		$this->addRowFilter ( array (&$this, 'filterWebsites'), 2 );
 		$this->addRowFilter ( array (&$this, 'filterAttributeSet'), 2 );
@@ -66,18 +64,18 @@ class Crown_Import_Model_Productimport extends Crown_Import_Model_Import_Abstrac
 		$this->addRowFilter ( array (&$this, 'filterTaxClassId'), 2 );
 		$this->addRowFilter ( array (&$this, 'filterIsInStock'), 2 );
 		$this->addRowFilter ( array (&$this, 'filterProductVisibility'), 2 );
-		$this->addRowFilter ( array (&$this, 'filterConfigurableProductInventory'), 2 );
+		$this->addRowFilter ( array (&$this, 'filterProductInventoryStatus'), 2 );
 		$this->addRowFilter ( array (&$this, 'filterMediaGallery'), 10 );
-		
+
 		$this->addAfterParseEvent( array (&$this, 'filterFindConfigurables') );
-		
-		$this->addAttributeFilter( 'image', array (&$this, 'filterRemoveBeginngSlash') );
-		$this->addAttributeFilter( 'small_image', array (&$this, 'filterRemoveBeginngSlash') );
-		$this->addAttributeFilter( 'thumbnail', array (&$this, 'filterRemoveBeginngSlash') );
-		
+
+		$this->addAttributeFilter( 'image', array (&$this, 'filterRemoveBeginningSlash') );
+		$this->addAttributeFilter( 'small_image', array (&$this, 'filterRemoveBeginningSlash') );
+		$this->addAttributeFilter( 'thumbnail', array (&$this, 'filterRemoveBeginningSlash') );
+
 		return parent::loadfilters();
 	}
-	
+
 	/**
 	 * (non-PHPdoc)
 	 * @see Crown_Import_Model_Productimport_Abstract::run()
@@ -86,7 +84,7 @@ class Crown_Import_Model_Productimport extends Crown_Import_Model_Import_Abstrac
 		$this->loadDefaults();
 		parent::run();
 	}
-	
+
 	/**
 	 * Set default values based off of user settings
 	 * @since 1.0.0
@@ -103,25 +101,25 @@ class Crown_Import_Model_Productimport extends Crown_Import_Model_Import_Abstrac
 		$this->setDefaultProductTaxClass($helper->getDefaultTaxClass());
 		$this->setDefaultProductWebsiteCode($helper->getDefaultWebsite());
 		$this->setDefaultProductWeight($helper->getDefaultWeight());
-		
+
 		$this->addColumnNameMap('type','product.type');
 		$this->addColumnNameMap('attribute_set','product.attribute_set');
 		$this->addColumnNameMap('qty','stock.qty');
 		$this->addColumnNameMap('category_id','category.ids');
 		$this->addColumnNameMap('websites','product.websites');
 	}
-	
+
 	/**
-	 * Removes the begging slash off of pathes
+	 * Removes the begging slash off of paths
 	 * @param string $value
 	 * @since 1.0.4
 	 * @return string
 	 */
-	public function filterRemoveBeginngSlash($value) {
+	public function filterRemoveBeginningSlash($value) {
 		$value = ltrim($value, '/');
 		return $value;
 	}
-	
+
 	/**
 	 * Finds configurable products
 	 * @since 1.0.0
@@ -145,15 +143,15 @@ class Crown_Import_Model_Productimport extends Crown_Import_Model_Import_Abstrac
 		}
 		return $this;
 	}
-	
+
 	/**
-	 * Sets the inventory for a configurable product to follow globals
+	 * Sets the inventory for a configurable product to follow globals and simples to follow the default setting.
 	 * @param $_id tempData id
 	 * @param $data Row data
 	 * @since 1.0.0
 	 * @return array
 	 */
-	public function filterConfigurableProductInventory($_id, $data) {
+	public function filterProductInventoryStatus($_id, $data) {
 		if ('configurable' == $data['product.type'] ) {
 			$data['stock.use_config_manage_stock'] = 'yes';
 			$data['stock.use_config_enable_qty_increments'] = 'yes';
@@ -162,13 +160,13 @@ class Crown_Import_Model_Productimport extends Crown_Import_Model_Import_Abstrac
 			$this->_fields[] = 'stock.use_config_enable_qty_increments';
 			$this->_fields[] = 'stock.is_in_stock';
 		} elseif ('simple' == $data['product.type'] && $data['stock.qty'] > 0) {
-			$data['stock.is_in_stock'] = 'yes';
+			$data['stock.is_in_stock'] =  $this->getDefaultProductIsInStock() ? 'yes': 'no';
 			$this->_fields[] = 'stock.is_in_stock';
 		}
-		
+
 		return $data;
 	}
-	
+
 	/**
 	 * Sets the default website if it's not set
 	 * @param mixed int|string $_id
@@ -183,7 +181,7 @@ class Crown_Import_Model_Productimport extends Crown_Import_Model_Import_Abstrac
 		}
 		return $data;
 	}
-	
+
 	/**
 	 * Sets the default attribut set if it's not set
 	 * @param mixed int|string $_id
@@ -198,7 +196,7 @@ class Crown_Import_Model_Productimport extends Crown_Import_Model_Import_Abstrac
 		}
 		return $data;
 	}
-	
+
 	/**
 	 * Sets the default product status if it's not set
 	 * @param mixed int|string $_id
@@ -213,7 +211,7 @@ class Crown_Import_Model_Productimport extends Crown_Import_Model_Import_Abstrac
 		}
 		return $data;
 	}
-	
+
 	/**
 	 * Generates a sku for the product if it's not set
 	 * @param mixed int|string $_id
@@ -227,7 +225,7 @@ class Crown_Import_Model_Productimport extends Crown_Import_Model_Import_Abstrac
 		}
 		return $data;
 	}
-	
+
 	/**
 	 * Generates a sku for a product
 	 * @param mixed $base
@@ -238,7 +236,7 @@ class Crown_Import_Model_Productimport extends Crown_Import_Model_Import_Abstrac
 		$sku = $base . '-' . base_convert ( time (), 10, 36 ) . base_convert ( rand ( 0, base_convert ( 'zzz', 36, 10 ) ), 10, 36 );
 		return substr ( $sku, 0, self::PRODUCT_SKU_MAX_LENGTH );
 	}
-	
+
 	/**
 	 * Filter to make sure the 'short description' exist in the import data with default values.
 	 * @param mixed int|string $_id
@@ -253,7 +251,7 @@ class Crown_Import_Model_Productimport extends Crown_Import_Model_Import_Abstrac
 		}
 		return $data;
 	}
-	
+
 	/**
 	 * Filter to make sure the 'description' exist in the import data with default values.
 	 * @param mixed int|string $_id
@@ -268,7 +266,7 @@ class Crown_Import_Model_Productimport extends Crown_Import_Model_Import_Abstrac
 		}
 		return $data;
 	}
-	
+
 	/**
 	 * Filter to make sure the 'weight' exist in the import data with default values.
 	 * @param mixed int|string $_id
@@ -283,7 +281,7 @@ class Crown_Import_Model_Productimport extends Crown_Import_Model_Import_Abstrac
 		}
 		return $data;
 	}
-	
+
 	/**
 	 * Filter to make sure the 'tax class id' exist in the import data with default values.
 	 * @param mixed int|string $_id
@@ -298,7 +296,7 @@ class Crown_Import_Model_Productimport extends Crown_Import_Model_Import_Abstrac
 		}
 		return $data;
 	}
-	
+
 	/**
 	 * Filter to make sure the 'is in stock' exist in the import data with default values.
 	 * @param mixed int|string $_id
@@ -313,7 +311,7 @@ class Crown_Import_Model_Productimport extends Crown_Import_Model_Import_Abstrac
 		}
 		return $data;
 	}
-	
+
 	/**
 	 * Filter to set the default category ID
 	 * @param mixed int|string $_id
@@ -328,22 +326,7 @@ class Crown_Import_Model_Productimport extends Crown_Import_Model_Import_Abstrac
 		}
 		return $data;
 	}
-	
-	/**
-	 * Filter to set the default vendor id
-	 * @param mixed int|string $_id
-	 * @param array $data
-	 * @since 1.0.0
-	 * @return array
-	 */
-	public function filterVendorId($_id, $data) {
-		if (!isset($data['vendor_id'])) {
-			$data['vendor_id'] = $this->getDefaultProductVendorId();
-			$this->_fields[] = 'vendor_id';
-		}
-		return $data;
-	}
-	
+
 	/**
 	 * Filter to set the default vendor code
 	 * @param mixed int|string $_id
@@ -358,22 +341,7 @@ class Crown_Import_Model_Productimport extends Crown_Import_Model_Import_Abstrac
 		}
 		return $data;
 	}
-	
-	/**
-	 * Filter to set default PO ID
-	 * @param mixed int|string $_id
-	 * @param array $data
-	 * @since 1.0.0
-	 * @return array
-	 */
-	public function filterPoId($_id, $data) {
-		if (!isset($data['po_id'])) {
-			$data['po_id'] = $this->getDefaultProductPoId();
-			$this->_fields[] = 'po_id';
-		}
-		return $data;
-	}
-	
+
 	/**
 	 * Add media gallery images
 	 * @param mixed int|string $_id
@@ -391,7 +359,7 @@ class Crown_Import_Model_Productimport extends Crown_Import_Model_Import_Abstrac
 		}
 		return $data;
 	}
-	
+
 	/**
 	 * Filter to set product visibility.
 	 * @param mixed int|string $_id
