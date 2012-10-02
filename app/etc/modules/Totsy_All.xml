@@ -61,6 +61,10 @@
             <active>true</active>
             <codePool>local</codePool>
         </Totsy_Cybersource>
+        <Totsy_Linkshare>
+            <active>true</active>
+            <codePool>local</codePool>
+        </Totsy_Linkshare>
         <Totsy_Categoryevent>
             <active>true</active>
             <codePool>local</codePool>

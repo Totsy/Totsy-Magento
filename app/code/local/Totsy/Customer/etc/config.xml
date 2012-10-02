@@ -10,10 +10,17 @@
 <config>
     <modules>
         <Totsy_Customer>
-            <version>0.1.0</version>
+            <version>0.2.0</version>
         </Totsy_Customer>
     </modules>
     <global>
+        <blocks>
+            <customer>
+                <rewrite>
+                    <address_book>Totsy_Customer_Block_Address_Book</address_book>
+                </rewrite>
+            </customer>
+        </blocks>
         <models>
             <totsycustomer>
                 <class>Totsy_Customer_Model</class>

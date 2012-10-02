@@ -22,12 +22,13 @@ class Harapartners_Service_Helper_Rewrite_Catalog_Product
             $params = new Varien_Object();
         }
 
+        /* SKIP THIS INIT FOR NOW . Slav September 27 2012
         // Init and load product
         Mage::dispatchEvent('catalog_controller_product_init_before', array(
             'controller_action' => $controller,
             'params' => $params,
         ));
-
+        */
         if (!$productId) {
             return false;
         }
