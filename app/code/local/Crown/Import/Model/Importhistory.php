@@ -192,6 +192,9 @@ class Crown_Import_Model_Importhistory extends Mage_Core_Model_Abstract {
     public function getUrapidflowProfileProductExtra() {
 		if ( !$this->hasData('urapidflow_profile_product_extra')) {
     		$profile = $this->_getUrapidflowProfileProductExtra();
+            if ($profile->getId ()) {
+                $this->setData('urapidflow_profile_product_extra', $profile->getId());
+            }
     	}
     	return $this->getData('urapidflow_profile_product_extra');
     }
