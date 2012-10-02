@@ -130,10 +130,8 @@ class Crown_Import_Model_Importhistory extends Mage_Core_Model_Abstract {
      */
     public function getUrapidflowProfile() {
     	if ( !$this->hasData('urapidflow_profile')) {
-    		$profile = $this->_getUrapidflowProfile();
-            if ($profile->getId ()) {
-                $this->setData('urapidflow_profile', $profile);
-            }
+            // 'urapidflow_profile' set in method.
+    		$this->_getUrapidflowProfile();
     	}
     	return $this->getData('urapidflow_profile');
     }
@@ -191,10 +189,8 @@ class Crown_Import_Model_Importhistory extends Mage_Core_Model_Abstract {
      */
     public function getUrapidflowProfileProductExtra() {
 		if ( !$this->hasData('urapidflow_profile_product_extra')) {
-    		$profile = $this->_getUrapidflowProfileProductExtra();
-            if ($profile->getId ()) {
-                $this->setData('urapidflow_profile_product_extra', $profile->getId());
-            }
+            // 'urapidflow_profile_product_extra' set within method.
+    		$this->_getUrapidflowProfileProductExtra();
     	}
     	return $this->getData('urapidflow_profile_product_extra');
     }
