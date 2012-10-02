@@ -40,6 +40,19 @@
 
 	<!-- order edit js and style -->
     <script>
+    jQuery(document).ready(function() {
+       function removeCoupon() {
+            var coupon = jQuery('#coupon').val();
+            if( coupon != '' ) {
+                jQuery('#coupon').val('');
+                jQuery('#add-new-coupon').hide();
+                jQuery('#actual-coupon').show();
+            }
+        }
+        jQuery('#remove-coupon').click(function(){
+                removeCoupon();
+        })
+    });
     function saveMe()
     {
     	if($('orderEdit').innerHTML == 'Edit Order') {
@@ -227,13 +240,6 @@
 	    return (checked) ? $F(checked) : null;
 	}
 
-    function removeCoupon() {
-        var coupon = jQuery('#coupon').val();
-        if( coupon != '' ) {
-
-
-        }
-    }
     </script>
 	<style type="text/css">
   	.admin-widget-edit-fields		{margin-bottom: 7px;}
@@ -328,7 +334,7 @@
             <fieldset class="np">
                 <div class="content">
                     <div id='add-new-coupon' <?php if(!$coupon) { echo 'style="display:none"'; } ?>>
-                        <p><strong><?php echo $this->getCouponCode() ?></strong> [<a href="#" onclick="removeCoupon(); return false;" title="<?php echo Mage::helper('sales')->__('Remove Coupon Code') ?>"><?php echo Mage::helper('sales')->__('Remove') ?></a>]</p>
+                        <p><strong><?php echo $this->getCouponCode() ?></strong> [<a href="#" id='remove-coupon' title="<?php echo Mage::helper('sales')->__('Remove Coupon Code') ?>"><?php echo Mage::helper('sales')->__('Remove') ?></a>]</p>
                     </div>
                     <div id='actual-coupon' <?php if($coupon) { echo 'style="display:none"'; } ?>>
                         <p><input type="text" class="input-text" id="coupons:code" value="" name="coupon_code" style="width:200px" />&nbsp;<?php echo $this->getButtonHtml(Mage::helper('sales')->__('Apply'), 'order.applyCoupon($F(\'coupons:code\'))') ?></p>
