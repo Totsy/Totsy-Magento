@@ -468,7 +468,7 @@ XML;
                 $billingAddress = Mage::getModel('sales/order_address');
              }
 
-            $billingAddress = $billingAddress->getFirstname() . ' ' . $billingAddress->getLastname();
+            $billingName = $billingAddress->getFirstname() . ' ' . $billingAddress->getLastname();
 
             $billing_state = Mage::helper('fulfillmentfactory')->getStateCodeByFullName($billingAddress->getRegion(), $billingAddress->getCountry());
 
@@ -538,8 +538,8 @@ XML;
                     <shipping-address2><![CDATA[{$shippingAddress->getStreet(2)}]]></shipping-address2>
                     <shipping-address3 xsi:nil="true"/>
                     <shipping-city><![CDATA[$city]]></shipping-city>
-                    <shipping-state><![CDATA[$state]]></shipping-city>
-                    <shipping-zip/>{$shippingAddress->getPostcode()}</shipping-zip>
+                    <shipping-state><![CDATA[$state]]></shipping-state>
+                    <shipping-zip>{$shippingAddress->getPostcode()}</shipping-zip>
                     <shipping-country >{$country}</shipping-country>
                     <shipping-iso-country-code xsi:nil="true"/>
                     <shipping-phone xsi:nil="true"/>
