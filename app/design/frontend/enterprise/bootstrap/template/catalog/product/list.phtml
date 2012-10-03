@@ -32,6 +32,7 @@
  */
 ?>
 <?php
+    //$_salesProducts = Array();
     $_productCollection=$this->getLoadedProductCollection();
     $_currentCategory = Mage::getSingleton('catalog/layer')->getCurrentCategory();
     $_helper = $this->helper('catalog/output');
@@ -67,7 +68,7 @@
         ?>
         <?php //$_collectionSize = $_productCollection->count() ?>
         <?php //$_columnCount = 3; //for the elements number will be changed by the filter ?>
-        <?php //$_columnCount = $this->getColumnCount(); ?>
+        <?php //$_columnCount = $this->getColumnCount(); ?>        
             <ul class="thumbnails event_prod_grid">
         	<?php foreach ($_productCollection as $_product): ?>
         		<?php if ( $_product->isSalable() ):?>
@@ -93,8 +94,10 @@
                             </div>
                         </div>
                     </li>
+                    <?php $_salesProducts[] =  $_product->getId(); ?>
                 <?php endif; ?>
-            <?php endforeach; ?>
+            <?php endforeach; ?> 
+            <?php //Mage::register( 'current_sales_products', $_salesProducts ); ?>
         	<?php foreach ($_productCollection as $_product): ?>
         		<?php if ( !$_product->isSalable() ):?>
                     <li class="span4 status status_sold_out item<?php echo ' '.str_replace(',',' ',$_product->getDepartments()) ?>" data-department="<?php echo str_replace(',',' ',$_product->getDepartments()) ?>">

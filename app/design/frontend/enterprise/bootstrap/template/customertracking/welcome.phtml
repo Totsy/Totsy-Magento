@@ -17,6 +17,47 @@
 <?php
     $isFaceBook = Mage::getSingleton('customer/session')->getFacebookAccountFirstCreate();
 ?>
+<!-- steelhouse customer conversion tracking pixel -->
+<script type = "text/javascript" > (function() {
+	"use strict";
+	var steelhouse = null,
+		shver = '3.0.0',
+		aid = '9577',
+		oid = '',
+		amt = '',
+		shocur = '',
+		shopid = '',
+		shoq = '',
+		shoup = '',
+		shadditional = '';
+	steelhouse = {
+		add: function(a, b, c, d) {
+			d = d || false;
+			if (a.addEventListener) {
+				a.addEventListener(b, c, d);
+			} else if (a.attachEvent) {
+				a.attachEvent("on" + b, c);
+			}
+		},
+		load: function() {
+			var a, b = document.createElement('script'),
+				c = null,
+				d = document.getElementsByTagName('script'),
+				e = Number(d.length) - 1,
+				f = document.getElementsByTagName('script')[e];
+			if (typeof a === 'undefined') {
+				a = Math.floor(Math.random() * 100000000000000000);
+			}
+			c = 'px.steelhousemedia.com/st?conv=1' + '&shver=' + shver + '&aid=' + aid + '&oid=' + oid + '&amt=' + amt + '&shocur=' + shocur + '&shopid=' + shopid + '&shoq=' + shoq + '&shoup=' + shoup + '&cb=' + a + shadditional;
+			b.type = 'text/javascript';
+			b.src = ('https:' === document.location.protocol ? 'https://' : 'http://') + c;
+			f.parentNode.insertBefore(b, f);
+		}
+	};
+	steelhouse.load();
+}()); </script>
+<!-- steelhouse customer conversion tracking pixel -->
+
 <?php if (!!$isFaceBook ): ?>
     <a id="facebook_pop" href="#facebook_window" class="hidden"></a>
     <div style="display: none;">

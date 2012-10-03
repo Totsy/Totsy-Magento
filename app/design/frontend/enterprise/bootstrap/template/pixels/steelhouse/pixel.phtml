@@ -1,12 +1,13 @@
 <?php
+
+$_sales_products = Mage::registry('current_sales_products');
 $_product = Mage::registry('current_product');
 $_category = Mage::registry('current_category');
 $_cart = $this->helper('checkout/cart')->getCart();
-
 $product_ids = implode(",", $_cart->getProductIds());
-?>
 
-<!-- s -->
+?>
+<!-- Steelhouse pixels for conversion -->
 <script type="text/javascript">
     var shver='2.8.6';
 <?php if($_product && $_category): ?>
@@ -24,9 +25,22 @@ $product_ids = implode(",", $_cart->getProductIds());
     var shpi= '';
     var shps= '';
 <?php endif; ?>
+
+<?php //if($_sales_products): ?>
+    //var shpil = encodeURIComponent('<?php echo $_sales_products ?>');
+<?php //else: ?>
+    var shpil = '';
+<?php //endif; ?>
+
+<?php if($cart): ?> 
     var shcv= encodeURIComponent('<?php echo number_format($_cart->getQuote()->getGrandTotal(), 2) ?>');
     var shcq= encodeURIComponent('<?php echo $_cart->getItemsQty() ?>');
     var shcp= encodeURIComponent('<?php echo $product_ids ?>');
+<?php else: ?>
+    var shcv = '';
+    var shcq = '';
+    var shcp = '';
+<?php endif; ?>
     //'SHOPPING CART COMMA SEPARATED LIST OF PRODUCT IDs';
     var additional = '';
     var aid = '9577';
@@ -47,7 +61,6 @@ $product_ids = implode(",", $_cart->getProductIds());
     }
 <?php endif; ?>
     shpi = encodeURIComponent(shpi);
-
 
         steelhouse = {add:function (a, b, c, d) {
             d = d || false;
@@ -72,4 +85,4 @@ $product_ids = implode(",", $_cart->getProductIds());
         }};
         steelhouse.load();
 </script>
-<!-- Steelhouse -->
+<!-- Steelhouse pixels for tracking-->
