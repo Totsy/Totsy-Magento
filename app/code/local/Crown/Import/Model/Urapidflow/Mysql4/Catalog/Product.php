@@ -251,7 +251,7 @@ class Crown_Import_Model_Urapidflow_Mysql4_Catalog_Product extends Unirgy_RapidF
 
 					// Check for invalid characters
                     /* @var Crown_Import_Helper_Encoding $encodingHlpr */
-                    $encodingHlpr = Mage::getModel('crownimport/encoding');
+                    $encodingHlpr = Mage::helper('crownimport/encoding');
 					if ($selectable) {
 						if ($attr ['frontend_input'] == 'multiselect' && is_array ( $newValue )) {
 							$newValue = array_unique ( $newValue );
@@ -277,7 +277,7 @@ class Crown_Import_Model_Urapidflow_Mysql4_Catalog_Product extends Unirgy_RapidF
 
                     // Check for media image on server or remote host
                     /* @var $mediaHlper Crown_Import_Helper_Data */
-                    $mediaHlper = Mage::getModel('crownimport');
+                    $mediaHlper = Mage::helper('crownimport');
                     if ($attr['frontend_input']=='media_image') {
                         if ($selectable) {
                             if ($attr ['frontend_input'] == 'multiselect' && is_array ( $newValue )) {

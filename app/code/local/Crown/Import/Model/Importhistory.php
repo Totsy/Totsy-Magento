@@ -64,7 +64,9 @@ class Crown_Import_Model_Importhistory extends Mage_Core_Model_Abstract {
 			default:
 				$this->setStatus(self::IMPORT_STATUS_NEW);
 		}
-		$this->save();
+        if ($this->dataHasChangedFor('status')) {
+		    $this->save();
+        }
 		return $this;
 	}
 
@@ -98,7 +100,9 @@ class Crown_Import_Model_Importhistory extends Mage_Core_Model_Abstract {
     	if (null == $this->getData('created_at')) {
 			$this->setData('created_at', now () );
 		}
-		$this->setData('updated_at', now () );
+        if ( $this->hasDataChanges() ) {
+		    $this->setData('updated_at', now () );
+        }
 		return parent::_beforeSave();
 	}
 

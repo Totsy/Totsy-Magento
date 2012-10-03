@@ -220,8 +220,9 @@ class Crown_Import_Model_Productimport extends Crown_Import_Model_Import_Abstrac
 	 * @return array
 	 */
 	public function filterSku($_id, $data) {
-		if ( ( !isset($data['sku']) || empty($data['sku']) ) && isset($data['vendor_id']) && isset($data['product.type']) && !empty($data['product.type'])) {
-			$data['sku'] = $this->_generateProductSku ( $data['vendor_id'] );
+		if ( isset($data['product.type']) && !isset($data['sku']) ) {
+            $base = isset($data['vendor_id']) ? $data['vendor_id']: $this->getDefaultProductVendorId();
+			$data['sku'] = $this->_generateProductSku ( $base );
 		}
 		return $data;
 	}
