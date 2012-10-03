@@ -278,27 +278,21 @@ class Crown_Import_Model_Urapidflow_Mysql4_Catalog_Product extends Unirgy_RapidF
                     // Check for media image on server or remote host
                     /* @var $mediaHlper Crown_Import_Helper_Data */
                     $mediaHlper = Mage::helper('crownimport');
-                    if ($attr['frontend_input']=='media_image') {
-                        if ($selectable) {
-                            if ($attr ['frontend_input'] == 'multiselect' && is_array ( $newValue )) {
-                                $newValue = array_unique ( $newValue );
-                            }
-                            foreach ( ( array ) $newValue as $i => $v ) {
-                                try {
-                                    $mediaHlper->checkForValidImageFiles( $v, $profile );
-                                } catch (Exception $e ) {
+                    if ( array_key_exists('frontend_input', $attr) && $attr['frontend_input']=='media_image') {
+                        try {
+                            $mediaHlper->checkForValidImageFiles( $newValue, $profile );
+                        } catch (Exception $e ) {
+                            $errorMessageId = Mage::getStoreConfig ( 'crownimport/urapidflow/missing_image_error' );
+                            switch( $errorMessageId ) {
+                                case Crown_Import_Model_Adminhtml_Source_Errorlevels::LEVEL_WARNING:
+                                    $profile->addValue ( 'num_warnings' );
+                                    $logger->warning ( $this->__ ( $e->getMessage() ) );
+                                    break;
+                                case Crown_Import_Model_Adminhtml_Source_Errorlevels::LEVEL_ERROR:
+                                default:
                                     $profile->addValue ( 'num_errors' );
                                     $logger->error ( $this->__ ( $e->getMessage() ) );
                                     $this->_valid [$sku] = false;
-                                }
-                            }
-                        } else {
-                            try {
-                                $mediaHlper->checkForValidImageFiles( $newValue, $profile );
-                            } catch (Exception $e ) {
-                                $profile->addValue ( 'num_errors' );
-                                $logger->error ( $this->__ ( $e->getMessage() ) );
-                                $this->_valid [$sku] = false;
                             }
                         }
                     }

@@ -2,7 +2,7 @@
 <config>
 	<modules>
 		<Crown_Import>
-			<version>1.1.2</version>
+			<version>1.1.4</version>
 		</Crown_Import>
 	</modules>
 	<global>
@@ -151,6 +151,7 @@
 		<crownimport>
 			<urapidflow>
 				<invalid_characters>‘ ’ “ ” é — – ÿ</invalid_characters>
+                <missing_image_error>1</missing_image_error>
 			</urapidflow>
 		</crownimport>
 	</default>
