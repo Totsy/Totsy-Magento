@@ -47,7 +47,7 @@ class Harapartners_Affiliate_RegisterController extends Mage_Core_Controller_Fro
                 ? json_decode($affiliateInfo['registration_param'], true)
                 : array();
 
-            $regParams = array_merge($regParams, $request->getParams());
+            $regParams = array_merge($regParams, $request->getParams(), $request->getCookie());
             $affiliateInfo['registration_param'] = json_encode($regParams);
 
             //Additional logic: specific landing page after registration, background image can also be prepared here!
