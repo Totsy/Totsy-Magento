@@ -153,6 +153,9 @@
 				<invalid_characters>‘ ’ “ ” é — – ÿ</invalid_characters>
                 <missing_image_error>1</missing_image_error>
 			</urapidflow>
+            <general>
+                <status>1</status>
+            </general>
 		</crownimport>
 	</default>
 </config>
