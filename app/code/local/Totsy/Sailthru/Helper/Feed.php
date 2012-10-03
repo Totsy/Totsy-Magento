@@ -66,7 +66,7 @@ class Totsy_Sailthru_Helper_Feed extends Mage_Core_Helper_Abstract
 
         if ($defaultTime>$time) {
             $this->_timeDiff = $defaultTime - $time;
-            $this->_timeIsAhead = false
+            $this->_timeIsAhead = false;
         } else {
             $this->_timeDiff = $time - $defaultTime;
             $this->_timeIsAhead = true;

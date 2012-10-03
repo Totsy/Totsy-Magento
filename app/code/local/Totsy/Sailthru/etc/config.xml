@@ -10,7 +10,7 @@
 <config>
     <modules>
         <Totsy_Sailthru>
-            <version>0.0.1</version>
+            <version>1.0.0</version>
         </Totsy_Sailthru>
     </modules>
     <global>
@@ -23,7 +23,7 @@
             </sailthru>
         </helpers>
         <models>
-            <sailythru>
+            <sailthru>
                 <rewrite>
                     <feed>Totsy_Sailthru_Model_Feed</feed>
                 </rewrite>

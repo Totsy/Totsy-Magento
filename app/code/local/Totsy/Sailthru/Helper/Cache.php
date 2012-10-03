@@ -130,7 +130,7 @@ class Totsy_Sailthru_Helper_Cache
     private function _handleGetParams()
     {
     
-        if (!empty($_GET['domain']) {
+        if (!empty($_GET['domain'])) {
             switch ($_GET['domain']){
                 case 'mamasource.totsy.com':
                     $this->_setHttHost('mamasource.totsy.com');
