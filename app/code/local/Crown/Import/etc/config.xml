@@ -155,6 +155,10 @@
 			</urapidflow>
             <general>
                 <status>1</status>
+                <is_in_stock>1</is_in_stock>
+                <weight>1.0</weight>
+                <description>No Description</description>
+                <short_description>No Short Description</short_description>
             </general>
 		</crownimport>
 	</default>
