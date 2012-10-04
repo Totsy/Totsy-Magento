@@ -24,20 +24,23 @@
             $amtlist = array();
             $items = $order->getItemsCollection();
             $item_cancel = false;
+            
             foreach($items as $item) {
                 $qty = $item->getQtyOrdered() - $item->getQtyCanceled();
-                
-                if(($trans_type != 'cancel') && $qty == 0 ) {
-                        $item_cancel = true;
+
+                if(($trans_type != 'cancel') || $qty == 0 ) {
+                    $item_cancel = true;
+                    $qty = $item->getQtyOrdered();
                 }
+
                 if(is_null($item->getParentItemId())) {
                     $skulist[] = $item->getSku();
                     $namelist[] = urlencode($item->getName());
-                    $qlist[] =  $qty;
+                    $qlist[] =  (int)$qty;
                     $amtlist[] = ( ($trans_type == 'cancel') || $item_cancel ) ? (-round($item->getOriginalPrice(), 2) * $qty) * 100 : (round($item->getOriginalPrice(), 2) * $qty) * 100 ;
                 }
             }
-            
+
             if($order->getCouponCode() || $order->getBaseDiscountAmount() != 0){
                 $raw .= 'skulist=' . implode('|', $skulist) . '|Discount&';
                 $raw .= 'namelist=' . implode('|', $namelist) . '|Discount&';
@@ -52,10 +55,11 @@
                 $raw .= 'amtlist='. implode('|', $amtlist);
             }
         }
+
         return $raw;
     }
 
-    public function dataEncode($raw) {
+    protected function dataEncode($raw) {
         //Encrypting raw message
         $base64 = base64_encode($raw);
         $msg = str_replace('/','_',str_replace('+','-',$base64));
@@ -76,16 +80,13 @@
     /**
     * This function sends order transactions to linkshare.
     **/
-    public function sendTransaction($data, $affiliate, $orderid, $trans_type = 'new') {
-        if( $transaction >= 1){
-            return true;
-        }
+    public function sendTransaction($data, $orderid, $trans_type = 'new') {
 
         $parser = xml_parser_create();
         xml_parse_into_struct($parser, file_get_contents($data), $response, $index);
         xml_parser_free($parser);
         $status = $response[1]['value'];
-        if( $status == 'Access denied' ) {
+            if( $status == 'Access denied' ) {
              $success = false;
              $message = 'Access Denied';
         }else{
@@ -93,7 +94,7 @@
             if(!$success)
                 $message = "Badly formatted NVP message";
         }
-        $out = print_r($response, true);
+        
         $trans['trans_id'] = $status;
         $trans['success'] = $success;
         $trans['order_id'] = $orderid;

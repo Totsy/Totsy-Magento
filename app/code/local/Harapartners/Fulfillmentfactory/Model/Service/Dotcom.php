@@ -302,26 +302,31 @@ XML;
             if ($value = $product->getVendorCode()) {
                 $value = Mage::helper('fulfillmentfactory')->removeBadCharacters($value);
                 $value = substr($value, 0, 10);
+                $value = htmlentities($value);
                 $vendorCode = '<manufacturing-code>' . $value . '</manufacturing-code>';
             }
 
             $style = '<style-number xsi:nil="true" />';
             if ($value = $product->getVendorStyle()) {
+                $value = htmlentities($value);
                 $style = '<style-number>' . substr($value, 0, 10) . '</style-number>';
             }
 
             $color = '<color xsi:nil="true" />';
             if ($value = $product->getAttributeText('color')) {
+                $value = htmlentities($value);
                 $color = '<color>' . substr($value, 0, 5) . '</color>';
             }
 
             $size = '<size xsi:nil="true" />';
             if ($value = $product->getAttributeText('size')) {
+                $value = htmlentities($value);
                 $size = '<size>' . substr($value, 0, 5) . '</size>';
             }
 
             $upc = '<upc xsi:nil="true" />';
             if ($value = $product->getUpc()) {
+                $value = htmlentities($value);
                 $upc = "<upc>$value</upc>"; // no need to limit string length here
             }
 

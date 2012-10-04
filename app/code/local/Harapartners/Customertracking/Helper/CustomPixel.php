@@ -75,9 +75,9 @@ class Harapartners_Customertracking_Helper_CustomPixel
             $split_orders = Mage::getModel('sales/order')->getCollection();
             $split_orders->getSelect()->where('increment_id like "' . $cust_order_id . '-%"');
             foreach($split_orders as $order) {
-                $message = Mage::helper('linkshare/transactions')->linkshareRaw($order, $regParams['subID'],$customer->getUpdatedAt(),'Pixel');
-                $encode = Mage::helper('linkshare/transactions')->prepareTransactionData($message);
-                $result = Mage::helper('linkshare/transactions')->sendTransaction($encode, 'linkshare', $order->getIncrementId(), $order->getStatus());
+                $message = Mage::helper('linkshare/linkshare')->linkshareRaw($order, $regParams['subID'],$customer->getUpdatedAt(),'Pixel');
+                $encode = Mage::helper('linkshare/linkshare')->prepareTransactionData($message);
+                $result = Mage::helper('linkshare/linkshare')->sendTransaction($encode, $order->getIncrementId(), $order->getStatus());
                 $result['customertracking_id'] = (int)$customertracking->getCustomertrackingId();
                 $result['raw_data'] = $message;
                 $result['order_status'] = 'New';
@@ -94,7 +94,7 @@ class Harapartners_Customertracking_Helper_CustomPixel
             $message = Mage::helper('linkshare/linkshare')->linkshareRaw($order, $regParams['subID'],$customer->getUpdatedAt(),$order->getStatus());
             $html .= $message;
             $encode = Mage::helper('linkshare/linkshare')->prepareTransactionData($message);
-            $result = Mage::helper('linkshare/linkshare')->sendTransaction($encode, 'linkshare', $order->getIncrementId(), $order->getStatus());
+            $result = Mage::helper('linkshare/linkshare')->sendTransaction($encode, $order->getIncrementId(), $order->getStatus());
             $result['customertracking_id'] = (int)$customertracking->getCustomertrackingId();
             $result['raw_data'] = $message;
             $result['order_status'] = 'New';
