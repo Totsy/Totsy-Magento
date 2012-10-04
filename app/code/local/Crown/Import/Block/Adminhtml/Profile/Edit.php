@@ -42,31 +42,6 @@ class Crown_Import_Block_Adminhtml_Profile_Edit extends Unirgy_RapidFlow_Block_A
 	        $this->_blockGroup = 'urapidflow';
 	        $this->_controller = 'adminhtml_profile';
 
-            switch ($profile->getRunStatus()) {
-                case 'pending': case 'running': case 'paused':
-                $this->_removeButton('delete');
-
-                if (false && $profile->getInvokeStatus()!=='foreground') {
-                    if ($profile->getRunStatus()=='paused') {
-                        $this->_addButton('resume', array(
-                             'label'     => $this->__('Resume'),
-                             'onclick'   => "location.href = '".$this->getUrl('urapidflowadmin/adminhtml_profile/resume', array('id'=>$id))."'",
-                        ), 0);
-                    } else {
-                        $this->_addButton('pause', array(
-                            'label'     => $this->__('Pause'),
-                            'onclick'   => "location.href = '".$this->getUrl('urapidflowadmin/adminhtml_profile/pause', array('id'=>$id))."'",
-                       ), 0);
-                    }
-                }
-
-                $this->_addButton('stop', array(
-                       'label'     => $this->__('Stop'),
-                       'onclick'   => "location.href = '".$this->getUrl('urapidflowadmin/adminhtml_profile/stop', array('id'=>$id))."'",
-                       'class'     => 'delete',
-                  ), 0);
-                break;
-            }
 			return;
 		} else {
 			parent::__construct();
