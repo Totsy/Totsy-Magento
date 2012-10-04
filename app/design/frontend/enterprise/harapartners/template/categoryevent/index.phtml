@@ -88,6 +88,7 @@
                 <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('topcms')->toHtml()?>
             </div>
         </div>
+        
         <?php foreach ($liveArray as $live):?>
             <?php
                 $endcountRaw = strtotime($live['event_end_date']);
@@ -121,7 +122,7 @@
                                     htmlTemplate: html,
                                     onComplete: function( event ){
                                         jQuery(this).html("Completed");
-                                        jQuery("div.event-counter-<?php echo $timer;?>").remove();
+                                        jQuery("div.event-counter-<?php echo $timer;?>").hide();
                                     },
                                     leadingZero: true,
                                     direction: "down"

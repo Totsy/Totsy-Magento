@@ -10,7 +10,7 @@
     $sortDate = now("Y-m-d");
     date_default_timezone_set($defaultTimezone);
     $storeId = Mage::app()->getStore()->getId();
-    $sortentryLive = Mage::getModel('categoryevent/sortentry')->loadByDate($sortDate, $storeId, false)->getLiveQueue();
+    $sortentryLive = Mage::getModel('categoryevent/sortentry')->loadByDate($sortDate)->getLiveQueue();
     $liveCategoryInfoArray = json_decode($sortentryLive, true);
     $i = 1;
 ?>

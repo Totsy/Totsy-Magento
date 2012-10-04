@@ -54,4 +54,53 @@ class Harapartners_Customertracking_Helper_CustomPixel
 
         return number_format($order->getProfit() / 2, 2);
     }
+
+    public function linkshare($pixel) {
+        $customer = Mage::getSingleton('customer/session')->getCustomer();
+        $orderId = Mage::getSingleton('checkout/session')->getLastOrderId();
+        $trackingInfo = Mage::getSingleton('customer/session')->getData('affiliate_info');
+        $customertracking = Mage::getModel('customertracking/record')->loadByCustomerEmail($customer->getEmail());
+        if ($trackingInfo) {
+            $regParams = json_decode($trackingInfo['registration_param'], true);
+        } else {
+            $regParams =  json_decode(Mage::getSingleton('customer/session')->getData('registration_param'), true);
+        }
+
+        $order = Mage::getModel('sales/order')->load($orderId);
+
+        $html = '';
+        if($order->getStatus() == "splitted") {
+            $split_count = 1;
+            $cust_order_id = $order->getIncrementId();
+            $split_orders = Mage::getModel('sales/order')->getCollection();
+            $split_orders->getSelect()->where('increment_id like "' . $cust_order_id . '-%"');
+            foreach($split_orders as $order) {
+                $message = Mage::helper('linkshare/transactions')->linkshareRaw($order, $regParams['subID'],$customer->getUpdatedAt(),'Pixel');
+                $encode = Mage::helper('linkshare/transactions')->prepareTransactionData($message);
+                $result = Mage::helper('linkshare/transactions')->sendTransaction($encode, 'linkshare', $order->getIncrementId(), $order->getStatus());
+                $result['customertracking_id'] = (int)$customertracking->getCustomertrackingId();
+                $result['raw_data'] = $message;
+                $result['order_status'] = 'New';
+                Mage::getModel('linkshare/transactions')->recordTransaction($result);
+                if ($split_count == 1) {
+                    $html .= $message . "\"/>\n";
+                } else {
+                    $html .= preg_replace('/{{[\w.]+}}/', $message, $pixel);
+                }
+                ++$split_count;
+            }
+            $html = rtrim($html, "\"/>");
+        } else {
+            $message = Mage::helper('linkshare/linkshare')->linkshareRaw($order, $regParams['subID'],$customer->getUpdatedAt(),$order->getStatus());
+            $html .= $message;
+            $encode = Mage::helper('linkshare/linkshare')->prepareTransactionData($message);
+            $result = Mage::helper('linkshare/linkshare')->sendTransaction($encode, 'linkshare', $order->getIncrementId(), $order->getStatus());
+            $result['customertracking_id'] = (int)$customertracking->getCustomertrackingId();
+            $result['raw_data'] = $message;
+            $result['order_status'] = 'New';
+            Mage::getModel('linkshare/transactions')->recordTransaction($result);
+        }
+
+        return $html;
+    }
 }

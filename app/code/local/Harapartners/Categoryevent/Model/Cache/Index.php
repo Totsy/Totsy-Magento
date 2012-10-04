@@ -64,7 +64,7 @@ class Harapartners_Categoryevent_Model_Cache_Index
     protected function _saveCache($data, $id, $tags = array(), $lifetime = null)
     {
         $tags[] = self::CACHE_TAG;
-
+/*
         if (null == $lifetime) {
             $lifetime = null;
             $now      = Mage::helper('service')->getServerTime() / 1000;
@@ -80,12 +80,8 @@ class Harapartners_Categoryevent_Model_Cache_Index
                     $lifetime = $eventStart;
                 }
             }
-
-            Mage::log("Calculated index block cache lifetime at $lifetime", Zend_Log::DEBUG, 'index_block_cache.log');
-            $lifetime = null;
         }
-
+*/
         return parent::_saveCache($data, $id, $tags, $lifetime);
     }
 }
-

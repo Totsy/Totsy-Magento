@@ -300,15 +300,26 @@ class Harapartners_Fulfillmentfactory_Helper_Dotcom extends Mage_Core_Helper_Abs
         $this->_getConfig();
         $uri = self::$_apiUrl . '/shipment';
         $uri  = $uri . '?fromShipDate=' . urlencode($fromDate) . '&toShipDate=' . urlencode($toDate);    //GET Method
-        
+
         $body =  $this->_sendQueryRequest($uri);
-        
-        if(!empty($body)) {
-            $shipments = $this->_readXMLString($body);
-            
-            return $shipments;
-        }
-        
-        return false;
+
+        return empty($body) ? false : $this->_readXMLString($body);
+    }
+
+    /**
+     * Get shipment information for a specific order.
+     *
+     * @param Mage_Sales_Model_Order $order
+     *
+     * @return bool|SimpleXMLElement
+     */
+    public function getShipmentForOrder($order)
+    {
+        $this->_getConfig();
+        $uri = self::$_apiUrl . '/shipment/' . $order->getIncrementId();
+
+        $body = $this->_sendQueryRequest($uri);
+
+        return empty($body) ? false : $this->_readXMLString($body);
     }
 }
