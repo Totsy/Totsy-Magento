@@ -1,5 +1,15 @@
 <?php
-$_sales_products = Array();
+
+/* $cookie = Mage::app()->getCookie(Harapartners_Customertracking_Helper_Data::COOKIE_CUSTOMER_WELCOME);
+
+ if(!!$cookie->get($key)){
+    //print "NOT new";
+ } else {
+    //print "yo yo yo";
+ }
+ */
+
+//$_sales_products = Array();
 $_product = Array();
 $_category = Array();
 $_referring_url = "";
@@ -27,8 +37,8 @@ if (Mage::registry('referring_url')) {
 }
 
 //check if not on the signup page or if this isn't the post-registration landing page, or the purchase success page 
-if (!($this->getRequest()->getActionName()=="create" && $this->getRequest()->getModuleName()=="customer") &&
-!($this->getRequest()->getActionName()=="welcome" && $this->getRequest()->getModuleName()=="customertracking")):
+if (!($this->getRequest()->getActionName()=="create" && $this->getRequest()->getModuleName()=="customer") /* &&
+!($this->getRequest()->getActionName()=="welcome" && $this->getRequest()->getModuleName()=="customertracking")*/ ):
 ?>
 <!-- Steelhouse BEGIN -->
 <div id="steelhouse_product_pixel"></div>
@@ -39,5 +49,24 @@ if (!($this->getRequest()->getActionName()=="create" && $this->getRequest()->get
             , { method:'get',evalScripts: true });
     });
 </script>
+<?php else: ?>
 <!-- Steelhouse END -->
+<!-- BEGIN steelhouse tracking pixel -->   
+<script type="text/javascript">
+(function(){var steelhouse=null,shver="3.3.0",
+shaid="9577",
+shpn="",
+shpc="",
+shpp="",
+shpb="",
+shpi="",
+shps="",
+shpil="",
+shcv="",
+shcq="",
+shcp="",
+shadditional="",
+tdr,urlNew,plh;try{tdr=top.document.referer!==""?encodeURIComponent(top.document.referrer.substring(0,256)):"";}catch(tdr_e){tdr=document.referrer!==null?document.referrer.toString().substring(0,256):"";}try{urlNew=window&&window.top&&document.location&&window.top.location===document.location?document.location:window&&window.top&&window.top.location&&""!==window.top.location?window.top.location:document.location;}catch(urlNew_e){urlNew=document.location;}try{plh=parent.location.href!==""?encodeURIComponent(parent.location.href.toString().substring(0,256)):"";}catch(plh_e){try{plh=urlNew!==null?encodeURIComponent(urlNew.toString().substring(0,256)):"";}catch(urlNew_e1){plh="";}}shpi=encodeURIComponent(shpi);steelhouse={add:function(a,b,c,d){d=d||false;if(a.addEventListener){a.addEventListener(b,c,d);}else{if(a.attachEvent){a.attachEvent("on"+b,c);}}},load:function(){var a,b=document.createElement("script"),c=null,d=document.getElementsByTagName("script"),e=Number(d.length)-1,f=document.getElementsByTagName("script")[e];if(typeof a==="undefined"){a=Math.floor(Math.random()*100000000000000000);}c="px.steelhousemedia.com/st?shver="+shver+"&shaid="+shaid+"&shcv="+shcv+"&shcq="+shcq+"&shcp="+shcp+"&shpn="+shpn+"&shpc="+shpc+"&shpp="+shpp+"&shpb="+shpb+"&shpi="+shpi+"&shps="+shps+"&shpil="+shpil+"&tdr="+tdr+"&plh="+plh+"&cb="+a+shadditional;b.type="text/javascript";b.src=("https:"===document.location.protocol?"https://":"http://")+c;f.parentNode.insertBefore(b,f);}};steelhouse.load();}());
+</script>
+<!-- END steelhouse tracking pixel --> 
 <?php endif; ?>
