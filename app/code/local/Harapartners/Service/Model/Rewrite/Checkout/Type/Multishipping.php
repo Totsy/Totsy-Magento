@@ -21,9 +21,9 @@ class Harapartners_Service_Model_Rewrite_Checkout_Type_Multishipping extends Mag
     {
         $helper = Mage::helper('checkout');
         $quote = $this->getQuote();
-        if (!$quote->getIsMultiShipping()) {
-            Mage::throwException($helper->__('Invalid checkout type.'));
-        }
+//        if (!$quote->getIsMultiShipping()) {
+//            Mage::throwException($helper->__('Invalid checkout type.'));
+//        }
 
         /** @var $paymentMethod Mage_Payment_Model_Method_Abstract */
         $paymentMethod = $quote->getPayment()->getMethodInstance();

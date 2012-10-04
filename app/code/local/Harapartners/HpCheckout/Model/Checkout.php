@@ -247,12 +247,11 @@ class Harapartners_HpCheckout_Model_Checkout
             $fulfillmentTypes [$product->getFulfillmentType ()] [] = $item->getId ();
 		}
 
-
         $i = 0;
         $items = array();
 		if(count($fulfillmentTypes) > 1) {
 
-			$this->getQuote()->setIsMultiShipping(TRUE);
+			$this->getQuote()->setIsMultiShipping(1);
 			$this->getQuote()->save();
 			
 			foreach($fulfillmentTypes as $fulfillment) {
@@ -264,13 +263,11 @@ class Harapartners_HpCheckout_Model_Checkout
 	        	foreach($fulfillment as $id) {
 	        		foreach($this->getQuote()->getAllItems() as $item) {
                         if($item->getId() == $id) {
-                            $item->isDeleted(TRUE);
-                            $item->save();
+                            $this->getQuote()->removeItem($item->getId());
 
                             if($item->getHasChildren()) {
                                 foreach($item->getChildren() as $child) {
-                                    $child->isDeleted(TRUE);
-                                    $child->save();
+                                   $this->getQuote()->removeItem($item->getId());
                                 }
                             }
 
