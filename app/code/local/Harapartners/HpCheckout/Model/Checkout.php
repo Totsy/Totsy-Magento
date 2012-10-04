@@ -35,6 +35,9 @@ class Harapartners_HpCheckout_Model_Checkout
         return $this->_customerSession;
     }
 
+    /**
+     * @return Mage_Sales_Model_Quote
+     */
     public function getQuote() {
         return $this->_quote;
     }
@@ -234,18 +237,14 @@ class Harapartners_HpCheckout_Model_Checkout
     	if ($this->getQuote()->hasVirtualItems()) {
             $shippingAddresses[] = $this->getQuote()->getBillingAddress();
         }
-        
-        
+
+
         $fulfillmentTypes = array();
         
         
-        foreach ( $shippingAddresses as $address ) {
-        	$shippingMethod = $address->getShippingMethod();
-        	
-			foreach ( $address->getAllItems () as $item ) {
-                $product = Mage::getModel ( 'catalog/product' )->load ( $item->getProductId () );
-                $fulfillmentTypes [$product->getFulfillmentType ()] [] = $item->getId ();
-			}
+        foreach ( $this->getQuote()->getAllItems() as $item) {
+            $product = Mage::getModel ( 'catalog/product' )->load ( $item->getProductId () );
+            $fulfillmentTypes [$product->getFulfillmentType ()] [] = $item->getId ();
 		}
 
 
@@ -263,24 +262,21 @@ class Harapartners_HpCheckout_Model_Checkout
 	        	}
 	        	
 	        	foreach($fulfillment as $id) {
-	        		foreach($this->getQuote()->getAllShippingAddresses() as $address) {
-	        			foreach($address->getAllItems() as $item) {
-	        				if($item->getId() == $id) {
-	        					$address->removeItem($item->getId());
-	        					$item->save();
+	        		foreach($this->getQuote()->getAllItems() as $item) {
+                        if($item->getId() == $id) {
+                            $item->isDeleted(TRUE);
+                            $item->save();
 
-	        					if($item->getHasChildren()) {
-	        						foreach($item->getChildren() as $child) {
-	        							$address->removeItem($child->getId());
-	        							$child->save();
-	        						}
-	        					}
-	        					
-	        					$items[] = $item;
-	        					
-	        					$address->save();
-			        		}
-	        			}
+                            if($item->getHasChildren()) {
+                                foreach($item->getChildren() as $child) {
+                                    $child->isDeleted(TRUE);
+                                    $child->save();
+                                }
+                            }
+
+                            $items[] = $item;
+
+                        }
 	        		}
 	        	}
 	        	$i++;
@@ -295,33 +291,14 @@ class Harapartners_HpCheckout_Model_Checkout
 
             /** @var $newAddress Mage_Sales_Model_Quote_Address */
             $newAddress->setShippingMethod ( $shippingMethod );
-            $newAddress->setQuote($this->getQuote());
+            $this->getQuote()->addShippingAddress($newAddress);
 
 			foreach ( $items as $item ) {
-                $newItem = Mage::getModel('sales/quote_item')->setProduct(Mage::getModel('catalog/product')->load($item->getProductId()));
-                $newItem->setQuote($this->getQuote());
-                $newItem->save();
-                
-				$newAddress->addItem ( $newItem, $item->getItemQty () );
+                $newAddress->addItem($item, $item->getItemQty());
 			}
 
-
-
-            $newAddress->save();
-
-            $this->getQuote ()->addAddress ( $newAddress->setAddressType ( Mage_Sales_Model_Quote_Address::TYPE_SHIPPING ) );
             $this->getQuote ()->save ();
 		}
-
-
-        foreach($this->getQuote()->getAllShippingAddresses() as $address) {
-            foreach($address->getAllItems() as $item) {
-                Mage::log('Address ID is ' . $address->getId() . ' and item attached to it is ' . $item->getId());
-                if($item->isDeleted()) {
-                    Mage::log('item ' . $item->getId() . ' is deleted.');
-                }
-            }
-        }
 
 
         if(count($fulfillmentTypes) > 1) {
