@@ -139,6 +139,7 @@ class Crown_Import_Adminhtml_ImportController extends Mage_Adminhtml_Controller_
 				->setCategoryId($category->getId ())
 				->setImportFilename($_FILES ['import_filename'] ['name'])
 				->setVendorCode($defaultVendorCode)
+                ->setPoId($defaultPoId)
 				->setUpdatedAt(now())
 				->save();
 
