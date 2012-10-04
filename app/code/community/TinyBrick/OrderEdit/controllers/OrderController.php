@@ -85,6 +85,9 @@ class TinyBrick_OrderEdit_OrderController extends Mage_Adminhtml_Controller_Acti
                     }
                 }
             }
+            if($this->getRequest()->getParam('coupon')) {
+                $order->setCouponCode($this->getRequest()->getParam('coupon'));
+            }
             $order->collectTotals()->save();
             Mage::getSingleton('cataloginventory/stock_status')->syncStatusWithStock($order);
             $postTotal = $order->getGrandTotal();
@@ -212,5 +215,19 @@ class TinyBrick_OrderEdit_OrderController extends Mage_Adminhtml_Controller_Acti
         $addressId = $this->getRequest()->getParam('addressId');
         $address = Mage::getModel('customer/address')->load($addressId);
         echo Zend_Json::encode($address->getData());
+    }
+
+    public function checkCouponAvailabilityAction()
+    {
+        $couponCode = $this->getRequest()->getParam('coupon');
+        $coupon = Mage::getModel('salesrule/coupon');
+        $coupon->load($couponCode, 'code');
+        $result = array('available' => false);
+        if($coupon->getId()) {
+            if(strtotime($coupon->getExpirationDate()) > time()) {
+                $result = array('available' => true);
+            }
+        }
+        echo Zend_Json::encode($result);
     }
 }

@@ -41,7 +41,15 @@
 	<!-- order edit js and style -->
     <script>
     jQuery(document).ready(function() {
-       function removeCoupon() {
+        jQuery("#apply-coupon").click(function() {
+            applyCoupon();
+        });
+
+        jQuery("#remove-coupon").click(function() {
+            removeCoupon();
+        });
+
+        function removeCoupon() {
             var coupon = jQuery('#coupon').val();
             if( coupon != '' ) {
                 jQuery('#coupon').val('');
@@ -49,9 +57,27 @@
                 jQuery('#actual-coupon').show();
             }
         }
-        jQuery('#remove-coupon').click(function(){
-                removeCoupon();
-        })
+
+        function applyCoupon() {
+            params = {};
+            params['coupon'] = jQuery('#coupon-code').val();
+            new Ajax.Request('<?php echo Mage::getModel('adminhtml/url')->getUrl('orderedit/order/checkcouponavailability') ?>', {
+                method: 'get',
+                parameters: params,
+                onSuccess: function(transport) {
+                    var fields = transport.responseText.evalJSON();
+                    available = fields['available'];
+                    if(fields['available']) {
+                        jQuery('#coupon').val(jQuery('#coupon-code').val());
+                        jQuery('#current-coupon').html(jQuery('#coupon-code').val());
+                        jQuery('#add-new-coupon').show();
+                        jQuery('#actual-coupon').hide();
+                    } else {
+                        jQuery('#current-coupon').html('Invalid Coupon');
+                    }
+                }
+            });
+        }
     });
     function saveMe()
     {
@@ -61,6 +87,7 @@
     		$('billing-static').hide();
     		$('payment_form_paymentfactory_tokenize').show();
     		$('payment-edit-form').show();
+    		$('coupon-edit-form').show();
     		$('payment-infos').hide();
     		$('billing-static').hide();
     		$('shipping-edit-form').show();
@@ -83,6 +110,7 @@
     		}
     		params['admin_user'] = '<?php echo Mage::getSingleton('admin/session')->getUser()->getUsername() ?>';
     		params['comment'] = $('edit-order-comment').value;
+    		params['coupon'] = $('coupon').value;
     		params['order_id'] = <?php echo $_order->getId() ?>;
     		//get values for billing address
     		var billing = $('billing-fields').serialize(true);
@@ -155,6 +183,7 @@
     				$('shipping-edit-form').hide();
     				$('shipping-static').show();
                     $('history_form').show();
+                    $('coupon-edit-form').hide();
     				//$('shippingmethod-edit-form').hide();
     				//$('shippingmethod-static').show();
     				$$('.e-item-price').invoke('hide');
@@ -325,7 +354,7 @@
         </div>
     </div>
     <?php endif; ?>
-    <div class="box-right">
+    <div class="box-right" id="coupon-edit-form" style="display:none;">
         <div class="entry-edit box-left">
             <div class="entry-edit-head">
                 <h4 class="icon-head"><?php echo Mage::helper('sales')->__('Apply Coupon Code') ?></h4>
@@ -334,10 +363,10 @@
             <fieldset class="np">
                 <div class="content">
                     <div id='add-new-coupon' <?php if(!$coupon) { echo 'style="display:none"'; } ?>>
-                        <p><strong><?php echo $this->getCouponCode() ?></strong> [<a href="#" id='remove-coupon' title="<?php echo Mage::helper('sales')->__('Remove Coupon Code') ?>"><?php echo Mage::helper('sales')->__('Remove') ?></a>]</p>
+                        <p><strong><div id='current-coupon'><?php echo $this->getCouponCode() ?></div></strong><a href="#" id='remove-coupon' title="<?php echo Mage::helper('sales')->__('Remove Coupon Code') ?>"><?php echo Mage::helper('sales')->__('Remove') ?></a></p>
                     </div>
                     <div id='actual-coupon' <?php if($coupon) { echo 'style="display:none"'; } ?>>
-                        <p><input type="text" class="input-text" id="coupons:code" value="" name="coupon_code" style="width:200px" />&nbsp;<?php echo $this->getButtonHtml(Mage::helper('sales')->__('Apply'), 'order.applyCoupon($F(\'coupons:code\'))') ?></p>
+                        <p><input type="text" class="input-text" id="coupon-code" value="" name="coupon_code" style="width:200px" /><a href="#" id='apply-coupon' title="<?php echo Mage::helper('sales')->__('Apply Coupon Code') ?>"><?php echo Mage::helper('sales')->__('Apply Coupon Code') ?></a></p>
                     </div>
                     <input type='hidden' id='coupon' value="<?php echo $coupon; ?>"/>
                 </div>
