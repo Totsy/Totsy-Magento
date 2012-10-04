@@ -87,7 +87,7 @@
     		$('billing-static').hide();
     		$('payment_form_paymentfactory_tokenize').show();
     		$('payment-edit-form').show();
-    		$('coupon-edit-form').show();
+    		//$('coupon-edit-form').show();
     		$('payment-infos').hide();
     		$('billing-static').hide();
     		$('shipping-edit-form').show();
@@ -110,7 +110,7 @@
     		}
     		params['admin_user'] = '<?php echo Mage::getSingleton('admin/session')->getUser()->getUsername() ?>';
     		params['comment'] = $('edit-order-comment').value;
-    		params['coupon'] = $('coupon').value;
+    		//params['coupon'] = $('coupon').value;
     		params['order_id'] = <?php echo $_order->getId() ?>;
     		//get values for billing address
     		var billing = $('billing-fields').serialize(true);
@@ -183,7 +183,7 @@
     				$('shipping-edit-form').hide();
     				$('shipping-static').show();
                     $('history_form').show();
-                    $('coupon-edit-form').hide();
+                    //$('coupon-edit-form').hide();
     				//$('shippingmethod-edit-form').hide();
     				//$('shippingmethod-static').show();
     				$$('.e-item-price').invoke('hide');

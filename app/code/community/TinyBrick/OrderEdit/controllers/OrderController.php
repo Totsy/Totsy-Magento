@@ -85,9 +85,9 @@ class TinyBrick_OrderEdit_OrderController extends Mage_Adminhtml_Controller_Acti
                     }
                 }
             }
-            if($this->getRequest()->getParam('coupon')) {
-                $order->setCouponCode($this->getRequest()->getParam('coupon'));
-            }
+            //if($this->getRequest()->getParam('coupon')) {
+            //    $order->setCouponCode($this->getRequest()->getParam('coupon'));
+            //}
             $order->collectTotals()->save();
             Mage::getSingleton('cataloginventory/stock_status')->syncStatusWithStock($order);
             $postTotal = $order->getGrandTotal();

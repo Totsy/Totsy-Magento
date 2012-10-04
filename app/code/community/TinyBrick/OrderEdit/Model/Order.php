@@ -204,10 +204,6 @@ class TinyBrick_OrderEdit_Model_Order extends Mage_Sales_Model_Order
             $address->setGrandTotal(0);
             $address->setBaseGrandTotal(0);
 
-            if($this->getCouponCode()) {
-                $address->setCouponCode($this->getCouponCode());
-            }
-
 			if($x == 0) {
             	$address->collectTotals();
             	$x++;
