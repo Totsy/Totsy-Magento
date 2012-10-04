@@ -40,7 +40,7 @@ if (Mage::registry('referring_url')) {
 if (!($this->getRequest()->getActionName()=="create" && $this->getRequest()->getModuleName()=="customer") /* &&
 !($this->getRequest()->getActionName()=="welcome" && $this->getRequest()->getModuleName()=="customertracking")*/ ):
 ?>
-<!-- Steelhouse BEGIN -->
+<!-- Steelhouse purchase begin-->
 <div id="steelhouse_product_pixel"></div>
 <script type="text/javascript">
     Event.observe(window,'load',function() {
@@ -49,8 +49,8 @@ if (!($this->getRequest()->getActionName()=="create" && $this->getRequest()->get
             , { method:'get',evalScripts: true });
     });
 </script>
+<!-- Steelhouse purchase end -->
 <?php else: ?>
-<!-- Steelhouse END -->
 <!-- BEGIN steelhouse tracking pixel -->   
 <script type="text/javascript">
 (function(){var steelhouse=null,shver="3.3.0",

@@ -1,6 +1,6 @@
 <?php
 
-$_sales_products = Mage::registry('current_sales_products');
+//$_sales_products = Mage::registry('current_sales_products');
 $_product = Mage::registry('current_product');
 $_category = Mage::registry('current_category');
 $_cart = $this->helper('checkout/cart')->getCart();
@@ -9,7 +9,7 @@ $product_ids = implode(",", $_cart->getProductIds());
 ?>
 <!-- Steelhouse pixels for conversion -->
 <script type="text/javascript">
-    var shver='2.8.6';
+    var shver='3.3.0';
 <?php if($_product && $_category): ?>
     var shpn= encodeURIComponent('<?php echo addslashes($_product->getName()) ?>');
     var shpc= encodeURIComponent('<?php echo addslashes(strip_tags(html_entity_decode(str_replace(array("\r", "\n"), '', $_product->getDescription())))) ?>');
@@ -27,7 +27,7 @@ $product_ids = implode(",", $_cart->getProductIds());
 <?php endif; ?>
 
 <?php //if($_sales_products): ?>
-    //var shpil = encodeURIComponent('<?php echo $_sales_products ?>');
+    //var shpil = encodeURIComponent('<?php //echo $_sales_products ?>');
 <?php //else: ?>
     var shpil = '';
 <?php //endif; ?>
