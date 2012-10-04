@@ -302,26 +302,31 @@ XML;
             if ($value = $product->getVendorCode()) {
                 $value = Mage::helper('fulfillmentfactory')->removeBadCharacters($value);
                 $value = substr($value, 0, 10);
+                $value = htmlentities($value);
                 $vendorCode = '<manufacturing-code>' . $value . '</manufacturing-code>';
             }
 
             $style = '<style-number xsi:nil="true" />';
             if ($value = $product->getVendorStyle()) {
+                $value = htmlentities($value);
                 $style = '<style-number>' . substr($value, 0, 10) . '</style-number>';
             }
 
             $color = '<color xsi:nil="true" />';
             if ($value = $product->getAttributeText('color')) {
+                $value = htmlentities($value);
                 $color = '<color>' . substr($value, 0, 5) . '</color>';
             }
 
             $size = '<size xsi:nil="true" />';
             if ($value = $product->getAttributeText('size')) {
+                $value = htmlentities($value);
                 $size = '<size>' . substr($value, 0, 5) . '</size>';
             }
 
             $upc = '<upc xsi:nil="true" />';
             if ($value = $product->getUpc()) {
+                $value = htmlentities($value);
                 $upc = "<upc>$value</upc>"; // no need to limit string length here
             }
 
@@ -468,7 +473,7 @@ XML;
                 $billingAddress = Mage::getModel('sales/order_address');
              }
 
-            $billingAddress = $billingAddress->getFirstname() . ' ' . $billingAddress->getLastname();
+            $billingName = $billingAddress->getFirstname() . ' ' . $billingAddress->getLastname();
 
             $billing_state = Mage::helper('fulfillmentfactory')->getStateCodeByFullName($billingAddress->getRegion(), $billingAddress->getCountry());
 
@@ -538,8 +543,8 @@ XML;
                     <shipping-address2><![CDATA[{$shippingAddress->getStreet(2)}]]></shipping-address2>
                     <shipping-address3 xsi:nil="true"/>
                     <shipping-city><![CDATA[$city]]></shipping-city>
-                    <shipping-state><![CDATA[$state]]></shipping-city>
-                    <shipping-zip/>{$shippingAddress->getPostcode()}</shipping-zip>
+                    <shipping-state><![CDATA[$state]]></shipping-state>
+                    <shipping-zip>{$shippingAddress->getPostcode()}</shipping-zip>
                     <shipping-country >{$country}</shipping-country>
                     <shipping-iso-country-code xsi:nil="true"/>
                     <shipping-phone xsi:nil="true"/>
