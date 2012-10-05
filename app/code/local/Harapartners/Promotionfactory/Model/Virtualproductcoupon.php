@@ -83,6 +83,7 @@ class Harapartners_Promotionfactory_Model_Virtualproductcoupon extends Mage_Core
                             $vpc->save();
                             Mage::log(print_r($vpc->getData(), true),null,'virtualDebug.log');
                             Mage::log('Coupon Saved',null,'virtualDebug.log');
+                            exit();
                         }
                     }
                 }
