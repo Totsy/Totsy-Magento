@@ -15,6 +15,8 @@ class Totsy_Sailthru_Helper_Feed extends Mage_Core_Helper_Abstract
     private $_timeIsAhead = false;
     private $_startDate = null;
     private $_startTime = null;
+    private $_min_datetime = null;
+    private $_max_datetime = null;
     private $_order = false; // true = DESC; false = ACS
     private $_excludeList = array();
 
@@ -51,6 +53,9 @@ class Totsy_Sailthru_Helper_Feed extends Mage_Core_Helper_Abstract
         $this->_processStartDate();
         $this->_processStartTime();
         $this->_processExclude();
+
+        $this->_min_datetime = $this->_startDate;
+        $this->_max_datetime = strtotime('+2 days',$this->_startDate);
     }
 
     public function setMagentoTimeDiff()
@@ -87,6 +92,66 @@ class Totsy_Sailthru_Helper_Feed extends Mage_Core_Helper_Abstract
             $time = date($format,$time);
         }
     }
+
+    public function formatEvent(&$event){
+        return array(
+            'id'             => $event['entity_id'],
+            'name'           => $event['name'],
+            'url'            => $event['url_path'],
+            'description'    => $event['description'],
+            'short'          => $event['short_description'],
+            'availableItems' => (!empty($event['products']))?'YES':'NO',
+            'image'          => $event['image'],
+            'image_small'    => $event['small_image'],
+            'discount'       => $event['max_discount_pct'],
+            'start_date'     => $event['event_start_date'],
+            'end_date'       => $event['event_end_date'],
+            'categories'     => $event['department_label'],
+            'ages'           => $event['age_label'],
+            'items'          => $event['products'],
+            'tags'           => implode(',',$event['age_label'])
+        );
+
+    }
+
+    public function formatPCEvent(&$event,$type){
+        $result = array(
+            'name'           => $event['name'],
+            'url'            => $event['url_path'],
+            'start_date'     => $event['event_start_date'],
+            'end_date'       => $event['event_end_date']
+        );
+        unset($result[$type.'_date']);
+        return $result;
+    }
+
+    public function timeConverter($date,$plus=null){
+        $dsec = strtotime($date);
+        if (!is_null($plus)){
+            $dsec = strtotime($plus,$dsec);
+        }
+        $dd = date('Y-m-d 00:00:00',$dsec);
+        return strtotime($dd);
+    }
+
+    public function filter($events, $type='end'){
+        $collector = array();
+        
+        if (empty($events) || !is_array($events)){
+            return $collector; 
+        }
+        foreach($events as $event){
+            $event_time = $this->timeConverter($event['event_'.$type.'_date']);
+
+            if ($event_time>$this->_min_datetime 
+                && $event_time<$this->_max_datetime ){
+                $collector[] = $event;
+            } 
+        }
+
+        return $collector;
+    }
+
 
     private function _processStartDate()
     {

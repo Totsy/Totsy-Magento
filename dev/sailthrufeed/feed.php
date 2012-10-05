@@ -19,6 +19,7 @@ Mage::app($mageRunCode, $mageRunType);
 
 $feed = Mage::getModel('sailthru/feed');
 $cache_object = $feed->getCacheHelper();
+$cache_object->disableCache();
 
 $cache = $cache_object->runner($full_path);
 if ($cache !== false) {
@@ -28,6 +29,7 @@ if ($cache !== false) {
 }
 
 $storeId = Mage::app()->getStore($cache_object->getStoreCode())->getId(); //store id
+//$storeId = Mage::app()->getStore()->getId(); //store id
 Mage::app()->setCurrentStore($storeId);
 
 $feed->runner();

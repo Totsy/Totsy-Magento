@@ -10,15 +10,15 @@
 <config>
     <modules>
         <Totsy_Sailthru>
-            <version>1.0.0</version>
+            <version>1.0.1</version>
         </Totsy_Sailthru>
     </modules>
     <global>
         <helpers>
             <sailthru>
                 <rewrite>
-                    <helper_cache>Totsy_Sailthru_Helper_Cache</helper_cache>
-                    <helper_feed>Totsy_Sailthru_Helper_Feed</helper_feed>
+                    <cache>Totsy_Sailthru_Helper_Cache</cache>
+                    <feed>Totsy_Sailthru_Helper_Feed</feed>
                 </rewrite>
             </sailthru>
         </helpers>

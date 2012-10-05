@@ -22,6 +22,23 @@ class Totsy_Sailthru_Helper_Cache
     private $_cache_file_ext = '.json';
     private $_cache_skip_check = false;
     private $_cache_store = null;
+    private $_cache_disabled = false;
+
+    public function disableCache(){
+        if ($this->_cache_disabled == false){
+            $this->_cache_disabled = true;
+        }
+    }
+
+    public function enableCache(){
+        if ($this->_cache_disabled == true){
+            $this->_cache_disabled = false;
+        }
+    }
+
+    public function isCacheDisabled(){
+        return $this->_cache_disabled;
+    }
 
     /**
     * This method does all diry caching job.
@@ -33,6 +50,9 @@ class Totsy_Sailthru_Helper_Cache
     */
     public function runner($full_path = null)
     {
+        if($this->isCacheDisabled()){
+            return false;
+        }
         
         if (!empty($full_path)) {
             $this->_full_path = $full_path;
