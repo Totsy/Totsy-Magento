@@ -38,15 +38,5 @@ class Harapartners_Promotionfactory_Model_Mysql4_Groupcoupon extends Mage_Core_M
         $write->query($query);
         
       }
-      
-      public function loadByPseudoCode($couponCode){
-          $read = $this->_getReadAdapter();
-          $select = $read->select()->from($this->getMainTable())->where('pseudo_code= ?', $couponCode);
-          $result = $read->fetchRow($select);
-          if(!$result){
-              $result = array();
-          }
-          return $result;
-      }
-    
+
 }

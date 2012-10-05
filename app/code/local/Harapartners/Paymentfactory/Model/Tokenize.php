@@ -80,14 +80,13 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Totsy_Cybersource_Model
     public function order(Varien_Object $payment, $amount){
         //For totsy, no payment is allowed to be captured upon order place
         $customerId = $payment->getOrder()->getQuote()->getCustomerId();
-        $profile = Mage::getModel('paymentfactory/profile');
+        $profile = Mage::getModel('paymentfactory/profile')->load($payment->getCybersourceSubid(),'subscription_id');
          if (!!$payment->getData('cybersource_subid')){
              //decrypt for the backend
              $subscriptionId = $this->_decryptSubscriptionId($payment->getData('cybersource_subid'));
              if(!!$subscriptionId){
                 $payment->setData('cybersource_subid', $subscriptionId);
              }
-             $profile->loadBySubscriptionId($payment->getData('cybersource_subid'));
          } elseif (!!$payment->getData('cc_number')){
              $profile->loadByCcNumberWithId($payment->getData('cc_number').$customerId.$payment->getCcExpYear().$payment->getCcExpMonth());
          }
@@ -265,9 +264,8 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Totsy_Cybersource_Model
                 Mage::helper('cybersource')->__('Gateway request error: %s', $e->getMessage())
             );
         }
-        
-        $payment->setCybersourceSubid($payment->getCybersourceSubid());
-        $profile = Mage::getModel('paymentfactory/profile')->loadBySubscriptionId($payment->getCybersourceSubid());
+
+        $profile = Mage::getModel('paymentfactory/profile')->load($payment->getCybersourceSubid(),'subscription_id');
         $payment->setCcLast4($profile->getData('last4no'));
         $payment->setCcType($profile->getData('card_type'));
         $payment->setCcExpYear($profile->getData('expire_year'));
@@ -280,9 +278,7 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Totsy_Cybersource_Model
     {
         $this->_payment = $payment;
         parent::void($payment);
-        $payment->setCybersourceSubid($payment->getCybersourceSubid());
-        $profile = Mage::getModel('paymentfactory/profile')
-            ->loadBySubscriptionId($payment->getCybersourceSubid());
+        $profile = Mage::getModel('paymentfactory/profile')->load($payment->getCybersourceSubid(),'subscription_id');
         $payment->setCcLast4($profile->getData('last4no'));
         $payment->setCcType($profile->getData('card_type'));
         $payment->setCcExpYear($profile->getData('expire_year'));
@@ -306,9 +302,8 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Totsy_Cybersource_Model
                 Mage::helper('cybersource')->__('Gateway request error: %s', $e->getMessage())
             );
         }
-        
-        $payment->setCybersourceSubid($payment->getCybersourceSubid()); //Harapartners
-        $profile = Mage::getModel('paymentfactory/profile')->loadBySubscriptionId($payment->getCybersourceSubid());
+
+        $profile = Mage::getModel('paymentfactory/profile')->load($payment->getCybersourceSubid(),'subscription_id');
         $payment->setCcLast4($profile->getData('last4no'));
         $payment->setCcType($profile->getData('card_type'));
         $payment->setCcExpYear($profile->getData('expire_year'));
@@ -363,8 +358,7 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Totsy_Cybersource_Model
         if ($error !== false) {
             Mage::throwException($error);
         }
-        $payment->setCybersourceSubid($payment->getCybersourceSubid()); //Harapartners
-        $profile = Mage::getModel('paymentfactory/profile')->loadBySubscriptionId($payment->getCybersourceSubid());
+        $profile = Mage::getModel('paymentfactory/profile')->load($payment->getCybersourceSubid(),'subscription_id');
         $payment->setCcLast4($profile->getData('last4no'));
         $payment->setCcType($profile->getData('card_type'));
         $payment->setCcExpYear($profile->getData('expire_year'));

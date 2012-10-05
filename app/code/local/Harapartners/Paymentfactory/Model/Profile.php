@@ -13,12 +13,7 @@ class Harapartners_Paymentfactory_Model_Profile extends Mage_Core_Model_Abstract
     
     public function loadByCcNumberWithId($ccNumberWithId){
         $ccNumberWithId = preg_replace('/[\s\-]/', '', $ccNumberWithId);
-        return $this->loadByCcNumberHash(md5($ccNumberWithId));
-    }
-    
-    public function loadByCcNumberHash($ccNumberWithIdHash){
-        $this->addData($this->getResource()->loadByCcNumberHash($ccNumberWithIdHash));
-        return $this;
+        return $this->load(md5($ccNumberWithId),'cc_number_hash');
     }
     
     public function getEncryptedSubscriptionId(){
@@ -35,18 +30,13 @@ class Harapartners_Paymentfactory_Model_Profile extends Mage_Core_Model_Abstract
         if(!!$encryptedSubscriptionId){
             try{
                 $subscriptionId = Mage::getModel('core/encryption')->decrypt(base64_decode($encryptedSubscriptionId));
-                $this->loadBySubscriptionId($subscriptionId);
+                $this->load($subscriptionId,'subscription_id');
             }catch (Exception $e){
             }
         }
         return $this;
     }
-    
-    public function loadBySubscriptionId($subscriptionId){
-        $this->addData($this->getResource()->loadBySubscriptionId($subscriptionId));
-        return $this;
-    }
-    
+
     public function deleteById($ruleId){
         return $this->getResource()->deleteById($ruleId);
     }
