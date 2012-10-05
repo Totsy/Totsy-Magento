@@ -473,11 +473,14 @@ XML;
                 $billingAddress = Mage::getModel('sales/order_address');
              }
 
+            $billingAddress = substr($billingAddress, 0, 30);
             $billingName = $billingAddress->getFirstname() . ' ' . $billingAddress->getLastname();
+            $billingName = substr($billingName, 0, 30);
 
             $billing_state = Mage::helper('fulfillmentfactory')->getStateCodeByFullName($billingAddress->getRegion(), $billingAddress->getCountry());
 
             $billing_city = Mage::helper('fulfillmentfactory')->validateAddressForDC('CITY', $billingAddress->getCity());
+            $billing_city = substr($billing_city, 0, 20);
 
             $billing_country = Mage::helper('fulfillmentfactory/dotcom')->getCountryCodeUsTerritories($billing_state);
 
