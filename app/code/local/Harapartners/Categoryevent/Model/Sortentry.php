@@ -270,13 +270,13 @@ class Harapartners_Categoryevent_Model_Sortentry
      */
     public function adjustQueuesForCurrentTime()
     {
-        $currentTime = Mage::helper('service')->getServerTime() / 1000;
+        $now = Mage::getModel('core/date')->timestamp();
 
         $live     = json_decode($this->getData('live_queue'), true);
         $upcoming = json_decode($this->getData('upcoming_queue'), true);
 
         foreach ($live as $idx => $event) {
-            if (strtotime($event['event_start_date']) > $currentTime) {
+            if (strtotime($event['event_start_date']) > $now) {
                 // move this event to Upcoming
                 array_unshift($upcoming, $event);
                 unset($live[$idx]);
@@ -284,7 +284,9 @@ class Harapartners_Categoryevent_Model_Sortentry
         }
 
         foreach ($upcoming as $idx => $event) {
-            if (strtotime($event['event_start_date']) < $currentTime) {
+            if (strtotime($event['event_start_date']) < $now &&
+                strtotime($event['event_end_date']) > $now
+            ) {
                 // move this event to Live
                 array_unshift($live, $event);
                 unset($upcoming[$idx]);
