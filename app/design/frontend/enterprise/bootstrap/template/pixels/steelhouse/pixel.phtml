@@ -24,14 +24,8 @@ $product_ids = implode(",", $_cart->getProductIds());
     var shpb= '';
     var shpi= '';
     var shps= '';
-<?php endif; ?>
-
-<?php //if($_sales_products): ?>
-    //var shpil = encodeURIComponent('<?php //echo $_sales_products ?>');
-<?php //else: ?>
     var shpil = '';
-<?php //endif; ?>
-
+<?php endif; ?>
 <?php if($cart): ?> 
     var shcv= encodeURIComponent('<?php echo number_format($_cart->getQuote()->getGrandTotal(), 2) ?>');
     var shcq= encodeURIComponent('<?php echo $_cart->getItemsQty() ?>');
