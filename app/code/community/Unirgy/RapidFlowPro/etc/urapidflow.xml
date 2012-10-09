@@ -1,0 +1,647 @@
+<?xml version="1.0"?>
+<config>
+    <urapidflow>
+        <data_types>
+            <product_extra>
+                <title>Products Extra</title>
+                <row_format>fixed</row_format>
+                <model>urapidflowpro_mysql4/productExtra</model>
+                <profile>
+                    <import>
+                        <tabs>
+                            <file>
+                                <title>File Options</title>
+                                <block>urapidflow/adminhtml_profile_edit_tab_file</block>
+                            </file>
+                            <csv>
+                                <title>Format Options</title>
+                                <block>urapidflow/adminhtml_profile_edit_tab_csv</block>
+                            </csv>
+                            <options>
+                                <title>Import Options</title>
+                                <block>urapidflowpro/adminhtml_profile_productExtra_importOptions</block>
+                            </options>
+                            <upload>
+                                <title>Upload Files</title>
+                                <block>urapidflow/adminhtml_profile_edit_tab_upload</block>
+                            </upload>
+                            <reindex>
+                                <title>Reindex</title>
+                                <block>urapidflow/adminhtml_profile_edit_tab_reindex</block>
+                            </reindex>
+                        </tabs>
+                    </import>
+                    <export>
+                        <tabs>
+                            <file>
+                                <title>File Options</title>
+                                <block>urapidflow/adminhtml_profile_edit_tab_file</block>
+                            </file>
+                            <csv>
+                                <title>Format Options</title>
+                                <block>urapidflow/adminhtml_profile_edit_tab_csv</block>
+                            </csv>
+                            <options>
+                                <title>Export Options</title>
+                                <block>urapidflowpro/adminhtml_profile_productExtra_exportOptions</block>
+                            </options>
+                            <conditions>
+                                <title>Export Conditions</title>
+                                <block>urapidflow/adminhtml_profile_edit_tab_export_condition</block>
+                            </conditions>
+                        </tabs>
+                    </export>
+                </profile>
+            </product_extra>
+
+            <eav_struct>
+                <title>EAV Structure</title>
+                <row_format>fixed</row_format>
+                <model>urapidflowpro_mysql4/eav</model>
+                <profile>
+                    <import>
+                        <tabs>
+                            <file>
+                                <title>File Options</title>
+                                <block>urapidflow/adminhtml_profile_edit_tab_file</block>
+                            </file>
+                            <csv>
+                                <title>Format Options</title>
+                                <block>urapidflow/adminhtml_profile_edit_tab_csv</block>
+                            </csv>
+                            <options>
+                                <title>Import Options</title>
+                                <block>urapidflowpro/adminhtml_profile_eav_importOptions</block>
+                            </options>
+                            <upload>
+                                <title>Upload Files</title>
+                                <block>urapidflow/adminhtml_profile_edit_tab_upload</block>
+                            </upload>
+                            <reindex>
+                                <title>Reindex</title>
+                                <block>urapidflow/adminhtml_profile_edit_tab_reindex</block>
+                            </reindex>
+                        </tabs>
+                    </import>
+                    <export>
+                        <tabs>
+                            <file>
+                                <title>File Options</title>
+                                <block>urapidflow/adminhtml_profile_edit_tab_file</block>
+                            </file>
+                            <csv>
+                                <title>Format Options</title>
+                                <block>urapidflow/adminhtml_profile_edit_tab_csv</block>
+                            </csv>
+                            <options>
+                                <title>Export Options</title>
+                                <block>urapidflowpro/adminhtml_profile_eav_exportOptions</block>
+                            </options>
+                        </tabs>
+                    </export>
+                </profile>
+            </eav_struct>
+
+            <category>
+                <title>Categories</title>
+                <row_format>dynamic</row_format>
+                <model>urapidflowpro_mysql4/category</model>
+                <profile>
+                    <import>
+                        <tabs>
+                            <file>
+                                <title>File Options</title>
+                                <block>urapidflow/adminhtml_profile_edit_tab_file</block>
+                            </file>
+                            <csv>
+                                <title>Format Options</title>
+                                <block>urapidflow/adminhtml_profile_edit_tab_csv</block>
+                            </csv>
+                            <options>
+                                <title>Import Options</title>
+                                <block>urapidflowpro/adminhtml_profile_category_importOptions</block>
+                            </options>
+                            <columns>
+                                <title>Import Columns</title>
+                                <block>urapidflowpro/adminhtml_profile_category_columns</block>
+                            </columns>
+                            <upload>
+                                <title>Upload Files</title>
+                                <block>urapidflow/adminhtml_profile_edit_tab_upload</block>
+                            </upload>
+                            <reindex>
+                                <title>Reindex</title>
+                                <block>urapidflow/adminhtml_profile_edit_tab_reindex</block>
+                            </reindex>
+                        </tabs>
+                    </import>
+                    <export>
+                        <tabs>
+                            <file>
+                                <title>File Options</title>
+                                <block>urapidflow/adminhtml_profile_edit_tab_file</block>
+                            </file>
+                            <csv>
+                                <title>Format Options</title>
+                                <block>urapidflow/adminhtml_profile_edit_tab_csv</block>
+                            </csv>
+                            <columns>
+                                <title>Export Columns</title>
+                                <block>urapidflowpro/adminhtml_profile_category_columns</block>
+                            </columns>
+                        </tabs>
+                    </export>
+                </profile>
+            </category>
+
+        </data_types>
+
+        <row_types>
+            <EA>
+                <title>EAV Attribute</title>
+                <data_type>eav_struct</data_type>
+                <columns>
+                    <attribute_code><col>1</col><key>1</key></attribute_code>
+                    <backend_type><col>2</col></backend_type>
+                    <frontend_input><col>3</col></frontend_input>
+                    <frontend_label><col>4</col></frontend_label>
+                    <is_required><col>5</col></is_required>
+                    <is_unique><col>6</col></is_unique>
+                    <entity_type><col>7</col><key>1</key></entity_type>
+                </columns>
+            </EA>
+
+            <EAL>
+                <title>EAV Attribute Store Specific</title>
+                <data_type>eav_struct</data_type>
+                <columns>
+                    <attribute_code><col>1</col><key>1</key></attribute_code>
+                    <store><col>2</col><key>1</key></store>
+                    <label><col>3</col></label>
+                    <entity_type><col>4</col><key>1</key></entity_type>
+                </columns>
+                <restrictions>
+                    <magento_version>1.4</magento_version>
+                </restrictions>
+            </EAL>
+
+            <EAX>
+                <title>EAV Attribute Extension</title>
+                <data_type>eav_struct</data_type>
+                <columns>
+                    <attribute_code><col>1</col><key>1</key></attribute_code>
+                    <attribute_model><col>2</col></attribute_model>
+                    <backend_model><col>3</col></backend_model>
+                    <backend_table><col>4</col></backend_table>
+                    <frontend_model><col>5</col></frontend_model>
+                    <frontend_class><col>6</col></frontend_class>
+                    <source_model><col>7</col></source_model>
+                    <default_value><col>8</col></default_value>
+                    <note><col>9</col></note>
+                    <entity_type><col>10</col><key>1</key></entity_type>
+                </columns>
+            </EAX>
+
+            <EAXP>
+                <title>EAV Attribute Product Extension</title>
+                <data_type>eav_struct</data_type>
+                <columns>
+                    <attribute_code><col>1</col><key>1</key></attribute_code>
+                    <is_global><col>2</col></is_global>
+                    <is_visible><col>3</col></is_visible>
+                    <is_searchable><col>4</col></is_searchable>
+                    <is_filterable><col>5</col></is_filterable>
+                    <is_comparable><col>6</col></is_comparable>
+                    <is_visible_on_front><col>7</col></is_visible_on_front>
+                    <is_html_allowed_on_front><col>8</col></is_html_allowed_on_front>
+                    <is_used_for_price_rules><col>9</col></is_used_for_price_rules>
+                    <is_filterable_in_search><col>10</col></is_filterable_in_search>
+                    <used_in_product_listing><col>11</col></used_in_product_listing>
+                    <used_for_sort_by><col>12</col></used_for_sort_by>
+                    <is_configurable><col>13</col></is_configurable>
+                    <apply_to><col>14</col></apply_to>
+                    <is_visible_in_advanced_search><col>15</col></is_visible_in_advanced_search>
+                    <position><col>16</col></position>
+                    <is_wysiwyg_enabled><col>17</col></is_wysiwyg_enabled>
+                </columns>
+            </EAXP>
+
+            <EAS>
+                <title>EAV Attribute Set</title>
+                <data_type>eav_struct</data_type>
+                <columns>
+                    <set_name><col>1</col><key>1</key></set_name>
+                    <sort_order><col>2</col></sort_order>
+                    <entity_type><col>3</col><key>1</key></entity_type>
+                </columns>
+            </EAS>
+
+            <EAG>
+                <title>EAV Attribute Group</title>
+                <data_type>eav_struct</data_type>
+                <columns>
+                    <set_name><col>1</col><key>1</key></set_name>
+                    <group_name><col>2</col><key>1</key></group_name>
+                    <sort_order><col>3</col></sort_order>
+                    <entity_type><col>4</col><key>1</key></entity_type>
+                </columns>
+            </EAG>
+
+            <EASI>
+                <title>EAV Attribute Within Attribute Set</title>
+                <data_type>eav_struct</data_type>
+                <columns>
+                    <set_name><col>1</col><key>1</key></set_name>
+                    <group_name><col>2</col><key>1</key></group_name>
+                    <attribute_code><col>3</col><key>1</key></attribute_code>
+                    <sort_order><col>4</col></sort_order>
+                    <entity_type><col>35</col><key>1</key></entity_type>
+                </columns>
+            </EASI>
+
+            <EAO>
+                <title>EAV Attribute Option</title>
+                <data_type>eav_struct</data_type>
+                <columns>
+                    <attribute_code><col>1</col><key>1</key></attribute_code>
+                    <option_name><col>2</col><key>1</key></option_name>
+                    <sort_order><col>3</col></sort_order>
+                    <entity_type><col>4</col><key>1</key></entity_type>
+                </columns>
+            </EAO>
+
+            <EAOL>
+                <title>EAV Attribute Option Store Specific</title>
+                <data_type>eav_struct</data_type>
+                <columns>
+                    <attribute_code><col>1</col><key>1</key></attribute_code>
+                    <option_name><col>2</col><key>1</key></option_name>
+                    <store><col>3</col><key>1</key></store>
+                    <option_label><col>4</col></option_label>
+                    <entity_type><col>5</col><key>1</key></entity_type>
+                </columns>
+            </EAOL>
+
+            <CC>
+                <title>Catalog Category</title>
+                <data_type>product_extra</data_type>
+                <columns>
+                    <url_path><col>1</col><key>1</key></url_path>
+                </columns>
+            </CC>
+
+            <CP>
+                <title>Catalog Product</title>
+                <data_type>product_extra</data_type>
+                <columns>
+                    <sku><col>1</col><key>1</key></sku>
+                </columns>
+            </CP>
+
+            <CCP>
+                <title>Catalog Category Product</title>
+                <data_type>product_extra</data_type>
+                <columns>
+                    <url_path><col>1</col><key>1</key></url_path>
+                    <sku><col>2</col><key>2</key></sku>
+                    <position><col>3</col></position>
+                </columns>
+            </CCP>
+
+            <CPI>
+                <title>Catalog Product Image</title>
+                <data_type>product_extra</data_type>
+                <columns>
+                    <sku><col>1</col><key>1</key></sku>
+                    <image_url><col>2</col><key>1</key></image_url>
+                    <label><col>3</col></label>
+                    <position><col>4</col></position>
+                    <disabled><col>5</col></disabled>
+                </columns>
+            </CPI>
+
+            <CPIL>
+                <title>Catalog Product Image Store Specific</title>
+                <data_type>product_extra</data_type>
+                <columns>
+                    <sku><col>1</col><key>1</key></sku>
+                    <image_url><col>2</col><key>1</key></image_url>
+                    <store><col>3</col><key>1</key></store>
+                    <label><col>4</col></label>
+                    <position><col>5</col></position>
+                    <disabled><col>6</col></disabled>
+                </columns>
+            </CPIL>
+
+            <CPCO>
+                <title>Catalog Product Custom Option</title>
+                <data_type>product_extra</data_type>
+                <columns>
+                    <sku><col>1</col><key>1</key></sku>
+                    <default_title><col>2</col><key>1</key></default_title>
+                    <type><col>3</col></type>
+                    <is_require><col>4</col></is_require>
+                    <option_sku><col>5</col></option_sku>
+                    <sort_order><col>6</col></sort_order>
+                    <max_characters><col>7</col></max_characters>
+                    <price><col>8</col></price>
+                    <price_type><col>9</col></price_type>
+                    <file_extension><col>10</col></file_extension>
+                    <image_size_x><col>11</col></image_size_x>
+                    <image_size_y><col>12</col></image_size_y>
+                </columns>
+            </CPCO>
+
+            <CPCOL>
+                <title>Catalog Product Custom Option Store Specific</title>
+                <data_type>product_extra</data_type>
+                <columns>
+                    <sku><col>1</col><key>1</key></sku>
+                    <default_title><col>2</col><key>1</key></default_title>
+                    <store><col>3</col><key>1</key></store>
+                    <title><col>4</col></title>
+                    <price><col>5</col></price>
+                    <price_type><col>6</col></price_type>
+                </columns>
+            </CPCOL>
+
+            <CPCOS>
+                <title>Catalog Product Custom Option Selection</title>
+                <data_type>product_extra</data_type>
+                <columns>
+                    <sku><col>1</col><key>1</key></sku>
+                    <default_title><col>2</col><key>1</key></default_title>
+                    <selection_default_title><col>3</col></selection_default_title>
+                    <selection_sku><col>4</col></selection_sku>
+                    <sort_order><col>5</col></sort_order>
+                    <price><col>6</col></price>
+                    <price_type><col>7</col></price_type>
+                </columns>
+            </CPCOS>
+
+            <CPCOSL>
+                <title>Catalog Product Custom Option Selection Store Specific</title>
+                <data_type>product_extra</data_type>
+                <columns>
+                    <sku><col>1</col><key>1</key></sku>
+                    <default_title><col>2</col><key>1</key></default_title>
+                    <selection_default_title><col>3</col><key>1</key></selection_default_title>
+                    <store><col>4</col></store>
+                    <title><col>5</col></title>
+                    <price><col>6</col></price>
+                    <price_type><col>7</col></price_type>
+                </columns>
+            </CPCOSL>
+
+            <CPBO>
+                <title>Catalog Product Bundle Option</title>
+                <data_type>product_extra</data_type>
+                <columns>
+                    <sku><col>1</col><key>1</key></sku>
+                    <default_title><col>2</col><key>1</key></default_title>
+                    <position><col>3</col></position>
+                    <type><col>4</col></type>
+                    <required><col>5</col></required>
+                </columns>
+            </CPBO>
+
+            <CPBOL>
+                <title>Catalog Product Bundle Option Store Specific</title>
+                <data_type>product_extra</data_type>
+                <columns>
+                    <sku><col>1</col><key>1</key></sku>
+                    <default_title><col>2</col><key>1</key></default_title>
+                    <store><col>3</col><key>1</key></store>
+                    <title><col>4</col></title>
+                </columns>
+            </CPBOL>
+
+            <CPBOS>
+                <title>Catalog Product Bundle Option Selection</title>
+                <data_type>product_extra</data_type>
+                <columns>
+                    <sku><col>1</col><key>1</key></sku>
+                    <default_title><col>2</col><key>1</key></default_title>
+                    <selection_sku><col>3</col><key>1</key></selection_sku>
+                    <position><col>4</col></position>
+                    <is_default><col>5</col></is_default>
+                    <selection_price_type><col>6</col></selection_price_type>
+                    <selection_price_value><col>7</col></selection_price_value>
+                    <selection_qty><col>8</col></selection_qty>
+                    <selection_can_change_qty><col>9</col></selection_can_change_qty>
+                </columns>
+            </CPBOS>
+
+            <CPRI>
+                <title>Catalog Product Related Item</title>
+                <data_type>product_extra</data_type>
+                <columns>
+                    <sku><col>1</col><key>1</key></sku>
+                    <linked_sku><col>2</col><key>1</key></linked_sku>
+                    <position><col>3</col></position>
+                    <qty><col>4</col></qty>
+                </columns>
+            </CPRI>
+
+            <CPUI>
+                <title>Catalog Product Up Sell Item</title>
+                <data_type>product_extra</data_type>
+                <columns>
+                    <sku><col>1</col><key>1</key></sku>
+                    <linked_sku><col>2</col><key>1</key></linked_sku>
+                    <position><col>3</col></position>
+                    <qty><col>4</col></qty>
+                </columns>
+            </CPUI>
+
+            <CPXI>
+                <title>Catalog Product Cross Sell Item</title>
+                <data_type>product_extra</data_type>
+                <columns>
+                    <sku><col>1</col><key>1</key></sku>
+                    <linked_sku><col>2</col><key>1</key></linked_sku>
+                    <position><col>3</col></position>
+                    <qty><col>4</col></qty>
+                </columns>
+            </CPXI>
+
+            <CPGI>
+                <title>Catalog Product Grouped Item</title>
+                <data_type>product_extra</data_type>
+                <columns>
+                    <sku><col>1</col><key>1</key></sku>
+                    <linked_sku><col>2</col><key>1</key></linked_sku>
+                    <position><col>3</col></position>
+                    <qty><col>4</col></qty>
+                </columns>
+            </CPGI>
+
+            <CPSA>
+                <title>Catalog Product Super Configurable Attribute</title>
+                <data_type>product_extra</data_type>
+                <columns>
+                    <sku><col>1</col><key>1</key></sku>
+                    <attribute_code><col>2</col><key>1</key></attribute_code>
+                    <position><col>3</col></position>
+                    <label><col>4</col></label>
+                </columns>
+            </CPSA>
+
+            <CPSAL>
+                <title>Catalog Product Super Configurable Attribute Store Specific</title>
+                <data_type>product_extra</data_type>
+                <columns>
+                    <sku><col>1</col><key>1</key></sku>
+                    <attribute_code><col>2</col><key>1</key></attribute_code>
+                    <store><col>3</col></store>
+                    <label><col>4</col></label>
+                </columns>
+            </CPSAL>
+
+            <CPSAP>
+                <title>Catalog Product Super Configurable Attribute Pricing</title>
+                <data_type>product_extra</data_type>
+                <columns>
+                    <sku><col>1</col><key>1</key></sku>
+                    <attribute_code><col>2</col><key>1</key></attribute_code>
+                    <value_label><col>3</col><key>1</key></value_label>
+                    <website><col>4</col><key>1</key></website>
+                    <pricing_value><col>5</col></pricing_value>
+                    <is_percent><col>6</col></is_percent>
+                </columns>
+            </CPSAP>
+
+            <CPSI>
+                <title>Catalog Product Super Configurable Item</title>
+                <data_type>product_extra</data_type>
+                <columns>
+                    <sku><col>1</col><key>1</key></sku>
+                    <linked_sku><col>2</col><key>1</key></linked_sku>
+                </columns>
+            </CPSI>
+
+            <CPD>
+                <title>Catalog Product Downloadable</title>
+                <data_type>product_extra</data_type>
+                <columns>
+                    <sku><col>1</col><key>1</key></sku>
+                    <title><col>2</col><key>1</key></title>
+                    <price><col>3</col></price>
+                    <max_downloads><col>4</col></max_downloads>
+                    <is_shareable><col>5</col></is_shareable>
+                    <sort_order><col>6</col></sort_order>
+                    <link_url><col>7</col></link_url>
+                    <link_file><col>8</col></link_file>
+                    <link_type><col>9</col></link_type>
+                    <sample_url><col>10</col></sample_url>
+                    <sample_file><col>11</col></sample_file>
+                    <sample_type><col>12</col></sample_type>
+                </columns>
+            </CPD>
+
+            <CPDL>
+                <title>Catalog Product Downloadable Store Specific</title>
+                <data_type>product_extra</data_type>
+                <columns>
+                    <sku><col>1</col><key>1</key></sku>
+                    <default_title><col>2</col><key>1</key></default_title>
+                    <store><col>3</col><key>1</key></store>
+                    <title><col>4</col></title>
+                </columns>
+            </CPDL>
+
+            <CPDP>
+                <title>Catalog Product Downloadable Website Price</title>
+                <data_type>product_extra</data_type>
+                <columns>
+                    <sku><col>1</col><key>1</key></sku>
+                    <default_title><col>2</col><key>1</key></default_title>
+                    <website><col>3</col><key>1</key></website>
+                    <price><col>4</col></price>
+                </columns>
+            </CPDP>
+
+            <CPDS>
+                <title>Catalog Product Downloadable Sample</title>
+                <data_type>product_extra</data_type>
+                <columns>
+                    <sku><col>1</col><key>1</key></sku>
+                    <title><col>2</col><key>1</key></title>
+                    <sort_order><col>3</col></sort_order>
+                    <sample_url><col>4</col></sample_url>
+                    <sample_file><col>5</col></sample_file>
+                    <sample_type><col>6</col></sample_type>
+                </columns>
+            </CPDS>
+
+            <CPDSL>
+                <title>Catalog Product Downloadable Sample Store Specific</title>
+                <data_type>product_extra</data_type>
+                <columns>
+                    <sku><col>1</col><key>1</key></sku>
+                    <default_title><col>2</col><key>1</key></default_title>
+                    <store><col>3</col><key>1</key></store>
+                    <title><col>4</col></title>
+                </columns>
+            </CPDSL>
+
+            <CPPT>
+                <title>Catalog Product Tier Prices</title>
+                <data_type>product_extra</data_type>
+                <columns>
+                    <sku><col>1</col><key>1</key></sku>
+                    <customer_group><col>2</col><key>1</key></customer_group>
+                    <qty><col>3</col><key>1</key></qty>
+                    <price><col>4</col></price>
+                    <website><col>5</col></website>
+                </columns>
+            </CPPT>
+            <CPPG>
+                <title>Catalog Product Group Prices</title>
+                <data_type>product_extra</data_type>
+                <columns>
+                    <sku><col>1</col><key>1</key></sku>
+                    <customer_group><col>2</col><key>1</key></customer_group>
+                    <price><col>4</col></price>
+                    <website><col>5</col></website>
+                </columns>
+            </CPPG>
+<!--
+            <CT>
+                <title>Catalog Tag</title>
+                <data_type>product_extra</data_type>
+                <columns>
+                    <tag_name><col>1</col><key>1</key></tag_name>
+                    <status><col>2</col></status>
+                </columns>
+            </CT>
+
+            <CTL>
+                <title>Catalog Tag Store Specific</title>
+                <data_type>product_extra</data_type>
+                <columns>
+                    <tag_name><col>1</col><key>1</key></tag_name>
+                    <store><col>2</col></store>
+                    <customers><col>3</col></customers>
+                    <products><col>4</col></products>
+                    <uses><col>5</col></uses>
+                    <historical_uses><col>6</col></historical_uses>
+                    <popularity><col>7</col></popularity>
+                </columns>
+            </CTL>
+
+            <CTP>
+                <title>Catalog Tag Product Relation</title>
+                <data_type>product_extra</data_type>
+                <columns>
+                    <sku><col>1</col><key>1</key></sku>
+                    <tag_name><col>2</col><key>1</key></tag_name>
+                    <store><col>3</col></store>
+                    <active><col>4</col></active>
+                    <created_at><col>5</col></created_at>
+                </columns>
+            </CTP>
+-->
+        </row_types>
+    </urapidflow>
+</config>

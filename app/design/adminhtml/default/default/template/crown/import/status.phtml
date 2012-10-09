@@ -1,0 +1,60 @@
+<?php
+$_p = $this->getProfile();
+$_ms = (int)Mage::getStoreConfig('urapidflow/finetune/status_refresh_delay');
+$_ms = $_ms ? $_ms*1000 : 3000;
+?>
+<div id="urapidflow-status-container">
+    <?php echo $this->getLayout()->createBlock('urapidflow/adminhtml_profile_status')->setProfile($_p)->toHtml() ?>
+</div>
+
+<script type="text/javascript">
+Ajax.Responders.unregister(varienLoaderHandler.handler);
+
+<?php if ($_p->getRunStatus()=='pending'): ?>
+new Ajax.Request(
+    '<?php echo $this->getUrl('urapidflowadmin/adminhtml_profile/ajaxStart', array('id'=>$_p->getId())) ?>',
+    {
+        method:'get',
+        evalJSON:'force',
+        onError: function(transport) {
+            alert('error');
+        },
+        onSuccess: function(transport) {
+            var res = transport.responseJSON;
+            if (!res && transport.responseText) {
+                alert(transport.responseText);
+                location.href = '<?php echo $this->getUrl('urapidflowadmin/adminhtml_profile/stop', array('id'=>$_p->getId())) ?>';
+            } else if (res.error) {
+                alert(res.error);
+                location.reload();
+            }
+        }
+    }
+);
+<?php endif ?>
+
+<?php if (in_array($_p->getRunStatus(), array('pending', 'running'))): ?>
+function updateStatus() {
+    new Ajax.Request(
+        '<?php echo $this->getUrl('urapidflowadmin/adminhtml_profile/ajaxStatus', array('id'=>$_p->getId())) ?>',
+        {
+            method:'get',
+            evalJSON:'force',
+            onSuccess: function(transport) {
+                var res = transport.responseJSON;
+                $('urapidflow-status-container').innerHTML = res.html;
+                if (res.run_status=='finished') {
+                	location.href = '<?php echo $this->getUrl('*/*/fixstatus', array('id'=>$this->getImportModel()->getId())) ?>';
+                    //location.reload();
+                    return;
+                }
+                if (res.run_status=='running') {
+                    setTimeout(updateStatus, <?php echo $_ms ?>);
+                }
+            }
+        }
+    )
+}
+setTimeout(updateStatus, <?php echo $_ms ?>);
+<?php endif ?>
+</script>

@@ -1,0 +1,209 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Unirgy LLC
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the EULA
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://www.unirgy.com/LICENSE-M1.txt
+ *
+ * @category   Unirgy
+ * @package    Unirgy_RapidFlow
+ * @copyright  Copyright (c) 2008-2009 Unirgy LLC (http://www.unirgy.com)
+ * @license    http:///www.unirgy.com/LICENSE-M1.txt
+ */
+-->
+<config>
+    <modules>
+        <Unirgy_RapidFlow>
+            <version>2.0.0.1</version>
+            <usimpleup remote="http://download.unirgy.com/simple/client_api/version/"
+                changelog="http://unirgy.com/support/portal/announcements"
+                uninstall="urapidflow/observer::usimpleup_uninstall"/>
+        </Unirgy_RapidFlow>
+    </modules>
+
+    <global>
+        <cache>
+            <types>
+                <config_urapidflow translate="label" module="urapidflow">
+                    <label>RapidFlow Configuration</label>
+                </config_urapidflow>
+            </types>
+        </cache>
+
+        <models>
+            <urapidflow>
+                <class>Unirgy_RapidFlow_Model</class>
+                <resourceModel>urapidflow_mysql4</resourceModel>
+            </urapidflow>
+            <urapidflow_mysql4>
+                <class>Unirgy_RapidFlow_Model_Mysql4</class>
+                <entities>
+                    <profile>
+                        <table>urapidflow_profile</table>
+                    </profile>
+                    <profile_log>
+                        <table>urapidflow_profile_log</table>
+                    </profile_log>
+                </entities>
+            </urapidflow_mysql4>
+        </models>
+
+        <helpers>
+            <urapidflow>
+                <class>Unirgy_RapidFlow_Helper</class>
+            </urapidflow>
+        </helpers>
+
+        <blocks>
+            <urapidflow><class>Unirgy_RapidFlow_Block</class></urapidflow>
+        </blocks>
+
+        <resources>
+            <urapidflow_setup>
+                <setup>
+                    <module>Unirgy_RapidFlow</module>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </urapidflow_setup>
+            <urapidflow_write>
+                <connection>
+                    <use>core_write</use>
+                </connection>
+            </urapidflow_write>
+            <urapidflow_read>
+                <connection>
+                    <use>core_read</use>
+                </connection>
+            </urapidflow_read>
+        </resources>
+
+        <urapidflow>
+            <modules>
+                <Unirgy_RapidFlow />
+            </modules>
+        </urapidflow>
+    </global>
+
+    <admin>
+        <routers>
+            <urapidflowadmin>
+                <use>admin</use>
+                <args>
+                    <module>Unirgy_RapidFlow</module>
+                    <frontName>urapidflowadmin</frontName>
+                </args>
+            </urapidflowadmin>
+        </routers>
+    </admin>
+
+    <adminhtml>
+        <menu>
+            <system>
+                <children>
+                    <urapidflow translate="title" module="urapidflow">
+                        <title>RapidFlow</title>
+                        <sort_order>45</sort_order>
+                        <action>urapidflowadmin/adminhtml_profile</action>
+                        <!--
+                        <children>
+                            <batch module="urapidflow">
+                                <title>Batches</title>
+                                <sort_order>10</sort_order>
+                                <action>urapidflowadmin/adminhtml_batch</action>
+                            </batch>
+                            <profile module="urapidflow">
+                                <title>Profiles</title>
+                                <sort_order>20</sort_order>
+                                <action>urapidflowadmin/adminhtml_profile</action>
+                            </profile>
+                        </children>
+                        -->
+                    </urapidflow>
+                </children>
+            </system>
+        </menu>
+        <acl>
+            <resources>
+                <admin>
+                    <children>
+                        <system>
+                            <children>
+                                <urapidflow translate="title" module="urapidflow">
+                                    <title>RapidFlow</title>
+                                </urapidflow>
+                                <config>
+                                    <children>
+                                        <urapidflow translate="title" module="urapidflow">
+                                            <title>RapidFlow</title>
+                                        </urapidflow>
+                                    </children>
+                                </config>
+                            </children>
+                        </system>
+                    </children>
+                </admin>
+            </resources>
+        </acl>
+
+        <layout>
+            <updates>
+                <urapidflow module="Unirgy_RapidFlow">
+                    <file>urapidflow.xml</file>
+                </urapidflow>
+            </updates>
+        </layout>
+
+        <translate>
+            <modules>
+                <Unirgy_RapidFlow>
+                    <files>
+                        <default>Unirgy_RapidFlow.csv</default>
+                    </files>
+                </Unirgy_RapidFlow>
+            </modules>
+        </translate>
+
+        <events>
+            <controller_action_layout_render_before_urapidflowadmin_adminhtml_profile_index>
+                <observers><urapidflow><type>singleton</type><class>urapidflow/observer</class><method>adminhtml_version</method></urapidflow></observers>
+            </controller_action_layout_render_before_urapidflowadmin_adminhtml_profile_index>
+            <controller_action_predispatch>
+                <observers>
+                    <urapidflow>
+                        <type>singleton</type>
+                        <class>urapidflow/observer</class>
+                        <method>adminhtml_controller_action_predispatch</method>
+                    </urapidflow>
+                </observers>
+            </controller_action_predispatch>
+        </events>
+    </adminhtml>
+
+    <default>
+        <urapidflow>
+            <finetune>
+                <import_page_size>100</import_page_size>
+                <export_page_size>100</export_page_size>
+                <page_sleep_delay>0</page_sleep_delay>
+                <status_refresh_delay>3</status_refresh_delay>
+            </finetune>
+            <dirs>
+                <import_dir>{var}/urapidflow/import</import_dir>
+                <export_dir>{var}/urapidflow/export</export_dir>
+                <log_dir>{var}/urapidflow/log</log_dir>
+                <report_dir>{var}/urapidflow/report</report_dir>
+                <images_dir>images</images_dir>
+            </dirs>
+            <admin>
+                <notifications>1</notifications>
+            </admin>
+        </urapidflow>
+    </default>
+</config>

@@ -1,0 +1,257 @@
+===== 2.0.0.1 =====
+  * Added image cache flush to doReindexActions method
+  * Fixed a bug in rendering ftp settings.
+  * Fixed a bug in category prepare attributes, the bug omits any attributes that have frontend_input NULL
+===== 2.0.0.0 =====
+  * Added separate options to control ftp - 'Ftp File Mode', 'Ftp Passive Mode'
+  * Added "Configurable Parent Sku" column for export
+  * Added support for mutable attributes
+  * Added "Increment/Decrement Qty in Stock" import attribute for products data type
+  * changed escaping of cell data for excel export. Used htmlentities instead of htmlspecialchars
+  * fixed a bug with condition attribute. In 1.6 attribute table prefix is changed
+  * fixed workaround for mysql 5.5 for query that clears media table
+  * fixed a bug with empty default attribute value, such as special_price, being obligatory updated when importing on another store level and not performing the update on profile's store level
+===== 1.6.2.5 =====
+  * Added option to delete old images ("Delete old image") with optional usage check of file to delete
+    ("Skip usage check when delete old image")
+  * Fixed error when auto-creating categories in Magento development mode
+
+===== 1.6.2.3 =====
+  * Fixed scope problems for price attributes
+  * Fixed unique multiselect values during import to eliminate further magento indexer problems
+  * Fixed explode by ',' only multiselect attributes
+===== 1.6.2.0 =====
+  * Added new product stock fields introduced in Magento CE 1.4.1
+
+===== 1.6.1.1 =====
+  * Fixed safe inserts into product_website, category_product tables
+  * Fixed SQL error when import file has stock.<not_existing_column>
+
+===== 1.6.1.0 =====
+  * Fixed throwing error on missing remote image file
+  * Fixed reindexing inventory when 'Display Out of Stock Products' = No
+  * Fixed multiple const.value fields are merged in event argument arrays
+  * Fixed not updating successfully updated rows count in for some fields (product import)
+  * Added has_options and required_options to Product Import/Export
+
+===== 1.6.0.1 =====
+  * Fixed recognizing product attributes with source_model as dropdown attributes
+
+===== 1.6.0.0 =====
+  * Added compatibility with CE 1.5.0.1
+  * Added date formatting for import/export
+  * Added date formatting processor global option (strtotime, Zend_Date, date_parse_from_format)
+  * Added integration with EE AdminGws module (import limitation by allowed websites)
+  * Fixed setting default values for category.* columns
+  * Fixed merging associated categories when importing from multiple category.* columns
+  * Fixed updating categories children_count on auto-create
+
+===== 1.5.9.5 =====
+  * Fixed auto-creating multiple options and categories for the same field
+
+===== 1.5.9.4 =====
+  * Added auto_detect_line_endings=1 runtime configuration to handle Mac line endings
+
+===== 1.5.9.3 =====
+  * Fixed error on product.attribute_set for existing products, introduced in 1.5.9.2
+
+===== 1.5.9.2 =====
+  * Fixed intermittent SQL error when importing product.attribute_set
+
+===== 1.5.9.1 =====
+  * Fixed mapping the same column in import file to multiple attributes
+
+===== 1.5.9 =====
+  * Added validation of local image files, accounting for automatic dispertion path
+
+===== 1.5.8 =====
+  * Added mapping the same column in import file to multiple attributes
+  * Added support for upcoming Sales import/export add-on
+  * Fixed intermittent error on product update (product.type)
+
+===== 1.5.7 =====
+  * Added option to refresh catalog price rules after import
+
+===== 1.5.6.1 =====
+  * Fixed recognizing selection_sku column in CPBOS rows
+  * Fixed creating bundle products with "Fixed" price type
+
+===== 1.5.6 =====
+  * Fixed Product / Export / price.* fields for out of stock and disabled products.
+  * Fixed importing gallery images (duplicate records)
+
+===== 1.5.5 =====
+  * Fixed showing all attributes in export conditions, instead of only price rule ones.
+
+===== 1.5.4 =====
+  * Fixed product conditions for "Product Extra" data type
+  * Fixed backslashes in imported image filenames on Windows
+  * Fixed uRapidFlow configuration cache
+  * Remove product gallery image duplicates
+
+===== 1.5.3 =====
+  * Worked around a PDO bug on some PHP versions (5.2.0)
+  * Added websites filter in product export
+  * Added not exporting simple products that are using in configurable
+  * Added configuration to calculate configurable product qty as sum of its simple products
+  * Added special price columns: price.final, price.minimal, price.maximum
+    (This feature replaces previous configuration option [Use minimal/final price])
+  * Added const.function column to allow custom column logic (custom/model::customMethod)
+
+===== 1.5.2 =====
+  * Fixed handling missing default attribute values
+  * Added handling orphan dropdown attributes left from uninstalled extensions
+
+===== 1.5.1 =====
+  * Added exporting product.entity_id
+
+===== 1.5.0 =====
+  * Fixed issues with reindexing in CE 1.4.1.1
+
+===== 1.4.15 =====
+  * Added profile configuration to export internal values of product attributes
+
+===== 1.4.14 =====
+  * Fixed auto-creating categories with custom level delimiter
+  * Added option to skip out of stock products during export
+
+===== 1.4.13 =====
+  * Added configuration for handling illegal characters during encoding conversion
+
+===== 1.4.12 =====
+  * Added workaround for empty default value select boxes in Import Columns tab
+
+===== 1.4.11 =====
+  * Replaced configuration for saving attributes method with number of inserted records in a chunk.
+  * Fixed recognizing invalid attribute names
+
+===== 1.4.10 =====
+  * Added etc/adminhtml.xml for compatibility with CE 1.4.1.1 in some cases
+  * Added configuration for saving attributes method (Plain/PDOStatement) - required for large values (>10KB)
+
+===== 1.4.9 =====
+  * Added configuration to retain remote image subfolders during import
+
+===== 1.4.8.1 =====
+  * Fixed importing large text attribute values (>10K)
+  * Fixed handling file names as case sensitive
+
+===== 1.4.8 =====
+  * Fixed javascript for re-ordering columns and reindex tabs
+  * Added configuration to delete old category-product associations
+  * Added auto-incrementing new category-product associations positions
+  * Added auto-incrementing new category children positions
+
+===== 1.4.7 =====
+  * Fixed not requiring stock qty for parent products (configurable, grouped, bundle)
+  * Fixed slashes in uploaded image names for Windows servers
+  * Added real time reindex for only affected records
+
+===== 1.4.6.1 =====
+  * Fixed changing file encoding on export
+
+===== 1.4.6 =====
+  * Improved handling of multiple profile invocations in the same PHP script
+
+===== 1.4.5.1 =====
+  * Further improvements in performance and removing memory leaks (ioncube related)
+
+===== 1.4.5 =====
+  * Added category autocreation during product import
+
+===== 1.4.4 =====
+  * Added admin notifications for important updates
+
+===== 1.4.3 =====
+  * Added import option for action to take when source image file is missing
+  * Improvements of memory consumption and performance related to ionCube loaders
+
+===== 1.4.2 =====
+  * Fixed updating attribute set and product type for existing products
+  * Added compatibility fixes for EE 1.8.0.0 and CE 1.4.1.0
+
+===== 1.4.1 =====
+  * Fixed filtering export by attributes with multi-store values
+  * Fixed opening categories chooser in export conditions
+  * Fixed multiple const.value columns during export
+
+===== 1.4.0 =====
+  * Fixed ignoring empty files during product import
+  * Fixed intermittent error when associating categories with products
+  * Fixed filtering by category in export conditions
+  * Changed Excel report filename, removed "-report" part
+  * Added exported price processing (special price, catalog rules, tax, markup)
+
+===== 1.3.9.2 =====
+  * Fixed importing duplicate category association within the same product row
+  * Added activating stock status when import option is enabled and qty>0
+  * Added flag to disable interface elements to update profiles for embedded usage
+
+===== 1.3.9 =====
+  * Improved importing image files logic
+  * Fixed JS selecting correct default values in import/export columns interface
+  * Refactoring for easier customization
+
+===== 1.3.8 =====
+  * Fixed not running reindexing on dry run
+  * Fixed using default values during export
+  * Added option to export image URLs as https
+
+===== 1.3.7.1 =====
+  * Fixed showing dropdowns for hidden attributes in Import Columns tab
+
+===== 1.3.7 =====
+  * Considerably improved performance and memory consumption when only creation of new products is requested
+  * Added workaround for mysql 5.0.x bug, improving performance and memory consumption
+
+===== 1.3.6 =====
+  * Fixed product import error when attribute value records have null
+  * Fixed compatibility with extensions that override catalog/product incorrectly
+
+===== 1.3.5 =====
+  * Improved logic of mapping dropdown attribute values to internal IDs
+
+===== 1.3.2 =====
+  * Fixed importing compatibility with CE1.3.x
+  * Fixed importing empty numeric values bug, introduced in 1.3.1
+  * Fixed importing inventory stock flags in some specific cases
+
+===== 1.3.1 =====
+  * Fixed importing categories by name
+  * Added importing non-US locale numbers
+
+===== 1.3.0 =====
+  * Worked around ionCube memory leaks
+  * Improved performance for fixed row data types
+
+===== 1.2.3 =====
+  * Added category.ids column for direct association of products to category IDs of any store
+
+===== 1.2.2 =====
+  * Fixed overwriting existing attributes with default values
+  * Added using Magento default attribute values
+  * Added ability to update multiple attributes from the same column
+  * Added extension version in admin
+
+===== 1.2.1 =====
+  * Added all reindex types for Magento 1.3.x
+  * Added all cache refresh types
+  * Added ability to set sort order for reindex and cache refresh
+
+===== 1.2.0 =====
+  * Added full support for internationalization
+  * Fixed columns and status profile tabs for IE
+
+===== 1.1.1 =====
+  * Fixed setting default values for multiselect columns
+
+===== 1.1.0 =====
+  * Added choice of file encoding
+  * Added skipping empty rows in product/category import
+  * Added import/export of profile data
+  * Added all stock item fields
+  * Added option to enable downloading remote images
+  * Fixed populating product image gallery on import
+
+===== 1.0.0 =====
+  * Initial release

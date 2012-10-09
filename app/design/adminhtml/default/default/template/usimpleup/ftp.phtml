@@ -1,0 +1,23 @@
+<?php if (!Mage::getStoreConfig('usimpleup/ftp/active')): ?>
+    <ul class="messages"><li class="notice-msg"><ul><li>
+        <?php echo $this->__('If you have issues with file permissions during extensions installation, <a href="'.$this->getUrl('adminhtml/system_config/edit/section/usimpleup').'" target="_blank">try FTP connection</a>') ?>
+    </li></ul></li></ul>
+<?php endif ?>
+
+<?php /*if (Mage::getStoreConfig('usimpleup/ftp/active') && !Mage::getStoreConfig('usimpleup/ftp/password')): ?>
+    <ul class="messages"><li class="notice-msg"><ul><li>
+        <?php echo $this->__('You have indicated that you wish to update extension files using local FTP connection and ask for password every installation.<br/>FTP login information is used only to create local connection and will NOT be sent to any external location.') ?>
+    </li></ul></li></ul>
+
+    <fieldset class="fieldset">
+        <label for="ftp_password_source" class="f-left">
+            <?php echo Mage::helper('usimpleup')->__('FTP Password:')?>
+            <input class="input-text" type="password" id="ftp_password_source" name="ftp_password" style="width:200px" onchange="updateMassactionPassword(this)" />
+        </label>
+        <label for="show_password" class="f-left" style="margin-left:10px;">
+            <input type="checkbox" id="show_password" onclick="toggleShowPassword()"/>
+            <?php echo Mage::helper('usimpleup')->__('Show password') ?>
+        </label>
+    </fieldset>
+
+<?php endif*/ ?>
