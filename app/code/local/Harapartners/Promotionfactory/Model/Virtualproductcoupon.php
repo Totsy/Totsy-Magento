@@ -72,6 +72,7 @@ class Harapartners_Promotionfactory_Model_Virtualproductcoupon extends Mage_Core
                         $codeCoupon = str_replace($textDetail,'', $optionDataArray['value']);
                         $vpc = Mage::getModel('promotionfactory/virtualproductcoupon')->load($codeCoupon, 'code');
                         if($vpc->getId()){
+                            Mage::log('virtualproductcoupon Ressource' . $vpc->getResource(),null,'virtualDebug.log');
                             Mage::log('Coupon Id' . $vpc->getId(),null,'virtualDebug.log');
                             Mage::log('Order Id' . $order->getId(),null,'virtualDebug.log');
                             Mage::log('Order Increment Id' . $order->getIncrementId(), null,'virtualDebug.log');
