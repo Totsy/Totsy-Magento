@@ -77,9 +77,7 @@ class Harapartners_Promotionfactory_Model_Virtualproductcoupon extends Mage_Core
                             Mage::log('Order Id' . $order->getId(),null,'virtualDebug.log');
                             Mage::log('Order Increment Id' . $order->getIncrementId(), null,'virtualDebug.log');
                             Mage::log(print_r($vpc->getData(), true),null,'virtualDebug.log');
-                            $vpc->setData('status', Harapartners_Promotionfactory_Model_Virtualproductcoupon::COUPON_STATUS_PURCHASED)
-                                ->setData('order_id', $order->getId())
-                                ->setData('order_increment_id', $order->getIncrementId());
+                            $vpc->setData('status', Harapartners_Promotionfactory_Model_Virtualproductcoupon::COUPON_STATUS_PURCHASED);
                             Mage::log(print_r($vpc->getData(), true),null,'virtualDebug.log');
                             $vpc->save();
                             Mage::log(print_r($vpc->getData(), true),null,'virtualDebug.log');
