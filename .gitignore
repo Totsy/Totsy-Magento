@@ -1,6 +1,7 @@
 .idea/
 .htaccess*
 /favicon.ico
+app/Mage.php
 app/code/community/Find/
 app/code/community/Phoenix/
 app/code/core/

@@ -1,6 +1,25 @@
 Totsy-Magento Release Notes
 ===========================
 
+20121001
+--------
+
+* Hide Address saved with Credit Card
+* Hide address in my account if Credit Card has been deleted by Customer
+* MGN-763: Added 'Canceled' to the set of states of an order that will trigger fulfillment error log removal.
+* MGN-905: Falling back to the most recent available sort, when one for the current date is not available. Also using the Magento-configured time for retrieving the current sort.
+* MGN888 - if an address is linked with a credit card, block any deletion or edit
+* If an address is linked with a credit card, block any deletion or edit
+* fixing PHP warning for catalog preview
+* Added a script that reconciles orders in Processing Fulfillment with shipments at Dotcom.
+* Using secure URLs for the customertracking AJAX request URL only when the current page is secure. This prevents the browser from following cross-domain policy rules for the request.
+* MGN-382. caching issue for each page (Product page contains wrong event title)
+* MGN-1078 : Negative Value Error fix
+* MGN-1030 : Linkshare Integration Part I - order confirmation pixel and reporting
+* MGN-753. STEP1 define product taxation categories
+* MGN-911 : passing actual billing address to dotcom
+* MGN-872 : it turns out IE's incompatibility with the jquery function .remove() is what prevented the page from loading completely.  Switched out the function with the hide() function so expired events are still invisible and not disrupt other events
+
 20120926
 --------
 * Ensuring that AJAX requests for the customer tracking pixel are sent securely.

@@ -112,6 +112,7 @@ jQuery(document).ready(function(){
 var topCartContent;
 
 Event.observe(document,'dom:loaded',function() {
+    console.log("header phtml");
     new Ajax.Updater({ success:'header-user-info'}, '<?php echo $this->getUrl('customertracking/headermsg/ajax',array('_secure'=>Mage::app()->getStore()->isCurrentlySecure())); ?>', {method:'get',evalScripts: true});
 });
 </script>
