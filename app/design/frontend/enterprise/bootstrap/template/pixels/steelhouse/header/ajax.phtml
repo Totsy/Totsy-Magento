@@ -6,11 +6,12 @@ $_referring_url = "";
 $_productId = "";
 $_categoryId = "";
 
-//pass al products in sale (when we're on a sales page) 
-/*
-if(Mage::registry('current_sales_products')) {
-	$_sales_products = implode(",", Mage::registry('current_sales_products'));    
-} */
+$welcome_cookie = false;
+$cookie = Mage::app()->getCookie();
+$key = Harapartners_Customertracking_Helper_Data::COOKIE_CUSTOMER_WELCOME;
+
+//check if this is a new customer
+$welcome_cookie = $cookie->get($key);
 
 if(Mage::registry('current_product')) {
     $_product = Mage::registry('current_product');
@@ -26,9 +27,28 @@ if (Mage::registry('referring_url')) {
     $referring_url = Mage::registry('referring_url');
 }
 
+if($welcome_cookie!==false) {
+?>
+<script type="text/javascript">
+alert("test");
+(function(){"use strict";var steelhouse=null,shver='3.0.0',
+aid='9836',
+oid='',
+amt='',
+shocur='',
+shopid='',
+shoq='',
+shoup='',
+shadditional='';
+steelhouse={add:function(a,b,c,d){d=d||false;if(a.addEventListener){a.addEventListener(b,c,d);}else if(a.attachEvent){a.attachEvent("on"+b,c);}},load:function(){var a,b=document.createElement('script'),c=null,d=document.getElementsByTagName('script'),e=Number(d.length)-1,f=document.getElementsByTagName('script')[e];if(typeof a==='undefined'){a=Math.floor(Math.random()*100000000000000000);}c='px.steelhousemedia.com/st?conv=1'+'&shver='+shver+'&aid='+aid+'&oid='+oid+'&amt='+amt+'&shocur='+shocur+'&shopid='+shopid+'&shoq='+shoq+'&shoup='+shoup+'&cb='+a+
+shadditional;b.type='text/javascript';b.src=('https:'===document.location.protocol?'https://':'http://')+c;f.parentNode.insertBefore(b,f);}};steelhouse.load();}());
+</script>    
+<?php
+exit();
+}
+
 //check if not on the signup page or if this isn't the post-registration landing page, or the purchase success page 
-if (!($this->getRequest()->getActionName()=="create" && $this->getRequest()->getModuleName()=="customer")/* &&
-!($this->getRequest()->getActionName()=="welcome" && $this->getRequest()->getModuleName()=="customertracking")*/):
+if (!($this->getRequest()->getActionName()=="create" && $this->getRequest()->getModuleName()=="customer")):
 ?>
 <!-- Steelhouse purchase begin-->
 <div id="steelhouse_product_pixel"></div>

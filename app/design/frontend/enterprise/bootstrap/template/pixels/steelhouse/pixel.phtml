@@ -13,7 +13,7 @@ $product_ids = implode(",", $_cart->getProductIds());
 <?php if($_product && $_category): ?>
     var shpn= encodeURIComponent('<?php echo addslashes($_product->getName()) ?>');
     var shpc= encodeURIComponent('<?php echo addslashes(strip_tags(html_entity_decode(str_replace(array("\r", "\n"), '', $_product->getDescription())))) ?>');
-    var shpp= encodeURIComponent('<?php echo number_format($_product->getPrice(), 2) ?>');
+    var shpp= encodeURIComponent('<?php echo number_format($_product->getSpecialPrice(), 2) ?>');
     var shpb= encodeURIComponent('<?php echo addslashes($_product->getCategory()->name); ?>');
     var shpi= encodeURIComponent('<?php echo $_product->getProductUrl() ?>');
     var shps= encodeURIComponent('<?php echo $_product->getSku() ?>');
