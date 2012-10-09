@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Unirgy_SimpleLicense>
+            <active>true</active>
+            <codePool>community</codePool>
+            <depends>
+                <Unirgy_SimpleUp/>
+            </depends>
+<!--
+            <scaffold code="usimplelic" output="true">
+                <tables>
+                    <license table="usimplelic_license"/>
+                </tables>
+                <adminhtml>
+                    <controllers/>
+                    <observers>
+                        <usimpleup_license_manager_html/>
+                    </observers>
+                </adminhtml>
+                <observers>
+                </observers>
+            </scaffold>
+-->
+        </Unirgy_SimpleLicense>
+    </modules>
+</config>
