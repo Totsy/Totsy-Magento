@@ -47,7 +47,7 @@ class Harapartners_Affiliate_RegisterController extends Mage_Core_Controller_Fro
                 ? json_decode($affiliateInfo['registration_param'], true)
                 : array();
 
-            $regParams = array_merge($regParams, $request->getParams());
+            $regParams = array_merge($regParams, $request->getParams(), $request->getCookie());
             $affiliateInfo['registration_param'] = json_encode($regParams);
 
             //Additional logic: specific landing page after registration, background image can also be prepared here!
@@ -55,6 +55,7 @@ class Harapartners_Affiliate_RegisterController extends Mage_Core_Controller_Fro
             $keyword = $request->getParam('keyword');
             $keywordCookieName = Mage::helper('affiliate')->getKeywordCookieName();
             Mage::getModel('core/cookie')->set($keywordCookieName, $keyword, 3600);
+            Mage::getModel('core/cookie')->set('affiliate', $affiliateInfo, 108000);
             //Harapartners, yang: end
             
             $session->setData('affiliate_id', $affiliate->getId());

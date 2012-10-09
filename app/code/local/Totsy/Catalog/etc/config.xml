@@ -10,7 +10,7 @@
 <config>
     <modules>
         <Totsy_Catalog>
-            <version>0.1.1</version>
+            <version>0.1.2</version>
         </Totsy_Catalog>
     </modules>
     <global>
@@ -21,6 +21,13 @@
                 </rewrite>
             </catalog>
         </helpers>
+        <models>
+            <catalog>
+                <rewrite>
+                    <product_attribute_source_tax>Totsy_Catalog_Model_Product_Attribute_Source_Tax</product_attribute_source_tax>
+                </rewrite>
+            </catalog>
+        </models>
         <resources>
             <totsycatalog_setup>
                 <setup>

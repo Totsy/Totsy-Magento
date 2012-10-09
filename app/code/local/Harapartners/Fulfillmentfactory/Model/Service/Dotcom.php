@@ -302,26 +302,31 @@ XML;
             if ($value = $product->getVendorCode()) {
                 $value = Mage::helper('fulfillmentfactory')->removeBadCharacters($value);
                 $value = substr($value, 0, 10);
+                $value = htmlentities($value);
                 $vendorCode = '<manufacturing-code>' . $value . '</manufacturing-code>';
             }
 
             $style = '<style-number xsi:nil="true" />';
             if ($value = $product->getVendorStyle()) {
+                $value = htmlentities($value);
                 $style = '<style-number>' . substr($value, 0, 10) . '</style-number>';
             }
 
             $color = '<color xsi:nil="true" />';
             if ($value = $product->getAttributeText('color')) {
+                $value = htmlentities($value);
                 $color = '<color>' . substr($value, 0, 5) . '</color>';
             }
 
             $size = '<size xsi:nil="true" />';
             if ($value = $product->getAttributeText('size')) {
+                $value = htmlentities($value);
                 $size = '<size>' . substr($value, 0, 5) . '</size>';
             }
 
             $upc = '<upc xsi:nil="true" />';
             if ($value = $product->getUpc()) {
+                $value = htmlentities($value);
                 $upc = "<upc>$value</upc>"; // no need to limit string length here
             }
 
@@ -441,6 +446,8 @@ XML;
 
             $orderDate = date("Y-m-d", strtotime($order->getCreatedAt()));
             $shippingMethod = Mage::helper('fulfillmentfactory/dotcom')->getDotcomShippingMethod($order->getShippingMethod());
+            
+            //handling shipping address
             $shippingAddress = $order->getShippingAddress();
 
             //to avoid null object
@@ -458,6 +465,25 @@ XML;
             $city = Mage::helper('fulfillmentfactory')->validateAddressForDC('CITY', $shippingAddress->getCity());
 
             $country = Mage::helper('fulfillmentfactory/dotcom')->getCountryCodeUsTerritories($state);
+
+            //handling billing address
+             $billingAddress = $order->getBillingAddress();
+
+             if(empty($billingAddress)) {
+                $billingAddress = Mage::getModel('sales/order_address');
+             }
+
+            $billingAddress = substr($billingAddress, 0, 30);
+            $billingName = $billingAddress->getFirstname() . ' ' . $billingAddress->getLastname();
+            $billingName = substr($billingName, 0, 30);
+
+            $billing_state = Mage::helper('fulfillmentfactory')->getStateCodeByFullName($billingAddress->getRegion(), $billingAddress->getCountry());
+
+            $billing_city = Mage::helper('fulfillmentfactory')->validateAddressForDC('CITY', $billingAddress->getCity());
+            $billing_city = substr($billing_city, 0, 20);
+
+            $billing_country = Mage::helper('fulfillmentfactory/dotcom')->getCountryCodeUsTerritories($billing_state);
+
 
             $xml = <<<XML
         <orders xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
@@ -500,32 +526,32 @@ XML;
                 <pool xsi:nil="true"/>
                 <billing-information>
                     <billing-customer-number xsi:nil="true"/>
-                    <billing-name><![CDATA[{$shippingName}]]></billing-name>
+                    <billing-name><![CDATA[{$billingName}]]></billing-name>
                     <billing-company xsi:nil="true"/>
-                    <billing-address1><![CDATA[{$shippingAddress->getStreet(1)}]]></billing-address1>
-                    <billing-address2><![CDATA[{$shippingAddress->getStreet(2)}]]></billing-address2>
+                    <billing-address1><![CDATA[{$billingAddress->getStreet(1)}]]></billing-address1>
+                    <billing-address2><![CDATA[{$billingAddress->getStreet(2)}]]></billing-address2>
                     <billing-address3 xsi:nil="true"/>
-                    <billing-city><![CDATA[$city]]></billing-city>
-                    <billing-state>{$state}</billing-state>
-                    <billing-zip>{$shippingAddress->getPostcode()}</billing-zip>
-                    <billing-country>{$country}</billing-country>
+                    <billing-city><![CDATA[$billing_city]]></billing-city>
+                    <billing-state>{$billing_state}</billing-state>
+                    <billing-zip>{$billingAddress->getPostcode()}</billing-zip>
+                    <billing-country>{$billing_country}</billing-country>
                     <billing-phone xsi:nil="true"/>
                     <billing-email>{$customer->getEmail()}</billing-email>
                 </billing-information>
                 <shipping-information>
                     <shipping-customer-number xsi:nil="true"/>
-                    <shipping-name xsi:nil="true"/>
+                    <shipping-name><![CDATA[{$shippingName}]]></shipping-name>
                     <shipping-company xsi:nil="true"/>
-                    <shipping-address1 xsi:nil="true"/>
-                    <shipping-address2 xsi:nil="true"/>
+                    <shipping-address1><![CDATA[{$shippingAddress->getStreet(1)}]]></shipping-address1>
+                    <shipping-address2><![CDATA[{$shippingAddress->getStreet(2)}]]></shipping-address2>
                     <shipping-address3 xsi:nil="true"/>
-                    <shipping-city xsi:nil="true"/>
-                    <shipping-state xsi:nil="true"/>
-                    <shipping-zip xsi:nil="true"/>
-                    <shipping-country xsi:nil="true"/>
+                    <shipping-city><![CDATA[$city]]></shipping-city>
+                    <shipping-state><![CDATA[$state]]></shipping-state>
+                    <shipping-zip>{$shippingAddress->getPostcode()}</shipping-zip>
+                    <shipping-country >{$country}</shipping-country>
                     <shipping-iso-country-code xsi:nil="true"/>
                     <shipping-phone xsi:nil="true"/>
-                    <shipping-email xsi:nil="true"/>
+                    <shipping-email>{$customer->getEmail()}</shipping-email>
                 </shipping-information>
                 <store-information>
                     <store-name xsi:nil="true"/>
