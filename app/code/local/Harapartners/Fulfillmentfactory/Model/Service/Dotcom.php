@@ -588,7 +588,7 @@ XML;
                         <sku>$sku</sku>
                         <quantity>$quantity</quantity>
                         <price>{$item->getPrice()}</price>
-                        <tax>{$item->getTaxAmount()}</tax>
+                        <tax>$taxAmount</tax>
                         <shipping-handling>0</shipping-handling>
                         <client-item xsi:nil="true"/>
                         <line-number xsi:nil="true"/>
