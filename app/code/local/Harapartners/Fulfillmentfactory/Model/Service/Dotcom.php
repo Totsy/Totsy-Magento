@@ -586,13 +586,17 @@ XML;
                 $sku = substr($item->getSku(), 0, 17);
 
                 if($quantity) {
+                    $taxAmount = $item->getTaxAmount();
+                    if (!$taxAmount) {
+                        $taxAmount = '0';
+                    }
 
                     $xml .= <<<XML
                     <line-item>
                         <sku>$sku</sku>
                         <quantity>$quantity</quantity>
                         <price>{$item->getPrice()}</price>
-                        <tax>{$item->getTaxAmount()}</tax>
+                        <tax>$taxAmount</tax>
                         <shipping-handling>0</shipping-handling>
                         <client-item xsi:nil="true"/>
                         <line-number xsi:nil="true"/>

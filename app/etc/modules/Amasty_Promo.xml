@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Amasty_Promo>
+            <active>true</active>
+            <codePool>local</codePool>
+			<platform>ee</platform>
+        </Amasty_Promo>
+    </modules>
+</config>

@@ -1,0 +1,40 @@
+<div class="columns">
+    <div class="side-col" id="page:left">
+        <?php echo $this->getLayout()->createBlock('usimpleup/adminhtml_module_tabs')->toHtml() ?>
+    </div>
+    <div class="main-col" id="content">
+        <div class="main-col-inner">
+            <div id="messages"></div>
+            <div class="content-header">
+                <h3 class="icon-head head-adminhtml-modules"><?php echo $this->__('Unirgy Installer') ?></h3>
+            </div>
+            <div class="entry-edit">
+                <form id="edit_form" enctype="multipart/form-data" method="post" action="<?php echo $this->getUrl('usimpleupadmin/adminhtml_module/post')?>">
+                    <div><input type="hidden" value="<?php echo $this->getFormKey() ?>" name="form_key"/></div>
+
+                    <?php echo $this->getLayout()->createBlock('adminhtml/template')->setTemplate('usimpleup/ftp.phtml')->toHtml() ?>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    function updateMassactionPassword(source) {
+        var formInput = $$('#modulesGrid_massaction-form #ftp_password');
+        if (formInput.length==0) {
+            formInput = document.createElement('input');
+            formInput.type = 'hidden';
+            formInput.id = 'ftp_password';
+            formInput.name = 'ftp_password';
+            $$('#modulesGrid_massaction-form div')[0].appendChild(formInput);
+        } else {
+            formInput = formInput[0];
+        }
+        formInput.value = source.value;
+    }
+
+    function toggleShowPassword() {
+        $('ftp_password_source').type = $('ftp_password_source').type=='text' ? 'password' : 'text';
+    }
+</script>
