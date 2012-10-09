@@ -578,6 +578,10 @@ XML;
                 $sku = substr($item->getSku(), 0, 17);
 
                 if($quantity) {
+                    $taxAmount = $item->getTaxAmount();
+                    if (!$taxAmount) {
+                        $taxAmount = '0';
+                    }
 
                     $xml .= <<<XML
                     <line-item>
