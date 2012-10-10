@@ -32,10 +32,11 @@ class Harapartners_Service_Model_Rewrite_Catalog_Product extends Mage_Catalog_Mo
     //Product out of the live event is NOT salable
     public function isSalable()
     {
-        return Mage::registry('current_category') ||
+        return (
+            Mage::registry('current_category') ||
             (false !== $this->getLiveCategory()) ||
-            $this->getPromoRule() ||
-            parent::isSalable();
+            (null !== $this->getPromoRule())
+        ) && parent::isSalable();
     }
 
     public function cleanCache()
