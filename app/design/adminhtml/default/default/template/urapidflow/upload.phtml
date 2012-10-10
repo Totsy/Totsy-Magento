@@ -1,0 +1,52 @@
+<ul class="messages"><li class="notice-msg"><ul><li>
+<?php echo $this->__("This upload tab is currently only a simple tool for uploading small files to the import folder.")?><br/>
+<?php echo $this->__("It will not show existing files in the import folder, only ones you've recently uploaded.")?><br/>
+<?php echo $this->__("Future versions will expand functionality of this tool.")?>
+</li></ul></li></ul>
+
+<div class="grid">
+<table cellspacing="0" class="data border" id="upload-grid" width="100%">
+    <thead>
+        <tr class="headings">
+            <th><?php echo Mage::helper('catalog')->__('File') ?></th>
+        </tr>
+    </thead>
+    <tbody id="upload-container">
+
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="100" class="last" style="padding:8px">
+                <?php echo $this->getUploaderHtml() ?>
+            </td>
+        </tr>
+    </tfoot>
+</table>
+</div>
+<script type="text/javascript">
+//<![CDATA[
+
+<?php echo $this->getUploader()->getJsObjectName() ?>.onFilesComplete = function (files) {
+    $('upload-container').innerHTML = '';
+    files.each(function(item) {
+       if (!item.response.isJSON()) {
+            try {
+                console.log(item.response);
+            } catch (e2) {
+                alert(item.response);
+            }
+           return;
+       }
+       var response = item.response.evalJSON();
+       if (response.error || !response.file) {
+           return;
+       }
+       addUploadedFile(response.file);
+    });
+}
+
+function addUploadedFile(file) {
+    $('upload-container').insert('<tr><td>'+file+'</td></tr>');
+}
+//]]>
+</script>

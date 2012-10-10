@@ -12,50 +12,68 @@
  * 
  */
 
-class Harapartners_Service_Model_Rewrite_Catalog_Category extends Mage_Catalog_Model_Category {
-    
-    //Harapartners, Jun, Event and Top Event are immutable for Totsy logic
-    
-    public function move($parentId, $afterCategoryId, $reIndex = false){
-    	$this->_totsyReserveAnchorCategoryCheck();
-    	//Moving categories will trigger url re-index, which is very slow for large categories, ignore by default
-    	if(!$reIndex){
-    		Mage::getSingleton('index/indexer')->lockIndexer();
-    	}
-    	return parent::move($parentId, $afterCategoryId);
-    	
+class Harapartners_Service_Model_Rewrite_Catalog_Category
+    extends Mage_Catalog_Model_Category
+{
+    /**
+     * Harapartners, Jun, Event and Top Event are immutable for Totsy logic
+     *
+     * @param int  $parentId
+     * @param int  $afterCategoryId
+     * @param bool $reIndex
+     *
+     * @return Mage_Catalog_Model_Category
+     */
+    public function move($parentId, $afterCategoryId, $reIndex = false)
+    {
+        $this->_totsyReserveAnchorCategoryCheck($parentId);
+
+        // Moving categories will trigger url re-index, which is very slow for
+        // large categories, ignore by default
+        if (!$reIndex) {
+            Mage::getSingleton('index/indexer')->lockIndexer();
+        }
+
+        return parent::move($parentId, $afterCategoryId);
     }
-    
-    protected function _beforeSave() {
+
+    protected function _beforeSave()
+    {
         $this->_totsyReserveAnchorCategoryCheck();
         return parent::_beforeSave();
     }
-    
-    protected function _beforeDelete() {
-    	$this->_totsyReserveAnchorCategoryCheck();
+
+    protected function _beforeDelete()
+    {
+        $this->_totsyReserveAnchorCategoryCheck();
         return parent::_beforeDelete();
     }
-    
-    protected function _totsyReserveAnchorCategoryCheck(){
-        if($this->getData('name') == Harapartners_Categoryevent_Model_Sortentry::EVENT_CATEGORY_NAME 
-                || $this->getOrigData('name') == Harapartners_Categoryevent_Model_Sortentry::EVENT_CATEGORY_NAME 
-        ){
-            Mage::throwException('"' . Harapartners_Categoryevent_Model_Sortentry::EVENT_CATEGORY_NAME . '" is a reserved anchor category. Please contact system admin if you need to make low level modifications.');
+
+    protected function _totsyReserveAnchorCategoryCheck($parentId = null)
+    {
+        if ($this->getData('name') == Harapartners_Categoryevent_Model_Sortentry::EVENT_CATEGORY_NAME ||
+            $this->getOrigData('name') == Harapartners_Categoryevent_Model_Sortentry::EVENT_CATEGORY_NAME ||
+            $this->getData('name') == Harapartners_Categoryevent_Model_Sortentry::TOP_EVENT_CATEGORY_NAME ||
+            $this->getOrigData('name') == Harapartners_Categoryevent_Model_Sortentry::TOP_EVENT_CATEGORY_NAME
+        ) {
+            Mage::throwException('This event is a fixed/reserve event that cannot be modified.');
         }
-        
-        if($this->getData('name') == Harapartners_Categoryevent_Model_Sortentry::TOP_EVENT_CATEGORY_NAME 
-                || $this->getOrigData('name') == Harapartners_Categoryevent_Model_Sortentry::TOP_EVENT_CATEGORY_NAME
-        ){
-            Mage::throwException('"' . Harapartners_Categoryevent_Model_Sortentry::TOP_EVENT_CATEGORY_NAME . '" is a reserved anchor category. Please contact system admin if you need to make low level modifications.');
+
+        if (null != $parentId) {
+            $eventCategory = Mage::getModel('catalog/category')->getCollection()
+                ->addAttributeToFilter('name', Harapartners_Categoryevent_Model_Sortentry::EVENT_CATEGORY_NAME)
+                ->getFirstItem();
+
+            $expiredEventCategory = Mage::getModel('catalog/category')->getCollection()
+                ->addAttributeToFilter('name', Harapartners_Categoryevent_Model_Sortentry::EVENT_EXPIRED_CATEGORY_NAME)
+                ->getFirstItem();
+
+            if ($parentId != $eventCategory->getId() && $parentId != $expiredEventCategory->getId()) {
+                Mage::throwException('Events can only be moved into the fixed/reserve events (Live and Expired)');
+            }
         }
-        
-        if((!!$this->getData('level') && $this->getData('level') <= 1) 
-                || (!!$this->getData('level') && $this->getOrigData('level') <= 1)
-        ){
-            Mage::throwException('Root level categories are protected. Please contact system admin if you need to make low level modifications.');
-        }
-        
+
         return $this;
     }
-    
+
 }

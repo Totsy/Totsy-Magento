@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<layout>
+    <crownimport_adminhtml_import_index>
+        <reference name="content">
+            <block type="crownimport/adminhtml_import" name="crownimport" />
+        </reference>
+    </crownimport_adminhtml_import_index>
+    <crownimport_adminhtml_import_edit>
+        <reference name="head">
+            <action method="addCss"><name>urapidflow.css</name></action>
+            <action method="addItem"><type>skin_js</type><name>urapidflow.js</name></action>
+        </reference>
+    </crownimport_adminhtml_import_edit>
+</layout>

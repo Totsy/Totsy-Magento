@@ -45,18 +45,17 @@ class Harapartners_Service_Helper_Rewrite_Catalog_Product
         }
 
         // Each product must have a category/event
-        $categoryId = $params->getCategoryId();
-        if (!$categoryId) {
-            $categoryEventId = $this->getLiveCategoryIdFromCategoryEventSort($product);
+        $category = $product->getLiveCategory();
+        if ($category && $categoryEventId = $category->getId()) {
             if ($product->canBeShowInCategory($categoryEventId)) {
                 $categoryId = $categoryEventId;
+            } else {
+                return false;
             }
-        }
-
-        if (!$categoryId) {
+        } else {
             return false;
         }
-        
+
         $category = Mage::getModel('catalog/category')->load($categoryId);
         $product->setCategory($category);
         Mage::register('current_category', $category);
@@ -77,27 +76,5 @@ class Harapartners_Service_Helper_Rewrite_Catalog_Product
             return false;
         }
         return $product;
-    }
-
-    /**
-     * Search for the latest matching live event.
-     *
-     * @param $product
-     * @return null|int
-     */
-    public function getLiveCategoryIdFromCategoryEventSort($product)
-    {
-        $categoryIds = $product->getCategoryIds();
-        $sortentry = Mage::getModel('categoryevent/sortentry')->loadCurrent();
-        $liveEvents = json_decode($sortentry->getLiveQueue(), true);
-        foreach ($liveEvents as $event){
-            if (isset($event['entity_id']) &&
-                in_array($event['entity_id'], $categoryIds)
-            ) {
-                return $event['entity_id'];
-            }
-        }
-
-        return null;
     }
 }

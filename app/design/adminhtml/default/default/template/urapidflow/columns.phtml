@@ -1,0 +1,269 @@
+<?php
+#var_dump($this->getColumnsOptions()); exit;
+$_isExport = $this->getProfile()->getProfileType()=='export';
+$_fields = $this->getColumnsFields();
+?>
+<div class="entry-edit-head">
+    <h4 class="icon-head head-edit-form fieldset-legend">Columns</h4>
+</div>
+
+<style type="text/css">
+#columns-container .even td { background:#EEE !important; }
+#columns-new-options { height:250px; }
+#columns-new-options option.required { color:#A00; }
+.sortable-handle { float:left; cursor:pointer; height:16px; padding-left:12px;
+    font-weight:bold; text-align:right;
+    background:url('<?php echo $this->getSkinUrl('images/arrow_sort_move.gif')?>') no-repeat 0 50%; }
+</style>
+
+<fieldset>
+<?php if (!$_isExport): ?>
+<ul class="messages"><li class="notice-msg"><ul><li>
+For IMPORT profiles the 'Columns' section is optional, as the field information will be taken from header row in the file.<br/>
+Add only fields that need a special Alias, Default Value or Format.<br/>
+Order of columns is irrelevant and was implemented only for convenience.
+</li></ul></li></ul>
+<?php endif ?>
+
+<div class="grid tier form-list">
+    <table id="columns-table" class="border" cellspacing="0" cellpadding="0">
+        <thead>
+            <tr class="headings">
+                <th class="type-title" style="width:10px"><?php echo $_isExport ? '#' : '&nbsp;' ?></th>
+                <th class="type-title"><?php echo $this->__('Field Source') ?></th>
+                <th class="type-title"><?php echo $this->__('Title Alias') ?></th>
+                <th class="type-title"><?php echo $this->__('Default Value') ?></th>
+                <th class="type-title"><?php echo $this->__('Format') ?></th>
+                <th class="type-title">&nbsp;</th>
+            </tr>
+        </thead>
+        <tbody id="columns-container">
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="20">
+                    <button class="add add-select-row f-right" type="button" onclick="addColumns()"><span><?php echo $this->__('Add New Columns') ?></span></button>
+                    <select id="columns-new-options" multiple="multiple" class="validate-urapidflow-columns" ondblclick="addColumns()"></select>
+                    <p><?php echo $this->__('* Columns in red are required, unless all the imported entities are not new')?></p>
+                    <p><input type="checkbox" id="_allow_mutable_attributes" accept="" <?php if ($this->getProfile()->getData('options/export/allow_mutable_attributes')):?> checked="checked"<?php endif?> onclick="$('allow_mutable_attributes').value=1*(this.checked)" /> <strong><label for="_allow_mutable_attributes"><?php echo $this->__('Allow mutable attributes (same alias for different attributes). In that case first non-empty attribute value will be used')?></label></strong></p>
+                    <input type="hidden" id="allow_mutable_attributes" name="options[export][allow_mutable_attributes]" value="<?php echo $this->getProfile()->getData('options/export/allow_mutable_attributes')?>" />
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+</fieldset>
+
+<script type="text/javascript">
+var columnsFields = <?php echo Zend_Json::encode($_fields) ?>;
+var isExport = <?php echo $_isExport ? 'true' : 'false' ?>;
+var requiredField = <?php $_dt = $this->getProfile()->getDataType(); echo $_dt=='catalog_product' ? '"sku"' : ($_dt=='catalog_category' ? '"url_path"' : 'false') ?>;
+
+fillColumnsLines();
+fillColumnsFieldsSelect('columns-new-options');
+
+var sortColumns = new UnirgySortable({container:'columns-container', tag:'tr', ondrop:redecorateColumnsTable});
+
+function fillColumnsLines() {
+    var columns = <?php echo Zend_Json::encode($this->getColumns()) ?>;
+    for (var i=0; i<columns.length; i++) {
+        addColumnLine(columns[i]);
+    }
+    redecorateColumnsTable();
+}
+
+function fillColumnsFieldsSelect(select) {
+    var i, j, label, html = '', optgroup, opt;
+    select = $(select);
+    for (i in columnsFields) {
+        optgroup = document.createElement('optgroup');
+        optgroup.label = columnsFields[i].label;
+        select.appendChild(optgroup);
+        for (j in columnsFields[i].fields) {
+            label = columnsFields[i].fields[j].frontend_label || j;
+            opt = document.createElement('option');
+            opt.value = j;
+            if (columnsFields[i].fields[j].is_required==1) {
+                opt.className = 'required';
+            }
+            opt.innerHTML = label.escapeHTML()+' ['+j+']';
+            optgroup.appendChild(opt);
+        }
+    }
+}
+
+function updatePrevHidden(select) {
+    var selected = [];
+    for (i=0; i<select.options.length; i++) {
+        if (select.options[i].selected) {
+            selected.push(select.options[i].value);
+        }
+    }
+    $(select).previous().value = selected.join(',');
+}
+
+function addColumns() {
+    $$('#columns-new-options option').each(function(el) {
+        if (el.selected) {
+            addColumnLine(el.value);
+            el.selected = false;
+        }
+    });
+    redecorateColumnsTable();
+}
+
+function addColumnLine(field, skipRedecorate) {
+    var k = typeof field=='string' ? field : field.field, f = {};
+    if (!k) return;
+    if (k.match(/\./)) {
+        f = columnsFields[k.split('.')[0]].fields[k] || {};
+    } else if (columnsFields['attributes'].fields[k]) {
+        f = columnsFields['attributes'].fields[k];
+    } else if (columnsFields['hidden'].fields[k]) {
+        f = columnsFields['hidden'].fields[k];
+    }
+    f.attribute_code = f.attribute_code || k;
+    var td, tds = '', i, j, def, label = f.frontend_label || k, v;
+
+    tds += '<td><div class="sortable-handle" onmousedown="sortColumns.drag(event, this)" onselectstart="return false"></div></td>';
+    tds += '<td><input type="hidden" name="columns_post[field][]" value="'+k+'" />'+label.escapeHTML()+' ['+k+']</td>';
+
+    tds += '<td><input type="text" name="columns_post[alias][]" class="input-text" value="'+(field.alias || k)+'" style="width:130px" title="<?php echo $this->__('Title Alias') ?>"/></td>';
+
+    def = field['default'] || '';
+    if (f.attribute_code.match(/^category\./) || f.frontend_input=='textarea') {
+        tds += '<td><input type="hidden" name="columns_post[default_multiselect][]" value="1"><textarea name="columns_post[default][]" style="width:100%; height:50px" title="<?php echo $this->__('Default Value') ?>">'+def.escapeHTML()+'</textarea></td>';
+    } else if (f.frontend_input=='select' || f.frontend_input=='multiselect') {
+        if (f.frontend_input=='multiselect') {
+            v = def instanceof Array ? def.join(',') : def;
+            tds += '<td><input type="hidden" name="columns_post[default_multiselect][]" value="1"><input type="hidden" name="columns_post[default][]" value="'+v.escapeHTML()+'"/><select multiple="multiple" style="width:100%" size="8" title="<?php echo $this->__('Default Value') ?>" onchange="updatePrevHidden(this)">';
+        } else {
+            if (f.options.length==0) {
+                tds += '<td><input type="hidden" name="columns_post[default_multiselect][]" value=""><input type="hidden" name="columns_post[default][]" value=""><select style="width:100%" title="<?php echo $this->__('Default Value') ?>">';
+            } else {
+                tds += '<td><input type="hidden" name="columns_post[default_multiselect][]" value=""><select name="columns_post[default][]" style="width:100%" title="<?php echo $this->__('Default Value') ?>">';
+            }
+        }
+        var defArr = def instanceof Array ? def : def.split(',');
+        for (i in f.options) {
+            if (typeof f.options[i] == 'object') {
+                tds += '<optgroup label="'+i+'">';
+                for (j in f.options[i]) {
+                    v = j.replace(/ $/,'');
+                    tds += '<option value="'+v+'"'+(defArr.indexOf(v)!=-1?' selected="selected"':'')+'>'+f.options[i][j].escapeHTML()+'</option>';
+                }
+                tds += '</optgroup>';
+            } else {
+                v = i.replace(/ $/,'');
+                tds += '<option value="'+v+'"'+(defArr.indexOf(v)!=-1?' selected="selected"':'')+'>'+f.options[i].escapeHTML()+'</option>';
+            }
+        }
+        tds += '</select></td>';
+    } else {
+        tds += '<td><input type="hidden" name="columns_post[default_multiselect][]" value=""><input type="text" name="columns_post[default][]" class="input-text" value="'+def.escapeHTML()+'" style="width:95%" title="<?php echo $this->__('Default Value') ?>"/></td>';
+    }
+
+    if (isExport && (f.frontend_input=='media_image' || f.attribute_code=='url_path')) {
+        tds += '<td><select name="columns_post[format][]" style="width:100px" title="<?php echo $this->__('Format') ?>">';
+        tds += '<option value=""'+(!field.format?' selected="selected"':'')+'><?php echo $this->__('Raw Value') ?></option>';
+        tds += '<option value="url"'+(field.format=='url'?' selected="selected"':'')+'><?php echo $this->__('URL') ?></option>';
+        tds += '</select><input type="hidden" name="columns_post[separator][]" value=""><input type="hidden" name="columns_post[delimiter][]" value=""></td>';
+    } else if (isExport && f.attribute_code=='product.configurable_parent_sku') {
+        tds += '<td><span style="width: 120px"><?php echo $this->__('Output') ?>:</span> <select name="columns_post[format][]" style="width:150px" title="<?php echo $this->__('Format') ?>">';
+        tds += '<option value=""'+(!field.format?' selected="selected"':'')+'><?php echo $this->__('Join If Multiple Parents') ?></option>';
+        tds += '<option value="url"'+(field.format=='single'?' selected="selected"':'')+'><?php echo $this->__('First Found Parent') ?></option>';
+        tds += '</select><input type="hidden" name="columns_post[delimiter][]" value=""><br/>';
+        var separator = field.separator || ';';
+        tds += '<span style="width: 120px"><?php echo $this->__('Separator') ?>:</span> <input type="text" name="columns_post[separator][]" class="input-text" value="'+separator.escapeHTML()+'" style="width:15px" title="<?php echo $this->__('Separator') ?>"/></td>';
+    } else if (isExport && f.backend_type=='decimal') {
+        var format = field.format || '%.4f';
+        tds += '<td><input type="text" name="columns_post[format][]" class="input-text" value="'+format.escapeHTML()+'" style="width:50px" title="<?php echo $this->__('Format') ?>"/><input type="hidden" name="columns_post[separator][]" value=""><input type="hidden" name="columns_post[delimiter][]" value=""></td>';
+    } else if (f.backend_type=='datetime') {
+        var format = field.format || '<?php echo $this->getProfile()->getDefaultDatetimeFormat()?>';
+        tds += '<td><input type="text" name="columns_post[format][]" class="input-text" value="'+format.escapeHTML()+'" style="width:150px" title="<?php echo $this->__('Format') ?>"/><input type="hidden" name="columns_post[separator][]" value=""><input type="hidden" name="columns_post[delimiter][]" value=""></td>';
+    } else if (f.frontend_input=='multiselect') {
+        var separator = field.separator || ';';
+        tds += '<td class="a-right nowrap"><input type="hidden" name="columns_post[format][]" value=""><?php echo $this->__('Separator') ?>: <input type="text" name="columns_post[separator][]" class="input-text" value="'+separator.escapeHTML()+'" style="width:15px" title="<?php echo $this->__('Separator') ?>"/>';
+        if (f.attribute_code=='category.name') {
+            var delimiter = field.delimiter || '>';
+            tds += '<br/><?php echo $this->__('Levels') ?>: <input type="text" name="columns_post[delimiter][]" class="input-text" value="'+delimiter.escapeHTML()+'" style="width:15px" title="<?php echo $this->__('Levels') ?>"/>';
+        } else {
+            tds += '<input type="hidden" name="columns_post[delimiter][]" value="">';
+        }
+        tds += '</td>';
+    } else {
+        tds += '<td><input type="hidden" name="columns_post[format][]" value=""><input type="hidden" name="columns_post[separator][]" value=""><input type="hidden" name="columns_post[delimiter][]" value="">&nbsp;</td>';
+    }
+
+    tds += '<td><button class="delete delete-select-row icon-btn" type="button" onclick="deleteColumnLine(this)"><span><?php echo $this->__('Delete Column') ?></span></button></td>';
+    $('columns-container').insert('<tr>'+tds+'</tr>');
+}
+
+function deleteColumnLine(button) {
+    $(button.parentNode.parentNode).remove();
+    redecorateColumnsTable();
+}
+
+function redecorateColumnsTable()
+{
+    $$('#columns-container tr').each(function(tr) {
+        tr.removeClassName('odd');
+        tr.removeClassName('even');
+        tr.removeClassName('first');
+        tr.removeClassName('last');
+    });
+<?php if ($_isExport): ?>
+    var colNum = 0;
+    $$('#columns-container .sortable-handle').each(function(el) {
+        el.innerHTML = ++colNum;
+    });
+<?php endif ?>
+    decorateTable('columns-table');
+}
+
+Validation.add('validate-urapidflow-columns',
+    '<?php echo $this->__('Please correct the column issues before continuing')?>',
+    function(v) {
+        var fields = $$("#columns-container input"), attrsUsed = {}, aliasUsed = {}, hasRequiredFields = !requiredField, i, k, errors;
+        for (i=0; i<fields.length; i++) {
+            switch (fields[i].name) {
+            case 'columns_post[field][]':
+                k = fields[i].value;
+                if (k==requiredField) {
+                    hasRequiredFields = true;
+                }
+                attrsUsed[k] = attrsUsed[k] ? attrsUsed[k]+1 : 1;
+                break;
+
+            case 'columns_post[alias][]':
+                k = fields[i].value;
+                aliasUsed[k] = aliasUsed[k] ? aliasUsed[k]+1 : 1;
+                break;
+            }
+        }
+
+        errors = [];
+
+        if (isExport) {
+            if (!$('_allow_mutable_attributes').checked) {
+                for (i in aliasUsed) {
+                    if (aliasUsed[i]>1) errors.push("Duplicate alias: "+i);
+                }
+            }
+            if (!hasRequiredFields) {
+                errors.push("'"+requiredField+"' attribute is required");
+            }
+        } else {
+            for (i in attrsUsed) {
+                if (i!='const.value' && attrsUsed[i]>1) errors.push("Duplicate attribute: "+i);
+            }
+        }
+        if (errors.length) {
+            alert("Errors encountered:\n\n"+errors.join("\n"));
+            return false;
+        }
+        return true;
+    }
+);
+
+</script>
