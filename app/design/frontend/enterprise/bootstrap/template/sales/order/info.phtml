@@ -36,29 +36,22 @@
     </div>
     <?php $orderdate = $this->formatDate($_order->getCreatedAtStoreDate(), Mage_Core_Model_Locale::FORMAT_TYPE_MEDIUM);?>
     <?php $sorttime = strtotime($orderdate); ?>
-    <?php $orderealdate = date('m-d-Y', $sorttime); ?>
+    <?php $orderealdate = date('Y-d-m', $sorttime); ?>
         <div class="order-date"><?php echo $this->__('Order Date: %s', $orderealdate) ?></div>
-        
     <div style="margin-top:10px">
-    <?php if (!$_order->getIsVirtual()): ?>
-        <div class="col1 span3">
-            <h4 class="box-title"><?php echo $this->__('Payment Method') ?></h3>
+    	<div class="col1 pull-left order-history-blocks">
+            <h4 class="box-title"><?php echo $this->__('Payment Method') ?></h4>
             <div class="box-content"><?php echo $this->getPaymentInfoHtml() ?></div>
-        </div>
-        <div class="col1 span3">
-            <h4 class="box-title"><?php echo $this->__('Shipping Address') ?></h3>
+    	</div>
+    	<div class="col1 pull-right order-history-blocks">
+            <h4 class="box-title"><?php echo $this->__('Billing Address') ?></h4>
+            <address class="box-content"><?php echo $_order->getBillingAddress()->format('html') ?></address>
+    	</div>
+    <?php if (!$_order->getIsVirtual()): ?>
+        <div class="col1 pull-right order-history-blocks">
+            <h4 class="box-title"><?php echo $this->__('Shipping Address') ?></h4>
             <address class="box-content"><?php echo $_order->getShippingAddress()->format('html') ?></address>
         </div>
         <?php endif; ?>
-        <div class="col1 span2">
-            <h4 class="box-title"><?php echo $this->__('Billing Address') ?></h3>
-            <address class="box-content"><?php echo $_order->getBillingAddress()->format('html') ?></address>
-        </div>
-        <?php if ($_order->getIsVirtual()): ?>
-        <div class="col1 span2">
-            <h4 class="box-title"><?php echo $this->__('Payment Method') ?></h3>
-            <div class="box-content"><?php echo $this->getPaymentInfoHtml() ?></div>
-        </div>
-    <?php endif; ?>
     </div>
 <div class="clear"></div>

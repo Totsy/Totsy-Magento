@@ -855,6 +855,10 @@ body.catalog-category-view .thumbnails > li {position: relative;}
     margin-right:10px;
 }
 
+.order-history-blocks {
+	width:210px;
+}
+
 .year {
     width:auto;
 }
@@ -994,6 +998,7 @@ body.catalog-category-view .thumbnails > li {position: relative;}
 .discount-buttons {
     margin-top: 10px;
 }
+
 
 /**
  * @Footer
