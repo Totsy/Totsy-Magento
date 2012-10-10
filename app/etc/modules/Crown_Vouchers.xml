@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Crown_Vouchers>
+            <active>true</active>
+            <codePool>local</codePool>
+        </Crown_Vouchers>
+    </modules>
+</config>

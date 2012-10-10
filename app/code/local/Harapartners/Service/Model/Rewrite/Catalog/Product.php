@@ -37,6 +37,11 @@ class Harapartners_Service_Model_Rewrite_Catalog_Product extends Mage_Catalog_Mo
             }
         }
         
+        // Is part of discount Vault
+        if($this->hasOneTimePurchase()) {
+        	$eventCategoryFound = true;
+        }
+        
         if($eventCategoryFound){
             return parent::isSalable();
         }else{

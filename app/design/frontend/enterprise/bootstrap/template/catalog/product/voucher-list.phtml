@@ -1,0 +1,150 @@
+<?php
+/**
+ * Magento Enterprise Edition
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Magento Enterprise Edition License
+ * that is bundled with this package in the file LICENSE_EE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://www.magentocommerce.com/license/enterprise-edition
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     enterprise_default
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://www.magentocommerce.com/license/enterprise-edition
+ */
+?>
+<?php
+/**
+ * Product list template
+ *
+ * @see Mage_Catalog_Block_Product_List
+ */
+?>
+<?php
+    $_productCollection=$this->getLoadedProductCollection();
+    $_helper = $this->helper('catalog/output');
+    $_customerId = Mage::helper('customer')->getCustomer()->getId() ? Mage::helper('customer')->getCustomer()->getId() : 0;
+?>
+<?php if(!$_productCollection->count()): ?>
+<p class="note-msg"><?php echo $this->__('There are no products matching the selection.') ?></p>
+<?php else: ?>
+<?php //echo $this->getToolbarHtml() ?>
+<?php echo $this->getAdditionalHtml() ?>
+<div class="category-products">
+    <?php // List mode ?>
+    <?php $_iterator = 0; ?>
+    <ol class="products-list" id="products-list">
+    <?php foreach ($_productCollection as $_product): ?>
+        <li class="item<?php if( ++$_iterator == sizeof($_productCollection) ): ?> last<?php endif; ?>">
+            <?php // Product Image ?>
+            <a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" class="product-image"><img src="<?php echo $this->helper('catalog/image')->init($_product, 'small_image')->resize(166); ?>" width="166" height="166" alt="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" /></a>
+            <?php // Product description ?>
+            <div class="product-shop">
+                <div class="f-fix">
+                    <?php $_productNameStripped = $this->stripTags($_product->getName(), null, true); ?>
+                    <h2 class="product-name"><a href="javascript:void(0);" onclick="openDialog('learn-more-<?php echo $_iterator;?>')"><?php echo $_productNameStripped;?></a></h2>
+                    <?php if($_product->getRatingSummary()): ?>
+                    <?php //echo $this->getReviewsSummaryHtml($_product) ?>
+                    <?php endif; ?>
+                    <?php //echo $this->getPriceHtml($_product, true) ?>
+                    <div class="desc std">
+                    
+                    	<?php if(Mage::helper('vouchers')->hasAssociation($_customerId, $_product->getId())):?>
+                    		<?php $_buttonMessage = $this->__('Code Sent!');?>
+                    		<?php $_disabledButton = 'disabled = "true"';?>
+                    	<?php else:?>
+                    		<?php $_buttonMessage = $this->__('Email Me Code');?>
+                    		<?php $_disabledButton = '';?>
+                    	<?php endif;?>
+                    
+                        <?php echo $_helper->productAttribute($_product, $_product->getShortDescription(), 'short_description') ?>
+                        <a href="javascript:void(0);" onclick="openDialog('learn-more-<?php echo $_iterator;?>')">Learn More</a>
+                        <div id="learn-more-<?php echo $_iterator;?>" style="display:none;">
+                        	<strong><?php echo $_productNameStripped;?></strong><br />
+                        	<?php echo Mage::getModel('catalog/product')->load($_product->getId())->getDescription();?>
+                        	<br /><br />
+                        	<button <?php echo $_disabledButton;?> type="button" title="<?php echo $this->__('Add to Cart') ?>" class="button btn-cart" onclick="emailCode('<?php echo $_product->getId();?>');"><span><span id="button-popup-<?php echo $_product->getId();?>"><?php echo $this->__($_buttonMessage) ?></span></span></button>
+                        </div>
+                    </div>
+                    <?php if($_product->isSaleable()): ?>
+                    
+                        <div style="float:right;"><button <?php echo $_disabledButton;?> type="button" title="<?php echo $this->__('Add to Cart') ?>" class="button btn-cart" onclick="emailCode('<?php echo $_product->getId();?>');"><span><span id="button-<?php echo $_product->getId();?>"><?php echo $this->__($_buttonMessage) ?></span></span></button></div>
+
+                    <?php else: ?>
+                        <?php if ($_product->getIsSalable()): ?>
+                            <p class="availability in-stock"><span><?php echo $this->__('In stock') ?></span></p>
+                        <?php else: ?>
+                            <p class="availability out-of-stock"><span><?php echo $this->__('Out of stock') ?></span></p>
+                        <?php endif; ?>
+                    <?php endif; ?>
+                </div>
+            </div>
+        </li>
+    <?php endforeach; ?>
+    </ol>
+    <script type="text/javascript">decorateList('products-list', 'none-recursive')</script>
+
+</div>
+<div class="toolbar-bottom">
+    <?php //echo $this->getToolbarHtml() ?>
+</div>
+<?php endif; ?>
+<script type="text/javascript">
+  var win = null;
+  var index = 1;
+	function openDialog(id) {
+	  Dialog.alert($(id).innerHTML, {
+		  className: "alphacube",  
+		  width:500,
+		  id: "d" + index,
+		  okLabel: "Close"
+		}
+	  )
+	  index++;
+  }
+
+	function emailCode(product_id) {
+		id = product_id;
+		new Ajax.Request('<?php echo Mage::getBaseUrl();?>vouchers/order/create/id/' + product_id + '/', { 
+		  method:'get',
+		  onCreate: function() {
+			$('button-' + id).update('Sending...');
+			$('button-popup-' + id).update('Sending...');
+		  },
+		  onSuccess: function(transport){
+			// Getting Ajax Response Text Which is JSON Object
+            var jsonResponse = transport.responseText.evalJSON();
+
+            $('button-' + id).update('Complete!');
+            $('button-popup-' + id).update('Complete!');
+            
+            if(jsonResponse.error) {
+				alert(jsonResponse.error);
+            }
+            else {
+				alert(jsonResponse.success);
+            }
+            
+		  }
+		});
+	}
+</script>
+<style>
+.overlay_alphacube {
+	background-color: #FFF;
+	filter:alpha(opacity=60);
+	-moz-opacity: 0.6;
+	opacity: 0.6;
+}
+</style>

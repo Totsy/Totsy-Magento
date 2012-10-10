@@ -6,6 +6,7 @@
             <codePool>local</codePool>
             <depends>
             	<Harapartners_Service />
+                <Harapartners_EmailFactory />
             </depends>
         </Crown_Club>
     </modules>

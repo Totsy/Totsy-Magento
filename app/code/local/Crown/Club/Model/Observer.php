@@ -1,6 +1,6 @@
 <?php
 class Crown_Club_Model_Observer {
-	
+
 	/**
 	 * Moves expired club members back to the non club members group.
 	 * @param Mage_Cron_Model_Schedule $schedule
@@ -10,21 +10,17 @@ class Crown_Club_Model_Observer {
 	public function removeExpiredClubMembers($schedule) {
 		$helper = Mage::helper('crownclub');
 		if (!$helper->moduleSetupComplete()) return;
-		
+
 		$clubModel = Mage::getModel('crownclub/club');
-		
+
 		$expiredMembers = $clubModel->getExpiredMembersOutOfGracePeriod();
-		
-		$gracePeriod = $helper->getGracePeriod();
-		
-		$todaysDate = new Zend_Date();
-		
+
 		foreach ($expiredMembers as $expiredMember) {
 			$customer = Mage::getModel('customer/customer')->load($expiredMember->getId());
 			$clubModel->removeClubMember($customer)->sendClubMembershipCancelledEmail($customer);
 		}
 	}
-	
+
 	/**
 	 * Warns expired club members that their payment has failed and their subscription account
 	 * will be cancelled once it exits the grace period.
@@ -35,15 +31,11 @@ class Crown_Club_Model_Observer {
 	public function warnExpiredClubMembers($schedule) {
 		$helper = Mage::helper('crownclub');
 		if (!$helper->moduleSetupComplete()) return;
-		
+
 		$clubModel = Mage::getModel('crownclub/club');
-		
+
 		$expiredMembers = $clubModel->getExpiredMembersInGracePeriod();
-		
-		$gracePeriod = $helper->getGracePeriod();
-		
-		$todaysDate = new Zend_Date();
-		
+
 		foreach ($expiredMembers as $expiredMember) {
 			$customer = Mage::getModel('customer/customer')->load($expiredMember->getId());
 			$clubModel->sendClubMembershipPaymentFailedEmail($customer);

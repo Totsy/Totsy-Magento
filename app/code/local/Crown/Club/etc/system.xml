@@ -21,8 +21,7 @@
 					<fields>
 						<grace_period translate="label">
 							<label>Grace period</label>
-							<comment>Number of days a customer is allowed to be late on
-								payment before subscription is cancelled.</comment>
+							<comment>Number of days a customer is allowed to be late on payment before subscription is cancelled.</comment>
 							<frontend_type>text</frontend_type>
 							<sort_order>10</sort_order>
 							<show_in_default>1</show_in_default>
@@ -92,5 +91,22 @@
 				</ident_club>
 			</groups>
 		</trans_email>
+        <sailthru_options translate="label" module="emailfactory">
+            <groups>
+                <email>
+                    <fields>
+                        <sailthru_club_list>
+                            <label>Club Email List</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>The email list users are added to when they join club.</comment>
+                        </sailthru_club_list>
+                    </fields>
+                </email>
+            </groups>
+        </sailthru_options>
 	</sections>
 </config>
