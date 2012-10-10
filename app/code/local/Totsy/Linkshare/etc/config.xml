@@ -46,4 +46,16 @@
             </linkshare_read>        
         </resources>
     </global>
+    <crontab>
+        <jobs>
+            <totsy_linkshare>
+                <schedule>
+                    <cron_expr>* 0 * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>linkshare/transactions::sendUpdates</model>
+                </run>
+            </totsy_linkshare>
+        </jobs>
+    </crontab>
 </config>
