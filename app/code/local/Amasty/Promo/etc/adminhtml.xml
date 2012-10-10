@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<config>
+        <translate>
+            <modules>
+                <Amasty_Promo>
+                    <files>
+                        <default>Amasty_Promo.csv</default>
+                    </files>
+                </Amasty_Promo>
+            </modules>
+        </translate>
+        
+        <events>
+            <adminhtml_block_salesrule_actions_prepareform>
+                <observers>
+                    <amasty_promo_model_observer>
+                        <type>singleton</type>
+                        <class>Amasty_Promo_Model_Observer</class>
+                        <method>handleFormCreation</method>
+                    </amasty_promo_model_observer>
+                </observers>
+            </adminhtml_block_salesrule_actions_prepareform>           
+        </events>
+
+		<acl>
+			<resources>
+				<all>
+					<title>Allow Everything</title>
+				</all>
+                <admin>
+                    <children>
+                        <system>
+                            <children>
+                                <config>
+                                    <children>
+                                        <ampromo>
+                                            <title>Promo Items</title>
+                                        </ampromo>
+                                    </children>
+                                </config>
+                            </children>
+                        </system> 
+                     </children>
+                </admin> 
+			</resources>
+		</acl>               
+</config>

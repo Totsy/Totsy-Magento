@@ -1,0 +1,18 @@
+<div class="entry-edit">
+    <div class="entry-edit-head">
+        <h4 class="icon-head head-edit-form fieldset-legend">
+            <?php echo $this->__('Paste URLs to download and install:')?>
+        </h4>
+    </div>
+    <fieldset class="fieldset">
+        <legend><?php echo $this->__('Install new extensions:') ?></legend>
+
+        <span class="field-row">
+            <p><input class="input-text" type="text" name="uri[]" style="width:95%" /></p>
+            <p><input class="input-text" type="text" name="uri[]" style="width:95%" /></p>
+            <p><input class="input-text" type="text" name="uri[]" style="width:95%" /></p>
+            <p><input class="form-button" type="submit" name="do" value="<?php echo Mage::helper('usimpleup')->__('Download and Install')?>"/></p>
+        </span>
+    </fieldset>
+
+</div>

@@ -1,0 +1,91 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Unirgy LLC
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the EULA
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://www.unirgy.com/LICENSE-M1.txt
+ *
+ * @category   Unirgy
+ * @package    Unirgy_RapidFlow
+ * @copyright  Copyright (c) 2008-2009 Unirgy LLC (http://www.unirgy.com)
+ * @license    http:///www.unirgy.com/LICENSE-M1.txt
+ */
+-->
+<config>
+    <urapidflow>
+        <data_types>
+            <product>
+                <title>Products</title>
+                <row_format>dynamic</row_format>
+                <model>urapidflow_mysql4/catalog_product</model>
+                <profile>
+                    <model>urapidflow/profile_catalog_product</model>
+                    <import>
+                        <tabs>
+                            <file>
+                                <title>File Options</title>
+                                <block>urapidflow/adminhtml_profile_edit_tab_file</block>
+                            </file>
+                            <csv>
+                                <title>Format Options</title>
+                                <block>urapidflow/adminhtml_profile_edit_tab_csv</block>
+                            </csv>
+                            <options>
+                                <title>Import Options</title>
+                                <block>urapidflow/adminhtml_profile_edit_tab_import</block>
+                            </options>
+                            <columns>
+                                <title>Import Columns</title>
+                                <block>urapidflow/adminhtml_profile_edit_tab_columns</block>
+                            </columns>
+                            <upload>
+                                <title>Upload Files</title>
+                                <block>urapidflow/adminhtml_profile_edit_tab_upload</block>
+                            </upload>
+                            <reindex>
+                                <title>Reindex</title>
+                                <block>urapidflow/adminhtml_profile_edit_tab_reindex</block>
+                            </reindex>
+                        </tabs>
+                    </import>
+                    <export>
+                        <tabs>
+                            <file>
+                                <title>File Options</title>
+                                <block>urapidflow/adminhtml_profile_edit_tab_file</block>
+                            </file>
+                            <csv>
+                                <title>Format Options</title>
+                                <block>urapidflow/adminhtml_profile_edit_tab_csv</block>
+                            </csv>
+                            <options>
+                                <title>Export Options</title>
+                                <block>urapidflow/adminhtml_profile_edit_tab_export</block>
+                            </options>
+                            <columns>
+                                <title>Export Columns</title>
+                                <block>urapidflow/adminhtml_profile_edit_tab_columns</block>
+                            </columns>
+                            <conditions>
+                                <title>Export Conditions</title>
+                                <block>urapidflow/adminhtml_profile_edit_tab_export_condition</block>
+                            </conditions>
+                        </tabs>
+                    </export>
+                </profile>
+            </product>
+        </data_types>
+
+        <row_types>
+            <CP>
+                <title>Catalog Product</title>
+                <data_type>product</data_type>
+            </CP>
+        </row_types>
+    </urapidflow>
+</config>
