@@ -366,6 +366,7 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
     color: #ED1C25;
     font-weight: bold;
 }
+#cartHeader.hasItems {display: block; white-space: nowrap;}
 #cartHeader.cartempty {
     position: relative; top:-6px; left: 25px; /* a bit hackish but gets it done */
     background-image: none;
