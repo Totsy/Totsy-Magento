@@ -26,7 +26,6 @@
 ?>
 <?php 
   $_orders = $this->getOrders(); 
-  $order_ids = Array();
 ?>
 
 <div class="page-header">
@@ -72,32 +71,9 @@
                 </span>
             </td>
         </tr>
-        <?php array_push($order_ids, $_order->getRealOrderId()); ?>
         <?php endforeach; ?>
     </tbody>
 </table>
-
-<?php 
-$latest_order_id = max($order_ids); 
-
-$_latestOrder = Mage::getModel('sales/order')->loadByIncrementId($latest_order_id);
-
-$quoteId = $_latestOrder->getQuoteId();
-$quote = Mage::getModel('sales/quote')->load($quoteId);
-
-$couponStr = isset($coupon)?"&promocode=".$_latestOrder->getCouponCode():"";
-
-?>
-
-<script type="text/javascript">
-  _esq.events.push({
-        type : 'es_conversion',
-        revenue: '<?php echo number_format($_latestOrder->getGrandTotal(), 2, '.', ' '); ?>',
-        quantity : '<?php echo (int) $quote->getItemsQty(); ?>',
-        promoCodes : ['<?php echo $couponStr; ?>'],
-        orderId : '<?php echo $latest_order_id; ?>'
-  });
-</script>
 
 <script type="text/javascript">decorateTable('my-orders-table');</script>
 <?php echo $this->getPagerHtml(); ?>
