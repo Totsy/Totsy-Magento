@@ -25,6 +25,21 @@
  */
 ?>
 <?php $_item = $this->getItem() ?>
+<?php $order = $this->getOrder() ?>
+<?php
+
+if($_item->is_virtual==1) {  
+	$product_options = $_item->getProductOptions();
+	$voucher_label = $product_options['options'][0]['label'];
+	$voucher_code_string = explode("\n",$product_options['options'][0]['value']);
+	$voucher_value = $voucher_code_string[0];
+	
+	$options =  $_item->getProductOptions();
+	unset($options['options']);
+	$_item->setProductOptions($options); 
+}
+
+?>
 <tr class="border" id="order-item-row-<?php echo $_item->getId() ?>">
     <td><h4 class="product-name"><?php echo $this->htmlEscape($_item->getName()) ?></h4>
         <?php if($_options = $this->getItemOptions()): ?>
@@ -180,7 +195,7 @@
     <td class="a-right">
         <span class="nobr">
                 <?php if ($this->getItem()->getQtyOrdered() > 0): ?>
-            <?php echo $this->__('Ordered'); ?>: <strong><?php echo $this->getItem()->getQtyOrdered()*1 ?></strong><br />
+            <strong><?php echo $this->getItem()->getQtyOrdered()*1 ?></strong><br />
         <?php endif; ?>
         <?php if ($this->getItem()->getQtyShipped() > 0): ?>
             <?php echo $this->__('Shipped'); ?>: <strong><?php echo $this->getItem()->getQtyShipped()*1 ?></strong><br />
