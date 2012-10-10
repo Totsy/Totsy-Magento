@@ -1,13 +1,12 @@
 <?php 
 error_reporting(E_ALL | E_STRICT);
-ini_set('display_errors', 1);
+ini_set('display_errors', 0);
 
 $full_path = dirname(dirname(__DIR__));
 
 require_once( $full_path.'/app/Mage.php' );
 umask(0);
 
-$_SERVER['MAGE_IS_DEVELOPER_MODE'] = 1;
 if (isset($_SERVER['MAGE_IS_DEVELOPER_MODE'])) {
     Mage::setIsDeveloperMode(true);
 }
