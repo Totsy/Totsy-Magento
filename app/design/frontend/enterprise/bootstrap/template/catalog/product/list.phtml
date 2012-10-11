@@ -72,13 +72,6 @@
         	<?php foreach ($_productCollection as $_product): ?>
         		<?php if ( $_product->isSalable() ):?>
                     <li class="span4 item<?php echo ' '.str_replace(',',' ',$_product->getDepartments()) ?>" data-department="<?php echo str_replace(',',' ',$_product->getDepartments()) ?>">
-                        <span class="echoShare" 
-                            data-productname="<?php echo $_product->getName();?>"
-                            data-productcap="" 
-                            data-productdesc="<?php echo $_product->getShortDescription();?>" 
-                            data-imageclass="" 
-                            data-producturl="<?php echo $_product->getProductUrl(); ?>">
-                        </span>
                         <div class="thumbnail">
                             <a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" class="product-image"><img src="<?php echo $this->helper('catalog/image')->init($_product, 'small_image')->resize(308, 310)->keepFrame(FALSE); ?>" width="308" height="310" alt="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" /></a>
                             <div class="caption">
@@ -99,13 +92,6 @@
         		<?php if ( !$_product->isSalable() ):?>
                     <li class="span4 status status_sold_out item<?php echo ' '.str_replace(',',' ',$_product->getDepartments()) ?>" data-department="<?php echo str_replace(',',' ',$_product->getDepartments()) ?>">
                         <img class="out-of-stock" src="<?php echo $this->getSkinUrl('images/soldout.png');?>"/>
-                        <span class="echoShare" 
-                            data-productname="<?php echo $_product->getName();?>"
-                            data-productcap="" 
-                            data-productdesc="<?php echo $_product->getShortDescription();?>" 
-                            data-imageclass="" 
-                            data-producturl="<?php echo $_product->getProductUrl(); ?>">
-                        </span>
                         <div class="thumbnail">
                             <a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" class="product-image"><img src="<?php echo $this->helper('catalog/image')->init($_product, 'small_image')->resize(308, 310)->keepFrame(FALSE); ?>" width="308px" height="310" alt="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" /></a>
                             <div class="caption">
