@@ -117,7 +117,7 @@ class Totsy_Sailthru_Helper_Feed extends Mage_Core_Helper_Abstract
     public function formatPCEvent(&$event,$type){
         $result = array(
             'name'           => $event['name'],
-            'url'            => $event['url_path'],
+            'url'            => Mage::getBaseUrl().$event['url_path'],
             'start_date'     => $event['event_start_date'],
             'end_date'       => $event['event_end_date']
         );
