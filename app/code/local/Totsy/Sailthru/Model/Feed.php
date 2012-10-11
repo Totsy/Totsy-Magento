@@ -38,7 +38,9 @@ class Totsy_Sailthru_Model_Feed extends Mage_Core_Model_Abstract
 
 		//open&top events
 		$this->_formatter(
-			$this->_getSortEvents('live'),
+			$this->getFeedHelper()->goingLive(
+				$this->_getSortEvents('live')
+			),
 			'events'
 		);
 

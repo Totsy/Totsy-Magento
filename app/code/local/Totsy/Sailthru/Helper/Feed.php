@@ -152,6 +152,24 @@ class Totsy_Sailthru_Helper_Feed extends Mage_Core_Helper_Abstract
         return $collector;
     }
 
+    public function goingLive($events){
+        $collector = array();
+        
+        if (empty($events) || !is_array($events)){
+            return $collector; 
+        }
+        foreach($events as $event){
+            $event_time = $this->timeConverter($event['event_start_date']);
+
+            if ($event_time>=$this->_min_datetime 
+                && $event_time<$this->_max_datetime ){
+                $collector[] = $event;
+            } 
+        }
+
+        return $collector;
+    }
+
     private function _getImage($event,$type=''){
         if (!empty($type)){
             $type.= '_';
