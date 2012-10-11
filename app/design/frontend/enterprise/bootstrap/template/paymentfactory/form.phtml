@@ -82,8 +82,10 @@
         		 <?php endforeach ?>
         		 <?php $methods = $this->getLayout()->getBlock('hpcheckout.payment.methods')->getMethods();  ?> 
                  <?php if(count($methods)): ?>
+                 	<?php if( Mage::getConfig()->getModuleConfig('Mage_Paypal')->is('active', 'true') ): ?>
 			    	<input type="radio" value="paypal_express" id="paypal_payment" name="paypal_payment">
         		 	    <span title="Paypal Express" class="paypal"></span>
+        		 	<?php endif; ?>
                  <?php foreach ($methods as $_method): $_code = $_method->getCode() ?>
         		 <?php if($this->getSelectedMethodCode()==$_code){ echo "checked"; } //echo $_code; ?>
         		 <?php endforeach; ?>
@@ -242,8 +244,9 @@ jQuery( document ).ready( function($) {
 	var billFormInputs = jQuery('#hpcheckout-billing-form :input');
     jQuery('#cybersource-use-card-method').change( function() {    
         if( $( this ).val() == '' ) {
-            jQuery('#paypal_payment').attr("checked", false);
-            
+        	if(jQuery('#paypal_payment').legth > 0) {
+            	jQuery('#paypal_payment').attr("checked", false);
+            }
             //if(jQuery("#payment_form_paypal_express").length > 0) {
                 //jQuery("#payment_form_paypal_express").show();           	
             //}
