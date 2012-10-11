@@ -128,24 +128,24 @@
 		</layout>
 	</adminhtml>
 	<crontab>
-		<jobs>
-			<crownimport_clean_expired>
-				<schedule>
-					<cron_expr>0 0 * * *</cron_expr>
-					<run>
-						<model>crownimport/cron::clearExpiredImports</model>
-					</run>
-				</schedule>
-			</crownimport_clean_expired>
-			<crownimport_clean_old_profiles>
-				<schedule>
-					<cron_expr>0 0 * * *</cron_expr>
-					<run>
-						<model>crownimport/cron::clearOldProfiles</model>
-					</run>
-				</schedule>
-			</crownimport_clean_old_profiles>
-		</jobs>
+        <jobs>
+            <crownimport_clean_expired>
+                <schedule>
+                    <cron_expr>0 0 * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>crownimport/cron::clearExpiredImports</model>
+                </run>
+            </crownimport_clean_expired>
+            <crownimport_clean_old_profiles>
+                <schedule>
+                    <cron_expr>0 0 * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>crownimport/cron::clearOldProfiles</model>
+                </run>
+            </crownimport_clean_old_profiles>
+        </jobs>
 	</crontab>
 	<default>
 		<crownimport>
