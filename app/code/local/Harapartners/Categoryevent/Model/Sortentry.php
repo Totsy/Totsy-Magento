@@ -344,7 +344,7 @@ class Harapartners_Categoryevent_Model_Sortentry
      */
     public function adjustQueuesForCurrentTime()
     {
-        $now = Mage::helper('service')->getServerTime() / 1000;
+        $now = Mage::getModel('core/date')->timestamp();
 
         $live     = json_decode($this->getData('live_queue'), true);
         $upcoming = json_decode($this->getData('upcoming_queue'), true);
