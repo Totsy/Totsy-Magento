@@ -64,7 +64,9 @@ class Totsy_Sailthru_Model_Feed extends Mage_Core_Model_Abstract
 	}
 
 	public function getOutPut(){
-		return json_encode($this->_output);
+		$json = json_encode($this->_output);
+		$this->_cache->_setRightHttpHost($json);
+		return $json;
 	}
 
 	/**
@@ -106,7 +108,6 @@ class Totsy_Sailthru_Model_Feed extends Mage_Core_Model_Abstract
     private function _formatter ($events,$type){
         $max_off = null;
         if (empty($events) || !is_array($events)){
-        	echo 'var $events is empty. Type:'.$type.' <br>';
             return; 
         } 
 
