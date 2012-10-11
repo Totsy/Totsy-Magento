@@ -473,9 +473,11 @@ XML;
                 $billingAddress = Mage::getModel('sales/order_address');
              }
 
-            $billingAddress = substr($billingAddress, 0, 30);
             $billingName = $billingAddress->getFirstname() . ' ' . $billingAddress->getLastname();
             $billingName = substr($billingName, 0, 30);
+
+            $billing_street_1 = substr($billingAddress->getStreet(1), 0,30);
+            $billing_street_2 = substr($billingAddress->getStreet(2), 0,30);
 
             $billing_state = Mage::helper('fulfillmentfactory')->getStateCodeByFullName($billingAddress->getRegion(), $billingAddress->getCountry());
 
@@ -528,8 +530,8 @@ XML;
                     <billing-customer-number xsi:nil="true"/>
                     <billing-name><![CDATA[{$billingName}]]></billing-name>
                     <billing-company xsi:nil="true"/>
-                    <billing-address1><![CDATA[{$billingAddress->getStreet(1)}]]></billing-address1>
-                    <billing-address2><![CDATA[{$billingAddress->getStreet(2)}]]></billing-address2>
+                    <billing-address1><![CDATA[{$billing_street_1}]]></billing-address1>
+                    <billing-address2><![CDATA[{$billing_street_2}]]></billing-address2>
                     <billing-address3 xsi:nil="true"/>
                     <billing-city><![CDATA[$billing_city]]></billing-city>
                     <billing-state>{$billing_state}</billing-state>
