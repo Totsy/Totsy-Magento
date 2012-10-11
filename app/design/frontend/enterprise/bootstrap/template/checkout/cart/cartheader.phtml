@@ -73,7 +73,7 @@
         <?php if ($_itemsInCart):?>
         
             <div id="usercart-block-title" class="dropdown-toggle block-title" data-toggle="dropdown">
-                <strong id="cartHeader"><?php echo $_myCart ?><span><?php echo ' | '.Mage::helper('checkout')->formatPrice($this->getSubtotal()) ?><?php if ($_subtotalInclTax = $this->getSubtotalInclTax()): ?> / <?php echo ' | '.Mage::helper('checkout')->formatPrice($_subtotalInclTax) ?> <?php echo ' | '.Mage::helper('tax')->getIncExcText(true) ?><?php endif; ?></span></strong>
+                <strong id="cartHeader" class="hasItems"><?php echo $_myCart ?><span><?php echo ' | '.Mage::helper('checkout')->formatPrice($this->getSubtotal()) ?><?php if ($_subtotalInclTax = $this->getSubtotalInclTax()): ?> / <?php echo ' | '.Mage::helper('checkout')->formatPrice($_subtotalInclTax) ?> <?php echo ' | '.Mage::helper('tax')->getIncExcText(true) ?><?php endif; ?></span></strong>
             </div>
 
             <?php

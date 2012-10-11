@@ -1,0 +1,177 @@
+<style type="text/css">
+#reindex-columns-container .even td { background:#EEE !important; }
+#reindex-columns-new-options { height:250px; }
+#reindex-columns-new-options option.required { color:#A00; }
+#refresh-columns-container .even td { background:#EEE !important; }
+#refresh-columns-new-options { height:250px; }
+#refresh-columns-new-options option.required { color:#A00; }
+.sortable-handle { float:left; cursor:pointer; height:16px; padding-left:12px;
+    font-weight:bold; text-align:right;
+    background:url('<?php echo $this->getSkinUrl('images/arrow_sort_move.gif')?>') no-repeat 0 50%; }
+</style>
+
+<div class="entry-edit-head">
+    <h4 class="icon-head head-edit-form fieldset-legend">Reindex</h4>
+</div>
+
+<fieldset>
+
+<div class="grid tier form-list">
+    <table id="reindex-columns-table" class="border" cellspacing="0" cellpadding="0">
+        <thead>
+            <tr class="headings">
+                <th class="type-title" style="width:10px">&nbsp;</th>
+                <th class="type-title" width="30%">Title</th>
+                <th class="type-title" style="width:70px">&nbsp;</th>
+                <th class="type-title">&nbsp;</th>
+            </tr>
+        </thead>
+        <tbody id="reindex-columns-container">
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="3">
+                    <button class="add add-select-row f-right" type="button" onclick="addColumnsIdx('reindex')"><span><?php echo $this->__('Add Reindex') ?></span></button>
+                    <select style="width: 250px" id="reindex-columns-new-options" multiple="multiple" ondblclick="addColumnsIdx('reindex')"></select>
+                </td>
+                <td>&nbsp;</td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+</fieldset>
+
+<div class="entry-edit-head">
+    <h4 class="icon-head head-edit-form fieldset-legend">Refresh</h4>
+</div>
+
+<fieldset>
+
+<div class="grid tier form-list">
+    <table id="refresh-columns-table" class="border" cellspacing="0" cellpadding="0">
+        <thead>
+            <tr class="headings">
+                <th class="type-title" style="width:10px">&nbsp;</th>
+                <th class="type-title" width="30%">Title</th>
+                <th class="type-title" style="width:70px">&nbsp;</th>
+                <th class="type-title">&nbsp;</th>
+            </tr>
+        </thead>
+        <tbody id="refresh-columns-container">
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="3">
+                    <button class="add add-select-row f-right" type="button" onclick="addColumnsIdx('refresh')"><span><?php echo $this->__('Add Cache') ?></span></button>
+                    <select style="width: 250px" id="refresh-columns-new-options" multiple="multiple" ondblclick="addColumnsIdx('refresh')"></select>
+                </td>
+                <td>&nbsp;</td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+</fieldset>
+
+
+<script type="text/javascript">
+var columnsFieldsIdx = {};
+columnsFieldsIdx['reindex'] = <?php echo Zend_Json::encode($this->getReindexColumnsFields()) ?>;
+columnsFieldsIdx['refresh'] = <?php echo Zend_Json::encode($this->getRefreshColumnsFields()) ?>;
+
+var columnsIdx = {};
+columnsIdx['reindex'] = <?php echo Zend_Json::encode($this->getReindexColumns()) ?>;
+columnsIdx['refresh'] = <?php echo Zend_Json::encode($this->getRefreshColumns()) ?>;
+
+fillColumnsFieldsSelectIdx('reindex-columns-new-options', 'reindex');
+fillColumnsFieldsSelectIdx('refresh-columns-new-options', 'refresh');
+fillColumnsLinesIdx('reindex');
+fillColumnsLinesIdx('refresh');
+
+var sortColumnsIdx = {};
+sortColumnsIdx['reindex'] = new UnirgySortable({container:'reindex-columns-container', tag:'tr', ondrop:function(){redecorateColumnsTableIdx('reindex')}});
+sortColumnsIdx['refresh'] = new UnirgySortable({container:'refresh-columns-container', tag:'tr', ondrop:function(){redecorateColumnsTableIdx('refresh')}});
+
+function fillColumnsLinesIdx(idxType) {
+    for (var i=0; i<columnsIdx[idxType].length; i++) {
+        addColumnLineIdx(columnsIdx[idxType][i], idxType);
+    }
+    redecorateColumnsTableIdx(idxType);
+}
+
+function fillColumnsFieldsSelectIdx(select, idxType) {
+    var i, j, label, html = '', optgroup, opt;
+    select = $(select);
+    for (i=0; i<columnsFieldsIdx[idxType].length; i++) {
+        opt = document.createElement('option');
+        opt.value = columnsFieldsIdx[idxType][i].value;
+        opt.innerHTML = columnsFieldsIdx[idxType][i].label.escapeHTML();
+        select.appendChild(opt);
+    }
+}
+
+function updatePrevHidden(select) {
+    var selected = [];
+    for (i=0; i<select.options.length; i++) {
+        if (select.options[i].selected) {
+            selected.push(select.options[i].value);
+        }
+    }
+    $(select).previous().value = selected.join(',');
+}
+
+function addColumnsIdx(idxType) {
+    $$('#'+idxType+'-columns-new-options option').each(function(el) {
+        if (el.selected) {
+            addColumnLineIdx(el.value, idxType);
+            el.selected = false;
+        }
+    });
+    redecorateColumnsTableIdx(idxType);
+}
+
+function addColumnLineIdx(field, idxType) {
+    var tds = '', labelEsc = '', noteEsc = '';
+    var columnField;
+    for (i=0; i<columnsFieldsIdx[idxType].length; i++) {
+        if (field == columnsFieldsIdx[idxType][i].value) {
+            labelEsc = columnsFieldsIdx[idxType][i].label.escapeHTML();
+            noteEsc = Object.isString(columnsFieldsIdx[idxType][i].note) ? '<br>'+columnsFieldsIdx[idxType][i].note.escapeHTML() : '';
+        }
+    }
+    $$('#'+idxType+'-columns-new-options option').each(function(el) {
+        if (el.value == field) el.remove();
+    });
+    $(idxType+'-columns-container').insert('<tr>'
+        +'<td><div class="sortable-handle" onmousedown="sortColumnsIdx[\''+idxType+'\'].drag(event, this)" onselectstart="return false"></div></td>'
+        +'<td><input type="hidden" name="options['+idxType+'][]" class="idx-field-value" value="'+field+'" />'+labelEsc+noteEsc+'</td>'
+        +'<td><button class="delete delete-select-row icon-btn" type="button" onclick="deleteColumnLineIdx(this, \''+idxType+'\')"><span><?php echo $this->__('Delete') ?></span></button></td>'
+        +'<td>&nbsp</td>'
+        +'</tr>');
+}
+
+function deleteColumnLineIdx(button, idxType) {
+    if (idxField = $(button.parentNode.parentNode).select('input.idx-field-value')) {
+        for (i=0; i<columnsFieldsIdx[idxType].length; i++) {
+            if (idxField[0].value == columnsFieldsIdx[idxType][i].value) {
+                opt = document.createElement('option');
+                opt.value = columnsFieldsIdx[idxType][i].value;
+                opt.innerHTML = columnsFieldsIdx[idxType][i].label.escapeHTML();
+                $(idxType+'-columns-new-options').appendChild(opt);
+            }
+        }
+    }
+    $(button.parentNode.parentNode).remove();
+    redecorateColumnsTableIdx(idxType);
+}
+
+function redecorateColumnsTableIdx(idxType)
+{
+    $$('#'+idxType+'-columns-container tr').each(function(tr) {
+        tr.removeClassName('odd');
+        tr.removeClassName('even');
+        tr.removeClassName('first');
+        tr.removeClassName('last');
+    });
+    decorateTable(idxType+'-columns-table');
+}
+</script>
