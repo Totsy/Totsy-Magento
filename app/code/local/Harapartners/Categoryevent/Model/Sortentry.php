@@ -171,7 +171,8 @@ class Harapartners_Categoryevent_Model_Sortentry
 
     protected function _prepareEvent($categoryId)
     {
-        $defaultStore = Mage::getModel('core/store')->load('totsy');
+        $stores = Mage::app()->getStores(false, true);
+        $defaultStore = $stores['default']->getId();
 
         // fetch all products part of this category/event
         $category = Mage::getModel('catalog/category')->load($categoryId);
