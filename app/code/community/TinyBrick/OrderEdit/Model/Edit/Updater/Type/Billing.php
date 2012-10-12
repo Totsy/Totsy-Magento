@@ -51,6 +51,7 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Billing extends TinyBrick_Orde
             $billing->save();
             $order->setData('billing_address_id', $billing->getId())
                     ->save();
+            $customerAddressId = $this->createCustomerAddressFromBilling($billing, $order->getCustomerId());
             //logging for changes in billing address
             $newArray = $billing->getData();
             $results = array_diff($oldArray, $newArray);
@@ -68,7 +69,7 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Billing extends TinyBrick_Orde
             }
             return false;
         }catch(Exception $e){
-            return "Error updating billing address";
+            return "Error updating billing address" . $e->getMessage();
         }
     }
     
@@ -82,5 +83,29 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Billing extends TinyBrick_Orde
             }
         }
         return $duplicate;
+    }
+
+    public function createCustomerAddressFromBilling($billing, $customerId) {
+        $address = Mage::getModel('customer/address');
+        $address->setData($billing->getData())
+                ->setCustomerId($customerId)
+                ->setIsDefaultBilling(false)
+                ->setIsDefaultShipping(false)
+                ->save();
+        return $address->getId();
+    }
+    
+    public function getCustomerAddressFromBilling($billingId) {
+        $billing = Mage::getModel('sales/order_address')->load($billingId);
+        $customerAddress = Mage::getModel('customer/address')->getCollection()
+                        ->addAttributeToFilter('firstname', $billing->getFirstname())
+                        ->addAttributeToFilter('lastname', $billing->getLastname())
+                        ->addAttributeToFilter('postcode', $billing->getPostcode())
+                        ->getFirstItem();
+        if(!$customerAddress->getId()) {
+            return false;
+        } else {
+            return $customerAddress->getId();
+        }
     }
 }

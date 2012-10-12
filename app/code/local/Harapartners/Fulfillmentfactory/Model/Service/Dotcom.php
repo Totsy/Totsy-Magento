@@ -302,26 +302,31 @@ XML;
             if ($value = $product->getVendorCode()) {
                 $value = Mage::helper('fulfillmentfactory')->removeBadCharacters($value);
                 $value = substr($value, 0, 10);
+                $value = htmlentities($value);
                 $vendorCode = '<manufacturing-code>' . $value . '</manufacturing-code>';
             }
 
             $style = '<style-number xsi:nil="true" />';
             if ($value = $product->getVendorStyle()) {
+                $value = htmlentities($value);
                 $style = '<style-number>' . substr($value, 0, 10) . '</style-number>';
             }
 
             $color = '<color xsi:nil="true" />';
             if ($value = $product->getAttributeText('color')) {
+                $value = htmlentities($value);
                 $color = '<color>' . substr($value, 0, 5) . '</color>';
             }
 
             $size = '<size xsi:nil="true" />';
             if ($value = $product->getAttributeText('size')) {
+                $value = htmlentities($value);
                 $size = '<size>' . substr($value, 0, 5) . '</size>';
             }
 
             $upc = '<upc xsi:nil="true" />';
             if ($value = $product->getUpc()) {
+                $value = htmlentities($value);
                 $upc = "<upc>$value</upc>"; // no need to limit string length here
             }
 
@@ -469,10 +474,15 @@ XML;
              }
 
             $billingName = $billingAddress->getFirstname() . ' ' . $billingAddress->getLastname();
+            $billingName = substr($billingName, 0, 30);
+
+            $billing_street_1 = substr($billingAddress->getStreet(1), 0,30);
+            $billing_street_2 = substr($billingAddress->getStreet(2), 0,30);
 
             $billing_state = Mage::helper('fulfillmentfactory')->getStateCodeByFullName($billingAddress->getRegion(), $billingAddress->getCountry());
 
             $billing_city = Mage::helper('fulfillmentfactory')->validateAddressForDC('CITY', $billingAddress->getCity());
+            $billing_city = substr($billing_city, 0, 20);
 
             $billing_country = Mage::helper('fulfillmentfactory/dotcom')->getCountryCodeUsTerritories($billing_state);
 
@@ -520,8 +530,8 @@ XML;
                     <billing-customer-number xsi:nil="true"/>
                     <billing-name><![CDATA[{$billingName}]]></billing-name>
                     <billing-company xsi:nil="true"/>
-                    <billing-address1><![CDATA[{$billingAddress->getStreet(1)}]]></billing-address1>
-                    <billing-address2><![CDATA[{$billingAddress->getStreet(2)}]]></billing-address2>
+                    <billing-address1><![CDATA[{$billing_street_1}]]></billing-address1>
+                    <billing-address2><![CDATA[{$billing_street_2}]]></billing-address2>
                     <billing-address3 xsi:nil="true"/>
                     <billing-city><![CDATA[$billing_city]]></billing-city>
                     <billing-state>{$billing_state}</billing-state>

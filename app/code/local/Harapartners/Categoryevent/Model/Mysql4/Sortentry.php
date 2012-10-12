@@ -18,9 +18,10 @@ class Harapartners_Categoryevent_Model_Mysql4_Sortentry
             $select = $this->_getReadAdapter()->select()
                 ->from($this->getMainTable());
             if ($useRecent) {
-                $select->where('date <= ?', $date);
+                $select->where('DATE(date) <= ?', $date)
+                    ->order('date DESC');
             } else {
-                $select->where('date = ?', $date);
+                $select->where('DATE(date) = ?', $date);
             }
 
             $data = $read->fetchRow($select);
