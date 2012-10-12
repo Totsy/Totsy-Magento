@@ -249,10 +249,7 @@ SQL;
 
             $ordersShipped = $this->updateShipment($fromDate, $toDate);
             Mage::log(
-                sprintf(
-                    'Completed processing for %d orders that have been shipped.',
-                    count($ordersShipped)
-                ),
+                "Completed processing for $ordersShipped orders that have been shipped.",
                 Zend_Log::INFO,
                 'fulfillment.log'
             );
@@ -672,7 +669,13 @@ XML;
         }
 
         // get data from dotcom
-        $dataXML = Mage::helper('fulfillmentfactory/dotcom')->getShipment($fromDate, $toDate);
+        $dataXML = array();
+        try {
+            $dataXML = Mage::helper('fulfillmentfactory/dotcom')->getShipment($fromDate, $toDate);
+        } catch(Exception $e) {
+            Mage::logException($e);
+            return 0;
+        }
 
         $updatedOrders = 0;
         foreach ($dataXML as $shipment) {
@@ -711,22 +714,22 @@ XML;
             if(count($orderShipments) > 0) {
                 $shipment = $orderShipments->getFirstItem();
             } else {
-                $itemQtyArray = array();
-                foreach ($order->getAllItems() as $item) {
-                    $itemQtyArray[$item->getData('item_id')] = (int) $item->getQtyToShip();
-                }
-
                 $shipment = Mage::getModel('sales/service_order', $order)
-                    ->prepareShipment($itemQtyArray);
+                    ->prepareShipment();
 
                 // create a new shipment track item
                 $shipmentTrack = Mage::getModel('sales/order_shipment_track')
                     ->addData($shipmentData);
 
                 // create a new shipment item
-                $shipment->addData($shipmentData)
-                    ->addTrack($shipmentTrack)
-                    ->save();
+                try {
+                    $shipment->addData($shipmentData)
+                        ->addTrack($shipmentTrack)
+                        ->save();
+                } catch(Exception $e) {
+                    Mage::logException($e);
+                    continue;
+                }
             }
 
             // update the order status and save
