@@ -74,14 +74,13 @@ class Harapartners_Categoryevent_Helper_Memcache extends Mage_Core_Helper_Abstra
             $defaultTimezone = date_default_timezone_get();
             $mageTimezone = Mage::getStoreConfig(Mage_Core_Model_Locale::XML_PATH_DEFAULT_TIMEZONE);
             date_default_timezone_set($mageTimezone);
-            $sortDate = now("Y-m-d");
             date_default_timezone_set($defaultTimezone);
             $storeId = Mage::app()->getStore()->getId();
             //To Jun: Note for rebuild script try not to get from cached or indexed data??
             
             // ---------- //
             // Load sorted live category info
-            $sortentryLive = Mage::getModel('categoryevent/sortentry')->loadByDate($sortDate)->getLiveQueue();
+            $sortentryLive = Mage::getModel('categoryevent/sortentry')->loadCurrent()->getLiveQueue();
             $liveCategoryInfoArray = json_decode($sortentryLive, true);
             $liveCategoryIdArray = array();
             $mageTimezone = Mage::getStoreConfig(Mage_Core_Model_Locale::XML_PATH_DEFAULT_TIMEZONE);

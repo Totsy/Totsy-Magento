@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Unirgy_SimpleUp>
+            <active>true</active>
+            <codePool>community</codePool>
+<!--
+            <scaffold code="usimpleup" output="true">
+                <tables>
+                    <module table="usimpleup_module"/>
+                </tables>
+                <adminhtml>
+                    <controllers/>
+                    <nav>
+                        <system>
+                            <usimpleup title="Simple Upgrades" sort_order="1000" action="usimpleupadmin/adminhtml_module"/>
+                        </system>
+                    </nav>
+                    <config>
+                        <usimpleup title="Simple Upgrades"/>
+                    </config>
+                    <events>
+                        <controller_action_predispatch/>
+                    </events>
+                </adminhtml>
+                <observers>
+                </observers>
+            </scaffold>
+-->
+        </Unirgy_SimpleUp>
+    </modules>
+</config>

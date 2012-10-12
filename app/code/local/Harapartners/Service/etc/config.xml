@@ -122,14 +122,6 @@
                     <stock>Harapartners_Service_Model_Rewrite_CatalogInventory_Resource_Stock</stock>
                 </rewrite>
             </cataloginventory_resource>
-            <checkout>
-                <rewrite>
-                    <!--Harapartners_HpCheckout--><!--Harapartners_Rushcheckout: Timer and quote item removal-->
-                    <session>Harapartners_Service_Model_Rewrite_Checkout_Session</session>
-                    <!--Harapartners_SpeedTax-->
-                    <type_multishipping>Harapartners_Service_Model_Rewrite_Checkout_Type_Multishipping</type_multishipping>
-                </rewrite>
-            </checkout>
             <core>
                 <rewrite>
                     <!--Harapartners_EmailFactory-->
@@ -546,16 +538,4 @@
 			</resources>
 		</acl>
     </adminhtml>
-    <crontab>
-        <jobs>
-            <service_clean_cache_after_sort_rebuild>
-                <schedule>
-                    <cron_expr>15 3 * * *</cron_expr>
-                </schedule>
-                <run>
-                    <model>service/service::cleanCacheAfterSortRebuild</model>
-                </run>
-            </service_clean_cache_after_sort_rebuild>
-        </jobs>
-    </crontab>
 </config>

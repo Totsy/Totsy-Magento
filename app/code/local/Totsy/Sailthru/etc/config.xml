@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @category    Totsy
+ * @package     Totsy_Sailthru
+ * @author      Slavik Koshelevskiy <skosh@totsy.com>
+ * @copyright   Copyright (c) 2012 Totsy LLC
+ */
+-->
+<config>
+    <modules>
+        <Totsy_Sailthru>
+            <version>1.0.1</version>
+        </Totsy_Sailthru>
+    </modules>
+    <global>
+        <helpers>
+            <sailthru>
+                <rewrite>
+                    <cache>Totsy_Sailthru_Helper_Cache</cache>
+                    <feed>Totsy_Sailthru_Helper_Feed</feed>
+                </rewrite>
+            </sailthru>
+        </helpers>
+        <models>
+            <sailthru>
+                <rewrite>
+                    <feed>Totsy_Sailthru_Model_Feed</feed>
+                </rewrite>
+            </sailthru>
+        </models>
+    </global>
+</config>

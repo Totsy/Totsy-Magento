@@ -20,7 +20,7 @@ CREATE TABLE {$this->getTable('linkshare/transactions')} (
   `id` int(10) unsigned NOT NULL auto_increment,
   `trans_id` varchar(10) default NULL,
   `customertracking_id` int(10) unsigned NOT NULL default 0,
-  `order_id` varchar(50) default NULL,
+  `order_id` varchar(255) default NULL,
   `raw_data` varchar(255) NOT NULL default '',
   `order_status` varchar(32) NOT NULL default '',
   `trans_status` varchar(32) NOT NULL default '',

@@ -1,0 +1,184 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @copyright   Copyright (c) 2009-11 Amasty
+ */
+-->
+<config>
+    <modules>
+        <Amasty_Promo>
+            <version>1.0.3</version>
+        </Amasty_Promo>
+    </modules>
+
+    <global>
+        <resources>
+            <ampromo_setup>
+                <setup>
+                    <module>Amasty_Promo</module>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </ampromo_setup>
+            
+            <ampromo_write>
+                <connection>
+                    <use>core_write</use>
+                </connection>
+            </ampromo_write>
+            
+            <ampromo_read>
+                <connection>
+                    <use>core_read</use>
+                </connection>
+            </ampromo_read>
+        </resources>     
+    
+        <models>
+            <ampromo>
+                <class>Amasty_Promo_Model</class>
+            </ampromo>
+        </models>
+        
+        <blocks>
+            <ampromo>
+                <class>Amasty_Promo_Block</class>
+            </ampromo>
+            <adminhtml>
+                <rewrite>
+                    <promo_quote_edit>Amasty_Promo_Block_Adminhtml_Promo_Quote_Edit</promo_quote_edit>
+                </rewrite>
+            </adminhtml>
+        </blocks>  
+                    
+        <helpers>
+            <ampromo>
+                <class>Amasty_Promo_Helper</class>
+            </ampromo>
+        </helpers>
+
+        <events>
+            <salesrule_validator_process>
+                <observers>
+                    <amasty_promo_model_observer>
+                        <type>singleton</type>
+                        <class>Amasty_Promo_Model_Observer</class>
+                        <method>handleValidation</method>
+                    </amasty_promo_model_observer>
+                </observers>
+            </salesrule_validator_process>
+            
+            <sales_quote_collect_totals_before>
+                <observers>
+                    <amasty_promo_model_observer>
+                        <type>singleton</type>
+                        <class>Amasty_Promo_Model_Observer</class>
+                        <method>initFreeItems</method>
+                    </amasty_promo_model_observer>
+                </observers>
+            </sales_quote_collect_totals_before>   
+            
+            <checkout_cart_update_items_before>
+                <observers>
+                    <amasty_promo_model_observer>
+                        <type>singleton</type>
+                        <class>Amasty_Promo_Model_Observer</class>
+                        <method>updateFreeItems</method>
+                    </amasty_promo_model_observer>
+                </observers>                
+            </checkout_cart_update_items_before>    
+            
+            <sales_quote_remove_item>
+                <observers>
+                    <amasty_promo_model_observer>
+                        <type>singleton</type>
+                        <class>Amasty_Promo_Model_Observer</class>
+                        <method>removeFreeItems</method>
+                    </amasty_promo_model_observer>
+                </observers>
+            </sales_quote_remove_item>             
+                     
+        </events>
+    </global>
+
+     <frontend>
+        <routers>
+            <ampromo>
+                <use>standard</use>
+                <args>
+                    <module>Amasty_Promo</module>
+                    <frontName>ampromo</frontName>
+                </args>
+            </ampromo>
+        </routers>
+        <translate>
+            <modules>
+                <Amasty_Promo>
+                    <files>
+                        <default>Amasty_Promo.csv</default>
+                    </files>
+                </Amasty_Promo>
+            </modules>
+        </translate>
+    </frontend> 
+    
+    <adminhtml>
+        <translate>
+            <modules>
+                <Amasty_Promo>
+                    <files>
+                        <default>Amasty_Promo.csv</default>
+                    </files>
+                </Amasty_Promo>
+            </modules>
+        </translate>
+        
+        <events>
+            <adminhtml_block_salesrule_actions_prepareform>
+                <observers>
+                    <amasty_promo_model_observer>
+                        <type>singleton</type>
+                        <class>Amasty_Promo_Model_Observer</class>
+                        <method>handleFormCreation</method>
+                    </amasty_promo_model_observer>
+                </observers>
+            </adminhtml_block_salesrule_actions_prepareform>           
+        </events> 
+		<acl>
+			<resources>
+				<all>
+					<title>Allow Everything</title>
+				</all>
+                <admin>
+                    <children>
+                        <system>
+                            <children>
+                                <config>
+                                    <children>
+                                        <ampromo>
+                                            <title>Promo Items</title>
+                                        </ampromo>
+                                    </children>
+                                </config>
+                            </children>
+                        </system> 
+                     </children>
+                </admin> 
+			</resources>
+		</acl>          
+    </adminhtml>    
+      
+    
+    <default>
+        <ampromo>
+           <general>
+                <prefix>FREE - </prefix>
+                <message>FREE!</message>
+                <allow_delete>0</allow_delete>
+            </general>
+        </ampromo>
+    </default>     
+    
+    
+</config>

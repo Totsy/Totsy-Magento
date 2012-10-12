@@ -108,26 +108,19 @@ class Enterprise_Invitation_IndexController extends Mage_Core_Controller_Front_A
                     if (Enterprise_Invitation_Model_Invitation::ERROR_CUSTOMER_EXISTS === $e->getCode()) {
                         $customerExists++;
                         array_push($existEmailArray, $email);
-                    }
-                    else {
+                    } else {
                         Mage::getSingleton('customer/session')->addError($e->getMessage());
                     }
-                }
-                catch (Exception $e) {
+                } catch (Exception $e) {
                     Mage::getSingleton('customer/session')->addError(Mage::helper('enterprise_invitation')->__('Failed to send email to %s.', $email));
                 }
             }
+
             if ($customerExists) {
                 //Harapartners, yang: for add error message for different existed user
-                foreach ( $existEmailArray as $existEmail ){
-                    $customer = Mage::getModel('customer/customer')->setWebsiteId(Mage::app()->getStore()->getWebsiteId())->loadByEmail($existEmail);
-                    if ( $customer->getStoreId() == Harapartners_Service_Helper_Data::TOTSY_MOBILE_STORE_ID ) {
-                        $customerStoreName = Mage::app()->getStore(Harapartners_Service_Helper_Data::TOTSY_STORE_ID)->getName();
-                    }else {
-                        $customerStoreName = Mage::app()->getStore($customer->getStoreId())->getName();
-                    }                 
-                    Mage::getSingleton('customer/session')->addNotice(                 
-                        Mage::helper('enterprise_invitation')->__('Invitation was not sent to ' . $existEmail . ' because this customer account already exist in ' . $customerStoreName )
+                foreach ($existEmailArray as $existEmail) {
+                    Mage::getSingleton('customer/session')->addNotice(
+                        Mage::helper('enterprise_invitation')->__("Invitations were not sent to $existEmail because this customer account already exists.")
                     );
                 }
                 //Harapartners, yang: end

@@ -213,6 +213,18 @@ class Mage_Catalog_ProductController extends Mage_Core_Controller_Front_Action
     		$this->_forward('noRoute');
     		return;
     	}
+        $category = Mage::getModel('catalog/category')->load($categoryId);
+        if($category->getId()) {
+            Mage::register('current_category',$category);
+        }
+
+
+        $product = Mage::getModel('catalog/product')->load($productId);
+        if($product->getId()) {
+            Mage::register('product',$product);
+            Mage::register('current_product',$product);
+        }
+
     	
     	Mage::unregister('admin_preview_mode');
     	Mage::register('admin_preview_mode', true);

@@ -1,0 +1,10 @@
+<table>
+	<tr>
+		<th>Category:</th>
+		<td><?php echo $this->getCategory()->getName();?> (<?php echo $this->getCategory()->getId();?>)</td>
+	</tr>
+	<tr>
+		<th>Filename:</th>
+		<td><?php echo $this->getImportModel()->getImportFilename(); ?></td>
+	</tr>
+</table>

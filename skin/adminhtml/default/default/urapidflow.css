@@ -1,0 +1,26 @@
+.profile-progress-bar { width:100%; height:20px; border:solid 1px #777; background:#DDD; }
+.profile-progress-bar div { height:20px; background:#8F8; text-align:right; font-weight:bold; color:#000; }
+
+.dry-run { background:#FFD !important; }
+.dry-run div { background:#FFFF80 !important; }
+
+.profile-status-wrapper { width:100%; }
+.profile-status-wrapper td.td-wrapper { padding:10px; }
+.profile-status-numbers { border:solid 1px #969696; border-left:none; border-top:none; }
+.profile-status-numbers td { padding:2px 4px; border:solid 1px #969696; border-right:none; border-bottom:none; white-space:nowrap; }
+.profile-status-numbers .label { font-weight:bold; background:#D0D0D0; text-align:right; }
+.profile-status-numbers .value { background:#F0F0F0; }
+.profile-status-numbers .tr-success td { background:#C0FFC0; }
+.profile-status-numbers .tr-depends td { background:#FFFFC0; }
+.profile-status-numbers .tr-error td { background:#FFC0C0; }
+.profile-status-numbers .tr-warning td { background:#FFFF80; }
+.profile-log-tail { width:100%; border:solid 1px #969696; border-left:none; border-top:none; }
+button.log-report { float:right; margin-left:10px; }
+.profile-log-tail td,
+.profile-log-tail th { padding:2px 4px; border:solid 1px #969696; border-right:none; border-bottom:none; }
+.profile-log-tail td.td-type { font-weight:bold; }
+.profile-log-tail .tr-error td { background:#FFC0C0; }
+.profile-log-tail .tr-warning td { background:#FFFF80; }
+.profile-log-tail .tr-success td { background:#C0FFC0; }
+.profile-log-tail td { width:1%; }
+.profile-log-tail td.td-msg { width:97%; }
