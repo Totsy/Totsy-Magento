@@ -122,7 +122,7 @@
 			params['shipping'] = Object.toJSON(shipping);
 			//get values for shipping method 
 			var	shippingmethod = $('shippingmethod-fields').serialize(true);
-			shippingmethod.customcarrier = $('customCarrier').value;
+			//shippingmethod.customcarrier = $('customCarrier').value;
 			shippingmethod.rateid = $F('rateid');
 			params['shippingmethod'] = Object.toJSON(shippingmethod);
 			//get values for existing items on order

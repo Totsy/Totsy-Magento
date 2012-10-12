@@ -33,6 +33,8 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Eitems extends TinyBrick_Order
 				$comment .= "Removed Item(SKU): " . $item->getSku() . "<br />";
                 Mage::getSingleton('cataloginventory/stock')->backItemQty($item->getProductId(),$item->getQtyOrdered());
 				$order->removeItem($itemId);
+                $itemQueue = Mage::getModel('fulfillmentfactory/itemqueue')->loadByItemId($itemId);
+                $itemQueue->setStatus(Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_CANCELLED);
 			} else {
 				$oldArray = array('price'=>$item->getPrice(), 'discount'=>$item->getDiscountAmount(), 'qty'=>$item->getQtyOrdered());
 				$item->setPrice($data['price'][$key]);
