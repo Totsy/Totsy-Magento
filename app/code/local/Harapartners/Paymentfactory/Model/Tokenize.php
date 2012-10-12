@@ -9,8 +9,6 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Totsy_Cybersource_Model
     protected $_infoBlockType = 'paymentfactory/info';
     protected $_payment = null;
     protected $_canRefundInvoicePartial = true;
-    
-    //HP, Payment failed emails (to customer and admin)
     protected $_emailTemplate;
     protected $_sender;
     protected $_adminReceivers;

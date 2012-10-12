@@ -38,7 +38,6 @@ class Harapartners_Promotionfactory_Model_Observer {
                 ->addFilter('status', Harapartners_Promotionfactory_Model_Virtualproductcoupon::COUPON_STATUS_AVAILABLE);
         $vpc = $coupons->getFirstItem();
 
-        //'null' when current virtual product does not have any coupon code associated with it
         if($vpc === null){
             return;
         }

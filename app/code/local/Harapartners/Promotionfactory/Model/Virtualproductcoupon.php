@@ -13,16 +13,16 @@
  */
 
 class Harapartners_Promotionfactory_Model_Virtualproductcoupon extends Mage_Core_Model_Abstract {
-	
-	const COUPON_STATUS_AVAILABLE = 0;
-	const COUPON_STATUS_RESERVED = 1;
-	const COUPON_STATUS_PURCHASED = 2;
-	
-	protected function _construct(){
+
+    const COUPON_STATUS_AVAILABLE = 0;
+    const COUPON_STATUS_RESERVED = 1;
+    const COUPON_STATUS_PURCHASED = 2;
+
+    protected function _construct(){
         $this->_init('promotionfactory/virtualproductcoupon');
     }
     
-	protected function _beforeSave(){
+    protected function _beforeSave(){
         $datetime = date('Y-m-d H:i:s');
         if(!$this->getId()){
             $this->setData('created_at', $datetime);
@@ -49,7 +49,7 @@ class Harapartners_Promotionfactory_Model_Virtualproductcoupon extends Mage_Core
                         $vpc = Mage::getModel('promotionfactory/virtualproductcoupon')->load($codeCoupon, 'code');
                         if($vpc->getId()){
                             $vpc->setData('status', Harapartners_Promotionfactory_Model_Virtualproductcoupon::COUPON_STATUS_RESERVED)
-                            ->save();
+                                ->save();
                         }
                     }
                 }
@@ -72,19 +72,10 @@ class Harapartners_Promotionfactory_Model_Virtualproductcoupon extends Mage_Core
                         $codeCoupon = str_replace($textDetail,'', $optionDataArray['value']);
                         $vpc = Mage::getModel('promotionfactory/virtualproductcoupon')->load($codeCoupon, 'code');
                         if($vpc->getId()){
-                            Mage::log(var_export($vpc->getResource(), true),null,'virtualDebug.log');
-                            Mage::log('Coupon Id' . $vpc->getId(),null,'virtualDebug.log');
-                            Mage::log('Order Id' . $order->getId(),null,'virtualDebug.log');
-                            Mage::log('Order Increment Id' . $order->getIncrementId(), null,'virtualDebug.log');
-                            Mage::log(print_r($vpc->getData(), true),null,'virtualDebug.log');
-                            $vpc->setData('status', Harapartners_Promotionfactory_Model_Virtualproductcoupon::COUPON_STATUS_PURCHASED);
-                            Mage::log(print_r($vpc->getData(), true),null,'virtualDebug.log');
-                            $vpc->save();
-                            Mage::log(print_r($vpc->getData(), true),null,'virtualDebug.log');
-                            Mage::log('Coupon Saved',null,'virtualDebug.log');
-                            $vpcAfter = Mage::getModel('promotionfactory/virtualproductcoupon')->load($codeCoupon, 'code');
-                            Mage::log(print_r($vpcAfter->getData(), true),null,'virtualDebug.log');
-                            exit();
+                            $vpc->setData('status', Harapartners_Promotionfactory_Model_Virtualproductcoupon::COUPON_STATUS_PURCHASED)
+                                ->setData('order_id', $order->getId())
+                                ->setData('order_increment_id', $order->getIncrementId())
+                                ->save();
                         }
                     }
                 }
@@ -92,7 +83,4 @@ class Harapartners_Promotionfactory_Model_Virtualproductcoupon extends Mage_Core
         }
         return;
     }
-    
-    
-
 }
