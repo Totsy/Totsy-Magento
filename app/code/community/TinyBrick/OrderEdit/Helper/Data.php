@@ -38,8 +38,13 @@ class TinyBrick_OrderEdit_Helper_Data extends Mage_Core_Helper_Data
 	}
 
     public function getItemQuantitiesAvailable($item) {
+        if(Mage::getModel('sales/order_item')->load($item->getId(),'parent_item_id')->getId()) {
+            $orderChildItem = Mage::getModel('sales/order_item')->load($item->getId(),'parent_item_id');
+        } else {
+            $orderChildItem = $item;
+        }
         $maxAvailable = ((int)$item->getQtyOrdered()
-            + (int) Mage::getModel('catalog/product')->load($item->getProductId())->getStockItem()->getQty());
+            + (int) Mage::getModel('catalog/product')->load($orderChildItem->getProductId())->getStockItem()->getQty());
         if($maxAvailable > 9) {
             $maxAvailable = 9;
         }

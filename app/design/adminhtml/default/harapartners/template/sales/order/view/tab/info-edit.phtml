@@ -121,10 +121,10 @@
 			var	shipping = $('shipping-fields').serialize(true);
 			params['shipping'] = Object.toJSON(shipping);
 			//get values for shipping method 
-			var	shippingmethod = $('shippingmethod-fields').serialize(true);
+			//var	shippingmethod = $('shippingmethod-fields').serialize(true);
 			//shippingmethod.customcarrier = $('customCarrier').value;
-			shippingmethod.rateid = $F('rateid');
-			params['shippingmethod'] = Object.toJSON(shippingmethod);
+			//shippingmethod.rateid = $F('rateid');
+			//params['shippingmethod'] = Object.toJSON(shippingmethod);
 			//get values for existing items on order
 			var eitems = new Object();
 			eitems.id = new Array();
