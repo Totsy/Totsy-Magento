@@ -56,6 +56,8 @@ class Harapartners_Customertracking_Helper_CustomPixel
     }
 
     public function linkshare($pixel) {
+
+        $login_time = Mage::getSingleton('customer/session')->getData('CUSTOMER_LAST_VALIDATION_TIME');
         $customer = Mage::getSingleton('customer/session')->getCustomer();
         $orderId = Mage::getSingleton('checkout/session')->getLastOrderId();
         $trackingInfo = Mage::getSingleton('customer/session')->getData('affiliate_info');
@@ -75,7 +77,7 @@ class Harapartners_Customertracking_Helper_CustomPixel
             $split_orders = Mage::getModel('sales/order')->getCollection();
             $split_orders->getSelect()->where('increment_id like "' . $cust_order_id . '-%"');
             foreach($split_orders as $order) {
-                $message = Mage::helper('linkshare/linkshare')->linkshareRaw($order, $regParams['subID'],$customer->getUpdatedAt(),'Pixel');
+                $message = Mage::helper('linkshare/linkshare')->linkshareRaw($order, $regParams['subID'],$login_time,'Pixel');
                 $encode = Mage::helper('linkshare/linkshare')->prepareTransactionData($message);
                 $result = Mage::helper('linkshare/linkshare')->sendTransaction($encode, $order->getIncrementId(), $order->getStatus());
                 $result['customertracking_id'] = (int)$customertracking->getCustomertrackingId();
@@ -91,7 +93,7 @@ class Harapartners_Customertracking_Helper_CustomPixel
             }
             $html = rtrim($html, "\"/>");
         } else {
-            $message = Mage::helper('linkshare/linkshare')->linkshareRaw($order, $regParams['subID'],$customer->getUpdatedAt(),$order->getStatus());
+            $message = Mage::helper('linkshare/linkshare')->linkshareRaw($order, $regParams['subID'],$login_time,$order->getStatus());
             $html .= $message;
             $encode = Mage::helper('linkshare/linkshare')->prepareTransactionData($message);
             $result = Mage::helper('linkshare/linkshare')->sendTransaction($encode, $order->getIncrementId(), $order->getStatus());

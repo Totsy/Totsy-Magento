@@ -474,10 +474,15 @@ XML;
              }
 
             $billingName = $billingAddress->getFirstname() . ' ' . $billingAddress->getLastname();
+            $billingName = substr($billingName, 0, 30);
+
+            $billing_street_1 = substr($billingAddress->getStreet(1), 0,30);
+            $billing_street_2 = substr($billingAddress->getStreet(2), 0,30);
 
             $billing_state = Mage::helper('fulfillmentfactory')->getStateCodeByFullName($billingAddress->getRegion(), $billingAddress->getCountry());
 
             $billing_city = Mage::helper('fulfillmentfactory')->validateAddressForDC('CITY', $billingAddress->getCity());
+            $billing_city = substr($billing_city, 0, 20);
 
             $billing_country = Mage::helper('fulfillmentfactory/dotcom')->getCountryCodeUsTerritories($billing_state);
 
@@ -525,8 +530,8 @@ XML;
                     <billing-customer-number xsi:nil="true"/>
                     <billing-name><![CDATA[{$billingName}]]></billing-name>
                     <billing-company xsi:nil="true"/>
-                    <billing-address1><![CDATA[{$billingAddress->getStreet(1)}]]></billing-address1>
-                    <billing-address2><![CDATA[{$billingAddress->getStreet(2)}]]></billing-address2>
+                    <billing-address1><![CDATA[{$billing_street_1}]]></billing-address1>
+                    <billing-address2><![CDATA[{$billing_street_2}]]></billing-address2>
                     <billing-address3 xsi:nil="true"/>
                     <billing-city><![CDATA[$billing_city]]></billing-city>
                     <billing-state>{$billing_state}</billing-state>
@@ -583,13 +588,17 @@ XML;
                 $sku = substr($item->getSku(), 0, 17);
 
                 if($quantity) {
+                    $taxAmount = $item->getTaxAmount();
+                    if (!$taxAmount) {
+                        $taxAmount = '0';
+                    }
 
                     $xml .= <<<XML
                     <line-item>
                         <sku>$sku</sku>
                         <quantity>$quantity</quantity>
                         <price>{$item->getPrice()}</price>
-                        <tax>{$item->getTaxAmount()}</tax>
+                        <tax>$taxAmount</tax>
                         <shipping-handling>0</shipping-handling>
                         <client-item xsi:nil="true"/>
                         <line-number xsi:nil="true"/>

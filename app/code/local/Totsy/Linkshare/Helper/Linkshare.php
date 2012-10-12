@@ -85,8 +85,9 @@
         $parser = xml_parser_create();
         xml_parse_into_struct($parser, file_get_contents($data), $response, $index);
         xml_parser_free($parser);
+        $message = "";
         $status = $response[1]['value'];
-            if( $status == 'Access denied' ) {
+        if( $status == 'Access denied' ) {
              $success = false;
              $message = 'Access Denied';
         }else{

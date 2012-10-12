@@ -16,6 +16,10 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Payment extends TinyBrick_Orde
             $customerId = $order->getCustomerId();
             $billingId = $order->getData('billing_address_id');
             $billing = Mage::getModel('sales/order_address')->load($billingId);
+            $customerAddressId = Mage::getModel('orderedit/edit_updater_type_billing')->getCustomerAddressFromBilling($billingId);
+            if(!$customerAddressId) {
+                return "Error updating payment informations : Address is not attached to the Customer";
+            }
             $data = $this->cleanPaymentData($data);
             $payment = new Varien_Object($data);
             $payment->setData('cc_last4', substr($payment->getCcNumber(), -4));   
@@ -38,7 +42,7 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Payment extends TinyBrick_Orde
             }
             if($savingNewCreditCard) {
                 $billing->setData('email', $order->getCustomerEmail());
-                Mage::getModel('paymentfactory/tokenize')->createProfile($payment, $billing, $customerId, $billingId);
+                Mage::getModel('paymentfactory/tokenize')->createProfile($payment, $billing, $customerId, $customerAddressId);
             }
             $this->replacePaymentInformation($order, $payment);
             $this->makeOrderReadyToBeProcessed($order);

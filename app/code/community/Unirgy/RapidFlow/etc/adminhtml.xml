@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<config>
+    <menu>
+        <system>
+            <children>
+                <urapidflow translate="title" module="urapidflow">
+                    <title>RapidFlow</title>
+                    <sort_order>45</sort_order>
+                    <action>urapidflowadmin/adminhtml_profile</action>
+                    <!--
+                    <children>
+                        <batch module="urapidflow">
+                            <title>Batches</title>
+                            <sort_order>10</sort_order>
+                            <action>urapidflowadmin/adminhtml_batch</action>
+                        </batch>
+                        <profile module="urapidflow">
+                            <title>Profiles</title>
+                            <sort_order>20</sort_order>
+                            <action>urapidflowadmin/adminhtml_profile</action>
+                        </profile>
+                    </children>
+                    -->
+                </urapidflow>
+            </children>
+        </system>
+    </menu>
+
+    <acl>
+    <resources>
+        <admin>
+            <children>
+                <system>
+                    <children>
+                        <urapidflow translate="title" module="urapidflow">
+                            <title>RapidFlow</title>
+                        </urapidflow>
+                        <config>
+                            <children>
+                                <urapidflow translate="title" module="urapidflow">
+                                    <title>RapidFlow</title>
+                                </urapidflow>
+                            </children>
+                        </config>
+                    </children>
+                </system>
+            </children>
+        </admin>
+    </resources>
+</acl>
+</config>

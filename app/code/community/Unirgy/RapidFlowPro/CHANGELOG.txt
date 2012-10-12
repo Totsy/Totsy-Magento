@@ -1,0 +1,170 @@
+===== 2.0.0.1 =====
+  * Added group prices import CPPG (for Magento 1.7.x and up)
+  * Added export_before_format and export_before_output events to category profile
+  * Added import option for EAV, to allow duplicate attribute option values [EAO] (as does Magento allow)
+  * Fixed bug not allowing all root categories to be used
+  * Fixed missing 'Use Default' option for is shareable column for downloadable options
+===== 2.0.0.0 =====
+  * Fixed EAOL when importing option values to update existing options
+  * Added option "Use Prepended Root Category Name To URL Paths" to categories, product extra data type profiles
+    Serves as a workaround when there are multiple root categories with identical trees, or tree elements.
+    Hence subcategories within different root categories have identical url paths.
+  * Added "Retain remote subfolders" option
+  * Added ability to delete gallery images using any filenames
+    filenames will be normalized to match values in db
+    this useful when using same profile for insert and delete images
+
+===== 1.6.2.3 =====
+  * Fixed "Notice: Undefined variable: additionalKey in RapidFlowPro/Model/Mysql4/Category/Abstract.php"
+    when Configuration > Catalog > Search Engine Optimizations > Category URL Suffix is empty
+  * Fixed import of -CPIL row type (rised - SQLSTATE[23000]: Integrity constraint violation: 1052 Column 'value_id' in field list is ambiguous)
+===== 1.6.2.0 =====
+  * Added implementation of CCP export
+
+===== 1.6.1.0 =====
+  * Fixed not updating successfully updated rows count in for some fields (category import)
+  * Fixed redundant check for required attributes when importing existing categories does not allow simple updates
+
+===== 1.6.0.5 =====
+  * Added automatic sort_order for EASI
+
+===== 1.6.0.4 =====
+  * Fixed minor bug in categories import
+
+===== 1.6.0.3 =====
+  * Fixed bug exporting categories for base (admin) store, introduced in 1.6.0.1
+
+===== 1.6.0.2 =====
+  * Fixed export categories to limit to store root
+
+===== 1.6.0.1 =====
+  * Fixed export categories for not default store view
+
+===== 1.6.0.0 =====
+  * Added compatibility with CE 1.5.0.1
+  * Fixed refreshing has_options, required_options on CPCO, CPBO, CPSA
+  * Fixed wildcard delete actions for old version of Zend_Framework
+  * Fixed updating categories children_count
+
+===== 1.5.9.1 =====
+  * Added mapping the same column in import file to multiple attributes
+
+===== 1.5.7 =====
+  * Added deletion of multiple records for -CCP,-CPSA,-CPSI,-CPI row types
+
+===== 1.5.6.1 =====
+  * Fixed recognizing selection_sku column in CPBOS rows
+  * Fixed creating bundle products with "Fixed" price type
+
+===== 1.5.6 =====
+  * Added reindex type (auto/manual)
+
+===== 1.5.5 =====
+  * Fixed deleting CPSI records
+
+===== 1.5.4 =====
+  * Fixed inserting CPGI records in some cases
+
+===== 1.5.3 =====
+  * Worked around a PDO bug on some PHP versions (5.2.0)
+
+===== 1.5.2 =====
+  * Fixed handling missing default attribute values
+
+===== 1.5.1 =====
+  * Added exporting category.entity_id
+
+===== 1.5.0 =====
+  * Fixed issues with reindexing in CE 1.4.1.1
+
+===== 1.4.14 =====
+  * Fixed handling empty const.value in categories export
+
+===== 1.4.12 =====
+  * Fixed importing large text attribute values (>4K)
+  * Fixed handling file names as case sensitive
+
+===== 1.4.8 =====
+  * Fixed some "delete" actions in EAV and Product Extra data type profiles
+
+===== 1.4.7 =====
+  * Fixed throwing correct error message when customer group is invalid
+
+===== 1.4.6.1 =====
+  * Fixed changing file encoding on export
+
+===== 1.4.6 =====
+  * Improved handling of multiple profile invocations in the same PHP script
+
+===== 1.4.5 =====
+  * Version bump with uRapidFlow basic
+
+===== 1.4.4 =====
+  * Version bump with uRapidFlow basic
+
+===== 1.4.3 =====
+  * Added import option for action to take when source image file is missing
+  * Improvements of memory consumption and performance related to ionCube loaders
+
+===== 1.4.2 =====
+  * Added compatibility fixes for EE 1.8.0.0 and CE 1.4.1.0
+
+===== 1.4.1 =====
+  * Work around for Zend_Db bug in CPRI,CPXI,CPGI,CPUI delete actions
+  * Added CCP row type import
+
+===== 1.4.0 =====
+  * Version bump with uRapidFlow basic
+
+===== 1.3.9 =====
+  * Refactoring for easier customization
+
+===== 1.3.8 =====
+  * Fixed using default values during export
+
+===== 1.3.7 =====
+  * Improved performance and memory consumption when only creation of new categories is requested
+
+===== 1.3.6 =====
+  * Fixed category import error when attribute value records have null
+  * Fixed compatibility with extensions that override catalog/product incorrectly
+
+===== 1.3.5.1 =====
+  * Fixed creating/updating categories for non-default store when admin value exists
+
+===== 1.3.5 =====
+  * Improved logic of mapping dropdown attribute values to internal IDs
+
+===== 1.3.4 =====
+  * Fixed importing configurable products for 1.4.x
+
+===== 1.3.3 =====
+  * Fixed updating category position
+
+===== 1.3.2 =====
+  * Fixed importing empty numeric values bug, introduced in 1.3.1
+
+===== 1.3.1 =====
+  * Added importing non-US locale numbers for categories
+
+===== 1.3.0 =====
+  * Worked around ionCube memory leaks
+  * Improved performance for fixed row data types
+
+===== 1.2.2 =====
+  * Category import: Fixed overwriting existing attributes with default values
+  * Category import: Added using Magento default attribute values
+  * Added extension version in admin
+
+===== 1.2.1 =====
+  * Added more import options for Category data type
+
+===== 1.2.0 =====
+  * Added full support for internationalization
+
+===== 1.1.0 =====
+  * Fixed exporting records when no store ids specified
+  * Added having label optional in CPSA
+
+===== 1.0.0 =====
+  * Initial release

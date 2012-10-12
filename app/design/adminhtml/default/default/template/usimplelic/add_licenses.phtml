@@ -1,0 +1,15 @@
+<div class="entry-edit">
+    <div class="entry-edit-head">
+        <h4 class="icon-head head-edit-form fieldset-legend">
+            <?php echo $this->__('Copy/paste license key from your order confirmation email here:')?>
+        </h4>
+    </div>
+    <fieldset class="fieldset">
+        <legend><?php echo $this->__('Add new license key:') ?></legend>
+
+        <p><input class="input-text" type="text" name="license_key" style="width:95%" /></p>
+        <p><label><input type="checkbox" name="download_install"> <?php echo $this->__('Download and install related extensions')?></label></p>
+        <p><input class="form-button" type="submit" name="do" value="<?php echo Mage::helper('usimplelic')->__('Add license key') ?>"/></p>
+    </fieldset>
+
+</div>
