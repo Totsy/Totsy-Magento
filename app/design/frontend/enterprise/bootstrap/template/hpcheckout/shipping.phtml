@@ -12,13 +12,6 @@
 	    	    </div>
 	    	    <input type="hidden" name="shipping[email]" id="shipping:email" value="<?php echo $this->getCustomer()->getEmail() ?>" />
 	    	    <input type="hidden" name="shipping[selected]" id="shipping:selected" />
-	    	    <!-- li class="fields">
-	    	        <div class="field half-of-half">
-			            <span for="shipping:email" class="required"><em>*</em><?php echo $this->__('Email Address') ?></span>
-			            <input type="text" name="shipping[email]" id="shipping:email" title="<?php echo $this->__('Email Address') ?>" class="input-text validate-email required-entry" value="<?php echo $this->htmlEscape($this->getAddress()->getEmail()) ?>" />
-			        </div>
-	    	    </div-->
-	    	     <div >
 	    	         <div class="field half-of-half">
 			            <label for="shipping:street1" class="required"><em>*&nbsp;</em><?php echo $this->__('street address line 1') ?></label>
 			            <input type="text" title="<?php echo $this->__('Street Address Line 1') ?>" name="shipping[street][0]" id="shipping:street1" value="<?php echo $this->getAddress()->getStreet(1) ?>" placeholder="<?php echo $this->__('Street Address Line 1') ?>" class="input-text required-entry streetaddress1" />
@@ -31,6 +24,10 @@
 	                 </div>
 	    	     </div>
 	    	     <div> 
+	    	         <div class="pull-left field half-of-half">
+	                     <label for="shipping:city" class="required"><em>*&nbsp;</em><?php echo $this->__('city') ?></label>
+	                     <input type="text" title="<?php echo $this->__('City') ?>" name="shipping[city]" class="input-text required-entry city" value="<?php echo $this->getAddress()->getCity() ?>" placeholder="<?php echo $this->__('City') ?>" id="shipping:city" />
+	                 </div>	
 	    	     	 <div class="pull-left half-of-half">
 	                     <label for="shipping:region_id" class="required"><em>*&nbsp;</em><?php echo $this->__('state') ?></label>
 		                 <div class="totsy-selective-input-box">
@@ -42,21 +39,16 @@
                             $('shipping:region_id').setAttribute('defaultValue',  "<?php echo $this->getAddress()->getRegionId() ?>");
                          </script>
                          <input type="text" id="shipping:region" name="shipping[region]" value="<?php echo $this->htmlEscape($this->getAddress()->getRegion()) ?>"  title="<?php echo $this->__('State/Province') ?>" class="input-text hidden-state" style="display:none;" />
-	                  </div>
-                      <div class="pull-left field half-of-half">
-	                     <label for="shipping:city" class="required"><em>*&nbsp;</em><?php echo $this->__('city') ?></label>
-	                     <input type="text" title="<?php echo $this->__('City') ?>" name="shipping[city]" class="input-text required-entry city" value="<?php echo $this->getAddress()->getCity() ?>" placeholder="<?php echo $this->__('City') ?>" id="shipping:city" />
-	                 </div>	 
+	                  </div> 
 	                  <div class="field half-of-half">
 	                      <label for="shipping:postcode" class="required"><em>*&nbsp;</em><?php echo $this->__('zip/postal code') ?></label>
-	                      <input type="text" title="<?php echo $this->__('Zip/Postal Code') ?>" name="shipping[postcode]" id="shipping:postcode" class="input-text validate-zip required-entry zip" value="<?php echo $this->getAddress()->getPostcode() ?>" placeholder="<?php echo $this->__('Zip/Postal Code') ?>" />
+	                      <input type="text" title="<?php echo $this->__('Zip Code') ?>" name="shipping[postcode]" id="shipping:postcode" class="input-text validate-zip required-entry zip" value="<?php echo $this->getAddress()->getPostcode() ?>" placeholder="<?php echo $this->__('Zip/Postal Code') ?>" />
 	                  </div>
 	              </div>
 	              <div>
 	    	          <div class="field half-of-half">
 	    	        	    <label for="shipping:telephone" class="required"><em>*&nbsp;</em><?php echo $this->__('telephone') ?></label>
 	    	        	    <input type="text" name="shipping[telephone]" title="<?php echo $this->__('Telephone') ?>" class="input-text required-entry validate-phoneLax telephone" id="shipping:telephone" value="<?php echo $this->htmlEscape($this->getAddress()->getTelephone()) ?>" placeholder="Telephone" onkeyup="backspacerUP(this,event);" onkeydown="backspacerDOWN(this,event);"/>
-	    	        	</div>
 	    	         </div> 
 	                 <div class="field half-of-half">
                          <label for="shipping:country_id" class="required"><em>*&nbsp;</em><?php echo $this->__('country') ?></label>
@@ -70,12 +62,14 @@
 <script type="text/javascript">
 //<![CDATA[
     var shippingRegionUpdater = new RegionUpdater('shipping:country_id', 'shipping:region', 'shipping:region_id', countryRegions, undefined, 'shipping:postcode');
-//    var shippingForm = new VarienForm('hpcheckout-shipping-form');
+
     jQuery( document ).ready( function() {
-        jQuery( '#shipping\\:postcode, #shipping\\:region_id' ).bind( 'change', hpcheckout.update );
+
+        //console.log(shippingRegionUpdater);
+        
+        jQuery( '#shipping\\:postcode, #shipping\\:region_id' ).blur( function() { hpcheckout.update(true); } );
         jQuery( '#shipping-address-select' ).bind( 'change', hpcheckout.switchAddress );
         jQuery( '#billing\\:selected' ).val(jQuery( '#billing-address-select' ).val());
     });
-    
 //]]>
 </script>

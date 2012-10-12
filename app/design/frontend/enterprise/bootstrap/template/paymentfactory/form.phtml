@@ -9,7 +9,7 @@
 	
 	//extending validation JS to include validation for rules for cc types displayed with radio buttons
 	Validation.add(['validate-cc-type-radio', 'Credit card number does not match credit card type.', function(v, elm) {
-                // remove credit card number delimiters such as "-" and space
+                // remove credit cardf number delimiters such as "-" and space
                 elm.value = removeDelimiters(elm.value);
                 v         = removeDelimiters(v);
                 var ccType = $$('input:checked[type="radio"][name="payment[cc_type]"]').pluck('value');
@@ -80,10 +80,18 @@
         		 	    </span>
         		 	</span> 
         		 <?php endforeach ?>
-        		<!-- part B of a hack for the radio button error message-->
+        		 <?php $methods = $this->getLayout()->getBlock('hpcheckout.payment.methods')->getMethods();  ?> 
+                 <?php if(count($methods)): ?>
+                 	<?php if( Mage::getConfig()->getModuleConfig('Mage_Paypal')->is('active', 'true') ): ?>
+			    	<input type="radio" value="paypal_express" id="paypal_payment" name="paypal_payment">
+        		 	    <span title="Paypal Express" class="paypal"></span>
+        		 	<?php endif; ?>
+                 <?php foreach ($methods as $_method): $_code = $_method->getCode() ?>
+        		 <?php if($this->getSelectedMethodCode()==$_code){ echo "checked"; } //echo $_code; ?>
+        		 <?php endforeach; ?>
+                 <?php endif; ?>                 
         		 <div style="clear:both; height:10px"></div>
         	    </div>
-        	    
         	</div>  
         </div>     
         <div class="pull-right cc_saved_cards">
@@ -109,6 +117,7 @@
         </div>
     </div>
     <div style="clear:both"></div>
+    <div id="cc_data">
     <div>
         <div class="pull-left cc_num use-new-card-wrapper">
             
@@ -116,7 +125,7 @@
                 <input type="text" id="<?php echo $_code ?>_cc_number" name="payment[cc_number]" title="<?php echo $this->__('Credit Card Number') ?>" class="input-text validate-cc-number validate-cc-type-radio" value="<?php echo (($this->__('Credit Card Number')!=='Credit Card Number') ? $this->__('Credit Card Number') : "") ?>" placeholder="<?php echo $this->__('Credit Card Number') ?>" />
             </div>
         </div>
-        <div class="rewards_points use-new-card-wrapper">
+        <div class="rewards_points use-new-card-wrapper pull-left">
             <?php echo $this->getLayout()->getBlock('hpcheckout.reward.points')->toHtml(); ?>
         </div>
     </div>
@@ -151,15 +160,20 @@
                 </select>
             </div>
         </div>
-        <div class="cc_save_card pull-right use-new-card-wrapper">
+        <div class="cc_save_card pull-left use-new-card-wrapper">
             <span>
                 <input type="checkbox" value="1" name="payment[saved_by_customer]" id="<?php echo $_code ?>_saved" />
             </span>
             <span for="<?php echo $_code ?>_cc_save"><?php echo $this->__(' Save this Credit Card ?') ?>
             </span>
         </div>
+        <div class="cc_security">
+            <div class="cc_secure_icon"><img src="https://ben.totsy.com/skin/frontend/enterprise/bootstrap/images/security-lock.png" width="19" height="32"></div>
+            <div class="cc_secure_text">Totsy.com makes sure your information<br> is private and secure.</div>
+        </div>
     </div> 
     <div style="clear:both"></div>
+</div>
 </div>
         <?php if ($this->hasSsCardType()): ?>
         <li id="<?php echo $_code ?>_cc_type_ss_div">
@@ -223,40 +237,49 @@
 // disable billing address form controls for saved credit card
 jQuery( document ).ready( function($) {
 	// cache jQuery objects
-	var $billAddySelect = $("#billing-address-select");
-	var $newCardWrap = $('.use-new-card-wrapper');
-	var $newCardCtrls = $( 'input, select', '.use-new-card-wrapper' );
-	var $selectUIWraps = $('.totsy-selective-input-box', '#hpcheckout-billing-wrapper');
-	var $billFormInputs = $('#hpcheckout-billing-form :input');
-    $('select#cybersource-use-card-method').change( function() {
-    
+	var billAddySelect = jQuery("#billing-address-select");
+	var newCardWrap = jQuery('.use-new-card-wrapper');
+	//var newCardCtrls = jQuery( 'input, select', '.use-new-card-wrapper' );
+	var selectUIWraps = jQuery('.totsy-selective-input-box', '#hpcheckout-billing-wrapper');
+	var billFormInputs = jQuery('#hpcheckout-billing-form :input');
+    jQuery('#cybersource-use-card-method').change( function() {    
         if( $( this ).val() == '' ) {
-            $newCardWrap.show();
-            $newCardCtrls.removeAttr('disabled');
-            $selectUIWraps.removeClass('disabled');
-            $billAddySelect.removeAttr('disabled');
+        	if(jQuery('#paypal_payment').legth > 0) {
+            	jQuery('#paypal_payment').attr("checked", false);
+            }
+            //if(jQuery("#payment_form_paypal_express").length > 0) {
+                //jQuery("#payment_form_paypal_express").show();           	
+            //}
+            jQuery("#cc_data").show();
+            newCardWrap.show();
+            //newCardCtrls.removeAttr('disabled');
+            selectUIWraps.removeClass('disabled');
+            billAddySelect.removeAttr('disabled');
             //Enable Billing Inputs if credit card not selected
-            $billFormInputs.each(function(i) {
-                $(this).removeAttr('disabled');
-                $(this).val('');
+            billFormInputs.each(function(i) {
+                jQuery(this).removeAttr('disabled');
+                jQuery(this).val('');
             });
-        } else {	
-			$newCardWrap.hide();
-			$newCardCtrls.attr( 'disabled', 'disabled' ); // disable new card controls
-			$selectUIWraps.addClass('disabled'); // 'disable' select UI wrappers
+        } else { 
+            if(jQuery("#payment_form_paypal_express").length > 0){
+                jQuery("#payment_form_paypal_express").hide();           	
+            }
+			newCardWrap.hide();
+			//newCardCtrls.attr( 'disabled', 'disabled' ); // disable new card controls
+			selectUIWraps.addClass('disabled'); // 'disable' select UI wrappers
 			
-			if($("#address_" + $( this ).val()).val()) {
-			    $billAddySelect.val($("#address_" + $( this ).val()).val()).change();
+			if(jQuery("#address_" + jQuery( this ).val()).val()) {
+			    billAddySelect.val(jQuery("#address_" + $( this ).val()).val()).change();
 			    //Block Billing Inputs if credit card selected
-			    $billFormInputs.each(function(i) {
-			        if($(this).attr('id') != 'button_ship_to') {
-			            $(this).attr('disabled','disabled');
+			    billFormInputs.each(function(i) {
+			        if(jQuery(this).attr('id') != 'button_ship_to') {
+			            jQuery(this).attr('disabled','disabled');
 			        }
 			    });
-			    $billAddySelect.attr('disabled','disabled');
+			    billAddySelect.attr('disabled','disabled');
 			} else {
-			    $billAddySelect.removeAttr('disabled');
-			    $billFormInputs.each(function(i) {
+			    billAddySelect.removeAttr('disabled');
+			    billFormInputs.each(function(i) {
 			        $(this).removeAttr('disabled');
 			    });
 			}

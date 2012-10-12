@@ -43,18 +43,20 @@
     <h2><?php echo $this->__('Shopping Cart') ?></h2>
 </div>
 <div class="cart">
-<div class="top-check-out">
+<div class="top-check-out clear container">
         <?php if(!$this->hasError()): ?>
-            <span class="pull-right">
-        	<?php foreach ($this->getMethods('top_methods') as $method): ?>
-        	    <?php if ($methodHtml = $this->getMethodHtml($method)): ?>
-        	    	<?php echo $methodHtml; ?>
+                <div class="pull-left">
+                <?php if($this->getContinueShoppingUrl()): ?>
+        	        <button type="button" title="<?php echo $this->__('Continue Shopping') ?>" class="button btn-continue btn" onclick="setLocation('<?php echo $this->getContinueShoppingUrl() ?>')"><?php echo $this->__('Continue Shopping') ?></button>
         	    <?php endif; ?>
-        	<?php endforeach; ?>
-			<?php if($this->getContinueShoppingUrl()): ?>
-        	    <button type="button" title="<?php echo $this->__('Continue Shopping') ?>" class="button btn-checkout-continue btn-continue btn" onclick="setLocation('<?php echo $this->getContinueShoppingUrl() ?>')"><?php echo $this->__('Continue Shopping') ?></button>
-        	<?php endif; ?>        
-        	</span>
+        	    </div>
+                <div class="btn-cart-checkout">
+        	    <?php foreach ($this->getMethods('top_methods') as $method): ?>
+        	        <?php if ($methodHtml = $this->getMethodHtml($method)): ?>
+        	        	<?php echo $methodHtml; ?>
+        	        <?php endif; ?>
+        	    <?php endforeach; ?>
+        	    </div>
         <?php endif; ?>
     </div>
     <div class="clear"></div>
@@ -104,18 +106,20 @@
             	<span><?php echo $this->__('Your savings: ') ?></span><?php echo Mage::helper('checkout')->formatPrice($saving); ?>
             </p>
         <?php endif;?>
-        <div class="top-check-out clear">
+        <div class="top-check-out clear container">
         <?php if(!$this->hasError()): ?>
-            <span class="btn-checkout-group">
-        	<?php foreach ($this->getMethods('top_methods') as $method): ?>
-        	    <?php if ($methodHtml = $this->getMethodHtml($method)): ?>
-        	    	<?php echo $methodHtml; ?>
+                <div class="pull-left">
+                <?php if($this->getContinueShoppingUrl()): ?>
+        	        <button type="button" title="<?php echo $this->__('Continue Shopping') ?>" class="button btn-continue btn" onclick="setLocation('<?php echo $this->getContinueShoppingUrl() ?>')"><?php echo $this->__('Continue Shopping') ?></button>
         	    <?php endif; ?>
-        	<?php endforeach; ?>
-			<?php if($this->getContinueShoppingUrl()): ?>
-        	    <button type="button" title="<?php echo $this->__('Continue Shopping') ?>" class="button btn-continue btn" onclick="setLocation('<?php echo $this->getContinueShoppingUrl() ?>')"><?php echo $this->__('Continue Shopping') ?></button>
-        	<?php endif; ?>
-        	</span>        
+        	    </div>
+                <div class="btn-cart-checkout">
+        	    <?php foreach ($this->getMethods('top_methods') as $method): ?>
+        	        <?php if ($methodHtml = $this->getMethodHtml($method)): ?>
+        	        	<?php echo $methodHtml; ?>
+        	        <?php endif; ?>
+        	    <?php endforeach; ?>
+        	    </div>
         <?php endif; ?>
         </div>
     </div>
