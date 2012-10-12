@@ -17,7 +17,7 @@ class Totsy_Sailthru_Helper_Cache
     private $_full_path = null;
     private $_originHttpHost = 'totsy.com';
     private $_isHttpHostChanged = false;
-    private $_cache_dir_path = '/var/tmp/';
+    private $_cache_dir_path = '/var/www/current/var/tmp/';
     private $_cache_file = null;
     private $_cache_file_ext = '.json';
     private $_cache_skip_check = false;
@@ -50,9 +50,6 @@ class Totsy_Sailthru_Helper_Cache
     */
     public function runner($full_path = null)
     {
-        if($this->isCacheDisabled()){
-            return false;
-        }
         
         if (!empty($full_path)) {
             $this->_full_path = $full_path;
@@ -67,7 +64,12 @@ class Totsy_Sailthru_Helper_Cache
         }
 
         // handle cli params first
-        $this->_doCliParams();
+        $this->_doParams();
+        // 
+        if($this->isCacheDisabled()){
+            return false;
+        }
+
         // make sure all cache related params are taking its place
         //$this->_handleGetParams();
         // how we have domain and get params, so generate a cache filename
@@ -200,9 +202,8 @@ class Totsy_Sailthru_Helper_Cache
     *
     * @return void
     */
-    private function _doCliParams()
+    private function _doParams()
     {
-
         if (php_sapi_name()=='cli') {
             $this->_cache_skip_check = true;
 
@@ -215,8 +216,10 @@ class Totsy_Sailthru_Helper_Cache
             if ( $index!==false && $argc>$index+1) {
                 $this->_setHttHost($argv[$index+1]);
             }
-        }
+        } else if (!empty($_GET['domain'])){
+            $this->_setHttHost($_GET['domain']);
 
+        }
     }
 
     /**
@@ -229,7 +232,7 @@ class Totsy_Sailthru_Helper_Cache
     private function _setHttHost($httHost) 
     {
         $_SERVER['HTTP_HOST'] = $httHost;
-        $isHttpHostChanged = true;
+        $this->_isHttpHostChanged = true;
     }
 
     /**
@@ -252,7 +255,7 @@ class Totsy_Sailthru_Helper_Cache
     *
     * @return void
     */
-    private function _setRightHttpHost(&$json)
+    public function _setRightHttpHost(&$json)
     {
 
         if ( $this->_isHttpHostChanged==true ) {
