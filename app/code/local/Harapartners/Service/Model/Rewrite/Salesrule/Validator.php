@@ -19,7 +19,7 @@ class Harapartners_Service_Model_Rewrite_Salesrule_Validator extends Mage_SalesR
     
     //Important logic for free shipping (calculated out of discount collect total)
     public function init($websiteId, $customerGroupId, $couponCode){
-        $groupcoupon = Mage::getModel('promotionfactory/groupcoupon')->loadByPseudoCode($couponCode);
+        $groupcoupon = Mage::getModel('promotionfactory/groupcoupon')->load('pseudo_code', $couponCode);
         if(!!$groupcoupon && !!$groupcoupon->getId() && $groupcoupon->getUsedCount() == 0){
             $couponCode = $groupcoupon->getCode();
         }
@@ -50,7 +50,7 @@ class Harapartners_Service_Model_Rewrite_Salesrule_Validator extends Mage_SalesR
 //                return false;
 //            }
 //        }
-        
+
         $ruleExsit = Mage::getModel('promotionfactory/emailcoupon')->ruleIdExist($ruleId);
         $custEmail = $address->getQuote()->getCustomer()->getEmail() ;
         $emailCouponMatchFail = False;
