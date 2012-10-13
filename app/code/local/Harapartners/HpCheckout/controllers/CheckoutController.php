@@ -95,9 +95,7 @@ class Harapartners_HpCheckout_CheckoutController extends Mage_Checkout_Controlle
                 	$this->getResponse()->setBody(Mage::helper('core')->jsonEncode($result));
                 	return;
                 }
-
                 $this->_getHpCheckout()->saveOrder();
-
 /*
                 $storeId = Mage::app()->getStore()->getId();
                 $paymentHelper = Mage::helper("payment");

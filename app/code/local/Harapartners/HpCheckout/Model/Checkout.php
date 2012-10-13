@@ -218,7 +218,6 @@ class Harapartners_HpCheckout_Model_Checkout
      */
     public function saveOrder()
     {
-        Mage::log('here:'.__LINE__);
         $this->validate();
 
         switch ($this->getCheckoutMethod()) {
@@ -229,40 +228,30 @@ class Harapartners_HpCheckout_Model_Checkout
             $this->_prepareCustomerQuote();
             break;
         }
-        Mage::log('here:'.__LINE__);
 
         $shippingAddresses = $this->getQuote()->getAllShippingAddresses();
         
     	if ($this->getQuote()->hasVirtualItems()) {
             $shippingAddresses[] = $this->getQuote()->getBillingAddress();
         }
-        Mage::log('here:'.__LINE__);
 
         $fulfillmentTypes = array();
 
-        Mage::log('here:'.__LINE__);
         foreach ( $this->getQuote()->getAllItems() as $item) {
             if($item->getParentItemId()) {
-                Mage::log('here:'.__LINE__);
-
                 continue;
             }
-            Mage::log('here:'.__LINE__);
             $product = Mage::getModel ( 'catalog/product' )->load ( $item->getProductId () );
             if($product->getIsVirtual()) {
-                //continue;
+                continue;
             }
             $fulfillmentTypes [$product->getFulfillmentType ()] [] = $item->getId ();
 		}
-        Mage::log('here');
-        Mage::log(print_r($fulfillmentTypes,true));
 
-		if(count($fulfillmentTypes) > 1) {
+		if($this->getQuote()->hasVirtualItems() || count($fulfillmentTypes) > 1) {
             $this->_prepareMultiShip();
-            Mage::log('here:'.__LINE__.':'.$this->getQuote()->getShippingAddress()->getId());
 			$originalShippingAddress = Mage::getModel('sales/quote_address')
                             ->load($this->getQuote()->getShippingAddress()->getId());
-            Mage::log('here:'.__LINE__.':'.$originalShippingAddress->getCustomerAddressId());
 
             $skipFirst = true;
 			foreach($fulfillmentTypes as $_fulfillmentProducts) {
@@ -272,54 +261,29 @@ class Harapartners_HpCheckout_Model_Checkout
 	        		continue;
 	        	}
                 $newAddress = clone $originalShippingAddress;
-                foreach($newAddress->getItemsCollection() as $item) {
-                    Mage::log('here:'.__LINE__);
-
-                }
                 $this->getQuote()->addShippingAddress($newAddress);
                 $newAddress->save();
-                Mage::log('here:'.__LINE__);
 
                 //Loop through the default shipping address to remove the items from that shipping address.
                 //We are then going to need to add the items to the new shipping address.
 	        	foreach($_fulfillmentProducts as $_productId) {
-                    Mage::log('here:'.__LINE__.':'.$_productId);
 	        		foreach($originalShippingAddress->getItemsCollection() as $addressItem) {
-                        Mage::log('here:'.__LINE__);
                         $quoteItem = $this->getQuote()->getItemById($addressItem->getQuoteItemId());
-                        Mage::log('here:'.__LINE__.':'.gettype($quoteItem));
-                        Mage::log('here:'.__LINE__.':'.$addressItem->getQuoteItemId());
-                        Mage::log('here:'.__LINE__.':'.$quoteItem->getId());
-//                        if($quoteItem->getProduct()->getIsVirtual()) {
-//                            continue;
-//                        }
                         $qty = $addressItem->getQty();
-                        Mage::log('here:'.__LINE__.':'.$addressItem->getId());
                         if($quoteItem->getId() == $_productId) {
-                            Mage::log('here:'.__LINE__.':'.$addressItem->getId());
                             if($addressItem->getHasChildren()) {
-                                Mage::log('here:'.__LINE__);
                                 foreach($addressItem->getChildren() as $child) {
-                                    Mage::log('here:'.__LINE__);
                                     $originalShippingAddress->removeItem($child->getId());
                                     $child->delete();
                                 }
                             }
                             $originalShippingAddress->removeItem($addressItem->getId());
                             $addressItem->delete();
-                            Mage::log('here:'.__LINE__.': qty:'.$qty);
                             $newAddress->addItem($quoteItem,$qty);
                         }
 	        		}
 	        	}
-                Mage::log('here:'.__LINE__);
-                Mage::log('here:'.__LINE__.':'.$newAddress->getItemsCollection()->getSize());
-                foreach($newAddress->getItemsCollection() as $item) {
-                    Mage::log('here:'.__LINE__);
-                }
                 $newAddress->getItemsCollection()->save();
-                Mage::log('here:'.__LINE__.':'.$newAddress->getItemsCollection()->getSize());
-//                $newAddress->clearAllItems();
                 $newAddress->setShippingMethod($originalShippingAddress->getShippingMethod());
                 $newAddress->setShippingDescription($originalShippingAddress->getShippingDescription());
                 $newAddress->setFreeShipping(true);
@@ -327,21 +291,13 @@ class Harapartners_HpCheckout_Model_Checkout
                 $newAddress->setBaseShippingAmount(0);
                 $newAddress->setCollectShippingRates(false);
                 $newAddress->getItemsCollection()->save();
-                Mage::log('here:'.__LINE__.':'.$newAddress->getItemsCollection()->getSize());
-//                $newAddress->collectTotals();
                 $newAddress->save();
-                Mage::log('here:'.__LINE__);
 
 	        }
-            Mage::log('here:'.__LINE__);
-//            $originalShippingAddress->save();
-//            $originalShippingAddress->setCollectShippingRates(false);
-//            $originalShippingAddress->collectTotals();
             $originalShippingAddress->save();
 
             $originalShippingAddress->clearAllItems();
             $originalShippingAddress->getItemsCollection()->clear();
-            Mage::log('here:'.__LINE__.':'.$newAddress->getItemsCollection()->getSize());
             $this->getQuote()->setTotalsCollectedFlag(false);
             $this->getQuote()->collectTotals();
             $this->getQuote()->save();
@@ -351,20 +307,18 @@ class Harapartners_HpCheckout_Model_Checkout
             $quote = Mage::getModel('sales/quote')->load($this->getQuote()->getId());
             $this->getCheckout()->replaceQuote($quote);
             $this->getQuote()->getPayment()->importData($this->getCheckout()->getData('payment_data'));
-		}
 
-        if(count($fulfillmentTypes) > 1) {
-            Mage::log('here:'.__LINE__);
         	try {
                 Mage::getSingleton('checkout/session')->setCheckoutState(true);
         		Mage::getModel('checkout/type_multishipping')->createOrders();
+                $this->_checkoutSession->setLastOrderId(null);
         	}
         	catch (Mage_Core_Exception $e) {
         		Mage::log($e->getMessage());
         		Mage::logException($e);
         	}
-        }
-        else {
+
+        } else {
 
             $service = Mage::getModel('sales/service_quote', $this->getQuote());
         	$service->submitAll();
@@ -398,7 +352,8 @@ class Harapartners_HpCheckout_Model_Checkout
 
                 $this->_checkoutSession->setLastOrderId($order->getId())
                     ->setRedirectUrl($redirectUrl)
-                    ->setLastRealOrderId($order->getIncrementId());
+                    ->setLastRealOrderId($order->getIncrementId())
+                    ->setOrderIds(null);
             }
 
             $profiles = $service->getRecurringPaymentProfiles();
