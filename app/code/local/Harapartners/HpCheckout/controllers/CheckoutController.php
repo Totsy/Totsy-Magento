@@ -81,6 +81,7 @@ class Harapartners_HpCheckout_CheckoutController extends Mage_Checkout_Controlle
                             $data['cybersource_subid'] = $cybersourceIdEncrypted;
                         }
                     }
+                    $this->_getHpCheckout()->getCheckout()->setData('payment_data',$data);
                     $this->_getHpCheckout()->getQuote()->getPayment()->importData($data);
                 }
 
@@ -94,9 +95,10 @@ class Harapartners_HpCheckout_CheckoutController extends Mage_Checkout_Controlle
                 	$this->getResponse()->setBody(Mage::helper('core')->jsonEncode($result));
                 	return;
                 }
-                
+
                 $this->_getHpCheckout()->saveOrder();
 
+/*
                 $storeId = Mage::app()->getStore()->getId();
                 $paymentHelper = Mage::helper("payment");
                 $zeroSubTotalPaymentAction = $paymentHelper->getZeroSubTotalPaymentAutomaticInvoice($storeId);
@@ -108,7 +110,7 @@ class Harapartners_HpCheckout_CheckoutController extends Mage_Checkout_Controlle
                     $invoice->getOrder()->setIsInProcess(true);
                     $invoice->save();
                 }
-
+*/
                 //                $redirectUrl = $this->_getHpCheckout()->getCheckout()->getRedirectUrl();
                 $result['status'] = 0;
             }

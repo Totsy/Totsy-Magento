@@ -116,6 +116,13 @@
                     <product_flat_indexer>Harapartners_Service_Model_Rewrite_Catalog_Resource_Product_Flat_Indexer</product_flat_indexer>
                 </rewrite>
             </catalog_resource-->
+            <cataloginventory>
+                <rewrite>
+                    <!--Harapartner_Service: Product of the same ID (conf. with different super attr. or simple with differnt options) share the same limit!-->
+                    <!--Harapartners_Rushcheckout: Successful checkout results in stock reservation cancel.-->
+                    <observer>Harapartners_Service_Model_Rewrite_CatalogInventory_Observer</observer>
+                </rewrite>
+            </cataloginventory>
             <cataloginventory_resource>
                 <rewrite>
                     <!--Harapartners_Rushcheckout: Batch update without saving 'stock_item' object, must sync with status (cart reservation for Totsy)-->
@@ -350,11 +357,13 @@
             <sales_order_place_after>
                <observers>
                     <!--Harapartners_Ordersplit-->
+                   <!--
                     <ordersplit>
                         <type>singleton</type>
                         <class>ordersplit/observer</class>
                         <method>salesOrderPlaceAfterSplit</method>
                     </ordersplit>
+                    -->
                     <!--Harapartners_Promotionfactory-->
                     <promotionfactory>
                         <type>singleton</type>

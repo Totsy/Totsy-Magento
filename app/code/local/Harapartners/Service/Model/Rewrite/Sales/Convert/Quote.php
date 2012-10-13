@@ -26,6 +26,7 @@ class Harapartners_Service_Model_Rewrite_Sales_Convert_Quote extends Mage_Sales_
     
     
     //Important logic for order split and DOTCOM fulfillment, must link new order item with original quote item!
+    /*
     public function itemToOrderItem(Mage_Sales_Model_Quote_Item_Abstract $item){
         $orderItem = parent::itemToOrderItem($item);
         if(!!$item->getOriginalQuoteItemId()){
@@ -35,5 +36,6 @@ class Harapartners_Service_Model_Rewrite_Sales_Convert_Quote extends Mage_Sales_
         }
         return $orderItem;
     }
+    */
     
 }
