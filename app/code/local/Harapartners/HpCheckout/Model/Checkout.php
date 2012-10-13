@@ -183,8 +183,6 @@ class Harapartners_HpCheckout_Model_Checkout
         }
         $this->getQuote()->getShippingAddress()
         ->setShippingMethod($shippingMethod);
-        //        $this->getQuote()->collectTotals()
-        //            ->save();
 
         return array( 'status' => 0, 'message' => '' );
     }
@@ -301,9 +299,6 @@ class Harapartners_HpCheckout_Model_Checkout
             $this->getQuote()->setTotalsCollectedFlag(false);
             $this->getQuote()->collectTotals();
             $this->getQuote()->save();
-            $originalShippingAddress->save();
-            $this->getQuote()->save();
-            $newAddress->save();
             $quote = Mage::getModel('sales/quote')->load($this->getQuote()->getId());
             $this->getCheckout()->replaceQuote($quote);
             $this->getQuote()->getPayment()->importData($this->getCheckout()->getData('payment_data'));
