@@ -82,7 +82,7 @@
         		 <?php endforeach ?>
         		 <?php $methods = $this->getLayout()->getBlock('hpcheckout.payment.methods')->getMethods();  ?> 
                  <?php if(count($methods)): ?>
-                 	<?php if( Mage::getConfig()->getModuleConfig('Mage_Paypal')->is('active', 'true') ): ?>
+                 	<?php if(Mage::getModel('paypal/config')->isMethodActive('paypal_express')): ?>
 			    	<input type="radio" value="paypal_express" id="paypal_payment" name="paypal_payment">
         		 	    <span title="Paypal Express" class="paypal"></span>
         		 	<?php endif; ?>
