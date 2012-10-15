@@ -30,7 +30,7 @@ class Harapartners_Service_Model_Rewrite_Salesrule_Quote_Discount extends Mage_S
     	
     	$quote = $address->getQuote();
     	$couponCode = $quote->getCouponCode();//may be a pseudo code, or a real code
-        $groupcoupon = Mage::getModel('promotionfactory/groupcoupon')->load('pseudo_code', $couponCode);
+        $groupcoupon = Mage::getModel('promotionfactory/groupcoupon')->load($couponCode, 'pseudo_code');
     	if(!!$groupcoupon && !!$groupcoupon->getId() && $groupcoupon->getUsedCount() == 0){
     		$quote->setCouponCode($groupcoupon->getCode());
     	}
