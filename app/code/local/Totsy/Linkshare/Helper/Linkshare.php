@@ -28,7 +28,7 @@
             foreach($items as $item) {
                 $qty = $item->getQtyOrdered() - $item->getQtyCanceled();
 
-                if(($trans_type != 'cancel') || $qty == 0 ) {
+                if(($trans_type == 'cancel') || $qty == 0 ) {
                     $item_cancel = true;
                     $qty = $item->getQtyOrdered();
                 }
