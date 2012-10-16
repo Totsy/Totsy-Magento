@@ -5,7 +5,7 @@
     //$endcount_lc = date("F j, Y, G:i:s", ($countDownTimer + $timeout));
     $endcount_lc = ($countDownTimer + $timeout)*1000; //ms
     //Harapartners, yang, get the server time with the frontend JS time
-    $serverTime = Mage::helper('service')->getServerTime();            
+    $serverTime = Mage::getModel('core/date')->timestamp() * 1000;
     $quote = Mage::getSingleton('checkout/session')->getQuote();
 ?>
 <div class="page-header">

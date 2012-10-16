@@ -75,12 +75,6 @@ class Totsy_Customer_Model_Customer
 
         $this->loadByEmail($login);
 
-        // Harapartners, yang, START
-        // Store switching, based on customer group, if customer is invalid,
-        // stay in the current store/store view
-        Mage::helper('service')->validateStoreByCustomer($this);
-        // Harapartners, yang, EN
-
         if ($this->getConfirmation() && $this->isConfirmationRequired()) {
             throw Mage::exception(
                 'Mage_Core',

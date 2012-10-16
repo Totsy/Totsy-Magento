@@ -78,27 +78,20 @@ class Harapartners_Fulfillmentfactory_Helper_Dotcom extends Mage_Core_Helper_Abs
      * @return array response body
      */
     protected function _sendQueryRequest($uri, $header=array()) {
-        try {
-            $this->_getConfig();
-            
-            $client = new Zend_Http_Client($uri);
-            
-            $header['Accept-encoding'] = 'gzip,deflate';
-            $header['Authorization'] = $this->_generateAuthHeader($uri);
-            $client->setHeaders($header);
-            
-            $response = $client->request();
+        $this->_getConfig();
 
-            if(isset($response)) {
-                $body = $response->getBody();
-                return $body;
-            }
+        $client = new Zend_Http_Client($uri);
+
+        $header['Accept-encoding'] = 'gzip,deflate';
+        $header['Authorization'] = $this->_generateAuthHeader($uri);
+        $client->setHeaders($header);
+
+        $response = $client->request();
+        if (($code = $response->getStatus()) > 399) {
+            Mage::throwException("Error $code received from Dotcom (" . $response->getBody() . ')');
         }
-        catch(Exception $e) {
-            throw new Exception('Send query to DOTcom failed: ' . $e->getMessage());
-        }
-        
-        return false;
+
+        return $response->getBody();
     }
     
     /**

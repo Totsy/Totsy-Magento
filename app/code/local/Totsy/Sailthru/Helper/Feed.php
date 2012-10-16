@@ -159,6 +159,10 @@ class Totsy_Sailthru_Helper_Feed extends Mage_Core_Helper_Abstract
             return $collector; 
         }
         foreach($events as $event){
+            if (in_array($event['entity_id'], $this->_excludeList)) {
+                continue;
+            }
+
             $event_time = $this->timeConverter($event['event_start_date']);
 
             if ($event_time>=$this->_min_datetime 

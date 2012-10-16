@@ -121,9 +121,9 @@ class Crown_Import_Adminhtml_ImportController extends Mage_Adminhtml_Controller_
 		$category = Mage::getModel ( 'catalog/category' )->load ( $categoryId );
 
 		if (! ! $category && ! ! $category->getId ()) {
-			$defaultPoId = 0;
+			$defaultPoId = null;
 			$poArray = Mage::helper ( 'stockhistory' )->getFormPoArrayByCategoryId ( $category->getId (), Harapartners_Stockhistory_Model_Purchaseorder::STATUS_OPEN );
-			if (count ( $poArray ) && isset ( $poArray [0] ['value'] )) {
+            if (count ( $poArray ) && isset ( $poArray [0] ['value'] ) && $poArray [0] ['value'] ) {
 				$defaultPoId = $poArray [0] ['value'];
 			}
 
