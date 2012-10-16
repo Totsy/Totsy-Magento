@@ -67,26 +67,11 @@ class Harapartners_Categoryevent_Model_Sortentry
         return parent::_afterSave();
     }
 
-    /**
-     * Load the sort entry for today.
-     *
-     * @param int $storeId
-     *
-     * @return Harapartners_Categoryevent_Model_Sortentry
-     */
     public function loadCurrent($storeId = Mage_Core_Model_App::ADMIN_STORE_ID)
     {
         return $this->loadByDate(Mage::getModel('core/date')->date('Y-m-d'), $storeId, true);
     }
 
-    /**
-     * Load the sort entry for a specific date.
-     *
-     * @param string $date    The date of the sort entry.
-     * @param int    $storeId The Magento Store ID of the sort entry.
-     *
-     * @return Harapartners_Categoryevent_Model_Sortentry
-     */
     public function loadByDate($date, $storeId = Mage_Core_Model_App::ADMIN_STORE_ID, $useRecent = false) {
         if (!$storeId) {
             $storeId = Mage_Core_Model_App::ADMIN_STORE_ID;
@@ -117,14 +102,6 @@ class Harapartners_Categoryevent_Model_Sortentry
         return $this;
     }
 
-    /**
-     * Rebuild the sort entry by finding all available events through the
-     * date range of available events to consider.
-     * Also copies the sort order from the previous sort entry before adding
-     * new events that open in the available date range.
-     *
-     * @return Harapartners_Categoryevent_Model_Sortentry
-     */
     public function rebuild()
     {
         $date    = $this->getDate();
@@ -159,7 +136,14 @@ class Harapartners_Categoryevent_Model_Sortentry
             return $this;
         }
 
-        $newEvents = $this->getCategoryCollection($eventParentCategory->getId(), $startDate, $endDate);
+        $newEvents = Mage::getModel('catalog/category')->getCollection()
+            ->addAttributeToFilter('parent_id', $eventParentCategory->getId())
+            ->addAttributeToFilter('level', self::CATEGORYEVENT_LEVEL)
+            ->addAttributeToFilter('is_active', '1')
+            ->addAttributeToFilter('event_start_date', array('to' => $endDate, 'date' => true ))
+            ->addAttributeToFilter('event_end_date', array('from' => $startDate, 'date' => true ))
+            ->addAttributeToSort('event_start_date', 'asc');
+
         if (!empty($copiedEventIds)) {
             $newEvents->addAttributeToFilter('entity_id', array('nin' => $copiedEventIds));
         }
@@ -185,8 +169,100 @@ class Harapartners_Categoryevent_Model_Sortentry
         return date("Y-m-d", (strtotime($sortDate)+self::DEFAULT_REBUILD_LIFETIME * self::EVENT_CATEGORY_DATE_RANGE));
     }
 
-    public function getParentCategory($categoryName, $storeId)
+    protected function _prepareEvent($categoryId)
     {
+        $stores = Mage::app()->getStores(false, true);
+        $defaultStore = $stores['default']->getId();
+
+        // fetch all products part of this category/event
+        $category = Mage::getModel('catalog/category')->load($categoryId);
+        $event    = $category->getData();
+        $products = $category->getProductCollection()
+            ->addAttributeToSelect('departments')
+            ->addAttributeToSelect('ages')
+            ->addAttributeToSelect('price')
+            ->addAttributeToSelect('special_price');
+
+        $startDate = strtotime($this->getDate());
+        $endDate   = strtotime($this->calculateEndDate($this->getDate()));
+
+        if (!$event['is_active'] ||
+            strtotime($event['event_start_date']) > $endDate ||
+            strtotime($event['event_end_date']) < $startDate
+        ) {
+            return false;
+        }
+
+        $event['department'] = array();
+        $event['age'] = array();
+        $event['department_label'] = array();
+        $event['age_label'] = array();
+        $event['max_discount_pct'] = 0;
+
+        // populate event metadata (classifications) and calculate the
+        // maximum discount percentage by finding the highest discount
+        // percentage across all products
+        foreach ($products as $product) {
+            $departments = $product->getAttributeTextByStore('departments', $defaultStore);
+            $ages = $product->getAttributeTextByStore('ages', $defaultStore);
+
+            if (is_array($departments)) {
+                $event['department'] = $event['department'] + $departments;
+            } else if (is_string($departments)) {
+                $event['department'][] = $departments;
+            }
+
+            if (is_array($ages)) {
+                $event['age'] = $event['age'] + $ages;
+            } else if (is_string($ages)) {
+                $event['age'][] = $ages;
+            }
+
+            // store user-friendly labels also
+            $departments = $product->getAttributeTextByStore('departments', 0);
+            $ages = $product->getAttributeTextByStore('ages', 0);
+
+            if (is_array($departments)) {
+                $event['department_label'] = $event['department_label'] + $departments;
+            } else if (is_string($departments)) {
+                $event['department_label'][] = $departments;
+            }
+
+            if (is_array($ages)) {
+                $event['age_label'] = $event['age_label'] + $ages;
+            } else if (is_string($ages)) {
+                $event['age_label'][] = $ages;
+            }
+
+            // calculate discount percentage for the event
+            $priceDiff = $product->getPrice() - $product->getSpecialPrice();
+            if ($product->getPrice()) {
+                $discount = round($priceDiff / $product->getPrice() * 100);
+                $event['max_discount_pct'] = max(
+                    $event['max_discount_pct'],
+                    $discount
+                );
+            }
+        }
+
+        $event['department'] = array_values(
+            array_unique($event['department'])
+        );
+        $event['age'] = array_values(
+            array_unique($event['age'])
+        );
+
+        $event['department_label'] = array_values(
+            array_unique($event['department_label'])
+        );
+        $event['age_label'] = array_values(
+            array_unique($event['age_label'])
+        );
+
+        return $event;
+    }
+
+    public function getParentCategory($categoryName, $storeId){
         $store = Mage::app()->getStore($storeId);
         if (!$store->getId()) {
             $store = Mage::app()->getStore(Mage_Core_Model_App::DISTRO_STORE_ID);
@@ -201,8 +277,7 @@ class Harapartners_Categoryevent_Model_Sortentry
         }
     }
 
-    public function getCategoryCollection($parentCategoryId, $startDate, $endDate)
-    {
+    public function getCategoryCollection($parentCategoryId, $startDate, $endDate){
         //optimized date comparison logic, please do NOT touch!
         $collection = Mage::getModel('catalog/category')->getCollection()
                 ->addAttributeToSelect(array('name', 'description', 'image', 'small_image', 'thumbnail', 'logo', 'event_start_date', 'event_end_date', 'is_active', 'url_path', 'url_key'))
@@ -216,8 +291,7 @@ class Harapartners_Categoryevent_Model_Sortentry
         return $collection;
     }
 
-    public function getExpCategoryCollection($parentCategoryId, $currentDate)
-    {
+    public function getExpCategoryCollection($parentCategoryId, $currentDate){
         $collection = Mage::getModel('catalog/category')->getCollection()
                 ->addAttributeToSelect(array('name', 'event_end_date', 'is_active'))
                 ->addFieldToFilter('parent_id', $parentCategoryId)
@@ -299,100 +373,95 @@ class Harapartners_Categoryevent_Model_Sortentry
         return $this;
     }
 
-    protected function _prepareEvent($categoryId)
-    {
-        // fetch all products part of this category/event
-        $category = Mage::getModel('catalog/category')->load($categoryId);
-        $event    = $category->getData();
-        $products = $category->getProductCollection()
-            ->addAttributeToSelect('departments')
-            ->addAttributeToSelect('ages')
-            ->addAttributeToSelect('price')
-            ->addAttributeToSelect('special_price');
+    //For move expired categories/events to a certain category
+    public function cleanExpiredEvents( $revert = false ){
+        //Get current clean time
+        $defaultTimezone = date_default_timezone_get();
+        $mageTimezone = Mage::getStoreConfig(Mage_Core_Model_Locale::XML_PATH_DEFAULT_TIMEZONE);
+        date_default_timezone_set($mageTimezone);
+        $currentDate = date("Y-m-d H:i:s");
+        date_default_timezone_set($defaultTimezone);
+        $endDate = $this->calculateEndDate($currentDate);
+        //Get store Id
+        $storeId = Mage_Core_Model_App::DISTRO_STORE_ID; //Harapartners, Yang: for now only affect on totsy store
 
-        $startDate = strtotime($this->getDate());
-        $endDate   = strtotime($this->calculateEndDate($this->getDate()));
+        //Get source category and target category
+        $eventParentCat = $this->getParentCategory(self::EVENT_CATEGORY_NAME, $storeId);
+        $expiredParentCat = $this->getParentCategory(self::EVENT_EXPIRED_CATEGORY_NAME, $storeId);
 
-        if (!$event['is_active'] ||
-            strtotime($event['event_start_date']) > $endDate ||
-            strtotime($event['event_end_date']) < $startDate
-        ) {
-            return false;
+        if(!!$eventParentCat
+            && !!$eventParentCat->getId()
+            && !!$expiredParentCat
+            && !!$expiredParentCat->getId()){
+
+                $parentCategoryId = $eventParentCat->getId();
+                $expiredParentId = $expiredParentCat->getId();
+                
+                try {
+                    if (!$revert){
+                        $expCollection = $this->getExpCategoryCollection($parentCategoryId, $currentDate)->load();
+                        foreach ( $expCollection as $cat ){
+                            $cat->move($expiredParentId, null);
+                        }
+                    }else {
+                        $collection = $this->getCategoryCollection($expiredParentId, $currentDate, $endDate)->load();
+                        foreach ( $collection as $cat ){
+                            $cat->move($parentCategoryId, null);
+                        }
+                    }
+                }catch ( Exception $e ){
+                    Mage::logException($e);
+                    return null;
+                }
         }
 
-        $event['department'] = array();
-        $event['age'] = array();
-        $event['department_label'] = array();
-        $event['age_label'] = array();
-        $event['max_discount_pct'] = 0;
+        //$this->rebuildSortCollection($currentDate, $storeId);
+        Mage::app()->getCacheInstance()->flush();
+        Mage::app()->cleanCache();
 
-        // populate event metadata (classifications) and calculate the
-        // maximum discount percentage by finding the highest discount
-        // percentage across all products
-        foreach ($products as $product) {
-            $departments = $product->getAttributeTextByStore(
-                'departments',
-                Harapartners_Service_Helper_Data::TOTSY_STORE_ID
-            );
-            $ages = $product->getAttributeTextByStore(
-                'ages',
-                Harapartners_Service_Helper_Data::TOTSY_STORE_ID
-            );
+        return $this;
+    }
+    
+    /*
+     * This function is for moving a single category that was in the 
+     * expired parent category, back to the event or main category
+    **/
+    public function moveSingleCategoryFromExpiredToEvent($categoryId) {
+		//Get current clean time
+        $defaultTimezone = date_default_timezone_get();
+        $mageTimezone = Mage::getStoreConfig(Mage_Core_Model_Locale::XML_PATH_DEFAULT_TIMEZONE);
+        date_default_timezone_set($mageTimezone);
+        $currentDate = date("Y-m-d H:i:s");
+        date_default_timezone_set($defaultTimezone);
+        //Get store Id
+        $storeId = Mage_Core_Model_App::DISTRO_STORE_ID; //Harapartners, Yang: for now only affect on totsy store
 
-            if (is_array($departments)) {
-                $event['department'] = $event['department'] + $departments;
-            } else if (is_string($departments)) {
-                $event['department'][] = $departments;
-            }
+        //Get source category and target category
+        $eventParentCat = $this->getParentCategory(self::EVENT_CATEGORY_NAME, $storeId);
+        $expiredParentCat = $this->getParentCategory(self::EVENT_EXPIRED_CATEGORY_NAME, $storeId);
 
-            if (is_array($ages)) {
-                $event['age'] = $event['age'] + $ages;
-            } else if (is_string($ages)) {
-                $event['age'][] = $ages;
-            }
+        if($eventParentCat
+            && $eventParentCat->getId()
+            && $expiredParentCat
+            && $expiredParentCat->getId()
+            && $categoryId){
 
-            // store user-friendly labels also
-            $departments = $product->getAttributeTextByStore('departments', 0);
-            $ages = $product->getAttributeTextByStore('ages', 0);
-
-            if (is_array($departments)) {
-                $event['department_label'] = $event['department_label'] + $departments;
-            } else if (is_string($departments)) {
-                $event['department_label'][] = $departments;
-            }
-
-            if (is_array($ages)) {
-                $event['age_label'] = $event['age_label'] + $ages;
-            } else if (is_string($ages)) {
-                $event['age_label'][] = $ages;
-            }
-
-            // calculate discount percentage for the event
-            $priceDiff = $product->getPrice() - $product->getSpecialPrice();
-            if ($product->getPrice()) {
-                $discount = round($priceDiff / $product->getPrice() * 100);
-                $event['max_discount_pct'] = max(
-                    $event['max_discount_pct'],
-                    $discount
-                );
-            }
+                $parentCategoryId = $eventParentCat->getId();
+                $expiredParentId = $expiredParentCat->getId();
+                try {
+                        $collection = Mage::getModel('catalog/category')->load($categoryId);
+                        $collection->move($parentCategoryId, null);
+                }catch ( Exception $e ){
+                    Mage::logException($e);
+                    return null;
+                }
         }
 
-        $event['department'] = array_values(
-            array_unique($event['department'])
-        );
-        $event['age'] = array_values(
-            array_unique($event['age'])
-        );
+        //$this->rebuildSortCollection($currentDate, $storeId);
+        Mage::app()->getCacheInstance()->flush();
+        Mage::app()->cleanCache();
 
-        $event['department_label'] = array_values(
-            array_unique($event['department_label'])
-        );
-        $event['age_label'] = array_values(
-            array_unique($event['age_label'])
-        );
-
-        return $event;
+        return $this;
     }
 
     protected function _getCacheKey()

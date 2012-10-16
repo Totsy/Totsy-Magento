@@ -25,33 +25,57 @@
  */
 ?>
 <?php $_item = $this->getItem() ?>
+<?php $order = $this->getOrder() ?>
+<?php
+
+if($_item->is_virtual==1) {  
+	$product_options = $_item->getProductOptions();
+	$voucher_label = $product_options['options'][0]['label'];
+	$voucher_code_string = explode("\n",$product_options['options'][0]['value']);
+	$voucher_value = $voucher_code_string[0];
+	
+	$options =  $_item->getProductOptions();
+	$_item->setProductOptions($options); 
+}
+
+?>
 <tr class="border" id="order-item-row-<?php echo $_item->getId() ?>">
-    <td><h3 class="product-name"><?php echo $this->htmlEscape($_item->getName()) ?></h3>
-        <?php if($_options = $this->getItemOptions()): ?>
-        <dl class="item-options">
+    <td><h4 class="product-name"><?php echo $this->htmlEscape($_item->getName()) ?></h4>
+	<?php if($_options = $this->getItemOptions()): ?>
+        <div class="item-options">
         <?php foreach ($_options as $_option) : ?>
-            <dt><?php echo $this->htmlEscape($_option['label']) ?></dt>
-            <?php if (!$this->getPrintStatus()): ?>
-                <?php $_formatedOptionValue = $this->getFormatedOptionValue($_option) ?>
-                <dd<?php if (isset($_formatedOptionValue['full_view'])): ?> class="truncated"<?php endif; ?>>
-                    <?php echo $_formatedOptionValue['value'] ?>
-                    <?php if (isset($_formatedOptionValue['full_view'])): ?>
-                    <div class="truncated_full_value">
-                        <dl class="item-options">
-                            <dt><?php echo $this->escapeHtml($_option['label']) ?></dt>
-                            <dd><?php echo $_formatedOptionValue['full_view'] ?></dd>
-                        </dl>
-                    </div>
-                    <?php endif; ?>
-                </dd>
-            <?php else: ?>
-                <dd>
-                    <?php echo nl2br($this->htmlEscape( (isset($_option['print_value']) ? $_option['print_value'] : $_option['value']) )) ?>
-                </dd>
-            <?php endif; ?>
-        <?php endforeach; ?>
-        </dl>
+        	<?php if(!$_item->is_virtual): ?>
+            <span><strong><?php echo $this->htmlEscape($_option['label']) ?> : </strong></span>
+            	<?php if (!$this->getPrintStatus()): ?>
+            	    <?php $_formatedOptionValue = $this->getFormatedOptionValue($_option) ?>
+            	    <span <?php if (isset($_formatedOptionValue['full_view'])): ?> class="truncated"<?php endif; ?>>
+            	        <span><?php echo $_formatedOptionValue['value'] ?></span>
+            	        <?php if (isset($_formatedOptionValue['full_view'])): ?>
+            	        <div class="truncated_full_value">
+            	            <div class="item-options">
+            	                <span><?php echo $this->escapeHtml($_option['label']) ?> : </span>
+            	                <span><?php echo $_formatedOptionValue['full_view'] ?></span>
+            	            </div>
+            	        </div>
+            	        <?php endif; ?>
+            	    </span>
+            	<?php else: ?>
+            	    <span>
+            	        <?php echo nl2br($this->htmlEscape( (isset($_option['print_value']) ? $_option['print_value'] : $_option['value']) )) ?>
+            	    </span>
+            	<?php endif; ?>
+        <?php else: ?>
+        	<div>
+        		<strong><?php echo $_option['label'] ?>:</strong> 
+        		<?php echo $voucher_value; ?>	
+        	</div>
+        	<div>
+        		<?php echo $voucher_code_string[1]; ?>	
+        	</div>		
         <?php endif; ?>
+        <?php endforeach; ?>
+        </div>
+	<?php endif; ?>
         <?php $addtInfoBlock = $this->getProductAdditionalInformationBlock(); ?>
         <?php if ($addtInfoBlock) :?>
             <?php echo $addtInfoBlock->setItem($_item)->toHtml(); ?>
@@ -180,7 +204,7 @@
     <td class="a-right">
         <span class="nobr">
                 <?php if ($this->getItem()->getQtyOrdered() > 0): ?>
-            <?php echo $this->__('Ordered'); ?>: <strong><?php echo $this->getItem()->getQtyOrdered()*1 ?></strong><br />
+            <strong><?php echo $this->getItem()->getQtyOrdered()*1 ?></strong><br />
         <?php endif; ?>
         <?php if ($this->getItem()->getQtyShipped() > 0): ?>
             <?php echo $this->__('Shipped'); ?>: <strong><?php echo $this->getItem()->getQtyShipped()*1 ?></strong><br />

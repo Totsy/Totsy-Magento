@@ -100,7 +100,7 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Billing extends TinyBrick_Orde
         $customerAddress = Mage::getModel('customer/address')->getCollection()
                         ->addAttributeToFilter('firstname', $billing->getFirstname())
                         ->addAttributeToFilter('lastname', $billing->getLastname())
-                        ->addAttributeToFilter('street', $billing->getStreet())
+                        ->addAttributeToFilter('postcode', $billing->getPostcode())
                         ->getFirstItem();
         if(!$customerAddress->getId()) {
             return false;

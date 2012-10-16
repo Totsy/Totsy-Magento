@@ -382,30 +382,19 @@ class Mage_Customer_AccountController extends Mage_Core_Controller_Front_Action
                 $session->setCustomerFormData($this->getRequest()->getPost());
                 if ($e->getCode() === Mage_Customer_Model_Customer::EXCEPTION_EMAIL_EXISTS) {
                     $url = Mage::getUrl('customer/account/forgotpassword');
-                    $existEmail = $customerData['email'];
-                    $existCustomer = Mage::getModel('customer/customer')->setWebsiteId(Mage::app()->getStore()->getWebsiteId())->loadByEmail($existEmail);
-                    $existStoreName = '';
-                    if (!!$existCustomer){
-                        
-                        if ( $existCustomer->getStoreId() == Harapartners_Service_Helper_Data::TOTSY_MOBILE_STORE_ID ) {
-                            $customerStoreName = Mage::app()->getStore(Harapartners_Service_Helper_Data::TOTSY_STORE_ID)->getName();
-                        }else {
-                            $customerStoreName = Mage::app()->getStore($existCustomer->getStoreId())->getName();
-                        }
-                        $message = $this->__('There is already an account with this email address in ' . $customerStoreName . '.com');
-                    }else {
-                        $message = $this->__('There is already an account with this email address. If you are sure that it is your email address, <a href="%s">click here</a> to get your password and access your account.', $url);
-                    }
-                    $session->setEscapeMessages(false);
+                    $session->setEscapeMessages(false)->addError(
+                        $this->__('There is already an account with this email address. If you are sure that it is your email address, <a href="%s">click here</a> to get your password and access your account.', $url)
+                    );
                 } else {
-                    $message = $e->getMessage();
+                    Mage::logException($e);
+                    $session->addError("We could not create a new customer at this time. Please try again later, or contact customer support.");
                 }
-                $session->addError($message);
             } catch (Exception $e) {
                 $session->setCustomerFormData($this->getRequest()->getPost())
-                    ->addException($e, $this->__('Cannot save the customer.'));
+                    ->addException($e, $this->__('We could not create a new customer at this time. Please try again later, or contact customer support.'));
             }
         }
+
         $this->_redirectError(Mage::getUrl('*/*/create', array('_secure' => true)));
     }
 
@@ -563,8 +552,7 @@ class Mage_Customer_AccountController extends Mage_Core_Controller_Front_Action
      */
     public function forgotPasswordPostAction()
     {
-        $email = (string) $this->getRequest()->getPost('email');
-        if ($email) {
+        if ($email = $this->getRequest()->getPost('email')) {
             if (!Zend_Validate::is($email, 'EmailAddress')) {
                 $this->_getSession()->setForgottenEmail($email);
                 $this->_getSession()->addError($this->__('Invalid email address.'));
@@ -576,42 +564,40 @@ class Mage_Customer_AccountController extends Mage_Core_Controller_Front_Action
             $customer = Mage::getModel('customer/customer')
                 ->setWebsiteId(Mage::app()->getStore()->getWebsiteId())
                 ->loadByEmail($email);
-            
-            $storeId = Mage::app()->getStore()->getId();
-            
-            //Harapartners, Yang: Add store id array for totsy and totsy_mobile
 
-            if ($customer->getId() && Mage::helper('service')->getCorrectStoreId($customer) == $storeId ) {
+            if ($customer->getId()) {
                 try {
-                    $newResetPasswordLinkToken = Mage::helper('customer')->generateResetPasswordLinkToken();
+                    $newResetPasswordLinkToken = Mage::helper('customer')
+                        ->generateResetPasswordLinkToken();
                     $customer->changeResetPasswordLinkToken($newResetPasswordLinkToken);
                     $customer->sendPasswordResetConfirmationEmail();
                 } catch (Exception $exception) {
-                    $this->_getSession()->addError($exception->getMessage());
+                    Mage::logException($exception);
+                    $this->_getSession()->addError(
+                        "We were unable to process your request. Please try again, or contact customer support"
+                    );
                     $this->_redirect('*/*/forgotpassword');
                     return;
-                }      
-                $this->_getSession()
-                    ->addSuccess(Mage::helper('customer')->__('Email sent to %s , you will receive an email with a link to reset your password.', Mage::helper('customer')->htmlEscape($email)));
-            }elseif ($customer->getId() && Mage::helper('service')->getCorrectStoreId($customer) != $storeId) {                
-                if ( $customer->getStoreId() == Harapartners_Service_Helper_Data::TOTSY_MOBILE_STORE_ID ) {
-                    $customerStoreName = Mage::app()->getStore(Harapartners_Service_Helper_Data::TOTSY_STORE_ID)->getName();
-                }else {
-                    $customerStoreName = Mage::app()->getStore($customer->getStoreId())->getName();
                 }
-                $this->_getSession()->addError($this->__('The email you entered is belong to an %s account, please check.', $customerStoreName ));
-            }else {  
-                $createLink = '';             
-                $this->_getSession()->addError($this->__('The email entered is not currently associated with a totsy account. %s ', $createLink ));
+
+                $this->_getSession()->addSuccess(
+                    Mage::helper('customer')->__(
+                        'Email sent to %s , you will receive an email with a link to reset your password.',
+                        Mage::helper('customer')->escapeHtml($email)
+                    )
+                );
+            } else {
+                $this->_getSession()->addError(
+                    $this->__('The email entered is not currently associated with a Totsy account.')
+                );
                 $this->_redirect('*/*/forgotpassword');
                 return;
-            }       
+            }
+
             $this->_redirect('*/*/');
-            return;
         } else {
             $this->_getSession()->addError($this->__('Please enter your email.'));
             $this->_redirect('*/*/forgotpassword');
-            return;
         }
     }
 
