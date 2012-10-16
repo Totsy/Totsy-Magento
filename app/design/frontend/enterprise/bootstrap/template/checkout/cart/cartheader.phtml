@@ -120,6 +120,7 @@
                                     .removeAttr('data-toggle');
                                 var _cartHeader = jQuery("#cartHeader");
                                 _cartHeader.addClass('cartempty')
+                                    .removeClass('hasItems')
                                     .html("Your shopping cart is <span class='over'>no longer reserved</span>");
                                 jQuery("#topCartContent").hide();
                                 
