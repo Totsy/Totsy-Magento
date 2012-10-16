@@ -73,7 +73,7 @@
         		 <div id="<?php echo $_code ?>_cc_type">
         		 <?php $i=0; ?>
         		 <?php foreach ($this->getCcAvailableTypes() as $_typeCode => $_typeName): ?>
-        		     	<input type="radio" class="validate-cybsersource-cc-type <?php if($i==3) { echo "validate-one-required"; } ?>" name="payment[cc_type]" value="<?php echo $_typeCode ?>" <?php if($_typeCode==$_ccType) { echo "checked"; } ?> > 
+        		  <input type="radio" class="validate-cybsersource-cc-type <?php if($i==3) { echo "validate-one-required"; } ?>" name="payment[cc_type]" value="<?php echo $_typeCode ?>" <?php if($_typeCode==$_ccType) { echo "checked"; } ?> > 
         		 <?php $i++; ?>
         		 	<span class="cc">
         		 	    <span title="<?php echo $_typeName; ?>"  class="<?php echo strtolower($_typeCode); ?>" >
@@ -89,9 +89,6 @@
         		 	    <a class="what-is-paypal-link" href="https://www.paypal.com/cgi-bin/webscr?cmd=xpt/Marketing/popup/OLCWhatIsPayPal-outside" target="_blank">What is<br /> PayPal?</a>
         		 	    </div>
         		 	<?php endif; ?>
-                 <?php foreach ($methods as $_method): $_code = $_method->getCode() ?>
-        		 <?php if($this->getSelectedMethodCode()==$_code){ echo "checked"; } //echo $_code; ?>
-        		 <?php endforeach; ?>
                  <?php endif; ?>                 
         		 <div style="clear:both; height:10px"></div>
         	    </div>
@@ -238,7 +235,7 @@
 <script type="text/javascript">
 // @TODO: should abstract this out to hpcheckout.js
 // disable billing address form controls for saved credit card
-jQuery( document ).ready( function($) {
+jQuery( document ).ready( function() {
 	// cache jQuery objects
 	var billAddySelect = jQuery("#billing-address-select");
 	var newCardWrap = jQuery('.use-new-card-wrapper');
@@ -246,13 +243,14 @@ jQuery( document ).ready( function($) {
 	var selectUIWraps = jQuery('.totsy-selective-input-box', '#hpcheckout-billing-wrapper');
 	var billFormInputs = jQuery('#hpcheckout-billing-form :input');
     jQuery('#cybersource-use-card-method').change( function() {    
-        if( $( this ).val() == '' ) {
-        	if(jQuery('#paypal_payment').legth > 0) {
+        if( jQuery(this).val() == '' ) {
+        	if(jQuery('#paypal_payment').length > 0) {
             	jQuery('#paypal_payment').attr("checked", false);
             }
-            //if(jQuery("#payment_form_paypal_express").length > 0) {
-                //jQuery("#payment_form_paypal_express").show();           	
-            //}
+            
+            if(jQuery("#payment_form_paypal_express").length > 0) {
+                jQuery("#payment_form_paypal_express").show();           	
+            }
             jQuery("#cc_data").show();
             newCardWrap.show();
             //newCardCtrls.removeAttr('disabled');
@@ -268,11 +266,10 @@ jQuery( document ).ready( function($) {
                 jQuery("#payment_form_paypal_express").hide();           	
             }
 			newCardWrap.hide();
-			//newCardCtrls.attr( 'disabled', 'disabled' ); // disable new card controls
-			selectUIWraps.addClass('disabled'); // 'disable' select UI wrappers
+			selectUIWraps.addClass('disabled'); 
 			
 			if(jQuery("#address_" + jQuery( this ).val()).val()) {
-			    billAddySelect.val(jQuery("#address_" + $( this ).val()).val()).change();
+			    billAddySelect.val(jQuery("#address_" + jQuery( this ).val()).val()).change();
 			    //Block Billing Inputs if credit card selected
 			    billFormInputs.each(function(i) {
 			        if(jQuery(this).attr('id') != 'button_ship_to') {
@@ -283,10 +280,10 @@ jQuery( document ).ready( function($) {
 			} else {
 			    billAddySelect.removeAttr('disabled');
 			    billFormInputs.each(function(i) {
-			        $(this).removeAttr('disabled');
+			        jQuery(this).removeAttr('disabled');
 			    });
 			}
         }
-    });
+    });    
 });
 </script>

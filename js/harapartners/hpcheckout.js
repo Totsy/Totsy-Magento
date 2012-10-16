@@ -221,7 +221,8 @@ HpCheckout.prototype = {
         var checkoutObject = this;
 		var postData = this.getFormData();
 		postData += '&updatePayment=true';
-		this.throbberOn();
+		this.throbberOn();		
+		
 		jQuery.ajax({
 			url: this.data.submitUrl,
 			dataType: "json",
@@ -232,6 +233,7 @@ HpCheckout.prototype = {
 				checkoutObject.renderErrorMessage( 'Please refresh the current page.' );
 			},
 			success: function( response ) {
+			     //console.log(response);
 				 if ( response.redirect ) {
 					 location.href = response.redirect;
 					 return;
