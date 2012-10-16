@@ -78,13 +78,14 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Totsy_Cybersource_Model
     public function order(Varien_Object $payment, $amount){
         //For totsy, no payment is allowed to be captured upon order place
         $customerId = $payment->getOrder()->getQuote()->getCustomerId();
-        $profile = Mage::getModel('paymentfactory/profile')->load($payment->getCybersourceSubid(),'subscription_id');
+        $profile = Mage::getModel('paymentfactory/profile');
          if (!!$payment->getData('cybersource_subid')){
              //decrypt for the backend
              $subscriptionId = $this->_decryptSubscriptionId($payment->getData('cybersource_subid'));
              if(!!$subscriptionId){
                 $payment->setData('cybersource_subid', $subscriptionId);
              }
+             $profile->load($subscriptionId,'subscription_id');
          } elseif (!!$payment->getData('cc_number')){
              $profile->loadByCcNumberWithId($payment->getData('cc_number').$customerId.$payment->getCcExpYear().$payment->getCcExpMonth());
          }
