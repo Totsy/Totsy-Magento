@@ -4,6 +4,25 @@
 <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
 <h2 class="sub-title"><?php echo $this->__('Thank you for your purchase!') ?></h2>
 
+<!-- Multiple Fulfillment types-->
+<?php if($this->hasMultipleOrders()):?>
+    <?php $orderIds = $this->getTheOrderIds();?>
+    <?php $flag = false;?>
+    <p><?php echo $this->__('Your order numbers are ') ?>
+    <?php foreach($orderIds as $orderId => $incrementId):?>
+        <?php if ($flag): ?>
+<?php echo ', ' ?>
+        <?php endif; ?>
+        <?php $flag = true ?>
+        <a href="<?php echo $this->getViewOrderUrl($orderId); ?>"><?php echo $incrementId; ?></a>
+    <?php endforeach;?>
+.</p>
+<p><?php echo $this->__('You will receive an order confirmation email with details of your order and a link to track its progress.') ?></p>
+<p><?php echo $this->__('Click <a href="%s">here</a> to continue. ', $this->getBaseUrl().'sales/order/history/');?></p>
+<?php endif;?>
+
+
+
 <?php if ($this->getOrderId()):?>
 <?php
 $orderIncrementId = $this->getOrderId();
