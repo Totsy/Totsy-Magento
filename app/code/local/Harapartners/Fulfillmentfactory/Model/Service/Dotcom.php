@@ -410,6 +410,12 @@ XML;
                     $continue = false;
                 }
 
+                if($continue && $order->getPayment()) {
+                    if($order->getPayment()->getAmountOrdered() == 0) {
+                        $continue = false;
+                    }
+                }
+
                 if($continue && $invoice->canCapture()) {
                     $invoice->capture();
 
