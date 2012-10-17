@@ -126,6 +126,7 @@ HpCheckout.prototype = {
 	switchAddress: function() {
 		var clickedAddress = jQuery( this ); 
 		var blockType = '';
+		var hpcheckoutObject = HpCheckout.prototype;
 		
 		if( clickedAddress.attr( 'id' ) == 'billing-address-select' ) {
 			blockType = 'billing';
