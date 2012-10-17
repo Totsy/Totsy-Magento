@@ -74,14 +74,4 @@
             </totsy>
         </routers>
     </admin>
-    <phpunit>
-        <suite>
-            <modules>
-                <Totsy_Customer/>
-            </modules>
-            <fixture>
-                <totsycustomer_observer>Totsy_Customer_Model_Observer</totsycustomer_observer>
-            </fixture>
-        </suite>
-    </phpunit>
 </config>
