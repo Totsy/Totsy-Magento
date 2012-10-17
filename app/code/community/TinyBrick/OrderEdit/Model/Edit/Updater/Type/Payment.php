@@ -22,7 +22,12 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Payment extends TinyBrick_Orde
             }
             $data = $this->cleanPaymentData($data);
             $payment = new Varien_Object($data);
-            $payment->setData('cc_last4', substr($payment->getCcNumber(), -4));   
+            if($payment->getMethod() == 'free') {
+                $this->replacePaymentInformation($order, $payment);
+                $this->makeOrderReadyToBeProcessed($order);
+                return false;
+            }
+            $payment->setData('cc_last4', substr($payment->getCcNumber(), -4));
             #Check if there is already a cybersource profile if yes, dont create a new one
             $profile = Mage::getModel('paymentfactory/profile');
             if($payment->getData('cc_number')) {
@@ -71,6 +76,7 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Payment extends TinyBrick_Orde
      */
     public function replacePaymentInformation($order, $payment) {
         $paymentOrder = $order->getPayment();
+        $paymentOrder->setData('method', $payment->getData('method'));
         $paymentOrder->setData('cc_exp_month', $payment->getData('cc_exp_month'));
         $paymentOrder->setData('cc_last4', $payment->getData('cc_last4'));
         $paymentOrder->setData('cc_type', $payment->getData('cc_type'));

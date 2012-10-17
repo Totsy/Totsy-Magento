@@ -1,6 +1,17 @@
 Totsy-Magento Release Notes
 ===========================
 
+20121016
+--------
+* MGN-1109 : display po name in item queue
+* Fix an exclude function for the sailthru events api feed
+* Ensuring that an exception while adding a shipment doesn't halt the update shipment process.
+* MGN-1025: removed the header bar from the top of the affiliate registration page.
+* Fixed calls to loading group coupons by code.
+* MGN-747: Using Keyade's cookie value, from registration params, as the clickId when generating feeds.
+* MGN-1156: Added event end date to the category/event sort screen.
+* Cleaning Connection Method from HP in PaymentFactory, OrderSplit, PromotionFactory
+
 20121010
 --------
 * Removing Echoshare integration
