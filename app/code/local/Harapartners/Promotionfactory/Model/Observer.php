@@ -158,7 +158,7 @@ class Harapartners_Promotionfactory_Model_Observer {
             return;
         }
 
-        $groupCoupon = Mage::getModel('promotionfactory/groupcoupon')->load('pseudo_code', $couponCode);
+        $groupCoupon = Mage::getModel('promotionfactory/groupcoupon')->load($couponCode, 'pseudo_code');
         if(!!$groupCoupon && !!$groupCoupon->getId()){
             $groupCoupon->setData('used_count', $groupCoupon->getUsedCount() + 1);
             $groupCoupon->save();

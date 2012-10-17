@@ -189,10 +189,14 @@ XML;
     {
         if (isset($entry['registration_param'])) {
             $regParams = json_decode($entry['registration_param'], true);
-            if (!isset($regParams['clickId'])) {
+            if (isset($regParams['clickId'])) {
+                $entry['clickId'] = $regParams['clickId'];
+            } else if(isset($regParams['K_18733'])) {
+                $entry['clickId'] = $regParams['K_18733'];
+            } else {
                 return false;
             }
-            $entry['clickId'] = $regParams['clickId'];
+
             unset($entry['registration_param']);
         }
         return true;
