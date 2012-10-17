@@ -29,6 +29,15 @@
             <block type="core/template" name="sociable.footer.pixel" template="pixels/sociable/footer.phtml" />
         </block>
     </pixels_sociable_product>
+    
+    <pixels_sociable_feed>
+        <reference name="root">
+            <action method="setTemplate"><template>page/1column.phtml</template></action>			
+        </reference>
+        <reference name="content">
+            <block type="page/html" name="harapartners" template="pixels/sociable/feed/index.phtml" />
+        </reference>
+    </pixels_sociable_feed>
 
     <pixels_sociable_header>
         <block type="core/template" name="root" template="pixels/sociable/header.phtml">

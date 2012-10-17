@@ -74,14 +74,6 @@
                 ?>
                 <?php if ($hasProduct): ?>
                     <li class="span3 catalog-event event-counter-<?php echo $timer;?>">
-                        <span class="echoShare" 
-                            data-productname="<?php echo $live['name'];?>" 
-                            data-productcap="" 
-                            data-productdesc="<?php echo 
-                            strip_tags(html_entity_decode($this->getDescription($live['description'])));?>" 
-                            data-imageclass="" 
-                            data-producturl="<?php echo Mage::getBaseUrl().$live['url_path']; ?>">
-                        </span>
                         <a href="<?php echo Mage::getBaseUrl().$live['url_path']; ?>" class="thumbnail">
                             <hgroup>
                                 <h5><?php echo $live['name'];?></h5>
