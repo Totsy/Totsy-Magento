@@ -1,0 +1,18 @@
+<?php
+$_order = Mage::registry('current_order');
+//$_success = Mage::registry('current_category');
+
+if($_order && $_order->getId()):
+?>
+<!-- Social Labs BEGIN -->
+<div id="sociable_checkout_pixel"></div>
+<script type="text/javascript">
+    var socialableLabsOutput = false;
+    Event.observe(window,'load',function() {
+        new Ajax.Updater($('sociable_checkout_pixel'), '<?php echo Mage::getUrl('pixels/sociable/checkout'
+            , array('order'=>$_order->getId())); ?>'
+            , { method:'get',evalScripts: true });
+    });
+</script>
+<!-- Social Labs END -->
+<?php endif;

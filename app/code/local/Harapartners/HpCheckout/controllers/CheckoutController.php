@@ -52,8 +52,10 @@ class Harapartners_HpCheckout_CheckoutController extends Mage_Checkout_Controlle
         try {
             $blocksSuccessFlag = true;
             $postData = $this->getRequest()->getPost();
+            
             $jsonArray = $this->_getBlocksArray( $postData, true );
             $result[ 'blocks' ] = $jsonArray;
+            
             $this->_getHpCheckout()->getQuote()->setData('billing_selected_by_customer', $postData['billing']['selected']);
             foreach( $jsonArray as $block ) {
                 if(isset($block['status']) && $block['status']) {
@@ -65,6 +67,9 @@ class Harapartners_HpCheckout_CheckoutController extends Mage_Checkout_Controlle
                 $result[ 'status' ] = 2;
             } else {
                 if ($data = $this->getRequest()->getPost('payment', false)) {
+                	
+                	
+                	
                     $profile = Mage::getModel('paymentfactory/profile');
                     if (isset($data['cc_number']) && isset($data['cc_exp_year']) && isset($data['cc_exp_month'])) {
                         $profile->loadByCcNumberWithId($data['cc_number'].$customerId.$data[ 'cc_exp_year' ].$data[ 'cc_exp_month' ]);
@@ -81,6 +86,14 @@ class Harapartners_HpCheckout_CheckoutController extends Mage_Checkout_Controlle
 
                 $service = Mage::getModel('sales/service_quote', $this->_getHpCheckout()->getQuote());
                 $order = $service->getQuote();
+                
+                // Paypal Express Checkout method
+                if($data['method'] == Mage_Paypal_Model_Config::METHOD_WPP_EXPRESS) {
+                	$result['redirect'] = Mage::getUrl('paypal/express/start/');
+                	
+                	$this->getResponse()->setBody(Mage::helper('core')->jsonEncode($result));
+                	return;
+                }
                 
                 $this->_getHpCheckout()->saveOrder();
 
