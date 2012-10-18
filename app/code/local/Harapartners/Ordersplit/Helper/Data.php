@@ -449,7 +449,6 @@ class Harapartners_Ordersplit_Helper_Data extends Mage_Core_Helper_Abstract {
                         }
 
                         if($continue && $invoice->canCapture()) {
-                            Mage::log($invoice->getOrder()->getId());
                             $invoice->capture();
 
                             $order->setStatus('processing');
