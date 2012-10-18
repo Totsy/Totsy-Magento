@@ -293,8 +293,10 @@
             $_item->getRowTotal() - $_item->getDiscountAmount() + $_item->getTaxAmount() + $_item->getWeeeTaxAppliedRowAmount()
         ); ?>
     </td>
-    <td class="e-item-remove a-right last" style="display:none;">
-    	<a href="javascript:void(0)" onclick="flagRemoveItem(<?php echo $_item->getId() ?>);" id="rem-btn<?php echo $_item->getId() ?>">Remove</a><input type="hidden" id="rem<?php echo $_item->getId() ?>" name="remove-<?php echo $_item->getId() ?>" value="0" class="e-item-remove-val" />
-    </td>
+    <?php if($_item->getProductType() != 'virtual'): ?>
+        <td class="e-item-remove a-right last" style="display:none;">
+            <a href="javascript:void(0)" onclick="flagRemoveItem(<?php echo $_item->getId() ?>);" id="rem-btn<?php echo $_item->getId() ?>">Remove</a><input type="hidden" id="rem<?php echo $_item->getId() ?>" name="remove-<?php echo $_item->getId() ?>" value="0" class="e-item-remove-val" />
+        </td>
+    <?php endif; ?>
     </form>
 </tr>

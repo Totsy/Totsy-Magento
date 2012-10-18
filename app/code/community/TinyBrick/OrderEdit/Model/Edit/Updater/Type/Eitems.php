@@ -27,7 +27,18 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Eitems extends TinyBrick_Order
 	public function edit(TinyBrick_OrderEdit_Model_Order $order, $data = array())
 	{
 		$comment = "";
+        $itemCounter = 0;
+        $discountFixed = null;
+        if($order->getDiscountDescription()) {
+            $ruleLabel = Mage::getModel('salesrule/rule_label')->load($order->getDiscountDescription(), 'description');
+            $rule = Mage::getModel('salesrule/rule_label')->load($ruleLabel->getRuleId());
+            if($rule->getSimpleAction == 'cart_fixed') {
+                $discountFixed = $rule->getDiscountAmount();
+            }
+        }
+
 		foreach($data['id'] as $key => $itemId) {
+            $itemCounter++;
 			$item = $order->getItemById($itemId);
 			if($data['remove'][$key]) {
 				$comment .= "Removed Item(SKU): " . $item->getSku() . "<br />";
@@ -53,9 +64,15 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Eitems extends TinyBrick_Order
 				$item->setBaseOriginalPrice($data['price'][$key]);
 				$item->setOriginalPrice($data['price'][$key]);
 				$item->setBaseRowTotal($data['price'][$key]);
-				if($data['discount'][$key]) {
-					$item->setDiscountAmount($data['discount'][$key]);
-				}
+                if($discountFixed) {
+                    if($itemCounter == 1) {
+                        $item->setDiscountAmount($discountFixed);
+                    }
+                } else {
+                    if($data['discount'][$key]) {
+                        $item->setDiscountAmount($data['discount'][$key]);
+                    }
+                }
 				if($data['qty'][$key]) {
 					$item->setQtyOrdered($data['qty'][$key]);
 				}
