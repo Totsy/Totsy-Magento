@@ -68,13 +68,6 @@ shpn='<?php echo $topNavDataObject->getData('attr_text_label'); ?>'
         <?php if ($_is_salable): ?>
         <li class="span2" style="width:146px;">
         <div class="thumbnail">
-            <span class="echoShare" 
-            data-productname="<?php echo $_product['name'];?>" 
-            data-productcap="" 
-            data-productdesc="<?php echo $_description; ?>" 
-            data-imageclass=""  
-            data-producturl="<?php echo $_product['url_path']; ?>">
-        </span>
         <a href="<?php echo Mage::getBaseUrl().$_product['url_path']; ?>" title="<?php echo $_product['name']; ?>" class="product-image"><img src="<?php echo $_product['small_image']; ?>" width="148" alt="<?php echo $_product['name']; ?>" /></a>
         <h5 class="product-name ellipsis">
             <?php echo $_product['name']; ?>

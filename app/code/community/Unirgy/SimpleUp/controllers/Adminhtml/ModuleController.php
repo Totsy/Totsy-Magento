@@ -31,9 +31,6 @@ class Unirgy_SimpleUp_Adminhtml_ModuleController extends Mage_Adminhtml_Controll
             Mage::helper('usimpleup')->checkUpdates();
             Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('adminhtml')->__('Version updates have been fetched'));
         } catch (Exception $e) {
-echo "<pre>";
-print_r($e);
-exit;
             Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
         }
         $this->_redirect('*/*/');
@@ -114,4 +111,8 @@ exit;
             $this->getLayout()->createBlock('usimpleup/adminhtml_module_grid')->toHtml()
         );
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> fix/indexers

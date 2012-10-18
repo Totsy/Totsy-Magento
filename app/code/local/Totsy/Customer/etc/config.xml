@@ -14,6 +14,13 @@
         </Totsy_Customer>
     </modules>
     <global>
+        <blocks>
+            <customer>
+                <rewrite>
+                    <address_book>Totsy_Customer_Block_Address_Book</address_book>
+                </rewrite>
+            </customer>
+        </blocks>
         <models>
             <totsycustomer>
                 <class>Totsy_Customer_Model</class>

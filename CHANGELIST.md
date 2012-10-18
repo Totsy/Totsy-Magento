@@ -1,6 +1,55 @@
 Totsy-Magento Release Notes
 ===========================
 
+20121016
+--------
+* MGN-1109 : display po name in item queue
+* Fix an exclude function for the sailthru events api feed
+* Ensuring that an exception while adding a shipment doesn't halt the update shipment process.
+* MGN-1025: removed the header bar from the top of the affiliate registration page.
+* Fixed calls to loading group coupons by code.
+* MGN-747: Using Keyade's cookie value, from registration params, as the clickId when generating feeds.
+* MGN-1156: Added event end date to the category/event sort screen.
+* Cleaning Connection Method from HP in PaymentFactory, OrderSplit, PromotionFactory
+
+20121010
+--------
+* Removing Echoshare integration
+* Fixing order tracking link
+* Fixed up orders history page
+* Correcting land variable value and adding default
+* Truncating billing information
+* MGN*1030 : Part II Update Reporting for Linkshare
+* MGN*1145 : Improve sailthru api feed
+* Added app/Mage.php to the gitignore file.
+* Removed references to an outdated block rewrite (catalog/category_edit_form).
+* Corrected logic for adjusting sorted events into the live/upcoming buckets, and optimized the sort entry resource loadByDate method.
+* Removed core file app/Mage.php, which was hacked to include user*agent detection to set the Magento store. This logic will be replaced 
+* Category/event sort entry optimization: always load current sort where needed, insteading of loading by date.
+* MGN*1058: Added html entity escaping to Dotcom PO XML fields.
+* Adding cookie data to affiliate registration parameters.
+* Rewrote the category/event maintenance, and refactored the Adminhtml_Catalog block rewrites.
+* Fix Edit Payment Informations for Customer Service.
+
+20121001
+--------
+
+* Hide Address saved with Credit Card
+* Hide address in my account if Credit Card has been deleted by Customer
+* MGN-763: Added 'Canceled' to the set of states of an order that will trigger fulfillment error log removal.
+* MGN-905: Falling back to the most recent available sort, when one for the current date is not available. Also using the Magento-configured time for retrieving the current sort.
+* MGN888 - if an address is linked with a credit card, block any deletion or edit
+* If an address is linked with a credit card, block any deletion or edit
+* fixing PHP warning for catalog preview
+* Added a script that reconciles orders in Processing Fulfillment with shipments at Dotcom.
+* Using secure URLs for the customertracking AJAX request URL only when the current page is secure. This prevents the browser from following cross-domain policy rules for the request.
+* MGN-382. caching issue for each page (Product page contains wrong event title)
+* MGN-1078 : Negative Value Error fix
+* MGN-1030 : Linkshare Integration Part I - order confirmation pixel and reporting
+* MGN-753. STEP1 define product taxation categories
+* MGN-911 : passing actual billing address to dotcom
+* MGN-872 : it turns out IE's incompatibility with the jquery function .remove() is what prevented the page from loading completely.  Switched out the function with the hide() function so expired events are still invisible and not disrupt other events
+
 20120926
 --------
 * Ensuring that AJAX requests for the customer tracking pixel are sent securely.

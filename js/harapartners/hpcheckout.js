@@ -126,34 +126,41 @@ HpCheckout.prototype = {
 	switchAddress: function() {
 		var clickedAddress = jQuery( this ); 
 		var blockType = '';
+		var hpcheckoutObject = HpCheckout.prototype;
+		
 		if( clickedAddress.attr( 'id' ) == 'billing-address-select' ) {
 			blockType = 'billing';
 		} else if( clickedAddress.attr( 'id' ) == 'shipping-address-select' ) {
 			blockType = 'shipping';
 		}
+		
 		if( clickedAddress.val() == '' ) {
 			jQuery( '#' + hpcheckout.data.blocks[ blockType ].formId + ' input' ).val( '' );
             if(blockType == 'billing') {
                 jQuery( '#billing\\:selected' ).val('');
             }
-		} else {
+		} else {	
 			if( hpcheckoutAddresses[ clickedAddress.val() ] ) {
 				jQuery('select#' + blockType +'\\:country_id').val( hpcheckoutAddresses[ clickedAddress.val() ][ 'country_id' ] );
+
 				if( blockType == 'billing' ) {
 					billingRegionUpdater.update();
 				} else if ( blockType == 'shipping' ) {
 					shippingRegionUpdater.update();
 				}
+				
 				jQuery( 'input, select', '#' + hpcheckout.data.blocks[ blockType ].formId ).each( function(){
 					jQuery( this ).val( hpcheckoutAddresses[ clickedAddress.val() ][ jQuery( this ).attr( 'id' ).replace( blockType + ':', '' ) ] );
 				});
+								
 				if( blockType == 'shipping' ) {
 					jQuery( '#shipping\\:postcode' ).change();
-				}
+				}	
+								
                 if(blockType == 'billing') {
                     jQuery( '#billing\\:selected' ).val(jQuery( '#billing-address-select' ).val());
                 }
-			}
+			} 
 		}
 	},
 
@@ -166,19 +173,26 @@ HpCheckout.prototype = {
 	/*******************************
 	* Handler when listened fields are updated
 	*/
-	update: function() {
+	update: function( doUpdatePayment ) {
 		var formId = jQuery( this ).parents( 'form' ).eq( 0 ).attr( 'id' );
 		var hpcheckoutObject = HpCheckout.prototype;
 		var step = hpcheckoutObject.data.forms[ formId ];
-		var blocksToUpdate = hpcheckoutObject.getBlocksToUpdate( step );
+		var blocksToUpdate = "";
+		
+		if(!doUpdatePayment) {		
+            blocksToUpdate = hpcheckoutObject.getBlocksToUpdate( step );
+		} else {
+		    blocksToUpdate = ['shipping','billing','review'];
+		}
+				
 		if( hpcheckoutObject.validate( step ) ) {
 			// var postData = hpcheckoutObject.getFormData( step );
 			var postData = hpcheckoutObject.getFormData();
 			postData += '&currentStep=' + step;
-			hpcheckoutObject.ajaxRequest( postData );
+			hpcheckoutObject.ajaxRequest( postData, doUpdatePayment );
 		}
 	},
-	
+		
 	updatePayment: function() {
 		var formId = jQuery( this ).parents( 'form' ).eq( 0 ).attr( 'id' );
 		var hpcheckoutObject = HpCheckout.prototype;
@@ -208,7 +222,8 @@ HpCheckout.prototype = {
         var checkoutObject = this;
 		var postData = this.getFormData();
 		postData += '&updatePayment=true';
-		this.throbberOn();
+		this.throbberOn();		
+		
 		jQuery.ajax({
 			url: this.data.submitUrl,
 			dataType: "json",
@@ -219,6 +234,7 @@ HpCheckout.prototype = {
 				checkoutObject.renderErrorMessage( 'Please refresh the current page.' );
 			},
 			success: function( response ) {
+			     //console.log(response);
 				 if ( response.redirect ) {
 					 location.href = response.redirect;
 					 return;
@@ -319,9 +335,18 @@ HpCheckout.prototype = {
 		return returnFormDataArray.join( '&' );
 	}, 
 	
-	ajaxRequest: function( postData ) {
+	ajaxRequest: function( postData, doUpdatePayment ) {
 		var checkoutObject = this;
-		var blocksToUpdate = this.getBlocksToUpdate( postData[ 'currentStep' ] );
+		
+		var blocksToUpdate = "";
+		
+		//chekig if payment block should be updated or not
+		if(!doUpdatePayment) {
+            blocksToUpdate = this.getBlocksToUpdate( postData[ 'currentStep' ] );
+		} else {
+            blocksToUpdate = ['shipping','billing','review'];	
+		}
+				
 		this.throbberOn( blocksToUpdate );
 		jQuery.ajax({
 			url: this.data.updateUrl,

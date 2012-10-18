@@ -1,47 +1,80 @@
 <?php
 /**
- * 
+ *
  * @category Crown
  * @package Crown_Import
  * @since 1.0.1
  */
-class Crown_Import_Helper_Encoding extends Mage_Core_Helper_Abstract{
-	
+class Crown_Import_Helper_Encoding extends Mage_Core_Helper_Abstract {
+
 	protected static $win1252ToUtf8 = array (
-		128 => "\xe2\x82\xac", 
-		130 => "\xe2\x80\x9a", 
-		131 => "\xc6\x92", 
-		132 => "\xe2\x80\x9e", 
-		133 => "\xe2\x80\xa6", 
-		134 => "\xe2\x80\xa0", 
-		135 => "\xe2\x80\xa1", 
-		136 => "\xcb\x86", 
-		137 => "\xe2\x80\xb0", 
-		138 => "\xc5\xa0", 
-		139 => "\xe2\x80\xb9", 
-		140 => "\xc5\x92", 
-		142 => "\xc5\xbd", 
-		145 => "\xe2\x80\x98", 
-		146 => "\xe2\x80\x99", 
-		147 => "\xe2\x80\x9c", 
-		148 => "\xe2\x80\x9d", 
-		149 => "\xe2\x80\xa2", 
-		150 => "\xe2\x80\x93", 
-		151 => "\xe2\x80\x94", 
-		152 => "\xcb\x9c", 
-		153 => "\xe2\x84\xa2", 
-		154 => "\xc5\xa1", 
-		155 => "\xe2\x80\xba", 
-		156 => "\xc5\x93", 
-		158 => "\xc5\xbe", 
-		159 => "\xc5\xb8" 
+		128 => "\xe2\x82\xac",
+		130 => "\xe2\x80\x9a",
+		131 => "\xc6\x92",
+		132 => "\xe2\x80\x9e",
+		133 => "\xe2\x80\xa6",
+		134 => "\xe2\x80\xa0",
+		135 => "\xe2\x80\xa1",
+		136 => "\xcb\x86",
+		137 => "\xe2\x80\xb0",
+		138 => "\xc5\xa0",
+		139 => "\xe2\x80\xb9",
+		140 => "\xc5\x92",
+		142 => "\xc5\xbd",
+		145 => "\xe2\x80\x98",
+		146 => "\xe2\x80\x99",
+		147 => "\xe2\x80\x9c",
+		148 => "\xe2\x80\x9d",
+		149 => "\xe2\x80\xa2",
+		150 => "\xe2\x80\x93",
+		151 => "\xe2\x80\x94",
+		152 => "\xcb\x9c",
+		153 => "\xe2\x84\xa2",
+		154 => "\xc5\xa1",
+		155 => "\xe2\x80\xba",
+		156 => "\xc5\x93",
+		158 => "\xc5\xbe",
+		159 => "\xc5\xb8"
 	);
-	
+
+    /**
+     * Gets the invalid characters for a uRapidFlow import
+     * @since 1.0.0
+     * @return array
+     */
+    public function getInvalidCharacters() {
+        if ( !isset($this->_invalid_characters) ) {
+            $info = Mage::getStoreConfig ( 'crownimport/urapidflow/invalid_characters' );
+            $info = preg_replace('/\s+/', ' ', $info);
+            $this->_invalid_characters = explode(' ', $info);
+        }
+        return $this->_invalid_characters;
+    }
+
+    /**
+     * Checks the attribute value to see if it has an invalid character.
+     * @param mixed $value
+     * @since 1.0.1
+     * @return boolean
+     */
+    public function checkForInvalidCharacter($value) {
+        $invalidCharacters = $this->getInvalidCharacters ();
+        $value = $this->toUTF8($value);
+        foreach ( $invalidCharacters as $invalidCharacter ) {
+            $pos = iconv_strpos($value, $invalidCharacter, null, 'UTF-8');
+            if ( false !== $pos ) {
+                throw new Exception("Invalid Character found");
+                return false;
+            }
+        }
+        return true;
+    }
+
 	/**
 	 * Function Encoding::toUTF8
 	 *
 	 * This function leaves UTF8 characters alone, while converting almost all non-UTF8 to UTF8.
-	 * 
+	 *
 	 * It assumes that the encoding of the original string is either Windows-1252 or ISO 8859-1.
 	 *
 	 * It may fail to convert characters to UTF-8 if they fall into one of these scenarios:
@@ -51,7 +84,7 @@ class Crown_Import_Helper_Encoding extends Mage_Core_Helper_Abstract{
 	 * 	are followed by any of these:  ("group B")
 	 * 	¡¢£¤¥¦§¨©ª«¬­®¯°±²³´µ¶•¸¹º»¼½¾¿
 	 * For example:   %ABREPRESENT%C9%BB. «REPRESENTÉ»
-	 * The "«" (%AB) character will be converted, but the "É" followed by "»" (%C9%BB) 
+	 * The "«" (%AB) character will be converted, but the "É" followed by "»" (%C9%BB)
 	 * is also a valid unicode character, and will be left unchanged.
 	 *
 	 * 2) when any of these: àáâãäåæçèéêëìíîï  are followed by TWO chars from group B,
@@ -62,14 +95,14 @@ class Crown_Import_Helper_Encoding extends Mage_Core_Helper_Abstract{
 	 * @return string  The same string, UTF8 encoded
 	 */
 	public function toUTF8($text) {
-		
+
 		if (is_array ( $text )) {
 			foreach ( $text as $k => $v ) {
 				$text [$k] = self::toUTF8 ( $v );
 			}
 			return $text;
 		} elseif (is_string ( $text )) {
-			
+
 			$max = strlen ( $text );
 			$buf = "";
 			for($i = 0; $i < $max; $i ++) {
@@ -128,3 +161,4 @@ class Crown_Import_Helper_Encoding extends Mage_Core_Helper_Abstract{
 		}
 	}
 }
+

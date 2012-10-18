@@ -1,12 +1,12 @@
 <?php
 /**
- * 
+ *
  * @category 	Crown
- * @package 	Crown_Import 
+ * @package 	Crown_Import
  * @since 		1.0.0
  */
 class Crown_Import_Adminhtml_ImportController extends Mage_Adminhtml_Controller_action {
-	
+
 	/**
 	 * @since 1.0.0
 	 * @return void
@@ -15,7 +15,7 @@ class Crown_Import_Adminhtml_ImportController extends Mage_Adminhtml_Controller_
 		$this->loadLayout ()->_setActiveMenu ( 'crown/import' );
 		return $this;
 	}
-	
+
 	/**
 	 * Initiates the import model used for the wizard. And the admin session
 	 * @since 1.0.0
@@ -28,7 +28,7 @@ class Crown_Import_Adminhtml_ImportController extends Mage_Adminhtml_Controller_
 		}
 		return Mage::helper ( 'crownimport' )->getImportModel();
 	}
-	
+
 	/**
 	 * Shows all the ran imports
 	 * @since 1.0.0
@@ -37,7 +37,7 @@ class Crown_Import_Adminhtml_ImportController extends Mage_Adminhtml_Controller_
 	public function indexAction() {
 		$this->_initAction ()->renderLayout ();
 	}
-	
+
 	/**
 	 * Deletes a profile.
 	 * @since 1.0.0
@@ -53,7 +53,7 @@ class Crown_Import_Adminhtml_ImportController extends Mage_Adminhtml_Controller_
 		Mage::getSingleton ( 'adminhtml/session' )->addSuccess('Profile has been deleted');
 		$this->_redirect ( '*/*/');
 	}
-	
+
 	/**
 	 * Shows an error message for when a urapidflow profiles is deleted.
 	 * @since 1.0.0
@@ -74,7 +74,7 @@ class Crown_Import_Adminhtml_ImportController extends Mage_Adminhtml_Controller_
 		$this->_redirect ( '*/*/');
 		return;
 	}
-	
+
 	/**
 	 * Creates a new import process
 	 * @since 1.0.0
@@ -85,7 +85,7 @@ class Crown_Import_Adminhtml_ImportController extends Mage_Adminhtml_Controller_
 		$this->_redirect ( '*/*/edit', array ('id' => $importModel->getId() ) );
 		return;
 	}
-	
+
 	/**
 	 * Changes status back to match process
 	 * @since 1.0.0
@@ -96,7 +96,7 @@ class Crown_Import_Adminhtml_ImportController extends Mage_Adminhtml_Controller_
 		$this->_redirect ( '*/*/edit', array ('id' => $importModel->getId() ) );
 		return;
 	}
-	
+
 	/**
 	 * Resets to the begining of the wizard
 	 * @since 1.0.0
@@ -108,7 +108,7 @@ class Crown_Import_Adminhtml_ImportController extends Mage_Adminhtml_Controller_
 		$this->_redirect ( '*/*/edit', array ('id' => $importModel->getId() ) );
 		return;
 	}
-	
+
 	/**
 	 * Creates a new import based off of a category
 	 * @since 1.0.0
@@ -116,40 +116,41 @@ class Crown_Import_Adminhtml_ImportController extends Mage_Adminhtml_Controller_
 	 */
 	public function newByCategoryAction() {
 		$importModel = Mage::helper ( 'crownimport' )->resetImportModel()->getImportModel();
-		
+
 		$categoryId = $this->getRequest ()->getParam ( 'category_id' );
 		$category = Mage::getModel ( 'catalog/category' )->load ( $categoryId );
-		
+
 		if (! ! $category && ! ! $category->getId ()) {
-			$defaultPoId = 0;
+			$defaultPoId = null;
 			$poArray = Mage::helper ( 'stockhistory' )->getFormPoArrayByCategoryId ( $category->getId (), Harapartners_Stockhistory_Model_Purchaseorder::STATUS_OPEN );
-			if (count ( $poArray ) && isset ( $poArray [0] ['value'] )) {
+            if (count ( $poArray ) && isset ( $poArray [0] ['value'] ) && $poArray [0] ['value'] ) {
 				$defaultPoId = $poArray [0] ['value'];
 			}
-			
+
 			$defaultVendorCode = "";
 			$vendorArray = Mage::helper ( 'stockhistory' )->getFormVendorArrayByCategoryId ( $category->getId (), Harapartners_Stockhistory_Model_Purchaseorder::STATUS_OPEN );
 			// If there is only 1 vendor that has been used for previous imports, set it as the default
 			if (count ( $vendorArray ) == 1 && isset ( $vendorArray [0] ['label'] )) {
 				$defaultVendorCode = $vendorArray [0] ['label'];
 			}
-			
+
 			$importModel
 				->setImportTitle($category->getName ())
 				->setCategoryId($category->getId ())
 				->setImportFilename($_FILES ['import_filename'] ['name'])
 				->setVendorCode($defaultVendorCode)
+                ->setPoId($defaultPoId)
 				->setUpdatedAt(now())
 				->save();
-				
+
 			Mage::helper ( 'crownimport' )->setImportModel($importModel);
-			
+
 			Mage::getSingleton ( 'adminhtml/session' )->setHpImportFormData ( array (
 				'import_title' => $category->getName (), //Default title is the event name
-				'category_id' => $category->getId (), 
-				'category_name' => $category->getName (), 
-				'po_id' => $defaultPoId, 
-				'vendor_code' => $defaultVendorCode 
+				'category_id' => $category->getId (),
+				'category_name' => $category->getName (),
+				'po_id' => $defaultPoId,
+				'vendor_code' => $defaultVendorCode
 			) );
 		} else {
 			Mage::getSingleton ( 'adminhtml/session' )->addError ( Mage::helper ( 'crownimport' )->__ ( 'Invalid Category ID' ) );
@@ -159,7 +160,7 @@ class Crown_Import_Adminhtml_ImportController extends Mage_Adminhtml_Controller_
 		$this->_redirect ( '*/*/edit', array ('id' => $importModel->getId() ) );
 		return;
 	}
-	
+
 	/**
 	 * Loads a profile to be edited or continued.
 	 * @since 1.0.0
@@ -172,7 +173,7 @@ class Crown_Import_Adminhtml_ImportController extends Mage_Adminhtml_Controller_
 			$this->_redirect ( '*/*/' );
 			return;
 		}
-		
+
 		$this->loadLayout ();
 		$this->_addContent ( $this->getLayout ()
 			->createBlock ( 'crownimport/adminhtml_import_edit' ) )
@@ -181,7 +182,7 @@ class Crown_Import_Adminhtml_ImportController extends Mage_Adminhtml_Controller_
 		$this->_initLayoutMessages ( 'adminhtml/session' );
 		$this->renderLayout ();
 	}
-	
+
 	/**
 	 * Handles all save request.
 	 * @since 1.0.0
@@ -250,7 +251,7 @@ class Crown_Import_Adminhtml_ImportController extends Mage_Adminhtml_Controller_
 				$this->importFile();
 		}
 	}
-	
+
 	/**
 	 * Runs the product import.
 	 * @since 1.0.0
@@ -266,26 +267,26 @@ class Crown_Import_Adminhtml_ImportController extends Mage_Adminhtml_Controller_
 			$this->_redirect ( '*/*/' );
 			return;
 		}
-		
+
 		$profileOptions = $profile->getOptions();
 		$profileOptions['import']['dryrun'] = '0';
 		$profile->setOptions($profileOptions);
 		$profile = $profile->factory ();
-		
+
 		if ($profile->getCreatedTime == NULL || $profile->getUpdateTime () == NULL) {
 			$profile->setCreatedTime ( now () )->setUpdateTime ( now () );
 		} else {
 			$profile->setUpdateTime ( now () );
 		}
-		
+
 		$profile->save ();
-		
+
 		try { $profile->stop(); } catch (Exception $e) { };
         $profile->pending('ondemand')->save();
-		
+
 		Mage::getSingleton ( 'adminhtml/session' )->addSuccess ( Mage::helper ( 'urapidflow' )->__ ( 'Profile started successfully' ) );
 	}
-	
+
 	/**
 	 * Runs the product extra import.
 	 * @since 1.0.0
@@ -293,7 +294,7 @@ class Crown_Import_Adminhtml_ImportController extends Mage_Adminhtml_Controller_
 	 */
 	protected function runProductExtraImport() {
 		$importModel = $this->_initImportModel();
-		
+
 		try {
 			$profile = $importModel->getUrapidflowProfileProductExtra();
 		} catch (Exception $e) {
@@ -301,23 +302,23 @@ class Crown_Import_Adminhtml_ImportController extends Mage_Adminhtml_Controller_
 			$this->_redirect ( '*/*/' );
 			return;
 		}
-		
+
 		$profile = $profile->factory ();
-		
+
 		if ($profile->getCreatedTime == NULL || $profile->getUpdateTime () == NULL) {
 			$profile->setCreatedTime ( now () )->setUpdateTime ( now () );
 		} else {
 			$profile->setUpdateTime ( now () );
 		}
-		
+
 		$profile->save ();
-		
+
 		try { $profile->stop(); } catch (Exception $e) { };
         $profile->pending('ondemand')->save();
-        
+
 		Mage::getSingleton ( 'adminhtml/session' )->addSuccess ( Mage::helper ( 'urapidflow' )->__ ( 'Profile started successfully' ) );
 	}
-	
+
 	/**
 	 * Uploads the CSV from the user and converts it to a usable file. Runs validation.
 	 * @since 1.0.0
@@ -328,14 +329,14 @@ class Crown_Import_Adminhtml_ImportController extends Mage_Adminhtml_Controller_
 		$importModel = $this->_initImportModel();
 		$data = $this->getRequest ()->getPost ();
 		$postDataObject = new Varien_Object ( $data );
-		
+
 		// Verify data exist
 		if (! $data) {
 			Mage::getSingleton ( 'adminhtml/session' )->addError ( Mage::helper ( 'crownimport' )->__ ( 'Nothing to save.' ) );
 			$this->_redirect ( '*/*/edit', array ('id' => $importModel->getId() ) );
 			return;
 		}
-		
+
 		// Database validation fix because of contstraints... cannot be 0.
 		if ( 0 == $data['po_id']) {
 			unset($data['po_id']);
@@ -343,16 +344,16 @@ class Crown_Import_Adminhtml_ImportController extends Mage_Adminhtml_Controller_
 
 		// Load category model
 		$category = Mage::getModel ( 'catalog/category' )->load ( $postDataObject->getdata ( 'category_id' ) );
-		
+
 		// Database validation fix because of contstraints... cannot be 0.
 		if (! $category->getId ()) {
 			unset($data['category_id']);
 		}
-		
+
 		// Import model has been created for this session
 		$importModel->addData($data)->save();
 		Mage::helper ( 'crownimport' )->setImportModel($importModel);
-		
+
 		// Verify a uRapidFlowProfile is chosen
 		/* @var $profile Unirgy_RapidFlow_Model_Profile */
 		try {
@@ -362,7 +363,7 @@ class Crown_Import_Adminhtml_ImportController extends Mage_Adminhtml_Controller_
 			$this->_redirect ( '*/*/edit', array ('id' => $importModel->getId() ) );
 			return;
 		}
-		
+
 		// Verify Category/Event
 		if (! $category->getId ()) {
 			Mage::getSingleton ( 'adminhtml/session' )->addError ( Mage::helper ( 'crownimport' )->__ ( 'Invalid Category/Event' ) );
@@ -386,7 +387,7 @@ class Crown_Import_Adminhtml_ImportController extends Mage_Adminhtml_Controller_
 			if (! $vendor || ! $vendor->getId ()) {
 				Mage::throwException ( 'Invalid Vendor.' );
 			}
-			
+
 			$purchaseOrderDataObj = new Varien_object ();
 			$purchaseOrderDataObj->setData ( 'vendor_id', $vendor->getId () );
 			$purchaseOrderDataObj->setData ( 'vendor_code', $vendor->getVendorCode () );
@@ -400,7 +401,7 @@ class Crown_Import_Adminhtml_ImportController extends Mage_Adminhtml_Controller_
 			$purchaseOrder->importData ( $savedData )->save ();
 			Mage::getSingleton ( 'adminhtml/session' )->addNotice ( Mage::helper ( 'crownimport' )->__ ( 'New PO created during import: ' . $purchaseOrder->getData ( 'name' ) ) );
 		}
-		
+
 		// Update import history model
 		$importModel
 			->setImportTitle($postDataObject->getData ( 'import_title' ))
@@ -411,7 +412,7 @@ class Crown_Import_Adminhtml_ImportController extends Mage_Adminhtml_Controller_
 			->setUpdatedAt(now())
 			->setCategoryId($category->getId ())
 			->save();
-			
+
 		try {
 			/* @var $importHandler Crown_Import_Model_Productimport */
 			$importHandler = Mage::getModel ( 'crownimport/productimport' );
@@ -424,7 +425,7 @@ class Crown_Import_Adminhtml_ImportController extends Mage_Adminhtml_Controller_
 			$importHandler->setDefaultProductPoId ( $purchaseOrder->getId () );
 			$importHandler->setFileBaseDir ( $profile->getFileBaseDir () );
 			$importHandler->run ();
-			
+
 			if ( $importHandler->getHasConfigurableProducts() ){
 				$importModel->setHasConfigurable(true)->save();
 				try {
@@ -437,7 +438,7 @@ class Crown_Import_Adminhtml_ImportController extends Mage_Adminhtml_Controller_
 					return;
 				}
 			}
-			
+
 			//Data preparation
 			try {
 				$profile->setFilename ( $importHandler->getFilename () );
@@ -445,32 +446,32 @@ class Crown_Import_Adminhtml_ImportController extends Mage_Adminhtml_Controller_
 				$profileOptions['import']['dryrun'] = '1';
 				$profile->setOptions($profileOptions);
 				$profile = $profile->factory ();
-				
+
 				if ($profile->getCreatedTime == NULL || $profile->getUpdateTime () == NULL) {
 					$profile->setCreatedTime ( now () )->setUpdateTime ( now () );
 				} else {
 					$profile->setUpdateTime ( now () );
 				}
-				
+
 				$profile->save ();
-				
+
 				try { $profile->stop(); } catch (Exception $e) { };
 		        $profile->pending('ondemand')->save();
-		        
+
 				$importModel->setData('step', 'validation')->save();
-				
+
 				Mage::getSingleton ( 'adminhtml/session' )->addSuccess ( Mage::helper ( 'urapidflow' )->__ ( 'Profile started successfully' ) );
-				
+
 				$this->_redirect ( '*/*/edit', array ('id' => $importModel->getId() ) );
 				return;
-			
+
 			} catch ( Exception $e ) {
 				Mage::getSingleton ( 'adminhtml/session' )->addError ( $e->getMessage () );
 				Mage::getSingleton ( 'adminhtml/session' )->setHpImportFormData ( $data );
 				$this->_redirect ( '*/*/edit', array ('id' => $importModel->getId() ) );
 				return;
 			}
-		
+
 		} catch ( Mage_Core_Exception $mageE ) {
 			Mage::getSingleton ( 'adminhtml/session' )->addError ( Mage::helper ( 'crownimport' )->__ ( $mageE->getMessage () ) );
 			$this->_redirect ( '*/*/edit', array ('id' => $importModel->getId() ) );
@@ -482,7 +483,7 @@ class Crown_Import_Adminhtml_ImportController extends Mage_Adminhtml_Controller_
 			return;
 		}
 	}
-	
+
 	/**
 	 * Mass delete of import history action
 	 * @since 1.0.0

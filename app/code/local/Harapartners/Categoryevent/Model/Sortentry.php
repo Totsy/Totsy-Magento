@@ -53,21 +53,26 @@ class Harapartners_Categoryevent_Model_Sortentry
             $this->setStoreId(Mage_Core_Model_App::ADMIN_STORE_ID);
         }
 
+        parent::_beforeSave();
+    }
+
+    protected function _afterSave()
+    {
         Mage::app()->getCache()->save(
             serialize($this->getData()),
             $this->_getCacheKey(),
             array($this->_cacheTag)
         );
 
-        parent::_beforeSave();
+        return parent::_afterSave();
     }
 
     public function loadCurrent($storeId = Mage_Core_Model_App::ADMIN_STORE_ID)
     {
-        return $this->loadByDate(date('Y-m-d'), $storeId);
+        return $this->loadByDate(Mage::getModel('core/date')->date('Y-m-d'), $storeId, true);
     }
 
-    public function loadByDate($date, $storeId = Mage_Core_Model_App::ADMIN_STORE_ID) {
+    public function loadByDate($date, $storeId = Mage_Core_Model_App::ADMIN_STORE_ID, $useRecent = false) {
         if (!$storeId) {
             $storeId = Mage_Core_Model_App::ADMIN_STORE_ID;
         }
@@ -79,7 +84,7 @@ class Harapartners_Categoryevent_Model_Sortentry
         if ($cache->test($this->_getCacheKey())) {
             $this->addData(unserialize($cache->load($this->_getCacheKey())));
         } else {
-            $this->getResource()->load($this, $date, 'date');
+            $this->getResource()->loadByDate($this, $date, $useRecent);
             if ($this->getId()) {
                 Mage::app()->getCache()->save(
                     serialize($this->getData()),
@@ -166,6 +171,9 @@ class Harapartners_Categoryevent_Model_Sortentry
 
     protected function _prepareEvent($categoryId)
     {
+        $stores = Mage::app()->getStores(false, true);
+        $defaultStore = $stores['default']->getId();
+
         // fetch all products part of this category/event
         $category = Mage::getModel('catalog/category')->load($categoryId);
         $event    = $category->getData();
@@ -195,14 +203,8 @@ class Harapartners_Categoryevent_Model_Sortentry
         // maximum discount percentage by finding the highest discount
         // percentage across all products
         foreach ($products as $product) {
-            $departments = $product->getAttributeTextByStore(
-                'departments',
-                Harapartners_Service_Helper_Data::TOTSY_STORE_ID
-            );
-            $ages = $product->getAttributeTextByStore(
-                'ages',
-                Harapartners_Service_Helper_Data::TOTSY_STORE_ID
-            );
+            $departments = $product->getAttributeTextByStore('departments', $defaultStore);
+            $ages = $product->getAttributeTextByStore('ages', $defaultStore);
 
             if (is_array($departments)) {
                 $event['department'] = $event['department'] + $departments;
@@ -342,13 +344,13 @@ class Harapartners_Categoryevent_Model_Sortentry
      */
     public function adjustQueuesForCurrentTime()
     {
-        $currentTime = Mage::helper('service')->getServerTime() / 1000;
+        $now = Mage::getModel('core/date')->timestamp();
 
         $live     = json_decode($this->getData('live_queue'), true);
         $upcoming = json_decode($this->getData('upcoming_queue'), true);
 
         foreach ($live as $idx => $event) {
-            if (strtotime($event['event_start_date']) > $currentTime) {
+            if (strtotime($event['event_start_date']) > $now) {
                 // move this event to Upcoming
                 array_unshift($upcoming, $event);
                 unset($live[$idx]);
@@ -356,7 +358,9 @@ class Harapartners_Categoryevent_Model_Sortentry
         }
 
         foreach ($upcoming as $idx => $event) {
-            if (strtotime($event['event_start_date']) < $currentTime) {
+            if (strtotime($event['event_start_date']) < $now &&
+                strtotime($event['event_end_date']) > $now
+            ) {
                 // move this event to Live
                 array_unshift($live, $event);
                 unset($upcoming[$idx]);

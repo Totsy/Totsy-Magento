@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<layout version="0.1.0">
+<layout>
     <catalog_product_view>
         <reference name="after_body_start">
             <block type="core/template" name="sociable.product.pixel" template="pixels/sociable/product/ajax.phtml" />
@@ -16,6 +16,7 @@
     <customer_logged_out>
         <reference name="after_body_start">
             <remove name="sociable.header.pixel" />
+            <remove name="steelhouse.product.pixel" />
         </reference>
     </customer_logged_out>
 
@@ -28,6 +29,15 @@
             <block type="core/template" name="sociable.footer.pixel" template="pixels/sociable/footer.phtml" />
         </block>
     </pixels_sociable_product>
+    
+    <pixels_sociable_feed>
+        <reference name="root">
+            <action method="setTemplate"><template>page/1column.phtml</template></action>			
+        </reference>
+        <reference name="content">
+            <block type="page/html" name="harapartners" template="pixels/sociable/feed/index.phtml" />
+        </reference>
+    </pixels_sociable_feed>
 
     <pixels_sociable_header>
         <block type="core/template" name="root" template="pixels/sociable/header.phtml">

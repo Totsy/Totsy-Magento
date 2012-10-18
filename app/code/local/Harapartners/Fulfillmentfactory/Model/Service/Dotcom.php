@@ -249,10 +249,7 @@ SQL;
 
             $ordersShipped = $this->updateShipment($fromDate, $toDate);
             Mage::log(
-                sprintf(
-                    'Completed processing for %d orders that have been shipped.',
-                    count($ordersShipped)
-                ),
+                "Completed processing for $ordersShipped orders that have been shipped.",
                 Zend_Log::INFO,
                 'fulfillment.log'
             );
@@ -297,31 +294,37 @@ XML;
             $productSku = substr($sku, 0, 17);
             $name = substr($product->getName(), 0, 28);
             $name = Mage::helper('fulfillmentfactory')->removeBadCharacters($name);
+            $name = substr($product->getName(), 0, 28);
 
             $vendorCode = '<manufacturing-code xsi:nil="true" />';
             if ($value = $product->getVendorCode()) {
                 $value = Mage::helper('fulfillmentfactory')->removeBadCharacters($value);
                 $value = substr($value, 0, 10);
+                $value = htmlentities($value);
                 $vendorCode = '<manufacturing-code>' . $value . '</manufacturing-code>';
             }
 
             $style = '<style-number xsi:nil="true" />';
             if ($value = $product->getVendorStyle()) {
+                $value = htmlentities($value);
                 $style = '<style-number>' . substr($value, 0, 10) . '</style-number>';
             }
 
             $color = '<color xsi:nil="true" />';
             if ($value = $product->getAttributeText('color')) {
+                $value = htmlentities($value);
                 $color = '<color>' . substr($value, 0, 5) . '</color>';
             }
 
             $size = '<size xsi:nil="true" />';
             if ($value = $product->getAttributeText('size')) {
+                $value = htmlentities($value);
                 $size = '<size>' . substr($value, 0, 5) . '</size>';
             }
 
             $upc = '<upc xsi:nil="true" />';
             if ($value = $product->getUpc()) {
+                $value = htmlentities($value);
                 $upc = "<upc>$value</upc>"; // no need to limit string length here
             }
 
@@ -468,11 +471,16 @@ XML;
                 $billingAddress = Mage::getModel('sales/order_address');
              }
 
-            $billingAddress = $billingAddress->getFirstname() . ' ' . $billingAddress->getLastname();
+            $billingName = $billingAddress->getFirstname() . ' ' . $billingAddress->getLastname();
+            $billingName = substr($billingName, 0, 30);
+
+            $billing_street_1 = substr($billingAddress->getStreet(1), 0,30);
+            $billing_street_2 = substr($billingAddress->getStreet(2), 0,30);
 
             $billing_state = Mage::helper('fulfillmentfactory')->getStateCodeByFullName($billingAddress->getRegion(), $billingAddress->getCountry());
 
             $billing_city = Mage::helper('fulfillmentfactory')->validateAddressForDC('CITY', $billingAddress->getCity());
+            $billing_city = substr($billing_city, 0, 20);
 
             $billing_country = Mage::helper('fulfillmentfactory/dotcom')->getCountryCodeUsTerritories($billing_state);
 
@@ -520,8 +528,8 @@ XML;
                     <billing-customer-number xsi:nil="true"/>
                     <billing-name><![CDATA[{$billingName}]]></billing-name>
                     <billing-company xsi:nil="true"/>
-                    <billing-address1><![CDATA[{$billingAddress->getStreet(1)}]]></billing-address1>
-                    <billing-address2><![CDATA[{$billingAddress->getStreet(2)}]]></billing-address2>
+                    <billing-address1><![CDATA[{$billing_street_1}]]></billing-address1>
+                    <billing-address2><![CDATA[{$billing_street_2}]]></billing-address2>
                     <billing-address3 xsi:nil="true"/>
                     <billing-city><![CDATA[$billing_city]]></billing-city>
                     <billing-state>{$billing_state}</billing-state>
@@ -538,8 +546,8 @@ XML;
                     <shipping-address2><![CDATA[{$shippingAddress->getStreet(2)}]]></shipping-address2>
                     <shipping-address3 xsi:nil="true"/>
                     <shipping-city><![CDATA[$city]]></shipping-city>
-                    <shipping-state><![CDATA[$state]]></shipping-city>
-                    <shipping-zip/>{$shippingAddress->getPostcode()}</shipping-zip>
+                    <shipping-state><![CDATA[$state]]></shipping-state>
+                    <shipping-zip>{$shippingAddress->getPostcode()}</shipping-zip>
                     <shipping-country >{$country}</shipping-country>
                     <shipping-iso-country-code xsi:nil="true"/>
                     <shipping-phone xsi:nil="true"/>
@@ -578,13 +586,17 @@ XML;
                 $sku = substr($item->getSku(), 0, 17);
 
                 if($quantity) {
+                    $taxAmount = $item->getTaxAmount();
+                    if (!$taxAmount) {
+                        $taxAmount = '0';
+                    }
 
                     $xml .= <<<XML
                     <line-item>
                         <sku>$sku</sku>
                         <quantity>$quantity</quantity>
                         <price>{$item->getPrice()}</price>
-                        <tax>{$item->getTaxAmount()}</tax>
+                        <tax>$taxAmount</tax>
                         <shipping-handling>0</shipping-handling>
                         <client-item xsi:nil="true"/>
                         <line-number xsi:nil="true"/>
@@ -658,7 +670,13 @@ XML;
         }
 
         // get data from dotcom
-        $dataXML = Mage::helper('fulfillmentfactory/dotcom')->getShipment($fromDate, $toDate);
+        $dataXML = array();
+        try {
+            $dataXML = Mage::helper('fulfillmentfactory/dotcom')->getShipment($fromDate, $toDate);
+        } catch(Exception $e) {
+            Mage::logException($e);
+            return 0;
+        }
 
         $updatedOrders = 0;
         foreach ($dataXML as $shipment) {
@@ -697,22 +715,22 @@ XML;
             if(count($orderShipments) > 0) {
                 $shipment = $orderShipments->getFirstItem();
             } else {
-                $itemQtyArray = array();
-                foreach ($order->getAllItems() as $item) {
-                    $itemQtyArray[$item->getData('item_id')] = (int) $item->getQtyToShip();
-                }
-
                 $shipment = Mage::getModel('sales/service_order', $order)
-                    ->prepareShipment($itemQtyArray);
+                    ->prepareShipment();
 
                 // create a new shipment track item
                 $shipmentTrack = Mage::getModel('sales/order_shipment_track')
                     ->addData($shipmentData);
 
                 // create a new shipment item
-                $shipment->addData($shipmentData)
-                    ->addTrack($shipmentTrack)
-                    ->save();
+                try {
+                    $shipment->addData($shipmentData)
+                        ->addTrack($shipmentTrack)
+                        ->save();
+                } catch(Exception $e) {
+                    Mage::logException($e);
+                    continue;
+                }
             }
 
             // update the order status and save

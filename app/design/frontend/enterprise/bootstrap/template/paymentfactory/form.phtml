@@ -73,7 +73,7 @@
         		 <div id="<?php echo $_code ?>_cc_type">
         		 <?php $i=0; ?>
         		 <?php foreach ($this->getCcAvailableTypes() as $_typeCode => $_typeName): ?>
-        		     	<input type="radio" class="validate-cybsersource-cc-type <?php if($i==3) { echo "validate-one-required"; } ?>" name="payment[cc_type]" value="<?php echo $_typeCode ?>" <?php if($_typeCode==$_ccType) { echo "checked"; } ?> > 
+        		  <input type="radio" class="validate-cybsersource-cc-type <?php if($i==3) { echo "validate-one-required"; } ?>" name="payment[cc_type]" value="<?php echo $_typeCode ?>" <?php if($_typeCode==$_ccType) { echo "checked"; } ?> > 
         		 <?php $i++; ?>
         		 	<span class="cc">
         		 	    <span title="<?php echo $_typeName; ?>"  class="<?php echo strtolower($_typeCode); ?>" >
@@ -82,11 +82,13 @@
         		 <?php endforeach ?>
         		 <?php $methods = $this->getLayout()->getBlock('hpcheckout.payment.methods')->getMethods();  ?> 
                  <?php if(count($methods)): ?>
-			    	<input type="radio" value="paypal_express" id="paypal_payment" name="paypal_payment">
+                 	<?php if(Mage::getModel('paypal/config')->isMethodActive('paypal_express')): ?>
+			    	    <input type="radio" value="paypal_express" id="paypal_payment" name="paypal_payment">
+			    	    <div>
         		 	    <span title="Paypal Express" class="paypal"></span>
-                 <?php foreach ($methods as $_method): $_code = $_method->getCode() ?>
-        		 <?php if($this->getSelectedMethodCode()==$_code){ echo "checked"; } //echo $_code; ?>
-        		 <?php endforeach; ?>
+        		 	    <a class="what-is-paypal-link" href="https://www.paypal.com/cgi-bin/webscr?cmd=xpt/Marketing/popup/OLCWhatIsPayPal-outside" target="_blank">What is<br /> PayPal?</a>
+        		 	    </div>
+        		 	<?php endif; ?>
                  <?php endif; ?>                 
         		 <div style="clear:both; height:10px"></div>
         	    </div>
@@ -123,7 +125,7 @@
                 <input type="text" id="<?php echo $_code ?>_cc_number" name="payment[cc_number]" title="<?php echo $this->__('Credit Card Number') ?>" class="input-text validate-cc-number validate-cc-type-radio" value="<?php echo (($this->__('Credit Card Number')!=='Credit Card Number') ? $this->__('Credit Card Number') : "") ?>" placeholder="<?php echo $this->__('Credit Card Number') ?>" />
             </div>
         </div>
-        <div class="rewards_points use-new-card-wrapper">
+        <div class="rewards_points use-new-card-wrapper pull-left">
             <?php echo $this->getLayout()->getBlock('hpcheckout.reward.points')->toHtml(); ?>
         </div>
     </div>
@@ -158,12 +160,16 @@
                 </select>
             </div>
         </div>
-        <div class="cc_save_card pull-right use-new-card-wrapper">
+        <div class="cc_save_card pull-left use-new-card-wrapper">
             <span>
                 <input type="checkbox" value="1" name="payment[saved_by_customer]" id="<?php echo $_code ?>_saved" />
             </span>
             <span for="<?php echo $_code ?>_cc_save"><?php echo $this->__(' Save this Credit Card ?') ?>
             </span>
+        </div>
+        <div class="cc_security">
+            <div class="cc_secure_icon"><img src="/skin/frontend/enterprise/bootstrap/images/security-lock.png" width="19" height="32"></div>
+            <div class="cc_secure_text">Totsy.com makes sure your information<br> is private and secure.</div>
         </div>
     </div> 
     <div style="clear:both"></div>
@@ -229,7 +235,7 @@
 <script type="text/javascript">
 // @TODO: should abstract this out to hpcheckout.js
 // disable billing address form controls for saved credit card
-jQuery( document ).ready( function($) {
+jQuery( document ).ready( function() {
 	// cache jQuery objects
 	var billAddySelect = jQuery("#billing-address-select");
 	var newCardWrap = jQuery('.use-new-card-wrapper');
@@ -237,12 +243,14 @@ jQuery( document ).ready( function($) {
 	var selectUIWraps = jQuery('.totsy-selective-input-box', '#hpcheckout-billing-wrapper');
 	var billFormInputs = jQuery('#hpcheckout-billing-form :input');
     jQuery('#cybersource-use-card-method').change( function() {    
-        if( $( this ).val() == '' ) {
-            jQuery('#paypal_payment').attr("checked", false);
+        if( jQuery(this).val() == '' ) {
+        	if(jQuery('#paypal_payment').length > 0) {
+            	jQuery('#paypal_payment').attr("checked", false);
+            }
             
-            //if(jQuery("#payment_form_paypal_express").length > 0) {
-                //jQuery("#payment_form_paypal_express").show();           	
-            //}
+            if(jQuery("#payment_form_paypal_express").length > 0) {
+                jQuery("#payment_form_paypal_express").show();           	
+            }
             jQuery("#cc_data").show();
             newCardWrap.show();
             //newCardCtrls.removeAttr('disabled');
@@ -257,12 +265,12 @@ jQuery( document ).ready( function($) {
             if(jQuery("#payment_form_paypal_express").length > 0){
                 jQuery("#payment_form_paypal_express").hide();           	
             }
+           	           	            
 			newCardWrap.hide();
-			//newCardCtrls.attr( 'disabled', 'disabled' ); // disable new card controls
-			selectUIWraps.addClass('disabled'); // 'disable' select UI wrappers
+			selectUIWraps.addClass('disabled'); 
 			
 			if(jQuery("#address_" + jQuery( this ).val()).val()) {
-			    billAddySelect.val(jQuery("#address_" + $( this ).val()).val()).change();
+			    billAddySelect.val(jQuery("#address_" + jQuery( this ).val()).val()).change();
 			    //Block Billing Inputs if credit card selected
 			    billFormInputs.each(function(i) {
 			        if(jQuery(this).attr('id') != 'button_ship_to') {
@@ -273,10 +281,10 @@ jQuery( document ).ready( function($) {
 			} else {
 			    billAddySelect.removeAttr('disabled');
 			    billFormInputs.each(function(i) {
-			        $(this).removeAttr('disabled');
+			        jQuery(this).removeAttr('disabled');
 			    });
 			}
         }
-    });
+    });    
 });
 </script>

@@ -36,7 +36,7 @@
     //$endcount_lc_header = date("F j, Y, G:i:s", ($countDownTimerHeader + $timeoutHeader));
     $endcount_lc_header = ($countDownTimerHeader + $timeoutHeader)*1000; //ms
     //Harapartners, yang, get the server time with the frontend JS time
-    $serverTime = Mage::helper('service')->getServerTime();
+    $serverTime = Mage::getModel('core/date')->timestamp() * 1000;
     $quote = $checkoutSession->getQuote();
     $_saving = Mage::helper('sales/order')->calculateEstimatedSavings($quote);
 ?>
@@ -73,7 +73,7 @@
         <?php if ($_itemsInCart):?>
         
             <div id="usercart-block-title" class="dropdown-toggle block-title" data-toggle="dropdown">
-                <strong id="cartHeader"><?php echo $_myCart ?><span><?php echo ' | '.Mage::helper('checkout')->formatPrice($this->getSubtotal()) ?><?php if ($_subtotalInclTax = $this->getSubtotalInclTax()): ?> / <?php echo ' | '.Mage::helper('checkout')->formatPrice($_subtotalInclTax) ?> <?php echo ' | '.Mage::helper('tax')->getIncExcText(true) ?><?php endif; ?></span></strong>
+                <strong id="cartHeader" class="hasItems"><?php echo $_myCart ?><span><?php echo ' | '.Mage::helper('checkout')->formatPrice($this->getSubtotal()) ?><?php if ($_subtotalInclTax = $this->getSubtotalInclTax()): ?> / <?php echo ' | '.Mage::helper('checkout')->formatPrice($_subtotalInclTax) ?> <?php echo ' | '.Mage::helper('tax')->getIncExcText(true) ?><?php endif; ?></span></strong>
             </div>
 
             <?php

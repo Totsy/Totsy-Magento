@@ -366,6 +366,7 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
     color: #ED1C25;
     font-weight: bold;
 }
+#cartHeader.hasItems {display: block; white-space: nowrap;}
 #cartHeader.cartempty {
     position: relative; top:-6px; left: 25px; /* a bit hackish but gets it done */
     background-image: none;
@@ -784,6 +785,13 @@ body.catalog-category-view .thumbnails > li {position: relative;}
     display: block !important;
 }
 
+.what-is-paypal-link {
+    float:left; 
+    color: #000;
+    font-size: 11px;
+    text-decoration:underline
+}
+
 #use-reward-point {
     cursor: pointer;
 }
@@ -867,6 +875,10 @@ body.catalog-category-view .thumbnails > li {position: relative;}
 .month {
     width: auto;
     margin-right:10px;
+}
+
+.order-history-blocks {
+	width:210px;
 }
 
 .year {
@@ -955,7 +967,7 @@ body.catalog-category-view .thumbnails > li {position: relative;}
 
 .cc_types {
     text-align: center !important;
-    width: 500px !important;
+    width: 510px !important;
 }
 
 .btn-checkout-group {
@@ -975,7 +987,19 @@ body.catalog-category-view .thumbnails > li {position: relative;}
 }
 
 .cc_saved_cards {
-    width:218px;
+    width:228px;
+}
+
+.cc_security {
+    float:right;
+}
+
+.cc_secure_icon {
+    float: left;
+}
+
+.cc_secure_text {
+    margin-left: 30px;
 }
 
 .cc_num input[type="text"]{
@@ -990,7 +1014,7 @@ body.catalog-category-view .thumbnails > li {position: relative;}
     width: 90px;
 }
 
-.cc_exp .lbl{
+.cc_exp .lbl {
     float: left;
     margin-right:10px;
     line-height: inherit;
@@ -1002,11 +1026,17 @@ body.catalog-category-view .thumbnails > li {position: relative;}
 }
 
 .cc_save_card {
-    width: 418px;
+    width: 160px;
 }
 
 .discount-buttons {
     margin-top: 10px;
+}
+
+.security-lock {
+    background: url("../images/security-lock.png") no-repeat scroll 0 0 transparent;
+    width: 38px;
+    height: 64px;
 }
 
 /**
@@ -1939,3 +1969,5 @@ overflow: auto;
 .fancybox-ie #fancybox-bg-sw { filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../images/fancybox/fancy_shadow_sw.png', sizingMethod='scale'); }
 .fancybox-ie #fancybox-bg-w { filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../images/fancybox/fancy_shadow_w.png', sizingMethod='scale'); }
 .fancybox-ie #fancybox-bg-nw { filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../images/fancybox/fancy_shadow_nw.png', sizingMethod='scale'); }
+
+#cc_data {display:none;}

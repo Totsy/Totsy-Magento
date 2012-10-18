@@ -1,8 +1,8 @@
 <div class="sp-methods" id="checkout-payment-method-load">
-<?php if( ! count( $methods = $this->getMethods() ) ): ?>
+<?php if(!count( $methods = $this->getMethods())): ?>
 	<div>No payment methods available, please try again later or contact us.</div>
 <?php elseif( count( $methods ) == 1 ): ?>
-	<!-- <input type="hidden" name="payment[method]" value="<?php //echo $methods[0]->getCode() ?>"> -->
+	 <input type="hidden" name="payment[method]" value="<?php echo $methods[0]->getCode() ?>"> 
 	<div><?php echo $this->getPaymentMethodFormHtml( $methods[0] ) ?></div>
 	<script type="text/javascript">
 		jQuery( "#payment_form_<?php echo $methods[0]->getCode() ?>" ).show();
@@ -18,20 +18,27 @@
         </div>
     <?php endif; ?>
 <?php endforeach; ?>
+<?php endif ?>
 <script type="text/javascript">
-    jQuery( document ).ready ( function() {
-    	jQuery('input:radio[name=paypal_payment]').click( function() {
-    	   jQuery('.validate-cybsersource-cc-type').attr("checked", false);
-            jQuery('input[name="payment[method]"]').val("paypal_express");
-    		hpcheckout.switchPaymentMethod('paypal_express');				
-        });
+    jQuery(document).ready( function() {   
+        if(jQuery('input:radio[name=paypal_payment]')) {
+            jQuery('input:radio[name=paypal_payment]').click( function() {
+                jQuery('.validate-cybsersource-cc-type').attr("checked", false);
+        	       jQuery('input[name="payment[method]"]').val("paypal_express");
+                hpcheckout.switchPaymentMethod('paypal_express');			
+            });
+        }    
+
         jQuery('.validate-cybsersource-cc-type').click( function() {
-            jQuery('#paypal_payment').attr("checked", false);
-            jQuery("#payment_form_paypal_express").hide();
+            if(jQuery('#paypal_payment').length > 0) {
+                jQuery('#paypal_payment').attr("checked", false);
+            }
+            if(jQuery("#payment_form_paypal_express").length > 0) {
+                jQuery("#payment_form_paypal_express").hide();
+            }
             jQuery("#cc_data").show();
             jQuery('input[name="payment[method]"]').val("paymentfactory_tokenize");
-    		hpcheckout.switchPaymentMethod('paymentfactory_tokenize');				
+    		hpcheckout.switchPaymentMethod('paymentfactory_tokenize');		
         });
     });	
 </script>
-<?php endif ?>
