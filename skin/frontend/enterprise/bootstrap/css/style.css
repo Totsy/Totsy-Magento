@@ -785,6 +785,13 @@ body.catalog-category-view .thumbnails > li {position: relative;}
     display: block !important;
 }
 
+.what-is-paypal-link {
+    float:left; 
+    color: #000;
+    font-size: 11px;
+    text-decoration:underline
+}
+
 #use-reward-point {
     cursor: pointer;
 }
@@ -868,6 +875,10 @@ body.catalog-category-view .thumbnails > li {position: relative;}
 .month {
     width: auto;
     margin-right:10px;
+}
+
+.order-history-blocks {
+	width:210px;
 }
 
 .year {
@@ -956,7 +967,7 @@ body.catalog-category-view .thumbnails > li {position: relative;}
 
 .cc_types {
     text-align: center !important;
-    width: 500px !important;
+    width: 510px !important;
 }
 
 .btn-checkout-group {

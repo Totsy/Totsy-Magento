@@ -22,6 +22,11 @@ class Harapartners_Fulfillmentfactory_Block_Adminhtml_Itemqueue_Index_Grid exten
     protected function _prepareCollection(){
         $model = Mage::getModel('fulfillmentfactory/itemqueue');
         $collection = $model->getCollection();
+        $collection->getSelect()
+            ->joinLeft(array('po_trans' =>'stockhistory_transaction'), 'main_table.product_id=po_trans.product_id', array('po_trans.po_id'))
+            ->joinLeft(array('po' =>'stockhistory_purchaseorder'), 'po_trans.po_id=po.id', array('po_name' => 'po.name'))
+            ->group(array('itemqueue_id'));
+            
         $this->setCollection($collection);
         parent::_prepareCollection();
         return $this;
@@ -33,7 +38,7 @@ class Harapartners_Fulfillmentfactory_Block_Adminhtml_Itemqueue_Index_Grid exten
     }
 
     protected function _prepareColumns()
-    {
+    {    
         $this->addColumn('order_increment_id', array(
             'header'        => Mage::helper('fulfillmentfactory')->__('Order No.'),
             'type'          => 'action',
@@ -57,6 +62,7 @@ class Harapartners_Fulfillmentfactory_Block_Adminhtml_Itemqueue_Index_Grid exten
             'width'         => '100px',
             'index'         => 'product_id',
             'getter'        => 'getProductId',
+            'filter_index'  => 'main_table.product_id',
             'actions'       => array(
                 array(
                     'caption_data_key' => 'product_id',
@@ -71,6 +77,7 @@ class Harapartners_Fulfillmentfactory_Block_Adminhtml_Itemqueue_Index_Grid exten
             'align'         => 'center',
             'width'         => '150px',
             'index'         => 'name',
+            'filter_index'  =>  'main_table.name'
         ));
 
         $this->addColumn('sku', array(
@@ -78,6 +85,16 @@ class Harapartners_Fulfillmentfactory_Block_Adminhtml_Itemqueue_Index_Grid exten
             'align'         => 'center',
             'width'         => '100px',
             'index'         => 'sku'
+        ));
+
+        $this->addColumn('po_name', array(
+            'header'        => Mage::helper('fulfillmentfactory')->__('Related PO'),
+            'align'         => 'center',
+            'width'         => '50px',
+            'index'         => 'po_name',
+            'filter_index'  => 'po.name',
+           'renderer'       => 'Harapartners_Fulfillmentfactory_Block_Adminhtml_Itemqueue_Index_Renderer_POName'
+
         ));
 
         $this->addColumn('qty_ordered', array(
@@ -99,6 +116,7 @@ class Harapartners_Fulfillmentfactory_Block_Adminhtml_Itemqueue_Index_Grid exten
             'align'         => 'right',
             'width'         => '100px',
             'index'         => 'status',
+            'filter_index'  =>  'main_table.status',
             'type'            => 'options',
             'options'        => Mage::helper('fulfillmentfactory')->getItemqueueStatusGridOptionList(),
             'renderer'        => 'Harapartners_Fulfillmentfactory_Block_Adminhtml_Itemqueue_Index_Renderer_Status',
@@ -109,6 +127,7 @@ class Harapartners_Fulfillmentfactory_Block_Adminhtml_Itemqueue_Index_Grid exten
             'align'         => 'center',
             'width'         => '150px',
             'index'         => 'created_at',
+            'filter_index'  => 'main_table.created_at',
             'type'          => 'datetime',
             'gmtoffset'     => true
         ));
@@ -118,6 +137,7 @@ class Harapartners_Fulfillmentfactory_Block_Adminhtml_Itemqueue_Index_Grid exten
             'align'         => 'center',
             'width'         => '150px',
             'index'         => 'updated_at',
+            'filter_index'  => 'main_table.created_at',
             'type'          => 'datetime',
             'gmtoffset'     => true
         ));
@@ -139,6 +159,22 @@ class Harapartners_Fulfillmentfactory_Block_Adminhtml_Itemqueue_Index_Grid exten
         ));
 
         return $this;
+    }
+
+    protected function _addColumnFilterToCollection($column)
+    {
+        if($this->getCollection()) 
+        { 
+            if($column->getId() == 'po_name') {
+                $cond = $column->getFilter()->getCondition();
+                $this->getCollection()
+                    ->addFieldToFilter($column->getFilterIndex() , $cond)
+                    ->getSelect()
+                    ->group(array('itemqueue_id'));
+            }
+        }
+        
+        return parent::_addColumnFilterToCollection($column);
     }
 
     public function getRowUrl($row) {

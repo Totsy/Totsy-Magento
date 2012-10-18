@@ -158,7 +158,7 @@ class Harapartners_Stockhistory_Block_Adminhtml_Purchaseorder_Index_Grid extends
 
         return $this;
     }
-    
+ 
 
     protected function _getStore()
     {

@@ -45,10 +45,16 @@
                     <page>Harapartners_Service_Block_Rewrite_Adminhtml_Page</page>
                     <!--Harapartners_Service: avoid reporting the complete history (ignore unvalidated historical data) -->
                     <report_refresh_statistics_grid>Harapartners_Service_Block_Rewrite_Adminhtml_Report_Refresh_Statistics_Grid</report_refresh_statistics_grid>
+                    <!--Harapartners_Categoryevent -->
+                    <catalog_category_edit_form>Harapartners_Service_Block_Rewrite_Adminhtml_Catalog_Category_Edit_Form</catalog_category_edit_form>
+                    <!--Harapartners_Service: adding root category is NOT allowed -->
+                    <catalog_category_tree>Harapartners_Service_Block_Rewrite_Adminhtml_Catalog_Category_Tree</catalog_category_tree>
                     <!--Harapartners_Service: disable admin setting custoemr password-->
                     <customer_edit_renderer_newpass>Harapartners_Service_Block_Rewrite_Adminhtml_Customer_Edit_Renderer_Newpass</customer_edit_renderer_newpass>
                     <!--Harapartners_Service: sku disabled (not editable) in the admin panel -->
                     <catalog_product_edit_tab_attributes>Harapartners_Service_Block_Rewrite_Adminhtml_Catalog_Product_Edit_Tab_Attributes</catalog_product_edit_tab_attributes>
+                    <!-- Totsy: select fields disabled in the admin panel -->
+                    <catalog_category_tab_general>Harapartners_Service_Block_Rewrite_Adminhtml_Catalog_Category_Tab_General</catalog_category_tab_general>
 					<!--Harapartners_Service: no wishlist for creating new orders -->
                     <sales_order_create_items_grid>Harapartners_Service_Block_Rewrite_Adminhtml_Sales_Order_Create_Items_Grid</sales_order_create_items_grid>
 					<!--Harapartners_Promotionfactory: manage coupon button for virtual product-->
@@ -116,14 +122,6 @@
                     <stock>Harapartners_Service_Model_Rewrite_CatalogInventory_Resource_Stock</stock>
                 </rewrite>
             </cataloginventory_resource>
-            <checkout>
-                <rewrite>
-                    <!--Harapartners_HpCheckout--><!--Harapartners_Rushcheckout: Timer and quote item removal-->
-                    <session>Harapartners_Service_Model_Rewrite_Checkout_Session</session>
-                    <!--Harapartners_SpeedTax-->
-                    <type_multishipping>Harapartners_Service_Model_Rewrite_Checkout_Type_Multishipping</type_multishipping>
-                </rewrite>
-            </checkout>
             <core>
                 <rewrite>
                     <!--Harapartners_EmailFactory-->
@@ -540,16 +538,4 @@
 			</resources>
 		</acl>
     </adminhtml>
-    <crontab>
-        <jobs>
-            <service_clean_cache_after_sort_rebuild>
-                <schedule>
-                    <cron_expr>15 3 * * *</cron_expr>
-                </schedule>
-                <run>
-                    <model>service/service::cleanCacheAfterSortRebuild</model>
-                </run>
-            </service_clean_cache_after_sort_rebuild>
-        </jobs>
-    </crontab>
 </config>

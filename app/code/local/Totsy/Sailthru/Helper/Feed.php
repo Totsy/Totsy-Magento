@@ -97,12 +97,12 @@ class Totsy_Sailthru_Helper_Feed extends Mage_Core_Helper_Abstract
         return array(
             'id'             => $event['entity_id'],
             'name'           => $event['name'],
-            'url'            => $event['url_path'],
+            'url'            => Mage::getBaseUrl().$event['url_path'],
             'description'    => $event['description'],
             'short'          => $event['short_description'],
-            'availableItems' => (!empty($event['products']))?'YES':'NO',
-            'image'          => $event['image'],
-            'image_small'    => $event['small_image'],
+            'availableItems' => !empty($event['products'])?'YES':'NO',
+            'image'          => $this->_getImage($event),
+            'image_small'    => $this->_getImage($event,'small'),
             'discount'       => $event['max_discount_pct'],
             'start_date'     => $event['event_start_date'],
             'end_date'       => $event['event_end_date'],
@@ -117,7 +117,7 @@ class Totsy_Sailthru_Helper_Feed extends Mage_Core_Helper_Abstract
     public function formatPCEvent(&$event,$type){
         $result = array(
             'name'           => $event['name'],
-            'url'            => $event['url_path'],
+            'url'            => Mage::getBaseUrl().$event['url_path'],
             'start_date'     => $event['event_start_date'],
             'end_date'       => $event['event_end_date']
         );
@@ -152,6 +152,46 @@ class Totsy_Sailthru_Helper_Feed extends Mage_Core_Helper_Abstract
         return $collector;
     }
 
+    public function goingLive($events){
+        $collector = array();
+        
+        if (empty($events) || !is_array($events)){
+            return $collector; 
+        }
+        foreach($events as $event){
+            if (in_array($event['entity_id'], $this->_excludeList)) {
+                continue;
+            }
+
+            $event_time = $this->timeConverter($event['event_start_date']);
+
+            if ($event_time>=$this->_min_datetime 
+                && $event_time<$this->_max_datetime ){
+                $collector[] = $event;
+            } 
+        }
+
+        return $collector;
+    }
+
+    private function _getImage($event,$type=''){
+        if (!empty($type)){
+            $type.= '_';
+        }
+
+        $image = $type.'image';
+        
+        if (!empty($event[$image])){
+            $image = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA).
+                            'catalog/category/'.
+                            $event[$image];
+        } else{
+            $image = Mage::getBaseUrl().
+                            'skin/frontend/enterprise/bootstrap/images/'.
+                            'catalog/product/placeholder/image.jpg';
+        }
+        return $image;
+    }
 
     private function _processStartDate()
     {

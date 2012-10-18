@@ -16,4 +16,14 @@
             </checkout>
         </routers>
     </frontend>
+    <global>
+        <models>
+            <checkout>
+                <rewrite>
+                    <session>Totsy_Checkout_Model_Session</session>
+                    <type_multishipping>Totsy_Checkout_Model_Type_Multishipping</type_multishipping>
+                </rewrite>
+            </checkout>
+        </models>
+    </global>
 </config>

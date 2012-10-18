@@ -35,7 +35,7 @@
     //$endcount_lc = date("F j, Y, G:i:s", ($countDownTimer + $timeout));
     $endcount_lc = ($countDownTimer + $timeout)*1000; //ms
     //Harapartners, yang, get the server time with the frontend JS time
-	$serverTime = Mage::helper('service')->getServerTime();
+    $serverTime = Mage::getModel('core/date')->timestamp() * 1000;
     $quote = Mage::getSingleton('checkout/session')->getQuote();
     $saving = Mage::helper('sales/order')->calculateEstimatedSavings($quote);
 ?>
@@ -137,9 +137,3 @@
     </div>
     <?php endif;?>
 </div>
-<script type="text/javascript">
-//code for disabling echoSahre
-if(typeof _esq!='undefined') {
-    _esq.settings.socialCenter = { enabled: true };
-}
-</script>
