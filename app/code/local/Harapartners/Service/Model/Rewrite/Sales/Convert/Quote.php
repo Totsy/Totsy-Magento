@@ -23,7 +23,50 @@ class Harapartners_Service_Model_Rewrite_Sales_Convert_Quote extends Mage_Sales_
         }
         return $orderPayment;
     }
-    
+
+    /**
+     * Convert quote item to order item
+     *
+     * @param   Mage_Sales_Model_Quote_Item_Abstract $item
+     * @return  Mage_Sales_Model_Order_Item
+     */
+    public function itemToOrderItem(Mage_Sales_Model_Quote_Item_Abstract $item)
+    {
+        $orderItem = Mage::getModel('sales/order_item')
+            ->setStoreId($item->getStoreId())
+            ->setQuoteItemId($item->getId())
+            ->setQuoteParentItemId($item->getParentItemId())
+            ->setProductId($item->getProductId())
+            ->setProductType($item->getProductType())
+            ->setQtyBackordered($item->getBackorders())
+            ->setProduct($item->getProduct())
+            ->setBaseOriginalPrice($item->getBaseOriginalPrice())
+        ;
+        //20121018 - CJD - this is needed for virtual items to work correctly
+        if($item instanceof Mage_Sales_Model_Quote_Address_Item) {
+            $orderItem->setQuoteItemId($item->getQuoteItemId());
+        }
+
+        $options = $item->getProductOrderOptions();
+        if (!$options) {
+            $options = $item->getProduct()->getTypeInstance(true)->getOrderOptions($item->getProduct());
+        }
+        $orderItem->setProductOptions($options);
+        Mage::helper('core')->copyFieldset('sales_convert_quote_item', 'to_order_item', $item, $orderItem);
+
+        if ($item->getParentItem()) {
+            $orderItem->setQtyOrdered($orderItem->getQtyOrdered()*$item->getParentItem()->getQty());
+        }
+
+        if (!$item->getNoDiscount()) {
+            Mage::helper('core')->copyFieldset('sales_convert_quote_item', 'to_order_item_discount', $item, $orderItem);
+        }
+
+        Mage::dispatchEvent('sales_convert_quote_item_to_order_item',
+            array('order_item'=>$orderItem, 'item'=>$item)
+        );
+        return $orderItem;
+    }
     
     //Important logic for order split and DOTCOM fulfillment, must link new order item with original quote item!
     /*
