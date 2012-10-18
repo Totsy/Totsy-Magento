@@ -11,6 +11,7 @@ foreach($this->getQuote()->getAllItems() as $item) {
     $fulfillmentTypes [$product->getFulfillmentType ()] [] = $item->getId ();
 }
 
+$multiShipping = FALSE;
 if(count($fulfillmentTypes) > 1) {
     $multiShipping = TRUE;
 }
