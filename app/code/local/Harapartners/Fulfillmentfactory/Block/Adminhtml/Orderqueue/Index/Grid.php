@@ -23,7 +23,7 @@ class Harapartners_Fulfillmentfactory_Block_Adminhtml_Orderqueue_Index_Grid exte
         $status = $this->getRequest()->getParam('custom_status');
         
         $collection = Mage::getResourceModel('sales/order_grid_collection');
-        $collection->addAttributeToFilter('status', $status);
+        $collection->addAttributeToFilter('status', array($status, 'processing'));
         $this->setCollection($collection);
         
         parent::_prepareCollection();

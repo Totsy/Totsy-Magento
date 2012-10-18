@@ -126,7 +126,7 @@ SELECT DISTINCT sfo.entity_id
 FROM            {$resource->getTableName('sales/order')} sfo
   INNER JOIN    {$resource->getTableName('sales/order_item')} sfoi ON sfoi.order_id = sfo.entity_id
   INNER JOIN    {$resource->getTableName('fulfillmentfactory/itemqueue')} fi ON fi.order_item_id = sfoi.item_id and fi.status in (3,8)
-WHERE sfo.status IN ('fulfillment_aging', 'pending')
+WHERE sfo.status IN ('fulfillment_aging', 'pending', 'processing')
   AND 0 = (
     SELECT count(*) FROM {$resource->getTableName('fulfillmentfactory/itemqueue')} fiq WHERE fiq.order_id = sfo.entity_id and fiq.status NOT IN (3,8)
   )
