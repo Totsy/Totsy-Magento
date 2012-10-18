@@ -13,9 +13,6 @@ class Totsy_Checkout_Model_Type_Multishipping
     {
         $helper = Mage::helper('checkout');
         $quote = $this->getQuote();
-        if ($quote->getIsMultiShipping()) {
-            Mage::throwException($helper->__('Invalid checkout type.'));
-        }
 
         // [removed the payment method validation from the parent implementation]
 
@@ -37,5 +34,6 @@ class Totsy_Checkout_Model_Type_Multishipping
         }
         return $this;
     }
+
 
 }
