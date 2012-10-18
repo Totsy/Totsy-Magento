@@ -224,8 +224,102 @@ class Harapartners_HpCheckout_Model_Checkout
         }
 
         $service = Mage::getModel('sales/service_quote', $this->getQuote());
-        $service->submitAll();
 
+        $shippingAddresses = $this->getQuote()->getAllShippingAddresses();
+        
+    	if ($this->getQuote()->hasVirtualItems()) {
+            $shippingAddresses[] = $this->getQuote()->getBillingAddress();
+        }
+        
+        
+        $fulfillmentTypes = array();
+        
+        
+        foreach ( $shippingAddresses as $address ) {
+        	$shippingMethod = $address->getShippingMethod();
+        	
+			foreach ( $address->getAllItems () as $item ) {
+				if(!$item->getParentItem()) {
+					$product = Mage::getModel ( 'catalog/product' )->load ( $item->getProductId () );
+					$fulfillmentTypes [$product->getFulfillmentType ()] [] = $item->getId ();
+				}
+			
+			}
+		}
+		
+		
+        $i = 0;
+        $items = array();
+		if(count($fulfillmentTypes) > 1) {
+			
+			$this->getQuote()->setIsMultiShipping(TRUE);
+			$this->getQuote()->save();
+			
+			foreach($fulfillmentTypes as $fulfillment) {
+	        	if($i == 0) {
+	        		$i++;
+	        		continue;
+	        	}
+	        	
+	        	foreach($fulfillment as $id) {
+	        		foreach($this->getQuote()->getAllShippingAddresses() as $address) {
+	        			foreach($address->getAllItems() as $item) {
+	        				if($item->getId() == $id) {
+	        					$item->isDeleted(TRUE);
+	        					
+	        					if($item->getHasChildren()) {
+	        						foreach($item->getChildren() as $child) {
+	        							$child->isDeleted(TRUE);
+	        							$child->save();
+	        						}
+	        					}
+	        					
+	        					$item->save();
+	        					
+	        					$items[] = $item;
+	        					
+	        					$address->save();
+			        		}
+	        			}
+	        		}
+	        	}
+	        	$i++;
+	        }
+		}
+		
+		
+		if (! empty ( $items )) {
+			$customerAddress = $this->getCustomerSession ()->getCustomer ()->getPrimaryShippingAddress();
+			
+			$newAddress = Mage::getModel ( 'sales/quote_address' )->importCustomerAddress ( $customerAddress );
+			
+			$newAddress->setShippingMethod ( $shippingMethod );
+			
+			foreach ( $items as $item ) {
+				if (! $item->getQuoteItem ()) {
+					$item->setQuoteItem ( Mage::getModel ( 'sales/quote_address_item' )->importQuoteItem ( $item ) );
+				}
+				
+				$newAddress->addItem ( $item->getQuoteItem (), $item->getItemQty () );
+				
+				$this->getQuote ()->addAddress ( $newAddress->setAddressType ( Mage_Sales_Model_Quote_Address::TYPE_SHIPPING ) );
+				$this->getQuote ()->save ();
+			}
+		}
+		
+        if(count($fulfillmentTypes) > 1) {
+        	try {
+        		Mage::getModel('checkout/type_multishipping')->createOrders();
+        	}
+        	catch (Mage_Core_Exception $e) {
+        		Mage::log($e->getMessage());
+        		Mage::logException($e);
+        	}
+        }
+        else {
+        	$service->submitAll();
+        }
+        
         $this->_checkoutSession->setLastQuoteId($this->getQuote()->getId())
         ->setLastSuccessQuoteId($this->getQuote()->getId())
         ->clearHelperData();
