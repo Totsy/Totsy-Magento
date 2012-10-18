@@ -240,13 +240,14 @@ class Harapartners_HpCheckout_Model_Checkout
                 continue;
             }
             $product = Mage::getModel ( 'catalog/product' )->load ( $item->getProductId () );
+
             if($product->getIsVirtual()) {
                 continue;
             }
             $fulfillmentTypes [$product->getFulfillmentType ()] [] = $item->getId ();
 		}
 
-		if($this->getQuote()->hasVirtualItems() || count($fulfillmentTypes) > 1) {
+		if(($this->getQuote()->hasVirtualItems() && !$this->getQuote()->isVirtual()) || count($fulfillmentTypes) > 1) {
             $this->_prepareMultiShip();
 			$originalShippingAddress = Mage::getModel('sales/quote_address')
                             ->load($this->getQuote()->getShippingAddress()->getId());

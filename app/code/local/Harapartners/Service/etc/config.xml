@@ -357,13 +357,11 @@
             <sales_order_place_after>
                <observers>
                     <!--Harapartners_Ordersplit-->
-                   <!--
                     <ordersplit>
                         <type>singleton</type>
                         <class>ordersplit/observer</class>
                         <method>salesOrderPlaceAfterSplit</method>
                     </ordersplit>
-                    -->
                     <!--Harapartners_Promotionfactory-->
                     <promotionfactory>
                         <type>singleton</type>
