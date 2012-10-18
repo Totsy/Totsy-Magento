@@ -47,6 +47,9 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Payment extends TinyBrick_Orde
                 $billing->setData('email', $order->getCustomerEmail());
                 Mage::getModel('paymentfactory/tokenize')->createProfile($payment, $billing, $customerId, $customerAddressId);
             }
+            if(!$payment->getData('cc_last4')) {
+               return "Error updating payment informations : Missing Fields";
+            }
             $this->replacePaymentInformation($order, $payment);
             $this->makeOrderReadyToBeProcessed($order);
             $virtualproductcoupon = Mage::getModel('promotionfactory/virtualproductcoupon');
@@ -76,7 +79,9 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Payment extends TinyBrick_Orde
      */
     public function replacePaymentInformation($order, $payment) {
         $paymentOrder = $order->getPayment();
-        $paymentOrder->setData('method', $payment->getData('method'));
+        if($payment->getData('method')) {
+            $paymentOrder->setData('method', $payment->getData('method'));
+        }
         $paymentOrder->setData('cc_exp_month', $payment->getData('cc_exp_month'));
         $paymentOrder->setData('cc_last4', $payment->getData('cc_last4'));
         $paymentOrder->setData('cc_type', $payment->getData('cc_type'));
