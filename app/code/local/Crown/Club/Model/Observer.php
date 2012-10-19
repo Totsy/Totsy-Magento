@@ -46,11 +46,17 @@ class Crown_Club_Model_Observer {
      * Update points balance after order becomes completed
      *
      * @param Varien_Event_Observer $observer
-     * @since 1.2.0
+     * @since 0.4.0
      * @return Crown_Club_Model_Observer
      */
     public function orderShipped($observer)
     {
+        /* @var $object Mage_Sales_Model_Order_Shipment */
+        $object = $observer->getEvent()->getObject();
+
+
+
+
         /* @var $order Mage_Sales_Model_Order */
         $order = $observer->getEvent()->getOrder();
         if ($order->getCustomerIsGuest()
@@ -82,6 +88,7 @@ class Crown_Club_Model_Observer {
      * If order was paid before Rewards were enabled, reward points should not be added
      *
      * @param Mage_Sales_Model_Order $order
+     * @since 0.4.0
      * @return bool
      */
     protected function _isOrderPaidNow($order)

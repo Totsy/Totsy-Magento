@@ -2,7 +2,7 @@
 <config>
 	<modules>
 		<Crown_Club>
-			<version>0.3.0</version>
+			<version>1.4.0</version>
 		</Crown_Club>
 	</modules>
     <global>
@@ -17,6 +17,7 @@
             <sales>
                 <rewrite>
                     <quote>Crown_Club_Model_Sales_Quote</quote>
+                    <order>Crown_Club_Model_Sales_Order</order>
                     <service_quote>Crown_Club_Model_Sales_Service_Quote</service_quote>
                 </rewrite>
             </sales>
