@@ -346,7 +346,7 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Totsy_Cybersource_Model
                         ->setCybersourceToken($result->requestToken);
                      //   ->setIsTransactionClosed(1);
                 } else {
-                     $error = Mage::helper('cybersource')->__('There is an error in processing the payment. Please try again or contact us.');
+                     $error = Mage::helper('cybersource')->__('There is an error in processing the payment. ' . $this->_errors[$result->reasonCode] . ' Please try again or contact us.');
                 }
             } catch (Exception $e) {
                Mage::throwException(
@@ -494,7 +494,7 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Totsy_Cybersource_Model
                     $payment->setCcCidStatus($result->ccAuthReply->cvCode);
                 }
             } else {
-                $error = Mage::helper('paymentfactory')->__('There is an gateway error in processing the payment. Please try again or contact us.');
+                $error = Mage::helper('paymentfactory')->__('There is an error in processing the payment. ' . $this->_errors[$result->reasonCode] . ' Please try again or contact us.');
             }
         } catch (Exception $e) {
            Mage::throwException(
