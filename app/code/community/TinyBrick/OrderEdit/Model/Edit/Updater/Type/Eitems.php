@@ -30,6 +30,8 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Eitems extends TinyBrick_Order
         $itemCounter = 0;
         $discountFixed = null;
         if($order->getDiscountDescription()) {
+            $rule = Mage::getModel('salesrule/rule');
+            $labels = $rule->getStoreLabels();
             $ruleLabel = Mage::getModel('salesrule/rule_label')->load($order->getDiscountDescription(), 'description');
             $rule = Mage::getModel('salesrule/rule_label')->load($ruleLabel->getRuleId());
             if($rule->getSimpleAction == 'cart_fixed') {
