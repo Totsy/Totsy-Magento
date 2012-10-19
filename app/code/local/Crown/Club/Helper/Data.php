@@ -101,7 +101,7 @@ class Crown_Club_Helper_Data extends Mage_Core_Helper_Abstract {
         }
 
         $sailthru = Mage::getSingleton('emailfactory/sailthruconfig')->getHandle();
-        $defaultListName = Mage::getStoreConfig('sailthru_options/email/sailthru_def_list');
+        $defaultListName = Mage::getStoreConfig('sailthru_options/email/sailthru_news_list');
         $clubListName = Mage::getStoreConfig('sailthru_options/email/sailthru_club_list');
 
         if (empty($clubListName)) {
@@ -129,7 +129,7 @@ class Crown_Club_Helper_Data extends Mage_Core_Helper_Abstract {
             $customerModel = Mage::getModel('customer/customer')->load($customer);
         }
         $sailthru = Mage::getSingleton('emailfactory/sailthruconfig')->getHandle();
-        $defaultListName = Mage::getStoreConfig('sailthru_options/email/sailthru_def_list');
+        $defaultListName = Mage::getStoreConfig('sailthru_options/email/sailthru_news_list');
         $clubListName = Mage::getStoreConfig('sailthru_options/email/sailthru_club_list');
 
         if (empty($clubListName)) {
