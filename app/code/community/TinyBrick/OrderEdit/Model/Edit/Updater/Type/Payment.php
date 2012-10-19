@@ -43,6 +43,7 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Payment extends TinyBrick_Orde
                     $enteredPayment->setData('cc_last4', substr($enteredPayment->getCcNumber(), -4));
                     $enteredPayment->setData('cybersource_subid',$profile->getData('subscription_id'));
                     $this->replacePaymentInformation($order, $enteredPayment);
+                    $this->makeOrderReadyToBeProcessed($order);
                     return false;
                 } else {
                     $savingNewCreditCard = false;
