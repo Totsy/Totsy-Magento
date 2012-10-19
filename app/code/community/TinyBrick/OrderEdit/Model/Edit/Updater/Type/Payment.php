@@ -39,7 +39,13 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Payment extends TinyBrick_Orde
                 $payment = Mage::getModel('sales/order_payment')->getCollection()
                     ->addAttributeToFilter('cybersource_subid',$profile->getData('subscription_id'))
                     ->getFirstItem();
-                if(!$payment) {
+                if(!$payment || !$payment->getId()) {
+                    //Case of Payment Informations has been Deleted from Object, Refill Payment Informations
+                    $enteredPayment = new Varien_Object($data);
+                    $enteredPayment->setData('cc_last4', substr($enteredPayment->getCcNumber(), -4));
+                    $enteredPayment->setData('cybersource_subid',$profile->getData('subscription_id'));
+                    $this->replacePaymentInformation($order, $enteredPayment);
+                    $this->makeOrderReadyToBeProcessed($order);
                     return false;
                 } else {
                     $savingNewCreditCard = false;
