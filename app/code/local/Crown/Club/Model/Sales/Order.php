@@ -5,7 +5,7 @@
  * @package 	Crown_Club
  * @since 		0.4.0
  */
-class Crown_Club_Model_Sales_Order extends Mage_Sales_Model_Order
+class Crown_Club_Model_Sales_Order extends Totsy_Sales_Model_Order
 {
     /**
      * If the order is for a club member.
@@ -13,13 +13,16 @@ class Crown_Club_Model_Sales_Order extends Mage_Sales_Model_Order
      * @return bool
      */
     public function isClubMember() {
+        // Guest members will never be part of the club :'(
         if ($this->getCustomerIsGuest())
             return false;
 
         /* @var $clubHelper Crown_Club_Helper_Data */
-        $clubHelper = Mage::helper('club/club');
+        $clubHelper = Mage::helper('crownclub');
 
-        if ($this->getCustomer() && $clubHelper->isClubMember($this->getCustomer()))
+        $customer = Mage::getModel('customer/customer')->load($this->getCustomerId());
+
+        if ($customer->getId() && $clubHelper->isClubMember($customer))
             return true;
 
         return false;
@@ -33,13 +36,14 @@ class Crown_Club_Model_Sales_Order extends Mage_Sales_Model_Order
     public function _beforeSave() {
         parent::_beforeSave();
 
-        $currentSetting = true == $this->getData('customer_is_club') ? true: false;
+        if (null != $this->getData('customer_is_club_member') )
+            return $this;
 
         // Only update the value if it has changed
-        if ($this->isClubMember() && $currentSetting != true) {
-            $this->setData('customer_is_club', true);
-        } elseif(!$this->isClubMember() && $currentSetting != false) {
-            $this->setData('customer_is_club', false);
+        if ($this->isClubMember()) {
+            $this->setData('customer_is_club_member', 1);
+        } elseif(!$this->isClubMember()) {
+            $this->setData('customer_is_club_member', 0);
         }
         return $this;
     }

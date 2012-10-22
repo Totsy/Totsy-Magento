@@ -3,11 +3,15 @@
  *
  * @category 	Crown
  * @package 	Crown_Club
- * @since 		1.2.0
+ * @since 		0.4.0
  */
 $installer = $this;
 $installer->startSetup ();
 
-$installer->addAttribute('order', 'customer_is_club', array('type' => Varien_Db_Ddl_Table::TYPE_BOOLEAN));
+$query = "
+ALTER TABLE `{$this->getTable('sales/order')}`
+ADD `customer_is_club_member` tinyint(1) DEFAULT 0 COMMENT 'Customer is club member at time of purchase';
+";
+$installer->run ($query);
 
 $installer->endSetup ();
