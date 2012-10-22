@@ -91,7 +91,8 @@ direction: "down"
 ?>
 <!-- Start Description Tab -->
 <div id="description">
-<?php echo $_product->getDescription(); ?> <br />
+<?php echo $_product->getDescription(); ?> <br>
+<div id="rondavu_pdp_container"></div>
 </div>
 <!-- End Description Tab -->
 
@@ -157,9 +158,6 @@ direction: "down"
         <?php echo $this->getChildHtml('productTagList') ?>
         <?php echo $this->getChildHtml('product_additional_data') ?>
 </div>
-
-
-
 <script type="text/javascript">
 // jQuery(document).ready(function(){
 // jQuery("button.btn-cart").css("background-color","#AAAAAA");

@@ -33,10 +33,11 @@ class Harapartners_Promotionfactory_Model_Observer {
             return;
         }
 
-        $vpc = Mage::getModel('promotionfactory/virtualproductcoupon')
-        ->loadOneByProductId($product->getId(), Harapartners_Promotionfactory_Model_Virtualproductcoupon::COUPON_STATUS_AVAILABLE );
+        $coupons = Mage::getModel('promotionfactory/virtualproductcoupon')->getCollection()
+                ->addFilter('product_id', $product->getId())
+                ->addFilter('status', Harapartners_Promotionfactory_Model_Virtualproductcoupon::COUPON_STATUS_AVAILABLE);
+        $vpc = $coupons->getFirstItem();
 
-        //'null' when current virtual product does not have any coupon code associated with it
         if($vpc === null){
             return;
         }
@@ -63,7 +64,7 @@ class Harapartners_Promotionfactory_Model_Observer {
         $reservationCodeOption = $quoteItem->getOptionByCode('reservation_code');
         if($reservationCodeOption instanceof Mage_Sales_Model_Quote_Item_Option
             && $reservationCodeOption->getId()){
-            $vpc = Mage::getModel('promotionfactory/virtualproductcoupon')->loadByCode($reservationCodeOption->getValue());
+            $vpc = Mage::getModel('promotionfactory/virtualproductcoupon')->load($reservationCodeOption->getValue(), 'code');
             if($vpc instanceof Harapartners_Promotionfactory_Model_Virtualproductcoupon
                 && $vpc->getId()
                 && $vpc->getStatus() == Harapartners_Promotionfactory_Model_Virtualproductcoupon::COUPON_STATUS_RESERVED){
@@ -102,7 +103,7 @@ class Harapartners_Promotionfactory_Model_Observer {
             }
             $orderItem->setData('product_options', serialize($productOptions));
 
-            $vpc = Mage::getModel('promotionfactory/virtualproductcoupon')->loadByCode($reservationCodeOption->getValue());
+            $vpc = Mage::getModel('promotionfactory/virtualproductcoupon')->load($reservationCodeOption->getValue(), 'code');
             if($vpc->getId()){
                 $vpc->setData('status', Harapartners_Promotionfactory_Model_Virtualproductcoupon::COUPON_STATUS_PURCHASED)
                     ->save();
@@ -130,7 +131,7 @@ class Harapartners_Promotionfactory_Model_Observer {
                     if(isset($optionDataArray['label'])
                         && $optionDataArray['value']
                         && $optionDataArray['label'] == 'Reservation Code'){
-                        $vpc = Mage::getModel('promotionfactory/virtualproductcoupon')->loadByCode($optionDataArray['value']);
+                        $vpc = Mage::getModel('promotionfactory/virtualproductcoupon')->load($optionDataArray['value'], 'code');
                         if($vpc->getId()){
                             $vpc->setData('status', Harapartners_Promotionfactory_Model_Virtualproductcoupon::COUPON_STATUS_AVAILABLE)
                             ->save();
@@ -157,7 +158,7 @@ class Harapartners_Promotionfactory_Model_Observer {
             return;
         }
 
-        $groupCoupon = Mage::getModel('promotionfactory/groupcoupon')->loadByPseudoCode($couponCode);
+        $groupCoupon = Mage::getModel('promotionfactory/groupcoupon')->load($couponCode, 'pseudo_code');
         if(!!$groupCoupon && !!$groupCoupon->getId()){
             $groupCoupon->setData('used_count', $groupCoupon->getUsedCount() + 1);
             $groupCoupon->save();

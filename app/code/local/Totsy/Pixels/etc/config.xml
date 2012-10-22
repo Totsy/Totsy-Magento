@@ -11,6 +11,13 @@
                 <class>Totsy_Pixels_Block</class>
             </pixels>
         </blocks>
+        <helpers>
+            <pixels>
+                <rewrite>
+                    <data>Totsy_Pixels_Helper_Data</data>
+                </rewrite>
+            </pixels>
+        </helpers>
     </global>
     <frontend>
         <routers>

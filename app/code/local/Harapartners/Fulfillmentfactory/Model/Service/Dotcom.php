@@ -249,10 +249,7 @@ SQL;
 
             $ordersShipped = $this->updateShipment($fromDate, $toDate);
             Mage::log(
-                sprintf(
-                    'Completed processing for %d orders that have been shipped.',
-                    count($ordersShipped)
-                ),
+                "Completed processing for $ordersShipped orders that have been shipped.",
                 Zend_Log::INFO,
                 'fulfillment.log'
             );
@@ -297,6 +294,7 @@ XML;
             $productSku = substr($sku, 0, 17);
             $name = substr($product->getName(), 0, 28);
             $name = Mage::helper('fulfillmentfactory')->removeBadCharacters($name);
+            $name = substr($product->getName(), 0, 28);
 
             $vendorCode = '<manufacturing-code xsi:nil="true" />';
             if ($value = $product->getVendorCode()) {
@@ -473,9 +471,11 @@ XML;
                 $billingAddress = Mage::getModel('sales/order_address');
              }
 
-            $billingAddress = substr($billingAddress, 0, 30);
             $billingName = $billingAddress->getFirstname() . ' ' . $billingAddress->getLastname();
             $billingName = substr($billingName, 0, 30);
+
+            $billing_street_1 = substr($billingAddress->getStreet(1), 0,30);
+            $billing_street_2 = substr($billingAddress->getStreet(2), 0,30);
 
             $billing_state = Mage::helper('fulfillmentfactory')->getStateCodeByFullName($billingAddress->getRegion(), $billingAddress->getCountry());
 
@@ -528,8 +528,8 @@ XML;
                     <billing-customer-number xsi:nil="true"/>
                     <billing-name><![CDATA[{$billingName}]]></billing-name>
                     <billing-company xsi:nil="true"/>
-                    <billing-address1><![CDATA[{$billingAddress->getStreet(1)}]]></billing-address1>
-                    <billing-address2><![CDATA[{$billingAddress->getStreet(2)}]]></billing-address2>
+                    <billing-address1><![CDATA[{$billing_street_1}]]></billing-address1>
+                    <billing-address2><![CDATA[{$billing_street_2}]]></billing-address2>
                     <billing-address3 xsi:nil="true"/>
                     <billing-city><![CDATA[$billing_city]]></billing-city>
                     <billing-state>{$billing_state}</billing-state>
@@ -670,7 +670,13 @@ XML;
         }
 
         // get data from dotcom
-        $dataXML = Mage::helper('fulfillmentfactory/dotcom')->getShipment($fromDate, $toDate);
+        $dataXML = array();
+        try {
+            $dataXML = Mage::helper('fulfillmentfactory/dotcom')->getShipment($fromDate, $toDate);
+        } catch(Exception $e) {
+            Mage::logException($e);
+            return 0;
+        }
 
         $updatedOrders = 0;
         foreach ($dataXML as $shipment) {
@@ -709,22 +715,22 @@ XML;
             if(count($orderShipments) > 0) {
                 $shipment = $orderShipments->getFirstItem();
             } else {
-                $itemQtyArray = array();
-                foreach ($order->getAllItems() as $item) {
-                    $itemQtyArray[$item->getData('item_id')] = (int) $item->getQtyToShip();
-                }
-
                 $shipment = Mage::getModel('sales/service_order', $order)
-                    ->prepareShipment($itemQtyArray);
+                    ->prepareShipment();
 
                 // create a new shipment track item
                 $shipmentTrack = Mage::getModel('sales/order_shipment_track')
                     ->addData($shipmentData);
 
                 // create a new shipment item
-                $shipment->addData($shipmentData)
-                    ->addTrack($shipmentTrack)
-                    ->save();
+                try {
+                    $shipment->addData($shipmentData)
+                        ->addTrack($shipmentTrack)
+                        ->save();
+                } catch(Exception $e) {
+                    Mage::logException($e);
+                    continue;
+                }
             }
 
             // update the order status and save

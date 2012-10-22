@@ -53,13 +53,13 @@
 
     jQuery( document ).ready( function() {
         if( isRewardUsed && isEnoughPointsToCoverAmount ) {
-        	jQuery( '#hpcheckout-payment-select' ).val('free');
-        	//jQuery( '#checkout-payment-method-load' ).hide();
+        	jQuery( 'input[name="payment[method]"]').val('free');
+        	jQuery( '#cc-data' ).hide();
         }
 		jQuery( '#use-reward-point' ).bind( 'click', function() {
 			jQuery( '#reward-points-input' ).val( 1 );
 			if( isEnoughPointsToCoverAmount ) {
-	        	jQuery( '#hpcheckout-payment-select' ).val('');
+	        	jQuery( 'input[name="payment[method]"]').attr('value', '');
 	        	jQuery( '[id^="payment_form_"]' ).hide();
 	        }
 			hpcheckout.updatePayment();

@@ -44,12 +44,7 @@ class Harapartners_Promotionfactory_Model_Groupcoupon extends Mage_Core_Model_Ab
     public function deleteByRuleId($ruleId){
         return $this->getResource()->deleteByRuleId($ruleId);
     }
-      
-      public function loadByPseudoCode($couponCode){
-          $this->addData($this->getResource()->loadByPseudoCode($couponCode));
-          return $this;
-      }
-      
+
     public function checkPseudoCode($couponCode){
           $collection = $this->getCollection();
           $collection->getSelect()->where('code = ?', $couponCode);

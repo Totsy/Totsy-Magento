@@ -13,16 +13,16 @@
  */
 
 class Harapartners_Promotionfactory_Model_Virtualproductcoupon extends Mage_Core_Model_Abstract {
-	
-	const COUPON_STATUS_AVAILABLE = 0;
-	const COUPON_STATUS_RESERVED = 1;
-	const COUPON_STATUS_PURCHASED = 2;
-	
-	protected function _construct(){
+
+    const COUPON_STATUS_AVAILABLE = 0;
+    const COUPON_STATUS_RESERVED = 1;
+    const COUPON_STATUS_PURCHASED = 2;
+
+    protected function _construct(){
         $this->_init('promotionfactory/virtualproductcoupon');
     }
     
-	protected function _beforeSave(){
+    protected function _beforeSave(){
         $datetime = date('Y-m-d H:i:s');
         if(!$this->getId()){
             $this->setData('created_at', $datetime);
@@ -32,23 +32,6 @@ class Harapartners_Promotionfactory_Model_Virtualproductcoupon extends Mage_Core
             $this->setStoreId(Mage_Core_Model_App::ADMIN_STORE_ID);
         }
         parent::_beforeSave();
-    }
-    
-    //Return null when there is no coupon setup for the virtual product (i.e. no reservation logic required)
-    //Return an empty object (without ID) when there is nothing available
-	public function loadOneByProductId( $productId, $status = null ) {
-		$data = $this->getResource()->loadOneByProductId($productId, $status);
-		if($data === null){
-			return null;
-		}
-		$this->addData($data);
-		return $this;
-    }
-    
-    public function loadByCode($code){
-		$data = $this->getResource()->loadByCode($code);
-		$this->addData($data);
-		return $this;
     }
 
     public function cancelVirtualProductCouponInOrder($order) {
@@ -63,10 +46,10 @@ class Harapartners_Promotionfactory_Model_Virtualproductcoupon extends Mage_Core
                         && $optionDataArray['value']){
                         $textDetail = "\n You will receive an additional email with details on this code";
                         $codeCoupon = str_replace($textDetail,'', $optionDataArray['value']);
-                        $vpc = Mage::getModel('promotionfactory/virtualproductcoupon')->loadByCode($codeCoupon);
+                        $vpc = Mage::getModel('promotionfactory/virtualproductcoupon')->load($codeCoupon, 'code');
                         if($vpc->getId()){
                             $vpc->setData('status', Harapartners_Promotionfactory_Model_Virtualproductcoupon::COUPON_STATUS_RESERVED)
-                            ->save();
+                                ->save();
                         }
                     }
                 }
@@ -87,12 +70,12 @@ class Harapartners_Promotionfactory_Model_Virtualproductcoupon extends Mage_Core
                         && $optionDataArray['value']){
                         $textDetail = "\n You will receive an additional email with details on this code";
                         $codeCoupon = str_replace($textDetail,'', $optionDataArray['value']);
-                        $vpc = Mage::getModel('promotionfactory/virtualproductcoupon')->loadByCode($codeCoupon);
+                        $vpc = Mage::getModel('promotionfactory/virtualproductcoupon')->load($codeCoupon, 'code');
                         if($vpc->getId()){
                             $vpc->setData('status', Harapartners_Promotionfactory_Model_Virtualproductcoupon::COUPON_STATUS_PURCHASED)
                                 ->setData('order_id', $order->getId())
                                 ->setData('order_increment_id', $order->getIncrementId())
-                            ->save();
+                                ->save();
                         }
                     }
                 }
@@ -100,7 +83,4 @@ class Harapartners_Promotionfactory_Model_Virtualproductcoupon extends Mage_Core
         }
         return;
     }
-    
-    
-
 }

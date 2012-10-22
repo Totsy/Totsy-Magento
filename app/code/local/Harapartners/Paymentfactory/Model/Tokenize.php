@@ -9,8 +9,6 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Totsy_Cybersource_Model
     protected $_infoBlockType = 'paymentfactory/info';
     protected $_payment = null;
     protected $_canRefundInvoicePartial = true;
-    
-    //HP, Payment failed emails (to customer and admin)
     protected $_emailTemplate;
     protected $_sender;
     protected $_adminReceivers;
@@ -87,7 +85,7 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Totsy_Cybersource_Model
              if(!!$subscriptionId){
                 $payment->setData('cybersource_subid', $subscriptionId);
              }
-             $profile->loadBySubscriptionId($payment->getData('cybersource_subid'));
+             $profile->load($subscriptionId,'subscription_id');
          } elseif (!!$payment->getData('cc_number')){
              $profile->loadByCcNumberWithId($payment->getData('cc_number').$customerId.$payment->getCcExpYear().$payment->getCcExpMonth());
          }
@@ -265,9 +263,8 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Totsy_Cybersource_Model
                 Mage::helper('cybersource')->__('Gateway request error: %s', $e->getMessage())
             );
         }
-        
-        $payment->setCybersourceSubid($payment->getCybersourceSubid());
-        $profile = Mage::getModel('paymentfactory/profile')->loadBySubscriptionId($payment->getCybersourceSubid());
+
+        $profile = Mage::getModel('paymentfactory/profile')->load($payment->getCybersourceSubid(),'subscription_id');
         $payment->setCcLast4($profile->getData('last4no'));
         $payment->setCcType($profile->getData('card_type'));
         $payment->setCcExpYear($profile->getData('expire_year'));
@@ -280,9 +277,7 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Totsy_Cybersource_Model
     {
         $this->_payment = $payment;
         parent::void($payment);
-        $payment->setCybersourceSubid($payment->getCybersourceSubid());
-        $profile = Mage::getModel('paymentfactory/profile')
-            ->loadBySubscriptionId($payment->getCybersourceSubid());
+        $profile = Mage::getModel('paymentfactory/profile')->load($payment->getCybersourceSubid(),'subscription_id');
         $payment->setCcLast4($profile->getData('last4no'));
         $payment->setCcType($profile->getData('card_type'));
         $payment->setCcExpYear($profile->getData('expire_year'));
@@ -306,13 +301,14 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Totsy_Cybersource_Model
                 Mage::helper('cybersource')->__('Gateway request error: %s', $e->getMessage())
             );
         }
-        
-        $payment->setCybersourceSubid($payment->getCybersourceSubid()); //Harapartners
-        $profile = Mage::getModel('paymentfactory/profile')->loadBySubscriptionId($payment->getCybersourceSubid());
-        $payment->setCcLast4($profile->getData('last4no'));
-        $payment->setCcType($profile->getData('card_type'));
-        $payment->setCcExpYear($profile->getData('expire_year'));
-        $payment->setCcExpMonth($profile->getData('expire_month'));
+
+        $profile = Mage::getModel('paymentfactory/profile')->load($payment->getCybersourceSubid(),'subscription_id');
+        $payment->setCcLast4($profile->getData('last4no'))
+                ->setCcType($profile->getData('card_type'))
+                ->setCcExpYear($profile->getData('expire_year'))
+                ->setCcExpMonth($profile->getData('expire_month'))
+                ->save();
+
         $this->_payment = NULL;
         return $this;
     }
@@ -350,7 +346,7 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Totsy_Cybersource_Model
                         ->setCybersourceToken($result->requestToken);
                      //   ->setIsTransactionClosed(1);
                 } else {
-                     $error = Mage::helper('cybersource')->__('There is an error in processing the payment. Please try again or contact us.');
+                     $error = Mage::helper('cybersource')->__('There is an error in processing the payment. ' . $this->_errors[$result->reasonCode] . ' Please try again or contact us.');
                 }
             } catch (Exception $e) {
                Mage::throwException(
@@ -363,8 +359,7 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Totsy_Cybersource_Model
         if ($error !== false) {
             Mage::throwException($error);
         }
-        $payment->setCybersourceSubid($payment->getCybersourceSubid()); //Harapartners
-        $profile = Mage::getModel('paymentfactory/profile')->loadBySubscriptionId($payment->getCybersourceSubid());
+        $profile = Mage::getModel('paymentfactory/profile')->load($payment->getCybersourceSubid(),'subscription_id');
         $payment->setCcLast4($profile->getData('last4no'));
         $payment->setCcType($profile->getData('card_type'));
         $payment->setCcExpYear($profile->getData('expire_year'));
@@ -499,7 +494,7 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Totsy_Cybersource_Model
                     $payment->setCcCidStatus($result->ccAuthReply->cvCode);
                 }
             } else {
-                $error = Mage::helper('paymentfactory')->__('There is an gateway error in processing the payment. Please try again or contact us.');
+                $error = Mage::helper('paymentfactory')->__('There is an error in processing the payment. ' . $this->_errors[$result->reasonCode] . ' Please try again or contact us.');
             }
         } catch (Exception $e) {
            Mage::throwException(

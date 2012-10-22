@@ -1,16 +1,15 @@
 <div class="page-title">
-     <h1><?php echo $this->__('Your order has been received') ?></h1>
+    <h1><?php echo $this->__('Your order has been received') ?></h1>
 </div>
 <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
 <h2 class="sub-title"><?php echo $this->__('Thank you for your purchase!') ?></h2>
 
 <?php if ($this->getOrderId()):?>
 <?php
-    $orderIncrementId = $this->getOrderId();
+$orderIncrementId = $this->getOrderId();
 $order = Mage::getModel('sales/order')->loadByIncrementId($orderIncrementId);
 $quoteId = $order->getQuoteId();
 $quote = Mage::getModel('sales/quote')->load($quoteId);
-//$quote = Mage::getModel('checkout/cart')->getQuote();
 
 ?>
 <?php if ($this->getCanViewOrder()) :?>
@@ -25,23 +24,26 @@ $quote = Mage::getModel('sales/quote')->load($quoteId);
         <?php echo $this->getChildHtml() ?>
     </p>
     <p class="red review-order-detail">
-    	<?php
+    <?php
         $order_id = $order->getId();
         $url = $this->getBaseUrl().'sales/order/history/';
 ?>
 		You will redirect to orders review page in 10 seconds. Or <a class="red" href="<?php echo $url?>">click here</a>
     </p>
-    <div id="rondavu_checkout_container"></div>
+    <p>
+    	<div id="rondavu_checkout_container"></div>
+    </p>
     <script language="javascript" type="text/javascript">
-		function redirect(){window.location.href="<?php echo $url?>"};
-		  setTimeout("redirect()",10000);
+		function redirect(){ window.location.href="<?php echo $url?>" };
+        setTimeout("redirect()",10000);
 	</script>
-	<?php
+<?php
 
 require("dev/sociablelabs/sociable_signer.php");
 
 $items_for_socialable_purchase_key = array();
 $items_for_socialable_mos_keys = array();
+$items_for_socialable_purchase_key = array();
 
 $items = $order->getAllVisibleItems();
 
@@ -52,11 +54,21 @@ foreach ($items as $itemId => $item) {
     $purchase_key = array();
     $mos_key = array();
 
-    $purchase_key['id'] = array("id"=>$item->getId(), "type"=>"product", "price"=>array("actual_paid"=>$item->getPrice(), "currency"=>"USD"));
-
+    $purchase_key = array("id"=>$item->getId(), "type"=>"product", "price"=>array("actual_paid"=> number_format($item->getPrice(), 2, '.', ''), "currency"=>"USD"));
+    
     $mos_key['id'] = array(array("id"=>$item->getId(), "type"=>"product"));
     $mos_key['name'] = array(array("name"=> $item->getName()));
-    $mos_key['primary_tag'] = ""; //$product->getCategory()->name;
+    
+    //get category(s) for this product    
+    $categoryIds = $product->getCategoryIds($product->getId());
+    $categoryNames = "";
+        
+    foreach($categoryIds as $categoryId) {
+        $category = Mage::getModel('catalog/category')->load($categoryId);
+        $categoryNames = $category->getName();
+    }
+            
+    $mos_key['primary_tag'] = $categoryNames;
     $mos_key['tags'] = array("ordered_item",$product->getId(),$product->getName());
     $mos_key['url'] = array("detail"=>$product->getProductUrl(), "picture"=>array("primary"=>$product->getProductUrl(), "primary_secure"=>str_replace("http", "https", $product->getProductUrl())));
 
@@ -67,28 +79,40 @@ foreach ($items as $itemId => $item) {
 $rondavu_data =array("config"=>array("version"=>"1.2") ,
     "user"=>array("id"=>array(array("id"=> Mage::getSingleton('customer/session')->getCustomerId(),"type"=>"totsy")),
         "tracking" =>array(array("name" =>"refId","
-           value" =>"refrerral_code"))),
+           value" =>"referral_code"))),
     "page" =>array("tags" =>array("order_confirmation"),
         "actions" =>array("purchase" =>array("order_id" =>$this->getOrderId(),"total"=>$order->getData('grand_total'),"currency" =>"USD","items"=> $items_for_socialable_purchase_key,
                 "price" =>array("actual_paid" =>$order->getData('grand_total'),"currency"=>"USD")))),
     "primary_mo"=>array("id" =>array(array("id"=>"order_confirmation","type"=>"page")) ,
         "name" =>array(array("name" =>"Totsy")) ,
-        "url" =>array("detail" =>"http//www.totsy.com","picture"=>array("primary"=>"http//www.totsy.com/img/logo-125x77.png","primary_secure" =>
+        "url" =>array("detail" =>"https://www.totsy.com","picture"=>array("primary"=>"https://www.totsy.com/img/logo-125x77.png","primary_secure" =>
                 "https://www.totsy.com/img/logo-125x77.png"))),
     "mos" => $items_for_socialable_mos_keys
 );
 
 // declare a path to the key
 $key_path = "dev/sociablelabs/sign_private_key";
-$socialable_labs_output = rondavu_sign($rondavu_data, $key_path);
+$socialableLabsOutput = rondavu_sign($rondavu_data, $key_path);
 
-if($socialable_labs_output) {
 ?>
 <script type="text/javascript">
-    var socialableLabsOutput = <?php echo $socialable_labs_output ?>;
+    window.RondavuData = <?php echo $socialableLabsOutput ?>;
 </script>
 
-<?php } ?>
+<script type="text/javascript">
+
+    (function(){
+        var s = document.createElement('script');
+        s.async = true;
+
+        s.src =  ('https:' == window.location.protocol ? 'https://s3.amazonaws.com/' : 'http://') +
+            ('www.totsy.com' == window.location.host ? 'static.rondavu.com' +'/C/' +  'Totsy_PROD' : 'qa.rondavu.com' +'/C/' +  'Totsy_QA')  + '/rondavu.js';
+
+        document.getElementsByTagName('head')[0].appendChild(s);
+        
+    })();
+    
+</script>
 
 <?php endif;?>
 <?php endif;?>
@@ -112,36 +136,38 @@ if($socialable_labs_output) {
 $category = array();
 // $productid = Mage::getModel('catalog/product')->getData('category_ids');
 // $order  = Mage::getModel('catalog/category')->getCollection()->load($productid);
-foreach($order->getAllItems() as $item):?>
-	<?php  if( !! $item->getParentItemId() ) {
-        continue;
-    }
+foreach($order->getAllItems() as $item):
+  if( !! $item->getParentItemId() ) {
+  	continue;
+  }
+  
 unset($category);
 $product = Mage::getModel( 'catalog/product' )->load( $item->getProductId() );
 $categoryIds = $product->getCategoryIds();
-foreach ($categoryIds as $cateId){
-    $category[] = Mage::getModel('catalog/category')->load($cateId)->getData('name');
-}
-?>
 
+foreach ($categoryIds as $cateId){
+	$category[] = Mage::getModel('catalog/category')->load($cateId)->getData('name');
+}
+
+?>
    // add item might be called for every item in the shopping cart
    // where your ecommerce engine loops through each item in the cart and
    // prints out _addItem for each
   _gaq.push(['_addItem',
-    '<?php echo $order->getData('increment_id'); ?>',           // order ID - required
-    '<?php echo $item->getData('sku'); ?>',           // SKU/code - required
-    '<?php echo $item->getData('name')?>',        // product name
+    '<?php echo $order->getData('increment_id'); ?>', // order ID - required
+    '<?php echo $item->getData('sku'); ?>',          // SKU/code - required
+    '<?php echo $item->getData('name')?>',          // product name
     '<?php foreach($category as $cat){
-    echo $cat.',';
-} ?>',   // category or variation
-    '<?php echo $item->getPrice() ?>',          // unit price - required
-    '<?php echo $item->getQtyOrdered() ?>'               // quantity - required
+    	       echo $cat . ','; 				  // category or variation
+    	   } 
+    ?>',   
+    '<?php echo $item->getPrice() ?>',         // unit price - required
+    '<?php echo $item->getQtyOrdered() ?>'    // quantity - required
   ]);
-  <?php
+<?php
 endforeach;
 ?>
-  _gaq.push(['_trackTrans']); //submits transaction to the Analytics servers
-
+  _gaq.push(['_trackTrans']); 			  //submits transaction to the Analytics servers
   (function() {
     var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
     ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
