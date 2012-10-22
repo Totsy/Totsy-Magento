@@ -10,7 +10,7 @@
 <config>
     <modules>
         <Totsy_Customer>
-            <version>0.2.0</version>
+            <version>0.2.5</version>
         </Totsy_Customer>
     </modules>
     <global>
@@ -101,8 +101,8 @@
                 <Totsy_Customer/>
             </modules>
             <fixture>
-                <totsycustomer_observer>Totsy_Customer_Model_Observer
-                </totsycustomer_observer>
+                <totsycustomer_observer>Totsy_Customer_Model_Observer</totsycustomer_observer>
+                <totsycustomer_zipcodeinfo>Totsy_Customer_Model_ZipCodeInfo</totsycustomer_zipcodeinfo>
             </fixture>
         </suite>
     </phpunit>
