@@ -1,4 +1,7 @@
-<?php $_item = $this->getItem()?>
+<?php 
+$quote = Mage::getSingleton('checkout/session')->getQuote();
+$_item = $this->getItem();
+?>
 <tr>
     <td><h4 class="product-name"><?php echo $this->htmlEscape($this->getProductName()) ?></h4>
         <?php if ($_options = $this->getOptionList()):?>
@@ -18,6 +21,9 @@
                 <?php endif; ?>
             </span>
             <?php endforeach; ?>
+            </div>
+            <div>
+            Estimated Ship date: <?php echo date('Y-m-d', Mage::helper('sales/order')->calculateEstimatedShipDate($quote)); ?>
             </div>
         </div>
         <?php endif;?>
