@@ -453,11 +453,13 @@ XML;
             
             //handling shipping address
             $shippingAddress = $order->getShippingAddress();
-
+            
             //to avoid null object
             if(empty($shippingAddress)) {
                 $shippingAddress = Mage::getModel('sales/order_address');
             }
+
+            $shippingAddress = Mage::helper('fulfillmentfactory/data')->removeAccentsFromAddress($shippingAddress);
 
             $customerId = $order->getCustomerId();
             $customer   = Mage::getModel('customer/customer')->load($customerId);
@@ -476,6 +478,8 @@ XML;
              if(empty($billingAddress)) {
                 $billingAddress = Mage::getModel('sales/order_address');
              }
+
+            $billingAddress = Mage::helper('fulfillmentfactory/data')->removeAccentsFromAddress($billingAddress);
 
             $billingName = $billingAddress->getFirstname() . ' ' . $billingAddress->getLastname();
             $billingName = substr($billingName, 0, 30);
