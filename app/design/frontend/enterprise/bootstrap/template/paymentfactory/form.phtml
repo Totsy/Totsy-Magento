@@ -73,7 +73,7 @@
         		 <div id="<?php echo $_code ?>_cc_type">
         		 <?php $i=0; ?>
         		 <?php foreach ($this->getCcAvailableTypes() as $_typeCode => $_typeName): ?>
-        		  <input type="radio" class="validate-cybsersource-cc-type <?php if($i==3) { echo "validate-one-required"; } ?>" name="payment[cc_type]" value="<?php echo $_typeCode ?>" <?php if($_typeCode==$_ccType) { echo "checked"; } ?> > 
+        		  <input type="radio" class="validate-cybsersource-cc-type <?php if($i==3) { /* echo "validate-one-required"*/; } ?>" name="payment[cc_type]" value="<?php echo $_typeCode ?>" <?php if($_typeCode==$_ccType) { echo "checked"; } ?> > 
         		 <?php $i++; ?>
         		 	<span class="cc">
         		 	    <span title="<?php echo $_typeName; ?>"  class="<?php echo strtolower($_typeCode); ?>" >
