@@ -37,15 +37,24 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Payment extends TinyBrick_Orde
                 $payment = Mage::getModel('sales/order_payment')->getCollection()
                     ->addAttributeToFilter('cybersource_subid',$profile->getData('subscription_id'))
                     ->getFirstItem();
-                if(!$payment) {
+                if(!$payment || !$payment->getId()) {
+                    //Case of Payment Informations has been Deleted from Object, Refill Payment Informations
+                    $enteredPayment = new Varien_Object($data);
+                    $enteredPayment->setData('cc_last4', substr($enteredPayment->getCcNumber(), -4));
+                    $enteredPayment->setData('cybersource_subid',$profile->getData('subscription_id'));
+                    $this->replacePaymentInformation($order, $enteredPayment);
+                    $this->makeOrderReadyToBeProcessed($order);
                     return false;
                 } else {
-                	$savingNewCreditCard = false;
+                    $savingNewCreditCard = false;
                 }
             }
             if($savingNewCreditCard) {
                 $billing->setData('email', $order->getCustomerEmail());
                 Mage::getModel('paymentfactory/tokenize')->createProfile($payment, $billing, $customerId, $customerAddressId);
+            }
+            if(!$payment->getData('cc_last4')) {
+               return "Error updating payment informations : Missing Fields";
             }
             $this->replacePaymentInformation($order, $payment);
             $this->makeOrderReadyToBeProcessed($order);
@@ -76,7 +85,9 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Payment extends TinyBrick_Orde
      */
     public function replacePaymentInformation($order, $payment) {
         $paymentOrder = $order->getPayment();
-        $paymentOrder->setData('method', $payment->getData('method'));
+        if($payment->getData('method')) {
+            $paymentOrder->setData('method', $payment->getData('method'));
+        }
         $paymentOrder->setData('cc_exp_month', $payment->getData('cc_exp_month'));
         $paymentOrder->setData('cc_last4', $payment->getData('cc_last4'));
         $paymentOrder->setData('cc_type', $payment->getData('cc_type'));
