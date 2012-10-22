@@ -103,7 +103,7 @@ class Harapartners_Stockhistory_Adminhtml_TransactionController extends Mage_Adm
         );
         
         $productData = $this->getRequest()->getParam('qty_to_amend');
-        $productIds = array_keys();
+
         $product = Mage::getModel('catalog/product');
         $productData = json_decode($productData, true);
         $isBatchSuccess = true;
@@ -176,8 +176,8 @@ class Harapartners_Stockhistory_Adminhtml_TransactionController extends Mage_Adm
         }else{
             $this->_getSession()->addError('Some rows in the batch processing failed.');
         }
-		Mage::app()->getFrontController()->getResponse()->setRedirect('*/adminhtml_transaction/report', array('po_id' => $poId));
-      // return;
+		//Mage::app()->getFrontController()->getResponse()->setRedirect('*/adminhtml_transaction/report', array('po_id' => $poId));
+        return;
     }
 
     
