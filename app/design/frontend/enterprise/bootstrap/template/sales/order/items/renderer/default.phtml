@@ -67,10 +67,10 @@ if($_item->is_virtual==1) {
         <?php else: ?>
         	<div>
         		<strong><?php echo $_option['label'] ?>:</strong> 
-        		<?php echo $voucher_value; ?>	
+        		<?php if($order->getStatus() != 'payment_failed') { echo $voucher_value; } else { echo 'Please update your payment informations to get your code.'; } ?>	
         	</div>
         	<div>
-        		<?php echo $voucher_code_string[1]; ?>	
+        		<?php if($order->getStatus() != 'payment_failed') echo $voucher_code_string[1]; ?>	
         	</div>		
         <?php endif; ?>
         <?php endforeach; ?>
@@ -207,13 +207,13 @@ if($_item->is_virtual==1) {
             <strong><?php echo $this->getItem()->getQtyOrdered()*1 ?></strong><br />
         <?php endif; ?>
         <?php if ($this->getItem()->getQtyShipped() > 0): ?>
-            <?php echo //$this->__('Shipped'); ?>: <strong><?php echo $this->getItem()->getQtyShipped()*1 ?></strong><br />
+            <strong><?php echo $this->getItem()->getQtyShipped()*1 ?></strong><br />
         <?php endif; ?>
         <?php if ($this->getItem()->getQtyCanceled() > 0): ?>
-            <?php echo //$this->__('Canceled'); ?>: <strong><?php echo $this->getItem()->getQtyCanceled()*1 ?></strong><br />
+            <strong><?php echo $this->getItem()->getQtyCanceled()*1 ?></strong><br />
         <?php endif; ?>
         <?php if ($this->getItem()->getQtyRefunded() > 0): ?>
-            <?php echo //$this->__('Refunded'); ?>: <strong><?php echo $this->getItem()->getQtyRefunded()*1 ?></strong><br />
+            <strong><?php echo $this->getItem()->getQtyRefunded()*1 ?></strong><br />
         <?php endif; ?>
         </span>
     </td>
