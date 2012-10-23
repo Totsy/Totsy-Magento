@@ -1,0 +1,6 @@
+tables:
+  core/email_template:
+    - template_id: 103
+      template_code: welcome
+config:
+  default/customer/create_account/email_template_autogen: 103

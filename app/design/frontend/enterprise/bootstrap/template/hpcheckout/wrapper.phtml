@@ -13,11 +13,6 @@
 </div>
 
 <div id="hpcheckout-wrapper">
-	<div class="page-title title-buttons">
-		<div class="shipping-date">
-			<p id="cart-shipping-date-header"><span>Estimated Ship Date:</span> <?php echo date('Y-m-d', Mage::helper('sales/order')->calculateEstimatedShipDate($quote)); ?></p>
-		</div>	
-	</div>
 	<div id="error-message-wrapper"></div>
 	<?php if( count( $this->getQuote()->getAllItems() ) ): ?>
 		<?php if( ! $this->getCustomerSession()->isLoggedIn() ): ?>
@@ -85,7 +80,6 @@
 	<?php endif ?>
 <script type="text/javascript">
 function updateSelectText(){
-
 	jQuery(".totsy-selective-input-box select").each(function(){
 		var temphtml = jQuery(this).html();
 		var text = jQuery(this).find("option:selected").text();

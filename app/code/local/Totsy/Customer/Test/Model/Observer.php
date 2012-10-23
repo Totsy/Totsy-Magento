@@ -46,9 +46,40 @@ class Totsy_Customer_Test_Model_Observer extends
      * Automagically register as a new user.
      *
      * @test
+     * @loadFixture
      */
     public function register()
     {
+        $mock = $this->getModelMock(
+            'customer/customer',
+            array('save')
+        );
+        $mock->expects($this->once())
+            ->method('save')
+            ->will($this->returnSelf());
+
+        $this->replaceByMock('model', 'customer/customer', $mock);
+
+        $mock = $this->getModelMock(
+            'customer/session',
+            array('setCustomerAsLoggedIn')
+        );
+        $mock->expects($this->once())
+            ->method('setCustomerAsLoggedIn')
+            ->will($this->returnSelf());
+
+        $this->replaceByMock('model', 'customer/session', $mock);
+
+        $mock = $this->getModelMock(
+            'core/email_template_mailer',
+            array('send')
+        );
+        $mock->expects($this->once())
+            ->method('send')
+            ->will($this->returnSelf());
+
+        $this->replaceByMock('model', 'core/email_template_mailer', $mock);
+
         $observer = Mage::getSingleton('totsycustomer/observer');
 
         // generate an encrypted e-mail address for an non-existent user
@@ -62,14 +93,6 @@ class Totsy_Customer_Test_Model_Observer extends
         $request->setQuery('auto_access_token', $token);
 
         $observer->autoAuthorization();
-
-        // verify that the user has been created
-        $customer = Mage::getModel('customer/customer')
-            ->setWebsiteId(1)
-            ->setStoreId(1)
-            ->loadByEmail('autologin@test.net');
-        $this->assertNotNull($customer->getId());
-        $this->assertNotEmpty($customer->getPasswordHash());
     }
 
     /**
@@ -110,6 +133,36 @@ class Totsy_Customer_Test_Model_Observer extends
      */
     public function registerAltStore()
     {
+        $mock = $this->getModelMock(
+            'customer/customer',
+            array('save')
+        );
+        $mock->expects($this->once())
+            ->method('save')
+            ->will($this->returnSelf());
+
+        $this->replaceByMock('model', 'customer/customer', $mock);
+
+        $mock = $this->getModelMock(
+            'customer/session',
+            array('setCustomerAsLoggedIn')
+        );
+        $mock->expects($this->once())
+            ->method('setCustomerAsLoggedIn')
+            ->will($this->returnSelf());
+
+        $this->replaceByMock('model', 'customer/session', $mock);
+
+        $mock = $this->getModelMock(
+            'core/email_template_mailer',
+            array('send')
+        );
+        $mock->expects($this->once())
+            ->method('send')
+            ->will($this->returnSelf());
+
+        $this->replaceByMock('model', 'core/email_template_mailer', $mock);
+
         $observer = Mage::getSingleton('totsycustomer/observer');
 
         // generate an encrypted e-mail address for an non-existent user
@@ -124,13 +177,5 @@ class Totsy_Customer_Test_Model_Observer extends
         $request->setQuery('auto_access_store', 2);
 
         $observer->autoAuthorization();
-
-        // verify that the user has been created
-        $customer = Mage::getModel('customer/customer')
-            ->setWebsiteId(1)
-            ->setStoreId(1)
-            ->loadByEmail('autologin@test.net');
-        $this->assertNotNull($customer->getId());
-        $this->assertEquals($customer->getStoreId(), 2);
     }
 }

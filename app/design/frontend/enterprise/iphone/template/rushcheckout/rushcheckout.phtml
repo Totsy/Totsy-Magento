@@ -176,7 +176,7 @@ $thumbnailurl = str_replace("cache/4/", "cache/1/", $badthumbnailurl);
 		
 	<td class="qty-box">
 		<?php if( $isVirtual ): ?>
-			<input type="text" name="cart[<?php echo $_item->getId() ?>][qty]" value="<?php echo $this->getQty() ?>" size="4" title="<?php echo $this->__('Qty') ?>" class="input-text qty" maxlength="12" />
+			<input type="text" name="cart[<?php echo $_item->getId() ?>][qty]" value="<?php echo $this->getQty() ?>" size="4" title="<?php echo $this->__('Qty') ?>" disabled="disabled" class="input-text qty" maxlength="12" />
 		<?php else: ?>
 		<div id="qty-<?php echo $timer ?>"	/>
 			<div class="updown">
