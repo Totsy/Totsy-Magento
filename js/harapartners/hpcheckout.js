@@ -205,9 +205,13 @@ HpCheckout.prototype = {
 	},
 	
 	submit: function() {
+	    //good time to validate CC
+		jQuery("input:radio").addClass("validate-one-required");
+	
 		if( ! this.validate() ) {
 			return;
 		}
+		
         //IE grabs placeholder text from orders in lew of of an actual value
         //this fix removes values explicitly when they match their placeholder text
         jQuery("#hpcheckout-wrapper").find('input[placeholder]').each(function() {

@@ -6,3 +6,9 @@ scope:
       group_id: 1
       name: Test Alternate Store
       is_active: 1
+tables:
+  core/email_template:
+    - template_id: 102
+      template_code: welcome
+config:
+  default/customer/create_account/email_template_autogen: 102
