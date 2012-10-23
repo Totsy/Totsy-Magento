@@ -465,13 +465,20 @@ class Mage_Core_Model_Config extends Mage_Core_Model_Config_Base
             return parent::saveCache($tags);
         }
 
-        $this->_saveCache(time(), $cacheLockId, array(), 60);
+        //2012-10-19 CJD - Adding second lock check before cache is actually saved.
+        if ($this->_loadCache($cacheLockId)) {
+            return $this;
+        }
+
+        //2012-10-19 CJD - Increasing cache lock lifetime to 120 seconds
+        $this->_saveCache(time(), $cacheLockId, array(), 120);
         $this->removeCache();
         foreach ($this->_cachePartsForSave as $cacheId => $cacheData) {
             $this->_saveCache($cacheData, $cacheId, $tags, $this->getCacheLifetime());
         }
         unset($this->_cachePartsForSave);
         $this->_removeCache($cacheLockId);
+
         return $this;
     }
 
