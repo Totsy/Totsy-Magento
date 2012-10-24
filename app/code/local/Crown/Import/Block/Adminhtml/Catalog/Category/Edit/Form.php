@@ -5,10 +5,10 @@
  * @package 	Crown_Import 
  * @since 		1.0.0
  */
-class Crown_Import_Block_Adminhtml_Catalog_Category_Edit_Form extends Totsy_Adminhtml_Block_Catalog_Category_Edit_Form {
+class Crown_Import_Block_Adminhtml_Catalog_Category_Edit_Form extends Harapartners_Service_Block_Rewrite_Adminhtml_Catalog_Category_Edit_Form {
 	/**
 	 * (non-PHPdoc)
-	 * @see Totsy_Adminhtml_Block_Catalog_Category_Edit_Form::_prepareLayout()
+	 * @see Harapartners_Service_Block_Rewrite_Adminhtml_Catalog_Category_Edit_Form::_prepareLayout()
 	 */
 	protected function _prepareLayout() {
 		parent::_prepareLayout ();

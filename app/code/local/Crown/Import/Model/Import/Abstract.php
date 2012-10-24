@@ -100,13 +100,6 @@ class Crown_Import_Model_Import_Abstract extends Mage_Core_Model_Abstract {
 	protected $_baseSkus = array();
 
 	/**
-	 * Holds the images for the media gallery import
-	 * @since 1.0.4
-	 * @var array
-	 */
-	protected $_media_gallery = array();
-
-	/**
 	 * Holds the super attributes to be used with each configurable product.
 	 * @since 1.0.0
 	 * @var array
@@ -316,7 +309,7 @@ class Crown_Import_Model_Import_Abstract extends Mage_Core_Model_Abstract {
 		if (($handle = fopen ( $this->getSourceFile(), "r" )) !== false) {
 			$headerRow = true;
 			$line = 0;
-			while ( ($data = fgetcsv ( $handle, 0, "," )) !== false ) {
+			while ( ($data = fgetcsv ( $handle, 1000, "," )) !== false ) {
 				$this->_offset = count ( $data );
 				$line++;
 
@@ -363,14 +356,20 @@ class Crown_Import_Model_Import_Abstract extends Mage_Core_Model_Abstract {
 		$this->_fields = array_unique($this->_fields);
 		$this->_skus = array_unique($this->_skus);
 		$this->_staticColumns = array_unique($this->_staticColumns);
-		if (($fp = fopen ( $this->getFileBaseDir() . DS . $this->getFilename(), 'w' )) !== false) {
-			// Load headers
-			$_headers = array_unique(array_merge($this->_fields, $this->_staticColumns));
-			asort($_headers);
-			$_columns = $_headers;
-			array_unshift($_headers, 'sku');
-			fputcsv ( $fp, $_headers );
 
+
+
+        // Load headers
+        $_columns = array_unique(array_merge($this->_fields, $this->_staticColumns));
+        asort($_columns);
+
+        if (isset($_columns['sku']))
+            unset($_columns['sku']);
+
+        array_unshift($_columns, 'sku');
+
+		if (($fp = fopen ( $this->getFileBaseDir() . DS . $this->getFilename(), 'w' )) !== false) {
+            fputcsv ( $fp, $_columns );
 			// Load sku data
 			foreach ( $this->_skus as $_SKU ) {
 				reset($_columns);
@@ -395,62 +394,39 @@ class Crown_Import_Model_Import_Abstract extends Mage_Core_Model_Abstract {
 	 * @return Crown_Import_Model_Import_Abstract
 	 */
 	protected function createProductExtraImportFile() {
-		if (!empty($this->_baseSkus) || !empty($this->_media_gallery)) {
+		if (!empty($this->_baseSkus)) {
+			$this->setData('has_configurable_products', true);
 			if (($fp = fopen ( $this->getFileBaseDir() . DS . $this->getProductExtraFilename(), 'w' )) !== false) {
-
-				// Configurable product import information
-				if (!empty($this->_baseSkus)) {
-					$this->setData('has_configurable_products', true);
-
-					// Add super attributes to configurables
-					$data = array(
-						'##CPSA','sku','attribute_code','position','label'
-					);
-					fputcsv ( $fp, $data );
-					foreach ( $this->_baseSkus as $_baseSku => $childSkusArray ) {
-						if ( !isset($this->_superAttributesPerSku[$_baseSku]) ) continue;
-						$pos = 0;
-						foreach ($this->_superAttributesPerSku[$_baseSku] as $superAttribute) {
-							$data = array(
-								'CPSA',$_baseSku,$superAttribute,$pos,ucfirst($superAttribute)
-							);
-							fputcsv ( $fp, $data );
-							$pos++;
-						}
-					}
-
-					// Add linking between configurables and simple products
-					$data = array(
-						'##CPSI','sku','linked_sku'
-					);
-					fputcsv ( $fp, $data );
-					foreach ( $this->_baseSkus as $_baseSku => $childSkusArray ) {
-						foreach ( $childSkusArray as $childSku ) {
-							$data = array(
-								'CPSI',$_baseSku,$childSku
-							);
-							fputcsv ( $fp, $data );
-						}
+				// Add super attributes to configurables
+				$data = array(
+					'##CPSA','sku','attribute_code','position','label'
+				);
+				fputcsv ( $fp, $data );
+				foreach ( $this->_baseSkus as $_baseSku => $childSkusArray ) {
+					if ( !isset($this->_superAttributesPerSku[$_baseSku]) ) continue;
+					$pos = 0;
+					foreach ($this->_superAttributesPerSku[$_baseSku] as $superAttribute) {
+						$data = array(
+							'CPSA',$_baseSku,$superAttribute,$pos,ucfirst($superAttribute)
+						);
+						fputcsv ( $fp, $data );
+						$pos++;
 					}
 				}
 
-				// Media gallery import
-				if (!empty($this->_media_gallery)) {
-					$data = array(
-						'##CPI', 'sku', 'image_url','label','position','disabled'
-					);
-					fputcsv ( $fp, $data );
-					foreach ( $this->_media_gallery as $_sku => $_image_urls ) {
-						foreach ($_image_urls as $_image_url) {
-							$data = array(
-								'CPI',$_sku, ltrim($_image_url,'/')
-							);
-							fputcsv ( $fp, $data );
-						}
+				// Add linking between configurables and simple products
+				$data = array(
+					'##CPSI','sku','linked_sku'
+				);
+				fputcsv ( $fp, $data );
+				foreach ( $this->_baseSkus as $_baseSku => $childSkusArray ) {
+					foreach ( $childSkusArray as $childSku ) {
+						$data = array(
+							'CPSI',$_baseSku,$childSku
+						);
+						fputcsv ( $fp, $data );
 					}
 				}
-
-				// Close file after writing
 				fclose ( $fp );
 			}
 		}

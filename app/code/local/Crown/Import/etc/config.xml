@@ -2,7 +2,7 @@
 <config>
 	<modules>
 		<Crown_Import>
-			<version>1.1.4</version>
+			<version>1.0.2</version>
 		</Crown_Import>
 	</modules>
 	<global>
@@ -67,15 +67,24 @@
 			</crownimport>
 		</helpers>
 		<events>
-			<urapidflow_product_import_after_save>
+			<urapidflow_product_import_after_diff>
 				<observers>
-					<createpurchaseordertransactions>
+					<dopurchaseordertransactions>
 						<type>singleton</type>
 						<class>Crown_Import_Model_Observer</class>
 						<method>savePurchaseOrderTransaction</method>
-					</createpurchaseordertransactions>
+					</dopurchaseordertransactions>
 				</observers>
-			</urapidflow_product_import_after_save>
+			</urapidflow_product_import_after_diff>
+			<urapidflow_product_import_after_fetch>
+				<observers>
+					<dopurchaseordertransactions>
+						<type>singleton</type>
+						<class>Crown_Import_Model_Observer</class>
+						<method>getCurrentProductQtyForDiff</method>
+					</dopurchaseordertransactions>
+				</observers>
+			</urapidflow_product_import_after_fetch>
 		</events>
 	</global>
 	<frontend>
@@ -128,38 +137,30 @@
 		</layout>
 	</adminhtml>
 	<crontab>
-        <jobs>
-            <crownimport_clean_expired>
-                <schedule>
-                    <cron_expr>0 0 * * *</cron_expr>
-                </schedule>
-                <run>
-                    <model>crownimport/cron::clearExpiredImports</model>
-                </run>
-            </crownimport_clean_expired>
-            <crownimport_clean_old_profiles>
-                <schedule>
-                    <cron_expr>0 0 * * *</cron_expr>
-                </schedule>
-                <run>
-                    <model>crownimport/cron::clearOldProfiles</model>
-                </run>
-            </crownimport_clean_old_profiles>
-        </jobs>
+		<jobs>
+			<crownimport_clean_expired>
+				<schedule>
+					<cron_expr>0 0 * * *</cron_expr>
+					<run>
+						<model>crownimport/cron::clearExpiredImports</model>
+					</run>
+				</schedule>
+			</crownimport_clean_expired>
+			<crownimport_clean_old_profiles>
+				<schedule>
+					<cron_expr>0 0 * * *</cron_expr>
+					<run>
+						<model>crownimport/cron::clearOldProfiles</model>
+					</run>
+				</schedule>
+			</crownimport_clean_old_profiles>
+		</jobs>
 	</crontab>
 	<default>
 		<crownimport>
 			<urapidflow>
 				<invalid_characters>‘ ’ “ ” é — – ÿ</invalid_characters>
-                <missing_image_error>1</missing_image_error>
 			</urapidflow>
-            <general>
-                <status>1</status>
-                <is_in_stock>1</is_in_stock>
-                <weight>1.0</weight>
-                <description>No Description</description>
-                <short_description>No Short Description</short_description>
-            </general>
 		</crownimport>
 	</default>
 </config>

@@ -19,6 +19,7 @@ class Crown_Import_Block_Adminhtml_Import_Grid extends Mage_Adminhtml_Block_Widg
 		$this->setDefaultDir ( 'DESC' );
 		$this->setSaveParametersInSession ( true );
 	}
+	
 	/**
 	 * (non-PHPdoc)
 	 * @see Mage_Adminhtml_Block_Widget_Grid::_prepareCollection()
@@ -119,12 +120,11 @@ class Crown_Import_Block_Adminhtml_Import_Grid extends Mage_Adminhtml_Block_Widg
 	
 	/**
      * Return row url for js event handlers
-     * @param Crown_Import_Model_Importhistory $row
+     * @param Mage_Catalog_Model_Product|Varien_Object
      * @since 1.0.0
      * @return string
      */
 	public function getRowUrl($row) {
-        $row->statusCheck();
 		if ( !$row->getUrapidflowProfileId() && Crown_Import_Model_Importhistory::IMPORT_STATUS_COMPLETE == $row->getStatus() ) {
 			return $this->getUrl ( '*/*/profilemessage', array ('mid' => 1 ) );
 		} elseif( Crown_Import_Model_Importhistory::IMPORT_STATUS_RUNNING == $row->getStatus() ) {
