@@ -83,7 +83,7 @@ class Crown_Import_Model_Import_Abstract extends Mage_Core_Model_Abstract {
 	 * @since 1.0.0
 	 * @var array
 	 */
-	protected $_after_fiter_events = array();
+	protected $_after_filter_events = array();
 
 	/**
 	 * Column name mapping.
@@ -183,7 +183,7 @@ class Crown_Import_Model_Import_Abstract extends Mage_Core_Model_Abstract {
 	 */
 	public function addAfterParseEvent(array $method, $priority = 10) {
 		$priority = intval($priority);
-		$this->_after_fiter_events[$priority][] = $method;
+		$this->_after_filter_events[$priority][] = $method;
 		return $this;
 	}
 
@@ -241,14 +241,14 @@ class Crown_Import_Model_Import_Abstract extends Mage_Core_Model_Abstract {
 	 * @return Crown_Import_Model_Import_Abstract
 	 */
 	protected function runAfterImportParseEvents() {
-		reset($this->_after_fiter_events);
+		reset($this->_after_filter_events);
 		do {
-			foreach( (array) current($this->_after_fiter_events) as $method ){
+			foreach( (array) current($this->_after_filter_events) as $method ){
 				if (is_array($method) || is_string($method)) {
 					call_user_func($method);
 				}
 			}
-		} while ( next($this->_after_fiter_events) !== false );
+		} while ( next($this->_after_filter_events) !== false );
 		return $this;
 	}
 
@@ -355,7 +355,7 @@ class Crown_Import_Model_Import_Abstract extends Mage_Core_Model_Abstract {
 	}
 
 	/**
-	 * Creates the import csv file for magento
+	 * Creates the import csv file for Magento
 	 * @since 1.0.0
 	 * @return Crown_Import_Model_Import_Abstract
 	 */
@@ -363,13 +363,16 @@ class Crown_Import_Model_Import_Abstract extends Mage_Core_Model_Abstract {
 		$this->_fields = array_unique($this->_fields);
 		$this->_skus = array_unique($this->_skus);
 		$this->_staticColumns = array_unique($this->_staticColumns);
+
+        // Load headers
+        $_columns = array_unique(array_merge($this->_fields, $this->_staticColumns));
+        asort($_columns);
+        if (isset($_columns['sku']))
+            unset($_columns['sku']);
+        array_unshift($_columns, 'sku');
+
 		if (($fp = fopen ( $this->getFileBaseDir() . DS . $this->getFilename(), 'w' )) !== false) {
-			// Load headers
-			$_headers = array_unique(array_merge($this->_fields, $this->_staticColumns));
-			asort($_headers);
-			$_columns = $_headers;
-			array_unshift($_headers, 'sku');
-			fputcsv ( $fp, $_headers );
+			fputcsv ( $fp, $_columns );
 
 			// Load sku data
 			foreach ( $this->_skus as $_SKU ) {
