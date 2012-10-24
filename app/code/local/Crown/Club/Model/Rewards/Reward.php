@@ -7,7 +7,7 @@
  */
 class Crown_Club_Model_Rewards_Reward extends Enterprise_Reward_Model_Reward
 {
-    const REWARD_ACTION_CLUB    = 42;
+    const REWARD_ACTION_CLUB    = 42; // After all, it is the answer to life the universe and everything
 
     /**
      * Internal constructor
