@@ -7,6 +7,7 @@
             <depends>
             	<Harapartners_Service />
                 <Harapartners_EmailFactory />
+                <Totsy_Sales />
             </depends>
         </Crown_Club>
     </modules>

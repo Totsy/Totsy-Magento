@@ -1,12 +1,12 @@
 <?php
 /**
- *
+ * 
  * @category Crown
  * @package Crown_Import
  * @since 1.0.1
  */
 class Crown_Import_Model_Urapidflow_Mysql4_Catalog_Product extends Unirgy_RapidFlow_Model_Mysql4_Catalog_Product {
-
+	
 	/**
 	 * (non-PHPdoc)
 	 * @see Unirgy_RapidFlow_Model_Mysql4_Catalog_Product::_importValidateNewData()
@@ -22,7 +22,7 @@ class Crown_Import_Model_Urapidflow_Mysql4_Catalog_Product extends Unirgy_RapidF
 		$actions = $profile->getData ( 'options/import/actions' );
 		$allowSelectIds = $profile->getData ( 'options/import/select_ids' );
 		$allowNotApplicable = $profile->getData ( 'options/import/not_applicable' );
-
+		
 		// find changed data
 		foreach ( $this->_newData as $sku => $p ) {
 			try {
@@ -30,16 +30,16 @@ class Crown_Import_Model_Urapidflow_Mysql4_Catalog_Product extends Unirgy_RapidF
 				// check if the product is new
 				$isNew = empty ( $this->_skus [$sku] );
 				$oldProduct = $isNew ? array () : $this->_products [$this->_skus [$sku]] [0];
-
+				
 				if ($isNew && $actions == 'update' || ! $isNew && $actions == 'create') {
 					$profile->addValue ( 'rows_nochange' );
 					$this->_valid [$sku] = false;
 					continue;
 				}
-
+				
 				// validate required attributes
 				$this->_valid [$sku] = true;
-
+				
 				$k = "product.type";
 				$logger->setColumn ( isset ( $this->_fieldsCodes [$k] ) ? $this->_fieldsCodes [$k] + 1 : 0 );
 				if (isset ( $p [$k] )) {
@@ -68,7 +68,7 @@ class Crown_Import_Model_Urapidflow_Mysql4_Catalog_Product extends Unirgy_RapidF
 						$typeId = $this->_products [$this->_skus [$sku]] [0] ['product.type'];
 					}
 				}
-
+				
 				$k = "product.attribute_set";
 				$logger->setColumn ( isset ( $this->_fieldsCodes [$k] ) ? $this->_fieldsCodes [$k] + 1 : 0 );
 				if (isset ( $p [$k] )) {
@@ -107,24 +107,24 @@ class Crown_Import_Model_Urapidflow_Mysql4_Catalog_Product extends Unirgy_RapidF
 						$attrSetId = $this->_products [$this->_skus [$sku]] [0] ['product.attribute_set'];
 					}
 				}
-
+				
 				// continue on error
 				if (! $this->_valid [$sku]) {
 					$profile->addValue ( 'rows_errors' );
 					continue;
 				}
-
+				
 				$p [$k] = $attrSetId;
 				$this->_newData [$sku] [$k] = $attrSetId;
-
+				
 				$attrSetFields = $this->_getAttributeSetFields ( $attrSetId );
 				$typeId = ! empty ( $typeId ) ? $typeId : $oldProduct ['type_id'];
 				$isParentProduct = $typeId == 'configurable' || $typeId == 'grouped' || $typeId == 'bundle';
-
+				
 				$dynamic = $this->__ ( 'Dynamic' );
 				$dynPrice = ($typeId == 'configurable' || $typeId == 'bundle') && (isset ( $p ['price_type'] ) && ! empty ( $p ['price_type'] ) && (in_array ( $p ['price_type'], array ($dynamic, 1 ) )) || ! isset ( $p ['price_type'] ) && ! empty ( $oldProduct ['price_type'] ));
 				$dynWeight = ($typeId == 'configurable' || $typeId == 'bundle') && (isset ( $p ['weight_type'] ) && ! empty ( $p ['weight_type'] ) && (in_array ( $p ['weight_type'], array ($dynamic, 1 ) )) || ! isset ( $p ['weight_type'] ) && ! empty ( $oldProduct ['weight_type'] ));
-
+				
 				if ($isNew) {
 					// check missing required columns
 					foreach ( $this->_attributesByCode as $k => $attr ) {
@@ -135,7 +135,7 @@ class Crown_Import_Model_Urapidflow_Mysql4_Catalog_Product extends Unirgy_RapidF
 						$inAttrSet = empty ( $attr ['attribute_id'] ) || ! empty ( $attrSetFields [$k] );
 						$dynAttr = $k == 'price' && $dynPrice || $k == 'weight' && $dynWeight;
 						$parentQty = $k == 'stock.qty' && $isParentProduct;
-
+						
 						if ($appliesTo && $inAttrSet && ! $dynAttr && ! $parentQty) {
 							$profile->addValue ( 'num_errors' );
 							$logger->setColumn ( 1 );
@@ -144,12 +144,12 @@ class Crown_Import_Model_Urapidflow_Mysql4_Catalog_Product extends Unirgy_RapidF
 						}
 					}
 				}
-
+				
 				// walk the attributes
 				foreach ( $p as $k => $newValue ) {
 					$attr = $this->_attr ( $k );
 					$logger->setColumn ( isset ( $this->_fieldsCodes [$k] ) ? $this->_fieldsCodes [$k] + 1 : - 1 );
-
+					
 					$empty = is_null ( $newValue ) || $newValue === '' || $newValue === array ();
 					$required = ! empty ( $attr ['is_required'] );
 					$visible = ! empty ( $attr ['is_visible'] );
@@ -158,7 +158,7 @@ class Crown_Import_Model_Urapidflow_Mysql4_Catalog_Product extends Unirgy_RapidF
 					$selectable = ! empty ( $attr ['frontend_input'] ) && ($attr ['frontend_input'] == 'select' || $attr ['frontend_input'] == 'multiselect' || ! empty ( $attr ['source_model'] ));
 					$dynAttr = $k == 'price' && $dynPrice || $k == 'weight' && $dynWeight;
 					$parentQty = $k == 'stock.qty' && $isParentProduct;
-
+					
 					if (! $empty && $visible && (! $appliesTo || ! $inAttrSet || $dynAttr) && ! $allowNotApplicable) {
 						unset ( $this->_newData [$sku] [$k] );
 						$newValue = null;
@@ -184,7 +184,7 @@ class Crown_Import_Model_Urapidflow_Mysql4_Catalog_Product extends Unirgy_RapidF
 							continue;
 						}
 					}
-
+					
 					if ($selectable && ! $empty && $k != 'product.attribute_set') {
 						if ($attr ['frontend_input'] == 'multiselect' && is_array ( $newValue )) {
 							$newValue = array_unique ( $newValue );
@@ -248,17 +248,15 @@ class Crown_Import_Model_Urapidflow_Mysql4_Catalog_Product extends Unirgy_RapidF
 							}
 						}
 					}
-
+					
 					// Check for invalid characters
-                    /* @var Crown_Import_Helper_Encoding $encodingHlpr */
-                    $encodingHlpr = Mage::helper('crownimport/encoding');
 					if ($selectable) {
 						if ($attr ['frontend_input'] == 'multiselect' && is_array ( $newValue )) {
 							$newValue = array_unique ( $newValue );
 						}
 						foreach ( ( array ) $newValue as $i => $v ) {
-							try {
-                                $encodingHlpr->checkForInvalidCharacter ( $v );
+							try { 
+								$this->_checkForInvalidCharacter ( $v );
 							} catch (Exception $e ) {
 								$profile->addValue ( 'num_errors' );
 								$logger->error ( $this->__ ( $e->getMessage() ) );
@@ -266,37 +264,15 @@ class Crown_Import_Model_Urapidflow_Mysql4_Catalog_Product extends Unirgy_RapidF
 							}
 						}
 					} else {
-						try {
-                            $encodingHlpr->checkForInvalidCharacter ( $newValue );
+						try { 
+							$this->_checkForInvalidCharacter ( $newValue );
 						} catch (Exception $e ) {
 							$profile->addValue ( 'num_errors' );
 							$logger->error ( $this->__ ( $e->getMessage() ) );
 							$this->_valid [$sku] = false;
 						}
 					}
-
-                    // Check for media image on server or remote host
-                    /* @var $mediaHlper Crown_Import_Helper_Data */
-                    $mediaHlper = Mage::helper('crownimport');
-                    if ( array_key_exists('frontend_input', $attr) && $attr['frontend_input']=='media_image') {
-                        try {
-                            $mediaHlper->checkForValidImageFiles( $newValue, $profile );
-                        } catch (Exception $e ) {
-                            $errorMessageId = Mage::getStoreConfig ( 'crownimport/urapidflow/missing_image_error' );
-                            switch( $errorMessageId ) {
-                                case Crown_Import_Model_Adminhtml_Source_Errorlevels::LEVEL_WARNING:
-                                    $profile->addValue ( 'num_warnings' );
-                                    $logger->warning ( $this->__ ( $e->getMessage() ) );
-                                    break;
-                                case Crown_Import_Model_Adminhtml_Source_Errorlevels::LEVEL_ERROR:
-                                default:
-                                    $profile->addValue ( 'num_errors' );
-                                    $logger->error ( $this->__ ( $e->getMessage() ) );
-                                    $this->_valid [$sku] = false;
-                            }
-                        }
-                    }
-
+					
 				} // foreach ($p as $k=>$newValue)
 
 				if (! $this->_valid [$sku]) {
@@ -308,5 +284,24 @@ class Crown_Import_Model_Urapidflow_Mysql4_Catalog_Product extends Unirgy_RapidF
 			}
 		} // foreach ($this->_newData as $p)
 		unset ( $p );
+	}
+	
+	/**
+	 * Checks the attribute value to see if it has an invalid character.
+	 * @param mixed $value
+	 * @since 1.0.1
+	 * @return boolean
+	 */
+	protected function _checkForInvalidCharacter($value) {
+		$invalidCharacters = Mage::helper ( 'crownimport' )->getInvalidCharacters ();
+		$value = Mage::helper('crownimport/encoding')->toUTF8($value);
+		foreach ( $invalidCharacters as $invalidCharacter ) {
+			$pos = iconv_strpos($value, $invalidCharacter, null, 'UTF-8');
+			if ( false !== $pos ) {
+					throw new Exception("Invalid Character found");
+				return false;
+			}
+		}
+		return true;
 	}
 }
