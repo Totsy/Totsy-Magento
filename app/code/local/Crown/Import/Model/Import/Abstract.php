@@ -360,11 +360,11 @@ class Crown_Import_Model_Import_Abstract extends Mage_Core_Model_Abstract {
 	 * @return Crown_Import_Model_Import_Abstract
 	 */
 	protected function createImportFile() {
+        // Load headers
 		$this->_fields = array_unique($this->_fields);
 		$this->_skus = array_unique($this->_skus);
 		$this->_staticColumns = array_unique($this->_staticColumns);
 
-        // Load headers
         $_columns = array_unique(array_merge($this->_fields, $this->_staticColumns));
         asort($_columns);
         if (isset($_columns['sku']))
