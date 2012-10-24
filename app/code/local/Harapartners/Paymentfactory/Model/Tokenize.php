@@ -87,7 +87,11 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Totsy_Cybersource_Model
              }
              $profile->load($subscriptionId,'subscription_id');
          } elseif (!!$payment->getData('cc_number')){
-             $profile->loadByCcNumberWithId($payment->getData('cc_number').$customerId.$payment->getCcExpYear().$payment->getCcExpMonth());
+            $profile->loadByCcNumberWithId($payment->getData('cc_number').$customerId.$payment->getCcExpYear().$payment->getCcExpMonth());
+            if($profile->getId()){
+                $payment->setData('cybersource_subid', $profile->getData('subscription_id'));
+                $payment->save();
+            }
          }
          
         if(!!$profile && !!$profile->getId() 
