@@ -27,6 +27,11 @@ html {
     background-image: linear-gradient(top, #eef6fc, #ffffff);
     background-attachment: fixed;
 }
+/* Not implemented - pending forthought from "Creative" on how a bold font affects typography site-wide
+body {
+    font-family: "Arial Rounded MT Bold", "Helvetica Rounded", Arial, "Helvetica Neue", Helvetica, sans-serif;
+}
+*/
 a {color:#ed1c25;text-decoration:none; outline: none;}
 a:hover{color:#ed1c25;text-decoration:underline;}
 a:focus{outline: none;}
