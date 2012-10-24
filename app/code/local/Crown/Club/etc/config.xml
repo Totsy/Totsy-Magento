@@ -21,6 +21,11 @@
                     <service_quote>Crown_Club_Model_Sales_Service_Quote</service_quote>
                 </rewrite>
             </sales>
+            <enterprise_reward>
+                <rewrite>
+                    <reward>Crown_Club_Model_Rewards_Reward</reward>
+                </rewrite>
+            </enterprise_reward>
         </models>
         <resources>
             <crownclub_setup>

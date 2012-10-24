@@ -51,56 +51,33 @@ class Crown_Club_Model_Observer {
      */
     public function orderShipped($observer)
     {
-        /* @var $object Mage_Sales_Model_Order_Shipment */
-        $object = $observer->getEvent()->getObject();
-
-
-
+        /* @var $shipment Mage_Sales_Model_Order_Shipment */
+        $shipment = $observer->getEvent()->getShipment();
 
         /* @var $order Mage_Sales_Model_Order */
-        $order = $observer->getEvent()->getOrder();
+        $order = Mage::getModel('sales/order')->load($shipment->getOrderId());
+
         if ($order->getCustomerIsGuest()
-            || !Mage::helper('enterprise_reward')->isEnabledOnFront($order->getStore()->getWebsiteId()))
-        {
+            || !Mage::helper('enterprise_reward')->isEnabledOnFront($order->getStore()->getWebsiteId())
+            || !$order->getData('customer_is_club_member')
+        ){
             return $this;
         }
 
-        if ($order->getCustomerId() && $this->_isOrderPaidNow($order)) {
+        if ($order->getCustomerId()) {
             /* @var $reward Enterprise_Reward_Model_Reward */
             $reward = Mage::getModel('enterprise_reward/reward')
                 ->setActionEntity($order)
                 ->setCustomerId($order->getCustomerId())
                 ->setWebsiteId($order->getStore()->getWebsiteId())
-                ->setAction(Enterprise_Reward_Model_Reward::REWARD_ACTION_ORDER_EXTRA)
+                ->setAction(Crown_Club_Model_Rewards_Reward::REWARD_ACTION_CLUB)
                 ->updateRewardPoints();
             if ($reward->getRewardPointsUpdated() && $reward->getPointsDelta()) {
                 $order->addStatusHistoryComment(
-                    Mage::helper('enterprise_reward')->__('Customer earned %s for the order.', Mage::helper('enterprise_reward')->formatReward($reward->getPointsDelta()))
+                    Mage::helper('enterprise_reward')->__('Club customer earned %s for the order.', Mage::helper('enterprise_reward')->formatReward($reward->getPointsDelta()))
                 )->save();
             }
         }
-
         return $this;
-    }
-
-    /**
-     * Check if order is paid exactly now
-     * If order was paid before Rewards were enabled, reward points should not be added
-     *
-     * @param Mage_Sales_Model_Order $order
-     * @since 0.4.0
-     * @return bool
-     */
-    protected function _isOrderPaidNow($order)
-    {
-        $isOrderPaid = (float)$order->getBaseTotalPaid() > 0
-            && ($order->getBaseGrandTotal() - $order->getBaseSubtotalCanceled() - $order->getBaseTotalPaid()) < 0.0001;
-
-        if (!$order->getOrigData('base_grand_total')) {//New order with "Sale" payment action
-            return $isOrderPaid;
-        }
-
-        return $isOrderPaid && ($order->getOrigData('base_grand_total') - $order->getOrigData('base_subtotal_canceled')
-            - $order->getOrigData('base_total_paid')) >= 0.0001;
     }
 }
