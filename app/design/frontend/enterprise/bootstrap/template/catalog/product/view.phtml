@@ -118,22 +118,18 @@ All vouchers are final sale and nonrefundable.</div>
         <?php //echo $this->__('SKU# %s', $this->htmlEscape($_product->getSku())); ?></p>
         <?php //echo $this->getReviewsSummaryHtml($_product, false, true)?>
         <div class="">
-        <?php echo $this->getChildHtml('alert_urls') ?>
-        <?php if($today <= $event_end_date):  ?>
-        <?php echo $this->getChildHtml('product_type_data') ?>
-        
-        <?php endif; ?>
-        <hr style="margin:15px 0px 3px 0px;"/>
-        <div style="float:left; display:block; padding:10px 3px; margin:10px 0px 10px 0px;">
-            <div style="float:left; display:block; width:72px; text-align:center; font-size:16px; border-right:2px solid #ddd;">$<?php echo number_format((float)$special_price, 2, '.', '');
- ?><br/><span style="font-size:12px;">Original</span></div>
-            <div style="float:left; display:block; width:72px; text-align:center; font-size:16px; border-right:2px solid #ddd;"><?php echo number_format((float)$percent, 0, '.', '');
- ?>%<br/><span style="font-size:12px;">Discount</span></div>
-            <div style="float:left; display:block; width:74px; text-align:center; font-size:16px;">$<?php echo number_format((float)$savings, 2, '.', '');
- ?><br/><span style="font-size:12px;">Savings</span></div>
-        </div>
-        <div class="clear"></div>
-        <hr style="margin:3px 0px 15px 0px;"/>
+            <?php echo $this->getChildHtml('alert_urls') ?>
+            <?php if($today <= $event_end_date):  ?>
+            <?php echo $this->getChildHtml('product_type_data') ?>
+            <?php endif; ?>
+            <div>
+                <div>$<?php echo number_format((float)$special_price, 2, '.', '');
+     ?><br/><span>Original</span></div>
+                <div><?php echo number_format((float)$percent, 0, '.', '');
+     ?>%<br/><span>Discount</span></div>
+                <div>$<?php echo number_format((float)$savings, 2, '.', '');
+     ?><br/><span>Savings</span></div>
+            </div>
         </div>
                     <?php echo $this->getChildHtml('tierprices') ?>
                     <?php echo $this->getChildHtml('extrahint') ?>
