@@ -403,7 +403,6 @@ class Crown_Import_Model_Productimport extends Crown_Import_Model_Import_Abstrac
                 }
             }
         }
-        Mage::log($errorMessages, null, 'media_gallery.log',true);
         $profile->setData( 'error_messages', serialize($errorMessages) )->save();
     }
 }
