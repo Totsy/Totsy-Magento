@@ -62,4 +62,13 @@ class Harapartners_Fulfillmentfactory_Adminhtml_OrderqueueController extends Mag
             ->_addContent($this->getLayout()->createBlock('fulfillmentfactory/adminhtml_orderqueue_Index'))
             ->renderLayout();
     }
+
+    public function orderquickviewAction() {
+        $encoded = $this->getRequest()->getParam('filter');
+        $this->loadLayout('popup')
+            ->_addContent($this->getLayout()->createBlock(
+                'fulfillmentfactory/adminhtml_itemqueue_index'
+            )->setData('filter', $encoded))
+            ->renderLayout();
+    }
 }
