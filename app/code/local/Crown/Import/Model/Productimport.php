@@ -398,12 +398,13 @@ class Crown_Import_Model_Productimport extends Crown_Import_Model_Import_Abstrac
                     try {
                         $mediaHlper->checkForValidImageFiles( $mediaImage, $profile );
                     } catch (Exception $e ) {
-                        $errorMessages[$sku][] = $e->getMessage();
+                        $errorMessages[$sku][] = 'Media Gallery ' . $e->getMessage() . " '{$mediaImage}'";
                     }
                 }
             }
         }
-        $profile->setData( 'error_messages', $errorMessages)->save();
+        Mage::log($errorMessages, null, 'media_gallery.log',true);
+        $profile->setData( 'error_messages', serialize($errorMessages) )->save();
     }
 }
 

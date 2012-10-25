@@ -369,10 +369,11 @@ class Crown_Import_Model_Import_Abstract extends Mage_Core_Model_Abstract {
         asort($_columns);
         if (isset($_columns['sku']))
             unset($_columns['sku']);
-        array_unshift($_columns, 'sku');
+        $_headers = $_columns;
+        array_unshift($_headers, 'sku');
 
 		if (($fp = fopen ( $this->getFileBaseDir() . DS . $this->getFilename(), 'w' )) !== false) {
-			fputcsv ( $fp, $_columns );
+			fputcsv ( $fp, $_headers );
 
 			// Load sku data
 			foreach ( $this->_skus as $_SKU ) {

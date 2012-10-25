@@ -1,33 +1,33 @@
 <?php
 /**
- * 
+ *
  * @category 	Crown
- * @package 	Crown_Import 
+ * @package 	Crown_Import
  * @since 		1.0.0
  */
 class Crown_Import_Model_Importhistory extends Mage_Core_Model_Abstract {
-	
+
 	/**
 	 * Import in progress or abandoned
 	 * @since 1.0.0
 	 * @var int
 	 */
 	const IMPORT_STATUS_NEW = 0;
-	
+
 	/**
 	 * Import completed
 	 * @since 1.0.0
 	 * @var int
 	 */
 	const IMPORT_STATUS_COMPLETE = 1;
-	
+
 	/**
 	 * Import process is currently running
 	 * @since 1.0.0
 	 * @var int
 	 */
 	const IMPORT_STATUS_RUNNING = 2;
-	
+
 	/**
 	 * Makes sure the status is set correctly based off of current operation
 	 * @since 1.0.0
@@ -55,7 +55,7 @@ class Crown_Import_Model_Importhistory extends Mage_Core_Model_Abstract {
 						break;
 					}
 				}
-				$this->setStatus(self::IMPORT_STATUS_NEW);	
+				$this->setStatus(self::IMPORT_STATUS_NEW);
 				break;
 			case 'complete':
 				$this->setStatus(self::IMPORT_STATUS_COMPLETE);
@@ -64,10 +64,12 @@ class Crown_Import_Model_Importhistory extends Mage_Core_Model_Abstract {
 			default:
 				$this->setStatus(self::IMPORT_STATUS_NEW);
 		}
-		$this->save();
+        if ($this->dataHasChangedFor('status')) {
+		    $this->save();
+        }
 		return $this;
 	}
-	
+
 	/**
 	 * Gets the labels for import status
 	 * @since 1.0.0
@@ -75,12 +77,12 @@ class Crown_Import_Model_Importhistory extends Mage_Core_Model_Abstract {
 	 */
     public function getGridStatusArray(){
         return array(
-			self::IMPORT_STATUS_COMPLETE	=> 'Complete', 
+			self::IMPORT_STATUS_COMPLETE	=> 'Complete',
 			self::IMPORT_STATUS_NEW			=> 'Not Finished',
 			self::IMPORT_STATUS_RUNNING		=> 'Running',
         );
     }
-	
+
 	/**
 	 * (non-PHPdoc)
 	 * @see Varien_Object::_construct()
@@ -89,7 +91,7 @@ class Crown_Import_Model_Importhistory extends Mage_Core_Model_Abstract {
 		parent::_construct ();
 		$this->_init ( 'crownimport/importhistory' );
 	}
-	
+
 	/**
 	 * (non-PHPdoc)
 	 * @see Mage_Core_Model_Abstract::_beforeSave()
@@ -98,10 +100,12 @@ class Crown_Import_Model_Importhistory extends Mage_Core_Model_Abstract {
     	if (null == $this->getData('created_at')) {
 			$this->setData('created_at', now () );
 		}
-		$this->setData('updated_at', now () );
+        if ( $this->hasDataChanges() ) {
+		    $this->setData('updated_at', now () );
+        }
 		return parent::_beforeSave();
 	}
-	
+
     /**
      * Clones a urapidflow profile
      * @param int $uRapidFlowProfileId
@@ -122,7 +126,7 @@ class Crown_Import_Model_Importhistory extends Mage_Core_Model_Abstract {
 		}
 		return $profile;
 	}
-	
+
 	/**
      * Gets the uRapidFlow profile object for this import.
      * @since 1.0.0
@@ -130,11 +134,12 @@ class Crown_Import_Model_Importhistory extends Mage_Core_Model_Abstract {
      */
     public function getUrapidflowProfile() {
     	if ( !$this->hasData('urapidflow_profile')) {
-    		$profile = $this->_getUrapidflowProfile();
+            // 'urapidflow_profile' set in method.
+    		$this->_getUrapidflowProfile();
     	}
     	return $this->getData('urapidflow_profile');
     }
-    
+
 	/**
      * Loads or creates a uRapidflow Profile
      * @throws Exception
@@ -165,7 +170,7 @@ class Crown_Import_Model_Importhistory extends Mage_Core_Model_Abstract {
     	}
     	return $profile;
     }
-	
+
     /**
      * Creates a clone of the default profile.
      * @since 1.0.0
@@ -180,7 +185,7 @@ class Crown_Import_Model_Importhistory extends Mage_Core_Model_Abstract {
     	}
     	return $this->getData('urapidflow_profile_id');
     }
-    
+
 	/**
      * Creates a clone of the default profile for product extra.
      * @since 1.0.0
@@ -188,11 +193,12 @@ class Crown_Import_Model_Importhistory extends Mage_Core_Model_Abstract {
      */
     public function getUrapidflowProfileProductExtra() {
 		if ( !$this->hasData('urapidflow_profile_product_extra')) {
-    		$profile = $this->_getUrapidflowProfileProductExtra();
+            // 'urapidflow_profile_product_extra' set within method.
+    		$this->_getUrapidflowProfileProductExtra();
     	}
     	return $this->getData('urapidflow_profile_product_extra');
     }
-    
+
 	/**
      * Loads or creates a uRapidflow Profile
      * @throws Exception
@@ -223,7 +229,7 @@ class Crown_Import_Model_Importhistory extends Mage_Core_Model_Abstract {
     	}
     	return $profile;
     }
-    
+
 	/**
      * Creates a clone of the default profile for product extra.
      * @since 1.0.0
@@ -240,3 +246,4 @@ class Crown_Import_Model_Importhistory extends Mage_Core_Model_Abstract {
     }
 
 }
+
