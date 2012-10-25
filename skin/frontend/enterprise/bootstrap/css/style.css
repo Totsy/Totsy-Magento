@@ -366,6 +366,15 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
     color: #ED1C25;
     font-weight: bold;
 }
+/* webkit and IE fixes */
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+    #usercart .over {display: inline-block; margin-top:-13px;}
+    #usercart .over:before {
+        content:"\A";
+        white-space: pre;
+    }
+}
+
 #cartHeader.hasItems {display: block; white-space: nowrap;}
 #cartHeader.cartempty {
     position: relative; top:-6px; left: 25px; /* a bit hackish but gets it done */

@@ -153,8 +153,8 @@ class Harapartners_Stockhistory_Model_Transaction extends Mage_Core_Model_Abstra
         $tempProductId = $this->getData('product_id');
         $category = Mage::getModel('catalog/category')->load($this->getData('category_id'));
         $sold = Mage::helper('stockhistory')->getProductSoldInfoByCategory($category, array( $tempProductId => $tempProductId ));
-        
-        $bool = $sold[$tempProductId]['qty'] || $product->getData('is_master_pack');
+
+        $bool = (!empty($sold) && $sold[$tempProductId]['qty']) || $product->getData('is_master_pack');
         $bool = $bool && ($this->getData('action_type') == 4);
 
         if (!$bool) {

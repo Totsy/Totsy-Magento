@@ -1,6 +1,20 @@
 Totsy-Magento Release Notes
 ===========================
 
+20121023
+--------
+* MGN-1165 Adding unique identifiers to elements on login page for selenium framework testing
+* MGN-965 Fixing some line break issues in the header cart, in webkit and IE browsers (related to the previous iPad fix)
+* MGN-885 - mobile customers can change quantity of virtual products in the cart
+* MGN-1179 : Moved estimated shipping date from top of one-page checkout to each item
+* MGN-1149 : Removing leftover HTML elements from the events and category pages
+* MGN-1178 : Removed error messages related to card type that were showing when the one-page checkout initially loaded. This happens to customers who have selected a default billing address
+* MGN-903 : may have solved the dead refresh after PO amendment is done
+* Hide Coupon Code if Order has payment failed status
+* MGN-1185 : Fixing blank payment informations when an Order is created through Admin with a credit card already saved
+* MGN-1180 :Automatically remove Accented caracters from Shipping/Billing Address before sending order to Dotcom
+* MGN-688 : Skip a capture if the order total is covered by credits and has also credit card informations.
+
 20121016
 --------
 * MGN-1109 : display po name in item queue
