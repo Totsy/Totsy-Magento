@@ -470,6 +470,12 @@ class Mage_Core_Model_Config extends Mage_Core_Model_Config_Base
             return $this;
         }
 
+        //2012-10-24 CJD - Adding check to see if cache has been saved since we started loading it
+        $cacheLoad = $this->loadModulesCache();
+        if ($cacheLoad) {
+            return $this;
+        }
+
         //2012-10-19 CJD - Increasing cache lock lifetime to 120 seconds
         $this->_saveCache(time(), $cacheLockId, array(), 120);
         $this->removeCache();
