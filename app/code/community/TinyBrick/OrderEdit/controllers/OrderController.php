@@ -32,7 +32,7 @@ class TinyBrick_OrderEdit_OrderController extends Mage_Adminhtml_Controller_Acti
         //arrays for restoring order if error is thrown or payment is declined
         $orderArr = $order->getData();
         $billingArr = $order->getBillingAddress()->getData();
-        //$shippingArr = $order->getShippingAddress()->getData();
+        $shippingArr = $order->getShippingAddress()->getData();
         try {
             $preTotal = $order->getGrandTotal();
             $edits = array();
@@ -111,12 +111,12 @@ class TinyBrick_OrderEdit_OrderController extends Mage_Adminhtml_Controller_Acti
                 $this->_logChanges($order, $this->getRequest()->getParam('comment'), $this->getRequest()->getParam('admin_user'), $changes);
                 echo "Order updated successfully. The page will now refresh.";
             } else {
-                //$this->_orderRollBack($order, $orderArr, $billingArr, $shippingArr);
+                $this->_orderRollBack($order, $orderArr, $billingArr, $shippingArr);
                 echo "There was an error saving information, please try again. : " . $msgs[0];
             }
         } catch(Exception $e) {
             echo $e->getMessage();
-            //$this->_orderRollBack($order, $orderArr, $billingArr, $shippingArr);
+            $this->_orderRollBack($order, $orderArr, $billingArr, $shippingArr);
         }
         return $this;
     }
@@ -126,7 +126,7 @@ class TinyBrick_OrderEdit_OrderController extends Mage_Adminhtml_Controller_Acti
         $order->setData($orderArray)->save();
         $order->getBillingAddress()->setData($billingArray)->save();
         $order->getShippingAddress()->setData($shippingArray)->save();
-        $order->collectTotals()->save();
+        $order->save();
     }
     
     protected function _logChanges($order, $comment, $user, $array = array()) 
