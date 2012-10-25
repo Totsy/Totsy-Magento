@@ -36,6 +36,12 @@
                 </select>
             </div>
         </li>
+        <div>
+            <?php foreach( $profiles as $profile ): ?>
+            <?php if( !$profile->getSubscriptionId() || $profile->getIsDefault()== 1 ) { continue; } ?>
+            <input type="hidden" id="address_<?php echo $profile->getEncryptedSubscriptionId() ?>" value="<?php echo $profile->getData('address_id') ?>" />
+            <?php endforeach ?>
+        </div>
     <?php endif ?>
     <div class="use-new-card-wrapper">
         <li>

@@ -408,3 +408,38 @@
     </div>
     <div class="clear"></div>
 </div>
+    <script type="text/javascript">
+        jQuery( document ).ready( function() {
+            var billAddySelect = jQuery("#billing-address-select");
+            var newCardWrap = jQuery('.use-new-card-wrapper');
+            var billFormInputs = jQuery('#billing-fields :input');
+            jQuery('#cybersource-use-card-method').change( function() {
+                if( jQuery(this).val() == '' ) {
+                    jQuery("#cc_data").show();
+                    newCardWrap.show();
+                    //newCardCtrls.removeAttr('disabled');
+                    billAddySelect.removeAttr('disabled');
+                    //Enable Billing Inputs if credit card not selected
+                    billFormInputs.each(function(i) {
+                        jQuery(this).removeAttr('disabled');
+                        jQuery(this).val('');
+                    });
+                } else {
+                    newCardWrap.hide();
+                    if(jQuery("#address_" + jQuery( this ).val()).val()) {
+                        billAddySelect.val(jQuery("#address_" + jQuery( this ).val()).val()).change();
+                        //Block Billing Inputs if credit card selected
+                        billFormInputs.each(function(i) {
+                            jQuery(this).attr('disabled','disabled');
+                        });
+                        billAddySelect.attr('disabled','disabled');
+                    } else {
+                        billAddySelect.removeAttr('disabled');
+                        billFormInputs.each(function(i) {
+                            jQuery(this).removeAttr('disabled');
+                        });
+                    }
+                }
+            });
+        });
+    </script>
