@@ -22,11 +22,11 @@ class Totsy_Checkout_Model_Type_Multishipping
             if ($addressValidation !== true) {
                 Mage::throwException($helper->__('Please check shipping addresses information.'));
             }
-            $method= $address->getShippingMethod();
-            $rate  = $address->getShippingRateByCode($method);
-            if (!$method || !$rate) {
-                Mage::throwException($helper->__('Please specify shipping methods for all addresses.'));
-            }
+//            $method= $address->getShippingMethod();
+//            $rate  = $address->getShippingRateByCode($method);
+//            if (!$method || !$rate) {
+//                Mage::throwException($helper->__('Please specify shipping methods for all addresses.'));
+//            }
         }
         $addressValidation = $quote->getBillingAddress()->validate();
         if ($addressValidation !== true) {

@@ -171,6 +171,7 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Totsy_Cybersource_Model
         } else {
             $this->addBillingAddress($payment->getOrder()->getBillingAddress(), $payment->getOrder()->getCustomerEmail());
             $addressId = $this->saveBillingAddress($payment);
+            $payment->getOrder()->getQuote()->setData('billing_selected_by_customer',$addressId)->save();
         }
         $this->addCcInfo($payment);
         

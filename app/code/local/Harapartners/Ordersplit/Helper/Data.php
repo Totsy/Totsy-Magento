@@ -435,6 +435,7 @@ class Harapartners_Ordersplit_Helper_Data extends Mage_Core_Helper_Abstract {
             case self::TYPE_VIRTUAL;
                     try{
                         $order->save();
+                        $order->getPayment()->save();
                         $continue = true;
                         if($order->canInvoice() === false) {
                             $continue = false;
