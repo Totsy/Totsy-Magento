@@ -32,6 +32,7 @@
  */
 ?>
 <?php
+    //$_salesProducts = Array();
     $_productCollection=$this->getLoadedProductCollection();
     $_currentCategory = Mage::getSingleton('catalog/layer')->getCurrentCategory();
     $_helper = $this->helper('catalog/output');
@@ -67,7 +68,7 @@
         ?>
         <?php //$_collectionSize = $_productCollection->count() ?>
         <?php //$_columnCount = 3; //for the elements number will be changed by the filter ?>
-        <?php //$_columnCount = $this->getColumnCount(); ?>
+        <?php //$_columnCount = $this->getColumnCount(); ?>        
             <ul class="thumbnails event_prod_grid">
         	<?php foreach ($_productCollection as $_product): ?>
         		<?php if ( $_product->isSalable() ):?>
@@ -86,19 +87,14 @@
                             </div>
                         </div>
                     </li>
+                    <?php $_salesProducts[] =  $_product->getId(); ?>
                 <?php endif; ?>
-            <?php endforeach; ?>
+            <?php endforeach; ?> 
+            <?php //Mage::register( 'current_sales_products', $_salesProducts ); ?>
         	<?php foreach ($_productCollection as $_product): ?>
         		<?php if ( !$_product->isSalable() ):?>
                     <li class="span4 status status_sold_out item<?php echo ' '.str_replace(',',' ',$_product->getDepartments()) ?>" data-department="<?php echo str_replace(',',' ',$_product->getDepartments()) ?>">
                         <img class="out-of-stock" src="<?php echo $this->getSkinUrl('images/soldout.png');?>"/>
-                        <span class="echoShare" 
-                            data-productname="<?php echo $_product->getName();?>"
-                            data-productcap="" 
-                            data-productdesc="<?php echo $_product->getShortDescription();?>" 
-                            data-imageclass="" 
-                            data-producturl="<?php echo $_product->getProductUrl(); ?>">
-                        </span>
                         <div class="thumbnail">
                             <a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" class="product-image"><img src="<?php echo $this->helper('catalog/image')->init($_product, 'small_image')->resize(308, 310)->keepFrame(FALSE); ?>" width="308px" height="310" alt="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" /></a>
                             <div class="caption">
