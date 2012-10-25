@@ -623,7 +623,7 @@ XML;
             </order>
         </orders>
 XML;
-die($xml);
+
             //change status
             $order->setStatus(Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_PROCESSING_FULFILLMENT)
                   ->save();
