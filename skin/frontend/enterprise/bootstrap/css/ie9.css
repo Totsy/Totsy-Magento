@@ -6,3 +6,10 @@
 html {
     -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='#eef6fc', EndColorStr='#ffffff')"; /* IE8+ */
 }
+
+/* header cart msg line break fix */
+#usercart .over {display: inline-block; margin-top:-13px;}
+#usercart .over:before {
+    content:"\A";
+    white-space: pre;
+}
