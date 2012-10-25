@@ -494,6 +494,7 @@ XML;
 
             $billing_country = Mage::helper('fulfillmentfactory/dotcom')->getCountryCodeUsTerritories($billing_state);
 
+            $totalAmount = number_format($order->getTotalInvoiced(), 2);
 
             $xml = <<<XML
         <orders xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
@@ -512,7 +513,7 @@ XML;
                 <total-tax>{$order->getTaxInvoiced()}</total-tax>
                 <total-shipping-handling>{$order->getShippingAmount()}</total-shipping-handling>
                 <total-discount xsi:nil="true"/>
-                <total-order-amount>{$order->getTotalInvoiced()}</total-order-amount>
+                <total-order-amount>{$totalAmount}</total-order-amount>
                 <po-number xsi:nil="true"/>
                 <salesman xsi:nil="true"/>
                 <credit-card-number xsi:nil="true"/>
@@ -622,7 +623,7 @@ XML;
             </order>
         </orders>
 XML;
-
+die($xml);
             //change status
             $order->setStatus(Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_PROCESSING_FULFILLMENT)
                   ->save();
