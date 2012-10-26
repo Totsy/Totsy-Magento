@@ -2,7 +2,7 @@
  * @Base styles for the Magento Bootstrap theme
  *
  * @Typography notes
- * - Red:           ??                      #ed1c25 | rgba(237,45,33,1)
+ * - Red:           ??                      #d22f2a | rgba(210,47,42,1)
  * - Ted's Red:     Ted likes this moar     #d22f2a | rgba(210,47,42,1)
  * - Black:         text headings           #000
  * - Dark Grey      subheadings             #636466
@@ -33,8 +33,8 @@ body {
     font-family: "Arial Rounded MT Bold", "Helvetica Rounded", Arial, "Helvetica Neue", Helvetica, sans-serif;
 }
 */
-a {color:#ed1c25;text-decoration:none; outline: none;}
-a:hover{color:#ed1c25;text-decoration:underline;}
+a {color:#d22f2a;text-decoration:none; outline: none;}
+a:hover{color:#d22f2a;text-decoration:underline;}
 a:focus{outline: none;}
 .content_push { margin-top:115px; } /* not in use, was for 1col */
 .content_push_2col { margin-top:115px; }
@@ -159,7 +159,7 @@ html.test .container .row {outline:1px dotted green;}
     text-transform: uppercase;
 }
 .dropdown-menu li > a:hover, .dropdown-menu .active > a, .dropdown-menu .active > a:hover {
-    background-color: #ed1c25;
+    background-color: #d22f2a;
 }
 
 /* btn classes - overrides bootstrap */
@@ -175,7 +175,7 @@ html.test .container .row {outline:1px dotted green;}
 }
 .btn-primary,
 a.btn-primary /* req to override '.dropdown a' ruleset */ {
-    background-color:rgba(237,45,33,1);
+    background-color:rgba(210,47,42,1);
     color:#fff;
 }
 body.customer-account-login .btn.btn-large {
@@ -194,7 +194,7 @@ body.customer-account-login .btn.btn-large {
     padding-right: 9px;
 }
 .btn-primary:hover {
-    background-color:rgba(237,45,33,0.9);
+    background-color:rgba(210,47,42,0.9);
     background-position: 0 50.5%;
 }
 .btn-nogo:hover {
@@ -273,7 +273,7 @@ body.customer-account-login .btn.btn-large {
 }
 .navbar .nav .active > a,
 .navbar .nav .active > a:hover {
-    color: #ed1c25;
+    color: #d22f2a;
     text-decoration: none;
 }
 .navbar .nav > li > a em {font-style: normal;}
@@ -369,7 +369,7 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
 }
 #cart-timer-header,
 #usercart .over {
-    color: #ED1C25;
+    color: #d22f2a;
     font-weight: bold;
 }
 /* webkit and IE fixes */
@@ -409,7 +409,7 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
 #topCartContent.dropdown-menu .product-name a { /* overrides 'dropdown-menu a' ruleset */
     clear: none;
     padding: 0;
-    color:#ed1c25;
+    color:#d22f2a;
 }
 #topCartContent .minifoot {
     position: absolute; bottom: 0; left: 0;
@@ -425,7 +425,7 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
 #topCartContent .minifoot .subtotal-savings {
     display: block;
     margin-bottom:5px;
-    color:rgba(237,45,33,0.78);
+    color:rgba(210,47,42,0.78);
     font-size: 13px; font-weight: 500;
     line-height: 1.15;
 }
@@ -434,7 +434,7 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
     text-shadow: 0 1px 0 rgba(255, 255, 255, 0.25);
 }
 #topCartContent .minifoot .subtotal-cost .price {
-    color: #ED1C25;
+    color: #d22f2a;
     font-weight: bold;
 }
 #topCartContent .minifoot .action {
@@ -586,7 +586,7 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
     display: inline-block;
     position: absolute; top:-70px; left:-10px; z-index:-1;
     width: 0; height: 0;
-    border-bottom: 100px solid #ed1c25;
+    border-bottom: 100px solid #d22f2a;
     border-left: 100px solid transparent;
     border-right: 100px solid transparent;
 }
@@ -858,7 +858,7 @@ body.catalog-category-view .thumbnails > li {position: relative;}
 .cart .savings {
     float: right;
     width:320px;
-    color: rgba(237,45,33,0.78);
+    color: rgba(210,47,42,0.78);
     font-size: 14px; font-weight: 500;
     line-height: 1.15;
     text-align: right;
@@ -1337,7 +1337,7 @@ body.catalog-category-view .price-box .special-price {
     text-decoration: underline;
 }
 .faq_links li > a:hover {
-    color: #ed1c25;
+    color: #d22f2a;
 }
 .faq_anchors {
     margin-top:2em;
@@ -1359,7 +1359,7 @@ body.catalog-category-view .price-box .special-price {
     border-top:1px solid rgb(229,229,229);
 }
 .faq_item:target .faq_question {
-    background:rgba(237,45,33,0.2); background-clip: padding-box; -webkit-background-clip: padding-box;
+    background:rgba(210,47,42,0.2); background-clip: padding-box; -webkit-background-clip: padding-box;
     font-weight: bold;
     text-shadow: 0 1px 0 rgba(255,255,255,0.8)
 }
@@ -1400,7 +1400,7 @@ body.catalog-category-view .price-box .special-price {
 .nav-list > li > a:hover {
     padding: 3px 15px;
     color:#fff;
-    background: #ed1c25;
+    background: #d22f2a;
 }
 
 .product_desc li {
