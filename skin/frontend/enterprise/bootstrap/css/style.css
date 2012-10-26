@@ -38,7 +38,7 @@ a:hover{color:#d22f2a;text-decoration:underline;}
 a:focus{outline: none;}
 .content_push { margin-top:115px; } /* not in use, was for 1col */
 .content_push_2col { margin-top:115px; }
-h2 {font-size:20px!important; /* header override */ }
+h2 {font-size:20px; /* removed !important for "header override" */ }
 /**
  * @Diagnostics
  */
@@ -128,6 +128,29 @@ html.test .container .row {outline:1px dotted green;}
     margin:20px 0 10px; padding-bottom:5px;
     border-bottom:1px solid #e5e5e5; 
 }
+.page-header.has-timer h2 {
+    float: left;
+    font-size:30px;
+}
+/* @TODO: Ted's Take 2012.10 - pending implementation of the breadcrumbs
+.page-header.has-timer h2 a:link {
+    color:#333;
+}
+.page-header.has-timer h2 a:hover {
+    color:#d22f2a;
+}
+*/
+.count-down-timer {
+    float: right;
+    padding-left:45px;
+    background:url('../images/icon-timer.png') 0 50% no-repeat;
+    line-height: 2.25;
+}
+.count-down-timer .prefix {
+    color:#d22f2a;
+}
+
+
 .zoomImage { padding:0px; z-index:500!important; }
 
 /* Ellipsis class for truncating long titles 
@@ -687,11 +710,6 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
     margin: -14px -18px 0px 0px;
 }
 .event-landing .page-header i {color:#ddd;}
-.event-landing .count-down-timer {
-    float: right;
-    padding-left:38px;
-    background:url('../images/iconmonstr-time-icon.png') 0 50% no-repeat;
-}
 .event-landing .intro-content {
     padding:11px;
     width:746px;

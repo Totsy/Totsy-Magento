@@ -48,14 +48,17 @@ $_category = Mage::getModel('catalog/category')->load(end($_categories));
 </style>
 
 <?php
+// counter variables
+$endcount_utc = strtotime($_category->getEventEndDate());
+$endcount_lc = date("F j, Y, G:i:s", $endcount_utc);
+
+// price variables
 $special_price = $_product->getPrice();
 $final_price = $_product->getSpecialPrice();
-
 $originalPrice = money_format('%n', $special_price);
 $discountPrice = money_format('%n', $final_price);
 $percent = number_format(($originalPrice - $discountPrice) * (100 / $originalPrice));
 $savings = money_format('%n', $originalPrice) - money_format('%n', $discountPrice);
-
 ?>
 <script type="text/javascript">
     var optionsPrice = new Product.OptionsPrice(<?php echo $this->getJsonConfig() ?>
@@ -63,10 +66,10 @@ $savings = money_format('%n', $originalPrice) - money_format('%n', $discountPric
 </script>
 <div id="messages_product_view"><?php echo $this->getMessagesBlock()->toHtml() ?></div>
 <section id="pageheader">
-    <header class="page-header subnav">
-        <h2><a href="<?php echo $_category->getUrl();?>"><?php echo $_helper->categoryAttribute($_category, $_category->getName(), 'name') ?></a> <small class="pull-right"><?php $endcount_utc = strtotime($_category->getEventEndDate());
-$endcount_lc = date("F j, Y, G:i:s", $endcount_utc); ?>
-<img src="/skin/frontend/enterprise/bootstrap/images/iconmonstr-time-icon.png" width="35px" style="margin:0px 3px 0px 0px;" class="pull-left" /><span class="count-down-timer" id="timer" style="color:#000; font-weight:bold;"></span></small></h2>
+    <header class="page-header has-timer clearfix">
+        <h2><a href="<?php echo $_category->getUrl();?>"><?php echo $_helper->categoryAttribute($_category, $_category->getName(), 'name') ?></a>
+        </h2>
+        <span class="count-down-timer"><span id="timer"></span></span>
     </header>
 
 <?php echo $this->getMessagesBlock()->toHtml(); ?>
@@ -76,7 +79,7 @@ $endcount_lc = date("F j, Y, G:i:s", $endcount_utc); ?>
         </div>
         <div class="span8 product-main">
             <div class="page-header" style="float: right; width: 630px; margin: 0px; border-bottom: 4px solid #ddd;">
-                <h2><?php echo $_product->getName(); ?></h2>
+                <h3><?php echo $_product->getName(); ?></h3>
             </div>
         
             <div class="alpha span5">
