@@ -117,18 +117,17 @@ All vouchers are final sale and nonrefundable.</div>
         <p class="product-ids">
         <?php //echo $this->__('SKU# %s', $this->htmlEscape($_product->getSku())); ?></p>
         <?php //echo $this->getReviewsSummaryHtml($_product, false, true)?>
-        <div class="">
-            <?php echo $this->getChildHtml('alert_urls') ?>
-            <?php if($today <= $event_end_date):  ?>
-            <?php echo $this->getChildHtml('product_type_data') ?>
-            <?php endif; ?>
-            <div>
-                <div>$<?php echo number_format((float)$special_price, 2, '.', '');
-     ?><br/><span>Original</span></div>
-                <div><?php echo number_format((float)$percent, 0, '.', '');
-     ?>%<br/><span>Discount</span></div>
-                <div>$<?php echo number_format((float)$savings, 2, '.', '');
-     ?><br/><span>Savings</span></div>
+        <div class="product-prices">
+            <div class="product-prices-main clearfix">
+                <?php echo $this->getChildHtml('alert_urls') ?>
+                <?php if($today <= $event_end_date):  ?>
+                <?php echo $this->getChildHtml('product_type_data') ?>
+                <?php endif; ?>
+                <div class="product-price-was"><span>Was</span> $<?php echo number_format((float)$special_price, 2, '.', '');?></div>
+            </div>
+            <div class="product-prices-supp clearfix">
+                <div class="product-price-discount"><?php echo number_format((float)$percent, 0, '.', '');?>% <span>Discount</span></div>
+                <div class="product-price-savings">$<?php echo number_format((float)$savings, 2, '.', '');?> <span>Savings</span></div>
             </div>
         </div>
                     <?php echo $this->getChildHtml('tierprices') ?>

@@ -2,12 +2,13 @@
  * @Base styles for the Magento Bootstrap theme
  *
  * @Typography notes
- * - Red:           ??              #ed1c25 | rgba(237,45,33,1)
- * - Black:         text headings   #000
- * - Dark Grey      subheadings     #636466
- * - Medium Grey    copy font       #999999
- * - Light Grey     borders         #e5e5e5 | rgba(229,229,229,1)
- * - Green          buttons         #c1d82f or #adc222 | rgba(173,194,34,1)
+ * - Red:           ??                      #ed1c25 | rgba(237,45,33,1)
+ * - Ted's Red:     Ted likes this moar     #d22f2a | rgba(210,47,42,1)
+ * - Black:         text headings           #000
+ * - Dark Grey      subheadings             #636466
+ * - Medium Grey    copy font               #999999
+ * - Light Grey     borders                 #e5e5e5 | rgba(229,229,229,1)
+ * - Green          buttons                 #c1d82f or #adc222 | rgba(173,194,34,1)
  */
  
 html,
@@ -1292,6 +1293,30 @@ body.catalog-category-view .price-box .special-price {
 .count-down-timer {font-size:18px;}
 .input-box {padding:0px 0px 5px;}
 .pdp_tabs {width:105%; margin-top:-45px; margin-left:-11px;}
+
+/* PDP pricing + addtocart module */
+#product_addtocart_form {
+    padding:8px 5px;
+    background:#dddbdd;
+}
+#product_addtocart_form .price-box {
+    float: left;
+}
+#product_addtocart_form .product-price-was {
+    float: right;
+}
+#product_addtocart_form .product-price-discount {
+    float: left;
+}
+#product_addtocart_form .product-price-savings {
+    float: right;
+}
+.add-to-cart-qty {
+    float: left;
+}
+.add-to-cart button {
+    float: right;
+}
 
 /* FAQ */
 .faq_links {
