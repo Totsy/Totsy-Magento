@@ -32,7 +32,8 @@
     <?php if($this->canEditOrder($_order->getStatus()) && !$this->isOrderInvoiced($_order)): ?>
 	    <div class="clear"></div>
 	    <button type="button" onclick="saveMe()" id="orderEdit" style="height:25px; width:280px; font-size:16px;">Edit Order</button>
-	    <div id="comment-field" style="display:none;"><br />Reason for editing order: <span id="required-comment" style="color:red; display:none;">This is required to edit an order</span><br />
+	    <div id="comment-field" style="display:none;"><br />Reason for editing order: <span id="required-comment" style="color:red; font-weight: bold; display:none;">Please add a comment to edit an order</span>
+        <br \><span id="required-cc" style="color:red; font-weight: bold; display:none;">Please fill correctly the credit card informations.</span><br />
 	    <textarea id="edit-order-comment" style="width:450px;"></textarea>
 	    </div>
 	    <br /><br />
@@ -82,6 +83,8 @@
     function saveMe()
     {
     	if($('orderEdit').innerHTML == 'Edit Order') {
+            $('required-comment').hide();
+            $('required-cc').hide();
     		$('orderEdit').innerHTML = 'Save Changes';
     		$('billing-edit-form').show();
     		$('billing-static').hide();
@@ -90,8 +93,12 @@
     		//$('coupon-edit-form').show();
     		$('payment-infos').hide();
     		$('billing-static').hide();
-    		$('shipping-edit-form').show();
-    		$('shipping-static').hide();
+            if($('shipping-edit-form') != undefined) {
+                $('shipping-edit-form').show();
+            }
+            if($('shipping-static') != undefined) {
+                $('shipping-static').hide();
+            }
             $('history_form').hide();
     		//$('shippingmethod-edit-form').show();
     		//$('shippingmethod-static').hide();
@@ -101,11 +108,28 @@
     		$$('.e-item-remove').invoke('show');
     		$('items-add-btn').show();
     		$('comment-field').show();
-    		calcShipping();
+            if($('shipping-static') != undefined) {
+                calcShipping();
+            }
     	} else {
+            $('required-cc').hide();
+            $('required-comment').hide();
+            if($('cybersource-use-card-method').value == "") {
+                var paymentForm = $('payment-fields').getElements();
+                var emptyCC = false;
+                paymentForm.each(function(i) {
+                    if(i.value == "" && (i.type == 'text' || i.type == 'select-one') && (i.id != 'cybersource-use-card-method')) {
+                        emptyCC = true;
+                    }
+                });
+                if(emptyCC) {
+                    $('required-cc').show();
+                    return false;
+                }
+            }
     		var params = {};
     		if($('edit-order-comment').value == "") {
-    			$('required-comment').show();
+                $('required-comment').show();
     			return false;
     		}
     		params['admin_user'] = '<?php echo Mage::getSingleton('admin/session')->getUser()->getUsername() ?>';
@@ -117,11 +141,12 @@
     		var payment = $('payment-fields').serialize(true);
     		params['billing'] = Object.toJSON(billing);
     		params['payment'] = Object.toJSON(payment);
-    		//get values for shipping address
-			var	shipping = $('shipping-fields').serialize(true);
-			params['shipping'] = Object.toJSON(shipping);
+            if($('shipping-fields') != null) {
+                var	shipping = $('shipping-fields').serialize(true);
+                params['shipping'] = Object.toJSON(shipping);
+            }
 			//get values for shipping method 
-			//var	shippingmethod = $('shippingmethod-fields').serialize(true);
+			//var shippingmethod = $('shippingmethod-fields').serialize(true);
 			//shippingmethod.customcarrier = $('customCarrier').value;
 			//shippingmethod.rateid = $F('rateid');
 			//params['shippingmethod'] = Object.toJSON(shippingmethod);
@@ -180,8 +205,12 @@
     				$('billing-static').show();
     				$('payment-edit-form').hide();
     				$('payment-infos').show();
-    				$('shipping-edit-form').hide();
-    				$('shipping-static').show();
+                    if($('shipping-edit-form') != undefined) {
+                        $('shipping-edit-form').hide();
+                    }
+                    if($('shipping-static') != undefined) {
+                        $('shipping-static').show();
+                    }
                     $('history_form').show();
                     //$('coupon-edit-form').hide();
     				//$('shippingmethod-edit-form').hide();

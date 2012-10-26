@@ -32,6 +32,9 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Eitems extends TinyBrick_Order
        foreach($data['id'] as $key => $itemId) {
             $itemCounter++;
             $item = $order->getItemById($itemId);
+            if($item->getIsVirtual()) {
+                continue;
+            }
             if($data['remove'][$key]) {
                 $comment .= "Removed Item(SKU): " . $item->getSku() . "<br />";
                 //Changing Status of Item Queue
