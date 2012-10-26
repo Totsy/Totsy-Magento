@@ -28,14 +28,16 @@
 <?php $order = $this->getOrder() ?>
 <?php
 
-if($_item->is_virtual==1) {  
+$_product = Mage::getModel('catalog/product')->load($_item->getProductId());
+
+if($_product->getIsVirtual()) {
 	$product_options = $_item->getProductOptions();
 	$voucher_label = $product_options['options'][0]['label'];
 	$voucher_code_string = explode("\n",$product_options['options'][0]['value']);
 	$voucher_value = $voucher_code_string[0];
 	
-	$options =  $_item->getProductOptions();
-	$_item->setProductOptions($options); 
+//	$options =  $_item->getProductOptions();
+//	$_item->setProductOptions($options);
 }
 
 ?>
@@ -44,7 +46,7 @@ if($_item->is_virtual==1) {
 	<?php if($_options = $this->getItemOptions()): ?>
         <div class="item-options">
         <?php foreach ($_options as $_option) : ?>
-        	<?php if(!$_item->is_virtual): ?>
+        	<?php if(!$_product->getIsVirtual()): ?>
             <span><strong><?php echo $this->htmlEscape($_option['label']) ?> : </strong></span>
             	<?php if (!$this->getPrintStatus()): ?>
             	    <?php $_formatedOptionValue = $this->getFormatedOptionValue($_option) ?>
@@ -65,13 +67,15 @@ if($_item->is_virtual==1) {
             	    </span>
             	<?php endif; ?>
         <?php else: ?>
+            <?php if($this->isOrderPaid()): ?>
         	<div>
         		<strong><?php echo $_option['label'] ?>:</strong> 
-        		<?php if($order->getStatus() != 'payment_failed') { echo $voucher_value; } else { echo 'Please update your payment informations to get your code.'; } ?>	
+        		<?php echo $voucher_value; ?>	
         	</div>
         	<div>
-        		<?php if($order->getStatus() != 'payment_failed') echo $voucher_code_string[1]; ?>	
-        	</div>		
+        		<?php echo $voucher_code_string[1]; ?>	
+        	</div>
+            <?php endif; ?>
         <?php endif; ?>
         <?php endforeach; ?>
         </div>
@@ -207,13 +211,13 @@ if($_item->is_virtual==1) {
             <strong><?php echo $this->getItem()->getQtyOrdered()*1 ?></strong><br />
         <?php endif; ?>
         <?php if ($this->getItem()->getQtyShipped() > 0): ?>
-            <strong><?php echo $this->getItem()->getQtyShipped()*1 ?></strong><br />
+            <?php echo $this->__('Shipped'); ?>: <strong><?php echo $this->getItem()->getQtyShipped()*1 ?></strong><br />
         <?php endif; ?>
         <?php if ($this->getItem()->getQtyCanceled() > 0): ?>
-            <strong><?php echo $this->getItem()->getQtyCanceled()*1 ?></strong><br />
+            <?php echo $this->__('Canceled'); ?>: <strong><?php echo $this->getItem()->getQtyCanceled()*1 ?></strong><br />
         <?php endif; ?>
         <?php if ($this->getItem()->getQtyRefunded() > 0): ?>
-            <strong><?php echo $this->getItem()->getQtyRefunded()*1 ?></strong><br />
+            <?php echo $this->__('Refunded'); ?>: <strong><?php echo $this->getItem()->getQtyRefunded()*1 ?></strong><br />
         <?php endif; ?>
         </span>
     </td>
