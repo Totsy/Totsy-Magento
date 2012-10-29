@@ -1,3 +1,28 @@
+<?php
+
+$multiShipping = FALSE;
+$fulfillmentTypes = array();
+
+// Check to see if there are multiple fulfillment types
+foreach($this->getItems() as $item) {
+    if($item->getParentItemId()) {
+        continue;
+    }
+    $product = Mage::getModel ( 'catalog/product' )->load ( $item->getProductId () );
+//        if($product->getIsVirtual()) {
+//            continue;
+//        }
+    $fulfillmentTypes [$product->getFulfillmentType ()] [] = $item->getId ();
+}
+
+if(count($fulfillmentTypes) > 1) {
+    $multiShipping = TRUE;
+}
+
+// Split cart check
+$splitCartFlag = Mage::getSingleton('checkout/session')->getSplitCartFlag() ? 'checked="checked"' : '';
+?>
+
 <div id="checkout-review-table-wrapper" >
     <table class="data-table cart-table table table-bordered table-condensed" id="checkout-review-table">
         <?php if ($this->helper('tax')->displayCartBothPrices()): $colspan = $rowspan = 2; else: $colspan = $rowspan = 1; endif; ?>
@@ -10,6 +35,7 @@
         <thead>
             <tr>
                 <th><?php echo $this->__('Product Name') ?></th>
+                <th><?php echo $this->__('Shipping Info');?></th>
                 <th><?php echo $this->__('Price') ?></th>
                 <th><?php echo $this->__('Qty') ?></th>
                 <th><?php echo $this->__('Subtotal') ?></th>
@@ -24,9 +50,23 @@
             <?php endif; ?>
         </thead>
         <tbody>
-        <?php foreach($this->getItems() as $_item): ?>
-            <?php echo $this->getItemHtml($_item)?>
-        <?php endforeach ?>
+        <?php if($multiShipping):?>
+
+        <?php foreach($fulfillmentTypes as $fulfillmentType => $items):?>
+
+        <?php foreach($items as $key=>$itemId):?>
+            <?php foreach($this->getItems() as $_item): ?>
+                <?php if($_item->getId() == $itemId):?>
+                    <?php echo $this->getItemHtml($_item) ?>
+                    <?php endif;?>
+                <?php endforeach ?>
+            <?php endforeach;?>
+        <?php endforeach;?>
+        <?php else:?>
+            <?php foreach($this->getItems() as $_item): ?>
+                    <?php echo $this->getItemHtml($_item) ?>
+                <?php endforeach ?>
+        <?php endif;?>
         </tbody>
 		<?php echo $this->getChildHtml('totals'); ?>	
     </table>
