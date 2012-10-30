@@ -257,7 +257,6 @@ class Harapartners_HpCheckout_Model_Checkout
             uksort($fulfillmentTypes, array(&$this, 'sortFulfillmentTypes'));
         }
 
-        Mage::log($fulfillmentTypes);
 
 		if(($this->getQuote()->hasVirtualItems() && !$this->getQuote()->isVirtual()) || count($fulfillmentTypes) > 1) {
             $this->_prepareMultiShip();
