@@ -8,7 +8,7 @@
  * If you did not receive a copy of the license and are unable to
  * obtain it through the world-wide-web, please send an email
  * to eula@harapartners.com so we can send you a copy immediately.
- * 
+ *
  */
 class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
 {
@@ -75,6 +75,15 @@ class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
                     ->loadByAttribute('sku', $sku);
 
                 if ($product && $product->getId()) {
+
+                    // Update product inventory for 'dotcom_stock'
+                    if ( 'dotcom_stock' == $product->getData('fulfillment_type') ) {
+						$stockItem = Mage::getModel ( 'cataloginventory/stock_item' )->loadByProduct ( $product->getId() );
+						$stockItem->setData ( 'qty', ( integer ) $qty );
+						$stockItem->save ();
+						Mage::log("Product stock Qty updated for '$sku': $qty", Zend_Log::DEBUG, 'fulfillment_inventory.log');
+                    }
+
                     $currentInventory = $product->getData('fulfillment_inventory');
                     if ($qty != $currentInventory) {
                         $product->setData('fulfillment_inventory', $qty);
@@ -100,6 +109,8 @@ class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
             Zend_Log::INFO,
             'fulfillment.log'
         );
+        
+        die();
 
         $availableProducts = Mage::getModel('catalog/product')->getCollection()
             ->addAttributeToFilter('fulfillment_inventory', array('gt' => 0));
@@ -126,7 +137,7 @@ SELECT DISTINCT sfo.entity_id
 FROM            {$resource->getTableName('sales/order')} sfo
   INNER JOIN    {$resource->getTableName('sales/order_item')} sfoi ON sfoi.order_id = sfo.entity_id
   INNER JOIN    {$resource->getTableName('fulfillmentfactory/itemqueue')} fi ON fi.order_item_id = sfoi.item_id and fi.status in (3,8)
-WHERE sfo.status IN ('fulfillment_aging', 'pending', 'processing')
+WHERE sfo.status IN ('fulfillment_aging', 'pending')
   AND 0 = (
     SELECT count(*) FROM {$resource->getTableName('fulfillmentfactory/itemqueue')} fiq WHERE fiq.order_id = sfo.entity_id and fiq.status NOT IN (3,8)
   )
@@ -444,7 +455,7 @@ XML;
 
             $orderDate = date("Y-m-d", strtotime($order->getCreatedAt()));
             $shippingMethod = Mage::helper('fulfillmentfactory/dotcom')->getDotcomShippingMethod($order->getShippingMethod());
-            
+
             //handling shipping address
             $shippingAddress = $order->getShippingAddress();
 
