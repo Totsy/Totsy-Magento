@@ -78,14 +78,12 @@ $savings = money_format('%n', $originalPrice) - money_format('%n', $discountPric
             <?php echo $this->getChildHtml('media'); ?>
         </div>
         <div class="span8 product-main">
-            <div class="page-header" style="float: right; width: 630px; margin: 0px; border-bottom: 4px solid #ddd;">
+            <div class="page-header">
                 <h3><?php echo $_product->getName(); ?></h3>
             </div>
         
             <div class="alpha span5">
                 <div class="well" style="margin-top:10px; border:none; padding:0px;box-shadow: none; background:none;">
-                    <h4>Description</h4>
-                    <hr style="margin:7px auto; padding:0px;"/>
                     <div class="product_desc">
                         <?php echo $_product->getDescription(); ?> 
                     </div>

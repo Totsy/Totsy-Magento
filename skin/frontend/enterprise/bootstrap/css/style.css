@@ -1312,6 +1312,11 @@ body.catalog-category-view .price-box .special-price {
 .input-box {padding:0px 0px 5px;}
 .pdp_tabs {width:105%; margin-top:-45px; margin-left:-11px;}
 
+/* PDP page specific styles */
+.catalog-product-view .page-header {
+    border: none;
+}
+
 /* PDP pricing + addtocart module */
 #product_addtocart_form {
     padding:8px 5px;
