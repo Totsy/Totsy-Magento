@@ -23,10 +23,9 @@ class Harapartners_Fulfillmentfactory_Block_Adminhtml_Itemqueue_Index_Grid exten
         $model = Mage::getModel('fulfillmentfactory/itemqueue');
         $collection = $model->getCollection();
         $collection->getSelect()
-            ->joinLeft(array('po_trans' =>'stockhistory_transaction'), 'main_table.product_id=po_trans.product_id', array('po_trans.po_id'))
-            ->joinLeft(array('po' =>'stockhistory_purchaseorder'), 'po_trans.po_id=po.id', array('po_name' => 'po.name'))
-            ->group(array('itemqueue_id'));
-            
+            ->joinLeft(array('cat_prod' =>'catalog_category_product'), 'main_table.product_id=cat_prod.product_id', array('cat_prod.category_id'))
+            ->joinLeft(array('po' =>'stockhistory_purchaseorder'), 'cat_prod.category_id=po.category_id', array('po_name' => 'po.name', 'po_id' => 'po.id'))
+            ->group(array('itemqueue_id')); 
         $this->setCollection($collection);
         parent::_prepareCollection();
         return $this;
@@ -93,7 +92,7 @@ class Harapartners_Fulfillmentfactory_Block_Adminhtml_Itemqueue_Index_Grid exten
             'width'         => '50px',
             'index'         => 'po_name',
             'filter_index'  => 'po.name',
-           'renderer'       => 'Harapartners_Fulfillmentfactory_Block_Adminhtml_Itemqueue_Index_Renderer_POName'
+            'renderer'       => 'Harapartners_Fulfillmentfactory_Block_Adminhtml_Itemqueue_Index_Renderer_POName'
 
         ));
 
