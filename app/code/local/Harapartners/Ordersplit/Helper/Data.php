@@ -16,6 +16,7 @@
 class Harapartners_Ordersplit_Helper_Data extends Mage_Core_Helper_Abstract {
     
     const TYPE_DOTCOM = 'dotcom';
+    const TYPE_DOTCOM_STOCK = 'dotcom_stock';
     const TYPE_DROPSHIP = 'dropship';
     const TYPE_VIRTUAL = 'virtual';
     const TYPE_OTHER = 'other';
@@ -483,7 +484,8 @@ class Harapartners_Ordersplit_Helper_Data extends Mage_Core_Helper_Abstract {
                 break;
             case self::TYPE_DROPSHIP;
                 break;
-            case self::TYPE_DOTCOM;
+            case self::TYPE_DOTCOM:
+            case self::TYPE_DOTCOM_STOCK:
                 Mage::getModel('fulfillmentfactory/service_itemqueue')->saveFromOrder($order);
                 break;
             case self::TYPE_OTHER;
