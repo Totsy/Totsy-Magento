@@ -64,16 +64,6 @@ class Totsy_Adminhtml_Block_Catalog_Category_Edit_Form
             );
             $this->setChild('event_preveiw_button', $button);
 
-            if ($category->getParentId() == $expiredEventCategory->getId()) {
-                $button = $this->getLayout()->createBlock('adminhtml/widget_button')->setData(
-                    array(
-                        'label'   => Mage::helper('catalog')->__('Revert Event Move'),
-                        'onclick' => "if(confirm('You sure want to move this event back to the \'Events\' folder?')) {setLocation('" . $this->getUrl('*/*/clearExpiredEvents', array('revert' => true,'category_id' => $categoryId)) . "')}"
-                    )
-                );
-                $this->setChild('revert_move', $button);
-            }
-
             if (!$this->_isAllowedAction('delete_category')) {
                 $this->unsetChild('delete_button');
             }
@@ -143,14 +133,6 @@ class Totsy_Adminhtml_Block_Catalog_Category_Edit_Form
     {
         if ($this->hasStoreRootCategory()) {
             return $this->getChildHtml('event_preveiw_button');
-        }
-        return '';
-    }
-
-    public function getRevertMoveButtonHtml()
-    {
-        if ($this->hasStoreRootCategory()) {
-            return $this->getChildHtml('revert_move');
         }
         return '';
     }
