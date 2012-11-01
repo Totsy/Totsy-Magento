@@ -51,6 +51,9 @@ class Harapartners_Ordersplit_Helper_Data extends Mage_Core_Helper_Abstract {
                 case self::TYPE_DOTCOM:
                     Mage::helper('ordersplit')->processNonHybridOrder($order, self::TYPE_DOTCOM);
                     break;
+                case self::TYPE_DOTCOM_STOCK:
+                    Mage::helper('ordersplit')->processNonHybridOrder($order, self::TYPE_DOTCOM_STOCK);
+                    break;
                 case self::TYPE_VIRTUAL:
                     Mage::helper('ordersplit')->processNonHybridOrder($order, self::TYPE_VIRTUAL);
                     break;
@@ -485,6 +488,8 @@ class Harapartners_Ordersplit_Helper_Data extends Mage_Core_Helper_Abstract {
             case self::TYPE_DROPSHIP;
                 break;
             case self::TYPE_DOTCOM:
+                Mage::getModel('fulfillmentfactory/service_itemqueue')->saveFromOrder($order);
+                break;
             case self::TYPE_DOTCOM_STOCK:
                 Mage::getModel('fulfillmentfactory/service_itemqueue')->saveFromOrder($order);
                 break;
