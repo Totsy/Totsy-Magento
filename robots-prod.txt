@@ -1,0 +1,11 @@
+# Crawlers Setup
+User-agent: *
+Crawl-delay: 10
+
+Disallow: /skin/
+Disallow: /var/
+
+# Paths (no clean URLs)
+Disallow: /*.js$
+Disallow: /*.css$
+Disallow: /*.php$
