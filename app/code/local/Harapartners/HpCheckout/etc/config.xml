@@ -10,6 +10,11 @@
             <hpcheckout>
                 <class>Harapartners_HpCheckout_Block</class>
             </hpcheckout>
+            <tax>
+                <rewrite>
+                    <checkout_shipping>Harapartners_HpCheckout_Block_Checkout_Shipping</checkout_shipping>
+                </rewrite>
+            </tax>
         </blocks>
         <models>
             <hpcheckout>

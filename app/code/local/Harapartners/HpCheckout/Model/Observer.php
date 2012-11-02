@@ -9,6 +9,7 @@ class Harapartners_HpCheckout_Model_Observer {
 
             if($splitCart && !$cartFlag) {
                 Mage::getSingleton('checkout/session')->setSplitCartFlag('1');
+                Mage::getSingleton('checkout/session')->addNotice('Thanks!  We will ship your Private label products immediately upon checkout!');
             }
             else {
                 Mage::getSingleton('checkout/session')->unsSplitCartFlag();

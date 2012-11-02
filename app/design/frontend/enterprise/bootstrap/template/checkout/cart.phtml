@@ -44,23 +44,28 @@
 
 
 <?php
+
+    $multiShipping = FALSE;
+    $fulfillmentTypes = array();
+
     // Check to see if there are multiple fulfillment types
     foreach($this->getItems() as $item) {
         if($item->getParentItemId()) {
             continue;
         }
         $product = Mage::getModel ( 'catalog/product' )->load ( $item->getProductId () );
-        if($product->getIsVirtual()) {
-            continue;
-        }
+//        if($product->getIsVirtual()) {
+//            continue;
+//        }
         $fulfillmentTypes [$product->getFulfillmentType ()] [] = $item->getId ();
     }
 
-    $multiShipping = FALSE;
     if(count($fulfillmentTypes) > 1) {
         $multiShipping = TRUE;
     }
 
+    // Split cart check
+    $splitCartFlag = $this->getCheckout()->getSplitCartFlag() ? 'checked="checked"' : '';
 ?>
 
 
@@ -96,7 +101,25 @@
 
         <?php if($multiShipping):?>
 
-        <?php foreach($fulfillmentTypes as $fulfillmentType):?>
+        <?php foreach($fulfillmentTypes as $fulfillmentType => $items):?>
+
+            <?php
+                switch($fulfillmentType) {
+
+                    case 'dotcom':
+                        echo '<h3>The following products will ship on '.  date('F jS, Y', Mage::helper('sales/order')->calculateEstimatedShipDate($quote)) . '</h3>';
+                        break;
+                    case 'dotcom_stock':
+                        echo '<h3>The following Totsy Private Label products can ship immediately</h3>';
+                        break;
+                    case 'voucher':
+                        echo '<h3>The following voucher codes will be emailed immediately</h3>';
+                        break;
+                }
+
+
+            ?>
+
             <fieldset>
                 <table id="shopping-cart-table" class="data-table table table-bordered table-condensed">
                     <?php $mergedCells = ($this->helper('tax')->displayCartBothPrices() ? 2 : 1); ?>
@@ -120,7 +143,7 @@
                     <?php endif; ?>
                     <tbody>
 
-                        <?php foreach($fulfillmentType as $key=>$itemId):?>
+                        <?php foreach($items as $key=>$itemId):?>
                             <?php foreach($this->getItems() as $_item): ?>
                                 <?php if($_item->getId() == $itemId):?>
                                     <?php echo $this->getItemHtml($_item) ?>
@@ -129,18 +152,22 @@
                         <?php endforeach;?>
 
                     </tbody>
-                    <tr>
-                        <td colspan="6">
-                            <button type="submit" class="pull-right btn button" title="<?php echo $this->__('Update Shopping Cart') ?>" ><?php echo $this->__('Update Shopping Cart') ?></button>
-                        </td>
-                    </tr>
                 </table>
                 <script type="text/javascript">decorateTable('shopping-cart-table')</script>
 
             </fieldset>
         <?php endforeach;?>
 
-            Split Orders? <input type="checkbox" name="splitCart" value="1" />
+        <table id="shopping-cart-table" class="data-table table table-bordered table-condensed">
+            <tr>
+                <td colspan="6">
+                    <?php if(array_key_exists('dotcom_stock', $fulfillmentTypes)):?>
+                        <span style="font-size:18px;color:#FF0000;">For $5.99 get your available items quicker! <input type="checkbox" name="splitCart" value="1" <?php echo $splitCartFlag;?> /></span>
+                    <?php endif;?>
+                    <button type="submit" class="pull-right btn button" title="<?php echo $this->__('Update Shopping Cart') ?>" ><?php echo $this->__('Update Shopping Cart') ?></button>
+                </td>
+            </tr>
+        </table>
 
         <?php else:?>
             <fieldset>
@@ -176,7 +203,6 @@
                     </tr>
                 </table>
                 <script type="text/javascript">decorateTable('shopping-cart-table')</script>
-                Split Orders? <input type="checkbox" name="splitCart" value="1" />
             </fieldset>
         <?php endif;?>
     </form>
