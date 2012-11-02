@@ -189,19 +189,18 @@
     </form>
 </div>	
 
-	
-    <script type="text/javascript">
-    //<![CDATA[
-        var dataForm = new VarienForm('form-validate', true);
-        <?php if($this->getShowAddressFields()): ?>
-        new RegionUpdater('country', 'region', 'region_id', <?php echo $this->helper('directory')->getRegionJson() ?>, undefined, 'zip');
-        <?php endif; ?>
+<script type="text/javascript">
+//<![CDATA[
+    var dataForm = new VarienForm('form-validate', true);
+    <?php if($this->getShowAddressFields()): ?>
+    new RegionUpdater('country', 'region', 'region_id', <?php echo $this->helper('directory')->getRegionJson() ?>, undefined, 'zip');
+    <?php endif; ?>
 
-        Form.getElements('form-validate').each(function(element) {
-            element.setAttribute('autocomplete', 'off');
-        });
-    //]]>
-    </script>
+    Form.getElements('form-validate').each(function(element) {
+        element.setAttribute('autocomplete', 'off');
+    });
+//]]>
+</script>
 </div>
 <!--
 <div class="desc-box">

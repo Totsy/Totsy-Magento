@@ -16,7 +16,9 @@ class Totsy_Sailthru_Model_Feed extends Mage_Core_Model_Abstract
 		'events'=>array(), 
 		'pending'=>array(), 
 		'closing'=>array(),
-		'max_off'=>0
+		'errors'=>array(),
+		'max_off'=>0,
+
 	);
 	private $_shortLenght = 45;
 
@@ -32,7 +34,7 @@ class Totsy_Sailthru_Model_Feed extends Mage_Core_Model_Abstract
 		parent::__construct();
 	}
 
-	public function runner()
+	public function runner($return = false)
 	{
 		$this->_feed->processor();
 
@@ -63,6 +65,18 @@ class Totsy_Sailthru_Model_Feed extends Mage_Core_Model_Abstract
 			),
 			'pending'
 		);
+
+		$validator = new Totsy_Sailthru_Helper_Validator_Feed();
+       	if (!$validator->process($this->_output)){
+    		$this->_output['errors'] = array_merge(
+    			$this->_output['errors'],
+    			$validator->getErrors()
+    		);
+    	}
+
+    	if ($return){
+    		return $this->_output;
+    	}
 	}
 
 	public function getOutPut(){
@@ -114,20 +128,40 @@ class Totsy_Sailthru_Model_Feed extends Mage_Core_Model_Abstract
         } 
 
         foreach ($events as $key => $event){
+
             $event_tmp = array();
             if ($type == 'events'){
+
                 $event['products'] = $this->_getProductsIds($event['entity_id']);
+                $this->getFeedHelper()->preFormatEvent($event);
                 $event_tmp = $this->getFeedHelper()->formatEvent($event);
+
                 if ($event_tmp['discount']>$max_off){
                     $max_off = $event_tmp['discount'];
                 }
+
             } else if ($type=='pending'){
+
+            	$this->getFeedHelper()->preFormatEvent($event,array('products','discount'));
             	$event_tmp = $this->getFeedHelper()->formatPCEvent($event,'end');
+
             } else if ($type=='closing'){
+
+            	$this->getFeedHelper()->preFormatEvent($event,array('products','discount'));
             	$event_tmp = $this->getFeedHelper()->formatPCEvent($event,'start');
+
             }
 
             $this->_output[$type][$key] = $event_tmp;
+            $class = 'Totsy_Sailthru_Helper_Validator_'.ucfirst($type);
+            $validator = new $class();
+        	if (!$validator->process($event_tmp)){
+        		$this->_output['errors'] = array_merge(
+        			$this->_output['errors'],
+        			$validator->getErrors(),
+        			$this->getFeedHelper()->getErrors()
+        		);
+        	}
         }
         if (!is_null($max_off)){
             $this->_output['max_off'] = $max_off;
