@@ -62,23 +62,20 @@ class Harapartners_Service_Model_Rewrite_Sales_Convert_Quote extends Mage_Sales_
             Mage::helper('core')->copyFieldset('sales_convert_quote_item', 'to_order_item_discount', $item, $orderItem);
         }
 
+        //Important logic for order split and DOTCOM fulfillment, must link new order item with original quote item!
+        if(!!$item->getOriginalQuoteItemId()){
+            $orderItem->setOriginalQuoteItemId($item->getOriginalQuoteItemId());
+        }else{
+            if($item instanceof Mage_Sales_Model_Quote_Address_Item) {
+                $orderItem->setOriginalQuoteItemId($item->getAddressItemId());
+            } else {
+                $orderItem->setOriginalQuoteItemId($item->getItemId());
+            }
+        }
+
         Mage::dispatchEvent('sales_convert_quote_item_to_order_item',
             array('order_item'=>$orderItem, 'item'=>$item)
         );
         return $orderItem;
     }
-    
-    //Important logic for order split and DOTCOM fulfillment, must link new order item with original quote item!
-    /*
-    public function itemToOrderItem(Mage_Sales_Model_Quote_Item_Abstract $item){
-        $orderItem = parent::itemToOrderItem($item);
-        if(!!$item->getOriginalQuoteItemId()){
-            $orderItem->setOriginalQuoteItemId($item->getOriginalQuoteItemId());
-        }else{
-            $orderItem->setOriginalQuoteItemId($item->getItemId());
-        }
-        return $orderItem;
-    }
-    */
-    
 }
