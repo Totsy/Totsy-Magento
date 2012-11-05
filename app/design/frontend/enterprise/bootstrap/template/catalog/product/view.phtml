@@ -78,8 +78,8 @@ $savings = money_format('%n', $originalPrice) - money_format('%n', $discountPric
             <?php echo $this->getChildHtml('media'); ?>
         </div>
         <div class="span8 product-main">
-            <div class="page-header">
-                <h3><?php echo $_product->getName(); ?></h3>
+            <div class="page-header row">
+                <h3 class="span5 alpha"><?php echo $_product->getName(); ?></h3>
             </div>
         
             <div class="alpha span5">
@@ -97,10 +97,6 @@ $savings = money_format('%n', $originalPrice) - money_format('%n', $discountPric
                     <?php else : ?>
                     <?php echo $this->getChildHtml('product.shipping.return'); ?>
                     <?php endif; ?>
-                    <?php if ($_product->getData('final_sale')): ?>
-                    <br />
-                    <p class="final-sale"><strong>All Sales Are Final</strong></p>
-                    <?php endif; ?>
                     <div id="rondavu_pdp_container"></div>
                 </div>
             <?php 
@@ -109,7 +105,7 @@ $savings = money_format('%n', $originalPrice) - money_format('%n', $discountPric
             ?>
             </div>
         <!-- <div class="well"> -->
-            <div class="span3">
+            <div class="span3 product-addtocart">
                 <form action="<?php echo $this->getSubmitUrl($_product) ?>" method="post" id="product_addtocart_form" <?php if($_product->getOptions()): ?> enctype="multipart/form-data" <?php endif; ?> >
                         <div class="no-display">
                             <input type="hidden" name="product" value="<?php echo $_product->getId() ?>" />

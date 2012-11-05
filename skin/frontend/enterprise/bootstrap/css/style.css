@@ -162,6 +162,15 @@ html.test .container .row {outline:1px dotted green;}
     text-overflow: ellipsis;
 }
 
+/* Got something important to say? Say it with Ted's Red…*/
+.shoutit {
+    color:#d22f2a;
+}
+.shoutit em {
+    font-style: normal;
+    text-transform: uppercase;
+}
+
 /* link classes */
 .navLinks { padding-top: 7px; }
 .cta-link {
@@ -1316,8 +1325,23 @@ body.catalog-category-view .price-box .special-price {
 .catalog-product-view .page-header {
     border: none;
 }
+.catalog-product-view .product-main {
+    position: relative;
+    border-top: 2px dashed #68a8fe;    
+}
+.product-main .page-header {
+    margin:0; padding:8px 0;
+    border-bottom: 2px dashed #68a8fe;
+}
+.product-main .page-header h3 {
+    font-size:22px;
+    font-weight: bold;
+}
 
 /* PDP pricing + addtocart module */
+.product-main .product-addtocart {
+    position: absolute; top:0; right: 0;
+}
 #product_addtocart_form {
     padding:8px 5px;
     background:#dddbdd;
