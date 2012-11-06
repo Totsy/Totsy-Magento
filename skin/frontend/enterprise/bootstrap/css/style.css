@@ -764,7 +764,7 @@ body.catalog-category-view .thumbnails > li {position: relative;}
 }
 
 .onepage-checkout .addresses {
-   width:445px !important; 
+   width:445px;
 }
 
 .onepage-checkout .review-payment-blocks {

@@ -115,11 +115,19 @@ HpCheckout.prototype = {
 		jQuery( '#shipping\\:postcode' ).change();
 	}, 
 	
-    switchPaymentMethod: function(payment_method) {
-        if (payment_method=="paypal_express") {
-            jQuery("#cc_data").hide();
-            jQuery().hide();
-        }        
+    switchPaymentMethod: function() {
+        var payment_method = document.getElementById('hpcheckout-payment-select').value;
+        console.log();
+        if (payment_method == "paypal_express") {
+            jQuery("#payment_form_paymentfactory_tokenize").hide();
+            jQuery('#billing-address').hide();
+            jQuery('#shipping-address').width(928);
+        }
+        else {
+            jQuery("#payment_form_paypal_express").hide();
+            jQuery('#billing-address').show();
+            jQuery('.addresses').width(445);
+        }
         jQuery("#payment_form_" + payment_method).show();
 	},
 	
