@@ -115,11 +115,9 @@ HpCheckout.prototype = {
 		jQuery( '#shipping\\:postcode' ).change();
 	}, 
 	
-    switchPaymentMethod: function() {
-        var payment_method = document.getElementById('hpcheckout-payment-select').value;
-        console.log();
-        if (payment_method == "paypal_express") {
-            jQuery("#payment_form_paymentfactory_tokenize").hide();
+    switchPaymentMethod: function(payment_method) {
+        if (payment_method=="paypal_express") {
+            jQuery("#cc_data").hide();
             jQuery('#billing-address').hide();
             jQuery('#shipping-address').width(928);
         }
