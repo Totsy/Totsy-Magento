@@ -247,13 +247,24 @@ class Harapartners_HpCheckout_Model_Checkout
             $fulfillmentTypes [$product->getFulfillmentType ()] [] = $item->getId ();
 		}
 
+        if(!Mage::getSingleton('checkout/session')->getSplitCartFlag() && array_key_exists('dotcom_stock', $fulfillmentTypes)) {
+            $fulfillmentTypes['dotcom'] = array_merge($fulfillmentTypes['dotcom_stock'], $fulfillmentTypes['dotcom']);
+            unset($fulfillmentTypes['dotcom_stock']);
+        }
+
+        // Sort array to dotcom first, dotcom stock second, and other types third
+        if(isset($fulfillmentTypes['dotcom_stock'])) {
+            uksort($fulfillmentTypes, array(&$this, 'sortFulfillmentTypes'));
+        }
+
+
 		if(($this->getQuote()->hasVirtualItems() && !$this->getQuote()->isVirtual()) || count($fulfillmentTypes) > 1) {
             $this->_prepareMultiShip();
 			$originalShippingAddress = Mage::getModel('sales/quote_address')
                             ->load($this->getQuote()->getShippingAddress()->getId());
 
             $skipFirst = true;
-			foreach($fulfillmentTypes as $_fulfillmentProducts) {
+			foreach($fulfillmentTypes as $_fulfillmentKey => $_fulfillmentProducts) {
                 //skipping the first fulfillment type
 	        	if($skipFirst) {
 	        		$skipFirst = false;
@@ -282,15 +293,28 @@ class Harapartners_HpCheckout_Model_Checkout
                         }
 	        		}
 	        	}
-                $newAddress->getItemsCollection()->save();
-                $newAddress->setShippingMethod($originalShippingAddress->getShippingMethod());
-                $newAddress->setShippingDescription($originalShippingAddress->getShippingDescription());
-                $newAddress->setFreeShipping(true);
-                $newAddress->setShippingAmount(0);
-                $newAddress->setBaseShippingAmount(0);
-                $newAddress->setCollectShippingRates(false);
-                $newAddress->getItemsCollection()->save();
-                $newAddress->save();
+
+                if($_fulfillmentKey == 'dotcom_stock') {
+                    $newAddress->getItemsCollection()->save();
+                    $newAddress->setShippingMethod('customshippingrate');
+                    $newAddress->setShippingDescription('Private Label Shipping');
+                    $newAddress->setFreeShipping(false);
+                    $newAddress->setShippingAmount(5.99);
+                    $newAddress->setBaseShippingAmount(5.99);
+                    $newAddress->setCollectShippingRates(false);
+                    $newAddress->getItemsCollection()->save();
+                    $newAddress->save();
+                } else {
+                    $newAddress->getItemsCollection()->save();
+                    $newAddress->setShippingMethod($originalShippingAddress->getShippingMethod());
+                    $newAddress->setShippingDescription($originalShippingAddress->getShippingDescription());
+                    $newAddress->setFreeShipping(true);
+                    $newAddress->setShippingAmount(0);
+                    $newAddress->setBaseShippingAmount(0);
+                    $newAddress->setCollectShippingRates(false);
+                    $newAddress->getItemsCollection()->save();
+                    $newAddress->save();
+                }
 
 	        }
             $originalShippingAddress->save();
@@ -454,6 +478,19 @@ class Harapartners_HpCheckout_Model_Checkout
         $shipping->save();
         $billing->save();
         $this->getQuote()->save();
+    }
+
+
+    protected function sortFulfillmentTypes($key, $value) {
+        if($key == 'dotcom') {
+            return 10;
+        }
+
+        if($key == 'dotcom_stock') {
+            return 20;
+        }
+
+        return 0;
     }
 
 }
