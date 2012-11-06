@@ -83,8 +83,7 @@
         		 <?php $methods = $this->getLayout()->getBlock('hpcheckout.payment.methods')->getMethods();  ?> 
                  <?php if(count($methods)): ?>
                  	<?php if(Mage::getModel('paypal/config')->isMethodActive('paypal_express')): ?>
-			    	    <input type="radio" value="paypal_express" id="paypal_payment" name="paypal_payment">
-			    	    <div>
+			    	<input type="radio" value="paypal_express" id="paypal_payment" name="paypal_payment">
         		 	    <span title="Paypal Express" class="paypal"></span>
         		 	    <a class="what-is-paypal-link" href="https://www.paypal.com/cgi-bin/webscr?cmd=xpt/Marketing/popup/OLCWhatIsPayPal-outside" target="_blank">What is<br /> PayPal?</a>
         		 	    </div>
