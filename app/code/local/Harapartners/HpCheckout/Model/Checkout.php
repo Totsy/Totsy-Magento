@@ -23,7 +23,6 @@ class Harapartners_HpCheckout_Model_Checkout
     public function __construct() {
         $this->_checkoutSession = Mage::getSingleton('checkout/session');
         $this->_customerSession = Mage::getSingleton('customer/session');
-        $this->_quote = $this->_checkoutSession->getQuote();
         $this->_helper = Mage::helper( 'checkout' );
     }
 
@@ -35,8 +34,11 @@ class Harapartners_HpCheckout_Model_Checkout
         return $this->_customerSession;
     }
 
+    /**
+     * @return Mage_Sales_Model_Quote
+     */
     public function getQuote() {
-        return $this->_quote;
+        return Mage::getSingleton('checkout/session')->getQuote();
     }
 
     public function saveBilling( $data )
@@ -181,8 +183,6 @@ class Harapartners_HpCheckout_Model_Checkout
         }
         $this->getQuote()->getShippingAddress()
         ->setShippingMethod($shippingMethod);
-        //        $this->getQuote()->collectTotals()
-        //            ->save();
 
         return array( 'status' => 0, 'message' => '' );
     }
@@ -210,6 +210,10 @@ class Harapartners_HpCheckout_Model_Checkout
         return array( 'status' => 0, 'message' => '' );
     }
 
+
+    /**
+     * @return Harapartners_HpCheckout_Model_Checkout
+     */
     public function saveOrder()
     {
         $this->validate();
@@ -223,46 +227,137 @@ class Harapartners_HpCheckout_Model_Checkout
             break;
         }
 
-        $service = Mage::getModel('sales/service_quote', $this->getQuote());
-        $service->submitAll();
-
-        $this->_checkoutSession->setLastQuoteId($this->getQuote()->getId())
-        ->setLastSuccessQuoteId($this->getQuote()->getId())
-        ->clearHelperData();
-
-        $order = $service->getOrder();
-
-        if ( $order ) {
-
-            //we need this in order to check if an order has virtual items
-            //we want to know that for toggling some FAQ copy about virtual products
-            if( $this->getQuote()->hasVirtualItems()==1 ) {
-                $order->hasVirtualItems = $this->getQuote()->hasVirtualItems();
-            }
-
-            Mage::dispatchEvent('hpcheckout_save_order_after',
-                array('order'=>$order, 'quote'=>$this->getQuote()));
-
-            $redirectUrl = $this->getQuote()->getPayment()->getOrderPlaceRedirectUrl();
-
-            if (!$redirectUrl && $order->getCanSendNewEmailFlag()) {
-                try {
-                    $order->sendNewOrderEmail();
-                } catch (Exception $e) {
-                    Mage::logException($e);
-                }
-            }
-
-            $this->_checkoutSession->setLastOrderId($order->getId())
-                ->setRedirectUrl($redirectUrl)
-                ->setLastRealOrderId($order->getIncrementId());
+        $shippingAddresses = $this->getQuote()->getAllShippingAddresses();
+        
+    	if ($this->getQuote()->hasVirtualItems()) {
+            $shippingAddresses[] = $this->getQuote()->getBillingAddress();
         }
 
-        $profiles = $service->getRecurringPaymentProfiles();
-        Mage::dispatchEvent(
-            'checkout_submit_all_after',
-            array('order' => $order, 'quote' => $this->getQuote(), 'recurring_profiles' => $profiles)
-        );
+        $fulfillmentTypes = array();
+
+        foreach ( $this->getQuote()->getAllItems() as $item) {
+            if($item->getParentItemId()) {
+                continue;
+            }
+            $product = Mage::getModel ( 'catalog/product' )->load ( $item->getProductId () );
+
+            if($product->getIsVirtual()) {
+                continue;
+            }
+            $fulfillmentTypes [$product->getFulfillmentType ()] [] = $item->getId ();
+		}
+
+		if(($this->getQuote()->hasVirtualItems() && !$this->getQuote()->isVirtual()) || count($fulfillmentTypes) > 1) {
+            $this->_prepareMultiShip();
+			$originalShippingAddress = Mage::getModel('sales/quote_address')
+                            ->load($this->getQuote()->getShippingAddress()->getId());
+
+            $skipFirst = true;
+			foreach($fulfillmentTypes as $_fulfillmentProducts) {
+                //skipping the first fulfillment type
+	        	if($skipFirst) {
+	        		$skipFirst = false;
+	        		continue;
+	        	}
+                $newAddress = clone $originalShippingAddress;
+                $this->getQuote()->addShippingAddress($newAddress);
+                $newAddress->save();
+
+                //Loop through the default shipping address to remove the items from that shipping address.
+                //We are then going to need to add the items to the new shipping address.
+	        	foreach($_fulfillmentProducts as $_productId) {
+	        		foreach($originalShippingAddress->getItemsCollection() as $addressItem) {
+                        $quoteItem = $this->getQuote()->getItemById($addressItem->getQuoteItemId());
+                        $qty = $addressItem->getQty();
+                        if($quoteItem->getId() == $_productId) {
+                            if($addressItem->getHasChildren()) {
+                                foreach($addressItem->getChildren() as $child) {
+                                    $originalShippingAddress->removeItem($child->getId());
+                                    $child->delete();
+                                }
+                            }
+                            $originalShippingAddress->removeItem($addressItem->getId());
+                            $addressItem->delete();
+                            $newAddress->addItem($quoteItem,$qty);
+                        }
+	        		}
+	        	}
+                $newAddress->getItemsCollection()->save();
+                $newAddress->setShippingMethod($originalShippingAddress->getShippingMethod());
+                $newAddress->setShippingDescription($originalShippingAddress->getShippingDescription());
+                $newAddress->setFreeShipping(true);
+                $newAddress->setShippingAmount(0);
+                $newAddress->setBaseShippingAmount(0);
+                $newAddress->setCollectShippingRates(false);
+                $newAddress->getItemsCollection()->save();
+                $newAddress->save();
+
+	        }
+            $originalShippingAddress->save();
+
+            $originalShippingAddress->clearAllItems();
+            $originalShippingAddress->getItemsCollection()->clear();
+            $this->getQuote()->setTotalsCollectedFlag(false);
+            $this->getQuote()->collectTotals();
+            $this->getQuote()->save();
+            $quote = Mage::getModel('sales/quote')->load($this->getQuote()->getId());
+            $this->getCheckout()->replaceQuote($quote);
+            $this->getQuote()->getPayment()->importData($this->getCheckout()->getData('payment_data'));
+
+        	try {
+                Mage::getSingleton('checkout/session')->setCheckoutState(true);
+        		Mage::getModel('checkout/type_multishipping')->createOrders();
+                $this->_checkoutSession->setLastOrderId(null);
+        	}
+        	catch (Mage_Core_Exception $e) {
+        		Mage::log($e->getMessage());
+        		Mage::logException($e);
+        	}
+
+        } else {
+
+            $service = Mage::getModel('sales/service_quote', $this->getQuote());
+        	$service->submitAll();
+
+            $this->_checkoutSession->setLastQuoteId($this->getQuote()->getId())
+                ->setLastSuccessQuoteId($this->getQuote()->getId())
+                ->clearHelperData();
+
+            $order = $service->getOrder();
+
+            if ( $order ) {
+
+                //we need this in order to check if an order has virtual items
+                //we want to know that for toggling some FAQ copy about virtual products
+                if( $this->getQuote()->hasVirtualItems()==1 ) {
+                    $order->hasVirtualItems = $this->getQuote()->hasVirtualItems();
+                }
+
+                Mage::dispatchEvent('hpcheckout_save_order_after',
+                    array('order'=>$order, 'quote'=>$this->getQuote()));
+
+                $redirectUrl = $this->getQuote()->getPayment()->getOrderPlaceRedirectUrl();
+
+                if (!$redirectUrl && $order->getCanSendNewEmailFlag()) {
+                    try {
+                        $order->sendNewOrderEmail();
+                    } catch (Exception $e) {
+                        Mage::logException($e);
+                    }
+                }
+
+                $this->_checkoutSession->setLastOrderId($order->getId())
+                    ->setRedirectUrl($redirectUrl)
+                    ->setLastRealOrderId($order->getIncrementId())
+                    ->setOrderIds(null);
+            }
+
+            $profiles = $service->getRecurringPaymentProfiles();
+            Mage::dispatchEvent(
+                'checkout_submit_all_after',
+                array('order' => $order, 'quote' => $this->getQuote(), 'recurring_profiles' => $profiles)
+            );
+        }
 
         return $this;
     }
@@ -326,6 +421,39 @@ class Harapartners_HpCheckout_Model_Checkout
             $this->getQuote()->setCheckoutMethod(self::METHOD_GUEST);
         }
         return $this->getQuote()->getCheckoutMethod();
+    }
+
+    protected function _prepareMultiShip()
+    {
+        $billing = $this->getQuote()->getBillingAddress();
+        $shipping = $this->getQuote()->getShippingAddress();
+        foreach($shipping->getItemsCollection() as $item) {
+            $shipping->removeItem($item->getId());
+        }
+        foreach($billing->getItemsCollection() as $item) {
+            $billing->removeItem($item->getId());
+        }
+        foreach($this->getQuote()->getAllShippingAddresses() as $_ship) {
+            if($_ship->getId() != $shipping->getId()) {
+                $this->getQuote()->removeAddress($_ship->getId());
+            }
+        }
+
+        foreach ($this->getQuote()->getAllItems() as $item) {
+            if ($item->getParentItemId()) {
+                continue;
+            }
+            if($item->getProduct()->getIsVirtual()) {
+                $billing->addItem($item);
+            } else {
+                $shipping->addItem($item);
+            }
+        }
+        $this->getQuote()->setIsMultiShipping(1);
+
+        $shipping->save();
+        $billing->save();
+        $this->getQuote()->save();
     }
 
 }
