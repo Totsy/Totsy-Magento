@@ -69,7 +69,7 @@ class TinyBrick_OrderEdit_OrderController extends Mage_Adminhtml_Controller_Acti
 
             foreach($edits as $edit) {
                 if($edit['type']) {
-                    if($edit['type'] == 'eitems' || $edit['type'] == 'nitems' || $edit['type'] == 'shipping') {
+                    if($edit['type'] == 'shipping') {
                         $model = Mage::getModel('orderedit/edit_updater_type_'.$edit['type']);
                         if(!$changes[] = $model->edit($order,$edit)) {
                             $msgs[] = "Error updating " . $edit['type'];
@@ -89,12 +89,9 @@ class TinyBrick_OrderEdit_OrderController extends Mage_Adminhtml_Controller_Acti
                     }
                 }
             }
-            //if($this->getRequest()->getParam('coupon')) {
-            //    $order->setCouponCode($this->getRequest()->getParam('coupon'));
-            //}
+
             $order->collectTotals()->save();
-            Mage::getSingleton('cataloginventory/stock_status')->syncStatusWithStock($order);
-            $postTotal = $order->getGrandTotal();
+
             if(count($msgs) < 1) {
                 //auth for more if the total has increased and configured to do so
                 if(Mage::getStoreConfig('toe/orderedit/auth')) {

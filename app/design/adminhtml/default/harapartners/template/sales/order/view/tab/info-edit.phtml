@@ -102,11 +102,11 @@
             $('history_form').hide();
     		//$('shippingmethod-edit-form').show();
     		//$('shippingmethod-static').hide();
-    		$$('.e-item-price').invoke('show');
-    		$$('.e-item-qty').invoke('show');
-    		$$('.e-item-discount').invoke('show');
-    		$$('.e-item-remove').invoke('show');
-    		$('items-add-btn').show();
+    		//$$('.e-item-price').invoke('show');
+    		//$$('.e-item-qty').invoke('show');
+    		//$$('.e-item-discount').invoke('show');
+    		//$$('.e-item-remove').invoke('show');
+    		//$('items-add-btn').show();
     		$('comment-field').show();
             if($('shipping-static') != undefined) {
                 calcShipping();
@@ -151,7 +151,7 @@
 			//shippingmethod.rateid = $F('rateid');
 			//params['shippingmethod'] = Object.toJSON(shippingmethod);
 			//get values for existing items on order
-			var eitems = new Object();
+			/**var eitems = new Object();
 			eitems.id = new Array();
 			eitems.price = new Array();
 			eitems.qty = new Array();
@@ -193,7 +193,7 @@
 			$$('.n-item-discount').each(function(s){
 				nitems.discount.push(s.value);
 			});
-			params['nitems'] = Object.toJSON(nitems);
+			params['nitems'] = Object.toJSON(nitems);*/
 
 			//send request for saving
 			new Ajax.Request('<?php echo Mage::getModel('adminhtml/url')->getUrl('orderedit/order/edit') ?>', {
@@ -215,12 +215,12 @@
                     //$('coupon-edit-form').hide();
     				//$('shippingmethod-edit-form').hide();
     				//$('shippingmethod-static').show();
-    				$$('.e-item-price').invoke('hide');
-    				$$('.e-item-qty').invoke('hide');
-    				$$('.e-item-discount').invoke('hide');
-    				$$('.e-item-remove').invoke('hide');
-    				$$('.add-item-form').invoke('hide');
-    				$('items-add-btn').hide();
+    				//$$('.e-item-price').invoke('hide');
+    				//$$('.e-item-qty').invoke('hide');
+    				//$$('.e-item-discount').invoke('hide');
+    				//$$('.e-item-remove').invoke('hide');
+    				//$$('.add-item-form').invoke('hide');
+    				//$('items-add-btn').hide();
     				$('comment-field').hide();
     				if(transport.responseText == 'Order updated successfully. The page will now refresh.') {
     				    alert(transport.responseText);
