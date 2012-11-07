@@ -25,7 +25,8 @@ class Harapartners_Ordersplit_Helper_Data extends Mage_Core_Helper_Abstract {
         return array(
                 self::TYPE_DOTCOM, 
                 self::TYPE_DROPSHIP, 
-                self::TYPE_VIRTUAL
+                self::TYPE_VIRTUAL,
+                self::TYPE_DOTCOM_STOCK
         );
     }
     
