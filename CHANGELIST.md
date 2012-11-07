@@ -1,6 +1,15 @@
 Totsy-Magento Release Notes
 ===========================
 
+20121101
+--------
+* Fixing Steelhouse member conversion, member tracking and purchase tracking pixels
+* MGN-674 : quick order view for order fulfillment aging.  MGN-1109 : fix for related po for dotcom stock items 
+* MGN-1195. Sailthru feed error handling and data validation
+* Fixed order total amount in order XML sent to Dotcom [#MGN-816 status:5 resolution:1 assignee:dmatusevich]
+* Removed unnecessary Revert Event Move button.
+* MGN819 : Allow Customer to re-add a previously deleted credit card.
+
 20121023
 --------
 * MGN-1165 Adding unique identifiers to elements on login page for selenium framework testing

@@ -41,6 +41,7 @@
                     <order>Totsy_Sales_Model_Order</order>
                     <order_invoice_total_subtotal>Totsy_Sales_Model_Order_Invoice_Total_Subtotal</order_invoice_total_subtotal>
                     <order_invoice>Totsy_Sales_Model_Order_Invoice</order_invoice>
+                    <order_payment>Totsy_Sales_Model_Order_Payment</order_payment>
                 </rewrite>
             </sales>
         </models>

@@ -25,6 +25,8 @@
  */
 ?>
 <?php
+/** @var $this Mage_Checkout_Block_Cart */
+
 /**
  * Shopping cart template
  *
@@ -39,6 +41,30 @@
     $quote = Mage::getSingleton('checkout/session')->getQuote();
     $saving = Mage::helper('sales/order')->calculateEstimatedSavings($quote);
 ?>
+
+
+<?php
+    // Check to see if there are multiple fulfillment types
+    foreach($this->getItems() as $item) {
+        if($item->getParentItemId()) {
+            continue;
+        }
+        $product = Mage::getModel ( 'catalog/product' )->load ( $item->getProductId () );
+        if($product->getIsVirtual()) {
+            continue;
+        }
+        $fulfillmentTypes [$product->getFulfillmentType ()] [] = $item->getId ();
+    }
+
+    $multiShipping = FALSE;
+    if(count($fulfillmentTypes) > 1) {
+        $multiShipping = TRUE;
+    }
+
+?>
+
+
+
 <div class="page-header">
     <h2><?php echo $this->__('Shopping Cart') ?></h2>
 </div>
@@ -52,6 +78,9 @@
         	    </div>
                 <div class="btn-cart-checkout">
         	    <?php foreach ($this->getMethods('top_methods') as $method): ?>
+                    <?php if($method == 'checkout.cart.methods.paypal_express.top' && $multiShipping) {
+                        continue; // No paypal if multiple fulfillment types
+                    }?>
         	        <?php if ($methodHtml = $this->getMethodHtml($method)): ?>
         	        	<?php echo $methodHtml; ?>
         	        <?php endif; ?>
@@ -115,6 +144,9 @@
         	    </div>
                 <div class="btn-cart-checkout">
         	    <?php foreach ($this->getMethods('top_methods') as $method): ?>
+                    <?php if($method == 'checkout.cart.methods.paypal_express.top' && $multiShipping) {
+                        continue; // No paypal if multiple fulfillment types
+                    }?>
         	        <?php if ($methodHtml = $this->getMethodHtml($method)): ?>
         	        	<?php echo $methodHtml; ?>
         	        <?php endif; ?>

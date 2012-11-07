@@ -303,10 +303,11 @@ XML;
                 $value = htmlentities($value);
                 $vendorCode = '<manufacturing-code>' . $value . '</manufacturing-code>';
             }
-
+            
             $style = '<style-number xsi:nil="true" />';
             if ($value = $product->getVendorStyle()) {
                 $value = htmlentities($value);
+                $value = Mage::helper('fulfillmentfactory')->removeBadCharacters($value);
                 $style = '<style-number>' . substr($value, 0, 10) . '</style-number>';
             }
 
@@ -494,6 +495,7 @@ XML;
 
             $billing_country = Mage::helper('fulfillmentfactory/dotcom')->getCountryCodeUsTerritories($billing_state);
 
+            $totalAmount = number_format($order->getTotalInvoiced(), 2);
 
             $xml = <<<XML
         <orders xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
@@ -512,7 +514,7 @@ XML;
                 <total-tax>{$order->getTaxInvoiced()}</total-tax>
                 <total-shipping-handling>{$order->getShippingAmount()}</total-shipping-handling>
                 <total-discount xsi:nil="true"/>
-                <total-order-amount>{$order->getTotalInvoiced()}</total-order-amount>
+                <total-order-amount>{$totalAmount}</total-order-amount>
                 <po-number xsi:nil="true"/>
                 <salesman xsi:nil="true"/>
                 <credit-card-number xsi:nil="true"/>
