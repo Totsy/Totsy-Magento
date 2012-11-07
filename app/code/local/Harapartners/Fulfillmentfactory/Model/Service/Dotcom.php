@@ -110,7 +110,6 @@ class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
             'fulfillment.log'
         );
         
-        die();
 
         $availableProducts = Mage::getModel('catalog/product')->getCollection()
             ->addAttributeToFilter('fulfillment_inventory', array('gt' => 0));
