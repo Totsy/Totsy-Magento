@@ -458,6 +458,49 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
     position:relative; left:-8px /* need to move this a bit to align with top cart (which moved to keep dropdown within 950 grid), tho now this is bit off grid… */
 }
 
+.use-new-card-wrapper {
+    display:none;
+}
+
+#use-card-method {
+    width: 655px;
+    height: auto;
+}
+
+.card-type {
+    width: 205px;
+}
+
+.card-name {
+    width: 160px;
+}
+
+.billing-address {
+    width: 130px;
+}
+
+.card-expdate {
+    width: 60px;
+}
+
+.saved_card {
+    line-height: 24px;
+}
+
+.saved_card th {
+	text-align:left;
+}
+
+.saved_card span:not(.cc){
+	margin-left: 15px;
+    margin-right: 15px;
+    margin-bottom: 10px;
+}
+
+.saved_card input[type="radio"] {
+    padding:0 10px 0 0;
+    position: relative;
+}
 /**
  * @Home page
  */
@@ -733,6 +776,11 @@ body.catalog-category-view .thumbnails > li {position: relative;}
 /**
  * @Cart & Checkout
  */
+.checkout-reward {
+	width:230px;
+	padding: 0px 0px 0px 0px;
+} 
+ 
 .onepage-checkout {
     margin-left: 0px !important; 
 }
@@ -802,6 +850,9 @@ body.catalog-category-view .thumbnails > li {position: relative;}
 }
 
 #use-reward-point {
+	margin-top: 5px;
+    width: ;
+    text-align: center;
     cursor: pointer;
 }
 
@@ -859,19 +910,24 @@ body.catalog-category-view .thumbnails > li {position: relative;}
 }
 
 .cc { 
-    height: 36px;
+    height: 27px;
 }
 
-.cc span { background:url('../images/cc_sprite.png'); border:0px solid #666; float:left; }
+.cc span { 
+vertical-align:middle;
+background:url('../images/cc_sprite.png'); 
+border:1px solid #666; 
+float:left; 
+}
 
-.cc .mc { background-position:0px 0px; height:32px; margin:2px; width:56px; }
-.cc .vi { background-position:-56px 0px; height:32px; margin:2px; width:56px; }
-.cc .di { background-position:-112px 0px; height:32px; margin:2px; width:56px; }
-.cc .ae { background-position:-168px 0px; height:32px; margin:2px; width:56px; }
-.cc .mb { background-position:0px 32px; height:32px; margin:2px; width:56px; }
-.cc .vb { background-position:-56px 32px; height:32px; margin:2px; width:56px; }
-.cc .db { background-position:-112px 32px; height:32px; margin:2px; width:56px; }
-.cc .ab { background-position:-168px 32px; height:32px; margin:2px; width:56px; }
+.cc .mc { background-position:0px 0px; height:24px; margin:2px; width:42px; }
+.cc .vi { background-position:-42px 0px; height:24px; margin:2px; width:42px; }
+.cc .di { background-position:-84px 0px; height:24px; margin:2px; width:42px; }
+.cc .ae { background-position:-126px 0px; height:24px; margin:2px; width:42px; }
+.cc .mb { background-position:0px 24px; height:24px; margin:2px; width:42px; }
+.cc .vb { background-position:-42px 24px; height:24px; margin:2px; width:42px; }
+.cc .db { background-position:-84px 24px; height:24px; margin:2px; width:42px; }
+.cc .ab { background-position:-126px 24px; height:24px; margin:2px; width:42px; }
 
 .paypal {
     height:34px; 
@@ -976,7 +1032,7 @@ body.catalog-category-view .thumbnails > li {position: relative;}
 
 .cc_types {
     text-align: center !important;
-    width: 510px !important;
+    width: 460px;
 }
 
 .btn-checkout-group {
@@ -1000,7 +1056,7 @@ body.catalog-category-view .thumbnails > li {position: relative;}
 }
 
 .cc_security {
-    float:right;
+    width: auto;
 }
 
 .cc_secure_icon {
@@ -1008,15 +1064,11 @@ body.catalog-category-view .thumbnails > li {position: relative;}
 }
 
 .cc_secure_text {
-    margin-left: 30px;
+    font-weight: bold; 
 }
 
 .cc_num input[type="text"]{
     width:420px;
-}
-
-.rewards_points{
-    padding-left: 490px !important;
 }
 
 .cc_cvn input[type="text"]{
@@ -1029,13 +1081,26 @@ body.catalog-category-view .thumbnails > li {position: relative;}
     line-height: inherit;
 }
 
+.cc_types input[type="radio"]{
+	vertical-align: middle;
+}
+
 .cc_exp {
-    margin-left: 75px !important;
-    width: 315px;
+    width: 238px;
+    margin-left: 40px;
 }
 
 .cc_save_card {
-    width: 160px;
+    width: 220px;
+    vertical-align: top;
+}
+
+.cc_save_card input[type="checkbox"] {
+	vertical-align:middle !important; 
+	float:left;
+	margin-right:5px;
+	height: 30px;
+	width: 20px;
 }
 
 .discount-buttons {
