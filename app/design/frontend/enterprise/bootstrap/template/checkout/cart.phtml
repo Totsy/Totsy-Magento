@@ -54,10 +54,12 @@
             continue;
         }
         $product = Mage::getModel ( 'catalog/product' )->load ( $item->getProductId () );
-//        if($product->getIsVirtual()) {
-//            continue;
-//        }
-        $fulfillmentTypes [$product->getFulfillmentType ()] [] = $item->getId ();
+        if($product->getIsVirtual()) {
+            $fulfillmentType = 'virtual';
+        } else {
+            $fulfillmentType = $product->getFulfillmentType();
+        }
+        $fulfillmentTypes [$fulfillmentType] [] = $item->getId ();
     }
 
     if(count($fulfillmentTypes) > 1) {
@@ -112,7 +114,7 @@
                     case 'dotcom_stock':
                         echo '<h3>The following Totsy Private Label products can ship immediately</h3>';
                         break;
-                    case 'voucher':
+                    case 'virtual':
                         echo '<h3>The following voucher codes will be emailed immediately</h3>';
                         break;
                 }
