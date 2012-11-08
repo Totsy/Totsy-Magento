@@ -82,6 +82,22 @@ class Harapartners_Service_Model_Rewrite_Sales_Quote_Address extends Mage_Sales_
         }
         
         return $result;
-    }    
+    }
+    /**
+     * Get all available address items
+     *
+     * @return array
+     */
+    public function clearAllItems()
+    {
+        foreach(array('nominal','nonnominal','all') as $cachedItems) {
+            $key = 'cached_items_' . $cachedItems;
+            if ($this->hasData($key)) {
+                $this->unsetData($key);
+            }
+        }
+    }
+
+
     
 }

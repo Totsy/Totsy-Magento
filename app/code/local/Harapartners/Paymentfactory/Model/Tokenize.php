@@ -90,7 +90,6 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Totsy_Cybersource_Model
             $profile->loadByCcNumberWithId($payment->getData('cc_number').$customerId.$payment->getCcExpYear().$payment->getCcExpMonth());
             if($profile->getId()){
                 $payment->setData('cybersource_subid', $profile->getData('subscription_id'));
-                $payment->save();
             }
          }
          
@@ -175,6 +174,7 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Totsy_Cybersource_Model
         } else {
             $this->addBillingAddress($payment->getOrder()->getBillingAddress(), $payment->getOrder()->getCustomerEmail());
             $addressId = $this->saveBillingAddress($payment);
+            $payment->getOrder()->getQuote()->setData('billing_selected_by_customer',$addressId)->save();
         }
         $this->addCcInfo($payment);
         
