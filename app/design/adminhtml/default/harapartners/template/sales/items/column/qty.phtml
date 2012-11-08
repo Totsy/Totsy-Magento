@@ -30,10 +30,12 @@
         <td><?php echo Mage::helper('sales')->__('Ordered') ?></td>
         <td><strong><?php echo $_item->getQtyOrdered()*1 ?></strong></td>
     </tr>
+    <?php if(!$_item->getIsVirtual()):?>
     <tr>
         <td><?php echo Mage::helper('sales')->__('Fulfilled') ?></td>
         <td><strong><?php echo $this->getItemFulfillCount($_item->getItemId()); ?> </strong></td>
     </tr>
+    <?php endif; ?>
     <?php if ((float) $_item->getQtyInvoiced()): ?>
     <tr>
         <td><?php echo Mage::helper('sales')->__('Invoiced') ?></td>

@@ -20,6 +20,7 @@ class Crown_Import_Model_Observer {
 		$oldData 		= $vars['old_data'];
 		$skuMap			= $vars['skus'];
 		$importModel	= Mage::getModel('crownimport/importhistory')->load($profile->getId(), 'urapidflow_profile_id');
+		$action_type 	= Harapartners_Stockhistory_Model_Transaction::ACTION_TYPE_EVENT_IMPORT;
 		
 		if (!$importModel->getId()) return;
 		
@@ -38,6 +39,7 @@ class Crown_Import_Model_Observer {
 				$oldStock = $oldData[ $id ][0]['stock.qty'];
 				$qtyDelta = $newStock - $oldStock;
 				$product = Mage::getModel ( 'catalog/product' )->load ( $id );
+				$action_type = Harapartners_Stockhistory_Model_Transaction::ACTION_TYPE_AMENDMENT;
 			}
 			
 			try {
@@ -55,7 +57,7 @@ class Crown_Import_Model_Observer {
 					$dataObj->setData ( 'vendor_style', $product->getVendorStyle () );
 					$dataObj->setData ( 'unit_cost', $product->getData ( 'sale_wholesale' ) );
 					$dataObj->setData ( 'qty_delta', $qtyDelta );
-					$dataObj->setData ( 'action_type', Harapartners_Stockhistory_Model_Transaction::ACTION_TYPE_EVENT_IMPORT );
+					$dataObj->setData ( 'action_type', $action_type );
 					$dataObj->setData ( 'comment', date ( 'Y-n-j H:i:s' ) );
 					$stockhistoryTransaction->importData ( $dataObj )->save ();
 				} elseif (!$product->getId()) {
