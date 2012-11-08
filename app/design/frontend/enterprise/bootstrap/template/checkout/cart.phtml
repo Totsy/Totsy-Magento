@@ -40,6 +40,8 @@
     $serverTime = Mage::getModel('core/date')->timestamp() * 1000;
     $quote = Mage::getSingleton('checkout/session')->getQuote();
     $saving = Mage::helper('sales/order')->calculateEstimatedSavings($quote);
+
+    $ajaxUrl = Mage::getUrl('hpcheckout/ajax/splitCart/');
 ?>
 
 
@@ -263,6 +265,8 @@
 <script type="text/javascript">
     function setSplitCartFlag(value, bold_id) {
         jQuery('#splitCartFlag').val(value);
+
+        jQuery.get('<?php echo $ajaxUrl;?>',{id: value});
 
         jQuery("#splitCartYes, #splitCartNo").css('font-weight', 'normal');
 
