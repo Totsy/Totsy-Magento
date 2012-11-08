@@ -49,6 +49,10 @@
 
     $multiShipping = FALSE;
     $fulfillmentTypes = array();
+    $splitYesCss = '';
+    $splitNoCss = '';
+
+    $splitCartPrice = Mage::helper('core')->formatPrice(Mage::getStoreConfig('checkout/cart/split_cart_price'));
 
     // Check to see if there are multiple fulfillment types
     foreach($this->getItems() as $item) {
@@ -69,8 +73,7 @@
     // Split cart check
     $splitCartFlag = $this->getCheckout()->getSplitCartFlag();
 
-    $splitYesCss = '';
-    $splitNoCss = '';
+
 
     if($splitCartFlag) {
         $splitYesCss = 'font-weight:bold;';
@@ -174,7 +177,7 @@
             <tr>
                 <td colspan="6">
                     <?php if(array_key_exists('dotcom_stock', $fulfillmentTypes)):?>
-                        <span style="font-size:18px;color:#FF0000;">For $5.99 get your available items quicker!
+                        <span style="font-size:18px;color:#FF0000;">For <?php echo $splitCartPrice;?>  get your available items quicker!
                             <span id="splitCartYes" style="<?php echo $splitYesCss;?>"><a href="javascript:void(0);" onclick="javascript:setSplitCartFlag(1, '#splitCartYes')">Yes</a></span>
                             <span id="splitCartNo" style="<?php echo $splitNoCss;?>"><a href="javascript:void(0);" onclick="javascript:setSplitCartFlag(0, '#splitCartNo');">No</a></span>
                             <input id="splitCartFlag" type="hidden" name="splitCart" value="<?php echo $splitCartFlag;?>" /></span>

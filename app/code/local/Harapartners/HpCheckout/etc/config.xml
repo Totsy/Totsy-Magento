@@ -70,5 +70,11 @@
             </controller_action_predispatch>
         </events>
     </frontend>
-    <default/>
+    <default>
+        <checkout>
+            <cart>
+                <split_cart_price>5.99</split_cart_price>
+            </cart>
+        </checkout>
+    </default>
 </config>

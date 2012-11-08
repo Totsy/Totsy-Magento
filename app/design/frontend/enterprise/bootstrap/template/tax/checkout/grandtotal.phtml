@@ -31,7 +31,7 @@
 $extra = '0.0000';
 
 if(Mage::getSingleton('checkout/session')->getSplitCartFlag()) {
-    $extra = '5.9900';
+    $extra = Mage::getStoreConfig('checkout/cart/split_cart_price');
 }
 
 ?>
