@@ -41,12 +41,6 @@ $_categories = $_product->getCategoryIds();
 $_category = Mage::getModel('catalog/category')->load(end($_categories));
 
 ?>
-<style>
-.old-price {display:none;}
-.price-box {text-align: center; display: block; margin:15px 0px;}
-.big_price {font-size:25px!important; font-weight: bold; }
-</style>
-
 <?php
 // counter variables
 $endcount_utc = strtotime($_category->getEventEndDate());
@@ -124,8 +118,8 @@ $savings = money_format('%n', $originalPrice) - money_format('%n', $discountPric
                             <div class="product-price-was"><span>Was</span> $<?php echo number_format((float)$special_price, 2, '.', '');?></div>
                         </div>
                         <div class="product-prices-supp clearfix">
-                            <div class="product-price-discount"><?php echo number_format((float)$percent, 0, '.', '');?>% <span>Discount</span></div>
-                            <div class="product-price-savings">$<?php echo number_format((float)$savings, 2, '.', '');?> <span>Savings</span></div>
+                            <span class="product-price-discount"><?php echo number_format((float)$percent, 0, '.', '');?>% <span>Discount</span></span>
+                            <span class="product-price-savings">Over $<?php echo number_format((float)$savings, 0, '.', '');?> <span>Savings</span></span>
                         </div>
                     </div>
                                 <?php echo $this->getChildHtml('tierprices') ?>

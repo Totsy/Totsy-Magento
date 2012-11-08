@@ -140,7 +140,7 @@ html.test .container .row {outline:1px dotted green;}
     color:#d22f2a;
 }
 */
-.count-down-timer {
+.has-timer .count-down-timer {
     float: right;
     padding-left:45px;
     background:url('../images/icon-timer.png') 0 50% no-repeat;
@@ -149,9 +149,6 @@ html.test .container .row {outline:1px dotted green;}
 .count-down-timer .prefix {
     color:#d22f2a;
 }
-
-
-.zoomImage { padding:0px; z-index:500!important; }
 
 /* Ellipsis class for truncating long titles 
  * to use, the element must also have a fixed width, either implicit (inherited) or explicit
@@ -216,7 +213,7 @@ body.customer-account-login .btn.btn-large {
     padding: 9px 14px;
 }
 .btn-nogo {
-    background-color: rgb(170, 170, 170);
+/*     background-color: rgb(170, 170, 170); */
 }
 .btn.checkout {
     margin: 8px 0 0;
@@ -230,7 +227,7 @@ body.customer-account-login .btn.btn-large {
     background-position: 0 50.5%;
 }
 .btn-nogo:hover {
-    background-color: rgb(170, 170, 170);
+/*     background-color: rgb(170, 170, 170); */
 }
 @media screen and (-webkit-min-device-pixel-ratio:0) { /* webkit fixin's */
     .btn.checkout {padding:2px 8px 1px; line-height:17px;}
@@ -1298,8 +1295,20 @@ select, textarea, input[type="text"], input[type="password"], input[type="dateti
     min-width:95px;
 }
 /* ZOOM Image Goodness */
-#zoom1 img {border-radius:3px; }
-.cloud-zoom-big {border-radius:3px;}
+.zoomImage { 
+    padding:0px; 
+    background: none;
+    border:1px dashed #666;
+    overflow: hidden;
+    z-index:500!important;
+}
+.zoomImage,
+#zoom1 img,
+.cloud-zoom-big {
+    -moz-border-radius: 12px;
+    -webkit-border-radius: 12px;
+    border-radius: 12px;
+}
 
 /* @GOTCHA: putting .price-box positioning hacks in here… b/c price view is used some many places the markup is rather untouchable */
 body.catalog-category-view .price-box {
@@ -1316,12 +1325,11 @@ body.catalog-category-view .price-box .special-price {
     position: relative; top: -19px;
 }
 
-.options-container-big {margin:0px;}
 .count-down-timer {font-size:18px;}
 .input-box {padding:0px 0px 5px;}
 .pdp_tabs {width:105%; margin-top:-45px; margin-left:-11px;}
 
-/* PDP page specific styles */
+/* @PDP page specific styles */
 .catalog-product-view .page-header {
     border: none;
 }
@@ -1338,30 +1346,93 @@ body.catalog-category-view .price-box .special-price {
     font-weight: bold;
 }
 
-/* PDP pricing + addtocart module */
+/* @PDP pricing + options + addtocart module */
 .product-main .product-addtocart {
     position: absolute; top:0; right: 0;
 }
 #product_addtocart_form {
-    padding:8px 5px;
+    padding:2px 8px 4px;
     background:#dddbdd;
+}
+/* prices */
+#product_addtocart_form .product-prices {
+    margin-bottom:20px;
 }
 #product_addtocart_form .price-box {
     float: left;
+    margin: 0;
+}
+.product-prices-main .old-price {
+    display: none;
+}
+#product_addtocart_form .price-box .big_price:before {
+    content: "NOW\0000a0";
+    color:#d22f2a;
+    font-size: 16px;
+    font-weight: bold;
+    letter-spacing: -.025em;
+}
+#product_addtocart_form .price-box .big_price,
+.product-prices-main .big_price .price {
+    display: inline-block;
+}
+.product-prices-main .big_price .price:first-letter {
+    vertical-align: super;
+    font-size: 15px !important;
+}
+.product-prices-main .price.special-price {
+    color:#d22f2a;
+    font-size: 25px;
+    letter-spacing: -0.025em;
 }
 #product_addtocart_form .product-price-was {
     float: right;
+    line-height: 2;
+}
+.product-prices-supp {
+    margin:8px 0 0;
+    font-size:1.05em;
+    letter-spacing: -0.025em;
+}
+@media screen and (-webkit-min-device-pixel-ratio:0) { /* webkit fixin's */
+    .product-prices-supp {
+        letter-spacing: -0.075em;
+    }
 }
 #product_addtocart_form .product-price-discount {
-    float: left;
 }
 #product_addtocart_form .product-price-savings {
-    float: right;
+    margin-left:10px;
+    white-space: nowrap;
+}
+#product_addtocart_form .product-price-savings:before {
+    content: "|";
+    position: relative; left:-6px;
+    display: inline-block;
+    height: 0.95em;
+    overflow: hidden;
+}
+/* options */
+#product-options-wrapper,
+#product-options-wrapper * {
+    max-width: 214px; /* hack - override bootstrap to fit Ted's Take */
+}
+.options-container-big label {
+    margin-bottom:3px;
+    font-size:14px;
+}
+.product-options label > span {
+    text-transform: lowercase;
+}
+/* add to cart */
+.product-options-bottom {
+    position: relative;
 }
 .add-to-cart-qty {
     float: left;
 }
 .add-to-cart button {
+    position: absolute; bottom:10px; right: 0;
     float: right;
 }
 
