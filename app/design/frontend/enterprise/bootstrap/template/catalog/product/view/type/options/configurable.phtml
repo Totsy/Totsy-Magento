@@ -51,8 +51,8 @@ else{
     <?php foreach ($_attributes as $_attribute): ?>
         <div <?php if ($_attribute->decoratedIsLast) {?> class="last"<?php }?>>
             <div class="input-box">
-            	<span style="-moz-user-select: none;" id="activechange<?php echo $counter;?>">
-            	    <?php echo $this->__('Please Select ').$_attribute->getLabel() ?></span>
+            	<label id="activechange<?php echo $counter;?>" for="super_attribute<?php echo $_attribute->getAttributeId() ?>">
+            	    <?php echo $this->__('Select ').'<span>'.$_attribute->getLabel().'</span>'.$this->__(', please…') ?></label>
                 <select name="super_attribute[<?php echo $_attribute->getAttributeId() ?>]" id="attribute<?php echo $_attribute->getAttributeId() ?>" class="required-entry super-attribute-select">
                     <option><?php echo $this->__('Please Select ').$_attribute->getLabel() ?></option>
                 </select>
