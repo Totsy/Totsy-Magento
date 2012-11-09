@@ -34,6 +34,11 @@ class Harapartners_Fulfillmentfactory_Adminhtml_FulfillmentController extends Ma
         $productIds = array();
         foreach ($category->getProductCollection() as $product) {
             $productIds[] = $product->getId();
+
+            // Set stock qty to 0
+            $stockItem = Mage::getModel ( 'cataloginventory/stock_item' )->loadByProduct ( $product->getId() );
+            $stockItem->setData ( 'qty', 0 );
+            $stockItem->save ();
         }
 
         $attributeHelper = Mage::helper('adminhtml/catalog_product_edit_action_attribute');
