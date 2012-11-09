@@ -446,11 +446,8 @@
                 if( jQuery(this).val() == '' ) {
                     jQuery("#cc_data").show();
                     newCardWrap.show();
-                    //newCardCtrls.removeAttr('disabled');
-                    billAddySelect.removeAttr('disabled');
                     //Enable Billing Inputs if credit card not selected
                     billFormInputs.each(function(i) {
-                        jQuery(this).removeAttr('disabled');
                         if(jQuery(this).attr('name') != 'type' && jQuery(this).attr('name') != 'admin_user') {
                             jQuery(this).val('');
                         }
@@ -459,16 +456,6 @@
                     newCardWrap.hide();
                     if(jQuery("#address_" + jQuery( this ).val()).val()) {
                         billAddySelect.val(jQuery("#address_" + jQuery( this ).val()).val()).change();
-                        //Block Billing Inputs if credit card selected
-                        billFormInputs.each(function(i) {
-                            jQuery(this).attr('disabled','disabled');
-                        });
-                        billAddySelect.attr('disabled','disabled');
-                    } else {
-                        billAddySelect.removeAttr('disabled');
-                        billFormInputs.each(function(i) {
-                            jQuery(this).removeAttr('disabled');
-                        });
                     }
                 }
             });

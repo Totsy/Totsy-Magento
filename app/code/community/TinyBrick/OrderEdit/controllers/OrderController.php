@@ -112,8 +112,8 @@ class TinyBrick_OrderEdit_OrderController extends Mage_Adminhtml_Controller_Acti
                 $this->_logChanges($order, $this->getRequest()->getParam('comment'), $this->getRequest()->getParam('admin_user'), $changes);
                 echo "Order updated successfully. The page will now refresh.";
             } else {
-                $this->_orderRollBack($order, $orderArr, $billingArr, $shippingArr);
                 echo "There was an error saving information, please try again. : " . $msgs[0];
+                $this->_orderRollBack($order, $orderArr, $billingArr, $shippingArr);
             }
         } catch(Exception $e) {
             echo $e->getMessage();
