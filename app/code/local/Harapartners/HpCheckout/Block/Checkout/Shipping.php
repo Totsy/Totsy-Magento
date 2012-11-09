@@ -18,7 +18,7 @@ class Harapartners_HpCheckout_Block_Checkout_Shipping extends Mage_Tax_Block_Che
         $splitCart = Mage::getSingleton('checkout/session')->getSplitCartFlag();
 
         if($splitCart) {
-            $extra = '5.9900';
+            $extra = Mage::getStoreConfig('checkout/cart/split_cart_price');
         }
         else {
             $extra = '0.0000';

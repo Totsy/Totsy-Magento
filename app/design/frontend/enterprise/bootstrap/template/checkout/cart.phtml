@@ -40,6 +40,8 @@
     $serverTime = Mage::getModel('core/date')->timestamp() * 1000;
     $quote = Mage::getSingleton('checkout/session')->getQuote();
     $saving = Mage::helper('sales/order')->calculateEstimatedSavings($quote);
+
+    $ajaxUrl = Mage::getUrl('hpcheckout/ajax/splitCart/');
 ?>
 
 
@@ -47,6 +49,10 @@
 
     $multiShipping = FALSE;
     $fulfillmentTypes = array();
+    $splitYesCss = '';
+    $splitNoCss = '';
+
+    $splitCartPrice = Mage::helper('core')->formatPrice(Mage::getStoreConfig('checkout/cart/split_cart_price'));
 
     // Check to see if there are multiple fulfillment types
     foreach($this->getItems() as $item) {
@@ -67,7 +73,16 @@
     }
 
     // Split cart check
-    $splitCartFlag = $this->getCheckout()->getSplitCartFlag() ? 'checked="checked"' : '';
+    $splitCartFlag = $this->getCheckout()->getSplitCartFlag();
+
+
+
+    if($splitCartFlag) {
+        $splitYesCss = 'font-weight:bold;';
+    }
+    else {
+        $splitNoCss = 'font-weight:bold;';
+    }
 ?>
 
 
@@ -164,7 +179,10 @@
             <tr>
                 <td colspan="6">
                     <?php if(array_key_exists('dotcom_stock', $fulfillmentTypes)):?>
-                        <span style="font-size:18px;color:#FF0000;">For $5.99 get your available items quicker! <input type="checkbox" name="splitCart" value="1" <?php echo $splitCartFlag;?> /></span>
+                        <span style="font-size:18px;color:#FF0000;">For <?php echo $splitCartPrice;?>  get your available items quicker!
+                            <span id="splitCartYes" style="<?php echo $splitYesCss;?>"><a href="javascript:void(0);" onclick="javascript:setSplitCartFlag(1, '#splitCartYes')">Yes</a></span>
+                            <span id="splitCartNo" style="<?php echo $splitNoCss;?>"><a href="javascript:void(0);" onclick="javascript:setSplitCartFlag(0, '#splitCartNo');">No</a></span>
+                            <input id="splitCartFlag" type="hidden" name="splitCart" value="<?php echo $splitCartFlag;?>" /></span>
                     <?php endif;?>
                     <button type="submit" class="pull-right btn button" title="<?php echo $this->__('Update Shopping Cart') ?>" ><?php echo $this->__('Update Shopping Cart') ?></button>
                 </td>
@@ -249,3 +267,16 @@
     </div>
     <?php endif;?>
 </div>
+<script type="text/javascript">
+    function setSplitCartFlag(value, bold_id) {
+        jQuery('#splitCartFlag').val(value);
+
+        jQuery.get('<?php echo $ajaxUrl;?>',{id: value});
+
+        jQuery("#splitCartYes, #splitCartNo").css('font-weight', 'normal');
+
+        jQuery(bold_id).css('font-weight', 'bold');
+
+    }
+
+</script>
