@@ -264,8 +264,10 @@ $orderStoreDate = $this->formatDate($_order->getCreatedAtStoreDate(), 'medium', 
         var $formInputs = jQuery('#'+type+'-fields :input');
         if( jQuery('select#'+type+'-address-select').val() == '' ) {
             $formInputs.each(function(i) {
-                this.value = '';
-                this.text = '';
+                if(this.name != 'type' && this.name != 'admin_user') {
+                    this.value = '';
+                    this.text = '';
+                }
             });
         } else {
             var params = {};

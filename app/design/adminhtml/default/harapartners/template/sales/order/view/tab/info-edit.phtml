@@ -451,7 +451,9 @@
                     //Enable Billing Inputs if credit card not selected
                     billFormInputs.each(function(i) {
                         jQuery(this).removeAttr('disabled');
-                        jQuery(this).val('');
+                        if(jQuery(this).attr('name') != 'type' && jQuery(this).attr('name') != 'admin_user') {
+                            jQuery(this).val('');
+                        }
                     });
                 } else {
                     newCardWrap.hide();

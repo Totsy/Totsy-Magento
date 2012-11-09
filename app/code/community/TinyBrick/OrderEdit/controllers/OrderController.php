@@ -90,8 +90,8 @@ class TinyBrick_OrderEdit_OrderController extends Mage_Adminhtml_Controller_Acti
                 }
             }
 
-            $order->collectTotals()->save();
-
+            //$order->collectTotals()->save();
+            $postTotal = $order->getGrandTotal();
             if(count($msgs) < 1) {
                 //auth for more if the total has increased and configured to do so
                 if(Mage::getStoreConfig('toe/orderedit/auth')) {

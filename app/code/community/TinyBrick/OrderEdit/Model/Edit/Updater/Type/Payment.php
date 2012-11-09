@@ -14,7 +14,7 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Payment extends TinyBrick_Orde
             $addressUpdated = $data['addressUpdated'];
             $savingNewCreditCard = true;
             $customerId = $order->getCustomerId();
-            $billingId = $order->getData('billing_address_id');
+            $billingId = $order->getBillingAddressId();
             $billing = Mage::getModel('sales/order_address')->load($billingId);
             $customerAddressId = Mage::getModel('orderedit/edit_updater_type_billing')->getCustomerAddressFromBilling($billingId);
             if(!$customerAddressId) {
