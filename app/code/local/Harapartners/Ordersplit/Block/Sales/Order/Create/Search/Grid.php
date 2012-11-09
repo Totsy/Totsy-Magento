@@ -32,6 +32,7 @@ class Harapartners_Ordersplit_Block_Sales_Order_Create_Search_Grid extends Mage_
         ));
 
         $this->addColumn('fulfillment', array(
+                'filter'    => false,
                 'header' => Mage::helper('sales')->__('Fulfillment Type'),
                 'renderer' => 'adminhtml/sales_order_create_search_grid_renderer_fulfillment',
                 'index' => 'fulfillment',
