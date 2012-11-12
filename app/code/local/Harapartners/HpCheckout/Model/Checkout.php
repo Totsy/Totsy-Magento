@@ -381,6 +381,7 @@ class Harapartners_HpCheckout_Model_Checkout
                 array('order' => $order, 'quote' => $this->getQuote(), 'recurring_profiles' => $profiles)
             );
         }
+        Mage::getSingleton('checkout/session')->unsSplitCartFlag();
 
         return $this;
     }
