@@ -102,7 +102,7 @@ class Harapartners_Ordersplit_Sales_Order_CreateController extends Mage_Adminhtm
             }
 
             if(count($fulfillmentTypes) > 1) {
-                Mage::throwException('I has a bucket');
+                Mage::throwException('Multiple Fulfillment Types detected. You can only create orders with products of the same fulfillment type.');
             }
 
             $items = $this->_processFiles($items);
