@@ -35,11 +35,11 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Payment extends TinyBrick_Orde
             } else if($payment->getData('cc_number')) {
                 $profile->loadByCcNumberWithId($payment->getData('cc_number').$customerId.$payment->getCcExpYear().$payment->getCcExpMonth());
             }
-            if($profile && $profile->getId() && !$addressUpdated) {
+            if($profile && $profile->getId()) {
                 $payment = Mage::getModel('sales/order_payment')->getCollection()
                     ->addAttributeToFilter('cybersource_subid',$profile->getData('subscription_id'))
                     ->getFirstItem();
-                if(!$payment || !$payment->getId()) {
+                if((!$payment || !$payment->getId()) && !$addressUpdated) {
                     //Case of Payment Informations has been Deleted from Object, Refill Payment Informations
                     $enteredPayment = new Varien_Object($data);
                     $enteredPayment->setData('cc_last4', substr($enteredPayment->getCcNumber(), -4));
@@ -49,6 +49,9 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Payment extends TinyBrick_Orde
                     return false;
                 } else {
                     $savingNewCreditCard = false;
+                    if($addressUpdated) {
+                        $profile->setData('address_id', $customerAddressId)->save();
+                    }
                 }
             }
             if($savingNewCreditCard) {

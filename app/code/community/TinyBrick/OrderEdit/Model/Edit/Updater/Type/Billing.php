@@ -28,6 +28,7 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Billing extends TinyBrick_Orde
     {
         $billing = $order->getBillingAddress();
         $oldArray = $billing->getData();
+        unset($data['entity_id']);
         #check if infos are empty 
         foreach($data as $key => $value) {
             if($key == 'street' || $key == 'city' || $key == 'firstname' || $key == 'lastname') {
@@ -46,7 +47,7 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Billing extends TinyBrick_Orde
             return 'not_updated';
         }
         try{
-            $billing->setData($data)
+            $billing->addData($data)
                     ->save();
             $order->setData('billing_address_id', $billing->getId())
                     ->save();
