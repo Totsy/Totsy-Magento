@@ -27,6 +27,7 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Shipping extends TinyBrick_Ord
 	public function edit(TinyBrick_OrderEdit_Model_Order $order, $data = array())
 	{
 		$array = array();
+        unset($data['entity_id']);
 		$shipping = $order->getShippingAddress();
 		$oldArray = $shipping->getData();
 		$data['street'] = $data['street1'];

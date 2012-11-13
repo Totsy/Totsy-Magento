@@ -26,9 +26,9 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Billing extends TinyBrick_Orde
 {
     public function edit(TinyBrick_OrderEdit_Model_Order $order, $data = array())
     {
-        $array = array();
         $billing = $order->getBillingAddress();
         $oldArray = $billing->getData();
+        unset($data['entity_id']);
         #check if infos are empty 
         foreach($data as $key => $value) {
             if($key == 'street' || $key == 'city' || $key == 'firstname' || $key == 'lastname') {
@@ -47,11 +47,11 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Billing extends TinyBrick_Orde
             return 'not_updated';
         }
         try{
-            $billing->setData($data);
-            $billing->save();
+            $billing->addData($data)
+                    ->save();
             $order->setData('billing_address_id', $billing->getId())
                     ->save();
-            $customerAddressId = $this->createCustomerAddressFromBilling($billing, $order->getCustomerId());
+            $this->createCustomerAddressFromBilling($data, $order->getCustomerId());
             //logging for changes in billing address
             $newArray = $billing->getData();
             $results = array_diff($oldArray, $newArray);
@@ -85,9 +85,9 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Billing extends TinyBrick_Orde
         return $duplicate;
     }
 
-    public function createCustomerAddressFromBilling($billing, $customerId) {
+    public function createCustomerAddressFromBilling($data, $customerId) {
         $address = Mage::getModel('customer/address');
-        $address->setData($billing->getData())
+        $address->setData($data)
                 ->setCustomerId($customerId)
                 ->setIsDefaultBilling(false)
                 ->setIsDefaultShipping(false)
