@@ -131,6 +131,7 @@ html.test .container .row {outline:1px dotted green;}
 .page-header.has-timer h2 {
     float: left;
     font-size:30px;
+    max-width:550px;
 }
 /* @TODO: Ted's Take 2012.10 - pending implementation of the breadcrumbs
 .page-header.has-timer h2 a:link {

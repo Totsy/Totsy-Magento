@@ -61,7 +61,7 @@ $savings = money_format('%n', $originalPrice) - money_format('%n', $discountPric
 <div id="messages_product_view"><?php echo $this->getMessagesBlock()->toHtml() ?></div>
 <section id="pageheader">
     <header class="page-header has-timer clearfix">
-        <h2><a href="<?php echo $_category->getUrl();?>"><?php echo $_helper->categoryAttribute($_category, $_category->getName(), 'name') ?></a>
+        <h2 class="ellipsis"><a href="<?php echo $_category->getUrl();?>"><?php echo $_helper->categoryAttribute($_category, $_category->getName(), 'name') ?></a>
         </h2>
         <span class="count-down-timer"><span id="timer"></span></span>
     </header>
@@ -99,7 +99,7 @@ $savings = money_format('%n', $originalPrice) - money_format('%n', $discountPric
             ?>
             </div>
         <!-- <div class="well"> -->
-            <div class="span3 product-addtocart">
+            <div class="span3 product-addtocart<?php if ($this->hasOptions()): echo ' has-options'; endif;?>">
                 <form action="<?php echo $this->getSubmitUrl($_product) ?>" method="post" id="product_addtocart_form" <?php if($_product->getOptions()): ?> enctype="multipart/form-data" <?php endif; ?> >
                         <div class="no-display">
                             <input type="hidden" name="product" value="<?php echo $_product->getId() ?>" />
