@@ -1346,6 +1346,9 @@ body.catalog-category-view .price-box .special-price {
     font-size:22px;
     font-weight: bold;
 }
+.product-main .product-content {
+    margin:10px 0;
+}
 
 /* @PDP pricing + options + addtocart module */
 .product-main .product-addtocart {
