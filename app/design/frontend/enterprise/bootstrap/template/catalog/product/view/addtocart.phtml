@@ -39,7 +39,24 @@
 	        <?php if(!$_product->isGrouped() && !$_product->isVirtual() ): ?>
 	        <div class="add-to-cart-qty">
     	        <label for="qty"><?php echo $this->__('Quantity') ?></label>
-    	        <input type="text" name="qty" id="qty" maxlength="2" value="1" title="<?php echo $this->__('Qty') ?>" class="input-text qty span1" />
+                <select name="qty" id="qty" class="span1" title="<?php echo $this->__('Qty') ?>" >
+                  <?php
+                    /**
+                    * @TODO: MGN-993
+                    * - quantity seems to work for simple products
+                    * - getQty() does not seem to work with configurable products
+                    * - need query for quantity of product with selected options
+                    */
+                    $_maxSaleQty = (int)Mage::getModel('cataloginventory/stock_item')->loadByProduct($_product)->getMaxSaleQty();
+                    $_productQty = (int)Mage::getModel('cataloginventory/stock_item')->loadByProduct($_product)->getQty();
+                    for ($i = 1; $i <= $_productQty; $i++) {
+                        if ($i <= $_maxSaleQty) { ?>
+                            <option value="<?php echo $i; ?>">
+                              <?php echo $i; ?>
+                            </option><?php
+                        }
+                    } ?>
+                </select>
 	        <?php //echo $this->getProductDefaultQty() * 1 ?>
 	        </div>
 	        <?php endif; ?>
