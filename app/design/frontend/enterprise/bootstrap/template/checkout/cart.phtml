@@ -44,6 +44,7 @@
 
 
 <?php
+    $fulfillmentTypes = array();
     // Check to see if there are multiple fulfillment types
     foreach($this->getItems() as $item) {
         if($item->getParentItemId()) {
