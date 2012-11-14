@@ -21,6 +21,13 @@
                 </rewrite>
             </bundle>
         </helpers>
+        <models>
+            <bundle>
+                <rewrite>
+                    <product_type>Totsy_Bundle_Model_Product_Type</product_type>
+                </rewrite>
+            </bundle>
+        </models>
         <resources>
             <totsybundle_setup>
                 <setup>
