@@ -51,7 +51,7 @@ class Totsy_Bundle_Helper_Catalog_Product_Configuration extends Mage_Bundle_Help
                         if ($qty) {
                             //2012-11-14 - CJD - Hiding option price if equal to zero per Rob's request
                             $text = $qty . ' x ' . $this->escapeHtml($bundleSelection->getName());
-                            if($this->getSelectionFinalPrice($item, $bundleSelection) > 0) {
+                            if($this->getSelectionFinalPrice($item, $bundleSelection) != 0) {
                                 $text .= ' ' . Mage::helper('core')->currency($this->getSelectionFinalPrice($item, $bundleSelection));
                             }
                             $option['value'][] = $text;
