@@ -1,4 +1,5 @@
 <?php
+$fulfillmentTypes = array();
 // Check to see if there are multiple fulfillment types
 foreach($this->getQuote()->getAllItems() as $item) {
     if($item->getParentItemId()) {
