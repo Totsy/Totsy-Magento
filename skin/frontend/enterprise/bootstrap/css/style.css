@@ -108,6 +108,17 @@ html.test .container .row {outline:1px dotted green;}
 /**
  * @General / Modular Classes
  */
+.clearfix:before,
+.clearfix:after {
+    content: "";
+    display: table;
+}
+.clearfix:after {
+    clear: both;
+}
+.clearfix {
+    *zoom:1; /* IE7 hackeroo */
+}
 .dropdown-toggle {cursor: pointer;}
 .well {
     background: none repeat scroll 0 0 #FFFFFF;
@@ -1429,6 +1440,7 @@ body.catalog-category-view .price-box .special-price {
     text-transform: lowercase;
 }
 /* add to cart */
+#product-main-info,
 .product-options-bottom {
     position: relative;
 }
@@ -1436,10 +1448,18 @@ body.catalog-category-view .price-box .special-price {
     float: left;
 }
 .add-to-cart button {
-    position: absolute; bottom:10px; right: 0;
     float: right;
 }
-
+.has-options .add-to-cart button {
+    position: absolute; bottom:10px; right: 0;
+}
+.no-options .btn-cart {
+    margin-bottom:10px;
+}
+.no-options .add-to-cart-qty ~ .btn-cart {
+    position: relative; top:26px;
+    margin-bottom: 0;
+}
 /* FAQ */
 .faq_links {
     margin-bottom:1.75em;
