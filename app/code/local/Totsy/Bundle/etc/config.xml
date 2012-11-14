@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @category    Totsy
+ * @package     Totsy_Bundle
+ * @author      Chris Davidowski <cdavidowski@crownpartners.com>
+ * @copyright   Copyright (c) 2012 Totsy LLC
+ */
+ -->
+<config>
+    <modules>
+        <Totsy_Bundle>
+            <version>0.0.1</version>
+        </Totsy_Bundle>
+    </modules>
+    <global>
+        <helpers>
+            <bundle>
+                <rewrite>
+                    <catalog_product_configuration>Totsy_Bundle_Helper_Catalog_Product_Configuration</catalog_product_configuration>
+                </rewrite>
+            </bundle>
+        </helpers>
+        <resources>
+            <totsybundle_setup>
+                <setup>
+                    <module>Totsy_Bundle</module>
+                    <class>Totsy_Bundle_Model_Resource_Eav_Mysql4_Setup</class>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </totsybundle_setup>
+        </resources>
+    </global>
+</config>
