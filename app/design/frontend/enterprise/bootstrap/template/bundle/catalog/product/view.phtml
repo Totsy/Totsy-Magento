@@ -49,7 +49,7 @@ $_category = Mage::getModel('catalog/category')->load(end($_categories));
 
 <?php
 $special_price = $_product->getPrice();
-$final_price = $_product->getSpecialPrice();
+$final_price = $_product->getFinalPrice();
 
 $originalPrice = money_format('%n', $special_price);
 $discountPrice = money_format('%n', $final_price);
