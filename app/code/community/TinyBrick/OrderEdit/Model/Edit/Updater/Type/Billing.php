@@ -51,7 +51,10 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Billing extends TinyBrick_Orde
                     ->save();
             $order->setData('billing_address_id', $billing->getId())
                     ->save();
-            Mage::helper('orderedit')->createCustomerAddressFromData($data, $order->getCustomerId());
+            $duplicateAddress = Mage::helper('orderedit')->checkDuplicateCustomerAddress($order->getCustomerId(), $data);
+            if(!$duplicateAddress) {
+                Mage::helper('orderedit')->createCustomerAddressFromData($data, $order->getCustomerId());
+            }
             //logging for changes in billing address
             $newArray = $billing->getData();
             $results = array_diff($oldArray, $newArray);

@@ -84,6 +84,24 @@ class TinyBrick_OrderEdit_Helper_Data extends Mage_Core_Helper_Data
         return $duplicate;
     }
 
+    public function checkDuplicateCustomerAddress($customerId, $data)
+    {
+        $keys = array('street','telephone','postcode','city','lastname','firstname');
+        $customer = Mage::getModel('customer/customer')->load($customerId);
+        foreach ($customer->getAddresses() as $address) {
+            $duplicate = true;
+            foreach($keys as $key) {
+                if($address->getData($key) != $data[$key]) {
+                    $duplicate = false;
+                }
+            }
+            if($duplicate) {
+                return $duplicate;
+            }
+        }
+        return $duplicate;
+    }
+
     public function createCustomerAddressFromData($data, $customerId) {
         $address = Mage::getModel('customer/address');
         $address->setData($data)
