@@ -12,6 +12,7 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Payment extends TinyBrick_Orde
     {
         try {
             $addressUpdated = $data['addressUpdated'];
+            //Setting datas linked with the order and payment
             $savingNewCreditCard = true;
             $customerId = $order->getCustomerId();
             $billingId = $order->getBillingAddressId();
@@ -28,7 +29,7 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Payment extends TinyBrick_Orde
                 return false;
             }
             $payment->setData('cc_last4', substr($payment->getCcNumber(), -4));
-            #Check if there is already a cybersource profile if yes, dont create a new one
+            #Check if a cybersource profile already exist with those informations
             $profile = Mage::getModel('paymentfactory/profile');
             if($payment->getData('cybersource_subid')) {
                 $profile->loadByEncryptedSubscriptionId($payment->getData('cybersource_subid'));
@@ -36,19 +37,18 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Payment extends TinyBrick_Orde
                 $profile->loadByCcNumberWithId($payment->getData('cc_number').$customerId.$payment->getCcExpYear().$payment->getCcExpMonth());
             }
             if($profile && $profile->getId()) {
+                $savingNewCreditCard = false;
                 $payment = Mage::getModel('sales/order_payment')->getCollection()
                     ->addAttributeToFilter('cybersource_subid',$profile->getData('subscription_id'))
                     ->getFirstItem();
                 if((!$payment || !$payment->getId()) && !$addressUpdated) {
-                    //Case of Payment Informations has been Deleted from Object, Refill Payment Informations
-                    $enteredPayment = new Varien_Object($data);
-                    $enteredPayment->setData('cc_last4', substr($enteredPayment->getCcNumber(), -4));
-                    $enteredPayment->setData('cybersource_subid',$profile->getData('subscription_id'));
-                    $this->replacePaymentInformation($order, $enteredPayment);
-                    $this->makeOrderReadyToBeProcessed($order);
-                    return false;
+                    // Specific Case if payment informations has been deleted from the object sales_flat_order_payment
+                    // Refill informations using the profile
+                    $payment = new Varien_Object($data);
+                    $payment->setData('cc_last4', substr($payment->getCcNumber(), -4))
+                            ->setData('cybersource_subid',$profile->getData('subscription_id'));
                 } else {
-                    $savingNewCreditCard = false;
+                    //If profile exist but the billing address has been updated, update the address id.
                     if($addressUpdated) {
                         $profile->setData('address_id', $customerAddressId)->save();
                     }
@@ -86,31 +86,34 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Payment extends TinyBrick_Orde
     }
 
     /**
-     * Update Payment Informations from the Order
+     * Update Payment Informations of the Order
      */
-    public function replacePaymentInformation($order, $payment) {
+    public function replacePaymentInformation($order, $newPayment) {
         $paymentOrder = $order->getPayment();
-        if($payment->getData('method')) {
-            $paymentOrder->setData('method', $payment->getData('method'));
+        if($newPayment->getData('method')) {
+            $paymentOrder->setData('method', $newPayment->getData('method'));
         }
-        $paymentOrder->setData('cc_exp_month', $payment->getData('cc_exp_month'));
-        $paymentOrder->setData('cc_last4', $payment->getData('cc_last4'));
-        $paymentOrder->setData('cc_type', $payment->getData('cc_type'));
-        $paymentOrder->setData('cc_exp_year', $payment->getData('cc_exp_year'));
-        $paymentOrder->setData('cc_trans_id', $payment->getData('cc_trans_id'));
-        $paymentOrder->setData('cybersource_token', $payment->getData('cybersource_token'));
-        $paymentOrder->setData('cybersource_subid', $payment->getData('cybersource_subid'));
-        $paymentOrder->save();
+        $paymentOrder->setData('cc_exp_month', $newPayment->getData('cc_exp_month'))
+                     ->setData('cc_last4', $newPayment->getData('cc_last4'))
+                     ->setData('cc_type', $newPayment->getData('cc_type'))
+                     ->setData('cc_exp_year', $newPayment->getData('cc_exp_year'))
+                     ->setData('cc_trans_id', $newPayment->getData('cc_trans_id'))
+                     ->setData('cybersource_token', $newPayment->getData('cybersource_token'))
+                     ->setData('cybersource_subid', $newPayment->getData('cybersource_subid'))
+                     ->save();
     }
-    
+
+    /**
+     * For ItemsQueue linked with the order, switch status to pending.
+     */
     public function makeOrderReadyToBeProcessed($order) {
       if($order->getStatus() == Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_PAYMENT_FAILED) {
             $order->setStatus('pending')
                 ->save();
             $collection = Mage::getModel('fulfillmentfactory/itemqueue')->getCollection()->loadByOrderId($order->getId());
             foreach($collection as $itemqueue) {
-                $itemqueue->setStatus(Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_PENDING);
-                $itemqueue->save();
+                $itemqueue->setStatus(Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_PENDING)
+                          ->save();
             }
         }
     }
