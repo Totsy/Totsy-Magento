@@ -1029,6 +1029,7 @@ float:left;
 #hpcheckout-payment-add-title{
     width:200px;
 	float: left;
+	padding-top:10px;
 }
 
 #hpcheckout-payment-select {
