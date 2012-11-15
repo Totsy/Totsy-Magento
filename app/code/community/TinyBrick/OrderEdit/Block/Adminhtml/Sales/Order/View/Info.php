@@ -53,7 +53,7 @@ class TinyBrick_OrderEdit_Block_Adminhtml_Sales_Order_View_Info extends Mage_Adm
         foreach ($customer->getAddresses() as $address) {
             $options[] = array(
                 'value' => $address->getId(),
-                'label' => substr($address->format('oneline'),1,80)
+                'label' => substr($address->format('oneline'),0,80)
             );
         }
 
