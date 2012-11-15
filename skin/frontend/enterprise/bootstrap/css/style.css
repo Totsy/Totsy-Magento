@@ -484,7 +484,7 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
 }
 
 .saved_card {
-    line-height: 24px;
+    line-height: 15px;
 }
 
 .saved_card th {
@@ -1012,8 +1012,22 @@ float:left;
     display:none;
 }
 
+#add_payment {
+    margin-top:10px;
+    margin-bottom:10px;
+}
+
+#add_payment_method {
+    cursor: pointer;
+}
+
 .hpcheckout-payment-title {
 	width:175px;
+	float: left;
+}
+
+#hpcheckout-payment-add-title{
+    width:200px;
 	float: left;
 }
 
@@ -1068,7 +1082,8 @@ float:left;
 }
 
 .cc_num input[type="text"]{
-    width:420px;
+    width:455px;
+    float:right;
 }
 
 .cc_cvn input[type="text"]{

@@ -71,21 +71,119 @@
 
 <script type="text/javascript">
 
+var checkoutPayment = {};
+
 jQuery( document ).ready( function() {
-    var hasProfile = "<?php echo $hasProfile; ?>";
-    var profiles = '<?php echo json_encode($profiles->getData()) ?>';
     
-    if(hasProfile) {
-        jQuery(".use-new-card-wrapper").hide();
-        jQuery(".checkout-reward").css("padding-top", "50px");
+    checkoutPayment = (function() {
+        var hasProfile = '';
+        var isCollapsed = '';
+        return {
+            isCollapsed: false,
+            hasProfile: false /*"<?php //echo $hasProfile; ?>"*/,
+            toggleViews: function() { 
+                if (!this.hasProfile) {
+                    jQuery(".use-new-card-wrapper").hide();
+                    jQuery(".checkout-reward").css("padding-top", "50px");
+                    jQuery(".cc_save_card").appendTo(jQuery("#add_payment_save_card"));
+                    
+                    jQuery(".cc_save_card").css("width", "60px");
+                    jQuery(".cc_save_card").css("margin-left","10px");
+                    
+                    jQuery("#cc_data").hide();
+                    jQuery("#hpcheckout-payment-add-title").show();
+                    jQuery("#use-card-method").show();
+                } else {
+                    jQuery(".checkout-reward").css("padding-top", "0px");
+                    jQuery(".use-new-card-wrapper").show();
+                    jQuery("#use-card-method").hide();
+                    jQuery("#hpcheckout-payment-add-title").hide();
+                    jQuery("#cc_data").show();
+                }
+            },
+            addPayment: function() {
+                if(this.isCollapsed == false) {                
+                    this.isCollapsed = true;
+                    jQuery("#add_payment_method").attr("src", "/skin/frontend/enterprise/bootstrap/images/iconmonstr-minus-5-icon.png");
+                    jQuery("#paymentfactory_tokenize_cc_save").contents("");                    
+                    jQuery(".use-new-card-wrapper").show();
+                  
+                    jQuery("#cc_save_text").html("Save");
+                    
+                    jQuery(".use-new-card-wrapper").appendTo(jQuery("#add_cc_types"));
+                } else {
+                    this.isCollapsed = false;
+                    jQuery("#add_payment_method").attr("src", "/skin/frontend/enterprise/bootstrap/images/iconmonstr-plus-5-icon.png");
+                    jQuery(".use-new-card-wrapper").hide();
+                }
+            }
+        };
+    })();
+    
+    checkoutPayment.toggleViews();
+    
+    jQuery("#add_payment_method").click(function(){
+        checkoutPayment.addPayment();
+    })
+    
+    //var billAddySelect = jQuery("#billing-address-select");
+	//var newCardWrap = jQuery('.use-new-card-wrapper');
+	//var newCardCtrls = jQuery( 'input, select', '.use-new-card-wrapper' );
+	//var selectUIWraps = jQuery('.totsy-selective-input-box', '#hpcheckout-billing-wrapper');
+	//var billFormInputs = jQuery('#hpcheckout-billing-form :input');
+	
+	jQuery(".use-saved-card-control").click( function(){
         jQuery("#cc_data").hide();
-        jQuery("#use-card-method").show();
-    } else {
-        jQuery(".checkout-reward").css("padding-top", "0px");
-        jQuery(".use-new-card-wrapper").show();
-        jQuery("#use-card-method").hide();
-        jQuery("#cc_data").show();
-    }
+	});
+	
+	/*
+    jQuery('#cybersource-use-card-method').change( function() {    
+    
+        if( jQuery(this).val() == '' ) {
+        
+        	if(jQuery('#paypal_payment').length > 0) {
+            	jQuery('#paypal_payment').attr("checked", false);
+            }
+            
+            if(jQuery("#payment_form_paypal_express").length > 0) {
+                jQuery("#payment_form_paypal_express").show();           	
+            }
+            jQuery("#cc_data").show();
+            newCardWrap.show();
+            //newCardCtrls.removeAttr('disabled');
+            selectUIWraps.removeClass('disabled');
+            billAddySelect.removeAttr('disabled');
+            //Enable Billing Inputs if credit card not selected
+            billFormInputs.each(function(i) {
+                jQuery(this).removeAttr('disabled');
+                jQuery(this).val('');
+            });
+        } else { 
+            if(jQuery("#payment_form_paypal_express").length > 0){
+                jQuery("#payment_form_paypal_express").hide();           	
+            }
+           	           	            
+			newCardWrap.hide();
+			selectUIWraps.addClass('disabled'); 
+			
+			if(jQuery("#address_" + jQuery( this ).val()).val()) {
+			    billAddySelect.val(jQuery("#address_" + jQuery( this ).val()).val()).change();
+			    //Block Billing Inputs if credit card selected
+			    billFormInputs.each(function(i) {
+			        if(jQuery(this).attr('id') != 'button_ship_to') {
+			            jQuery(this).attr('disabled','disabled');
+			        }
+			    });
+			    billAddySelect.attr('disabled','disabled');
+			} else {
+			    billAddySelect.removeAttr('disabled');
+			    billFormInputs.each(function(i) {
+			        jQuery(this).removeAttr('disabled');
+			    });
+			}
+        }
+    });*/
+    
 });
 
 </script>
@@ -139,7 +237,7 @@ jQuery( document ).ready( function() {
         </div>
         <div style="clear:both"></div>
         <?php if($profiles && $profilesCounter > 0 ) { ?>
-                <div class="totsy-selective-input-box middle-length pull-left" id="use-card-method">
+                <div class="pull-left" id="use-card-method">
                     <div id="cybersource-use-card-method ">
                     <table class="saved_card">
                     	<tr>
@@ -159,7 +257,7 @@ jQuery( document ).ready( function() {
                         <?php if(!$profile->getSubscriptionId() || $profile->getIsDefault()== 1 || !$profile->getData('saved_by_customer')) { continue; } ?>
                         <tr>
                         	<td>
-                                <input type="radio" name="payment[cybersource_subid]" class="use-saved-card-control pull-left" value="<?php echo $profile->getEncryptedSubscriptionId() ?>">
+                                <input type="radio" name="payment[cybersource_subid]" id="payment[cybersource_subid]" class="use-saved-card-control pull-left" value="<?php echo $profile->getEncryptedSubscriptionId() ?>">
                                     <span class="cc">
         		 	                    <span title="<?php echo $this->getFullCcCardType( $profile->getData( 'card_type' )); ?>" class="<?php echo strtolower($profile->getData('card_type')); ?>" >
         		 	                    </span>
@@ -184,9 +282,20 @@ jQuery( document ).ready( function() {
                     <?php endforeach ?>
                 </div>
     </div>
+    <div class="pull-right">
+    <div style="float:left">
+        <div class="cc_save_card pull-left use-new-card-wrapper">
+                <div>
+                    <input type="checkbox" value="1" name="payment[saved_by_customer]" checked="checked" id="<?php echo $_code ?>_saved" />
+                </div>
+                <div id="cc_save_text" for="<?php echo $_code ?>_cc_save"><?php echo $this->__(' Save this method for quick <br> shopping on future visits!'); ?>
+                </div>
+            </div>
+    </div>    
     <div class="rewards_points pull-right">
             <?php echo $this->getLayout()->getBlock('hpcheckout.reward.points')->toHtml(); ?>
         </div>
+    </div>
 <div id="cc_data">
     <div class="pull-left">
         <div>
@@ -209,6 +318,8 @@ jQuery( document ).ready( function() {
                 </div>
             </div>
             <?php endif; ?>
+            <div id="add_payment_save_card">
+            </div>
             <div class="cc_exp pull-right use-new-card-wrapper">
                 <div class="pull-left">
                     <div for="<?php echo $_code ?>_expiration" class="lbl"><em>*</em><?php echo $this->__('Exp.') ?></div>
@@ -229,18 +340,18 @@ jQuery( document ).ready( function() {
                 </div>
             </div>
         </div>
-        </div>
-        <div class="pull-right ">
-            <div class="cc_save_card pull-left use-new-card-wrapper">
-                <div>
-                    <input type="checkbox" value="1" name="payment[saved_by_customer]" checked="checked" id="<?php echo $_code ?>_saved" />
-                </div>
-                <div for="<?php echo $_code ?>_cc_save"><?php echo $this->__(' Save this method for quick <br> shopping on future visits!'); ?>
-                </div>
-            </div>
-        </div>
     	</div> 
     </div>
+<div style="clear:both"></div>
+<div id="hpcheckout-payment-add-title">
+	<h4 class="legend"><span><img id="add_payment_method" src="/skin/frontend/enterprise/bootstrap/images/iconmonstr-plus-5-icon.png" width="18" height="18"></span>&nbsp;Add a payment method</h4>
+</div>
+<div style="clear:both"></div>
+<div id="add_payment">
+	<div class="pull-left" id="add_cc_types">
+	</div>
+	<div id="add_cc_data"></div>
+</div>
 <div style="clear:both"></div>
 </div>
 </div>
@@ -304,56 +415,4 @@ jQuery( document ).ready( function() {
 <script type="text/javascript">
 // @TODO: should abstract this out to hpcheckout.js
 // disable billing address form controls for saved credit card
-jQuery( document ).ready( function() {
-	// cache jQuery objects
-	var billAddySelect = jQuery("#billing-address-select");
-	var newCardWrap = jQuery('.use-new-card-wrapper');
-	//var newCardCtrls = jQuery( 'input, select', '.use-new-card-wrapper' );
-	var selectUIWraps = jQuery('.totsy-selective-input-box', '#hpcheckout-billing-wrapper');
-	var billFormInputs = jQuery('#hpcheckout-billing-form :input');
-    jQuery('#cybersource-use-card-method').change( function() {    
-        if( jQuery(this).val() == '' ) {
-        	if(jQuery('#paypal_payment').length > 0) {
-            	jQuery('#paypal_payment').attr("checked", false);
-            }
-            
-            if(jQuery("#payment_form_paypal_express").length > 0) {
-                jQuery("#payment_form_paypal_express").show();           	
-            }
-            jQuery("#cc_data").show();
-            newCardWrap.show();
-            //newCardCtrls.removeAttr('disabled');
-            selectUIWraps.removeClass('disabled');
-            billAddySelect.removeAttr('disabled');
-            //Enable Billing Inputs if credit card not selected
-            billFormInputs.each(function(i) {
-                jQuery(this).removeAttr('disabled');
-                jQuery(this).val('');
-            });
-        } else { 
-            if(jQuery("#payment_form_paypal_express").length > 0){
-                jQuery("#payment_form_paypal_express").hide();           	
-            }
-           	           	            
-			newCardWrap.hide();
-			selectUIWraps.addClass('disabled'); 
-			
-			if(jQuery("#address_" + jQuery( this ).val()).val()) {
-			    billAddySelect.val(jQuery("#address_" + jQuery( this ).val()).val()).change();
-			    //Block Billing Inputs if credit card selected
-			    billFormInputs.each(function(i) {
-			        if(jQuery(this).attr('id') != 'button_ship_to') {
-			            jQuery(this).attr('disabled','disabled');
-			        }
-			    });
-			    billAddySelect.attr('disabled','disabled');
-			} else {
-			    billAddySelect.removeAttr('disabled');
-			    billFormInputs.each(function(i) {
-			        jQuery(this).removeAttr('disabled');
-			    });
-			}
-        }
-    });    
-});
 </script>
