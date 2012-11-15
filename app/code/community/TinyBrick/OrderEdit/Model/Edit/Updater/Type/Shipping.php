@@ -34,11 +34,25 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Shipping extends TinyBrick_Ord
 		if($data['street2']) {
 			$data['street'] .= "\n" . $data['street2'];
 		}
-		$shipping->setData($data);
+        #check if infos are empty
+        foreach($data as $key => $value) {
+            if($key == 'street' || $key == 'city' || $key == 'firstname' || $key == 'lastname') {
+                if(!$value) {
+                    return "Error updating shipping address, you should fill all the fields required.";
+                }
+            }
+        }
+        #If address is identical, dont save it
+        $duplicate = Mage::helper('orderedit')->checkDuplicate($shipping, $data);
+        if($duplicate) {
+            return 'not_updated';
+        }
+		$shipping->addData($data);
 		$region = Mage::getResourceModel('directory/region_collection')->addFieldToFilter('default_name', $data['region'])->getFirstItem();
 		$shipping->setRegionId($region->getId());
 		try{
 			$shipping->save();
+            Mage::helper('orderedit')->createCustomerAddressFromData($data, $order->getCustomerId());
 			$newArray = $shipping->getData();
 			$results = array_diff($oldArray, $newArray);
 			$count = 0;

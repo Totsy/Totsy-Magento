@@ -71,5 +71,27 @@ class TinyBrick_OrderEdit_Helper_Data extends Mage_Core_Helper_Data
             return true;
         }
     }
+
+    public function checkDuplicate($address, $data)
+    {
+        $duplicate = true;
+        $keys = array('street','telephone','postcode','city','lastname','firstname');
+        foreach($keys as $key) {
+            if($address->getData($key) != $data[$key]) {
+                $duplicate = false;
+            }
+        }
+        return $duplicate;
+    }
+
+    public function createCustomerAddressFromData($data, $customerId) {
+        $address = Mage::getModel('customer/address');
+        $address->setData($data)
+            ->setCustomerId($customerId)
+            ->setIsDefaultBilling(false)
+            ->setIsDefaultShipping(false)
+            ->save();
+        return $address->getId();
+    }
 }
 
