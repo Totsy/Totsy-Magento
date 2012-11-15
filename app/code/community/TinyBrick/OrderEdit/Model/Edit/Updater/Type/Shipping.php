@@ -26,7 +26,6 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Shipping extends TinyBrick_Ord
 {
 	public function edit(TinyBrick_OrderEdit_Model_Order $order, $data = array())
 	{
-		$array = array();
         unset($data['entity_id']);
 		$shipping = $order->getShippingAddress();
 		$oldArray = $shipping->getData();
@@ -70,9 +69,7 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Shipping extends TinyBrick_Ord
 			}
 			return true;
 		}catch(Exception $e){
-			$array['status'] = 'error';
-			$array['msg'] = "Error updating shipping address";
-			return false;
+            return "Error updating shipping address" . $e->getMessage();
 		}
 	}
 }
