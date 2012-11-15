@@ -449,13 +449,13 @@
                     //Enable Billing Inputs if credit card not selected
                     billFormInputs.each(function(i) {
                         if(jQuery(this).attr('name') != 'type' && jQuery(this).attr('name') != 'admin_user') {
-                            jQuery(this).val('');
+                            //jQuery(this).val('');
                         }
                     });
                 } else {
                     newCardWrap.hide();
                     if(jQuery("#address_" + jQuery( this ).val()).val()) {
-                        billAddySelect.val(jQuery("#address_" + jQuery( this ).val()).val()).change();
+                        //billAddySelect.val(jQuery("#address_" + jQuery( this ).val()).val()).change();
                     }
                 }
             });
