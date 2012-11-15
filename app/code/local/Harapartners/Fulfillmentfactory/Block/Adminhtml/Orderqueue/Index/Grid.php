@@ -37,25 +37,44 @@ class Harapartners_Fulfillmentfactory_Block_Adminhtml_Orderqueue_Index_Grid exte
     }
 
     protected function _prepareColumns(){
+
+        $this->addColumn('quick_view', array(
+            'header'    => Mage::helper('fulfillmentfactory')->__(''),
+            'align'     => 'center',
+            'filter'    => false,
+            'sortable'  => false,
+            'renderer'    => 'Harapartners_Fulfillmentfactory_Block_Adminhtml_Orderqueue_Index_Renderer_OrderOverview'
+        ));
+
         $this->addColumn('increment_id', array(
             'header'        => Mage::helper('fulfillmentfactory')->__('Order #'),
             'align'         => 'right',
             'width'         => '100px',
             'type'          => 'text',
             'index'         => 'increment_id',
+            'getter'        => 'getEntityId',
+            'type'          =>  'action',
+            'actions'        => array(
+                array(
+                    'caption_data_key' => 'increment_id',
+                    'url'              => array('base' => 'adminhtml/sales_order/view'),
+                    'field'            => 'order_id',
+                    'target'           => '_blank'
+                )
+            )
         ));
         
-        if (!Mage::app()->isSingleStoreMode()) {
+     /*   if (!Mage::app()->isSingleStoreMode()) {
             $this->addColumn('store_id', array(
                 'header'    => Mage::helper('sales')->__('Purchased From (Store)'),
                 'index'     => 'store_id',
                 'type'      => 'store',
                 'width'        => '30px',
-                'store_view'=> true,
-                'display_deleted' => true,
+                'store_view' => true,
+                'display_deleted' => true
             ));
         }
-        
+        */
         $this->addColumn('created_at', array(
             'header' => Mage::helper('sales')->__('Purchased On'),
             'align'  => 'right',
@@ -89,7 +108,7 @@ class Harapartners_Fulfillmentfactory_Block_Adminhtml_Orderqueue_Index_Grid exte
             'align'    => 'right',
             'index' => 'grand_total',
             'type'  => 'currency',
-            'currency' => 'order_currency_code',
+            'currency' => 'order_currency_code'
         ));
         
         $this->addColumn('status', array(
@@ -113,8 +132,9 @@ class Harapartners_Fulfillmentfactory_Block_Adminhtml_Orderqueue_Index_Grid exte
     
     public function getRowUrl($row) {
         //Mage::getModel('adminhtml/url')->getUrl('adminhtml/sales_order/view')
-        return $this->getUrl('adminhtml/sales_order/view', array(
+        /*return $this->getUrl('adminhtml/sales_order/view', array(
                 'order_id'=>$row->getId()
-        ));
+        ));*/
+        return false;
     }
 }

@@ -48,6 +48,7 @@ class Harapartners_Promotionfactory_Model_Observer {
                 $newOption->setData(
                     array('code' => 'reservation_code', 'value' => $vpc->getCode())
                 );
+                $newOption->setCode('reservation_code');
                 $newOption->setProduct($product);
                 $newOption->setItem($quoteItem);
                 $quoteItem->addOption($newOption);
@@ -149,7 +150,12 @@ class Harapartners_Promotionfactory_Model_Observer {
         $email = $order->getCustomer()->getEmail();
 
         if(!$order || !$order->getId()) {
-            return;
+            if($order) {
+                $order->save();
+            }
+            if(!$order || !$order->getId()) {
+                return;
+            }
 
         }
 

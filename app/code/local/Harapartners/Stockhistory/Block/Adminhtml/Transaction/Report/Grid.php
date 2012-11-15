@@ -212,5 +212,9 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Grid extends 
 
         return $csv;
     }
+
+    public function getRowUrl($row) {
+        return false;
+    }
     
 }

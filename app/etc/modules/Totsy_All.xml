@@ -9,6 +9,10 @@
             <active>true</active>
             <codePool>local</codePool>
         </Totsy_Ajax>
+        <Totsy_Bundle>
+            <active>true</active>
+            <codePool>local</codePool>
+        </Totsy_Bundle>
         <Totsy_Cdn>
             <active>true</active>
             <codePool>local</codePool>
