@@ -47,8 +47,6 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Shipping extends TinyBrick_Ord
             return 'not_updated';
         }
 		$shipping->addData($data);
-		$region = Mage::getResourceModel('directory/region_collection')->addFieldToFilter('default_name', $data['region'])->getFirstItem();
-		$shipping->setRegionId($region->getId());
 		try{
 			$shipping->save();
             Mage::helper('orderedit')->createCustomerAddressFromData($data, $order->getCustomerId());
@@ -62,12 +60,7 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Shipping extends TinyBrick_Ord
 					$count++;
 				}
 			}
-
-			if($count != 0) {
-				$comment = "Changed shipping address:<br />" . $comment . "<br />";
-				return $comment;
-			}
-			return true;
+			return false;
 		}catch(Exception $e){
             return "Error updating shipping address" . $e->getMessage();
 		}
