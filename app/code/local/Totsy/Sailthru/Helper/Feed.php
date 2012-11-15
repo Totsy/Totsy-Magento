@@ -118,7 +118,8 @@ class Totsy_Sailthru_Helper_Feed extends Mage_Core_Helper_Abstract
             $this->arrayKeyExistsValidateAndFormat('products', $event, $error);
         }
         if (!empty($error)){
-            $this->_errors[] = $error;
+            $this->_errors[$event['entity_id']] = array_unique($error);
+            unset($error);
         }
 
     }
@@ -291,7 +292,7 @@ class Totsy_Sailthru_Helper_Feed extends Mage_Core_Helper_Abstract
             return true;
         }
 
-        $error[] = 'Key "'.$key.'" does not exist in a for event ( Id = \''.$array['entity_id'].'\')';
+        $error[$array['entity_id']][] = 'Key "'.$key.'" does not exist in a for event ( Id = \''.$array['entity_id'].'\')';
         $array[$key] = null;
         
         return false;

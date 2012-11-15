@@ -276,4 +276,49 @@ class Totsy_Cybersource_Model_Soap extends Mage_Cybersource_Model_Soap
         return $this;
     }
 
+    /**
+     * Credit customer profile
+     *
+     * @param Mage_Sale_Model_Order_Payment $payment
+     * @param flaot $amount
+     * @return Mage_Cybersource_Model_Soap
+     */
+    public function credit($subscription_id, $amount)
+    {
+        $error = false;
+        if ($subscription_id && $amount>0) {
+            $soapClient = $this->getSoapApi();
+            $this->iniRequest();
+            $ccCreditService = new stdClass();
+            $ccCreditService->run = "true";
+            $this->_request->ccCreditService = $ccCreditService;
+
+            $subscription_info = new stdClass();
+            $subscription_info->subscriptionID = $subscription_id;
+            $this->_request->recurringSubscriptionInfo = $subscription_info;
+
+            $purchaseTotals = new stdClass();
+            $purchaseTotals->grandTotalAmount = $amount;
+            $this->_request->purchaseTotals = $purchaseTotals;
+
+            try {
+                $result = $soapClient->runTransaction($this->_request);
+                if ($result->reasonCode==self::RESPONSE_CODE_SUCCESS) {
+
+                } else {
+                    $error = Mage::helper('cybersource')->__('There is an error in processing the payment. ' . $this->_errors[$result->reasonCode] . ' Please try again or contact us.');
+                }
+            } catch (Exception $e) {
+                Mage::throwException(
+                    Mage::helper('cybersource')->__('Gateway request error: %s', $e->getMessage())
+                );
+            }
+        } else {
+            $error = Mage::helper('cybersource')->__('Error in refunding the payment.');
+        }
+        if ($error !== false) {
+            Mage::throwException($error);
+        }
+        return $this;
+    }
 }

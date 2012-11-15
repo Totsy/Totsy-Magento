@@ -3,18 +3,18 @@
 	    	    <div > 
 	    		    <div class="pull-left field half-of-half">
 	    	           <label for="shipping:firstname" class="required"><em>*&nbsp;</em><?php echo $this->__('first name') ?></label>
-	    	     <input type="text" name="shipping[firstname]" title="<?php echo $this->__('First Name') ?>" class="input-text required-entry firstname"  value="<?php echo $this->htmlEscape($this->getFirstName()) ?>" placeholder="<?php echo $this->__('First Name') ?>" id="shipping:firstname" />
+	    	     <input type="text" name="shipping[firstname]" title="<?php echo $this->__('First Name') ?>" class="input-text required-entry firstname validate-alpha"  value="<?php echo $this->htmlEscape($this->getFirstName()) ?>" placeholder="<?php echo $this->__('First Name') ?>" id="shipping:firstname" />
 	    	        </div>
 	    	        <div class="field half-of-half">
 	    	            <label for="shipping:lastname" class="required"><em>*&nbsp;</em><?php echo $this->__('last name') ?></label>
-	    	            <input type="text" name="shipping[lastname]" title="<?php echo $this->__('Last Name') ?>" class="input-text required-entry lastname" value="<?php echo $this->htmlEscape($this->getLastName()) ?>" placeholder="<?php echo $this->__('Last Name') ?>" id="shipping:lastname" />
+	    	            <input type="text" name="shipping[lastname]" title="<?php echo $this->__('Last Name') ?>" class="input-text required-entry lastname validate-alpha" value="<?php echo $this->htmlEscape($this->getLastName()) ?>" placeholder="<?php echo $this->__('Last Name') ?>" id="shipping:lastname" />
 	    	        </div>
 	    	    </div>
 	    	    <input type="hidden" name="shipping[email]" id="shipping:email" value="<?php echo $this->getCustomer()->getEmail() ?>" />
 	    	    <input type="hidden" name="shipping[selected]" id="shipping:selected" />
 	    	         <div class="field half-of-half">
 			            <label for="shipping:street1" class="required"><em>*&nbsp;</em><?php echo $this->__('street address line 1') ?></label>
-			            <input type="text" title="<?php echo $this->__('Street Address Line 1') ?>" name="shipping[street][0]" id="shipping:street1" value="<?php echo $this->getAddress()->getStreet(1) ?>" placeholder="<?php echo $this->__('Street Address Line 1') ?>" class="input-text required-entry streetaddress1" />
+			            <input type="text" title="<?php echo $this->__('Street Address Line 1') ?>" name="shipping[street][0]" id="shipping:street1" value="<?php echo $this->getAddress()->getStreet(1) ?>" placeholder="<?php echo $this->__('Street Address Line 1') ?>" class="input-text required-entry streetaddress1"/>
 	    	        </div>
 	    	     </div>
 	    	     <div>
@@ -69,5 +69,14 @@
         jQuery( '#shipping-address-select' ).bind( 'change', hpcheckout.switchAddress );
         jQuery( '#billing\\:selected' ).val(jQuery( '#billing-address-select' ).val());
     });
+
+    jQuery('#shipping\\:street1, #shipping\\:street2').keyup(function(){
+		var $this = jQuery(this);
+		if($this.val().length > 30 ) {
+			$this.val($this.val().substr(0,30));
+		}
+	});
 //]]>
 </script>
+
+	

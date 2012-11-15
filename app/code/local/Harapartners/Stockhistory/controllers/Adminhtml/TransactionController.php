@@ -368,7 +368,6 @@ class Harapartners_Stockhistory_Adminhtml_TransactionController extends Mage_Adm
     }
 
     public function changeCasePackAction() {
-      //  var_dump($this->getRequest()->getParams()); die();
         $change_to = $this->getRequest()->getParam('change_to');
         $items = $this->getRequest()->getParam('product_id');
         if($items) {

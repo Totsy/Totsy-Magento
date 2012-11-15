@@ -16,10 +16,14 @@
             <input type="text" title="<?php echo $this->__('Name on Card') ?>" class="input-text required-entry" id="<?php echo $_code ?>_cc_owner" name="payment[cc_owner]" value="<?php echo $this->htmlEscape($this->getInfoData('cc_owner')) ?>" />
         </div>
     </li>*/ ?>
-    <?php $customerId = Mage::getSingleton('adminhtml/session_quote')->getCustomerId() ?>
-    <?php $orderId = $this->getRequest()->getParam('order_id'); ?>
-    <?php $profiles = $this->getProfilesByCustomerId( $customerId ) ?>
-    <?php if( $customerId && $profiles && count( $profiles->getItems() ) && !$orderId ): ?>
+    <?php if($this->getRequest()->getParam('order_id')) : ?>
+        <?php $orderId = $this->getRequest()->getParam('order_id'); ?>
+        <?php $customerId = Mage::getModel('sales/order')->load($orderId)->getCustomerId(); ?>
+    <?php else : ?>
+        <?php $customerId = Mage::getSingleton('adminhtml/session_quote')->getCustomerId(); ?>
+    <?php endif; ?>
+    <?php $profiles = $this->getProfilesByCustomerId($customerId); ?>
+    <?php if( $customerId && $profiles && count( $profiles->getItems() )): ?>
         <li class="switch-card-control">
             <label for="use-card-method">Choose a credit/debit card:</label>
             <div class="totsy-selective-input-box middle-length" id="use-card-method">
@@ -32,6 +36,12 @@
                 </select>
             </div>
         </li>
+        <div>
+            <?php foreach( $profiles as $profile ): ?>
+            <?php if( !$profile->getSubscriptionId() || $profile->getIsDefault()== 1 ) { continue; } ?>
+            <input type="hidden" id="address_<?php echo $profile->getEncryptedSubscriptionId() ?>" value="<?php echo $profile->getData('address_id') ?>" />
+            <?php endforeach ?>
+        </div>
     <?php endif ?>
     <div class="use-new-card-wrapper">
         <li>
@@ -151,11 +161,11 @@
                     if( jQuery( this ).val() == '' ) {
                         jQuery( '.use-new-card-wrapper' ).show();
                         jQuery( 'input, select', '.use-new-card-wrapper' ).removeAttr( 'disabled' );
-//                        jQuery( 'input', '.use-new-card-wrapper' ).show();
+//                      jQuery( 'input', '.use-new-card-wrapper' ).show();
                     } else {
                         jQuery( '.use-new-card-wrapper' ).hide();
                         jQuery( 'input, select', '.use-new-card-wrapper' ).attr( 'disabled', 'disabled' );
-//                        jQuery( 'input', '.use-new-card-wrapper' ).hide();
+//                      jQuery( 'input', '.use-new-card-wrapper' ).hide();
                     }
                 });
             });
