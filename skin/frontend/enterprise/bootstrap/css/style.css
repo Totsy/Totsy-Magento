@@ -526,6 +526,10 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
 	text-align:left;
 }
 
+#rewards_points {
+    float:right;
+}
+
 .saved_card span:not(.cc){
 	margin-left: 15px;
     margin-right: 15px;
@@ -1098,6 +1102,11 @@ float:left;
 
 .cc_saved_cards {
     width:228px;
+    float: left;
+}
+
+#credits_and_card_save {
+    float: right;
 }
 
 .cc_security {

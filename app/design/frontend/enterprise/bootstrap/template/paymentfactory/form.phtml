@@ -81,7 +81,7 @@ jQuery( document ).ready( function() {
             isCollapsed: false,
             hasProfile: "<?php echo $hasProfile; ?>",
             toggleViews: function() { 
-                if (!this.hasProfile) {
+                if (this.hasProfile) {
                     jQuery(".use-new-card-wrapper").hide();
                     jQuery(".checkout-reward").css("padding-top", "50px");
                     jQuery(".cc_save_card").appendTo(jQuery("#add_payment_save_card"));
@@ -123,7 +123,7 @@ jQuery( document ).ready( function() {
     
     jQuery("#add_payment_method").click(function(){
         checkoutPayment.addPayment();
-    })
+    });
     
 	jQuery(".use-saved-card-control").click( function(){
         jQuery("#cc_data").hide();
@@ -227,17 +227,15 @@ jQuery( document ).ready( function() {
                     <?php endforeach ?>
                 </div>
     </div>
-    <div class="pull-right">
-    <div style="float:left">
-        <div class="cc_save_card pull-left use-new-card-wrapper">
-                <div>
-                    <input type="checkbox" value="1" name="payment[saved_by_customer]" checked="checked" id="<?php echo $_code ?>_saved" />
-                </div>
-                <div id="cc_save_text" for="<?php echo $_code ?>_cc_save"><?php echo $this->__(' Save this method for quick <br> shopping on future visits!'); ?>
-                </div>
+    <div id="credits_and_card_save">
+        <div class="cc_save_card use-new-card-wrapper">
+            <div>
+                <input type="checkbox" value="1" name="payment[saved_by_customer]" checked="checked" id="<?php echo $_code ?>_saved" />
             </div>
-    </div>    
-    <div class="rewards_points pull-right">
+            <div id="cc_save_text" for="<?php echo $_code ?>_cc_save"><?php echo $this->__(' Save this method for quick <br> shopping on future visits!'); ?>
+            </div>
+        </div>
+        <div id="rewards_points">
             <?php echo $this->getLayout()->getBlock('hpcheckout.reward.points')->toHtml(); ?>
         </div>
     </div>

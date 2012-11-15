@@ -51,10 +51,15 @@
 
     jQuery( document ).ready( function() {
         if( isRewardUsed && isEnoughPointsToCoverAmount ) {
+            jQuery("#reward_placer").css("padding-top", "0px");
+            jQuery("#credits_and_card_save").css("float", "left");
+            jQuery("#use-card-method").hide();
+            jQuery("#hpcheckout-payment-add-title").hide();
+        
         	jQuery( 'input[name="payment[method]"]').val('free');
         	jQuery( '#cc-data' ).hide();
         }
-		jQuery( '#use-reward-point' ).bind( 'click', function() {
+		jQuery( '#use-reward-point' ).bind( 'click', function() {		
 			jQuery( '#reward-points-input' ).val( 1 );
 			if( isEnoughPointsToCoverAmount ) {
 	        	jQuery( 'input[name="payment[method]"]').attr('value', '');
