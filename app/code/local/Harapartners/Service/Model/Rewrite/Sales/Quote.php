@@ -101,4 +101,19 @@ class Harapartners_Service_Model_Rewrite_Sales_Quote
 
         return $item;
     }
+
+    public function hasFulfillmentType($fulfillmentType) {
+        foreach($this->getItems() as $item) {
+            if($item->getParentItemId()) {
+                continue;
+            }
+            $product = Mage::getModel ( 'catalog/product' )->load ( $item->getProductId () );
+            if($product->getIsVirtual() && $fulfillmentType == 'virtual') {
+                return true;
+            } elseif($product->getFulfillmentType() == $fulfillmentType) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

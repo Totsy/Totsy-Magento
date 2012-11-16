@@ -30,9 +30,6 @@ $shipDate = date('m-d-Y', Mage::helper('sales/order')->calculateEstimatedShipDat
             </span>
             <?php endforeach; ?>
             </div>
-            <div>
-            Estimated Ship date: <?php echo date('Y-m-d', Mage::helper('sales/order')->calculateEstimatedShipDate($quote)); ?>
-            </div>
         </div>
         <?php endif;?>
         <?php if ($addtInfoBlock = $this->getProductAdditionalInformationBlock()):?>
@@ -41,7 +38,8 @@ $shipDate = date('m-d-Y', Mage::helper('sales/order')->calculateEstimatedShipDat
     </td>
     <td>
         <?php $fulFillmentType = Mage::getModel('catalog/product')->load($_item->getProductId())->getFulfillmentType ();?>
-        <?php if($fulFillmentType == 'dotcom_stock' && Mage::getSingleton('checkout/session')->getSplitCartFlag()):?>
+        <?php if($fulFillmentType == 'dotcom_stock'
+        && (Mage::getSingleton('checkout/session')->getSplitCartFlag() || !$quote->hasFulfillmentType('dotcom') )):?>
             Estimated Ship Date: 1-3 Business Days
         <?php elseif($_item->getProduct()->getIsVirtual()):?>
             You will receive an email with the details of this voucher code.
