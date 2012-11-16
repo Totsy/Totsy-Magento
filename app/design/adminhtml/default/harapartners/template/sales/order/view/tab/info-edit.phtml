@@ -29,7 +29,7 @@
     <div id="order-messages">
         <?php echo $this->getChildHtml('order_messages') ?>
     </div>
-    <?php if($this->canEditOrder($_order->getStatus()) && !$this->isOrderInvoiced($_order)): ?>
+    <?php if($this->canEditOrder($_order->getStatus())): ?>
 	    <div class="clear"></div>
 	    <button type="button" onclick="saveMe()" id="orderEdit" style="height:25px; width:280px; font-size:16px;">Edit Order</button>
 	    <div id="comment-field" style="display:none;"><br />Reason for editing order: <span id="required-comment" style="color:red; font-weight: bold; display:none;">Please add a comment to edit an order</span>
@@ -446,8 +446,10 @@
                 if( jQuery(this).val() == '' ) {
                     jQuery("#cc_data").show();
                     newCardWrap.show();
+                    billAddySelect.removeAttr('disabled');
                     //Enable Billing Inputs if credit card not selected
                     billFormInputs.each(function(i) {
+                        jQuery(this).removeAttr('disabled');
                         if(jQuery(this).attr('name') != 'type' && jQuery(this).attr('name') != 'admin_user') {
                             jQuery(this).val('');
                         }
@@ -456,6 +458,16 @@
                     newCardWrap.hide();
                     if(jQuery("#address_" + jQuery( this ).val()).val()) {
                         billAddySelect.val(jQuery("#address_" + jQuery( this ).val()).val()).change();
+                        //Block Billing Inputs if credit card selected
+                        billFormInputs.each(function(i) {
+                            jQuery(this).attr('disabled','disabled');
+                        });
+                        billAddySelect.attr('disabled','disabled');
+                    } else {
+                        billAddySelect.removeAttr('disabled');
+                        billFormInputs.each(function(i) {
+                            jQuery(this).removeAttr('disabled');
+                        });
                     }
                 }
             });
