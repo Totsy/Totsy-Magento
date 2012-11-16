@@ -14,6 +14,13 @@
         </Totsy_Sales>
     </modules>
     <global>
+        <blocks>
+            <sales>
+                <rewrite>
+                    <order_item_renderer_default>Totsy_Sales_Block_Order_Item_Renderer_Default</order_item_renderer_default>
+                </rewrite>
+            </sales>
+        </blocks>
         <resources>
             <totsy_sales_setup>
                 <setup>
