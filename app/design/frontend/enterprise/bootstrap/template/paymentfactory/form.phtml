@@ -83,7 +83,7 @@ jQuery( document ).ready( function() {
             toggleViews: function() { 
                 if (this.hasProfile) {
                     jQuery(".use-new-card-wrapper").hide();
-                    jQuery(".checkout-reward").css("padding-top", "50px");
+                    //jQuery(".checkout-reward").css("padding-top", "50px");
                     jQuery(".cc_save_card").appendTo(jQuery("#add_payment_save_card"));
                     
                     jQuery(".cc_save_card").css("width", "60px");
@@ -175,7 +175,7 @@ jQuery( document ).ready( function() {
             <?php if( $customerId  ): ?>
             <div>
                 <div class="cc_security pull-right">
-                    <div class="cc_secure_text pull-left">Totsy.com makes sure your information is<br> private and secure! (<a href="#">more info</a>)</div>
+                    <div class="cc_secure_text pull-left">Totsy.com ensures your information is<br> private and secure! (<a href="#">more info</a>)</div>
                     <div class="cc_secure_icon">
                         <img src="/skin/frontend/enterprise/bootstrap/images/security-lock.png" width="19" height="32">
                     </div>
