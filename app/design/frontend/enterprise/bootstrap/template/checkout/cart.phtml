@@ -66,10 +66,28 @@
             $fulfillmentType = $product->getFulfillmentType();
         }
         $fulfillmentTypes [$fulfillmentType] [] = $item->getId ();
+
     }
 
     if(count($fulfillmentTypes) > 1) {
         $multiShipping = TRUE;
+        $sortedFulfillmentTypes = array();
+        if(array_key_exists('dotcom_stock',$fulfillmentTypes)) {
+            $sortedFulfillmentTypes['dotcom_stock'] = $fulfillmentTypes['dotcom_stock'];
+            unset($fulfillmentTypes['dotcom_stock']);
+        }
+        if(array_key_exists('dotcom',$fulfillmentTypes)) {
+            $sortedFulfillmentTypes['dotcom'] = $fulfillmentTypes['dotcom'];
+            unset($fulfillmentTypes['dotcom']);
+        }
+        if(array_key_exists('virtual',$fulfillmentTypes)) {
+            $sortedFulfillmentTypes['virtual'] = $fulfillmentTypes['virtual'];
+            unset($fulfillmentTypes['virtual']);
+        }
+        if(count($fulfillmentTypes)) {
+            array_push($sortedFulfillmentTypes,$fulfillmentTypes);
+        }
+        $fulfillmentTypes = $sortedFulfillmentTypes;
     }
 
     // Split cart check
@@ -124,10 +142,15 @@
                 switch($fulfillmentType) {
 
                     case 'dotcom':
-                        echo '<h3>The following products will ship on '.  date('F jS, Y', Mage::helper('sales/order')->calculateEstimatedShipDate($quote)) . '</h3>';
+                        echo '<h3>Standard Shipping Items</h3>The following items will ship on or around '.  date('F jS, Y', Mage::helper('sales/order')->calculateEstimatedShipDate($quote));
                         break;
                     case 'dotcom_stock':
-                        echo '<h3>The following Totsy Private Label products can ship immediately</h3>';
+                        ?>
+                    <h3 style="display:inline;">Get These Items Fast!</h3>&nbsp;<a href="#">What is this?</a><br/>FastShip these items in 3 days or less for an additional <?php echo $splitCartPrice?>
+                    <span id="splitCartYes" style="<?php echo $splitYesCss;?>"><a href="javascript:void(0);" onclick="javascript:setSplitCartFlag(1, '#splitCartYes')">Yes</a></span>
+                    <span id="splitCartNo" style="<?php echo $splitNoCss;?>"><a href="javascript:void(0);" onclick="javascript:setSplitCartFlag(0, '#splitCartNo');">No</a></span>
+                    <input id="splitCartFlag" type="hidden" name="splitCart" value="<?php echo $splitCartFlag;?>" />
+                        <?php
                         break;
                     case 'virtual':
                         echo '<h3>The following voucher codes will be emailed immediately</h3>';
@@ -138,7 +161,7 @@
             ?>
 
             <fieldset>
-                <table id="shopping-cart-table" class="data-table table table-bordered table-condensed">
+                <table class="shopping-cart-table data-table table table-bordered table-condensed">
                     <?php $mergedCells = ($this->helper('tax')->displayCartBothPrices() ? 2 : 1); ?>
                     <tr>
                         <th rowspan="<?php echo $mergedCells; ?>" colspan="1"><span class="nobr"><?php echo $this->__('Product Name') ?></span></th>
@@ -175,15 +198,9 @@
             </fieldset>
         <?php endforeach;?>
 
-        <table id="shopping-cart-table" class="data-table table table-bordered table-condensed">
+        <table class="shopping-cart-table data-table table table-bordered table-condensed">
             <tr>
                 <td colspan="6">
-                    <?php if(array_key_exists('dotcom_stock', $fulfillmentTypes)):?>
-                        <span style="font-size:18px;color:#FF0000;">For <?php echo $splitCartPrice;?>  get your available items quicker!
-                            <span id="splitCartYes" style="<?php echo $splitYesCss;?>"><a href="javascript:void(0);" onclick="javascript:setSplitCartFlag(1, '#splitCartYes')">Yes</a></span>
-                            <span id="splitCartNo" style="<?php echo $splitNoCss;?>"><a href="javascript:void(0);" onclick="javascript:setSplitCartFlag(0, '#splitCartNo');">No</a></span>
-                            <input id="splitCartFlag" type="hidden" name="splitCart" value="<?php echo $splitCartFlag;?>" /></span>
-                    <?php endif;?>
                     <button type="submit" class="pull-right btn button" title="<?php echo $this->__('Update Shopping Cart') ?>" ><?php echo $this->__('Update Shopping Cart') ?></button>
                 </td>
             </tr>
@@ -191,7 +208,7 @@
 
         <?php else:?>
             <fieldset>
-                <table id="shopping-cart-table" class="data-table table table-bordered table-condensed">
+                <table class="shopping-cart-table data-table table table-bordered table-condensed">
                     <?php $mergedCells = ($this->helper('tax')->displayCartBothPrices() ? 2 : 1); ?>
                     <tr>
                         <th rowspan="<?php echo $mergedCells; ?>" colspan="1"><span class="nobr"><?php echo $this->__('Product Name') ?></span></th>

@@ -858,6 +858,11 @@ body.catalog-category-view .thumbnails > li {position: relative;}
     text-align: right;
 }
 
+.shopping-cart-table th,
+html body .shopping-cart-table tr:hover th
+{background-color: #cdd2d6;}
+
+
 .cc { 
     height: 36px;
 }
