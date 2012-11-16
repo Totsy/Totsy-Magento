@@ -175,9 +175,13 @@ html.test .container .row {outline:1px dotted green;}
 .shoutit {
     color:#d22f2a;
 }
-.shoutit em {
+.shoutit em,
+.shoutit.loud {
     font-style: normal;
     text-transform: uppercase;
+}
+.loud {
+    font-size:110%;
 }
 
 /* link classes */
@@ -1369,9 +1373,18 @@ body.catalog-category-view .price-box .special-price {
     padding:2px 8px 4px;
     background:#dddbdd;
 }
+#product_addtocart_form .availability {
+    font-weight: bold;
+}
 /* prices */
 #product_addtocart_form .product-prices {
     margin-bottom:20px;
+}
+#product_addtocart_form .availability + .product-prices {
+    margin:10px 0;
+    opacity: 0.45;
+    background: rgba(255,255,255,0.75);
+    padding:8px 0;
 }
 #product_addtocart_form .price-box {
     float: left;

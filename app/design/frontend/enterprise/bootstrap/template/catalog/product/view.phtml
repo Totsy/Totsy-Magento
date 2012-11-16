@@ -97,80 +97,85 @@ $savings = money_format('%n', $originalPrice) - money_format('%n', $discountPric
                 $today = strtotime('NOW');
             ?>
             </div>
-        <!-- <div class="well"> -->
             <div class="span3 product-addtocart<?php if ($this->hasOptions()): echo ' has-options'; else: echo ' no-options'; endif;?>">
                 <form action="<?php echo $this->getSubmitUrl($_product) ?>" method="post" id="product_addtocart_form" <?php if($_product->getOptions()): ?> enctype="multipart/form-data" <?php endif; ?> >
-                        <div class="no-display">
-                            <input type="hidden" name="product" value="<?php echo $_product->getId() ?>" />
-                            <input type="hidden" name="related_product" id="related-products-field" value="" />
-                        </div>
-                <div id="product-main-info">
-                    <p class="product-ids">
-                    <?php //echo $this->__('SKU# %s', $this->htmlEscape($_product->getSku())); ?></p>
-                    <?php //echo $this->getReviewsSummaryHtml($_product, false, true)?>
-                    <div class="product-prices">
-                        <div class="product-prices-main clearfix">
-                            <?php echo $this->getChildHtml('alert_urls') ?>
-                            <?php if($today <= $event_end_date):  ?>
-                            <?php echo $this->getPriceHtml($_product) ?>
-                            <?php endif; ?>
-                            <div class="product-price-was"><span>Was</span> $<?php echo number_format((float)$special_price, 2, '.', '');?></div>
-                        </div>
-                        <div class="product-prices-supp clearfix">
-                            <span class="product-price-discount"><?php echo number_format((float)$percent, 0, '.', '');?>% <span>Discount</span></span>
-                            <span class="product-price-savings">Over $<?php echo number_format((float)$savings, 0, '.', '');?> <span>Savings</span></span>
-                        </div>
+                    <div class="no-display">
+                        <input type="hidden" name="product" value="<?php echo $_product->getId() ?>" />
+                        <input type="hidden" name="related_product" id="related-products-field" value="" />
                     </div>
-                                <?php echo $this->getChildHtml('tierprices') ?>
-                                <?php echo $this->getChildHtml('extrahint') ?>
-                                    <?php if (!$this->hasOptions()):?>
-                                        <?php echo $this->getChildHtml('product_type_data') ?>
-                                         <div class="add-to-box">
-                                             <?php if($_product->isSaleable()): ?>
-                                                 <?php echo $this->getChildHtml('addtocart') ?>
-                                             <?php endif; ?>
-                                             <?php //echo $this->getChildHtml('addto') ?>
-                                         </div>
-                                    <?php else:?>
-                                         <?php if ($_product->isSaleable() && $this->hasOptions() && $this->getChildChildHtml('container1') ):?>
-                                             <div class="options-container-small">
-                                                 <?php echo $this->getChildChildHtml('container1', '', true, true) ?>
-                                             </div>
-                                         <?php else: ?>
-                                             <?php //echo $this->getChildHtml('addto') ?>
-                                         <?php endif;?>
-                                    <?php endif; ?>
-                                    <?php echo $this->getChildHtml('other');?>
-                <?php if ($_product->isSaleable() && $this->hasOptions() && $this->getChildChildHtml('container2')):?>
-                    <div class="options-container-big">
-                        <?php echo $this->getChildChildHtml('container2', '', true, true) ?>
-                    </div>
+                    <div id="product-main-info">
+                        <p class="product-ids"><?php //echo $this->__('SKU# %s', $this->htmlEscape($_product->getSku())); ?></p>
+                        <?php //echo $this->getReviewsSummaryHtml($_product, false, true)?>
+                        
+                        <?php if (!$_product->isAvailable()): ?>
+                            <div class="availability">
+                                <p><?php echo $this->helper('catalog')->__('Availability:') ?> <strong class="shoutit loud"><?php echo $this->helper('catalog')->__('Out of stock') ?></strong></p>
+                            </div>
+                        <?php endif; ?>
+
+                        <div class="product-prices">
+                            <div class="product-prices-main clearfix">
+                                <?php echo $this->getChildHtml('alert_urls') ?>
+                                <?php if($today <= $event_end_date):  ?>
+                                <?php echo $this->getPriceHtml($_product) ?>
+                                <?php endif; ?>
+                                <div class="product-price-was"><span>Was</span> $<?php echo number_format((float)$special_price, 2, '.', '');?></div>
+                            </div>
+                            <div class="product-prices-supp clearfix">
+                                <span class="product-price-discount"><?php echo number_format((float)$percent, 0, '.', '');?>% <span>Discount</span></span>
+                                <span class="product-price-savings">Over $<?php echo number_format((float)$savings, 0, '.', '');?> <span>Savings</span></span>
+                            </div>
+                        </div>
+                        <?php echo $this->getChildHtml('tierprices') ?>
+                        <?php echo $this->getChildHtml('extrahint') ?>
+                        <?php if (!$this->hasOptions()):?>
+                            <?php echo $this->getChildHtml('product_type_data') ?>
+                             <div class="add-to-box">
+                                 <?php if($_product->isSaleable()): ?>
+                                     <?php echo $this->getChildHtml('addtocart') ?>
+                                 <?php endif; ?>
+                                 <?php //echo $this->getChildHtml('addto') ?>
+                             </div>
+                        <?php else:?>
+                            <?php if ($_product->isSaleable() && $this->hasOptions() && $this->getChildChildHtml('container1') ):?>
+                                <div class="options-container-small">
+                                    <?php echo $this->getChildChildHtml('container1', '', true, true) ?>
+                                </div>
+                            <?php else: ?>
+                                <?php //echo $this->getChildHtml('addto') ?>
+                            <?php endif;?>
+                        <?php endif; ?>
+                        <?php echo $this->getChildHtml('other');?>
+                        <?php if ($_product->isSaleable() && $this->hasOptions() && $this->getChildChildHtml('container2')):?>
+                            <div class="options-container-big">
+                                <?php echo $this->getChildChildHtml('container2', '', true, true) ?>
+                            </div>
+                            <!--
+                            <div class="sharethis">
+                            <script type="text/javascript">var switchTo5x=true;</script>
+                            <script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
+                            <script type="text/javascript">stLight.options({publisher: "ur-9cc9581d-d77b-def7-ed25-5e247f0520ad"}); </script>
+                            <br/><strong>Share</strong>
+                            <hr style="margin:10px 0px;"/>
+                            <span class='st_pinterest_large pull-right' displayText='Pinterest'></span>
+                            <span class='st_facebook_large pull-right' displayText='Facebook'></span>
+                            <span class='st_twitter_large pull-right' displayText='Tweet'></span>
+                            <span class='st_email_large pull-right' displayText='Email'></span>
+                            <div class="clear"></div>
+                            </div>
+                            -->
+                        <?php endif;?>
+                    
+                    </div><!-- /#product-main-info -->
+                </form>
+            </div> <!-- /.product-addtocart -->
             
-            <div>
-            <!-- <script type="text/javascript">var switchTo5x=true;</script>
-            <script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
-            <script type="text/javascript">stLight.options({publisher: "ur-9cc9581d-d77b-def7-ed25-5e247f0520ad"}); </script>
-            <br/><strong>Share</strong>
-            <hr style="margin:10px 0px;"/>
-            <span class='st_pinterest_large pull-right' displayText='Pinterest'></span>
-            <span class='st_facebook_large pull-right' displayText='Facebook'></span>
-            <span class='st_twitter_large pull-right' displayText='Tweet'></span>
-            <span class='st_email_large pull-right' displayText='Email'></span>
-            <div class="clear"></div>
+            <?php echo $this->getChildHtml('relatedProducts') ?>
+            <?php //echo $this->getChildHtml('upsell_products') ?>
+            <?php //echo $this->getChildHtml('productTagList') ?>
+            <?php echo $this->getChildHtml('product_additional_data') ?>
             
-            </div>
-            -->
-            </div>
-                <?php endif;?>
-                    </div>
-                    </form>
-            </div>
-        <!-- </div> -->
-                <?php echo $this->getChildHtml('relatedProducts') ?>
-                <?php //echo $this->getChildHtml('upsell_products') ?>
-                <?php //echo $this->getChildHtml('productTagList') ?>
-                <?php echo $this->getChildHtml('product_additional_data') ?>
-        </div>
+        </div><!-- /.product-main -->
     </div>
 </section>
 <script type="text/javascript">
