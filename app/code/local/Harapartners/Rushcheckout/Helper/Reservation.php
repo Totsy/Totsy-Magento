@@ -52,9 +52,8 @@ class Harapartners_Rushcheckout_Helper_Reservation extends Mage_Core_Helper_Abst
             ->addAttributeToSelect('purchase_max_sale_qty')
             ->addAttributeToFilter('entity_id', $quoteItem->getProduct()->getId())
             ->getFirstItem();
-
         if($product->getData('purchase_max_sale_qty')) {
-            if($product->getData('purchase_max_sale_qty') <= $quoteItem->getData('qty')
+            if($product->getData('purchase_max_sale_qty') < $quoteItem->getData('qty')
                 || $quantityPurchased >= $product->getData('purchase_max_sale_qty')) {
                 Mage::throwException(
                     Mage::helper('cataloginventory')->__('You have requested more than the authorized quantity.')
