@@ -1364,6 +1364,9 @@ body.catalog-category-view .price-box .special-price {
 .product-main .product-content {
     margin:10px 0;
 }
+.product-main .product_desc {
+    margin-bottom: .8em;
+}
 
 /* @PDP pricing + options + addtocart module */
 .product-main .product-addtocart {
@@ -1393,24 +1396,23 @@ body.catalog-category-view .price-box .special-price {
 .product-prices-main .old-price {
     display: none;
 }
-#product_addtocart_form .price-box .big_price:before {
+#product_addtocart_form .price-box .price:before {
     content: "NOW\0000a0";
     color:#d22f2a;
     font-size: 16px;
     font-weight: bold;
     letter-spacing: -.025em;
 }
-#product_addtocart_form .price-box .big_price,
-.product-prices-main .big_price .price {
-    display: inline-block;
-}
-.product-prices-main .big_price .price:first-letter {
+/*
+.product-prices-main .price:first-letter {
     vertical-align: super;
     font-size: 15px !important;
 }
-.product-prices-main .price.special-price {
+*/
+.product-prices-main .price-box .price {
+    display: inline-block;
     color:#d22f2a;
-    font-size: 25px;
+    font-size: 25px; font-weight: bold;
     letter-spacing: -0.025em;
 }
 #product_addtocart_form .product-price-was {
@@ -1452,6 +1454,17 @@ body.catalog-category-view .price-box .special-price {
 .product-options label > span {
     text-transform: lowercase;
 }
+.options-container-big label.bundled:first-letter {
+    text-transform: capitalize;
+}
+.options-container-big dl,
+.options-container-big dd {
+    margin:0;
+}
+.options-container-big p.required {
+    display: none;
+}
+
 /* add to cart */
 #product-main-info,
 .product-options-bottom {

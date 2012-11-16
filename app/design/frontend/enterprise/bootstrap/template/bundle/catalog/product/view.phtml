@@ -117,7 +117,10 @@ $savings = money_format('%n', $originalPrice) - money_format('%n', $discountPric
                             <div class="product-prices-main clearfix">
                                 <?php echo $this->getChildHtml('alert_urls') ?>
                                 <?php if($today <= $event_end_date):  ?>
-                                <?php echo $this->getPriceHtml($_product) ?>
+                                    <div class="price-box-bundle">
+                                        <?php echo $this->getPriceHtml($_product) ?>
+                                    </div>
+                                    <?php echo $this->getChildHtml('bundle_prices') ?>
                                 <?php endif; ?>
                                 <div class="product-price-was"><span>Was</span> $<?php echo number_format((float)$special_price, 2, '.', '');?></div>
                             </div>
