@@ -50,32 +50,14 @@ class TinyBrick_OrderEdit_OrderController extends Mage_Adminhtml_Controller_Acti
             $msgs = array();
             
             $changes = array();
-            $addressUpdated = true;
 
             foreach($edits as $edit) {
                 if($edit['type']) {
-                    if($edit['type'] == 'billing') {
-                        $model = Mage::getModel('orderedit/edit_updater_type_'.$edit['type']);
-                        if($mess = $model->edit($order,$edit)) {
-                            if($mess == 'not_updated') {
-                                $addressUpdated = false;
-                            } else {
-                                $msgs[] = $mess;
-                            }
-                        } 
-                    } else {
-                        $addressUpdated = false;
-                    }
-                }
-            }
-
-            foreach($edits as $edit) {
-                if($edit['type']) {
-                    if($edit['type'] == 'shipping') {
+                    if($edit['type'] == 'billing' || $edit['type'] == 'shipping') {
                         $model = Mage::getModel('orderedit/edit_updater_type_'.$edit['type']);
                         if($mess = $model->edit($order,$edit)) {
                             $msgs[] = $mess;
-                        }
+                        } 
                     }
                 }
             }
@@ -83,15 +65,17 @@ class TinyBrick_OrderEdit_OrderController extends Mage_Adminhtml_Controller_Acti
             foreach($edits as $edit) {
                 if($edit['type']) {
                     if($edit['type'] == 'payment') {
-                        $edit['addressUpdated'] = $addressUpdated;
                         $model = Mage::getModel('orderedit/edit_updater_type_'.$edit['type']);
+                        $edit = $this->cleanPaymentData($edit);
                         if($mess = $model->edit($order,$edit)) {
                             $msgs[] = $mess;
                         }
                     }
                 }
             }
-
+            //Makes ItemQueues linked with the order Ready to be processed
+            Mage::helper('fulfillmentfactory/data')->makeOrderReadyToBeProcessed($order);
+            Mage::getModel('promotionfactory/virtualproductcoupon')->openVirtualProductCouponInOrder($order);
             //$order->collectTotals()->save();
             $postTotal = $order->getGrandTotal();
             if(count($msgs) < 1) {
@@ -239,5 +223,19 @@ class TinyBrick_OrderEdit_OrderController extends Mage_Adminhtml_Controller_Acti
             }
         }
         echo Zend_Json::encode($result);
+    }
+
+    /**
+     * Clean Payment datas got from the post to be able to process them
+     */
+    public function cleanPaymentData($datas) {
+        $cleanDatas = null;
+        foreach($datas as  $key => $data) {
+            $key = str_replace('[','',$key);
+            $key = str_replace(']','',$key);
+            $key = str_replace('payment','',$key);
+            $cleanDatas[$key] = $data;
+        }
+        return $cleanDatas;
     }
 }
