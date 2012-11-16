@@ -862,6 +862,11 @@ body.catalog-category-view .thumbnails > li {position: relative;}
 html body .shopping-cart-table tr:hover th
 {background-color: #cdd2d6;}
 
+#fastship_modal_icon {float:left; margin-top:-50px; margin-left: -50px;}
+#fastship_close_icon {float:right; margin-right:-20px; margin-top:-20px;}
+#fastship_modal {overflow: visible;}
+#fastship_modal_text {margin: 20px;}
+#fastship_modal_title {float:left; margin: 10px;}
 
 .cc { 
     height: 36px;

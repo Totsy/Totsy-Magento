@@ -146,10 +146,18 @@
                         break;
                     case 'dotcom_stock':
                         ?>
-                    <h3 style="display:inline;">Get These Items Fast!</h3>&nbsp;<a href="#">What is this?</a><br/>FastShip these items in 3 days or less for an additional <?php echo $splitCartPrice?>
-                    <span id="splitCartYes" style="<?php echo $splitYesCss;?>"><a href="javascript:void(0);" onclick="javascript:setSplitCartFlag(1, '#splitCartYes')">Yes</a></span>
-                    <span id="splitCartNo" style="<?php echo $splitNoCss;?>"><a href="javascript:void(0);" onclick="javascript:setSplitCartFlag(0, '#splitCartNo');">No</a></span>
-                    <input id="splitCartFlag" type="hidden" name="splitCart" value="<?php echo $splitCartFlag;?>" />
+                    <div>
+                        <div class="cart-prod-thumb">
+                            <img width="48" height="48" src="<?php echo $this->getSkinUrl('images/icon-fastship-small.png'); ?>"/>
+                        </div>
+                        <div>
+                            <h3 style="display:inline;">Get These Items Fast!</h3>&nbsp;<a href="#fastship_modal" role="button" data-toggle="modal">What is this?</a><br/>FastShip these items in 3 days or less for an additional <?php echo $splitCartPrice?>
+                            <span id="splitCartYes" style="<?php echo $splitYesCss;?>"><a href="javascript:void(0);" onclick="javascript:setSplitCartFlag(1, '#splitCartYes')">Yes</a></span>
+                            <span id="splitCartNo" style="<?php echo $splitNoCss;?>"><a href="javascript:void(0);" onclick="javascript:setSplitCartFlag(0, '#splitCartNo');">No</a></span>
+                            <input id="splitCartFlag" type="hidden" name="splitCart" value="<?php echo $splitCartFlag;?>" />
+                        </div>
+                        <br style="clear"/>
+                    </div>
                         <?php
                         break;
                     case 'virtual':
@@ -285,6 +293,7 @@
     <?php endif;?>
 </div>
 <script type="text/javascript">
+
     function setSplitCartFlag(value, bold_id) {
         jQuery('#splitCartFlag').val(value);
 
@@ -297,3 +306,21 @@
     }
 
 </script>
+
+<div id="fastship_modal" class="modal hide fade">
+    <div id="fastship_modal_icon">
+        <img width="117" height="115" src="<?php echo $this->getSkinUrl('images/icon-fastship-large.png');?>"/>
+    </div>
+    <div id="fastship_close_icon">
+        <a href="javascript:void(0);" data-dismiss="modal"><img width="55" height="55" src="<?php echo $this->getSkinUrl('images/icon-fastship-close.png');?>"/></a>
+    </div>
+    <div id="fastship_modal_title">
+        <h1>What is FastShip?</h1>
+    </div>
+    <br class="clear"/>
+    <div id="fastship_modal_text">
+        <p>We know busy Moms can't wait for their Totsy purchases to arrive. So we're making things faster.</p>
+        <p>For select sales we have made exclusive arrangements to deliver your favorite items faster. With <b>FastShip</b> your purchase leaves our warehouse in 3 days or less---often within 24 hours!</p>
+        <p>Best of all, when you order only <b>FastShip</b> items you just page the regular shipping charge. If your order contains both <b>FastShip</b> items and regular products you can upgrade the <b>FastShip</b> items for an additional <?php echo $splitCartPrice?></p>
+    </div>
+</div>
