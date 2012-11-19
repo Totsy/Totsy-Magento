@@ -104,6 +104,7 @@ jQuery( document ).ready( function() {
             addPayment: function() {
                 if(this.isCollapsed == false) {                
                     this.isCollapsed = true;
+                    jQuery("[id='payment[cybersource_subid]']").attr("checked", false);
                     jQuery("[id='payment[cybersource_subid]']").attr("disabled", true);
                     jQuery("#add_payment_method").attr("src", "/skin/frontend/enterprise/bootstrap/images/iconmonstr-minus-5-icon.png");
                     jQuery("#paymentfactory_tokenize_cc_save").contents("");                    

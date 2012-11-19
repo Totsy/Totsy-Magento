@@ -542,7 +542,7 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
 }
 
 .saved_card input[type="radio"] {
-    padding:0 10px 0 0;
+    margin:10px 0px 10px 0;
     position: relative;
 }
 /**
@@ -990,7 +990,7 @@ float:left;
 }
 
 .onepage-address-form form {
-	margin-bottom: 0px !important;
+	margin-bottom: 0px;
 }
 
 .onepage-address-form input[type="text"], select {
@@ -998,24 +998,24 @@ float:left;
 }
 
 .onepage-address-form .firstname {
-    width:205px !important;
+    width:205px;
 }
 
 .onepage-address-form .lastname {
-    width:205px !important;
-    margin-left: 10px !important;
+    width:205px;
+    margin-left: 10px;
 }
 
 .onepage-address-form .telephone {
-    width:205px !important;
+    width:205px;
 }
 
 .onepage-address-form .streetaddress1 {
-    width:430px !important;
+    width:430px ;
 }
 
 .onepage-address-form .address-select {
-	width:220px !important;
+	width:220px ;
 }
 
 .error-msg {
@@ -1030,21 +1030,21 @@ float:left;
 }
 
 .onepage-address-form .streetaddress2 {
-    width:430px !important;
+    width:430px ;
 }
 
 .onepage-address-form .zip {
-    width:80px !important;
-    margin-left: 10px !important;
+    width:80px ;
+    margin-left: 10px ;
 }
 
 .onepage-address-form .city {
-    width:175px !important;
+    width:175px ;
 }
 
 .onepage-address-form .state {
-    width: 145px !important;
-    margin-left: 10px !important;
+    width: 145px ;
+    margin-left: 10px ;
 }
 
 .onepage-address-form .country {
@@ -1058,6 +1058,7 @@ float:left;
 
 #add_payment_method {
     cursor: pointer;
+    margin: 3px 0px 3px 0px;
 }
 
 .hpcheckout-payment-title {
