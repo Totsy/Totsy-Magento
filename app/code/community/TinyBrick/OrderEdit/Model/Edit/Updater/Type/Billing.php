@@ -42,7 +42,7 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Billing extends TinyBrick_Orde
             $data['street'] .= "\n" . $data['street2'];
         }
         #If address is identical, dont save it
-        $duplicate = $this->checkDuplicate($billing, $data);
+        $duplicate = Mage::helper('orderedit')->checkDuplicate($billing, $data);
         if($duplicate) {
             return 'not_updated';
         }
@@ -51,7 +51,10 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Billing extends TinyBrick_Orde
                     ->save();
             $order->setData('billing_address_id', $billing->getId())
                     ->save();
-            $this->createCustomerAddressFromBilling($data, $order->getCustomerId());
+            $duplicateAddress = Mage::helper('orderedit')->checkDuplicateCustomerAddress($order->getCustomerId(), $data);
+            if(!$duplicateAddress) {
+                Mage::helper('orderedit')->createCustomerAddressFromData($data, $order->getCustomerId());
+            }
             //logging for changes in billing address
             $newArray = $billing->getData();
             $results = array_diff($oldArray, $newArray);
@@ -63,44 +66,19 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Billing extends TinyBrick_Orde
                     $count++;
                 }
             }
-            if($count != 0) {
-                $comment = "Changed billing address:<br />" . $comment . "<br />";
-                return false;
-            }
             return false;
         }catch(Exception $e){
             return "Error updating billing address" . $e->getMessage();
         }
     }
-    
-    public function checkDuplicate($billing, $data) 
-    {
-        $duplicate = true;
-        $keys = array('street','telephone','postcode','city','lastname','firstname');
-        foreach($keys as $key) {
-            if($billing->getData($key) != $data[$key]) {
-                $duplicate = false;
-            }
-        }
-        return $duplicate;
-    }
 
-    public function createCustomerAddressFromBilling($data, $customerId) {
-        $address = Mage::getModel('customer/address');
-        $address->setData($data)
-                ->setCustomerId($customerId)
-                ->setIsDefaultBilling(false)
-                ->setIsDefaultShipping(false)
-                ->save();
-        return $address->getId();
-    }
-    
     public function getCustomerAddressFromBilling($billingId) {
         $billing = Mage::getModel('sales/order_address')->load($billingId);
         $customerAddress = Mage::getModel('customer/address')->getCollection()
-                        ->addAttributeToFilter('lastname', $billing->getLastname())
-                        ->addAttributeToFilter('postcode', $billing->getPostcode())
-                        ->getFirstItem();
+            ->addAttributeToFilter('firstname', $billing->getFirstname())
+            ->addAttributeToFilter('lastname', $billing->getLastname())
+            ->addAttributeToFilter('postcode', $billing->getPostcode())
+            ->getFirstItem();
         if(!$customerAddress->getId()) {
             return false;
         } else {
