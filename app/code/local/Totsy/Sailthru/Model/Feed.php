@@ -156,11 +156,14 @@ class Totsy_Sailthru_Model_Feed extends Mage_Core_Model_Abstract
             $class = 'Totsy_Sailthru_Helper_Validator_'.ucfirst($type);
             $validator = new $class();
         	if (!$validator->process($event_tmp)){
-        		$this->_output['errors'] = array_merge(
-        			$this->_output['errors'],
-        			$validator->getErrors(),
-        			$this->getFeedHelper()->getErrors()
-        		);
+        		$errors = $validator->getErrors();
+        		if (!empty($errors)){
+        			$this->_output['errors'][$type]['validator'][] = $errors;
+        		}
+        		$errors = $this->getFeedHelper()->getErrors();
+        		if (!empty($errors)){
+        			$this->_output['errors'][$type]['helper'][] = $this->getFeedHelper()->getErrors();
+        		}
         	}
         }
         if (!is_null($max_off)){
@@ -173,7 +176,7 @@ class Totsy_Sailthru_Model_Feed extends Mage_Core_Model_Abstract
     	if (!is_null($plus)){
     		$date = $this->getFeedHelper()->getStartDate();
     	}
-    	$sort = Mage::getModel('categoryevent/sortentry')->loadByDate(date('Y-m-d',$date))->getData();
+    	$sort = Mage::getModel('categoryevent/sortentry')->loadByDate(date('Y-m-d',$date));
     	$return = json_decode($sort[$type.'_queue'],true);	
     	return $return;
     }

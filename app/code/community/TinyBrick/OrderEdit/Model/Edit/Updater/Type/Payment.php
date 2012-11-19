@@ -14,7 +14,7 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Payment extends TinyBrick_Orde
             $addressUpdated = $data['addressUpdated'];
             $savingNewCreditCard = true;
             $customerId = $order->getCustomerId();
-            $billingId = $order->getData('billing_address_id');
+            $billingId = $order->getBillingAddressId();
             $billing = Mage::getModel('sales/order_address')->load($billingId);
             $customerAddressId = Mage::getModel('orderedit/edit_updater_type_billing')->getCustomerAddressFromBilling($billingId);
             if(!$customerAddressId) {
@@ -30,14 +30,16 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Payment extends TinyBrick_Orde
             $payment->setData('cc_last4', substr($payment->getCcNumber(), -4));
             #Check if there is already a cybersource profile if yes, dont create a new one
             $profile = Mage::getModel('paymentfactory/profile');
-            if($payment->getData('cc_number')) {
+            if($payment->getData('cybersource_subid')) {
+                $profile->loadByEncryptedSubscriptionId($payment->getData('cybersource_subid'));
+            } else if($payment->getData('cc_number')) {
                 $profile->loadByCcNumberWithId($payment->getData('cc_number').$customerId.$payment->getCcExpYear().$payment->getCcExpMonth());
             }
-            if($profile && $profile->getId() && !$addressUpdated) {
+            if($profile && $profile->getId()) {
                 $payment = Mage::getModel('sales/order_payment')->getCollection()
                     ->addAttributeToFilter('cybersource_subid',$profile->getData('subscription_id'))
                     ->getFirstItem();
-                if(!$payment || !$payment->getId()) {
+                if((!$payment || !$payment->getId()) && !$addressUpdated) {
                     //Case of Payment Informations has been Deleted from Object, Refill Payment Informations
                     $enteredPayment = new Varien_Object($data);
                     $enteredPayment->setData('cc_last4', substr($enteredPayment->getCcNumber(), -4));
@@ -47,6 +49,9 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Payment extends TinyBrick_Orde
                     return false;
                 } else {
                     $savingNewCreditCard = false;
+                    if($addressUpdated) {
+                        $profile->setData('address_id', $customerAddressId)->save();
+                    }
                 }
             }
             if($savingNewCreditCard) {
@@ -58,8 +63,8 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Payment extends TinyBrick_Orde
             }
             $this->replacePaymentInformation($order, $payment);
             $this->makeOrderReadyToBeProcessed($order);
-            $virtualproductcoupon = Mage::getModel('promotionfactory/virtualproductcoupon');
-            $virtualproductcoupon->openVirtualProductCouponInOrder($order);
+            $virtualProductCoupon = Mage::getModel('promotionfactory/virtualproductcoupon');
+            $virtualProductCoupon->openVirtualProductCouponInOrder($order);
         } catch(Exception $e){
             return "Error updating payment informations : ".$e->getMessage();
         }

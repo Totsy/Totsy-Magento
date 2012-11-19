@@ -169,7 +169,10 @@ $orderStoreDate = $this->formatDate($_order->getCreatedAtStoreDate(), 'medium', 
         
         <fieldset id="billing-edit-form" style="display:none;">
         	<?php $billing = $_order->getBillingAddress() ?>
-
+            <?php if ($this->customerHasAddresses()): ?>
+                <?php echo $this->getAddressesHtmlSelect('billing') ?>
+            <?php endif; ?>
+            <br /><br />
         	<form id="billing-fields">
         		
         		<input type="hidden" name="type" value="billing" />
@@ -209,7 +212,6 @@ $orderStoreDate = $this->formatDate($_order->getCreatedAtStoreDate(), 'medium', 
     <div class="entry-edit">
         <div class="entry-edit-head">
             <h4 class="icon-head head-shipping-address"><?php echo Mage::helper('sales')->__('Shipping Address') ?></h4>
-            <div class="tools"><?php echo $this->getAddressEditLink($_order->getShippingAddress())?></div>
         </div>
         <fieldset id="shipping-static">
             <address id="shipping-static-text"><?php echo $_order->getShippingAddress()->getFormated(true) ?></address>
@@ -217,6 +219,10 @@ $orderStoreDate = $this->formatDate($_order->getCreatedAtStoreDate(), 'medium', 
         
         
         <fieldset id="shipping-edit-form" style="display:none;">
+            <?php if ($this->customerHasAddresses()): ?>
+                <?php echo $this->getAddressesHtmlSelect('shipping') ?>
+            <?php endif; ?>
+            <br /><br />
         	<?php $shipping = $_order->getShippingAddress() ?>
 			
         	<form id="shipping-fields">
@@ -253,3 +259,32 @@ $orderStoreDate = $this->formatDate($_order->getCreatedAtStoreDate(), 'medium', 
 </div>
 <div class="clear"></div>
 <?php endif; ?>
+<script type="text/javascript">
+    function changeAddress(type) {
+        var $formInputs = jQuery('#'+type+'-fields :input');
+        if( jQuery('select#'+type+'-address-select').val() == '' ) {
+            $formInputs.each(function(i) {
+                if(this.name != 'type' && this.name != 'admin_user') {
+                    this.value = '';
+                    this.text = '';
+                }
+            });
+        } else {
+            var params = {};
+            params['addressId'] = jQuery('select#'+type+'-address-select').val();
+            new Ajax.Request('<?php echo Mage::getModel('adminhtml/url')->getUrl('orderedit/order/getorderaddressinformations') ?>', {
+                method: 'get',
+                parameters: params,
+                onSuccess: function(transport) {
+                    var fields = transport.responseText.evalJSON();
+                    $formInputs.each(function(i) {
+                        if (this.name in fields) {
+                            this.value = fields[this.name];
+                            this.text = fields[this.name];
+                        }
+                    })
+                }
+            });
+        }
+     }
+</script>

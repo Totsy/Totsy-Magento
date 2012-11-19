@@ -24,7 +24,18 @@ class Harapartners_Fulfillmentfactory_Model_Service_Itemqueue
             $storeId = $order->getStoreId();
             
             $items = $order->getAllItems();
-            
+            //save shipping address as a customer address
+            $addressCustomer = Mage::getModel('customer/address');
+            $customerId = $order->getQuote()->getCustomerId();
+            if($order->getShippingAddress()) {
+                $shippingAddressDatas = $order->getShippingAddress()->getData();
+                unset($shippingAddressDatas['entity_id']);
+                $addressCustomer->setData($shippingAddressDatas)
+                    ->setCustomerId($customerId)
+                    ->setIsDefaultBilling(false)
+                    ->setIsDefaultShipping(false)
+                    ->save();
+            }
             foreach($items as $item) {
                 //Duplicate test, if order_item_id exist, load the existing one, otherwise return an empty object
                 $itemQueue = Mage::getModel('fulfillmentfactory/itemqueue')->loadByItemId($item->getId());

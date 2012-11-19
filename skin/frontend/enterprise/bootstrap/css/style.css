@@ -2,12 +2,13 @@
  * @Base styles for the Magento Bootstrap theme
  *
  * @Typography notes
- * - Red:           ??              #ed1c25 | rgba(237,45,33,1)
- * - Black:         text headings   #000
- * - Dark Grey      subheadings     #636466
- * - Medium Grey    copy font       #999999
- * - Light Grey     borders         #e5e5e5 | rgba(229,229,229,1)
- * - Green          buttons         #c1d82f or #adc222 | rgba(173,194,34,1)
+ * - Red:           ??                      #d22f2a | rgba(210,47,42,1)
+ * - Ted's Red:     Ted likes this moar     #d22f2a | rgba(210,47,42,1)
+ * - Black:         text headings           #000
+ * - Dark Grey      subheadings             #636466
+ * - Medium Grey    copy font               #999999
+ * - Light Grey     borders                 #e5e5e5 | rgba(229,229,229,1)
+ * - Green          buttons                 #c1d82f or #adc222 | rgba(173,194,34,1)
  */
  
 html,
@@ -27,12 +28,17 @@ html {
     background-image: linear-gradient(top, #eef6fc, #ffffff);
     background-attachment: fixed;
 }
-a {color:#ed1c25;text-decoration:none; outline: none;}
-a:hover{color:#ed1c25;text-decoration:underline;}
+/* Not implemented - pending forthought from "Creative" on how a bold font affects typography site-wide
+body {
+    font-family: "Arial Rounded MT Bold", "Helvetica Rounded", Arial, "Helvetica Neue", Helvetica, sans-serif;
+}
+*/
+a {color:#d22f2a;text-decoration:none; outline: none;}
+a:hover{color:#d22f2a;text-decoration:underline;}
 a:focus{outline: none;}
 .content_push { margin-top:115px; } /* not in use, was for 1col */
 .content_push_2col { margin-top:115px; }
-h2 {font-size:20px!important; /* header override */ }
+h2 {font-size:20px; /* removed !important for "header override" */ }
 /**
  * @Diagnostics
  */
@@ -102,6 +108,17 @@ html.test .container .row {outline:1px dotted green;}
 /**
  * @General / Modular Classes
  */
+.clearfix:before,
+.clearfix:after {
+    content: "";
+    display: table;
+}
+.clearfix:after {
+    clear: both;
+}
+.clearfix {
+    *zoom:1; /* IE7 hackeroo */
+}
 .dropdown-toggle {cursor: pointer;}
 .well {
     background: none repeat scroll 0 0 #FFFFFF;
@@ -122,7 +139,28 @@ html.test .container .row {outline:1px dotted green;}
     margin:20px 0 10px; padding-bottom:5px;
     border-bottom:1px solid #e5e5e5; 
 }
-.zoomImage { padding:0px; z-index:500!important; }
+.page-header.has-timer h2 {
+    float: left;
+    font-size:30px;
+    max-width:550px;
+}
+/* @TODO: Ted's Take 2012.10 - pending implementation of the breadcrumbs
+.page-header.has-timer h2 a:link {
+    color:#333;
+}
+.page-header.has-timer h2 a:hover {
+    color:#d22f2a;
+}
+*/
+.has-timer .count-down-timer {
+    float: right;
+    padding-left:45px;
+    background:url('../images/icon-timer.png') 0 50% no-repeat;
+    line-height: 2.25;
+}
+.count-down-timer .prefix {
+    color:#d22f2a;
+}
 
 /* Ellipsis class for truncating long titles 
  * to use, the element must also have a fixed width, either implicit (inherited) or explicit
@@ -131,6 +169,19 @@ html.test .container .row {outline:1px dotted green;}
     white-space:nowrap;
     overflow:hidden;
     text-overflow: ellipsis;
+}
+
+/* Got something important to say? Say it with Ted's Red…*/
+.shoutit {
+    color:#d22f2a;
+}
+.shoutit em,
+.shoutit.loud {
+    font-style: normal;
+    text-transform: uppercase;
+}
+.loud {
+    font-size:110%;
 }
 
 /* link classes */
@@ -153,7 +204,7 @@ html.test .container .row {outline:1px dotted green;}
     text-transform: uppercase;
 }
 .dropdown-menu li > a:hover, .dropdown-menu .active > a, .dropdown-menu .active > a:hover {
-    background-color: #ed1c25;
+    background-color: #d22f2a;
 }
 
 /* btn classes - overrides bootstrap */
@@ -169,7 +220,7 @@ html.test .container .row {outline:1px dotted green;}
 }
 .btn-primary,
 a.btn-primary /* req to override '.dropdown a' ruleset */ {
-    background-color:rgba(237,45,33,1);
+    background-color:rgba(210,47,42,1);
     color:#fff;
 }
 body.customer-account-login .btn.btn-large {
@@ -178,7 +229,7 @@ body.customer-account-login .btn.btn-large {
     padding: 9px 14px;
 }
 .btn-nogo {
-    background-color: rgb(170, 170, 170);
+/*     background-color: rgb(170, 170, 170); */
 }
 .btn.checkout {
     margin: 8px 0 0;
@@ -188,11 +239,11 @@ body.customer-account-login .btn.btn-large {
     padding-right: 9px;
 }
 .btn-primary:hover {
-    background-color:rgba(237,45,33,0.9);
+    background-color:rgba(210,47,42,0.9);
     background-position: 0 50.5%;
 }
 .btn-nogo:hover {
-    background-color: rgb(170, 170, 170);
+/*     background-color: rgb(170, 170, 170); */
 }
 @media screen and (-webkit-min-device-pixel-ratio:0) { /* webkit fixin's */
     .btn.checkout {padding:2px 8px 1px; line-height:17px;}
@@ -267,7 +318,7 @@ body.customer-account-login .btn.btn-large {
 }
 .navbar .nav .active > a,
 .navbar .nav .active > a:hover {
-    color: #ed1c25;
+    color: #d22f2a;
     text-decoration: none;
 }
 .navbar .nav > li > a em {font-style: normal;}
@@ -363,7 +414,7 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
 }
 #cart-timer-header,
 #usercart .over {
-    color: #ED1C25;
+    color: #d22f2a;
     font-weight: bold;
 }
 /* webkit and IE fixes */
@@ -403,7 +454,7 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
 #topCartContent.dropdown-menu .product-name a { /* overrides 'dropdown-menu a' ruleset */
     clear: none;
     padding: 0;
-    color:#ed1c25;
+    color:#d22f2a;
 }
 #topCartContent .minifoot {
     position: absolute; bottom: 0; left: 0;
@@ -419,7 +470,7 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
 #topCartContent .minifoot .subtotal-savings {
     display: block;
     margin-bottom:5px;
-    color:rgba(237,45,33,0.78);
+    color:rgba(210,47,42,0.78);
     font-size: 13px; font-weight: 500;
     line-height: 1.15;
 }
@@ -428,7 +479,7 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
     text-shadow: 0 1px 0 rgba(255, 255, 255, 0.25);
 }
 #topCartContent .minifoot .subtotal-cost .price {
-    color: #ED1C25;
+    color: #d22f2a;
     font-weight: bold;
 }
 #topCartContent .minifoot .action {
@@ -580,7 +631,7 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
     display: inline-block;
     position: absolute; top:-70px; left:-10px; z-index:-1;
     width: 0; height: 0;
-    border-bottom: 100px solid #ed1c25;
+    border-bottom: 100px solid #d22f2a;
     border-left: 100px solid transparent;
     border-right: 100px solid transparent;
 }
@@ -681,11 +732,6 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
     margin: -14px -18px 0px 0px;
 }
 .event-landing .page-header i {color:#ddd;}
-.event-landing .count-down-timer {
-    float: right;
-    padding-left:38px;
-    background:url('../images/iconmonstr-time-icon.png') 0 50% no-repeat;
-}
 .event-landing .intro-content {
     padding:11px;
     width:746px;
@@ -852,7 +898,7 @@ body.catalog-category-view .thumbnails > li {position: relative;}
 .cart .savings {
     float: right;
     width:320px;
-    color: rgba(237,45,33,0.78);
+    color: rgba(210,47,42,0.78);
     font-size: 14px; font-weight: 500;
     line-height: 1.15;
     text-align: right;
@@ -1265,8 +1311,20 @@ select, textarea, input[type="text"], input[type="password"], input[type="dateti
     min-width:95px;
 }
 /* ZOOM Image Goodness */
-#zoom1 img {border-radius:3px; }
-.cloud-zoom-big {border-radius:3px;}
+.zoomImage { 
+    padding:0px; 
+    background: none;
+    border:1px dashed #666;
+    overflow: hidden;
+    z-index:500!important;
+}
+.zoomImage,
+#zoom1 img,
+.cloud-zoom-big {
+    -moz-border-radius: 12px;
+    -webkit-border-radius: 12px;
+    border-radius: 12px;
+}
 
 /* @GOTCHA: putting .price-box positioning hacks in here… b/c price view is used some many places the markup is rather untouchable */
 body.catalog-category-view .price-box {
@@ -1283,11 +1341,151 @@ body.catalog-category-view .price-box .special-price {
     position: relative; top: -19px;
 }
 
-.options-container-big {margin:0px;}
 .count-down-timer {font-size:18px;}
 .input-box {padding:0px 0px 5px;}
 .pdp_tabs {width:105%; margin-top:-45px; margin-left:-11px;}
 
+/* @PDP page specific styles */
+.catalog-product-view .page-header {
+    border: none;
+}
+.catalog-product-view .product-main {
+    position: relative;
+    border-top: 2px dashed #68a8fe;    
+}
+.product-main .page-header {
+    margin:0; padding:8px 0;
+    border-bottom: 2px dashed #68a8fe;
+}
+.product-main .page-header h3 {
+    font-size:22px;
+    font-weight: bold;
+}
+.product-main .product-content {
+    margin:10px 0;
+}
+.product-main .product_desc {
+    margin-bottom: .8em;
+}
+
+/* @PDP pricing + options + addtocart module */
+.product-main .product-addtocart {
+    position: absolute; top:0; right: 0;
+}
+#product_addtocart_form {
+    padding:2px 8px 4px;
+    background:#dddbdd;
+}
+#product_addtocart_form .availability {
+    font-weight: bold;
+}
+/* prices */
+#product_addtocart_form .product-prices {
+    margin-bottom:20px;
+}
+#product_addtocart_form .availability + .product-prices {
+    margin:10px 0;
+    opacity: 0.45;
+    background: rgba(255,255,255,0.75);
+    padding:8px 0;
+}
+#product_addtocart_form .price-box {
+    float: left;
+    margin: 0;
+}
+.product-prices-main .old-price {
+    display: none;
+}
+#product_addtocart_form .price-box .price:before {
+    content: "NOW\0000a0";
+    color:#d22f2a;
+    font-size: 16px;
+    font-weight: bold;
+    letter-spacing: -.025em;
+}
+/*
+.product-prices-main .price:first-letter {
+    vertical-align: super;
+    font-size: 15px !important;
+}
+*/
+.product-prices-main .price-box .price {
+    display: inline-block;
+    color:#d22f2a;
+    font-size: 25px; font-weight: bold;
+    letter-spacing: -0.025em;
+}
+#product_addtocart_form .product-price-was {
+    float: right;
+    line-height: 2;
+}
+.product-prices-supp {
+    margin:8px 0 0;
+    font-size:1.05em;
+    letter-spacing: -0.025em;
+}
+@media screen and (-webkit-min-device-pixel-ratio:0) { /* webkit fixin's */
+    .product-prices-supp {
+        letter-spacing: -0.075em;
+    }
+}
+#product_addtocart_form .product-price-discount {
+}
+#product_addtocart_form .product-price-savings {
+    margin-left:10px;
+    white-space: nowrap;
+}
+#product_addtocart_form .product-price-savings:before {
+    content: "|";
+    position: relative; left:-6px;
+    display: inline-block;
+    height: 0.95em;
+    overflow: hidden;
+}
+/* options */
+#product-options-wrapper,
+#product-options-wrapper * {
+    max-width: 214px; /* hack - override bootstrap to fit Ted's Take */
+}
+.options-container-big label {
+    margin-bottom:3px;
+    font-size:14px;
+}
+.product-options label > span {
+    text-transform: lowercase;
+}
+.options-container-big label.bundled:first-letter {
+    text-transform: capitalize;
+}
+.options-container-big dl,
+.options-container-big dd {
+    margin:0;
+}
+.options-container-big p.required {
+    display: none;
+}
+
+/* add to cart */
+#product-main-info,
+.product-options-bottom {
+    position: relative;
+}
+.add-to-cart-qty {
+    float: left;
+}
+.add-to-cart button {
+    float: right;
+}
+.has-options .add-to-cart button {
+    position: absolute; bottom:10px; right: 0;
+}
+.no-options .btn-cart {
+    margin-bottom:10px;
+}
+.no-options .add-to-cart-qty ~ .btn-cart {
+    position: relative; top:26px;
+    margin-bottom: 0;
+}
 /* FAQ */
 .faq_links {
     margin-bottom:1.75em;
@@ -1307,7 +1505,7 @@ body.catalog-category-view .price-box .special-price {
     text-decoration: underline;
 }
 .faq_links li > a:hover {
-    color: #ed1c25;
+    color: #d22f2a;
 }
 .faq_anchors {
     margin-top:2em;
@@ -1329,7 +1527,7 @@ body.catalog-category-view .price-box .special-price {
     border-top:1px solid rgb(229,229,229);
 }
 .faq_item:target .faq_question {
-    background:rgba(237,45,33,0.2); background-clip: padding-box; -webkit-background-clip: padding-box;
+    background:rgba(210,47,42,0.2); background-clip: padding-box; -webkit-background-clip: padding-box;
     font-weight: bold;
     text-shadow: 0 1px 0 rgba(255,255,255,0.8)
 }
@@ -1370,7 +1568,7 @@ body.catalog-category-view .price-box .special-price {
 .nav-list > li > a:hover {
     padding: 3px 15px;
     color:#fff;
-    background: #ed1c25;
+    background: #d22f2a;
 }
 
 .product_desc li {
