@@ -281,8 +281,6 @@ $orderStoreDate = $this->formatDate($_order->getCreatedAtStoreDate(), 'medium', 
                         if (this.name in fields) {
                             this.value = fields[this.name];
                             this.text = fields[this.name];
-                        } else if (this.name == 'street1') {
-                            this.value = fields['street'];
                         }
                     })
                 }

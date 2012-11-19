@@ -63,6 +63,8 @@ class TinyBrick_OrderEdit_OrderController extends Mage_Adminhtml_Controller_Acti
                                 $msgs[] = $mess;
                             }
                         } 
+                    } else {
+                        $addressUpdated = false;
                     }
                 }
             }
@@ -71,8 +73,8 @@ class TinyBrick_OrderEdit_OrderController extends Mage_Adminhtml_Controller_Acti
                 if($edit['type']) {
                     if($edit['type'] == 'shipping') {
                         $model = Mage::getModel('orderedit/edit_updater_type_'.$edit['type']);
-                        if(!$changes[] = $model->edit($order,$edit)) {
-                            $msgs[] = "Error updating " . $edit['type'];
+                        if($mess = $model->edit($order,$edit)) {
+                            $msgs[] = $mess;
                         }
                     }
                 }
@@ -217,6 +219,11 @@ class TinyBrick_OrderEdit_OrderController extends Mage_Adminhtml_Controller_Acti
     {
         $addressId = $this->getRequest()->getParam('addressId');
         $address = Mage::getModel('customer/address')->load($addressId);
+        $street = explode("\n", $address->getData('street'));
+        $address->setData('street1',$street[0]);
+        if(array_key_exists(1,$street)) {
+            $address->setData('street2',$street[1]);
+        }
         echo Zend_Json::encode($address->getData());
     }
 
