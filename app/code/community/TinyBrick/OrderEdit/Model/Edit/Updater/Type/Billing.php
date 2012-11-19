@@ -44,7 +44,7 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Billing extends TinyBrick_Orde
         #If address is identical, dont save it
         $duplicate = Mage::helper('orderedit')->checkDuplicate($billing, $data);
         if($duplicate) {
-            return 'not_updated';
+            return false;
         }
         try{
             $billing->addData($data)

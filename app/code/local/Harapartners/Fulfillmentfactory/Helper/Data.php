@@ -201,4 +201,18 @@ class Harapartners_Fulfillmentfactory_Helper_Data extends Mage_Core_Helper_Abstr
         }
         return $address;
     }
+
+    /**
+     * For ItemsQueue linked with the order, switch status to pending.
+     */
+    public function makeOrderReadyToBeProcessed($order) {
+        if($order->getStatus() == Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_PAYMENT_FAILED) {
+            $order->setStatus('pending')->save();
+            $collection = Mage::getModel('fulfillmentfactory/itemqueue')->getCollection()->loadByOrderId($order->getId());
+            foreach($collection as $itemqueue) {
+                $itemqueue->setStatus(Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_PENDING)
+                    ->save();
+            }
+        }
+    }
 }
