@@ -1,6 +1,20 @@
 Totsy-Magento Release Notes
 ===========================
 
+20121114
+--------
+* Adding super banner for safari mobile only browsers
+* MGN-1184 : Product page Redesign, "it's Ted time!"
+* MGN-1195 : Sailthru Improvements.
+* MGN-764 : preventing customers from putting special letters in shipping/billing name and limit shipping address to 30 characters
+* MGN-1190 : Updated product import to prevent negative quantities in PO 
+* MGN-668 Removed Fulfill count display from order view for virtual items 
+* MGN-733 : Save shipping address during checkout process for Customer Service use.
+* MGN-765 : Improve Quick Order Edit Functions : Billing, Shipping, Payment.
+* MGN-834 : Add option on product admin page to limit the quantity purchased per customer.
+* MGN-1029 : Fixing an issue while crediting a transaction older thant 60 days (Now credit customer profile instead)
+* MGN-1071 : Allow Customer to change Password without First, Last Name previously saved.
+
 20121101
 --------
 * Fixing Steelhouse member conversion, member tracking and purchase tracking pixels
