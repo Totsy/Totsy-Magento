@@ -1351,6 +1351,7 @@ body.catalog-category-view .price-box .special-price {
 }
 .catalog-product-view .product-main {
     position: relative;
+    min-height: 310px; /* hackish fix for footer overlap of abs pos'ed price module */
     border-top: 2px dashed #68a8fe;    
 }
 .product-main .page-header {
