@@ -134,4 +134,26 @@ class Harapartners_Service_Model_Rewrite_Catalog_Product extends Mage_Catalog_Mo
             ->addFieldToFilter('promo_sku', $this->getSku())
             ->getFirstItem();
     }
+
+    /**
+     * Get the product's quantity purchased by a customer
+     *
+     * @param string $customerId
+     * @return int
+     */
+    public function getQuantityPurchasedByCustomer($customerId) {
+        $quantityPurchased = 0;
+        $orderCollection = Mage::getModel('sales/order')->getCollection()
+            ->addAttributeToFilter('customer_id', $customerId);
+        foreach($orderCollection as $order) {
+            $orderItem = Mage::getModel('sales/order_item')->getCollection()
+                ->addAttributeToFilter('product_id', $this->getId())
+                ->addAttributeToFilter('order_id', $order->getId())
+                ->getFirstItem();
+            if($orderItem->getId()) {
+                $quantityPurchased += $orderItem->getQtyOrdered();
+            }
+        }
+        return $quantityPurchased;
+    }
 }

@@ -55,6 +55,14 @@ class Totsy_Catalog_Model_Resource_Eav_Mysql4_Setup extends Mage_Eav_Model_Entit
                         'apply_to'    => Mage_Catalog_Model_Product_Type::TYPE_SIMPLE,
                         'required'    => false,
                     ),
+                    'purchase_max_sale_qty' => array(
+                        'type'        => 'int',
+                        'label'       => 'Purchase Max Sale Quantity',
+                        'input'       => 'text',
+                        'sort_order'  => 26,
+                        'apply_to'    => Mage_Catalog_Model_Product_Type::TYPE_SIMPLE,
+                        'required'    => false,
+                    )
                 )
             )
         );

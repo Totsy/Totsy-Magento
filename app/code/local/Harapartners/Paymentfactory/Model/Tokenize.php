@@ -143,8 +143,9 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Totsy_Cybersource_Model
     public function saveBillingAddress(Varien_Object $payment) {
         $addressCustomer = Mage::getModel('customer/address');
         $customerId = $payment->getOrder()->getQuote()->getCustomerId();
-        $addressOrder = $payment->getOrder()->getBillingAddress();
-        $addressCustomer->setData($addressOrder->getData())
+        $billingAddressDatas = $payment->getOrder()->getBillingAddress()->getData();
+        unset($billingAddressDatas['entity_id']);
+        $addressCustomer->setData($billingAddressDatas)
             ->setCustomerId($customerId)
             ->setIsDefaultBilling(false)
             ->setIsDefaultShipping(false)

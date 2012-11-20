@@ -8,9 +8,10 @@
     <global>
         <models>
             <cataloginventory>
+                <!-- <class>Totsy_CatalogInventory_Model_Stock_Item</class> -->
                 <rewrite>
+                    <stock_status>Totsy_CatalogInventory_Model_Stock_Status</stock_status>
                     <stock>Totsy_CatalogInventory_Model_Stock</stock>
-                    <observer>Totsy_CatalogInventory_Model_Observer</observer>
                 </rewrite>
             </cataloginventory>
         </models>

@@ -317,6 +317,7 @@ XML;
             $style = '<style-number xsi:nil="true" />';
             if ($value = $product->getVendorStyle()) {
                 $value = htmlentities($value);
+                $value = Mage::helper('fulfillmentfactory')->removeBadCharacters($value);
                 $style = '<style-number>' . substr($value, 0, 10) . '</style-number>';
             }
 

@@ -105,7 +105,7 @@ class Mage_Adminhtml_Block_Catalog_Category_Tab_Product extends Mage_Adminhtml_B
     protected function _prepareColumns()
     {     
         $productSizeAttr = Mage::getModel('catalog/product')->getResource()->getAttribute('size');
-//        $productSizeOption = $productSizeAttr->getSource()->getAllOptions();
+        $productSizeOption = $productSizeAttr->getSource()->getAllOptions();
         $productColorAttr = Mage::getModel('catalog/product')->getResource()->getAttribute('color');
         $productColorOption = $productColorAttr->getSource()->getAllOptions();
         $sizeArray = array();
