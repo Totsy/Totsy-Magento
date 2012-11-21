@@ -114,7 +114,7 @@
     	} else {
             $('required-cc').hide();
             $('required-comment').hide();
-            if($('cybersource-use-card-method').value == "") {
+            if($('cybersource-use-card-method').value == "" && !$('p_method_free').checked) {
                 var paymentForm = $('payment-fields').getElements();
                 var emptyCC = false;
                 paymentForm.each(function(i) {
