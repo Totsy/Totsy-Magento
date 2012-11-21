@@ -29,7 +29,7 @@ class Indust_CustomShippingRate_Model_Quote_Address_Total_Shipping extends Mage_
      */
     public function collect(Mage_Sales_Model_Quote_Address $address)
     {
-        $_code = 'customshippingrate';
+        $_code = 'customshippingrate_customshippingrate';
 
         $method = $address->getShippingMethod();
 

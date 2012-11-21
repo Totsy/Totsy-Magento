@@ -254,9 +254,8 @@ class Harapartners_HpCheckout_Model_Checkout
 
         // Sort array to dotcom first, dotcom stock second, and other types third
         if(isset($fulfillmentTypes['dotcom_stock'])) {
-            uksort($fulfillmentTypes, array(&$this, 'sortFulfillmentTypes'));
+            uksort($fulfillmentTypes, array($this, 'sortFulfillmentTypes'));
         }
-
 
 		if(($this->getQuote()->hasVirtualItems() && !$this->getQuote()->isVirtual()) || count($fulfillmentTypes) > 1) {
             $this->_prepareMultiShip();
@@ -296,10 +295,10 @@ class Harapartners_HpCheckout_Model_Checkout
 
                 if($_fulfillmentKey == 'dotcom_stock') {
                     $newAddress->getItemsCollection()->save();
-                    $newAddress->setShippingMethod('customshippingrate');
+                    $newAddress->setShippingMethod('customshippingrate_customshippingrate');
                     $newAddress->setShippingDescription('Private Label Shipping');
-                    $newAddress->setShippingAmount(5.99);
-                    $newAddress->setBaseShippingAmount(5.99,true);
+                    $newAddress->setShippingAmount(Mage::getStoreConfig('checkout/cart/split_cart_price'));
+                    $newAddress->setBaseShippingAmount(Mage::getStoreConfig('checkout/cart/split_cart_price'),true);
                     $newAddress->setCollectShippingRates(false);
                     $newAddress->getItemsCollection()->save();
                     $newAddress->save();
@@ -481,16 +480,16 @@ class Harapartners_HpCheckout_Model_Checkout
     }
 
 
-    protected function sortFulfillmentTypes($key, $value) {
-        if($key == 'dotcom') {
-            return 10;
+    protected function sortFulfillmentTypes($key1, $key2) {
+
+        if(!in_array($key1,array('dotcom_stock','dotcom'))) {
+            return -1;
+        }
+        if($key1 == 'dotcom' && $key2 == 'dotcom_stock') {
+            return -1;
         }
 
-        if($key == 'dotcom_stock') {
-            return 20;
-        }
-
-        return 0;
+        return 1;
     }
 
 }
