@@ -296,7 +296,7 @@ class Harapartners_HpCheckout_Model_Checkout
 
                 if($_fulfillmentKey == 'dotcom_stock') {
                     $newAddress->getItemsCollection()->save();
-                    $newAddress->setShippingMethod('customshippingrate_customshippingrate');
+                    $newAddress->setShippingMethod('customshippingrate');
                     $newAddress->setShippingDescription('Private Label Shipping');
                     $newAddress->setShippingAmount(5.99);
                     $newAddress->setBaseShippingAmount(5.99,true);
