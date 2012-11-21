@@ -1072,6 +1072,10 @@ float:left;
     margin: 3px 0px 3px 0px;
 }
 
+#add_cc_types {
+	margin-top: 10px;
+}
+
 .hpcheckout-payment-title {
 	width:175px;
 	float: left;
