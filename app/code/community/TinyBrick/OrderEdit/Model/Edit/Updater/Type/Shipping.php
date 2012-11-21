@@ -42,13 +42,15 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Shipping extends TinyBrick_Ord
             }
         }
         #If address is identical, dont save it
+        $regionModel = Mage::getModel('directory/region')->load($data['region_id']);
+        $data['region'] = $regionModel->getName();
         $duplicate = Mage::helper('orderedit')->checkDuplicate($shipping, $data);
         if($duplicate) {
             return false;
         }
-		$shipping->addData($data);
-		try{
-			$shipping->save();
+        try{
+            $shipping->addData($data)
+                     ->save();
             $duplicateAddress = Mage::helper('orderedit')->checkDuplicateCustomerAddress($order->getCustomerId(), $data);
             if(!$duplicateAddress) {
                 Mage::helper('orderedit')->createCustomerAddressFromData($data, $order->getCustomerId());
