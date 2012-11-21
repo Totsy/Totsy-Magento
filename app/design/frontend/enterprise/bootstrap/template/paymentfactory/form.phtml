@@ -81,19 +81,18 @@ jQuery( document ).ready( function() {
             isCollapsed: false,
             hasProfile: "<?php echo $hasProfile; ?>",
             toggleViews: function() { 
-                if (this.hasProfile) {
+                if (!this.hasProfile) {
                     jQuery(".use-new-card-wrapper").hide();
-                    //jQuery(".checkout-reward").css("padding-top", "50px");
                     jQuery(".cc_save_card").appendTo(jQuery("#add_payment_save_card"));
                     
-                    jQuery(".cc_save_card").css("width", "60px");
-                    jQuery(".cc_save_card").css("margin-left","10px");
-                    jQuery(".cc_save_card").css("float","left");
+                    var savedCardStyles = {'width' : '60px','margin-left' : '10px','float' : 'left'}; 
                     
+                    jQuery(".cc_save_card").css( savedCardStyles );
                     jQuery("#cc_data").hide();
                     jQuery("#hpcheckout-payment-add-title").show();
                     jQuery("#use-card-method").show();
                 } else {
+                    jQuery("[id='add_payment']").hide();
                     jQuery(".checkout-reward").css("padding-top", "0px");
                     jQuery(".use-new-card-wrapper").show();
                     jQuery("#use-card-method").hide();
@@ -106,6 +105,8 @@ jQuery( document ).ready( function() {
                     this.isCollapsed = true;
                     jQuery("[id='payment[cybersource_subid]']").attr("checked", false);
                     jQuery("[id='payment[cybersource_subid]']").attr("disabled", true);
+                    jQuery("#use-card-method").css("opacity", ".5");
+                    
                     jQuery("#add_payment_method").attr("src", "/skin/frontend/enterprise/bootstrap/images/iconmonstr-minus-5-icon.png");
                     jQuery("#paymentfactory_tokenize_cc_save").contents("");                    
                     jQuery(".use-new-card-wrapper").show();
@@ -115,6 +116,7 @@ jQuery( document ).ready( function() {
                     jQuery(".use-new-card-wrapper").appendTo(jQuery("#add_cc_types"));
                 } else {
                     this.isCollapsed = false;
+                    jQuery("#use-card-method").css("opacity", "100");
                     jQuery("[id='payment[cybersource_subid]']").attr("disabled", false);
                     jQuery("#add_payment_method").attr("src", "/skin/frontend/enterprise/bootstrap/images/iconmonstr-plus-5-icon.png");
                     jQuery(".use-new-card-wrapper").hide();
@@ -178,7 +180,7 @@ jQuery( document ).ready( function() {
                 <div class="cc_security pull-right">
                     <div class="cc_secure_text pull-left">Totsy.com ensures your information is<br> private and secure! (<a href="#">more info</a>)</div>
                     <div class="cc_secure_icon">
-                        <img src="/skin/frontend/enterprise/bootstrap/images/security-lock.png" width="19" height="32">
+                        <img src="/skin/frontend/enterprise/bootstrap/images/iconmonstr-lock-7-icon.png" width="40" height="40">
                     </div>
                 </div>
             </div>
@@ -300,17 +302,19 @@ jQuery( document ).ready( function() {
     	</div> 
     </div>
 <div style="clear:both"></div>
-<div id="hpcheckout-payment-add-title">
-	<h4 class="legend"><span><img id="add_payment_method" src="/skin/frontend/enterprise/bootstrap/images/iconmonstr-plus-5-icon.png" width="18" height="18"></span>&nbsp;Add a payment method</h4>
-</div>
-<div style="clear:both"></div>
 <div id="add_payment">
-	<div class="pull-left" id="add_cc_types">
+	<hr />
+	<div id="hpcheckout-payment-add-title">
+		<h4 class="legend"><span><img id="add_payment_method" src="/skin/frontend/enterprise/bootstrap/images/iconmonstr-plus-5-icon.png" width="18" height="18"></span>&nbsp;Add a payment method</h4>
 	</div>
-	<div id="add_cc_data"></div>
-</div>
-<div style="clear:both"></div>
-</div>
+	<div style="clear:both"></div>
+	<div>
+		<div class="pull-left" id="add_cc_types">
+		</div>
+		<div id="add_cc_data"></div>
+	</div>
+	<div style="clear:both"></div>
+	</div>
 </div>
         <?php if ($this->hasSsCardType()): ?>
         <li id="<?php echo $_code ?>_cc_type_ss_div">

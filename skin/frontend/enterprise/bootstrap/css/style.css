@@ -1067,11 +1067,6 @@ float:left;
     display:none;
 }
 
-#add_payment {
-    margin-top:10px;
-    margin-bottom:10px;
-}
-
 #add_payment_method {
     cursor: pointer;
     margin: 3px 0px 3px 0px;
@@ -1190,7 +1185,7 @@ float:left;
 }
 
 .security-lock {
-    background: url("../images/security-lock.png") no-repeat scroll 0 0 transparent;
+    background: url("../images/iconmonstr-lock-7-icon.png") no-repeat scroll 0 0 transparent;
     width: 38px;
     height: 64px;
 }
