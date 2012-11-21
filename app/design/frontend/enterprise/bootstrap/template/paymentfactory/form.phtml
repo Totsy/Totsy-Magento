@@ -198,15 +198,25 @@ jQuery( document ).ready( function() {
                         </tr>
                     <?php foreach( $profiles as $profile ): ?>
                         <?php 
+                            $checked = '';
                             $customerObj = Mage::getSingleton('customer/customer')->load($profile->getCustomerId());
                             $customerName = $customerObj->getFirstname() ." ". $customerObj->getLastname();
                             $customerAddress = Mage::getSingleton('customer/address')->load($profile->getAddressId());
                             $customerStreet = reset($customerAddress->getStreet());
+                            
+                            $orders = Mage::getResourceModel('sales/order_collection')->addFieldToSelect('*')
+    ->addFieldToFilter('customer_id', $profile->getCustomerId())->addAttributeToSort('created_at', 'DESC')->setPageSize(1);
+                            
+                            if($orders->getFirstItem()->getPayment()->getData('cybersource_subid')
+                            ==$profile->getSubscriptionId()){
+                                $checked = 'checked';
+                            }
+                            
                         ?>
                         <?php if(!$profile->getSubscriptionId() || $profile->getIsDefault()== 1 || !$profile->getData('saved_by_customer')) { continue; } ?>
                         <tr>
                         	<td>
-                                <input type="radio" name="payment[cybersource_subid]" id="payment[cybersource_subid]" class="use-saved-card-control pull-left" value="<?php echo $profile->getEncryptedSubscriptionId() ?>">
+                                <input type="radio" checked="<?php echo $checked; ?>" name="payment[cybersource_subid]" id="payment[cybersource_subid]" class="use-saved-card-control pull-left" value="<?php echo $profile->getEncryptedSubscriptionId() ?>">
                                     <span class="cc">
         		 	                    <span title="<?php echo $this->getFullCcCardType( $profile->getData( 'card_type' )); ?>" class="<?php echo strtolower($profile->getData('card_type')); ?>" >
         		 	                    </span>
