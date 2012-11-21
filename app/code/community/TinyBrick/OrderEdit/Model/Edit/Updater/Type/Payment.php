@@ -36,7 +36,6 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Payment extends TinyBrick_Orde
             }
             if($payment->getMethod() == 'free') {
                 $this->replacePaymentInformation($order, $payment);
-                $this->makeOrderReadyToBeProcessed($order);
                 return false;
             }
             $payment->setData('cc_last4', substr($payment->getCcNumber(), -4));
