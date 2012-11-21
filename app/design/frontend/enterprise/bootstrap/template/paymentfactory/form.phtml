@@ -74,6 +74,7 @@ var checkoutPayment = {};
 
 jQuery( document ).ready( function() {
     
+    //a namespace for operations controlling the present of the payment section
     checkoutPayment = (function() {
         var hasProfile = '';
         var isCollapsed = '';
@@ -204,13 +205,15 @@ jQuery( document ).ready( function() {
                             $customerObj = Mage::getSingleton('customer/customer')->load($profile->getCustomerId());
                             $customerName = $customerObj->getFirstname() ." ". $customerObj->getLastname();
                             $customerAddress = Mage::getSingleton('customer/address')->load($profile->getAddressId());
+                            //reset gets the first item from the array passed in
                             $customerStreet = reset($customerAddress->getStreet());
                             
                             $orders = Mage::getResourceModel('sales/order_collection')->addFieldToSelect('*')
     ->addFieldToFilter('customer_id', $profile->getCustomerId())->addAttributeToSort('created_at', 'DESC')->setPageSize(1);
-                            
+    						//checking the users last used, saved to expedite checkout
+                            //comparing cybersource profile id to id of card used in last order placed
                             if($orders->getFirstItem()->getPayment()->getData('cybersource_subid')
-                            ==$profile->getSubscriptionId()){
+                            ==$profile->getSubscriptionId()) {
                                 $checked = 'checked';
                             }
                             
