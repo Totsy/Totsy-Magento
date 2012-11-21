@@ -8,12 +8,12 @@
  * If you did not receive a copy of the license and are unable to
  * obtain it through the world-wide-web, please send an email
  * to eula@harapartners.com so we can send you a copy immediately.
- * 
+ *
  */
 class Harapartners_Fulfillmentfactory_Model_Service_Fulfillment
 {
     const DAY_SECONDS = 86400;
-    
+
     /**
      * mark orders which havn't been fulfilled
      *
@@ -23,7 +23,7 @@ class Harapartners_Fulfillmentfactory_Model_Service_Fulfillment
 
         $expiredTime = time() - self::DAY_SECONDS * $agingDay;
         $expiredDate = date('Y-m-d H:i:s', $expiredTime);
-        
+
         $orderCollection = Mage::getModel('sales/order')->getCollection()
                                                         ->addAttributeToFilter('status', 'pending')
                                                         ->addAttributeToFilter('created_at', array('to' => $expiredDate));
@@ -32,7 +32,7 @@ class Harapartners_Fulfillmentfactory_Model_Service_Fulfillment
                   ->save();
         }
     }
-    
+
     /**
      * mark orders which have sent to fulfillment but haven't received shipment infomation
      *
@@ -42,16 +42,16 @@ class Harapartners_Fulfillmentfactory_Model_Service_Fulfillment
 
         $expiredTime = time() - self::DAY_SECONDS * $agingDay;
         $expiredDate = date('Y-m-d H:i:s', $expiredTime);
-        
+
         $orderCollection = Mage::getModel('sales/order')->getCollection()
                                                         ->addAttributeToFilter('status', 'processing')
-                                                        ->addAttributeToFilter('updated_at', array('to' => $expiredDate));        
+                                                        ->addAttributeToFilter('updated_at', array('to' => $expiredDate));
         foreach($orderCollection as $order) {
             $order->setStatus(Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_SHIPMENT_AGING)
                   ->save();
         }
     }
-    
+
     /**
      * update items' fulfill statuses for all waiting orders
      *
@@ -70,59 +70,59 @@ class Harapartners_Fulfillmentfactory_Model_Service_Fulfillment
     */
     public function stockUpdate($availableProducts = array(), $keepTrackAffctedOrders = false) {
         $processingOrderCollection = array();
-        
+
         foreach($availableProducts as $aProduct) {
-            
+
             if(!isset($aProduct['sku']) || !isset($aProduct['qty']) || $aProduct['qty'] <= 0){
                 continue;
             }
-            
+
             $availableQty = $aProduct['qty'];
             //get unprocessed ItemQueue collection of this product, based on $aProduct['sku']
             $itemQueueCollection = Mage::getModel('fulfillmentfactory/itemqueue')->getCollection()
                     ->loadIncompleteItemQueueByProductSku($aProduct['sku'], $availableQty);
-            
+
             foreach($itemQueueCollection as $itemQueue) {
                 //check if we still has available products
                 if($availableQty <= 0) {
                     break;
                 }
-                
+
                 //if product is enough, fulfill products for item.
                 //if it is not enough, fulfill the rest of the products.
                 //consider partial ready items
                 $needItemsCount = $itemQueue->getQtyOrdered() - $itemQueue->getFulfillCount();
-                
+
                 if($needItemsCount <= $availableQty) {
                     $itemQueue->setFulfillCount($itemQueue->getQtyOrdered());
                     $itemQueue->setStatus(Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_READY);
-                    
+
                     $availableQty -= $needItemsCount;
                 }
                 else {
                     $itemQueue->setFulfillCount($itemQueue->getFulfillCount() + $availableQty);
                     $itemQueue->setStatus(Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_PARTIAL);
-                    
+
                     $availableQty = 0;
                 }
-                
+
                 //save item queue object
                 $itemQueue->save();
-                
+
                 if(!!$keepTrackAffctedOrders){
 	                $order = Mage::getModel('sales/order')->load($itemQueue->getOrderId());
 	                Mage::helper('fulfillmentfactory')->_pushUniqueOrderIntoArray($processingOrderCollection, $order);
                 }
-                
+
                 unset($itemQueue);
-                
+
             }
             unset($itemQueueCollection);
         }
-        
+
         return $processingOrderCollection;
     }
-    
+
     /**
      * batch cancel item queue objects
      *
@@ -132,11 +132,11 @@ class Harapartners_Fulfillmentfactory_Model_Service_Fulfillment
     public function batchCancel($cancelIdList) {
         $orderArray = array();
         $errorArray = array();
-        
+
         //group item queues by order
         foreach($cancelIdList as $id) {
             $itemQueue = Mage::getModel('fulfillmentfactory/itemqueue')->load($id);
-            
+
             //vaidation
             if(!in_array($itemQueue->getStatus(),
                 array(Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_PENDING,
@@ -144,20 +144,13 @@ class Harapartners_Fulfillmentfactory_Model_Service_Fulfillment
             	$errorArray[] = sprintf('Cannot cancel item #%d. Only pending or suspended items can be cancelled.', $itemQueue->getId());
             	continue;
             }
-            
+
             $orderId = $itemQueue->getOrderId();
             if(!empty($orderId)) {
-                if(isset($orderArray[$orderId])) {
-                    $orderArray[$orderId][] = $itemQueue;
-                }
-                else {
-                    $orderArray[$orderId] = array($itemQueue);
-                }
+                $orderArray[$orderId][] = $itemQueue;
             }
         }
-        
-        $isSuccess = true;
-        
+
         //cancel/split orders
         foreach($orderArray as $orderId => $itemQueueList) {
         	try{
@@ -167,18 +160,17 @@ class Harapartners_Fulfillmentfactory_Model_Service_Fulfillment
 	            $email = $order->getCustomerEmail();
 	            $sender = 'sales';
 	            $storeId = $order->getStoreId();
-	            $templateId = Mage::getModel('core/email_template')->loadByCode('_trans_Batch_Cancel')->getId(); 
+	            $templateId = Mage::getModel('core/email_template')->loadByCode('_trans_Batch_Cancel')->getId();
 				Mage::getModel('core/email_template')
 				          ->sendTransactional($templateId, $sender, $email, NULL, array('customer'=>$customer, 'order'=>$order, 'item'=>$itemQueueList[0]), $storeId);
         	}catch (Exception $e){
         		$errorArray[] = $e->getMessage();
-                $isSuccess = false;
         	}
         }
-        
+
         return $errorArray;
     }
-    
+
     /**
      * cancel/split orders by updated items
      *
@@ -208,8 +200,7 @@ class Harapartners_Fulfillmentfactory_Model_Service_Fulfillment
                 }
                 if ($shouldBeRemoved) {
                     $itemsToCancel[] = $orderItem;
-                }
-                if (!$shouldBeRemoved) {
+                } else {
                     $remainingOrderItems = true;
                 }
             }
@@ -316,7 +307,7 @@ class Harapartners_Fulfillmentfactory_Model_Service_Fulfillment
                                 ->addFieldToFilter('status', array('in' => array(Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_CLOSED,
                                                             Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_CANCELLED))
                                 );
-        
+
         foreach($itemQueueCollection as $itemQueue) {
             //remove this item queue
             $itemQueue->delete();
