@@ -103,7 +103,7 @@ class Harapartners_Service_Model_Rewrite_Sales_Quote
     }
 
     public function hasFulfillmentType($fulfillmentType) {
-        foreach($this->getItems() as $item) {
+        foreach($this->getAllItems() as $item) {
             if($item->getParentItemId()) {
                 continue;
             }
