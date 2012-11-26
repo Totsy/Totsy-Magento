@@ -213,6 +213,9 @@ class Enterprise_Reward_Model_Reward extends Mage_Core_Model_Abstract
             try {
                 $this->save();
                 $this->_rewardPointsUpdated = true;
+            } catch (PDOException $exception) {
+                Mage::logException($exception);
+                $this->_rewardPointsUpdated = false;
             } catch (Exception $e) {
                 $this->_rewardPointsUpdated = false;
                 throw $e;
