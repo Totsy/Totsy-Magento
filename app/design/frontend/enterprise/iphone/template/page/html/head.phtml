@@ -31,7 +31,9 @@
 <meta name="sailthru.title" content="<?php echo ($this->getSailthruTitle()=='')?htmlspecialchars($this->getKeywords()):htmlspecialchars($this->getSailthruTitle()) ?>" />
 <meta name="sailthru.tags" content="<?php echo ($this->getSailthruTags()=='')?htmlspecialchars($this->getKeywords()):htmlspecialchars($this->getSailthruTags()) ?>" />
 <meta id="viewport" name="viewport" content="width=320; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
+<?php if (!$this->helper('customer')->isLoggedIn() ) { ?>
 <meta name="apple-itunes-app" content="app-id=572913004"/>
+<?php } ?>
 <script type="text/javascript">
     var BLANK_URL = '<?php echo $this->helper('core/js')->getJsUrl('blank.html') ?>';
     var BLANK_IMG = '<?php echo $this->helper('core/js')->getJsUrl('spacer.gif') ?>';
