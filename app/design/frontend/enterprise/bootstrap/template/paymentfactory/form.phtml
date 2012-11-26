@@ -135,11 +135,6 @@ jQuery( document ).ready( function() {
 	jQuery(".use-saved-card-control").click( function(){
         jQuery("#cc_data").hide();
 	});
-	
-	jQuery("[id='payment[cybersource_subid]']").click( function() { 
-		jQuery("[id='payment[cybersource_subid]']").attr("disabled", false);
-		checkoutPayment.addPayment();		
-	});
 
 });
 
@@ -184,7 +179,7 @@ jQuery( document ).ready( function() {
             <?php if( $customerId  ): ?>
             <div>
                 <div class="cc_security pull-right">
-                    <div class="cc_secure_text pull-left">Totsy.com ensures your information is<br> private and secure! (<a href="#">more info</a>)</div>
+                    <div class="cc_secure_text pull-left">Totsy ensures your information is<br> private and secure!</div>
                     <div class="cc_secure_icon">
                         <img src="/skin/frontend/enterprise/bootstrap/images/iconmonstr-lock-7-icon.png" width="40" height="40">
                     </div>
@@ -208,8 +203,10 @@ jQuery( document ).ready( function() {
                         <?php 
                             $checked = '';
                             $customerObj = Mage::getSingleton('customer/customer')->load($profile->getCustomerId());
-                            $customerName = $customerObj->getFirstname() ." ". $customerObj->getLastname();
                             $customerAddress = Mage::getSingleton('customer/address')->load($profile->getAddressId());
+                            
+                            $customerName = $customerAddress->getFirstname() ." ". $customerAddress->getLastname();
+                            
                             //reset gets the first item from the array passed in
                             $customerStreet = reset($customerAddress->getStreet());
                             
