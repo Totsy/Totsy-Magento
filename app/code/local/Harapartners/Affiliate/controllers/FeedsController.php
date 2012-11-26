@@ -79,9 +79,9 @@ XML;
         $staticOne = new Zend_Db_Expr("'1'");
         $staticConfirmed = new Zend_Db_Expr("'confirmed'");
 
-        $from = Mage::getModel('core/date')->gmtDate($from);
-        $to = Mage::getModel('core/date')->gmtDate($to);
-
+        $from = Mage::getModel('core/date')->gmtDate(null, $from);
+        $to = Mage::getModel('core/date')->gmtDate(null, $to);
+echo $from, PHP_EOL; echo $to, PHP_EOL; exit;
         switch ($type) {
             case 'signups':
                 $select->from(array('c' => 'customertracking_record'), 'c.registration_param')
