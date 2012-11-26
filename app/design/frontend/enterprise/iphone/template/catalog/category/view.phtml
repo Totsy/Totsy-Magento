@@ -66,9 +66,9 @@
 <div class="category-view">
 	<div class="event-title-container">
 	<?php if ( !$upComingFlag ):?>
-		<h1><a href="<?php echo $this->getUrl('event/?ref=todays_sales_mobile') ?>">Today's Sales</a><span> / <span><?php echo $_helper->categoryAttribute($_category, $_category->getName(), 'name') ?></h1>
+		<h3><a href="<?php echo $this->getUrl('event/?ref=todays_sales_mobile') ?>">Today's Sales</a><span> / <span><?php echo $_helper->categoryAttribute($_category, $_category->getName(), 'name') ?></h3>
 	<?php else :?>
-		<h1><a href="/event#event-upcoming">Upcoming Sales</a><span> / <span><?php echo $_helper->categoryAttribute($_category, $_category->getName(), 'name') ?></h1>
+		<h3><a href="/event#event-upcoming">Upcoming Sales</a><span> / <span><?php echo $_helper->categoryAttribute($_category, $_category->getName(), 'name') ?></h3>
 	<?php endif;?>
 	</div>
 	<hr/>

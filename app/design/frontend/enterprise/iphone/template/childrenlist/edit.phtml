@@ -20,13 +20,13 @@
 ?>
 
 <div class="page-title">
-    <h1><?php echo ($this->isEditMode())?$this->__('Edit Children Information'):$this->__('Create Children Information') ?></h1>
+    <h3><?php echo ($this->isEditMode())?$this->__('Edit Children Information'):$this->__('Create Children Information') ?></h3>
 </div>
 <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
 <form action="<?php echo $this->getUrl('childrenlist/index/editPost') ?>" method="post" id="form-validate" enctype="multipart/form-data">
 <div class="fieldset">
     <?php echo $this->getBlockHtml('formkey')?>
-    <h2 class="legend"><?php echo $this->__('Children Information') ?></h2>
+    <h3 class="legend"><?php echo $this->__('Children Information') ?></h3>
     <ul class="form-list">
         <li class="fields">
             <?php echo $this->getLayout()->createBlock('childrenlist/widget_name')->setObject($this->getChildInfo())->toHtml() ?>

@@ -33,13 +33,13 @@
 ?>
 <?php if($this->getTitle()): ?>
 <div class="page-title">
-    <h1><?php echo $this->getTitle() ?></h1>
+    <h3><?php echo $this->getTitle() ?></h3>
 </div>
 <?php endif; ?>
 <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
 <form action="<?php echo $this->getSaveUrl() ?>" method="post" id="form-validate" enctype="multipart/form-data">
     <div class="fieldset">
-        <h2 class="legend"><?php echo $this->__('Contact Information') ?></h2>
+        <h3 class="legend"><?php echo $this->__('Contact Information') ?></h3>
         <?php echo $this->getBlockHtml('formkey')?>
         <input type="hidden" name="success_url" value="<?php echo $this->getSuccessUrl() ?>" />
         <input type="hidden" name="error_url" value="<?php echo $this->getErrorUrl() ?>" />
@@ -70,7 +70,7 @@
         </ul>
     </div>
     <div class="fieldset">
-        <h2 class="legend"><?php echo $this->__('Address') ?></h2>
+        <h3 class="legend"><?php echo $this->__('Address') ?></h3>
         <ul class="form-list">
             <li>
                 <label for="street_1" class="required"><em>*</em><?php echo $this->__('Street Address') ?></label>
