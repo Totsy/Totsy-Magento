@@ -1,0 +1,145 @@
+<?xml version="1.0"?>
+<!-- **
+ * WebShopApps
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/osl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    WebShopApps
+ * @package     WebShopApps WsaLogger
+ * @copyright   Copyright (c) 2011 Zowta Ltd (http://www.webshopapps.com)
+ * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ -->
+<config>
+    <modules>
+        <Webshopapps_Wsalogger>
+            <version>1.0.2</version>
+        </Webshopapps_Wsalogger>
+    </modules>
+    <global>
+    	<blocks>
+    		<wsalogger>
+    			<class>Webshopapps_Wsalogger_Block</class>
+    		</wsalogger>
+    	   <wsalogger_adminhtml>
+                <class>Webshopapps_Wsalogger_Adminhtml_Block</class>
+            </wsalogger_adminhtml>
+    	</blocks>
+        <models>
+            <wsalogger>
+                <class>Webshopapps_Wsalogger_Model</class>
+                <resourceModel>wsalogger_mysql4</resourceModel>
+            </wsalogger>
+            <wsalogger_mysql4>
+                <class>Webshopapps_Wsalogger_Model_Mysql4</class>
+                <entities>
+                    <log>
+                        <table>wsalogger_log</table>
+                    </log>
+                </entities>
+            </wsalogger_mysql4>
+        </models>
+		<helpers>
+            <wsalogger>
+            	<class>Webshopapps_Wsalogger_Helper</class>
+            </wsalogger>
+        </helpers> 
+        <resources>
+            <wsalogger_setup>
+                <setup>
+                    <module>Webshopapps_Wsalogger</module>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </wsalogger_setup>
+        </resources>
+        <events>
+            <wsalogger_log_mesasge>
+	    	          <observers>
+	    	              <wsalogger_observer>
+	    	                  <type>singleton</type>
+	    	                  <class>wsalogger/observer</class>
+	    	                  <method>logMessage</method>
+	    	              </wsalogger_observer>
+	    	          </observers>
+            </wsalogger_log_mesasge> 
+		</events>
+		  <template>         
+		 	<email>             
+		 		<log_email_template module="wsalogger">                 
+			 		<label>Webshopapps Log Email Module</label>                 
+			 		<file>webshopapps_log_email.html</file>                 
+			 		<type>html</type>             
+		 		</log_email_template>         
+		 	</email>     
+		 </template> 
+    </global>
+      <admin>
+	    <routers>
+			<wsalogger>
+				<use>admin</use>
+				<args>
+					<module>Webshopapps_Wsalogger</module>
+					<frontName>wsalogger</frontName>
+				</args>
+			</wsalogger>
+	    </routers>
+    </admin>
+     <adminhtml>
+        <translate>
+            <modules>
+                <Webshopapps_Wsalogger>
+                    <files>
+                        <default>Webshopapps_Wsalogger</default>
+                    </files>
+                </Webshopapps_Wsalogger>
+            </modules>
+        </translate>
+        <layout>
+            <updates>
+                <wsalogger>
+                    <file>webshopapps_wsalogger.xml</file>
+                </wsalogger>
+            </updates>
+        </layout>
+    </adminhtml>
+  	<crontab>
+  		<jobs>
+  			<Webshopapps_Wsalogger>
+  				<schedule>
+  					<cron_expr>0 0 1,10,20 * *</cron_expr>
+  				</schedule>
+  				<run>
+  					<model>wsalogger/log::truncate</model>
+  				</run>
+  			</Webshopapps_Wsalogger>
+  		</jobs>
+  	</crontab>    
+    <default>
+  		<wsalogmenu>
+	  		<wsalog>
+	   			<enabled>0</enabled>
+	  			<admin_level>-1</admin_level>
+	  			<system_level>-1</system_level>
+	  			<email_level>-1</email_level>
+	  			<empty_system_log>0</empty_system_log>
+	  			<view_all_extns>0</view_all_extns>
+	  		</wsalog>
+  		</wsalogmenu>
+  	</default>
+
+</config>

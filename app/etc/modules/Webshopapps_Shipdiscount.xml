@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config>
+	<modules>
+		<Webshopapps_Shipdiscount>
+			<active>true</active>
+			<codePool>local</codePool>
+		</Webshopapps_Shipdiscount>
+	</modules>
+</config>

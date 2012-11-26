@@ -1,0 +1,8 @@
+1.0  - Amended const usage to match 1.4.2 conventions for dropdown menus on Shopping Cart Rules.
+2.0  - Now compatible with Magento 1.5.1
+2.1  - Removed rogue log.
+       Changed to call correct class
+2.2  - Retag
+2.3  - Fixed design pages to output description from coupon code
+       Fixed coupon logic so will not only apply to max of first price
+2.4  - Added ability to discount shipping by fixed amount
