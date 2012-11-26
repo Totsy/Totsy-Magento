@@ -205,8 +205,8 @@ HpCheckout.prototype = {
 	},
 	
 	submit: function() {
-	    //good time to validate CC
-		jQuery("input:radio").addClass("validate-one-required");
+	    //good time to validate CC types
+		jQuery(".cc_types input[type='radio']").addClass("validate-one-required");
 	
 		if( ! this.validate() ) {
 			return;
@@ -225,6 +225,7 @@ HpCheckout.prototype = {
 
         var checkoutObject = this;
 		var postData = this.getFormData();
+		
 		postData += '&updatePayment=true';
 		this.throbberOn();		
 		
