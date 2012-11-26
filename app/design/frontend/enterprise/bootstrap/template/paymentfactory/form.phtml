@@ -74,13 +74,13 @@ var checkoutPayment = {};
 
 jQuery( document ).ready( function() {
     
-    //a namespace for operations controlling the present of the payment section
+    //a namespace for operations toggling the 2 views of the payment section
     checkoutPayment = (function() {
         var hasProfile = '';
         var isCollapsed = '';
         return {
-            isCollapsed: false,
             hasProfile: "<?php echo $hasProfile; ?>",
+            isCollapsed: false,
             toggleViews: function() { 
                 if (this.hasProfile) {
                     jQuery(".use-new-card-wrapper").hide();
@@ -128,12 +128,17 @@ jQuery( document ).ready( function() {
     
     checkoutPayment.toggleViews();
     
-    jQuery("#add_payment_method").click(function(){
+    jQuery("#add_payment_method").click( function(){
         checkoutPayment.addPayment();
     });
     
 	jQuery(".use-saved-card-control").click( function(){
         jQuery("#cc_data").hide();
+	});
+	
+	jQuery("[id='payment[cybersource_subid]']").click( function() { 
+		jQuery("[id='payment[cybersource_subid]']").attr("disabled", false);
+		checkoutPayment.addPayment();		
 	});
 
 });
