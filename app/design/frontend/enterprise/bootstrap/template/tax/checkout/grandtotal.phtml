@@ -27,13 +27,6 @@
  * @var $this Mage_Tax_Block_Checkout_Grandtotal
  * @see Mage_Tax_Block_Checkout_Grandtotal
  */
-
-$extra = '0.0000';
-
-if(Mage::getSingleton('checkout/session')->getSplitCartFlag()) {
-    $extra = Mage::getStoreConfig('checkout/cart/split_cart_price');
-}
-
 ?>
 <?php if ($this->includeTax() && $this->getTotalExclTax()>=0):?>
 <tr>
@@ -59,7 +52,7 @@ if(Mage::getSingleton('checkout/session')->getSplitCartFlag()) {
         <strong><?php echo $this->getTotal()->getTitle() ?></strong>
     </td>
     <td style="<?php echo $this->getStyle() ?>" class="a-right">
-        <strong><?php echo $this->helper('checkout')->formatPrice($extra + $this->getTotal()->getValue()) ?></strong>
+        <strong><?php echo $this->helper('checkout')->formatPrice($this->getTotal()->getValue()) ?></strong>
     </td>
 </tr>
 <?php endif;?>

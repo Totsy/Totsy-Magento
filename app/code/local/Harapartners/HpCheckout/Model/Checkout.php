@@ -261,7 +261,7 @@ class Harapartners_HpCheckout_Model_Checkout
             $this->_prepareMultiShip();
 			$originalShippingAddress = Mage::getModel('sales/quote_address')
                             ->load($this->getQuote()->getShippingAddress()->getId());
-
+            $originalQuoteAddress = $this->getQuote()->getShippingAddress();
             $skipFirst = true;
 			foreach($fulfillmentTypes as $_fulfillmentKey => $_fulfillmentProducts) {
                 //skipping the first fulfillment type
@@ -319,6 +319,13 @@ class Harapartners_HpCheckout_Model_Checkout
 
             $originalShippingAddress->clearAllItems();
             $originalShippingAddress->getItemsCollection()->clear();
+
+            $originalQuoteAddress->setShippingMethod('customshippingrate_customshippingrate');
+            $originalQuoteAddress->setShippingAmount($originalShippingAddress->getShippingAmount() - Mage::getStoreConfig('checkout/cart/split_cart_price'));
+            $originalQuoteAddress->setBaseShippingAmount($originalShippingAddress->getBaseShippingAmount() - Mage::getStoreConfig('checkout/cart/split_cart_price'),true);
+            $originalQuoteAddress->setCollectShippingRates(false);
+            $originalQuoteAddress->save();
+
             $this->getQuote()->setTotalsCollectedFlag(false);
             $this->getQuote()->collectTotals();
             $this->getQuote()->save();
