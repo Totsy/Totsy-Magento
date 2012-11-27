@@ -84,6 +84,8 @@
 	// need to re-enable billing form controls before trying to send values to shipping form
 	jQuery(document).ready(function() {
         if(checkoutPayment.hasProfile==true) {
+            //jQuery("#billing-address-select").attr("disabled", false);
+            jQuery("#billing-address-select").val(checkoutPayment.lastUsedAddressId);
             jQuery('#hpcheckout-billing-form :input').attr("disabled", true);
         }
 	

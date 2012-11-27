@@ -130,9 +130,11 @@ jQuery(document).ready( function() {
     checkoutPayment = (function() {
         var hasProfile = '';
         var isCollapsed = '';
+        var lastUsedAddressId = '';
         return {
             hasProfile: "<?php echo $hasProfile; ?>",
             isCollapsed: false,
+            lastUsedAddressId: '',
             toggleViews: function() { 
                 if (this.hasProfile) {
                     jQuery(".use-new-card-wrapper").hide();
@@ -275,8 +277,15 @@ jQuery(document).ready( function() {
                             ==$profile->getSubscriptionId()) {
                                 $checked = 'checked';
                             }
-                            
+                            //echo $profile->getSubscriptionId();
                         ?>
+                        
+                        <script type="text/javascript">
+                        jQuery(document).ready( function() {
+                            checkoutPayment.lastUsedAddressId = "<?php echo $profile->getAddressId(); ?>"; 
+                        });
+                        </script>
+                        
                         <?php if(!$profile->getSubscriptionId() || $profile->getIsDefault()== 1 || !$profile->getData('saved_by_customer')) { continue; } ?>
                         <tr>
                         	<td>
