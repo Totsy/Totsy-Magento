@@ -60,11 +60,8 @@ if ( !$rewardCollection ) {
 
 ?>
 	<div class="page-sub-title">
-		<h2 class="gray"><?php echo Mage::helper('enterprise_invitation')->__('My Invitations'); ?></h2>
-	    		<span class="fr" id="generic-invitation">
-			Share this link with your friends:<br/>
-			<textarea class="invitation-link-area" readonly="readonly" ><?php echo Mage::helper('enterprise_invitation')->getGenericInvitationLink() ?></textarea></span>
-		<hr/>
+		<h3 class="gray"><?php echo Mage::helper('enterprise_invitation')->__('My Invitations'); ?></h3>
+		<hr />
 	</div>
 	
 
@@ -74,7 +71,7 @@ if ( !$rewardCollection ) {
 				<a class="ui-collapsible-heading-toggle ui-btn ui-btn-icon-left ui-corner-top ui-btn-up-c" href="##" data-theme="c">
 					<span class="ui-btn-inner ui-corner-top" aria-hidden="true">
 						<span class="ui-btn-text">
-						<?php echo $this->__('Send Invitations, Get $15.00 in Totsy Credit') ?>
+						<?php echo $this->__('Send Invitations') ?>
 							<span class="ui-collapsible-heading-status"> click to collapse contents</span>
 						</span>
 						<span class="ui-icon ui-icon-shadow ui-icon-plus"></span>
@@ -82,11 +79,7 @@ if ( !$rewardCollection ) {
 				</a>
 			</h3>
             <div class="ui-body-d ui-collapsible-content-collapsed box-content ui-collapsible-content ui-body-d">
-			
-			
-
-				
-							<div id="messages"><?php echo $this->getMessagesBlock()->getGroupedHtml() ?></div>
+			<div id="messages"><?php echo $this->getMessagesBlock()->getGroupedHtml() ?></div>
 							<?php echo $this->getChildHtml('form_before')?>
 							<?php if ($maxPerSend = (int)Mage::helper('enterprise_invitation')->getMaxInvitationsPerSend()): ?>
 							<form id="invitationForm" action="<?php echo $this->helper('enterprise_invitation')->getCustomerInvitationFormUrl()?>" method="post">
@@ -132,7 +125,7 @@ if ( !$rewardCollection ) {
 						<div class="st_sharethis_custom-2"></div>
 					</span>
 					<!-- Any link with a class="cs_import" will start the import process -->
-					<h2 class="gray clear mar-b">Invite friends from your address book</h2>
+					<h3 class="gray clear mar-b">Invite friends from your address book</h3>
 					<hr class="the-hr"/>
 					<div class="cloudsponge-tab">
 					<a id="invite-gmail" class="invite-btn fl cs_import" title="Invite friends from your Gmail contacts" href="#" >Gmail</a>
@@ -141,6 +134,7 @@ if ( !$rewardCollection ) {
 					<a id="invite-aol" class="invite-btn fr cs_import" title="Invite friends from your AOL contacts" href="#" >AOL</a>
 					<a id="invite-msn" class="invite-btn fl cs_import" title="Invite friends from your MSN address book" href="#" >MSN</a>
 					<a id="invite-others" class="invite-btn fr cs_import" title="Invite friends" href="#">Others</a>
+					
 					</div>	
 				</div>
             </div>
@@ -241,6 +235,19 @@ if ( !$rewardCollection ) {
 					<div class="inside-block invitation-info-credits"><span class="title">Totsy Credits Available</span><span class="float-right"><?php if($currentBalance) echo $currentBalance; else echo '0';//put real numbers here?></span></div>
 				</div>		
             </div>
+            <div class="box ui-collapsible ui-collapsible-collapsed">
+			<h3>
+				<a class="ui-collapsible-heading-toggle ui-btn ui-btn-icon-left ui-corner-top ui-btn-up-c" href="##" data-theme="c">
+					<span class="ui-btn-inner ui-corner-top" aria-hidden="true">
+						<span class="ui-btn-text">
+						<?php echo $this->__('Share & Earn Totsy Credits') ?>
+						</span>
+						<span class="ui-icon ui-icon-shadow ui-icon-plus"></span>
+					</span>
+				</a>
+			</h3>
+            <div class="ui-body-d ui-collapsible-content-collapsed box-content ui-collapsible-content ui-body-d">
+			<div id="messages">Share link below <br /> <textarea cols="40" rows="2" class="invitation-link-area" readonly="readonly" ><?php echo Mage::helper('enterprise_invitation')->getGenericInvitationLink() ?></textarea></div>
         </div>
 	
 <script type="text/javascript">var switchTo5x=true;</script>
