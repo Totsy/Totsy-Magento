@@ -182,8 +182,10 @@ HpCheckout.prototype = {
 		if(!doUpdatePayment) {		
             blocksToUpdate = hpcheckoutObject.getBlocksToUpdate( step );
 		} else {
-		    blocksToUpdate = ['shipping','billing','review'];
+		    blocksToUpdate = ['shipping','review'];
 		}
+		
+		console.log(blocksToUpdate);
 				
 		if( hpcheckoutObject.validate( step ) ) {
 			// var postData = hpcheckoutObject.getFormData( step );
