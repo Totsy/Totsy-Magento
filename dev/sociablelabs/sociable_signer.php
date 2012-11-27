@@ -123,6 +123,8 @@ function rondavu_base64_encode($data, $newline = "\r\n"){
 * @return JSON string
 */
 function rondavu_json_encode($data){
-    return str_replace("\/","/",json_encode($data));
+    if(isset($data)) {
+        return str_replace("\/","/",json_encode($data));
+    }
 }
 ?>
