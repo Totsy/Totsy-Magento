@@ -86,7 +86,11 @@
         if(checkoutPayment.hasProfile==true) {
             //jQuery("#billing-address-select").attr("disabled", false);
             jQuery("#billing-address-select").val(checkoutPayment.lastUsedAddressId);
-            jQuery('#hpcheckout-billing-form :input').attr("disabled", true);
+            jQuery('#hpcheckout-billing-form :input').each(function(i) {
+			        if(this.id != 'button_ship_to') {
+			            jQuery("[id='" + this.id + "']").attr('disabled',true);
+			        }
+			    });
         }
 	
 	    jQuery('#button_ship_to').bind('click', function() {

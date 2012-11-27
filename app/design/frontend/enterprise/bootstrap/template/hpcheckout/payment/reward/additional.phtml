@@ -50,6 +50,7 @@
     var isRewardUsed = <?php echo ($this->useRewardPoints() ? 'true' : 'false'); ?>;
 
     jQuery( document ).ready( function() {
+        
         if( isRewardUsed && isEnoughPointsToCoverAmount ) {
             jQuery("#reward_placer").css("padding-top", "0px");
             jQuery("#credits_and_card_save").css("float", "left");
@@ -59,9 +60,13 @@
         	jQuery( 'input[name="payment[method]"]').val('free');
         	jQuery( '#cc-data' ).hide();
         }
-		jQuery( '#use-reward-point' ).bind( 'click', function() {		
+        
+		jQuery( '#use-reward-point' ).bind( 'click', function() {				
 			jQuery( '#reward-points-input' ).val( 1 );
 			if( isEnoughPointsToCoverAmount ) {
+                jQuery('#billing-address-select').attr('disabled', false);
+		        jQuery('#hpcheckout-billing-form :input')..attr('disabled',false);
+			
 	        	jQuery( 'input[name="payment[method]"]').attr('value', '');
 	        	jQuery( '[id^="payment_form_"]' ).hide();
 	        }
