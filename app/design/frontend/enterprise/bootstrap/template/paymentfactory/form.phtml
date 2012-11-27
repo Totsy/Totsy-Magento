@@ -72,7 +72,59 @@
 
 var checkoutPayment = {};
 
-jQuery( document ).ready( function() {
+jQuery(document).ready( function() {
+
+    var billAddySelect = jQuery("#billing-address-select");
+	var newCardWrap = jQuery('.use-new-card-wrapper');
+	//var newCardCtrls = jQuery( 'input, select', '.use-new-card-wrapper' );
+	var billingAddress = jQuery('.totsy-selective-input-box', '#hpcheckout-billing-wrapper');
+	var billFormInputs = jQuery('#hpcheckout-billing-form :input');
+
+    jQuery("[id='payment[cybersource_subid]']").change( function() {   
+     
+        if( jQuery(this).val() == '' ) {
+        	if(jQuery('#paypal_payment').length > 0) {
+            	jQuery('#paypal_payment').attr("checked", false);
+            }
+            if(jQuery("#payment_form_paypal_express").length > 0) {
+                jQuery("#payment_form_paypal_express").show();           	
+            }
+            jQuery("#cc_data").show();
+            newCardWrap.show();
+            //newCardCtrls.removeAttr('disabled');
+            billingAddress.removeClass('disabled');
+            billAddySelect.removeAttr('disabled');
+            //Enable Billing Inputs if credit card not selected
+            billFormInputs.each(function(i) {
+                jQuery(this).removeAttr('disabled');
+                jQuery(this).val('');
+            });
+        } else { 
+            if(jQuery("#payment_form_paypal_express").length > 0){
+                jQuery("#payment_form_paypal_express").hide();           	
+            }
+           	           	            
+			newCardWrap.hide();
+			//selectUIWraps.addClass('disabled'); 
+            billingAddress.attr("disabled", true);
+            
+			if(checkoutPayment.isCollapsed==false) {
+			    billAddySelect.val(jQuery("#address_" + jQuery( this ).val()).val()).change();
+			    //Block Billing Inputs if credit card selected
+			    billFormInputs.each(function(i) {
+			        if(this.id != 'button_ship_to') {
+			            jQuery("[id='" + this.id + "']").attr('disabled',true);
+			        }
+			    });
+			    billAddySelect.attr('disabled',true);
+			} else {
+			    billAddySelect.removeAttr('disabled');
+			    billFormInputs.each(function(i) {
+			        jQuery(this).removeAttr('disabled');
+			    });
+			}
+        }
+    }); 
     
     //a namespace for operations toggling the 2 views of the payment section
     checkoutPayment = (function() {
@@ -87,6 +139,9 @@ jQuery( document ).ready( function() {
                     jQuery(".cc_save_card").appendTo(jQuery("#add_payment_save_card"));
                     
                     var savedCardStyles = {'width' : '60px','margin-left' : '10px','float' : 'left'}; 
+                    
+                    jQuery('#hpcheckout-billing-form :input').attr("disabled", true);
+                    jQuery('#billing-address-select').attr('disabled', true);
                     
                     jQuery(".cc_save_card").css( savedCardStyles );
                     jQuery("#cc_data").hide();
@@ -104,6 +159,9 @@ jQuery( document ).ready( function() {
             addPayment: function() {
                 if(this.isCollapsed == false) {                
                     this.isCollapsed = true;
+                    jQuery('#hpcheckout-billing-form :input').attr("disabled", false);
+                    jQuery('#billing-address-select').attr('disabled', false);
+                    
                     jQuery("[id='payment[cybersource_subid]']").attr("checked", false);
                     jQuery("[id='payment[cybersource_subid]']").attr("disabled", true);
                     jQuery("#use-card-method").css("opacity", ".5");
