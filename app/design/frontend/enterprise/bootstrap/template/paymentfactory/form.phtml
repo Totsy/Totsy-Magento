@@ -267,7 +267,8 @@ jQuery(document).ready( function() {
                             $customerName = $customerAddress->getFirstname() ." ". $customerAddress->getLastname();
                             
                             //reset gets the first item from the array passed in
-                            $customerStreet = reset($customerAddress->getStreet());
+                            $customerStreetArray = $customerAddress->getStreet();
+                            $customerStreet = reset($customerStreetArray);
                             
                             $orders = Mage::getResourceModel('sales/order_collection')->addFieldToSelect('*')
     ->addFieldToFilter('customer_id', $profile->getCustomerId())->addAttributeToSort('created_at', 'DESC')->setPageSize(1);
