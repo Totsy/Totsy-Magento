@@ -83,6 +83,10 @@
 	// @TODO: abstract this out to hpcheckout.js as self-contained method
 	// need to re-enable billing form controls before trying to send values to shipping form
 	jQuery(document).ready(function() {
+        if(checkoutPayment.hasProfile==true) {
+            jQuery('#hpcheckout-billing-form :input').attr("disabled", true);
+        }
+	
 	    jQuery('#button_ship_to').bind('click', function() {
 	    	var billFormInputs = jQuery('#hpcheckout-billing-form :input');
 	    	var billAddySelect = jQuery("#billing-address-select");

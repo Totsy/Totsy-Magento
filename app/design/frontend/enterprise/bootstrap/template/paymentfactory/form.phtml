@@ -140,7 +140,6 @@ jQuery(document).ready( function() {
                     
                     var savedCardStyles = {'width' : '60px','margin-left' : '10px','float' : 'left'}; 
                     
-                    jQuery('#hpcheckout-billing-form :input').attr("disabled", true);
                     jQuery('#billing-address-select').attr('disabled', true);
                     
                     jQuery(".cc_save_card").css( savedCardStyles );
@@ -420,7 +419,8 @@ jQuery(document).ready( function() {
                 </li>
                 <li class="adv-container"></li>
             </ul>
-            <script type="text/javascript">
+            <script type="text/javascript">            
+            
             var SSChecked<?php echo $_code ?> = function() {
                 var elm = $('<?php echo $_code ?>_cc_type');
                 if (elm.value=='SO' || elm.value=='SM') {
