@@ -64,7 +64,7 @@
     var shippingRegionUpdater = new RegionUpdater('shipping:country_id', 'shipping:region', 'shipping:region_id', countryRegions, undefined, 'shipping:postcode');
 
     jQuery(document).ready( function() {
-        //jQuery( '#shipping\\:postcode' ).blur( function() { hpcheckout.update(true); });
+        jQuery( '#shipping\\:postcode' ).blur( function() { hpcheckout.update(true); });
         jQuery( '#shipping-address-select' ).bind( 'change', hpcheckout.switchAddress );
         jQuery( '#billing\\:selected' ).val(jQuery( '#billing-address-select' ).val());
     });

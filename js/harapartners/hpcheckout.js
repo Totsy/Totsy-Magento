@@ -184,8 +184,6 @@ HpCheckout.prototype = {
 		} else {
 		    blocksToUpdate = ['shipping','review'];
 		}
-		
-		console.log(blocksToUpdate);
 				
 		if( hpcheckoutObject.validate( step ) ) {
 			// var postData = hpcheckoutObject.getFormData( step );
@@ -351,7 +349,7 @@ HpCheckout.prototype = {
 		if(!doUpdatePayment) {
             blocksToUpdate = this.getBlocksToUpdate( postData[ 'currentStep' ] );
 		} else {
-            blocksToUpdate = ['shipping','billing','review'];	
+            blocksToUpdate = ['shipping','review'];	
 		}
 				
 		this.throbberOn( blocksToUpdate );
