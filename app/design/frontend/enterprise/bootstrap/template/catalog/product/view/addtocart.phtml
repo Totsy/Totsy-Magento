@@ -39,9 +39,10 @@
 	        <?php if(!$_product->isGrouped() && !$_product->isVirtual() ): ?>
 	        <div class="add-to-cart-qty">
     	        <label for="qty"><?php echo $this->__('Quantity') ?></label>
-                <input type="text" name="qty" id="qty" maxlength="2" value="1" title="<?php echo $this->__('Qty') ?>" class="input-text qty span1" />
+                <select name="qty" id="qty" class="span1 required-entry" title="<?php echo $this->__('Qty') ?>" ></select>
 	        <?php //echo $this->getProductDefaultQty() * 1 ?>
 	        </div>
+	        <div class="spinner" style="display: none;"><img src="<?php echo $this->getSkinUrl( 'images/ajax-loader.gif' ) ?>"></div>
 	        <?php endif; ?>
 	        <button type="button" title="<?php echo $buttonTitle ?>" class="button btn-cart btn btn-primary" onclick="productAddToCartForm.submit(this)"><span><span><?php echo $buttonTitle ?></span></span></button> 
         <span id="ajax_loader" style="display:none"><img src='<?php echo $this->getSkinUrl('images/ajax-loader.gif')?>'/></span>
