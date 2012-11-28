@@ -7,22 +7,27 @@ Where the savvy mom shops - Totsy offers moms on-the-go and moms-to-be access to
 
 Getting Started
 ---------------
-This code base is meant to be copied on top of a vanilla Magento installation. After cloning the repository, the stock Magento Enterprise archive must be extracted on top (without overwriting existing files).
+This code base is meant to be merged with the base Magento Enterprise installation. After cloning the repository, the stock Magento Enterprise archive must be extracted on top (without overwriting existing files).
 
-Clone the Totsy-Magento repository, and then extract the Magento Enterprise (gzipped) tarball into the working copy:
+Clone the Totsy-Magento repository
 
-    $ git clone git@github.com:Totsy/Totsy-Magento.git <your directory>
-    $ cd <your directory>
+    $ git clone git@github.com:Totsy/Totsy-Magento.git <yourname>.totsy.com/current
+    $ cd <yourname>.totsy.com/current
 
-Unpack the magento core enterprise files:
+Unpack the magento core enterprise files
 
     $ tar xkfj /usr/share/magento/magento-enterprise-1.11.1.tar.bz2 --strip-components=1
 
-Setup the application configuration, and the shared `media` directory:
+Setup the application configuration, and the shared `media` directory
 
     $ ln -sf /etc/magento/enterprise.xml app/etc/enterprise.xml
     $ ln -sf /etc/magento/local.xml app/etc/local.xml
-    $ ln -s /srv/cache/media/ media
+    $ ln -sf /srv/cache/media/ media
+
+Return to the root where you created the working copy, and move it to the deployment directory
+
+    $ cd ../..
+    $ mv <yourname>.totsy.com /var/www/
 
 Unit Testing
 ------------
