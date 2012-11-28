@@ -143,13 +143,19 @@ jQuery(document).ready( function() {
                     
                     var savedCardStyles = {'width' : '60px','margin-left' : '10px','float' : 'left'}; 
                     
-                    jQuery('#billing-address-select').attr('disabled', true);
+                    jQuery('#billing-address-select').attr('disabled', true); 
+                    
+                    billFormInputs.each(function(i) {
+			        	if(this.id != 'button_ship_to') {
+			            	jQuery("[id='" + this.id + "']").attr('disabled',true);
+			        }
+			        });
                     
                     jQuery(".cc_save_card").css( savedCardStyles );
                     jQuery("#cc_data").hide();
                     jQuery("#hpcheckout-payment-add-title").show();
                     jQuery("#use-card-method").show();
-                } else {
+                } else {			        
                     jQuery("[id='add_payment']").hide();
                     jQuery(".checkout-reward").css("padding-top", "0px");
                     jQuery(".use-new-card-wrapper").show();
