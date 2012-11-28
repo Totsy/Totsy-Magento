@@ -9,7 +9,7 @@ Getting Started
 ---------------
 This code base is meant to be merged with the base Magento Enterprise installation. After cloning the repository, the stock Magento Enterprise archive must be extracted on top (without overwriting existing files).
 
-Clone the Totsy-Magento repository
+From a directory in which you have permissions to write (i.e. your home directory), clone the Totsy-Magento repository
 
     $ git clone git@github.com:Totsy/Totsy-Magento.git <yourname>.totsy.com/current
     $ cd <yourname>.totsy.com/current
@@ -27,7 +27,7 @@ Setup the application configuration, and the shared `media` directory
 Return to the root where you created the working copy, and move it to the deployment directory
 
     $ cd ../..
-    $ mv <yourname>.totsy.com /var/www/
+    $ sudo mv <yourname>.totsy.com /var/www/
 
 Unit Testing
 ------------
