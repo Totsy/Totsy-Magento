@@ -127,7 +127,7 @@ HpCheckout.prototype = {
 		var clickedAddress = jQuery( this ); 
 		var blockType = '';
 		var hpcheckoutObject = HpCheckout.prototype;
-		
+				
 		if( clickedAddress.attr( 'id' ) == 'billing-address-select' ) {
 			blockType = 'billing';
 		} else if( clickedAddress.attr( 'id' ) == 'shipping-address-select' ) {
@@ -135,11 +135,23 @@ HpCheckout.prototype = {
 		}
 		
 		if( clickedAddress.val() == '' ) {
+			jQuery('#hpcheckout-billing-form :input').each(function(i) {
+				if(this.id != 'button_ship_to') {
+					jQuery("[id='" + this.id + "']").attr('disabled',false);
+				}
+			});
+		
 			jQuery( '#' + hpcheckout.data.blocks[ blockType ].formId + ' input' ).val( '' );
             if(blockType == 'billing') {
                 jQuery( '#billing\\:selected' ).val('');
             }
-		} else {	
+		} else {
+			jQuery('#hpcheckout-billing-form :input').each(function(i) {
+				if(this.id != 'button_ship_to') {
+					jQuery("[id='" + this.id + "']").attr('disabled',true);
+				}
+			});
+			
 			if( hpcheckoutAddresses[ clickedAddress.val() ] ) {
 				jQuery('select#' + blockType +'\\:country_id').val( hpcheckoutAddresses[ clickedAddress.val() ][ 'country_id' ] );
 
