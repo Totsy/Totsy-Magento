@@ -160,6 +160,8 @@ abstract class Mage_Paypal_Controller_Express_Abstract extends Mage_Core_Control
         try {
             $this->_initCheckout();
             $this->_checkout->returnFromPaypal($this->_initToken());
+            //2012-11-16 - CJD - reset cart timer on return from paypal
+            Mage::getSingleton('checkout/session')->setCountDownTimer(Mage::helper('hpcheckout')->getCurrentTime());
             $this->_redirect('*/*/review');
             return;
         }

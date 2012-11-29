@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<config>
+	<modules>
+		<Webshopapps_Shipdiscount>
+			<active>true</active>
+			<codePool>local</codePool>
+            <depends>
+                <Harapartners_Service/>
+            </depends>
+		</Webshopapps_Shipdiscount>
+	</modules>
+</config>

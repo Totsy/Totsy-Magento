@@ -1,5 +1,5 @@
 <?php if ($this->getTotals()): ?>
-    <?php $_colspan = $this->helper('tax')->displayCartBothPrices() ? 5 : 3; ?>
+    <?php $_colspan = $this->helper('tax')->displayCartBothPrices() ? 5 : 4; ?>
     <?php echo $this->renderTotals(null, $_colspan); ?>
     <?php echo $this->renderTotals('footer', $_colspan); ?>
     <?php if ($this->needDisplayBaseGrandtotal()):?>
