@@ -320,11 +320,13 @@ class Harapartners_HpCheckout_Model_Checkout
             $originalShippingAddress->clearAllItems();
             $originalShippingAddress->getItemsCollection()->clear();
 
-            $originalQuoteAddress->setShippingMethod('customshippingrate_customshippingrate');
-            $originalQuoteAddress->setShippingAmount($originalShippingAddress->getShippingAmount() - Mage::getStoreConfig('checkout/cart/split_cart_price'));
-            $originalQuoteAddress->setBaseShippingAmount($originalShippingAddress->getBaseShippingAmount() - Mage::getStoreConfig('checkout/cart/split_cart_price'),true);
-            $originalQuoteAddress->setCollectShippingRates(false);
-            $originalQuoteAddress->save();
+            if(Mage::getSingleton('checkout/session')->getSplitCartFlag()) {
+                $originalQuoteAddress->setShippingMethod('customshippingrate_customshippingrate');
+                $originalQuoteAddress->setShippingAmount($originalShippingAddress->getShippingAmount() - Mage::getStoreConfig('checkout/cart/split_cart_price'));
+                $originalQuoteAddress->setBaseShippingAmount($originalShippingAddress->getBaseShippingAmount() - Mage::getStoreConfig('checkout/cart/split_cart_price'),true);
+                $originalQuoteAddress->setCollectShippingRates(false);
+                $originalQuoteAddress->save();
+            }
 
             $this->getQuote()->setTotalsCollectedFlag(false);
             $this->getQuote()->collectTotals();
