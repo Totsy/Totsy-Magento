@@ -34,6 +34,7 @@
                 return true;
             }],
             ['validate-cc-cvn-radio', 'Please enter a valid credit card verification number.', function(v, elm) {
+                            
                 var ccType = $$('input:checked[type="radio"][name="payment[cc_type]"]').pluck('value');
                 if (typeof Validation.creditCartTypes.get(ccType) == 'undefined') {
                     return false;
