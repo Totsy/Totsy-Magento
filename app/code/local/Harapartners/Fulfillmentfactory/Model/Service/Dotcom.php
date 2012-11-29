@@ -8,7 +8,7 @@
  * If you did not receive a copy of the license and are unable to
  * obtain it through the world-wide-web, please send an email
  * to eula@harapartners.com so we can send you a copy immediately.
- * 
+ *
  */
 class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
 {
@@ -75,6 +75,15 @@ class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
                     ->loadByAttribute('sku', $sku);
 
                 if ($product && $product->getId()) {
+
+                    // Update product inventory for 'dotcom_stock'
+                    if ( 'dotcom_stock' == $product->getData('fulfillment_type') ) {
+						$stockItem = Mage::getModel ( 'cataloginventory/stock_item' )->loadByProduct ( $product->getId() );
+						$stockItem->setData ( 'qty', ( integer ) $qty );
+						$stockItem->save ();
+						Mage::log("Product stock Qty updated for '$sku': $qty", Zend_Log::DEBUG, 'fulfillment_inventory.log');
+                    }
+
                     $currentInventory = $product->getData('fulfillment_inventory');
                     if ($qty != $currentInventory) {
                         $product->setData('fulfillment_inventory', $qty);
@@ -100,6 +109,7 @@ class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
             Zend_Log::INFO,
             'fulfillment.log'
         );
+        
 
         $availableProducts = Mage::getModel('catalog/product')->getCollection()
             ->addAttributeToFilter('fulfillment_inventory', array('gt' => 0));
@@ -303,7 +313,7 @@ XML;
                 $value = htmlentities($value);
                 $vendorCode = '<manufacturing-code>' . $value . '</manufacturing-code>';
             }
-            
+
             $style = '<style-number xsi:nil="true" />';
             if ($value = $product->getVendorStyle()) {
                 $value = htmlentities($value);
@@ -451,7 +461,7 @@ XML;
 
             $orderDate = date("Y-m-d", strtotime($order->getCreatedAt()));
             $shippingMethod = Mage::helper('fulfillmentfactory/dotcom')->getDotcomShippingMethod($order->getShippingMethod());
-            
+
             //handling shipping address
             $shippingAddress = $order->getShippingAddress();
             
@@ -597,9 +607,8 @@ XML;
                 $quantity = intval($item->getQtyToShip());
                 $sku = substr($item->getSku(), 0, 17);
 
-                if ($quantity) {
-                    $itemPrice = number_format($item->getPrice(), 2);
-                    $taxAmount = number_format($item->getTaxAmount(), 2);
+                if($quantity) {
+                    $taxAmount = $item->getTaxAmount();
                     if (!$taxAmount) {
                         $taxAmount = '0';
                     }
@@ -608,7 +617,7 @@ XML;
                     <line-item>
                         <sku>$sku</sku>
                         <quantity>$quantity</quantity>
-                        <price>$itemPrice</price>
+                        <price>{$item->getPrice()}</price>
                         <tax>$taxAmount</tax>
                         <shipping-handling>0</shipping-handling>
                         <client-item xsi:nil="true"/>

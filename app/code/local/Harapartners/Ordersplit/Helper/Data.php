@@ -16,6 +16,7 @@
 class Harapartners_Ordersplit_Helper_Data extends Mage_Core_Helper_Abstract {
     
     const TYPE_DOTCOM = 'dotcom';
+    const TYPE_DOTCOM_STOCK = 'dotcom_stock';
     const TYPE_DROPSHIP = 'dropship';
     const TYPE_VIRTUAL = 'virtual';
     const TYPE_OTHER = 'other';
@@ -24,7 +25,8 @@ class Harapartners_Ordersplit_Helper_Data extends Mage_Core_Helper_Abstract {
         return array(
                 self::TYPE_DOTCOM, 
                 self::TYPE_DROPSHIP, 
-                self::TYPE_VIRTUAL
+                self::TYPE_VIRTUAL,
+                self::TYPE_DOTCOM_STOCK
         );
     }
     
@@ -49,6 +51,9 @@ class Harapartners_Ordersplit_Helper_Data extends Mage_Core_Helper_Abstract {
             switch($product->getFulfillmentType()) {
                 case self::TYPE_DOTCOM:
                     Mage::helper('ordersplit')->processNonHybridOrder($order, self::TYPE_DOTCOM);
+                    break;
+                case self::TYPE_DOTCOM_STOCK:
+                    Mage::helper('ordersplit')->processNonHybridOrder($order, self::TYPE_DOTCOM_STOCK);
                     break;
                 case self::TYPE_VIRTUAL:
                     Mage::helper('ordersplit')->processNonHybridOrder($order, self::TYPE_VIRTUAL);
@@ -484,7 +489,10 @@ class Harapartners_Ordersplit_Helper_Data extends Mage_Core_Helper_Abstract {
                 break;
             case self::TYPE_DROPSHIP;
                 break;
-            case self::TYPE_DOTCOM;
+            case self::TYPE_DOTCOM:
+                Mage::getModel('fulfillmentfactory/service_itemqueue')->saveFromOrder($order);
+                break;
+            case self::TYPE_DOTCOM_STOCK:
                 Mage::getModel('fulfillmentfactory/service_itemqueue')->saveFromOrder($order);
                 break;
             case self::TYPE_OTHER;

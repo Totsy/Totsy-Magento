@@ -8,12 +8,12 @@
  * If you did not receive a copy of the license and are unable to
  * obtain it through the world-wide-web, please send an email
  * to eula@harapartners.com so we can send you a copy immediately.
- * 
+ *
  -->
 <config>
     <modules>
         <Harapartners_Fulfillmentfactory>
-            <version>1.0.2</version>
+            <version>1.1.0</version>
         </Harapartners_Fulfillmentfactory>
     </modules>
     <global>
@@ -82,6 +82,9 @@
                 <fulfillment_aging_day>90</fulfillment_aging_day>
                 <shipment_aging_day>3</shipment_aging_day>
             </aging_setting>
+            <general>
+                <fulfillment_types>dotcom,dotcom_stock,virtual</fulfillment_types>
+            </general>
         </fulfillmentfactory_options>
     </default>
     <crontab>
