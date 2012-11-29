@@ -42,9 +42,10 @@ class Harapartners_Service_Model_Rewrite_Sales_Convert_Quote extends Mage_Sales_
             ->setProduct($item->getProduct())
             ->setBaseOriginalPrice($item->getBaseOriginalPrice())
         ;
+
         //20121018 - CJD - this is needed for virtual items to work correctly
-        if($item instanceof Mage_Sales_Model_Quote_Address_Item) {
-            $orderItem->setQuoteItemId($item->getQuoteItemId());
+        if($item instanceof Mage_Sales_Model_Quote_Address_Item && $item->getProduct()->getIsVirtual()) {
+            $orderItem->setQuoteItemId($item->getQuoteItem()->getId());
         }
 
         $options = $item->getProductOrderOptions();

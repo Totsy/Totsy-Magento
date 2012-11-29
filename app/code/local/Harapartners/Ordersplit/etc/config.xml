@@ -22,6 +22,15 @@
                 <class>Harapartners_Ordersplit_Helper</class>
             </ordersplit>
         </helpers>
+        <blocks>
+            <adminhtml>
+                <rewrite>
+                    <sales_order_create_search_grid>Harapartners_Ordersplit_Block_Sales_Order_Create_Search_Grid</sales_order_create_search_grid>
+                    <sales_order_create_search_grid_renderer_fulfillment>Harapartners_Ordersplit_Block_Sales_Order_Create_Search_Grid_Renderer_Fulfillment</sales_order_create_search_grid_renderer_fulfillment>
+                </rewrite>
+            </adminhtml>
+
+        </blocks>
         <models>
             <ordersplit>
                 <class>Harapartners_Ordersplit_Model</class>
@@ -45,7 +54,7 @@
                 <connection>
                     <use>core_read</use>
                 </connection>
-            </ordersplit_read>        
+            </ordersplit_read>
         </resources>
         <!--Moved to Harapartners_Service-->
         <!--events>
@@ -58,6 +67,17 @@
                     </ordersplit>
                 </observers> 
             </sales_order_place_after>
-        </events-->            
+        </events-->
     </global>
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <Harapartners_Ordersplit before="Mage_Adminhtml">Harapartners_Ordersplit</Harapartners_Ordersplit>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
 </config>

@@ -1,25 +1,3 @@
-<?php
-$fulfillmentTypes = array();
-// Check to see if there are multiple fulfillment types
-foreach($this->getQuote()->getAllItems() as $item) {
-    if($item->getParentItemId()) {
-        continue;
-    }
-    $product = Mage::getModel ( 'catalog/product' )->load ( $item->getProductId () );
-    if($product->getIsVirtual()) {
-        continue;
-    }
-    $fulfillmentTypes [$product->getFulfillmentType ()] [] = $item->getId ();
-}
-
-$multiShipping = FALSE;
-if(count($fulfillmentTypes) > 1) {
-    $multiShipping = TRUE;
-}
-
-?>
-
-
 <div class="sp-methods" id="checkout-payment-method-load">
 <?php if(!count( $methods = $this->getMethods())): ?>
 	<div>No payment methods available, please try again later or contact us.</div>
@@ -34,9 +12,6 @@ if(count($fulfillmentTypes) > 1) {
 <input type="hidden" name="payment[method]" id="payment_method" value="paymentfactory_tokenize" />
 </div>
 <?php foreach ($methods as $_method):  $_code = $_method->getCode() ?>
-    <?php if($multiShipping && $_code == 'paypal_express'):?>
-        <?php continue; // Skip paypal if multiple fulfillment types ?>
-    <?php endif; ?>
     <?php if ($html = $this->getPaymentMethodFormHtml($_method)): ?>
         <div>
             <?php echo $html; ?>
@@ -65,5 +40,7 @@ if(count($fulfillmentTypes) > 1) {
             jQuery('input[name="payment[method]"]').val("paymentfactory_tokenize");
     		hpcheckout.switchPaymentMethod('paymentfactory_tokenize');		
         });
+
+
     });	
 </script>

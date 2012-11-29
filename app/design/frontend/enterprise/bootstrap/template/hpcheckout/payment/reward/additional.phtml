@@ -58,6 +58,9 @@
             jQuery("#hpcheckout-payment-add-title").hide();
         
         	jQuery( 'input[name="payment[method]"]').val('free');
+            jQuery('#paymentfactory_tokenize_cc_cid').removeClass('required-entry');
+            jQuery('#paymentfactory_tokenize_expiration').removeClass('required-entry');
+            jQuery('#paymentfactory_tokenize_expiration_yr').removeClass('required-entry');
         	jQuery( '#cc-data' ).hide();
         }
         
@@ -66,8 +69,11 @@
 			if( isEnoughPointsToCoverAmount ) {
                 jQuery('#billing-address-select').attr('disabled', false);
 		        jQuery('#hpcheckout-billing-form :input').attr('disabled',false);
-			
-	        	jQuery( 'input[name="payment[method]"]').attr('value', '');
+                jQuery( 'input[name="payment[method]"]').val('free');
+                jQuery('#paymentfactory_tokenize_cc_cid').removeClass('required-entry');
+                jQuery('#paymentfactory_tokenize_expiration').removeClass('required-entry');
+                jQuery('#paymentfactory_tokenize_expiration_yr').removeClass('required-entry');
+
 	        	jQuery( '[id^="payment_form_"]' ).hide();
 	        }
 			hpcheckout.updatePayment();

@@ -1,4 +1,23 @@
-<?php $_code=$this->getMethodCode(); ?>
+<?php $_code=$this->getMethodCode();
+// Check to see if there are multiple fulfillment types
+foreach($this->getQuote()->getAllItems() as $item) {
+    if($item->getParentItemId()) {
+        continue;
+    }
+    $product = Mage::getModel ( 'catalog/product' )->load ( $item->getProductId () );
+    if($product->getIsVirtual()) {
+        $_fulfillmentType = 'virtual';
+    } else {
+        $_fulfillmentType = $product->getFulfillmentType();
+    }
+    $fulfillmentTypes [$_fulfillmentType] [] = $item->getId ();
+}
+
+$multiShipping = FALSE;
+if(count($fulfillmentTypes) > 1) {
+    $multiShipping = TRUE;
+}
+?>
 <script type="text/javascript">
 //<![CDATA[
     Validation.creditCartTypes.set('JCB', [new RegExp('^(35[0-9]{14}|(2131|1800)[0-9]{11})$'), new RegExp('^([0-9]{3})?$'), true]);
@@ -222,7 +241,7 @@ jQuery(document).ready( function() {
         		 <?php endforeach ?>
         		 <?php $methods = $this->getLayout()->getBlock('hpcheckout.payment.methods')->getMethods();  ?> 
                  <?php if(count($methods)): ?>
-                 	<?php if(Mage::getModel('paypal/config')->isMethodActive('paypal_express')): ?>
+                 	<?php if(!$multiShipping && Mage::getModel('paypal/config')->isMethodActive('paypal_express')): ?>
 			    	    <input type="radio" value="paypal_express" id="paypal_payment" name="paypal_payment">
 			    	    <div>
         		 	    <span title="Paypal Express" class="paypal"></span>
