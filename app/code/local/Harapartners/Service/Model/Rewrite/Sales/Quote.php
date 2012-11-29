@@ -12,8 +12,7 @@
  * 
  */
 
-class Harapartners_Service_Model_Rewrite_Sales_Quote
-    extends Mage_Sales_Model_Quote
+class Harapartners_Service_Model_Rewrite_Sales_Quote extends Webshopapps_Shipdiscount_Sales_Model_Quote
 {
     public function addProductAdvanced(
         Mage_Catalog_Model_Product $product,
