@@ -144,12 +144,6 @@ jQuery(document).ready( function() {
                     
                     jQuery('#billing-address-select').attr('disabled', true); 
                     
-                    billFormInputs.each(function(i) {
-			        	if(this.id != 'button_ship_to') {
-			            	jQuery("[id='" + this.id + "']").attr('disabled',true);
-			        	}
-			        });
-                    
                     jQuery(".cc_save_card").css( savedCardStyles );
                     jQuery("#cc_data").hide();
                     jQuery("#hpcheckout-payment-add-title").show();
