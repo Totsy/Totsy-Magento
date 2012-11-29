@@ -4,6 +4,9 @@
 		<Webshopapps_Shipdiscount>
 			<active>true</active>
 			<codePool>local</codePool>
+            <depends>
+                <Harapartners_Service/>
+            </depends>
 		</Webshopapps_Shipdiscount>
 	</modules>
 </config>
