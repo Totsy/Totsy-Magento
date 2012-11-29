@@ -40,7 +40,7 @@
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Webshopapps_Shipdiscount_Sales_Model_Quote extends Mage_Sales_Model_Quote
+class Webshopapps_Shipdiscount_Sales_Model_Quote extends Harapartners_Service_Model_Rewrite_Sales_Quote
 {
  protected function _validateCouponCode()
     {
