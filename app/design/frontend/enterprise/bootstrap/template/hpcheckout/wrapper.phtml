@@ -102,22 +102,5 @@ jQuery( document ).ready( function() {
 	if( jQuery( '#shipping-address-select' ).val() != '' ) {
 		jQuery( '#shipping-address-select' ).change();
     }
-    
-    if (checkoutPayment.hasProfile == true) {
-						console.log("test");
-						jQuery('#hpcheckout-billing-form :input').each(function(i) {
-							if (this.id != 'button_ship_to') {
-								jQuery("[id='" + this.id + "']").attr('disabled', true);
-							}
-						});
-					}
-
-    /*jQuery('#shipping\\:firstname').keypress(function(event){
-    	if( (event.keyCode > 127)) {
-    		invalid_key = event.keyCode;
-    		var element_parent = jQuery(this).parent();
-	    	element_parent.append('<div class="validation-advice" id="advice-required-entry-shipping:firstname" style=""> Please only use English Characters</div>');
-    	}
-    });*/
 });
 </script>
