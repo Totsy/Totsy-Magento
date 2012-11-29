@@ -27,7 +27,11 @@ class Totsy_Sales_Helper_Order
     public function calculateEstimatedShipDate($order)
     {
         // use the creation date for the order or quote
-        $shipDate = strtotime($order->getCreatedAt());
+        if($order instanceof Mage_Sales_Model_Quote) {
+            $shipDate = time();
+        } else {
+            $shipDate = strtotime($order->getCreatedAt());
+        }
         if($order->getRelationParentId()) {
             $parentOrder = Mage::getModel('sales/order')->load($order->getRelationParentId());
             $shipDate = strtotime($parentOrder->getCreatedAt());

@@ -52,7 +52,7 @@ class Harapartners_SpeedTax_Model_Speedtax_Calculate extends Harapartners_SpeedT
         if(!$this->_invoice || !$this->_invoice->lineItems){
             return null;
         }
-        
+
         $this->_result = $this->_loadCachedResult();
         if(!$this->_result){
             $this->_result = $this->_getSpeedtax()->CalculateInvoice($this->_invoice)->CalculateInvoiceResult;
@@ -114,7 +114,13 @@ class Harapartners_SpeedTax_Model_Speedtax_Calculate extends Harapartners_SpeedT
             
             //check is taxable
             //note while adding to cart, the child item is not yet linked to the the parent item, however the child item is set as not taxable
-            if($mageItem->getTaxClassId() == $this->_productTaxClassNoneTaxableId){
+            if($mageItem instanceof Mage_Sales_Model_Quote_Address_Item) {
+                $itemTaxClass = $mageItem->getQuoteItem()->getTaxClassId();
+            } else {
+                $itemTaxClass = $mageItem->getTaxClassId();
+            }
+
+            if($itemTaxClass == $this->_productTaxClassNoneTaxableId){
                 continue;
             }
             
@@ -123,7 +129,7 @@ class Harapartners_SpeedTax_Model_Speedtax_Calculate extends Harapartners_SpeedT
             }
             
             $mageItem->setData('speedtax_invoice_lineitem_index', count($this->_invoice->lineItems)); //For request clean up
-            
+
             $sptxLineItem = new lineItem();
             $sptxLineItem->lineItemNumber = count( $this->_invoice->lineItems ); //Append to end
             //Specify tax class (product code for SpeedTax), if empty, default company code will be applied on SpeedTax's end
