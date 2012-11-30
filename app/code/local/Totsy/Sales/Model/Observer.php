@@ -74,4 +74,40 @@ class Totsy_Sales_Model_Observer extends Mage_Sales_Model_Observer
         Mage::getResourceSingleton('sales/quote')->markQuotesRecollect($product->getId());
         return $this;
     }
+
+    /**
+     * Method to cancel all orders that have payment failed status and are older than 7 days
+     */
+    public function cancelOrderWithPaymentFailedAndOlderThan7Days() {
+        //Limit to X days for Cancel
+        $limitDate = strtotime("-7 day");
+        $count = 0;
+        try {
+            $orderCollection = Mage::getModel('sales/order')->getCollection()
+                ->addAttributeToFilter('status',Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_PAYMENT_FAILED);
+            foreach($orderCollection as $order) {
+                if(strtotime($order->getUpdatedAt()) < $limitDate) {
+                    //Get the last fulfillment errorlog message and copy it to the order history
+                    $lastErrorLog = Mage::getModel('fulfillmentfactory/errorlog')->getCollection()
+                                        ->addFieldToFilter('order_id', $order->getId())
+                                        ->getLastItem();
+                    $order->cancel()
+                          ->addStatusHistoryComment($lastErrorLog->getMessage())
+                          ->save();
+                    Mage::log('Order Canceled: ' . $order->getId(),null,'payment_failed_order_cancel.log');
+                    $count++;
+                    //Delete all fulfillment error logs link to the order
+                    $errorLogCollection = Mage::getModel('fulfillmentfactory/errorlog')->getCollection()
+                        ->addFieldToFilter('order_id', $order->getId());
+                    foreach($errorLogCollection as $errorLog) {
+                        $errorLog->delete();
+                    }
+                }
+            }
+        } catch(Exception $e) {
+            Mage::log('Error: ' . $e->getMessage(),null,'payment_failed_order_cancel.log');
+        }
+        Mage::log('Success: ' .$count. ' Orders have been canceled.',null,'payment_failed_order_cancel.log');
+        return true;
+    }
 }
