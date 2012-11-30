@@ -8,7 +8,7 @@
  * If you did not receive a copy of the license and are unable to
  * obtain it through the world-wide-web, please send an email
  * to eula@harapartners.com so we can send you a copy immediately.
- * 
+ *
  -->
 <config>
     <menu>
@@ -48,6 +48,11 @@
                             <sort_order>5</sort_order>
                             <action>fulfillmentfactory/adminhtml_errorlog</action>
                         </fulfillmentlog>
+                        <fulfillmentbulkchange translate="title" module="fulfillmentfactory">
+                            <title>Fulfillment Bulk Change</title>
+                            <sort_order>5</sort_order>
+                            <action>fulfillmentfactory/adminhtml_fulfillment</action>
+                        </fulfillmentbulkchange>
                     </children>
                 </fulfillmentfactory>
             </children>
@@ -64,6 +69,21 @@
                             </fulfillmentfactory>
                         </children>
                     </sales>
+                    <catalog>
+                        <children>
+                            <categories>
+                                <children>
+                                    <actions>
+                                        <children>
+                                            <fulfillmentfactorybulkedit translate="title" module="fulfillmentfactory">
+                                                <title>Fulfillment Type Bulk Edit</title>
+                                            </fulfillmentfactorybulkedit>
+                                        </children>
+                                    </actions>
+                                </children>
+                            </categories>
+                        </children>
+                    </catalog>
                     <system>
                         <children>
                             <config>

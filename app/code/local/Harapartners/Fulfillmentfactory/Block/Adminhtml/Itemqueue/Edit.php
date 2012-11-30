@@ -8,10 +8,10 @@
  * If you did not receive a copy of the license and are unable to
  * obtain it through the world-wide-web, please send an email
  * to eula@harapartners.com so we can send you a copy immediately.
- * 
+ *
  */
-class Harapartners_Fulfillmentfactory_Block_Adminhtml_Itemqueue_Edit extends Mage_Adminhtml_Block_Widget_Form_Container {    
-    
+class Harapartners_Fulfillmentfactory_Block_Adminhtml_Itemqueue_Edit extends Mage_Adminhtml_Block_Widget_Form_Container {
+
     public function __construct(){
         parent::__construct();
 
@@ -20,7 +20,7 @@ class Harapartners_Fulfillmentfactory_Block_Adminhtml_Itemqueue_Edit extends Mag
         $this->_controller = 'adminhtml_itemqueue';
 
         $this->removeButton('delete');
-        
+
         $this->_updateButton('save', 'label', Mage::helper('fulfillmentfactory')->__('Save Item Queue'));
         //$this->_updateButton('delete', 'label', Mage::helper('fulfillmentfactory')->__('Delete Item Queue'));
     }
@@ -32,7 +32,7 @@ class Harapartners_Fulfillmentfactory_Block_Adminhtml_Itemqueue_Edit extends Mag
             return Mage::helper('fulfillmentfactory')->__('Add Item Queue');
         }
     }
-    
+
     protected function _prepareLayout() {
         $this->setChild('back_button',
             $this->getLayout()->createBlock('adminhtml/widget_button')
@@ -42,7 +42,7 @@ class Harapartners_Fulfillmentfactory_Block_Adminhtml_Itemqueue_Edit extends Mag
                     'class'   => 'back'
                 ))
         );
-        
+
         return parent::_prepareLayout();
     }
 
@@ -53,5 +53,5 @@ class Harapartners_Fulfillmentfactory_Block_Adminhtml_Itemqueue_Edit extends Mag
     public function getSaveUrl(){
         return $this->getUrl('*/*/save', array('_current'=>true));
     }
-    
+
 }

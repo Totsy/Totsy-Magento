@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Webshopapps_Wsalogger>
+            <active>true</active>
+            <codePool>community</codePool>
+        </Webshopapps_Wsalogger>
+    </modules>
+</config>
