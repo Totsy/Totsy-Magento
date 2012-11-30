@@ -19,7 +19,23 @@ class Totsy_CatalogInventory_InventoryController extends Mage_Core_Controller_Fr
 					$stock_status = Mage::getModel('cataloginventory/stock_status')->getProductData($related_product->getEntityId(), Mage::app()->getStore()->getId());
 					$stock_count = $stock_status[$related_product->getEntityId()]['qty'];
 				}
-			} else{
+			} elseif($product->getTypeId() == "bundle"){
+				$count = 0;
+				foreach($data['bundle_option'] as $option_id => $selection_id){
+					$related_product = $product->getTypeInstance()->getProductInfoBySelectionId($selection_id);
+					if($related_product) {
+						$stock_status = Mage::getModel('cataloginventory/stock_status')->getProductData($related_product->getEntityId(), Mage::app()->getStore()->getId());
+						$current_prod_stock_count = $stock_status[$related_product->getEntityId()]['qty'];
+						
+						if ($count == 0 ){
+							$stock_count = $current_prod_stock_count;
+						} else if($stock_count > $current_prod_stock_count){
+							$stock_count = $current_prod_stock_count;
+						}
+						++$count;
+					}
+				}
+			}else{
 				$stock_status = Mage::getModel('cataloginventory/stock_status')->getProductData($product->getEntityId(), Mage::app()->getStore()->getId());
 				$stock_count = $stock_status[$product->getEntityId()]['qty'];
 			}

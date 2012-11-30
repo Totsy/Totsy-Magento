@@ -208,6 +208,9 @@ Additional block for bundle product type
                 <block type="bundle/catalog_product_price" name="bundle.prices" as="bundle_prices" template="bundle/catalog/product/view/price.phtml">
                     <action method="setMAPTemplate"><tmpl>catalog/product/price_msrp_item.phtml</tmpl></action>
                 </block>
+                <reference name="product.info.addtocart">
+                    <action method="setTemplate"><template>bundle/catalog/product/view/addtocart.phtml</template></action>
+                </reference>
                 <action method="append"><block>product.info.addtocart</block></action>
                 <action method="append"><block>product.info.addto</block></action>
             </block>
