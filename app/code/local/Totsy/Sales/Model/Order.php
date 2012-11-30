@@ -372,19 +372,17 @@ class Totsy_Sales_Model_Order extends Mage_Sales_Model_Order
         return $this;
     }
 
-
-    public function hasFulfillmentType($fulfillmentType) {
-        foreach($this->getAllItems() as $item) {
-            if($item->getParentItemId()) {
-                continue;
-            }
-            $product = Mage::getModel ( 'catalog/product' )->load ( $item->getProductId () );
-            if($product->getIsVirtual() && $fulfillmentType == 'virtual') {
-                return true;
-            } elseif($product->getFulfillmentType() == $fulfillmentType) {
-                return true;
-            }
+    /**
+     * Retrieve label of order status
+     *
+     * @return string
+     */
+    public function getStatusLabel()
+    {
+        if($this->getStatus() == 'complete' && $this->getIsVirtual()) {
+            return 'Emailed';
+        } else {
+            return $this->getConfig()->getStatusLabel($this->getStatus());
         }
-        return false;
     }
 }
