@@ -31,7 +31,7 @@
             <?php if($this->getCategoryId()): ?>
                     <?php echo $this->getRevertMoveButtonHtml(); ?>
             <?php endif; ?>
-            
+
             <?php if($this->getCategoryId()): ?>
             		<?php echo $this->getDeleteButtonHtml(); ?>
                     <?php echo $this->getDeleteProductsButtonHtml();?>
@@ -41,6 +41,7 @@
             <?php echo $this->getAdditionalButtonsHtml(); ?>
             <?php echo $this->getResetButtonHtml() ?>
             <?php if($this->getCategoryId()): ?>
+                    <?php echo $this->getChangeFulfillmentButtonHtml();?>
             		<?php echo $this->getImportProductButtonHtml();?>
             		<?php echo $this->getCrownimportProductButtonHtml();?>
                     <?php echo $this->getPreviewButtonHtml();?>
@@ -73,7 +74,7 @@
         this.errorSections = $H({});
         this.canShowError = true;
         this.submitUrl = url;
-        if (this.validator && this.validator.validate() && 
+        if (this.validator && this.validator.validate() &&
        !this.dateValidate()) {
             if(this.validationUrl){
                 this._validate();
@@ -267,7 +268,7 @@
             Event.observe(position,'keyup',positionChange);
         }
     }
-    
+
     //There is a conflict between row click and checkbox check call back
 	//Haraparters, Jun: categoryProductRowClick should apply default action (redirect to product detail page)
     <?php echo $_gridJsObject ?>.rowClickCallback = categoryProductRowClick;
@@ -275,9 +276,9 @@
     <?php echo $_gridJsObject ?>.checkboxCheckCallback = registerCategoryProduct;
     <?php echo $_gridJsObject ?>.rows.each(function(row){categoryProductRowInit(<?php echo $_gridJsObject ?>, row)});
 
-    <?php 
+    <?php
     	//For AJAX pages, ignore get query parameters 'isAjax'
-    	$deleteUrlParts = explode('?', $this->getUrl('*/*/deleteProducts', array('_current' => true, 'store' => $this->_getAdminStore(), 'categoryId' => $this->getCategoryId()))); 
+    	$deleteUrlParts = explode('?', $this->getUrl('*/*/deleteProducts', array('_current' => true, 'store' => $this->_getAdminStore(), 'categoryId' => $this->getCategoryId())));
     ?>
     function deleteProductsSubmit() {
         var massDeleteUrl = "<?php echo $deleteUrlParts[0]; ?>";

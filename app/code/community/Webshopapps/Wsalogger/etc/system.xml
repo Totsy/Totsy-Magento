@@ -1,0 +1,160 @@
+<?xml version="1.0"?>
+<!-- **
+ * WebShopApps
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/osl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    WebShopApps
+ * @package     WebShopApps WsaLogger
+ * @copyright   Copyright (c) 2011 Zowta Ltd (http://www.webshopapps.com)
+ * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ -->
+<config>
+	<sections>
+		<wsalogmenu translate="label">
+		 <label>WebShopApps Logger</label>
+            <tab>advanced</tab>
+            <frontend_type>text</frontend_type>
+            <sort_order>999</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>1</show_in_store>
+			<groups>
+				<wsalog translate="label">
+					<label>Logger Configuration</label>
+					<frontend_type>text</frontend_type>
+					<sort_order>10</sort_order>
+					<show_in_default>1</show_in_default>
+					<show_in_website>0</show_in_website>
+					<show_in_store>0</show_in_store>
+					<comment>
+						<![CDATA[
+							<div style="padding:10px;background-color:#fff;border:1px solid #ddd;margin-bottom:7px;">
+								<h3>Please ensure that you disable this logger after use</h3>
+								<br/>With this logger you can see diagnostic information on WebShopApps extensions.
+								<br/><br/>Further info on the <a href="http://wiki.webshopapps.com/webshopapps-logger">WebShopApps Wiki</a>.
+							</div>
+						]]>
+					</comment>
+					<fields>
+						<active translate="label">
+							<label>Enabled</label>
+							<frontend_type>select</frontend_type>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<sort_order>5</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</active>
+						<admin_level translate="label">
+							<label>Minimum Log Level - Admin Panel</label>
+							<frontend_type>select</frontend_type>
+							<sort_order>10</sort_order>
+							<source_model>wsalogger/system_config_source_severities
+							</source_model>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<comment>Switch on to see logs in admin under System->WebShopApps View Logs. Recommend use 'info' or above</comment>
+						</admin_level>
+						<system_level translate="label">
+							<label>Minimum Log Level - System Log</label>
+							<frontend_type>select</frontend_type>
+							<source_model>wsalogger/system_config_source_severities</source_model>
+							<sort_order>15</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<comment>Switch on to see logs in /var/log/system.log. For expert uses</comment>
+						</system_level>
+						<email_level translate="label">
+							<label>Minimum Log Level - Email</label>
+							<frontend_type>select</frontend_type>
+							<sort_order>20</sort_order>
+							<source_model>wsalogger/system_config_source_severities
+							</source_model>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<comment>Will email recipient when logs of this level raised</comment>
+						</email_level>
+						<contact_email translate="label">
+							<label>Logging Email Address</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>30</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>0</show_in_website>
+							<show_in_store>0</show_in_store>
+						</contact_email>
+						<sender_email translate="label">
+							<label>Sender Email</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>40</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>0</show_in_website>
+							<show_in_store>0</show_in_store>
+						</sender_email>
+						<sender_email_name translate="label">
+							<label>Sender Email Name</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>50</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>0</show_in_website>
+							<show_in_store>0</show_in_store>
+						</sender_email_name>
+						<email_subject translate="label">
+							<label>Email Subject</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>60</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>0</show_in_website>
+							<show_in_store>0</show_in_store>
+						</email_subject>
+					<!-- 	<empty_system_log translate="label">
+							<label>Empty System Log</label>
+							<frontend_type>select</frontend_type>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<sort_order>50</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>0</show_in_website>
+							<show_in_store>0</show_in_store>
+						</empty_system_log> -->
+					<!--  	<view_all_extns translate="label">
+							<label>View all Extensions</label>
+							<frontend_type>select</frontend_type>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<sort_order>200</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>0</show_in_website>
+							<show_in_store>0</show_in_store>
+							<comment>Use Logger in non-WebShopApps extensions (if supported)</comment>
+						</view_all_extns>  -->
+					</fields>
+				</wsalog>
+				<wsamodulelog>
+				 	<label>Extension(s) to log output from</label>
+                    <frontend_type>text</frontend_type>
+                    <frontend_model>wsalogger_adminhtml/system_config_form_fieldset_modules_disableLogging</frontend_model>
+                    <sort_order>20</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+				</wsamodulelog>
+			</groups>
+		</wsalogmenu>
+	</sections>
+</config>

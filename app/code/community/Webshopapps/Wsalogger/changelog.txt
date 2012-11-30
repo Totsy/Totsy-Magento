@@ -1,0 +1,8 @@
+1.0 - Initial Release
+1.1 - Rezip manually
+1.2 - Re-released without common using new ant build.xml
+1.3 - Added db logic to recreate the wsalogger table
+1.4 - Removed upgrade sql script just to simplify this call
+2.0 - Moved logger to under System->Configuration.  Added in support to enable/disable logging at this level rather than on each extension.
+2.1 - Added notice to logger page in admin warning to disable after use.
+2.2 - Added support for EE1.11

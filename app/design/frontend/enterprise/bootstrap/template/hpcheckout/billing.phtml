@@ -13,11 +13,11 @@
 	    	    <div> 
 	    		    <div class="pull-left">
 	    	           <label for="billing:firstname" class="required"><em>*&nbsp;</em><?php echo $this->__('first name') ?></label>
-	    	     <input type="text" name="billing[firstname]" title="<?php echo $this->__('First Name') ?>" class="input-text required-entry firstname"  value="<?php echo $this->htmlEscape($this->getFirstName()) ?>" placeholder="<?php echo $this->__('First Name') ?>" id="billing:firstname" />
+	    	     <input type="text" name="billing[firstname]" title="<?php echo $this->__('First Name') ?>" class="input-text required-entry firstname validate-alpha"  value="<?php echo $this->htmlEscape($this->getFirstName()) ?>" placeholder="<?php echo $this->__('First Name') ?>" id="billing:firstname" />
 	    	        </div>
 	    	        <div>
 	    	            <label for="billing:lastname" class="required"><em>*&nbsp;</em><?php echo $this->__('last name') ?></label>
-	    	            <input type="text" name="billing[lastname]" title="<?php echo $this->__('Last Name') ?>" class="input-text required-entry lastname" value="<?php echo $this->htmlEscape($this->getLastName()) ?>" placeholder="<?php echo $this->__('Last Name') ?>" id="billing:lastname" />
+	    	            <input type="text" name="billing[lastname]" title="<?php echo $this->__('Last Name') ?>" class="input-text required-entry lastname validate-alpha" value="<?php echo $this->htmlEscape($this->getLastName()) ?>" placeholder="<?php echo $this->__('Last Name') ?>" id="billing:lastname" />
 	    	        </div>
 	    	    </div>
 	    	    <input type="hidden" name="billing[email]" id="billing:email" value="<?php echo $this->getCustomer()->getEmail() ?>" />

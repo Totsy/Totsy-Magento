@@ -41,6 +41,13 @@
                 </connection>
             </totsy_sales_read>
         </resources>
+        <blocks>
+            <sales>
+                <rewrite>
+                    <order_item_renderer_default>Totsy_Sales_Block_Order_Item_Renderer_Default</order_item_renderer_default>
+                </rewrite>
+            </sales>
+        </blocks>
         <models>
             <sales>
                 <rewrite>
@@ -48,6 +55,7 @@
                     <order>Totsy_Sales_Model_Order</order>
                     <order_invoice_total_subtotal>Totsy_Sales_Model_Order_Invoice_Total_Subtotal</order_invoice_total_subtotal>
                     <order_invoice>Totsy_Sales_Model_Order_Invoice</order_invoice>
+                    <order_payment>Totsy_Sales_Model_Order_Payment</order_payment>
                 </rewrite>
             </sales>
         </models>

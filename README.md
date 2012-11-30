@@ -11,11 +11,24 @@ This code base is meant to be copied on top of a vanilla Magento installation. A
 
 Clone the Totsy-Magento repository, and then extract the Magento Enterprise (gzipped) tarball into the working copy:
 
-    $ git clone <repository-url> totsy.com
-    $ cd totsy.com
-    $ tar xkfz <path-to-magento-enterprise>/enterprise.tar.gz --strip-components=1
+    $ cd /var/www/
+    $ git clone git@github.com:Totsy/Totsy-Magento.git <your directory>
+    $ cd <your directory>
 
-The last thing that you will need is a valid `app/etc/local.xml` to configure your instance of Totsy-Magento.
+Unpack the magento core enterprise files:
+
+    $ tar xkfj /usr/share/magento/magento-enterprise-1.11.1.tar.bz2 --strip-components=1
+    $ cd app/etc/
+    $ rm enterprise.xml
+
+Symlink the config files:
+
+    $ ln -s /etc/magento/enterprise.xml enterprise.xml
+    $ ln -s /etc/magento/local.xml local.xml
+    $ cd <your directory>
+    $ ln -s /srv/cache/media/ media
+
+Now visit http://yourname.totsy.com and you should see a working app. Look, you did it!
 
 Unit Testing
 ------------

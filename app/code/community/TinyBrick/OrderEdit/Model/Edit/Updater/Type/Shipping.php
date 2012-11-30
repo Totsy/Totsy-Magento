@@ -26,18 +26,33 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Shipping extends TinyBrick_Ord
 {
 	public function edit(TinyBrick_OrderEdit_Model_Order $order, $data = array())
 	{
-		$array = array();
+        unset($data['entity_id']);
 		$shipping = $order->getShippingAddress();
 		$oldArray = $shipping->getData();
 		$data['street'] = $data['street1'];
 		if($data['street2']) {
 			$data['street'] .= "\n" . $data['street2'];
 		}
-		$shipping->setData($data);
-		$region = Mage::getResourceModel('directory/region_collection')->addFieldToFilter('default_name', $data['region'])->getFirstItem();
-		$shipping->setRegionId($region->getId());
+        #check if infos are empty
+        foreach($data as $key => $value) {
+            if($key == 'street' || $key == 'city' || $key == 'firstname' || $key == 'lastname') {
+                if(!$value) {
+                    return "Error updating shipping address, you should fill all the fields required.";
+                }
+            }
+        }
+        #If address is identical, dont save it
+        $duplicate = Mage::helper('orderedit')->checkDuplicate($shipping, $data);
+        if($duplicate) {
+            return false;
+        }
+		$shipping->addData($data);
 		try{
 			$shipping->save();
+            $duplicateAddress = Mage::helper('orderedit')->checkDuplicateCustomerAddress($order->getCustomerId(), $data);
+            if(!$duplicateAddress) {
+                Mage::helper('orderedit')->createCustomerAddressFromData($data, $order->getCustomerId());
+            }
 			$newArray = $shipping->getData();
 			$results = array_diff($oldArray, $newArray);
 			$count = 0;
@@ -48,16 +63,9 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Shipping extends TinyBrick_Ord
 					$count++;
 				}
 			}
-
-			if($count != 0) {
-				$comment = "Changed shipping address:<br />" . $comment . "<br />";
-				return $comment;
-			}
-			return true;
-		}catch(Exception $e){
-			$array['status'] = 'error';
-			$array['msg'] = "Error updating shipping address";
 			return false;
+		}catch(Exception $e){
+            return "Error updating shipping address" . $e->getMessage();
 		}
 	}
 }

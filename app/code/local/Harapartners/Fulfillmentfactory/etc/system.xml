@@ -9,7 +9,7 @@
  * If you did not receive a copy of the license and are unable to
  * obtain it through the world-wide-web, please send an email
  * to eula@harapartners.com so we can send you a copy immediately.
- * 
+ *
  -->
 
 <config>
@@ -23,6 +23,26 @@
             <show_in_website>1</show_in_website>
             <show_in_store>1</show_in_store>
             <groups>
+                <general translate="label">
+                    <label>General Settings</label>
+                    <frontend_types>text</frontend_types>
+                    <sort_order>2</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <expanded>1</expanded>
+                    <fields>
+                        <fulfillment_types translate="label">
+                            <label>Fulfillment Types</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>0</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>Comma separated fulfillment types.</comment>
+                        </fulfillment_types>
+                    </fields>
+                </general>
                 <aging_setting translate="label">
                     <label>Aging Setting</label>
                     <frontend_type>text</frontend_type>

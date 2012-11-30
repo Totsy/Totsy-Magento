@@ -735,15 +735,11 @@ class Mage_Customer_AccountController extends Mage_Core_Controller_Front_Action
         }
         $data = $this->_getSession()->getCustomerFormData(true);
         $customer = $this->_getSession()->getCustomer();
-        
-        $lastOrder = $customer->getLastOrder();
-        
-        //Harapartners, Jun, Get name info from billing address, moved to Customer Session
-                               
+
         if (!empty($data)) {
             $customer->addData($data);
         }
-        
+
         //Harapartners, Edward, for change password link start
         if ($this->getRequest()->getParam('changepass') || $this->getRequest()->getParam('changepassword')){
             $customer->setChangePassword(1);
@@ -775,10 +771,14 @@ class Mage_Customer_AccountController extends Mage_Core_Controller_Front_Action
             $customerForm->setFormCode('customer_account_edit')
                 ->setEntity($customer);
 
+            $errors = array();
+            $customerErrors = true;
             $customerData = $customerForm->extractData($this->getRequest());
 
-            $errors = array();
-            $customerErrors = $customerForm->validateData($customerData);
+            if(!$this->getRequest()->getParam('change_password')) {
+                $customerErrors = $customerForm->validateData($customerData);
+            }
+
             if ($customerErrors !== true) {
                 $errors = array_merge($customerErrors, $errors);
             } else {

@@ -61,7 +61,6 @@ if ( !Mage::getSingleton('checkout/session')->hasData('countdown_timer') ) {
             </ul>
         </div>
         <?php endif;?>
-        <span>Estimated ship date:&nbsp;<?php echo date('Y-m-d', Mage::helper('sales/order')->calculateEstimatedShipDate($quote)); ?></span>
         <?php } else { ?>
         <span>You will receive an email with details on this voucher code.</span>
         <?php } ?>

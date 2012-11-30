@@ -43,7 +43,7 @@ class Totsy_Sailthru_Helper_Validator {
 			return true;
 		}
 
-		$error[] = 'Key "'.$key.'" does not exist in a given array';
+		$error[] = 'Key "'.$key.'" does not exist in given array';
 		$array[$key] = null;
 
 		return false;
