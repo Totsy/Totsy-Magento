@@ -79,8 +79,8 @@ XML;
         $staticOne = new Zend_Db_Expr("'1'");
         $staticConfirmed = new Zend_Db_Expr("'confirmed'");
 
-        $from = Mage::getModel('core/date')->gmtDate($from);
-        $to = Mage::getModel('core/date')->gmtDate($to);
+        $from = Mage::getModel('core/date')->gmtDate(null, $from);
+        $to = Mage::getModel('core/date')->gmtDate(null, $to);
 
         switch ($type) {
             case 'signups':

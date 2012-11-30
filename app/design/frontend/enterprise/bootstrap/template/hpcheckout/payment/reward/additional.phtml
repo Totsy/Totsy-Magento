@@ -35,13 +35,11 @@
         <input type="hidden" name="payment[use_reward_points]" id="reward-points-input" value="<?php echo $this->useRewardPoints()? 1 : 0 ?>" />
 		<?php if( ! $this->useRewardPoints() ): ?>
 	        <?php $balance = Mage::helper('enterprise_reward')->formatReward($this->getPointsBalance(), $this->getCurrencyAmount()) ?>
-	        <span id="use-reward-point">
-	           <a href="#">
-	            <?php echo Mage::helper('enterprise_reward')->__('Credits'); ?>
-	            (<span id="reward_available_amount"><?php echo $balance; ?></span>
-	            <?php echo Mage::helper('enterprise_reward')->__('available'); ?>)
-	            </a>
-	        </span>
+	            <div id="reward_available_amount"><?php echo Mage::helper('enterprise_reward')->__('You have '); ?><?php echo $balance; ?></div>
+
+	        <div id="use-reward-point">
+	           <input type="button" class="btn btn-primary" value="Apply Credits">
+	        </div>
 	    <?php elseif( $this->isEnoughPoints() ): ?>
 	    	<span class="reward-full-cover"><?php echo Mage::helper('enterprise_reward')->__('Paid by Reward Points') ?></span>
 	    <?php endif ?>
@@ -52,20 +50,30 @@
     var isRewardUsed = <?php echo ($this->useRewardPoints() ? 'true' : 'false'); ?>;
 
     jQuery( document ).ready( function() {
+        
         if( isRewardUsed && isEnoughPointsToCoverAmount ) {
+            jQuery("#reward_placer").css("padding-top", "0px");
+            jQuery("#credits_and_card_save").css("float", "left");
+            jQuery("#use-card-method").hide();
+            jQuery("#hpcheckout-payment-add-title").hide();
+        
         	jQuery( 'input[name="payment[method]"]').val('free');
             jQuery('#paymentfactory_tokenize_cc_cid').removeClass('required-entry');
             jQuery('#paymentfactory_tokenize_expiration').removeClass('required-entry');
             jQuery('#paymentfactory_tokenize_expiration_yr').removeClass('required-entry');
         	jQuery( '#cc-data' ).hide();
         }
-		jQuery( '#use-reward-point' ).bind( 'click', function() {
+        
+		jQuery( '#use-reward-point' ).bind( 'click', function() {				
 			jQuery( '#reward-points-input' ).val( 1 );
 			if( isEnoughPointsToCoverAmount ) {
+                jQuery('#billing-address-select').attr('disabled', false);
+		        jQuery('#hpcheckout-billing-form :input').attr('disabled',false);
                 jQuery( 'input[name="payment[method]"]').val('free');
                 jQuery('#paymentfactory_tokenize_cc_cid').removeClass('required-entry');
                 jQuery('#paymentfactory_tokenize_expiration').removeClass('required-entry');
                 jQuery('#paymentfactory_tokenize_expiration_yr').removeClass('required-entry');
+
 	        	jQuery( '[id^="payment_form_"]' ).hide();
 	        }
 			hpcheckout.updatePayment();
