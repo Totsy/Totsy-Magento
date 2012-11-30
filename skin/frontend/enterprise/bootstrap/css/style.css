@@ -509,6 +509,58 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
     position:relative; left:-8px /* need to move this a bit to align with top cart (which moved to keep dropdown within 950 grid), tho now this is bit off grid… */
 }
 
+.use-new-card-wrapper {
+    display:none;
+}
+
+#use-card-method {
+    width: 655px;
+    height: auto;
+}
+
+.card-type {
+    width: 205px;
+}
+
+.card-name {
+    width: 160px;
+}
+
+.billing-address {
+    width: 130px;
+}
+
+.card-expdate {
+    width: 60px;
+}
+
+.saved_card {
+    line-height: 15px;
+}
+
+.saved_card th {
+	text-align:left;
+}
+
+#rewards_points {
+    float:right;
+}
+
+#reward_placer {
+    margin-top: 10%;
+    margin-bottom: 10%;
+}
+
+.saved_card span:not(.cc){
+	margin-left: 15px;
+    margin-right: 15px;
+    margin-bottom: 10px;
+}
+
+.saved_card input[type="radio"] {
+    margin:10px 0px 10px 0;
+    position: relative;
+}
 /**
  * @Home page
  */
@@ -779,6 +831,11 @@ body.catalog-category-view .thumbnails > li {position: relative;}
 /**
  * @Cart & Checkout
  */
+.checkout-reward {
+	width:230px;
+	padding: 0px 0px 0px 0px;
+} 
+ 
 .onepage-checkout {
     margin-left: 0px !important; 
 }
@@ -848,6 +905,9 @@ body.catalog-category-view .thumbnails > li {position: relative;}
 }
 
 #use-reward-point {
+	margin-top: 5px;
+    width: ;
+    text-align: center;
     cursor: pointer;
 }
 
@@ -915,19 +975,24 @@ html body .shopping-cart-table tr:hover th
 #fastship_modal_title {float:left; margin: 10px;}
 
 .cc { 
-    height: 36px;
+    height: 27px;
 }
 
-.cc span { background:url('../images/cc_sprite.png'); border:0px solid #666; float:left; }
+.cc span { 
+vertical-align:middle;
+background:url('../images/cc_sprite.png'); 
+border:1px solid #666; 
+float:left; 
+}
 
-.cc .mc { background-position:0px 0px; height:32px; margin:2px; width:56px; }
-.cc .vi { background-position:-56px 0px; height:32px; margin:2px; width:56px; }
-.cc .di { background-position:-112px 0px; height:32px; margin:2px; width:56px; }
-.cc .ae { background-position:-168px 0px; height:32px; margin:2px; width:56px; }
-.cc .mb { background-position:0px 32px; height:32px; margin:2px; width:56px; }
-.cc .vb { background-position:-56px 32px; height:32px; margin:2px; width:56px; }
-.cc .db { background-position:-112px 32px; height:32px; margin:2px; width:56px; }
-.cc .ab { background-position:-168px 32px; height:32px; margin:2px; width:56px; }
+.cc .mc { background-position:0px 0px; height:24px; margin:2px; width:42px; }
+.cc .vi { background-position:-42px 0px; height:24px; margin:2px; width:42px; }
+.cc .di { background-position:-84px 0px; height:24px; margin:2px; width:42px; }
+.cc .ae { background-position:-126px 0px; height:24px; margin:2px; width:42px; }
+.cc .mb { background-position:0px 24px; height:24px; margin:2px; width:42px; }
+.cc .vb { background-position:-42px 24px; height:24px; margin:2px; width:42px; }
+.cc .db { background-position:-84px 24px; height:24px; margin:2px; width:42px; }
+.cc .ab { background-position:-126px 24px; height:24px; margin:2px; width:42px; }
 
 .paypal {
     height:34px; 
@@ -951,7 +1016,7 @@ html body .shopping-cart-table tr:hover th
 }
 
 .onepage-address-form form {
-	margin-bottom: 0px !important;
+	margin-bottom: 0px;
 }
 
 .onepage-address-form input[type="text"], select {
@@ -959,24 +1024,24 @@ html body .shopping-cart-table tr:hover th
 }
 
 .onepage-address-form .firstname {
-    width:205px !important;
+    width:205px;
 }
 
 .onepage-address-form .lastname {
-    width:205px !important;
-    margin-left: 10px !important;
+    width:205px;
+    margin-left: 10px;
 }
 
 .onepage-address-form .telephone {
-    width:205px !important;
+    width:205px;
 }
 
 .onepage-address-form .streetaddress1 {
-    width:430px !important;
+    width:430px ;
 }
 
 .onepage-address-form .address-select {
-	width:220px !important;
+	width:220px ;
 }
 
 .error-msg {
@@ -991,29 +1056,43 @@ html body .shopping-cart-table tr:hover th
 }
 
 .onepage-address-form .streetaddress2 {
-    width:430px !important;
+    width:430px ;
 }
 
 .onepage-address-form .zip {
-    width:80px !important;
-    margin-left: 10px !important;
+    width:80px ;
+    margin-left: 10px ;
 }
 
 .onepage-address-form .city {
-    width:175px !important;
+    width:175px ;
 }
 
 .onepage-address-form .state {
-    width: 145px !important;
-    margin-left: 10px !important;
+    width: 145px ;
+    margin-left: 10px ;
 }
 
 .onepage-address-form .country {
     display:none;
 }
 
+#add_payment_method {
+    cursor: pointer;
+    margin: 3px 0px 3px 0px;
+}
+
+#add_cc_types {
+	margin-top: 10px;
+}
+
 .hpcheckout-payment-title {
 	width:175px;
+	float: left;
+}
+
+#hpcheckout-payment-add-title{
+    width:200px;
 	float: left;
 }
 
@@ -1032,7 +1111,7 @@ html body .shopping-cart-table tr:hover th
 
 .cc_types {
     text-align: center !important;
-    width: 510px !important;
+    width: 460px;
 }
 
 .btn-checkout-group {
@@ -1053,10 +1132,15 @@ html body .shopping-cart-table tr:hover th
 
 .cc_saved_cards {
     width:228px;
+    float: left;
+}
+
+#credits_and_card_save {
+    float: right;
 }
 
 .cc_security {
-    float:right;
+    width: auto;
 }
 
 .cc_secure_icon {
@@ -1064,15 +1148,17 @@ html body .shopping-cart-table tr:hover th
 }
 
 .cc_secure_text {
-    margin-left: 30px;
+    font-weight: bold; 
+    color: #3b9c5a;
+}
+
+.cc_secure_text a {
+    color: #3b9c5a;
 }
 
 .cc_num input[type="text"]{
-    width:420px;
-}
-
-.rewards_points{
-    padding-left: 490px !important;
+    width:455px;
+    float:right;
 }
 
 .cc_cvn input[type="text"]{
@@ -1085,13 +1171,27 @@ html body .shopping-cart-table tr:hover th
     line-height: inherit;
 }
 
+.cc_types input[type="radio"]{
+	vertical-align: middle;
+}
+
 .cc_exp {
-    margin-left: 75px !important;
-    width: 315px;
+    width: 238px;
+    margin-left: 40px;
 }
 
 .cc_save_card {
-    width: 160px;
+    width: 220px;
+    vertical-align: top;
+    float:left;
+}
+
+.cc_save_card input[type="checkbox"] {
+	vertical-align:middle !important; 
+	margin-right:5px;
+	height: 18px;
+	width: 20px;
+	float:left;
 }
 
 .discount-buttons {
@@ -1099,7 +1199,7 @@ html body .shopping-cart-table tr:hover th
 }
 
 .security-lock {
-    background: url("../images/security-lock.png") no-repeat scroll 0 0 transparent;
+    background: url("../images/iconmonstr-lock-7-icon.png") no-repeat scroll 0 0 transparent;
     width: 38px;
     height: 64px;
 }
@@ -1361,6 +1461,7 @@ body.catalog-category-view .price-box .special-price {
 }
 .catalog-product-view .product-main {
     position: relative;
+    min-height: 310px; /* hackish fix for footer overlap of abs pos'ed price module */
     border-top: 2px dashed #68a8fe;    
 }
 .product-main .page-header {
