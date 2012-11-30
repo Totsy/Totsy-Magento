@@ -168,7 +168,16 @@ jQuery(document).ready( function() {
                     jQuery("#cc_data").hide();
                     jQuery("#hpcheckout-payment-add-title").show();
                     jQuery("#use-card-method").show();
-                } else {			        
+                } else {	
+                
+                    if(jQuery('#billing-address-select').val()!=='') {
+                        jQuery('#hpcheckout-billing-form :input').each(function(i) {
+			             if(this.id != 'button_ship_to') {
+			                 jQuery("[id='" + this.id + "']").attr('disabled',true);
+			             }
+			           });    
+                    }
+                		        
                     jQuery("[id='add_payment']").hide();
                     jQuery(".checkout-reward").css("padding-top", "0px");
                     jQuery(".use-new-card-wrapper").show();
