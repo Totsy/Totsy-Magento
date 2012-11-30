@@ -316,7 +316,6 @@ HpCheckout.prototype = {
 			jQuery('#' + affectedBlocks[blockIndex].wrapperId + ' .spinner').hide();
 			
 			if((!navigator.userAgent.match(/iPhone/i)) && (!navigator.userAgent.match(/iPod/i))) {	
-			     console.log(true);					
                 if(checkoutPayment.hasProfile==true || jQuery("#billing-address-select").val()!=='') {
                    jQuery('#hpcheckout-billing-form :input').each(function(i) {
                        if(this.id != 'button_ship_to') {
