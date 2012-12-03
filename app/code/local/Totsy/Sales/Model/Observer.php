@@ -79,29 +79,31 @@ class Totsy_Sales_Model_Observer extends Mage_Sales_Model_Observer
      * Method to cancel all orders that have payment failed status and are older than 7 days
      */
     public function cancelOrderWithPaymentFailedAndOlderThan7Days() {
-        //Limit to X days for Cancel
+        Mage::log('Starting script to cancel order with payment failed status and older than 7 Days: ',null,'payment_failed_order_cancel.log');
         $limitDate = strtotime("-7 day");
         $count = 0;
         try {
             $orderCollection = Mage::getModel('sales/order')->getCollection()
-                ->addAttributeToFilter('status',Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_PAYMENT_FAILED);
+                ->addAttributeToFilter('status',Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_PAYMENT_FAILED)
+                ->addAttributeToFilter('updated_at', array(
+                    'to' => $limitDate,
+                    'date' => true
+                ));
             foreach($orderCollection as $order) {
-                if(strtotime($order->getUpdatedAt()) < $limitDate) {
-                    //Get the last fulfillment errorlog message and copy it to the order history
-                    $lastErrorLog = Mage::getModel('fulfillmentfactory/errorlog')->getCollection()
-                                        ->addFieldToFilter('order_id', $order->getId())
-                                        ->getLastItem();
-                    $order->cancel()
-                          ->addStatusHistoryComment($lastErrorLog->getMessage())
-                          ->save();
-                    Mage::log('Order Canceled: ' . $order->getId(),null,'payment_failed_order_cancel.log');
-                    $count++;
-                    //Delete all fulfillment error logs link to the order
-                    $errorLogCollection = Mage::getModel('fulfillmentfactory/errorlog')->getCollection()
-                        ->addFieldToFilter('order_id', $order->getId());
-                    foreach($errorLogCollection as $errorLog) {
-                        $errorLog->delete();
-                    }
+                //Get the last fulfillment errorlog message and copy it to the order history
+                $lastErrorLog = Mage::getModel('fulfillmentfactory/errorlog')->getCollection()
+                                    ->addFieldToFilter('order_id', $order->getId())
+                                    ->getLastItem();
+                $order->cancel()
+                      ->addStatusHistoryComment($lastErrorLog->getMessage())
+                      ->save();
+                Mage::log('Order Canceled: ' . $order->getId(),null,'payment_failed_order_cancel.log');
+                $count++;
+                //Delete all fulfillment error logs link to the order
+                $errorLogCollection = Mage::getModel('fulfillmentfactory/errorlog')->getCollection()
+                    ->addFieldToFilter('order_id', $order->getId());
+                foreach($errorLogCollection as $errorLog) {
+                    $errorLog->delete();
                 }
             }
         } catch(Exception $e) {
