@@ -197,28 +197,12 @@ $savings = money_format('%n', $originalPrice) - money_format('%n', $discountPric
             name = jQuery(this).attr('id');
             pos = name.lastIndexOf('-');
             option_id = name.slice(pos + 1);
-            
-            var other_options = jQuery('[id^=bundle-option-]');
-			var post_data = {};
-			attr_count = other_options.length;
-			count = 0;
-			other_options.each(function(idx,value) {
-				if(value['value'] != "") {
-					++count;
-					post_data[value['name']] = value['value'];
-				}
 
-				if(attr_count == count) {
-					post_data['id'] = "<?php echo $_product->getEntityId()?>";
-					populateQty(post_data, "Sold Out");                       
-				}
-			});
-/*
             var post_data = {};
             post_data['option_id'] = option_id;
             post_data['id'] = "<?php echo $_product->getEntityId()?>";
-*/
-            console.log(post_data);
+            post_data[jQuery(this).attr('name')] = jQuery(this).val();
+            populateQty(post_data, "sold_out");
             
         });
 
@@ -229,17 +213,17 @@ $savings = money_format('%n', $originalPrice) - money_format('%n', $discountPric
             cache: false,
             url: "<?php echo Mage::getUrl('cataloginventory/inventory/laststockstatus');?>",
             beforeSend: function() {
-                jQuery('.spinner').show();
+                jQuery('#ajax_loader').show();
             },
             success: function(stock_status) {
-                jQuery('.spinner').hide();
+                jQuery('#ajax_loader').hide();
                 stock_status = jQuery.parseJSON(stock_status);
                 stock_qty = stock_status.stock_count;
                 max_qty = 9;
                 if (stock_qty < max_qty) {
                     max_qty = stock_qty;
                 }
-                console.log(stock_qty);
+
                 qty_select = jQuery('#qty');
                 qty_select.html("");
                 if(stock_qty  != 0 ) {
@@ -251,12 +235,13 @@ $savings = money_format('%n', $originalPrice) - money_format('%n', $discountPric
                         jQuery('.btn-cart').show();
                     }
                 } else {
-                    qty_select.append("<option value ='sold_out'> " + sold_out_msg + " </option>" );
+                    qty_select.append("<option value ='sold_out'>" + sold_out_msg + "</option>" );
                     jQuery('.btn-cart').hide();
                 }
             }
         });
     }
+    setInterval ( function(){jQuery('[id^=bundle-option-]').change()}, 60000 );
 </script>
 <!--
 <script type="text/javascript">var switchTo5x=true;</script>

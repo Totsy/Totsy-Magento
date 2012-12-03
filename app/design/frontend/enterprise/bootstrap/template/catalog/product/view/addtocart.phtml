@@ -27,13 +27,14 @@
 <?php
     $_product = $this->getProduct();
     $_category = Mage::registry('current_category');
-    $event_end_date = strtotime($_category->getEventEndDate());
-    $today = strtotime('NOW');
+    $reformat = date("m/d/Y H:i:s", strtotime($_category->getEventEndDate()));
+    $event_end_date = Mage::app()->getLocale()->date($reformat, null, null, false);
+    $today = Mage::app()->getLocale()->date(null,null,null, true);
 ?>
 
 <?php $buttonTitle = $this->__('Add to Cart'); ?>
 
-<?php if($today <= $event_end_date):  ?>
+<?php if(!$today->isLater($event_end_date)):  ?>
 	<?php if($_product->isSaleable()): ?>
 	    <div class="add-to-cart clearfix">
 	        <?php if(!$_product->isGrouped() && !$_product->isVirtual() ): ?>
@@ -51,7 +52,7 @@
 	<?php endif; ?>
 <?php else: // the end of the if for time check ?>
 	<div class="msg-expired">
-	    <h3>Oh Shucks! You just missed it!</h3>
+	    <h3>Sorry, you just missed it!</h3>
 	    <p>This sale has expired.</p>
 	    <p><a href="<?php echo $this->getBaseUrl(); ?>event">Check out our latest sales</a>.</p>
 	</div>

@@ -95,8 +95,9 @@ $savings = money_format('%n', $originalPrice) - money_format('%n', $discountPric
                     <div id="rondavu_pdp_container"></div>
                 </div>
             <?php 
-                $event_end_date = strtotime($_category->getEventEndDate());
-                $today = strtotime('NOW');
+                $reformat = date("m/d/Y H:i:s", strtotime($_category->getEventEndDate()));
+                $event_end_date = Mage::app()->getLocale()->date($reformat, null, null, false);
+                $today = Mage::app()->getLocale()->date(null,null,null, true);
             ?>
             </div>
             <div class="span3 product-addtocart<?php if ($this->hasOptions()): echo ' has-options'; else: echo ' no-options'; endif;?>">
@@ -118,7 +119,7 @@ $savings = money_format('%n', $originalPrice) - money_format('%n', $discountPric
                         <div class="product-prices">
                             <div class="product-prices-main clearfix">
                                 <?php echo $this->getChildHtml('alert_urls') ?>
-                                <?php if($today <= $event_end_date):  ?>
+                                <?php if(!$today->isLater($event_end_date)):  ?>
                                 <?php echo $this->getPriceHtml($_product) ?>
                                 <?php endif; ?>
                                 <div class="product-price-was"><span>Was</span> $<?php echo number_format((float)$special_price, 2, '.', '');?></div>
@@ -207,14 +208,16 @@ var productAddToCartForm=new VarienForm("product_addtocart_form");productAddToCa
                         populateQty(post_data, "Combination Sold Out");                       
                     }
                 });
-                
             });
+        setInterval ( function(){jQuery('[id^=attribute]').change()}, 60000 );
     <?php else: ?>
         jQuery(document).ready(function(){
             post_data = {};
             post_data['id'] = "<?php echo $_product->getEntityId(); ?>";
             populateQty(post_data, "Sold Out");
+            
         });
+        setInterval ( function(){ populateQty(post_data, "Sold Out");}, 60000 );
     <?php endif; ?>
 
     var populateQty = function(post_data, sold_out_msg) {
