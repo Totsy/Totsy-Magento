@@ -194,16 +194,21 @@ $savings = money_format('%n', $originalPrice) - money_format('%n', $discountPric
     var html=getTimerHtml("live","<?php echo $endcount_lc ?>");jQuery("#timer").countdown({date:"<?php echo $endcount_lc; ?>",htmlTemplate:html,onComplete:function(a){jQuery(this).html("Completed")},leadingZero:true,direction:"down"});
 
     jQuery('[id^=bundle-option-]').change(function(){
-            name = jQuery(this).attr('id');
-            pos = name.lastIndexOf('-');
-            option_id = name.slice(pos + 1);
-
+            other_attribute = jQuery('[id^=bundle-option-]');
             var post_data = {};
-            post_data['option_id'] = option_id;
-            post_data['id'] = "<?php echo $_product->getEntityId()?>";
-            post_data[jQuery(this).attr('name')] = jQuery(this).val();
-            populateQty(post_data, "sold_out");
-            
+            attr_count = other_attribute.length;
+            count = 0;
+            other_attribute.each(function(idx,value) {
+                if(value['value'] != "") {
+                    ++count;
+                    post_data[value['name']] = value['value'];
+                }
+
+                if(attr_count == count) {
+                    post_data['id'] = "<?php echo $_product->getEntityId()?>";
+                    populateQty(post_data, "Combination Sold Out");                       
+                }
+            });
         });
 
     var populateQty = function(post_data, sold_out_msg) {
