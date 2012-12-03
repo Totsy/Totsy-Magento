@@ -185,13 +185,68 @@ $savings = money_format('%n', $originalPrice) - money_format('%n', $discountPric
 </section>
 <script type="text/javascript">
     /* cart stuff minified */
-    var productAddToCartForm=new VarienForm("product_addtocart_form");productAddToCartForm.submit=function(a,b){if(this.validator.validate()){var c=this.form;var d=c.action;if(b){c.action=b}var e=null;if(!b){b=jQuery("#product_addtocart_form").attr("action")}b=b.replace("checkout/cart","ajax/checkout_cart");var f=jQuery("#product_addtocart_form").serialize();f+="&isAjax=1";jQuery("#ajax_loader").show();try{jQuery.ajax({url:b,dataType:"json",type:"post",data:f,success:function(b){if(b.redirect){window.location.href=b.redirect}jQuery("#ajax_loader").hide();if(b.headercart&&$("header-user-info")){$("header-user-info").update(b.headercart)}if(b.status&&b.message){var c='<ul class="alert alert-success"><li class="'+b.status.toLowerCase()+'-msg"><ul><li>'+b.message+"</li></ul></li></ul>";$("messages_product_view").update(c);(function(){$("messages_product_view").update(null)}).delay(2)}if(a&&a!="undefined"){a.disabled=false}}})}catch(e){}this.form.action=d;if(e){throw e}if(a&&a!="undefined"){}}}.bind(productAddToCartForm);productAddToCartForm.submitLight=function(a,b){if(this.validator){var c=Validation.methods;delete Validation.methods["required-entry"];delete Validation.methods["validate-one-required"];delete Validation.methods["validate-one-required-by-name"];if(this.validator.validate()){if(b){this.form.action=b}this.form.submit()}Object.extend(Validation.methods,c)}}.bind(productAddToCartForm)
+    var productAddToCartForm=new VarienForm("product_addtocart_form");productAddToCartForm.submit=function(a,b){if(this.validator.validate()){var c=this.form;var d=c.action;if(b){c.action=b}var e=null;if(!b){b=jQuery("#product_addtocart_form").attr("action")}b=b.replace("checkout/cart","ajax/checkout_cart");var f=jQuery("#product_addtocart_form").serialize();f+="&isAjax=1";jQuery("#ajax_loader").show();try{jQuery.ajax({url:b,dataType:"json",type:"post",data:f,success:function(b){if(b.redirect){window.location.href=b.redirect}jQuery("#ajax_loader").hide();if(b.headercart&&$("header-user-info")){$("header-user-info").update(b.headercart)}if(b.status&&b.message){var c='<ul class="alert alert-success"><li class="'+b.status.toLowerCase()+'-msg"><ul><li>'+b.message+"</li></ul></li></ul>";$("messages_product_view").update(c);(function(){$("messages_product_view").update(null)}).delay(2)}if(a&&a!="undefined"){a.disabled=false}}})}catch(e){}this.form.action=d;if(e){throw e}if(a&&a!="undefined"){}}}.bind(productAddToCartForm);productAddToCartForm.submitLight=function(a,b){if(this.validator){var c=Validation.methods;delete Validation.methods["required-entry"];delete Validation.methods["validate-one-required"];delete Validation.methods["validate-one-required-by-name"];if(this.validator.validate()){if(b){this.form.action=b}this.form.submit()}Object.extend(Validation.methods,c)}}.bind(productAddToCartForm);
 
     /*fancy box stuff minified */
-    jQuery(document).ready(function(){jQuery(".fancybox").fancybox();jQuery(".fancybox-effects-a").fancybox({helpers:{title:{type:"outside"},overlay:{speedIn:500,opacity:.95}}});jQuery(".fancybox-effects-b").fancybox({openEffect:"none",closeEffect:"none",helpers:{title:{type:"over"}}})})
+    jQuery(document).ready(function(){jQuery(".fancybox").fancybox();jQuery(".fancybox-effects-a").fancybox({helpers:{title:{type:"outside"},overlay:{speedIn:500,opacity:.95}}});jQuery(".fancybox-effects-b").fancybox({openEffect:"none",closeEffect:"none",helpers:{title:{type:"over"}}})});
 
     /* cart timer minified */
-    var html=getTimerHtml("live","<?php echo $endcount_lc ?>");jQuery("#timer").countdown({date:"<?php echo $endcount_lc; ?>",htmlTemplate:html,onComplete:function(a){jQuery(this).html("Completed")},leadingZero:true,direction:"down"})
+    var html=getTimerHtml("live","<?php echo $endcount_lc ?>");jQuery("#timer").countdown({date:"<?php echo $endcount_lc; ?>",htmlTemplate:html,onComplete:function(a){jQuery(this).html("Completed")},leadingZero:true,direction:"down"});
+
+    jQuery('[id^=bundle-option-]').change(function(){
+            other_attribute = jQuery('[id^=bundle-option-]');
+            var post_data = {};
+            attr_count = other_attribute.length;
+            count = 0;
+            other_attribute.each(function(idx,value) {
+                if(value['value'] != "") {
+                    ++count;
+                    post_data[value['name']] = value['value'];
+                }
+
+                if(attr_count == count) {
+                    post_data['id'] = "<?php echo $_product->getEntityId()?>";
+                    populateQty(post_data, "Combination Sold Out");                       
+                }
+            });
+        });
+
+    var populateQty = function(post_data, sold_out_msg) {
+        jQuery.ajax({
+            data: post_data,
+            type: "post",
+            cache: false,
+            url: "<?php echo Mage::getUrl('cataloginventory/inventory/laststockstatus');?>",
+            beforeSend: function() {
+                jQuery('#ajax_loader').show();
+            },
+            success: function(stock_status) {
+                jQuery('#ajax_loader').hide();
+                stock_status = jQuery.parseJSON(stock_status);
+                stock_qty = stock_status.stock_count;
+                max_qty = 9;
+                if (stock_qty < max_qty) {
+                    max_qty = stock_qty;
+                }
+
+                qty_select = jQuery('#qty');
+                qty_select.html("");
+                if(stock_qty  != 0 ) {
+                    qty_select.append("<option value =''> Please Select Quantity </option>" );
+                    for(idx = 1 ; idx <= max_qty ; ++idx) {
+                        qty_select.append("<option value =" + idx + ">" + idx + "</option>" );
+                    }
+                    if(jQuery('.btn-cart').css('display') == 'none') {
+                        jQuery('.btn-cart').show();
+                    }
+                } else {
+                    qty_select.append("<option value ='sold_out'>" + sold_out_msg + "</option>" );
+                    jQuery('.btn-cart').hide();
+                }
+            }
+        });
+    }
+    setInterval ( function(){jQuery('[id^=bundle-option-]').change()}, 60000 );
 </script>
 <!--
 <script type="text/javascript">var switchTo5x=true;</script>
