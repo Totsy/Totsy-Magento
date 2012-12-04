@@ -26,7 +26,7 @@ $product_ids = implode(",", $_cart->getProductIds());
     var shps= '';
     var shpil = '';
 <?php endif; ?>
-<?php if($cart): ?> 
+<?php if(isset($cart)): ?> 
     var shcv= encodeURIComponent('<?php echo number_format($_cart->getQuote()->getGrandTotal(), 2) ?>');
     var shcq= encodeURIComponent('<?php echo $_cart->getItemsQty() ?>');
     var shcp= encodeURIComponent('<?php echo $product_ids ?>');

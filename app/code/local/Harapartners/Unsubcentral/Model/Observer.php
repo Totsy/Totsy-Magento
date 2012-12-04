@@ -202,7 +202,9 @@ class Harapartners_Unsubcentral_Model_Observer extends Mage_Core_Model_Abstract 
         echo $result.'<br/>';
         
         //remove the unsubcentral upload file after it is used for upload
-        unlink($unsubcentral_filename);
+        if (file_exists($unsubcentral_filename)) {
+            unlink($unsubcentral_filename);
+        }
         
         echo ('<h3>done</h3>');
         echo ('<br/>in order to check, plx use https://login8.unsubcentral.com/uc/list_download.pl?login=api_test&password=password1&format=plaintext&zipped=false&listID='.$optOuptList);

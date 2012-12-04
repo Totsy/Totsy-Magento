@@ -1,6 +1,4 @@
-<?php
-$_code=$this->getMethodCode();
-
+<?php $_code=$this->getMethodCode();
 // Check to see if there are multiple fulfillment types
 foreach($this->getQuote()->getAllItems() as $item) {
     if($item->getParentItemId()) {
@@ -19,8 +17,6 @@ $multiShipping = FALSE;
 if(count($fulfillmentTypes) > 1) {
     $multiShipping = TRUE;
 }
-
-
 ?>
 <script type="text/javascript">
 //<![CDATA[
@@ -57,6 +53,7 @@ if(count($fulfillmentTypes) > 1) {
                 return true;
             }],
             ['validate-cc-cvn-radio', 'Please enter a valid credit card verification number.', function(v, elm) {
+                            
                 var ccType = $$('input:checked[type="radio"][name="payment[cc_type]"]').pluck('value');
                 if (typeof Validation.creditCartTypes.get(ccType) == 'undefined') {
                     return false;
@@ -75,18 +72,168 @@ if(count($fulfillmentTypes) > 1) {
 <?php $customerId = Mage::getSingleton('customer/session')->getCustomerId(); ?>
 <?php $profiles = $this->getProfilesByCustomerId( $customerId ) ?>
 <?php
-        $profilesCounter = 0;
-        foreach( $profiles as $profile ) {
-            if($profile->getSubscriptionId() && $profile->getIsDefault()==0 && $profile->getData('saved_by_customer')) {
-                $profilesCounter++;
-            }
+    $profilesCounter = 0;
+    foreach( $profiles as $profile ) {
+        if($profile->getSubscriptionId() && $profile->getIsDefault()==0 && $profile->getData('saved_by_customer')) { 
+            $profilesCounter++;
         }
+    }
+    
+    $hasProfile = false;
+    
+    if ($profilesCounter > 0 ) { 
+        $hasProfile = true; 
+    } else { 
+        $hasProfile = false; 
+    }
 ?>
+
+<script type="text/javascript">
+
+var checkoutPayment = {};
+
+jQuery(document).ready( function() {
+
+    var billAddySelect = jQuery("#billing-address-select");
+	var newCardWrap = jQuery('.use-new-card-wrapper');
+	//var newCardCtrls = jQuery( 'input, select', '.use-new-card-wrapper' );
+	var billingAddress = jQuery('.totsy-selective-input-box', '#hpcheckout-billing-wrapper');
+	var billFormInputs = jQuery('#hpcheckout-billing-form :input');
+
+    jQuery("[id='payment[cybersource_subid]']").change( function() {   
+     
+        if( jQuery(this).val() == '' ) {
+        	if(jQuery('#paypal_payment').length > 0) {
+            	jQuery('#paypal_payment').attr("checked", false);
+            }
+            if(jQuery("#payment_form_paypal_express").length > 0) {
+                jQuery("#payment_form_paypal_express").show();           	
+            }
+            jQuery("#cc_data").show();
+            newCardWrap.show();
+            //newCardCtrls.removeAttr('disabled');
+            billingAddress.removeClass('disabled');
+            billAddySelect.removeAttr('disabled');
+            //Enable Billing Inputs if credit card not selected
+            billFormInputs.each(function(i) {
+                jQuery(this).removeAttr('disabled');
+                jQuery(this).val('');
+            });
+        } else { 
+            if(jQuery("#payment_form_paypal_express").length > 0){
+                jQuery("#payment_form_paypal_express").hide();           	
+            }
+           	           	            
+			newCardWrap.hide();
+            billingAddress.attr("disabled", true);
+            
+			if(checkoutPayment.isCollapsed==false) {
+			    billAddySelect.val(jQuery("#address_" + jQuery( this ).val()).val()).change();
+			    //Block Billing Inputs if credit card selected
+			    
+			    billFormInputs.each(function(i) {
+			        if(this.id != 'button_ship_to') {
+			            jQuery("[id='" + this.id + "']").attr('disabled',true);
+			        }
+			    });
+			    billAddySelect.attr('disabled',true);
+			} else {
+			    billAddySelect.removeAttr('disabled');
+			    billFormInputs.each(function(i) {
+			        jQuery(this).removeAttr('disabled');
+			    });
+			}
+        }
+    }); 
+    
+    //a namespace for operations toggling the 2 views of the payment section
+    checkoutPayment = (function() {
+        var hasProfile = '';
+        var isCollapsed = '';
+        var lastUsedAddressId = '';
+        return {
+            hasProfile: "<?php echo $hasProfile; ?>",
+            isCollapsed: false,
+            lastUsedAddressId: '',
+            toggleViews: function() { 
+                if (this.hasProfile) {
+                    jQuery(".use-new-card-wrapper").hide();
+                    jQuery(".cc_save_card").appendTo(jQuery("#add_payment_save_card"));
+                    
+                    var savedCardStyles = {'width' : '60px','margin-left' : '10px','float' : 'left'}; 
+                    
+                    jQuery('#billing-address-select').attr('disabled', true);                     
+                    
+                    jQuery(".cc_save_card").css( savedCardStyles );
+                    jQuery("#cc_data").hide();
+                    jQuery("#hpcheckout-payment-add-title").show();
+                    jQuery("#use-card-method").show();
+                } else {	
+                		        
+                    jQuery("[id='add_payment']").hide();
+                    jQuery(".checkout-reward").css("padding-top", "0px");
+                    jQuery(".use-new-card-wrapper").show();
+                    jQuery("#use-card-method").hide();
+                    jQuery("#hpcheckout-payment-add-title").hide();
+                    jQuery("#cc_data").show();
+                }
+            },
+            addPayment: function() {
+                if(this.isCollapsed == false) {                
+                    this.isCollapsed = true;
+                    jQuery('#hpcheckout-billing-form :input').attr("disabled", false);
+                    jQuery('#billing-address-select').attr('disabled', false);
+                    
+                    if(checkoutPayment.hasProfile==true) {
+ 				       jQuery('#hpcheckout-billing-form :input').each(function(i) {
+			             if(this.id != 'button_ship_to') {
+			                 jQuery("[id='" + this.id + "']").attr('disabled',true);
+			             }
+			           });
+			        }
+                    
+                    jQuery("[id='payment[cybersource_subid]']").attr("checked", false);
+                    jQuery("[id='payment[cybersource_subid]']").attr("disabled", true);
+                    jQuery("#use-card-method").css("opacity", ".5");
+                    
+                    jQuery("#add_payment_method").attr("src", "/skin/frontend/enterprise/bootstrap/images/iconmonstr-minus-5-icon.png");
+                    jQuery("#paymentfactory_tokenize_cc_save").contents("");                    
+                    jQuery(".use-new-card-wrapper").show();
+                  
+                    jQuery("#cc_save_text").html("Save");
+                    
+                    jQuery(".use-new-card-wrapper").appendTo(jQuery("#add_cc_types"));
+                } else {
+                    this.isCollapsed = false;
+                    
+                    jQuery("#use-card-method").css("opacity", "100");
+                    jQuery("[id='payment[cybersource_subid]']").attr("disabled", false);
+                    jQuery("#add_payment_method").attr("src", "/skin/frontend/enterprise/bootstrap/images/iconmonstr-plus-5-icon.png");
+                    jQuery(".use-new-card-wrapper").hide();
+                }
+            }
+        };
+    })();
+    
+    checkoutPayment.toggleViews();
+    
+    jQuery("#add_payment_method").click( function(){
+        checkoutPayment.addPayment();
+    });
+    
+	jQuery(".use-saved-card-control").click( function(){
+        jQuery("#cc_data").hide();
+	});
+
+});
+
+</script>
+
 <div>
     <div>
     	<div>
         	<div class="hpcheckout-payment-title">
-        	    <h4 class="legend">Payment Information</h4>
+        	    <h4 class="legend">Your payment methods</h4>
         	</div>
         	<!-- part A of a hack for the radio button error message-->
         	<div>
@@ -96,7 +243,7 @@ if(count($fulfillmentTypes) > 1) {
         		 <div id="<?php echo $_code ?>_cc_type">
         		 <?php $i=0; ?>
         		 <?php foreach ($this->getCcAvailableTypes() as $_typeCode => $_typeName): ?>
-        		  <input type="radio" class="validate-cybsersource-cc-type <?php if($i==3) { /* echo "validate-one-required"*/; } ?>" name="payment[cc_type]" value="<?php echo $_typeCode ?>" <?php if($_typeCode==$_ccType) { echo "checked"; } ?> > 
+        		  <input type="radio" class="validate-cybsersource-cc-type <?php if($i==3) { /*echo "validate-one-required"*/; } ?>" name="payment[cc_type]" value="<?php echo $_typeCode ?>" <?php if ($_typeCode==$_ccType) { echo "checked"; } ?> > 
         		 <?php $i++; ?>
         		 	<span class="cc">
         		 	    <span title="<?php echo $_typeName; ?>"  class="<?php echo strtolower($_typeCode); ?>" >
@@ -108,8 +255,8 @@ if(count($fulfillmentTypes) > 1) {
                  	<?php if(!$multiShipping && Mage::getModel('paypal/config')->isMethodActive('paypal_express')): ?>
 			    	    <input type="radio" value="paypal_express" id="paypal_payment" name="paypal_payment">
 			    	    <div>
-        		 	        <span title="Paypal Express" class="paypal"></span>
-        		 	        <a class="what-is-paypal-link" href="https://www.paypal.com/cgi-bin/webscr?cmd=xpt/Marketing/popup/OLCWhatIsPayPal-outside" target="_blank">What is<br /> PayPal?</a>
+        		 	    <span title="Paypal Express" class="paypal"></span>
+        		 	    <a class="what-is-paypal-link" href="https://www.paypal.com/cgi-bin/webscr?cmd=xpt/Marketing/popup/OLCWhatIsPayPal-outside" target="_blank">What is<br /> PayPal?</a>
         		 	    </div>
         		 	<?php endif; ?>
                  <?php endif; ?>                 
@@ -117,86 +264,159 @@ if(count($fulfillmentTypes) > 1) {
         	    </div>
         	</div>  
         </div>     
-        <div class="pull-right cc_saved_cards">
-            <?php if( $customerId && $profiles && ($profilesCounter>0) ): ?>
-            <div class="switch-card-control">
-                <div class="totsy-selective-input-box middle-length" id="use-card-method">
-                    <select id="cybersource-use-card-method" name="payment[cybersource_subid]">
-                        <option value="" class="use-new-card-control">Choose a Credit/Debit Card</option>
-                    <?php foreach( $profiles as $profile ): ?>
-                        <?php if(!$profile->getSubscriptionId() || $profile->getIsDefault()== 1 || !$profile->getData('saved_by_customer')) { continue; } ?>
-                        <option class="use-saved-card-control" value="<?php echo $profile->getEncryptedSubscriptionId() ?>"><?php echo $this->getFullCcCardType( $profile->getData( 'card_type' ) ) ?> ends with <?php echo $profile->getData( 'last4no' ) ?></option>
-                    <?php endforeach ?>
-                    </select>
+        <div>
+            <?php if( $customerId  ): ?>
+            <div>
+                <div class="cc_security pull-right">
+                    <div class="cc_secure_text pull-left">Totsy ensures your information is<br> private and secure!</div>
+                    <div class="cc_secure_icon">
+                        <img src="/skin/frontend/enterprise/bootstrap/images/iconmonstr-lock-7-icon.png" width="40" height="40">
+                    </div>
                 </div>
+            </div>
+            <?php endif ?>    
+        </div>
+        <div style="clear:both"></div>
+        <?php if($profiles && $profilesCounter > 0 ) { ?>
+                <div class="pull-left" id="use-card-method">
+                    <div id="cybersource-use-card-method ">
+                    <table class="saved_card">
+                    	<tr>
+                        	<th></th>
+                        	<th></th>
+                        	<th>Name on card</th>
+                        	<th>Billing address</th>
+                        	<th>Expires</th>
+                        </tr>
+                    <?php foreach( $profiles as $profile ): ?>
+                        <?php 
+                            $checked = '';
+                            $customerObj = Mage::getSingleton('customer/customer')->load($profile->getCustomerId());
+                            $customerAddress = Mage::getSingleton('customer/address')->load($profile->getAddressId());
+                            
+                            $customerName = $customerAddress->getFirstname() ." ". $customerAddress->getLastname();
+                            
+                            //reset gets the first item from the array passed in
+                            $customerStreetArray = $customerAddress->getStreet();
+                            $customerStreet = reset($customerStreetArray);
+                            
+                            $orders = Mage::getResourceModel('sales/order_collection')->addFieldToSelect('*')
+    ->addFieldToFilter('customer_id', $profile->getCustomerId())->addAttributeToSort('created_at', 'DESC')->setPageSize(1);
+    						//checking the users last used, saved to expedite checkout
+                            //comparing cybersource profile id to id of card used in last order placed
+                            if($orders->getFirstItem()->getPayment()->getData('cybersource_subid')
+                            ==$profile->getSubscriptionId()) {
+                                $checked = 'checked';
+                            }
+                            //echo $profile->getSubscriptionId();
+                        ?>
+                        
+                        <script type="text/javascript">
+                        jQuery(document).ready( function() {
+                            checkoutPayment.lastUsedAddressId = "<?php echo $profile->getAddressId(); ?>"; 
+                        });
+                        </script>
+                        
+                        <?php if(!$profile->getSubscriptionId() || $profile->getIsDefault()== 1 || !$profile->getData('saved_by_customer')) { continue; } ?>
+                        <tr>
+                        	<td>
+                                <input type="radio" checked="<?php echo $checked; ?>" name="payment[cybersource_subid]" id="payment[cybersource_subid]" class="use-saved-card-control pull-left" value="<?php echo $profile->getEncryptedSubscriptionId() ?>">
+                                    <span class="cc">
+        		 	                    <span title="<?php echo $this->getFullCcCardType( $profile->getData( 'card_type' )); ?>" class="<?php echo strtolower($profile->getData('card_type')); ?>" >
+        		 	                    </span>
+        		 	                </span>
+        		 	         </td>
+                            <td class="card-type">
+                            <strong><?php echo $this->getFullCcCardType( $profile->getData( 'card_type' )); ?></strong> ending in <?php echo $profile->getLast4no() ?></td>
+                            <td class="card-name"><?php echo $customerName ?></td>
+                            <td class="billing-address"><?php echo $customerStreet; ?></td>
+                            <td class="card-expdate"><?php echo $profile->getExpireMonth()."/".$profile->getExpireYear() ?>
+                            </td>
+                        </tr>
+                    <?php endforeach ?>
+						</table>
+                    </div>
+                </div> 
+                <?php } ?>
                 <div>
                      <?php foreach( $profiles as $profile ): ?>
                         <?php if( !$profile->getSubscriptionId() || $profile->getIsDefault()== 1 ) { continue; } ?>
                         <input type="hidden" id="address_<?php echo $profile->getEncryptedSubscriptionId() ?>" value="<?php echo $profile->getData('address_id') ?>" />
                     <?php endforeach ?>
                 </div>
-            </div>
-            <?php endif ?>    
-        </div>
     </div>
-    <div style="clear:both"></div>
-    <div id="cc_data">
-    <div>
-        <div class="pull-left cc_num use-new-card-wrapper">
-            
-            <div class="input-box">
-                <input type="text" id="<?php echo $_code ?>_cc_number" name="payment[cc_number]" title="<?php echo $this->__('Credit Card Number') ?>" class="input-text validate-cc-number validate-cc-type-radio" value="<?php echo (($this->__('Credit Card Number')!=='Credit Card Number') ? $this->__('Credit Card Number') : "") ?>" placeholder="<?php echo $this->__('Credit Card Number') ?>" />
+    <div id="credits_and_card_save">
+        <div class="cc_save_card use-new-card-wrapper">
+            <div>
+                <input type="checkbox" value="1" name="payment[saved_by_customer]" checked="checked" id="<?php echo $_code ?>_saved" />
+            </div>
+            <div id="cc_save_text" for="<?php echo $_code ?>_cc_save"><?php echo $this->__(' Save this method for quick <br> shopping on future visits!'); ?>
             </div>
         </div>
-        <div class="rewards_points use-new-card-wrapper pull-left">
+        <div id="rewards_points">
             <?php echo $this->getLayout()->getBlock('hpcheckout.reward.points')->toHtml(); ?>
         </div>
     </div>
-    <div style="clear:both"></div>
-    <div>
-        <?php if($this->hasVerification()): ?>
-        <div class="cc_cvn pull-left use-new-card-wrapper">
-            <label for="<?php echo $_code ?>_cc_cid" class="required"><em>*</em><?php echo $this->__('CVN#') ?></label>
-            <div class="input-box">
-                <div class="v-fix">
-                    <input type="text" title="<?php echo $this->__('Card Verification Number') ?>" class="input-text cvv required-entry validate-cc-cvn-radio" id="<?php echo $_code ?>_cc_cid" name="payment[cc_cid]" value="<?php echo (($this->__('Card Verification Number')!=="Card Verification Number") ? $this->__('Card Verification Number') : "") ?>" placeholder="<?php echo $this->__('CVN#') ?>" />
+<div id="cc_data">
+    <div class="pull-left">
+        <div>
+            <div class="pull-left cc_num use-new-card-wrapper">
+                
+                <div class="input-box">
+                    <input type="text" id="<?php echo $_code ?>_cc_number" name="payment[cc_number]" title="<?php echo $this->__('Credit Card Number') ?>" class="input-text validate-cc-number validate-cc-type-radio" value="<?php echo (($this->__('Credit Card Number')!=='Credit Card Number') ? $this->__('Credit Card Number') : "") ?>" placeholder="<?php echo $this->__('Credit Card Number') ?>" />
                 </div>
             </div>
         </div>
-        <?php endif; ?>
-        <div class="cc_exp pull-left use-new-card-wrapper">
-            <div class="pull-left">
-                <div for="<?php echo $_code ?>_expiration" class="lbl"><em>*</em><?php echo $this->__('Expiration') ?></div>
-                	<select id="<?php echo $_code ?>_expiration" name="payment[cc_exp_month]" class="month validate-cc-exp required-entry">
-                	<?php $_ccExpMonth = $this->getInfoData('cc_exp_month') ?>
-                	<?php foreach ($this->getCcMonths() as $k=>$v): ?>
-                	    <option value="<?php echo $k?$k:'' ?>" <?php if($k==$_ccExpMonth): ?>selected="selected"<?php endif ?>><?php echo $v ?></option>
-                	<?php endforeach ?>
-                	</select>	
+        <div style="clear:both"></div>
+        <div>
+            <?php if ($this->hasVerification()): ?>
+            <div class="cc_cvn pull-left use-new-card-wrapper">
+                <label for="<?php echo $_code ?>_cc_cid" class="required"><em>*</em><?php echo $this->__('CVN#') ?></label>
+                <div class="input-box">
+                    <div class="v-fix">
+                        <input type="text" title="<?php echo $this->__('Card Verification Number') ?>" class="input-text cvv validate-cc-cvn-radio" id="<?php echo $_code ?>_cc_cid" name="payment[cc_cid]" value="<?php echo (($this->__('Card Verification Number')!=="Card Verification Number") ? $this->__('Card Verification Number') : "") ?>" placeholder="<?php echo $this->__('CVN#') ?>" />
+                    </div>
+                </div>
             </div>
-            <div>
-                <select id="<?php echo $_code ?>_expiration_yr" name="payment[cc_exp_year]" class="year required-entry">
-                <?php $_ccExpYear = $this->getInfoData('cc_exp_year') ?>
-                <?php foreach ($this->getCcYears() as $k=>$v): ?>
-                    <option value="<?php echo $k?$k:'' ?>" <?php if($k==$_ccExpYear): ?>selected="selected"<?php endif ?>><?php echo $v ?></option>
-                <?php endforeach ?>
-                </select>
+            <?php endif; ?>
+            <div id="add_payment_save_card">
+            </div>
+            <div class="cc_exp pull-right use-new-card-wrapper">
+                <div class="pull-left">
+                    <div for="<?php echo $_code ?>_expiration" class="lbl"><em>*</em><?php echo $this->__('Exp.') ?></div>
+                    	<select id="<?php echo $_code ?>_expiration" name="payment[cc_exp_month]" class="month validate-cc-exp">
+                    	<?php $_ccExpMonth = $this->getInfoData('cc_exp_month') ?>
+                    	<?php foreach ($this->getCcMonths() as $k=>$v): ?>
+                    	    <option value="<?php echo $k?$k:'' ?>" <?php if($k==$_ccExpMonth): ?>selected="selected"<?php endif ?>><?php echo $v ?></option>
+                    	<?php endforeach ?>
+                    	</select>	
+                </div>
+                <div>
+                    <select id="<?php echo $_code ?>_expiration_yr" name="payment[cc_exp_year]" class="year">
+                    <?php $_ccExpYear = $this->getInfoData('cc_exp_year') ?>
+                    <?php foreach ($this->getCcYears() as $k=>$v): ?>
+                        <option value="<?php echo $k?$k:'' ?>" <?php if($k==$_ccExpYear): ?>selected="selected"<?php endif ?>><?php echo $v ?></option>
+                    <?php endforeach ?>
+                    </select>
+                </div>
             </div>
         </div>
-        <div class="cc_save_card pull-left use-new-card-wrapper">
-            <span>
-                <input type="checkbox" value="1" name="payment[saved_by_customer]" id="<?php echo $_code ?>_saved" />
-            </span>
-            <span for="<?php echo $_code ?>_cc_save"><?php echo $this->__(' Save this Credit Card ?') ?>
-            </span>
-        </div>
-        <div class="cc_security">
-            <div class="cc_secure_icon"><img src="/skin/frontend/enterprise/bootstrap/images/security-lock.png" width="19" height="32"></div>
-            <div class="cc_secure_text">Totsy.com makes sure your information<br> is private and secure.</div>
-        </div>
-    </div> 
-    <div style="clear:both"></div>
-</div>
+    	</div> 
+    </div>
+<div style="clear:both"></div>
+<div id="add_payment">
+	<hr />
+	<div id="hpcheckout-payment-add-title">
+		<h4 class="legend"><span><img id="add_payment_method" src="/skin/frontend/enterprise/bootstrap/images/iconmonstr-plus-5-icon.png" width="18" height="18"></span>&nbsp;Add a payment method</h4>
+	</div>
+	<div style="clear:both"></div>
+	<div>
+		<div class="pull-left" id="add_cc_types">
+		</div>
+		<div id="add_cc_data"></div>
+	</div>
+	<div style="clear:both"></div>
+	</div>
 </div>
         <?php if ($this->hasSsCardType()): ?>
         <li id="<?php echo $_code ?>_cc_type_ss_div">
@@ -239,7 +459,8 @@ if(count($fulfillmentTypes) > 1) {
                 </li>
                 <li class="adv-container"></li>
             </ul>
-            <script type="text/javascript">
+            <script type="text/javascript">            
+            
             var SSChecked<?php echo $_code ?> = function() {
                 var elm = $('<?php echo $_code ?>_cc_type');
                 if (elm.value=='SO' || elm.value=='SM') {
@@ -255,64 +476,3 @@ if(count($fulfillmentTypes) > 1) {
         <?php endif; ?>
     </div>
 </div>
-<script type="text/javascript">
-// @TODO: should abstract this out to hpcheckout.js
-// disable billing address form controls for saved credit card
-jQuery( document ).ready( function() {
-	// cache jQuery objects
-	var billAddySelect = jQuery("#billing-address-select");
-	var newCardWrap = jQuery('.use-new-card-wrapper');
-	//var newCardCtrls = jQuery( 'input, select', '.use-new-card-wrapper' );
-	var selectUIWraps = jQuery('.totsy-selective-input-box', '#hpcheckout-billing-wrapper');
-	var billFormInputs = jQuery('#hpcheckout-billing-form :input');
-    jQuery('#cybersource-use-card-method').change( function() {    
-        if( jQuery(this).val() == '' ) {
-        	if(jQuery('#paypal_payment').length > 0) {
-            	jQuery('#paypal_payment').attr("checked", false);
-            }
-
-            if(jQuery("#payment_form_paypal_express").length > 0) {
-                jQuery("#payment_form_paypal_express").hide();
-            }
-            jQuery("#cc_data").hide();
-            newCardWrap.show();
-//            newCardCtrls.removeAttr('disabled');
-            selectUIWraps.removeClass('disabled');
-            billAddySelect.removeAttr('disabled');
-            //Enable Billing Inputs if credit card not selected
-            billFormInputs.each(function(i) {
-                jQuery(this).removeAttr('disabled');
-                jQuery(this).val('');
-            });
-            jQuery('#paymentfactory_tokenize_cc_type :input').each(function(i) {
-                jQuery(this).attr('checked',false);
-            });
-        } else { 
-            if(jQuery("#payment_form_paypal_express").length > 0){
-                jQuery("#payment_form_paypal_express").hide();           	
-            }
-           	           	            
-			newCardWrap.hide();
-			selectUIWraps.addClass('disabled'); 
-			
-			if(jQuery("#address_" + jQuery( this ).val()).val()) {
-			    billAddySelect.val(jQuery("#address_" + jQuery( this ).val()).val()).change();
-			    //Block Billing Inputs if credit card selected
-			    billFormInputs.each(function(i) {
-			        if(jQuery(this).attr('id') != 'button_ship_to') {
-			            jQuery(this).attr('disabled','disabled');
-			        }
-			    });
-			    billAddySelect.attr('disabled','disabled');
-			} else {
-			    billAddySelect.removeAttr('disabled');
-			    billFormInputs.each(function(i) {
-			        jQuery(this).removeAttr('disabled');
-			    });
-			}
-
-            hpcheckout.switchPaymentMethod('paymentfactory_tokenize');
-        }
-    });    
-});
-</script>

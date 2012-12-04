@@ -122,6 +122,11 @@
                         emptyCC = true;
                     }
                 });
+                if($('p_method_free') != undefined) {
+                    if($('p_method_free').checked) {
+                        emptyCC = false;
+                    }
+                }
                 if(emptyCC) {
                     $('required-cc').show();
                     return false;
