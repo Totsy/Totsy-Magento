@@ -79,6 +79,9 @@ XML;
         $staticOne = new Zend_Db_Expr("'1'");
         $staticConfirmed = new Zend_Db_Expr("'confirmed'");
 
+        $from = Mage::getModel('core/date')->gmtDate(null, $from);
+        $to = Mage::getModel('core/date')->gmtDate(null, $to);
+
         switch ($type) {
             case 'signups':
                 $select->from(array('c' => 'customertracking_record'), 'c.registration_param')
@@ -90,7 +93,7 @@ XML;
                     ->columns(array('count1' => $staticOne))
                     ->columns(array('eventStatus' => $staticConfirmed))
                     ->where('c.affiliate_code = ?', $affiliateCode)
-                    ->where("CONVERT_TZ(c.created_at, '+00:00', '-04:00') BETWEEN '$from' AND '$to'")
+                    ->where("c.created_at BETWEEN '$from' AND '$to'")
                     ->where('c.level = 0');
                 break;
 
@@ -104,7 +107,7 @@ XML;
                     ->columns(array('count1' => $staticOne))
                     ->columns(array('eventStatus' => $staticConfirmed))
                     ->where('c.affiliate_code = ?', $affiliateCode)
-                    ->where("CONVERT_TZ(c.created_at, '+00:00', '-04:00') BETWEEN '$from' AND '$to'")
+                    ->where("c.created_at BETWEEN '$from' AND '$to'")
                     ->where("c.level = 1");
                 break;
 
@@ -123,7 +126,7 @@ XML;
                     ->columns(array('time' => 'UNIX_TIMESTAMP(c.created_at)'))
                     ->columns(array('eventStatus' => $staticConfirmed))
                     ->where('c.affiliate_code = ?', $affiliateCode)
-                    ->where("CONVERT_TZ(c.created_at, '+00:00', '-04:00') BETWEEN '$from' AND '$to'")
+                    ->where("c.created_at BETWEEN '$from' AND '$to'")
                     ->where('c.level = 0');
 
                 if ($period) {
@@ -147,7 +150,7 @@ XML;
                     ->columns(array('time' => 'UNIX_TIMESTAMP(c.created_at)'))
                     ->columns(array('eventStatus' => $staticConfirmed))
                     ->where('c.affiliate_code = ?', $affiliateCode)
-                    ->where("CONVERT_TZ(c.created_at, '+00:00', '-04:00') BETWEEN '$from' AND '$to'")
+                    ->where("c.created_at BETWEEN '$from' AND '$to'")
                     ->where("c.level = 1");
 
                 if ($period) {

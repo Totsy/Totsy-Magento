@@ -147,6 +147,9 @@ class Harapartners_ShippingFactory_Model_Shipping_Carrier_Flexible
 
         if ($shippingPrice !== false)
         {
+            if(Mage::getSingleton('checkout/session')->getSplitCartFlag()) {
+                $shippingPrice += Mage::getStoreConfig('checkout/cart/split_cart_price');
+            }
         	foreach ($this->getAllowedMethods() as $methodCode => $methodName)
         	{                
 	            $method = Mage::getModel('shipping/rate_result_method');	

@@ -8,7 +8,7 @@
  * If you did not receive a copy of the license and are unable to
  * obtain it through the world-wide-web, please send an email
  * to eula@harapartners.com so we can send you a copy immediately.
- * 
+ *
  */
 class Harapartners_Fulfillmentfactory_Helper_Data extends Mage_Core_Helper_Abstract{
     const ORDER_STATUS_PROCESSING_FULFILLMENT = 'processing_fulfillment';
@@ -18,7 +18,7 @@ class Harapartners_Fulfillmentfactory_Helper_Data extends Mage_Core_Helper_Abstr
     const ORDER_STATUS_SHIPMENT_AGING = 'shipment_aging';
     const CITY_CONSTRAINT = 20;
     const ADDRESS_CONSTRAINT = 30;
-    
+
     /**
      * get 2-letter code for states
      *
@@ -28,16 +28,16 @@ class Harapartners_Fulfillmentfactory_Helper_Data extends Mage_Core_Helper_Abstr
      */
     public function getStateCodeByFullName($stateName, $countryCode) {
         $stateCode = $stateName;
-        
+
         $stateObj = Mage::getModel('directory/region')->loadByName($stateName, $countryCode);
-        
+
         if(!empty($stateObj)) {
             $stateCode = $stateObj->getCode();
         }
-        
+
         return $stateCode;
     }
-    
+
     /**
      * Auxiliary function for pushing order into array, which can avoid duplicate of orders.
      *
@@ -48,21 +48,21 @@ class Harapartners_Fulfillmentfactory_Helper_Data extends Mage_Core_Helper_Abstr
         if(empty($order) || !$order->getId()) {
             return;
         }
-        
+
         $shouldBeAdded = true;
-        
+
         foreach($orderArray as $existOrder) {
             if($existOrder->getId() == $order->getId()) {
                 $shouldBeAdded = false;
                 break;
             }
         }
-        
+
         if($shouldBeAdded) {
             $orderArray[] = $order;
         }
     }
-    
+
     /*
      * get array list of Status (for dropdown list)
      */
@@ -102,7 +102,7 @@ class Harapartners_Fulfillmentfactory_Helper_Data extends Mage_Core_Helper_Abstr
             ),
         );
     }
-    
+
     /*
      * get option array list of Status (for grid list)
      */
@@ -119,7 +119,7 @@ class Harapartners_Fulfillmentfactory_Helper_Data extends Mage_Core_Helper_Abstr
         );
     }
     /**
-    * 
+    *
     */
     public function validateAddressForDC($validate, $data){
 
@@ -148,7 +148,7 @@ class Harapartners_Fulfillmentfactory_Helper_Data extends Mage_Core_Helper_Abstr
             }
         }
 
-        return $data;      
+        return $data;
     }
 
     /**
@@ -200,5 +200,32 @@ class Harapartners_Fulfillmentfactory_Helper_Data extends Mage_Core_Helper_Abstr
             $address->setData($key, str_replace($a, $b, $data));
         }
         return $address;
+    }
+    /**
+     * Gets the fulfillment types as an array for select list
+     * @return array
+     */
+    public function getAllFulfillmentTypesArray() {
+        $_types = Mage::getStoreConfig ( 'fulfillmentfactory_options/general/fulfillment_types' );
+        $types = explode(',', $_types);
+        $returnArray = array();
+        foreach ($types as $type) {
+            $returnArray[$type] = $type;
+        }
+        return $returnArray;
+    }
+
+    /**
+     * For ItemsQueue linked with the order, switch status to pending.
+     */
+    public function makeOrderReadyToBeProcessed($order) {
+        if($order->getStatus() == Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_PAYMENT_FAILED) {
+            $order->setStatus('pending')->save();
+            $collection = Mage::getModel('fulfillmentfactory/itemqueue')->getCollection()->loadByOrderId($order->getId());
+            foreach($collection as $itemqueue) {
+                $itemqueue->setStatus(Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_PENDING)
+                    ->save();
+            }
+        }
     }
 }

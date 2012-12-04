@@ -40,11 +40,22 @@
     $serverTime = Mage::getModel('core/date')->timestamp() * 1000;
     $quote = Mage::getSingleton('checkout/session')->getQuote();
     $saving = Mage::helper('sales/order')->calculateEstimatedSavings($quote);
+
+    $ajaxUrl = Mage::getUrl('hpcheckout/ajax/splitCart/');
 ?>
 
 
 <?php
+
+    $multiShipping = FALSE;
     $fulfillmentTypes = array();
+    $splitYesCss = '';
+    $splitNoCss = '';
+    $hasVirtual = false;
+    $hasDotCom = false;
+
+    $splitCartPrice = Mage::helper('core')->formatPrice(Mage::getStoreConfig('checkout/cart/split_cart_price'));
+
     // Check to see if there are multiple fulfillment types
     foreach($this->getItems() as $item) {
         if($item->getParentItemId()) {
@@ -52,16 +63,48 @@
         }
         $product = Mage::getModel ( 'catalog/product' )->load ( $item->getProductId () );
         if($product->getIsVirtual()) {
-            continue;
+            $fulfillmentType = 'virtual';
+            $hasVirtual = true;
+        } else {
+            $fulfillmentType = $product->getFulfillmentType();
         }
-        $fulfillmentTypes [$product->getFulfillmentType ()] [] = $item->getId ();
+        $fulfillmentTypes [$fulfillmentType] [] = $item->getId ();
+
     }
 
-    $multiShipping = FALSE;
     if(count($fulfillmentTypes) > 1) {
         $multiShipping = TRUE;
+        $sortedFulfillmentTypes = array();
+        if(array_key_exists('dotcom_stock',$fulfillmentTypes)) {
+            $sortedFulfillmentTypes['dotcom_stock'] = $fulfillmentTypes['dotcom_stock'];
+            unset($fulfillmentTypes['dotcom_stock']);
+        }
+        if(array_key_exists('dotcom',$fulfillmentTypes)) {
+            $sortedFulfillmentTypes['dotcom'] = $fulfillmentTypes['dotcom'];
+            $hasDotCom = true;
+            unset($fulfillmentTypes['dotcom']);
+        }
+        if(array_key_exists('virtual',$fulfillmentTypes)) {
+            $sortedFulfillmentTypes['virtual'] = $fulfillmentTypes['virtual'];
+            unset($fulfillmentTypes['virtual']);
+        }
+        if(count($fulfillmentTypes)) {
+            array_push($sortedFulfillmentTypes,$fulfillmentTypes);
+        }
+        $fulfillmentTypes = $sortedFulfillmentTypes;
     }
 
+    // Split cart check
+    $splitCartFlag = $this->getCheckout()->getSplitCartFlag();
+
+
+
+    if($splitCartFlag) {
+        $splitYesCss = 'font-weight:bold;';
+    }
+    else {
+        $splitNoCss = 'font-weight:bold;';
+    }
 ?>
 
 
@@ -94,9 +137,45 @@
     <?php echo $this->getChildHtml('form_before') ?>
     <div class="cart-form-container">
     <form action="<?php echo $this->getUrl('checkout/cart/updatePost') ?>" method="post">
-        <fieldset>
-            <table id="shopping-cart-table" class="data-table table table-bordered table-condensed">
-            <?php $mergedCells = ($this->helper('tax')->displayCartBothPrices() ? 2 : 1); ?>
+
+        <?php foreach($fulfillmentTypes as $fulfillmentType => $items):?>
+
+            <?php
+                switch($fulfillmentType) {
+
+                    case 'dotcom':
+                        echo '<h3>Standard Shipping Items</h3>The following items will ship on or around '.  date('F jS, Y', Mage::helper('sales/order')->calculateEstimatedShipDate($quote));
+                        break;
+                    case 'dotcom_stock':
+                        ?>
+                    <div>
+                        <div class="cart-prod-thumb">
+                            <img width="48" height="48" src="<?php echo $this->getSkinUrl('images/icon-fastship-small.png'); ?>"/>
+                        </div>
+                        <div>
+                            <h3 style="display:inline;">Get These Items Fast!</h3>&nbsp;<a href="#fastship_modal" role="button" data-toggle="modal">What is this?</a><br/>
+                            <?php if($multiShipping && $hasDotCom): ?>
+                            FastShip these items in 3 days or less for an additional <?php echo $splitCartPrice?>
+                            <span id="splitCartYes" style="<?php echo $splitYesCss;?>"><a href="javascript:void(0);" onclick="javascript:setSplitCartFlag(1, '#splitCartYes')">Yes</a></span>
+                            <span id="splitCartNo" style="<?php echo $splitNoCss;?>"><a href="javascript:void(0);" onclick="javascript:setSplitCartFlag(0, '#splitCartNo');">No</a></span>
+                            <input id="splitCartFlag" type="hidden" name="splitCart" value="<?php echo $splitCartFlag;?>" />
+                            <?php endif; ?>
+                        </div>
+                        <br class="clear"/>
+                    </div>
+                        <?php
+                        break;
+                    case 'virtual':
+                        echo '<h3>The following voucher codes will be emailed immediately</h3>';
+                        break;
+                }
+
+
+            ?>
+
+            <fieldset>
+                <table class="shopping-cart-table data-table table table-bordered table-condensed">
+                    <?php $mergedCells = ($this->helper('tax')->displayCartBothPrices() ? 2 : 1); ?>
                     <tr>
                         <th rowspan="<?php echo $mergedCells; ?>" colspan="1"><span class="nobr"><?php echo $this->__('Product Name') ?></span></th>
                         <?php if ($this->helper('wishlist')->isAllowInCart()) : ?>
@@ -115,19 +194,30 @@
                         <th><?php echo $this->helper('tax')->getIncExcTaxLabel(true) ?></th>
                     </tr>
                     <?php endif; ?>
-                <tbody>
-                <?php foreach($this->getItems() as $_item): ?>
-                    <?php echo $this->getItemHtml($_item) ?>
-                <?php endforeach ?>
-                </tbody>
-                <tr>
-                	<td colspan="6">
-                		<button type="submit" class="pull-right btn button" title="<?php echo $this->__('Update Shopping Cart') ?>" ><?php echo $this->__('Update Shopping Cart') ?></button>
-                	</td>
-                </tr>
-            </table>
-            <script type="text/javascript">decorateTable('shopping-cart-table')</script>
-        </fieldset>
+                    <tbody>
+
+                        <?php foreach($items as $key=>$itemId):?>
+                            <?php foreach($this->getItems() as $_item): ?>
+                                <?php if($_item->getId() == $itemId):?>
+                                    <?php echo $this->getItemHtml($_item) ?>
+                                <?php endif;?>
+                            <?php endforeach ?>
+                        <?php endforeach;?>
+
+                    </tbody>
+                </table>
+                <script type="text/javascript">decorateTable('shopping-cart-table')</script>
+
+            </fieldset>
+        <?php endforeach;?>
+
+        <table class="shopping-cart-table data-table table table-bordered table-condensed">
+            <tr>
+                <td colspan="6">
+                    <button type="submit" class="pull-right btn button" title="<?php echo $this->__('Update Shopping Cart') ?>" ><?php echo $this->__('Update Shopping Cart') ?></button>
+                </td>
+            </tr>
+        </table>
     </form>
     </div>
     <div class="totals pull-right">
@@ -169,4 +259,36 @@
         <?php //if (!$this->getIsVirtual()): echo $this->getChildHtml('shipping'); endif; ?>
     </div>
     <?php endif;?>
+</div>
+<script type="text/javascript">
+
+    function setSplitCartFlag(value, bold_id) {
+        jQuery('#splitCartFlag').val(value);
+
+        jQuery.get('<?php echo $ajaxUrl;?>',{id: value});
+
+        jQuery("#splitCartYes, #splitCartNo").css('font-weight', 'normal');
+
+        jQuery(bold_id).css('font-weight', 'bold');
+
+    }
+
+</script>
+
+<div id="fastship_modal" class="modal hide fade">
+    <div id="fastship_modal_icon">
+        <img width="117" height="115" src="<?php echo $this->getSkinUrl('images/icon-fastship-large.png');?>"/>
+    </div>
+    <div id="fastship_close_icon">
+        <a href="javascript:void(0);" data-dismiss="modal"><img width="55" height="55" src="<?php echo $this->getSkinUrl('images/icon-fastship-close.png');?>"/></a>
+    </div>
+    <div id="fastship_modal_title">
+        <h1>What is FastShip?</h1>
+    </div>
+    <br class="clear"/>
+    <div id="fastship_modal_text">
+        <p>We know busy Moms can't wait for their Totsy purchases to arrive. So we're making things faster.</p>
+        <p>For select sales we have made exclusive arrangements to deliver your favorite items faster. With <b>FastShip</b> your purchase leaves our warehouse in 3 days or less---often within 24 hours!</p>
+        <p>Best of all, when you order only <b>FastShip</b> items you just page the regular shipping charge. If your order contains both <b>FastShip</b> items and regular products you can upgrade the <b>FastShip</b> items for an additional <?php echo $splitCartPrice?></p>
+    </div>
 </div>

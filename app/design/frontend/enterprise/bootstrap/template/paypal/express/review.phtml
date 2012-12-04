@@ -52,27 +52,10 @@
             <?php if ($this->getCanEditShippingMethod() || !$this->getCurrentShippingRate()):?>
                 <?php if ($groups = $this->getShippingRateGroups()):?>
                     <?php $currentRate = $this->getCurrentShippingRate(); ?>
-                    <form method="post" id="shipping_method_form" action="<?php echo $this->escapeHtml($this->getShippingMethodSubmitUrl()) ?>">
-                        <fieldset>
-                            <select name="shipping_method" id="shipping_method" style="width:250px;" class="required-entry">
-                            <?php if (!$currentRate):?>
-                                <option value=""><?php echo $this->__('Please select a shipping method...') ?></option>
-                            <?php endif;?>
-                            <?php foreach ($groups as $code => $rates):?>
-                                <optgroup label="<?php echo $this->getCarrierName($code) ?>" style="font-style:normal;">
-                                <?php foreach ($rates as $rate):?>
-                                    <option value="<?php echo $this->renderShippingRateValue($rate)?>"<?php echo ($currentRate === $rate) ? ' selected="selected"' : '' ;?>>
-                                        <?php echo $this->renderShippingRateOption($rate)?>
-                                    </option>
-                                <?php endforeach;?>
-                                </optgroup>
-                            <?php endforeach;?>
-                            </select>
-                        </fieldset>
-                        <p class="actions">
-                            <button id="update_shipping_method_submit" type="submit" class="button"><span><span><?php echo $this->__('Update Shipping Method') ?></span></span></button>
-                        </p>
-                    </form>
+                    <?php foreach ($groups as $code => $rates):?>
+                        <?php echo $this->getCarrierName($code);?> - <?php  echo Mage::helper('core')->formatPrice($currentRate->getPrice());?>
+                    <?php endforeach;?>
+
                 <?php else: ?>
                     <p><strong><?php echo $this->__('Sorry, no quotes are available for this order at this time.') ?></strong></p>
                 <?php endif;?>

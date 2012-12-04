@@ -184,8 +184,7 @@ $orderStoreDate = $this->formatDate($_order->getCreatedAtStoreDate(), 'medium', 
 				<div class="admin-widget-edit-fields"><label>Address 1:</label> <input type="text" class=" input-text" name="street1" value="<?php echo $billing->getStreet1() ?>" /></div>
 				<div class="admin-widget-edit-fields"><label>Address 2:</label> <input type="text" class=" input-text" name="street2" value="<?php echo $billing->getStreet2() ?>" /></div>
 				<div class="admin-widget-edit-fields"><label>City:</label> <input type="text" class=" input-text" name="city" value="<?php echo $billing->getCity() ?>" /></div>
-				<div class="admin-widget-edit-fields"><label>State:</label> 
-				
+				<div class="admin-widget-edit-fields"><label>State:</label> 				
 				<select name="region_id">
 				<?php $states = $this->getStateList() ?>
 				<?php foreach($states as $state): ?>
@@ -228,7 +227,6 @@ $orderStoreDate = $this->formatDate($_order->getCreatedAtStoreDate(), 'medium', 
         	<form id="shipping-fields">
         		<input type="hidden" name="type" value="shipping" />
         		<input type="hidden" name="admin_user" value="<?php echo Mage::getSingleton('admin/session')->getUser()->getUsername() ?>" />
-        		<input type="hidden" name="region_id" value="<?php echo $shipping->getRegionId() ?>" />
         		<input type="hidden" name="entity_id" value="<?php echo $shipping->getId() ?>" />
 		        <div class="admin-widget-edit-fields"><label>First Name:</label> <input type="text" class=" input-text" name="firstname" value="<?php echo $shipping->getFirstname() ?>" /></div>
 		        <div class="admin-widget-edit-fields"><label>Last Name:</label> <input type="text" class=" input-text" name="lastname" value="<?php echo $shipping->getLastname() ?>" /></div>
@@ -236,12 +234,14 @@ $orderStoreDate = $this->formatDate($_order->getCreatedAtStoreDate(), 'medium', 
 				<div class="admin-widget-edit-fields"><label>Address 1:</label> <input type="text" class=" input-text" name="street1" value="<?php echo $shipping->getStreet1() ?>" /></div>
 				<div class="admin-widget-edit-fields"><label>Address 2:</label> <input type="text" class=" input-text" name="street2" value="<?php echo $shipping->getStreet2() ?>" /></div>
 				<div class="admin-widget-edit-fields"><label>City:</label> <input type="text" class=" input-text" name="city" value="<?php echo $shipping->getCity() ?>" /></div>
-				<div class="admin-widget-edit-fields"><label>State:</label> <select name="region">
+				<div class="admin-widget-edit-fields"><label>State:</label> 
+				<select name="region_id">
 				<?php $states = $this->getStateList() ?>
 				<?php foreach($states as $state): ?>
-					<option <?php echo $state['name']==$shipping->getRegion()?"Selected ":"" ?>value="<?php echo $state['name'] ?>"><?php echo $state['name'] ?></option>
+					<option <?php echo $state['name']==$shipping->getRegion()? "Selected ": "" ?>value="<?php echo $state['region_id'] ?>"><?php echo $state['name'] ?></option>
 				<?php endforeach ?>
-				</select></div>
+				</select>
+				</div>
 				<div class="admin-widget-edit-fields"><label>Postcode:</label> <input type="text" id="ship-zip" class=" input-text" name="postcode" value="<?php echo $shipping->getPostcode() ?>" /></div>
 				<div class="admin-widget-edit-fields"><label>Country:</label> <select name="country_id">
 				<?php $countries = $this->getCountryList() ?>

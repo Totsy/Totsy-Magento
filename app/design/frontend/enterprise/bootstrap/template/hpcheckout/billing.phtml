@@ -82,7 +82,13 @@
 <script type="text/javascript">
 	// @TODO: abstract this out to hpcheckout.js as self-contained method
 	// need to re-enable billing form controls before trying to send values to shipping form
-	jQuery(document).ready(function() {
+	jQuery(document).ready( function() {
+        
+        if(checkoutPayment.hasProfile==true && checkoutPayment.lastUsedAddressId!="") {
+            //jQuery("#billing-address-select").attr("disabled", false);
+            jQuery("#billing-address-select").val(checkoutPayment.lastUsedAddressId);
+        }
+	
 	    jQuery('#button_ship_to').bind('click', function() {
 	    	var billFormInputs = jQuery('#hpcheckout-billing-form :input');
 	    	var billAddySelect = jQuery("#billing-address-select");
@@ -96,13 +102,13 @@
 	    	// then use hpcheckout.copyBillingToShipping() method
 	    	hpcheckout.copyBillingToShipping();
 	    });
+	    
+	    jQuery( '#billing-address-select' ).bind( 'change', hpcheckout.switchAddress );
+   
 	});
 //<![CDATA[
     var billingRegionUpdater = new RegionUpdater('billing:country_id', 'billing:region', 'billing:region_id', countryRegions, undefined, 'billing:postcode');
-    jQuery( document ).ready( function() {
-        jQuery( '#billing-address-select' ).bind( 'change', hpcheckout.switchAddress );
 
-	});
     <?php if($this->getAddressesJson()) { ?>
         var hpcheckoutAddresses = <?php echo $this->getAddressesJson() ?>;
     <?php }  ?>
