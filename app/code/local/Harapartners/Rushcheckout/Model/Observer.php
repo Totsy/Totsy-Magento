@@ -140,9 +140,7 @@ class Harapartners_Rushcheckout_Model_Observer
         //Separate for different stores
         foreach ($lifetimes as $storeId => $lifetime) {
             //Optimization for large collections, since sales/quote is a flat table, this is relatively efficient
-            //Entity ID offset is safer than LIMIT clause offset, this would safe guard against endless loop
             //LIMIT clause offset is vulnerable if other processes also update the table
-            $entityIdOffset = 0;
             do {
                 $quoteCollection = Mage::getModel('sales/quote')
                     ->getCollection();
@@ -151,8 +149,7 @@ class Harapartners_Rushcheckout_Model_Observer
                         ->addFieldToFilter('items_count', array('gt' => 0))
                         ->addFieldToFilter('updated_at', array('to' => date("Y-m-d H:i:s", time() - $lifetime)));
                 $quoteCollection->getSelect()
-                        ->limit(self::DEFAULT_COLLECTION_SIZE_LIMIT)
-                        ->order('entity_id ASC');
+                        ->limit(self::DEFAULT_COLLECTION_SIZE_LIMIT);
                 foreach ($quoteCollection as $quote) {
                     foreach ($quote->getAllItems() as $item) {
                         //Cart reservation logic: item qty is release back to available by observer
@@ -168,7 +165,6 @@ class Harapartners_Rushcheckout_Model_Observer
                         unset($item);
                     }
 
-                    $entityIdOffset = $quote->getId();
                     $quote->setData('items_count', 0)
                         ->setData('items_qty', 0)
                         ->setData('grand_total', 0)

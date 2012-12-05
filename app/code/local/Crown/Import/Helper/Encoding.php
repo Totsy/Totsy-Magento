@@ -161,3 +161,4 @@ class Crown_Import_Helper_Encoding extends Mage_Core_Helper_Abstract {
 		}
 	}
 }
+

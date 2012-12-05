@@ -19,7 +19,6 @@ class Crown_Import_Block_Adminhtml_Import_Grid extends Mage_Adminhtml_Block_Widg
 		$this->setDefaultDir ( 'DESC' );
 		$this->setSaveParametersInSession ( true );
 	}
-
 	/**
 	 * (non-PHPdoc)
 	 * @see Mage_Adminhtml_Block_Widget_Grid::_prepareCollection()
@@ -125,8 +124,14 @@ class Crown_Import_Block_Adminhtml_Import_Grid extends Mage_Adminhtml_Block_Widg
      * @return string
      */
 	public function getRowUrl($row) {
-        $row->statusCheck();
-		if ( !$row->getUrapidflowProfileId() && Crown_Import_Model_Importhistory::IMPORT_STATUS_COMPLETE == $row->getStatus() ) {
+
+        // Update status on profile
+        // Try catch to avoid Exception for when profile has been deleted
+        try {
+            $row->statusCheck();
+        } catch (Exception $e) {}
+
+		if ( is_null($row->getUrapidflowProfileId()) ) {
 			return $this->getUrl ( '*/*/profilemessage', array ('mid' => 1 ) );
 		} elseif( Crown_Import_Model_Importhistory::IMPORT_STATUS_RUNNING == $row->getStatus() ) {
 			return $this->getUrl ( '*/*/profilemessage', array ('mid' => 2 ) );

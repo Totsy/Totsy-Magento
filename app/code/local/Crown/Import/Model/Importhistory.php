@@ -246,3 +246,4 @@ class Crown_Import_Model_Importhistory extends Mage_Core_Model_Abstract {
     }
 
 }
+
