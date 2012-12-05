@@ -39,5 +39,5 @@
 <?php if($this->IsRssCatalogEnable()): ?>
     <a href="<?php echo $this->getRssLink() ?>" title="<?php echo $this->__('Subscribe to RSS Feed') ?>" class="rss-feed"><?php echo $this->__('Subscribe to RSS Feed') ?></a>
 <?php endif; ?>
-    <h1><?php echo $_helper->categoryAttribute($_category, $this->getCurrentCategory()->getName(), 'name') ?></h1>
+    <h3><?php echo $_helper->categoryAttribute($_category, $this->getCurrentCategory()->getName(), 'name') ?></h3>
 </div>

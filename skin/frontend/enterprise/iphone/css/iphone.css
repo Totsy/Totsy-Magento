@@ -452,7 +452,7 @@ p.required { text-align:right; }
 .error-msg,
 .success-msg,
 .notice-msg,
-.note-msg { margin-bottom:1em !important; padding:8px !important; border-style:solid !important; border-width:1px !important; background-repeat:no-repeat !important; background-position:10px 10px !important; text-align:center !important; font-size:.95em !important; font-weight:bold !important; }
+.note-msg { margin-bottom:1em !important; padding:8px !important; text-align:center !important; font-weight:bold !important; }
 .error-msg li,
 .success-msg li,
 .notice-msg li {margin-bottom:.2em; }
