@@ -180,11 +180,44 @@ class Harapartners_Stockhistory_Model_Transaction extends Mage_Core_Model_Abstra
         $product_collection->getSelect()->where('entity_id in (' . implode(',' , $items) . ')' );
         foreach($product_collection as $product) {
 			$product->setData('_edit_mode', true);
-            $product->setFulfillmentTYpe('dotcom');
+            $product->setFulfillmentType('dotcom');
             $product->setIsMasterPack((int)$changeto);
             $product->setVisibility(1);
             $product->save();           
         }
+    }
+
+    public function casePackQty($item){
+        var_dump($item);
+        die();
+        $case_pack_grp_id = $item->getData('case_pack_grp_id');
+
+        #pull all the items that have the same case pack grp id and event id
+        $products = Mage::getModel('catalog/product')->getCollection()
+                ->addCategoryFilter($this->getCategory())
+                ->addAttributeToFilter('type_id', 'simple')
+                ->addAttributeToFilter('case_pack_grp_id', array('eq' => $case_pack_grp_id))
+                ->setOrder('vendor_style', 'asc')
+                ->setOrder('color', 'asc')
+                ->setOrder('size', 'asc');
+
+        var_dump($products->count());
+
+        die();
+
+        $ordersColl = Mage::getModel('sales/order_item')->getCollection();
+        $ordersColl->getSelect()->where('product_id =' . $product_id);
+        foreach($ordersColl as $order) {
+
+            if($order->getParentItemId()) {
+                $parent_item_id = $order->getParentItemId();
+                $parent_order_line = Mage::getModel('sales/order_item')->getCollection();
+                $parent_order_line->getSelect()->where('item_id =' . $parent_item_id);
+                $order = $parent_order_line->getFirstItem();
+            }
+            $qty = $order->getQtyOrdered() - $order->getQtyReturned() - $order->getQtyCanceled();
+            $total_units += $qty;
+       }
     }
     
 }

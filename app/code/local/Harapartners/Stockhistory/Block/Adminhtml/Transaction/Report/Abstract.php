@@ -103,6 +103,7 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Abstract exte
                 'qty_total'                =>    $productInfo['qty'],
                 'is_master_pack'        =>    $productInfo['is_master_pack'],
                 'case_pack_qty'            =>    round($product->getData('case_pack_qty')),
+                'case_pack_grp_id'      =>  $product->getCasePackGrpId(),
                 'unit_cost'                =>    $productInfo['qty'] ?
                                     round($productInfo['total']/$productInfo['qty'], 2) : $productInfo['total'],
                 'total_cost'            =>    $productInfo['total']

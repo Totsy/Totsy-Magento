@@ -16,6 +16,8 @@ class Harapartners_Stockhistory_Block_Adminhtml_Widget_Grid_Column_Renderer_Inpu
 
     public function render(Varien_Object $row){
         //SKU bases
+
+        Mage::getModel('stockhistory/transaction')->casePackQty($row);
         
         //qty_to_amend: defined as FINAL quantity, i.e. forcing the quantity to the given value, instead of just the delta
         $html = '<input type="text"';
