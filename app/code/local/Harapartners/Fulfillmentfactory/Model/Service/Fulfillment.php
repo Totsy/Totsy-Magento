@@ -245,12 +245,12 @@ class Harapartners_Fulfillmentfactory_Model_Service_Fulfillment
             if($item->getStatusId() == Mage_Sales_Model_Order_Item::STATUS_CANCELED) {
                 $subtotalCanceled += $item->getRowTotal();
                 $baseSubtotalCanceled += $item->getBaseRowTotal();
-                $taxCanceled += ($item->getRowTotalInclTax() - $item->getRowTotal());
-                $baseTaxCanceled += ($item->getBaseRowTotalInclTax() - $item->getBaseRowTotal());
+                $taxCanceled += $item->getTaxCanceled();
+                $baseTaxCanceled += $item->getBaseBaseTaxCanceled();
                 $discountCanceled += $item->getDiscountAmount();
                 $baseDiscountCanceled += $item->getBaseDiscountAmount();
-                $totalCanceled += $item->getRowTotal() + ($item->getRowTotalInclTax() - $item->getRowTotal());
-                $baseTotalCanceled += $item->getBaseRowTotal() + ($item->getBaseRowTotalInclTax() - $item->getBaseRowTotal());
+                $totalCanceled += $item->getRowTotal() + $item->getTaxCanceled();
+                $baseTotalCanceled += $item->getBaseRowTotal() + $item->getBaseBaseTaxCanceled();
             }
         }
         if($shouldCancel) {
