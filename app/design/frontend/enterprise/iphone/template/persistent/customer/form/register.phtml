@@ -51,7 +51,7 @@
 	<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
     <form action="<?php echo $this->getPostActionUrl() ?>" method="post" id="form-validate" enctype="multipart/form-data">
     	<div class="info-title">
-			<h2 class="legend membersignup"><?php echo $this->__('Sign Up') ?></h2>
+			<h3 class="legend membersignup"><?php echo $this->__('Sign Up') ?></h3>
 			<p class="membersignin">Already a Totsy member? <a href="<?php echo Mage::getUrl('customer/account/login');?>">Sign In</a></p>
         </div>
         <div class="clear"></div>
@@ -107,7 +107,7 @@
     <?php if($this->getShowAddressFields()): ?>
         <div class="fieldset">
             <input type="hidden" name="create_address" value="1" />
-            <h2 class="legend"><?php echo $this->__('Address Information') ?></h2>
+            <h3 class="legend"><?php echo $this->__('Address Information') ?></h3>
             <ul class="form-list">
                 <li class="fields">
                     <div class="field">

@@ -76,12 +76,11 @@
         <?php endfor ?>
          <label for="zip" class="required"><em>*</em><?php echo $this->__('Zip/Postal Code') ?></label>
          <input type="text" name="postcode" value="<?php echo $this->htmlEscape($this->getAddress()->getPostcode()) ?>" title="<?php echo $this->__('Zip/Postal Code') ?>" id="zip" class="input-text validate-zip-international required-entry" />
-        <div id="city-state-manual" style="display:none;">
+        <div id="city-state-manual">
             <label for="city" class="required"><em>*</em><?php echo $this->__('City') ?></label>
             <input type="text" name="city" value="<?php echo $this->htmlEscape($this->getAddress()->getCity()) ?>" title="<?php echo $this->__('City') ?>" class="input-text required-entry" id="city" />
             <label for="region_id" class="required"><em>*</em><?php echo $this->__('State/Province') ?></label>
             <div class="input-box totsy-selective-input-box">
-                <span>Please select region, state or province</span>
                 <select id="region_id" name="region_id" title="<?php echo $this->__('State/Province') ?>" class="validate-select" style="display:none;">
                     <option value=""><?php echo $this->__('Please select region, state or province') ?></option>
                 </select>
@@ -97,7 +96,6 @@
         </div>
          <label for="country" class="required"><em>*</em><?php echo $this->__('Country') ?></label>
                     <div class="input-box totsy-selective-input-box">
-                    <span>Please select your country</span>
                         <?php echo $this->getCountryHtmlSelect() ?>
                     </div>
           

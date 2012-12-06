@@ -424,6 +424,7 @@ class Crown_Import_Adminhtml_ImportController extends Mage_Adminhtml_Controller_
 			$importHandler->setDefaultProductVendorId ( $vendor->getId () );
 			$importHandler->setDefaultProductPoId ( $purchaseOrder->getId () );
 			$importHandler->setFileBaseDir ( $profile->getFileBaseDir () );
+            $importHandler->setImportProfileModel( $profile );
 			$importHandler->run ();
 
 			if ( $importHandler->getHasConfigurableProducts() ){

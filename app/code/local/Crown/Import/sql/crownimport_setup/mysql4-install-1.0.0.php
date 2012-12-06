@@ -1,18 +1,14 @@
 <?php
 /**
- * 
+ *
  * @category 	Crown
- * @package 	Crown_Import 
+ * @package 	Crown_Import
  * @since 		1.0.0
  */
 
 /* @var $this Crown_Import_Model_Resource_Setup */
 $installer = $this;
 $installer->startSetup();
-
-$query = "
-
-";
 
 /**
  * Create required tables
@@ -42,7 +38,7 @@ CREATE TABLE {$this->getTable('crownimport/importhistory')} (
   CONSTRAINT `FK_IMPORTHISTORY_IMPORT_PO` FOREIGN KEY (`po_id`) REFERENCES {$this->getTable('stockhistory/purchaseorder')} (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `FK_IMPORTHISTORY_IMPORT_CATEGORY` FOREIGN KEY (`category_id`) REFERENCES {$this->getTable('catalog_category_entity')} (`entity_id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `FK_IMPORTHISTORY_IMPORT_URAPIDFLOW_PROFILE` FOREIGN KEY (`urapidflow_profile_id`) REFERENCES {$this->getTable('urapidflow/profile')} (`profile_id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  CONSTRAINT `FK_IMPORTHISTORY_IMPORT_URAPIDFLOW_PROFILE_PRODUCT_EXTRA` FOREIGN KEY (`urapidflow_profile_id_product_extra`) REFERENCES {$this->getTable('urapidflow/profile')} (`profile_id`) ON DELETE SET NULL ON UPDATE CASCADE  
+  CONSTRAINT `FK_IMPORTHISTORY_IMPORT_URAPIDFLOW_PROFILE_PRODUCT_EXTRA` FOREIGN KEY (`urapidflow_profile_id_product_extra`) REFERENCES {$this->getTable('urapidflow/profile')} (`profile_id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Import Module With uRapidflow Import Records';
 ");
 

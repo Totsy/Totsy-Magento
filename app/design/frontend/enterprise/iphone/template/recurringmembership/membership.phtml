@@ -5,13 +5,13 @@
 ?>
 
 <div class="page-title">
-	<h1>Recurring Membership</h1>
+	<h3>Recurring Membership</h3>
 </div>
 <?php if($membership->getId()&&$membership->getStatus()== 1):?>
 <form action="<?php echo $this->getBaseUrl();?>recurringmembership/index/deactiviate/" method="post" id="membership_edit_form">
 	<div class="membership">
-		<h2>Thanks for joining Totsy Recurring Membership!</h2>
-		<h2> You could view or deactiviate your membership here:</h2>
+		<h3>Thanks for joining Totsy Recurring Membership!</h3>
+		<h3>You could view or deactiviate your membership here:</h3>
 		<a href="<?php $this->getBaseUrl();?>/sales/order/history/"><button class="button general top" type="button"><span><span>View</span></span></button></a>
 		<button class="button general top" type="submit"><span><span>Deactiviate</span></span></button>
 		
@@ -22,7 +22,7 @@
 	<input type="hidden" name="qty" id="qty" maxlength="12" value="1" class="input-text qty hidden" />
 	<input type="hidden" name="product" value="33" />
 	<div class="membership">
-		<h2>You are not a member of Totsy. Would you like to join now?</h2>		
+		<h3>You are not a member of Totsy. Would you like to join now?</h3>		
 		<button type="submit" title="Join" class="button ibuy-product-cart" ><span><span>Join</span></span></button>
 	</div>
 </form>
