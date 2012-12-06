@@ -106,48 +106,6 @@ $('#message').text("");
     </div>
     <script type="text/javascript">
         var spConfig = new Product.Config(<?php echo $this->getJsonConfig() ?>);
-
-        /*jQuery('[id^=attribute]').change(function(){
-        	var other_attribute = jQuery('[id^=attribute]');
-        	var post_data = {};
-        	attr_count = other_attribute.length;
-        	count = 0;
-        	other_attribute.each(function(idx,value) {
-        		console.log(value);
-        		if(value['value'] != "") {
-        			++count;
-        			post_data[value['name']] = value['value'];
-        		}
-
-        		if(attr_count == count) {
-					post_data['id'] = "<?php echo $_product->getEntityId()?>";
-					jQuery.ajax({
-						data: post_data,
-						type: "post",
-						url: "<?php echo Mage::getUrl('cataloginventory/inventory/laststockstatus');?>",
-						beforeSend: function() {
-							jQuery('.spinner').show();
-						},
-						success: function(stock_status) {
-							jQuery('.spinner').hide();
-							stock_status = jQuery.parseJSON(stock_status);
-							stock_qty = stock_status.stock_count;
-							max_qty = 9;
-							if (stock_qty < max_qty) {
-								max_qty = stock_qty;
-							}
-							qty_select = jQuery('#qty');
-							qty_select.html("");
-							qty_select.append("<option value =''> Please Select Quantity </option>" );
-							for(idx = 1 ; idx <= max_qty ; ++idx) {
-								qty_select.append("<option value =" + idx + ">" + idx + "</option>" );
-							}
-						}
-					});
-				}
-        	});
-        	
-        });*/
     </script>
     
 <?php endif;?>

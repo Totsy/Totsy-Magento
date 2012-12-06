@@ -38,18 +38,4 @@ class Totsy_Bundle_Model_Product_Type extends Mage_Bundle_Model_Product_Type
 
         return $this;
     }
-
-	/**
-	 * Retrieve product information by bundle selection id
-	 * 
-	 **/
-    public function getProductInfoBySelectionId($selection_id) {
-        $selection = Mage::getModel('bundle/selection')->load($selection_id);
-
-        if($selection) {
-            return $product = Mage::getModel('catalog/product')->load($selection->getProductId());
-        }
-
-        return null;
-    }
 }

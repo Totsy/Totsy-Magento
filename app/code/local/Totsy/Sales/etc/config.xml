@@ -104,7 +104,7 @@
     <crontab>
         <jobs>
             <totsy_sales>
-                <schedule><cron_expr>* */1 * * *</cron_expr></schedule>
+                <schedule><cron_expr>0 * * * *</cron_expr></schedule>
                 <run><model>sales/observer::cancelOrderWithPaymentFailedAndOlderThan7Days</model></run>
             </totsy_sales>
         </jobs>
