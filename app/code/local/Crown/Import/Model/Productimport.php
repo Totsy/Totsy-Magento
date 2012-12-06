@@ -25,6 +25,8 @@
  * @method string getDefaultProductVendorCode()
  * @method Crown_Import_Model_Productimport setDefaultProductPoId(int $value)
  * @method int getDefaultProductPoId()
+ * @method Crown_Import_Model_Productimport setImportProfileModel(Unirgy_RapidFlow_Model_Profile $value)
+ * @method Unirgy_RapidFlow_Model_Profile getImportProfileModel()
  *
  * @category 	Crown
  * @package 	Crown_Import
@@ -68,6 +70,7 @@ class Crown_Import_Model_Productimport extends Crown_Import_Model_Import_Abstrac
 		$this->addRowFilter ( array (&$this, 'filterMediaGallery'), 10 );
 
 		$this->addAfterParseEvent( array (&$this, 'filterFindConfigurables') );
+        $this->addAfterParseEvent( array (&$this, 'filterValidateMediaGallery') );
 
 		$this->addAttributeFilter( 'image', array (&$this, 'filterRemoveBeginningSlash') );
 		$this->addAttributeFilter( 'small_image', array (&$this, 'filterRemoveBeginningSlash') );
@@ -376,4 +379,32 @@ class Crown_Import_Model_Productimport extends Crown_Import_Model_Import_Abstrac
 		}
 		return $data;
 	}
+
+    /**
+     * Filter to validate media image files
+     * @since 1.3.0
+     * @return void
+     */
+    public function filterValidateMediaGallery() {
+        $errorMessages = array();
+        $profile = $this->getImportProfileModel();
+        if(!empty($this->_media_gallery)) {
+            /* @var $mediaHlper Crown_Import_Helper_Data */
+            $mediaHelper = Mage::helper('crownimport');
+
+            foreach($this->_media_gallery as $sku => $mediaImages) {
+                foreach ($mediaImages as $mediaImage) {
+                    // Check for media image on server or remote host
+                    try {
+                        $mediaImageFiltered = $this->filterRemoveBeginningSlash($mediaImage);
+                        $mediaHelper->checkForValidImageFiles( $mediaImageFiltered, $profile );
+                    } catch (Exception $e ) {
+                        $errorMessages[$sku][] = 'Media Gallery ' . $e->getMessage() . " '{$mediaImageFiltered}'";
+                    }
+                }
+            }
+        }
+        $profile->setData( 'error_messages', serialize($errorMessages) )->save();
+    }
 }
+

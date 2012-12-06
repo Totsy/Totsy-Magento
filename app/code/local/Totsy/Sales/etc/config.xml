@@ -101,4 +101,12 @@
             </order>
         </sales>
     </global>
+    <crontab>
+        <jobs>
+            <totsy_sales>
+                <schedule><cron_expr>0 * * * *</cron_expr></schedule>
+                <run><model>sales/observer::cancelOrderWithPaymentFailedAndOlderThan7Days</model></run>
+            </totsy_sales>
+        </jobs>
+    </crontab>
 </config>

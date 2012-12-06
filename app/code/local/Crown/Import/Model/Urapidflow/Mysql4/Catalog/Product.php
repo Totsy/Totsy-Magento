@@ -286,18 +286,38 @@ class Crown_Import_Model_Urapidflow_Mysql4_Catalog_Product extends Unirgy_RapidF
                             switch( $errorMessageId ) {
                                 case Crown_Import_Model_Adminhtml_Source_Errorlevels::LEVEL_WARNING:
                                     $profile->addValue ( 'num_warnings' );
-                                    $logger->warning ( $this->__ ( $e->getMessage() ) );
+                                    $logger->warning ( $this->__ ( $e->getMessage() . ' Column ' . ucfirst($k) ) );
                                     break;
                                 case Crown_Import_Model_Adminhtml_Source_Errorlevels::LEVEL_ERROR:
                                 default:
                                     $profile->addValue ( 'num_errors' );
-                                    $logger->error ( $this->__ ( $e->getMessage() ) );
+                                    $logger->error ( $this->__ (  $e->getMessage() . ' Column ' . ucfirst($k) ) );
                                     $this->_valid [$sku] = false;
                             }
                         }
                     }
 
 				} // foreach ($p as $k=>$newValue)
+
+                // Media Gallery validation check
+                if ( $mediaGallery = unserialize($profile->getData('error_messages')) ) {
+                    if(isset($mediaGallery[$sku])) {
+                        foreach ($mediaGallery[$sku] as $_message) {
+                            $errorMessageId = Mage::getStoreConfig ( 'crownimport/urapidflow/missing_image_error' );
+                            switch( $errorMessageId ) {
+                                case Crown_Import_Model_Adminhtml_Source_Errorlevels::LEVEL_WARNING:
+                                    $profile->addValue ( 'num_warnings' );
+                                    $logger->warning ( $this->__ ( $_message ) );
+                                    break;
+                                case Crown_Import_Model_Adminhtml_Source_Errorlevels::LEVEL_ERROR:
+                                default:
+                                    $profile->addValue ( 'num_errors' );
+                                    $logger->error ( $this->__ (  $_message ) );
+                                    $this->_valid [$sku] = false;
+                            }
+                        }
+                    }
+                }
 
 				if (! $this->_valid [$sku]) {
 					$profile->addValue ( 'rows_errors' );

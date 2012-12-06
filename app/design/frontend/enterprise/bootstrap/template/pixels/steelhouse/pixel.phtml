@@ -15,7 +15,7 @@ $product_ids = implode(",", $_cart->getProductIds());
     var shpc= encodeURIComponent('<?php echo addslashes(strip_tags(html_entity_decode(str_replace(array("\r", "\n"), '', $_product->getDescription())))) ?>');
     var shpp= encodeURIComponent('<?php echo number_format($_product->getSpecialPrice(), 2) ?>');
     var shpb= encodeURIComponent('<?php echo addslashes($_product->getCategory()->name); ?>');
-    var shpi= encodeURIComponent('<?php echo $_product->getProductUrl() ?>');
+    var shpi= encodeURIComponent('<?php echo $_product->getImageUrl() ?>');
     var shps= encodeURIComponent('<?php echo $_product->getSku() ?>');
 <?php else: ?>
     var shpn= '';

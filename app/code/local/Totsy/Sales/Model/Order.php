@@ -372,7 +372,6 @@ class Totsy_Sales_Model_Order extends Mage_Sales_Model_Order
         return $this;
     }
 
-
     public function hasFulfillmentType($fulfillmentType) {
         foreach($this->getAllItems() as $item) {
             if($item->getParentItemId()) {
@@ -386,5 +385,19 @@ class Totsy_Sales_Model_Order extends Mage_Sales_Model_Order
             }
         }
         return false;
+    }
+
+    /**
+     * Retrieve label of order status
+     *
+     * @return string
+     */
+    public function getStatusLabel()
+    {
+        if($this->getStatus() == 'complete' && $this->getIsVirtual()) {
+            return 'Emailed';
+        } else {
+            return $this->getConfig()->getStatusLabel($this->getStatus());
+        }
     }
 }

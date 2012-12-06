@@ -36,7 +36,7 @@ $minBalance = $this->getMinBalance();
 $expireIn = $this->getExpireIn();
 ?>
 <div class="box info-box">
-    <h2 class="box-title"><?php echo $this->__('Reward points balance Information'); ?> <span class="separator">|</span></h2>
+    <h3 class="box-title"><?php echo $this->__('Reward points balance Information'); ?> <span class="separator">|</span></h3>
     <dl class="box-content">
         <dt><?php echo $this->__('Your current balance is %s.', $helper->formatReward($this->getPointsBalance(), $this->getCurrencyBalance()))?></dt>
         <dt><?php echo $this->__('Current exchange rates:')?></dt>
