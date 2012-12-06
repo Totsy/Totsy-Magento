@@ -234,16 +234,15 @@ class Harapartners_Fulfillmentfactory_Model_Service_Fulfillment
         $totalCanceled = 0;
         $baseTotalCanceled = 0;
         foreach($order->getItemsCollection() as $item) {
-            $skip = false;
             if($item->getParentItemId()) {
                 continue;
             }
+
             if($shouldCancel && ($item->getStatusId() != Mage_Sales_Model_Order_Item::STATUS_CANCELED)) {
                 $shouldCancel = false;
-                $skip = TRUE;
-
             }
-            if(!$skip) {
+
+            if($item->getStatusId() == Mage_Sales_Model_Order_Item::STATUS_CANCELED) {
                 $subtotalCanceled += $item->getRowTotal();
                 $baseSubtotalCanceled += $item->getBaseRowTotal();
                 $taxCanceled += ($item->getRowTotalInclTax() - $item->getRowTotal());
