@@ -246,11 +246,11 @@ class Harapartners_Fulfillmentfactory_Model_Service_Fulfillment
                 $subtotalCanceled += $item->getRowTotal();
                 $baseSubtotalCanceled += $item->getBaseRowTotal();
                 $taxCanceled += $item->getTaxCanceled();
-                $baseTaxCanceled += $item->getBaseBaseTaxCanceled();
+                $baseTaxCanceled += $item->getBaseTaxAmount();
                 $discountCanceled += $item->getDiscountAmount();
                 $baseDiscountCanceled += $item->getBaseDiscountAmount();
                 $totalCanceled += $item->getRowTotal() + $item->getTaxCanceled();
-                $baseTotalCanceled += $item->getBaseRowTotal() + $item->getBaseBaseTaxCanceled();
+                $baseTotalCanceled += $item->getBaseRowTotal() + $item->getBaseTaxAmount();
             }
         }
         if($shouldCancel) {
