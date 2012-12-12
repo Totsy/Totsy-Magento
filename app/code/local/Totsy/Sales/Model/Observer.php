@@ -94,8 +94,10 @@ class Totsy_Sales_Model_Observer extends Mage_Sales_Model_Observer
                 $lastErrorLog = Mage::getModel('fulfillmentfactory/errorlog')->getCollection()
                                     ->addFieldToFilter('order_id', $order->getId())
                                     ->getLastItem();
+                if($lastErrorLog && $lastErrorLog->getId()) {
+                    $order->addStatusHistoryComment($lastErrorLog->getMessage());
+                }
                 $order->cancel()
-                      ->addStatusHistoryComment($lastErrorLog->getMessage())
                       ->save();
                 Mage::log('Order Canceled: ' . $order->getId(),null,'payment_failed_order_cancel.log');
                 $count++;

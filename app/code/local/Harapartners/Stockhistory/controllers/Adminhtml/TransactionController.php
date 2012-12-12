@@ -154,9 +154,10 @@ class Harapartners_Stockhistory_Adminhtml_TransactionController extends Mage_Adm
                 
                 $category = Mage::getModel('catalog/category')->load($poObject->getCategoryId());
                 $event_end_date = strtotime($category->getEventEndDate());
+                $event_start_date = strtotime($category->getEventStartDate());
                 $today = strtotime('NOW');
 
-                if (!($event_end_date <= $today) ) {
+                if (!($event_end_date <= $today) || ($today <= $event_start_date) ) {
                     if($transaction->updateProductStock()){
                         $transaction->save();
                     }else{
