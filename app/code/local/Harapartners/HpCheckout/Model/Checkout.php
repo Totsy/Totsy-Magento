@@ -389,6 +389,17 @@ class Harapartners_HpCheckout_Model_Checkout
                 array('order' => $order, 'quote' => $this->getQuote(), 'recurring_profiles' => $profiles)
             );
         }
+
+        //Fill Customer First/Last Name with Billing Address Infos
+        if($order && $order->getId()) {
+            $customer = $this->getCustomerSession()->getCustomer();
+            if((!$customer->getFirstname() || !$customer->getLastname) && $order->getBillingAddress()) {
+                $customer->setFirstname($order->getBillingAddress()->getFirstname())
+                    ->setLastname($order->getBillingAddress()->getLastname())
+                    ->save();
+            }
+        }
+
         Mage::getSingleton('checkout/session')->unsSplitCartFlag();
 
         return $this;
