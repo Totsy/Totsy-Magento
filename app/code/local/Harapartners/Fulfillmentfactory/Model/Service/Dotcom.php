@@ -464,7 +464,7 @@ XML;
 
             //handling shipping address
             $shippingAddress = $order->getShippingAddress();
-            
+
             //to avoid null object
             if(empty($shippingAddress)) {
                 $shippingAddress = Mage::getModel('sales/order_address');
@@ -484,11 +484,11 @@ XML;
             $country = Mage::helper('fulfillmentfactory/dotcom')->getCountryCodeUsTerritories($state);
 
             //handling billing address
-             $billingAddress = $order->getBillingAddress();
+            $billingAddress = $order->getBillingAddress();
 
-             if(empty($billingAddress)) {
+            if(empty($billingAddress)) {
                 $billingAddress = Mage::getModel('sales/order_address');
-             }
+            }
 
             $billingAddress = Mage::helper('fulfillmentfactory/data')->removeAccentsFromAddress($billingAddress);
 
@@ -604,28 +604,58 @@ XML;
                     continue;
                 }
 
-                $quantity = intval($item->getQtyToShip());
-                $sku = substr($item->getSku(), 0, 17);
+                if($product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_BUNDLE) {
+                    foreach($item->getChildrenItems() as $child) {
+                        $quantity = intval($child->getQtyToShip());
+                        $sku = substr($child->getSku(), 0, 17);
 
-                if($quantity) {
-                    $taxAmount = $item->getTaxAmount();
-                    if (!$taxAmount) {
-                        $taxAmount = '0';
+                        if($quantity) {
+                            $taxAmount = $item->getTaxAmount();
+                            if (!$taxAmount) {
+                                $taxAmount = '0';
+                            }
+
+                            $xml .= <<<XML
+                        <line-item>
+                            <sku>$sku</sku>
+                            <quantity>$quantity</quantity>
+                            <price>{$item->getPrice()}</price>
+                            <tax>$taxAmount</tax>
+                            <shipping-handling>0</shipping-handling>
+                            <client-item xsi:nil="true"/>
+                            <line-number xsi:nil="true"/>
+                            <gift-box-wrap-quantity xsi:nil="true"/>
+                            <gift-box-wrap-type xsi:nil="true"/>
+                        </line-item>
+XML;
+                        }
+
                     }
 
-                    $xml .= <<<XML
-                    <line-item>
-                        <sku>$sku</sku>
-                        <quantity>$quantity</quantity>
-                        <price>{$item->getPrice()}</price>
-                        <tax>$taxAmount</tax>
-                        <shipping-handling>0</shipping-handling>
-                        <client-item xsi:nil="true"/>
-                        <line-number xsi:nil="true"/>
-                        <gift-box-wrap-quantity xsi:nil="true"/>
-                        <gift-box-wrap-type xsi:nil="true"/>
-                    </line-item>
+                } else {
+                    $quantity = intval($item->getQtyToShip());
+                    $sku = substr($item->getSku(), 0, 17);
+
+                    if($quantity) {
+                        $taxAmount = $item->getTaxAmount();
+                        if (!$taxAmount) {
+                            $taxAmount = '0';
+                        }
+
+                        $xml .= <<<XML
+                        <line-item>
+                            <sku>$sku</sku>
+                            <quantity>$quantity</quantity>
+                            <price>{$item->getPrice()}</price>
+                            <tax>$taxAmount</tax>
+                            <shipping-handling>0</shipping-handling>
+                            <client-item xsi:nil="true"/>
+                            <line-number xsi:nil="true"/>
+                            <gift-box-wrap-quantity xsi:nil="true"/>
+                            <gift-box-wrap-type xsi:nil="true"/>
+                        </line-item>
 XML;
+                    }
                 }
             }
 
