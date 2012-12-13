@@ -20,8 +20,7 @@ class Harapartners_Service_Model_Rewrite_Index_Indexer extends Mage_Index_Model_
         $this->_processesCollection = Mage::getResourceModel('index/process_collection')
                 ->addFieldToFilter('indexer_code', array("nin"=>array(
                         'catalog_product_attribute', 
-                        'catalogsearch_fulltext',
-                        'cataloginventory_stock'
+                        'catalogsearch_fulltext'
                 )
         ));
     }
