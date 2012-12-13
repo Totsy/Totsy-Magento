@@ -100,7 +100,8 @@
         </acl>
 		-->
     </adminhtml>
-    <crontab>
+    <!-- RSTREET: Removed crontab for the cart cleaner-->
+    <!--crontab>
         <jobs>
             <rushcheckout_clean_expired_quotes>
                 <schedule>
@@ -111,5 +112,5 @@
                 </run>
             </rushcheckout_clean_expired_quotes>
         </jobs>
-    </crontab>
+    </crontab-->
 </config>
