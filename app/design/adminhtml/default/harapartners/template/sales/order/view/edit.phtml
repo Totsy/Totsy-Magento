@@ -262,14 +262,14 @@ $orderStoreDate = $this->formatDate($_order->getCreatedAtStoreDate(), 'medium', 
 <script type="text/javascript">
     function changeAddress(type) {
         var $formInputs = jQuery('#'+type+'-fields :input');
-        if( jQuery('select#'+type+'-address-select').val() == '' ) {
-            $formInputs.each(function(i) {
-                if(this.name != 'type' && this.name != 'admin_user') {
-                    this.value = '';
-                    this.text = '';
-                }
-            });
-        } else {
+        //Cleaning inputs before filling them
+        $formInputs.each(function(i) {
+            if(this.name != 'type' && this.name != 'admin_user') {
+                this.value = '';
+                this.text = '';
+            }
+        });
+        if( jQuery('select#'+type+'-address-select').val() != '' ) {
             var params = {};
             params['addressId'] = jQuery('select#'+type+'-address-select').val();
             new Ajax.Request('<?php echo Mage::getModel('adminhtml/url')->getUrl('orderedit/order/getorderaddressinformations') ?>', {
@@ -277,6 +277,7 @@ $orderStoreDate = $this->formatDate($_order->getCreatedAtStoreDate(), 'medium', 
                 parameters: params,
                 onSuccess: function(transport) {
                     var fields = transport.responseText.evalJSON();
+
                     $formInputs.each(function(i) {
                         if (this.name in fields) {
                             this.value = fields[this.name];

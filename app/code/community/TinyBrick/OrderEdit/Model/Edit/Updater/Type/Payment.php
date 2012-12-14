@@ -56,7 +56,10 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Payment extends TinyBrick_Orde
                     // Specific Case if payment informations has been deleted from the object sales_flat_order_payment
                     // Refill informations using the profile
                     $payment = new Varien_Object($data);
-                    $payment->setData('cc_last4', substr($payment->getCcNumber(), -4))
+                    $payment->setData('cc_last4', $profile->getData('last4no'))
+                            ->setData('cc_exp_year', $profile->getData('expire_year'))
+                            ->setData('cc_exp_month', $profile->getData('expire_month'))
+                            ->setData('cc_type', $profile->getData('card_type'))
                             ->setData('cybersource_subid',$profile->getData('subscription_id'));
                 }
             }
