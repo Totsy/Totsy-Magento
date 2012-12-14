@@ -285,8 +285,6 @@
     </div>
     <br class="clear"/>
     <div id="fastship_modal_text">
-        <p>We know busy Moms can't wait for their Totsy purchases to arrive. So we're making things faster.</p>
-        <p>For select sales we have made exclusive arrangements to deliver your favorite items faster. With <b>FastShip</b> your purchase leaves our warehouse in 3 days or less---often within 24 hours!</p>
-        <p>Best of all, when you order only <b>FastShip</b> items you just page the regular shipping charge. If your order contains both <b>FastShip</b> items and regular products you can upgrade the <b>FastShip</b> items for an additional <?php echo $splitCartPrice?></p>
+        <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('fastship_info')->toHtml() ?> <?php echo $splitCartPrice?></p>
     </div>
 </div>
