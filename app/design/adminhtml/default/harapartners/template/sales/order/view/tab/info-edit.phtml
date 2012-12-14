@@ -141,7 +141,12 @@
     		params['comment'] = $('edit-order-comment').value;
     		//params['coupon'] = $('coupon').value;
     		params['order_id'] = <?php echo $_order->getId() ?>;
-    		//get values for billing address
+
+            var billingForm = $('billing-fields').getElements();
+            billingForm.each(function(i) {
+                i.removeAttribute('disabled');
+            });
+
     		var billing = $('billing-fields').serialize(true);
     		var payment = $('payment-fields').serialize(true);
     		params['billing'] = Object.toJSON(billing);
