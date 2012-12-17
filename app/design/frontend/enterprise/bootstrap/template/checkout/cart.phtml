@@ -97,14 +97,13 @@
     // Split cart check
     $splitCartFlag = $this->getCheckout()->getSplitCartFlag();
 
-
-
     if($splitCartFlag) {
         $splitYesCss = 'font-weight:bold;';
     }
     else {
         $splitNoCss = 'font-weight:bold;';
     }
+
 ?>
 
 
@@ -141,6 +140,7 @@
         <?php foreach($fulfillmentTypes as $fulfillmentType => $items):?>
 
             <?php
+                $fastShip = $fulfillmentType == 'dotcom_stock' ? true : false;
                 switch($fulfillmentType) {
 
                     case 'dotcom':
@@ -156,9 +156,8 @@
                             <h3 style="display:inline;">Get These Items Fast!</h3>&nbsp;<a href="#fastship_modal" role="button" data-toggle="modal">What is this?</a><br/>
                             <?php if($multiShipping && $hasDotCom): ?>
                             FastShip these items in 3 days or less for an additional <?php echo $splitCartPrice?>
-                            <span id="splitCartYes" style="<?php echo $splitYesCss;?>"><a href="javascript:void(0);" onclick="javascript:setSplitCartFlag(1, '#splitCartYes')">Yes</a></span>
-                            <span id="splitCartNo" style="<?php echo $splitNoCss;?>"><a href="javascript:void(0);" onclick="javascript:setSplitCartFlag(0, '#splitCartNo');">No</a></span>
-                            <input id="splitCartFlag" type="hidden" name="splitCart" value="<?php echo $splitCartFlag;?>" />
+                            <input type="checkbox" id="fastShipCheck" onclick="javascript:setSplitCartFlag()"<?php echo $splitCartFlag? ' checked="checked"' : ''; ?>>
+                            <input id="splitCartFlag" type="hidden" name="splitCart" value="<?php echo $splitCartFlag ? 1 : 0;?>" />
                             <?php endif; ?>
                         </div>
                         <br class="clear"/>
@@ -174,17 +173,21 @@
             ?>
 
             <fieldset>
+                <?php if($fastShip) : ?>
+                <table class="fast-ship-table data-table table fast-ship-table-bordered table-condensed">
+                <?php else : ?>
                 <table class="shopping-cart-table data-table table table-bordered table-condensed">
+                <?php endif; ?>
                     <?php $mergedCells = ($this->helper('tax')->displayCartBothPrices() ? 2 : 1); ?>
                     <tr>
-                        <th rowspan="<?php echo $mergedCells; ?>" colspan="1"><span class="nobr"><?php echo $this->__('Product Name') ?></span></th>
+                        <th class="first" rowspan="<?php echo $mergedCells; ?>" colspan="1" width="60%"><span class="nobr"><?php echo $this->__('Product Name') ?></span></th>
                         <?php if ($this->helper('wishlist')->isAllowInCart()) : ?>
                         <th colspan="1" rowspan="<?php echo $mergedCells; ?>" class="a-center"><span class="nobr"><?php echo $this->__('Move to Wishlist') ?></span></th>
                         <?php endif ?>
-                        <th class="a-center" colspan="<?php echo $mergedCells; ?>"><span class="nobr"><?php echo $this->__('Unit Price') ?></span></th>
-                        <th colspan="1" rowspan="<?php echo $mergedCells; ?>" class="a-center"><?php echo $this->__('Qty') ?></th>
-                        <th class="a-center" colspan="1"><span class="nobr"><?php echo $this->__('Subtotal') ?></span></th>
-                        <th colspan="1" rowspan="<?php echo $mergedCells; ?>" class="a-center"><span class="nobr"></span></th>
+                        <th class="a-center" colspan="<?php echo $mergedCells; ?>" width="12%"><span class="nobr"><?php echo $this->__('Unit Price') ?></span></th>
+                        <th colspan="1" rowspan="<?php echo $mergedCells; ?>" class="a-center" width="10%"><?php echo $this->__('Qty') ?></th>
+                        <th class="a-center" colspan="1" width="12%"><span class="nobr"><?php echo $this->__('Subtotal') ?></span></th>
+                        <th colspan="1" rowspan="<?php echo $mergedCells; ?>" class="last a-center" width="6%"><span class="nobr"><?php echo $this->__('Remove') ?></span></th>
                     </tr>
                     <?php if ($this->helper('tax')->displayCartBothPrices()): ?>
                     <tr>
@@ -262,15 +265,10 @@
 </div>
 <script type="text/javascript">
 
-    function setSplitCartFlag(value, bold_id) {
+    function setSplitCartFlag(el) {
+        var value = jQuery('#fastShipCheck').is(':checked') ? 1 : 0;
         jQuery('#splitCartFlag').val(value);
-
         jQuery.get('<?php echo $ajaxUrl;?>',{id: value});
-
-        jQuery("#splitCartYes, #splitCartNo").css('font-weight', 'normal');
-
-        jQuery(bold_id).css('font-weight', 'bold');
-
     }
 
 </script>
@@ -287,8 +285,6 @@
     </div>
     <br class="clear"/>
     <div id="fastship_modal_text">
-        <p>We know busy Moms can't wait for their Totsy purchases to arrive. So we're making things faster.</p>
-        <p>For select sales we have made exclusive arrangements to deliver your favorite items faster. With <b>FastShip</b> your purchase leaves our warehouse in 3 days or less---often within 24 hours!</p>
-        <p>Best of all, when you order only <b>FastShip</b> items you just page the regular shipping charge. If your order contains both <b>FastShip</b> items and regular products you can upgrade the <b>FastShip</b> items for an additional <?php echo $splitCartPrice?></p>
+        <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('fastship_info')->toHtml() ?> <?php echo $splitCartPrice?></p>
     </div>
 </div>

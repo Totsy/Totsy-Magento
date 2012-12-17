@@ -184,12 +184,14 @@ HpCheckout.prototype = {
 		} else {
 			blocksToUpdate = ['review'];
 		}
+		
 		if (hpcheckoutObject.validate(step)) {
-			// var postData = hpcheckoutObject.getFormData( step );
-			var postData = hpcheckoutObject.getFormData();
+			var postData = hpcheckoutObject.getFormData( step );
+			//var postData = hpcheckoutObject.getFormData();
 			postData += '&currentStep=' + step;
 			hpcheckoutObject.ajaxRequest(postData, doUpdatePayment);
-		}
+        }
+        
 	},
 	updatePayment: function() {
 		var formId = jQuery(this).parents('form').eq(0).attr('id');
@@ -204,6 +206,11 @@ HpCheckout.prototype = {
 	submit: function() {
 		//good time to validate CC types
 		jQuery(".cc_types input[type='radio']").addClass("validate-one-required");
+		
+		//only validate these fields when the customer deceides to place an order (when they click the "Place Order" button on the onepage checkout)
+		jQuery("[id='shipping:postcode']").addClass("required-entry validate-zip");
+		jQuery("[id='shipping:telephone']").addClass("required-entry validate-phoneLax");
+		
 		if (!this.validate()) {
 			return;
 		}
@@ -212,7 +219,7 @@ HpCheckout.prototype = {
 		jQuery("#hpcheckout-wrapper").find('input[placeholder]').each(function() {
 			var e = $(this);
 			if (e.id) {
-				if (jQuery("[id='" + e.id + "']").attr('value') === jQuery("[id='" + e.id + "']").attr('placeholder')) {
+				if ((jQuery("[id='" + e.id + "']").attr('value') === jQuery("[id='" + e.id + "']").attr('placeholder'))) {
 					jQuery("[id='" + e.id + "']").val('');
 				}
 			}
@@ -329,15 +336,39 @@ HpCheckout.prototype = {
 	getFormData: function(blockCodes) {
 		var affectedFormIds = this.getFormIds(blockCodes);
 		var returnFormDataArray = [];
+		
+		//hack to fill in postcode and telephone WHEN THEY ARE NOT YET SET
+		//this applies to customers who have not yet filled the postcode and telephone fields for the shipping address
 		for (var blockIndex = 0; blockIndex < affectedFormIds.length; blockIndex++) {
-			returnFormDataArray.push(jQuery('#' + affectedFormIds[blockIndex]).serialize());
+			if(blockIndex==1 && (jQuery("[id='shipping:postcode']").val()=="" || jQuery("[id='shipping:telephone']").val()=="")) {
+                shippingBlock = jQuery('#' + affectedFormIds[blockIndex]).serializeArray();
+                
+                delete shippingBlock["shipping[postcode]"];
+                delete shippingBlock["shipping[telephone]"];
+                
+			    shippingBlock.push({
+			        name: "shipping[postcode]",
+			        value: "T0000"
+			    }, {
+			        name: "shipping[telephone]",
+			        value: "(T00)-000-0000" 
+			    });
+			    returnFormDataArray.push(jQuery.param(shippingBlock));
+			    
+			    jQuery("shipping[postcode]").val("");
+		        jQuery("shipping[telephone]").val("");
+			    
+			} else {
+                returnFormDataArray.push(jQuery('#' + affectedFormIds[blockIndex]).serialize());
+			}
 		}
+
 		return returnFormDataArray.join('&');
 	},
 	ajaxRequest: function(postData, doUpdatePayment) {
 		var checkoutObject = this;
 		var blocksToUpdate = "";
-		//chekig if payment block should be updated or not
+		//checking if payment block should be updated or not
 		if (!doUpdatePayment) {
 			blocksToUpdate = this.getBlocksToUpdate(postData['currentStep']);
 		} else {

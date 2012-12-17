@@ -610,6 +610,7 @@ XML;
                         $sku = substr($child->getSku(), 0, 17);
 
                         if($quantity) {
+                            $price = number_format($item->getPrice(), 2);
                             $taxAmount = $item->getTaxAmount();
                             if (!$taxAmount) {
                                 $taxAmount = '0';
@@ -619,7 +620,7 @@ XML;
                         <line-item>
                             <sku>$sku</sku>
                             <quantity>$quantity</quantity>
-                            <price>{$item->getPrice()}</price>
+                            <price>$price</price>
                             <tax>$taxAmount</tax>
                             <shipping-handling>0</shipping-handling>
                             <client-item xsi:nil="true"/>
@@ -637,6 +638,7 @@ XML;
                     $sku = substr($item->getSku(), 0, 17);
 
                     if($quantity) {
+                        $price = number_format($item->getPrice(), 2);
                         $taxAmount = $item->getTaxAmount();
                         if (!$taxAmount) {
                             $taxAmount = '0';
@@ -646,7 +648,7 @@ XML;
                         <line-item>
                             <sku>$sku</sku>
                             <quantity>$quantity</quantity>
-                            <price>{$item->getPrice()}</price>
+                            <price>$price</price>
                             <tax>$taxAmount</tax>
                             <shipping-handling>0</shipping-handling>
                             <client-item xsi:nil="true"/>
