@@ -109,7 +109,7 @@ HpCheckout.prototype = {
 	},
     switchPaymentMethod: function(payment_method) {
         if (payment_method=="paypal_express") {
-            jQuery("#cc_data").hide();
+            jQuery(".cc_info").hide();
             jQuery('#billing-address').hide();
             jQuery('#shipping-address').hide();
         }
