@@ -184,12 +184,9 @@ jQuery(document).ready( function() {
                     jQuery('#hpcheckout-billing-form :input').attr("disabled", false);
                     jQuery('#billing-address-select').attr('disabled', false);
                     
-                    if(checkoutPayment.hasProfile==true) {
- 				       jQuery('#hpcheckout-billing-form :input').each(function(i) {
-			             if(this.id != 'button_ship_to') {
-			                 jQuery("[id='" + this.id + "']").attr('disabled',true);
-			             }
-			           });
+                    if(this.hasProfile==true) {
+                       jQuery('#billing-address-select').attr('disabled', false);
+ 				       this.disableBillAddr(true);
 			        }
                     
                     jQuery("[id='payment[cybersource_subid]']").attr("checked", false);
@@ -205,16 +202,23 @@ jQuery(document).ready( function() {
                     jQuery(".use-new-card-wrapper").appendTo(jQuery("#add_cc_types"));
                 } else {
                     this.isCollapsed = false;
-                    
                     jQuery("#use-card-method").css("opacity", "100");
                     jQuery("[id='payment[cybersource_subid]']").attr("disabled", false);
                     jQuery("#add_payment_method").attr("src", "/skin/frontend/enterprise/bootstrap/images/iconmonstr-plus-5-icon.png");
                     jQuery(".use-new-card-wrapper").hide();
                 }
+            },
+            disableBillAddr: function(stateFlag) {
+                jQuery('#hpcheckout-billing-form :input').each(function(i) {
+			        if(this.id != 'button_ship_to') {
+			            jQuery("[id='" + this.id + "']").attr('disabled',stateFlag);
+			        }
+			    });
             }
         };
     })();
     
+    //when the page loads, toggling between views that feature a saved card and views that don't 
     checkoutPayment.toggleViews();
     
     jQuery("#add_payment_method").click( function(){
@@ -222,6 +226,7 @@ jQuery(document).ready( function() {
     });
     
 	jQuery(".use-saved-card-control").click( function(){
+	    jQuery('#billing-address-select').attr('disabled', false);
         jQuery("#cc_data").hide();
 	});
 

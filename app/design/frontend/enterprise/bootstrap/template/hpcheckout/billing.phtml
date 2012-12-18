@@ -85,8 +85,11 @@
 	jQuery(document).ready( function() {
         
         if(checkoutPayment.hasProfile==true && checkoutPayment.lastUsedAddressId!="") {
-            //jQuery("#billing-address-select").attr("disabled", false);
             jQuery("#billing-address-select").val(checkoutPayment.lastUsedAddressId);
+        }
+        
+        if ( jQuery("#billing-address-select").val()!== undefined ) {
+            checkoutPayment.disableBillAddr(true);
         }
 	
 	    jQuery('#button_ship_to').bind('click', function() {
