@@ -89,7 +89,7 @@
         }
         
         if ( jQuery("#billing-address-select").val()!== undefined) {
-            if(checkoutPayment.hasProfile==true) {
+            if(checkoutPayment.hasProfile==false) {
                 jQuery("#billing-address-select").attr("disabled", false);
             }
             checkoutPayment.disableBillAddr(true);
