@@ -39,6 +39,21 @@ class Harapartners_Fulfillmentfactory_Adminhtml_FulfillmentController extends Ma
             $stockItem = Mage::getModel ( 'cataloginventory/stock_item' )->loadByProduct ( $product->getId() );
             $stockItem->setData ( 'qty', 0 );
             $stockItem->save ();
+
+            // Get child products too
+            $_productType = $product->getType();
+            if( Mage_Catalog_Model_Product_Type_Configurable::TYPE_CODE == $_productType ) {
+                if( is_array($product->getChildrenIds()) ) {
+                    foreach ($product->getChildrenIds() as $childId) {
+                        $productIds[] = $childId;
+
+                        // Set stock qty to 0
+                        $stockItem = Mage::getModel ( 'cataloginventory/stock_item' )->loadByProduct ( $childId );
+                        $stockItem->setData ( 'qty', 0 );
+                        $stockItem->save ();
+                    }
+                }
+            }
         }
 
         $attributeHelper = Mage::helper('adminhtml/catalog_product_edit_action_attribute');
