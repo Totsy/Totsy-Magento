@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Totsy_Reward>
+            <version>0.1.0</version>
+        </Totsy_Reward>
+    </modules>
+    <global>
+        <models>
+            <enterprise_reward>
+                <rewrite>
+                    <total_invoice_reward>Totsy_Reward_Model_Total_Invoice_Reward</total_invoice_reward>
+                </rewrite>
+            </enterprise_reward>
+        </models>
+    </global>
+</config>
