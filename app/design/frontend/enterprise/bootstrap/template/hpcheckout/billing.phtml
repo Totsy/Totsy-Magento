@@ -88,7 +88,10 @@
             jQuery("#billing-address-select").val(checkoutPayment.lastUsedAddressId);
         }
         
-        if ( jQuery("#billing-address-select").val()!== undefined ) {
+        if ( jQuery("#billing-address-select").val()!== undefined) {
+            if(checkoutPayment.hasProfile==true) {
+                jQuery("#billing-address-select").attr("disabled", false);
+            }
             checkoutPayment.disableBillAddr(true);
         }
 	
