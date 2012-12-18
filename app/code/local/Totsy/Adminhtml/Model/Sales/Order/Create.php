@@ -113,7 +113,7 @@ class Totsy_Adminhtml_Model_Sales_Order_Create extends Mage_Adminhtml_Model_Sale
                         if($this->getSession()->getOrder()) {
                             $oldOrderItems = $this->getSession()->getOrder()->getItemsCollection();
                             foreach ($oldOrderItems as $oldItem){
-                                if($oldItem->product_id == $item->getProductId()) {
+                                if($oldItem->getSku() == $item->getSku()) {
                                        $oldItemQty = (int)$oldItem->getQtyOrdered();
                                 }
                             }
@@ -194,7 +194,7 @@ class Totsy_Adminhtml_Model_Sales_Order_Create extends Mage_Adminhtml_Model_Sale
         if($this->getSession()->getOrder()) {
             $oldOrderItems = $this->getSession()->getOrder()->getItemsCollection();
             foreach ($oldOrderItems as $oldItem){
-                if($oldItem->product_id == $product->getId()) {
+                if($oldItem->getSku() == $product->getSku()) {
                     $oldItemQty = (int)$oldItem->getQtyOrdered();
                 }
             }
