@@ -124,8 +124,12 @@ jQuery(document).ready( function() {
                 jQuery("#payment_form_paypal_express").hide();           	
             }
 
+            jQuery('#billing-address').show();
+            jQuery('#shipping-address').show();
+            jQuery('.addresses').width(445);
             billingAddress.attr("disabled", true);
             newCardWrap.hide();
+
 
             
 			if(checkoutPayment.isCollapsed==false) {
@@ -368,20 +372,24 @@ jQuery(document).ready( function() {
             <div class="cc_exp pull-right use-new-card-wrapper cc_info">
                 <div class="pull-left">
                     <div for="<?php echo $_code ?>_expiration" class="lbl"><em>*</em><?php echo $this->__('Exp.') ?></div>
-                    	<select id="<?php echo $_code ?>_expiration" name="payment[cc_exp_month]" class="month validate-cc-exp">
-                    	<?php $_ccExpMonth = $this->getInfoData('cc_exp_month') ?>
-                    	<?php foreach ($this->getCcMonths() as $k=>$v): ?>
-                    	    <option value="<?php echo $k?$k:'' ?>" <?php if($k==$_ccExpMonth): ?>selected="selected"<?php endif ?>><?php echo $v ?></option>
-                    	<?php endforeach ?>
-                    	</select>	
-                </div>
-                <div>
-                    <select id="<?php echo $_code ?>_expiration_yr" name="payment[cc_exp_year]" class="year">
-                    <?php $_ccExpYear = $this->getInfoData('cc_exp_year') ?>
-                    <?php foreach ($this->getCcYears() as $k=>$v): ?>
-                        <option value="<?php echo $k?$k:'' ?>" <?php if($k==$_ccExpYear): ?>selected="selected"<?php endif ?>><?php echo $v ?></option>
-                    <?php endforeach ?>
-                    </select>
+                    <div class="pull-left">
+                        <div>
+                            <select id="<?php echo $_code ?>_expiration" name="payment[cc_exp_month]" class="month validate-cc-exp">
+                            <?php $_ccExpMonth = $this->getInfoData('cc_exp_month') ?>
+                            <?php foreach ($this->getCcMonths() as $k=>$v): ?>
+                                <option value="<?php echo $k?$k:'' ?>" <?php if($k==$_ccExpMonth): ?>selected="selected"<?php endif ?>><?php echo $v ?></option>
+                            <?php endforeach ?>
+                            </select>
+                        </div>
+                        <div>
+                            <select id="<?php echo $_code ?>_expiration_yr" name="payment[cc_exp_year]" class="year">
+                            <?php $_ccExpYear = $this->getInfoData('cc_exp_year') ?>
+                            <?php foreach ($this->getCcYears() as $k=>$v): ?>
+                                <option value="<?php echo $k?$k:'' ?>" <?php if($k==$_ccExpYear): ?>selected="selected"<?php endif ?>><?php echo $v ?></option>
+                            <?php endforeach ?>
+                            </select>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
