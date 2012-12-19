@@ -1,6 +1,13 @@
 Totsy-Magento Release Notes
 ===========================
 
+20121218
+--------
+* While editing an order with 2 same configurable product, checkt properly the quantity
+* MGN-1304 Updating the contact us linkage and wording for vouchers returns blurb, using RightNow linkage
+* fixed error ERR (3): Notice: Undefined index: is_salable in /var/www/www.totsy.com/releases/20121218151842/app/design/frontend/enterprise/iphone/template/categoryevent/topnav.phtml on line 63
+* Added fix for MGN-1301. Configurable product children are now updated when fulfillment type is changed.
+
 20121114
 --------
 * Adding super banner for safari mobile only browsers
