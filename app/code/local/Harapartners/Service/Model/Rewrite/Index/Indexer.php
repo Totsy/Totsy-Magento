@@ -16,7 +16,6 @@ class Harapartners_Service_Model_Rewrite_Index_Indexer extends Mage_Index_Model_
     
     public function __construct(){
         //Attribute and Fulltext ignored, since TopNav uses a complete different search/cache mechanism
-        //Freeing stock status as index, for cart reservation
         $this->_processesCollection = Mage::getResourceModel('index/process_collection')
                 ->addFieldToFilter('indexer_code', array("nin"=>array(
                         'catalog_product_attribute', 

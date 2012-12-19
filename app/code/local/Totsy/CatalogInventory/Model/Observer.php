@@ -52,9 +52,9 @@ class Totsy_CatalogInventory_Model_Observer
 
         // Due to special logic for cart stock reservation, default stock check
         // is disabled
-        //return parent::checkQuoteItemQty($observer);
+        return parent::checkQuoteItemQty($observer);
 
-        return $this;
+        //return $this;
     }
 
     public function reindexQuoteInventory($observer)
