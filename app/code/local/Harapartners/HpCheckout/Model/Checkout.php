@@ -247,7 +247,7 @@ class Harapartners_HpCheckout_Model_Checkout
             $fulfillmentTypes [$product->getFulfillmentType ()] [] = $item->getId ();
 		}
 
-        if(!Mage::getSingleton('checkout/session')->getSplitCartFlag() && array_key_exists('dotcom_stock', $fulfillmentTypes)) {
+        if(!Mage::getSingleton('checkout/session')->getSplitCartFlag() && array_key_exists('dotcom',$fulfillmentTypes) && array_key_exists('dotcom_stock', $fulfillmentTypes)) {
             $fulfillmentTypes['dotcom'] = array_merge($fulfillmentTypes['dotcom_stock'], $fulfillmentTypes['dotcom']);
             unset($fulfillmentTypes['dotcom_stock']);
         }
