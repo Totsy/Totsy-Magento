@@ -205,10 +205,19 @@ HpCheckout.prototype = {
 	},
 	submit: function() {
 		//good time to validate CC types
-        if(!checkoutPayment.hasProfile || !jQuery("[id='payment[cybersource_subid]']").val()) {
+        if(!checkoutPayment.hasProfile || jQuery("[id='payment[cybersource_subid]']").is(':checked') != true) {
 		    jQuery(".cc_types input[type='radio']").addClass("validate-one-required");
+            if(jQuery("[id='paypal_payment']").is(':checked') != true) {
+                jQuery('.cc_info input').addClass('required-entry');
+            } else {
+                jQuery('.cc_info input').removeClass('required-entry');
+            }
+
+        } else {
+            jQuery(".cc_types input[type='radio']").removeClass("validate-one-required");
+            jQuery('.cc_info input').removeClass('required-entry');
         }
-		
+
 		//only validate these fields when the customer deceides to place an order (when they click the "Place Order" button on the onepage checkout)
 		jQuery("[id='shipping:postcode']").addClass("required-entry validate-zip");
 		jQuery("[id='shipping:telephone']").addClass("required-entry validate-phoneLax");
