@@ -127,6 +127,7 @@ class Mage_Customer_AccountController extends Mage_Core_Controller_Front_Action
             $this->_redirect('*/*/');
             return;
         }
+        Mage::getSingleton('core/cookie')->delete('frontend', '/', '.totsy.com', 0, 1);
         $this->getResponse()->setHeader('Login-Required', 'true');
         $this->loadLayout();
         $this->_initLayoutMessages('customer/session');

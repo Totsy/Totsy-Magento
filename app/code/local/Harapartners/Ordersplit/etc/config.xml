@@ -13,7 +13,7 @@
 <config>
     <modules>
         <Harapartners_Ordersplit>
-            <version>1.0.0</version>
+            <version>1.0.1</version>
         </Harapartners_Ordersplit>
     </modules>
     <global>
@@ -29,7 +29,6 @@
                     <sales_order_create_search_grid_renderer_fulfillment>Harapartners_Ordersplit_Block_Sales_Order_Create_Search_Grid_Renderer_Fulfillment</sales_order_create_search_grid_renderer_fulfillment>
                 </rewrite>
             </adminhtml>
-
         </blocks>
         <models>
             <ordersplit>

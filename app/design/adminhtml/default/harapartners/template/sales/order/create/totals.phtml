@@ -62,11 +62,15 @@ function notifyCustomerUpdate() {
 }
 function putCommentAndSubmit(){
 	var oriComment = jQuery('textarea#order-comment').val();
-	<?php 
+	if(!oriComment) {
+        alert('Please add a comment about your edit action.');
+        return false;
+    }
+    <?php
 		$user = Mage::getSingleton('admin/session');
 		$userId = $user->getUser()->getUserId();
-		$userFirstname = $user->getUser()->getFirstname();
-		$commentInput = ' (edit by '.$userFirstname.' id:'.$userId.')';
+		$userFirstname = $user->getUser()->getEmail();
+		$commentInput = ' (edit by '.$userFirstname.')';
 	?>
 	var modifyComment = oriComment+"<?php echo $commentInput; ?>";
 	jQuery('textarea#order-comment').val(modifyComment);
