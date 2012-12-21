@@ -205,7 +205,9 @@ HpCheckout.prototype = {
 	},
 	submit: function() {
 		//good time to validate CC types
-		jQuery(".cc_types input[type='radio']").addClass("validate-one-required");
+        if(!checkoutPayment.hasProfile || !jQuery("[id='payment[cybersource_subid]']").val()) {
+		    jQuery(".cc_types input[type='radio']").addClass("validate-one-required");
+        }
 		
 		//only validate these fields when the customer deceides to place an order (when they click the "Place Order" button on the onepage checkout)
 		jQuery("[id='shipping:postcode']").addClass("required-entry validate-zip");
