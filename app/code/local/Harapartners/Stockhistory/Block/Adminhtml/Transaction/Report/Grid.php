@@ -47,7 +47,7 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Grid extends 
     }
     
     protected function _prepareColumns() {
-
+        $dataObject = new Varien_Object(Mage::registry('stockhistory_transaction_report_data'));
         $this->addColumn('vendor_style', array(
                     'header'    =>    Mage::helper('stockhistory')->__('Vendor Style'),
                     'align'        =>    'right',
@@ -55,6 +55,15 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Grid extends 
                     'index'        =>    'vendor_style',
 
         ));
+        if($dataObject->getData('debug')) {
+            $this->addColumn('product_id', array(
+                        'header'    =>    Mage::helper('stockhistory')->__('Product Id'),
+                        'align'        =>    'right',
+                        'width'        =>    '50px',
+                        'index'        =>    'product_id',
+
+            ));
+        }
         
         $this->addColumn('sku', array(
                     'header'    =>    Mage::helper('stockhistory')->__('SKU'),
@@ -127,12 +136,16 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Grid extends 
                     'width'        =>    '25px',
                     'index'        =>  'case_pack_qty',
         ));
-        $this->addColumn('case_pack_grp_id', array(
-                    'header'    =>    Mage::helper('stockhistory')->__('Case Pack Group Id'),
-                    'align'        =>    'right',
-                    'width'        =>    '25px',
-                    'index'        =>  'case_pack_grp_id',
-        ));
+        
+      //  if($dataObject->getData('debug')){
+            $this->addColumn('case_pack_grp_id', array(
+                        'header'    =>    Mage::helper('stockhistory')->__('Case Pack Group Id'),
+                        'align'        =>    'right',
+                        'width'        =>    '25px',
+                        'index'        =>  'case_pack_grp_id',
+                        'column_css_class'		=> 'editable casepackgrp',
+            ));
+     //   }
         
         $this->addColumn('unit_cost', array(
                     'header'    =>    Mage::helper('stockhistory')->__('Unit Cost'),

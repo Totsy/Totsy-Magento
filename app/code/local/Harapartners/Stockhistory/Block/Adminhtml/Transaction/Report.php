@@ -132,6 +132,24 @@ FORM_WRAPPER;
         });
         return goodData;
     }
+    jQuery(document).ready(function() {
+        var oTable = jQuery('#ReportGrid_table').dataTable( {
+            "bPagination": false,
+            "bSortable": false,
+            "bFilter": false,
+            "bProcessing": false,
+            "bServerSide": true,
+            "fnDrawCallback": function () {
+                $('.editable').editable( "{$this->getUrl('stockhistory/adminhtml_transaction/updateCasePackGroup')}", {
+                    "callback": function( sValue, y ) {
+                        /* Redraw the table from the new data on the server */
+                        oTable.fnDraw();
+                    },
+                    "height": "14px"
+                } );
+            }
+        } );
+    } );
 </script>
 ADDITIONAL_JAVASCRIPT;
 

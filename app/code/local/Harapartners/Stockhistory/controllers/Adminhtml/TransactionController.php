@@ -154,10 +154,9 @@ class Harapartners_Stockhistory_Adminhtml_TransactionController extends Mage_Adm
                 
                 $category = Mage::getModel('catalog/category')->load($poObject->getCategoryId());
                 $event_end_date = strtotime($category->getEventEndDate());
-                $event_start_date = strtotime($category->getEventStartDate());
                 $today = strtotime('NOW');
 
-                if (!($event_end_date <= $today) || ($today <= $event_start_date) ) {
+                if (!($event_end_date <= $today) ) {
                     if($transaction->updateProductStock()){
                         $transaction->save();
                     }else{
@@ -369,6 +368,7 @@ class Harapartners_Stockhistory_Adminhtml_TransactionController extends Mage_Adm
     }
 
     public function changeCasePackAction() {
+
         $change_to = $this->getRequest()->getParam('change_to');
         $items = $this->getRequest()->getParam('product_id');
         if($items) {
@@ -383,5 +383,10 @@ class Harapartners_Stockhistory_Adminhtml_TransactionController extends Mage_Adm
         }
         Mage::getSingleton('adminhtml/session')->setPOReportGridData(null);
         $this->_redirectReferer(null);
+    }
+
+    public function updateCasePackGroupAction() {
+        $this->getResponse()->setBody(Mage::helper('core')->jsonEncode(array('response' => "hello world")));
+        return null;
     }
 }

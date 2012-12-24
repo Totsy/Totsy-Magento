@@ -106,7 +106,8 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Abstract exte
                 'case_pack_grp_id'      =>  $product->getCasePackGrpId(),
                 'unit_cost'                =>    $productInfo['qty'] ?
                                     round($productInfo['total']/$productInfo['qty'], 2) : $productInfo['total'],
-                'total_cost'            =>    $productInfo['total']
+                'total_cost'            =>    $productInfo['total'],
+                'category_id'       =>  $this->getPoObject()->getCategoryId()
             );
             $reportItem->addData($data);
             $reportCollection->addItem($reportItem);

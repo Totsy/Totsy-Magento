@@ -187,36 +187,56 @@ class Harapartners_Stockhistory_Model_Transaction extends Mage_Core_Model_Abstra
     }
 
     public function casePackQty($item){
-        var_dump($item);
-        die();
+        
+        $high_denom = $item->getData('qty_sold');
+        $high_denom_cs_pk_qty = $item->getData('case_pack_qty');
+        
+        $_category = Mage::getModel('catalog/category')->load($item->getCategoryId());
         $case_pack_grp_id = $item->getData('case_pack_grp_id');
 
         #pull all the items that have the same case pack grp id and event id
         $products = Mage::getModel('catalog/product')->getCollection()
-                ->addCategoryFilter($this->getCategory())
+                ->addCategoryFilter($_category)
                 ->addAttributeToFilter('type_id', 'simple')
-                ->addAttributeToFilter('case_pack_grp_id', array('eq' => $case_pack_grp_id))
+                ->addAttributeToSelect('case_pack_qty')
+                ->addAttributeToFilter(array(array('attribute' => 'case_pack_grp_id', 'eq' => $case_pack_grp_id)))
                 ->setOrder('vendor_style', 'asc')
                 ->setOrder('color', 'asc')
                 ->setOrder('size', 'asc');
 
-        var_dump($products->count());
+        #loop through all related products hand find the highest denominator
+        foreach($products as $product) {
+            $total_units = 0;   
 
-        die();
+            if($product->getEntityId() != $item->getProductId()) {
+                $ordersColl = Mage::getModel('sales/order_item')->getCollection();
+                $ordersColl->getSelect()->where('product_id =' . $product->getEntityId());
+                foreach($ordersColl as $order) {
+                    if($order->getParentItemId()) {
+                        $parent_item_id = $order->getParentItemId();
+                        $parent_order_line = Mage::getModel('sales/order_item')->getCollection();
+                        $parent_order_line->getSelect()->where('item_id =' . $parent_item_id);
+                        $order = $parent_order_line->getFirstItem();
+                    }
 
-        $ordersColl = Mage::getModel('sales/order_item')->getCollection();
-        $ordersColl->getSelect()->where('product_id =' . $product_id);
-        foreach($ordersColl as $order) {
+                    $qty = $order->getQtyOrdered() - $order->getQtyReturned() - $order->getQtyCanceled();
+                    $total_units += $qty;
+               }
 
-            if($order->getParentItemId()) {
-                $parent_item_id = $order->getParentItemId();
-                $parent_order_line = Mage::getModel('sales/order_item')->getCollection();
-                $parent_order_line->getSelect()->where('item_id =' . $parent_item_id);
-                $order = $parent_order_line->getFirstItem();
-            }
-            $qty = $order->getQtyOrdered() - $order->getQtyReturned() - $order->getQtyCanceled();
-            $total_units += $qty;
+               if ($high_denom < $total_units) {
+                    $high_denom = $total_units;
+                    $high_denom_cs_pk_qty = $product->getData('case_pack_qty');
+                }
+           }
        }
+
+        if($high_denom_cs_pk_qty) {
+            $order_amount = ceil($high_denom / $high_denom_cs_pk_qty) * $item->getData('case_pack_qty');
+        } else {
+            $order_amount = $item->getData('case_pack_qty');
+        }
+
+       return $order_amount;
     }
     
 }
