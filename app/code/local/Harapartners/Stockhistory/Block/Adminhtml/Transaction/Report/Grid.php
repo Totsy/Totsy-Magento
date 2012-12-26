@@ -134,7 +134,7 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Grid extends 
                     'header'    =>    Mage::helper('stockhistory')->__('Case Pack Qty'),
                     'align'        =>    'right',
                     'width'        =>    '25px',
-                    'index'        =>  'case_pack_qty',
+                    'index'        =>  'case_pack_qty'
         ));
         
       //  if($dataObject->getData('debug')){
@@ -144,6 +144,7 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Grid extends 
                         'width'        =>    '25px',
                         'index'        =>  'case_pack_grp_id',
                         'column_css_class'		=> 'editable casepackgrp',
+                        'column_css_id'           =>   'getProductId'
             ));
      //   }
         

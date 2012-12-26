@@ -134,20 +134,35 @@ FORM_WRAPPER;
     }
     jQuery(document).ready(function() {
         var oTable = jQuery('#ReportGrid_table').dataTable( {
-            "bPagination": false,
+            "bPaginate": false,
             "bSortable": false,
             "bFilter": false,
-            "bProcessing": false,
-            "bServerSide": true,
-            "fnDrawCallback": function () {
-                $('.editable').editable( "{$this->getUrl('stockhistory/adminhtml_transaction/updateCasePackGroup')}", {
-                    "callback": function( sValue, y ) {
-                        /* Redraw the table from the new data on the server */
-                        oTable.fnDraw();
-                    },
-                    "height": "14px"
-                } );
-            }
+            "bProcessing": false
+        } );
+
+        jQuery('.editable').editable( "{$this->getUrl('stockhistory/adminhtml_transaction/updateCasePackGroup', array('_current' => true, '_query' => array('isAjax' => "true")))}", {
+            "method": "POST",
+            "name": "new_case_pk_grp_id",
+            "callback": function( sValue, y ) {
+                console.log();
+                /* Redraw the table from the new data on the server */
+               response = JSON.parse(sValue);
+               var aPos = oTable.fnGetPosition( this );
+               oTable.fnUpdate( response.response, aPos[0], aPos[1] );
+            },
+            "submitdata": function ( value, settings ) {
+                element = oTable.fnGetData(oTable.fnGetPosition( this )[0],0);
+                obj = jQuery(element);
+                return {
+                    "product_id": obj.val(),
+                    "form_key" : FORM_KEY,
+                    "column": oTable.fnGetPosition( this )[2]
+                };
+            },
+            "submit": "Ok",
+            "cancel": "X",
+            "height": "14px",
+            "width": "100%"
         } );
     } );
 </script>

@@ -386,7 +386,30 @@ class Harapartners_Stockhistory_Adminhtml_TransactionController extends Mage_Adm
     }
 
     public function updateCasePackGroupAction() {
-        $this->getResponse()->setBody(Mage::helper('core')->jsonEncode(array('response' => "hello world")));
-        return null;
+        $post_data = $this->getRequest()->getParams();
+        $po_id = $this->getRequest()->getParam('po_id');
+
+        $response = array();
+        $response['response'] = 'c1';
+
+        $po = Mage::getModel('stockhistory/purchaseorder')->load($po_id);
+
+        $product = Mage::getModel('catalog/product')->getCollection();
+        $product->addAttributeToFilter('entity_id', $post_data['product_id'])
+                ->addAttributeToSelect(array('case_pack_qty', 'case_pack_grp_id'));
+        $product = $product->getFirstItem();
+        $product->setCategoryId($po->getCategoryId());
+
+        if (Mage::getModel('stockhistory/transaction')->changeCasePackGroupId($post_data['product_id'], $post_data['new_case_pk_grp_id'])) {
+            $response['response'] = $post_data['new_case_pk_grp_id'];
+            //var_dump(usleep(300));
+            $order_amount = Mage::getModel('stockhistory/transaction')->casePackQty($product);
+            $response['qty_to_amend'] = $order_amount;
+        }
+
+        var_dump($response); die();
+        $this->getResponse()->setBody(Mage::helper('core')->jsonEncode($response));
+       // echo json_encode(array('response' => 'hello world'));
+        // $this->_redirectReferer(null);
     }
 }

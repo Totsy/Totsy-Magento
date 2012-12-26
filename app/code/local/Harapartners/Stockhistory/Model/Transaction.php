@@ -186,12 +186,26 @@ class Harapartners_Stockhistory_Model_Transaction extends Mage_Core_Model_Abstra
         }
     }
 
+    public function changeCasePackGroupId($product_id,$changeto) {
+
+        $product = Mage::getModel('catalog/product')->load($product_id);
+        if($product) {
+            $product->setData('_edit_mode', true);
+            $product->setFulfillmentType('dotcom');
+            $product->setCasePackGrpId($changeto);
+            $product->setVisibility(1);
+            $product->save();
+            return true;       
+        }
+        return false;
+    }
+
     public function casePackQty($item){
         
-        $high_denom = $item->getData('qty_sold');
+        $high_denom = 0;
         $high_denom_cs_pk_qty = $item->getData('case_pack_qty');
         
-        $_category = Mage::getModel('catalog/category')->load($item->getCategoryId());
+        $_category = Mage::getModel('catalog/category')->load($item->getData('category_id'));
         $case_pack_grp_id = $item->getData('case_pack_grp_id');
 
         #pull all the items that have the same case pack grp id and event id
@@ -199,16 +213,14 @@ class Harapartners_Stockhistory_Model_Transaction extends Mage_Core_Model_Abstra
                 ->addCategoryFilter($_category)
                 ->addAttributeToFilter('type_id', 'simple')
                 ->addAttributeToSelect('case_pack_qty')
-                ->addAttributeToFilter(array(array('attribute' => 'case_pack_grp_id', 'eq' => $case_pack_grp_id)))
-                ->setOrder('vendor_style', 'asc')
-                ->setOrder('color', 'asc')
-                ->setOrder('size', 'asc');
+                ->addAttributeToFilter(array(array('attribute' => 'case_pack_grp_id', 'eq' => $case_pack_grp_id)));
 
+     //   var_dump($_category, $products->count()); die();
         #loop through all related products hand find the highest denominator
         foreach($products as $product) {
             $total_units = 0;   
 
-            if($product->getEntityId() != $item->getProductId()) {
+         //   if($product->getEntityId() != $item->getProductId()) {
                 $ordersColl = Mage::getModel('sales/order_item')->getCollection();
                 $ordersColl->getSelect()->where('product_id =' . $product->getEntityId());
                 foreach($ordersColl as $order) {
@@ -227,7 +239,7 @@ class Harapartners_Stockhistory_Model_Transaction extends Mage_Core_Model_Abstra
                     $high_denom = $total_units;
                     $high_denom_cs_pk_qty = $product->getData('case_pack_qty');
                 }
-           }
+        //   }
        }
 
         if($high_denom_cs_pk_qty) {
@@ -238,5 +250,6 @@ class Harapartners_Stockhistory_Model_Transaction extends Mage_Core_Model_Abstra
 
        return $order_amount;
     }
+
     
 }
