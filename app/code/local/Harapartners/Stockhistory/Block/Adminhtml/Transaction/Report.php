@@ -142,18 +142,28 @@ FORM_WRAPPER;
 
         jQuery('.editable').editable( "{$this->getUrl('stockhistory/adminhtml_transaction/updateCasePackGroup', array('_current' => true, '_query' => array('isAjax' => "true")))}", {
             "method": "POST",
-            "name": "new_case_pk_grp_id",
+            "name": "change_to",
             "callback": function( sValue, y ) {
-                console.log();
-                /* Redraw the table from the new data on the server */
+               /* Redraw the table from the new data on the server */
                response = JSON.parse(sValue);
                var aPos = oTable.fnGetPosition( this );
                oTable.fnUpdate( response.response, aPos[0], aPos[1] );
+               
+               jQuery.each(response.update, function(index, data){
+                    jQuery('#' + data.sku).val(data.qty_to_amend); 
+                });
             },
             "submitdata": function ( value, settings ) {
+                //get product id
                 element = oTable.fnGetData(oTable.fnGetPosition( this )[0],0);
                 obj = jQuery(element);
+                
+                //get cell "id"
+                var classes = jQuery(this).attr('class');
+                classes_ar = classes.split(" ", 3);
+                var cell_id = classes_ar[2];
                 return {
+                    "id" : cell_id,
                     "product_id": obj.val(),
                     "form_key" : FORM_KEY,
                     "column": oTable.fnGetPosition( this )[2]

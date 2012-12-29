@@ -20,9 +20,10 @@ class Harapartners_Stockhistory_Block_Adminhtml_Widget_Grid_Column_Renderer_Inpu
         
         //qty_to_amend: defined as FINAL quantity, i.e. forcing the quantity to the given value, instead of just the delta
         $html = '<input type="text"';
-        $html .= 'name="' . $this->getColumn()->getId() . '[' . $row->getData('sku') . '][' . $this->getColumn()->getId() . ']" ';
+        $html .= 'id=' . $row->getData('sku');
+        $html .= ' name="' . $this->getColumn()->getId() . '[' . $row->getData('sku') . '][' . $this->getColumn()->getId() . ']" ';
        // $html .= 'value="' . $row->getData($this->getColumn()->getIndex()) . '"';
-        $html .= 'value="' . Mage::getModel('stockhistory/transaction')->casePackQty($row)  . '"';
+        $html .= 'value="' . Mage::getModel('stockhistory/transaction')->calculateCasePackOrderQty($row->getData('product_id'), $row->getData('po_id'), $row->getData('case_pack_grp_id'))  . '"';
         $html .= 'class="input-text ' . $this->getColumn()->getId() . ' ' . $this->getColumn()->getInlineCss() . '"/>';
         
         //Current total qty

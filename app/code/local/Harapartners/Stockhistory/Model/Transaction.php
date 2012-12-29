@@ -186,43 +186,56 @@ class Harapartners_Stockhistory_Model_Transaction extends Mage_Core_Model_Abstra
         }
     }
 
-    public function changeCasePackGroupId($product_id,$changeto) {
+    public function changeCasePackAttributeValue($attribute, $product_id, $changeto) {
 
         $product = Mage::getModel('catalog/product')->load($product_id);
         if($product) {
             $product->setData('_edit_mode', true);
             $product->setFulfillmentType('dotcom');
-            $product->setCasePackGrpId($changeto);
             $product->setVisibility(1);
+            switch($attribute) {
+                case 'case_pack_grp_id':
+                    $product->setCasePackGrpId($changeto);
+                    break;
+                case 'case_pack_qty':
+                    $product->setCasePackQty($changeto);
+            }
             $product->save();
             return true;       
         }
         return false;
     }
+    /**
+     * @todo: needs protective measures
+     */
 
-    public function casePackQty($item){
+    public function calculateCasePackOrderQty($item_id, $po_id, $case_pack_grp_id, $all_results = false){
         
         $high_denom = 0;
-        $high_denom_cs_pk_qty = $item->getData('case_pack_qty');
-        
-        $_category = Mage::getModel('catalog/category')->load($item->getData('category_id'));
-        $case_pack_grp_id = $item->getData('case_pack_grp_id');
+        $high_denom_cs_pk_qty = 0;
+        $grouped = array();
+        $po_record = Mage::getModel('stockhistory/purchaseorder')->load($po_id);
+        $_category = Mage::getModel('catalog/category')->load($po_record->getData('category_id'));
 
         #pull all the items that have the same case pack grp id and event id
         $products = Mage::getModel('catalog/product')->getCollection()
                 ->addCategoryFilter($_category)
                 ->addAttributeToFilter('type_id', 'simple')
+                ->addAttributeToFilter(array(array('attribute'=>'is_master_pack', 'gt'=>0)))
                 ->addAttributeToSelect('case_pack_qty')
                 ->addAttributeToFilter(array(array('attribute' => 'case_pack_grp_id', 'eq' => $case_pack_grp_id)));
+        if($products->count()){
+            #loop through all related products hand find the highest denominator
+            foreach($products as $product) {
+                $total_units = 0;
+                $fromTime = strtotime($_category->getData('event_start_date')) - 60*60*24*7;	// 7 days before
+                $toTime = strtotime($_category->getData('event_end_date')) + 60*60*24*3;	// 3 days after
 
-     //   var_dump($_category, $products->count()); die();
-        #loop through all related products hand find the highest denominator
-        foreach($products as $product) {
-            $total_units = 0;   
-
-         //   if($product->getEntityId() != $item->getProductId()) {
+                $fromDate = date('Y-m-d H:i:s', $fromTime);
+                $toDate = date('Y-m-d H:i:s', $toTime);
+                
                 $ordersColl = Mage::getModel('sales/order_item')->getCollection();
-                $ordersColl->getSelect()->where('product_id =' . $product->getEntityId());
+                $ordersColl->getSelect()->where('product_id =' . $product->getEntityId() . ' and created_at between "' . $fromDate . '" and "' . $toDate . '"');
                 foreach($ordersColl as $order) {
                     if($order->getParentItemId()) {
                         $parent_item_id = $order->getParentItemId();
@@ -233,22 +246,44 @@ class Harapartners_Stockhistory_Model_Transaction extends Mage_Core_Model_Abstra
 
                     $qty = $order->getQtyOrdered() - $order->getQtyReturned() - $order->getQtyCanceled();
                     $total_units += $qty;
+                    $grouped[(string)$product->getEntityId()] = array('qty_sold' => $total_units, 'cp_qty' => $product->getData('case_pack_qty'), 'sku' => $product->getData('sku'));
                }
 
                if ($high_denom < $total_units) {
                     $high_denom = $total_units;
                     $high_denom_cs_pk_qty = $product->getData('case_pack_qty');
                 }
-        //   }
+           }
+       } else {
+           if($item_id){
+            $grouped[$item_id]['cp_qty'] = 0;
+           }
        }
-
+       
+        #calculation logic
         if($high_denom_cs_pk_qty) {
-            $order_amount = ceil($high_denom / $high_denom_cs_pk_qty) * $item->getData('case_pack_qty');
+            if(count($grouped) > 1) {
+                foreach($grouped as $key => $value){
+                    $tmp_order_amount = ceil($high_denom / $high_denom_cs_pk_qty) * $value['cp_qty'];
+                    $grouped[$key]['qty_to_amend'] = $tmp_order_amount;
+                }
+               if($item_id){
+                    $order_amount = $grouped[$item_id]['qty_to_amend'];
+               }
+            } else {
+                $order_amount = ceil($high_denom / $high_denom_cs_pk_qty) * $grouped[$item_id]['cp_qty'];
+            }
         } else {
-            $order_amount = $item->getData('case_pack_qty');
+            if($item_id){
+                $order_amount = $grouped[$item_id]['cp_qty'];
+            }
         }
 
-       return $order_amount;
+        if($all_results){
+            return $grouped;
+        } else {
+            return $order_amount;
+        }
     }
 
     
