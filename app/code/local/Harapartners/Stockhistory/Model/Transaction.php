@@ -222,11 +222,12 @@ class Harapartners_Stockhistory_Model_Transaction extends Mage_Core_Model_Abstra
                 ->addCategoryFilter($_category)
                 ->addAttributeToFilter('type_id', 'simple')
                 ->addAttributeToFilter(array(array('attribute'=>'is_master_pack', 'gt'=>0)))
-                ->addAttributeToSelect('case_pack_qty')
+                ->addAttributeToSelect(array('case_pack_qty'))
                 ->addAttributeToFilter(array(array('attribute' => 'case_pack_grp_id', 'eq' => $case_pack_grp_id)));
         if($products->count()){
             #loop through all related products hand find the highest denominator
             foreach($products as $product) {
+                
                 $total_units = 0;
                 $fromTime = strtotime($_category->getData('event_start_date')) - 60*60*24*7;	// 7 days before
                 $toTime = strtotime($_category->getData('event_end_date')) + 60*60*24*3;	// 3 days after

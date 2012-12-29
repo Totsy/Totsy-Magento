@@ -21,6 +21,7 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Grid extends 
         //Only for Report, not to be submitted to DotCom or Printing
         $productCollection = Mage::getModel('catalog/product')->getCollection()
                 ->addCategoryFilter($this->getCategory())
+                ->addAttributeToSelect('original_wholesale')
                 ->addAttributeToFilter('type_id', 'simple')
                 ->addAttributeToFilter(array(array('attribute'=>'is_master_pack', 'gt'=>0)))
                 ->setOrder('vendor_style', 'asc')
