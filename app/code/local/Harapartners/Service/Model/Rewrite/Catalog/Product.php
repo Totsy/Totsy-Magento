@@ -44,6 +44,19 @@ class Harapartners_Service_Model_Rewrite_Catalog_Product extends Mage_Catalog_Mo
         return Mage::registry('batch_import_no_index') ? $this : parent::cleanCache();
     }
 
+    public function cleanModelCache()
+    {
+        $tags = $this->getCacheTags();
+        if ($tags !== false) {
+            if (is_array($tags) && ($idx = array_search('catalog_product', $tags)) !== FALSE) {
+                unset($tags[$idx]);
+            }
+
+            Mage::app()->cleanCache($tags);
+        }
+        return $this;
+    }
+
     public function afterCommitCallback()
     {
         // ===== Index rebuild ========================================== //
