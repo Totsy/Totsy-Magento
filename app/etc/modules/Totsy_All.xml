@@ -45,6 +45,13 @@
             <active>true</active>
             <codePool>local</codePool>
         </Totsy_Catalog>
+        <Totsy_Paypal>
+            <active>true</active>
+            <codePool>local</codePool>
+            <depends>
+                <Mage_Paypal/>
+            </depends>
+        </Totsy_Paypal>
         <Totsy_Pixels>
             <active>true</active>
             <codePool>local</codePool>
