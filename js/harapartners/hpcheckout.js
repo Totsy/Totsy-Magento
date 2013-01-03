@@ -132,7 +132,7 @@ HpCheckout.prototype = {
 		}
 		if (clickedAddress.val() == '') {
 			jQuery('#hpcheckout-billing-form :input').each(function(i) {
-				if (this.id != 'button_ship_to' && this.id != 'billing:selected')  {
+				if (this.id != 'button_ship_to') {
 					jQuery("[id='" + this.id + "']").attr('disabled', false);
 				}
 			});
@@ -141,20 +141,11 @@ HpCheckout.prototype = {
 				jQuery('#billing\\:selected').val('');
 			}
 		} else {
-            if(blockType == 'billing') {
-                jQuery('#hpcheckout-billing-form :input').each(function(i) {
-                    if (this.id != 'button_ship_to' && this.id != 'billing:selected') {
-                        jQuery("[id='" + this.id + "']").attr('disabled', true);
-                    }
-                });
-            } else if(blockType == 'shipping') {
-                jQuery('#hpcheckout-shipping-form :input').each(function(i) {
-                    if (this.id != 'button_ship_to' && this.id != 'billing:selected') {
-                        jQuery("[id='" + this.id + "']").attr('disabled', true);
-                    }
-                });
-
-            }
+			jQuery('#hpcheckout-billing-form :input').each(function(i) {
+				if (this.id != 'button_ship_to') {
+					jQuery("[id='" + this.id + "']").attr('disabled', true);
+				}
+			});
 			if (hpcheckoutAddresses[clickedAddress.val()]) {
 				jQuery('select#' + blockType + '\\:country_id').val(hpcheckoutAddresses[clickedAddress.val()]['country_id']);
 				if (blockType == 'billing') {
@@ -169,7 +160,6 @@ HpCheckout.prototype = {
 					jQuery('#shipping\\:postcode').change();
 				}
 				if (blockType == 'billing') {
-                    jQuery('#billing\\:postcode').change();
 					jQuery('#billing\\:selected').val(jQuery('#billing-address-select').val());
 				}
 			}
@@ -194,6 +184,7 @@ HpCheckout.prototype = {
 		} else {
 			blocksToUpdate = ['review'];
 		}
+		
 		if (hpcheckoutObject.validate(step)) {
 			var postData = hpcheckoutObject.getFormData( step );
 			//var postData = hpcheckoutObject.getFormData();
@@ -345,7 +336,7 @@ HpCheckout.prototype = {
 			if((!navigator.userAgent.match(/iPhone/i)) && (!navigator.userAgent.match(/iPod/i))) {	
                 if(checkoutPayment.hasProfile==true || jQuery("#billing-address-select").val()!=='') {
                    jQuery('#hpcheckout-billing-form :input').each(function(i) {
-                       if(this.id != 'button_ship_to' && this.id!='billing:selected') {
+                       if(this.id != 'button_ship_to') {
                          jQuery("[id='" + this.id + "']").attr('disabled',true);
                        }
                    });

@@ -1,22 +1,4 @@
 <?php $_code=$this->getMethodCode() ?>
-<?php $customerId = Mage::getSingleton('customer/session')->getCustomerId(); ?>
-<?php $profiles = $this->getProfilesByCustomerId( $customerId ) ?>
-<?php
-$profilesCounter = 0;
-foreach( $profiles as $profile ) {
-    if($profile->getSubscriptionId() && $profile->getIsDefault()==0 && $profile->getData('saved_by_customer')) {
-        $profilesCounter++;
-    }
-}
-
-$hasProfile = false;
-
-if ($profilesCounter > 0 ) {
-    $hasProfile = true;
-} else {
-    $hasProfile = false;
-}
-?>
 <script type="text/javascript">
 //<![CDATA[
     Validation.creditCartTypes.set('JCB', [new RegExp('^(35[0-9]{14}|(2131|1800)[0-9]{11})$'), new RegExp('^([0-9]{3})?$'), true]);
@@ -24,23 +6,6 @@ if ($profilesCounter > 0 ) {
     Validation.creditCartTypes.set('UATP', [false, new RegExp('^[0-9]{3}([0-9]{1})?$'), false]);
     Validation.creditCartTypes.set('MCI', [false, new RegExp('^[0-9]{3}([0-9]{1})?$'), false]);
 //]]>
-
-var checkoutPayment = {};
-
-jQuery(document).ready( function() {
-
-    //a namespace for operations toggling the 2 views of the payment section
-    checkoutPayment = (function() {
-        var hasProfile = '';
-        var isCollapsed = '';
-        var lastUsedAddressId = '';
-        return {
-            hasProfile: "<?php echo $hasProfile; ?>",
-            isCollapsed: false,
-            lastUsedAddressId: ''
-        }
-    });
-});
 </script>
 <ul class="form-list" id="payment_form_<?php echo $_code ?>" style="display:none;">
     <?php /*<li>
