@@ -109,11 +109,13 @@ HpCheckout.prototype = {
 	},
     switchPaymentMethod: function(payment_method) {
         if (payment_method=="paypal_express") {
-            jQuery(".cc_info").hide();
+        	jQuery("#cc_data").hide();
+            //jQuery(".cc_info").hide();
             jQuery('#billing-address').hide();
             jQuery('#shipping-address').hide();
         }
         else {
+            jQuery("#cc_data").show(); 
             jQuery("#payment_form_paypal_express").hide();
             jQuery('#billing-address').show();
             jQuery('#shipping-address').show();
@@ -157,9 +159,11 @@ HpCheckout.prototype = {
 					jQuery(this).val(hpcheckoutAddresses[clickedAddress.val()][jQuery(this).attr('id').replace(blockType + ':', '')]);
 				});
 				if (blockType == 'shipping') {
+					console.log("shipping");
 					jQuery('#shipping\\:postcode').change();
 				}
 				if (blockType == 'billing') {
+					console.log("billing");
 					jQuery('#billing\\:selected').val(jQuery('#billing-address-select').val());
 				}
 			}
@@ -205,18 +209,22 @@ HpCheckout.prototype = {
 	},
 	submit: function() {
 		//good time to validate CC types
-        if(!checkoutPayment.hasProfile || jQuery("[id='payment[cybersource_subid]']").is(':checked') != true) {
-		    jQuery(".cc_types input[type='radio']").addClass("validate-one-required");
-            if(jQuery("[id='paypal_payment']").is(':checked') != true) {
-                jQuery('.cc_info input').addClass('required-entry');
-            } else {
-                jQuery('.cc_info input').removeClass('required-entry');
-            }
-
-        } else {
-            jQuery(".cc_types input[type='radio']").removeClass("validate-one-required");
-            jQuery('.cc_info input').removeClass('required-entry');
+		if(typeof checkoutPayment!=="undefined") {
+        	if(!checkoutPayment.hasProfile || jQuery("[id='payment[cybersource_subid]']").is(':checked') != true) {
+			    jQuery(".cc_types input[type='radio']").addClass("validate-one-required");
+        	    if(jQuery("[id='paypal_payment']").is(':checked') != true) {
+        	        jQuery('.cc_info input').addClass('required-entry');
+        	    } else {
+        	        jQuery('.cc_info input').removeClass('required-entry');
+        	    }
+			
+        	} else {
+        	    jQuery(".cc_types input[type='radio']").removeClass("validate-one-required");
+        	    jQuery('.cc_info input').removeClass('required-entry');
+        	}
         }
+        
+        //return false;
 
 		//only validate these fields when the customer deceides to place an order (when they click the "Place Order" button on the onepage checkout)
 		jQuery("[id='shipping:postcode']").addClass("required-entry validate-zip");
@@ -255,6 +263,7 @@ HpCheckout.prototype = {
 					return;
 				}
 				if (!response.status) {
+					//return false;
 					window.location = checkoutObject.data.successUrl;
 				} else {
 					if (response.message) {
@@ -333,7 +342,7 @@ HpCheckout.prototype = {
 			jQuery('input, select, button', '#' + affectedBlocks[blockIndex].wrapperId).removeAttr('disabled');
 			jQuery('#' + affectedBlocks[blockIndex].wrapperId + ' .spinner').hide();
 			
-			if((!navigator.userAgent.match(/iPhone/i)) && (!navigator.userAgent.match(/iPod/i))) {	
+			if(typeof checkoutPayment!=="undefined") {	
                 if(checkoutPayment.hasProfile==true || jQuery("#billing-address-select").val()!=='') {
                    jQuery('#hpcheckout-billing-form :input').each(function(i) {
                        if(this.id != 'button_ship_to') {

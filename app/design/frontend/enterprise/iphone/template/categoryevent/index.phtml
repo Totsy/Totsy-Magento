@@ -80,7 +80,11 @@
 				$endcountRaw = strtotime($live['event_end_date']);
 				$endcount = date("F j, Y, G:i:s", $endcountRaw);
 				$hasProduct = $this->countCategoryProducts($live['entity_id']);
-				$imgFile = BP.DS.'media'.DS.'catalog'.DS.'category'.DS.$live['thumbnail'];
+				$thumbnail  = "";
+				
+				if(isset($live['thumbnail'])) { $thumbnail = $live['thumbnail']; } else { $thumbnail = ""; }
+				
+				$imgFile = BP.DS.'media'.DS.'catalog'.DS.'category'.DS.$thumbnail;
 			?>
 			<?php if ($hasProduct):?>
 			<li class="catalog-event ui-btn-up-c live-event-<?php echo $timer?>">
