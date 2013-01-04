@@ -16,7 +16,7 @@ From a directory in which you have permissions to write (i.e. your home director
 
 Unpack the magento core enterprise files
 
-    $ tar xkfj /usr/share/magento/magento-enterprise-1.11.1.tar.bz2 --strip-components=1
+    $ tar xf /usr/share/magento/magento-enterprise-1.11.1.tar.bz2 --strip-components=1 --skip-old-files
 
 Setup the application configuration, and the shared `media` directory
 
