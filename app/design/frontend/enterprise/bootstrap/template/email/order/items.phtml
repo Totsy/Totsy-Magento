@@ -20,21 +20,6 @@
         </tr>
     </thead>
     <?php $i=0; foreach ( $_order->getAllItems() as $_item ): ?>
-    <?php 
-        //we don't want the SKU in these emails
-        //the SKU however is in different places of the object, depending on whether its virtual or not
-        if ($_item->getProduct()->isVirtual()==1) {
-            $_item->sku = null; 
-        } else {
-            //removing Sku
-            $options =  $_item->getProductOptions();
-            unset($options['simple_sku']);
-            $_item->setProductOptions($options);  
-            //$_item->setData('product_options', serialize($productOptions));
-            $_item->sku = null;          
-        }
-        
-    ?>
     <?php if($_item->getParentItem()) continue; else $i++; ?>
     <tbody<?php echo $i%2 ? ' bgcolor="#F6F6F6"' : '' ?>>
         <?php
