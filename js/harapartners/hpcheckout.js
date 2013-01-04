@@ -159,11 +159,9 @@ HpCheckout.prototype = {
 					jQuery(this).val(hpcheckoutAddresses[clickedAddress.val()][jQuery(this).attr('id').replace(blockType + ':', '')]);
 				});
 				if (blockType == 'shipping') {
-					console.log("shipping");
 					jQuery('#shipping\\:postcode').change();
 				}
 				if (blockType == 'billing') {
-					console.log("billing");
 					jQuery('#billing\\:selected').val(jQuery('#billing-address-select').val());
 				}
 			}
@@ -257,8 +255,8 @@ HpCheckout.prototype = {
 				checkoutObject.renderErrorMessage('Please refresh the current page.');
 			},
 			success: function(response) {
-				//console.log(response);
 				if (response.redirect) {
+				    //return false;
 					location.href = response.redirect;
 					return;
 				}
