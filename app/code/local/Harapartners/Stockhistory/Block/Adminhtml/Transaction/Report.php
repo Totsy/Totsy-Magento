@@ -150,8 +150,9 @@ FORM_WRAPPER;
                oTable.fnUpdate( response.response, aPos[0], aPos[1] );
                
                jQuery.each(response.update, function(index, data){
-                    jQuery('#' + data.sku).val(data.qty_to_amend); 
+                    jQuery('#' + data.sku).val(data.qty_to_amend);
                 });
+                showMessages(response.message);
             },
             "submitdata": function ( value, settings ) {
                 //get product id
@@ -174,7 +175,22 @@ FORM_WRAPPER;
             "height": "14px",
             "width": "100%"
         } );
-    } );
+        
+        function showMessages(messages){
+            jQuery('#messages').html("");
+            html = "<ul class='messages'>";
+            jQuery.each(messages, function(index, data){
+                html += "<li class=" + data['type'] + "-msg>";
+                html += "<ul><li>" + data['message'] + "</li></ul>";
+            });
+            jQuery('#messages').append(html);
+        }
+
+        function showMessage(txt, type) {
+            var html = '<ul class="messages"><li class="'+type+'-msg"><ul><li>' + txt + '</li></ul></li></ul>';
+            jQuery('#messages').update(html);
+        }
+});
 </script>
 ADDITIONAL_JAVASCRIPT;
 

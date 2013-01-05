@@ -211,81 +211,93 @@ class Harapartners_Stockhistory_Model_Transaction extends Mage_Core_Model_Abstra
 
     public function calculateCasePackOrderQty($item_id, $po_id, $case_pack_grp_id, $all_results = false){
         
-        $high_denom = 0;
-        $high_denom_cs_pk_qty = 0;
+        $high_denom_sold = 0;
+        $high_denom_cp_qty = 0;
         $grouped = array();
-        $po_record = Mage::getModel('stockhistory/purchaseorder')->load($po_id);
-        $_category = Mage::getModel('catalog/category')->load($po_record->getData('category_id'));
+        $order_amount = 0;
 
-        #pull all the items that have the same case pack grp id and event id
-        $products = Mage::getModel('catalog/product')->getCollection()
-                ->addCategoryFilter($_category)
-                ->addAttributeToFilter('type_id', 'simple')
-                ->addAttributeToFilter(array(array('attribute'=>'is_master_pack', 'gt'=>0)))
-                ->addAttributeToSelect(array('case_pack_qty'))
-                ->addAttributeToFilter(array(array('attribute' => 'case_pack_grp_id', 'eq' => $case_pack_grp_id)));
-        if($products->count()){
-            #loop through all related products hand find the highest denominator
-            foreach($products as $product) {
-                
-                $total_units = 0;
-                $fromTime = strtotime($_category->getData('event_start_date')) - 60*60*24*7;	// 7 days before
-                $toTime = strtotime($_category->getData('event_end_date')) + 60*60*24*3;	// 3 days after
-
-                $fromDate = date('Y-m-d H:i:s', $fromTime);
-                $toDate = date('Y-m-d H:i:s', $toTime);
-                
-                $ordersColl = Mage::getModel('sales/order_item')->getCollection();
-                $ordersColl->getSelect()->where('product_id =' . $product->getEntityId() . ' and created_at between "' . $fromDate . '" and "' . $toDate . '"');
-                foreach($ordersColl as $order) {
-                    if($order->getParentItemId()) {
-                        $parent_item_id = $order->getParentItemId();
-                        $parent_order_line = Mage::getModel('sales/order_item')->getCollection();
-                        $parent_order_line->getSelect()->where('item_id =' . $parent_item_id);
-                        $order = $parent_order_line->getFirstItem();
-                    }
-
-                    $qty = $order->getQtyOrdered() - $order->getQtyReturned() - $order->getQtyCanceled();
-                    $total_units += $qty;
-                    $grouped[(string)$product->getEntityId()] = array('qty_sold' => $total_units, 'cp_qty' => $product->getData('case_pack_qty'), 'sku' => $product->getData('sku'));
-               }
-
-               if ($high_denom < $total_units) {
-                    $high_denom = $total_units;
-                    $high_denom_cs_pk_qty = $product->getData('case_pack_qty');
-                }
-           }
-       } else {
-           if($item_id){
-            $grouped[$item_id]['cp_qty'] = 0;
-           }
-       }
-       
-        #calculation logic
-        if($high_denom_cs_pk_qty) {
-            if(count($grouped) > 1) {
-                foreach($grouped as $key => $value){
-                    $tmp_order_amount = ceil($high_denom / $high_denom_cs_pk_qty) * $value['cp_qty'];
-                    $grouped[$key]['qty_to_amend'] = $tmp_order_amount;
-                }
-               if($item_id){
-                    $order_amount = $grouped[$item_id]['qty_to_amend'];
-               }
-            } else {
-                $order_amount = ceil($high_denom / $high_denom_cs_pk_qty) * $grouped[$item_id]['cp_qty'];
-            }
-        } else {
-            if($item_id){
-                $order_amount = $grouped[$item_id]['cp_qty'];
-            }
+        if(!isset($po_id)) {
+            throw new Exception("PO ID does not exists.");
         }
 
-        if($all_results){
-            return $grouped;
-        } else {
+        #init needed data
+        $po = Mage::getModel('stockhistory/purchaseorder')->load($po_id);
+        $_category = Mage::getModel('catalog/category')->load($po->getData('category_id'));
+
+        #Most Items will not have a case
+        if (!isset($case_pack_grp_id) && $item_id) {
+            $product = Mage::getModel('catalog/product')->load($item_id);
+            if(!$product->getData('is_master_pack')) {
+                return $order_amount;
+            }
+            $total_units_sold = Mage::helper('stockhistory')->getIndProductSold($_category, $product);
+            $order_amount = Mage::helper('stockhistory')->casePackOrderAmount($total_units_sold, $product->getData('case_pack_qty'), $product->getData('case_pack_qty'));
+            
+            if($all_results) {
+                $grouped[(string)$item_id] = array('sku' => $product->getData('sku'), 'qty_to_amend' => $order_amount, 'cp_qty' => $product->getData('case_pack_qty'));
+                return $grouped;
+            }
+
             return $order_amount;
-        }
-    }
+            
+        } else {
+            #pull all the items that have the same case pack grp id and event id
+            $products = Mage::getModel('catalog/product')->getCollection()
+                    ->addCategoryFilter($_category)
+                    ->addAttributeToFilter('type_id', 'simple')
+                   // ->addAttributeToFilter(array(array('attribute'=>'is_master_pack', 'gt'=>0)))
+                    ->addAttributeToSelect(array('case_pack_qty', 'is_master_pack'))
+                    ->addAttributeToFilter(array(array('attribute' => 'case_pack_grp_id', 'eq' => $case_pack_grp_id)));
+            foreach($products as $product) {
+                if(!$product->getData('is_master_pack')) {
+                    $grouped[(string)$product->getEntityId()] = array(
+                        'sku' => $product->getData('sku'), 
+                        'qty_to_amend' => $order_amount, 
+                        'cp_qty' => $product->getData('case_pack_qty')
+                    );
+                    $grouped['message'][] = array('message' => "Sku : {$product->getData('sku')} is not a case pack", 'type' => 'warning');
+                    continue;
+                }
 
+               $total_units_sold = Mage::helper('stockhistory')->getIndProductSold($_category, $product);
+
+               #find highest denominator
+               if ($high_denom_sold < $total_units_sold) {
+                    $high_denom_sold = $total_units_sold;
+                    $high_denom_cp_qty = $product->getData('case_pack_qty');
+                }
+                $grouped[(string)$product->getEntityId()] = array(
+                    'qty_sold' => $total_units_sold, 
+                    'cp_qty' => $product->getData('case_pack_qty'), 
+                    'sku' => $product->getData('sku'), 
+                    'qty_to_amend' => $product->getData('case_pack_qty')
+                );
+            }
+
+            if($high_denom_cp_qty == 0) {
+                if($all_results) {
+                    return $grouped;
+                }
+                return $grouped[$item_id]['cp_qty'];
+            }
+            
+            $mfactor = ceil($high_denom_sold/$high_denom_cp_qty);
+
+            foreach($grouped as $id => $values ) {
+                $grouped[$id]['qty_to_amend'] = $mfactor * $values['cp_qty'];
+                if($id == $item_id){
+                    $order_amount = $grouped[$id]['qty_to_amend'];
+                }
+            }
+                        
+            if($all_results){
+                $grouped['message'][] = array('message' => 'Success!', 'type' => 'success' );
+                return $grouped;
+            } else {
+                return $order_amount;
+            }
+        } #end of else
+
+    }
     
 }
