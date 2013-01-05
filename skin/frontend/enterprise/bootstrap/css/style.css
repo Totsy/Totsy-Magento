@@ -1036,7 +1036,7 @@ float:left;
 .paypal {
     height:34px; 
     width:56px;
-    background:url('../images/paypal_icon.gif'); 
+    background:url('https://www.paypalobjects.com/en_US/i/logo/PayPal_mark_50x34.gif');
     background-repeat: no-repeat;
     float:left;
 }

@@ -248,8 +248,6 @@ class Totsy_Adminhtml_Model_Sales_Order_Create extends Mage_Adminhtml_Model_Sale
             ->load($orderItem->getProductId());
 
         if ($product->getId()) {
-            Mage::log((int)$product->getStockItem()->getQty() + (int)$orderItem->getQtyOrdered(),null, 'mylog.log');
-            Mage::log($qty,null, 'mylog.log');
             if($qty > (int)$product->getStockItem()->getQty() + (int)$orderItem->getQtyOrdered()) {
                 return false;
             }

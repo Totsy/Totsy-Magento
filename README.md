@@ -16,13 +16,13 @@ From a directory in which you have permissions to write (i.e. your home director
 
 Unpack the magento core enterprise files
 
-    $ tar xkfj /usr/share/magento/magento-enterprise-1.11.1.tar.bz2 --strip-components=1
+    $ tar xf /usr/share/magento/magento-enterprise-1.11.1.tar.bz2 --strip-components=1 --skip-old-files
 
 Setup the application configuration, and the shared `media` directory
 
     $ ln -sf /etc/magento/enterprise.xml app/etc/enterprise.xml
     $ ln -sf /etc/magento/local.xml app/etc/local.xml
-    $ ln -sf /srv/cache/media/ media
+    $ ln -sf /srv/share/media/ media
 
 Return to the root where you created the working copy, and move it to the deployment directory
 

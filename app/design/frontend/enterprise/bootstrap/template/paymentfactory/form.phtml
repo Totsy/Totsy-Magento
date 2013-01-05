@@ -95,7 +95,7 @@ var checkoutPayment = {};
 jQuery(document).ready( function() {
 
     var billAddySelect = jQuery("#billing-address-select");
-	var newCardWrap = jQuery('.use-new-card-wrapper');
+	var newCardWrap = jQuery('.cc_info');
 	//var newCardCtrls = jQuery( 'input, select', '.use-new-card-wrapper' );
 	var billingAddress = jQuery('.totsy-selective-input-box', '#hpcheckout-billing-wrapper');
 	var billFormInputs = jQuery('#hpcheckout-billing-form :input');
@@ -123,9 +123,14 @@ jQuery(document).ready( function() {
             if(jQuery("#payment_form_paypal_express").length > 0){
                 jQuery("#payment_form_paypal_express").hide();           	
             }
-           	           	            
-			newCardWrap.hide();
+
+            jQuery('#billing-address').show();
+            jQuery('#shipping-address').show();
+            jQuery('.addresses').width(445);
             billingAddress.attr("disabled", true);
+            newCardWrap.hide();
+
+
             
 			if(checkoutPayment.isCollapsed==false) {
 			    billAddySelect.val(jQuery("#address_" + jQuery( this ).val()).val()).change();
@@ -157,7 +162,6 @@ jQuery(document).ready( function() {
             lastUsedAddressId: '',
             toggleViews: function() { 
                 if (this.hasProfile) {
-                    jQuery(".use-new-card-wrapper").hide();
                     jQuery(".cc_save_card").appendTo(jQuery("#add_payment_save_card"));
                     
                     var savedCardStyles = {'width' : '60px','margin-left' : '10px','float' : 'left'}; 
@@ -165,11 +169,18 @@ jQuery(document).ready( function() {
                     jQuery('#billing-address-select').attr('disabled', true);                     
                     
                     jQuery(".cc_save_card").css( savedCardStyles );
-                    jQuery("#cc_data").hide();
                     jQuery("#hpcheckout-payment-add-title").show();
                     jQuery("#use-card-method").show();
-                } else {	
-                		        
+
+                    jQuery("#paymentfactory_tokenize_cc_save").contents("");
+                    jQuery(".use-new-card-wrapper").show();
+
+                    jQuery("#cc_save_text").html("Save");
+
+                    jQuery(".use-new-card-wrapper").appendTo(jQuery("#add_cc_types"));
+                    newCardWrap.hide();
+                } else {
+
                     jQuery("[id='add_payment']").hide();
                     jQuery(".checkout-reward").css("padding-top", "0px");
                     jQuery(".use-new-card-wrapper").show();
@@ -221,14 +232,24 @@ jQuery(document).ready( function() {
     //when the page loads, toggling between views that feature a saved card and views that don't 
     checkoutPayment.toggleViews();
     
-    jQuery("#add_payment_method").click( function(){
-        checkoutPayment.addPayment();
-    });
-    
 	jQuery(".use-saved-card-control").click( function(){
-	    jQuery('#billing-address-select').attr('disabled', false);
-        jQuery("#cc_data").hide();
+        jQuery("#paymentfactory_tokenize_cc_type input").attr("checked", false);
+        jQuery('#hpcheckout-billing-form :input').attr("disabled", true);
+        jQuery('#billing-address-select').attr('disabled', true);
 	});
+
+    jQuery("#paymentfactory_tokenize_cc_type input").click( function(){
+        if(jQuery(this).name == "paypal_payment") {
+            newCardWrap.hide();
+//            jQuery('#billing-address').hide();
+//            jQuery('#shipping-address').hide();
+        } else {
+            jQuery("[id='payment[cybersource_subid]']").attr("checked", false);
+            jQuery('#hpcheckout-billing-form :input').attr("disabled", false);
+            jQuery('#billing-address-select').attr('disabled', false);
+            newCardWrap.show();
+        }
+    });
 
 });
 
@@ -351,7 +372,7 @@ jQuery(document).ready( function() {
                 </div>
     </div>
     <div id="credits_and_card_save">
-        <div class="cc_save_card use-new-card-wrapper">
+        <div class="cc_save_card use-new-card-wrapper cc_info">
             <div>
                 <input type="checkbox" value="1" name="payment[saved_by_customer]" checked="checked" id="<?php echo $_code ?>_saved" />
             </div>
@@ -365,7 +386,7 @@ jQuery(document).ready( function() {
 <div id="cc_data">
     <div class="pull-left">
         <div>
-            <div class="pull-left cc_num use-new-card-wrapper">
+            <div class="pull-left cc_num use-new-card-wrapper cc_info">
                 
                 <div class="input-box">
                     <input type="text" id="<?php echo $_code ?>_cc_number" name="payment[cc_number]" title="<?php echo $this->__('Credit Card Number') ?>" class="input-text validate-cc-number validate-cc-type-radio" value="<?php echo (($this->__('Credit Card Number')!=='Credit Card Number') ? $this->__('Credit Card Number') : "") ?>" placeholder="<?php echo $this->__('Credit Card Number') ?>" />
@@ -375,7 +396,7 @@ jQuery(document).ready( function() {
         <div style="clear:both"></div>
         <div>
             <?php if ($this->hasVerification()): ?>
-            <div class="cc_cvn pull-left use-new-card-wrapper">
+            <div class="cc_cvn pull-left use-new-card-wrapper cc_info">
                 <label for="<?php echo $_code ?>_cc_cid" class="required"><em>*</em><?php echo $this->__('CVN#') ?></label>
                 <div class="input-box">
                     <div class="v-fix">
@@ -386,23 +407,27 @@ jQuery(document).ready( function() {
             <?php endif; ?>
             <div id="add_payment_save_card">
             </div>
-            <div class="cc_exp pull-right use-new-card-wrapper">
+            <div class="cc_exp pull-right use-new-card-wrapper cc_info">
                 <div class="pull-left">
                     <div for="<?php echo $_code ?>_expiration" class="lbl"><em>*</em><?php echo $this->__('Exp.') ?></div>
-                    	<select id="<?php echo $_code ?>_expiration" name="payment[cc_exp_month]" class="month validate-cc-exp">
-                    	<?php $_ccExpMonth = $this->getInfoData('cc_exp_month') ?>
-                    	<?php foreach ($this->getCcMonths() as $k=>$v): ?>
-                    	    <option value="<?php echo $k?$k:'' ?>" <?php if($k==$_ccExpMonth): ?>selected="selected"<?php endif ?>><?php echo $v ?></option>
-                    	<?php endforeach ?>
-                    	</select>	
-                </div>
-                <div>
-                    <select id="<?php echo $_code ?>_expiration_yr" name="payment[cc_exp_year]" class="year">
-                    <?php $_ccExpYear = $this->getInfoData('cc_exp_year') ?>
-                    <?php foreach ($this->getCcYears() as $k=>$v): ?>
-                        <option value="<?php echo $k?$k:'' ?>" <?php if($k==$_ccExpYear): ?>selected="selected"<?php endif ?>><?php echo $v ?></option>
-                    <?php endforeach ?>
-                    </select>
+                    <div class="pull-left">
+                        <div>
+                            <select id="<?php echo $_code ?>_expiration" name="payment[cc_exp_month]" class="month validate-cc-exp">
+                            <?php $_ccExpMonth = $this->getInfoData('cc_exp_month') ?>
+                            <?php foreach ($this->getCcMonths() as $k=>$v): ?>
+                                <option value="<?php echo $k?$k:'' ?>" <?php if($k==$_ccExpMonth): ?>selected="selected"<?php endif ?>><?php echo $v ?></option>
+                            <?php endforeach ?>
+                            </select>
+                        </div>
+                        <div>
+                            <select id="<?php echo $_code ?>_expiration_yr" name="payment[cc_exp_year]" class="year">
+                            <?php $_ccExpYear = $this->getInfoData('cc_exp_year') ?>
+                            <?php foreach ($this->getCcYears() as $k=>$v): ?>
+                                <option value="<?php echo $k?$k:'' ?>" <?php if($k==$_ccExpYear): ?>selected="selected"<?php endif ?>><?php echo $v ?></option>
+                            <?php endforeach ?>
+                            </select>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -412,7 +437,7 @@ jQuery(document).ready( function() {
 <div id="add_payment">
 	<hr />
 	<div id="hpcheckout-payment-add-title">
-		<h4 class="legend"><span><img id="add_payment_method" src="/skin/frontend/enterprise/bootstrap/images/iconmonstr-plus-5-icon.png" width="18" height="18"></span>&nbsp;Add a payment method</h4>
+		<h4 class="legend">Add a payment method</h4>
 	</div>
 	<div style="clear:both"></div>
 	<div>

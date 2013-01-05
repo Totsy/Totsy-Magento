@@ -1,0 +1,89 @@
+<?php
+/**
+ * Magento Enterprise Edition
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Magento Enterprise Edition License
+ * that is bundled with this package in the file LICENSE_EE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://www.magentocommerce.com/license/enterprise-edition
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    Mage
+ * @package     Mage_Sales
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://www.magentocommerce.com/license/enterprise-edition
+ */
+
+
+/**
+ * Flat sales order grid collection
+ *
+ * @category    Mage
+ * @package     Mage_Sales
+ * @author      Magento Core Team <core@magentocommerce.com>
+ */
+class Mage_Sales_Model_Resource_Order_Grid_Collection extends Mage_Sales_Model_Resource_Order_Collection
+{
+    /**
+     * Event prefix
+     *
+     * @var string
+     */
+    protected $_eventPrefix    = 'sales_order_grid_collection';
+
+    /**
+     * Event object
+     *
+     * @var string
+     */
+    protected $_eventObject    = 'order_grid_collection';
+
+    /**
+     * Customer mode flag
+     * 
+     * @var bool
+     */
+    protected $_customerModeFlag = false;
+
+    /**
+     * Model initialization
+     *
+     */
+    protected function _construct()
+    {
+        parent::_construct();
+        $this->setMainTable('sales/order_grid');
+    }
+
+    /**
+     * Set customer mode flag value
+     *
+     * @param bool $value
+     * @return Mage_Sales_Model_Resource_Order_Grid_Collection
+     */
+    public function setIsCustomerMode($value)
+    {
+        $this->_customerModeFlag = (bool)$value;
+        return $this;
+    }
+
+    /**
+     * Get customer mode flag value
+     *
+     * @return bool
+     */
+    public function getIsCustomerMode()
+    {
+        return $this->_customerModeFlag;
+    }
+}
