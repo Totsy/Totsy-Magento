@@ -1,22 +1,4 @@
 <?php $_code=$this->getMethodCode() ?>
-<?php $customerId = Mage::getSingleton('customer/session')->getCustomerId(); ?>
-<?php $profiles = $this->getProfilesByCustomerId( $customerId ) ?>
-<?php
-$profilesCounter = 0;
-foreach( $profiles as $profile ) {
-    if($profile->getSubscriptionId() && $profile->getIsDefault()==0 && $profile->getData('saved_by_customer')) {
-        $profilesCounter++;
-    }
-}
-
-$hasProfile = false;
-
-if ($profilesCounter > 0 ) {
-    $hasProfile = true;
-} else {
-    $hasProfile = false;
-}
-?>
 <script type="text/javascript">
 //<![CDATA[
     Validation.creditCartTypes.set('JCB', [new RegExp('^(35[0-9]{14}|(2131|1800)[0-9]{11})$'), new RegExp('^([0-9]{3})?$'), true]);
@@ -24,31 +6,9 @@ if ($profilesCounter > 0 ) {
     Validation.creditCartTypes.set('UATP', [false, new RegExp('^[0-9]{3}([0-9]{1})?$'), false]);
     Validation.creditCartTypes.set('MCI', [false, new RegExp('^[0-9]{3}([0-9]{1})?$'), false]);
 //]]>
-
-var checkoutPayment = {};
-
-jQuery(document).ready( function() {
-
-    //a namespace for operations toggling the 2 views of the payment section
-    checkoutPayment = (function() {
-        var hasProfile = '';
-        var isCollapsed = '';
-        var lastUsedAddressId = '';
-        return {
-            hasProfile: "<?php echo $hasProfile; ?>",
-            isCollapsed: false,
-            lastUsedAddressId: ''
-        }
-    });
-});
 </script>
+<div id="cc_data">
 <ul class="form-list" id="payment_form_<?php echo $_code ?>" style="display:none;">
-    <?php /*<li>
-        <label for="<?php echo $_code ?>_cc_owner" class="required"><em>*</em><?php echo $this->__('Name on Card') ?></label>
-        <div class="input-box">
-            <input type="text" title="<?php echo $this->__('Name on Card') ?>" class="input-text required-entry" id="<?php echo $_code ?>_cc_owner" name="payment[cc_owner]" value="<?php echo $this->htmlEscape($this->getInfoData('cc_owner')) ?>" />
-        </div>
-    </li>*/ ?>
 	<?php $customerId = Mage::getSingleton('customer/session')->getCustomerId() ?>
 	<?php $profiles = $this->getProfilesByCustomerId( $customerId ) ?>
 	<?php if( $customerId && $profiles && count( $profiles->getItems() ) ): ?>
@@ -60,7 +20,7 @@ jQuery(document).ready( function() {
 					<option value="" class="use-new-card-control">New Credit/Debit Card</option>
 				<?php foreach( $profiles as $profile ): ?>
 					<?php if( ! $profile->getSubscriptionId() ) { continue; } ?>
-					<option class="use-saved-card-control" value="<?php echo $profile->getSubscriptionId() ?>"><?php echo $this->getFullCcCardType( $profile->getData( 'card_type' ) ) ?> ends with <?php echo $profile->getData( 'last4no' ) ?></option>
+					<option class="use-saved-card-control" value="<?php echo $profile->getEncryptedSubscriptionId() ?>"><?php echo $this->getFullCcCardType( $profile->getData( 'card_type' ) ) ?> ends with <?php echo $profile->getData( 'last4no' ) ?></option>
 				<?php endforeach ?>
 				</select>
 			</div>
@@ -113,6 +73,7 @@ jQuery(document).ready( function() {
 						</select>
 					</div>
 				</div>
+				<!--  -->
 	        </div>
 	    </li>
 	    <?php if($this->hasVerification()): ?>
@@ -182,8 +143,22 @@ jQuery(document).ready( function() {
 	    <?php endif; ?>
 	</div>
 </ul>
+</div>
 <script type="text/javascript">
 	jQuery( document ).ready( function() {
+	   
+	    jQuery("#hpcheckout-payment-select").change( function() {
+	       if(jQuery("#" + this.id + "").val()=="paypal_express") {
+	           if(jQuery("#paypal_payment").length === 0) {
+	               jQuery('#hpcheckout-payment-form').append('<input type="hidden" id="paypal_payment" name="paypal_payment" value="paypal_express" />');
+	           }
+	       } else {
+	           if(jQuery("#paypal_payment").length > 0) {
+	               jQuery("#paypal_payment").remove();
+	           }
+	       }
+	    });
+	
 		jQuery( 'select#cybersource-use-card-method' ).change( function(){
 			if( jQuery( this ).val() == '' ) {
 				jQuery( '.use-new-card-wrapper' ).show();

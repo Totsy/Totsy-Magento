@@ -239,7 +239,7 @@ jQuery(document).ready( function() {
 	});
 
     jQuery("#paymentfactory_tokenize_cc_type input").click( function(){
-        if(jQuery(this).name == "paypal_payment") {
+        if(this.id == "paypal_payment") {
             newCardWrap.hide();
 //            jQuery('#billing-address').hide();
 //            jQuery('#shipping-address').hide();
