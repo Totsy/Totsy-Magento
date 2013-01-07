@@ -505,7 +505,7 @@ XML;
 
             $billing_country = Mage::helper('fulfillmentfactory/dotcom')->getCountryCodeUsTerritories($billing_state);
 
-            $totalAmount = number_format($order->getTotalInvoiced(), 2);
+            $totalAmount = number_format($order->getTotalInvoiced(), 2, '.', '');
 
             $xml = <<<XML
         <orders xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
@@ -610,7 +610,7 @@ XML;
                         $sku = substr($child->getSku(), 0, 17);
 
                         if($quantity) {
-                            $price = number_format($item->getPrice(), 2);
+                            $price = number_format($item->getPrice(), 2, '.', '');
                             $taxAmount = $item->getTaxAmount();
                             if (!$taxAmount) {
                                 $taxAmount = '0';
@@ -638,7 +638,7 @@ XML;
                     $sku = substr($item->getSku(), 0, 17);
 
                     if($quantity) {
-                        $price = number_format($item->getPrice(), 2);
+                        $price = number_format($item->getPrice(), 2, '.', '');
                         $taxAmount = $item->getTaxAmount();
                         if (!$taxAmount) {
                             $taxAmount = '0';
