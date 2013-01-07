@@ -73,7 +73,7 @@
 						</select>
 					</div>
 				</div>
-				<input type="hidden" id="paypal_payment" name="paypal_payment" value="paypal_express" />
+				<!--  -->
 	        </div>
 	    </li>
 	    <?php if($this->hasVerification()): ?>
@@ -148,7 +148,15 @@
 	jQuery( document ).ready( function() {
 	   
 	    jQuery("#hpcheckout-payment-select").change( function() {
-	       //jQuery("#paypal_payment").val(""+ this.value + "");
+	       if(jQuery("#" + this.id + "").val()=="paypal_express") {
+	           if(jQuery("#paypal_payment").length === 0) {
+	               jQuery('#hpcheckout-payment-form').append('<input type="hidden" id="paypal_payment" name="paypal_payment" value="paypal_express" />');
+	           }
+	       } else {
+	           if(jQuery("#paypal_payment").length > 0) {
+	               jQuery("#paypal_payment").remove();
+	           }
+	       }
 	    });
 	
 		jQuery( 'select#cybersource-use-card-method' ).change( function(){
