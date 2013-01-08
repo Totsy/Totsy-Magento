@@ -33,7 +33,11 @@ Unit Testing
 ------------
 A suite of [PHPUnit](http://www.phpunit.de) unit tests is included, and use the [EcomDev_PHPUnit](https://github.com/IvanChepurnyi/EcomDev_PHPUnit) Magento module for accomplishing unit testing goals within the Magento framework.
 
-To run the unit tests, ensure you have configured `app/etc/local.xml` and `app/etc/local.xml.phpunit` (which should be configured to connect to an empty test database) and then run:
+Setup the configuration file required
+
+    $ ln -sf /etc/magento/local.xml.phpunit app/etc
+
+Run the unit test suite
 
     $ phpunit UnitTests.php
 
