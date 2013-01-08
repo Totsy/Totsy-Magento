@@ -23,6 +23,7 @@ app/etc/enterprise.xml
 app/etc/local.xml
 app/etc/local.xml.additional
 app/etc/local.xml.template
+app/etc/local.xml.phpunit
 app/.htaccess
 app/locale/
 cron.php
