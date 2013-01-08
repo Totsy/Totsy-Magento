@@ -133,6 +133,8 @@ HpCheckout.prototype = {
 			blockType = 'shipping';
 		}
 		if (clickedAddress.val() == '') {
+            checkoutPayment.disableBillAddr(false);
+
 			jQuery('#hpcheckout-billing-form :input').each(function(i) {
 				if (this.id != 'button_ship_to') {
 					jQuery("[id='" + this.id + "']").attr('disabled', false);
@@ -143,6 +145,22 @@ HpCheckout.prototype = {
 				jQuery('#billing\\:selected').val('');
 			}
 		} else {
+            checkoutPayment.disableBillAddr(true);
+
+            if(blockType == 'billing') {
+                jQuery('#hpcheckout-billing-form :input').each(function(i) {
+                    if (this.id != 'button_ship_to' && this.id != 'billing:selected') {
+                        jQuery("[id='" + this.id + "']").attr('disabled', true);
+                    }
+                });
+            } else if(blockType == 'shipping') {
+                jQuery('#hpcheckout-shipping-form :input').each(function(i) {
+                    if (this.id != 'button_ship_to' && this.id != 'billing:selected') {
+                        jQuery("[id='" + this.id + "']").attr('disabled', true);
+                    }
+                });
+
+            }
 			jQuery('#hpcheckout-billing-form :input').each(function(i) {
 				if (this.id != 'button_ship_to') {
 					jQuery("[id='" + this.id + "']").attr('disabled', true);
@@ -212,6 +230,7 @@ HpCheckout.prototype = {
 			    jQuery(".cc_types input[type='radio']").addClass("validate-one-required");
         	    if(jQuery("[id='paypal_payment']").is(':checked') != true) {
         	        jQuery('.cc_info input').addClass('required-entry');
+                    jQuery('#paymentfactory_tokenize_saved').removeClass('required-entry');
         	    } else {
         	        jQuery('.cc_info input').removeClass('required-entry');
         	    }
@@ -342,6 +361,7 @@ HpCheckout.prototype = {
 			
 			if(typeof checkoutPayment!=="undefined") {	
                 if(checkoutPayment.hasProfile==true || jQuery("#billing-address-select").val()!=='') {
+                    checkoutPayment.disableBillAddr(true);
                    jQuery('#hpcheckout-billing-form :input').each(function(i) {
                        if(this.id != 'button_ship_to') {
                          jQuery("[id='" + this.id + "']").attr('disabled',true);

@@ -77,7 +77,7 @@ class Harapartners_Customertracking_Block_Pixel
         $orderId = Mage::getSingleton('checkout/session')->getLastOrderId();
 
         $trackingInfo = Mage::getSingleton('customer/session')->getData('affiliate_info');
-        if ($trackingInfo) {
+        if ($trackingInfo && isset($trackingInfo['registration_param'])) {
             $regParams = json_decode($trackingInfo['registration_param'], true);
         } else {
             $regParams =  json_decode(Mage::getSingleton('customer/session')->getData('registration_param'));
