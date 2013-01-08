@@ -22,6 +22,7 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report extends Mage_
         
         $headerText = 'Product Report from PO ' . $dataObject->getData('po_id');
         $poObject = Mage::getModel('stockhistory/purchaseorder')->load($dataObject->getData('po_id'));
+        
         if($poObject->getStatus() == Harapartners_Stockhistory_Model_Purchaseorder::STATUS_SUBMITTED){
             $headerText .= ' (Submitted)';
         }
@@ -135,12 +136,13 @@ FORM_WRAPPER;
     jQuery(document).ready(function() {
         var oTable = jQuery('#ReportGrid_table').dataTable( {
             "bPaginate": false,
-            "bSortable": false,
+            "bSort": false,
             "bFilter": false,
             "bProcessing": false
         } );
 
         jQuery('.editable').editable( "{$this->getUrl('stockhistory/adminhtml_transaction/updateCasePackGroup', array('_current' => true, '_query' => array('isAjax' => "true")))}", {
+            "placeholder" : "Click to edit",
             "method": "POST",
             "name": "change_to",
             "callback": function( sValue, y ) {
@@ -170,11 +172,18 @@ FORM_WRAPPER;
                     "column": oTable.fnGetPosition( this )[2]
                 };
             },
-            "submit": "Ok",
-            "cancel": "X",
+            "submit": 'OK',
+            "cancel": 'Cancel',
             "height": "14px",
             "width": "100%"
         } );
+
+        jQuery(".editable").click(function(){
+            value = jQuery("input[name='change_to']").val();
+            if(jQuery.trim(value) == "Click to edit") {
+                jQuery("input[name='change_to']").val("");
+            }
+        });
         
         function showMessages(messages){
             jQuery('#messages').html("");
@@ -184,11 +193,9 @@ FORM_WRAPPER;
                 html += "<ul><li>" + data['message'] + "</li></ul>";
             });
             jQuery('#messages').append(html);
-        }
-
-        function showMessage(txt, type) {
-            var html = '<ul class="messages"><li class="'+type+'-msg"><ul><li>' + txt + '</li></ul></li></ul>';
-            jQuery('#messages').update(html);
+            /*jQuery('#messages').fadeOut(10000, function(){
+                jQuery(this).css('display','block');
+            });*/
         }
 });
 </script>

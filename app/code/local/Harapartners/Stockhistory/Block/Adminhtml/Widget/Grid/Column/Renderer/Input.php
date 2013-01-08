@@ -17,6 +17,12 @@ class Harapartners_Stockhistory_Block_Adminhtml_Widget_Grid_Column_Renderer_Inpu
     public function render(Varien_Object $row){
         //SKU bases
 
+        $readonly = "";
+
+        if (!$this->_isAllowedAction('post_amendment')) {
+            $readonly = "readonly";
+        }
+
         
         //qty_to_amend: defined as FINAL quantity, i.e. forcing the quantity to the given value, instead of just the delta
         $html = '<input type="text"';
@@ -24,7 +30,7 @@ class Harapartners_Stockhistory_Block_Adminhtml_Widget_Grid_Column_Renderer_Inpu
         $html .= ' name="' . $this->getColumn()->getId() . '[' . $row->getData('sku') . '][' . $this->getColumn()->getId() . ']" ';
        // $html .= 'value="' . $row->getData($this->getColumn()->getIndex()) . '"';
         $html .= 'value="' . Mage::getModel('stockhistory/transaction')->calculateCasePackOrderQty($row->getData('product_id'), $row->getData('po_id'), $row->getData('case_pack_grp_id'))  . '"';
-        $html .= 'class="input-text ' . $this->getColumn()->getId() . ' ' . $this->getColumn()->getInlineCss() . '"/>';
+        $html .= 'class="input-text ' . $this->getColumn()->getId() . ' ' . $this->getColumn()->getInlineCss() . '"' . $readonly .'/>';
         
         //Current total qty
         $html .= '<input type="hidden"';
@@ -39,6 +45,12 @@ class Harapartners_Stockhistory_Block_Adminhtml_Widget_Grid_Column_Renderer_Inpu
         $html .= 'class="input-text ' . $this->getColumn()->getId() . ' ' . $this->getColumn()->getInlineCss() . '"/>';
         
         return $html;
+    }
+
+    protected function _isAllowedAction($action)
+    {
+        //return null;
+        return Mage::getSingleton('admin/session')->isAllowed('harapartners/stockhistory/purchaseorder/actions/' . $action);
     }
     
 }

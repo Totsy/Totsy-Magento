@@ -423,10 +423,11 @@ class Harapartners_Stockhistory_Adminhtml_TransactionController extends Mage_Adm
                         if($previous_cpg != $post_data['change_to']){
                             $prv_grp_amounts = Mage::getModel('stockhistory/transaction')->calculateCasePackOrderQty(null, $po_id, $previous_cpg,true);
                             $response['update'] = array_merge($order_amounts, $prv_grp_amounts );
+                            debug($response['update']);
                         } else {
                             $response['update'] = $order_amounts;
                         }
-                        
+                        debug($order_amounts);
                         #messages
                         $response['message'] = $order_amounts['message'];
                     }
@@ -438,7 +439,7 @@ class Harapartners_Stockhistory_Adminhtml_TransactionController extends Mage_Adm
                         $response['response'] = $post_data['change_to'];
                         $order_amounts = Mage::getModel('stockhistory/transaction')->calculateCasePackOrderQty($product->getData('entity_id'), $po_id, $product->getData('case_pack_grp_id'),true);
                         $response['update'] = $order_amounts;
-                        
+                        debug($order_amounts);
                         #messages
                         $response['message'] = $order_amounts['message'];
                     }

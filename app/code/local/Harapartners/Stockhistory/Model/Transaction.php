@@ -224,7 +224,7 @@ class Harapartners_Stockhistory_Model_Transaction extends Mage_Core_Model_Abstra
         $po = Mage::getModel('stockhistory/purchaseorder')->load($po_id);
         $_category = Mage::getModel('catalog/category')->load($po->getData('category_id'));
 
-        #Most Items will not have a case
+        #Most Items that does not have a case pack id
         if (!isset($case_pack_grp_id) && $item_id) {
             $product = Mage::getModel('catalog/product')->load($item_id);
             if(!$product->getData('is_master_pack')) {
@@ -253,9 +253,10 @@ class Harapartners_Stockhistory_Model_Transaction extends Mage_Core_Model_Abstra
                     $grouped[(string)$product->getEntityId()] = array(
                         'sku' => $product->getData('sku'), 
                         'qty_to_amend' => $order_amount, 
-                        'cp_qty' => $product->getData('case_pack_qty')
+                        'cp_qty' => 0
                     );
                     $grouped['message'][] = array('message' => "Sku : {$product->getData('sku')} is not a case pack", 'type' => 'warning');
+                    //if($item_id == $product->getData('entity_id')) return $grouped;
                     continue;
                 }
 
@@ -266,6 +267,7 @@ class Harapartners_Stockhistory_Model_Transaction extends Mage_Core_Model_Abstra
                     $high_denom_sold = $total_units_sold;
                     $high_denom_cp_qty = $product->getData('case_pack_qty');
                 }
+
                 $grouped[(string)$product->getEntityId()] = array(
                     'qty_sold' => $total_units_sold, 
                     'cp_qty' => $product->getData('case_pack_qty'), 
@@ -276,6 +278,7 @@ class Harapartners_Stockhistory_Model_Transaction extends Mage_Core_Model_Abstra
 
             if($high_denom_cp_qty == 0) {
                 if($all_results) {
+                    $grouped['message'][] = array('message' => 'Successfully Updated!', 'type' => 'success' );
                     return $grouped;
                 }
                 return $grouped[$item_id]['cp_qty'];
@@ -284,6 +287,7 @@ class Harapartners_Stockhistory_Model_Transaction extends Mage_Core_Model_Abstra
             $mfactor = ceil($high_denom_sold/$high_denom_cp_qty);
 
             foreach($grouped as $id => $values ) {
+                if($id == "message") continue;
                 $grouped[$id]['qty_to_amend'] = $mfactor * $values['cp_qty'];
                 if($id == $item_id){
                     $order_amount = $grouped[$id]['qty_to_amend'];
@@ -291,7 +295,7 @@ class Harapartners_Stockhistory_Model_Transaction extends Mage_Core_Model_Abstra
             }
                         
             if($all_results){
-                $grouped['message'][] = array('message' => 'Success!', 'type' => 'success' );
+                $grouped['message'][] = array('message' => 'Successfully Updated!', 'type' => 'success' );
                 return $grouped;
             } else {
                 return $order_amount;
