@@ -17,6 +17,7 @@ class Totsy_Reward_Model_Total_Invoice_Reward
      */
     public function collect(Mage_Sales_Model_Order_Invoice $invoice)
     {
+        $previousInvoiceFailed = false;
         foreach ($invoice->getOrder()->getInvoiceCollection() as $previousInvoice) {
             if ($previousInvoice->getState() == 3) {
                 $previousInvoiceFailed = true;
