@@ -66,16 +66,20 @@ class Totsy_Sailthru_Model_Feed extends Mage_Core_Model_Abstract
 			'pending'
 		);
 
-		if (!$this->getFeedHelper()->filterErrors()){
-			$validator = new Totsy_Sailthru_Helper_Validator_Feed();
-	       	if (!$validator->process($this->_output)){
-	    		$this->_output['errors'] = array_merge(
-	    			$this->_output['errors'],
-	    			$validator->getErrors()
-	    		);
-	    	}
-	    }
+		
+		
+		$validator = new Totsy_Sailthru_Helper_Validator_Feed();
+       	if (!$validator->process($this->_output)){
+    		$this->_output['errors'] = array_merge(
+    			$this->_output['errors'],
+    			$validator->getErrors()
+    		);
+    	}
 	    
+	    if ($this->getFeedHelper()->filterErrors()){
+	    	$this->_output['errors'] = null;
+	    }
+
     	if ($return){
     		return $this->_output;
     	}
