@@ -71,7 +71,11 @@ class Harapartners_Paymentfactory_Block_Form extends Mage_Payment_Block_Form_Cc
         }
         return false;
     }
-    
+
+    public function getQuote()
+    {
+        return Mage::getSingleton('checkout/session')->getQuote();
+    }
     
     public function getFullCcCardType( $shortCardType ) {
         switch ( $shortCardType ) {

@@ -213,6 +213,10 @@ class Enterprise_Reward_Model_Reward extends Mage_Core_Model_Abstract
             try {
                 $this->save();
                 $this->_rewardPointsUpdated = true;
+            } catch (Zend_Db_Statement_Exception $exception) {
+                Mage::logException($exception);
+                Mage::log($exception->getMessage(), null, 'updateRewardPointsErrors.log');
+                $this->_rewardPointsUpdated = false;
             } catch (Exception $e) {
                 $this->_rewardPointsUpdated = false;
                 throw $e;

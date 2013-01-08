@@ -1,6 +1,50 @@
 Totsy-Magento Release Notes
 ===========================
 
+20121218
+--------
+* While editing an order with 2 same configurable product, checkt properly the quantity
+* MGN-1304 Updating the contact us linkage and wording for vouchers returns blurb, using RightNow linkage
+* fixed error ERR (3): Notice: Undefined index: is_salable in /var/www/www.totsy.com/releases/20121218151842/app/design/frontend/enterprise/iphone/template/categoryevent/topnav.phtml on line 63
+* Added fix for MGN-1301. Configurable product children are now updated when fulfillment type is changed.
+
+20121114
+--------
+* Adding super banner for safari mobile only browsers
+* MGN-1184 : Product page Redesign, "it's Ted time!"
+* MGN-1195 : Sailthru Improvements.
+* MGN-764 : preventing customers from putting special letters in shipping/billing name and limit shipping address to 30 characters
+* MGN-1190 : Updated product import to prevent negative quantities in PO 
+* MGN-668 Removed Fulfill count display from order view for virtual items 
+* MGN-733 : Save shipping address during checkout process for Customer Service use.
+* MGN-765 : Improve Quick Order Edit Functions : Billing, Shipping, Payment.
+* MGN-834 : Add option on product admin page to limit the quantity purchased per customer.
+* MGN-1029 : Fixing an issue while crediting a transaction older thant 60 days (Now credit customer profile instead)
+* MGN-1071 : Allow Customer to change Password without First, Last Name previously saved.
+
+20121101
+--------
+* Fixing Steelhouse member conversion, member tracking and purchase tracking pixels
+* MGN-674 : quick order view for order fulfillment aging.  MGN-1109 : fix for related po for dotcom stock items 
+* MGN-1195. Sailthru feed error handling and data validation
+* Fixed order total amount in order XML sent to Dotcom [#MGN-816 status:5 resolution:1 assignee:dmatusevich]
+* Removed unnecessary Revert Event Move button.
+* MGN819 : Allow Customer to re-add a previously deleted credit card.
+
+20121023
+--------
+* MGN-1165 Adding unique identifiers to elements on login page for selenium framework testing
+* MGN-965 Fixing some line break issues in the header cart, in webkit and IE browsers (related to the previous iPad fix)
+* MGN-885 - mobile customers can change quantity of virtual products in the cart
+* MGN-1179 : Moved estimated shipping date from top of one-page checkout to each item
+* MGN-1149 : Removing leftover HTML elements from the events and category pages
+* MGN-1178 : Removed error messages related to card type that were showing when the one-page checkout initially loaded. This happens to customers who have selected a default billing address
+* MGN-903 : may have solved the dead refresh after PO amendment is done
+* Hide Coupon Code if Order has payment failed status
+* MGN-1185 : Fixing blank payment informations when an Order is created through Admin with a credit card already saved
+* MGN-1180 :Automatically remove Accented caracters from Shipping/Billing Address before sending order to Dotcom
+* MGN-688 : Skip a capture if the order total is covered by credits and has also credit card informations.
+
 20121016
 --------
 * MGN-1109 : display po name in item queue

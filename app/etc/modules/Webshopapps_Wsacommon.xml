@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Webshopapps_Wsacommon>
+            <active>true</active>
+            <codePool>local</codePool>
+        </Webshopapps_Wsacommon>
+    </modules>
+</config>

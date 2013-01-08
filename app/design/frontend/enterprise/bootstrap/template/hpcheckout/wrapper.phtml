@@ -13,11 +13,6 @@
 </div>
 
 <div id="hpcheckout-wrapper">
-	<div class="page-title title-buttons">
-		<div class="shipping-date">
-			<p id="cart-shipping-date-header"><span>Estimated Ship Date:</span> <?php echo date('Y-m-d', Mage::helper('sales/order')->calculateEstimatedShipDate($quote)); ?></p>
-		</div>	
-	</div>
 	<div id="error-message-wrapper"></div>
 	<?php if( count( $this->getQuote()->getAllItems() ) ): ?>
 		<?php if( ! $this->getCustomerSession()->isLoggedIn() ): ?>
@@ -30,7 +25,7 @@
                 <div class="checkout-content"><?php echo $this->getChildHtml( 'payment' ) ?></div>
 			    <?php echo $this->getChildHtml( 'reward' ); ?>
 		        </div>
-		    <div class="addresses pull-left well">
+		    <div id="billing-address" class="addresses pull-left well">
 		   		<div class="checkout-headline">
 		    	    <h4 class="legend pull-left"><?php echo $this->__('Billing Address') ?></h4>
 		    	    <?php if ($this->customerHasAddresses()): ?>
@@ -45,7 +40,7 @@
 		    	</div>
          </div>
 		 <?php if( ! $this->getQuote()->isVirtual() ): ?>
-		 <div class="addresses pull-right well">
+		 <div id="shipping-address" class="addresses pull-right well">
 	         <div class="checkout-headline">
 			     <h4 class="legend pull-left"><?php echo $this->__('Shipping Address') ?></h4>
 			     <?php if ($this->customerHasAddresses()): ?>
@@ -53,7 +48,7 @@
 			         <?php echo $this->getAddressesHtmlSelect('shipping') ?>
 			         </span>
 			     <?php endif; ?>
-			  </div>	
+			  </div>
 		      <div style="clear:both"></div>
 		  	  <div id="hpcheckout-shipping-wrapper" class="onepage-address-form">
 	      	      <div class="checkout-content">
@@ -65,7 +60,7 @@
 		<div style="clear:both"></div>
         <?php if( false && ! $this->getQuote()->isVirtual() ): ?>
         <div id="hpcheckout-shipping-method-wrapper" class="well review-payment-blocks">
-            <h4 class="legend">Shipping Method</h4>	
+            <h4 class="legend">Shipping Method</h4>
             <br />
             <div class="checkout-content"><?php echo $this->getChildHtml('shipping_method') ?></div>
         </div>
@@ -85,7 +80,6 @@
 	<?php endif ?>
 <script type="text/javascript">
 function updateSelectText(){
-
 	jQuery(".totsy-selective-input-box select").each(function(){
 		var temphtml = jQuery(this).html();
 		var text = jQuery(this).find("option:selected").text();
@@ -104,6 +98,7 @@ jQuery( document ).ready( function() {
 	if( jQuery( '#billing-address-select' ).val() != '' ) {
 		jQuery( '#billing-address-select' ).change();
     }
+
 	if( jQuery( '#shipping-address-select' ).val() != '' ) {
 		jQuery( '#shipping-address-select' ).change();
     }

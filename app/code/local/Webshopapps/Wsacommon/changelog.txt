@@ -1,0 +1,29 @@
+0.14 - Added check to see if extension active in admin panel config
+0.15 - UPS Freight extension compatible release
+0.16 - updated for shipping override to support multiple freight carriers
+0.17 - Added support for Shipping Insurance to work with Shipping Override
+0.18 - Added support for Dropship with Override
+0.19 - Added fix so that ProductMatrix can work with Downloadable shipping
+0.20 - Added fix to pickup on custom options set for Downloadable shipping
+0.21 - Split Shipping Abstract.php into 2 classes to allow support for non-freight extensions.
+       Removed references to virtual products in getItemTotals to ensure no adverse effects.
+0.22 - Split getItemTotals into 2 methods for virtual items and physical items 
+0.23 - Added ABF Support. Changed getAllowedMethod call for Freight extns
+0.24 - Added a method to save a CSV file to the file system for backup purposes. 
+0.25 - Now resets results in Shipping.php for multi-cart checkout
+0.26 - Added check to ensure item is an object.
+1.0 - Removed logger components
+1.1 - Added in 1.6 support
+1.2 - Resolved issue producing 'Mage_Wsacommon\log_Helper_Data' not found error
+1.3 - Added support for freight rate
+1.4 - Re-released without logger using new ant build.xml
+1.5 - Fixed issued with getVersion call on certain PHP versions
+1.6 - Wasn't using the ceil weight value in getLineItems. Only affects freight extensions.
+1.7 - Made weight check in freight more robust
+1.8 - Reworked getAllowedMethods call to allow multiple results to be returned
+1.9 - Was calling downloadable shipping even if it wasn't installed. Caused issues with virtual products
+2.0 - Changed to work with version 2.0 of logger
+2.1 - Added support for multiple extensions using Sales Order Grid menu
+2.2 - Added support for pricing calculations of fixed priced bundled products
+2.3 - Added support for Handling Matrix with Shipping Override
+2.4 - Added support for EE1.11

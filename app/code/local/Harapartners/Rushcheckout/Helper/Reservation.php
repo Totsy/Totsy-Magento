@@ -45,7 +45,30 @@ class Harapartners_Rushcheckout_Helper_Reservation extends Mage_Core_Helper_Abst
             
             $deltaQty = -1.0 * ($newQty - $origQty); //Quote item qty changes count as negative toward stock qty
         }
-        
+        $customerId = Mage::getSingleton('customer/session')->getCustomer()->getId();
+        $quantityPurchased = $quoteItem->getProduct()->getQuantityPurchasedByCustomer($customerId);
+
+        $quote = Mage::getSingleton('checkout/session')->getQuote();
+        $cartItems = $quote->getAllVisibleItems();
+        $qtyInCart = 0;
+        foreach ($cartItems as $item) {
+            if($item->getProductId() == $quoteItem->getProduct()->getId()) {
+                $qtyInCart += $item->getQty();
+            }
+        }
+        $product = Mage::getModel('catalog/product')->getCollection()
+            ->addAttributeToSelect('purchase_max_sale_qty')
+            ->addAttributeToFilter('entity_id', $quoteItem->getProduct()->getId())
+            ->getFirstItem();
+        if($product->getData('purchase_max_sale_qty')) {
+            if($product->getData('purchase_max_sale_qty') < ($qtyInCart)
+                || $quantityPurchased >= $product->getData('purchase_max_sale_qty')) {
+                Mage::throwException(
+                    Mage::helper('cataloginventory')
+                        ->__('Sorry, this product has a purchase limit of "%s" per customer', $product->getData('purchase_max_sale_qty'))
+                );
+            }
+        }
         $options = $quoteItem->getQtyOptions();
         if ($options) {
             foreach ($options as $option) {

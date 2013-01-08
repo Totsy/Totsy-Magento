@@ -452,6 +452,16 @@
                 <sort_order>50</sort_order>
             </marketing>
         </menu>
+        <events>
+            <!-- 2012-12-30 CJD - Disabling CatalogRule event from clearing full page cache -->
+            <catalogrule_after_apply>
+                <observers>
+                    <enterprise_pagecache>
+                        <type>disabled</type>
+                    </enterprise_pagecache>
+                </observers>
+            </catalogrule_after_apply>
+        </events>
 		<acl>
 			<resources>
 				<all>

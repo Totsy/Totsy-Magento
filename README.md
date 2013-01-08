@@ -7,12 +7,34 @@ Where the savvy mom shops - Totsy offers moms on-the-go and moms-to-be access to
 
 Getting Started
 ---------------
-Clone the Totsy-Magento repository, and then extract the Magento Enterprise (gzipped) tarball into the working copy:
+This code base is meant to be merged with the base Magento Enterprise installation. After cloning the repository, the stock Magento Enterprise archive must be extracted on top (without overwriting existing files).
 
-    $ git clone <repository-url> totsy-magento
-    $ cd totsy-magento
-    $ tar xfz <path-to-magento-enterprise>/enterprise.tar.gz --strip-components=1
-    $ git reset --hard HEAD
+From a directory in which you have permissions to write (i.e. your home directory), clone the Totsy-Magento repository
 
-The last thing that you will need is a valid `app/etc/local.xml` to configure your instance of Totsy-Magento.
+    $ git clone git@github.com:Totsy/Totsy-Magento.git <yourname>.totsy.com/current
+    $ cd <yourname>.totsy.com/current
 
+Unpack the magento core enterprise files
+
+    $ tar xkfj /usr/share/magento/magento-enterprise-1.11.1.tar.bz2 --strip-components=1
+
+Setup the application configuration, and the shared `media` directory
+
+    $ ln -sf /etc/magento/enterprise.xml app/etc/enterprise.xml
+    $ ln -sf /etc/magento/local.xml app/etc/local.xml
+    $ ln -sf /srv/cache/media/ media
+
+Return to the root where you created the working copy, and move it to the deployment directory
+
+    $ cd ../..
+    $ sudo mv <yourname>.totsy.com /var/www/
+
+Unit Testing
+------------
+A suite of [PHPUnit](http://www.phpunit.de) unit tests is included, and use the [EcomDev_PHPUnit](https://github.com/IvanChepurnyi/EcomDev_PHPUnit) Magento module for accomplishing unit testing goals within the Magento framework.
+
+To run the unit tests, ensure you have configured `app/etc/local.xml` and `app/etc/local.xml.phpunit` (which should be configured to connect to an empty test database) and then run:
+
+    $ phpunit UnitTests.php
+
+This will take a few minutes the first time you run the test suite, in order to build the test database (configured in the `app/etc/local.xml.phpunit` file).

@@ -158,7 +158,7 @@ class Harapartners_Fulfillmentfactory_Adminhtml_ItemqueueController extends Mage
      * for fulfill orders test
      */
     public function fulfillOrderAction() {
-        $orderCollection = Mage::getModel('sales/order')->getCollection()->addFieldToFilter('status', 'pending');
+        $orderCollection = Mage::getModel('sales/order')->getCollection()->addFieldToFilter('status', array('in'=>array('pending','processing')));
         Mage::getModel('fulfillmentfactory/service_fulfillment')->updateOrderFulfillStatus($orderCollection);
         
         $this->_redirect('*/*/index');

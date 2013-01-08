@@ -52,6 +52,7 @@ class Harapartners_Promotionfactory_Model_Observer {
                 $newOption->setData(
                     array('code' => 'reservation_code', 'value' => $vpc->getCode())
                 );
+                $newOption->setCode('reservation_code');
                 $newOption->setProduct($product);
                 $newOption->setItem($quoteItem);
                 $quoteItem->addOption($newOption);
@@ -80,7 +81,6 @@ class Harapartners_Promotionfactory_Model_Observer {
 
     public function purchaseVirtualProductCouponInOrder(Varien_Event_Observer $observer) {
         $orderItem = $observer->getEvent()->getItem();
-
         $reservationCodeOption = Mage::getModel('sales/quote_item_option')->getCollection()
         ->addFieldToFilter('item_id', $orderItem->getQuoteItemId())
         ->addFieldToFilter('code', 'reservation_code')
@@ -109,6 +109,13 @@ class Harapartners_Promotionfactory_Model_Observer {
 
             $vpc = Mage::getModel('promotionfactory/virtualproductcoupon')->loadByCode($reservationCodeOption->getValue());
             if($vpc->getId()){
+                if($orderItem->getOrderId()) {
+                    $order = Mage::getModel('sales/order')->getCollection()
+                                ->addAttributeToFilter('entity_id', $orderItem->getOrderId())
+                                ->getFirstItem();
+                    $vpc->setData('order_id', $order->getId())
+                        ->setData('order_increment_id', $order->getIncrementId());
+                }
                 $vpc->setData('status', Harapartners_Promotionfactory_Model_Virtualproductcoupon::COUPON_STATUS_PURCHASED)
                     ->save();
             }else{
@@ -153,7 +160,12 @@ class Harapartners_Promotionfactory_Model_Observer {
         $email = $order->getCustomer()->getEmail();
 
         if(!$order || !$order->getId()) {
-            return;
+            if($order) {
+                $order->save();
+            }
+            if(!$order || !$order->getId()) {
+                return;
+            }
 
         }
 

@@ -44,6 +44,19 @@ class Harapartners_Service_Model_Rewrite_Catalog_Product extends Mage_Catalog_Mo
         return Mage::registry('batch_import_no_index') ? $this : parent::cleanCache();
     }
 
+    public function cleanModelCache()
+    {
+        $tags = $this->getCacheTags();
+        if ($tags !== false) {
+            if (is_array($tags) && ($idx = array_search('catalog_product', $tags)) !== FALSE) {
+                unset($tags[$idx]);
+            }
+
+            Mage::app()->cleanCache($tags);
+        }
+        return $this;
+    }
+
     public function afterCommitCallback()
     {
         // ===== Index rebuild ========================================== //
@@ -133,5 +146,27 @@ class Harapartners_Service_Model_Rewrite_Catalog_Product extends Mage_Catalog_Mo
         return Mage::getModel('salesrule/rule')->getCollection()
             ->addFieldToFilter('promo_sku', $this->getSku())
             ->getFirstItem();
+    }
+
+    /**
+     * Get the product's quantity purchased by a customer
+     *
+     * @param string $customerId
+     * @return int
+     */
+    public function getQuantityPurchasedByCustomer($customerId) {
+        $quantityPurchased = 0;
+        $orderCollection = Mage::getModel('sales/order')->getCollection()
+            ->addAttributeToFilter('customer_id', $customerId);
+        foreach($orderCollection as $order) {
+            $orderItem = Mage::getModel('sales/order_item')->getCollection()
+                ->addAttributeToFilter('product_id', $this->getId())
+                ->addAttributeToFilter('order_id', $order->getId())
+                ->getFirstItem();
+            if($orderItem->getId()) {
+                $quantityPurchased += $orderItem->getQtyOrdered();
+            }
+        }
+        return $quantityPurchased;
     }
 }

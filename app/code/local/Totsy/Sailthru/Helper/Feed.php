@@ -19,6 +19,7 @@ class Totsy_Sailthru_Helper_Feed extends Mage_Core_Helper_Abstract
     private $_max_datetime = null;
     private $_order = false; // true = DESC; false = ACS
     private $_excludeList = array();
+    private $_errors = array();
 
     public function __call($name,$argiments){
         if (substr($name,0,3) == 'get'){
@@ -91,6 +92,36 @@ class Totsy_Sailthru_Helper_Feed extends Mage_Core_Helper_Abstract
         if (!is_null($format)){
             $time = date($format,$time);
         }
+    }
+
+    public function preFormatEvent(&$event,$escape=array()){
+        $error = array();
+
+        $this->arrayKeyExistsValidateAndFormat('entity_id', $event, $error);
+        $this->arrayKeyExistsValidateAndFormat('name', $event, $error);
+        $this->arrayKeyExistsValidateAndFormat('url_path', $event, $error);
+        $this->arrayKeyExistsValidateAndFormat('description', $event, $error);
+        $this->arrayKeyExistsValidateAndFormat('short_description', $event, $error);
+        $this->arrayKeyExistsValidateAndFormat('products', $event, $error);
+        $this->arrayKeyExistsValidateAndFormat('image', $event, $error);
+        $this->arrayKeyExistsValidateAndFormat('small_image', $event, $error);
+        $this->arrayKeyExistsValidateAndFormat('event_start_date', $event, $error);
+        $this->arrayKeyExistsValidateAndFormat('event_end_date', $event, $error);
+        $this->arrayKeyExistsValidateAndFormat('department_label', $event, $error);
+        $this->arrayKeyExistsValidateAndFormat('age_label', $event, $error);
+        
+        if (!in_array('discount',$escape)){        
+            $this->arrayKeyExistsValidateAndFormat('max_discount_pct', $event, $error);
+        }
+
+        if (!in_array('products',$escape)){
+            $this->arrayKeyExistsValidateAndFormat('products', $event, $error);
+        }
+        if (!empty($error)){
+            $this->_errors[$event['entity_id']] = array_unique($error);
+            unset($error);
+        }
+
     }
 
     public function formatEvent(&$event){
@@ -251,5 +282,19 @@ class Totsy_Sailthru_Helper_Feed extends Mage_Core_Helper_Abstract
             }
             unset($exclude_list);
         }
+    }
+
+    private function arrayKeyExistsValidateAndFormat($key,&$array,&$error){
+        if (array_key_exists($key, $array)){
+            return true;
+        }
+        if (!is_array($error)){
+            return true;
+        }
+
+        $error[$array['entity_id']][] = 'Key "'.$key.'" does not exist in a for event ( Id = \''.$array['entity_id'].'\')';
+        $array[$key] = null;
+        
+        return false;
     }
 }

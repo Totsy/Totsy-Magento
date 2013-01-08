@@ -37,6 +37,7 @@ class Totsy_Checkout_CartController extends Mage_Checkout_CartController
     public function indexAction()
     {
         $cart = $this->_getCart();
+        Mage::getSingleton('checkout/session')->unsSplitCartFlag();
 
         if ($cart->getQuote()->getItemsCount()) {
             $cart->init();

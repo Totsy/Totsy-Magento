@@ -74,16 +74,15 @@
 	
 ?>
 <section class="event-landing event-<?php echo ($upComingFlag ? 'upcoming' : 'current'); ?>">
-    <header class="page-header">
+    <header class="page-header has-timer clearfix">
         <h2>
         <?php if (!$upComingFlag): ?>
             <a href="<?php echo $this->getUrl('event/?ref=todays_sales') ?>" >Today's Sales</a><i> / </i><?php echo $_helper->categoryAttribute($_category, $_category->getName(), 'name') ?>
-            <span class="count-down-timer"><span id="time-<?php echo $timer ?>"></span></span>
         <?php else :?>
             <a href="/event#event-upcoming">Upcoming Sales</a><i> / </i><?php echo $_helper->categoryAttribute($_category, $_category->getName(), 'name') ?>
-            <span class="count-down-timer"><span id="time-<?php echo $timer ?>"></span></span>
         <?php endif;?>
         </h2>
+        <span class="count-down-timer"><span id="time-<?php echo $timer ?>"></span></span>
         <script type="text/javascript">
             // @TODO: externalize the timer script
             if(<?php echo $upComingFlag?>){

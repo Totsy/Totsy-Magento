@@ -32,7 +32,11 @@ class TinyBrick_OrderEdit_OrderController extends Mage_Adminhtml_Controller_Acti
         //arrays for restoring order if error is thrown or payment is declined
         $orderArr = $order->getData();
         $billingArr = $order->getBillingAddress()->getData();
-        //$shippingArr = $order->getShippingAddress()->getData();
+        if($order->getShippingAddress()) {
+            $shippingArr = $order->getShippingAddress()->getData();
+        } else {
+            $shippingArr = null;
+        }
         try {
             $preTotal = $order->getGrandTotal();
             $edits = array();
@@ -46,35 +50,33 @@ class TinyBrick_OrderEdit_OrderController extends Mage_Adminhtml_Controller_Acti
             $msgs = array();
             
             $changes = array();
-            $addressUpdated = true;
-         
+
             foreach($edits as $edit) {
                 if($edit['type']) {
-                    if($edit['type'] == 'billing') {
+                    if($edit['type'] == 'billing' || $edit['type'] == 'shipping') {
                         $model = Mage::getModel('orderedit/edit_updater_type_'.$edit['type']);
                         if($mess = $model->edit($order,$edit)) {
-                            if($mess == 'not_updated') {
-                                $addressUpdated = false;
-                            } else {
-                                $msgs[] = $mess;
-                            }
+                            $msgs[] = $mess;
                         } 
                     }
                 }
             }
-            //$order->collectTotals()->save();
             #After Editing Billing Informations use it to Update Payment Infos
             foreach($edits as $edit) {
                 if($edit['type']) {
                     if($edit['type'] == 'payment') {
-                        $edit['addressUpdated'] = $addressUpdated;
                         $model = Mage::getModel('orderedit/edit_updater_type_'.$edit['type']);
+                        $edit = $this->cleanPaymentData($edit);
                         if($mess = $model->edit($order,$edit)) {
                             $msgs[] = $mess;
                         }
                     }
                 }
             }
+            //Makes ItemQueues linked with the order Ready to be processed
+            Mage::helper('fulfillmentfactory/data')->makeOrderReadyToBeProcessed($order);
+            Mage::getModel('promotionfactory/virtualproductcoupon')->openVirtualProductCouponInOrder($order);
+            //$order->collectTotals()->save();
             $postTotal = $order->getGrandTotal();
             if(count($msgs) < 1) {
                 //auth for more if the total has increased and configured to do so
@@ -96,12 +98,12 @@ class TinyBrick_OrderEdit_OrderController extends Mage_Adminhtml_Controller_Acti
                 $this->_logChanges($order, $this->getRequest()->getParam('comment'), $this->getRequest()->getParam('admin_user'), $changes);
                 echo "Order updated successfully. The page will now refresh.";
             } else {
-                //$this->_orderRollBack($order, $orderArr, $billingArr, $shippingArr);
                 echo "There was an error saving information, please try again. : " . $msgs[0];
+                $this->_orderRollBack($order, $orderArr, $billingArr, $shippingArr);
             }
         } catch(Exception $e) {
             echo $e->getMessage();
-            //$this->_orderRollBack($order, $orderArr, $billingArr, $shippingArr);
+            $this->_orderRollBack($order, $orderArr, $billingArr, $shippingArr);
         }
         return $this;
     }
@@ -110,8 +112,10 @@ class TinyBrick_OrderEdit_OrderController extends Mage_Adminhtml_Controller_Acti
     {
         $order->setData($orderArray)->save();
         $order->getBillingAddress()->setData($billingArray)->save();
-        $order->getShippingAddress()->setData($shippingArray)->save();
-        $order->collectTotals()->save();
+        if($order->getShippingAddress()) {
+            $order->getShippingAddress()->setData($shippingArray)->save();
+        }
+        $order->save();
     }
     
     protected function _logChanges($order, $comment, $user, $array = array()) 
@@ -165,6 +169,7 @@ class TinyBrick_OrderEdit_OrderController extends Mage_Adminhtml_Controller_Acti
     public function getQtyAndDescAction()
     {
         $sku = $this->getRequest()->getParam('sku');
+
         $product = Mage::getModel('catalog/product')->getCollection()
             ->addAttributeToSelect('*')
             ->addAttributeToFilter('sku', $sku)
@@ -178,11 +183,11 @@ class TinyBrick_OrderEdit_OrderController extends Mage_Adminhtml_Controller_Acti
             $return['price'] = round($product->getPrice(), 2);
         }
 
-        if($product->getManageStock()) {
-            $qty = $product->getQty();
-        } else {
-            $qty = 10;
+        $qty = (int) Mage::getModel('catalog/product')->load($product->getId())->getStockItem()->getQty();
+        if($qty>9) {
+            $qty = 9;
         }
+
         $select = "<select class='n-item-qty'>";
         $x = 1;
         while($x <= $qty) {
@@ -192,5 +197,45 @@ class TinyBrick_OrderEdit_OrderController extends Mage_Adminhtml_Controller_Acti
         $select .= "</select>";
         $return['select'] = $select;
         echo Zend_Json::encode($return);
+    }
+
+    public function getOrderAddressInformationsAction()
+    {
+        $addressId = $this->getRequest()->getParam('addressId');
+        $address = Mage::getModel('customer/address')->load($addressId);
+        $street = explode("\n", $address->getData('street'));
+        $address->setData('street1',$street[0]);
+        if(array_key_exists(1,$street)) {
+            $address->setData('street2',$street[1]);
+        }
+        echo Zend_Json::encode($address->getData());
+    }
+
+    public function checkCouponAvailabilityAction()
+    {
+        $couponCode = $this->getRequest()->getParam('coupon');
+        $coupon = Mage::getModel('salesrule/coupon');
+        $coupon->load($couponCode, 'code');
+        $result = array('available' => false);
+        if($coupon->getId()) {
+            if(strtotime($coupon->getExpirationDate()) > time()) {
+                $result = array('available' => true);
+            }
+        }
+        echo Zend_Json::encode($result);
+    }
+
+    /**
+     * Clean Payment datas got from the post to be able to process them
+     */
+    public function cleanPaymentData($datas) {
+        $cleanDatas = null;
+        foreach($datas as  $key => $data) {
+            $key = str_replace('[','',$key);
+            $key = str_replace(']','',$key);
+            $key = str_replace('payment','',$key);
+            $cleanDatas[$key] = $data;
+        }
+        return $cleanDatas;
     }
 }

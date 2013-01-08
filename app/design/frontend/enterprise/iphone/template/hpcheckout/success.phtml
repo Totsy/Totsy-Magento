@@ -1,8 +1,8 @@
 <div class="page-title">
-    <h1><?php echo $this->__('Your order has been received') ?></h1>
+    <h3><?php echo $this->__('Your order has been received') ?></h3>
 </div>
 <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
-<h2 class="sub-title"><?php echo $this->__('Thank you for your purchase!') ?></h2>
+<h3 class="sub-title"><?php echo $this->__('Thank you for your purchase!') ?></h3>
 
 <?php if ($this->getOrderId()):?>
 <?php 
@@ -14,7 +14,7 @@
 	
 ?>
 <?php if ($this->getCanViewOrder()) :?>
-    <p><?php echo $this->__('Your order # is: %s.', sprintf('<a href="%s">%s</a>', $this->escapeHtml($this->getViewOrderUrl()), $this->escapeHtml($this->getOrderId()))) ?></p>
+    <p><?php echo $this->__('Your order # is: %s.', sprintf('<a href="%s">%s</a>', $this->escapeHtml($this->getViewOrderUrl($this->getOrderId())), $this->escapeHtml($this->getOrderId()))) ?></p>
 <?php  else :?>
     <p><?php echo $this->__('Your order # is: %s.', $this->escapeHtml($this->getOrderId())) ?></p>
 <?php endif;?>
@@ -41,7 +41,7 @@
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', <?php echo Mage::getStoreConfig("google/analytics/account")?>);  
+  _gaq.push(['_setAccount', '<?php echo Mage::getStoreConfig("google/analytics/account")?>']);  
   _gaq.push(['_trackPageview']);
   _gaq.push(['_addTrans',
     '<?php echo $order->getData('increment_id'); ?>',           // order ID - required

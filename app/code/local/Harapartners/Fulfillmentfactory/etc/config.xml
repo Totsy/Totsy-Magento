@@ -8,12 +8,12 @@
  * If you did not receive a copy of the license and are unable to
  * obtain it through the world-wide-web, please send an email
  * to eula@harapartners.com so we can send you a copy immediately.
- * 
+ *
  -->
 <config>
     <modules>
         <Harapartners_Fulfillmentfactory>
-            <version>1.0.2</version>
+            <version>1.1.0</version>
         </Harapartners_Fulfillmentfactory>
     </modules>
     <global>
@@ -82,13 +82,16 @@
                 <fulfillment_aging_day>90</fulfillment_aging_day>
                 <shipment_aging_day>3</shipment_aging_day>
             </aging_setting>
+            <general>
+                <fulfillment_types>dotcom,dotcom_stock,virtual</fulfillment_types>
+            </general>
         </fulfillmentfactory_options>
     </default>
     <crontab>
         <jobs>
             <fulfillmentfactory_process_fulfillment>
                 <schedule>
-                    <cron_expr>0 2,11 * * 1-5</cron_expr><!--2am and 12pm Monday through Friday -->
+                    <cron_expr>0 2,11 * * *</cron_expr><!--2am and 12pm Monday through Friday -->
                 </schedule>
                 <run>
                     <model>fulfillmentfactory/service_dotcom::fulfillment</model>

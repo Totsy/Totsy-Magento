@@ -15,7 +15,7 @@
 class Harapartners_Customertracking_Block_Background extends Mage_Core_Block_Template {
     
     public function getBackroundImagesJsonArray(){
-        $dir = BP . DS . 'skin'. DS .'frontend'. DS .'enterprise'. DS .'harapartners'. DS .'images'. DS .'login'. DS;
+        $dir = BP . DS . 'skin'. DS .'frontend'. DS .'enterprise'. DS .'bootstrap'. DS .'images'. DS .'login'. DS;
         $images = scandir($dir);
         unset($images[0]);
         unset($images[1]);

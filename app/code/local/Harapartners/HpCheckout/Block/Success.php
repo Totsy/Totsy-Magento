@@ -12,6 +12,28 @@ class Harapartners_HpCheckout_Block_Success extends Mage_Core_Block_Template
         return parent::_beforeToHtml();
     }
 
+    public function hasMultipleOrders() {
+        $ids = Mage::getSingleton('core/session')->getOrderIds();
+//        Zend_Debug::dump(Mage::getSingleton('core/session')->getOrderIds());
+        if ($ids && is_array($ids)) {
+            return TRUE;
+        }
+        else return FALSE;
+    }
+
+    public function getTheOrderIds() {
+        if(!$this->hasOrderIds()) {
+            $this->setOrderIds(Mage::getSingleton('core/session')->getOrderIds(TRUE));
+            return $this->getOrderIds();
+        }
+        else return $this->getOrderIds();
+    }
+
+    public function getViewOrderUrl($orderId)
+    {
+        return $this->getUrl('sales/order/view/', array('order_id' => $orderId, '_secure' => true));
+    }
+
     protected function _prepareLastOrder()
     {
         $orderId = Mage::getSingleton('checkout/session')->getLastOrderId();

@@ -60,7 +60,7 @@
 				<?php if (empty($_product['url_path']) || !preg_match('/sales/',$_product['url_path'])){
 					$_product['url_path'] = $_product['request_path'];
 				}?>
-				<?php if ($_product['is_salable']==1): ?>
+				<?php if (array_key_exists('is_salable',$_product) &&  $_product['is_salable']==1): ?>
 				<li class="item ui-btn ui-btn-icon-right ui-li-has-arrow ui-li ui-li-has-thumb ui-btn-up-c" data-theme="c">
 				<div class="ui-btn-inner ui-li" aria-hidden="true">
 					<div class="ui-btn-text">
@@ -94,6 +94,3 @@
 			<script type="text/javascript">decorateGeneric($$('ul.products-grid'), ['odd','even','first','last'])</script>
 </div>
 <?php endforeach ?>
-
-
-

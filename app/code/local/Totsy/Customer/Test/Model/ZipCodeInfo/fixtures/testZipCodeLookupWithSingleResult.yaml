@@ -1,0 +1,6 @@
+tables:
+  totsycustomer/zipCodeInfo:
+    - customer_zip_code_info_id: 1
+      zip: 10001
+      city: Robot
+      state: NY

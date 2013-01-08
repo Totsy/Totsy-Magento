@@ -390,15 +390,16 @@ class Crown_Import_Model_Productimport extends Crown_Import_Model_Import_Abstrac
         $profile = $this->getImportProfileModel();
         if(!empty($this->_media_gallery)) {
             /* @var $mediaHlper Crown_Import_Helper_Data */
-            $mediaHlper = Mage::helper('crownimport');
+            $mediaHelper = Mage::helper('crownimport');
 
             foreach($this->_media_gallery as $sku => $mediaImages) {
                 foreach ($mediaImages as $mediaImage) {
                     // Check for media image on server or remote host
                     try {
-                        $mediaHlper->checkForValidImageFiles( $mediaImage, $profile );
+                        $mediaImageFiltered = $this->filterRemoveBeginningSlash($mediaImage);
+                        $mediaHelper->checkForValidImageFiles( $mediaImageFiltered, $profile );
                     } catch (Exception $e ) {
-                        $errorMessages[$sku][] = 'Media Gallery ' . $e->getMessage() . " '{$mediaImage}'";
+                        $errorMessages[$sku][] = 'Media Gallery ' . $e->getMessage() . " '{$mediaImageFiltered}'";
                     }
                 }
             }

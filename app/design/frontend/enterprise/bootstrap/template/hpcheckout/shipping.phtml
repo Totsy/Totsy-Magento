@@ -3,18 +3,18 @@
 	    	    <div > 
 	    		    <div class="pull-left field half-of-half">
 	    	           <label for="shipping:firstname" class="required"><em>*&nbsp;</em><?php echo $this->__('first name') ?></label>
-	    	     <input type="text" name="shipping[firstname]" title="<?php echo $this->__('First Name') ?>" class="input-text required-entry firstname"  value="<?php echo $this->htmlEscape($this->getFirstName()) ?>" placeholder="<?php echo $this->__('First Name') ?>" id="shipping:firstname" />
+	    	     <input type="text" name="shipping[firstname]" title="<?php echo $this->__('First Name') ?>" class="input-text required-entry firstname validate-alpha"  value="<?php echo $this->htmlEscape($this->getFirstName()) ?>" placeholder="<?php echo $this->__('First Name') ?>" id="shipping:firstname" />
 	    	        </div>
 	    	        <div class="field half-of-half">
 	    	            <label for="shipping:lastname" class="required"><em>*&nbsp;</em><?php echo $this->__('last name') ?></label>
-	    	            <input type="text" name="shipping[lastname]" title="<?php echo $this->__('Last Name') ?>" class="input-text required-entry lastname" value="<?php echo $this->htmlEscape($this->getLastName()) ?>" placeholder="<?php echo $this->__('Last Name') ?>" id="shipping:lastname" />
+	    	            <input type="text" name="shipping[lastname]" title="<?php echo $this->__('Last Name') ?>" class="input-text required-entry lastname validate-alpha" value="<?php echo $this->htmlEscape($this->getLastName()) ?>" placeholder="<?php echo $this->__('Last Name') ?>" id="shipping:lastname" />
 	    	        </div>
 	    	    </div>
 	    	    <input type="hidden" name="shipping[email]" id="shipping:email" value="<?php echo $this->getCustomer()->getEmail() ?>" />
 	    	    <input type="hidden" name="shipping[selected]" id="shipping:selected" />
 	    	         <div class="field half-of-half">
 			            <label for="shipping:street1" class="required"><em>*&nbsp;</em><?php echo $this->__('street address line 1') ?></label>
-			            <input type="text" title="<?php echo $this->__('Street Address Line 1') ?>" name="shipping[street][0]" id="shipping:street1" value="<?php echo $this->getAddress()->getStreet(1) ?>" placeholder="<?php echo $this->__('Street Address Line 1') ?>" class="input-text required-entry streetaddress1" />
+			            <input type="text" title="<?php echo $this->__('Street Address Line 1') ?>" name="shipping[street][0]" id="shipping:street1" value="<?php echo $this->getAddress()->getStreet(1) ?>" placeholder="<?php echo $this->__('Street Address Line 1') ?>" class="input-text required-entry streetaddress1"/>
 	    	        </div>
 	    	     </div>
 	    	     <div>
@@ -41,14 +41,14 @@
                          <input type="text" id="shipping:region" name="shipping[region]" value="<?php echo $this->htmlEscape($this->getAddress()->getRegion()) ?>"  title="<?php echo $this->__('State/Province') ?>" class="input-text hidden-state" style="display:none;" />
 	                  </div> 
 	                  <div class="field half-of-half">
-	                      <label for="shipping:postcode" class="required"><em>*&nbsp;</em><?php echo $this->__('zip/postal code') ?></label>
-	                      <input type="text" title="<?php echo $this->__('Zip Code') ?>" name="shipping[postcode]" id="shipping:postcode" class="input-text validate-zip required-entry zip" value="<?php echo $this->getAddress()->getPostcode() ?>" placeholder="<?php echo $this->__('Zip/Postal Code') ?>" />
+	                      <label for="shipping:postcode"><em>*&nbsp;</em><?php echo $this->__('zip/postal code') ?></label>
+	                      <input type="text" title="<?php echo $this->__('Zip Code') ?>" name="shipping[postcode]" id="shipping:postcode" class="input-text zip" value="<?php echo $this->getAddress()->getPostcode() ?>" placeholder="<?php echo $this->__('Zip/Postal Code') ?>" />
 	                  </div>
 	              </div>
 	              <div>
 	    	          <div class="field half-of-half">
-	    	        	    <label for="shipping:telephone" class="required"><em>*&nbsp;</em><?php echo $this->__('telephone') ?></label>
-	    	        	    <input type="text" name="shipping[telephone]" title="<?php echo $this->__('Telephone') ?>" class="input-text required-entry validate-phoneLax telephone" id="shipping:telephone" value="<?php echo $this->htmlEscape($this->getAddress()->getTelephone()) ?>" placeholder="Telephone" onkeyup="backspacerUP(this,event);" onkeydown="backspacerDOWN(this,event);"/>
+	    	        	    <label for="shipping:telephone"><em>*&nbsp;</em><?php echo $this->__('telephone') ?></label>
+	    	        	    <input type="text" name="shipping[telephone]" title="<?php echo $this->__('Telephone') ?>" class="input-text telephone" id="shipping:telephone" value="<?php echo $this->htmlEscape($this->getAddress()->getTelephone()) ?>" placeholder="Telephone"/>
 	    	         </div> 
 	                 <div class="field half-of-half">
                          <label for="shipping:country_id" class="required"><em>*&nbsp;</em><?php echo $this->__('country') ?></label>
@@ -61,13 +61,39 @@
 <div class="spinner" style="display: none;"><img src="<?php echo $this->getSkinUrl( 'images/ajax-loader.gif' ) ?>"></div>
 <script type="text/javascript">
 //<![CDATA[
+    //hack that empties out faked shipping postcode and telephone for users who select a shipping state which then triggers a shipping cost calculation 
+    //this way users know their totals before hitting submit
+    if(jQuery("[id='shipping:postcode']").val()=="T0000" && jQuery("[id='shipping:telephone']").val()=="(T00)-000-0000" ){
+            jQuery("[id='shipping:postcode']").val("");
+            jQuery("[id='shipping:telephone']").val("");
+    }
+
     var shippingRegionUpdater = new RegionUpdater('shipping:country_id', 'shipping:region', 'shipping:region_id', countryRegions, undefined, 'shipping:postcode');
 
     jQuery(document).ready( function() {
-        jQuery( '#shipping\\:postcode, #shipping\\:region_id' ).change( function() { hpcheckout.update(true); } );
-        jQuery( '#shipping\\:postcode' ).blur( function() { hpcheckout.update(true); } );
+    
+        jQuery( '#shipping\\:postcode' ).change( function() { hpcheckout.update(true); });
+        jQuery( '#shipping\\:region_id' ).change( function() { 
+
+        jQuery('#shipping\\:region').val(jQuery("#shipping:region_id option:selected").text());
+
+        hpcheckout.update(true); });
+    
+    	if(checkoutPayment.hasProfile==true && checkoutPayment.lastUsedAddressId!=""){
+    		hpcheckout.switchAddress;
+    	}
+        
         jQuery( '#shipping-address-select' ).bind( 'change', hpcheckout.switchAddress );
         jQuery( '#billing\\:selected' ).val(jQuery( '#billing-address-select' ).val());
     });
+
+    jQuery('#shipping\\:street1, #shipping\\:street2').keyup(function(){
+		var $this = jQuery(this);
+		if($this.val().length > 30 ) {
+			$this.val($this.val().substr(0,30));
+		}
+	});
 //]]>
 </script>
+
+	

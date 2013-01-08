@@ -42,4 +42,12 @@ class TinyBrick_OrderEdit_Block_Adminhtml_Sales_Order_View_Tab_Info extends Mage
         }
         return $invoiced;
     }
+
+    public function getCouponCode()
+    {
+        $orderId = $this->getRequest()->getParam('order_id');
+        $order = Mage::getModel('sales/order')->load($orderId);
+        return $order->getCouponCode();
+    }
+
 }

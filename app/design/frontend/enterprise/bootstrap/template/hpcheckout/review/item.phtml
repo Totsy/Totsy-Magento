@@ -1,4 +1,15 @@
 <?php $_item = $this->getItem()?>
+
+
+<?php
+$quote = Mage::getSingleton('checkout/session')->getQuote();
+
+$shipDate = date('m-d-Y', Mage::helper('sales/order')->calculateEstimatedShipDate($quote));
+
+
+?>
+
+
 <tr>
     <td><h4 class="product-name"><?php echo $this->htmlEscape($this->getProductName()) ?></h4>
         <?php if ($_options = $this->getOptionList()):?>
@@ -23,6 +34,17 @@
         <?php endif;?>
         <?php if ($addtInfoBlock = $this->getProductAdditionalInformationBlock()):?>
             <?php echo $addtInfoBlock->setItem($_item)->toHtml() ?>
+        <?php endif;?>
+    </td>
+    <td>
+        <?php $fulFillmentType = Mage::getModel('catalog/product')->load($_item->getProductId())->getFulfillmentType ();?>
+        <?php if($fulFillmentType == 'dotcom_stock'
+        && (Mage::getSingleton('checkout/session')->getSplitCartFlag() || !$quote->hasFulfillmentType('dotcom') )):?>
+            Estimated Ship Date: 1-3 Business Days
+        <?php elseif($_item->getProduct()->getIsVirtual()):?>
+            You will receive an email with the details of this voucher code.
+        <?php else:?>
+            Estimated Ship Date: <?php echo $shipDate;?>
         <?php endif;?>
     </td>
     <?php if ($this->helper('tax')->displayCartPriceExclTax() || $this->helper('tax')->displayCartBothPrices()): ?>

@@ -35,7 +35,15 @@ class Totsy_Adminhtml_Sales_Order_EditController extends Mage_Adminhtml_Sales_Or
                 ->setIsValidate(true)
                 ->importPostData($this->getRequest()->getPost('order'))
                 ->createOrder();
-
+            //Make Order Created date same as the original
+            $originalIncrementId = $order->getOriginalIncrementId();
+            if($originalIncrementId) {
+                $originalOrder = Mage::getModel('sales/order')->loadByIncrementId($originalIncrementId);
+                if($originalOrder && $originalOrder->getId()) {
+                     $order->setData('created_at', $originalOrder->getData('created_at'))
+                           ->save();
+                }
+            }
             $this->_getSession()->clear();
             Mage::getSingleton('adminhtml/session')->addSuccess($this->__('The order has been created.'));
             $this->_redirect('*/sales_order/view', array('order_id' => $order->getId()));

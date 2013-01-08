@@ -175,7 +175,18 @@
         <?php endif; ?>
 
     </td>
-    <td><?php echo $this->getColumnHtml($_item, 'qty') ?><input type="text" size="3" style="display:none;" value="<?php echo round($_item->getQtyOrdered(), 0) ?>" class="e-item-qty" /></td>
+
+    <td>
+        <?php echo $this->getColumnHtml($_item, 'qty') ?>
+        <?php $maxAvailable = Mage::helper('orderedit')->getItemQuantitiesAvailable($_item); ?>
+        <select class="e-item-qty" style="display:none;">
+            <?php for($i=1;$i<=$maxAvailable;$i++): ?>
+            <option value="<?php echo $i ?>" <?php if($i==round($_item->getQtyOrdered(), 0)): ?>selected="selected"<?php endif ?>>
+                <?php echo $i ?>
+            </option>
+            <?php endfor; ?>
+        </select>
+    </td>
 
     <td class="a-right">
         <?php if ($this->helper('tax')->displayCartBothPrices() || $this->helper('tax')->displayCartPriceExclTax()): ?>
@@ -275,15 +286,17 @@
     </td>
     <td class="a-right"><?php echo $this->displayPriceAttribute('tax_amount') ?></td>
     <td class="a-right" width="80"><?php echo $this->displayTaxPercent($_item) ?></td>
-    <td class="a-right"><?php echo $this->displayPriceAttribute('discount_amount') ?><input style="display:none;" name="discount" type="text" class="e-item-discount" size="7" value="<?php echo round($_item->getDiscountAmount(), 2) ?>" /></td>
+    <td class="a-right"><?php echo $this->displayPriceAttribute('discount_amount') ?><input style="display:none;"  type="text" name="discount" type="text" class="e-item-discount" size="7" value="<?php echo round($_item->getDiscountAmount(), 2) ?>" /></td>
     <td class="a-right last">
         <?php echo $this->displayPrices(
             $_item->getBaseRowTotal() - $_item->getBaseDiscountAmount() + $_item->getBaseTaxAmount() + $_item->getBaseWeeeTaxAppliedRowAmount(),
             $_item->getRowTotal() - $_item->getDiscountAmount() + $_item->getTaxAmount() + $_item->getWeeeTaxAppliedRowAmount()
         ); ?>
     </td>
-    <td class="e-item-remove a-right last" style="display:none;">
-    	<a href="javascript:void(0)" onclick="flagRemoveItem(<?php echo $_item->getId() ?>);" id="rem-btn<?php echo $_item->getId() ?>">Remove</a><input type="hidden" id="rem<?php echo $_item->getId() ?>" name="remove-<?php echo $_item->getId() ?>" value="0" class="e-item-remove-val" />
-    </td>
+    <?php if($_item->getProductType() != 'virtual'): ?>
+        <td class="e-item-remove a-right last" style="display:none;">
+            <a href="javascript:void(0)" onclick="flagRemoveItem(<?php echo $_item->getId() ?>);" id="rem-btn<?php echo $_item->getId() ?>">Remove</a><input type="hidden" id="rem<?php echo $_item->getId() ?>" name="remove-<?php echo $_item->getId() ?>" value="0" class="e-item-remove-val" />
+        </td>
+    <?php endif; ?>
     </form>
 </tr>
