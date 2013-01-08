@@ -66,6 +66,8 @@ class Totsy_Sailthru_Model_Feed extends Mage_Core_Model_Abstract
 			'pending'
 		);
 
+		
+		
 		$validator = new Totsy_Sailthru_Helper_Validator_Feed();
        	if (!$validator->process($this->_output)){
     		$this->_output['errors'] = array_merge(
@@ -73,6 +75,10 @@ class Totsy_Sailthru_Model_Feed extends Mage_Core_Model_Abstract
     			$validator->getErrors()
     		);
     	}
+	    
+	    if ($this->getFeedHelper()->filterErrors()){
+	    	$this->_output['errors'] = null;
+	    }
 
     	if ($return){
     		return $this->_output;
