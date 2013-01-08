@@ -143,6 +143,7 @@ FORM_WRAPPER;
 
         jQuery('.editable').editable( "{$this->getUrl('stockhistory/adminhtml_transaction/updateCasePackGroup', array('_current' => true, '_query' => array('isAjax' => "true")))}", {
             "placeholder" : "Click to edit",
+            "indicator" : '<img src="/skin/adminhtml/default/enterprise/images/process_spinner.gif"/>',
             "method": "POST",
             "name": "change_to",
             "callback": function( sValue, y ) {

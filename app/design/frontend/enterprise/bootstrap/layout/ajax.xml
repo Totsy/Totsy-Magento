@@ -81,9 +81,4 @@
             <action method="unsetCallChild"><child>container2</child><call>ifEquals</call><if>0</if><key>alias_in_layout</key><key>options_container</key></action>
         </block>
     </ajax_checkout_cart_add>
-
-    <ajax_pixels_sociable_product>
-        <block type="core/template" name="root" template="pixels/sociable/product.phtml"></block>
-    </ajax_pixels_sociable_product>
-
 </layout>
