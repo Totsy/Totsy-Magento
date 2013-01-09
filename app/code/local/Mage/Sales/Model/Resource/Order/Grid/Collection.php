@@ -77,6 +77,31 @@ class Mage_Sales_Model_Resource_Order_Grid_Collection extends Mage_Sales_Model_R
         return $this;
     }
 
+    public function getSelectCountSql()
+    {
+        $this->_renderFilters();
+
+        $unionSelect = clone $this->getSelect();
+
+        if (!$unionSelect->getPart('from')) {
+            $unionSelect->reset(Zend_Db_Select::ORDER);
+            $unionSelect->reset(Zend_Db_Select::LIMIT_COUNT);
+            $unionSelect->reset(Zend_Db_Select::LIMIT_OFFSET);
+            $countSelect = clone $this->getSelect();
+            $countSelect->reset();
+            $countSelect->from(array('a' => $unionSelect), 'COUNT(*)');
+        } else {
+            $countSelect = clone $this->getSelect();
+            $countSelect->reset(Zend_Db_Select::ORDER);
+            $countSelect->reset(Zend_Db_Select::LIMIT_COUNT);
+            $countSelect->reset(Zend_Db_Select::LIMIT_OFFSET);
+            $countSelect->reset(Zend_Db_Select::COLUMNS);
+            $countSelect->columns('COUNT(*)');
+        }
+
+        return $countSelect;
+    }
+
     /**
      * Get customer mode flag value
      *
