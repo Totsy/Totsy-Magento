@@ -109,11 +109,13 @@ HpCheckout.prototype = {
 	},
     switchPaymentMethod: function(payment_method) {
         if (payment_method=="paypal_express") {
-            jQuery(".cc_info").hide();
+        	jQuery("#cc_data").hide();
+            //jQuery(".cc_info").hide();
             jQuery('#billing-address').hide();
             jQuery('#shipping-address').hide();
         }
         else {
+            jQuery("#cc_data").show(); 
             jQuery("#payment_form_paypal_express").hide();
             jQuery('#billing-address').show();
             jQuery('#shipping-address').show();
@@ -131,6 +133,8 @@ HpCheckout.prototype = {
 			blockType = 'shipping';
 		}
 		if (clickedAddress.val() == '') {
+            checkoutPayment.disableBillAddr(false);
+
 			jQuery('#hpcheckout-billing-form :input').each(function(i) {
 				if (this.id != 'button_ship_to') {
 					jQuery("[id='" + this.id + "']").attr('disabled', false);
@@ -141,6 +145,22 @@ HpCheckout.prototype = {
 				jQuery('#billing\\:selected').val('');
 			}
 		} else {
+            checkoutPayment.disableBillAddr(true);
+
+            if(blockType == 'billing') {
+                jQuery('#hpcheckout-billing-form :input').each(function(i) {
+                    if (this.id != 'button_ship_to' && this.id != 'billing:selected') {
+                        jQuery("[id='" + this.id + "']").attr('disabled', true);
+                    }
+                });
+            } else if(blockType == 'shipping') {
+                jQuery('#hpcheckout-shipping-form :input').each(function(i) {
+                    if (this.id != 'button_ship_to' && this.id != 'billing:selected') {
+                        jQuery("[id='" + this.id + "']").attr('disabled', true);
+                    }
+                });
+
+            }
 			jQuery('#hpcheckout-billing-form :input').each(function(i) {
 				if (this.id != 'button_ship_to') {
 					jQuery("[id='" + this.id + "']").attr('disabled', true);
@@ -205,19 +225,21 @@ HpCheckout.prototype = {
 	},
 	submit: function() {
 		//good time to validate CC types
-	
-            if(!checkoutPayment.hasProfile || jQuery("[id='payment[cybersource_subid]']").is(':checked') != true) {
-		        jQuery(".cc_types input[type='radio']").addClass("validate-one-required");
-                if(jQuery("[id='paypal_payment']").is(':checked') != true) {
-                    jQuery('.cc_info input').addClass('required-entry');
-                } else {
-                    jQuery('.cc_info input').removeClass('required-entry');
-                }
-            
-            } else {
-                jQuery(".cc_types input[type='radio']").removeClass("validate-one-required");
-                jQuery('.cc_info input').removeClass('required-entry');
-            }
+		if(typeof checkoutPayment!=="undefined") {
+        	if(!checkoutPayment.hasProfile || jQuery("[id='payment[cybersource_subid]']").is(':checked') != true) {
+			    jQuery(".cc_types input[type='radio']").addClass("validate-one-required");
+        	    if(jQuery("[id='paypal_payment']").is(':checked') != true) {
+        	        jQuery('.cc_info input').addClass('required-entry');
+                    jQuery('#paymentfactory_tokenize_saved').removeClass('required-entry');
+        	    } else {
+        	        jQuery('.cc_info input').removeClass('required-entry');
+        	    }
+			
+        	} else {
+        	    jQuery(".cc_types input[type='radio']").removeClass("validate-one-required");
+        	    jQuery('.cc_info input').removeClass('required-entry');
+        	}
+        }
 
 		//only validate these fields when the customer deceides to place an order (when they click the "Place Order" button on the onepage checkout)
 		jQuery("[id='shipping:postcode']").addClass("required-entry validate-zip");
@@ -250,12 +272,13 @@ HpCheckout.prototype = {
 				checkoutObject.renderErrorMessage('Please refresh the current page.');
 			},
 			success: function(response) {
-				//console.log(response);
 				if (response.redirect) {
+				    //return false;
 					location.href = response.redirect;
 					return;
 				}
 				if (!response.status) {
+					//return false;
 					window.location = checkoutObject.data.successUrl;
 				} else {
 					if (response.message) {
@@ -332,15 +355,17 @@ HpCheckout.prototype = {
 		var affectedBlocks = this.getBlocks(blockCodes);
 		for (var blockIndex in affectedBlocks) {
 			jQuery('input, select, button', '#' + affectedBlocks[blockIndex].wrapperId).removeAttr('disabled');
-			jQuery('#' + affectedBlocks[blockIndex].wrapperId + ' .spinner').hide();
-				
+			jQuery('#' + affectedBlocks[blockIndex].wrapperId + ' .spinner').hide();	
+			if(typeof checkoutPayment!=="undefined") {	
                 if(checkoutPayment.hasProfile==true || jQuery("#billing-address-select").val()!=='') {
+                    checkoutPayment.disableBillAddr(true);
                    jQuery('#hpcheckout-billing-form :input').each(function(i) {
                        if(this.id != 'button_ship_to') {
                          jQuery("[id='" + this.id + "']").attr('disabled',true);
                        }
                    });
-                 }
+         		}
+            }
 		}
 	},
 	getFormData: function(blockCodes) {

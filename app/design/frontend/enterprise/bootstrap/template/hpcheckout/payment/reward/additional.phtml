@@ -66,9 +66,9 @@
         
 		jQuery( '#use-reward-point' ).bind( 'click', function() {				
 			jQuery( '#reward-points-input' ).val( 1 );
+			
 			if( isEnoughPointsToCoverAmount ) {
                 jQuery('#billing-address-select').attr('disabled', false);
-		        jQuery('#hpcheckout-billing-form :input').attr('disabled',false);
                 jQuery( 'input[name="payment[method]"]').val('free');
                 jQuery('#paymentfactory_tokenize_cc_cid').removeClass('required-entry');
                 jQuery('#paymentfactory_tokenize_expiration').removeClass('required-entry');
