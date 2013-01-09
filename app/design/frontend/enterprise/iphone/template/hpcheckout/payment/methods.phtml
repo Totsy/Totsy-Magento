@@ -25,9 +25,26 @@
 	    </div>
 	    <?php endif; ?>
 	<?php endforeach; ?>
+	<?php 
+    $quote = Mage::getSingleton('checkout/session')->getQuote();
+    
+    //do not show the paypal logo for mobile of the order contains both virtual AND tangible items
+    $showPaypal = true;    
+    
+    if ( $quote->getItemVirtualQty() > 0 && $quote->isVirtual()==false ) {
+        $showPaypal = false;
+    }
+    ?>
 	</div>
 	<script type="text/javascript">
 		jQuery( document ).ready( function() {
+		
+		    var showPaypal = "<?php echo $showPaypal; ?>";
+		    
+		    if(showPaypal==false) {
+		        jQuery("#hpcheckout-payment-select option[value='paypal_express']").remove();
+		    }
+		    
 			hpcheckout.switchPaymentMethod();
 			jQuery("#hpcheckout-payment-select").change( function() {
                 hpcheckout.switchPaymentMethod(this.value);
