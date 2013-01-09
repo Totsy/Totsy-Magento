@@ -1,0 +1,146 @@
+tables: # Pregenerated category url path index, for testing product request path generation
+  ecomdev_urlrewrite/category_request_path: 
+    - category_id: 21
+      store_id: 1
+      id_path: category/21
+      request_path: "comedy"
+      updated: 1
+    - category_id: 21
+      store_id: 21
+      id_path: category/21
+      request_path: "comedy"
+      updated: 1
+    - category_id: 21
+      store_id: 22
+      id_path: category/21
+      request_path: "komodie"
+      updated: 1
+    - category_id: 21
+      store_id: 23
+      id_path: category/21
+      request_path: "komedija"
+      updated: 1
+    - category_id: 22
+      store_id: 1
+      id_path: category/22
+      request_path: "sci-fi"
+      updated: 1
+    - category_id: 22
+      store_id: 21
+      id_path: category/22
+      request_path: "sci-fi"
+      updated: 1
+    - category_id: 22
+      store_id: 22
+      id_path: category/22
+      request_path: "sci-fi"
+      updated: 1
+    - category_id: 22
+      store_id: 23
+      id_path: category/22
+      request_path: "fantastyka"
+      updated: 1
+    - category_id: 30
+      store_id: 31
+      id_path: category/30
+      request_path: "advanced"
+      updated: 1
+    - category_id: 30
+      store_id: 32
+      id_path: category/30
+      request_path: "advanced"
+      updated: 1
+    - category_id: 30
+      store_id: 33
+      id_path: category/30
+      request_path: "advanced"
+      updated: 1
+    - category_id: 31
+      store_id: 31
+      id_path: category/31
+      request_path: "advanced/url-rewrites"
+      updated: 1
+    - category_id: 31
+      store_id: 32
+      id_path: category/31
+      request_path: "advanced/url-rewrites"
+      updated: 1
+    - category_id: 31
+      store_id: 33
+      id_path: category/31
+      request_path: "advanced/url-rewrites"
+      updated: 1
+    - category_id: 32
+      store_id: 31
+      id_path: category/32
+      request_path: "advanced/url-rewrites"
+      updated: 1
+    - category_id: 32
+      store_id: 32
+      id_path: category/32
+      request_path: "advanced/url-rewrites"
+      updated: 1
+    - category_id: 32
+      store_id: 33
+      id_path: category/32
+      request_path: "advanced/url-rewrites"
+      updated: 1
+    - category_id: 221
+      store_id: 1
+      id_path: category/221
+      request_path: "sci-fi/aliens"
+      updated: 1
+    - category_id: 221
+      store_id: 21
+      id_path: category/221
+      request_path: "sci-fi/aliens"
+      updated: 1
+    - category_id: 221
+      store_id: 22
+      id_path: category/221
+      request_path: "sci-fi/aliens"
+      updated: 1
+    - category_id: 221
+      store_id: 23
+      id_path: category/221
+      request_path: "fantastyka/pribul-ci"
+      updated: 1
+    - category_id: 222
+      store_id: 1
+      id_path: category/222
+      request_path: "sci-fi/time-travels"
+      updated: 1
+    - category_id: 222
+      store_id: 21
+      id_path: category/222
+      request_path: "sci-fi/time-travels"
+      updated: 1
+    - category_id: 222
+      store_id: 22
+      id_path: category/222
+      request_path: "sci-fi/zeitreisen"
+      updated: 1
+    - category_id: 222
+      store_id: 23
+      request_path: "fantastyka/podorozhi-u-chasi"
+      updated: 1
+    - category_id: 2211
+      store_id: 1
+      id_path: category/2211
+      request_path: "sci-fi/aliens/humanoids"
+      updated: 1
+    - category_id: 2211
+      store_id: 21
+      id_path: category/2211
+      request_path: "sci-fi/aliens/humanoids"
+      updated: 1
+    - category_id: 2211
+      store_id: 22
+      id_path: category/2211
+      request_path: "sci-fi/aliens/humanoide"
+      updated: 1
+    - category_id: 2211
+      store_id: 23
+      id_path: category/2211
+      request_path: "fantastyka/pribul-ci/gumanoidi"
+      updated: 1
