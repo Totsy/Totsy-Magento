@@ -14,7 +14,12 @@
  *
  */
 ?>
-
+<style>
+h4 {
+    color:#000;
+    text-transform: uppercase;
+}
+</style>
 <?php
 /**
  * Catalog index list template
@@ -73,10 +78,10 @@
                     $maxDiscount = $live['max_discount_pct'];
                 ?>
                 <?php if ($hasProduct): ?>
-                    <li class="span3 catalog-event event-counter-<?php echo $timer;?>">
+                    <li class="span4 catalog-event event-counter-<?php echo $timer;?>">
                         <a href="<?php echo Mage::getBaseUrl().$live['url_path']; ?>" class="thumbnail">
                             <hgroup>
-                                <h5><?php echo $live['name'];?></h5>
+                                <h4><?php echo $live['name'];?></h4>
                                 <!-- <h6><?php //echo $live['short_description'];?></h6> -->
                             </hgroup>
                             <div class="more">
@@ -108,7 +113,7 @@
                                 : BP . DS . 'skin' . DS . 'frontend' . DS . 'enterprise ' . DS . 'harapartners' . DS . 'images' . DS . 'catalog' . DS . 'product' . DS . 'placeholder' . DS . 'small_image.jpg';
                             ?>
                             <span class="event-link">
-                                <img src="<?php echo Mage::helper('service/image')->loadImageFile($imgFile)->resize(228)->keepFrame(FALSE); ?>" width="228" height="263" alt="<?php echo $live['name'];?>" />
+                                <img src="<?php echo Mage::helper('service/image')->loadImageFile($imgFile)->resize(228)->keepFrame(FALSE); ?>" width="310" height="310" alt="<?php echo $live['name'];?>" />
                             </span>
                             <script type="text/javascript">
                                 // @TODO: all countdown jQuery should be externalized

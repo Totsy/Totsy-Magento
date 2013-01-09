@@ -19,7 +19,8 @@ body { height: 100%;}
 }
 html {
     margin:0;
-    background:#fff;
+    background:url(../images/bkg_stripped_blue.png);
+    /*
     background-image: -moz-linear-gradient(top, #eef6fc, #ffffff);
     background-image: -ms-linear-gradient(top, #eef6fc, #ffffff);
     background-image: -o-linear-gradient(top, #eef6fc, #ffffff);
@@ -27,6 +28,7 @@ html {
     background-image: -webkit-linear-gradient(top, #eef6fc, #ffffff);
     background-image: linear-gradient(top, #eef6fc, #ffffff);
     background-attachment: fixed;
+    */
 }
 /* Not implemented - pending forthought from "Creative" on how a bold font affects typography site-wide
 body {
@@ -572,7 +574,10 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
     width: 100%;
 }
 #mainContent {
+    background: #fff;
     padding-top:190px; 
+    padding-left:10px;
+    padding-right:10px;
     padding-bottom:250px; overflow: auto; /* @sticky, +more padding */
 }
 .logged-out ~ #mainContent {
