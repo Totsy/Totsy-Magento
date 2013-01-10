@@ -423,7 +423,7 @@ class Harapartners_Stockhistory_Adminhtml_TransactionController extends Mage_Adm
                         if($previous_cpg != $post_data['change_to']){
                             $prv_grp_amounts = Mage::getModel('stockhistory/transaction')->calculateCasePackOrderQty(null, $po_id, $previous_cpg,true);
                             $response['update'] = array_merge($order_amounts, $prv_grp_amounts );
-                            debug($response['update']);
+                            
                         } else {
                             $response['update'] = $order_amounts;
                         }

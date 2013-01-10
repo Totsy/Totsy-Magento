@@ -211,8 +211,7 @@ class Harapartners_Stockhistory_Model_Transaction extends Mage_Core_Model_Abstra
 
     public function calculateCasePackOrderQty($item_id, $po_id, $case_pack_grp_id, $all_results = false){
         
-        $high_denom_sold = 0;
-        $high_denom_cp_qty = 0;
+        $highest_ratio = 0;
         $grouped = array();
         $order_amount = 0;
 
@@ -262,10 +261,13 @@ class Harapartners_Stockhistory_Model_Transaction extends Mage_Core_Model_Abstra
 
                $total_units_sold = Mage::helper('stockhistory')->getIndProductSold($_category, $product);
 
+               if($product->getData('case_pack_qty')) {
+                    $ratio = $total_units_sold/$product->getData('case_pack_qty');
+               }
+
                #find highest denominator
-               if ($high_denom_sold < $total_units_sold) {
-                    $high_denom_sold = $total_units_sold;
-                    $high_denom_cp_qty = $product->getData('case_pack_qty');
+               if ($highest_ratio < $ratio) {
+                    $highest_ratio = $ratio;
                 }
 
                 $grouped[(string)$product->getEntityId()] = array(
@@ -276,19 +278,18 @@ class Harapartners_Stockhistory_Model_Transaction extends Mage_Core_Model_Abstra
                 );
             }
 
-            if($high_denom_cp_qty == 0) {
+            if(!$highest_ratio) {
                 if($all_results) {
                     $grouped['message'][] = array('message' => 'Successfully Updated!', 'type' => 'success' );
                     return $grouped;
                 }
                 return $grouped[$item_id]['cp_qty'];
             }
-            
-            $mfactor = ceil($high_denom_sold/$high_denom_cp_qty);
 
             foreach($grouped as $id => $values ) {
                 if($id == "message") continue;
-                $grouped[$id]['qty_to_amend'] = $mfactor * $values['cp_qty'];
+                $grouped[$id]['qty_to_amend'] = $highest_ratio * $values['cp_qty'];
+
                 if($id == $item_id){
                     $order_amount = $grouped[$id]['qty_to_amend'];
                 }
