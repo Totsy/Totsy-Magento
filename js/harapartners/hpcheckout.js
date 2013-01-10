@@ -133,7 +133,10 @@ HpCheckout.prototype = {
 			blockType = 'shipping';
 		}
 		if (clickedAddress.val() == '') {
-            checkoutPayment.disableBillAddr(false);
+		    
+		    if(typeof checkoutPayment!=="undefined") {
+                checkoutPayment.disableBillAddr(false);
+            }
 
 			jQuery('#hpcheckout-billing-form :input').each(function(i) {
 				if (this.id != 'button_ship_to') {
@@ -145,7 +148,10 @@ HpCheckout.prototype = {
 				jQuery('#billing\\:selected').val('');
 			}
 		} else {
-            checkoutPayment.disableBillAddr(true);
+		
+		    if(typeof checkoutPayment!=="undefined") {
+                checkoutPayment.disableBillAddr(true);
+            }
 
             if(blockType == 'billing') {
                 jQuery('#hpcheckout-billing-form :input').each(function(i) {

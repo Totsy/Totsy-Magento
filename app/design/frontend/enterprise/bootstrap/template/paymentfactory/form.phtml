@@ -190,7 +190,14 @@ jQuery(document).ready( function() {
                     jQuery("#hpcheckout-payment-add-title").hide();
                     jQuery("#cc_data").show();
                 }
-            }
+            },
+            disableBillAddr: function(stateFlag) {
+               jQuery('#hpcheckout-billing-form :input').each(function(i) {
+                   if(this.id != 'button_ship_to') {
+                       jQuery("[id='" + this.id + "']").attr('disabled',stateFlag);
+                   }
+               });
+           }
         };
     })();
     
@@ -203,7 +210,7 @@ jQuery(document).ready( function() {
 	});
 
     jQuery("#paymentfactory_tokenize_cc_type input").click( function(){
-        if(jQuery(this).name == "paypal_payment") {
+        if(this.id == "paypal_payment") {
             newCardWrap.hide();
 //            jQuery('#billing-address').hide();
 //            jQuery('#shipping-address').hide();
