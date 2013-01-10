@@ -414,7 +414,7 @@ class Harapartners_Stockhistory_Adminhtml_TransactionController extends Mage_Adm
                 case 'casepackgrp':
                     $response['response'] = $previous_cpg = $product->getData('case_pack_grp_id');
                     
-                    if (Mage::getModel('stockhistory/transaction')->changeCasePackAttributeValue("case_pack_grp_id", $post_data['product_id'], $post_data['change_to'])) {
+                    if (Mage::getModel('stockhistory/transaction')->changeCasePackAttributeValue("case_pack_grp_id", $post_data['product_id'], trim($post_data['change_to']))) {
                         $response['response'] = trim($post_data['change_to']);
                         #calculate new order qty changes
                         $order_amounts = Mage::getModel('stockhistory/transaction')->calculateCasePackOrderQty($product->getData('entity_id'), $po_id, trim($post_data['change_to']),true);
