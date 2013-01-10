@@ -1,4 +1,5 @@
 <?php $_code=$this->getMethodCode();
+$hasVirtual = false;
 // Check to see if there are multiple fulfillment types
 foreach($this->getQuote()->getAllItems() as $item) {
     if($item->getParentItemId()) {
@@ -7,6 +8,7 @@ foreach($this->getQuote()->getAllItems() as $item) {
     $product = Mage::getModel ( 'catalog/product' )->load ( $item->getProductId () );
     if($product->getIsVirtual()) {
         $_fulfillmentType = 'virtual';
+        $hasVirtual = true;
     } else {
         $_fulfillmentType = $product->getFulfillmentType();
     }
@@ -165,7 +167,7 @@ jQuery(document).ready( function() {
                     jQuery(".cc_save_card").appendTo(jQuery("#add_payment_save_card"));
                     
                     var savedCardStyles = {'width' : '60px','margin-left' : '10px','float' : 'left'}; 
-                                        
+                    
                     jQuery('#billing-address-select').attr('disabled', true);                     
                     
                     jQuery(".cc_save_card").css( savedCardStyles );
@@ -188,48 +190,10 @@ jQuery(document).ready( function() {
                     jQuery("#hpcheckout-payment-add-title").hide();
                     jQuery("#cc_data").show();
                 }
-            },
-            addPayment: function() {
-                if(this.isCollapsed == false) {                
-                    this.isCollapsed = true;
-                    jQuery('#hpcheckout-billing-form :input').attr("disabled", false);
-                    jQuery('#billing-address-select').attr('disabled', false);
-                    
-                    if(this.hasProfile==true) {
-                       jQuery('#billing-address-select').attr('disabled', false);
- 				       this.disableBillAddr(true);
-			        }
-                    
-                    jQuery("[id='payment[cybersource_subid]']").attr("checked", false);
-                    jQuery("[id='payment[cybersource_subid]']").attr("disabled", true);
-                    jQuery("#use-card-method").css("opacity", ".5");
-                    
-                    jQuery("#add_payment_method").attr("src", "/skin/frontend/enterprise/bootstrap/images/iconmonstr-minus-5-icon.png");
-                    jQuery("#paymentfactory_tokenize_cc_save").contents("");                    
-                    jQuery(".use-new-card-wrapper").show();
-                  
-                    jQuery("#cc_save_text").html("Save");
-                    
-                    jQuery(".use-new-card-wrapper").appendTo(jQuery("#add_cc_types"));
-                } else {
-                    this.isCollapsed = false;
-                    jQuery("#use-card-method").css("opacity", "100");
-                    jQuery("[id='payment[cybersource_subid]']").attr("disabled", false);
-                    jQuery("#add_payment_method").attr("src", "/skin/frontend/enterprise/bootstrap/images/iconmonstr-plus-5-icon.png");
-                    jQuery(".use-new-card-wrapper").hide();
-                }
-            },
-            disableBillAddr: function(stateFlag) {
-                jQuery('#hpcheckout-billing-form :input').each(function(i) {
-			        if(this.id != 'button_ship_to') {
-			            jQuery("[id='" + this.id + "']").attr('disabled',stateFlag);
-			        }
-			    });
             }
         };
     })();
     
-    //when the page loads, toggling between views that feature a saved card and views that don't 
     checkoutPayment.toggleViews();
     
 	jQuery(".use-saved-card-control").click( function(){
@@ -239,7 +203,7 @@ jQuery(document).ready( function() {
 	});
 
     jQuery("#paymentfactory_tokenize_cc_type input").click( function(){
-        if(this.id == "paypal_payment") {
+        if(jQuery(this).name == "paypal_payment") {
             newCardWrap.hide();
 //            jQuery('#billing-address').hide();
 //            jQuery('#shipping-address').hide();
@@ -278,7 +242,7 @@ jQuery(document).ready( function() {
         		 <?php endforeach ?>
         		 <?php $methods = $this->getLayout()->getBlock('hpcheckout.payment.methods')->getMethods();  ?> 
                  <?php if(count($methods)): ?>
-                 	<?php if(!$multiShipping && Mage::getModel('paypal/config')->isMethodActive('paypal_express')): ?>
+                 	<?php if(!$multiShipping && !$hasVirtual && Mage::getModel('paypal/config')->isMethodActive('paypal_express')): ?>
 			    	    <input type="radio" value="paypal_express" id="paypal_payment" name="paypal_payment">
 			    	    <div>
         		 	    <span title="Paypal Express" class="paypal"></span>
