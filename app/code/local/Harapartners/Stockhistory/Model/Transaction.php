@@ -229,8 +229,14 @@ class Harapartners_Stockhistory_Model_Transaction extends Mage_Core_Model_Abstra
             if(!$product->getData('is_master_pack')) {
                 return $order_amount;
             }
+
             $total_units_sold = Mage::helper('stockhistory')->getIndProductSold($_category, $product);
-            $order_amount = Mage::helper('stockhistory')->casePackOrderAmount($total_units_sold, $product->getData('case_pack_qty'), $product->getData('case_pack_qty'));
+
+            if($product->getData('case_pack_qty')) {
+                $highest_ratio = $total_units_sold/$product->getData('case_pack_qty');
+            }
+
+            $order_amount = Mage::helper('stockhistory')->casePackOrderAmount($highest_ratio, $product->getData('case_pack_qty'));
             
             if($all_results) {
                 $grouped[(string)$item_id] = array('sku' => $product->getData('sku'), 'qty_to_amend' => $order_amount, 'cp_qty' => $product->getData('case_pack_qty'));
@@ -262,7 +268,7 @@ class Harapartners_Stockhistory_Model_Transaction extends Mage_Core_Model_Abstra
                $total_units_sold = Mage::helper('stockhistory')->getIndProductSold($_category, $product);
 
                if($product->getData('case_pack_qty')) {
-                    $ratio = $total_units_sold/$product->getData('case_pack_qty');
+                    $ratio = ceil($total_units_sold/$product->getData('case_pack_qty'));
                }
 
                #find highest denominator
@@ -288,7 +294,7 @@ class Harapartners_Stockhistory_Model_Transaction extends Mage_Core_Model_Abstra
 
             foreach($grouped as $id => $values ) {
                 if($id == "message") continue;
-                $grouped[$id]['qty_to_amend'] = $highest_ratio * $values['cp_qty'];
+                $grouped[$id]['qty_to_amend'] = Mage::helper('stockhistory')->casePackOrderAmount($highest_ratio, $values['cp_qty']);
 
                 if($id == $item_id){
                     $order_amount = $grouped[$id]['qty_to_amend'];
