@@ -1,5 +1,3 @@
-<?php require("dev/sociablelabs/sociable_signer.php");?>
-
 <div class="page-title">
      <h1><?php echo $this->__('Your order has been received') ?></h1>
 </div>
@@ -90,64 +88,6 @@
         (function(){steelhouse={add:function(a,b,c,d){d=d||false;if(a.addEventListener){a.addEventListener(b,c,d)}else if(a.attachEvent){a.attachEvent("on"+b,c)}},load:function(){var a;if(typeof a=='undefined'){a=Math.random()*10000000000000000}var b=document.createElement('script');var c='px.steelhousemedia.com/st?aid='+aid+'&conv=1&order_id='+oid+'&order_amt='+oamt+'&cb='+a+additional;b.type='text/javascript';b.src=('https:'==document.location.protocol?'https://':'http://')+c;var d=document.getElementsByTagName('script');var e=Number(d.length)-1;var f=document.getElementsByTagName('script')[e];f.parentNode.insertBefore(b,f)}};steelhouse.load();})();
     </script>
 
-
-    <?php
-        /*
-$items_for_socialable_purchase_key = array();
-        $items_for_socialable_mos_keys = array();
-
-        $items = $order->getAllVisibleItems();
-
-        foreach ($items as $itemId => $item) {
-
-            $product = Mage::getModel('catalog/product')->load($item->getProductId());
-
-            $purchase_key = array();
-            $mos_key = array();
-
-            $purchase_key['id'] = array("id"=>$item->getId(), "type"=>"product", "price"=>array("actual_paid"=>$item->getPrice(), "currency"=>"USD"));
-
-            $mos_key['id'] = array(array("id"=>$item->getId(), "type"=>"product"));
-            $mos_key['name'] = array(array("name"=> $item->getName()));
-            $mos_key['primary_tag'] = ""; //$product->getCategory()->name;
-            $mos_key['tags'] = array("ordered_item",$product->getId(),$product->getName());
-            $mos_key['url'] = array("detail"=>$product->getProductUrl(), "picture"=>array("primary"=>$product->getProductUrl(), "primary_secure"=>str_replace("http", "https", $product->getProductUrl())));
-
-            array_push($items_for_socialable_purchase_key,$purchase_key);
-            array_push($items_for_socialable_mos_keys,$mos_key);
-        }
-
-        $rondavu_data =array("config"=>array("version"=>"1.2") ,
-            "user"=>array("id"=>array(array("id"=> Mage::getSingleton('customer/session')->getCustomerId(),"type"=>"totsy")),
-                "tracking" =>array(array("name" =>"refId","
-           value" =>"refrerral_code"))),
-            "page" =>array("tags" =>array("order_confirmation"),
-                "actions" =>array("purchase" =>array("order_id" =>$this->getOrderId(),"total"=>$order->getData('grand_total'),"currency" =>"USD","items"=> $items_for_socialable_purchase_key,
-                    "price" =>array("actual_paid" =>$order->getData('grand_total'),"currency"=>"USD")))),
-            "primary_mo"=>array("id" =>array(array("id"=>"order_confirmation","type"=>"page")) ,
-                "name" =>array(array("name" =>"Totsy")) ,
-                "url" =>array("detail" =>"http//www.totsy.com","picture"=>array("primary"=>"http//www.totsy.com/img/logo-125x77.png","primary_secure" =>
-                "https://www.totsy.com/img/logo-125x77.png"))),
-            "mos" => $items_for_socialable_mos_keys
-        );
-*/
-
-// declare a path to the key
-        /*
-$key_path = "dev/sociablelabs/sign_private_key";
-        $socialable_labs_output = rondavu_sign($rondavu_data, $key_path);
-
-        if($socialable_labs_output) {
-*/
-            // ?>
-<!--
-        <script type="text/javascript">
-            var socialableLabsOutput = <?php // echo $socialable_labs_output ?>;
-        </script>
--->
-
-         <?php // } ?>
-
     <?php endforeach; // End order loop ?>
 <?php endif;?>
 
@@ -195,14 +135,16 @@ $quote = Mage::getModel('sales/quote')->load($quoteId);
     _gaq.push(['_setAccount', '<?php echo Mage::getStoreConfig("google/analytics/account")?>']);
     _gaq.push(['_trackPageview']);
     _gaq.push(['_addTrans',
-        '<?php echo $order->getData('increment_id'); ?>',           // order ID - required
-        'Totsy',  // affiliation or store name
-        '<?php echo $order->getData('grand_total'); ?>',          // total - required
-        '<?php echo $order->getData('tax_amount'); ?>',           // tax
-        '<?php echo $order->getData('shipping_amount'); ?>',              // shipping
-        '<?php echo $order->getShippingAddress()->getData('city')?>',       // city
-        '<?php echo $order->getShippingAddress()->getData('region')?>',     // state or province
-        'USA'             // country
+        '<?php echo $order->getData('increment_id'); ?>',     // order ID - required
+        'Totsy',                                              // affiliation or store name
+        '<?php echo $order->getData('grand_total'); ?>',      // total - required
+        '<?php echo $order->getData('tax_amount'); ?>',       // tax
+        '<?php echo $order->getData('shipping_amount'); ?>'   // shipping
+<?php if ($address = $order->getShippingAddress()): ?>
+       ,'<?php echo $address->getData('city') ?>',            // city
+        '<?php echo $address->getData('region') ?>',          // state or province
+        '<?php echo $address->getData('country') ?>'          // country
+<?php endif; ?>
     ]);
         <?php
         $category = array();

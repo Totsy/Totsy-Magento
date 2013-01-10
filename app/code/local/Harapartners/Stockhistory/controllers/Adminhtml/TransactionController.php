@@ -154,10 +154,9 @@ class Harapartners_Stockhistory_Adminhtml_TransactionController extends Mage_Adm
                 
                 $category = Mage::getModel('catalog/category')->load($poObject->getCategoryId());
                 $event_end_date = strtotime($category->getEventEndDate());
-                $event_start_date = strtotime($category->getEventStartDate());
                 $today = strtotime('NOW');
 
-                if (!($event_end_date <= $today) || ($today <= $event_start_date) ) {
+                if (!($event_end_date <= $today) ) {
                     if($transaction->updateProductStock()){
                         $transaction->save();
                     }else{
@@ -367,8 +366,14 @@ class Harapartners_Stockhistory_Adminhtml_TransactionController extends Mage_Adm
 
         $this->_redirect('*/*/report', array('po_id' => $this->getRequest()->getParam('po_id')));
     }
-
+    
+    /**
+     * ajax call that changes the case pack status (Yes/No) for 1 or more items
+     * @author Lawrenberg Hanson <lhanson@totsy.com>
+     * @example Stockhistory/Block/Adminhtml/Transaction/Report/Grid.php line 177
+     */
     public function changeCasePackAction() {
+
         $change_to = $this->getRequest()->getParam('change_to');
         $items = $this->getRequest()->getParam('product_id');
         if($items) {
@@ -383,5 +388,67 @@ class Harapartners_Stockhistory_Adminhtml_TransactionController extends Mage_Adm
         }
         Mage::getSingleton('adminhtml/session')->setPOReportGridData(null);
         $this->_redirectReferer(null);
+    }
+
+    /**
+     * This function is an ajax function that changes an items case pack information
+     * such as case pack qty and case pack group id
+     * @author Lawrenberg Hanson <lhanson@totsy.com>
+     * @example Stockhistory/Block/Adminhtml/Transaction/Report.php line 135
+     */
+    public function updateCasePackGroupAction() {
+        $post_data = $this->getRequest()->getParams();
+        $po_id = $this->getRequest()->getParam('po_id');
+        $response = array();
+        
+        $po = Mage::getModel('stockhistory/purchaseorder')->load($po_id);
+        $product = Mage::getModel('catalog/product')->getCollection();
+        $product->addAttributeToFilter('entity_id', $post_data['product_id'])
+                ->addAttributeToSelect(array('case_pack_qty', 'case_pack_grp_id'));
+        $product = $product->getFirstItem();
+        $product->setCategoryId($po->getCategoryId());
+        
+        try{
+            switch($post_data['id']) {
+                #change case pack group id of a given item
+                case 'casepackgrp':
+                    $response['response'] = $previous_cpg = $product->getData('case_pack_grp_id');
+                    
+                    if (Mage::getModel('stockhistory/transaction')->changeCasePackAttributeValue("case_pack_grp_id", $post_data['product_id'], trim($post_data['change_to']))) {
+                        $response['response'] = trim($post_data['change_to']);
+                        #calculate new order qty changes
+                        $order_amounts = Mage::getModel('stockhistory/transaction')->calculateCasePackOrderQty($product->getData('entity_id'), $po_id, trim($post_data['change_to']),true);
+                        
+                        #recalculate previous grp
+                        if($previous_cpg != $post_data['change_to']){
+                            $prv_grp_amounts = Mage::getModel('stockhistory/transaction')->calculateCasePackOrderQty(null, $po_id, $previous_cpg,true);
+                            $response['update'] = array_merge($order_amounts, $prv_grp_amounts );
+
+                        } else {
+                            $response['update'] = $order_amounts;
+                        }
+
+                        #messages
+                        $response['message'] = $order_amounts['message'];
+                    }
+                    break;
+                #change case pack quantity of a given item
+                case 'casepackqty':
+                    $response['response'] = $product->getData('case_pack_qty');
+                    if ($result = Mage::getModel('stockhistory/transaction')->changeCasePackAttributeValue("case_pack_qty", $post_data['product_id'], trim($post_data['change_to']))) {
+                        $response['response'] = trim($post_data['change_to']);
+                        $order_amounts = Mage::getModel('stockhistory/transaction')->calculateCasePackOrderQty($product->getData('entity_id'), $po_id, $product->getData('case_pack_grp_id'),true);
+                        $response['update'] = $order_amounts;
+                        
+                        #messages
+                        $response['message'] = $order_amounts['message'];
+                    }
+                    break;
+            }
+        }catch(Exception $e){
+            $response['message'][] = array('message' => $e->getMessage(), 'type' => 'error');
+        }
+        
+        $this->getResponse()->setBody(Mage::helper('core')->jsonEncode($response));
     }
 }
