@@ -131,6 +131,7 @@ html.test .container .row {outline:1px dotted green;}
     padding: 10px;
 }
 .table-bordered,
+.fast-ship-table-bordered,
 .thumbnail {
     -moz-border-radius:5px; -webkit-border-radius:5px; border-radius:5px;
 }
@@ -968,6 +969,44 @@ body.catalog-category-view .thumbnails > li {position: relative;}
 html body .shopping-cart-table tr:hover th
 {background-color: #cdd2d6;}
 
+.fast-ship-table th,
+html body .fast-ship-table tr:hover th {
+    background-color: #C0CD2F;
+    border-top: 1px solid #C0CD2F;
+}
+
+.shopping-cart-table th.first,
+html body .shopping-cart-table tr:hover th.first,
+.fast-ship-table th.first,
+html body .fast-ship-table tr:hover th.first {
+    -webkit-border-radius:4px 0 0 0;
+    -moz-border-radius:4px 0 0 0;
+    border-radius:4px 0 0 0;
+}
+
+.shopping-cart-table th.last,
+html body .shopping-cart-table tr:hover th.last,
+.fast-ship-table th.last,
+html body .fast-ship-table tr:hover th.last {
+    -webkit-border-radius:0 4px 0 0;
+    -moz-border-radius:0 4px 0 0;
+    border-radius:0 4px 0 0;
+}
+
+.fast-ship-table-bordered {
+    border:1px solid #C0CD2F;
+    border-collapse:separate;
+    *border-collapse:collapsed;
+    border-left:0;
+    -webkit-border-radius:4px;
+    -moz-border-radius:4px;
+    border-radius:4px;
+}
+
+.fast-ship-table-bordered thead:last-child tr:last-child th:first-child, .fast-ship-table-bordered tbody:last-child tr:last-child td:first-child {border-radius: 0 0 0 4px;}
+
+.fast-ship-table-bordered th,.fast-ship-table-bordered td{border-left:1px solid #C0CD2F;}
+
 #fastship_modal_icon {float:left; margin-top:-50px; margin-left: -50px;}
 #fastship_close_icon {float:right; margin-right:-20px; margin-top:-20px;}
 #fastship_modal {overflow: visible;}
@@ -997,7 +1036,7 @@ float:left;
 .paypal {
     height:34px; 
     width:56px;
-    background:url('../images/paypal_icon.gif'); 
+    background:url('https://www.paypalobjects.com/en_US/i/logo/PayPal_mark_50x34.gif');
     background-repeat: no-repeat;
     float:left;
 }

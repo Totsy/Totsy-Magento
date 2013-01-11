@@ -136,7 +136,7 @@ SELECT DISTINCT sfo.entity_id
 FROM            {$resource->getTableName('sales/order')} sfo
   INNER JOIN    {$resource->getTableName('sales/order_item')} sfoi ON sfoi.order_id = sfo.entity_id
   INNER JOIN    {$resource->getTableName('fulfillmentfactory/itemqueue')} fi ON fi.order_item_id = sfoi.item_id and fi.status in (3,8)
-WHERE sfo.status IN ('fulfillment_aging', 'pending')
+WHERE sfo.status IN ('fulfillment_aging', 'pending','processing')
   AND 0 = (
     SELECT count(*) FROM {$resource->getTableName('fulfillmentfactory/itemqueue')} fiq WHERE fiq.order_id = sfo.entity_id and fiq.status NOT IN (3,8)
   )
@@ -464,7 +464,7 @@ XML;
 
             //handling shipping address
             $shippingAddress = $order->getShippingAddress();
-            
+
             //to avoid null object
             if(empty($shippingAddress)) {
                 $shippingAddress = Mage::getModel('sales/order_address');
@@ -484,11 +484,11 @@ XML;
             $country = Mage::helper('fulfillmentfactory/dotcom')->getCountryCodeUsTerritories($state);
 
             //handling billing address
-             $billingAddress = $order->getBillingAddress();
+            $billingAddress = $order->getBillingAddress();
 
-             if(empty($billingAddress)) {
+            if(empty($billingAddress)) {
                 $billingAddress = Mage::getModel('sales/order_address');
-             }
+            }
 
             $billingAddress = Mage::helper('fulfillmentfactory/data')->removeAccentsFromAddress($billingAddress);
 
@@ -505,7 +505,7 @@ XML;
 
             $billing_country = Mage::helper('fulfillmentfactory/dotcom')->getCountryCodeUsTerritories($billing_state);
 
-            $totalAmount = number_format($order->getTotalInvoiced(), 2);
+            $totalAmount = number_format($order->getTotalInvoiced(), 2, '.', '');
 
             $xml = <<<XML
         <orders xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
@@ -604,28 +604,60 @@ XML;
                     continue;
                 }
 
-                $quantity = intval($item->getQtyToShip());
-                $sku = substr($item->getSku(), 0, 17);
+                if($product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_BUNDLE) {
+                    foreach($item->getChildrenItems() as $child) {
+                        $quantity = intval($child->getQtyToShip());
+                        $sku = substr($child->getSku(), 0, 17);
 
-                if($quantity) {
-                    $taxAmount = $item->getTaxAmount();
-                    if (!$taxAmount) {
-                        $taxAmount = '0';
+                        if($quantity) {
+                            $price = number_format($item->getPrice(), 2, '.', '');
+                            $taxAmount = $item->getTaxAmount();
+                            if (!$taxAmount) {
+                                $taxAmount = '0';
+                            }
+
+                            $xml .= <<<XML
+                        <line-item>
+                            <sku>$sku</sku>
+                            <quantity>$quantity</quantity>
+                            <price>$price</price>
+                            <tax>$taxAmount</tax>
+                            <shipping-handling>0</shipping-handling>
+                            <client-item xsi:nil="true"/>
+                            <line-number xsi:nil="true"/>
+                            <gift-box-wrap-quantity xsi:nil="true"/>
+                            <gift-box-wrap-type xsi:nil="true"/>
+                        </line-item>
+XML;
+                        }
+
                     }
 
-                    $xml .= <<<XML
-                    <line-item>
-                        <sku>$sku</sku>
-                        <quantity>$quantity</quantity>
-                        <price>{$item->getPrice()}</price>
-                        <tax>$taxAmount</tax>
-                        <shipping-handling>0</shipping-handling>
-                        <client-item xsi:nil="true"/>
-                        <line-number xsi:nil="true"/>
-                        <gift-box-wrap-quantity xsi:nil="true"/>
-                        <gift-box-wrap-type xsi:nil="true"/>
-                    </line-item>
+                } else {
+                    $quantity = intval($item->getQtyToShip());
+                    $sku = substr($item->getSku(), 0, 17);
+
+                    if($quantity) {
+                        $price = number_format($item->getPrice(), 2, '.', '');
+                        $taxAmount = $item->getTaxAmount();
+                        if (!$taxAmount) {
+                            $taxAmount = '0';
+                        }
+
+                        $xml .= <<<XML
+                        <line-item>
+                            <sku>$sku</sku>
+                            <quantity>$quantity</quantity>
+                            <price>$price</price>
+                            <tax>$taxAmount</tax>
+                            <shipping-handling>0</shipping-handling>
+                            <client-item xsi:nil="true"/>
+                            <line-number xsi:nil="true"/>
+                            <gift-box-wrap-quantity xsi:nil="true"/>
+                            <gift-box-wrap-type xsi:nil="true"/>
+                        </line-item>
 XML;
+                    }
                 }
             }
 

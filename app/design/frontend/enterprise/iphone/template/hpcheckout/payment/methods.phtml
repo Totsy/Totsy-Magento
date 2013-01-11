@@ -5,13 +5,13 @@
 	<input type="hidden" name="payment[method]" value="<?php echo $methods[0]->getCode() ?>">
 	<div><?php echo $this->getPaymentMethodFormHtml( $methods[0] ) ?></div>
 	<script type="text/javascript">
-		jQuery( "ul#payment_form_<?php echo $methods[0]->getCode() ?>" ).show();
+		jQuery( "#payment_form_<?php echo $methods[0]->getCode() ?>" ).show();
 	</script>
 <?php else: ?>
 	<!--span class="payment-title">Payment</span-->
 	<div class="totsy-selective-input-box middle-length">
 	<span><?php echo $this->__('Please select payment method') ?></span>
-	<select id="hpcheckout-payment-select" name="payment[method]" onchange="hpcheckout.switchPaymentMethod()" class="validate-select" >
+	<select id="hpcheckout-payment-select" name="payment[method]"  class="validate-select" >
 	<option value=""><?php echo $this->__('Please select payment method') ?></option>
 	<?php foreach ($methods as $_method): $_code = $_method->getCode() ?>
 	    <option value="<?php echo $_code ?>" <?php if($this->getSelectedMethodCode()==$_code): ?> selected="true"<?php endif; ?>><?php echo $_method->getTitle() ?></option>
@@ -25,10 +25,30 @@
 	    </div>
 	    <?php endif; ?>
 	<?php endforeach; ?>
+	<?php 
+    $quote = Mage::getSingleton('checkout/session')->getQuote();
+    
+    //do not show the paypal logo for mobile of the order contains both virtual AND tangible items
+    $showPaypal = true;    
+    
+    if ( $quote->getItemVirtualQty() > 0 && $quote->isVirtual()==false ) {
+        $showPaypal = false;
+    }
+    ?>
 	</div>
 	<script type="text/javascript">
 		jQuery( document ).ready( function() {
+		
+		    var showPaypal = "<?php echo $showPaypal; ?>";
+		    
+		    if(showPaypal==false) {
+		        jQuery("#hpcheckout-payment-select option[value='paypal_express']").remove();
+		    }
+		    
 			hpcheckout.switchPaymentMethod();
+			jQuery("#hpcheckout-payment-select").change( function() {
+                hpcheckout.switchPaymentMethod(this.value);
+     		});
 		});
 	</script>
 <?php endif ?>

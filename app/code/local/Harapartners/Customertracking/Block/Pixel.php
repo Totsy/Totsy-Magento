@@ -56,11 +56,11 @@ class Harapartners_Customertracking_Block_Pixel
             // additional logic to ensure the post-registration pixel fires
             // only once, by checking a tracking cookie
             $cookie = Mage::app()->getCookie();
-            $key = Harapartners_Customertracking_Helper_Data::COOKIE_CUSTOMER_WELCOME;
-            if ($cookie->get($key)) {
-                $idx = Harapartners_Affiliate_Helper_Data::PAGE_NAME_AFTER_CUSTOMER_REGISTER_SUCCESS;
-                $htmlPixel .= $trackingCodes[$idx];
-                $cookie->delete($key);
+            $cookieKey = Harapartners_Customertracking_Helper_Data::COOKIE_CUSTOMER_WELCOME;
+            $pixelKey  = Harapartners_Affiliate_Helper_Data::PAGE_NAME_AFTER_CUSTOMER_REGISTER_SUCCESS;
+            if ($cookie->get($cookieKey) && isset($trackingCodes[$pixelKey])) {
+                $htmlPixel .= $trackingCodes[$pixelKey];
+                $cookie->delete($cookieKey);
             }
 
             if (isset($trackingCodes[$pageTag])) {
@@ -77,7 +77,7 @@ class Harapartners_Customertracking_Block_Pixel
         $orderId = Mage::getSingleton('checkout/session')->getLastOrderId();
 
         $trackingInfo = Mage::getSingleton('customer/session')->getData('affiliate_info');
-        if ($trackingInfo) {
+        if ($trackingInfo && isset($trackingInfo['registration_param'])) {
             $regParams = json_decode($trackingInfo['registration_param'], true);
         } else {
             $regParams =  json_decode(Mage::getSingleton('customer/session')->getData('registration_param'));

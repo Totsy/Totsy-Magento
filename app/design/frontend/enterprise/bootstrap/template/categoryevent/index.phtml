@@ -159,16 +159,9 @@
                     $endcount = date("F j, Y, G:i:s", $endcountRaw);
                 ?>
                 <li class="span2 catalog-event up-event-counter-<?php echo $timer;?>">
-                    <span class="echoShare" 
-                        data-productname="<?php echo $up['name'];?>" 
-                        data-productcap="" 
-                        data-productdesc="<?php echo strip_tags(html_entity_decode($this->getDescription($up['description'])));?>" 
-                        data-imageclass="" 
-                        data-producturl="<?php echo Mage::getBaseUrl().$up['url_path']; ?>">
-                    </span>
                     <div class="thumbnail">
                         <hgroup>
-                            <h5><a href="<?php echo Mage::getBaseUrl().$up['url_path']; ?>"><?php echo $up['name'];?></a></h5>
+                            <h5><a href="<?php echo Mage::getBaseUrl().(array_key_exists('url_path',$up) ? $up['url_path'] : ''); ?>"><?php echo $up['name'];?></a></h5>
                         </hgroup>
                         <?php
                             $imgFile = (isset($up['small_image']))
@@ -176,7 +169,7 @@
                             $up['small_image']
                             : BP . DS . 'skin' . DS . 'frontend' . DS . 'enterprise ' . DS . 'harapartners' . DS . 'images' . DS . 'catalog' . DS . 'product' . DS . 'placeholder' . DS . 'small_image.jpg';
                         ?>
-                        <a class="event-link" href="<?php echo Mage::getBaseUrl().$up['url_path']; ?>">
+                        <a class="event-link" href="<?php echo Mage::getBaseUrl().(array_key_exists('url_path',$up) ? $up['url_path'] : ''); ?>">
                             <img src="<?php echo Mage::helper('service/image')->loadImageFile($imgFile)->resize(165)->keepFrame(FALSE); ?>" width="165px" height="171" alt="<?php echo $up['name'];?>" />
                         </a>
                         <?php $timer++; ?>

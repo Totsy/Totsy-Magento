@@ -46,6 +46,10 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Billing extends TinyBrick_Orde
         $data['region'] = $regionModel->getName();
         $duplicate = Mage::helper('orderedit')->checkDuplicate($billing, $data);
         if($duplicate) {
+            $customerAddressId = Mage::getModel('orderedit/edit_updater_type_billing')->getCustomerAddressFromBilling($billing->getId());
+            if(!$customerAddressId) {
+                Mage::helper('orderedit')->createCustomerAddressFromData($data, $order->getCustomerId());
+            }
             return false;
         }
         try{

@@ -93,12 +93,30 @@ class Harapartners_Ordersplit_Sales_Order_CreateController extends Mage_Adminhtm
             foreach($quoteItems as $key => $value) {
                 $quoteProduct = Mage::getModel('catalog/product')->load($key);
 
-                $fulfillmentTypes[$quoteProduct->getFulfillmentType()][] = $key;
+                if($quoteProduct->getFulfillmentType() == 'dotcom_stock') {
+                    $type = 'dotcom';
+                }
+                else {
+                    $type = $quoteProduct->getFulfillmentType();
+                }
+
+                if(!empty($type)) {
+                    $fulfillmentTypes[$type][] = $key;
+                }
             }
 
             foreach($items as $key=>$value) {
                 $product = Mage::getModel('catalog/product')->load($key);
-                $fulfillmentTypes[$product->getFulfillmentType()][] = $key;
+                if($product->getFulfillmentType() == 'dotcom_stock') {
+                    $type = 'dotcom';
+                }
+                else {
+                    $type = $product->getFulfillmentType();
+                }
+
+                if(!empty($type)) {
+                    $fulfillmentTypes[$type][] = $key;
+                }
             }
 
             if(count($fulfillmentTypes) > 1) {

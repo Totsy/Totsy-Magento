@@ -87,12 +87,12 @@ $savings = money_format('%n', $originalPrice) - money_format('%n', $discountPric
                         <h4>Shipping:</h4>
                         <p>This is a voucher code sale, which means there's no product being shipped to you at this time. Instead, shortly after your purchase, you will receive an email containing a voucher code, along with instructions on how to use and redeem that code. There is no shipment from Totsy, which means there are no shipping costs for this item.</p>
                         <h4>Returns:</h4>
-                        <p><strong class="shoutit"><em>All Voucher Sales Are Final</em> and nonrefundable.</strong><br> Questions? Please contact <a href="mailto:support@totsy.com">support@totsy.com</a><br> or 1-888-247-9444 (Monday to Friday, 9 am - 7 pm EST).</p>                        
+                        <p><strong class="shoutit"><em>All Voucher Sales Are Final</em> and nonrefundable.</strong><br> Questions? Please <a href="http://totsy.custhelp.com/app/ask">contact us</a><br> or call 1-888-247-9444 (Monday to Friday, 9 am - 7 pm EST).</p>                        
                     </div>
                     <?php else : ?>
                     <?php echo $this->getChildHtml('product.shipping.return'); ?>
                     <?php endif; ?>
-                    <div id="rondavu_pdp_container"></div>
+                    <!-- <div id="rondavu_pdp_container"></div> -->
                 </div>
             <?php 
                 $event_end_date = strtotime($_category->getEventEndDate());
