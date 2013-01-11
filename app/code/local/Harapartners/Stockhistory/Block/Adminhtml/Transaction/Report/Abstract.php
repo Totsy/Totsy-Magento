@@ -136,9 +136,10 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Abstract exte
         foreach($rawCollection as $item){
         	$newTransactionId = $item->getId(); // Hara Song, Save current trasaction ID for certain item
         	$product = Mage::getModel('catalog/product')->getCollection()
-                ->addAttributeToSelect('sale_wholesale')
+                ->addAttributeToSelect(array('sale_wholesale', 'is_master_pack'))
                 ->addAttributeToFilter('entity_id', $item->getProductId());
         	$product = $product->getFirstItem();
+            
         	$productId = $product->getId();
            
         	//ignore empty rows, some products may have been removed
