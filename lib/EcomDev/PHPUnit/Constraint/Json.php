@@ -157,7 +157,7 @@ class EcomDev_PHPUnit_Constraint_Json extends EcomDev_PHPUnit_Constraint_Abstrac
     protected function customFailureDescription($other, $description, $not)
     {
         return sprintf(
-            'string value %s.',
+            'Failed asserting that string value %s.',
             $this->toString()
         );
     }
