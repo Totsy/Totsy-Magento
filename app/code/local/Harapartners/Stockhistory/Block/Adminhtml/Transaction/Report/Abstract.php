@@ -170,9 +170,11 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Abstract exte
             		$uniqueProductList[$item->getProductId()]['amendment_total'] += $item->getQtyDelta() * $product->getData('sale_wholesale');
             		$uniqueProductList[$item->getProductId()]['amendment_qty'] += $item->getQtyDelta();
             }
-	        if($product->getData('is_master_pack')){
+	        if((int)$product->getData('is_master_pack')){
             	$uniqueProductList[$item->getProductId()]['is_master_pack'] = 'Yes';
             }
+
+                $uniqueProductList[$item->getProductId()]['is_master_pack_value'] = $product->getData('is_master_pack');
             
             //add items which should be removed
             if($item->getActionType() == Harapartners_Stockhistory_Model_Transaction::ACTION_TYPE_REMOVE) {
