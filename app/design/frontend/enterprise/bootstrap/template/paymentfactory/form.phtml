@@ -130,9 +130,7 @@ jQuery(document).ready( function() {
             jQuery('#shipping-address').show();
             jQuery('.addresses').width(445);
             billingAddress.attr("disabled", true);
-            newCardWrap.hide();
-
-
+            //newCardWrap.hide();
             
 			if(checkoutPayment.isCollapsed==false) {
 			    billAddySelect.val(jQuery("#address_" + jQuery( this ).val()).val()).change();
@@ -180,7 +178,7 @@ jQuery(document).ready( function() {
                     jQuery("#cc_save_text").html("Save");
 
                     jQuery(".use-new-card-wrapper").appendTo(jQuery("#add_cc_types"));
-                    newCardWrap.hide();
+                    //newCardWrap.hide();
                 } else {
 
                     jQuery("[id='add_payment']").hide();
@@ -197,11 +195,43 @@ jQuery(document).ready( function() {
                        jQuery("[id='" + this.id + "']").attr('disabled',stateFlag);
                    }
                });
-           }
+           },
+           getCreditCardType: function(ccNum) {
+              //start without knowing the credit card type
+              var result = "unknown";
+              //first check for MasterCard
+              if (/^5[1-5]/.test(ccNum)) {
+                result = "MC";
+              }//then check for Visa
+              else if (/^4/.test(ccNum)) {
+                result = "VI";
+              }//then check for AmEx
+              else if (/^3[47]/.test(ccNum)) {
+                result = "AE";
+              }
+              return result;
+            }
         };
     })();
     
     checkoutPayment.toggleViews();
+    
+    jQuery("#paymentfactory_tokenize_cc_number").keyup(function() {
+    
+        var ccEntered = checkoutPayment.getCreditCardType(this.value);
+    
+        jQuery("button","[id='paymentfactory_tokenize_cc_type']").each(function() {             
+            var temp = jQuery(this);
+            
+            if (ccEntered == this.value) {
+                //console.log(this.value);
+                temp.addClass('active');
+            } else {
+                temp.removeClass('active');
+            }
+        });
+        
+    });
     
 	jQuery(".use-saved-card-control").click( function(){
         jQuery("#paymentfactory_tokenize_cc_type input").attr("checked", false);
@@ -209,7 +239,7 @@ jQuery(document).ready( function() {
         jQuery('#billing-address-select').attr('disabled', true);
 	});
 
-    jQuery("#paymentfactory_tokenize_cc_type input").click( function(){
+    jQuery("#paymentfactory_tokenize_cc_type").click( function(){
         if(this.id == "paypal_payment") {
             newCardWrap.hide();
 //            jQuery('#billing-address').hide();
@@ -237,26 +267,28 @@ jQuery(document).ready( function() {
         	</div>
         	<div class="cc_types use-new-card-wrapper input-box validation-error pull-left">
         		<?php $_ccType = $this->getInfoData('cc_type') ?>
-        		 <div id="<?php echo $_code ?>_cc_type">
+        		 <div id="<?php echo $_code ?>_cc_type" data-toggle="buttons-radio">
         		 <?php $i=0; ?>
         		 <?php foreach ($this->getCcAvailableTypes() as $_typeCode => $_typeName): ?>
-        		  <input type="radio" class="validate-cybsersource-cc-type <?php if($i==3) { /*echo "validate-one-required"*/; } ?>" name="payment[cc_type]" value="<?php echo $_typeCode ?>" <?php if ($_typeCode==$_ccType) { echo "checked"; } ?> > 
-        		 <?php $i++; ?>
-        		 	<span class="cc">
+        		  <button type="button" class="btn validate-cybsersource-cc-type <?php if($i==3) { /*echo "validate-one-required"*/; } ?>" name="payment[cc_type]" value="<?php echo $_typeCode ?>" <?php if ($_typeCode==$_ccType) { echo "checked"; } ?> > 
+        		  <span class="cc">
         		 	    <span title="<?php echo $_typeName; ?>"  class="<?php echo strtolower($_typeCode); ?>" >
         		 	    </span>
         		 	</span> 
+        		 	                 </button>              
+        		 <?php $i++; ?>
         		 <?php endforeach ?>
         		 <?php $methods = $this->getLayout()->getBlock('hpcheckout.payment.methods')->getMethods();  ?> 
                  <?php if(count($methods)): ?>
                  	<?php if(!$multiShipping && !$hasVirtual && Mage::getModel('paypal/config')->isMethodActive('paypal_express')): ?>
-			    	    <input type="radio" value="paypal_express" id="paypal_payment" name="paypal_payment">
-			    	    <div>
-        		 	    <span title="Paypal Express" class="paypal"></span>
-        		 	    <a class="what-is-paypal-link" href="https://www.paypal.com/cgi-bin/webscr?cmd=xpt/Marketing/popup/OLCWhatIsPayPal-outside" target="_blank">What is<br /> PayPal?</a>
-        		 	    </div>
+			    	    <button type="button" class="btn" value="paypal_express" id="paypal_payment" name="paypal_payment">
+			    	        <div>
+        		 	        <span title="Paypal Express" class="paypal"></span>
+        		 	        <a class="what-is-paypal-link" href="https://www.paypal.com/cgi-bin/webscr?cmd=xpt/Marketing/popup/OLCWhatIsPayPal-outside" target="_blank">What is<br /> PayPal?</a>
+        		 	        </div>
+        		 	    </button>
         		 	<?php endif; ?>
-                 <?php endif; ?>                 
+                 <?php endif; ?>   
         		 <div style="clear:both; height:10px"></div>
         	    </div>
         	</div>  
