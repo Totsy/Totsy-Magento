@@ -118,7 +118,15 @@ class Totsy_Adminhtml_Model_Sales_Order_Create extends Mage_Adminhtml_Model_Sale
                                 }
                             }
                         }
-                        if($itemQty > ((int)$item->getProduct()->getStockItem()->getQty() + $oldItemQty)) {
+
+                        if($item->getProduct()->getTypeId() == 'configurable') {
+                            $simpleProduct = Mage::getModel('catalog/product')->loadByAttribute('sku',$item->getSku());
+                            $productStockQty = (int)Mage::getModel('cataloginventory/stock_item')->loadByProduct($simpleProduct)->getQty();
+                        } else {
+                            $productStockQty = (int)$item->getProduct()->getStockItem()->getQty();
+                        }
+
+                        if($itemQty > ($productStockQty + $oldItemQty)) {
                             Mage::throwException(
                                 Mage::helper('adminhtml')->__('The quantity requested for "%s" is not available', $item->getProduct()->getName())
                             );
@@ -199,8 +207,13 @@ class Totsy_Adminhtml_Model_Sales_Order_Create extends Mage_Adminhtml_Model_Sale
                 }
             }
         }
+        if($product->getTypeId() == 'configurable') {
+            $productStockQty = (int)Mage::getModel('cataloginventory/stock_item')->loadByProduct($product)->getQty();
+        } else {
+            $productStockQty = (int)$product->getStockItem()->getQty();
+        }
 
-        if($config->getQty() > ((int) $stockItem->getQty() + $oldItemQty)) {
+        if($config->getQty() > ($productStockQty + $oldItemQty)) {
             Mage::throwException(
                 Mage::helper('adminhtml')->__('The quantity requested for "%s" is not available', $product->getName())
             );
