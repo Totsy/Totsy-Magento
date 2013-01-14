@@ -454,6 +454,10 @@ class Harapartners_Ordersplit_Helper_Data extends Mage_Core_Helper_Abstract {
                             $continue = false;
                         }
 
+                        if($continue && (!$invoice->getBaseGrandTotal())) {
+                            $continue = false;
+                        }
+
                         if($continue && $invoice->canCapture()) {
                             $invoice->capture();
 
