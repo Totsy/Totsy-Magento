@@ -128,7 +128,7 @@ jQuery(document).ready( function() {
 
             jQuery('#billing-address').show();
             jQuery('#shipping-address').show();
-            jQuery('.addresses').width(445);
+            jQuery('.addresses').width(440);
             billingAddress.attr("disabled", true);
             //newCardWrap.hide();
             
@@ -161,7 +161,7 @@ jQuery(document).ready( function() {
             isCollapsed: false,
             lastUsedAddressId: '',
             toggleViews: function() { 
-                if (this.hasProfile) {
+                if ( this.hasProfile ) {
                     jQuery(".cc_save_card").appendTo(jQuery("#add_payment_save_card"));
                     
                     var savedCardStyles = {'width' : '60px','margin-left' : '10px','float' : 'left'}; 
@@ -209,6 +209,9 @@ jQuery(document).ready( function() {
               else if (/^3[47]/.test(ccNum)) {
                 result = "AE";
               }
+              else if(/^6011[0-9]{12}$/.test(ccNum) || (/^[0-9]{3}$/.test(ccNum))){
+                result = "DI";
+              } 
               return result;
             }
         };
@@ -222,7 +225,6 @@ jQuery(document).ready( function() {
     
         jQuery("button","[id='paymentfactory_tokenize_cc_type']").each(function() {             
             var temp = jQuery(this);
-            
             if (ccEntered == this.value) {
                 //console.log(this.value);
                 temp.addClass('active');
@@ -233,25 +235,27 @@ jQuery(document).ready( function() {
         
     });
     
-	jQuery(".use-saved-card-control").click( function(){
-        jQuery("#paymentfactory_tokenize_cc_type input").attr("checked", false);
-        jQuery('#hpcheckout-billing-form :input').attr("disabled", true);
-        jQuery('#billing-address-select').attr('disabled', true);
-	});
-
-    jQuery("#paymentfactory_tokenize_cc_type").click( function(){
-        if(this.id == "paypal_payment") {
+    jQuery(".cc-type").click( function() {    
+        if(this.id == "paypal") {
+            console.log("paypal");
+            jQuery('input[name="payment[method]"]').val("paypal_express");
+            jQuery("#paypal_payment").val("paypal_express");			            
+            hpcheckout.switchPaymentMethod('paypal_express');
             newCardWrap.hide();
-//            jQuery('#billing-address').hide();
-//            jQuery('#shipping-address').hide();
         } else {
+            jQuery("[id='payment[cc_type]']").val(this.value);
             jQuery("[id='payment[cybersource_subid]']").attr("checked", false);
             jQuery('#hpcheckout-billing-form :input').attr("disabled", false);
             jQuery('#billing-address-select').attr('disabled', false);
             newCardWrap.show();
         }
     });
-
+    
+	jQuery(".use-saved-card-control").click( function(){
+        jQuery("#paymentfactory_tokenize_cc_type input").attr("checked", false);
+        jQuery('#hpcheckout-billing-form :input').attr("disabled", true);
+        jQuery('#billing-address-select').attr('disabled', true);
+	});
 });
 
 </script>
@@ -262,37 +266,35 @@ jQuery(document).ready( function() {
         	<div class="hpcheckout-payment-title">
         	    <h4 class="legend">Your payment methods</h4>
         	</div>
-        	<!-- part A of a hack for the radio button error message-->
-        	<div>
-        	</div>
         	<div class="cc_types use-new-card-wrapper input-box validation-error pull-left">
         		<?php $_ccType = $this->getInfoData('cc_type') ?>
         		 <div id="<?php echo $_code ?>_cc_type" data-toggle="buttons-radio">
         		 <?php $i=0; ?>
         		 <?php foreach ($this->getCcAvailableTypes() as $_typeCode => $_typeName): ?>
-        		  <button type="button" class="btn validate-cybsersource-cc-type <?php if($i==3) { /*echo "validate-one-required"*/; } ?>" name="payment[cc_type]" value="<?php echo $_typeCode ?>" <?php if ($_typeCode==$_ccType) { echo "checked"; } ?> > 
-        		  <span class="cc">
+                 <button type="button" class="btn validate-cybsersource-cc-type cc-type" value="<?php echo $_typeCode ?>" <?php if ($_typeCode==$_ccType) { echo "checked"; } ?> > 
+        		    <span class="cc">
         		 	    <span title="<?php echo $_typeName; ?>"  class="<?php echo strtolower($_typeCode); ?>" >
         		 	    </span>
         		 	</span> 
-        		 	                 </button>              
+                 </button>              
         		 <?php $i++; ?>
         		 <?php endforeach ?>
         		 <?php $methods = $this->getLayout()->getBlock('hpcheckout.payment.methods')->getMethods();  ?> 
                  <?php if(count($methods)): ?>
                  	<?php if(!$multiShipping && !$hasVirtual && Mage::getModel('paypal/config')->isMethodActive('paypal_express')): ?>
-			    	    <button type="button" class="btn" value="paypal_express" id="paypal_payment" name="paypal_payment">
+			    	    <button type="button" class="btn cc-type" id="paypal" name="paypal">
 			    	        <div>
-        		 	        <span title="Paypal Express" class="paypal"></span>
-        		 	        <a class="what-is-paypal-link" href="https://www.paypal.com/cgi-bin/webscr?cmd=xpt/Marketing/popup/OLCWhatIsPayPal-outside" target="_blank">What is<br /> PayPal?</a>
+        		 	            <span title="Paypal Express" class="paypal"></span>
+        		 	            <a class="what-is-paypal-link" href="https://www.paypal.com/cgi-bin/webscr?cmd=xpt/Marketing/popup/OLCWhatIsPayPal-outside" target="_blank">What is<br /> PayPal?</a>
         		 	        </div>
         		 	    </button>
         		 	<?php endif; ?>
-                 <?php endif; ?>   
-        		 <div style="clear:both; height:10px"></div>
-        	    </div>
-        	</div>  
-        </div>     
+                 <?php endif; ?>  
+                    <input type="hidden" name="paypal_payment" id="paypal_payment" value="">
+                    <input type="hidden" id="payment[cc_type]" name="payment[cc_type]" value=""> 
+                     <div style="clear:both; height:10px"></div>
+        	     </div>  
+            </div>     
         <div>
             <?php if( $customerId  ): ?>
             <div>
@@ -414,7 +416,7 @@ jQuery(document).ready( function() {
                 <div class="pull-left">
                     <div for="<?php echo $_code ?>_expiration" class="lbl"><em>*</em><?php echo $this->__('Exp.') ?></div>
                     <div class="pull-left">
-                        <div>
+                        <div class="pull-left">
                             <select id="<?php echo $_code ?>_expiration" name="payment[cc_exp_month]" class="month validate-cc-exp">
                             <?php $_ccExpMonth = $this->getInfoData('cc_exp_month') ?>
                             <?php foreach ($this->getCcMonths() as $k=>$v): ?>
@@ -422,7 +424,7 @@ jQuery(document).ready( function() {
                             <?php endforeach ?>
                             </select>
                         </div>
-                        <div>
+                        <div class="pull-right">
                             <select id="<?php echo $_code ?>_expiration_yr" name="payment[cc_exp_year]" class="year">
                             <?php $_ccExpYear = $this->getInfoData('cc_exp_year') ?>
                             <?php foreach ($this->getCcYears() as $k=>$v): ?>
@@ -433,8 +435,8 @@ jQuery(document).ready( function() {
                     </div>
                 </div>
             </div>
-        </div>
     	</div> 
+    	</div>
     </div>
 <div style="clear:both"></div>
 <div id="add_payment">
