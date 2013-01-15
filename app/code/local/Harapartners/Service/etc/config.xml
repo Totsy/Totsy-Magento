@@ -151,7 +151,7 @@
                     <!--Harapartners_SpeedTax-->
                     <quote_address_total_grand>Harapartners_Service_Model_Rewrite_Sales_Quote_Address_Total_Grand</quote_address_total_grand>
 					<!--Harapartners_Service, Query optimization, no quote item price update after product import-->
-					<observer>Harapartners_Service_Model_Rewrite_Sales_Observer</observer>
+					<!--observer>Harapartners_Service_Model_Rewrite_Sales_Observer</observer-->
 					<!--Harapartners_Service, Removing Ogone from order status-->
                     <order_config>Harapartners_Service_Model_Rewrite_Sales_Order_Config</order_config>
 					<!--Harapartners_Service, if product does not have an live category/event, it cannot be add to cart (quote)--><!--Harapartners_Promotionfactory, Virtual product (coupons) should always be a separate line item-->

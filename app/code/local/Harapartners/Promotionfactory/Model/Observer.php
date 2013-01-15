@@ -37,14 +37,16 @@ class Harapartners_Promotionfactory_Model_Observer {
             && $reservationCodeOption->getValue()){
             return;
         }
+        $vpc = null;
 
-        $vpc = Mage::getModel('promotionfactory/virtualproductcoupon')
-        ->loadOneByProductId($product->getId(), Harapartners_Promotionfactory_Model_Virtualproductcoupon::COUPON_STATUS_AVAILABLE );
-
-        //'null' when current virtual product does not have any coupon code associated with it
-        if($vpc === null){
-            return;
-        }
+        /** Old Logic not active since 06/2012 */
+//        $vpc = Mage::getModel('promotionfactory/virtualproductcoupon')
+//        ->loadOneByProductId($product->getId(), Harapartners_Promotionfactory_Model_Virtualproductcoupon::COUPON_STATUS_AVAILABLE );
+//
+//        //'null' when current virtual product does not have any coupon code associated with it
+//        if($vpc === null){
+//            return;
+//        }
 
         if($vpc instanceof Harapartners_Promotionfactory_Model_Virtualproductcoupon){
             if($vpc->getId()){

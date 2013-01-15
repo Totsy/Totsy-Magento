@@ -9,6 +9,11 @@ class Crown_Vouchers_Model_Mysql4_Setup extends Mage_Core_Model_Resource_Setup {
 		$this->createAttributes();
 		$this->createTables();
 	}
+
+    public function upgradeModule_1_1() {
+        $this->createRegularVoucherPriceAttribute();
+        $this->createDiscountVoucherPriceAttribute();
+    }
 	
 	/**
 	 * Creates the attributes for the Module
@@ -52,6 +57,14 @@ class Crown_Vouchers_Model_Mysql4_Setup extends Mage_Core_Model_Resource_Setup {
 	private function createVoucherCodeAttribute() {
 		$this->createAttribute('voucher_code', 'Voucher Code', 'text', 'virtual');
 	}
+
+    private function createRegularVoucherPriceAttribute() {
+        $this->createAttribute('regular_voucher_price', 'Regular Voucher Price', 'price', 'virtual');
+    }
+
+    private function createDiscountVoucherPriceAttribute() {
+        $this->createAttribute('discount_voucher_price', 'Discount Voucher Price', 'price', 'virtual');
+    }
 	
 	
 	/**
@@ -60,7 +73,7 @@ class Crown_Vouchers_Model_Mysql4_Setup extends Mage_Core_Model_Resource_Setup {
 	 * @param string $code the attribute code
 	 * @param string $label frontend label
 	 * @param string $attribute_type text|textarea|date|boolean|multiselect|select|price|media_image|weee
-	 * @param unknown_type $product_type simple|configurable|bundle|grouped|downloadable|virtual|giftcard
+	 * @param string $product_type simple|configurable|bundle|grouped|downloadable|virtual|giftcard
 	 */
 	private function createAttribute($code, $label, $attribute_type, $product_type) {
 			$_attribute_data = array (
