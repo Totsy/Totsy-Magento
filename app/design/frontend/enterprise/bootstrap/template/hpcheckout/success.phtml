@@ -47,7 +47,7 @@
 <?php if ($address = $order->getShippingAddress()): ?>
                ,'<?php echo $address->getData('city') ?>',            // city
                 '<?php echo $address->getData('region') ?>',          // state or province
-                '<?php echo $address->getData('country') ?>'          // country
+                'USA'          // country
 <?php endif; ?>
             ]);
                 <?php
@@ -145,7 +145,7 @@ $quote = Mage::getModel('sales/quote')->load($quoteId);
 <?php if ($address = $order->getShippingAddress()): ?>
        ,'<?php echo $address->getData('city') ?>',            // city
         '<?php echo $address->getData('region') ?>',          // state or province
-        '<?php echo $address->getData('country') ?>'          // country
+        'USA'          // country
 <?php endif; ?>
     ]);
         <?php
