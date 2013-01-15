@@ -8,12 +8,17 @@
     <global>
         <models>
             <cataloginventory>
-                <!-- <class>Totsy_CatalogInventory_Model_Stock_Item</class> -->
                 <rewrite>
                     <stock_status>Totsy_CatalogInventory_Model_Stock_Status</stock_status>
                     <stock>Totsy_CatalogInventory_Model_Stock</stock>
+                    <stock_item>Totsy_CatalogInventory_Model_Stock_Item</stock_item>
                 </rewrite>
             </cataloginventory>
         </models>
+        <helpers>
+            <totsy_cataloginventory>
+                <class>Totsy_CatalogInventory_Helper</class>
+            </totsy_cataloginventory>
+        </helpers>
     </global>
 </config>

@@ -31,6 +31,9 @@ class Totsy_CatalogInventory_Model_Stock extends Mage_CatalogInventory_Model_Sto
                 Mage::throwException(Mage::helper('cataloginventory')->__('The requested quantity for "%s" is not available.', $product->getName()));
             }
             $item->subtractQty($qtys[$item->getProductId()]);
+
+            Mage::helper('totsy_cataloginventory')->changeReserveCount($item->getProductId(),-1*$qtys[$item->getProductId()]);
+
             if (!$item->verifyStock() || $item->verifyNotification()) {
                 $fullSaveItems[] = clone $item;
             }

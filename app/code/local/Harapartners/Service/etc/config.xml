@@ -413,15 +413,15 @@
                     </rushcheckout>
                 </observers>
             </sales_quote_item_save_after -->
-            <!--sales_quote_item_delete_after>
-                <observers-->
+            <sales_quote_item_delete_after>
+                <observers>
                     <!--Harapartners_Rushcheckout: Deleting quote item -->
-                    <!--rushcheckout>
+                    <rushcheckout>
                         <class>rushcheckout/observer</class>
                         <method>updateReservationByQuoteItem</method>
                     </rushcheckout>
                 </observers>
-            </sales_quote_item_delete_after-->>
+            </sales_quote_item_delete_after>
             <customer_session_init>
                 <observers>
                     <!--Harapartners_Rushcheckout-->
