@@ -1,11 +1,13 @@
 <reference name="head">
 <action method="addJs"><script>prototype/window.js</script></action>
 <action method="addJs"><script>prototype/window_effects.js</script></action>
+<action method="addJs"><script>jquery/jquery-ui-1.8.13.js</script></action>
+<action method="addCss"><stylesheet>css/smoothness/jquery-ui-1.9.2.custom.min.css</stylesheet></action>
         <action method="addItem"><type>js_css</type><name>prototype/windows/themes/default.css</name></action>
         <action method="addItem"><type>js_css</type><name>prototype/windows/themes/magento.css</name></action>    
 </reference>
 <reference name="product_list">
 	<action method="setTemplate">
-		<template>catalog/product/voucher-list.phtml</template>
+		<template>catalog/product/entertainment-savings.phtml</template>
 	</action>
 </reference>
