@@ -25,6 +25,8 @@
  */
 ?>
 <?php
+/** @var $this Mage_Checkout_Block_Cart */
+
 /**
  * Shopping cart template
  *
@@ -38,7 +40,74 @@
     $serverTime = Mage::getModel('core/date')->timestamp() * 1000;
     $quote = Mage::getSingleton('checkout/session')->getQuote();
     $saving = Mage::helper('sales/order')->calculateEstimatedSavings($quote);
+
+    $ajaxUrl = Mage::getUrl('hpcheckout/ajax/splitCart/');
 ?>
+
+
+<?php
+
+    $multiShipping = FALSE;
+    $fulfillmentTypes = array();
+    $splitYesCss = '';
+    $splitNoCss = '';
+    $hasVirtual = false;
+    $hasDotCom = false;
+
+    $splitCartPrice = Mage::helper('core')->formatPrice(Mage::getStoreConfig('checkout/cart/split_cart_price'));
+
+    // Check to see if there are multiple fulfillment types
+    foreach($this->getItems() as $item) {
+        if($item->getParentItemId()) {
+            continue;
+        }
+        $product = Mage::getModel ( 'catalog/product' )->load ( $item->getProductId () );
+        if($product->getIsVirtual()) {
+            $fulfillmentType = 'virtual';
+            $hasVirtual = true;
+        } else {
+            $fulfillmentType = $product->getFulfillmentType();
+        }
+        $fulfillmentTypes [$fulfillmentType] [] = $item->getId ();
+
+    }
+
+    if(count($fulfillmentTypes) > 1) {
+        $multiShipping = TRUE;
+        $sortedFulfillmentTypes = array();
+        if(array_key_exists('dotcom_stock',$fulfillmentTypes)) {
+            $sortedFulfillmentTypes['dotcom_stock'] = $fulfillmentTypes['dotcom_stock'];
+            unset($fulfillmentTypes['dotcom_stock']);
+        }
+        if(array_key_exists('dotcom',$fulfillmentTypes)) {
+            $sortedFulfillmentTypes['dotcom'] = $fulfillmentTypes['dotcom'];
+            $hasDotCom = true;
+            unset($fulfillmentTypes['dotcom']);
+        }
+        if(array_key_exists('virtual',$fulfillmentTypes)) {
+            $sortedFulfillmentTypes['virtual'] = $fulfillmentTypes['virtual'];
+            unset($fulfillmentTypes['virtual']);
+        }
+        if(count($fulfillmentTypes)) {
+            array_push($sortedFulfillmentTypes,$fulfillmentTypes);
+        }
+        $fulfillmentTypes = $sortedFulfillmentTypes;
+    }
+
+    // Split cart check
+    $splitCartFlag = $this->getCheckout()->getSplitCartFlag();
+
+    if($splitCartFlag) {
+        $splitYesCss = 'font-weight:bold;';
+    }
+    else {
+        $splitNoCss = 'font-weight:bold;';
+    }
+
+?>
+
+
+
 <div class="page-header">
     <h2><?php echo $this->__('Shopping Cart') ?></h2>
 </div>
@@ -52,6 +121,9 @@
         	    </div>
                 <div class="btn-cart-checkout">
         	    <?php foreach ($this->getMethods('top_methods') as $method): ?>
+                    <?php if($method == 'checkout.cart.methods.paypal_express.top' && $multiShipping) {
+                        continue; // No paypal if multiple fulfillment types
+                    }?>
         	        <?php if ($methodHtml = $this->getMethodHtml($method)): ?>
         	        	<?php echo $methodHtml; ?>
         	        <?php endif; ?>
@@ -64,18 +136,58 @@
     <?php echo $this->getChildHtml('form_before') ?>
     <div class="cart-form-container">
     <form action="<?php echo $this->getUrl('checkout/cart/updatePost') ?>" method="post">
-        <fieldset>
-            <table id="shopping-cart-table" class="data-table table table-bordered table-condensed">
-            <?php $mergedCells = ($this->helper('tax')->displayCartBothPrices() ? 2 : 1); ?>
+
+        <?php foreach($fulfillmentTypes as $fulfillmentType => $items):?>
+
+            <?php
+                $fastShip = $fulfillmentType == 'dotcom_stock' ? true : false;
+                switch($fulfillmentType) {
+
+                    case 'dotcom':
+                        echo '<h3>Standard Shipping Items</h3>The following items will ship on or around '.  date('F jS, Y', Mage::helper('sales/order')->calculateEstimatedShipDate($quote));
+                        break;
+                    case 'dotcom_stock':
+                        ?>
+                    <div>
+                        <div class="cart-prod-thumb">
+                            <img width="48" height="48" src="<?php echo $this->getSkinUrl('images/icon-fastship-small.png'); ?>"/>
+                        </div>
+                        <div>
+                            <h3 style="display:inline;">Get These Items Fast!</h3>&nbsp;<a href="#fastship_modal" role="button" data-toggle="modal">What is this?</a><br/>
+                            <?php if($multiShipping && $hasDotCom): ?>
+                            FastShip these items in 3 days or less for an additional <?php echo $splitCartPrice?>
+                            <input type="checkbox" id="fastShipCheck" onclick="javascript:setSplitCartFlag()"<?php echo $splitCartFlag? ' checked="checked"' : ''; ?>>
+                            <input id="splitCartFlag" type="hidden" name="splitCart" value="<?php echo $splitCartFlag ? 1 : 0;?>" />
+                            <?php endif; ?>
+                        </div>
+                        <br class="clear"/>
+                    </div>
+                        <?php
+                        break;
+                    case 'virtual':
+                        echo '<h3>The following voucher codes will be emailed immediately</h3>';
+                        break;
+                }
+
+
+            ?>
+
+            <fieldset>
+                <?php if($fastShip) : ?>
+                <table class="fast-ship-table data-table table fast-ship-table-bordered table-condensed">
+                <?php else : ?>
+                <table class="shopping-cart-table data-table table table-bordered table-condensed">
+                <?php endif; ?>
+                    <?php $mergedCells = ($this->helper('tax')->displayCartBothPrices() ? 2 : 1); ?>
                     <tr>
-                        <th rowspan="<?php echo $mergedCells; ?>" colspan="1"><span class="nobr"><?php echo $this->__('Product Name') ?></span></th>
+                        <th class="first" rowspan="<?php echo $mergedCells; ?>" colspan="1" width="60%"><span class="nobr"><?php echo $this->__('Product Name') ?></span></th>
                         <?php if ($this->helper('wishlist')->isAllowInCart()) : ?>
                         <th colspan="1" rowspan="<?php echo $mergedCells; ?>" class="a-center"><span class="nobr"><?php echo $this->__('Move to Wishlist') ?></span></th>
                         <?php endif ?>
-                        <th class="a-center" colspan="<?php echo $mergedCells; ?>"><span class="nobr"><?php echo $this->__('Unit Price') ?></span></th>
-                        <th colspan="1" rowspan="<?php echo $mergedCells; ?>" class="a-center"><?php echo $this->__('Qty') ?></th>
-                        <th class="a-center" colspan="1"><span class="nobr"><?php echo $this->__('Subtotal') ?></span></th>
-                        <th colspan="1" rowspan="<?php echo $mergedCells; ?>" class="a-center"><span class="nobr"></span></th>
+                        <th class="a-center" colspan="<?php echo $mergedCells; ?>" width="12%"><span class="nobr"><?php echo $this->__('Unit Price') ?></span></th>
+                        <th colspan="1" rowspan="<?php echo $mergedCells; ?>" class="a-center" width="10%"><?php echo $this->__('Qty') ?></th>
+                        <th class="a-center" colspan="1" width="12%"><span class="nobr"><?php echo $this->__('Subtotal') ?></span></th>
+                        <th colspan="1" rowspan="<?php echo $mergedCells; ?>" class="last a-center" width="6%"><span class="nobr"><?php echo $this->__('Remove') ?></span></th>
                     </tr>
                     <?php if ($this->helper('tax')->displayCartBothPrices()): ?>
                     <tr>
@@ -85,19 +197,30 @@
                         <th><?php echo $this->helper('tax')->getIncExcTaxLabel(true) ?></th>
                     </tr>
                     <?php endif; ?>
-                <tbody>
-                <?php foreach($this->getItems() as $_item): ?>
-                    <?php echo $this->getItemHtml($_item) ?>
-                <?php endforeach ?>
-                </tbody>
-                <tr>
-                	<td colspan="6">
-                		<button type="submit" class="pull-right btn button" title="<?php echo $this->__('Update Shopping Cart') ?>" ><?php echo $this->__('Update Shopping Cart') ?></button>
-                	</td>
-                </tr>
-            </table>
-            <script type="text/javascript">decorateTable('shopping-cart-table')</script>
-        </fieldset>
+                    <tbody>
+
+                        <?php foreach($items as $key=>$itemId):?>
+                            <?php foreach($this->getItems() as $_item): ?>
+                                <?php if($_item->getId() == $itemId):?>
+                                    <?php echo $this->getItemHtml($_item) ?>
+                                <?php endif;?>
+                            <?php endforeach ?>
+                        <?php endforeach;?>
+
+                    </tbody>
+                </table>
+                <script type="text/javascript">decorateTable('shopping-cart-table')</script>
+
+            </fieldset>
+        <?php endforeach;?>
+
+        <table class="shopping-cart-table data-table table table-bordered table-condensed">
+            <tr>
+                <td colspan="6">
+                    <button type="submit" class="pull-right btn button" title="<?php echo $this->__('Update Shopping Cart') ?>" ><?php echo $this->__('Update Shopping Cart') ?></button>
+                </td>
+            </tr>
+        </table>
     </form>
     </div>
     <div class="totals pull-right">
@@ -115,6 +238,9 @@
         	    </div>
                 <div class="btn-cart-checkout">
         	    <?php foreach ($this->getMethods('top_methods') as $method): ?>
+                    <?php if($method == 'checkout.cart.methods.paypal_express.top' && $multiShipping) {
+                        continue; // No paypal if multiple fulfillment types
+                    }?>
         	        <?php if ($methodHtml = $this->getMethodHtml($method)): ?>
         	        	<?php echo $methodHtml; ?>
         	        <?php endif; ?>
@@ -136,4 +262,29 @@
         <?php //if (!$this->getIsVirtual()): echo $this->getChildHtml('shipping'); endif; ?>
     </div>
     <?php endif;?>
+</div>
+<script type="text/javascript">
+
+    function setSplitCartFlag(el) {
+        var value = jQuery('#fastShipCheck').is(':checked') ? 1 : 0;
+        jQuery('#splitCartFlag').val(value);
+        jQuery.get('<?php echo $ajaxUrl;?>',{id: value});
+    }
+
+</script>
+
+<div id="fastship_modal" class="modal hide fade">
+    <div id="fastship_modal_icon">
+        <img width="117" height="115" src="<?php echo $this->getSkinUrl('images/icon-fastship-large.png');?>"/>
+    </div>
+    <div id="fastship_close_icon">
+        <a href="javascript:void(0);" data-dismiss="modal"><img width="55" height="55" src="<?php echo $this->getSkinUrl('images/icon-fastship-close.png');?>"/></a>
+    </div>
+    <div id="fastship_modal_title">
+        <h1>What is FastShip?</h1>
+    </div>
+    <br class="clear"/>
+    <div id="fastship_modal_text">
+        <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('fastship_info')->toHtml() ?> <?php echo $splitCartPrice?></p>
+    </div>
 </div>

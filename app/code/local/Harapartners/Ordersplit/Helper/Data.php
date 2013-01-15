@@ -16,6 +16,7 @@
 class Harapartners_Ordersplit_Helper_Data extends Mage_Core_Helper_Abstract {
     
     const TYPE_DOTCOM = 'dotcom';
+    const TYPE_DOTCOM_STOCK = 'dotcom_stock';
     const TYPE_DROPSHIP = 'dropship';
     const TYPE_VIRTUAL = 'virtual';
     const TYPE_OTHER = 'other';
@@ -24,7 +25,8 @@ class Harapartners_Ordersplit_Helper_Data extends Mage_Core_Helper_Abstract {
         return array(
                 self::TYPE_DOTCOM, 
                 self::TYPE_DROPSHIP, 
-                self::TYPE_VIRTUAL
+                self::TYPE_VIRTUAL,
+                self::TYPE_DOTCOM_STOCK
         );
     }
     
@@ -38,7 +40,34 @@ class Harapartners_Ordersplit_Helper_Data extends Mage_Core_Helper_Abstract {
         }
         /**split order*/    
         return $this->createSplitOrder($oldOrder,$splitInfoArray);                    
-    }    
+    }
+
+    public function processOrder($order) {
+        foreach($order->getAllItems() as $item) {
+            if($item->getParentItemId()) {
+                continue;
+            }
+            $product = Mage::getModel ( 'catalog/product' )->load ( $item->getProductId () );
+            switch($product->getFulfillmentType()) {
+                case self::TYPE_DOTCOM:
+                    Mage::helper('ordersplit')->processNonHybridOrder($order, self::TYPE_DOTCOM);
+                    break;
+                case self::TYPE_DOTCOM_STOCK:
+                    Mage::helper('ordersplit')->processNonHybridOrder($order, self::TYPE_DOTCOM_STOCK);
+                    break;
+                case self::TYPE_VIRTUAL:
+                    Mage::helper('ordersplit')->processNonHybridOrder($order, self::TYPE_VIRTUAL);
+                    break;
+                case self::TYPE_DROPSHIP:
+                    Mage::helper('ordersplit')->processNonHybridOrder($order, self::TYPE_DROPSHIP);
+                    break;
+                case self::TYPE_OTHER:
+                default:
+                    Mage::helper('ordersplit')->processNonHybridOrder($order, self::TYPE_OTHER);
+            }
+            break;
+        }
+    }
     
     protected function _splitQuoteItems($oldOrder){        
         $splitInfoArray = array();
@@ -409,26 +438,46 @@ class Harapartners_Ordersplit_Helper_Data extends Mage_Core_Helper_Abstract {
     public function processNonHybridOrder($order, $type){
         switch($type){
             case self::TYPE_VIRTUAL;
-                if($order->canInvoice()) {
                     try{
-                        $action = Mage_Payment_Model_Method_Abstract::ACTION_AUTHORIZE_CAPTURE;
-                        $orderPayment = $order->getPayment();
-                        $orderPayment->getMethodInstance()->setData('forced_payment_action', $action);
-                        
-                        //NOTE: important events like 'sales_order_invoice_pay' are automatically dispatched
-                        $orderPayment->place();
-                        
-                        $virtualproductcoupon = Mage::getModel('promotionfactory/virtualproductcoupon');
-                        $virtualproductcoupon->openVirtualProductCouponInOrder($order);
-                        $order->setData('state', 'complete')
-                            ->setStatus('complete')
-                            ->save();
+                        $order->save();
+                        $order->getPayment()->save();
+                        $continue = true;
+                        if($order->canInvoice() === false) {
+                            $continue = false;
+                        }
+
+                        if($continue && (($invoice = $order->prepareInvoice()) == false)) {
+                            $continue = false;
+                        }
+
+                        if($continue && (($invoice->register()) === false)) {
+                            $continue = false;
+                        }
+
+                        if($continue && $invoice->canCapture()) {
+                            $invoice->capture();
+
+                            $order->setStatus('processing');
+                            $order->setState('processing');
+
+                            $transactionSave = Mage::getModel('core/resource_transaction');
+                            $transactionSave->addObject($invoice);
+                            $transactionSave->addObject($invoice->getOrder());
+                            $transactionSave->save();
+
+                            $virtualproductcoupon = Mage::getModel('promotionfactory/virtualproductcoupon');
+                            $virtualproductcoupon->openVirtualProductCouponInOrder($order);
+                            $order->setData('state', 'complete')
+                                ->setStatus('complete')
+                                ->save();
 //                        $invoiceId = Mage::getModel('sales/order_invoice_api')->create($order->getIncrementId(), array());
-//                        $invoice = Mage::getModel('sales/order_invoice')->loadByIncrementId($invoiceId);                
+//                        $invoice = Mage::getModel('sales/order_invoice')->loadByIncrementId($invoiceId);
 //                        $invoice->capture()->save();
 //                       $order->addStatusToHistory($order->getStatus(), 'Auto Complete Virtual Order', false);
+                        }
                     }
                     catch (Exception $exception){
+                        Mage::logException($exception);
                         #Payment Failed
                         $virtualproductcoupon = Mage::getModel('promotionfactory/virtualproductcoupon');
                         $virtualproductcoupon->cancelVirtualProductCouponInOrder($order);
@@ -437,11 +486,13 @@ class Harapartners_Ordersplit_Helper_Data extends Mage_Core_Helper_Abstract {
                             ->save();
                         return null;
                     }
-                }            
                 break;
             case self::TYPE_DROPSHIP;
                 break;
-            case self::TYPE_DOTCOM;
+            case self::TYPE_DOTCOM:
+                Mage::getModel('fulfillmentfactory/service_itemqueue')->saveFromOrder($order);
+                break;
+            case self::TYPE_DOTCOM_STOCK:
                 Mage::getModel('fulfillmentfactory/service_itemqueue')->saveFromOrder($order);
                 break;
             case self::TYPE_OTHER;

@@ -21,7 +21,7 @@ class Totsy_Pixels_Helper_Data
     	$_dom = new DOMDocument();
     	
     	if($_htmlString) {
-            $_dom->loadHTML($_htmlString);
+            $_dom->loadHTML(htmlentities($_htmlString));
             $_dom->preserveWhiteSpace = false;
             
             //more elements/tags may be stripped out using this type

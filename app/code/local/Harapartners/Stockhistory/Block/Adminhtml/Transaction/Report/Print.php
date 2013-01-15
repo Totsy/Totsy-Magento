@@ -23,7 +23,11 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Print extends
     }
     
     public function getPoNumber(){
-        return $this->getPoObject()->generatePoNumber();
+		if($this->getPoObject()->getPoNumber()) {
+            return $this->getPoObject()->getPoNumber();
+		} else {
+            return $this->getPoObject()->generatePoNumber();
+		}
     }
     
 	public function getPoCategoryName(){

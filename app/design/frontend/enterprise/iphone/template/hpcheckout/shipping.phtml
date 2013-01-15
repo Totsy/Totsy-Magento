@@ -76,6 +76,8 @@
 //    var billingForm = new VarienForm('hpcheckout-shipping-form');
 
     jQuery( document ).ready( function() {
+    	jQuery("[id='shipping:region']").val(jQuery("[id='shipping:region_id'] option:selected").text());
+    
     	jQuery( '#shipping\\:postcode, #shipping\\:country_id' ).bind( 'change', hpcheckout.update );
 		jQuery( '#shipping-address-select' ).bind( 'change', hpcheckout.switchAddress );
 	});

@@ -74,25 +74,28 @@
         <?php for ($_i=2, $_n=$this->helper('customer/address')->getStreetLines(); $_i<=$_n; $_i++): ?>
         <input type="text" name="street[]" value="<?php echo $this->htmlEscape($this->getAddress()->getStreet($_i)) ?>" title="<?php echo $this->__('Street Address '.$_i) ?>" id="street_<?php echo $_i?>" class="input-text" />
         <?php endfor ?>
-        <label for="city" class="required"><em>*</em><?php echo $this->__('City') ?></label>
-        <input type="text" name="city" value="<?php echo $this->htmlEscape($this->getAddress()->getCity()) ?>" title="<?php echo $this->__('City') ?>" class="input-text required-entry" id="city" />
-        <label for="region_id" class="required"><em>*</em><?php echo $this->__('State/Province') ?></label>
-                    
-                    <div class="input-box totsy-selective-input-box">
-                    <span>Please select region, state or province</span>
-                        <select id="region_id" name="region_id" title="<?php echo $this->__('State/Province') ?>" class="validate-select" style="display:none;">
-                           <option value=""><?php echo $this->__('Please select region, state or province') ?></option>
-                        </select>
-                        </div>
-                        <script type="text/javascript">
-                            $('region_id').setAttribute('defaultValue',  "<?php echo $this->getAddress()->getRegionId() ?>");
-                        </script>
-                        <input type="text" id="region" name="region" value="<?php echo $this->htmlEscape($this->getAddress()->getRegion()) ?>"  title="<?php echo $this->__('State/Province') ?>" class="input-text hidden" />
          <label for="zip" class="required"><em>*</em><?php echo $this->__('Zip/Postal Code') ?></label>
          <input type="text" name="postcode" value="<?php echo $this->htmlEscape($this->getAddress()->getPostcode()) ?>" title="<?php echo $this->__('Zip/Postal Code') ?>" id="zip" class="input-text validate-zip-international required-entry" />
+        <div id="city-state-manual">
+            <label for="city" class="required"><em>*</em><?php echo $this->__('City') ?></label>
+            <input type="text" name="city" value="<?php echo $this->htmlEscape($this->getAddress()->getCity()) ?>" title="<?php echo $this->__('City') ?>" class="input-text required-entry" id="city" />
+            <label for="region_id" class="required"><em>*</em><?php echo $this->__('State/Province') ?></label>
+            <div class="input-box totsy-selective-input-box">
+                <select id="region_id" name="region_id" title="<?php echo $this->__('State/Province') ?>" class="validate-select" style="display:none;">
+                    <option value=""><?php echo $this->__('Please select region, state or province') ?></option>
+                </select>
+            </div>
+            <script type="text/javascript">
+                $('region_id').setAttribute('defaultValue',  "<?php echo $this->getAddress()->getRegionId() ?>");
+            </script>
+            <input type="text" id="region" name="region" value="<?php echo $this->htmlEscape($this->getAddress()->getRegion()) ?>"  title="<?php echo $this->__('State/Province') ?>" class="input-text hidden" />
+        </div>
+        <div id="city-state-auto" style="display:none;">
+            <label for="city-state-selector" class="required"><em>*</em><?php echo $this->__('Region') ?></label>
+            <select name="city-state-selector" id="city-state-selector"></select>
+        </div>
          <label for="country" class="required"><em>*</em><?php echo $this->__('Country') ?></label>
                     <div class="input-box totsy-selective-input-box">
-                    <span>Please select your country</span>
                         <?php echo $this->getCountryHtmlSelect() ?>
                     </div>
           
@@ -133,11 +136,23 @@
 
 <script type="text/javascript">
 
-	jQuery( document ).ready( function() {
-		updateSelectText();
-		jQuery('.totsy-selective-input-box select').bind( 'change', updateSelectText );
-	}); 
-	
+    jQuery( document ).ready( function() {
+        updateSelectText();
+        jQuery('.totsy-selective-input-box select').bind( 'change', updateSelectText );
+        jQuery('#zip').keyup(function(e) {
+            if (this.value.length == 5) {
+                setTimeout('getZipCodeInfo()', 500);
+            }
+        });
+        jQuery('#city-state-selector').change(function(e) {
+            var $selected = jQuery('option:selected', this),
+                info      = $selected.data('info');
+
+            jQuery('#city').val(info['city']);
+            jQuery('#region_id').val(info['region_id']);
+        });
+    });
+
 	function updateSelectText(){
 		jQuery(".totsy-selective-input-box select").each(function(){
 			var temphtml = jQuery(this).html();
@@ -152,4 +167,30 @@
 			jQuery(this).parent('div').children('span').html(text);
 		});
 	};
+
+    function getZipCodeInfo() {
+        jQuery.get('/customer/zipCodeInfo/lookup', { 'zip': jQuery('#zip').val() }, function(data, status) {
+            for(i = 0; i < data.length; i++) {
+                var $option = jQuery('<option value="' + data[i]['region_id'] + '">'
+                    + data[i]['city'] + ',' + data[i]['state']
+                    + '</option>');
+                $option.data('info', data[i]);
+
+                jQuery('#city-state-selector').append($option);
+            }
+
+            if (data.length > 0) {
+                if (data.length == 1) {
+                    jQuery('#city-state-selector').change();
+                }
+
+                jQuery('#city-state-auto').show();
+                jQuery('#city-state-manual').hide();
+            } else {
+                jQuery('#city-state-manual').show();
+                jQuery('#city-state-auto').hide();
+            }
+        });
+    }
+
 </script>

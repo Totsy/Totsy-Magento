@@ -1,19 +1,90 @@
 <?php
-$_product = Mage::registry('current_product');
-$_category = Mage::registry('current_category');
-$referring_url = Mage::registry('referring_url');
-if($_product && $_category && $_product->getId() && $_category->getId()):
+//$_sales_products = Array();
+$_product = Array();
+$_category = Array();
+$_referring_url = "";
+$_productId = "";
+$_categoryId = "";
+
+$welcome_cookie = false;
+$cookie = Mage::app()->getCookie();
+$key = Harapartners_Customertracking_Helper_Data::COOKIE_CUSTOMER_WELCOME;
+
+//check if this is a new customer
+$welcome_cookie = $cookie->get($key);
+
+if(Mage::registry('current_product')) {
+    $_product = Mage::registry('current_product');
+    $_productId = $_product->getId();
+}
+
+if(Mage::registry('current_category')) {
+    $_category = Mage::registry('current_category');
+    $_categoryId = $_category->getId();
+}
+
+if (Mage::registry('referring_url')) {
+    $referring_url = Mage::registry('referring_url');
+}
+
+if($welcome_cookie!==false) {
 ?>
-<!-- Steelhouse BEGIN -->
+<script type="text/javascript">
+	(function(){"use strict";var steelhouse=null,shver='3.0.0',
+	aid='9836',
+	oid='',
+	amt='',
+	shocur='',
+	shopid='',
+	shoq='',
+	shoup='',
+	shadditional='';
+	steelhouse={add:function(a,b,c,d){d=d||false;if(a.addEventListener){a.addEventListener(b,c,d);}else if(a.attachEvent){a.attachEvent("on"+b,c);}},load:function(){var a,b=document.createElement('script'),c=null,d=document.getElementsByTagName('script'),e=Number(d.length)-1,f=document.getElementsByTagName('script')[e];if(typeof a==='undefined'){a=Math.floor(Math.random()*100000000000000000);}c='px.steelhousemedia.com/st?conv=1'+'&shver='+shver+'&aid='+aid+'&oid='+oid+'&amt='+amt+'&shocur='+shocur+'&shopid='+shopid+'&shoq='+shoq+'&shoup='+shoup+'&cb='+a+
+	shadditional;b.type='text/javascript';b.src=('https:'===document.location.protocol?'https://':'http://')+c;f.parentNode.insertBefore(b,f);}};steelhouse.load();}());
+	
+	//console.log("that's what's up?");
+</script> 
+<?php
+} elseif (!($this->getRequest()->getActionName()=="create" && $this->getRequest()->getModuleName()=="customer")) {
+
+$_cart = "";
+$product_ids = "";
+
+if($_product) {
+?>
+<!-- Steelhouse purchase begin-->
 <div id="steelhouse_product_pixel"></div>
 <script type="text/javascript">
     Event.observe(window,'load',function() {
         new Ajax.Updater({success: 'steelhouse_product_pixel'}, '<?php echo Mage::getUrl('pixels/steelhouse/index'
-            , array('product'=>$_product->getId(),'category'=>$_category->getId()
-                ,'current_url'=> base64_encode(Mage::helper('core/url')->getCurrentUrl()),'referrer_url'=> base64_encode($referring_url))); ?>'
-            , {method:'get',evalScripts: true});
+        , array('product'=>$_productId,'category'=>$_categoryId, 'current_url'=> base64_encode(Mage::helper('core/url')->getCurrentUrl()),'referrer_url'=> base64_encode($_referring_url))); ?>'
+            , { method:'get',evalScripts: true });
     });
-
 </script>
-<!-- Steelhouse END -->
-<?php endif;
+<!-- Steelhouse purchase end -->
+<?php } else { 
+    if($this->helper('checkout/cart')->getCart()) {
+        $_cart = $this->helper('checkout/cart')->getCart();
+        $product_ids = implode(",", $_cart->getProductIds());
+    }
+?>
+<script type="text/javascript">
+jQuery(document).ready(function() {
+    (function(){var steelhouse=null,shver="3.3.0",
+    shaid="9577",
+    shpn="",
+    shpc="",
+    shpp="",
+    shpb="",
+    shpi="",
+    shps="",
+    shpil="",
+    shcv="",
+    shcq= encodeURIComponent('<?php echo $_cart->getItemsQty(); ?>'),
+    shcp= encodeURIComponent('<?php echo $product_ids; ?>'),
+    shadditional="",
+    tdr,urlNew,plh;try{tdr=top.document.referer!==""?encodeURIComponent(top.document.referrer.substring(0,256)):"";}catch(tdr_e){tdr=document.referrer!==null?document.referrer.toString().substring(0,256):"";}try{urlNew=window&&window.top&&document.location&&window.top.location===document.location?document.location:window&&window.top&&window.top.location&&""!==window.top.location?window.top.location:document.location;}catch(urlNew_e){urlNew=document.location;}try{plh=parent.location.href!==""?encodeURIComponent(parent.location.href.toString().substring(0,256)):"";}catch(plh_e){try{plh=urlNew!==null?encodeURIComponent(urlNew.toString().substring(0,256)):"";}catch(urlNew_e1){plh="";}}shpi=encodeURIComponent(shpi);steelhouse={add:function(a,b,c,d){d=d||false;if(a.addEventListener){a.addEventListener(b,c,d);}else{if(a.attachEvent){a.attachEvent("on"+b,c);}}},load:function(){var a,b=document.createElement("script"),c=null,d=document.getElementsByTagName("script"),e=Number(d.length)-1,f=document.getElementsByTagName("script")[e];if(typeof a==="undefined"){a=Math.floor(Math.random()*100000000000000000);}c="px.steelhousemedia.com/st?shver="+shver+"&shaid="+shaid+"&shcv="+shcv+"&shcq="+shcq+"&shcp="+shcp+"&shpn="+shpn+"&shpc="+shpc+"&shpp="+shpp+"&shpb="+shpb+"&shpi="+shpi+"&shps="+shps+"&shpil="+shpil+"&tdr="+tdr+"&plh="+plh+"&cb="+a+shadditional;b.type="text/javascript";b.src=("https:"===document.location.protocol?"https://":"http://")+c;f.parentNode.insertBefore(b,f);}};steelhouse.load();}());
+});
+</script>
+<!-- END steelhouse tracking pixel --> 
+<?php }} else {} ?>

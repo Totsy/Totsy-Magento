@@ -29,10 +29,11 @@
     <div id="order-messages">
         <?php echo $this->getChildHtml('order_messages') ?>
     </div>
-    <?php if($this->canEditOrder($_order->getStatus()) && !$this->isOrderInvoiced($_order)): ?>
+    <?php if($this->canEditOrder($_order->getStatus())): ?>
 	    <div class="clear"></div>
-	    <button type="button" onclick="saveMe()" id="orderEdit" style="height:25px; width:280px; font-size:16px;">Edit Payment Informations</button>
-	    <div id="comment-field" style="display:none;"><br />Reason for editing order: <span id="required-comment" style="color:red; display:none;">This is required to edit an order</span><br />
+	    <button type="button" onclick="saveMe()" id="orderEdit" style="height:25px; width:280px; font-size:16px;">Edit Order</button>
+	    <div id="comment-field" style="display:none;"><br />Reason for editing order: <span id="required-comment" style="color:red; font-weight: bold; display:none;">Please add a comment to edit an order</span>
+        <br \><span id="required-cc" style="color:red; font-weight: bold; display:none;">Please fill correctly the credit card informations.</span><br />
 	    <textarea id="edit-order-comment" style="width:450px;"></textarea>
 	    </div>
 	    <br /><br />
@@ -40,18 +41,65 @@
 
 	<!-- order edit js and style -->
     <script>
+    jQuery(document).ready(function() {
+        jQuery("#apply-coupon").click(function() {
+            applyCoupon();
+        });
+
+        jQuery("#remove-coupon").click(function() {
+            removeCoupon();
+        });
+
+        function removeCoupon() {
+            var coupon = jQuery('#coupon').val();
+            if( coupon != '' ) {
+                jQuery('#coupon').val('');
+                jQuery('#add-new-coupon').hide();
+                jQuery('#actual-coupon').show();
+            }
+        }
+
+        function applyCoupon() {
+            params = {};
+            params['coupon'] = jQuery('#coupon-code').val();
+            new Ajax.Request('<?php echo Mage::getModel('adminhtml/url')->getUrl('orderedit/order/checkcouponavailability') ?>', {
+                method: 'get',
+                parameters: params,
+                onSuccess: function(transport) {
+                    var fields = transport.responseText.evalJSON();
+                    available = fields['available'];
+                    if(fields['available']) {
+                        jQuery('#coupon').val(jQuery('#coupon-code').val());
+                        jQuery('#current-coupon').html(jQuery('#coupon-code').val());
+                        jQuery('#add-new-coupon').show();
+                        jQuery('#actual-coupon').hide();
+                    } else {
+                        jQuery('#current-coupon').html('Invalid Coupon');
+                    }
+                }
+            });
+        }
+    });
     function saveMe()
     {
-    	if($('orderEdit').innerHTML == 'Edit Payment Informations') {
+    	if($('orderEdit').innerHTML == 'Edit Order') {
+            $('required-comment').hide();
+            $('required-cc').hide();
     		$('orderEdit').innerHTML = 'Save Changes';
     		$('billing-edit-form').show();
     		$('billing-static').hide();
     		$('payment_form_paymentfactory_tokenize').show();
     		$('payment-edit-form').show();
+    		//$('coupon-edit-form').show();
     		$('payment-infos').hide();
     		$('billing-static').hide();
-    		//$('shipping-edit-form').show();
-    		//$('shipping-static').hide();
+            if($('shipping-edit-form') != undefined) {
+                $('shipping-edit-form').show();
+            }
+            if($('shipping-static') != undefined) {
+                $('shipping-static').hide();
+            }
+            $('history_form').hide();
     		//$('shippingmethod-edit-form').show();
     		//$('shippingmethod-static').hide();
     		//$$('.e-item-price').invoke('show');
@@ -60,31 +108,60 @@
     		//$$('.e-item-remove').invoke('show');
     		//$('items-add-btn').show();
     		$('comment-field').show();
-    		//calcShipping();
+            if($('shipping-static') != undefined) {
+                calcShipping();
+            }
     	} else {
+            $('required-cc').hide();
+            $('required-comment').hide();
+            if($('cybersource-use-card-method').value == "") {
+                var paymentForm = $('payment-fields').getElements();
+                var emptyCC = false;
+                paymentForm.each(function(i) {
+                    if(i.value == "" && (i.type == 'text' || i.type == 'select-one') && (i.id != 'cybersource-use-card-method')) {
+                        emptyCC = true;
+                    }
+                });
+                if($('p_method_free') != undefined) {
+                    if($('p_method_free').checked) {
+                        emptyCC = false;
+                    }
+                }
+                if(emptyCC) {
+                    $('required-cc').show();
+                    return false;
+                }
+            }
     		var params = {};
     		if($('edit-order-comment').value == "") {
-    			$('required-comment').show();
+                $('required-comment').show();
     			return false;
     		}
     		params['admin_user'] = '<?php echo Mage::getSingleton('admin/session')->getUser()->getUsername() ?>';
     		params['comment'] = $('edit-order-comment').value;
+    		//params['coupon'] = $('coupon').value;
     		params['order_id'] = <?php echo $_order->getId() ?>;
-    		//get values for billing address
+
+            var billingForm = $('billing-fields').getElements();
+            billingForm.each(function(i) {
+                i.removeAttribute('disabled');
+            });
+
     		var billing = $('billing-fields').serialize(true);
     		var payment = $('payment-fields').serialize(true);
     		params['billing'] = Object.toJSON(billing);
     		params['payment'] = Object.toJSON(payment);
-    		//get values for shipping address
-			/**var	shipping = $('shipping-fields').serialize(true);
-			params['shipping'] = Object.toJSON(shipping);
+            if($('shipping-fields') != null) {
+                var	shipping = $('shipping-fields').serialize(true);
+                params['shipping'] = Object.toJSON(shipping);
+            }
 			//get values for shipping method 
-			var	shippingmethod = $('shippingmethod-fields').serialize(true);
-			shippingmethod.customcarrier = $('customCarrier').value;
-			shippingmethod.rateid = $F('rateid');
-			params['shippingmethod'] = Object.toJSON(shippingmethod);
+			//var shippingmethod = $('shippingmethod-fields').serialize(true);
+			//shippingmethod.customcarrier = $('customCarrier').value;
+			//shippingmethod.rateid = $F('rateid');
+			//params['shippingmethod'] = Object.toJSON(shippingmethod);
 			//get values for existing items on order
-			var eitems = new Object();
+			/**var eitems = new Object();
 			eitems.id = new Array();
 			eitems.price = new Array();
 			eitems.qty = new Array();
@@ -126,28 +203,34 @@
 			$$('.n-item-discount').each(function(s){
 				nitems.discount.push(s.value);
 			});
-			params['nitems'] = Object.toJSON(nitems);
-			**/
+			params['nitems'] = Object.toJSON(nitems);*/
+
 			//send request for saving
 			new Ajax.Request('<?php echo Mage::getModel('adminhtml/url')->getUrl('orderedit/order/edit') ?>', {
 				method: 'get',
 				parameters: params,
 				onSuccess: function(transport) {
-					$('orderEdit').innerHTML = 'Edit Payment Informations';
+					$('orderEdit').innerHTML = 'Edit Order';
     				$('billing-edit-form').hide();
     				$('billing-static').show();
     				$('payment-edit-form').hide();
     				$('payment-infos').show();
-    				/**$('shipping-edit-form').hide();
-    				$('shipping-static').show();
-    				$('shippingmethod-edit-form').hide();
-    				$('shippingmethod-static').show();
-    				$$('.e-item-price').invoke('hide');
-    				$$('.e-item-qty').invoke('hide');
-    				$$('.e-item-discount').invoke('hide');
-    				$$('.e-item-remove').invoke('hide');
-    				$$('.add-item-form').invoke('hide');
-    				$('items-add-btn').hide();**/
+                    if($('shipping-edit-form') != undefined) {
+                        $('shipping-edit-form').hide();
+                    }
+                    if($('shipping-static') != undefined) {
+                        $('shipping-static').show();
+                    }
+                    $('history_form').show();
+                    //$('coupon-edit-form').hide();
+    				//$('shippingmethod-edit-form').hide();
+    				//$('shippingmethod-static').show();
+    				//$$('.e-item-price').invoke('hide');
+    				//$$('.e-item-qty').invoke('hide');
+    				//$$('.e-item-discount').invoke('hide');
+    				//$$('.e-item-remove').invoke('hide');
+    				//$$('.add-item-form').invoke('hide');
+    				//$('items-add-btn').hide();
     				$('comment-field').hide();
     				if(transport.responseText == 'Order updated successfully. The page will now refresh.') {
     				    alert(transport.responseText);
@@ -224,6 +307,7 @@
 	    );
 	    return (checked) ? $F(checked) : null;
 	}
+
     </script>
 	<style type="text/css">
   	.admin-widget-edit-fields		{margin-bottom: 7px;}
@@ -242,15 +326,18 @@
     <div class="box-left">
     <?php endif; ?>
         <!--Payment Method-->
-        <div class="entry-edit">
+        <div class="entry-edit" id="payment-infos">
             <div class="entry-edit-head">
                 <h4 class="icon-head head-payment-method"><?php echo Mage::helper('sales')->__('Payment Information') ?></h4>
             </div>
-            <fieldset id="payment-infos">
+            <fieldset>
                 <?php echo $this->getPaymentHtml() ?>
                 <div><?php echo Mage::helper('sales')->__('Order was placed using %s', $_order->getOrderCurrencyCode()) ?></div>
             </fieldset>
-            <fieldset id="payment-edit-form" style="display:none;">
+
+        </div>
+        <div id="payment-edit-form"  style="display:none;">
+            <fieldset>
                 <form id="payment-fields">
                     <input type="hidden" value="payment" name="type">
                     <input type="hidden" value="troyer@totsy.com" name="admin_user">
@@ -306,7 +393,25 @@
         </div>
     </div>
     <?php endif; ?>
-    <div class="clear"></div>
+    <div class="box-right" id="coupon-edit-form" style="display:none;">
+        <div class="entry-edit box-left">
+            <div class="entry-edit-head">
+                <h4 class="icon-head"><?php echo Mage::helper('sales')->__('Apply Coupon Code') ?></h4>
+            </div>
+            <?php $coupon = $this->getCouponCode(); ?>
+            <fieldset class="np">
+                <div class="content">
+                    <div id='add-new-coupon' <?php if(!$coupon) { echo 'style="display:none"'; } ?>>
+                        <p><strong><div id='current-coupon'><?php echo $this->getCouponCode() ?></div></strong><a href="#" id='remove-coupon' title="<?php echo Mage::helper('sales')->__('Remove Coupon Code') ?>"><?php echo Mage::helper('sales')->__('Remove') ?></a></p>
+                    </div>
+                    <div id='actual-coupon' <?php if($coupon) { echo 'style="display:none"'; } ?>>
+                        <p><input type="text" class="input-text" id="coupon-code" value="" name="coupon_code" style="width:200px" /><a href="#" id='apply-coupon' title="<?php echo Mage::helper('sales')->__('Apply Coupon Code') ?>"><?php echo Mage::helper('sales')->__('Apply Coupon Code') ?></a></p>
+                    </div>
+                    <input type='hidden' id='coupon' value="<?php echo $coupon; ?>"/>
+                </div>
+            </fieldset>
+        </div>
+    </div>
 
     <?php echo $this->getGiftmessageHtml() ?>
 
@@ -342,3 +447,39 @@
     </div>
     <div class="clear"></div>
 </div>
+    <script type="text/javascript">
+        jQuery( document ).ready( function() {
+            var billAddySelect = jQuery("#billing-address-select");
+            var newCardWrap = jQuery('.use-new-card-wrapper');
+            var billFormInputs = jQuery('#billing-fields :input');
+            jQuery('#cybersource-use-card-method').change( function() {
+                if( jQuery(this).val() == '' ) {
+                    jQuery("#cc_data").show();
+                    newCardWrap.show();
+                    billAddySelect.removeAttr('disabled');
+                    //Enable Billing Inputs if credit card not selected
+                    billFormInputs.each(function(i) {
+                        jQuery(this).removeAttr('disabled');
+                        if(jQuery(this).attr('name') != 'type' && jQuery(this).attr('name') != 'admin_user') {
+                            jQuery(this).val('');
+                        }
+                    });
+                } else {
+                    newCardWrap.hide();
+                    if(jQuery("#address_" + jQuery( this ).val()).val()) {
+                        billAddySelect.val(jQuery("#address_" + jQuery( this ).val()).val()).change();
+                        //Block Billing Inputs if credit card selected
+                        billFormInputs.each(function(i) {
+                            jQuery(this).attr('disabled','disabled');
+                        });
+                        billAddySelect.attr('disabled','disabled');
+                    } else {
+                        billAddySelect.removeAttr('disabled');
+                        billFormInputs.each(function(i) {
+                            jQuery(this).removeAttr('disabled');
+                        });
+                    }
+                }
+            });
+        });
+    </script>

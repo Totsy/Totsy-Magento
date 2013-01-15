@@ -1,20 +1,21 @@
 <?php
+
+//$_sales_products = Mage::registry('current_sales_products');
 $_product = Mage::registry('current_product');
 $_category = Mage::registry('current_category');
 $_cart = $this->helper('checkout/cart')->getCart();
-
 $product_ids = implode(",", $_cart->getProductIds());
-?>
 
-<!-- s -->
+?>
+<!-- Steelhouse pixels for conversion -->
 <script type="text/javascript">
-    var shver='2.8.6';
+    var shver='3.3.0';
 <?php if($_product && $_category): ?>
     var shpn= encodeURIComponent('<?php echo addslashes($_product->getName()) ?>');
     var shpc= encodeURIComponent('<?php echo addslashes(strip_tags(html_entity_decode(str_replace(array("\r", "\n"), '', $_product->getDescription())))) ?>');
-    var shpp= encodeURIComponent('<?php echo number_format($_product->getPrice(), 2) ?>');
+    var shpp= encodeURIComponent('<?php echo number_format($_product->getSpecialPrice(), 2) ?>');
     var shpb= encodeURIComponent('<?php echo addslashes($_product->getCategory()->name); ?>');
-    var shpi= encodeURIComponent('<?php echo $_product->getProductUrl() ?>');
+    var shpi= '<?php echo html_entity_decode($_product->getImageUrl()) ?>';
     var shps= encodeURIComponent('<?php echo $_product->getSku() ?>');
 <?php else: ?>
     var shpn= '';
@@ -23,10 +24,17 @@ $product_ids = implode(",", $_cart->getProductIds());
     var shpb= '';
     var shpi= '';
     var shps= '';
+    var shpil = '';
 <?php endif; ?>
+<?php if(isset($cart)): ?> 
     var shcv= encodeURIComponent('<?php echo number_format($_cart->getQuote()->getGrandTotal(), 2) ?>');
     var shcq= encodeURIComponent('<?php echo $_cart->getItemsQty() ?>');
     var shcp= encodeURIComponent('<?php echo $product_ids ?>');
+<?php else: ?>
+    var shcv = '';
+    var shcq = '';
+    var shcp = '';
+<?php endif; ?>
     //'SHOPPING CART COMMA SEPARATED LIST OF PRODUCT IDs';
     var additional = '';
     var aid = '9577';
@@ -47,7 +55,6 @@ $product_ids = implode(",", $_cart->getProductIds());
     }
 <?php endif; ?>
     shpi = encodeURIComponent(shpi);
-
 
         steelhouse = {add:function (a, b, c, d) {
             d = d || false;
@@ -72,4 +79,4 @@ $product_ids = implode(",", $_cart->getProductIds());
         }};
         steelhouse.load();
 </script>
-<!-- Steelhouse -->
+<!-- Steelhouse pixels for tracking-->

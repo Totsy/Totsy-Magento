@@ -152,6 +152,7 @@ Layout for pop up windows
         <update handle="default"/>
         <remove name="header"/>
         <remove name="menu"/>
+        <remove name="footer"/>
         <reference name="root">
             <action method="setTemplate"><template>popup.phtml</template></action>
         </reference>

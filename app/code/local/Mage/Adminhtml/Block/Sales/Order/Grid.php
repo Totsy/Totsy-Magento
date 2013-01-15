@@ -57,9 +57,6 @@ class Mage_Adminhtml_Block_Sales_Order_Grid extends Mage_Adminhtml_Block_Widget_
     protected function _prepareCollection()
     {
         $collection = Mage::getResourceModel($this->_getCollectionClass());
-        //Harapartners Li Lu: add customer email in collection
-        $tableName = Mage::getSingleton( 'core/resource' )->getTableName( 'customer/entity' );
-        $collection->getSelect()->joinLeft( $tableName, 'customer_id=' . $tableName . '.entity_id', 'email' );
         $this->setCollection($collection);
         return parent::_prepareCollection();
     }
@@ -106,11 +103,11 @@ class Mage_Adminhtml_Block_Sales_Order_Grid extends Mage_Adminhtml_Block_Widget_
             'filter_index' => '`main_table`.`shipping_name`'
         ));
 
-        //Harapartners Li Lu: add a column for customer email
-        $this->addColumn('email', array(
+        //20121112 - CJD - changed customer email to load from grid table, instead of joining eav customer tables
+        $this->addColumn('customer_email', array(
             'header' => Mage::helper('sales')->__('Customer Email'),
-            'index' => 'email',
-            'filter_index' => '`customer_entity`.`email`'
+            'index' => 'customer_email',
+            'filter_index' => '`main_table`.`customer_email`'
         ));
 
 //        $this->addColumn('base_grand_total', array(
@@ -223,8 +220,8 @@ class Mage_Adminhtml_Block_Sales_Order_Grid extends Mage_Adminhtml_Block_Widget_
 
     protected function _setFilterValues($data)
     {
-        if (array_key_exists('email',$data)) {
-            $data['email'] = Mage::helper('customer')->sanitizeEmail($data['email']);
+        if (array_key_exists('customer_email',$data)) {
+            $data['customer_email'] = Mage::helper('customer')->sanitizeEmail($data['customer_email']);
         }
 
         return parent::_setFilterValues($data);

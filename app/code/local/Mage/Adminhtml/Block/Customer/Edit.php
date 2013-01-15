@@ -81,6 +81,19 @@ class Mage_Adminhtml_Block_Customer_Edit extends Mage_Adminhtml_Block_Widget_For
                 'class'   => 'cancel',
             )
         );
+
+        $urlGeneratePassword = $this->getUrl(
+            'totsy/adminhtml_customer/generatePassword',
+            array('id' => $customer->getId())
+        );
+
+        $this->_addButton(
+            'generate_password',
+            array(
+                'label'   => Mage::helper('customer')->__('Generate Password'),
+                'onclick' => "setLocation('$urlGeneratePassword')"
+            )
+        );
     }
 
     public function getCreateOrderUrl()

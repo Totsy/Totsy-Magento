@@ -13,22 +13,16 @@
 	    	    <div> 
 	    		    <div class="pull-left">
 	    	           <label for="billing:firstname" class="required"><em>*&nbsp;</em><?php echo $this->__('first name') ?></label>
-	    	     <input type="text" name="billing[firstname]" title="<?php echo $this->__('First Name') ?>" class="input-text required-entry firstname"  value="<?php echo $this->htmlEscape($this->getFirstName()) ?>" placeholder="<?php echo $this->__('First Name') ?>" id="billing:firstname" />
+	    	     <input type="text" name="billing[firstname]" title="<?php echo $this->__('First Name') ?>" class="input-text required-entry firstname validate-alpha"  value="<?php echo $this->htmlEscape($this->getFirstName()) ?>" placeholder="<?php echo $this->__('First Name') ?>" id="billing:firstname" />
 	    	        </div>
 	    	        <div>
 	    	            <label for="billing:lastname" class="required"><em>*&nbsp;</em><?php echo $this->__('last name') ?></label>
-	    	            <input type="text" name="billing[lastname]" title="<?php echo $this->__('Last Name') ?>" class="input-text required-entry lastname" value="<?php echo $this->htmlEscape($this->getLastName()) ?>" placeholder="<?php echo $this->__('Last Name') ?>" id="billing:lastname" />
+	    	            <input type="text" name="billing[lastname]" title="<?php echo $this->__('Last Name') ?>" class="input-text required-entry lastname validate-alpha" value="<?php echo $this->htmlEscape($this->getLastName()) ?>" placeholder="<?php echo $this->__('Last Name') ?>" id="billing:lastname" />
 	    	        </div>
 	    	    </div>
 	    	    <input type="hidden" name="billing[email]" id="billing:email" value="<?php echo $this->getCustomer()->getEmail() ?>" />
 	    	    <input type="hidden" name="billing[selected]" id="billing:selected" />
-	    	    <!-- li class="fields">
-	    	        <div class="field half-of-half">
-			            <span for="billing:email" class="required"><em>*</em><?php echo $this->__('Email Address') ?></span>
-			            <input type="text" name="billing[email]" id="billing:email" title="<?php echo $this->__('Email Address') ?>" class="input-text validate-email required-entry" value="<?php echo $this->htmlEscape($this->getAddress()->getEmail()) ?>" />
-			        </div>
-	    	    </div-->
-	    	     <div >
+	    	     <div>
 	    	         <div class="field half-of-half">
 			            <label for="billing:street1" class="required"><em>*&nbsp;</em><?php echo $this->__('street address line 1') ?></label>
 			            <input type="text" title="<?php echo $this->__('Street Address Line 1') ?>" name="billing[street][0]" id="billing:street1" value="<?php echo $this->getAddress()->getStreet(1) ?>" class="input-text required-entry streetaddress1" placeholder="<?php echo $this->__('Street Address Line 1') ?>" />
@@ -65,7 +59,7 @@
 	              <div class="last-billing-form-row">
 	    	          <div class="field half-of-half pull-left">
 	    	        	    <label for="billing:telephone" class="required"><em>*&nbsp;</em><?php echo $this->__('telephone') ?></label>
-	    	        	    <input type="text" name="billing[telephone]" title="<?php echo $this->__('Telephone') ?>" class="input-text required-entry validate-phoneLax telephone" id="billing:telephone" value="<?php echo $this->htmlEscape($this->getAddress()->getTelephone()) ?>" placeholder="Telephone" onkeyup="backspacerUP(this,event);" onkeydown="backspacerDOWN(this,event);"/>
+	    	        	    <input type="text" name="billing[telephone]" title="<?php echo $this->__('Telephone') ?>" class="input-text required-entry validate-phoneLax telephone" id="billing:telephone" value="<?php echo $this->htmlEscape($this->getAddress()->getTelephone()) ?>" placeholder="Telephone"/>
 	    	        	</div>
 	    	         </div>
 	    	         <div class="field half-of-half">
@@ -85,35 +79,36 @@
 </form>
 
 <div class="spinner" style="display: none;"><img src="<?php echo $this->getSkinUrl( 'images/ajax-loader.gif' ) ?>"></div>
-<script>
+<script type="text/javascript">
 	// @TODO: abstract this out to hpcheckout.js as self-contained method
 	// need to re-enable billing form controls before trying to send values to shipping form
-	jQuery(document).ready(function($) {
-	    $('#button_ship_to').bind('click', function() {
-	    	var billFormInputs = $('#hpcheckout-billing-form :input');
-	    	var billAddySelect = $("#billing-address-select");
+	jQuery(document).ready( function() {
+        
+        if(checkoutPayment.hasProfile==true && checkoutPayment.lastUsedAddressId!="") {
+            //jQuery("#billing-address-select").attr("disabled", false);
+            jQuery("#billing-address-select").val(checkoutPayment.lastUsedAddressId);
+        }
+	
+	    jQuery('#button_ship_to').bind('click', function() {
+	    	var billFormInputs = jQuery('#hpcheckout-billing-form :input');
+	    	var billAddySelect = jQuery("#billing-address-select");
 	    	// re-enable disabled controls
 	    	if (billAddySelect.attr('disabled') !== undefined) {
 	            billAddySelect.removeAttr('disabled');
 	            billFormInputs.each(function(i) {
-	                $(this).removeAttr('disabled');
+	                jQuery(this).removeAttr('disabled');
 	            });
 	    	}
-	    	
 	    	// then use hpcheckout.copyBillingToShipping() method
 	    	hpcheckout.copyBillingToShipping();
 	    });
+	    
+	    jQuery( '#billing-address-select' ).bind( 'change', hpcheckout.switchAddress );
+   
 	});
-</script>
-<script type="text/javascript">
 //<![CDATA[
     var billingRegionUpdater = new RegionUpdater('billing:country_id', 'billing:region', 'billing:region_id', countryRegions, undefined, 'billing:postcode');
-//    var billingForm = new VarienForm('hpcheckout-billing-form');
-    jQuery( document ).ready( function() {
-        jQuery( '#billing-address-select' ).bind( 'change', hpcheckout.switchAddress );
-    	//jQuery( '#billing\\:region_id, #billing\\:postcode' ).bind( 'change', hpcheckout.update );
-//    	/jQuery( '#billing\\:postcode, #billing\\:country_id' ).bind( 'change', hpcheckout.update );
-	});
+
     <?php if($this->getAddressesJson()) { ?>
         var hpcheckoutAddresses = <?php echo $this->getAddressesJson() ?>;
     <?php }  ?>

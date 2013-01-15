@@ -50,6 +50,17 @@ class Harapartners_HpCheckout_CheckoutController extends Mage_Checkout_Controlle
         $customer = Mage::getSingleton('customer/session')->getCustomer();
         $customerId = $customer->getId();
         try {
+
+            if($this->getRequest()->getPost('paypal_payment', false)) {
+
+                $service = Mage::getModel('sales/service_quote', $this->_getHpCheckout()->getQuote());
+                $order = $service->getQuote();
+
+                $result['redirect'] = Mage::getUrl('paypal/express/start/');
+
+                $this->getResponse()->setBody(Mage::helper('core')->jsonEncode($result));
+                return;
+            }
             $blocksSuccessFlag = true;
             $postData = $this->getRequest()->getPost();
             
@@ -67,9 +78,8 @@ class Harapartners_HpCheckout_CheckoutController extends Mage_Checkout_Controlle
                 $result[ 'status' ] = 2;
             } else {
                 if ($data = $this->getRequest()->getPost('payment', false)) {
-                	
-                	
-                	
+
+
                     $profile = Mage::getModel('paymentfactory/profile');
                     if (isset($data['cc_number']) && isset($data['cc_exp_year']) && isset($data['cc_exp_month'])) {
                         $profile->loadByCcNumberWithId($data['cc_number'].$customerId.$data[ 'cc_exp_year' ].$data[ 'cc_exp_month' ]);
@@ -81,22 +91,21 @@ class Harapartners_HpCheckout_CheckoutController extends Mage_Checkout_Controlle
                             $data['cybersource_subid'] = $cybersourceIdEncrypted;
                         }
                     }
+                    $this->_getHpCheckout()->getCheckout()->setData('payment_data',$data);
                     $this->_getHpCheckout()->getQuote()->getPayment()->importData($data);
                 }
 
                 $service = Mage::getModel('sales/service_quote', $this->_getHpCheckout()->getQuote());
                 $order = $service->getQuote();
-                
-                // Paypal Express Checkout method
-                if($data['method'] == Mage_Paypal_Model_Config::METHOD_WPP_EXPRESS) {
+
+                if($this->getRequest()->getPost('paypal_payment', false)) {
                 	$result['redirect'] = Mage::getUrl('paypal/express/start/');
                 	
                 	$this->getResponse()->setBody(Mage::helper('core')->jsonEncode($result));
                 	return;
                 }
-                
                 $this->_getHpCheckout()->saveOrder();
-
+/*
                 $storeId = Mage::app()->getStore()->getId();
                 $paymentHelper = Mage::helper("payment");
                 $zeroSubTotalPaymentAction = $paymentHelper->getZeroSubTotalPaymentAutomaticInvoice($storeId);
@@ -108,7 +117,7 @@ class Harapartners_HpCheckout_CheckoutController extends Mage_Checkout_Controlle
                     $invoice->getOrder()->setIsInProcess(true);
                     $invoice->save();
                 }
-
+*/
                 //                $redirectUrl = $this->_getHpCheckout()->getCheckout()->getRedirectUrl();
                 $result['status'] = 0;
             }

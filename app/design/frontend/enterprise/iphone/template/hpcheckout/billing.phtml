@@ -19,7 +19,7 @@
 		                <input type="text" name="billing[email]" id="billing:email" title="<?php echo $this->__('Email Address') ?>" class="ui-input-text ui-body-c ui-corner-all ui-shadow-inset input-text validate-email required-entry" value="<?php echo $this->htmlEscape($this->getAddress()->getEmail()) ?>" />
 		            </div>
 	            </li-->
-				
+	<input type="hidden" name="billing[selected]" id="billing:selected" />			
 	            <li class="fields">
 	                <div class="field half-of-half">
 	                    <label for="billing:telephone" class="required ui-input-text"><em>*</em><?php echo $this->__('Telephone') ?></label>
@@ -89,6 +89,8 @@
 //    var billingForm = new VarienForm('hpcheckout-billing-form');
 
     jQuery( document ).ready( function() {
+    	jQuery("[id='billing:region']").val(jQuery("[id='billing:region_id'] option:selected").text());
+    
 		jQuery( '#billing-address-select' ).bind( 'change', hpcheckout.switchAddress );
     	//jQuery( '#billing\\:region_id, #billing\\:postcode' ).bind( 'change', hpcheckout.update );
 //    	/jQuery( '#billing\\:postcode, #billing\\:country_id' ).bind( 'change', hpcheckout.update );

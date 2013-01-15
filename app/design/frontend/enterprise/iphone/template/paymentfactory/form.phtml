@@ -7,13 +7,8 @@
     Validation.creditCartTypes.set('MCI', [false, new RegExp('^[0-9]{3}([0-9]{1})?$'), false]);
 //]]>
 </script>
+<div id="cc_data">
 <ul class="form-list" id="payment_form_<?php echo $_code ?>" style="display:none;">
-    <?php /*<li>
-        <label for="<?php echo $_code ?>_cc_owner" class="required"><em>*</em><?php echo $this->__('Name on Card') ?></label>
-        <div class="input-box">
-            <input type="text" title="<?php echo $this->__('Name on Card') ?>" class="input-text required-entry" id="<?php echo $_code ?>_cc_owner" name="payment[cc_owner]" value="<?php echo $this->htmlEscape($this->getInfoData('cc_owner')) ?>" />
-        </div>
-    </li>*/ ?>
 	<?php $customerId = Mage::getSingleton('customer/session')->getCustomerId() ?>
 	<?php $profiles = $this->getProfilesByCustomerId( $customerId ) ?>
 	<?php if( $customerId && $profiles && count( $profiles->getItems() ) ): ?>
@@ -25,7 +20,7 @@
 					<option value="" class="use-new-card-control">New Credit/Debit Card</option>
 				<?php foreach( $profiles as $profile ): ?>
 					<?php if( ! $profile->getSubscriptionId() ) { continue; } ?>
-					<option class="use-saved-card-control" value="<?php echo $profile->getSubscriptionId() ?>"><?php echo $this->getFullCcCardType( $profile->getData( 'card_type' ) ) ?> ends with <?php echo $profile->getData( 'last4no' ) ?></option>
+					<option class="use-saved-card-control" value="<?php echo $profile->getEncryptedSubscriptionId() ?>"><?php echo $this->getFullCcCardType( $profile->getData( 'card_type' ) ) ?> ends with <?php echo $profile->getData( 'last4no' ) ?></option>
 				<?php endforeach ?>
 				</select>
 			</div>
@@ -78,6 +73,7 @@
 						</select>
 					</div>
 				</div>
+				<!--  -->
 	        </div>
 	    </li>
 	    <?php if($this->hasVerification()): ?>
@@ -147,8 +143,22 @@
 	    <?php endif; ?>
 	</div>
 </ul>
+</div>
 <script type="text/javascript">
 	jQuery( document ).ready( function() {
+	   
+	    jQuery("#hpcheckout-payment-select").change( function() {
+	       if(jQuery("#" + this.id + "").val()=="paypal_express") {
+	           if(jQuery("#paypal_payment").length === 0) {
+	               jQuery('#hpcheckout-payment-form').append('<input type="hidden" id="paypal_payment" name="paypal_payment" value="paypal_express" />');
+	           }
+	       } else {
+	           if(jQuery("#paypal_payment").length > 0) {
+	               jQuery("#paypal_payment").remove();
+	           }
+	       }
+	    });
+	
 		jQuery( 'select#cybersource-use-card-method' ).change( function(){
 			if( jQuery( this ).val() == '' ) {
 				jQuery( '.use-new-card-wrapper' ).show();

@@ -1,0 +1,10 @@
+tables:
+  totsycustomer/zipCodeInfo:
+    - customer_zip_code_info_id: 1
+      zip: 10002
+      city: Zebulon
+      state: NY
+    - customer_zip_code_info_id: 2
+      zip: 10002
+      city: Astrid
+      state: NJ

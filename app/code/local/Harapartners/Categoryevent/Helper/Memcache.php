@@ -121,10 +121,11 @@ class Harapartners_Categoryevent_Helper_Memcache extends Mage_Core_Helper_Abstra
                         && !!$relation['category_id']
                         && isset($relation['product_id']) 
                         && !!$relation['product_id']){
-                            
-                    if(!in_array($relation['product_id'], $uniqueProductIds)){
-                        $uniqueProductIds[] = $relation['product_id'];
+
+                    if (!isset($uniqueProductIds[$relation['product_id']])){
+                        $uniqueProductIds[$relation['product_id']] = true;
                     }
+
                     if(!array_key_exists($relation['category_id'], $categoryProductCompleteData)){
                         $categoryProductCompleteData[$relation['category_id']] = array('product_list' => array());
                     }
@@ -157,7 +158,7 @@ class Harapartners_Categoryevent_Helper_Memcache extends Mage_Core_Helper_Abstra
                                     '`table_rewrite`.`product_id` = `e`.`entity_id` AND `table_rewrite`.`store_id` = \''.$storeId.'\' AND `table_rewrite`.`is_system` = 1 AND  `table_rewrite`.`request_path` LIKE \'sales%\'',
                                     array('request_path')
                                 )
-                              ->where('`e`.`entity_id` IN(' . implode(',', $uniqueProductIds) . ')');
+                              ->where('`e`.`entity_id` IN(' . implode(',', array_keys($uniqueProductIds)) . ')');
             $productCollection->addFieldToFilter($attributeType, array('like' => '%'.$attributeValue.'%'));
             $productCollection->addFieldToFilter('visibility', array("in" => array(
                     Mage_Catalog_Model_Product_Visibility::VISIBILITY_IN_CATALOG,

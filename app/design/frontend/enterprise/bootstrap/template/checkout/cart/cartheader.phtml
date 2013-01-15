@@ -34,7 +34,7 @@
     $countDownTimerHeader= $checkoutSession->getCountDownTimer();
     $timeoutHeader = $checkoutSession->getQuoteItemExpireTime();
     //$endcount_lc_header = date("F j, Y, G:i:s", ($countDownTimerHeader + $timeoutHeader));
-    $endcount_lc_header = ($countDownTimerHeader + $timeoutHeader)*1000; //ms
+    $endcount_lc_header = (time() + $timeoutHeader)*1000; //ms
     //Harapartners, yang, get the server time with the frontend JS time
     $serverTime = Mage::getModel('core/date')->timestamp() * 1000;
     $quote = $checkoutSession->getQuote();
@@ -128,6 +128,7 @@
                                     .removeAttr('data-toggle');
                                 var _cartHeader = jQuery("#cartHeader");
                                 _cartHeader.addClass('cartempty')
+                                    .removeClass('hasItems')
                                     .html("Your shopping cart is <span class='over'>no longer reserved</span>");
                                 jQuery("#topCartContent").hide();
 

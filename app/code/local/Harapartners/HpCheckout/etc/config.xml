@@ -54,17 +54,22 @@
                 </hpcheckout>
             </updates>
         </layout>
-        <!--Moved to Harapartners_Service-->
-        <!--events>
+        <events>
             <controller_action_predispatch>
                 <observers>
-                    <hpcheckout_controller_rewrite>
+                    <hpcheckout_check_for_split>
                         <class>hpcheckout/observer</class>
-                        <method>hpcheckoutControllerRewrite</method>
-                    </hpcheckout_controller_rewrite>
+                        <method>checkForSplit</method>
+                    </hpcheckout_check_for_split>
                 </observers>
             </controller_action_predispatch>
-        </events-->
+        </events>
     </frontend>
-    <default/>
+    <default>
+        <checkout>
+            <cart>
+                <split_cart_price>5.99</split_cart_price>
+            </cart>
+        </checkout>
+    </default>
 </config>

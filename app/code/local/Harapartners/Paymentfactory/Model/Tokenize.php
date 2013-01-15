@@ -87,7 +87,10 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Totsy_Cybersource_Model
              }
              $profile->load($subscriptionId,'subscription_id');
          } elseif (!!$payment->getData('cc_number')){
-             $profile->loadByCcNumberWithId($payment->getData('cc_number').$customerId.$payment->getCcExpYear().$payment->getCcExpMonth());
+            $profile->loadByCcNumberWithId($payment->getData('cc_number').$customerId.$payment->getCcExpYear().$payment->getCcExpMonth());
+            if($profile->getId()){
+                $payment->setData('cybersource_subid', $profile->getData('subscription_id'));
+            }
          }
          
         if(!!$profile && !!$profile->getId() 
@@ -140,8 +143,9 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Totsy_Cybersource_Model
     public function saveBillingAddress(Varien_Object $payment) {
         $addressCustomer = Mage::getModel('customer/address');
         $customerId = $payment->getOrder()->getQuote()->getCustomerId();
-        $addressOrder = $payment->getOrder()->getBillingAddress();
-        $addressCustomer->setData($addressOrder->getData())
+        $billingAddressDatas = $payment->getOrder()->getBillingAddress()->getData();
+        unset($billingAddressDatas['entity_id']);
+        $addressCustomer->setData($billingAddressDatas)
             ->setCustomerId($customerId)
             ->setIsDefaultBilling(false)
             ->setIsDefaultShipping(false)
@@ -171,6 +175,7 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Totsy_Cybersource_Model
         } else {
             $this->addBillingAddress($payment->getOrder()->getBillingAddress(), $payment->getOrder()->getCustomerEmail());
             $addressId = $this->saveBillingAddress($payment);
+            $payment->getOrder()->getQuote()->setData('billing_selected_by_customer',$addressId)->save();
         }
         $this->addCcInfo($payment);
         
@@ -346,7 +351,7 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Totsy_Cybersource_Model
                         ->setCybersourceToken($result->requestToken);
                      //   ->setIsTransactionClosed(1);
                 } else {
-                     $error = Mage::helper('cybersource')->__('There is an error in processing the payment. Please try again or contact us.');
+                     $error = Mage::helper('cybersource')->__('There is an error in processing the payment. ' . $this->_errors[$result->reasonCode] . ' Please try again or contact us.');
                 }
             } catch (Exception $e) {
                Mage::throwException(
@@ -494,7 +499,7 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Totsy_Cybersource_Model
                     $payment->setCcCidStatus($result->ccAuthReply->cvCode);
                 }
             } else {
-                $error = Mage::helper('paymentfactory')->__('There is an gateway error in processing the payment. Please try again or contact us.');
+                $error = Mage::helper('paymentfactory')->__('There is an error in processing the payment. ' . $this->_errors[$result->reasonCode] . ' Please try again or contact us.');
             }
         } catch (Exception $e) {
            Mage::throwException(

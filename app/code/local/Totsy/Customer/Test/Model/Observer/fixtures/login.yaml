@@ -1,6 +1,15 @@
-tables:
-  customer/entity:
+eav:
+  customer:
     - entity_id: 100
+      attribute_set_id: 0
       email: autologin+3@test.net
+      group_id: 0
       store_id: 1
       website_id: 1
+      is_active: 1
+tables:
+  core/email_template:
+    - template_id: 100
+      template_code: welcome
+config:
+  default/customer/create_account/email_template_autogen: 100
