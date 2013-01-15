@@ -233,13 +233,14 @@ class Harapartners_Stockhistory_Model_Transaction extends Mage_Core_Model_Abstra
             $total_units_sold = Mage::helper('stockhistory')->getIndProductSold($_category, $product);
 
             if($product->getData('case_pack_qty')) {
-                $highest_ratio = $total_units_sold/$product->getData('case_pack_qty');
+                $highest_ratio = ceil($total_units_sold/$product->getData('case_pack_qty'));
             }
 
             $order_amount = Mage::helper('stockhistory')->casePackOrderAmount($highest_ratio, $product->getData('case_pack_qty'));
             
             if($all_results) {
                 $grouped[(string)$item_id] = array('sku' => $product->getData('sku'), 'qty_to_amend' => $order_amount, 'cp_qty' => $product->getData('case_pack_qty'));
+                $grouped['message'][] = array('message' => 'Successfully Updated!', 'type' => 'success' );
                 return $grouped;
             }
 
