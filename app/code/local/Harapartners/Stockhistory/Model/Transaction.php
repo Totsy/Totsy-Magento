@@ -97,8 +97,10 @@ class Harapartners_Stockhistory_Model_Transaction extends Mage_Core_Model_Abstra
         if(!$dataObj->getData('action_type')){
             $dataObj->setData('action_type', self::ACTION_TYPE_AMENDMENT);
         }
-        
-    	if($dataObj->getData('qty_delta') === '00') {
+
+        $sold = Mage::helper('stockhistory')->getIndProductSold($category, $product);
+        #making sure that items with sold quantity can't be zeroed out
+    	if($dataObj->getData('qty_delta') === '00' && !$sold) {
         	//put a flag to indicate this item should be delete remove this line item
         	$qtyDelta = 0;
         	$dataObj->setData('action_type', self::ACTION_TYPE_REMOVE);
@@ -205,9 +207,6 @@ class Harapartners_Stockhistory_Model_Transaction extends Mage_Core_Model_Abstra
         }
         return false;
     }
-    /**
-     * @todo: needs protective measures
-     */
 
     public function calculateCasePackOrderQty($item_id, $po_id, $case_pack_grp_id, $all_results = false){
         
