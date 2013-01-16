@@ -27,5 +27,10 @@ class Crown_Vouchers_Helper_Data extends Mage_Core_Helper_Abstract {
 		$vouchers->setProductId($product_id);
 		$vouchers->save();
 	}
-	
+
+    public function getDiscount($originalPrice, $salePrice) {
+        $discount = (1.00 - ($salePrice / $originalPrice)) * 100;
+        return substr($discount, 0, 2) . '%';
+    }
+
 }
