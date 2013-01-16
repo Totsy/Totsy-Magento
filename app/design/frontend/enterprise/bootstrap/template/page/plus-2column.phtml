@@ -1,0 +1,89 @@
+<?php
+/**
+ * Magento Enterprise Edition
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Magento Enterprise Edition License
+ * that is bundled with this package in the file LICENSE_EE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://www.magentocommerce.com/license/enterprise-edition
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     enterprise_default
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://www.magentocommerce.com/license/enterprise-edition
+ */
+?>
+<?php
+/**
+ * Template for Mage_Page_Block_Html
+ */
+?>
+<!DOCTYPE html>
+<html lang="<?php echo $this->getLang() ?>">
+<head>
+<?php echo $this->getChildHtml('head') ?>
+</head>
+<body<?php echo $this->getBodyClass()?' class="'.$this->getBodyClass().'"':'' ?> data-spy="scroll" data-target=".subnav" data-offset="50">
+    <div id="stickywrap">
+        <?php echo $this->getChildHtml('header') ?>
+        <div id="mainContent" class="container">
+            <?php echo $this->getChildHtml('global_notices') ?>
+            <?php echo $this->getChildHtml('global_messages') ?>
+            <?php echo $this->getChildHtml('breadcrumbsContainer') ?>
+            <?php 
+              $currentUrlPath = $this->helper('core/url')->getCurrentUrl();
+              $temp = explode('/', $currentUrlPath);
+              $baseUrl = $temp[3];
+              if($baseUrl=="event") {
+            } 
+            ?>
+            <div class="plus-menu">
+                <?php
+                if(Mage::app()->getRequest()->getRouteName() == 'cms') {
+                    $active = Mage::getSingleton('cms/page')->getIdentifier();
+                } else {
+                    $active = 'null';
+                }
+                ?>
+                <ul class="links">
+                    <li class="first"><a href="/plus/dashboard" title="TOTSYPLUS DASHBOARD" <?php echo $active == 'plus/dashboard' ? 'class="active"' : ''; ?>>TOTSYPLUS DASHBOARD</a></li>
+                    <li><a href="#commitment" title="Early Access" >Early Access</a></li>
+                    <li><a href="#commitment" title="10% Credit On Every Purchase*" >10% Credit On<br/>Every Purchase*</a></li>
+                    <li><a href="#commitment" title="Exclusive Sales" >Exclusive Sales</a></li>
+                    <li><a href="#commitment" title="Entertainment Savings" >Entertainment Savings</a></li>
+                    <li><a href="#commitment" title="Discount Vault" >Discount Vault</a></li>
+                    <li class=" last" ><a href="#commitment" title="My Totsy Plus Membership" >My Totsy Plus Membership</a></li>
+                </ul>
+
+                <ul class="links">
+                    <li class="first"><span>NEED HELP?</span></li>
+                    <li><a href="#commitment" title="Help Desk" >Help Desk</a></li>
+                    <li><a href="#commitment" title="FAQs" >FAQs</a></li>
+                    <li><a href="#commitment" title="Privacy Policy">Privacy Policy</a></li>
+                    <li class="last"><a href="#commitment" title="Terms Of Use">Terms Of Use</a></li>
+                </ul>
+            </div>
+            <div class="plus-content">
+                <?php echo $this->getChildHtml('content') ?>
+            </div>
+            <div class="clear"></div>
+            <?php echo $this->getChildHtml('footer_before') ?>
+            <?php echo $this->getChildHtml('after_body_start') ?>
+            <?php echo $this->getChildHtml('before_body_end') ?>
+        </div>
+    </div><!-- /#stickywrap -->
+    <?php echo $this->getChildHtml('footer') ?>
+    <?php //echo $this->getAbsoluteFooter() ?>
+</body>
+</html>

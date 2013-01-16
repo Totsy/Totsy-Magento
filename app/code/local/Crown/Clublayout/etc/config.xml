@@ -13,6 +13,11 @@
                     <template>page/category_layout.phtml</template>
                     <layout_handle>Category_Layout</layout_handle>
                 </Crown_Club_Category_Layout>
+                <Plus_2Column translate="label">
+                    <label>Plus 2 Column Left</label>
+                    <template>page/plus-2column.phtml</template>
+                    <layout_handle>Plus_2Column</layout_handle>
+                </Plus_2Column>
             </layouts>
         </page>
         <resources>
