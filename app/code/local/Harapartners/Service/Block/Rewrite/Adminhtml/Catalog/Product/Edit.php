@@ -16,7 +16,7 @@ class Harapartners_Service_Block_Rewrite_Adminhtml_Catalog_Product_Edit extends 
     protected function _prepareLayout() {
     	
     	//Only allowed for existing product, not while creating new product!
-        if ($this->getProduct()->getId() &&  $this->getProduct()->isVirtual()) { 
+        if ($this->getProduct()->getId() &&  $this->getProduct()->isVirtual() && $this->_isAllowedAction('manage_coupon')) { 
             $this->setChild('manage_coupon_button',
                 $this->getLayout()->createBlock('adminhtml/widget_button')
                     ->setData(array(
@@ -42,6 +42,7 @@ class Harapartners_Service_Block_Rewrite_Adminhtml_Catalog_Product_Edit extends 
             $this->getChildHtml('reset_button');
         }
         if(!$this->_isAllowedAction('save')) {
+             $this->getChildHtml('duplicate_button');
             $this->getChildHtml('save_button');
             $this->getChildHtml('save_and_edit_button');
         }

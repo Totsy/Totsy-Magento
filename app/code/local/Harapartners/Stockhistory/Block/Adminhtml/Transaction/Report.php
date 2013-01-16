@@ -38,6 +38,7 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report extends Mage_
                     'class'        => 'save'
                 ));
             }
+            
             if ($this->_isAllowedAction('post_amendment')) {
                 $this->_addButton('post_batch_amendments', array(
                     'label'     => Mage::helper('stockhistory')->__('Post Batch Amendments'),
@@ -133,6 +134,7 @@ FORM_WRAPPER;
         });
         return goodData;
     }
+    {if $this->_isAllowedAction(editable):}
     jQuery(document).ready(function() {
         var oTable = jQuery('#ReportGrid_table').dataTable( {
             "bPaginate": false,
@@ -198,6 +200,7 @@ FORM_WRAPPER;
                 jQuery(this).css('display','block');
             });*/
         }
+        {endif;}
 });
 </script>
 ADDITIONAL_JAVASCRIPT;

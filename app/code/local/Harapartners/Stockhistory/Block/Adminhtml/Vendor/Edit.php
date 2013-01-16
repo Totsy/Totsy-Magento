@@ -20,14 +20,22 @@ class Harapartners_Stockhistory_Block_Adminhtml_Vendor_Edit extends Mage_Adminht
         $this->_objectId = 'id';
         $this->_blockGroup = 'stockhistory';
         $this->_controller = 'adminhtml_vendor';
-        //$this->_removeButton('delete');
         
-        if($this->getVendorId()){
+        
+        if($this->getVendorId() && $this->_isAllowedAction('create_po')){
             $this->_addButton('create_po', array(
                 'label'     => Mage::helper('stockhistory')->__('Create PO'),
                 'onclick'   => 'setLocation(\'' . $this->getCreatePoUrl() .'\')',
                 'class'        => 'add',
               ));
+        }
+        if(!$this->_isAllowedAction('delete')) {
+            $this->_removeButton('delete');
+        }
+
+        if(!$this->_isAllowedAction('save')) {
+            $this->_removeButton('reset');
+            $this->_removeButton('save');
         }
         //$this->_updateButton('save', 'label', Mage::helper('stockhistory')->__('Import File'));
     }
@@ -38,6 +46,12 @@ class Harapartners_Stockhistory_Block_Adminhtml_Vendor_Edit extends Mage_Adminht
 
     public function getSaveUrl(){
         return $this->getUrl('*/*/save', array('_current'=>true));
+    }
+
+    protected function _isAllowedAction($action)
+    {
+        //return null;
+        return Mage::getSingleton('admin/session')->isAllowed('harapartners/stockhistory/vendor/actions/' . $action);
     }
     
     public function getCreatePoUrl()

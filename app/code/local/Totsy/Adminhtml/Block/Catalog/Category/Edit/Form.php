@@ -74,6 +74,8 @@ class Totsy_Adminhtml_Block_Catalog_Category_Edit_Form
 
             if (!$this->_isAllowedAction('save')) {
                 $this->unsetChild('save_button');
+                $this->unsetChild('release_button');
+                $this->unsetChild('undo_release_button');
             }
 
             if ($this->_isAllowedAction('import')) {
