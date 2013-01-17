@@ -43,19 +43,23 @@ class Harapartners_Fulfillmentfactory_Helper_Log
      * log message with order id
      *
      * @param string $message
-     * @param unknown_type $orderId
-     * @return log file name
+     * @param int    $orderId
+     * @param string $xml
+     *
+     * @return string file name
      */
-    public function errorLogWithOrder($message, $orderId)
+    public function errorLogWithOrder($message, $orderId, $xml = '')
     {
         $logFileName = 'fulfillment_error_' . date('Y_m_d_his') . '.log';
 
         $errorlogModel = Mage::getModel('fulfillmentfactory/errorlog');
         $errorlogModel->setOrderId($orderId);
         $errorlogModel->setMessage($message);
-        $errorlogModel->importDataWithValidation($errorlogModel->getData())->save();
+        $errorlogModel->setXml($xml);
+        $errorlogModel->save();
 
-        Mage::log($message, Zend_Log::ERR, $logFileName, true);
+        Mage::log($message, Zend_Log::ERR, $logFileName);
+        Mage::log($xml, Zend_Log::DEBUG, $logFileName);
 
         return $logFileName;
     }

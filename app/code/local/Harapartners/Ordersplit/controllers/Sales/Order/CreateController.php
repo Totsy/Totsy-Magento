@@ -100,7 +100,9 @@ class Harapartners_Ordersplit_Sales_Order_CreateController extends Mage_Adminhtm
                     $type = $quoteProduct->getFulfillmentType();
                 }
 
-                $fulfillmentTypes[$type][] = $key;
+                if(!empty($type)) {
+                    $fulfillmentTypes[$type][] = $key;
+                }
             }
 
             foreach($items as $key=>$value) {
@@ -111,7 +113,10 @@ class Harapartners_Ordersplit_Sales_Order_CreateController extends Mage_Adminhtm
                 else {
                     $type = $product->getFulfillmentType();
                 }
-                $fulfillmentTypes[$type][] = $key;
+
+                if(!empty($type)) {
+                    $fulfillmentTypes[$type][] = $key;
+                }
             }
 
             if(count($fulfillmentTypes) > 1) {

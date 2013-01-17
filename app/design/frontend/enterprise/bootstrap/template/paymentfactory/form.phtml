@@ -1,4 +1,5 @@
 <?php $_code=$this->getMethodCode();
+$hasVirtual = false;
 // Check to see if there are multiple fulfillment types
 foreach($this->getQuote()->getAllItems() as $item) {
     if($item->getParentItemId()) {
@@ -7,6 +8,7 @@ foreach($this->getQuote()->getAllItems() as $item) {
     $product = Mage::getModel ( 'catalog/product' )->load ( $item->getProductId () );
     if($product->getIsVirtual()) {
         $_fulfillmentType = 'virtual';
+        $hasVirtual = true;
     } else {
         $_fulfillmentType = $product->getFulfillmentType();
     }
@@ -188,7 +190,14 @@ jQuery(document).ready( function() {
                     jQuery("#hpcheckout-payment-add-title").hide();
                     jQuery("#cc_data").show();
                 }
-            }
+            },
+            disableBillAddr: function(stateFlag) {
+               jQuery('#hpcheckout-billing-form :input').each(function(i) {
+                   if(this.id != 'button_ship_to') {
+                       jQuery("[id='" + this.id + "']").attr('disabled',stateFlag);
+                   }
+               });
+           }
         };
     })();
     
@@ -240,7 +249,7 @@ jQuery(document).ready( function() {
         		 <?php endforeach ?>
         		 <?php $methods = $this->getLayout()->getBlock('hpcheckout.payment.methods')->getMethods();  ?> 
                  <?php if(count($methods)): ?>
-                 	<?php if(!$multiShipping && Mage::getModel('paypal/config')->isMethodActive('paypal_express')): ?>
+                 	<?php if(!$multiShipping && !$hasVirtual && Mage::getModel('paypal/config')->isMethodActive('paypal_express')): ?>
 			    	    <input type="radio" value="paypal_express" id="paypal_payment" name="paypal_payment">
 			    	    <div>
         		 	    <span title="Paypal Express" class="paypal"></span>

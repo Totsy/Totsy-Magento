@@ -179,11 +179,137 @@ class Harapartners_Stockhistory_Model_Transaction extends Mage_Core_Model_Abstra
         $product_collection->getSelect()->where('entity_id in (' . implode(',' , $items) . ')' );
         foreach($product_collection as $product) {
 			$product->setData('_edit_mode', true);
-            $product->setFulfillmentTYpe('dotcom');
+            $product->setFulfillmentType('dotcom');
             $product->setIsMasterPack((int)$changeto);
             $product->setVisibility(1);
             $product->save();           
         }
+    }
+
+    public function changeCasePackAttributeValue($attribute, $product_id, $changeto) {
+
+        $product = Mage::getModel('catalog/product')->load($product_id);
+        if($product) {
+            $product->setData('_edit_mode', true);
+            $product->setFulfillmentType('dotcom');
+            $product->setVisibility(1);
+            switch($attribute) {
+                case 'case_pack_grp_id':
+                    $product->setCasePackGrpId($changeto);
+                    break;
+                case 'case_pack_qty':
+                    $product->setCasePackQty($changeto);
+            }
+            $product->save();
+            return true;       
+        }
+        return false;
+    }
+    /**
+     * @todo: needs protective measures
+     */
+
+    public function calculateCasePackOrderQty($item_id, $po_id, $case_pack_grp_id, $all_results = false){
+        
+        $highest_ratio = 0;
+        $grouped = array();
+        $order_amount = 0;
+
+        if(!isset($po_id)) {
+            throw new Exception("PO ID does not exists.");
+        }
+
+        #init needed data
+        $po = Mage::getModel('stockhistory/purchaseorder')->load($po_id);
+        $_category = Mage::getModel('catalog/category')->load($po->getData('category_id'));
+
+        #Most Items that does not have a case pack id
+        if (!isset($case_pack_grp_id) && $item_id) {
+            $product = Mage::getModel('catalog/product')->load($item_id);
+            if(!$product->getData('is_master_pack')) {
+                return $order_amount;
+            }
+
+            $total_units_sold = Mage::helper('stockhistory')->getIndProductSold($_category, $product);
+
+            if($product->getData('case_pack_qty')) {
+                $highest_ratio = ceil($total_units_sold/$product->getData('case_pack_qty'));
+            }
+
+            $order_amount = Mage::helper('stockhistory')->casePackOrderAmount($highest_ratio, $product->getData('case_pack_qty'));
+            
+            if($all_results) {
+                $grouped[(string)$item_id] = array('sku' => $product->getData('sku'), 'qty_to_amend' => $order_amount, 'cp_qty' => $product->getData('case_pack_qty'));
+                $grouped['message'][] = array('message' => 'Successfully Updated!', 'type' => 'success' );
+                return $grouped;
+            }
+
+            return $order_amount;
+            
+        } else {
+            #pull all the items that have the same case pack grp id and event id
+            $products = Mage::getModel('catalog/product')->getCollection()
+                    ->addCategoryFilter($_category)
+                    ->addAttributeToFilter('type_id', 'simple')
+                   // ->addAttributeToFilter(array(array('attribute'=>'is_master_pack', 'gt'=>0)))
+                    ->addAttributeToSelect(array('case_pack_qty', 'is_master_pack'))
+                    ->addAttributeToFilter(array(array('attribute' => 'case_pack_grp_id', 'eq' => $case_pack_grp_id)));
+            foreach($products as $product) {
+                if(!$product->getData('is_master_pack')) {
+                    $grouped[(string)$product->getEntityId()] = array(
+                        'sku' => $product->getData('sku'), 
+                        'qty_to_amend' => $order_amount, 
+                        'cp_qty' => 0
+                    );
+                    $grouped['message'][] = array('message' => "Sku : {$product->getData('sku')} is not a case pack", 'type' => 'warning');
+                    //if($item_id == $product->getData('entity_id')) return $grouped;
+                    continue;
+                }
+
+               $total_units_sold = Mage::helper('stockhistory')->getIndProductSold($_category, $product);
+
+               if($product->getData('case_pack_qty')) {
+                    $ratio = ceil($total_units_sold/$product->getData('case_pack_qty'));
+               }
+
+               #find highest denominator
+               if ($highest_ratio < $ratio) {
+                    $highest_ratio = $ratio;
+                }
+
+                $grouped[(string)$product->getEntityId()] = array(
+                    'qty_sold' => $total_units_sold, 
+                    'cp_qty' => $product->getData('case_pack_qty'), 
+                    'sku' => $product->getData('sku'), 
+                    'qty_to_amend' => $product->getData('case_pack_qty')
+                );
+            }
+
+            if(!$highest_ratio) {
+                if($all_results) {
+                    $grouped['message'][] = array('message' => 'Successfully Updated!', 'type' => 'success' );
+                    return $grouped;
+                }
+                return $grouped[$item_id]['cp_qty'];
+            }
+
+            foreach($grouped as $id => $values ) {
+                if($id == "message") continue;
+                $grouped[$id]['qty_to_amend'] = Mage::helper('stockhistory')->casePackOrderAmount($highest_ratio, $values['cp_qty']);
+
+                if($id == $item_id){
+                    $order_amount = $grouped[$id]['qty_to_amend'];
+                }
+            }
+                        
+            if($all_results){
+                $grouped['message'][] = array('message' => 'Successfully Updated!', 'type' => 'success' );
+                return $grouped;
+            } else {
+                return $order_amount;
+            }
+        } #end of else
+
     }
     
 }

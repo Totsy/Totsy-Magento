@@ -92,6 +92,7 @@
                             <a href="javascript:void(0);" onclick="openDialog('learn-more-<?php echo $j;?>')">More</a><br />
                             <strong>Regular Price: </strong> <del><?php echo Mage::helper('core')->formatPrice($_product->getRegularVoucherPrice());?></del></strong>
                             <strong>Your Price: </strong> <?php echo Mage::helper('core')->formatPrice($_product->getDiscountVoucherPrice());?></strong>
+                            <strong>Save </strong> <?php echo Mage::helper('vouchers')->getDiscount($_product->getRegularVoucherPrice(), $_product->getDiscountVoucherPrice());?></strong>
                             <div id="learn-more-<?php echo $j;?>" style="display:none;">
                                 <strong><?php echo $_productNameStripped;?></strong><br />
                                 <?php echo Mage::getModel('catalog/product')->load($_product->getId())->getDescription();?>
