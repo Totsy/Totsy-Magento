@@ -63,21 +63,19 @@
     <?php $i=0;$j=0;?>
     <?php foreach($categories as $name => $collection): ?>
     <div id="category-<?php echo $i;?>">
-        <h2><?php echo $name;?></h2>
         <ol class="products-list" id="products-list">
             <?php foreach($collection as $pro):?>
 
             <?php $_product = Mage::getModel('catalog/product')->load($pro->getEntityId());?>
             <li class="item">
                 <!-- Product Image -->
-                <div class="product-image" style="float:left;">
+                <div class="product-image">
                     <a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" class="product-image"><img src="<?php echo $this->helper('catalog/image')->init($_product, 'small_image')->resize(166); ?>" width="166" height="166" alt="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" /></a>
                 </div>
                 <!-- Product Description -->
                 <div class="product-shop">
                     <div class="f-fix">
                         <?php $_productNameStripped = $this->stripTags($_product->getName(), null, true); ?>
-                        <h2 class="product-name"><a href="javascript:void(0);" onclick="openDialog('learn-more-<?php echo $j;?>')"><?php echo $_productNameStripped;?></a></h2>
                         <div class="desc std">
 
                             <?php if(Mage::helper('vouchers')->hasAssociation($_customerId, $_product->getId())):?>
@@ -88,11 +86,12 @@
                             <?php $_disabledButton = '';?>
                             <?php endif;?>
 
+                            <div class="product-name strong"><a href="javascript:void(0);"  onclick="openDialog('learn-more-<?php echo $j;?>')"><?php echo $_productNameStripped;?></a></div>
                             <?php echo $_helper->productAttribute($_product, $_product->getShortDescription(), 'short_description') ?>
-                            <a href="javascript:void(0);" onclick="openDialog('learn-more-<?php echo $j;?>')">More</a><br />
-                            <strong>Regular Price: </strong> <del><?php echo Mage::helper('core')->formatPrice($_product->getRegularVoucherPrice());?></del></strong>
-                            <strong>Your Price: </strong> <?php echo Mage::helper('core')->formatPrice($_product->getDiscountVoucherPrice());?></strong>
-                            <strong>Save </strong> <?php echo Mage::helper('vouchers')->getDiscount($_product->getRegularVoucherPrice(), $_product->getDiscountVoucherPrice());?></strong>
+                            <a href="javascript:void(0);" class="learn-more red" onclick="openDialog('learn-more-<?php echo $j;?>')">More</a><br />
+                            <div class="float light">Regular Price: <del><?php echo Mage::helper('core')->formatPrice($_product->getRegularVoucherPrice());?></del></div>
+                            <div class="float left-16">Your Price: </div> <div class="float red"><?php echo Mage::helper('core')->formatPrice($_product->getDiscountVoucherPrice());?></div>
+                            <div class="float red left-16">Save <?php echo Mage::helper('vouchers')->getDiscount($_product->getRegularVoucherPrice(), $_product->getDiscountVoucherPrice());?></div>
                             <div id="learn-more-<?php echo $j;?>" style="display:none;">
                                 <strong><?php echo $_productNameStripped;?></strong><br />
                                 <?php echo Mage::getModel('catalog/product')->load($_product->getId())->getDescription();?>
@@ -132,7 +131,7 @@
 	function openDialog(id) {
 	  Dialog.alert($(id).innerHTML, {
 		  className: "alphacube",
-		  width:500,
+		  width:750,
 		  id: "d" + index,
 		  okLabel: "Close"
 		}
