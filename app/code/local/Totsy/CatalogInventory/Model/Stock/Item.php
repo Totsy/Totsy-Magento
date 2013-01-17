@@ -23,7 +23,6 @@ class Totsy_CatalogInventory_Model_Stock_Item extends Mage_CatalogInventory_Mode
 
         $calcQty = $this->getQty();
         if($reserved != false) {
-            Mage::log($reserved.'::'.$calcQty.'::'.$qty);
             $calcQty = $this->getQty() - $reserved;
         }
 
