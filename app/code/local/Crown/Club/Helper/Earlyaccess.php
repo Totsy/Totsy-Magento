@@ -8,6 +8,12 @@
 class Crown_Club_Helper_Earlyaccess extends Mage_Core_Helper_Abstract {
 
     /**
+     * @var int
+     * @since 0.6.0
+     */
+    private $_early_access_time;
+
+    /**
      * Get the number of seconds a club member is allowed to see sales early.
      * @since 0.6.0
      * @return number
@@ -37,7 +43,7 @@ class Crown_Club_Helper_Earlyaccess extends Mage_Core_Helper_Abstract {
         Mage::log('Early Time ' . $earlyAccessStartDate->toString(), null, 'cheese.log',true);
         Mage::log($currentDate->compare($earlyAccessStartDate), null, 'cheese.log',true);
 
-        if ( 1 != $currentDate->compare($earlyAccessStartDate) ) {
+        if ( 1 !== $currentDate->compare($earlyAccessStartDate) ) {
             return true;
         }
 
