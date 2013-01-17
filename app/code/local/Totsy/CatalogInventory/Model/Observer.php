@@ -50,11 +50,9 @@ class Totsy_CatalogInventory_Model_Observer
             );
         }
 
-        // Due to special logic for cart stock reservation, default stock check
-        // is disabled
-        //return parent::checkQuoteItemQty($observer);
+        return parent::checkQuoteItemQty($observer);
 
-        return $this;
+        //return $this;
     }
 
     public function reindexQuoteInventory($observer)
@@ -62,22 +60,67 @@ class Totsy_CatalogInventory_Model_Observer
         // Reindex quote ids
         $quote = $observer->getEvent()->getQuote();
         $reservationHelper = Mage::helper('rushcheckout/reservation');
-        foreach ($quote->getAllItems() as $quoteItem) {
+        $productIds = array();
+        foreach ($quote->getAllItems() as $item) {
             //Restock all reservation qty, qty also modified by true stock change
-            $reservationHelper->updateReservationByQuoteItem($quoteItem, true);
+            $reservationHelper->updateReservationByQuoteItem($item, true);
+
+            $productIds[$item->getProductId()] = $item->getProductId();
+            $children   = $item->getChildrenItems();
+            if ($children) {
+                foreach ($children as $childItem) {
+                    $productIds[$childItem->getProductId()] = $childItem->getProductId();
+                }
+            }
         }
 
+        if( count($productIds)) {
+            Mage::getResourceSingleton('cataloginventory/indexer_stock')->reindexProducts($productIds);
+        }
+
+        // Reindex previously remembered items
+        $productIds = array();
         // any products that required a full save
         foreach ($this->_itemsForReindex as $item) {
             $item->save();
 
+            $productIds[] = $item->getProductId();
             $product = Mage::getModel('catalog/product')->load($item->getProductId());
             $product->cleanModelCache();
         }
 
-        // avoid calling the parent implementation because we don't want to run
-        // the CatalogInventory indexer
+        Mage::getResourceSingleton('catalog/product_indexer_price')->reindexProductIds($productIds);
+
+        $this->_itemsForReindex = array(); // Clear list of remembered items - we don't need it anymore
 
         return $this;
+    }
+
+    public function catalogInventoryStockItemSaveAfter($observer) {
+
+        /**
+         * Mage_CatalogInventory_Model_Stock_Item
+         * @var Mage_CatalogInventory_Model_Stock_Item
+         */
+        $item = $observer->getItem();
+
+        if($item->getStockStatusChangedAuto() || ($item->getOriginalInventoryQty() <= 0 && $item->getQty() > 0 && $item->getQtyCorrection() > 0)) //If the stock status changed
+        {
+            $parentIdsConfigurable = Mage::getModel('catalog/product_type_configurable')->getParentIdsByChild($item->getProductId());
+            $parentIdsGrouped = Mage::getModel('catalog/product_type_grouped')->getParentIdsByChild($item->getProductId());
+            $parentIds = array_merge($parentIdsConfigurable,$parentIdsGrouped);
+
+            if($parentIds)
+            {
+                foreach ($parentIds as $id)
+                {
+                    $product = Mage::getModel('catalog/product')->load($id);
+                    $product->cleanModelCache();
+                }
+            }
+
+            $product = Mage::getModel('catalog/product')->load($item->getProductId());
+            $product->cleanModelCache();
+        }
     }
 }
