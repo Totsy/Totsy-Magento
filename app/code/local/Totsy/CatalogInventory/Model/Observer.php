@@ -95,4 +95,32 @@ class Totsy_CatalogInventory_Model_Observer
 
         return $this;
     }
+
+    public function catalogInventoryStockItemSaveAfter($observer) {
+
+        /**
+         * Mage_CatalogInventory_Model_Stock_Item
+         * @var Mage_CatalogInventory_Model_Stock_Item
+         */
+        $item = $observer->getItem();
+
+        if($item->getStockStatusChangedAuto() || ($item->getOriginalInventoryQty() <= 0 && $item->getQty() > 0 && $item->getQtyCorrection() > 0)) //If the stock status changed
+        {
+            $parentIdsConfigurable = Mage::getModel('catalog/product_type_configurable')->getParentIdsByChild($item->getProductId());
+            $parentIdsGrouped = Mage::getModel('catalog/product_type_grouped')->getParentIdsByChild($item->getProductId());
+            $parentIds = array_merge($parentIdsConfigurable,$parentIdsGrouped);
+
+            if($parentIds)
+            {
+                foreach ($parentIds as $id)
+                {
+                    $product = Mage::getModel('catalog/product')->load($id);
+                    $product->cleanModelCache();
+                }
+            }
+
+            $product = Mage::getModel('catalog/product')->load($item->getProductId());
+            $product->cleanModelCache();
+        }
+    }
 }

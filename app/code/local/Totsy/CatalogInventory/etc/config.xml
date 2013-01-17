@@ -7,6 +7,9 @@
     </modules>
     <global>
         <models>
+            <totsy_cataloginventory>
+                <class>Totsy_CatalogInventory_Model</class>
+            </totsy_cataloginventory>
             <cataloginventory>
                 <rewrite>
                     <stock_status>Totsy_CatalogInventory_Model_Stock_Status</stock_status>
@@ -20,5 +23,15 @@
                 <class>Totsy_CatalogInventory_Helper</class>
             </totsy_cataloginventory>
         </helpers>
+        <events>
+            <cataloginventory_stock_item_save_after>
+                <observers>
+                    <totsy_cataloginventory_observer>
+                        <class>totsy_cataloginventory/observer</class>
+                        <method>catalogInventoryStockItemSaveAfter</method>
+                    </totsy_cataloginventory_observer>
+                </observers>
+            </cataloginventory_stock_item_save_after>
+        </events>
     </global>
 </config>
