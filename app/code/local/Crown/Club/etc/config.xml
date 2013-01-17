@@ -2,7 +2,7 @@
 <config>
 	<modules>
 		<Crown_Club>
-			<version>0.5.0</version>
+			<version>0.6.0</version>
 		</Crown_Club>
 	</modules>
     <global>
@@ -86,6 +86,9 @@
 				<nonclub_customer_group>-1</nonclub_customer_group>
 				<club_customer_group>-1</club_customer_group>
 			</clubgeneral>
+            <clubearlyaccess>
+                <early_access_time>7200</early_access_time>
+            </clubearlyaccess>
 		</Crown_Club>
 		<trans_email>
             <ident_club>
