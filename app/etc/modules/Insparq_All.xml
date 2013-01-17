@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<config>
+  <modules>
+    <Insparq_All>
+      <active>true</active>
+      <codePool>community</codePool>
+      <version>0.4</version>
+    </Insparq_All>
+  </modules>
+</config>
