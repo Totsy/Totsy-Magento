@@ -178,7 +178,7 @@ jQuery(document).ready( function() {
                     jQuery("#cc_save_text").html("Save");
 
                     jQuery(".use-new-card-wrapper").appendTo(jQuery("#add_cc_types"));
-                    //newCardWrap.hide();
+                    newCardWrap.hide();
                 } else {
 
                     jQuery("[id='add_payment']").hide();
@@ -252,6 +252,7 @@ jQuery(document).ready( function() {
     });
     
 	jQuery(".use-saved-card-control").click( function(){
+	    newCardWrap.hide();
         jQuery("#paymentfactory_tokenize_cc_type input").attr("checked", false);
         jQuery('#hpcheckout-billing-form :input').attr("disabled", true);
         jQuery('#billing-address-select').attr('disabled', true);
