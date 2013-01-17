@@ -1,0 +1,79 @@
+<?php
+/**
+ * Magento Enterprise Edition
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Magento Enterprise Edition License
+ * that is bundled with this package in the file LICENSE_EE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://www.magentocommerce.com/license/enterprise-edition
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://www.magentocommerce.com/license/enterprise-edition
+ */
+?>
+<?php
+$profiles = Mage::getModel('sales/recurring_profile')->getCollection()
+    ->addFieldToFilter('customer_id', Mage::registry('current_customer')->getId())
+    ->addFieldToSelect('*')
+    ->setOrder('profile_id', 'desc');
+
+
+if($profiles) {
+    foreach($profiles as $profile) {
+        $profile_data = unserialize($profile->getOrderItemInfo());
+        $product = Mage::getModel('catalog/product')->load($profile_data['product_id']);
+
+        if($product->getIsClubSubscription() && $profile->getState() == 'active') {
+            $next_billing_date = date('F dS, Y', strtotime(date("Y-m-d", strtotime($profile_data['updated_at'])) . " + 1 month"));
+
+            break;
+        }
+
+    }
+}
+
+$customer = Mage::registry('current_customer');
+
+?>
+
+<table>
+    <tr>
+        <td>Member Name: </td>
+        <td><input type="text" readonly="readonly" value="<?php echo $customer->getFirstname() . ' ' . $customer->getLastname();?>" /></td>
+    </tr>
+    <tr>
+        <td>Totsy Plus Plan: </td>
+        <td><input type="text" readonly="readonly" value="<?php echo $product->getName();?> (<?php echo Mage::helper('core')->formatPrice($product->getPrice(), FALSE);?>)" /></td>
+    </tr>
+    <tr>
+        <td>Next Billing Date: </td>
+        <td><input type="text" readonly="readonly" value="<?php echo $next_billing_date;?>" /></td>
+    </tr>
+    <tr>
+        <td>Automatic Renewal: </td>
+        <td><input type="checkbox" id="on_off" onchange="javascript:toggleCheck();" /></td>
+    </tr>
+</table>
+
+<script type="text/javascript">
+    function toggleCheck() {
+        jQuery(document).ready(function($) {
+            $("#on_off").change(function() {
+                $("#on_off").toggleClass("selected", this.checked);
+            });
+        });
+    }
+</script>
