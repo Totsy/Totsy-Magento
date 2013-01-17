@@ -474,6 +474,7 @@ XML;
 
             $customerId = $order->getCustomerId();
             $customer   = Mage::getModel('customer/customer')->load($customerId);
+            $customerEmail = htmlentities($customer->getEmail());
 
             $shippingName = $shippingAddress->getFirstname() . ' ' . $shippingAddress->getLastname();
 
@@ -505,7 +506,7 @@ XML;
 
             $billing_country = Mage::helper('fulfillmentfactory/dotcom')->getCountryCodeUsTerritories($billing_state);
 
-            $totalAmount = number_format($order->getTotalInvoiced(), 2);
+            $totalAmount = number_format($order->getTotalInvoiced(), 2, '.', '');
 
             $xml = <<<XML
         <orders xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
@@ -558,7 +559,7 @@ XML;
                     <billing-zip>{$billingAddress->getPostcode()}</billing-zip>
                     <billing-country>{$billing_country}</billing-country>
                     <billing-phone xsi:nil="true"/>
-                    <billing-email>{$customer->getEmail()}</billing-email>
+                    <billing-email>$customerEmail</billing-email>
                 </billing-information>
                 <shipping-information>
                     <shipping-customer-number xsi:nil="true"/>
@@ -573,7 +574,7 @@ XML;
                     <shipping-country >{$country}</shipping-country>
                     <shipping-iso-country-code xsi:nil="true"/>
                     <shipping-phone xsi:nil="true"/>
-                    <shipping-email>{$customer->getEmail()}</shipping-email>
+                    <shipping-email>$customerEmail</shipping-email>
                 </shipping-information>
                 <store-information>
                     <store-name xsi:nil="true"/>
@@ -610,7 +611,7 @@ XML;
                         $sku = substr($child->getSku(), 0, 17);
 
                         if($quantity) {
-                            $price = number_format($item->getPrice(), 2);
+                            $price = number_format($item->getPrice(), 2, '.', '');
                             $taxAmount = $item->getTaxAmount();
                             if (!$taxAmount) {
                                 $taxAmount = '0';
@@ -638,7 +639,7 @@ XML;
                     $sku = substr($item->getSku(), 0, 17);
 
                     if($quantity) {
-                        $price = number_format($item->getPrice(), 2);
+                        $price = number_format($item->getPrice(), 2, '.', '');
                         $taxAmount = $item->getTaxAmount();
                         if (!$taxAmount) {
                             $taxAmount = '0';
@@ -682,16 +683,29 @@ XML;
 
                     Mage::helper('fulfillmentfactory/log')->errorLogWithOrder(
                         $error->error_description,
-                        $order->getId()
+                        $order->getId(),
+                        $xml
                     );
                 } else {
                     $successCount++;
                 }
+            } catch(Harapartners_Fulfillmentfactory_Model_Exception_FulfillmentNetworkException $e) {
+                $order->setStatus(Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_FULFILLMENT_FAILED)
+                    ->save();
+
+                Mage::helper('fulfillmentfactory/log')->errorLogWithOrder(
+                    $e->getMessage(),
+                    $order->getId(),
+                    $e->getResponse()->getBody()
+                );
             } catch(Exception $e) {
                 $order->setStatus(Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_FULFILLMENT_FAILED)
                     ->save();
 
-                Mage::helper('fulfillmentfactory/log')->errorLogWithOrder($e->getMessage(), $order->getId());
+                Mage::helper('fulfillmentfactory/log')->errorLogWithOrder(
+                    $e->getMessage(),
+                    $order->getId()
+                );
             }
         }
 

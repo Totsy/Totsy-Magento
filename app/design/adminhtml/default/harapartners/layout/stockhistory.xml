@@ -20,5 +20,11 @@
 			<action method="setTemplate"><template>empty.phtml</template></action> 
 		</reference>
     </stockhistory_adminhtml_transaction_print>
+    <stockhistory_adminhtml_transaction_report>
+		<reference name="head">
+            <action method="addJs"><name>DataTables-1.9.4/media/js/jquery.dataTables.js</name></action>
+            <action method="addJs"><name>jquery.jeditable.js</name></action>
+        </reference>
+    </stockhistory_adminhtml_transaction_report>
 	
 </layout>

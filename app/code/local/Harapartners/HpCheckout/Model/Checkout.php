@@ -388,10 +388,8 @@ class Harapartners_HpCheckout_Model_Checkout
                 'checkout_submit_all_after',
                 array('order' => $order, 'quote' => $this->getQuote(), 'recurring_profiles' => $profiles)
             );
-        }
 
-        //Fill Customer First/Last Name with Billing Address Infos
-        if($order && $order->getId()) {
+            //Fill Customer First/Last Name with Billing Address Infos
             $customer = $this->getCustomerSession()->getCustomer();
             if((!$customer->getFirstname() || !$customer->getLastname) && $order->getBillingAddress()) {
                 $customer->setFirstname($order->getBillingAddress()->getFirstname())

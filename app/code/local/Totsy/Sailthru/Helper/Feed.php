@@ -20,6 +20,7 @@ class Totsy_Sailthru_Helper_Feed extends Mage_Core_Helper_Abstract
     private $_order = false; // true = DESC; false = ACS
     private $_excludeList = array();
     private $_errors = array();
+    private $_filters = array();
 
     public function __call($name,$argiments){
         if (substr($name,0,3) == 'get'){
@@ -54,6 +55,7 @@ class Totsy_Sailthru_Helper_Feed extends Mage_Core_Helper_Abstract
         $this->_processStartDate();
         $this->_processStartTime();
         $this->_processExclude();
+        $this->_processFilter();
 
         $this->_min_datetime = $this->_startDate;
         $this->_max_datetime = strtotime('+2 days',$this->_startDate);
@@ -205,6 +207,10 @@ class Totsy_Sailthru_Helper_Feed extends Mage_Core_Helper_Abstract
         return $collector;
     }
 
+    public function filterErrors(){
+        return in_array('errors', $this->_filters);
+    }
+
     private function _getImage($event,$type=''){
         if (!empty($type)){
             $type.= '_';
@@ -282,6 +288,15 @@ class Totsy_Sailthru_Helper_Feed extends Mage_Core_Helper_Abstract
             }
             unset($exclude_list);
         }
+    }
+
+    private function _processFilter()
+    {
+      if (empty($_GET['filter']) || $_GET['filter']!='errors') {
+        return;
+      } 
+
+      $this->_filters[] = 'errors';
     }
 
     private function arrayKeyExistsValidateAndFormat($key,&$array,&$error){

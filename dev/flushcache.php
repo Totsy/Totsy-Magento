@@ -25,4 +25,8 @@ if (isset($opts['t'])) {
     die("Usage: flushcache.php -t <tags> --tags=<tags>\n");
 }
 
-Mage::app()->getCache()->clean('all', $tags);
+Mage::app()->getCache()->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, $tags);
+
+if (in_array('FPC', $tags)) {
+    Enterprise_PageCache_Model_Cache::getCacheInstance()->flush();
+}
