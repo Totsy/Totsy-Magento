@@ -231,7 +231,7 @@ class Harapartners_Stockhistory_Model_Transaction extends Mage_Core_Model_Abstra
 
             $total_units_sold = Mage::helper('stockhistory')->getIndProductSold($_category, $product);
 
-            if($product->getData('case_pack_qty')) {
+            if((int)$product->getData('case_pack_qty')) {
                 $highest_ratio = ceil($total_units_sold/$product->getData('case_pack_qty'));
             }
 
