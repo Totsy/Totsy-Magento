@@ -21,6 +21,7 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Grid extends 
         //Only for Report, not to be submitted to DotCom or Printing
         $productCollection = Mage::getModel('catalog/product')->getCollection()
                 ->addCategoryFilter($this->getCategory())
+                ->addAttributeToSelect('original_wholesale')
                 ->addAttributeToFilter('type_id', 'simple')
                 ->addAttributeToFilter(array(array('attribute'=>'is_master_pack', 'gt'=>0)))
                 ->setOrder('vendor_style', 'asc')
@@ -42,33 +43,49 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Grid extends 
         if($hasEmptyMasterPackItem){
             Mage::register('has_empty_master_pack_item', 1);
         }
-        
+
         return $uniqueProductList;
     }
     
     protected function _prepareColumns() {
-
+        $dataObject = new Varien_Object(Mage::registry('stockhistory_transaction_report_data'));
+       
         $this->addColumn('vendor_style', array(
                     'header'    =>    Mage::helper('stockhistory')->__('Vendor Style'),
                     'align'        =>    'right',
                     'width'        =>    '50px',
                     'index'        =>    'vendor_style',
+                    'filter'    => false,
+                    'sortable'  => false
 
         ));
+        if($dataObject->getData('debug')) {
+            $this->addColumn('product_id', array(
+                        'header'    =>    Mage::helper('stockhistory')->__('Product Id'),
+                        'align'        =>    'right',
+                        'width'        =>    '50px',
+                        'index'        =>    'product_id',
+                        'filter'    => false,
+                        'sortable'  => false
+            ));
+        }
         
         $this->addColumn('sku', array(
                     'header'    =>    Mage::helper('stockhistory')->__('SKU'),
                     'align'        =>    'right',
                     'width'        =>    '50px',
                     'index'        =>    'sku',
-
+                    'filter'    => false,
+                    'sortable'  => false
         ));
         
         $this->addColumn('product_name', array(
                     'header'    =>    Mage::helper('stockhistory')->__('Product Name'),
                     'align'        =>    'right',
                     'width'        =>    '50px',
-                    'index'        => 'product_name'
+                    'index'        => 'product_name',
+                    'filter'    => false,
+                    'sortable'  => false
         ));
         
         
@@ -77,6 +94,8 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Grid extends 
                     'align'        =>    'right',
                     'width'        =>    '25px',
                     'index'        =>    'color',
+                    'filter'    => false,
+                    'sortable'  => false
         ));
         
         $this->addColumn('size', array(
@@ -84,6 +103,8 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Grid extends 
                     'align'        =>    'right',
                     'width'        =>    '25px',
                     'index'        =>    'size',
+                    'filter'    => false,
+                    'sortable'  => false
         ));
         
         $this->addColumn('qty_sold', array(
@@ -91,6 +112,8 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Grid extends 
                     'align'        =>    'right',
                     'width'        =>    '25px',
                     'index'        =>  'qty_sold',
+                    'filter'    => false,
+                    'sortable'  => false
         ));
         
         $this->addColumn('qty_stock', array(
@@ -98,6 +121,8 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Grid extends 
                     'align'        =>    'right',
                     'width'        =>    '25px',
                     'index'        =>  'qty_stock',
+                    'filter'    => false,
+                    'sortable'  => false
         ));
         
         $this->addColumn('qty_total', array(
@@ -105,34 +130,58 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Grid extends 
                     'align'        =>    'right',
                     'width'        =>    '25px',
                     'index'        =>  'qty_total',
+                    'filter'    => false,
+                    'sortable'  => false
         ));
-        
+
         $this->addColumn('qty_to_amend', array(
                     'header'    => Mage::helper('catalog')->__('Final Qty'),
                     'width'     => '1',
                     'type'      => 'number',
-                    'renderer'  => 'stockhistory/adminhtml_widget_grid_column_renderer_input'
+                    'renderer'  => 'stockhistory/adminhtml_widget_grid_column_renderer_input',
+                    'filter'    => false,
+                    'sortable'  => false
         ));
         
         $this->addColumn('is_master_pack', array(
                     'header'    =>    Mage::helper('stockhistory')->__('Master Pack'),
                     'align'        =>    'right',
                     'width'        =>    '25px',
-                    'index'        =>  'is_master_pack'
+                    'index'        =>  'is_master_pack',
+                    'filter'    => false,
+                    'sortable'  => false
         ));
         
         $this->addColumn('case_pack_qty', array(
-                    'header'    =>    Mage::helper('stockhistory')->__('Case Pack Qty'),
+                    'header'    =>    Mage::helper('stockhistory')->__('Case Pack Qty (editable)'),
                     'align'        =>    'right',
                     'width'        =>    '25px',
                     'index'        =>  'case_pack_qty',
+                    'column_css_class'		=> 'editable casepackqty',
+                    'filter'    => false,
+                    'sortable'  => false
         ));
+      
+      //  if($dataObject->getData('debug')){
+            $this->addColumn('case_pack_grp_id', array(
+                        'header'    =>    Mage::helper('stockhistory')->__('Case Pack Group Id (editable)'),
+                        'align'        =>    'right',
+                        'width'        =>    '25px',
+                        'index'        =>  'case_pack_grp_id',
+                        'column_css_class'		=> 'editable casepackgrp',
+                        'renderer'  => 'stockhistory/adminhtml_widget_grid_column_renderer_casepackid',
+                        'filter'    => false,
+                        'sortable'  => false
+            ));
+     //   }
         
         $this->addColumn('unit_cost', array(
                     'header'    =>    Mage::helper('stockhistory')->__('Unit Cost'),
                     'align'        =>    'right',
                     'width'        =>    '30px',
                     'index'        =>    'unit_cost',
+                    'filter'    => false,
+                    'sortable'  => false
         ));
         
         $this->addColumn('total_cost', array(
@@ -140,6 +189,8 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Grid extends 
                     'align'        =>    'right',
                     'width'        =>    '30px',
                     'index'        =>    'total_cost',
+                    'filter'    => false,
+                    'sortable'  => false
         ));
         
         $this->addExportType('*/*/exportPoCsv', Mage::helper('stockhistory')->__('CSV'));
@@ -215,6 +266,12 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Grid extends 
 
     public function getRowUrl($row) {
         return false;
+    }
+
+    protected function _isAllowedAction($action)
+    {
+        //return null;
+        return Mage::getSingleton('admin/session')->isAllowed('harapartners/stockhistory/purchaseorder/actions/' . $action);
     }
     
 }

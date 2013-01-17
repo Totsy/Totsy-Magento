@@ -325,4 +325,43 @@ class Harapartners_Stockhistory_Helper_Data extends Mage_Core_Helper_Abstract  {
 		return $csv;
     }
 
+    public function getIndProductSold($_category, $product) {
+            $total_units = 0;
+
+            $fromTime = strtotime($_category->getData('event_start_date')) - 60*60*24*7;    // 7 days before
+            $toTime = strtotime($_category->getData('event_end_date')) + 60*60*24*3;    // 3 days after
+
+            $fromDate = date('Y-m-d H:i:s', $fromTime);
+            $toDate = date('Y-m-d H:i:s', $toTime);
+            #retrieve all orders related to the item with in the specified time frame
+            $ordersColl = Mage::getModel('sales/order_item')->getCollection();
+            $ordersColl->getSelect()->where('product_id =' . $product->getEntityId() . ' and created_at between "' . $fromDate . '" and "' . $toDate . '"');
+            
+            foreach($ordersColl as $order) {
+                #NOTE : parent item id refers to items with configurations
+                if($order->getParentItemId()) {
+                    $parent_item_id = $order->getParentItemId();
+                    $parent_order_line = Mage::getModel('sales/order_item')->getCollection();
+                    $parent_order_line->getSelect()->where('item_id =' . $parent_item_id);
+                    $order = $parent_order_line->getFirstItem();
+                }
+
+                $qty = $order->getQtyOrdered() - $order->getQtyReturned() - $order->getQtyCanceled();
+                $total_units += $qty;
+           }
+
+        return $total_units;
+    }
+
+    public function casePackOrderAmount($ratio, $cp_qty) {
+        
+        if($ratio){
+            $order_amount = $ratio * $cp_qty;
+        } else {
+            $order_amount = $cp_qty;
+        }
+
+        return $order_amount;
+    }
+
 }

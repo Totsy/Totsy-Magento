@@ -185,10 +185,7 @@ class Totsy_Customer_Model_Customer
         }
 
         // Harapartners, add email md5 hash
-        $emailHash = $this->getEmailMd5();
-        if ($emailHash === null) {
-            $this->setEmailMd5(md5($this->getEmail()));
-        }
+        $this->setData('email_md5', md5($this->getEmail()));
 
         $this->getGroupId();
         return $this;
