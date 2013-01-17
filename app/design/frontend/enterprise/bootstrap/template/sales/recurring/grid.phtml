@@ -49,30 +49,54 @@ $customer = Mage::registry('current_customer');
 
 ?>
 
-<table>
+<table class="plus top-24">
     <tr>
-        <td>Member Name: </td>
-        <td><input type="text" readonly="readonly" value="<?php echo $customer->getFirstname() . ' ' . $customer->getLastname();?>" /></td>
+        <td class="plus-label">Member Name: </td>
+        <td class="plus-value"><input type="text" readonly="readonly" value="<?php echo $customer->getFirstname() . ' ' . $customer->getLastname();?>" /></td>
     </tr>
     <tr>
-        <td>Totsy Plus Plan: </td>
-        <td><input type="text" readonly="readonly" value="<?php echo $product->getName();?> (<?php echo Mage::helper('core')->formatPrice($product->getPrice(), FALSE);?>)" /></td>
+        <td class="plus-label">Totsy Plus Plan: </td>
+        <td class="plus-value"><input type="text" readonly="readonly" value="<?php echo $product->getName();?> (<?php echo Mage::helper('core')->formatPrice($product->getPrice(), FALSE);?>)" /></td>
     </tr>
     <tr>
-        <td>Next Billing Date: </td>
-        <td><input type="text" readonly="readonly" value="<?php echo $next_billing_date;?>" /></td>
+        <td class="plus-label">Next Billing Date: </td>
+        <td class="plus-value">
+            <input type="text" readonly="readonly" value="<?php echo $next_billing_date;?>" />
+        </td>
     </tr>
     <tr>
-        <td>Automatic Renewal: </td>
-        <td><input type="checkbox" id="on_off" onchange="javascript:toggleCheck();" /></td>
+        <td class="plus-label">&nbsp;</td>
+        <td class="plus-value renewal-info"><div class="f12" id="renewal-info">Your TotsyPLUS subscription will renew automatically each month.<br/>For more information on TotsyPLUS, please see the<br/><a href="/plus/terms.html" class="dark underline">Terms and Conditions</a></div></td>
+    </tr>
+    <tr>
+        <td class="plus-label">Automatic Renewal: </td>
+        <td class="plus-value slider-box">
+            <div class="slider-frame"><span class="slider-button"></span></div>
+            <input type="checkbox" id="on-off" checked="check" onchange="javascript:toggleCheck();" />
+        </td>
     </tr>
 </table>
 
 <script type="text/javascript">
+    jQuery('.slider-button').toggle(function(){
+        jQuery('.slider-button').animate({ marginLeft: "28px" }, 250);
+        jQuery('.slider-frame').fadeTo('fast', 1, function(){
+            jQuery(this).css('background-image', 'url(/skin/frontend/enterprise/bootstrap/images/plus/slider_off.png)');
+        });
+        jQuery('#renewal-info').css('display', 'none');
+        jQuery('#on-off').removeAttr('checked', 'checked');
+    },function(){
+        jQuery('.slider-button').animate({ marginLeft: "0" }, 250);
+        jQuery('.slider-frame').fadeTo('fast', 1, function(){
+            jQuery(this).css('background-image', 'url(/skin/frontend/enterprise/bootstrap/images/plus/slider_on.png)');
+        });
+        jQuery('#renewal-info').css('display', 'block');
+        jQuery('#on-off').attr('checked');
+    });
     function toggleCheck() {
         jQuery(document).ready(function($) {
-            $("#on_off").change(function() {
-                $("#on_off").toggleClass("selected", this.checked);
+            $("#on-off").change(function() {
+                $("#on-off").toggleClass("selected", this.checked);
             });
         });
     }
