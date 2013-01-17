@@ -22,6 +22,7 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report extends Mage_
         
         $headerText = 'Product Report from PO ' . $dataObject->getData('po_id');
         $poObject = Mage::getModel('stockhistory/purchaseorder')->load($dataObject->getData('po_id'));
+        
         if($poObject->getStatus() == Harapartners_Stockhistory_Model_Purchaseorder::STATUS_SUBMITTED){
             $headerText .= ' (Submitted)';
         }
@@ -132,6 +133,72 @@ FORM_WRAPPER;
         });
         return goodData;
     }
+    jQuery(document).ready(function() {
+        var oTable = jQuery('#ReportGrid_table').dataTable( {
+            "bPaginate": false,
+            "bSort": false,
+            "bFilter": false,
+            "bProcessing": false
+        } );
+
+        jQuery('.editable').editable( "{$this->getUrl('stockhistory/adminhtml_transaction/updateCasePackGroup', array('_current' => true, '_query' => array('isAjax' => "true")))}", {
+            "placeholder" : "Click to edit",
+            "indicator" : '<img src="/skin/adminhtml/default/enterprise/images/process_spinner.gif"/>',
+            "method": "POST",
+            "name": "change_to",
+            "callback": function( sValue, y ) {
+               /* Redraw the table from the new data on the server */
+               response = JSON.parse(sValue);
+               var aPos = oTable.fnGetPosition( this );
+               oTable.fnUpdate( response.response, aPos[0], aPos[1] );
+               
+               jQuery.each(response.update, function(index, data){
+                    jQuery('#' + data.sku).val(data.qty_to_amend);
+                });
+                showMessages(response.message);
+            },
+            "submitdata": function ( value, settings ) {
+                //get product id
+                element = oTable.fnGetData(oTable.fnGetPosition( this )[0],0);
+                obj = jQuery(element);
+                
+                //get cell "id"
+                var classes = jQuery(this).attr('class');
+                classes_ar = classes.split(" ", 3);
+                var cell_id = classes_ar[2];
+                return {
+                    "id" : cell_id,
+                    "product_id": obj.val(),
+                    "form_key" : FORM_KEY,
+                    "column": oTable.fnGetPosition( this )[2]
+                };
+            },
+            "submit": 'OK',
+            "cancel": 'Cancel',
+            "height": "14px",
+            "width": "100%"
+        } );
+
+        jQuery(".editable").click(function(){
+            value = jQuery("input[name='change_to']").val();
+            if(jQuery.trim(value) == "Click to edit") {
+                jQuery("input[name='change_to']").val("");
+            }
+        });
+        
+        function showMessages(messages){
+            jQuery('#messages').html("");
+            html = "<ul class='messages'>";
+            jQuery.each(messages, function(index, data){
+                html += "<li class=" + data['type'] + "-msg>";
+                html += "<ul><li>" + data['message'] + "</li></ul>";
+            });
+            jQuery('#messages').append(html);
+            /*jQuery('#messages').fadeOut(10000, function(){
+                jQuery(this).css('display','block');
+            });*/
+        }
+});
 </script>
 ADDITIONAL_JAVASCRIPT;
 

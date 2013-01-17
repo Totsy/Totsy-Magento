@@ -71,10 +71,9 @@ class Mage_Log_Model_Visitor extends Mage_Core_Model_Abstract
      * Harapartners, optimization: loggin creates heavy writes into the database,
      * Disabled by overwriting save, not by module config, since this module has been hardcoded into the core logic
      */ 
-        
-    public function save(){
+    /**public function save(){
         return $this;
-    }
+    }**/
     
     //load is also diabled to avoid additional DB read
     public function load($id, $field=null){

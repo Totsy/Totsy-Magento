@@ -103,9 +103,11 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Abstract exte
                 'qty_total'                =>    $productInfo['qty'],
                 'is_master_pack'        =>    $productInfo['is_master_pack'],
                 'case_pack_qty'            =>    round($product->getData('case_pack_qty')),
+                'case_pack_grp_id'      =>  $product->getCasePackGrpId(),
                 'unit_cost'                =>    $productInfo['qty'] ?
                                     round($productInfo['total']/$productInfo['qty'], 2) : $productInfo['total'],
-                'total_cost'            =>    $productInfo['total']
+                'total_cost'            =>    $productInfo['total'],
+                'category_id'       =>  $this->getPoObject()->getCategoryId()
             );
             $reportItem->addData($data);
             $reportCollection->addItem($reportItem);
@@ -133,10 +135,13 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Abstract exte
         $uniqueProductList = array();
         foreach($rawCollection as $item){
         	$newTransactionId = $item->getId(); // Hara Song, Save current trasaction ID for certain item
-        	$product = Mage::getModel('catalog/product')->load($item->getProductId());
-        	
+        	$product = Mage::getModel('catalog/product')->getCollection()
+                ->addAttributeToSelect(array('sale_wholesale', 'is_master_pack'))
+                ->addAttributeToFilter('entity_id', $item->getProductId());
+        	$product = $product->getFirstItem();
+            
         	$productId = $product->getId();
-        	
+           
         	//ignore empty rows, some products may have been removed
         	if(empty($productId)) {
         		continue;
@@ -157,17 +162,19 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Abstract exte
             		|| $item->getActionType() == Harapartners_Stockhistory_Model_Transaction::ACTION_TYPE_DIRECT_IMPORT){
             
 	            if($newTransactionId >= $uniqueProductList[$item->getProductId()]['latest_transaction_id']){
-		            $uniqueProductList[$item->getProductId()]['total'] = $item->getQtyDelta() * $item->getUnitCost();
+		            $uniqueProductList[$item->getProductId()]['total'] = $item->getQtyDelta() * $product->getData('sale_wholesale');
 		            $uniqueProductList[$item->getProductId()]['qty'] = $item->getQtyDelta();
 		            $uniqueProductList[$item->getProductId()]['latest_transaction_id'] = $newTransactionId;
 	            }
             }elseif(Harapartners_Stockhistory_Model_Transaction::ACTION_TYPE_AMENDMENT){
-            		$uniqueProductList[$item->getProductId()]['amendment_total'] += $item->getQtyDelta() * $item->getUnitCost();
+            		$uniqueProductList[$item->getProductId()]['amendment_total'] += $item->getQtyDelta() * $product->getData('sale_wholesale');
             		$uniqueProductList[$item->getProductId()]['amendment_qty'] += $item->getQtyDelta();
             }
-	        if($product->getData('is_master_pack')){
+	        if((int)$product->getData('is_master_pack')){
             	$uniqueProductList[$item->getProductId()]['is_master_pack'] = 'Yes';
             }
+
+                $uniqueProductList[$item->getProductId()]['is_master_pack_value'] = $product->getData('is_master_pack');
             
             //add items which should be removed
             if($item->getActionType() == Harapartners_Stockhistory_Model_Transaction::ACTION_TYPE_REMOVE) {

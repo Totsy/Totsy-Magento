@@ -81,6 +81,9 @@
             <active>true</active>
             <codePool>local</codePool>
         </Totsy_Sailthru>
-        
+        <Totsy_Reward>
+            <active>true</active>
+            <codePool>local</codePool>
+        </Totsy_Reward>
     </modules>
 </config>
