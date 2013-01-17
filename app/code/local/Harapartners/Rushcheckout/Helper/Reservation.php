@@ -34,7 +34,8 @@ class Harapartners_Rushcheckout_Helper_Reservation extends Mage_Core_Helper_Abst
         }
         
         if($shouldRestock){
-            $deltaQty = (double) $quoteItem->getData('qty');
+            $deltaQty = (double) (-1 * $quoteItem->getData('qty'));
+
         }else{
             //Use 'last_reservation_qty' to prevent duplicate updates by duplicate saves (only saves with qty update will be effective)
             if($quoteItem->getData('last_reservation_qty') !== null){
@@ -43,7 +44,7 @@ class Harapartners_Rushcheckout_Helper_Reservation extends Mage_Core_Helper_Abst
                 $origQty = $quoteItem->getOrigData('qty');
             }
             
-            $deltaQty = -1.0 * ($newQty - $origQty); //Quote item qty changes count as negative toward stock qty
+            $deltaQty = $newQty - $origQty;
         }
         $customerId = Mage::getSingleton('customer/session')->getCustomer()->getId();
         $quantityPurchased = $quoteItem->getProduct()->getQuantityPurchasedByCustomer($customerId);
@@ -86,27 +87,12 @@ class Harapartners_Rushcheckout_Helper_Reservation extends Mage_Core_Helper_Abst
                 }
                 if($this->_registerUpdate($stockItem, $deltaQty, true)){
                     $quoteItem->setData('last_reservation_qty', $newQty);
-                }else{
-                    Mage::throwException(
-                            Mage::helper('cataloginventory')->__('The requested quantity for \'%s\' is not available.', $quoteItem->getProduct()->getName())
-                    );
                 }
             }
         }else{
             $stockItem = $quoteItem->getProduct()->getStockItem();
             if($this->_registerUpdate($stockItem, $deltaQty, true)){
             	$quoteItem->setData('last_reservation_qty', $newQty);
-            }else{
-            	if(Mage::app()->getStore()->isAdmin()){
-                	Mage::getSingleton('adminhtml/session')->addError(
-                			Mage::helper('cataloginventory')->__('The requested quantity for \'%s\' is not available according to the cart reservation logic. But might be still in stock.<br/>As admin, you can proceed. But the quantity changes will be ignored in cart reservation logic.', $quoteItem->getProduct()->getName())
-                	);
-                }else{
-                	Mage::throwException(
-                        	Mage::helper('cataloginventory')->__('The requested quantity for \'%s\' is not available.', $quoteItem->getProduct()->getName())
-                	);
-                }
-            	
             }
         }
         return $this;
@@ -131,7 +117,7 @@ class Harapartners_Rushcheckout_Helper_Reservation extends Mage_Core_Helper_Abst
         return $this;
     }
     
-    protected function _validateStock($result, $deltaQty){
+    protected function _validateStock($stockItem, $deltaQty){
         //Restock (positive delta) is always allowed
         if($deltaQty >= self::PRECISION_DELTA){
             return true;
@@ -142,12 +128,11 @@ class Harapartners_Rushcheckout_Helper_Reservation extends Mage_Core_Helper_Abst
         if(Mage::registry('isSplitOrder')){
             return true;
         }
-        
-        // == 0.00 is allowed, (-1.0 * self::PRECISION_DELTA)
-        if(!empty($result['qty']) && $result['qty'] + $deltaQty >= -1.0 * self::PRECISION_DELTA){
+
+        if($stockItem->checkQty($deltaQty)){
             return true;
         }
-        
+
         return false;
     }
     
@@ -167,37 +152,11 @@ class Harapartners_Rushcheckout_Helper_Reservation extends Mage_Core_Helper_Abst
             return $this;
         }
         
-        //Wrapped into a DB transaction for failure rollback
-        $write = Mage::getSingleton('core/resource')->getConnection('core_write');
-        
-        $select = $write->select()
-                ->from('cataloginventory_stock_status')
-                ->where('product_id = ?', $stockItem->getData('product_id'))
-                ->where('website_id = ?', self::DEFAULT_WEBSITE_ID)
-                ->where('stock_id = ?', $stockItem->getData('stock_id'));
-        $result = $write->fetchRow($select);
-        
-        if($shouldValidate && !$this->_validateStock($result, $deltaQty)){
+        if($shouldValidate && !$this->_validateStock($stockItem, $deltaQty)){
             return false;
         }
         
-        $write->beginTransaction();
-        //SQL += or -= may cause problems with nested DB transactions
-        $queryString = 'UPDATE `cataloginventory_stock_status` ';
-        $queryString .= 'SET `qty` = ' . ($result['qty'] + $deltaQty);
-        
-        // == 0.00 is considered as out of stock
-        if($result['qty'] + $deltaQty >= self::PRECISION_DELTA){
-            $queryString .= ', `stock_status` = 1 ';
-        }else{
-            $queryString .= ', `stock_status` = 0 ';
-        }
-        $queryString .= 'WHERE `product_id` = ' . $stockItem->getData('product_id') 
-                . ' AND `website_id` = '  . self::DEFAULT_WEBSITE_ID 
-                . ' AND `stock_id` = ' . $stockItem->getData('stock_id')  . ';';
-        $write->query($queryString);
-        $write->commit();
-
+        Mage::helper('totsy_cataloginventory')->changeReserveCount($stockItem->getProductId(),$deltaQty);
         
         return $this;
     }
