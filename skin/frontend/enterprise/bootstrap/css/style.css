@@ -1469,6 +1469,11 @@ body.catalog-category-view .price-box .special-price {
     text-decoration: underline;
 }
 
+.plus .dotted {
+    border-bottom: 2px dotted #000;
+    height: 2px;
+}
+
 .plus .center {
     text-align: center;
 }
