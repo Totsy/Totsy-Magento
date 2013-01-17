@@ -130,6 +130,8 @@
             </core>
             <index>
                 <rewrite>
+                    <!--Harapartners_Import: Optimization, ignoring irrelevant indexing processes --><!--Harapartners_Rushcheckout: Freeing stock status for cart reservation-->
+                    <indexer>Harapartners_Service_Model_Rewrite_Index_Indexer</indexer>
 					<!--Harapartners_Import: Optimization, skip event save to DB-->
 					<event>Harapartners_Service_Model_Rewrite_Index_Event</event>
                 </rewrite>
@@ -151,7 +153,7 @@
                     <!--Harapartners_SpeedTax-->
                     <quote_address_total_grand>Harapartners_Service_Model_Rewrite_Sales_Quote_Address_Total_Grand</quote_address_total_grand>
 					<!--Harapartners_Service, Query optimization, no quote item price update after product import-->
-					<!--observer>Harapartners_Service_Model_Rewrite_Sales_Observer</observer-->
+					<observer>Harapartners_Service_Model_Rewrite_Sales_Observer</observer>
 					<!--Harapartners_Service, Removing Ogone from order status-->
                     <order_config>Harapartners_Service_Model_Rewrite_Sales_Order_Config</order_config>
 					<!--Harapartners_Service, if product does not have an live category/event, it cannot be add to cart (quote)--><!--Harapartners_Promotionfactory, Virtual product (coupons) should always be a separate line item-->
@@ -392,24 +394,25 @@
     <frontend>
         <events>
             <!-- ===== FRONTEND ONLY EVENTS START ===== -->
-            <cataloginventory_stock_item_save_after>
-                <observers>
+            <!-- RSTREET: Removed references to add and remove stock from items in the cart -->
+            <!--cataloginventory_stock_item_save_after>
+                <observers-->
                     <!--Harapartners_Rushcheckout: Updating only (Addition and deletion can be safely ignored) -->
-                    <rushcheckout>
+                    <!--rushcheckout>
                         <class>rushcheckout/observer</class>
                         <method>updateReservationByStockItem</method>
                     </rushcheckout>
                 </observers>
-            </cataloginventory_stock_item_save_after>
-            <sales_quote_item_save_after>
-                <observers>
+            </cataloginventory_stock_item_save_after-->
+            <!--sales_quote_item_save_after>
+                <observers-->
                     <!--Harapartners_Rushcheckout: Adding or updating quote item -->
-                    <rushcheckout>
+                    <!--rushcheckout>
                         <class>rushcheckout/observer</class>
                         <method>updateReservationByQuoteItem</method>
                     </rushcheckout>
                 </observers>
-            </sales_quote_item_save_after>
+            </sales_quote_item_save_after -->
             <sales_quote_item_delete_after>
                 <observers>
                     <!--Harapartners_Rushcheckout: Deleting quote item -->
