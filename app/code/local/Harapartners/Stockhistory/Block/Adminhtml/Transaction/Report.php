@@ -77,7 +77,7 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report extends Mage_
 FORM_WRAPPER;
         
         $hasEmptyMasterPackItem = Mage::registry('has_empty_master_pack_item') ? 1 : 0;
-        $html .= <<<ADDITIONAL_JAVASCRIPT
+               $html .= <<<ADDITIONAL_JAVASCRIPT
 <script type="text/javascript">
     var postBatchAmendment = function () {
         if(confirm('All amendment quantities will be posted to this purchase order, continue?')) {
@@ -134,8 +134,11 @@ FORM_WRAPPER;
         });
         return goodData;
     }
-    {if $this->_isAllowedAction(editable):}
-    jQuery(document).ready(function() {
+
+ADDITIONAL_JAVASCRIPT;
+    if($this->_isAllowedAction('editable')){
+    $html.=<<<ADDITIONAL_JAVASCRIPT
+jQuery(document).ready(function() {
         var oTable = jQuery('#ReportGrid_table').dataTable( {
             "bPaginate": false,
             "bSort": false,
@@ -200,7 +203,6 @@ FORM_WRAPPER;
                 jQuery(this).css('display','block');
             });*/
         }
-        {endif;}
 });
 </script>
 ADDITIONAL_JAVASCRIPT;
