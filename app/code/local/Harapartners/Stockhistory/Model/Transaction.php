@@ -97,8 +97,10 @@ class Harapartners_Stockhistory_Model_Transaction extends Mage_Core_Model_Abstra
         if(!$dataObj->getData('action_type')){
             $dataObj->setData('action_type', self::ACTION_TYPE_AMENDMENT);
         }
-        
-    	if($dataObj->getData('qty_delta') === '00') {
+
+        $sold = Mage::helper('stockhistory')->getIndProductSold($category, $product);
+        #making sure that items with sold quantity can't be zeroed out
+    	if($dataObj->getData('qty_delta') === '00' && !$sold) {
         	//put a flag to indicate this item should be delete remove this line item
         	$qtyDelta = 0;
         	$dataObj->setData('action_type', self::ACTION_TYPE_REMOVE);
@@ -205,14 +207,10 @@ class Harapartners_Stockhistory_Model_Transaction extends Mage_Core_Model_Abstra
         }
         return false;
     }
-    /**
-     * @todo: needs protective measures
-     */
 
     public function calculateCasePackOrderQty($item_id, $po_id, $case_pack_grp_id, $all_results = false){
         
-        $high_denom_sold = 0;
-        $high_denom_cp_qty = 0;
+        $highest_ratio = 0;
         $grouped = array();
         $order_amount = 0;
 
@@ -230,11 +228,18 @@ class Harapartners_Stockhistory_Model_Transaction extends Mage_Core_Model_Abstra
             if(!$product->getData('is_master_pack')) {
                 return $order_amount;
             }
+
             $total_units_sold = Mage::helper('stockhistory')->getIndProductSold($_category, $product);
-            $order_amount = Mage::helper('stockhistory')->casePackOrderAmount($total_units_sold, $product->getData('case_pack_qty'), $product->getData('case_pack_qty'));
+
+            if((int)$product->getData('case_pack_qty')) {
+                $highest_ratio = ceil($total_units_sold/$product->getData('case_pack_qty'));
+            }
+
+            $order_amount = Mage::helper('stockhistory')->casePackOrderAmount($highest_ratio, $product->getData('case_pack_qty'));
             
             if($all_results) {
                 $grouped[(string)$item_id] = array('sku' => $product->getData('sku'), 'qty_to_amend' => $order_amount, 'cp_qty' => $product->getData('case_pack_qty'));
+                $grouped['message'][] = array('message' => 'Successfully Updated!', 'type' => 'success' );
                 return $grouped;
             }
 
@@ -262,10 +267,13 @@ class Harapartners_Stockhistory_Model_Transaction extends Mage_Core_Model_Abstra
 
                $total_units_sold = Mage::helper('stockhistory')->getIndProductSold($_category, $product);
 
+               if($product->getData('case_pack_qty')) {
+                    $ratio = ceil($total_units_sold/$product->getData('case_pack_qty'));
+               }
+
                #find highest denominator
-               if ($high_denom_sold < $total_units_sold) {
-                    $high_denom_sold = $total_units_sold;
-                    $high_denom_cp_qty = $product->getData('case_pack_qty');
+               if ($highest_ratio < $ratio) {
+                    $highest_ratio = $ratio;
                 }
 
                 $grouped[(string)$product->getEntityId()] = array(
@@ -276,19 +284,18 @@ class Harapartners_Stockhistory_Model_Transaction extends Mage_Core_Model_Abstra
                 );
             }
 
-            if($high_denom_cp_qty == 0) {
+            if(!$highest_ratio) {
                 if($all_results) {
                     $grouped['message'][] = array('message' => 'Successfully Updated!', 'type' => 'success' );
                     return $grouped;
                 }
                 return $grouped[$item_id]['cp_qty'];
             }
-            
-            $mfactor = ceil($high_denom_sold/$high_denom_cp_qty);
 
             foreach($grouped as $id => $values ) {
                 if($id == "message") continue;
-                $grouped[$id]['qty_to_amend'] = $mfactor * $values['cp_qty'];
+                $grouped[$id]['qty_to_amend'] = Mage::helper('stockhistory')->casePackOrderAmount($highest_ratio, $values['cp_qty']);
+
                 if($id == $item_id){
                     $order_amount = $grouped[$id]['qty_to_amend'];
                 }

@@ -48,14 +48,6 @@ class EcomDev_PHPUnit_Model_Config extends Mage_Core_Model_Config
      */
     protected $_replaceInstanceCreation = array();
 
-    /**
-     * No cache sections should be cached,
-     * in favor to get rid of buggy config set options
-     *
-     * @var array
-     */
-    protected $_cacheSections = array();
-
 	/**
      * Load config data from DB
      *
@@ -70,18 +62,6 @@ class EcomDev_PHPUnit_Model_Config extends Mage_Core_Model_Config
         }
         parent::loadDb();
         return $this;
-    }
-
-    /**
-     * Get events configuration
-     *
-     * @param   string $area event area
-     * @param   string $eventName event name
-     * @return  Mage_Core_Model_Config_Element
-     */
-    public function getEventConfig($area, $eventName)
-    {
-        return $this->getNode($area)->events->{$eventName};
     }
 
     /**
@@ -255,7 +235,7 @@ class EcomDev_PHPUnit_Model_Config extends Mage_Core_Model_Config
     {
         // Cache beckend initialization for unit tests,
         // because it should be separate from live one
-        $this->setNode('global/cache/backend', '');
+        $this->setNode('global/cache/backend', 'file');
         $this->getOptions()->setData('cache_dir', $this->getVarDir() . DS . 'phpunit.cache');
         $this->getOptions()->setData('session_dir', $this->getVarDir() . DS . 'phpunit.session');
         return $this;

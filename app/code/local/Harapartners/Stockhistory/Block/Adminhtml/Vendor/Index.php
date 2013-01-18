@@ -19,6 +19,15 @@ class Harapartners_Stockhistory_Block_Adminhtml_Vendor_Index extends Mage_Adminh
         $this->_controller = 'adminhtml_vendor_index';
         $this->_headerText = Mage::helper('stockhistory')->__('Vendor Info');
         parent::__construct();
+        if(!$this->_isAllowedAction('add')){
+            $this->_removeButton('add');
+        }
+    }
+
+    protected function _isAllowedAction($action)
+    {
+        //return null;
+        return Mage::getSingleton('admin/session')->isAllowed('harapartners/stockhistory/vendor/actions/' . $action);
     }
  
 }

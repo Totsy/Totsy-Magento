@@ -58,11 +58,11 @@ class EcomDev_PHPUnit_Constraint_Config extends PHPUnit_Framework_Constraint
      * @param string  $description
      * @param boolean $not
      */
-    public function fail($other, $description, PHPUnit_Framework_ComparisonFailure $comparisonFailure = NULL)
+    public function fail($other, $description, $not)
     {
         $nodeValue = $this->getNodeValue($other);
 
-        return $this->constraint->fail($nodeValue, $description, $comparisonFailure);
+        return $this->constraint->fail($nodeValue, $description, $not);
     }
 
     /**
@@ -123,7 +123,6 @@ class EcomDev_PHPUnit_Constraint_Config extends PHPUnit_Framework_Constraint
      */
     protected function failureDescription($other)
     {
-        $nodeValue = $this->getNodeValue($other);
-        return $this->constraint->failureDescription($nodeValue);
+        return $this->constraint->failureDescription($other);
     }
 }
