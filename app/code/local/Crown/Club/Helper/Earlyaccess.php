@@ -39,14 +39,9 @@ class Crown_Club_Helper_Earlyaccess extends Mage_Core_Helper_Abstract {
 
         $earlyAccessStartDate = $this->getEventTimeUntilAvailableForMembers($category);
 
-        Mage::log('Current Time ' . $currentDate->toString(), null, 'cheese.log',true);
-        Mage::log('Early Time ' . $earlyAccessStartDate->toString(), null, 'cheese.log',true);
-        Mage::log($currentDate->compare($earlyAccessStartDate), null, 'cheese.log',true);
-
-        if ( 1 !== $currentDate->compare($earlyAccessStartDate) ) {
+        if ( strtotime( $currentDate->toString() ) >= strtotime( $earlyAccessStartDate->toString() ) ) {
             return true;
         }
-
         return false;
 
     }

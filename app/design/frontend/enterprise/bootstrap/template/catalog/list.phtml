@@ -67,11 +67,6 @@
 	<?php Mage::getSingleton('customer/session')->setFacebookAccountFirstCreate(false);?>
 <?php elseif( (Mage::getSingleton('customer/session')->getData('login_refer')) && (Mage::helper('enterprise_invitation')->isInvitationMessageAllowed()) && $storeId==1 ):?>
 
-
-
-
-
-
 	<a id="invite_pop" href="#invite_window" class="hidden"></a>
 	<div style="display: none;">
 		<div id="invite_window" class="fancybox">

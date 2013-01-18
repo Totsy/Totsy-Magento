@@ -19,6 +19,12 @@ class Crown_Club_Helper_Data extends Mage_Core_Helper_Abstract {
 	 */
 	private $_clubCustomerGroup;
 
+    /**
+     * @since 0.6.0
+     * @var Mage_Catalog_Model_Product
+     */
+    private $_clubProduct;
+
 	/**
 	 * Check to see if the module has all required settings to run successfuly.
 	 * @since 0.1.0
@@ -32,6 +38,22 @@ class Crown_Club_Helper_Data extends Mage_Core_Helper_Abstract {
 		$checks[] = $this->getNonClubCustomerGroup() != $this->getClubCustomerGroup();
 		return !in_array(false, $checks, true);
 	}
+
+    /**
+     * Gets the product model of the club subscription product
+     * @since 0.6.0
+     * @return Mage_Catalog_Model_Product|Mage_Core_Model_Abstract
+     */
+    public function getClubProduct() {
+        if (!$this->_clubProduct) {
+            $productId = abs((int)Mage::getStoreConfig('Crown_Club/clubgeneral/club_product_id'));
+            $product = Mage::getModel('catalog/product')->load($productId);
+            if ($product->getId()) {
+                $this->_clubProduct = $product;
+            }
+        }
+        return $this->_clubProduct;
+    }
 
 	/**
 	 * Get the store value for the number of days in the grace period of an expired subscription

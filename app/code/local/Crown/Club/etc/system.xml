@@ -28,6 +28,15 @@
 							<show_in_website>1</show_in_website>
 							<show_in_store>1</show_in_store>
 						</grace_period>
+                        <club_product_id translate="label">
+                            <label>Club Product ID</label>
+                            <comment>The product ID of the club subscription.</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </club_product_id>
 						<club_customer_group translate="label">
 							<label>Club Group</label>
 							<comment>The customer group considered the Club group</comment>
