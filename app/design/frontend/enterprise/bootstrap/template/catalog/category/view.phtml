@@ -170,12 +170,14 @@
                 <p>
                     <?php if ($inEarly): ?>
                         <?php if ($upComingFlag): ?>
-                            Early Access to sale in
-                            <span class="earlytime-<?php echo $timer ?>"></span>
-                            Non Totsy Club members access in
+                            <img src="/skin/frontend/enterprise/bootstrap/images/plus/ladybug.png" style="vertical-align:baseline;" />
+                            <span class="rocking-text">Early Access to sale in</span>
+                            <span class="earlytime-<?php echo $timer ?>" style="color: #ff0000"></span>
+                            <span style="size: 12px; color:#cccccc">Non Totsy Club members access in</span>
                            <span class="timesmall-<?php echo $timer ?>"></span>
                         <?php else: ?>
-                            You're in early!
+                            <img src="/skin/frontend/enterprise/bootstrap/images/plus/ladybug.png" style="vertical-align:baseline;" />
+                            <span class="rocking-text">You're in early!</span>
                         <?php endif; ?>
                     <?php elseif($upComingFlag):
                         /* @var $clubProduct Mage_Catalog_Model_Product */
