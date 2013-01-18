@@ -206,7 +206,7 @@ jQuery(document).ready(function() {
 });
 </script>
 ADDITIONAL_JAVASCRIPT;
-
+        }
         return $html;
     }
 
