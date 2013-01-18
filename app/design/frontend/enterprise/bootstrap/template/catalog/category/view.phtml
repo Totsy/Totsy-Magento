@@ -181,14 +181,21 @@
                         /* @var $clubProduct Mage_Catalog_Model_Product */
                         $clubProduct = $clubHelper->getClubProduct();
                     ?>
-                        Sale begins in
-                       <span class="timesmall-<?php echo $timer ?>"></span>
-                        Signup for TotsyPLUS GET ACCESS 2 HOURS EARLY!
-                        <?php if(!is_null($clubProduct)):
-                            $url = $clubProduct->getProductUrl();
-                        ?>
-                            <a href="<?php echo $url ?>"><img src="/skin/frontend/enterprise/bootstrap/images/plus/signupforclub.png"></a>
-                        <?php endif; ?>
+                        <div>
+                            <div style="display: inline-block; width: 27%">
+                                <strong>SALE BEGINS IN</strong>
+                                <span class="timesmall-<?php echo $timer ?>" style="color: #ff0000"></span>
+                            </div>
+                            <div style="text-align: right; display: inline-block; width: 72%;">
+                                <img src="/skin/frontend/enterprise/bootstrap/images/plus/ladybug.png" style="vertical-align:baseline;" />
+                                <span class="rocking-text">Signup for TotsyPLUS GET ACCESS 2 HOURS EARLY!</span>
+                                <?php if(!is_null($clubProduct)):
+                                $url = $clubProduct->getProductUrl();
+                                ?>
+                                <a href="<?php echo $url ?>"><img src="/skin/frontend/enterprise/bootstrap/images/plus/signupforclub.png" /></a>
+                                <?php endif; ?>
+                            </div>
+                        </div>
                     <?php endif; ?>
                 </p>
             </div>

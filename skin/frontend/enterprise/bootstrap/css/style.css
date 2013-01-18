@@ -2770,3 +2770,6 @@ body.catalog-category-view .price-box .special-price {
 .fancybox-ie #fancybox-bg-nw { filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../images/fancybox/fancy_shadow_nw.png', sizingMethod='scale'); }
 
 #cc_data {display:none;}
+
+/* Totsy Plus */
+.rocking-text {color: #ADB92C; text-transform: uppercase; font-weight: bold}
