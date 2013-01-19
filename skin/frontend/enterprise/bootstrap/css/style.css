@@ -2086,6 +2086,10 @@ body.catalog-category-view .price-box .special-price {
     height: 20px;
 }
 
+.plus .slider-box .inactive {
+    background: url(/skin/frontend/enterprise/bootstrap/images/plus/slider_off.png) no-repeat 0 0;
+}
+
 .plus .slider-box #on-off{
     display:none;
 }
@@ -2098,6 +2102,10 @@ body.catalog-category-view .price-box .special-price {
     width: 18px;
     height: 20px;
     cursor: pointer;
+}
+
+.plus .slider-box .slider-frame .off {
+    margin-left: 28px;
 }
 
 .plus .plus-label {

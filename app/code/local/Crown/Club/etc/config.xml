@@ -97,6 +97,17 @@
             </ident_club>
         </trans_email>
 	</default>
+    <frontend>
+        <routers>
+            <crownclub>
+                <use>standard</use>
+                <args>
+                    <module>Crown_Club</module>
+                    <frontName>totsyplus</frontName>
+                </args>
+            </crownclub>
+        </routers>
+    </frontend>
 	<crontab>
 		<jobs>
 			<club_clean_expired>

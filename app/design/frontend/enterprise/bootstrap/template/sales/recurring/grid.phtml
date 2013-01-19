@@ -38,9 +38,26 @@ if($profiles) {
 
         if($product->getIsClubSubscription() && $profile->getState() == 'active') {
             $next_billing_date = date('F dS, Y', strtotime(date("Y-m-d", strtotime($profile_data['updated_at'])) . " + 1 month"));
-
-            break;
+            $action = 'suspend';
+            $form_elements = array(
+                'slider-frame' => '',
+                'slider-button' => '',
+                'checkbox' => ' checked="checked"',
+                'renewal-info' => ''
+            );
         }
+        else {
+            $next_billing_date = 'Not Active';
+            $action = 'activate';
+            $form_elements = array(
+                'slider-frame' => 'inactive',
+                'slider-button' => 'off',
+                'checkbox' => ' ',
+                'renewal-info' => 'display:none;'
+            );
+        }
+
+        break;
 
     }
 }
@@ -49,55 +66,56 @@ $customer = Mage::registry('current_customer');
 
 ?>
 
-<table class="plus top-24">
-    <tr>
-        <td class="plus-label">Member Name: </td>
-        <td class="plus-value"><input type="text" readonly="readonly" value="<?php echo $customer->getFirstname() . ' ' . $customer->getLastname();?>" /></td>
-    </tr>
-    <tr>
-        <td class="plus-label">Totsy Plus Plan: </td>
-        <td class="plus-value"><input type="text" readonly="readonly" value="<?php echo $product->getName();?> (<?php echo Mage::helper('core')->formatPrice($product->getPrice(), FALSE);?>)" /></td>
-    </tr>
-    <tr>
-        <td class="plus-label">Next Billing Date: </td>
-        <td class="plus-value">
-            <input type="text" readonly="readonly" value="<?php echo $next_billing_date;?>" />
-        </td>
-    </tr>
-    <tr>
-        <td class="plus-label">&nbsp;</td>
-        <td class="plus-value renewal-info"><div class="f12" id="renewal-info">Your TotsyPLUS subscription will renew automatically each month.<br/>For more information on TotsyPLUS, please see the<br/><a href="/plus/terms.html" class="dark underline">Terms and Conditions</a></div></td>
-    </tr>
-    <tr>
-        <td class="plus-label">Automatic Renewal: </td>
-        <td class="plus-value slider-box">
-            <div class="slider-frame"><span class="slider-button"></span></div>
-            <input type="checkbox" id="on-off" checked="check" onchange="javascript:toggleCheck();" />
-        </td>
-    </tr>
-</table>
+<?php if(Mage::helper('crownclub')->isClubMember($customer)): ?>
+    <table class="plus top-24">
+        <tr>
+            <td class="plus-label">Member Name: </td>
+            <td class="plus-value"><input type="text" readonly="readonly" value="<?php echo $customer->getFirstname() . ' ' . $customer->getLastname();?>" /></td>
+        </tr>
+        <tr>
+            <td class="plus-label">Totsy Plus Plan: </td>
+            <td class="plus-value"><input type="text" readonly="readonly" value="<?php echo $product->getName();?> (<?php echo Mage::helper('core')->formatPrice($product->getPrice(), FALSE);?>)" /></td>
+        </tr>
+        <tr>
+            <td class="plus-label">Next Billing Date: </td>
+            <td class="plus-value">
+                <input type="text" readonly="readonly" value="<?php echo $next_billing_date;?>" />
+            </td>
+        </tr>
+        <tr>
+            <td class="plus-label">&nbsp;</td>
+            <td class="plus-value renewal-info"><div class="f12" id="renewal-info" style="<?php echo $form_elements['renewal-info'];?>">Your TotsyPLUS subscription will renew automatically each month.<br/>For more information on TotsyPLUS, please see the<br/><a href="/plus/terms.html" class="dark underline">Terms and Conditions</a></div></td>
+        </tr>
+        <tr>
+            <td class="plus-label">Automatic Renewal: </td>
+            <td class="plus-value slider-box">
+                <div class="slider-frame <?php echo $form_elements['slider-frame'];?>"><span class="slider-button <?php echo $form_elements['slider-button'];?>"></span></div>
+                <input type="checkbox" id="on-off" <?php echo $form_elements['checkbox'];?> />
+            </td>
+        </tr>
+    </table>
 
-<script type="text/javascript">
-    jQuery('.slider-button').toggle(function(){
-        jQuery('.slider-button').animate({ marginLeft: "28px" }, 250);
-        jQuery('.slider-frame').fadeTo('fast', 1, function(){
-            jQuery(this).css('background-image', 'url(/skin/frontend/enterprise/bootstrap/images/plus/slider_off.png)');
-        });
-        jQuery('#renewal-info').css('display', 'none');
-        jQuery('#on-off').removeAttr('checked', 'checked');
-    },function(){
-        jQuery('.slider-button').animate({ marginLeft: "0" }, 250);
-        jQuery('.slider-frame').fadeTo('fast', 1, function(){
-            jQuery(this).css('background-image', 'url(/skin/frontend/enterprise/bootstrap/images/plus/slider_on.png)');
-        });
-        jQuery('#renewal-info').css('display', 'block');
-        jQuery('#on-off').attr('checked');
-    });
-    function toggleCheck() {
-        jQuery(document).ready(function($) {
-            $("#on-off").change(function() {
-                $("#on-off").toggleClass("selected", this.checked);
+    <script type="text/javascript">
+        jQuery('.slider-button').toggle(function(){
+            jQuery('.slider-button').animate({ marginLeft: "28px" }, 250);
+            jQuery('.slider-frame').fadeTo('fast', 1, function(){
+                jQuery(this).css('background-image', 'url(/skin/frontend/enterprise/bootstrap/images/plus/slider_off.png)');
             });
+            jQuery('#renewal-info').css('display', 'none');
+            jQuery('#on-off').removeAttr('checked', 'checked');
+            jQuery.get('<?php echo Mage::getBaseUrl() . 'totsyplus/profile_recurring/update/profile/' .$profile->getId(). '/action/suspend/';?>');
+        },function(){
+            jQuery('.slider-button').animate({ marginLeft: "0" }, 250);
+            jQuery('.slider-frame').fadeTo('fast', 1, function(){
+                jQuery(this).css('background-image', 'url(/skin/frontend/enterprise/bootstrap/images/plus/slider_on.png)');
+            });
+            jQuery('#renewal-info').css('display', 'block');
+            jQuery('#on-off').attr('checked', 'checked');
+            jQuery.get('<?php echo Mage::getBaseUrl() . 'totsyplus/profile_recurring/update/profile/' .$profile->getId(). '/action/activate/';?>');
         });
-    }
-</script>
+
+    </script>
+
+<?php else: ?>
+    You are not a current Totsy Plus Member.  Sign up <a href="<?php echo Mage::helper('crownclub')->getClubProduct()->getProductUrl();?>">here.</a>
+<?php endif;?>
