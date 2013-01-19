@@ -10,7 +10,6 @@ class Crown_Club_Profile_RecurringController extends Mage_Core_Controller_Front_
 
     public function updateAction() {
 
-        Mage::log('called');
         $profile_id = $this->getRequest()->getParam('profile');
 
         $action = $this->getRequest()->getParam('action');
