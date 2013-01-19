@@ -50,28 +50,36 @@
             ?>
             <div class="plus-menu">
                 <?php
-                if(Mage::app()->getRequest()->getRouteName() == 'cms') {
+                $active = "";
+                // check if CMS page and get the identifier
+                if(Mage::app()->getFrontController()->getRequest()->getRouteName() == 'cms') {
                     $active = Mage::getSingleton('cms/page')->getIdentifier();
-                } else {
-                    $active = 'null';
+                }
+                // get the route name if it is not a CMS page
+                if(empty($active)) {
+                    $active = Mage::app()->getFrontController()->getRequest()->getRouteName();
+                }
+                // if this is a catalog page, get the category path
+                if($active == 'catalog') {
+                    $active = 'plus'.strtolower(Mage::registry('current_category')->getUrlPath()).'.html';
                 }
                 ?>
                 <ul class="links">
                     <li class="first"><a href="/plus/dashboard" title="TOTSYPLUS DASHBOARD" <?php echo $active == 'plus/dashboard' ? 'class="active"' : ''; ?>>TOTSYPLUS DASHBOARD</a></li>
-                    <li><a href="/plus/early-access.html" title="Early Access" >Early Access</a></li>
-                    <li><a href="/plus/credit.html" title="10% Credit On Every Purchase*" >10% Credit On<br/>Every Purchase*</a></li>
-                    <li><a href="/plus/exclusive-sales.html" title="Exclusive Sales" >Exclusive Sales</a></li>
-                    <li><a href="/plus/entertainment-savings.html" title="Entertainment Savings" >Entertainment Savings</a></li>
-                    <li><a href="/plus/discount-vault.html" title="Discount Vault" >Discount Vault</a></li>
-                    <li class=" last" ><a href="/sales/recurring_profile/" title="My Totsy Plus Membership" >My Totsy Plus Membership</a></li>
+                    <li><a href="/plus/early-access.html" title="Early Access" <?php echo $active == 'plus/early-access.html' ? 'class="active"' : ''; ?>>Early Access</a></li>
+                    <li><a href="/plus/credit.html" title="10% Credit On Every Purchase*" <?php echo $active == 'plus/credit.html' ? 'class="active"' : ''; ?>>10% Credit On<br/>Every Purchase*</a></li>
+                    <li><a href="/plus/exclusive-sales.html" title="Exclusive Sales" <?php echo $active == 'plus/exclusive-sales.html' ? 'class="active"' : ''; ?>>Exclusive Sales</a></li>
+                    <li><a href="/plus/entertainment-savings.html" title="Entertainment Savings" <?php echo $active == 'plus/entertainment-savings.html' ? 'class="active"' : ''; ?>>Entertainment Savings</a></li>
+                    <li><a href="/plus/discount-vault.html" title="Discount Vault" <?php echo $active == 'plus/discount-vault.html' ? 'class="active"' : ''; ?>>Discount Vault</a></li>
+                    <li class=" last" ><a href="/sales/recurring_profile/" title="My Totsy Plus Membership" <?php echo $active == 'sales/recurring_profile' ? 'class="active"' : ''; ?>>My Totsy Plus Membership</a></li>
                 </ul>
 
                 <ul class="links">
                     <li class="first"><span>NEED HELP?</span></li>
                     <li><a href="http://totsy.custhelp.com/app/ask" title="Help Desk" >Help Desk</a></li>
                     <li><a href="http://totsy.custhelp.com/app/home" title="FAQs" >FAQs</a></li>
-                    <li><a href="/pages/privacy/" title="Privacy Policy">Privacy Policy</a></li>
-                    <li class="last"><a href="/plus/terms.html" title="Terms Of Use">Terms Of Use</a></li>
+                    <li><a href="/pages/privacy/" title="Privacy Policy" <?php echo $active == 'pages/privacy' ? 'class="active"' : ''; ?>>Privacy Policy</a></li>
+                    <li class="last"><a href="/plus/terms.html" title="Terms Of Use" <?php echo $active == 'plus/terms.html' ? 'class="active"' : ''; ?>>Terms Of Use</a></li>
                 </ul>
             </div>
             <div class="plus-content">

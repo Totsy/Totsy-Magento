@@ -1770,9 +1770,14 @@ body.catalog-category-view .price-box .special-price {
     display: block;
 }
 
+.plus-menu ul.links li a:hover {
+    text-decoration: none;
+}
+
 .plus-menu ul.links li a.active {
     color: #FFF;
     background: #DC4338;
+    font-weight: bold;
 }
 
 .plus-content {
