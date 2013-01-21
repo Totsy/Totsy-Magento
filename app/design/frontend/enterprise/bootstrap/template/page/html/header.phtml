@@ -97,7 +97,11 @@
                     </ul>
                 </li>
                 <li id="navByAge" class="navShop">
-                    <a href="/plus"><em>Totsy<br/>PLUS</em></a>
+                    <?php if(($customer = Mage::getSingleton('customer/session')->getCustomer()) && (Mage::helper('crownclub')->isClubMember($customer))): ?>
+                        <a href="/plus/dashboard"><em>Totsy<br/>PLUS</em></a>
+                    <?php else: ?>
+                        <a href="/plus"><em>Totsy<br/>PLUS</em></a>
+                    <?php endif; ?>
                 </li>
                 <!--<li id="navSocial"><a href="/pixels/sociable/feed" title="Social Feed"><em>WHAT'S <br/>HOT</em></a></li> -->
             </ul>

@@ -99,14 +99,17 @@ class Crown_Club_Helper_Data extends Mage_Core_Helper_Abstract {
 	 * @since 0.1.0
 	 * @return boolean
 	 */
-	public function isClubMember($customer) {
+	public function isClubMember($customer,$checkCustomer = false) {
 		$clubGroup = $this->getClubCustomerGroup();
 		if ( $customer instanceof Mage_Customer_Model_Customer ) {
 			$customerModel = $customer;
 		} else {
 			$customerModel = Mage::getModel('customer/customer')->load($customer);
 		}
-		return $clubGroup->getId() == $customer->getGroupId() && 1 == $customerModel->getData('is_club_member');
+        if($checkCustomer) {
+            return $clubGroup->getId() == $customer->getGroupId() && 1 == $customerModel->getData('is_club_member');
+        }
+        return $clubGroup->getId() == $customer->getGroupId();
 	}
 
     /**
