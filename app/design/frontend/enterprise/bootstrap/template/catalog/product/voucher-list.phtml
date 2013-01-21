@@ -79,11 +79,13 @@
                         <div class="desc std">
 
                             <?php if(Mage::helper('vouchers')->hasAssociation($_customerId, $_product->getId())):?>
-                            <?php $_buttonMessage = $this->__('Code Sent!');?>
-                            <?php $_disabledButton = 'disabled = "true"';?>
+                                <?php $_buttonMessage = '';?>
+                                <?php $_buttonClass = 'btn-cart-sent';?>
+                                <?php $_disabledButton = 'disabled = "true"';?>
                             <?php else:?>
-                            <?php $_buttonMessage = $this->__('Email Me Code');?>
-                            <?php $_disabledButton = '';?>
+                                <?php $_buttonClass = 'btn-cart';?>
+                                <?php $_buttonMessage = $this->__('Email Me Code');?>
+                                <?php $_disabledButton = '';?>
                             <?php endif;?>
 
                             <div class="product-name strong"><a href="javascript:void(0);"  onclick="openDialog('learn-more-<?php echo $j;?>')"><?php echo $_productNameStripped;?></a></div>
@@ -96,12 +98,12 @@
                                 <strong><?php echo $_productNameStripped;?></strong><br />
                                 <?php echo Mage::getModel('catalog/product')->load($_product->getId())->getDescription();?>
                                 <br /><br />
-                                <button <?php echo $_disabledButton;?> type="button" title="<?php echo $_buttonMessage; ?>" class="button btn-cart" onclick="emailCode('<?php echo $_product->getId();?>');"><span><span id="button-popup-<?php echo $_product->getId();?>"><?php echo $this->__($_buttonMessage) ?></span></span></button>
+                                <button <?php echo $_disabledButton;?> type="button" title="<?php echo $_buttonMessage; ?>" class="button <?php echo $_buttonClass;?>" onclick="emailCode('<?php echo $_product->getId();?>');"><span><span id="button-popup-<?php echo $_product->getId();?>"><?php echo $this->__($_buttonMessage) ?></span></span></button>
                             </div>
                         </div>
                         <?php if($_product->isSaleable()): ?>
 
-                        <div style="float:right;"><button <?php echo $_disabledButton;?> type="button" title="<?php echo $_buttonMessage ?>" class="button btn-cart" onclick="emailCode('<?php echo $_product->getId();?>');"><span><span id="button-<?php echo $_product->getId();?>"><?php echo $this->__($_buttonMessage) ?></span></span></button></div>
+                        <div style="float:right;"><button <?php echo $_disabledButton;?> type="button" title="<?php echo $_buttonMessage ?>" class="button <?php echo $_buttonClass;?>" onclick="emailCode('<?php echo $_product->getId();?>');"><span><span id="button-<?php echo $_product->getId();?>"><?php echo $this->__($_buttonMessage) ?></span></span></button></div>
 
                         <?php else: ?>
                         <?php if ($_product->getIsSalable()): ?>
