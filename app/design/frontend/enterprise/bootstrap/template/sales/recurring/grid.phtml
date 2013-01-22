@@ -37,6 +37,7 @@ if($profiles) {
         $product = Mage::getModel('catalog/product')->load($profile_data['product_id']);
 
         if($product->getIsClubSubscription() && $profile->getState() == 'active') {
+            $period_unit = $profile->getPeriodUnit();
             $next_billing_date = date('F dS, Y', strtotime(date("Y-m-d", strtotime($profile_data['updated_at'])) . " + 1 month"));
             $action = 'suspend';
             $form_elements = array(
@@ -47,6 +48,7 @@ if($profiles) {
             );
         }
         else {
+            $period_unit = $profile->getPeriodUnit();
             $next_billing_date = 'Not Active';
             $action = 'activate';
             $form_elements = array(
@@ -74,7 +76,7 @@ $customer = Mage::registry('current_customer');
         </tr>
         <tr>
             <td class="plus-label">Totsy Plus Plan: </td>
-            <td class="plus-value"><input type="text" readonly="readonly" value="<?php echo $product->getName();?> (<?php echo Mage::helper('core')->formatPrice($product->getPrice(), FALSE);?>)" /></td>
+            <td class="plus-value"><input type="text" readonly="readonly" value="<?php echo $product->getName();?> (<?php echo Mage::helper('core')->formatPrice($product->getPrice(), FALSE);?>/<?php echo $period_unit;?>)" /></td>
         </tr>
         <tr>
             <td class="plus-label">Next Billing Date: </td>
@@ -94,7 +96,9 @@ $customer = Mage::registry('current_customer');
             </td>
         </tr>
     </table>
-<a href="<?php echo Mage::getUrl('plus/dashboard', array('_secure' => true));?>">Back to Totsy Plus Dashboard</a>
+
+    <br />
+    <a href="<?php echo Mage::getUrl('plus/dashboard', array('_secure' => true));?>">Back to Totsy Plus Dashboard</a>
 
     <script type="text/javascript">
         jQuery('.slider-button').toggle(function(){
