@@ -48,6 +48,7 @@
         <?php endforeach; ?>
     </dl>
 </div>
+<input id="original" value="1" type="checkbox" name="original"/> Keep original payment information.
 <script type="text/javascript">
     if(typeof order != "undefined") {
         order.setPaymentMethod('<?php echo $this->getSelectedMethodCode() ?>');
