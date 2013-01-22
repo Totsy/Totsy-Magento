@@ -141,7 +141,7 @@ foreach($category_ids as $category_id) {
 
     function emailCode(product_id) {
         id = product_id;
-        new Ajax.Request('<?php echo Mage::getUrl('vouchers/order/create/id/',array('_secure'=>true)); ?>' + product_id + '/', {
+        new Ajax.Request('<?php echo Mage::getUrl('vouchers/order/create/',array('_secure'=>true)); ?>id/' + product_id + '/', {
             method:'get',
             onCreate: function() {
                 $('button-' + id).update('Sending...');
