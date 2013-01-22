@@ -487,12 +487,10 @@
 										<vendor translate="title" module="stockhistory">
 											<title>Vendor Report</title>
                                             <children>
-                                                <actions>
                                                     <add translate="title"><title>Add Vendor</title></add>
                                                     <create_po translate="title"><title>Create PO</title></create_po>
                                                     <save translate="title"><title>Save Vendor</title></save>
                                                     <delete translate="title"><title>Delete Vendor</title></delete>
-                                                </actions>
                                             </children>
 										</vendor>
 										<purchaseorder translate="title" module="stockhistory">
