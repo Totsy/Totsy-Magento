@@ -70,12 +70,21 @@ class Totsy_Adminhtml_Sales_Order_EditController extends Mage_Adminhtml_Sales_Or
     public function submitFulfillmentAction()
     {
         $orderId = $this->getRequest()->getParam('id');
-        $result = Mage::helper('fulfillmentfactory')->submitOrderForFulfillment($orderId);
+        $order   = Mage::getModel('sales/order')->load($orderId);
 
-        if ($result) {
-            Mage::getSingleton('adminhtml/session')->addSuccess('Order successfully submitted to Dotcom for fulfillment');
-        } else {
+        // ensure the order's line items have been fulfilled
+        if (!$order->isReadyForFulfillment()) {
             Mage::getSingleton('adminhtml/session')->addError('Order could not be submitted for fulfillment at this time, because at least one order item has not yet been fulfilled.');
+            $this->_redirect('*/sales_order/view', array('order_id' => $orderId));
+        } else {
+            $result = Mage::getSingleton('fulfillmentfactory/service_dotcom')
+                ->submitOrdersToFulfill(array($order));
+
+            if (count($result)) {
+                Mage::getSingleton('adminhtml/session')->addError((string)$result[0]->order_error->error_description);
+            } else {
+                Mage::getSingleton('adminhtml/session')->addSuccess('Order successfully sent for fulfillment.');
+            }
         }
 
         $this->_redirect('*/sales_order/view', array('order_id' => $orderId));

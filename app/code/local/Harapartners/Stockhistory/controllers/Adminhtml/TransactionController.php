@@ -313,56 +313,62 @@ class Harapartners_Stockhistory_Adminhtml_TransactionController extends Mage_Adm
         if(!$poObject || !$poObject->getId()){
             $this->_getSession()->addError($this->__('Invalid PO.'));
         }
-        
-        $isError = false;
-        
-        //get report collection data from session
-        $reportData = $this->_getSession()->getPOReportGridData();
-        $itemsArray = array();
-        foreach($reportData as $record) {
-        	
-        	if($record['po_id'] != $poObject->getId()) {
-        		$isError = true;
-        		break;
-        	}
-        	
-        	if($record['is_master_pack'] == 'Yes') {
-        		$qty = $record['qty_total'];
-        	}else{
-        		$qty = $record['qty_sold'];
-        	}
-        	if($qty == 0) {
-        		continue;
-        	}
-            //DotCom does NOT receive qty = 0 record
-            if(!empty($record['sku']) && !empty($qty)){
-                $itemsArray[$record['sku']] = $qty;
-            }
-        }
-        
-        if(!$isError) {
-	        $rsp = Mage::getModel('fulfillmentfactory/service_dotcom')->submitPurchaseOrdersToDotcom($poObject, $itemsArray);
-	
-	        $error = $rsp->purchase_order_error;
-	        if ($error) {
-	            $this->_getSession()->addError($this->__('Could not submit this Purchase Order to Dotcom: ' . $error->error_description));
-	        } else {
-	            $this->_getSession()->addSuccess($this->__('New Purchase Order successfully submitted to Dotcom.'));
-	            //Update PO status
-	            try{
-	                $poObject->setStatus(Harapartners_Stockhistory_Model_Purchaseorder::STATUS_SUBMITTED);
-	                $poObject->save();
-	            } catch(Exception $e) {
-	                $this->_getSession()->addError($e->getMessage());
-	            }
-	        }
-        }
-        else {
-        	$this->_getSession()->addError('Incorrect session data. Please refresh the page and submit again!');
-        }
 
-        //clean collection in session
-        Mage::getSingleton('adminhtml/session')->setPOReportGridData(null);
+        try{
+            $isError = false;
+            
+            //get report collection data from session
+            $reportData = $this->_getSession()->getPOReportGridData();
+            
+            $itemsArray = array();
+            foreach($reportData as $record) {
+            	
+            	if($record['po_id'] != $poObject->getId()) {
+            		$isError = true;
+            		break;
+            	}
+            	
+            	if($record['is_master_pack'] == 'Yes') {
+            		$qty = $record['qty_total'];
+            	}else{
+            		$qty = $record['qty_sold'];
+            	}
+            	if($qty == 0) {
+            		continue;
+            	}
+                //DotCom does NOT receive qty = 0 record
+                if(!empty($record['sku']) && !empty($qty)){
+                    $itemsArray[$record['sku']] = $qty;
+                }
+            }
+            
+            if(!$isError) {
+    	        $rsp = Mage::getModel('fulfillmentfactory/service_dotcom')->submitPurchaseOrdersToDotcom($poObject, $itemsArray);
+    	
+    	        $error = $rsp->purchase_order_error;
+    	        if ($error) {
+    	            $this->_getSession()->addError($this->__('Could not submit this Purchase Order to Dotcom: ' . $error->error_description));
+    	        } else {
+    	            $this->_getSession()->addSuccess($this->__('New Purchase Order successfully submitted to Dotcom.'));
+    	            //Update PO status
+    	            try{
+    	                $poObject->setStatus(Harapartners_Stockhistory_Model_Purchaseorder::STATUS_SUBMITTED);
+    	                $poObject->save();
+    	            } catch(Exception $e) {
+    	                $this->_getSession()->addError($e->getMessage());
+    	            }
+    	        }
+            }
+            else {
+            	$this->_getSession()->addError('Incorrect session data. Please refresh the page and submit again!');
+            }
+
+            //clean collection in session
+            Mage::getSingleton('adminhtml/session')->setPOReportGridData(null);
+            
+        }catch(Exception $e) {
+            $this->_getSession()->addError($e->getMessage());
+        }
 
         $this->_redirect('*/*/report', array('po_id' => $this->getRequest()->getParam('po_id')));
     }
@@ -414,16 +420,16 @@ class Harapartners_Stockhistory_Adminhtml_TransactionController extends Mage_Adm
                 case 'casepackgrp':
                     $response['response'] = $previous_cpg = $product->getData('case_pack_grp_id');
                     
-                    if (Mage::getModel('stockhistory/transaction')->changeCasePackAttributeValue("case_pack_grp_id", $post_data['product_id'], $post_data['change_to'])) {
-                        $response['response'] = $post_data['change_to'];
+                    if (Mage::getModel('stockhistory/transaction')->changeCasePackAttributeValue("case_pack_grp_id", $post_data['product_id'], trim($post_data['change_to']))) {
+                        $response['response'] = trim($post_data['change_to']);
                         #calculate new order qty changes
-                        $order_amounts = Mage::getModel('stockhistory/transaction')->calculateCasePackOrderQty($product->getData('entity_id'), $po_id, $post_data['change_to'],true);
+                        $order_amounts = Mage::getModel('stockhistory/transaction')->calculateCasePackOrderQty($product->getData('entity_id'), $po_id, trim($post_data['change_to']),true);
                         
                         #recalculate previous grp
                         if($previous_cpg != $post_data['change_to']){
                             $prv_grp_amounts = Mage::getModel('stockhistory/transaction')->calculateCasePackOrderQty(null, $po_id, $previous_cpg,true);
                             $response['update'] = array_merge($order_amounts, $prv_grp_amounts );
-                            debug($response['update']);
+
                         } else {
                             $response['update'] = $order_amounts;
                         }
@@ -435,11 +441,11 @@ class Harapartners_Stockhistory_Adminhtml_TransactionController extends Mage_Adm
                 #change case pack quantity of a given item
                 case 'casepackqty':
                     $response['response'] = $product->getData('case_pack_qty');
-                    if ($result = Mage::getModel('stockhistory/transaction')->changeCasePackAttributeValue("case_pack_qty", $post_data['product_id'], $post_data['change_to'])) {
-                        $response['response'] = $post_data['change_to'];
+                    if ($result = Mage::getModel('stockhistory/transaction')->changeCasePackAttributeValue("case_pack_qty", $post_data['product_id'], trim($post_data['change_to']))) {
+                        $response['response'] = trim($post_data['change_to']);
                         $order_amounts = Mage::getModel('stockhistory/transaction')->calculateCasePackOrderQty($product->getData('entity_id'), $po_id, $product->getData('case_pack_grp_id'),true);
                         $response['update'] = $order_amounts;
-                        
+
                         #messages
                         $response['message'] = $order_amounts['message'];
                     }

@@ -353,13 +353,10 @@ class Harapartners_Stockhistory_Helper_Data extends Mage_Core_Helper_Abstract  {
         return $total_units;
     }
 
-    public function casePackOrderAmount($sold, $highest_denom_cp, $cp_qty) {
-        if(!isset($highest_denom_cp)){
-            throw new Exception("No Case Pack Qty Provided");
-        }
-
-        if($sold){
-            $order_amount = ceil($sold / $highest_denom_cp) * $cp_qty;
+    public function casePackOrderAmount($ratio, $cp_qty) {
+        
+        if($ratio){
+            $order_amount = $ratio * $cp_qty;
         } else {
             $order_amount = $cp_qty;
         }

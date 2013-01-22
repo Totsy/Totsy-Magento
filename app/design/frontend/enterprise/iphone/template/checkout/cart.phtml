@@ -35,6 +35,55 @@
     $endcount_lc = date("F j, Y, G:i:s", ($countDownTimer + $timeout));
     $quote = Mage::getSingleton('checkout/session')->getQuote();
 ?>
+<?php
+
+$multiShipping = FALSE;
+$fulfillmentTypes = array();
+$splitYesCss = '';
+$splitNoCss = '';
+$hasVirtual = false;
+$hasDotCom = false;
+
+$splitCartPrice = Mage::helper('core')->formatPrice(Mage::getStoreConfig('checkout/cart/split_cart_price'));
+
+// Check to see if there are multiple fulfillment types
+foreach($this->getItems() as $item) {
+    if($item->getParentItemId()) {
+        continue;
+    }
+    $product = Mage::getModel ( 'catalog/product' )->load ( $item->getProductId () );
+    if($product->getIsVirtual()) {
+        $fulfillmentType = 'virtual';
+        $hasVirtual = true;
+    } else {
+        $fulfillmentType = $product->getFulfillmentType();
+    }
+    $fulfillmentTypes [$fulfillmentType] [] = $item->getId ();
+
+}
+
+if(count($fulfillmentTypes) > 1) {
+    $multiShipping = TRUE;
+    $sortedFulfillmentTypes = array();
+    if(array_key_exists('dotcom_stock',$fulfillmentTypes)) {
+        $sortedFulfillmentTypes['dotcom_stock'] = $fulfillmentTypes['dotcom_stock'];
+        unset($fulfillmentTypes['dotcom_stock']);
+    }
+    if(array_key_exists('dotcom',$fulfillmentTypes)) {
+        $sortedFulfillmentTypes['dotcom'] = $fulfillmentTypes['dotcom'];
+        $hasDotCom = true;
+        unset($fulfillmentTypes['dotcom']);
+    }
+    if(array_key_exists('virtual',$fulfillmentTypes)) {
+        $sortedFulfillmentTypes['virtual'] = $fulfillmentTypes['virtual'];
+        unset($fulfillmentTypes['virtual']);
+    }
+    if(count($fulfillmentTypes)) {
+        array_push($sortedFulfillmentTypes,$fulfillmentTypes);
+    }
+    $fulfillmentTypes = $sortedFulfillmentTypes;
+}
+?>
 <div class="cart">
 
     <div class="page-title title-buttons">
@@ -75,6 +124,9 @@
         <?php if(!$this->hasError()): ?>
         <ul class="checkout-types">       
         <?php foreach ($this->getMethods('top_methods') as $method): ?>
+            <?php if($method == 'checkout.cart.methods.paypal_express.top' && ($multiShipping || $hasVirtual)) {
+                continue;
+            } ?>
             <?php if ($methodHtml = $this->getMethodHtml($method)): ?>
             <li><?php echo $methodHtml; ?></li>
             <?php endif; ?>
@@ -153,6 +205,11 @@
 		<div class="float-left"><a title="<?php echo $this->__('Continue Shopping') ?>" class="ui-link button btn-continue" href="<?php echo $this->getContinueShoppingUrl() ?>"><span><span><?php echo $this->__('Continue Shopping') ?></span></span></a></div>
 	<?php endif; ?> 
 	<?php foreach ($this->getMethods('methods') as $method): ?>
+        <?php if($method == 'checkout.cart.methods.paypal_express.bottom' && ($multiShipping || $hasVirtual)) {
+                continue;
+            }
+        ?>
+
 		<?php if ($methodHtml = $this->getMethodHtml($method)): ?>
 		<div class="float-right"><?php echo $methodHtml; ?></div>
 		<?php endif; ?>

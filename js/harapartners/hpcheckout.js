@@ -133,7 +133,10 @@ HpCheckout.prototype = {
 			blockType = 'shipping';
 		}
 		if (clickedAddress.val() == '') {
-            checkoutPayment.disableBillAddr(false);
+		    
+		    if(typeof checkoutPayment!=="undefined") {
+                checkoutPayment.disableBillAddr(false);
+            }
 
 			jQuery('#hpcheckout-billing-form :input').each(function(i) {
 				if (this.id != 'button_ship_to') {
@@ -145,7 +148,10 @@ HpCheckout.prototype = {
 				jQuery('#billing\\:selected').val('');
 			}
 		} else {
-            checkoutPayment.disableBillAddr(true);
+		
+		    if(typeof checkoutPayment!=="undefined") {
+                checkoutPayment.disableBillAddr(true);
+            }
 
             if(blockType == 'billing') {
                 jQuery('#hpcheckout-billing-form :input').each(function(i) {
@@ -240,8 +246,6 @@ HpCheckout.prototype = {
         	    jQuery('.cc_info input').removeClass('required-entry');
         	}
         }
-        
-        //return false;
 
 		//only validate these fields when the customer deceides to place an order (when they click the "Place Order" button on the onepage checkout)
 		jQuery("[id='shipping:postcode']").addClass("required-entry validate-zip");
@@ -357,8 +361,7 @@ HpCheckout.prototype = {
 		var affectedBlocks = this.getBlocks(blockCodes);
 		for (var blockIndex in affectedBlocks) {
 			jQuery('input, select, button', '#' + affectedBlocks[blockIndex].wrapperId).removeAttr('disabled');
-			jQuery('#' + affectedBlocks[blockIndex].wrapperId + ' .spinner').hide();
-			
+			jQuery('#' + affectedBlocks[blockIndex].wrapperId + ' .spinner').hide();	
 			if(typeof checkoutPayment!=="undefined") {	
                 if(checkoutPayment.hasProfile==true || jQuery("#billing-address-select").val()!=='') {
                     checkoutPayment.disableBillAddr(true);
@@ -367,8 +370,8 @@ HpCheckout.prototype = {
                          jQuery("[id='" + this.id + "']").attr('disabled',true);
                        }
                    });
-                 }
-			 }
+         		}
+            }
 		}
 	},
 	getFormData: function(blockCodes) {

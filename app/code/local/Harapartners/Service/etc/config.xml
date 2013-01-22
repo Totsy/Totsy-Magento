@@ -394,24 +394,25 @@
     <frontend>
         <events>
             <!-- ===== FRONTEND ONLY EVENTS START ===== -->
-            <cataloginventory_stock_item_save_after>
-                <observers>
+            <!-- RSTREET: Removed references to add and remove stock from items in the cart -->
+            <!--cataloginventory_stock_item_save_after>
+                <observers-->
                     <!--Harapartners_Rushcheckout: Updating only (Addition and deletion can be safely ignored) -->
-                    <rushcheckout>
+                    <!--rushcheckout>
                         <class>rushcheckout/observer</class>
                         <method>updateReservationByStockItem</method>
                     </rushcheckout>
                 </observers>
-            </cataloginventory_stock_item_save_after>
-            <sales_quote_item_save_after>
-                <observers>
+            </cataloginventory_stock_item_save_after-->
+            <!--sales_quote_item_save_after>
+                <observers-->
                     <!--Harapartners_Rushcheckout: Adding or updating quote item -->
-                    <rushcheckout>
+                    <!--rushcheckout>
                         <class>rushcheckout/observer</class>
                         <method>updateReservationByQuoteItem</method>
                     </rushcheckout>
                 </observers>
-            </sales_quote_item_save_after>
+            </sales_quote_item_save_after -->
             <sales_quote_item_delete_after>
                 <observers>
                     <!--Harapartners_Rushcheckout: Deleting quote item -->
@@ -485,6 +486,14 @@
 									<children>
 										<vendor translate="title" module="stockhistory">
 											<title>Vendor Report</title>
+                                            <children>
+                                                <actions>
+                                                    <add translate="title"><title>Add Vendor</title></add>
+                                                    <create_po translate="title"><title>Create PO</title></create_po>
+                                                    <save translate="title"><title>Save Vendor</title></save>
+                                                    <delete translate="title"><title>Delete Vendor</title></delete>
+                                                </actions>
+                                            </children>
 										</vendor>
 										<purchaseorder translate="title" module="stockhistory">
 											<title>Purchase Order Report</title>
@@ -492,11 +501,14 @@
                                                 <actions translate="title"> 
                                                     <title>Actions</title>
                                                     <children>
+                                                        <add translate="title"><title>Add PO</title></add>
+                                                        <save translate="title"><title>Save PO</title></save>
                                                         <reset translate="title"><title>Reset PO</title></reset>
                                                         <delete translate="title"><title>Delete PO</title></delete>
                                                         <create_amendment translate="title"><title>Create Amendment(PO Info Edit)</title></create_amendment>
                                                         <submit_dotcom translate="title"><title>Submit To Dotcom</title></submit_dotcom>
                                                         <post_amendment translate="title"><title>Post Amendment(Item Line Edit)</title></post_amendment>
+                                                        <editable translate="title"><title>Edit PO Report</title></editable>
                                                     </children>
                                                 </actions>
                                             </children>
@@ -534,8 +546,10 @@
                                         <actions translate="title"> 
                                             <title>Product Edit Actions</title>
                                             <children>
+                                                <add translate="title"><title>Add Product</title></add>
                                                 <reset translate="title"><title>Reset</title></reset>
                                                 <delete translate="title"><title>Delete</title></delete>
+                                                <manage_coupon translate="title"><title>manage_coupon</title></manage_coupon>
                                                 <save translate="title"><title>Save</title></save>
                                             </children>
                                         </actions>

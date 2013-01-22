@@ -372,7 +372,6 @@ class Mage_Paypal_Model_Express_Checkout
         foreach ($exportedBillingAddress->getExportedKeys() as $key) {
             //2012-12-19 - CJD - Fixed issue where billing street wasn't transferring.
             if (($key == 'street' && $exportedBillingAddress->getData($key)) || !$billingAddress->getDataUsingMethod($key)) {
-                Mage::log(__LINE__.':'.$key);
                 $billingAddress->setDataUsingMethod($key, $exportedBillingAddress->getData($key));
             }
         }
