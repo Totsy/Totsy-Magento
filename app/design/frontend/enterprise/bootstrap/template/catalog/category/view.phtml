@@ -171,13 +171,13 @@
                     <?php if ($inEarly): ?>
                         <?php if ($upComingFlag): ?>
                             <img src="/skin/frontend/enterprise/bootstrap/images/plus/ladybug.png" style="vertical-align:baseline;" />
-                            <span class="rocking-text">Early Access to sale in</span>
+                            <span class="rocking-text"><?php echo Mage::getStoreConfig('Crown_Club/clubearlyaccess/early_access_count_down_text');?></span>
                             <span class="earlytime-<?php echo $timer ?>" style="color: #ff0000"></span>
-                            <span style="size: 12px; color:#cccccc">Non Totsy Club members access in</span>
+                            <span style="size: 12px; color:#cccccc"><?php echo Mage::getStoreConfig('Crown_Club/clubearlyaccess/early_access_count_down_text_non_member');?></span>
                            <span class="timesmall-<?php echo $timer ?>"></span>
                         <?php else: ?>
                             <img src="/skin/frontend/enterprise/bootstrap/images/plus/ladybug.png" style="vertical-align:baseline;" />
-                            <span class="rocking-text">You're in early!</span>
+                            <span class="rocking-text"><?php echo Mage::getStoreConfig('Crown_Club/clubearlyaccess/early_access_in_early_text');?></span>
                         <?php endif; ?>
                     <?php elseif($upComingFlag):
                         /* @var $clubProduct Mage_Catalog_Model_Product */
@@ -185,12 +185,12 @@
                     ?>
                         <div>
                             <div style="display: inline-block; width: 27%">
-                                <strong>SALE BEGINS IN</strong>
+                                <strong><?php echo Mage::getStoreConfig('Crown_Club/clubearlyaccess/early_access_to_sale_text');?></strong>
                                 <span class="timesmall-<?php echo $timer ?>" style="color: #ff0000"></span>
                             </div>
                             <div style="text-align: right; display: inline-block; width: 72%;">
                                 <img src="/skin/frontend/enterprise/bootstrap/images/plus/ladybug.png" style="vertical-align:baseline;" />
-                                <span class="rocking-text">Signup for TotsyPLUS GET ACCESS 2 HOURS EARLY!</span>
+                                <span class="rocking-text"><?php echo Mage::getStoreConfig('Crown_Club/clubearlyaccess/early_access_sign_up_text');?></span>
                                 <?php if(!is_null($clubProduct)):
                                 $url = $clubProduct->getProductUrl();
                                 ?>

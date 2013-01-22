@@ -88,6 +88,11 @@
 			</clubgeneral>
             <clubearlyaccess>
                 <early_access_time>7200</early_access_time>
+                <early_access_count_down_text>Early Access to sale in</early_access_count_down_text>
+                <early_access_count_down_text_non_member>Non Totsy Club members access in</early_access_count_down_text_non_member>
+                <early_access_sign_up_text>Signup for TotsyPLUS GET ACCESS 2 HOURS EARLY!</early_access_sign_up_text>
+                <early_access_to_sale_text>SALE BEGINS IN</early_access_to_sale_text>
+                <early_access_in_early_text>You're in early!</early_access_in_early_text>
             </clubearlyaccess>
 		</Crown_Club>
 		<trans_email>
