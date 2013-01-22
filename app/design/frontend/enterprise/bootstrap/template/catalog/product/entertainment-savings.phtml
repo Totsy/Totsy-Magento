@@ -70,7 +70,7 @@ foreach($category_ids as $category_id) {
             <li class="item">
                 <!-- Product Image -->
                 <div class="product-image">
-                    <a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" class="product-image"><img src="<?php echo $this->helper('catalog/image')->init($_product, 'small_image')->resize(166); ?>" width="166" height="166" alt="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" /></a>
+                    <img src="<?php echo $this->helper('catalog/image')->init($_product, 'small_image')->resize(166); ?>" width="166" height="166" alt="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" />
                 </div>
                 <!-- Product Description -->
                 <div class="product-shop">
@@ -141,7 +141,7 @@ foreach($category_ids as $category_id) {
 
     function emailCode(product_id) {
         id = product_id;
-        new Ajax.Request('<?php echo Mage::getUrl('vouchers/order/create/id/',array('_secure'=>true)); ?>' + product_id + '/', {
+        new Ajax.Request('<?php echo Mage::getUrl('vouchers/order/create/',array('_secure'=>true)); ?>id/' + product_id + '/', {
             method:'get',
             onCreate: function() {
                 $('button-' + id).update('Sending...');
