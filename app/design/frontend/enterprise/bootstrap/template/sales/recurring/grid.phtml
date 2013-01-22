@@ -108,7 +108,7 @@ $customer = Mage::registry('current_customer');
             });
             jQuery('#renewal-info').css('display', 'none');
             jQuery('#on-off').removeAttr('checked', 'checked');
-            jQuery.get('<?php echo Mage::getUrl('totsyplus/profile_recurring/update/profile/' .$profile->getId(). '/action/suspend/', array('_secure'=>true));?>');
+            jQuery.get('<?php echo Mage::getUrl('totsyplus/profile_recurring/update/profile/' .$profile->getId(). '/action/suspend/', array('_secure' => Mage::app()->getStore()->isCurrentlySecure()));?>');
         },function(){
             jQuery('.slider-button').animate({ marginLeft: "0" }, 250);
             jQuery('.slider-frame').fadeTo('fast', 1, function(){
@@ -116,7 +116,7 @@ $customer = Mage::registry('current_customer');
             });
             jQuery('#renewal-info').css('display', 'block');
             jQuery('#on-off').attr('checked', 'checked');
-            jQuery.get('<?php echo Mage::getUrl('totsyplus/profile_recurring/update/profile/' .$profile->getId(). '/action/activate/', array('_secure'=>true));?>');
+            jQuery.get('<?php echo Mage::getUrl('totsyplus/profile_recurring/update/profile/' .$profile->getId(). '/action/activate/', array('_secure' => Mage::app()->getStore()->isCurrentlySecure()));?>');
         });
 
     </script>
