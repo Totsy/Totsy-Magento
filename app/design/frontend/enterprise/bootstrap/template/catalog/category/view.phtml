@@ -104,14 +104,14 @@
     </header>
     <?php echo $this->getMessagesBlock()->toHtml() ?>
     
-    <div class="well intro clearfix">
+    <div class="intro clearfix">
         <?php if($_imgUrl): ?>
             <div class="span2 alpha omega">
                 <?php echo $_imgHtml ?>
             </div>
         <?php endif; ?>
         <?php if($_description=$this->getCurrentCategory()->getDescription()): ?>
-            <div class="span9 intro-content">
+            <div class="span6 intro-content">
                 <h3><?php echo $_helper->categoryAttribute($_category, $_category->getName(), 'name') ?></h3>
                 <!-- 
                 <div class="social-links">
@@ -122,6 +122,10 @@
                 </div>
                 -->
                 <p><?php echo $_helper->categoryAttribute($_category, $_description, 'description') ?></p>
+            </div>
+            <div class="span4 intro-content">
+                <h3><?php echo $_helper->categoryAttribute($_category, $_category->getName(), 'name') ?></h3>
+                <img src="http://placehold.it/450x200"/>
             </div>
         <?php endif; ?>
     </div><!-- /.well -->

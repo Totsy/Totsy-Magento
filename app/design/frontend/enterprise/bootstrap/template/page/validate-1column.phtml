@@ -33,10 +33,15 @@
 <html lang="<?php echo $this->getLang() ?>">
 <head>
 <?php echo $this->getChildHtml('head') ?>
+<style>
+#mainContent {background:none;}
+</style>
 </head>
 <body<?php echo $this->getBodyClass()?' class="'.$this->getBodyClass().'"':'' ?> data-spy="scroll" data-target=".subnav" data-offset="50">
 <?php echo $this->getChildHtml('after_body_start') ?>
-<div class="container content_push_2col">
+<div id="stickywrap">
+<div id="mainContent" class="container l-1col">
+
     <?php echo $this->getChildHtml('global_notices') ?>
     <div class="page">
         <?php echo $this->getChildHtml('header') ?>
@@ -49,6 +54,7 @@
         </div>
         <?php echo $this->getChildHtml('footer_before') ?>
             </div>
+</div>
 </div>
 </div>        <?php echo $this->getChildHtml('footer') ?>
         <?php echo $this->getChildHtml('before_body_end') ?>
