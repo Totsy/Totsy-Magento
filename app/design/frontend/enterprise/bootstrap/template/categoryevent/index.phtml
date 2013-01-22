@@ -17,8 +17,9 @@
 <style>
 h4 {
     color:#000;
-    text-transform: uppercase;
+    /*text-transform: uppercase;*/
 }
+.more {margin-top: 30px;}
 </style>
 <?php
 /**
@@ -82,27 +83,11 @@ h4 {
                         <a href="<?php echo Mage::getBaseUrl().$live['url_path']; ?>" class="thumbnail">
                             <hgroup>
                                 <h4><?php echo $live['name'];?></h4>
+                                <div class="maxDiscount"><em>up to <span><strong><?php echo $maxDiscount; ?>%</strong> off</span></em></div>
                                 <!-- <h6><?php //echo $live['short_description'];?></h6> -->
                             </hgroup>
                             <div class="more">
-                                <div class="maxDiscount"><em>up to <span><strong><?php echo $maxDiscount; ?>%</strong> off</span></em></div>
                                 <div class="more-content">
-                                    <section class="labels container">
-                                        <h6>Categories:</h6>
-                                        <ul>
-                                        <?php foreach ($eventDepts as $eventDept) : ?>
-                                            <li><?php echo $eventDept; ?></li>
-                                        <?php endforeach; ?>
-                                        </ul>
-                                    </section>
-                                    <section class="labels container">
-                                        <h6>Ages:</h6>
-                                        <ul>
-                                        <?php foreach ($eventAges as $eventAge) : ?>
-                                            <li><?php echo $eventAge; ?></li>
-                                        <?php endforeach; ?>  
-                                        </ul>                                  
-                                    </section>
                                     <p id="time1-<?php echo $timer ?>"></p>
                                     <span class="btn btn-primary">Shop Now!</span>
                                 </div>
@@ -113,7 +98,7 @@ h4 {
                                 : BP . DS . 'skin' . DS . 'frontend' . DS . 'enterprise ' . DS . 'harapartners' . DS . 'images' . DS . 'catalog' . DS . 'product' . DS . 'placeholder' . DS . 'small_image.jpg';
                             ?>
                             <span class="event-link">
-                                <img src="<?php echo Mage::helper('service/image')->loadImageFile($imgFile)->resize(228)->keepFrame(FALSE); ?>" width="310" height="310" alt="<?php echo $live['name'];?>" />
+                                <img src="<?php echo Mage::helper('service/image')->loadImageFile($imgFile)->resize(310)->keepFrame(FALSE); ?>" width="310" height="310" alt="<?php echo $live['name'];?>" />
                             </span>
                             <script type="text/javascript">
                                 // @TODO: all countdown jQuery should be externalized

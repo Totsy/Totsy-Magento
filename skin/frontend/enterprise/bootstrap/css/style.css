@@ -124,8 +124,8 @@ html.test .container .row {outline:1px dotted green;}
 .dropdown-toggle {cursor: pointer;}
 .well {
     background: none repeat scroll 0 0 #FFFFFF;
-    border: 1px solid #DDDDDD;
-    -moz-border-radius: 5px; -webkit-border-radius: 5px; border-radius: 5px;
+    border: 1px solid #333;
+    -moz-border-radius: 0px; -webkit-border-radius: 0px; border-radius: 0px;
     -moz-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075);
     -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075);
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075);
@@ -135,7 +135,7 @@ html.test .container .row {outline:1px dotted green;}
 .table-bordered,
 .fast-ship-table-bordered,
 .thumbnail {
-    -moz-border-radius:5px; -webkit-border-radius:5px; border-radius:5px;
+    /* -moz-border-radius:5px; -webkit-border-radius:5px; border-radius:5px; */
 }
 .thumbnail {padding:10px;}
 .page-header {
@@ -574,14 +574,16 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
     width: 100%;
 }
 #mainContent {
+    margin-top:120px;
     background: #fff;
-    padding-top:190px; 
+    padding-top:10px; 
+    border-radius: 6px;
     padding-left:10px;
     padding-right:10px;
     padding-bottom:250px; overflow: auto; /* @sticky, +more padding */
 }
 .logged-out ~ #mainContent {
-    padding-top:115px;
+    /* padding-top:115px; */
 }
 #mainContent > .banner {
     margin:5px auto 0;
@@ -595,7 +597,12 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
     position: relative;
     display: block;
     margin: 0; padding: 0;
+    border-radius: 0;
 }
+.thumbnails > li {
+    border: 1px solid #333;
+}
+.span4 {width:307px;}
 .events-grid .thumbnail:hover {
     border-color:#ddd;
     text-decoration: none;
@@ -606,9 +613,10 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
 .events-grid hgroup {
     border-bottom:1px solid #ddd;
 }
-.events-grid .span3 hgroup {
-    padding: 8px 4px;
-    height: 30px; overflow: hidden;
+.events-grid .span4 hgroup {
+    padding: 8px;
+    /* height: 40px; */
+    overflow: hidden;
 }
 .events-grid .span2 hgroup {
     padding: 4px 4px;
@@ -641,7 +649,7 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
     position: absolute; bottom: 0; left: 0;
     visibility: hidden;
     opacity:0;
-    width:100%; height: 263px; overflow: hidden;
+    width:100%; height: 310px; overflow: hidden;
     background: rgba(255,255,255,0.75);
     -moz-transition:opacity 0.5s ease;
     -webkit-transition:opacity 0.5s ease;
@@ -666,6 +674,7 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
     -webkit-box-shadow: 0 2px 2px rgba(0, 0, 0, 0.086);
     box-shadow: 0 2px 2px rgba(0, 0, 0, 0.086);
     border-bottom:1px solid #d1d9de;
+    height:55px;
     font-weight: bold;
 }
 .events-grid .thumbnail .more [id*="time1-"] :first-child {
@@ -679,6 +688,7 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
 }
 
 /* discount banner */
+.maxDiscount {font-size:20px; float:right;}
 .events-grid .more .maxDiscount {
     position: absolute; top:0; left:0; z-index: 3;
     display: block;
@@ -1253,7 +1263,7 @@ float:left;
  */
 body > footer {
     position: relative;
-    margin-top:-221px; height: 203px; /* @sticky */
+    margin-top:-221px; height: 184px; /* @sticky */
     padding: 17px 0 0 0;
     min-width:950px; /* temp hackish fix for iPad display, prevent content of fixed width from bleeding in. @TODO: get responsive! */
     background: #e5e5e5;
@@ -1468,16 +1478,16 @@ select, textarea, input[type="text"], input[type="password"], input[type="dateti
 .zoomImage { 
     padding:0px; 
     background: none;
-    border:1px dashed #666;
+    border:1px solid #333;
     overflow: hidden;
     z-index:500!important;
 }
 .zoomImage,
 #zoom1 img,
 .cloud-zoom-big {
-    -moz-border-radius: 12px;
+   /* -moz-border-radius: 12px;
     -webkit-border-radius: 12px;
-    border-radius: 12px;
+    border-radius: 12px; */
 }
 
 /* @GOTCHA: putting .price-box positioning hacks in here… b/c price view is used some many places the markup is rather untouchable */
