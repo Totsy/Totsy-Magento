@@ -11,7 +11,13 @@ class Crown_Vouchers_OrderController extends Mage_Core_Controller_Front_Action {
 		$customer_id = Mage::helper('customer')->getCustomer()->getId();
 		
 		$association = Mage::getModel('vouchers/association');
-		
+
+        $defaultAddress = Mage::helper('customer')->getCustomer()->getDefaultBillingAddress();
+
+        if(!is_object($defaultAddress)) {
+            $this->returnResult(array('error' => 'Please fill out your address information before claiming a voucher. '));
+            return;
+        }
 		
 		if(!$product_id) {
 			$this->returnResult(array('error' => 'Invalid Product ID'));

@@ -91,26 +91,49 @@ class Crown_Vouchers_Model_Order extends Mage_Core_Model_Abstract {
 	protected function setBillingAddressInfo() {
 		
 		$billingAddress = $this->customer->getDefaultBillingAddress();
-		
-		$this->orderData['order'] = array(
-			'billing_address' => array (
-				'customer_address_id' => $this->customer->getDefaultBilling (), 
-				'prefix' => '', 
-				'firstname' => $this->customer->getFirstname (), 
-				'middlename' => '', 
-				'lastname' => $this->customer->getLastname (), 
-				'suffix' => '', 
-				'company' => '', 
-				'street' => $billingAddress->getStreet(), 
-				'city' => $billingAddress->getCity (), 
-				'country_id' => $billingAddress->getCountryId (), 
-				'region' => $billingAddress->getRegion(), 
-				'region_id' => $billingAddress->getRegionId(), 
-				'postcode' => $billingAddress->getPostcode (), 
-				'telephone' => $billingAddress->getTelephone (), 
-				'fax' => '' 
-			)
-		);
+
+        if(is_object($billingAddress)) {
+            $this->orderData['order'] = array(
+                'billing_address' => array (
+                    'customer_address_id' => $this->customer->getDefaultBilling (),
+                    'prefix' => '',
+                    'firstname' => $this->customer->getFirstname (),
+                    'middlename' => '',
+                    'lastname' => $this->customer->getLastname (),
+                    'suffix' => '',
+                    'company' => '',
+                    'street' => $billingAddress->getStreet(),
+                    'city' => $billingAddress->getCity (),
+                    'country_id' => $billingAddress->getCountryId (),
+                    'region' => $billingAddress->getRegion(),
+                    'region_id' => $billingAddress->getRegionId(),
+                    'postcode' => $billingAddress->getPostcode (),
+                    'telephone' => $billingAddress->getTelephone (),
+                    'fax' => ''
+                )
+            );
+        }
+        else {
+            $this->orderData['order'] = array(
+                'billing_address' => array (
+                    'customer_address_id' => $this->customer->getDefaultBilling (),
+                    'prefix' => '',
+                    'firstname' => $this->customer->getFirstname (),
+                    'middlename' => '',
+                    'lastname' => $this->customer->getLastname (),
+                    'suffix' => '',
+                    'company' => '',
+                    'street' => '',
+                    'city' => '',
+                    'country_id' => '',
+                    'region' => '',
+                    'region_id' => '',
+                    'postcode' => '',
+                    'telephone' => '',
+                    'fax' => ''
+                )
+            );
+        }
 		
 		return $this;
 	}
@@ -118,26 +141,51 @@ class Crown_Vouchers_Model_Order extends Mage_Core_Model_Abstract {
 	protected function setShippingAddressInfo() {
 		
 		$shippingAddress = $this->customer->getDefaultShippingAddress();
-		
-		$this->orderData['order'] = array(
-			'shipping_address' => array (
-				'customer_address_id' => $this->customer->getDefaultShipping (), 
-				'prefix' => '', 
-				'firstname' => $this->customer->getFirstname (), 
-				'middlename' => '', 
-				'lastname' => $this->customer->getLastname (), 
-				'suffix' => '', 
-				'company' => '', 
-				'street' => $shippingAddress->getStreet (), 
-				'city' => $shippingAddress->getCity (), 
-				'country_id' => $shippingAddress->getCountryId (), 
-				'region' => $shippingAddress->getRegion(), 
-				'region_id' => $shippingAddress->getRegionId (), 
-				'postcode' => $shippingAddress->getPostcode (), 
-				'telephone' => $shippingAddress->getTelephone (), 
-				'fax' => '' 
-			)
-		);
+
+        if(is_object($shippingAddress)) {
+            $this->orderData['order'] = array(
+                'shipping_address' => array (
+                    'customer_address_id' => $this->customer->getDefaultShipping (),
+                    'prefix' => '',
+                    'firstname' => $this->customer->getFirstname (),
+                    'middlename' => '',
+                    'lastname' => $this->customer->getLastname (),
+                    'suffix' => '',
+                    'company' => '',
+                    'street' => '',
+                    'city' => $shippingAddress->getCity (),
+                    'country_id' => $shippingAddress->getCountryId (),
+                    'region' => $shippingAddress->getRegion(),
+                    'region_id' => $shippingAddress->getRegionId (),
+                    'postcode' => $shippingAddress->getPostcode (),
+                    'telephone' => $shippingAddress->getTelephone (),
+                    'fax' => ''
+                )
+            );
+        }
+        else {
+            $this->orderData['order'] = array(
+                'shipping_address' => array (
+                    'customer_address_id' => $this->customer->getDefaultShipping (),
+                    'prefix' => '',
+                    'firstname' => $this->customer->getFirstname (),
+                    'middlename' => '',
+                    'lastname' => $this->customer->getLastname (),
+                    'suffix' => '',
+                    'company' => '',
+                    'street' => '',
+                    'city' => '',
+                    'country_id' => '',
+                    'region' => '',
+                    'region_id' => '',
+                    'postcode' => '',
+                    'telephone' => '',
+                    'fax' => ''
+                )
+            );
+        }
+
+
 		
 		return $this;
 	}
