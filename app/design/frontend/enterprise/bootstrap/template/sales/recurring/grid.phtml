@@ -72,16 +72,16 @@ $customer = Mage::registry('current_customer');
     <table class="plus top-24">
         <tr>
             <td class="plus-label">Member Name: </td>
-            <td class="plus-value"><input type="text" readonly="readonly" value="<?php echo $customer->getFirstname() . ' ' . $customer->getLastname();?>" /></td>
+            <td class="plus-value"><input type="text" readonly="readonly" class="input-xlarge" value="<?php echo $customer->getFirstname() . ' ' . $customer->getLastname();?>" /></td>
         </tr>
         <tr>
             <td class="plus-label">Totsy Plus Plan: </td>
-            <td class="plus-value"><input type="text" readonly="readonly" value="<?php echo $product->getName();?> (<?php echo Mage::helper('core')->formatPrice($product->getPrice(), FALSE);?>/<?php echo $period_unit;?>)" /></td>
+            <td class="plus-value"><input type="text" readonly="readonly" class="input-xlarge" value="<?php echo $product->getName();?> (<?php echo Mage::helper('core')->formatPrice($product->getPrice(), FALSE);?>/<?php echo $period_unit;?>)" /></td>
         </tr>
         <tr>
             <td class="plus-label">Next Billing Date: </td>
             <td class="plus-value">
-                <input type="text" readonly="readonly" value="<?php echo $next_billing_date;?>" />
+                <input type="text" readonly="readonly" class="input-xlarge" value="<?php echo $next_billing_date;?>" />
             </td>
         </tr>
         <tr>
