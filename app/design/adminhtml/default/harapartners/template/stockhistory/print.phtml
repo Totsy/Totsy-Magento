@@ -19,7 +19,12 @@
 			<p><?php echo $this->getPoCategoryName(); ?></p>
 			<div id="billing-info">
 				<label><?php echo $this->__('BILL TO:');?></label>
-				<p>TOTSY <br>10 West 18th Street <br>Fourth Floor <br>New York, New York 10011 <br>payment@totsy.com</p>
+				<p>
+					<?php echo strtoupper(Mage::getStoreConfig('general/store_information/name'));?> <br/>
+					<?php echo Mage::getStoreConfig('general/store_information/address');?>
+					<br>
+					payment@totsy.com
+				</p>
 			</div>
 		</div>
 		<div id="vendor-info" class="block">

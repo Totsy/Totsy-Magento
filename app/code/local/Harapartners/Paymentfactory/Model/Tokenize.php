@@ -308,12 +308,13 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Totsy_Cybersource_Model
         }
 
         $profile = Mage::getModel('paymentfactory/profile')->load($payment->getCybersourceSubid(),'subscription_id');
-        $payment->setCcLast4($profile->getData('last4no'))
+        if($profile && $profile->getId()) {
+            $payment->setCcLast4($profile->getData('last4no'))
                 ->setCcType($profile->getData('card_type'))
                 ->setCcExpYear($profile->getData('expire_year'))
                 ->setCcExpMonth($profile->getData('expire_month'))
                 ->save();
-
+        }
         $this->_payment = NULL;
         return $this;
     }

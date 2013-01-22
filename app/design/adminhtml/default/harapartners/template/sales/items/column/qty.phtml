@@ -33,7 +33,7 @@
     <?php if(!$_item->getIsVirtual()):?>
     <tr>
         <td><?php echo Mage::helper('sales')->__('Fulfilled') ?></td>
-        <td><strong><?php echo $this->getItemFulfillCount($_item->getItemId()); ?> </strong></td>
+        <td><strong><?php echo $this->getItemFulfillCount($_item); ?> </strong></td>
     </tr>
     <?php endif; ?>
     <?php if ((float) $_item->getQtyInvoiced()): ?>

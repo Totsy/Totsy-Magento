@@ -57,17 +57,18 @@ class Harapartners_Customertracking_Helper_CustomPixel
 
     public function linkshare($pixel) {
 
+        $html = '';
         $login_time = Mage::getSingleton('customer/session')->getData('CUSTOMER_LAST_VALIDATION_TIME');
         $customer = Mage::getSingleton('customer/session')->getCustomer();
         $orderId = Mage::getSingleton('checkout/session')->getLastOrderId();
         $trackingInfo = Mage::getSingleton('customer/session')->getData('affiliate_info');
         $customertracking = Mage::getModel('customertracking/record')->loadByCustomerEmail($customer->getEmail());
-        if ($trackingInfo) {
-            $regParams = json_decode($trackingInfo['registration_param'], true);
-        } else {
-            $regParams =  json_decode(Mage::getSingleton('customer/session')->getData('registration_param'), true);
-        }
 
+        if(trim($customertracking->getData('affiliate_code')) != 'linkshare') {
+            return $html;
+        }
+        
+        $regParams = json_decode($customertracking->getData('registration_param'),true);
         $order = Mage::getModel('sales/order')->load($orderId);
 
         $html = '';
