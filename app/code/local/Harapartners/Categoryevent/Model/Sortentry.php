@@ -357,7 +357,7 @@ class Harapartners_Categoryevent_Model_Sortentry
         foreach ($live as $idx => $event) {
             $startTime = strtotime($event['event_start_date']);
             if($earlyAccessTime) {
-                $startTime -= ($earlyAccessTime * 3600);
+                $startTime -= $earlyAccessTime;
             }
             if ($startTime > $now) {
                 // move this event to Upcoming
