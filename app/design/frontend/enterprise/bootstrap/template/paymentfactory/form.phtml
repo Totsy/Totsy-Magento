@@ -178,7 +178,7 @@ jQuery(document).ready( function() {
                     jQuery("#cc_save_text").html("Save");
 
                     jQuery(".use-new-card-wrapper").appendTo(jQuery("#add_cc_types"));
-                    newCardWrap.hide();
+                    //newCardWrap.hide();
                 } else {
 
                     jQuery("[id='add_payment']").hide();
@@ -219,14 +219,13 @@ jQuery(document).ready( function() {
     
     checkoutPayment.toggleViews();
     
-    jQuery("#paymentfactory_tokenize_cc_number").keyup(function() {
+    jQuery("#paymentfactory_tokenize_cc_number").keyup( function() {
     
         var ccEntered = checkoutPayment.getCreditCardType(this.value);
     
         jQuery("button","[id='paymentfactory_tokenize_cc_type']").each(function() {             
             var temp = jQuery(this);
             if (ccEntered == this.value) {
-                //console.log(this.value);
                 temp.addClass('active');
             } else {
                 temp.removeClass('active');
@@ -237,7 +236,6 @@ jQuery(document).ready( function() {
     
     jQuery(".cc-type").click( function() {    
         if(this.id == "paypal") {
-            console.log("paypal");
             jQuery('input[name="payment[method]"]').val("paypal_express");
             jQuery("#paypal_payment").val("paypal_express");			            
             hpcheckout.switchPaymentMethod('paypal_express');
@@ -267,7 +265,7 @@ jQuery(document).ready( function() {
         	<div class="hpcheckout-payment-title">
         	    <h4 class="legend">Your payment methods</h4>
         	</div>
-        	<div class="cc_types use-new-card-wrapper input-box validation-error pull-left">
+        	<div class="cc_types use-new-card-wrapper input-box validation-error pull-right">
         		<?php $_ccType = $this->getInfoData('cc_type') ?>
         		 <div id="<?php echo $_code ?>_cc_type" data-toggle="buttons-radio">
         		 <?php $i=0; ?>
