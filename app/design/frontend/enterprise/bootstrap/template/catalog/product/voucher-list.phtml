@@ -153,16 +153,17 @@
 			// Getting Ajax Response Text Which is JSON Object
             var jsonResponse = transport.responseText.evalJSON();
 
-            $('button-' + id).update('Complete!');
+            $('button-' + id).removeClass('btn-cart');
+            $('button-' + id).addClass('btn-cart-sending');
             $('button-popup-' + id).update('Complete!');
-            
+
             if(jsonResponse.error) {
 				alert(jsonResponse.error);
             }
             else {
-				alert(jsonResponse.success);
+                $('button-' + id).addClass('btn-cart-sent');
             }
-            
+
 		  }
 		});
 	}
