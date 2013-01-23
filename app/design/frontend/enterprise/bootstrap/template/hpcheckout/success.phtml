@@ -39,14 +39,16 @@
             _gaq.push(['_setAccount', '<?php echo Mage::getStoreConfig("google/analytics/account")?>']);
             _gaq.push(['_trackPageview']);
             _gaq.push(['_addTrans',
-                '<?php echo $order->getData('increment_id'); ?>',           // order ID - required
+                '<?php echo $order->getData('increment_id'); ?>',     // order ID - required
                 'Totsy',  // affiliation or store name
-                '<?php echo $order->getData('grand_total'); ?>',          // total - required
-                '<?php echo $order->getData('tax_amount'); ?>',           // tax
-                '<?php echo $order->getData('shipping_amount'); ?>',              // shipping
-                '<?php echo $order->getShippingAddress()->getData('city')?>',       // city
-                '<?php echo $order->getShippingAddress()->getData('region')?>',     // state or province
-                'USA'             // country
+                '<?php echo $order->getData('grand_total'); ?>',      // total - required
+                '<?php echo $order->getData('tax_amount'); ?>',       // tax
+                '<?php echo $order->getData('shipping_amount'); ?>',  // shipping
+<?php if ($address = $order->getShippingAddress()): ?>
+               ,'<?php echo $address->getData('city') ?>',            // city
+                '<?php echo $address->getData('region') ?>',          // state or province
+                'USA'          // country
+<?php endif; ?>
             ]);
                 <?php
                 $category = array();
@@ -143,7 +145,7 @@ $quote = Mage::getModel('sales/quote')->load($quoteId);
 <?php if ($address = $order->getShippingAddress()): ?>
        ,'<?php echo $address->getData('city') ?>',            // city
         '<?php echo $address->getData('region') ?>',          // state or province
-        '<?php echo $address->getData('country') ?>'          // country
+        'USA'          // country
 <?php endif; ?>
     ]);
         <?php

@@ -88,7 +88,10 @@ class Harapartners_Fulfillmentfactory_Helper_Dotcom extends Mage_Core_Helper_Abs
 
         $response = $client->request();
         if (($code = $response->getStatus()) > 399) {
-            Mage::throwException("Error $code received from Dotcom (" . $response->getBody() . ')');
+            throw new Harapartners_Fulfillmentfactory_Model_Exception_FulfillmentNetworkException(
+                "Error $code received from Dotcom",
+                $response
+            );
         }
 
         return $response->getBody();
@@ -119,7 +122,10 @@ class Harapartners_Fulfillmentfactory_Helper_Dotcom extends Mage_Core_Helper_Abs
 
         // handle error conditions (400 or 500 level statuses)
         if (($code = $response->getStatus()) > 399) {
-            Mage::throwException("Error $code received from Dotcom (" . $response->getBody() . ')');
+            throw new Harapartners_Fulfillmentfactory_Model_Exception_FulfillmentNetworkException(
+                "Error $code received from Dotcom",
+                $response
+            );
         }
 
         return $response->getBody();

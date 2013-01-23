@@ -394,24 +394,25 @@
     <frontend>
         <events>
             <!-- ===== FRONTEND ONLY EVENTS START ===== -->
-            <cataloginventory_stock_item_save_after>
-                <observers>
+            <!-- RSTREET: Removed references to add and remove stock from items in the cart -->
+            <!--cataloginventory_stock_item_save_after>
+                <observers-->
                     <!--Harapartners_Rushcheckout: Updating only (Addition and deletion can be safely ignored) -->
-                    <rushcheckout>
+                    <!--rushcheckout>
                         <class>rushcheckout/observer</class>
                         <method>updateReservationByStockItem</method>
                     </rushcheckout>
                 </observers>
-            </cataloginventory_stock_item_save_after>
-            <sales_quote_item_save_after>
-                <observers>
+            </cataloginventory_stock_item_save_after-->
+            <!--sales_quote_item_save_after>
+                <observers-->
                     <!--Harapartners_Rushcheckout: Adding or updating quote item -->
-                    <rushcheckout>
+                    <!--rushcheckout>
                         <class>rushcheckout/observer</class>
                         <method>updateReservationByQuoteItem</method>
                     </rushcheckout>
                 </observers>
-            </sales_quote_item_save_after>
+            </sales_quote_item_save_after -->
             <sales_quote_item_delete_after>
                 <observers>
                     <!--Harapartners_Rushcheckout: Deleting quote item -->
