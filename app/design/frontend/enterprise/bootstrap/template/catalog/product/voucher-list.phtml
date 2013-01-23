@@ -104,7 +104,7 @@
                         <?php if($_product->isSaleable()): ?>
 
                         <div style="float:right;">
-                            <button <?php echo $_disabledButton;?> id="button-popup-<?php echo $_product->getId();?>" type="button" title="<?php echo $_buttonMessage ?>" class="button <?php echo $_buttonClass;?>" onclick="emailCode('<?php echo $_product->getId();?>');"></button>
+                            <button <?php echo $_disabledButton;?> id="button-<?php echo $_product->getId();?>" type="button" title="<?php echo $_buttonMessage ?>" class="button <?php echo $_buttonClass;?>" onclick="emailCode('<?php echo $_product->getId();?>');"></button>
                         </div>
 
                         <?php else: ?>
@@ -157,13 +157,17 @@
 
             $('button-' + id).removeClass('btn-cart');
             $('button-' + id).addClass('btn-cart-sending');
-            $('button-popup-' + id).update('Complete!');
+            $('button-popup-' + id).removeClass('btn-cart');
+            $('button-popup-' + id).addClass('btn-cart');
 
             if(jsonResponse.error) {
 				alert(jsonResponse.error);
             }
             else {
+                $('button-' + id).removeClass('btn-cart-sending');
                 $('button-' + id).addClass('btn-cart-sent');
+                $('button-popup-' + id).removeClass('btn-cart-sending');
+                $('button-popup-' + id).addClass('btn-cart-sent');
             }
 
 		  }
