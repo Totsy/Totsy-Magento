@@ -74,6 +74,14 @@ html.test .container .row {outline:1px dotted green;}
 .align-right {
   text-align: right;
 }
+/* TED's BLUE LINE HR */
+hr {
+background-color:#fff;
+border:1px dashed #64a5fe;
+border-style: none none dashed;
+color:#fff;
+}
+h4 {text-transform: uppercase;}
 
 /**
  * @One-off Modules & 3rd Party
