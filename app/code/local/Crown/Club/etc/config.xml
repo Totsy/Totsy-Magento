@@ -77,6 +77,15 @@
                     </crownclub_shipment_save_after>
                 </observers>
             </sales_order_shipment_save_after>
+            <controller_front_send_response_before>
+                <observers>
+                    <crownclub_check_url>
+                        <type>model</type>
+                        <class>crownclub/observer</class>
+                        <method>checkPlusMemberDashboardUrl</method>
+                    </crownclub_check_url>
+                </observers>
+            </controller_front_send_response_before>
         </events>
     </global>
 	<default>

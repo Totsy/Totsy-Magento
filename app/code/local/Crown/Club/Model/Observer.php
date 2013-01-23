@@ -80,4 +80,21 @@ class Crown_Club_Model_Observer {
         }
         return $this;
     }
+
+    /**
+     * Redirect to plus if they access the dashboard page and aren't a member
+     *
+     * @since 0.7.0
+     * @return void
+     */
+    public function checkPlusMemberDashboardUrl() {
+        $customer = Mage::helper('customer')->getCustomer();
+
+        // Reroute non customers to Plus Sign Up Page
+        if ( ( preg_match( '#plus/dashboard#', Mage::app ()->getRequest ()->getPathInfo () ) ) && ( !Mage::helper('crownclub')->isClubMember($customer) ) ) {
+            Mage::app()->getFrontController()->getResponse()->setRedirect(Mage::getUrl('plus'));
+        }
+
+        return;
+    }
 }
