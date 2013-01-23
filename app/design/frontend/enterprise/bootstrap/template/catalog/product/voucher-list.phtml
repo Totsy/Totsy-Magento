@@ -148,22 +148,22 @@
 		new Ajax.Request('<?php echo Mage::getUrl('vouchers/order/create/',array('_secure' => Mage::app()->getStore()->isCurrentlySecure())); ?>id/' + product_id + '/', {
 		  method:'get',
 		  onCreate: function() {
-			$('button-' + id).update('Sending...');
-			$('button-popup-' + id).update('Sending...');
+              $('button-' + id).removeClass('btn-cart');
+              $('button-' + id).addClass('btn-cart-sending');
+              $('button-popup-' + id).removeClass('btn-cart');
+              $('button-popup-' + id).addClass('btn-cart');
 		  },
 		  onSuccess: function(transport){
 			// Getting Ajax Response Text Which is JSON Object
             var jsonResponse = transport.responseText.evalJSON();
 
-            $('button-' + id).removeClass('btn-cart');
-            $('button-' + id).addClass('btn-cart-sending');
-            $('button-popup-' + id).removeClass('btn-cart');
-            $('button-popup-' + id).addClass('btn-cart');
-
             if(jsonResponse.error) {
+                $('button-' + id).removeClass('btn-cart-sending');
+                $('button-popup-' + id).removeClass('btn-cart-sending');
+                $('button-' + id).addClass('btn-cart');
+                $('button-popup-' + id).addClass('btn-cart');
 				alert(jsonResponse.error);
-            }
-            else {
+            } else {
                 $('button-' + id).removeClass('btn-cart-sending');
                 $('button-' + id).addClass('btn-cart-sent');
                 $('button-popup-' + id).removeClass('btn-cart-sending');
