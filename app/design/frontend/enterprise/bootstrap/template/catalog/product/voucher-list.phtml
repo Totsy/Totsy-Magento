@@ -143,36 +143,33 @@
 	  index++;
   }
 
-	function emailCode(product_id) {
-		id = product_id;
-		new Ajax.Request('<?php echo Mage::getUrl('vouchers/order/create/',array('_secure' => Mage::app()->getStore()->isCurrentlySecure())); ?>id/' + product_id + '/', {
-		  method:'get',
-		  onCreate: function() {
-			$('button-' + id).update('Sending...');
-			$('button-popup-' + id).update('Sending...');
-		  },
-		  onSuccess: function(transport){
-			// Getting Ajax Response Text Which is JSON Object
-            var jsonResponse = transport.responseText.evalJSON();
+    function emailCode(product_id) {
+        id = product_id;
 
-            $('button-' + id).removeClass('btn-cart');
-            $('button-' + id).addClass('btn-cart-sending');
-            $('button-popup-' + id).removeClass('btn-cart');
-            $('button-popup-' + id).addClass('btn-cart');
+        jQuery('#button-' + id).removeClass('btn-cart');
+        jQuery('#button-' + id).addClass('btn-cart-sending');
+        jQuery('#button-popup-' + id).removeClass('btn-cart');
+        jQuery('#button-popup-' + id).addClass('btn-cart');
 
-            if(jsonResponse.error) {
-				alert(jsonResponse.error);
-            }
-            else {
-                $('button-' + id).removeClass('btn-cart-sending');
-                $('button-' + id).addClass('btn-cart-sent');
-                $('button-popup-' + id).removeClass('btn-cart-sending');
-                $('button-popup-' + id).addClass('btn-cart-sent');
-            }
+        jQuery.get('<?php echo Mage::getUrl('vouchers/order/create/',array('_secure' => Mage::app()->getStore()->isCurrentlySecure())); ?>id/' + product_id + '/',
+                function(data){
+                    var jsonResponse = jQuery.parseJSON(data);
 
-		  }
-		});
-	}
+                    if(jsonResponse.error) {
+                        jQuery('#button-' + id).removeClass('btn-cart-sending');
+                        jQuery('#button-popup-' + id).removeClass('btn-cart-sending');
+                        jQuery('#button-' + id).addClass('btn-cart');
+                        jQuery('#button-popup-' + id).addClass('btn-cart');
+                        alert(jsonResponse.error);
+                    } else {
+                        jQuery('#button-' + id).removeClass('btn-cart-sending');
+                        jQuery('#button-' + id).addClass('btn-cart-sent');
+                        jQuery('#button-popup-' + id).removeClass('btn-cart-sent');
+                        jQuery('#button-popup-' + id).addClass('btn-cart-sent');
+                    }
+                }
+        );
+    }
 
     jQuery(function() {
         jQuery( "#discount-vault-tabs" ).tabs();
