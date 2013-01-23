@@ -98,12 +98,18 @@
                                 <strong><?php echo $_productNameStripped;?></strong><br />
                                 <?php echo Mage::getModel('catalog/product')->load($_product->getId())->getDescription();?>
                                 <br /><br />
-                                <button <?php echo $_disabledButton;?> type="button" title="<?php echo $_buttonMessage; ?>" class="button <?php echo $_buttonClass;?>" onclick="emailCode('<?php echo $_product->getId();?>');"><span><span id="button-popup-<?php echo $_product->getId();?>"><?php echo $this->__($_buttonMessage) ?></span></span></button>
+                                <button <?php echo $_disabledButton;?> id="button-popup-<?php echo $_product->getId();?>" type="button" title="<?php echo $_buttonMessage; ?>" class="button <?php echo $_buttonClass;?>" onclick="emailCode('<?php echo $_product->getId();?>');">
+                                    <?php echo $this->__($_buttonMessage) ?>
+                                </button>
                             </div>
                         </div>
                         <?php if($_product->isSaleable()): ?>
 
-                        <div style="float:right;"><button <?php echo $_disabledButton;?> type="button" title="<?php echo $_buttonMessage ?>" class="button <?php echo $_buttonClass;?>" onclick="emailCode('<?php echo $_product->getId();?>');"><span><span id="button-<?php echo $_product->getId();?>"><?php echo $this->__($_buttonMessage) ?></span></span></button></div>
+                        <div style="float:right;">
+                            <button <?php echo $_disabledButton;?> id="button-popup-<?php echo $_product->getId();?>" type="button" title="<?php echo $_buttonMessage ?>" class="button <?php echo $_buttonClass;?>" onclick="emailCode('<?php echo $_product->getId();?>');">
+                                <?php echo $this->__($_buttonMessage) ?>
+                            </button>
+                        </div>
 
                         <?php else: ?>
                         <?php if ($_product->getIsSalable()): ?>
