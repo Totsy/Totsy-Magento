@@ -351,7 +351,7 @@ class Harapartners_Categoryevent_Model_Sortentry
 
         $earlyAccessTime = false;
         if(($customer = Mage::helper('customer')->getCustomer()) && (Mage::helper('crownclub')->isClubMember($customer))) {
-            $earlyAccessTime = Mage::helper('crownclub')->getGracePeriod();
+            $earlyAccessTime = Mage::helper('crownclub/earlyaccess')->getEarlyAccessTime();
         }
 
         foreach ($live as $idx => $event) {
@@ -369,7 +369,7 @@ class Harapartners_Categoryevent_Model_Sortentry
         foreach ($upcoming as $idx => $event) {
             $startTime = strtotime($event['event_start_date']);
             if($earlyAccessTime) {
-                $startTime -= ($earlyAccessTime * 3600);
+                $startTime -= $earlyAccessTime;
             }
             if ($startTime < $now &&
                 strtotime($event['event_end_date']) > $now
