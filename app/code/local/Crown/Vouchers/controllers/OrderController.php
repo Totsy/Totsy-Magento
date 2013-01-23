@@ -15,7 +15,7 @@ class Crown_Vouchers_OrderController extends Mage_Core_Controller_Front_Action {
         $defaultAddress = Mage::helper('customer')->getCustomer()->getDefaultBillingAddress();
 
         if(!is_object($defaultAddress)) {
-            $this->returnResult(array('error' => 'Please fill out your address information before claiming a voucher. '));
+            $this->returnResult(array('error' => "Before you stock up on discounts, we'll need some information from you.  Please fill out your address information in the MY ACCOUNT section"));
             return;
         }
 		
