@@ -75,7 +75,7 @@ $customer = Mage::registry('current_customer');
             <td class="plus-value"><input type="text" readonly="readonly" class="input-xlarge" value="<?php echo $customer->getFirstname() . ' ' . $customer->getLastname();?>" /></td>
         </tr>
         <tr>
-            <td class="plus-label">Totsy Plus Plan: </td>
+            <td class="plus-label">TotsyPLUS Plan: </td>
             <td class="plus-value"><input type="text" readonly="readonly" class="input-xlarge" value="<?php echo $product->getName();?> (<?php echo Mage::helper('core')->formatPrice($product->getPrice(), FALSE);?>/<?php echo $period_unit;?>)" /></td>
         </tr>
         <tr>
@@ -98,7 +98,7 @@ $customer = Mage::registry('current_customer');
     </table>
 
     <br />
-    <a href="<?php echo Mage::getUrl('plus/dashboard', array('_secure' => true));?>">Back to Totsy Plus Dashboard</a>
+    <a href="<?php echo Mage::getUrl('plus/dashboard', array('_secure' => true));?>">Back to TotsyPLUS Dashboard</a>
 
     <script type="text/javascript">
         jQuery('.slider-button').toggle(function(){
@@ -122,5 +122,5 @@ $customer = Mage::registry('current_customer');
     </script>
 
 <?php else: ?>
-    You are not a current Totsy Plus Member.  Sign up <a href="<?php echo Mage::helper('crownclub')->getClubProduct()->getProductUrl();?>">here.</a>
+    You are not a current TotsyPLUS Member.  Sign up <a href="<?php echo Mage::helper('crownclub')->getClubProduct()->getProductUrl();?>">here.</a>
 <?php endif;?>
