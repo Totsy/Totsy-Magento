@@ -220,21 +220,26 @@ jQuery(document).ready( function() {
     checkoutPayment.toggleViews();
     
     jQuery("#paymentfactory_tokenize_cc_number").keyup( function() {
-    
         var ccEntered = checkoutPayment.getCreditCardType(this.value);
     
         jQuery("button","[id='paymentfactory_tokenize_cc_type']").each(function() {             
             var temp = jQuery(this);
-            if (ccEntered == this.value) {
+            var targetId = temp.attr('data-active-class');
+
+            if (ccEntered == this.value) {                
+                jQuery("#" + targetId).removeClass(temp.attr('data-inactive-class'));
+                jQuery("#" + targetId).addClass(temp.attr('data-active-class'));
                 temp.addClass('active');
             } else {
+                jQuery("#" + targetId).removeClass(temp.attr('data-active-class'));
+                jQuery("#" + targetId).addClass(temp.attr('data-inactive-class'));
                 temp.removeClass('active');
             }
         });
         
     });
     
-    jQuery(".cc-type").click( function() {    
+    jQuery(".cc-type").click( function() {
         if(this.id == "paypal") {
             jQuery('input[name="payment[method]"]').val("paypal_express");
             jQuery("#paypal_payment").val("paypal_express");			            
@@ -267,12 +272,18 @@ jQuery(document).ready( function() {
         	</div>
         	<div class="cc_types use-new-card-wrapper input-box validation-error pull-right">
         		<?php $_ccType = $this->getInfoData('cc_type') ?>
+        		<?php $_cssClassNamesForCardTypes = Array(
+                    'vi'=>'vb',
+                    'di'=>'db',
+                    'mc'=>'mb',
+                    'ae'=>'ab'
+        		); ?>
         		 <div id="<?php echo $_code ?>_cc_type" data-toggle="buttons-radio">
         		 <?php $i=0; ?>
         		 <?php foreach ($this->getCcAvailableTypes() as $_typeCode => $_typeName): ?>
-                 <button type="button" class="btn validate-cybsersource-cc-type cc-type" value="<?php echo $_typeCode ?>" <?php if ($_typeCode==$_ccType) { echo "checked"; } ?> > 
+                 <button type="button" class="btn validate-cybsersource-cc-type cc-type" value="<?php echo $_typeCode ?>" <?php if ($_typeCode==$_ccType) { echo "checked"; } ?> data-active-class="<?php echo strtolower($_typeCode); ?>" data-inactive-class="<?php echo $_cssClassNamesForCardTypes[strtolower($_typeCode)]; ?>"> 
         		    <span class="cc">
-        		 	    <span title="<?php echo $_typeName; ?>"  class="<?php echo strtolower($_typeCode); ?>" >
+        		 	    <span id="<?php echo strtolower($_typeCode); ?>" title="<?php echo $_typeName; ?>" class="<?php echo $_cssClassNamesForCardTypes[strtolower($_typeCode)]; ?>" >
         		 	    </span>
         		 	</span> 
                  </button>              
