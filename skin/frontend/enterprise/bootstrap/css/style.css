@@ -1740,6 +1740,10 @@ body.catalog-category-view .price-box .special-price {
     font-style: normal;
 }
 
+.f-left {
+    float: left;
+}
+
 .plus {
     width:100%;
 }
@@ -2198,6 +2202,17 @@ body.catalog-category-view .price-box .special-price {
     height: 28px;
     border: none;
     text-indent: 1000px;
+}
+
+.reward-checkout {
+    margin-top: 20px;
+    text-align: right;
+}
+
+.reward-checkout .reward span {
+    padding: 2px 0 0 24px;
+    background: url(/skin/frontend/enterprise/bootstrap/images/plus/ladybug_icon.jpg) no-repeat 0 -4px;
+    display: inline-block;
 }
 
 /*! fancyBox v2.0.6 fancyapps.com | fancyapps.com/fancybox/#license */
