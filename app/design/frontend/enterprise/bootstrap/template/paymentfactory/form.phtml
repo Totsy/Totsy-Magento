@@ -21,12 +21,6 @@ if(count($fulfillmentTypes) > 1) {
 }
 ?>
 <script type="text/javascript">
-//<![CDATA[
-    Validation.creditCartTypes.set('JCB', [new RegExp('^(35[0-9]{14}|(2131|1800)[0-9]{11})$'), new RegExp('^([0-9]{3})?$'), true]);
-    Validation.creditCartTypes.set('LASER', [new RegExp('^((6304|6706|6771|6709)[0-9]{12}([0-9]{3}))$'), new RegExp('^([0-9]{3})?$'), false]);
-    Validation.creditCartTypes.set('UATP', [false, new RegExp('^[0-9]{3}([0-9]{1})?$'), false]);
-    Validation.creditCartTypes.set('MCI', [false, new RegExp('^[0-9]{3}([0-9]{1})?$'), false]);
-//]]>
 	
 	//extending validation JS to include validation for rules for cc types displayed with radio buttons
 	Validation.add(['validate-cc-type-radio', 'Credit card number does not match credit card type.', function(v, elm) {
@@ -476,4 +470,3 @@ jQuery(document).ready( function() {
         </li>
         <?php endif; ?>
     </div>
-</div>
