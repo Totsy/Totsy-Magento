@@ -29,6 +29,18 @@
                             <block type="checkout/cart_totals" name="hpcheckout.review.totals" as="totals" template="hpcheckout/review/totals.phtml"/>
 						<block type="core/template" name="hpcheckout.review.button" as="button" template="hpcheckout/review/button.phtml"/>
 					</block>
+                    <block type="enterprise_reward/tooltip_checkout" name="reward.tooltip.checkout" template="reward/checkout.phtml">
+                        <action method="initRewardType"><type>enterprise_reward/action_orderExtra</type></action>
+                        <action method="setWrapperClass"><class>reward-checkout</class></action>
+                        <action method="setRewardMessage" translate="message" module="enterprise_reward"><message>TotsyPLUS: When your order ships, you will earn $%s credit toward a future purchase.</message></action>
+                        <action method="setIsGuestNote"><value>1</value></action>
+                    </block>
+                    <block type="enterprise_reward/tooltip_checkout" name="reward.tooltip.checkout.salesrule" template="reward/checkout.phtml">
+                        <action method="initRewardType"><type>enterprise_reward/action_salesrule</type></action>
+                        <action method="setWrapperClass"><class>reward-checkout</class></action>
+                        <action method="setRewardMessage" translate="message" module="enterprise_reward"><message>TotsyPLUS: When your order ships, you will earn $%s credit toward a future purchase.</message></action>
+                        <action method="setIsGuestNote"><value>1</value></action>
+                    </block>
 				</block>
 				<block type="core/template" name="hpcheckout.script" as="script" template="hpcheckout/script.phtml"/>
 			</block>

@@ -57,6 +57,16 @@ class Crown_Club_Model_Observer {
         /* @var $order Mage_Sales_Model_Order */
         $order = Mage::getModel('sales/order')->load($shipment->getOrderId());
 
+        // Check if order is club membership
+        if ($order->isNominal()) {
+            foreach ($order->getAllVisibleItems() as $item) {
+                $productModel = Mage::getModel('catalog/product')->load($item->getProductId());
+                if ($productModel->getIsClubSubscription()) {
+                    return $this;
+                }
+            }
+        }
+
         if ($order->getCustomerIsGuest()
             || !Mage::helper('enterprise_reward')->isEnabledOnFront($order->getStore()->getWebsiteId())
             || !$order->getData('customer_is_club_member')
