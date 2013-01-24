@@ -169,6 +169,7 @@ class Harapartners_Stockhistory_Model_Transaction extends Mage_Core_Model_Abstra
             
             $stock->setQty($qtyStock + $qtyDelta);
             $stock->save();
+            $stock_status = Mage::getModel('cataloginventory/stock_status')->updateStatus($product->getEntityId());
             return true;
         } else {
             throw new Exception('Cannot remove item that ' . ($product->getData('is_master_pack')) ? 'is a case pack ' : 'has been sold');
