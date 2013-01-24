@@ -136,7 +136,6 @@ $savings = money_format('%n', $originalPrice) - money_format('%n', $discountPric
                              <div class="add-to-box" style="padding-bottom:30px;">
                                  <?php if($_product->isSaleable()): ?>
                                      <?php echo $this->getChildHtml('addtocart') ?>
-                                     <?php debug("in the no option"); ?>
                                  <?php endif; ?>
                                  <?php //echo $this->getChildHtml('addto') ?>
                              </div>
