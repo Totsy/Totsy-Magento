@@ -1728,6 +1728,10 @@ body.catalog-category-view .price-box .special-price {
 
 /* TotsyPLUS */
 
+.mini-products-list a img {
+    width: 54px;
+}
+
 @font-face {
     font-family: 'memphisbold';
     src: url('/skin/frontend/enterprise/bootstrap/fonts/memphisbold/memphisbold.eot');
