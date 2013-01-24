@@ -1136,9 +1136,9 @@ class Mage_Paypal_Model_Api_Nvp extends Mage_Paypal_Model_Api_Abstract
             // PayPal doesn't provide detailed shipping name fields, so the name will be overwritten
             $shippingAddress->addData(array(
                 'prefix'     => null,
-                'firstname'  => $data['SHIPTONAME'],
+                'firstname'  => $data['FIRSTNAME'],
                 'middlename' => null,
-                'lastname'   => null,
+                'lastname'   => $data['LASTNAME'],
                 'suffix'     => null,
             ));
             $this->setExportedShippingAddress($shippingAddress);
