@@ -868,7 +868,7 @@ body.catalog-category-view .thumbnails > li {position: relative;}
 }
 
 .onepage-checkout .addresses {
-   width:445px;
+   width:440px;
 }
 
 .onepage-checkout .review-payment-blocks {
@@ -1149,8 +1149,8 @@ float:left;
 }
 
 .cc_types {
-    text-align: center !important;
-    width: 460px;
+    text-align: left !important;
+    width: 450px;
 }
 
 .btn-checkout-group {
@@ -1215,8 +1215,7 @@ float:left;
 }
 
 .cc_exp {
-    width: 238px;
-    margin-left: 40px;
+    width: 290px;
 }
 
 .cc_save_card {
@@ -2327,4 +2326,6 @@ overflow: auto;
 .fancybox-ie #fancybox-bg-w { filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../images/fancybox/fancy_shadow_w.png', sizingMethod='scale'); }
 .fancybox-ie #fancybox-bg-nw { filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../images/fancybox/fancy_shadow_nw.png', sizingMethod='scale'); }
 
-#cc_data {display:none;}
+#cc_data {
+    display:none;
+}
