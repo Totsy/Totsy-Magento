@@ -6,13 +6,15 @@
 ?>
 
 <?php
-$_item = $this->getItem();
-$isVisibleProduct = $_item->getProduct()->isVisibleInSiteVisibility();
-$isVirtual = $_item->getProduct()->isVirtual();
-$canApplyMsrp = Mage::helper('catalog')->canApplyMsrp($_item->getProduct(), Mage_Catalog_Model_Product_Attribute_Source_Msrp_Type::TYPE_BEFORE_ORDER_CONFIRM);
-$configKey = 'limit_timer';
-$countdownTime = Mage::getStoreConfig('config/rushcheckout_timer/'.$configKey);
-$quote = Mage::getSingleton('checkout/session')->getQuote();
+$_item              = $this->getItem();
+$isVisibleProduct   = $_item->getProduct()->isVisibleInSiteVisibility();
+$_product           = $_item->getProduct();
+$_fullProduct       = Mage::getModel('catalog/product')->load($_product->getId()); // Fetch full product for fulfillment type
+$isVirtual          = $_product->isVirtual();
+$canApplyMsrp       = Mage::helper('catalog')->canApplyMsrp($_item->getProduct(), Mage_Catalog_Model_Product_Attribute_Source_Msrp_Type::TYPE_BEFORE_ORDER_CONFIRM);
+$configKey          = 'limit_timer';
+$countdownTime      = Mage::getStoreConfig('config/rushcheckout_timer/'.$configKey);
+$quote              = Mage::getSingleton('checkout/session')->getQuote();
 
 if ( !Mage::getSingleton('checkout/session')->hasData('countdown_timer') ) {
 	$timer = 0;
@@ -61,6 +63,8 @@ if ( !Mage::getSingleton('checkout/session')->hasData('countdown_timer') ) {
             </ul>
         </div>
         <?php endif;?>
+        <?php } elseif($isVirtual && $_fullProduct->getFulfillmentType() == 'nominal') {?>
+                <span>Your Membership will be activated upon checkout</span>
         <?php } else { ?>
         <span>You will receive an email with details on this voucher code.</span>
         <?php } ?>
