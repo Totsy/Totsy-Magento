@@ -1887,6 +1887,11 @@ body.catalog-category-view .price-box .special-price {
      color: #000;
 }
 
+.plus .dashboard-icon {
+    width: 110px;
+    height: 103px;
+    float: left;
+}
 
 .plus .icon-clock {
     width:110px;
