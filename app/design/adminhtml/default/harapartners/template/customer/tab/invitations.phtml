@@ -1,0 +1,97 @@
+<?php
+/**
+ * Magento Enterprise Edition
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Magento Enterprise Edition License
+ * that is bundled with this package in the file LICENSE_EE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://www.magentocommerce.com/license/enterprise-edition
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     default_default
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://www.magentocommerce.com/license/enterprise-edition
+ */
+?>
+<?php
+/**
+ * Template for block Mage_Adminhtml_Block_Customer_Edit_Tab_View
+ */
+?>
+<?php
+    $sent_invitations = $this->getSentInvitations();
+    $invitationInfo = $this->getInvitationInfo();
+?>
+<div class="entry-edit box-left">
+    <div class="entry-edit-head"><h4 class="icon-head head-customer-view"><?php echo Mage::helper('customer')->__('Invited by') ?></h4></div>
+    <fieldset>
+        <table cellspacing="2" class="box-left">
+            <tr>
+                <td><strong><?php echo $this->__('Invited by:') ?></strong></td>
+                <td><?php echo $this->getInvitedBy(); ?></td>
+            </tr>
+            <tr>
+                <td><strong><?php echo $this->__('Invitation Date:') ?></strong></td>
+                <?php if($invitationInfo): ?>
+                    <td><?php echo $invitationInfo->getData('invitation_date') . " GMT"; ?></td>
+                <?php else:?>
+                    <td>N/A</td>
+                <?php endif; ?>
+            </tr>
+        </table>
+    </fieldset>
+</div>
+<?php
+    if ($sent_invitations != "N/A") :?>
+    <?php foreach($sent_invitations as $invitation) :?>
+        <div class="entry-edit box-right">
+            <div class="entry-edit-head"><h4 class="icon-head head-customer-view"><?php echo Mage::helper('customer')->__('Has Invited') ?></h4></div>
+            <fieldset>
+                <table cellspacing="2" class="box-left" width="auto">
+                    <tr>
+                        <td><strong><?php echo $this->__('Invited:') ?></strong></td>
+                        <?php if($invitation['referral_id']) :?>
+                            <td><strong><?php echo "<a target='_blank' href='" . $this->getUrl("*/*/edit", array('id' => $invitation['referral_id'])) . "''>" . $invitation['email'] . "</a>" ?> </strong></td>
+                        <?php else:?>
+                            <td><strong><?php echo $invitation['email'] ?></strong></td>
+                        <?php endif;?>
+                    </tr>
+                    <tr>
+                        <td><strong><?php echo $this->__('Invitation Date:') ?></strong></td>
+                        <td><?php echo $invitation['invitation_date'] . " GMT" ?></td>
+                    </tr>
+                    <tr>
+                        <td><strong><?php echo $this->__('Register Date:') ?></strong></td>
+                        <td><?php echo $invitation['signup_date'] . " GMT" ?></td>
+                    </tr>
+                    <tr>
+                        <td><strong><?php echo $this->__('1st Purchase:') ?></strong></td>
+                        <?php if($date = $this->getInviteeFirstPurchaseDate($invitation['order_increment_id'])) : ?>
+                            <td><?php echo $date . " GMT" ?></td>
+                        <?php else:?>
+                            <td><?php echo "N/A" ?></td>
+                        <?php endif; ?>
+                    </tr>
+                    <tr>
+                        <?php if($invitation['order_increment_id']) :?>
+                            <td><strong>Credits Earned!</strong></td>
+                        <?php endif; ?>
+                    </tr>
+                </table>
+            </fieldset>
+        </div>
+    <?php endforeach;?>
+<?php endif; ?>
+<div class="box-left"><div>
+<?php echo $this->getChildHtml('', true, true); ?>
