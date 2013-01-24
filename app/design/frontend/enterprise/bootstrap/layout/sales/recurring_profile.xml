@@ -32,7 +32,7 @@
             <action method="addLink" translate="label">
                 <name>recurring_profiles</name>
                 <path>sales/recurring_profile/</path>
-                <label>My Totsy Plus Membership</label></action>
+                <label>My TotsyPLUS Membership</label></action>
         </reference>
     </customer_account>
 
