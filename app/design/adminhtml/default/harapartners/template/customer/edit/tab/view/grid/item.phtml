@@ -18,28 +18,29 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Mage
- * @package     Mage_Adminhtml
+ * @category    design
+ * @package     default_default
  * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://www.magentocommerce.com/license/enterprise-edition
  */
-
-
-/**
- * Sales Order items qty column renderer
- *
- * @category   Mage
- * @package    Mage_Adminhtml
- * @author     Magento Core Team <core@magentocommerce.com>
- */
-class Mage_Adminhtml_Block_Sales_Items_Column_Qty extends Mage_Adminhtml_Block_Sales_Items_Column_Default
-{ 
-    public function getItemFulfillCount($item){
-		$check = Mage::getModel('fulfillmentfactory/itemqueue')->getCollection()
-            ->addFieldToFilter('sku', $item->getSku())
-            ->addFieldToFilter('order_id', $item->getOrderId())
-            ->getFirstItem();
-		return (int)$check->getFulfillCount();
-	}
-}
+ ?>
+<?php /* @var $this Mage_Adminhtml_Block_Customer_Edit_Tab_View_Grid_Renderer_Item */ ?>
+<?php
+    $product = $this->getProduct();
+    $options = $this->getOptionList();
 ?>
+
+<?php if (!$options): ?>
+    <?php echo $this->escapeHtml($product->getName())?>
+<?php else: ?>
+<div class="bundle-product-options">
+    <strong><?php echo $this->escapeHtml($product->getName())?></strong>
+    <dl>
+        <?php foreach ($options as $option) : ?>
+            <dt><?php echo $this->escapeHtml($option['label']) ?></dt>
+            <?php $formatedOptionValue = $this->getFormattedOptionValue($option) ?>
+            <dd><?php echo $formatedOptionValue['value'] ?></dd>
+        <?php endforeach; ?>
+    </dl>
+</div>
+<?php endif; ?>

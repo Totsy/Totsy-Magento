@@ -311,7 +311,7 @@ class Harapartners_Ordersplit_Helper_Data extends Mage_Core_Helper_Abstract {
                         $newQuote->getShippingAddress()->setShippingMethod($oldOrder->getShippingMethod());
                         $newQuote->getShippingAddress()->setShippingDescription($oldOrder->getShippingDescription());
 
-                        $paymentData = $oldPayment->getData();
+                        $paymentData = $oldOrder->getPayment()->getData();
                         if($paymentData['method'] == 'free') {
                             $paymentData['use_reward_points'] = 1;
                         }

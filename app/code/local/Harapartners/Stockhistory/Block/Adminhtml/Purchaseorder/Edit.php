@@ -43,6 +43,9 @@ class Harapartners_Stockhistory_Block_Adminhtml_Purchaseorder_Edit extends Mage_
             if (!$this->_isAllowedAction('reset')) {
                 $this->_removeButton('reset');
             }
+            if (!$this->_isAllowedAction('save')) {
+                $this->_removeButton('save');
+            }
             
               $this->_addButton('generate_report', array(
                   'label'        =>    Mage::helper('stockhistory')->__('Generate Report'),

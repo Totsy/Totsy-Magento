@@ -18,28 +18,16 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Mage
- * @package     Mage_Adminhtml
+ * @category    design
+ * @package     default_default
  * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://www.magentocommerce.com/license/enterprise-edition
  */
-
-
-/**
- * Sales Order items qty column renderer
- *
- * @category   Mage
- * @package    Mage_Adminhtml
- * @author     Magento Core Team <core@magentocommerce.com>
- */
-class Mage_Adminhtml_Block_Sales_Items_Column_Qty extends Mage_Adminhtml_Block_Sales_Items_Column_Default
-{ 
-    public function getItemFulfillCount($item){
-		$check = Mage::getModel('fulfillmentfactory/itemqueue')->getCollection()
-            ->addFieldToFilter('sku', $item->getSku())
-            ->addFieldToFilter('order_id', $item->getOrderId())
-            ->getFirstItem();
-		return (int)$check->getFulfillCount();
-	}
-}
 ?>
+<script type="text/javascript">
+function saveAndContinueEdit(urlTemplate) {
+        var template = new Template(urlTemplate, /(^|.|\r|\n)({{(\w+)}})/);
+        var url = template.evaluate({tab_id:customer_info_tabsJsTabs.activeTab.id});
+        editForm.submit(url);
+}
+</script>
