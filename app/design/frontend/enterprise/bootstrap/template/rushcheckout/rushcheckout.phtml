@@ -64,7 +64,7 @@ if ( !Mage::getSingleton('checkout/session')->hasData('countdown_timer') ) {
         </div>
         <?php endif;?>
         <?php } elseif($isVirtual && $_fullProduct->getFulfillmentType() == 'nominal') {?>
-                <span>Your Membership will be activated upon checkout</span>
+                <span>With purchase, you will become a TotsyPLUS member.  </span>
         <?php } else { ?>
         <span>You will receive an email with details on this voucher code.</span>
         <?php } ?>
@@ -103,6 +103,7 @@ if ( !Mage::getSingleton('checkout/session')->hasData('countdown_timer') ) {
 									<?php echo $this->helper('checkout')->formatPrice($_item->getCalculationPrice()+$_item->getWeeeTaxAppliedAmount()+$_item->getWeeeTaxDisposition()); ?>
 								<?php else: ?>
 									<?php echo $this->helper('checkout')->formatPrice($_item->getCalculationPrice()) ?>
+                                    <?php echo $_fullProduct->getFulfillmentType() == 'nominal' ? '/ month' : '';?>
 								<?php endif; ?>
 							</span>
 
