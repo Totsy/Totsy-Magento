@@ -19,7 +19,6 @@ h4 {
     color:#000;
     /*text-transform: uppercase;*/
 }
-.more {margin-top: 30px;}
 </style>
 <?php
 /**
@@ -82,7 +81,7 @@ h4 {
                     <li class="span4 catalog-event event-counter-<?php echo $timer;?>">
                         <a href="<?php echo Mage::getBaseUrl().$live['url_path']; ?>" class="thumbnail">
                             <hgroup>
-                                <h4><?php echo $live['name'];?></h4>
+                                <h4 class="ellipsis"><?php echo $live['name'];?></h4>
                                 <div class="maxDiscount"><em>up to <span><strong><?php echo $maxDiscount; ?>%</strong> off</span></em></div>
                                 <!-- <h6><?php //echo $live['short_description'];?></h6> -->
                             </hgroup>
@@ -95,7 +94,7 @@ h4 {
                             <?php
                                 $imgFile = (isset($live['small_image']))
                                 ? BP . DS . 'media' . DS . 'catalog' . DS . 'category' . DS . $live['small_image']
-                                : BP . DS . 'skin' . DS . 'frontend' . DS . 'enterprise ' . DS . 'harapartners' . DS . 'images' . DS . 'catalog' . DS . 'product' . DS . 'placeholder' . DS . 'small_image.jpg';
+                                : BP . DS . 'skin' . DS . 'frontend' . DS . 'enterprise ' . DS . 'bootstrap' . DS . 'images' . DS . 'catalog' . DS . 'product' . DS . 'placeholder' . DS . 'small_image.jpg';
                             ?>
                             <span class="event-link">
                                 <img src="<?php echo Mage::helper('service/image')->loadImageFile($imgFile)->resize(310)->keepFrame(FALSE); ?>" width="310" height="310" alt="<?php echo $live['name'];?>" />
@@ -124,7 +123,7 @@ h4 {
     <?php endif; ?>
     
     <?php // ENDING SOON - not functioning, no $endingArray exists - just a placeholder var and code for now ?>
-    <?php $endingArray = ''; ?>
+    <?php $endingArray = '1'; ?>
     <?php if (!!$endingArray && !empty($endingArray)): ?>
         <section id="events-ending" class="events-grid">
             <header class="page-header">
@@ -157,7 +156,7 @@ h4 {
                             $imgFile = (isset($up['small_image']))
                             ? BP . DS . 'media' . DS . 'catalog' . DS . 'category' . DS .
                             $up['small_image']
-                            : BP . DS . 'skin' . DS . 'frontend' . DS . 'enterprise ' . DS . 'harapartners' . DS . 'images' . DS . 'catalog' . DS . 'product' . DS . 'placeholder' . DS . 'small_image.jpg';
+                            : BP . DS . 'skin' . DS . 'frontend' . DS . 'enterprise ' . DS . 'bootstrap' . DS . 'images' . DS . 'catalog' . DS . 'product' . DS . 'placeholder' . DS . 'small_image.jpg';
                         ?>
                         <a class="event-link" href="<?php echo Mage::getBaseUrl().(array_key_exists('url_path',$up) ? $up['url_path'] : ''); ?>">
                             <img src="<?php echo Mage::helper('service/image')->loadImageFile($imgFile)->resize(165)->keepFrame(FALSE); ?>" width="165px" height="171" alt="<?php echo $up['name'];?>" />

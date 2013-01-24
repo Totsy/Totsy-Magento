@@ -678,7 +678,7 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
 }
 .events-grid .thumbnail .more [id*="time1-"] {
     margin:10px 0 18px; padding:8px 0;
-    background:#fff;
+    background:#666;
     -moz-box-shadow: 0 2px 2px rgba(0, 0, 0, 0.086);
     -webkit-box-shadow: 0 2px 2px rgba(0, 0, 0, 0.086);
     box-shadow: 0 2px 2px rgba(0, 0, 0, 0.086);

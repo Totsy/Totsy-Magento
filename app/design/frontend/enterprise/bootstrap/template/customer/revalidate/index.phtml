@@ -30,7 +30,7 @@
         <?php $customer = Mage::getSingleton('customer/session')->getCustomer();?>
         <form name="validation-check-form" method="post" action="<?php echo $this->getUrl('customer/revalidate/validationcheckpost',array('_secure'=>true));  ?>">
         <div class="fieldset">
-        <p><?php echo $this->__("Sorry, for the interruption! Please sign in again to continue shopping. If you need help with your password, click ")?><a style="font-weight:bold; color:#ED1C25" href="<?php echo $this->getUrl('customer/account/forgotpassword')?>">here</a><br/>
+        <p><?php echo $this->__("Sorry for the interruption! Please sign in again to continue shopping. If you need help with your password, click ")?><a style="font-weight:bold; color:#ED1C25" href="<?php echo $this->getUrl('customer/account/forgotpassword')?>">here</a><br/>
     <a href="<?php echo $this->getUrl('customer/account/logout')?>">Not you?</a></p>
         <label for="email" class="required">Email <em>*</em></label>
         <input name="login[username]" id="email" type="text" class="input-text required-entry validate-email" title="Email Address" value="<?php echo $customer->getEmail();?>"/>
