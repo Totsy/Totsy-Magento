@@ -119,7 +119,7 @@ HpCheckout.prototype = {
             jQuery("#payment_form_paypal_express").hide();
             jQuery('#billing-address').show();
             jQuery('#shipping-address').show();
-            jQuery('.addresses').width(440);
+            jQuery('.addresses').width(445);
         }
         jQuery("#payment_form_" + payment_method).show();
 	},
