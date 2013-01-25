@@ -2,7 +2,7 @@
 <config>
 	<modules>
 		<Crown_Club>
-			<version>0.7.3</version>
+			<version>0.7.4</version>
 		</Crown_Club>
 	</modules>
     <global>
@@ -69,7 +69,7 @@
             </email>
         </template>
         <events>
-            <sales_order_shipment_save_after>
+            <sales_order_save_after>
                 <observers>
                     <crownclub_shipment_save_after>
                         <type>singleton</type>
@@ -77,7 +77,7 @@
                         <method>orderShipped</method>
                     </crownclub_shipment_save_after>
                 </observers>
-            </sales_order_shipment_save_after>
+            </sales_order_save_after>
             <controller_front_send_response_before>
                 <observers>
                     <crownclub_check_url>
