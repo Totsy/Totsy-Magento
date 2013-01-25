@@ -8,6 +8,11 @@
 class Crown_Club_Model_Rewards_Action_Club extends Enterprise_Reward_Model_Action_Abstract
 {
     /**
+     * @var 0.7.3
+     */
+    private $_quote = null;
+
+    /**
      * Return action message for history log
      * @since 		0.4.0
      * @param array $args Additional history data
@@ -35,6 +40,18 @@ class Crown_Club_Model_Rewards_Action_Club extends Enterprise_Reward_Model_Actio
     }
 
     /**
+     * Quote setter
+     *
+     * @since 0.7.3
+     * @param Mage_Sales_Model_Quote $quote
+     * @return Crown_Club_Model_Rewards_Action_Club
+     */
+    public function setQuote(Mage_Sales_Model_Quote $quote) {
+        $this->_quote = $quote;
+        return $this;
+    }
+
+    /**
      * Retrieve points delta for action
      * @since 		0.4.0
      * @param int $websiteId
@@ -42,7 +59,13 @@ class Crown_Club_Model_Rewards_Action_Club extends Enterprise_Reward_Model_Actio
      */
     public function getPoints($websiteId)
     {
-        $monetaryAmount = $this->getEntity()->getGrandTotal();
+        if ($this->_quote) {
+            $quote = $this->_quote;
+            $monetaryAmount = $quote->getBaseGrandTotal();
+            $monetaryAmount = $monetaryAmount < 0 ? 0 : $monetaryAmount;
+        } else {
+            $monetaryAmount = $this->getEntity()->getGrandTotal();
+        }
 
         $monetaryAmount = (float) $monetaryAmount * .10;
         $pointsDelta = $this->getReward()->getRateToPoints()->calculateToPoints((float)$monetaryAmount);

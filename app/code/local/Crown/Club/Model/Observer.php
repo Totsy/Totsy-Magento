@@ -51,11 +51,8 @@ class Crown_Club_Model_Observer {
      */
     public function orderShipped($observer)
     {
-        /* @var $shipment Mage_Sales_Model_Order_Shipment */
-        $shipment = $observer->getEvent()->getShipment();
-
         /* @var $order Mage_Sales_Model_Order */
-        $order = Mage::getModel('sales/order')->load($shipment->getOrderId());
+        $order = $observer->getEvent()->getOrder();
 
         // Check if order is club membership
         if ($order->isNominal()) {
@@ -75,7 +72,7 @@ class Crown_Club_Model_Observer {
         }
 
         // Give credit where credit is due
-        if ($order->getCustomerId()) {
+        if ($order->getCustomerId() && $this->_isOrderPaidNow($order)) {
             /* @var $reward Enterprise_Reward_Model_Reward */
             $reward = Mage::getModel('enterprise_reward/reward')
                 ->setActionEntity($order)
@@ -107,5 +104,26 @@ class Crown_Club_Model_Observer {
         }
 
         return;
+    }
+
+    /**
+     * Check if order is paid exactly now
+     * If order was paid before Rewards were enabled, reward points should not be added
+     *
+     * @since 0.7.2
+     * @param Mage_Sales_Model_Order $order
+     * @return bool
+     */
+    protected function _isOrderPaidNow($order)
+    {
+        $isOrderPaid = (float)$order->getBaseTotalPaid() > 0
+            && ($order->getBaseGrandTotal() - $order->getBaseSubtotalCanceled() - $order->getBaseTotalPaid()) < 0.0001;
+
+        if (!$order->getOrigData('base_grand_total')) {//New order with "Sale" payment action
+            return $isOrderPaid;
+        }
+
+        return $isOrderPaid && ($order->getOrigData('base_grand_total') - $order->getOrigData('base_subtotal_canceled')
+            - $order->getOrigData('base_total_paid')) >= 0.0001;
     }
 }
