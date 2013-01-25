@@ -1744,10 +1744,6 @@ body.catalog-category-view .price-box .special-price {
     font-style: normal;
 }
 
-.f-left {
-    float: left;
-}
-
 .plus {
     width:100%;
 }
@@ -1848,7 +1844,7 @@ body.catalog-category-view .price-box .special-price {
     width:100%;
 }
 
-.plus .float {
+.plus .float, f-left {
     float: left;
 }
 
@@ -2224,7 +2220,7 @@ body.catalog-category-view .price-box .special-price {
 
 .reward-checkout .reward span {
     padding: 2px 0 0 24px;
-    background: url(/skin/frontend/enterprise/bootstrap/images/plus/ladybug_icon.jpg) no-repeat 0 -4px;
+    background: url(/skin/frontend/enterprise/bootstrap/images/plus/ladybug_icon.jpg) no-repeat 0 0px;
     display: inline-block;
 }
 
