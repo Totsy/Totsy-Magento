@@ -94,7 +94,7 @@ class Harapartners_Fulfillmentfactory_Model_Service_Itemqueue
                 }
             }
         }
-        else if($status == 'pending' || $status == 'processing'){
+        else if($status == 'pending'){
             foreach($collection as $itemqueue) {
                 if($itemqueue->getStatus() != Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_CANCELLED) {
                     if ($itemqueue->getFulfillCount() == $itemqueue->getQtyOrdered()) {
