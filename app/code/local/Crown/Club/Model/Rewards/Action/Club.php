@@ -44,7 +44,7 @@ class Crown_Club_Model_Rewards_Action_Club extends Enterprise_Reward_Model_Actio
     {
         $monetaryAmount = $this->getEntity()->getGrandTotal();
 
-        $monetaryAmount = (float) ceil($monetaryAmount * .10);
+        $monetaryAmount = (float) $monetaryAmount * .10;
         $pointsDelta = $this->getReward()->getRateToPoints()->calculateToPoints((float)$monetaryAmount);
         return $pointsDelta;
     }
