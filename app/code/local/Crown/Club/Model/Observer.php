@@ -74,6 +74,7 @@ class Crown_Club_Model_Observer {
             return $this;
         }
 
+        // Give credit where credit is due
         if ($order->getCustomerId()) {
             /* @var $reward Enterprise_Reward_Model_Reward */
             $reward = Mage::getModel('enterprise_reward/reward')

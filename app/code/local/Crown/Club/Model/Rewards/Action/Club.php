@@ -16,7 +16,7 @@ class Crown_Club_Model_Rewards_Action_Club extends Enterprise_Reward_Model_Actio
     public function getHistoryMessage($args = array())
     {
         $incrementId = isset($args['increment_id']) ? $args['increment_id'] : '';
-        return Mage::helper('enterprise_reward')->__('Earned points for order #%s.', $incrementId);
+        return Mage::helper('enterprise_reward')->__('TotsyPLUS Credits for order #%s.', $incrementId);
     }
 
     /**
@@ -42,26 +42,10 @@ class Crown_Club_Model_Rewards_Action_Club extends Enterprise_Reward_Model_Actio
      */
     public function getPoints($websiteId)
     {
-        if (!Mage::helper('enterprise_reward')->isOrderAllowed($this->getReward()->getWebsiteId())) {
-            return 0;
-        }
-
         $monetaryAmount = $this->getEntity()->getGrandTotal();
 
         $monetaryAmount = (float) ceil($monetaryAmount * .10);
         $pointsDelta = $this->getReward()->getRateToPoints()->calculateToPoints((float)$monetaryAmount);
         return $pointsDelta;
-    }
-
-    /**
-     * Check whether rewards can be added for action
-     * Checking for the history records is intentionaly omitted
-     * @since 		0.4.0
-     * @return bool
-     */
-    public function canAddRewardPoints()
-    {
-        return parent::canAddRewardPoints()
-            && Mage::helper('enterprise_reward')->isOrderAllowed($this->getReward()->getWebsiteId());
     }
 }
