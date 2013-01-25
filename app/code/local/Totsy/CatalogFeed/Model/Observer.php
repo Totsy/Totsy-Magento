@@ -10,6 +10,12 @@ require 'aws.phar';
 
 class Totsy_CatalogFeed_Model_Observer
 {
+    /**
+     * Generate a product feed for Insparq, and submit it to their AWS S3 file
+     * store.
+     *
+     * @return bool
+     */
     public function insparqSubmit()
     {
         $env = (string) Mage::getConfig()->getNode('environment');
