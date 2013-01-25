@@ -110,7 +110,7 @@ class Crown_Club_Model_Observer {
      * Check if order is paid exactly now
      * If order was paid before Rewards were enabled, reward points should not be added
      *
-     * @since 0.7.2
+     * @since 0.7.3
      * @param Mage_Sales_Model_Order $order
      * @return bool
      */
