@@ -18,7 +18,7 @@ $status = array('fulfillment_failed');
 $orders = Mage::getModel('sales/order')->getCollection()
     ->addAttributeToFilter('status', array('in' => $status));
 
-echo "Found ", count($orders), " orders in Processing status.", PHP_EOL;
+echo "Found ", count($orders), " orders in Fulfillment Failed status.", PHP_EOL;
 
 $countComplete = 0;
 $countSkipped  = 0;
@@ -27,11 +27,6 @@ foreach ($orders as $order) {
 
     if (count($shipments)) {
         $order->setState(Mage_Sales_Model_Order::STATE_COMPLETE, true, 'Autocorrected by Tom')->save();
-        $collection = Mage::getModel('fulfillmentfactory/itemqueue')->getCollection()->loadByOrderId($order->getId());
-        foreach($collection as $itemqueue) {
-            $itemqueue->setStatus(Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_SUBMITTED)
-                ->save();
-        }
         Mage::helper('fulfillmentfactory/log')
             ->removeErrorLogEntriesForOrder($order);
         echo $order->getIncrementId(), " complete", PHP_EOL;
