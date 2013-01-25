@@ -9,7 +9,7 @@
 class Totsy_CatalogFeed_Model_Feed_Json
     extends Totsy_CatalogFeed_Model_Feed_Abstract
 {
-    public function generate(array $options)
+    public function generate(array $options = array())
     {
         // TODO: Implement generate() method.
         return json_encode(array());

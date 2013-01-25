@@ -16,7 +16,7 @@ class Totsy_CatalogFeed_Model_Feed_Csv
      */
     protected $_header = array();
 
-    public function generate(array $options)
+    public function generate(array $options = array())
     {
         // initialize the feed data as a temporary resource, with the header line
         $feedcsv = fopen('php://memory', 'rw');

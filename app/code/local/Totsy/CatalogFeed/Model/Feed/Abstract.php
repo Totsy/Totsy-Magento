@@ -15,5 +15,5 @@ abstract class Totsy_CatalogFeed_Model_Feed_Abstract
      *
      * @return string
      */
-    public abstract function generate(array $options);
+    public abstract function generate(array $options = array());
 }
