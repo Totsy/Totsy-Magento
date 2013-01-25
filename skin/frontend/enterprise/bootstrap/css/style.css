@@ -2061,6 +2061,10 @@ body.catalog-category-view .price-box .special-price {
     color: #636466;
 }
 
+.plus .product-shop .desc .pricing {
+    margin-top: 25px;
+}
+
 .plus .btn-cart {
     background: url(/skin/frontend/enterprise/bootstrap/images/plus/email_code.jpg) no-repeat 0 0;
     width: 113px;
