@@ -149,6 +149,7 @@ HpCheckout.prototype = {
                 if (blockType == 'billing') {
                     checkoutPayment.disableAddress(true, 'hpcheckout-billing-form');
                 } else if (blockType == 'shipping') {
+                    //hpcheckout.update(true);
                     checkoutPayment.disableAddress(true, 'hpcheckout-shipping-form');
                 }
             }
@@ -163,7 +164,7 @@ HpCheckout.prototype = {
                     jQuery(this).val(hpcheckoutAddresses[clickedAddress.val()][jQuery(this).attr('id').replace(blockType + ':', '')]);
                 });
                 if (blockType == 'shipping') {
-                    jQuery('#shipping\\:postcode').change();
+                    //jQuery('#shipping\\:postcode').change();
                 }
                 if (blockType == 'billing') {
                     jQuery('#billing\\:selected').val(jQuery('#billing-address-select').val());
