@@ -91,14 +91,16 @@
                             <div class="product-name strong"><a href="javascript:void(0);"  onclick="openDialog('learn-more-<?php echo $j;?>')"><?php echo $_productNameStripped;?></a></div>
                             <?php echo $_helper->productAttribute($_product, $_product->getShortDescription(), 'short_description') ?>
                             <a href="javascript:void(0);" class="learn-more red" onclick="openDialog('learn-more-<?php echo $j;?>')">More</a><br />
-                            <div class="float light">Regular Price: <del><?php echo Mage::helper('core')->formatPrice($_product->getRegularVoucherPrice());?></del></div>
-                            <div class="float left-16">Your Price: </div> <div class="float red"><?php echo Mage::helper('core')->formatPrice($_product->getDiscountVoucherPrice());?></div>
-                            <div class="float red left-16">Save <?php echo Mage::helper('vouchers')->getDiscount($_product->getRegularVoucherPrice(), $_product->getDiscountVoucherPrice());?></div>
-                            <div id="learn-more-<?php echo $j;?>" style="display:none;">
-                                <strong><?php echo $_productNameStripped;?></strong><br />
-                                <?php echo Mage::getModel('catalog/product')->load($_product->getId())->getDescription();?>
-                                <br /><br />
-                                <button <?php echo $_disabledButton;?> id="button-popup-<?php echo $_product->getId();?>" type="button" title="<?php echo $_buttonMessage; ?>" class="button <?php echo $_buttonClass;?>" onclick="emailCode('<?php echo $_product->getId();?>');"></button>
+                            <div class="pricing">
+                                <div class="float light">Regular Price: <del><?php echo Mage::helper('core')->formatPrice($_product->getRegularVoucherPrice());?></del></div>
+                                <div class="float left-16">Your Price: </div> <div class="float red"><?php echo Mage::helper('core')->formatPrice($_product->getDiscountVoucherPrice());?></div>
+                                <div class="float red left-16">Save <?php echo Mage::helper('vouchers')->getDiscount($_product->getRegularVoucherPrice(), $_product->getDiscountVoucherPrice());?></div>
+                                <div id="learn-more-<?php echo $j;?>" style="display:none;">
+                                    <strong><?php echo $_productNameStripped;?></strong><br />
+                                    <?php echo Mage::getModel('catalog/product')->load($_product->getId())->getDescription();?>
+                                    <br /><br />
+                                    <button <?php echo $_disabledButton;?> id="button-popup-<?php echo $_product->getId();?>" type="button" title="<?php echo $_buttonMessage; ?>" class="button <?php echo $_buttonClass;?>" onclick="emailCode('<?php echo $_product->getId();?>');"></button>
+                                </div>
                             </div>
                         </div>
                         <?php if($_product->isSaleable()): ?>
