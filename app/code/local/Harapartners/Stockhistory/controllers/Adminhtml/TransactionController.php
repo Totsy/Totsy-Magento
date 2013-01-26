@@ -116,7 +116,7 @@ class Harapartners_Stockhistory_Adminhtml_TransactionController extends Mage_Adm
             }
 
             //Ignore empty rows
-            if(empty($amendmentData['qty_to_amend'])){
+            if(!isset($amendmentData['qty_to_amend'])){
                 continue;
             }
             
@@ -135,13 +135,13 @@ class Harapartners_Stockhistory_Adminhtml_TransactionController extends Mage_Adm
             $qty_delta = 0;
             
             //if final qty is '00', remove item from PO
-            if($amendmentData['qty_to_amend'] == '00') {
+            if($amendmentData['qty_to_amend'] === '00') {
             	$qty_delta = '00';
             }
             else {
             	$qty_delta = $amendmentData['qty_to_amend'] - $amendmentData['qty_total']; //'qty_to_amend' is forced to be the new total
             }
-
+            
             try{
                 $tempdata = array_merge($prepopulateData, array(
                         'product_id'    => $tempProduct->getId(),
@@ -149,6 +149,7 @@ class Harapartners_Stockhistory_Adminhtml_TransactionController extends Mage_Adm
                         'unit_cost'        => $amendmentData['unit_cost'],
                         'comment'        => 'Create by Batch Amendment'
                 ));
+                
                 $transaction = Mage::getModel('stockhistory/transaction');
                 $transaction->importData($tempdata);
                 
@@ -440,11 +441,22 @@ class Harapartners_Stockhistory_Adminhtml_TransactionController extends Mage_Adm
                     break;
                 #change case pack quantity of a given item
                 case 'casepackqty':
-                    $response['response'] = $product->getData('case_pack_qty');
+                    $response['response'] = $previous_cpqty = $product->getData('case_pack_qty');
+                    if(!is_numeric(trim($post_data['change_to']))) {
+                        throw new Exception("Case Pack Quantity needs to be an integer.");
+                    }
                     if ($result = Mage::getModel('stockhistory/transaction')->changeCasePackAttributeValue("case_pack_qty", $post_data['product_id'], trim($post_data['change_to']))) {
                         $response['response'] = trim($post_data['change_to']);
                         $order_amounts = Mage::getModel('stockhistory/transaction')->calculateCasePackOrderQty($product->getData('entity_id'), $po_id, $product->getData('case_pack_grp_id'),true);
-                        $response['update'] = $order_amounts;
+                                                
+                        #recalculate previous grp
+                        if($previous_cpqty != $post_data['change_to']){
+                            $prv_grp_amounts = Mage::getModel('stockhistory/transaction')->calculateCasePackOrderQty(null, $po_id, $product->getData('case_pack_grp_id'),true);
+                            $response['update'] = array_merge($order_amounts, $prv_grp_amounts );
+
+                        } else {
+                            $response['update'] = $order_amounts;
+                        }
 
                         #messages
                         $response['message'] = $order_amounts['message'];
@@ -455,6 +467,18 @@ class Harapartners_Stockhistory_Adminhtml_TransactionController extends Mage_Adm
             $response['message'][] = array('message' => $e->getMessage(), 'type' => 'error');
         }
         
+        $this->getResponse()->setBody(Mage::helper('core')->jsonEncode($response));
+    }
+    
+    public function displayCasePackMathAction(){
+        $po_id = $this->getRequest()->getParam('po_id');
+        $response = array();
+        try{
+            $po_items = Mage::getModel('stockhistory/transaction')->massCasePackCalculation($po_id);
+            $response['update'] = $po_items;           
+        } catch(Exception $e){
+            $response['message'][] = array('message' => $e->getMessage(), 'type' => 'error');
+        }
         $this->getResponse()->setBody(Mage::helper('core')->jsonEncode($response));
     }
 }
