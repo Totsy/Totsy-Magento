@@ -13,12 +13,12 @@ Mage::app();
 
 $dotcom = Mage::helper('fulfillmentfactory/dotcom');
 
-$status = array('fulfillment_failed');
+$status = array('fulfillment_failed','processing');
 
 $orders = Mage::getModel('sales/order')->getCollection()
     ->addAttributeToFilter('status', array('in' => $status));
 
-echo "Found ", count($orders), " orders in Fulfillment Failed status.", PHP_EOL;
+echo "Found ", count($orders), " orders in Fulfillment Failed / Processing status.", PHP_EOL;
 
 $countComplete = 0;
 $countSkipped  = 0;
@@ -26,7 +26,9 @@ foreach ($orders as $order) {
     $shipments = $order->getShipmentsCollection();
 
     if (count($shipments)) {
-        $order->setState(Mage_Sales_Model_Order::STATE_COMPLETE, true, 'Autocorrected by Tom')->save();
+        $order->setData('state', "complete")
+              ->setStatus(Mage_Sales_Model_Order::STATE_COMPLETE)
+              ->save();
         Mage::helper('fulfillmentfactory/log')
             ->removeErrorLogEntriesForOrder($order);
         echo $order->getIncrementId(), " complete", PHP_EOL;
@@ -38,4 +40,3 @@ foreach ($orders as $order) {
 }
 
 echo "Completed processing ", count($orders), " orders: $countComplete marked as complete, and $countSkipped ignored due to absence of shipments.", PHP_EOL;
-
