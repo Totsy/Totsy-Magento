@@ -1,46 +1,46 @@
 <?php
 class Crown_Club_Model_Observer {
 
-    /**
-     * Moves expired club members back to the non club members group.
-     * @param Mage_Cron_Model_Schedule $schedule
-     * @since 0.1.0
-     * @return void
-     */
-    public function removeExpiredClubMembers($schedule) {
-        $helper = Mage::helper('crownclub');
-        if (!$helper->moduleSetupComplete()) return;
+	/**
+	 * Moves expired club members back to the non club members group.
+	 * @param Mage_Cron_Model_Schedule $schedule
+	 * @since 0.1.0
+	 * @return void
+	 */
+	public function removeExpiredClubMembers($schedule) {
+		$helper = Mage::helper('crownclub');
+		if (!$helper->moduleSetupComplete()) return;
 
-        $clubModel = Mage::getModel('crownclub/club');
+		$clubModel = Mage::getModel('crownclub/club');
 
-        $expiredMembers = $clubModel->getExpiredMembersOutOfGracePeriod();
+		$expiredMembers = $clubModel->getExpiredMembersOutOfGracePeriod();
 
-        foreach ($expiredMembers as $expiredMember) {
-            $customer = Mage::getModel('customer/customer')->load($expiredMember->getId());
-            $clubModel->removeClubMember($customer)->sendClubMembershipCancelledEmail($customer);
-        }
-    }
+		foreach ($expiredMembers as $expiredMember) {
+			$customer = Mage::getModel('customer/customer')->load($expiredMember->getId());
+			$clubModel->removeClubMember($customer)->sendClubMembershipCancelledEmail($customer);
+		}
+	}
 
-    /**
-     * Warns expired club members that their payment has failed and their subscription account
-     * will be cancelled once it exits the grace period.
-     * @param Mage_Cron_Model_Schedule $schedule
-     * @since 0.1.0
-     * @return void
-     */
-    public function warnExpiredClubMembers($schedule) {
-        $helper = Mage::helper('crownclub');
-        if (!$helper->moduleSetupComplete()) return;
+	/**
+	 * Warns expired club members that their payment has failed and their subscription account
+	 * will be cancelled once it exits the grace period.
+	 * @param Mage_Cron_Model_Schedule $schedule
+	 * @since 0.1.0
+	 * @return void
+	 */
+	public function warnExpiredClubMembers($schedule) {
+		$helper = Mage::helper('crownclub');
+		if (!$helper->moduleSetupComplete()) return;
 
-        $clubModel = Mage::getModel('crownclub/club');
+		$clubModel = Mage::getModel('crownclub/club');
 
-        $expiredMembers = $clubModel->getExpiredMembersInGracePeriod();
+		$expiredMembers = $clubModel->getExpiredMembersInGracePeriod();
 
-        foreach ($expiredMembers as $expiredMember) {
-            $customer = Mage::getModel('customer/customer')->load($expiredMember->getId());
-            $clubModel->sendClubMembershipPaymentFailedEmail($customer);
-        }
-    }
+		foreach ($expiredMembers as $expiredMember) {
+			$customer = Mage::getModel('customer/customer')->load($expiredMember->getId());
+			$clubModel->sendClubMembershipPaymentFailedEmail($customer);
+		}
+	}
 
     /**
      * Update points balance after order becomes completed
@@ -51,10 +51,12 @@ class Crown_Club_Model_Observer {
      */
     public function orderShipped($observer)
     {
-        /* @var $order Mage_Sales_Model_Order */
-        $order = $observer->getEvent()->getOrder();
+        /* @var $shipment Mage_Sales_Model_Order_Shipment */
+        $shipment = $observer->getEvent()->getShipment();
 
-        // Check if order is club membership
+        /* @var $order Mage_Sales_Model_Order */
+        $order = Mage::getModel('sales/order')->load($shipment->getOrderId());
+
         if ($order->getCustomerIsGuest()
             || !Mage::helper('enterprise_reward')->isEnabledOnFront($order->getStore()->getWebsiteId())
             || !$order->getData('customer_is_club_member')
@@ -62,18 +64,7 @@ class Crown_Club_Model_Observer {
             return $this;
         }
 
-        // Check for club item. We don't give credit for allowing credit.
-        if ($order->isNominal()) {
-            foreach ($order->getAllVisibleItems() as $item) {
-                $productModel = Mage::getModel('catalog/product')->load($item->getProductId());
-                if ($productModel->getIsClubSubscription()) {
-                    return $this;
-                }
-            }
-        }
-
-        // Give credit where credit is due, if it's due that is...
-        if ($order->getCustomerId() && Mage_Sales_Model_Order::STATE_COMPLETE == $order->getState()) {
+        if ($order->getCustomerId()) {
             /* @var $reward Enterprise_Reward_Model_Reward */
             $reward = Mage::getModel('enterprise_reward/reward')
                 ->setActionEntity($order)
@@ -99,9 +90,17 @@ class Crown_Club_Model_Observer {
     public function checkPlusMemberDashboardUrl() {
         $customer = Mage::helper('customer')->getCustomer();
 
-        // Reroute non customers to Plus Sign Up Page
-        if ( ( preg_match( '#plus/dashboard#', Mage::app ()->getRequest ()->getPathInfo () ) ) && ( !Mage::helper('crownclub')->isClubMember($customer) ) ) {
-            Mage::app()->getFrontController()->getResponse()->setRedirect(Mage::getUrl('plus'));
+        if(!Mage::helper('crownclub')->isClubMember($customer)) {
+            if(
+                preg_match( '#plus/dashboard#', Mage::app ()->getRequest ()->getPathInfo () ) ||
+                preg_match( '#plus/credit.html#', Mage::app ()->getRequest ()->getPathInfo () ) ||
+                preg_match( '#plus/early-access.html#', Mage::app ()->getRequest ()->getPathInfo () ) ||
+                preg_match( '#plus/exclusive-sales.html#', Mage::app ()->getRequest ()->getPathInfo () ) ||
+                preg_match( '#plus/entertainment-savings.html#', Mage::app ()->getRequest ()->getPathInfo () ) ||
+                preg_match( '#plus/discount-vault.html#', Mage::app ()->getRequest ()->getPathInfo () )
+                ) {
+                Mage::app()->getFrontController()->getResponse()->setRedirect(Mage::getUrl('plus'));
+            }
         }
 
         return;

@@ -1748,6 +1748,27 @@ body.catalog-category-view .price-box .special-price {
     width:100%;
 }
 
+.plus .landing-header {
+    background: url(/skin/frontend/enterprise/bootstrap/images/plus/landing-header.jpg) top center no-repeat #FFF;
+    height: 327px;
+    width: 950px;
+}
+
+.plus .landing-header .signup-header-button {
+    height: 31px;
+    width: 136px;
+    margin: 237px 0px 0px 500px;
+    display: inline-block;
+}
+
+.plus .benefit-row { clear: both; width: 950px; height: 200px; letter-spacing:-1px}
+.plus .benefit-icon { float: left; display: inline; text-align: left; width: 200px; }
+.plus .benefit-text { float: right; display: inline; text-align: left; width: 730px; }
+.plus .benefit-title { font-size: 30px; color: #e40521; line-height: 32px; text-transform:uppercase; }
+.plus .benefit-summary { font-size: 14px; color: #636466; margin: 8px 0px 14px 0px; }
+.plus .benefit-cta { font-size: 14px; color: #d22f2a; font-weight: bold; }
+.plus .benefit-cta a { text-decoration:none; }
+
 .plus-menu {
     width: 150px;
     float: left;
@@ -1782,6 +1803,11 @@ body.catalog-category-view .price-box .special-price {
     color: #FFF;
     background: #DC4338;
     font-weight: bold;
+}
+
+.plus-menu ul.links li a:hover {
+    background: #DC4338 !important;
+    color: #ffffff !important;
 }
 
 .plus-content {
@@ -1891,48 +1917,6 @@ body.catalog-category-view .price-box .special-price {
     width: 110px;
     height: 103px;
     float: left;
-}
-
-.plus .icon-clock {
-    width:110px;
-    height:108px;
-    float:left;
-    background:url(/skin/frontend/enterprise/bootstrap/images/plus/clock.jpg) 0 0 no-repeat;
-}
-
-.plus .icon-credit {
-    width:110px;
-    height:108px;
-    float:left;
-    background:url(/skin/frontend/enterprise/bootstrap/images/plus/credit.jpg) 0 0 no-repeat;
-}
-
-.plus .icon-exclusive {
-    width:110px;
-    height:108px;
-    float:left;
-    background:url(/skin/frontend/enterprise/bootstrap/images/plus/exclusive.jpg) 0 0 no-repeat;
-}
-
-.plus .icon-entertainment {
-    width:110px;
-    height:108px;
-    float:left;
-    background:url(/skin/frontend/enterprise/bootstrap/images/plus/entertainment.jpg) 0 0 no-repeat;
-}
-
-.plus .icon-mother {
-    width:110px;
-    height:108px;
-    float:left;
-    background:url(/skin/frontend/enterprise/bootstrap/images/plus/mother.jpg) 0 0 no-repeat;
-}
-
-.plus .icon-ladybug {
-    width:110px;
-    height:108px;
-    float:left;
-    background:url(/skin/frontend/enterprise/bootstrap/images/plus/ladybug.jpg) 0 0 no-repeat;
 }
 
 .plus .mini-plus {
