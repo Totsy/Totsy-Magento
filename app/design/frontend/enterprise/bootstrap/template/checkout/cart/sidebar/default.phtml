@@ -23,6 +23,22 @@
  * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://www.magentocommerce.com/license/enterprise-edition
  */
+$_loadedProduct = $this->getProduct();
+
+$product = Mage::getModel('catalog/product')->load($_loadedProduct->getEntityId());
+
+if($product->getEntertainmentSavings()) {
+    $this->overrideProductUrl(Mage::getModel('core/url')->getDirectUrl('plus/entertainment-savings.html'));
+}
+
+if($product->getOneTimePurchase()) {
+    $this->overrideProductUrl(Mage::getModel('core/url')->getDirectUrl('plus/discount-vault.html'));
+}
+
+if($product->getId() == Mage::getStoreConfig('Crown_Club/clubgeneral/club_product_id')) {
+    $this->overrideProductUrl(Mage::getModel('core/url')->getDirectUrl('plus.html'));
+}
+
 ?>
 <?php $_item = $this->getItem() ?>
 <?php $canApplyMsrp = Mage::helper('catalog')->canApplyMsrp($_item->getProduct(), Mage_Catalog_Model_Product_Attribute_Source_Msrp_Type::TYPE_BEFORE_ORDER_CONFIRM); ?>
