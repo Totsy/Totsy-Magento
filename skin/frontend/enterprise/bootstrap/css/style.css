@@ -1748,6 +1748,16 @@ body.catalog-category-view .price-box .special-price {
     width:100%;
 }
 
+.plus .look-for {
+    margin-top: 54px;
+    text-align: right;
+    font-size: 18px;
+}
+
+.plus .look-for img {
+    margin-top: -12px;
+}
+
 .plus .landing-header {
     background: url(/skin/frontend/enterprise/bootstrap/images/plus/landing-header.jpg) top center no-repeat #FFF;
     height: 327px;
