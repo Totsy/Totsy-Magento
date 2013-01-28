@@ -14,6 +14,10 @@
  *
  */
 
+/**
+ * @method array getLiveQueue()
+ * @method array getUpcomingQueue()
+ */
 class Harapartners_Categoryevent_Model_Sortentry
     extends Mage_Core_Model_Abstract
 {
