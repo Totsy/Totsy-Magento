@@ -10,9 +10,16 @@ class Crown_Vouchers_Model_Mysql4_Setup extends Mage_Core_Model_Resource_Setup {
 		$this->createTables();
 	}
 
+    /**
+     *
+     */
     public function upgradeModule_1_1() {
         $this->createRegularVoucherPriceAttribute();
         $this->createDiscountVoucherPriceAttribute();
+    }
+
+    public function upgradeModule_1_2() {
+        $this->createEntertainmentSavingsAttribute();
     }
 	
 	/**
@@ -64,6 +71,10 @@ class Crown_Vouchers_Model_Mysql4_Setup extends Mage_Core_Model_Resource_Setup {
 
     private function createDiscountVoucherPriceAttribute() {
         $this->createAttribute('discount_voucher_price', 'Discount Voucher Price', 'price', 'virtual');
+    }
+
+    private function createEntertainmentSavingsAttribute() {
+        $this->createAttribute('entertainment_savings', 'Is Entertainment Savings Voucher?', 'boolean', 'virtual');
     }
 	
 	

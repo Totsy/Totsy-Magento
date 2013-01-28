@@ -31,13 +31,23 @@
 $_product = Mage::getModel('catalog/product')->load($_item->getProductId());
 
 if($_product->getIsVirtual()) {
+
+    $product_options = $_item->getProductOptions();
+
     if($_product->getOneTimePurchase()) {
-        $product_options = $_item->getProductOptions();
-        $voucher_label = $this->__('Your Voucher Code');
-        $voucher_code_string = array($_product->getVoucherCode(), $_product->getVoucherCode()); // For backward compatibility
-        $voucher_value = $voucher_code_string[0];
-    }else {
-        $product_options = $_item->getProductOptions();
+        
+        $voucher_label          = $this->__('Your Voucher Code');
+        $voucher_code_string    = array($_product->getVoucherCode(), $_product->getVoucherCode()); // For backward compatibility
+        $voucher_value          = $voucher_code_string[0];
+
+    }elseif($product->getEntertainmentSavings()) {
+
+        $voucher_label          = $this->__('Your Tickets');
+        $voucher_code_string    = array('Your Tickets will be mailed to you', 'Your Tickets will be mailed to you'); // For backward compatibility
+        $voucher_value          = $voucher_code_string[0];
+
+    } else {
+
         $voucher_label = $product_options['options'][0]['label'];
         $voucher_code_string = explode("\n",$product_options['options'][0]['value']);
         $voucher_value = $voucher_code_string[0];

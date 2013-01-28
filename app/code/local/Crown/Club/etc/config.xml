@@ -69,7 +69,20 @@
             </email>
         </template>
         <events>
+<<<<<<< Updated upstream
             <sales_order_save_after>
+=======
+            <sales_quote_address_save_before>
+                <observers>
+                    <crownclub_set_default_billing>
+                        <type>model</type>
+                        <class>crownclub/observer</class>
+                        <method>checkForDefaultShipping</method>
+                    </crownclub_set_default_billing>
+                </observers>
+            </sales_quote_address_save_before>
+            <sales_order_shipment_save_after>
+>>>>>>> Stashed changes
                 <observers>
                     <crownclub_shipment_save_after>
                         <type>singleton</type>

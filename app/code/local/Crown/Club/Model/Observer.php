@@ -106,4 +106,26 @@ class Crown_Club_Model_Observer {
 
         return;
     }
+
+    /**
+     * Check for a default billing address when saving.  If it doesnt exist, ADD IT!
+     *
+     * @since 0.7.0
+     * @return void
+     */
+    public function checkForDefaultShipping(Varien_Event_Observer $observer) {
+        $address = $observer->getEvent()->getQuoteAddress();
+
+        $customer = Mage::helper('customer')->getCustomer();
+
+
+        if(!$customer->getDefaultBillingAddress()) {
+            $address->setIsDefaultBilling(true);
+            $address->setSaveInAddressBook(true);
+        }
+
+        Mage::log('trigger');
+
+
+    }
 }
