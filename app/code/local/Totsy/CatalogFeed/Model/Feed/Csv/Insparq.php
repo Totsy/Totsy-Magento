@@ -9,13 +9,33 @@
 class Totsy_CatalogFeed_Model_Feed_Csv_Insparq
     extends Totsy_CatalogFeed_Model_Feed_Csv
 {
-    protected function _formatFeedItem(
-        Mage_Catalog_Model_Category $event,
-        Mage_Catalog_Model_Product $child,
-        Mage_Catalog_Model_Product $parent = null)
+    /**
+     * Process an event for this feed.
+     *
+     * @param Mage_Catalog_Model_Category $event
+     *
+     * @return void
+     */
+    protected function _processEvent(Mage_Catalog_Model_Category $event)
     {
+    }
+
+    /**
+     * Process a product for this feed.
+     *
+     * @param Mage_Catalog_Model_Category $event
+     * @param Mage_Catalog_Model_Product  $product
+     * @param Mage_Catalog_Model_Product  $parent
+     *
+     * @return void
+     */
+    protected function _processProduct(
+        Mage_Catalog_Model_Category $event,
+        Mage_Catalog_Model_Product $product,
+        Mage_Catalog_Model_Product $parent = null
+    ) {
         // compile the departments as a user-friendly label
-        $dept = (array) $child->getAttributeText('departments');
+        $dept = (array) $product->getAttributeText('departments');
         array_walk($dept, function(&$value) {
                 $departmentLabels = array(
                     "boys-apparel" => "Boys Apparel",
@@ -34,7 +54,7 @@ class Totsy_CatalogFeed_Model_Feed_Csv_Insparq
             });
 
         // compile the ages as a user-friendly label
-        $age = (array) $child->getAttributeText('ages');
+        $age = (array) $product->getAttributeText('ages');
         array_walk($age, function(&$value) {
                 $ageLabels = array(
                     "newborn" => "Newborn 0-6M",
@@ -51,27 +71,29 @@ class Totsy_CatalogFeed_Model_Feed_Csv_Insparq
             });
 
         // determine the product image URL
-        $imageUrl = (string) Mage::helper('catalog/image')->init($child, 'small_image');
+        $imageUrl = (string) Mage::helper('catalog/image')->init($product, 'small_image');
 
         // determine the product description
-        $description = $child['description'];
+        $description = $product['description'];
         if ($parent !== null) {
             $description = $parent['description'];
         }
 
-        return array(
-            $child['entity_id'],
+        $feedItem = array(
+            $product['entity_id'],
             (null !== $parent) ? $parent->getId() : '',
-            $child['name'],
+            $product['name'],
             preg_replace("/[\r\n]/", "", strip_tags($description)),
             implode(',', $dept),
-            $child->getProductUrl(),
+            $product->getProductUrl(),
             $imageUrl,
-            $child['price'],
-            $child['special_price'],
+            $product['price'],
+            $product['special_price'],
             implode(',', $age),
-            $child->getAttributeText('color'),
-            $child->getAttributeText('size')
+            $product->getAttributeText('color'),
+            $product->getAttributeText('size')
         );
+
+        fputcsv($this->_handle, $feedItem);
     }
 }

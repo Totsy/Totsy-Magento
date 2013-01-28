@@ -19,7 +19,7 @@ class Totsy_CatalogFeed_Model_Observer
     public function insparqSubmit()
     {
         $env = (string) Mage::getConfig()->getNode('environment');
-        if ('production' !== $env) {
+        if ('dev' !== $env) {
             return false;
         }
 

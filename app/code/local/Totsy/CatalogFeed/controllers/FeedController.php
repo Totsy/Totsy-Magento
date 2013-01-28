@@ -10,7 +10,9 @@ class Totsy_CatalogFeed_FeedController extends Mage_Core_Controller_Front_Action
 {
     public function sailthruAction()
     {
-        $feed = Mage::getSingleton('catalogfeed/feed_json_sailthru')->generate();
+        $options = $this->getRequest()->getParams();
+        $feed = Mage::getModel('catalogfeed/feed_json_sailthru', $options)
+            ->generate();
 
         $this->getResponse()->setHeader('Content-Type', 'application/json', true)
             ->setBody($feed);

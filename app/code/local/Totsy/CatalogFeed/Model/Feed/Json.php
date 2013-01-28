@@ -6,12 +6,19 @@
  * @copyright   Copyright (c) 2013 Totsy LLC
  */
 
-class Totsy_CatalogFeed_Model_Feed_Json
+abstract class Totsy_CatalogFeed_Model_Feed_Json
     extends Totsy_CatalogFeed_Model_Feed_Abstract
 {
-    public function generate(array $options = array())
+    protected $_content = array();
+
+    /**
+     * Build the string contents of this feed. This is called after the feed
+     * has been built inside the generate() method.
+     *
+     * @return string
+     */
+    protected function _getFeedContent()
     {
-        // TODO: Implement generate() method.
-        return json_encode(array());
+        return json_encode($this->_content);
     }
 }
