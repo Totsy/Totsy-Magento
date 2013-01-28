@@ -298,10 +298,10 @@ class EcomDev_PHPUnit_Constraint_Controller_Request extends EcomDev_PHPUnit_Cons
      * (non-PHPdoc)
      * @see PHPUnit_Framework_Constraint::customFailureDescription()
      */
-    protected function customFailureDescription($other)
+    protected function customFailureDescription($other, $description, $not)
     {
         return sprintf(
-            'request %s.',
+            'Failed asserting that request %s.',
             $this->toString()
         );
     }

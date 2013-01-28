@@ -114,20 +114,6 @@ class Harapartners_Fulfillmentfactory_Model_Service_Itemqueue
             	$order->save();
             }
         }
-        else if($status == 'processing'){
-            foreach($collection as $itemqueue) {
-                if($itemqueue->getStatus() != Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_CANCELLED) {
-                    $itemqueue->setStatus(Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_PROCESSING);
-                    $itemqueue->setFulfillCount($itemqueue->getQtyOrdered());    //fulfill all items
-                    $itemqueue->save();
-                }
-            }
-            
-			if($state != Mage_Sales_Model_Order::STATE_PROCESSING) {
-            	$order->setState(Mage_Sales_Model_Order::STATE_PROCESSING);
-            	$order->save();
-            }
-        }
         else if($status == 'canceled'){
             foreach($collection as $itemqueue) {
                 $itemqueue->setStatus(Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_CANCELLED);
