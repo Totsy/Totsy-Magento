@@ -111,16 +111,16 @@ jQuery(document).ready( function() {
             if(jQuery("#payment_form_paypal_express").length > 0) {
                 jQuery("#payment_form_paypal_express").show();           	
             }
-            jQuery("#cc_data").show();
-            newCardWrap.show();
-            //newCardCtrls.removeAttr('disabled');
-            billingAddress.removeClass('disabled');
-            billAddySelect.removeAttr('disabled');
-            //Enable Billing Inputs if credit card not selected
+                jQuery("#cc_data").show();
+                newCardWrap.show();
+                billAddySelect.removeAttr('disabled');
+                //Enable Billing Inputs if credit card not selected
+                checkoutPayment.disableAddress(false, 'hpcheckout-billing-form');
+            
             billFormInputs.each(function(i) {
-                jQuery(this).removeAttr('disabled');
                 jQuery(this).val('');
             });
+            
         } else { 
             if(jQuery("#payment_form_paypal_express").length > 0){
                 jQuery("#payment_form_paypal_express").hide();           	
@@ -128,25 +128,18 @@ jQuery(document).ready( function() {
 
             jQuery('#billing-address').show();
             jQuery('#shipping-address').show();
-            jQuery('.addresses').width(440);
-            billingAddress.attr("disabled", true);
-            //newCardWrap.hide();
+            jQuery('.addresses').width(445);
+            //billingAddress.attr("disabled", true);
+            newCardWrap.hide();
             
 			if(checkoutPayment.isCollapsed==false) {
 			    billAddySelect.val(jQuery("#address_" + jQuery( this ).val()).val()).change();
 			    //Block Billing Inputs if credit card selected
-			    
-			    billFormInputs.each(function(i) {
-			        if(this.id != 'button_ship_to') {
-			            jQuery("[id='" + this.id + "']").attr('disabled',true);
-			        }
-			    });
+			    checkoutPayment.disableAddress(true, 'hpcheckout-billing-form');
 			    billAddySelect.attr('disabled',true);
 			} else {
+			    checkoutPayment.disableAddress(false, 'hpcheckout-billing-form');
 			    billAddySelect.removeAttr('disabled');
-			    billFormInputs.each(function(i) {
-			        jQuery(this).removeAttr('disabled');
-			    });
 			}
         }
     }); 
@@ -189,11 +182,11 @@ jQuery(document).ready( function() {
                     jQuery("#cc_data").show();
                 }
             },
-            disableBillAddr: function(stateFlag) {
-               jQuery('#hpcheckout-billing-form :input').each(function(i) {
-                   if(this.id != 'button_ship_to') {
+            disableAddress: function(stateFlag, formId) {
+               jQuery('#' + formId + ' :input').each(function(i) {
+                  if(this.id!=="button_ship_to") {
                        jQuery("[id='" + this.id + "']").attr('disabled',stateFlag);
-                   }
+                  }
                });
            },
            getCreditCardType: function(ccNum) {
@@ -248,7 +241,6 @@ jQuery(document).ready( function() {
         } else {
             jQuery("[id='payment[cc_type]']").val(this.value);
             jQuery("[id='payment[cybersource_subid]']").attr("checked", false);
-            jQuery('#hpcheckout-billing-form :input').attr("disabled", false);
             jQuery('#billing-address-select').attr('disabled', false);
             newCardWrap.show();
         }

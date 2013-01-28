@@ -81,5 +81,9 @@
             <active>true</active>
             <codePool>local</codePool>
         </Totsy_Reward>
+        <Totsy_CatalogFeed>
+            <active>true</active>
+            <codePool>local</codePool>
+        </Totsy_CatalogFeed>
     </modules>
 </config>
