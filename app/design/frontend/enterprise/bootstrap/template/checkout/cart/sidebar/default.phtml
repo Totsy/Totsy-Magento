@@ -36,7 +36,7 @@ if($product->getOneTimePurchase()) {
 }
 
 if($product->getId() == Mage::getStoreConfig('Crown_Club/clubgeneral/club_product_id')) {
-    $this->overrideProductUrl(Mage::getModel('core/url')->getDirectUrl('plus.html'));
+    $this->overrideProductUrl(Mage::getModel('core/url')->getDirectUrl('plus'));
 }
 
 ?>
