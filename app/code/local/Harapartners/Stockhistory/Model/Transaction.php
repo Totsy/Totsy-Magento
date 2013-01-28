@@ -156,6 +156,14 @@ class Harapartners_Stockhistory_Model_Transaction extends Mage_Core_Model_Abstra
         $tempProductId = $this->getData('product_id');
         $category = Mage::getModel('catalog/category')->load($this->getData('category_id'));
         $sold = Mage::helper('stockhistory')->getProductSoldInfoByCategory($category, array( $tempProductId => $tempProductId ));
+        
+        #when an items stock qty is reduced to zero and it has sold items, the qty delta should be adjusted to avoid negative values
+        if($sold && $sold[$tempProductId]['qty'] && ($this->getData('qty_delta') < 0) && (abs($this->getData('qty_delta')) == $this->getData('orig_qty_total')) ) {
+                
+                $qty_delta =  $sold[$tempProductId]['qty'] - $this->getData('orig_qty_total');
+                $this->setQtyDelta($qty_delta);
+               
+        }
 
         $bool = (!empty($sold) && $sold[$tempProductId]['qty']) || $product->getData('is_master_pack');
         $bool = $bool && ($this->getData('action_type') == 4);
@@ -181,12 +189,9 @@ class Harapartners_Stockhistory_Model_Transaction extends Mage_Core_Model_Abstra
 
         $product_collection = Mage::getModel('catalog/product')->getCollection();
         $product_collection->getSelect()->where('entity_id in (' . implode(',' , $items) . ')' );
+        
         foreach($product_collection as $product) {
-			$product->setData('_edit_mode', true);
-            $product->setFulfillmentType('dotcom');
-            $product->setIsMasterPack((int)$changeto);
-            $product->setVisibility(1);
-            $product->save();           
+            $this->changeCasePackAttributeValue('is_masterpack', $product->getData('entity_id'), $changeto);
         }
     }
 
@@ -194,15 +199,25 @@ class Harapartners_Stockhistory_Model_Transaction extends Mage_Core_Model_Abstra
 
         $product = Mage::getModel('catalog/product')->load($product_id);
         if($product) {
+            $parentIds = Mage::getResourceSingleton('catalog/product_type_configurable')
+            ->getParentIdsByChild($product->getData('entity_id'));
             $product->setData('_edit_mode', true);
             $product->setFulfillmentType('dotcom');
-            $product->setVisibility(1);
+            if(!empty($parentIds)){
+                $product->setVisibility(1);
+            } else {
+                $product->setVisibility(4);
+            }
             switch($attribute) {
                 case 'case_pack_grp_id':
                     $product->setCasePackGrpId($changeto);
                     break;
                 case 'case_pack_qty':
                     $product->setCasePackQty($changeto);
+                    break;
+                case 'is_masterpack':
+                    $product->setIsMasterPack((int)$changeto);
+                    break;
             }
             $product->save();
             return true;       

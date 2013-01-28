@@ -146,6 +146,7 @@ class Harapartners_Stockhistory_Adminhtml_TransactionController extends Mage_Adm
                 $tempdata = array_merge($prepopulateData, array(
                         'product_id'    => $tempProduct->getId(),
                         'qty_delta'        => $qty_delta,
+                        'orig_qty_total'    => $amendmentData['qty_total'],
                         'unit_cost'        => $amendmentData['unit_cost'],
                         'comment'        => 'Create by Batch Amendment'
                 ));
@@ -159,11 +160,13 @@ class Harapartners_Stockhistory_Adminhtml_TransactionController extends Mage_Adm
 
                 if (!($event_end_date <= $today) ) {
                     if($transaction->updateProductStock()){
+                        $transaction->unsetData('orig_qty_total');
                         $transaction->save();
                     }else{
                         $this->_getSession()->addError('There is an error saving amendment Info for "' . trim($productSku));
                     }
                 } else {
+                        $transaction->unsetData('orig_qty_total');
                         $transaction->save();
                 }
             }catch (Exception $e){

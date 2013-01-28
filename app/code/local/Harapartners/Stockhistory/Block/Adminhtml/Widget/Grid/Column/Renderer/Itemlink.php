@@ -18,7 +18,7 @@ class Harapartners_Stockhistory_Block_Adminhtml_Widget_Grid_Column_Renderer_Item
         
         //qty_to_amend: defined as FINAL quantity, i.e. forcing the quantity to the given value, instead of just the delta
         $html = '<a href="';
-        $html .= Mage::getUrl('catalog_product/edit/store/1/id/' . $row->getData('product_id')) . '"target="_blank">';
+        $html .= Mage::getModel('adminhtml/url')->getUrl('adminhtml/catalog_product/edit/store/1/id/' . $row->getData('product_id')) . '"target="_blank">';
         $html .= $row->getData('product_id') . "</a>";
         return $html;
     }
