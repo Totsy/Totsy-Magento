@@ -117,15 +117,7 @@ class Mage_Adminhtml_Block_Customer_Edit_Tabs extends Mage_Adminhtml_Block_Widge
                 'class'     => 'ajax',
                 'url'       => $this->getUrl('childrenlist/adminhtml_customerajax/index', array('_current' => true)),
                 //'url'       => $this->getUrl('*/*/newsletter', array('_current' => true)),
-            ));
-
-             $this->addTab('invitations', array(
-                'label'     => Mage::helper('customer')->__('Invitations'),
-                'class'     => 'ajax',
-                'url'       => $this->getUrl('*/*/customerInvitations', array('_current' => true)),
-                //'url'       => $this->getUrl('*/*/newsletter', array('_current' => true)),
-            ));
-            
+            ));            
         }
         
         //Harapartners, Jun, START
