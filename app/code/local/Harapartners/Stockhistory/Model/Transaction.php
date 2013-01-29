@@ -93,12 +93,15 @@ class Harapartners_Stockhistory_Model_Transaction extends Mage_Core_Model_Abstra
         $dataObj->setData('product_id', $product->getId());
         $dataObj->setData('product_sku', $product->getSku());
         $dataObj->setData('vendor_style', $product->getVendorStyle());
+        $dataObj->setData('unit_cost', $product->getSaleWholesale());
         
         if(!$dataObj->getData('action_type')){
             $dataObj->setData('action_type', self::ACTION_TYPE_AMENDMENT);
         }
-        
-    	if($dataObj->getData('qty_delta') === '00') {
+
+        $sold = Mage::helper('stockhistory')->getIndProductSold($category, $product);
+        #making sure that items with sold quantity can't be zeroed out
+    	if($dataObj->getData('qty_delta') === '00' && !$sold) {
         	//put a flag to indicate this item should be delete remove this line item
         	$qtyDelta = 0;
         	$dataObj->setData('action_type', self::ACTION_TYPE_REMOVE);
@@ -153,6 +156,14 @@ class Harapartners_Stockhistory_Model_Transaction extends Mage_Core_Model_Abstra
         $tempProductId = $this->getData('product_id');
         $category = Mage::getModel('catalog/category')->load($this->getData('category_id'));
         $sold = Mage::helper('stockhistory')->getProductSoldInfoByCategory($category, array( $tempProductId => $tempProductId ));
+        
+        #when an items stock qty is reduced to zero and it has sold items, the qty delta should be adjusted to avoid negative values
+        if($sold && $sold[$tempProductId]['qty'] && ($this->getData('qty_delta') < 0) && (abs($this->getData('qty_delta')) == $this->getData('orig_qty_total')) ) {
+                
+                $qty_delta =  $sold[$tempProductId]['qty'] - $this->getData('orig_qty_total');
+                $this->setQtyDelta($qty_delta);
+               
+        }
 
         $bool = (!empty($sold) && $sold[$tempProductId]['qty']) || $product->getData('is_master_pack');
         $bool = $bool && ($this->getData('action_type') == 4);
@@ -177,12 +188,9 @@ class Harapartners_Stockhistory_Model_Transaction extends Mage_Core_Model_Abstra
 
         $product_collection = Mage::getModel('catalog/product')->getCollection();
         $product_collection->getSelect()->where('entity_id in (' . implode(',' , $items) . ')' );
+        
         foreach($product_collection as $product) {
-			$product->setData('_edit_mode', true);
-            $product->setFulfillmentType('dotcom');
-            $product->setIsMasterPack((int)$changeto);
-            $product->setVisibility(1);
-            $product->save();           
+            $this->changeCasePackAttributeValue('is_masterpack', $product->getData('entity_id'), $changeto);
         }
     }
 
@@ -190,30 +198,38 @@ class Harapartners_Stockhistory_Model_Transaction extends Mage_Core_Model_Abstra
 
         $product = Mage::getModel('catalog/product')->load($product_id);
         if($product) {
+            $parentIds = Mage::getResourceSingleton('catalog/product_type_configurable')
+            ->getParentIdsByChild($product->getData('entity_id'));
             $product->setData('_edit_mode', true);
             $product->setFulfillmentType('dotcom');
-            $product->setVisibility(1);
+            if(!empty($parentIds)){
+                $product->setVisibility(1);
+            } else {
+                $product->setVisibility(4);
+            }
             switch($attribute) {
                 case 'case_pack_grp_id':
                     $product->setCasePackGrpId($changeto);
                     break;
                 case 'case_pack_qty':
                     $product->setCasePackQty($changeto);
+                    break;
+                case 'is_masterpack':
+                    $product->setIsMasterPack((int)$changeto);
+                    break;
             }
             $product->save();
             return true;       
         }
         return false;
     }
-    /**
-     * @todo: needs protective measures
-     */
 
     public function calculateCasePackOrderQty($item_id, $po_id, $case_pack_grp_id, $all_results = false){
         
         $highest_ratio = 0;
         $grouped = array();
         $order_amount = 0;
+        $ratio = 0;
 
         if(!isset($po_id)) {
             throw new Exception("PO ID does not exists.");
@@ -224,7 +240,7 @@ class Harapartners_Stockhistory_Model_Transaction extends Mage_Core_Model_Abstra
         $_category = Mage::getModel('catalog/category')->load($po->getData('category_id'));
 
         #Most Items that does not have a case pack id
-        if (!isset($case_pack_grp_id) && $item_id) {
+        if (empty($case_pack_grp_id) && $item_id) {
             $product = Mage::getModel('catalog/product')->load($item_id);
             if(!$product->getData('is_master_pack')) {
                 return $order_amount;
@@ -232,7 +248,7 @@ class Harapartners_Stockhistory_Model_Transaction extends Mage_Core_Model_Abstra
 
             $total_units_sold = Mage::helper('stockhistory')->getIndProductSold($_category, $product);
 
-            if($product->getData('case_pack_qty')) {
+            if((int)$product->getData('case_pack_qty')) {
                 $highest_ratio = ceil($total_units_sold/$product->getData('case_pack_qty'));
             }
 
@@ -259,7 +275,7 @@ class Harapartners_Stockhistory_Model_Transaction extends Mage_Core_Model_Abstra
                     $grouped[(string)$product->getEntityId()] = array(
                         'sku' => $product->getData('sku'), 
                         'qty_to_amend' => $order_amount, 
-                        'cp_qty' => 0
+                        'cp_qty' => ""
                     );
                     $grouped['message'][] = array('message' => "Sku : {$product->getData('sku')} is not a case pack", 'type' => 'warning');
                     //if($item_id == $product->getData('entity_id')) return $grouped;
@@ -290,6 +306,7 @@ class Harapartners_Stockhistory_Model_Transaction extends Mage_Core_Model_Abstra
                     $grouped['message'][] = array('message' => 'Successfully Updated!', 'type' => 'success' );
                     return $grouped;
                 }
+                
                 return $grouped[$item_id]['cp_qty'];
             }
 
@@ -309,7 +326,19 @@ class Harapartners_Stockhistory_Model_Transaction extends Mage_Core_Model_Abstra
                 return $order_amount;
             }
         } #end of else
-
+    }
+    
+    public function massCasePackCalculation($po_id){
+        $results = array();
+        
+        $po_items = Mage::getModel('stockhistory/transaction')->getCollection();
+        $po_items->getSelect()->where('po_id=' . $po_id . ' and product_id is not null and action_type=2');
+        foreach($po_items as $item){
+            $product = Mage::getModel('catalog/product')->load($item->getData('product_id'));
+            $case_pack_id = Mage::getResourceModel('catalog/product')->getAttributeRawValue($item->getData('product_id'), 'case_pack_grp_id', $product->getData('store_id'));
+            $results[$item->getData('product_sku')] = $this->calculateCasePackOrderQty($item->getData('product_id'), $po_id, $case_pack_id);
+        }
+        return $results;
     }
     
 }

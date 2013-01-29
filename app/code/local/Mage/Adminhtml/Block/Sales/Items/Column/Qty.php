@@ -34,9 +34,11 @@
  */
 class Mage_Adminhtml_Block_Sales_Items_Column_Qty extends Mage_Adminhtml_Block_Sales_Items_Column_Default
 { 
-    public function getItemFulfillCount($item_id){
-
-		$check = Mage::getModel('fulfillmentfactory/itemqueue')->loadByItemId($item_id);
+    public function getItemFulfillCount($item){
+		$check = Mage::getModel('fulfillmentfactory/itemqueue')->getCollection()
+            ->addFieldToFilter('sku', $item->getSku())
+            ->addFieldToFilter('order_id', $item->getOrderId())
+            ->getFirstItem();
 		return (int)$check->getFulfillCount();
 	}
 }

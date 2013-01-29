@@ -219,10 +219,10 @@ class EcomDev_PHPUnit_Constraint_Config_Module
      * (non-PHPdoc)
      * @see PHPUnit_Framework_Constraint::customFailureDescription()
      */
-    protected function customFailureDescription($other)
+    protected function customFailureDescription($other, $description, $not)
     {
         return sprintf(
-          '%s module %s.', $this->_expectedValue, $this->toString()
+          'Failed asserting that %s module %s.', $this->_moduleName, $this->toString()
         );
     }
 }

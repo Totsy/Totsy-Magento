@@ -112,10 +112,9 @@ class EcomDev_PHPUnit_Model_Layout
         $this->_records = array();
 
         foreach ($this->_blocks as $block) {
-            /* @var $block Mage_Core_Block_Abstract */
             // Remove references between blocks
-            EcomDev_Utils_Reflection::setRestrictedPropertyValue($block, '_parentBlock', null);
-            $block->unsMessageBlock();
+            $block->setParentBlock(null);
+            $block->setMessageBlock(null);
             $block->unsetChildren();
         }
 
@@ -279,16 +278,14 @@ class EcomDev_PHPUnit_Model_Layout
 
     /**
      * Records action call
-     * 
      * (non-PHPdoc)
      * @see Mage_Core_Model_Layout::_generateAction()
      */
     protected function _generateAction($node, $parent)
     {
-        $this->_collectedArgs = $this->_collectActionArguments($node);
+        $this->_collectedArgs = null;
         parent::_generateAction($node, $parent);
         if ($this->_collectedArgs !== null) {
-            $this->_translateLayoutNode($node, $this->_collectedArgs);
             $method = (string)$node['method'];
             if (!empty($node['block'])) {
                 $parentName = (string)$node['block'];
@@ -302,55 +299,17 @@ class EcomDev_PHPUnit_Model_Layout
         return $this;
     }
 
-
-
     /**
-     * Collects action arguments
-     *
-     * @param Varien_SimpleXml_Element $node
-     * @return array|null
+     * Collects arguments if was not collected before
+     * (non-PHPdoc)
+     * @see Mage_Core_Model_Layout::_translateLayoutNode()
      */
-    protected function _collectActionArguments($node)
+    protected function _translateLayoutNode($node, $args)
     {
-        if (isset($node['ifconfig']) && !Mage::getStoreConfigFlag((string)$node['ifconfig'])) {
-            return null;
+        parent::_translateLayoutNode($node, $args);
+        if ($this->_collectedArgs === null) {
+            $this->_collectedArgs = $args;
         }
-
-        $args = (array)$node->children();
-        unset($args['@attributes']);
-
-        foreach ($args as $key => $arg) {
-            if (($arg instanceof Mage_Core_Model_Layout_Element)) {
-                if (isset($arg['helper'])) {
-                    $helperName = explode('/', (string)$arg['helper']);
-                    $helperMethod = array_pop($helperName);
-                    $helperName = implode('/', $helperName);
-                    $arg = $arg->asArray();
-                    unset($arg['@']);
-                    $args[$key] = call_user_func_array(array(Mage::helper($helperName), $helperMethod), $arg);
-                } else {
-                    /**
-                     * if there is no helper we hope that this is assoc array
-                     */
-                    $arr = array();
-                    foreach($arg as $subkey => $value) {
-                        $arr[(string)$subkey] = $value->asArray();
-                    }
-                    if (!empty($arr)) {
-                        $args[$key] = $arr;
-                    }
-                }
-            }
-        }
-
-        if (isset($node['json'])) {
-            $json = explode(' ', (string)$node['json']);
-            foreach ($json as $arg) {
-                $args[$arg] = Mage::helper('core')->jsonDecode($args[$arg]);
-            }
-        }
-
-        return $args;
     }
 
     /**
@@ -362,7 +321,7 @@ class EcomDev_PHPUnit_Model_Layout
     {
         $this->_collectedBlock = null;
         parent::_generateBlock($node, $parent);
-        if ($this->_collectedBlock) {
+        if ($this->_collectedBlock !== null) {
             $target = $this->_collectedBlock->getNameInLayout();
             $params = array();
             if (isset($node['as'])) {

@@ -23,6 +23,9 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Payment extends TinyBrick_Orde
     public function edit(TinyBrick_OrderEdit_Model_Order $order, $data = array())
     {
         try {
+            if(array_key_exists('original',$data) && $data['original']) {
+                return false;
+            }
             $payment = new Varien_Object($data);
             $profile = Mage::getModel('paymentfactory/profile');
             //Setting datas linked with the order and payment

@@ -38,6 +38,7 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report extends Mage_
                     'class'        => 'save'
                 ));
             }
+            
             if ($this->_isAllowedAction('post_amendment')) {
                 $this->_addButton('post_batch_amendments', array(
                     'label'     => Mage::helper('stockhistory')->__('Post Batch Amendments'),
@@ -76,7 +77,7 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report extends Mage_
 FORM_WRAPPER;
         
         $hasEmptyMasterPackItem = Mage::registry('has_empty_master_pack_item') ? 1 : 0;
-        $html .= <<<ADDITIONAL_JAVASCRIPT
+               $html .= <<<ADDITIONAL_JAVASCRIPT
 <script type="text/javascript">
     var postBatchAmendment = function () {
         if(confirm('All amendment quantities will be posted to this purchase order, continue?')) {
@@ -118,9 +119,10 @@ FORM_WRAPPER;
         initial.each(function(index){
             if(index.value){
                 name = index.name;
-                breakup = name.split('[');
+               /* breakup = name.split('[');
                 sku = breakup[1];
-                sku = sku.substring(0,sku.length-1);
+                sku = sku.substring(0,sku.length-1);*/
+                sku = index.id;
                 if (!goodData[sku]) {
                     data = $$('input[name*=[' + sku + ']]');
                     goodData[sku] = {};
@@ -133,7 +135,11 @@ FORM_WRAPPER;
         });
         return goodData;
     }
-    jQuery(document).ready(function() {
+
+ADDITIONAL_JAVASCRIPT;
+    if($this->_isAllowedAction('editable')){
+    $html.=<<<ADDITIONAL_JAVASCRIPT
+jQuery(document).ready(function() {
         var oTable = jQuery('#ReportGrid_table').dataTable( {
             "bPaginate": false,
             "bSort": false,
@@ -152,9 +158,12 @@ FORM_WRAPPER;
                var aPos = oTable.fnGetPosition( this );
                oTable.fnUpdate( response.response, aPos[0], aPos[1] );
                
-               jQuery.each(response.update, function(index, data){
-                    jQuery('#' + data.sku).val(data.qty_to_amend);
-                });
+               if(response.update) {
+                   jQuery.each(response.update, function(index, data){
+                        jQuery('#' + data.sku).val(data.qty_to_amend);
+                    });
+                }
+                
                 showMessages(response.message);
             },
             "submitdata": function ( value, settings ) {
@@ -197,11 +206,35 @@ FORM_WRAPPER;
             /*jQuery('#messages').fadeOut(10000, function(){
                 jQuery(this).css('display','block');
             });*/
-        }
+        }        
 });
+        var clearFields = function() {
+            jQuery('.input-text').each(function(index,elem){
+              elem['value'] ="";
+            });
+        };
+        
+        var displayCasePackMath = function(){
+                jQuery.ajax({
+                    url: "{$this->getUrl('*/*/displayCasePackMath', array('_current' => true, '_query' => array('isAjax' => "true")))}",
+                    dataType: 'json',
+                    success: function(response) {
+                        
+                        if(response.update){
+                            jQuery.each(response.update, function(index, data){
+                                jQuery('#' + index).val(data);
+                            });
+                        }
+                        if(response.message){
+                            alert(":( received an error");
+                        }
+                    }
+                        
+                });
+        }
 </script>
 ADDITIONAL_JAVASCRIPT;
-
+        }
         return $html;
     }
 

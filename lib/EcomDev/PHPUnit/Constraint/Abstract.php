@@ -181,9 +181,9 @@ abstract class EcomDev_PHPUnit_Constraint_Abstract
      * (non-PHPdoc)
      * @see PHPUnit_Framework_Constraint::fail()
      */
-    public function fail($other, $description, PHPUnit_Framework_ComparisonFailure $comparisonFailure = NULL)
+    public function fail($other, $description, $not = FALSE)
     {
-        $failureDescription = sprintf('Failed asserting that %s', $this->failureDescription($other));
+        $failureDescription = $this->failureDescription($other, $description, $not);
 
         if (in_array($this->_type, $this->_typesWithDiff)) {
             throw new EcomDev_PHPUnit_Constraint_Exception(
@@ -211,13 +211,13 @@ abstract class EcomDev_PHPUnit_Constraint_Abstract
      * @param boolean $not
      * @return string
      */
-    protected function failureDescription($other)
+    protected function failureDescription($other, $description, $not)
     {
         if (method_exists($this, 'customFailureDescription')) {
-            return $this->customFailureDescription($other);
+            return $this->customFailureDescription($other, $description, $not);
         }
 
-        return parent::failureDescription($other);
+        return parent::failureDescription($other, $description, $not);
     }
 
     /**
