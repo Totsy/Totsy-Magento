@@ -199,6 +199,10 @@ class Totsy_Sales_Model_Order extends Mage_Sales_Model_Order
                 ->load($orderItem->getProduct()->getId());
 
             if ($product->getIsVirtual()) {
+
+                // Is it a discount vault or Entertainment Savings item?  If so, skip it.
+                if(!$product->getOneTimePurchase() || !$product->getEntertainmentSavings()) continue;
+
                 $shortDescription = $product->getShortDescription();
                 $description = $product->getDescription();
                 $title = $product->getName();
