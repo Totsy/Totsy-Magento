@@ -40,12 +40,6 @@ if($_product->getIsVirtual()) {
         $voucher_code_string    = array($_product->getVoucherCode(), $_product->getVoucherCode()); // For backward compatibility
         $voucher_value          = $voucher_code_string[0];
 
-    }elseif($product->getEntertainmentSavings()) {
-
-        $voucher_label          = $this->__('Your Tickets');
-        $voucher_code_string    = array('Your Tickets will be mailed to you', 'Your Tickets will be mailed to you'); // For backward compatibility
-        $voucher_value          = $voucher_code_string[0];
-
     } else {
 
         $voucher_label = $product_options['options'][0]['label'];

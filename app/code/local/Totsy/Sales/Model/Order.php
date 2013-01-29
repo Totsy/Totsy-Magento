@@ -200,8 +200,9 @@ class Totsy_Sales_Model_Order extends Mage_Sales_Model_Order
 
             if ($product->getIsVirtual()) {
 
-                // Is it a discount vault or Entertainment Savings item?  If so, skip it.
-                if(!$product->getOneTimePurchase() || !$product->getEntertainmentSavings()) continue;
+                // Is it a discount vault If so, skip it.
+                if($product->getOneTimePurchase())
+                    continue;
 
                 $shortDescription = $product->getShortDescription();
                 $description = $product->getDescription();
