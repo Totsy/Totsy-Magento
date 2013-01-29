@@ -34,15 +34,4 @@
             </cataloginventory_stock_item_save_after>
         </events>
     </global>
-    <frontend>
-        <routers>
-            <cataloginventory>
-                <use>standard</use>
-                <args>
-                    <module>Totsy_CatalogInventory</module>
-                    <frontName>cataloginventory</frontName>
-                </args>
-            </cataloginventory>
-        </routers>
-    </frontend>
 </config>
