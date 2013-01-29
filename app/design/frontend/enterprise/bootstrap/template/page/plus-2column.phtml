@@ -30,7 +30,7 @@
  */
 ?>
 <!DOCTYPE html>
-<html lang="<?php echo $this->getLang() ?>">
+<html class="plus-html" lang="<?php echo $this->getLang() ?>">
 <head>
 <?php echo $this->getChildHtml('head') ?>
 </head>
@@ -83,7 +83,10 @@
                 </ul>
             </div>
             <div class="plus-content">
-                <?php echo $this->getChildHtml('content') ?>
+                <div class="plus">
+                    <?php echo $this->getChildHtml('content') ?>
+                    <div class="look-for">Look for the TotsyPLUS ladybug <img src="/skin/frontend/enterprise/bootstrap/images/plus/tp_ladybug.png" width="21" height="26" alt="TotsyPLUS"> to get members-only benefits!</div>
+                </div>
             </div>
             <div class="clear"></div>
             <?php echo $this->getChildHtml('footer_before') ?>

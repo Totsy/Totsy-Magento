@@ -1728,6 +1728,16 @@ body.catalog-category-view .price-box .special-price {
 
 /* TotsyPLUS */
 
+html.plus-html { background: #fff !important}
+html.plus-html { background-image: -moz-linear-gradient(top, #ffffff, #ffffff) !important; }
+html.plus-html { background-image: -ms-linear-gradient(top, #ffffff, #ffffff) !important; }
+html.plus-html { background-image: -o-linear-gradient(top, #ffffff, #ffffff) !important; }
+html.plus-html { background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), to(#ffffff)) !important; }
+html.plus-html { background-image: -webkit-linear-gradient(top, #ffffff, #ffffff) !important; }
+html.plus-html { background-image: linear-gradient(top, #ffffff, #ffffff) !important; }
+html.plus-html { background-attachment: fixed; }
+html.plus-html#stickywrap { padding-top: 35px; }
+
 .mini-products-list a img {
     width: 54px;
 }
@@ -1973,8 +1983,10 @@ body.catalog-category-view .price-box .special-price {
 .plus ul.mini-col li p.mini-header {
     width: 100%;
     height: 40px;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: bold;
+    color: #da453e;
+    text-transform:uppercase;
 }
 
 .plus ul.mini-col li p.mini-content {
