@@ -92,12 +92,12 @@ class Crown_Club_Model_Observer {
 
         if(!Mage::helper('crownclub')->isClubMember($customer)) {
             if(
-                preg_match( '#plus/dashboard#', Mage::app ()->getRequest ()->getPathInfo () ) ||
-                preg_match( '#plus/credit.html#', Mage::app ()->getRequest ()->getPathInfo () ) ||
-                preg_match( '#plus/early-access.html#', Mage::app ()->getRequest ()->getPathInfo () ) ||
-                preg_match( '#plus/exclusive-sales.html#', Mage::app ()->getRequest ()->getPathInfo () ) ||
-                preg_match( '#plus/entertainment-savings.html#', Mage::app ()->getRequest ()->getPathInfo () ) ||
-                preg_match( '#plus/discount-vault.html#', Mage::app ()->getRequest ()->getPathInfo () )
+                preg_match( '#plus/dashboard#',Mage::app ()->getRequest ()->getRequestString() ) ||
+                preg_match( '#plus/credit.html#', Mage::app ()->getRequest ()->getRequestString() ) ||
+                preg_match( '#plus/early-access.html#', Mage::app ()->getRequest ()->getRequestString() ) ||
+                preg_match( '#plus/exclusive-sales.html#', Mage::app ()->getRequest ()->getRequestString() ) ||
+                preg_match( '#plus/entertainment-savings.html#', Mage::app ()->getRequest ()->getRequestString() ) ||
+                preg_match( '#plus/discount-vault.html#', Mage::app ()->getRequest ()->getRequestString() )
                 ) {
                 Mage::app()->getFrontController()->getResponse()->setRedirect(Mage::getUrl('plus'));
             }
@@ -122,9 +122,5 @@ class Crown_Club_Model_Observer {
             $address->setIsDefaultBilling(true);
             $address->setSaveInAddressBook(true);
         }
-
-        Mage::log('trigger');
-
-
     }
 }
