@@ -2041,9 +2041,17 @@ html.plus-html#stickywrap { padding-top: 35px; }
     color: #666666 !important;
 }
 
-.plus .ui-tabs-panel {
-    padding: 0 !important;
-}
+.plus .ui-tabs-panel { padding: 0 !important; }
+
+.plus ul.ui-tabs-nav li.ui-state-default { background: #d1d3d4 !important; border: 0px solid #ffffff !important; }
+.plus ul.ui-tabs-nav li.ui-state-active { background: #c7d100 !important; border: 0px solid #ffffff !important; }
+.plus ul.ui-tabs-nav li.ui-state-hover{ background: #c7d100 !important; border: 0px solid #ffffff !important; }
+
+.plus ul.ui-tabs-nav li.ui-state-default a {color: #ffffff !important; padding: 14px 18px; }
+.plus ul.ui-tabs-nav li.ui-state-active a {color: #ffffff !important; padding: 14px 18px; }
+.plus ul.ui-tabs-nav li.ui-state-hover a {color: #ffffff !important; padding: 14px 18px; }
+
+.plus .ui-tabs-nav li { margin: 1px .5em 0 0 !important; }
 
 .plus ol {
     list-style: none;
