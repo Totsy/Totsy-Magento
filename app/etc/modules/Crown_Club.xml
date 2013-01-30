@@ -5,6 +5,7 @@
             <active>true</active>
             <codePool>local</codePool>
             <depends>
+                <Webshopapps_Shipdiscount />
             	<Harapartners_Service />
                 <Harapartners_EmailFactory />
                 <Totsy_Sales />
