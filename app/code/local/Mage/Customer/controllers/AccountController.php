@@ -595,7 +595,8 @@ class Mage_Customer_AccountController extends Mage_Core_Controller_Front_Action
                 return;
             }
 
-            $this->_redirect('*/*/');
+            $this->_redirect('*/*/forgotpassword');
+            //$this->_redirect('*/*/');
         } else {
             $this->_getSession()->addError($this->__('Please enter your email.'));
             $this->_redirect('*/*/forgotpassword');

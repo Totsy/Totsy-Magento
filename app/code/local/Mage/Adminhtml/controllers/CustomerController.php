@@ -553,6 +553,17 @@ class Mage_Adminhtml_CustomerController extends Mage_Adminhtml_Controller_Action
         );
     }
 
+    public function customerCouponsAction()
+    {
+        $this->_initCustomer();
+        $this->getResponse()->setBody(
+            $this->getLayout()->createBlock('adminhtml/customer_edit_tab_coupons', 'admin.customer.coupons')
+                ->setCustomerId(Mage::registry('current_customer')->getId())
+                ->setUseAjax(true)
+                ->toHtml()
+        );
+    }
+
     public function tagGridAction()
     {
         $this->_initCustomer();
