@@ -160,6 +160,7 @@ HpCheckout.prototype = {
                     }
                 });
 <<<<<<< HEAD
+<<<<<<< HEAD
                 if (blockType == 'shipping') {
                     jQuery('#shipping\\:postcode').change();
                 }
@@ -266,10 +267,15 @@ HpCheckout.prototype = {
                         checkoutObject.throbberOff();
                         checkoutObject.renderBlocks();
 =======
+=======
+>>>>>>> parent of b4cff8e... fixing address switcher and calculating shipping when state or zip change
             } else if(blockType == 'shipping') {
                 jQuery('#hpcheckout-shipping-form :input').each(function(i) {
                     if (this.id != 'button_ship_to' && this.id != 'billing:selected') {
                         jQuery("[id='" + this.id + "']").attr('disabled', true);
+<<<<<<< HEAD
+>>>>>>> parent of b4cff8e... fixing address switcher and calculating shipping when state or zip change
+=======
 >>>>>>> parent of b4cff8e... fixing address switcher and calculating shipping when state or zip change
                     }
                 });
