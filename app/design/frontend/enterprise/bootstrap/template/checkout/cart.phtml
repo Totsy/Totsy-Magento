@@ -121,7 +121,7 @@
         	    </div>
                 <div class="btn-cart-checkout">
         	    <?php foreach ($this->getMethods('top_methods') as $method): ?>
-                    <?php if($method == 'checkout.cart.methods.paypal_express.top' && $multiShipping) {
+                    <?php if($method == 'checkout.cart.methods.paypal_express.top' && ($multiShipping || $hasVirtual)) {
                         continue; // No paypal if multiple fulfillment types
                     }?>
         	        <?php if ($methodHtml = $this->getMethodHtml($method)): ?>
@@ -240,7 +240,7 @@
         	    </div>
                 <div class="btn-cart-checkout">
         	    <?php foreach ($this->getMethods('top_methods') as $method): ?>
-                    <?php if($method == 'checkout.cart.methods.paypal_express.top' && $multiShipping) {
+                    <?php if($method == 'checkout.cart.methods.paypal_express.top' && ($multiShipping || $hasVirtual)) {
                         continue; // No paypal if multiple fulfillment types
                     }?>
         	        <?php if ($methodHtml = $this->getMethodHtml($method)): ?>
