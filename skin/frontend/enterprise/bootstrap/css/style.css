@@ -1272,7 +1272,7 @@ float:left;
  */
 body > footer {
     position: relative;
-    margin-top:-221px; height: 184px; /* @sticky */
+    margin-top:-221px; height: 209px; /* @sticky */
     padding: 17px 0 0 0;
     min-width:950px; /* temp hackish fix for iPad display, prevent content of fixed width from bleeding in. @TODO: get responsive! */
     background: #e5e5e5;
