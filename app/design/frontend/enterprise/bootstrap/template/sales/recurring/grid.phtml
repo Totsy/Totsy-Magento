@@ -86,13 +86,14 @@ $customer = Mage::registry('current_customer');
         </tr>
         <tr>
             <td class="plus-label">&nbsp;</td>
-            <td class="plus-value renewal-info"><div class="f12" id="renewal-info" style="<?php echo $form_elements['renewal-info'];?>">Your TotsyPLUS subscription will renew automatically each month.<br/>For more information on TotsyPLUS, please see the<br/><a href="/plus/terms.html" class="dark underline">Terms and Conditions</a></div></td>
+            <td class="plus-value renewal-info"><div class="f12" style="<?php echo $form_elements['renewal-info'];?>">Your TotsyPLUS subscription will renew automatically each month.<br/>For more information on TotsyPLUS, please see the<br/><a href="/plus/terms.html" class="dark underline">Terms and Conditions</a></div></td>
         </tr>
         <tr>
-            <td class="plus-label">Automatic Renewal: </td>
+            <td class="plus-label"> </td>
             <td class="plus-value slider-box">
-                <div class="slider-frame <?php echo $form_elements['slider-frame'];?>"><span class="slider-button <?php echo $form_elements['slider-button'];?>"></span></div>
-                <input type="checkbox" id="on-off" <?php echo $form_elements['checkbox'];?> />
+                <button type="button" id="cancel-plus" class="cancel-plus"></button>
+                <!-- <div class="slider-frame <?php echo $form_elements['slider-frame'];?>"><span class="slider-button <?php echo $form_elements['slider-button'];?>"></span></div> -->
+                <!-- <input type="checkbox" id="on-off" <?php echo $form_elements['checkbox'];?> /> -->
             </td>
         </tr>
     </table>
@@ -101,7 +102,21 @@ $customer = Mage::registry('current_customer');
     <a href="<?php echo Mage::getUrl('plus/dashboard', array('_secure' => true));?>">Back to TotsyPLUS Dashboard</a>
 
     <script type="text/javascript">
-        jQuery('.slider-button').toggle(function(){
+        jQuery('#cancel-plus').click(function(){
+            var choice = confirm("Are you sure you want to cancel your TotsyPLUS membership? This choice is not reversible.")
+            if(choice == true) {
+                jQuery.getJSON(
+                    '<?php echo Mage::getUrl('totsyplus/profile_recurring/update/profile/' .$profile->getId(). '/action/cancel/', array('_secure' => Mage::app()->getStore()->isCurrentlySecure()));?>', function(data){
+                        if(data.error == false) {
+                            window.alert('Your TotsyPLUS membership has been successfully cancelled.')
+                            window.location.href = "/plus"
+                        } else {
+                            window.alert(data.message);
+                        }
+                 });
+            }
+        });
+      /*  jQuery('.slider-button').toggle(function(){
             jQuery('.slider-button').animate({ marginLeft: "28px" }, 250);
             jQuery('.slider-frame').fadeTo('fast', 1, function(){
                 jQuery(this).css('background-image', 'url(/skin/frontend/enterprise/bootstrap/images/plus/slider_off.png)');
@@ -117,7 +132,7 @@ $customer = Mage::registry('current_customer');
             jQuery('#renewal-info').css('display', 'block');
             jQuery('#on-off').attr('checked', 'checked');
             jQuery.get('<?php echo Mage::getUrl('totsyplus/profile_recurring/update/profile/' .$profile->getId(). '/action/activate/', array('_secure' => Mage::app()->getStore()->isCurrentlySecure()));?>');
-        });
+        });*/
 
     </script>
 
