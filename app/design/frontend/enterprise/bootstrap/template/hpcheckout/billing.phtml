@@ -42,7 +42,7 @@
 	    	     	 <div class="pull-left half-of-half">
 	                     <label for="billing:region_id" class="required"><em>*&nbsp;</em><?php echo $this->__('state') ?></label>
 		                 <div class="totsy-selective-input-box">
-		                     <select id="billing:region_id" name="billing[region_id]" title="<?php echo $this->__('State') ?>" class="validate-select state" >
+		                     <select id="billing:region_id" name="billing[region_id]" title="<?php echo $this->__('State') ?>" class="validate-select state" style="display:none;" >
 		                       <option value=""><?php echo $this->__('Please select state') ?></option>
 		                     </select>
 		                 </div>
@@ -83,38 +83,41 @@
 	// @TODO: abstract this out to hpcheckout.js as self-contained method
 	// need to re-enable billing form controls before trying to send values to shipping form
 	jQuery(document).ready( function() {
-        
-        if(checkoutPayment.hasProfile==true && checkoutPayment.lastUsedAddressId!=="") {
-            jQuery("#billing-address-select").val(checkoutPayment.lastUsedAddressId);
-        }
-        
-        if(jQuery( '#billing-address-select' ).length>0){
-            if(checkoutPayment.hasProfile==false) {
-                jQuery("#billing-address-select").attr("disabled", false);
-                checkoutPayment.disableAddress(true, 'hpcheckout-billing-form');
+        if(typeof checkoutPayment!=="undefined") {
+
+            if(checkoutPayment.hasProfile==true && checkoutPayment.lastUsedAddressId!="") {
+                jQuery("#billing-address-select").val(checkoutPayment.lastUsedAddressId);
+            }
+
+            if ( jQuery("#billing-address-select").val()!== undefined) {
+                if(checkoutPayment.hasProfile==false) {
+                    jQuery("#billing-address-select").attr("disabled", false);
+                }
+                checkoutPayment.disableBillAddr(true);
             }
         }
-	
 	    jQuery('#button_ship_to').bind('click', function() {
+	    	var billFormInputs = jQuery('#hpcheckout-billing-form :input');
 	    	var billAddySelect = jQuery("#billing-address-select");
 	    	// re-enable disabled controls
-	    	if (billAddySelect.attr('disabled') !== "undefined") {
+	    	if (billAddySelect.attr('disabled') !== undefined) {
 	            billAddySelect.removeAttr('disabled');
-	            checkoutPayment.disableAddress(false,'hpcheckout-billing-form');
+	            billFormInputs.each(function(i) {
+	                jQuery(this).removeAttr('disabled');
+	            });
 	    	}
 	    	// then use hpcheckout.copyBillingToShipping() method
 	    	hpcheckout.copyBillingToShipping();
 	    });
 	    
-	    if( jQuery( '#billing-address-select' ).length >0 ){
-	       jQuery( '#billing-address-select' ).bind( 'change', function(){ hpcheckout.switchAddress(this.id); hpcheckout.update(true); } );
-	    }
+	    jQuery( '#billing-address-select' ).bind( 'change', hpcheckout.switchAddress );
+   
 	});
 //<![CDATA[
     var billingRegionUpdater = new RegionUpdater('billing:country_id', 'billing:region', 'billing:region_id', countryRegions, undefined, 'billing:postcode');
 
     <?php if($this->getAddressesJson()) { ?>
-              var hpcheckoutAddresses = <?php echo $this->getAddressesJson() ?>;
+        var hpcheckoutAddresses = <?php echo $this->getAddressesJson() ?>;
     <?php }  ?>
     
 </script>

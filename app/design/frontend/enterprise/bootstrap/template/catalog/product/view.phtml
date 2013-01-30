@@ -95,9 +95,8 @@ $savings = money_format('%n', $originalPrice) - money_format('%n', $discountPric
                     <!-- <div id="rondavu_pdp_container"></div> -->
                 </div>
             <?php 
-                $reformat = date("m/d/Y H:i:s", strtotime($_category->getEventEndDate()));
-                $event_end_date = Mage::app()->getLocale()->date($reformat, null, null, false);
-                $today = Mage::app()->getLocale()->date(null,null,null, true);
+                $event_end_date = strtotime($_category->getEventEndDate());
+                $today = strtotime('NOW');
             ?>
             </div>
             <div class="span3 product-addtocart<?php if ($this->hasOptions()): echo ' has-options'; else: echo ' no-options'; endif;?>">
@@ -119,7 +118,7 @@ $savings = money_format('%n', $originalPrice) - money_format('%n', $discountPric
                         <div class="product-prices">
                             <div class="product-prices-main clearfix">
                                 <?php echo $this->getChildHtml('alert_urls') ?>
-                                <?php if(!$today->isLater($event_end_date)):  ?>
+                                <?php if($today <= $event_end_date):  ?>
                                 <?php echo $this->getPriceHtml($_product) ?>
                                 <?php endif; ?>
                                 <div class="product-price-was"><span>Was</span> $<?php echo number_format((float)$special_price, 2, '.', '');?></div>
@@ -133,7 +132,7 @@ $savings = money_format('%n', $originalPrice) - money_format('%n', $discountPric
                         <?php echo $this->getChildHtml('extrahint') ?>
                         <?php if (!$this->hasOptions()):?>
                             <?php echo $this->getChildHtml('product_type_data') ?>
-                             <div class="add-to-box" style="padding-bottom:30px;">
+                             <div class="add-to-box">
                                  <?php if($_product->isSaleable()): ?>
                                      <?php echo $this->getChildHtml('addtocart') ?>
                                  <?php endif; ?>
@@ -189,70 +188,7 @@ var productAddToCartForm=new VarienForm("product_addtocart_form");productAddToCa
     jQuery(document).ready(function(){jQuery(".fancybox").fancybox();jQuery(".fancybox-effects-a").fancybox({helpers:{title:{type:"outside"},overlay:{speedIn:500,opacity:.95}}});jQuery(".fancybox-effects-b").fancybox({openEffect:"none",closeEffect:"none",helpers:{title:{type:"over"}}})})
     
     /* cart timer minified */
-    var html=getTimerHtml("live","<?php echo $endcount_lc ?>");jQuery("#timer").countdown({date:"<?php echo $endcount_lc; ?>",htmlTemplate:html,onComplete:function(a){jQuery(this).html("Completed")},leadingZero:true,direction:"down"});
-    <?php if($this->hasOptions()): ?>
-        jQuery('[id^=attribute]').change(function(){
-                var other_attribute = jQuery('[id^=attribute]');
-                var post_data = {};
-                attr_count = other_attribute.length;
-                count = 0;
-                other_attribute.each(function(idx,value) {
-                    if(value['value'] != "") {
-                        ++count;
-                        post_data[value['name']] = value['value'];
-                    }
-
-                    if(attr_count == count) {
-                        post_data['id'] = "<?php echo $_product->getEntityId()?>";
-                        populateQty(post_data, "Combination Sold Out");                       
-                    }
-                });
-            });
-        setInterval ( function(){jQuery('[id^=attribute]').change()}, 60000 );
-    <?php else: ?>
-        jQuery(document).ready(function(){
-            post_data = {};
-            post_data['id'] = "<?php echo $_product->getEntityId(); ?>";
-            populateQty(post_data, "Sold Out");
-            
-        });
-        setInterval ( function(){ populateQty(post_data, "Sold Out");}, 60000 );
-    <?php endif; ?>
-
-    var populateQty = function(post_data, sold_out_msg) {
-        jQuery.ajax({
-            data: post_data,
-            type: "post",
-            cache: false,
-            url: "<?php echo Mage::getUrl('cataloginventory/inventory/laststockstatus');?>",
-            beforeSend: function() {
-                jQuery('.spinner').show();
-            },
-            success: function(stock_status) {
-                jQuery('.spinner').hide();
-                stock_status = jQuery.parseJSON(stock_status);
-                stock_qty = stock_status.stock_count;
-                max_qty = 9;
-                if (stock_qty < max_qty) {
-                    max_qty = stock_qty;
-                }
-                qty_select = jQuery('#qty');
-                qty_select.html("");
-                if(stock_qty  != 0 ) {
-                    qty_select.append("<option value =''> Please Select Quantity </option>" );
-                    for(idx = 1 ; idx <= max_qty ; ++idx) {
-                        qty_select.append("<option value =" + idx + ">" + idx + "</option>" );
-                    }
-                    if(jQuery('.btn-cart').css('display') == 'none') {
-                        jQuery('.btn-cart').show();
-                    }
-                } else {
-                    qty_select.append("<option value ='sold_out'> " + sold_out_msg + " </option>" );
-                    jQuery('.btn-cart').hide();
-                }
-            }
-        });
-    }
+    var html=getTimerHtml("live","<?php echo $endcount_lc ?>");jQuery("#timer").countdown({date:"<?php echo $endcount_lc; ?>",htmlTemplate:html,onComplete:function(a){jQuery(this).html("Completed")},leadingZero:true,direction:"down"})
 </script>
 <!--
 <script type="text/javascript">var switchTo5x=true;</script>

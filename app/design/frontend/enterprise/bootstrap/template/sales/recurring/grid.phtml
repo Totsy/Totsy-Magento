@@ -1,0 +1,126 @@
+<?php
+/**
+ * Magento Enterprise Edition
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Magento Enterprise Edition License
+ * that is bundled with this package in the file LICENSE_EE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://www.magentocommerce.com/license/enterprise-edition
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://www.magentocommerce.com/license/enterprise-edition
+ */
+?>
+<?php
+$profiles = Mage::getModel('sales/recurring_profile')->getCollection()
+    ->addFieldToFilter('customer_id', Mage::registry('current_customer')->getId())
+    ->addFieldToSelect('*')
+    ->setOrder('profile_id', 'desc');
+
+
+if($profiles) {
+    foreach($profiles as $profile) {
+        $profile_data = unserialize($profile->getOrderItemInfo());
+        $product = Mage::getModel('catalog/product')->load($profile_data['product_id']);
+
+        if($product->getIsClubSubscription() && $profile->getState() == 'active') {
+            $period_unit = $profile->getPeriodUnit();
+            $next_billing_date = date('F dS, Y', strtotime(date("Y-m-d", strtotime($profile_data['updated_at'])) . " + 1 month"));
+            $action = 'suspend';
+            $form_elements = array(
+                'slider-frame' => '',
+                'slider-button' => '',
+                'checkbox' => ' checked="checked"',
+                'renewal-info' => ''
+            );
+        }
+        else {
+            $period_unit = $profile->getPeriodUnit();
+            $next_billing_date = 'Not Active';
+            $action = 'activate';
+            $form_elements = array(
+                'slider-frame' => 'inactive',
+                'slider-button' => 'off',
+                'checkbox' => ' ',
+                'renewal-info' => 'display:none;'
+            );
+        }
+
+        break;
+
+    }
+}
+
+$customer = Mage::registry('current_customer');
+
+?>
+
+<?php if(Mage::helper('crownclub')->isClubMember($customer)): ?>
+    <table class="plus top-24">
+        <tr>
+            <td class="plus-label">Member Name: </td>
+            <td class="plus-value"><input type="text" readonly="readonly" class="input-xlarge" value="<?php echo $customer->getFirstname() . ' ' . $customer->getLastname();?>" /></td>
+        </tr>
+        <tr>
+            <td class="plus-label">TotsyPLUS Plan: </td>
+            <td class="plus-value"><input type="text" readonly="readonly" class="input-xlarge" value="<?php echo $product->getName();?> (<?php echo Mage::helper('core')->formatPrice($product->getPrice(), FALSE);?>/<?php echo $period_unit;?>)" /></td>
+        </tr>
+        <tr>
+            <td class="plus-label">Next Billing Date: </td>
+            <td class="plus-value">
+                <input type="text" readonly="readonly" class="input-xlarge" value="<?php echo $next_billing_date;?>" />
+            </td>
+        </tr>
+        <tr>
+            <td class="plus-label">&nbsp;</td>
+            <td class="plus-value renewal-info"><div class="f12" id="renewal-info" style="<?php echo $form_elements['renewal-info'];?>">Your TotsyPLUS subscription will renew automatically each month.<br/>For more information on TotsyPLUS, please see the<br/><a href="/plus/terms.html" class="dark underline">Terms and Conditions</a></div></td>
+        </tr>
+        <tr>
+            <td class="plus-label">Automatic Renewal: </td>
+            <td class="plus-value slider-box">
+                <div class="slider-frame <?php echo $form_elements['slider-frame'];?>"><span class="slider-button <?php echo $form_elements['slider-button'];?>"></span></div>
+                <input type="checkbox" id="on-off" <?php echo $form_elements['checkbox'];?> />
+            </td>
+        </tr>
+    </table>
+
+    <br />
+    <a href="<?php echo Mage::getUrl('plus/dashboard', array('_secure' => true));?>">Back to TotsyPLUS Dashboard</a>
+
+    <script type="text/javascript">
+        jQuery('.slider-button').toggle(function(){
+            jQuery('.slider-button').animate({ marginLeft: "28px" }, 250);
+            jQuery('.slider-frame').fadeTo('fast', 1, function(){
+                jQuery(this).css('background-image', 'url(/skin/frontend/enterprise/bootstrap/images/plus/slider_off.png)');
+            });
+            jQuery('#renewal-info').css('display', 'none');
+            jQuery('#on-off').removeAttr('checked', 'checked');
+            jQuery.get('<?php echo Mage::getUrl('totsyplus/profile_recurring/update/profile/' .$profile->getId(). '/action/suspend/', array('_secure' => Mage::app()->getStore()->isCurrentlySecure()));?>');
+        },function(){
+            jQuery('.slider-button').animate({ marginLeft: "0" }, 250);
+            jQuery('.slider-frame').fadeTo('fast', 1, function(){
+                jQuery(this).css('background-image', 'url(/skin/frontend/enterprise/bootstrap/images/plus/slider_on.png)');
+            });
+            jQuery('#renewal-info').css('display', 'block');
+            jQuery('#on-off').attr('checked', 'checked');
+            jQuery.get('<?php echo Mage::getUrl('totsyplus/profile_recurring/update/profile/' .$profile->getId(). '/action/activate/', array('_secure' => Mage::app()->getStore()->isCurrentlySecure()));?>');
+        });
+
+    </script>
+
+<?php else: ?>
+    You are not a current TotsyPLUS Member.  Sign up <a href="/plus">here.</a>
+<?php endif;?>

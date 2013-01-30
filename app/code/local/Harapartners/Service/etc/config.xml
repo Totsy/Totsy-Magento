@@ -153,7 +153,7 @@
                     <!--Harapartners_SpeedTax-->
                     <quote_address_total_grand>Harapartners_Service_Model_Rewrite_Sales_Quote_Address_Total_Grand</quote_address_total_grand>
 					<!--Harapartners_Service, Query optimization, no quote item price update after product import-->
-					<observer>Harapartners_Service_Model_Rewrite_Sales_Observer</observer>
+					<!-- <observer>Harapartners_Service_Model_Rewrite_Sales_Observer</observer> -->
 					<!--Harapartners_Service, Removing Ogone from order status-->
                     <order_config>Harapartners_Service_Model_Rewrite_Sales_Order_Config</order_config>
 					<!--Harapartners_Service, if product does not have an live category/event, it cannot be add to cart (quote)--><!--Harapartners_Promotionfactory, Virtual product (coupons) should always be a separate line item-->
@@ -486,17 +486,6 @@
 									<children>
 										<vendor translate="title" module="stockhistory">
 											<title>Vendor Report</title>
-                                             <children>
-                                                <actions translate="title"> 
-                                                    <title>Actions</title>
-                                                    <children>
-                                                            <add translate="title"><title>Add Vendor</title></add>
-                                                            <create_po translate="title"><title>Create PO</title></create_po>
-                                                            <save translate="title"><title>Save Vendor</title></save>
-                                                            <delete translate="title"><title>Delete Vendor</title></delete>
-                                                    </children>
-                                                    </actions>
-                                            </children>
 										</vendor>
 										<purchaseorder translate="title" module="stockhistory">
 											<title>Purchase Order Report</title>
@@ -504,14 +493,11 @@
                                                 <actions translate="title"> 
                                                     <title>Actions</title>
                                                     <children>
-                                                        <add translate="title"><title>Add PO</title></add>
-                                                        <save translate="title"><title>Save PO</title></save>
                                                         <reset translate="title"><title>Reset PO</title></reset>
                                                         <delete translate="title"><title>Delete PO</title></delete>
                                                         <create_amendment translate="title"><title>Create Amendment(PO Info Edit)</title></create_amendment>
                                                         <submit_dotcom translate="title"><title>Submit To Dotcom</title></submit_dotcom>
                                                         <post_amendment translate="title"><title>Post Amendment(Item Line Edit)</title></post_amendment>
-                                                        <editable translate="title"><title>Edit PO Report</title></editable>
                                                     </children>
                                                 </actions>
                                             </children>
@@ -549,10 +535,8 @@
                                         <actions translate="title"> 
                                             <title>Product Edit Actions</title>
                                             <children>
-                                                <add translate="title"><title>Add Product</title></add>
                                                 <reset translate="title"><title>Reset</title></reset>
                                                 <delete translate="title"><title>Delete</title></delete>
-                                                <manage_coupon translate="title"><title>manage_coupon</title></manage_coupon>
                                                 <save translate="title"><title>Save</title></save>
                                             </children>
                                         </actions>

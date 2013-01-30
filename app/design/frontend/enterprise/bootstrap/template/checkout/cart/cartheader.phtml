@@ -39,6 +39,7 @@
     $serverTime = Mage::getModel('core/date')->timestamp() * 1000;
     $quote = $checkoutSession->getQuote();
     $_saving = Mage::helper('sales/order')->calculateEstimatedSavings($quote);
+    $is_nominal = $quote->isNominal();
 ?>
 
 <div class="top-cart dropdown">
@@ -47,18 +48,20 @@
     $_itemsArray = $this->getItems();
     $_updateFlag = $checkoutSession->getCartUpdatedFlag();
     $_mySaving = $this->__('Your savings: %s', Mage::helper('checkout')->formatPrice($_saving));
-    
+
     // store value of cart quantity check
     $_itemsInCart = ( ($_cartQty > 0 && !empty($_itemsArray)) ? true : false );
 
     // set cart message
-    if ($_itemsInCart) :
+    if ($_itemsInCart && 1 == $_cartQty) :
+        $_myCart = $this->__('%s Item', '<span>' . $_cartQty . '</span>');
+    elseif ($_itemsInCart) :
         $_myCart = $this->__('%s Items', '<span>' . $_cartQty . '</span>');
     else :
         $_myCart = $this->__('%s Items', '<span>0</span> - NO ITEMS');
-    endif; 
+    endif;
 ?>
-    
+
     <?php if ($this->getIsLinkMode() || !$this->getIsNeedToDisplaySideBar()):?>
     <?php Mage::log('link mode:'.print_r($this->getIsLinkMode())); ?>
     <?php Mage::log('display sidebar mode:'.print_r($this->getIsNeedToDisplaySideBar())); ?>
@@ -67,13 +70,18 @@
                 <li ><a href="<?php echo $this->getUrl('checkout/cart'); ?>"><?php echo $_myCart ?><span class="badge badge-inverse">$0.00</span></a></li>
             </ul>
         </div>
-        
+
     <?php else:?>
-    
+
         <?php if ($_itemsInCart):?>
-        
+
             <div id="usercart-block-title" class="dropdown-toggle block-title" data-toggle="dropdown">
-                <strong id="cartHeader" class="hasItems"><?php echo $_myCart ?><span><?php echo ' | '.Mage::helper('checkout')->formatPrice($this->getSubtotal()) ?><?php if ($_subtotalInclTax = $this->getSubtotalInclTax()): ?> / <?php echo ' | '.Mage::helper('checkout')->formatPrice($_subtotalInclTax) ?> <?php echo ' | '.Mage::helper('tax')->getIncExcText(true) ?><?php endif; ?></span></strong>
+                <strong id="cartHeader" class="hasItems">
+                    <?php echo $_myCart ?>
+                    <?php if (!$is_nominal): ?>
+                        <span><?php echo ' | '.Mage::helper('checkout')->formatPrice($this->getSubtotal()) ?><?php if ($_subtotalInclTax = $this->getSubtotalInclTax()): ?> / <?php echo ' | '.Mage::helper('checkout')->formatPrice($_subtotalInclTax) ?> <?php echo ' | '.Mage::helper('tax')->getIncExcText(true) ?><?php endif; ?></span>
+                    <?php endif; ?>
+                </strong>
             </div>
 
             <?php
@@ -84,7 +92,7 @@
              * - @todo: new block/module/magento-whatever-the-f and/or new ajax call to drop this in DOM where needed
              * - https://totsy1.jira.com/browse/MGN-935
              */
-            ?>         
+            ?>
             <div class="count-down-timer">
                 <strong>Your cart is reserved <br/>for <span id="cart-timer-header"></span></strong>
                 <script type="text/javascript">
@@ -113,7 +121,7 @@
                             htmlTemplate: "%{m} <span class=\"cd-time\">min</span> %{s} <span class=\"cd-time\">sec</span>",
                             onChange: function( event, timer ){
                             },
-                            onComplete: function( event ) {            
+                            onComplete: function( event ) {
                                 jQuery('#usercart .top-cart').addClass('expired').removeClass('open');
                                 jQuery('#usercart .count-down-timer').hide();
                                 jQuery('#usercart-block-title').removeClass('dropdown-toggle')
@@ -123,7 +131,7 @@
                                     .removeClass('hasItems')
                                     .html("Your shopping cart is <span class='over'>no longer reserved</span>");
                                 jQuery("#topCartContent").hide();
-                                
+
                                 // if on cart or checkout, redirect; otherwise remove btn and update cart msg
                                 var UrlPath = window.location.pathname;
                                 if ( UrlPath == '/checkout/onepage/' || UrlPath == '/checkout/cart/' ) {
@@ -152,17 +160,17 @@
             </div>
 
         <?php endif;?>
-    
-    
+
+
 <!-- start top cart dropdown (aka "minicart") -->
 <div id="topCartContent" class="block-content dropdown-menu" data-item-added="<?php if ( !!$_updateFlag && $_updateFlag ) {echo "true"; $checkoutSession->setCartUpdatedFlag(false);} else echo "false";?>">
-    
+
     <div class="inner-wrapper"><?php // extra div to smooth slideUp and slideDown ?>
-        
+
         <div id="items-info-wrapper">
         <?php $_items = $this->getItems(); //change from getRecentItems()?>
         <?php if( count($_items) && !empty($_itemsArray) ): ?>
-        
+
             <div id="mini-cart" class="mini-products-list">
                 <?php foreach($_items as $_item): ?>
                     <!-- Add Customerize Cart item info -->
@@ -170,20 +178,20 @@
                 <?php endforeach; ?>
             </div>
             <script type="text/javascript">decorateList('mini-cart', 'none-recursive')</script>
-            
+
         <?php else: ?>
-    
+
             <p class="cart-empty">
                 <?php echo $this->__('You have zero items in your cart.'); // @TODO: remove after confirmed not needed ?>
             </p>
         <?php endif; ?>
-        
+
         <?php if($_cartQty && !empty($_itemsArray)): ?>
             <div class="minifoot clearfix">
                 <div class="subtotal">
                 <?php if ($this->canApplyMsrp()): ?>
                     <span class="map-cart-sidebar-total"><?php echo $this->__('ORDER TOTAL WILL BE DISPLAYED BEFORE YOU SUBMIT THE ORDER'); ?></span>
-                <?php else: ?>
+                <?php elseif(!$is_nominal): ?>
                     <span class="subtotal-savings"><?php echo $_mySaving; ?></span>
                     <span class="subtotal-cost"><?php echo $this->__('Subtotal: ') ?><?php echo Mage::helper('checkout')->formatPrice($this->getSubtotal()) ?>
                         <?php if ($_subtotalInclTax = $this->getSubtotalInclTax()): ?> / <?php echo Mage::helper('checkout')->formatPrice($_subtotalInclTax) ?> <?php echo Mage::helper('tax')->getIncExcText(true) ?><?php endif; ?>
@@ -207,7 +215,7 @@
         if ( itemsInCartBool == true ) {
             headCheckoutBtn.show();
         }
-        
+
         // Show minicart after item added, then hide after 5 sec
         var topCartContent = jQuery("#topCartContent");
         var topCartUpdated = topCartContent.attr('data-item-added');

@@ -2,7 +2,7 @@
 <config>
 	<modules>
 		<Crown_Club>
-			<version>0.5.0</version>
+			<version>0.7.4</version>
 		</Crown_Club>
 	</modules>
     <global>
@@ -24,6 +24,7 @@
             <enterprise_reward>
                 <rewrite>
                     <reward>Crown_Club_Model_Rewards_Reward</reward>
+                    <observer>Crown_Club_Model_Rewards_Observer</observer>
                 </rewrite>
             </enterprise_reward>
         </models>
@@ -68,6 +69,15 @@
             </email>
         </template>
         <events>
+            <sales_quote_address_save_before>
+                <observers>
+                    <crownclub_set_default_billing>
+                        <type>model</type>
+                        <class>crownclub/observer</class>
+                        <method>checkForDefaultShipping</method>
+                    </crownclub_set_default_billing>
+                </observers>
+            </sales_quote_address_save_before>
             <sales_order_shipment_save_after>
                 <observers>
                     <crownclub_shipment_save_after>
@@ -77,6 +87,15 @@
                     </crownclub_shipment_save_after>
                 </observers>
             </sales_order_shipment_save_after>
+            <controller_front_send_response_before>
+                <observers>
+                    <crownclub_check_url>
+                        <type>model</type>
+                        <class>crownclub/observer</class>
+                        <method>checkPlusMemberDashboardUrl</method>
+                    </crownclub_check_url>
+                </observers>
+            </controller_front_send_response_before>
         </events>
     </global>
 	<default>
@@ -86,6 +105,14 @@
 				<nonclub_customer_group>-1</nonclub_customer_group>
 				<club_customer_group>-1</club_customer_group>
 			</clubgeneral>
+            <clubearlyaccess>
+                <early_access_time>7200</early_access_time>
+                <early_access_count_down_text>Early Access to sale in</early_access_count_down_text>
+                <early_access_count_down_text_non_member>Non Totsy Club members access in</early_access_count_down_text_non_member>
+                <early_access_sign_up_text>Signup for TotsyPLUS GET ACCESS 2 HOURS EARLY!</early_access_sign_up_text>
+                <early_access_to_sale_text>SALE BEGINS IN</early_access_to_sale_text>
+                <early_access_in_early_text>You're in early!</early_access_in_early_text>
+            </clubearlyaccess>
 		</Crown_Club>
 		<trans_email>
             <ident_club>
@@ -94,6 +121,17 @@
             </ident_club>
         </trans_email>
 	</default>
+    <frontend>
+        <routers>
+            <crownclub>
+                <use>standard</use>
+                <args>
+                    <module>Crown_Club</module>
+                    <frontName>totsyplus</frontName>
+                </args>
+            </crownclub>
+        </routers>
+    </frontend>
 	<crontab>
 		<jobs>
 			<club_clean_expired>

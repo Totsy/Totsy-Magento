@@ -108,7 +108,6 @@
                         <li><a href="<?php echo $this->getBaseUrl()?>sales/recurring_profile/">Membership</a></li>
                     </ul>
                 </li>
-                
             </ul>
             <?php if ($this->getRequest()->getModuleName()!=="checkout" && $this->getRequest()->getModuleName()!=="hpcheckout"): ?>
             <div class="span2 offset2" id="header-checkoutBtn">
@@ -124,6 +123,7 @@
     </nav>
 </header><!-- /.navbar -->
 
+<div id="sociable_recent_activity_container"></div>
 <script type="text/javascript">
     function logout(){
     	FB.logout(function(response) {

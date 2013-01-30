@@ -22,6 +22,7 @@ class Harapartners_HpCheckout_CheckoutController extends Mage_Checkout_Controlle
 
     public function indexAction() {
         $this->validateCart();
+        $this->collectTotals();
         $this->loadLayout();
         $this->_initLayoutMessages( 'checkout/session' );
         $this->_resetCartTimer();

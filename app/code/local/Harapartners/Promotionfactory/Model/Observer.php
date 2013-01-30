@@ -26,21 +26,27 @@ class Harapartners_Promotionfactory_Model_Observer {
             return;
         }
 
+        // Ignore this coupon stuff for membership stuff.
+        if($product->getIsClubSubscription()) {
+            return;
+        }
+
         //Return when there is already a coupon code associated
         $reservationCodeOption = $quoteItem->getOptionByCode('reservation_code');
         if($reservationCodeOption instanceof Mage_Sales_Model_Quote_Item_Option
             && $reservationCodeOption->getValue()){
             return;
         }
+        $vpc = null;
 
-        $coupons = Mage::getModel('promotionfactory/virtualproductcoupon')->getCollection()
-                ->addFilter('product_id', $product->getId())
-                ->addFilter('status', Harapartners_Promotionfactory_Model_Virtualproductcoupon::COUPON_STATUS_AVAILABLE);
-        $vpc = $coupons->getFirstItem();
-
-        if($vpc === null){
-            return;
-        }
+        /** Old Logic not active since 06/2012 */
+//        $vpc = Mage::getModel('promotionfactory/virtualproductcoupon')
+//        ->loadOneByProductId($product->getId(), Harapartners_Promotionfactory_Model_Virtualproductcoupon::COUPON_STATUS_AVAILABLE );
+//
+//        //'null' when current virtual product does not have any coupon code associated with it
+//        if($vpc === null){
+//            return;
+//        }
 
         if($vpc instanceof Harapartners_Promotionfactory_Model_Virtualproductcoupon){
             if($vpc->getId()){
@@ -65,7 +71,7 @@ class Harapartners_Promotionfactory_Model_Observer {
         $reservationCodeOption = $quoteItem->getOptionByCode('reservation_code');
         if($reservationCodeOption instanceof Mage_Sales_Model_Quote_Item_Option
             && $reservationCodeOption->getId()){
-            $vpc = Mage::getModel('promotionfactory/virtualproductcoupon')->load($reservationCodeOption->getValue(), 'code');
+            $vpc = Mage::getModel('promotionfactory/virtualproductcoupon')->loadByCode($reservationCodeOption->getValue());
             if($vpc instanceof Harapartners_Promotionfactory_Model_Virtualproductcoupon
                 && $vpc->getId()
                 && $vpc->getStatus() == Harapartners_Promotionfactory_Model_Virtualproductcoupon::COUPON_STATUS_RESERVED){
@@ -103,7 +109,7 @@ class Harapartners_Promotionfactory_Model_Observer {
             }
             $orderItem->setData('product_options', serialize($productOptions));
 
-            $vpc = Mage::getModel('promotionfactory/virtualproductcoupon')->load($reservationCodeOption->getValue(), 'code');
+            $vpc = Mage::getModel('promotionfactory/virtualproductcoupon')->loadByCode($reservationCodeOption->getValue());
             if($vpc->getId()){
                 if($orderItem->getOrderId()) {
                     $order = Mage::getModel('sales/order')->getCollection()
@@ -138,7 +144,7 @@ class Harapartners_Promotionfactory_Model_Observer {
                     if(isset($optionDataArray['label'])
                         && $optionDataArray['value']
                         && $optionDataArray['label'] == 'Reservation Code'){
-                        $vpc = Mage::getModel('promotionfactory/virtualproductcoupon')->load($optionDataArray['value'], 'code');
+                        $vpc = Mage::getModel('promotionfactory/virtualproductcoupon')->loadByCode($optionDataArray['value']);
                         if($vpc->getId()){
                             $vpc->setData('status', Harapartners_Promotionfactory_Model_Virtualproductcoupon::COUPON_STATUS_AVAILABLE)
                             ->save();
@@ -170,7 +176,7 @@ class Harapartners_Promotionfactory_Model_Observer {
             return;
         }
 
-        $groupCoupon = Mage::getModel('promotionfactory/groupcoupon')->load($couponCode, 'pseudo_code');
+        $groupCoupon = Mage::getModel('promotionfactory/groupcoupon')->loadByPseudoCode($couponCode);
         if(!!$groupCoupon && !!$groupCoupon->getId()){
             $groupCoupon->setData('used_count', $groupCoupon->getUsedCount() + 1);
             $groupCoupon->save();
