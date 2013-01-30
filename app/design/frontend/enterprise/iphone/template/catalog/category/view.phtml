@@ -50,16 +50,39 @@
 	$startcount_utc = strtotime($_category->getEventStartDate());
 	$endcount_lc = date("F j, Y, G:i:s", $endcount_utc);
 	$startcount_lc = date("F j, Y, G:i:s", $startcount_utc);
-	
-	if (strtotime($now) >= strtotime( $startcount_lc )){
-		$timecount = $endcount_lc;
-		$timerFlag = 'Ends in';
-		$upComingFlag = 0;
-	}else {
-		$timecount = $startcount_lc;
-		$timerFlag = 'Opens in';
-		$upComingFlag = 1;
-	}
+
+    $currentCustomer = Mage::helper('customer')->getCustomer();
+
+    $clubHelper = Mage::helper('crownclub');
+    $earlyAccessHelper = Mage::helper('crownclub/earlyaccess');
+    $earlyAccessTimeCount = $earlyAccessHelper->getEventTimeUntilAvailableForMembers($_category);
+    $earlyAccessTimeCount_lc = date("F j, Y, G:i:s", $earlyAccessTimeCount->getTimestamp());
+
+    // Event available now for all members
+    if (strtotime($now) >= strtotime( $startcount_lc )){
+        $timecount = $endcount_lc;
+        $timerFlag = 'Ends in';
+        $upComingFlag = 0;
+        $inEarly = false;
+        // Event available to club members now
+    } elseif($clubHelper->isClubMember($currentCustomer) && $earlyAccessHelper->isEventAvailableForMembers($_category)) {
+        $timecount = $endcount_lc;
+        $timerFlag = 'Sale ends in';
+        $upComingFlag = 0;
+        $inEarly = true;
+        // Event available to club members in X time
+    } elseif($clubHelper->isClubMember($currentCustomer) && !$earlyAccessHelper->isEventAvailableForMembers($_category)) {
+        $timecount = $startcount_lc;
+        $timerFlag = 'Sale begins in';
+        $upComingFlag = 1;
+        $inEarly = true;
+        // Event closed to everyone!
+    } else {
+        $timecount = $startcount_lc;
+        $timerFlag = 'Opens in';
+        $upComingFlag = 1;
+        $inEarly = false;
+    }
 	
 ?>
 <?php echo $this->getMessagesBlock()->toHtml() ?>
@@ -95,28 +118,6 @@
 	    <?php endif; ?>
 	</div>
 	<div class="event-timer-container">
-		<?php
-			$defaultTimezone = date_default_timezone_get();
-			$mageTimezone = Mage::getStoreConfig(Mage_Core_Model_Locale::XML_PATH_DEFAULT_TIMEZONE);
-			date_default_timezone_set($mageTimezone);
-			$now = now();
-			date_default_timezone_set($defaultTimezone);
-			
-			$endcount_utc = strtotime($_category->getEventEndDate());
-			$startcount_utc = strtotime($_category->getEventStartDate());
-			$endcount_lc = date("F j, Y, G:i:s", $endcount_utc);
-			$startcount_lc = date("F j, Y, G:i:s", $startcount_utc);
-			
-			if (strtotime($now) >= strtotime( $startcount_lc )){
-				$timecount = $endcount_lc;
-				$timerFlag = 'Ends in';
-				$upComingFlag = 0;
-			}else {
-				$timecount = $startcount_lc;
-				$timerFlag = 'Opens in';
-				$upComingFlag = 1;
-			}
-		?>
 		<p class="count-down-timer" id="time-<?php echo $timer ?>"></p>					 
 		<script type="text/javascript">
 			if(<?php echo $upComingFlag?>){
