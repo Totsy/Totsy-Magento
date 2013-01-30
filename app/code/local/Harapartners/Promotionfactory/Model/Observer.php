@@ -25,6 +25,10 @@ class Harapartners_Promotionfactory_Model_Observer {
         if(!$product->isVirtual()){
             return;
         }
+        
+        if($product->getIsRecurring()) {
+            return;
+        }
 
         //Return when there is already a coupon code associated
         $reservationCodeOption = $quoteItem->getOptionByCode('reservation_code');
