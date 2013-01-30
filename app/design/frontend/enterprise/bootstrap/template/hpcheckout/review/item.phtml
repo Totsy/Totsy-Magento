@@ -41,6 +41,8 @@ $shipDate = date('m-d-Y', Mage::helper('sales/order')->calculateEstimatedShipDat
         <?php if($fulFillmentType == 'dotcom_stock'
         && (Mage::getSingleton('checkout/session')->getSplitCartFlag() || !$quote->hasFulfillmentType('dotcom') )):?>
             Estimated Ship Date: 1-3 Business Days
+        <?php elseif($_item->getProduct()->getFulfillmentType() !== 'nominal'):?>
+            With purchase, you will become a TotsyPLUS member.
         <?php elseif($_item->getProduct()->getIsVirtual()):?>
             You will receive an email with the details of this voucher code.
         <?php else:?>
