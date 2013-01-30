@@ -49,16 +49,6 @@ class Harapartners_Promotionfactory_Model_Groupcoupon extends Mage_Core_Model_Ab
           $collection = $this->getCollection();
           $collection->getSelect()->where('code = ?', $couponCode);
           return $collection->getFirstItem();
-      }
-
-    public function loadByPseudoCode($couponCode){
-        $read = $this->_getReadAdapter();
-        $select = $read->select()->from($this->getMainTable())->where('pseudo_code= ?', $couponCode);
-        $result = $read->fetchRow($select);
-        if(!$result){
-            $result = array();
-        }
-        return $result;
     }
 
 

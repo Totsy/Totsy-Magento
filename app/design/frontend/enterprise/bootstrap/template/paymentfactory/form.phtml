@@ -1,12 +1,14 @@
 <?php $_code=$this->getMethodCode();
+$hasVirtual = false;
 // Check to see if there are multiple fulfillment types
 foreach($this->getQuote()->getAllItems() as $item) {
     if($item->getParentItemId()) {
         continue;
     }
     $product = Mage::getModel ( 'catalog/product' )->load ( $item->getProductId () );
-    if($product->getIsVirtual()) {
+    if($product->getIsVirtual() && $product->getFulfillmentType() !== 'nominal') {
         $_fulfillmentType = 'virtual';
+        $hasVirtual = true;
     } else {
         $_fulfillmentType = $product->getFulfillmentType();
     }
@@ -239,7 +241,7 @@ jQuery(document).ready( function() {
 	});
 
     jQuery("#paymentfactory_tokenize_cc_type input").click( function(){
-        if(this.id == "paypal_payment") {
+        if(jQuery(this).name == "paypal_payment") {
             newCardWrap.hide();
 //            jQuery('#billing-address').hide();
 //            jQuery('#shipping-address').hide();
@@ -278,7 +280,7 @@ jQuery(document).ready( function() {
         		 <?php endforeach ?>
         		 <?php $methods = $this->getLayout()->getBlock('hpcheckout.payment.methods')->getMethods();  ?> 
                  <?php if(count($methods)): ?>
-                 	<?php if(!$multiShipping && Mage::getModel('paypal/config')->isMethodActive('paypal_express')): ?>
+                     <?php if(!$multiShipping && !$hasVirtual && Mage::getModel('paypal/config')->isMethodActive('paypal_express')): ?>
 			    	    <input type="radio" value="paypal_express" id="paypal_payment" name="paypal_payment">
 			    	    <div>
         		 	    <span title="Paypal Express" class="paypal"></span>
