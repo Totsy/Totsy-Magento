@@ -53,6 +53,12 @@ class Harapartners_Rushcheckout_Model_Observer
 
     public function setValidationRedirect($session, $url=null)
     {
+        $session_url = $session->getData('revalidate_before_auth_url');
+        if (!empty($session_url)){
+            return;
+        }
+        unset($session_url);
+
         if (is_null($url)) {
             $url = Mage::helper('core/url')->getCurrentUrl();
         }
