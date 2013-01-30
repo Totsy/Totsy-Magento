@@ -96,18 +96,27 @@
                     <?php endforeach;?>
                     </ul>
                 </li>
-                <li id="navTotsyPlus" class="dropdown">
-                    <a href="<?php echo $this->getBaseUrl()?>plus/"><em>Totsy <br />PLUS</em></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="<?php echo $this->getBaseUrl()?>plus/dashboard">Dashboard</a></li>
-                        <li><a href="<?php echo $this->getBaseUrl()?>plus/credit.html">10&#37; Credit</a></li>
-                        <li><a href="<?php echo $this->getBaseUrl()?>plus/early-access.html">Early Access</a></li>
-                        <li><a href="<?php echo $this->getBaseUrl()?>plus/exclusive-sales.html">Exclusive Sales</a></li>
-                        <li><a href="<?php echo $this->getBaseUrl()?>plus/entertainment-savings.html">Entertainment Savings</a></li>
-                        <li><a href="<?php echo $this->getBaseUrl()?>plus/discount-vault.html">Discount Vault</a></li>
-                        <li><a href="<?php echo $this->getBaseUrl()?>sales/recurring_profile/">Membership</a></li>
-                    </ul>
-                </li>
+                <?php 
+                    // Check for TotsyPLUS membership, render nav appropriately
+                 ?>
+                <?php if (($customer = Mage::getSingleton('customer/session')->getCustomer()) && (Mage::helper('crownclub')->isClubMember($customer))) : ?>
+                    <li id="navTotsyPlus" class="dropdown">
+                        <a href="<?php echo $this->getBaseUrl()?>plus/dashboard"><em>Totsy <br />PLUS</em></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="<?php echo $this->getBaseUrl()?>plus/dashboard">Dashboard</a></li>
+                            <li><a href="<?php echo $this->getBaseUrl()?>plus/credit.html">10&#37; Credit</a></li>
+                            <li><a href="<?php echo $this->getBaseUrl()?>plus/early-access.html">Early Access</a></li>
+                            <li><a href="<?php echo $this->getBaseUrl()?>plus/exclusive-sales.html">Exclusive Sales</a></li>
+                            <li><a href="<?php echo $this->getBaseUrl()?>plus/entertainment-savings.html">Entertainment Savings</a></li>
+                            <li><a href="<?php echo $this->getBaseUrl()?>plus/discount-vault.html">Discount Vault</a></li>
+                            <li><a href="<?php echo $this->getBaseUrl()?>sales/recurring_profile/">Membership</a></li>
+                        </ul>
+                    </li>
+                <?php else : ?>
+                    <li id="navTotsyPlus">
+                        <a href="<?php echo $this->getBaseUrl()?>plus/"><em>Totsy <br />PLUS</em></a>
+                    </li>
+                <?php endif; ?>
             </ul>
             <?php if ($this->getRequest()->getModuleName()!=="checkout" && $this->getRequest()->getModuleName()!=="hpcheckout"): ?>
             <div class="span2 offset2" id="header-checkoutBtn">
