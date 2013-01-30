@@ -132,7 +132,7 @@ h4 {text-transform: uppercase;}
 .dropdown-toggle {cursor: pointer;}
 .well {
     background: none repeat scroll 0 0 #FFFFFF;
-    border: 1px solid #333;
+    border: 0px solid #333;
     -moz-border-radius: 0px; -webkit-border-radius: 0px; border-radius: 0px;
     -moz-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075);
     -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075);
