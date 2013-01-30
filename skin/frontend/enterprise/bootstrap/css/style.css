@@ -1419,7 +1419,14 @@ a.invite-btn {
 }
 
 /* Validation / Error Classes */
-.validation-advice {background:#FEEFB3; color:#9F6000; padding:10px; margin:-10px 0 10px 0px; border: 1px solid #CCCCCC; }
+.validation-advice {
+    position: relative; z-index: 100; /* displays msg on top of checkout btn on pdp - quicky fix */
+    background:#FEEFB3; 
+    color:#9F6000; 
+    padding:10px; 
+    margin:-10px 0 10px 0px; 
+    border: 1px solid #CCCCCC;
+}
 
 /* Sign In / Sign Up Classes */
 .badgecity_log {
