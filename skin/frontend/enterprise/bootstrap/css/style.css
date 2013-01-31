@@ -313,6 +313,9 @@ body.customer-account-login .btn.btn-large {
 #navSocial > a {
     background: url('../images/icon-like-whot.png') 100% 50% no-repeat;
 }
+#navTotsyPlus.nonmember > a {
+    background: url('../images/icon-totsyplus-25x26.png') 100% 50% no-repeat;
+}
 .navbar .nav > li > a:hover {
     color: #636466;
     text-decoration: none;
@@ -1733,7 +1736,7 @@ body.catalog-category-view .price-box .special-price {
 .size_chart {top:446px; margin-left:134px; position: absolute;}
 
 /* TotsyPLUS */
-
+ 
 html.plus-html { background: #fff !important}
 html.plus-html { background-image: -moz-linear-gradient(top, #ffffff, #ffffff) !important; }
 html.plus-html { background-image: -ms-linear-gradient(top, #ffffff, #ffffff) !important; }
