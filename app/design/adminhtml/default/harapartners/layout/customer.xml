@@ -45,6 +45,8 @@
                 <block type="adminhtml/customer_edit_tab_invitations" name="customer_edit_tab_invitations" template="customer/tab/invitations.phtml"/>
                 <action method="addTab"><name>customer_edit_tab_view</name><block>customer_edit_tab_view</block></action>
                 <action method="addTab"><name>customer_edit_tab_invitations</name><block>customer_edit_tab_invitations</block></action>
+                <block type="adminhtml/customer_edit_tab_coupons" name="customer_edit_tab_coupons" template="customer/tab/coupons.phtml"/>
+                <action method="addTab"><name>customer_edit_tab_coupons</name><block>customer_edit_tab_coupons</block></action>
             </block>
         </reference>
         <reference name="js">

@@ -68,22 +68,27 @@
             jQuery("[id='shipping:telephone']").val("");
     }
 
-    var shippingRegionUpdater = new RegionUpdater('shipping:country_id', 'shipping:region', 'shipping:region_id', countryRegions, undefined, 'shipping:postcode');
-
     jQuery(document).ready( function() {
         jQuery( '#shipping\\:postcode' ).change( function() { hpcheckout.update(true); });
+        
         jQuery( '#shipping\\:region_id' ).change( function() { 
         	jQuery('#shipping\\:region').val(jQuery("#shipping:region_id option:selected").text());
 			hpcheckout.update(true); 
-		});    
-    
-    	if(checkoutPayment.hasProfile==true && checkoutPayment.lastUsedAddressId!=="") {
-    		//hpcheckout.switchAddress();
-    		//hpcheckout.update(true);
-    	}
+		}); 
+		   
+        if( jQuery( '#shipping-address-select' ).length > 0 ) {
+            jQuery( '#shipping-address-select' ).bind('change', function() { 
+                hpcheckout.switchAddress(this.id);
+                hpcheckout.update(true);
+            });
+        }
         
-        jQuery( '#shipping-address-select' ).bind('change', function() { hpcheckout.update(true); hpcheckout.switchAddress(this.id);     		;
- });
+        if( jQuery( '#shipping-address-select' ).length > 0 ) {
+            if(jQuery( '#shipping-address-select' ).val()!=="") {
+                checkoutPayment.disableAddress(true, 'hpcheckout-shipping-form');
+            }
+        }
+                    
         jQuery( '#billing\\:selected' ).val(jQuery( '#billing-address-select' ).val());
     });
 
@@ -93,5 +98,7 @@
 			$this.val($this.val().substr(0,30));
 		}
 	});
+	
+	var shippingRegionUpdater = new RegionUpdater('shipping:country_id', 'shipping:region', 'shipping:region_id', countryRegions, undefined, 'shipping:postcode');
 //]]>
 </script>
