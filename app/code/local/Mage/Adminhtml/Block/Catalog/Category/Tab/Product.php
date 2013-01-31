@@ -79,9 +79,11 @@ class Mage_Adminhtml_Block_Catalog_Category_Tab_Product extends Mage_Adminhtml_B
             ->addAttributeToSelect('vendor_style') //Totsy, Josh: include vendor style in the grid
             ->addAttributeToSelect('sku')
             ->addAttributeToSelect('price')
+            ->addAttributeToSelect('special_price')
             ->addAttributeToSelect('type')
             ->addAttributeToSelect('size')
             ->addAttributeToSelect('color')
+            ->addAttributeToSelect('status')
             ->addStoreFilter($this->getRequest()->getParam('store'))
             ->joinField('position',
                 'catalog/category_product',
@@ -132,6 +134,11 @@ class Mage_Adminhtml_Block_Catalog_Category_Tab_Product extends Mage_Adminhtml_B
             'sortable'  => true,
             'width'     => '60',
             'index'     => 'entity_id'
+        ));
+        $this->addColumn('status', array(
+            'header'    => Mage::helper('catalog')->__('Enabled'),
+            'index'     => 'status',
+            'renderer'  => 'Mage_Adminhtml_Block_Catalog_Category_Tab_Renderer_Status'
         ));
         $this->addColumn('name', array(
             'header'    => Mage::helper('catalog')->__('Name'),
@@ -188,6 +195,13 @@ class Mage_Adminhtml_Block_Catalog_Category_Tab_Product extends Mage_Adminhtml_B
             'width'     => '1',
             'currency_code' => (string) Mage::getStoreConfig(Mage_Directory_Model_Currency::XML_PATH_CURRENCY_BASE),
             'index'     => 'price'
+        ));
+        $this->addColumn('totsy_price', array(
+            'header'    => Mage::helper('catalog')->__('Totsy Price'),
+            'type'  => 'currency',
+            'width'     => '1',
+            'currency_code' => (string) Mage::getStoreConfig(Mage_Directory_Model_Currency::XML_PATH_CURRENCY_BASE),
+            'index'     => 'special_price'
         ));
         $this->addColumn('position', array(
             'header'    => Mage::helper('catalog')->__('Position'),
