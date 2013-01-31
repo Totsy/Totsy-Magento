@@ -51,12 +51,10 @@ class Crown_Club_Model_Observer {
      */
     public function applyCredits($observer)
     {
-        /* @var $shipment Mage_Sales_Model_Order_Shipment */
-        $shipment = $observer->getEvent()->getShipment();
-
         /* @var $order Mage_Sales_Model_Order */
-        $order = Mage::getModel('sales/order')->load($shipment->getOrderId());
+        $order = $observer->getEvent()->getOrder();
 
+        // Check if order is club membership
         if ($order->getCustomerIsGuest()
             || !Mage::helper('enterprise_reward')->isEnabledOnFront($order->getStore()->getWebsiteId())
             || !$order->getData('customer_is_club_member')
@@ -64,7 +62,18 @@ class Crown_Club_Model_Observer {
             return $this;
         }
 
-        if ($order->getCustomerId()) {
+        // Check for club item. We don't give credit for allowing credit.
+        if ($order->isNominal()) {
+            foreach ($order->getAllVisibleItems() as $item) {
+                $productModel = Mage::getModel('catalog/product')->load($item->getProductId());
+                if ($productModel->getIsClubSubscription()) {
+                    return $this;
+                }
+            }
+        }
+
+        // Give credit where credit is due, if it's due that is...
+        if ($order->getCustomerId() && Mage_Sales_Model_Order::STATE_COMPLETE == $order->getState()) {
             /* @var $reward Enterprise_Reward_Model_Reward */
             $reward = Mage::getModel('enterprise_reward/reward')
                 ->setActionEntity($order)

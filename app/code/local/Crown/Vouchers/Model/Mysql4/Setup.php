@@ -1,6 +1,6 @@
 <?php
 
-class Crown_Vouchers_Model_Mysql4_Setup extends Mage_Core_Model_Resource_Setup {
+class Crown_Vouchers_Model_Mysql4_Setup extends Mage_Eav_Model_Entity_Setup {
 	
 	/**
 	 * Installs the modules data associations
@@ -20,6 +20,10 @@ class Crown_Vouchers_Model_Mysql4_Setup extends Mage_Core_Model_Resource_Setup {
 
     public function upgradeModule_1_2() {
         $this->createEntertainmentSavingsAttribute();
+    }
+
+    public function upgradeModule_1_3() {
+        $this->createEntertainmentStateAttribute();
     }
 	
 	/**
@@ -48,19 +52,19 @@ class Crown_Vouchers_Model_Mysql4_Setup extends Mage_Core_Model_Resource_Setup {
 		  		`customer_id` int(11) DEFAULT NULL,
 		 		 PRIMARY KEY (`id`)
 			)ENGINE=InnoDB DEFAULT CHARSET=utf8;
-            
+
 		" );
-		
+
 		return;
 	}
-	
+
 	/**
 	 * Creates the one-time purchase attribute
 	 */
 	private function createPurchaseAttribute() {
 		$this->createAttribute('one_time_purchase', 'Is One Time Purchase?', 'boolean', 'virtual');
-	} 
-	
+	}
+
 	private function createVoucherCodeAttribute() {
 		$this->createAttribute('voucher_code', 'Voucher Code', 'text', 'virtual');
 	}
@@ -76,8 +80,85 @@ class Crown_Vouchers_Model_Mysql4_Setup extends Mage_Core_Model_Resource_Setup {
     private function createEntertainmentSavingsAttribute() {
         $this->createAttribute('entertainment_savings', 'Is Entertainment Savings Voucher?', 'boolean', 'virtual');
     }
-	
-	
+
+    private function createEntertainmentStateAttribute() {
+        $this->addAttribute('catalog_product', 'entertainment_savings_state', array(
+            'backend'       => 'eav/entity_attribute_backend_array',
+            'frontend'      => '',
+            'label'         => 'Entertainment Savings State',
+            'input'         => 'multiselect',
+            'class'         => '',
+            'source'        => 'eav/entity_attribute_source_table',
+            'global'        => true,
+            'visible'       => true,
+            'required'      => false,
+            'user_defined'  => true,
+            'default'       => '',
+            'apply_to'      => 'simple',
+            'is_configurable'  => 0,
+            'visible_on_front' => false,
+            'option' => array (
+                'value' => array(
+                    'AL'=> array('AL', 'AL'),
+                    'AK'=> array('AK', 'AK'),
+                    'AZ'=> array('AZ', 'AZ'),
+                    'AR'=> array('AR', 'AR'),
+                    'CA'=> array('CA', 'CA'),
+                    'CO'=> array('CO', 'CO'),
+                    'CT'=> array('CT', 'CT'),
+                    'DE'=> array('DE', 'DE'),
+                    'DC'=> array('DC', 'DC'),
+                    'FL'=> array('FL', 'FL'),
+                    'GA'=> array('GA', 'GA'),
+                    'HI'=> array('HI', 'HI'),
+                    'ID'=> array('ID', 'ID'),
+                    'IL'=> array('IL', 'IL'),
+                    'IN'=> array('IN', 'IN'),
+                    'IA'=> array('IA', 'IA'),
+                    'KS'=> array('KS', 'KS'),
+                    'KY'=> array('KY', 'KY'),
+                    'LA'=> array('LA', 'LA'),
+                    'ME'=> array('ME', 'ME'),
+                    'MD'=> array('MD', 'MD'),
+                    'MA'=> array('MA', 'MA'),
+                    'MI'=> array('MI', 'MI'),
+                    'MN'=> array('MN', 'MN'),
+                    'MS'=> array('MS', 'MS'),
+                    'MO'=> array('MO', 'MO'),
+                    'MT'=> array('MT', 'MT'),
+                    'NE'=> array('NE', 'NE'),
+                    'NV'=> array('NV', 'NV'),
+                    'NH'=> array('NH', 'NH'),
+                    'NJ'=> array('NJ', 'NJ'),
+                    'NM'=> array('NM', 'NM'),
+                    'NY'=> array('NY', 'NY'),
+                    'NC'=> array('NC', 'NC'),
+                    'ND'=> array('ND', 'ND'),
+                    'OH'=> array('OH', 'OH'),
+                    'OK'=> array('OK', 'OK'),
+                    'OR'=> array('OR', 'OR'),
+                    'PA'=> array('PA', 'PA'),
+                    'PR'=> array('PR', 'PR'),
+                    'RI'=> array('RI', 'RI'),
+                    'SC'=> array('SC', 'SC'),
+                    'SD'=> array('SD', 'SD'),
+                    'TN'=> array('TN', 'TN'),
+                    'TX'=> array('TX', 'TX'),
+                    'UT'=> array('UT', 'UT'),
+                    'VT'=> array('VT', 'VT'),
+                    'VA'=> array('VA', 'VA'),
+                    'WA'=> array('WA', 'WA'),
+                    'WV'=> array('WV', 'WV'),
+                    'WI'=> array('WI', 'WI'),
+                    'WY'=> array('WY', 'WY')
+                )
+            )
+        )
+    );
+
+    }
+
+
 	/**
 	 * Creates product attributes
 	 * 
@@ -85,6 +166,7 @@ class Crown_Vouchers_Model_Mysql4_Setup extends Mage_Core_Model_Resource_Setup {
 	 * @param string $label frontend label
 	 * @param string $attribute_type text|textarea|date|boolean|multiselect|select|price|media_image|weee
 	 * @param string $product_type simple|configurable|bundle|grouped|downloadable|virtual|giftcard
+     * @param array $options The options available for the attribute, if applicable
 	 */
 	private function createAttribute($code, $label, $attribute_type, $product_type) {
 			$_attribute_data = array (
@@ -128,14 +210,17 @@ class Crown_Vouchers_Model_Mysql4_Setup extends Mage_Core_Model_Resource_Setup {
 			if ($defaultValueField) {
 				$_attribute_data ['default_value'] = '';
 			}
+
 			$model->addData ( $_attribute_data );
 			$model->setEntityTypeId ( Mage::getModel ( 'eav/entity' )->setType ( 'catalog_product' )->getTypeId () );
 			$model->setIsUserDefined ( 1 );
 			try {
 				$model->save ();
 			} catch ( Exception $e ) {
-				echo '<p>Sorry, error occured while trying to save the attribute. Error: ' . $e->getMessage () . '</p>';
+				echo '<p>Sorry, error occurred while trying to save the attribute. Error: ' . $e->getMessage () . '</p>';
 			}
 	}
-	
+
+
+
 }

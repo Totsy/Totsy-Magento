@@ -44,7 +44,19 @@ foreach($category_ids as $category_id) {
     else {
         $_category = Mage::getModel('catalog/category')->load($category_id);
 
-        $categories[$_category->getName()] = $_category->getProductCollection();
+        $collection = $_category->getProductCollection();
+        $_filter = Mage::app()->getRequest()->getParam('entertainment_savings_state');
+
+        if($_filter) {
+            $collection->addFieldToFilter(
+                array(
+                    array('attribute'=>'entertainment_savings_state','eq'=>$_filter)
+                )
+            );
+        }
+
+
+        $categories[$_category->getName()] = $collection;
     }
 }
 ?>
