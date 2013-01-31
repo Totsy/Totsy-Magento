@@ -2,13 +2,15 @@
 
 class Crown_Vouchers_Model_Email extends Mage_Core_Model_Abstract {
 	
-	protected 	$productId, // Product ID
-				$product, // Product Object
-				$mailer, // Mail Object
-				$customer; // Customer Object
+	protected $productId; // Product ID
+    protected $product; // Product Object
+    protected $mailer; // Mail Object
+    protected $customer; // Customer Object
+    protected $order;
 	
-	public function sendEmail($product_id) {
+	public function sendEmail($product_id,$order) {
 		$this->productId = $product_id;
+        $this->order = $order;
 		$this->init();
 		$this->send();
 	}
@@ -21,19 +23,21 @@ class Crown_Vouchers_Model_Email extends Mage_Core_Model_Abstract {
 	
 	
 	protected function send() {
-		$templateId = Mage::getModel('core/email_template')->loadByCode('voucher_code_email_template')->getId();
-		Mage::getModel('core/email_template')->sendTransactional(
-			$templateId, 
-			'voucher', 
-			$this->customer->getEmail(), 
-			$this->customer->getName(), 
-			array(
-				'customer' => $this->customer->getName(), 
-				'product_name' => $this->product->getName(),
-				'voucher_code' => $this->product->getVoucherCode()
-			), 
-			Mage::app()->getStore()->getId()
-		);
+		$templateId = Mage::getModel('core/email_template')->loadByCode('_trans_Virtual_Product_Redemption')->getId();
+        Mage::getModel('core/email_template')->sendTransactional(
+            $templateId,
+            "sales",
+            $this->customer->getEmail(),
+            $this->customer->getName(),
+            array(
+                "virtual_product_code" => $this->product->getVoucherCode(),
+                "order" => $this->order,
+                "store" => Mage::app()->getStore(),
+                "title" => $this->product->getName(),
+                "description" => $this->product->getName(),
+                "short_description" => $this->product->getName()
+            )
+        );
         	
 	}
 	

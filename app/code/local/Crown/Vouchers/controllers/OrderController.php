@@ -35,10 +35,10 @@ class Crown_Vouchers_OrderController extends Mage_Core_Controller_Front_Action {
 		}
 		
 		// Create order
-		Mage::getModel('vouchers/order')->createOrder($product_id);
+		$order = Mage::getModel('vouchers/order')->createOrder($product_id);
 		
 		// Send Voucher Email
-		Mage::getModel('vouchers/email')->sendEmail($product_id);
+		Mage::getModel('vouchers/email')->sendEmail($product_id, $order);
 		
 		$this->returnResult(array('success' => 'Your email has been sent!'));
 	}
