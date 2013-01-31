@@ -2642,9 +2642,11 @@ html.plus-html#stickywrap { padding-top: 35px; background: #ffffff !important; }
 }
 
 .reward-checkout .reward span {
-    padding: 2px 0 0 24px;
-    background: url(/skin/frontend/enterprise/bootstrap/images/plus/ladybug_icon.jpg) no-repeat 0 0;
+    padding: 6px 0 6px 24px;
+    background: url(/skin/frontend/enterprise/bootstrap/images/plus/tp_ladybug.png) no-repeat 0 0;
     display: inline-block;
+    font-weight: bold;
+    font-size: 14px;
 }
 
 /*! fancyBox v2.0.6 fancyapps.com | fancyapps.com/fancybox/#license */
