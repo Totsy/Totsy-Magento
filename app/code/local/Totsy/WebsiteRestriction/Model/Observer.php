@@ -57,6 +57,7 @@ class Totsy_WebsiteRestriction_Model_Observer
 
                     // redirect to landing page/login
                 case Enterprise_WebsiteRestriction_Model_Mode::ALLOW_LOGIN:
+                    
                     if (!$dispatchResult->getCustomerLoggedIn() && !Mage::helper('customer')->isLoggedIn()) {
                         // see whether redirect is required and where
                         $redirectUrl = false;
@@ -120,6 +121,22 @@ class Totsy_WebsiteRestriction_Model_Observer
                         }
                     }
                     elseif (Mage::getSingleton('core/session')->hasWebsiteRestrictionAfterLoginUrl()) {
+                        
+                        if (Mage::helper('customer')->isLoggedIn() 
+                            && Mage::getSingleton('customer/session')->getData('afterd_auth_affiliate_redirect')
+                        ){
+                            $session =Mage::getSingleton('customer/session');
+                            $response->setRedirect(
+                                Mage::getBaseUrl().$session->getData('afterd_auth_affiliate_redirect')
+                            );
+                            $session->unsetData('afterd_auth_affiliate_redirect');
+                            // don't know why need this one extra call, but seems like this is important 
+                            // when customer comes from  affiliate registration page, and tries to reach
+                            // product landing page. So this is what stopping from redirecting to /
+                            Mage::getSingleton('core/session')->getWebsiteRestrictionAfterLoginUrl(true);
+                            return;
+                        }
+                        
                         $response->setRedirect(
                             Mage::getSingleton('core/session')->getWebsiteRestrictionAfterLoginUrl(true)
                         );
