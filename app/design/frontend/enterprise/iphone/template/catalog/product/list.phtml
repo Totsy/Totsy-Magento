@@ -47,9 +47,9 @@
     date_default_timezone_set($defaultTimezone);
 
     if ( strtotime($now) >= strtotime($_currentCategory->getData('event_end_date')) || strtotime($now) < strtotime($_currentCategory->getData('event_start_date'))){
-        $timeFlag = 0;
+        $timeFlag = 1;
 	} else {
-		$timeFlag = 1;
+		$timeFlag = 0;
 	}
 
     if (!!Mage::registry('admin_preview_mode') || ($earlyAccessHelper->isEventAvailableForMembers($_currentCategory) && $clubHelper->isClubMember($currentCustomer))) {
