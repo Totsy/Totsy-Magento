@@ -12,6 +12,7 @@ class Crown_Vouchers_Model_Order extends Mage_Core_Model_Abstract {
 		$this->init();
 		$this->setOrder();
 		$this->create();
+        return $this->order;
 	}
 	
 	protected function init() {
@@ -266,12 +267,12 @@ class Crown_Vouchers_Model_Order extends Mage_Core_Model_Abstract {
 				
 				Mage::app ()->getStore ()->setConfig ( Mage_Sales_Model_Order::XML_PATH_EMAIL_ENABLED, "0" );
 				
-				$_order = $this->_getOrderCreateModel ()->importPostData ( $orderData ['order'] )->createOrder ();
+				$this->order = $this->_getOrderCreateModel ()->importPostData ( $orderData ['order'] )->createOrder ();
 				
 				$this->_getSession ()->clear ();
 				Mage::unregister ( 'rule_data' );
 				
-				return $_order;
+				return $this->order;
 			} catch ( Exception $e ) {
 				Mage::logException($e);
 				Mage::log ( "Order save error..." );
