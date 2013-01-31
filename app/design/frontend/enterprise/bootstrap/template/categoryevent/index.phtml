@@ -19,6 +19,7 @@ h4 {
     color:#000;
     /*text-transform: uppercase;*/
 }
+
 </style>
 <?php
 /**
@@ -27,7 +28,8 @@ h4 {
  * 
  */
 ?>
-<?php    $indexDataObj 	= 	$this->getIndexDataObject();
+<?php    
+    $indexDataObj 	= 	$this->getIndexDataObject();
     $baseUrl 		= 	Mage::getBaseUrl();
     $maxPerSend 	= 	0;
     $timer 			= 	0;
@@ -127,7 +129,7 @@ h4 {
     <?php if (!!$endingArray && !empty($endingArray)): ?>
         <section id="events-ending" class="events-grid">
             <header class="page-header">
-                <h2><img src="/skin/frontend/enterprise/bootstrap/images/iconmonstr-time-8-icon.png" width="35px" /> Sales Ending Soon...</h2>
+                <h2>Sales Ending Soon...</h2>
             </header>
             <ul>
             <?php // foreach block here ?>
@@ -139,7 +141,7 @@ h4 {
     <?php if (!!$upcomingArray && !empty($upcomingArray)): ?>
         <section id="events-upcoming" class="events-grid">
             <header class="page-header">
-                <h2><img src="/skin/frontend/enterprise/bootstrap/images/iconmonstr-calendar-5-icon.png" width="35px" class="pull-left" /> Upcoming Sales</h2>
+                <h2>Upcoming Sales</h2>
             </header>
             <ul class="thumbnails">
             <?php foreach ($upcomingArray as $up): ?>
@@ -147,7 +149,7 @@ h4 {
                     $endcountRaw = strtotime($up['event_start_date']);
                     $endcount = date("F j, Y, G:i:s", $endcountRaw);
                 ?>
-                <li class="span2 catalog-event up-event-counter-<?php echo $timer;?>">
+                <li class="span2 alpha catalog-event up-event-counter-<?php echo $timer;?>">
                     <div class="thumbnail">
                         <hgroup>
                             <h5><a href="<?php echo Mage::getBaseUrl().(array_key_exists('url_path',$up) ? $up['url_path'] : ''); ?>"><?php echo $up['name'];?></a></h5>

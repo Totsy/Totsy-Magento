@@ -144,6 +144,7 @@ h4 {text-transform: uppercase;}
 .fast-ship-table-bordered,
 .thumbnail {
     /* -moz-border-radius:5px; -webkit-border-radius:5px; border-radius:5px; */
+    border:1px solid #333;
 }
 .thumbnail {padding:10px;}
 .page-header {
@@ -607,9 +608,6 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
     display: block;
     margin: 0; padding: 0;
     border-radius: 0;
-}
-.thumbnails > li {
-    border: 1px solid #333;
 }
 .span4 {width:307px;}
 .events-grid .thumbnail:hover {
