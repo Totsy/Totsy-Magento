@@ -375,6 +375,7 @@ class Mage_Paypal_Model_Express_Checkout
                 $billingAddress->setDataUsingMethod($key, $exportedBillingAddress->getData($key));
             }
         }
+        $billingAddress->setSaveInAddressBook(true);
 
         // import shipping address
         $exportedShippingAddress = $this->_api->getExportedShippingAddress();
@@ -387,6 +388,7 @@ class Mage_Paypal_Model_Express_Checkout
                     }
                     $shippingAddress->setCollectShippingRates(true);
                     $shippingAddress->setSameAsBilling(0);
+                    $shippingAddress->setSaveInAddressBook(true);
                 }
 
                 // import shipping method
@@ -874,6 +876,7 @@ class Mage_Paypal_Model_Express_Checkout
         } elseif ($shipping && isset($customerShipping) && !$customer->getDefaultShipping()) {
             $customerShipping->setIsDefaultShipping(true);
         }
+        $customer->save();
         $quote->setCustomer($customer);
 
         return $this;
