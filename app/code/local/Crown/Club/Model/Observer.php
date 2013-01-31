@@ -49,7 +49,7 @@ class Crown_Club_Model_Observer {
      * @since 0.4.0
      * @return Crown_Club_Model_Observer
      */
-    public function orderShipped($observer)
+    public function applyCredits($observer)
     {
         /* @var $shipment Mage_Sales_Model_Order_Shipment */
         $shipment = $observer->getEvent()->getShipment();
