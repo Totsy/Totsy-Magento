@@ -25,17 +25,7 @@ class Harapartners_Service_Model_Rewrite_Catalog_Product extends Mage_Catalog_Mo
             $pageKey = base64_encode(Mage::helper('core')->encrypt($targetPath));
             return Mage::getUrl($targetPath, array('page_key' => $pageKey));
         } else {
-            // build the product's static web site page URL
-            $now = Mage::getModel('core/date')->timestamp();
-            $category = $this->getCategoryCollection()
-                ->addAttributeToSelect('url_key')
-                ->addAttributeToFilter('event_start_date', array('to' => $now, 'datetime' => true))
-                ->addAttributeToFilter('event_end_date', array('from' => $now, 'datetime' => true))
-                ->getFirstItem();
-
-            return (null !== $category)
-                ? Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB) . 'sales/' . $category->getUrlKey() . '/' . $this->getData('url_key') . '.html'
-                : null;
+            return parent::getProductUrl($useSid);
         }
     }
 
