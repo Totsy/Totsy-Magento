@@ -2315,6 +2315,10 @@ html.plus-html#stickywrap { padding-top: 35px; }
     margin-right: 48px;
 }
 
+.plus .bottom-16px {
+    margin-bottom: 16px;
+}
+
 .plus .bottom-24 {
     margin-bottom: 24px;
 }

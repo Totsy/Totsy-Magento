@@ -69,7 +69,8 @@ $customer = Mage::registry('current_customer');
 ?>
 
 <?php if(Mage::helper('crownclub')->isClubMember($customer)): ?>
-    <table class="plus top-24">
+    <div class="plus">
+    <table class="top-24">
         <tr>
             <td class="plus-label">Member Name: </td>
             <td class="plus-value"><input type="text" readonly="readonly" class="input-xlarge" value="<?php echo $customer->getFirstname() . ' ' . $customer->getLastname();?>" /></td>
@@ -96,10 +97,13 @@ $customer = Mage::registry('current_customer');
                 <!-- <input type="checkbox" id="on-off" <?php echo $form_elements['checkbox'];?> /> -->
             </td>
         </tr>
+        <tr>
+            <td> </td>
+            <td><a href="<?php echo Mage::getUrl('plus/dashboard', array('_secure' => true));?>" class="strong top-24" style="display:inline-block;">Back to TotsyPLUS Dashboard</a></td>
+        </tr>
     </table>
+    </div>
 
-    <br />
-    <a href="<?php echo Mage::getUrl('plus/dashboard', array('_secure' => true));?>">Back to TotsyPLUS Dashboard</a>
 
     <script type="text/javascript">
         jQuery('#cancel-plus').click(function(){
