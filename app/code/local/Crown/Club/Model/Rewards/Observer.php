@@ -5,7 +5,7 @@
  * @package 	Crown_Club
  * @since 		0.7.1
  */
-class Crown_Club_Model_Rewards_Observer extends Enterprise_Reward_Model_Observer{
+class Crown_Club_Model_Rewards_Observer extends Harapartners_Service_Model_Rewrite_Reward_Observer{
 
     /**
      * Removing the default order rewards businasssizzle
