@@ -57,6 +57,7 @@ class Totsy_WebsiteRestriction_Model_Observer
 
                     // redirect to landing page/login
                 case Enterprise_WebsiteRestriction_Model_Mode::ALLOW_LOGIN:
+                    
                     if (!$dispatchResult->getCustomerLoggedIn() && !Mage::helper('customer')->isLoggedIn()) {
                         // see whether redirect is required and where
                         $redirectUrl = false;
@@ -120,6 +121,7 @@ class Totsy_WebsiteRestriction_Model_Observer
                         }
                     }
                     elseif (Mage::getSingleton('core/session')->hasWebsiteRestrictionAfterLoginUrl()) {
+                        
                         $response->setRedirect(
                             Mage::getSingleton('core/session')->getWebsiteRestrictionAfterLoginUrl(true)
                         );

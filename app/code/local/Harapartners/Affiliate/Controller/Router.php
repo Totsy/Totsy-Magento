@@ -30,6 +30,13 @@ class Harapartners_Affiliate_Controller_Router extends Mage_Core_Controller_Vari
 
         $identifier = trim ( $request->getPathInfo (), '/' );
         $pathParams = explode ( '/', $identifier );
+        
+        if (!!($redirect = $request->getParam('r'))){
+            $redirect = preg_replace('/[^\w\d\-\_\/]/', '', $redirect);
+            Mage::getSingleton('core/session')->setData(
+                'afterd_auth_affiliate_redirect','sales/'.$redirect.'.html'
+            );
+         }
 
         if (count ( $pathParams ) >= 2 && $pathParams [0] == 'a') {
             //Default Magento params in path: a/[affilate_code]?...
