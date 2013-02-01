@@ -26,8 +26,21 @@
             <sailthru>
                 <rewrite>
                     <feed>Totsy_Sailthru_Model_Feed</feed>
+                    <archive>Totsy_Sailthru_Model_Archive</archive>
                 </rewrite>
             </sailthru>
         </models>
     </global>
+    <crontab>
+        <jobs>
+            <totsy_sailthru_archive>
+                <schedule>
+                    <cron_expr>0 0 * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>saithru/archive::process</model>
+                </run>
+            </totsy_sailthru_archive>
+        </jobs>
+    </crontab>
 </config>

@@ -59,6 +59,13 @@ class Harapartners_Affiliate_RegisterController extends Mage_Core_Controller_Fro
             
             $session->setData('affiliate_id', $affiliate->getId());
             $session->setData('affiliate_info', $affiliateInfo);
+
+            if ($request->getParam('r')){
+                $redirect = preg_replace('/[^\w\d\-\_\/]/', '', $request->getParam('r'));
+                if (!preg_match('/http|https/',$redirect)){
+                    Mage::getModel('core/cookie')->set('redirect', $redirect);
+                }
+             }
         }
 
         $this->_forward('create', 'account', 'customer');

@@ -1,0 +1,35 @@
+<?php
+/**
+ * Template for block Mage_Adminhtml_Block_Customer_Edit_Tab_View
+ */
+?>
+<?php
+    $ordersCoupons = $this->getOrdersWithCouponsUsed();
+?>
+<?php
+if ($ordersCoupons) :?>
+    <div class="entry-edit">
+        <div class="entry-edit-head"><h4 class="icon-head head-customer-view"><?php echo Mage::helper('customer')->__('Promocodes Used') ?></h4></div>
+        <fieldset>
+            <table cellspacing="2" width="auto">
+                <tr>
+                    <td style="width:100px;"><strong><?php echo $this->__('Coupon Code') ?></strong></td>
+                    <td style="width:100px;"><strong><?php echo $this->__('Order Id') ?></strong></td>
+                    <td style="width:150px;"><strong><?php echo $this->__('Date Used') ?></strong></td>
+                </tr>
+<?php foreach($ordersCoupons as $orderCoupon) :?>
+                <tr>
+                    <td style="width:100px;"><?php echo $orderCoupon['coupon_code'] ?></td>
+                    <td style="width:100px;"><a href="<?php echo $this->getUrl("adminhtml/sales_order/view", array(
+                'order_id'=>$orderCoupon['entity_id']));  ?>"><?php echo $orderCoupon['increment_id'] ?></a></td>
+                    <td style="width:150px;"><?php echo $orderCoupon['created_at'] ?></td>
+                </tr>
+    <?php endforeach;?>
+            </table>
+        </fieldset>
+    </div>
+<?php else: ?>
+    <strong>No coupons has been used yet by the customer.</strong>
+<?php endif; ?>
+<div class="box-left"><div>
+    <?php echo $this->getChildHtml('', true, true); ?>
