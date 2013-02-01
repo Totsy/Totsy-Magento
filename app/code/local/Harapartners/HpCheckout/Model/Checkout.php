@@ -391,7 +391,7 @@ class Harapartners_HpCheckout_Model_Checkout
 
             //Fill Customer First/Last Name with Billing Address Infos
             $customer = $this->getCustomerSession()->getCustomer();
-            if((!$customer->getFirstname() || !$customer->getLastname) && $order->getBillingAddress()) {
+            if((!$customer->getFirstname() || !$customer->getLastname()) && $order->getBillingAddress()) {
                 $customer->setFirstname($order->getBillingAddress()->getFirstname())
                     ->setLastname($order->getBillingAddress()->getLastname())
                     ->save();
