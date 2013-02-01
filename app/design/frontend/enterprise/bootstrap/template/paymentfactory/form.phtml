@@ -173,7 +173,6 @@ jQuery(document).ready( function() {
                     jQuery(".use-new-card-wrapper").appendTo(jQuery("#add_cc_types"));
                     //newCardWrap.hide();
                 } else {
-
                     jQuery("[id='add_payment']").hide();
                     jQuery(".checkout-reward").css("padding-top", "0px");
                     jQuery(".use-new-card-wrapper").show();
@@ -194,16 +193,16 @@ jQuery(document).ready( function() {
               var result = "unknown";
               //first check for MasterCard
               if (/^5[1-5]/.test(ccNum)) {
-                result = "MC";
+                result = "mc";
               }//then check for Visa
               else if (/^4/.test(ccNum)) {
-                result = "VI";
+                result = "vi";
               }//then check for AmEx
               else if (/^3[47]/.test(ccNum)) {
-                result = "AE";
+                result = "ae";
               }
               else if(/^6011[0-9]{12}$/.test(ccNum) || (/^[0-9]{3}$/.test(ccNum))){
-                result = "DI";
+                result = "di";
               } 
               return result;
             }
@@ -215,32 +214,30 @@ jQuery(document).ready( function() {
     jQuery("#paymentfactory_tokenize_cc_number").keyup( function() {
         var ccEntered = checkoutPayment.getCreditCardType(this.value);
     
-        jQuery("button","[id='paymentfactory_tokenize_cc_type']").each(function() {             
-            var temp = jQuery(this);
-            var targetId = temp.attr('data-active-class');
-
-            if (ccEntered == this.value) {                
-                jQuery("#" + targetId).removeClass(temp.attr('data-inactive-class'));
-                jQuery("#" + targetId).addClass(temp.attr('data-active-class'));
-                temp.addClass('active');
+        jQuery("#paymentfactory_tokenize_cc_type .cc").children().each(function(i, k) {             
+            var temp = jQuery("#" + k.id);            
+                        
+            if (ccEntered == temp.attr('id')) {
+                //console.log("found a match");
+                temp.removeClass(temp.attr('class')).addClass(temp.attr('data-active'));
             } else {
-                jQuery("#" + targetId).removeClass(temp.attr('data-active-class'));
-                jQuery("#" + targetId).addClass(temp.attr('data-inactive-class'));
-                temp.removeClass('active');
-            }
+                temp.removeClass(temp.attr('data-active')).addClass(temp.attr('data-inactive'));
+            } 
         });
-        
     });
+    ///jQuery('.cc-type').unbind('click');
     
-    jQuery(".cc-type").click( function() {
-        if(this.id == "paypal") {
+    jQuery("#paypal").click( function() {
+        if (jQuery('input[name="payment[method]"]').val()!=="paypal_express") {
             jQuery('input[name="payment[method]"]').val("paypal_express");
             jQuery("#paypal_payment").val("paypal_express");			            
             hpcheckout.switchPaymentMethod('paypal_express');
             newCardWrap.hide();
         } else {
-            jQuery("[id='payment[cc_type]']").val(this.value);
+            //jQuery("[id='payment[cc_type]']").val(this.value);
+            jQuery("#payment_form_paypal_express").hide();
             jQuery("[id='payment[cybersource_subid]']").attr("checked", false);
+            //disable the adress select here. 
             jQuery('#billing-address-select').attr('disabled', false);
             newCardWrap.show();
         }
@@ -249,7 +246,7 @@ jQuery(document).ready( function() {
 	jQuery(".use-saved-card-control").click( function(){
 	    newCardWrap.hide();
         jQuery("#paymentfactory_tokenize_cc_type input").attr("checked", false);
-        jQuery('#hpcheckout-billing-form :input').attr("disabled", true);
+        checkoutPayment.disableAddress(true, 'hpcheckout-billing-form');
         jQuery('#billing-address-select').attr('disabled', true);
 	});
 });
@@ -273,23 +270,22 @@ jQuery(document).ready( function() {
         		 <div id="<?php echo $_code ?>_cc_type" data-toggle="buttons-radio">
         		 <?php $i=0; ?>
         		 <?php foreach ($this->getCcAvailableTypes() as $_typeCode => $_typeName): ?>
-                 <button type="button" class="btn validate-cybsersource-cc-type cc-type" value="<?php echo $_typeCode ?>" <?php if ($_typeCode==$_ccType) { echo "checked"; } ?> data-active-class="<?php echo strtolower($_typeCode); ?>" data-inactive-class="<?php echo $_cssClassNamesForCardTypes[strtolower($_typeCode)]; ?>"> 
         		    <span class="cc">
-        		 	    <span id="<?php echo strtolower($_typeCode); ?>" title="<?php echo $_typeName; ?>" class="<?php echo $_cssClassNamesForCardTypes[strtolower($_typeCode)]; ?>" >
+        		 	    <span id="<?php echo strtolower($_typeCode); ?>" title="<?php echo $_typeName; ?>" class="<?php echo $_cssClassNamesForCardTypes[strtolower($_typeCode)]; ?>" data-active="<?php echo strtolower($_typeCode); ?>" data-inactive="<?php echo $_cssClassNamesForCardTypes[strtolower($_typeCode)]; ?>">
         		 	    </span>
         		 	</span> 
-                 </button>              
+                 <!-- </button> -->              
         		 <?php $i++; ?>
         		 <?php endforeach ?>
         		 <?php $methods = $this->getLayout()->getBlock('hpcheckout.payment.methods')->getMethods();  ?> 
                  <?php if(count($methods)): ?>
                  	<?php if(!$multiShipping && !$hasVirtual && Mage::getModel('paypal/config')->isMethodActive('paypal_express')): ?>
-			    	    <button type="button" class="btn cc-type" id="paypal" name="paypal">
-			    	        <div>
+			    	    <!-- <button type="button" class="btn cc-type" id="paypal" name="paypal"> -->
+			    	        <div id="paypal" name="paypal">
         		 	            <span title="Paypal Express" class="paypal"></span>
         		 	            <a class="what-is-paypal-link" href="https://www.paypal.com/cgi-bin/webscr?cmd=xpt/Marketing/popup/OLCWhatIsPayPal-outside" target="_blank">What is<br /> PayPal?</a>
         		 	        </div>
-        		 	    </button>
+        		 	    <!-- </button> -->
         		 	<?php endif; ?>
                  <?php endif; ?>  
                     <input type="hidden" name="paypal_payment" id="paypal_payment" value="">
