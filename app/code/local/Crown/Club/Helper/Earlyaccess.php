@@ -54,7 +54,8 @@ class Crown_Club_Helper_Earlyaccess extends Mage_Core_Helper_Abstract {
      */
     public function getEventTimeUntilAvailableForMembers($category) {
         $earlyAccessTimeWindow = $this->getEarlyAccessTime();
-        $startDate = new Zend_Date($category->getEventStartDate());
+        $startDate = new Zend_Date($category->getEventStartDate()
+            ,'yyyy-MM-dd hh:mm:ss');
         $earlyAccessStartDate = clone $startDate;
         $earlyAccessStartDate->subSecond($earlyAccessTimeWindow);
         return $earlyAccessStartDate;
