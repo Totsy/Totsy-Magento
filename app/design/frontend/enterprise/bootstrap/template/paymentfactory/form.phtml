@@ -229,23 +229,40 @@ jQuery(document).ready( function() {
     
     jQuery("#paypal").click( function() {
         if (jQuery('input[name="payment[method]"]').val()!=="paypal_express") {
-            jQuery('input[name="payment[method]"]').val("paypal_express");
-            jQuery("#paypal_payment").val("paypal_express");			            
-            hpcheckout.switchPaymentMethod('paypal_express');
+            jQuery("#").val("paypal_express");
+            jQuery("#add_payment_toggle").show();			            
             newCardWrap.hide();
+            jQuery(".cc_info").css({'opacity': .5});
+            jQuery(".cards").css({'opacity': .5});
         } else {
+            jQuery('#billing-address').hide();
+            jQuery('#shipping-address').hide();
             //jQuery("[id='payment[cc_type]']").val(this.value);
-            jQuery("#payment_form_paypal_express").hide();
             jQuery("[id='payment[cybersource_subid]']").attr("checked", false);
+            jQuery("#add_payment_toggle").hide();			            
             //disable the adress select here. 
             jQuery('#billing-address-select').attr('disabled', false);
             newCardWrap.show();
+            jQuery(".cc_info").css({'opacity': 100});
+            jQuery(".cards").css({'opacity': 100});        
         }
     });
     
-	jQuery(".use-saved-card-control").click( function(){
-	    newCardWrap.hide();
-        jQuery("#paymentfactory_tokenize_cc_type input").attr("checked", false);
+    jQuery("#add_payment_toggle").click(function(){
+        if (jQuery('input[name="payment[method]"]').val()=="paypal_express") {
+            jQuery(".cc_info").css({'opacity': 100});
+            jQuery(".cards").css({'opacity': 100});
+            jQuery("#add_payment_toggle").hide();
+            newCardWrap.show();
+        } else {
+            jQuery(".cc_info").css({'opacity': .5});
+            jQuery(".cards").css({'opacity': .5});
+            newCardWrap.hide();
+        }
+    });
+    
+	jQuery(".use-saved-card-control").click( function() {
+        jQuery("#paymentfactory_tokenize_cc_type input").attr("checked", false );
         checkoutPayment.disableAddress(true, 'hpcheckout-billing-form');
         jQuery('#billing-address-select').attr('disabled', true);
 	});
@@ -259,7 +276,7 @@ jQuery(document).ready( function() {
         	<div class="hpcheckout-payment-title">
         	    <h4 class="legend">Your payment methods</h4>
         	</div>
-        	<div class="cc_types use-new-card-wrapper input-box validation-error pull-right">
+        	<div class="use-new-card-wrapper input-box validation-error pull-right">
         		<?php $_ccType = $this->getInfoData('cc_type') ?>
         		<?php $_cssClassNamesForCardTypes = Array(
                     'vi'=>'vb',
@@ -267,10 +284,10 @@ jQuery(document).ready( function() {
                     'mc'=>'mb',
                     'ae'=>'ab'
         		); ?>
-        		 <div id="<?php echo $_code ?>_cc_type" data-toggle="buttons-radio">
+        		 <div class="cc_types" id="<?php echo $_code ?>_cc_type">
         		 <?php $i=0; ?>
         		 <?php foreach ($this->getCcAvailableTypes() as $_typeCode => $_typeName): ?>
-        		    <span class="cc">
+        		    <span class="cc cards">
         		 	    <span id="<?php echo strtolower($_typeCode); ?>" title="<?php echo $_typeName; ?>" class="<?php echo $_cssClassNamesForCardTypes[strtolower($_typeCode)]; ?>" data-active="<?php echo strtolower($_typeCode); ?>" data-inactive="<?php echo $_cssClassNamesForCardTypes[strtolower($_typeCode)]; ?>">
         		 	    </span>
         		 	</span> 
@@ -440,7 +457,7 @@ jQuery(document).ready( function() {
 <div id="add_payment">
 	<hr />
 	<div id="hpcheckout-payment-add-title">
-		<h4 class="legend">Add a payment method</h4>
+		<h4 class="legend"><img id="add_payment_toggle" style="margin-top:-5px;display:none !important" width="20" height="20" src="/skin/frontend/enterprise/bootstrap/images/iconmonstr-plus-5-icon.png">Add a payment method</h4>
 	</div>
 	<div style="clear:both"></div>
 	<div>
