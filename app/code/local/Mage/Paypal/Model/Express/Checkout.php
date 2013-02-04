@@ -558,6 +558,9 @@ class Mage_Paypal_Model_Express_Checkout
             case Mage_Sales_Model_Order::STATE_COMPLETE:
             case Mage_Sales_Model_Order::STATE_PAYMENT_REVIEW:
                 $order->sendNewOrderEmail();
+                //Fill Customer First/Last Name with Billing Address Infos
+                $customer = $this->getCustomerSession()->getCustomer();
+                $customer->fillNameWithBillingAddress($order->getBillingAddress());
                 break;
         }
         $this->_order = $order;

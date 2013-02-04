@@ -218,4 +218,12 @@ class Totsy_Customer_Model_Customer
         $customerEmail = Mage::helper('customer')->sanitizeEmail($customerEmail);
         return parent::loadByEmail($customerEmail);
     }
+
+    public function fillNameWithBillingAddress($billingAddress) {
+        if((!$this->getFirstname() || !$this->getLastname()) && $billingAddress) {
+            $this->setFirstname($billingAddress->getFirstname())
+                ->setLastname($billingAddress->getLastname())
+                ->save();
+        }
+    }
 }
