@@ -40,23 +40,23 @@ if($profiles) {
             $period_unit = $profile->getPeriodUnit();
             $next_billing_date = date('F dS, Y', strtotime(date("Y-m-d", strtotime($profile_data['updated_at'])) . " + 1 month"));
             $action = 'suspend';
-            $form_elements = array(
+        /*    $form_elements = array(
                 'slider-frame' => '',
                 'slider-button' => '',
                 'checkbox' => ' checked="checked"',
                 'renewal-info' => ''
-            );
+            ); */
         }
         else {
             $period_unit = $profile->getPeriodUnit();
             $next_billing_date = 'Not Active';
             $action = 'activate';
-            $form_elements = array(
+        /*    $form_elements = array(
                 'slider-frame' => 'inactive',
                 'slider-button' => 'off',
                 'checkbox' => ' ',
                 'renewal-info' => 'display:none;'
-            );
+            ); */
         }
 
         break;
@@ -85,16 +85,29 @@ $customer = Mage::registry('current_customer');
                 <input type="text" readonly="readonly" class="input-xlarge" value="<?php echo $next_billing_date;?>" />
             </td>
         </tr>
+        <?php if($profile->getState() == 'active') : ?>
         <tr>
             <td class="plus-label">&nbsp;</td>
-            <td class="plus-value renewal-info"><div class="f12" style="<?php echo $form_elements['renewal-info'];?>">Your TotsyPLUS subscription will renew automatically each month.<br/>For more information on TotsyPLUS, please see the<br/><a href="/plus/terms.html" class="dark underline">Terms and Conditions</a></div></td>
+            <td class="plus-value renewal-info"><div class="f12">Your TotsyPLUS subscription will renew automatically each month.<br/>For more information on TotsyPLUS, please see the<br/><a href="/plus/terms.html" class="dark underline">Terms and Conditions</a></div></td>
         </tr>
+        <?php endif; ?>
         <tr>
             <td class="plus-label"> </td>
             <td class="plus-value slider-box">
+                <?php if($profile->getState() == 'active') : ?>
                 <button type="button" id="cancel-plus" class="cancel-plus"></button>
-                <!-- <div class="slider-frame <?php echo $form_elements['slider-frame'];?>"><span class="slider-button <?php echo $form_elements['slider-button'];?>"></span></div> -->
-                <!-- <input type="checkbox" id="on-off" <?php echo $form_elements['checkbox'];?> /> -->
+                <?php else : ?>
+                    <?php // get the proper month and year for the billing cylce
+                    $m = date('n', strtotime($profile_data['updated_at']));
+                    $d = date('d', strtotime($profile_data['created_at']));
+                    $y = date('Y');
+                    ?>
+                Sorry to see you go. You can still access these benefits until your billing cycle ends on <?php echo date('F jS, Y', mktime(0,0,0, date($m)+1, date($d), date($y))); ?>.
+                <?php endif; ?>
+                <?php /* CODE FOR TOGGLE SWITCH */
+                /*<div class="slider-frame <?php echo $form_elements['slider-frame'];?>"><span class="slider-button <?php echo $form_elements['slider-button'];?>"></span></div>
+                  <input type="checkbox" id="on-off" <?php echo $form_elements['checkbox'];?> />*/
+                ?>
             </td>
         </tr>
         <tr>
@@ -109,20 +122,21 @@ $customer = Mage::registry('current_customer');
 
     <script type="text/javascript">
         jQuery('#cancel-plus').click(function(){
-            var choice = confirm("Are you sure you want to cancel your TotsyPLUS membership? This choice is not reversible.")
+            var choice = confirm("Are you sure? If you cancel your account, you can still access the TotsyPLUS benefits for the remainder of your billing period - after that, you'll have to sign up again to get these great benefits!")
             if(choice == true) {
                 jQuery.getJSON(
-                    '<?php echo Mage::getUrl('totsyplus/profile_recurring/update/profile/' .$profile->getId(). '/action/cancel/', array('_secure' => Mage::app()->getStore()->isCurrentlySecure()));?>', function(data){
+                    '<?php echo Mage::getUrl('totsyplus/profile_recurring/update/profile/' .$profile->getId(). '/action/suspend/', array('_secure' => Mage::app()->getStore()->isCurrentlySecure()));?>', function(data){
                         if(data.error == false) {
-                            window.alert('Your TotsyPLUS membership has been successfully cancelled.')
-                            window.location.href = "/plus"
+                            window.alert('Your TotsyPLUS membership has been suspended.')
+                            window.location.href = "/sales/recurring_profile/"
                         } else {
                             window.alert(data.message);
                         }
                  });
             }
         });
-      /*  jQuery('.slider-button').toggle(function(){
+        <?php /* CODE BLOCK FOR ALLOWING A TOGGLE SWITCH INSTEAD OF THE CANCEL SUBSCRIPTION BUTTON */
+        /*jQuery('.slider-button').toggle(function(){
             jQuery('.slider-button').animate({ marginLeft: "28px" }, 250);
             jQuery('.slider-frame').fadeTo('fast', 1, function(){
                 jQuery(this).css('background-image', 'url(/skin/frontend/enterprise/bootstrap/images/plus/slider_off.png)');
@@ -139,6 +153,7 @@ $customer = Mage::registry('current_customer');
             jQuery('#on-off').attr('checked', 'checked');
             jQuery.get('<?php echo Mage::getUrl('totsyplus/profile_recurring/update/profile/' .$profile->getId(). '/action/activate/', array('_secure' => Mage::app()->getStore()->isCurrentlySecure()));?>');
         });*/
+        ?>
 
     </script>
 
