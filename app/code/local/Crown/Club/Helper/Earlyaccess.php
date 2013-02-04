@@ -32,6 +32,9 @@ class Crown_Club_Helper_Earlyaccess extends Mage_Core_Helper_Abstract {
      * @return bool
      */
     public function isEventAvailableForMembers ($category) {
+        if(!Mage::getStoreConfig('Crown_Club/clubgeneral/enable')) {
+            return false;
+        }
         $mageTimezone = Mage::getStoreConfig(Mage_Core_Model_Locale::XML_PATH_DEFAULT_TIMEZONE);
 
         $currentDate = new Zend_Date();

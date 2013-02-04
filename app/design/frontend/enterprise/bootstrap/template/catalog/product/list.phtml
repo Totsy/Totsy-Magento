@@ -52,7 +52,7 @@
        $timeOutFlag = 0;
     }
 
-    if (!!Mage::registry('admin_preview_mode') || ($earlyAccessHelper->isEventAvailableForMembers($_currentCategory) && $clubHelper->isClubMember($currentCustomer))) {
+    if (!!Mage::registry('admin_preview_mode') || (Mage::getStoreConfig('Crown_Club/clubgeneral/enable') && $earlyAccessHelper->isEventAvailableForMembers($_currentCategory) && $clubHelper->isClubMember($currentCustomer))) {
         $timeOutFlag = 0;
     }
 ?>

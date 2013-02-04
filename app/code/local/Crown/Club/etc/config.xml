@@ -101,6 +101,7 @@
 	<default>
 		<Crown_Club>
 			<clubgeneral>
+                <enable>0</enable>
 				<grace_period>7</grace_period>
 				<nonclub_customer_group>-1</nonclub_customer_group>
 				<club_customer_group>-1</club_customer_group>

@@ -99,7 +99,9 @@ $customer = Mage::registry('current_customer');
         </tr>
         <tr>
             <td> </td>
+            <?php if(Mage::getStoreConfig('Crown_Club/clubgeneral/enable')): ?>
             <td><a href="<?php echo Mage::getUrl('plus/dashboard', array('_secure' => true));?>" class="strong top-24" style="display:inline-block;">Back to TotsyPLUS Dashboard</a></td>
+            <?php endif; ?>
         </tr>
     </table>
     </div>

@@ -126,7 +126,7 @@ class Harapartners_Service_Model_Rewrite_Catalog_Product extends Mage_Catalog_Mo
             ->addAttributeToSelect(array('event_start_date','event_end_date'));
 
         $earlyAccessTime = false;
-        if(($customer = Mage::helper('customer')->getCustomer()) && (Mage::helper('crownclub')->isClubMember($customer))) {
+        if(Mage::getStoreConfig('Crown_Club/clubgeneral/enable') && ($customer = Mage::helper('customer')->getCustomer()) && (Mage::helper('crownclub')->isClubMember($customer))) {
             $earlyAccessTime = Mage::helper('crownclub/earlyaccess')->getEarlyAccessTime();
         }
 

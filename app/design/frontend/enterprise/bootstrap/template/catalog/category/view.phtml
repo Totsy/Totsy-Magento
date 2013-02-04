@@ -76,13 +76,13 @@
 		$upComingFlag = 0;
         $inEarly = false;
     // Event available to club members now
-    } elseif($clubHelper->isClubMember($currentCustomer) && $earlyAccessHelper->isEventAvailableForMembers($_category)) {
+    } elseif(Mage::getStoreConfig('Crown_Club/clubgeneral/enable') && $clubHelper->isClubMember($currentCustomer) && $earlyAccessHelper->isEventAvailableForMembers($_category)) {
         $timecount = $endcount_lc;
         $timerFlag = 'Sale ends in';
         $upComingFlag = 0;
         $inEarly = true;
     // Event available to club members in X time
-    } elseif($clubHelper->isClubMember($currentCustomer) && !$earlyAccessHelper->isEventAvailableForMembers($_category)) {
+    } elseif(Mage::getStoreConfig('Crown_Club/clubgeneral/enable') && $clubHelper->isClubMember($currentCustomer) && !$earlyAccessHelper->isEventAvailableForMembers($_category)) {
         $timecount = $startcount_lc;
         $timerFlag = 'Sale begins in';
         $upComingFlag = 1;
@@ -184,6 +184,7 @@
                         $clubProduct = $clubHelper->getClubProduct();
                     ?>
                         <div>
+                            <?php if(Mage::getStoreConfig('Crown_Club/clubgeneral/enable')): ?>
                             <div style="display: inline-block; width: 27%">
                                 <strong><?php echo Mage::getStoreConfig('Crown_Club/clubearlyaccess/early_access_to_sale_text');?></strong>
                                 <span class="timesmall-<?php echo $timer ?>" style="color: #ff0000"></span>
@@ -197,6 +198,7 @@
                                 <a href="<?php echo $url ?>"><img src="/skin/frontend/enterprise/bootstrap/images/plus/learn_more.png" /></a>
                                 <?php endif; ?>
                             </div>
+                            <?php endif; ?>
                         </div>
                     <?php endif; ?>
                 </p>
