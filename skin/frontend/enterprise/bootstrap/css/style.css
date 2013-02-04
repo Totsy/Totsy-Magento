@@ -313,6 +313,9 @@ body.customer-account-login .btn.btn-large {
 #navSocial > a {
     background: url('../images/icon-like-whot.png') 100% 50% no-repeat;
 }
+#navTotsyPlus.nonmember > a {
+    background: url('../images/icon-totsyplus-25x26.png') 100% 50% no-repeat;
+}
 .navbar .nav > li > a:hover {
     color: #636466;
     text-decoration: none;
