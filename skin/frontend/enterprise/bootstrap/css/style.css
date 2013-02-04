@@ -2165,22 +2165,22 @@ html.plus-html#stickywrap { padding-top: 35px; }
     height: 29px;
 }
 
-.category-discount-vault .dialog, .categorypath-entertainment-savings .dialog {
+.category-discount-vault .dialog, .category-entertainment-savings .dialog {
     background: #FFF;
     padding: 8px;
     border-radius: 8px;
 }
 
-.category-discount-vault .dialog .alphacube_message strong, .categorypath-entertainment-savings .dialog .alphacube_message strong {
+.category-discount-vault .dialog .alphacube_message strong, .category-entertainment-savings .dialog .alphacube_message strong {
     margin-bottom: 12px;
     display: inline-block;
 }
 
-.category-discount-vault .dialog table.table_window, .categorypath-entertainment-savings .dialog table.table_window {
+.category-discount-vault .dialog table.table_window, .category-entertainment-savings .dialog table.table_window {
     border-bottom: none;
 }
 
-.category-discount-vault .alphacube_title, .categorypath-entertainment-savings .alphacube_title {
+.category-discount-vault .alphacube_title, .category-entertainment-savings .alphacube_title {
     display: none;
 }
 
@@ -2225,17 +2225,17 @@ html.plus-html#stickywrap { padding-top: 35px; }
     display: none;
 }
 
-.category-discount-vault .btn-cart span, .categorypath-entertainment-savings .btn-cart span {
+.category-discount-vault .btn-cart span, .category-entertainment-savings .btn-cart span {
     display: none;
 }
 
-.category-discount-vault .alphacube_buttons, .categorypath-entertainment-savings .alphacube_buttons {
+.category-discount-vault .alphacube_buttons, .category-entertainment-savings .alphacube_buttons {
     position: absolute;
     top: -8px;
     right: -8px;
 }
 
-.category-discount-vault .alphacube_buttons .ok_button, .categorypath-entertainment-savings .alphacube_buttons .ok_button {
+.category-discount-vault .alphacube_buttons .ok_button, .category-entertainment-savings .alphacube_buttons .ok_button {
     background: url(/skin/frontend/enterprise/bootstrap/images/plus/close.png) no-repeat 0 0;
     width: 28px;
     height: 28px;
