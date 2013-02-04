@@ -22,7 +22,7 @@ class Crown_Vouchers_Model_Mysql4_Setup extends Mage_Eav_Model_Entity_Setup {
         $this->createEntertainmentSavingsAttribute();
     }
 
-    public function upgradeModule_1_3() {
+    public function upgradeModule_1_4() {
         $this->createEntertainmentStateAttribute();
     }
 	

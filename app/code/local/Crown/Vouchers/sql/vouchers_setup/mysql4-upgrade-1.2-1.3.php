@@ -4,6 +4,7 @@ $installer = $this;
 
 $installer->startSetup ();
 
-$installer->upgradeModule_1_2(); // Execute Module Installation
+// Do nothing due to a commit error.  All properties will be fixed in 1.4
+//$installer->upgradeModule_1_2(); // Execute Module Installation
 
 $installer->endSetup ();
