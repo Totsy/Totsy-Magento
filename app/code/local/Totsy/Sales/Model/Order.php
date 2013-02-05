@@ -196,7 +196,7 @@ class Totsy_Sales_Model_Order extends Mage_Sales_Model_Order
         // order, with the appropriate redemption code
         foreach ($this->getAllItems() as $orderItem) {
             $product = Mage::getModel('catalog/product')
-                ->load($orderItem->getProduct()->getId());
+                ->load($orderItem->getProduct());
 
             if ($product->getIsVirtual()) {
 
