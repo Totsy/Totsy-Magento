@@ -138,18 +138,18 @@
 			<club_clean_expired>
 				<schedule>
 					<cron_expr>0 0 * * *</cron_expr>
-					<run>
-						<model>crownclub/observer::removeExpiredClubMembers</model>
-					</run>
-				</schedule>
+                </schedule>
+                <run>
+                    <model>crownclub/observer::removeExpiredClubMembers</model>
+                </run>
 			</club_clean_expired>
 			<club_warn_expired>
 				<schedule>
 					<cron_expr>0 0 * * *</cron_expr>
-					<run>
-						<model>crownclub/observer::warnExpiredClubMembers</model>
-					</run>
-				</schedule>
+                </schedule>
+                <run>
+                    <model>crownclub/observer::warnExpiredClubMembers</model>
+                </run>
 			</club_warn_expired>
 		</jobs>
 	</crontab>
