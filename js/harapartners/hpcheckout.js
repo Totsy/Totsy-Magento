@@ -229,6 +229,11 @@ HpCheckout.prototype = {
         //only validate these fields when the customer deceides to place an order (when they click the "Place Order" button on the onepage checkout)
         jQuery("[id='shipping:postcode']").addClass("required-entry validate-zip");
         jQuery("[id='shipping:telephone']").addClass("required-entry validate-phoneLax");
+        
+        if(typeof checkoutPayment!=="undefined") {
+            checkoutPayment.disableAddress(false, "hpcheckout-shipping-form");
+        }
+        
         if (!this.validate()) {
             return;
         }
