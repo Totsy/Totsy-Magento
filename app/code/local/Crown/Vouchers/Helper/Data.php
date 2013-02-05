@@ -29,7 +29,8 @@ class Crown_Vouchers_Helper_Data extends Mage_Core_Helper_Abstract {
 	}
 
     public function getDiscount($originalPrice, $salePrice) {
-        $discount = (1.00 - ($salePrice / $originalPrice)) * 100;
+
+        $discount = $originalPrice ? (1.00 - ($salePrice / $originalPrice)) * 100 : $salePrice;
         return substr($discount, 0, 2) . '%';
     }
 
