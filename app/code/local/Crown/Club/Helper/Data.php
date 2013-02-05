@@ -136,7 +136,7 @@ class Crown_Club_Helper_Data extends Mage_Core_Helper_Abstract {
         $listArray = array(
             $clubListName       => 1,
         );
-        $this->_enqueueEmail($sailthru, $customerModel->getEmail(), array(), $listArray);
+        $this->_enqueueEmail($customerModel->getEmail(), array(), $listArray);
     }
 
     /**
@@ -163,7 +163,7 @@ class Crown_Club_Helper_Data extends Mage_Core_Helper_Abstract {
         $listArray = array(
             $clubListName       => 0,
         );
-        $this->_enqueueEmail($sailthru, $customerModel->getEmail(), array(), $listArray);
+        $this->_enqueueEmail($customerModel->getEmail(), array(), $listArray);
     }
 
     /**
