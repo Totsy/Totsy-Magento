@@ -131,13 +131,6 @@ HpCheckout.prototype = {
             blockType = 'shipping';
         }
         if (clickedAddress.val() === '') {
-            if (typeof checkoutPayment !== "undefined") {
-                if (blockType == 'billing') {
-                    checkoutPayment.disableAddress(false, 'hpcheckout-billing-form');
-                } else if (blockType == 'shipping') {
-                    checkoutPayment.disableAddress(false, 'hpcheckout-shipping-form');
-                }
-            }
             
             jQuery('#' + hpcheckout.data.blocks[blockType].formId + ' input').val('');
             
@@ -145,15 +138,6 @@ HpCheckout.prototype = {
                 jQuery('#billing\\:selected').val('');
             }
         } else {
-            
-            if(typeof checkoutPayment !== "undefined") {    
-                if (checkoutPayment.hasProfile === true || jQuery("#billing-address-select").val() !== '') {
-                    checkoutPayment.disableAddress(true, 'hpcheckout-billing-form');
-                }
-                if (jQuery("#shipping-address-select").val() !== '') {
-                    checkoutPayment.disableAddress(true, 'hpcheckout-shipping-form');
-                }
-            }
             
             if (hpcheckoutAddresses[clickedAddress.val()]) {
                 jQuery('select#' + blockType + '\\:country_id').val(hpcheckoutAddresses[clickedAddress.val()]['country_id']);
@@ -229,6 +213,11 @@ HpCheckout.prototype = {
         //only validate these fields when the customer deceides to place an order (when they click the "Place Order" button on the onepage checkout)
         jQuery("[id='shipping:postcode']").addClass("required-entry validate-zip");
         jQuery("[id='shipping:telephone']").addClass("required-entry validate-phoneLax");
+        
+        if(typeof checkoutPayment!=="undefined") {
+            checkoutPayment.disableAddress(false, "hpcheckout-shipping-form");
+        }
+        
         if (!this.validate()) {
             return;
         }

@@ -19,30 +19,3 @@
     <?php endif; ?>
 <?php endforeach; ?>
 <?php endif ?>
-<script type="text/javascript">
-    jQuery(document).ready( function() {   
-    
-        /*
-        if(jQuery('input:radio[name=paypal_payment]')) {
-            jQuery('input:radio[name=paypal_payment]').click( function() {
-                jQuery('.validate-cybsersource-cc-type').attr("checked", false);
-        	       jQuery('input[name="payment[method]"]').val("paypal_express");
-                hpcheckout.switchPaymentMethod('paypal_express');			
-            });
-        } */   
-
-        jQuery('.validate-cybsersource-cc-type').click( function() {
-            if(jQuery('#paypal_payment').length > 0) {
-                jQuery('#paypal_payment').attr("checked", false);
-            }
-            if(jQuery("#payment_form_paypal_express").length > 0) {
-                jQuery("#payment_form_paypal_express").hide();
-            }
-            jQuery("#cc_data").show();
-            jQuery('input[name="payment[method]"]').val("paymentfactory_tokenize");
-    		hpcheckout.switchPaymentMethod('paymentfactory_tokenize');		
-        });
-
-
-    });	
-</script>
