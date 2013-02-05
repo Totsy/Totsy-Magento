@@ -44,6 +44,17 @@ class Totsy_Customer_Model_Observer
                 $response->setRedirect($urlRedirect . '?auto=login');
                 return $this;
             } else if (preg_match("/\b[A-Z0-9._%-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b/i", $email)) {
+                // look for an affiliate code to register this customer under
+                if ($affiliateCode = $request->getQuery('auto_access_affiliate')) {
+                    $affiliate = Mage::getModel('affiliate/record')
+                        ->loadByAffiliateCode($affiliateCode);
+
+                    if ($affiliate && $affiliate->getId()) {
+                        $session = Mage::getSingleton('customer/session');
+                        $session->setAffiliate($affiliate);
+                    }
+                }
+
                 $customer = Mage::getModel('customer/customer');
                 $newPassword = $customer->generatePassword();
                 $customer->setWebsiteId(1)
@@ -51,6 +62,11 @@ class Totsy_Customer_Model_Observer
                     ->setEmail($email)
                     ->setPassword($newPassword)
                     ->save();
+
+                Mage::dispatchEvent(
+                    'customer_register_success',
+                    array('account_controller' => $this, 'customer' => $customer)
+                );
 
                 $templateParams = array(
                     'customer' => $customer,
