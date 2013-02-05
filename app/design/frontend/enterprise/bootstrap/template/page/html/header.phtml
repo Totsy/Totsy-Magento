@@ -107,6 +107,11 @@
                 <a class="cta-link" href="<?php echo $this -> getBaseUrl();?>invitation">INVITE FRIENDS <strong>GET A <em>$15</em> CREDIT</strong></a><?php echo $this->getAdditionalHtml() ?>
             </div>
 -->
+
+          <form id="search_mini_form" action="<?php echo $this->helper('catalogsearch')->getResultUrl() ?>" method="get" class="pull-right">
+            <input class="input-small" id="search" type="text" placeholder="<?php echo $this->__('Search') ?>" name="<?php echo $this->helper('catalogsearch')->getQueryParamName() ?>">
+            <button class="btn" type="submit"><?php echo $this->__('Search') ?></button>
+          </form>
         </div>
     </nav>
 </header><!-- /.navbar -->
