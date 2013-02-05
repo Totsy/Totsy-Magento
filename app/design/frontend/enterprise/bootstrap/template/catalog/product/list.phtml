@@ -35,31 +35,37 @@
     //$_salesProducts = Array();
     $_productCollection=$this->getLoadedProductCollection();
     $_currentCategory = Mage::getSingleton('catalog/layer')->getCurrentCategory();
+    $currentCustomer = Mage::helper('customer')->getCustomer();
+    $earlyAccessHelper = Mage::helper('crownclub/earlyaccess');
+    $clubHelper = Mage::helper('crownclub');
     $_helper = $this->helper('catalog/output');
+
     $defaultTimezone = date_default_timezone_get();
     $mageTimezone = Mage::getStoreConfig(Mage_Core_Model_Locale::XML_PATH_DEFAULT_TIMEZONE);
     date_default_timezone_set($mageTimezone);
     $now = now();
     date_default_timezone_set($defaultTimezone);
+
     if ( strtotime($now) >= strtotime($_currentCategory->getData('event_end_date')) || strtotime($now) < strtotime($_currentCategory->getData('event_start_date'))){
-    $timeOutFlag = 1;
+        $timeOutFlag = 1;
     } else {
        $timeOutFlag = 0;
     }
-    if (!!Mage::registry('admin_preview_mode')) {
+
+    if (!!Mage::registry('admin_preview_mode') || (Mage::getStoreConfig('Crown_Club/clubgeneral/enable') && $earlyAccessHelper->isEventAvailableForMembers($_currentCategory) && $clubHelper->isClubMember($currentCustomer))) {
         $timeOutFlag = 0;
     }
 ?>
-    <?php if( !$_productCollection->count() || $timeOutFlag ): 
+    <?php if( !$_productCollection->count() || $timeOutFlag ):
         // display nothing if no collections or event expired
         // @TODO: this logic seems flawed, better to test negation? Refactor post-MVP launch.
-        // i.e. " if ( $_productCollection->count() && !$timeOutFlag ): //render the events grid… 
+        // i.e. " if ( $_productCollection->count() && !$timeOutFlag ): //render the events grid…
     ?>
     <?php else : ?>
     <div class="row">
         <div class="span12 event-products">
         <?php // Grid Only Mode ?>
-        <?php 
+        <?php
             /*
              * @GOTCHA: these collecitonSize and columnCount vars are not being used
              * - no longer needing to count colleciton size to close ULs (all products are now in one big UL)
@@ -68,7 +74,7 @@
         ?>
         <?php //$_collectionSize = $_productCollection->count() ?>
         <?php //$_columnCount = 3; //for the elements number will be changed by the filter ?>
-        <?php //$_columnCount = $this->getColumnCount(); ?>        
+        <?php //$_columnCount = $this->getColumnCount(); ?>
             <ul class="thumbnails event_prod_grid">
         	<?php foreach ($_productCollection as $_product): ?>
         		<?php if ( $_product->isSalable() ):?>
@@ -89,7 +95,7 @@
                     </li>
                     <?php $_salesProducts[] =  $_product->getId(); ?>
                 <?php endif; ?>
-            <?php endforeach; ?> 
+            <?php endforeach; ?>
             <?php //Mage::register( 'current_sales_products', $_salesProducts ); ?>
         	<?php foreach ($_productCollection as $_product): ?>
         		<?php if ( !$_product->isSalable() ):?>

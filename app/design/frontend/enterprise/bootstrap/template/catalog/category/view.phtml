@@ -45,33 +45,56 @@
     $_category  = $this->getCurrentCategory();
     $_imgHtml   = '';
     $timer = 'category';
-    
+
     if ($_imgUrl = $_category->getImageUrl()) {
         $_imgHtml = '<div class="category-image"><img src="'.$_imgUrl.'" alt="'.$this->htmlEscape($_category->getName()).'" title="'.$this->htmlEscape($_category->getName()).'" /></div>';
         $_imgHtml = $_helper->categoryAttribute($_category, $_imgHtml, 'image');
     }
-    
+
   	$defaultTimezone = date_default_timezone_get();
 	$mageTimezone = Mage::getStoreConfig(Mage_Core_Model_Locale::XML_PATH_DEFAULT_TIMEZONE);
 	date_default_timezone_set($mageTimezone);
 	$now = now();
 	date_default_timezone_set($defaultTimezone);
-	
+
 	$endcount_utc = strtotime($_category->getEventEndDate());
 	$startcount_utc = strtotime($_category->getEventStartDate());
 	$endcount_lc = date("F j, Y, G:i:s", $endcount_utc);
 	$startcount_lc = date("F j, Y, G:i:s", $startcount_utc);
-	
+
+    $currentCustomer = Mage::helper('customer')->getCustomer();
+
+    $clubHelper = Mage::helper('crownclub');
+    $earlyAccessHelper = Mage::helper('crownclub/earlyaccess');
+    $earlyAccessTimeCount = $earlyAccessHelper->getEventTimeUntilAvailableForMembers($_category);
+    $earlyAccessTimeCount_lc = date("F j, Y, G:i:s", $earlyAccessTimeCount->getTimestamp());
+
+    // Event available now for all members
 	if (strtotime($now) >= strtotime( $startcount_lc )){
 		$timecount = $endcount_lc;
 		$timerFlag = 'Ends in';
 		$upComingFlag = 0;
-	}else {
+        $inEarly = false;
+    // Event available to club members now
+    } elseif(Mage::getStoreConfig('Crown_Club/clubgeneral/enable') && $clubHelper->isClubMember($currentCustomer) && $earlyAccessHelper->isEventAvailableForMembers($_category)) {
+        $timecount = $endcount_lc;
+        $timerFlag = 'Sale ends in';
+        $upComingFlag = 0;
+        $inEarly = true;
+    // Event available to club members in X time
+    } elseif(Mage::getStoreConfig('Crown_Club/clubgeneral/enable') && $clubHelper->isClubMember($currentCustomer) && !$earlyAccessHelper->isEventAvailableForMembers($_category)) {
+        $timecount = $startcount_lc;
+        $timerFlag = 'Sale begins in';
+        $upComingFlag = 1;
+        $inEarly = true;
+    // Event closed to everyone!
+	} else {
 		$timecount = $startcount_lc;
 		$timerFlag = 'Opens in';
 		$upComingFlag = 1;
+        $inEarly = false;
 	}
-	
+
 ?>
 <section class="event-landing event-<?php echo ($upComingFlag ? 'upcoming' : 'current'); ?>">
     <header class="page-header has-timer clearfix">
@@ -82,7 +105,7 @@
             <a href="/event#event-upcoming">Upcoming Sales</a><i> / </i><?php echo $_helper->categoryAttribute($_category, $_category->getName(), 'name') ?>
         <?php endif;?>
         </h2>
-        <span class="count-down-timer"><span id="time-<?php echo $timer ?>"></span></span>
+        <span class="count-down-timer"><span class="time-<?php echo $timer ?>"></span></span>
         <script type="text/javascript">
             // @TODO: externalize the timer script
             if(<?php echo $upComingFlag?>){
@@ -90,15 +113,37 @@
             } else {
                 var html = getTimerHtml('live','<?php echo $timecount ?>');
             }
-            jQuery("#time-<?php echo $timer ?>").countdown({
-                //date: "12 10, 2011 16:11", //Counting TO a date
-                date: "<?php echo $timecount; ?>", //Counting TO a date
-                htmlTemplate: html,
-                onComplete: function( event ){
-                    jQuery(this).html("Completed");
-                },
-                leadingZero: true,
-                direction: "down"
+            jQuery(document).ready(function() {
+                jQuery(".time-<?php echo $timer ?>").countdown({
+                    //date: "12 10, 2011 16:11", //Counting TO a date
+                    date: "<?php echo $timecount; ?>", //Counting TO a date
+                    htmlTemplate: html,
+                    onComplete: function( event ){
+                        jQuery(this).html("Completed");
+                    },
+                    leadingZero: true,
+                    direction: "down"
+                });
+                jQuery(".timesmall-<?php echo $timer ?>").countdown({
+                    //date: "12 10, 2011 16:11", //Counting TO a date
+                    date: "<?php echo $timecount; ?>", //Counting TO a date
+                    htmlTemplate: getEarlyAccessTimerHtml('earlyaccess','<?php echo $timecount ?>'),
+                    onComplete: function( event ){
+                        jQuery(this).html("Completed");
+                    },
+                    leadingZero: true,
+                    direction: "down"
+                });
+                jQuery(".earlytime-<?php echo $timer ?>").countdown({
+                    //date: "12 10, 2011 16:11", //Counting TO a date
+                    date: "<?php echo $earlyAccessTimeCount_lc; ?>", //Counting TO a date
+                    htmlTemplate: getEarlyAccessTimerHtml('earlyaccess','<?php echo $earlyAccessTimeCount_lc ?>'),
+                    onComplete: function( event ){
+                        jQuery(this).html("Completed");
+                    },
+                    leadingZero: true,
+                    direction: "down"
+                });
             });
         </script>
     </header>
@@ -113,7 +158,7 @@
         <?php if($_description=$this->getCurrentCategory()->getDescription()): ?>
             <div class="span6 intro-content">
                 <h3><?php echo $_helper->categoryAttribute($_category, $_category->getName(), 'name') ?></h3>
-                <!-- 
+                <!--
                 <div class="social-links">
                 <span class='st_pinterest_large pull-right' displayText='Pinterest'></span>
                 <span class='st_facebook_large pull-right' displayText='Facebook'></span>
@@ -122,6 +167,41 @@
                 </div>
                 -->
                 <p><?php echo $_helper->categoryAttribute($_category, $_description, 'description') ?></p>
+                <p>
+                    <?php if ($inEarly): ?>
+                        <?php if ($upComingFlag): ?>
+                            <img src="/skin/frontend/enterprise/bootstrap/images/plus/ladybug.png" style="vertical-align:baseline;" />
+                            <span class="rocking-text"><?php echo Mage::getStoreConfig('Crown_Club/clubearlyaccess/early_access_count_down_text');?></span>
+                            <span class="earlytime-<?php echo $timer ?>" style="color: #ff0000"></span>
+                            <span style="size: 12px; color:#cccccc"><?php echo Mage::getStoreConfig('Crown_Club/clubearlyaccess/early_access_count_down_text_non_member');?></span>
+                           <span class="timesmall-<?php echo $timer ?>"></span>
+                        <?php else: ?>
+                            <img src="/skin/frontend/enterprise/bootstrap/images/plus/ladybug.png" style="vertical-align:baseline;" />
+                            <span class="rocking-text"><?php echo Mage::getStoreConfig('Crown_Club/clubearlyaccess/early_access_in_early_text');?></span>
+                        <?php endif; ?>
+                    <?php elseif($upComingFlag):
+                        /* @var $clubProduct Mage_Catalog_Model_Product */
+                        $clubProduct = $clubHelper->getClubProduct();
+                    ?>
+                        <div>
+                            <?php if(Mage::getStoreConfig('Crown_Club/clubgeneral/enable')): ?>
+                            <div style="display: inline-block; width: 27%">
+                                <strong><?php echo Mage::getStoreConfig('Crown_Club/clubearlyaccess/early_access_to_sale_text');?></strong>
+                                <span class="timesmall-<?php echo $timer ?>" style="color: #ff0000"></span>
+                            </div>
+                            <div style="text-align: right; display: inline-block; width: 72%;">
+                                <img src="/skin/frontend/enterprise/bootstrap/images/plus/ladybug.png" style="vertical-align:baseline;" />
+                                <span class="rocking-text"><?php echo Mage::getStoreConfig('Crown_Club/clubearlyaccess/early_access_sign_up_text');?></span>
+                                <?php if(!is_null($clubProduct)):
+                                $url = Mage::getBaseUrl().'plus';
+                                ?>
+                                <a href="<?php echo $url ?>"><img src="/skin/frontend/enterprise/bootstrap/images/plus/learn_more.png" /></a>
+                                <?php endif; ?>
+                            </div>
+                            <?php endif; ?>
+                        </div>
+                    <?php endif; ?>
+                </p>
             </div>
             <div class="span4 intro-content">
                 <h3><?php echo $_helper->categoryAttribute($_category, $_category->getName(), 'name') ?></h3>
@@ -129,16 +209,16 @@
             </div>
         <?php endif; ?>
     </div><!-- /.well -->
-    
+
     <?php
     $depts = $_category->getDepartments();
     $_attributes = array();
     $_attributes = explode(',',$depts);
     $allowAttrArray = array('boys','girls','moms_dads');
     ?>
-    
+
     <?php echo $this->getProductListHtml() ?>
-    
+
     <!--
     <script type="text/javascript">var switchTo5x=true;</script>
     <script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
@@ -152,5 +232,5 @@
     "image":"<?php echo $_imgUrl; ?>"
     });
     </script>
-    -->    
+    -->
 </section>

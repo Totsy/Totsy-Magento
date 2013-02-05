@@ -35,11 +35,21 @@ class Harapartners_Categoryevent_Block_Index_Index
     public function countCategoryProducts($categoryId)
     {
         /** @var $read Varien_Db_Adapter_Interface */
-        $read   = Mage::getSingleton('core/resource')->getConnection('core_read');
-        $select = $read->select()
-            ->from('catalog_category_product', 'count(*)')
-            ->where('category_id = ?', $categoryId);
+        $read = Mage::getSingleton('core/resource')->getConnection('core_read');
 
+        $select = $read->select()
+            ->from(
+                array('cp' => 'catalog_category_product'),
+                array('product_id', 'category_id')
+            )
+            ->join(
+                array('ccs'=> 'cataloginventory_stock_status'),
+                'cp.product_id = ccs.product_id',
+                array()
+            )
+            ->where('ccs.stock_status = 1')
+            ->where('cp.category_id = ?', $categoryId);
+        
         return $read->fetchOne($select);
     }
 }
