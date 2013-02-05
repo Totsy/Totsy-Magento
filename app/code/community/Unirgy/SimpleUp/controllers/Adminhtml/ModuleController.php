@@ -111,4 +111,8 @@ class Unirgy_SimpleUp_Adminhtml_ModuleController extends Mage_Adminhtml_Controll
             $this->getLayout()->createBlock('usimpleup/adminhtml_module_grid')->toHtml()
         );
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> fix/indexers

@@ -35,19 +35,26 @@
 <?php
     $_productCollection=$this->getLoadedProductCollection();
     $_currentCategory = Mage::getSingleton('catalog/layer')->getCurrentCategory();
+    $currentCustomer = Mage::helper('customer')->getCustomer();
+    $earlyAccessHelper = Mage::helper('crownclub/earlyaccess');
+    $clubHelper = Mage::helper('crownclub');
     $_helper = $this->helper('catalog/output');
 
-	$defaultTimezone = date_default_timezone_get();
-	$mageTimezone = Mage::getStoreConfig(Mage_Core_Model_Locale::XML_PATH_DEFAULT_TIMEZONE);
-	date_default_timezone_set($mageTimezone);	
-	$now = now();
-	date_default_timezone_set($defaultTimezone);
-	
-	if ( strtotime($now) >= strtotime($_currentCategory->getData('event_start_date')) ){
+    $defaultTimezone = date_default_timezone_get();
+    $mageTimezone = Mage::getStoreConfig(Mage_Core_Model_Locale::XML_PATH_DEFAULT_TIMEZONE);
+    date_default_timezone_set($mageTimezone);
+    $now = now();
+    date_default_timezone_set($defaultTimezone);
+
+    if ( strtotime($now) >= strtotime($_currentCategory->getData('event_end_date')) || strtotime($now) < strtotime($_currentCategory->getData('event_start_date'))){
+        $timeFlag = 1;
+	} else {
 		$timeFlag = 0;
-	}else {
-		$timeFlag = 1;
 	}
+
+    if (!!Mage::registry('admin_preview_mode') || (Mage::getStoreConfig('Crown_Club/clubgeneral/enable') && $earlyAccessHelper->isEventAvailableForMembers($_currentCategory) && $clubHelper->isClubMember($currentCustomer))) {
+        $timeFlag = 0;
+    }
 ?>
 <?php if(!$_productCollection->count() || $timeFlag): ?>
 <!-- <p class="note-msg">There are no products matching the selection.</p> --> 

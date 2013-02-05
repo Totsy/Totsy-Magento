@@ -303,7 +303,7 @@ class Harapartners_Categoryevent_Model_Sortentry
                 ->addFieldToFilter('event_end_date', array( "lt" => $currentDate ));
 
         return $collection;
-    }    
+    }
 
     public function updateSortCollection(
         array $sortedLive = array(),
@@ -353,8 +353,17 @@ class Harapartners_Categoryevent_Model_Sortentry
         $live     = json_decode($this->getData('live_queue'), true);
         $upcoming = json_decode($this->getData('upcoming_queue'), true);
 
+        $earlyAccessTime = false;
+        if(($customer = Mage::helper('customer')->getCustomer()) && (Mage::helper('crownclub')->isClubMember($customer))) {
+            $earlyAccessTime = Mage::helper('crownclub/earlyaccess')->getEarlyAccessTime();
+        }
+
         foreach ($live as $idx => $event) {
-            if (strtotime($event['event_start_date']) > $now) {
+            $startTime = strtotime($event['event_start_date']);
+            if($earlyAccessTime) {
+                $startTime -= $earlyAccessTime;
+            }
+            if ($startTime > $now) {
                 // move this event to Upcoming
                 array_unshift($upcoming, $event);
                 unset($live[$idx]);
@@ -362,7 +371,11 @@ class Harapartners_Categoryevent_Model_Sortentry
         }
 
         foreach ($upcoming as $idx => $event) {
-            if (strtotime($event['event_start_date']) < $now &&
+            $startTime = strtotime($event['event_start_date']);
+            if($earlyAccessTime) {
+                $startTime -= $earlyAccessTime;
+            }
+            if ($startTime < $now &&
                 strtotime($event['event_end_date']) > $now
             ) {
                 // move this event to Live
@@ -400,7 +413,7 @@ class Harapartners_Categoryevent_Model_Sortentry
 
                 $parentCategoryId = $eventParentCat->getId();
                 $expiredParentId = $expiredParentCat->getId();
-                
+
                 try {
                     if (!$revert){
                         $expCollection = $this->getExpCategoryCollection($parentCategoryId, $currentDate)->load();
@@ -425,9 +438,9 @@ class Harapartners_Categoryevent_Model_Sortentry
 
         return $this;
     }
-    
+
     /*
-     * This function is for moving a single category that was in the 
+     * This function is for moving a single category that was in the
      * expired parent category, back to the event or main category
     **/
     public function moveSingleCategoryFromExpiredToEvent($categoryId) {
