@@ -54,8 +54,9 @@
 </div>
 <?php
     if ($sent_invitations != "N/A") :?>
-    <?php foreach($sent_invitations as $invitation) :?>
         <div class="entry-edit box-right">
+
+        <?php foreach($sent_invitations as $invitation) :?>
             <div class="entry-edit-head"><h4 class="icon-head head-customer-view"><?php echo Mage::helper('customer')->__('Has Invited') ?></h4></div>
             <fieldset>
                 <table cellspacing="2" class="box-left" width="auto">
@@ -73,7 +74,11 @@
                     </tr>
                     <tr>
                         <td><strong><?php echo $this->__('Register Date:') ?></strong></td>
-                        <td><?php echo $invitation['signup_date'] . " GMT" ?></td>
+                        <?php if($invitation['signup_date']) :?>
+                            <td><?php echo $invitation['signup_date'] . " GMT" ?></td>
+                        <?php else: ?>
+                            <td><?php echo "N/A" ?></td>
+                        <?php endif; ?>
                     </tr>
                     <tr>
                         <td><strong><?php echo $this->__('1st Purchase:') ?></strong></td>
@@ -90,8 +95,8 @@
                     </tr>
                 </table>
             </fieldset>
-        </div>
     <?php endforeach;?>
+        </div>
 <?php endif; ?>
 <div class="box-left"><div>
 <?php echo $this->getChildHtml('', true, true); ?>

@@ -238,12 +238,16 @@ class Harapartners_Stockhistory_Model_Transaction extends Mage_Core_Model_Abstra
         #init needed data
         $po = Mage::getModel('stockhistory/purchaseorder')->load($po_id);
         $_category = Mage::getModel('catalog/category')->load($po->getData('category_id'));
-
+        
         #Most Items that does not have a case pack id
         if (empty($case_pack_grp_id) && $item_id) {
             $product = Mage::getModel('catalog/product')->load($item_id);
             if(!$product->getData('is_master_pack')) {
-                return $order_amount;
+                if($order_amount) {
+                    return $order_amount;
+                } else {
+                    return "";
+                }
             }
 
             $total_units_sold = Mage::helper('stockhistory')->getIndProductSold($_category, $product);
@@ -269,8 +273,11 @@ class Harapartners_Stockhistory_Model_Transaction extends Mage_Core_Model_Abstra
                     ->addAttributeToFilter('type_id', 'simple')
                    // ->addAttributeToFilter(array(array('attribute'=>'is_master_pack', 'gt'=>0)))
                     ->addAttributeToSelect(array('case_pack_qty', 'is_master_pack'))
-                    ->addAttributeToFilter(array(array('attribute' => 'case_pack_grp_id', 'eq' => $case_pack_grp_id)));
+                    ->addAttributeToFilter(array(array('attribute' => 'case_pack_grp_id', 'eq' => $case_pack_grp_id)))
+                    ->addAttributeToFilter(array(array('attribute' => 'vendor_code', 'eq' => $po->getVendorCode())));
+                    debug($po->getVendorCode());
             foreach($products as $product) {
+                
                 if(!$product->getData('is_master_pack')) {
                     $grouped[(string)$product->getEntityId()] = array(
                         'sku' => $product->getData('sku'), 
@@ -306,7 +313,11 @@ class Harapartners_Stockhistory_Model_Transaction extends Mage_Core_Model_Abstra
                     $grouped['message'][] = array('message' => 'Successfully Updated!', 'type' => 'success' );
                     return $grouped;
                 }
-                
+
+                if(empty($grouped)) {
+                    return "";
+                }
+
                 return $grouped[$item_id]['cp_qty'];
             }
 
