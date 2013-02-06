@@ -118,6 +118,9 @@ h4 {text-transform: uppercase;}
 /**
  * @General / Modular Classes
  */
+.hide {
+    display: none;
+}
 .clearfix:before,
 .clearfix:after {
     content: "";
