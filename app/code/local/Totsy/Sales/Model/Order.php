@@ -195,8 +195,8 @@ class Totsy_Sales_Model_Order extends Mage_Sales_Model_Order
         // also send an e-mail for each virtual product that is part of this
         // order, with the appropriate redemption code
         foreach ($this->getAllItems() as $orderItem) {
-            $product = Mage::getModel('catalog/product')
-                ->load($orderItem->getProduct());
+
+            $product = Mage::getModel('catalog/product')->load($orderItem->getProductId());
 
             if ($product->getIsVirtual()) {
 
@@ -218,7 +218,7 @@ class Totsy_Sales_Model_Order extends Mage_Sales_Model_Order
                     ->loadByCode('_trans_Virtual_Product_Redemption')->getId();
 
                 $store = Mage::app()->getStore();
-                $email = $this->getCustomer()->getEmail();
+                $email = $this->getCustomerEmail();
 
                 if ($this->getStatus() != 'payment_failed') {
                     Mage::getModel('core/email_template')->sendTransactional(
