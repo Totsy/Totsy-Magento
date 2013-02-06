@@ -127,6 +127,7 @@ class Crown_Club_Helper_Data extends Mage_Core_Helper_Abstract {
 
         $sailthru = Mage::getSingleton('emailfactory/sailthruconfig')->getHandle();
         $clubListName = Mage::getStoreConfig('sailthru_options/email/sailthru_club_list');
+        $defListName = Mage::getStoreConfig('sailthru_options/email/sailthru_def_list');
 
         if (empty($clubListName)) {
             Mage::throwException('No Sailthru club list set in admin. Customer not moved.');
@@ -135,6 +136,7 @@ class Crown_Club_Helper_Data extends Mage_Core_Helper_Abstract {
         // 1 Means add 0 Means remove
         $listArray = array(
             $clubListName       => 1,
+            $defListName       => 0,
         );
         $this->_enqueueEmail($customerModel->getEmail(), array(), $listArray);
     }
@@ -153,6 +155,7 @@ class Crown_Club_Helper_Data extends Mage_Core_Helper_Abstract {
         }
         $sailthru = Mage::getSingleton('emailfactory/sailthruconfig')->getHandle();
         $clubListName = Mage::getStoreConfig('sailthru_options/email/sailthru_club_list');
+        $defListName = Mage::getStoreConfig('sailthru_options/email/sailthru_def_list');
 
         if (empty($clubListName)) {
             Mage::throwException('No Sailthru club list set in admin. Customer not removed.');
@@ -162,6 +165,7 @@ class Crown_Club_Helper_Data extends Mage_Core_Helper_Abstract {
         // 1 Means add 0 Means remove
         $listArray = array(
             $clubListName       => 0,
+            $defListName       => 1,
         );
         $this->_enqueueEmail($customerModel->getEmail(), array(), $listArray);
     }
