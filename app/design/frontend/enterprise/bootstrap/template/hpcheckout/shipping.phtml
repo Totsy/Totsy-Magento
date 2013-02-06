@@ -79,15 +79,17 @@
         if( jQuery( '#shipping-address-select' ).length > 0 ) {
         	
         	if(jQuery( '#shipping-address-select' ).val()!=="") {
+        		//disable on load
                 checkoutPayment.disableAddress(true, 'hpcheckout-shipping-form');
             }
         
             jQuery( '#shipping-address-select' ).bind('change', function() { 
-            	//enable shipping address
+            	//enable shipping address to perform update
             	checkoutPayment.disableAddress(false, "hpcheckout-shipping-form");
                 hpcheckout.switchAddress(this.id);
                 hpcheckout.update(true);
                 
+                //if a shipping address was chosen from the dropdown, disable the form
                 if(jQuery("#shipping-address-select").val()!=="") {
                 	checkoutPayment.disableAddress(true, "hpcheckout-shipping-form");
                 }
