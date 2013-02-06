@@ -78,6 +78,8 @@
 		   
         if( jQuery( '#shipping-address-select' ).length > 0 ) {
             jQuery( '#shipping-address-select' ).bind('change', function() { 
+            	//enable shipping address
+            	checkoutPayment.disableAddress(false, "hpcheckout-shipping-form");
                 hpcheckout.switchAddress(this.id);
                 hpcheckout.update(true);
             });
