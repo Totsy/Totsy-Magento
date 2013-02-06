@@ -81,7 +81,7 @@ h4 {
                 ?>
                 <?php if ($hasProduct): ?>
                     <li class="span4 catalog-event event-counter-<?php echo $timer;?>">
-                        <a href="<?php echo Mage::getBaseUrl().$live['url_path']; ?>" class="thumbnail">
+                        <a href="<?php echo Mage::getBaseUrl().Mage::getModel('core/url_rewrite')->loadByIdPath('category/'.$live['entity_id'])->getRequestPath();?>" class="thumbnail">
                             <hgroup>
                                 <h4 class="ellipsis"><?php echo $live['name'];?></h4>
                                 <div class="maxDiscount"><em>up to <span><strong><?php echo $maxDiscount; ?>%</strong> off</span></em></div>
@@ -152,7 +152,7 @@ h4 {
                 <li class="span2 alpha catalog-event up-event-counter-<?php echo $timer;?>">
                     <div class="thumbnail">
                         <hgroup>
-                            <h5><a href="<?php echo Mage::getBaseUrl().(array_key_exists('url_path',$up) ? $up['url_path'] : ''); ?>"><?php echo $up['name'];?></a></h5>
+                            <h5><a href="<?php echo Mage::getBaseUrl().Mage::getModel('core/url_rewrite')->loadByIdPath('category/'.$up['entity_id'])->getRequestPath();?>"><?php echo $up['name'];?></a></h5>
                         </hgroup>
                         <?php
                             $imgFile = (isset($up['small_image']))
@@ -160,7 +160,7 @@ h4 {
                             $up['small_image']
                             : BP . DS . 'skin' . DS . 'frontend' . DS . 'enterprise ' . DS . 'bootstrap' . DS . 'images' . DS . 'catalog' . DS . 'product' . DS . 'placeholder' . DS . 'small_image.jpg';
                         ?>
-                        <a class="event-link" href="<?php echo Mage::getBaseUrl().(array_key_exists('url_path',$up) ? $up['url_path'] : ''); ?>">
+                        <a class="event-link" href="<?php echo Mage::getBaseUrl().Mage::getModel('core/url_rewrite')->loadByIdPath('category/'.$up['entity_id'])->getRequestPath();?>">
                             <img src="<?php echo Mage::helper('service/image')->loadImageFile($imgFile)->resize(165)->keepFrame(FALSE); ?>" width="165px" height="171" alt="<?php echo $up['name'];?>" />
                         </a>
                         <?php $timer++; ?>
