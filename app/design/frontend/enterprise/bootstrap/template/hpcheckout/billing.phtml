@@ -106,8 +106,10 @@
 	    	hpcheckout.copyBillingToShipping();
 	    });
 	    
-	    if( jQuery( '#billing-address-select' ).length >0 ){
-	       jQuery( '#billing-address-select' ).bind( 'change', function(){ hpcheckout.switchAddress(this.id); hpcheckout.update(true); } );
+	    if( jQuery( '#billing-address-select' ).length >0 ) {
+	       jQuery( '#billing-address-select' ).bind( 'change', function(){ 
+	           hpcheckout.switchAddress(this.id); 
+	       });
 	    }
 	});
 //<![CDATA[

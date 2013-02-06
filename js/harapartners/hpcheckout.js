@@ -131,6 +131,7 @@ HpCheckout.prototype = {
             blockType = 'shipping';
         }
         if (clickedAddress.val() === '') {
+            
             if (typeof checkoutPayment !== "undefined") {
                 if (blockType == 'billing') {
                     checkoutPayment.disableAddress(false, 'hpcheckout-billing-form');
@@ -144,17 +145,10 @@ HpCheckout.prototype = {
             if (blockType == 'billing') {
                 jQuery('#billing\\:selected').val('');
             }
-        } else {        
-            if (typeof checkoutPayment !== "undefined") {
-                if (blockType == 'billing') {
-                    checkoutPayment.disableAddress(true, 'hpcheckout-billing-form');
-                } else if (blockType == 'shipping') {
-                    //hpcheckout.update(true);
-                    checkoutPayment.disableAddress(true, 'hpcheckout-shipping-form');
-                }
-            }
-            if (hpcheckoutAddresses[clickedAddress.val()]) {
-                jQuery('select#' + blockType + '\\:country_id').val(hpcheckoutAddresses[clickedAddress.val()]['country_id']);
+        } else {
+            
+                if (hpcheckoutAddresses[clickedAddress.val()]) {
+                	jQuery('select#' + blockType + '\\:country_id').val(hpcheckoutAddresses[clickedAddress.val()]['country_id']);
                 if (blockType == 'billing') {
                     billingRegionUpdater.update();
                 } else if (blockType == 'shipping') {
@@ -339,6 +333,9 @@ HpCheckout.prototype = {
             if (typeof checkoutPayment !== "undefined") {
                 if (checkoutPayment.hasProfile === true || jQuery("#billing-address-select").val() !== '') {
                     checkoutPayment.disableAddress(true, 'hpcheckout-billing-form');
+                }
+                if (jQuery("#shipping-address-select").val() !== '') {
+                    checkoutPayment.disableAddress(true, 'hpcheckout-shipping-form');
                 }
             }
         }

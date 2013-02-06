@@ -36,13 +36,13 @@ class Harapartners_Stockhistory_Block_Adminhtml_Widget_Grid_Column_Renderer_Inpu
         $html .= '<input type="hidden"';
         $html .= 'name="' . $this->getColumn()->getId() . '[' . $row->getData('sku') . '][qty_total]" ';
         $html .= 'value="' . $row->getData('qty_total') . '"';
-        $html .= 'class="input-text ' . $this->getColumn()->getId() . ' ' . $this->getColumn()->getInlineCss() . '"/>';
+        $html .= 'class="' . $this->getColumn()->getId() . ' ' . $this->getColumn()->getInlineCss() . '"/>';
         
         //Unit cost
         $html .= '<input type="hidden"';
         $html .= 'name="' . $this->getColumn()->getId() . '[' . $row->getData('sku') . '][unit_cost]" ';
         $html .= 'value="' . $row->getData('unit_cost') . '"';
-        $html .= 'class="input-text ' . $this->getColumn()->getId() . ' ' . $this->getColumn()->getInlineCss() . '"/>';
+        $html .= 'class="' . $this->getColumn()->getId() . ' ' . $this->getColumn()->getInlineCss() . '"/>';
         
         return $html;
     }
