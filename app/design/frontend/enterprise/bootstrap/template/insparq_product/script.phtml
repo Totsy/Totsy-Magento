@@ -1,0 +1,29 @@
+<?php
+  $http = "api.insparq.com";
+  $wVersion = "2.0.0";
+?>
+<button id="addToCart" style="position:absolute; left:-99999px;" type="button" title="Add to Cart" class="button btn-cart" onclick="productAddToCartForm.submit(this)">Add to Cart</button>
+<script type="text/javascript">
+( function() {
+   var d = document,
+      wrp = d.getElementById('issw'),
+      h = d.getElementsByTagName('head')[0],
+      notFound = (!wrp);
+   if (notFound) {
+      b = d.getElementsByTagName('body')[0];
+      wrp = d.createElement('div');
+      wrp.setAttribute('id','issw');
+   }
+   <?php foreach( $this->getDataTags() as $key => $value ) : ?>
+   wrp.setAttribute('data-issw-<?php echo $key; ?>','<?php echo $value; ?>');
+   <?php endforeach; ?>
+   if (notFound) {
+      wrp.setAttribute('data-issw-widget-style-name', 'bar');
+      b.appendChild(wrp);
+   }
+   ins = d.createElement('script');
+   ins.setAttribute('type','text/javascript');
+   ins.setAttribute('src', ('https:' == document.location.protocol ? 'https://' : 'http://') + '<?php echo $http; ?>/v<?php echo $wVersion; ?>/widget/scripts/issw.js');
+   h.appendChild(ins);
+} )();
+</script>
