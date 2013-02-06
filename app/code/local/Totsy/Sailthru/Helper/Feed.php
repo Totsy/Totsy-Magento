@@ -130,7 +130,7 @@ class Totsy_Sailthru_Helper_Feed extends Mage_Core_Helper_Abstract
         return array(
             'id'             => $event['entity_id'],
             'name'           => $event['name'],
-            'url'            => Mage::getBaseUrl().$event['url_path'],
+            'url'            => Mage::getBaseUrl().Mage::getModel('core/url_rewrite')->loadByIdPath('category/'.$event['entity_id'])->getRequestPath(),
             'description'    => $event['description'],
             'short'          => $event['short_description'],
             'availableItems' => !empty($event['products'])?'YES':'NO',
