@@ -2,11 +2,15 @@
 
 $multiShipping = FALSE;
 $fulfillmentTypes = array();
+$TotsyPLUS = false;
 
 // Check to see if there are multiple fulfillment types
 foreach($this->getItems() as $item) {
     if($item->getParentItemId()) {
         continue;
+    }
+    if($item->getProductId() == Mage::getStoreConfig('Crown_Club/clubgeneral/club_product_id')) {
+        $TotsyPLUS = true;
     }
     $product = Mage::getModel ( 'catalog/product' )->load ( $item->getProductId () );
 //        if($product->getIsVirtual()) {
@@ -35,8 +39,8 @@ $splitCartFlag = Mage::getSingleton('checkout/session')->getSplitCartFlag() ? 'c
         <thead>
             <tr>
                 <th><?php echo $this->__('Product Name') ?></th>
-                <th><?php echo $this->__('Shipping Info');?></th>
-                <th><?php echo $this->__('Price') ?></th>
+                <th><?php echo !$TotsyPLUS ? $this->__('Shipping Info') : $this->__('Info'); ?></th>
+                <th><?php echo !$TotsyPLUS ? $this->__('Price') : $this->__('Price/Month'); ?></th>
                 <th><?php echo $this->__('Qty') ?></th>
                 <th><?php echo $this->__('Subtotal') ?></th>
             </tr>

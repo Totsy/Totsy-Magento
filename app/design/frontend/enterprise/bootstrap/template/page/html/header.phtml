@@ -28,7 +28,7 @@
  */
 ?>
 <header class="navbar navbar-fixed-top">
-    <div id="monetateBanner"><i><a href="/invitation/" title="Invite Friends, get $15">Invite Friends</a></i></div>
+
     <!-- begin masthead -->
     <div id="masthead">
         <div class="container row">   
@@ -40,7 +40,7 @@
             echo $this->getLogoSrc();
             ?>" alt="<?php
             echo $this->getLogoAlt();
-            ?>" width="85px" /></a></h1>
+            ?>" /></a></h1>
         
             <ul id="userUtils" class="span4 offset6">
                 <li id="userAccount" class="dropdown">
@@ -96,6 +96,29 @@
                     <?php endforeach;?>
                     </ul>
                 </li>
+                <?php 
+                    // Check for TotsyPLUS membership, render nav appropriately
+                 ?>
+                <?php if(Mage::getStoreConfig('Crown_Club/clubgeneral/enable')): ?>
+                    <?php if (($customer = Mage::getSingleton('customer/session')->getCustomer()) && (Mage::helper('crownclub')->isClubMember($customer))) : ?>
+                        <li id="navTotsyPlus" class="dropdown">
+                            <a href="<?php echo $this->getBaseUrl()?>plus/dashboard"><em>Totsy <br />PLUS</em></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="<?php echo $this->getBaseUrl()?>plus/dashboard">Dashboard</a></li>
+                                <li><a href="<?php echo $this->getBaseUrl()?>plus/credit.html">10&#37; Credit</a></li>
+                                <li><a href="<?php echo $this->getBaseUrl()?>plus/early-access.html">Early Access</a></li>
+                                <li><a href="<?php echo $this->getBaseUrl()?>plus/exclusive-sales.html">Exclusive Sales</a></li>
+                                <li><a href="<?php echo $this->getBaseUrl()?>plus/entertainment-savings.html">Entertainment Savings</a></li>
+                                <li><a href="<?php echo $this->getBaseUrl()?>plus/discount-vault.html">Discount Vault</a></li>
+                                <li><a href="<?php echo $this->getBaseUrl()?>sales/recurring_profile/">Membership</a></li>
+                            </ul>
+                        </li>
+                    <?php else : ?>
+                        <li id="navTotsyPlus" class="nonmember">
+                            <a href="<?php echo $this->getBaseUrl()?>plus/"><em>Totsy <br />PLUS</em></a>
+                        </li>
+                    <?php endif; ?>
+                <?php endif; ?>
             </ul>
             <?php if ($this->getRequest()->getModuleName()!=="checkout" && $this->getRequest()->getModuleName()!=="hpcheckout"): ?>
             <div class="span2 offset2" id="header-checkoutBtn">
@@ -107,6 +130,11 @@
                 <a class="cta-link" href="<?php echo $this -> getBaseUrl();?>invitation">INVITE FRIENDS <strong>GET A <em>$15</em> CREDIT</strong></a><?php echo $this->getAdditionalHtml() ?>
             </div>
 -->
+
+          <form id="search_mini_form" action="<?php echo $this->helper('catalogsearch')->getResultUrl() ?>" method="get" class="pull-right">
+            <input class="input-small" id="search" type="text" placeholder="<?php echo $this->__('Search') ?>" name="<?php echo $this->helper('catalogsearch')->getQueryParamName() ?>">
+            <button class="btn" type="submit"><?php echo $this->__('Search') ?></button>
+          </form>
         </div>
     </nav>
 </header><!-- /.navbar -->

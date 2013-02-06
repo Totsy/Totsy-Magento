@@ -366,6 +366,10 @@ class Mage_Customer_AccountController extends Mage_Core_Controller_Front_Action
                         $defaultUrl = $this->_welcomeCustomer($customer);  //Harapartners, Edward, keep this function only for sending welcome email, the real url to redirect is $url
                         //$url = $this->_welcomeCustomer($customer);    
                         $url = Mage::getBaseUrl().'event/';    //Harapartners, yang, set success redirect url to home page
+                        if (Mage::getModel('core/cookie')->get('redirect')){
+                            $url = Mage::getBaseUrl().Mage::getModel('core/cookie')->get('redirect').'.html';
+                            Mage::getModel('core/cookie')->delete('redirect');
+                        } 
                         $this->_redirectSuccess($url);
                         return;
                     }
@@ -595,7 +599,8 @@ class Mage_Customer_AccountController extends Mage_Core_Controller_Front_Action
                 return;
             }
 
-            $this->_redirect('*/*/');
+            $this->_redirect('*/*/forgotpassword');
+            //$this->_redirect('*/*/');
         } else {
             $this->_getSession()->addError($this->__('Please enter your email.'));
             $this->_redirect('*/*/forgotpassword');

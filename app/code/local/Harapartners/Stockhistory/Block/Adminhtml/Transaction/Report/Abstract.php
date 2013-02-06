@@ -27,6 +27,26 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Abstract exte
         $this->setSaveParametersInSession(true);
         $this->setTemplate('widget/grid_po_report.phtml');
     }
+
+    protected function _prepareLayout() {
+        $this->setChild('clear_fields_button',
+            $this->getLayout()->createBlock('adminhtml/widget_button')
+                ->setData(array(
+                    'label'     => Mage::helper('adminhtml')->__('Clear Fields'),
+                    'onclick'   => 'clearFields()',
+                    'class'   => 'task'
+                ))
+        );
+        $this->setChild('cp_math_button',
+            $this->getLayout()->createBlock('adminhtml/widget_button')
+                ->setData(array(
+                    'label'     => Mage::helper('adminhtml')->__('Show CP Math'),
+                    'onclick'   => 'displayCasePackMath()',
+                    'class'   => 'task'
+                ))
+        );
+        parent::_prepareLayout();
+    }
     
     public function getPreparedCollection() {
         return $this->_reportCollection;
@@ -208,6 +228,21 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Abstract exte
     //No filters for this report!
     public function getFilterVisibility(){
         return false;
+    }
+
+    public function getClearFieldsButtonHtml() {
+        return $this->getChildHtml('clear_fields_button');
+    }
+     public function getCPMathButtonHtml() {
+        return $this->getChildHtml('cp_math_button');
+    }
+
+    public function getMainButtonsHtml(){
+        $html = "";
+        $html .= $this->getClearFieldsButtonHtml();
+        $html .= $this->getCPMathButtonHtml();
+        
+        return $html;
     }
     
 }

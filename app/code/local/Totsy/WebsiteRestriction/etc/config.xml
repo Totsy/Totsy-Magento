@@ -22,6 +22,7 @@
                         <inchoo_facebook_customer_account_connect/>
                         <customer_account_resetpassword/>
                         <customer_account_resetpasswordpost/>
+                        <catalogfeed_feed_sailthru/>
                     </generic>
                 </full_action_names>
             </websiterestriction>

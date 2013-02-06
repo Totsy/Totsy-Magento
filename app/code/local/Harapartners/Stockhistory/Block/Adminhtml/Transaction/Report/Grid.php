@@ -24,6 +24,7 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Grid extends 
                 ->addAttributeToSelect('original_wholesale')
                 ->addAttributeToFilter('type_id', 'simple')
                 ->addAttributeToFilter(array(array('attribute'=>'is_master_pack', 'gt'=>0)))
+                ->addAttributeToFilter(array(array('attribute'=>'vendor_code', $this->getVendorCode())))
                 ->setOrder('vendor_style', 'asc')
                 ->setOrder('color', 'asc')
 	    		->setOrder('size', 'asc');
@@ -66,7 +67,8 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Grid extends 
                         'width'        =>    '50px',
                         'index'        =>    'product_id',
                         'filter'    => false,
-                        'sortable'  => false
+                        'sortable'  => false,
+                        'renderer'  => 'stockhistory/adminhtml_widget_grid_column_renderer_itemlink'
             ));
         }
         

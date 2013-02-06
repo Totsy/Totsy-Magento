@@ -20,7 +20,7 @@
  *
  * @category    Varien
  * @package     Varien_Image
- * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
  * @license     http://www.magentocommerce.com/license/enterprise-edition
  */
 
@@ -104,12 +104,11 @@ class Varien_Image_Adapter_Gd2 extends Varien_Image_Adapter_Abstract
         $functionParameters = array();
         $functionParameters[] = $this->_imageHandler;
         $functionParameters[] = $fileName;
-        $functionParameters[] = 95;
 
         // set quality param for JPG file type
         if (!is_null($this->quality()) && $this->_fileType == IMAGETYPE_JPEG)
         {
-            //$functionParameters[] = $this->quality();
+            $functionParameters[] = $this->quality();
         }
 
         // set quality param for PNG file type

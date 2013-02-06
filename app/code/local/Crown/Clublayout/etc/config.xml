@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Crown_Clublayout>
+            <version>0.1.0</version>
+        </Crown_Clublayout>
+    </modules>
+    <global>
+        <page>
+            <layouts>
+                <Crown_Club_Category_Layout translate="label">
+                    <label>Plus Category Layout</label>
+                    <template>page/category_layout.phtml</template>
+                    <layout_handle>Category_Layout</layout_handle>
+                </Crown_Club_Category_Layout>
+                <Plus_2Column translate="label">
+                    <label>Plus 2 Column Left</label>
+                    <template>page/plus-2column.phtml</template>
+                    <layout_handle>Plus_2Column</layout_handle>
+                </Plus_2Column>
+            </layouts>
+        </page>
+        <resources>
+            <clublayout_setup>
+                <setup>
+                    <module>Crown_Clublayout</module>
+                    <class>Crown_Clublayout_Model_Resource_Setup</class>
+                </setup>
+            </clublayout_setup>
+        </resources>
+    </global>
+</config>

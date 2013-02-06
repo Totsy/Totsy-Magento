@@ -50,6 +50,14 @@
             removeCoupon();
         });
 
+        jQuery("#original").click(function() {
+            if(jQuery('#original').is(':checked')) {
+                jQuery('#order-billing_method_form').hide();
+            } else {
+                jQuery('#order-billing_method_form').show();
+            }
+        });
+
         function removeCoupon() {
             var coupon = jQuery('#coupon').val();
             if( coupon != '' ) {
@@ -114,7 +122,7 @@
     	} else {
             $('required-cc').hide();
             $('required-comment').hide();
-            if($('cybersource-use-card-method').value == "") {
+            if(($('cybersource-use-card-method') && $('cybersource-use-card-method').value == "") || !$('cybersource-use-card-method')) {
                 var paymentForm = $('payment-fields').getElements();
                 var emptyCC = false;
                 paymentForm.each(function(i) {
@@ -126,6 +134,9 @@
                     if($('p_method_free').checked) {
                         emptyCC = false;
                     }
+                }
+                if($('original').checked) {
+                    emptyCC = false;
                 }
                 if(emptyCC) {
                     $('required-cc').show();

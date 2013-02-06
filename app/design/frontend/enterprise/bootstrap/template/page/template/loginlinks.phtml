@@ -41,7 +41,7 @@
     <li><a href="/pages/careers/" title="Careers">Careers</a></li>
     <li><a href="http://totsy.custhelp.com/app/ask" title="Contact Us">Contact</a></li>
     <li><a href="http://nytm.org/made" title="Made in NYC" target="_blank">Made in NYC</a></li>
-    <address >&copy; 2012 Totsy.com. All Rights Reserved.</address>
+    <address >&copy; 2013 Totsy.com. All Rights Reserved.</address>
 </ul>
 <footer id="loginFooter" class="footer-block">
     <div id="socialLinks">
@@ -53,7 +53,7 @@
 </footer>
 </div>
 <script>
-    var jsonArray =  <?php echo Mage::app()->getLayout()->createBlock('customertracking/background')->getBackroundImagesJsonArray();?>;
+    var jsonArray =  <?php // echo Mage::app()->getLayout()->createBlock('customertracking/background')->getBackroundImagesJsonArray();?>;
     var keyword   =  jsonArray['keyword'];
     var imgDir 	  =  jsonArray['dir'];
     var items     =  jsonArray['images'];

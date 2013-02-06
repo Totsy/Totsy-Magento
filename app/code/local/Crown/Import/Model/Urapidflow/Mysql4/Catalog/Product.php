@@ -278,7 +278,7 @@ class Crown_Import_Model_Urapidflow_Mysql4_Catalog_Product extends Unirgy_RapidF
                     // Check for media image on server or remote host
                     /* @var $mediaHlper Crown_Import_Helper_Data */
                     $mediaHlper = Mage::helper('crownimport');
-                    if ( array_key_exists('frontend_input', $attr) && $attr['frontend_input']=='media_image') {
+                    if ( is_array($attr) && array_key_exists('frontend_input', $attr) && $attr['frontend_input']=='media_image') {
                         try {
                             $mediaHlper->checkForValidImageFiles( $newValue, $profile );
                         } catch (Exception $e ) {

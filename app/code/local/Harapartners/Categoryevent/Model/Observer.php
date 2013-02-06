@@ -29,6 +29,13 @@ class Harapartners_Categoryevent_Model_Observer
             Harapartners_Categoryevent_Model_Sortentry::TOP_EVENT_CATEGORY_NAME,
             Harapartners_Categoryevent_Model_Sortentry::EVENT_EXPIRED_CATEGORY_NAME,
             Harapartners_Categoryevent_Model_Sortentry::EVENT_CATEGORY_NAME,
+            'Plus',
+            'Discount Vault',
+            'Entertainment Savings',
+            'Discounts',
+            'Subscriptions',
+            'Movie Tickets',
+            'Theme Parks',
         );
 
         $categories = Mage::getModel('catalog/category')->getCollection()
