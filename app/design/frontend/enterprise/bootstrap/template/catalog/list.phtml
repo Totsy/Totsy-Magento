@@ -23,7 +23,7 @@
  */
 ?>
 
-<?php 
+<?php
 	$cdsDataObj 	= 	$this->getCdsDataObject();
 	$isFaceBook 	= 	Mage::getSingleton('customer/session')->getFacebookAccountFirstCreate();
 	$baseUrl 		= 	Mage::getBaseUrl();
@@ -31,8 +31,8 @@
 	$timer 			= 	0;
 	$topArray 		= 	'';
 	$liveArray 		= 	'';
-	$upcomingArray  = 	'';	
-	
+	$upcomingArray  = 	'';
+
 	if( $cdsDataObj->hasData('toplive') ){
 		$topArray = $cdsDataObj->getData('toplive');
 	}
@@ -49,29 +49,24 @@
 	<a id="facebook_pop" href="#facebook_window" class="hidden"></a>
 	<div style="display: none;">
 		<div id="facebook_window" class="fancybox">
-			<div class="window_content">	
+			<div class="window_content">
 				<h3><img src="<?php echo $this->getSkinUrl()?>images/facebook_pop.png" width="40px" height="40px"></img>Thanks for Joining Totsy!</h3>
 				<p>	Please retrieve your temporary password through your email and update it in your <a  class="needgreen" href="<?php echo $this->getBaseUrl()?>customer/account/edit/changepass/1/">account panel</a></p>
 			</div>
 		</div>
 	</div>
-	
+
 	<script type="text/javascript">
 	    jQuery(document).ready(function() {
 	    	jQuery("#facebook_pop").fancybox({
-				'speedIn'		:	600, 
-				'speedOut'		:	200, 
+				'speedIn'		:	600,
+				'speedOut'		:	200,
 			}).trigger('click');
 	    });
 	</script>
 	<?php Mage::getSingleton('customer/session')->setFacebookAccountFirstCreate(false);?>
 <?php elseif( (Mage::getSingleton('customer/session')->getData('login_refer')) && (Mage::helper('enterprise_invitation')->isInvitationMessageAllowed()) && $storeId==1 ):?>
 
-
-
-    
-    
-    
 	<a id="invite_pop" href="#invite_window" class="hidden"></a>
 	<div style="display: none;">
 		<div id="invite_window" class="fancybox">
@@ -84,7 +79,7 @@
 				</p>
 			</div>
 			<form id="invitationForm" action="<?php echo $this->helper('enterprise_invitation')->getCustomerInvitationFormUrl()?>" method="post">
-			    <div class="fieldset">		
+			    <div class="fieldset">
 			        <ul class="form-list">
 			            <?php //$_perRow = ceil($maxPerSend/3); for($_index = 1; $_index <= $maxPerSend; $_index ++): ?>
 			            <li class="email-add-box">
@@ -92,7 +87,7 @@
 			                <div class="input-box">
 			                    <textarea id="contact_list" tabindex="<?php //echo $_index+1 ?>" name="email" id="inviteemailaddress" title="<?php echo Mage::helper('enterprise_invitation')->__('email') ?>"  class="input-text" rows="3" cols="4"></textarea>
 			                </div>
-			               
+
 			            </li>
 			            <?php //endfor; ?>
 			        <?php if (Mage::helper('enterprise_invitation')->isInvitationMessageAllowed()): ?>
@@ -109,19 +104,19 @@
 			    <div class="buttons-set form-buttons">
 			        <!--p class="back-link"><a href="<?php echo Mage::helper('enterprise_invitation')->getCustomerInvitationUrl() ?>"><small>&laquo; </small><?php  echo Mage::helper('enterprise_invitation')->__('Back to Invitations') ?></a></p-->
 			        <button class="button" type="submit"><div class="invite-button"><?php echo Mage::helper('enterprise_invitation')->__('Send Invitations') ?></div></button>
-			    </div>			
+			    </div>
 			</form>
 			<script type="text/javascript">
 			    var contactForm = new VarienForm('invitationForm', false);
 			</script>
 		</div>
 	</div>
-	
+
 	<script type="text/javascript">
 	    jQuery(document).ready(function() {
 	    	jQuery("#invite_pop").fancybox({
-				'speedIn'		:	600, 
-				'speedOut'		:	200, 
+				'speedIn'		:	600,
+				'speedOut'		:	200,
 			}).trigger('click');
 	    });
 	</script>
@@ -138,21 +133,21 @@
 				$endcount = date("F j, Y, G:i:s", $endcountRaw);
 			?>
 			<div class="catalog-top-event">
-				<?php $imgFile = BP.DS.'media'.DS.'catalog'.DS.'category'.DS.$top['thumbnail'];?>	
+				<?php $imgFile = BP.DS.'media'.DS.'catalog'.DS.'category'.DS.$top['thumbnail'];?>
 				<a class="event-link" href="<?php echo Mage::getBaseUrl().$top['url_path']; ?>"><img src="<?php echo Mage::helper('service/image')->loadImageFile($imgFile)->resize(349,403); ?>" width="349px" height="403px" alt="" /></a>
 				<div class="splash-details">
-					<div class="table-cell-left">	
+					<div class="table-cell-left">
 						<p class="event-name"><?php echo $top['name'];?></p>
-						<p id="time1-top-<?php echo $timer ?>"></p>					 
+						<p id="time1-top-<?php echo $timer ?>"></p>
 						<script type="text/javascript">
 							jQuery("#time1-top-<?php echo $timer ?>").countdown({
 								//date: "12 10, 2011 16:11", //Counting TO a date
 								date: "<?php echo $endcount; ?>", //Counting TO a date
 								htmlTemplate: "<span>Ends in</span> %{d} <span class=\"cd-time\">Days</span> %{h}<span class=\"cd-time\">:</span>%{m}<span class=\"cd-time\">:</span>%{s}<span class=\"cd-time\"></span>",
-				
+
 								onChange: function( event, timer ){
 								},
-								onComplete: function( event ){										
+								onComplete: function( event ){
 									jQuery(this).html("Completed");
 								},
 								leadingZero: true,
@@ -163,35 +158,35 @@
 					<div class="table-cell-right">
 						<a class="shop-button" href="<?php echo Mage::getBaseUrl().$top['url_path']; ?>">Shop</a>
 					</div>
-				</div>	
-			</div>	
-			<?php $timer++;?>		
+				</div>
+			</div>
+			<?php $timer++;?>
 			<?php endforeach;?>
 			<div class="catalog-top-event">
 				<?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('topcms')->toHtml()?>
 			</div>
-		</div>	
+		</div>
 		<?php foreach ($liveArray as $live):?>
 			<?php
 				$endcountRaw = strtotime($live['event_end_date']);
 				$endcount = date("F j, Y, G:i:s", $endcountRaw);
 			?>
 			<div class="catalog-event">
-				<?php $imgFile = BP.DS.'media'.DS.'catalog'.DS.'category'.DS.$live['thumbnail'];?>	
+				<?php $imgFile = BP.DS.'media'.DS.'catalog'.DS.'category'.DS.$live['thumbnail'];?>
 				<a class="event-link" href="<?php echo Mage::getBaseUrl().$live['url_path']; ?>"><img src="<?php echo Mage::helper('service/image')->loadImageFile($imgFile)->resize(228,263); ?>" width="228px" height="263px" alt="" /></a>
 				<div class="splash-details">
-					<div class="table-cell-left">	
+					<div class="table-cell-left">
 						<p class="event-name"><?php echo $live['name'];?></p>
-						<p id="time1-<?php echo $timer ?>"></p>					 
+						<p id="time1-<?php echo $timer ?>"></p>
 						<script type="text/javascript">
 							jQuery("#time1-<?php echo $timer ?>").countdown({
 								//date: "12 10, 2011 16:11", //Counting TO a date
 								date: "<?php echo $endcount; ?>", //Counting TO a date
 								htmlTemplate: "<span>Ends in</span> %{d} <span class=\"cd-time\">Days</span> %{h}<span class=\"cd-time\">:</span>%{m}<span class=\"cd-time\">:</span>%{s}<span class=\"cd-time\"></span>",
-				
+
 								onChange: function( event, timer ){
 								},
-								onComplete: function( event ){										
+								onComplete: function( event ){
 									jQuery(this).html("Completed");
 								},
 								leadingZero: true,
@@ -202,13 +197,13 @@
 					<div class="table-cell-right">
 						<a class="shop-button" href="<?php echo Mage::getBaseUrl().$live['url_path']; ?>">Shop</a>
 					</div>
-				</div>	
+				</div>
 			</div>
 			<?php $timer++;?>
 		<?php endforeach;?>
 	</div>
 
-	<?php if (!!$upcomingArray && !empty($upcomingArray)):?>	
+	<?php if (!!$upcomingArray && !empty($upcomingArray)):?>
 	<div class="upcoming-events-container">
 		<h1 class="event-collection-title" id="event-upcoming">Upcoming Sales</h1>
 		<?php foreach ($upcomingArray as $up):?>
@@ -217,21 +212,21 @@
 				$endcount = date("F j, Y, G:i:s", $endcountRaw);
 			?>
 			<div class="catalog-event">
-				<?php $imgFile = BP.DS.'media'.DS.'catalog'.DS.'category'.DS.$up['thumbnail'];?>	
+				<?php $imgFile = BP.DS.'media'.DS.'catalog'.DS.'category'.DS.$up['thumbnail'];?>
 				<a class="event-link" href="<?php echo Mage::getBaseUrl().$up['url_path']; ?>"><img src="<?php echo Mage::helper('service/image')->loadImageFile($imgFile)->resize(228,263); ?>" width="228px" height="263px" alt="" /></a>
 				<div class="splash-details">
-					<div class="table-cell-left">	
+					<div class="table-cell-left">
 						<p class="event-name"><?php echo $up['name'];?></p>
-						<p id="time2-<?php echo $timer ?>"></p> 
+						<p id="time2-<?php echo $timer ?>"></p>
 						<script type="text/javascript">
 							jQuery("#time2-<?php echo $timer ?>").countdown({
 								//date: "12 10, 2011 16:11", //Counting TO a date
 								date: "<?php echo $endcount; ?>", //Counting TO a date
 								htmlTemplate: "<span>Opens in</span> %{d} <span class=\"cd-time\">Days</span> %{h}<span class=\"cd-time\">:</span>%{m}<span class=\"cd-time\">:</span>%{s}<span class=\"cd-time\"></span>",
-				
+
 								onChange: function( event, timer ){
 								},
-								onComplete: function( event ){										
+								onComplete: function( event ){
 									jQuery(this).html("Completed");
 								},
 								leadingZero: true,
@@ -242,10 +237,10 @@
 					<div class="table-cell-right">
 						<a class="shop-button" href="<?php echo Mage::getBaseUrl().$up['url_path']; ?>">View</a>
 					</div>
-				</div>	
+				</div>
 			</div>
 			<?php $timer++;?>
-		<?php endforeach;?>		
+		<?php endforeach;?>
 	</div>
-	<?php endif;?>	
+	<?php endif;?>
 </div>

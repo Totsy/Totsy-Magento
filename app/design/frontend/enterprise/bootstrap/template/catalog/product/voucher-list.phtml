@@ -1,0 +1,193 @@
+<?php
+/**
+ * Magento Enterprise Edition
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Magento Enterprise Edition License
+ * that is bundled with this package in the file LICENSE_EE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://www.magentocommerce.com/license/enterprise-edition
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     enterprise_default
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://www.magentocommerce.com/license/enterprise-edition
+ */
+?>
+<?php
+/**
+ * Product list template
+ *
+ * @see Mage_Catalog_Block_Product_List
+ */
+?>
+<?php
+    $_helper = $this->helper('catalog/output');
+    $_customerId = Mage::helper('customer')->getCustomer()->getId() ? Mage::helper('customer')->getCustomer()->getId() : 0;
+    $category_ids = $this->getLayer()->getCurrentCategory()->getAllChildren(TRUE);
+    $categories = array();
+
+    foreach($category_ids as $category_id) {
+        if($category_id == $this->getLayer()->getCurrentCategory()->getId()) {
+            continue;
+        }
+        else {
+            $_category = Mage::getModel('catalog/category')->load($category_id);
+
+            $categories[$_category->getName()] = $_category->getProductCollection();
+        }
+    }
+?>
+
+<?php $i=0;?>
+<div id="discount-vault-tabs">
+    <!-- Tabs -->
+    <ul>
+        <?php foreach($categories as $name => $collection): ?>
+            <li><a href="#category-<?php echo $i;?>"><?php echo $name;?></a></li>
+            <?php $i++;?>
+        <?php endforeach;?>
+    </ul>
+
+    <!-- Content -->
+    <?php $i=0;$j=0;?>
+    <?php foreach($categories as $name => $collection): ?>
+    <div id="category-<?php echo $i;?>">
+        <ol class="products-list" id="products-list">
+            <?php foreach($collection as $pro):?>
+
+            <?php $_product = Mage::getModel('catalog/product')->load($pro->getEntityId());?>
+            <li class="item">
+                <!-- Product Image -->
+                <div class="product-image">
+                    <img src="<?php echo $this->helper('catalog/image')->init($_product, 'small_image')->resize(166); ?>" width="166" height="166" alt="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" />
+                </div>
+                <!-- Product Description -->
+                <div class="product-shop">
+                    <div class="f-fix">
+                        <?php $_productNameStripped = $this->stripTags($_product->getName(), null, true); ?>
+                        <div class="desc std">
+
+                            <?php if(Mage::helper('vouchers')->hasAssociation($_customerId, $_product->getId())):?>
+                                <?php $_buttonMessage = '';?>
+                                <?php $_buttonClass = 'btn-cart-sent';?>
+                                <?php $_disabledButton = 'disabled = "true"';?>
+                            <?php else:?>
+                                <?php $_buttonClass = 'btn-cart';?>
+                                <?php $_buttonMessage = $this->__('Email Me Code');?>
+                                <?php $_disabledButton = '';?>
+                            <?php endif;?>
+
+                            <div class="product-name strong"><a href="javascript:void(0);"  onclick="openDialog('learn-more-<?php echo $j;?>')"><?php echo $_productNameStripped;?></a></div>
+                            <?php echo $_helper->productAttribute($_product, $_product->getShortDescription(), 'short_description') ?>
+                            <a href="javascript:void(0);" class="learn-more red" onclick="openDialog('learn-more-<?php echo $j;?>')">More</a><br />
+                            <div class="pricing">
+                                <div class="float light">Regular Price: <del><?php echo Mage::helper('core')->formatPrice($_product->getRegularVoucherPrice());?></del></div>
+                                <div class="float left-16">Your Price: </div> <div class="float red"><?php echo Mage::helper('core')->formatPrice($_product->getDiscountVoucherPrice());?></div>
+                                <div class="float red left-16">Save <?php echo Mage::helper('vouchers')->getDiscount($_product->getRegularVoucherPrice(), $_product->getDiscountVoucherPrice());?></div>
+                                <div id="learn-more-<?php echo $j;?>" style="display:none;">
+                                    <strong><?php echo $_productNameStripped;?></strong><br />
+                                    <?php echo Mage::getModel('catalog/product')->load($_product->getId())->getDescription();?>
+                                    <br /><br />
+                                    <button <?php echo $_disabledButton;?> id="button-popup-<?php echo $_product->getId();?>" type="button" title="<?php echo $_buttonMessage; ?>" class="button <?php echo $_buttonClass;?>" onclick="emailCode('<?php echo $_product->getId();?>');"></button>
+                                </div>
+                            </div>
+                        </div>
+                        <?php if($_product->isSaleable()): ?>
+
+                        <div style="float:right;">
+                            <button <?php echo $_disabledButton;?> id="button-<?php echo $_product->getId();?>" type="button" title="<?php echo $_buttonMessage ?>" class="button <?php echo $_buttonClass;?>" onclick="emailCode('<?php echo $_product->getId();?>');"></button>
+                        </div>
+
+                        <?php else: ?>
+                        <?php if ($_product->getIsSalable()): ?>
+                            <p class="availability in-stock"><span><?php echo $this->__('In stock') ?></span></p>
+                            <?php else: ?>
+                            <p class="availability out-of-stock"><span><?php echo $this->__('Out of stock') ?></span></p>
+                            <?php endif; ?>
+                        <?php endif; ?>
+                    </div>
+                </div>
+                <div class="clear"></div>
+            </li>
+                <?php $j++;?>
+            <?php endforeach;?>
+        </ol>
+    </div>
+    <?php $i++;?>
+    <?php endforeach;?>
+</div>
+
+<script type="text/javascript">
+
+    decorateList('products-list', 'none-recursive');
+
+  var win = null;
+  var index = 1;
+	function openDialog(id) {
+	  Dialog.alert($(id).innerHTML, {
+		  className: "alphacube",
+		  width:750,
+		  id: "d" + index,
+		  okLabel: "Close"
+		}
+	  )
+	  index++;
+  }
+
+    function emailCode(product_id) {
+        id = product_id;
+
+        jQuery('#button-' + id).removeClass('btn-cart');
+        jQuery('#button-' + id).addClass('btn-cart-sending');
+        jQuery('#button-popup-' + id).removeClass('btn-cart');
+        jQuery('#button-popup-' + id).addClass('btn-cart');
+
+        jQuery.get('<?php echo Mage::getUrl('vouchers/order/create/',array('_secure' => Mage::app()->getStore()->isCurrentlySecure())); ?>id/' + product_id + '/',
+                function(data){
+                    var jsonResponse = jQuery.parseJSON(data);
+
+                    if(jsonResponse.error) {
+                        jQuery('#button-' + id).removeClass('btn-cart-sending');
+                        jQuery('#button-popup-' + id).removeClass('btn-cart-sending');
+                        jQuery('#button-' + id).addClass('btn-cart');
+                        jQuery('#button-popup-' + id).addClass('btn-cart');
+                        alert(jsonResponse.error);
+                    } else {
+                        jQuery('#button-' + id).removeClass('btn-cart-sending');
+                        jQuery('#button-' + id).addClass('btn-cart-sent');
+                        jQuery('#button-popup-' + id).removeClass('btn-cart-sent');
+                        jQuery('#button-popup-' + id).addClass('btn-cart-sent');
+                    }
+                }
+        );
+    }
+
+    jQuery(function() {
+        jQuery( "#discount-vault-tabs" ).tabs();
+    })
+
+</script>
+<style>
+.overlay_alphacube {
+	background-color: #FFF;
+	filter:alpha(opacity=60);
+	-moz-opacity: 0.6;
+	opacity: 0.6;
+}
+
+.ui-tabs-hide
+{
+    display: none;
+}
+</style>

@@ -109,27 +109,27 @@
         </reference>
     </newsletter_manage_index>
 
-    <checkout_cart_index>
-        <reference name="checkout.cart.form.before">
-            <block type="enterprise_reward/tooltip_checkout" name="reward.tooltip.checkout" template="reward/tooltip.phtml">
-                <action method="initRewardType"><type>enterprise_reward/action_orderExtra</type></action>
-                <action method="setWrapperClass"><class>reward-checkout</class></action>
-                <action method="setRewardMessage" translate="message" module="enterprise_reward"><message>Checkout now and earn %s for this order.</message></action>
-                <action method="setIsGuestNote"><value>1</value></action>
-            </block>
-        </reference>
-    </checkout_cart_index>
+<!--        <checkout_cart_index>
+            <reference name="checkout.cart.form.before">
+                <block type="enterprise_reward/tooltip_checkout" name="reward.tooltip.checkout" template="reward/tooltip.phtml">
+                    <action method="initRewardType"><type>enterprise_reward/action_orderExtra</type></action>
+                    <action method="setWrapperClass"><class>reward-checkout</class></action>
+                    <action method="setRewardMessage" translate="message" module="enterprise_reward"><message>Checkout now and earn %s for this order.</message></action>
+                    <action method="setIsGuestNote"><value>1</value></action>
+                </block>
+            </reference>
+        </checkout_cart_index>
 
-    <checkout_cart_index>
-        <reference name="checkout.cart.form.before">
-            <block type="enterprise_reward/tooltip_checkout" name="reward.tooltip.checkout.salesrule" template="reward/tooltip.phtml">
-                <action method="initRewardType"><type>enterprise_reward/action_salesrule</type></action>
-                <action method="setWrapperClass"><class>reward-checkout</class></action>
-                <action method="setRewardMessage" translate="message" module="enterprise_reward"><message>Checkout now and earn %s for this order.</message></action>
-                <action method="setIsGuestNote"><value>1</value></action>
-            </block>
-        </reference>
-    </checkout_cart_index>
+        <checkout_cart_index>
+            <reference name="checkout.cart.form.before">
+                <block type="enterprise_reward/tooltip_checkout" name="reward.tooltip.checkout.salesrule" template="reward/tooltip.phtml">
+                    <action method="initRewardType"><type>enterprise_reward/action_salesrule</type></action>
+                    <action method="setWrapperClass"><class>reward-checkout</class></action>
+                    <action method="setRewardMessage" translate="message" module="enterprise_reward"><message>Checkout now and earn %s for this order.</message></action>
+                    <action method="setIsGuestNote"><value>1</value></action>
+                </block>
+            </reference>
+        </checkout_cart_index>-->
 
     <checkout_onepage_index>
         <reference name="checkout.onepage.login.before">
