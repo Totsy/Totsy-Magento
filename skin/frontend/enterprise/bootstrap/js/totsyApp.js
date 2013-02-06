@@ -48,3 +48,18 @@
 
 // Placeholder for inline form labels //
 jQuery('input[placeholder], textarea[placeholder]').placeholder();
+
+// @TODO: Combine into one single popup class instead of ID. keep it DRY
+jQuery(document).ready(function () {
+    jQuery("#facebook_pop").fancybox({
+        'speedIn': 600,
+        'speedOut': 200,
+    }).trigger('click');
+});
+
+jQuery(document).ready(function () {
+    jQuery("#invite_pop").fancybox({
+        'speedIn': 600,
+        'speedOut': 200,
+    }).trigger('click');
+});
