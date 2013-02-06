@@ -77,18 +77,21 @@
 		}); 
 		   
         if( jQuery( '#shipping-address-select' ).length > 0 ) {
+        	
+        	if(jQuery( '#shipping-address-select' ).val()!=="") {
+                checkoutPayment.disableAddress(true, 'hpcheckout-shipping-form');
+            }
+        
             jQuery( '#shipping-address-select' ).bind('change', function() { 
             	//enable shipping address
             	checkoutPayment.disableAddress(false, "hpcheckout-shipping-form");
                 hpcheckout.switchAddress(this.id);
                 hpcheckout.update(true);
+                
+                if(jQuery("#shipping-address-select").val()!=="") {
+                	checkoutPayment.disableAddress(true, "hpcheckout-shipping-form");
+                }
             });
-        }
-        
-        if( jQuery( '#shipping-address-select' ).length > 0 ) {
-            if(jQuery( '#shipping-address-select' ).val()!=="") {
-                checkoutPayment.disableAddress(true, 'hpcheckout-shipping-form');
-            }
         }
                     
         jQuery( '#billing\\:selected' ).val(jQuery( '#billing-address-select' ).val());
