@@ -55,15 +55,6 @@
 			</div>
 		</div>
 	</div>
-
-	<script type="text/javascript">
-	    jQuery(document).ready(function() {
-	    	jQuery("#facebook_pop").fancybox({
-				'speedIn'		:	600,
-				'speedOut'		:	200,
-			}).trigger('click');
-	    });
-	</script>
 	<?php Mage::getSingleton('customer/session')->setFacebookAccountFirstCreate(false);?>
 <?php elseif( (Mage::getSingleton('customer/session')->getData('login_refer')) && (Mage::helper('enterprise_invitation')->isInvitationMessageAllowed()) && $storeId==1 ):?>
 
@@ -111,15 +102,6 @@
 			</script>
 		</div>
 	</div>
-
-	<script type="text/javascript">
-	    jQuery(document).ready(function() {
-	    	jQuery("#invite_pop").fancybox({
-				'speedIn'		:	600,
-				'speedOut'		:	200,
-			}).trigger('click');
-	    });
-	</script>
 <?php Mage::getSingleton('customer/session')->setData('login_refer',false);?>
 <?php endif; ?>
 
