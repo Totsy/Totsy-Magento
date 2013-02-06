@@ -17,7 +17,7 @@
 		
 	</div>
 </form>
-<?php else:?>
+<?php elseif(Mage::getStoreConfig('Crown_Club/clubgeneral/enable')):?>
 <form action="<?php echo $this->getBaseUrl();?>checkout/cart/add" method="post" id="membership_join_form">
 	<input type="hidden" name="qty" id="qty" maxlength="12" value="1" class="input-text qty hidden" />
 	<input type="hidden" name="product" value="33" />

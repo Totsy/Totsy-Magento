@@ -104,7 +104,7 @@ class Totsy_Customer_Model_Observer
                 return $this;
             }
 
-            $response->setRedirect('customer/account/login');
+            $response->setRedirect('/customer/account/login');
         }
 
         return $this;
