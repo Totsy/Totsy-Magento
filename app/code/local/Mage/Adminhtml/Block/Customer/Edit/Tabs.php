@@ -125,7 +125,12 @@ class Mage_Adminhtml_Block_Customer_Edit_Tabs extends Mage_Adminhtml_Block_Widge
                 'url'       => $this->getUrl('*/*/customerInvitations', array('_current' => true)),
                 //'url'       => $this->getUrl('*/*/newsletter', array('_current' => true)),
             ));
-            
+
+            $this->addTab('coupons', array(
+                'label'     => Mage::helper('customer')->__('Coupons'),
+                'class'     => 'ajax',
+                'url'       => $this->getUrl('*/*/customerCoupons', array('_current' => true))
+            ));
         }
         
         //Harapartners, Jun, START

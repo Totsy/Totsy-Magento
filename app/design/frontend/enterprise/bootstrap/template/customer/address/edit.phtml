@@ -32,7 +32,7 @@
  */
 ?>
 <?php if($this->getTitle()): ?>
-<div class="page-header">
+<div class="page-header" xmlns="http://www.w3.org/1999/html">
     <h2><?php echo $this->getTitle() ?> <small class="pull-right"><?php echo $this->__('* Required Fields') ?></small></h2>
 </div>
 <?php endif; ?>
@@ -82,7 +82,7 @@
             <label for="region_id" class="required"><em>*</em><?php echo $this->__('State/Province') ?></label>
             <div class="input-box totsy-selective-input-box">
                 <select id="region_id" name="region_id" title="<?php echo $this->__('State/Province') ?>" class="validate-select" style="display:none;">
-                    <option value=""><?php echo $this->__('Please select region, state or province') ?></option>
+                    <option value=""><?php echo $this->__('Please select state') ?></option>
                 </select>
             </div>
             <script type="text/javascript">
@@ -94,34 +94,31 @@
             <label for="city-state-selector" class="required"><em>*</em><?php echo $this->__('Region') ?></label>
             <select name="city-state-selector" id="city-state-selector"></select>
         </div>
-         <label for="country" class="required"><em>*</em><?php echo $this->__('Country') ?></label>
-                    <div class="input-box totsy-selective-input-box">
-                        <?php echo $this->getCountryHtmlSelect() ?>
-                    </div>
-          
+        <input type="hidden" id="country" name="country_id" value="US"  title="<?php echo $this->__('Country') ?>"/>
 <?php $userDefinedAttributes = $this->getLayout()->getBlock('customer_form_user_attributes'); ?>
 <?php if ($userDefinedAttributes):?>
     <?php echo $userDefinedAttributes->setEntity($this->getAddress())->setShowContainer(false)->toHtml(); ?>
 <?php endif;?>
 <?php if($this->isDefaultBilling()): ?>
-                    <p><strong><?php echo $this->__('Default Billing Address') ?></strong></p>
-                <?php elseif($this->canSetAsDefaultBilling()): ?>
-          <input type="checkbox" id="primary_billing" name="default_billing" value="1" class="checkbox" />
-          <label for="primary_billing"><?php echo $this->__('Use as my default billing address') ?></label>
-                <?php else: ?>
-           <input type="hidden" name="default_billing" value="1" />
-                <?php endif; ?>
-            <?php if($this->isDefaultShipping()): ?>
-                    <p><strong><?php echo $this->__('Default Shipping Address') ?></strong></p>
-                <?php elseif($this->canSetAsDefaultShipping()): ?>
-           <input type="checkbox" id="primary_shipping" name="default_shipping" value="1" class="checkbox" />
-           <label for="primary_shipping"><?php echo $this->__('Use as my default shipping address') ?></label>
-                <?php else: ?>
-                    <input type="hidden" name="default_shipping" value="1" />
-                <?php endif; ?>
-           
-    </div>
-    <br />
+    <p><strong><?php echo $this->__('Default Billing Address') ?></strong></p>
+<?php elseif($this->canSetAsDefaultBilling()): ?>
+    <p>
+        <input type="checkbox" id="primary_billing" name="default_billing" value="1" class="checkbox" />
+        <?php echo $this->__('Use as my default billing address') ?>
+    </p>
+<?php else: ?>
+    <input type="hidden" name="default_billing" value="1" />
+<?php endif; ?>
+<?php if($this->isDefaultShipping()): ?>
+    <p><strong><?php echo $this->__('Default Shipping Address') ?></strong></p>
+<?php elseif($this->canSetAsDefaultShipping()): ?>
+    <input type="checkbox" id="primary_shipping" name="default_shipping" value="1" class="checkbox" />
+    <?php echo $this->__('Use as my default shipping address') ?>
+<?php else: ?>
+    <input type="hidden" name="default_shipping" value="1" />
+<?php endif; ?>
+</div>
+<br />
     <div class="buttons-set form-buttons">
         <button type="submit" class="button btn btn-primary" title="<?php echo $this->__('Save Address') ?>"><span><span><?php echo $this->__('Save Address') ?></span></span></button>
     </div>
