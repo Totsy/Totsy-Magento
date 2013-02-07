@@ -39,7 +39,7 @@
 	            <li class="fields"> 
 	                <div class="field half-of-half">
 	                    <label for="billing:city" class="ui-input-text required"><em>*</em><?php echo $this->__('City') ?></label>
-	                    <input type="text" title="<?php echo $this->__('City') ?>" name="billing[city]" class="ui-input-text ui-body-c ui-corner-all ui-shadow-inset input-text required-entry" value="<?php echo $this->htmlEscape($this->getAddress()->getCity()) ?>" id="billing:city" />
+	                    <input type="text" title="<?php echo $this->__('City') ?>" name="billing[city]" id="billing:city"  class="ui-input-text ui-body-c ui-corner-all ui-shadow-inset input-text required-entry" value="<?php echo $this->htmlEscape($this->getAddress()->getCity()) ?>" id="billing:city" />
 	                </div>
 	                <div class="field half-of-half">
 	                    <label for="billing:region_id" class="required"><em>*</em><?php echo $this->__('State') ?></label>
@@ -92,7 +92,11 @@
     jQuery( document ).ready( function() {
     	jQuery("[id='billing:region']").val(jQuery("[id='billing:region_id'] option:selected").text());
     
-		jQuery( '#billing-address-select' ).bind( 'change', hpcheckout.switchAddress );
+        if( jQuery( '#billing-address-select' ).length > 0 ) {
+		    jQuery( '#billing-address-select' ).bind( 'change', function(){ 
+		          hpcheckout.switchAddress(this.id) }
+		    );
+		}
     	//jQuery( '#billing\\:region_id, #billing\\:postcode' ).bind( 'change', hpcheckout.update );
 //    	/jQuery( '#billing\\:postcode, #billing\\:country_id' ).bind( 'change', hpcheckout.update );
 	});
