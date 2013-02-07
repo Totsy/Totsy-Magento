@@ -85,7 +85,7 @@ h4 {
                     $url = Mage::getBaseUrl().$url;
                 ?>
                 <?php if ($hasProduct): ?>
-                    <li class="span3 catalog-event event-counter-<?php echo $timer;?>">
+                    <li class="span4 catalog-event event-counter-<?php echo $timer;?>">
                         <a href="<?php echo Mage::getBaseUrl().Mage::getModel('core/url_rewrite')->loadByIdPath('category/'.$live['entity_id'])->getRequestPath();?>" class="thumbnail">
                             <hgroup>
                                 <h4 class="ellipsis"><?php echo $live['name'];?></h4>
