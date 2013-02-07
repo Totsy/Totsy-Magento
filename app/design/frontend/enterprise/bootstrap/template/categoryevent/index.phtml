@@ -71,10 +71,14 @@
                     $eventDepts = $live['department_label'];
                     $eventAges = $live['age_label'];
                     $maxDiscount = $live['max_discount_pct'];
+                    if(!($url = Mage::getModel('core/url_rewrite')->setStoreId(Mage::app()->getStore()->getId())->loadByIdPath('category/'.$live['entity_id'])->getRequestPath())) {
+                        $url = 'catalog/category/view/id/'.$live['entity_id'];
+                    }
+                    $url = Mage::getBaseUrl().$url;
                 ?>
                 <?php if ($hasProduct): ?>
                     <li class="span3 catalog-event event-counter-<?php echo $timer;?>">
-                        <a href="<?php echo Mage::getBaseUrl().Mage::getModel('core/url_rewrite')->loadByIdPath('category/'.$live['entity_id'])->getRequestPath();?>" class="thumbnail">
+                        <a href="<?php echo $url; ?>" class="thumbnail">
                             <hgroup>
                                 <h5><?php echo $live['name'];?></h5>
                                 <!-- <h6><?php //echo $live['short_description'];?></h6> -->
@@ -157,11 +161,15 @@
                 <?php
                     $endcountRaw = strtotime($up['event_start_date']);
                     $endcount = date("F j, Y, G:i:s", $endcountRaw);
+                    if(!($url = Mage::getModel('core/url_rewrite')->setStoreId(Mage::app()->getStore()->getId())->loadByIdPath('category/'.$up['entity_id'])->getRequestPath())) {
+                        $url = 'catalog/category/view/id/'.$up['entity_id'];
+                    }
+                    $url = Mage::getBaseUrl().$url;
                 ?>
                 <li class="span2 catalog-event up-event-counter-<?php echo $timer;?>">
                     <div class="thumbnail">
                         <hgroup>
-                            <h5><a href="<?php echo Mage::getBaseUrl().Mage::getModel('core/url_rewrite')->loadByIdPath('category/'.$up['entity_id'])->getRequestPath();?>"><?php echo $up['name'];?></a></h5>
+                            <h5><a href="<?php echo $url; ?>"><?php echo $up['name'];?></a></h5>
                         </hgroup>
                         <?php
                             $imgFile = (isset($up['small_image']))
@@ -169,7 +177,7 @@
                             $up['small_image']
                             : BP . DS . 'skin' . DS . 'frontend' . DS . 'enterprise ' . DS . 'harapartners' . DS . 'images' . DS . 'catalog' . DS . 'product' . DS . 'placeholder' . DS . 'small_image.jpg';
                         ?>
-                        <a class="event-link" href="<?php echo Mage::getBaseUrl().Mage::getModel('core/url_rewrite')->loadByIdPath('category/'.$up['entity_id'])->getRequestPath();?>">
+                        <a class="event-link" href="<?php echo $url; ?>">
                             <img src="<?php echo Mage::helper('service/image')->loadImageFile($imgFile)->resize(165)->keepFrame(FALSE); ?>" width="165px" height="171" alt="<?php echo $up['name'];?>" />
                         </a>
                         <?php $timer++; ?>
