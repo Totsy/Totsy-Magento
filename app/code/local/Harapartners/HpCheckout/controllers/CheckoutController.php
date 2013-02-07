@@ -22,6 +22,7 @@ class Harapartners_HpCheckout_CheckoutController extends Mage_Checkout_Controlle
 
     public function indexAction() {
         $this->validateCart();
+        $this->collectTotals();
         $this->loadLayout();
         $this->_initLayoutMessages( 'checkout/session' );
         $this->_resetCartTimer();
@@ -50,8 +51,7 @@ class Harapartners_HpCheckout_CheckoutController extends Mage_Checkout_Controlle
         $customer = Mage::getSingleton('customer/session')->getCustomer();
         $customerId = $customer->getId();
         try {
-
-            if($this->getRequest()->getPost('paypal_payment', false)) {
+            if (($data = $this->getRequest()->getPost('payment', false)) && array_key_exists('method',$data) && $data['method'] == 'paypal_express') {
 
                 $service = Mage::getModel('sales/service_quote', $this->_getHpCheckout()->getQuote());
                 $order = $service->getQuote();

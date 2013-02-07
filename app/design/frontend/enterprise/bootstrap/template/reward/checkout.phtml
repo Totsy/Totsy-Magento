@@ -1,0 +1,14 @@
+<?php
+/**
+ * Author: Crown
+ * Date: 1/24/13
+ * Time: 10:41 AM
+ */
+?>
+<div class="reward-message <?php echo $this->getWrapperClass()?>">
+    <div class="reward">
+        <?php if ($this->hasRewardMessage()):?>
+        <span><?php echo $this->__($this->getRewardMessage(), (string)$this->getRewardAmount())?></span>
+        <?php endif;?>
+    </div>
+</div>

@@ -202,11 +202,11 @@ if ( !$rewardCollection ) {
 				</td>
 				<td class="his-list events">
 				<?php if($this->helper('enterprise_invitation')->getInvitationStatusText($invitation) == 'Sent'):?>
-					<span><?php echo Mage::helper('enterprise_invitation')->__('Invitation sent to ');?></span><?php echo $this->htmlEscape($invitation->getEmail()); ?>
+					<span><?php echo Mage::helper('enterprise_invitation')->__('Invitation sent to ');?></span><?php echo $this->htmlEscape(substr($invitation->getEmail(),0,30)); ?>
 				<?php elseif ($this->helper('enterprise_invitation')->getInvitationStatusText($invitation) == 'Accepted'):?>
-					<span><?php echo $this->htmlEscape($invitation->getEmail()); ?></span><?php echo Mage::helper('enterprise_invitation')->__(' joined Totsy');?>
+					<span><?php echo $this->htmlEscape(substr($invitation->getEmail(),0,30)); ?></span><br /><?php echo Mage::helper('enterprise_invitation')->__(' joined Totsy');?>
 				<?php else :?>
-					<span><?php echo $this->htmlEscape($invitation->getEmail()); ?></span><?php echo Mage::helper('enterprise_invitation')->__(' email not send');?>
+					<span><?php echo $this->htmlEscape(substr($invitation->getEmail(),0,33)); ?></span><?php echo Mage::helper('enterprise_invitation')->__(' email not send');?>
 				<?php endif;?>
 				</td>
 				<td class="his-list status">

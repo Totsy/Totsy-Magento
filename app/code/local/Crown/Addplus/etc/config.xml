@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <modules>
+        <Crown_Addplus>
+            <version>1.0.0</version>
+        </Crown_Addplus>
+    </modules>
+    <frontend>
+        <routers>
+            <addplus>
+                <use>standard</use>
+                <args>
+                    <module>Crown_Addplus</module>
+                    <frontName>addplus</frontName>
+                </args>
+            </addplus>
+        </routers>
+    </frontend>
+</config>

@@ -137,10 +137,9 @@ HpCheckout.prototype = {
             if (blockType == 'billing') {
                 jQuery('#billing\\:selected').val('');
             }
-        } else {
-            
-            if (hpcheckoutAddresses[clickedAddress.val()]) {
-                jQuery('select#' + blockType + '\\:country_id').val(hpcheckoutAddresses[clickedAddress.val()]['country_id']);
+        } else {            
+                if (hpcheckoutAddresses[clickedAddress.val()]) {
+                	jQuery('select#' + blockType + '\\:country_id').val(hpcheckoutAddresses[clickedAddress.val()]['country_id']);
                 if (blockType == 'billing') {
                     billingRegionUpdater.update();
                 } else if (blockType == 'shipping') {
@@ -328,10 +327,10 @@ HpCheckout.prototype = {
             jQuery('input, select, button', '#' + affectedBlocks[blockIndex].wrapperId).removeAttr('disabled');
             jQuery('#' + affectedBlocks[blockIndex].wrapperId + ' .spinner').hide();
             if (typeof checkoutPayment !== "undefined") {
-                if (checkoutPayment.hasProfile === true || jQuery("#billing-address-select").val() !== '') {
+                if (jQuery("#billing-address-select").length > 0 && jQuery("#billing-address-select").val() !== '') {
                     checkoutPayment.disableAddress(true, 'hpcheckout-billing-form');
                 }
-                if (jQuery("#shipping-address-select").val() !== '') {
+                if (jQuery("#shipping-address-select").length > 0 && jQuery("#shipping-address-select").val() !== '') {
                     checkoutPayment.disableAddress(true, 'hpcheckout-shipping-form');
                 }
             }
