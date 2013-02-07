@@ -59,7 +59,7 @@ $savings = money_format('%n', $originalPrice) - money_format('%n', $discountPric
     );
 </script>
 <div id="messages_product_view"><?php echo $this->getMessagesBlock()->toHtml() ?></div>
-<section id="pageheader">
+<section>
     <header class="page-header has-timer clearfix">
         <h2 class="ellipsis"><a href="<?php echo $_category->getUrl();?>"><?php echo $_helper->categoryAttribute($_category, $_category->getName(), 'name') ?></a>
         </h2>
@@ -75,10 +75,13 @@ $savings = money_format('%n', $originalPrice) - money_format('%n', $discountPric
             <div class="page-header row">
                 <h3 class="span5 alpha"><?php echo $_product->getName(); ?></h3>
             </div>
-        
             <div class="alpha span5">
                 <div class="product-content">
-                    <div class="product_desc">
+                    <div class="insparq-share content-block">
+                        <!-- // @TODO: replace placeholder with actual insparq widget code, place inside the .insparq-share div -->
+                        <img src="/skin/frontend/enterprise/bootstrap/images/FPO-insparq.png" alt="FPO PLACEHOLDER" />
+                    </div>
+                    <div class="product_desc content-block">
                         <?php echo $_product->getDescription(); ?> 
                     </div>
                     <?php // product.shipping.return detects if virtual or dotcom product
