@@ -1547,8 +1547,11 @@ body.catalog-category-view .price-box .special-price {
 .product-main .product-content {
     margin:10px 0;
 }
-.product-main .product_desc {
-    margin-bottom: .8em;
+.product-content .content-block {
+    margin-top: .8em;
+}
+.product-content > .content-block:first-child {
+    margin-top:0;
 }
 
 /* @PDP pricing + options + addtocart module */
