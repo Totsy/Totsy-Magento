@@ -325,7 +325,6 @@ HpCheckout.prototype = {
             jQuery('#' + affectedBlocks[blockIndex].wrapperId + ' .spinner').hide();
             if (typeof checkoutPayment !== "undefined") {
                 if (jQuery("#billing-address-select").length > 0 && jQuery("#billing-address-select").val() !== '') {
-                    console.log("test");
                     checkoutPayment.disableAddress(true, 'hpcheckout-billing-form');
                 }
                 if (jQuery("#shipping-address-select").length > 0 && jQuery("#shipping-address-select").val() !== '') {
