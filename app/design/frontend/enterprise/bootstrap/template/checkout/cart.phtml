@@ -88,8 +88,9 @@
             $sortedFulfillmentTypes['virtual'] = $fulfillmentTypes['virtual'];
             unset($fulfillmentTypes['virtual']);
         }
+
         if(count($fulfillmentTypes)) {
-            array_push($sortedFulfillmentTypes,$fulfillmentTypes);
+            $sortedFulfillmentTypes = array_merge($sortedFulfillmentTypes,$fulfillmentTypes);
         }
         $fulfillmentTypes = $sortedFulfillmentTypes;
     }
@@ -166,6 +167,9 @@
                         break;
                     case 'virtual':
                         echo '<h3>The following voucher codes will be emailed immediately</h3>';
+                        break;
+                    case 'sourcemktg':
+                        echo '<h3>The following items will either be shipped or emailed to you within 5-7 business days.</h3>';
                         break;
                     case 'nominal':
                         break;

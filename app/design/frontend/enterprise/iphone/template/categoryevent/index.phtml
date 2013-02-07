@@ -50,7 +50,7 @@
 	<div style="display: none;">
 		<div id="facebook_window">
 			<div class="window_content">	
-				<h3><img src="<?php echo $this->getSkinUrl()?>images/facebook_pop.png" width="40px" height="40px"></img>Thanks for Joining Totsy!</h3>
+				<h3><img src="<?php echo $this->getSkinUrl()?>images/facebook_pop.png" width="40px" height="40px"/>Thanks for Joining Totsy!</h3>
 				<p>	Please retrieve your temporary password through your email and update it in your <a  class="needgreen" href="<?php echo $this->getBaseUrl()?>customer/account/edit/">account panel</a></p>
 			</div>
 		</div>
@@ -60,7 +60,7 @@
 	    jQuery(document).ready(function() {
 	    	jQuery("#facebook_pop").fancybox({
 				'speedIn'		:	600, 
-				'speedOut'		:	200, 
+				'speedOut'		:	200
 			}).trigger('click');
 	    });
 	</script>
@@ -88,12 +88,16 @@
 				}
 				
 				$imgFile = BP.DS.'media'.DS.'catalog'.DS.'category'.DS.$liveThumbnail;
+                if(!($url = Mage::getModel('core/url_rewrite')->setStoreId(Mage::app()->getStore()->getId())->loadByIdPath('category/'.$live['entity_id'])->getRequestPath())) {
+                    $url = 'catalog/category/view/id/'.$live['entity_id'];
+                }
+                $url = Mage::getBaseUrl().$url;
 			?>
 			<?php if ($hasProduct):?>
 			<li class="catalog-event ui-btn-up-c live-event-<?php echo $timer?>">
 				<div class="ui-btn-text ">
-					<a class="event-link" href="<?php echo Mage::getBaseUrl().$live['url_path']; ?>">
-						<img src="<?php echo Mage::helper('service/image')->loadImageFile($imgFile)->resize(80,92); ?>" width="80px" height="80px" alt=""></img>
+					<a class="event-link" href="<?php echo $url; ?>">
+						<img src="<?php echo Mage::helper('service/image')->loadImageFile($imgFile)->resize(80,92); ?>" width="80px" height="80px" alt=""/>
 						<h3 class="event-name"><?php echo $live['name'];?></h3>
 						<p id="time1-<?php echo $timer ?>"></p>					 
 						<script type="text/javascript">
@@ -129,10 +133,14 @@
 			<?php 
 				$endcountRaw = strtotime($up['event_start_date']);
 				$endcount = date("F j, Y, G:i:s", $endcountRaw);
+                if(!($url = Mage::getModel('core/url_rewrite')->setStoreId(Mage::app()->getStore()->getId())->loadByIdPath('category/'.$up['entity_id'])->getRequestPath())) {
+                    $url = 'catalog/category/view/id/'.$up['entity_id'];
+                }
+                $url = Mage::getBaseUrl().$url;
 			?>
 			<li class="catalog-event ui-btn-up-c up-event-<?php echo $timer?>">			
 				<div class="ui-btn-text">
-					<a class="event-link" href="<?php echo Mage::getBaseUrl().$up['url_path']; ?>">
+					<a class="event-link" href="<?php echo $url; ?>">
 						<p class="event-name"><?php echo $up['name'];?></p>
 						<p id="time2-<?php echo $timer ?>"></p> 
 						<script type="text/javascript">

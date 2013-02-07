@@ -130,7 +130,7 @@ class Totsy_Sailthru_Helper_Feed extends Mage_Core_Helper_Abstract
         return array(
             'id'             => $event['entity_id'],
             'name'           => $event['name'],
-            'url'            => Mage::getBaseUrl().$event['url_path'],
+            'url'            => $this->_getEventUrl($event),
             'description'    => $event['description'],
             'short'          => $event['short_description'],
             'availableItems' => !empty($event['products'])?'YES':'NO',
@@ -228,6 +228,14 @@ class Totsy_Sailthru_Helper_Feed extends Mage_Core_Helper_Abstract
                             'catalog/product/placeholder/image.jpg';
         }
         return $image;
+    }
+
+    protected function _getEventUrl($event) {
+        if(!($url = Mage::getModel('core/url_rewrite')->setStoreId(Mage::app()->getStore()->getId())->loadByIdPath('category/'.$event['entity_id'])->getRequestPath())) {
+            $url = 'catalog/category/view/id/'.$event['entity_id'];
+        }
+        $url = Mage::getBaseUrl().$url;
+        return $url;
     }
 
     private function _processStartDate()

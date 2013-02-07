@@ -540,6 +540,9 @@
                                                 <import translate="title"><title>Product Import</title></import>
                                                 <add_category translate="title"><title>Add Category/Event</title></add_category>
                                                 <save translate="title"><title>Save Category/Event</title></save>
+                                                <fulfillmentfactorybulkedit translate="title" module="fulfillmentfactory">
+                                                    <title>Fulfillment Type Bulk Edit</title>
+                                                </fulfillmentfactorybulkedit>
                                             </children>
                                         </actions>
                                     </children>
