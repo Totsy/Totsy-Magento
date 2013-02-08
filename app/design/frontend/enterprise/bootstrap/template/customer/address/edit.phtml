@@ -74,8 +74,7 @@
         <?php for ($_i=2, $_n=$this->helper('customer/address')->getStreetLines(); $_i<=$_n; $_i++): ?>
         <input type="text" name="street[]" value="<?php echo $this->htmlEscape($this->getAddress()->getStreet($_i)) ?>" title="<?php echo $this->__('Street Address '.$_i) ?>" id="street_<?php echo $_i?>" class="input-text" />
         <?php endfor ?>
-         <label for="zip" class="required"><em>*</em><?php echo $this->__('Zip/Postal Code') ?></label>
-         <input type="text" name="postcode" value="<?php echo $this->htmlEscape($this->getAddress()->getPostcode()) ?>" title="<?php echo $this->__('Zip/Postal Code') ?>" id="zip" class="input-text validate-zip-international required-entry" />
+         
         <div id="city-state-manual">
             <label for="city" class="required"><em>*</em><?php echo $this->__('City') ?></label>
             <input type="text" name="city" value="<?php echo $this->htmlEscape($this->getAddress()->getCity()) ?>" title="<?php echo $this->__('City') ?>" class="input-text required-entry" id="city" />
@@ -90,6 +89,8 @@
             </script>
             <input type="text" id="region" name="region" value="<?php echo $this->htmlEscape($this->getAddress()->getRegion()) ?>"  title="<?php echo $this->__('State/Province') ?>" class="input-text hidden" />
         </div>
+        <label for="zip" class="required"><em>*</em><?php echo $this->__('Zip/Postal Code') ?></label>
+         <input type="text" name="postcode" value="<?php echo $this->htmlEscape($this->getAddress()->getPostcode()) ?>" title="<?php echo $this->__('Zip/Postal Code') ?>" id="zip" class="input-text validate-zip-international required-entry" />
         <div id="city-state-auto" style="display:none;">
             <label for="city-state-selector" class="required"><em>*</em><?php echo $this->__('Region') ?></label>
             <select name="city-state-selector" id="city-state-selector"></select>
