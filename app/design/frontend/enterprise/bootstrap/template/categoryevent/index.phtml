@@ -162,7 +162,7 @@
                             <img src="<?php echo Mage::helper('service/image')->loadImageFile($imgFile)->resize(165)->keepFrame(FALSE); ?>" width="165px" height="171" alt="<?php echo $up['name'];?>" />
                         </a>
                         <?php $timer++; ?>
-                        <p class="opens_in counter" id="time2-<?php echo $timer ?>" data-enddate="<?php echo $endcount?>" data-status="upcoming" data-countertype="up-event-counter"></p>
+                        <p class="opens_in counter" id="time2-<?php echo $timer ?>" data-enddate="<?php echo $endcount?>" data-status="upcoming" data-countertype="up-event-counter"  data-id="<?php echo $timer ?>"></p>
                         
                         </script>                    
                     </div>

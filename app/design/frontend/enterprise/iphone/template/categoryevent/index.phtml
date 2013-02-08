@@ -95,7 +95,7 @@
 					<a class="event-link" href="<?php echo Mage::getBaseUrl().$live['url_path']; ?>">
 						<img src="<?php echo Mage::helper('service/image')->loadImageFile($imgFile)->resize(80,92); ?>" width="80px" height="80px" alt=""></img>
 						<h3 class="event-name"><?php echo $live['name'];?></h3>
-						<p id="time1-<?php echo $timer ?>" class="counter" data-enddate="<?php echo $endcount?>" data-status="upcoming" data-countertype="li.live-event"></p>	
+						<p id="time1-<?php echo $timer ?>" class="counter" data-enddate="<?php echo $endcount?>" data-status="upcoming" data-countertype="li.live-event" data-id="<?php echo $timer?>"></p>	
 						<span class="ui-icon ui-icon-arrow-r ui-icon-shadow hp-ui-icon-right"></span>
 						<div class="clear"></div>
 					</a>
@@ -120,7 +120,7 @@
 				<div class="ui-btn-text">
 					<a class="event-link" href="<?php echo Mage::getBaseUrl().$up['url_path']; ?>">
 						<p class="event-name"><?php echo $up['name'];?></p>
-						<p id="time2-<?php echo $timer ?>" class="counter" data-enddate="<?php echo $endcount?>" data-status="upcoming" data-countertype="li.up-event"></p>
+						<p id="time2-<?php echo $timer ?>" class="counter" data-enddate="<?php echo $endcount?>" data-status="upcoming" data-countertype="li.up-event" data-id="<?php echo $timer?>"></p>
 						<span class="ui-icon ui-icon-arrow-r ui-icon-shadow hp-ui-icon-right"></span>
 						<div class="clear"></div>
 					</a>
