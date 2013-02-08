@@ -66,8 +66,6 @@
             <?php foreach ($liveArray as $live): ?>
                 <?php
                     $endcountRaw = strtotime($live['event_end_date']);
-
-                    debug($endcountRaw);
                     $endcount = date("F j, Y, G:i:s", $endcountRaw);
                     $hasProduct = $this->countCategoryProducts($live['entity_id']);
                     $eventDepts = $live['department_label'];
