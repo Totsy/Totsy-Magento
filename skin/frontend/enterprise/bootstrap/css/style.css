@@ -154,19 +154,26 @@ h4 {text-transform: uppercase;}
     margin:20px 0 10px; padding-bottom:5px;
     border-bottom:1px solid #e5e5e5;
 }
+.breadcrumb { /* bootstrap overrides follow… */
+    background: none;
+    border:none;
+    padding: 0; margin: 0 0 10px;
+}
+.breadcrumb > li:before {
+    content: ">>";
+    display: inline-block;
+    padding: 0 3px 0 0;
+    font-size:85%;
+    vertical-align:1px;
+}
+.breadcrumb > li:first-child:before {
+    content:"";
+}
 .page-header.has-timer h2 {
     float: left;
-    font-size:30px;
+    font-size:30px; font-weight: normal;
     max-width:550px;
 }
-/* @TODO: Ted's Take 2012.10 - pending implementation of the breadcrumbs
-.page-header.has-timer h2 a:link {
-    color:#333;
-}
-.page-header.has-timer h2 a:hover {
-    color:#d22f2a;
-}
-*/
 .has-timer .count-down-timer {
     float: right;
     padding-left:45px;
@@ -1530,17 +1537,18 @@ body.catalog-category-view .price-box .special-price {
 /* @PDP page specific styles */
 .catalog-product-view .page-header {
     border: none;
+    margin-top:0;
 }
 .catalog-product-view .product-main {
     position: relative;
     min-height: 310px; /* hackish fix for footer overlap of abs pos'ed price module */
     border-top: 2px dashed #68a8fe;
 }
-.product-main .page-header {
+.product-main .product-header {
     margin:0; padding:8px 0;
     border-bottom: 2px dashed #68a8fe;
 }
-.product-main .page-header h3 {
+.product-main .product-header h3 {
     font-size:22px;
     font-weight: bold;
 }

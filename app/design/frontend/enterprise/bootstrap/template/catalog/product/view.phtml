@@ -61,8 +61,12 @@ $savings = money_format('%n', $originalPrice) - money_format('%n', $discountPric
 <div id="messages_product_view"><?php echo $this->getMessagesBlock()->toHtml() ?></div>
 <section>
     <header class="page-header has-timer clearfix">
-        <h2 class="ellipsis"><a href="<?php echo $_category->getUrl();?>"><?php echo $_helper->categoryAttribute($_category, $_category->getName(), 'name') ?></a>
-        </h2>
+        <ol class="breadcrumb">
+                <li><a href="<?php echo $this->getUrl(); ?>" title="Totsy home">Totsy Home</a></li>
+                <li><a href="<?php echo $_category->getUrl();?>"><?php echo $_helper->categoryAttribute($_category, $_category->getName(), 'name') ?></a></li>
+                <li class="active"><?php echo $_product->getName(); ?></li>
+        </ol>
+        <h2 class="ellipsis"><?php echo $_helper->categoryAttribute($_category, $_category->getName(), 'name') ?></h2>
         <span class="count-down-timer"><span id="timer"></span></span>
     </header>
 
@@ -72,7 +76,7 @@ $savings = money_format('%n', $originalPrice) - money_format('%n', $discountPric
             <?php echo $this->getChildHtml('media'); ?>
         </div>
         <div class="span8 product-main">
-            <div class="page-header row">
+            <div class="product-header row">
                 <h3 class="span5 alpha"><?php echo $_product->getName(); ?></h3>
             </div>
             <div class="alpha span5">
