@@ -54,6 +54,7 @@ $discountPrice = money_format('%n', $final_price);
 $percent = number_format(($originalPrice - $discountPrice) * (100 / $originalPrice));
 $savings = money_format('%n', $originalPrice) - money_format('%n', $discountPrice);
 ?>
+
 <script type="text/javascript">
     var optionsPrice = new Product.OptionsPrice(<?php echo $this->getJsonConfig() ?>
     );

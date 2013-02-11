@@ -34,5 +34,10 @@
  */
 class Harapartners_Categoryevent_Block_Catalog_Product_View_Shippingreturn extends Mage_Catalog_Block_Product_View
 {
-    
+    protected function _toHtml() {
+        if($this->getProduct()->getFulfillmentType() == 'dotcom_stock') {
+            return Mage::getModel('cms/block')->load('shipping_and_return_fastship')->getContent();
+        }
+        return Mage::getModel('cms/block')->load('block-id');
+    }
 }
