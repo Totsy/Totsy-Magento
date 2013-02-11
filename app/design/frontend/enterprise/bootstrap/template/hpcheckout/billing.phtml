@@ -98,9 +98,11 @@
 	    jQuery('#button_ship_to').bind('click', function() {
 	    	var billAddySelect = jQuery("#billing-address-select");
 	    	// re-enable disabled controls
-	    	if (billAddySelect.attr('disabled') !== "undefined") {
-	            billAddySelect.removeAttr('disabled');
-	            checkoutPayment.disableAddress(false,'hpcheckout-billing-form');
+	    	if(billAddySelect.length > 0 ){
+	    	    if (billAddySelect.val() !== "") {
+	                billAddySelect.removeAttr('disabled');
+	                checkoutPayment.disableAddress(false,'hpcheckout-billing-form');
+	    	    }
 	    	}
 	    	// then use hpcheckout.copyBillingToShipping() method
 	    	hpcheckout.copyBillingToShipping();
