@@ -102,7 +102,7 @@
                                         <?php endforeach; ?>  
                                         </ul>                                  
                                     </section>
-                                    <p id="time1-<?php echo $timer ?>"></p>
+                                    <p id="time1-<?php echo $timer ?>" class="counter" data-enddate="<?php echo $endcount?>" data-status="live" data-id="<?php echo $timer ?>" data-countertype="event-counter"></p>
                                     <span class="btn btn-primary">Shop Now!</span>
                                 </div>
                             </div>
@@ -114,20 +114,7 @@
                             <span class="event-link">
                                 <img src="<?php echo Mage::helper('service/image')->loadImageFile($imgFile)->resize(228)->keepFrame(FALSE); ?>" width="228" height="263" alt="<?php echo $live['name'];?>" />
                             </span>
-                            <script type="text/javascript">
-                                // @TODO: all countdown jQuery should be externalized
-                                var html = getTimerHtml('live','<?php echo $endcount ?>');
-                                jQuery("#time1-<?php echo $timer ?>").countdown({//date: "12 10, 2011 16:11", //Counting TO a date
-                                    date: "<?php echo $endcount; ?>", //Counting TO a date
-                                    htmlTemplate: html,
-                                    onComplete: function( event ){
-                                        jQuery(this).html("Completed");
-                                        jQuery(".event-counter-<?php echo $timer;?>").hide();
-                                    },
-                                    leadingZero: true,
-                                    direction: "down"
-                                });
-                            </script>
+                            
                             <?php $timer++; ?>
                         </a>
                     </li>
@@ -181,21 +168,8 @@
                             <img src="<?php echo Mage::helper('service/image')->loadImageFile($imgFile)->resize(165)->keepFrame(FALSE); ?>" width="165px" height="171" alt="<?php echo $up['name'];?>" />
                         </a>
                         <?php $timer++; ?>
-                        <p class="opens_in" id="time2-<?php echo $timer ?>"></p>
-                        <script type="text/javascript">
-                            // @TODO: externalize countdown script
-                            var html = getTimerHtml('upcoming','<?php echo $endcount ?>');
-                            jQuery("#time2-<?php echo $timer ?>").countdown({
-                                //date: "12 10, 2011 16:11", //Counting TO a date
-                                date: "<?php echo $endcount; ?>", //Counting TO a date
-                                htmlTemplate: html,
-                                onComplete: function( event ){
-                                    jQuery(this).html("Completed");
-                                    jQuery(".up-event-counter-<?php echo $timer;?>").remove();
-                                },
-                                leadingZero: true,
-                                direction: "down"
-                            });
+                        <p class="opens_in counter" id="time2-<?php echo $timer ?>" data-enddate="<?php echo $endcount?>" data-status="upcoming" data-countertype="up-event-counter"  data-id="<?php echo $timer ?>"></p>
+                        
                         </script>                    
                     </div>
                 </li>
@@ -206,3 +180,21 @@
 
     </div><!-- /.live-events-container -->
 </div><!-- /.catalog-events-container -->
+
+<script type="text/javascript">
+    jQuery(".counter").each(function(){
+        var saleTime = new Date(jQuery(this).data('enddate'));
+        var id = jQuery(this).data('id');
+        jQuery(this).countdown({
+            date: saleTime,
+            htmlTemplate: getTimerHtml(jQuery(this).data('status'), jQuery(this).data('enddate')),
+            leadingZero: true,
+            direction: 'down',
+            onComplete: function( event ){
+                jQuery(this).html("Completed");
+                jQuery(jQuery(this).data('countertype') + '-' + id).hide();
+            }
+
+        });
+    });
+</script>
