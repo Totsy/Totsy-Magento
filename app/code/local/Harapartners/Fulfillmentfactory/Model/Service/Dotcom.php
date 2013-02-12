@@ -23,15 +23,6 @@ class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
      */
     public function fulfillment()
     {
-        /** @var $write Varien_Db_Adapter_Interface */
-        $write  = Mage::getSingleton('core/resource')
-            ->getConnection('core_write');
-        $inventoryAttribute = Mage::getSingleton('eav/config')
-            ->getAttribute('catalog_product', 'fulfillment_inventory');
-        $inventoryTable = Mage::getResourceModel('catalog/product')
-            ->getTable('catalog/product');
-        $inventoryTable .= '_' . $inventoryAttribute->getBackendType();
-
         $xmlStreamName = Mage::helper('fulfillmentfactory/dotcom')
             ->getInventory();
 
@@ -86,13 +77,11 @@ class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
                 if ($product && $product->getId()) {
 
                     // Update product inventory for 'dotcom_stock'
-                    if ('dotcom_stock' == $product->getData('fulfillment_type')) {
-                        $write->query(
-                            "REPLACE INTO `$inventoryTable` SET `entity_type_id` = ?, `attribute_id` = ?, `entity_id` = ?, `value` = ?",
-                            array($inventoryAttribute->getEntityTypeId(), $inventoryAttribute->getId(), $product->getId(), $qty)
-                        )->execute();
-
-                        Mage::log("Product stock Qty updated for '$sku': $qty", Zend_Log::DEBUG, 'fulfillment_inventory.log');
+                    if ( 'dotcom_stock' == $product->getData('fulfillment_type') ) {
+						$stockItem = Mage::getModel ( 'cataloginventory/stock_item' )->loadByProduct ( $product->getId() );
+						$stockItem->setData ( 'qty', ( integer ) $qty );
+						$stockItem->save ();
+						Mage::log("Product stock Qty updated for '$sku': $qty", Zend_Log::DEBUG, 'fulfillment_inventory.log');
                     }
 
                     $currentInventory = $product->getData('fulfillment_inventory');
@@ -120,6 +109,7 @@ class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
             Zend_Log::INFO,
             'fulfillment.log'
         );
+        
 
         $availableProducts = Mage::getModel('catalog/product')->getCollection()
             ->addAttributeToFilter('fulfillment_inventory', array('gt' => 0));
