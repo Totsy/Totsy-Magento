@@ -40,7 +40,16 @@ if(count($fulfillmentTypes) > 1) {
         $hasProfile = false; 
     }
 ?>
+<script type="text/javascript">
 
+jQuery(document).ready(function() {
+    if(typeof checkoutPayment!=="undefined") {
+        checkoutPayment.hasProfile = "<?php echo $hasProfile; ?>";
+        checkoutPayment.toggleViews();
+    }
+});
+
+</script>
 <div>
     <div>
     	<div>
