@@ -285,12 +285,14 @@ jQuery(document).ready( function() {
                             
                             $orders = Mage::getResourceModel('sales/order_collection')->addFieldToSelect('*')
     ->addFieldToFilter('customer_id', $profile->getCustomerId())->addAttributeToSort('created_at', 'DESC')->setPageSize(1);
+    
     						//checking the users last used, saved to expedite checkout
                             //comparing cybersource profile id to id of card used in last order placed
-                            if($orders->getFirstItem()->getPayment()->getData('cybersource_subid')
-                            ==$profile->getSubscriptionId()) {
-                                $checked = 'checked';
-                            }
+                            if($orders->getFirstItem()->getPayment()) {
+                            	if($orders->getFirstItem()->getPayment()->getData('cybersource_subid')==$profile->getSubscriptionId()) {
+                                	$checked = 'checked';
+                            	}
+                            } 
                             //echo $profile->getSubscriptionId();
                         ?>
                         
