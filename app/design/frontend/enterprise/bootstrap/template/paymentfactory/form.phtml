@@ -40,16 +40,6 @@ if(count($fulfillmentTypes) > 1) {
         $hasProfile = false; 
     }
 ?>
-<script type="text/javascript">
-
-jQuery(document).ready(function() {
-    if(typeof checkoutPayment!=="undefined") {
-        checkoutPayment.hasProfile = "<?php echo $hasProfile; ?>";
-        checkoutPayment.toggleViews();
-    }
-});
-
-</script>
 <div>
     <div>
     	<div>
@@ -304,3 +294,27 @@ jQuery(document).ready(function() {
     </div>
 </div>
 </div>
+<script type="text/javascript">
+
+jQuery(document).ready(function() {
+    checkoutPayment.hasProfile = "<?php echo $hasProfile; ?>";
+    checkoutPayment.toggleViews();
+    
+    jQuery("[id='payment[cybersource_subid]']").change(function() {
+        checkoutPayment.setPaymentType();
+    });
+    jQuery("#paymentfactory_tokenize_cc_number").keyup(function() {
+        checkoutPayment.autoDetectCard(this.id);
+    });
+    jQuery("#add_payment_toggle").click(function() {
+        checkoutPayment.paymentToggle();
+    });
+    jQuery('#paypal').click(function() {
+        checkoutPayment.setPaypal();
+    });
+    jQuery(".use-saved-card-control").click(function() {
+        checkoutPayment.useSavedCard();
+    });
+});
+
+</script>

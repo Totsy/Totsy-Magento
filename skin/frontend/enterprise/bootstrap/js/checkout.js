@@ -172,20 +172,4 @@ jQuery(document).ready(function() {
             }
         };
     })();
-    jQuery("[id='payment[cybersource_subid]']").change(function() {
-        checkoutPayment.setPaymentType();
-    });
-    jQuery("#paymentfactory_tokenize_cc_number").keyup(function() {
-        checkoutPayment.autoDetectCard(this.id);
-    });
-    jQuery("#add_payment_toggle").click(function() {
-        checkoutPayment.paymentToggle();
-    });
-    jQuery('#paypal').click(function() {
-        checkoutPayment.setPaypal();
-    });
-    //};
-    jQuery(".use-saved-card-control").click(function() {
-        checkoutPayment.useSavedCard();
-    });
 });
