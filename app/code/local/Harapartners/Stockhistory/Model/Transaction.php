@@ -275,7 +275,6 @@ class Harapartners_Stockhistory_Model_Transaction extends Mage_Core_Model_Abstra
                     ->addAttributeToSelect(array('case_pack_qty', 'is_master_pack'))
                     ->addAttributeToFilter(array(array('attribute' => 'case_pack_grp_id', 'eq' => $case_pack_grp_id)))
                     ->addAttributeToFilter(array(array('attribute' => 'vendor_code', 'eq' => $po->getVendorCode())));
-                    debug($po->getVendorCode());
             foreach($products as $product) {
                 
                 if(!$product->getData('is_master_pack')) {
