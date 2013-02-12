@@ -1,5 +1,4 @@
 var checkoutPayment = {};
-var testing = "test";
 
 jQuery(document).ready(function() {
     //a namespace for operations toggling the 2 views of the payment section
