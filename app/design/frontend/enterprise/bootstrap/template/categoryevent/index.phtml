@@ -22,7 +22,8 @@
  * 
  */
 ?>
-<?php    $indexDataObj 	= 	$this->getIndexDataObject();
+<?php    
+    $indexDataObj 	= 	$this->getIndexDataObject();
     $baseUrl 		= 	Mage::getBaseUrl();
     $maxPerSend 	= 	0;
     $timer 			= 	0;
@@ -169,8 +170,6 @@
                         </a>
                         <?php $timer++; ?>
                         <p class="opens_in counter" id="time2-<?php echo $timer ?>" data-enddate="<?php echo $endcount?>" data-status="upcoming" data-countertype="up-event-counter"  data-id="<?php echo $timer ?>"></p>
-                        
-                        </script>                    
                     </div>
                 </li>
             <?php endforeach; ?>
