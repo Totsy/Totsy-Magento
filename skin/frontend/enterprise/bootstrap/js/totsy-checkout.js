@@ -99,3 +99,4 @@ jQuery(document).ready(function() {
             }
         };
     })();
+});
