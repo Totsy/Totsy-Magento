@@ -78,6 +78,9 @@ class Mage_Adminhtml_Block_Customer_Edit_Tab_Invitations extends Mage_Adminhtml_
         if($invitation->getData()) {
             $inviter = Mage::getModel('customer/customer')->load($invitation->getCustomerId());
             $username = $inviter->getFirstname() . " " . $inviter->getLastname();
+            if(empty($username)) {
+                $username = $inviter->getEmail();
+            }
             return "<a target='_blank' href='" . $this->getUrl("*/*/edit", array('id' => $invitation->getCustomerId())) . "'>" . $username . "</a>";
         }
 
