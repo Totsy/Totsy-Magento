@@ -20,55 +20,6 @@ if(count($fulfillmentTypes) > 1) {
     $multiShipping = TRUE;
 }
 ?>
-<script type="text/javascript">
-//<![CDATA[
-    Validation.creditCartTypes.set('JCB', [new RegExp('^(35[0-9]{14}|(2131|1800)[0-9]{11})$'), new RegExp('^([0-9]{3})?$'), true]);
-    Validation.creditCartTypes.set('LASER', [new RegExp('^((6304|6706|6771|6709)[0-9]{12}([0-9]{3}))$'), new RegExp('^([0-9]{3})?$'), false]);
-    Validation.creditCartTypes.set('UATP', [false, new RegExp('^[0-9]{3}([0-9]{1})?$'), false]);
-    Validation.creditCartTypes.set('MCI', [false, new RegExp('^[0-9]{3}([0-9]{1})?$'), false]);
-//]]>
-	
-	//extending validation JS to include validation for rules for cc types displayed with radio buttons
-	Validation.add(['validate-cc-type-radio', 'Credit card number does not match credit card type.', function(v, elm) {
-                // remove credit cardf number delimiters such as "-" and space
-                elm.value = removeDelimiters(elm.value);
-                v         = removeDelimiters(v);
-                var ccType = $$('input:checked[type="radio"][name="payment[cc_type]"]').pluck('value');
-				if (typeof Validation.creditCartTypes.get(ccType) == 'undefined') {
-                    return false;
-                } 
-                // Other card type or switch or solo card
-                if (Validation.creditCartTypes.get(ccType)[0]==false) {
-                    return true;
-                }
-                // Matched credit card type
-                var ccMatchedType = '';
-				Validation.creditCartTypes.each(function (pair) {
-                    if (pair.value[0] && v.match(pair.value[0])) {
-                        ccMatchedType = pair.key;
-                        throw $break;
-                    }
-                });
-               	if(ccMatchedType != ccType) {
-                    return false;
-                } 
-                return true;
-            }],
-            ['validate-cc-cvn-radio', 'Please enter a valid credit card verification number.', function(v, elm) {
-                            
-                var ccType = $$('input:checked[type="radio"][name="payment[cc_type]"]').pluck('value');
-                if (typeof Validation.creditCartTypes.get(ccType) == 'undefined') {
-                    return false;
-                }
-                var re = Validation.creditCartTypes.get(ccType)[1];
-
-                if (v.match(re)) {
-                    return true;
-                }
-                return false;
-            }]);
-
-</script>
 
 <div class="form-list .one-page-payment" id="payment_form_<?php echo $_code ?>">
 <?php $customerId = Mage::getSingleton('customer/session')->getCustomerId(); ?>
@@ -89,189 +40,6 @@ if(count($fulfillmentTypes) > 1) {
         $hasProfile = false; 
     }
 ?>
-
-<script type = "text/javascript" >
-var checkoutPayment = {};
-jQuery(document).ready(function() {
-    var billAddySelect = jQuery("#billing-address-select");
-    var newCardWrap = jQuery('.cc_info');
-    //var newCardCtrls = jQuery( 'input, select', '.use-new-card-wrapper' );
-    var billingAddress = jQuery('.totsy-selective-input-box', '#hpcheckout-billing-wrapper');
-    var billFormInputs = jQuery('#hpcheckout-billing-form :input');
-    jQuery("[id='payment[cybersource_subid]']").change(function() {
-        if (jQuery(this).val() == '') {
-            if (jQuery('#paypal_payment').length > 0) {
-                jQuery('#paypal_payment').attr("checked", false);
-            }
-            if (jQuery("#payment_form_paypal_express").length > 0) {
-                jQuery("#payment_form_paypal_express").show();
-            }
-            jQuery("#cc_data").show();
-            newCardWrap.show();
-            billAddySelect.removeAttr('disabled');
-            //Enable Billing Inputs if credit card not selected
-            checkoutPayment.disableAddress(false, 'hpcheckout-billing-form');
-            billFormInputs.each(function(i) {
-                jQuery(this).val('');
-            });
-        } else {
-            if (jQuery("#payment_form_paypal_express").length > 0) {
-                jQuery("#payment_form_paypal_express").hide();
-            }
-            jQuery('#billing-address').show();
-            jQuery('#shipping-address').show();
-            jQuery('.addresses').width(445);
-            //billingAddress.attr("disabled", true);
-            newCardWrap.hide();
-            if (checkoutPayment.isCollapsed == false) {
-                billAddySelect.val(jQuery("#address_" + jQuery(this).val()).val()).change();
-                //Block Billing Inputs if credit card selected
-                checkoutPayment.disableAddress(true, 'hpcheckout-billing-form');
-                billAddySelect.attr('disabled', true);
-            } else {
-                checkoutPayment.disableAddress(false, 'hpcheckout-billing-form');
-                billAddySelect.removeAttr('disabled');
-            }
-        }
-    });
-    //a namespace for operations toggling the 2 views of the payment section
-    checkoutPayment = (function() {
-        var hasProfile = '';
-        var isCollapsed = '';
-        var lastUsedAddressId = '';
-        return {
-            hasProfile: "<?php echo $hasProfile; ?>",
-            isCollapsed: false,
-            lastUsedAddressId: '',
-            toggleViews: function() {
-                if (this.hasProfile) {
-                    jQuery(".cc_save_card").appendTo(jQuery("#add_payment_save_card"));
-                    var savedCardStyles = {
-                        'width': '60px',
-                        'margin-left': '10px',
-                        'float': 'left'
-                    };
-                    jQuery('#billing-address-select').attr('disabled', true);
-                    jQuery(".cc_save_card").css(savedCardStyles);
-                    jQuery("#hpcheckout-payment-add-title").show();
-                    jQuery("#use-card-method").show();
-                    jQuery("#paymentfactory_tokenize_cc_save").contents("");
-                    jQuery(".use-new-card-wrapper").show();
-                    jQuery("#cc_save_text").html("Save");
-                    jQuery(".use-new-card-wrapper").appendTo(jQuery("#add_cc_types"));
-                    //newCardWrap.hide();
-                } else {
-                    jQuery("[id='add_payment']").hide();
-                    jQuery(".checkout-reward").css("padding-top", "0px");
-                    jQuery(".use-new-card-wrapper").show();
-                    jQuery("#use-card-method").hide();
-                    jQuery("#hpcheckout-payment-add-title").hide();
-                    jQuery("#cc_data").show();
-                }
-            },
-            disableAddress: function(stateFlag, formId) {
-                jQuery('#' + formId + ' :input').each(function(i) {
-                    if (this.id !== "button_ship_to") {
-                        jQuery("[id='" + this.id + "']").attr('disabled', stateFlag);
-                    }
-                });
-            },
-            getCreditCardType: function(ccNum) {
-                //start without knowing the credit card type
-                var result = "unknown";
-                //first check for MasterCard
-                if (/^5[1-5]/.test(ccNum)) {
-                    result = "mc";
-                } //then check for Visa
-                else if (/^4/.test(ccNum)) {
-                    result = "vi";
-                } //then check for AmEx
-                else if (/^3[47]/.test(ccNum)) {
-                    result = "ae";
-                } else if (/^6011[0-9]{12}$/.test(ccNum) || (/^[0-9]{3}$/.test(ccNum))) {
-                    result = "di";
-                }
-                return result;
-            }
-        };
-    })();
-    checkoutPayment.toggleViews();
-    jQuery("#paymentfactory_tokenize_cc_number").keyup(function() {
-        var ccEntered = checkoutPayment.getCreditCardType(this.value);
-        var isCard = false;
-        jQuery("#paymentfactory_tokenize_cc_type .cc").children().each(function(i, k) {
-            var temp = jQuery("#" + k.id);
-            if (ccEntered == temp.attr('id')) {
-                //console.log("found a match");
-                temp.removeClass(temp.attr('class')).addClass(temp.attr('data-active'));
-                isCard = true;
-            } else {
-                temp.removeClass(temp.attr('data-active')).addClass(temp.attr('data-inactive'));
-            }
-        });
-        
-        if(isCard==true) { 
-             //unset saved card
-            jQuery('[id="payment[cybersource_subid]"]').attr("checked", false);
-            jQuery('[id="payment[cc_type]"]').val(ccEntered.toUpperCase());
-            //enable address dropdown
-            billAddySelect.attr('disabled', false);
-        } else {
-            //if a saved card was selected, reselect it
-            if(jQuery('[id="payment[cybersource_subid]"]').val()!==""){
-                jQuery('[id="payment[cybersource_subid]"]').val(checkoutPayment.lastUsedAddressId);
-                jQuery('[id="payment[cybersource_subid]"]').attr("checked", true);
-            }
-            jQuery('[id="payment[cc_type]"]').val("");
-            billAddySelect.attr('disabled', true);
-        }        
-    });
-    jQuery("#add_payment_toggle").click(function() {
-        if (jQuery('#paypal_payment').length > 0) {
-            jQuery('#paypal_payment').attr("checked", false);
-        }
-        if (jQuery("#payment_form_paypal_express").length > 0) {
-            jQuery("#payment_form_paypal_express").hide();
-        }
-        jQuery("#cc_data").show();
-        jQuery(".cc_info").css({
-            'opacity': 100
-        });
-        jQuery(".cards").css({
-            'opacity': 100
-        });
-        jQuery('input[name="payment[method]"]').val("paymentfactory_tokenize");
-        jQuery('[id="paypal_payment"]').val("");
-        hpcheckout.switchPaymentMethod('paymentfactory_tokenize');
-        newCardWrap.show();
-        jQuery("#add_payment_toggle").hide();
-    });
-    jQuery('#paypal').click(function() {
-        //
-        jQuery("#add_payment_toggle").show();
-        newCardWrap.hide();
-        jQuery('#billing-address').hide();
-        jQuery('#shipping-address').hide();
-        //grey out card icons
-        jQuery(".cards").css({
-            'opacity': .5
-        });
-        //uncheck saved card option
-        jQuery('[id="payment[cybersource_subid]"]').attr("checked", false);
-        //set hidden for variable 
-        jQuery('input[name="payment[method]"]').val("paypal_express");
-        jQuery('[id="paypal_payment"]').val("paypal_express")
-        //switch payment to send right data to backend   
-        hpcheckout.switchPaymentMethod('paypal_express');
-    });
-    //};
-    jQuery(".use-saved-card-control").click(function() {
-        //jQuery("#paymentfactory_tokenize_cc_type input").attr("checked", false);        
-        checkoutPayment.disableAddress(true, 'hpcheckout-billing-form');
-        jQuery('#billing-address-select').attr('disabled', true);
-    });
-}); 
-</script>
 
 <div>
     <div>
@@ -294,18 +62,15 @@ jQuery(document).ready(function() {
         		 	    <span id="<?php echo strtolower($_typeCode); ?>" title="<?php echo $_typeName; ?>" class="<?php echo $_cssClassNamesForCardTypes[strtolower($_typeCode)]; ?>" data-active="<?php echo strtolower($_typeCode); ?>" data-inactive="<?php echo $_cssClassNamesForCardTypes[strtolower($_typeCode)]; ?>">
         		 	    </span>
         		 	</span> 
-                 <!-- </button> -->              
         		 <?php $i++; ?>
         		 <?php endforeach ?>
         		 <?php $methods = $this->getLayout()->getBlock('hpcheckout.payment.methods')->getMethods();  ?> 
                  <?php if(count($methods)): ?>
                  	<?php if(!$multiShipping && !$hasVirtual && Mage::getModel('paypal/config')->isMethodActive('paypal_express')): ?>
-			    	    <!-- <button type="button" class="btn cc-type" id="paypal" name="paypal"> -->
 			    	        <div id="paypal" name="paypal">
         		 	            <span title="Paypal Express" class="paypal"></span>
         		 	            <a class="what-is-paypal-link" href="https://www.paypal.com/cgi-bin/webscr?cmd=xpt/Marketing/popup/OLCWhatIsPayPal-outside" target="_blank">What is<br /> PayPal?</a>
         		 	        </div>
-        		 	    <!-- </button> -->
         		 	<?php endif; ?>
                  <?php endif; ?>  
                     <input type="hidden" name="paypal_payment" id="paypal_payment" value="">
