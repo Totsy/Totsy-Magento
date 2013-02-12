@@ -702,10 +702,6 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
     font-size:11px; font-style: italic; font-weight: normal;
     text-transform: lowercase;
 }
-.events-grid .thumbnail .more [id*="time1-"] :first-child:after {
-    content: ":";
-    display: inline-block;
-}
 
 /* discount banner */
 .maxDiscount {font-size:20px; float:right;}
