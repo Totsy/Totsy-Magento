@@ -38,7 +38,7 @@
                     <cron_expr>0 0 * * *</cron_expr>
                 </schedule>
                 <run>
-                    <model>saithru/archive::process</model>
+                    <model>sailthru/archive::process</model>
                 </run>
             </totsy_sailthru_archive>
         </jobs>
