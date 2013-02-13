@@ -213,7 +213,7 @@ class Harapartners_Fulfillmentfactory_Helper_Data extends Mage_Core_Helper_Abstr
 
         $select->from($tableName)
             ->reset(Zend_Db_Select::COLUMNS)
-            ->columns("SUM(fulfill_count+0)")
+            ->columns("SUM(qty_ordered)")
             ->where('sku = ?', $sku)
             ->where('status IN (?)', $statuses);
 
