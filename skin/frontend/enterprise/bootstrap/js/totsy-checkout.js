@@ -1,7 +1,6 @@
 var checkoutPayment = {};
 
 jQuery(document).ready(function() {
-    //a namespace for operations toggling the 2 views of the payment section
     var billAddySelect = jQuery("#billing-address-select");
     var newCardWrap = jQuery('.cc_info');
     //var newCardCtrls = jQuery( 'input, select', '.use-new-card-wrapper' );
@@ -32,6 +31,7 @@ jQuery(document).ready(function() {
                     jQuery("#cc_save_text").html("Save");
                     jQuery(".use-new-card-wrapper").appendTo(jQuery("#add_cc_types"));
                     //newCardWrap.hide();
+
                 } else {
                     jQuery("[id='add_payment']").hide();
                     jQuery(".checkout-reward").css("padding-top", "0px");
