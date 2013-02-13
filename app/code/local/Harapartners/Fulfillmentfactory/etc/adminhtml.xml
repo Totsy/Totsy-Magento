@@ -69,21 +69,6 @@
                             </fulfillmentfactory>
                         </children>
                     </sales>
-                    <catalog>
-                        <children>
-                            <categories>
-                                <children>
-                                    <actions>
-                                        <children>
-                                            <fulfillmentfactorybulkedit translate="title" module="fulfillmentfactory">
-                                                <title>Fulfillment Type Bulk Edit</title>
-                                            </fulfillmentfactorybulkedit>
-                                        </children>
-                                    </actions>
-                                </children>
-                            </categories>
-                        </children>
-                    </catalog>
                     <system>
                         <children>
                             <config>
