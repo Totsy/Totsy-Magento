@@ -38,6 +38,6 @@ class Harapartners_Categoryevent_Block_Catalog_Product_View_Shippingreturn exten
         if($this->getProduct()->getFulfillmentType() == 'dotcom_stock') {
             return Mage::getModel('cms/block')->load('shipping_and_return_fastship')->getContent();
         }
-        return Mage::getModel('cms/block')->load('block-id');
+        return Mage::getModel('cms/block')->load('shipping_and_return')->getContent();
     }
 }
