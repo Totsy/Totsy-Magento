@@ -34,8 +34,8 @@ class Crown_Vouchers_Model_Email extends Mage_Core_Model_Abstract {
                 "order" => $this->order,
                 "store" => Mage::app()->getStore(),
                 "title" => $this->product->getName(),
-                "description" => $this->product->getName(),
-                "short_description" => $this->product->getName()
+                "description" => $this->product->getDescription(),
+                "short_description" => $this->product->getShortDescription(),
             )
         );
         	
