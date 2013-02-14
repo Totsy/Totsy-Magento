@@ -83,6 +83,12 @@
         $upComingFlag = 1;
         $inEarly = false;
     }
+    
+    if($upComingFlag){
+        $flag = "upcoming";
+    } else {
+        $flag = "live";
+    }
 	
 ?>
 <?php echo $this->getMessagesBlock()->toHtml() ?>
@@ -118,24 +124,7 @@
 	    <?php endif; ?>
 	</div>
 	<div class="event-timer-container">
-		<p class="count-down-timer" id="time-<?php echo $timer ?>"></p>					 
-		<script type="text/javascript">
-			if(<?php echo $upComingFlag?>){
-				var html = getTimerHtml('upcoming','<?php echo $timecount ?>');
-			}else {
-				var html = getTimerHtml('live','<?php echo $timecount ?>');
-			}
-			jQuery("#time-<?php echo $timer ?>").countdown({
-				//date: "12 10, 2011 16:11", //Counting TO a date
-				date: "<?php echo $timecount; ?>", //Counting TO a date
-				htmlTemplate: html,
-				onComplete: function( event ){										
-					jQuery(this).html("Completed");
-				},
-				leadingZero: true,
-				direction: "down"
-			});
-		</script>
+		<p class="count-down-timer" id="time-<?php echo $timer ?> counter" data-enddate="<?php echo $timecount?>" data-status="<?php echo $flag?>" data-countertype="time"  data-id="<?php echo $timer ?>"></p>					 
 	</div>
 
 	<div class="middle-part">		
@@ -226,3 +215,24 @@
         "image":"<?php echo $_imgUrl; ?>"
 	});
 </script>
+<script type="text/javascript">
+    jQuery(".counter").each(function(){
+        var saleTime = new Date(jQuery(this).data('enddate'));
+        var id = jQuery(this).data('id');
+        if(jQuery(this).data('status') == 'earlyaccess'){
+            var html = getEarlyAccessTimerHtml(jQuery(this).data('status'), jQuery(this).data('enddate'));
+        } else {
+            var html = getTimerHtml(jQuery(this).data('status'), jQuery(this).data('enddate'));
+        }
+        jQuery(this).countdown({
+            date: saleTime,
+            htmlTemplate: html,
+            leadingZero: true,
+            direction: 'down',
+            onComplete: function( event ){
+                jQuery(this).html("Completed");
+            }
+        });
+    });
+</script>
+
