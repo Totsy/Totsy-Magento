@@ -135,11 +135,6 @@
 </header><!-- /.navbar -->
 
 <script type="text/javascript">
-    function logout(){
-    	FB.logout(function(response) {
-    		window.location = "<?php echo Mage::getUrl('customer/account/logout')?>"// user is now logged out
-    	});
-    }
     Event.observe(document,'dom:loaded',function() {
         new Ajax.Updater({success: 'header-user-info'}, '<?php echo $this->getUrl('customertracking/headermsg/ajax',array('_secure'=>Mage::app()->getStore()->isCurrentlySecure())); ?>', {
             method:'get',
