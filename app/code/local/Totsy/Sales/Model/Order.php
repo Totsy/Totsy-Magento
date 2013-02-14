@@ -198,7 +198,7 @@ class Totsy_Sales_Model_Order extends Mage_Sales_Model_Order
 
             $product = Mage::getModel('catalog/product')->load($orderItem->getProductId());
 
-            if ($product->getIsVirtual()) {
+            if ($product->getIsVirtual() && !$product->isRecurring()) {
 
                 // Is it a discount vault If so, skip it.
                 if($product->getOneTimePurchase())
