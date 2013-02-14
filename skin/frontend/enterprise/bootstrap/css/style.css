@@ -150,14 +150,22 @@ h4 {text-transform: uppercase;}
     border:1px solid #333;
 }
 .thumbnail {padding:10px;}
+
+/* 
+    @TODO: .page-header is abused; cleanup: 
+    - markup: only use on true page headers not sections headers; 
+    - CSS: with modularized style rules, the body-level "category" overrides won't be needed;
+*/
 .page-header {
     margin:20px 0 10px; padding-bottom:5px;
     border-bottom:1px solid #e5e5e5;
 }
-body[class*="catalog-"] .page-header {
+body[class*="catalog-"] .page-header,
+body.categoryevent-index-topnav .page-header { 
     border: none;
     margin-top:0;
 }
+
 .breadcrumb { /* bootstrap overrides follow… */
     background: none;
     border:none;

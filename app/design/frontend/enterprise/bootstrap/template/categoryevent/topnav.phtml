@@ -19,9 +19,13 @@ $categoryDataArray = $topNavDataObject->getData('category_product_complete_data'
 $howMany = count($categoryDataArray);
 ?>
 
-<div class="page-header">
+<header class="page-header">
+    <ol class="breadcrumb">
+            <li><a href="<?php echo $this->getUrl(); ?>" title="Totsy home">Totsy Home</a></li>
+            <li class="active"><?php echo $topNavDataObject->getData('attr_text_label'); ?></li>
+    </ol>
     <h2><?php echo $topNavDataObject->getData('attr_text_label'); ?><small class="pull-right"><?php echo ' '.$howMany.' Sales Found';?></small></h2>
-</div>
+</header>
 
 <script type="text/javascript">
 shpn='<?php echo $topNavDataObject->getData('attr_text_label'); ?>'
