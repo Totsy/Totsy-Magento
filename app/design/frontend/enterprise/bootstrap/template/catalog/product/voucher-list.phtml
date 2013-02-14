@@ -75,7 +75,11 @@
                 <!-- Product Description -->
                 <div class="product-shop">
                     <div class="f-fix">
-                        <?php $_productNameStripped = $this->stripTags($_product->getName(), null, true); ?>
+                        <?php
+                            $_productNameStripped = $this->stripTags($_product->getName(), null, true);
+                            $description = $_helper->productAttribute($_product, $_product->getDescription(), 'description');
+
+                        ?>
                         <div class="desc std">
 
                             <?php if(Mage::helper('vouchers')->hasAssociation($_customerId, $_product->getId())):?>
@@ -89,7 +93,10 @@
                             <?php endif;?>
 
                             <div class="product-name strong"><a href="javascript:void(0);"  onclick="openDialog('learn-more-<?php echo $j;?>')"><?php echo $_productNameStripped;?></a></div>
-                            <?php echo $_helper->productAttribute($_product, $_product->getShortDescription(), 'short_description') ?>
+                            <?php
+                                echo substr($description,0,300);
+                                echo strlen($description) > 300 ? '...' : '';
+                            ?>
                             <a href="javascript:void(0);" class="learn-more red" onclick="openDialog('learn-more-<?php echo $j;?>')">More</a><br />
                             <div class="pricing">
                                 <div class="float light">Regular Price: <del><?php echo Mage::helper('core')->formatPrice($_product->getRegularVoucherPrice());?></del></div>
