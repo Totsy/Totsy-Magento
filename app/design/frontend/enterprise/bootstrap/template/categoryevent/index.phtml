@@ -182,7 +182,7 @@ h4 {
             direction: 'down',
             onComplete: function( event ){
                 jQuery(this).html("Completed");
-                jQuery(jQuery(this).data('countertype') + '-' + id).hide();
+                jQuery(jQuery(this).data('countertype') + '-' + id).remove();
             }
 
         });
