@@ -130,7 +130,7 @@ class Totsy_Sailthru_Helper_Feed extends Mage_Core_Helper_Abstract
         return array(
             'id'             => $event['entity_id'],
             'name'           => $event['name'],
-            'url'            => Mage::getBaseUrl().$event['url_path'],
+            'url'            => $this->_getEventUrl($event),
             'description'    => $event['description'],
             'short'          => $event['short_description'],
             'availableItems' => !empty($event['products'])?'YES':'NO',
@@ -139,10 +139,10 @@ class Totsy_Sailthru_Helper_Feed extends Mage_Core_Helper_Abstract
             'discount'       => $event['max_discount_pct'],
             'start_date'     => $event['event_start_date'],
             'end_date'       => $event['event_end_date'],
-            'categories'     => $event['department_label'],
-            'ages'           => $event['age_label'],
+            'categories'     => $event['department'],
+            'ages'           => $event['age'],
             'items'          => $event['products'],
-            'tags'           => implode(',',$event['age_label'])
+            'tags'           => implode(',',$event['age'])
         );
 
     }
@@ -228,6 +228,14 @@ class Totsy_Sailthru_Helper_Feed extends Mage_Core_Helper_Abstract
                             'catalog/product/placeholder/image.jpg';
         }
         return $image;
+    }
+
+    protected function _getEventUrl($event) {
+        if(!($url = Mage::getModel('core/url_rewrite')->setStoreId(Mage::app()->getStore()->getId())->loadByIdPath('category/'.$event['entity_id'])->getRequestPath())) {
+            $url = 'catalog/category/view/id/'.$event['entity_id'];
+        }
+        $url = Mage::getBaseUrl().$url;
+        return $url;
     }
 
     private function _processStartDate()

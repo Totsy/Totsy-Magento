@@ -81,9 +81,12 @@ class Totsy_Sales_Model_Order_Payment extends Mage_Sales_Model_Order_Payment
             $message = $this->hasMessage() ? $this->getMessage()
                 : Mage::helper('sales')->__('Refunded amount of %s offline.', $this->_formatPrice($baseAmountToRefund));
         }
-        $message = $message = $this->_prependMessage($message);
+        $message = $this->_prependMessage($message);
         $message = $this->_appendTransactionToMessage($transaction, $message);
-        $order->setState(Mage_Sales_Model_Order::STATE_PROCESSING, true, $message);
+
+        $history = $order->addStatusHistoryComment($message, false);
+        $history->setIsCustomerNotified(null);
+        $order->save();
 
         Mage::dispatchEvent('sales_order_payment_refund', array('payment' => $this, 'creditmemo' => $creditmemo));
         return $this;

@@ -99,7 +99,7 @@
                 <?php 
                     // Check for TotsyPLUS membership, render nav appropriately
                  ?>
-                <?php if(Mage::getStoreConfig('Crown_Club/clubgeneral/enable')): ?>
+                <?php if(Mage::getStoreConfig('Crown_Club/clubgeneral/enable') || (($customer = Mage::helper('customer')->getCustomer()) && (Mage::helper('crownclub')->isClubMember($customer)))): ?>
                     <?php if (($customer = Mage::getSingleton('customer/session')->getCustomer()) && (Mage::helper('crownclub')->isClubMember($customer))) : ?>
                         <li id="navTotsyPlus" class="dropdown">
                             <a href="<?php echo $this->getBaseUrl()?>plus/dashboard"><em>Totsy <br />PLUS</em></a>
@@ -135,11 +135,6 @@
 </header><!-- /.navbar -->
 
 <script type="text/javascript">
-    function logout(){
-    	FB.logout(function(response) {
-    		window.location = "<?php echo Mage::getUrl('customer/account/logout')?>"// user is now logged out
-    	});
-    }
     Event.observe(document,'dom:loaded',function() {
         new Ajax.Updater({success: 'header-user-info'}, '<?php echo $this->getUrl('customertracking/headermsg/ajax',array('_secure'=>Mage::app()->getStore()->isCurrentlySecure())); ?>', {
             method:'get',

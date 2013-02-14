@@ -221,7 +221,7 @@ if ( !$rewardCollection ) {
 				<a class="ui-collapsible-heading-toggle ui-btn ui-btn-icon-left ui-corner-top ui-btn-up-c" href="##" data-theme="c">
 					<span class="ui-btn-inner ui-corner-top" aria-hidden="true">
 						<span class="ui-btn-text">
-						<?php echo Mage::helper('enterprise_invitation')->__('Invitations Summary'); ?>
+						<?php echo Mage::helper('enterprise_invitation')->__('Invitations History'); ?>
 							<span class="ui-collapsible-heading-status"> click to collapse contents</span>
 						</span>
 						<span class="ui-icon ui-icon-shadow ui-icon-plus"></span>
@@ -249,10 +249,6 @@ if ( !$rewardCollection ) {
             <div class="ui-body-d ui-collapsible-content-collapsed box-content ui-collapsible-content ui-body-d">
 			<div id="messages">Share link below <br /> <textarea cols="40" rows="2" class="invitation-link-area" readonly="readonly" ><?php echo Mage::helper('enterprise_invitation')->getGenericInvitationLink() ?></textarea></div>
         </div>
-	
-<script type="text/javascript">var switchTo5x=true;</script>
-<script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
-<script type="text/javascript">stLight.options({publisher: "fa9539d4-b1db-40d3-9e2d-9e9a8dc98b42",onhover: false}); </script>
 		<!-- Include these scripts to import address books with CloudSponge -->
 		<script type="text/javascript" src="https://api.cloudsponge.com/address_books.js"></script>
 		<?php $currentUrl = $this->helper('core/url')->getCurrentUrl();?>
@@ -279,13 +275,3 @@ if ( !$rewardCollection ) {
 		  textarea_id:"contact_list"
 		};
 		</script>
-<script>
-	stWidget.addEntry({
-        "service":"sharethis",
-        "element":document.getElementById('st_sharethis_custom'),
-        "url":"<?php echo Mage::helper('enterprise_invitation')->getGenericInvitationLink(); ?>",
-        "title":"Let's Join Totsy",
-        "image":"<?php echo $this->getSkinUrl('images/logo.png');?>",
-        "summary":"Totsy has this super cool find available now and so much more for kids and moms! Score the best brands for your family at up to 90% off."    
-	});
-</script>

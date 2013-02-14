@@ -671,10 +671,6 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
     font-size:11px; font-style: italic; font-weight: normal;
     text-transform: lowercase;
 }
-.events-grid .thumbnail .more [id*="time1-"] :first-child:after {
-    content: ":";
-    display: inline-block;
-}
 
 /* discount banner */
 .events-grid .more .maxDiscount {
@@ -1199,7 +1195,6 @@ html body .fast-ship-table tr:hover th.last {
 
 .cc_num input[type="text"]{
     width:455px;
-    float:right;
 }
 
 .cc_cvn input[type="text"]{
