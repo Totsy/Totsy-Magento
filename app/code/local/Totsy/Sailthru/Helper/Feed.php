@@ -139,10 +139,10 @@ class Totsy_Sailthru_Helper_Feed extends Mage_Core_Helper_Abstract
             'discount'       => $event['max_discount_pct'],
             'start_date'     => $event['event_start_date'],
             'end_date'       => $event['event_end_date'],
-            'categories'     => $event['department_label'],
-            'ages'           => $event['age_label'],
+            'categories'     => $event['department'],
+            'ages'           => $event['age'],
             'items'          => $event['products'],
-            'tags'           => implode(',',$event['age_label'])
+            'tags'           => implode(',',$event['age'])
         );
 
     }
