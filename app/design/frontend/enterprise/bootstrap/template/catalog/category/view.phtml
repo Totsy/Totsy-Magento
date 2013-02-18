@@ -108,7 +108,7 @@
         <?php if (!$upComingFlag): ?>
             <a href="<?php echo $this->getUrl('event/?ref=todays_sales') ?>" >Today's Sales</a><i> / </i><?php echo $_helper->categoryAttribute($_category, $_category->getName(), 'name') ?>
         <?php else :?>
-            <a href="/event#event-upcoming">Upcoming Sales</a><i> / </i><?php echo $_helper->categoryAttribute($_category, $_category->getName(), 'name') ?>
+            <a href="/event#events-upcoming">Upcoming Sales</a><i> / </i><?php echo $_helper->categoryAttribute($_category, $_category->getName(), 'name') ?>
         <?php endif;?>
         </h2>
         <span class="count-down-timer"><span class="time-<?php echo $timer ?> counter" data-enddate="<?php echo $timecount?>" data-status="<?php echo $flag?>" data-countertype="time"  data-id="<?php echo $timer ?>"></span></span>
