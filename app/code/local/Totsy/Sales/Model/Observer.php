@@ -57,6 +57,35 @@ class Totsy_Sales_Model_Observer extends Mage_Sales_Model_Observer
     }
 
     /**
+    * Totsy, Slav
+    * Update stock qty saved by configurable items
+    */
+    public function updateConfigurableTotalQty(Varien_Event_Observer $observer){
+        $items = $observer->getEvent()->getOrder()->getAllItems();
+        foreach ($items as $i){
+            $qty = 0;
+            $item = Mage::getModel('catalog/product')->load($i->getProductId());
+            if ($item->getTypeID()!='configurable'){
+                continue;
+            }
+
+            Mage::log($item->getStockItem()->getQty());
+
+            $conf = $item->getTypeInstance()->getUsedProducts();
+            foreach( $conf as $sp){
+                $stockItem = $sp->getStockItem();
+                $qty+= $stockItem->getQty();
+            }
+            $stock = $item->getStockItem();
+            $stock->setQty($qty);
+            $stock->save();
+            $item->save();
+            Mage::log($qty);
+            Mage::log($stock->getQty());
+        }
+    }
+
+    /**
      * Harapartners, Jun
      * Performance optimization, no action during batch import.
      *
