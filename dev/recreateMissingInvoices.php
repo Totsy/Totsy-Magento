@@ -23,7 +23,7 @@ $select = $read->select()
         'sfo.entity_id = sfi.order_id',
         array()
     )
-    ->where('sfo.status = "complete"')
+    ->where('sfo.status = "complete" OR sfo.status = "processing_fulfillment"')
     ->where('sfo.grand_total > 0')
     ->where('sfo.created_at > "2012-06-1"')
     ->where('sfi.entity_id IS NULL');
