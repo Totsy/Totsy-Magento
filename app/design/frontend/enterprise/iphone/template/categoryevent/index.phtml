@@ -166,7 +166,7 @@
             direction: 'down',
             onComplete: function( event ){
                 jQuery(this).html("Completed");
-                elem_class = "." + jQuery(this).data('countertype') + '-' + id;
+                elem_class = jQuery(this).data('countertype') + '-' + id;
                jQuery(elem_class).remove();
             }
 
