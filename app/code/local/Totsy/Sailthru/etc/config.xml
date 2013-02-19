@@ -30,6 +30,17 @@
                 </rewrite>
             </sailthru>
         </models>
+        <events>
+            <checkout_cart_update_items_after>
+                <observers>
+                    <sales_observer>
+                        <type>singleton</type>
+                        <class>Totsy_Sailthru_Model_Observer</class>
+                        <method>updateIncompleteOrder</method>
+                    </sales_observer>
+                </observers>
+            </checkout_cart_update_items_after>
+        </events>
     </global>
     <crontab>
         <jobs>
