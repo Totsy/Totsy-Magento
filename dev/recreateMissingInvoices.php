@@ -24,6 +24,7 @@ $select = $read->select()
         array()
     )
     ->where('sfo.status = "complete"')
+    ->where('sfo.status = "processing_fulfillment"')
     ->where('sfo.grand_total > 0')
     ->where('sfo.created_at > "2012-06-1"')
     ->where('sfi.entity_id IS NULL');
