@@ -486,8 +486,6 @@ XML;
                 }
 
                 if($continue && $invoice->canCapture()) {
-                    $invoice->capture();
-
                     $order->setStatus('processing');
                     $order->setState('processing');
 
@@ -495,6 +493,10 @@ XML;
                     $transactionSave->addObject($invoice);
                     $transactionSave->addObject($invoice->getOrder());
                     $transactionSave->save();
+                    
+                    $invoice->capture()
+                            ->save();
+                    
                     if (!$invoice->getOrder()->getEmailSent()) {
                         $invoice->sendEmail(true)
                             ->setEmailSent(true);
