@@ -114,14 +114,14 @@ class Harapartners_Promotionfactory_Model_Observer {
             $vpc = Mage::getModel('promotionfactory/virtualproductcoupon')->load($reservationCodeOption->getValue(), 'code');
             if($vpc->getId()){
                 if($orderItem->getOrderId()) {
-                    $order = Mage::getModel('sales/order')->getCollection()
-                        ->addAttributeToFilter('entity_id', $orderItem->getOrderId())
-                        ->getFirstItem();
-                    $vpc->setData('order_id', $order->getId())
-                        ->setData('order_increment_id', $order->getIncrementId());
+                    $order = Mage::getModel('sales/order')->load($orderItem->getOrderId());
+                    if($order->getId()) {
+                        $vpc->setData('order_id', $order->getId())
+                            ->setData('order_increment_id', $order->getIncrementId())
+                            ->setData('status', Harapartners_Promotionfactory_Model_Virtualproductcoupon::COUPON_STATUS_PURCHASED)
+                            ->save();
+                    }
                 }
-                $vpc->setData('status', Harapartners_Promotionfactory_Model_Virtualproductcoupon::COUPON_STATUS_PURCHASED)
-                    ->save();
             }else{
                 Mage::getSingleton('checkout/session')->addError('There was an error while placing the order with your reserved coupon code.');
             }
