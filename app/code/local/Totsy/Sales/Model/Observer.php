@@ -69,9 +69,11 @@ class Totsy_Sales_Model_Observer extends Mage_Sales_Model_Observer
                 continue;
             }
 
-            Mage::log($item->getStockItem()->getQty());
+            Mage::log('item id: '.$item->getId());
+            
 
             $conf = $item->getTypeInstance()->getUsedProducts();
+            Mage::log('item gsi qty: '.$item->getStockItem()->getQty());
             foreach( $conf as $sp){
                 $stockItem = $sp->getStockItem();
                 $qty+= $stockItem->getQty();
@@ -79,9 +81,15 @@ class Totsy_Sales_Model_Observer extends Mage_Sales_Model_Observer
             $stock = $item->getStockItem();
             $stock->setQty($qty);
             $stock->save();
-            $item->save();
-            Mage::log($qty);
-            Mage::log($stock->getQty());
+            Mage::log(__LINE__);
+            $item->setStockItem($stock);
+            //$item->save();
+            //Mage::log(__LINE__);
+            
+            Mage::log('qty: '.$qty);
+            Mage::log('s qty: '.$stock->getQty());
+            $item = Mage::getModel('catalog/product')->load($i->getProductId());
+            Mage::log('gsti qty: '.$item->getStockItem()->getQty());
         }
     }
 
