@@ -48,7 +48,36 @@ h4 {
         $upcomingArray = json_decode($indexDataObj->getData('upcoming_queue'), true);
     }
 ?>
-
+<h2>How Totsy Works <small class="pull-right"><a href="/invitation/">Invite Friends, Receive $15.00 in Credit</a></small></h2>
+<hr />
+          <div class="row">
+            <ul class="thumbnails">
+              <li class="span4">
+                <div class="thumbnail">
+                  <img src="http://placehold.it/150x150" alt="" class="img-circle">
+                  <div class="caption">
+                  </div>
+                </div>
+              </li>
+              <li class="span4">
+                <div class="thumbnail">
+                  <img src="http://placehold.it/150x150" alt="" class="img-circle">
+                  <div class="caption">
+                  </div>
+                </div>
+              </li>
+              <li class="span4">
+                <div class="thumbnail">
+                  <img src="http://placehold.it/150x150" alt="" class="img-circle">
+                  <div class="caption">
+                  </div>
+                </div>
+              </li>
+            </ul>
+            <p class="pull-right"><a href="">Close</a></p>
+          </div>
+<h2>Today's Sales</h2>
+<hr />
 <div class="catalog-events-container">
     <div class="live-events-container">
 
@@ -121,9 +150,8 @@ h4 {
     <?php $endingArray = '1'; ?>
     <?php if (!!$endingArray && !empty($endingArray)): ?>
         <section id="events-ending" class="events-grid">
-            <header class="page-header">
-                <h2>Sales Ending Soon...</h2>
-            </header>
+                <h2>Sales Ending Soon</h2>
+                <hr/>
             <ul>
             <?php // foreach block here ?>
             </ul>
@@ -133,9 +161,8 @@ h4 {
     <?php // Upcoming Events ?>
     <?php if (!!$upcomingArray && !empty($upcomingArray)): ?>
         <section id="events-upcoming" class="events-grid">
-            <header class="page-header">
                 <h2>Upcoming Sales</h2>
-            </header>
+                <hr />
             <ul class="thumbnails">
             <?php foreach ($upcomingArray as $up): ?>
                 <?php
