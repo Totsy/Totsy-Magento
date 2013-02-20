@@ -441,6 +441,10 @@ class Harapartners_Ordersplit_Helper_Data extends Mage_Core_Helper_Abstract {
                     try{
                         $order->save();
                         $order->getPayment()->save();
+                        
+                        $virtualproductcoupon = Mage::getModel('promotionfactory/virtualproductcoupon');
+                        $virtualproductcoupon->openVirtualProductCouponInOrder($order);
+                            
                         $continue = true;
                         if($order->canInvoice() === false) {
                             $continue = false;
@@ -469,8 +473,6 @@ class Harapartners_Ordersplit_Helper_Data extends Mage_Core_Helper_Abstract {
                             $transactionSave->addObject($invoice->getOrder());
                             $transactionSave->save();
 
-                            $virtualproductcoupon = Mage::getModel('promotionfactory/virtualproductcoupon');
-                            $virtualproductcoupon->openVirtualProductCouponInOrder($order);
                             $order->setData('state', 'complete')
                                 ->setStatus('complete')
                                 ->save();
