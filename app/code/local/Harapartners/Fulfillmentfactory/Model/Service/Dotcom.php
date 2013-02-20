@@ -26,11 +26,8 @@ class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
         /** @var $write Varien_Db_Adapter_Interface */
         $write  = Mage::getSingleton('core/resource')
             ->getConnection('core_write');
-        $inventoryAttribute = Mage::getSingleton('eav/config')
-            ->getAttribute('catalog_product', 'fulfillment_inventory');
-        $inventoryTable = Mage::getResourceModel('catalog/product')
-            ->getTable('catalog/product');
-        $inventoryTable .= '_' . $inventoryAttribute->getBackendType();
+        $inventoryTable = Mage::getResourceModel('cataloginventory/stock_item')
+            ->getTable('cataloginventory/stock_item');
 
         $xmlStreamName = Mage::helper('fulfillmentfactory/dotcom')
             ->getInventory();
@@ -42,6 +39,7 @@ class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
         $sku = null;
         $qty = null;
         $count = 0;
+        $productsToReindex = array();
 
         while ($reader->read()) {
             // this node is an opening <item> tag
@@ -83,14 +81,56 @@ class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
                 $product = Mage::getModel('catalog/product')
                     ->loadByAttribute('sku', $sku);
 
-                if ($product && $product->getId()) {
+                if ($product && ($productId = $product->getId())) {
 
                     // Update product inventory for 'dotcom_stock'
                     if ('dotcom_stock' == $product->getData('fulfillment_type')) {
-                        $write->query(
-                            "REPLACE INTO `$inventoryTable` SET `entity_type_id` = ?, `attribute_id` = ?, `entity_id` = ?, `value` = ?",
-                            array($inventoryAttribute->getEntityTypeId(), $inventoryAttribute->getId(), $product->getId(), $qty)
-                        )->execute();
+                        $newQty = $qty - Mage::helper('fulfillmentfactory')->getPendingCount($sku);
+                        $newQty = max(0, $newQty);
+
+                        //check current stock qty
+                        $stockItem = Mage::getModel('cataloginventory/stock_item')->loadByProduct($product);
+
+                        if($stockItem->getQty() !== $newQty) {
+                            if ($stockItem->getId() == 0) {
+                                //item hasn't been added to the website
+                                unset($stockItem);
+                                continue;
+                            }
+                            // only respect existing values if it already exists.  Otherwise skip.
+                            if($stockItem->getUseConfigManageStock() == 0 && !$stockItem->getManageStock()) {
+                                //Product does not manage stock
+                                unset($stockItem);
+                                continue;
+                            }
+
+                            $oldQty = $stockItem->getQty();
+                            if($oldQty == $newQty) {
+                                unset($stockItem);
+                                continue;
+                            }
+
+                            if($newQty > $stockItem->getMinQty()) {
+                                $isInStock = 1;
+                            } else {
+                                $isInStock = 0;
+                            }
+
+                            $sql = "update `{$inventoryTable}` set qty=?, is_in_stock=? where item_id=?";
+
+                            try {
+                                $write->query($sql,
+                                    array($newQty,$isInStock,$stockItem->getId())
+                                )->execute();
+                            } catch (Exception $e) {
+                                Mage::logException($e);
+                            }
+
+                            //Items to Reindex
+                            $productsToReindex[] = $productId;
+
+                            unset($stockItem);
+                        }
 
                         Mage::log("Product stock Qty updated for '$sku': $qty", Zend_Log::DEBUG, 'fulfillment_inventory.log');
                     }
@@ -108,6 +148,8 @@ class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
 
                     $count++;
                 }
+                unset($product);
+                unset($productId);
 
                 $state = 'waiting';
                 $qty = null;
@@ -115,11 +157,17 @@ class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
             }
         }
 
+        //reindex updated products
+        if(count($productsToReindex)) {
+            Mage::getResourceModel('cataloginventory/indexer_stock')->reindexProducts($productsToReindex);
+        }
+
         Mage::log(
             "Retrieved and stored inventory updates for $count products",
             Zend_Log::INFO,
             'fulfillment.log'
         );
+
 
         $availableProducts = Mage::getModel('catalog/product')->getCollection()
             ->addAttributeToFilter('fulfillment_inventory', array('gt' => 0));
@@ -438,8 +486,6 @@ XML;
                 }
 
                 if($continue && $invoice->canCapture()) {
-                    $invoice->capture();
-
                     $order->setStatus('processing');
                     $order->setState('processing');
 
@@ -447,25 +493,26 @@ XML;
                     $transactionSave->addObject($invoice);
                     $transactionSave->addObject($invoice->getOrder());
                     $transactionSave->save();
+                    
+                    $invoice->capture()
+                            ->save();
+                    
                     if (!$invoice->getOrder()->getEmailSent()) {
                         $invoice->sendEmail(true)
                             ->setEmailSent(true);
                     }
                 }
-            }
-            catch(Exception $e) {
-                $order->setStatus(Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_PAYMENT_FAILED)->save();
-                $order->setState(Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_PAYMENT_FAILED)->save();
-                $message = 'Order ' . $order->getIncrementId() . ' could not place the payment. ' . $e->getMessage();
-                Mage::helper('fulfillmentfactory/log')->errorLogWithOrder($message, $order->getId());
-                /*
-                $customer = Mage::getModel('customer/customer')->load($order->getCustomerId());
+            } catch(Exception $e) {
+                Mage::logException($e);
 
-                //send payment failed email
-                Mage::getModel('core/email_template')->setTemplateSubject('Payment Failed')
-                                                     ->sendTransactional(6, 'support@totsy.com', $customer->getEmail(), $customer->getFirstname());
-                */
-                //throw new Exception($message);
+                $message = 'Could not place payment for order ' . $order->getIncrementId() . ': ' . $e->getMessage();
+                $order->setState(
+                    Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_PAYMENT_FAILED,
+                    Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_PAYMENT_FAILED,
+                    $message
+                )->save();
+                Mage::helper('fulfillmentfactory/log')->errorLogWithOrder($message, $order->getId());
+
                 continue;
             }
 

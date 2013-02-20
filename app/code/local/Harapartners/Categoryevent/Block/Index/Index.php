@@ -52,4 +52,12 @@ class Harapartners_Categoryevent_Block_Index_Index
         
         return $read->fetchOne($select);
     }
+
+    //adding customer group to the cache key for Plus functionality
+    public function getCacheKeyInfo()
+    {
+        $key = parent::getCacheKeyInfo();
+        $key[] = Mage::getSingleton('customer/session')->getCustomerGroupId();
+        return $key;
+    }
 }

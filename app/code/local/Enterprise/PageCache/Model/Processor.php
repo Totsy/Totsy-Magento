@@ -461,7 +461,7 @@ class Enterprise_PageCache_Model_Processor
         /**
          * Basic validation for request processing
          */
-        if ($this->canProcessRequest($request)) {
+        if ($this->canProcessRequest($request) && 302 != $response->getHttpResponseCode()) {
             $processor = $this->getRequestProcessor($request);
             if ($processor && $processor->allowCache($request)) {
                 $this->setMetadata('cache_subprocessor', get_class($processor));
