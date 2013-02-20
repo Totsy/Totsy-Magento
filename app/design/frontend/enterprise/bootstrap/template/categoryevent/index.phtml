@@ -48,14 +48,6 @@ h4 {
         $upcomingArray = json_decode($indexDataObj->getData('upcoming_queue'), true);
     }
 ?>
-<?php // include banner if it is enabled
-    $bannerActive = Mage::getModel('cms/block')->load('home_banner')->getIsActive();
-    if ($bannerActive) {
-        echo '<div class="banner">';
-        echo $this->getLayout()->createBlock('cms/block')->setBlockId('home_banner')->toHtml();
-        echo '</div>';
-    }
-?>
 
 <div class="catalog-events-container">
     <div class="live-events-container">
@@ -63,13 +55,6 @@ h4 {
     <?php // Live Events ?>
     <?php if (!!$liveArray && !empty($liveArray)) : ?>
         <section id="events-live" class="events-grid">
-        <?php if (!$bannerActive) : ?>
-<!--
-            <header class="page-header">
-                <h2><img src="/skin/frontend/enterprise/bootstrap/images/iconmonstr-time-8-icon.png" width="50" /> Today's Sales</h2>
-            </header>
--->
-        <?php endif; ?>
             <ul class="thumbnails">
             <?php foreach ($liveArray as $live): ?>
                 <?php
@@ -117,6 +102,22 @@ h4 {
     <?php endif; ?>
     
     <?php // ENDING SOON - not functioning, no $endingArray exists - just a placeholder var and code for now ?>
+    
+    <?php // include banner if it is enabled
+    $bannerActive = Mage::getModel('cms/block')->load('home_banner')->getIsActive();
+    if ($bannerActive) {
+        echo '<div class="banner">';
+        echo $this->getLayout()->createBlock('cms/block')->setBlockId('home_banner')->toHtml();
+        echo '</div>';
+    }
+?>
+    <?php if (!$bannerActive) : ?>
+<!--
+            <header class="page-header">
+                <h2><img src="/skin/frontend/enterprise/bootstrap/images/iconmonstr-time-8-icon.png" width="50" /> Today's Sales</h2>
+            </header>
+-->
+        <?php endif; ?>
     <?php $endingArray = '1'; ?>
     <?php if (!!$endingArray && !empty($endingArray)): ?>
         <section id="events-ending" class="events-grid">
