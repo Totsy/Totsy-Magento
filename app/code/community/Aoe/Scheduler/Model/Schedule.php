@@ -70,6 +70,8 @@ class Aoe_Scheduler_Model_Schedule extends Mage_Cron_Model_Schedule {
 
 		$this->setFinishedAt(strftime('%Y-%m-%d %H:%M:%S', time()));
 
+		$this->notify();
+
 		return $this;
 	}
 
@@ -149,5 +151,44 @@ class Aoe_Scheduler_Model_Schedule extends Mage_Cron_Model_Schedule {
 		return $duration;
 	}
 
+	/**
+	 * Notify any recipients of this cron task's result via e-mail.
+	 *
+	 * @return void
+	 */
+	public function notify()
+	{
+		$fromEmail = Mage::getStoreConfig('trans_email/ident_general/email');
+		$fromName  = Mage::getStoreConfig('trans_email/ident_general/name');
 
+		$message = "Job '" . $this->getJobCode() . "' has completed with status " .
+			strtoupper($this->getStatus());
+		$message .= PHP_EOL . PHP_EOL;
+		$message .= $this->getMessages();
+
+		$notifications = $this->getJobConfiguration()->getNotifyRecipients();
+		if ($this->getStatus() == Mage_Cron_Model_Schedule::STATUS_SUCCESS &&
+			isset($notifications[Mage_Cron_Model_Schedule::STATUS_SUCCESS])
+		) {
+			$recipients = $notifications[Mage_Cron_Model_Schedule::STATUS_SUCCESS];
+			$email = Mage::getModel('core/email');
+			$email->setToEmail($recipients)
+				->setFromEmail($fromEmail)
+				->setFromName($fromName)
+				->setSubject("Job '" . $this->getJobCode() . "' completed successfully")
+				->setBody($message)
+				->send();
+		} else if ($this->getStatus() == Mage_Cron_Model_Schedule::STATUS_ERROR &&
+			isset($notifications[Mage_Cron_Model_Schedule::STATUS_ERROR])
+		) {
+			$recipients = $notifications[Mage_Cron_Model_Schedule::STATUS_ERROR];
+			$email = Mage::getModel('core/email');
+			$email->setToEmail($recipients)
+				->setFromEmail($fromEmail)
+				->setFromName($fromName)
+				->setSubject("Job '" . $this->getJobCode() . "' failed!")
+				->setBody($message)
+				->send();
+		}
+	}
 }

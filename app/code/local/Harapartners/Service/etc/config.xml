@@ -442,6 +442,34 @@
                 </observers>
             </checkout_cart_product_add_after>
             <!-- ===== FRONTEND ONLY EVENTS END ===== -->
+            <customer_login>
+                <observers>
+                    <reports>
+                        <type>disabled</type>
+                    </reports>
+                </observers>
+            </customer_login>
+            <customer_logout>
+                <observers>
+                    <reports>
+                        <type>disabled</type>
+                    </reports>
+                </observers>
+            </customer_logout>
+            <catalog_controller_product_view>
+                <observers>
+                    <reports>
+                        <type>disabled</type>
+                    </reports>
+                </observers>
+            </catalog_controller_product_view>
+            <sales_quote_item_save_before>
+                <observers>
+                    <reports>
+                        <type>disabled</type>
+                    </reports>
+                </observers>
+            </sales_quote_item_save_before>
         </events>
     </frontend>
     <adminhtml>

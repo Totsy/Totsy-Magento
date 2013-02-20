@@ -63,6 +63,11 @@ class Aoe_Scheduler_Model_Configuration extends Mage_Core_Model_Abstract {
 			$this->setModel((string)$global->run->model);
 		}
 
+		$this->setNotifyRecipients(array());
+		if ($global && $global->notify) {
+			$this->setNotifyRecipients($global->notify->asArray());
+		}
+
 		$configurable = $this->getConfigurableCrontabJobXmlConfig();
 		if ($configurable) {
 			if (is_object($configurable->schedule)) {

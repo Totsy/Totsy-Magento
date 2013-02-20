@@ -20,6 +20,9 @@
      	<Harapartners_Service>
             <active>true</active>
             <codePool>local</codePool>
+             <depends>
+                 <Mage_Reports/>
+             </depends>
         </Harapartners_Service>
 		
 		<!-- DEPENDENT MODULES -->

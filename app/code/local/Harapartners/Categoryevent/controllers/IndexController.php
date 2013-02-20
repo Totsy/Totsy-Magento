@@ -17,14 +17,6 @@
 class Harapartners_Categoryevent_IndexController extends Mage_Core_Controller_Front_Action {
     
     public function indexAction(){
-        if (Mage::getModel('customer/session')->getAfterAuthUrl()){
-            $url ='/'.Mage::getModel('customer/session')->getAfterAuthUrl().'.html';
-             Mage::app()
-                ->getResponse()
-                ->setRedirect($url);
-            Mage::getModel('customer/session')->unsetData('after_auth_url');
-            return;
-        } 
         $this->loadLayout();
         $this->renderLayout();        
     }

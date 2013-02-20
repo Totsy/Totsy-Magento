@@ -98,6 +98,7 @@ class Aoe_Scheduler_Model_Observer extends Mage_Cron_Model_Observer {
 					->setMessages($e->__toString());
 			}
 			$schedule->save();
+            $schedule->notify();
 		}
 
 		$this->generate();
