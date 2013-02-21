@@ -6,7 +6,7 @@ foreach($this->getQuote()->getAllItems() as $item) {
         continue;
     }
     $product = Mage::getModel ( 'catalog/product' )->load ( $item->getProductId () );
-    if($product->getIsVirtual()) {
+    if($product->getIsVirtual() && $product->getFulfillmentType() !== 'nominal') {
         $_fulfillmentType = 'virtual';
         $hasVirtual = true;
     } else {
@@ -20,55 +20,6 @@ if(count($fulfillmentTypes) > 1) {
     $multiShipping = TRUE;
 }
 ?>
-<script type="text/javascript">
-//<![CDATA[
-    Validation.creditCartTypes.set('JCB', [new RegExp('^(35[0-9]{14}|(2131|1800)[0-9]{11})$'), new RegExp('^([0-9]{3})?$'), true]);
-    Validation.creditCartTypes.set('LASER', [new RegExp('^((6304|6706|6771|6709)[0-9]{12}([0-9]{3}))$'), new RegExp('^([0-9]{3})?$'), false]);
-    Validation.creditCartTypes.set('UATP', [false, new RegExp('^[0-9]{3}([0-9]{1})?$'), false]);
-    Validation.creditCartTypes.set('MCI', [false, new RegExp('^[0-9]{3}([0-9]{1})?$'), false]);
-//]]>
-	
-	//extending validation JS to include validation for rules for cc types displayed with radio buttons
-	Validation.add(['validate-cc-type-radio', 'Credit card number does not match credit card type.', function(v, elm) {
-                // remove credit cardf number delimiters such as "-" and space
-                elm.value = removeDelimiters(elm.value);
-                v         = removeDelimiters(v);
-                var ccType = $$('input:checked[type="radio"][name="payment[cc_type]"]').pluck('value');
-				if (typeof Validation.creditCartTypes.get(ccType) == 'undefined') {
-                    return false;
-                } 
-                // Other card type or switch or solo card
-                if (Validation.creditCartTypes.get(ccType)[0]==false) {
-                    return true;
-                }
-                // Matched credit card type
-                var ccMatchedType = '';
-				Validation.creditCartTypes.each(function (pair) {
-                    if (pair.value[0] && v.match(pair.value[0])) {
-                        ccMatchedType = pair.key;
-                        throw $break;
-                    }
-                });
-               	if(ccMatchedType != ccType) {
-                    return false;
-                } 
-                return true;
-            }],
-            ['validate-cc-cvn-radio', 'Please enter a valid credit card verification number.', function(v, elm) {
-                            
-                var ccType = $$('input:checked[type="radio"][name="payment[cc_type]"]').pluck('value');
-                if (typeof Validation.creditCartTypes.get(ccType) == 'undefined') {
-                    return false;
-                }
-                var re = Validation.creditCartTypes.get(ccType)[1];
-
-                if (v.match(re)) {
-                    return true;
-                }
-                return false;
-            }]);
-
-</script>
 
 <div class="form-list .one-page-payment" id="payment_form_<?php echo $_code ?>">
 <?php $customerId = Mage::getSingleton('customer/session')->getCustomerId(); ?>
@@ -92,136 +43,19 @@ if(count($fulfillmentTypes) > 1) {
 
 <script type="text/javascript">
 
-var checkoutPayment = {};
-
-jQuery(document).ready( function() {
-
-    var billAddySelect = jQuery("#billing-address-select");
-	var newCardWrap = jQuery('.cc_info');
-	//var newCardCtrls = jQuery( 'input, select', '.use-new-card-wrapper' );
-	var billingAddress = jQuery('.totsy-selective-input-box', '#hpcheckout-billing-wrapper');
-	var billFormInputs = jQuery('#hpcheckout-billing-form :input');
-
-    jQuery("[id='payment[cybersource_subid]']").change( function() {   
-     
-        if( jQuery(this).val() == '' ) {
-        	if(jQuery('#paypal_payment').length > 0) {
-            	jQuery('#paypal_payment').attr("checked", false);
-            }
-            if(jQuery("#payment_form_paypal_express").length > 0) {
-                jQuery("#payment_form_paypal_express").show();           	
-            }
-            jQuery("#cc_data").show();
-            newCardWrap.show();
-            //newCardCtrls.removeAttr('disabled');
-            billingAddress.removeClass('disabled');
-            billAddySelect.removeAttr('disabled');
-            //Enable Billing Inputs if credit card not selected
-            billFormInputs.each(function(i) {
-                jQuery(this).removeAttr('disabled');
-                jQuery(this).val('');
-            });
-        } else { 
-            if(jQuery("#payment_form_paypal_express").length > 0){
-                jQuery("#payment_form_paypal_express").hide();           	
-            }
-
-            jQuery('#billing-address').show();
-            jQuery('#shipping-address').show();
-            jQuery('.addresses').width(445);
-            billingAddress.attr("disabled", true);
-            newCardWrap.hide();
-
-
-            
-			if(checkoutPayment.isCollapsed==false) {
-			    billAddySelect.val(jQuery("#address_" + jQuery( this ).val()).val()).change();
-			    //Block Billing Inputs if credit card selected
-			    
-			    billFormInputs.each(function(i) {
-			        if(this.id != 'button_ship_to') {
-			            jQuery("[id='" + this.id + "']").attr('disabled',true);
-			        }
-			    });
-			    billAddySelect.attr('disabled',true);
-			} else {
-			    billAddySelect.removeAttr('disabled');
-			    billFormInputs.each(function(i) {
-			        jQuery(this).removeAttr('disabled');
-			    });
-			}
-        }
-    }); 
-    
-    //a namespace for operations toggling the 2 views of the payment section
-    checkoutPayment = (function() {
-        var hasProfile = '';
-        var isCollapsed = '';
-        var lastUsedAddressId = '';
-        return {
-            hasProfile: "<?php echo $hasProfile; ?>",
-            isCollapsed: false,
-            lastUsedAddressId: '',
-            toggleViews: function() { 
-                if (this.hasProfile) {
-                    jQuery(".cc_save_card").appendTo(jQuery("#add_payment_save_card"));
-                    
-                    var savedCardStyles = {'width' : '60px','margin-left' : '10px','float' : 'left'}; 
-                    
-                    jQuery('#billing-address-select').attr('disabled', true);                     
-                    
-                    jQuery(".cc_save_card").css( savedCardStyles );
-                    jQuery("#hpcheckout-payment-add-title").show();
-                    jQuery("#use-card-method").show();
-
-                    jQuery("#paymentfactory_tokenize_cc_save").contents("");
-                    jQuery(".use-new-card-wrapper").show();
-
-                    jQuery("#cc_save_text").html("Save");
-
-                    jQuery(".use-new-card-wrapper").appendTo(jQuery("#add_cc_types"));
-                    newCardWrap.hide();
-                } else {
-
-                    jQuery("[id='add_payment']").hide();
-                    jQuery(".checkout-reward").css("padding-top", "0px");
-                    jQuery(".use-new-card-wrapper").show();
-                    jQuery("#use-card-method").hide();
-                    jQuery("#hpcheckout-payment-add-title").hide();
-                    jQuery("#cc_data").show();
-                }
-            },
-            disableBillAddr: function(stateFlag) {
-               jQuery('#hpcheckout-billing-form :input').each(function(i) {
-                   if(this.id != 'button_ship_to') {
-                       jQuery("[id='" + this.id + "']").attr('disabled',stateFlag);
-                   }
-               });
-           }
-        };
-    })();
-    
+jQuery(document).ready(function() {
+    checkoutPayment.hasProfile = "<?php echo $hasProfile; ?>";
     checkoutPayment.toggleViews();
-    
-	jQuery(".use-saved-card-control").click( function(){
-        jQuery("#paymentfactory_tokenize_cc_type input").attr("checked", false);
-        jQuery('#hpcheckout-billing-form :input').attr("disabled", true);
-        jQuery('#billing-address-select').attr('disabled', true);
-	});
 
-    jQuery("#paymentfactory_tokenize_cc_type input").click( function(){
-        if(this.id == "paypal_payment") {
-            newCardWrap.hide();
-//            jQuery('#billing-address').hide();
-//            jQuery('#shipping-address').hide();
-        } else {
-            jQuery("[id='payment[cybersource_subid]']").attr("checked", false);
-            jQuery('#hpcheckout-billing-form :input').attr("disabled", false);
-            jQuery('#billing-address-select').attr('disabled', false);
-            newCardWrap.show();
-        }
+    jQuery("[id='payment[cybersource_subid]']").change(function() {
+        checkoutPayment.setPaymentUI(this);
     });
-
+    jQuery(".use-saved-card-control").click(function() {
+        checkoutPayment.useSavedCard();
+    });
+    jQuery("#paymentfactory_tokenize_cc_type input").click(function() {
+        checkoutPayment.setPaymentType(this);
+    });
 });
 
 </script>
@@ -299,12 +133,14 @@ jQuery(document).ready( function() {
                             
                             $orders = Mage::getResourceModel('sales/order_collection')->addFieldToSelect('*')
     ->addFieldToFilter('customer_id', $profile->getCustomerId())->addAttributeToSort('created_at', 'DESC')->setPageSize(1);
+    
     						//checking the users last used, saved to expedite checkout
                             //comparing cybersource profile id to id of card used in last order placed
-                            if($orders->getFirstItem()->getPayment()->getData('cybersource_subid')
-                            ==$profile->getSubscriptionId()) {
-                                $checked = 'checked';
-                            }
+                            if($orders->getFirstItem()->getPayment()) {
+                            	if($orders->getFirstItem()->getPayment()->getData('cybersource_subid')==$profile->getSubscriptionId()) {
+                                	$checked = 'checked';
+                            	}
+                            } 
                             //echo $profile->getSubscriptionId();
                         ?>
                         
@@ -358,7 +194,6 @@ jQuery(document).ready( function() {
     <div class="pull-left">
         <div>
             <div class="pull-left cc_num use-new-card-wrapper cc_info">
-                
                 <div class="input-box">
                     <input type="text" id="<?php echo $_code ?>_cc_number" name="payment[cc_number]" title="<?php echo $this->__('Credit Card Number') ?>" class="input-text validate-cc-number validate-cc-type-radio" value="<?php echo (($this->__('Credit Card Number')!=='Credit Card Number') ? $this->__('Credit Card Number') : "") ?>" placeholder="<?php echo $this->__('Credit Card Number') ?>" />
                 </div>
@@ -382,7 +217,7 @@ jQuery(document).ready( function() {
                 <div class="pull-left">
                     <div for="<?php echo $_code ?>_expiration" class="lbl"><em>*</em><?php echo $this->__('Exp.') ?></div>
                     <div class="pull-left">
-                        <div>
+                        <div class="pull-left">
                             <select id="<?php echo $_code ?>_expiration" name="payment[cc_exp_month]" class="month validate-cc-exp">
                             <?php $_ccExpMonth = $this->getInfoData('cc_exp_month') ?>
                             <?php foreach ($this->getCcMonths() as $k=>$v): ?>
@@ -390,7 +225,7 @@ jQuery(document).ready( function() {
                             <?php endforeach ?>
                             </select>
                         </div>
-                        <div>
+                        <div class="pull-right">
                             <select id="<?php echo $_code ?>_expiration_yr" name="payment[cc_exp_year]" class="year">
                             <?php $_ccExpYear = $this->getInfoData('cc_exp_year') ?>
                             <?php foreach ($this->getCcYears() as $k=>$v): ?>

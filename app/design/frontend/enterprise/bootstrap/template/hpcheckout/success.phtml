@@ -198,3 +198,19 @@ var additional = '';
 (function(){steelhouse={add:function(a,b,c,d){d=d||false;if(a.addEventListener){a.addEventListener(b,c,d)}else if(a.attachEvent){a.attachEvent("on"+b,c)}},load:function(){var a;if(typeof a=='undefined'){a=Math.random()*10000000000000000}var b=document.createElement('script');var c='px.steelhousemedia.com/st?aid='+aid+'&conv=1&order_id='+oid+'&order_amt='+oamt+'&cb='+a+additional;b.type='text/javascript';b.src=('https:'==document.location.protocol?'https://':'http://')+c;var d=document.getElementsByTagName('script');var e=Number(d.length)-1;var f=document.getElementsByTagName('script')[e];f.parentNode.insertBefore(b,f)}};steelhouse.load();})();
 </script>
 <?php endif;?>
+
+<?php if(($profileIds = Mage::getSingleton('checkout/session')->getLastRecurringProfileIds()) && count($profileIds)): ?>
+<p class="red review-order-detail">
+    <?php
+    $url = $this->getBaseUrl().'plus/dashboard/';
+    ?>
+    You will redirect to plus dashboard in 10 seconds. Or <a class="red" href="<?php echo $url?>">click here</a>
+</p>
+<script language="javascript" type="text/javascript">
+    function redirect(){window.location.href="<?php echo $url?>"};
+    setTimeout("redirect()",10000);
+</script>
+<script language="javascript" type="text/javascript">
+    _gaq.push(['_trackEvent','TotsyPlus', 'signup']);
+</script>
+<?php endif; ?>

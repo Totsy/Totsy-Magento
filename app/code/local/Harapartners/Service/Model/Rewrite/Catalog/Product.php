@@ -125,8 +125,18 @@ class Harapartners_Service_Model_Rewrite_Catalog_Product extends Mage_Catalog_Mo
         $categories = $this->getCategoryCollection()
             ->addAttributeToSelect(array('event_start_date','event_end_date'));
 
+        $earlyAccessTime = false;
+        if(($customer = Mage::helper('customer')->getCustomer()) && (Mage::helper('crownclub')->isClubMember($customer))) {
+            $earlyAccessTime = Mage::helper('crownclub/earlyaccess')->getEarlyAccessTime();
+        }
+
         foreach ($categories as $category) {
-            if (strtotime($category['event_start_date']) < $now &&
+            $startTime = strtotime($category['event_start_date']);
+            if($earlyAccessTime) {
+                $startTime -= $earlyAccessTime;
+            }
+
+            if ($startTime < $now &&
                 strtotime($category['event_end_date']) > $now
             ) {
                 return $category;

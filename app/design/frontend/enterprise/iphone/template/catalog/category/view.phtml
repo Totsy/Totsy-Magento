@@ -50,16 +50,45 @@
 	$startcount_utc = strtotime($_category->getEventStartDate());
 	$endcount_lc = date("F j, Y, G:i:s", $endcount_utc);
 	$startcount_lc = date("F j, Y, G:i:s", $startcount_utc);
-	
-	if (strtotime($now) >= strtotime( $startcount_lc )){
-		$timecount = $endcount_lc;
-		$timerFlag = 'Ends in';
-		$upComingFlag = 0;
-	}else {
-		$timecount = $startcount_lc;
-		$timerFlag = 'Opens in';
-		$upComingFlag = 1;
-	}
+
+    $currentCustomer = Mage::helper('customer')->getCustomer();
+
+    $clubHelper = Mage::helper('crownclub');
+    $earlyAccessHelper = Mage::helper('crownclub/earlyaccess');
+    $earlyAccessTimeCount = $earlyAccessHelper->getEventTimeUntilAvailableForMembers($_category);
+    $earlyAccessTimeCount_lc = date("F j, Y, G:i:s", $earlyAccessTimeCount->getTimestamp());
+
+    // Event available now for all members
+    if (strtotime($now) >= strtotime( $startcount_lc )){
+        $timecount = $endcount_lc;
+        $timerFlag = 'Ends in';
+        $upComingFlag = 0;
+        $inEarly = false;
+        // Event available to club members now
+    } elseif($clubHelper->isClubMember($currentCustomer) && $earlyAccessHelper->isEventAvailableForMembers($_category)) {
+        $timecount = $endcount_lc;
+        $timerFlag = 'Sale ends in';
+        $upComingFlag = 0;
+        $inEarly = true;
+        // Event available to club members in X time
+    } elseif($clubHelper->isClubMember($currentCustomer) && !$earlyAccessHelper->isEventAvailableForMembers($_category)) {
+        $timecount = $startcount_lc;
+        $timerFlag = 'Sale begins in';
+        $upComingFlag = 1;
+        $inEarly = true;
+        // Event closed to everyone!
+    } else {
+        $timecount = $startcount_lc;
+        $timerFlag = 'Opens in';
+        $upComingFlag = 1;
+        $inEarly = false;
+    }
+    
+    if($upComingFlag){
+        $flag = "upcoming";
+    } else {
+        $flag = "live";
+    }
 	
 ?>
 <?php echo $this->getMessagesBlock()->toHtml() ?>
@@ -95,46 +124,7 @@
 	    <?php endif; ?>
 	</div>
 	<div class="event-timer-container">
-		<?php
-			$defaultTimezone = date_default_timezone_get();
-			$mageTimezone = Mage::getStoreConfig(Mage_Core_Model_Locale::XML_PATH_DEFAULT_TIMEZONE);
-			date_default_timezone_set($mageTimezone);
-			$now = now();
-			date_default_timezone_set($defaultTimezone);
-			
-			$endcount_utc = strtotime($_category->getEventEndDate());
-			$startcount_utc = strtotime($_category->getEventStartDate());
-			$endcount_lc = date("F j, Y, G:i:s", $endcount_utc);
-			$startcount_lc = date("F j, Y, G:i:s", $startcount_utc);
-			
-			if (strtotime($now) >= strtotime( $startcount_lc )){
-				$timecount = $endcount_lc;
-				$timerFlag = 'Ends in';
-				$upComingFlag = 0;
-			}else {
-				$timecount = $startcount_lc;
-				$timerFlag = 'Opens in';
-				$upComingFlag = 1;
-			}
-		?>
-		<p class="count-down-timer" id="time-<?php echo $timer ?>"></p>					 
-		<script type="text/javascript">
-			if(<?php echo $upComingFlag?>){
-				var html = getTimerHtml('upcoming','<?php echo $timecount ?>');
-			}else {
-				var html = getTimerHtml('live','<?php echo $timecount ?>');
-			}
-			jQuery("#time-<?php echo $timer ?>").countdown({
-				//date: "12 10, 2011 16:11", //Counting TO a date
-				date: "<?php echo $timecount; ?>", //Counting TO a date
-				htmlTemplate: html,
-				onComplete: function( event ){										
-					jQuery(this).html("Completed");
-				},
-				leadingZero: true,
-				direction: "down"
-			});
-		</script>
+		<p class="count-down-timer" id="time-<?php echo $timer ?> counter" data-enddate="<?php echo $timecount?>" data-status="<?php echo $flag?>" data-countertype="time"  data-id="<?php echo $timer ?>"></p>					 
 	</div>
 
 	<div class="middle-part">		
@@ -225,3 +215,24 @@
         "image":"<?php echo $_imgUrl; ?>"
 	});
 </script>
+<script type="text/javascript">
+    jQuery(".counter").each(function(){
+        var saleTime = new Date(jQuery(this).data('enddate'));
+        var id = jQuery(this).data('id');
+        if(jQuery(this).data('status') == 'earlyaccess'){
+            var html = getEarlyAccessTimerHtml(jQuery(this).data('status'), jQuery(this).data('enddate'));
+        } else {
+            var html = getTimerHtml(jQuery(this).data('status'), jQuery(this).data('enddate'));
+        }
+        jQuery(this).countdown({
+            date: saleTime,
+            htmlTemplate: html,
+            leadingZero: true,
+            direction: 'down',
+            onComplete: function( event ){
+                jQuery(this).html("Completed");
+            }
+        });
+    });
+</script>
+

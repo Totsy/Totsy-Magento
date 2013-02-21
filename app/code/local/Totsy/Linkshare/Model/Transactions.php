@@ -45,6 +45,10 @@ class Totsy_Linkshare_Model_Transactions extends Mage_Core_Model_Abstract
     }
 
     public function sendUpdates(){
+    	$env = (string) Mage::getConfig()->getNode('environment');
+        if ('production' !== $env) {
+            return false;
+        }
         $transactions = Mage::getModel('linkshare/transactions')->getCollection();
         $transactions->getSelect()->where('trans_status= "Failed" or (trans_status= "Success" and order_status= "New")');
         foreach($transactions as $transaction){

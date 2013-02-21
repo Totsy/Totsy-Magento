@@ -442,6 +442,34 @@
                 </observers>
             </checkout_cart_product_add_after>
             <!-- ===== FRONTEND ONLY EVENTS END ===== -->
+            <customer_login>
+                <observers>
+                    <reports>
+                        <type>disabled</type>
+                    </reports>
+                </observers>
+            </customer_login>
+            <customer_logout>
+                <observers>
+                    <reports>
+                        <type>disabled</type>
+                    </reports>
+                </observers>
+            </customer_logout>
+            <catalog_controller_product_view>
+                <observers>
+                    <reports>
+                        <type>disabled</type>
+                    </reports>
+                </observers>
+            </catalog_controller_product_view>
+            <sales_quote_item_save_before>
+                <observers>
+                    <reports>
+                        <type>disabled</type>
+                    </reports>
+                </observers>
+            </sales_quote_item_save_before>
         </events>
     </frontend>
     <adminhtml>
@@ -487,7 +515,7 @@
 										<vendor translate="title" module="stockhistory">
 											<title>Vendor Report</title>
                                              <children>
-                                                <actions translate="title"> 
+                                                <actions translate="title">
                                                     <title>Actions</title>
                                                     <children>
                                                             <add translate="title"><title>Add Vendor</title></add>
@@ -540,6 +568,9 @@
                                                 <import translate="title"><title>Product Import</title></import>
                                                 <add_category translate="title"><title>Add Category/Event</title></add_category>
                                                 <save translate="title"><title>Save Category/Event</title></save>
+                                                <fulfillmentfactorybulkedit translate="title" module="fulfillmentfactory">
+                                                    <title>Fulfillment Type Bulk Edit</title>
+                                                </fulfillmentfactorybulkedit>
                                             </children>
                                         </actions>
                                     </children>

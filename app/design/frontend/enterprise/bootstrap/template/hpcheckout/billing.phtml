@@ -1,13 +1,3 @@
-<?php 
-    /*
-    $customer = Mage::getSingleton('customer/session')->getCustomer();
-    $id = $customer->getId(); 
-    $paymentCollection = Mage::getModel('paymentfactory/profile')->loadByCustomerId($id);
-    
-    var_dump($paymentCollection);
-    */
- ?>
-
 <form id="hpcheckout-billing-form" action="">
 	    <div id="billing-new-address-form fields alpha">
 	    	    <div> 
@@ -23,26 +13,26 @@
 	    	    <input type="hidden" name="billing[email]" id="billing:email" value="<?php echo $this->getCustomer()->getEmail() ?>" />
 	    	    <input type="hidden" name="billing[selected]" id="billing:selected" />
 	    	     <div>
-	    	         <div class="field half-of-half">
+	    	         <div>
 			            <label for="billing:street1" class="required"><em>*&nbsp;</em><?php echo $this->__('street address line 1') ?></label>
 			            <input type="text" title="<?php echo $this->__('Street Address Line 1') ?>" name="billing[street][0]" id="billing:street1" value="<?php echo $this->getAddress()->getStreet(1) ?>" class="input-text required-entry streetaddress1" placeholder="<?php echo $this->__('Street Address Line 1') ?>" />
 	    	        </div>
 	    	     </div>
 	    	     <div>
-	    	         <div class="pull-left field half-of-half">
+	    	         <div class="pull-left">
 	                   <label for="billing:street2">&nbsp;<?php echo $this->__('street address line 2') ?></label>
 	                   <input type="text" title="<?php echo $this->__('Street Address Line 2') ?>" name="billing[street][1]" id="billing:street2" value="<?php echo $this->getAddress()->getStreet(2) ?>" class="input-text streetaddress2" placeholder="<?php echo $this->__('Street Address Line 2') ?>"/>
 	                 </div>
 	    	     </div>
 	    	     <div>
-	    	         <div class="pull-left field half-of-half">
+	    	         <div class="pull-left">
 	                     <label for="billing:city" class="required"><em>*&nbsp;</em><?php echo $this->__('city') ?></label>
 	                     <input type="text" title="<?php echo $this->__('City') ?>" name="billing[city]" class="input-text required-entry city" value="<?php echo $this->getAddress()->getCity() ?>" placeholder="<?php echo $this->__('City') ?>" id="billing:city" />
 	                 </div>	 
-	    	     	 <div class="pull-left half-of-half">
+	    	     	 <div class="pull-left">
 	                     <label for="billing:region_id" class="required"><em>*&nbsp;</em><?php echo $this->__('state') ?></label>
 		                 <div class="totsy-selective-input-box">
-		                     <select id="billing:region_id" name="billing[region_id]" title="<?php echo $this->__('State') ?>" class="validate-select state" style="display:none;" >
+		                     <select id="billing:region_id" name="billing[region_id]" title="<?php echo $this->__('State') ?>" class="validate-select state" >
 		                       <option value=""><?php echo $this->__('Please select state') ?></option>
 		                     </select>
 		                 </div>
@@ -51,25 +41,25 @@
                          </script>
                          <input type="text" id="billing:region" name="billing[region]" value="<?php echo $this->htmlEscape($this->getAddress()->getRegion()) ?>"  title="<?php echo $this->__('State/Province') ?>" class="input-text hidden-state" style="display:none;" />
 	                  </div>
-	                  <div class="field half-of-half">
+	                  <div>
 	                      <label for="billing:postcode" class="required"><em>*&nbsp;</em><?php echo $this->__('zip/postal code') ?></label>
 	                      <input type="text" title="<?php echo $this->__('Zip Code') ?>" name="billing[postcode]" id="billing:postcode" class="input-text validate-zip required-entry zip" value="<?php echo $this->getAddress()->getPostcode() ?>" placeholder="<?php echo $this->__('Zip/Postal Code') ?>" />
 	                  </div>
 	              </div>
 	              <div class="last-billing-form-row">
-	    	          <div class="field half-of-half pull-left">
+	    	          <div class="field pull-left">
 	    	        	    <label for="billing:telephone" class="required"><em>*&nbsp;</em><?php echo $this->__('telephone') ?></label>
 	    	        	    <input type="text" name="billing[telephone]" title="<?php echo $this->__('Telephone') ?>" class="input-text required-entry validate-phoneLax telephone" id="billing:telephone" value="<?php echo $this->htmlEscape($this->getAddress()->getTelephone()) ?>" placeholder="Telephone"/>
 	    	        	</div>
 	    	         </div>
-	    	         <div class="field half-of-half">
+	    	         <div>
 						<?php if( ! $this->getQuote()->isVirtual() ): ?>
                  		<button type="button" id="button_ship_to" class="button button-exception ship-to-billing btn" onclick="hpcheckout.copyBillingToShipping()">
                  			<div class="totsy-button-white"><?php echo  $this->__('SHIP TO THIS ADDRESS') ?></div>
                  		</button>
 						<?php endif; ?>
                  	</div> 
-	                 <div class="field half-of-half">
+	                 <div>
                          <label for="billing:country_id" class="required"><em>*&nbsp;</em><?php echo $this->__('country') ?></label>
 			             <div class="totsy-selective-input-box totsy-selective-input-box-billing-country country">
 			             	<?php echo $this->getCountryHtmlSelect('billing') ?>
@@ -83,40 +73,62 @@
 	// @TODO: abstract this out to hpcheckout.js as self-contained method
 	// need to re-enable billing form controls before trying to send values to shipping form
 	jQuery(document).ready( function() {
+
+        if(typeof checkoutPayment!=="undefined") {
         
-        if(checkoutPayment.hasProfile==true && checkoutPayment.lastUsedAddressId!="") {
+        if(checkoutPayment.hasProfile==true && checkoutPayment.lastUsedAddressId!=="") {
             jQuery("#billing-address-select").val(checkoutPayment.lastUsedAddressId);
         }
         
-        if ( jQuery("#billing-address-select").val()!== undefined) {
+        if(jQuery( '#billing-address-select' ).length>0){
             if(checkoutPayment.hasProfile==false) {
                 jQuery("#billing-address-select").attr("disabled", false);
+                checkoutPayment.disableAddress(true, 'hpcheckout-billing-form');
             }
-            checkoutPayment.disableBillAddr(true);
         }
 	
 	    jQuery('#button_ship_to').bind('click', function() {
-	    	var billFormInputs = jQuery('#hpcheckout-billing-form :input');
 	    	var billAddySelect = jQuery("#billing-address-select");
+	 
 	    	// re-enable disabled controls
-	    	if (billAddySelect.attr('disabled') !== undefined) {
-	            billAddySelect.removeAttr('disabled');
-	            billFormInputs.each(function(i) {
-	                jQuery(this).removeAttr('disabled');
-	            });
+	    	if(billAddySelect.length > 0 ){
+	    	    if (billAddySelect.val() !== "") {
+	                billAddySelect.attr('disabled', false);
+	                checkoutPayment.disableAddress(false,'hpcheckout-billing-form');
+	    	    }
 	    	}
 	    	// then use hpcheckout.copyBillingToShipping() method
 	    	hpcheckout.copyBillingToShipping();
+	    	
+	    	if(billAddySelect.length > 0 ){
+	    	    if (billAddySelect.val() !== "") {
+	    	        //if the user has a card on file, disable to ability to edit the billing address
+	    	    	//NOTE: a user may have a saved billing address and NO card on file, in that case, the address dropdown should be enabled
+	    	    	
+	    	    	if(checkoutPayment.hasProfile==1) {
+	                    billAddySelect.attr('disabled', true);
+	                }
+	                //if there's an address selected in the dropdown, disable the address form
+	                checkoutPayment.disableAddress(true,'hpcheckout-billing-form');
+	    	    }
+	    	}
 	    });
 	    
-	    jQuery( '#billing-address-select' ).bind( 'change', hpcheckout.switchAddress );
-   
+	    if( jQuery( '#billing-address-select' ).length >0 ) {
+	       jQuery( '#billing-address-select' ).bind( 'change', function(){ 
+	           if(jQuery( '#billing-address-select' ).val()=="") {
+	               checkoutPayment.disableAddress(false,'hpcheckout-billing-form');
+	           }
+	           hpcheckout.switchAddress(this.id); 
+	       });
+	    }
+        }
 	});
 //<![CDATA[
     var billingRegionUpdater = new RegionUpdater('billing:country_id', 'billing:region', 'billing:region_id', countryRegions, undefined, 'billing:postcode');
 
     <?php if($this->getAddressesJson()) { ?>
-        var hpcheckoutAddresses = <?php echo $this->getAddressesJson() ?>;
+              var hpcheckoutAddresses = <?php echo $this->getAddressesJson() ?>;
     <?php }  ?>
     
 </script>
