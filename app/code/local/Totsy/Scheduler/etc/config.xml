@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Totsy_Scheduler>
+            <version>0.1.0</version>
+        </Totsy_Scheduler>
+    </modules>
+    <global>
+        <models>
+            <totsy_scheduler>
+                <class>Totsy_Scheduler_Model</class>
+            </totsy_scheduler>
+            <cron>
+                <rewrite>
+                    <schedule>Totsy_Scheduler_Model_Schedule</schedule>
+                </rewrite>
+            </cron>
+        </models>
+    </global>
+</config>
