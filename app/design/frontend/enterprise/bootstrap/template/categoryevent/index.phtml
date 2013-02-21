@@ -14,14 +14,7 @@
  *
  */
 ?>
-<style>
-/* Temporary Eric */
-h4 {
-    color:#000;
-    /*text-transform: uppercase;*/
-}
 
-</style>
 <?php
 /**
  * Catalog index list template
@@ -48,42 +41,28 @@ h4 {
         $upcomingArray = json_decode($indexDataObj->getData('upcoming_queue'), true);
     }
 ?>
-<h2>How Totsy Works <small class="pull-right"><a href="/invitation/">Invite Friends, Receive $15.00 in Credit</a></small></h2>
-<hr />
-          <div class="row">
-            <ul class="thumbnails">
-              <li class="span4">
-                <div class="thumbnail">
-                  <img src="http://placehold.it/150x150" alt="" class="img-circle">
-                  <div class="caption">
-                  </div>
-                </div>
-              </li>
-              <li class="span4">
-                <div class="thumbnail">
-                  <img src="http://placehold.it/150x150" alt="" class="img-circle">
-                  <div class="caption">
-                  </div>
-                </div>
-              </li>
-              <li class="span4">
-                <div class="thumbnail">
-                  <img src="http://placehold.it/150x150" alt="" class="img-circle">
-                  <div class="caption">
-                  </div>
-                </div>
-              </li>
-            </ul>
-            <p class="pull-right"><a href="">Close</a></p>
-          </div>
-<h2>Today's Sales</h2>
-<hr />
+<?php // include banner if it is enabled
+    $bannerActive = Mage::getModel('cms/block')->load('home_banner')->getIsActive();
+    if ($bannerActive) {
+        echo '<div class="banner">';
+        echo $this->getLayout()->createBlock('cms/block')->setBlockId('home_banner')->toHtml();
+        echo '</div>';
+    }
+?>
+
 <div class="catalog-events-container">
     <div class="live-events-container">
 
     <?php // Live Events ?>
     <?php if (!!$liveArray && !empty($liveArray)) : ?>
         <section id="events-live" class="events-grid">
+        <?php if (!$bannerActive) : ?>
+<!--
+            <header class="page-header">
+                <h2><img src="/skin/frontend/enterprise/bootstrap/images/iconmonstr-time-8-icon.png" width="50" /> Today's Sales</h2>
+            </header>
+-->
+        <?php endif; ?>
             <ul class="thumbnails">
             <?php foreach ($liveArray as $live): ?>
                 <?php
@@ -99,15 +78,31 @@ h4 {
                     $url = Mage::getBaseUrl().$url;
                 ?>
                 <?php if ($hasProduct): ?>
-                    <li class="span4 catalog-event event-counter-<?php echo $timer;?>">
+                    <li class="span3 catalog-event event-counter-<?php echo $timer;?>">
                         <a href="<?php echo $url; ?>" class="thumbnail">
                             <hgroup>
-                                <h4 class="ellipsis"><?php echo $live['name'];?></h4>
-                                <div class="maxDiscount"><em>up to <span><strong><?php echo $maxDiscount; ?>%</strong> off</span></em></div>
+                                <h5><?php echo $live['name'];?></h5>
                                 <!-- <h6><?php //echo $live['short_description'];?></h6> -->
                             </hgroup>
                             <div class="more">
+                                <div class="maxDiscount"><em>up to <span><strong><?php echo $maxDiscount; ?>%</strong> off</span></em></div>
                                 <div class="more-content">
+                                    <section class="labels container">
+                                        <h6>Categories:</h6>
+                                        <ul>
+                                        <?php foreach ($eventDepts as $eventDept) : ?>
+                                            <li><?php echo $eventDept; ?></li>
+                                        <?php endforeach; ?>
+                                        </ul>
+                                    </section>
+                                    <section class="labels container">
+                                        <h6>Ages:</h6>
+                                        <ul>
+                                        <?php foreach ($eventAges as $eventAge) : ?>
+                                            <li><?php echo $eventAge; ?></li>
+                                        <?php endforeach; ?>  
+                                        </ul>                                  
+                                    </section>
                                     <p id="time1-<?php echo $timer ?>" class="counter" data-enddate="<?php echo $endcount?>" data-status="live" data-id="<?php echo $timer ?>" data-countertype="event-counter"></p>
                                     <span class="btn btn-primary">Shop Now!</span>
                                 </div>
@@ -115,10 +110,10 @@ h4 {
                             <?php
                                 $imgFile = (isset($live['small_image']))
                                 ? BP . DS . 'media' . DS . 'catalog' . DS . 'category' . DS . $live['small_image']
-                                : BP . DS . 'skin' . DS . 'frontend' . DS . 'enterprise ' . DS . 'bootstrap' . DS . 'images' . DS . 'catalog' . DS . 'product' . DS . 'placeholder' . DS . 'small_image.jpg';
+                                : BP . DS . 'skin' . DS . 'frontend' . DS . 'enterprise ' . DS . 'harapartners' . DS . 'images' . DS . 'catalog' . DS . 'product' . DS . 'placeholder' . DS . 'small_image.jpg';
                             ?>
                             <span class="event-link">
-                                <img src="<?php echo Mage::helper('service/image')->loadImageFile($imgFile)->resize(310)->keepFrame(FALSE); ?>" width="310" height="310" alt="<?php echo $live['name'];?>" />
+                                <img src="<?php echo Mage::helper('service/image')->loadImageFile($imgFile)->resize(228)->keepFrame(FALSE); ?>" width="228" height="263" alt="<?php echo $live['name'];?>" />
                             </span>
                             
                             <?php $timer++; ?>
@@ -131,27 +126,12 @@ h4 {
     <?php endif; ?>
     
     <?php // ENDING SOON - not functioning, no $endingArray exists - just a placeholder var and code for now ?>
-    
-    <?php // include banner if it is enabled
-    $bannerActive = Mage::getModel('cms/block')->load('home_banner')->getIsActive();
-    if ($bannerActive) {
-        echo '<div class="banner">';
-        echo $this->getLayout()->createBlock('cms/block')->setBlockId('home_banner')->toHtml();
-        echo '</div>';
-    }
-?>
-    <?php if (!$bannerActive) : ?>
-<!--
-            <header class="page-header">
-                <h2><img src="/skin/frontend/enterprise/bootstrap/images/iconmonstr-time-8-icon.png" width="50" /> Today's Sales</h2>
-            </header>
--->
-        <?php endif; ?>
-    <?php $endingArray = '1'; ?>
+    <?php $endingArray = ''; ?>
     <?php if (!!$endingArray && !empty($endingArray)): ?>
         <section id="events-ending" class="events-grid">
-                <h2>Sales Ending Soon</h2>
-                <hr/>
+            <header class="page-header">
+                <h2><img src="/skin/frontend/enterprise/bootstrap/images/iconmonstr-time-8-icon.png" width="35px" /> Hurry, Ending Soon!</h2>
+            </header>
             <ul>
             <?php // foreach block here ?>
             </ul>
@@ -161,8 +141,9 @@ h4 {
     <?php // Upcoming Events ?>
     <?php if (!!$upcomingArray && !empty($upcomingArray)): ?>
         <section id="events-upcoming" class="events-grid">
-                <h2>Upcoming Sales</h2>
-                <hr />
+            <header class="page-header">
+                <h2><img src="/skin/frontend/enterprise/bootstrap/images/iconmonstr-calendar-5-icon.png" width="35px" class="pull-left" /> Upcoming Sales</h2>
+            </header>
             <ul class="thumbnails">
             <?php foreach ($upcomingArray as $up): ?>
                 <?php
@@ -173,7 +154,7 @@ h4 {
                     }
                     $url = Mage::getBaseUrl().$url;
                 ?>
-                <li class="span2 alpha catalog-event up-event-counter-<?php echo $timer;?>">
+                <li class="span2 catalog-event up-event-counter-<?php echo $timer;?>">
                     <div class="thumbnail">
                         <hgroup>
                             <h5><a href="<?php echo $url; ?>"><?php echo $up['name'];?></a></h5>
@@ -182,7 +163,7 @@ h4 {
                             $imgFile = (isset($up['small_image']))
                             ? BP . DS . 'media' . DS . 'catalog' . DS . 'category' . DS .
                             $up['small_image']
-                            : BP . DS . 'skin' . DS . 'frontend' . DS . 'enterprise ' . DS . 'bootstrap' . DS . 'images' . DS . 'catalog' . DS . 'product' . DS . 'placeholder' . DS . 'small_image.jpg';
+                            : BP . DS . 'skin' . DS . 'frontend' . DS . 'enterprise ' . DS . 'harapartners' . DS . 'images' . DS . 'catalog' . DS . 'product' . DS . 'placeholder' . DS . 'small_image.jpg';
                         ?>
                         <a class="event-link" href="<?php echo $url; ?>">
                             <img src="<?php echo Mage::helper('service/image')->loadImageFile($imgFile)->resize(165)->keepFrame(FALSE); ?>" width="165px" height="171" alt="<?php echo $up['name'];?>" />
