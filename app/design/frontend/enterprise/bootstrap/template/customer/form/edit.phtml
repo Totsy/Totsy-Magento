@@ -87,7 +87,7 @@ $isPasswordChange = Mage::registry('changepassword');
         $resultArray = $client->graph($facebookUid, array('id','name','picture','access_token'));
     ?>
     <?php if (!empty($resultArray)):?>
-    <h5><img src="https://eric.totsy.com/skin/frontend/enterprise/bootstrap/images/iconmonstr-facebook-5-icon.png" width="20px" align="middle" /> <?php echo $resultArray['name']?></h5>
+    <h5><img src="/skin/frontend/enterprise/bootstrap/images/iconmonstr-facebook-5-icon.png" width="20px" align="middle" /> <?php echo $resultArray['name']?></h5>
     <img id="facebook-photo" src="https://graph.facebook.com/<?php echo $resultArray['id']?>/picture" />
     <?php else : ?>
     <p class="error"><?php $this->__('Can not get your information from Facebook.')?></p>

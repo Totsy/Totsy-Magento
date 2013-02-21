@@ -85,5 +85,12 @@
             <active>true</active>
             <codePool>local</codePool>
         </Totsy_CatalogFeed>
+        <Totsy_Scheduler>
+            <active>true</active>
+            <codePool>local</codePool>
+            <depends>
+                <Aoe_Scheduler/>
+            </depends>
+        </Totsy_Scheduler>
     </modules>
 </config>
