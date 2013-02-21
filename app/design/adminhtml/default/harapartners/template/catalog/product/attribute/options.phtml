@@ -93,11 +93,11 @@ $store_count = count($magento_stores);
                <thead>
                     <tr id="attribute-save-table">
                         <?php foreach ($magento_stores as $_store): ?>
-                            <th><?php echo $_store->getName() ?></th>
+                            <th class="a-center"><?php echo $_store->getName() ?></th>
                         <?php endforeach; ?>
-                            <th><?php echo Mage::helper('catalog')->__('Position') ?></th>
+                            <th class="a-center"><?php echo Mage::helper('catalog')->__('Position') ?></th>
                             <th class="nobr a-center"><?php echo Mage::helper('catalog')->__('Is Default') ?></th>
-                            <th>Action</th>
+                            <th class="a-center">Action</th>
                             <th>
                             </th>
                     </tr>
@@ -115,6 +115,12 @@ $store_count = count($magento_stores);
         <h4 class="icon-head head-edit-form fieldset-legend"><?php echo Mage::helper('catalog')->__('Attribute Options') ?></h4>
     </div>
     <br/>
+    <div>
+       <p> 
+            To edit an attribute, click the checkbox next to the attribute(s) you wish to edit, click 'Update Selection', &
+            edit in the <span style="font-weight:bold">Options to save</span> Panel
+        </p>
+    </div>
     <div id="controls" class="right">
          <?php if (!$this->getReadOnly()):?>
             <?php echo $this->getUpdateButtonHtml() ?>
@@ -132,18 +138,23 @@ $store_count = count($magento_stores);
                     <th><?php echo $_store->getName() ?></th>
                 <?php endforeach; ?>
                      <th>Position</th>
+                     <th>Default</th>
                     <th><input type="checkbox" class="attribute_select_all" name="attribute"></th>
             </tr>
         </thead>
         <tbody>
             <?php foreach($this->getOptionValues() as $value): ?>
-            <tr id="row_<?php echo $value->getData('id')?>">
+               <?php 
+                    $default =  ($value->getData('checked')) ?  "default" :  "";
+                ?>
+            <tr id="row_<?php echo $value->getData('id')?>" data-default="<?php echo $default;?>">
                 <td><?php echo $value->getData("id"); ?></td>
                 <?php foreach ($stores as $no): ?>
-                    <td><?php echo $value->getData("store".$no); ?></td>
+                    <td data-storeid="<?php echo $no?>"><?php echo $value->getData("store".$no); ?></td>
                 <?php endforeach; ?>
                 <td><?php echo $value->getData("sort_order"); ?></td>
-                <td><input type="checkbox" class="attribute_select" name="attribute[<?php echo $value->getData('id')?>]" value="<?php echo $value->getData('id')?>" data-storeid="<?php echo $no?>"></td>
+                <td><?php echo $default; ?></td>
+                <td><input type="checkbox" class="attribute_select" name="attribute[<?php echo $value->getData('id')?>]" value="<?php echo $value->getData('id')?>"></td>
             </tr>
             <?php endforeach;?>
         </tbody>
@@ -159,10 +170,6 @@ jQuery(document).ready(function(){
             "bFilter": true,
             "bProcessing": false
         });
-
-    jQuery("#cancel_add_new_button").bind('click',function(){
-        console.log(this.parent());
-    });
 });
 jQuery('.attribute_select_all').click(function(){
     if(this.checked){
@@ -181,9 +188,9 @@ jQuery('#add_new_option_button').click(function(){
     });
 
     html += "<td><input type='text' name='option[order][option_" + table_length + "]' /></td>";
-    html += "<td><input type='radio' class='a-center' name='default[]' value='option_" + table_length + "' /></td>";
+    html += "<td><input id='default_radio' type='radio' class='a-center' name='default[]' value='option_" + table_length + "' /></td>";
     html += "<td>";
-    html += "<select id='action' name='option[delete][option_" + table_length  +"]' disabled='disabled'>";
+    html += "<select id='select_action' name='option[delete][option_" + table_length  +"]' disabled='disabled'>";
     html += "<option value= '0' selected>New</option>";
     html += "<option value= '1' >Delete</option>";
     html += "<option value= '0'>Edit</option>";
@@ -202,7 +209,7 @@ jQuery('#update_existing').click(function(){
         attr.each(function(idx, val){
 
             var selecthtml =  "<td>";
-            selecthtml += "<select id='action' name='option[delete][" + val.value  +"]'>";
+            selecthtml += "<select id='select_action' name='option[delete][" + val.value  +"]'>";
             selecthtml += "<option value='1' >Delete</option>";
             selecthtml += "<option value='0' selected>Edit</option>";
             selecthtml += "</select>";
@@ -213,23 +220,40 @@ jQuery('#update_existing').click(function(){
                 row = jQuery(id);
                 children = row.children();
                 var addRow = "<tr id= 'row_"+ val.value +"'>";
-                for(var idx = 1 ; idx <= children.length-2 ; ++idx) {
-                    addRow += "<td><input type='text' name='option[value][" + val.value + "][" + jQuery(val).data('storeid') + "]' value= '" + children[idx].outerText + "' /></td>";
+                for(var idx = 1 ; idx <= children.length-3 ; ++idx) {
+                    
+                    if(idx == children.length-3){
+                        name = "'option[order][" + val.value + "]'";
+                    } else {
+                        name = "'option[value][" + val.value + "][" + jQuery(children[idx]).data('storeid') + "]'";
+                    }
+                    addRow += "<td><input type='text' name= " + name +" value= '" + children[idx].outerText + "' /></td>";
+                    default_true = row.data('default');
+                    if(default_true) {
+                        default_true = "checked='checked'"
+                    }
                 }
-                addRow += "<td><input type='radio' class='a-center' name='default[]' value='" + val.value + "' /></td>";
+                addRow += "<td><input id='default_radio' type='radio' class='center' name='default[]' value='" + val.value + "' " + default_true +" /></td>";
                 addRow += selecthtml;
                 addRow += "<td><button id='cancel_add_new_button' type='button' class='cancel'>cancel</button></td>";
                 addRow += "</tr>";
                 jQuery(addRow).appendTo('#save-table > tbody');
+                jQuery(val).removeAttr('checked');
             }
         });
     } else {
         alert("Please select attributes to update");
     }
 });
+
 jQuery(document).delegate('#cancel_add_new_button', 'click', function() {
     row_id = jQuery(this).parent().parent().attr('id');
     jQuery("#" + row_id).remove();
-    console.log(row_id);
+});
+
+jQuery(document).delegate('#default_radio', 'click', function() {
+    jQuery('tr[data-default="default"] > td > input').attr('checked','checked');
+    jQuery("#update_existing").click();
+    jQuery(this).attr('checked','checked');
 });
 </script>

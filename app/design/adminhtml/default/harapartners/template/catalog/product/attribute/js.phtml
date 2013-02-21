@@ -29,9 +29,7 @@
 function saveAndContinueEdit(){
     disableElements('save');
     var activeTab = product_attribute_tabsJsTabs.activeTab.id;
-    console.log(activeTab);
     validation_result = editForm.submit($('edit_form').action+'back/edit/tab/' + activeTab);
-    console.log(validation_result);
     if ( validation_result == false) {
         enableElements('save');
      }
