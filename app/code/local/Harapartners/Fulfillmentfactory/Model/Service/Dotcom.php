@@ -18,8 +18,9 @@ class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
     const ORDER_FULFILLMENT_CHUNK_SIZE = 128;
 
     /**
+     * Process fulfillment tasks.
      *
-     * @return void
+     * @return int The number of orders sent for fulfillment.
      */
     public function fulfillment()
     {
@@ -212,6 +213,8 @@ SQL;
         }
 
         $this->submitOrdersToFulfill($orders, true);
+
+        return count($orders);
     }
 
     /**
