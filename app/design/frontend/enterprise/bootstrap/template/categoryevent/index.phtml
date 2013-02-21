@@ -48,28 +48,42 @@ h4 {
         $upcomingArray = json_decode($indexDataObj->getData('upcoming_queue'), true);
     }
 ?>
-<?php // include banner if it is enabled
-    $bannerActive = Mage::getModel('cms/block')->load('home_banner')->getIsActive();
-    if ($bannerActive) {
-        echo '<div class="banner">';
-        echo $this->getLayout()->createBlock('cms/block')->setBlockId('home_banner')->toHtml();
-        echo '</div>';
-    }
-?>
-
+<h2>How Totsy Works <small class="pull-right"><a href="/invitation/">Invite Friends, Receive $15.00 in Credit</a></small></h2>
+<hr />
+          <div class="row">
+            <ul class="thumbnails">
+              <li class="span4">
+                <div class="thumbnail">
+                  <img src="http://placehold.it/150x150" alt="" class="img-circle">
+                  <div class="caption">
+                  </div>
+                </div>
+              </li>
+              <li class="span4">
+                <div class="thumbnail">
+                  <img src="http://placehold.it/150x150" alt="" class="img-circle">
+                  <div class="caption">
+                  </div>
+                </div>
+              </li>
+              <li class="span4">
+                <div class="thumbnail">
+                  <img src="http://placehold.it/150x150" alt="" class="img-circle">
+                  <div class="caption">
+                  </div>
+                </div>
+              </li>
+            </ul>
+            <p class="pull-right"><a href="">Close</a></p>
+          </div>
+<h2>Today's Sales</h2>
+<hr />
 <div class="catalog-events-container">
     <div class="live-events-container">
 
     <?php // Live Events ?>
     <?php if (!!$liveArray && !empty($liveArray)) : ?>
         <section id="events-live" class="events-grid">
-        <?php if (!$bannerActive) : ?>
-<!--
-            <header class="page-header">
-                <h2><img src="/skin/frontend/enterprise/bootstrap/images/iconmonstr-time-8-icon.png" width="50" /> Today's Sales</h2>
-            </header>
--->
-        <?php endif; ?>
             <ul class="thumbnails">
             <?php foreach ($liveArray as $live): ?>
                 <?php
@@ -117,12 +131,27 @@ h4 {
     <?php endif; ?>
     
     <?php // ENDING SOON - not functioning, no $endingArray exists - just a placeholder var and code for now ?>
+    
+    <?php // include banner if it is enabled
+    $bannerActive = Mage::getModel('cms/block')->load('home_banner')->getIsActive();
+    if ($bannerActive) {
+        echo '<div class="banner">';
+        echo $this->getLayout()->createBlock('cms/block')->setBlockId('home_banner')->toHtml();
+        echo '</div>';
+    }
+?>
+    <?php if (!$bannerActive) : ?>
+<!--
+            <header class="page-header">
+                <h2><img src="/skin/frontend/enterprise/bootstrap/images/iconmonstr-time-8-icon.png" width="50" /> Today's Sales</h2>
+            </header>
+-->
+        <?php endif; ?>
     <?php $endingArray = '1'; ?>
     <?php if (!!$endingArray && !empty($endingArray)): ?>
         <section id="events-ending" class="events-grid">
-            <header class="page-header">
-                <h2>Sales Ending Soon...</h2>
-            </header>
+                <h2>Sales Ending Soon</h2>
+                <hr/>
             <ul>
             <?php // foreach block here ?>
             </ul>
@@ -132,9 +161,8 @@ h4 {
     <?php // Upcoming Events ?>
     <?php if (!!$upcomingArray && !empty($upcomingArray)): ?>
         <section id="events-upcoming" class="events-grid">
-            <header class="page-header">
                 <h2>Upcoming Sales</h2>
-            </header>
+                <hr />
             <ul class="thumbnails">
             <?php foreach ($upcomingArray as $up): ?>
                 <?php
