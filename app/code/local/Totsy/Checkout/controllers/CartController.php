@@ -180,6 +180,30 @@ class Totsy_Checkout_CartController extends Mage_Checkout_CartController
     }
 
     /**
+    * Remove product from cart
+    *
+    * @return void
+    */
+
+    public function deleteAction()
+    {
+
+        $id = (int) $this->getRequest()->getParam('id');
+        if ($id) {
+            $item = $this->_getCart()->getQuote()->getItemById($id);
+        }
+
+        parent::deleteAction();
+
+        if (isset($item)){
+            Mage::dispatchEvent('checkout_cart_remove_item',
+                array('item' => $item->getProductId(), 'cart'=>$this->_getCart())
+            );
+        }
+    }
+
+
+    /**
      * Update shoping cart data action.
      *
      * @return void
