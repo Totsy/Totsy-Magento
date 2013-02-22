@@ -302,7 +302,10 @@ class Inchoo_Facebook_Customer_AccountController extends Mage_Core_Controller_Fr
             $visitor = parse_url($visitorData['http_referer']);
             if (empty($visitor['query'])){
                 $visitor = parse_url($visitorData['request_uri']);
-            } 
+            }
+            if (!is_array($visitor) || !array_key_exists('query', $visitor)){
+                return;
+            }
             parse_str($visitor['query'],$data);
 
             if (array_key_exists('r', $data)){
