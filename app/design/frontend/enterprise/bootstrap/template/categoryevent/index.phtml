@@ -191,7 +191,8 @@
             direction: 'down',
             onComplete: function( event ){
                 jQuery(this).html("Completed");
-                jQuery(jQuery(this).data('countertype') + '-' + id).hide();
+                elem_class = "." + jQuery(this).data('countertype') + '-' + id;
+               jQuery(elem_class).remove();
             }
 
         });
