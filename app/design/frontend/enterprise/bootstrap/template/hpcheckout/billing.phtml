@@ -80,8 +80,8 @@
             jQuery("#billing-address-select").val(checkoutPayment.lastUsedAddressId);
         }
         
-        if(jQuery( '#billing-address-select' ).length>0){
-            if(checkoutPayment.hasProfile==false) {
+        if(("#billing-address-select").length>0){
+            if(checkoutPayment.hasProfile==false && jQuery("#billing-address-select").val()!=="") {
                 jQuery("#billing-address-select").attr("disabled", false);
                 checkoutPayment.disableAddress(true, 'hpcheckout-billing-form');
             }
@@ -103,7 +103,7 @@
 	    	if(billAddySelect.length > 0 ){
 	    	    if (billAddySelect.val() !== "") {
 	    	        //if the user has a card on file, disable to ability to edit the billing address
-	    	    	//NOTE: a user may have a saved billing address and NO card on file, in that case, the address dropdown should be enabled
+	    	    	//NOTE: a user may have a saved billing address and NO card on file, in that case, the address dropdown should be enabled	 
 	    	    	
 	    	    	if(checkoutPayment.hasProfile==1) {
 	                    billAddySelect.attr('disabled', true);
@@ -120,6 +120,10 @@
 	               checkoutPayment.disableAddress(false,'hpcheckout-billing-form');
 	           }
 	           hpcheckout.switchAddress(this.id); 
+	           
+	           if(jQuery( '#billing-address-select' ).val()!=="") {
+	               checkoutPayment.disableAddress(true,'hpcheckout-billing-form');
+	           }
 	       });
 	    }
         }
