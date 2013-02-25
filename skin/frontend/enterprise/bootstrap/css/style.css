@@ -227,9 +227,10 @@ body.categoryevent-index-topnav .page-header {
     text-overflow: ellipsis;
 }
 
-/* Got something important to say? Say it with Ted's Red…*/
+/* Got something important to say? Say it with Ted's Red… -- edit, not red (that's for links). Black is the new red, Ted! */
 .shoutit {
-    color:#d22f2a;
+    color:#333;
+    font-weight: bold;
 }
 .shoutit em,
 .shoutit.loud {
