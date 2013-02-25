@@ -1,82 +1,79 @@
-    <script src="https://cert01.securepaypage.litle.com/LitlePayPage/litle-api.js"
-            type="text/javascript"></script>
-    <script>
-        $(document).ready(
-                function(){
-                    function setLitleResponseFields(response) {
-                        document.getElementById('response$code').value = response.response;
-                        document.getElementById('response$message').value = response.message;
-                        document.getElementById('response$responseTime').value = response.responseTime;
-                        document.getElementById('response$litleTxnId').value = response.litleTxnId;
-                        document.getElementById('response$type').value = response.type;
-                    }
-                    function submitAfterLitle (response) {
-                        setLitleResponseFields(response);
-                        document.forms['fCheckout'].submit();
-                    }
-                    function timeoutOnLitle () {
-                        alert("We are experiencing technical difficulties.  Please try again later or call 555-555-1212 (timeout)");
-                    }
-                    function onErrorAfterLitle (response) {
-                        setLitleResponseFields(response);
-                        if(response.response == '871') {
-                            alert("Invalid card number.  Check and retry. (Not Mod10)");
-                        }
-                        else if(response.response == '872') {
-                            alert("Invalid card number.  Check and retry. (Too short)");
-                        }
-                        else if(response.response == '873') {
-                            alert("Invalid card number.  Check and retry. (Too long)");
-                        }
-                        else if(response.response == '874') {
-                            alert("Invalid card number.  Check and retry. (Not a number)");
-                        }
-                        else if(response.response == '875') {
-                            alert("We are experiencing technical difficulties. Please try again later or call 555-555-1212");
-                        }
-                        else if(response.response == '876') {
-                            alert("Invalid card number.  Check and retry. (Failure from Server)");
-                        }
-                        else if(response.response == '881') {
-                            alert("Invalid card validation code.  Check and retry. (Not a number)");
-                        }
-                        else if(response.response == '882') {
-                            alert("Invalid card validation code.  Check and retry. (Too short)");
-                        }
-                        else if(response.response == '883') {
-                            alert("Invalid card validation code.  Check and retry. (Too long)");
-                        }
-                        else if(response.response == '889') {
-                            alert("We are experiencing technical difficulties. Please try again later or call 555-555-1212");
-                        }
-                        return false;
-                    }
-                    var formFields = {
-                        "accountNum"   :document.getElementById('ccNum'),
-                        "cvv2"   :document.getElementById('cvv2Num'),
-                        "paypageRegistrationId":document.getElementById('response$paypageRegistrationId'),
-                        "bin"  :document.getElementById('response$bin')
-                    };
-                    $("submitId").click(
-                            function(){
-                                alert('test1');
-                                setLitleResponseFields({"response":"", "message":""});
-                                var litleRequest = {
-                                    "paypageId" : document.getElementById("request$paypageId").value,
-                                    "reportGroup" : document.getElementById("request$reportGroup").value,
-                                    "orderId" : document.getElementById("request$orderId").value,
-                                    "id" : document.getElementById("request$merchantTxnId").value,
-                                    "url" : "https://cert01.securepaypage.litle.com"
-                                };
-                                sendToLitle(litleRequest, formFields, submitAfterLitle, onErrorAfterLitle,
-                                        timeoutOnLitle, 5000);
-                                alert('test2');
-                                return false;
-                            }
-                    );
+<script src="https://cert01.securepaypage.litle.com/LitlePayPage/litle-api.js"
+        type="text/javascript"></script>
+<script>
+    jQuery(document).ready(
+       function(){
+            function setLitleResponseFields(response) {
+                document.getElementById('response$code').value = response.response;
+                document.getElementById('response$message').value = response.message;
+                document.getElementById('response$responseTime').value = response.responseTime;
+                document.getElementById('response$litleTxnId').value = response.litleTxnId;
+                document.getElementById('response$type').value = response.type;
+            }
+            function submitAfterLitle (response) {
+                setLitleResponseFields(response);
+                document.forms['fCheckout'].submit();
+            }
+            function timeoutOnLitle () {
+                alert("We are experiencing technical difficulties.  Please try again later or call 555-555-1212 (timeout)");
+            }
+            function onErrorAfterLitle (response) {
+                setLitleResponseFields(response);
+                if(response.response == '871') {
+                    alert("Invalid card number.  Check and retry. (Not Mod10)");
                 }
-        );
-    </script>
+                else if(response.response == '872') {
+                    alert("Invalid card number.  Check and retry. (Too short)");
+                }
+                else if(response.response == '873') {
+                    alert("Invalid card number.  Check and retry. (Too long)");
+                }
+                else if(response.response == '874') {
+                    alert("Invalid card number.  Check and retry. (Not a number)");
+                }
+                else if(response.response == '875') {
+                    alert("We are experiencing technical difficulties. Please try again later or call 555-555-1212");
+                }
+                else if(response.response == '876') {
+                    alert("Invalid card number.  Check and retry. (Failure from Server)");
+                }
+                else if(response.response == '881') {
+                    alert("Invalid card validation code.  Check and retry. (Not a number)");
+                }
+                else if(response.response == '882') {
+                    alert("Invalid card validation code.  Check and retry. (Too short)");
+                }
+                else if(response.response == '883') {
+                    alert("Invalid card validation code.  Check and retry. (Too long)");
+                }
+                else if(response.response == '889') {
+                    alert("We are experiencing technical difficulties. Please try again later or call 555-555-1212");
+                }
+                return false;
+            }
+            var formFields = {
+                "accountNum"   :document.getElementById('ccNum'),
+                "cvv2"   :document.getElementById('cvv2Num'),
+                "paypageRegistrationId":document.getElementById('response$paypageRegistrationId'),
+                "bin"  :document.getElementById('response$bin')
+            };
+            jQuery("#submitId").click(
+                function(){
+                    setLitleResponseFields({"response":"", "message":""});
+                    var litleRequest = {
+                        "paypageId" : document.getElementById("request$paypageId").value,
+                        "reportGroup" : document.getElementById("request$reportGroup").value,
+                        "orderId" : document.getElementById("request$orderId").value,
+                        "id" : document.getElementById("request$merchantTxnId").value,
+                        "url" : "https://cert01.securepaypage.litle.com"
+                    };
+                    sendToLitle(litleRequest, formFields, submitAfterLitle, onErrorAfterLitle, timeoutOnLitle, 5000);
+                   return false;
+                }
+            );
+        }
+    );
+</script>
 <form method=post id="fCheckout" name="fCheckout"
       action="/merchant101/Merchant101CheckoutServlet">
     <input type="hidden" id="request$paypageId" name="request$paypageId"
