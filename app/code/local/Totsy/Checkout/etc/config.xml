@@ -21,6 +21,7 @@
             <checkout>
                 <rewrite>
                     <cart>Totsy_Checkout_Block_Cart</cart>
+                    <cart_totals>Totsy_Checkout_Block_Cart_Totals</cart_totals>
                 </rewrite>
             </checkout>
         </blocks>
