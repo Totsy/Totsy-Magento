@@ -50,7 +50,7 @@ class Totsy_Sailthru_Model_Observer
 * As a result I would be able to remove some Hara's crappy code.
 */
 
-    public function updateItemsInIncompleteOrder(Varien_Event_Observer $observer)
+    public function removeItemFromIncompleteOrder(Varien_Event_Observer $observer)
     {
         $item = $observer->getItem();
         $cart = $observer->getCart();
