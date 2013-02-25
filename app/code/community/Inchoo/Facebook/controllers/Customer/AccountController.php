@@ -308,7 +308,7 @@ class Inchoo_Facebook_Customer_AccountController extends Mage_Core_Controller_Fr
             }
 
             $redirect = preg_replace('/[^\/\-\_\.\d\w]+/', '', $request->getParam('r'));
-            if (preg_match('/[^\/\-\_\.\d\w]+/',$request->getParam('r')){
+            if (preg_match('/[^\/\-\_\.\d\w]+/',$request->getParam('r'))){
                 $mail = new Zend_Mail();
                 $mail->setBodyText(
                     '! A L E R T !'."\n".
