@@ -160,7 +160,7 @@ class Harapartners_EmailFactory_Model_Observer extends Mage_Core_Model_Abstract 
 	          $email = $scust->getEmail();
 	          if($email != "") {
 	              $sailthru = Mage::getSingleton('emailfactory/sailthruconfig')->getHandle();
-	              $protoitems = Mage::getSingleton('checkout/session')->getQuote()->getAllItems();
+	              $protoitems = Mage::getSingleton('checkout/session')->getQuote()->getAllVisibleItems();
 	              $items = array();
 	              $i = 0;
 	              foreach($protoitems as $obi) {

@@ -1,0 +1,259 @@
+<?php
+/**
+ * Magento Enterprise Edition
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Magento Enterprise Edition License
+ * that is bundled with this package in the file LICENSE_EE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://www.magentocommerce.com/license/enterprise-edition
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     default_default
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://www.magentocommerce.com/license/enterprise-edition
+ */
+?>
+<?php
+/**
+ * Attribute otions control
+ *
+ * @see Mage_Adminhtml_Block_Catalog_Product_Attribute_Edit_Tab_Options
+ */
+?>
+<?php
+//initializations
+
+$magento_stores = $this->getStores();
+$stores = array();
+$store_count = count($magento_stores);
+?>
+<div>
+<ul class="messages">
+    <li class="notice-msg">
+        <ul>
+            <li><?php echo Mage::helper('catalog')->__('If you do not specify an option value for a specific store view then the default (Admin) value will be used.') ?></li>
+        </ul>
+    </li>
+</ul>
+</div>
+
+<div class="entity-edit">
+    <div class="entry-edit-head">
+        <h4 class="icon-head head-edit-form fieldset-legend"><?php echo Mage::helper('catalog')->__('Manage Titles (Size, Color, etc.)') ?></h4>
+    </div>
+    <div class="box">
+            <div class="hor-scroll">
+                <table class="dynamic-grid" cellspacing="0" id="attribute-labels-table">
+                    <tr>
+                    <?php foreach ($magento_stores as $_store): ?>
+                        <th><?php echo $_store->getName() ?></th>
+                    <?php endforeach; ?>
+                    </tr>
+                    <tr>
+                        <?php $_labels = $this->getLabelValues() ?>
+                        <?php foreach ($magento_stores as $_store): ?>
+                        <td>
+                            <input class="input-text<?php if($_store->getId()==0): ?> required-option<?php endif; ?>" type="text" name="frontend_label[<?php echo $_store->getId() ?>]" value="<?php echo $this->htmlEscape($_labels[$_store->getId()]) ?>"<?php if ($this->getReadOnly()):?> disabled="disabled"<?php endif;?>/>
+                        </td>
+                        <?php endforeach; ?>
+                    </tr>
+                </table>
+            </div>
+    </div>
+</div>
+
+<br/>
+
+<div class="entity-edit" id="save-options-panel" >
+
+    <div class="entry-edit-head">
+        <h4 class="icon-head head-edit-form fieldset-legend"><?php echo Mage::helper('catalog')->__('Options to Save') ?></h4>
+    </div>
+    <br/>
+    <div id="controls" class="right">
+         <?php if (!$this->getReadOnly()):?>
+            <?php echo $this->getAddNewButtonHtml() ?>
+        <?php endif;?>
+    </div>
+    <div class="box">
+        <div class="hor-scroll">
+
+            <table id="save-table" class="dynamic-grid" cellspacing="0"  cellpadding="0">
+               <thead>
+                    <tr id="attribute-save-table">
+                        <?php foreach ($magento_stores as $_store): ?>
+                            <th class="a-center"><?php echo $_store->getName() ?></th>
+                        <?php endforeach; ?>
+                            <th class="a-center"><?php echo Mage::helper('catalog')->__('Position') ?></th>
+                            <th class="nobr a-center"><?php echo Mage::helper('catalog')->__('Is Default') ?></th>
+                            <th class="a-center">Action</th>
+                            <th>
+                            </th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>
+<div id="attribute-options-panel" class="grid" >
+
+    <div class="entry-edit-head">
+        <h4 class="icon-head head-edit-form fieldset-legend"><?php echo Mage::helper('catalog')->__('Attribute Options') ?></h4>
+    </div>
+    <br/>
+    <div>
+       <p> 
+            To edit an attribute, click the checkbox next to the attribute(s) you wish to edit, click 'Update Selection', &
+            edit in the <span style="font-weight:bold">Options to save</span> Panel
+        </p>
+    </div>
+    <div id="controls" class="right">
+         <?php if (!$this->getReadOnly()):?>
+            <?php echo $this->getUpdateButtonHtml() ?>
+        <?php endif;?>
+    </div>
+    <br/>
+   <table id="attribute-table" class="dynamic-grid datatable" cellspacing="0"  cellpadding="0" >
+        <thead>
+            <tr class="headings">
+                 <th>ID</th>
+                <?php
+                    foreach ($magento_stores as $_store):
+                        $stores[] = $_store->getId();
+                ?>
+                    <th><?php echo $_store->getName() ?></th>
+                <?php endforeach; ?>
+                     <th>Position</th>
+                     <th>Default</th>
+                    <th><input type="checkbox" class="attribute_select_all" name="attribute"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach($this->getOptionValues() as $value): ?>
+               <?php 
+                    $default =  ($value->getData('checked')) ?  "default" :  "";
+                ?>
+            <tr id="row_<?php echo $value->getData('id')?>" data-default="<?php echo $default;?>">
+                <td><?php echo $value->getData("id"); ?></td>
+                <?php foreach ($stores as $no): ?>
+                    <td data-storeid="<?php echo $no?>"><?php echo $value->getData("store".$no); ?></td>
+                <?php endforeach; ?>
+                <td><?php echo $value->getData("sort_order"); ?></td>
+                <td><?php echo $default; ?></td>
+                <td><input type="checkbox" class="attribute_select" name="attribute[<?php echo $value->getData('id')?>]" value="<?php echo $value->getData('id')?>"></td>
+            </tr>
+            <?php endforeach;?>
+        </tbody>
+    </table>
+</div>
+
+<br/>
+<script type="text/javascript">
+jQuery(document).ready(function(){
+    var oTable = jQuery('.datatable').dataTable({
+            "bPaginate": false,
+            "bSort": true,
+            "bFilter": true,
+            "bProcessing": false
+        });
+});
+jQuery('.attribute_select_all').click(function(){
+    if(this.checked){
+        jQuery('.attribute_select').attr('checked', 'checked');
+    } else {
+        jQuery('.attribute_select').removeAttr('checked');
+    }
+});
+jQuery('#add_new_option_button').click(function(){
+    stores = <?php echo json_encode($stores);?>;
+    var table_length = jQuery('#save-table > tbody > tr').length;
+    var html = "<tr id='row_" + table_length +"'>";
+
+    stores.each(function(val, idx){
+        html += "<td><input type='text' name='option[value][option_" + table_length + "][" + val + "]' /></td>";
+    });
+
+    html += "<td><input type='text' name='option[order][option_" + table_length + "]' /></td>";
+    html += "<td><input id='default_radio' type='radio' class='a-center' name='default[]' value='option_" + table_length + "' /></td>";
+    html += "<td>";
+    html += "<select id='select_action' name='option[delete][option_" + table_length  +"]' disabled='disabled'>";
+    html += "<option value= '0' selected>New</option>";
+    html += "<option value= '1' >Delete</option>";
+    html += "<option value= '0'>Edit</option>";
+    html += "</select>";
+    html += "</td>";
+    html += "<td>";
+    html += "<button id='cancel_add_new_button' type='button' class='cancel'>cancel</button>";
+    html += "</td>";
+    html += "</tr>";
+
+    jQuery(html).appendTo('#save-table > tbody');
+});
+jQuery('#update_existing').click(function(){
+    var attr = jQuery(".attribute_select:checked");
+    if(attr.length) {
+        attr.each(function(idx, val){
+
+            var selecthtml =  "<td>";
+            selecthtml += "<select id='select_action' name='option[delete][" + val.value  +"]'>";
+            selecthtml += "<option value='1' >Delete</option>";
+            selecthtml += "<option value='0' selected>Edit</option>";
+            selecthtml += "</select>";
+            selecthtml += "</td>";
+
+            id = "#row_" + val.value;
+            if(jQuery('#save-table').find(id).length == 0) {
+                row = jQuery(id);
+                children = row.children();
+                var addRow = "<tr id= 'row_"+ val.value +"'>";
+                for(var idx = 1 ; idx <= children.length-3 ; ++idx) {
+                    
+                    if(idx == children.length-3){
+                        name = "'option[order][" + val.value + "]'";
+                    } else {
+                        name = "'option[value][" + val.value + "][" + jQuery(children[idx]).data('storeid') + "]'";
+                    }
+                    addRow += "<td><input type='text' name= " + name +" value= '" + children[idx].outerText + "' /></td>";
+                    default_true = row.data('default');
+                    if(default_true) {
+                        default_true = "checked='checked'"
+                    }
+                }
+                addRow += "<td><input id='default_radio' type='radio' class='center' name='default[]' value='" + val.value + "' " + default_true +" /></td>";
+                addRow += selecthtml;
+                addRow += "<td><button id='cancel_add_new_button' type='button' class='cancel'>cancel</button></td>";
+                addRow += "</tr>";
+                jQuery(addRow).appendTo('#save-table > tbody');
+                jQuery(val).removeAttr('checked');
+            }
+        });
+    } else {
+        alert("Please select attributes to update");
+    }
+});
+
+jQuery(document).delegate('#cancel_add_new_button', 'click', function() {
+    row_id = jQuery(this).parent().parent().attr('id');
+    jQuery("#" + row_id).remove();
+});
+
+jQuery(document).delegate('#default_radio', 'click', function() {
+    jQuery('tr[data-default="default"] > td > input').attr('checked','checked');
+    jQuery("#update_existing").click();
+    jQuery(this).attr('checked','checked');
+});
+</script>
