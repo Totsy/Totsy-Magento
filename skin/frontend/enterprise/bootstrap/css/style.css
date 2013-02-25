@@ -9,10 +9,12 @@
  * - Medium Grey    copy font               #999999
  * - Light Grey     borders                 #e5e5e5 | rgba(229,229,229,1)
  * - Green          buttons                 #c1d82f or #adc222 | rgba(173,194,34,1)
+ * - Blue           dotted lines!           #68a8fe
  */
 
 html,
 body { height: 100%;}
+body { padding-top:147px; } /* magic number BS for fixed nav */
 #stickywrap { /* @sticky */
     height: auto;
     min-height: 100%;
@@ -325,22 +327,15 @@ body.customer-account-login .btn.btn-large {
 /**
  * @Header
  * - "navbar" class from bootstrap
- * - incl: branding, actual nav, user & checkout modules
+ * - incl: branding, actual nav, user account, cta/promo, & checkout modules
  */
 .navbar {
     background:#fff;
-    border-bottom:1px solid #d1d9de;
-    -moz-box-shadow: 0 2px 2px rgba(0, 0, 0, 0.086);
-    -webkit-box-shadow: 0 2px 2px rgba(0, 0, 0, 0.086);
-    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.086);
 }
 #masthead {
     position: relative; z-index: 10;
     padding:3px 0;
     min-height: 54px;
-    -moz-box-shadow: 0 3px 3px rgba(0, 0, 0, 0.18);
-    -webkit-box-shadow: 0 3px 3px rgba(0, 0, 0, 0.18);
-    box-shadow: 0 3px 3px rgba(0, 0, 0, 0.18);
 }
 #logo {margin-left:0;}
 
@@ -349,8 +344,9 @@ body.customer-account-login .btn.btn-large {
 
 /* nav */
 .navbar nav {
-    background-color:#f9f9f9;
     position: relative; z-index: 1;
+    border-top: 2px dashed #68a8fe;
+    border-bottom: 2px dashed #68a8fe;
 }
 .navbar .nav {margin:0;}
 .navbar .nav > li {
@@ -420,10 +416,11 @@ header nav .cta strong em {color:#d84643; font-style:normal;}
 
 /**
  * @User Utils
- * - global in header: my account dropdown, minicart
+ * - global in header: checkout btn / timer / minicart
  */
-#userUtils {margin-top:18px; margin-bottom: 0;}
-#userUtils > li {float: left; width:50%;}
+#userUtils {
+    background: #dddbdd;
+}
 
 /* header cart */
 #usercart {
@@ -561,14 +558,14 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
 
 /* checkout btn in non-mini-cart header */
 #header-checkoutBtn {
-    display: none; /* hide by default, ajax topcart logic displays when items in cart */
-    float: right; clear: right;
     margin-top:3px;
     text-align: right;
 }
-#header-checkoutBtn a {
-    position:relative; left:-8px /* need to move this a bit to align with top cart (which moved to keep dropdown within 950 grid), tho now this is bit off grid… */
-}
+
+
+
+
+
 
 .use-new-card-wrapper {
     display:none;

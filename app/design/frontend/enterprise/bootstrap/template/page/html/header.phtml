@@ -66,27 +66,27 @@
 
 <div class="visible-tablet">You are on tablet.</div>
 <div class="visible-desktop">You are on desktop.</div>
-            <ul id="userUtils" class="span4 offset6">
-                <li id="userAccount" class="dropdown">
-                    <a href="/customer/account/#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-user"></i> My Account</a>
-                    <ul class="dropdown-menu">
-                        <li><a href="/customer/account/">Account Dashboard</a></li>
-                        <li><a href="/customer/account/edit/">Account Information</a></li>
-                        <li><a href="/paymentfactory/">Manage Credit Cards</a></li>
-                        <li><a href="/customer/account/edit/changepassword/1/">Change Password</a></li>
-                        <li><a href="/customer/address/">Address Book</a></li>
-                        <li><a href="/sales/order/history/">My Orders</a></li>
-                        <li><a href="/reward/customer/info/">My Credits</a></li>
-                        <li><a href="/invitation/">My Invitations</a></li>
-                        <li class="divider"></li>
-                        <li><a href="/customer/account/logout">Logout</a></li>
-                    </ul>
-                </li>
-                <li class="quick-access" id="header-user-info"></li>
-            </ul>
+        
+            <div id="userAccount" class="dropdown">
+                <a href="/customer/account/#" class="dropdown-toggle" data-toggle="dropdown"><img src="/skin/frontend/enterprise/bootstrap/images/iconmonstr-user-icon.png" width="20" height="20" style="margin-top:-5px;" /> My Account</a>
+                <ul class="dropdown-menu">
+                    <li><a href="/customer/account/">Account Dashboard</a></li>
+                    <li><a href="/customer/account/edit/">Account Information</a></li>
+                    <li><a href="/paymentfactory/">Manage Credit Cards</a></li>
+                    <li><a href="/customer/account/edit/changepassword/1/">Change Password</a></li>
+                    <li><a href="/customer/address/">Address Book</a></li>
+                    <li><a href="/sales/order/history/">My Orders</a></li>
+                    <li><a href="/reward/customer/info/">My Credits</a></li>
+                    <li><a href="/invitation/">My Invitations</a></li>
+                    <li class="divider"></li>
+                    <li><a href="/customer/account/logout">Logout</a></li>
+                </ul>
+            </div>
+            <div class="cta">
+                <a class="cta-link" href="<?php echo $this -> getBaseUrl();?>invitation">INVITE FRIENDS <strong>GET A <em>$15</em> CREDIT</strong></a><?php echo $this->getAdditionalHtml() ?>
+            </div>
         </div>
     </div><!--/#masthead -->
-    <!-- <div id="rondavu_welcome_container"></div> -->
     <!-- begin nav -->
     <nav>
         <div class="container">
@@ -145,16 +145,17 @@
                     <?php endif; ?>
                 <?php endif; ?>
             </ul>
-            <?php if ($this->getRequest()->getModuleName()!=="checkout" && $this->getRequest()->getModuleName()!=="hpcheckout"): ?>
-            <div class="span2 offset2" id="header-checkoutBtn">
-                <a class="btn checkout btn-primary" title="Checkout" href="<?php echo Mage::getUrl('checkout/cart')?>"><strong>Checkout</strong></a>
+            
+            <div id="userUtils" class="span4 clearfix">
+                <div class="quick-access span2 alpha" id="header-user-info"></div>
+    
+                <?php if ($this->getRequest()->getModuleName()!=="checkout" && $this->getRequest()->getModuleName()!=="hpcheckout"): ?>
+                <div class="span2 alpha" id="header-checkoutBtn">
+                    <a class="btn checkout btn-primary" title="Checkout" href="<?php echo Mage::getUrl('checkout/cart')?>"><strong>Checkout</strong></a>
+                </div>     
+                <?php endif; ?>
             </div>
-            <?php endif; ?>
-            <!--
-            <div class="cta span2 offset2">
-                <a class="cta-link" href="<?php echo $this -> getBaseUrl();?>invitation">INVITE FRIENDS <strong>GET A <em>$15</em> CREDIT</strong></a><?php echo $this->getAdditionalHtml() ?>
-            </div>
--->
+                 
         </div>
     </nav>
 </header><!-- /.navbar -->
