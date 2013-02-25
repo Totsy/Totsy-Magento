@@ -195,8 +195,8 @@ if($_fullProduct->getId() == Mage::getStoreConfig('Crown_Club/clubgeneral/club_p
 	</td>
 		
 		
-		
-		
+
+    <?php if(!$quote->isNominal()): ?>
 	<td class="qty-box">
 		<?php if( $isVirtual ): ?>
 			<input type="text" name="cart[<?php echo $_item->getId() ?>][qty]" value="<?php echo $this->getQty() ?>" size="4" title="<?php echo $this->__('Qty') ?>" class="input-text qty" maxlength="12" disabled="disabled"/>
@@ -319,6 +319,7 @@ if($_fullProduct->getId() == Mage::getStoreConfig('Crown_Club/clubgeneral/club_p
 		</div>
 		<?php endif; ?>
 	</td>
+    <?php endif; ?>
 	<td class="remove-box">
 		<div class="remove-button"><a href="<?php echo $this->getDeleteUrl()?>" title="<?php echo $this->__('Remove item')?>" class="btn-remove btn-remove2 pull-right"><img src="/skin/frontend/enterprise/bootstrap/images/iconmonstr-x-mark-icon.png" width="30px" style="margin:0px 5px 0 -15px;" /></a></div>
 	</td>
