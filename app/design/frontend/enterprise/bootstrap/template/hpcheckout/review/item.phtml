@@ -144,6 +144,7 @@ $shipDate = date('m-d-Y', Mage::helper('sales/order')->calculateEstimatedShipDat
         <?php endif; ?>
     </td>
     <?php endif; ?>
+    <?php if(!$quote->isNominal()): ?>
     <td style="text-align:center !important"><?php echo $_item->getQty() ?></td>
     <?php if ($this->helper('tax')->displayCartPriceExclTax() || $this->helper('tax')->displayCartBothPrices()): ?>
     <td style="text-align:center !important">
@@ -237,5 +238,6 @@ $shipDate = date('m-d-Y', Mage::helper('sales/order')->calculateEstimatedShipDat
             <?php endif; ?>
         <?php endif; ?>
     </td>
+    <?php endif; ?>
     <?php endif; ?>
 </tr>
