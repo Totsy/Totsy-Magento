@@ -310,6 +310,10 @@ class Inchoo_Facebook_Customer_AccountController extends Mage_Core_Controller_Fr
             	return;
             }
             
+            if (!preg_match('http|https//',$uri)){
+            	$uri = Mage::getBaseUrl().$uri;
+            }
+            
             $request = new Zend_Controller_Request_Http($uri);
             
             if (!$request->has('r')){
