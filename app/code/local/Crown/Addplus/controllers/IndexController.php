@@ -20,7 +20,7 @@ class Crown_Addplus_IndexController extends Mage_Core_Controller_Front_Action {
             } else {
                 $product_id = Mage::getStoreConfig('Crown_Club/clubgeneral/club_product_id');
                 $return_url = '/checkout/cart/';
-                $this->_redirect('checkout/cart/add?product='.$product_id.'&qty=1&return_url='.$return_url);
+                $this->_redirect('checkout/cart/add?product='.$product_id.'&qty=1&hideSuccess=1&return_url='.$return_url);
             }
         }
     }
