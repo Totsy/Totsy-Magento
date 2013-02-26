@@ -6,8 +6,9 @@
         </reference>
         <reference name="head">
 			<action method="addJs"><script>harapartners/hpcheckout.js</script></action>
-            <action method="addItem"><type>skin_js</type><name>js/totsy-checkout.js</name><params/>
-            </action> 
+            <action method="addItem"><type>skin_js</type><name>js/totsy-checkout.js</name><params/></action>
+            <action method="addItem"><type>skin_js</type><name>js/opcheckout.js</name><params/></action>
+            <block type="page/html" name="litle3.js" output="toHtml" template="litle/form/litlejs.phtml"/>
         </reference>
 		<reference name="content">
 			<block type="hpcheckout/wrapper" name="hpcheckout.wrapper" as="wrapper" template="hpcheckout/wrapper.phtml">
