@@ -93,7 +93,7 @@
                 }
                 $url = Mage::getBaseUrl().$url;
 			?>
-			<?php if ($hasProduct && $endcountRaw > time()):?>
+			<?php if ($hasProduct && $endcountRaw > Mage::getSingleton('core/date')->timestamp()):?>
 			<li class="catalog-event ui-btn-up-c live-event-<?php echo $timer?>">
 				<div class="ui-btn-text ">
 					<a class="event-link" href="<?php echo $url; ?>">
