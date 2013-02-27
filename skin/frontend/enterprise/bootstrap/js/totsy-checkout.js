@@ -90,6 +90,8 @@ jQuery(document).ready(function() {
                     jQuery('.addresses').width(445);
                     //billingAddress.attr("disabled", true);
                     newCardWrap.hide();
+                    
+                    /*
                     if (this.isCollapsed == false) {
                         billAddySelect.val(jQuery("#address_" + jQuery(this).val()).val()).change();
                         //Block Billing Inputs if credit card selected
@@ -98,7 +100,7 @@ jQuery(document).ready(function() {
                     } else {
                         this.disableAddress(false, 'hpcheckout-billing-form');
                         billAddySelect.removeAttr('disabled');
-                    }
+                    }*/
                 }
             },
             autoDetectCard: function(ccNum) {                
