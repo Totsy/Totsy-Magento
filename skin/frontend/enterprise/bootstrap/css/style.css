@@ -860,7 +860,10 @@ body.catalog-category-view .thumbnails > li {position: relative;}
     margin-left: 0px !important;
     width: 928px !important;  /* new */
 }
-
+#payment_form_paypal_express .form-alt {
+    font-weight: bold;
+    padding: 10px 0;
+}
 #hpcheckout-payment-wrapper {
     margin-left: 0px !important;
 }
