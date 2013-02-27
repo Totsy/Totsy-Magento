@@ -31,7 +31,7 @@
 
     <!-- begin masthead -->
     <div id="masthead">
-        <div class="container row">   
+        <div class="container">   
             <h1 id="logo" class="span2"><a href="<?php
             echo $this->getUrl( 'event/?ref=logo' );
             ?>" title="<?php
@@ -40,7 +40,7 @@
             echo $this->getLogoSrc();
             ?>" alt="<?php
             echo $this->getLogoAlt();
-            ?>" /></a></h1>
+            ?>" style="max-width:120px; padding:5px;"/></a></h1>
         
             <ul id="userUtils" class="span4 offset6">
                 <li id="userAccount" class="dropdown">
@@ -65,7 +65,7 @@
     <!-- <div id="rondavu_welcome_container"></div> -->
     <!-- begin nav -->
     <nav>
-        <div class="container row">
+        <div class="container">
             <ul class="nav span8">
                 <li id="navAllEvents" class="dropdown">
                     <a href="<?php echo $this->getBaseUrl()?>event/"><em>ALL <br />SALES</em></a>

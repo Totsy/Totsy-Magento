@@ -32,34 +32,110 @@ textarea{overflow:auto;vertical-align:top;}
 body{margin:0;font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:13px;line-height:18px;color:#333333;}
 a{color:#ed1c25;text-decoration:none;}
 a:hover{color:#af0e15;text-decoration:underline;}
-.row{ margin-left:-10px;*zoom:1;}.row:before,.row:after{display:table;content:"";}
-.row:after{clear:both;}
+
 [class*="span"]{float:left;margin-left:10px;}
-.container,.navbar-fixed-top .container,.navbar-fixed-bottom .container{width:950px;}
-.span12{width:950px;}
-.span11{width:870px;}
-.span10{width:790px;}
-.span9{width:710px;}
-.span8{width:630px;}
-.span7{width:550px;}
-.span6{width:470px;}
-.span5{width:390px;}
-.span4{width:310px;}
-.span3{width:230px;}
-.span2{width:150px;}
-.span1{width:70px;}
-.offset12{margin-left:970px;}
-.offset11{margin-left:890px;}
-.offset10{margin-left:810px;}
-.offset9{margin-left:730px;}
-.offset8{margin-left:650px;}
-.offset7{margin-left:570px;}
-.offset6{margin-left:490px;}
-.offset5{margin-left:410px;}
-.offset4{margin-left:330px;}
-.offset3{margin-left:250px;}
-.offset2{margin-left:170px;}
-.offset1{margin-left:90px;}
+.container,
+.navbar-static-top .container,
+.navbar-fixed-top .container,
+.navbar-fixed-bottom .container {
+  width: 940px;
+}
+
+.span12 {
+  width: 940px;
+}
+
+.span11 {
+  width: 860px;
+}
+
+.span10 {
+  width: 780px;
+}
+
+.span9 {
+  width: 700px;
+}
+
+.span8 {
+  width: 620px;
+}
+
+.span7 {
+  width: 540px;
+}
+
+.span6 {
+  width: 460px;
+}
+
+.span5 {
+  width: 380px;
+}
+
+.span4 {
+  width: 300px;
+}
+
+.span3 {
+  width: 220px;
+}
+
+.span2 {
+  width: 140px;
+}
+
+.span1 {
+  width: 60px;
+}
+
+.offset12 {
+  margin-left: 980px;
+}
+
+.offset11 {
+  margin-left: 900px;
+}
+
+.offset10 {
+  margin-left: 820px;
+}
+
+.offset9 {
+  margin-left: 740px;
+}
+
+.offset8 {
+  margin-left: 660px;
+}
+
+.offset7 {
+  margin-left: 580px;
+}
+
+.offset6 {
+  margin-left: 500px;
+}
+
+.offset5 {
+  margin-left: 420px;
+}
+
+.offset4 {
+  margin-left: 340px;
+}
+
+.offset3 {
+  margin-left: 260px;
+}
+
+.offset2 {
+  margin-left: 180px;
+}
+
+.offset1 {
+  margin-left: 100px;
+}
 .row-fluid{width:100%;*zoom:1;}.row-fluid:before,.row-fluid:after{display:table;content:"";}
 .row-fluid:after{clear:both;}
 .row-fluid [class*="span"]{display:block;width:100%;min-height:28px;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;-ms-box-sizing:border-box;box-sizing:border-box;float:left;margin-left:2.127659574%;*margin-left:2.0750279950526314%;}
