@@ -65,8 +65,8 @@ jQuery(document).ready(function() {
                 }
                 return result;
             },
-            setPaymentType: function() {
-                if (jQuery(this).val() == '') {
+            setPaymentUI: function(elem) {
+                if (jQuery(elem).val() == '') {
                     if (jQuery('#paypal_payment').length > 0) {
                         jQuery('#paypal_payment').attr("checked", false);
                     }
@@ -77,9 +77,9 @@ jQuery(document).ready(function() {
                     newCardWrap.show();
                     billAddySelect.removeAttr('disabled');
                     //Enable Billing Inputs if credit card not selected
-                    this.disableAddress(false, 'hpcheckout-billing-form');
+                    checkoutPayment.disableAddress(false, 'hpcheckout-billing-form');
                     billFormInputs.each(function(i) {
-                        jQuery(this).val('');
+                        jQuery(elem).val('');
                     });
                 } else {
                     if (jQuery("#payment_form_paypal_express").length > 0) {
@@ -90,17 +90,24 @@ jQuery(document).ready(function() {
                     jQuery('.addresses').width(445);
                     //billingAddress.attr("disabled", true);
                     newCardWrap.hide();
-                    
-                    /*
-                    if (this.isCollapsed == false) {
-                        billAddySelect.val(jQuery("#address_" + jQuery(this).val()).val()).change();
+                    if (checkoutPayment.isCollapsed == false) {
+                        billAddySelect.val(jQuery("#address_" + jQuery(elem).val()).val()).change();
                         //Block Billing Inputs if credit card selected
                         this.disableAddress(true, 'hpcheckout-billing-form');
                         billAddySelect.attr('disabled', true);
                     } else {
                         this.disableAddress(false, 'hpcheckout-billing-form');
                         billAddySelect.removeAttr('disabled');
-                    }*/
+                    }
+                }
+            },
+            setPaymentType: function(elem) {
+                if (elem.id == "paypal_payment") {
+                    newCardWrap.hide();
+                } else {
+                    jQuery("[id='payment[cybersource_subid]']").attr("checked", false);
+                    jQuery('#billing-address-select').attr('disabled', false);
+                    newCardWrap.show();
                 }
             },
             autoDetectCard: function(ccNum) {                
