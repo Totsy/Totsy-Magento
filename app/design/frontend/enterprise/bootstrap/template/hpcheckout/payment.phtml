@@ -1,10 +1,6 @@
 <form action="" id="hpcheckout-payment-form">
-<?php echo $_REQUEST['formpath']; ?>
 <?php echo $this->getChildHtml('methods') ?>
 </form>
 <div class="spinner" style="display: none;">
     <img src="<?php echo $this->getSkinUrl('images/ajax-loader.gif') ?>">
 </div>
-<?php 
-//$this->getChild('methods')->setData('formpath', $temp); 
-?>

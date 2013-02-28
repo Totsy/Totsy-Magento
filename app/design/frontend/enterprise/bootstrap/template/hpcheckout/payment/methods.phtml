@@ -11,9 +11,18 @@
 <?php else: ?>	
 <div>
 <input type="hidden" name="payment[method]" id="payment_method" value="paymentfactory_tokenize" />
+<?php 
+
+$formPath = "paymentfactory/forma.phtml";
+
+if(isset($_GET['b'])) {
+	$formPath = "paymentfactory/form.phtml";
+} 
+
+?>
 </div>
 <?php $paymentCode = $methods[0]->getCode(); ?>
-<?php $this->setMethodFormTemplate($paymentCode, "paymentfactory/forma.phtml"); ?>
+<?php $this->setMethodFormTemplate($paymentCode, $formPath); ?>
 <?php foreach ($methods as $_method):  $_code = $_method->getCode() ?>
     <?php if ($html = $this->getPaymentMethodFormHtml($_method)): ?>
         <div>
