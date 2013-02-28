@@ -69,6 +69,13 @@ html.test .container .row {outline:1px dotted green;}
     position: absolute;
     top: 0;
 }
+
+/* @TODO: remove this safety fallback - pending fix of hacked core (Robot's temporary removal of .row)
+.row { margin-left:-10px;*zoom:1;}
+.row:before,.row:after{display:table;content:"";}
+.row:after {clear:both;}
+ */
+
 /* Alignment classes */
 .align-center {
     text-align: center;
@@ -288,19 +295,26 @@ body.customer-account-login .btn.btn-large {
     line-height: normal;
     padding: 9px 14px;
 }
-.btn-nogo {
-    /*     background-color: rgb(170, 170, 170); */
-}
 .btn.checkout {
     margin: 8px 0 0;
+    background-color: rgb(132, 132, 132);
+    color:#fff;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
 }
 .btn.checkout strong {
     background: url("../images/btn-arrow-s.png") no-repeat scroll 100% 46% transparent;
     padding-right: 9px;
 }
-.btn-primary:hover {
+.btn.is-active {
+    background-color:rgba(210,47,42,1);
+}
+.btn-primary:hover,
+.btn.is-active:hover {
     background-color:rgba(210,47,42,0.9);
     background-position: 0 50.5%;
+}
+.btn-nogo {
+    /*     background-color: rgb(170, 170, 170); */
 }
 .btn-nogo:hover {
     /*     background-color: rgb(170, 170, 170); */
@@ -463,9 +477,8 @@ header nav .cta strong em {color:#d84643; font-style:normal;}
 #usercart .top-cart.onCheckout .count-down-timer { /* @KLUDGE: when on onepage checkout */
     left:-160px;
 }
-body[class*='checkout'] #usercart .count-down-timer,
 body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
-    /*     display: none !important; */
+    display: none !important;
 }
 #usercart .count-down-timer strong {
     font-weight: normal;
@@ -558,7 +571,6 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
 
 /* checkout btn in non-mini-cart header */
 #header-checkoutBtn {
-    margin-top:3px;
     text-align: right;
 }
 

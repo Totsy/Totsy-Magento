@@ -147,13 +147,7 @@
             </ul>
             
             <div id="userUtils" class="span4 clearfix">
-                <div class="quick-access span2 alpha" id="header-user-info"></div>
-    
-                <?php if ($this->getRequest()->getModuleName()!=="checkout" && $this->getRequest()->getModuleName()!=="hpcheckout"): ?>
-                <div class="span2 alpha" id="header-checkoutBtn">
-                    <a class="btn checkout btn-primary" title="Checkout" href="<?php echo Mage::getUrl('checkout/cart')?>"><strong>Checkout</strong></a>
-                </div>     
-                <?php endif; ?>
+                <div class="quick-access" id="header-user-info"></div>
             </div>
                  
         </div>

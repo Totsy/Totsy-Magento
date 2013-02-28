@@ -78,9 +78,14 @@
             <div id="usercart-block-title" class="dropdown-toggle block-title" data-toggle="dropdown">
                 <strong id="cartHeader" class="hasItems">
                     <?php echo $_myCart ?>
+                    
+<!--
                     <?php if (!$is_nominal): ?>
                         <span><?php echo ' | '.Mage::helper('checkout')->formatPrice($this->getSubtotal()) ?><?php if ($_subtotalInclTax = $this->getSubtotalInclTax()): ?> / <?php echo ' | '.Mage::helper('checkout')->formatPrice($_subtotalInclTax) ?> <?php echo ' | '.Mage::helper('tax')->getIncExcText(true) ?><?php endif; ?></span>
                     <?php endif; ?>
+-->
+                    
+                    
                 </strong>
             </div>
 
@@ -156,7 +161,7 @@
 
         <?php else :?>
             <div id="usercart-block-title" class="block-title no-items">
-                <strong id="cartHeader" class="cartempty"><span><i class="icon-shopping-cart"></i> <span>0 Items</span></span></strong>
+                <strong id="cartHeader" class="cartempty"><span><i class="icon-shopping-cart"></i><?php echo $this->__('Your cart is empty.'); ?></span></strong>
             </div>
 
         <?php endif;?>
@@ -209,11 +214,11 @@
     <script type="text/javascript">
     // Cart related JS needs to stay here, load in ajax call
     jQuery(document).ready( function() {
-        // Show checkout button if items in cart
+        // "Active" styles applied to button if items in cart
         var itemsInCartBool = "<?php echo $_itemsInCart; ?>";
-        var headCheckoutBtn = jQuery('#header-checkoutBtn');
+        var headCheckoutBtn = jQuery('#header-checkoutBtn > .btn');
         if ( itemsInCartBool == true ) {
-            headCheckoutBtn.show();
+            headCheckoutBtn.addClass('is-active');
         }
 
         // Show minicart after item added, then hide after 5 sec
@@ -234,3 +239,7 @@
     <!-- end mini-cart -->
     <?php endif; ?>
 </div>
+
+<div class="FOOBAR" id="header-checkoutBtn">
+    <a class="btn checkout" title="Checkout" href="<?php echo Mage::getUrl('checkout/cart')?>"><strong>Checkout</strong></a>
+</div>     
