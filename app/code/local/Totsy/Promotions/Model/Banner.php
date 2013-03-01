@@ -3,7 +3,7 @@
 class Totsy_Promotions_Model_Banner extends Mage_Core_Model_Abstract {
     
     public static $path = 'import/banners/';
-    
+
     protected function _construct(){
         $this->_init('promotions/banner');
     }
@@ -49,11 +49,11 @@ class Totsy_Promotions_Model_Banner extends Mage_Core_Model_Abstract {
         if(!$this->hasIsActive()){
             throw new Exception('Active is required!');
         }
+        if( strlen($this->getData('is_active'))>1){
+            throw new Exception('Is Active can not be longer than 1 character. Error value: ' . $this->getData('name'));
+        }
         if(!preg_match("/^[0-1]+$/", $this->getData('is_active'))){
             throw new Exception('Active must be boolean. Error value: ' . $this->getData('is_active'));
-        }
-        if( strlen($this->getData('is_active'))>1){
-            throw new Exception('Name can not be longer than 1 character. Error value: ' . $this->getData('name'));
         }
 
         //Validate name
@@ -74,6 +74,7 @@ class Totsy_Promotions_Model_Banner extends Mage_Core_Model_Abstract {
                 throw new Exception('Image type is not allowed to upload . Error value: ' . $this->getData('image'));   
             }
         }
+
         //Validate link
         if($this->getData('link')){
 
@@ -88,6 +89,23 @@ class Totsy_Promotions_Model_Banner extends Mage_Core_Model_Abstract {
             }
         }
 
+        //Validate at_home
+        if(!$this->hasAtHome()){
+            throw new Exception('At Home Page is required!');
+        }
+        if( strlen($this->getData('at_home'))>1){
+            throw new Exception('At Home can not be longer than 1 character. Error value: ' . $this->getData('name'));
+        }
+        if(!preg_match("/^[0|1]+$/", $this->getData('at_home'))){
+            throw new Exception('At Home Page must be boolean. Error value: ' . $this->getData('is_active'));
+        }
+
+        //Validate at_events
+        $this->_validateAtEvenetsAndproducts('at_events');
+        
+        //Validate at_products
+        $this->_validateAtEvenetsAndproducts('at_products');
+        
         // validate start_date
         if (!$this->getData('start_at')){
             throw new Exception('Start Date is required!');
@@ -133,4 +151,45 @@ class Totsy_Promotions_Model_Banner extends Mage_Core_Model_Abstract {
         }
     }
 
+    protected function _validateAtEvenetsAndproducts($key){
+        $at = array();
+
+        if(!$this->getData($key)){
+            return;
+        }
+        
+        if (preg_match('/[^\d\n\,]/', $this->getData($key))){
+            $title = str_replace('_', ' ', $this->getData($key));
+            $title = ucwords($title);
+            throw new Exception(
+                $title.
+                ' can contain only new line, ',' and any numeric characters. '.
+                'Error value: ' . $this->getData($key)
+            );
+        }
+
+        if ( preg_match("/[\n]/", $this->getData($key))){
+            $at = explode("\n",$at);
+        }
+        if (empty($at)){
+            $at = $this->getData($key);
+        }
+        $at = explode(',', $at);
+        if (empty($at) || !is_array($at)){
+            return;
+        }
+        $ats = $at;
+        $at = array();
+        foreach ($ats as $t){
+            $t = trim($t);
+            if (empty($t) || !is_numeric($t)){
+                continue;
+            }
+            $at[] = $t;
+        }
+        if (empty($at)){
+            return;
+        }
+        $this->setData($key,implode(',', $at));
+    }
 }

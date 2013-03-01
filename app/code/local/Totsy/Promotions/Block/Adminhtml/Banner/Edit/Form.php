@@ -47,7 +47,35 @@ class Totsy_Promotions_Block_Adminhtml_Banner_Edit_Form
             'label'     => Mage::helper('promotions')->__('Link'),
             'name'      => 'link',
             'required'  => false,
-            'note'      => '255 characters max.'
+            'note'      => 'Followed with / character. 255 characters max.'
+        ));
+
+        $fieldset->addField('at_home', 'select', array(
+            'label'     => Mage::helper('promotions')->__('At Home Page'),
+            'name'      => 'at_home',
+            'value'     => '-1',
+            'values'    => array(
+                array('value'=>'-1', 'label'=> 'Please select ...'),
+                array('value'=>0, 'label'=> 'NO'),
+                array('value'=>1, 'label'=> 'YES'),
+            ),
+            'disabled'  => false,
+            'readonly'  => false,
+            'required'  => true
+        ));
+
+        $fieldset->addField('at_events', 'textarea', array(
+            'label'     => Mage::helper('promotions')->__('At Events Pages'),
+            'name'      => 'at_events',
+            'required'  => false,
+            'note'      => 'Provide a list of events ids separeted by \',\' or new line'
+        ));
+
+        $fieldset->addField('at_products', 'textarea', array(
+            'label'     => Mage::helper('promotions')->__('At Products Pages'),
+            'name'      => 'at_products',
+            'required'  => false,
+            'note'      => 'Provide a list of products ids separeted by \',\' or new line' 
         ));
 
         $fieldset->addField('start_at', 'date', array(

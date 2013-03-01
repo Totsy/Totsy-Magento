@@ -49,6 +49,26 @@ class Totsy_Promotions_Block_Adminhtml_Banner_Index_Grid extends Mage_Adminhtml_
             'width'         => '50px',
             'index'         => 'link'
         ));
+        $this->addColumn('at_home', array(
+            'header'        => Mage::helper('promotions')->__('At Home Page'),
+            'align'         => 'right',
+            'width'         => '50px',
+            'index'         => 'at_home',
+            'type'          => 'options',
+            'options'       => array( 0 => 'NO', 1 => 'YES')
+        ));
+        $this->addColumn('at_events', array(
+            'header'        => Mage::helper('promotions')->__('At Events Pages'),
+            'align'         => 'right',
+            'width'         => '50px',
+            'index'         => 'at_events',
+        ));
+        $this->addColumn('at_products', array(
+            'header'        => Mage::helper('promotions')->__('At Events Pages'),
+            'align'         => 'right',
+            'width'         => '50px',
+            'index'         => 'at_products',
+        ));
         $this->addColumn('start_at', array(
             'header'        => Mage::helper('promotions')->__('Start Date'),
             'align'         => 'center',
