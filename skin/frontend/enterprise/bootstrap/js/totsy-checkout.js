@@ -66,13 +66,17 @@ jQuery(document).ready(function() {
                 return result;
             },
             setPaymentUI: function(elem) {
+                
                 if (jQuery(elem).val() == '') {
                     if (jQuery('#paypal_payment').length > 0) {
                         jQuery('#paypal_payment').attr("checked", false);
                     }
+                    console.log("test 1");
+                    
                     if (jQuery("#payment_form_paypal_express").length > 0) {
                         jQuery("#payment_form_paypal_express").show();
                     }
+                    
                     jQuery("#cc_data").show();
                     newCardWrap.show();
                     billAddySelect.removeAttr('disabled');
@@ -85,6 +89,9 @@ jQuery(document).ready(function() {
                     if (jQuery("#payment_form_paypal_express").length > 0) {
                         jQuery("#payment_form_paypal_express").hide();
                     }
+                    
+                    jQuery('[name="payment[cc_type]"]').attr("checked", false);
+                                        
                     jQuery('#billing-address').show();
                     jQuery('#shipping-address').show();
                     jQuery('.addresses').width(445);
@@ -103,6 +110,16 @@ jQuery(document).ready(function() {
             },
             setPaymentType: function(elem) {
                 if (elem.id == "paypal_payment") {
+                    if (jQuery("#payment_form_paypal_express").length > 0) {
+                        jQuery("#payment_form_paypal_express").show();
+                        
+                        if(jQuery('#paypal_payment').attr("type")=="radio") {
+                            jQuery("[id='payment[cybersource_subid]']").attr("checked", false);
+                            jQuery('#paypal_payment').attr("checked", true);
+                        } else {
+                            jQuery('#paypal_payment').attr("checked", false);
+                        }
+                    }
                     newCardWrap.hide();
                 } else {
                     jQuery("[id='payment[cybersource_subid]']").attr("checked", false);
@@ -135,7 +152,7 @@ jQuery(document).ready(function() {
                         jQuery('[id="payment[cybersource_subid]"]').val(this.lastUsedAddressId);
                         jQuery('[id="payment[cybersource_subid]"]').attr("checked", true);
                     }
-                    jQuery('[id="payment[cc_type]"]').val("");
+                    jQuery('[name="payment[cc_type]"]').val("");
                     billAddySelect.attr('disabled', true);
                 }
             },
