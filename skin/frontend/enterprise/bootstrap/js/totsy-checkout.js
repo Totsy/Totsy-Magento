@@ -71,7 +71,6 @@ jQuery(document).ready(function() {
                     if (jQuery('#paypal_payment').length > 0) {
                         jQuery('#paypal_payment').attr("checked", false);
                     }
-                    console.log("test 1");
                     
                     if (jQuery("#payment_form_paypal_express").length > 0) {
                         jQuery("#payment_form_paypal_express").show();
@@ -133,7 +132,6 @@ jQuery(document).ready(function() {
                 jQuery("#paymentfactory_tokenize_cc_type .cc").children().each(function(i, k) {
                     var temp = jQuery("#" + k.id);
                     if (ccEntered == temp.attr('id')) {
-                        //console.log("found a match");
                         temp.removeClass(temp.attr('class')).addClass(temp.attr('data-active'));
                         isCard = true;
                     } else {
