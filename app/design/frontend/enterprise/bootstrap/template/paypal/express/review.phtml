@@ -85,7 +85,7 @@
 </div>
 <?php endif; ?>
 
-<div class="well addresses pull-right">
+<div class="well addresses<?php if ($this->getShippingAddress()) echo ' pull-right'; ?>">
     <h4 class="legend"><?php echo $this->__('Billing Information') ?></h4>
     <div class="col-1">
         <div class="box">
