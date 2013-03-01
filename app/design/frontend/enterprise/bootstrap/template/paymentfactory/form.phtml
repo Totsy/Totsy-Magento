@@ -47,7 +47,7 @@ if(count($fulfillmentTypes) > 1) {
         	<div class="hpcheckout-payment-title">
         	    <h4 class="legend">Your payment methods</h4>
         	</div>
-        	<div class="use-new-card-wrapper input-box validation-error pull-right">
+        	<div class="use-new-card-wrapper input-box validation-error pull-left">
         		<?php $_ccType = $this->getInfoData('cc_type') ?>
         		<?php $_cssClassNamesForCardTypes = Array(
                     'vi'=>'vb',
@@ -55,7 +55,7 @@ if(count($fulfillmentTypes) > 1) {
                     'mc'=>'mb',
                     'ae'=>'ab'
         		); ?>
-        		 <div class="cc_types" id="<?php echo $_code ?>_cc_type">
+        		 <div class="cc_types" id="<?php echo $_code ?>_cc_type pull-left">
         		 <?php $i=0; ?>
         		 <?php foreach ($this->getCcAvailableTypes() as $_typeCode => $_typeName): ?>
         		    <span class="cc cards">
@@ -78,16 +78,14 @@ if(count($fulfillmentTypes) > 1) {
                      <div style="clear:both; height:10px"></div>
         	     </div>  
             </div>     
-        <div>
+        <div class="pull-right">
             <?php if( $customerId  ): ?>
-            <div>
-                <div class="cc_security pull-right">
+                <div class="cc_security">
                     <div class="cc_secure_text pull-left">Totsy ensures your information is<br> private and secure!</div>
                     <div class="cc_secure_icon">
                         <img src="/skin/frontend/enterprise/bootstrap/images/iconmonstr-lock-7-icon.png" width="40" height="40">
                     </div>
                 </div>
-            </div>
             <?php endif ?>    
         </div>
         <div style="clear:both"></div>
