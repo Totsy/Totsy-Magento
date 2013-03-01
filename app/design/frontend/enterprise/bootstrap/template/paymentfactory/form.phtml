@@ -55,7 +55,7 @@ if(count($fulfillmentTypes) > 1) {
                     'mc'=>'mb',
                     'ae'=>'ab'
         		); ?>
-        		 <div class="cc_types" id="<?php echo $_code ?>_cc_type pull-left">
+        		 <div class="cc_types pull-left" id="<?php echo $_code ?>_cc_type">
         		 <?php $i=0; ?>
         		 <?php foreach ($this->getCcAvailableTypes() as $_typeCode => $_typeName): ?>
         		    <span class="cc cards">
@@ -77,8 +77,9 @@ if(count($fulfillmentTypes) > 1) {
                     <input type="hidden" id="payment[cc_type]" name="payment[cc_type]" value=""> 
                      <div style="clear:both; height:10px"></div>
         	     </div>  
-            </div>     
-        <div class="pull-right">
+            </div> 
+        <div>        
+        <div>
             <?php if( $customerId  ): ?>
                 <div class="cc_security">
                     <div class="cc_secure_text pull-left">Totsy ensures your information is<br> private and secure!</div>
@@ -87,6 +88,7 @@ if(count($fulfillmentTypes) > 1) {
                     </div>
                 </div>
             <?php endif ?>    
+        </div>
         </div>
         <div style="clear:both"></div>
         <?php if($profiles && $profilesCounter > 0 ) { ?>
