@@ -77,7 +77,7 @@
                     }
                     $url = Mage::getBaseUrl().$url;
                 ?>
-                <?php if ($hasProduct): ?>
+                <?php if ($hasProduct && $endcountRaw > Mage::getSingleton('core/date')->timestamp()): ?>
                     <li class="span3 catalog-event event-counter-<?php echo $timer;?>">
                         <a href="<?php echo $url; ?>" class="thumbnail">
                             <hgroup>

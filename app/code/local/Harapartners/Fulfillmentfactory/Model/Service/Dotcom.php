@@ -214,7 +214,7 @@ SQL;
 
         $this->submitOrdersToFulfill($orders, true);
 
-        return count($orders);
+        return count($results);
     }
 
     /**
