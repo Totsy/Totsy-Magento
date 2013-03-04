@@ -1,0 +1,29 @@
+<div id="myModal" class="modal hide fade">
+    <div class="modal-header">
+    </div>
+    <div class="modal-body">
+        <div class="validation-form-container">
+            <div class="fieldset">
+                <?php echo $this->getChildHtml('terms_text'); ?>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class=" btn btn-nogo" style="float:left;" name="disagree" id="disagree">No Thanks</button>
+                <button type="button" class=" btn btn-primary" name="agree" id="agree">Agree</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script type='text/javascript'>//<![CDATA[
+jQuery(window).load(function(){
+    jQuery('#myModal').modal({
+        keyboard: false,
+        backdrop: 'static'
+    })
+    jQuery('#agree').bind('click', function() {
+        window.location.href = '<?php echo $this->getUrl('addplus/index/agree'); ?>';
+    });
+    jQuery('#disagree').bind('click', function() {
+        window.location.href = '<?php echo $this->getUrl('addplus/index/disagree'); ?>';
+    });
+});//]]>
+</script>

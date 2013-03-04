@@ -864,6 +864,9 @@ body.catalog-category-view .thumbnails > li {position: relative;}
     font-weight: bold;
     padding: 10px 0;
 }
+.nominal-checkout #payment_form_paypal_express .form-alt {
+    display: none;
+}
 #hpcheckout-payment-wrapper {
     margin-left: 0px !important;
 }
