@@ -1405,10 +1405,10 @@ a.invite-btn {
 /* Validation / Error Classes */
 .validation-advice {
     position: relative; z-index: 100; /* displays msg on top of checkout btn on pdp - quicky fix */
-    background:#FEEFB3; 
-    color:#9F6000; 
-    padding:10px; 
-    margin:-10px 0 10px 0px; 
+    background:#FEEFB3;
+    color:#9F6000;
+    padding:10px;
+    margin:-10px 0 10px 0px;
     border: 1px solid #CCCCCC;
 }
 
@@ -1945,7 +1945,7 @@ html.plus-html#stickywrap { padding-top: 35px; }
 }
 
 .plus .dark {
-     color: #000;
+    color: #000;
 }
 
 .plus .dashboard-icon {
@@ -2169,6 +2169,42 @@ html.plus-html#stickywrap { padding-top: 35px; }
     background: url(/skin/frontend/enterprise/bootstrap/images/plus/cancel_plus.png) no-repeat 0 0;
     width: 244px;
     height: 29px;
+}
+
+.plus ul.exclusives {
+    margin: 0;
+}
+
+.plus ul.exclusives li a {
+    text-decoration: none;
+}
+
+.plus ul.exclusives li a:hover {
+    text-decoration: none;
+}
+
+.plus ul.exclusives li a div.event-container {
+    position: relative;
+    overflow: hidden;
+}
+
+.plus ul.exclusives li a div.event-container img {
+    position: relative;
+}
+
+.plus ul.exclusives li a div.event-container .exclusive-description {
+    position: relative;
+    background: rgba(0,0,0,0.35);
+    height: 28px;
+    bottom: 38px;
+    color: #FFF;
+    text-decoration: none;
+    padding: 10px 0 0 8px;
+}
+
+.plus ul.exclusives li a div.event-container .exclusive-description .name {
+    font-weight: bold;
+    font-size: 16px;
 }
 
 .category-discount-vault .dialog, .category-entertainment-savings .dialog {
