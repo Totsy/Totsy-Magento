@@ -1,4 +1,4 @@
-/**
+f/**
  * @Base styles for the Magento Bootstrap theme
  *
  * @Typography notes
@@ -8,7 +8,7 @@
  * - Dark Grey      subheadings             #636466
  * - Medium Grey    copy font               #999999
  * - Light Grey     borders                 #e5e5e5 | rgba(229,229,229,1)
- * - Green          buttons                 #c1d82f or #adc222 | rgba(173,194,34,1)
+ * - Green          buttons                 #c1cc00 
  * - Blue           dotted lines!           #68a8fe
  */
 
@@ -152,6 +152,11 @@ h4 {text-transform: uppercase;}
     box-shadow: 0 0px 0px rgba(0, 0, 0, 0.075);
     display: block;
     padding: 10px;
+}
+.boxofdoom {
+    background: #dddbdd;
+    color: #636466;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.85);
 }
 .table-bordered,
 .fast-ship-table-bordered,
@@ -335,7 +340,7 @@ body.customer-account-login .btn.btn-large {
 
 /* labels / badges - overrides bootstrap */
 .label-success, .badge-success {
-    background-color: #adc222;
+    background-color: #c1cc00;
 }
 
 /**
@@ -351,8 +356,21 @@ body.customer-account-login .btn.btn-large {
     padding:3px 0;
     min-height: 54px;
 }
+#masthead > .container {
+    position: relative;
+}
 #logo {margin-left:0;}
 
+.header-utils {
+    position: absolute; bottom: 0; right: 0;
+    border:1px dotted #c00;
+}
+.header-cta {
+    position: absolute; top: 0; right: 0;
+    background: #c1cc00;
+    border-radius: 0 0 10px 10px;
+    border:1px dotted #c00;
+}
 /* #userAccount - my account module */
 #userAccount > a:hover {text-decoration: none;}
 
@@ -362,7 +380,6 @@ body.customer-account-login .btn.btn-large {
     border-top: 2px dashed #68a8fe;
     border-bottom: 2px dashed #68a8fe;
 }
-.navbar .nav {margin:0;}
 .navbar .nav > li {
     padding: 8px 9px 9px 10px;
     background: url('../images/div-nav.png') 0 50% no-repeat;
@@ -429,17 +446,13 @@ header nav .cta strong {display: block;}
 header nav .cta strong em {color:#d84643; font-style:normal;}
 
 /**
- * @User Utils
+ * @User Info
  * - global in header: checkout btn / timer / minicart
  */
-#userUtils {
-    background: #dddbdd;
-}
 
 /* header cart */
 #usercart {
     position: relative;
-    float:right;
 }
 #usercart-block-title {
     margin-top:-1px; padding-right:8px;
@@ -488,11 +501,12 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
     }
 }
 
-#cartHeader.hasItems {display: block; white-space: nowrap;}
+#cartHeader.hasItems {
+    display: block; 
+    white-space: nowrap;
+}
 #cartHeader.cartempty {
-    position: relative; top:-6px; left: 25px; /* a bit hackish but gets it done */
     background-image: none;
-    color:#999;
     font-size:13px; font-weight: normal;
     line-height: 14px;
     text-transform: none;
@@ -517,6 +531,12 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
     clear: none;
     padding: 0;
     color:#d22f2a;
+}
+.mini-product-image {
+    width:30px;
+}
+.mini-product-image img {
+    width: 100%;
 }
 #topCartContent .minifoot {
     position: absolute; bottom: 0; left: 0;
@@ -562,6 +582,7 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
 
 /* checkout btn in non-mini-cart header */
 #header-checkoutBtn {
+    position: absolute; bottom: 0; right: 0;
     text-align: right;
 }
 
@@ -1734,7 +1755,6 @@ body.catalog-category-view .price-box .special-price {
 }
 #product_addtocart_form {
     padding:2px 8px 4px;
-    background:#dddbdd;
 }
 #product_addtocart_form .availability {
     font-weight: bold;

@@ -45,9 +45,9 @@ if($product->getId() == Mage::getStoreConfig('Crown_Club/clubgeneral/club_produc
 <div class="item" style="height:48px !important">
     <div style="float:left; border: 0px solid; margin:0px">
     <?php if ($this->hasProductUrl()): ?>
-        <a href="<?php echo $this->getProductUrl()?>" title="<?php echo $this->htmlEscape($this->getProductName()) ?>" class="product-image"><img src="<?php echo $this->getProductThumbnail()->resize(30)->setWatermarkSize('30x10'); ?>" /></a>
+        <a href="<?php echo $this->getProductUrl()?>" title="<?php echo $this->htmlEscape($this->getProductName()) ?>" class="mini-product-image"><img src="<?php echo $this->getProductThumbnail()->resize(30)->setWatermarkSize('30x10'); ?>" /></a>
     <?php else: ?>
-        <span class="product-image">
+        <span class="mini-product-image">
             <img src="<?php echo $this->getProductThumbnail()->resize(30)->setWatermarkSize('30x10'); ?>"  title="<?php echo $this->htmlEscape($this->getProductName()) ?>" />
         </span>
     <?php endif; ?>
