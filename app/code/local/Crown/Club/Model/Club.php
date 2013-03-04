@@ -34,87 +34,16 @@ class Crown_Club_Model_Club extends Mage_Core_Model_Abstract {
 			if (!$helper->moduleSetupComplete()) return array();
 			$clubCustomerGroup = $helper->getClubCustomerGroup();
 
-			$date = Zend_Date::now()->toString();
-
-			$filterClubExpirationDate = array();
-			$filterClubExpirationDate[] = array('attribute' => 'club_expiration_date', 'lteq' => $date, 'date' => true);
-			$filterClubExpirationDate[] = array('attribute' => 'club_expiration_date', 'null' => 'null');
-
 			$customers = Mage::getModel('customer/customer')->getCollection()
 							->addAttributeToSelect('name')
-							->addAttributeToSelect('club_expiration_date','left')
-							->addAttributeToFilter($filterClubExpirationDate)
 							->addAttributeToFilter('group_id', $clubCustomerGroup->getId());
-
+            $customers->getSelect()->where('not exists {?)',new Zend_Db_Expr(
+                "select profile_id from sales_recurring_profile srp where ce.entity_id=srp.customer_id and srp.state='active'"
+            ));
 			$this->setData('expired_customers', $customers);
 		}
 
 		return $this->getData('expired_customers');
-	}
-
-	/**
-	 * Gets a list of expired membership accounts that are still within the grace period.
-	 * @since 0.1.0
-	 * @return array
-	 */
-	public function getExpiredMembersInGracePeriod() {
-		if ( !$this->getData('expired_customers_in_grace_period') ) {
-			$helper = Mage::helper('crownclub');
-			if (!$helper->moduleSetupComplete()) return array();
-			$clubCustomerGroup = $helper->getClubCustomerGroup();
-
-			$gracePeriod = $helper->getGracePeriod() * -1;
-
-			$date = Zend_Date::now()->addDay($gracePeriod)->toString();
-
-			$filterClubExpirationDate = array();
-			$filterClubExpirationDate[] = array('attribute' => 'club_expiration_date', 'lteq' => $date, 'date' => true);
-			$filterClubExpirationDate[] = array('attribute' => 'club_expiration_date', 'null' => 'null');
-
-			$customers = Mage::getModel('customer/customer')->getCollection()
-							->addAttributeToSelect('name')
-							->addAttributeToSelect('club_expiration_date','left')
-							->addAttributeToFilter($filterClubExpirationDate)
-							->addAttributeToFilter('group_id', $clubCustomerGroup->getId());
-
-			$this->setData('expired_customers_in_grace_period', $customers);
-		}
-
-		return $this->getData('expired_customers_in_grace_period');
-	}
-
-	/**
-	 * Gets a list of expired membership accounts that are past the grace period.
-	 * @since 0.1.0
-	 * @return array
-	 */
-	public function getExpiredMembersOutOfGracePeriod() {
-		if ( !$this->getData('expired_customers_out_of_grace_period') ) {
-			$helper = Mage::helper('crownclub');
-			if (!$helper->moduleSetupComplete()) return array();
-			$clubCustomerGroup = $helper->getClubCustomerGroup();
-
-			$gracePeriod = $helper->getGracePeriod() * -1;
-
-			$gracePeriodDate = Zend_Date::now()->addDay($gracePeriod)->toString();
-
-			$date = Zend_Date::now()->toString();
-
-			$filterClubExpirationDate = array();
-			$filterClubExpirationDate[] = array('attribute' => 'club_expiration_date', 'gt' => $gracePeriodDate, 'date' => true);
-			$filterClubExpirationDate[] = array('attribute' => 'club_expiration_date', 'lteq' => $date, 'date' => true);
-			$filterClubExpirationDate[] = array('attribute' => 'club_expiration_date', 'null' => 'null');
-
-			$customers = Mage::getModel('customer/customer')->getCollection()
-							->addAttributeToSelect('name')
-							->addAttributeToSelect('club_expiration_date','left')
-							->addAttributeToFilter($filterClubExpirationDate)
-							->addAttributeToFilter('group_id', $clubCustomerGroup->getId());
-
-			$this->setData('expired_customers_out_of_grace_period', $customers);
-		}
-
-		return $this->getData('expired_customers_out_of_grace_period');
 	}
 
 	/**
