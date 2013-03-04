@@ -91,7 +91,11 @@ class Harapartners_Rushcheckout_Model_Observer
                 ),
                 'hpcheckout' => array(
                     'checkout',
-                )
+                ),
+                'addplus' => array(
+                    'index',
+                ),
+
             );
 
             $excludedActions = array(
@@ -106,12 +110,14 @@ class Harapartners_Rushcheckout_Model_Observer
             $controllerName = Mage::app()->getRequest()->getControllerName();
             $moduleName = Mage::app()->getRequest()->getModuleName();
             $actionName = Mage::app()->getRequest()->getActionName();
+            Mage::log("controller:{$controllerName}, module: {$moduleName}");
 
             foreach ($moduleArrary as $module => $controllers) {
                 if (strcasecmp($moduleName, $module) == 0 &&
                     in_array(strtolower($controllerName), $controllers) &&
                     !in_array(strtolower($actionName), $excludedActions)
                 ) {
+                    Mage::log('this is a valid module to check');
                     $this->checkLastValidation($session);
                 }
             }
