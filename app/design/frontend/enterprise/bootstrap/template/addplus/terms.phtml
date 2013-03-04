@@ -1,6 +1,3 @@
-<div class="hero-unit">
-
-</div>
 <div id="myModal" class="modal hide fade">
     <div class="modal-header">
     </div>
@@ -15,17 +12,18 @@
             </div>
         </div>
     </div>
-    <script type='text/javascript'>//<![CDATA[
-    jQuery(window).load(function(){
-        jQuery('#myModal').modal({
-            keyboard: false,
-            backdrop: 'static'
-        })
-        jQuery('#agree').bind('click', function() {
-            window.location.href = '<?php echo $this->getUrl('addplus/index/agree'); ?>';
-        });
-        jQuery('#disagree').bind('click', function() {
-            window.location.href = '<?php echo $this->getUrl('addplus/index/disagree'); ?>';
-        });
-    });//]]>
-    </script>
+</div>
+<script type='text/javascript'>//<![CDATA[
+jQuery(window).load(function(){
+    jQuery('#myModal').modal({
+        keyboard: false,
+        backdrop: 'static'
+    })
+    jQuery('#agree').bind('click', function() {
+        window.location.href = '<?php echo $this->getUrl('addplus/index/agree'); ?>';
+    });
+    jQuery('#disagree').bind('click', function() {
+        window.location.href = '<?php echo $this->getUrl('addplus/index/disagree'); ?>';
+    });
+});//]]>
+</script>
