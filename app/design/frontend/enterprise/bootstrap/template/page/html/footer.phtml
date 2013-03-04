@@ -24,27 +24,33 @@
  * @license     http://www.magentocommerce.com/license/enterprise-edition
  */
 ?>
+<style>
+    .footer-customer-service {
+    padding:20px 0px; background:#000;
+    }
+    .footer-payment-logos {
+    text-align:center;
+    }
+    .footer-copy {
+    color:#fff;
+    }
+</style>
 <div class="clear"></div>
 <!-- clear the content -->
 <footer>
+<div style="padding:0px 0px 20px 0px; background:#c2ecff;">
     <div class="container">
-    <div class="span4 alpha">
+    <div class="span3 alpha">
                 <h4>Why Totsy</h4>
-                <ul class="bullet-checks">
-                    <li>Always Low Prices</li>
-                    <li>Always Something New to Discover</li>
-                    <li>Great Values for the Whole Family</li>
-                    <li>Quality Brands plus New Favorites</li>
-                    <li>Exclusive Offers and Events</li>
+                <ul class="bullet-checks_">
+                    <li><i class="icon-ok"></i> Always Low Prices</li>
+                    <li><i class="icon-ok"></i> Always Something New to Discover</li>
+                    <li><i class="icon-ok"></i> Great Values for the Whole Family</li>
+                    <li><i class="icon-ok"></i> Quality Brands plus New Favorites</li>
+                    <li><i class="icon-ok"></i> Exclusive Offers and Events</li>
                 </ul>
             </div>
             <div class="span8">
-            <div class="span2 alpha">
-                <h4>Our Apps</h4>
-                <br />
-                <a href="https://itunes.apple.com/us/app/totsy/id572913004?mt=8" target="_blank"><img alt="Get the Totsy.com App on iPhone" src="/skin/frontend/enterprise/bootstrap/images/app-store-banner.png" style="padding:0px 0px 5px 0px; width:120px; margin:-15px 0px 0px 0px;"></a>
-                 <a href="https://play.google.com/store/apps/details?id=com.totsy&hl=en" target="_blank"><img alt="Get the Totsy.com App on Android" src="/skin/frontend/enterprise/bootstrap/images/google-play-banner.png" style="width:120px;"></a>
-            </div>
             <div class="span2">
                 <h4>Company</h4>
                 <ul>
@@ -56,7 +62,7 @@
                 </ul>
             </div>
             <div class="span2">
-                <strong>Customer Service</strong>
+                <h4>Customer Service</h4>
                 <ul>
                     <li><a href="http://totsy.custhelp.com/app/home" title="FAQ">FAQ</a></li>
                     <li><a href="http://totsy.custhelp.com/app/ask" title="Contact Us">Contact Us</a></li>
@@ -65,7 +71,7 @@
                 </ul>
             </div>
             <div class="span2">
-                <strong>Customer Service</strong>
+                <h4>Customer Service</h4>
                 <ul>
                     <li><a href="http://totsy.custhelp.com/app/home" title="FAQ">FAQ</a></li>
                     <li><a href="http://totsy.custhelp.com/app/ask" title="Contact Us">Contact Us</a></li>
@@ -73,26 +79,34 @@
                 <li><a href="/pages/privacy/" title="Privacy Policy">Privacy Policy</a></li>
                 </ul>
             </div>
+            <div class="span2 alpha">
+                <h4>Our Apps</h4>
+                <br />
+                <a href="https://itunes.apple.com/us/app/totsy/id572913004?mt=8" target="_blank"><img alt="Get the Totsy.com App on iPhone" src="/skin/frontend/enterprise/bootstrap/images/app-store-banner.png" style="padding:0px 0px 5px 0px; width:120px; margin:-15px 0px 0px 0px;"></a>
+                 <a href="https://play.google.com/store/apps/details?id=com.totsy&hl=en" target="_blank"><img alt="Get the Totsy.com App on Android" src="/skin/frontend/enterprise/bootstrap/images/google-play-banner.png" style="width:120px;"></a>
+            </div>
             </div>
     </div>
-    <div class="container">
-    <div class="span8 alpha">
-            <a href="//privacy-policy.truste.com/click-with-confidence/wps/en/www.totsy.com/seal_m" title="TRUSTe online privacy certification" target="_blank"><img src="//privacy-policy.truste.com/certified-seal/wps/en/www.totsy.com/seal_m.png" alt="TRUSTe online privacy certification" style="padding:5px; width:120px;"/></a> <img src="<?php echo $this->getSkinUrl('images/paypal_logo_footer.png') ?>"  style="padding:5px; width:120px;"/>
-            </div>
-    <div class="span4 align-right">
-                <ul>
-                    <li><a href="http://www.facebook.com/totsy" target="_blank"><img src="<?php echo $this->getSkinUrl('images/icons_social_footer_facebook.png') ?>"  style="width:36px;"/></a> 
+    </div>
+    <div class="footer-customer-service">
+    <div class="container" style="color:#fff; text-align:center; font-size:20px;"><a href="http://totsy.custhelp.com/app/home" target="_blank" class="btn btn-large btn-primary" style="padding:10px; margin:0px 8px; background-image:none; font-size:20px;">ONLINE HELP</a> CALL US TOLL FREE 1-888-247-9444 <a href="http://www.facebook.com/totsy" target="_blank"><img src="<?php echo $this->getSkinUrl('images/icons_social_footer_facebook.png') ?>"  style="width:36px;"/></a> 
                     <a href="http://twitter.com/mytotsy" target="_blank"><img src="<?php echo $this->getSkinUrl('images/icons_social_footer_twitter.png') ?>"  style="width:36px;"/></a>
                     <a href="http://pinterest.com/totsyfan/" target="_blank"><img src="<?php echo $this->getSkinUrl('images/icons_social_footer_pinterest.png') ?>"  style="width:36px;"/></a>
                     <a href="http://www.youtube.com/totsyfan" target="_blank"><img src="<?php echo $this->getSkinUrl('images/icons_social_footer_youtube.png') ?>"  style="width:36px;"/></a>
                     <a href="http://www.youtube.com/totsyfan" target="_blank"><img src="<?php echo $this->getSkinUrl('images/icons_social_footer_tumblr.png') ?>"  style="width:36px;"/></a>
-                    <a href="http://www.youtube.com/totsyfan" target="_blank"><img src="<?php echo $this->getSkinUrl('images/icons_social_footer_instagram.png') ?>"  style="width:36px;"/></a></li>
-                    
-                </ul></div>
-    </div>
+                    <a href="http://www.youtube.com/totsyfan" target="_blank"><img src="<?php echo $this->getSkinUrl('images/icons_social_footer_instagram.png') ?>"  style="width:36px;"/></a></div>
+    <div class="footer-payment-logos">
+    <div class="container">
+            <a href="//privacy-policy.truste.com/click-with-confidence/wps/en/www.totsy.com/seal_m" title="TRUSTe online privacy certification" target="_blank"><img src="//privacy-policy.truste.com/certified-seal/wps/en/www.totsy.com/seal_m.png" alt="TRUSTe online privacy certification" style="padding:5px; width:120px;"/></a> 
+            <!-- PayPal Logo -->
+            <a href="https://www.paypal.com/webapps/mpp/paypal-popup" title="How PayPal Works" onclick="javascript:window.open('https://www.paypal.com/webapps/mpp/paypal-popup','WIPaypal','toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=1060, height=700'); return false;">
+            <img src="<?php echo $this->getSkinUrl('images/paypal_logos.png') ?>" /></a><!-- PayPal Logo -->
+            <img src="<?php echo $this->getSkinUrl('images/paypal_logo_verified.png') ?>" />
+</div>
+</div>
 <div class="container">
-                   <div class="span4 alpha">
-                    <p>&copy;2013 Totsy.com. All Rights Reserved.</p>
-                </div>
+    <div class="span12">
+        <p>&copy;2013 Totsy, Inc. All rights reserved.</p>
     </div>
+</div>
 </footer>

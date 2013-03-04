@@ -22,7 +22,7 @@
  * 
  */
 ?>
-<?php    
+<?php
     $indexDataObj 	= 	$this->getIndexDataObject();
     $baseUrl 		= 	Mage::getBaseUrl();
     $maxPerSend 	= 	0;
@@ -106,13 +106,7 @@
                                 : BP . DS . 'skin' . DS . 'frontend' . DS . 'enterprise ' . DS . 'harapartners' . DS . 'images' . DS . 'catalog' . DS . 'product' . DS . 'placeholder' . DS . 'small_image.jpg';
                             ?>
                             <span class="event-link">
-                                <img src="<?php echo Mage::helper('service/image')->loadImageFile($imgFile)
-->constrainOnly(false)
-->keepAspectRatio(TRUE)
-->keepFrame(FALSE)
-->resize(550,550)
-?>" alt="<?php echo $live['name'];?>
-"  />
+                                <img src="<?php echo Mage::helper('service/image')->loadImageFile($imgFile)->constrainOnly(false)->keepAspectRatio(TRUE)->keepFrame(FALSE)->resize(550,550) ?>" alt="<?php echo $live['name'];?>" />
                             </span>
                             
                             <?php $timer++; ?>
@@ -131,7 +125,7 @@
     <?php endif; ?>
     
     <?php // ENDING SOON - not functioning, no $endingArray exists - just a placeholder var and code for now ?>
-    <?php $endingArray = ''; ?>
+    <?php $endingArray = '1'; ?>
     <?php if (!!$endingArray && !empty($endingArray)): ?>
         <section id="events-ending" class="events-grid">
             <header class="page-header">

@@ -32,6 +32,27 @@
     <!-- begin masthead -->
     <div id="masthead">
         <div class="container">   
+            <div class="visible-phone">
+            <h1 id="logo-phone" class="span2"><a href="<?php
+            echo $this->getUrl( 'event/?ref=logo' );
+            ?>" title="<?php
+            echo $this->getLogoAlt();
+            ?>"><img src="/skin/frontend/enterprise/bootstrap/images/icon-totsyphone.png" alt="<?php
+            echo $this->getLogoAlt();
+            ?>" style="max-width:90px; padding:5px;"/></a></h1>
+            </div>
+            <div class="visible-tablet">
+            <h1 id="logo-tablet" class="span2"><a href="<?php
+            echo $this->getUrl( 'event/?ref=logo' );
+            ?>" title="<?php
+            echo $this->getLogoAlt();
+            ?>"><img src="<?php
+            echo $this->getLogoSrc();
+            ?>" alt="<?php
+            echo $this->getLogoAlt();
+            ?>" style="max-width:120px; padding:5px;"/></a></h1>
+            </div>
+            <div class="visible-desktop">
             <h1 id="logo" class="span2"><a href="<?php
             echo $this->getUrl( 'event/?ref=logo' );
             ?>" title="<?php
@@ -41,13 +62,13 @@
             ?>" alt="<?php
             echo $this->getLogoAlt();
             ?>" style="max-width:120px; padding:5px;"/></a></h1>
-            <div class="visible-phone">You are on phone. </div>
-<div class="visible-tablet">You are on tablet. </div>
-<div class="visible-desktop">You are on desktop. </div>
-        
+            </div>
+
+<div class="visible-tablet">You are on tablet.</div>
+<div class="visible-desktop">You are on desktop.</div>
             <ul id="userUtils" class="span4 offset6">
                 <li id="userAccount" class="dropdown">
-                    <a href="/customer/account/#" class="dropdown-toggle" data-toggle="dropdown"><img src="/skin/frontend/enterprise/bootstrap/images/iconmonstr-user-icon.png" width="20" height="20" style="margin-top:-5px;" /> My Account</a>
+                    <a href="/customer/account/#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-user"></i> My Account</a>
                     <ul class="dropdown-menu">
                         <li><a href="/customer/account/">Account Dashboard</a></li>
                         <li><a href="/customer/account/edit/">Account Information</a></li>
@@ -86,7 +107,7 @@
                     <?php foreach($optionArray as $option):?>
                         <li><a href="<?php echo $this->getBaseUrl();?>category/<?php echo $option['label']?>" title="<?php echo $this->__($option['label']) ?>"><?php echo $this->__($option['label']) ?></a></li>
                     <?php endforeach;?>
-                    </ul>        
+                    </ul>
                 </li>
                 <li id="navByAge" class="dropdown navShop">
                     <a href="#"><em>SHOP BY<br/>AGE</em></a>
@@ -126,9 +147,9 @@
             <?php if ($this->getRequest()->getModuleName()!=="checkout" && $this->getRequest()->getModuleName()!=="hpcheckout"): ?>
             <div class="span2 offset2" id="header-checkoutBtn">
                 <a class="btn checkout btn-primary" title="Checkout" href="<?php echo Mage::getUrl('checkout/cart')?>"><strong>Checkout</strong></a>
-            </div>     
-            <?php endif; ?>       
-<!--
+            </div>
+            <?php endif; ?>
+            <!--
             <div class="cta span2 offset2">
                 <a class="cta-link" href="<?php echo $this -> getBaseUrl();?>invitation">INVITE FRIENDS <strong>GET A <em>$15</em> CREDIT</strong></a><?php echo $this->getAdditionalHtml() ?>
             </div>
