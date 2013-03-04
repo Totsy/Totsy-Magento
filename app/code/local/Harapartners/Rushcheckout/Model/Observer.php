@@ -91,7 +91,11 @@ class Harapartners_Rushcheckout_Model_Observer
                 ),
                 'hpcheckout' => array(
                     'checkout',
-                )
+                ),
+                'addplus' => array(
+                    'index',
+                ),
+
             );
 
             $excludedActions = array(

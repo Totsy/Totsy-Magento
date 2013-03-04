@@ -64,6 +64,7 @@
         <?php endif; ?>
             <ul class="thumbnails">
             <?php foreach ($liveArray as $live): ?>
+                <?php if(!isset($live['club_only_event']) || !$live['club_only_event']) : ?>
                 <?php
                     $endcountRaw = strtotime($live['event_end_date']);
                     $endcount = date("F j, Y, G:i:s", $endcountRaw);
@@ -119,6 +120,7 @@
                   </div>
                     </li>
                 <?php endif; ?>
+                <?php endif; ?>
             <?php endforeach; ?>
             </ul>
         </section><!-- /#events-live -->
@@ -145,6 +147,7 @@
             </header>
             <ul class="thumbnails">
             <?php foreach ($upcomingArray as $up): ?>
+                <?php if(!isset($live['club_only_event']) || !$up['club_only_event']) : ?>
                 <?php
                     $endcountRaw = strtotime($up['event_start_date']);
                     $endcount = date("F j, Y, G:i:s", $endcountRaw);
@@ -171,6 +174,7 @@
                         <p class="opens_in counter" id="time2-<?php echo $timer ?>" data-enddate="<?php echo $endcount?>" data-status="upcoming" data-countertype="up-event-counter"  data-id="<?php echo $timer ?>"></p>
                     </div>
                 </li>
+            <?php endif; ?>
             <?php endforeach; ?>
             </ul>
         </section><!-- /#events-upcoming -->
