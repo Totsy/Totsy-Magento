@@ -7,8 +7,9 @@ jQuery(document).ready(function($) {
     $('#placeOrderBtn').bind('click', function(e) {
     	// set form controls back to enabled so POST will work
     	$('input[disabled], select[disabled]', '#hpcheckout-billing-form').removeAttr('disabled');
+        litlePayment.save();
         // ...then submit form using hpcheckout method
-        hpcheckout.submit();
+        //hpcheckout.submit();
     });
 });
 </script>

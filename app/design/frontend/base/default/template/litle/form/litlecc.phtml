@@ -45,7 +45,7 @@ $_id = $_time . substr($_session,13);
 <?php $_code=$this->getMethodCode() ?>
 <ul class="form-list" id="payment_form_<?php echo $_code ?>"
 	style="display: none;">
-
+<input type="hidden" name="payment[method]" id="payment_method" value="creditcard" />
 <?php if ($this->getVaultEnabled()): ?>
 	<?php if ($this->hasStoredCards()): ?>
 	<li>
@@ -82,6 +82,7 @@ $_id = $_time . substr($_session,13);
 	<?php endif; ?>
 <?php endif; ?>
     <li class="new-card">
+        <h4 class="legend">Add a payment method</h4>
         <label id="creditcard_cc_type_label" for="<?php echo $_code ?>_cc_type" class="required"><em>*</em><?php echo $this->__('Credit Card Type') ?></label>
         <div class="input-box">
             <select id="<?php echo $_code ?>_cc_type" name="payment[cc_type]" class="required-entry validate-cc-type-select">
@@ -94,13 +95,12 @@ $_id = $_time . substr($_session,13);
         </div>
     </li>
     <li class="new-card">
-        <label id="creditcard_cc_number_label" for="<?php echo $_code ?>_cc_number" class="required"><em>*</em><?php echo $this->__('Credit Card Number') ?></label>
         <div class="input-box">
-            <input type="text" id="<?php echo $_code ?>_cc_number" name="payment[cc_number]" title="<?php echo $this->__('Credit Card Number') ?>" class="input-text validate-cc-type <?php if (!Mage::helper('creditcard')->isSandbox()): ?>validate-cc-number<?php endif ?>" value="" />
+            <input type="text" id="<?php echo $_code ?>_cc_number" name="payment[cc_number]" title="<?php echo $this->__('Credit Card Number') ?>" class="input-text validate-cc-type <?php if (!Mage::helper('creditcard')->isSandbox()): ?>validate-cc-number<?php endif ?>"  placeholder='Credit Card Number' value="" />
         </div>
     </li>
     <li id="<?php echo $_code ?>_cc_type_exp_div" class="new-card">
-        <label id="creditcard_cc_expDate_label" for="<?php echo $_code ?>_expiration" class="required"><em>*</em><?php echo $this->__('Expiration Date') ?></label>
+        <em>*</em><?php echo $this->__('Exp.') ?>
         <div class="input-box">
             <div class="v-fix">
                 <select id="<?php echo $_code ?>_expiration" name="payment[cc_exp_month]" class="month validate-cc-exp required-entry">
@@ -109,8 +109,6 @@ $_id = $_time . substr($_session,13);
                     <option value="<?php echo $k?$k:'' ?>"<?php if($k==$_ccExpMonth): ?> selected="selected"<?php endif ?>><?php echo $v ?></option>
                 <?php endforeach ?>
                 </select>
-            </div>
-            <div class="v-fix">
                 <?php $_ccExpYear = $this->getInfoData('cc_exp_year') ?>
                 <select id="<?php echo $_code ?>_expiration_yr" name="payment[cc_exp_year]" class="year required-entry">
                 <?php foreach ($this->getCcYears() as $k=>$v): ?>
@@ -123,10 +121,9 @@ $_id = $_time . substr($_session,13);
     <?php echo $this->getChildHtml() ?>
     <?php if($this->hasVerification()): ?>
     <li id="<?php echo $_code ?>_cc_type_cvv_div" class="cid-class">
-        <label for="<?php echo $_code ?>_cc_cid" class="required"><em>*</em><?php echo $this->__('Card Verification Number') ?></label>
         <div class="input-box">
             <div class="v-fix">
-                <input type="text" title="<?php echo $this->__('Card Verification Number') ?>" class="input-text cvv required-entry " id="<?php echo $_code ?>_cc_cid" name="payment[cc_cid]" value="" />
+                <input type="text" title="<?php echo $this->__('Card Verification Number') ?>" class="input-text cvv required-entry " placeholder='CVN#' id="<?php echo $_code ?>_cc_cid" name="payment[cc_cid]" value="" />
             </div>
             <a href="#" class="cvv-what-is-this"><?php echo $this->__('What is this?') ?></a>
         </div>
@@ -136,7 +133,7 @@ $_id = $_time . substr($_session,13);
 
 <?php if($_isLoggedIn && $this->getVaultEnabled()):?>
    <li id="<?php echo $_code ?>_cc_type_should_save_div" class="new-card">
-       <label for="<?php echo $_code ?>_cc_should_save"><?php echo $this->__('Save Card In My Account') ?></label>
+        <?php echo $this->__('Save Card In My Account') ?>
        <div class="input-box">
            <div class="v-fix">
                <input type="checkbox" title="<?php echo $this->__('Save Card In My Account') ?>" class="input-checkbox" id="<?php echo $_code ?>_cc_should_save" name="payment[cc_should_save]" />
@@ -164,20 +161,26 @@ $_id = $_time . substr($_session,13);
 </ul>
 
 <?php if($this->getPaypageEnabled()):?>
-<script type="text/javascript">
-document.observe("dom:loaded", function() {
-	Payment.prototype.save = function() {
 
+<script type="text/javascript">
+
+    var litlePayment = new Payment($("payment_form_<?php echo $this->getMethodCode(); ?>"),
+            "<?php echo $this->getUrl('checkout/onepage/');?>");
+    var formId = "payment_form_<?php echo $this->getMethodCode(); ?>";
+    var litlePaymentForm = new paymentForm(formId);
+
+    document.observe("dom:loaded", function() {
+	Payment.prototype.save = function() {
 		var _saveUrl = this.saveUrl;
 		var _onComplete = this.onComplete;
 		var _onSave = this.onSave;
-		var _currentMethod = this.currentMethod;
+		var _currentMethod = "<?php echo $_code ?>";
 		var _form = this.form;
 
-		if (checkout.loadWaiting!=false) return;
-		var validator = new Validation(this.form);
-		if (this.validate() && validator.validate()) {
-			checkout.setLoadWaiting('payment');
+		//if (checkout.loadWaiting!=false) return;
+		//var validator = new Validation(this.form);
+		//if (this.validate() && validator.validate()) {
+			//checkout.setLoadWaiting('payment');
 
 			// Litle Page Stuff//
 			function setLitleResponseFields(response) {
@@ -186,6 +189,8 @@ document.observe("dom:loaded", function() {
 				$('<?php echo $_code ?>_response_time').value = response.responseTime;
 				$('<?php echo $_code ?>_litle_txn_id').value = response.litleTxnId;
 				$('<?php echo $_code ?>_type').value = response.type;
+
+                hpcheckout.submit();
 			}
 
 			function submitAfterLitle() {
@@ -195,7 +200,7 @@ document.observe("dom:loaded", function() {
 						method:'post',
 						onComplete: _onComplete,
 						onSuccess: _onSave,
-						onFailure: checkout.ajaxFailure.bind(checkout),
+						//onFailure: checkout.ajaxFailure.bind(checkout),
 						parameters: Form.serialize(_form)
 					}
 				);
@@ -228,8 +233,11 @@ document.observe("dom:loaded", function() {
 				"url" : ($('<?php echo $_code ?>_paypage_url').value)
 			};
 
-			var selectmenu=$("<?php echo $_code ?>_cc_vaulted");
+            if(!hpcheckout.validate()) {
+                return;
+            }
 
+            var selectmenu = $("<?php echo $_code ?>_cc_vaulted");
 			if(selectmenu){
 				var chosenoption=selectmenu.options[selectmenu.selectedIndex]
 				if (chosenoption.value == 0){
@@ -243,7 +251,7 @@ document.observe("dom:loaded", function() {
 				}
 			}
 			submitAfterLitle();
-		}
+	    //}
 	};
 });
 </script>
