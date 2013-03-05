@@ -100,6 +100,10 @@ class Harapartners_Fulfillmentfactory_Helper_Data extends Mage_Core_Helper_Abstr
                 'label' => 'Cancelled',
                 'value' => Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_CANCELLED
             ),
+            array(
+                'label' => 'Shipment Error',
+                'value' => Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_SHIPMENT_ERROR
+            ),
         );
     }
 
