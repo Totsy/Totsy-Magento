@@ -28,7 +28,10 @@ shpn='<?php echo $topNavDataObject->getData('attr_text_label'); ?>'
 </script>
 
 <?php foreach($categoryDataArray as $category):?>
-<div class="events-div">
+<?php if(!isset($category['club_only_event']) || !$category['club_only_event']) : ?>
+
+
+    <div class="events-div">
 
 <?php 
     $timerParam = $category['prepare_timer'];
@@ -110,4 +113,5 @@ shpn='<?php echo $topNavDataObject->getData('attr_text_label'); ?>'
 <div class="clear"></div>
 </div>
 </div>
+<?php endif; ?>
 <?php endforeach ?>

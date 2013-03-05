@@ -12,6 +12,23 @@ class Crown_Addplus_IndexController extends Mage_Core_Controller_Front_Action {
         if(Mage::helper('crownclub')->isClubMember($customer)) {
             Mage::getSingleton('core/session')->addError('<div style="width:100%;text-align:center;">You are already a TotsyPLUS member.</div>');
             $this->_redirect('plus/dashboard');
+        }
+        $cart = Mage::helper('checkout/cart')->getCart();
+        if($cart->getItemsCount() >= 1) {
+            Mage::getSingleton('core/session')->addError('In order to sign up for TotsyPLUS, please remove all existing items from your cart.');
+            $this->_redirect('checkout/cart');
+        }
+
+        $this->loadLayout();
+        $this->renderLayout();
+
+    }
+
+    public function agreeAction() {
+        $customer = Mage::helper('customer')->getCustomer();
+        if(Mage::helper('crownclub')->isClubMember($customer)) {
+            Mage::getSingleton('core/session')->addError('<div style="width:100%;text-align:center;">You are already a TotsyPLUS member.</div>');
+            $this->_redirect('plus/dashboard');
         } else {
             $cart = Mage::helper('checkout/cart')->getCart();
             if($cart->getItemsCount() >= 1) {
@@ -23,5 +40,9 @@ class Crown_Addplus_IndexController extends Mage_Core_Controller_Front_Action {
                 $this->_redirect('checkout/cart/add?product='.$product_id.'&qty=1&hideSuccess=1&return_url='.$return_url);
             }
         }
+    }
+
+    public function disagreeAction() {
+        $this->_redirect('/event');
     }
 }
