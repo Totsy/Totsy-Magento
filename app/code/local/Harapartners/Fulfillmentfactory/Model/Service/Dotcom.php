@@ -825,6 +825,16 @@ XML;
             // ensure there is at least one ship item
             $shipmentItems = $shipment->ship_items->children('a', TRUE);
             if (!$shipmentItems) {
+                $order->setStatus('partially_shipped')->save();
+                foreach($order->getAllItems() as $item) {
+                    if($item->getQtyToShip() > 0) {
+                        $itemQueue = Mage::getModel('fulfillmentfactory/itemqueue')
+                            ->loadByItemId($item->getId());
+                        $itemQueue->setStatus(Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_SHIPMENT_ERROR);
+                        $itemQueue->save();
+                        unset($itemQueue);
+                    }
+                }
                 continue;
             }
 
@@ -876,18 +886,17 @@ XML;
                 if($order->canShip()) {
                     $partialShip = false;
                     foreach($order->getAllItems() as $item) {
-                        if($item->getQtyShipped() > 0) {
-                            $itemQueue = Mage::getModel('fulfillmentfactory/itemqueue')
-                                ->loadByItemId($item->getId());
-                            if($item->getQtyToShip() == 0) {
-                                $itemQueue->setStatus(Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_CLOSED);
-                            } else {
-                                $itemQueue->setStatus(Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_SHIPMENT_ERROR);
-                            }
-                            $itemQueue->save();
-                            unset($itemQueue);
+                        $itemQueue = Mage::getModel('fulfillmentfactory/itemqueue')
+                            ->loadByItemId($item->getId());
+
+                        if($item->getQtyShipped() > 0 && $item->getQtyToShip() == 0) {
+                            $itemQueue->setStatus(Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_CLOSED);
+                        } else {
                             $partialShip = true;
+                            $itemQueue->setStatus(Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_SHIPMENT_ERROR);
                         }
+                        $itemQueue->save();
+                        unset($itemQueue);
                     }
                     if($partialShip) {// update the order status and save
                         $order->setStatus('partially_shipped')->save();
@@ -918,8 +927,8 @@ XML;
                 if($shipmentError) {
                     $order->setStatus('partially_shipped')->save();
                 }
-            }
-        }
+    }
+}
 
         return $updatedOrders;
     }
