@@ -45,7 +45,7 @@ $_id = $_time . substr($_session,13);
 <?php $_code=$this->getMethodCode() ?>
 <ul class="form-list" id="payment_form_<?php echo $_code ?>"
 	style="display: none;">
-<input type="hidden" name="payment[method]" id="payment_method" value="creditcard" />
+<input type="hidden" name="payment[method]" id="payment_method" value="creditcard" checked="checked"/>
 <?php if ($this->getVaultEnabled()): ?>
 	<?php if ($this->hasStoredCards()): ?>
 	<li>
