@@ -23,6 +23,7 @@ class Harapartners_Fulfillmentfactory_Model_Itemqueue
     const STATUS_SUBMITTED  = 6;    // when order has been submitted
     const STATUS_CLOSED     = 7;    // when order is closed
     const STATUS_CANCELLED  = 8;    // when order has been cancelled
+    const STATUS_PARTIALLY_SHIPPED  = 9;    // when order has been cancelled
 
     protected function _construct()
     {
