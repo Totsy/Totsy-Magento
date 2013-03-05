@@ -37,6 +37,8 @@ class Inchoo_Facebook_Customer_AccountController extends Mage_Core_Controller_Fr
             return;
         }
 
+        $this->_affiliateRedirect();
+
         //login or connect
 
         $customer = Mage::getModel('customer/customer');
@@ -292,6 +294,52 @@ class Inchoo_Facebook_Customer_AccountController extends Mage_Core_Controller_Fr
     private function _getSession()
     {
         return Mage::getSingleton('inchoo_facebook/session');
+    }
+
+    private function _affiliateRedirect(){
+        if (!Mage::getSingleton('core/session')->getWebsiteRestrictionAfterLoginUrlAffiliate()){
+
+            $visitorData = Mage::getModel('core/session')->getVisitorData();
+            
+            $uri = $visitorData['http_referer'];
+            if (empty($uri)){
+            	$uri = $visitorData['request_uri'];
+            }
+            
+            if (empty($uri)){
+            	return;
+            }
+            
+            if (!preg_match('/http|https/',$uri)){
+            	$uri = Mage::getBaseUrl().$uri;
+            }
+            
+            $request = new Zend_Controller_Request_Http($uri);
+            
+            if (!$request->has('r')){
+                return;
+            }
+
+            $redirect = preg_replace('/[^\/\-\_\.\d\w]+/', '', $request->getParam('r'));
+            if (preg_match('/[^\/\-\_\.\d\w]+/',$request->getParam('r'))){
+                $mail = new Zend_Mail();
+                $mail->setBodyText(
+                    '! A L E R T !'."\n".
+                    'Affiliate redirect link is not matching the template!!!'."\n".
+                    'LINK: '.$request->getParam('r')."\n".
+                    'LINK BASE64 ENCODED: '.base64_encode($request->getParam('r'))."\n"
+                )
+                ->setFrom('alert@totsy.com', 'Affiliate Redirect Link Alert')
+                ->addTo('skosh@totsy.com', 'Slavik Koshelevskiy')
+                ->addTo('tbhuvanendran@totsy.com', 'Tharsan Bhuvanendran')
+                ->setSubject('Affiliate Link Alert')
+                ->send();
+            }
+            if ($redirect && '/' == $redirect{0}) {
+                Mage::getSingleton('core/session')->setWebsiteRestrictionAfterLoginUrl($redirect);
+                Mage::getSingleton('core/session')->setWebsiteRestrictionAfterLoginUrlAffiliate(true);
+            }
+        }
     }
 
 }
