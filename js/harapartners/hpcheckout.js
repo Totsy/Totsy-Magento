@@ -230,7 +230,9 @@ HpCheckout.prototype = {
         var checkoutObject = this;
         var postData = this.getFormData();
         postData += '&updatePayment=true';
+        
         this.throbberOn();
+        
         jQuery.ajax({
             url: this.data.submitUrl,
             dataType: "json",
@@ -331,7 +333,7 @@ HpCheckout.prototype = {
                     checkoutPayment.disableAddress(true, 'hpcheckout-shipping-form');
                 }
             }
-        }
+        }        
     },
     getFormData: function(blockCodes) {
         var affectedFormIds = this.getFormIds(blockCodes);
