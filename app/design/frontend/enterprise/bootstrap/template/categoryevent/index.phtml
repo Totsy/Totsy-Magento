@@ -11,7 +11,7 @@
  * If you did not receive a copy of the license and are unable to
  * obtain it through the world-wide-web, please send an email
  * to license@Harapartners.com so we can send you a copy immediately.
- *
+ * 
  */
 ?>
 
@@ -43,11 +43,12 @@
 ?>
 <?php // include banner if it is enabled
     $bannerActive = Mage::getModel('cms/block')->load('home_banner')->getIsActive();
-    if ($bannerActive) {
         echo '<div class="banner">';
-        echo $this->getLayout()->createBlock('cms/block')->setBlockId('home_banner')->toHtml();
+        echo $this->getLayout()->createBlock('promotions/block')
+                  ->setBlockId('promotions_banner_view')
+                  ->setBlockPageName('home')
+                  ->toHtml();
         echo '</div>';
-    }
 ?>
 
 <div class="catalog-events-container">

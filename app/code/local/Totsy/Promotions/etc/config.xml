@@ -62,6 +62,13 @@
                 </args>
             </promotions>
         </routers>
+        <layout>
+            <updates>
+                <promotions>
+                    <file>promotions.xml</file>
+                </promotions>
+            </updates>
+        </layout>
     </frontend>
     <admin>
         <routers>

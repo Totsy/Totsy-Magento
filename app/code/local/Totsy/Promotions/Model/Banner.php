@@ -8,13 +8,41 @@ class Totsy_Promotions_Model_Banner extends Mage_Core_Model_Abstract {
         $this->_init('promotions/banner');
     }
 
+    public function getUrlPath(){
+        return Mage::getBaseUrl('media'). DS. self::$path;
+    }
+
+    public function getBanners(){
+        $page = $this->getPageName();
+        $pageId = $this->getPageId();
+        $resource = $this->getResource();        
+
+        $this->setCount(0);
+        $this->setActiveBanners(array());
+
+        if (empty($page)){
+            return array();
+        }
+
+        if ($page=='home'){
+            $banners = $resource->getBannersForHome();
+        } else {
+            $banners = $resource->getBannersForEvetsOrPoruducts($page,$id);
+        }
+
+        $this->setCount(count($banners));
+        $this->setActiveBanners($banners);
+
+        return $this; 
+    }
+
     public function importData($data){
         //Type casting
         if(is_array($data)){
             $data = new Varien_Object($data);
         }
         if(!($data instanceof Varien_Object)){
-            throw new Exception('Invalid type for data importing, Array or Varien_Object needed.');
+            throw new Exception('Invalid type for data importing, Array or Varien_Object expected.');
         }
 
         //Forcefully overwrite existing data, certain data may need to be removed before this step
