@@ -41,8 +41,10 @@ $splitCartFlag = Mage::getSingleton('checkout/session')->getSplitCartFlag() ? 'c
                 <th><?php echo $this->__('Product Name') ?></th>
                 <th><?php echo !$TotsyPLUS ? $this->__('Shipping Info') : $this->__('Info'); ?></th>
                 <th><?php echo !$TotsyPLUS ? $this->__('Price') : $this->__('Price/Month'); ?></th>
+            <?php if(!$this->getQuote()->isNominal()): ?>
                 <th><?php echo $this->__('Qty') ?></th>
                 <th><?php echo $this->__('Subtotal') ?></th>
+            <?php endif; ?>
             </tr>
             <?php if ($this->helper('tax')->displayCartBothPrices()): ?>
                 <tr>
@@ -80,7 +82,9 @@ $splitCartFlag = Mage::getSingleton('checkout/session')->getSplitCartFlag() ? 'c
 
 <div id="checkout-review-submit">
     <div class="buttons-set" id="review-buttons-container">
+        <?php if(!$this->getQuote()->isNominal()): ?>
         <p class="f-left"><?php echo $this->__('Forgot an Item?') ?> <a href="<?php echo $this->getUrl('checkout/cart') ?>"><?php echo $this->__('Edit Your Cart') ?></a></p>
+        <?php endif; ?>
         <?php echo $this->getChildHtml('button') ?>
     </div>
 </div>

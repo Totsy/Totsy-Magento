@@ -18,8 +18,9 @@ class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
     const ORDER_FULFILLMENT_CHUNK_SIZE = 128;
 
     /**
+     * Process fulfillment tasks.
      *
-     * @return void
+     * @return int The number of orders sent for fulfillment.
      */
     public function fulfillment()
     {
@@ -212,6 +213,8 @@ SQL;
         }
 
         $this->submitOrdersToFulfill($orders, true);
+
+        return count($results);
     }
 
     /**
@@ -486,8 +489,6 @@ XML;
                 }
 
                 if($continue && $invoice->canCapture()) {
-                    $invoice->capture();
-
                     $order->setStatus('processing');
                     $order->setState('processing');
 
@@ -495,25 +496,26 @@ XML;
                     $transactionSave->addObject($invoice);
                     $transactionSave->addObject($invoice->getOrder());
                     $transactionSave->save();
+                    
+                    $invoice->capture()
+                            ->save();
+                    
                     if (!$invoice->getOrder()->getEmailSent()) {
                         $invoice->sendEmail(true)
                             ->setEmailSent(true);
                     }
                 }
-            }
-            catch(Exception $e) {
-                $order->setStatus(Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_PAYMENT_FAILED)->save();
-                $order->setState(Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_PAYMENT_FAILED)->save();
-                $message = 'Order ' . $order->getIncrementId() . ' could not place the payment. ' . $e->getMessage();
-                Mage::helper('fulfillmentfactory/log')->errorLogWithOrder($message, $order->getId());
-                /*
-                $customer = Mage::getModel('customer/customer')->load($order->getCustomerId());
+            } catch(Exception $e) {
+                Mage::logException($e);
 
-                //send payment failed email
-                Mage::getModel('core/email_template')->setTemplateSubject('Payment Failed')
-                                                     ->sendTransactional(6, 'support@totsy.com', $customer->getEmail(), $customer->getFirstname());
-                */
-                //throw new Exception($message);
+                $message = 'Could not place payment for order ' . $order->getIncrementId() . ': ' . $e->getMessage();
+                $order->setState(
+                    Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_PAYMENT_FAILED,
+                    Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_PAYMENT_FAILED,
+                    $message
+                )->save();
+                Mage::helper('fulfillmentfactory/log')->errorLogWithOrder($message, $order->getId());
+
                 continue;
             }
 
@@ -823,26 +825,29 @@ XML;
 
             // calculate the total quantity shipped, and select the last
             // shipment carrier
-            $shipmentQty = 0;
             $shipmentCarrier = "";
+            $itemQtys = array();
             foreach ($shipmentItems as $shipmentItem) {
-                $shipmentQty += (int) $shipmentItem->ship_weight;
                 $shipmentCarrier = (string) $shipmentItem->carrier;
+                $orderItem = Mage::getResourceModel('sales/order_item_collection')
+                    ->setOrderFilter($order)
+                    ->addFieldToFilter('sku',$shipmentItem->sku)
+                    ->addFieldToFilter('parent_item_id',array('null'=> true))
+                    ->fetchItem();
+                if($orderItem && $orderItem->canShip()) {
+                    $itemQtys[$orderItem->getId()] = $shipmentItem->quantity_shipped;
+                }
             }
 
             $shipmentData = array(
                 'total_weight' => (string) $shipment->ship_weight,
-                'total_qty'    => $shipmentQty,
-                'order_id'     => $order->getId(),
                 'carrier_code' => $shipmentCarrier,
             );
 
-            $orderShipments = $order->getShipmentsCollection();
-            if(count($orderShipments) > 0) {
-                $shipment = $orderShipments->getFirstItem();
-            } else {
+            if(count($itemQtys)) {
+                //let's collect qty's to ship
                 $shipment = Mage::getModel('sales/service_order', $order)
-                    ->prepareShipment();
+                    ->prepareShipment($itemQtys);
 
                 // create a new shipment track item
                 $shipmentTrack = Mage::getModel('sales/order_shipment_track')
@@ -852,27 +857,52 @@ XML;
                 try {
                     $shipment->addData($shipmentData)
                         ->addTrack($shipmentTrack)
+                        ->register()
                         ->save();
+                    $order->setDataChanges(true);
+                    $order->save();
                 } catch(Exception $e) {
                     Mage::logException($e);
                     continue;
                 }
-            }
 
-            // update the order status and save
-            $order->setStatus('complete')->save();
+                // send a shipment notification to the customer, if one hasn't been
+                // sent already
+                if (!$shipment->getEmailSent()) {
+                    $shipment->sendEmail()
+                        ->setEmailSent(true)
+                        ->save();
 
-            // send a shipment notification to the customer, if one hasn't been
-            // sent already
-            if (!$shipment->getEmailSent()) {
-                $shipment->sendEmail()
-                    ->setEmailSent(true)
-                    ->save();
-
-                $updatedOrders++;
+                    $updatedOrders++;
+                }
             }
         }
 
         return $updatedOrders;
+    }
+
+    protected function _needToAddDummyForShipment($item, $qtys) {
+        if ($item->getHasChildren()) {
+            foreach ($item->getChildrenItems() as $child) {
+                if ($child->getIsVirtual()) {
+                    continue;
+                }
+                if (isset($qtys[$child->getProductId()]) && $qtys[$child->getProductId()] > 0) {
+                    return $qtys[$child->getProductId()];
+                }
+            }
+            if ($item->isShipSeparately()) {
+                return true;
+            }
+            return false;
+        } else if ($item->getParentItem()) {
+            if ($item->getIsVirtual()) {
+                return false;
+            }
+            if (isset($qtys[$item->getProductId()]) && $qtys[$item->getProductId()] > 0) {
+                return $qtys[$item->getProductId()];
+            }
+            return false;
+        }
     }
 }

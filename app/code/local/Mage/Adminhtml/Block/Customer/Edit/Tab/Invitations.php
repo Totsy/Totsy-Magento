@@ -73,15 +73,13 @@ class Mage_Adminhtml_Block_Customer_Edit_Tab_Invitations extends Mage_Adminhtml_
     }
 
     public function getInvitedBy() {
+
         $invitation = Mage::getModel('enterprise_invitation/invitation')->load($this->getCustomer()->getId(), 'referral_id');
 
         if($invitation->getData()) {
+
             $inviter = Mage::getModel('customer/customer')->load($invitation->getCustomerId());
-            $username = $inviter->getFirstname() . " " . $inviter->getLastname();
-            if(empty($username)) {
-                $username = $inviter->getEmail();
-            }
-            return "<a target='_blank' href='" . $this->getUrl("*/*/edit", array('id' => $invitation->getCustomerId())) . "'>" . $username . "</a>";
+            return "<a target='_blank' href='" . $this->getUrl("*/*/edit", array('id' => $invitation->getCustomerId())) . "'>" . $inviter->getEmail() . "</a>";
         }
 
         return 'N/A';

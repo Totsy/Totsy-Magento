@@ -65,6 +65,7 @@
         <?php endif; ?>
             <ul class="thumbnails">
             <?php foreach ($liveArray as $live): ?>
+                <?php if(!isset($live['club_only_event']) || !$live['club_only_event']) : ?>
                 <?php
                     $endcountRaw = strtotime($live['event_end_date']);
                     $endcount = date("F j, Y, G:i:s", $endcountRaw);
@@ -77,7 +78,7 @@
                     }
                     $url = Mage::getBaseUrl().$url;
                 ?>
-                <?php if ($hasProduct): ?>
+                <?php if ($hasProduct && $endcountRaw > Mage::getSingleton('core/date')->timestamp()): ?>
                     <li class="span3 catalog-event event-counter-<?php echo $timer;?>">
                         <a href="<?php echo $url; ?>" class="thumbnail">
                             <hgroup>
@@ -120,6 +121,7 @@
                         </a>
                     </li>
                 <?php endif; ?>
+                <?php endif; ?>
             <?php endforeach; ?>
             </ul>
         </section><!-- /#events-live -->
@@ -146,6 +148,7 @@
             </header>
             <ul class="thumbnails">
             <?php foreach ($upcomingArray as $up): ?>
+                <?php if(!isset($live['club_only_event']) || !$up['club_only_event']) : ?>
                 <?php
                     $endcountRaw = strtotime($up['event_start_date']);
                     $endcount = date("F j, Y, G:i:s", $endcountRaw);
@@ -172,6 +175,7 @@
                         <p class="opens_in counter" id="time2-<?php echo $timer ?>" data-enddate="<?php echo $endcount?>" data-status="upcoming" data-countertype="up-event-counter"  data-id="<?php echo $timer ?>"></p>
                     </div>
                 </li>
+            <?php endif; ?>
             <?php endforeach; ?>
             </ul>
         </section><!-- /#events-upcoming -->
@@ -191,7 +195,8 @@
             direction: 'down',
             onComplete: function( event ){
                 jQuery(this).html("Completed");
-                jQuery(jQuery(this).data('countertype') + '-' + id).hide();
+                elem_class = "." + jQuery(this).data('countertype') + '-' + id;
+               jQuery(elem_class).remove();
             }
 
         });

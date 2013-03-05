@@ -42,7 +42,7 @@ $shipDate = date('m-d-Y', Mage::helper('sales/order')->calculateEstimatedShipDat
         && (Mage::getSingleton('checkout/session')->getSplitCartFlag() || !$quote->hasFulfillmentType('dotcom') )):?>
             Estimated Ship Date: 1-3 Business Days
         <?php elseif($fulfillmentType == 'nominal'):?>
-            With purchase, you will become a TotsyPLUS member.
+            Automatically billed monthly. Cancel at any time.
         <?php elseif($fulfillmentType == 'sourcemktg'):?>
             The following items will either be shipped or emailed to you within 5-7 business days.
         <?php elseif($_item->getProduct()->getIsVirtual()):?>
@@ -144,6 +144,7 @@ $shipDate = date('m-d-Y', Mage::helper('sales/order')->calculateEstimatedShipDat
         <?php endif; ?>
     </td>
     <?php endif; ?>
+    <?php if(!$quote->isNominal()): ?>
     <td style="text-align:center !important"><?php echo $_item->getQty() ?></td>
     <?php if ($this->helper('tax')->displayCartPriceExclTax() || $this->helper('tax')->displayCartBothPrices()): ?>
     <td style="text-align:center !important">
@@ -237,5 +238,6 @@ $shipDate = date('m-d-Y', Mage::helper('sales/order')->calculateEstimatedShipDat
             <?php endif; ?>
         <?php endif; ?>
     </td>
+    <?php endif; ?>
     <?php endif; ?>
 </tr>

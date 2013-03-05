@@ -1,0 +1,68 @@
+<?php
+/**
+ * Crown Partners
+ * Date: 2/5/13
+ * Time: 12:54 PM
+ */
+?>
+
+<?php    $indexDataObj 	= 	$this->getIndexDataObject();
+$baseUrl 		= 	Mage::getBaseUrl();
+$maxPerSend 	= 	0;
+$counter 		= 	0;
+$totalItems     =   0;
+$liveArray 		= 	'';
+if ( $indexDataObj->hasData('live_queue') ){
+    $liveArray = json_decode($indexDataObj->getData('live_queue'), true);
+}
+if (!!$liveArray && !empty($liveArray)) {
+    foreach($liveArray as $live) {
+        if(isset($live['club_only_event']) && $live['club_only_event']) {
+            $totalItems++;
+        }
+    }
+}
+?>
+
+<div class="plus">
+    <?php if($totalItems >= 1) : ?>
+    <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('exclusive_sales')->toHtml(); ?>
+    <div class="exclusive-events-container">
+        <ul class="exclusives">
+        <?php foreach ($liveArray as $live): ?>
+        <?php if(isset($live['club_only_event']) && $live['club_only_event']) : ?>
+        <?php
+        $endcountRaw = strtotime($live['event_end_date']);
+        $endcount = date("F j, Y, G:i:s", $endcountRaw);
+        $hasProduct = $this->countCategoryProducts($live['entity_id']);
+        $eventDepts = $live['department_label'];
+        $eventAges = $live['age_label'];
+        $maxDiscount = $live['max_discount_pct'];
+        ?>
+        <?php if ($hasProduct): ?>
+            <li class="exclusive-event">
+                <a href="<?php echo Mage::getBaseUrl().$live['url_path']; ?>">
+                    <div class="event-container">
+                        <?php
+                        $imgFile = (isset($live['small_image']))
+                            ? BP . DS . 'media' . DS . 'catalog' . DS . 'category' . DS . $live['small_image']
+                            : BP . DS . 'skin' . DS . 'frontend' . DS . 'enterprise ' . DS . 'harapartners' . DS . 'images' . DS . 'catalog' . DS . 'product' . DS . 'placeholder' . DS . 'small_image.jpg';
+                        ?>
+                        <img src="<?php echo Mage::helper('service/image')->loadImageFile($imgFile)->keepFrame(FALSE); ?>" width="791" height="262" alt="<?php echo $live['name'];?>" />
+                        <div class="exclusive-description">
+                            <span class="name"><?php echo $live['name'];?></span>
+                            <span class="discount">Up to <?php echo $maxDiscount; ?>% Off</span>
+                        </div>
+                    </div>
+                <?php $counter++; ?>
+                </a>
+            </li>
+            <?php endif; ?>
+        <?php endif; ?>
+        <?php endforeach; ?>
+        </ul>
+    </div>
+    <?php else : ?>
+    <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('exclusive_sales_no_products')->toHtml(); ?>
+    <?php endif; ?>
+</div>
