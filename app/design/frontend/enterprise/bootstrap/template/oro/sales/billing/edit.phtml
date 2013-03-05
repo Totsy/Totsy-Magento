@@ -70,7 +70,7 @@ $paymentCode    = $this->getPaymentMethod()->getCode();
         </div>
     </div>
 
-    <div id="cc_info">
+    <div id="cc_info" class="oro-cc-info">
     <div class="pull-left">
         <div>
             <div class="pull-left cc_num cc_info">
@@ -128,7 +128,7 @@ $paymentCode    = $this->getPaymentMethod()->getCode();
     <div style="clear:both;"></div>
     </div>
 
-    <div id="billing-address" class="addresses pull-left well">
+    <div id="billing-address" class="addresses billing-address-oro pull-left well">
         <div class="checkout-headline">
             <h4 class="legend pull-left"><?php echo $this->__('Billing Address') ?></h4>
             <?php if ($this->customerHasAddresses()): ?>
@@ -139,8 +139,8 @@ $paymentCode    = $this->getPaymentMethod()->getCode();
         </div>
         <div style="clear:both"></div>
         <div id="billing-address-form">
-            <div>
-                <div class="pull-left">
+            <div class="clearfix">
+                <div class="pull-left left-well">
                     <label for="billing:firstname" class="required"><em>*&nbsp;</em><?php echo $this->__('First Name') ?></label>
                     <input type="text" name="billing[firstname]" title="<?php echo $this->__('First Name') ?>"
                            class="input-text required-entry firstname validate-alpha" value=""
@@ -155,7 +155,7 @@ $paymentCode    = $this->getPaymentMethod()->getCode();
             </div>
             <input type="hidden" name="billing[email]" id="billing:email" value="<?php echo $this->getCustomer()->getEmail() ?>" />
             <input type="hidden" name="billing[selected]" id="billing:selected" />
-            <div>
+            <div class="clearfix">
                 <div>
                     <label for="billing:street1" class="required"><em>*&nbsp;</em><?php echo $this->__('Street Address Line 1') ?></label>
                     <input type="text" title="<?php echo $this->__('Street Address Line 1') ?>" name="billing[street][0]"
@@ -163,7 +163,7 @@ $paymentCode    = $this->getPaymentMethod()->getCode();
                            placeholder="<?php echo $this->__('Street Address Line 1') ?>" />
                 </div>
             </div>
-            <div>
+            <div class="clearfix">
                 <div class="pull-left">
                     <label for="billing:street2">&nbsp;<?php echo $this->__('Street Address Line 2') ?></label>
                     <input type="text" title="<?php echo $this->__('Street Address Line 2') ?>" name="billing[street][1]"
@@ -171,16 +171,16 @@ $paymentCode    = $this->getPaymentMethod()->getCode();
                            placeholder="<?php echo $this->__('Street Address Line 2') ?>" />
                 </div>
             </div>
-            <div>
-                <div class="pull-left">
+            <div class="clearfix">
+                <div class="pull-left left-well">
                     <label for="billing:city" class="required"><em>*&nbsp;</em><?php echo $this->__('City') ?></label>
-                    <input type="text" title="<?php echo $this->__('City') ?>" name="billing[city]" class="input-text required-entry city"
+                    <input type="text" title="<?php echo $this->__('City') ?>" name="billing[city]" class="input-text oro-city required-entry city"
                            value="" placeholder="<?php echo $this->__('City') ?>" id="billing:city" />
                 </div>
-                <div class="pull-left">
+                <div class="pull-left left-well">
                     <label for="billing:region_id" class="required"><em>*&nbsp;</em><?php echo $this->__('State') ?></label>
                     <div class="totsy-selective-input-box">
-                        <select id="billing:region_id" name="billing[region_id]" title="<?php echo $this->__('State') ?>" class="validate-select state">
+                        <select id="billing:region_id" name="billing[region_id]" title="<?php echo $this->__('State') ?>" class="validate-select oro-region state">
                             <option value=""><?php echo $this->__('Please select state') ?></option>
                         </select>
                     </div>
@@ -194,7 +194,7 @@ $paymentCode    = $this->getPaymentMethod()->getCode();
                 <div>
                     <label for="billing:postcode" class="required"><em>*&nbsp;</em><?php echo $this->__('zip/postal code') ?></label>
                     <input type="text" title="<?php echo $this->__('Zip Code') ?>" name="billing[postcode]"
-                           id="billing:postcode" class="input-text validate-zip required-entry zip"
+                           id="billing:postcode" class="input-text validate-zip oro-zip required-entry zip"
                            value="" placeholder="<?php echo $this->__('Zip/Postal Code') ?>" />
                 </div>
             </div>
@@ -206,7 +206,7 @@ $paymentCode    = $this->getPaymentMethod()->getCode();
                            value="" placeholder="Telephone"/>
                 </div>
             </div>
-            <div>
+            <div style="display:none;">
                 <label for="billing:country_id" class="required"><em>*&nbsp;</em><?php echo $this->__('country') ?></label>
                 <div class="totsy-selective-input-box totsy-selective-input-box-billing-country country">
                     <?php echo $this->getCountryHtmlSelect() ?>
