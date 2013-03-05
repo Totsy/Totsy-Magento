@@ -400,8 +400,8 @@ body.customer-account-login .btn.btn-large {
 #navTotsyPlus.nonmember > a {
     background: url('../images/icon-totsyplus-25x26.png') 100% 50% no-repeat;
 }
-.navbar .nav > li > a:hover {
-    color: #636466;
+.navbar .nav > li:hover > a {
+    color: #d22f2a;
     text-decoration: none;
 }
 .navbar .nav .active > a,
