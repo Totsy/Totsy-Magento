@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+/**
+ * {magecore_license_notice}
+ *
+ * @category   Oro
+ * @package    Oro_Sales
+ * @copyright  {magecore_copyright}
+ * @license    {magecore_license}
+ */
+-->
+<config>
+    <modules>
+        <Oro_Sales>
+            <version>1.0.0</version>
+        </Oro_Sales>
+    </modules>
+
+    <global>
+        <models>
+            <oro_sales>
+                <class>Oro_Sales_Model</class>
+                <resourceModel>oro_sales_resource</resourceModel>
+            </oro_sales>
+            <oro_sales_resource>
+                <class>Oro_Sales_Model_Resource</class>
+                <entities>
+                </entities>
+            </oro_sales_resource>
+        </models>
+        <helpers>
+            <oro_sales>
+                <class>Oro_Sales_Helper</class>
+            </oro_sales>
+        </helpers>
+        <blocks>
+            <oro_sales>
+                <class>Oro_Sales_Block</class>
+            </oro_sales>
+        </blocks>
+        <resources>
+            <oro_sales_setup>
+                <setup>
+                    <module>Oro_Sales</module>
+                    <class>Oro_Sales_Model_Resource_Setup</class>
+                </setup>
+            </oro_sales_setup>
+        </resources>
+    </global>
+
+    <frontend>
+        <routers>
+            <sales>
+                <args>
+                    <modules>
+                        <Oro_Sales before="Mage_Sales">Oro_Sales</Oro_Sales>
+                    </modules>
+                </args>
+            </sales>
+        </routers>
+        <layout>
+            <updates>
+                <oro_sales>
+                    <file>oro/sales.xml</file>
+                </oro_sales>
+            </updates>
+        </layout>
+        <translate>
+            <modules>
+                <Oro_Sales>
+                    <files>
+                        <default>Oro_Sales.csv</default>
+                    </files>
+                </Oro_Sales>
+            </modules>
+        </translate>
+    </frontend>
+</config>
