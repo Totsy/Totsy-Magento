@@ -14,7 +14,7 @@ f/**
 
 html,
 body { height: 100%;}
-body { padding-top:147px; } /* magic number BS for fixed nav */
+body { padding-top:141px; } /* magic number BS for fixed nav */
 #stickywrap { /* @sticky */
     height: auto;
     min-height: 100%;
@@ -692,16 +692,18 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
     padding-bottom:0px; overflow: auto; /* @sticky, +more padding */
 }
 }
-/* Large desktop */
-@media (min-width: 1200px) {
+
+/* this #mainContent block will override all previous media queries due to natural cascade
+ * keep RWD out of this build for now…
+*/
 #mainContent {
-    margin-top:150px;
+    margin-top:0;
     margin-bottom:232px;
     background:#fff; 
     padding:15px;
     padding-bottom:0px; overflow: auto; /* @sticky, +more padding */
 }
-}
+
 .logged-out ~ #mainContent {
     /* padding-top:115px; */
 }
