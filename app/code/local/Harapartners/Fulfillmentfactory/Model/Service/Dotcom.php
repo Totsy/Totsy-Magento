@@ -817,11 +817,18 @@ XML;
                 continue;
             }
 
+            //we don't want to process orders that have already been through a shipment processing.
+            if($order->getStatus() == 'partially_shipped') {
+                continue;
+            }
+
             // ensure there is at least one ship item
             $shipmentItems = $shipment->ship_items->children('a', TRUE);
             if (!$shipmentItems) {
                 continue;
             }
+
+
 
             // calculate the total quantity shipped, and select the last
             // shipment carrier
@@ -875,7 +882,7 @@ XML;
                             if($item->getQtyToShip() == 0) {
                                 $itemQueue->setStatus(Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_CLOSED);
                             } else {
-                                $itemQueue->setStatus(Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_PARTIALLY_SHIPPED);
+                                $itemQueue->setStatus(Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_SHIPMENT_ERROR);
                             }
                             $itemQueue->save();
                             unset($itemQueue);
@@ -895,6 +902,21 @@ XML;
                         ->save();
 
                     $updatedOrders++;
+                }
+            } else {
+                $shipmentError = false;
+                foreach($order->getAllItems() as $item) {
+                    if($item->getQtyToShip() > 0) {
+                        $itemQueue = Mage::getModel('fulfillmentfactory/itemqueue')
+                            ->loadByItemId($item->getId());
+                            $itemQueue->setStatus(Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_SHIPMENT_ERROR);
+                        $itemQueue->save();
+                        unset($itemQueue);
+                        $shipmentError = true;
+                    }
+                }
+                if($shipmentError) {
+                    $order->setStatus('partially_shipped')->save();
                 }
             }
         }

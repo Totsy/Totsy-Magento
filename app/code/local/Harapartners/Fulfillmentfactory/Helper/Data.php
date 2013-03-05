@@ -116,7 +116,7 @@ class Harapartners_Fulfillmentfactory_Helper_Data extends Mage_Core_Helper_Abstr
             Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_SUBMITTED => 'Submitted',
             Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_CLOSED => 'Complete',
             Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_CANCELLED => 'Cancelled',
-            Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_PARTIALLY_SHIPPED => 'Partially Shipped',
+            Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_SHIPMENT_ERROR => 'Shipment Error',
         );
     }
     /**
