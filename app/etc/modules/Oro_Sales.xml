@@ -16,7 +16,8 @@
             <codePool>local</codePool>
             <depends>
                 <Mage_Sales />
-                <Mage_Adminhtml />
+                <Harapartners_Paymentfactory />
+                <Harapartners_Fulfillmentfactory />
             </depends>
         </Oro_Sales>
     </modules>

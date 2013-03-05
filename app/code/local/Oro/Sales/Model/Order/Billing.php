@@ -181,8 +181,8 @@ class Oro_Sales_Model_Order_Billing
         $instance = $this->_getPaymentInstance();
         if (!$instance->checkProfile($profile)) {
             // delete profile ?
-//            $profile->setIsDefault(1);
-//            $profile->save();
+            $profile->setIsDefault(1);
+            $profile->save();
 
             return array(
                 Mage::helper('oro_sales')->__('Cannot use profile.')
@@ -243,32 +243,18 @@ class Oro_Sales_Model_Order_Billing
     public function invoice(Mage_Sales_Model_Order $order)
     {
         try {
-            $invoiceQty = array();
-            /** @var $orderItem Mage_Sales_Model_Order_Item */
-            foreach ($order->getAllVisibleItems() as $orderItem) {
-                if ($orderItem->getQtyToInvoice()) {
-                    $invoiceQty[$orderItem->getId()] = $orderItem->getQtyToInvoice();
-                }
+            /* @var $service Harapartners_Fulfillmentfactory_Model_Service_Dotcom */
+            $service = Mage::getModel('fulfillmentfactory/service_dotcom');
+            $order->setStatus(Mage_Sales_Model_Order::STATE_PROCESSING);
+            $result  = $service->submitOrdersToFulfill(array($order), true);
+            $status  = $order->getStatus();
+
+            if ($status == Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_PAYMENT_FAILED) {
+                Mage::throwException(Mage::helper('oro_sales')->__('Cannot place payment information'));
             }
 
-            /** @var $service Mage_Sales_Model_Service_Order */
-            $service    = Mage::getModel('sales/service_order', $order);
-            $invoice    = $service->prepareInvoice($invoiceQty);
-
-            if (!$invoice->getTotalQty()) {
-                Mage::throwException(Mage::helper('oro_sales')->__('Cannot create an invoice'));
-            }
-
-            $invoice->setRequestedCaptureCase(Mage_Sales_Model_Order_Invoice::CAPTURE_ONLINE);
-            $invoice->register();
-            $invoice->sendEmail();
-            $order->setIsInProcess(true);
-
-            /** @var $transaction Mage_Core_Model_Resource_Transaction */
-            $transaction    = Mage::getModel('core/resource_transaction');
-            $transaction->addObject($invoice);
-            $transaction->addObject($order);
-            $transaction->save();
+            /** @var $invoice Mage_Sales_Model_Order_Invoice */
+            $invoice = $order->getInvoiceCollection()->getLastItem();
         } catch (Mage_Core_Exception $e) {
             throw $e;
         } catch (Exception $e) {
