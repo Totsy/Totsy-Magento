@@ -31,7 +31,6 @@
 $_product = Mage::getModel('catalog/product')->load($_item->getProductId());
 
 if($_product->getIsVirtual()) {
-
     $product_options = $_item->getProductOptions();
 
     if($_product->getOneTimePurchase()) {
@@ -46,8 +45,6 @@ if($_product->getIsVirtual()) {
         $voucher_code_string = explode("\n",$product_options['options'][0]['value']);
         $voucher_value = $voucher_code_string[0];
     }
-//	$options =  $_item->getProductOptions();
-//	$_item->setProductOptions($options);
 }
 
 ?>

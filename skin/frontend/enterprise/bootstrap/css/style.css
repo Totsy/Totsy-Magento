@@ -1257,8 +1257,10 @@ html body .fast-ship-table tr:hover th.last {
     text-decoration:underline;
 }
 
-sales-order-virtual-items-toggle-link img {
-    cursor:pointer !important;
+.sales-order-virtual-items-toggle-link img {
+    cursor:pointer;
+    padding:3px;
+    vertical-align: middle;
 }
 
 .sales-order-virtual-items-toggle-link a{
