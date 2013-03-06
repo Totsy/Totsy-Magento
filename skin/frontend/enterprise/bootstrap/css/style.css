@@ -1,4 +1,4 @@
-/**
+f/**
  * @Base styles for the Magento Bootstrap theme
  *
  * @Typography notes
@@ -8,11 +8,13 @@
  * - Dark Grey      subheadings             #636466
  * - Medium Grey    copy font               #999999
  * - Light Grey     borders                 #e5e5e5 | rgba(229,229,229,1)
- * - Green          buttons                 #c1d82f or #adc222 | rgba(173,194,34,1)
+ * - Green          buttons                 #c1cc00 
+ * - Blue           dotted lines!           #68a8fe
  */
 
 html,
 body { height: 100%;}
+body { padding-top:141px; } /* magic number BS for fixed nav */
 #stickywrap { /* @sticky */
     height: auto;
     min-height: 100%;
@@ -67,6 +69,13 @@ html.test .container .row {outline:1px dotted green;}
     position: absolute;
     top: 0;
 }
+
+/* @TODO: remove this safety fallback - pending fix of hacked core (Robot's temporary removal of .row)
+.row { margin-left:-10px;*zoom:1;}
+.row:before,.row:after{display:table;content:"";}
+.row:after {clear:both;}
+ */
+
 /* Alignment classes */
 .align-center {
     text-align: center;
@@ -143,6 +152,11 @@ h4 {text-transform: uppercase;}
     box-shadow: 0 0px 0px rgba(0, 0, 0, 0.075);
     display: block;
     padding: 10px;
+}
+.boxofdoom {
+    background: #dddbdd;
+    color: #636466;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.85);
 }
 .table-bordered,
 .fast-ship-table-bordered,
@@ -286,19 +300,26 @@ body.customer-account-login .btn.btn-large {
     line-height: normal;
     padding: 9px 14px;
 }
-.btn-nogo {
-    /*     background-color: rgb(170, 170, 170); */
-}
 .btn.checkout {
     margin: 8px 0 0;
+    background-color: rgb(132, 132, 132);
+    color:#fff;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
 }
 .btn.checkout strong {
     background: url("../images/btn-arrow-s.png") no-repeat scroll 100% 46% transparent;
     padding-right: 9px;
 }
-.btn-primary:hover {
+.btn.is-active {
+    background-color:rgba(210,47,42,1);
+}
+.btn-primary:hover,
+.btn.is-active:hover {
     background-color:rgba(210,47,42,0.9);
     background-position: 0 50.5%;
+}
+.btn-nogo {
+    /*     background-color: rgb(170, 170, 170); */
 }
 .btn-nogo:hover {
     /*     background-color: rgb(170, 170, 170); */
@@ -319,40 +340,46 @@ body.customer-account-login .btn.btn-large {
 
 /* labels / badges - overrides bootstrap */
 .label-success, .badge-success {
-    background-color: #adc222;
+    background-color: #c1cc00;
 }
 
 /**
  * @Header
  * - "navbar" class from bootstrap
- * - incl: branding, actual nav, user & checkout modules
+ * - incl: branding, actual nav, user account, cta/promo, & checkout modules
  */
 .navbar {
     background:#fff;
-    border-bottom:1px solid #d1d9de;
-    -moz-box-shadow: 0 2px 2px rgba(0, 0, 0, 0.086);
-    -webkit-box-shadow: 0 2px 2px rgba(0, 0, 0, 0.086);
-    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.086);
 }
 #masthead {
     position: relative; z-index: 10;
     padding:3px 0;
     min-height: 54px;
-    -moz-box-shadow: 0 3px 3px rgba(0, 0, 0, 0.18);
-    -webkit-box-shadow: 0 3px 3px rgba(0, 0, 0, 0.18);
-    box-shadow: 0 3px 3px rgba(0, 0, 0, 0.18);
+}
+#masthead > .container {
+    position: relative;
 }
 #logo {margin-left:0;}
 
+.header-utils {
+    position: absolute; bottom: 0; right: 0;
+    border:1px dotted #c00;
+}
+.header-cta {
+    position: absolute; top: 0; right: 0;
+    background: #c1cc00;
+    border-radius: 0 0 10px 10px;
+    border:1px dotted #c00;
+}
 /* #userAccount - my account module */
 #userAccount > a:hover {text-decoration: none;}
 
 /* nav */
 .navbar nav {
-    background-color:#f9f9f9;
     position: relative; z-index: 1;
+    border-top: 2px dashed #68a8fe;
+    border-bottom: 2px dashed #68a8fe;
 }
-.navbar .nav {margin:0;}
 .navbar .nav > li {
     padding: 8px 9px 9px 10px;
     background: url('../images/div-nav.png') 0 50% no-repeat;
@@ -373,8 +400,8 @@ body.customer-account-login .btn.btn-large {
 #navTotsyPlus.nonmember > a {
     background: url('../images/icon-totsyplus-25x26.png') 100% 50% no-repeat;
 }
-.navbar .nav > li > a:hover {
-    color: #636466;
+.navbar .nav > li:hover > a {
+    color: #d22f2a;
     text-decoration: none;
 }
 .navbar .nav .active > a,
@@ -419,16 +446,13 @@ header nav .cta strong {display: block;}
 header nav .cta strong em {color:#d84643; font-style:normal;}
 
 /**
- * @User Utils
- * - global in header: my account dropdown, minicart
+ * @User Info
+ * - global in header: checkout btn / timer / minicart
  */
-#userUtils {margin-top:18px; margin-bottom: 0;}
-#userUtils > li {float: left; width:50%;}
 
 /* header cart */
 #usercart {
     position: relative;
-    float:right;
 }
 #usercart-block-title {
     margin-top:-1px; padding-right:8px;
@@ -454,21 +478,11 @@ header nav .cta strong em {color:#d84643; font-style:normal;}
     box-shadow:1px -3px 4px rgba(0, 0, 0, 0.05);
 }
 #usercart .count-down-timer { /* @KLUDGE: hackish placement into nav area, see MGN-935 */
-    position: absolute;
-    top: 45px;
-    left: -191px;
     font-size: 13px;
     line-height: 15px;
 }
-#usercart .top-cart.expired .count-down-timer { /* @KLUDGE */
-    left:-180px;
-}
-#usercart .top-cart.onCheckout .count-down-timer { /* @KLUDGE: when on onepage checkout */
-    left:-160px;
-}
-body[class*='checkout'] #usercart .count-down-timer,
 body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
-    /*     display: none !important; */
+    display: none !important;
 }
 #usercart .count-down-timer strong {
     font-weight: normal;
@@ -487,11 +501,12 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
     }
 }
 
-#cartHeader.hasItems {display: block; white-space: nowrap;}
+#cartHeader.hasItems {
+    display: block; 
+    white-space: nowrap;
+}
 #cartHeader.cartempty {
-    position: relative; top:-6px; left: 25px; /* a bit hackish but gets it done */
     background-image: none;
-    color:#999;
     font-size:13px; font-weight: normal;
     line-height: 14px;
     text-transform: none;
@@ -516,6 +531,12 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
     clear: none;
     padding: 0;
     color:#d22f2a;
+}
+.mini-product-image {
+    width:30px;
+}
+.mini-product-image img {
+    width: 100%;
 }
 #topCartContent .minifoot {
     position: absolute; bottom: 0; left: 0;
@@ -561,14 +582,14 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
 
 /* checkout btn in non-mini-cart header */
 #header-checkoutBtn {
-    display: none; /* hide by default, ajax topcart logic displays when items in cart */
-    float: right; clear: right;
-    margin-top:3px;
+    position: absolute; bottom: 0; right: 0;
     text-align: right;
 }
-#header-checkoutBtn a {
-    position:relative; left:-8px /* need to move this a bit to align with top cart (which moved to keep dropdown within 950 grid), tho now this is bit off grid… */
-}
+
+
+
+
+
 
 .use-new-card-wrapper {
     display:none;
@@ -671,16 +692,18 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
     padding-bottom:0px; overflow: auto; /* @sticky, +more padding */
 }
 }
-/* Large desktop */
-@media (min-width: 1200px) {
+
+/* this #mainContent block will override all previous media queries due to natural cascade
+ * keep RWD out of this build for now…
+*/
 #mainContent {
-    margin-top:150px;
+    margin-top:0;
     margin-bottom:232px;
     background:#fff; 
     padding:15px;
     padding-bottom:0px; overflow: auto; /* @sticky, +more padding */
 }
-}
+
 .logged-out ~ #mainContent {
     /* padding-top:115px; */
 }
@@ -1734,7 +1757,6 @@ body.catalog-category-view .price-box .special-price {
 }
 #product_addtocart_form {
     padding:2px 8px 4px;
-    background:#dddbdd;
 }
 #product_addtocart_form .availability {
     font-weight: bold;
