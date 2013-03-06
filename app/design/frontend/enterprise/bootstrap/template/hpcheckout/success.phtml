@@ -73,14 +73,14 @@
                 // where your ecommerce engine loops through each item in the cart and
                 // prints out _addItem for each
                 _gaq.push(['_addItem',
-                    '<?php echo $order->getData('increment_id'); ?>',           // order ID - required
-                    '<?php echo $item->getData('sku'); ?>',           // SKU/code - required
-                    '<?php echo $item->getData('name')?>',        // product name
+                    '<?php echo $this->$order->getData('increment_id'); ?>',           // order ID - required
+                    '<?php echo $this->htmlEscape($item->getData('sku')); ?>',           // SKU/code - required
+                    '<?php echo $this->htmlEscape($item->getData('name')); ?>',        // product name
                     '<?php foreach($category as $cat){
-                        echo $cat.',';
+                        echo $this->htmlEscape($cat).',';
                     } ?>',   // category or variation
-                    '<?php echo $item->getPrice() ?>',          // unit price - required
-                    '<?php echo $item->getQtyOrdered() ?>'               // quantity - required
+                    '<?php echo $this->htmlEscape($item->getPrice()) ?>',          // unit price - required
+                    '<?php echo $this->htmlEscape($item->getQtyOrdered()) ?>'               // quantity - required
                 ]);
                     <?php endforeach;?>
             _gaq.push(['_trackTrans']); //submits transaction to the Analytics servers
