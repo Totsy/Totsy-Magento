@@ -31,7 +31,7 @@ class Harapartners_Fulfillmentfactory_Helper_Data extends Mage_Core_Helper_Abstr
 
         $stateObj = Mage::getModel('directory/region')->loadByName($stateName, $countryCode);
 
-        if(!empty($stateObj)) {
+        if($stateObj && $stateObj->getId()) {
             $stateCode = $stateObj->getCode();
         }
 
