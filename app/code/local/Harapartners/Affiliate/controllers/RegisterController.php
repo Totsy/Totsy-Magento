@@ -62,21 +62,14 @@ class Harapartners_Affiliate_RegisterController extends Mage_Core_Controller_Fro
 
             $redirect = preg_replace('/[^\/\-\_\.\d\w]+/', '', $request->getParam('r'));
             if (preg_match('/[^\/\-\_\.\d\w]+/',$request->getParam('r'))){
-                $mail = new Zend_Mail();
-                $mail->setBodyText(
-                    '! A L E R T !'."\n".
+                Mage::log(
                     'Affiliate redirect link is not matching the template!!!'."\n".
                     'LINK: '.$request->getParam('r')."\n".
-                    'LINK BASE64 ENCODED: '.base64_encode($request->getParam('r'))."\n".
                     'URI: '.$_SERVER['REQUEST_URI']."\n".
-                    'METHOD: '.__METHOD__."\n".
-                    'X-NODE: '.php_uname('n')
-                )
-                ->setFrom('alert@totsy.com', 'Affiliate Redirect Link Alert')
-                ->addTo('skosh@totsy.com', 'Slavik Koshelevskiy')
-                ->addTo('tbhuvanendran@totsy.com', 'Tharsan Bhuvanendran')
-                ->setSubject('Affiliate Link Alert')
-                ->send();
+                    'METHOD: '.__METHOD__."\n",
+                    '',
+                    'affiliateRedorect.log'
+                );
             }
             if ($redirect && '/' == $redirect{0}) {
                 Mage::getSingleton('core/session')->setWebsiteRestrictionAfterLoginUrl($redirect);
