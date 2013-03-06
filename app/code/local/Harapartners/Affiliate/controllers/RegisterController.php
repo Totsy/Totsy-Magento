@@ -67,7 +67,10 @@ class Harapartners_Affiliate_RegisterController extends Mage_Core_Controller_Fro
                     '! A L E R T !'."\n".
                     'Affiliate redirect link is not matching the template!!!'."\n".
                     'LINK: '.$request->getParam('r')."\n".
-                    'LINK BASE64 ENCODED: '.base64_encode($request->getParam('r'))."\n"
+                    'LINK BASE64 ENCODED: '.base64_encode($request->getParam('r'))."\n".
+                    'URI: '.$_SERVER['REQUEST_URI']."\n".
+                    'METHOD: '.__METHOD__."\n".
+                    'X-NODE: '.php_uname('n')
                 )
                 ->setFrom('alert@totsy.com', 'Affiliate Redirect Link Alert')
                 ->addTo('skosh@totsy.com', 'Slavik Koshelevskiy')

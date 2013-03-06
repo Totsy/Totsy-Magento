@@ -35,6 +35,7 @@ class Harapartners_Fulfillmentfactory_Model_Observer
             'complete' == $order->getStatus() ||
             'canceled' == $order->getStatus()
         ) {
+            Mage::log($order->getId(), Zend_Log::INFO, 'removeErrorLogEntriesForOrder.log');
             Mage::helper('fulfillmentfactory/log')
                 ->removeErrorLogEntriesForOrder($order);
         }

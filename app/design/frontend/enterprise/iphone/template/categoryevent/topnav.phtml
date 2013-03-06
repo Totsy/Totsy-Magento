@@ -45,6 +45,7 @@
 ?>
 
 <?php foreach($categoryDataArray as $category):?>
+<?php if(!isset($category['club_only_event']) || !$category['club_only_event']) : ?>
 
 <div class="layer-list-content-primary content-primary">
 
@@ -93,4 +94,5 @@
 
 			<script type="text/javascript">decorateGeneric($$('ul.products-grid'), ['odd','even','first','last'])</script>
 </div>
-<?php endforeach ?>
+    <?php endif; ?>
+    <?php endforeach; ?>
