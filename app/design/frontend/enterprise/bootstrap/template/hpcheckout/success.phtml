@@ -6,7 +6,10 @@
 
 <!-- Multiple Fulfillment types-->
 <?php if($this->hasMultipleOrders()):?>
-    <?php $orderIds = $this->getTheOrderIds();?>
+    <?php 
+        $orderIds = $this->getTheOrderIds();
+        Mage::getSingleton('checkout/session')->setData('orderids', $orderIds);
+    ?>
     <?php $flag = false;?>
     <p><?php echo $this->__('Your order numbers are ') ?>
     <?php foreach($orderIds as $orderId => $incrementId):?>
