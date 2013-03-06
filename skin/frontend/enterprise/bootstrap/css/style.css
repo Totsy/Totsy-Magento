@@ -1827,7 +1827,7 @@ body.catalog-category-view .price-box .special-price {
 /* options */
 #product-options-wrapper,
 #product-options-wrapper * {
-    max-width: 214px; /* hack - override bootstrap to fit Ted's Take */
+    max-width: 204px;
 }
 .options-container-big label {
     margin-bottom:3px;
@@ -3098,3 +3098,15 @@ background-position: 0 .5em;
 
 /* Totsy Plus */
 .rocking-text {color: #ADB92C; text-transform: uppercase; font-weight: bold}
+
+
+/* insparq overrides and extra styles */
+#issw #ins-message {
+    display: none;
+}
+.totsy #issw .ins-share-button {
+    margin-left:.45em;
+}
+.totsy #ins-share-button-bar .ins-share-button:first-child {
+    margin-left: 0;
+}
