@@ -17,7 +17,10 @@ class Crown_Club_Model_Observer {
 
 		foreach ($expiredMembers as $expiredMember) {
 			$customer = Mage::getModel('customer/customer')->load($expiredMember->getId());
-            if($customer->getIs)
+            if($customer->getIsInternalUser()) {
+                continue;
+            }
+
 			$clubModel->removeClubMember($customer)->sendClubMembershipCancelledEmail($customer);
 		}
 	}

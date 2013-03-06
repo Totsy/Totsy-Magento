@@ -37,8 +37,8 @@ class Crown_Club_Model_Club extends Mage_Core_Model_Abstract {
 			$customers = Mage::getModel('customer/customer')->getCollection()
 							->addAttributeToSelect('name')
 							->addAttributeToFilter('group_id', $clubCustomerGroup->getId());
-            $customers->getSelect()->where('not exists {?)',new Zend_Db_Expr(
-                "select profile_id from sales_recurring_profile srp where ce.entity_id=srp.customer_id and srp.state='active'"
+            $customers->getSelect()->where('not exists (?)',new Zend_Db_Expr(
+                "select profile_id from sales_recurring_profile srp where e.entity_id=srp.customer_id and srp.state='active'"
             ));
 			$this->setData('expired_customers', $customers);
 		}
