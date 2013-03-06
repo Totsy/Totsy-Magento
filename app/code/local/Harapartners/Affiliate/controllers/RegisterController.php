@@ -56,7 +56,7 @@ class Harapartners_Affiliate_RegisterController extends Mage_Core_Controller_Fro
             $keywordCookieName = Mage::helper('affiliate')->getKeywordCookieName();
             Mage::getModel('core/cookie')->set($keywordCookieName, $keyword, 3600);
             //Harapartners, yang: end
-            
+
             $session->setData('affiliate_id', $affiliate->getId());
             $session->setData('affiliate_info', $affiliateInfo);
 
