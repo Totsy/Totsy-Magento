@@ -747,6 +747,10 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
     font-weight: normal;
     /*     white-space:nowrap; text-overflow: ellipsis; */ /* leave this out, see MGN-882 */
 }
+.events-grid .span4 h3 {
+    font-size: 14px;
+    text-transform: uppercase;
+}
 .events-grid .span3 h5 {
     font-size: 14px;
 }
@@ -807,7 +811,7 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
     position: absolute; bottom: 0; left: 0;
     visibility: hidden;
     opacity:0;
-    width:100%; height: 424px; overflow: hidden;
+    width:100%; height: 343px; overflow: hidden;
     background: rgba(0,0,0,0.45);
     -moz-transition:opacity 0.1s ease;
     -webkit-transition:opacity 0.1s ease;
@@ -997,6 +1001,13 @@ body.catalog-category-view .thumbnails > li {position: relative;}
     overflow: hidden;
     color: #636466;
     font-size: 13px; font-weight: bold;
+}
+/* Bootstrap override for TED's design */
+.thumbnails > li {
+    border: 1px solid none;
+    float: left;
+    margin-bottom: 18px;
+    margin-left: 10px;
 }
 
 /**
