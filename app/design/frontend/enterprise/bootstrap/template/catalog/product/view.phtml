@@ -89,7 +89,7 @@ $savings = money_format('%n', $originalPrice) - money_format('%n', $discountPric
                 </div>
             <?php 
                 $event_end_date = strtotime($_category->getEventEndDate());
-                $today = strtotime('NOW');
+                $today = Mage::getSingleton('core/date')->timestamp();
             ?>
             </div>
             <div class="span3 product-addtocart<?php if ($this->hasOptions()): echo ' has-options'; else: echo ' no-options'; endif;?>">
