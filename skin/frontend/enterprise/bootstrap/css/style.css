@@ -153,7 +153,7 @@ h4 {text-transform: uppercase;}
     display: block;
     padding: 10px;
 }
-.boxofdoom {
+.puncted {
     background: #dddbdd;
     color: #636466;
     text-shadow: 0 1px 0 rgba(255, 255, 255, 0.85);
@@ -353,24 +353,36 @@ body.customer-account-login .btn.btn-large {
 }
 #masthead {
     position: relative; z-index: 10;
-    padding:3px 0;
     min-height: 54px;
 }
 #masthead > .container {
     position: relative;
+    padding:3px 0;
 }
 #logo {margin-left:0;}
 
 .header-utils {
     position: absolute; bottom: 0; right: 0;
-    border:1px dotted #c00;
 }
 .header-cta {
     position: absolute; top: 0; right: 0;
+    padding:12px 8px 5px;
     background: #c1cc00;
     border-radius: 0 0 10px 10px;
-    border:1px dotted #c00;
+    color:#fff;
 }
+.header-cta .cta-item strong {
+    font-size:130%; font-weight: normal;
+}
+.header-cta .cta-item em {
+    font-size:80%;
+}
+.header-cta .cta-link {
+    font-size: 130%;
+    color: #fff;
+}
+
+
 /* #userAccount - my account module */
 #userAccount > a:hover {text-decoration: none;}
 
@@ -412,7 +424,7 @@ body.customer-account-login .btn.btn-large {
 .navbar .nav > li > a em {font-style: normal;}
 
 /* dropdown nav menus */
-.navbar .nav > li:hover {
+.navbar .nav > li.dropdown:hover {
     padding-left:9px;
     background-color:#fff;
     background-image:none;
@@ -422,6 +434,7 @@ body.customer-account-login .btn.btn-large {
 .navbar .nav > li:first-child:hover {
     /*     padding-left:0; */
 }
+
 .nav .dropdown-menu {
     display: none;
     left:-1px;
@@ -454,10 +467,29 @@ header nav .cta strong em {color:#d84643; font-style:normal;}
 #usercart {
     position: relative;
 }
+
+.top-cart.open {
+    position: relative; top: -1px;
+/*
+    border:1px solid #ccc;
+    border:1px solid rgba(0, 0, 0, 0.15); border-bottom:none;
+*/
+    -moz-box-shadow:1px -3px 4px rgba(0, 0, 0, 0.05);
+    -webkit-box-shadow:1px -3px 4px rgba(0, 0, 0, 0.05);
+    box-shadow:1px -3px 4px rgba(0, 0, 0, 0.05);
+}
 #usercart-block-title {
     margin-top:-1px; padding-right:8px;
     background-image: none; /* override .dropdown-toggle, reapplied that image to child element #cartHeader */
     border:1px solid transparent; border-bottom: none;
+}
+#usercart-block-title.no-items,
+#usercart-block-title.dropdown-toggle {
+    position: relative;
+    top: 11px;
+    padding-left: 8px;
+    min-height: 43px;
+    line-height: 2;
 }
 .top-cart.onCheckout #usercart-block-title .savings { /* @KLUDGE: when on onepage checkout */
     margin-bottom: 5px;
@@ -469,17 +501,17 @@ header nav .cta strong em {color:#d84643; font-style:normal;}
 }
 .open > #usercart-block-title {
     position: relative; z-index: 100;
-    margin:-8px 0 0 3px; padding:7px 8px 13px;
-    background: #fff;
-    border:1px solid #ccc; /* old browser fallback */
+/*     margin:-8px 0 0 3px; padding:7px 8px 13px; */
+/*
+    border:1px solid #ccc;
     border:1px solid rgba(0, 0, 0, 0.15); border-bottom:none;
     -moz-box-shadow:1px -3px 4px rgba(0, 0, 0, 0.05);
     -webkit-box-shadow:1px -3px 4px rgba(0, 0, 0, 0.05);
     box-shadow:1px -3px 4px rgba(0, 0, 0, 0.05);
+*/
 }
-#usercart .count-down-timer { /* @KLUDGE: hackish placement into nav area, see MGN-935 */
-    font-size: 13px;
-    line-height: 15px;
+#usercart .count-down-timer {
+    font-size: 12px;
 }
 body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
     display: none !important;
@@ -511,21 +543,25 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
     line-height: 14px;
     text-transform: none;
 }
-
+.cart-qty {
+    margin-left: 5px;
+    padding-left: 5px;
+    border-left: 1px solid #fff;
+}
 /* Minicart */
 #topCartContent {
     position: absolute; top: 100%; left: auto; right:0; z-index: 10;
     margin-top:-1px; padding:12px 12px 48px;
-    width:334px;
+    width:354px; /* magic number BS */
     background:#fff;
     border:1px solid #ccc; /* old browser fallback */
     border: 1px solid rgba(0, 0, 0, 0.15);
     border-radius: 0;
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
-    -moz-box-shadow:0 0 6px rgba(0, 0, 0, 0.1);
-    -webkit-box-shadow:0 0 6px rgba(0, 0, 0, 0.1);
-    box-shadow:0 0 6px rgba(0, 0, 0, 0.1);
+    -moz-box-shadow:0 3px 6px rgba(0, 0, 0, 0.25);
+    -webkit-box-shadow:0 3px 6px rgba(0, 0, 0, 0.25);
+    box-shadow:0 3px 6px rgba(0, 0, 0, 0.25);
 }
 #topCartContent.dropdown-menu .product-name a { /* overrides 'dropdown-menu a' ruleset */
     clear: none;
@@ -582,10 +618,12 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
 
 /* checkout btn in non-mini-cart header */
 #header-checkoutBtn {
-    position: absolute; bottom: 0; right: 0;
+    position: absolute; top: 3px; right: 8px;
     text-align: right;
 }
-
+.open > #header-checkoutBtn {
+    display: none;
+}
 
 
 
@@ -1838,7 +1876,7 @@ body.catalog-category-view .price-box .special-price {
 /* options */
 #product-options-wrapper,
 #product-options-wrapper * {
-    max-width: 214px; /* hack - override bootstrap to fit Ted's Take */
+    max-width: 204px;
 }
 .options-container-big label {
     margin-bottom:3px;
@@ -3109,3 +3147,15 @@ background-position: 0 .5em;
 
 /* Totsy Plus */
 .rocking-text {color: #ADB92C; text-transform: uppercase; font-weight: bold}
+
+
+/* insparq overrides and extra styles */
+#issw #ins-message {
+    display: none;
+}
+.totsy #issw .ins-share-button {
+    margin-left:.45em;
+}
+.totsy #ins-share-button-bar .ins-share-button:first-child {
+    margin-left: 0;
+}
