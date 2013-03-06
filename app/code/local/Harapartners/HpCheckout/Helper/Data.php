@@ -1,7 +1,6 @@
 <?php 
 class Harapartners_HpCheckout_Helper_Data extends Mage_Core_Helper_Abstract {
-    
-	//Harapartners, yang, START
+
     //For cart timer
     public function getCurrentTime(){
         
@@ -13,6 +12,12 @@ class Harapartners_HpCheckout_Helper_Data extends Mage_Core_Helper_Abstract {
         
         return strtotime($timer);
     }
-    //Harapartners, yang, END
-	
+
+    public function convertArrayToLittleHash($paymentArray){
+        foreach($paymentArray as $key => $infos) {
+            $newKey = lcfirst(str_replace(' ','', ucwords(str_replace('_',' ',$key))));
+            $hash[$newKey] = $infos;
+        }
+        return $hash;
+    }
 }
