@@ -33,11 +33,18 @@ abstract class Totsy_CatalogFeed_Model_Feed_Abstract
 
         $events = json_decode($sortentry->getLiveQueue(), true);
         foreach ($events as $event) {
-            $category = Mage::getModel('catalog/category')
-                ->load($event['entity_id']);
-            $category->setStoreId(1);
+            $category = null;
+            if (!isset($this->_options['supress_event_load'])) {
+                $category = Mage::getModel('catalog/category')
+                    ->load($event['entity_id']);
+                $category->setStoreId(1);
+            }
 
-            $this->_processEvent($category);
+            $this->_processEvent($category, $event);
+
+            if (isset($this->_options['supress_product_load'])) {
+                continue;
+            }
 
             /** @var $layer Mage_Catalog_Model_Layer */
             $layer = Mage::getSingleton('catalog/layer');
@@ -69,11 +76,14 @@ abstract class Totsy_CatalogFeed_Model_Feed_Abstract
 
         $events = json_decode($sortentry->getLiveQueue(), true);
         foreach ($events as $event) {
-            $category = Mage::getModel('catalog/category')
-                ->load($event['entity_id']);
-            $category->setStoreId(1);
+            $category = null;
+            if (!isset($this->_options['supress_event_load'])) {
+                $category = Mage::getModel('catalog/category')
+                    ->load($event['entity_id']);
+                $category->setStoreId(1);
+            }
 
-            $this->_processEvent($category);
+            $this->_processEvent($category, $event);
         }
 
         return $this->_getFeedContent();
@@ -83,10 +93,14 @@ abstract class Totsy_CatalogFeed_Model_Feed_Abstract
      * Process an event for this feed.
      *
      * @param Mage_Catalog_Model_Category $event
+     * @param array                       $categoryInfo
      *
      * @return void
      */
-    protected abstract function _processEvent(Mage_Catalog_Model_Category $event);
+    protected abstract function _processEvent(
+        Mage_Catalog_Model_Category $event = null,
+        array $categoryInfo = array()
+    );
 
     /**
      * Process a product for this feed.

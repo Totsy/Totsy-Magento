@@ -96,6 +96,10 @@
                 <run>
                     <model>fulfillmentfactory/service_dotcom::fulfillment</model>
                 </run>
+                <notify>
+                    <success>tbhuvanendran@totsy.com,dmatusevich@totsy.com,rkamphausen@totsy.com,rminns@totsy.com</success>
+                    <error>tbhuvanendran@totsy.com,dmatusevich@totsy.com,rkamphausen@totsy.com,rminns@totsy.com</error>
+                </notify>
             </fulfillmentfactory_process_fulfillment>
             <fulfillmentfactory_dotcom_update_shipment>
                 <schedule>

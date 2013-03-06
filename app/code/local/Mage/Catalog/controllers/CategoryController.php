@@ -55,6 +55,11 @@ class Mage_Catalog_CategoryController extends Mage_Core_Controller_Front_Action
 	            return false;
 	        }
         }
+        //2013-03-04 CJD Added in check for exclusive sales
+        if($category->getClubOnlyEvent() && (!($customer = Mage::getSingleton('customer/session')->getCustomer())
+            || !Mage::helper('crownclub')->isClubMember($customer))) {
+            return false;
+        }
         Mage::getSingleton('catalog/session')->setLastVisitedCategoryId($category->getId());
         Mage::register('current_category', $category);
         try {

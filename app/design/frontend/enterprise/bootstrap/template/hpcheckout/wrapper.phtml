@@ -12,7 +12,7 @@
     <h2><?php echo $this->__('Checkout') ?></h2>
 </div>
 
-<div id="hpcheckout-wrapper">
+<div id="hpcheckout-wrapper"<?php if($quote->isNominal()): ?> class="nominal-checkout"<?php endif; ?>>
 	<div id="error-message-wrapper"></div>
 	<?php if( count( $this->getQuote()->getAllItems() ) ): ?>
 		<?php if( ! $this->getCustomerSession()->isLoggedIn() ): ?>
@@ -66,7 +66,7 @@
         </div>
 		<?php endif ?>
 		<div style="clear:both"></div>
-		<div id="hpcheckout-review-wrapper" class="well review-payment-blocks">
+		<div id="hpcheckout-review-wrapper"<?php if(!$quote->isNominal()): ?> class="well review-payment-blocks"<?php endif;?>>
 			<div class="checkout-content"><?php echo $this->getChildHtml( 'review' ) ?></div>
 		</div>
 		</div>

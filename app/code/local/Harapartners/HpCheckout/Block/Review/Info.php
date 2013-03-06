@@ -10,4 +10,8 @@ class Harapartners_HpCheckout_Block_Review_Info extends Mage_Sales_Block_Items_A
     {
         return Mage::getSingleton('checkout/session')->getQuote()->getTotals();
     }
+
+    public function getQuote() {
+        return Mage::getSingleton('checkout/session')->getQuote();
+    }
 }

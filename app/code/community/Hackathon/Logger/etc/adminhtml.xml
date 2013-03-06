@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<config>
+    <menu>
+        <system>
+            <children>
+                <logger translate="title" module="hackathon_logger">
+                    <title>View Error Log</title>
+                    <sort_order>60</sort_order>
+                    <action>adminhtml/logger/index</action>
+                    <depends>
+                        <config>logger/db/viewer_enabled</config>
+                    </depends>
+                </logger>
+            </children>
+        </system>
+    </menu>
+    <acl>
+        <resources>
+            <admin>
+                <children>
+                    <system>
+                        <children>
+                            <logger translate="title" module="hackathon_logger">
+                                <title>View Error Log</title>
+                                <sort_order>60</sort_order>
+                            </logger>
+                            <config>
+                                <children>
+                                    <logger translate="title" module="hackathon_logger">
+                                        <title>Advanced Logger Section</title>
+                                        <sort_order>60</sort_order>
+                                    </logger>
+                                </children>
+                            </config>
+                        </children>
+                    </system>
+                </children>
+            </admin>
+        </resources>
+    </acl>
+</config>

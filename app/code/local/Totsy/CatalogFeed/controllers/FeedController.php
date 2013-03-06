@@ -11,6 +11,9 @@ class Totsy_CatalogFeed_FeedController extends Mage_Core_Controller_Front_Action
     public function sailthruAction()
     {
         $options = $this->getRequest()->getParams();
+        $options['supress_event_load'] = true;
+        $options['supress_product_load'] = true;
+
         $feed = Mage::getModel('catalogfeed/feed_json_sailthru', $options)
             ->generate();
 

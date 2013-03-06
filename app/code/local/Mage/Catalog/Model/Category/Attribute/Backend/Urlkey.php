@@ -51,7 +51,7 @@ class Mage_Catalog_Model_Category_Attribute_Backend_Urlkey extends Mage_Eav_Mode
         }
         if ($urlKey=='') {
             $urlKey = $object->getName();
-        }
+        } 
         $id = $object->getId();
         if($object->getId() && $object->getUrlKey() && !preg_match("/$id/", $urlKey)) {
             $object->setData($attributeName, $urlKey . '-' . $object->getId());
@@ -69,6 +69,10 @@ class Mage_Catalog_Model_Category_Attribute_Backend_Urlkey extends Mage_Eav_Mode
      */
     public function afterSave($object)
     {
+        if( preg_match("/" . $object->getEntityId() . "/", $object->getUrlKey()) == 0 ) {
+            $object->save();
+        }
+
         /* @var $object Mage_Catalog_Model_Category */
         /**
          * Logic moved to Mage_Catalog_Molde_Indexer_Url

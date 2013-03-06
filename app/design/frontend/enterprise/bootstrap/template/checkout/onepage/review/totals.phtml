@@ -31,6 +31,7 @@
 <?php if ($this->getTotals()): ?>
 <tfoot>
     <?php $_colspan = $this->helper('tax')->displayCartBothPrices() ? 5 : 3; ?>
+    <?php $_colspan = $this->getQuote()->isNominal() ? 1 : $_colspan; ?>
     <?php echo $this->renderTotals(null, $_colspan); ?>
     <?php echo $this->renderTotals('footer', $_colspan); ?>
     <?php if ($this->needDisplayBaseGrandtotal()):?>

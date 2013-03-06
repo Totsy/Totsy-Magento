@@ -224,7 +224,7 @@ class Mage_Adminhtml_Block_Customer_Edit_Tab_View
         if($invitation->getData()) {
             $invitee = Mage::getModel('customer/customer')->load($invitation->getCustomerId());
             $username = $invitee->getFirstname() . " " . $invitee->getLastname();
-            return "<a target='_blank' href='" . $this->getUrl("*/*/edit", array('id' => $invitation->getCustomerId())) . "'/>" . $username . "</a>";
+            return "<a target='_blank' href='" . $this->getUrl("*/*/edit", array('id' => $invitation->getCustomerId())) . "'/>" . $invitee->getEmail() . "</a>";
         }
 
         return 'N/A';

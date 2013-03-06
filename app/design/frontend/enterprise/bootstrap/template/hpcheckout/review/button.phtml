@@ -1,4 +1,8 @@
+<?php if(!$this->getQuote()->isNominal()): ?>
 <button id="placeOrderBtn" type="button" title="<?php echo $this->__('Place Order') ?>" class="button btn btn-primary pull-right"><div class="totsy-button"><?php echo $this->__('Place Order') ?></div></button>
+<?php else: ?>
+<button id="placeOrderBtn" type="button" title="<?php echo $this->__('Proceed to PayPal') ?>" class="button btn btn-primary pull-right"><div class="totsy-button"><?php echo $this->__('Proceed to PayPal') ?></div></button>
+<?php endif; ?>
 <div class="clear"></div>
 <script>
 // @TODO: abstract this out to hpcheckout.js

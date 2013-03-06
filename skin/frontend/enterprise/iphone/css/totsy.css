@@ -1194,3 +1194,12 @@ a.ui-link-inherit {
 .ui-mobile-nosupport-boxshadow .ui-focus {
 	outline-width: 2px;
 }
+
+.reward-checkout .reward {
+    text-align: right;
+}
+
+.reward-checkout .reward span {
+    display: inline-block;
+    margin:24px 0;
+}

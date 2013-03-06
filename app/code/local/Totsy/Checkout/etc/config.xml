@@ -17,6 +17,15 @@
         </routers>
     </frontend>
     <global>
+        <blocks>
+            <checkout>
+                <rewrite>
+                    <cart>Totsy_Checkout_Block_Cart</cart>
+                    <cart_totals>Totsy_Checkout_Block_Cart_Totals</cart_totals>
+                    <total_nominal>Totsy_Checkout_Block_Total_Nominal</total_nominal>
+                </rewrite>
+            </checkout>
+        </blocks>
         <models>
             <checkout>
                 <rewrite>

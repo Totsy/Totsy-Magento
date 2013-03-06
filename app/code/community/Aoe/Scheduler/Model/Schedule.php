@@ -162,7 +162,12 @@ class Aoe_Scheduler_Model_Schedule extends Mage_Cron_Model_Schedule {
 		$fromName  = Mage::getStoreConfig('trans_email/ident_general/name');
 
 		$message = "Job '" . $this->getJobCode() . "' has completed with status " .
-			strtoupper($this->getStatus());
+			ucfirst($this->getStatus());
+
+		if ($duration = $this->getDuration()) {
+			$message .= " in " . gmdate('H:i:s', $duration);
+		}
+
 		$message .= PHP_EOL . PHP_EOL;
 		$message .= $this->getMessages();
 
@@ -171,23 +176,34 @@ class Aoe_Scheduler_Model_Schedule extends Mage_Cron_Model_Schedule {
 			isset($notifications[Mage_Cron_Model_Schedule::STATUS_SUCCESS])
 		) {
 			$recipients = $notifications[Mage_Cron_Model_Schedule::STATUS_SUCCESS];
-			$email = Mage::getModel('core/email');
-			$email->setToEmail($recipients)
-				->setFromEmail($fromEmail)
-				->setFromName($fromName)
+
+			$mail = new Zend_Mail();
+
+			$recipientEmails = preg_split("/[ ;,]/", $recipients);
+			foreach ($recipientEmails as $recipientEmail) {
+				$mail->addTo(trim($recipientEmail));
+			}
+
+			$mail->setFrom($fromEmail, $fromName)
 				->setSubject("Job '" . $this->getJobCode() . "' completed successfully")
-				->setBody($message)
+				->setBodyText($message)
 				->send();
+
 		} else if ($this->getStatus() == Mage_Cron_Model_Schedule::STATUS_ERROR &&
 			isset($notifications[Mage_Cron_Model_Schedule::STATUS_ERROR])
 		) {
 			$recipients = $notifications[Mage_Cron_Model_Schedule::STATUS_ERROR];
-			$email = Mage::getModel('core/email');
-			$email->setToEmail($recipients)
-				->setFromEmail($fromEmail)
-				->setFromName($fromName)
-				->setSubject("Job '" . $this->getJobCode() . "' failed!")
-				->setBody($message)
+
+			$mail = new Zend_Mail();
+
+			$recipientEmails = preg_split("/[ ;,]/", $recipients);
+			foreach ($recipientEmails as $recipientEmail) {
+				$mail->addTo(trim($recipientEmail));
+			}
+
+			$mail->setFrom($fromEmail, $fromName)
+				->setSubject("Job '" . $this->getJobCode() . "' failed")
+				->setBodyText($message)
 				->send();
 		}
 	}
