@@ -8,6 +8,9 @@ class Crown_Club_Model_Observer {
 	 * @return void
 	 */
 	public function removeExpiredClubMembers($schedule) {
+        if(Mage::getIsDeveloperMode()) {
+            return;
+        }
 		$helper = Mage::helper('crownclub');
 		if (!$helper->moduleSetupComplete()) return;
 
