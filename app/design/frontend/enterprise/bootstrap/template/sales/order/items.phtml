@@ -24,6 +24,26 @@
  * @license     http://www.magentocommerce.com/license/enterprise-edition
  */
 ?>
+<script type="text/javascript">
+
+jQuery(document).ready(function() {
+    //virtual product div toggling code goes here   
+    function toggleVoucherCodeBlurb(obj) {
+        if (jQuery("#" + obj.id + " img").attr("src") == "/skin/frontend/enterprise/bootstrap/images/orders-history-virtual-items-arrow.gif") {
+            jQuery("#" + obj.id + " img").attr("src", "/skin/frontend/enterprise/bootstrap/images/orders-history-virtual-items-down-arrow.gif");
+        } else {
+            jQuery("#" + obj.id + " img").attr("src", "/skin/frontend/enterprise/bootstrap/images/orders-history-virtual-items-arrow.gif");
+        }
+        jQuery("#sales-order-virtual-item-content-" + obj.id + "").toggle();
+    }
+    
+    jQuery(".sales-order-virtual-items-toggle-link").click(function() {
+        toggleVoucherCodeBlurb(this);
+    });
+});
+
+</script>
+
 <?php $_order = $this->getOrder() ?>
 <table class="data-table cart-table table table-hover" id="my-orders-table" summary="<?php echo $this->__('Items Ordered') ?>">
     <col />

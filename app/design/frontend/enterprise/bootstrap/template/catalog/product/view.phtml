@@ -96,7 +96,7 @@ $savings = money_format('%n', $originalPrice) - money_format('%n', $discountPric
                 </div>
             <?php 
                 $event_end_date = strtotime($_category->getEventEndDate());
-                $today = strtotime('NOW');
+                $today = Mage::getSingleton('core/date')->timestamp();
             ?>
             </div>
             <div class="span3 product-addtocart<?php if ($this->hasOptions()): echo ' has-options'; else: echo ' no-options'; endif;?>">
@@ -175,6 +175,14 @@ productAddToCartForm.submit = function(a, b) {
             c.action = b
         }
         var e = null;
+        var qty = "";
+        
+        if(jQuery("#qty").length < 0) {
+        	qty = 1;
+        } else {
+        	qty = jQuery("#qty").val();
+        }
+        
         if (!b) {
             b = jQuery("#product_addtocart_form").attr("action")
         }
@@ -190,7 +198,7 @@ productAddToCartForm.submit = function(a, b) {
                 data: f,
                 success: function(b) {
                     //tracking ADDs to cart
-                    _gaq.push(['_trackEvent', 'Add to Cart', '<?php echo $this->htmlEscape($_product->getSku()); ?>', jQuery("#qty").val()]);
+                    _gaq.push(['_trackEvent', 'Add to Cart', '<?php echo $this->htmlEscape($_product->getSku()); ?>', qty]);
                     
                     if (b.redirect) {
                         window.location.href = b.redirect

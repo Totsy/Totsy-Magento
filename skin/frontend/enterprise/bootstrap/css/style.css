@@ -1471,6 +1471,40 @@ html body .fast-ship-table tr:hover th.last {
     height: 64px;
 }
 
+/* Sales Order Virtaul items */
+.sales-order-virtual-items-toggle-link { 
+    font-weight:bold;
+    text-decoration:underline;
+}
+
+.sales-order-virtual-items-toggle-link img {
+    cursor:pointer;
+    padding:3px;
+    vertical-align: middle;
+}
+
+.sales-order-virtual-items-toggle-link a{
+    color: #707070 !important;
+    font-size:12px;
+    float:left;
+    text-transform:uppercase;
+} 
+
+.sales-order-virtual-item-code {
+    line-height:30px;
+}
+
+.sales-order-virtual-item-code-value {
+    font-weight:bold;
+}
+
+.sales-order-virtual-item-content { 
+	display:none;	
+}
+.sales-order-virtual-item-thumbnail { padding-bottom: 10px; }
+.sales-order-virtual-item-shortdescription { /* */ }
+.sales-order-virtual-item-description { /* */ }
+
 /**
  * @Footer
  */
