@@ -189,7 +189,6 @@ $_id = $_time . substr($_session,13);
 				$('<?php echo $_code ?>_response_time').value = response.responseTime;
 				$('<?php echo $_code ?>_litle_txn_id').value = response.litleTxnId;
 				$('<?php echo $_code ?>_type').value = response.type;
-
                 hpcheckout.submit();
 			}
 
@@ -243,14 +242,18 @@ $_id = $_time . substr($_session,13);
 				if (chosenoption.value == 0){
 					if( _currentMethod == "creditcard" ){
 						sendToLitle(litleRequest, formFields, setLitleResponseFields, onErrorAfterLitle);
-					}
-				}
+                        submitAfterLitle();
+                    }
+				} else {
+                    submitAfterLitle();
+                    hpcheckout.submit();
+                }
 			} else{
 				if( _currentMethod == "creditcard" ){
 					sendToLitle(litleRequest, formFields, setLitleResponseFields, onErrorAfterLitle);
-				}
+                }
+                submitAfterLitle();
 			}
-			submitAfterLitle();
 	    //}
 	};
 });

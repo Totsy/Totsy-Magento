@@ -197,7 +197,7 @@ HpCheckout.prototype = {
     submit: function() {
         //good time to validate CC types
         if (typeof checkoutPayment !== "undefined") {
-            if (!checkoutPayment.hasProfile || jQuery("[id='payment[cybersource_subid]']").is(':checked') !== true) {
+            if (!checkoutPayment.hasProfile || jQuery("[id='payment[cc_vaulted]']").is(':checked') !== true) {
                 jQuery(".cc_types input[type='radio']").addClass("validate-one-required");
                 if (jQuery("[id='paypal_payment']").is(':checked') !== true) {
                     jQuery('.cc_info input').addClass('required-entry');
