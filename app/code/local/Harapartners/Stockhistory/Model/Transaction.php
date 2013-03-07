@@ -145,7 +145,7 @@ class Harapartners_Stockhistory_Model_Transaction extends Mage_Core_Model_Abstra
         return $this;
     }
     
-    public function updateProductStock(){
+    public function updateProductStock($reverse = false){
         $product = Mage::getModel('catalog/product')->load($this->getData('product_id'));
         if($product->getTypeId() != 'simple'){
             Mage::throwException('Purchase should only contain simple product. Other product types are ignored.');
@@ -156,13 +156,15 @@ class Harapartners_Stockhistory_Model_Transaction extends Mage_Core_Model_Abstra
         $tempProductId = $this->getData('product_id');
         $category = Mage::getModel('catalog/category')->load($this->getData('category_id'));
         $sold = Mage::helper('stockhistory')->getProductSoldInfoByCategory($category, array( $tempProductId => $tempProductId ));
+        $qtyDelta = $this->getData('qty_delta');
+        if($reverse){
+            $qtyDelta = -$qtyDelta;
+        }
         
         #when an items stock qty is reduced to zero and it has sold items, the qty delta should be adjusted to avoid negative values
-        if($sold && $sold[$tempProductId]['qty'] && ($this->getData('qty_delta') < 0) && (abs($this->getData('qty_delta')) == $this->getData('orig_qty_total')) ) {
-                
+        if($sold && $sold[$tempProductId]['qty'] && ($qtyDelta < 0) && (abs($qtyDelta) == $this->getData('orig_qty_total')) ) {
                 $qty_delta =  $sold[$tempProductId]['qty'] - $this->getData('orig_qty_total');
                 $this->setQtyDelta($qty_delta);
-               
         }
 
         $bool = (!empty($sold) && $sold[$tempProductId]['qty']) || $product->getData('is_master_pack');
@@ -171,7 +173,7 @@ class Harapartners_Stockhistory_Model_Transaction extends Mage_Core_Model_Abstra
         if (!$bool) {
             $stock = $product->getStockItem();
             $qtyStock = $stock->getQty();
-            $qtyDelta = $this->getData('qty_delta');
+            
             if(($qtyStock + $qtyDelta) < 0){
                 throw new Exception('This stock update will result in a negative value. Ignored.');
             }
@@ -191,6 +193,23 @@ class Harapartners_Stockhistory_Model_Transaction extends Mage_Core_Model_Abstra
         
         foreach($product_collection as $product) {
             $this->changeCasePackAttributeValue('is_masterpack', $product->getData('entity_id'), $changeto);
+        }
+    }
+
+    public function resetPOItems($po_id, $items, $update_stock) { 
+
+        $trans_collection = $this->getCollection();
+        
+        $trans_collection->getSelect()->where('po_id=' . $po_id . ' and product_id in (' . implode(',', $items) .') and action_type = ' . self::ACTION_TYPE_AMENDMENT );
+        
+        foreach($trans_collection as $transaction) {
+            
+            if($update_stock) {
+                $qty_change = -$transaction->getData('qty_delta');
+                $transaction->updateProductStock($update_stock);
+            }
+
+            $transaction->delete();
         }
     }
 

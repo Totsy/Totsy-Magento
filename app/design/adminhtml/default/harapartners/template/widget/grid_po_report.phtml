@@ -198,7 +198,6 @@ $numColumns = sizeof($this->getColumns());
             </tr>
         <?php endif; ?>
         </tbody>
-
     </table>
     </div>
 </div>
@@ -223,6 +222,18 @@ $numColumns = sizeof($this->getColumns());
     <?php endif ?>
     <?php echo $this->getAdditionalJavaScript(); ?>
 //]]>
+
+    jQuery("#<?php echo $this->getId(); ?>_massaction-select").change(function(){
+      var ans = "";
+      if(jQuery(this).val() == 'move_items') {
+        ans = prompt("New PO #:");
+        if(ans) {
+            jQuery("#<?php echo $this->getId(); ?>_massaction-form").append("<input type=\"hidden\" id=\"new_po\" name=\"new_po\">");
+            jQuery('#new_po').val(ans);
+            jQuery("#<?php echo $this->getId(); ?>_massaction-select option[value=\"move_items\"]").text("Move to PO # " + ans);
+        }
+      }
+    });
 </script>
 <?php endif; ?>
 <?php endif ?>

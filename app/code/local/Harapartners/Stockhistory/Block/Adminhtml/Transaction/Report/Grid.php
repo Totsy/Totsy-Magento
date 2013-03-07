@@ -207,6 +207,18 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Grid extends 
         $this->getMassactionBlock()->setUseSelectAll(false);
 
         //change case pack status function
+        $this->getMassactionBlock()->addItem('reset_items', array(
+             'label'=> Mage::helper('stockhistory')->__('Reset Item(s)'),
+             'url'  => $this->getUrl('*/*/resetItems', array('_current' => true)),
+             'confirm' => Mage::helper('stockhistory')->__("Resetting the item(s) will remove ALL amendments ever made for the item. \n**If the sale is currently live, stock qty will be updated appropriately** \nAre you sure you want to reset?")
+        ));
+
+        $this->getMassactionBlock()->addItem('move_items', array(
+             'label'=> Mage::helper('stockhistory')->__('Move items to PO #...'),
+             'url'  => $this->getUrl('*/*/moveItemsToNewPo', array('_current' => true)),
+             'confirm' => Mage::helper('stockhistory')->__("Are you sure you want to move these items?")
+        ));
+
         $this->getMassactionBlock()->addItem('change_case_pack_no', array(
              'label'=> Mage::helper('stockhistory')->__('Set Case Pack to No'),
              'url'  => $this->getUrl('*/*/changeCasePack', array('change_to' => 0)),
