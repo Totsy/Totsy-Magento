@@ -19,18 +19,33 @@
 				jQuery(document).ready(function() {
 					jQuery("#checkout-timer").countdown({
 						//date: "12 10, 2011 16:11", //Counting TO a date
-						date: "<?php echo $endcount_lc; ?>", //Counting TO a date
-						htmlTemplate: "%{m} <span class=\"cd-time\">:</span> %{s} <span class=\"cd-time\">minutes</span>",
-						onChange: function( event, timer ){
-						},
-						onComplete: function( event ){										
+						until: new Date("<?php echo $endcount_lc; ?>"), //Counting TO a date
+						layout: "{mnn} <span class=\"cd-time\">:</span> {snn} <span class=\"cd-time\">minutes</span>",
+						serverSync: retrieveServertime,
+						alwaysExpire: true,
+						onExpiry: function( event ){										
 							jQuery(this).html("<span class='over'>no longer reserved</span>");
 							setTimeout("cartRedirect();",2000);
-						},
-						leadingZero: true,
-						direction: "down"
+						}
 					});										
-				});	
+				});
+
+				 function retrieveServertime() {
+			        var time = null;
+			        jQuery.ajax({
+			            url:"<?php echo Mage::getUrl('ajax/servertime/servertime', array('format' => 'string')); ?>",
+			            async: false,
+			            success: function(servertime) {
+			                servertime = jQuery.parseJSON(servertime);
+			                time =  servertime.time;
+			            }, 
+			            error:function () {
+			                time = "<?php Mage::getModel('core/date')->timestamp(time()); ?>";
+			            }
+			        });
+			        date = new Date(time);
+			        return date;
+			    }
 
 				function cartRedirect(){
 					window.location = "<?php echo Mage::getUrl('checkout/cart');?>"
