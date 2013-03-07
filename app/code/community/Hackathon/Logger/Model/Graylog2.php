@@ -6,8 +6,8 @@
  *
  * @author Colin Mollenhour (rewrote to publish each message individually with lots of metadata)
  */
-require_once 'lib/Graylog2-gelf-php/GELFMessage.php';
-require_once 'lib/Graylog2-gelf-php/GELFMessagePublisher.php';
+require_once 'Graylog2-gelf-php/GELFMessage.php';
+require_once 'Graylog2-gelf-php/GELFMessagePublisher.php';
 
 class Hackathon_Logger_Model_Graylog2 extends Zend_Log_Writer_Abstract
 {
