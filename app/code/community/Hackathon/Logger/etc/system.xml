@@ -291,6 +291,14 @@
                           <show_in_default>1</show_in_default>
                           <comment>This value will prefix the file name as the Facility.</comment>
                         </app_name>
+                        <truncate_fqdn>
+                            <label>Truncate FQDN for Host</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>50</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <comment>Truncate the fully-qualified domain name (FQDN) to only the hostname for the Graylog Host field.</comment>
+                        </truncate_fqdn>
                     </fields>
                 </graylog2>
             </groups>
