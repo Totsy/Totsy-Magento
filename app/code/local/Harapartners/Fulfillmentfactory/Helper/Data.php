@@ -31,7 +31,7 @@ class Harapartners_Fulfillmentfactory_Helper_Data extends Mage_Core_Helper_Abstr
 
         $stateObj = Mage::getModel('directory/region')->loadByName($stateName, $countryCode);
 
-        if(!empty($stateObj)) {
+        if($stateObj && $stateObj->getId()) {
             $stateCode = $stateObj->getCode();
         }
 
@@ -100,6 +100,10 @@ class Harapartners_Fulfillmentfactory_Helper_Data extends Mage_Core_Helper_Abstr
                 'label' => 'Cancelled',
                 'value' => Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_CANCELLED
             ),
+            array(
+                'label' => 'Shipment Error',
+                'value' => Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_SHIPMENT_ERROR
+            ),
         );
     }
 
@@ -115,7 +119,8 @@ class Harapartners_Fulfillmentfactory_Helper_Data extends Mage_Core_Helper_Abstr
             Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_SUSPENDED => 'Suspended',
             Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_SUBMITTED => 'Submitted',
             Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_CLOSED => 'Complete',
-            Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_CANCELLED => 'Cancelled'
+            Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_CANCELLED => 'Cancelled',
+            Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_SHIPMENT_ERROR => 'Shipment Error',
         );
     }
     /**

@@ -76,6 +76,7 @@
 	<div class="live-events-box">
 		<ul class="live-events-container">
 			<?php foreach ($liveArray as $live):?>
+            <?php if(!isset($live['club_only_event']) || !$live['club_only_event']) : ?>
 			<?php
 				$endcountRaw = strtotime($live['event_end_date']);
 				$endcount = date("F j, Y, G:i:s", $endcountRaw);
@@ -106,7 +107,8 @@
 				</div>	
 			</li>
 			<?php $timer++;?>
-			<?php endif;?>
+            <?php endif;?>
+            <?php endif;?>
 			<?php endforeach;?>
 		</ul>
 	</div>
@@ -116,6 +118,7 @@
 		<hr/>
 		<ul class="upcoming-events-container">
 		<?php foreach ($upcomingArray as $up):?>
+            <?php if(!isset($up['club_only_event']) || !$up['club_only_event']) : ?>
 			<?php 
 				$endcountRaw = strtotime($up['event_start_date']);
 				$endcount = date("F j, Y, G:i:s", $endcountRaw);
@@ -135,7 +138,8 @@
 				</div>	
 			</li>
 			<?php $timer++;?>
-		<?php endforeach;?>	
+            <?php endif;?>
+        <?php endforeach;?>
 		</ul>
 	</div>
 	<?php endif;?>	
