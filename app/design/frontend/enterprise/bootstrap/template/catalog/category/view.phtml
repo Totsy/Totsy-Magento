@@ -207,20 +207,38 @@
 <script type="text/javascript">
     jQuery(".counter").each(function(){
         var saleTime = new Date(jQuery(this).data('enddate'));
+        var server_now = "<?php echo date('F j, Y, G:i:s' , Mage::app()->getLocale()->storeTimeStamp(Mage::app()->getStore()->getId())); ?>";
         var id = jQuery(this).data('id');
         if(jQuery(this).data('status') == 'earlyaccess'){
-            var html = getEarlyAccessTimerHtml(jQuery(this).data('status'), jQuery(this).data('enddate'));
+            var html = getEarlyAccessTimerHtml(jQuery(this).data('status'), jQuery(this).data('enddate'), server_now);
         } else {
-            var html = getTimerHtml(jQuery(this).data('status'), jQuery(this).data('enddate'));
+            var html = getTimerHtml(jQuery(this).data('status'), jQuery(this).data('enddate'), server_now);
         }
         jQuery(this).countdown({
-            date: saleTime,
-            htmlTemplate: html,
-            leadingZero: true,
-            direction: 'down',
-            onComplete: function( event ){
+            until: saleTime,
+            layout: html,
+            serverSync: retrieveServertime,
+            alwaysExpire: true,
+            onExpiry: function( event ){
                 jQuery(this).html("Completed");
             }
         });
     });
+    
+    function retrieveServertime() {
+        var time = null;
+        jQuery.ajax({
+            url:"<?php echo Mage::getUrl('ajax/servertime/servertime', array('format' => 'string')); ?>",
+            async: false,
+            success: function(servertime) {
+                servertime = jQuery.parseJSON(servertime);
+                time =  servertime.time;
+            }, 
+            error:function () {
+                time = "<?php Mage::getModel('core/date')->timestamp(time()); ?>";
+            }
+        });
+        date = new Date(time);
+        return date;
+    }
 </script>
