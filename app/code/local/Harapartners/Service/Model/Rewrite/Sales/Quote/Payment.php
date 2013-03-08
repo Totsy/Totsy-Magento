@@ -36,8 +36,14 @@ class Harapartners_Service_Model_Rewrite_Sales_Quote_Payment extends Mage_Sales_
         if (!$method->isAvailable($this->getQuote())) {
             Mage::throwException(Mage::helper('sales')->__('The requested Payment Method is not available.'));
         }
+        if($data->getData('cybersource_subid')) {
+            $data->setData('cybersource_subid', $this->_decryptSubscriptionId($data->getData('cybersource_subid')));
+            $this->setData('cybersource_subid', $data->getData('cybersource_subid'));
+            $method->setData('cybersource_subid', $data->getData('cybersource_subid'));
+        }
 
         $method->assignData($data);
+        
         $this->getQuote()->setData('saved_by_customer', $data[ 'saved_by_customer' ]);
         if($withValidate) {
             /*
@@ -46,5 +52,16 @@ class Harapartners_Service_Model_Rewrite_Sales_Quote_Payment extends Mage_Sales_
             $method->validate();
         }
         return $this;
+    }
+
+    protected function _decryptSubscriptionId($subId){
+        try{
+            $testSubId = Mage::getModel('core/encryption')->decrypt(base64_decode($subId));
+            if(is_numeric($testSubId)){
+                $subId = $testSubId;
+            }
+        }catch (Exception $e){
+        }
+        return $subId;
     }
 }
