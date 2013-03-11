@@ -6,7 +6,10 @@
 
 <!-- Multiple Fulfillment types-->
 <?php if($this->hasMultipleOrders()):?>
-    <?php $orderIds = $this->getTheOrderIds();?>
+    <?php 
+        $orderIds = $this->getTheOrderIds();
+        Mage::getSingleton('checkout/session')->setData('orderids', $orderIds);
+    ?>
     <?php $flag = false;?>
     <p><?php echo $this->__('Your order numbers are ') ?>
     <?php foreach($orderIds as $orderId => $incrementId):?>
@@ -70,7 +73,7 @@
                 // where your ecommerce engine loops through each item in the cart and
                 // prints out _addItem for each
                 _gaq.push(['_addItem',
-                    '<?php echo $this->$order->getData('increment_id'); ?>',           // order ID - required
+                    '<?php echo $order->getData('increment_id'); ?>',           // order ID - required
                     '<?php echo $this->htmlEscape($item->getData('sku')); ?>',           // SKU/code - required
                     '<?php echo $this->htmlEscape($item->getData('name')); ?>',        // product name
                     '<?php foreach($category as $cat){

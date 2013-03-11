@@ -39,23 +39,9 @@ shpn='<?php echo $topNavDataObject->getData('attr_text_label'); ?>'
     $timer = $timerParam['timer'];
 ?>
 <div class="well">
-    <h3 class="category-name"><?php echo $category['category_info']['name']; ?> <a href="<?php echo Mage::getBaseUrl().$category['category_info']['url_path']; ?>">View All</a> <small class="pull-right"><p class="the-topnav-timer" id="time-layer-<?php echo $timer ?>"></p></small>
+    <h3 class="category-name"><?php echo $category['category_info']['name']; ?> <a href="<?php echo Mage::getBaseUrl().$category['category_info']['url_path']; ?>">View All</a> <small class="pull-right"><p class="the-topnav-timer counter" id="time-layer-<?php echo $timer ?>" data-enddate="<?php echo $endcount_lc?>" data-status="live" data-id="<?php echo $timer ?>" data-countertype="events-div"></p></small>
     </h3>
     <hr />
-    <script type="text/javascript">
-        jQuery("#time-layer-<?php echo $timer ?>").countdown({
-            date: "<?php echo $endcount_lc; ?>", //Counting TO a date
-            htmlTemplate: "<span>Ends in</span><span class='italic'> %{d} <span class=\"cd-time\">Days</span> %{h}<span class=\"cd-time\">:</span>%{m}<span class=\"cd-time\">:</span>%{s}<span class=\"cd-time\"></span></span>",
-            onChange: function( event, timer ){
-            },
-            onComplete: function( event ){
-                jQuery(this).html("Completed");
-                jQuery(this).parents('.events-div').hide();
-            },
-            leadingZero: true,
-            direction: "down"
-        });
-    </script>
     <div class="category-products">
     <ul class="products-grid thumbnails">
         <?php $j=0; ?>
@@ -115,3 +101,38 @@ shpn='<?php echo $topNavDataObject->getData('attr_text_label'); ?>'
 </div>
 <?php endif; ?>
 <?php endforeach ?>
+
+
+<script type="text/javascript">
+        jQuery(".counter").each(function(){
+        var saleTime = new Date(jQuery(this).data('enddate'));
+        var id = jQuery(this).data('id');
+        var thisElem = jQuery(this);
+        jQuery(this).countdown({
+            until: saleTime, //Counting TO a date
+            layout: "<span>Ends in</span><span class='italic'> {dn} <span class=\"cd-time\">Days</span> {hnn} <span class=\"cd-time\">:</span>{mnn}<span class=\"cd-time\">:</span>{snn}<span class=\"cd-time\"></span></span>",
+            serverSync: retrieveServertime,
+            expiryText: 'Completed',
+            alwaysExpire: true,
+            onExpiry: function( event ){
+                thisElem.parents('.events-div').hide();
+            },
+        });
+    });
+    function retrieveServertime() {
+        var time = null;
+        jQuery.ajax({
+            url:"<?php echo Mage::getUrl('ajax/servertime/servertime', array('format' => 'string')); ?>",
+            async: false,
+            success: function(servertime) {
+                servertime = jQuery.parseJSON(servertime);
+                time =  servertime.time;
+            }, 
+            error:function () {
+                time = "<?php Mage::getModel('core/date')->timestamp(time()); ?>";
+            }
+        });
+        date = new Date(time);
+        return date;
+    }
+</script>
