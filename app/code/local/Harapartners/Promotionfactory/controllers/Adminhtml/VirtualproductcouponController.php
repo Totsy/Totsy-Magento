@@ -104,7 +104,7 @@ class Harapartners_PromotionFactory_Adminhtml_VirtualproductcouponController ext
                             }
                             $coupon = Mage::getModel ( 'promotionfactory/virtualproductcoupon' );
                             $coupon->setData ('code', $fileData[$header["code"]]);
-                            $coupon->setData('status',isset($fileData[$header['status']]) ? $fileData[$header['status']] : Harapartners_Promotionfactory_Model_Virtualproductcoupon::COUPON_STATUS_AVAILABLE);
+                            $coupon->setData('status', (isset($header['status']) && isset($fileData[$header['status']])) ? $fileData[$header['status']] : Harapartners_Promotionfactory_Model_Virtualproductcoupon::COUPON_STATUS_AVAILABLE);
                             $coupon->setData('product_id', $data['product_id']);
                             try {
                             	$coupon->save();

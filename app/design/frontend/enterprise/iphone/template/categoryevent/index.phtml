@@ -76,6 +76,7 @@
 	<div class="live-events-box">
 		<ul class="live-events-container">
 			<?php foreach ($liveArray as $live):?>
+            <?php if(!isset($live['club_only_event']) || !$live['club_only_event']) : ?>
 			<?php
 				$endcountRaw = strtotime($live['event_end_date']);
 				$endcount = date("F j, Y, G:i:s", $endcountRaw);
@@ -106,7 +107,8 @@
 				</div>	
 			</li>
 			<?php $timer++;?>
-			<?php endif;?>
+            <?php endif;?>
+            <?php endif;?>
 			<?php endforeach;?>
 		</ul>
 	</div>
@@ -116,6 +118,7 @@
 		<hr/>
 		<ul class="upcoming-events-container">
 		<?php foreach ($upcomingArray as $up):?>
+            <?php if(!isset($up['club_only_event']) || !$up['club_only_event']) : ?>
 			<?php 
 				$endcountRaw = strtotime($up['event_start_date']);
 				$endcount = date("F j, Y, G:i:s", $endcountRaw);
@@ -135,7 +138,8 @@
 				</div>	
 			</li>
 			<?php $timer++;?>
-		<?php endforeach;?>	
+            <?php endif;?>
+        <?php endforeach;?>
 		</ul>
 	</div>
 	<?php endif;?>	
@@ -152,24 +156,40 @@
 			}else{
 				jQuery(this).parent().show();
 			}
-		})
-		;
+		});
 	}
 
     jQuery(".counter").each(function(){
         var saleTime = new Date(jQuery(this).data('enddate'));
         var id = jQuery(this).data('id');
+        var server_now = "<?php echo date('F j, Y, G:i:s' , Mage::app()->getLocale()->storeTimeStamp(Mage::app()->getStore()->getId())); ?>";
         jQuery(this).countdown({
-            date: saleTime,
-            htmlTemplate: getTimerHtml(jQuery(this).data('status'), jQuery(this).data('enddate')),
-            leadingZero: true,
-            direction: 'down',
-            onComplete: function( event ){
-                jQuery(this).html("Completed");
+            until: saleTime,
+            layout: getTimerHtml(jQuery(this).data('status'), jQuery(this).data('enddate'), server_now),
+            expiryText: 'Completed',
+            serverSync: retrieveServertime,
+            alwaysExpire: true,
+            onExpiry: function( event ){
                 elem_class = jQuery(this).data('countertype') + '-' + id;
                jQuery(elem_class).remove();
             }
 
         });
     });
+    function retrieveServertime() {
+        var time = null;
+        jQuery.ajax({
+            url:"<?php echo Mage::getUrl('ajax/servertime/servertime', array('format' => 'string')); ?>",
+            async: false,
+            success: function(servertime) {
+                servertime = jQuery.parseJSON(servertime);
+                time =  servertime.time;
+            }, 
+            error:function () {
+                time = "<?php Mage::getModel('core/date')->timestamp(time()); ?>";
+            }
+        });
+        date = new Date(time);
+        return date;
+    }
 </script>

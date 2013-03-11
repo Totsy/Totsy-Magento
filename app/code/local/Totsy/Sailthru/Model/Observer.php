@@ -14,23 +14,26 @@ class Totsy_Sailthru_Model_Observer
         $info = $observer->getInfo();
         $cart = $observer->getCart();
         $items = array();
-        
+
         if (!isset($info) || empty($info) || !is_array($info)) {
             return;
         }
 
-        foreach ($info as $id=>$qty) {
-            $itemQuoted = $cart->getQuote()->getItemById($id);
-            $itemInfo = Mage::getModel('catalog/product')->load($itemQuoted->getProductId());
-            $items[] = $this->_preSailthruPurchase($itemInfo, $qty);
+        foreach ($info as $id => $qty) {
+            if ($quoteItem = $cart->getQuote()->getItemById($id)) {
+                $itemInfo = Mage::getModel('catalog/product')
+                    ->load($quoteItem->getProductId());
+                $items[] = $this->_preSailthruPurchase($itemInfo, $qty);
+            }
         }
 
-        $this->_callPurchaseApi(array(
-            'email' => Mage::getSingleton('customer/session')->getCustomer()->getEmail(), 
-            'items' => $items,
-            'incomplete' => 1 //0: complete ; 1: imcomplete
-        )); 
-
+        $this->_callPurchaseApi(
+            array(
+                'email' => Mage::getSingleton('customer/session')->getCustomer()->getEmail(),
+                'items' => $items,
+                'incomplete' => 1 //0: complete ; 1: imcomplete
+            )
+        );
     }
 
 /**
