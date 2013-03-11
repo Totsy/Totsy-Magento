@@ -179,4 +179,38 @@ class Harapartners_Service_Model_Rewrite_Catalog_Product extends Mage_Catalog_Mo
         }
         return $quantityPurchased;
     }
+
+    public function save(){
+        Mage::log(__METHOD__."\n".'TYPE: '.$this->getStockItem()->getTypeID());
+
+        return parent::save();  
+        /*
+        if ( $this->getStockItem()->getTypeID() != 'simple'){
+            return parent::save();  
+        }
+
+        $parent = Mage::getModel('catalog/product_type_configurable')->getParentIdsByChild($product->getId());
+        Mage::log($parent->getData());
+
+        $qty = $this->getStockItem()->getQty();
+        $sps = $this->getTypeInstance()->getUsedProducts();
+        foreach( $sps as $sp){
+            $stockItem = $sp->getStockItem();
+            $qty+= $stockItem->getQty();
+        }
+        
+        $stock = $item->getStockItem();
+        $stock->setQty($qty);
+        $stock->save();
+        $this->setStockItem($stock);
+
+        
+        Mage::log(
+            'QTY: '. $stock->getQty().PHP_EOL.
+            'TYP: '. $stock->getTypeID()
+        );
+        
+        return parent::save();
+        */
+    }
 }
