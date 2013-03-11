@@ -4,8 +4,6 @@ $hasVirtual = false;
 
 $_quote = Mage::getSingleton('checkout/session')->getQuote();
 
-//print_r(get_class_methods(get_class($_quote)));
-
 foreach($_quote->getAllItems() as $item) {
     if($item->getParentItemId()) {
         continue;
@@ -201,7 +199,6 @@ jQuery(document).ready(function() {
                                 </tr>
 	                        <?php endforeach ?>
 	                       	</div>
-	                   </li>
 	                   <script type="text/javascript">
 	                   Event.observe($("<?php echo $_code ?>_cc_vaulted"), 'change', function() {
 	                   	if ($F(this) != '0') {
@@ -311,14 +308,14 @@ jQuery(document).ready(function() {
 	</div>
 </div>
        <?php if($_isLoggedIn && $this->getVaultEnabled()):?>
-   <li id="<?php echo $_code ?>_cc_type_should_save_div" class="new-card">
+   <div id="<?php echo $_code ?>_cc_type_should_save_div" class="new-card">
         <?php echo $this->__('Save Card In My Account') ?>
        <div class="input-box">
            <div class="v-fix">
                <input type="checkbox" title="<?php echo $this->__('Save Card In My Account') ?>" class="input-checkbox" id="<?php echo $_code ?>_cc_should_save" name="payment[cc_should_save]" />
            </div>
        </div>
-   </li>
+   </div>
 <?php endif; ?>
 
 	<?php if($this->getPaypageEnabled()):?>
@@ -337,7 +334,6 @@ jQuery(document).ready(function() {
         <input type="hidden" id="<?php echo $_code ?>_litle_txn_id" name="payment[litle_txn_id]"/>
 		<input type="hidden" id="<?php echo $_code ?>_vault_id" name="payment[paypage_id]" value="<?php echo $purchase['token']; ?>"/>
 	<?php endif; ?>
-</ul>
 
 <?php if($this->getPaypageEnabled()):?>
 
