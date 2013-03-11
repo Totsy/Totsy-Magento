@@ -110,8 +110,7 @@ class Oro_Sales_Order_BillingController extends Mage_Core_Controller_Front_Actio
         $redirect = '*/*/edit';
         try {
             $invoice  = $billing->invoice($order);
-            $session->addSuccess(Mage::helper('oro_sales')->__('Order was updated successfully - Invoice #%s',
-                $invoice->getIncrementId()));
+            $session->addSuccess(Mage::helper('oro_sales')->__('Your order was successfully updated!'));
             $redirect = 'sales/order/view';
         } catch (Mage_Core_Exception $e) {
             $session->addError($e->getMessage());
