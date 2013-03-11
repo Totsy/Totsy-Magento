@@ -527,7 +527,7 @@ class Harapartners_Stockhistory_Adminhtml_TransactionController extends Mage_Adm
         try{
             Mage::getModel('stockhistory/transaction')->moveItems($new_po, $items);
         }catch(Exception $e){
-
+            $this->_getSession()->addError(Mage::helper('stockhistory')->__('Unable to update, please try again.  Error: ' . $e->getMessage()));
         }
 
         Mage::getSingleton('adminhtml/session')->setPOReportGridData(null);

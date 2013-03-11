@@ -210,7 +210,7 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Grid extends 
         $this->getMassactionBlock()->addItem('reset_items', array(
              'label'=> Mage::helper('stockhistory')->__('Reset Item(s)'),
              'url'  => $this->getUrl('*/*/resetItems', array('_current' => true)),
-             'confirm' => Mage::helper('stockhistory')->__("Resetting the item(s) will remove ALL amendments ever made for the item. \n**If the sale is currently live, stock qty will be updated appropriately** \nAre you sure you want to reset?")
+             'confirm' => Mage::helper('stockhistory')->__("Resetting the item(s) will remove ALL qty change post amendments ever made for the item. \n**If the sale is has not expired, stock qty will be updated accordingly** \nAre you sure you want to reset?")
         ));
 
         $this->getMassactionBlock()->addItem('move_items', array(

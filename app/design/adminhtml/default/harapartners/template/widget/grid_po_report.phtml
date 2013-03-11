@@ -35,6 +35,7 @@
  *  getVarNamePage()
  */
 $numColumns = sizeof($this->getColumns());
+$removedItems = $this->getRemovedItems();
 ?>
 <?php if($this->getCollection()): ?>
     <?php if($this->canDisplayContainer()): ?>
@@ -47,7 +48,9 @@ $numColumns = sizeof($this->getColumns());
             </table>
         </div>
         <?php endif ?>
-
+        <?php if (!empty($removedItems)): ?>
+            <a href="#removed_items"> See Removed Items </a>
+        <?php endif; ?>
         <div id="<?php echo $this->getId() ?>">
     <?php else: ?>
         <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
@@ -201,6 +204,35 @@ $numColumns = sizeof($this->getColumns());
     </table>
     </div>
 </div>
+<div id='removed_items_grid' class="grid">
+    <div>
+        <h3>Removed Items</h3>
+    </div>
+    <table id="removed_items" class="data" cellspacing="0">
+        <thead>
+            <tr class="headings">
+                <th>Vendor Style</th>
+                <th>Product Name</th>
+                <th>Sku</th>
+                <th>Size</th>
+                <th>Color</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php 
+                foreach($removedItems as $id => $data): 
+            ?>
+                <tr class="removed">
+                    <td> <?php echo $data['vendor_style']; ?> </td>
+                    <td> <?php echo $data['product_name']; ?> </td>
+                    <td> <?php echo $data['sku'] ?> </td>
+                    <td> <?php echo $data['color'] ?> </td>
+                    <td> <?php echo $data['size'] ?> </td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+</div>
 <?php if($this->canDisplayContainer()): ?>
 </div>
 <script type="text/javascript">
@@ -226,7 +258,7 @@ $numColumns = sizeof($this->getColumns());
     jQuery("#<?php echo $this->getId(); ?>_massaction-select").change(function(){
       var ans = "";
       if(jQuery(this).val() == 'move_items') {
-        ans = prompt("New PO #:");
+        ans = prompt("Enter the PO id you wish to relocate the items to (eg. 7310):");
         if(ans) {
             jQuery("#<?php echo $this->getId(); ?>_massaction-form").append("<input type=\"hidden\" id=\"new_po\" name=\"new_po\">");
             jQuery('#new_po').val(ans);

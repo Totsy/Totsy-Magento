@@ -295,7 +295,6 @@ class Harapartners_Stockhistory_Model_Transaction extends Mage_Core_Model_Abstra
                     ->addAttributeToFilter(array(array('attribute' => 'case_pack_grp_id', 'eq' => $case_pack_grp_id)))
                     ->addAttributeToFilter(array(array('attribute' => 'vendor_code', 'eq' => $po->getVendorCode())));
             foreach($products as $product) {
-                
                 if(!$product->getData('is_master_pack')) {
                     $grouped[(string)$product->getEntityId()] = array(
                         'sku' => $product->getData('sku'), 
@@ -325,13 +324,13 @@ class Harapartners_Stockhistory_Model_Transaction extends Mage_Core_Model_Abstra
                     'qty_to_amend' => $product->getData('case_pack_qty')
                 );
             }
-
+            
             if(!$highest_ratio) {
                 if($all_results) {
                     $grouped['message'][] = array('message' => 'Successfully Updated!', 'type' => 'success' );
                     return $grouped;
                 }
-
+                
                 if(empty($grouped)) {
                     return "";
                 }
@@ -368,6 +367,43 @@ class Harapartners_Stockhistory_Model_Transaction extends Mage_Core_Model_Abstra
             $results[$item->getData('product_sku')] = $this->calculateCasePackOrderQty($item->getData('product_id'), $po_id, $case_pack_id);
         }
         return $results;
+    }
+
+    public function moveItems($new_po, $items) {
+        
+        $alreadyUpToDate = array();
+
+        if(!is_numeric($new_po)) {
+            throw new Exception("PO id must be numerical");
+        }
+
+        $po = Mage::getModel('stockhistory/purchaseorder')->load($new_po);
+        $po_data = $po->getData();
+        if(empty($po_data)) {
+            throw new Exception("The PO id you entered does not exists");
+        }
+
+        $categoryid = $po->getCategoryId();
+        $vendorid = $po->getVendorId();
+        $vendorcode = $po->getVendorCode();
+
+        $transactions = $this->getCollection();
+        $transactions->getSelect()->where('product_id in (' . implode(',', $items) . ')');
+
+        foreach($transactions as $transaction) {
+            
+            $transaction->setData('category_id', $categoryid);
+            $transaction->setData('po_id', $new_po);
+            $transaction->setData('vendor_id', $vendorid);
+            $transaction->setData('vendor_code', $vendorcode);
+            $transaction->save();
+            
+            if(!in_array($transaction->getProductId(), $alreadyUpToDate)){
+              $product = Mage::getModel('catalog/product')->load($transaction->getProductId());
+              $product->setData('vendor_code', $vendorcode);
+              $product->save();
+            }
+        }
     }
     
 }
