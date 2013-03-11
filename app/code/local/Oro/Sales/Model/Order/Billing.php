@@ -101,7 +101,7 @@ class Oro_Sales_Model_Order_Billing
             $profile->load($payment->getCybersourceSubid(), 'subscription_id');
 
             if (!$profile->getId()) {
-                Mage::throwException('Cannot find payment profile');
+                Mage::throwException($this->_getGeneralErrorMessage());
             }
 
             return $this->_replaceOrderPayment($order, $profile);
@@ -185,7 +185,7 @@ class Oro_Sales_Model_Order_Billing
             $profile->save();
 
             return array(
-                Mage::helper('oro_sales')->__('Cannot use profile.')
+                $this->_getGeneralErrorMessage()
             );
         }
 
@@ -259,10 +259,26 @@ class Oro_Sales_Model_Order_Billing
             throw $e;
         } catch (Exception $e) {
             Mage::logException($e);
-            Mage::throwException(Mage::helper('oro_sales')->__('Please try again'));
+            Mage::throwException($this->_getGeneralErrorMessage());
             return false;
         }
 
         return $invoice;
+    }
+
+    /**
+     * Returns General Error message
+     *
+     * @return string
+     */
+    protected function _getGeneralErrorMessage()
+    {
+        /* @var $urlModel Mage_Core_Model_Url */
+        $urlModel = Mage::getModel('core/url');
+
+        return Mage::helper('oro_sales')->__('Ooops, something went wrong. '
+            . 'Please try again later or <a href="%s">contact customer service</a>.',
+            $urlModel->getDirectUrl('app/ask')
+        );
     }
 }
