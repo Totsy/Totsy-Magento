@@ -45,6 +45,7 @@ $_category = Mage::getModel('catalog/category')->load(end($_categories));
 // counter variables
 $endcount_utc = strtotime($_category->getEventEndDate());
 $endcount_lc = date("F j, Y, G:i:s", $endcount_utc);
+$serverNow = date('F j, Y, G:i:s' , Mage::app()->getLocale()->storeTimeStamp(Mage::app()->getStore()->getId()));
 
 // price variables
 $special_price = $_product->getPrice();
@@ -96,7 +97,7 @@ $savings = money_format('%n', $originalPrice) - money_format('%n', $discountPric
                 </div>
             <?php 
                 $event_end_date = strtotime($_category->getEventEndDate());
-                $today = strtotime('NOW');
+                $today = Mage::getSingleton('core/date')->timestamp();
             ?>
             </div>
             <div class="span3 product-addtocart<?php if ($this->hasOptions()): echo ' has-options'; else: echo ' no-options'; endif;?>">
@@ -165,6 +166,7 @@ $savings = money_format('%n', $originalPrice) - money_format('%n', $discountPric
         </div><!-- /.product-main -->
     </div>
 </section>
+
 <script type = "text/javascript" > /* cart stuff minified */
 var productAddToCartForm = new VarienForm("product_addtocart_form");
 productAddToCartForm.submit = function(a, b) {
@@ -175,6 +177,14 @@ productAddToCartForm.submit = function(a, b) {
             c.action = b
         }
         var e = null;
+        var qty = "";
+        
+        if(jQuery("#qty").length < 0) {
+        	qty = 1;
+        } else {
+        	qty = jQuery("#qty").val();
+        }
+        
         if (!b) {
             b = jQuery("#product_addtocart_form").attr("action")
         }
@@ -190,7 +200,7 @@ productAddToCartForm.submit = function(a, b) {
                 data: f,
                 success: function(b) {
                     //tracking ADDs to cart
-                    _gaq.push(['_trackEvent', 'Add to Cart', '<?php echo $this->htmlEscape($_product->getSku()); ?>', jQuery("#qty").val()]);
+                    _gaq.push(['_trackEvent', 'Add to Cart', '<?php echo $this->htmlEscape($_product->getSku()); ?>', qty]);
                     
                     if (b.redirect) {
                         window.location.href = b.redirect
@@ -257,14 +267,22 @@ jQuery(document).ready(function() {
         }
     })
 }) /* cart timer minified */
-var html = getTimerHtml("live", "<?php echo $endcount_lc ?>");
-jQuery("#timer").countdown({
-    date: "<?php echo $endcount_lc; ?>",
-    htmlTemplate: html,
-    onComplete: function(a) {
-        jQuery(this).html("Completed")
-    },
-    leadingZero: true,
-    direction: "down"
-}) 
+/* cart timer minified */
+    var html=getTimerHtml("live","<?php echo $endcount_lc ?>", "<?php echo $serverNow?>");jQuery("#timer").countdown({until: new Date("<?php echo $endcount_lc; ?>"),layout:html, serverSync:retrieveServertime,alwaysExpire:true, onExpiry:function(a){jQuery(this).html("Completed")},leadingZero:true,direction:"down"})
+    function retrieveServertime() {
+        var time = null;
+        jQuery.ajax({
+            url:"<?php echo Mage::getUrl('ajax/servertime/servertime', array('format' => 'string')); ?>",
+            async: false,
+            success: function(servertime) {
+                servertime = jQuery.parseJSON(servertime);
+                time =  servertime.time;
+            }, 
+            error:function () {
+                time = "<?php Mage::getModel('core/date')->timestamp(time()); ?>";
+            }
+        });
+        date = new Date(time);
+        return date;
+    }
 </script>

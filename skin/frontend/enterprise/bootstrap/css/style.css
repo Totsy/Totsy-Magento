@@ -8,6 +8,7 @@ f/**
  * - Dark Grey      subheadings             #636466
  * - Medium Grey    copy font               #999999
  * - Light Grey     borders                 #e5e5e5 | rgba(229,229,229,1)
+ * - Puncted Grey	boxes of doom			#dddbdd
  * - Green          buttons                 #c1cc00 
  * - Blue           dotted lines!           #68a8fe
  */
@@ -217,10 +218,15 @@ body.categoryevent-index-topnav .page-header {
 .breadcrumb > li:first-child:before {
     content:"";
 }
-.page-header.has-timer h2 {
+.page-header.has-timer h2,
+.categoryevent-index-topnav .page-header h2 /* @KLUDGE: hackish, tedworthy… "fix it in post edit" all these headers should be modular */ {
     float: left;
     font-size:30px; font-weight: normal;
     max-width:550px;
+}
+.categoryevent-index-topnav .page-header h2 {
+	width:100%;
+	max-width:100%;
 }
 .has-timer .count-down-timer {
     float: right;
@@ -1042,10 +1048,34 @@ body.catalog-category-view .thumbnails > li {position: relative;}
 }
 /* Bootstrap override for TED's design */
 .thumbnails > li {
-    border: 1px solid none;
+    border: none;
     float: left;
     margin-bottom: 18px;
     margin-left: 10px;
+}
+
+/**
+ * @Cat/Age Landing Page
+ *
+*/
+.category-event-grid {
+	margin-bottom:1.25em;
+/* 	background: #dddbdd; */
+}
+.category-event-name {
+	margin-bottom:0.5em;
+}
+.category-event-grid .thumbnails {
+	margin-bottom:0;
+}
+.category-event-grid .thumbnails .tedhack {
+	margin-bottom:0.75em;
+	border:1px solid #ccc;
+	width:146px;
+}
+.the-topnav-timer .prefix {
+	font-weight: bold;
+	color:#333;
 }
 
 /**
@@ -1470,6 +1500,40 @@ html body .fast-ship-table tr:hover th.last {
     width: 38px;
     height: 64px;
 }
+
+/* Sales Order Virtaul items */
+.sales-order-virtual-items-toggle-link { 
+    font-weight:bold;
+    text-decoration:underline;
+}
+
+.sales-order-virtual-items-toggle-link img {
+    cursor:pointer;
+    padding:3px;
+    vertical-align: middle;
+}
+
+.sales-order-virtual-items-toggle-link a{
+    color: #707070 !important;
+    font-size:12px;
+    float:left;
+    text-transform:uppercase;
+} 
+
+.sales-order-virtual-item-code {
+    line-height:30px;
+}
+
+.sales-order-virtual-item-code-value {
+    font-weight:bold;
+}
+
+.sales-order-virtual-item-content { 
+	display:none;	
+}
+.sales-order-virtual-item-thumbnail { padding-bottom: 10px; }
+.sales-order-virtual-item-shortdescription { /* */ }
+.sales-order-virtual-item-description { /* */ }
 
 /**
  * @Footer

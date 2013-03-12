@@ -19,234 +19,121 @@ $categoryDataArray = $topNavDataObject->getData('category_product_complete_data'
 $howMany = count($categoryDataArray);
 ?>
 
-<header class="page-header">
+<header class="page-header clearfix">
     <ol class="breadcrumb">
-            <li><a href="<?php echo $this->getUrl(); ?>" title="Totsy home">Totsy Home</a></li>
-            <li class="active"><?php echo $topNavDataObject->getData('attr_text_label'); ?></li>
+        <li><a href="<?php echo $this->getUrl(); ?>" title="Totsy home">Totsy Home</a></li>
+        <li class="active"><?php echo $topNavDataObject->getData('attr_text_label'); ?></li>
     </ol>
     <h2><?php echo $topNavDataObject->getData('attr_text_label'); ?><small class="pull-right"><?php echo ' '.$howMany.' Sales Found';?></small></h2>
 </header>
+
+<script type="text/javascript">
+shpn='<?php echo $topNavDataObject->getData('attr_text_label'); ?>'
+</script>
 
 <?php foreach($categoryDataArray as $category):?>
 <?php if(!isset($category['club_only_event']) || !$category['club_only_event']) : ?>
 
 
-    <div class="events-div">
-
-<?php 
-    $timerParam = $category['prepare_timer'];
-    $endcount_lc = $timerParam['endcount_lc'];
-    $timer = $timerParam['timer'];
-?>
-<div class="container">
-     <!-- Main Area -->
-                <div id="main_area">
-                        <!-- Slider -->
-                        <div class="row">
-                                <div class="span12" id="slider">
-                                        <!-- Top part of the slider -->
-                                        <div class="row">
-                                                <div class="span6" id="carousel-bounding-box">
-                                                        <div id="myCarousel" class="carousel slide">
-                                                                <!-- Carousel items -->
-                                                                <div class="carousel-inner">
-                                                                        <div class="active item" data-slide-number="0"><img src="http://placehold.it/770x300&text=one" /></div>
-                                                                        <div class="item" data-slide-number="1"><img src="http://placehold.it/770x300&text=two" /></div>
-                                                                        <div class="item" data-slide-number="2"><img src="http://placehold.it/770x300&text=three" /></div>
-                                                                        <div class="item" data-slide-number="3"><img src="http://placehold.it/770x300&text=four" /></div>
-                                                                        <div class="item" data-slide-number="4"><img src="http://placehold.it/770x300&text=five" /></div>
-                                                                        <div class="item" data-slide-number="5"><img src="http://placehold.it/770x300&text=six" /></div>
-                                                                </div>
-                                                                <!-- Carousel nav -->
-                                                                <a class="carousel-control left" href="#myCarousel" data-slide="prev">‹</a>
-                                                                <a class="carousel-control right" href="#myCarousel" data-slide="next">›</a>
-                                                        </div>
-                                                </div>
-                                                <div class="span6" id="carousel-text"></div>
- 
-                                                <div style="display: none;" id="slide-content">
-                                                        <div id="slide-content-0">
-                                                                <h3 class="category-name ellipsis"><?php echo $category['category_info']['name']; ?></h3>
-                                                                <p><?php echo $this->stripTags($category['category_info']['description']) ?>
-                                                                </p>
-                                                                <p class="the-topnav-timer" id="time-layer-<?php echo $timer ?>"></p>
-                                                                    <script type="text/javascript">
-        jQuery("#time-layer-<?php echo $timer ?>").countdown({
-            date: "<?php echo $endcount_lc; ?>", //Counting TO a date
-            htmlTemplate: "<span>Ends in</span><span class='italic'> %{d} <span class=\"cd-time\">Days</span> %{h}<span class=\"cd-time\">:</span>%{m}<span class=\"cd-time\">:</span>%{s}<span class=\"cd-time\"></span></span>",
-            onChange: function( event, timer ){
-            },
-            onComplete: function( event ){
-                jQuery(this).html("Completed");
-                jQuery(this).parents('.events-div').hide();
-            },
-            leadingZero: true,
-            direction: "down"
-        });
-    </script>
-                                                        </div>
-                                                        <div id="slide-content-1">
-                                                                <h2>Slider Two</h2>
-                                                                <p>Lorem Ipsum Dolor</p>
-                                                                <p class="sub-text">October 24 2012 - <a href="#">Read more</a></p>
-                                                        </div>
-                                                        <div id="slide-content-2">
-                                                                <h2>Slider Three</h2>
-                                                                <p>Lorem Ipsum Dolor</p>
-                                                                <p class="sub-text">October 24 2012 - <a href="#">Read more</a></p>
-                                                        </div>
-                                                        <div id="slide-content-3">
-                                                                <h2>Slider Four</h2>
-                                                                <p>Lorem Ipsum Dolor</p>
-                                                                <p class="sub-text">October 24 2012 - <a href="#">Read more</a></p>
-                                                        </div>
-                                                        <div id="slide-content-4">
-                                                                <h2>Slider Five</h2>
-                                                                <p>Lorem Ipsum Dolor</p>
-                                                                <p class="sub-text">October 24 2012 - <a href="#">Read more</a></p>
-                                                        </div>
-                                                        <div id="slide-content-5">
-                                                                <h2>Slider Six</h2>
-                                                                <p>Lorem Ipsum Dolor</p>
-                                                                <p class="sub-text">October 24 2012 - <a href="#">Read more</a></p>
-                                                        </div>
-                                                </div>
-                                        </div>
- 
-                                </div>
-                        </div> <!--/Slider-->
- 
-                        <div class="row hidden-phone" id="slider-thumbs">
-                                <div class="span12">
-                                        <!-- Bottom switcher of slider -->
-                                        <ul class="thumbnails">
-                                                <li class="span2">
-                                                        <a class="thumbnail" id="carousel-selector-0">
-                                                                <img src="http://placehold.it/170x100&text=one" />
-                                                        </a>
-                                                </li>
-                                                <li class="span2">
-                                                        <a class="thumbnail" id="carousel-selector-1">
-                                                                <img src="http://placehold.it/170x100&text=two" />
-                                                        </a>
-                                                </li>
-                                                <li class="span2">
-                                                        <a class="thumbnail" id="carousel-selector-2">
-                                                                <img src="http://placehold.it/170x100&text=three" />
-                                                        </a>
-                                                </li>
-                                                <li class="span2">
-                                                        <a class="thumbnail" id="carousel-selector-3">
-                                                                <img src="http://placehold.it/170x100&text=four" />
-                                                        </a>
-                                                </li>
-                                                <li class="span2">
-                                                        <a class="thumbnail" id="carousel-selector-4">
-                                                                <img src="http://placehold.it/170x100&text=five" />
-                                                        </a>
-                                                </li>
-                                                <li class="span2">
-                                                        <a class="thumbnail" id="carousel-selector-5">
-                                                                <img src="http://placehold.it/170x100&text=six" />
-                                                        </a>
-                                                </li>
-                                        </ul>
-                                </div>
-                        </div>
-</div>
-<script>
-  jQuery(document).ready(function(jQuery) {
- 
-        jQuery('#myCarousel').carousel({
-                interval: 5000
-        });
- 
-        jQuery('#carousel-text').html(jQuery('#slide-content-0').html());
- 
-        //Handles the carousel thumbnails
-        jQuery('[id^=carousel-selector-]').click( function(){
-                var id_selector = jQuery(this).attr("id");
-                var id = id_selector.substr(id_selector.length -1);
-                var id = parseInt(id);
-                jQuery('#myCarousel').carousel(id);
-        });
- 
- 
-        // When the carousel slides, auto update the text
-        jQuery('#myCarousel').on('slid', function (e) {
-                var id = jQuery('.item.active').data('slide-number');
-                jQuery('#carousel-text').html(jQuery('#slide-content-'+id).html());
-        });
- 
- 
-});
-</script>
-<script type="text/javascript" src="/skin/frontend/enterprise/bootstrap/js/bootstrap-carousel.js"></script>
-    <div class="category-products">
-     <div class="span12 alpha">
-     <h3 class="category-name ellipsis"><?php echo $category['category_info']['name']; ?> <small class="align-right"><p class="the-topnav-timer" id="time-layer-<?php echo $timer ?>"></p></small>
-    </h3>
-    <?php // echo $this->stripTags($category['category_info']['description']) ?>
-    <hr style="margin:5px 0px;"/>
-</div>
-<div class="span12 alpha">
-    <ul class="products-grid thumbnails">
-        <?php $j=0; ?>
-        <?php $nonSalableArray = array();?>        
-        
-        <?php $i=0; foreach ($category['product_list'] as $_product): ?>
-        <?php $_description = array_key_exists('description',$_product) ? $_product['description'] : '';  ?>
-        <?php $_is_salable = array_key_exists('is_salable',$_product) ? $_product['is_salable'] : 0;  ?>
-        <?php if (empty($_product['url_path']) || !preg_match('/sales/',$_product['url_path'])){
-            $_product['url_path'] = $_product['request_path'];
-        }
-//        $product = Mage::getModel('catalog/product')->load($_product['entity_id']);
-        ?>
-        <?php if ($_is_salable): ?>
-        <li class="span3">
-        <div class="thumbnail">
-        <a href="<?php echo Mage::getBaseUrl().$_product['url_path']; ?>" title="<?php echo $_product['name']; ?>" class="product-image"><img src="<?php echo Mage::helper('catalog/image')->init(Mage::getModel('catalog/product'),'small_image',$_product['small_image'])->resize(300); ?>" alt="<?php echo $_product['name']; ?>" /></a>
-        <h4 class="ellipsis">
-            <?php echo $_product['name']; ?>
-        </h4>
-        <?php //echo $this->getPriceHtml($_product, true) ?>
-        <div class="price-box">
-        <span class="regular-price" id="product-price-<?php echo $_product['entity_id']; ?>">
-        <?php $price = (isset($_product['special_price']))?$_product['special_price']:$_product['price']?>
-        <h3 class="align-right">$<?php echo number_format($price,2,'.',''); ?></h3>
-        </span>
-        </div>
-        
-        </div>
-        </li>
-        <?php 
-            $i++; 
-            $j = $i;
-                if ($i==6){
-            break;
+    <?php 
+        $timerParam = $category['prepare_timer'];
+        $endcount_lc = $timerParam['endcount_lc'];
+        $timer = $timerParam['timer'];
+    ?>
+    <div class="container category-event-grid">
+        <h3 class="category-event-name"><?php echo $category['category_info']['name']; ?> <a href="<?php echo Mage::getBaseUrl().$category['category_info']['url_path']; ?>">View All</a> <small class="pull-right"><span class="the-topnav-timer counter" id="time-layer-<?php echo $timer ?>" data-enddate="<?php echo $endcount_lc?>" data-status="live" data-id="<?php echo $timer ?>" data-countertype="category-event-grid"></span></small>
+        </h3>
+        <div class="category-event-products">
+        <ul class="products-grid thumbnails">
+            <?php $j=0; ?>
+            <?php $nonSalableArray = array();?>        
+            
+            <?php $i=0; foreach ($category['product_list'] as $_product): ?>
+            <?php $_description = array_key_exists('description',$_product) ? $_product['description'] : '';  ?>
+            <?php $_is_salable = array_key_exists('is_salable',$_product) ? $_product['is_salable'] : 0;  ?>
+            <?php if (empty($_product['url_path']) || !preg_match('/sales/',$_product['url_path'])){
+                $_product['url_path'] = $_product['request_path'];
             }
-        ?>
-        <?php else: ?>
-        <?php $nonSalableArray[] = $_product;?>
-        <?php endif; ?>
-        <?php endforeach; ?>
-        <!--
-        <li class="item last btn viewAllEvents">
-        <a href="<?php echo Mage::getBaseUrl().$category['category_info']['url_path']; ?>">
-        <img src="<?php echo $this->getSkinUrl()?>images/btn-viewevents-bug.png" />
-        </a>
-    </li>
-    -->
+    //        $product = Mage::getModel('catalog/product')->load($_product['entity_id']);
+            ?>
+            <?php if ($_is_salable): ?>
+            <li class="span2 tedhack">
+            <div class="thumbnail">
+            <a href="<?php echo Mage::getBaseUrl().$_product['url_path']; ?>" title="<?php echo $_product['name']; ?>" class="product-image"><img src="<?php echo Mage::helper('catalog/image')->init(Mage::getModel('catalog/product'),'small_image',$_product['small_image'])->resize(148); ?>" width="148" alt="<?php echo $_product['name']; ?>" /></a>
+            <h5 class="product-name ellipsis">
+                <?php echo $_product['name']; ?>
+            </h5>
+            <?php //echo $this->getPriceHtml($_product, true) ?>
+            <div class="price-box">
+            <span class="regular-price" id="product-price-<?php echo $_product['entity_id']; ?>">
+            <?php $price = (isset($_product['special_price']))?$_product['special_price']:$_product['price']?>
+            <span class="price">$<?php echo number_format($price,2,'.',''); ?></span>
+            </span>
+            </div>
+            
+            </div>
+            </li>
+            </li>
+            <?php 
+                $i++; 
+                $j = $i;
+                    if ($i==6){
+                break;
+                }
+            ?>
+            <?php else: ?>
+            <?php $nonSalableArray[] = $_product;?>
+            <?php endif; ?>
+            <?php endforeach; ?>
+            <!--
+            <li class="item last btn viewAllEvents">
+            <a href="<?php echo Mage::getBaseUrl().$category['category_info']['url_path']; ?>">
+            <img src="<?php echo $this->getSkinUrl()?>images/btn-viewevents-bug.png" />
+            </a>
+        </li>
+        -->
+        </div>
+    </ul>
+    <p><?php echo $this->stripTags($category['category_info']['description']) ?></p>
     </div>
-    </div>
-</ul>
-<script type="text/javascript">decorateGeneric($$('ul.products-grid'), ['odd','even','first','last'])</script>
-<div class="clear"></div>
-</div>
-</div>
 <?php endif; ?>
 <?php endforeach ?>
 
+<?php // @TODO
+	/* should be using the countdown-extend.js methods here?
+	 * sorting out other BS - revisit
+	 */
+?>
 <script type="text/javascript">
-shpn='<?php echo $topNavDataObject->getData('attr_text_label'); ?>'
+        jQuery(".counter").each(function(){
+        var saleTime = new Date(jQuery(this).data('enddate'));
+        var id = jQuery(this).data('id');
+        var thisElem = jQuery(this);
+        jQuery(this).countdown({
+            until: saleTime, //Counting TO a date
+            layout: "<span class='prefix'>Sale Ends:</span> <span class='italic'> {dn} <span class=\"cd-time\">Days,</span> {hnn} <span class=\"cd-time\">Hours,</span> {mnn} <span class=\"cd-time\">Mins</span></span>",
+            serverSync: retrieveServertime,
+            expiryText: 'Completed',
+            alwaysExpire: true,
+            onExpiry: function( event ){
+                thisElem.parents('.category-event-grid').hide();
+            },
+        });
+    });
+    function retrieveServertime() {
+        var time = null;
+        jQuery.ajax({
+            url:"<?php echo Mage::getUrl('ajax/servertime/servertime', array('format' => 'string')); ?>",
+            async: false,
+            success: function(servertime) {
+                servertime = jQuery.parseJSON(servertime);
+                time =  servertime.time;
+            }, 
+            error:function () {
+                time = "<?php Mage::getModel('core/date')->timestamp(time()); ?>";
+            }
+        });
+        date = new Date(time);
+        return date;
+    }
 </script>
