@@ -2,7 +2,6 @@
     <?php if(!count( $methods = $this->getMethods())): ?>
         <div>No payment methods available, please try again later or contact us.</div>
     <?php elseif( count( $methods ) == 1 ): ?>
-         <input type="hidden" name="payment[method]" value="<?php echo $methods[0]->getCode() ?>">
         <div>
             <?php echo $this->getPaymentMethodFormHtml( $methods[0] ) ?>
         </div>
@@ -37,8 +36,8 @@
                 jQuery("#payment_form_paypal_express").hide();
             }
             jQuery("#cc_data").show();
-            jQuery('input[name="payment[method]"]').val("paymentfactory_tokenize");
-    		hpcheckout.switchPaymentMethod('paymentfactory_tokenize');		
+            jQuery('input[name="payment[method]"]').val("creditcard");
+    		hpcheckout.switchPaymentMethod('creditcard');		
         });
 
 

@@ -92,7 +92,7 @@ jQuery(document).ready(function() {
                 if (elem.id == "paypal_payment") {
                     newCardWrap.hide();
                 } else {
-                    jQuery("[id='payment[cybersource_subid]']").attr("checked", false);
+                    jQuery("[id='payment[cc_vaulted]']").attr("checked", false);
                     jQuery('#billing-address-select').attr('disabled', false);
                     newCardWrap.show();
                 }

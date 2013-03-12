@@ -38,32 +38,16 @@ $_id = $_time . substr($_session,13);
 
 <div class="form-list .one-page-payment" id="payment_form_<?php echo $_code ?>">
 <?php $customerId = Mage::getSingleton('customer/session')->getCustomerId(); ?>
-<?php if ($this->getProfilesByCustomerId( $customerId )) { ?>
-<?php $profiles = $this->getProfilesByCustomerId( $customerId ) ?>
-<?php
-    $profilesCounter = 0;
-    foreach( $profiles as $profile ) {
-        if($profile->getSubscriptionId() && $profile->getIsDefault()==0 && $profile->getData('saved_by_customer')) {
-            $profilesCounter++;
-        }
-    }
-
-    $hasProfile = false;
-
-    if ($profilesCounter > 0 ) {
+<?php if($this->getVaultEnabled()) {
         $hasProfile = true;
-    } else {
-        $hasProfile = false;
-    }
-?>
-<?php } ?>
+} ?>
 <script type="text/javascript">
 
 jQuery(document).ready(function() {
     checkoutPayment.hasProfile = "<?php echo $hasProfile; ?>";
     checkoutPayment.toggleViews();
 
-    jQuery("[id='payment[cybersource_subid]']").change(function() {
+    jQuery("[id='payment[cc_vaulted]']").change(function() {
         checkoutPayment.setPaymentUI(this);
     });
     jQuery(".use-saved-card-control").click(function() {
@@ -124,9 +108,8 @@ jQuery(document).ready(function() {
             <?php endif ?>
         </div>
         <div style="clear:both"></div>
-        <?php if(($profiles && $profilesCounter > 0) || ($this->getVaultEnabled())) { ?>
                 <div class="pull-left" id="use-card-method">
-                    <div id="cybersource-use-card-method ">
+                    <div id="cybersource-use-card-method">
                     <table class="saved_card">
                     	<tr>
                         	<th></th>
@@ -135,58 +118,12 @@ jQuery(document).ready(function() {
                         	<th>Billing address</th>
                         	<th>Expires</th>
                         </tr>
-                    <?php if($profiles) { ?>
-                    <?php foreach( $profiles as $profile ): ?>
-                        <?php
-                            $checked = '';
-                            $customerObj = Mage::getSingleton('customer/customer')->load($profile->getCustomerId());
-                            $customerAddress = Mage::getSingleton('customer/address')->load($profile->getAddressId());
-                            
-                            $customerName = $customerAddress->getFirstname() ." ". $customerAddress->getLastname();
-                            
-                            //reset gets the first item from the array passed in
-                            $customerStreetArray = $customerAddress->getStreet();
-                            $customerStreet = reset($customerStreetArray);
-                            
-                            $orders = Mage::getResourceModel('sales/order_collection')->addFieldToSelect('*')
-                            ->addFieldToFilter('customer_id', $profile->getCustomerId())->addAttributeToSort('created_at', 'DESC')->setPageSize(1);
-                            
-                            //checking the users last used, saved to expedite checkout
-                            //comparing cybersource profile id to id of card used in last order placed
-                            if($orders->getFirstItem()->getPayment()) {
-                                if($orders->getFirstItem()->getPayment()->getData('cybersource_subid')==$profile->getSubscriptionId()) {
-                                    $checked = 'checked';
-                                }
-                            }
-                        ?>
-                        <script type="text/javascript">
-                            jQuery(document).ready( function() {
-                                checkoutPayment.lastUsedAddressId = "<?php echo $profile->getAddressId(); ?>";
-                            });
-                        </script>
-                        <?php if(!$profile->getSubscriptionId() || $profile->getIsDefault()== 1 || !$profile->getData('saved_by_customer')) { continue; } ?>
-                        <tr>
-                        	<td>
-                                <input type="radio" checked="<?php echo $checked; ?>" name="payment[cybersource_subid]" id="payment[cybersource_subid]" class="use-saved-card-control pull-left" value="<?php echo $profile->getEncryptedSubscriptionId() ?>">
-                                    <span class="cc">
-        		 	                    <span title="<?php echo $this->getFullCcCardType( $profile->getData( 'card_type' )); ?>" class="<?php echo strtolower($profile->getData('card_type')); ?>" >
-        		 	                    </span>
-        		 	                </span>
-        		 	         </td>
-                            <td class="card-type">
-                            <strong><?php echo $this->getFullCcCardType( $profile->getData( 'card_type' )); ?></strong> ending in <?php echo $profile->getLast4no() ?></td>
-                            <td class="card-name"><?php echo $customerName ?></td>
-                            <td class="billing-address"><?php echo $customerStreet; ?></td>
-                            <td class="card-expdate"><?php echo $profile->getExpireMonth()."/".$profile->getExpireYear() ?>
-                            </td>
-                        </tr>
-                    <?php endforeach ?>
-                    <?php } elseif($this->getVaultEnabled()) { ?>
+                    <?php if($this->getVaultEnabled()) { ?>
                         <?php if ($this->hasStoredCards()){ ?>
                             <?php foreach ($this->getStoredCards() as $card): ?>
                                 <tr>
 	                                <td>
-	                       		        <input type="radio" name="payment[cc_vaulted]" value="<?php echo $card->getVaultId() ?>"><?php echo 'Stored ' . $card->getTypeName() . ' Ending in: ' . $card->getLast4() ?>
+	                       		        <input type="radio" id="payment[cc_vaulted]" name="payment[cc_vaulted]" value="<?php echo $card->getVaultId() ?>"><?php echo 'Stored ' . $card->getTypeName() . ' Ending in: ' . $card->getLast4() ?>
                                             <span class="cc">
         		 	                            <span title="<?php //echo $this->getFullCcCardType( $profile->getData( 'card_type' )); ?>" class="<?php //echo strtolower($profile->getData('card_type')); ?>" >
         		 	                            </span>
@@ -221,7 +158,6 @@ jQuery(document).ready(function() {
 						</table>
                     </div>
                 </div>
-                <?php } ?>
                 <div>
                     <?php if($profiles) { ?>
                      <?php foreach( $profiles as $profile ): ?>
@@ -233,11 +169,16 @@ jQuery(document).ready(function() {
     </div>
     <div id="credits_and_card_save">
         <div class="cc_save_card use-new-card-wrapper cc_info">
-            <div>
-                <input type="checkbox" value="1" name="payment[saved_by_customer]" checked="checked" id="<?php echo $_code ?>_saved" />
-            </div>
-            <div id="cc_save_text" for="<?php echo $_code ?>_cc_save"><?php echo $this->__(' Save this method for quick <br> shopping on future visits!'); ?>
-            </div>
+            <?php if($_isLoggedIn && $this->getVaultEnabled()):?>
+                <div id="<?php echo $_code ?>_cc_type_should_save_div" class="new-card">
+                     <?php echo $this->__('Save Card In My Account') ?>
+                    <div class="input-box">
+                        <div class="v-fix">
+                            <input type="checkbox" title="<?php echo $this->__('Save Card In My Account') ?>" class="input-checkbox" id="<?php echo $_code ?>_cc_should_save" name="payment[cc_should_save]" />
+                        </div>
+                    </div>
+                </div>
+            <?php endif; ?>
         </div>
         <div id="rewards_points">
             <?php echo $this->getLayout()->getBlock('hpcheckout.reward.points')->toHtml(); ?>
@@ -307,17 +248,6 @@ jQuery(document).ready(function() {
 	<div style="clear:both"></div>
 	</div>
 </div>
-       <?php if($_isLoggedIn && $this->getVaultEnabled()):?>
-   <div id="<?php echo $_code ?>_cc_type_should_save_div" class="new-card">
-        <?php echo $this->__('Save Card In My Account') ?>
-       <div class="input-box">
-           <div class="v-fix">
-               <input type="checkbox" title="<?php echo $this->__('Save Card In My Account') ?>" class="input-checkbox" id="<?php echo $_code ?>_cc_should_save" name="payment[cc_should_save]" />
-           </div>
-       </div>
-   </div>
-<?php endif; ?>
-
 	<?php if($this->getPaypageEnabled()):?>
    		<input type="hidden" id="<?php echo $_code ?>_paypage_id" name="payment[paypage_id]" value="<?php echo $_paypageId; ?>"/>
         <input type="hidden" id="<?php echo $_code ?>_merchant_txn_id" name="payment[merchant_txn_id]" value="<?php echo $_id; ?>"/>
@@ -333,6 +263,8 @@ jQuery(document).ready(function() {
         <input type="hidden" id="<?php echo $_code ?>_type" name="payment[type]"/>
         <input type="hidden" id="<?php echo $_code ?>_litle_txn_id" name="payment[litle_txn_id]"/>
 		<input type="hidden" id="<?php echo $_code ?>_vault_id" name="payment[paypage_id]" value="<?php echo $purchase['token']; ?>"/>
+        <input type="hidden" id="<?php echo $_code ?>_method" name="payment[method]" value="creditcard">
+
 	<?php endif; ?>
 
 <?php if($this->getPaypageEnabled()):?>
@@ -388,7 +320,7 @@ jQuery(document).ready(function() {
 
 			function onErrorAfterLitle(response) {
 				setLitleResponseFields(response);
-				alert('There was an error. Re-enter your payment information, or contact us for further assistance.');
+				//alert('There was an error. Re-enter your payment information, or contact us for further assistance.');
 				return false;
 			}
 
