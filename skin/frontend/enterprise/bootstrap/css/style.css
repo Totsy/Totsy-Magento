@@ -85,13 +85,12 @@ html.test .container .row {outline:1px dotted green;}
 }
 /* TED's BLUE LINE HR */
 hr {
-background-color:#fff;
-border:1px dashed #64a5fe;
-border-style: none none dashed;
-color:#fff;
-margin:7px 0px 10px; 
+    background-color:#fff;
+    border:1px dashed #64a5fe;
+    border-style: none none dashed;
+    color:#fff;
+    margin:7px 0px 10px; 
 }
-h4 {text-transform: uppercase;}
 
 /**
  * @One-off Modules & 3rd Party
@@ -810,7 +809,7 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
     position: absolute; bottom: 0; left: 0;
     visibility: hidden;
     opacity:0;
-    width:100%; height: 378px; overflow: hidden;
+    width:100%; height: 343px; overflow: hidden;
     background: rgba(0,0,0,0.75);
     -moz-transition:opacity 0.1s ease;
     -webkit-transition:opacity 0.1s ease;
@@ -823,7 +822,7 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
     position: absolute; bottom: 0; left: 0;
     visibility: hidden;
     opacity:0;
-    width:100%; height: 260px; overflow: hidden;
+    width:100%; height: 343px; overflow: hidden;
     background: rgba(0,0,0,0.75);
     -moz-transition:opacity 0.1s ease;
     -webkit-transition:opacity 0.1s ease;
@@ -836,7 +835,7 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
     position: absolute; bottom: 0; left: 0;
     visibility: hidden;
     opacity:0;
-    width:100%; height: 424px; overflow: hidden;
+    width:100%; height: 343px; overflow: hidden;
     background: rgba(0,0,0,0.75);
     -moz-transition:opacity 0.1s ease;
     -webkit-transition:opacity 0.1s ease;
@@ -864,13 +863,14 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
     position: absolute; bottom: 0; left: 0; z-index: 2;
     padding:0 0 18px; width:100%;
     text-align: center;
+    background:#fff;
     -moz-transition: opacity 0.5s ease;
     -webkit-transition:opacity 0.5s ease;
     transition:opacity 0.5s ease;
 }
 .events-grid .thumbnail .more [id*="time1-"] {
     margin:10px 0 18px; padding:8px 0;
-    background:#666;
+    background:none;
     -moz-box-shadow: 0 2px 2px rgba(0, 0, 0, 0.086);
     -webkit-box-shadow: 0 2px 2px rgba(0, 0, 0, 0.086);
     box-shadow: 0 2px 2px rgba(0, 0, 0, 0.086);
