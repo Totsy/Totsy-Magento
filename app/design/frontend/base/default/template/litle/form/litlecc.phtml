@@ -53,7 +53,7 @@ jQuery(document).ready(function() {
     jQuery(".use-saved-card-control").click(function() {
         checkoutPayment.useSavedCard();
     });
-    jQuery("#paymentfactory_tokenize_cc_type input").click(function() {
+    jQuery("#creditcard_cc_type input").click(function() {
         checkoutPayment.setPaymentType(this);
     });
 });
@@ -121,18 +121,30 @@ jQuery(document).ready(function() {
                     <?php if($this->getVaultEnabled()) { ?>
                         <?php if ($this->hasStoredCards()){ ?>
                             <?php foreach ($this->getStoredCards() as $card): ?>
+                                <?php 
+                                     
+                                    $customerId = $card->getData('customer_id');
+                                    $customerObj = Mage::getSingleton('customer/customer')->load($customerId);
+                                    
+                                    $customerAddress = Mage::getModel('sales/order')->load($card->order_id)->getBillingAddress();
+                                    $customerName = $customerAddress->getFirstname() ." ". $customerAddress->getLastname();
+                                    $customerStreet = $customerAddress['street'];
+                                ?>
                                 <tr>
 	                                <td>
-	                       		        <input type="radio" id="payment[cc_vaulted]" name="payment[cc_vaulted]" value="<?php echo $card->getVaultId() ?>"><?php echo 'Stored ' . $card->getTypeName() . ' Ending in: ' . $card->getLast4() ?>
+	                                    <div>
+	                       		            <input type="radio" id="payment[cc_vaulted]" name="payment[cc_vaulted]" value="<?php echo $card->getVaultId() ?>" class="use-saved-card-control pull-left" id="payment">
                                             <span class="cc">
-        		 	                            <span title="<?php //echo $this->getFullCcCardType( $profile->getData( 'card_type' )); ?>" class="<?php //echo strtolower($profile->getData('card_type')); ?>" >
+        		 	                            <span title="<?php echo strtolower($card->type); ?>" class="<?php echo strtolower($card->type); ?>" >
         		 	                            </span>
         		 	                       </span>
+        		 	                       <strong><?php $card->getTypeName(); ?></strong>
+        		 	                    </div>
         		 	                </td>
-        		 	                <td class="card-type"><strong><?php $card->getTypeName(); ?></strong> ending in <?php echo $card->getLast4() ?></td>
-                                    <td class="card-name"><?php echo "Dude Name"; //$customerName ?></td>
-                                    <td class="billing-address"><?php echo "Dude Address #32"; //$customerStreet; ?></td>
-                                    <td class="card-expdate"><?php echo "10/13"; /* echo $profile->getExpireMonth()."/".$profile->getExpireYear();*/ ?></td>
+        		 	                <td class="card-type"> ending in <?php echo $card->getData('last4'); ?></td>
+                                    <td class="card-name"><?php echo $customerName; ?></td>
+                                    <td class="billing-address"><?php echo $customerStreet; ?></td>
+                                    <td class="card-expdate"><?php echo $card->getData('expiration_month')."/".$card->getData('expiration_year'); ?></td>
                                 </tr>
 	                        <?php endforeach ?>
 	                       	</div>

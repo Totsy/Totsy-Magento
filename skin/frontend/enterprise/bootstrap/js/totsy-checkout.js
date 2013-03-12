@@ -74,7 +74,7 @@ jQuery(document).ready(function() {
                     //billingAddress.attr("disabled", true);
                     newCardWrap.hide();
                     if (checkoutPayment.isCollapsed == false) {
-                        billAddySelect.val(jQuery("#address_" + jQuery(elem).val()).val()).change();
+                        //billAddySelect.val(jQuery("#address_" + jQuery(elem).val()).val()).change();
                         //Block Billing Inputs if credit card selected
                         this.disableAddress(true, 'hpcheckout-billing-form');
                         billAddySelect.attr('disabled', true);

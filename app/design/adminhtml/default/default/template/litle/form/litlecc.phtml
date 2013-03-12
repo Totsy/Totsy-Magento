@@ -30,6 +30,7 @@ $_code = $this->getMethodCode();
 $_reportGroup = $this->getReportGroup();
 $_paypageId = Mage::getModel('Litle_CreditCard_Model_PaymentLogic')->getConfigData("paypage_id");
 $_paypageUrl = Mage::getModel('Litle_CreditCard_Model_PaymentLogic')->getConfigData("paypage_url");
+$_showClassicPaymentForm = true; 
 ?>
 
 <ul id="payment_form_<?php echo $_code ?>" style="display:none;">
@@ -75,7 +76,7 @@ $_paypageUrl = Mage::getModel('Litle_CreditCard_Model_PaymentLogic')->getConfigD
 	</script>
 <?php endif; ?>
 
-<?php if ($this->getPaypageEnabled()):?>
+<?php if ($this->getPaypageEnabled() && !$_showClassicPaymentForm):?>
 
 	<?php if($this->hasVerification() && $this->getVaultEnabled() && $this->hasStoredCards()): ?>
     <li id="<?php echo $_code ?>_cc_type_cvv_div">

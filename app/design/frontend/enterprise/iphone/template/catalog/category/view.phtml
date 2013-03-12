@@ -218,18 +218,18 @@
 <script type="text/javascript">
     jQuery(".counter").each(function(){
         var saleTime = new Date(jQuery(this).data('enddate'));
-        var id = jQuery(this).data('id');
+        var server_now = "<?php echo date('F j, Y, G:i:s' , Mage::app()->getLocale()->storeTimeStamp(Mage::app()->getStore()->getId())); ?>";
         if(jQuery(this).data('status') == 'earlyaccess'){
-            var html = getEarlyAccessTimerHtml(jQuery(this).data('status'), jQuery(this).data('enddate'));
+            var html = getEarlyAccessTimerHtml(jQuery(this).data('status'), jQuery(this).data('enddate'), server_now);
         } else {
-            var html = getTimerHtml(jQuery(this).data('status'), jQuery(this).data('enddate'));
+            var html = getTimerHtml(jQuery(this).data('status'), jQuery(this).data('enddate'),server_now);
         }
         jQuery(this).countdown({
-            date: saleTime,
-            htmlTemplate: html,
-            leadingZero: true,
-            direction: 'down',
-            onComplete: function( event ){
+            until: saleTime,
+            layout: html,
+            expiryText: "Completed",
+            alwaysExpire: true,
+            onExpiry: function( event ){
                 jQuery(this).html("Completed");
             }
         });

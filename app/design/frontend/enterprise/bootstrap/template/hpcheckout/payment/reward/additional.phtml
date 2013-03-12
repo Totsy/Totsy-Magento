@@ -31,7 +31,7 @@
  */
 ?>
 <?php if ($this->getCanUseRewardPoints()): ?>
-    <div class="sp-methods checkout-reward checkout-onepage-payment-additional-reward" id="reward_placer">
+    <div class="sp-methods checkout-reward checkout-onepage-payment-additional-reward">
         <input type="hidden" name="payment[use_reward_points]" id="reward-points-input" value="<?php echo $this->useRewardPoints()? 1 : 0 ?>" />
 		<?php if( ! $this->useRewardPoints() ): ?>
 	        <?php $balance = Mage::helper('enterprise_reward')->formatReward($this->getPointsBalance(), $this->getCurrencyAmount()) ?>
