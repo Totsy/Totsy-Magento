@@ -196,23 +196,6 @@ class Harapartners_Stockhistory_Model_Transaction extends Mage_Core_Model_Abstra
         }
     }
 
-    public function resetPOItems($po_id, $items, $update_stock) { 
-
-        $trans_collection = $this->getCollection();
-        
-        $trans_collection->getSelect()->where('po_id=' . $po_id . ' and product_id in (' . implode(',', $items) .') and action_type = ' . self::ACTION_TYPE_AMENDMENT );
-        
-        foreach($trans_collection as $transaction) {
-            
-            if($update_stock) {
-                $qty_change = -$transaction->getData('qty_delta');
-                $transaction->updateProductStock($update_stock);
-            }
-
-            $transaction->delete();
-        }
-    }
-
     public function changeCasePackAttributeValue($attribute, $product_id, $changeto) {
 
         $product = Mage::getModel('catalog/product')->load($product_id);
@@ -367,6 +350,33 @@ class Harapartners_Stockhistory_Model_Transaction extends Mage_Core_Model_Abstra
             $results[$item->getData('product_sku')] = $this->calculateCasePackOrderQty($item->getData('product_id'), $po_id, $case_pack_id);
         }
         return $results;
+    }
+
+    public function resetPOItems($po_id, $items, $update_stock) { 
+
+        $trans_collection = $this->getCollection();
+        
+        $trans_collection->getSelect()->where('po_id=' . $po_id . ' and product_id in (' . implode(',', $items) .') and action_type = ' . self::ACTION_TYPE_AMENDMENT );
+        
+        foreach($trans_collection as $transaction) {
+            
+            if($update_stock) {
+                $qty_change = -$transaction->getData('qty_delta');
+                $transaction->updateProductStock($update_stock);
+            }
+
+            $transaction->delete();
+        }
+    }
+
+    public function putbackPOItem($po_id, $item) { 
+
+        $trans_collection = $this->getCollection();
+        
+        $trans_collection->getSelect()->where('po_id=' . $po_id . ' and product_id =' . $item .' and action_type = ' . self::ACTION_TYPE_REMOVE );
+        foreach($trans_collection as $transaction) {
+            $transaction->delete();
+        }
     }
 
     public function moveItems($new_po, $items) {

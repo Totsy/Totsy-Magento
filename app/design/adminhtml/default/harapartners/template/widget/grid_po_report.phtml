@@ -204,35 +204,41 @@ $removedItems = $this->getRemovedItems();
     </table>
     </div>
 </div>
-<div id='removed_items_grid' class="grid">
-    <div>
-        <h3>Removed Items</h3>
-    </div>
-    <table id="removed_items" class="data" cellspacing="0">
-        <thead>
-            <tr class="headings">
-                <th>Vendor Style</th>
-                <th>Product Name</th>
-                <th>Sku</th>
-                <th>Size</th>
-                <th>Color</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php 
-                foreach($removedItems as $id => $data): 
-            ?>
-                <tr class="removed">
-                    <td> <?php echo $data['vendor_style']; ?> </td>
-                    <td> <?php echo $data['product_name']; ?> </td>
-                    <td> <?php echo $data['sku'] ?> </td>
-                    <td> <?php echo $data['color'] ?> </td>
-                    <td> <?php echo $data['size'] ?> </td>
+
+<?php if (!empty($removedItems)): ?>
+    <div id='removed_items_grid' class="grid">
+        <div>
+            <h3>Removed Items</h3>
+            <div class="spinner" style="display: none;"> Please wait <img src="<?php echo $this->getSkinUrl( 'images/ajax-loader.gif' ) ?>"></div>
+        </div>
+        <table id="removed_items" class="data" cellspacing="0">
+            <thead>
+                <tr class="headings">
+                    <th>Vendor Style</th>
+                    <th>Product Name</th>
+                    <th>Sku</th>
+                    <th>Size</th>
+                    <th>Color</th>
+                    <th></th>
                 </tr>
-            <?php endforeach; ?>
-        </tbody>
-    </table>
-</div>
+            </thead>
+            <tbody>
+                <?php 
+                    foreach($removedItems as $id => $data): 
+                ?>
+                    <tr class="removed">
+                        <td> <?php echo $data['vendor_style']; ?> </td>
+                        <td> <?php echo $data['product_name']; ?> </td>
+                        <td> <?php echo $data['sku'] ?> </td>
+                        <td> <?php echo $data['color'] ?> </td>
+                        <td> <?php echo $data['size'] ?> </td>
+                        <td> <button id="put_back_button" type="button" data-id="<?php echo $id?>">Put Back</button> </td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+<?php endif; ?>
 <?php if($this->canDisplayContainer()): ?>
 </div>
 <script type="text/javascript">
@@ -265,6 +271,21 @@ $removedItems = $this->getRemovedItems();
             jQuery("#<?php echo $this->getId(); ?>_massaction-select option[value=\"move_items\"]").text("Move to PO # " + ans);
         }
       }
+    });
+
+    jQuery("#put_back_button").click(function(){
+      var id = jQuery(this).data('id');
+      jQuery.ajax({
+        url: "<?php echo Mage::getUrl('*/*/putBackRemovedItem', array('_current' => true, '_query'=> array('isAjax' => true)))?>",
+        type: 'POST',
+        data: {product_id : id, form_key : FORM_KEY},
+        beforeSend: function() {
+            jQuery('#loading-mask').show();
+        },
+        success: function(success) {
+            setLocation("<?php echo $this->getUrl('*/adminhtml_transaction/report', array('_current' => true))?>");
+        }
+      });
     });
 </script>
 <?php endif; ?>

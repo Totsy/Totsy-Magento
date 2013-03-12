@@ -213,11 +213,13 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Grid extends 
              'confirm' => Mage::helper('stockhistory')->__("Resetting the item(s) will remove ALL qty change post amendments ever made for the item. \n**If the sale is has not expired, stock qty will be updated accordingly** \nAre you sure you want to reset?")
         ));
 
-        $this->getMassactionBlock()->addItem('move_items', array(
-             'label'=> Mage::helper('stockhistory')->__('Move items to PO #...'),
-             'url'  => $this->getUrl('*/*/moveItemsToNewPo', array('_current' => true)),
-             'confirm' => Mage::helper('stockhistory')->__("Are you sure you want to move these items?")
-        ));
+        if(($this->getPoObject()->getStatus()) != Harapartners_Stockhistory_Model_Purchaseorder::STATUS_SUBMITTED){
+            $this->getMassactionBlock()->addItem('move_items', array(
+                 'label'=> Mage::helper('stockhistory')->__('Move items to PO #...'),
+                 'url'  => $this->getUrl('*/*/moveItemsToNewPo', array('_current' => true)),
+                 'confirm' => Mage::helper('stockhistory')->__("Are you sure you want to move these items?")
+            ));
+        }
 
         $this->getMassactionBlock()->addItem('change_case_pack_no', array(
              'label'=> Mage::helper('stockhistory')->__('Set Case Pack to No'),

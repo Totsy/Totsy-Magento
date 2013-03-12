@@ -401,41 +401,6 @@ class Harapartners_Stockhistory_Adminhtml_TransactionController extends Mage_Adm
     }
 
     /**
-     * ajax call that resets 1 or more items
-     * @author Lawrenberg Hanson <lhanson@totsy.com>
-     * @example Stockhistory/Block/Adminhtml/Transaction/Report/Grid.php line 203
-     */
-    public function resetItemsAction() {
-
-        $po_id = $this->getRequest()->getParam('po_id');
-        $items = $this->getRequest()->getParam('product_id');
-        $update_stock = false;
-
-        $po = Mage::getModel('stockhistory/purchaseorder')->load($po_id);
-        $category = Mage::getModel('catalog/category')->load($po->getCategoryId());
-
-        $event_end_date = strtotime($category->getEventEndDate());
-        $today = strtotime('NOW');
-
-        if( $event_end_date > $today) {
-            $update_stock = true;
-        }
-
-        if($items) {
-            try{
-                Mage::getModel('stockhistory/transaction')->resetPOItems($po_id , $items, $update_stock);
-                $this->_getSession()->addSuccess(Mage::helper('stockhistory')->__('Items were successfully reset!'));
-            }catch(Exception $e){
-                $this->_getSession()->addError(Mage::helper('stockhistory')->__('Unable to reset items, please try again.  Error: ' . $e->getMessage()));
-            }
-        } else {
-            $this->_getSession()->addError(Mage::helper('stockhistory')->__('You did not select any items'));
-        }
-        Mage::getSingleton('adminhtml/session')->setPOReportGridData(null);
-        $this->_redirectReferer(null);
-    }
-
-    /**
      * This function is an ajax function that changes an items case pack information
      * such as case pack qty and case pack group id
      * @author Lawrenberg Hanson <lhanson@totsy.com>
@@ -533,4 +498,54 @@ class Harapartners_Stockhistory_Adminhtml_TransactionController extends Mage_Adm
         Mage::getSingleton('adminhtml/session')->setPOReportGridData(null);
         $this->_redirectReferer(null);
     }
+
+    public function putBackRemovedItemAction() {
+        $po_id = $this->getRequest()->getParam('po_id');
+        $item_id = $this->getRequest()->getParam('product_id');
+        try{
+            $po_items = Mage::getModel('stockhistory/transaction')->putbackPOItem($po_id, $item_id);
+            $this->_getSession()->addSuccess(Mage::helper('stockhistory')->__('Successfully updated!'));
+        } catch(Exception $e) {
+            $this->_getSession()->addError(Mage::helper('stockhistory')->__("Error: " . $e->getMessage()));
+        }
+
+        Mage::getSingleton('adminhtml/session')->setPOReportGridData(null);
+        $this->_redirectReferer(null);
+    }
+
+    /**
+     * ajax call that resets 1 or more items
+     * @author Lawrenberg Hanson <lhanson@totsy.com>
+     * @example Stockhistory/Block/Adminhtml/Transaction/Report/Grid.php line 203
+     */
+    public function resetItemsAction() {
+
+        $po_id = $this->getRequest()->getParam('po_id');
+        $items = $this->getRequest()->getParam('product_id');
+        $update_stock = false;
+
+        $po = Mage::getModel('stockhistory/purchaseorder')->load($po_id);
+        $category = Mage::getModel('catalog/category')->load($po->getCategoryId());
+
+        $event_end_date = strtotime($category->getEventEndDate());
+        $today = strtotime('NOW');
+
+        if( $event_end_date > $today) {
+            $update_stock = true;
+        }
+
+        if($items) {
+            try{
+                Mage::getModel('stockhistory/transaction')->resetPOItems($po_id , $items, $update_stock);
+                $this->_getSession()->addSuccess(Mage::helper('stockhistory')->__('Items were successfully reset!'));
+            }catch(Exception $e){
+                $this->_getSession()->addError(Mage::helper('stockhistory')->__('Unable to reset items, please try again.  Error: ' . $e->getMessage()));
+            }
+        } else {
+            $this->_getSession()->addError(Mage::helper('stockhistory')->__('You did not select any items'));
+        }
+        Mage::getSingleton('adminhtml/session')->setPOReportGridData(null);
+        $this->_redirectReferer(null);
+    }
+
 }
