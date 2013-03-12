@@ -4,6 +4,7 @@
 {
     const MERCHANT_ID = 36138;
     const TRANSMIT_URL = "https://track.linksynergy.com/nvp";
+    const ENCRYPT_KEY = 'Ve3YGHn7';
 
     /**
     *
@@ -56,6 +57,7 @@
             }
         }
 
+        Mage::log("\torder id: {$order->getId()} and raw data: {$raw}", Zend_Log::INFO, 'linkshare_log.log');
         return $raw;
     }
 
@@ -65,7 +67,7 @@
         $msg = str_replace('/','_',str_replace('+','-',$base64));
 
         //Used for authenticity
-        $md5_raw = hash_hmac('md5', $raw, 'Ve3YGHn7', true);
+        $md5_raw = hash_hmac('md5', $raw, self::ENCRYPT_KEY , true);
         $md5 = base64_encode($md5_raw);
         $md5 = str_replace('/','_',str_replace('+','-',$md5));
         return array('msg' => $msg, 'md5' => $md5);
@@ -100,6 +102,7 @@
         $trans['success'] = $success;
         $trans['order_id'] = $orderid;
         $trans['message'] = $message;
+        Mage::log("\torder id: {$orderid} and transfer is {$success}", Zend_Log::INFO, 'linkshare_log.log');
         return $trans;
     }
 }

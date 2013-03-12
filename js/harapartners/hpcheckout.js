@@ -212,10 +212,14 @@ HpCheckout.prototype = {
         }
         //only validate these fields when the customer deceides to place an order (when they click the "Place Order" button on the onepage checkout)
         jQuery("[id='shipping:postcode']").addClass("required-entry validate-zip");
-        jQuery("[id='shipping:telephone']").addClass("required-entry validate-phoneLax");
-        //if (!this.validate()) {
-            //return;
-        //}
+        jQuery("[id='shipping:telephone']").addClass("required-entry validate-phoneLax");        
+
+        if (!this.validate()) {
+            return;
+        }
+
+        jQuery("#" + this.id).attr("disabled", true);
+
         //IE grabs placeholder text from orders in lew of of an actual value
         //this fix removes values explicitly when they match their placeholder text
         jQuery("#hpcheckout-wrapper").find('input[placeholder]').each(function() {
@@ -229,7 +233,9 @@ HpCheckout.prototype = {
         var checkoutObject = this;
         var postData = this.getFormData();
         postData += '&updatePayment=true';
+        
         this.throbberOn();
+        
         jQuery.ajax({
             url: this.data.submitUrl,
             dataType: "json",
@@ -330,7 +336,7 @@ HpCheckout.prototype = {
                     checkoutPayment.disableAddress(true, 'hpcheckout-shipping-form');
                 }
             }
-        }
+        }        
     },
     getFormData: function(blockCodes) {
         var affectedFormIds = this.getFormIds(blockCodes);

@@ -63,20 +63,24 @@ class Harapartners_Customertracking_Helper_CustomPixel
         $orderId = Mage::getSingleton('checkout/session')->getLastOrderId();
         $trackingInfo = Mage::getSingleton('customer/session')->getData('affiliate_info');
         $customertracking = Mage::getModel('customertracking/record')->loadByCustomerEmail($customer->getEmail());
-
-        if(trim($customertracking->getData('affiliate_code')) != 'linkshare') {
+        
+        //Making sure that the user is actually a linkshare user
+        if(trim($customertracking->getData('affiliate_code')) != 'linkshare'  && $customertracking->getId() != 0) {
+            Mage::log("This is not a linkshare customer.", Zend_Log::INFO, 'linkshare_log.log');
             return $html;
         }
-        
+
+        $orderids = Mage::getSingleton('checkout/session')->getData('orderids');
         $regParams = json_decode($customertracking->getData('registration_param'),true);
-        $order = Mage::getModel('sales/order')->load($orderId);
 
         $html = '';
-        if($order->getStatus() == "splitted") {
+        if(count($orderids) >= 2  && is_null($orderId)) {
+            Mage::log("Multiple Orders:", Zend_Log::INFO, 'linkshare_log.log');
             $split_count = 1;
-            $cust_order_id = $order->getIncrementId();
+
             $split_orders = Mage::getModel('sales/order')->getCollection();
-            $split_orders->getSelect()->where('increment_id like "' . $cust_order_id . '-%"');
+            $split_orders->getSelect()->where('increment_id in (' . implode(',', $orderids) . ')');
+            Mage::log("\tOrder(s) count: " . $split_orders->count(), Zend_Log::INFO, 'linkshare_log.log');
             foreach($split_orders as $order) {
                 $message = Mage::helper('linkshare/linkshare')->linkshareRaw($order, $regParams['subID'],$login_time,'Pixel');
                 $encode = Mage::helper('linkshare/linkshare')->prepareTransactionData($message);
@@ -91,9 +95,12 @@ class Harapartners_Customertracking_Helper_CustomPixel
                     $html .= preg_replace('/{{[\w.]+}}/', $message, $pixel);
                 }
                 ++$split_count;
+                Mage::log("\tThis is order id: {$order->getId()} and it is has a status: {$order->getStatus()}", Zend_Log::INFO, 'linkshare_log.log');
             }
             $html = rtrim($html, "\"/>");
         } else {
+            Mage::log("Single Order: ", Zend_Log::INFO, 'linkshare_log.log');
+            $order = Mage::getModel('sales/order')->load($orderId);
             $message = Mage::helper('linkshare/linkshare')->linkshareRaw($order, $regParams['subID'],$login_time,$order->getStatus());
             $html .= $message;
             $encode = Mage::helper('linkshare/linkshare')->prepareTransactionData($message);
@@ -102,6 +109,8 @@ class Harapartners_Customertracking_Helper_CustomPixel
             $result['raw_data'] = $message;
             $result['order_status'] = 'New';
             Mage::getModel('linkshare/transactions')->recordTransaction($result);
+            Mage::log("\tThis is order id: {$orderId} and it is has a status: {$order->getStatus()}", Zend_Log::INFO, 'linkshare_log.log');
+        
         }
 
         return $html;
