@@ -362,12 +362,12 @@ body.customer-account-login .btn.btn-large {
 }
 #masthead > .container {
     position: relative;
-    padding:3px 0;
+    padding:8px 0;
 }
 #logo {margin-left:0;}
 
 .header-utils {
-    position: absolute; bottom: 0; right: 0;
+    position: absolute; bottom: 8px; right: 0;
 }
 .header-cta {
     position: absolute; top: 0; right: 0;
