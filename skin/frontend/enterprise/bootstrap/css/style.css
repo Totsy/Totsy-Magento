@@ -364,6 +364,20 @@ body.customer-account-login .btn.btn-large {
     background-color: #c1cc00;
 }
 
+/* mainContent - the site "wrapper" white box */
+#mainContent {
+    margin-top:0;
+    margin-bottom:232px;
+    background:#fff; 
+    padding:15px;
+    padding-bottom:0px; overflow: auto; /* @sticky, +more padding */
+}
+
+.logged-out ~ #mainContent {
+    /* padding-top:115px; */
+}
+
+
 /**
  * @Header
  * - "navbar" class from bootstrap
@@ -745,61 +759,6 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
     overflow: hidden;
     position: relative;
     width: 100%;
-}
-/* Landscape phones and down */
-@media (max-width: 480px) {
-#mainContent {
-    margin-top:35px;
-    margin-bottom:232px;
-    background:#fff; 
-    padding:15px;
-    padding-bottom:0px; overflow: auto; /* @sticky, +more padding */
-}
-}
-/* Landscape phone to portrait tablet */
-@media (max-width: 767px) {
-#mainContent {
-    margin-top:20px;
-    margin-bottom:232px;
-    background:#fff; 
-    padding:15px;
-    padding-bottom:0px; overflow: auto; /* @sticky, +more padding */
-}
-}
-/* Portrait tablet to landscape and desktop */
-@media (min-width: 768px) {
-#mainContent {
-    margin-top:20px;
-    margin-bottom:232px;
-    background:#fff; 
-    padding:15px;
-    padding-bottom:0px; overflow: auto; /* @sticky, +more padding */
-}
-}
-/* Default Display */
-@media (min-width: 980px) {
-#mainContent {
-    margin-top:150px;
-    margin-bottom:232px;
-    background:#fff; 
-    padding:15px;
-    padding-bottom:0px; overflow: auto; /* @sticky, +more padding */
-}
-}
-
-/* this #mainContent block will override all previous media queries due to natural cascade
- * keep RWD out of this build for now…
-*/
-#mainContent {
-    margin-top:0;
-    margin-bottom:232px;
-    background:#fff; 
-    padding:15px;
-    padding-bottom:0px; overflow: auto; /* @sticky, +more padding */
-}
-
-.logged-out ~ #mainContent {
-    /* padding-top:115px; */
 }
 #mainContent > .banner {
     margin:5px auto 0;
