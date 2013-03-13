@@ -96,5 +96,9 @@
                 <Aoe_Scheduler/>
             </depends>
         </Totsy_Scheduler>
+        <Totsy_Log>
+            <active>true</active>
+            <codePool>local</codePool>
+        </Totsy_Log>
     </modules>
 </config>
