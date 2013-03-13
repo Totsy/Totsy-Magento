@@ -99,31 +99,30 @@ class Totsy_Sailthru_Helper_Feed extends Mage_Core_Helper_Abstract
     public function preFormatEvent(&$event,$escape=array()){
         $error = array();
 
-        $this->arrayKeyExistsValidateAndFormat('entity_id', $event, $error);
-        $this->arrayKeyExistsValidateAndFormat('name', $event, $error);
-        $this->arrayKeyExistsValidateAndFormat('url_path', $event, $error);
-        $this->arrayKeyExistsValidateAndFormat('description', $event, $error);
-        $this->arrayKeyExistsValidateAndFormat('short_description', $event, $error);
-        $this->arrayKeyExistsValidateAndFormat('products', $event, $error);
-        $this->arrayKeyExistsValidateAndFormat('image', $event, $error);
-        $this->arrayKeyExistsValidateAndFormat('small_image', $event, $error);
-        $this->arrayKeyExistsValidateAndFormat('event_start_date', $event, $error);
-        $this->arrayKeyExistsValidateAndFormat('event_end_date', $event, $error);
-        $this->arrayKeyExistsValidateAndFormat('department_label', $event, $error);
-        $this->arrayKeyExistsValidateAndFormat('age_label', $event, $error);
-        
+        $this->arrayKeyExistsValidateAndFormat('entity_id', $event);
+        $this->arrayKeyExistsValidateAndFormat('name', $event);
+        $this->arrayKeyExistsValidateAndFormat('url_path', $event);
+        $this->arrayKeyExistsValidateAndFormat('description', $event);
+        $this->arrayKeyExistsValidateAndFormat('short_description', $event);
+        $this->arrayKeyExistsValidateAndFormat('items', $event);
+        $this->arrayKeyExistsValidateAndFormat('image', $event);
+        $this->arrayKeyExistsValidateAndFormat('small_image', $event);
+        $this->arrayKeyExistsValidateAndFormat('event_start_date', $event);
+        $this->arrayKeyExistsValidateAndFormat('event_end_date', $event);
+        $this->arrayKeyExistsValidateAndFormat('department_label', $event);
+        $this->arrayKeyExistsValidateAndFormat('age_label', $event);
+
         if (!in_array('discount',$escape)){        
-            $this->arrayKeyExistsValidateAndFormat('max_discount_pct', $event, $error);
+            $this->arrayKeyExistsValidateAndFormat('max_discount_pct', $event);
         }
 
         if (!in_array('products',$escape)){
-            $this->arrayKeyExistsValidateAndFormat('products', $event, $error);
+            $this->arrayKeyExistsValidateAndFormat('products', $event);
         }
-        if (!empty($error)){
-            $this->_errors[$event['entity_id']] = array_unique($error);
-            unset($error);
+        
+        if (!empty($this->_errors)){
+            $this->_errors = array_unique($this->_errors);
         }
-
     }
 
     public function formatEvent(&$event){
@@ -315,9 +314,8 @@ class Totsy_Sailthru_Helper_Feed extends Mage_Core_Helper_Abstract
             return true;
         }
 
-        $error[$array['entity_id']][] = 'Key "'.$key.'" does not exist in a for event ( Id = \''.$array['entity_id'].'\')';
+        $this->_errors[] = 'Key "'.$key.'" does not exist in a for event ( Id = \''.$array['entity_id'].'\')';
         $array[$key] = null;
-        
         return false;
     }
 }
