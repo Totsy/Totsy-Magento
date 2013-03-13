@@ -1,148 +1,265 @@
-<?php
-/**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Academic Free License (AFL 3.0)
- * that is bundled with this package in the file LICENSE_AFL.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/afl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @category design
- * @package base_default
- * @copyright Copyright (c) 2010 Magento Inc. (http://www.magentocommerce.com)
- * @license http://opensource.org/licenses/afl-3.0.php Academic Free License (AFL 3.0)
- */
-/* @var $this Litle_CreditCard_Block_Form_CreditCard  */
+<?php $_code=$this->getMethodCode();
+$hasVirtual = false;
+// Check to see if there are multiple fulfillment types
+
+$_quote = Mage::getSingleton('checkout/session')->getQuote();
+
+foreach($_quote->getAllItems() as $item) {
+    if($item->getParentItemId()) {
+        continue;
+    }
+    $product = Mage::getModel ( 'catalog/product' )->load ( $item->getProductId () );
+    if($product->getIsVirtual() && $product->getFulfillmentType() !== 'nominal') {
+        $_fulfillmentType = 'virtual';
+        $hasVirtual = true;
+    } else {
+        $_fulfillmentType = $product->getFulfillmentType();
+    }
+    $fulfillmentTypes [$_fulfillmentType] [] = $item->getId ();
+}
+
+$multiShipping = FALSE;
+if(count($fulfillmentTypes) > 1) {
+    $multiShipping = TRUE;
+}
 ?>
+
 <?php
 $_reportGroup = $this->getReportGroup();
 $_paypageId = Mage::getModel('Litle_CreditCard_Model_PaymentLogic')->getConfigData("paypage_id");
 $_paypageUrl = Mage::getModel('Litle_CreditCard_Model_PaymentLogic')->getConfigData("paypage_url");
 $_isLoggedIn = Mage::helper('customer')->isLoggedIn();
-?>
 
-<script type="text/javascript">
-Validation.creditCartTypes.set('DC', [new RegExp('^3(?:0[0-5]|[68][0-9])[0-9]{11}$'), new RegExp('^[0-9]{3}$'), true]);
-</script>
-
-<?php
 $_time =  date('ymdHis');
 $_session =  Mage::getModel("core/session")->getEncryptedSessionId();
 $_id = $_time . substr($_session,13);
 
 ?>
-<?php $_code=$this->getMethodCode() ?>
-<ul class="form-list" id="payment_form_<?php echo $_code ?>"
-	style="display: none;">
-<input type="hidden" name="payment[method]" id="payment_method" value="creditcard" checked="checked"/>
-    <input type="hidden" name="payment[use_reward_points]" id="reward-points-input" ?>
-<?php if ($this->getVaultEnabled()): ?>
-	<?php if ($this->hasStoredCards()): ?>
-	<li>
-	<label for="<?php echo $_code ?>_cc_vaulted" class="required"><?php echo $this->__('Stored Credit Cards') ?></label>
-		<div class="input-box">
-			<select id="<?php echo $_code ?>_cc_vaulted" name="payment[cc_vaulted]">
-				<option value=""><?php echo $this->__('--Please Select a Stored Credit Card--')?></option>
-				<option value="0">New Credit Card</option>
 
-            <?php foreach ($this->getStoredCards() as $card): ?>
-                <option value="<?php echo $card->getVaultId() ?>"><?php echo 'Stored ' . $card->getTypeName() . ' Ending in: ' . $card->getLast4() ?></option>
-	    	<?php endforeach ?>
-            </select>
+<div class="form-list .one-page-payment" id="payment_form_<?php echo $_code ?>">
+<?php $customerId = Mage::getSingleton('customer/session')->getCustomerId(); ?>
+<?php if($this->getVaultEnabled()) {
+        $hasProfile = true;
+} ?>
+<script type="text/javascript">
+
+jQuery(document).ready(function() {
+    checkoutPayment.hasProfile = "<?php echo $hasProfile; ?>";
+    checkoutPayment.toggleViews();
+
+    jQuery("[id='payment[cc_vaulted]']").change(function() {
+        checkoutPayment.setPaymentUI(this);
+    });
+    jQuery(".use-saved-card-control").click(function() {
+        checkoutPayment.useSavedCard();
+    });
+    jQuery("#creditcard_cc_type input").click(function() {
+        checkoutPayment.setPaymentType(this);
+    });
+});
+
+</script>
+
+<div>
+    <div>
+    	<div>
+        	<div class="hpcheckout-payment-title">
+        	    <h4 class="legend">Your payment methods</h4>
+        	</div>
+        	<!-- part A of a hack for the radio button error message-->
+        	<div>
+        	</div>
+        	<div class="cc_types use-new-card-wrapper input-box validation-error pull-left">
+        		<?php $_ccType = $this->getInfoData('cc_type') ?>
+        		 <div id="<?php echo $_code ?>_cc_type">
+        		 <?php $i=0; ?>
+        		 <?php foreach ($this->getCcAvailableTypes() as $_typeCode => $_typeName): ?>
+        		  <input type="radio" class="validate-cybsersource-cc-type <?php if($i==3) { /*echo "validate-one-required"*/; } ?>" name="payment[cc_type]" value="<?php echo $_typeCode ?>" <?php if ($_typeCode==$_ccType) { echo "checked"; } ?> >
+        		 <?php $i++; ?>
+        		 	<span class="cc">
+        		 	    <span title="<?php echo $_typeName; ?>"  class="<?php echo strtolower($_typeCode); ?>" >
+        		 	    </span>
+        		 	</span>
+        		 <?php endforeach ?>
+        		 <?php $methods = $this->getLayout()->getBlock('hpcheckout.payment.methods')->getMethods();  ?>
+                 <?php if(count($methods)): ?>
+                 	<?php if(!$multiShipping && !$hasVirtual && Mage::getModel('paypal/config')->isMethodActive('paypal_express')): ?>
+			    	    <input type="radio" value="paypal_express" id="paypal_payment" name="paypal_payment">
+			    	    <div>
+        		 	    <span title="Paypal Express" class="paypal"></span>
+        		 	    <a class="what-is-paypal-link" href="https://www.paypal.com/cgi-bin/webscr?cmd=xpt/Marketing/popup/OLCWhatIsPayPal-outside" target="_blank">What is<br /> PayPal?</a>
+        		 	    </div>
+        		 	<?php endif; ?>
+                 <?php endif; ?>
+        		 <div style="clear:both; height:10px"></div>
+        	    </div>
+        	</div>
+        </div>
+        <div>
+            <?php if( $customerId  ): ?>
+            <div>
+                <div class="cc_security pull-right">
+                    <div class="cc_secure_text pull-left">Totsy ensures your information is<br> private and secure!</div>
+                    <div class="cc_secure_icon">
+                        <img src="/skin/frontend/enterprise/bootstrap/images/iconmonstr-lock-7-icon.png" width="40" height="40">
+                    </div>
+                </div>
+            </div>
+            <?php endif ?>
+        </div>
+        <div style="clear:both"></div>
+                <div class="pull-left" id="use-card-method">
+                    <div id="cybersource-use-card-method">
+                    <table class="saved_card">
+                    	<tr>
+                        	<th></th>
+                        	<th></th>
+                        	<th>Name on card</th>
+                        	<th>Billing address</th>
+                        	<th>Expires</th>
+                        </tr>
+                    <?php if($this->getVaultEnabled()) { ?>
+                        <?php if ($this->hasStoredCards()){ ?>
+                            <?php foreach ($this->getStoredCards() as $card): ?>
+                                <?php 
+                                     
+                                    $customerId = $card->getData('customer_id');
+                                    $customerObj = Mage::getSingleton('customer/customer')->load($customerId);
+                                    
+                                    $customerAddress = Mage::getModel('sales/order')->load($card->order_id)->getBillingAddress();
+                                    $customerName = $customerAddress->getFirstname() ." ". $customerAddress->getLastname();
+                                    $customerStreet = $customerAddress['street'];
+                                ?>
+                                <tr>
+	                                <td>
+	                                    <div>
+	                       		            <input type="radio" id="payment[cc_vaulted]" name="payment[cc_vaulted]" value="<?php echo $card->getVaultId() ?>" class="use-saved-card-control pull-left" id="payment">
+                                            <span class="cc">
+        		 	                            <span title="<?php echo strtolower($card->type); ?>" class="<?php echo strtolower($card->type); ?>" >
+        		 	                            </span>
+        		 	                       </span>
+        		 	                       <strong><?php $card->getTypeName(); ?></strong>
+        		 	                    </div>
+        		 	                </td>
+        		 	                <td class="card-type"> ending in <?php echo $card->getData('last4'); ?></td>
+                                    <td class="card-name"><?php echo $customerName; ?></td>
+                                    <td class="billing-address"><?php echo $customerStreet; ?></td>
+                                    <td class="card-expdate"><?php echo $card->getData('expiration_month')."/".$card->getData('expiration_year'); ?></td>
+                                </tr>
+	                        <?php endforeach ?>
+	                       	</div>
+	                   <script type="text/javascript">
+	                   Event.observe($("<?php echo $_code ?>_cc_vaulted"), 'change', function() {
+	                   	if ($F(this) != '0') {
+	                   		$$('.new-card').invoke('hide');
+	                   		$('<?php echo $_code ?>_cc_cid').value="";
+	                   		$$('.cid-class').invoke('show');
+	                   	} else {
+	                   		$$('.new-card').invoke('show');
+	                   		$('<?php echo $_code ?>_cc_cid').value="";
+	                   		$('<?php echo $_code ?>_cc_type').value = "";
+	                   		$('<?php echo $_code ?>_expiration').value = "";
+	                   		$('<?php echo $_code ?>_expiration_yr').value = "";
+	                   		$('<?php echo $_code ?>_cc_should_save').setValue(false);
+	                   		$$('.cid-class').invoke('show');
+	                   	}
+	                   });
+	                   </script>
+	                   <?php } ?>
+                    <?php } ?>
+						</table>
+                    </div>
+                </div>
+                <div>
+                    <?php if($profiles) { ?>
+                     <?php foreach( $profiles as $profile ): ?>
+                        <?php if( !$profile->getSubscriptionId() || $profile->getIsDefault()== 1 ) { continue; } ?>
+                        <input type="hidden" id="address_<?php echo $profile->getEncryptedSubscriptionId() ?>" value="<?php echo $profile->getData('address_id') ?>" />
+                    <?php endforeach ?>
+                    <?php } ?>
+                </div>
+    </div>
+    <div id="credits_and_card_save">
+        <div class="cc_save_card use-new-card-wrapper cc_info">
+            <?php if($_isLoggedIn && $this->getVaultEnabled()):?>
+                <div id="<?php echo $_code ?>_cc_type_should_save_div" class="new-card">
+                     <?php echo $this->__('Save Card In My Account') ?>
+                    <div class="input-box">
+                        <div class="v-fix">
+                            <input type="checkbox" title="<?php echo $this->__('Save Card In My Account') ?>" class="input-checkbox" id="<?php echo $_code ?>_cc_should_save" name="payment[cc_should_save]" />
+                        </div>
+                    </div>
+                </div>
+            <?php endif; ?>
+        </div>
+        <div id="rewards_points">
+            <?php echo $this->getLayout()->getBlock('hpcheckout.reward.points')->toHtml(); ?>
+        </div>
+    </div>
+<div id="cc_data">
+    <div class="pull-left">
+        <div>
+            <div class="pull-left cc_num use-new-card-wrapper cc_info">
+                <div class="input-box">
+                    <input type="text" id="<?php echo $_code ?>_cc_number" name="payment[cc_number]" title="<?php echo $this->__('Credit Card Number') ?>" class="input-text validate-cc-number validate-cc-type-radio" value="<?php echo (($this->__('Credit Card Number')!=='Credit Card Number') ? $this->__('Credit Card Number') : "") ?>" placeholder="<?php echo $this->__('Credit Card Number') ?>" />
+                </div>
+            </div>
+        </div>
+        <div style="clear:both"></div>
+        <div>
+            <?php if ($this->hasVerification()): ?>
+            <div class="cc_cvn pull-left use-new-card-wrapper cc_info">
+                <label for="<?php echo $_code ?>_cc_cid" class="required"><em>*</em><?php echo $this->__('CVN#') ?></label>
+                <div class="input-box">
+                    <div class="v-fix">
+                        <input type="text" title="<?php echo $this->__('Card Verification Number') ?>" class="input-text cvv validate-cc-cvn-radio" id="<?php echo $_code ?>_cc_cid" name="payment[cc_cid]" value="<?php echo (($this->__('Card Verification Number')!=="Card Verification Number") ? $this->__('Card Verification Number') : "") ?>" placeholder="<?php echo $this->__('CVN#') ?>" />
+                    </div>
+                </div>
+            </div>
+            <?php endif; ?>
+            <div id="add_payment_save_card">
+            </div>
+            <div class="cc_exp pull-right use-new-card-wrapper cc_info">
+                <div class="pull-left">
+                    <div for="<?php echo $_code ?>_expiration" class="lbl"><em>*</em><?php echo $this->__('Exp.') ?></div>
+                    <div class="pull-left">
+                        <div class="pull-left">
+                            <select id="<?php echo $_code ?>_expiration" name="payment[cc_exp_month]" class="month validate-cc-exp">
+                            <?php $_ccExpMonth = $this->getInfoData('cc_exp_month') ?>
+                            <?php foreach ($this->getCcMonths() as $k=>$v): ?>
+                                <option value="<?php echo $k?$k:'' ?>" <?php if($k==$_ccExpMonth): ?>selected="selected"<?php endif ?>><?php echo $v ?></option>
+                            <?php endforeach ?>
+                            </select>
+                        </div>
+                        <div class="pull-right">
+                            <select id="<?php echo $_code ?>_expiration_yr" name="payment[cc_exp_year]" class="year">
+                            <?php $_ccExpYear = $this->getInfoData('cc_exp_year') ?>
+                            <?php foreach ($this->getCcYears() as $k=>$v): ?>
+                                <option value="<?php echo $k?$k:'' ?>" <?php if($k==$_ccExpYear): ?>selected="selected"<?php endif ?>><?php echo $v ?></option>
+                            <?php endforeach ?>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    	</div>
+    </div>
+<div style="clear:both"></div>
+<div id="add_payment">
+	<hr />
+	<div id="hpcheckout-payment-add-title">
+		<h4 class="legend">Add a payment method</h4>
+	</div>
+	<div style="clear:both"></div>
+	<div>
+		<div class="pull-left" id="add_cc_types">
 		</div>
-	</li>
-
-	<script type="text/javascript">
-	Event.observe($("<?php echo $_code ?>_cc_vaulted"), 'change', function() {
-		if ($F(this) != '0') {
-			$$('.new-card').invoke('hide');
-			$('<?php echo $_code ?>_cc_cid').value="";
-			$$('.cid-class').invoke('show');
-		} else {
-			$$('.new-card').invoke('show');
-			$('<?php echo $_code ?>_cc_cid').value="";
-			$('<?php echo $_code ?>_cc_type').value = "";
-			$('<?php echo $_code ?>_expiration').value = "";
-			$('<?php echo $_code ?>_expiration_yr').value = "";
-			$('<?php echo $_code ?>_cc_should_save').setValue(false);
-			$$('.cid-class').invoke('show');
-		}
-	});
-	</script>
-	<?php endif; ?>
-<?php endif; ?>
-    <li class="new-card">
-        <h4 class="legend">Add a payment method</h4>
-        <label id="creditcard_cc_type_label" for="<?php echo $_code ?>_cc_type" class="required"><em>*</em><?php echo $this->__('Credit Card Type') ?></label>
-        <div class="input-box">
-            <select id="<?php echo $_code ?>_cc_type" name="payment[cc_type]" class="required-entry validate-cc-type-select">
-                <option value=""><?php echo $this->__('--Please Select--')?></option>
-            <?php $_ccType = $this->getInfoData('cc_type') ?>
-            <?php foreach ($this->getCcAvailableTypes() as $_typeCode => $_typeName): ?>
-                <option value="<?php echo $_typeCode ?>"<?php if($_typeCode==$_ccType): ?> selected="selected"<?php endif ?>><?php echo $_typeName ?></option>
-            <?php endforeach ?>
-            </select>
-        </div>
-    </li>
-    <li class="new-card">
-        <div class="input-box">
-            <input type="text" id="<?php echo $_code ?>_cc_number" name="payment[cc_number]" title="<?php echo $this->__('Credit Card Number') ?>" class="input-text validate-cc-type <?php if (!Mage::helper('creditcard')->isSandbox()): ?>validate-cc-number<?php endif ?>"  placeholder='Credit Card Number' value="" />
-        </div>
-    </li>
-    <li id="<?php echo $_code ?>_cc_type_exp_div" class="new-card">
-        <em>*</em><?php echo $this->__('Exp.') ?>
-        <div class="input-box">
-            <div class="v-fix">
-                <select id="<?php echo $_code ?>_expiration" name="payment[cc_exp_month]" class="month validate-cc-exp required-entry">
-                <?php $_ccExpMonth = $this->getInfoData('cc_exp_month') ?>
-                <?php foreach ($this->getCcMonths() as $k=>$v): ?>
-                    <option value="<?php echo $k?$k:'' ?>"<?php if($k==$_ccExpMonth): ?> selected="selected"<?php endif ?>><?php echo $v ?></option>
-                <?php endforeach ?>
-                </select>
-                <?php $_ccExpYear = $this->getInfoData('cc_exp_year') ?>
-                <select id="<?php echo $_code ?>_expiration_yr" name="payment[cc_exp_year]" class="year required-entry">
-                <?php foreach ($this->getCcYears() as $k=>$v): ?>
-                    <option value="<?php echo $k?$k:'' ?>"<?php if($k==$_ccExpYear): ?> selected="selected"<?php endif ?>><?php echo $v ?></option>
-                <?php endforeach ?>
-                </select>
-            </div>
-        </div>
-    </li>
-    <?php echo $this->getChildHtml() ?>
-    <?php if($this->hasVerification()): ?>
-    <li id="<?php echo $_code ?>_cc_type_cvv_div" class="cid-class">
-        <div class="input-box">
-            <div class="v-fix">
-                <input type="text" title="<?php echo $this->__('Card Verification Number') ?>" class="input-text cvv required-entry " placeholder='CVN#' id="<?php echo $_code ?>_cc_cid" name="payment[cc_cid]" value="" />
-            </div>
-            <a href="#" class="cvv-what-is-this"><?php echo $this->__('What is this?') ?></a>
-        </div>
-    </li>
-    
-<?php endif; ?>
-
-<?php if($_isLoggedIn && $this->getVaultEnabled()):?>
-   <li id="<?php echo $_code ?>_cc_type_should_save_div" class="new-card">
-        <?php echo $this->__('Save Card In My Account') ?>
-       <div class="input-box">
-           <div class="v-fix">
-               <input type="checkbox" title="<?php echo $this->__('Save Card In My Account') ?>" class="input-checkbox" id="<?php echo $_code ?>_cc_should_save" name="payment[cc_should_save]" />
-           </div>
-       </div>
-   </li>
-<?php endif; ?>
-
+		<div id="add_cc_data"></div>
+	</div>
+	<div style="clear:both"></div>
+	</div>
+</div>
 	<?php if($this->getPaypageEnabled()):?>
    		<input type="hidden" id="<?php echo $_code ?>_paypage_id" name="payment[paypage_id]" value="<?php echo $_paypageId; ?>"/>
         <input type="hidden" id="<?php echo $_code ?>_merchant_txn_id" name="payment[merchant_txn_id]" value="<?php echo $_id; ?>"/>
@@ -158,8 +275,9 @@ $_id = $_time . substr($_session,13);
         <input type="hidden" id="<?php echo $_code ?>_type" name="payment[type]"/>
         <input type="hidden" id="<?php echo $_code ?>_litle_txn_id" name="payment[litle_txn_id]"/>
 		<input type="hidden" id="<?php echo $_code ?>_vault_id" name="payment[paypage_id]" value="<?php echo $purchase['token']; ?>"/>
+        <input type="hidden" id="<?php echo $_code ?>_method" name="payment[method]" value="creditcard">
+
 	<?php endif; ?>
-</ul>
 
 <?php if($this->getPaypageEnabled()):?>
 
@@ -214,7 +332,7 @@ $_id = $_time . substr($_session,13);
 
 			function onErrorAfterLitle(response) {
 				setLitleResponseFields(response);
-				alert('There was an error. Re-enter your payment information, or contact us for further assistance.');
+				//alert('There was an error. Re-enter your payment information, or contact us for further assistance.');
 				return false;
 			}
 
@@ -236,7 +354,8 @@ $_id = $_time . substr($_session,13);
             if(!hpcheckout.validate()) {
                 return;
             }
-
+            
+            //this becomes a set of radio buttons instead    
             var selectmenu = $("<?php echo $_code ?>_cc_vaulted");
 			if(selectmenu){
 				var chosenoption=selectmenu.options[selectmenu.selectedIndex]
@@ -260,3 +379,5 @@ $_id = $_time . substr($_session,13);
 });
 </script>
 <?php endif; ?>
+    </div>
+</div>

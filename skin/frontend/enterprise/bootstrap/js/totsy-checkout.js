@@ -74,7 +74,7 @@ jQuery(document).ready(function() {
                     //billingAddress.attr("disabled", true);
                     newCardWrap.hide();
                     if (checkoutPayment.isCollapsed == false) {
-                        billAddySelect.val(jQuery("#address_" + jQuery(elem).val()).val()).change();
+                        //billAddySelect.val(jQuery("#address_" + jQuery(elem).val()).val()).change();
                         //Block Billing Inputs if credit card selected
                         this.disableAddress(true, 'hpcheckout-billing-form');
                         billAddySelect.attr('disabled', true);
@@ -92,7 +92,7 @@ jQuery(document).ready(function() {
                 if (elem.id == "paypal_payment") {
                     newCardWrap.hide();
                 } else {
-                    jQuery("[id='payment[cybersource_subid]']").attr("checked", false);
+                    jQuery("[id='payment[cc_vaulted]']").attr("checked", false);
                     jQuery('#billing-address-select').attr('disabled', false);
                     newCardWrap.show();
                 }

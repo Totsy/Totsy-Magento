@@ -119,7 +119,7 @@ HpCheckout.prototype = {
             jQuery('#shipping-address').show();
             jQuery('.addresses').width(445);
         }
-        jQuery("#payment_form_" + payment_method).show();
+        //jQuery("#payment_form_" + payment_method).show();
     },
     switchAddress: function(selectName) {
         var clickedAddress = jQuery("#" + selectName);
@@ -201,7 +201,7 @@ HpCheckout.prototype = {
                 jQuery(".cc_types input[type='radio']").addClass("validate-one-required");
                 if (jQuery("[id='paypal_payment']").is(':checked') !== true) {
                     jQuery('.cc_info input').addClass('required-entry');
-                    jQuery('#paymentfactory_tokenize_saved').removeClass('required-entry');
+                    //jQuery('#paymentfactory_tokenize_saved').removeClass('required-entry');
                 } else {
                     jQuery('.cc_info input').removeClass('required-entry');
                 }
