@@ -21,8 +21,8 @@ class Crown_Addplus_IndexController extends Mage_Core_Controller_Front_Action {
             return;
         }
 
-//        $this->loadLayout();
-//        $this->renderLayout();
+        $this->loadLayout();
+        $this->renderLayout();
     }
 
     public function agreeAction() {
