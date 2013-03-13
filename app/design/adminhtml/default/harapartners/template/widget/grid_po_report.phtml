@@ -35,6 +35,7 @@
  *  getVarNamePage()
  */
 $numColumns = sizeof($this->getColumns());
+$removedItems = $this->getRemovedItems();
 ?>
 <?php if($this->getCollection()): ?>
     <?php if($this->canDisplayContainer()): ?>
@@ -47,7 +48,9 @@ $numColumns = sizeof($this->getColumns());
             </table>
         </div>
         <?php endif ?>
-
+        <?php if (!empty($removedItems)): ?>
+            <a href="#removed_items"> See Removed Items </a>
+        <?php endif; ?>
         <div id="<?php echo $this->getId() ?>">
     <?php else: ?>
         <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
@@ -198,10 +201,44 @@ $numColumns = sizeof($this->getColumns());
             </tr>
         <?php endif; ?>
         </tbody>
-
     </table>
     </div>
 </div>
+
+<?php if (!empty($removedItems)): ?>
+    <div id='removed_items_grid' class="grid">
+        <div>
+            <h3>Removed Items</h3>
+            <div class="spinner" style="display: none;"> Please wait <img src="<?php echo $this->getSkinUrl( 'images/ajax-loader.gif' ) ?>"></div>
+        </div>
+        <table id="removed_items" class="data" cellspacing="0">
+            <thead>
+                <tr class="headings">
+                    <th>Vendor Style</th>
+                    <th>Product Name</th>
+                    <th>Sku</th>
+                    <th>Size</th>
+                    <th>Color</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php 
+                    foreach($removedItems as $id => $data): 
+                ?>
+                    <tr class="removed">
+                        <td> <?php echo $data['vendor_style']; ?> </td>
+                        <td> <?php echo $data['product_name']; ?> </td>
+                        <td> <?php echo $data['sku'] ?> </td>
+                        <td> <?php echo $data['color'] ?> </td>
+                        <td> <?php echo $data['size'] ?> </td>
+                        <td> <button id="put_back_button" type="button" data-id="<?php echo $id?>">Put Back</button> </td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+<?php endif; ?>
 <?php if($this->canDisplayContainer()): ?>
 </div>
 <script type="text/javascript">
@@ -223,6 +260,33 @@ $numColumns = sizeof($this->getColumns());
     <?php endif ?>
     <?php echo $this->getAdditionalJavaScript(); ?>
 //]]>
+
+    jQuery("#<?php echo $this->getId(); ?>_massaction-select").change(function(){
+      var ans = "";
+      if(jQuery(this).val() == 'move_items') {
+        ans = prompt("Enter the PO id you wish to relocate the items to (eg. 7310):");
+        if(ans) {
+            jQuery("#<?php echo $this->getId(); ?>_massaction-form").append("<input type=\"hidden\" id=\"new_po\" name=\"new_po\">");
+            jQuery('#new_po').val(ans);
+            jQuery("#<?php echo $this->getId(); ?>_massaction-select option[value=\"move_items\"]").text("Move to PO # " + ans);
+        }
+      }
+    });
+
+    jQuery("#put_back_button").click(function(){
+      var id = jQuery(this).data('id');
+      jQuery.ajax({
+        url: "<?php echo Mage::getUrl('*/*/putBackRemovedItem', array('_current' => true, '_query'=> array('isAjax' => true)))?>",
+        type: 'POST',
+        data: {product_id : id, form_key : FORM_KEY},
+        beforeSend: function() {
+            jQuery('#loading-mask').show();
+        },
+        success: function(success) {
+            setLocation("<?php echo $this->getUrl('*/adminhtml_transaction/report', array('_current' => true))?>");
+        }
+      });
+    });
 </script>
 <?php endif; ?>
 <?php endif ?>
