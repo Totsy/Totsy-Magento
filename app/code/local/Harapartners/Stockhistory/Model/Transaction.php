@@ -388,9 +388,14 @@ class Harapartners_Stockhistory_Model_Transaction extends Mage_Core_Model_Abstra
         }
 
         $po = Mage::getModel('stockhistory/purchaseorder')->load($new_po);
+
         $po_data = $po->getData();
         if(empty($po_data)) {
             throw new Exception("The PO id you entered does not exists");
+        }
+
+        if($po->getStatus() == Harapartners_Stockhistory_Model_Purchaseorder::STATUS_SUBMITTED ) {
+            throw new Exception("$new_po has already been submitted to Dotcom.");            
         }
 
         $categoryid = $po->getCategoryId();
