@@ -60,7 +60,7 @@
         <h1 id="logo" class="span4"><a href="<?php 
                         echo $this->getUrl( 'event/?ref=logo' ); ?>" title="<?php
                         echo $this->getLogoAlt();
-                        ?>"><img src="<?php echo $this->getSkinUrl() ?>images/logo.png" alt="Totsy.com" width="85px" /></a>
+                        ?>"><img src="<?php echo $this->getSkinUrl() ?>images/logo.png" alt="Totsy.com" width="85" /></a>
         </h1>
         <br />
         <h2 style="font-size:18px;"><?php echo $this->__('Sign In') ?> <small> or <a id="opt-signup" href="/customer/account/create/" style="font-weight:normal;">Sign Up</a></small></h2>
@@ -79,9 +79,11 @@
                     <input placeholder="Password" name="login[password]" type="password" class="big-input input-text required-entry validate-password" id="pass" title="<?php echo $this->__('Password') ?>" />
                     <?php echo $this->getChildHtml('persistent.remember.me'); ?>
                     <?php echo $this->getChildHtml('persistent.remember.me.tooltip'); ?>
-                    <input type="checkbox" name="rememberme" value="remember" class="rememberme" align="middle"/>
-                    <span style="font-size:11px; color:#999;"><?php echo $this->__( ' Remember me' ); ?></span>
-                    <a href="<?php echo $this->getForgotPasswordUrl() ?>" class="forgotpwd pull-right"><?php echo $this->__('Forgot Your Password?') ?></a>
+                    <div class="clearfix">
+                        <input type="checkbox" name="rememberme" value="remember" class="rememberme" align="middle"/>
+                        <span style="font-size:11px; color:#999;"><?php echo $this->__( ' Remember me' ); ?></span>
+                        <a href="<?php echo $this->getForgotPasswordUrl() ?>" class="forgotpwd pull-right"><?php echo $this->__('Forgot Your Password?') ?></a>
+                    </div>
                     <div class="buttons-set form-buttons align-center" style="margin:5px 0px -16px 0px">
                         <button type="submit" id="submit-button" class="btn btn-primary btn-large" style="width:100%;">Sign In</button>
                     </div>
