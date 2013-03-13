@@ -19,8 +19,9 @@ jQuery(document).ready(function() {
                 if (this.hasProfile) {
                     jQuery(".cc_save_card").appendTo(jQuery("#add_payment_save_card"));
                     var savedCardStyles = {
-                        'width': '60px',
+                        'width': 'auto',
                         'margin-left': '10px',
+                        'vertical-align': 'middle',
                         'float': 'left'
                     };
                     jQuery('#billing-address-select').attr('disabled', true);
@@ -73,6 +74,9 @@ jQuery(document).ready(function() {
                     jQuery('.addresses').width(445);
                     //billingAddress.attr("disabled", true);
                     newCardWrap.hide();
+                    
+                    jQuery("[name='payment[cc_type]']").attr("checked", false);
+                    
                     if (checkoutPayment.isCollapsed == false) {
                         //billAddySelect.val(jQuery("#address_" + jQuery(elem).val()).val()).change();
                         //Block Billing Inputs if credit card selected
