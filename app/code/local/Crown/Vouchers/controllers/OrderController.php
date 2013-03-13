@@ -43,6 +43,11 @@ class Crown_Vouchers_OrderController extends Mage_Core_Controller_Front_Action {
 		$this->returnResult(array('success' => 'Your email has been sent!'));
 	}
 
+    /**
+     * AJAX request to check if voucher is available to user
+     *
+     * Created by Crown Partners
+     */
     public function availableAction() {
         $product_id = $this->getRequest()->getParam('id');
 
