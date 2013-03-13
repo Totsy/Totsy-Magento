@@ -36,23 +36,6 @@ class Totsy_Sailthru_Model_Observer
         );
     }
 
-/**
-* IDEA!!!
-* since i have created my own event for sailthru .. 
-* i can pass custom data to the dispatcher and as a result
-* to the every instance registered in dispatcher for that event.
-* So, I need only one method with update of incomplete order
-* and then have login in it to determine what type of the 
-* incoming parameter we getting.
-*
-* paratms to the dispatcher:
-*   - type ( type that will define what variables needed to be used)
-*   - cart ( basically ust an object of the cart )
-*   - params ( all other params that need to be sent, as array)
-*
-* As a result I would be able to remove some Hara's crappy code.
-*/
-
     public function removeItemFromIncompleteOrder(Varien_Event_Observer $observer)
     {
         $item = $observer->getItem();
@@ -72,8 +55,13 @@ class Totsy_Sailthru_Model_Observer
 
         // Add other items from cart to 
         // sailthru incomplete order
-        $allItems = $cart->getQuote()->getAllItems();
+        $allItems = $cart->getQuote()->getAllVisibleItems();
         foreach ($allItems as $ai) {
+
+            if ($item == $ai->getId()){
+                continue;
+            }
+
             $name = $ai->getName();
             $id = $ai->getSku();
             $title = !empty($name)?$name:$id;    
