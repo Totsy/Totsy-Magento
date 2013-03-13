@@ -43,7 +43,7 @@ $_id = $_time . substr($_session,13);
 } ?>
 <script type="text/javascript">
 
-jQuery(document).ready(function() {
+jQuery(document).ready( function() {
     checkoutPayment.hasProfile = "<?php echo $hasProfile; ?>";
     checkoutPayment.toggleViews();
 
@@ -66,7 +66,6 @@ jQuery(document).ready(function() {
         	<div class="hpcheckout-payment-title">
         	    <h4 class="legend">Your payment methods</h4>
         	</div>
-        	<!-- part A of a hack for the radio button error message-->
         	<div>
         	</div>
         	<div class="cc_types use-new-card-wrapper input-box validation-error pull-left">
@@ -74,7 +73,7 @@ jQuery(document).ready(function() {
         		 <div id="<?php echo $_code ?>_cc_type">
         		 <?php $i=0; ?>
         		 <?php foreach ($this->getCcAvailableTypes() as $_typeCode => $_typeName): ?>
-        		  <input type="radio" class="validate-cybsersource-cc-type <?php if($i==3) { /*echo "validate-one-required"*/; } ?>" name="payment[cc_type]" value="<?php echo $_typeCode ?>" <?php if ($_typeCode==$_ccType) { echo "checked"; } ?> >
+        		  <input type="radio" name="payment[cc_type]"  value="<?php echo $_typeCode ?>" <?php if ($_typeCode==$_ccType) { echo "checked"; } ?> />
         		 <?php $i++; ?>
         		 	<span class="cc">
         		 	    <span title="<?php echo $_typeName; ?>"  class="<?php echo strtolower($_typeCode); ?>" >
@@ -108,6 +107,8 @@ jQuery(document).ready(function() {
             <?php endif ?>
         </div>
         <div style="clear:both"></div>
+ 		<?php if($this->getVaultEnabled()) { ?>
+ 		        <?php if ($this->hasStoredCards()) { ?>
                 <div class="pull-left" id="use-card-method">
                     <div id="cybersource-use-card-method">
                     <table class="saved_card">
@@ -118,14 +119,10 @@ jQuery(document).ready(function() {
                         	<th>Billing address</th>
                         	<th>Expires</th>
                         </tr>
-                    <?php if($this->getVaultEnabled()) { ?>
-                        <?php if ($this->hasStoredCards()){ ?>
                             <?php foreach ($this->getStoredCards() as $card): ?>
                                 <?php 
-                                     
                                     $customerId = $card->getData('customer_id');
                                     $customerObj = Mage::getSingleton('customer/customer')->load($customerId);
-                                    
                                     $customerAddress = Mage::getModel('sales/order')->load($card->order_id)->getBillingAddress();
                                     $customerName = $customerAddress->getFirstname() ." ". $customerAddress->getLastname();
                                     $customerStreet = $customerAddress['street'];
@@ -149,35 +146,29 @@ jQuery(document).ready(function() {
 	                        <?php endforeach ?>
 	                       	</div>
 	                   <script type="text/javascript">
-	                   Event.observe($("<?php echo $_code ?>_cc_vaulted"), 'change', function() {
-	                   	if ($F(this) != '0') {
-	                   		$$('.new-card').invoke('hide');
-	                   		$('<?php echo $_code ?>_cc_cid').value="";
-	                   		$$('.cid-class').invoke('show');
-	                   	} else {
-	                   		$$('.new-card').invoke('show');
-	                   		$('<?php echo $_code ?>_cc_cid').value="";
-	                   		$('<?php echo $_code ?>_cc_type').value = "";
-	                   		$('<?php echo $_code ?>_expiration').value = "";
-	                   		$('<?php echo $_code ?>_expiration_yr').value = "";
-	                   		$('<?php echo $_code ?>_cc_should_save').setValue(false);
-	                   		$$('.cid-class').invoke('show');
-	                   	}
-	                   });
+	                   	   Event.observe($("<?php echo $_code ?>_cc_vaulted"), 'change', function() {
+	                   	   	   if ($F(this) != '0') {
+	                   	   	   	   $$('.new-card').invoke('hide');
+	                   	   	   	   $('<?php echo $_code ?>_cc_cid').value="";
+	                   	   	   	   $$('.cid-class').invoke('show');
+	                   	   	   } else {
+	                   	   	   	   $$('.new-card').invoke('show');
+	                   	   	   	   $('<?php echo $_code ?>_cc_cid').value="";
+	                   	   	   	   $('<?php echo $_code ?>_cc_type').value = "";
+	                   	   	   	   $('<?php echo $_code ?>_expiration').value = "";
+	                   	   	   	   $('<?php echo $_code ?>_expiration_yr').value = "";
+	                   	   	   	   $('<?php echo $_code ?>_cc_should_save').setValue(false);
+	                   	   	   	   $$('.cid-class').invoke('show');
+	                   	   	   }
+	                   	   });
 	                   </script>
-	                   <?php } ?>
-                    <?php } ?>
 						</table>
                     </div>
                 </div>
-                <div>
-                    <?php if($profiles) { ?>
-                     <?php foreach( $profiles as $profile ): ?>
-                        <?php if( !$profile->getSubscriptionId() || $profile->getIsDefault()== 1 ) { continue; } ?>
-                        <input type="hidden" id="address_<?php echo $profile->getEncryptedSubscriptionId() ?>" value="<?php echo $profile->getData('address_id') ?>" />
-                    <?php endforeach ?>
-                    <?php } ?>
-                </div>
+                 <?php } ?>
+             <?php } ?>
+        	<div>          
+    	</div>
     </div>
     <div id="credits_and_card_save">
         <div class="cc_save_card use-new-card-wrapper cc_info">
@@ -294,20 +285,13 @@ jQuery(document).ready(function() {
 
 			// Litle Page Stuff//
 			function setLitleResponseFields(response) {	
-				var flag = false;
-					
-				if(response) {
+
 					$('<?php echo $_code ?>_code').value = response.response;
 					$('<?php echo $_code ?>_message').value = response.message;
 					$('<?php echo $_code ?>_response_time').value = response.responseTime;
 					$('<?php echo $_code ?>_litle_txn_id').value = response.litleTxnId;
-					$('<?php echo $_code ?>_type').value = response.type;	
-					flag = true;
-				}
-				
-				if(flag==true) {				
+					$('<?php echo $_code ?>_type').value = response.type;					
                 	hpcheckout.submit();
-                }
 			}
 
 			function submitAfterLitle() {

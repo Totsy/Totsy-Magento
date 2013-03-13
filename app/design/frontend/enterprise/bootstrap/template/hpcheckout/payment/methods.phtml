@@ -5,9 +5,6 @@
         <div>
             <?php echo $this->getPaymentMethodFormHtml( $methods[0] ) ?>
         </div>
-        <script type="text/javascript">
-            jQuery( "#payment_form_<?php echo $methods[0]->getCode() ?>" ).show();
-        </script>
     <?php else: ?>
         <?php foreach ($methods as $_method):  $_code = $_method->getCode() ?>
             <?php if ($html = $this->getPaymentMethodFormHtml($_method)): ?>
@@ -20,6 +17,7 @@
  </div>
 <script type="text/javascript">
     jQuery(document).ready( function() {   
+    
         if(jQuery('input:radio[name=paypal_payment]')) {
             jQuery('input:radio[name=paypal_payment]').click( function() {
                 jQuery('.validate-cybsersource-cc-type').attr("checked", false);
@@ -27,7 +25,7 @@
                 hpcheckout.switchPaymentMethod('paypal_express');			
             });
         }    
-
+		
         jQuery('.validate-cybsersource-cc-type').click( function() {
             if(jQuery('#paypal_payment').length > 0) {
                 jQuery('#paypal_payment').attr("checked", false);
@@ -39,7 +37,6 @@
             jQuery('input[name="payment[method]"]').val("creditcard");
     		hpcheckout.switchPaymentMethod('creditcard');		
         });
-
 
     });	
 </script>

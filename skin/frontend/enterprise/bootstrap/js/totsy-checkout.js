@@ -16,7 +16,7 @@ jQuery(document).ready(function() {
             isCollapsed: false,
             lastUsedAddressId: '',
             toggleViews: function() {
-                if (this.hasProfile) {
+                if (this.hasProfile) {                
                     jQuery(".cc_save_card").appendTo(jQuery("#add_payment_save_card"));
                     var savedCardStyles = {
                         'width': 'auto',
@@ -28,18 +28,20 @@ jQuery(document).ready(function() {
                     jQuery(".cc_save_card").css(savedCardStyles);
                     jQuery("#hpcheckout-payment-add-title").show();
                     jQuery("#use-card-method").show();
-                    jQuery("#paymentfactory_tokenize_cc_save").contents("");
+                    jQuery("#creditcard_cc_type_should_save_div").contents("");
                     jQuery(".use-new-card-wrapper").show();
                     jQuery("#cc_save_text").html("Save");
                     jQuery(".use-new-card-wrapper").appendTo(jQuery("#add_cc_types"));
                     newCardWrap.hide();
-                } else {
+                } else {  
                     jQuery("[id='add_payment']").hide();
                     jQuery(".checkout-reward").css("padding-top", "0px");
                     jQuery(".use-new-card-wrapper").show();
                     jQuery("#use-card-method").hide();
+                    jQuery("#cc_data").show();                    
+                    
+                    console.log("test");
                     jQuery("#hpcheckout-payment-add-title").hide();
-                    jQuery("#cc_data").show();
                 }
             },
             disableAddress: function(stateFlag, formId) {
@@ -79,7 +81,6 @@ jQuery(document).ready(function() {
                     
                     if (checkoutPayment.isCollapsed == false) {
                         //billAddySelect.val(jQuery("#address_" + jQuery(elem).val()).val()).change();
-                        //Block Billing Inputs if credit card selected
                         this.disableAddress(true, 'hpcheckout-billing-form');
                         billAddySelect.attr('disabled', true);
                     } else {
@@ -89,7 +90,7 @@ jQuery(document).ready(function() {
                 }
             },
             useSavedCard: function() {
-                jQuery("#paymentfactory_tokenize_cc_type input").attr("checked", false);
+                //jQuery("#paymentfactory_tokenize_cc_type input").attr("checked", false);
                 jQuery('#billing-address-select').attr('disabled', true);
             },
             setPaymentType: function(elem) {
