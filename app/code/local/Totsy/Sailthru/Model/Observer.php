@@ -19,12 +19,17 @@ class Totsy_Sailthru_Model_Observer
             return;
         }
 
-        foreach ($info as $id => $qty) {
-            if ($quoteItem = $cart->getQuote()->getItemById($id)) {
-                $itemInfo = Mage::getModel('catalog/product')
-                    ->load($quoteItem->getProductId());
-                $items[] = $this->_preSailthruPurchase($itemInfo, $qty);
-            }
+        $allItems = $cart->getQuote()->getAllVisibleItems();
+        foreach ($allItems as $ai) {
+
+            $name = $ai->getName();
+            $id = $ai->getSku();
+            $title = !empty($name)?$name:$id;    
+            $qty = $ai->getQty();
+            $price = $ai->getProduct()->getFinalPrice()*100;
+            $url = $ai->getProduct()->getProductUrl();
+
+            $items[] = compact('id','title','qty','price','url');
         }
 
         $this->_callPurchaseApi(
@@ -48,10 +53,10 @@ class Totsy_Sailthru_Model_Observer
 
         // mark to remove this item from 
         // sailthru incomplete order
-        $items[] = $this->_preSailthruPurchase(
-            Mage::getModel('catalog/product')->load($item),
-            array('qty'=>0)
-        );
+        //$items[] = $this->_preSailthruPurchase(
+        //    Mage::getModel('catalog/product')->load($item),
+        //    array('qty'=>0)
+        //);
 
         // Add other items from cart to 
         // sailthru incomplete order
