@@ -145,7 +145,7 @@ class Harapartners_Stockhistory_Model_Transaction extends Mage_Core_Model_Abstra
         return $this;
     }
     
-    public function updateProductStock(){
+    public function updateProductStock($reverse = false){
         $product = Mage::getModel('catalog/product')->load($this->getData('product_id'));
         if($product->getTypeId() != 'simple'){
             Mage::throwException('Purchase should only contain simple product. Other product types are ignored.');
@@ -156,13 +156,15 @@ class Harapartners_Stockhistory_Model_Transaction extends Mage_Core_Model_Abstra
         $tempProductId = $this->getData('product_id');
         $category = Mage::getModel('catalog/category')->load($this->getData('category_id'));
         $sold = Mage::helper('stockhistory')->getProductSoldInfoByCategory($category, array( $tempProductId => $tempProductId ));
+        $qtyDelta = $this->getData('qty_delta');
+        if($reverse){
+            $qtyDelta = -$qtyDelta;
+        }
         
         #when an items stock qty is reduced to zero and it has sold items, the qty delta should be adjusted to avoid negative values
-        if($sold && $sold[$tempProductId]['qty'] && ($this->getData('qty_delta') < 0) && (abs($this->getData('qty_delta')) == $this->getData('orig_qty_total')) ) {
-                
+        if($sold && $sold[$tempProductId]['qty'] && ($qtyDelta < 0) && (abs($qtyDelta) == $this->getData('orig_qty_total')) ) {
                 $qty_delta =  $sold[$tempProductId]['qty'] - $this->getData('orig_qty_total');
                 $this->setQtyDelta($qty_delta);
-               
         }
 
         $bool = (!empty($sold) && $sold[$tempProductId]['qty']) || $product->getData('is_master_pack');
@@ -171,7 +173,7 @@ class Harapartners_Stockhistory_Model_Transaction extends Mage_Core_Model_Abstra
         if (!$bool) {
             $stock = $product->getStockItem();
             $qtyStock = $stock->getQty();
-            $qtyDelta = $this->getData('qty_delta');
+            
             if(($qtyStock + $qtyDelta) < 0){
                 throw new Exception('This stock update will result in a negative value. Ignored.');
             }
@@ -276,7 +278,6 @@ class Harapartners_Stockhistory_Model_Transaction extends Mage_Core_Model_Abstra
                     ->addAttributeToFilter(array(array('attribute' => 'case_pack_grp_id', 'eq' => $case_pack_grp_id)))
                     ->addAttributeToFilter(array(array('attribute' => 'vendor_code', 'eq' => $po->getVendorCode())));
             foreach($products as $product) {
-                
                 if(!$product->getData('is_master_pack')) {
                     $grouped[(string)$product->getEntityId()] = array(
                         'sku' => $product->getData('sku'), 
@@ -306,13 +307,13 @@ class Harapartners_Stockhistory_Model_Transaction extends Mage_Core_Model_Abstra
                     'qty_to_amend' => $product->getData('case_pack_qty')
                 );
             }
-
+            
             if(!$highest_ratio) {
                 if($all_results) {
                     $grouped['message'][] = array('message' => 'Successfully Updated!', 'type' => 'success' );
                     return $grouped;
                 }
-
+                
                 if(empty($grouped)) {
                     return "";
                 }
@@ -349,6 +350,70 @@ class Harapartners_Stockhistory_Model_Transaction extends Mage_Core_Model_Abstra
             $results[$item->getData('product_sku')] = $this->calculateCasePackOrderQty($item->getData('product_id'), $po_id, $case_pack_id);
         }
         return $results;
+    }
+
+    public function resetPOItems($po_id, $items, $update_stock) { 
+
+        $trans_collection = $this->getCollection();
+        
+        $trans_collection->getSelect()->where('po_id=' . $po_id . ' and product_id in (' . implode(',', $items) .') and action_type = ' . self::ACTION_TYPE_AMENDMENT );
+        
+        foreach($trans_collection as $transaction) {
+            
+            if($update_stock) {
+                $qty_change = -$transaction->getData('qty_delta');
+                $transaction->updateProductStock($update_stock);
+            }
+
+            $transaction->delete();
+        }
+    }
+
+    public function putbackPOItem($po_id, $item) { 
+
+        $trans_collection = $this->getCollection();
+        
+        $trans_collection->getSelect()->where('po_id=' . $po_id . ' and product_id =' . $item .' and action_type = ' . self::ACTION_TYPE_REMOVE );
+        foreach($trans_collection as $transaction) {
+            $transaction->delete();
+        }
+    }
+
+    public function moveItems($new_po, $items) {
+        
+        $alreadyUpToDate = array();
+
+        if(!is_numeric($new_po)) {
+            throw new Exception("PO id must be numerical");
+        }
+
+        $po = Mage::getModel('stockhistory/purchaseorder')->load($new_po);
+        $po_data = $po->getData();
+        if(empty($po_data)) {
+            throw new Exception("The PO id you entered does not exists");
+        }
+
+        $categoryid = $po->getCategoryId();
+        $vendorid = $po->getVendorId();
+        $vendorcode = $po->getVendorCode();
+
+        $transactions = $this->getCollection();
+        $transactions->getSelect()->where('product_id in (' . implode(',', $items) . ')');
+
+        foreach($transactions as $transaction) {
+            
+            $transaction->setData('category_id', $categoryid);
+            $transaction->setData('po_id', $new_po);
+            $transaction->setData('vendor_id', $vendorid);
+            $transaction->setData('vendor_code', $vendorcode);
+            $transaction->save();
+            
+            if(!in_array($transaction->getProductId(), $alreadyUpToDate)){
+              $product = Mage::getModel('catalog/product')->load($transaction->getProductId());
+              $product->setData('vendor_code', $vendorcode);
+              $product->save();
+            }
+        }
     }
     
 }
