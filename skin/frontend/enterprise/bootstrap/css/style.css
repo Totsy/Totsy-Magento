@@ -268,10 +268,6 @@ body.categoryevent-index-topnav .page-header {
 
 /* link classes */
 .navLinks { padding-top: 7px; }
-.cta-link {
-    padding-right:10px;
-    background: url('../images/glyph-arrow-r.png') 100% 85% no-repeat;
-}
 .dropdown-toggle,
 #cartHeader {
     padding-right:12px;
@@ -379,6 +375,20 @@ body.customer-account-login .btn.btn-large {
 }
 
 /* CTAs */
+.cta-link:after {
+    content: "►";
+    display: inline-block;
+    position: relative; left: 5px;
+    font-size:60%;
+    -ms-transform:scale(2,4); /* IE 9 */
+    -moz-transform:scale(2,4); /* Firefox */
+    -webkit-transform:scale(1.5,2); /* Safari and Chrome */
+    -o-transform:scale(2,4); /* Opera */
+    transform:scale(1.5,2);
+    text-shadow:0 0 1px rgba(0,0,0,0.5);
+    vertical-align: top;
+}
+
 .header-cta {
     position: absolute; top: 0; right: 0;
     padding:18px 10px 5px 8px;
@@ -409,20 +419,8 @@ body.customer-account-login .btn.btn-large {
 /*     color: #d22f2a; */
     text-decoration: none;
 }
-
-.cta-item a:after {
-    content: "►";
-    display: inline-block;
-    position: relative; left: 5px;
+.header-cta .cta-link:after {
     color:#d22f2a;
-    font-size:60%;
-    -ms-transform:scale(2,4); /* IE 9 */
-    -moz-transform:scale(2,4); /* Firefox */
-    -webkit-transform:scale(1.5,2); /* Safari and Chrome */
-    -o-transform:scale(2,4); /* Opera */
-    transform:scale(1.5,2);
-    text-shadow:0 0 1px rgba(0,0,0,0.5);
-    vertical-align: top;
 }
 #cta-freeship {
     background: url(../images/icon-totsy-bug.png) 0 0 no-repeat;
