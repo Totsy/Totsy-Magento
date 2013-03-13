@@ -33,7 +33,7 @@
     <div id="masthead">
         <div class="container">
             <div class="row">
-                <h1 id="logo" class="span2"><a href="<?php
+                <h1 id="logo" class="span3"><a href="<?php
                 echo $this->getUrl( 'event/?ref=logo' );
                 ?>" title="<?php
                 echo $this->getLogoAlt();
@@ -61,9 +61,9 @@
                     </div>
                     <div class="promo-area pull-left"></div>            
                 </div>
-                <div class="header-cta span5 clearfix">
-                    <span class="cta-item pull-left"><strong>FREE Shipping!</strong> <br /> <em>on all orders over $75</em></span>
-                    <a class="cta-link pull-right" href="<?php echo $this -> getBaseUrl();?>invitation">Invite friends get $15</a><?php echo $this->getAdditionalHtml() ?>
+                <div class="header-cta span6 clearfix">
+                    <span class="cta-item pull-left" id="cta-freeship"><em class="cta-item-head">FREE Shipping!</em> <em class="cta-item-sub">on all orders over $75</em></span>
+                    <span class="cta-item pull-right"><a class="cta-link" href="<?php echo $this -> getBaseUrl();?>invitation">Invite friends get $15</a></span> 
                 </div>
             </div><!-- /.row -->
         </div><!--/.container -->

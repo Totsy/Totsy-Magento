@@ -15,7 +15,7 @@ f/**
 
 html,
 body { height: 100%;}
-body { padding-top:141px; } /* magic number BS for fixed nav */
+body { padding-top:181px; } /* magic number BS for fixed nav */
 #stickywrap { /* @sticky */
     height: auto;
     min-height: 100%;
@@ -69,6 +69,11 @@ html.test .container .row {outline:1px dotted green;}
     padding: 5px;
     position: absolute;
     top: 0;
+}
+[class*="span"] {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 /* @TODO: remove this safety fallback - pending fix of hacked core (Robot's temporary removal of .row)
@@ -263,10 +268,6 @@ body.categoryevent-index-topnav .page-header {
 
 /* link classes */
 .navLinks { padding-top: 7px; }
-.cta-link {
-    padding-right:10px;
-    background: url('../images/glyph-arrow-r.png') 100% 85% no-repeat;
-}
 .dropdown-toggle,
 #cartHeader {
     padding-right:12px;
@@ -278,6 +279,9 @@ body.categoryevent-index-topnav .page-header {
     color:#636466;
     font-size: 12px; font-weight: bold;
     text-shadow: 0 1px 0 rgba(255, 255, 255, 0.85);
+}
+.navbar .nav > li > a,
+#cartHeader {
     text-transform: uppercase;
 }
 .dropdown-menu li > a:hover, .dropdown-menu .active > a, .dropdown-menu .active > a:hover {
@@ -362,31 +366,66 @@ body.customer-account-login .btn.btn-large {
 }
 #masthead > .container {
     position: relative;
-    padding:3px 0;
+    padding:8px 0;
 }
 #logo {margin-left:0;}
 
 .header-utils {
-    position: absolute; bottom: 0; right: 0;
+    position: absolute; bottom: 8px; right: 0;
 }
+
+/* CTAs */
+.cta-link:after {
+    content: "►";
+    display: inline-block;
+    position: relative; left: 5px;
+    font-size:60%;
+    -ms-transform:scale(2,4); /* IE 9 */
+    -moz-transform:scale(2,4); /* Firefox */
+    -webkit-transform:scale(1.5,2); /* Safari and Chrome */
+    -o-transform:scale(2,4); /* Opera */
+    transform:scale(1.5,2);
+    text-shadow:0 0 1px rgba(0,0,0,0.5);
+    vertical-align: top;
+}
+
 .header-cta {
     position: absolute; top: 0; right: 0;
-    padding:12px 8px 5px;
+    padding:18px 10px 5px 8px;
     background: #c1cc00;
     border-radius: 0 0 10px 10px;
     color:#fff;
+    font-family: Arial,Helvetica, sans-serif; font-weight: bold;
+    letter-spacing: 0.075em;
+    line-height: 1.2em;
+    text-shadow: 0 0 4px rgba(0,0,0,0.4);
 }
-.header-cta .cta-item strong {
-    font-size:130%; font-weight: normal;
+.header-cta .cta-item {
+    font-size: 150%;
 }
-.header-cta .cta-item em {
-    font-size:80%;
+.header-cta .cta-item-head {
+    display: block;
+    font-style: normal;
 }
-.header-cta .cta-link {
-    font-size: 130%;
+.header-cta .cta-item-sub {
+    font-size:60%; font-style: normal;
+    letter-spacing: normal;
+}
+.cta-item a,
+.cta-item a:link {
     color: #fff;
 }
-
+.cta-item a:hover {
+/*     color: #d22f2a; */
+    text-decoration: none;
+}
+.header-cta .cta-link:after {
+    color:#d22f2a;
+}
+#cta-freeship {
+    background: url(../images/icon-totsy-bug.png) 0 0 no-repeat;
+    padding-left:25px;
+}
 
 /* #userAccount - my account module */
 #userAccount > a:hover {text-decoration: none;}
