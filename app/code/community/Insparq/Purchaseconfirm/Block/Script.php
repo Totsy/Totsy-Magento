@@ -60,7 +60,10 @@ class Insparq_Purchaseconfirm_Block_Script extends Mage_Core_Block_Template {
         $productPrices = array();
         $buyerID = ($order->getCustomerId() === NULL) ? '' : $order->getCustomerId();
         $couponCode = $order->getCouponCode();
-        $items = $order->getAllItems();
+        $items = $order->getAllVisibileItems();
+        if(count($items) == 0){
+           $items = $order->getAllItems();
+        }
         foreach ($items as $itemId => $item){
            $productNames[] = $item->getName();
            $productPrices[] = $item->getPrice();
