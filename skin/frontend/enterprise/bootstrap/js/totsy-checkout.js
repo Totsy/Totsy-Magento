@@ -74,13 +74,11 @@ jQuery(document).ready(function() {
                     jQuery('#billing-address').show();
                     jQuery('#shipping-address').show();
                     jQuery('.addresses').width(445);
-                    //billingAddress.attr("disabled", true);
                     newCardWrap.hide();
                     
                     jQuery("[name='payment[cc_type]']").attr("checked", false);
                     
                     if (checkoutPayment.isCollapsed == false) {
-                        //billAddySelect.val(jQuery("#address_" + jQuery(elem).val()).val()).change();
                         this.disableAddress(true, 'hpcheckout-billing-form');
                         billAddySelect.attr('disabled', true);
                     } else {
@@ -90,14 +88,15 @@ jQuery(document).ready(function() {
                 }
             },
             useSavedCard: function() {
-                //jQuery("#paymentfactory_tokenize_cc_type input").attr("checked", false);
                 jQuery('#billing-address-select').attr('disabled', true);
             },
             setPaymentType: function(elem) {
                 if (elem.id == "paypal_payment") {
+                    jQuery("[name='payment[cc_type]']").attr("checked", false);
                     newCardWrap.hide();
                 } else {
-                    jQuery("[id='payment[cc_vaulted]']").attr("checked", false);
+                    jQuery('input[name="payment[method]"]').val("creditcard");
+                    jQuery("#paypal_payment").attr("checked", false);
                     jQuery('#billing-address-select').attr('disabled', false);
                     newCardWrap.show();
                 }
