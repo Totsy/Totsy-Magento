@@ -96,6 +96,8 @@ jQuery(document).ready(function() {
                     newCardWrap.hide();
                 } else {
                     jQuery('input[name="payment[method]"]').val("creditcard");
+                    jQuery('#billing-address').show();
+                    jQuery('#shipping-address').show();
                     jQuery("#paypal_payment").attr("checked", false);
                     jQuery('#billing-address-select').attr('disabled', false);
                     newCardWrap.show();
