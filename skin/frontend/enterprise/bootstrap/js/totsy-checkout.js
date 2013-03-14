@@ -99,6 +99,7 @@ jQuery(document).ready(function() {
                     jQuery('#billing-address').show();
                     jQuery('#shipping-address').show();
                     jQuery("#paypal_payment").attr("checked", false);
+                    jQuery("[name='payment[cc_vaulted]']").attr("checked", false);
                     jQuery('#billing-address-select').attr('disabled', false);
                     newCardWrap.show();
                 }

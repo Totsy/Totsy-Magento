@@ -54,14 +54,15 @@
         if( isRewardUsed && isEnoughPointsToCoverAmount ) {
             jQuery("#reward_placer").css("padding-top", "0px");
             jQuery("#credits_and_card_save").css("float", "left");
+            
+            //once the entire order is covered, no point in showing this stuff
             jQuery("#use-card-method").hide();
-            jQuery("#hpcheckout-payment-add-title").hide();
+            jQuery( '#add_payment' ).hide();
         
         	jQuery( 'input[name="payment[method]"]').val('free');
             jQuery('#paymentfactory_tokenize_cc_cid').removeClass('required-entry');
             jQuery('#paymentfactory_tokenize_expiration').removeClass('required-entry');
             jQuery('#paymentfactory_tokenize_expiration_yr').removeClass('required-entry');
-        	jQuery( '#cc-data' ).hide();
         }
         
 		jQuery( '#use-reward-point' ).bind( 'click', function() {				
