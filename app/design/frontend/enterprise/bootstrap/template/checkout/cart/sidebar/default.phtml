@@ -56,11 +56,11 @@ if($product->getId() == Mage::getStoreConfig('Crown_Club/clubgeneral/club_produc
     </div>
     
     <div class="mini-product-details clearfix">
-        <div class="mini-product-name ellipsis">
+        <div class="mini-product-name">
             <?php if ($this->hasProductUrl()): ?>
-                <a href="<?php echo $this->getProductUrl() ?>"><?php echo $this->htmlEscape($this->getProductName()) ?></a>
+                <a class="ellipsis" href="<?php echo $this->getProductUrl() ?>"><?php echo $this->htmlEscape($this->getProductName()) ?></a>
             <?php else: ?>
-                <?php echo $this->htmlEscape($this->getProductName()) ?>
+                <span class="ellipsis"><?php echo $this->htmlEscape($this->getProductName()) ?></span>
             <?php endif; ?>
         </div>
         <div class="mini-product-meta">

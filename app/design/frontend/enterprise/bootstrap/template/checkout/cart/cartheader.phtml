@@ -120,11 +120,12 @@
 	                                jQuery('#usercart .top-cart').addClass('expired').removeClass('open');
 	                                jQuery('#usercart .count-down-timer').hide();
 	                                jQuery('#usercart-block-title').removeClass('dropdown-toggle')
-	                                    .removeAttr('data-toggle');
+	                                    .removeAttr('data-toggle')
+	                                    .addClass("no-items");
 	                                var _cartHeader = jQuery("#cartHeader");
 	                                _cartHeader.addClass('cartempty')
 	                                    .removeClass('hasItems')
-	                                    .html("Your cart is <span class='over'>no longer reserved</span>");
+	                                    .html("Your cart is <span class='over'>no longer reserved</span>.");
 	                                jQuery("#topCartContent").hide();
 	
 	                                // if on cart or checkout, redirect; otherwise remove btn and update cart msg

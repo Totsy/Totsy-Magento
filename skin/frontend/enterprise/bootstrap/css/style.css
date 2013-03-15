@@ -22,7 +22,7 @@ body { height: 100%;}
 }
 html {
     margin:0;
-    background: url(../images/bkg_stripped_blue.png);
+    background: url(../images/bkg_stripped_blue.png) fixed 0 0 repeat-x;
     /*
     background-image: -moz-linear-gradient(top, #eef6fc, #ffffff);
     background-image: -ms-linear-gradient(top, #eef6fc, #ffffff);
@@ -639,13 +639,17 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
     -webkit-box-shadow:0 3px 6px rgba(0, 0, 0, 0.25);
     box-shadow:0 3px 6px rgba(0, 0, 0, 0.25);
 }
+.mini-products-list {
+}
 .mini-product {
     min-height:30px;
-    margin-bottom: 0.5em;
+    margin-bottom: 0.8em;
+    border-bottom:1px solid #e5e5e5;
+    padding-bottom:0.8em;
 }
 .mini-product-image {
     float:left; 
-    margin:0;
+    margin:0 5px 0 0;
     width:30px;
     border:1px solid #ccc;
 }
@@ -654,12 +658,19 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
 }
 .mini-product-details {
     line-height: 2em;
+    padding-top:2px;
 }
 .mini-product-name {
     float: left;
-    max-width: 250px;
+    max-width: 220px;
 }
-.mini-product-image a { /* @overrides 'dropdown-menu a' ruleset */
+.mini-product-name a {
+    display: inline-block;
+    width:100%;
+    line-height: 2.25em;
+    vertical-align: middle;
+}
+.mini-product a { /* @overrides 'dropdown-menu a' ruleset */
     clear: none;
     padding: 0;
     color:#d22f2a;
@@ -673,7 +684,7 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
 }
 .mini-product-meta > :first-child {
     padding:0 8px 0 8px;
-    border:1px solid #ccc; border-top:none; border-bottom: none;
+    border:1px solid #e5e5e5; border-top:none; border-bottom: none;
 }
 #topCartContent .minifoot {
     position: absolute; bottom: 0; left: 0;
@@ -708,13 +719,9 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
 #topCartContent .minifoot .action a {
     margin-top:0;
 }
-#mini-cart .even {
-    margin: 0 0 5px;
-    border-top:1px solid #ddd; /* fallback old browsers */
-    border-top: 1px solid rgba(0, 0, 0, 0.065);
-}
 #mini-cart .last {
     border:none;
+    margin-bottom:0.4em;
 }
 
 /* checkout btn in non-mini-cart header */
@@ -898,8 +905,7 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
 }
 .categoryevent-index-index .prefix {display: block;}
 .categoryevent-index-index .hasCountdown {font-size: 12px; color:#fcdc0a;text-transform: uppercase;}
-.up-to {color:#d22f2a; font-weight: bold; text-align: right;}
-.up-to span {color:#d22f2a; font-size: 16px; font-weight: bold;}
+.up-to {color:#d22f2a;}
 
 /* discount banner */
 .maxDiscount {font-size:20px; float:right;}
@@ -1064,7 +1070,6 @@ body.catalog-category-view .thumbnails > li {position: relative;}
     margin-bottom: 18px;
     margin-left: 10px;
 }
-.thumbnail{background:#fff;display:block;padding:4px;line-height:1;border:0px solid #ddd;-webkit-border-radius:4px;-moz-border-radius:4px;border-radius:4px;-webkit-box-shadow:0px 0px 0px 0px rgba(0, 0, 0, 0.075);-moz-box-shadow:0px 0px 0px 0px rgba(0, 0, 0, 0.075);box-shadow:0px 0px 0px 0px rgba(0, 0, 0, 0.075);}
 
 /**
  * @Cat/Age Landing Page
