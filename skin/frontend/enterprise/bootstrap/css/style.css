@@ -835,47 +835,7 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
 .events-grid .thumbnail .event-link {
     display: block;
 }
-/* Landscape phone to portrait tablet */
-@media (max-width: 767px) {
-.events-grid .catalog-event .more {
-    position: absolute; bottom: 0; left: 0;
-    visibility: hidden;
-    opacity:0;
-    width:100%; height: 343px; overflow: hidden;
-    background: rgba(0,0,0,0.75);
-    -moz-transition:opacity 0.1s ease;
-    -webkit-transition:opacity 0.1s ease;
-    transition:opacity 0.1s ease;
-}
-}
-/* Portrait tablet to landscape and desktop */
-@media (min-width: 768px) {
-.events-grid .catalog-event .more {
-    position: absolute; bottom: 0; left: 0;
-    visibility: hidden;
-    opacity:0;
-    width:100%; height: 343px; overflow: hidden;
-    background: rgba(0,0,0,0.75);
-    -moz-transition:opacity 0.1s ease;
-    -webkit-transition:opacity 0.1s ease;
-    transition:opacity 0.1s ease;
-}
-}
-/* Default Display */
-@media (min-width: 980px) {
-.events-grid .catalog-event .more {
-    position: absolute; bottom: 0; left: 0;
-    visibility: hidden;
-    opacity:0;
-    width:100%; height: 343px; overflow: hidden;
-    background: rgba(0,0,0,0.75);
-    -moz-transition:opacity 0.1s ease;
-    -webkit-transition:opacity 0.1s ease;
-    transition:opacity 0.1s ease;
-}
-}
-/* Large desktop */
-@media (min-width: 1200px) {
+
 .events-grid .catalog-event .more {
     position: absolute; bottom: 0; left: 0;
     visibility: hidden;
@@ -885,7 +845,6 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
     -moz-transition:opacity 0.1s ease;
     -webkit-transition:opacity 0.1s ease;
     transition:opacity 0.1s ease;
-}
 }
 .events-grid .catalog-event:hover .more {
     visibility: visible;
@@ -1572,30 +1531,6 @@ body > footer {
     border-top:0px solid #fff;
     margin-bottom: 0px;
 }
-/* Landscape phone to portrait tablet */
-@media (max-width: 767px) {
-body > footer {
-    position: relative;
-    margin-top:-221px; height: 211px; /* @sticky */
-    padding: 18px 0 0px 0;
-    background: #e5e5e5;
-    border-top:0px solid #fff;
-    margin-bottom: -20px;
-}
-}
-/* Portrait tablet to landscape and desktop */
-@media (min-width: 768px) {
-body > footer {
-    position: relative;
-    margin-top:-221px; height: 211px; /* @sticky */
-    padding: 18px 0 0px 0;
-    background: #e5e5e5;
-    border-top:0px solid #fff;
-    margin-bottom: -20px;
-}
-}
-/* Default Display */
-@media (min-width: 980px) {
 body > footer {
     position: relative;
     margin-top:-221px; height: 211px; /* @sticky */
@@ -1604,19 +1539,6 @@ body > footer {
     background: #e5e5e5;
     border-top:0px solid #fff;
     margin-bottom: -20px;
-}
-}
-/* Large desktop */
-@media (min-width: 1200px) {
-body > footer {
-    position: relative;
-    margin-top:-221px; height: 211px; /* @sticky */
-    padding: 18px 0 0px 0;
-    min-width:950px; /* temp hackish fix for iPad display, prevent content of fixed width from bleeding in. @TODO: get responsive! */
-    background: #e5e5e5;
-    border-top:0px solid #fff;
-    margin-bottom: -20px;
-}
 }
 
 body > footer:before {
