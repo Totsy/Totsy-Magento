@@ -145,22 +145,24 @@ if($product->getId() == Mage::getStoreConfig('Crown_Club/clubgeneral/club_produc
         <?php endif; ?>
         <?php endif; //Can apply MSRP ?>
         <?php if ($_options = $this->getOptionList()):?>
-        <span class="item-options" style="float:right">
-        <?php foreach ($_options as $_option) : ?>
-        <?php $_formatedOptionValue = $this->getFormatedOptionValue($_option) ?>
-        <span>
-        <span style="font-weight:bold"><?php echo $this->htmlEscape($_option['label']) ?>: </span>
-        <span<?php if (isset($_formatedOptionValue['full_view'])): ?> class="truncated"<?php endif; ?>><?php echo $_formatedOptionValue['value'] ?>
-            <?php if (isset($_formatedOptionValue['full_view'])): ?>
-            <span class="truncated_full_value">
-                <span class="item-options">
-                    <span style="font-weight:bold"><?php echo $this->htmlEscape($_option['label']) ?></span>
-                    <span><?php echo $_formatedOptionValue['full_view'] ?></span>
+            <span class="item-options" style="float:right">
+            <?php foreach ($_options as $_option) : ?>
+                <?php $_formatedOptionValue = $this->getFormatedOptionValue($_option) ?>
+                <span>
+                    <span style="font-weight:bold"><?php echo $this->htmlEscape($_option['label']) ?>: </span>
+                    <span<?php if (isset($_formatedOptionValue['full_view'])): ?> class="truncated"<?php endif; ?>><?php echo $_formatedOptionValue['value'] ?>
+                        <?php if (isset($_formatedOptionValue['full_view'])): ?>
+                            <span class="truncated_full_value">
+                                <span class="item-options">
+                                    <span style="font-weight:bold"><?php echo $this->htmlEscape($_option['label']) ?></span>
+                                    <span><?php echo $_formatedOptionValue['full_view'] ?></span>
+                                </span>
+                            </span>
+                        <?php endif; ?>
+                    </span>
                 </span>
-            </span>
-            <?php endif; ?>
-        </span>
-        <?php endforeach; ?>
+            <?php endforeach; ?>
+            </span><!-- /.item-options -->
         <?php endif;?>
     </div>
 </div>
