@@ -16,10 +16,6 @@ f/**
 html,
 body { height: 100%;}
 body { padding-top:181px; } /* magic number BS for fixed nav */
-body[class*="span"] { /* bootstrap override for edge case of *span* sale title in body class MGN-1554 */
-    float: none;
-    margin: 0;
-}
 #stickywrap { /* @sticky */
     height: auto;
     min-height: 100%;
@@ -48,6 +44,7 @@ a:focus{outline: none;}
 .content_push { margin-top:115px; } /* not in use, was for 1col */
 .content_push_2col { margin-top:115px; }
 h2 {font-size:20px; /* removed !important for "header override" */ }
+
 /**
  * @Diagnostics
  */
@@ -58,7 +55,7 @@ html.test body > header .container {outline:1px dotted blue;}
 html.test .container .row {outline:1px dotted green;}
 
 /**
- * @960.gs Grid Reset Classes
+ * @Bootstrap Scaffolding / Grid overrides
  */
 .alpha { margin-left: 0 }
 .omega { margin-right: 0 }
@@ -79,6 +76,12 @@ html.test .container .row {outline:1px dotted green;}
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
 }
+body[class*="span"] { /* bootstrap override for edge case of *span* sale title in body class MGN-1554 */
+    float: none;
+    margin: 0;
+}
+.navbar-fixed-top .container,.navbar-fixed-bottom .container{width: 940px;}
+
 
 /* @TODO: remove this safety fallback - pending fix of hacked core (Robot's temporary removal of .row)
 .row { margin-left:-10px;*zoom:1;}
@@ -370,10 +373,11 @@ body.customer-account-login .btn.btn-large {
 
 /* mainContent - the site "wrapper" white box */
 #mainContent {
-    margin-top:0;
+    margin:0 auto 232px; /* bottom margin is magic number BS for sticky footer */
     margin-bottom:232px;
+    width:940px;
     background:#fff; 
-    padding:15px;
+    padding:30px 30px 15px;
     padding-bottom:0px; overflow: auto; /* @sticky, +more padding */
 }
 
@@ -398,8 +402,6 @@ body.customer-account-login .btn.btn-large {
     position: relative;
     padding:8px 0;
 }
-#logo {margin-left:0;}
-
 .header-utils {
     position: absolute; bottom: 8px; right: 0;
 }
@@ -460,11 +462,14 @@ body.customer-account-login .btn.btn-large {
 /* #userAccount - my account module */
 #userAccount > a:hover {text-decoration: none;}
 
-/* nav */
+/* @nav */
 .navbar nav {
     position: relative; z-index: 1;
     border-top: 2px dashed #68a8fe;
     border-bottom: 2px dashed #68a8fe;
+}
+.navbar .nav {
+	margin:0 0 0 20px; /* @KLUDGE: override some Bootstrap margins, Ted-hackery */
 }
 .navbar .nav > li {
     padding: 8px 9px 9px 10px;
@@ -2107,16 +2112,6 @@ body.catalog-category-view .price-box .special-price {
 
 /* TotsyPLUS */
 
-html.plus-html { background: #fff !important}
-html.plus-html { background-image: -moz-linear-gradient(top, #ffffff, #ffffff) !important; }
-html.plus-html { background-image: -ms-linear-gradient(top, #ffffff, #ffffff) !important; }
-html.plus-html { background-image: -o-linear-gradient(top, #ffffff, #ffffff) !important; }
-html.plus-html { background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), to(#ffffff)) !important; }
-html.plus-html { background-image: -webkit-linear-gradient(top, #ffffff, #ffffff) !important; }
-html.plus-html { background-image: linear-gradient(top, #ffffff, #ffffff) !important; }
-html.plus-html { background-attachment: fixed; }
-html.plus-html#stickywrap { padding-top: 35px; }
-
 .mini-products-list a img {
     width: 54px;
 }
@@ -2135,6 +2130,7 @@ html.plus-html#stickywrap { padding-top: 35px; }
 
 .plus {
     width:100%;
+    padding-bottom: 16px;
 }
 
 .plus .look-for {
@@ -2168,13 +2164,8 @@ html.plus-html#stickywrap { padding-top: 35px; }
 .plus .benefit-cta { font-size: 14px; color: #d22f2a; font-weight: bold; }
 .plus .benefit-cta a { text-decoration:none; }
 
-.plus-menu {
-    width: 150px;
-    float: left;
-}
-
+/* plus menu - lives in span2 */
 .plus-menu ul.links li {
-    width: 150px;
     margin-bottom: 2px;
 }
 
@@ -2188,7 +2179,6 @@ html.plus-html#stickywrap { padding-top: 35px; }
 }
 
 .plus-menu ul.links li a {
-    width: 142px;
     padding: 4px;
     color: #262626;
     display: block;
@@ -2209,12 +2199,7 @@ html.plus-html#stickywrap { padding-top: 35px; }
     color: #ffffff !important;
 }
 
-.plus-content {
-    width: 780px;
-    margin-left: 20px;
-    float: left;
-}
-
+/* plus content - lives in span10 */
 .plus .f12 {
     font-size: 12px;
 }
@@ -2257,7 +2242,7 @@ html.plus-html#stickywrap { padding-top: 35px; }
 }
 
 .plus .dotted {
-    border-bottom: 2px dotted #000;
+    border-bottom: 2px dashed #68a8fe;
     height: 2px;
 }
 
