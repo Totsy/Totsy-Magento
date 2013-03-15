@@ -166,45 +166,39 @@
 <!-- start top cart dropdown (aka "minicart") -->
 <div id="topCartContent" class="block-content dropdown-menu" data-item-added="<?php if ( !!$_updateFlag && $_updateFlag ) {echo "true"; $checkoutSession->setCartUpdatedFlag(false);} else echo "false";?>">
 
-    <div class="inner-wrapper"><?php // extra div to smooth slideUp and slideDown ?>
-
-        <div id="items-info-wrapper">
-        <?php $_items = $this->getItems(); //change from getRecentItems()?>
-        <?php if( count($_items) && !empty($_itemsArray) ): ?>
-
-            <div id="mini-cart" class="mini-products-list">
-                <?php foreach($_items as $_item): ?>
-                    <!-- Add Customerize Cart item info -->
-                    <?php echo $this->getItemHtml($_item); ?>
-                <?php endforeach; ?>
+    <?php $_items = $this->getItems(); //change from getRecentItems()?>
+    <?php if( count($_items) && !empty($_itemsArray) ): ?>
+        <div id="mini-cart" class="mini-products-list">
+            <?php foreach($_items as $_item): ?>
+                <!-- Add Customerize Cart item info -->
+                <?php echo $this->getItemHtml($_item); ?>
+            <?php endforeach; ?>
+        </div>
+        <script type="text/javascript">decorateList('mini-cart', 'none-recursive')</script>
+    
+    <?php else: ?>
+        <p class="cart-empty">
+            <?php echo $this->__('You have zero items in your cart.'); // @TODO: remove after confirmed not needed ?>
+        </p>
+    <?php endif; ?>
+    
+    <?php if($_cartQty && !empty($_itemsArray)): ?>
+        <div class="minifoot clearfix">
+            <div class="subtotal">
+            <?php if ($this->canApplyMsrp()): ?>
+                <span class="map-cart-sidebar-total"><?php echo $this->__('ORDER TOTAL WILL BE DISPLAYED BEFORE YOU SUBMIT THE ORDER'); ?></span>
+            <?php elseif(!$is_nominal): ?>
+                <span class="subtotal-savings"><?php echo $_mySaving; ?></span>
+                <span class="subtotal-cost"><?php echo $this->__('Subtotal: ') ?><?php echo Mage::helper('checkout')->formatPrice($this->getSubtotal()) ?>
+                    <?php if ($_subtotalInclTax = $this->getSubtotalInclTax()): ?> / <?php echo Mage::helper('checkout')->formatPrice($_subtotalInclTax) ?> <?php echo Mage::helper('tax')->getIncExcText(true) ?><?php endif; ?>
+                </span>
+            <?php endif; ?>
             </div>
-            <script type="text/javascript">decorateList('mini-cart', 'none-recursive')</script>
-
-        <?php else: ?>
-
-            <p class="cart-empty">
-                <?php echo $this->__('You have zero items in your cart.'); // @TODO: remove after confirmed not needed ?>
-            </p>
-        <?php endif; ?>
-
-        <?php if($_cartQty && !empty($_itemsArray)): ?>
-            <div class="minifoot clearfix">
-                <div class="subtotal">
-                <?php if ($this->canApplyMsrp()): ?>
-                    <span class="map-cart-sidebar-total"><?php echo $this->__('ORDER TOTAL WILL BE DISPLAYED BEFORE YOU SUBMIT THE ORDER'); ?></span>
-                <?php elseif(!$is_nominal): ?>
-                    <span class="subtotal-savings"><?php echo $_mySaving; ?></span>
-                    <span class="subtotal-cost"><?php echo $this->__('Subtotal: ') ?><?php echo Mage::helper('checkout')->formatPrice($this->getSubtotal()) ?>
-                        <?php if ($_subtotalInclTax = $this->getSubtotalInclTax()): ?> / <?php echo Mage::helper('checkout')->formatPrice($_subtotalInclTax) ?> <?php echo Mage::helper('tax')->getIncExcText(true) ?><?php endif; ?>
-                    </span>
-                <?php endif; ?>
-                </div>
-                <div class="action">
+            <div class="action">
                 <a class="btn checkout is-active" title="Checkout" href="/checkout/cart/"><strong>Checkout</strong></a>
-                </div>
             </div>
-        <?php endif; ?>
-    </div><!-- /.inner-wrapper -->
+        </div><!-- /.minifoot -->
+    <?php endif; ?>
 </div><!-- /#topCartContent -->
 
     <script type="text/javascript">

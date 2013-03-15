@@ -43,7 +43,7 @@ a:hover{color:#d22f2a;text-decoration:underline;}
 a:focus{outline: none;}
 .content_push { margin-top:115px; } /* not in use, was for 1col */
 .content_push_2col { margin-top:115px; }
-h2 {font-size:20px; /* removed !important for "header override" */ }
+h2 {font-size:20px; /* removed !important for "header @override" */ }
 
 /**
  * @Diagnostics
@@ -55,22 +55,10 @@ html.test body > header .container {outline:1px dotted blue;}
 html.test .container .row {outline:1px dotted green;}
 
 /**
- * @Bootstrap Scaffolding / Grid overrides
+ * @Bootstrap Scaffolding / Component @overrides
  */
 .alpha { margin-left: 0 }
 .omega { margin-right: 0 }
-.clear { clear:both; }
-.inset {
-    border-radius: 8px 8px 8px 8px;
-    box-shadow: 0 1px 2px rgba(50, 50, 50, 0.5) inset;
-    height: 40px;
-    left: 50%;
-    margin: 0 0 0 10px;
-    min-width: 200px;
-    padding: 5px;
-    position: absolute;
-    top: 0;
-}
 [class*="span"] {
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
@@ -80,7 +68,54 @@ body[class*="span"] { /* bootstrap override for edge case of *span* sale title i
     float: none;
     margin: 0;
 }
+.events-grid > .span3 {width:226px;}
+.thumbnail {
+    border:1px solid #fff;
+    padding:10px;
+}
+.dropdown-toggle {cursor: pointer;}
+.well {
+    background: none repeat scroll 0 0 #FFFFFF;
+    border: 0px solid #333;
+    -moz-border-radius: 0px; -webkit-border-radius: 0px; border-radius: 0px;
+    -moz-box-shadow: 0 0px 0px rgba(0, 0, 0, 0.075);
+    -webkit-box-shadow: 0 0px 0px rgba(0, 0, 0, 0.075);
+    box-shadow: 0 0px 0px rgba(0, 0, 0, 0.075);
+    display: block;
+    padding: 10px;
+}
+/* @TODO: put this back in, replacing the above, and apply .well class properly - MGN-1553
+.well {
+    background: none repeat scroll 0 0 #fff;
+    border: 1px solid #ddd;
+    -moz-border-radius: 5px; -webkit-border-radius: 5px; border-radius: 5px;
+    -moz-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075);
+    -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075);
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075);
+    display: block;
+    padding: 10px;
+}
+*/
 .navbar-fixed-top .container,.navbar-fixed-bottom .container{width: 940px;}
+.img-rounded {
+  -webkit-border-radius: 6px;
+     -moz-border-radius: 6px;
+          border-radius: 6px;
+}
+.img-polaroid {
+  padding: 4px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+     -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+.img-circle {
+  -webkit-border-radius: 500px;
+     -moz-border-radius: 500px;
+          border-radius: 500px;
+}
 
 
 /* @TODO: remove this safety fallback - pending fix of hacked core (Robot's temporary removal of .row)
@@ -89,13 +124,6 @@ body[class*="span"] { /* bootstrap override for edge case of *span* sale title i
 .row:after {clear:both;}
  */
 
-/* Alignment classes */
-.align-center {
-    text-align: center;
-}
-.align-right {
-    text-align: right;
-}
 /* TED's BLUE LINE HR */
 hr {
     background-color:#fff;
@@ -138,10 +166,22 @@ hr {
 }
 
 /**
- * @General / Modular Classes
+ * @General Utility & Modular Classes
  */
-.hide {
-    display: none;
+.hide { display: none;}
+.clear { clear:both; }
+.align-center { text-align: center;}
+.align-right { text-align: right;}
+.inset {
+    border-radius: 8px 8px 8px 8px;
+    box-shadow: 0 1px 2px rgba(50, 50, 50, 0.5) inset;
+    height: 40px;
+    left: 50%;
+    margin: 0 0 0 10px;
+    min-width: 200px;
+    padding: 5px;
+    position: absolute;
+    top: 0;
 }
 .clearfix:before,
 .clearfix:after {
@@ -154,46 +194,25 @@ hr {
 .clearfix {
     *zoom:1; /* IE7 hackeroo */
 }
-.dropdown-toggle {cursor: pointer;}
-.well {
-    background: none repeat scroll 0 0 #FFFFFF;
-    border: 0px solid #333;
-    -moz-border-radius: 0px; -webkit-border-radius: 0px; border-radius: 0px;
-    -moz-box-shadow: 0 0px 0px rgba(0, 0, 0, 0.075);
-    -webkit-box-shadow: 0 0px 0px rgba(0, 0, 0, 0.075);
-    box-shadow: 0 0px 0px rgba(0, 0, 0, 0.075);
-    display: block;
-    padding: 10px;
-}
-/* @TODO: put this back in, replacing the above, and apply .well class properly - MGN-1553
-.well {
-    background: none repeat scroll 0 0 #fff;
-    border: 1px solid #ddd;
-    -moz-border-radius: 5px; -webkit-border-radius: 5px; border-radius: 5px;
-    -moz-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075);
-    -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075);
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075);
-    display: block;
-    padding: 10px;
-}
-*/
 .puncted {
     background: #dddbdd;
     color: #636466;
     text-shadow: 0 1px 0 rgba(255, 255, 255, 0.85);
 }
 .table-bordered,
-.fast-ship-table-bordered,
-.thumbnail {
-    /* -moz-border-radius:5px; -webkit-border-radius:5px; border-radius:5px; */
+.fast-ship-table-bordered {
     border:1px solid #fff;
 }
-.thumbnail {padding:10px;}
+
+/* data A-V pairs */
+.datapair {}
+.datapair-attr {}
+.datapair-val {}
 
 /* 
     @TODO: .page-header is abused; cleanup: 
     - markup: only use on true page headers not sections headers; 
-    - CSS: with modularized style rules, the body-level "category" overrides won't be needed;
+    - CSS: with modularized style rules, the body-level "category" @overrides won't be needed;
 */
 .page-header {
     margin:20px 0 10px; padding-bottom:5px;
@@ -204,30 +223,9 @@ body.categoryevent-index-topnav .page-header {
     border: none;
     margin-top:0;
 }
-/* Bootstrap Overrides */
-.img-rounded {
-  -webkit-border-radius: 6px;
-     -moz-border-radius: 6px;
-          border-radius: 6px;
-}
 
-.img-polaroid {
-  padding: 4px;
-  background-color: #fff;
-  border: 1px solid #ccc;
-  border: 1px solid rgba(0, 0, 0, 0.2);
-  -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-     -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-
-.img-circle {
-  -webkit-border-radius: 500px;
-     -moz-border-radius: 500px;
-          border-radius: 500px;
-}
-
-.breadcrumb { /* bootstrap overrides follow… */
+/* breadcrumbs */
+.breadcrumb { /* @Bootstrap @overrides follow… */
     background: none;
     border:none;
     padding: 0; margin: 0 0 10px;
@@ -261,7 +259,6 @@ body.categoryevent-index-topnav .page-header {
 .count-down-timer .prefix {
     color:#d22f2a;
 }
-.events-grid > .span3 {width:226px;}
 
 /* Ellipsis class for truncating long titles
  * to use, the element must also have a fixed width, either implicit (inherited) or explicit
@@ -308,7 +305,7 @@ body.categoryevent-index-topnav .page-header {
     background-color: #d22f2a;
 }
 
-/* btn classes - overrides bootstrap */
+/* btn classes - @overrides @Bootstrap */
 .btn,
 .navbar .btn { /* MGN-951: ALL btns have consistent font-size and typography - DO NOT use '.btn-large' class override */
     padding:2px 8px 2px;
@@ -320,7 +317,7 @@ body.categoryevent-index-topnav .page-header {
     text-transform: uppercase;
 }
 .btn-primary,
-a.btn-primary /* req to override '.dropdown a' ruleset */ {
+a.btn-primary /* req to @override '.dropdown a' ruleset */ {
     background-color:rgba(210,47,42,1);
     color:#fff;
 }
@@ -367,7 +364,7 @@ body.customer-account-login .btn.btn-large {
     color: #468847;
 }
 
-/* labels / badges - overrides bootstrap */
+/* labels / badges - @overrides @Bootstrap */
 .label-success, .badge-success {
     background-color: #c1cc00;
 }
@@ -469,7 +466,7 @@ body.customer-account-login .btn.btn-large {
     border-bottom: 2px dashed #68a8fe;
 }
 .navbar .nav {
-	margin:0 0 0 20px; /* @KLUDGE: override some Bootstrap margins, Ted-hackery */
+	margin:0 0 0 20px; /* @KLUDGE: @override some @Bootstrap margins, Ted-hackery */
 }
 .navbar .nav > li {
     padding: 8px 9px 9px 10px;
@@ -559,7 +556,7 @@ header nav .cta strong em {color:#d84643; font-style:normal;}
 }
 #usercart-block-title {
     margin-top:-1px; padding-right:8px;
-    background-image: none; /* override .dropdown-toggle, reapplied that image to child element #cartHeader */
+    background-image: none; /* @override .dropdown-toggle, reapplied that image to child element #cartHeader */
     border:1px solid transparent; border-bottom: none;
 }
 #usercart-block-title.no-items,
@@ -642,16 +639,41 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
     -webkit-box-shadow:0 3px 6px rgba(0, 0, 0, 0.25);
     box-shadow:0 3px 6px rgba(0, 0, 0, 0.25);
 }
-#topCartContent.dropdown-menu .product-name a { /* overrides 'dropdown-menu a' ruleset */
+.mini-product {
+    min-height:30px;
+    margin-bottom: 0.5em;
+}
+.mini-product-image {
+    float:left; 
+    margin:0;
+    width:30px;
+    border:1px solid #ccc;
+}
+.mini-product-image img {
+    width: 100%;
+}
+.mini-product-details {
+    line-height: 2em;
+}
+.mini-product-name {
+    float: left;
+    max-width: 250px;
+}
+.mini-product-image a { /* @overrides 'dropdown-menu a' ruleset */
     clear: none;
     padding: 0;
     color:#d22f2a;
 }
-.mini-product-image {
-    width:30px;
+.mini-product-meta {
+    float: right;
 }
-.mini-product-image img {
-    width: 100%;
+.mini-product-name,
+.mini-product-meta > * {
+    display: inline-block;
+}
+.mini-product-meta > :first-child {
+    padding:0 8px 0 8px;
+    border:1px solid #ccc; border-top:none; border-bottom: none;
 }
 #topCartContent .minifoot {
     position: absolute; bottom: 0; left: 0;
@@ -1034,7 +1056,7 @@ body.catalog-category-view .thumbnails > li {position: relative;}
     color: #636466;
     font-size: 13px; font-weight: bold;
 }
-/* Bootstrap override for TED's design */
+/* @Bootstrap @override for TED's design */
 .thumbnails > li {
     border: none;
     float: left;
@@ -1182,14 +1204,6 @@ body.catalog-category-view .thumbnails > li {position: relative;}
 
 .cart-prod-desription {
 }
-
-#mini-cart .product-name a {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    width: 250px;
-}
-
 .btn-continue {
     margin: 0px 10px 10px 10px;
 }
@@ -1710,7 +1724,7 @@ a.invite-btn {
 }
 p.badgecity_fine_print {font-size:11px; color:#999; margin:2px 0px 0px 0px; text-align:center; padding:0px;}
 
-/* Forms Override */
+/* Forms @override */
 textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input {
     -moz-transition: border 0.2s linear 0s, box-shadow 0.2s linear 0s;
     background-color: #f9f9f9;
@@ -2025,10 +2039,6 @@ body.catalog-category-view .price-box .special-price {
 .size_chart {top:446px; margin-left:134px; position: absolute;}
 
 /* TotsyPLUS */
-
-.mini-products-list a img {
-    width: 54px;
-}
 
 @font-face {
     font-family: 'memphisbold';
@@ -3146,7 +3156,7 @@ background-position: 0 .5em;
 .rocking-text {color: #ADB92C; text-transform: uppercase; font-weight: bold}
 
 
-/* insparq overrides and extra styles */
+/* @InSparq @overrides and extra styles */
 #issw #ins-message {
     display: none;
 }
