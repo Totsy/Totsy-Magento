@@ -89,7 +89,7 @@
                             <?php
                                 $imgFile = (isset($live['small_image']))
                                 ? BP . DS . 'media' . DS . 'catalog' . DS . 'category' . DS . $live['small_image']
-                                : BP . DS . 'skin' . DS . 'frontend' . DS . 'enterprise ' . DS . 'harapartners' . DS . 'images' . DS . 'catalog' . DS . 'product' . DS . 'placeholder' . DS . 'small_image.jpg';
+                                : BP . DS . 'skin' . DS . 'frontend' . DS . 'enterprise ' . DS . 'bootstrap' . DS . 'images' . DS . 'catalog' . DS . 'product' . DS . 'placeholder' . DS . 'small_image.jpg';
                             ?>
                             <span class="event-link">
                                 <img src="<?php echo Mage::helper('service/image')->loadImageFile($imgFile)->constrainOnly(false)->keepAspectRatio(TRUE)->keepFrame(FALSE)->resize(550,550) ?>" alt="<?php echo $live['name'];?>" />
@@ -100,22 +100,6 @@
                         <div class="caption">
                     <h3 class="ellipsis"><?php echo $live['name'];?></h3>
                     <p class="up-to">up to <span><?php echo $maxDiscount; ?>% Off!</span></p>
-                    <section class="labels container">
-                                        <h6>Categories:</h6>
-                                        <ul>
-                                        <?php foreach ($eventDepts as $eventDept) : ?>
-                                            <li><?php echo $eventDept; ?></li>
-                                        <?php endforeach; ?>
-                                        </ul>
-                                    </section>
-                                    <section class="labels container">
-                                        <h6>Ages:</h6>
-                                        <ul>
-                                        <?php foreach ($eventAges as $eventAge) : ?>
-                                            <li><?php echo $eventAge; ?></li>
-                                        <?php endforeach; ?>  
-                                        </ul>                                  
-                                    </section>
                   </div>
                     </li>
                 <?php endif; ?>
@@ -183,7 +167,7 @@
                             $imgFile = (isset($up['small_image']))
                             ? BP . DS . 'media' . DS . 'catalog' . DS . 'category' . DS .
                             $up['small_image']
-                            : BP . DS . 'skin' . DS . 'frontend' . DS . 'enterprise ' . DS . 'harapartners' . DS . 'images' . DS . 'catalog' . DS . 'product' . DS . 'placeholder' . DS . 'small_image.jpg';
+                            : BP . DS . 'skin' . DS . 'frontend' . DS . 'enterprise ' . DS . 'bootstrap' . DS . 'images' . DS . 'catalog' . DS . 'product' . DS . 'placeholder' . DS . 'small_image.jpg';
                         ?>
                         <a class="event-link" href="<?php echo $url; ?>">
                             <img src="<?php echo Mage::helper('service/image')->loadImageFile($imgFile)->resize(165)->keepFrame(FALSE); ?>" width="165px" height="171" alt="<?php echo $up['name'];?>" />
