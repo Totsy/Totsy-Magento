@@ -34,13 +34,11 @@ jQuery(document).ready(function() {
                     jQuery(".use-new-card-wrapper").appendTo(jQuery("#add_cc_types"));
                     newCardWrap.hide();
                 } else {  
-                    jQuery("[id='add_payment']").hide();
+                    jQuery(".add_payment_separator").hide();
                     jQuery(".checkout-reward").css("padding-top", "0px");
                     jQuery(".use-new-card-wrapper").show();
                     jQuery("#use-card-method").hide();
                     jQuery("#cc_data").show();                    
-                    
-                    console.log("test");
                     jQuery("#hpcheckout-payment-add-title").hide();
                 }
             },
