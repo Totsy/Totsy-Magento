@@ -1,4 +1,4 @@
-f/**
+/**
  * @Base styles for the Magento Bootstrap theme
  *
  * @Typography notes
@@ -12,11 +12,10 @@ f/**
  * - Green          buttons                 #c1cc00 
  * - Blue           dotted lines!           #68a8fe
  */
-
+ 
 html,
 body { height: 100%;}
-body { padding-top:181px; } /* magic number BS for fixed nav */
-#stickywrap { /* @sticky */
+#stickywrap { /* @stickyfooter */
     height: auto;
     min-height: 100%;
 }
@@ -373,12 +372,11 @@ body.customer-account-login .btn.btn-large {
 
 /* mainContent - the site "wrapper" white box */
 #mainContent {
-    margin:0 auto 232px; /* bottom margin is magic number BS for sticky footer */
-    margin-bottom:232px;
+    margin:0 auto;
     width:940px;
     background:#fff; 
-    padding:30px 30px 15px;
-    padding-bottom:0px; overflow: auto; /* @sticky, +more padding */
+    padding:211px 30px 267px; /* @fixednav: top padding magic number BS; @stickyfooter: bottom padding magic number BS */
+    overflow: auto; /* @stickyfooter */
 }
 
 .logged-out ~ #mainContent {
@@ -769,7 +767,7 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
     position: relative;
     width: 100%;
 }
-#mainContent > .banner {
+#mainContent > .container > .banner {
     margin:5px auto 0;
 }
 .banner img {width:100%;}
@@ -1525,22 +1523,11 @@ html body .fast-ship-table tr:hover th.last {
  */
 body > footer {
     position: relative;
-    margin-top:-221px;  /* @sticky */
-    padding: 0;
+    margin-top:-229px; height:211px; /* @stickyfooter: top margin is footer height + padding, magic number BS */
+    padding: 18px 0 0;
+    min-width: 950px; /* temp hackish fix for iPad display, prevent content of fixed width from bleeding in. @TODO: get responsive! */
     background: #e5e5e5;
-    border-top:0px solid #fff;
-    margin-bottom: 0px;
 }
-body > footer {
-    position: relative;
-    margin-top:-221px; height: 211px; /* @sticky */
-    padding: 18px 0 0px 0;
-    min-width:950px; /* temp hackish fix for iPad display, prevent content of fixed width from bleeding in. @TODO: get responsive! */
-    background: #e5e5e5;
-    border-top:0px solid #fff;
-    margin-bottom: -20px;
-}
-
 body > footer:before {
     content: "";
     position: absolute; top: 0; left: 0;
