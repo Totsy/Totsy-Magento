@@ -22,7 +22,7 @@ body { height: 100%;}
 }
 html {
     margin:0;
-    background: url(../images/bkg_stripped_blue.png);
+    background: url(../images/bkg_stripped_blue.png) fixed 0 0 repeat-x;
     /*
     background-image: -moz-linear-gradient(top, #eef6fc, #ffffff);
     background-image: -ms-linear-gradient(top, #eef6fc, #ffffff);
