@@ -3173,3 +3173,40 @@ background-position: 0 .5em;
 .totsy #ins-share-button-bar .ins-share-button:first-child {
     margin-left: 0;
 }
+/* InSparq nav "Flicker" */
+#navInsFeed {
+/*
+    margin:0;
+    padding:0;
+*/
+}
+
+#navInsFeed #inspbfeeda{
+    cursor:pointer;
+    text-decoration: none;
+}
+
+#navInsFeed #insfeedtext{
+    color: #5A9E24;
+    height: 16px;
+    line-height: 16px;
+    position: relative;
+    top: -3px;
+    font-style:normal;
+    font-size:12px;
+    font-weight:bold;
+}
+#navInsFeed .nonewfeeditem{
+    background: url(../images/balloonGreen.png) no-repeat 2px 0px;
+    display:inline-block;
+    width:34px;
+    height:16px;
+
+}
+#navInsFeed .newfeeditem{
+    background: url(../images/balloonPink.png) no-repeat 2px 0px;
+    display:inline-block;
+    width:34px;
+    height:16px;
+
+}
