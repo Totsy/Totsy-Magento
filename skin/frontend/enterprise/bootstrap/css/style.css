@@ -3163,7 +3163,9 @@ background-position: 0 .5em;
 .rocking-text {color: #ADB92C; text-transform: uppercase; font-weight: bold}
 
 
-/* @InSparq @overrides and extra styles */
+/* 
+ * @InSparq @overrides and extra styles
+ */
 #issw #ins-message {
     display: none;
 }
@@ -3173,6 +3175,15 @@ background-position: 0 .5em;
 .totsy #ins-share-button-bar .ins-share-button:first-child {
     margin-left: 0;
 }
+.totsy #issw .ins-share-button .link .insinset {
+	height:22px;
+}
+.totsy #issw #ins-fancybox-fb .insinset {width:58px;}
+.totsy #issw #ins-fancybox-tw-proxy .insinset {width:61px;}
+.totsy #issw #ins-fancybox-pn .insinset {width:45px;}
+.totsy #issw #ins-fancybox-em .insinset {width:55px;}
+
+
 /* InSparq nav "Flicker" */
 #navInsFeed {
 /*
