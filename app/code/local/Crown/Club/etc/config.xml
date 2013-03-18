@@ -56,6 +56,11 @@
         </helpers>
         <template>
             <email>
+                <club_welcome_email_template translate="label" module="crownclub">
+                    <label>Club Welcome Notification</label>
+                    <file>club_welcome_notification.html</file>
+                    <type>html</type>
+                </club_welcome_email_template>
                 <club_expired_email_template translate="label" module="crownclub">
                     <label>Club Expired Notification</label>
                     <file>club_expired_notification.html</file>

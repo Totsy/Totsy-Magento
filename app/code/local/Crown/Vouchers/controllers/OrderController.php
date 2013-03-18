@@ -33,13 +33,12 @@ class Crown_Vouchers_OrderController extends Mage_Core_Controller_Front_Action {
 			$this->returnResult(array('error' => 'You have already received this voucher. '));
 			return;
 		}
-		
 		// Create order
 		$order = Mage::getModel('vouchers/order')->createOrder($product_id);
-		
+
 		// Send Voucher Email
 		Mage::getModel('vouchers/email')->sendEmail($product_id, $order);
-		
+
 		$this->returnResult(array('success' => 'Your email has been sent!'));
 	}
 
@@ -68,7 +67,7 @@ class Crown_Vouchers_OrderController extends Mage_Core_Controller_Front_Action {
             return;
         }
 
-        $this->returnResult(array('status' => 0));
+        $this->returnResult(array('status' => 0, 'id' => $product_id));
     }
 	
 	private function returnResult($result) {
