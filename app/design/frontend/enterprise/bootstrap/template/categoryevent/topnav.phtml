@@ -44,7 +44,7 @@ shpn='<?php echo $topNavDataObject->getData('attr_text_label'); ?>'
         <h3 class="category-event-name"><?php echo $category['category_info']['name']; ?> <a href="<?php echo Mage::getBaseUrl().$category['category_info']['url_path']; ?>">View All</a> <small class="pull-right"><span class="the-topnav-timer counter" id="time-layer-<?php echo $timer ?>" data-enddate="<?php echo $endcount_lc?>" data-status="live" data-id="<?php echo $timer ?>" data-countertype="category-event-grid"></span></small>
         </h3>
         <div class="category-event-products">
-        <ul class="products-grid thumbnails">
+        <ul class="products-grid thumbnails tedhack">
             <?php $j=0; ?>
             <?php $nonSalableArray = array();?>        
             
@@ -57,7 +57,7 @@ shpn='<?php echo $topNavDataObject->getData('attr_text_label'); ?>'
     //        $product = Mage::getModel('catalog/product')->load($_product['entity_id']);
             ?>
             <?php if ($_is_salable): ?>
-            <li class="span2 tedhack">
+            <li class="span2 category-product">
             <div class="thumbnail">
             <a href="<?php echo Mage::getBaseUrl().$_product['url_path']; ?>" title="<?php echo $_product['name']; ?>" class="product-image"><img src="<?php echo Mage::helper('catalog/image')->init(Mage::getModel('catalog/product'),'small_image',$_product['small_image'])->resize(148); ?>" width="148" alt="<?php echo $_product['name']; ?>" /></a>
             <h5 class="product-name ellipsis">

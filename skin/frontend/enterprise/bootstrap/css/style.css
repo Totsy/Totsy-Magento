@@ -1084,10 +1084,13 @@ body.catalog-category-view .thumbnails > li {position: relative;}
 .category-event-grid .thumbnails {
 	margin-bottom:0;
 }
-.category-event-grid .thumbnails .tedhack {
+.category-event-grid .thumbnails.tedhack {
+    margin-left:-9px;
+}
+.category-event-grid .thumbnails.tedhack .category-product {
 	margin-bottom:0.75em;
 	border:1px solid #ccc;
-	width:146px;
+	width:148px;
 }
 .the-topnav-timer .prefix {
 	font-weight: bold;
