@@ -559,7 +559,8 @@ header nav .cta strong em {color:#d84643; font-style:normal;}
     border:1px solid transparent; border-bottom: none;
 }
 #usercart-block-title.no-items,
-#usercart-block-title.dropdown-toggle {
+#usercart-block-title.dropdown-toggle,
+.top-cart.onCheckout #usercart-block-title {
     position: relative;
     top: 11px;
     padding-left: 8px;
@@ -567,7 +568,7 @@ header nav .cta strong em {color:#d84643; font-style:normal;}
     line-height: 2;
 }
 .top-cart.onCheckout #usercart-block-title .savings { /* @KLUDGE: when on onepage checkout */
-    margin-bottom: 5px;
+    margin-bottom: 5px; padding-left:8px;
     color: rgba(237, 45, 33, 0.78);
     font-size: 13px;
     font-weight: 500;
