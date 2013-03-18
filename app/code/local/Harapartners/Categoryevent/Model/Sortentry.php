@@ -120,7 +120,7 @@ class Harapartners_Categoryevent_Model_Sortentry
 
         $startDate = date('Y-m-d', strtotime($date));
         $endDate   = $this->calculateEndDate($date);
-
+ 
         $live = array();
         $upcoming = array();
         $copiedEventIds = array();
@@ -162,7 +162,23 @@ class Harapartners_Categoryevent_Model_Sortentry
             }
         }
 
+        $ls = $live;
+        $new = array();
+        $live = array();
+        $orgDate = strtotime($date);
+        $newDate = strtotime('+1 day', $orgDate); 
+        foreach ($ls as $l){
+            $start = strtotime($l['event_start_date']);
+            if ($orgDate <= $start && $start <= $newDate){
+                Mage::log($orgDate.' <= '.$start.' && '.$start.' <= '.$newDate);
+                $new[] = $l;
+                continue;
+            }
+            $live[] = $l;
+        }
+
         $this->setData('date', $date)
+            ->setData('top_live_queue', json_encode($new))
             ->setData('live_queue', json_encode($live))
             ->setData('upcoming_queue', json_encode($upcoming));
 
