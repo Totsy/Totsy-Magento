@@ -13,6 +13,10 @@
 
 html,
 body { height: 100%;}
+body[class*="span"] { /* bootstrap override for edge case of *span* sale title in body class MGN-1554 */
+    float: none;
+    margin: 0;
+}
 #stickywrap { /* @sticky */
     height: auto;
     min-height: 100%;

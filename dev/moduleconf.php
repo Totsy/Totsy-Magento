@@ -3,7 +3,7 @@
  * @category    Totsy
  * @package     dev
  * @author      Tharsan Bhuvanendran <tbhuvanendran@totsy.com>
- * @copyright   Copyright (c) 2012 Totsy LLC
+ * @copyright   Copyright (c) 2013 Totsy LLC
  */
 
 function usage() {
@@ -16,6 +16,8 @@ function usage() {
     echo "<classname> is the name of the new class.", PHP_EOL;
     exit(1);
 }
+
+date_default_timezone_set('America/New_York');
 
 // determine the Magento installation root
 $mageRoot = realpath(__DIR__ . '/../');
@@ -113,13 +115,14 @@ function controller($moduleName, $className) {
         echo "+ $controllersPath", PHP_EOL;
     }
 
+    $currentYear = date('Y');
     $controllerFileContents = <<<EOH
 <?php
 /**
  * @category    Totsy
  * @package     Totsy_$moduleName
  * @author      $author
- * @copyright   Copyright (c) 2012 Totsy LLC
+ * @copyright   Copyright (c) {$currentYear} Totsy LLC
  */
 
 class Totsy_{$moduleName}_{$className}Controller
@@ -166,13 +169,14 @@ function standard($moduleName, $classType, $className) {
         echo "+ $classDir", PHP_EOL;
     }
 
+    $currentYear = date('Y');
     $fileContents = <<<EOH
 <?php
 /**
  * @category    Totsy
  * @package     Totsy_{$moduleName}_{$classType}
  * @author      $author
- * @copyright   Copyright (c) 2012 Totsy LLC
+ * @copyright   Copyright (c) {$currentYear} Totsy LLC
  */
 
 class Totsy_{$moduleName}_{$classType}_{$className}
