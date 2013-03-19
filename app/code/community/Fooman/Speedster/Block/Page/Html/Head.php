@@ -30,7 +30,6 @@ class Fooman_Speedster_Block_Page_Html_Head extends Mage_Page_Block_Html_Head
 
     public function getCssJsHtml()
     {
-Mage::log('here');
         // Figure out if we are run from a subdirectory
         //$dir=explode("index.php" , htmlentities($_SERVER['SCRIPT_NAME']));
         //$webroot=$dir[0];
