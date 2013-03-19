@@ -1,11 +1,10 @@
 var checkoutPayment = {};
 
+var billAddySelect = jQuery("#billing-address-select");
+var newCardWrap = jQuery('.cc_info');
+var billFormInputs = jQuery('#hpcheckout-billing-form :input');
+
 jQuery(document).ready(function() {
-    var billAddySelect = jQuery("#billing-address-select");
-    var newCardWrap = jQuery('.cc_info');
-    //var newCardCtrls = jQuery( 'input, select', '.use-new-card-wrapper' );
-    var billingAddress = jQuery('.totsy-selective-input-box', '#hpcheckout-billing-wrapper');
-    var billFormInputs = jQuery('#hpcheckout-billing-form :input');
     //a namespace for operations toggling the 2 views of the payment section
     checkoutPayment = (function() {
         var hasProfile = '';
@@ -16,12 +15,11 @@ jQuery(document).ready(function() {
             isCollapsed: false,
             lastUsedAddressId: '',
             toggleViews: function() {
-                if (this.hasProfile) {                
+                if (this.hasProfile) { 
                     jQuery(".cc_save_card").appendTo(jQuery("#add_payment_save_card"));
                     var savedCardStyles = {
                         'width': 'auto',
                         'margin-left': '10px',
-                        'vertical-align': 'middle',
                         'float': 'left'
                     };
                     jQuery('#billing-address-select').attr('disabled', true);
@@ -104,4 +102,4 @@ jQuery(document).ready(function() {
             }
         };
     })();
-});
+ });

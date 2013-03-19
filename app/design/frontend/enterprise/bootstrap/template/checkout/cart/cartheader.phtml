@@ -39,7 +39,7 @@
     $serverTime = Mage::getModel('core/date')->timestamp() * 1000;
     $quote = $checkoutSession->getQuote();
     $_saving = Mage::helper('sales/order')->calculateEstimatedSavings($quote);
-    $is_nominal = $quote->isNominal();
+    $is_nominal = $quote->isNominal();    
 ?>
 
 <div class="top-cart dropdown">
@@ -144,7 +144,7 @@
                                 else {
                                     jQuery('#header-checkoutBtn').hide();
                                     setTimeout(function() {
-                                        //_cartHeader.html("<?php echo $this->__('You have no items in your shopping cart.'); ?>");
+                                        _cartHeader.html("<?php echo $this->__('You have no items in your shopping cart.'); ?>");
                                         window.location.reload();
                                     }, 5000);
                                 }

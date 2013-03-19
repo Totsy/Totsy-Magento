@@ -41,13 +41,14 @@ $_id = $_time . substr($_session,13);
 <?php if($this->getVaultEnabled()) {
         $hasProfile = true;
 } ?>
+
 <script type="text/javascript">
 
 jQuery(document).ready( function() {
     checkoutPayment.hasProfile = "<?php echo $hasProfile; ?>";
     checkoutPayment.toggleViews();
-
-    jQuery("[id='payment[cc_vaulted]']").change(function() {
+    
+    jQuery("[name='payment[cc_vaulted]']").change(function() {
         checkoutPayment.setPaymentUI(this);
     });
     jQuery(".use-saved-card-control").click(function() {
@@ -337,7 +338,6 @@ jQuery(document).ready( function() {
             if(!hpcheckout.validate()) {
                 return;
             }
-            
             //this becomes a set of radio buttons instead    
             var selectmenu = $("<?php echo $_code ?>_cc_vaulted");
 			if(selectmenu){
