@@ -32,12 +32,12 @@ font-size:15px;
 }
 
 #ordertotal{
-color:#009900; 
+color:#009900;
 }
 
 .cart-savings{
-	//color:#ff6d1d; 
-	text-align: center;4
+	/*color:#ff6d1d;*/
+	text-align: center;
 }
 input[disabled='disabled'] {
   background-color:#222;
@@ -113,7 +113,7 @@ border-bottom: 1px solid #FFF;
 font-size: 1px;
 line-height: 0;
 overflow: visible;}
-.nav_head { 
+.nav_head {
 	font-weight:normal; background:#ed1c24; padding:5px; text-shadow:none; color:#fff;}
 .error_flash, .error {
     background: url(images/error_image.png) !important;
@@ -152,7 +152,7 @@ div.list-row a {
     text-align: left;
     text-decoration: none;
     width: 100%;
-    
+
 }
 .item_title_bar {
     position: absolute;
@@ -294,7 +294,6 @@ h2 { margin:0px; font-size:18px; }
 	border: 1px solid #dddddd /*{a-bup-border}*/;
 	background: #ffffff /*{a-bup-background-color}*/;
 	font-weight: bold;
-
 	color:  					#2F3E46  /*{a-bup-color}*/;
 	text-shadow:  0  /*{a-bup-shadow-x}*/  1px  /*{a-bup-shadow-y}*/  1px  /*{a-bup-shadow-radius}*/  #f6f6f6  /*{a-bup-shadow-color}*/;
 	background-image: -webkit-gradient(linear, left top, left bottom, from( #ffffff /*{a-bup-background-start}*/), to( #eeeeee /*{a-bup-background-end}*/)); /* Saf4+, Chrome */
@@ -775,7 +774,7 @@ h2 { margin:0px; font-size:18px; }
 }
 /* Structure */
 
-/* links within "buttons" 
+/* links within "buttons"
 -----------------------------------------------------------------------------------------------------------*/
 
 a.ui-link-inherit {
@@ -926,11 +925,11 @@ a.ui-link-inherit {
 @media only screen and (-webkit-min-device-pixel-ratio: 1.5),
        only screen and (min--moz-device-pixel-ratio: 1.5),
        only screen and (min-resolution: 240dpi) {
-	
+
 	.ui-icon-plus, .ui-icon-minus, .ui-icon-delete, .ui-icon-arrow-r,
 	.ui-icon-arrow-l, .ui-icon-arrow-u, .ui-icon-arrow-d, .ui-icon-check,
 	.ui-icon-gear, .ui-icon-refresh, .ui-icon-forward, .ui-icon-back,
-	.ui-icon-grid, .ui-icon-star, .ui-icon-alert, .ui-icon-info, .ui-icon-home, .ui-icon-search, .ui-icon-searchfield:after, 
+	.ui-icon-grid, .ui-icon-star, .ui-icon-alert, .ui-icon-info, .ui-icon-home, .ui-icon-search, .ui-icon-searchfield:after,
 	.ui-icon-checkbox-off, .ui-icon-checkbox-on, .ui-icon-radio-off, .ui-icon-radio-on {
 		background-image: url(../images/icons-36-white.png);
 		-moz-background-size: 776px 18px;
@@ -959,7 +958,7 @@ a.ui-link-inherit {
 /* arrows */
 .ui-icon-arrow-r {
 	background-position: 	-108px 50%;
-	
+
 }
 .ui-icon-arrow-l {
 	background-position: 	-144px 50%;
@@ -1009,7 +1008,7 @@ a.ui-link-inherit {
 .ui-icon-checkbox-off {
 	background-position: 	-684px 50%;
 }
-.ui-icon-checkbox-on { 
+.ui-icon-checkbox-on {
 	background-position: 	-648px 50%;
 }
 .ui-icon-radio-off {
@@ -1025,11 +1024,11 @@ a.ui-link-inherit {
 	-moz-border-radius: 3px;
 	-webkit-border-radius: 3px;
 	border-radius: 3px;
-	
+
 }
 .ui-icon-checkbox-off,
 .ui-icon-radio-off {
-	background-color: transparent;	
+	background-color: transparent;
 }
 .ui-checkbox-on .ui-icon,
 .ui-radio-on .ui-icon {
@@ -1113,19 +1112,19 @@ a.ui-link-inherit {
 /* radius clip workaround for cleaning up corner trapping */
 .ui-corner-tl,
 .ui-corner-tr,
-.ui-corner-bl, 
+.ui-corner-bl,
 .ui-corner-br,
 .ui-corner-top,
-.ui-corner-bottom, 
+.ui-corner-bottom,
 .ui-corner-right,
 .ui-corner-left,
 .ui-corner-all,
 .ui-btn-corner-tl,
 .ui-btn-corner-tr,
-.ui-btn-corner-bl, 
+.ui-btn-corner-bl,
 .ui-btn-corner-br,
 .ui-btn-corner-top,
-.ui-btn-corner-bottom, 
+.ui-btn-corner-bottom,
 .ui-btn-corner-right,
 .ui-btn-corner-left,
 .ui-btn-corner-all {
@@ -1194,85 +1193,4 @@ a.ui-link-inherit {
 /* ...and bring back focus */
 .ui-mobile-nosupport-boxshadow .ui-focus {
 	outline-width: 2px;
-}
-.oro-mob .card-type strong span{
-	background: url("../images/cc_sprite.png") no-repeat -42px 0;
-	width: 42px;
-	height: 24px;
-	float: left;
-	margin: 0 10px 0 0;
-}
-
-.oro-mob .card-type{
-	min-width: 148px;
-}
-.oro-mob .card-type strong span.MasterCard{
-	background-position: 0 0;
-}
-.oro-mob input[type="text"]{
-	background:#f0f0f0 url("../images/bg-input.png") repeat-x;
-	border: 1px solid #b3b3b3;
-	border-radius: 3px;
-	-moz-border-radius: 3px;
-	color:#333333;
-	padding: 0 7px;
-	height: 36px;
-	line-height: 36px;
-	width: 280px;
-}
-.oro-mob select{
-	padding: 8px 5px;
-}
-.oro-mob #billing-address-select,
-.oro-mob  .oro-select select,
-.oro-mob  .oro-select{
-	width: 295px;
-}
-.oro-mob input[disabled="disabled"]{
-	background:#f0f0f0 url("../images/bg-input.png") repeat-x;
-	color:#aeadad;
-}
-.oro-mob #billing-address-form label{
-	display:none;
-}
-.oro-mob  .oro-left{
-	margin-rihgt: 10px;
-}
-.oro-mob .oro-frame{
-	margin-bottom: 10px;
-}
-.oro-mob  #payment_cc_type em{
-	background: url("../images/cc_sprite.png") no-repeat -42px 0;
-	width: 42px;
-	height: 24px;
-	float: left;
-	margin: 0 10px 0 0;
-}
-.oro-mob  #payment_cc_type .ae em{
-	background-position: -126px 0;
-}
-.oro-mob  #payment_cc_type .mc em{
-	background-position: 0 0;
-}
-.oro-mob  #payment_cc_type .di em{
-	background-position: -84px 0;
-}
-.oro-mob  #payment_cc_type input{
-	float:left;
-}
-.oro-mob .clearfix{
-	width:100%;
-}
-.oro-mob .clearfix:after{
-	content:'';
-	display: block;
-	clear:both;
-}
-.oro-mob .card-type .holder{
-	
-}
-@media all and (max-width : 480px){
-	.oro-mob .card-type strong span {
-		margin-top: 5px;
-	}
 }
