@@ -30,10 +30,9 @@
     $topArray 		= 	'';
     $liveArray 		= 	'';
     $upcomingArray  = 	'';	
-    if ( $indexDataObj->hasData('toplive') ){
-        $topArray = $indexDataObj->getData('toplive');
-        $topArray = array(); //Harapartners, yang: "temporarily" block the top events
-    }
+    if ( $indexDataObj->hasData('top_live_queue') ){
+        $topArray = json_decode($indexDataObj->getData('top_live_queue'),true);
+    } 
     if ( $indexDataObj->hasData('live_queue') ){
         $liveArray = json_decode($indexDataObj->getData('live_queue'), true);
     }
