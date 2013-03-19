@@ -7,10 +7,12 @@
         </div>
     <?php else: ?>
         <?php foreach ($methods as $_method):  $_code = $_method->getCode() ?>
-            <?php if ($html = $this->getPaymentMethodFormHtml($_method)): ?>
+            <?php if($_code != 'paymentfactory_tokenize'): ?>
+                <?php if ($html = $this->getPaymentMethodFormHtml($_method)): ?>
                 <div>
                     <?php echo $html; ?>
                 </div>
+                <?php endif; ?>
             <?php endif; ?>
         <?php endforeach; ?>
     <?php endif ?>
