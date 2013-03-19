@@ -217,6 +217,9 @@ HpCheckout.prototype = {
         if (!this.validate()) {
             return;
         }
+        
+        jQuery("#" + this.id).attr("disabled", true);
+        
         //IE grabs placeholder text from orders in lew of of an actual value
         //this fix removes values explicitly when they match their placeholder text
         jQuery("#hpcheckout-wrapper").find('input[placeholder]').each(function() {

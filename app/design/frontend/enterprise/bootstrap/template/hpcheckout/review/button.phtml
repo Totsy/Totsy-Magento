@@ -11,7 +11,6 @@ jQuery(document).ready(function($) {
     jQuery('#placeOrderBtn').bind('click', function(e) {
     	// set form controls back to enabled so POST will work
     	$('input[disabled], select[disabled]', '#hpcheckout-billing-form').removeAttr('disabled');
-        jQuery("#" + this.id).attr("disabled", true);
         hpcheckout.submit();
     });
 });

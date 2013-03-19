@@ -237,6 +237,10 @@ class Zend_Db_Statement_Pdo extends Zend_Db_Statement implements IteratorAggrega
                 #require_once 'Zend/Db/Statement/Exception.php';
                 if ($tries < 10 and $e->getMessage()=='SQLSTATE[40001]: Serialization failure: 1213 Deadlock found when trying to get lock; try restarting transaction') {
                     $retry = true;
+                } elseif($tries<10 && $e->getMessage()=='SQLSTATE[HY000]: General error: 2006 MySQL server has gone away') {
+                    $this->_adapter->closeConnection();
+                    $this->_stmt = $this->_adapter->getConnection()->prepare($this->_stmt->queryString);
+                    $retry = true;
                 } else {
                     throw new Zend_Db_Statement_Exception($e->getMessage(), (int) $e->getCode(), $e);
                 }

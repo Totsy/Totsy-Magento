@@ -215,7 +215,7 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Abstract exte
         		$newUniqueProductList[$productId] = $data;
         	}
         }
-        
+        Mage::getSingleton('adminhtml/session')->setPORemovedItems($removeProducts);
         return $newUniqueProductList;
         //return $uniqueProductList;
     }
@@ -243,6 +243,20 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Abstract exte
         $html .= $this->getCPMathButtonHtml();
         
         return $html;
+    }
+
+    public function getRemovedItems() {
+        $removeProductsInfo = array();
+        $removed = Mage::getSingleton('adminhtml/session')->getPORemovedItems();
+        foreach($removed as $id => $value) {
+            $product = Mage::getModel('catalog/product')->load($id);
+            $removeProductsInfo[$id]['vendor_style'] = $product->getVendorStyle();
+            $removeProductsInfo[$id]['product_name'] = $product->getName();
+            $removeProductsInfo[$id]['sku'] = $product->getSku();
+            $removeProductsInfo[$id]['color'] = $product->getColor();
+            $removeProductsInfo[$id]['size'] = $product->getSize();
+        }
+        return $removeProductsInfo;
     }
     
 }

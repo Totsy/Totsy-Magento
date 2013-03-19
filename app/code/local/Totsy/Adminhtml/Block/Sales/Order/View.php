@@ -13,7 +13,9 @@ class Totsy_Adminhtml_Block_Sales_Order_View
     {
         parent::__construct();
 
-        if ('pending' == $this->getOrder()->getStatus()) {
+        if ('pending' == $this->getOrder()->getStatus() ||
+            'processing' == $this->getOrder()->getStatus()
+        ) {
             $confirm = "Are you sure you want to send this order for fulfillment?";
             $url     = $this->getUrl(
                 '*/sales_order_edit/submitFulfillment',

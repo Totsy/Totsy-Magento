@@ -29,6 +29,8 @@
 <?php
 
 $_product = Mage::getModel('catalog/product')->load($_item->getProductId());
+$voucher_label = "";
+$voucher_value = "";
 
 if($_product->getIsVirtual()) {
     $product_options = $_item->getProductOptions();
@@ -355,7 +357,7 @@ if($_product->getIsVirtual()) {
     <?php endif; ?>
     -->
 </tr>
-<?php if($_product->getIsVirtual() || $this->getQuote()->isNominal() || $_item->sku=="totsyplus-membership") {  
+<?php if(($_product->getIsVirtual() || $_item->sku=="totsyplus-membership") && $order->getData('status')!=="payment_failed") {  
 ?>
 <tr>
     <td colspan="5">

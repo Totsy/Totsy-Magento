@@ -10,7 +10,7 @@
 <config>
     <modules>
         <Totsy_Customer>
-            <version>0.2.5</version>
+            <version>0.2.6</version>
         </Totsy_Customer>
     </modules>
     <global>

@@ -62,12 +62,14 @@ class Harapartners_Affiliate_RegisterController extends Mage_Core_Controller_Fro
 
             $redirect = preg_replace('/[^\/\-\_\.\d\w]+/', '', $request->getParam('r'));
             if (preg_match('/[^\/\-\_\.\d\w]+/',$request->getParam('r'))){
-                Mage::log(
-                    'Affiliate redirect link is not matching the template!!!'."\n".
+                $warning = 'Affiliate redirect link is not matching the template!!!'."\n".
                     'LINK: '.$request->getParam('r')."\n".
                     'URI: '.$_SERVER['REQUEST_URI']."\n".
-                    'METHOD: '.__METHOD__."\n",
-                    '',
+                    'METHOD: '.__METHOD__."\n";
+
+                Mage::log(
+                    $warning,
+                    null,
                     'affiliateRedorect.log'
                 );
             }

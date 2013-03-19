@@ -11,6 +11,8 @@ class Hackathon_Logger_Helper_Data extends Mage_Core_Helper_Abstract
 
     const XML_PATH_PRIORITY = 'general/priority';
 
+    const MAX_REQUEST_DATA_LENGTH = 8192;
+
     protected $_targetMap = NULL;
 
     /**
@@ -182,9 +184,9 @@ class Hackathon_Logger_Helper_Data extends Mage_Core_Helper_Abstract
             $event['REQUEST_URI'] = $_SERVER['PHP_SELF'];
         }
         $requestData = array();
-        if ( ! empty($_GET)) $requestData[] = '  GET|'.substr(@json_encode($_GET), 0, 1000);
-        if ( ! empty($_POST)) $requestData[] = '  POST|'.substr(@json_encode($_POST), 0, 1000);
-        if ( ! empty($_FILES)) $requestData[] = '  FILES|'.substr(@json_encode($_FILES), 0, 1000);
+        if ( ! empty($_GET)) $requestData[] = '  GET|'.substr(@json_encode($_GET), 0, self::MAX_REQUEST_DATA_LENGTH);
+        if ( ! empty($_POST)) $requestData[] = '  POST|'.substr(@json_encode($_POST), 0, self::MAX_REQUEST_DATA_LENGTH);
+        if ( ! empty($_FILES)) $requestData[] = '  FILES|'.substr(@json_encode($_FILES), 0, self::MAX_REQUEST_DATA_LENGTH);
         $event['REQUEST_DATA'] = $requestData ? implode("\n", $requestData) : $notAvailable;
 
 

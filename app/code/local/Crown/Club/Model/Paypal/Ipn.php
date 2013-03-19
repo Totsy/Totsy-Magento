@@ -31,6 +31,7 @@ class Crown_Club_Model_Paypal_Ipn extends Mage_Paypal_Model_Ipn {
 			$customer = Mage::getModel('customer/customer')->load($customerId);
 			$club->addClubMember($customer);
 			Mage::log('Customer converted',null,'test.log',true);
+            $club->sendClubMembershipWelcomeEmail($customer);
 		}
 	}
 }
