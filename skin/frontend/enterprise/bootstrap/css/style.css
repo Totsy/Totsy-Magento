@@ -373,7 +373,7 @@ body.customer-account-login .btn.btn-large {
     margin:0 auto;
     width:940px;
     background:#fff; 
-    padding:211px 30px 267px; /* @fixednav: top padding magic number BS; @stickyfooter: bottom padding magic number BS */
+    padding:206px 30px 267px; /* @fixednav: top padding magic number BS; @stickyfooter: bottom padding magic number BS */
     overflow: auto; /* @stickyfooter */
 }
 
