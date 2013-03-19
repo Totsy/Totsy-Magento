@@ -162,7 +162,12 @@ class Aoe_Scheduler_Model_Schedule extends Mage_Cron_Model_Schedule {
 		$fromName  = Mage::getStoreConfig('trans_email/ident_general/name');
 
 		$message = "Job '" . $this->getJobCode() . "' has completed with status " .
-			strtoupper($this->getStatus());
+			ucfirst($this->getStatus());
+
+		if ($duration = $this->getDuration()) {
+			$message .= " in " . gmdate('H:i:s', $duration);
+		}
+
 		$message .= PHP_EOL . PHP_EOL;
 		$message .= $this->getMessages();
 

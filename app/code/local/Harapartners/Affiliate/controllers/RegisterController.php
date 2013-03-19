@@ -56,24 +56,22 @@ class Harapartners_Affiliate_RegisterController extends Mage_Core_Controller_Fro
             $keywordCookieName = Mage::helper('affiliate')->getKeywordCookieName();
             Mage::getModel('core/cookie')->set($keywordCookieName, $keyword, 3600);
             //Harapartners, yang: end
-            
+
             $session->setData('affiliate_id', $affiliate->getId());
             $session->setData('affiliate_info', $affiliateInfo);
 
             $redirect = preg_replace('/[^\/\-\_\.\d\w]+/', '', $request->getParam('r'));
             if (preg_match('/[^\/\-\_\.\d\w]+/',$request->getParam('r'))){
-                $mail = new Zend_Mail();
-                $mail->setBodyText(
-                    '! A L E R T !'."\n".
-                    'Affiliate redirect link is not matching the template!!!'."\n".
+                $warning = 'Affiliate redirect link is not matching the template!!!'."\n".
                     'LINK: '.$request->getParam('r')."\n".
-                    'LINK BASE64 ENCODED: '.base64_encode($request->getParam('r'))."\n"
-                )
-                ->setFrom('alert@totsy.com', 'Affiliate Redirect Link Alert')
-                ->addTo('skosh@totsy.com', 'Slavik Koshelevskiy')
-                ->addTo('tbhuvanendran@totsy.com', 'Tharsan Bhuvanendran')
-                ->setSubject('Affiliate Link Alert')
-                ->send();
+                    'URI: '.$_SERVER['REQUEST_URI']."\n".
+                    'METHOD: '.__METHOD__."\n";
+
+                Mage::log(
+                    $warning,
+                    null,
+                    'affiliateRedorect.log'
+                );
             }
             if ($redirect && '/' == $redirect{0}) {
                 Mage::getSingleton('core/session')->setWebsiteRestrictionAfterLoginUrl($redirect);

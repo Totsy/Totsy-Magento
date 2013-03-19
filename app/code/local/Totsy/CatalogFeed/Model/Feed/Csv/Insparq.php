@@ -9,26 +9,12 @@
 class Totsy_CatalogFeed_Model_Feed_Csv_Insparq
     extends Totsy_CatalogFeed_Model_Feed_Csv
 {
-    /**
-     * Process an event for this feed.
-     *
-     * @param Mage_Catalog_Model_Category $event
-     *
-     * @return void
-     */
-    protected function _processEvent(Mage_Catalog_Model_Category $event)
-    {
+    protected function _processEvent(
+        Mage_Catalog_Model_Category $event = null,
+        array $categoryInfo = array()
+    ) {
     }
 
-    /**
-     * Process a product for this feed.
-     *
-     * @param Mage_Catalog_Model_Category $event
-     * @param Mage_Catalog_Model_Product  $product
-     * @param Mage_Catalog_Model_Product  $parent
-     *
-     * @return void
-     */
     protected function _processProduct(
         Mage_Catalog_Model_Category $event,
         Mage_Catalog_Model_Product $product,

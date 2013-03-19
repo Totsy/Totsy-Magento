@@ -35,7 +35,7 @@ class Harapartners_Fulfillmentfactory_Helper_Dotcom extends Mage_Core_Helper_Abs
         }
         
         if(empty(self::$_apiUrl)) {
-            self::$_apiKey = 'https://cwa.dotcomdistribution.com/dcd_api_test/DCDAPIService.svc';
+            self::$_apiUrl = 'https://cwa.dotcomdistribution.com/dcd_api_test/DCDAPIService.svc';
         }
     }
     

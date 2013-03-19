@@ -15,5 +15,12 @@
                 </args>
             </addplus>
         </routers>
+        <layout>
+            <updates>
+                <addplus module="Crown_Addplus">
+                    <file>addplus.xml</file>
+                </addplus>
+            </updates>
+        </layout>
     </frontend>
 </config>
