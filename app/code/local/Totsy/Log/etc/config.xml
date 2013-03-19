@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Totsy_Log>
+            <version>0.1.0</version>
+        </Totsy_Log>
+    </modules>
+    <global>
+        <models>
+            <log_resource>
+                <rewrite>
+                    <visitor>Totsy_Log_Model_Resource_Visitor</visitor>
+                </rewrite>
+            </log_resource>
+        </models>
+    </global>
+</config>

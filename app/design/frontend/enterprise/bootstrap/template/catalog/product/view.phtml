@@ -45,6 +45,7 @@ $_category = Mage::getModel('catalog/category')->load(end($_categories));
 // counter variables
 $endcount_utc = strtotime($_category->getEventEndDate());
 $endcount_lc = date("F j, Y, G:i:s", $endcount_utc);
+$serverNow = date('F j, Y, G:i:s' , Mage::app()->getLocale()->storeTimeStamp(Mage::app()->getStore()->getId()));
 
 // price variables
 $special_price = $_product->getPrice();
@@ -57,6 +58,7 @@ $savings = money_format('%n', $originalPrice) - money_format('%n', $discountPric
 <script type="text/javascript">
     var optionsPrice = new Product.OptionsPrice(<?php echo $this->getJsonConfig() ?>
     );
+    
 </script>
 <div id="messages_product_view"><?php echo $this->getMessagesBlock()->toHtml() ?></div>
 <section id="pageheader">
@@ -88,7 +90,7 @@ $savings = money_format('%n', $originalPrice) - money_format('%n', $discountPric
                 </div>
             <?php 
                 $event_end_date = strtotime($_category->getEventEndDate());
-                $today = strtotime('NOW');
+                $today = Mage::getSingleton('core/date')->timestamp();
             ?>
             </div>
             <div class="span3 product-addtocart<?php if ($this->hasOptions()): echo ' has-options'; else: echo ' no-options'; endif;?>">
@@ -172,29 +174,123 @@ $savings = money_format('%n', $originalPrice) - money_format('%n', $discountPric
         </div><!-- /.product-main -->
     </div>
 </section>
-<script type="text/javascript">
-/* cart stuff minified */
-var productAddToCartForm=new VarienForm("product_addtocart_form");productAddToCartForm.submit=function(a,b){if(this.validator.validate()){var c=this.form;var d=c.action;if(b){c.action=b}var e=null;if(!b){b=jQuery("#product_addtocart_form").attr("action")}b=b.replace("checkout/cart","ajax/checkout_cart");var f=jQuery("#product_addtocart_form").serialize();f+="&isAjax=1";jQuery("#ajax_loader").show();try{jQuery.ajax({url:b,dataType:"json",type:"post",data:f,success:function(b){if(b.redirect){window.location.href=b.redirect}jQuery("#ajax_loader").hide();if(b.headercart&&$("header-user-info")){$("header-user-info").update(b.headercart)}if(b.status&&b.message){var c='<ul class="alert alert-success"><li class="'+b.status.toLowerCase()+'-msg"><ul><li>'+b.message+"</li></ul></li></ul>";$("messages_product_view").update(c);(function(){$("messages_product_view").update(null)}).delay(2)}if(a&&a!="undefined"){a.disabled=false}}})}catch(e){}this.form.action=d;if(e){throw e}if(a&&a!="undefined"){}}}.bind(productAddToCartForm);productAddToCartForm.submitLight=function(a,b){if(this.validator){var c=Validation.methods;delete Validation.methods["required-entry"];delete Validation.methods["validate-one-required"];delete Validation.methods["validate-one-required-by-name"];if(this.validator.validate()){if(b){this.form.action=b}this.form.submit()}Object.extend(Validation.methods,c)}}.bind(productAddToCartForm)
-    
-    /*fancy box stuff minified */
-    jQuery(document).ready(function(){jQuery(".fancybox").fancybox();jQuery(".fancybox-effects-a").fancybox({helpers:{title:{type:"outside"},overlay:{speedIn:500,opacity:.95}}});jQuery(".fancybox-effects-b").fancybox({openEffect:"none",closeEffect:"none",helpers:{title:{type:"over"}}})})
-    
-    /* cart timer minified */
-    var html=getTimerHtml("live","<?php echo $endcount_lc ?>");jQuery("#timer").countdown({date:"<?php echo $endcount_lc; ?>",htmlTemplate:html,onComplete:function(a){jQuery(this).html("Completed")},leadingZero:true,direction:"down"})
-</script>
-<!--
-<script type="text/javascript">var switchTo5x=true;</script>
-<script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
-<script type="text/javascript">stLight.options({publisher: "fa9539d4-b1db-40d3-9e2d-9e9a8dc98b42",onhover: false}); </script>
 
-<?php $small_img = $this->helper('catalog/image')->init($_product, 'image')->resize(100); ?>
-<script>
-stWidget.addEntry({
-        "service":"sharethis",
-        "element":document.getElementById('st_sharethis_custom'),
-        "url":"<?php echo $this->helper('core/url')->getCurrentUrl();?>",
-        "title":"Totsy",
-        "image":"<?php echo $small_img; ?>"
-});
+<script type = "text/javascript" > /* cart stuff minified */
+var productAddToCartForm = new VarienForm("product_addtocart_form");
+productAddToCartForm.submit = function(a, b) {
+    if (this.validator.validate()) {
+        var c = this.form;
+        var d = c.action;
+        if (b) {
+            c.action = b
+        }
+        var e = null;
+        var qty = "";
+        
+        if(jQuery("#qty").length < 0) {
+        	qty = 1;
+        } else {
+        	qty = jQuery("#qty").val();
+        }
+        
+        if (!b) {
+            b = jQuery("#product_addtocart_form").attr("action")
+        }
+        b = b.replace("checkout/cart", "ajax/checkout_cart");
+        var f = jQuery("#product_addtocart_form").serialize();
+        f += "&isAjax=1";
+        jQuery("#ajax_loader").show();
+        try {
+            jQuery.ajax({
+                url: b,
+                dataType: "json",
+                type: "post",
+                data: f,
+                success: function(b) {
+                    //tracking ADDs to cart
+                    _gaq.push(['_trackEvent', 'Add to Cart', '<?php echo $this->htmlEscape($_product->getSku()); ?>', qty]);
+                    
+                    if (b.redirect) {
+                        window.location.href = b.redirect
+                    }
+                    jQuery("#ajax_loader").hide();
+                    if (b.headercart && $("header-user-info")) {
+                        $("header-user-info").update(b.headercart)
+                    }
+                    if (b.status && b.message) {
+                        var c = '<ul class="alert alert-success"><li class="' + b.status.toLowerCase() + '-msg"><ul><li>' + b.message + "</li></ul></li></ul>";
+                        $("messages_product_view").update(c);
+                        (function() {
+                            $("messages_product_view").update(null)
+                        }).delay(2)
+                    }
+                    if (a && a != "undefined") {
+                        a.disabled = false
+                    }
+                }
+            })
+        } catch (e) {}
+        this.form.action = d;
+        if (e) {
+            throw e
+        }
+        if (a && a != "undefined") {}
+    }
+}.bind(productAddToCartForm);
+productAddToCartForm.submitLight = function(a, b) {
+    if (this.validator) {
+        var c = Validation.methods;
+        delete Validation.methods["required-entry"];
+        delete Validation.methods["validate-one-required"];
+        delete Validation.methods["validate-one-required-by-name"];
+        if (this.validator.validate()) {
+            if (b) {
+                this.form.action = b
+            }
+            this.form.submit()
+        }
+        Object.extend(Validation.methods, c)
+    }
+}.bind(productAddToCartForm) /*fancy box stuff minified */
+jQuery(document).ready(function() {
+    jQuery(".fancybox").fancybox();
+    jQuery(".fancybox-effects-a").fancybox({
+        helpers: {
+            title: {
+                type: "outside"
+            },
+            overlay: {
+                speedIn: 500,
+                opacity: .95
+            }
+        }
+    });
+    jQuery(".fancybox-effects-b").fancybox({
+        openEffect: "none",
+        closeEffect: "none",
+        helpers: {
+            title: {
+                type: "over"
+            }
+        }
+    })
+}) /* cart timer minified */
+/* cart timer minified */
+    var html=getTimerHtml("live","<?php echo $endcount_lc ?>", "<?php echo $serverNow?>");jQuery("#timer").countdown({until: new Date("<?php echo $endcount_lc; ?>"),layout:html, serverSync:retrieveServertime,alwaysExpire:true, onExpiry:function(a){jQuery(this).html("Completed")},leadingZero:true,direction:"down"})
+    function retrieveServertime() {
+        var time = null;
+        jQuery.ajax({
+            url:"<?php echo Mage::getUrl('ajax/servertime/servertime', array('format' => 'string')); ?>",
+            async: false,
+            success: function(servertime) {
+                servertime = jQuery.parseJSON(servertime);
+                time =  servertime.time;
+            }, 
+            error:function () {
+                time = "<?php Mage::getModel('core/date')->timestamp(time()); ?>";
+            }
+        });
+        date = new Date(time);
+        return date;
+    }
 </script>
--->

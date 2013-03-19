@@ -7,7 +7,7 @@
  */
 
 class Totsy_Customer_Model_Resource_Eav_Mysql4_Setup
-    extends Mage_Eav_Model_Entity_Setup
+    extends Mage_Customer_Model_Resource_Setup
 {
     /**
      * Retrieve new customer entity attributes.

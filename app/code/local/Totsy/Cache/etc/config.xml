@@ -1,0 +1,13 @@
+<config>
+    <global>
+        <cache>
+            <types>
+                <restapi translate="label,description" module="totsycache">
+                    <label>ReST API</label>
+                    <description>ReSTful API</description>
+                    <tags>RESTAPI</tags>
+                </restapi>
+            </types>
+        </cache>
+    </global>
+</config>

@@ -65,6 +65,7 @@
         <?php endif; ?>
             <ul class="thumbnails">
             <?php foreach ($liveArray as $live): ?>
+                <?php if(!isset($live['club_only_event']) || !$live['club_only_event']) : ?>
                 <?php
                     $endcountRaw = strtotime($live['event_end_date']);
                     $endcount = date("F j, Y, G:i:s", $endcountRaw);
@@ -120,6 +121,7 @@
                         </a>
                     </li>
                 <?php endif; ?>
+                <?php endif; ?>
             <?php endforeach; ?>
             </ul>
         </section><!-- /#events-live -->
@@ -146,6 +148,7 @@
             </header>
             <ul class="thumbnails">
             <?php foreach ($upcomingArray as $up): ?>
+                <?php if(!isset($live['club_only_event']) || !$up['club_only_event']) : ?>
                 <?php
                     $endcountRaw = strtotime($up['event_start_date']);
                     $endcount = date("F j, Y, G:i:s", $endcountRaw);
@@ -172,6 +175,7 @@
                         <p class="opens_in counter" id="time2-<?php echo $timer ?>" data-enddate="<?php echo $endcount?>" data-status="upcoming" data-countertype="up-event-counter"  data-id="<?php echo $timer ?>"></p>
                     </div>
                 </li>
+            <?php endif; ?>
             <?php endforeach; ?>
             </ul>
         </section><!-- /#events-upcoming -->
@@ -183,13 +187,15 @@
 <script type="text/javascript">
     jQuery(".counter").each(function(){
         var saleTime = new Date(jQuery(this).data('enddate'));
+        var server_now = "<?php echo date('F j, Y, G:i:s' , Mage::app()->getLocale()->storeTimeStamp(Mage::app()->getStore()->getId())); ?>";
         var id = jQuery(this).data('id');
         jQuery(this).countdown({
-            date: saleTime,
-            htmlTemplate: getTimerHtml(jQuery(this).data('status'), jQuery(this).data('enddate')),
-            leadingZero: true,
-            direction: 'down',
-            onComplete: function( event ){
+            until: saleTime,
+            layout: getTimerHtml(jQuery(this).data('status'), jQuery(this).data('enddate'), server_now),
+            serverSync:retrieveServertime,
+            tickInterval: 1, 
+            alwaysExpire: true,
+            onExpiry: function( event ){
                 jQuery(this).html("Completed");
                 elem_class = "." + jQuery(this).data('countertype') + '-' + id;
                jQuery(elem_class).remove();
@@ -197,4 +203,22 @@
 
         });
     });
+
+    function retrieveServertime() {
+        var time = null;
+        jQuery.ajax({
+            url:"<?php echo Mage::getUrl('ajax/servertime/servertime', array('format' => 'string')); ?>",
+            async: false,
+            success: function(servertime) {
+                servertime = jQuery.parseJSON(servertime);
+                time =  servertime.time;
+            }, 
+            error:function () {
+                time = "<?php Mage::getModel('core/date')->timestamp(time()); ?>";
+            }
+        });
+        date = new Date(time);
+        return date;
+    }
+
 </script>

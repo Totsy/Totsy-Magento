@@ -42,7 +42,7 @@ class Mage_Cms_IndexController extends Mage_Core_Controller_Front_Action
     public function indexAction($coreRoute = null)
     {
         //Harapartners, Jun, landing page redirect, handled by Harapartners_Service
-        $this->_redirect('/');
+        $this->_redirect('/event');
         return;
         
         $pageId = Mage::getStoreConfig(Mage_Cms_Helper_Page::XML_PATH_HOME_PAGE);

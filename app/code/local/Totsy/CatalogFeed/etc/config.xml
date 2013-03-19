@@ -22,6 +22,15 @@
                 </args>
             </catalogfeed>
         </routers>
+        <cache>
+            <requests>
+                <catalogfeed>
+                    <feed>
+                        <sailthru>enterprise_pagecache/processor_default</sailthru>
+                    </feed>
+                </catalogfeed>
+            </requests>
+        </cache>
     </frontend>
     <crontab>
         <jobs>

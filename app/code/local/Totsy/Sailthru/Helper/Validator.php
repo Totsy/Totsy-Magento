@@ -122,6 +122,8 @@ class Totsy_Sailthru_Helper_Validator {
 				break;
 			}
 		}
-
+		if (array_key_exists($id,$this->_errors)){
+			$this->_errors[$id] = array_unique($this->_errors[$id]);
+		}
 	}
 }

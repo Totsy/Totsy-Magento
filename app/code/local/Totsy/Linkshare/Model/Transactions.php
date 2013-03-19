@@ -44,6 +44,7 @@ class Totsy_Linkshare_Model_Transactions extends Mage_Core_Model_Abstract
         }
     }
 
+    
     public function sendUpdates(){
     	$env = (string) Mage::getConfig()->getNode('environment');
         if ('production' !== $env) {
@@ -62,9 +63,26 @@ class Totsy_Linkshare_Model_Transactions extends Mage_Core_Model_Abstract
                 $regParams = json_decode($trackingInfo, true);
                 
                 if($transaction->getTransStatus() == 'Failed') {
-                    $encoded = Mage::helper("linkshare/linkshare")->prepareTransactionData($transaction->getRawData());
-                    $result = Mage::helper('linkshare/linkshare')->sendTransaction($encoded, $order_id, 'New');
+                    if(is_null($transaction->getOrderId())) {
 
+                        $created_at = $transaction->getCreatedAt();
+                        $mil = strtotime($created_at);
+                        $ten_min_before = mktime( date('H',$mil), date('i',$mil) - 10, date('s',$mil), date('n',$mil), date('j',$mil), date('Y',$mil) );
+                        $ten_min_after = mktime( date('H',$mil), date('i',$mil) + 10, date('s',$mil), date('n',$mil), date('j',$mil), date('Y',$mil) );
+
+                        $order_record = Mage::getModel('sales/order')->getCollection();
+                        $order_record->getSelect()->where('customer_id = ' . (int)$customertracker->getCustomerId() . ' and created_at between "' . $ten_min_before . '" and "' . $ten_min_after . '"');
+                        
+                        foreach($order_record as $order) {
+                            $message = Mage::helper('linkshare/linkshare')->linkshareRaw($order, $regParams['subID'], $order->getCreatedAt(), $order->getStatus());
+                            $encode = Mage::helper('linkshare/linkshare')->prepareTransactionData($message);
+                            $result = Mage::helper('linkshare/linkshare')->sendTransaction($encode, $order->getIncrementId(), $order->getStatus());
+                        }
+                    } else {
+                        $encoded = Mage::helper("linkshare/linkshare")->prepareTransactionData($transaction->getRawData());
+                        $result = Mage::helper('linkshare/linkshare')->sendTransaction($encoded, $order_id, 'New');
+                    }
+ 
                     if ($result['success']) {
                         $transaction->setData('trans_id', $result['trans_id']);
                         $transaction->setData('updated_at', date('Y-m-d H:i:s'));
@@ -88,7 +106,7 @@ class Totsy_Linkshare_Model_Transactions extends Mage_Core_Model_Abstract
                     continue;
                 }
             } catch( Exception $e) {
-                 Mage::logException($e);
+                Mage::log("\t{$e->getMessage()}", Zend_Log::ERROR, 'linkshare_log.log');
             }
 
            if( $transaction->getOrderStatus() == 'New'  && $transaction->getTransStatus() == 'Success') {
