@@ -306,11 +306,8 @@ class Totsy_Sailthru_Helper_Feed extends Mage_Core_Helper_Abstract
       $this->_filters[] = 'errors';
     }
 
-    private function arrayKeyExistsValidateAndFormat($key,&$array,&$error){
+    private function arrayKeyExistsValidateAndFormat($key,&$array){
         if (array_key_exists($key, $array)){
-            return true;
-        }
-        if (!is_array($error)){
             return true;
         }
 
