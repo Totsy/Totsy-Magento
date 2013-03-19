@@ -1,26 +1,13 @@
 <?php
 
-$multiShipping = FALSE;
-$fulfillmentTypes = array();
+$fulfillmentTypes = $this->getQuote()->getFulfillmentTypes();
 $TotsyPLUS = false;
 
 // Check to see if there are multiple fulfillment types
 foreach($this->getItems() as $item) {
-    if($item->getParentItemId()) {
-        continue;
-    }
     if($item->getProductId() == Mage::getStoreConfig('Crown_Club/clubgeneral/club_product_id')) {
         $TotsyPLUS = true;
     }
-    $product = Mage::getModel ( 'catalog/product' )->load ( $item->getProductId () );
-//        if($product->getIsVirtual()) {
-//            continue;
-//        }
-    $fulfillmentTypes [$product->getFulfillmentType ()] [] = $item->getId ();
-}
-
-if(count($fulfillmentTypes) > 1) {
-    $multiShipping = TRUE;
 }
 
 // Split cart check
@@ -56,7 +43,7 @@ $splitCartFlag = Mage::getSingleton('checkout/session')->getSplitCartFlag() ? 'c
             <?php endif; ?>
         </thead>
         <tbody>
-        <?php if($multiShipping):?>
+        <?php if(count($fulfillmentTypes) > 1):?>
 
         <?php foreach($fulfillmentTypes as $fulfillmentType => $items):?>
 
