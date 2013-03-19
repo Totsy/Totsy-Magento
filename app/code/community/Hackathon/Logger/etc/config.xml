@@ -68,6 +68,7 @@
                     <xmpp><label>XMPP</label><class>Hackathon_Logger_Model_Xmpp</class></xmpp>
                     <dropbox><label>Dropbox</label><class>Hackathon_Logger_Model_Dropbox</class></dropbox>
                     <graylog2><label>Graylog2</label><class>Hackathon_Logger_Model_Graylog2</class></graylog2>
+                    <chromephp><label>ChromePHP</label><class>Hackathon_Logger_Model_ChromePhp</class></chromephp>
                 </writer_models>
             </core>
         </log>
