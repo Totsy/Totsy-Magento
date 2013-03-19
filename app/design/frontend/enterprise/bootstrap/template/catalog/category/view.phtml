@@ -119,9 +119,9 @@
     </header>
     <?php echo $this->getMessagesBlock()->toHtml() ?>
 
-    <div class="intro clearfix">
+    <div class="intro row">
         <?php if($_imgUrl): ?>
-            <div class="span2 alpha omega">
+            <div class="span2">
                 <?php echo $_imgHtml ?>
             </div>
         <?php endif; ?>
@@ -173,11 +173,11 @@
                     <?php endif; ?>
                 </p>
             </div>
-            <div class="span4 intro-content">
+            <div class="span4 intro-secondary">
                <!-- they don't know what to do with this space yet…. -->
             </div>
         <?php endif; ?>
-    </div><!-- /.well -->
+    </div><!-- /.intro .row -->
 
     <?php
     $depts = $_category->getDepartments();
