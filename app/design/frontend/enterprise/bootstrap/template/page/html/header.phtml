@@ -73,7 +73,7 @@
         <div class="container">
             <div class="row">
                 <ul class="nav span7">
-                    <li id="navAllEvents" class="dropdown">
+                    <li id="navAllEvents" class="nav-item dropdown">
                         <a href="<?php echo $this->getBaseUrl()?>event/"><em>ALL <br />SALES</em></a>
                         <ul class="dropdown-menu">
                             <li><a href="<?php echo $this->getBaseUrl()?>event/">New </a></li>
@@ -81,7 +81,7 @@
                             <li><a href="<?php echo $this->getBaseUrl()?>event#events-ending">Ending Soon</a></li>
                         </ul>
                     </li>
-                    <li id="navByCat" class="dropdown navShop">
+                    <li id="navByCat" class="nav-item dropdown navShop">
                         <a href="#"><em>SHOP BY<br/>CATEGORY</em></a>
                         <ul class="dropdown-menu">
                         <?php $type = 'departments'; ?>
@@ -92,7 +92,7 @@
                         <?php endforeach;?>
                         </ul>        
                     </li>
-                    <li id="navByAge" class="dropdown navShop">
+                    <li id="navByAge" class="nav-item dropdown navShop">
                         <a href="#"><em>SHOP BY<br/>AGE</em></a>
                         <ul class="dropdown-menu">
                         <?php $age = 'ages'; ?>
@@ -108,7 +108,7 @@
                      ?>
                     <?php if(Mage::getStoreConfig('Crown_Club/clubgeneral/enable') || (($customer = Mage::helper('customer')->getCustomer()) && (Mage::helper('crownclub')->isClubMember($customer)))): ?>
                         <?php if (($customer = Mage::getSingleton('customer/session')->getCustomer()) && (Mage::helper('crownclub')->isClubMember($customer))) : ?>
-                            <li id="navTotsyPlus" class="dropdown">
+                            <li id="navTotsyPlus" class="nav-item dropdown">
                                 <a href="<?php echo $this->getBaseUrl()?>plus/dashboard"><em>Totsy <br />PLUS</em></a>
                                 <ul class="dropdown-menu">
                                     <li><a href="<?php echo $this->getBaseUrl()?>plus/dashboard">Dashboard</a></li>
@@ -121,13 +121,13 @@
                                 </ul>
                             </li>
                         <?php else : ?>
-                            <li id="navTotsyPlus" class="nonmember">
+                            <li id="navTotsyPlus" class="nav-item nonmember">
                                 <a href="<?php echo $this->getBaseUrl()?>plus/"><em>Totsy <br />PLUS</em></a>
                             </li>
                         <?php endif; ?>
                     <?php endif; ?>
-                            <li id="insfeedflicker">
-                                <a href="<?php echo $this->getBaseUrl()?>pinboard/"><em>What's <br />Hot</em></a>
+                            <li id="insfeedflicker" class="nav-item">
+                                <a id="inspbfeeda" href="<?php echo $this->getBaseUrl()?>pinboard/"><em id="insfeedtext">What's <br />Hot</em><span id="insfeedballoon" class="nonewfeeditem"></span></a>
                             </li>
                 </ul>
                 

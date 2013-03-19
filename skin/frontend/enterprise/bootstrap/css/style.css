@@ -290,13 +290,13 @@ body.categoryevent-index-topnav .page-header {
     background: url('../images/glyph-arrow-d.png') 100% 50% no-repeat;
 }
 .dropdown > a,
-.navbar .nav > li > a,
+.navbar .nav > .nav-item > a,
 #cartHeader {
     color:#636466;
     font-size: 12px; font-weight: bold;
     text-shadow: 0 1px 0 rgba(255, 255, 255, 0.85);
 }
-.navbar .nav > li > a,
+.navbar .nav > .nav-item > a,
 #cartHeader {
     text-transform: uppercase;
 }
@@ -467,18 +467,18 @@ body.customer-account-login .btn.btn-large {
 .navbar .nav {
 	margin:0 0 0 20px; /* @KLUDGE: @override some @Bootstrap margins, Ted-hackery */
 }
-.navbar .nav > li {
+.navbar .nav > .nav-item {
     padding: 8px 9px 9px 10px;
     background: url('../images/div-nav.png') 0 50% no-repeat;
 }
-.navbar .nav > li:first-child {
+.navbar .nav > .nav-item:first-child {
     background-image: none;
 }
-.navbar .nav > li > a {
+.navbar .nav > .nav-item > a {
     padding:0 33px 0 0; /* christophery - all icons on right */
     line-height: 13px;
 }
-.navbar .nav > li.dropdown > a {
+.navbar .nav > .nav-item.dropdown > a {
     background: url('../images/icon-nav-drop.png') 100% 50% no-repeat;
 }
 #navSocial > a {
@@ -487,7 +487,7 @@ body.customer-account-login .btn.btn-large {
 #navTotsyPlus.nonmember > a {
     background: url('../images/icon-totsyplus-25x26.png') 100% 50% no-repeat;
 }
-.navbar .nav > li:hover > a {
+.navbar .nav > .nav-item:hover > a {
     color: #d22f2a;
     text-decoration: none;
 }
@@ -496,17 +496,17 @@ body.customer-account-login .btn.btn-large {
     color: #d22f2a;
     text-decoration: none;
 }
-.navbar .nav > li > a em {font-style: normal;}
+.navbar .nav > .nav-item > a em {font-style: normal;}
 
 /* dropdown nav menus */
-.navbar .nav > li.dropdown:hover {
+.navbar .nav > .nav-item.dropdown:hover {
     padding-left:9px;
     background-color:#fff;
     background-image:none;
     border-left:1px solid rgba(0,0,0,0.2);
     cursor: pointer;
 }
-.navbar .nav > li:first-child:hover {
+.navbar .nav > .nav-item:first-child:hover {
     /*     padding-left:0; */
 }
 
@@ -3194,13 +3194,14 @@ background-position: 0 .5em;
     padding:0;
 */
 }
-
 #insfeedflicker #inspbfeeda{
+    position: relative;
+    padding-right: 36px;
     cursor:pointer;
     text-decoration: none;
 }
-
 #insfeedflicker #insfeedtext{
+/*
     color: #5A9E24;
     height: 16px;
     line-height: 16px;
@@ -3209,18 +3210,17 @@ background-position: 0 .5em;
     font-style:normal;
     font-size:12px;
     font-weight:bold;
+*/
+}
+#insfeedballoon {
+    position: absolute; top:25%; right: 0;
+    display:inline-block;
+    width:34px;
+    height:16px;
 }
 #insfeedflicker .nonewfeeditem{
     background: url(../images/balloonGreen.png) no-repeat 2px 0px;
-    display:inline-block;
-    width:34px;
-    height:16px;
-
 }
 #insfeedflicker .newfeeditem{
     background: url(../images/balloonPink.png) no-repeat 2px 0px;
-    display:inline-block;
-    width:34px;
-    height:16px;
-
 }
