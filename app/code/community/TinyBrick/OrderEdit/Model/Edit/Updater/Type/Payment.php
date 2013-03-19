@@ -5,6 +5,7 @@
  * @author      Tom Royer <troyer@totsy.com>
  * @copyright   Copyright (c) 2012 Totsy LLC
  */
+require_once Mage::getBaseDir('code') . '/community/Litle/LitleSDK/LitleOnline.php';
 
 class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Payment extends TinyBrick_OrderEdit_Model_Edit_Updater_Type_Abstract
 {
@@ -12,7 +13,6 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Payment extends TinyBrick_Orde
      * @param Mage_Sales_Model_Order $order
      * @param array $data
      *      "method" => string
-     *      "cybersource_subid" => string
      *      "cc_type" => string
      *      "cc_number" => string
      *      "cc_exp_month" => string
@@ -27,12 +27,7 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Payment extends TinyBrick_Orde
                 return false;
             }
             $payment = new Varien_Object($data);
-            $profile = Mage::getModel('paymentfactory/profile');
-            //Setting datas linked with the order and payment
-            $savingNewCreditCard = true;
-            $customerId = $order->getCustomerId();
             $billingId = $order->getBillingAddressId();
-            $billing = Mage::getModel('sales/order_address')->load($billingId);
             $customerAddressId = Mage::getModel('orderedit/edit_updater_type_billing')->getCustomerAddressFromBilling($billingId);
             if(!$customerAddressId) {
                 return "Error updating payment informations : Address is not attached to the Customer";
@@ -41,36 +36,7 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Payment extends TinyBrick_Orde
                 $this->replacePaymentInformation($order, $payment);
                 return false;
             }
-            $payment->setData('cc_last4', substr($payment->getCcNumber(), -4));
-            #Check if a cybersource profile already exist with those informations
-            if($payment->getData('cybersource_subid')) {
-                $profile->loadByEncryptedSubscriptionId($payment->getData('cybersource_subid'));
-            } else if($payment->getData('cc_number')) {
-                $profile->loadByCcNumberWithId($payment->getData('cc_number').$customerId.$payment->getCcExpYear().$payment->getCcExpMonth());
-            } else {
-                return "Error updating payment informations : Missing Fields";
-            }
-            if($profile && $profile->getId()) {
-                $savingNewCreditCard = false;
-                $payment = Mage::getModel('sales/order_payment')->getCollection()
-                    ->addAttributeToFilter('cybersource_subid',$profile->getData('subscription_id'))
-                    ->getFirstItem();
-                if(!$payment || !$payment->getId()) {
-                    // Specific Case if payment informations has been deleted from the object sales_flat_order_payment
-                    // Refill informations using the profile
-                    $payment = new Varien_Object($data);
-                    $payment->setData('cc_last4', $profile->getData('last4no'))
-                            ->setData('cc_exp_year', $profile->getData('expire_year'))
-                            ->setData('cc_exp_month', $profile->getData('expire_month'))
-                            ->setData('cc_type', $profile->getData('card_type'))
-                            ->setData('cybersource_subid',$profile->getData('subscription_id'));
-                }
-            }
-            if($savingNewCreditCard) {
-                $billing->setData('email', $order->getCustomerEmail());
-                Mage::getModel('paymentfactory/tokenize')->createProfile($payment, $billing, $customerId, $customerAddressId);
-            }
-            $this->replacePaymentInformation($order, $payment);
+            $this->authorization($order, $payment);
         } catch(Exception $e) {
             return "Error updating payment informations : ".$e->getMessage();
         }
@@ -89,9 +55,67 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Payment extends TinyBrick_Orde
                      ->setData('cc_last4', $newPayment->getData('cc_last4'))
                      ->setData('cc_type', $newPayment->getData('cc_type'))
                      ->setData('cc_exp_year', $newPayment->getData('cc_exp_year'))
+                     ->setData('last_trans_id', $newPayment->getData('last_trans_id'))
                      ->setData('cc_trans_id', $newPayment->getData('cc_trans_id'))
-                     ->setData('cybersource_token', $newPayment->getData('cybersource_token'))
-                     ->setData('cybersource_subid', $newPayment->getData('cybersource_subid'))
                      ->save();
+    }
+
+    /**
+     * Create Authorization through Litle
+     */
+    public function authorization($order, $payment) {
+        $billingAddress = $order->getBillingAddress();
+        $street = $billingAddress->getStreet();
+        $expDate = $payment->getCcExpMonth() . substr($payment->getCcExpYear(), -2);
+        if(strlen($expDate) < 4) {
+            $expDate = '0' . $expDate;
+        }
+        #Authorization
+        $auth_info = array(
+            'orderId' => $order->getId(),
+            'amount' => (int) ($order->getGrandTotal() * 100),
+            'id'=> '456',
+            'orderSource'=>'ecommerce',
+            'billToAddress'=>array(
+                'name' => $billingAddress->getFirstname() . ' ' . $billingAddress->getLastname(),
+                'addressLine1' => (is_array($street))
+                    ? $street[0] . ' ' . $street[1]
+                    : $street,
+                'city' => $billingAddress->getCity(),
+                'state' => $billingAddress->getRegion(),
+                'zip' => $billingAddress->getPostcode(),
+                'country' => 'US'),
+            'card'=>array(
+                'number' =>$payment->getCcNumber(),
+                'expDate' => $expDate,
+                'cardValidationNum' => $payment->getCcCid(),
+                'type' => $payment->getCcType())
+        );
+
+        $initialize = new LitleOnlineRequest();
+        $authResponse = $initialize->authorizationRequest($auth_info);
+
+        $transactionId =  XmlParser::getNode($authResponse,'litleTxnId');
+
+        if($transactionId) {
+            $payment->setData('last_trans_id', $transactionId)
+                    ->setData('cc_trans_id', $transactionId);
+        }
+
+        $payment->setData('cc_last4', substr($payment->getCcNumber(), -4));
+
+        $this->replacePaymentInformation($order, $payment);
+
+        //Create Vault Profile if option selected
+        if($payment->getData('cc_should_save') == 'on') {
+            $paymentObject = $order->getPayment();
+            $paymentObject->setCcNumber($payment->getCcNumber());
+            Mage::getModel('palorus/vault')->setTokenFromPayment(
+                $paymentObject,
+                Mage::getModel('Litle_CreditCard_Model_PaymentLogic')->getUpdater($authResponse, 'tokenResponse', 'litleToken'),
+                Mage::getModel('Litle_CreditCard_Model_PaymentLogic')->getUpdater($authResponse, 'tokenResponse', 'bin'));
+        }
+
+        return true;
     }
 }
