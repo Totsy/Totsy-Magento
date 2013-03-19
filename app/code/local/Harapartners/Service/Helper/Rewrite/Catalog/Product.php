@@ -60,6 +60,11 @@ class Harapartners_Service_Helper_Rewrite_Catalog_Product
             $category = Mage::getModel('catalog/category')->load($categoryId);
             Mage::register('current_category', $category);
 
+            //2013-03-04 CJD Added in check for exclusive sales
+            if($category->getClubOnlyEvent() && (!($customer = Mage::getSingleton('customer/session')->getCustomer())
+                || !Mage::helper('crownclub')->isClubMember($customer))) {
+                return false;
+            }
             // Register current data and dispatch final events
             Mage::register('current_product', $product);
             Mage::register('product', $product);
