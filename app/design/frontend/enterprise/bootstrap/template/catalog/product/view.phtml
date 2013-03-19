@@ -54,6 +54,7 @@ $originalPrice = money_format('%n', $special_price);
 $discountPrice = money_format('%n', $final_price);
 $percent = number_format(($originalPrice - $discountPrice) * (100 / $originalPrice));
 $savings = money_format('%n', $originalPrice) - money_format('%n', $discountPrice);
+
 ?>
 
 <script type="text/javascript">
@@ -61,6 +62,7 @@ $savings = money_format('%n', $originalPrice) - money_format('%n', $discountPric
     );
     
 </script>
+
 <div id="messages_product_view"><?php echo $this->getMessagesBlock()->toHtml() ?></div>
 <section>
     <header class="page-header has-timer clearfix">
@@ -90,9 +92,6 @@ $savings = money_format('%n', $originalPrice) - money_format('%n', $discountPric
                     <div class="product_desc content-block">
                         <?php echo $_product->getDescription(); ?> 
                     </div>
-                    <?php // product.shipping.return detects if virtual or dotcom product
-                        // and serves the correct cms block accordingly
-                    ?>
                     <?php echo $this->getChildHtml('product.shipping.return'); ?>
                 </div>
             <?php 
@@ -159,8 +158,6 @@ $savings = money_format('%n', $originalPrice) - money_format('%n', $discountPric
             </div> <!-- /.product-addtocart -->
             
             <?php echo $this->getChildHtml('relatedProducts') ?>
-            <?php //echo $this->getChildHtml('upsell_products') ?>
-            <?php //echo $this->getChildHtml('productTagList') ?>
             <?php echo $this->getChildHtml('product_additional_data') ?>
             
         </div><!-- /.product-main -->
@@ -176,22 +173,25 @@ productAddToCartForm.submit = function(a, b) {
         if (b) {
             c.action = b
         }
-        var e = null;
-        var qty = "";
         
-        if(jQuery("#qty").length < 0) {
-        	qty = 1;
+        var e = null;
+        var lineTotal = 0;
+                
+        if(jQuery("#qty").length < 1) {
+        	lineTotal = jQuery(".special-price").html().replace("$","");
         } else {
-        	qty = jQuery("#qty").val();
+        	lineTotal = jQuery("#qty").val() * jQuery(".special-price").html().replace("$","");
         }
         
         if (!b) {
-            b = jQuery("#product_addtocart_form").attr("action")
+            b = jQuery("#product_addtocart_form").attr("action");
         }
+        
         b = b.replace("checkout/cart", "ajax/checkout_cart");
         var f = jQuery("#product_addtocart_form").serialize();
         f += "&isAjax=1";
         jQuery("#ajax_loader").show();
+        
         try {
             jQuery.ajax({
                 url: b,
@@ -200,7 +200,7 @@ productAddToCartForm.submit = function(a, b) {
                 data: f,
                 success: function(b) {
                     //tracking ADDs to cart
-                    _gaq.push(['_trackEvent', 'Add to Cart', '<?php echo $this->htmlEscape($_product->getSku()); ?>', qty]);
+                    _gaq.push(['_trackEvent', 'Add to Cart', '<?php echo $this->htmlEscape($_product->getSku()); ?>', lineTotal]);
                     
                     if (b.redirect) {
                         window.location.href = b.redirect
