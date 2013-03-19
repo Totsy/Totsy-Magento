@@ -3,6 +3,6 @@
 $installer = $this;
 $installer->startSetup();
 
-$installer->run(" ALTER TABLE  `params` CHANGE  `params`  `params` LONGTEXT ");
+$installer->run("ALTER TABLE `{$this->getTable('emailfactory/sailthruqueue')}` MODIFY `params` LONGTEXT");
 
 $installer->endSetup();
