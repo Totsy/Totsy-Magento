@@ -40,6 +40,10 @@
         <Totsy_Page>
             <active>true</active>
             <codePool>local</codePool>
+            <depends>
+                <Fooman_Speedster/>
+
+            </depends>
         </Totsy_Page>
         <Totsy_Catalog>
             <active>true</active>

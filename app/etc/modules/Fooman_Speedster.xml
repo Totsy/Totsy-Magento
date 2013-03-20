@@ -4,9 +4,6 @@
         <Fooman_Speedster>
             <active>true</active>
             <codePool>community</codePool>
-            <depends>
-        	<Totsy_Page />
-       	    </depends>
         </Fooman_Speedster>        
     </modules>
 </config>
