@@ -52,7 +52,7 @@
 <div class="catalog-events-container">
     <div class="live-events-container">
     <?php // Live Events ?>
-    <?php if (!!$liveArray && !empty($liveArray)) : ?>
+    <?php if (!!$topArray && !empty($topArray)) : ?>
         <section id="events-live" class="tedhack events-grid">
         <?php if (!$bannerActive) : ?>
 <!--
@@ -62,17 +62,17 @@
 -->
         <?php endif; ?>
             <ul class="thumbnails">
-            <?php foreach ($liveArray as $live): ?>
-                <?php if(!isset($live['club_only_event']) || !$live['club_only_event']) : ?>
+            <?php foreach ($topArray as $top): ?>
+                <?php if(!isset($top['club_only_event']) || !$top['club_only_event']) : ?>
                 <?php
-                    $endcountRaw = strtotime($live['event_end_date']);
+                    $endcountRaw = strtotime($top['event_end_date']);
                     $endcount = date("F j, Y, G:i:s", $endcountRaw);
-                    $hasProduct = $this->countCategoryProducts($live['entity_id']);
-                    $eventDepts = $live['department_label'];
-                    $eventAges = $live['age_label'];
-                    $maxDiscount = $live['max_discount_pct'];
-                    if(!($url = Mage::getModel('core/url_rewrite')->setStoreId(Mage::app()->getStore()->getId())->loadByIdPath('category/'.$live['entity_id'])->getRequestPath())) {
-                        $url = 'catalog/category/view/id/'.$live['entity_id'];
+                    $hasProduct = $this->countCategoryProducts($top['entity_id']);
+                    $eventDepts = $top['department_label'];
+                    $eventAges = $top['age_label'];
+                    $maxDiscount = $top['max_discount_pct'];
+                    if(!($url = Mage::getModel('core/url_rewrite')->setStoreId(Mage::app()->getStore()->getId())->loadByIdPath('category/'.$top['entity_id'])->getRequestPath())) {
+                        $url = 'catalog/category/view/id/'.$top['entity_id'];
                     }
                     $url = Mage::getBaseUrl().$url;
                 ?>
@@ -86,18 +86,18 @@
                                 </div>
                             </div>
                             <?php
-                                $imgFile = (isset($live['small_image']))
-                                ? BP . DS . 'media' . DS . 'catalog' . DS . 'category' . DS . $live['small_image']
+                                $imgFile = (isset($top['small_image']))
+                                ? BP . DS . 'media' . DS . 'catalog' . DS . 'category' . DS . $top['small_image']
                                 : BP . DS . 'skin' . DS . 'frontend' . DS . 'enterprise ' . DS . 'bootstrap' . DS . 'images' . DS . 'catalog' . DS . 'product' . DS . 'placeholder' . DS . 'small_image.jpg';
                             ?>
                             <span class="event-link">
-                                <img src="<?php echo Mage::helper('service/image')->loadImageFile($imgFile)->constrainOnly(false)->keepAspectRatio(TRUE)->keepFrame(FALSE)->resize(550,550) ?>" alt="<?php echo $live['name'];?>" />
+                                <img src="<?php echo Mage::helper('service/image')->loadImageFile($imgFile)->constrainOnly(false)->keepAspectRatio(TRUE)->keepFrame(FALSE)->resize(550,550) ?>" alt="<?php echo $top['name'];?>" />
                             </span>
                             
                             <?php $timer++; ?>
                         </a>
                         <div class="caption">
-                    <h3 class="ellipsis"><?php echo $live['name'];?></h3>
+                    <h3 class="ellipsis"><?php echo $top['name'];?></h3>
                     <p class="up-to">up to <span><?php echo $maxDiscount; ?>% Off!</span></p>
                   </div>
                     </li>
@@ -109,8 +109,7 @@
     <?php endif; ?>
     
     <?php // ENDING SOON - not functioning, no $endingArray exists - just a placeholder var and code for now ?>
-    <?php $endingArray = '1'; ?>
-    <?php if (!!$endingArray && !empty($endingArray)): ?>
+    <?php if (!!$liveArray && !empty($liveArray)) : ?>
 <section id="events-ending" class="tedhack events-grid">
         <header class="page-header">
                 <h2>Hurry, Ending Soon</h2>
