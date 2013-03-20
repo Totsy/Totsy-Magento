@@ -53,7 +53,7 @@
     <div class="live-events-container">
     <?php // Live Events ?>
     <?php if (!!$liveArray && !empty($liveArray)) : ?>
-        <section id="events-live" class="events-grid">
+        <section id="events-live" class="tedhack events-grid">
         <?php if (!$bannerActive) : ?>
 <!--
             <header class="page-header">
@@ -111,7 +111,7 @@
     <?php // ENDING SOON - not functioning, no $endingArray exists - just a placeholder var and code for now ?>
     <?php $endingArray = '1'; ?>
     <?php if (!!$endingArray && !empty($endingArray)): ?>
-<section id="events-ending" class="events-grid">
+<section id="events-ending" class="tedhack events-grid">
         <header class="page-header">
                 <h2>Hurry, Ending Soon</h2>
             </header>
@@ -164,7 +164,7 @@
 
     <?php // Upcoming Events ?>
     <?php if (!!$upcomingArray && !empty($upcomingArray)): ?>
-        <section id="events-upcoming" class="events-grid">
+        <section id="events-upcoming" class="tedhack events-grid">
             <header class="page-header">
                 <h2>Upcoming Sales</h2>
             </header>
