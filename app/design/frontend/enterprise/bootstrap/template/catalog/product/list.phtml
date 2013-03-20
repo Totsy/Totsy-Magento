@@ -62,7 +62,8 @@
         // i.e. " if ( $_productCollection->count() && !$timeOutFlag ): //render the events grid…
     ?>
     <?php else : ?>
-            <ul class="thumbnails event_prod_grid">
+        <div class="event_prod_grid tedhack">
+            <ul class="thumbnails">
         	<?php foreach ($_productCollection as $_product): ?>
         		<?php if ( $_product->isSalable() ):?>
                     <li class="span4 item<?php echo ' '.str_replace(',',' ',$_product->getDepartments()) ?>" data-department="<?php echo str_replace(',',' ',$_product->getDepartments()) ?>">
@@ -105,4 +106,5 @@
                 <?php endif;?>
             <?php endforeach; ?>
             </ul>
+        </div>
     <?php endif; ?>
