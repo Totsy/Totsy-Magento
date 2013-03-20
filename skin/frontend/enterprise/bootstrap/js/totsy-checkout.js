@@ -15,7 +15,7 @@ jQuery(document).ready(function() {
             isCollapsed: false,
             lastUsedAddressId: '',
             toggleViews: function() {
-                if (this.hasProfile) { 
+                if (!this.hasProfile) { 
                     jQuery(".cc_save_card").appendTo(jQuery("#add_payment_save_card"));
                     var savedCardStyles = {
                         'width': 'auto',
