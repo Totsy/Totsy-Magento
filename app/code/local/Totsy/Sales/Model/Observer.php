@@ -61,7 +61,7 @@ class Totsy_Sales_Model_Observer extends Mage_Sales_Model_Observer
     * Update stock qty saved by configurable items
     */
     public function updateConfigurableTotalQty(Varien_Event_Observer $observer){
-        /*
+        
         $items = $observer->getEvent()->getOrder()->getAllItems();
         foreach ($items as $i){
             $qty = 0;
@@ -70,32 +70,24 @@ class Totsy_Sales_Model_Observer extends Mage_Sales_Model_Observer
                 continue;
             }
 
-            //Mage::log('item id: '.$item->getId());
-            
-
-            $conf = $item->getTypeInstance()->getUsedProducts();
-            Mage::log('item gsi qty: '.$item->getStockItem()->getQty());
-            
+            $conf = $item->getTypeInstance()->getUsedProducts();        
             foreach( $conf as $sp){
                 $stockItem = $sp->getStockItem();
                 $qty+= $stockItem->getQty();
             }
-            
-            $stock = $item->getStockItem();
-            $stock->setQty($qty);
-            $stock->save();
-            //Mage::log(get_class($item));
-            //Mage::log(__LINE__);
-            $item->setStockItem($stock);
-            $item->save();
-            //Mage::log(__LINE__);
-            
-            //Mage::log('qty: '.$qty);
-            //Mage::log('s qty: '.$stock->getQty());
-            //$item = Mage::getModel('catalog/product')->load($i->getProductId());
-            //Mage::log('gsti qty: '.$item->getStockItem()->getQty());
+
+            $dbW = Mage::getSingleton("core/resource")->getConnection('core_wirte');
+            $query = "UPDATE `".$dbW->getTableName('cataloginventory/stock_item')."` ".
+                    "SET `qty` =  :qty".
+                    "WHERE `product_id`=:product_id";
+            $bind = array(
+                'qty' => $qty,
+                'product_id' => $i->getProductId()
+            ); 
+            $dbW->query($query,$bind);
         }
-        */
+        
+        Mage::log(__METHOD__);   
     }
 
     /**
