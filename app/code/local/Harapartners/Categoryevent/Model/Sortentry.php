@@ -166,7 +166,7 @@ class Harapartners_Categoryevent_Model_Sortentry
         $new = array();
         $live = array();
         $orgDate = strtotime($date);
-        $newDate = strtotime('+1 day', $orgDate); 
+        $newDate = strtotime('+3 day', $orgDate); 
         foreach ($ls as $l){
             $start = strtotime($l['event_start_date']);
             if ($orgDate <= $start && $start <= $newDate){
