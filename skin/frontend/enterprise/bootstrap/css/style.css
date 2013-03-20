@@ -67,14 +67,17 @@ body[class*="span"] { /* bootstrap override for edge case of *span* sale title i
     float: none;
     margin: 0;
 }
-/* Bootstrap Events Grid Override */
-#events-live > .thumbnails > .span4 {width:23.591em;}
-#events-ending > .thumbnails > .span3 {width:17.5em;}
-#events-upcoming > .thumbnails > .span2 {width:11.41em;}
+
+/* Bootstrap Events Grid Override - .tedhack */
+#events-live.tedhack .span4 {width:23.591em;}
+#events-ending.tedhack .span3 {width:17.5em;}
+#events-upcoming.tedhack .span2 {width:11.41em;}
 .thumbnail {
     border:1px solid #fff;
     padding:10px;
 }
+
+/* other Bootstrap Component overrides */
 .dropdown-toggle {cursor: pointer;}
 .well {
     background: none repeat scroll 0 0 #FFFFFF;
@@ -840,13 +843,6 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
     color:#333;
     font-weight: normal;
     /*     white-space:nowrap; text-overflow: ellipsis; */ /* leave this out, see MGN-882 */
-}
-/* Grid Hacks :( */
-.events-grid .span4 {
-    width:306px;
-}
-.events-grid .span3 {
-    width:226px;
 }
 .events-grid .span4 h3 {
     font-size: 14px;
