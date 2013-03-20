@@ -842,17 +842,10 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
     /*     white-space:nowrap; text-overflow: ellipsis; */ /* leave this out, see MGN-882 */
 }
 /* Grid Hacks :( */
-.events-grid .span4 {
-    width:306px;
-}
-.events-grid .span3 {
-    width:226px;
-}
 .events-grid .span4 h3 {
     font-size: 14px;
-    text-transform: uppercase;
 }
-.events-grid .span3 h5 {
+.events-grid .span3 h3 {
     font-size: 14px;
 }
 .events-grid .span2 h5 {
@@ -867,7 +860,6 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
 .events-grid .thumbnail .event-link {
     display: block;
 }
-
 .events-grid .catalog-event .more {
     position: absolute; bottom: 0; left: 0;
     visibility: hidden;
@@ -1558,14 +1550,17 @@ body > footer {
     margin-top:-229px; height:211px; /* @stickyfooter: top margin is footer height + padding, magic number BS */
     padding: 18px 0 0;
     min-width: 950px; /* temp hackish fix for iPad display, prevent content of fixed width from bleeding in. @TODO: get responsive! */
-    background: #e5e5e5;
+    background: #fff;
 }
 body > footer:before {
     content: "";
     position: absolute; top: 0; left: 0;
     display: block;
     width:100%; height: 1px;
-    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    border: 1px dashed #64a5fe;
+    border-style: none none dashed;
+    color: #fff;
 
 }
 footer p, img {
