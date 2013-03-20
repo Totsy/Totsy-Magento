@@ -22,7 +22,7 @@
     <?php if($_item->getParentItem()) continue; else $i++; ?>
     <tbody<?php echo $i%2 ? ' bgcolor="#F6F6F6"' : '' ?>>
         <?php
-        echo //$this->getItemHtml($_item); ?>
+        echo $this->getItemHtml($_item); ?>
     </tbody>
     <?php endforeach; ?>
     <tbody>
