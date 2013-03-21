@@ -1358,12 +1358,18 @@ min-height:420px;
 .ui-mobile,.ui-mobile .ui-page {
 min-height:300px;
 }
-
+@media all and min-width550px{
+	.oro-mob .card-type {
+		text-align:right;
+	}
+}
 @media all and min-width450px{
 .ui-field-contain .ui-controlgroup .ui-select {
 width:100%;
 }
-
+.oro-mob .card-type {
+		text-align:right;
+	}
 .ui-field-contain .ui-controlgroup-horizontal .ui-select {
 width:auto;
 }
@@ -1418,4 +1424,9 @@ width:43%;
 @media only screen and min-device-width768px and max-device-width1024px{
 .ui-li .ui-btn-text {
 overflow:visible;
+}
+.oro-mob .cart-type strong span{
+	background: url("../images/cc_sprite.png") no-repeat -42px 0;
+	width: 42px;
+	height: 24px;
 }
