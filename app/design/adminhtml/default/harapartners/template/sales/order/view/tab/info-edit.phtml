@@ -122,11 +122,11 @@
     	} else {
             $('required-cc').hide();
             $('required-comment').hide();
-            if(($('cybersource-use-card-method') && $('cybersource-use-card-method').value == "") || !$('cybersource-use-card-method')) {
+            if(($('creditcard_cc_vaulted') && $('creditcard_cc_vaulted').value == "") || !$('creditcard_cc_vaulted')) {
                 var paymentForm = $('payment-fields').getElements();
                 var emptyCC = false;
                 paymentForm.each(function(i) {
-                    if(i.value == "" && (i.type == 'text' || i.type == 'select-one') && (i.id != 'cybersource-use-card-method')) {
+                    if(i.value == "" && (i.type == 'text' || i.type == 'select-one') && (i.id != 'creditcard_cc_vaulted')) {
                         emptyCC = true;
                     }
                 });

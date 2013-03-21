@@ -27,6 +27,10 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Payment extends TinyBrick_Orde
                 return false;
             }
             $payment = new Varien_Object($data);
+            if($payment->getData('cc_vaulted')) {
+                $vault = Mage::getModel('palorus/vault')->load($payment->getData('cc_vaulted'));
+            }
+            
             $billingId = $order->getBillingAddressId();
             $customerAddressId = Mage::getModel('orderedit/edit_updater_type_billing')->getCustomerAddressFromBilling($billingId);
             if(!$customerAddressId) {
