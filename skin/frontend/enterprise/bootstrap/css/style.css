@@ -1595,6 +1595,10 @@ body > footer small .container {
 }
 
 /* login/register pages footer */
+#footerpush { /* @KLUDGE: hackish fix for footer overlap on login/signup page */
+    height:680px; 
+    padding-bottom:98px;
+}
 body.customer-account-login #footer ul {
     float: left;
 }
