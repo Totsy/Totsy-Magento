@@ -69,11 +69,11 @@ body[class*="span"] { /* bootstrap override for edge case of *span* sale title i
 }
 
 /* Bootstrap Events Grid Override - .tedhack */
-[class*='event'].tedhack .span4 {width:23.591em;}
+[class*='event'].tedhack .span4 {width:23.59em;}
 [class*='event'].tedhack .span3 {width:17.5em;}
 [class*='event'].tedhack .span2 {width:11.41em;}
-.thumbnail {
-    border:1px solid #fff;
+.thumbnail > img {
+    border:1px solid #999;
     padding:10px;
 }
 
@@ -1051,6 +1051,7 @@ body.catalog-category-view .thumbnails > li {position: relative;}
 .event_prod_grid .thumbnail {
     padding:0px;
     min-height:382px;
+    margin-top:10px;    
 }
 .event_prod_grid .thumbnail .product-image{
     display: block;
@@ -1775,11 +1776,12 @@ select, textarea, input[type="text"], input[type="password"], input[type="dateti
     font-size: 11px;
     min-width:95px;
 }
+.big_price {color:red;}
 /* ZOOM Image Goodness */
 .zoomImage {
     padding:0px;
     background: none;
-    border:1px solid #333;
+    border:1px solid #ddd;
     overflow: hidden;
     z-index:500!important;
 }
@@ -1799,7 +1801,7 @@ body.catalog-category-view .price-box .old-price {
     position: relative; top: 28px;
 }
 .price-box .price.special-price {
-    color: #000;
+    color: #d22f2a;
     font-size: 20px; font-weight: bold;
 }
 body.catalog-category-view .price-box .special-price {
