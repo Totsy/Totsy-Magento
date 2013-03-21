@@ -707,11 +707,11 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
     display: block;
     margin-bottom:5px;
     color:rgba(210,47,42,0.78);
-    font-size: 13px; font-weight: 500;
+    font-size:16px; font-weight: 500;
     line-height: 1.15;
 }
 #topCartContent .minifoot .subtotal-cost {
-    font-size:16px; font-weight: 500;
+    font-size: 13px; font-weight: 500;
     text-shadow: 0 1px 0 rgba(255, 255, 255, 0.25);
 }
 #topCartContent .minifoot .subtotal-cost .price {
