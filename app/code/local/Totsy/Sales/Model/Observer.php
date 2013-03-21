@@ -77,12 +77,12 @@ class Totsy_Sales_Model_Observer extends Mage_Sales_Model_Observer
             }
 
             $dbW = Mage::getSingleton("core/resource")->getConnection('core_wirte');
-            $query = "UPDATE `".$dbW->getTableName('cataloginventory/stock_item')."` ".
-                    "SET `qty` =  :qty".
-                    "WHERE `product_id`=:product_id";
+            $query = "UPDATE `".$dbW->getTableName('cataloginventory_stock_item')."` ".
+                    "SET `qty` =  ?".
+                    "WHERE `product_id`=?";
             $bind = array(
-                'qty' => $qty,
-                'product_id' => $i->getProductId()
+                $qty,
+                $i->getProductId()
             ); 
             $dbW->query($query,$bind);
         }

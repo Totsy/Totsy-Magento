@@ -76,11 +76,11 @@
                         <class>Totsy_Sales_Model_Observer</class>
                         <method>incrementCustomerPurchaseCount</method>
                     </sales_observer>
-                    <sales_observer_after>
+                    <hpcheckout_save_order_after>
                         <type>singleton</type>
                         <class>Totsy_Sales_Model_Observer</class>
                         <method>updateConfigurableTotalQty</method>
-                    </sales_observer_after>
+                    </hpcheckout_save_order_after>
                 </observers>
             </sales_order_place_after>
             <order_cancel_after>
