@@ -69,9 +69,9 @@ body[class*="span"] { /* bootstrap override for edge case of *span* sale title i
 }
 
 /* Bootstrap Events Grid Override - .tedhack */
-#events-live.tedhack .span4 {width:23.591em;}
-#events-ending.tedhack .span3 {width:17.5em;}
-#events-upcoming.tedhack .span2 {width:11.41em;}
+[class*='event'].tedhack .span4 {width:23.591em;}
+[class*='event'].tedhack .span3 {width:17.5em;}
+[class*='event'].tedhack .span2 {width:11.41em;}
 .thumbnail {
     border:1px solid #fff;
     padding:10px;
