@@ -18,7 +18,9 @@ class Harapartners_Fulfillmentfactory_Helper_Dotcom extends Mage_Core_Helper_Abs
     protected static $_apiKey = '';
     protected static $_apiPassword = '';
     protected static $_apiUrl = '';
-    
+
+    const MAX_RETRY = 3;
+
     protected function _getConfig() {
         //Please see System->Configuration->Sales->Order Fulfillment Settings
         self::$_apiKey = Mage::getStoreConfig('fulfillmentfactory_options/dotcom_setting/fulfillment_dotcom_api_key');
@@ -35,7 +37,7 @@ class Harapartners_Fulfillmentfactory_Helper_Dotcom extends Mage_Core_Helper_Abs
         }
         
         if(empty(self::$_apiUrl)) {
-            self::$_apiUrl = 'https://cwa.dotcomdistribution.com/dcd_api_test/DCDAPIService.svc';
+            self::$_apiKey = 'https://cwa.dotcomdistribution.com/dcd_api_test/DCDAPIService.svc';
         }
     }
     
@@ -118,17 +120,33 @@ class Harapartners_Fulfillmentfactory_Helper_Dotcom extends Mage_Core_Helper_Abs
 
         $client->setRawData($xml);
 
-        $response = $client->request('POST');
+        $tries = 0;
+        while ($tries < self::MAX_RETRY) {
+            try {
+                $response = $client->request('POST');
+            } catch(Zend_Http_Client_Adapter_Exception $e) {
+                $tries++;
+                Mage::logException($e);
+                continue;
+            }
 
-        // handle error conditions (400 or 500 level statuses)
-        if (($code = $response->getStatus()) > 399) {
-            throw new Harapartners_Fulfillmentfactory_Model_Exception_FulfillmentNetworkException(
-                "Error $code received from Dotcom",
-                $response
-            );
+            // handle error conditions (400 or 500 level statuses)
+            if (($code = $response->getStatus()) > 399) {
+                throw new Harapartners_Fulfillmentfactory_Model_Exception_FulfillmentNetworkException(
+                    "Error $code received from Dotcom",
+                    $response
+                );
+            }
+
+            return $response->getBody();
         }
 
-        return $response->getBody();
+        Mage::throwException(
+            "Communication with the DotCom API failed after " .
+                self::MAX_RETRY . " attempts."
+        );
+
+        return '';
     }
 
     /**
