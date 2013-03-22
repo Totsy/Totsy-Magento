@@ -375,10 +375,6 @@ class Harapartners_Categoryevent_Model_Sortentry
             $earlyAccessTime = Mage::helper('crownclub/earlyaccess')->getEarlyAccessTime();
         }
 
-        //$this->_moveEvents($top, $top, $live, $upcoming, $earlyAccessTime);
-        //$this->_moveEvents($live, $top, $live, $upcoming, $earlyAccessTime);
-        //$this->_moveEvents($upcoming, $top, $live, $upcoming, $earlyAccessTime);
-
         foreach ($top as $idx => $event) {
             $startTime = strtotime($event['event_start_date']);
             if($earlyAccessTime) {
@@ -464,33 +460,6 @@ class Harapartners_Categoryevent_Model_Sortentry
             }
         }
 
-        /*
-        foreach ($live as $idx => $event) {
-            $startTime = strtotime($event['event_start_date']);
-            if($earlyAccessTime) {
-                $startTime -= $earlyAccessTime;
-            }
-            if ($startTime > $now) {
-                // move this event to Upcoming
-                array_unshift($upcoming, $event);
-                unset($live[$idx]);
-            }
-        }
-
-        foreach ($upcoming as $idx => $event) {
-            $startTime = strtotime($event['event_start_date']);
-            if($earlyAccessTime) {
-                $startTime -= $earlyAccessTime;
-            }
-            if ($startTime < $now &&
-                strtotime($event['event_end_date']) > $now
-            ) {
-                // move this event to Live
-                array_unshift($live, $event);
-                unset($upcoming[$idx]);
-            }
-        }
-        */
         $this->setData('top_live_queue', json_encode($top))
             ->setData('live_queue', json_encode($live))
             ->setData('upcoming_queue', json_encode($upcoming));
@@ -594,56 +563,5 @@ class Harapartners_Categoryevent_Model_Sortentry
         return $this->_cacheTag . '_' .
             $this->getStoreId() . '_' .
             date('Y-m-d', strtotime($this->getDate()));
-    }
-
-    protected function _moveEvents(&$current,&$top,&$live,&$up, $early){
-
-        $now = Mage::getModel('core/date')->timestamp();
-
-        if (empty($current)){
-            return;
-        }
-
-        foreach ($current as $idx => $event) {
-            
-            $startTime = strtotime($event['event_start_date']);
-            
-            if($early) {
-                $startTime -= $early;
-            }
-
-            if (strtotime($event['event_end_date']) < $now){
-                return;
-            }
-
-            $diff = ($now - $startTime)/24/60/60;
-            $diff = round(abs($diff),2);
-
-            if ($startTime > $now ) {
-                
-                // move this event to Upcoming
-                unset($current[$idx]);
-                array_unshift($up, $event);
-                continue;
-
-            } else if ( ($startTime < $now) 
-                && $diff > $this->_daysForNew
-            ){
-
-                // move this event to Live
-                unset($current[$idx]);
-                array_unshift($live, $event);
-                continue;
-
-            } else if ( ($startTime < $now) 
-                && $diff > $this->_daysForNew
-            ){
-
-                // move this event to Top
-                unset($current[$idx]);
-                array_unshift($top, $event);
-                continue;
-            }
-        }
     }
 }
