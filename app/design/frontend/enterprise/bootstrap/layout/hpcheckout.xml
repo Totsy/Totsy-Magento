@@ -20,7 +20,6 @@
 				    <block type="hpcheckout/payment_methods" name="hpcheckout.payment.methods" as="methods" template="hpcheckout/payment/methods.phtml" />
 				    <block type="enterprise_reward/checkout_payment_additional" template="hpcheckout/payment/reward/additional.phtml" as="reward" name="hpcheckout.reward.points" />
 				</block>
-                
 				<block type="hpcheckout/review" name="hpcheckout.review" as="review" template="hpcheckout/review.phtml">
 					<block type="hpcheckout/review_info" name="info" template="hpcheckout/review/info.phtml">
 						<action method="addItemRender"><type>default</type><block>checkout/cart_item_renderer</block><template>hpcheckout/review/item.phtml</template></action>

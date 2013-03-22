@@ -1,11 +1,10 @@
 var checkoutPayment = {};
 
+var billAddySelect = jQuery("#billing-address-select");
+var newCardWrap = jQuery('.cc_info');
+var billFormInputs = jQuery('#hpcheckout-billing-form :input');
+
 jQuery(document).ready(function() {
-    var billAddySelect = jQuery("#billing-address-select");
-    var newCardWrap = jQuery('.cc_info');
-    //var newCardCtrls = jQuery( 'input, select', '.use-new-card-wrapper' );
-    var billingAddress = jQuery('.totsy-selective-input-box', '#hpcheckout-billing-wrapper');
-    var billFormInputs = jQuery('#hpcheckout-billing-form :input');
     //a namespace for operations toggling the 2 views of the payment section
     checkoutPayment = (function() {
         var hasProfile = '';
@@ -16,16 +15,17 @@ jQuery(document).ready(function() {
             isCollapsed: false,
             lastUsedAddressId: '',
             toggleViews: function() {
-                if (this.hasProfile) {                
+                if (this.hasProfile=="") { 
+                    jQuery(".add_payment_separator").hide();
+                    jQuery(".checkout-reward").css("padding-top", "0px");
+                    jQuery(".use-new-card-wrapper").show();
+                    jQuery("#use-card-method").hide();
+                    jQuery("#cc_data").show();
+                    jQuery("#hpcheckout-payment-add-title").hide(); 
+                } else { 
                     jQuery(".cc_save_card").appendTo(jQuery("#add_payment_save_card"));
-                    var savedCardStyles = {
-                        'width': 'auto',
-                        'margin-left': '10px',
-                        'vertical-align': 'middle',
-                        'float': 'left'
-                    };
                     jQuery('#billing-address-select').attr('disabled', true);
-                    jQuery(".cc_save_card").css(savedCardStyles);
+                    jQuery(".cc_save_card").css({'width': 'auto','margin-left': '10px','float': 'left'});
                     jQuery("#hpcheckout-payment-add-title").show();
                     jQuery("#use-card-method").show();
                     jQuery("#creditcard_cc_type_should_save_div").contents("");
@@ -33,15 +33,6 @@ jQuery(document).ready(function() {
                     jQuery("#cc_save_text").html("Save");
                     jQuery(".use-new-card-wrapper").appendTo(jQuery("#add_cc_types"));
                     newCardWrap.hide();
-                } else {  
-                    jQuery("[id='add_payment']").hide();
-                    jQuery(".checkout-reward").css("padding-top", "0px");
-                    jQuery(".use-new-card-wrapper").show();
-                    jQuery("#use-card-method").hide();
-                    jQuery("#cc_data").show();                    
-                    
-                    console.log("test");
-                    jQuery("#hpcheckout-payment-add-title").hide();
                 }
             },
             disableAddress: function(stateFlag, formId) {
@@ -87,7 +78,9 @@ jQuery(document).ready(function() {
                     }
                 }
             },
-            useSavedCard: function() {
+            useSavedCard: function(elem) {
+                console.log(jQuery(elem).attr("data-billing-address-id"));
+                jQuery('#billing-address-select').val(jQuery(elem).attr("data-billing-address-id"));
                 jQuery('#billing-address-select').attr('disabled', true);
             },
             setPaymentType: function(elem) {
@@ -106,4 +99,4 @@ jQuery(document).ready(function() {
             }
         };
     })();
-});
+ });

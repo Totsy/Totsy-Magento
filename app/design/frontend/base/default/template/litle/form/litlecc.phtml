@@ -41,17 +41,19 @@ $_id = $_time . substr($_session,13);
 <?php if($this->getVaultEnabled()) {
         $hasProfile = true;
 } ?>
+
 <script type="text/javascript">
 
 jQuery(document).ready( function() {
+    //console.log(typeof checkoutPayment.toggleViews);
     checkoutPayment.hasProfile = "<?php echo $hasProfile; ?>";
     checkoutPayment.toggleViews();
-
-    jQuery("[id='payment[cc_vaulted]']").change(function() {
+    
+    jQuery("[name='payment[cc_vaulted]']").change(function() {
         checkoutPayment.setPaymentUI(this);
     });
     jQuery(".use-saved-card-control").click(function() {
-        checkoutPayment.useSavedCard();
+        checkoutPayment.useSavedCard(this);
     });
     jQuery(".cc_types input").click(function() {
         checkoutPayment.setPaymentType(this);
@@ -120,7 +122,7 @@ jQuery(document).ready( function() {
                         	<th>Expires</th>
                         </tr>
                             <?php foreach ($this->getStoredCards() as $card): ?>
-                                <?php 
+                                <?php
                                     $customerId = $card->getData('customer_id');
                                     $customerObj = Mage::getSingleton('customer/customer')->load($customerId);
                                     $customerAddress = Mage::getModel('sales/order')->load($card->order_id)->getBillingAddress();
@@ -130,7 +132,7 @@ jQuery(document).ready( function() {
                                 <tr>
 	                                <td>
 	                                    <div>
-	                       		            <input type="radio" id="payment[cc_vaulted]" name="payment[cc_vaulted]" value="<?php echo $card->getVaultId() ?>" class="use-saved-card-control pull-left" id="payment">
+	                       		            <input type="radio" data-billing-address-id="<?php echo $card->address_id; ?>" id="payment[cc_vaulted]" name="payment[cc_vaulted]" value="<?php echo $card->getVaultId() ?>" class="use-saved-card-control pull-left" id="payment">
                                             <span class="cc">
         		 	                            <span title="<?php echo strtolower($card->type); ?>" class="<?php echo strtolower($card->type); ?>" >
         		 	                            </span>
@@ -236,7 +238,7 @@ jQuery(document).ready( function() {
     </div>
 <div style="clear:both"></div>
 <div id="add_payment">
-	<hr />
+	<span class="add_payment_separator"><hr /></span>
 	<div id="hpcheckout-payment-add-title">
 		<h4 class="legend">Add a payment method</h4>
 	</div>
@@ -337,7 +339,6 @@ jQuery(document).ready( function() {
             if(!hpcheckout.validate()) {
                 return;
             }
-            
             //this becomes a set of radio buttons instead    
             var selectmenu = $("<?php echo $_code ?>_cc_vaulted");
 			if(selectmenu){

@@ -139,8 +139,42 @@
 
     decorateList('products-list', 'none-recursive');
 
+<<<<<<< HEAD
+    var win = null;
+    var index = 1;
+
+    jQuery( document ).ready( function() {
+        jQuery('.btn-cart').each(function() {
+            product_id = this.value;
+            if(product_id != 0) {
+                jQuery.get('<?php echo Mage::getUrl('vouchers/order/available/',array('_secure' => Mage::app()->getStore()->isCurrentlySecure())); ?>id/' + product_id + '/',
+                    function(data) {
+                        var jsonResponse = jQuery.parseJSON(data);
+                        if(jsonResponse.status == 0) {
+                            product_id = jsonResponse.id;
+                            jQuery('#button-'+product_id).removeAttr("disabled");
+                            jQuery('#button-popup-'+product_id).removeAttr("disabled");
+                        } else if(jsonResponse.status == 3) {
+                            product_id = jsonResponse.id;
+                            jQuery('#button-'+product_id).removeClass('btn-cart');
+                            jQuery('#button-popup-'+product_id).removeClass('btn-cart');
+                            jQuery('#button-'+product_id).addClass('btn-cart-sent');
+                            jQuery('#button-popup-'+product_id).addClass('btn-cart-sent');
+                        } else {
+                            product_id = jsonResponse.id;
+                            jQuery('#button-'+product_id).css("display", "none");
+                            jQuery('#button-popup-'+product_id).css("display", "none");
+                        }
+                    }
+                )
+            }
+        });
+    });
+
+=======
   var win = null;
   var index = 1;
+>>>>>>> release/20130315
 	function openDialog(id) {
 	  Dialog.alert($(id).innerHTML, {
 		  className: "alphacube",
@@ -155,28 +189,25 @@
 
     function emailCode(product_id) {
         id = product_id;
-
         jQuery('#button-' + id).removeClass('btn-cart');
         jQuery('#button-' + id).addClass('btn-cart-sending');
         jQuery('#button-popup-' + id).removeClass('btn-cart');
         jQuery('#button-popup-' + id).addClass('btn-cart');
 
         jQuery.get('<?php echo Mage::getUrl('vouchers/order/create/',array('_secure' => Mage::app()->getStore()->isCurrentlySecure())); ?>id/' + product_id + '/',
-                function(data){
-                    var jsonResponse = jQuery.parseJSON(data);
-
-                    if(jsonResponse.error) {
-                        jQuery('#button-' + id).removeClass('btn-cart-sending');
-                        jQuery('#button-popup-' + id).removeClass('btn-cart-sending');
-                        jQuery('#button-' + id).addClass('btn-cart');
-                        jQuery('#button-popup-' + id).addClass('btn-cart');
-                        alert(jsonResponse.error);
-                    } else {
-                        jQuery('#button-' + id).removeClass('btn-cart-sending');
-                        jQuery('#button-' + id).addClass('btn-cart-sent');
-                        jQuery('#button-popup-' + id).removeClass('btn-cart-sent');
-                        jQuery('#button-popup-' + id).addClass('btn-cart-sent');
-                    }
+            function(data){
+                var jsonResponse = jQuery.parseJSON(data);
+                if(jsonResponse.error) {
+                    jQuery('#button-' + id).removeClass('btn-cart-sending');
+                    jQuery('#button-popup-' + id).removeClass('btn-cart-sending');
+                    jQuery('#button-' + id).addClass('btn-cart');
+                    jQuery('#button-popup-' + id).addClass('btn-cart');
+                    alert(jsonResponse.error);
+                } else {
+                    jQuery('#button-' + id).removeClass('btn-cart-sending');
+                    jQuery('#button-' + id).addClass('btn-cart-sent');
+                    jQuery('#button-popup-' + id).removeClass('btn-cart-sent');
+                    jQuery('#button-popup-' + id).addClass('btn-cart-sent');
                 }
         );
     }
