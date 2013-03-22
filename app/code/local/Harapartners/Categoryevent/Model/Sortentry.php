@@ -515,12 +515,16 @@ class Harapartners_Categoryevent_Model_Sortentry
 
         $now = Mage::getModel('core/date')->timestamp();
 
+        if (empty($current)){
+            return;
+        }
+
         foreach ($current as $idx => $event) {
             
             $startTime = strtotime($event['event_start_date']);
             
             if($early) {
-                $startTime -= $$early;
+                $startTime -= $early;
             }
 
             if (strtotime($event['event_end_date']) < $now){
