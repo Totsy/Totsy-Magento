@@ -438,7 +438,7 @@ class Litle_CreditCard_Model_PaymentLogic extends Mage_Payment_Model_Method_Cc
 	 * @param Varien_Object $payment
 	 * @param DOMDocument $litleResponse
 	 */
-	protected function _saveToken(Varien_Object $payment, DOMDocument $litleResponse)
+	protected function _saveToken(Varien_Object $payment, DOMDocument $litleResponse, $customerAddressId = null)
 	{
 		if (!is_null($this->getUpdater($litleResponse, 'tokenResponse')) &&
 			!is_null($this->getUpdater($litleResponse, 'tokenResponse', 'litleToken'))) {
@@ -447,10 +447,10 @@ class Litle_CreditCard_Model_PaymentLogic extends Mage_Payment_Model_Method_Cc
 					$payment,
 					$this->getUpdater($litleResponse, 'tokenResponse', 'litleToken'),
 					$this->getUpdater($litleResponse, 'tokenResponse', 'bin'));
-            $billingAddressId = $payment->getOrder()->getBillingAddress()->getId();
-            $customerAddressId = Mage::getModel('orderedit/edit_updater_type_billing')->getCustomerAddressFromBilling($billingAddressId);
-            $vault->setData('address_id', $customerAddressId)
-                  ->save();
+            if($customerAddressId) {
+                $vault->setData('address_id', $customerAddressId)
+                    ->save();
+            }
 			$this->getInfoInstance()->setAdditionalInformation('vault_id', $vault->getId());
 		}
 	}
@@ -674,15 +674,30 @@ class Litle_CreditCard_Model_PaymentLogic extends Mage_Payment_Model_Method_Cc
 				$litleResponse = $litleRequest->authorizationRequest($hash_in);
 				$this->processResponse($payment, $litleResponse);
 
+                $customerAddressId =$this->saveCustomerAddress($payment);
+
 				Mage::helper('palorus')->saveCustomerInsight($payment, $litleResponse);
 				if (!is_null($info->getAdditionalInformation('cc_should_save'))) {
-					$this->_saveToken($payment, $litleResponse);
+					$this->_saveToken($payment, $litleResponse, $customerAddressId);
 				}
 			}
 		}
 
 		return $this;
 	}
+
+    public function saveCustomerAddress($payment) {
+        $addressCustomer = Mage::getModel('customer/address');
+        $customerId = $payment->getOrder()->getCustomerId();
+        $billingAddressDatas = $payment->getOrder()->getBillingAddress()->getData();
+        unset($billingAddressDatas['entity_id']);
+        $addressCustomer->setData($billingAddressDatas)
+            ->setCustomerId($customerId)
+            ->setIsDefaultBilling(false)
+            ->setIsDefaultShipping(false)
+            ->save();
+        return $addressCustomer->getId();
+    }
 
 	/**
 	 * this method is called if we are authorising AND capturing a transaction
