@@ -15,7 +15,7 @@ jQuery(document).ready(function() {
             isCollapsed: false,
             lastUsedAddressId: '',
             toggleViews: function() {
-                if (this.hasProfile!=="") { 
+                if (this.hasProfile=="") { 
                     jQuery(".add_payment_separator").hide();
                     jQuery(".checkout-reward").css("padding-top", "0px");
                     jQuery(".use-new-card-wrapper").show();
@@ -78,7 +78,9 @@ jQuery(document).ready(function() {
                     }
                 }
             },
-            useSavedCard: function() {
+            useSavedCard: function(elem) {
+                console.log(jQuery(elem).attr("data-billing-address-id"));
+                jQuery('#billing-address-select').val(jQuery(elem).attr("data-billing-address-id"));
                 jQuery('#billing-address-select').attr('disabled', true);
             },
             setPaymentType: function(elem) {
