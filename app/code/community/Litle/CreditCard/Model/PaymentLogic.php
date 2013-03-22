@@ -447,7 +447,9 @@ class Litle_CreditCard_Model_PaymentLogic extends Mage_Payment_Model_Method_Cc
 					$payment,
 					$this->getUpdater($litleResponse, 'tokenResponse', 'litleToken'),
 					$this->getUpdater($litleResponse, 'tokenResponse', 'bin'));
-            $vault->setData('address_id', $payment->getOrder()->getBillingAddress()->getId())
+            $billingAddressId = $payment->getOrder()->getBillingAddress()->getId();
+            $customerAddressId = Mage::getModel('orderedit/edit_updater_type_billing')->getCustomerAddressFromBilling($billingAddressId);
+            $vault->setData('address_id', $customerAddressId)
                   ->save();
 			$this->getInfoInstance()->setAdditionalInformation('vault_id', $vault->getId());
 		}
