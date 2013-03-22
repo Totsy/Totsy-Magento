@@ -34,13 +34,13 @@
 <head>
 <?php echo $this->getChildHtml('head') ?>
 </head>
-<body<?php echo $this->getBodyClass()?' class="customer-account-login '.$this->getBodyClass().'"':'' ?>>
+<body<?php echo $this->getBodyClass()?' class="customer-account-entry '.$this->getBodyClass().'"':'' ?>>
 <?php echo $this->getChildHtml('after_body_start') ?>
-    <div id="stickywrap">
+    <div id="stickywrap" class="boxit">
         <?php // echo $this->getChildHtml('header') ?>
-        <div id="mainContent_">
-	        <div class="container l-1col">
+
             <?php echo $this->getChildHtml('content') ?>
+            
             <?php $currentUrl = $this->helper('core/url')->getCurrentUrl();?>
             <?php $loginPattern = '/customer/account/create/';?>
 <!--
@@ -48,9 +48,6 @@
                         <img src="<?php echo $this->getSkinUrl()?>images/featured_on_long.png"  alt=""  />
                     </div>
 -->
-	        </div>
-        </div><!-- /#mainContent -->
-        <div id="footerpush"></div>
         
     </div><!-- /#stickywrap -->
     <?php echo $this->getChildHtml('footer') ?>

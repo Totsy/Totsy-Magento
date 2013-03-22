@@ -326,7 +326,7 @@ a.btn-primary /* req to @override '.dropdown a' ruleset */ {
     background-color:rgba(210,47,42,1);
     color:#fff;
 }
-body.customer-account-login .btn.btn-large {
+body.customer-account-entry .btn.btn-large {
     font-size: 15px;
     line-height: normal;
     padding: 9px 14px;
@@ -1594,15 +1594,93 @@ body > footer small .container {
     font-style: normal;
 }
 
-/* login/register pages footer */
-#footerpush { /* @KLUDGE: hackish fix for footer overlap on login/signup page */
-    height:680px; 
-    padding-bottom:98px;
+/* 
+ * Login/Register pages  
+ */
+#Signin.modal {width:340px!important; margin:-250px 0 0 -200px!important;}
+#Signup.modal {
+    max-height: 470px!important;
+    overflow-y: auto;
+    padding: 15px;
 }
-body.customer-account-login #footer ul {
+
+
+/* Center on page */
+/* container for element to be centered */
+.boxit {
+  text-align: center;
+  height: 100%;
+}
+/* The ghost, maintains centering */
+.boxit:before {
+  content: '';
+  display: inline-block;
+  height: 100%;
+  vertical-align: middle;
+  margin-right: -0.25em; /* Adjusts for spacing */
+}
+/* The element to be centered */ 
+.page_center {
+	position: relative;
+	display: inline-block;
+	margin-top:-210px;
+	vertical-align: middle;
+	width: 300px;
+}
+/* login smaller screen */
+@media screen and (max-height:749px) { 
+	.customer-account-login .boxit {
+		position: relative;
+		min-height: 0 !important;
+		margin:60px 0 250px;
+	}
+	.customer-account-login .boxit {
+		height: 500px; 
+	}
+	.customer-account-login .boxit:before {
+		display: none;
+	}
+    .customer-account-login .page_center {
+        display: block;
+		margin:0 auto 0;
+    }
+}
+/* register smaller screen */
+@media screen and (max-height:820px) { 
+	.customer-account-create .boxit {
+		position: relative;
+		min-height: 0 !important;
+		margin:60px 0 250px;
+	}
+	.customer-account-create .boxit {
+		height: 540px; 
+	}
+	.customer-account-create .boxit:before {
+		display: none;
+	}
+    .customer-account-create .page_center {
+        display: block;
+		margin:0 auto 0;
+    }
+}
+
+
+.well.page_center /* @TODO: temporary, pending MGN-1553 */
+{
+    background: none repeat scroll 0 0 #fff;
+    border: 1px solid #ddd;
+    -moz-border-radius: 5px; -webkit-border-radius: 5px; border-radius: 5px;
+    -moz-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075);
+    -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075);
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075);
+    padding: 10px;
+}
+
+
+body.customer-account-entry #footer ul {
     float: left;
 }
-body.customer-account-login #footer {
+body.customer-account-entry #footer {
     background: none repeat scroll 0 0 #FFFFFF;
     bottom: 0;
     left: 0;
@@ -1658,7 +1736,7 @@ body .footer ul {
     float: left;
     padding: 4px 5px 0 0;
 }
-body.customer-account-login #footer ul {
+body.customer-account-entry #footer ul {
     float: left;
     height: 27px;
     margin: 0;
@@ -1765,6 +1843,14 @@ select, textarea, input[type="text"], input[type="password"], input[type="dateti
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
     padding: 4px;
 }
+.big-input { /* @TODO: you're doing something wrong if all these !important declarations are needed */
+    font-size: 20px !important;
+    padding: 20px 4px 16px 10px !important;
+    height:25px!important;
+    width: 100%!important;
+    box-sizing: border-box;
+}
+
 
 /* prices */
 .price-box {
@@ -2006,41 +2092,6 @@ body.catalog-category-view .price-box .special-price {
     background:#fff;
 }
 .faq_answer > a {position: relative; z-index: 100;}
-
-
-.big-input { /* @TODO: you're doing something wrong if all these !important declarations are needed */
-    font-size: 20px !important;
-    padding: 20px 4px 16px 10px !important;
-    height:25px!important;
-    width: 100%!important;
-    box-sizing: border-box;
-}
-
-#Signin.modal {width:340px!important; margin:-250px 0 0 -200px!important;}
-#Signup.modal {
-    max-height: 470px!important;
-    overflow-y: auto;
-    padding: 15px;
-}
-.page_center{
-    max-width:310px;
-    height:auto;
-    position:absolute;
-    left:50%;
-    top:50%;
-    margin:-280px 0 0 -165px;
-}
-.well.page_center /* @TODO: temporary, pending MGN-1553 */
-{
-    background: none repeat scroll 0 0 #fff;
-    border: 1px solid #ddd;
-    -moz-border-radius: 5px; -webkit-border-radius: 5px; border-radius: 5px;
-    -moz-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075);
-    -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075);
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075);
-    display: block;
-    padding: 10px;
-}
 
 /* My Account / Public Pages side bar navigation links */
 .nav-list > li > a {
