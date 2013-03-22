@@ -883,7 +883,7 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
     height:100%;
 }
 .events-grid .thumbnail .more-content {
-    position: absolute; bottom: 120px; left: 0; z-index: 2;
+    position: absolute; bottom: 35%; left: 0; z-index: 2;
     padding:0 0 18px; width:100%;
     text-align: center;
     background:#333;
