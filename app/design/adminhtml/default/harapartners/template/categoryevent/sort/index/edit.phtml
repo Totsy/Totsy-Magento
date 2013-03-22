@@ -16,7 +16,9 @@
 $sortDate = $this->getRequest()->getPost('sort_date');
 $storeId = $this->getRequest()->getPost('sort_store');
 $sortentry = $this->getSortentry();
+$topArray = json_decode($sortentry->getTopLiveQueue(), true);
 $liveArray = json_decode($sortentry->getLiveQueue(), true);
+$liveArray = array_merge($topArray,$liveArray);
 $upcomingArray = json_decode($sortentry->getUpcomingQueue(), true);
 ?>
 <div class="catalog-events-container">

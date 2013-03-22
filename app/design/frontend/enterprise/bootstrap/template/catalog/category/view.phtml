@@ -127,7 +127,7 @@
         <?php endif; ?>
 
         <?php if($_description=$this->getCurrentCategory()->getDescription()): ?>
-            <div class="span6 intro-content">
+            <div class="span10 intro-content">
                 <h3><?php echo $_helper->categoryAttribute($_category, $_category->getName(), 'name') ?></h3>
                 <!--
                 <div class="social-links">
@@ -137,7 +137,9 @@
                 <span class='st_email_large pull-right' displayText='Email'></span>
                 </div>
                 -->
-                <p class="read-more"><?php echo $_helper->categoryAttribute($_category, $_description, 'description') ?></p>
+                <p><?php echo $_helper->categoryAttribute($_category, $_description, 'description') ?></p>
+                
+                <div class="clearfix"></div>
                 <p>
                     <?php if ($inEarly): ?>
                         <?php if ($upComingFlag): ?>
@@ -174,9 +176,10 @@
                     <?php endif; ?>
                 </p>
             </div>
-            <div class="span4 intro-secondary">
-               <!-- they don't know what to do with this space yet…. -->
+            <!--<div class="span4 intro-secondary">
+               they don't know what to do with this space yet…. 
             </div>
+            -->
         <?php endif; ?>
     </div><!-- /.intro .row -->
 
@@ -241,36 +244,4 @@
         date = new Date(time);
         return date;
     }
-</script>
-
-<script>
-jQuery(function(){ /* to make sure the script runs after page load */
- 
-	jQuery('.read-more').each(function(event){ /* select all divs with the item class */
- 
-		var max_length = 150; /* set the max content length before a read more link will be added */
- 
-		if(jQuery(this).html().length > max_length){ /* check for content length */
- 
-			var short_content 	= jQuery(this).html().substr(0,max_length); /* split the content in two parts */
-			var long_content	= jQuery(this).html().substr(max_length);
- 
-			jQuery(this).html(short_content+
-						 '<a href="#" class="read_more"><br/>Read More</a>'+
-						 '<span class="more_text" style="display:none;">'+long_content+'</span>'); /* Alter the html to allow the read more functionality */
- 
-			jQuery(this).find('a.read_more').click(function(event){ /* find the a.read_more element within the new html and bind the following code to it */
- 
-				event.preventDefault(); /* prevent the a from changing the url */
-				jQuery(this).hide(); /* hide the read more button */
-				jQuery(this).parents('.item').find('.more_text').show(); /* show the .more_text span */
- 
-			});
- 
-		}
- 
-	});
- 
- 
-});
 </script>

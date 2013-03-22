@@ -22,6 +22,7 @@ class Harapartners_Categoryevent_Model_Sortentry
     extends Mage_Core_Model_Abstract
 {
     protected $_cacheTag = 'categoryevent_sortentry';
+    protected $_daysForNew = 3;
 
     // Only this level is considered category event
     const CATEGORYEVENT_LEVEL = 3;
@@ -166,11 +167,10 @@ class Harapartners_Categoryevent_Model_Sortentry
         $new = array();
         $live = array();
         $orgDate = strtotime($date);
-        $newDate = strtotime('+3 day', $orgDate); 
+        $newDate = strtotime('+'.$this->_daysForNew.' day', $orgDate); 
         foreach ($ls as $l){
             $start = strtotime($l['event_start_date']);
             if ($orgDate <= $start && $start <= $newDate){
-                Mage::log($orgDate.' <= '.$start.' && '.$start.' <= '.$newDate);
                 $new[] = $l;
                 continue;
             }
@@ -366,6 +366,7 @@ class Harapartners_Categoryevent_Model_Sortentry
     {
         $now = Mage::getModel('core/date')->timestamp();
 
+        $top     = json_decode($this->getData('top_live_queue'), true);
         $live     = json_decode($this->getData('live_queue'), true);
         $upcoming = json_decode($this->getData('upcoming_queue'), true);
 
@@ -374,33 +375,93 @@ class Harapartners_Categoryevent_Model_Sortentry
             $earlyAccessTime = Mage::helper('crownclub/earlyaccess')->getEarlyAccessTime();
         }
 
+        foreach ($top as $idx => $event) {
+            $startTime = strtotime($event['event_start_date']);
+            if($earlyAccessTime) {
+                $startTime -= $earlyAccessTime;
+            }
+
+            $diff = ($now - $startTime)/24/60/60;
+            $diff = round(abs($diff),2);
+
+            if ($startTime > $now ) {
+                
+                // move this event to Upcoming
+                array_unshift($upcoming, $event);
+                unset($top[$idx]);
+                continue;
+
+            } else if ( ($startTime < $now) 
+                && $diff > $this->_daysForNew
+            ){
+
+                // move this event to Live
+                array_unshift($live, $event);
+                unset($top[$idx]);
+                continue;
+
+            } 
+        }
+
         foreach ($live as $idx => $event) {
             $startTime = strtotime($event['event_start_date']);
             if($earlyAccessTime) {
                 $startTime -= $earlyAccessTime;
             }
-            if ($startTime > $now) {
+
+            $diff = ($now - $startTime)/24/60/60;
+            $diff = round(abs($diff),2);
+
+            if ($startTime > $now ) {
+                
                 // move this event to Upcoming
                 array_unshift($upcoming, $event);
                 unset($live[$idx]);
-            }
+                continue;
+
+            } else if ( ($startTime < $now) 
+                && $diff > $this->_daysForNew
+            ){
+
+                // move this event to Top                
+                array_unshift($top, $event);
+                unset($live[$idx]);
+                continue;
+            }        
         }
 
         foreach ($upcoming as $idx => $event) {
+            
             $startTime = strtotime($event['event_start_date']);
             if($earlyAccessTime) {
                 $startTime -= $earlyAccessTime;
             }
-            if ($startTime < $now &&
-                strtotime($event['event_end_date']) > $now
-            ) {
+
+            $diff = ($now - $startTime)/24/60/60;
+            $diff = round(abs($diff),2);
+
+            if ( ($startTime < $now) 
+                && $diff > $this->_daysForNew
+            ){
+
                 // move this event to Live
                 array_unshift($live, $event);
                 unset($upcoming[$idx]);
+                continue;
+
+            } else if ( ($startTime < $now) 
+                && $diff > $this->_daysForNew
+            ){
+
+                // move this event to Top
+                array_unshift($top, $event);
+                unset($$upcoming[$idx]);
+                continue;
             }
         }
 
-        $this->setData('live_queue', json_encode($live))
+        $this->setData('top_live_queue', json_encode($top))
+            ->setData('live_queue', json_encode($live))
             ->setData('upcoming_queue', json_encode($upcoming));
 
         return $this;
