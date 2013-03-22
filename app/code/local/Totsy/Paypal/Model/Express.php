@@ -37,7 +37,8 @@ class Totsy_Paypal_Model_Express extends Mage_Paypal_Model_Express
      */
     public function isAvailable($quote = null)
     {
-        if ($quote && ($quote->hasVirtualItems() || $quote->getIsMultiShipping())) {
+
+        if ($quote && (($quote->hasVirtualItems() && !$quote->isNominal()) || $quote->getIsMultiShipping())) {
             return false;
         }
         if(parent::isAvailable($quote) && $this->_pro->getConfig()->isMethodAvailable()) {
