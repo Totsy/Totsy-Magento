@@ -87,9 +87,8 @@ class Litle_CreditCard_Model_PaymentLogic extends Mage_Payment_Model_Method_Cc
 		if (! ($data instanceof Varien_Object)) {
 			$data = new Varien_Object($data);
 		}
-
+        $info = $this->getInfoInstance();
 		if ($this->getConfigData('paypage_enabled')) {
-			$info = $this->getInfoInstance();
 			$info->setAdditionalInformation('paypage_enabled', $data->getPaypageEnabled());
 			$info->setAdditionalInformation('paypage_registration_id', $data->getPaypageRegistrationId());
 			$info->setAdditionalInformation('paypage_order_id', $data->getOrderId());
