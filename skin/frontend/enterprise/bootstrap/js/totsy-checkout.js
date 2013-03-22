@@ -15,15 +15,17 @@ jQuery(document).ready(function() {
             isCollapsed: false,
             lastUsedAddressId: '',
             toggleViews: function() {
-                if (!this.hasProfile) { 
+                if (this.hasProfile!=="") { 
+                    jQuery(".add_payment_separator").hide();
+                    jQuery(".checkout-reward").css("padding-top", "0px");
+                    jQuery(".use-new-card-wrapper").show();
+                    jQuery("#use-card-method").hide();
+                    jQuery("#cc_data").show();
+                    jQuery("#hpcheckout-payment-add-title").hide(); 
+                } else { 
                     jQuery(".cc_save_card").appendTo(jQuery("#add_payment_save_card"));
-                    var savedCardStyles = {
-                        'width': 'auto',
-                        'margin-left': '10px',
-                        'float': 'left'
-                    };
                     jQuery('#billing-address-select').attr('disabled', true);
-                    jQuery(".cc_save_card").css(savedCardStyles);
+                    jQuery(".cc_save_card").css({'width': 'auto','margin-left': '10px','float': 'left'});
                     jQuery("#hpcheckout-payment-add-title").show();
                     jQuery("#use-card-method").show();
                     jQuery("#creditcard_cc_type_should_save_div").contents("");
@@ -31,13 +33,6 @@ jQuery(document).ready(function() {
                     jQuery("#cc_save_text").html("Save");
                     jQuery(".use-new-card-wrapper").appendTo(jQuery("#add_cc_types"));
                     newCardWrap.hide();
-                } else {  
-                    jQuery(".add_payment_separator").hide();
-                    jQuery(".checkout-reward").css("padding-top", "0px");
-                    jQuery(".use-new-card-wrapper").show();
-                    jQuery("#use-card-method").hide();
-                    jQuery("#cc_data").show();                    
-                    jQuery("#hpcheckout-payment-add-title").hide();
                 }
             },
             disableAddress: function(stateFlag, formId) {
