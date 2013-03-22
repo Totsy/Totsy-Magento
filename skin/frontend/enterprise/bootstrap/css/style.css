@@ -72,6 +72,10 @@ body[class*="span"] { /* bootstrap override for edge case of *span* sale title i
 [class*='event'].tedhack .span4 {width:23.59em;}
 [class*='event'].tedhack .span3 {width:17.5em;}
 [class*='event'].tedhack .span2 {width:11.41em;}
+.thumbnail {
+    border-radius:0px;
+    box-shadow: none;
+}
 .thumbnail > img {
     border:1px solid #999;
     padding:10px;
@@ -820,7 +824,7 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
     border-radius: 0;
 }
 .events-grid .thumbnail:hover {
-    border-color:#000;
+    border-color:#ddd;
     text-decoration: none;
     -moz-box-shadow: 0 1px 4px rgba(0, 105, 214, 0.15);
     -webkit-box-shadow: 0 1px 4px rgba(0, 105, 214, 0.15);
@@ -876,6 +880,7 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
 .events-grid .catalog-event:hover .more {
     visibility: visible;
     opacity:1;
+    height:100%;
 }
 .events-grid .thumbnail .more-content {
     position: absolute; bottom: 120px; left: 0; z-index: 2;
@@ -1596,10 +1601,6 @@ body > footer small .container {
 }
 
 /* login/register pages footer */
-#footerpush { /* @KLUDGE: hackish fix for footer overlap on login/signup page */
-    height:680px; 
-    padding-bottom:98px;
-}
 body.customer-account-login #footer ul {
     float: left;
 }
