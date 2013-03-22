@@ -22,6 +22,7 @@ class Harapartners_Categoryevent_Model_Sortentry
     extends Mage_Core_Model_Abstract
 {
     protected $_cacheTag = 'categoryevent_sortentry';
+    protected $_daysForNew = 3;
 
     // Only this level is considered category event
     const CATEGORYEVENT_LEVEL = 3;
@@ -166,11 +167,10 @@ class Harapartners_Categoryevent_Model_Sortentry
         $new = array();
         $live = array();
         $orgDate = strtotime($date);
-        $newDate = strtotime('+3 day', $orgDate); 
+        $newDate = strtotime('+'.$this->_daysForNew.' day', $orgDate); 
         foreach ($ls as $l){
             $start = strtotime($l['event_start_date']);
             if ($orgDate <= $start && $start <= $newDate){
-                Mage::log($orgDate.' <= '.$start.' && '.$start.' <= '.$newDate);
                 $new[] = $l;
                 continue;
             }
@@ -364,8 +364,9 @@ class Harapartners_Categoryevent_Model_Sortentry
      */
     public function adjustQueuesForCurrentTime()
     {
-        $now = Mage::getModel('core/date')->timestamp();
+        //$now = Mage::getModel('core/date')->timestamp();
 
+        $top     = json_decode($this->getData('top_live_queue'), true);
         $live     = json_decode($this->getData('live_queue'), true);
         $upcoming = json_decode($this->getData('upcoming_queue'), true);
 
@@ -374,6 +375,11 @@ class Harapartners_Categoryevent_Model_Sortentry
             $earlyAccessTime = Mage::helper('crownclub/earlyaccess')->getEarlyAccessTime();
         }
 
+        $this->_moveEvents($top, $top, $live, $upcoming, $earlyAccessTime);
+        $this->_moveEvents($live, $top, $live, $upcoming, $earlyAccessTime);
+        $this->_moveEvents($upcoming, $top, $live, $upcoming, $earlyAccessTime);
+
+        /*
         foreach ($live as $idx => $event) {
             $startTime = strtotime($event['event_start_date']);
             if($earlyAccessTime) {
@@ -399,8 +405,9 @@ class Harapartners_Categoryevent_Model_Sortentry
                 unset($upcoming[$idx]);
             }
         }
-
-        $this->setData('live_queue', json_encode($live))
+        */
+        $this->setData('top_live_queue', json_encode($live))
+            ->setData('live_queue', json_encode($live))
             ->setData('upcoming_queue', json_encode($upcoming));
 
         return $this;
@@ -502,5 +509,50 @@ class Harapartners_Categoryevent_Model_Sortentry
         return $this->_cacheTag . '_' .
             $this->getStoreId() . '_' .
             date('Y-m-d', strtotime($this->getDate()));
+    }
+
+    protected function _moveEvents(&$current,&$top,&$live,&$up, $early){
+
+        $now = Mage::getModel('core/date')->timestamp();
+
+        foreach ($current as $idx => $event) {
+            
+            $startTime = strtotime($event['event_start_date']);
+            
+            if($early) {
+                $startTime -= $$early;
+            }
+
+            if (strtotime($event['event_end_date']) < $now){
+                return;
+            }
+
+            $diff = ($now - $startTime)/24/60/60;
+            $diff = round(abs($diff),2);
+
+            if ($startTime > $now ) {
+                
+                // move this event to Upcoming
+                unset($current[$idx]);
+                array_unshift($up, $event);
+
+            } else if ( ($startTime < $now) 
+                && $diff > $this->_daysForNew
+            ){
+
+                // move this event to Live
+                unset($current[$idx]);
+                array_unshift($live, $event);
+
+            } else if ( ($startTime < $now) 
+                && $diff > $this->_daysForNew
+            ){
+
+                // move this event to Top
+                unset($current[$idx]);
+                array_unshift($top, $event);
+
+            }
+        }
     }
 }
