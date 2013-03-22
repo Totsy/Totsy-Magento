@@ -3232,7 +3232,37 @@ background-position: 0 .5em;
 
 /* Totsy Plus */
 .rocking-text {color: #ADB92C; text-transform: uppercase; font-weight: bold}
-
+.billing-address-oro label{
+	display: none;
+}
+.left-well{
+	margin-right: 10px;
+}
+.billing-address-oro .streetaddress2,
+.billing-address-oro .streetaddress1{
+	width: 440px;
+}
+.billing-address-oro #billing-address-form{
+	width: 450px;
+}
+.billing-address-oro .oro-region{
+	width: 154px;
+}
+.billing-address-oro  .oro-city{
+	width: 180px;
+}
+.billing-address-oro  .oro-zip{
+	width: 75px;
+}
+.cc_cvn label{
+	display:none;
+}
+.oro-cc-info .cc_save_card {
+	width: 128px;
+}
+.cc_exp .lbl{
+	display:none;
+}
 
 /* 
  * @InSparq @overrides and extra styles
