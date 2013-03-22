@@ -141,7 +141,7 @@ class Crown_Club_Model_Club extends Mage_Core_Model_Abstract {
         // Set all required params and send emails
         $mailer->setSender('club');
         $mailer->setStoreId ( $storeId );
-        $mailer->setTemplateId ( 'TotsyPLUS_welcome' );
+        $mailer->setTemplateId ( '_trans_plus_join' );
         $mailer->setTemplateParams (
             array (
                 'customer' => $customer->getName(),
