@@ -81,11 +81,6 @@ class Harapartners_HpCheckout_CheckoutController extends Mage_Checkout_Controlle
                 $result[ 'status' ] = 2;
             } else {
                 if ($data = $this->getRequest()->getPost('payment', false)) {
-
-                    //$hash_in = Mage::helper('hpcheckout')->convertArrayToLittleHash($data);
-                    //$initialize = new LitleOnlineRequest();
-                    //$registerResponse = $initialize->registerTokenRequest($hash_in);
-
                     $this->_getHpCheckout()->getCheckout()->setData('payment_data',$data);
                     $this->_getHpCheckout()->getQuote()->getPayment()->importData($data);
                 }

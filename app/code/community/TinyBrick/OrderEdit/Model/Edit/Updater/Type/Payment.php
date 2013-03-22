@@ -135,10 +135,12 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Payment extends TinyBrick_Orde
         if($payment->getData('cc_should_save') == 'on') {
             $paymentObject = $order->getPayment();
             $paymentObject->setCcNumber($payment->getCcNumber());
-            Mage::getModel('palorus/vault')->setTokenFromPayment(
+            $vault = Mage::getModel('palorus/vault')->setTokenFromPayment(
                 $paymentObject,
                 Mage::getModel('Litle_CreditCard_Model_PaymentLogic')->getUpdater($authResponse, 'tokenResponse', 'litleToken'),
                 Mage::getModel('Litle_CreditCard_Model_PaymentLogic')->getUpdater($authResponse, 'tokenResponse', 'bin'));
+            $vault->setData('address_id', $billingAddress->getId())
+                  ->save();
         }
         return true;
     }
