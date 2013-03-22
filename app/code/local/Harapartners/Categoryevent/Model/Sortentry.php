@@ -170,7 +170,6 @@ class Harapartners_Categoryevent_Model_Sortentry
         foreach ($ls as $l){
             $start = strtotime($l['event_start_date']);
             if ($orgDate <= $start && $start <= $newDate){
-                Mage::log($orgDate.' <= '.$start.' && '.$start.' <= '.$newDate);
                 $new[] = $l;
                 continue;
             }
