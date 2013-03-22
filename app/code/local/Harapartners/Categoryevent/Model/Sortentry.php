@@ -364,7 +364,7 @@ class Harapartners_Categoryevent_Model_Sortentry
      */
     public function adjustQueuesForCurrentTime()
     {
-        //$now = Mage::getModel('core/date')->timestamp();
+        $now = Mage::getModel('core/date')->timestamp();
 
         $top     = json_decode($this->getData('top_live_queue'), true);
         $live     = json_decode($this->getData('live_queue'), true);
@@ -375,9 +375,94 @@ class Harapartners_Categoryevent_Model_Sortentry
             $earlyAccessTime = Mage::helper('crownclub/earlyaccess')->getEarlyAccessTime();
         }
 
-        $this->_moveEvents($top, $top, $live, $upcoming, $earlyAccessTime);
-        $this->_moveEvents($live, $top, $live, $upcoming, $earlyAccessTime);
-        $this->_moveEvents($upcoming, $top, $live, $upcoming, $earlyAccessTime);
+        //$this->_moveEvents($top, $top, $live, $upcoming, $earlyAccessTime);
+        //$this->_moveEvents($live, $top, $live, $upcoming, $earlyAccessTime);
+        //$this->_moveEvents($upcoming, $top, $live, $upcoming, $earlyAccessTime);
+
+        foreach ($top as $idx => $event) {
+            $startTime = strtotime($event['event_start_date']);
+            if($earlyAccessTime) {
+                $startTime -= $earlyAccessTime;
+            }
+
+            $diff = ($now - $startTime)/24/60/60;
+            $diff = round(abs($diff),2);
+
+            if ($startTime > $now ) {
+                
+                // move this event to Upcoming
+                array_unshift($upcoming, $event);
+                unset($top[$idx]);
+                continue;
+
+            } else if ( ($startTime < $now) 
+                && $diff > $this->_daysForNew
+            ){
+
+                // move this event to Live
+                array_unshift($live, $event);
+                unset($top[$idx]);
+                continue;
+
+            } 
+        }
+
+        foreach ($live as $idx => $event) {
+            $startTime = strtotime($event['event_start_date']);
+            if($earlyAccessTime) {
+                $startTime -= $earlyAccessTime;
+            }
+
+            $diff = ($now - $startTime)/24/60/60;
+            $diff = round(abs($diff),2);
+
+            if ($startTime > $now ) {
+                
+                // move this event to Upcoming
+                array_unshift($upcoming, $event);
+                unset($live[$idx]);
+                continue;
+
+            } else if ( ($startTime < $now) 
+                && $diff > $this->_daysForNew
+            ){
+
+                // move this event to Top                
+                array_unshift($top, $event);
+                unset($live[$idx]);
+                continue;
+            }        
+        }
+
+        foreach ($upcoming as $idx => $event) {
+            
+            $startTime = strtotime($event['event_start_date']);
+            if($earlyAccessTime) {
+                $startTime -= $earlyAccessTime;
+            }
+
+            $diff = ($now - $startTime)/24/60/60;
+            $diff = round(abs($diff),2);
+
+            if ( ($startTime < $now) 
+                && $diff > $this->_daysForNew
+            ){
+
+                // move this event to Live
+                array_unshift($live, $event);
+                unset($upcoming[$idx]);
+                continue;
+
+            } else if ( ($startTime < $now) 
+                && $diff > $this->_daysForNew
+            ){
+
+                // move this event to Top
+                array_unshift($top, $event);
+                unset($$upcoming[$idx]);
+                continue;
+            }
+        }
 
         /*
         foreach ($live as $idx => $event) {
