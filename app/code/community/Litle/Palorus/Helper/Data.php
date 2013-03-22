@@ -199,6 +199,14 @@ class Litle_Palorus_Helper_Data extends Mage_Core_Helper_Abstract
 	 */
 	public function getCustomer()
 	{
-		return $this->getQuote()->getCustomer();
+        $customer = null;
+        if($this->getQuote()->getId()) {
+            $customer = $this->getQuote()->getCustomer();
+        } else {
+            $orderId = Mage::app()->getRequest()->getParam('order_id');
+            $order = Mage::getModel('sales/order')->load($orderId);
+            $customer = Mage::getModel('customer/customer')->load($order->getCustomerId());
+        }
+		return $customer;
 	}
 }

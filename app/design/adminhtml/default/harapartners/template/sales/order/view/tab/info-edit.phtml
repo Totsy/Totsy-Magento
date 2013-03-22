@@ -122,11 +122,11 @@
     	} else {
             $('required-cc').hide();
             $('required-comment').hide();
-            if(($('cybersource-use-card-method') && $('cybersource-use-card-method').value == "") || !$('cybersource-use-card-method')) {
+            if(($('creditcard_cc_vaulted') && $('creditcard_cc_vaulted').value == "") || !$('creditcard_cc_vaulted')) {
                 var paymentForm = $('payment-fields').getElements();
                 var emptyCC = false;
                 paymentForm.each(function(i) {
-                    if(i.value == "" && (i.type == 'text' || i.type == 'select-one') && (i.id != 'cybersource-use-card-method')) {
+                    if(i.value == "" && (i.type == 'text' || i.type == 'select-one') && (i.id != 'creditcard_cc_vaulted')) {
                         emptyCC = true;
                     }
                 });
@@ -325,7 +325,6 @@
 	.admin-widget-edit-fields label	{float: left; width: 160px;}
 	.admin-widget-edit-fields input	{width: 200px;}
 	.admin-widget-edit-req-field	{color: red; font-size: 12px;}
-	sdfvdf {text-decoration: line-through}
 	</style>
 
 
@@ -463,7 +462,7 @@
             var billAddySelect = jQuery("#billing-address-select");
             var newCardWrap = jQuery('.use-new-card-wrapper');
             var billFormInputs = jQuery('#billing-fields :input');
-            jQuery('#cybersource-use-card-method').change( function() {
+            jQuery('#creditcard_cc_vaulted').change( function() {
                 if( jQuery(this).val() == '' ) {
                     jQuery("#cc_data").show();
                     newCardWrap.show();

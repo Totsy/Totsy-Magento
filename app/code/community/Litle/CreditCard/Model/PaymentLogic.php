@@ -87,9 +87,8 @@ class Litle_CreditCard_Model_PaymentLogic extends Mage_Payment_Model_Method_Cc
 		if (! ($data instanceof Varien_Object)) {
 			$data = new Varien_Object($data);
 		}
-
+        $info = $this->getInfoInstance();
 		if ($this->getConfigData('paypage_enabled')) {
-			$info = $this->getInfoInstance();
 			$info->setAdditionalInformation('paypage_enabled', $data->getPaypageEnabled());
 			$info->setAdditionalInformation('paypage_registration_id', $data->getPaypageRegistrationId());
 			$info->setAdditionalInformation('paypage_order_id', $data->getOrderId());
@@ -448,7 +447,8 @@ class Litle_CreditCard_Model_PaymentLogic extends Mage_Payment_Model_Method_Cc
 					$payment,
 					$this->getUpdater($litleResponse, 'tokenResponse', 'litleToken'),
 					$this->getUpdater($litleResponse, 'tokenResponse', 'bin'));
-
+            $vault->setData('address_id', $payment->getOrder()->getBillingAddress()->getId())
+                  ->save();
 			$this->getInfoInstance()->setAdditionalInformation('vault_id', $vault->getId());
 		}
 	}
