@@ -406,7 +406,7 @@ class Harapartners_Categoryevent_Model_Sortentry
             }
         }
         */
-        $this->setData('top_live_queue', json_encode($live))
+        $this->setData('top_live_queue', json_encode($top))
             ->setData('live_queue', json_encode($live))
             ->setData('upcoming_queue', json_encode($upcoming));
 
@@ -539,6 +539,7 @@ class Harapartners_Categoryevent_Model_Sortentry
                 // move this event to Upcoming
                 unset($current[$idx]);
                 array_unshift($up, $event);
+                continue;
 
             } else if ( ($startTime < $now) 
                 && $diff > $this->_daysForNew
@@ -547,6 +548,7 @@ class Harapartners_Categoryevent_Model_Sortentry
                 // move this event to Live
                 unset($current[$idx]);
                 array_unshift($live, $event);
+                continue;
 
             } else if ( ($startTime < $now) 
                 && $diff > $this->_daysForNew
@@ -555,7 +557,7 @@ class Harapartners_Categoryevent_Model_Sortentry
                 // move this event to Top
                 unset($current[$idx]);
                 array_unshift($top, $event);
-
+                continue;
             }
         }
     }
