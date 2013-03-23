@@ -388,7 +388,7 @@ body.customer-account-entry .btn.btn-large {
 }
 
 .logged-out ~ #mainContent {
-    /* padding-top:115px; */
+    padding-top:150px;
 }
 
 
