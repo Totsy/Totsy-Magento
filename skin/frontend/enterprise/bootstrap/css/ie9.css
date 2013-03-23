@@ -13,3 +13,11 @@ html {
     content:"\A";
     white-space: pre;
 }
+
+/* login / register form input fixes */
+.customer-account-entry .page_center .big-input {
+	line-height: normal;
+	padding-top: 5px;
+	padding-bottom: 8px;
+	min-height: 40px;
+}

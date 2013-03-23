@@ -1849,11 +1849,12 @@ select, textarea, input[type="text"], input[type="password"], input[type="dateti
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
     padding: 4px;
 }
-.big-input { /* @TODO: you're doing something wrong if all these !important declarations are needed */
-    font-size: 20px !important;
-    padding: 20px 4px 16px 10px !important;
-    height:25px!important;
-    width: 100%!important;
+input.big-input {
+    font-size: 20px;
+    padding: 20px 4px 16px 10px;
+    height:25px;
+    width: 100%;
+    -moz-box-sizing: border-box;
     box-sizing: border-box;
 }
 
