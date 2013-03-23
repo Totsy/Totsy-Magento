@@ -37,8 +37,17 @@ body {
     font-family: "Arial Rounded MT Bold", "Helvetica Rounded", Arial, "Helvetica Neue", Helvetica, sans-serif;
 }
 */
-a {color:#d22f2a;text-decoration:none; outline: none;}
-a:hover{color:#d22f2a;text-decoration:underline;}
+a {
+	color:#d22f2a; 
+	color: rgba(210,47,42,0.8);
+	text-decoration:underline;
+	outline: none;
+}
+a:hover{
+	color:#d22f2a;
+	color: rgba(210,47,42,1);
+	text-decoration:underline;
+}
 a:focus{outline: none;}
 .content_push { margin-top:115px; } /* not in use, was for 1col */
 .content_push_2col { margin-top:115px; }
@@ -304,7 +313,7 @@ body.categoryevent-index-topnav .page-header {
 #cartHeader {
     color:#636466;
     font-size: 12px; font-weight: bold;
-    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.85);
+    text-decoration: none; text-shadow: 0 1px 0 rgba(255, 255, 255, 0.85);
 }
 .navbar .nav > .nav-item > a,
 #cartHeader {
@@ -535,6 +544,9 @@ body.customer-account-entry .btn.btn-large {
 .navShop .dropdown-menu li:first-child {display: none;}
 .navbar .dropdown-menu:after,
 .navbar .dropdown-menu:before {display: none;} /* not using these cool dropdown tooltip bootstrap things… boo */
+.dropdown-menu a {
+	text-decoration: none;
+}
 
 /* CTA area in header */
 header nav .cta {padding: 7px 0 0;}
@@ -1587,7 +1599,7 @@ footer strong {
 }
 body > footer ul {margin:0;}
 body > footer ul li a,
-body > footer ul li a:hover {color:#666; font-size: 12px;}
+body > footer ul li a:hover {color:#666; font-size: 12px; text-decoration: none;}
 body > footer small {
     display: block;
     margin-top:18px; padding: 16px 16px 18px;
