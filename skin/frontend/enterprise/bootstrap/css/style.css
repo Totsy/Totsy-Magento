@@ -1863,8 +1863,8 @@ select, textarea, input[type="text"], input[type="password"], input[type="dateti
 }
 input.big-input {
     font-size: 20px;
-    padding: 20px 4px 16px 10px;
-    height:25px;
+    padding: 8px 4px 6px 10px;
+    min-height:40px;
     width: 100%;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
