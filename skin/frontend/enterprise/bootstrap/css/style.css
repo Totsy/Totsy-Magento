@@ -332,7 +332,7 @@ body.categoryevent-index-topnav .page-header {
     background-position:0 50.5%;
     font-size: 12px; font-weight: bold;
     line-height: 17px;
-    text-transform: uppercase;
+    text-decoration: none; text-transform: uppercase;
 }
 .btn-primary,
 a.btn-primary /* req to @override '.dropdown a' ruleset */ {
