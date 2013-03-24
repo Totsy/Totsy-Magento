@@ -1920,7 +1920,9 @@ body.catalog-category-view .price-box .special-price {
 .input-box {padding:0px 0px 5px;}
 .pdp_tabs {width:105%; margin-top:-45px; margin-left:-11px;}
 
-/* @PDP page specific styles */
+/* 
+ * @PDP page specific styles 
+ */
 .catalog-product-view .product-main {
     position: relative;
     min-height: 310px; /* hackish fix for footer overlap of abs pos'ed price module */
@@ -2061,7 +2063,14 @@ body.catalog-category-view .price-box .special-price {
     position: relative; top:26px;
     margin-bottom: 0;
 }
-/* FAQ */
+.alert-product-result {
+	display: block;
+	padding: 8px 8px 4px;
+}
+
+/* 
+ * FAQ 
+ */
 .faq_links {
     margin-bottom:1.75em;
 }

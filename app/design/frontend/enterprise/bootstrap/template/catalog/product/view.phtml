@@ -63,7 +63,6 @@ $savings = money_format('%n', $originalPrice) - money_format('%n', $discountPric
     
 </script>
 
-<div id="messages_product_view"><?php echo $this->getMessagesBlock()->toHtml() ?></div>
 <section>
     <header class="page-header has-timer clearfix">
         <ol class="breadcrumb">
@@ -155,6 +154,7 @@ $savings = money_format('%n', $originalPrice) - money_format('%n', $discountPric
                     
                     </div><!-- /#product-main-info -->
                 </form>
+				<div id="messages_product_view"><?php echo $this->getMessagesBlock()->toHtml(); ?></div>
             </div> <!-- /.product-addtocart -->
             
             <?php echo $this->getChildHtml('relatedProducts') ?>
@@ -212,11 +212,11 @@ productAddToCartForm.submit = function(a, b) {
                         $("header-user-info").update(b.headercart)
                     }
                     if (b.status && b.message) {
-                        var c = '<ul class="alert alert-success"><li class="' + b.status.toLowerCase() + '-msg"><ul><li>' + b.message + "</li></ul></li></ul>";
+                        var c = '<span class="alert alert-product-result alert-' + b.status.toLowerCase() + '">' + b.message + "</span>";
                         $("messages_product_view").update(c);
                         (function() {
                             $("messages_product_view").update(null)
-                        }).delay(2)
+                        }).delay(5)
                     }
                     if (a && a != "undefined") {
                         a.disabled = false
