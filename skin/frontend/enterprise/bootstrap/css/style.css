@@ -2057,6 +2057,9 @@ body.catalog-category-view .price-box .special-price {
 .add-to-cart-qty {
     float: left;
 }
+.add-to-cart-qty .qty {
+	max-width: 60px;
+}
 .add-to-cart button {
     float: right;
 }

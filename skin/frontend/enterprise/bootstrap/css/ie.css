@@ -50,6 +50,11 @@ html {
 	min-height: 30px;
 }
 
+/* PDP fixes */
+.product-options select {
+	width:204px !important;
+}
+
 /* IE6 FancyBOX */
 
 .fancybox-ie6 #fancybox-close { background: transparent; filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../images/fancybox/fancy_close.png', sizingMethod='scale'); }
