@@ -1945,6 +1945,13 @@ body.catalog-category-view .price-box .special-price {
 .product-content > .content-block:first-child {
     margin-top:0;
 }
+#shipping-returns p,
+#shipping-returns h4 {
+	font-size:12px;
+}
+#shipping-returns h4 {
+	text-transform: uppercase;
+}
 
 /* @PDP pricing + options + addtocart module */
 .product-main .product-addtocart {
