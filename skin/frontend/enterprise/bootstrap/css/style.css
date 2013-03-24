@@ -287,9 +287,9 @@ body.categoryevent-index-topnav .page-header {
     text-overflow: ellipsis;
 }
 
-/* Got something important to say? Say it with Ted's Red… -- edit, not red (that's for links). Black is the new red, Ted! */
+/* Got something important to say? Say it with Ted's Red… even though red *should* just be for links, Ted! */
 .shoutit {
-    color:#333;
+    color:#d22f2a;
     font-weight: bold;
 }
 .shoutit em,
