@@ -488,6 +488,7 @@ body.customer-account-entry .btn.btn-large {
 }
 .navbar .nav > .nav-item {
     padding: 8px 9px 9px 10px;
+    min-height: 26px;
     background: url('../images/div-nav.png') 0 50% no-repeat;
 }
 .navbar .nav > .nav-item:first-child {

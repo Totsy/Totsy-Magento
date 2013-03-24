@@ -6,7 +6,7 @@
 #insfeedflicker #inspbfeeda {
     position: relative;
     display: inline-block;
-    padding-right: 30px;
+    padding-right: 35px;
     color: #636466;
     font-size: 12px;
     font-weight: bold;
@@ -26,7 +26,8 @@
     display:inline-block;
     width:25px;
     height:26px;
-    border-radius: 4px;
+	padding:0 3px;
+	border-radius: 4px;
 }
 #insfeedflicker .nonewfeeditem {
     background: #c1cc00;
@@ -54,3 +55,16 @@
 #insfeedflicker .newfeeditem:before {
 	border-right-color: rgba(210,47,42,1);
 }
+#insfeedflicker .newfeeditem:after {
+	content: 'New';
+	display: block;
+	position: absolute;
+	top: 25%;
+	left: 3px;
+	font-size: 100%;
+	font-weight: normal;
+	color: #fff;
+	text-transform: capitalize;
+	text-shadow: 0 1px 0 rgba(0,0,0,0.5);
+}
+
