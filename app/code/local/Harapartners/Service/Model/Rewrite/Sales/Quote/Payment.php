@@ -36,10 +36,8 @@ class Harapartners_Service_Model_Rewrite_Sales_Quote_Payment extends Mage_Sales_
         if (!$method->isAvailable($this->getQuote())) {
             Mage::throwException(Mage::helper('sales')->__('The requested Payment Method is not available.'));
         }
-        if($data->getData('cybersource_subid')) {
-            $data->setData('cybersource_subid', $this->_decryptSubscriptionId($data->getData('cybersource_subid')));
-            $this->setData('cybersource_subid', $data->getData('cybersource_subid'));
-            $method->setData('cybersource_subid', $data->getData('cybersource_subid'));
+        if($data->getData('cc_vaulted')) {
+            $this->setData('litle_vault_id', $data->getData('cc_vaulted'));
         }
 
         $method->assignData($data);

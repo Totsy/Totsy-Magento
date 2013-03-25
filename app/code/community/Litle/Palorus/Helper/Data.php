@@ -209,4 +209,27 @@ class Litle_Palorus_Helper_Data extends Mage_Core_Helper_Abstract
         }
 		return $customer;
 	}
+
+    /**
+     * Get the card from vault that has been used the last
+     *
+     * @return vault_id
+     */
+    public function getLastCardUsed() {
+        $customer = Mage::helper('palorus')->getCustomer();
+        $orders = Mage::getResourceModel('sales/order_collection')
+            ->addFieldToSelect('*')
+            ->addFieldToFilter('customer_id', $customer->getId())
+            ->addAttributeToSort('created_at', 'DSC');
+        foreach($orders as $_order){
+            if($_order->getPayment()->getData('litle_vault_id')) {
+                $card = Mage::getModel('palorus/vault')->load($_order->getPayment()->getData('litle_vault_id'));
+                if($card->getId()) {
+                    return $card->getId();
+                }
+
+            }
+        }
+        return null;
+    }
 }

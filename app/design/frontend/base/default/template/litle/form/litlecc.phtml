@@ -124,6 +124,7 @@ jQuery(document).ready( function() {
                             <?php foreach ($this->getStoredCards() as $card): ?>
                                 <?php
                                     $customerId = $card->getData('customer_id');
+                                    $lastCardUsedId = Mage::helper('palorus')->getLastCardUsed();
                                     $customerObj = Mage::getSingleton('customer/customer')->load($customerId);
                                     $customerAddress = Mage::getModel('sales/order')->load($card->order_id)->getBillingAddress();
                                     $customerName = $customerAddress->getFirstname() ." ". $customerAddress->getLastname();
@@ -132,7 +133,8 @@ jQuery(document).ready( function() {
                                 <tr>
 	                                <td>
 	                                    <div>
-	                       		            <input type="radio" data-billing-address-id="<?php echo $card->address_id; ?>" id="payment[cc_vaulted]" name="payment[cc_vaulted]" value="<?php echo $card->getVaultId() ?>" class="use-saved-card-control pull-left" id="payment">
+	                       		            <input type="radio" data-billing-address-id="<?php echo $card->address_id; ?>" id="payment[cc_vaulted]" name="payment[cc_vaulted]" value="<?php echo $card->getVaultId() ?>"
+                                            <?php if($lastCardUsedId == $card->getVaultId()) echo 'checked="yes"'; ?> class="use-saved-card-control pull-left" id="payment">
                                             <span class="cc">
         		 	                            <span title="<?php echo strtolower($card->type); ?>" class="<?php echo strtolower($card->type); ?>" >
         		 	                            </span>
