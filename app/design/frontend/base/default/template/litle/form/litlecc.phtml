@@ -124,6 +124,14 @@ jQuery(document).ready( function() {
                             <?php foreach ($this->getStoredCards() as $card): ?>
                                 <?php
                                     $customerId = $card->getData('customer_id');
+
+                                    $orders = Mage::getResourceModel('sales/order_collection')->addFieldToSelect('*')
+    ->addFieldToFilter('customer_id', $customerId);
+    
+                                    echo "<pre>";
+                                    print_r($orders->getFirstItem()->getPayment()->getData());
+                                    echo "</pre>";
+                                    
                                     $customerObj = Mage::getSingleton('customer/customer')->load($customerId);
                                     $customerAddress = Mage::getModel('sales/order')->load($card->order_id)->getBillingAddress();
                                     $customerName = $customerAddress->getFirstname() ." ". $customerAddress->getLastname();
