@@ -382,7 +382,7 @@ class Harapartners_Categoryevent_Model_Sortentry
             }
 
             $diff = ($now - $startTime)/24/60/60;
-            $diff = round(abs($diff),2);
+            $diff = round($diff,2);
 
             if ($startTime > $now ) {
                 
@@ -392,7 +392,7 @@ class Harapartners_Categoryevent_Model_Sortentry
                 continue;
 
             } else if ( ($startTime < $now) 
-                && $diff > $this->_daysForNew
+                && $diff <= $this->_daysForNew
             ){
 
                 // move this event to Live
@@ -410,7 +410,7 @@ class Harapartners_Categoryevent_Model_Sortentry
             }
 
             $diff = ($now - $startTime)/24/60/60;
-            $diff = round(abs($diff),2);
+            $diff = round($diff,2);
 
             if ($startTime > $now ) {
                 
@@ -420,7 +420,7 @@ class Harapartners_Categoryevent_Model_Sortentry
                 continue;
 
             } else if ( ($startTime < $now) 
-                && $diff > $this->_daysForNew
+                && $diff <= $this->_daysForNew
             ){
 
                 // move this event to Top                
@@ -441,7 +441,7 @@ class Harapartners_Categoryevent_Model_Sortentry
             $diff = round($diff,2);
 
             if ( ($startTime < $now) 
-                && $diff > $this->_daysForNew
+                && $diff <= $this->_daysForNew
             ){
 
                 // move this event to Live
