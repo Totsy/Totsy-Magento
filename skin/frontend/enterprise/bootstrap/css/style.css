@@ -831,6 +831,8 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
 .catalog-events-container {margin-top:8px;}
 .banner + .catalog-events-container {margin-top:18px;}
 .page-header img {margin-right: 5px;}
+.catalog-event img {border:1px solid #ddd;}
+.caption {background:#f5f5f5; padding:4px 8px; border:1px solid #eee;}
 
 /* event tiles */
 .events-grid .thumbnail {
@@ -866,7 +868,7 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
 }
 /* Grid Hacks :( */
 .events-grid .span4 h3 {
-    font-size: 14px;
+    font-size: 16px;
 }
 .events-grid .span3 h3 {
     font-size: 14px;
@@ -1896,7 +1898,7 @@ input.big-input {
 .zoomImage {
     padding:0px;
     background: none;
-    border:1px solid #ddd;
+    border:1px solid #eee;
     overflow: hidden;
     z-index:500!important;
 }
