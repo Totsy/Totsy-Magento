@@ -79,7 +79,7 @@ jQuery(document).ready(function() {
                 }
             },
             useSavedCard: function(elem) {
-                console.log(jQuery(elem).attr("data-billing-address-id"));
+                jQuery('#billing-address-select').attr('disabled', false);
                 jQuery('#billing-address-select').val(jQuery(elem).attr("data-billing-address-id"));
                 jQuery('#billing-address-select').attr('disabled', true);
             },
