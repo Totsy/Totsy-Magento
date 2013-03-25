@@ -121,13 +121,13 @@
 
     <div class="intro row">
         <?php if($_imgUrl): ?>
-            <div class="span2">
+            <div class="span3">
                 <?php echo $_imgHtml ?>
             </div>
         <?php endif; ?>
 
         <?php if($_description=$this->getCurrentCategory()->getDescription()): ?>
-            <div class="span10 intro-content">
+            <div class="span9 intro-content">
                 <h3><?php echo $_helper->categoryAttribute($_category, $_category->getName(), 'name') ?></h3>
                 <!--
                 <div class="social-links">
