@@ -15,7 +15,7 @@ jQuery(document).ready(function() {
             isCollapsed: false,
             lastUsedAddressId: '',
             toggleViews: function() {
-                if (this.hasProfile=="") { 
+                if (this.hasProfile!=="1") { 
                     jQuery(".add_payment_separator").hide();
                     jQuery(".checkout-reward").css("padding-top", "0px");
                     jQuery(".use-new-card-wrapper").show();
