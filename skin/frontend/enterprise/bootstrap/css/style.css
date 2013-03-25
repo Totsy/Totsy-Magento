@@ -150,7 +150,10 @@ hr {
     color:#fff;
     margin:7px 0px 10px; 
 }
-
+/* Global Table Border (not best practice, but its a hack until RWD - Eric*/
+table{
+    border:1px solid #eee;
+}
 /**
  * @One-off Modules & 3rd Party
  */
@@ -219,7 +222,7 @@ hr {
 }
 .table-bordered,
 .fast-ship-table-bordered {
-    border:1px solid #fff;
+    border:1px solid #eee;
 }
 
 /* data A-V pairs */
@@ -234,7 +237,7 @@ hr {
 */
 .page-header {
     margin:20px 0 10px; padding-bottom:5px;
-    border-bottom:1px solid #e5e5e5;
+    border-bottom:1px dashed #64a5fe;
 }
 body[class*="catalog-"] .page-header,
 body.categoryevent-index-topnav .page-header { 
