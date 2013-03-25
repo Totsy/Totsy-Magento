@@ -40,13 +40,12 @@ class Litle_Palorus_Block_Vault_List extends Mage_Core_Block_Template
 
 /**
  *
- * @todo New card url
  * @return string
  */
-	// public function getAddUrl()
-	// {
-	// return $this->getUrl('*/*/new');
-	// }
+	public function getAddUrl()
+	{
+	    return $this->getUrl('*/*/new');
+	}
 
 /**
  *
