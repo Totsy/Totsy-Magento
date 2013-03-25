@@ -832,7 +832,7 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
 .banner + .catalog-events-container {margin-top:18px;}
 .page-header img {margin-right: 5px;}
 .catalog-event img {border:1px solid #ddd;}
-.caption {background:#f5f5f5; padding:4px 8px; border:1px solid #eee; min-height: 38px;}
+.caption {background:#f5f5f5; padding:4px 8px; border:1px solid #eee; min-height: 56px;}
 
 /* event tiles */
 .events-grid .thumbnail {
@@ -1073,7 +1073,7 @@ body.catalog-category-view .thumbnails > li {position: relative;}
 }
 .event_prod_grid .thumbnail {
     padding:0px;
-    min-height:368px;
+    min-height:386px;
     margin-top:10px;    
 }
 .event_prod_grid .thumbnail .product-image{
@@ -1649,7 +1649,6 @@ body > footer small .container {
 	margin-top:-210px;
 	vertical-align: middle;
 	width: 300px;
-	text-align: left;
 }
 /* login smaller screen */
 @media screen and (max-height:749px) { 
