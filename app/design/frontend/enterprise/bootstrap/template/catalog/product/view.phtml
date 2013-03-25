@@ -172,7 +172,7 @@ productAddToCartForm.submit = function(a, b) {
         var lineTotal = 0;
                 
         if(jQuery("#qty").length < 1) {
-        	lineTotal = jQuery(".special-price").html().replace("$","");
+        	lineTotal = jQuery(".special-price").html().replace("$","") + '';
         } else {
         	lineTotal = jQuery("#qty").val() * jQuery(".special-price").html().replace("$","");
         }
@@ -194,7 +194,9 @@ productAddToCartForm.submit = function(a, b) {
                 data: f,
                 success: function(b) {
                     //tracking ADDs to cart
-                    _gaq.push(['_trackEvent', 'Add to Cart', '<?php echo $this->htmlEscape($_product->getSku()); ?>', lineTotal]);
+                    lineTotal = String(lineTotal);
+                    
+                    _gaq.push(['_trackEvent', 'Add to Cart', '<?php echo $this->htmlEscape($_product->getSku()); ?>', lineTotal ]);
                     
                     if (b.redirect) {
                         window.location.href = b.redirect
