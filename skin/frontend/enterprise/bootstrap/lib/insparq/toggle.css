@@ -6,7 +6,7 @@
 #insfeedflicker #inspbfeeda {
     position: relative;
     display: inline-block;
-    padding-right: 35px;
+    padding-right: 37px;
     color: #636466;
     font-size: 12px;
     font-weight: bold;
@@ -26,14 +26,15 @@
     display:inline-block;
     width:25px;
     height:26px;
-	padding:0 3px;
+	padding:0 5px 0 4px;
 	border-radius: 4px;
 }
 #insfeedflicker .nonewfeeditem {
-    background: #c1cc00;
+	display: none; /* hiding it - why show if there's nothing? */
+    background: rgba(210,47,42,1);
 }
 #insfeedflicker .newfeeditem {
-    background: rgba(210,47,42,1);
+    background: #c1cc00;
 }
 
 /* the balloon arrow */
@@ -50,21 +51,23 @@
 	margin-top: -4px;
 }
 #insfeedflicker .nonewfeeditem:before {
-	border-right-color: #c1cc00;
+	display: none; /* hiding it - why show if there's nothing? */
+	border-right-color: rgba(210,47,42,1);
 }
 #insfeedflicker .newfeeditem:before {
-	border-right-color: rgba(210,47,42,1);
+	border-right-color: #c1cc00;
 }
 #insfeedflicker .newfeeditem:after {
 	content: 'New';
 	display: block;
 	position: absolute;
 	top: 25%;
-	left: 3px;
-	font-size: 100%;
-	font-weight: normal;
-	color: #fff;
-	text-transform: capitalize;
-	text-shadow: 0 1px 0 rgba(0,0,0,0.5);
+	left: 4px;
+	font-family: Verdana, sans-serif;
+	font-size: 85%;
+	font-weight: bold;
+	color: #636466;
+	text-transform: uppercase;
+	text-shadow: 0 1px 0 rgba(255,255,255,0.25);
 }
 
