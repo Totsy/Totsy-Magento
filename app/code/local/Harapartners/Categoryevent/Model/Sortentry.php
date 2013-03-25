@@ -370,9 +370,9 @@ class Harapartners_Categoryevent_Model_Sortentry
         $live     = json_decode($this->getData('live_queue'), true);
         $upcoming = json_decode($this->getData('upcoming_queue'), true);
 
-	if (!is_array($top)) { $top = array() );
-	if (!is_array($live)) { $live = array() );
-	if (!is_array($upcoming)) { $upcoming = array() );
+	if (!is_array($top)) { $top = array(); }
+	if (!is_array($live)) { $live = array(); }
+	if (!is_array($upcoming)) { $upcoming = array(); }
 
         $earlyAccessTime = false;
         if(($customer = Mage::helper('customer')->getCustomer()) && (Mage::helper('crownclub')->isClubMember($customer))) {
