@@ -346,6 +346,7 @@ body.customer-account-entry .btn.btn-large {
     font-size: 15px;
     line-height: normal;
     padding: 9px 14px;
+    width: 100%;
 }
 .btn.checkout {
     margin: 8px 0 0;
@@ -1309,6 +1310,10 @@ html body .fast-ship-table tr:hover th.last {
 #fastship_modal {overflow: visible;}
 #fastship_modal_text {margin: 20px;}
 #fastship_modal_title {float:left; margin: 10px;}
+img.fastship-icon {
+    float: left;
+    margin-right: 8px;
+}
 
 .cc {
     height: 27px;
@@ -1649,6 +1654,7 @@ body > footer small .container {
 	margin-top:-210px;
 	vertical-align: middle;
 	width: 300px;
+	text-align: left;
 }
 /* login smaller screen */
 @media screen and (max-height:749px) { 
