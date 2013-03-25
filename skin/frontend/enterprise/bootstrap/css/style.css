@@ -1879,6 +1879,9 @@ input.big-input {
 .price-box {
     margin-top:10px;
     font-size: 14px;
+    color:#d22f2a;
+    text-align: right;
+    font-weight: bold;
 }
 .old-price {
     color: #999999;
