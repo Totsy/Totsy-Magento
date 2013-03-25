@@ -48,7 +48,7 @@
                     echo $this->getLogoAlt();
                     ?>"><img src="<?php echo $this->getSkinUrl() ?>images/logo.png" alt="Totsy.com" width="85" /></a>
     </h1>
-    <div class="page-header" style="margin:0px 0px 10px;">
+    <div class="page-header">
         <h2 style="font-size:18px;"><?php echo $this->__('Sign Up') ?><small> or <a href="/customer/account/login/" style="font-weight:normal;">Sign In</a></small></h2>
     </div>
     <div class="row">
@@ -177,7 +177,7 @@
                     <p style="font-size:11px; color:#999; text-align:center;"><?php echo $this->__('By joining you accept our ')?> <a id="redtrerm" href="<?php echo $this->getBaseUrl()?>pages/terms/">terms and conditions.</a> </p>
                 </div>
                 <div class="buttons-set form-buttons align-center" style="margin:0px 0px -16px 0px">
-                    <button type="submit" id="submit-button" class="btn btn-primary btn-large pull-left" style="width:100%;">Sign Up</button>
+                    <button type="submit" id="submit-button" class="btn btn-primary btn-large pull-left">Sign Up</button>
                 </div>
                 <?php if (Mage::helper('checkout')->isContextCheckout()): ?>
                     <input name="context" type="hidden" value="checkout" />

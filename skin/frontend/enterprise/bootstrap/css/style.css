@@ -346,6 +346,7 @@ body.customer-account-entry .btn.btn-large {
     font-size: 15px;
     line-height: normal;
     padding: 9px 14px;
+    width: 100%;
 }
 .btn.checkout {
     margin: 8px 0 0;
@@ -1649,6 +1650,7 @@ body > footer small .container {
 	margin-top:-210px;
 	vertical-align: middle;
 	width: 300px;
+	text-align: left;
 }
 /* login smaller screen */
 @media screen and (max-height:749px) { 
