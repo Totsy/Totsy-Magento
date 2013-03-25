@@ -450,7 +450,7 @@ class Harapartners_Categoryevent_Model_Sortentry
                 continue;
 
             } else if ( ($startTime < $now) 
-                && $diff > $this->_daysForNew
+                && $diff <= $this->_daysForNew
             ){
 
                 // move this event to Top
