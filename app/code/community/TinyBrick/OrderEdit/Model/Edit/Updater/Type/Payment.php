@@ -93,6 +93,11 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Payment extends TinyBrick_Orde
         if(strlen($expDate) < 4) {
             $expDate = '0' . $expDate;
         }
+        if($payment->getCcType() == 'AE') {
+            $creditCardType = 'AX';
+        } else {
+            $creditCardType = $payment->getCcType();
+        }
         #Authorization
         $auth_info = array(
             'orderId' => $order->getId(),
@@ -112,7 +117,7 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Payment extends TinyBrick_Orde
                 'number' =>$payment->getCcNumber(),
                 'expDate' => $expDate,
                 'cardValidationNum' => $payment->getCcCid(),
-                'type' => $payment->getCcType())
+                'type' => $creditCardType)
         );
 
         $initialize = new LitleOnlineRequest();
