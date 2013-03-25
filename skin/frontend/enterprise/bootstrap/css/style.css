@@ -1310,6 +1310,10 @@ html body .fast-ship-table tr:hover th.last {
 #fastship_modal {overflow: visible;}
 #fastship_modal_text {margin: 20px;}
 #fastship_modal_title {float:left; margin: 10px;}
+img.fastship-icon {
+    float: left;
+    margin-right: 8px;
+}
 
 .cc {
     height: 27px;
