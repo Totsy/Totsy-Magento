@@ -1649,6 +1649,7 @@ body > footer small .container {
 	margin-top:-210px;
 	vertical-align: middle;
 	width: 300px;
+	text-align: left;
 }
 /* login smaller screen */
 @media screen and (max-height:749px) { 
