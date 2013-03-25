@@ -438,7 +438,7 @@ class Harapartners_Categoryevent_Model_Sortentry
             }
 
             $diff = ($now - $startTime)/24/60/60;
-            $diff = round(abs($diff),2);
+            $diff = round($diff,2);
 
             if ( ($startTime < $now) 
                 && $diff > $this->_daysForNew
