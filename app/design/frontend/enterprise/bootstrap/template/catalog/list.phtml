@@ -55,15 +55,6 @@
 			</div>
 		</div>
 	</div>
-
-	<script type="text/javascript">
-	    jQuery(document).ready(function() {
-	    	jQuery("#facebook_pop").fancybox({
-				'speedIn'		:	600,
-				'speedOut'		:	200,
-			}).trigger('click');
-	    });
-	</script>
 	<?php Mage::getSingleton('customer/session')->setFacebookAccountFirstCreate(false);?>
 <?php elseif( (Mage::getSingleton('customer/session')->getData('login_refer')) && (Mage::helper('enterprise_invitation')->isInvitationMessageAllowed()) && $storeId==1 ):?>
 
@@ -111,15 +102,6 @@
 			</script>
 		</div>
 	</div>
-
-	<script type="text/javascript">
-	    jQuery(document).ready(function() {
-	    	jQuery("#invite_pop").fancybox({
-				'speedIn'		:	600,
-				'speedOut'		:	200,
-			}).trigger('click');
-	    });
-	</script>
 <?php Mage::getSingleton('customer/session')->setData('login_refer',false);?>
 <?php endif; ?>
 
@@ -134,7 +116,7 @@
 			?>
 			<div class="catalog-top-event">
 				<?php $imgFile = BP.DS.'media'.DS.'catalog'.DS.'category'.DS.$top['thumbnail'];?>
-				<a class="event-link" href="<?php echo Mage::getBaseUrl().$top['url_path']; ?>"><img src="<?php echo Mage::helper('service/image')->loadImageFile($imgFile)->resize(349,403); ?>" width="349px" height="403px" alt="" /></a>
+				<a class="event-link" href="<?php echo Mage::getBaseUrl().$top['url_path']; ?>"><img src="<?php echo Mage::helper('service/image')->loadImageFile($imgFile)->resize(500); ?>" alt="" /></a>
 				<div class="splash-details">
 					<div class="table-cell-left">
 						<p class="event-name"><?php echo $top['name'];?></p>
@@ -173,7 +155,7 @@
 			?>
 			<div class="catalog-event">
 				<?php $imgFile = BP.DS.'media'.DS.'catalog'.DS.'category'.DS.$live['thumbnail'];?>
-				<a class="event-link" href="<?php echo Mage::getBaseUrl().$live['url_path']; ?>"><img src="<?php echo Mage::helper('service/image')->loadImageFile($imgFile)->resize(228,263); ?>" width="228px" height="263px" alt="" /></a>
+				<a class="event-link" href="<?php echo Mage::getBaseUrl().$live['url_path']; ?>"><img src="<?php echo Mage::helper('service/image')->loadImageFile($imgFile)->resize(500); ?>" alt="" /></a>
 				<div class="splash-details">
 					<div class="table-cell-left">
 						<p class="event-name"><?php echo $live['name'];?></p>
@@ -213,7 +195,7 @@
 			?>
 			<div class="catalog-event">
 				<?php $imgFile = BP.DS.'media'.DS.'catalog'.DS.'category'.DS.$up['thumbnail'];?>
-				<a class="event-link" href="<?php echo Mage::getBaseUrl().$up['url_path']; ?>"><img src="<?php echo Mage::helper('service/image')->loadImageFile($imgFile)->resize(228,263); ?>" width="228px" height="263px" alt="" /></a>
+				<a class="event-link" href="<?php echo Mage::getBaseUrl().$up['url_path']; ?>"><img src="<?php echo Mage::helper('service/image')->loadImageFile($imgFile)->resize(500); ?>" alt="" /></a>
 				<div class="splash-details">
 					<div class="table-cell-left">
 						<p class="event-name"><?php echo $up['name'];?></p>

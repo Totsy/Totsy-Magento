@@ -33,27 +33,32 @@
 <html lang="<?php echo $this->getLang() ?>">
 <head>
 <?php echo $this->getChildHtml('head') ?>
+<style>
+#mainContent {background:none;}
+</style>
 </head>
 <body<?php echo $this->getBodyClass()?' class="'.$this->getBodyClass().'"':'' ?> data-spy="scroll" data-target=".subnav" data-offset="50">
 <?php echo $this->getChildHtml('after_body_start') ?>
-<div class="container content_push_2col">
-    <?php echo $this->getChildHtml('global_notices') ?>
-    <div class="page">
-        <?php echo $this->getChildHtml('header') ?>
-        <?php echo $this->getChildHtml('breadcrumbsContainer') ?>
-        <div class="main col1-layout">
-            <div class="col-main">
-                <?php echo $this->getChildHtml('global_messages') ?>
-                <?php echo $this->getChildHtml('content') ?>
-            </div>
+    <div id="stickywrap">
+        <div id="mainContent" class="container l-1col l-validate">
+        
+            <?php echo $this->getChildHtml('global_notices') ?>
+            <div class="page">
+                <?php echo $this->getChildHtml('header') ?>
+                <?php echo $this->getChildHtml('breadcrumbsContainer') ?>
+                <div class="main col1-layout">
+                    <div class="col-main">
+                        <?php echo $this->getChildHtml('global_messages') ?>
+                        <?php echo $this->getChildHtml('content') ?>
+                    </div>
+                </div>
+                <?php echo $this->getChildHtml('footer_before') ?>
+                    </div>
         </div>
-        <?php echo $this->getChildHtml('footer_before') ?>
-            </div>
-</div>
-</div>        <?php echo $this->getChildHtml('footer') ?>
-        <?php echo $this->getChildHtml('before_body_end') ?>
-
-<?php echo $this->getAbsoluteFooter() ?>
-
+        </div>
+    </div>
+    <?php echo $this->getChildHtml('footer') ?>
+    <?php echo $this->getChildHtml('before_body_end') ?>
+    <?php echo $this->getAbsoluteFooter() ?>
 </body>
 </html>

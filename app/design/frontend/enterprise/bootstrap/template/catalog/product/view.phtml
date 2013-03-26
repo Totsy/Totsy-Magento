@@ -56,17 +56,21 @@ $percent = number_format(($originalPrice - $discountPrice) * (100 / $originalPri
 $savings = money_format('%n', $originalPrice) - money_format('%n', $discountPrice);
 
 ?>
+
 <script type="text/javascript">
     var optionsPrice = new Product.OptionsPrice(<?php echo $this->getJsonConfig() ?>
     );
     
 </script>
 
-<div id="messages_product_view"><?php echo $this->getMessagesBlock()->toHtml() ?></div>
-<section id="pageheader">
+<section>
     <header class="page-header has-timer clearfix">
-        <h2 class="ellipsis"><a href="<?php echo $_category->getUrl();?>"><?php echo $_helper->categoryAttribute($_category, $_category->getName(), 'name') ?></a>
-        </h2>
+        <ol class="breadcrumb">
+                <li><a href="<?php echo $this->getUrl(); ?>" title="Totsy home">Totsy Home</a></li>
+                <li><a href="<?php echo $_category->getUrl();?>"><?php echo $_helper->categoryAttribute($_category, $_category->getName(), 'name') ?></a></li>
+                <li class="active"><?php echo $_product->getName(); ?></li>
+        </ol>
+        <h2 class="ellipsis"><?php echo $_helper->categoryAttribute($_category, $_category->getName(), 'name') ?></h2>
         <span class="count-down-timer"><span id="timer"></span></span>
     </header>
 
@@ -76,13 +80,15 @@ $savings = money_format('%n', $originalPrice) - money_format('%n', $discountPric
             <?php echo $this->getChildHtml('media'); ?>
         </div>
         <div class="span8 product-main">
-            <div class="page-header row">
+            <div class="product-header row">
                 <h3 class="span5 alpha"><?php echo $_product->getName(); ?></h3>
             </div>
-        
             <div class="alpha span5">
                 <div class="product-content">
-                    <div class="product_desc">
+                    <div class="insparq-share content-block">
+                        <?php echo $this->getChildHtml('extrahint') ?>
+                    </div>
+                    <div class="product_desc content-block">
                         <?php echo $_product->getDescription(); ?> 
                     </div>
                     <?php echo $this->getChildHtml('product.shipping.return'); ?>
@@ -93,7 +99,7 @@ $savings = money_format('%n', $originalPrice) - money_format('%n', $discountPric
             ?>
             </div>
             <div class="span3 product-addtocart<?php if ($this->hasOptions()): echo ' has-options'; else: echo ' no-options'; endif;?>">
-                <form action="<?php echo $this->getSubmitUrl($_product) ?>" method="post" id="product_addtocart_form" <?php if($_product->getOptions()): ?> enctype="multipart/form-data" <?php endif; ?> >
+                <form action="<?php echo $this->getSubmitUrl($_product) ?>" method="post" id="product_addtocart_form" class="puncted" <?php if($_product->getOptions()): ?> enctype="multipart/form-data" <?php endif; ?> >
                     <div class="no-display">
                         <input type="hidden" name="product" value="<?php echo $_product->getId() ?>" />
                         <input type="hidden" name="related_product" id="related-products-field" value="" />
@@ -122,7 +128,6 @@ $savings = money_format('%n', $originalPrice) - money_format('%n', $discountPric
                             </div>
                         </div>
                         <?php echo $this->getChildHtml('tierprices') ?>
-                        <?php echo $this->getChildHtml('extrahint') ?>
                         <?php if (!$this->hasOptions()):?>
                             <?php echo $this->getChildHtml('product_type_data') ?>
                              <div class="add-to-box">
@@ -149,6 +154,7 @@ $savings = money_format('%n', $originalPrice) - money_format('%n', $discountPric
                     
                     </div><!-- /#product-main-info -->
                 </form>
+				<div id="messages_product_view"><?php echo $this->getMessagesBlock()->toHtml(); ?></div>
             </div> <!-- /.product-addtocart -->
             
             <?php echo $this->getChildHtml('relatedProducts') ?>
@@ -206,11 +212,11 @@ productAddToCartForm.submit = function(a, b) {
                         $("header-user-info").update(b.headercart)
                     }
                     if (b.status && b.message) {
-                        var c = '<ul class="alert alert-success"><li class="' + b.status.toLowerCase() + '-msg"><ul><li>' + b.message + "</li></ul></li></ul>";
+                        var c = '<span class="alert alert-product-result alert-' + b.status.toLowerCase() + '">' + b.message + "</span>";
                         $("messages_product_view").update(c);
                         (function() {
                             $("messages_product_view").update(null)
-                        }).delay(2)
+                        }).delay(5)
                     }
                     if (a && a != "undefined") {
                         a.disabled = false
