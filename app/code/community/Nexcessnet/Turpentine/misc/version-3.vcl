@@ -18,6 +18,10 @@ import std;
 
 {{crawler_acl}}
 
+acl purge {
+        "localhost";
+}
+
 ## Custom Subroutines
 
 sub remove_cache_headers {
@@ -35,6 +39,13 @@ sub remove_double_slashes {
 ## Varnish Subroutines
 
 sub vcl_recv {
+    # allow PURGE from localhost
+    if (req.request == "PURGE") {
+            if (!client.ip ~ purge) {
+                    error 405 "Not allowed.";
+            }
+            return (lookup);
+    }
     if (req.restarts == 0) {
         if (req.http.X-Forwarded-For) {
             set req.http.X-Forwarded-For =
@@ -99,6 +110,8 @@ sub vcl_recv {
                 req.url ~ "(?:[?&](?:{{get_param_excludes}})(?=[&=]|$))") {
             return (pass);
         }
+        #20130325 - CJD - Remove all cookies except for the customer info cookie
+
         return (lookup);
     }
     # else it's not part of magento so do default handling (doesn't help
@@ -135,12 +148,13 @@ sub vcl_hash {
     if (req.http.Accept-Encoding) {
         hash_data(req.http.Accept-Encoding);
     }
-    if (req.url ~ "{{url_base_regex}}turpentine/esi/getBlock/") {
-        if (req.url ~ "/{{esi_cache_type_param}}/private/"
-                && req.http.Cookie ~ "frontend=") {
-            hash_data(regsub(req.http.Cookie, "^.*?frontend=([^;]*);*.*$", "\1"));
-            {{advanced_session_validation}}
-        }
+    if (req.http.Cookie ~ "CUSTOMER_INFO=") {
+        hash_data(regsub(req.http.Cookie, "^.*?CUSTOMER_INFO=([^;]*);*.*$", "\1"));
+    }
+    if (req.http.Cookie ~ "CUSTOMER=") {
+        hash_data("loggedinuser");
+    } else {
+        hash_data("loggedoutuser");
     }
     return (hash);
 }
@@ -152,7 +166,18 @@ sub vcl_hash {
 #     }
 # }
 
+sub vcl_hit {
+    if (req.request == "PURGE") {
+        purge;
+        error 200 "Purged.";
+    }
+}
+
 sub vcl_miss {
+    if (req.request == "PURGE") {
+        purge;
+        error 200 "Purged.";
+    }
     if (req.esi_level == 0 && req.http.X-Varnish-Cookie) {
         unset req.http.Cookie;
     } elsif (req.esi_level > 0 && req.http.X-Varnish-Cookie) {
@@ -221,9 +246,11 @@ sub vcl_deliver {
     if (resp.http.X-Varnish-Use-Set-Cookie) {
         set resp.http.Set-Cookie = resp.http.X-Varnish-Set-Cookie;
     }
+
     #GCC should optimize this entire branch away if debug headers are disabled
     if ({{debug_headers}}) {
         set resp.http.X-Varnish-Hits = obj.hits;
+        set resp.http.X-Cookie-Debug = req.http.Cookie;
     } else {
         #remove Varnish fingerprints
         unset resp.http.X-Varnish;
