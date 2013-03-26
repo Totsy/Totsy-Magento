@@ -162,14 +162,27 @@ class Harapartners_EmailFactory_Model_Observer extends Mage_Core_Model_Abstract 
 	              $sailthru = Mage::getSingleton('emailfactory/sailthruconfig')->getHandle();
 	              $protoitems = Mage::getSingleton('checkout/session')->getQuote()->getAllVisibleItems();
 	              $items = array();
-	              $i = 0;
+
 	              foreach($protoitems as $obi) {
-	                    $name = $obi->getName();
-	                    $sku = $obi->getSku();
-	                    $obiName = isset($name)?$name:$sku;    
-	                  $items[$i] = array("qty" => $obi->getQty(), "title" => $obiName, "price" => $obi["product"]->getFinalPrice()*100, "id" => $obi->getSku(), "url" => $obi["product"]->getProductUrl());
-	                  $i++;
+
+                        $id = $obi->getSku();
+                        $title = $obi->getName();
+                        $sku = $obi->getSku();
+                        $price = $obi["product"]->getFinalPrice()*100;
+                        $qty = $obi->getQty();
+                        $url = $obi["product"]->getProductUrl();
+
+                        if($obi->getParentItemId() 
+                            || empty($price) 
+                            || empty($qty)
+                        ) {
+                            continue;
+                        }   
+
+	                    $title = isset($title)?$title:$sku;    
+	                    $items[] = compact('qty', 'title', 'price', 'id', 'url');
 	              }
+
 	              $data = array("email" => $email, "items" => $items, "incomplete" => $status);//0: complete ; 1: imcomplete
 	              if (isset($_COOKIE['sailthru_bid'])) {
 	                  $data['message_id'] = $_COOKIE['sailthru_bid'];

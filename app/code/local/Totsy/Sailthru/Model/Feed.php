@@ -41,7 +41,7 @@ class Totsy_Sailthru_Model_Feed extends Mage_Core_Model_Abstract
 		//open&top events
 		$this->_formatter(
 			$this->getFeedHelper()->goingLive(
-				$this->_getSortEvents('live')
+				$this->_getSortEvents('top_live')
 			),
 			'events'
 		);
@@ -164,11 +164,20 @@ class Totsy_Sailthru_Model_Feed extends Mage_Core_Model_Abstract
         	if (!$validator->process($event_tmp)){
         		$errors = $validator->getErrors();
         		if (!empty($errors)){
-        			$this->_output['errors'][$type]['validator'][] = $errors;
+        			if (!empty($this->_output['errors'][$type]['validator'])){
+	        			$errors = array_merge($this->_output['errors'][$type]['validator'],$errors);
+	        			$errors = array_unique($errors);
+        			}
+        			$this->_output['errors'][$type]['validator'] = $errors;
         		}
         		$errors = $this->getFeedHelper()->getErrors();
         		if (!empty($errors)){
-        			$this->_output['errors'][$type]['helper'][] = $this->getFeedHelper()->getErrors();
+
+        			if (!empty($this->_output['errors'][$type]['helper'])){
+	        			$errors = array_merge($this->_output['errors'][$type]['helper'],$errors);
+	        			$errors = array_unique($errors);
+        			}
+        			$this->_output['errors'][$type]['helper'] = $errors;
         		}
         	}
         }

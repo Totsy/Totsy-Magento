@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * {magecore_license_notice}
+ *
+ * @category   design
+ * @package    enterprise_iphone
+ * @copyright  {magecore_copyright}
+ * @license    {magecore_license}
+ */
+-->
+<layout>
+    <sales_order_billing_edit>
+        <label>Edit Order Billing Info</label>
+        <update handle="customer_account"/>
+        <reference name="root">
+            <action method="setTemplate"><template>page/2columns-left.phtml</template></action>
+        </reference>
+        <reference name="my.account.wrapper">
+            <block type="oro_sales/order_billing_edit" name="order_billing_edit" template="oro/sales/billing/edit.phtml" />
+        </reference>
+    </sales_order_billing_edit>
+    <sales_order_view>
+        <reference name="sales.order.info.buttons">
+            <block type="oro_sales/order_info_button" name="oro_sales_order_info_button" template="oro/sales/info/button.phtml"/>
+        </reference>
+    </sales_order_view>
+</layout>

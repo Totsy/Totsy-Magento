@@ -115,4 +115,46 @@ class Harapartners_Service_Model_Rewrite_Sales_Quote extends Mage_Sales_Model_Qu
         }
         return false;
     }
+
+    public function getFulfillmentTypes() {
+        $fulfillmentTypes = array();
+
+        // Check to see if there are multiple fulfillment types
+        foreach($this->getAllItems() as $item) {
+            if($item->getParentItemId()) {
+                continue;
+            }
+            $product = Mage::getModel ( 'catalog/product' )->load ( $item->getProductId () );
+            if($product->getIsVirtual() && $product->getFulfillmentType() !== 'nominal') {
+                $fulfillmentType = 'virtual';
+            } else {
+                $fulfillmentType = $product->getFulfillmentType();
+            }
+            $fulfillmentTypes [$fulfillmentType] [] = $item->getId ();
+
+        }
+
+        if(count($fulfillmentTypes) > 1) {
+            $sortedFulfillmentTypes = array();
+            if(array_key_exists('dotcom_stock',$fulfillmentTypes)) {
+                $sortedFulfillmentTypes['dotcom_stock'] = $fulfillmentTypes['dotcom_stock'];
+                unset($fulfillmentTypes['dotcom_stock']);
+            }
+            if(array_key_exists('dotcom',$fulfillmentTypes)) {
+                $sortedFulfillmentTypes['dotcom'] = $fulfillmentTypes['dotcom'];
+                unset($fulfillmentTypes['dotcom']);
+            }
+            if(array_key_exists('virtual',$fulfillmentTypes)) {
+                $sortedFulfillmentTypes['virtual'] = $fulfillmentTypes['virtual'];
+                unset($fulfillmentTypes['virtual']);
+            }
+
+            if(count($fulfillmentTypes)) {
+                $sortedFulfillmentTypes = array_merge($sortedFulfillmentTypes,$fulfillmentTypes);
+            }
+            $fulfillmentTypes = $sortedFulfillmentTypes;
+        }
+
+        return $fulfillmentTypes;
+    }
 }
