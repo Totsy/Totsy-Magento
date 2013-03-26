@@ -24,7 +24,7 @@
  * @license     http://www.magentocommerce.com/license/enterprise-edition
  */
 ?>
-<div class="order-items order-details well">
+<div class="order-items order-details">
     <?php if ($this->helper('giftmessage/message')->getIsMessagesAvailable('items', $this->getOrder())): ?>
     <script type="text/javascript">
     //<![CDATA[
@@ -60,6 +60,7 @@
             <span class="separator">|</span> <a href="http://www.shipmentmanager.com/Portal.aspx?MerchantID=1469&TargetPageID=38&TrackingKey=BID&TrackingIdentifier=<?php echo $this->getOrder()->getRealOrderId() ?>" target="_blank" title="<?php echo $this->__('Track your order') ?>"><?php echo $this->__('Track your order') ?></a>
         <?php endif; ?>
     </h3>
+    <hr />
     <?php echo $this->getChildHtml('order_items') ?>
     <?php if($this->helper('giftmessage/message')->getIsMessagesAvailable('order', $_order) && $_order->getGiftMessageId()): ?>
     <div class="order-additional order-gift-message">
@@ -84,8 +85,12 @@
         </dl>
     </div>
     <?php endif; ?>
-    <div class="buttons-set">
-        <p class="back-link"><a href="<?php echo $this->getBackUrl() ?>"><small>&laquo; </small><?php echo $this->getBackTitle() ?></a></p>
+    <div class="alert alert-success alpha omega">
+<h3>Your Savings: <span class="pull-right"><?php echo '$' . number_format(Mage::helper('sales/order')->calculateEstimatedSavings($_order), 2) ?></span></h3>
+</div>
+    <div class="buttons-set" style="margin-bottom:30px;">
+        <a href="<?php echo $this->getBackUrl() ?>" class="btn btn-primary pull-right"><?php echo $this->getBackTitle() ?></a>
+        <div class="clear"></div>
     </div>
 </div>
 </div>

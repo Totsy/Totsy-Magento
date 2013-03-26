@@ -62,20 +62,8 @@
         // i.e. " if ( $_productCollection->count() && !$timeOutFlag ): //render the events grid…
     ?>
     <?php else : ?>
-    <div class="row">
-        <div class="span12 event-products">
-        <?php // Grid Only Mode ?>
-        <?php
-            /*
-             * @GOTCHA: these collecitonSize and columnCount vars are not being used
-             * - no longer needing to count colleciton size to close ULs (all products are now in one big UL)
-             * - no longer need to count columns - their dependent "first" and "last" css classnames are not being used
-             */
-        ?>
-        <?php //$_collectionSize = $_productCollection->count() ?>
-        <?php //$_columnCount = 3; //for the elements number will be changed by the filter ?>
-        <?php //$_columnCount = $this->getColumnCount(); ?>
-            <ul class="thumbnails event_prod_grid">
+        <div class="event_prod_grid tedhack">
+            <ul class="thumbnails">
         	<?php foreach ($_productCollection as $_product): ?>
         		<?php if ( $_product->isSalable() ):?>
                     <li class="span4 item<?php echo ' '.str_replace(',',' ',$_product->getDepartments()) ?>" data-department="<?php echo str_replace(',',' ',$_product->getDepartments()) ?>">
@@ -118,6 +106,5 @@
                 <?php endif;?>
             <?php endforeach; ?>
             </ul>
-        </div><!-- /.span12 -->
-    </div><!-- /.row -->
+        </div>
     <?php endif; ?>

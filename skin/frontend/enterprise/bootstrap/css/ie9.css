@@ -2,14 +2,22 @@
  * IE9 Conditional Style Sheet
  */
 
-/* body gradient */
-html {
-    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='#eef6fc', EndColorStr='#ffffff')"; /* IE8+ */
-}
+/* Bootstrap Events Grid Override - .tedhack */
+[class*='event'].tedhack .span4 {width:23.57em;}
+[class*='event'].tedhack .span3 {width:17.5em;}
+[class*='event'].tedhack .span2 {width:11.41em;}
 
 /* header cart msg line break fix */
 #usercart .over {display: inline-block; margin-top:-13px;}
 #usercart .over:before {
     content:"\A";
     white-space: pre;
+}
+
+/* login / register form input fixes */
+.customer-account-entry .page_center .big-input {
+	line-height: normal;
+	padding-top: 5px;
+	padding-bottom: 8px;
+	min-height: 40px;
 }

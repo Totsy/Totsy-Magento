@@ -10,6 +10,7 @@
             <log_resource>
                 <rewrite>
                     <visitor>Totsy_Log_Model_Resource_Visitor</visitor>
+                    <customer>Totsy_Log_Model_Resource_Customer</customer>
                 </rewrite>
             </log_resource>
         </models>

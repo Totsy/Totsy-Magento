@@ -71,6 +71,8 @@ class Crown_Club_Model_Club extends Mage_Core_Model_Abstract {
 			$customerModel->setGroupId($clubCustomerGroup->getId());
 			$customerModel->save();
 
+            $this->sendClubMembershipWelcomeEmail($customerModel);
+
             try {
                 $helper->setClubEmailList($customerModel);
             } catch (Exception $e) {
@@ -130,24 +132,21 @@ class Crown_Club_Model_Club extends Mage_Core_Model_Abstract {
      * @return Crown_Club_Model_Club
      */
     public function sendClubMembershipWelcomeEmail($customer) {
-        Mage::log('Sending welcome email');
-        $storeId = $this->getStore()->getId();
-
-        $mailer = Mage::getModel ( 'core/email_template_mailer' );
-        $emailInfo = Mage::getModel ( 'core/email_info' );
-        $emailInfo->addTo ( $customer->getEmail(), $customer->getName() );
-        $mailer->addEmailInfo ( $emailInfo );
-
-        // Set all required params and send emails
-        $mailer->setSender('club');
-        $mailer->setStoreId ( $storeId );
-        $mailer->setTemplateId ( 'TotsyPLUS_welcome' );
-        $mailer->setTemplateParams (
-            array (
-                'customer' => $customer->getName(),
-            ) );
-        $mailer->send ();
-        Mage::log('Welcome email sent');
+        $store      = Mage::app()->getStore();
+        $storeId    = $this->getStore()->getId();
+        $email      = $customer->getEmail();
+        $template   = Mage::getStoreConfig('Crown_Club/clubgeneral/club_welcome_email', $storeId);
+        $templateId = Mage::getModel('core/email_template')->loadByCode($template)->getId();
+        Mage::getModel('core/email_template')->sendTransactional(
+            $templateId,
+            "club",
+            $email,
+            NULL,
+            array(
+                "customer" => $customer,
+                "store" => $store
+            )
+        );
         return $this;
     }
 

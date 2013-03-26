@@ -28,117 +28,121 @@
  */
 ?>
 <header class="navbar navbar-fixed-top">
-    <div id="monetateBanner"><i><a href="/invitation/" title="Invite Friends, get $15">Invite Friends</a></i></div>
     <!-- begin masthead -->
     <div id="masthead">
-        <div class="container row">   
-            <h1 id="logo" class="span2"><a href="<?php
-            echo $this->getUrl( 'event/?ref=logo' );
-            ?>" title="<?php
-            echo $this->getLogoAlt();
-            ?>"><img src="<?php
-            echo $this->getLogoSrc();
-            ?>" alt="<?php
-            echo $this->getLogoAlt();
-            ?>" width="85px" /></a></h1>
-        
-            <ul id="userUtils" class="span4 offset6">
-                <li id="userAccount" class="dropdown">
-                    <a href="/customer/account/#" class="dropdown-toggle" data-toggle="dropdown"><img src="/skin/frontend/enterprise/bootstrap/images/iconmonstr-user-icon.png" width="20" height="20" style="margin-top:-5px;" /> My Account</a>
-                    <ul class="dropdown-menu">
-                        <li><a href="/customer/account/">Account Dashboard</a></li>
-                        <li><a href="/customer/account/edit/">Account Information</a></li>
-                        <li><a href="/palorus/vault/index">Manage Credit Cards</a></li>
-                        <li><a href="/customer/account/edit/changepassword/1/">Change Password</a></li>
-                        <li><a href="/customer/address/">Address Book</a></li>
-                        <li><a href="/sales/order/history/">My Orders</a></li>
-                        <li><a href="/reward/customer/info/">My Credits</a></li>
-                        <li><a href="/invitation/">My Invitations</a></li>
-                        <li class="divider"></li>
-                        <li><a href="/customer/account/logout">Logout</a></li>
-                    </ul>
-                </li>
-                <li class="quick-access" id="header-user-info"></li>
-            </ul>
-        </div>
+        <div class="container">
+            <div class="row">
+                <h1 id="logo" class="span3"><a href="<?php
+                echo $this->getUrl( 'event/?ref=logo' );
+                ?>" title="<?php
+                echo $this->getLogoAlt();
+                ?>"><img src="<?php
+                echo $this->getLogoSrc();
+                ?>" alt="<?php
+                echo $this->getLogoAlt();
+                ?>" /></a></h1>
+            
+                <div class="header-utils span3 clearfix">
+                    <div id="userAccount" class="dropdown pull-right">
+                        <a href="/customer/account/#" class="dropdown-toggle" data-toggle="dropdown"><img src="/skin/frontend/enterprise/bootstrap/images/iconmonstr-user-icon.png" width="20" height="20" style="margin-top:-5px;" /> My Account</a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/customer/account/">Account Dashboard</a></li>
+                            <li><a href="/customer/account/edit/">Account Information</a></li>
+                            <li><a href="/paymentfactory/">Manage Credit Cards</a></li>
+                            <li><a href="/customer/account/edit/changepassword/1/">Change Password</a></li>
+                            <li><a href="/customer/address/">Address Book</a></li>
+                            <li><a href="/sales/order/history/">My Orders</a></li>
+                            <li><a href="/reward/customer/info/">My Credits</a></li>
+                            <li><a href="/invitation/">My Invitations</a></li>
+                            <li class="divider"></li>
+                            <li><a href="/customer/account/logout">Logout</a></li>
+                        </ul>
+                    </div>
+                    <div class="promo-area pull-left"></div>            
+                </div>
+                <div class="header-cta span6 clearfix">
+                    <span class="cta-item pull-left" id="cta-freeship"><em class="cta-item-head">FREE Shipping!</em> <em class="cta-item-sub">on all orders over $75</em></span>
+                    <span class="cta-item pull-right"><a class="cta-link" href="<?php echo $this -> getBaseUrl();?>invitation">Invite friends get $15</a></span> 
+                </div>
+            </div><!-- /.row -->
+        </div><!--/.container -->
     </div><!--/#masthead -->
-    <!-- <div id="rondavu_welcome_container"></div> -->
     <!-- begin nav -->
     <nav>
-        <div class="container row">
-            <ul class="nav span8">
-                <li id="navAllEvents" class="dropdown">
-                    <a href="<?php echo $this->getBaseUrl()?>event/"><em>ALL <br />SALES</em></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="<?php echo $this->getBaseUrl()?>event/">New </a></li>
-                        <li><a href="<?php echo $this->getBaseUrl()?>event#events-upcoming">Upcoming</a></li>
-                    </ul>
-                </li>
-                <li id="navByCat" class="dropdown navShop">
-                    <a href="#"><em>SHOP BY<br/>CATEGORY</em></a>
-                    <ul class="dropdown-menu">
-                    <?php $type = 'departments'; ?>
-                    <?php $departmentAttr = Mage::getModel('catalog/product')->getResource()->getAttribute($type);?>
-                    <?php $optionArray = $departmentAttr->getSource()->getAllOptions();?>
-                    <?php foreach($optionArray as $option):?>
-                        <li><a href="<?php echo $this->getBaseUrl();?>category/<?php echo $option['label']?>" title="<?php echo $this->__($option['label']) ?>"><?php echo $this->__($option['label']) ?></a></li>
-                    <?php endforeach;?>
-                    </ul>        
-                </li>
-                <li id="navByAge" class="dropdown navShop">
-                    <a href="#"><em>SHOP BY<br/>AGE</em></a>
-                    <ul class="dropdown-menu">
-                    <?php $age = 'ages'; ?>
-                    <?php $ageAttr = Mage::getModel('catalog/product')->getResource()->getAttribute($age);?>
-                    <?php $ageOptionArray = $ageAttr->getSource()->getAllOptions();?>
-                    <?php foreach($ageOptionArray as $option):?>
-                        <li><a href="<?php echo $this->getBaseUrl();?>age/<?php echo $option['label']?>" title="<?php echo $this->__($option['label']) ?>"><?php echo $this->__($option['label']) ?></a></li>
-                    <?php endforeach;?>
-                    </ul>
-                </li>
-                <?php 
-                    // Check for TotsyPLUS membership, render nav appropriately
-                 ?>
-                <?php if(Mage::getStoreConfig('Crown_Club/clubgeneral/enable') || (($customer = Mage::helper('customer')->getCustomer()) && (Mage::helper('crownclub')->isClubMember($customer)))): ?>
-                    <?php if (($customer = Mage::getSingleton('customer/session')->getCustomer()) && (Mage::helper('crownclub')->isClubMember($customer))) : ?>
-                        <li id="navTotsyPlus" class="dropdown">
-                            <a href="<?php echo $this->getBaseUrl()?>plus/dashboard"><em>Totsy <br />PLUS</em></a>
-                            <ul class="dropdown-menu">
-                                <li><a href="<?php echo $this->getBaseUrl()?>plus/dashboard">Dashboard</a></li>
-                                <li><a href="<?php echo $this->getBaseUrl()?>plus/credit.html">10&#37; Credit</a></li>
-                                <li><a href="<?php echo $this->getBaseUrl()?>plus/early-access.html">Early Access</a></li>
-                                <li><a href="<?php echo $this->getBaseUrl()?>plus/exclusive-sales.html">Exclusive Sales</a></li>
-                                <li><a href="<?php echo $this->getBaseUrl()?>plus/entertainment-savings.html">Entertainment Savings</a></li>
-                                <li><a href="<?php echo $this->getBaseUrl()?>plus/discount-vault.html">Discount Vault</a></li>
-                                <li><a href="<?php echo $this->getBaseUrl()?>sales/recurring_profile/">Membership</a></li>
-                            </ul>
-                        </li>
-                    <?php else : ?>
-                        <li id="navTotsyPlus" class="nonmember">
-                            <a href="<?php echo $this->getBaseUrl()?>plus/"><em>Totsy <br />PLUS</em></a>
-                        </li>
+        <div class="container">
+            <div class="row">
+                <ul class="nav span7">
+                    <li id="navAllEvents" class="nav-item dropdown">
+                        <a href="<?php echo $this->getBaseUrl()?>event/"><em>ALL <br />SALES</em></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="<?php echo $this->getBaseUrl()?>event/">New </a></li>
+                            <li><a href="<?php echo $this->getBaseUrl()?>event#events-upcoming">Upcoming</a></li>
+                            <li><a href="<?php echo $this->getBaseUrl()?>event#events-ending">Ending Soon</a></li>
+                        </ul>
+                    </li>
+                    <li id="navByCat" class="nav-item dropdown navShop">
+                        <a href="#"><em>SHOP BY<br/>CATEGORY</em></a>
+                        <ul class="dropdown-menu">
+                        <?php $type = 'departments'; ?>
+                        <?php $departmentAttr = Mage::getModel('catalog/product')->getResource()->getAttribute($type);?>
+                        <?php $optionArray = $departmentAttr->getSource()->getAllOptions();?>
+                        <?php foreach($optionArray as $option):?>
+                            <li><a href="<?php echo $this->getBaseUrl();?>category/<?php echo $option['label']?>" title="<?php echo $this->__($option['label']) ?>"><?php echo $this->__($option['label']) ?></a></li>
+                        <?php endforeach;?>
+                        </ul>        
+                    </li>
+                    <li id="navByAge" class="nav-item dropdown navShop">
+                        <a href="#"><em>SHOP BY<br/>AGE</em></a>
+                        <ul class="dropdown-menu">
+                        <?php $age = 'ages'; ?>
+                        <?php $ageAttr = Mage::getModel('catalog/product')->getResource()->getAttribute($age);?>
+                        <?php $ageOptionArray = $ageAttr->getSource()->getAllOptions();?>
+                        <?php foreach($ageOptionArray as $option):?>
+                            <li><a href="<?php echo $this->getBaseUrl();?>age/<?php echo $option['label']?>" title="<?php echo $this->__($option['label']) ?>"><?php echo $this->__($option['label']) ?></a></li>
+                        <?php endforeach;?>
+                        </ul>
+                    </li>
+                    <?php 
+                        // Check for TotsyPLUS membership, render nav appropriately
+                     ?>
+                    <?php if(Mage::getStoreConfig('Crown_Club/clubgeneral/enable') || (($customer = Mage::helper('customer')->getCustomer()) && (Mage::helper('crownclub')->isClubMember($customer)))): ?>
+                        <?php if (($customer = Mage::getSingleton('customer/session')->getCustomer()) && (Mage::helper('crownclub')->isClubMember($customer))) : ?>
+                            <li id="navTotsyPlus" class="nav-item dropdown">
+                                <a href="<?php echo $this->getBaseUrl()?>plus/dashboard"><em>Totsy <br />PLUS</em></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="<?php echo $this->getBaseUrl()?>plus/dashboard">Dashboard</a></li>
+                                    <li><a href="<?php echo $this->getBaseUrl()?>plus/credit.html">10&#37; Credit</a></li>
+                                    <li><a href="<?php echo $this->getBaseUrl()?>plus/early-access.html">Early Access</a></li>
+                                    <li><a href="<?php echo $this->getBaseUrl()?>plus/exclusive-sales.html">Exclusive Sales</a></li>
+                                    <li><a href="<?php echo $this->getBaseUrl()?>plus/entertainment-savings.html">Entertainment Savings</a></li>
+                                    <li><a href="<?php echo $this->getBaseUrl()?>plus/discount-vault.html">Discount Vault</a></li>
+                                    <li><a href="<?php echo $this->getBaseUrl()?>sales/recurring_profile/">Membership</a></li>
+                                </ul>
+                            </li>
+                        <?php else : ?>
+                            <li id="navTotsyPlus" class="nav-item nonmember">
+                                <a href="<?php echo $this->getBaseUrl()?>plus/"><em>Totsy <br />PLUS</em></a>
+                            </li>
+                        <?php endif; ?>
                     <?php endif; ?>
-                <?php endif; ?>
-            </ul>
-            <?php if ($this->getRequest()->getModuleName()!=="checkout" && $this->getRequest()->getModuleName()!=="hpcheckout"): ?>
-            <div class="span2 offset2" id="header-checkoutBtn">
-                <a class="btn checkout btn-primary" title="Checkout" href="<?php echo Mage::getUrl('checkout/cart')?>"><strong>Checkout</strong></a>
-            </div>     
-            <?php endif; ?>       
-<!--
-            <div class="cta span2 offset2">
-                <a class="cta-link" href="<?php echo $this -> getBaseUrl();?>invitation">INVITE FRIENDS <strong>GET A <em>$15</em> CREDIT</strong></a><?php echo $this->getAdditionalHtml() ?>
-            </div>
--->
-        </div>
+                            <?php // commenting this out pending fixin's
+                            //<li id="feedflicker" class="nav-item"></li>
+                            ?>
+                </ul>
+                
+                <div class="quick-access span5 puncted clearfix pull-right" id="header-user-info"></div>
+                 
+            </div><!-- /.row -->
+        </div><!-- /.container -->
     </nav>
 </header><!-- /.navbar -->
-
-<script type="text/javascript">
+<script type="text/javascript">   
+    /* removing redudant customer tracking Ajax to fix checkout timer after Litle integration. this was breaking Litle JS.
     Event.observe(document,'dom:loaded',function() {
-        new Ajax.Updater({success: 'header-user-info'}, '<?php echo $this->getUrl('customertracking/headermsg/ajax',array('_secure'=>Mage::app()->getStore()->isCurrentlySecure())); ?>', {
+        new Ajax.Updater({success: 'header-user-info'}, '<?php //echo $this->getUrl('customertracking/headermsg/ajax',array('_secure'=>Mage::app()->getStore()->isCurrentlySecure())); ?>', {
             method:'get',
             evalScripts: true
         });
     });
+    */
 </script>

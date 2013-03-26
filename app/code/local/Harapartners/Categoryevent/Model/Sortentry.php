@@ -22,6 +22,7 @@ class Harapartners_Categoryevent_Model_Sortentry
     extends Mage_Core_Model_Abstract
 {
     protected $_cacheTag = 'categoryevent_sortentry';
+    protected $_timeNewToLive = 129600 ; // 36*60*60 in sec
 
     // Only this level is considered category event
     const CATEGORYEVENT_LEVEL = 3;
@@ -120,7 +121,7 @@ class Harapartners_Categoryevent_Model_Sortentry
 
         $startDate = date('Y-m-d', strtotime($date));
         $endDate   = $this->calculateEndDate($date);
-
+ 
         $live = array();
         $upcoming = array();
         $copiedEventIds = array();
@@ -162,7 +163,22 @@ class Harapartners_Categoryevent_Model_Sortentry
             }
         }
 
+        $ls = $live;
+        $new = array();
+        $live = array();
+        $orgDate = strtotime($date);
+        $newDate = $orgDate + $this->_timeNewToLive; 
+        foreach ($ls as $l){
+            $start = strtotime($l['event_start_date']);
+            if ($orgDate <= $start && $start <= $newDate){
+                $new[] = $l;
+                continue;
+            }
+            $live[] = $l;
+        }
+
         $this->setData('date', $date)
+            ->setData('top_live_queue', json_encode($new))
             ->setData('live_queue', json_encode($live))
             ->setData('upcoming_queue', json_encode($upcoming));
 
@@ -350,12 +366,44 @@ class Harapartners_Categoryevent_Model_Sortentry
     {
         $now = Mage::getModel('core/date')->timestamp();
 
+        $top     = json_decode($this->getData('top_live_queue'), true);
         $live     = json_decode($this->getData('live_queue'), true);
         $upcoming = json_decode($this->getData('upcoming_queue'), true);
+
+    	if (!is_array($top)) { $top = array(); }
+    	if (!is_array($live)) { $live = array(); }
+    	if (!is_array($upcoming)) { $upcoming = array(); }
 
         $earlyAccessTime = false;
         if(($customer = Mage::helper('customer')->getCustomer()) && (Mage::helper('crownclub')->isClubMember($customer))) {
             $earlyAccessTime = Mage::helper('crownclub/earlyaccess')->getEarlyAccessTime();
+        }
+
+        foreach ($top as $idx => $event) {
+            $startTime = strtotime($event['event_start_date']);
+            if($earlyAccessTime) {
+                $startTime -= $earlyAccessTime;
+            }
+
+            $diff = $now - $startTime;
+
+            if ($startTime > $now ) {
+                
+                // move this event to Upcoming
+                array_unshift($upcoming, $event);
+                unset($top[$idx]);
+                continue;
+
+            } else if ( ($startTime < $now) 
+                && $diff <= $this->_timeNewToLive
+            ){
+
+                // move this event to Live
+                array_unshift($live, $event);
+                unset($top[$idx]);
+                continue;
+
+            } 
         }
 
         foreach ($live as $idx => $event) {
@@ -363,28 +411,58 @@ class Harapartners_Categoryevent_Model_Sortentry
             if($earlyAccessTime) {
                 $startTime -= $earlyAccessTime;
             }
-            if ($startTime > $now) {
+
+            $diff = $now - $startTime;
+
+            if ($startTime > $now ) {
+                
                 // move this event to Upcoming
                 array_unshift($upcoming, $event);
                 unset($live[$idx]);
-            }
+                continue;
+
+            } else if ( ($startTime < $now) 
+                && $diff <= $this->_timeNewToLive
+            ){
+
+                // move this event to Top                
+                array_unshift($top, $event);
+                unset($live[$idx]);
+                continue;
+            }        
         }
 
         foreach ($upcoming as $idx => $event) {
+            
             $startTime = strtotime($event['event_start_date']);
             if($earlyAccessTime) {
                 $startTime -= $earlyAccessTime;
             }
-            if ($startTime < $now &&
-                strtotime($event['event_end_date']) > $now
-            ) {
+
+            $diff = $now - $startTime;
+
+            if ( ($startTime < $now) 
+                && $diff <= $this->_timeNewToLive
+            ){
+
                 // move this event to Live
                 array_unshift($live, $event);
                 unset($upcoming[$idx]);
+                continue;
+
+            } else if ( ($startTime < $now) 
+                && $diff <= $this->_timeNewToLive
+            ){
+
+                // move this event to Top
+                array_unshift($top, $event);
+                unset($$upcoming[$idx]);
+                continue;
             }
         }
 
-        $this->setData('live_queue', json_encode($live))
+        $this->setData('top_live_queue', json_encode(array_reverse($top)))
+            ->setData('live_queue', json_encode($live))
             ->setData('upcoming_queue', json_encode($upcoming));
 
         return $this;
