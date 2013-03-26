@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <modules>
+        <Insparq_Feed>
+        <version>1.0.0</version>
+        </Insparq_Feed>
+    </modules>
+    <global>
+        <page>
+            <layouts>
+                <insparq_feed_page translate="label">
+                    <label>InSparq Feed</label>
+                    <template>page/insparq-1column.phtml</template>
+                    <layout_handle>insparq_layout_handle</layout_handle>
+                </insparq_feed_page>
+            </layouts>
+        </page>
+    </global>
+</config>

@@ -37,62 +37,65 @@
 <body<?php echo $this->getBodyClass()?' class="'.$this->getBodyClass().'"':'' ?> data-spy="scroll" data-target=".subnav" data-offset="50">
 <div id="stickywrap">
     <?php echo $this->getChildHtml('header') ?>
-    <div id="mainContent" class="container">
-        <?php echo $this->getChildHtml('global_notices') ?>
-        <?php echo $this->getChildHtml('global_messages') ?>
-        <?php echo $this->getChildHtml('breadcrumbsContainer') ?>
-        <?php
-        $currentUrlPath = $this->helper('core/url')->getCurrentUrl();
-        $temp = explode('/', $currentUrlPath);
-        $baseUrl = $temp[3];
-        if($baseUrl=="event") {
-        }
-        ?>
-        <div class="plus-menu">
-            <?php
-            $active = "";
-            // check if CMS page and get the identifier
-            if(Mage::app()->getFrontController()->getRequest()->getRouteName() == 'cms') {
-                $active = Mage::getSingleton('cms/page')->getIdentifier();
-            }
-            // get the route name if it is not a CMS page
-            if(empty($active)) {
-                $active = Mage::app()->getFrontController()->getRequest()->getRouteName();
-            }
-            // if this is a catalog page, get the category path
-            if($active == 'catalog') {
-                $active = 'plus'.strtolower(Mage::registry('current_category')->getUrlPath()).'.html';
-            }
-            ?>
-            <ul class="links">
-                <li class="first"><a href="/plus/dashboard" title="TOTSYPLUS DASHBOARD" <?php echo $active == 'plus/dashboard' ? 'class="active"' : ''; ?>>TOTSYPLUS DASHBOARD</a></li>
-                <li><a href="/plus/credit.html" title="10% Credit On Every Purchase*" <?php echo $active == 'plus/credit.html' ? 'class="active"' : ''; ?>>10% Credit On<br/>Every Purchase</a></li>
-                <li><a href="/plus/early-access.html" title="Early Access" <?php echo $active == 'plus/early-access.html' ? 'class="active"' : ''; ?>>Early Access</a></li>
-                <li><a href="/plus/exclusive-sales.html" title="Exclusive Sales" <?php echo $active == 'plus/exclusive-sales.html' ? 'class="active"' : ''; ?>>Exclusive Sales</a></li>
-                <li><a href="/plus/entertainment-savings.html" title="Entertainment Savings" <?php echo $active == 'plus/entertainment-savings.html' ? 'class="active"' : ''; ?>>Entertainment Savings</a></li>
-                <li><a href="/plus/discount-vault.html" title="Discount Vault" <?php echo $active == 'plus/discount-vault.html' ? 'class="active"' : ''; ?>>Discount Vault</a></li>
-                <li class=" last" ><a href="/sales/recurring_profile/" title="My TotsyPLUS Membership" <?php echo $active == 'sales/recurring_profile' ? 'class="active"' : ''; ?>>My TotsyPLUS Membership</a></li>
-            </ul>
-
-            <ul class="links">
-                <li class="first"><span>NEED HELP?</span></li>
-                <li><a href="http://totsy.custhelp.com/app/ask" title="Help Desk" >Help Desk</a></li>
-                <li><a href="http://totsy.custhelp.com/app/home" title="FAQs" >FAQs</a></li>
-                <li><a href="/pages/privacy/" title="Privacy Policy" <?php echo $active == 'pages/privacy' ? 'class="active"' : ''; ?>>Privacy Policy</a></li>
-                <li class="last"><a href="/plus/terms.html" title="Terms Of Use" <?php echo $active == 'plus/terms.html' ? 'class="active"' : ''; ?>>Terms Of Use</a></li>
-            </ul>
-        </div>
-        <div class="plus-content">
-            <div class="plus">
-                <?php echo $this->getChildHtml('content') ?>
-                <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('look_for_totsyplus')->toHtml(); ?>
-            </div>
-        </div>
-        <div class="clear"></div>
-        <?php echo $this->getChildHtml('footer_before') ?>
-        <?php echo $this->getChildHtml('after_body_start') ?>
-        <?php echo $this->getChildHtml('before_body_end') ?>
-    </div>
+    <div id="mainContent">
+        <div class="container l-2col">
+	        <?php echo $this->getChildHtml('global_notices') ?>
+	        <?php echo $this->getChildHtml('global_messages') ?>
+	        <?php echo $this->getChildHtml('breadcrumbsContainer') ?>
+	        <?php
+	        $currentUrlPath = $this->helper('core/url')->getCurrentUrl();
+	        $temp = explode('/', $currentUrlPath);
+	        $baseUrl = $temp[3];
+	        if($baseUrl=="event") {
+	        }
+	        ?>
+	        <div class="row">
+		        <div class="plus-menu span2">
+		            <?php
+		            $active = "";
+		            // check if CMS page and get the identifier
+		            if(Mage::app()->getFrontController()->getRequest()->getRouteName() == 'cms') {
+		                $active = Mage::getSingleton('cms/page')->getIdentifier();
+		            }
+		            // get the route name if it is not a CMS page
+		            if(empty($active)) {
+		                $active = Mage::app()->getFrontController()->getRequest()->getRouteName();
+		            }
+		            // if this is a catalog page, get the category path
+		            if($active == 'catalog') {
+		                $active = 'plus'.strtolower(Mage::registry('current_category')->getUrlPath()).'.html';
+		            }
+		            ?>
+		            <ul class="links">
+		                <li class="first"><a href="/plus/dashboard" title="TOTSYPLUS DASHBOARD" <?php echo $active == 'plus/dashboard' ? 'class="active"' : ''; ?>>TOTSYPLUS DASHBOARD</a></li>
+		                <li><a href="/plus/credit.html" title="10% Credit On Every Purchase*" <?php echo $active == 'plus/credit.html' ? 'class="active"' : ''; ?>>10% Credit On<br/>Every Purchase</a></li>
+		                <li><a href="/plus/early-access.html" title="Early Access" <?php echo $active == 'plus/early-access.html' ? 'class="active"' : ''; ?>>Early Access</a></li>
+		                <li><a href="/plus/exclusive-sales.html" title="Exclusive Sales" <?php echo $active == 'plus/exclusive-sales.html' ? 'class="active"' : ''; ?>>Exclusive Sales</a></li>
+		                <li><a href="/plus/entertainment-savings.html" title="Entertainment Savings" <?php echo $active == 'plus/entertainment-savings.html' ? 'class="active"' : ''; ?>>Entertainment Savings</a></li>
+		                <li><a href="/plus/discount-vault.html" title="Discount Vault" <?php echo $active == 'plus/discount-vault.html' ? 'class="active"' : ''; ?>>Discount Vault</a></li>
+		                <li class=" last" ><a href="/sales/recurring_profile/" title="My TotsyPLUS Membership" <?php echo $active == 'sales/recurring_profile' ? 'class="active"' : ''; ?>>My TotsyPLUS Membership</a></li>
+		            </ul>
+		
+		            <ul class="links">
+		                <li class="first"><span>NEED HELP?</span></li>
+		                <li><a href="http://totsy.custhelp.com/app/ask" title="Help Desk" >Help Desk</a></li>
+		                <li><a href="http://totsy.custhelp.com/app/home" title="FAQs" >FAQs</a></li>
+		                <li><a href="/pages/privacy/" title="Privacy Policy" <?php echo $active == 'pages/privacy' ? 'class="active"' : ''; ?>>Privacy Policy</a></li>
+		                <li class="last"><a href="/plus/terms.html" title="Terms Of Use" <?php echo $active == 'plus/terms.html' ? 'class="active"' : ''; ?>>Terms Of Use</a></li>
+		            </ul>
+		        </div>
+		        <div class="plus-content span10">
+		            <div class="plus">
+		                <?php echo $this->getChildHtml('content') ?>
+		                <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('look_for_totsyplus')->toHtml(); ?>
+		            </div>
+		        </div>
+		        <?php echo $this->getChildHtml('footer_before') ?>
+		        <?php echo $this->getChildHtml('after_body_start') ?>
+		        <?php echo $this->getChildHtml('before_body_end') ?>
+	        </div><!-- /.row -->
+        </div><!-- /.container -->
+    </div><!-- /#mainContent -->
 </div><!-- /#stickywrap -->
 <?php echo $this->getChildHtml('footer') ?>
 <?php //echo $this->getAbsoluteFooter() ?>

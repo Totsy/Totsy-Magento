@@ -140,7 +140,7 @@ class Harapartners_Fulfillmentfactory_Model_Service_Fulfillment
             //vaidation
             if(!in_array($itemQueue->getStatus(),
                 array(Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_PENDING,
-                Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_PARTIALo,
+                Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_PARTIAL,
                 Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_SUSPENDED))){
             	$errorArray[] = sprintf('Cannot cancel item #%d. Only pending or suspended items can be cancelled.', $itemQueue->getId());
             	continue;
