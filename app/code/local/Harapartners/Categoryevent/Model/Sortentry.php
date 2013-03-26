@@ -163,20 +163,7 @@ class Harapartners_Categoryevent_Model_Sortentry
             }
         }
 
-        $ls = $live;
         $new = array();
-        $live = array();
-        $orgDate = strtotime($date);
-        $newDate = $orgDate + $this->_timeNewToLive; 
-        foreach ($ls as $l){
-            $start = strtotime($l['event_start_date']);
-            if ($orgDate <= $start && $start <= $newDate){
-                $new[] = $l;
-                continue;
-            }
-            $live[] = $l;
-        }
-
         $this->setData('date', $date)
             ->setData('top_live_queue', json_encode($new))
             ->setData('live_queue', json_encode($live))
