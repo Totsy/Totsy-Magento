@@ -39,9 +39,7 @@ $_id = $_time . substr($_session,13);
 <div class="form-list .one-page-payment" id="payment_form_<?php echo $_code ?>">
 <?php $customerId = Mage::getSingleton('customer/session')->getCustomerId(); ?>
 <?php if($this->getVaultEnabled()) {
-        if($this->hasStoredCards()) {
-            $hasProfile = true;
-        }
+        $hasProfile = true;
 } ?>
 
 <script type="text/javascript">
@@ -128,7 +126,7 @@ jQuery(document).ready( function() {
                                     $customerId = $card->getData('customer_id');
                                     $lastCardUsedId = Mage::helper('palorus')->getLastCardUsed();
                                     $customerObj = Mage::getSingleton('customer/customer')->load($customerId);
-                                    $customerAddress = Mage::getModel('sales/order')->load($card->order_id)->getBillingAddress();
+                                    $customerAddress = Mage::getModel('customer/address')->load($card->getData('address_id'));
                                     $customerName = $customerAddress->getFirstname() ." ". $customerAddress->getLastname();
                                     $customerStreet = $customerAddress['street'];
                                 ?>
@@ -362,6 +360,7 @@ jQuery(document).ready( function() {
                 }
                 submitAfterLitle();
 			}
+	    //}
 	};
 });
 </script>
