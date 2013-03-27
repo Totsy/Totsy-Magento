@@ -79,9 +79,16 @@ jQuery(document).ready(function() {
                 }
             },
             useSavedCard: function(elem) {
-            	jQuery();
-                jQuery('#billing-address-select').attr('disabled', false);
+                jQuery('#billing-address-select').attr('disabled', false);               
                 jQuery('#billing-address-select').val(jQuery(elem).attr("data-billing-address-id"));
+                
+                //switch the address, but first remove the lock on the form fields
+                this.disableAddress(false, 'hpcheckout-billing-form');                
+                hpcheckout.switchAddress('billing-address-select');
+                
+                //lock the form fields again
+                this.disableAddress(true, 'hpcheckout-billing-form'); 
+                
                 jQuery('#billing-address-select').attr('disabled', true);
             },
             setPaymentType: function(elem) {
