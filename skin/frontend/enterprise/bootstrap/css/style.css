@@ -828,7 +828,7 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
 #mainContent > .container > .banner {
     margin:5px auto 0;
 }
-.banner img {width:100%;}
+.banner img {/* RWD */ /* width:100%; */ width:940px; height:200px; margin:0px; padding: 0px; }
 .catalog-events-container {margin-top:8px;}
 .banner + .catalog-events-container {margin-top:18px;}
 .page-header img {margin-right: 5px;}
