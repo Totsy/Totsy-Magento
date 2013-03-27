@@ -399,7 +399,11 @@ class Crown_Import_Model_Productimport extends Crown_Import_Model_Import_Abstrac
      */
     public function filterMediaGallery($_id, $data) {
         if (isset($data['media_gallery']) && isset($data['sku'])) {
-            $this->_media_gallery[$data['sku']] = explode(',', $data['media_gallery']);
+            $media_paths = array();
+            foreach (explode(',', $data['media_gallery']) as $path) {
+                array_push($media_paths, trim($path));
+            }
+            $this->_media_gallery[$data['sku']] = $media_paths;
             unset($data['media_gallery']);
             if (isset($this->_fields['media_gallery'])) {
                 unset($this->_fields['media_gallery']);
