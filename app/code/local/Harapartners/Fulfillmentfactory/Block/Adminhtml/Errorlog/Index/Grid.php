@@ -109,16 +109,24 @@ class Harapartners_Fulfillmentfactory_Block_Adminhtml_Errorlog_Index_Grid
         $this->getMassactionBlock()->setFormFieldName('entity_id');
         $this->getMassactionBlock()->setUseSelectAll(false);
 
-        //batch cancel function
-        $this->getMassactionBlock()->addItem(
-            'refulfill',
-            array(
-                'label'=> Mage::helper('fulfillmentfactory')->__('Fulfill Again'),
-                'url'  => $this->getUrl('*/*/refulfill'),
-                'confirm' => Mage::helper('fulfillmentfactory')->__('Are you sure?')
-            )
-        );
+        if($this->_isAllowedAction('fulfill_action')) {
+            //refulfill function
+            $this->getMassactionBlock()->addItem(
+                'refulfill',
+                array(
+                    'label'=> Mage::helper('fulfillmentfactory')->__('Fulfill Again'),
+                    'url'  => $this->getUrl('*/*/refulfill'),
+                    'confirm' => Mage::helper('fulfillmentfactory')->__('Are you sure?')
+                )
+            );
+        }
 
         return $this;
+    }
+
+    protected function _isAllowedAction($action)
+    {
+        //return null;
+        return Mage::getSingleton('admin/session')->isAllowed('sales/fulfillmentfactory/fulfillmentlog/actions/' . $action);
     }
 }
