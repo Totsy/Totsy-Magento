@@ -33,6 +33,7 @@ jQuery(document).ready(function() {
                     jQuery("#cc_save_text").html("Save");
                     jQuery(".use-new-card-wrapper").appendTo(jQuery("#add_cc_types"));
                     newCardWrap.hide();
+                    this.useSavedCard(jQuery(".use-saved-card-control"));
                 }
             },
             disableAddress: function(stateFlag, formId) {
