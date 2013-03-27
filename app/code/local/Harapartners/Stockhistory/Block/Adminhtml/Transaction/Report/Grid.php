@@ -206,32 +206,34 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Grid extends 
         $this->getMassactionBlock()->setFormFieldName('product_id');
         $this->getMassactionBlock()->setUseSelectAll(false);
 
-        //change case pack status function
-        $this->getMassactionBlock()->addItem('reset_items', array(
-             'label'=> Mage::helper('stockhistory')->__('Reset Item(s)'),
-             'url'  => $this->getUrl('*/*/resetItems', array('_current' => true)),
-             'confirm' => Mage::helper('stockhistory')->__("Resetting the item(s) will remove ALL qty change post amendments ever made for the item. \n**If the sale is has not expired, stock qty will be updated accordingly** \nAre you sure you want to reset?")
-        ));
+        if($this->_isAllowedAction('editable')) {
+            //change case pack status function
+            $this->getMassactionBlock()->addItem('reset_items', array(
+                 'label'=> Mage::helper('stockhistory')->__('Reset Item(s)'),
+                 'url'  => $this->getUrl('*/*/resetItems', array('_current' => true)),
+                 'confirm' => Mage::helper('stockhistory')->__("Resetting the item(s) will remove ALL qty change post amendments ever made for the item. \n**If the sale is has not expired, stock qty will be updated accordingly** \nAre you sure you want to reset?")
+            ));
 
-        if(($this->getPoObject()->getStatus()) != Harapartners_Stockhistory_Model_Purchaseorder::STATUS_SUBMITTED){
-            $this->getMassactionBlock()->addItem('move_items', array(
-                 'label'=> Mage::helper('stockhistory')->__('Move items to PO #...'),
-                 'url'  => $this->getUrl('*/*/moveItemsToNewPo', array('_current' => true)),
-                 'confirm' => Mage::helper('stockhistory')->__("Are you sure you want to move these items?")
+            if(($this->getPoObject()->getStatus()) != Harapartners_Stockhistory_Model_Purchaseorder::STATUS_SUBMITTED){
+                $this->getMassactionBlock()->addItem('move_items', array(
+                     'label'=> Mage::helper('stockhistory')->__('Move items to PO #...'),
+                     'url'  => $this->getUrl('*/*/moveItemsToNewPo', array('_current' => true)),
+                     'confirm' => Mage::helper('stockhistory')->__("Are you sure you want to move these items?")
+                ));
+            }
+
+            $this->getMassactionBlock()->addItem('change_case_pack_no', array(
+                 'label'=> Mage::helper('stockhistory')->__('Set Case Pack to No'),
+                 'url'  => $this->getUrl('*/*/changeCasePack', array('change_to' => 0)),
+                 'confirm' => Mage::helper('stockhistory')->__('Are you sure you want to change it to "No"?')
+            ));
+
+            $this->getMassactionBlock()->addItem('change_case_pack_yes', array(
+                 'label'=> Mage::helper('stockhistory')->__('Set Case Pack to Yes'),
+                 'url'  => $this->getUrl('*/*/changeCasePack', array('change_to' => 1)),
+                 'confirm' => Mage::helper('stockhistory')->__('Are you sure you want to change it to "Yes"?')
             ));
         }
-
-        $this->getMassactionBlock()->addItem('change_case_pack_no', array(
-             'label'=> Mage::helper('stockhistory')->__('Set Case Pack to No'),
-             'url'  => $this->getUrl('*/*/changeCasePack', array('change_to' => 0)),
-             'confirm' => Mage::helper('stockhistory')->__('Are you sure you want to change it to "No"?')
-        ));
-
-        $this->getMassactionBlock()->addItem('change_case_pack_yes', array(
-             'label'=> Mage::helper('stockhistory')->__('Set Case Pack to Yes'),
-             'url'  => $this->getUrl('*/*/changeCasePack', array('change_to' => 1)),
-             'confirm' => Mage::helper('stockhistory')->__('Are you sure you want to change it to "Yes"?')
-        ));
 
         return $this;
     }
