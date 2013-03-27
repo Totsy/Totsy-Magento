@@ -469,6 +469,7 @@ body.customer-account-entry .btn.btn-large {
 .cta-item a,
 .cta-item a:link {
     color: #fff;
+    text-decoration: none;
 }
 .cta-item a:hover {
 /*     color: #d22f2a; */
