@@ -48,7 +48,7 @@ class Crown_Import_Block_Adminhtml_Catalog_Category_Edit_Form extends Totsy_Admi
      * @return string
      */
     public function getChangeFulfillmentButtonHtml() {
-		$currentTime = time();
+		$currentTime = Mage::getSingleton('core/date')->timestamp();
 
         if ($this->hasStoreRootCategory () && $this->_isAllowedAction('fulfillmentfactorybulkedit')
 			&& !$this->getCategory()->getData('is_active')
