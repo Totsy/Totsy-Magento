@@ -39,14 +39,14 @@ $_id = $_time . substr($_session,13);
 <div class="form-list .one-page-payment" id="payment_form_<?php echo $_code ?>">
 <?php $customerId = Mage::getSingleton('customer/session')->getCustomerId(); ?>
 <?php if($this->getVaultEnabled()) {
-        $hasProfile = true;
+	  	if($this->hasStoredCards()) {
+        	$hasProfile = true;
+        }
 } ?>
 
 <script type="text/javascript">
-
 jQuery(document).ready( function() {
-    //console.log(typeof checkoutPayment.toggleViews);
-    checkoutPayment.hasProfile = "<?php echo $hasProfile; ?>";
+    checkoutPayment.hasProfile = "<?php echo $hasProfile; ?>";    
     checkoutPayment.toggleViews();
     
     jQuery("[name='payment[cc_vaulted]']").change(function() {
@@ -59,7 +59,6 @@ jQuery(document).ready( function() {
         checkoutPayment.setPaymentType(this);
     });
 });
-
 </script>
 
 <div>
@@ -287,80 +286,78 @@ jQuery(document).ready( function() {
 		var _currentMethod = "<?php echo $_code ?>";
 		var _form = this.form;
 
-			// Litle Page Stuff//
-			function setLitleResponseFields(response) {	
+		// Litle Page Stuff//
+		function setLitleResponseFields(response) {	
+		    $('<?php echo $_code ?>_code').value = response.response;
+		    $('<?php echo $_code ?>_message').value = response.message;
+		    $('<?php echo $_code ?>_response_time').value = response.responseTime;
+		    $('<?php echo $_code ?>_litle_txn_id').value = response.litleTxnId;
+		    $('<?php echo $_code ?>_type').value = response.type;					
+            hpcheckout.submit();
+		}
 
-					$('<?php echo $_code ?>_code').value = response.response;
-					$('<?php echo $_code ?>_message').value = response.message;
-					$('<?php echo $_code ?>_response_time').value = response.responseTime;
-					$('<?php echo $_code ?>_litle_txn_id').value = response.litleTxnId;
-					$('<?php echo $_code ?>_type').value = response.type;					
-                	hpcheckout.submit();
-			}
+		function submitAfterLitle() {
+		    var request = new Ajax.Request(
+		    	_saveUrl,
+		    	{
+		    		method:'post',
+		    		onComplete: _onComplete,
+		    		onSuccess: _onSave,
+		    		//onFailure: checkout.ajaxFailure.bind(checkout),
+		    		parameters: Form.serialize(_form)
+		    	}
+		    );
+		}
 
-			function submitAfterLitle() {
-				var request = new Ajax.Request(
-					_saveUrl,
-					{
-						method:'post',
-						onComplete: _onComplete,
-						onSuccess: _onSave,
-						//onFailure: checkout.ajaxFailure.bind(checkout),
-						parameters: Form.serialize(_form)
-					}
-				);
-			}
+		function timeoutOnLitle() {
+		    setLitleResponseFields();
+		    alert('timeout error');
+		    return false;
+		}
 
-			function timeoutOnLitle() {
-				setLitleResponseFields();
-				alert('timeout error');
-				return false;
-			}
+		function onErrorAfterLitle(response) {
+		    setLitleResponseFields(response);
+		    //alert('There was an error. Re-enter your payment information, or contact us for further assistance.');
+		    return false;
+		}
 
-			function onErrorAfterLitle(response) {
-				setLitleResponseFields(response);
-				//alert('There was an error. Re-enter your payment information, or contact us for further assistance.');
-				return false;
-			}
+		var formFields = {
+		    "accountNum" : $('<?php echo $_code ?>_cc_number'),
+		    "paypageRegistrationId" : $('<?php echo $_code ?>_paypage_registration_id'),
+		    "bin" : $('<?php echo $_code ?>_bin'),
+		    "cvv2" : $('<?php echo $_code ?>_cc_cid')
+		};
 
-			var formFields = {
-				"accountNum" : $('<?php echo $_code ?>_cc_number'),
-				"paypageRegistrationId" : $('<?php echo $_code ?>_paypage_registration_id'),
-				"bin" : $('<?php echo $_code ?>_bin'),
-				"cvv2" : $('<?php echo $_code ?>_cc_cid')
-			};
+		var litleRequest = {
+		    "paypageId" : $('<?php echo $_code ?>_paypage_id').value,
+		    "reportGroup" : $('<?php echo $_code ?>_report_group').value,
+		    "orderId" : $('<?php echo $_code ?>_order_id').value,
+		    "id" : $('<?php echo $_code ?>_merchant_txn_id').value,
+		    "url" : ($('<?php echo $_code ?>_paypage_url').value)
+		};
 
-			var litleRequest = {
-				"paypageId" : $('<?php echo $_code ?>_paypage_id').value,
-				"reportGroup" : $('<?php echo $_code ?>_report_group').value,
-				"orderId" : $('<?php echo $_code ?>_order_id').value,
-				"id" : $('<?php echo $_code ?>_merchant_txn_id').value,
-				"url" : ($('<?php echo $_code ?>_paypage_url').value)
-			};
-
-            if(!hpcheckout.validate()) {
-                return;
+        if(!hpcheckout.validate()) {
+            return;
+        }
+        //this becomes a set of radio buttons instead    
+        var selectmenu = $("<?php echo $_code ?>_cc_vaulted");
+		if(selectmenu){
+		    var chosenoption=selectmenu.options[selectmenu.selectedIndex]
+		    if (chosenoption.value == 0){
+		    	if( _currentMethod == "creditcard" ){
+		    		sendToLitle(litleRequest, formFields, setLitleResponseFields, onErrorAfterLitle);
+                    submitAfterLitle();
+                }
+		    } else {
+                submitAfterLitle();                    
+                hpcheckout.submit();
             }
-            //this becomes a set of radio buttons instead    
-            var selectmenu = $("<?php echo $_code ?>_cc_vaulted");
-			if(selectmenu){
-				var chosenoption=selectmenu.options[selectmenu.selectedIndex]
-				if (chosenoption.value == 0){
-					if( _currentMethod == "creditcard" ){
-						sendToLitle(litleRequest, formFields, setLitleResponseFields, onErrorAfterLitle);
-                        submitAfterLitle();
-                    }
-				} else {
-                    submitAfterLitle();                    
-                    hpcheckout.submit();
-                }
-			} else{
-				if( _currentMethod == "creditcard" ){
-					sendToLitle(litleRequest, formFields, setLitleResponseFields, onErrorAfterLitle);
-                }
-                submitAfterLitle();
-			}
-	    //}
+		} else{
+		    if( _currentMethod == "creditcard" ){
+		    	sendToLitle(litleRequest, formFields, setLitleResponseFields, onErrorAfterLitle);
+            }
+            submitAfterLitle();
+		}
 	};
 });
 </script>
