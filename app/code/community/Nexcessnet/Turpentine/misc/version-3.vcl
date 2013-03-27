@@ -67,6 +67,10 @@ sub vcl_recv {
         return (pipe);
     }
 
+    if( req.http.User-Agent ~ "(?i)android.+mobile|blackberry|ip(hone|od)" ) {
+        set req.http.X-UA-Device = "mobile";
+    }
+
     call remove_double_slashes;
 
     {{normalize_encoding}}
@@ -155,6 +159,9 @@ sub vcl_hash {
         hash_data("loggedinuser");
     } else {
         hash_data("loggedoutuser");
+    }
+    if (req.http.X-UA-Device) {
+        hash_data(req.http.X-UA-Device);
     }
     return (hash);
 }
