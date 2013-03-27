@@ -163,20 +163,7 @@ class Harapartners_Categoryevent_Model_Sortentry
             }
         }
 
-        $ls = $live;
         $new = array();
-        $live = array();
-        $orgDate = strtotime($date);
-        $newDate = $orgDate + $this->_timeNewToLive; 
-        foreach ($ls as $l){
-            $start = strtotime($l['event_start_date']);
-            if ($orgDate <= $start && $start <= $newDate){
-                $new[] = $l;
-                continue;
-            }
-            $live[] = $l;
-        }
-
         $this->setData('date', $date)
             ->setData('top_live_queue', json_encode($new))
             ->setData('live_queue', json_encode($live))
@@ -321,15 +308,32 @@ class Harapartners_Categoryevent_Model_Sortentry
         return $collection;
     }
 
-    public function updateSortCollection(
+ public function updateSortCollection(
         array $sortedLive = array(),
         array $sortedUpcoming = array()
     ) {
+        $currentTop = json_decode($this->getData('top_live_queue'), true);
         $currentLive = json_decode($this->getData('live_queue'), true);
         $currentUpcoming = json_decode($this->getData('upcoming_queue'), true);
 
+        $updatedTop = array();
         $updatedLive = array();
         $updatedUpcoming = array();
+
+        foreach ($currentTop as $event) {
+            $idx = array_search($event['entity_id'], $sortedLive);
+            if ($idx!==false){
+                $updatedTop[$idx] = $event;
+                unset($currentLive[$idx]);
+
+            } 
+        }
+
+        ksort($updatedTop);
+        if (is_array($updatedTop) && count($updatedTop)>0){
+            $keys = array_flip(array_keys($updatedTop));
+            $updatedTop = array_combine($keys,$updatedTop);
+        }
 
         if (!empty($sortedLive)) {
             foreach ($currentLive as $event) {
@@ -351,7 +355,8 @@ class Harapartners_Categoryevent_Model_Sortentry
             $updatedUpcoming = $currentUpcoming;
         }
 
-        $this->setData('live_queue', json_encode($updatedLive))
+        $this->setData('top_live_queue', json_encode($updatedTop))
+            ->setData('live_queue', json_encode($updatedLive))
             ->setData('upcoming_queue', json_encode($updatedUpcoming));
 
         return $this;
