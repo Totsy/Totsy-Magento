@@ -24,8 +24,6 @@ jQuery(document).ready(function($) {
 		if (rel) {
 			data.getBlocks[id] = rel;
 			counter++;
-		} else {
-			throw 'Found placeholder without rel attribute';
 		}
 	});
 
