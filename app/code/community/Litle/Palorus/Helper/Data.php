@@ -225,14 +225,14 @@ class Litle_Palorus_Helper_Data extends Mage_Core_Helper_Abstract
             if($_order->getPayment()->getData('litle_vault_id')) {
                 $card = Mage::getModel('palorus/vault')->load($_order->getPayment()->getData('litle_vault_id'));
                 if($card->getId()) {
-                    return $card->getId();
+                    return $card;
                 }
             }
             if($_order->getPayment()->getData('cybersource_subid')) {
                 $card = Mage::getModel('paymentfactory/profile')
                     ->load($_order->getPayment()->getData('cybersource_subid'), 'subscription_id');
                 if($card->getId()) {
-                    return $card->getId();
+                    return $card;
                 }
             }
         }
