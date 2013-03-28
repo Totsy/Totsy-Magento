@@ -107,7 +107,7 @@ class Nexcessnet_Turpentine_Block_Core_Messages extends Mage_Core_Block_Messages
      */
     public function addMessage( Mage_Core_Model_Message_Abstract $message ) {
         parent::addMessage( $message );
-        $this->_saveMessages( array( $message ) );
+//        $this->_saveMessages( array( $message ) );
         return $this;
     }
 
