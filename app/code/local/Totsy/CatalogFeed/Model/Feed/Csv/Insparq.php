@@ -65,13 +65,15 @@ class Totsy_CatalogFeed_Model_Feed_Csv_Insparq
             $description = $parent['description'];
         }
 
+        $productUrl = is_null($parent) ? $product->getProductUrl() : $parent->getProductUrl();
+
         $feedItem = array(
             $product['entity_id'],
             (null !== $parent) ? $parent->getId() : '',
             $product['name'],
             preg_replace("/[\r\n]/", "", strip_tags($description)),
             implode(',', $dept),
-            $product->getProductUrl(),
+            $productUrl,
             $imageUrl,
             $product['price'],
             $product['special_price'],
