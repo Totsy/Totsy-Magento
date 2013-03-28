@@ -44,9 +44,9 @@ if(count($fulfillmentTypes) > 1) {
 <script type="text/javascript">
 
 jQuery(document).ready(function() {
-    checkoutPayment.hasProfile = "<?php echo $hasProfile; ?>";
-    checkoutPayment.toggleViews();
-
+    //checkoutPayment.hasProfile = "<?php //echo $hasProfile; ?>";
+    //checkoutPayment.toggleViews();
+    /*
     jQuery("[id='payment[cybersource_subid]']").change(function() {
         checkoutPayment.setPaymentUI(this);
     });
@@ -56,6 +56,7 @@ jQuery(document).ready(function() {
     jQuery("#paymentfactory_tokenize_cc_type input").click(function() {
         checkoutPayment.setPaymentType(this);
     });
+    */
 });
 
 </script>
@@ -132,63 +133,5 @@ jQuery(document).ready(function() {
                         <input type="hidden" id="address_<?php echo $profile->getEncryptedSubscriptionId() ?>" value="<?php echo $profile->getData('address_id') ?>" />
                     <?php endforeach ?>
                 </div>
-    </div>
-<div style="clear:both"></div>
-        <?php if ($this->hasSsCardType()): ?>
-        <li id="<?php echo $_code ?>_cc_type_ss_div">
-            <ul class="inner-form">
-                <li class="form-alt">
-                    <label for="<?php echo $_code ?>_issue" class="required"><em>*</em><?php echo $this->__('Switch/Solo/Maestro(UK Domestic) Only') ?></label>
-                </li>
-                <li>
-                    <label for="<?php echo $_code ?>_cc_issue"><?php echo $this->__('Issue Number') ?></label>
-                    <div class="input-box">
-                        <input type="text" title="<?php echo $this->__('Issue Number') ?>" class="input-text cvv validate-cc-ukss" id="<?php echo $_code ?>_cc_issue" name="payment[cc_ss_issue]" value="" />
-                    </div>
-                </li>
-                <li>
-                    <label for="<?php echo $_code ?>_start_month"><?php echo $this->__('Start Date') ?></label>
-                    <div class="input-box">
-                        <div class="v-fix">
-                            <div class="totsy-selective-input-box short-length">
-                            <span><?php echo $this->__('Month') ?></span>
-                            <select id="<?php echo $_code ?>_start_month" name="payment[cc_ss_start_month]" class="month validate-cc-ukss">
-                            <?php $_ccStartMonth = $this->getInfoData('cc_ss_start_month') ?>
-                            <?php foreach ($this->getCcMonths() as $k=>$v): ?>
-                                <option value="<?php echo $k?$k:'' ?>" <?php if($k==$_ccStartMonth): ?>selected="selected"<?php endif ?>><?php echo $v ?></option>
-                            <?php endforeach ?>
-                            </select>
-                            </div>
-                        </div>
-                        <div class="v-fix">
-                            <div class="totsy-selective-input-box short-length">
-                            <span><?php echo $this->__('Year') ?></span>
-                            <select id="<?php echo $_code ?>_start_year" name="payment[cc_ss_start_year]" class="year validate-cc-ukss">
-                            <?php $_ccStartYear = $this->getInfoData('cc_ss_start_year') ?>
-                            <?php foreach ($this->getSsStartYears() as $k=>$v): ?>
-                                <option value="<?php echo $k?$k:'' ?>" <?php if($k==$_ccStartYear): ?>selected="selected"<?php endif ?>><?php echo $v ?></option>
-                            <?php endforeach ?>
-                            </select>
-                            </div>
-                         </div>
-                    </div>
-                </li>
-                <li class="adv-container"></li>
-            </ul>
-            <script type="text/javascript">            
-            
-            var SSChecked<?php echo $_code ?> = function() {
-                var elm = $('<?php echo $_code ?>_cc_type');
-                if (elm.value=='SO' || elm.value=='SM') {
-                    $('<?php echo $_code ?>_cc_type_ss_div').show();
-                } else {
-                    $('<?php echo $_code ?>_cc_type_ss_div').hide();
-                }
-            };
-            Event.observe($('<?php echo $_code ?>_cc_type'), 'change', SSChecked<?php echo $_code ?>);
-            SSChecked<?php echo $_code ?>();
-            </script>
-        </li>
-        <?php endif; ?>
     </div>
 </div>
