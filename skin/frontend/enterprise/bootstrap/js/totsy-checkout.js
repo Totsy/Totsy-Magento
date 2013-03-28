@@ -10,6 +10,7 @@ jQuery(document).ready(function() {
         var hasProfile = '';
         var isCollapsed = '';
         var lastUsedAddressId = '';
+        var isLitle = true;
         return {
             hasProfile: '',
             isCollapsed: false,
@@ -80,6 +81,15 @@ jQuery(document).ready(function() {
                 }
             },
             useSavedCard: function(elem) {
+                
+                if ( jQuery(elem).attr('name')=="payment[cybersource_subid]" ) {
+                    jQuery("[name='payment[cc_vaulted]']").attr("checked", false);
+                    this.isLitle = false;
+                } else {
+                    jQuery("[name='payment[cybersource_subid]']").attr("checked", false);
+                    this.isLitle = true;
+                }
+            
                 jQuery('#billing-address-select').attr('disabled', false);               
                 jQuery('#billing-address-select').val(jQuery(elem).attr("data-billing-address-id"));
                 
@@ -97,11 +107,17 @@ jQuery(document).ready(function() {
                     jQuery("[name='payment[cc_type]']").attr("checked", false);
                     newCardWrap.hide();
                 } else {
-                    jQuery('input[name="payment[method]"]').val("creditcard");
+                    //setting payment method depending on the payment gateway being used (Litle vs Cybersource)
+                    if(this.isLitle==true) {
+                        jQuery('input[name="payment[method]"]').val("creditcard");
+                    } else {
+                        jQuery('input[name="payment[method]"]').val("paymentfactory_tokenize");
+                    }
+                    
+                    jQuery("[name='payment[cc_vaulted]']").attr("checked", false);
                     jQuery('#billing-address').show();
                     jQuery('#shipping-address').show();
                     jQuery("#paypal_payment").attr("checked", false);
-                    jQuery("[name='payment[cc_vaulted]']").attr("checked", false);
                     jQuery('#billing-address-select').attr('disabled', false);
                     newCardWrap.show();
                 }
