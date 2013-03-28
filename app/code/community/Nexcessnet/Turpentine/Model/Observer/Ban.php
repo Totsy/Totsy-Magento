@@ -91,6 +91,28 @@ class Nexcessnet_Turpentine_Model_Observer_Ban extends Varien_Event_Observer {
                     $cronHelper->getCrawlerEnabled() ) {
                 $cronHelper->addProductToCrawlerQueue( $product );
             }
+
+            if($product->getCategoryCollection()) {
+                foreach($product->getCategoryCollection() as $category) {
+                    $rewrite = $category->getUrlRewrite();
+                    if ($category->getStoreId()) {
+                        $rewrite->setStoreId($category->getStoreId());
+                    }
+                    $idPath = 'category/' . $category->getId();
+                    $rewrite->loadByIdPath($idPath);
+
+                    if ($rewrite->getId()) {
+                        $url = $rewrite->getRequestPath();
+                        $result = $this->_getVarnishAdmin()->flushUrl( $url );
+                        Mage::dispatchEvent( 'turpentine_ban_category_cache', $result );
+                        $cronHelper = Mage::helper( 'turpentine/cron' );
+                        if( $this->_checkResult( $result ) &&
+                            $cronHelper->getCrawlerEnabled() ) {
+                            $cronHelper->addCategoryToCrawlerQueue( $category );
+                        }
+                    }
+                }
+            }
         }
     }
 
