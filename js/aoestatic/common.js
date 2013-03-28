@@ -4,7 +4,7 @@
  *
  * @author Fabrizio Branca
  */
-$.noConflict();
+//$.noConflict();
 jQuery(document).ready(function($) {
 
 	var data = { 
@@ -13,14 +13,14 @@ jQuery(document).ready(function($) {
 
 	// add placeholders
 	var counter = 0;
-	$('.placeholder').each(function() {
+	jQuery('.placeholder').each(function() {
 		var id = $(this).attr('id');
 		if (!id) {
 			// create dynamic id
 			id = 'ph_' + counter;
-			$(this).attr('id', id);
+			jQuery(this).attr('id', id);
 		}
-		var rel = $(this).attr('rel');
+		var rel = jQuery(this).attr('rel');
 		if (rel) {
 			data.getBlocks[id] = rel;
 			counter++;
@@ -36,12 +36,12 @@ jQuery(document).ready(function($) {
 
 	// E.T. phone home
 	if (typeof data.currentProductId !== 'undefined' || counter > 0) {
-		$.get(
+		jQuery.get(
 			AJAXHOME_URL,
 			data,
 			function (response) {
 				for(var id in response.blocks) {
-					$('#' + id).html(response.blocks[id]);
+					jQuery('#' + id).html(response.blocks[id]);
 				}
 				// inject session if (TODO: check if this is really needed)
 				// $.cookie('frontend', response.sid, { path: '/' });
