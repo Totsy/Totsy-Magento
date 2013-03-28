@@ -80,6 +80,13 @@ jQuery(document).ready(function() {
                 }
             },
             useSavedCard: function(elem) {
+                
+                if ( jQuery(elem).attr('name')=="payment[cybersource_subid]" ) {
+                    jQuery("[name='payment[cc_vaulted]']").attr("checked", false);
+                } else {
+                    jQuery("[name='payment[cybersource_subid]']").attr("checked", false);
+                }
+            
                 jQuery('#billing-address-select').attr('disabled', false);               
                 jQuery('#billing-address-select').val(jQuery(elem).attr("data-billing-address-id"));
                 

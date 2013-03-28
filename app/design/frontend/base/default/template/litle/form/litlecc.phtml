@@ -49,13 +49,14 @@ jQuery(document).ready( function() {
     checkoutPayment.hasProfile = "<?php echo $hasProfile; ?>";    
     checkoutPayment.toggleViews();
     
-    jQuery("[name='payment[cc_vaulted]']").change(function() {
+    jQuery("[name='payment[cc_vaulted]'] [name='payment[cybersource_subid]']").change( function() {
         checkoutPayment.setPaymentUI(this);
     });
-    jQuery(".use-saved-card-control").click(function() {
+    
+    jQuery(".use-saved-card-control").click( function() {
         checkoutPayment.useSavedCard(this);
     });
-    jQuery(".cc_types input").click(function() {
+    jQuery(".cc_types input").click( function() {
         checkoutPayment.setPaymentType(this);
     });
 });
