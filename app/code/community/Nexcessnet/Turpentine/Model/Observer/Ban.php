@@ -146,10 +146,47 @@ class Nexcessnet_Turpentine_Model_Observer_Ban extends Varien_Event_Observer {
                     if( $cronHelper->getCrawlerEnabled() ) {
                         $cronHelper->addProductToCrawlerQueue( $parentProduct );
                     }
+                    if($parentProduct->getCategoryCollection()) {
+                        foreach($parentProduct->getCategoryCollection() as $category) {
+                            $rewrite = $category->getUrlRewrite();
+                            if ($category->getStoreId()) {
+                                $rewrite->setStoreId($category->getStoreId());
+                            }
+                            $idPath = 'category/' . $category->getId();
+                            $rewrite->loadByIdPath($idPath);
+
+                            if ($rewrite->getId()) {
+                                $urlPatterns[] = $rewrite->getRequestPath();
+                                $cronHelper = Mage::helper( 'turpentine/cron' );
+                                if( $cronHelper->getCrawlerEnabled() ) {
+                                    $cronHelper->addCategoryToCrawlerQueue( $category );
+                                }
+                            }
+                        }
+                    }
                 }
                 $product = Mage::getModel( 'catalog/product' )
                     ->load( $item->getProductId() );
                 $urlPatterns[] = $product->getUrlKey();
+
+                if($product->getCategoryCollection()) {
+                    foreach($product->getCategoryCollection() as $category) {
+                        $rewrite = $category->getUrlRewrite();
+                        if ($category->getStoreId()) {
+                            $rewrite->setStoreId($category->getStoreId());
+                        }
+                        $idPath = 'category/' . $category->getId();
+                        $rewrite->loadByIdPath($idPath);
+
+                        if ($rewrite->getId()) {
+                            $urlPatterns[] = $rewrite->getRequestPath();
+                            $cronHelper = Mage::helper( 'turpentine/cron' );
+                            if( $cronHelper->getCrawlerEnabled() ) {
+                                $cronHelper->addCategoryToCrawlerQueue( $category );
+                            }
+                        }
+                    }
+                }
                 $pattern = sprintf( '(?:%s)', implode( '|', $urlPatterns ) );
                 $result = $this->_getVarnishAdmin()->flushUrl( $pattern );
                 Mage::dispatchEvent( 'turpentine_ban_product_cache_check_stock',
