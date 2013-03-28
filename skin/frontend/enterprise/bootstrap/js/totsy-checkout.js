@@ -34,7 +34,6 @@ jQuery(document).ready(function() {
                     jQuery("#cc_save_text").html("Save");
                     jQuery(".use-new-card-wrapper").appendTo(jQuery("#add_cc_types"));
                     newCardWrap.hide();
-                    this.useSavedCard(jQuery(".use-saved-card-control"));
                 }
             },
             disableAddress: function(stateFlag, formId) {
@@ -81,12 +80,13 @@ jQuery(document).ready(function() {
                 }
             },
             useSavedCard: function(elem) {
-                
                 if ( jQuery(elem).attr('name')=="payment[cybersource_subid]" ) {
                     jQuery("[name='payment[cc_vaulted]']").attr("checked", false);
+                    jQuery('input[name="payment[method]"]').val("paymentfactory_tokenize");
                     this.isLitle = false;
                 } else {
                     jQuery("[name='payment[cybersource_subid]']").attr("checked", false);
+                    jQuery('input[name="payment[method]"]').val("creditcard");
                     this.isLitle = true;
                 }
             
@@ -103,18 +103,16 @@ jQuery(document).ready(function() {
                 jQuery('#billing-address-select').attr('disabled', true);
             },
             setPaymentType: function(elem) {
+                //unselect ANY saved cards
+                jQuery("[name='payment[cc_vaulted]'],[name='payment[cybersource_subid]']").attr("checked", false);
+            
                 if (elem.id == "paypal_payment") {
                     jQuery("[name='payment[cc_type]']").attr("checked", false);
                     newCardWrap.hide();
                 } else {
                     //setting payment method depending on the payment gateway being used (Litle vs Cybersource)
-                    if(this.isLitle==true) {
-                        jQuery('input[name="payment[method]"]').val("creditcard");
-                    } else {
-                        jQuery('input[name="payment[method]"]').val("paymentfactory_tokenize");
-                    }
+                    this.isLitle = false;
                     
-                    jQuery("[name='payment[cc_vaulted]']").attr("checked", false);
                     jQuery('#billing-address').show();
                     jQuery('#shipping-address').show();
                     jQuery("#paypal_payment").attr("checked", false);
