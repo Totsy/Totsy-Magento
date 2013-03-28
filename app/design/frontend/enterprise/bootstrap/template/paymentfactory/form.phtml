@@ -80,24 +80,12 @@ jQuery(document).ready(function() {
                             $checked = '';
                             $customerObj = Mage::getSingleton('customer/customer')->load($profile->getCustomerId());
                             $customerAddress = Mage::getSingleton('customer/address')->load($profile->getAddressId());
-                            
+                            $lastCardUsedId = Mage::helper('palorus')->getLastCardUsed();
                             $customerName = $customerAddress->getFirstname() ." ". $customerAddress->getLastname();
                             
                             //reset gets the first item from the array passed in
                             $customerStreetArray = $customerAddress->getStreet();
                             $customerStreet = reset($customerStreetArray);
-                            
-                            $orders = Mage::getResourceModel('sales/order_collection')->addFieldToSelect('*')
-    ->addFieldToFilter('customer_id', $profile->getCustomerId())->addAttributeToSort('created_at', 'DESC')->setPageSize(1);
-    
-    						//checking the users last used, saved to expedite checkout
-                            //comparing cybersource profile id to id of card used in last order placed
-                            if($orders->getFirstItem()->getPayment()) {
-                            	if($orders->getFirstItem()->getPayment()->getData('cybersource_subid')==$profile->getSubscriptionId()) {
-                                	$checked = 'checked';
-                            	}
-                            } 
-                            //echo $profile->getSubscriptionId();
                         ?>
                         
                         <script type="text/javascript">
@@ -109,7 +97,7 @@ jQuery(document).ready(function() {
                         <?php if(!$profile->getSubscriptionId() || $profile->getIsDefault()== 1 || !$profile->getData('saved_by_customer')) { continue; } ?>
                         <tr>
                         	<td>
-                                <input type="radio" checked="<?php echo $checked; ?>" name="payment[cybersource_subid]" id="payment[cybersource_subid]" class="use-saved-card-control pull-left" value="<?php echo $profile->getEncryptedSubscriptionId() ?>">
+                                <input type="radio" <?php if($lastCardUsedId==$profile->getSubscriptionId()) echo 'checked'; ?> name="payment[cybersource_subid]" id="payment[cybersource_subid]" class="use-saved-card-control pull-left" value="<?php echo $profile->getEncryptedSubscriptionId() ?>">
                                     <span class="cc">
         		 	                    <span title="<?php echo $this->getFullCcCardType( $profile->getData( 'card_type' )); ?>" class="<?php echo strtolower($profile->getData('card_type')); ?>" >
         		 	                    </span>
