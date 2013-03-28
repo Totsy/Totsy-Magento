@@ -89,11 +89,6 @@ abstract class Harapartners_HpCheckout_Block_Abstract extends Mage_Core_Block_Te
                         'value' => $address->getId(),
                         'label' => $address->format('oneline')
                     );
-                    $lastCardUsed = Mage::helper('palorus')->getLastCardUsed();
-                    if($lastCardUsed->getAddressId() == $address->getId()) {
-                        $options[] = 'selected';
-                    }
-                }
             }
             
             $addressId = '';
@@ -105,7 +100,10 @@ abstract class Harapartners_HpCheckout_Block_Abstract extends Mage_Core_Block_Te
             if ($address) {
                 $addressId = $address->getId();
             }
-
+            $lastCardUsed = Mage::helper('palorus')->getLastCardUsed();
+            if($lastCardUsed) {
+                $addressId = $lastCardUsed->getAddressId() ;
+            }
             $select = $this->getLayout()->createBlock('core/html_select')
                 ->setName($type.'_address_id')
                 ->setId($type.'-address-select')
