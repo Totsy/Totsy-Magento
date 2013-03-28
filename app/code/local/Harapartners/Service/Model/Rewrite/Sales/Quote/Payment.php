@@ -39,6 +39,12 @@ class Harapartners_Service_Model_Rewrite_Sales_Quote_Payment extends Mage_Sales_
         if($data->getData('cc_vaulted')) {
             $this->setData('litle_vault_id', $data->getData('cc_vaulted'));
         }
+        if($data->getData('cybersource_subid')) {
+            //Special logic for tokenized payments, decrypt if necessary
+            $subscriptionId = $this->_decryptSubscriptionId($data->getData('cybersource_subid'));
+            $this->setData('cybersource_subid', $subscriptionId);
+            $method->setData('cybersource_subid', $subscriptionId);
+        }
 
         $method->assignData($data);
         

@@ -6,14 +6,25 @@
             <?php echo $this->getPaymentMethodFormHtml( $methods[0] ) ?>
         </div>
     <?php else: ?>
-        <?php foreach ($methods as $_method):  $_code = $_method->getCode() ?>
-            <?php if($_code != 'paymentfactory_tokenize'): ?>
+        <div class="hpcheckout-payment-title">
+            <h4 class="legend">Your payment methods</h4>
+        </div>
+        <div>
+                <div class="cc_security pull-right">
+                    <div class="cc_secure_text pull-left">Totsy ensures your information is<br> private and secure!</div>
+                    <div class="cc_secure_icon">
+                        <img src="/skin/frontend/enterprise/bootstrap/images/iconmonstr-lock-7-icon.png" width="40" height="40">
+                    </div>
+                </div>
+        </div>
+        <?php foreach (array_reverse($methods) as $_method):  $_code = $_method->getCode() ?>
+            <?php //if($_code != 'paymentfactory_tokenize'): ?>
                 <?php if ($html = $this->getPaymentMethodFormHtml($_method)): ?>
                 <div>
                     <?php echo $html; ?>
                 </div>
                 <?php endif; ?>
-            <?php endif; ?>
+            <?php //endif; ?>
         <?php endforeach; ?>
     <?php endif ?>
  </div>
