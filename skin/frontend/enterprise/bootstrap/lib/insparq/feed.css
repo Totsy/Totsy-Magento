@@ -5,20 +5,6 @@ div#insparq #pinboard {
 }
 
 div#insparq .brick {
-	margin: 0 0 20px 0px;
+	margin: 0 0 20px 10px;
 	width:300px !important;
-}
-
-/* :nth-child(3n-2) */
-#insparq .brick.grid-1-of-3  {
-    margin-left: 0;
-}
-
-#insparq .brick.grid-2-of-3  {
-    margin-left:20px;
-}
-
-/* :nth-child(3n) */
-#insparq .brick.grid-3-of-3  {
-    margin-left:40px;
 }
