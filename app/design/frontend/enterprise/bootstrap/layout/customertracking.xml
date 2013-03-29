@@ -60,7 +60,6 @@ Default layout, loads most of the pages
             <action method="unsetChild"><param>customertracking.footer</param></action>
             <block type="aoestatic/placeholder" name="customertracking.footer">
                 <action method="setPlaceholderBlockname"><param>customertracking.footer</param></action><!-- required: needs to point to the original block name -->
-                <action method="setPlaceholderId"><param>customertracking.footer</param></action><!-- optional -->
                 <block type="core/text" name="placeholder_content">
                     <action method="setText"><param><![CDATA[&nbsp;]]></param></action>
                 </block>
