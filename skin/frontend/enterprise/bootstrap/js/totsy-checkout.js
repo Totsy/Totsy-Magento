@@ -111,7 +111,11 @@ jQuery(document).ready(function() {
                     jQuery("[name='payment[cc_type]']").attr("checked", false);
                     newCardWrap.hide();
                 } else {
-                    this.isLitle = false;
+                    if (jQuery("[name='payment[cybersource_subid]']").attr("checked")) {
+                        this.isLitle = false;
+                    } else {
+                        this.isLitle = true;
+                    }
                     
                     jQuery('#billing-address').show();
                     jQuery('#shipping-address').show();
