@@ -111,6 +111,11 @@
 	                checkoutPayment.disableAddress(true,'hpcheckout-billing-form');
 	    	    }
 	    	}
+	    	
+	    	//blank out the shipping address dropdown when it's not blank
+	    	if (jQuery("#shipping-address-select").val()!=="") {
+	            jQuery("#shipping-address-select").val("");
+	    	}
 	    });
 	    
 	    if( jQuery( '#billing-address-select' ).length >0 ) {
