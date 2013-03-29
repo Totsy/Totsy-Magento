@@ -33,4 +33,3 @@ class Insparq_Product_Block_Holder extends Mage_Core_Block_Template {
   }
 
 }
-?>
