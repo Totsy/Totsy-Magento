@@ -129,17 +129,11 @@
                             <li id="feedflicker" class="nav-item"></li>
                 </ul>
                 
-                <div class="quick-access span5 puncted clearfix pull-right" id="header-user-info"></div>
+                <div class="quick-access span5 puncted clearfix pull-right" id="header-user-info">
+                    <?php echo $this->getChildHtml('header.user.info'); ?>
+                </div>
                  
             </div><!-- /.row -->
         </div><!-- /.container -->
     </nav>
 </header><!-- /.navbar -->
-<script type="text/javascript">
-    Event.observe(document,'dom:loaded',function() {
-        new Ajax.Updater({success: 'header-user-info'}, '<?php echo $this->getUrl('customertracking/headermsg/ajax',array('_secure'=>Mage::app()->getStore()->isCurrentlySecure())); ?>', {
-            method:'get',
-            evalScripts: true
-        });
-    });
-</script>
