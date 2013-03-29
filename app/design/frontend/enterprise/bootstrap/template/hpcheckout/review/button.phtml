@@ -7,11 +7,13 @@
 <script>
     jQuery(document).ready(function($) {
         jQuery('#placeOrderBtn').bind('click', function(e) {
-            $('input[disabled], select[disabled]', '#hpcheckout-billing-form').removeAttr('disabled');
-            if(checkoutPayment.isLitle) {
-                litlePayment.save();
-            } else {
-                hpcheckout.submit();
+            if(typeof checkoutPayment!=="undefined") {
+                $('input[disabled], select[disabled]', '#hpcheckout-billing-form').removeAttr('disabled');
+                if(checkoutPayment.isLitle==true) {
+                    litlePayment.save();
+                } else {
+                    hpcheckout.submit();
+                }
             }
         });
     });
