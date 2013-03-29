@@ -196,17 +196,18 @@ HpCheckout.prototype = {
     submit: function() {
         //good time to validate CC types
         if (typeof checkoutPayment !== "undefined") {
-            if (!checkoutPayment.hasProfile || jQuery("[id='payment[cc_vaulted]']").is(':checked') !== true) {
-                jQuery(".cc_types input[type='radio']").addClass("validate-one-required");
-                if (jQuery("[id='paypal_payment']").is(':checked') !== true) {
-                    jQuery(".cc_info input[type='radio']").addClass('required-entry');
-                    //jQuery('#paymentfactory_tokenize_saved').removeClass('required-entry');
-                } else {
-                    jQuery('.cc_info input').removeClass('required-entry');
-                }
-            } else {
-                jQuery(".cc_types input[type='radio']").removeClass("validate-one-required");
+            jQuery(".cc_info input[type='radio']").addClass('required-entry');
+            jQuery('.cc_info input').addClass('required-entry');
+            //Saved Credit Card Selected
+            if (jQuery("[id='payment[cc_vaulted]']").is(':checked') == true
+                || jQuery("[id='payment[cybersource_subid]']").is(':checked') == true) {
                 jQuery('.cc_info input').removeClass('required-entry');
+                jQuery(".cc_types input[type='radio']").removeClass("validate-one-required");
+            }
+            //Paypal selected
+            if(jQuery("[id='paypal_payment']").is(':checked') == true) {
+                jQuery('.cc_info input').removeClass('required-entry');
+                jQuery(".cc_types input[type='radio']").removeClass("validate-one-required");
             }
         }
         //only validate these fields when the customer deceides to place an order (when they click the "Place Order" button on the onepage checkout)
