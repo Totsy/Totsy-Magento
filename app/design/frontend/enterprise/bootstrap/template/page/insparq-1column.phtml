@@ -84,6 +84,21 @@
                     s.parentNode.insertBefore(e, s);
                     })();
                 </script>
+                
+                <script>
+                    // apply layout tweaks to InSparq divs post-rendering
+                    // can't be done via static CSS due to InSparq JS
+                    
+                    jQuery(document).ready(function() {
+                        var _insGridIt = function() {
+                            jQuery('#insparq .brick[style*="left: 0px"]').addClass('grid-1-of-3'); 
+                            jQuery('#insparq .brick[style*="left: 3"]').addClass('grid-2-of-3'); 
+                            jQuery('#insparq .brick[style*="left: 6"]').addClass('grid-3-of-3'); 
+                        }
+                        setTimeout( _insGridIt, 2000 );
+                    });
+                    
+                </script>
                             
 	        </div>
         </div><!-- /#mainContent -->
