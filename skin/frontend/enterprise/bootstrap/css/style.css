@@ -791,6 +791,7 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
 
 .saved_card {
     line-height: 15px;
+    border:0px !important;
 }
 
 .saved_card th {

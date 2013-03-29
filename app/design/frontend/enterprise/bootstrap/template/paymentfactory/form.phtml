@@ -47,7 +47,7 @@ if(count($fulfillmentTypes) > 1) {
         <?php if($profiles && $profilesCounter > 0 ) { ?>
                 <div class="pull-left" id="use-card-method">
                     <div id="cybersource-use-card-method ">
-                    <table class="saved_card">
+                    <table class="saved_card"
                     	<tr>
                         	<th></th>
                         	<th></th>
@@ -84,7 +84,7 @@ if(count($fulfillmentTypes) > 1) {
         		 	                </span>
         		 	         </td>
                             <td class="card-type">
-                            <strong><?php echo $this->getFullCcCardType( $profile->getData( 'card_type' )); ?></strong> ending in <?php echo $profile->getLast4no() ?></td>
+                            <strong></strong> ending in <?php echo $profile->getLast4no() ?></td>
                             <td class="card-name"><?php echo $customerName ?></td>
                             <td class="billing-address"><?php echo $customerStreet; ?></td>
                             <td class="card-expdate"><?php echo $profile->getExpireMonth()."/".$profile->getExpireYear() ?>
