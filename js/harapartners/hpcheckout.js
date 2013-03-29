@@ -193,10 +193,10 @@ HpCheckout.prototype = {
         postData += '&currentStep=' + step + '&updatePayment=true';
         hpcheckoutObject.ajaxRequest(postData);
     },
-    submit: function() {
+    submit: function() {    
         //good time to validate CC types
         if (typeof checkoutPayment !== "undefined") {
-            if (!checkoutPayment.hasProfile || jQuery("[id='payment[cc_vaulted]']").is(':checked') !== true) {
+            if (!checkoutPayment.hasProfile && jQuery("[id='payment[cc_vaulted]']").is(':checked') == false && jQuery("[id='payment[cybersource_subid]']").is(':checked') == false) {
                 jQuery(".cc_types input[type='radio']").addClass("validate-one-required");
                 if (jQuery("[id='paypal_payment']").is(':checked') !== true) {
                     jQuery(".cc_info input[type='radio']").addClass('required-entry');
@@ -212,10 +212,11 @@ HpCheckout.prototype = {
         //only validate these fields when the customer deceides to place an order (when they click the "Place Order" button on the onepage checkout)
         jQuery("[id='shipping:postcode']").addClass("required-entry validate-zip");
         jQuery("[id='shipping:telephone']").addClass("required-entry validate-phoneLax");        
-
+        
+        /*
         if (!this.validate()) {
             return;
-        }
+        } */
 
         jQuery("#" + this.id).attr("disabled", true);
 
@@ -229,8 +230,10 @@ HpCheckout.prototype = {
                 }
             }
         });
+        
         var checkoutObject = this;
-        var postData = this.getFormData();
+        
+        var postData = this.getFormData();        
         postData += '&updatePayment=true';
         
         this.throbberOn();
@@ -339,6 +342,7 @@ HpCheckout.prototype = {
     },
     getFormData: function(blockCodes) {
         var affectedFormIds = this.getFormIds(blockCodes);
+        
         var returnFormDataArray = [];
         //hack to fill in postcode and telephone WHEN THEY ARE NOT YET SET
         //this applies to customers who have not yet filled the postcode and telephone fields for the shipping address
@@ -357,8 +361,8 @@ HpCheckout.prototype = {
                 returnFormDataArray.push(jQuery.param(shippingBlock));
                 jQuery("shipping[postcode]").val("");
                 jQuery("shipping[telephone]").val("");
-            } else {
-                returnFormDataArray.push(jQuery('#' + affectedFormIds[blockIndex]).serialize());
+            } else { */
+            returnFormDataArray.push(jQuery('#' + affectedFormIds[blockIndex]).serialize());
             }
         }
         return returnFormDataArray.join('&');

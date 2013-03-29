@@ -1,10 +1,9 @@
 var checkoutPayment = {};
 
-var billAddySelect = jQuery("#billing-address-select");
-var newCardWrap = jQuery('.cc_info');
-var billFormInputs = jQuery('#hpcheckout-billing-form :input');
-
 jQuery(document).ready(function() {
+    var billAddySelect = jQuery("#billing-address-select");
+    var newCardWrap = jQuery('.cc_info');
+    var billFormInputs = jQuery('#hpcheckout-billing-form :input');
     //a namespace for operations toggling the 2 views of the payment section
     checkoutPayment = (function() {
         var hasProfile = '';
@@ -13,6 +12,7 @@ jQuery(document).ready(function() {
         var isLitle = true;
         return {
             hasProfile: '',
+            isLitle: false,
             isCollapsed: false,
             lastUsedAddressId: '',
             toggleViews: function() {
@@ -80,6 +80,7 @@ jQuery(document).ready(function() {
                 }
             },
             useSavedCard: function(elem) {
+                //setting payment method depending on the payment gateway being used (Litle vs Cybersource)
                 if ( jQuery(elem).attr('name')=="payment[cybersource_subid]" ) {
                     jQuery("[name='payment[cc_vaulted]']").attr("checked", false);
                     jQuery('input[name="payment[method]"]').val("paymentfactory_tokenize");
@@ -110,7 +111,6 @@ jQuery(document).ready(function() {
                     jQuery("[name='payment[cc_type]']").attr("checked", false);
                     newCardWrap.hide();
                 } else {
-                    //setting payment method depending on the payment gateway being used (Litle vs Cybersource)
                     this.isLitle = false;
                     
                     jQuery('#billing-address').show();
