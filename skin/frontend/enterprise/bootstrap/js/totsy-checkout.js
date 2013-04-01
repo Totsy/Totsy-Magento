@@ -109,8 +109,14 @@ jQuery(document).ready(function() {
             
                 if (elem.id == "paypal_payment") {
                     jQuery("[name='payment[cc_type]']").attr("checked", false);
+                    jQuery("#payment_form_paypal_express").appendTo(jQuery("#paypal_container"));
+                    jQuery("#payment_form_paypal_express").show();
                     newCardWrap.hide();
                 } else {
+                    if (jQuery("#paypal_payment").length > 0) {
+                        jQuery("#payment_form_paypal_express").hide();
+                    }
+                
                     if (jQuery("[name='payment[cybersource_subid]']").attr("checked")) {
                         this.isLitle = false;
                     } else {
