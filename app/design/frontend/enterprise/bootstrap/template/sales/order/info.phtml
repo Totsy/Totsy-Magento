@@ -25,36 +25,57 @@
  */
 ?>
 <?php  $_order = $this->getOrder() ?>
-<div class="well">
-    <div class="page-title title-buttons">
-        <h3><?php echo $this->__('Order #%s - %s', $_order->getRealOrderId(), $_order->getStatusLabel()) ?></h3>
-        <?php echo $this->getChildHtml('buttons') ?>
+<div class="row">
+    <div class="page-title alert">
+        <h3><?php echo $this->__('Order #%s', $_order->getRealOrderId(), $_order->getStatusLabel()) ?> <span class="pull-right"><?php echo $this->__('Status: %s',  $_order->getStatusLabel()) ?></span></h3>
     </div>
     <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
     <div class="order-info">
         <span><?php //echo $this->__('About This Order:') ?></span>
     </div>
+    <hr/>
+     <?php echo $this->getChildHtml('buttons') ?>
+<div class="span4">
+    <h3 class="box-title"><?php echo $this->__('Payment Method') ?></h3>
+    <hr />
+    <?php echo $this->getPaymentInfoHtml() ?>
+</div>
+<div class="span2">
+    <h3>Order Date</h3>
+    <hr/>
     <?php $orderdate = $this->formatDate($_order->getCreatedAtStoreDate(), Mage_Core_Model_Locale::FORMAT_TYPE_MEDIUM);?>
     <?php $sorttime = strtotime($orderdate); ?>
     <?php $orderealdate = date('Y-d-m', $sorttime); ?>
-        <div class="order-date"><?php echo $this->__('Order Date: %s', $orderealdate) ?></div>
-    <div style="margin-top:10px">
-    	<div class="col1 span8">
-            <h4 class="box-title"><?php echo $this->__('Payment Method') ?></h4>
-        <div class="box-content"><?php echo $this->getPaymentInfoHtml() ?></div>
+    <?php echo $this->__('%s', $orderealdate) ?>
     </div>
-    <div class="clear"></div>
-    <div style="margin-top:10px">
-    	 <div class="col1 pull-left span4">
+    <div class="span2">
+    <h3>Est. Ship Date</h3>
+    <hr />
+    <?php if($_order->hasFulfillmentType('dotcom_stock') && !$_order->hasFulfillmentType('dotcom')): ?>
+    1 - 3 Business Days
+    <?php elseif($_order->hasFulfillmentType('virtual')): ?>
+    You will receive an email with the details of this voucher code.
+    <?php else: ?>
+    <?php echo date('Y-m-d', Mage::helper('sales/order')->calculateEstimatedShipDate($_order)); ?>
+    <?php endif; ?>
+    </div>
+</div>
+<div class="clear"></div>
+<div style="margin-top:30px;"></div>
+<div class="">
+    <h3>Billing & Shipping</h3>
+    <hr />
+    <div>
+    	 <div class="span4 alpha">
     	 	<h4 class="box-title"><?php echo $this->__('Billing Address') ?></h4>
     	  	<address class="box-content"><?php echo $_order->getBillingAddress()->format('html') ?></address>
     	 </div>
     	 <?php if (!$_order->getIsVirtual()): ?>
-    	 <div class="col1 span4">
+    	 <div class="span4 alpha">
     		<h4 class="box-title"><?php echo $this->__('Shipping Address') ?></h4>
     	    <address class="box-content"><?php echo $_order->getShippingAddress()->format('html') ?></address>
     	 </div>
     	 <?php endif; ?>
-     </div>
+</div>
 </div>
 <div class="clear"></div>

@@ -82,15 +82,15 @@
                         ?>
                         <div class="desc std">
 
-                            <?php if(Mage::helper('vouchers')->hasAssociation($_customerId, $_product->getId())):?>
-                                <?php $_buttonMessage = '';?>
-                                <?php $_buttonClass = 'btn-cart-sent';?>
-                                <?php $_disabledButton = 'disabled = "true"';?>
-                            <?php else:?>
+                            <?php //if(Mage::helper('vouchers')->hasAssociation($_customerId, $_product->getId())):?>
+                                <?php //$_buttonMessage = '';?>
+                                <?php //$_buttonClass = 'btn-cart-sent';?>
+                                <?php //$_disabledButton = 'disabled = "true"';?>
+                            <?php //else:?>
                                 <?php $_buttonClass = 'btn-cart';?>
                                 <?php $_buttonMessage = $this->__('Email Me Code');?>
                                 <?php $_disabledButton = '';?>
-                            <?php endif;?>
+                            <?php //endif;?>
 
                             <div class="product-name strong"><a href="javascript:void(0);"  onclick="openDialog('learn-more-<?php echo $j;?>')"><?php echo $_productNameStripped;?></a></div>
                             <?php
@@ -106,14 +106,14 @@
                                     <strong><?php echo $_productNameStripped;?></strong><br />
                                     <?php echo Mage::getModel('catalog/product')->load($_product->getId())->getDescription();?>
                                     <br /><br />
-                                    <button <?php echo $_disabledButton;?> id="button-popup-<?php echo $_product->getId();?>" type="button" title="<?php echo $_buttonMessage; ?>" class="button <?php echo $_buttonClass;?>" onclick="emailCode('<?php echo $_product->getId();?>');"></button>
+                                    <button <?php echo $_disabledButton;?> id="button-popup-<?php echo $_product->getId();?>" type="button" title="<?php echo $_buttonMessage; ?>" class="button <?php echo $_buttonClass;?>" style="display:none;" onclick="emailCode('<?php echo $_product->getId();?>');" value="0"></button>
                                 </div>
                             </div>
                         </div>
                         <?php if($_product->isSaleable()): ?>
 
                         <div style="float:right;">
-                            <button <?php echo $_disabledButton;?> id="button-<?php echo $_product->getId();?>" type="button" title="<?php echo $_buttonMessage ?>" class="button <?php echo $_buttonClass;?>" onclick="emailCode('<?php echo $_product->getId();?>');"></button>
+                            <button <?php echo $_disabledButton;?> id="button-<?php echo $_product->getId();?>" type="button" title="<?php echo $_buttonMessage ?>" class="button <?php echo $_buttonClass;?>" style="display:none;" onclick="emailCode('<?php echo $_product->getId();?>');" value="<?php echo $_product->getId();?>"></button>
                         </div>
 
                         <?php else: ?>
@@ -139,46 +139,78 @@
 
     decorateList('products-list', 'none-recursive');
 
-  var win = null;
-  var index = 1;
-	function openDialog(id) {
-	  Dialog.alert($(id).innerHTML, {
-		  className: "alphacube",
-		  width:750,
-		  id: "d" + index,
-          zIndex: 1100,
-		  okLabel: "Close"
-		}
-	  )
-	  index++;
-  }
+    var win = null;
+    var index = 1;
+
+    jQuery( document ).ready( function() {
+        jQuery('.btn-cart').each(function() {
+            product_id = this.value;
+            if(product_id != 0) {
+                jQuery.get('<?php echo Mage::getUrl('vouchers/order/available/',array('_secure' => Mage::app()->getStore()->isCurrentlySecure())); ?>id/' + product_id + '/',
+                    function(data) {
+                        var jsonResponse = jQuery.parseJSON(data);
+                        if(jsonResponse.status == 0) {
+                            product_id = jsonResponse.id;
+                            jQuery('#button-'+product_id).removeAttr("disabled");
+                            jQuery('#button-popup-'+product_id).removeAttr("disabled");
+                            jQuery('#button-'+product_id).css("display", "block");
+                            jQuery('#button-popup-'+product_id).css("display", "block");
+                        } else if(jsonResponse.status == 3) {
+                            product_id = jsonResponse.id;
+                            jQuery('#button-'+product_id).removeClass('btn-cart');
+                            jQuery('#button-popup-'+product_id).removeClass('btn-cart');
+                            jQuery('#button-'+product_id).addClass('btn-cart-sent');
+                            jQuery('#button-popup-'+product_id).addClass('btn-cart-sent');
+                            jQuery('#button-'+product_id).attr("disabled");
+                            jQuery('#button-popup-'+product_id).attr("disabled");
+                            jQuery('#button-'+product_id).css("display", "block");
+                            jQuery('#button-popup-'+product_id).css("display", "block");
+                        } else {
+                            product_id = jsonResponse.id;
+                            jQuery('#button-'+product_id).css("display", "none");
+                            jQuery('#button-popup-'+product_id).css("display", "none"); 
+                        }
+                    }
+                )
+            }
+        });
+    });
+
+    var win = null;
+    var index = 1;
+    function openDialog(id) {
+        Dialog.alert($(id).innerHTML, {
+            className: "alphacube",
+            width:750,
+            id: "d" + index,
+            zIndex: 1100,
+            okLabel: "Close"
+        });
+	    index++;
+    }
 
     function emailCode(product_id) {
         id = product_id;
-
         jQuery('#button-' + id).removeClass('btn-cart');
         jQuery('#button-' + id).addClass('btn-cart-sending');
         jQuery('#button-popup-' + id).removeClass('btn-cart');
         jQuery('#button-popup-' + id).addClass('btn-cart');
 
-        jQuery.get('<?php echo Mage::getUrl('vouchers/order/create/',array('_secure' => Mage::app()->getStore()->isCurrentlySecure())); ?>id/' + product_id + '/',
-                function(data){
-                    var jsonResponse = jQuery.parseJSON(data);
-
-                    if(jsonResponse.error) {
-                        jQuery('#button-' + id).removeClass('btn-cart-sending');
-                        jQuery('#button-popup-' + id).removeClass('btn-cart-sending');
-                        jQuery('#button-' + id).addClass('btn-cart');
-                        jQuery('#button-popup-' + id).addClass('btn-cart');
-                        alert(jsonResponse.error);
-                    } else {
-                        jQuery('#button-' + id).removeClass('btn-cart-sending');
-                        jQuery('#button-' + id).addClass('btn-cart-sent');
-                        jQuery('#button-popup-' + id).removeClass('btn-cart-sent');
-                        jQuery('#button-popup-' + id).addClass('btn-cart-sent');
-                    }
-                }
-        );
+        jQuery.get('<?php echo Mage::getUrl('vouchers/order/create/',array('_secure' => Mage::app()->getStore()->isCurrentlySecure())); ?>id/' + product_id + '/', function(data){
+            var jsonResponse = jQuery.parseJSON(data);
+            if(jsonResponse.error) {
+                jQuery('#button-' + id).removeClass('btn-cart-sending');
+                jQuery('#button-popup-' + id).removeClass('btn-cart-sending');
+                jQuery('#button-' + id).addClass('btn-cart');
+                jQuery('#button-popup-' + id).addClass('btn-cart');
+                alert(jsonResponse.error);
+            } else {
+                jQuery('#button-' + id).removeClass('btn-cart-sending');
+                jQuery('#button-' + id).addClass('btn-cart-sent');
+                jQuery('#button-popup-' + id).removeClass('btn-cart-sent');
+                jQuery('#button-popup-' + id).addClass('btn-cart-sent');
+            }
+        });
     }
 
     jQuery(function() {

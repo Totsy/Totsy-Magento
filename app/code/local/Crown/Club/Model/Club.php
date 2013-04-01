@@ -71,6 +71,8 @@ class Crown_Club_Model_Club extends Mage_Core_Model_Abstract {
 			$customerModel->setGroupId($clubCustomerGroup->getId());
 			$customerModel->save();
 
+            $this->sendClubMembershipWelcomeEmail($customerModel);
+
             try {
                 $helper->setClubEmailList($customerModel);
             } catch (Exception $e) {
@@ -123,6 +125,30 @@ class Crown_Club_Model_Club extends Mage_Core_Model_Abstract {
 		}
 		return $this;
 	}
+
+    /**
+     * Send email welcoming a new TotsyPLUS member.
+     * @param Mage_Customer_Model_Customer $customer
+     * @return Crown_Club_Model_Club
+     */
+    public function sendClubMembershipWelcomeEmail($customer) {
+        $store      = Mage::app()->getStore();
+        $storeId    = $this->getStore()->getId();
+        $email      = $customer->getEmail();
+        $template   = Mage::getStoreConfig('Crown_Club/clubgeneral/club_welcome_email', $storeId);
+        $templateId = Mage::getModel('core/email_template')->loadByCode($template)->getId();
+        Mage::getModel('core/email_template')->sendTransactional(
+            $templateId,
+            "club",
+            $email,
+            NULL,
+            array(
+                "customer" => $customer,
+                "store" => $store
+            )
+        );
+        return $this;
+    }
 
 	/**
 	 * Send email notifying customer that their subscription has been cancelled.

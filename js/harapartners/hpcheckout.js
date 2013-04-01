@@ -131,7 +131,6 @@ HpCheckout.prototype = {
             blockType = 'shipping';
         }
         if (clickedAddress.val() === '') {
-            
             jQuery('#' + hpcheckout.data.blocks[blockType].formId + ' input').val('');
             
             if (blockType == 'billing') {

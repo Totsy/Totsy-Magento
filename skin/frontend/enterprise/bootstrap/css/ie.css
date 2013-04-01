@@ -2,12 +2,12 @@
  * < IE9 (IE8 and below) Conditional Style Sheet
  */
 
-/* body gradient */
-html {
-    filter:  progid:DXImageTransform.Microsoft.gradient(startColorStr='#eef6fc', EndColorStr='#ffffff'); /* IE6,IE7 */
-    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='#eef6fc', EndColorStr='#ffffff')"; /* IE8 */
-}
  
+/* Bootstrap Events Grid Override - .tedhack */
+[class*='event'].tedhack .span4 {width:23.56em; min-height:422px;}
+[class*='event'].tedhack .span3 {width:17.48em;min-height:332px;}
+[class*='event'].tedhack .span2 {width:11.41em;}
+
 /* event tiles rollovers */
 .events-grid .thumbnail .more {
     visibility: hidden;
@@ -38,7 +38,24 @@ html {
     white-space: pre;
 }
 
-/* IE6 */
+/* login / sign up form - make if overlay on top of footer as "good enough" fix to overlap bug */
+.customer-account-entry .page_center {
+	z-index: 1000;
+}
+/* login / register form input fixes */
+.customer-account-entry .page_center .big-input {
+	line-height: normal;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	min-height: 30px;
+}
+
+/* PDP fixes */
+.product-options select {
+	width:204px !important;
+}
+
+/* IE6 FancyBOX */
 
 .fancybox-ie6 #fancybox-close { background: transparent; filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../images/fancybox/fancy_close.png', sizingMethod='scale'); }
 
@@ -61,7 +78,8 @@ html {
 
 #fancybox-loading.fancybox-ie6 div	{ background: transparent; filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../images/fancybox/fancy_loading.png', sizingMethod='scale'); }
 
-/* IE6, IE7, IE8 */
+
+/* IE6, IE7, IE8 FancyBOX */
 
 .fancybox-ie .fancybox-bg { background: transparent !important; }
 
