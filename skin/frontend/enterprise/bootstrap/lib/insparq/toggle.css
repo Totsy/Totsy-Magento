@@ -16,6 +16,9 @@
     text-transform: uppercase;
     cursor:pointer;
 }
+#insfeedflicker #inspbfeeda:hover {
+    color: #d22f2a;
+}
 #insfeedflicker #insfeedtext{
     font-style: normal;
 }
