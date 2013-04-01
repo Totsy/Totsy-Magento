@@ -59,12 +59,8 @@ Default layout, loads most of the pages
                 <block type="page/js_cookie" name="js_cookies" template="page/js/cookie.phtml"/>
                 <action method="addItem"><type>skin_js</type><name>js/html5shiv.js</name><params/><if>lt IE 9</if></action>
                 <action method="addItem"><type>skin_js</type><name>js/scripts.js</name></action>
-<<<<<<< HEAD
                 <action method="addItem"><type>skin_js</type><name>js/global.js</name><params/>
                     </action> 
-=======
-                <action method="addItem"><type>skin_js</type><name>js/global.js</name><params/></action>
->>>>>>> a180dbeb84da1f0df7ba9a114324cb9a9787724e
                 <action method="addCss"><stylesheet>lib/bootstrap/bootstrap.css</stylesheet></action>
                 <!--<action method="addCss"><stylesheet>lib/bootstrap/bootstrap-responsive.css</stylesheet></action>-->
                 <action method="addCss"><stylesheet>css/style.css</stylesheet></action>
