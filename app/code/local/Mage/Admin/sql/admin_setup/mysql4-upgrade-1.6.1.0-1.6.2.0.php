@@ -29,7 +29,7 @@
 $installer = $this;
 $installer->startSetup();
 
-
+die("Made it to the setup file");
 
 // Add reset password link token creation date column
 $installer->getConnection()->addColumn($installer->getTable('admin/user'), 'department', array(

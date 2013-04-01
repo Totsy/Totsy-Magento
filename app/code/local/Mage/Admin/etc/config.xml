@@ -28,11 +28,7 @@
 <config>
     <modules>
         <Mage_Admin>
-<<<<<<< HEAD
             <version>1.6.2.0</version>
-=======
-            <version>1.6.1.0</version>
->>>>>>> 3fc10f7ab1579b8ae4d43c4f5a95de7540dc3766
         </Mage_Admin>
     </modules>
     <global>
@@ -57,12 +53,9 @@
                     <assert>
                         <table>admin_assert</table>
                     </assert>
-<<<<<<< HEAD
                     <department>
                         <table>admin_department</table>
                     </department>
-=======
->>>>>>> 3fc10f7ab1579b8ae4d43c4f5a95de7540dc3766
                 </entities>
             </admin_resource>
         </models>
