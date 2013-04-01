@@ -22,35 +22,48 @@ Default layout, loads most of the pages
 
     <default>
         <reference name="before_body_end">
-            <block type="core/template" name="customertracking.footer" template="customertracking/footer.phtml" />
+            <block type="core/template" name="customertracking.footer" template="customertracking/footer.phtml">
+                <block type="customertracking/pixel" name="customertracking.pixel"  template="customertracking/pixel.phtml" />
+                <block type="customertracking/welcome" name="customertracking.welcome" template="customertracking/welcome.phtml" />
+            </block>
         </reference>
 		<reference name="header">
-			<block type="customertracking/headermsg" name="customertracking.headermsg" template="customertracking/headermsg.phtml" />
-		</reference>
-    </default>
+            <block type="core/template" name="header.user.info" template="page/html/header_cart_ajax.phtml">
+                <block type="customertracking/headermsg" name="customertracking.headermsg" template="customertracking/headermsg.phtml" />
 
-    <customertracking_headermsg_ajax>
-        <block type="core/template" name="root" template="page/html/header_cart_ajax.phtml">
-            <block type="customertracking/headermsg" name="customertracking.headermsg" template="customertracking/headermsg.phtml" />
-
-            <block type="checkout/cart_sidebar" name="cart_sidebar" as="topCart" template="checkout/cart/cartheader.phtml">
-                <action method="addItemRender"><type>simple</type><block>checkout/cart_item_renderer</block><template>checkout/cart/sidebar/default.phtml</template></action>
-                <action method="addItemRender"><type>grouped</type><block>checkout/cart_item_renderer_grouped</block><template>checkout/cart/sidebar/default.phtml</template></action>
-                <action method="addItemRender"><type>configurable</type><block>checkout/cart_item_renderer_configurable</block><template>checkout/cart/sidebar/default.phtml</template></action>
-                <block type="core/text_list" name="cart_sidebar.extra_actions" as="extra_actions" translate="label" module="checkout">
-                    <label>Shopping Cart Sidebar Extra Actions</label>
+                <block type="checkout/cart_sidebar" name="cart_sidebar" as="topCart" template="checkout/cart/cartheader.phtml">
+                    <action method="addItemRender"><type>simple</type><block>checkout/cart_item_renderer</block><template>checkout/cart/sidebar/default.phtml</template></action>
+                    <action method="addItemRender"><type>grouped</type><block>checkout/cart_item_renderer_grouped</block><template>checkout/cart/sidebar/default.phtml</template></action>
+                    <action method="addItemRender"><type>configurable</type><block>checkout/cart_item_renderer_configurable</block><template>checkout/cart/sidebar/default.phtml</template></action>
+                    <block type="core/text_list" name="cart_sidebar.extra_actions" as="extra_actions" translate="label" module="checkout">
+                        <label>Shopping Cart Sidebar Extra Actions</label>
+                    </block>
                 </block>
             </block>
-        </block>
-    </customertracking_headermsg_ajax>
-
-    <customertracking_index_ajax>
-        <block type="core/template" name="root" template="customertracking/ajax.phtml">
-            <block type="customertracking/pixel" name="customertracking.pixel"  template="customertracking/pixel.phtml" />
-            <block type="customertracking/welcome" name="customertracking.welcome" template="customertracking/welcome.phtml" />
-        </block>
-    </customertracking_index_ajax>
-
+		</reference>
+    </default>
+    <aoestatic_cacheable>
+        <reference name="header">
+            <!-- Replace cart by static placeholder wrapped with placeholder information (q'n'd solution) -->
+            <action method="unsetChild"><param>header.user.info</param></action>
+            <block type="aoestatic/placeholder" name="header.user.info">
+                <action method="setPlaceholderBlockname"><param>header.user.info</param></action><!-- required: needs to point to the original block name -->
+                <block type="core/text" name="placeholder_content">
+                    <action method="setText"><param><![CDATA[&nbsp;]]></param></action>
+                </block>
+            </block>
+        </reference>
+        <reference name="before_body_end">
+            <action method="unsetChild"><param>customertracking.footer</param></action>
+            <block type="aoestatic/placeholder" name="customertracking.footer">
+                <action method="setPlaceholderBlockname"><param>customertracking.footer</param></action><!-- required: needs to point to the original block name -->
+                <action method="setPlaceholderId"><param>customertracking.footer</param></action><!-- optional -->
+                <block type="core/text" name="placeholder_content">
+                    <action method="setText"><param><![CDATA[&nbsp;]]></param></action>
+                </block>
+            </block>
+        </reference>
+    </aoestatic_cacheable>
 
     <customer_logged_out>
         <reference name="before_body_end">

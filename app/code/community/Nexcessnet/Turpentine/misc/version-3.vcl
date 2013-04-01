@@ -116,6 +116,14 @@ sub vcl_recv {
         }
         #20130325 - CJD - Remove all cookies except for the customer info cookie
 
+        #Strip out Google Analytics campaign variables. They are only needed
+        #by the javascript running on the page
+        #utm_source, utm_medium, utm_campaign, gclid
+        if(req.url ~ "(\?|&)(gclid|utm_[a-z]+)=") {
+           set req.url = regsuball(req.url, "(gclid|utm_[a-z]+)=[-_A-z0-9]+&?", "");
+           set req.url = regsub(req.url, "(\?|&)$", "");
+        }
+
         return (lookup);
     }
     # else it's not part of magento so do default handling (doesn't help
