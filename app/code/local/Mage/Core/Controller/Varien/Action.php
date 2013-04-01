@@ -618,6 +618,9 @@ abstract class Mage_Core_Controller_Varien_Action
      */
     protected function _initLayoutMessages($messagesStorage)
     {
+        if(!Mage::app()->getStore()->isAdmin()) {
+            return $this;
+        }
         if (!is_array($messagesStorage)) {
             $messagesStorage = array($messagesStorage);
         }
@@ -625,9 +628,9 @@ abstract class Mage_Core_Controller_Varien_Action
             $storage = Mage::getSingleton($storageName);
             if ($storage) {
                 $block = $this->getLayout()->getMessagesBlock();
-//                $block->addMessages($storage->getMessages(true));
-//                $block->setEscapeMessageFlag($storage->getEscapeMessages(true));
-//                $block->addStorageType($storageName);
+                $block->addMessages($storage->getMessages(true));
+                $block->setEscapeMessageFlag($storage->getEscapeMessages(true));
+                $block->addStorageType($storageName);
             }
             else {
                 Mage::throwException(

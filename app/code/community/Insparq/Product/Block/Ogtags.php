@@ -91,4 +91,3 @@ class Insparq_Product_Block_Ogtags extends Mage_Core_Block_Template {
   }
 
 }
-?>
