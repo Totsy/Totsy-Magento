@@ -203,4 +203,17 @@ Print layout
             <action method="setIsHandle"><applied>1</applied></action>
         </reference>
     </page_three_columns>
+    <aoestatic_cacheable>
+        <reference name="content">
+            <!-- Replace cart by static placeholder wrapped with placeholder information (q'n'd solution) -->
+            <action method="unsetChild"><param>messages</param></action>
+            <block type="aoestatic/placeholder" name="messages">
+                <action method="setPlaceholderBlockname"><param>messages</param></action><!-- required: needs to point to the original block name -->
+                <action method="setPlaceholderId"><param>messages</param></action>
+                <block type="core/text" name="placeholder_content">
+                    <action method="setText"><param><![CDATA[&nbsp;]]></param></action>
+                </block>
+            </block>
+        </reference>
+    </aoestatic_cacheable>
 </layout>
