@@ -110,39 +110,7 @@ class Insparq_Product_Block_Script extends Mage_Core_Block_Template {
       $dataTags[ 'product-buy-action-selector' ] = '#addToCart';
 
 
-      /**
-       * Check for Cart Items
-       */
-      $_cart = Mage::getSingleton('checkout/cart');
-      if( $_cart->getSummaryQty() > 0 ) {
-
-        /**
-         * Set Total Cart Value
-         */
-        $dataTags[ 'user-cart-items-value-total' ] = round( $_cart->getQuote()->getGrandTotal(), 2 );
-
-        /**
-         * Set Total Cart Items
-         */
-        $dataTags[ 'user-cart-items-quantity' ] = $_cart->getSummaryQty();
-
-      }
-
-      /**
-       * Check for Customer Information
-       */
-      $_cHelper = $this->helper( 'customer' );
-      if( $_customer = $_cHelper->getCustomer() ) {
-         /**
-          * Set Name
-          */
-         $dataTags[ 'user-name' ] = $this->escapeValue( $_customer->getFirstname() . " " . $_customer->getLastname() );
-
-         /**
-          * Set Email
-          */
-         $dataTags[ 'user-email' ] = $_customer->getEmail();
-      }
+      //20130329 - CJD - Removing customer specific information form insparq call
 
     }
 
@@ -165,4 +133,3 @@ class Insparq_Product_Block_Script extends Mage_Core_Block_Template {
   }
 
 }
-?>

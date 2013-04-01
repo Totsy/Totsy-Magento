@@ -1,14 +1,10 @@
 /* overrides */
 
 div#insparq #pinboard {
-	width:950px !important;
+	width:940px !important;
 }
 
 div#insparq .brick {
-	margin: 0 8px 20px;
-	position: static !important;
-}
-div#insparq .item h3 {
-	height: 75px;
-	max-width: 278px;
+	margin: 0 0 20px 10px;
+	width:300px !important;
 }
