@@ -18,6 +18,9 @@ abstract class Totsy_CatalogFeed_Model_Feed_Abstract
     public function __construct(array $options = array())
     {
         $this->_options = $options;
+
+        // use the default 'totsy' store so that URLs are generated for the frontend
+        Mage::app()->setCurrentStore(1);
     }
 
     /**
@@ -32,6 +35,10 @@ abstract class Totsy_CatalogFeed_Model_Feed_Abstract
             ->adjustQueuesForCurrentTime();
 
         $events = json_decode($sortentry->getLiveQueue(), true);
+        if ($toplive = json_decode($sortentry->getTopLiveQueue(), true)) {
+            $events = array_merge($toplive, $events);
+        }
+
         foreach ($events as $event) {
             $category = null;
             if (!isset($this->_options['supress_event_load'])) {
@@ -60,6 +67,7 @@ abstract class Totsy_CatalogFeed_Model_Feed_Abstract
             }
 
             foreach ($products as $product) {
+                $product->setCategoryId($event['entity_id']);
                 if ('configurable' == $product->getTypeId()) {
                     $configurable = $product->getTypeInstance(true);
                     $children = $configurable

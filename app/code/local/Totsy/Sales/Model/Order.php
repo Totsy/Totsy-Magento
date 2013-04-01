@@ -405,4 +405,49 @@ class Totsy_Sales_Model_Order extends Mage_Sales_Model_Order
             return $this->getConfig()->getStatusLabel($this->getStatus());
         }
     }
+
+     public function save(){
+
+        $parent =parent::save();
+
+        foreach ($this->getAllVisibleItems() as $item){
+
+            if ($item->getProducttype()=='configurable'){
+                continue;
+            }
+
+            $_product = Mage::getModel('catalog/product')->load($item->getProductId());
+            $arrConfigurableProductIds = $_product->loadParentProductIds();
+
+            if (empty($arrConfigurableProductIds)){
+                continue;
+            }
+
+            $item = $arrConfigurableProductIds->toArray();
+            if (!array_key_exists('entity_id',$item)){
+                continue;
+            }
+
+            $product = Mage::getModel('catalog/product')->load($item['entity_id']);
+            $conf = $product->getTypeInstance()->getUsedProducts();
+
+            $qty = 0;
+            foreach( $conf as $sp){
+                $stockItem = $sp->getStockItem();
+                $qty+= $stockItem->getQty();
+            }
+            $this->_updateConfigurableItemQty(array($qty,$item['entity_id']));
+            
+        }
+
+        return $parent;
+    }
+
+    protected function _updateConfigurableItemQty($bind){
+        $dbW = Mage::getSingleton("core/resource")->getConnection('core_wirte');
+        $query = "UPDATE `".$dbW->getTableName('cataloginventory_stock_item')."` ".
+                "SET `qty` =  ?".
+                "WHERE `product_id`=?";
+        $dbW->query($query,$bind);        
+    }
 }
