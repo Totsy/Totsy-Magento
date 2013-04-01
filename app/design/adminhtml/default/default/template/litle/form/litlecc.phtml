@@ -60,13 +60,17 @@ $_showClassicPaymentForm = true;
 		function toggleLitleCardFields(index, changed) {
 			if (index !== '0' && index !== '') {
 				$$('.new-card').invoke('hide');
+                $('<?php echo $_code ?>_cc_type_cvv_div').hide();
 				$$('.new-card input, .new-card select').invoke('disable');
 				$('<?php echo $_code ?>_cc_cid').removeClassName('validate-cc-cvn');
+                $('<?php echo $_code ?>_cc_cid').removeClassName('required-entry');
 			} else {
+                $('<?php echo $_code ?>_cc_type_cvv_div').show();
 				$$('.new-card').invoke('show');
 				$$('.new-card input, .new-card select').invoke('enable');
 				$('<?php echo $_code ?>_cc_cid').addClassName('validate-cc-cvn');
-			}
+                $('<?php echo $_code ?>_cc_cid').addClassName('required-entry');
+            }
 		}
 		Event.observe($("<?php echo $_code ?>_cc_vaulted"), 'change', function() {
 			toggleLitleCardFields($F(this));
