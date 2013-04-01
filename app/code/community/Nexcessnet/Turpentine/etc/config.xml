@@ -1,0 +1,401 @@
+<?xml version="1.0"?>
+<!--
+    Nexcess.net Turpentine Extension for Magento
+    Copyright (C) 2012  Nexcess.net L.L.C.
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License along
+    with this program; if not, write to the Free Software Foundation, Inc.,
+    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+-->
+<config>
+    <modules>
+        <Nexcessnet_Turpentine>
+            <version>0.4.0</version>
+        </Nexcessnet_Turpentine>
+    </modules>
+    <default>
+        <turpentine_varnish>
+            <general>
+                <varnish_debug>0</varnish_debug>
+                <esi_debug>0</esi_debug>
+                <block_debug>0</block_debug>
+                <ajax_messages>1</ajax_messages>
+                <crawler_enable>0</crawler_enable>
+                <crawler_debug>0</crawler_debug>
+            </general>
+            <purging>
+                <esi_purge_events><![CDATA[core_session_abstract_add_message
+checkout_cart_add_product_complete
+checkout_cart_save_after
+checkout_onepage_controller_success_action
+controller_action_postdispatch_checkout_cart_couponPost
+controller_action_postdispatch_checkout_cart_updatePost
+catalog_product_compare_add_product
+sales_quote_save_after
+customer_login
+customer_logout
+poll_vote_add]]></esi_purge_events>
+            </purging>
+            <servers>
+                <version>auto</version>
+                <server_list>127.0.0.1:6082</server_list>
+                <config_file>{{root_dir}}/var/default.vcl</config_file>
+            </servers>
+        </turpentine_varnish>
+        <turpentine_vcl>
+            <backend>
+                <backend_host>127.0.0.1</backend_host>
+                <backend_port>8080</backend_port>
+                <frontend_timeout>300</frontend_timeout>
+                <admin_timeout>21600</admin_timeout>
+                <crawlers>127.0.0.1</crawlers>
+                <crawler_user_agents><![CDATA[ApacheBench/.*,.*Googlebot.*,JoeDog/.*Siege.*,magespeedtest\.com,Nexcessnet_Turpentine/.*]]></crawler_user_agents>
+            </backend>
+            <normalization>
+                <encoding>1</encoding>
+                <user_agent>0</user_agent>
+                <host>0</host>
+            </normalization>
+            <ttls>
+                <grace_period>15</grace_period>
+                <default_ttl>3600</default_ttl>
+                <static_ttl>28800</static_ttl>
+                <!--
+                <lru_factor>15</lru_factor>
+                -->
+            </ttls>
+            <urls>
+                <url_blacklist><![CDATA[cron\.php]]></url_blacklist>
+            </urls>
+            <params>
+                <get_params>__SID,XDEBUG_PROFILE</get_params>
+            </params>
+            <static>
+                <force_static>1</force_static>
+                <exts>css,js,jpe?g,png,gif,ico,swf</exts>
+            </static>
+        </turpentine_vcl>
+    </default>
+    <global>
+        <ignoredModules>
+            <entities>
+                <!--
+                This disables Magento visitor logging for Turpentine ESI
+                requests. The logging was pointless and caused AJAX blocks to
+                take much more time then they otherwise would to load (most of
+                the time was spent doing database writes)
+                -->
+                <turpentine/>
+            </entities>
+        </ignoredModules>
+        <blocks>
+            <turpentine>
+                <class>Nexcessnet_Turpentine_Block</class>
+            </turpentine>
+            <core>
+                <rewrite>
+                    <!--
+                    Rewritten because it doesn't use a template we can replace
+                    with an ESI include tag, just dumps out a block of
+                    hard-coded HTML and also frequently skips the toHtml method
+                    -->
+                    <messages>Nexcessnet_Turpentine_Block_Core_Messages</messages>
+                </rewrite>
+            </core>
+        </blocks>
+        <helpers>
+            <turpentine>
+                <class>Nexcessnet_Turpentine_Helper</class>
+            </turpentine>
+        </helpers>
+        <models>
+            <turpentine>
+                <class>Nexcessnet_Turpentine_Model</class>
+            </turpentine>
+        </models>
+        <cache>
+            <types>
+                <!--
+                These aren't used to actually store anything in Magento's cache,
+                we just use them to signal Varnish to purge it's cache. Note
+                that the type names must match the MAGE_CACHE_NAME constant in
+                the Varnish and ESI helpers.
+                -->
+                <turpentine_pages>
+                    <label>Varnish Pages</label>
+                    <description>Full pages cached in Varnish (will also flush ESI blocks)</description>
+                    <tags>TURPENTINE_FAKE_PAGE_TAG</tags>
+                </turpentine_pages>
+                <turpentine_esi_blocks>
+                    <label>Varnish ESI Blocks</label>
+                    <description>ESI blocks cached in Varnish (this should not be disabled except for debugging)</description>
+                    <!--
+                    This is helpful to prevent blocks from being double ESI-
+                    included, which ends up resulting in the "ESI processing
+                    not enabled" error
+                    -->
+                    <tags>BLOCK_HTML</tags>
+                </turpentine_esi_blocks>
+            </types>
+        </cache>
+        <events>
+            <!-- Varnish Events -->
+            <http_response_send_before>
+                <observers>
+                    <turpentine_varnish_http_response_send_before>
+                        <class>turpentine/observer_varnish</class>
+                        <method>setCacheFlagHeader</method>
+                    </turpentine_varnish_http_response_send_before>
+                </observers>
+            </http_response_send_before>
+
+            <admin_system_config_changed_section_turpentine_varnish>
+                <observers>
+                    <turpentine_varnish_admin_system_config_changed_section_turpentine_varnish>
+                        <class>turpentine/observer_varnish</class>
+                        <method>adminSystemConfigChangedSection</method>
+                    </turpentine_varnish_admin_system_config_changed_section_turpentine_varnish>
+                </observers>
+            </admin_system_config_changed_section_turpentine_varnish>
+            <admin_system_config_changed_section_turpentine_vcl>
+                <observers>
+                    <turpentine_varnish_admin_system_config_changed_section_turpentine_vcl>
+                        <class>turpentine/observer_varnish</class>
+                        <method>adminSystemConfigChangedSection</method>
+                    </turpentine_varnish_admin_system_config_changed_section_turpentine_vcl>
+                </observers>
+            </admin_system_config_changed_section_turpentine_vcl>
+
+            <!-- ESI Events -->
+            <core_block_abstract_to_html_before>
+                <observers>
+                    <turpentine_esi_core_block_abstract_to_html_before>
+                        <type>singleton</type>
+                        <class>turpentine/observer_esi</class>
+                        <method>injectEsi</method>
+                    </turpentine_esi_core_block_abstract_to_html_before>
+                </observers>
+            </core_block_abstract_to_html_before>
+            <http_response_send_before>
+                <observers>
+                    <turpentine_esi_http_response_send_before>
+                        <class>turpentine/observer_esi</class>
+                        <method>setFlagHeaders</method>
+                    </turpentine_esi_http_response_send_before>
+                </observers>
+            </http_response_send_before>
+            <controller_action_layout_generate_blocks_after>
+                <observers>
+                    <turpentine_esi_controller_action_layout_generate_blocks_after>
+                        <class>turpentine/observer_esi</class>
+                        <method>checkCacheFlag</method>
+                    </turpentine_esi_controller_action_layout_generate_blocks_after>
+                </observers>
+            </controller_action_layout_generate_blocks_after>
+            <!--
+            Magento sometimes sees the last URL as being the
+            turpentine/esi/getBlock url, and then redirects to it which is not
+            good. We need to check and intercept it if it happens
+            -->
+            <controller_response_redirect>
+                <observers>
+                    <turpentine_esi_controller_response_redirect>
+                        <class>turpentine/observer_esi</class>
+                        <method>checkRedirectUrl</method>
+                    </turpentine_esi_controller_response_redirect>
+                </observers>
+            </controller_response_redirect>
+
+            <!--
+            Load the ESI client cache clear events from stored config at
+            runtime
+            -->
+            <controller_front_init_before>
+                <observers>
+                    <turpentine_esi_controller_front_init_before>
+                        <class>turpentine/observer_esi</class>
+                        <method>loadCacheClearEvents</method>
+                    </turpentine_esi_controller_front_init_before>
+                </observers>
+            </controller_front_init_before>
+
+            <!-- Varnish cache clear events -->
+            <catalog_product_save_commit_after>
+                <observers>
+                    <turpentine_varnish_catalog_product_save_commit_after>
+                        <class>turpentine/observer_ban</class>
+                        <method>banProductPageCache</method>
+                    </turpentine_varnish_catalog_product_save_commit_after>
+                </observers>
+            </catalog_product_save_commit_after>
+            <cataloginventory_stock_item_save_after>
+                <observers>
+                    <turpentine_varnish_cataloginventory_stock_item_save_after>
+                        <class>turpentine/observer_ban</class>
+                        <method>banProductPageCacheCheckStock</method>
+                    </turpentine_varnish_cataloginventory_stock_item_save_after>
+                </observers>
+             </cataloginventory_stock_item_save_after>
+            <catalog_category_save_commit_after>
+                <observers>
+                    <turpentine_varnish_catalog_category_save_commit_after>
+                        <class>turpentine/observer_ban</class>
+                        <method>banCategoryCache</method>
+                    </turpentine_varnish_catalog_category_save_commit_after>
+                </observers>
+            </catalog_category_save_commit_after>
+            <clean_media_cache_after>
+                <observers>
+                    <turpentine_varnish_clean_media_cache_after>
+                        <class>turpentine/observer_ban</class>
+                        <method>banMediaCache</method>
+                    </turpentine_varnish_clean_media_cache_after>
+                </observers>
+            </clean_media_cache_after>
+            <clean_catalog_images_cache_after>
+                <observers>
+                    <turpentine_varnish_clean_catalog_images_cache_after>
+                        <class>turpentine/observer_ban</class>
+                        <method>banCatalogImagesCache</method>
+                    </turpentine_varnish_clean_catalog_images_cache_after>
+                </observers>
+            </clean_catalog_images_cache_after>
+            <cms_page_save_commit_after>
+                <observers>
+                    <turpentine_varnish_cms_page_save_commit_after>
+                        <class>turpentine/observer_ban</class>
+                        <method>banCmsPageCache</method>
+                    </turpentine_varnish_cms_page_save_commit_after>
+                </observers>
+            </cms_page_save_commit_after>
+            <adminhtml_cache_flush_system>
+                <observers>
+                    <turpentine_varnish_adminhtml_cache_flush_system>
+                        <class>turpentine/observer_ban</class>
+                        <method>banAllCache</method>
+                    </turpentine_varnish_adminhtml_cache_flush_system>
+                </observers>
+            </adminhtml_cache_flush_system>
+            <adminhtml_cache_flush_all>
+                <observers>
+                    <turpentine_varnish_adminhtml_cache_flush_all>
+                        <class>turpentine/observer_ban</class>
+                        <method>banAllCache</method>
+                    </turpentine_varnish_adminhtml_cache_flush_all>
+                </observers>
+            </adminhtml_cache_flush_all>
+            <adminhtml_cache_refresh_type>
+                <observers>
+                    <turpentine_varnish_adminhtml_cache_refresh_type>
+                        <class>turpentine/observer_ban</class>
+                        <method>banCacheType</method>
+                    </turpentine_varnish_adminhtml_cache_refresh_type>
+                </observers>
+            </adminhtml_cache_refresh_type>
+            <!-- Cron/Crawler events -->
+            <turpentine_ban_all_cache>
+                <observers>
+                    <turpentine_cron_turpentine_ban_all_cache>
+                        <class>turpentine/observer_cron</class>
+                        <method>queueAllUrls</method>
+                    </turpentine_cron_turpentine_ban_all_cache>
+                </observers>
+            </turpentine_ban_all_cache>
+        </events>
+    </global>
+    <frontend>
+        <routers>
+            <turpentine>
+                <use>standard</use>
+                <args>
+                    <module>Nexcessnet_Turpentine</module>
+                    <frontName>turpentine</frontName>
+                </args>
+            </turpentine>
+        </routers>
+        <layout>
+            <updates>
+                <!--
+                This file should never be edited by a user since it will
+                be overwritten on extension updates
+                -->
+                <turpentine_esi module="turpentine">
+                    <file>turpentine_esi.xml</file>
+                </turpentine_esi>
+                <!--
+                The user should instead edit this file, creating it if needed
+                -->
+                <turpentine_esi_custom module="turpentine">
+                    <file>turpentine_esi_custom.xml</file>
+                </turpentine_esi_custom>
+            </updates>
+        </layout>
+    </frontend>
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <turpentine after="Mage_Adminhtml">Nexcessnet_Turpentine</turpentine>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
+    <adminhtml>
+        <layout>
+            <updates>
+                <turpentine module="turpentine">
+                    <file>turpentine.xml</file>
+                </turpentine>
+            </updates>
+        </layout>
+        <acl>
+            <resources>
+                <admin>
+                    <children>
+                        <system>
+                            <children>
+                                <turpentine translate="title" module="turpentine">
+                                    <title>Turpentine Varnish Management</title>
+                                </turpentine>
+                                <config>
+                                    <children>
+                                        <turpentine_varnish translate="title" module="turpentine">
+                                            <title>Turpentine Varnish Options</title>
+                                        </turpentine_varnish>
+                                        <turpentine_vcl translate="title" module="turpentine">
+                                            <title>Turpentine Caching Options</title>
+                                        </turpentine_vcl>
+                                    </children>
+                                </config>
+                            </children>
+                        </system>
+                    </children>
+                </admin>
+            </resources>
+        </acl>
+    </adminhtml>
+    <crontab>
+        <jobs>
+            <turpentine_crawl_urls>
+                <schedule>
+                    <cron_expr>0,10,20,30,40,50 * * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>turpentine/observer_cron::crawlUrls</model>
+                </run>
+            </turpentine_crawl_urls>
+        </jobs>
+    </crontab>
+</config>

@@ -886,10 +886,14 @@ XML;
                 if($order->canShip()) {
                     $partialShip = false;
                     foreach($order->getAllItems() as $item) {
+                        if($item->getProductType != 'simple') {continue;}
                         $itemQueue = Mage::getModel('fulfillmentfactory/itemqueue')
                             ->loadByItemId($item->getId());
 
-                        if($item->getQtyShipped() > 0 && $item->getQtyToShip() == 0) {
+                        if(!$item->getIsDummy(true) && $item->getQtyShipped() > 0 && $item->getQtyToShip() == 0) {
+                            $itemQueue->setStatus(Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_CLOSED);
+                        } elseif($item->getIsDummy(true) && ($parent = $item->getParentItem())
+                            && $parent->getQtyShipped() > 0 && $parent->getQtyToShip() == 0) {
                             $itemQueue->setStatus(Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_CLOSED);
                         } else {
                             $partialShip = true;
@@ -927,8 +931,8 @@ XML;
                 if($shipmentError) {
                     $order->setStatus('partially_shipped')->save();
                 }
-    }
-}
+            }
+        }
 
         return $updatedOrders;
     }
