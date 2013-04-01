@@ -27,6 +27,9 @@ class Fooman_Speedster_Block_Adminhtml_Page_Head extends Fooman_Speedster_Block_
      */
     protected function _getUrlModelClass()
     {
+        if(!Mage::getStoreConfig('system/fooman_speedster/enable')) {
+            return parent::_getUrlModelClass();
+        }
         return 'adminhtml/url';
     }
 
@@ -37,6 +40,9 @@ class Fooman_Speedster_Block_Adminhtml_Page_Head extends Fooman_Speedster_Block_
      */
     public function getFormKey()
     {
+        if(!Mage::getStoreConfig('system/fooman_speedster/enable')) {
+            return parent::getFormKey();
+        }
         return Mage::getSingleton('core/session')->getFormKey();
     }
 }
