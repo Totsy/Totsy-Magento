@@ -98,7 +98,7 @@ $paymentCode    = $this->getPaymentMethod()->getCode();
             <div class="cc_save_card cc_info">
                 <div>
                     <input type="checkbox" value="1" name="payment[saved_by_customer]" checked="checked"
-                           id="<?php echo $paymentCode ?>_saved" class="no-required">
+                           id="<?php echo $paymentCode ?>_cc_save" class="no-required">
                 </div>
                 <div id="cc_save_text" for="<?php echo $paymentCode ?>_cc_save"><?php echo $this->__('Save') ?></div>
             </div>
