@@ -250,7 +250,8 @@ class Oro_Sales_Model_Order_Billing
             $status  = $order->getStatus();
 
             if ($status == Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_PAYMENT_FAILED) {
-                Mage::throwException(Mage::helper('oro_sales')->__('Cannot place payment information'));
+                Mage::throwException(Mage::helper('oro_sales')->
+                    __('Sorry, we were unable to submit your billing information, please try again.'));
             }
 
             /** @var $invoice Mage_Sales_Model_Order_Invoice */
