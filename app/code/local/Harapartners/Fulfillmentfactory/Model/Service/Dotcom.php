@@ -817,34 +817,54 @@ XML;
                 continue;
             }
 
-            // ensure there is at least one ship item
-            $shipmentItems = $shipment->ship_items->children('a', TRUE);
-            if (!$shipmentItems) {
+            //we don't want to process orders that have already been through a shipment processing.
+            if($order->getStatus() == 'partially_shipped') {
                 continue;
             }
 
+            // ensure there is at least one ship item
+            $shipmentItems = $shipment->ship_items->children('a', TRUE);
+            if (!$shipmentItems) {
+                $order->setStatus('partially_shipped')->save();
+                foreach($order->getAllItems() as $item) {
+                    if($item->getQtyToShip() > 0) {
+                        $itemQueue = Mage::getModel('fulfillmentfactory/itemqueue')
+                            ->loadByItemId($item->getId());
+                        $itemQueue->setStatus(Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_SHIPMENT_ERROR);
+                        $itemQueue->save();
+                        unset($itemQueue);
+                    }
+                }
+                continue;
+            }
+
+
+
             // calculate the total quantity shipped, and select the last
             // shipment carrier
-            $shipmentQty = 0;
             $shipmentCarrier = "";
+            $itemQtys = array();
             foreach ($shipmentItems as $shipmentItem) {
-                $shipmentQty += (int) $shipmentItem->ship_weight;
                 $shipmentCarrier = (string) $shipmentItem->carrier;
+                $orderItem = Mage::getResourceModel('sales/order_item_collection')
+                    ->setOrderFilter($order)
+                    ->addFieldToFilter('sku',$shipmentItem->sku)
+                    ->addFieldToFilter('parent_item_id',array('null'=> true))
+                    ->fetchItem();
+                if($orderItem && $orderItem->canShip()) {
+                    $itemQtys[$orderItem->getId()] = $shipmentItem->quantity_shipped;
+                }
             }
 
             $shipmentData = array(
                 'total_weight' => (string) $shipment->ship_weight,
-                'total_qty'    => $shipmentQty,
-                'order_id'     => $order->getId(),
                 'carrier_code' => $shipmentCarrier,
             );
 
-            $orderShipments = $order->getShipmentsCollection();
-            if(count($orderShipments) > 0) {
-                $shipment = $orderShipments->getFirstItem();
-            } else {
+            if(count($itemQtys)) {
+                //let's collect qty's to ship
                 $shipment = Mage::getModel('sales/service_order', $order)
-                    ->prepareShipment();
+                    ->prepareShipment($itemQtys);
 
                 // create a new shipment track item
                 $shipmentTrack = Mage::getModel('sales/order_shipment_track')
@@ -854,27 +874,91 @@ XML;
                 try {
                     $shipment->addData($shipmentData)
                         ->addTrack($shipmentTrack)
+                        ->register()
                         ->save();
+                    $order->setDataChanges(true);
+                    $order->save();
                 } catch(Exception $e) {
                     Mage::logException($e);
                     continue;
                 }
-            }
 
-            // update the order status and save
-            $order->setStatus('complete')->save();
+                if($order->canShip()) {
+                    $partialShip = false;
+                    foreach($order->getAllItems() as $item) {
+                        if($item->getProductType != 'simple') {continue;}
+                        $itemQueue = Mage::getModel('fulfillmentfactory/itemqueue')
+                            ->loadByItemId($item->getId());
 
-            // send a shipment notification to the customer, if one hasn't been
-            // sent already
-            if (!$shipment->getEmailSent()) {
-                $shipment->sendEmail()
-                    ->setEmailSent(true)
-                    ->save();
+                        if(!$item->getIsDummy(true) && $item->getQtyShipped() > 0 && $item->getQtyToShip() == 0) {
+                            $itemQueue->setStatus(Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_CLOSED);
+                        } elseif($item->getIsDummy(true) && ($parent = $item->getParentItem())
+                            && $parent->getQtyShipped() > 0 && $parent->getQtyToShip() == 0) {
+                            $itemQueue->setStatus(Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_CLOSED);
+                        } else {
+                            $partialShip = true;
+                            $itemQueue->setStatus(Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_SHIPMENT_ERROR);
+                        }
+                        $itemQueue->save();
+                        unset($itemQueue);
+                    }
+                    if($partialShip) {// update the order status and save
+                        $order->setStatus('partially_shipped')->save();
+                    }
+                }
 
-                $updatedOrders++;
+                // send a shipment notification to the customer, if one hasn't been
+                // sent already
+                if (!$shipment->getEmailSent()) {
+                    $shipment->sendEmail()
+                        ->setEmailSent(true)
+                        ->save();
+
+                    $updatedOrders++;
+                }
+            } else {
+                $shipmentError = false;
+                foreach($order->getAllItems() as $item) {
+                    if($item->getQtyToShip() > 0) {
+                        $itemQueue = Mage::getModel('fulfillmentfactory/itemqueue')
+                            ->loadByItemId($item->getId());
+                            $itemQueue->setStatus(Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_SHIPMENT_ERROR);
+                        $itemQueue->save();
+                        unset($itemQueue);
+                        $shipmentError = true;
+                    }
+                }
+                if($shipmentError) {
+                    $order->setStatus('partially_shipped')->save();
+                }
             }
         }
 
         return $updatedOrders;
+    }
+
+    protected function _needToAddDummyForShipment($item, $qtys) {
+        if ($item->getHasChildren()) {
+            foreach ($item->getChildrenItems() as $child) {
+                if ($child->getIsVirtual()) {
+                    continue;
+                }
+                if (isset($qtys[$child->getProductId()]) && $qtys[$child->getProductId()] > 0) {
+                    return $qtys[$child->getProductId()];
+                }
+            }
+            if ($item->isShipSeparately()) {
+                return true;
+            }
+            return false;
+        } else if ($item->getParentItem()) {
+            if ($item->getIsVirtual()) {
+                return false;
+            }
+            if (isset($qtys[$item->getProductId()]) && $qtys[$item->getProductId()] > 0) {
+                return $qtys[$item->getProductId()];
+            }
+            return false;
+        }
     }
 }

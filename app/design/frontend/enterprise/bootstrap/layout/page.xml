@@ -36,19 +36,20 @@ Default layout, loads most of the pages
                 <!--<action method="addJs"><script>mage/cookies.js</script></action>-->
                 <!--<block type="page/js_cookie" name="js_cookies" template="page/js/cookie.phtml"/>-->
                 <!--<action method="addCss"><stylesheet>css/print.css</stylesheet><params>media="print"</params></action>-->
-                <action method="addJs"><script>jquery/jquery-1.7.2.min.js</script></action>
-                <action method="addJs"><script>jquery/jquery.jcountdown1.3.min.js</script></action>
+<!--                 <action method="addJs"><script>jquery/jquery-1.7.2.min.js</script></action> -->
+                <action method="addJs"><script>jquery/jquery.countdown-1.6.1.min.js</script></action>
+                <action method="addJs"><script>totsy/countdown-extend.js</script></action>
                 <action method="addJs"><script>jquery/cloud-zoom.1.0.2.js</script></action>
                 <action method="addJs"><script>jquery/jquery.fancybox.js</script></action>
-                <action method="addJs"><script>jquery/jquery.placeholder.min.js</script></action>
                 <action method="addJs"><script>prototype/prototype.js</script></action>
-                <action method="addJs"><script>lib/ccard.js</script></action>
                 <action method="addJs"><script>prototype/validation.js</script></action>
                 <action method="addJs"><script>scriptaculous/builder.js</script></action>
                 <action method="addJs"><script>scriptaculous/effects.js</script></action>
+                <!-- 
                 <action method="addJs"><script>scriptaculous/dragdrop.js</script></action>
                 <action method="addJs"><script>scriptaculous/controls.js</script></action>
                 <action method="addJs"><script>scriptaculous/slider.js</script></action>
+                -->
                 <action method="addJs"><script>varien/js.js</script></action>
                 <action method="addJs"><script>varien/form.js</script></action>
                 <!-- <action method="addJs"><script>varien/menu.js</script></action>
@@ -58,8 +59,12 @@ Default layout, loads most of the pages
                 <block type="page/js_cookie" name="js_cookies" template="page/js/cookie.phtml"/>
                 <action method="addItem"><type>skin_js</type><name>js/html5shiv.js</name><params/><if>lt IE 9</if></action>
                 <action method="addItem"><type>skin_js</type><name>js/scripts.js</name></action>
+<<<<<<< HEAD
                 <action method="addItem"><type>skin_js</type><name>js/global.js</name><params/>
                     </action> 
+=======
+                <action method="addItem"><type>skin_js</type><name>js/global.js</name><params/></action>
+>>>>>>> a180dbeb84da1f0df7ba9a114324cb9a9787724e
                 <action method="addCss"><stylesheet>lib/bootstrap/bootstrap.css</stylesheet></action>
                 <!--<action method="addCss"><stylesheet>lib/bootstrap/bootstrap-responsive.css</stylesheet></action>-->
                 <action method="addCss"><stylesheet>css/style.css</stylesheet></action>
@@ -106,6 +111,9 @@ Default layout, loads most of the pages
                 <!-- global scripts -->
                 <block type="totsy_page/html_script_footer" name="footer_scripts">
                     <!-- bootstrap components / plugins -->
+                    <action method="addJs"><script>jquery/cloud-zoom.1.0.2.js</script></action> 
+                    <action method="addJs"><script>jquery/jquery.placeholder.min.js</script></action>
+                    <action method="addJs"><script>lib/ccard.js</script></action>
                     <action method="addItem"><type>skin_js</type><name>js/prettify.js</name><params/></action>
                     <!--
                     <action method="addItem"><type>skin_js</type><name>js/bootstrap-transition.js</name><params/></action>
@@ -118,17 +126,18 @@ Default layout, loads most of the pages
                     -->
                     <action method="addItem"><type>skin_js</type><name>js/bootstrap-tab.js</name><params/></action>
                     <action method="addItem"><type>skin_js</type><name>js/bootstrap-tooltip.js</name><params/></action>
-                    <action method="addItem"><type>skin_js</type><name>js/bootstrap-popover.js</name><params/></action>
+                    <!--<action method="addItem"><type>skin_js</type><name>js/bootstrap-popover.js</name><params/></action>-->
                     <action method="addItem"><type>skin_js</type><name>js/bootstrap-button.js</name><params/></action>
                     <!--
                     <action method="addItem"><type>skin_js</type><name>js/bootstrap-collapse.js</name><params/></action>
                     -->
-                    <action method="addItem"><type>skin_js</type><name>js/bootstrap-carousel.js</name><params/></action>
+                    <!--<action method="addItem"><type>skin_js</type><name>js/bootstrap-carousel.js</name><params/></action>-->
                     <!--
                     <action method="addItem"><type>skin_js</type><name>js/bootstrap-typeahead.js</name><params/></action>
                     <action method="addItem"><type>skin_js</type><name>js/application.js</name><params/></action>
                     -->
-                    
+                    <action method="addItem"><type>skin_js</type><name>js/totsyApp.js</name><params/></action>
+                    <action method="addJs"><script>totsy/insparq.js</script></action>
                 </block>
             </block>
         </block>
@@ -200,4 +209,17 @@ Print layout
             <action method="setIsHandle"><applied>1</applied></action>
         </reference>
     </page_three_columns>
+    <aoestatic_cacheable>
+        <reference name="content">
+            <!-- Replace cart by static placeholder wrapped with placeholder information (q'n'd solution) -->
+            <action method="unsetChild"><param>messages</param></action>
+            <block type="aoestatic/placeholder" name="messages">
+                <action method="setPlaceholderBlockname"><param>messages</param></action><!-- required: needs to point to the original block name -->
+                <action method="setPlaceholderId"><param>messages</param></action>
+                <block type="core/text" name="placeholder_content">
+                    <action method="setText"><param><![CDATA[&nbsp;]]></param></action>
+                </block>
+            </block>
+        </reference>
+    </aoestatic_cacheable>
 </layout>

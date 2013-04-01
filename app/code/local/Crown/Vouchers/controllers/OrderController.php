@@ -33,15 +33,42 @@ class Crown_Vouchers_OrderController extends Mage_Core_Controller_Front_Action {
 			$this->returnResult(array('error' => 'You have already received this voucher. '));
 			return;
 		}
-		
 		// Create order
 		$order = Mage::getModel('vouchers/order')->createOrder($product_id);
-		
+
 		// Send Voucher Email
 		Mage::getModel('vouchers/email')->sendEmail($product_id, $order);
-		
+
 		$this->returnResult(array('success' => 'Your email has been sent!'));
 	}
+
+    /**
+     * AJAX request to check if voucher is available to user
+     *
+     * Created by Crown Partners
+     */
+    public function availableAction() {
+        $product_id = $this->getRequest()->getParam('id');
+
+        $customer_id = Mage::helper('customer')->getCustomer()->getId();
+
+        if(!$product_id) {
+            $this->returnResult(array('status' => 1, 'id' => $product_id));
+            return;
+        }
+
+        if(!$customer_id) {
+            $this->returnResult(array('status' => 2, 'id' => $product_id));
+            return;
+        }
+
+        if(Mage::helper('vouchers')->hasAssociation($customer_id, $product_id)) {
+            $this->returnResult(array('status' => 3, 'id' => $product_id));
+            return;
+        }
+
+        $this->returnResult(array('status' => 0, 'id' => $product_id));
+    }
 	
 	private function returnResult($result) {
 		$this->getResponse()->setBody(Mage::helper('core')->jsonEncode($result));

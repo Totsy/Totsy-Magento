@@ -15,8 +15,9 @@
 ?>
 <ul class="thumbnails">
     <?php  foreach ($liveCategoryInfoArray as $liveCategory): ?>
-    <li class="span2">
-    <div class="thumbnail">
+    <?php if(!isset($liveCategory['club_only_event']) || !$liveCategory['club_only_event']) : ?>
+
+        <li class="span3">
     <a href="<?php echo $this->getBaseUrl().$liveCategory['url_path']?>"><?php if(isset($liveCategory['image'])){
     //$containerProductInfo['small_image'] = $mediaBaseDir . str_ireplace('/', DS, $productInfo['small_image']);    //it call from file system like F:\www\totsy\media\catalog\product\n\e\newborn_tiered_dots_top_2pc_diaper_set.jpg
     if (($liveCategory['image'] == 'no_selection')||empty($liveCategory['image'])){
@@ -32,14 +33,14 @@
     <div class="caption">
         <h5><?php echo $liveCategory['name'] ?></h5>
     </div>
-    </div>
     </li>
     <?php
-        if ($i >= 6){
+        if ($i >= 4){
             break;
         }
             $i++;
     ?>
+    <?php endif; ?>
     <?php endforeach; ?>
 </ul>
 </div>

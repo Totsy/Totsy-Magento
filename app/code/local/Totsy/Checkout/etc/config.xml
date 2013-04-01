@@ -22,6 +22,7 @@
                 <rewrite>
                     <cart>Totsy_Checkout_Block_Cart</cart>
                     <cart_totals>Totsy_Checkout_Block_Cart_Totals</cart_totals>
+                    <total_nominal>Totsy_Checkout_Block_Total_Nominal</total_nominal>
                 </rewrite>
             </checkout>
         </blocks>
@@ -29,6 +30,7 @@
             <checkout>
                 <rewrite>
                     <session>Totsy_Checkout_Model_Session</session>
+                    <cart>Totsy_Checkout_Model_Cart</cart>
                     <type_multishipping>Totsy_Checkout_Model_Type_Multishipping</type_multishipping>
                 </rewrite>
             </checkout>

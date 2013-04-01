@@ -24,11 +24,6 @@
           <show_in_website>1</show_in_website>
           <show_in_store>1</show_in_store>
           <comment>
-            <![CDATA[
-            <div style="padding:10px;background-color:#fff;border:1px solid #ddd;margin-bottom:7px;">
-              This is a beta version of the INSPARQ Widget for Magento.
-            </div>
-            ]]>
           </comment>
           <fields>
             <pubid translate="label comment">

@@ -28,12 +28,14 @@
 /**
  * @see Mage_Checkout_Block_Total_Nominal
  */
+/*
 ?>
 <tr>
     <th colspan="<?php echo $this->getColspan() + 1; ?>" style="<?php echo $this->getTotalStyle() ?>" class="a-right">
         <?php echo sprintf(($this->getRenderingArea() == $this->getTotalArea()) ? '<strong>%s</strong>' : '%s', $this->escapeHtml($this->getTotalTitle())) ?>
     </th>
 </tr>
+ */ ?>
 <?php foreach ($this->getTotalItems() as $i => $item): ?>
 <?php //if($this->getTotalItemDetails($item) == false) {continue;} ?>
 <?php foreach ($this->getTotalItemDetails($item) as $j => $row):?>
@@ -48,7 +50,7 @@
 <?php endforeach; ?>
 <tr class="summary-total">
     <td colspan="<?php echo $this->getColspan(); ?>" style="<?php echo $this->getTotalStyle() ?>">
-        <div class="summary-collapse"><?php echo $this->escapeHtml($this->getItemName($item)); ?></div>
+        <div class="summary-collapse">Total</div>
     </td>
     <td class="a-right">
         <?php echo $this->helper('checkout')->formatPrice($this->getItemRowTotal($item)) ?>

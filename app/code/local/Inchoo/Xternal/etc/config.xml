@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Inchoo_Xternal>
+            <version>1.0.0</version>
+        </Inchoo_Xternal>
+    </modules>
+    <global>
+    
+        <blocks>
+            <inchoo_externals>
+                <class>Inchoo_Xternal_Block</class>
+            </inchoo_externals>
+            <page>
+                <rewrite>
+                    <html_head>Inchoo_Xternal_Block_Html_Head</html_head>
+                </rewrite>
+            </page>
+        </blocks>
+        
+    </global>
+    <frontend>
+        <layout>
+            <updates>
+                <inchoo_xternal module="Inchoo_Xternal">
+                    <file>inchoo_xternal.xml</file>
+                </inchoo_xternal>
+            </updates>
+        </layout>
+    </frontend>
+
+</config>

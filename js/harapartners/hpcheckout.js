@@ -117,7 +117,7 @@ HpCheckout.prototype = {
             jQuery("#payment_form_paypal_express").hide();
             jQuery('#billing-address').show();
             jQuery('#shipping-address').show();
-            jQuery('.addresses').width(440);
+            jQuery('.addresses').width(445);
         }
         jQuery("#payment_form_" + payment_method).show();
     },
@@ -131,7 +131,6 @@ HpCheckout.prototype = {
             blockType = 'shipping';
         }
         if (clickedAddress.val() === '') {
-            
             jQuery('#' + hpcheckout.data.blocks[blockType].formId + ' input').val('');
             
             if (blockType == 'billing') {
@@ -220,6 +219,9 @@ HpCheckout.prototype = {
         if (!this.validate()) {
             return;
         }
+        
+        jQuery("#" + this.id).attr("disabled", true);
+        
         //IE grabs placeholder text from orders in lew of of an actual value
         //this fix removes values explicitly when they match their placeholder text
         jQuery("#hpcheckout-wrapper").find('input[placeholder]').each(function() {
@@ -233,7 +235,9 @@ HpCheckout.prototype = {
         var checkoutObject = this;
         var postData = this.getFormData();
         postData += '&updatePayment=true';
+        
         this.throbberOn();
+        
         jQuery.ajax({
             url: this.data.submitUrl,
             dataType: "json",
@@ -334,7 +338,7 @@ HpCheckout.prototype = {
                     checkoutPayment.disableAddress(true, 'hpcheckout-shipping-form');
                 }
             }
-        }
+        }        
     },
     getFormData: function(blockCodes) {
         var affectedFormIds = this.getFormIds(blockCodes);
