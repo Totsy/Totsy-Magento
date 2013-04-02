@@ -2,12 +2,6 @@
  * < IE9 (IE8 and below) Conditional Style Sheet
  */
 
- 
-/* Bootstrap Events Grid Override - .tedhack */
-[class*='event'].tedhack .span4 {width:23.57em;}
-[class*='event'].tedhack .span3 {width:17.5em;}
-[class*='event'].tedhack .span2 {width:11.41em;}
-
 /* event tiles rollovers */
 .events-grid .thumbnail .more {
     visibility: hidden;

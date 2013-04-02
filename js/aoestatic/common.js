@@ -32,6 +32,10 @@ jQuery(document).ready(function($) {
 		data.currentProductId = CURRENTPRODUCTID;
 	}
 
+    if (typeof PAGETAG !== 'undefined' && PAGETAG) {
+        data.pageTag = PAGETAG;
+    }
+
 	// E.T. phone home
 	if (typeof data.currentProductId !== 'undefined' || counter > 0) {
 		jQuery.get(
