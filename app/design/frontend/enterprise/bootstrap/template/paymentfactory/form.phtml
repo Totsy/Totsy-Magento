@@ -89,7 +89,7 @@ jQuery(document).ready(function() {
 		};
 
 		var is_digital = function (e) {
-			if (e.keyCode != 8 && (e.keyCode < 48 || e.keyCode > 57)) {
+			if (e.keyCode != 8 && (e.keyCode < 48 || e.keyCode > 57) || e.shiftKey) {
 				if (jQuery.browser.msie) {
 					window.event.cancelBubble = true;
 				}
@@ -128,6 +128,7 @@ jQuery(document).ready(function() {
 			var card_type = jQuery("input[name='payment[cc_type]']:checked").val();
 			this.maxLength = card_types[card_type].cid_length;
 		});
+
 		cc_cid.blur(function (e) {
 			var cid_nr = this.value;
 			var card_type = jQuery("input[name='payment[cc_type]']:checked").val();
