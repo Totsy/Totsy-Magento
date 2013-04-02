@@ -57,70 +57,90 @@ jQuery(document).ready(function() {
         checkoutPayment.setPaymentType(this);
     });
 
-	jQuery("#error-msg").hide();
-	jQuery("#<?php echo $_code ?>_cc_number").keyup(function () {
-		card_types = [
-			{
-				name: 'amex',
+	(function () {
+		var error_msg = jQuery("#cid_error-msg");
+		error_msg.hide();
+
+		var card_types = {
+			"AE": {
+				name: 'AE',
 				pattern: /^3[47]/,
-				valid_length: [15]
+				valid_length: [15],
+				cid_length: 4
 			},
-			{
-				name: 'visa',
+			"VI": {
+				name: 'VI',
 				pattern: /^4/,
-				valid_length: [16]
+				valid_length: [16],
+				cid_length: 3
 			},
-			{
-				name: 'mastercard',
+			"MC": {
+				name: 'MC',
 				pattern: /^5[1-5]/,
-				valid_length: [16]
+				valid_length: [16],
+				cid_length: 3
 			},
-			{
-				name: 'discover',
+			"DI": {
+				name: 'DI',
 				pattern: /^(6011|622(12[6-9]|1[3-9][0-9]|[2-8][0-9]{2}|9[0-1][0-9]|92[0-5]|64[4-9])|65)/,
-				valid_length: [16]
+				valid_length: [16],
+				cid_length: 3
 			}
-		];
+		};
 
-		var card_num = this.value;
-		for (var i = 0, len = card_types.length; i < len; i++) {
-			card_type = card_types[i];
+		var is_digital = function (e) {
+			if (e.keyCode != 8 && (e.keyCode < 48 || e.keyCode > 57)) {
+				if (jQuery.browser.msie) {
+					window.event.cancelBubble = true;
+				}
+				else {
+					e.stopPropagation();
+				}
 
-			if (card_num.match(card_type.pattern)) {
-				jQuery("input[name='payment[cc_type]']:eq(" + i + ")").attr("checked","checked");
-			}
-		}
-	});
-
-	jQuery("#<?php echo $_code ?>_cc_cid").blur(function () {
-		var cid_value = jQuery("#<?php echo $_code ?>_cc_cid").val();
-		var card_types = jQuery("input[name='payment[cc_type]']:checked").val();
-		var errmsg = jQuery("#error-msg");
-
-		if ("" == card_types) {
-			return;
-		}
-
-		if ("AE" == card_types) {
-			if (4 != cid_value.length) {
-				errmsg.html("Please enter a valid 4-digit CVN#");
-				errmsg.show();
+				return false;
 			}
 			else {
-				errmsg.hide();
+				return true;
 			}
-		}
-		else {
-			if (3 != cid_value.length) {
-				errmsg.html("Please enter a valid 3-digit CVN#");
-				errmsg.show();
+		};
+
+		var cc_nr = jQuery("#<?php echo $_code; ?>_cc_number");
+		cc_nr.keydown(function (e) {
+			if (!is_digital(e)) {
+				return false;
+			}
+
+			var card_num = this.value;
+			for (var prop in card_types) {
+				if (card_num.match(card_types[prop].pattern)) {
+					jQuery("input[name='payment[cc_type]'][value='" + prop + "']").attr("checked","checked");
+					this.maxLength = card_types[prop].valid_length;
+				}
+			}
+		});
+
+		var cc_cid = jQuery("#<?php echo $_code; ?>_cc_cid");
+		cc_cid.keydown(function (e) {
+			if (!is_digital(e)) {
+				return false;
+			}
+
+			var card_type = jQuery("input[name='payment[cc_type]']:checked").val();
+			this.maxLength = card_types[card_type].cid_length;
+		});
+		cc_cid.blur(function (e) {
+			var cid_nr = this.value;
+			var card_type = jQuery("input[name='payment[cc_type]']:checked").val();
+
+			if (cid_nr.length != card_types[card_type].cid_length) {
+				error_msg.html("Please enter a valid " + card_types[card_type].cid_length + "-digit CVN#");
+				error_msg.show();
 			}
 			else {
-				errmsg.hide();
+				error_msg.hide();
 			}
-		}
-	});
-
+		});
+	})();
 });
 
 </script>
@@ -272,7 +292,7 @@ jQuery(document).ready(function() {
                 <div class="input-box">
                     <div class="v-fix">
                         <input type="text" title="<?php echo $this->__('Card Verification Number') ?>" class="input-text cvv validate-cc-cvn-radio" id="<?php echo $_code ?>_cc_cid" name="payment[cc_cid]" value="<?php echo (($this->__('Card Verification Number')!=="Card Verification Number") ? $this->__('Card Verification Number') : "") ?>" placeholder="<?php echo $this->__('CVN#') ?>" />
-						<div id="error-msg" class="validation-advice"></div>
+						<div id="cid_error-msg" class="validation-advice"></div>
                     </div>
                 </div>
             </div>
