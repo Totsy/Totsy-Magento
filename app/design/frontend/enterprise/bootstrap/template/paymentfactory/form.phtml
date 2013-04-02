@@ -263,7 +263,6 @@ jQuery(document).ready(function() {
                     <input type="text" id="<?php echo $_code ?>_cc_number" name="payment[cc_number]" title="<?php echo $this->__('Credit Card Number') ?>" class="input-text validate-cc-number validate-cc-type-radio" value="<?php echo (($this->__('Credit Card Number')!=='Credit Card Number') ? $this->__('Credit Card Number') : "") ?>" placeholder="<?php echo $this->__('Credit Card Number') ?>" />
                 </div>
             </div>
-			<div id="error-msg" class="error-msg"></div>
         </div>
         <div style="clear:both"></div>
         <div>
@@ -273,6 +272,7 @@ jQuery(document).ready(function() {
                 <div class="input-box">
                     <div class="v-fix">
                         <input type="text" title="<?php echo $this->__('Card Verification Number') ?>" class="input-text cvv validate-cc-cvn-radio" id="<?php echo $_code ?>_cc_cid" name="payment[cc_cid]" value="<?php echo (($this->__('Card Verification Number')!=="Card Verification Number") ? $this->__('Card Verification Number') : "") ?>" placeholder="<?php echo $this->__('CVN#') ?>" />
+						<div id="error-msg" class="validation-advice"></div>
                     </div>
                 </div>
             </div>
