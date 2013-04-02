@@ -119,7 +119,7 @@ jQuery(document).ready( function() {
 	                                <td>
 	                                    <div>
 	                       		            <input type="radio" data-billing-address-id="<?php echo $card->address_id; ?>" id="payment[cc_vaulted]" name="payment[cc_vaulted]" value="<?php echo $card->getVaultId() ?>"
-                                            <?php if(($lastCardUsed->getId() == $card->getVaultId()) && (!$lastCardUsed->getSubscriptionId()))  echo 'checked="yes"'; ?> class="use-saved-card-control pull-left" id="payment">
+                                            <?php if($lastCardUsed && ($lastCardUsed->getId() == $card->getVaultId()) && (!$lastCardUsed->getSubscriptionId()))  echo 'checked="yes"'; ?> class="use-saved-card-control pull-left" id="payment">
                                             <span class="cc">
         		 	                            <span title="<?php echo strtolower($card->type); ?>" class="<?php echo strtolower($card->type); ?>" >
         		 	                            </span>
