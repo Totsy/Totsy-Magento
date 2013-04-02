@@ -92,7 +92,7 @@ class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
                         //check current stock qty
                         $stockItem = Mage::getModel('cataloginventory/stock_item')->loadByProduct($product);
 
-                        if($stockItem->getQty() !== $newQty) {
+                        if($stockItem->getQty() != $newQty) {
                             if ($stockItem->getId() == 0) {
                                 //item hasn't been added to the website
                                 unset($stockItem);
@@ -101,12 +101,6 @@ class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
                             // only respect existing values if it already exists.  Otherwise skip.
                             if($stockItem->getUseConfigManageStock() == 0 && !$stockItem->getManageStock()) {
                                 //Product does not manage stock
-                                unset($stockItem);
-                                continue;
-                            }
-
-                            $oldQty = $stockItem->getQty();
-                            if($oldQty == $newQty) {
                                 unset($stockItem);
                                 continue;
                             }
