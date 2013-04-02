@@ -30,4 +30,11 @@
             </adminhtml>
         </blocks>
     </global>
+    <default>
+        <system>
+            <fooman_speedster>
+                <enabled>0</enabled>
+            </fooman_speedster>
+        </system>
+    </default>
 </config>
