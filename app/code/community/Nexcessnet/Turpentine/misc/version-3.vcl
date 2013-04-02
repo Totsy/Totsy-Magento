@@ -105,7 +105,7 @@ sub vcl_recv {
 
         set req.http.hash_url = regsuball(req.url, "\?.*$", "");
         if ({{force_cache_static}} &&
-                req.url ~ ".*\.(?:{{static_extensions}})(?=\?|&|$)") {
+                req.url ~ ".*\.(?:{{static_extensions}})(?=\?|$)") {
             unset req.http.Cookie;
             return (lookup);
         }
