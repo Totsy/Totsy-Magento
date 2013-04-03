@@ -169,6 +169,17 @@
                 </children>
             </harapartners>
         </menu>-->
+        <menu>
+            <harapartners>
+                <children>
+                    <taxsku translate="title" module="speedtax">
+                        <title>Product Tax Categories</title>
+                        <sort_order>80</sort_order>
+                        <action>speedtax/adminhtml_taxsku</action>
+                    </taxsku>
+                </children>
+            </harapartners>
+        </menu>
     </adminhtml>
     <admin>
         <routers>
