@@ -399,7 +399,7 @@ body.customer-account-entry .btn.btn-large {
 /* mainContent - the site "wrapper" white box */
 #mainContent {
     margin:0 auto;
-    width:940px;
+    /* pull out for RWD */ /* width:940px; */
     background:#fff; 
     padding:206px 30px 267px; /* @fixednav: top padding magic number BS; @stickyfooter: bottom padding magic number BS */
     overflow: auto; /* @stickyfooter */

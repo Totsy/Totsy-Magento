@@ -28,11 +28,10 @@
  */
 ?>
 <header class="navbar navbar-fixed-top">
-
     <!-- begin masthead -->
     <div id="masthead">
-        <div class="container">
-            <div class="row">
+        <div class="container-fluid">
+            <div class="row-fluid">
                 <h1 id="logo" class="span3"><a href="<?php
                 echo $this->getUrl( 'event/?ref=logo' );
                 ?>" title="<?php
@@ -42,7 +41,6 @@
                 ?>" alt="<?php
                 echo $this->getLogoAlt();
                 ?>" /></a></h1>
-            
                 <div class="header-utils span3 clearfix">
                     <div id="userAccount" class="dropdown pull-right">
                         <a href="/customer/account/#" class="dropdown-toggle" data-toggle="dropdown"><img src="/skin/frontend/enterprise/bootstrap/images/iconmonstr-user-icon.png" width="20" height="20" style="margin-top:-5px;" /> My Account</a>
@@ -59,7 +57,7 @@
                             <li><a href="/customer/account/logout">Logout</a></li>
                         </ul>
                     </div>
-                    <div class="promo-area pull-left"></div>            
+                    <div class="promo-area pull-left"></div>
                 </div>
                 <div class="header-cta span6 clearfix">
                     <span class="cta-item pull-left" id="cta-freeship"><em class="cta-item-head">FREE Shipping!</em> <em class="cta-item-sub">on all orders over $75</em></span>
@@ -70,8 +68,8 @@
     </div><!--/#masthead -->
     <!-- begin nav -->
     <nav>
-        <div class="container">
-            <div class="row">
+        <div class="container-fluid">
+            <div class="row-fluid">
                 <ul class="nav span7">
                     <li id="navAllEvents" class="nav-item dropdown">
                         <a href="<?php echo $this->getBaseUrl()?>event/"><em>ALL <br />SALES</em></a>
