@@ -116,7 +116,7 @@
 	    
 	    if( jQuery( '#billing-address-select' ).length >0 ) {
 	       jQuery( '#billing-address-select' ).bind( 'change', function(){ 
-	           if(jQuery( '#billing-address-select' ).val() == "") {
+	           if(jQuery( '#billing-address-select' ).val()=="") {
 	               checkoutPayment.disableAddress(false,'hpcheckout-billing-form');
 	           }
 	           else{
