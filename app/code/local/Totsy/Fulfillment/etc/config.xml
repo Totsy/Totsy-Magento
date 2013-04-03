@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Totsy_Fulfillment>
+            <version>0.1.0</version>
+        </Totsy_Fulfillment>
+    </modules>
+</config>
