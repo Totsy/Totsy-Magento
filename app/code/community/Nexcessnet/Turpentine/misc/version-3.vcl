@@ -102,8 +102,10 @@ sub vcl_recv {
                 return (pass);
             }
         }
+
+        set req.http.hash_url = regsuball(req.url, "\?.*$", "");
         if ({{force_cache_static}} &&
-                req.url ~ ".*\.(?:{{static_extensions}})(?=\?|&|$)") {
+                req.url ~ ".*\.(?:{{static_extensions}})(?=\?|$)") {
             unset req.http.Cookie;
             return (lookup);
         }
@@ -148,7 +150,7 @@ sub vcl_pass {
 }
 
 sub vcl_hash {
-    hash_data(req.url);
+    hash_data(req.http.hash_url);
     if (req.http.Host) {
         hash_data(req.http.Host);
     } else {
@@ -266,6 +268,7 @@ sub vcl_deliver {
     if ({{debug_headers}}) {
         set resp.http.X-Varnish-Hits = obj.hits;
         set resp.http.X-Cookie-Debug = req.http.Cookie;
+        set resp.http.X-Hash-Url = req.http.hash_url;
     } else {
         #remove Varnish fingerprints
         unset resp.http.X-Varnish;
