@@ -52,7 +52,6 @@ a:focus{outline: none;}
 .content_push { margin-top:115px; } /* not in use, was for 1col */
 .content_push_2col { margin-top:115px; }
 h2 {font-size:20px; /* removed !important for "header @override" */ }
-
 /**
  * @Diagnostics
  */
@@ -78,9 +77,9 @@ body[class*="span"] { /* bootstrap override for edge case of *span* sale title i
 }
 
 /* Bootstrap Events Grid Override - .tedhack */
-[class*='event'].tedhack .span4 {width:23.56em; min-height:438px; }
-[class*='event'].tedhack .span3 {width:17.48em;min-height:349px;}
-[class*='event'].tedhack .span2 {width:11.39em;}
+[class*='event'].tedhack .span4 { min-height:438px; }
+[class*='event'].tedhack .span3 { min-height:349px;}
+[class*='event'].tedhack .span2 { }
 [class*='event'].tedhack .span4 img {max-height: 438px;}
 .thumbnail {
     border-radius:0px;
@@ -397,12 +396,48 @@ body.customer-account-entry .btn.btn-large {
 }
 
 /* mainContent - the site "wrapper" white box */
+/* Large desktop */
+@media (min-width: 1200px) { 
 #mainContent {
     margin:0 auto;
     /* pull out for RWD */ /* width:940px; */
     background:#fff; 
     padding:206px 30px 267px; /* @fixednav: top padding magic number BS; @stickyfooter: bottom padding magic number BS */
     overflow: auto; /* @stickyfooter */
+    }
+}
+ 
+/* Portrait tablet to landscape and desktop */
+@media (min-width: 768px) and (max-width: 979px) { 
+#mainContent {
+    margin:0 auto;
+    /* pull out for RWD */ /* width:940px; */
+    background:#ddd; 
+    padding:206px 30px 267px; /* @fixednav: top padding magic number BS; @stickyfooter: bottom padding magic number BS */
+    overflow: auto; /* @stickyfooter */
+    }
+}
+ 
+/* Landscape phone to portrait tablet */
+@media (max-width: 767px) { 
+#mainContent {
+    margin:0 auto;
+    /* pull out for RWD */ /* width:940px; */
+    background:#999; 
+    padding:206px 30px 267px; /* @fixednav: top padding magic number BS; @stickyfooter: bottom padding magic number BS */
+    overflow: auto; /* @stickyfooter */
+    }
+}
+ 
+/* Landscape phones and down */
+@media (max-width: 480px) { 
+#mainContent {
+    margin:0 auto;
+    /* pull out for RWD */ /* width:940px; */
+    background:#000; 
+    padding:206px 30px 267px; /* @fixednav: top padding magic number BS; @stickyfooter: bottom padding magic number BS */
+    overflow: auto; /* @stickyfooter */
+    }
 }
 
 .logged-out ~ #mainContent {
