@@ -3,6 +3,7 @@
         <div>No payment methods available, please try again later or contact us.</div>
     <?php elseif( count( $methods ) == 1 ): ?>
         <div>
+            <input type="hidden" name="payment[method]" value="<?php echo $methods[0]->getCode(); ?>"> 
             <?php echo $this->getPaymentMethodFormHtml( $methods[0] ) ?>
         </div>
     <?php else: ?>
