@@ -62,11 +62,7 @@ class Litle_Palorus_VaultController extends Mage_Core_Controller_Front_Action
         } else {
             $creditCardType = $payment->getCcType();
         }
-        if($creditCardType == 'VI') {
-            $amount = 0;
-        } else {
-            $amount = 100;
-        }
+        $amount = 100;
         //Authorization Datas
         $auth_info = array(
             'orderId' => $customer->getId(),
