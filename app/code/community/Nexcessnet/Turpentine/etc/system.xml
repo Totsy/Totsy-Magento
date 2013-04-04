@@ -148,6 +148,15 @@
                             <show_in_website>0</show_in_website>
                             <show_in_store>0</show_in_store>
                         </config_file>
+                        <template_file translate="label" module="turpentine">
+                            <label>Template File Location</label>
+                            <frontend_type>text</frontend_type>
+                            <comment>Specify a custom Varnish VCL template file to use.</comment>
+                            <sort_order>35</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </template_file>
                     </fields>
                 </servers>
                 <purging translate="label" module="turpentine">

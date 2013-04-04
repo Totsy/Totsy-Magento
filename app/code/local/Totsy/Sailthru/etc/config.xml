@@ -19,6 +19,7 @@
                 <rewrite>
                     <cache>Totsy_Sailthru_Helper_Cache</cache>
                     <feed>Totsy_Sailthru_Helper_Feed</feed>
+                    <item>Totsy_Sailthru_Helper_Item</item>
                 </rewrite>
             </sailthru>
         </helpers>

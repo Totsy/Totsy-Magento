@@ -131,7 +131,7 @@ Default layout, loads most of the pages
                     <action method="addItem"><type>skin_js</type><name>js/application.js</name><params/></action>
                     -->
                     <action method="addItem"><type>skin_js</type><name>js/totsyApp.js</name><params/></action>
-                    <action method="addJs"><script>totsy/insparq.js</script></action>
+                    <action method="addJs"><script>totsy/insparq-flicker.js</script></action>
                 </block>
             </block>
         </block>

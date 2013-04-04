@@ -10,9 +10,21 @@ import std;
 
 ## Backends
 
-{{default_backend}}
+backend web0 { .host = "web0-dc0.totsy.net"; .port = "80"; .first_byte_timeout = 300s; .between_bytes_timeout = 300s; .probe = { .url = "/"; .interval = 5s; .timeout = 1s; .window = 5;.threshold = 3; }}
+backend web1 { .host = "web1-dc0.totsy.net"; .port = "80"; .first_byte_timeout = 300s; .between_bytes_timeout = 300s; .probe = { .url = "/"; .interval = 5s; .timeout = 1s; .window = 5;.threshold = 3; }}
+backend web2 { .host = "web2-dc0.totsy.net"; .port = "80"; .first_byte_timeout = 300s; .between_bytes_timeout = 300s; .probe = { .url = "/"; .interval = 5s; .timeout = 1s; .window = 5;.threshold = 3; }}
+backend web3 { .host = "web3-dc0.totsy.net"; .port = "80"; .first_byte_timeout = 300s; .between_bytes_timeout = 300s; .probe = { .url = "/"; .interval = 5s; .timeout = 1s; .window = 5;.threshold = 3; }}
+backend web4 { .host = "web4-dc0.totsy.net"; .port = "80"; .first_byte_timeout = 300s; .between_bytes_timeout = 300s; .probe = { .url = "/"; .interval = 5s; .timeout = 1s; .window = 5;.threshold = 3; }}
+backend admin { .host = "web7-dc0.totsy.net"; .port = "80"; .first_byte_timeout = 21600s; .between_bytes_timeout = 21600s; }
 
-{{admin_backend}}
+# Define the director that determines how to distribute incoming requests.
+director default_director round-robin {
+  { .backend = web0; }
+  { .backend = web1; }
+  { .backend = web2; }
+  { .backend = web3; }
+  { .backend = web4; }
+}
 
 ## ACLs
 
@@ -39,6 +51,8 @@ sub remove_double_slashes {
 ## Varnish Subroutines
 
 sub vcl_recv {
+    set req.backend = default_director;
+
     # allow PURGE from localhost
     if (req.request == "PURGE") {
             if (!client.ip ~ purge) {
@@ -102,10 +116,8 @@ sub vcl_recv {
                 return (pass);
             }
         }
-
-        set req.http.hash_url = regsuball(req.url, "\?.*$", "");
         if ({{force_cache_static}} &&
-                req.url ~ ".*\.(?:{{static_extensions}})(?=\?|$)") {
+                req.url ~ ".*\.(?:{{static_extensions}})(?=\?|&|$)") {
             unset req.http.Cookie;
             return (lookup);
         }
@@ -150,7 +162,7 @@ sub vcl_pass {
 }
 
 sub vcl_hash {
-    hash_data(req.http.hash_url);
+    hash_data(req.url);
     if (req.http.Host) {
         hash_data(req.http.Host);
     } else {
@@ -268,7 +280,6 @@ sub vcl_deliver {
     if ({{debug_headers}}) {
         set resp.http.X-Varnish-Hits = obj.hits;
         set resp.http.X-Cookie-Debug = req.http.Cookie;
-        set resp.http.X-Hash-Url = req.http.hash_url;
     } else {
         #remove Varnish fingerprints
         unset resp.http.X-Varnish;

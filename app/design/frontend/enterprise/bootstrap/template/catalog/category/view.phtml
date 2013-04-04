@@ -105,7 +105,7 @@
 <section class="event-landing event-<?php echo ($upComingFlag ? 'upcoming' : 'current'); ?>">
     <header class="page-header has-timer clearfix">
         <ol class="breadcrumb">
-                <li><a href="<?php echo $this->getUrl(); ?>" title="Totsy home">Totsy Home</a></li>
+                <li><a href="<?php echo $this->getUrl('event/'); ?>" title="Totsy home">Totsy Home</a></li>
                 <li class="active"><a href="<?php echo $_category->getUrl();?>"><?php echo $_helper->categoryAttribute($_category, $_category->getName(), 'name') ?></a></li>
         </ol>
         <h2>

@@ -30,7 +30,16 @@ class Nexcessnet_Turpentine_Model_Varnish_Configurator_Version3
      * @return string
      */
     public function generate() {
-        $tplFile = $this->_getVclTemplateFilename( self::VCL_TEMPLATE_FILE );
+        $tplFile = false;
+        if(($configTemplate = Mage::getStoreConfig( 'turpentine_varnish/servers/template_file' ))
+            && strlen($configTemplate) > 0) {
+
+            $tplFile = $this->_getVclTemplateFilename( $configTemplate );
+
+        }
+        if(!$tplFile || !is_readable($tplFile)) {
+            $tplFile = $this->_getVclTemplateFilename( self::VCL_TEMPLATE_FILE );
+        }
         $vcl = $this->_formatTemplate( file_get_contents( $tplFile ),
             $this->_getTemplateVars() );
         return $this->_cleanVcl( $vcl );

@@ -73,68 +73,25 @@
 	            
                 <!-- INSPARQ JS -->
                 <script language="javascript" type="text/javascript">
-                    (function() {
-                    var e = document.createElement('script');
-                    e.type = 'text/javascript';
-                    e.async = true;
-                    e.src = '//pinboard.insparq.com/assets/insparq.js';
-                    e.apikey = '48fa5885203f6957a1b65fb8a4c3304e'
-                    
-                    var s = document.getElementsByTagName('script')[0]; 
-                    s.parentNode.insertBefore(e, s);
-                    })();
+                    jQuery(window).bind("load", function() {
+                        (function() {
+                        var e = document.createElement('script');
+                        e.type = 'text/javascript';
+                        e.async = true;
+                        e.src = '//pinboard.insparq.com/assets/insparq.js';
+                        e.apikey = '48fa5885203f6957a1b65fb8a4c3304e'
+                        
+                        var s = document.getElementsByTagName('script')[0]; 
+                        s.parentNode.insertBefore(e, s);
+                        })();
+                    });
                 </script>
-                            
+                
 	        </div>
         </div><!-- /#mainContent -->
         
-    </div><!-- /#stickywrap -->
-    <?php echo $this->getChildHtml('footer') ?>
-    <?php //echo $this->getAbsoluteFooter() ?>
-    <script>
-//    function logout(){
-//    	FB.logout(function(response) {
-//    		window.location = "<?php  // echo Mage::getUrl('customer/account/logout')?>"// user is now logged out
-//    	});
-//    }
-    Event.observe(document,'dom:loaded',function() {
-        new Ajax.Updater({success: 'header-user-info'}, '<?php echo $this->getUrl('customertracking/headermsg/ajax',array('_secure'=>Mage::app()->getStore()->isCurrentlySecure())); ?>', {
-            method:'get',
-            evalScripts: true
-        });
-    });
-    // Sailthru Horizon Tags (sailthru.com transaction email) //
-        (function() {
-        function loadHorizon() { 
-            var s = document.createElement('script'); 
-            s.type = 'text/javascript'; 
-            s.async = true;
-            s.src = ('https:' === location.protocol?'https://d1gp8joe0evc8s.cloudfront.net':'http://cdn.sail-horizon.com')+'/horizon/v1.js';
-            var x = document.getElementsByTagName('script')[0]; 
-            x.parentNode.insertBefore(s, x);
-        }
-        loadHorizon();
-        var oldOnLoad = window.onload;
-        window.onload = function() {
-            if (typeof oldOnLoad === 'function') {
-                oldOnLoad();
-            }
-            Sailthru.setup({
-                domain: '<?php echo Mage::getStoreConfig('sailthru_options/horizon/sailthru_horizon_domain')?>',
-                spider: true,
-                concierge: <?php echo (Mage::getStoreConfig('sailthru_options/horizon/sailthru_concierge_enabled'))?'true':'false'?>,
-            });
-        };
-    })();
-    
-    // Facebook Logout Functionality //
-    function logout(){
-        FB.logout(function(response) {
-            window.location = "<?php echo Mage::getUrl('customer/account/logout')?>"// user is now logged out
-        });
-    }
-    
-</script>
-<?php echo $this->getIncludes() ?>
+</div><!-- /#stickywrap -->
+<?php echo $this->getChildHtml('footer') ?>
+<?php //echo $this->getAbsoluteFooter() ?>
 </body>
 </html>
