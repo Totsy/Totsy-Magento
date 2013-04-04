@@ -165,13 +165,9 @@ class Harapartners_EmailFactory_Model_Observer extends Mage_Core_Model_Abstract 
 
 	              foreach($protoitems as $obi) {
 
-                        $id = $obi->getSku();
-                        $title = $obi->getName();
-                        $sku = $obi->getSku();
                         $price = $obi["product"]->getFinalPrice()*100;
                         $qty = $obi->getQty();
-                        $url = $obi["product"]->getProductUrl();
-
+                        
                         if($obi->getParentItemId() 
                             || empty($price) 
                             || empty($qty)
@@ -179,8 +175,7 @@ class Harapartners_EmailFactory_Model_Observer extends Mage_Core_Model_Abstract 
                             continue;
                         }   
 
-	                    $title = isset($title)?$title:$sku;    
-	                    $items[] = compact('qty', 'title', 'price', 'id', 'url');
+                        $items[] = Mage::helper('sailthru/item')->prepare($obi);
 	              }
 
 	              $data = array("email" => $email, "items" => $items, "incomplete" => $status);//0: complete ; 1: imcomplete

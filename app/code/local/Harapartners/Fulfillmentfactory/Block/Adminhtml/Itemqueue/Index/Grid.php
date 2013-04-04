@@ -149,13 +149,14 @@ class Harapartners_Fulfillmentfactory_Block_Adminhtml_Itemqueue_Index_Grid exten
         $this->setMassactionIdField('itemqueue_id');
         $this->getMassactionBlock()->setFormFieldName('itemqueue_id');
         $this->getMassactionBlock()->setUseSelectAll(false);
-
-        //batch cancel function
-        $this->getMassactionBlock()->addItem('batch_cancel', array(
-             'label'=> Mage::helper('fulfillmentfactory')->__('Batch Cancel'),
-             'url'  => $this->getUrl('*/*/batchCancel'),
-             'confirm' => Mage::helper('fulfillmentfactory')->__('Are you sure?')
-        ));
+        if($this->_isAllowedAction('batch_cancel')){
+            //batch cancel function
+            $this->getMassactionBlock()->addItem('batch_cancel', array(
+                 'label'=> Mage::helper('fulfillmentfactory')->__('Batch Cancel'),
+                 'url'  => $this->getUrl('*/*/batchCancel'),
+                 'confirm' => Mage::helper('fulfillmentfactory')->__('Are you sure?')
+            ));
+        }
 
         return $this;
     }
@@ -181,5 +182,11 @@ class Harapartners_Fulfillmentfactory_Block_Adminhtml_Itemqueue_Index_Grid exten
                 'store'=>$this->getRequest()->getParam('store'),
                 'id'=>$row->getId()
         ));
+    }
+
+    protected function _isAllowedAction($action)
+    {
+        //return null;
+        return Mage::getSingleton('admin/session')->isAllowed('sales/fulfillmentfactory/fulfillmentgrid/actions/' . $action);
     }
 }

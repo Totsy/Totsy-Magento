@@ -45,7 +45,7 @@ class Webshopapps_Shipdiscount_Checkout_CartController extends Mage_Checkout_Car
                 $this->_goBack();
                 return;
             }
-    
+
             $couponCode = (string) $this->getRequest()->getParam('coupon_code');
             if ($this->getRequest()->getParam('remove') == 1) {
                 $couponCode = '';
@@ -56,7 +56,25 @@ class Webshopapps_Shipdiscount_Checkout_CartController extends Mage_Checkout_Car
                 $this->_goBack();
                 return;
             }
-    
+            //Check If Coupon is available.
+            if($couponCode) {
+                $coupon = Mage::getModel('salesrule/coupon');
+                $coupon->load($couponCode, 'code');
+                $availabe = false;
+                if($coupon->getId()) {
+                    if(strtotime($coupon->getExpirationDate()) > time()) {
+                        $availabe = true;
+                    }
+                }
+                if(!$availabe) {
+                    $this->_getSession()->addError(
+                        $this->__('Coupon code "%s" is not valid.', Mage::helper('core')->htmlEscape($couponCode))
+                    );
+                    $this->_goBack();
+                    return;
+                }
+            }
+
             try {
                 $this->_getQuote()->getShippingAddress()->setCollectShippingRates(true);
                 $this->_getQuote()->setCouponCode(strlen($couponCode) ? $couponCode : '')
