@@ -42,118 +42,99 @@
 ?>
 <?php // include banner if it is enabled
     $bannerActive = Mage::getModel('cms/block')->load('home_banner')->getIsActive();
-    if ($bannerActive) {
-        echo '<div class="banner">';
-        echo $this->getLayout()->createBlock('cms/block')->setBlockId('home_banner')->toHtml();
-        echo '</div>';
-    }
-?>
-<section id="thumbnails">
-<div class="row-fluid">
+    if ($bannerActive) { ?>
+    
+<!-- Carousel
+    ================================================== -->
+    <div id="myCarousel" class="carousel slide">
+      <div class="carousel-inner">
+        <div class="item active">
+          <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('home_banner')->toHtml(); ?>
+          <div class="container">
+            <div class="carousel-caption">
+              <h1>Example headline.</h1>
+            </div>
+          </div>
+        </div>
+        <div class="item">
+          <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('home_banner')->toHtml(); ?>
+          <div class="container">
+            <div class="carousel-caption">
+              <h1>Another example headline.</h1>
+            </div>
+          </div>
+        </div>
+        <div class="item">
+          <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('home_banner')->toHtml(); ?>
+          <div class="container">
+            <div class="carousel-caption">
+              <h1>One more for good measure.</h1>
+            </div>
+          </div>
+        </div>
+      </div>
+      <a class="left carousel-control" href="#myCarousel" data-slide="prev">&lsaquo;</a>
+      <a class="right carousel-control" href="#myCarousel" data-slide="next">&rsaquo;</a>
+    </div><!-- /.carousel -->
+<?php } ?>
+<h2>Default thumbnails</h2>
+          <p>By default, Bootstrap's thumbnails are designed to showcase linked images with minimal required markup.</p>
+          <div class="container">
             <ul class="thumbnails">
-              <li class="span4">
-                <div class="thumbnail">
-                  <img data-src="holder.js/300x200" alt="">
-                  <div class="caption">
-                    <h3>Thumbnail label</h3>
-                    <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
-                    <p><a href="#" class="btn btn-primary">Action</a> <a href="#" class="btn">Action</a></p>
-                  </div>
-                </div>
+              <li class="span3">
+                <a href="#" class="thumbnail">
+                  <img data-src="holder.js/260x180" alt="">
+                </a>
               </li>
-              <li class="span4">
-                <div class="thumbnail">
-                  <img data-src="holder.js/300x200" alt="">
-                  <div class="caption">
-                    <h3>Thumbnail label</h3>
-                    <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
-                    <p><a href="#" class="btn btn-primary">Action</a> <a href="#" class="btn">Action</a></p>
-                  </div>
-                </div>
+              <li class="span3">
+                <a href="#" class="thumbnail">
+                  <img data-src="holder.js/260x180" alt="">
+                </a>
               </li>
-              <li class="span4">
-                <div class="thumbnail">
-                  <img data-src="holder.js/300x200" alt="">
-                  <div class="caption">
-                    <h3>Thumbnail label</h3>
-                    <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
-                    <p><a href="#" class="btn btn-primary">Action</a> <a href="#" class="btn">Action</a></p>
-                  </div>
-                </div>
+              <li class="span3">
+                <a href="#" class="thumbnail">
+                  <img data-src="holder.js/260x180" alt="">
+                </a>
               </li>
-              <li class="span4">
-                <div class="thumbnail">
-                  <img data-src="holder.js/300x200" alt="">
-                  <div class="caption">
-                    <h3>Thumbnail label</h3>
-                    <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
-                    <p><a href="#" class="btn btn-primary">Action</a> <a href="#" class="btn">Action</a></p>
-                  </div>
-                </div>
+              <li class="span3">
+                <a href="#" class="thumbnail">
+                  <img data-src="holder.js/260x180" alt="">
+                </a>
               </li>
-              <li class="span4">
-                <div class="thumbnail">
-                  <img data-src="holder.js/300x200" alt="">
-                  <div class="caption">
-                    <h3>Thumbnail label</h3>
-                    <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
-                    <p><a href="#" class="btn btn-primary">Action</a> <a href="#" class="btn">Action</a></p>
-                  </div>
-                </div>
+              <li class="span3">
+                <a href="#" class="thumbnail">
+                  <img data-src="holder.js/260x180" alt="">
+                </a>
               </li>
-              <li class="span4">
-                <div class="thumbnail">
-                  <img data-src="holder.js/300x200" alt="">
-                  <div class="caption">
-                    <h3>Thumbnail label</h3>
-                    <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
-                    <p><a href="#" class="btn btn-primary">Action</a> <a href="#" class="btn">Action</a></p>
-                  </div>
-                </div>
+              <li class="span3">
+                <a href="#" class="thumbnail">
+                  <img data-src="holder.js/260x180" alt="">
+                </a>
               </li>
-              <li class="span4">
-                <div class="thumbnail">
-                  <img data-src="holder.js/300x200" alt="">
-                  <div class="caption">
-                    <h3>Thumbnail label</h3>
-                    <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
-                    <p><a href="#" class="btn btn-primary">Action</a> <a href="#" class="btn">Action</a></p>
-                  </div>
-                </div>
+              <li class="span3">
+                <a href="#" class="thumbnail">
+                  <img data-src="holder.js/260x180" alt="">
+                </a>
               </li>
-              <li class="span4">
-                <div class="thumbnail">
-                  <img data-src="holder.js/300x200" alt="">
-                  <div class="caption">
-                    <h3>Thumbnail label</h3>
-                    <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
-                    <p><a href="#" class="btn btn-primary">Action</a> <a href="#" class="btn">Action</a></p>
-                  </div>
-                </div>
+              <li class="span3">
+                <a href="#" class="thumbnail">
+                  <img data-src="holder.js/260x180" alt="">
+                </a>
+              </li>
+              <li class="span3">
+                <a href="#" class="thumbnail">
+                  <img data-src="holder.js/260x180" alt="">
+                </a>
+              </li>
+              <li class="span3">
+                <a href="#" class="thumbnail">
+                  <img data-src="holder.js/260x180" alt="">
+                </a>
               </li>
             </ul>
           </div>
-          <!-- Example row of columns -->
-      <div class="row">
-        <div class="span4">
-          <h2>Heading</h2>
-          <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-          <p><a class="btn" href="#">View details &raquo;</a></p>
-        </div>
-        <div class="span4">
-          <h2>Heading</h2>
-          <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-          <p><a class="btn" href="#">View details &raquo;</a></p>
-       </div>
-        <div class="span4">
-          <h2>Heading</h2>
-          <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
-          <p><a class="btn" href="#">View details &raquo;</a></p>
-        </div>
-      </div>
-</section>
-<div class="catalog-events-container">
-    <div class="live-events-container row-fluid">
+<div class="catalog-events-container container">
+    <div class="live-events-container">
     <?php // Live Events ?>
     <?php if (!!$topArray && !empty($topArray)) : ?>
         <section id="events-live" class="tedhack events-grid">
@@ -199,10 +180,11 @@
                             
                             <?php $timer++; ?>
                         </a>
-                        <div class="caption">
+                  <div class="caption">
                     <h3 class="ellipsis"><?php echo $top['name'];?></h3>
                     <p class="up-to">up to <span><?php echo $maxDiscount; ?>% Off!</span></p>
                   </div>
+                  
                     </li>
                 <?php endif; ?>
                 <?php endif; ?>
@@ -307,7 +289,24 @@
 
     </div><!-- /.live-events-container -->
 </div><!-- /.catalog-events-container -->
-
+<div class="modal hide fade" id="myModal">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3>Marketing Greeting Could Go Here</h3>
+  </div>
+  <div class="modal-body">
+    <p>invite your friends, do something else. </p>
+  </div>
+  <div class="modal-footer">
+    <a href="#" class="btn">Close</a>
+    <a href="#" class="btn btn-primary">Save changes</a>
+  </div>
+</div>
+<script>
+jQuery(window).load(function(){
+        jQuery('#myModal').modal('show');
+    });
+</script>
 <script type="text/javascript">
     jQuery(".counter").each(function(){
         var saleTime = new Date(jQuery(this).data('enddate'));

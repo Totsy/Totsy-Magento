@@ -29,8 +29,13 @@
 ?>
 <header class="navbar navbar-fixed-top">
     <!-- begin masthead -->
-    <div id="masthead">
+    <div id="masthead" class="navbar-inner">
         <div class="container">
+        <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
             <div class="row">
                 <h1 id="logo" class="span3"><a href="<?php
                 echo $this->getUrl( 'event/?ref=logo' );
@@ -41,10 +46,8 @@
                 ?>" alt="<?php
                 echo $this->getLogoAlt();
                 ?>" /></a></h1>
-                <div class="header-utils span3 clearfix">
-                    <div id="userAccount" class="dropdown pull-right">
-                        <a href="/customer/account/#" class="dropdown-toggle" data-toggle="dropdown"><img src="/skin/frontend/enterprise/bootstrap/images/iconmonstr-user-icon.png" width="20" height="20" style="margin-top:-5px;" /> My Account</a>
-                        <ul class="dropdown-menu">
+                <div class="nav-collapse collapse">
+            <ul class="nav">
                             <li><a href="/customer/account/">Account Dashboard</a></li>
                             <li><a href="/customer/account/edit/">Account Information</a></li>
                             <li><a href="/paymentfactory/">Manage Credit Cards</a></li>
@@ -57,12 +60,12 @@
                             <li><a href="/customer/account/logout">Logout</a></li>
                         </ul>
                     </div>
-                    <div class="promo-area pull-left"></div>
-                </div>
+                <!--
                 <div class="header-cta span6 clearfix">
                     <span class="cta-item pull-left" id="cta-freeship"><em class="cta-item-head">FREE Shipping!</em> <em class="cta-item-sub">on all orders over $75</em></span>
                     <span class="cta-item pull-right"><a class="cta-link" href="<?php echo $this -> getBaseUrl();?>invitation">Invite friends get $15</a></span> 
                 </div>
+                -->
             </div><!-- /.row -->
         </div><!--/.container -->
     </div><!--/#masthead -->

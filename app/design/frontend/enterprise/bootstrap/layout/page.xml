@@ -113,27 +113,19 @@ Default layout, loads most of the pages
                     <action method="addJs"><script>jquery/jquery.placeholder.min.js</script></action>
                     <action method="addJs"><script>lib/ccard.js</script></action>
                     <action method="addItem"><type>skin_js</type><name>js/prettify.js</name><params/></action>
-                    <!--
                     <action method="addItem"><type>skin_js</type><name>js/bootstrap-transition.js</name><params/></action>
                     <action method="addItem"><type>skin_js</type><name>js/bootstrap-alert.js</name><params/></action>
-                    -->
                     <action method="addItem"><type>skin_js</type><name>js/bootstrap-modal.js</name><params/></action>
                     <action method="addItem"><type>skin_js</type><name>js/bootstrap-dropdown.js</name><params/></action>
-                    <!--
                     <action method="addItem"><type>skin_js</type><name>js/bootstrap-scrollspy.js</name><params/></action>
-                    -->
                     <action method="addItem"><type>skin_js</type><name>js/bootstrap-tab.js</name><params/></action>
                     <action method="addItem"><type>skin_js</type><name>js/bootstrap-tooltip.js</name><params/></action>
-                    <!--<action method="addItem"><type>skin_js</type><name>js/bootstrap-popover.js</name><params/></action>-->
+                    <action method="addItem"><type>skin_js</type><name>js/bootstrap-popover.js</name><params/></action>
                     <action method="addItem"><type>skin_js</type><name>js/bootstrap-button.js</name><params/></action>
-                    <!--
                     <action method="addItem"><type>skin_js</type><name>js/bootstrap-collapse.js</name><params/></action>
-                    -->
-                    <!--<action method="addItem"><type>skin_js</type><name>js/bootstrap-carousel.js</name><params/></action>-->
-                    <!--
+                    <action method="addItem"><type>skin_js</type><name>js/bootstrap-carousel.js</name><params/></action>
                     <action method="addItem"><type>skin_js</type><name>js/bootstrap-typeahead.js</name><params/></action>
                     <action method="addItem"><type>skin_js</type><name>js/application.js</name><params/></action>
-                    -->
                     <action method="addItem"><type>skin_js</type><name>js/totsyApp.js</name><params/></action>
                     <action method="addJs"><script>totsy/insparq-flicker.js</script></action>
                 </block>
