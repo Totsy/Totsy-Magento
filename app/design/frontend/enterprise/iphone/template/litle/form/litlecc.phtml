@@ -242,7 +242,7 @@ jQuery(document).ready( function() {
         <input type="hidden" id="<?php echo $_code ?>_type" name="payment[type]"/>
         <input type="hidden" id="<?php echo $_code ?>_litle_txn_id" name="payment[litle_txn_id]"/>
 		<input type="hidden" id="<?php echo $_code ?>_vault_id" name="payment[vault_id]" value="<?php echo $purchase['token']; ?>"/>
-        <input type="hidden" id="<?php echo $_code ?>_method" name="payment[method]" value="creditcard">
+        <!-- <input type="hidden" id="<?php //echo $_code ?>_method" name="payment[method]" value="creditcard">-->
 	<?php endif; ?>
 <?php if($this->getPaypageEnabled()):?>
 

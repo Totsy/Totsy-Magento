@@ -1,1 +1,17 @@
-<button type="button" title="<?php echo $this->__('Place Order') ?>" class="button" onclick="litlePayment.save();"><div class="totsy-button"><?php echo $this->__('Place Order') ?></div></button>
+<button id="place_order" type="button" title="<?php echo $this->__('Place Order') ?>" class="button">
+    <div class="totsy-button"><?php echo $this->__('Place Order') ?></div>
+</button>
+<script type="text/javascript">
+jQuery(document).ready(function() {
+    jQuery("#place_order").click( function() {
+        //check if Cybersource cards are on file
+        if (jQuery("[name='payment[cybersource_subid]']").length > 0 && jQuery("[name='payment[cybersource_subid]']").is(':checked')) {
+            jQuery("[name='payment[method]']").val("paymentfactory_tokenize");
+            hpcheckout.submit();
+        } else {
+            //place order using Litle payment gateway instead
+            litlePayment.save();
+        }
+    });
+});
+</script>
