@@ -23,7 +23,7 @@ class Crown_Import_Model_Observer {
 		$action_type 	= Harapartners_Stockhistory_Model_Transaction::ACTION_TYPE_EVENT_IMPORT;
 		
 		if (!$importModel->getId()) return;
-		
+
 		foreach ( $newProducts as $sku => $changeArray ) {
 			$new = ( !isset($skuMap[$sku]) || !isset($oldData[ $skuMap[$sku] ][0]['stock.qty']) );
 			
