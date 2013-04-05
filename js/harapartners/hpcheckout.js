@@ -207,6 +207,7 @@ HpCheckout.prototype = {
         if (typeof checkoutPayment !== "undefined") {
             jQuery(".cc_info input[type='radio']").addClass('required-entry');
             jQuery('.cc_info input').addClass('required-entry');
+            jQuery("[name='payment[cc_should_save]']").removeClass("required-entry");
             //Saved Credit Card Selected
             if (jQuery("[id='payment[cc_vaulted]']").is(':checked') == true
                 || jQuery("[id='payment[cybersource_subid]']").is(':checked') == true) {
