@@ -165,9 +165,13 @@ class Litle_CreditCard_Model_PaymentLogic extends Mage_Payment_Model_Method_Cc
 	{
 		$vaultIndex = $this->getInfoInstance()->getAdditionalInformation('cc_vaulted');
 		$vaultCard = Mage::getModel('palorus/vault')->load($vaultIndex);
-
+        if($vaultCard->getType() == 'AE') {
+            $cardType = 'AX';
+        } else {
+            $cardType = $vaultCard->getType();
+        }
 		$retArray = array();
-		$retArray['type'] = $vaultCard->getType();
+		$retArray['type'] = $cardType;
 		$retArray['litleToken'] = $vaultCard->getToken();
 		$retArray['cardValidationNum'] = $payment->getCcCid();
 
