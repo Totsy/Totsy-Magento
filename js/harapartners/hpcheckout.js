@@ -201,6 +201,7 @@ HpCheckout.prototype = {
                 if (jQuery("[id='paypal_payment']").is(':checked') !== true) {
                     jQuery('.cc_info input').addClass('required-entry');
                     jQuery('#paymentfactory_tokenize_saved').removeClass('required-entry');
+                    jQuery("[id='paypal_payment']").removeClass("validate-one-required");
                 } else {
                     jQuery('.cc_info input').removeClass('required-entry');
                 }

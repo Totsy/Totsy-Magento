@@ -1,0 +1,12 @@
+diff --git a/js/harapartners/hpcheckout.js b/js/harapartners/hpcheckout.js
+index ed015d3..45d924a 100644
+--- a/js/harapartners/hpcheckout.js
++++ b/js/harapartners/hpcheckout.js
+@@ -201,6 +201,7 @@ HpCheckout.prototype = {
+                 if (jQuery("[id='paypal_payment']").is(':checked') !== true) {
+                     jQuery('.cc_info input').addClass('required-entry');
+                     jQuery('#paymentfactory_tokenize_saved').removeClass('required-entry');
++                    jQuery("[id='paypal_payment']").removeClass("validate-one-required");                   
+                 } else {
+                     jQuery('.cc_info input').removeClass('required-entry');
+                 }
