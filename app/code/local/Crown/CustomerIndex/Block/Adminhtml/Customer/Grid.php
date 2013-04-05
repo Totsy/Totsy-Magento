@@ -83,6 +83,14 @@ class Crown_CustomerIndex_Block_Adminhtml_Customer_Grid extends Mage_Adminhtml_B
             'gmtoffset' => true
         ));
 
+        $this->addColumn('plus_since', array(
+            'header'    => Mage::helper('customer')->__('TotsyPLUS Since'),
+            'type'      => 'datetime',
+            'align'     => 'center',
+            'index'     => 'club_created_at',
+            'gmtoffset' => true
+        ));
+
         if (!Mage::app()->isSingleStoreMode()) {
             $this->addColumn('website_id', array(
                 'header'    => Mage::helper('customer')->__('Website'),

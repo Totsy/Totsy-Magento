@@ -140,6 +140,7 @@ class Crown_Club_Model_Club extends Mage_Core_Model_Abstract {
 		if ($customerModel) {
 			$customerModel->setIsClubMember(true);
 			$customerModel->setGroupId($clubCustomerGroup->getId());
+            $customerModel->setData('club_created_at', Zend_Date::now()->toString());
 			$customerModel->save();
 
             try {

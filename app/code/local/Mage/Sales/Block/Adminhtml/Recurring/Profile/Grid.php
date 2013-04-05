@@ -41,16 +41,36 @@ class Mage_Sales_Block_Adminhtml_Recurring_Profile_Grid extends Mage_Adminhtml_B
     }
 
     /**
+     * Prepare the grid collection object based on the passed customer_id
+     */
+    public function initCustomerCollection($customer_id)
+    {
+        $collection = Mage::getResourceModel('sales/recurring_profile_collection')
+            ->addFieldToFilter('customer_id', $customer_id);
+        $this->setCollection($collection);
+        if (!$this->getParam($this->getVarNameSort())) {
+            $collection->setOrder('profile_id', 'desc');
+        }
+        return $this;
+    }
+
+    /**
      * Prepare grid collection object
      *
      * @return Mage_Sales_Block_Adminhtml_Recurring_Profile_Grid
      */
     protected function _prepareCollection()
     {
-        $collection = Mage::getResourceModel('sales/recurring_profile_collection');
-        $this->setCollection($collection);
-        if (!$this->getParam($this->getVarNameSort())) {
-            $collection->setOrder('profile_id', 'desc');
+        // if being initiated from within the customer information view the collection will already exist so don't destroy it
+        if(!$this->getCollection()) {
+            $collection = Mage::getResourceModel('sales/recurring_profile_collection');
+            $this->setCollection($collection);
+            if (!$this->getParam($this->getVarNameSort())) {
+                $collection->setOrder('profile_id', 'desc');
+            }
+        } else {
+            // must be called from within the customer info view, remove some unnecessary columns
+            $this->removeColumn('customer_id')->removeColumn('customer_email')->removeColumn('action');
         }
         return parent::_prepareCollection();
     }
@@ -132,6 +152,24 @@ class Mage_Sales_Block_Adminhtml_Recurring_Profile_Grid extends Mage_Adminhtml_B
         $this->addColumn('schedule_description', array(
             'header' => $profile->getFieldLabel('schedule_description'),
             'index' => 'schedule_description',
+        ));
+
+        $this->addColumn('action',
+            array(
+                'header'    =>  $this->__('Action'),
+                'width'     => '100',
+                'type'      => 'action',
+                'getter'    => 'getCustomerId',
+                'actions'   => array(
+                    array(
+                        'caption'   => $this->__('Customer'),
+                        'url'       => array('base'=> 'adminhtml/customer/edit'),
+                        'field'     => 'id'
+                    ),
+                ),
+                'filter'    => false,
+                'sortable'  => false,
+                'is_system' => true,
         ));
 
         return parent::_prepareColumns();

@@ -77,6 +77,14 @@ class Mage_Adminhtml_Block_Customer_Edit_Tabs extends Mage_Adminhtml_Block_Widge
                  ));
             }
 
+            // Loading the Recurring Profile Tab. Added by Crown
+            $this->addTab('recurringProfiles', array(
+                'label'     => Mage::helper('customer')->__('Recurring Profiles'),
+                'content'   => $this->getLayout()->createBlock('sales/adminhtml_recurring_profile_grid')
+                    ->initCustomerCollection(Mage::registry('current_customer')->getId())
+                    ->toHtml()
+            ));
+
             $this->addTab('cart', array(
                 'label'     => Mage::helper('customer')->__('Shopping Cart'),
                 'class'     => 'ajax',
