@@ -10,11 +10,15 @@ jQuery(document).ready(function() {
         var isCollapsed = '';
         var lastUsedAddressId = '';
         var isLitle = true;
+        var isEnoughPointsToCoverAmount = '';
+        var isRewardUsed = '';
         return {
             hasProfile: '',
             isLitle: false,
             isCollapsed: false,
             lastUsedAddressId: '',
+            isEnoughPointsToCoverAmount: '',
+            isRewardUsed: '',
             toggleViews: function() {
                 if (this.hasProfile!=="1") { 
                     jQuery(".add_payment_separator").hide();
@@ -78,6 +82,27 @@ jQuery(document).ready(function() {
                         billAddySelect.removeAttr('disabled');
                     }
                 }
+            },
+            useRewardsPoints: function() {
+                var paymentMethod = "creditcard";
+                
+                if(checkoutPayment.isEnoughPointsToCoverAmount) {
+                    jQuery( 'input[name="payment[method]"]').val('free');
+                    jQuery( '#reward-points-input' ).val( 1 );
+                    jQuery("#reward_placer").css("padding-top", "0px");
+                    jQuery("#credits_and_card_save").hide();
+                    
+                    //once the entire order is covered, no point in showing this stuff
+                    jQuery("#use-card-method").hide();
+                    jQuery( '#add_payment' ).hide();
+                    
+                    jQuery('#' + paymentMethod + '_cc_cid').removeClass('required-entry');
+                    jQuery('#' + paymentMethod + '_expiration').removeClass('required-entry');
+                    jQuery('#' + paymentMethod + '_expiration_yr').removeClass('required-entry');
+                    
+                }
+                    hpcheckout.updatePayment();
+                    hpcheckout.update(true);
             },
             useSavedCard: function(elem) {
                 //setting payment method depending on the payment gateway being used (Litle vs Cybersource)

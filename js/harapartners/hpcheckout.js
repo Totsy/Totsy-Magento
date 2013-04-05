@@ -137,7 +137,6 @@ HpCheckout.prototype = {
                 jQuery('#billing\\:selected').val('');
             }
         } else {
-            
                 if (hpcheckoutAddresses[clickedAddress.val()]) {
                 	jQuery('select#' + blockType + '\\:country_id').val(hpcheckoutAddresses[clickedAddress.val()]['country_id']);
                 if (blockType == 'billing') {
@@ -171,11 +170,13 @@ HpCheckout.prototype = {
         var hpcheckoutObject = HpCheckout.prototype;
         var step = hpcheckoutObject.data.forms[formId];
         var blocksToUpdate = "";
+        
         if (!doUpdatePayment) {
             blocksToUpdate = hpcheckoutObject.getBlocksToUpdate(step);
         } else {
             blocksToUpdate = ['review'];
         }
+        
         if (hpcheckoutObject.validate(step)) {
             var postData = hpcheckoutObject.getFormData(step);
             //var postData = hpcheckoutObject.getFormData();
@@ -183,15 +184,23 @@ HpCheckout.prototype = {
             hpcheckoutObject.ajaxRequest(postData, doUpdatePayment);
         }
     },
-    updatePayment: function() {
+    updatePayment: function(doUpdatePayment) {
         var formId = jQuery(this).parents('form').eq(0).attr('id');
         var hpcheckoutObject = HpCheckout.prototype;
         var step = hpcheckoutObject.data.forms[formId];
-        var blocksToUpdate = hpcheckoutObject.getBlocksToUpdate(step);
+        
+        var blocksToUpdate = "";
+        
+        if (!doUpdatePayment) {
+            blocksToUpdate = hpcheckoutObject.getBlocksToUpdate(step);
+        } else {
+            blocksToUpdate = ['review'];
+        }
+        
         // var postData = hpcheckoutObject.getFormData( step );
         var postData = hpcheckoutObject.getFormData();
         postData += '&currentStep=' + step + '&updatePayment=true';
-        hpcheckoutObject.ajaxRequest(postData);
+        hpcheckoutObject.ajaxRequest(postData, doUpdatePayment);
     },
     submit: function() {
         //good time to validate CC types
@@ -368,11 +377,12 @@ HpCheckout.prototype = {
         var checkoutObject = this;
         var blocksToUpdate = "";
         //checking if payment block should be updated or not
-        if (!doUpdatePayment) {
+        if (!doUpdatePayment && checkoutPayment.isEnoughPointsToCoverAmount==false) {
             blocksToUpdate = this.getBlocksToUpdate(postData['currentStep']);
         } else {
             blocksToUpdate = ['review'];
         }
+        
         this.throbberOn(blocksToUpdate);
         jQuery.ajax({
             url: this.data.updateUrl,
