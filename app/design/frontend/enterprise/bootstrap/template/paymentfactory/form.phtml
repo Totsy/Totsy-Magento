@@ -45,7 +45,7 @@ if(count($fulfillmentTypes) > 1) {
     <div>   
         <div style="clear:both"></div>
         <?php if($profiles && $profilesCounter > 0 ) { ?>
-                <div class="pull-left" id="use-card-method">
+                <div class="pull-left" id="use-card-method-cybersource">
                     <div id="cybersource-use-card-method ">
                     <table class="saved_card"
                     	<tr>
@@ -103,3 +103,13 @@ if(count($fulfillmentTypes) > 1) {
                 </div>
     </div>
 </div>
+<div style="clear:both"></div>
+<?php if(!count(Mage::getModel('palorus/vault')->getCollection()->addCustomerFilter(Mage::helper('palorus')->getCustomer()))): ?>
+<div id="add_payments">
+	<span class="add_payment_separators">
+	   <hr /><h4 class="legend">Add a payment method</h4>
+	   <br />
+	</span>
+	<div style="clear:both"></div>
+</div>
+<?php endif; ?>
