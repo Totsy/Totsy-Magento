@@ -35,13 +35,14 @@
         <input type="hidden" name="payment[use_reward_points]" id="reward-points-input" value="<?php echo $this->useRewardPoints()? 1 : 0 ?>" />
 		<?php if( ! $this->useRewardPoints() ): ?>
 	        <?php $balance = Mage::helper('enterprise_reward')->formatReward($this->getPointsBalance(), $this->getCurrencyAmount()) ?>
-	            <div id="reward_available_amount"><?php echo Mage::helper('enterprise_reward')->__('You have '); ?><?php echo $balance; ?></div>
+	        <div id="applyreward">
+	        <div id="reward_available_amount"><?php echo Mage::helper('enterprise_reward')->__('You have '); ?><?php echo $balance; ?></div>
 	        <div id="use-reward-point">
 	           <input type="button" class="btn btn-primary" value="Apply Credits">
 	        </div>
-    <?php elseif( $this->isEnoughPoints() ): ?>
-	   <div class="reward-full-cover"><?php echo Mage::helper('enterprise_reward')->__('Paid by Reward Points') ?></div>
-    <?php endif ?>
+	        </div>
+        <?php endif ?>
+	   <div id="paidbyreward" class="reward-full-cover" <?php if(!$this->useRewardPoints() || !$this->isEnoughPoints()) echo 'style="display: none;"'; ?>><?php echo Mage::helper('enterprise_reward')->__('Paid by Reward Points') ?></div>
     </div>
 
     <script type="text/javascript">

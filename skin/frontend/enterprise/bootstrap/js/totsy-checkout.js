@@ -90,16 +90,17 @@ jQuery(document).ready(function() {
                     jQuery( 'input[name="payment[method]"]').val('free');
                     jQuery( '#reward-points-input' ).val( 1 );
                     jQuery("#reward_placer").css("padding-top", "0px");
-                    jQuery("#credits_and_card_save").hide();
+                    //jQuery("#credits_and_card_save").hide();
                     
                     //once the entire order is covered, no point in showing this stuff
                     jQuery("#use-card-method").hide();
                     jQuery( '#add_payment' ).hide();
-                    
+                    jQuery( '#paidbyreward' ).show();
+                    jQuery( '#applyreward' ).hide();
+
                     jQuery('#' + paymentMethod + '_cc_cid').removeClass('required-entry');
                     jQuery('#' + paymentMethod + '_expiration').removeClass('required-entry');
                     jQuery('#' + paymentMethod + '_expiration_yr').removeClass('required-entry');
-                    
                 }
                     hpcheckout.updatePayment();
                     hpcheckout.update(true);
