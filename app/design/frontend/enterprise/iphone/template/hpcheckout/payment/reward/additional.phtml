@@ -56,8 +56,12 @@
         }
 		jQuery( '#use-reward-point' ).bind( 'click', function() {
 			jQuery( '#reward-points-input' ).val( 1 );
+			
+			console.log(isEnoughPointsToCoverAmount);
+			
 			if( isEnoughPointsToCoverAmount ) {
-	        	jQuery( '#hpcheckout-payment-select' ).val('');
+			    jQuery( '#hpcheckout-payment-select' ).val('free');
+	        	//jQuery( '#hpcheckout-payment-select' ).val('');
 	        	jQuery( '[id^="payment_form_"]' ).hide();
 	        }
 			hpcheckout.updatePayment();

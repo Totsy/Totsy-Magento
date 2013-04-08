@@ -378,7 +378,7 @@ HpCheckout.prototype = {
         var checkoutObject = this;
         var blocksToUpdate = "";
         //checking if payment block should be updated or not
-        if (!doUpdatePayment && checkoutPayment.isEnoughPointsToCoverAmount==false) {
+        if (!doUpdatePayment) {
             blocksToUpdate = this.getBlocksToUpdate(postData['currentStep']);
         } else {
             blocksToUpdate = ['review'];
