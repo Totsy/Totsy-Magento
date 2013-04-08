@@ -43,15 +43,21 @@
 	</div>
 	<script type="text/javascript">
 		jQuery( document ).ready( function() {
-		
 		    var showPaypal = "<?php echo $showPaypal; ?>";
 		    
 		    if(showPaypal==false) {
 		        jQuery("#hpcheckout-payment-select option[value='paypal_express']").remove();
 		    }
+		    //hide saved cards by default
+		    jQuery("#add_payment, .one-page-payment").hide();
 		    
 			hpcheckout.switchPaymentMethod();
 			jQuery("#hpcheckout-payment-select").change( function() {
+			    if(this.value=="paymentfactory_tokenize") { 
+			        jQuery("#add_payment, .one-page-payment").show();
+			    } else {
+			        jQuery("#add_payment, .one-page-payment").hide();
+			    }
                 hpcheckout.switchPaymentMethod(this.value);
      		});
 		});

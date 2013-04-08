@@ -1,5 +1,5 @@
 
-<div class="form-list .one-page-payment" id="payment_form_<?php echo $_code ?>">
+<div class="form-list one-page-payment" id="payment_form_<?php echo $_code ?>">
 <?php $customerId = Mage::getSingleton('customer/session')->getCustomerId(); ?>
 <?php $profiles = $this->getProfilesByCustomerId( $customerId ) ?>
 <?php
@@ -48,7 +48,7 @@
                         
                         <script type="text/javascript">
                         jQuery(document).ready( function() {
-                            //checkoutPayment.lastUsedAddressId = "<?php echo $profile->getAddressId(); ?>"; 
+                            //checkoutPayment.lastUsedAddressId = "<?php //echo $profile->getAddressId(); ?>"; 
                         });
                         </script>
                         
