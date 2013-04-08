@@ -36,7 +36,7 @@ $_id = $_time . substr($_session,13);
 
 ?>
 
-<div class="form-list .one-page-payment" id="payment_form_<?php echo $_code ?>">
+<div class="form-list one-page-payment" id="payment_form_<?php echo $_code ?>">
 <?php $customerId = Mage::getSingleton('customer/session')->getCustomerId(); ?>
 <?php 
 if($this->getVaultEnabled()) {
