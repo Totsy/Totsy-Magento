@@ -22,6 +22,7 @@ jQuery(document).ready(function() {
             toggleViews: function() {
                 if (this.hasProfile!=="1") { 
                     jQuery(".add_payment_separator").hide();
+                    jQuery("#add_payments").hide();
                     jQuery(".checkout-reward").css("padding-top", "0px");
                     jQuery(".use-new-card-wrapper").show();
                     jQuery("#use-card-method").hide();
