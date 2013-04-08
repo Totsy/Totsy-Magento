@@ -35,7 +35,6 @@ $_session =  Mage::getModel("core/session")->getEncryptedSessionId();
 $_id = $_time . substr($_session,13);
 
 ?>
-
 <div class="form-list one-page-payment" id="payment_form_<?php echo $_code ?>">
 <?php $customerId = Mage::getSingleton('customer/session')->getCustomerId(); ?>
 <?php 
@@ -44,11 +43,15 @@ if($this->getVaultEnabled()) {
     	$hasProfile = true;
     }
 } 
+
 ?>
 
 <script type="text/javascript">
 jQuery(document).ready( function() {
-    checkoutPayment.hasProfile = "<?php echo $hasProfile; ?>";    
+
+    if(hasCBProfile==false) {
+        checkoutPayment.hasProfile = "<?php echo $hasProfile; ?>"; 
+    }   
     checkoutPayment.toggleViews();
     
     jQuery("[name='payment[cc_vaulted]'],[name='payment[cybersource_subid]']").change( function() {

@@ -1,5 +1,5 @@
 var checkoutPayment = {};
-
+var hasCBProfile = false;
 jQuery(document).ready(function() {
     var billAddySelect = jQuery("#billing-address-select");
     var newCardWrap = jQuery('.cc_info');
@@ -21,6 +21,7 @@ jQuery(document).ready(function() {
             isRewardUsed: '',
             toggleViews: function() {
                 if (this.hasProfile!=="1") { 
+                    console.log(true);
                     jQuery(".add_payment_separator").hide();
                     jQuery("#add_payments").hide();
                     jQuery(".checkout-reward").css("padding-top", "0px");
