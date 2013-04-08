@@ -11,9 +11,12 @@ class Totsy_Ajax_ServertimeController extends Mage_Core_Controller_Front_Action
                 break;
             case 'string':
                 $servertime = Mage::getModel('core/date')->timestamp(time());
-                $servertime = date('F d,Y H:i:s:u', $servertime);
+                $servertime = date('M j, Y H:i:s O', $servertime);
                 break;
        }
+        header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
+        header("Expires: Fri, 1 Jan 2013 00:00:00 GMT"); // Date in the past
+        header("Content-Type: text/plain; charset=utf-8"); // MIME type
         echo json_encode(array( 'time' => $servertime));
         exit();
     }
