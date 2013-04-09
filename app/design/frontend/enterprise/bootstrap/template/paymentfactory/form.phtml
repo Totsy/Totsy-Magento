@@ -39,8 +39,8 @@ if(count($fulfillmentTypes) > 1) {
     } else { 
         $hasProfile = false; 
     }
+    
 ?>
-
 <div>
     <div>   
         <div style="clear:both"></div>
@@ -69,11 +69,16 @@ if(count($fulfillmentTypes) > 1) {
                         ?>
                         
                         <script type="text/javascript">
-                        jQuery(document).ready( function() {
-                            checkoutPayment.lastUsedAddressId = "<?php echo $profile->getAddressId(); ?>"; 
-                        });
+                            jQuery(document).ready( function() {
+                                checkoutPayment.hasProfile = "<?php echo $hasProfile; ?>"; 
+                                
+                                if(checkoutPayment.hasProfile==1){
+                                    hasCBProfile = true;
+                                }
+                                
+                                checkoutPayment.lastUsedAddressId = "<?php echo $profile->getAddressId(); ?>"; 
+                            });
                         </script>
-                        
                         <?php if(!$profile->getSubscriptionId() || $profile->getIsDefault()== 1 || !$profile->getData('saved_by_customer')) { continue; } ?>
                         <tr>
                         	<td>
@@ -104,12 +109,3 @@ if(count($fulfillmentTypes) > 1) {
     </div>
 </div>
 <div style="clear:both"></div>
-<?php if(!count(Mage::getModel('palorus/vault')->getCollection()->addCustomerFilter(Mage::helper('palorus')->getCustomer()))): ?>
-<div id="add_payments">
-	<span class="add_payment_separators">
-	   <hr /><h4 class="legend">Add a payment method</h4>
-	   <br />
-	</span>
-	<div style="clear:both"></div>
-</div>
-<?php endif; ?>

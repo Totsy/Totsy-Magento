@@ -25,7 +25,7 @@
 	</div>
 	<?php foreach ($methods as $_method): ?>
 		<?php if ($html = $this->getPaymentMethodFormHtml($_method)): ?>
-	    <div>
+	    <div id="new-cards">
 	        <?php echo $html; ?>
 	    </div>
 	    <?php endif; ?>
@@ -49,12 +49,16 @@
 		        jQuery("#hpcheckout-payment-select option[value='paypal_express']").remove();
 		    }
 		    //hide saved cards by default
-		    jQuery("#add_payment, .one-page-payment").hide();
+		    jQuery("#add_payment,.one-page-payment").hide();
 		    
 			hpcheckout.switchPaymentMethod();
 			jQuery("#hpcheckout-payment-select").change( function() {
 			    if(this.value=="paymentfactory_tokenize") { 
+			        jQuery("#new-cards").hide();
 			        jQuery("#add_payment, .one-page-payment").show();
+			    } else if(this.value=="creditcard") {
+			        jQuery("#add_payment, .one-page-payment").hide();
+			        jQuery("#new-cards").show();
 			    } else {
 			        jQuery("#add_payment, .one-page-payment").hide();
 			    }
