@@ -119,11 +119,9 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Payment extends TinyBrick_Orde
                 'cardValidationNum' => $payment->getCcCid(),
                 'type' => $creditCardType)
         );
-
         $initialize = new LitleOnlineRequest();
         $authResponse = $initialize->authorizationRequest($auth_info);
         $transactionId =  XmlParser::getNode($authResponse,'litleTxnId');
-
         if($transactionId) {
             $payment->setData('last_trans_id', $transactionId)
                     ->setData('cc_trans_id', $transactionId);
@@ -145,6 +143,9 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Payment extends TinyBrick_Orde
                 Mage::getModel('Litle_CreditCard_Model_PaymentLogic')->getUpdater($authResponse, 'tokenResponse', 'litleToken'),
                 Mage::getModel('Litle_CreditCard_Model_PaymentLogic')->getUpdater($authResponse, 'tokenResponse', 'bin'));
             $customerAddressId = Mage::getModel('orderedit/edit_updater_type_billing')->getCustomerAddressFromBilling($billingAddress->getId());
+            if(!$customerAddressId) {
+                $customerAddressId = $billingAddress->getCustomerAddressId();
+            }
             $vault->setData('address_id', $customerAddressId)
                   ->save();
         }
