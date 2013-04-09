@@ -23,7 +23,7 @@ class Crown_Import_Model_Observer {
 		$action_type 	= Harapartners_Stockhistory_Model_Transaction::ACTION_TYPE_EVENT_IMPORT;
 		
 		if (!$importModel->getId()) return;
-		
+
 		foreach ( $newProducts as $sku => $changeArray ) {
 			$new = ( !isset($skuMap[$sku]) || !isset($oldData[ $skuMap[$sku] ][0]['stock.qty']) );
 			
@@ -72,4 +72,30 @@ class Crown_Import_Model_Observer {
 			}
 		}
 	}
+
+    /**
+     * Removes products from existing event category before updating and adding them to import category
+     * @since 1.3.2
+     * @param unknown_type $observer
+     * @return void
+     */
+    public function orphanProductsFromExistingEvent($observer) {
+        $vars 			= $observer->getEvent ()->getVars ();
+        $skus			= $vars['skus'];
+        $oldData        = $vars['old_data'];
+        $dryRun         = $vars['dry_run'];
+
+        if(count($oldData) > 0 && !$dryRun) {
+            foreach ($skus as $sku => $productId) {
+                try {
+                    $catIds = array();
+                    $product = Mage::getModel('catalog/product')->load($productId);
+                    $product->setCategoryIds($catIds);
+                    $product->save();
+                } catch( Exception $e) {
+                    Mage::log(  $e->getMessage(), null, 'import_observer_error.log', true);
+                }
+            }
+        }
+    }
 }
