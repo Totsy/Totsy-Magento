@@ -156,14 +156,16 @@ class Crown_Import_Model_Productimport extends Crown_Import_Model_Import_Abstrac
         $baseSkus = array();
         foreach ($this->_productData as $sku => $data ) {
             if ( isset($data['product.type']) && 'configurable' == $data['product.type'] && isset($data['vendor_style']) && !empty($data['vendor_style'])) {
-                $baseSkus[$data['vendor_style']] = $sku;
+                $simpleProductIdx = $data['vendor_style'] . '-' . $data['name'];
+                $baseSkus[$simpleProductIdx] = $sku;
                 $this->_superAttributesPerSku[$sku] = $this->_configurableAttributes;
             }
         }
         foreach ($this->_productData as $sku => $data ) {
             if ( isset($data['product.type']) && 'simple' == $data['product.type'] && isset($data['vendor_style']) && !empty($data['vendor_style'])) {
-                if (isset( $baseSkus[$data['vendor_style']] )) {
-                    $this->_baseSkus[ $baseSkus[$data['vendor_style']] ][] = $sku;
+                $simpleProductIdx = $data['vendor_style'] . '-' . $data['name'];
+                if (isset( $baseSkus[$simpleProductIdx] )) {
+                    $this->_baseSkus[ $baseSkus[$simpleProductIdx] ][] = $sku;
                     $this->_productData[$sku]['visibility'] = 'Not Visible Individually';
                 }
             }
