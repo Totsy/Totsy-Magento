@@ -1938,7 +1938,9 @@ input.big-input {
     -moz-box-sizing: border-box;
     box-sizing: border-box;
 }
-
+.input-constrained {
+    width:115px;
+}
 
 /* prices */
 .price-box {
