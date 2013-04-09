@@ -63,3 +63,12 @@
 <?php else: ?>
 <?php echo Mage::helper('sales')->__('No Payment Methods') ?>
 <?php endif; ?>
+<script type="text/javascript">
+    jQuery(document).ready(function() {
+        if($('p_method_free')) {
+            if($('p_method_free').checked) {
+                payment.switchMethod('free');
+            }
+        }
+    });
+</script>  

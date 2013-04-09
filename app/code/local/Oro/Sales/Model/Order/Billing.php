@@ -45,9 +45,7 @@ class Oro_Sales_Model_Order_Billing
     public function import(Mage_Sales_Model_Order $order, array $data)
     {
         // customer choose payment profile
-        if (isset($data['payment']['cybersource_subid'])) {
-            return $this->_setPaymentByProfile($order, $data['payment']['cybersource_subid']);
-        } else if (isset($data['payment']['cc_type'])) {
+        if (isset($data['payment'])) {
             return $this->_setPayment($order, $data);
         }
         return array(
@@ -88,23 +86,23 @@ class Oro_Sales_Model_Order_Billing
     protected function _setPayment(Mage_Sales_Model_Order $order, array $data)
     {
         try {
-            $address = $this->_saveAddress($order, $data);
+            if(array_key_exists('cc_vaulted',$data['payment']) && $data['payment']['cc_vaulted']) {
+                $profile = Mage::getModel('palorus/vault');
+                $profile->load($data['payment']['cc_vaulted']);
+                $address = Mage::getModel('customer/address')->load($profile->getAddressId());
+            } else {
+                $address = $this->_saveAddress($order, $data);
+            }
+            $billingId = $order->getBillingAddressId();
             $this->_replaceBillingAddress($order, $address);
+            $billingId = $order->getBillingAddressId();
+            $model = Mage::getModel('orderedit/edit_updater_type_payment');
+            $mess = $model->edit($order,$data['payment']);
 
-            $billing  = $order->getBillingAddress();
-            $payment  = new Varien_Object($data['payment']);
-            $instance = $this->_getPaymentInstance();
-
-            $instance->createProfile($payment, $billing, $order->getCustomerId(), $address->getId());
-            /* @var $profile Harapartners_Paymentfactory_Model_Profile */
-            $profile  = Mage::getModel('paymentfactory/profile');
-            $profile->load($payment->getCybersourceSubid(), 'subscription_id');
-
-            if (!$profile->getId()) {
+            if ($mess) {
                 Mage::throwException($this->_getGeneralErrorMessage());
             }
-
-            return $this->_replaceOrderPayment($order, $profile);
+            return true;
         } catch (Mage_Core_Exception $e) {
             return array(
                 $e->getMessage()
@@ -143,7 +141,6 @@ class Oro_Sales_Model_Order_Billing
                 Mage::throwException(implode("\n", $addressErrors));
             }
             $addressForm->compactData($addressData);
-
             $address->setCustomerId($order->getCustomerId());
         }
 
@@ -170,7 +167,7 @@ class Oro_Sales_Model_Order_Billing
     {
         /* @var $profile Harapartners_Paymentfactory_Model_Profile */
         $profile = Mage::getModel('paymentfactory/profile');
-        $profile->loadByEncryptedSubscriptionId($subId);
+        $profile->load($subId);
 
         if (!$profile->getId() || $profile->getCustomerId() != $order->getCustomerId()) {
             return array(
