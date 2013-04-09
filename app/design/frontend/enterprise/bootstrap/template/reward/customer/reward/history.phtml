@@ -54,7 +54,7 @@
             <?php if ($this->getPointsDelta($item)):?>
             <tr>
                 <td>
-                    <span class="nobr"><?php echo $this->getDate($item)?></span>
+                    <span class="nobr"><?php echo $this->__('Order Date: %s', date('m/d/Y',strtotime($this->formatDate($this->getDate($item), Mage_Core_Model_Locale::FORMAT_TYPE_MEDIUM)))) ?></span>
                     <?php if ($expirationDate = $this->getExpirationDate($item)):?>
                     <small class="nobr"><?php echo $this->__('Expires on %s', $expirationDate);?></small>
                     <?php endif;?>

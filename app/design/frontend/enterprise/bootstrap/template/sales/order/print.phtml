@@ -26,7 +26,7 @@
 ?>
 <?php $_order = $this->getOrder() ?>
 <h1><?php echo $this->__('Order #%s', $_order->getRealOrderId()) ?></h1>
-<p class="order-date"><?php echo $this->__('Order Date: %s', $this->formatDate($_order->getCreatedAtStoreDate(), 'long')) ?></p>
+<p class="order-date"><?php echo $this->__('Order Date: %s', date('m/d/Y',strtotime($this->formatDate($_order->getCreatedAtStoreDate(), Mage_Core_Model_Locale::FORMAT_TYPE_MEDIUM)))) ?></p>
 <div class="col2-set">
     <?php if (!$_order->getIsVirtual()): ?>
     <div class="col-1">
