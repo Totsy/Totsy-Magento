@@ -51,17 +51,22 @@
 
     jQuery( document ).ready( function() {
         if( isRewardUsed && isEnoughPointsToCoverAmount ) {
-        	jQuery( '#hpcheckout-payment-select' ).val('free');
+            jQuery( '#hpcheckout-payment-select' ).removeClass('validate-select');
+            jQuery( 'input[name="payment[method]"]').val('free');
+            jQuery( '#reward-points-input' ).val( 1 );
         	jQuery( '#checkout-payment-method-load' ).hide();
         }
 		jQuery( '#use-reward-point' ).bind( 'click', function() {
-			jQuery( '#reward-points-input' ).val( 1 );
 			if( isEnoughPointsToCoverAmount ) {
-			    jQuery( '#hpcheckout-payment-select' ).val('free');
-	        	//jQuery( '#hpcheckout-payment-select' ).val('');
-	        	jQuery( '[id^="payment_form_"]' ).hide();
+			    jQuery( 'input[name="payment[method]"]').val('free');
 	        }
+	        
+	         jQuery( '#hpcheckout-payment-select' ).removeClass('validate-select');
+             jQuery( '#reward-points-input' ).val( 1 );
+             jQuery( '[id^="payment_form_"]' ).hide();
+	        
 			hpcheckout.updatePayment();
+			hpcheckout.update(true);
 		});
     });
     //]]>

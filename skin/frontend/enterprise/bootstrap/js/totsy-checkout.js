@@ -89,6 +89,7 @@ jQuery(document).ready(function() {
                 
                 if(checkoutPayment.isEnoughPointsToCoverAmount) {
                     jQuery( 'input[name="payment[method]"]').val('free');
+                }
                     jQuery( '#reward-points-input' ).val( 1 );
                     jQuery("#reward_placer").css("padding-top", "0px");
                     //jQuery("#credits_and_card_save").hide();
@@ -102,7 +103,7 @@ jQuery(document).ready(function() {
                     jQuery('#' + paymentMethod + '_cc_cid').removeClass('required-entry');
                     jQuery('#' + paymentMethod + '_expiration').removeClass('required-entry');
                     jQuery('#' + paymentMethod + '_expiration_yr').removeClass('required-entry');
-                }
+                
                     hpcheckout.updatePayment();
                     hpcheckout.update(true);
             },
