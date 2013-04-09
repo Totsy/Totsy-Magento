@@ -144,6 +144,7 @@ class Harapartners_EmailFactory_Model_Observer extends Mage_Core_Model_Abstract 
     }
     
     public function sailthruSuccessPurchase($observer){
+
         $this->_sendPurchaseDataToSailThru();
         return $this;
     }
@@ -158,25 +159,50 @@ class Harapartners_EmailFactory_Model_Observer extends Mage_Core_Model_Abstract 
     	try{
 	          $scust = Mage::getSingleton('customer/session')->getCustomer();
 	          $email = $scust->getEmail();
+              $quote = Mage::getSingleton('checkout/session')->getQuote();
 	          if($email != "") {
 	              $sailthru = Mage::getSingleton('emailfactory/sailthruconfig')->getHandle();
-	              $protoitems = Mage::getSingleton('checkout/session')->getQuote()->getAllVisibleItems();
+	              $protoitems = $quote->getAllVisibleItems();
 	              $items = array();
-	              $i = 0;
+
 	              foreach($protoitems as $obi) {
-	                    $name = $obi->getName();
-	                    $sku = $obi->getSku();
-	                    $obiName = isset($name)?$name:$sku;    
-	                  $items[$i] = array("qty" => $obi->getQty(), "title" => $obiName, "price" => $obi["product"]->getFinalPrice()*100, "id" => $obi->getSku(), "url" => $obi["product"]->getProductUrl());
-	                  $i++;
+
+                        $price = $obi["product"]->getFinalPrice()*100;
+                        $qty = $obi->getQty();
+                        
+                        if($obi->getParentItemId() 
+                            || empty($price) 
+                            || empty($qty)
+                        ) {
+                            continue;
+                        }   
+
+                        $items[] = Mage::helper('sailthru/item')->prepare($obi);
 	              }
+
 	              $data = array("email" => $email, "items" => $items, "incomplete" => $status);//0: complete ; 1: imcomplete
-	              if (isset($_COOKIE['sailthru_bid'])) {
-	                  $data['message_id'] = $_COOKIE['sailthru_bid'];
-	              }                  
-	             // $success = $sailthru->apiPost("purchase", $data);
-	              $queueData = array(
-	              		'call' => array(
+
+	            if (isset($_COOKIE['sailthru_bid'])) {
+	                $data['message_id'] = $_COOKIE['sailthru_bid'];
+	            }  
+
+                // basically perevent multiple api calls for the same order. 
+                // For example split cart issue.
+                // and seems like json_encode() is 80.52% faster than serialize()
+                $hash = sha1(json_encode($data));
+                if ($quote->hasHashes() && in_array($hash,$quote->getHashes()) ){
+                    return;
+                }
+
+                $hash = array($hash);
+                if ($quote->hasHashes()){
+                    $hash = array_merge($quote->getHashes(),$hash);
+                }
+                $quote->setHashes($hash);
+
+	            // $success = $sailthru->apiPost("purchase", $data);
+	            $queueData = array(
+	             		'call' => array(
 	              				'class' => 'emailfactory/sailthruconfig',
 	              				'methods' => array(
 	              						'getHandle',

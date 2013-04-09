@@ -47,7 +47,8 @@ Default layout, loads most of the pages
                 <action method="addJs"><script>mage/translate.js</script></action>
                 <action method="addJs"><script>mage/cookies.js</script></action>
 				<action method="addJs"><script>jquery/jquery-1.6.1.min.noConflict.js</script></action>
-				<action method="addJs"><script>jquery/jquery.jcountdown1.3.min.js</script></action>
+				<action method="addJs"><script>jquery/jquery.countdown-1.6.1.min.js</script></action>
+                <action method="addJs"><script>totsy/countdown-extend.js</script></action>
 				<action method="addJs"><script>jquery/cloud-zoom.1.0.2.js</script></action>
 				
 
@@ -163,4 +164,17 @@ Default layout, loads most of the pages
             <action method="setLayoutCode"><name>three_columns</name></action>
         </reference>
     </page_three_columns>
+    <aoestatic_cacheable>
+        <reference name="content">
+            <!-- Replace cart by static placeholder wrapped with placeholder information (q'n'd solution) -->
+            <action method="unsetChild"><param>messages</param></action>
+            <block type="aoestatic/placeholder" name="messages">
+                <action method="setPlaceholderBlockname"><param>messages</param></action><!-- required: needs to point to the original block name -->
+                <action method="setPlaceholderId"><param>messages</param></action>
+                <block type="core/text" name="placeholder_content">
+                    <action method="setText"><param><![CDATA[&nbsp;]]></param></action>
+                </block>
+            </block>
+        </reference>
+    </aoestatic_cacheable>
 </layout>

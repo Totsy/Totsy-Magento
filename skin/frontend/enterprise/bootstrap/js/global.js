@@ -1,44 +1,79 @@
-(function(a) {
-    if (typeof b === "undefined") {
-        var b = {
-            init: function() {
-                a("#logo").on("click", b.clickHandler)
+// Sandbox for all jQuery that is global for the site
+// - wrapped in self-executing anonymous function for no conflict use of $ alias
+// - use appropriate namespacing, don't pollute global namespace (not implemented, maybe a phase 2 cleanup)
+(function($) {
+
+    // SillyExample namespace
+    if (typeof(SillyExample) === "undefined") {
+        var SillyExample = {
+            init : function() {
+                // define events handlers and such
+                $('#logo').on('click', SillyExample.clickHandler);
             },
-            clickHandler: function() {
-                alert("OOPs there goes the namespace")
+            
+            // results / actions
+            clickHandler : function() {
+                alert('OOPs there goes the namespace');
             }
-        }
+        };
     }
-    if (typeof c === "undefined") {
-        var c = {
+    
+    // MyNameSpace
+    if (typeof(MyNameSpace) === 'undefined') {
+        var MyNameSpace = {
             init: function() {
-                console.log("Running MyNameSpace.init")
+                console.log('Running MyNameSpace.init');
             }
-        }
+        };
     }
-    a(function() {
-        a("nav a").each(function() {
-            var b = a(this);
-            if (b.length > 0) {
-                if (b.attr("href") == "#") {
-                    a(this).click(function(a) {
-                        a.preventDefault()
-                    })
-                }
-            }
-        });
-        a(window).scroll(function() {
-            if (a(this).scrollTop() != 0) {
-                a("#toTop").fadeIn()
+    
+
+    // DOM is ready, now do stuf
+    $(function() {
+        
+        //SillyExample.init();
+        //MyNameSpace.init();
+ 
+        /**
+         * Following are one-offs… should still be namespaced
+         */
+                      
+        /*
+        * Prevent default if menu links are "#"
+        */
+        $('nav a').each( function() {
+        	var nav = $(this); 
+        	if( nav.length > 0 ) {
+        		if( nav.attr('href') == '#' ) {
+        			//console.log(nav);
+        			$(this).click(
+        				function(e) {
+        					e.preventDefault();
+        				}
+        			);
+        		}
+        	}
+        }); 
+
+        /*
+         * Back to Top
+         */
+        $(window).scroll(function () {
+            if ($(this).scrollTop() != 0) {
+                $('#toTop').fadeIn();
             } else {
-                a("#toTop").fadeOut()
+                $('#toTop').fadeOut();
             }
         });
-        a("#toTop a").click(function(b) {
-            b.preventDefault();
-            a("body,html").animate({
-                scrollTop: 0
-            }, 800)
-        })
-    })
-})(jQuery)
+        $('#toTop a').click(function (e) {
+            e.preventDefault();
+            $('body,html').animate({scrollTop: 0},800);
+        });
+
+        /*
+         * FastShip image floatery
+         */
+         $('img[src*="icon-fastship-small.png"]').addClass('fastship-icon');
+        
+    });               
+})(jQuery);

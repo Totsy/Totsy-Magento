@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Fooman_Speedster>
+            <version>2.0.8</version>
+            <depends>
+                <Mage_Page />
+                <Mage_Adminhtml />
+            </depends>
+        </Fooman_Speedster>
+    </modules>
+    
+ 
+    <global>
+        <models>
+            <speedster>
+                <class>Fooman_Speedster_Model</class>
+            </speedster>
+        </models>
+        <blocks>
+            <page>
+                <rewrite>
+                     <html_head>Fooman_Speedster_Block_Page_Html_Head</html_head>
+                </rewrite>                     
+            </page>
+            <adminhtml>
+                <rewrite>
+                     <page_head>Fooman_Speedster_Block_Adminhtml_Page_Head</page_head>
+                </rewrite>              
+            </adminhtml>
+        </blocks>
+    </global>
+    <default>
+        <system>
+            <fooman_speedster>
+                <enabled>0</enabled>
+            </fooman_speedster>
+        </system>
+    </default>
+</config>

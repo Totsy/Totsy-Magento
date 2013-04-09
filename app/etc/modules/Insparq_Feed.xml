@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <modules>
+        <Insparq_Feed>
+            <active>true</active>
+            <codePool>local</codePool>
+            <version>0.4</version>
+            <depends>
+                <Mage_Page />
+            </depends>
+        </Insparq_Feed>
+    </modules>
+</config>

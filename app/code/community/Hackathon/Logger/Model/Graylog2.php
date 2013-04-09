@@ -6,8 +6,8 @@
  *
  * @author Colin Mollenhour (rewrote to publish each message individually with lots of metadata)
  */
-require_once 'lib/Graylog2-gelf-php/GELFMessage.php';
-require_once 'lib/Graylog2-gelf-php/GELFMessagePublisher.php';
+require_once 'Graylog2-gelf-php/GELFMessage.php';
+require_once 'Graylog2-gelf-php/GELFMessagePublisher.php';
 
 class Hackathon_Logger_Model_Graylog2 extends Zend_Log_Writer_Abstract
 {
@@ -66,6 +66,7 @@ class Hackathon_Logger_Model_Graylog2 extends Zend_Log_Writer_Abstract
 		$helper = Mage::helper('hackathon_logger'); /* @var $helper Hackathon_Logger_Helper_Data */
 		$this->_options['filename'] = basename($filename);
 		$this->_options['app_name'] = $helper->getLoggerConfig('graylog2/app_name');
+		$this->_options['truncate_fqdn'] = $helper->getLoggerConfig('graylog2/truncate_fqdn');
 		$hostname = $helper->getLoggerConfig('graylog2/hostname');
 		$port = $helper->getLoggerConfig('graylog2/port');
 		$chunk_size = $helper->getLoggerConfig('graylog2/chunk_size');
@@ -86,7 +87,7 @@ class Hackathon_Logger_Model_Graylog2 extends Zend_Log_Writer_Abstract
 			$eofMessageFirstLine = strpos($event['message'], "\n", 1);
 			$shortMessage = (FALSE === $eofMessageFirstLine) ? $event['message'] :
 			substr($event['message'], 0, $eofMessageFirstLine);
-			
+
 			$msg = new GELFMessage();
 			$msg->setTimestamp(microtime(TRUE));
 			$msg->setShortMessage($shortMessage);
@@ -95,14 +96,17 @@ class Hackathon_Logger_Model_Graylog2 extends Zend_Log_Writer_Abstract
 			} else {
 				$msg->setFullMessage($event['message']);
 			}
-			$msg->setHost(gethostname());
 			$msg->setLevel($event['priority']);
 			$msg->setFacility($this->_options['app_name'] . $this->_options['filename']);
 			$msg->setFile($event['file']);
 			$msg->setLine($event['line']);
 			$msg->setAdditional('store_code', $event['store_code']);
 			$msg->setAdditional('time_elapsed', $event['time_elapsed']);
-			$msg->setHost(php_uname('n'));
+			$host = php_uname('n');
+			if ($this->_options['truncate_fqdn'] && ($offset = strpos($host, '.')) !== FALSE) {
+				$host = substr($host, 0, $offset);
+			}
+			$msg->setHost($host);
 			foreach(array('REQUEST_METHOD', 'REQUEST_URI', 'REMOTE_IP', 'HTTP_USER_AGENT') as $key) {
 				if ( ! empty($event[$key])) {
 					$msg->setAdditional($key, $event[$key]);

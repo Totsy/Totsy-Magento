@@ -47,53 +47,11 @@
 
 <?php
 
-    $multiShipping = FALSE;
-    $fulfillmentTypes = array();
+    $fulfillmentTypes = $quote->getFulfillmentTypes();
     $splitYesCss = '';
     $splitNoCss = '';
-    $hasVirtual = false;
-    $hasDotCom = false;
 
     $splitCartPrice = Mage::helper('core')->formatPrice(Mage::getStoreConfig('checkout/cart/split_cart_price'));
-
-    // Check to see if there are multiple fulfillment types
-    foreach($this->getItems() as $item) {
-        if($item->getParentItemId()) {
-            continue;
-        }
-        $product = Mage::getModel ( 'catalog/product' )->load ( $item->getProductId () );
-        if($product->getIsVirtual() && $product->getFulfillmentType() !== 'nominal') {
-            $fulfillmentType = 'virtual';
-            $hasVirtual = true;
-        } else {
-            $fulfillmentType = $product->getFulfillmentType();
-        }
-        $fulfillmentTypes [$fulfillmentType] [] = $item->getId ();
-
-    }
-
-    if(count($fulfillmentTypes) > 1) {
-        $multiShipping = TRUE;
-        $sortedFulfillmentTypes = array();
-        if(array_key_exists('dotcom_stock',$fulfillmentTypes)) {
-            $sortedFulfillmentTypes['dotcom_stock'] = $fulfillmentTypes['dotcom_stock'];
-            unset($fulfillmentTypes['dotcom_stock']);
-        }
-        if(array_key_exists('dotcom',$fulfillmentTypes)) {
-            $sortedFulfillmentTypes['dotcom'] = $fulfillmentTypes['dotcom'];
-            $hasDotCom = true;
-            unset($fulfillmentTypes['dotcom']);
-        }
-        if(array_key_exists('virtual',$fulfillmentTypes)) {
-            $sortedFulfillmentTypes['virtual'] = $fulfillmentTypes['virtual'];
-            unset($fulfillmentTypes['virtual']);
-        }
-
-        if(count($fulfillmentTypes)) {
-            $sortedFulfillmentTypes = array_merge($sortedFulfillmentTypes,$fulfillmentTypes);
-        }
-        $fulfillmentTypes = $sortedFulfillmentTypes;
-    }
 
     // Split cart check
     $splitCartFlag = $this->getCheckout()->getSplitCartFlag();
@@ -122,9 +80,6 @@
         	    </div>
                 <div class="btn-cart-checkout">
         	    <?php foreach ($this->getMethods('top_methods') as $method): ?>
-                    <?php if($method == 'checkout.cart.methods.paypal_express.top' && ($multiShipping || $hasVirtual)) {
-                        continue; // No paypal if multiple fulfillment types
-                    }?>
         	        <?php if ($methodHtml = $this->getMethodHtml($method)): ?>
         	        	<?php echo $methodHtml; ?>
         	        <?php endif; ?>
@@ -133,6 +88,7 @@
         <?php endif; ?>
     </div>
     <div class="clear"></div>
+    <hr />
     <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
     <?php echo $this->getChildHtml('form_before') ?>
     <div class="cart-form-container">
@@ -155,7 +111,7 @@
                         </div>
                         <div>
                             <h3 style="display:inline;">Get These Items Fast!</h3>&nbsp;<a href="#fastship_modal" role="button" data-toggle="modal">What is this?</a><br/>
-                            <?php if($multiShipping && $hasDotCom): ?>
+                            <?php if(count($fulfillmentTypes) > 1 && isset($fulfillmentTypes['dotcom'])): ?>
                             FastShip these items in 3 days or less for an additional <?php echo $splitCartPrice?>
                             <input type="checkbox" id="fastShipCheck" onclick="javascript:setSplitCartFlag()"<?php echo $splitCartFlag? ' checked="checked"' : ''; ?>>
                             <input id="splitCartFlag" type="hidden" name="splitCart" value="<?php echo $splitCartFlag ? 1 : 0;?>" />
@@ -249,9 +205,6 @@
         	    </div>
                 <div class="btn-cart-checkout">
         	    <?php foreach ($this->getMethods('top_methods') as $method): ?>
-                    <?php if($method == 'checkout.cart.methods.paypal_express.top' && ($multiShipping || $hasVirtual)) {
-                        continue; // No paypal if multiple fulfillment types
-                    }?>
         	        <?php if ($methodHtml = $this->getMethodHtml($method)): ?>
         	        	<?php echo $methodHtml; ?>
         	        <?php endif; ?>

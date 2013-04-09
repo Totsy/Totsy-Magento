@@ -56,51 +56,52 @@
 //	}
 ?>
 <div class="well page_center">
-    <div class="page-header" style="margin:0px 0px 10px;">
-    <h1 id="logo" class="span4"><a href="<?php 
-                    echo $this->getUrl( 'event/?ref=logo' ); ?>" title="<?php
-                    echo $this->getLogoAlt();
-                    ?>"><img src="<?php echo $this->getSkinUrl() ?>images/logo.png" alt="Totsy.com" width="85px" /></a>
-    </h1>
-    <br />
-    <h2 style="font-size:18px;"><?php echo $this->__('Sign In') ?> <small> or <a id="opt-signup" href="/customer/account/create/" style="font-weight:normal;">Sign Up</a></small></h2>
+    <div class="page-header">
+        <h1 id="logo" class="span4"><a href="<?php 
+                        echo $this->getUrl( 'event/?ref=logo' ); ?>" title="<?php
+                        echo $this->getLogoAlt();
+                        ?>"><img src="<?php echo $this->getSkinUrl() ?>images/logo.png" alt="Totsy.com" width="85" /></a>
+        </h1>
+        <br />
+        <h2 style="font-size:18px;"><?php echo $this->__('Sign In') ?> <small> or <a id="opt-signup" href="/customer/account/create/" style="font-weight:normal;">Sign Up</a></small></h2>
     </div>
     <div class="row">
-    <div style="text-align:center; margin:0px 0px 13px">
-    <a rel="facebook-connect" style="margin:10px 0px; cursor:pointer;" title="<?php echo $this->__('Connect with Facebook') ?>" class="facebook-button" ><img src="<?php echo $this->getSkinUrl() ?>images/facebook_connect_button.png" /></a>
-    </div>
-    <div class="span4">
-    <div class="the-account-login account-login<?php if (!$this->helper('customer')->isRegistrationAllowed()) echo ' login-only' ?>">
-        <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
-        <form action="<?php echo $this->getPostActionUrl() ?>" method="post" id="login-form">
-        <!--<label for="email" class="required"><?php echo $this->__('Email') ?><em> *</em></label>-->
-        <input placeholder="Email" name="login[username]" value="<?php echo $this->htmlEscape($this->getUsername()) ?>" id="email" type="text" class="big-input input-text required-entry validate-email span4" title="<?php echo $this->__('Email Address') ?>" />
-        <!--<label for="pass" class="required"><?php echo $this->__('Password') ?><em> *</em></label>-->
-        <input placeholder="Password" name="login[password]" type="password" class="big-input input-text required-entry validate-password span4" id="pass" title="<?php echo $this->__('Password') ?>" />
-        <?php echo $this->getChildHtml('persistent.remember.me'); ?>
-        <?php echo $this->getChildHtml('persistent.remember.me.tooltip'); ?>
-        <input type="checkbox" name="rememberme" value="remember" class="rememberme" align="middle"/>
-        <span style="font-size:11px; color:#999;"><?php echo $this->__( ' Remember me' ); ?></span>
-        <a href="<?php echo $this->getForgotPasswordUrl() ?>" class="forgotpwd pull-right"><?php echo $this->__('Forgot Your Password?') ?></a>
-        <div class="buttons-set form-buttons align-center" style="margin:5px 0px -16px 0px">
-        <button type="submit" id="submit-button" class="btn btn-primary btn-large" style="width:100%;">Sign In</button>
+        <div style="text-align:center; margin:0px 0px 13px">
+            <a rel="facebook-connect" style="margin:10px 0px; cursor:pointer;" title="<?php echo $this->__('Connect with Facebook') ?>" class="facebook-button" ><img src="<?php echo $this->getSkinUrl() ?>images/facebook_connect_button.png" /></a>
         </div>
-    </div>
-        <div class="free_shipping_banner_reg_new rollover_img">
-            <a href="javascript:;" title="Free Shipping"></a>
-        </div>
-    </div>
-    </div>
-            <?php if (Mage::helper('checkout')->isContextCheckout()): ?>
-                <input name="context" type="hidden" value="checkout" />
-            <?php endif; ?>
-        </form>
-        <script type="text/javascript">
-        //<![CDATA[
-            var dataForm = new VarienForm('login-form', true);
-        //]]>
-        </script>
+        <div class="span4">
+            <div class="the-account-login account-login<?php if (!$this->helper('customer')->isRegistrationAllowed()) echo ' login-only' ?>">
+                <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+                <form action="<?php echo $this->getPostActionUrl() ?>" method="post" id="login-form">
+                    <!--<label for="email" class="required"><?php echo $this->__('Email') ?><em> *</em></label>-->
+                    <input placeholder="Email" name="login[username]" value="<?php echo $this->htmlEscape($this->getUsername()) ?>" id="email" type="text" class="big-input input-text required-entry validate-email" title="<?php echo $this->__('Email Address') ?>" />
+                    <!--<label for="pass" class="required"><?php echo $this->__('Password') ?><em> *</em></label>-->
+                    <input placeholder="Password" name="login[password]" type="password" class="big-input input-text required-entry validate-password" id="pass" title="<?php echo $this->__('Password') ?>" />
+                    <?php echo $this->getChildHtml('persistent.remember.me'); ?>
+                    <?php echo $this->getChildHtml('persistent.remember.me.tooltip'); ?>
+                    <div class="clearfix">
+                        <input type="checkbox" name="rememberme" value="remember" class="rememberme" align="middle"/>
+                        <span style="font-size:11px; color:#999;"><?php echo $this->__( ' Remember me' ); ?></span>
+                        <a href="<?php echo $this->getForgotPasswordUrl() ?>" class="forgotpwd pull-right"><?php echo $this->__('Forgot Your Password?') ?></a>
+                    </div>
+                    <div class="buttons-set form-buttons align-center" style="margin:5px 0px -16px 0px">
+                        <button type="submit" id="submit-button" class="btn btn-primary btn-large">Sign In</button>
+                    </div>
+                    <?php if (Mage::helper('checkout')->isContextCheckout()): ?>
+                        <input name="context" type="hidden" value="checkout" />
+                    <?php endif; ?>
+                </form>
+            </div>
+            <div class="free_shipping_banner_reg_new rollover_img">
+                <a href="javascript:;" title="Free Shipping"></a>
+            </div>
+        </div><!-- /.span col -->
+    </div><!-- /.row -->
+    <script type="text/javascript">
+    //<![CDATA[
+        var dataForm = new VarienForm('login-form', true);
+    //]]>
+    </script>
     <div class="badgecity_reg"></div>
-<p class="badgecity_fine_print">*Offer expires 30 days after sign up.</p>
-    </div>
+    <p class="badgecity_fine_print">*Offer expires 30 days after sign up.</p>
 </div>

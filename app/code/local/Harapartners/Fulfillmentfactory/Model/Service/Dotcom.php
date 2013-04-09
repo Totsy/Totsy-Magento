@@ -92,7 +92,7 @@ class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
                         //check current stock qty
                         $stockItem = Mage::getModel('cataloginventory/stock_item')->loadByProduct($product);
 
-                        if($stockItem->getQty() !== $newQty) {
+                        if($stockItem->getQty() != $newQty) {
                             if ($stockItem->getId() == 0) {
                                 //item hasn't been added to the website
                                 unset($stockItem);
@@ -101,12 +101,6 @@ class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
                             // only respect existing values if it already exists.  Otherwise skip.
                             if($stockItem->getUseConfigManageStock() == 0 && !$stockItem->getManageStock()) {
                                 //Product does not manage stock
-                                unset($stockItem);
-                                continue;
-                            }
-
-                            $oldQty = $stockItem->getQty();
-                            if($oldQty == $newQty) {
                                 unset($stockItem);
                                 continue;
                             }
@@ -817,11 +811,28 @@ XML;
                 continue;
             }
 
+            //we don't want to process orders that have already been through a shipment processing.
+            if($order->getStatus() == 'partially_shipped') {
+                continue;
+            }
+
             // ensure there is at least one ship item
             $shipmentItems = $shipment->ship_items->children('a', TRUE);
             if (!$shipmentItems) {
+                $order->setStatus('partially_shipped')->save();
+                foreach($order->getAllItems() as $item) {
+                    if($item->getQtyToShip() > 0) {
+                        $itemQueue = Mage::getModel('fulfillmentfactory/itemqueue')
+                            ->loadByItemId($item->getId());
+                        $itemQueue->setStatus(Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_SHIPMENT_ERROR);
+                        $itemQueue->save();
+                        unset($itemQueue);
+                    }
+                }
                 continue;
             }
+
+
 
             // calculate the total quantity shipped, and select the last
             // shipment carrier
@@ -866,6 +877,30 @@ XML;
                     continue;
                 }
 
+                if($order->canShip()) {
+                    $partialShip = false;
+                    foreach($order->getAllItems() as $item) {
+                        if($item->getProductType != 'simple') {continue;}
+                        $itemQueue = Mage::getModel('fulfillmentfactory/itemqueue')
+                            ->loadByItemId($item->getId());
+
+                        if(!$item->getIsDummy(true) && $item->getQtyShipped() > 0 && $item->getQtyToShip() == 0) {
+                            $itemQueue->setStatus(Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_CLOSED);
+                        } elseif($item->getIsDummy(true) && ($parent = $item->getParentItem())
+                            && $parent->getQtyShipped() > 0 && $parent->getQtyToShip() == 0) {
+                            $itemQueue->setStatus(Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_CLOSED);
+                        } else {
+                            $partialShip = true;
+                            $itemQueue->setStatus(Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_SHIPMENT_ERROR);
+                        }
+                        $itemQueue->save();
+                        unset($itemQueue);
+                    }
+                    if($partialShip) {// update the order status and save
+                        $order->setStatus('partially_shipped')->save();
+                    }
+                }
+
                 // send a shipment notification to the customer, if one hasn't been
                 // sent already
                 if (!$shipment->getEmailSent()) {
@@ -874,6 +909,21 @@ XML;
                         ->save();
 
                     $updatedOrders++;
+                }
+            } else {
+                $shipmentError = false;
+                foreach($order->getAllItems() as $item) {
+                    if($item->getQtyToShip() > 0) {
+                        $itemQueue = Mage::getModel('fulfillmentfactory/itemqueue')
+                            ->loadByItemId($item->getId());
+                            $itemQueue->setStatus(Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_SHIPMENT_ERROR);
+                        $itemQueue->save();
+                        unset($itemQueue);
+                        $shipmentError = true;
+                    }
+                }
+                if($shipmentError) {
+                    $order->setStatus('partially_shipped')->save();
                 }
             }
         }

@@ -534,7 +534,7 @@
                                                     <children>
                                                         <add translate="title"><title>Add PO</title></add>
                                                         <save translate="title"><title>Save PO</title></save>
-                                                        <reset translate="title"><title>Reset PO</title></reset>
+                                                        <reset translate="title"><title>Reset PO Information</title></reset>
                                                         <delete translate="title"><title>Delete PO</title></delete>
                                                         <create_amendment translate="title"><title>Create Amendment(PO Info Edit)</title></create_amendment>
                                                         <submit_dotcom translate="title"><title>Submit To Dotcom</title></submit_dotcom>

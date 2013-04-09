@@ -71,6 +71,13 @@ function isRunning(){
 		logMessage($message);
 		die($message);
 	}
+	
+	$pid = intval( file_get_contents($file) );
+	if (isRunningPid($pid)==false){
+		unlink($file);
+		logMessage('Pid file exists but process is not running. Removing pid file.','Error');
+	}
+
 	file_put_contents($file, $pid);
 	logMessage('Starting Sailthru queue');
 }
@@ -81,5 +88,21 @@ function execued(){
 		unlink($file);
 	}
 	logMessage('Sailthru queue finished');
+}
+
+function isRunningPid($pid) {
+    $processes = array();
+    $command = 'ps ax | grep '.__FILE__.' | grep -v grep';
+    exec($command, $processes);
+    foreach ($processes as $processString) {
+        $processArr = explode(' ', trim($processString));
+        if ( intval($processArr[0]) != getmypid() ) {
+            $rpid = intval($processArr[0]);
+            if ($rpid == $pid ){
+            	return true;
+            }
+        }
+    }
+    return false;
 }  
 ?>
