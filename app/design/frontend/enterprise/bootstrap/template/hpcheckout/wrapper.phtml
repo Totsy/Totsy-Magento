@@ -12,7 +12,7 @@
     <h2><?php echo $this->__('Checkout') ?></h2>
 </div>
 
-<div id="hpcheckout-wrapper"<?php if($quote->isNominal()): ?> class="nominal-checkout<?php endif; ?> row clearfix">
+<div id="hpcheckout-wrapper"<?php if($quote->isNominal()): ?> class="nominal-checkout"<?php endif; ?>>
 	<div id="error-message-wrapper"></div>
 	<?php if( count( $this->getQuote()->getAllItems() ) ): ?>
 		<?php if( ! $this->getCustomerSession()->isLoggedIn() ): ?>
@@ -20,12 +20,12 @@
 				<?php echo $this->getChildHtml( 'login' ) ?>
 			</div>
 		<?php endif ?>
-		<div class="onepage-checkout container">
-		    <div id="hpcheckout-payment-wrapper" class="span12">		
+		<div class="onepage-checkout container row">
+		    <div id="hpcheckout-payment-wrapper" class="well review-payment-blocks">		
                 <div class="checkout-content"><?php echo $this->getChildHtml( 'payment' ) ?></div>
 			    <?php echo $this->getChildHtml( 'reward' ); ?>
 		        </div>
-		    <div id="billing-address" class="pull-left span6">
+		    <div id="billing-address" class="addresses pull-left well">
 		   		<div class="checkout-headline">
 		    	    <h4 class="legend pull-left"><?php echo $this->__('Billing Address') ?></h4>
 		    	    <?php if ($this->customerHasAddresses()): ?>
@@ -35,12 +35,12 @@
 		    	    <?php endif; ?>
 		    	</div>
 		    	<div style="clear:both"></div>
-		    	<div id="hpcheckout-billing-wrapper">
+		    	<div id="hpcheckout-billing-wrapper" class="onepage-address-form">
 		    	    	<div class="checkout-content"><?php echo $this->getChildHtml('billing') ?></div>
 		    	</div>
          </div>
 		 <?php if( ! $this->getQuote()->isVirtual() ): ?>
-		 <div id="shipping-address" class="addresses pull-right span6">
+		 <div id="shipping-address" class="addresses pull-right well">
 	         <div class="checkout-headline">
 			     <h4 class="legend pull-left"><?php echo $this->__('Shipping Address') ?></h4>
 			     <?php if ($this->customerHasAddresses()): ?>
@@ -50,7 +50,7 @@
 			     <?php endif; ?>
 			  </div>
 		      <div style="clear:both"></div>
-		  	  <div id="hpcheckout-shipping-wrapper">
+		  	  <div id="hpcheckout-shipping-wrapper" class="onepage-address-form">
 	      	      <div class="checkout-content">
 	      	          <?php echo $this->getChildHtml( 'shipping' ) ?>
 	      	      </div>
@@ -59,14 +59,14 @@
         <?php endif ?>
 		<div style="clear:both"></div>
         <?php if( false && ! $this->getQuote()->isVirtual() ): ?>
-        <div id="hpcheckout-shipping-method-wrapper" class="span12">
+        <div id="hpcheckout-shipping-method-wrapper" class="review-payment-blocks">
             <h4 class="legend">Shipping Method</h4>
             <br />
             <div class="checkout-content"><?php echo $this->getChildHtml('shipping_method') ?></div>
         </div>
 		<?php endif ?>
 		<div style="clear:both"></div>
-		<div id="hpcheckout-review-wrapper"<?php if(!$quote->isNominal()): ?> class="span12"<?php endif;?>>
+		<div id="hpcheckout-review-wrapper"<?php if(!$quote->isNominal()): ?> class="well review-payment-blocks"<?php endif;?>>
 			<div class="checkout-content"><?php echo $this->getChildHtml( 'review' ) ?></div>
 		</div>
 		</div>
