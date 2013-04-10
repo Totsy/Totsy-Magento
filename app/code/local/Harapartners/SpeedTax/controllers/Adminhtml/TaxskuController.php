@@ -36,8 +36,8 @@ class Harapartners_SpeedTax_Adminhtml_TaxskuController extends Mage_Adminhtml_Co
         		throw new Exception("Field End Date is required");
         	}
 
-            $start = $data->getParam('start_at');
-            $end   = $data->getParam('end_at');
+            $start = $data->getStartAt();
+            $end   = $data->getEndAt();
             $ex_events = $this->_getExs($data, 'ex_events');
         	$ex_products = $this->_getExs($data, 'ex_products');
 
