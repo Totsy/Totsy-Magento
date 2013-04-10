@@ -38,6 +38,7 @@ class Harapartners_SpeedTax_Adminhtml_TaxskuController extends Mage_Adminhtml_Co
 
             $start = $data->getStartAt();
             $end   = $data->getEndAt();
+            
             $ex_events = $this->_getExs($data, 'ex_events');
         	$ex_products = $this->_getExs($data, 'ex_products');
 
