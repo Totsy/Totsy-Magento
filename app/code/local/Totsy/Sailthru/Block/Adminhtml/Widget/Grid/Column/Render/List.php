@@ -18,7 +18,7 @@ class Totsy_Sailthru_Block_Adminhtml_Widget_Grid_Column_Render_List
         if (empty($val)){
             return '';
         }
-        $val = json_decode($val,true)
+        $val = json_decode($val,true);
         $val = implode(",", $val);
 
         $out = '<textarea rows="2" cols="5">';

@@ -19,7 +19,7 @@ class Totsy_Sailthru_Block_Adminhtml_Widget_Grid_Column_Render_Hash
         $url = Mage::getBaseUrl() .DS. 'dev' .DS. 'sailthrufeed' .DS. 'feed.php?params='. $val;
 
         $out = '<a href="'.$url.'">';
-        $out .= $url
+        $out .= $url;
         $out .= '</a>';
 
         return $out;

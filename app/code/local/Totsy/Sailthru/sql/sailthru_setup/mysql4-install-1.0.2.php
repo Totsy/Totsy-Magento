@@ -22,12 +22,11 @@ CREATE TABLE {$this->getTable('sailthru/feedconfig')} (
   KEY `hash` (`hash`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='Feed Config';
 
-  ");
+");
  
 $installer->endSetup();
 
 /*
-- type ( event, product )
 order
   	- event
   		- id
@@ -43,10 +42,4 @@ order
 		- event & sales volume
 		  	- desc - 5
   			- asc - 6		
-
-- start_date
-- start_time
-- exclude ( show everything except )
-- include ( hide everything except )
-- filter (errors)
 */
