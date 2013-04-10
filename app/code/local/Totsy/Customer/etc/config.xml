@@ -18,6 +18,7 @@
             <customer>
                 <rewrite>
                     <address_book>Totsy_Customer_Block_Address_Book</address_book>
+                    <address_edit>Totsy_Customer_Block_Address_Edit</address_edit>
                 </rewrite>
             </customer>
         </blocks>
