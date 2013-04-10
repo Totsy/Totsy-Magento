@@ -39,8 +39,8 @@
 
 <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
 <div class="well">
-<form action="<?php echo $this->getSaveUrl() ?>" method="post" id="form-validate" enctype="multipart/form-data">
-    <div class="fieldset">
+<form action="<?php if($this->isDefaultShipping() && $this->isDefaultBilling()){echo Mage::getUrl('customer/address/formPost'); }else{echo $this->getSaveUrl();} ?>" method="post" id="form-validate" enctype="multipart/form-data">
+   <div class="fieldset">
         <h4 class="legend"><?php echo $this->__('Contact Information') ?></h4>
         <hr />
         <?php echo $this->getBlockHtml('formkey')?>
@@ -100,23 +100,29 @@
 <?php if ($userDefinedAttributes):?>
     <?php echo $userDefinedAttributes->setEntity($this->getAddress())->setShowContainer(false)->toHtml(); ?>
 <?php endif;?>
-<?php if($this->isDefaultBilling()): ?>
+<?php if(($this->isDefaultBilling() && !$this->isDefaultShipping()) || $this->isShowDefaultBilling()): ?>
     <p><strong><?php echo $this->__('Default Billing Address') ?></strong></p>
-<?php elseif($this->canSetAsDefaultBilling()): ?>
+<?php elseif(($this->canSetAsDefaultBilling() || ($this->isDefaultShipping() && $this->isDefaultBilling()))|| $this->isShowDefaultShipping()): ?>
     <p>
         <input type="checkbox" id="primary_billing" name="default_billing" value="1" class="checkbox" />
         <?php echo $this->__('Use as my default billing address') ?>
     </p>
 <?php else: ?>
     <input type="hidden" name="default_billing" value="1" />
+ <?php endif; ?>
+ <?php if($this->isShowDefaultBilling()):?>
+     <input type="hidden" name="default_billing" value="1" />
 <?php endif; ?>
-<?php if($this->isDefaultShipping()): ?>
-    <p><strong><?php echo $this->__('Default Shipping Address') ?></strong></p>
-<?php elseif($this->canSetAsDefaultShipping()): ?>
+<?php if(($this->isDefaultShipping() && !$this->isDefaultBilling()) || $this->isShowDefaultShipping()): ?>
+    <p><strong><?php echo $this->__('Default Shipping Address'); ?></strong></p>
+<?php elseif(($this->canSetAsDefaultShipping() || ($this->isDefaultShipping() && $this->isDefaultBilling())) || $this->isShowDefaultBilling() ): ?>
     <input type="checkbox" id="primary_shipping" name="default_shipping" value="1" class="checkbox" />
     <?php echo $this->__('Use as my default shipping address') ?>
 <?php else: ?>
     <input type="hidden" name="default_shipping" value="1" />
+<?php endif; ?>
+ <?php if($this->isShowDefaultShipping()):?>
+  <input type="hidden" name="default_shipping" value="1" />
 <?php endif; ?>
 </div>
 <br />

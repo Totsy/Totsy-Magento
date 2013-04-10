@@ -45,7 +45,7 @@
             <div class="info-box span4">
                 <h4 class="box-title">
                 <?php echo $this->__('Default Billing Address') ?>
-                    <a href="<?php echo $this->getAddressEditUrl(Mage::getSingleton('customer/session')->getCustomer()->getAddressById($_pAddsses)) ?>" class="btn btn-primary"><?php echo $this->__('Edit') ?></a>
+                    <a href="<?php echo $this->getAddressEditUrl(Mage::getSingleton('customer/session')->getCustomer()->getAddressById($_pAddsses)) ?>type/billing/" class="btn btn-primary"><?php echo $this->__('Edit') ?></a>
                 </h4>
                 <address class="box-content">
                 <?php echo $this->getAddressHtml(Mage::getSingleton('customer/session')->getCustomer()->getAddressById($_pAddsses)) ?>
@@ -62,7 +62,7 @@
             <div class="info-box span4">
             
                 <h4 class="box-title"><?php echo $this->__('Default Shipping Address') ?>
-                    <a href="<?php echo $this->getAddressEditUrl(Mage::getSingleton('customer/session')->getCustomer()->getAddressById($_pAddsses)) ?>" class="btn btn-primary"><?php echo $this->__('Edit') ?></a>
+                    <a href="<?php echo $this->getAddressEditUrl(Mage::getSingleton('customer/session')->getCustomer()->getAddressById($_pAddsses)) ?>type/shipping/" class="btn btn-primary"><?php echo $this->__('Edit') ?></a>
                 </h4>
                 <address class="box-content">
                     <?php echo $this->getAddressHtml(Mage::getSingleton('customer/session')->getCustomer()->getAddressById($_pAddsses)) ?>
