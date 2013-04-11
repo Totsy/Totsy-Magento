@@ -16,7 +16,10 @@ class Totsy_Sailthru_Block_Adminhtml_Widget_Grid_Column_Render_Hash
         $val = $row->getData($this->getColumn()->getIndex());
         $val = str_replace("no_selection", "", $val);
 
-        $url = Mage::getBaseUrl() .DS. 'dev' .DS. 'sailthrufeed' .DS. 'feed.php?params='. $val;
+        $url = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB).
+                'dev' .DS. 
+                'sailthrufeed' .DS. 
+                'feed.php?params='. $val;
 
         $out = '<a href="'.$url.'">';
         $out .= $url;

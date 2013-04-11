@@ -5,13 +5,14 @@ $installer->startSetup();
  
 $installer->run("
 
--- DROP TABLE IF EXISTS {$this->getTable('sailthru/feedconfig')};
+DROP TABLE IF EXISTS {$this->getTable('sailthru/feedconfig')};
 CREATE TABLE {$this->getTable('sailthru/feedconfig')} (
   `entity_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `type` tinyint(1) NOT NULL DEFAULT '0',
   `order` smallint(1) NOT NULL DEFAULT '1',
   `start_at_day` datetime DEFAULT NULL,
-  `start_at_time` datetime DEFAULT NULL,
+  `start_at_time` varchar(5) DEFAULT NULL,
+  `include` text DEFAULT NULL,
   `exclude` text DEFAULT NULL,
   `filter` text DEFAULT NULL,
   `hash` varchar(40) DEFAULT NULL,

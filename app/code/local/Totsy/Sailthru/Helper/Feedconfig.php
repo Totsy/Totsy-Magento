@@ -21,7 +21,12 @@ class Totsy_Sailthru_Helper_Feedconfig {
 	}
 
 	public static function mapTimeSelect(){
-		$times[] = array( 'value'=>'-1', 'label' => 'Plese select ...');
+		$times = array( 
+			array('value'=>'-1', 'label' => 'Plese select ...'),
+			array('value'=>'am', 'label' => 'AM'),
+			array('value'=>'pm', 'label' => 'PM')
+		);
+
 		for( $i=0; $i<24; $i++ ){
 			$times[] = array( 'value'=>$i.':00', 'label' => $i.':00');
 			$times[] = array( 'value'=>$i.':30', 'label' => $i.':30');

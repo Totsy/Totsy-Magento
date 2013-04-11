@@ -51,6 +51,13 @@ class Totsy_Sailthru_Block_Adminhtml_Feedconfig_Index_Grid extends Mage_Adminhtm
             'width'         => '50px',
             'index'         => 'start_at_time',
         ));
+        $this->addColumn('include', array(
+            'header'        => $helper->__('Include'),
+            'align'         => 'right',
+            'width'         => '100px',
+            'index'         => 'iclude',
+            'renderer'      => 'sailthru/adminhtml_widget_grid_column_render_list'
+        ));
         $this->addColumn('exclude', array(
             'header'        => $helper->__('Exclude'),
             'align'         => 'right',

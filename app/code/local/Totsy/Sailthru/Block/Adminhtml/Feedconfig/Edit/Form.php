@@ -54,69 +54,29 @@ class Totsy_Sailthru_Block_Adminhtml_Feedconfig_Edit_Form
             'required'  => false,
         ));
 
-        $fieldset->addField('name', 'text', array(
-            'label'     => $helper->__('Name'),
-            'name'      => 'name',
-            'required'  => true,
-            'note'      => 'Must contain leading / character. 255 characters max.'
-        ));
-
-        $field = $fieldset->addField('image', 'file', array(
-            'label'     => $helper->__('Image'),
-            'name'      => 'image',
-            'value'     => 'Upload',
-            'note'      => 'Only jpg, gif or png extentions allowed.'
-        ));
-
-        $fieldset->addField('link', 'text', array(
-            'label'     => $helper->__('Link'),
-            'name'      => 'link',
+        $fieldset->addField('include', 'text', array(
+            'label'     => $helper->__('Include'),
+            'name'      => 'include',
             'required'  => false,
-            'note'      => 'Followed with / character. 255 characters max.'
+            'note'      => 'Provide a list of events or products ids separeted by \',\' or new line'
         ));
 
-        $fieldset->addField('at_home', 'select', array(
-            'label'     => $helper->__('At Home Page'),
-            'name'      => 'at_home',
-            'value'     => '-1',
-            'values'    => array(
-                array('value'=>'-1', 'label'=> 'Please select ...'),
-                array('value'=>0, 'label'=> 'NO'),
-                array('value'=>1, 'label'=> 'YES'),
-            ),
-            'disabled'  => false,
-            'readonly'  => false,
-            'required'  => true
-        ));
-
-        $fieldset->addField('at_events', 'textarea', array(
-            'label'     => $helper->__('At Events Pages'),
-            'name'      => 'at_events',
+        $fieldset->addField('exclude', 'text', array(
+            'label'     => $helper->__('Exclude'),
+            'name'      => 'exclude',
             'required'  => false,
-            'note'      => 'Provide a list of events ids separeted by \',\' or new line'
+            'note'      => 'Provide a list of events or products ids separeted by \',\' or new line'
         ));
 
-        $fieldset->addField('at_products', 'textarea', array(
-            'label'     => $helper->__('At Products Pages'),
-            'name'      => 'at_products',
+        $fieldset->addField('filter', 'text', array(
+            'label'     => $helper->__('Filter'),
+            'name'      => 'filter',
             'required'  => false,
-            'note'      => 'Provide a list of products ids separeted by \',\' or new line' 
+            'note'      => 'Provide a list of parameters separeted by \',\' or new line'
         ));
 
-
-
-        $fieldset->addField('end_at', 'date', array(
-            'label'     => $helper->__('End Date'),
-            'name'      => 'end_at',
-            'required'  => true,
-            'time'      => true,
-            'format'    => Mage::app()->getLocale()->getDateTimeFormat(Mage_Core_Model_Locale::FORMAT_TYPE_SHORT),
-            'image'     => $this->getSkinUrl('images/grid-cal.gif'),
-            'style'     => 'width: 140px;' 
-        ));
-
-        if ( Mage::registry('promotions_banner_form_data') ) {
-            $form->setValues(Mage::registry('promotions_banner_form_data'));
+        if ( Mage::registry('sailthru_feedconfig_form_data') ) {
+            $form->setValues(Mage::registry('sailthru_feedconfig_form_data'));
         }
 
         $form->setUseContainer(true);

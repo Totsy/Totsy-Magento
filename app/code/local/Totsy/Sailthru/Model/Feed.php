@@ -38,6 +38,35 @@ class Totsy_Sailthru_Model_Feed extends Mage_Core_Model_Abstract
 	{
 		$this->_feed->processor();
 
+		if ($this->_feed->getType() == 'events'){
+			$this->runEvents();
+		} else if ($this->_feed->getType() == 'products'){
+			$this->runProducts();
+		}
+
+	    if ($this->getFeedHelper()->filterErrors()){
+	    	$this->_output['errors'] = null;
+	    }
+
+    	if ($return){
+    		return $this->_output;
+    	}
+
+	}
+
+	public function runProducts(){
+
+		$this->_output['type'] = 'products';
+		$this->_formatProducts(
+	    	$this->_getListOfEvents(
+	    		$this->getFeedHelper()->getInclude()
+	    	)
+	    );
+	    
+	}
+
+	public function runEvents(){
+		$this->_output['type'] = 'events';
 		//open&top events
 		$this->_formatter(
 			$this->getFeedHelper()->goingLive(
@@ -66,8 +95,6 @@ class Totsy_Sailthru_Model_Feed extends Mage_Core_Model_Abstract
 			'pending'
 		);
 
-		
-		
 		$validator = new Totsy_Sailthru_Helper_Validator_Feed();
        	if (!$validator->process($this->_output)){
     		$this->_output['errors'] = array_merge(
@@ -75,14 +102,7 @@ class Totsy_Sailthru_Model_Feed extends Mage_Core_Model_Abstract
     			$validator->getErrors()
     		);
     	}
-	    
-	    if ($this->getFeedHelper()->filterErrors()){
-	    	$this->_output['errors'] = null;
-	    }
 
-    	if ($return){
-    		return $this->_output;
-    	}
 	}
 
 	public function getOutPut(){
@@ -125,6 +145,13 @@ class Totsy_Sailthru_Model_Feed extends Mage_Core_Model_Abstract
 	        $productIds[] = $product->getId();
 	    }
 	    return $productIds;
+	}
+
+	private function _getProducts($event){
+    	return Mage::getModel('catalog/category')
+	        ->load($event->getEntityId())
+	        ->getProductCollection()
+	        ->addAttributeToSelect('entity_id');
 	}
 
     private function _formatter ($events,$type){
@@ -186,6 +213,113 @@ class Totsy_Sailthru_Model_Feed extends Mage_Core_Model_Abstract
         }
     }
 
+	private function _formatProducts ($events){
+
+        if (empty($events) || !is_array($events)){
+            return; 
+        } 
+
+        $stores = Mage::app()->getStores(false, true);
+        $defaultStore = $stores['default']->getId();
+
+        foreach ($events as $event){
+
+        	$max_off = 0;
+            $products = array();
+            $productCollection = $this->_getProducts( $event );
+
+		    foreach ($productCollection as $_product){
+		    	$obj = Mage::getModel('catalog/product')
+		    			->load($_product->getId());
+		        $product = array(
+		        	'id' 			=> $obj->getEntityId(),
+		        	'name'			=> $obj->getName(),
+		        	'categories'	=> $obj->getAttributeTextByStore('departments', $defaultStore),
+		        	'ages'			=> $obj->getAttributeTextByStore('ages', $defaultStore),
+		        	'price'			=> $obj->getSpecialPrice(),
+		        	'msrp'			=> $obj->getPrice(),
+		        	'discount'		=> floor(
+		        		($obj->getPrice() - $obj->getSpecialPrice())/$obj->getPrice()*100
+		        	),
+		        	'description'	=> $obj->getDescription(),
+		        	'url'			=> Mage::getBaseUrl().$event->getUrlPath().'/'.$obj->getUrlPath,
+		        	'image'			=> Mage::getBaseUrl('media').$obj->getImage(),
+		        	'image_small'	=> Mage::getBaseUrl('media').$obj->getSmallImage(),
+		        );
+
+		        if (!empty($product['categories']) && !is_array($product['categories'])){
+					$product['categories'] = array($product['categories']);
+				}
+
+		        if (!empty($product['ages']) && !is_array($product['ages'])){
+					$product['ages'] = array($product['ages']);
+				}
+				if (empty($product['description'])){
+					$product['description'] = $event->getDescription();
+				}
+				if ($product['discount']>$max_off){
+					$max_off = $product['discount'];
+				}
+
+				$products[] = $product;
+
+	          	$validator = new Totsy_Sailthru_Helper_Validator_Products();
+	            if (!$validator->process($product)){
+	            	$type = $event->getEntityId();
+					$errors = $validator->getErrors();
+	        		if (!empty($errors)){
+	        			if (!empty($this->_output['errors'][$type]['validator'])){
+		        			$errors = array_merge($this->_output['errors'][$type]['validator'],$errors);
+		        			$errors = array_unique($errors);
+	        			}
+	        			$this->_output['errors'][$type]['validator'] = $errors;
+	        		}
+	        		$errors = $this->getFeedHelper()->getErrors();
+	        		if (!empty($errors)){
+
+	        			if (!empty($this->_output['errors'][$type]['helper'])){
+		        			$errors = array_merge($this->_output['errors'][$type]['helper'],$errors);
+		        			$errors = array_unique($errors);
+	        			}
+	        			$this->_output['errors'][$type]['helper'] = $errors;
+	        		}
+	            }
+		    }
+
+            $out = array(
+            	'id'			=> $event->getEntityId(),
+            	'name'			=> $event->getName(),
+            	'start_date'	=> $event->getEventStartDate(),
+            	'end_date'		=> $event->getEventEndDate(),
+            	'products'		=> $products,
+            	'max_off'		=> $max_off
+            );
+            unset($products);
+
+            $this->_output['events'][] = $out;
+            $validator = new Totsy_Sailthru_Helper_Validator_ProductsEvents();
+            if (!$validator->process($out)){
+				$errors = $validator->getErrors();
+        		if (!empty($errors)){
+        			if (!empty($this->_output['errors'][$type]['validator'])){
+	        			$errors = array_merge($this->_output['errors'][$type]['validator'],$errors);
+	        			$errors = array_unique($errors);
+        			}
+        			$this->_output['errors'][$type]['validator'] = $errors;
+        		}
+        		$errors = $this->getFeedHelper()->getErrors();
+        		if (!empty($errors)){
+
+        			if (!empty($this->_output['errors'][$type]['helper'])){
+	        			$errors = array_merge($this->_output['errors'][$type]['helper'],$errors);
+	        			$errors = array_unique($errors);
+        			}
+        			$this->_output['errors'][$type]['helper'] = $errors;
+        		}
+            }
+        }
+    }
+
     private function _getSortEvents($type,$plus=null){
     	$date = $this->getFeedHelper()->getStartDate();
     	if (!is_null($plus)){
@@ -193,6 +327,28 @@ class Totsy_Sailthru_Model_Feed extends Mage_Core_Model_Abstract
     	}
     	$sort = Mage::getModel('categoryevent/sortentry')->loadByDate(date('Y-m-d',$date));
     	$return = json_decode($sort[$type.'_queue'],true);	
+    	return $return;
+    }
+
+    private function _getListOfEvents($events){
+
+    	if (!is_array($events)){
+    		$events = array($events);
+    	}
+
+    	if (empty($events)){
+    		return;
+    	}
+
+    	$return = array();
+    	foreach ($events as $id){
+    		$cat = Mage::getModel('catalog/category')->load($id);
+    		if (empty($cat)){
+    			continue;
+    		}
+    		$return[] = $cat;
+    	}
+
     	return $return;
     }
 }
