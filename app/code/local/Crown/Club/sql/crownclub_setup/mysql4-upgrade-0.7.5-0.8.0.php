@@ -8,7 +8,7 @@
 $installer = $this;
 $installer->startSetup ();
 
-// Add club expiration date attribute
+// Add club creation date attribute
 $installer->addAttribute('customer', 'club_created_at', array(
     'type'           => 'datetime',
     'input'          => 'date',

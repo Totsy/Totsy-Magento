@@ -140,7 +140,7 @@ class Crown_Club_Model_Club extends Mage_Core_Model_Abstract {
 		if ($customerModel) {
 			$customerModel->setIsClubMember(true);
 			$customerModel->setGroupId($clubCustomerGroup->getId());
-            $customerModel->setData('club_created_at', strftime('%Y-%m-%d %H:%M:%S', time()));
+            $customerModel->setClubCreatedAt(strftime('%Y-%m-%d %H:%M:%S', time()));
 			$customerModel->save();
 
             try {

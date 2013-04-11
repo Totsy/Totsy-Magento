@@ -28,7 +28,7 @@ class Crown_CustomerIndex_Helper_Data extends Mage_Core_Helper_Abstract {
 		$customerAddressEntityType = $customerAddressEntity->getType();
 		
 		$customerAttributes = array(
-			'default_billing','firstname','lastname','prefix','middlename','suffix'
+			'default_billing','firstname','lastname','prefix','middlename','suffix', 'club_created_at'
 		);
 		
 		$addressAttributes = array(
@@ -79,7 +79,8 @@ class Crown_CustomerIndex_Helper_Data extends Mage_Core_Helper_Abstract {
 				`at_billing_postcode`.`value` AS `billing_postcode`, 
 				`at_billing_telephone`.`value` AS `billing_telephone`, 
 				`at_billing_region`.`value` AS `billing_region`, 
-				`at_billing_country_id`.`value` AS `billing_country_id`, 
+				`at_billing_country_id`.`value` AS `billing_country_id`,
+				`at_club_created_at`.`value` AS 'club_created_at',
 				`e`.`store_id` AS `store_id` 
 			FROM 
 			`{$coreResource->getTableName('customer/entity')}` AS `e`
@@ -104,7 +105,9 @@ class Crown_CustomerIndex_Helper_Data extends Mage_Core_Helper_Abstract {
 			LEFT JOIN `{$attributeTables['region']}` 
 				AS `at_billing_region` ON (`at_billing_region`.`entity_id` = `at_default_billing`.`value`) AND (`at_billing_region`.`attribute_id` = '{$region}')
 			LEFT JOIN `{$attributeTables['country_id']}` 
-				AS `at_billing_country_id` ON (`at_billing_country_id`.`entity_id` = `at_default_billing`.`value`) AND (`at_billing_country_id`.`attribute_id` = '{$country_id}') 
+				AS `at_billing_country_id` ON (`at_billing_country_id`.`entity_id` = `at_default_billing`.`value`) AND (`at_billing_country_id`.`attribute_id` = '{$country_id}')
+			LEFT JOIN `{$attributeTables['club_created_at']}`
+				AS `at_club_created_at` ON (`at_club_created_at`.`entity_id` = `e`.`entity_id`) AND (`at_club_created_at`.`attribute_id` = '{$club_created_at}')
 			WHERE (`e`.`entity_type_id` = '{$customerEntityId}')
 			{$queryExtra}
 			);
