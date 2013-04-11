@@ -367,8 +367,9 @@ class Crown_Import_Model_Import_Abstract extends Mage_Core_Model_Abstract {
 
         $_columns = array_unique(array_merge($this->_fields, $this->_staticColumns));
         asort($_columns);
-        if (isset($_columns['sku']))
-            unset($_columns['sku']);
+
+        if ($skuIdx = array_search('sku', $_columns))
+            unset($_columns[$skuIdx]);
         $_headers = $_columns;
         array_unshift($_headers, 'sku');
 

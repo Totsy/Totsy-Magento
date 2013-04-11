@@ -48,26 +48,30 @@ class Crown_Vouchers_OrderController extends Mage_Core_Controller_Front_Action {
      * Created by Crown Partners
      */
     public function availableAction() {
-        $product_id = $this->getRequest()->getParam('id');
+        $product_ids = $this->getRequest()->getParam('ids');
 
         $customer_id = Mage::helper('customer')->getCustomer()->getId();
 
-        if(!$product_id) {
-            $this->returnResult(array('status' => 1, 'id' => $product_id));
+        if(!$product_ids) {
             return;
         }
 
         if(!$customer_id) {
-            $this->returnResult(array('status' => 2, 'id' => $product_id));
             return;
         }
 
-        if(Mage::helper('vouchers')->hasAssociation($customer_id, $product_id)) {
-            $this->returnResult(array('status' => 3, 'id' => $product_id));
-            return;
+        $product_ids = explode(',',$product_ids);
+
+        $response = array();
+        foreach($product_ids as $product_id) {
+            if(Mage::helper('vouchers')->hasAssociation($customer_id, $product_id)) {
+                $response[] = array('status' => 3, 'id' => $product_id);
+            } else {
+                $response[] = array('status' => 0, 'id' => $product_id);
+            }
         }
 
-        $this->returnResult(array('status' => 0, 'id' => $product_id));
+        $this->returnResult($response);
     }
 	
 	private function returnResult($result) {
