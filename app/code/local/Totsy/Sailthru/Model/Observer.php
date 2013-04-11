@@ -19,12 +19,9 @@ class Totsy_Sailthru_Model_Observer
             return;
         }
 
-        foreach ($info as $id => $qty) {
-            if ($quoteItem = $cart->getQuote()->getItemById($id)) {
-                $itemInfo = Mage::getModel('catalog/product')
-                    ->load($quoteItem->getProductId());
-                $items[] = $this->_preSailthruPurchase($itemInfo, $qty);
-            }
+        $allItems = $cart->getQuote()->getAllVisibleItems();
+        foreach ($allItems as $ai) {
+            $items[] = Mage::helper('sailthru/item')->prepare($ai);
         }
 
         $this->_callPurchaseApi(
@@ -36,23 +33,6 @@ class Totsy_Sailthru_Model_Observer
         );
     }
 
-/**
-* IDEA!!!
-* since i have created my own event for sailthru .. 
-* i can pass custom data to the dispatcher and as a result
-* to the every instance registered in dispatcher for that event.
-* So, I need only one method with update of incomplete order
-* and then have login in it to determine what type of the 
-* incoming parameter we getting.
-*
-* paratms to the dispatcher:
-*   - type ( type that will define what variables needed to be used)
-*   - cart ( basically ust an object of the cart )
-*   - params ( all other params that need to be sent, as array)
-*
-* As a result I would be able to remove some Hara's crappy code.
-*/
-
     public function removeItemFromIncompleteOrder(Varien_Event_Observer $observer)
     {
         $item = $observer->getItem();
@@ -63,25 +43,16 @@ class Totsy_Sailthru_Model_Observer
             return;
         }
 
-        // mark to remove this item from 
-        // sailthru incomplete order
-        $items[] = $this->_preSailthruPurchase(
-            Mage::getModel('catalog/product')->load($item),
-            array('qty'=>0)
-        );
-
         // Add other items from cart to 
         // sailthru incomplete order
-        $allItems = $cart->getQuote()->getAllItems();
+        $allItems = $cart->getQuote()->getAllVisibleItems();
         foreach ($allItems as $ai) {
-            $name = $ai->getName();
-            $id = $ai->getSku();
-            $title = !empty($name)?$name:$id;    
-            $qty = $ai->getQty();
-            $price = $ai->getProduct()->getFinalPrice()*100;
-            $url = $ai->getProduct()->getProductUrl();
 
-            $items[] = compact('id','title','qty','price','url');
+            if ($item == $ai->getId()){
+                continue;
+            }
+
+            $items[] = Mage::helper('sailthru/item')->prepare($ai);;
         }
 
         $this->_callPurchaseApi(array(
@@ -113,20 +84,4 @@ class Totsy_Sailthru_Model_Observer
         $queue->addToQueue($queueData);
     }
 
-    protected function _preSailthruPurchase ($itemInfo, $qty)
-    {
-        $price = $itemInfo->getSpecialPrice();
-        $price = number_format($price, 2);
-        $price = $price*100;
-
-        $item = array(
-            'id' => $itemInfo->getSku(),
-            'url' => $itemInfo->getProductUrl(),
-            'title' => $itemInfo->getName(),
-            'price' => $price,
-            'qty' => $qty['qty']
-        );
-
-        return $item;
-    }
 }

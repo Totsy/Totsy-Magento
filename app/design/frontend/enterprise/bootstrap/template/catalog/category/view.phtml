@@ -104,9 +104,13 @@
 ?>
 <section class="event-landing event-<?php echo ($upComingFlag ? 'upcoming' : 'current'); ?>">
     <header class="page-header has-timer clearfix">
+        <ol class="breadcrumb">
+                <li><a href="<?php echo $this->getUrl('event/'); ?>" title="Totsy home">Totsy Home</a></li>
+                <li class="active"><a href="<?php echo $_category->getUrl();?>"><?php echo $_helper->categoryAttribute($_category, $_category->getName(), 'name') ?></a></li>
+        </ol>
         <h2>
         <?php if (!$upComingFlag): ?>
-            <a href="<?php echo $this->getUrl('event/?ref=todays_sales') ?>" >Today's Sales</a><i> / </i><?php echo $_helper->categoryAttribute($_category, $_category->getName(), 'name') ?>
+            <?php echo $_helper->categoryAttribute($_category, $_category->getName(), 'name') ?>
         <?php else :?>
             <a href="/event#events-upcoming">Upcoming Sales</a><i> / </i><?php echo $_helper->categoryAttribute($_category, $_category->getName(), 'name') ?>
         <?php endif;?>
@@ -115,12 +119,13 @@
     </header>
     <?php echo $this->getMessagesBlock()->toHtml() ?>
 
-    <div class="well intro clearfix">
+    <div class="intro row">
         <?php if($_imgUrl): ?>
-            <div class="span2 alpha omega">
+            <div class="span3">
                 <?php echo $_imgHtml ?>
             </div>
         <?php endif; ?>
+
         <?php if($_description=$this->getCurrentCategory()->getDescription()): ?>
             <div class="span9 intro-content">
                 <h3><?php echo $_helper->categoryAttribute($_category, $_category->getName(), 'name') ?></h3>
@@ -133,6 +138,8 @@
                 </div>
                 -->
                 <p><?php echo $_helper->categoryAttribute($_category, $_description, 'description') ?></p>
+                
+                <div class="clearfix"></div>
                 <p>
                     <?php if ($inEarly): ?>
                         <?php if ($upComingFlag): ?>
@@ -169,8 +176,12 @@
                     <?php endif; ?>
                 </p>
             </div>
+            <!--<div class="span4 intro-secondary">
+               they don't know what to do with this space yet…. 
+            </div>
+            -->
         <?php endif; ?>
-    </div><!-- /.well -->
+    </div><!-- /.intro .row -->
 
     <?php
     $depts = $_category->getDepartments();

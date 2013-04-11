@@ -92,7 +92,7 @@ class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
                         //check current stock qty
                         $stockItem = Mage::getModel('cataloginventory/stock_item')->loadByProduct($product);
 
-                        if($stockItem->getQty() !== $newQty) {
+                        if($stockItem->getQty() != $newQty) {
                             if ($stockItem->getId() == 0) {
                                 //item hasn't been added to the website
                                 unset($stockItem);
@@ -101,12 +101,6 @@ class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
                             // only respect existing values if it already exists.  Otherwise skip.
                             if($stockItem->getUseConfigManageStock() == 0 && !$stockItem->getManageStock()) {
                                 //Product does not manage stock
-                                unset($stockItem);
-                                continue;
-                            }
-
-                            $oldQty = $stockItem->getQty();
-                            if($oldQty == $newQty) {
                                 unset($stockItem);
                                 continue;
                             }
@@ -886,10 +880,14 @@ XML;
                 if($order->canShip()) {
                     $partialShip = false;
                     foreach($order->getAllItems() as $item) {
+                        if($item->getProductType != 'simple') {continue;}
                         $itemQueue = Mage::getModel('fulfillmentfactory/itemqueue')
                             ->loadByItemId($item->getId());
 
-                        if($item->getQtyShipped() > 0 && $item->getQtyToShip() == 0) {
+                        if(!$item->getIsDummy(true) && $item->getQtyShipped() > 0 && $item->getQtyToShip() == 0) {
+                            $itemQueue->setStatus(Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_CLOSED);
+                        } elseif($item->getIsDummy(true) && ($parent = $item->getParentItem())
+                            && $parent->getQtyShipped() > 0 && $parent->getQtyToShip() == 0) {
                             $itemQueue->setStatus(Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_CLOSED);
                         } else {
                             $partialShip = true;
@@ -927,8 +925,8 @@ XML;
                 if($shipmentError) {
                     $order->setStatus('partially_shipped')->save();
                 }
-    }
-}
+            }
+        }
 
         return $updatedOrders;
     }

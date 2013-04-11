@@ -40,11 +40,23 @@
         <Totsy_Page>
             <active>true</active>
             <codePool>local</codePool>
+            <depends>
+                <Fooman_Speedster/>
+
+            </depends>
         </Totsy_Page>
         <Totsy_Catalog>
             <active>true</active>
             <codePool>local</codePool>
         </Totsy_Catalog>
+        <Totsy_Log>
+            <active>true</active>
+            <codePool>local</codePool>
+        </Totsy_Log>
+        <Totsy_Paypal>
+            <active>true</active>
+            <codePool>local</codePool>
+        </Totsy_Paypal>
         <Totsy_Pixels>
             <active>true</active>
             <codePool>local</codePool>

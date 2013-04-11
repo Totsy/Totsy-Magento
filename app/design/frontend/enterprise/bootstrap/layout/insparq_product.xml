@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * INSPARQ Inc.
+ *
+ * @category   Insparq
+ * @package    Insparq_Product
+ * @copyright  Copyright (c) 2012 Insparq Inc. (http://www.insparq.com)
+ */
+-->
+<layout version="0.1.0">
+  <catalog_product_view>
+    <reference name="head">
+      <block type="product/ogtags" name="product_ogtags" before="-" />
+    </reference>
+
+    <reference name="product.info.extrahint">
+      <block type="product/holder" name="product_holder" before="-" />
+      <block type="product/richsnippet" name="product_richsnippet" before="-" />
+	  <block type="product/script" name="product_script" after="-" />
+    </reference>
+  </catalog_product_view>
+</layout>

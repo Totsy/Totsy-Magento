@@ -87,7 +87,7 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Abstract exte
         $sizeOptions = $sizeAttribute->getSource()->getAllOptions(false);
         $colorAttribute = Mage::getSingleton('eav/config')->getAttribute('catalog_product', 'color');
         $colorOptions = $colorAttribute->getSource()->getAllOptions(false);
-        
+
         foreach($uniqueProductList as $productId => $productInfo){
             $reportItem = new Varien_Object();
             $product = Mage::getModel('catalog/product')->load($productId);
@@ -215,7 +215,7 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Abstract exte
         		$newUniqueProductList[$productId] = $data;
         	}
         }
-        
+        Mage::getSingleton('adminhtml/session')->setPORemovedItems($removeProducts);
         return $newUniqueProductList;
         //return $uniqueProductList;
     }
@@ -243,6 +243,43 @@ class Harapartners_Stockhistory_Block_Adminhtml_Transaction_Report_Abstract exte
         $html .= $this->getCPMathButtonHtml();
         
         return $html;
+    }
+
+    public function getRemovedItems() {
+        $removeProductsInfo = array();
+        $removed = Mage::getSingleton('adminhtml/session')->getPORemovedItems();
+
+        $reportCollection = new Varien_Data_Collection();
+        $sizeAttribute = Mage::getSingleton('eav/config')->getAttribute('catalog_product', 'size');
+        $sizeOptions = $sizeAttribute->getSource()->getAllOptions(false);
+        $colorAttribute = Mage::getSingleton('eav/config')->getAttribute('catalog_product', 'color');
+        $colorOptions = $colorAttribute->getSource()->getAllOptions(false);
+
+
+        foreach($removed as $id => $value) {
+            $product = Mage::getModel('catalog/product')->load($id);
+            $removeProductsInfo[$id]['vendor_style'] = $product->getVendorStyle();
+            $removeProductsInfo[$id]['product_name'] = $product->getName();
+            $removeProductsInfo[$id]['sku'] = $product->getSku();
+            $tempSizeLabel = '';
+            foreach($sizeOptions as $tempOption){
+                if($tempOption['value'] == $product->getSize()){
+                    $tempSizeLabel = $tempOption['label'];
+                    break;
+                }
+            }
+            $removeProductsInfo[$id]['size'] = $tempSizeLabel;
+
+            $tempColorLabel = '';
+            foreach($colorOptions as $tempOption){
+                if($tempOption['value'] == $product->getColor()){
+                    $tempColorLabel = $tempOption['label'];
+                    break;
+                }
+            }
+            $removeProductsInfo[$id]['color'] = $tempColorLabel;
+        }
+        return $removeProductsInfo;
     }
     
 }

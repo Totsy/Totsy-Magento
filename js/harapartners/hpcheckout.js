@@ -131,7 +131,6 @@ HpCheckout.prototype = {
             blockType = 'shipping';
         }
         if (clickedAddress.val() === '') {
-            
             jQuery('#' + hpcheckout.data.blocks[blockType].formId + ' input').val('');
             
             if (blockType == 'billing') {
@@ -217,6 +216,9 @@ HpCheckout.prototype = {
         if (!this.validate()) {
             return;
         }
+        
+        jQuery("#" + this.id).attr("disabled", true);
+        
         //IE grabs placeholder text from orders in lew of of an actual value
         //this fix removes values explicitly when they match their placeholder text
         jQuery("#hpcheckout-wrapper").find('input[placeholder]').each(function() {
