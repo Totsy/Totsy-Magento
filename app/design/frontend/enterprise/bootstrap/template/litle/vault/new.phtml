@@ -1,10 +1,6 @@
 <?php
 /* @var $this Litle_CreditCard_Block_Form_CreditCard  */
 $_code = $this->getMethodCode();
-$_reportGroup = $this->getReportGroup();
-$_paypageId = Mage::getModel('Litle_CreditCard_Model_PaymentLogic')->getConfigData("paypage_id");
-$_paypageUrl = Mage::getModel('Litle_CreditCard_Model_PaymentLogic')->getConfigData("paypage_url");
-$_showClassicPaymentForm = true;
 ?>
 <?php /* @var $this Litle_Palorus_Block_Vault_New */ ?><?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
 <div class="well">
@@ -111,20 +107,29 @@ $_showClassicPaymentForm = true;
                         } ?>
                     </select>
                     <input type="hidden" title="<?php echo $this->__('State/Province') ?>" name="billing[region]" id="billing:region" />
-                    <label for="billing:postcode" class="required"><em>*</em> <?php echo $this->__('Zip/Postal Code') ?></label>
+                    <label for="billing:postcode" class="required">
+                        <em>*</em> <?php echo $this->__('Zip/Postal Code') ?>
+                    </label>
                     <input type="text" title="<?php echo $this->__('Zip/Postal Code') ?>" name="billing[postcode]" id="billing:postcode" class="input-text validate-zip-international required-entry" />
-                    <label for="billing:country_id" class="required"><em>*</em> <?php echo $this->__('Country') ?></label>
+                    <label for="billing:country_id" class="required">
+                        <em>*</em> 
+                        <?php echo $this->__('Country') ?>
+                    </label>
                     <select id="billing:country_id" name="billing[country_id]" title="<?php echo $this->__('Country') ?>" class="validate-select">
                         <option value="US">United States</option>
                     </select>
                     <div>
                         <hr />
-                        <button class="button general top btn btn-primary" type="submit"><?php echo $this->__('Add Credit Card');?></button>
+                        <button class="button general top btn btn-primary" type="submit">
+                            <?php echo $this->__('Add Credit Card');?>
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
     </form>
 </div>
 <script type="text/javascript">
-
     var paymentForm = new VarienForm( 'creditcard-add-form' );
 
     jQuery( document ).ready( function() {
