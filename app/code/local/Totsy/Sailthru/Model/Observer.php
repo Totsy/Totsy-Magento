@@ -21,15 +21,7 @@ class Totsy_Sailthru_Model_Observer
 
         $allItems = $cart->getQuote()->getAllVisibleItems();
         foreach ($allItems as $ai) {
-
-            $name = $ai->getName();
-            $id = $ai->getSku();
-            $title = !empty($name)?$name:$id;    
-            $qty = $ai->getQty();
-            $price = $ai->getProduct()->getFinalPrice()*100;
-            $url = $ai->getProduct()->getProductUrl();
-
-            $items[] = compact('id','title','qty','price','url');
+            $items[] = Mage::helper('sailthru/item')->prepare($ai);
         }
 
         $this->_callPurchaseApi(
@@ -51,13 +43,6 @@ class Totsy_Sailthru_Model_Observer
             return;
         }
 
-        // mark to remove this item from 
-        // sailthru incomplete order
-        //$items[] = $this->_preSailthruPurchase(
-        //    Mage::getModel('catalog/product')->load($item),
-        //    array('qty'=>0)
-        //);
-
         // Add other items from cart to 
         // sailthru incomplete order
         $allItems = $cart->getQuote()->getAllVisibleItems();
@@ -67,14 +52,7 @@ class Totsy_Sailthru_Model_Observer
                 continue;
             }
 
-            $name = $ai->getName();
-            $id = $ai->getSku();
-            $title = !empty($name)?$name:$id;    
-            $qty = $ai->getQty();
-            $price = $ai->getProduct()->getFinalPrice()*100;
-            $url = $ai->getProduct()->getProductUrl();
-
-            $items[] = compact('id','title','qty','price','url');
+            $items[] = Mage::helper('sailthru/item')->prepare($ai);;
         }
 
         $this->_callPurchaseApi(array(
@@ -106,20 +84,4 @@ class Totsy_Sailthru_Model_Observer
         $queue->addToQueue($queueData);
     }
 
-    protected function _preSailthruPurchase ($itemInfo, $qty)
-    {
-        $price = $itemInfo->getSpecialPrice();
-        $price = number_format($price, 2);
-        $price = $price*100;
-
-        $item = array(
-            'id' => $itemInfo->getSku(),
-            'url' => $itemInfo->getProductUrl(),
-            'title' => $itemInfo->getName(),
-            'price' => $price,
-            'qty' => $qty['qty']
-        );
-
-        return $item;
-    }
 }

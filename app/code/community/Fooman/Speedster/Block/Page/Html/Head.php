@@ -30,6 +30,9 @@ class Fooman_Speedster_Block_Page_Html_Head extends Mage_Page_Block_Html_Head
 
     public function getCssJsHtml()
     {
+        if(!Mage::getStoreConfig('system/fooman_speedster/enable')) {
+            return parent::getCssJsHtml();
+        }
         // Figure out if we are run from a subdirectory
         //$dir=explode("index.php" , htmlentities($_SERVER['SCRIPT_NAME']));
         //$webroot=$dir[0];
@@ -150,6 +153,9 @@ class Fooman_Speedster_Block_Page_Html_Head extends Mage_Page_Block_Html_Head
 
     public function getChunkedItems($items, $prefix='', $maxLen=450)
     {
+        if(!Mage::getStoreConfig('system/fooman_speedster/enable')) {
+            return parent::getChunkedItems($items, $prefix, $maxLen);
+        }
         $chunks = array();
         $chunk = $prefix;
 

@@ -158,4 +158,3 @@ class Insparq_Product_Block_Richsnippet extends Mage_Core_Block_Template {
   }
 
 }
-?>

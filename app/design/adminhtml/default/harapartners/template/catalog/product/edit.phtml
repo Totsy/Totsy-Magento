@@ -128,7 +128,7 @@
        var reply = prompt('Which email do you want to send the preview?  For multiple email, separate with semicolon (;)',admin_user_email);
 
        <?php
-            $request_url = $this->getUrl('*/catalog_category/emailPreview', array('_current'=>true,'_nosid' => false));
+            $request_url = $this->getUrl('*/catalog_product/emailPreview', array('_current'=>true,'_nosid' => false));
         ?>
         var request_url = "<?php echo $request_url;?>";
         if(reply) {
@@ -157,7 +157,6 @@
                             alert(response.message);
                         }
                     }
-                    console.log(result);
                 }
             });
         } else {

@@ -66,7 +66,7 @@ $savings = money_format('%n', $originalPrice) - money_format('%n', $discountPric
 <section>
     <header class="page-header has-timer clearfix">
         <ol class="breadcrumb">
-                <li><a href="<?php echo $this->getUrl(); ?>" title="Totsy home">Totsy Home</a></li>
+                <li><a href="<?php echo $this->getUrl('event/'); ?>" title="Totsy home">Totsy Home</a></li>
                 <li><a href="<?php echo $_category->getUrl();?>"><?php echo $_helper->categoryAttribute($_category, $_category->getName(), 'name') ?></a></li>
                 <li class="active"><?php echo $_product->getName(); ?></li>
         </ol>
@@ -270,7 +270,19 @@ jQuery(document).ready(function() {
     })
 }) /* cart timer minified */
 /* cart timer minified */
-    var html=getTimerHtml("live","<?php echo $endcount_lc ?>", "<?php echo $serverNow?>");jQuery("#timer").countdown({until: new Date("<?php echo $endcount_lc; ?>"),layout:html, serverSync:retrieveServertime,alwaysExpire:true, onExpiry:function(a){jQuery(this).html("Completed")},leadingZero:true,direction:"down"})
+    var html=getTimerHtml("live","<?php echo $endcount_lc ?>", "<?php echo $serverNow?>");
+    var server_now = retrieveServertime();
+    var timezone = -server_now.getTimezoneOffset()/60;
+    jQuery("#timer").countdown({
+        until: new Date("<?php echo $endcount_lc; ?>"),
+        layout:html,
+        serverSync:retrieveServertime,
+        alwaysExpire:true,
+        timezone: timezone,
+        onExpiry:function(a){jQuery(this).html("Completed")},
+        leadingZero:true,
+        direction:"down"
+    })
     function retrieveServertime() {
         var time = null;
         jQuery.ajax({
