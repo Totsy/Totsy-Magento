@@ -40,7 +40,7 @@ class Totsy_Checkout_CartController extends Mage_Checkout_CartController
         //Mage::getSingleton('checkout/session')->unsSplitCartFlag();
         $quote = $this->_getSession()->getQuote();
         $fulfillmentTypes = $quote->getFulfillmentTypes();
-        if(!isset($fulfillmentTypes['dotcom_stock'])||count($fulfillmentTypes['dotcom_stock']) <=0){
+        if(!isset($fulfillmentTypes['dotcom_stock']) || count($fulfillmentTypes['dotcom_stock']) <= 0) {
             Mage::getSingleton('checkout/session')->unsSplitCartFlag();
         }
 

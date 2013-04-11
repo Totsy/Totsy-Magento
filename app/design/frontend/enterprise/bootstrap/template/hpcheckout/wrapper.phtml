@@ -101,9 +101,10 @@ jQuery( document ).ready( function() {
 
 	if( jQuery( '#shipping-address-select' ).val() != '' ) {
 		jQuery( '#shipping-address-select' ).change();
-    }else 
-        if(jQuery('#shipping\\:region').val()){
-        hpcheckout.update(true); 
+    } else {
+        if(jQuery('#shipping\\:region').val()) {
+            hpcheckout.update(true);
+        }
     }
 });
 </script>
