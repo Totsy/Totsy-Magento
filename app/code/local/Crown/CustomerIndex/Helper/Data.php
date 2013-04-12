@@ -65,7 +65,7 @@ class Crown_CustomerIndex_Helper_Data extends Mage_Core_Helper_Abstract {
 		}
 		$query .= "
 		INSERT IGNORE INTO `{$coreResource->getTableName('CustomerIndex/CustomerIndex')}`
-			(`entity_id`,`website_id`,`email`,`group_id`,`created_at`,`firstname`, `lastname`,`customer_name`,`billing_postcode`,`billing_telephone`,`billing_region`,`billing_country_id`,`store_id`)
+			(`entity_id`,`website_id`,`email`,`group_id`,`created_at`,`firstname`, `lastname`,`customer_name`,`billing_postcode`,`billing_telephone`,`billing_region`,`billing_country_id`,`club_created_at`,`store_id`)
 			(
 			SELECT
 				`e`.`entity_id`, 
