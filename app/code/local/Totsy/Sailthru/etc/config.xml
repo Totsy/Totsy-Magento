@@ -10,27 +10,54 @@
 <config>
     <modules>
         <Totsy_Sailthru>
-            <version>1.0.1</version>
+            <version>1.0.2</version>
         </Totsy_Sailthru>
     </modules>
     <global>
+        <blocks>
+            <sailthru>
+                <class>Totsy_Sailthru_Block</class>
+            </sailthru>
+        </blocks>
         <helpers>
             <sailthru>
-                <rewrite>
-                    <cache>Totsy_Sailthru_Helper_Cache</cache>
-                    <feed>Totsy_Sailthru_Helper_Feed</feed>
-                    <item>Totsy_Sailthru_Helper_Item</item>
-                </rewrite>
+                <class>Totsy_Sailthru_Helper</class>
             </sailthru>
         </helpers>
         <models>
             <sailthru>
-                <rewrite>
-                    <feed>Totsy_Sailthru_Model_Feed</feed>
-                    <archive>Totsy_Sailthru_Model_Archive</archive>
-                </rewrite>
+                <class>Totsy_Sailthru_Model</class>
+                <resourceModel>sailthru_mysql4</resourceModel>
             </sailthru>
+            <sailthru_mysql4>
+                <class>Totsy_Sailthru_Model_Mysql4</class>
+                <entities>
+                    <feedconfig>
+                        <table>sailthru_feedconfig</table>
+                    </feedconfig>
+                </entities>
+            </sailthru_mysql4>
         </models>
+        <resources>
+            <sailthru_setup>
+                <setup>
+                    <module>Totsy_Sailthru</module>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </sailthru_setup>
+            <sailthru_write>
+                <connection>
+                    <use>core_write</use>
+                </connection>
+            </sailthru_write>
+            <sailthru_read>
+                <connection>
+                    <use>core_read</use>
+                </connection>
+            </sailthru_read>        
+        </resources>
         <events>
             <checkout_cart_update_items_after>
                 <observers>
@@ -52,6 +79,30 @@
             </checkout_cart_remove_item>
         </events>
     </global>
+    <admin>
+        <routers>
+            <sailthru>
+                <use>admin</use>
+                <args>
+                    <module>Totsy_Sailthru</module>
+                    <frontName>sailthru</frontName>
+                </args>
+            </sailthru>
+        </routers>
+    </admin>
+    <adminhtml>
+        <menu>
+            <harapartners>
+                <children>
+                    <feedconfig translate="title" module="sailthru">
+                        <title>Config Sailthru Feed</title>
+                        <sort_order>50</sort_order>
+                        <action>sailthru/adminhtml_feedconfig</action>
+                    </feedconfig>
+                </children>
+            </harapartners>
+        </menu>
+    </adminhtml>
     <crontab>
         <jobs>
             <totsy_sailthru_archive>
