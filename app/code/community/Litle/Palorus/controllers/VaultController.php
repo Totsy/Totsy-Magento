@@ -152,19 +152,34 @@ class Litle_Palorus_VaultController extends Mage_Core_Controller_Front_Action
 		$vaultId = $this->getRequest()->getParam('vault_id');
 		if ($vaultId) {
 			$vault = Mage::getModel('palorus/vault')->load($vaultId);
-			if ($vault->getCustomerId() != $this->_getSession()->getCustomer()->getId()) {
-				$this->_getSession()->addError($this->__('The card does not belong to this customer.'));
-				$this->getResponse()->setRedirect(Mage::getUrl('*/*/index'));
-				return;
-			}
+            if($vault->getVaultId()) {
+                if ($vault->getCustomerId() != $this->_getSession()->getCustomer()->getId()) {
+                    $this->_getSession()->addError($this->__('The card does not belong to this customer.'));
+                    $this->getResponse()->setRedirect(Mage::getUrl('*/*/index'));
+                    return;
+                }
 
-			try {
-				$vault->delete();
-				$this->_getSession()->addSuccess($this->__('The card has been deleted.'));
-			} catch (Exception $e) {
-				$this->_getSession()->addException($e, $this->__('An error occurred while deleting the card.'));
-				Mage::logException($e);
-			}
+                try {
+                    $vault->delete();
+                    $this->_getSession()->addSuccess($this->__('The card has been deleted.'));
+                } catch (Exception $e) {
+                    $this->_getSession()->addException($e, $this->__('An error occurred while deleting the card.'));
+                    Mage::logException($e);
+                }
+            } else {
+                //Case It's a Cybersource profile
+                try{
+                    $profile = Mage::getModel ( 'paymentfactory/profile' )->load($vaultId,'subscription_id');
+                    if($profile->getId()) {
+                        $profile->setData('is_default',1)
+                            ->save();
+                        $this->_getSession()->addSuccess($this->__('The card has been deleted.'));
+                    }
+                }catch(Exception $e){
+                    $this->_getSession()->addException($e, $this->__('An error occurred while deleting the card.'));
+                    Mage::logException($e);
+                }
+            }
 		}
 		$this->_redirect('*/*/index');
 	}

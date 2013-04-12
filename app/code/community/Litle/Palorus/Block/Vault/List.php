@@ -47,6 +47,21 @@ class Litle_Palorus_Block_Vault_List extends Mage_Core_Block_Template
 	    return $this->getUrl('*/*/new');
 	}
 
+    public function getFullCcCardType( $shortCardType ) {
+        switch ( $shortCardType ) {
+            case 'AE':
+                return 'American Express';
+            case 'VI':
+                return 'Visa';
+            case 'MC':
+                return 'MasterCard';
+            case 'DI':
+                return 'Discover';
+            default:
+                return $shortCardType;
+        }
+    }
+
 /**
  *
  * @todo Edit card url
