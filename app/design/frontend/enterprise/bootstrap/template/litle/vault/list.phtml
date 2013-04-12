@@ -1,3 +1,15 @@
+<?php
+    //Get Cybersoure profiles
+    $customerId = Mage::getSingleton('customer/session')->getCustomerId();
+    $profiles = Mage::getModel('paymentfactory/profile')->getCollection();
+    $profiles->getSelect()->where( 'customer_id = ?', $customerId );
+    $profilesCounter = 0;
+    foreach( $profiles as $profile ) {
+        if($profile->getSubscriptionId() && $profile->getIsDefault()==0 && $profile->getData('saved_by_customer')) {
+            $profilesCounter++;
+        }
+    }
+?>
 <?php /* @var $this Litle_Palorus_Block_Vault_List */ ?><?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
 <div class="page-header">
     <h2><?php echo $this->__('Manage Credit Cards') ?> <img class="cart-type pull-right"  width="180px;" src="<?php echo $this->getSkinUrl('images/creditcards.jpg')?>"/></h2>
@@ -10,7 +22,7 @@
         <hr />
     </div>
     <?php $cards = $this->getStoredCards() ?>
-    <?php if (count($cards)): ?>
+    <?php if (count($cards) || $profilesCounter > 0): ?>
         <div class="cards-info">
             <?php foreach($cards as $card): ?>
                 <table class="table table-striped table-bordered">
@@ -27,6 +39,47 @@
                         </tr>
                         <?php if($card->getData('address_id')):?>
                             <?php $address = Mage::getModel('customer/address')->load($card->getData('address_id')); ?>
+                            <?php if($address->getFirstname()):?>
+                                <tr>
+                                    <td width="10%" align="left"></td>
+                                    <td width="90%">
+                                        <table class="table table-condensed">
+                                            <tr>
+                                                <td width="141" valign="top">Cardholder Name:</td>
+                                                <td width="281"><?php echo $address->getFirstname(); ?> <?php echo $address->getLastname(); ?></td>
+                                            </tr>
+                                            <tr>
+                                                <td valign="top">Billing Address:</td>
+                                                <td><?php echo $address->getStreet(1); ?>
+                                                    <?php if($address->getStreet(2)): ?>
+                                                        <?php echo $address->getStreet(2); ?><br />
+                                                    <?php endif ?>
+                                                    <?php echo $address->getCity(); ?>, <?php $address->getRegion(); ?> <?php echo $address->getPostcode(); ?>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            <?php endif; ?>
+                        <?php endif; ?>
+                    <?php endif; ?>
+                </table>
+            <?php endforeach; ?>
+            <?php foreach($profiles as $profile): ?>
+                <table class="table table-striped table-bordered">
+                    <?php if($profile->getSubscriptionId() && $profile->getData('saved_by_customer') && $profile->getIsDefault() != 1): ?>
+                        <tr>
+                            <td><img src="<?php echo $this->getSkinUrl('images/cc_' . strtolower(str_replace(' ','_',$this->getFullCcCardType( $profile->getData( 'card_type' )))) . '.gif'); ?>"> </td>
+                            <td width="71%">
+                                <?php echo $this->getFullCcCardType( $profile->getData( 'card_type' )); ?> ending in <strong><?php echo $profile->getLast4no(); ?></strong>
+                                expires <strong><?php echo $profile->getExpireMonth();?>/<?php echo $profile->getExpireYear();?></strong>
+                            </td>
+                            <td width="2%">
+                                <a href="#" onclick="return deleteCard('<?php echo $profile->getSubscriptionId() ?>');" id="remove_<?php echo $profile->getSubscriptionId(); ?>" title="Remove Credit Card" class="delete-new-card-button btn">Delete</a>
+                            </td>
+                        </tr>
+                        <?php if($profile->getData('address_id')):?>
+                            <?php $address = Mage::getModel('customer/address')->load($profile->getData('address_id')); ?>
                             <?php if($address->getFirstname()):?>
                                 <tr>
                                     <td width="10%" align="left"></td>
