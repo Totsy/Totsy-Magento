@@ -18,26 +18,31 @@
                     <title>Fulfillment Factory</title>
                     <sort_order>31</sort_order>
                     <children>
-                        <orderpendinggrid translate="title" module="fulfillmentfactory">
-                            <title>Order Queue (Pending)</title>
-                            <sort_order>0</sort_order>
-                            <action>fulfillmentfactory/adminhtml_orderqueue/orderpending</action>
-                        </orderpendinggrid>
-                        <orderfulfillmentaginggrid translate="title" module="fulfillmentfactory">
-                            <title>Order Queue (Fulfillment Aging)</title>
-                            <sort_order>1</sort_order>
-                            <action>fulfillmentfactory/adminhtml_orderqueue/orderfulfillmentaging</action>
-                        </orderfulfillmentaginggrid>
-                        <orderfulfillmentgrid translate="title" module="fulfillmentfactory">
-                            <title>Order Queue (Sent to Fulfillment)</title>
-                            <sort_order>2</sort_order>
-                            <action>fulfillmentfactory/adminhtml_orderqueue/orderfulfillment</action>
-                        </orderfulfillmentgrid>
-                        <ordershipmentaginggrid translate="title" module="fulfillmentfactory">
-                            <title>Order Queue (Shipment Aging)</title>
-                            <sort_order>3</sort_order>
-                            <action>fulfillmentfactory/adminhtml_orderqueue/ordershipmentaging</action>
-                        </ordershipmentaginggrid>
+                        <order_queues translate="title">
+                            <title> Order Queue Status </title>
+                            <children>
+                                <orderpendinggrid translate="title" module="fulfillmentfactory">
+                                    <title>Pending</title>
+                                    <sort_order>0</sort_order>
+                                    <action>fulfillmentfactory/adminhtml_orderqueue/orderpending</action>
+                                </orderpendinggrid>
+                                <orderfulfillmentaginggrid translate="title" module="fulfillmentfactory">
+                                    <title>Fulfillment Aging</title>
+                                    <sort_order>1</sort_order>
+                                    <action>fulfillmentfactory/adminhtml_orderqueue/orderfulfillmentaging</action>
+                                </orderfulfillmentaginggrid>
+                                <orderfulfillmentgrid translate="title" module="fulfillmentfactory">
+                                    <title>Sent to Fulfillment</title>
+                                    <sort_order>2</sort_order>
+                                    <action>fulfillmentfactory/adminhtml_orderqueue/orderfulfillment</action>
+                                </orderfulfillmentgrid>
+                                <ordershipmentaginggrid translate="title" module="fulfillmentfactory">
+                                    <title>Shipment Aging</title>
+                                    <sort_order>3</sort_order>
+                                    <action>fulfillmentfactory/adminhtml_orderqueue/ordershipmentaging</action>
+                                </ordershipmentaginggrid>
+                            </children>
+                        </order_queues>
                         <fulfillmentgrid translate="title" module="fulfillmentfactory">
                             <title>Item Queue</title>
                             <sort_order>4</sort_order>
@@ -65,7 +70,51 @@
                     <sales>
                         <children>
                             <fulfillmentfactory translate="title" module="fulfillmentfactory">
-                                <title>Fulfillment Factory</title>
+                               <title>Fulfillment Factory</title>
+                               <children>
+                                    <order_queues translate="title">
+                                        <title>Order Queue Views</title>
+                                        <sort_order>10</sort_order>
+                                        <children>
+                                            <ordershipmentaginggrid translate="title">
+                                                <title>Shipment Aging</title>
+                                            </ordershipmentaginggrid>
+                                            <orderfulfillmentaginggrid translate="title">
+                                                <title>Fulfillment Aging</title>
+                                            </orderfulfillmentaginggrid>
+                                            <orderfulfillmentgrid translate="title">
+                                                <title>Sent Fulfillment</title>
+                                            </orderfulfillmentgrid>
+                                            <orderpendinggrid translate="title" module="fulfillmentfactory">
+                                                <title>Pending Orders</title>
+                                            </orderpendinggrid>
+                                        </children>
+                                    </order_queues>
+                                    <fulfillmentgrid translate="title" module="fulfillmentfactory">
+                                        <title>Item Queue</title>
+                                        <sort_order>20</sort_order>
+                                        <children>
+                                            <actions translate="title">
+                                                <title>Actions</title>
+                                                <children>
+                                                    <batch_cancel translate="title"><title>Batch Cancel</title></batch_cancel>
+                                                </children>
+                                            </actions>
+                                        </children>
+                                    </fulfillmentgrid>
+                                    <fulfillmentlog translate="title" module="fulfillmentfactory">
+                                        <title>Fulfillment Error Log</title>
+                                        <sort_order>30</sort_order>
+                                        <children>
+                                            <actions translate="title">
+                                                <title>Actions</title>
+                                                <children>
+                                                    <fulfill_action translate="title"><title>Fufill Action</title></fulfill_action>
+                                                </children>
+                                            </actions>
+                                        </children>
+                                    </fulfillmentlog>
+                               </children>
                             </fulfillmentfactory>
                         </children>
                     </sales>

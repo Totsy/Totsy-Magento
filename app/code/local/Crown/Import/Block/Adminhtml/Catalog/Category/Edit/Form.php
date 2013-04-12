@@ -48,9 +48,20 @@ class Crown_Import_Block_Adminhtml_Catalog_Category_Edit_Form extends Totsy_Admi
      * @return string
      */
     public function getChangeFulfillmentButtonHtml() {
-        if ($this->hasStoreRootCategory () && $this->_isAllowedAction('fulfillmentfactorybulkedit')) {
-            return $this->getChildHtml ( 'fulfillmentfactory_edit_button' );
-        }
-        return '';
+        if (!$this->hasStoreRootCategory () || !$this->_isAllowedAction('fulfillmentfactorybulkedit')) {
+			return '';
+		}
+
+		$current_time = Mage::getSingleton('core/date')->timestamp();
+		$start_time = strtotime($this->getCategory()->getData('event_start_date'));
+		$end_time = strtotime($this->getCategory()->getData('event_end_date'));
+		$is_active = $this->getCategory()->getData('is_active');
+
+		if ($is_active && $start_time < $current_time && $end_time > $current_time) {
+			return '';
+		}
+		else {
+			return $this->getChildHtml ( 'fulfillmentfactory_edit_button' );
+		}
     }
 }

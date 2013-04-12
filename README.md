@@ -23,6 +23,7 @@ Setup the application configuration, and the shared `media` directory
     $ ln -sf /etc/magento/enterprise.xml app/etc/enterprise.xml
     $ ln -sf /etc/magento/local.xml app/etc/local.xml
     $ ln -sf /srv/share/media/ media
+    $ ln -sf /etc/magento/litle_SDK_config.ini app/code/community/Litle/LitleSDK/litle_SDK_config.ini
 
 Return to the root where you created the working copy, and move it to the deployment directory
 

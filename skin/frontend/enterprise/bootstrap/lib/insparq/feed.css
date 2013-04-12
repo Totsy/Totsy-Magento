@@ -1,14 +1,19 @@
 /* overrides */
 
+/* layout */
 div#insparq #pinboard {
-	width:950px !important;
+	width:940px !important;
+}
+div#insparq .brick {
+	margin: 0 0 20px 10px;
+	width:300px !important;
 }
 
-div#insparq .brick {
-	margin: 0 8px 20px;
-	position: static !important;
+/* filters */
+div#insparq #view-filters {
+    min-width: 400px;
+    text-align: right;
 }
-div#insparq .item h3 {
-	height: 75px;
-	max-width: 278px;
+div#insparq #ping {
+    display: inline-block !important;
 }

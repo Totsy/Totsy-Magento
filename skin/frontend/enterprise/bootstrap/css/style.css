@@ -78,9 +78,10 @@ body[class*="span"] { /* bootstrap override for edge case of *span* sale title i
 }
 
 /* Bootstrap Events Grid Override - .tedhack */
-[class*='event'].tedhack .span4 {width:23.56em; min-height:422px;}
-[class*='event'].tedhack .span3 {width:17.48em;min-height:332px;}
+[class*='event'].tedhack .span4 {width:23.56em; min-height:438px; }
+[class*='event'].tedhack .span3 {width:17.48em;min-height:349px;}
 [class*='event'].tedhack .span2 {width:11.39em;}
+[class*='event'].tedhack .span4 img {max-height: 438px;}
 .thumbnail {
     border-radius:0px;
     box-shadow: none;
@@ -931,7 +932,7 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
     text-transform: uppercase;
 }
 .categoryevent-index-index .prefix {display: block;}
-.categoryevent-index-index .hasCountdown {font-size: 12px; color:#fcdc0a;text-transform: uppercase;}
+.categoryevent-index-index .thumbnail .hasCountdown {font-size: 12px; color:#fcdc0a;text-transform: uppercase;}
 .up-to {
     font-weight: bold;
     color: #d22f2a;
@@ -1885,7 +1886,9 @@ input.big-input {
     -moz-box-sizing: border-box;
     box-sizing: border-box;
 }
-
+.input-constrained {
+    width:115px;
+}
 
 /* prices */
 .price-box {
