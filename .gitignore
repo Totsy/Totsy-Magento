@@ -105,4 +105,5 @@ skin/frontend/default/modern/
 skin/frontend/enterprise/default/
 skin/install/
 var/
+vendor/
 .DS_Store

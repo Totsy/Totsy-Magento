@@ -1,0 +1,13 @@
+{
+    "name": "totsy/totsy-magento",
+    "description": "The primary web application platform for Totsy, running on Magento Enterprise Edition",
+    "require": {
+        "guzzle/guzzle": "3.3.*"
+    },
+    "authors": [
+        {
+            "name": "Tharsan Bhuvanendran",
+            "email": "tbhuvanendran@totsy.com"
+        }
+    ]
+}
