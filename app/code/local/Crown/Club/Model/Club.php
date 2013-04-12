@@ -53,7 +53,7 @@ class Crown_Club_Model_Club extends Mage_Core_Model_Abstract {
 	 * @since 0.1.0
 	 * @return Crown_Club_Model_Club
 	 */
-	public function addClubMember( $customer ) {
+	public function addClubMember( $customer, $ignoreEmail = false ) {
         /* @var $helper Crown_Club_Helper_Data */
 		$helper = Mage::helper('crownclub');
 		if (!$helper->moduleSetupComplete()) return $this;
@@ -72,7 +72,9 @@ class Crown_Club_Model_Club extends Mage_Core_Model_Abstract {
             $customerModel->setClubCreatedAt(strftime('%Y-%m-%d %H:%M:%S', time()));
 			$customerModel->save();
 
-            $this->sendClubMembershipWelcomeEmail($customerModel);
+            if(!$ignoreEmail) {
+                $this->sendClubMembershipWelcomeEmail($customerModel);
+            }
 
             try {
                 $helper->setClubEmailList($customerModel);
@@ -111,6 +113,7 @@ class Crown_Club_Model_Club extends Mage_Core_Model_Abstract {
 		if ($customerModel) {
 			$customerModel->setIsClubMember(false);
 			$customerModel->setGroupId($clubNonCustomerGroup->getId());
+            $customerModel->setClubCreatedAt('');
 			$customerModel->save();
 
             try {

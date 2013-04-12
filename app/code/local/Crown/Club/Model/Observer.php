@@ -119,4 +119,25 @@ class Crown_Club_Model_Observer {
             $address->setSaveInAddressBook(true);
         }
     }
+
+    /**
+     * Customer club created at update
+     *
+     * @param Varien_Event_Observer $observer
+     */
+    public function customerPrepareSave($observer) {
+        $customer = $observer->getCustomer();
+        $clubModel = Mage::getModel('crownclub/club');
+        if(Mage::helper('crownclub')->isClubMember($customer)) {
+            // if club membership is set and the created date is not then we must have just set the plus user group
+            if($customer->getClubCreatedAt() == '') {
+                $clubModel->addClubMember($customer, true);
+            }
+        } else {
+            // if club membership is not set but the created date is then we must have just removed the plus user group
+            if($customer->getClubCreatedAt() != '') {
+                $clubModel->removeClubMember($customer);
+            }
+        }
+    }
 }
