@@ -261,6 +261,7 @@ class Totsy_Sailthru_Helper_Feed extends Mage_Core_Helper_Abstract
     }
 
     private function _processParams(){
+
         if (empty($_GET['params']) 
             || !preg_match('/[a-f\d]+/',strtolower($_GET['params']))
             || strlen($_GET['params'])!=40
@@ -275,15 +276,18 @@ class Totsy_Sailthru_Helper_Feed extends Mage_Core_Helper_Abstract
         if (empty($params)){
             return;
         }
+        $params = $params[0];
         foreach ($params as $key => $value) {
             $_GET[$key] = $value;
         }
     }
 
     private function _processType(){
+
         if (!isset($_GET['type'])){
             return;
         }
+
         switch ($_GET['type']){
             case '1':
             case 'products':

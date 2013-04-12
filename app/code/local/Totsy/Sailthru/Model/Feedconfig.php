@@ -25,8 +25,9 @@ class Totsy_Sailthru_Model_Feedconfig extends Mage_Core_Model_Abstract {
         parent::_beforeSave();
 
         $this->validate(); //Errors will be thrown as exceptions
-        $this->setHash(sha1($this->toJson()));
-
+        if (!$this->hasHash()){
+        	$this->setHash(sha1($this->toJson()));
+    	}
         return $this;
     }
 
@@ -67,10 +68,17 @@ class Totsy_Sailthru_Model_Feedconfig extends Mage_Core_Model_Abstract {
         //Validate start_at_time
         if($this->getData('start_at_time')){
 
-            if ( !preg_match('/[\d\:]+/', $this->getData('start_at_time'))){
+            if ( !preg_match('/[\d\:apmAPM]+/', $this->getData('start_at_time'))){
                 throw new Exception('Time contains not allowed characters. Error value: ' . $this->getData('start_at_time'));   
             }
+
             $time = trim($this->getData('start_at_time'));
+            if (strtolower($time) == 'am'){
+            	$time = '09:00';
+            }
+            if (strtolower($time) == 'pm'){
+            	$time = '20:00';
+            }
             $time = explode(':', $time);
 
             if ( count($time)!=2 ){

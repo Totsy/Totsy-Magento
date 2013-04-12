@@ -148,10 +148,19 @@ class Totsy_Sailthru_Model_Feed extends Mage_Core_Model_Abstract
 	}
 
 	private function _getProducts($event){
-    	return Mage::getModel('catalog/category')
+    	$productsCollection = Mage::getModel('catalog/category')
 	        ->load($event->getEntityId())
 	        ->getProductCollection()
 	        ->addAttributeToSelect('entity_id');
+	        
+	    $exclude = $this->getFeedHelper()->getExcludeList();
+	    if ( !empty($exclude) ){
+		    $productsCollection->addAttributeToFilter(
+		    	'entity_id', 
+		    	array('nin' => $exclude)
+		    );
+		}
+		return $productsCollection;
 	}
 
     private function _formatter ($events,$type){
@@ -236,8 +245,8 @@ class Totsy_Sailthru_Model_Feed extends Mage_Core_Model_Abstract
 		        	'name'			=> $obj->getName(),
 		        	'categories'	=> $obj->getAttributeTextByStore('departments', $defaultStore),
 		        	'ages'			=> $obj->getAttributeTextByStore('ages', $defaultStore),
-		        	'price'			=> $obj->getSpecialPrice(),
-		        	'msrp'			=> $obj->getPrice(),
+		        	'price'			=> number_format($obj->getSpecialPrice(),2),
+		        	'msrp'			=> number_format($obj->getPrice(),2),
 		        	'discount'		=> floor(
 		        		($obj->getPrice() - $obj->getSpecialPrice())/$obj->getPrice()*100
 		        	),
