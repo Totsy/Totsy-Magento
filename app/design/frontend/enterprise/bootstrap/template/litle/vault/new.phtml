@@ -80,8 +80,7 @@ $_code = $this->getMethodCode();
 
                 <div>
                     <label class="required" for="creditcard_cc_cid"><em>*</em> <?php echo $this->__('Security Code');?></label>
-                    <input id="creditcard_cc_cid" class="input-text cvv required-entry validate-cc-cvn span2" type="text" value="" name="payment[cc_cid]" title="Card Verification Number">
-                    <input type="hidden" value="1" name="payment[saved_by_customer]" id="<?php echo $_code ?>_saved">
+                    <input id="creditcard_cc_cid" class="input-text cvv required-entry validate-cc-cvn" type="text" value="" name="payment[cc_cid]" title="Card Verification Number">
                 </div>
 
                 <div id="billing-info" style="margin-top:25px;">
