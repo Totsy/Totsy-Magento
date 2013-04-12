@@ -3,6 +3,8 @@
 class Totsy_Promotions_Model_Banner extends Mage_Core_Model_Abstract {
     
     public static $path = 'import/banners/';
+    protected $_allowedImageExtentions = array('jpg','gif','png');
+
 
     protected function _construct(){
         $this->_init('promotions/banner');
