@@ -43,10 +43,11 @@
 <?php // include banner if it is enabled
     $bannerActive = Mage::getModel('cms/block')->load('home_banner')->getIsActive();
         echo '<div class="banner">';
-        echo $this->getLayout()->createBlock('promotions/block')
+        $banners = $this->getLayout()->createBlock('promotions/block')
                   ->setBlockId('promotions_banner_view')
                   ->setBlockPageName('home')
                   ->toHtml();
+        echo $banners;
         echo '</div>';
 ?>
 
@@ -242,5 +243,9 @@
         date = new Date(time);
         return date;
     }
-
+    <?php if(!empty($banners)){ ?>
+        jQuery(document).ready(function() {
+            jQuery('.carousel').carousel();
+        });
+    <?php } ?>
 </script>
