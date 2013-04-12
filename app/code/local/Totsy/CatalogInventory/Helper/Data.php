@@ -7,17 +7,11 @@ class Totsy_CatalogInventory_Helper_Data extends Mage_Core_Helper_Abstract
     protected $_lifetime = 1800;
 
     public function getReserveCount($productId) {
-        $cache = Mage::app()->getCache();
+        $reserved = $this->_getReserveCountFromDb($productId);
 
-        if($cache->test($this->_getCacheKey($productId))) {
-            $reserved = $cache->load($this->_getCacheKey($productId));
-        } else {
-            $reserved = $this->_getReserveCountFromDb($productId);
-
-            if($reserved !== false) {
-                $this->setReserveCount($productId, $reserved);
-            }
-         }
+        if($reserved !== false) {
+            $this->setReserveCount($productId, $reserved);
+        }
 
         return $reserved;
     }
@@ -74,7 +68,7 @@ class Totsy_CatalogInventory_Helper_Data extends Mage_Core_Helper_Abstract
 
         $cache = Mage::app()->getCache();
 
-        if(method_exists($cache->getBackend(),'getRedis') && $cache->test($this->_getCacheKey($productId))) {
+        if(method_exists($cache->getBackend(),'getRedis') && $cache->load($this->_getCacheKey($productId))) {
             $redis = $cache->getBackend()->getRedis();
             if($delta > 0) {
                 return $redis->incrBy($cache->getBackend()->getCacheId($this->_getCacheKey($productId)),$delta);
