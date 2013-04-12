@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+/**
+ * {magecore_license_notice}
+ *
+ * @category   Oro
+ * @package    Oro_Configurable
+ * @copyright  {magecore_copyright}
+ * @license    {magecore_license}
+ */
+-->
+<config>
+    <modules>
+        <Oro_Configurable>
+            <version>1.0.0</version>
+        </Oro_Configurable>
+    </modules>
+
+    <global>
+        <models>
+            <oro_configurable>
+                <class>Oro_Configurable_Model</class>
+                <resourceModel>oro_configurable_resource</resourceModel>
+            </oro_configurable>
+
+            <oro_configurable_resource>
+                <class>Oro_Configurable_Model_Resource</class>
+            </oro_configurable_resource>
+
+            <catalog>
+                <rewrite>
+                    <product_type_configurable>Oro_Configurable_Model_Product_Type_Configurable</product_type_configurable>
+                </rewrite>
+            </catalog>
+
+            <catalog_resource>
+                <rewrite>
+                    <product_type_configurable_attribute_collection>Oro_Configurable_Model_Resource_Product_Type_Configurable_Attribute_Collection</product_type_configurable_attribute_collection>
+                </rewrite>
+            </catalog_resource>
+        </models>
+        <resources>
+            <oro_configurable_setup>
+                <setup>
+                    <module>Oro_Configurable</module>
+                    <class>Oro_Configurable_Model_Resource_Setup</class>
+                </setup>
+            </oro_configurable_setup>
+        </resources>
+
+        <helpers>
+            <oro_configurable>
+                <class>Oro_Configurable_Helper</class>
+            </oro_configurable>
+        </helpers>
+    </global>
+</config>
