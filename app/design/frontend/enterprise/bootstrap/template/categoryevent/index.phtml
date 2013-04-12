@@ -19,7 +19,7 @@
 /**
  * Catalog index list template
  * Load Top, Live, Upcoming events
- * 
+ *
  */
 ?>
 <?php
@@ -29,10 +29,10 @@
     $timer 			= 	0;
     $topArray 		= 	'';
     $liveArray 		= 	'';
-    $upcomingArray  = 	'';	
+    $upcomingArray  = 	'';
     if ( $indexDataObj->hasData('top_live_queue') ){
         $topArray = json_decode($indexDataObj->getData('top_live_queue'),true);
-    } 
+    }
     if ( $indexDataObj->hasData('live_queue') ){
         $liveArray = json_decode($indexDataObj->getData('live_queue'), true);
     }
@@ -67,7 +67,6 @@
                 <?php
                     $endcountRaw = strtotime($top['event_end_date']);
                     $endcount = date("F j, Y, G:i:s", $endcountRaw);
-                    $hasProduct = $this->countCategoryProducts($top['entity_id']);
                     $eventDepts = $top['department_label'];
                     $eventAges = $top['age_label'];
                     $maxDiscount = $top['max_discount_pct'];
@@ -76,7 +75,7 @@
                     }
                     $url = Mage::getBaseUrl().$url;
                 ?>
-                <?php if ($hasProduct && $endcountRaw > Mage::getSingleton('core/date')->timestamp()): ?>
+                <?php if (($endcountRaw > Mage::getSingleton('core/date')->timestamp()) && $this->countCategoryProducts($top['entity_id'])): ?>
                     <li class="span4 catalog-event event-counter-<?php echo $timer;?>">
                         <a href="<?php echo $url; ?>" class="thumbnail">
                             <div class="more">
@@ -93,7 +92,7 @@
                             <span class="event-link">
                                 <img src="<?php echo Mage::helper('service/image')->loadImageFile($imgFile)->constrainOnly(false)->keepAspectRatio(TRUE)->keepFrame(FALSE)->resize(550,550) ?>" alt="<?php echo $top['name'];?>" />
                             </span>
-                            
+
                             <?php $timer++; ?>
                         </a>
                         <div class="caption">
@@ -107,7 +106,7 @@
             </ul>
         </section><!-- /#events-live -->
     <?php endif; ?>
-    
+
     <?php // ENDING SOON - not functioning, no $endingArray exists - just a placeholder var and code for now ?>
     <?php if (!!$liveArray && !empty($liveArray)) : ?>
     <section id="events-ending" class="tedhack events-grid anchorHack">
@@ -120,7 +119,6 @@
                 <?php
                     $endcountRaw = strtotime($live['event_end_date']);
                     $endcount = date("F j, Y, G:i:s", $endcountRaw);
-                    $hasProduct = $this->countCategoryProducts($live['entity_id']);
                     $eventDepts = $live['department_label'];
                     $eventAges = $live['age_label'];
                     $maxDiscount = $live['max_discount_pct'];
@@ -129,7 +127,7 @@
                     }
                     $url = Mage::getBaseUrl().$url;
                 ?>
-                <?php if ($hasProduct && $endcountRaw > Mage::getSingleton('core/date')->timestamp()): ?>
+                <?php if (($endcountRaw > Mage::getSingleton('core/date')->timestamp()) && $this->countCategoryProducts($live['entity_id'])): ?>
                     <li class="span3 catalog-event event-counter-<?php echo $timer;?>">
                         <a href="<?php echo $url; ?>" class="thumbnail">
                             <div class="more">
@@ -146,7 +144,7 @@
                             <span class="event-link">
                                 <img src="<?php echo Mage::helper('service/image')->loadImageFile($imgFile)->constrainOnly(false)->keepAspectRatio(TRUE)->keepFrame(FALSE)->resize(550,550) ?>" alt="<?php echo $live['name'];?>" />
                             </span>
-                            
+
                             <?php $timer++; ?>
                         </a>
                         <div class="caption">
@@ -216,7 +214,7 @@
             until: saleTime,
             layout: getTimerHtml(jQuery(this).data('status'), jQuery(this).data('enddate'), server_now),
             serverSync:retrieveServertime,
-            tickInterval: 1, 
+            tickInterval: 1,
             alwaysExpire: true,
             timezone: timezone,
             onExpiry: function( event ){
