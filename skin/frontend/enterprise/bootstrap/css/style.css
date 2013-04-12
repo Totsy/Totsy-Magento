@@ -462,10 +462,17 @@ body.customer-account-entry .btn.btn-large {
     padding:0px 10px 0px; /* @fixednav: top padding magic number BS; @stickyfooter: bottom padding magic number BS */
     overflow: auto; /* @stickyfooter */
     }
-#logo img {
+    body > footer {
+    position: relative;
+    margin-top:0px; height:511px; /* @stickyfooter: top margin is footer height + padding, magic number BS */
+    padding: 18px 0 0;
+    height:auto;
+    background: #fff;
+    }
+    #logo img {
     width:100px;
     }
-.well.page_center {
+    .well.page_center {
     position: relative;
     display: inline-block;
     margin-top: -210px;
@@ -1647,14 +1654,7 @@ img.fastship-icon {
 /**
  * @Footer
  */
-body > footer {
-    position: relative;
-    margin-top:-229px; height:211px; /* @stickyfooter: top margin is footer height + padding, magic number BS */
-    padding: 18px 0 0;
-    height:auto;
-    min-width: 950px; /* temp hackish fix for iPad display, prevent content of fixed width from bleeding in. @TODO: get responsive! */
-    background: #fff;
-}
+
 body > footer:before {
     content: "";
     position: absolute; top: 0; left: 0;
