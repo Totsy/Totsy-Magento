@@ -83,7 +83,7 @@ class Totsy_Promotions_Block_Adminhtml_Banner_Edit_Form
             'name'      => 'start_at',
             'required'  => true,
             'time'      => true,
-            'format'    => Mage::app()->getLocale()->getDateTimeFormat(Mage_Core_Model_Locale::FORMAT_TYPE_SHORT),
+            'format'    => Varien_Date::DATETIME_INTERNAL_FORMAT,
             'image'     => $this->getSkinUrl('images/grid-cal.gif'),
             'style'     => 'width: 140px;'
         ));
@@ -93,7 +93,7 @@ class Totsy_Promotions_Block_Adminhtml_Banner_Edit_Form
             'name'      => 'end_at',
             'required'  => true,
             'time'      => true,
-            'format'    => Mage::app()->getLocale()->getDateTimeFormat(Mage_Core_Model_Locale::FORMAT_TYPE_SHORT),
+            'format'    => Varien_Date::DATETIME_INTERNAL_FORMAT,
             'image'     => $this->getSkinUrl('images/grid-cal.gif'),
             'style'     => 'width: 140px;' 
         ));
