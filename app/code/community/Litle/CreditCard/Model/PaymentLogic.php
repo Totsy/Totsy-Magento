@@ -170,8 +170,14 @@ class Litle_CreditCard_Model_PaymentLogic extends Mage_Payment_Model_Method_Cc
         } else {
             $cardType = $vaultCard->getType();
         }
+        
+        $expDate = $vaultCard->getExpirationMonth() . substr($vaultCard->getExpirationYear(), -2);
+        if(strlen($expDate) < 4) {
+            $expDate = '0' . $expDate;
+        }
 		$retArray = array();
-		$retArray['type'] = $cardType;
+		//$retArray['type'] = $cardType;
+		$retArray['expDate'] = $expDate;
 		$retArray['litleToken'] = $vaultCard->getToken();
 		$retArray['cardValidationNum'] = $payment->getCcCid();
 
@@ -661,13 +667,8 @@ class Litle_CreditCard_Model_PaymentLogic extends Mage_Payment_Model_Method_Cc
 						'billToAddress' => $this->getBillToAddress($payment),
 						'shipToAddress' => $this->getAddressInfo($payment),
 						'cardholderAuthentication' => $this->getFraudCheck($payment),
-						'enhancedData' => $this->getEnhancedData($payment),
-						'customBilling' => $this->getCustomBilling(
-								Mage::app()->getStore()
-									->getBaseUrl())
+						'enhancedData' => $this->getEnhancedData($payment)
 				);
-
-
 
 				$payment_hash = $this->creditCardOrPaypageOrToken($payment);
 				$hash_temp = array_merge($hash, $payment_hash);

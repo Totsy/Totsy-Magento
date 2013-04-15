@@ -92,14 +92,11 @@ class Litle_Palorus_VaultController extends Mage_Core_Controller_Front_Action
         if(!$transactionId) {
             $this->_redirect ( '*/*/' );
         }
-        if($creditCardType != 'VI') {
-            $auth_reversalinfos = array(
-                'litleTxnId' => $transactionId,
-			    'amount' => $amount
-            );
-            $initializeVoid = new LitleOnlineRequest();
-            $initializeVoid->authReversalRequest($auth_reversalinfos);
-        }
+        $auth_reversalinfos = array(
+            'litleTxnId' => $transactionId,
+            'amount' => $amount
+        );
+        $initialize->authReversalRequest($auth_reversalinfos);
         //Create Vault Profile if option selected
         $vault = Mage::getModel('palorus/vault');
         $alreadyCreated = Mage::getModel('palorus/vault')->getCustomerToken($customer,Mage::getModel('Litle_CreditCard_Model_PaymentLogic')->getUpdater($authResponse, 'tokenResponse', 'litleToken'));
