@@ -172,18 +172,20 @@ class Totsy_Promotions_Model_Banner extends Mage_Core_Model_Abstract {
             $bannerName = $_FILES['image']['name'];
             $uploader->save($path, $bannerName);
 
-            if (preg_match("/[\s]+/", $bannerName){
+            if (preg_match("/[\s]+/", $bannerName)){
                 $bannerNameNew = preg_replace("/[\s]+/", '_', $bannerName);
                 rename($path.$bannerName, $path.$BannerNameNew.$ext);
                 $bannerName = $bannerNameNew;
                 unset($bannerNameNew);
             }
             $imageinfo = getimagesize($path.$bannerName);
-            if (!in_array(image_type_to_extension($imageinfo), $this->_allowedImageExtentions)){
+            $type = image_type_to_extension($imageinfo[2]);
+            $type = substr($type, 1);
+            if (!in_array($type, $this->_allowedImageExtentions)){
                 unlink($path.$bannerName);
-                throw new Exception('Image type is not allowed to upload . Error value: ' . $this->getData('image'));   
+                throw new Exception('Image type is not allowed to upload . Error value: ' . $type);   
             }
-            
+
             if ($imageinfo[0]>$this->_maxWidth || $imageinfo[1]>$this->_maxHeight){
                 unlink($path.$bannerName);
                 throw new Exception('Image dimentions is too big. Allowed dimentions: ' . 
