@@ -3,8 +3,9 @@
 class Totsy_Promotions_Model_Banner extends Mage_Core_Model_Abstract {
     
     public static $path = 'import/banners/';
-    protected $_allowedImageExtentions = array('jpg','gif','png');
-
+    protected $_allowedImageExtentions = array('jpg','jpeg','gif','png');
+    protected $_maxWidth = 940;
+    protected $_maxHeight = 199;
 
     protected function _construct(){
         $this->_init('promotions/banner');
@@ -170,6 +171,25 @@ class Totsy_Promotions_Model_Banner extends Mage_Core_Model_Abstract {
 
             $bannerName = $_FILES['image']['name'];
             $uploader->save($path, $bannerName);
+
+            if (preg_match("/[\s]+/", $bannerName){
+                $bannerNameNew = preg_replace("/[\s]+/", '_', $bannerName);
+                rename($path.$bannerName, $path.$BannerNameNew.$ext);
+                $bannerName = $bannerNameNew;
+                unset($bannerNameNew);
+            }
+            $imageinfo = getimagesize($path.$bannerName);
+            if (!in_array(image_type_to_extension($imageinfo), $this->_allowedImageExtentions)){
+                unlink($path.$bannerName);
+                throw new Exception('Image type is not allowed to upload . Error value: ' . $this->getData('image'));   
+            }
+            
+            if ($imageinfo[0]>$this->_maxWidth || $imageinfo[1]>$this->_maxHeight){
+                unlink($path.$bannerName);
+                throw new Exception('Image dimentions is too big. Allowed dimentions: ' . 
+                    $this->_maxWidth . 'px by '.$this->_maxHeight . 'px.'.
+                    ' Error value: ' . $imageinfo[0] . 'px  by ' . $imageinfo[1].'px');      
+            }
 
             $newBannerName = md5_file($path.$bannerName);
             $ext = '.'.strtolower(substr($bannerName,-3));
