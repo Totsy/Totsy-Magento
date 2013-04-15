@@ -58,6 +58,23 @@ jQuery(document).ready(function() {
     });
 });
 
+Validation.add('validate-cc-cvn-number','Please enter a valid credit card verification number.',function(v){
+    return Validation.get('IsEmpty').test(v) ||  !/[^\d]/.test(v);
+});
+Validation.add('validate-cc-ae-cvn','Please enter a valid 3-digit CVN#.',function(v){
+     var card_type = jQuery("input[name='payment[cc_type]']:checked").val();
+    if('AE' != card_type && 3 != v.length && 'undefined' != typeof Validation.creditCartTypes.get(card_type)){
+        return false;
+    }
+    return true;
+});
+Validation.add('validate-cc-other-cvn','Please enter a valid 4-digit CVN#.',function(v){
+     var card_type = jQuery("input[name='payment[cc_type]']:checked").val();
+    if('AE' == card_type && 4 != v.length && 'undefined' != typeof Validation.creditCartTypes.get(card_type)){
+        return false;
+    }
+    return true;
+});
 </script>
 
 <div>
@@ -206,7 +223,7 @@ jQuery(document).ready(function() {
                 <label for="<?php echo $_code ?>_cc_cid" class="required"><em>*</em><?php echo $this->__('CVN#') ?></label>
                 <div class="input-box">
                     <div class="v-fix">
-                        <input type="text" title="<?php echo $this->__('Card Verification Number') ?>" class="input-text cvv validate-cc-cvn-radio" id="<?php echo $_code ?>_cc_cid" name="payment[cc_cid]" value="<?php echo (($this->__('Card Verification Number')!=="Card Verification Number") ? $this->__('Card Verification Number') : "") ?>" placeholder="<?php echo $this->__('CVN#') ?>" />
+                        <input type="text" title="<?php echo $this->__('Card Verification Number') ?>" class="input-text cvv validate-cc-cvn-radio validate-cc-cvn-number validate-cc-ae-cvn validate-cc-other-cvn" id="<?php echo $_code ?>_cc_cid" name="payment[cc_cid]" value="<?php echo (($this->__('Card Verification Number')!=="Card Verification Number") ? $this->__('Card Verification Number') : "") ?>" placeholder="<?php echo $this->__('CVN#') ?>" />
                     </div>
                 </div>
             </div>
