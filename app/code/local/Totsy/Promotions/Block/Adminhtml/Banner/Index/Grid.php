@@ -74,16 +74,14 @@ class Totsy_Promotions_Block_Adminhtml_Banner_Index_Grid extends Mage_Adminhtml_
             'align'         => 'center',
             'width'         => '100px',
             'index'         => 'start_at',
-            'type'          => 'datetime',
-            'gmtoffset'     => true
+            'renderer'      => 'promotions/adminhtml_widget_grid_column_render_datetime'
         ));   
         $this->addColumn('end_at', array(
             'header'        => Mage::helper('promotions')->__('End Date'),
             'align'         => 'center',
             'width'         => '100px',
             'index'         => 'end_at',
-            'type'          => 'datetime',
-            'gmtoffset'     => true
+            'renderer'      => 'promotions/adminhtml_widget_grid_column_render_datetime'
         ));      
         
       return parent::_prepareColumns();
