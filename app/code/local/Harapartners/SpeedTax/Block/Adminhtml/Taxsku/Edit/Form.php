@@ -4,7 +4,6 @@ class Harapartners_SpeedTax_Block_Adminhtml_Taxsku_Edit_Form
 {
  protected function _prepareForm() {
         $helper = Mage::helper('speedtax');
-        $dateFormat = 'yyyy-MM-dd h:mm a';
 
         $form = new Varien_Data_Form(array(
             'id'        => 'edit_form',
@@ -19,9 +18,10 @@ class Harapartners_SpeedTax_Block_Adminhtml_Taxsku_Edit_Form
             'name'      => 'start_at',
             'required'  => true,
             'time'      => true,
-            'format'    => $dateFormat,
+            'format'    => Varien_Date::DATETIME_INTERNAL_FORMAT,
             'image'     => $this->getSkinUrl('images/grid-cal.gif'),
-            'style'     => 'width: 140px;'
+            'style'     => 'width: 140px;',
+            'note'      => 'Min date for event start date field'
         ));
 
         $fieldset->addField('end_at', 'date', array(
@@ -29,9 +29,10 @@ class Harapartners_SpeedTax_Block_Adminhtml_Taxsku_Edit_Form
             'name'      => 'end_at',
             'required'  => true,
             'time'      => true,
-            'format'    => $dateFormat,
+            'format'    => Varien_Date::DATETIME_INTERNAL_FORMAT,
             'image'     => $this->getSkinUrl('images/grid-cal.gif'),
-            'style'     => 'width: 140px;' 
+            'style'     => 'width: 140px;',
+            'note'      => 'Max date for event start date field'
         ));
 
         $fieldset->addField('ex_events', 'textarea', array(

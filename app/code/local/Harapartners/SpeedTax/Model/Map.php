@@ -3,8 +3,8 @@
 class Harapartners_SpeedTax_Model_Map extends Mage_Core_Model_Abstract {
 
 	public function generateMappingReport($args){
-		extract($args);
 		
+		extract($args);
 
 		$defaultTimezone = date_default_timezone_get();
         $mageTimezone = Mage::getStoreConfig(
@@ -22,15 +22,15 @@ class Harapartners_SpeedTax_Model_Map extends Mage_Core_Model_Abstract {
 		            ->addAttributeToFilter('level', 3)
 		            ->addAttributeToFilter('is_active', '1')
 		            ->addAttributeToFilter('event_start_date', array('from' => $start, 'date' => true ))
-		            ->addAttributeToFilter('event_end_date', array('to' => $end, 'date' => true ))
+		            ->addAttributeToFilter('event_start_date', array('to' => $end, 'date' => true ))
 		            ->addAttributeToSort('event_start_date', 'asc');
 
 		if (!empty($ex_events)){
 			$newEvents->addAttributeToFilter('entity_id', array('nin' => $ex_events));
 		}
 
-		if (empty($newEvents)) {
-			throw new Exception('0 events found for specified date range');
+		if (empty($newEvents) || $newEvents->count()==0) {
+			throw new Exception('0 events/products found for specified date range');
 		}
 
 		$items = array();
