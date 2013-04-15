@@ -12,6 +12,9 @@
  */
 ?>
 <?php if ($this->isShowEditBilling()): ?>
-    <span class="separator">|</span>
-    <a href="<?php echo $this->getEditBillingUrl() ?>"><?php echo $this->__('Edit Billing Info') ?></a>
+    <div class="pull-right">
+        <small>
+            <a href="<?php echo $this->getEditBillingUrl() ?>"><?php echo $this->__('Change Payment') ?></a>
+        </small>
+    </div>
 <?php endif; ?>

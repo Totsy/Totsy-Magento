@@ -61,18 +61,24 @@ class Oro_Sales_Model_Order_Billing
      */
     protected function _replaceBillingAddress(Mage_Sales_Model_Order $order, Mage_Customer_Model_Address $address)
     {
+        $copyFields = array(
+            'firstname',
+            'lastname',
+            'street',
+            'city',
+            'country_id',
+            'region',
+            'region_id',
+            'postcode',
+            'telephone'
+        );
         $billing = $order->getBillingAddress();
         foreach ($address->getData() as $key => $value) {
-            if (in_array($key, array('parent_id'))) {
-                continue;
-            }
-            if ($billing->hasData($key)) {
+            if (in_array($key, $copyFields) && $billing->hasData($key)) {
                 $billing->setDataUsingMethod($key, $value);
             }
         }
         $billing->setEmail($order->getCustomerEmail());
-        $billing->setCustomerId($order->getCustomerId());
-        $billing->setCustomerAddressId($address->getId());
         $billing->save();
     }
 
