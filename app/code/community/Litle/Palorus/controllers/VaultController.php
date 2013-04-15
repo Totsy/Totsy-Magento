@@ -67,7 +67,6 @@ class Litle_Palorus_VaultController extends Mage_Core_Controller_Front_Action
         $auth_info = array(
             'orderId' => $customer->getId(),
             'amount' => $amount,
-            'id'=> '456',
             'orderSource'=>'ecommerce',
             'billToAddress'=>array(
                 'name' => $billingAddress->getFirstname() . ' ' . $billingAddress->getLastname(),
