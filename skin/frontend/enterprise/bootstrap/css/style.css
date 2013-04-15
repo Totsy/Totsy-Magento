@@ -888,6 +888,7 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
   left: 100%;
 }
 
+.carousel-control {display:none;}
 .carousel-control.right {
   right: 15px;
   left: auto;
