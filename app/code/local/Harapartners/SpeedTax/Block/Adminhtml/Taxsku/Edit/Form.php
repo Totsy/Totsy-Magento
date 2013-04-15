@@ -4,6 +4,7 @@ class Harapartners_SpeedTax_Block_Adminhtml_Taxsku_Edit_Form
 {
  protected function _prepareForm() {
         $helper = Mage::helper('speedtax');
+        $dateFormat = 'yyyy-MM-dd h:mm a';
 
         $form = new Varien_Data_Form(array(
             'id'        => 'edit_form',
@@ -18,7 +19,7 @@ class Harapartners_SpeedTax_Block_Adminhtml_Taxsku_Edit_Form
             'name'      => 'start_at',
             'required'  => true,
             'time'      => true,
-            'format'    => Mage::app()->getLocale()->getDateTimeFormat(Mage_Core_Model_Locale::FORMAT_TYPE_SHORT),
+            'format'    => $dateFormat,
             'image'     => $this->getSkinUrl('images/grid-cal.gif'),
             'style'     => 'width: 140px;'
         ));
@@ -28,7 +29,7 @@ class Harapartners_SpeedTax_Block_Adminhtml_Taxsku_Edit_Form
             'name'      => 'end_at',
             'required'  => true,
             'time'      => true,
-            'format'    => Mage::app()->getLocale()->getDateTimeFormat(Mage_Core_Model_Locale::FORMAT_TYPE_SHORT),
+            'format'    => $dateFormat,
             'image'     => $this->getSkinUrl('images/grid-cal.gif'),
             'style'     => 'width: 140px;' 
         ));
