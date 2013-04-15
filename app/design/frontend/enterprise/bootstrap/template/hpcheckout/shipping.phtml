@@ -49,7 +49,8 @@
 	    	          <div class="field half-of-half">
 	    	        	    <label for="shipping:telephone"><em>*&nbsp;</em><?php echo $this->__('telephone') ?></label>
 	    	        	    <input type="text" name="shipping[telephone]" title="<?php echo $this->__('Telephone') ?>" class="input-text telephone" id="shipping:telephone" value="<?php echo $this->htmlEscape($this->getAddress()->getTelephone()) ?>" placeholder="Telephone"/>
-	    	         </div> 
+							<input type="checkbox" name="shipping[save_in_address_book]" value="1" title="<?php echo $this->__('Save Shipping Address') ?>" id="shipping:save_in_address_book" onchange="shipping.setSameAsBilling(false);"<?php if ($this->getAddress()->getSaveInAddressBook()):?> checked="checked"<?php endif;?> class="checkbox" /><?php echo $this->__('Save Shipping Address') ?>
+                          </div>
 	                 <div class="field half-of-half">
                          <label for="shipping:country_id" class="required"><em>*&nbsp;</em><?php echo $this->__('country') ?></label>
 			             <div class="totsy-selective-input-box totsy-selective-input-box-shipping-country country">
@@ -83,7 +84,7 @@
                 checkoutPayment.disableAddress(true, 'hpcheckout-shipping-form');
             }
         
-            jQuery( '#shipping-address-select' ).bind('change', function() { 
+            jQuery( '#shipping-address-select' ).bind('change', function() {
             	//enable shipping address to perform update
             	checkoutPayment.disableAddress(false, "hpcheckout-shipping-form");
                 hpcheckout.switchAddress(this.id);
@@ -96,7 +97,6 @@
             });
         }
                     
-        jQuery( '#billing\\:selected' ).val(jQuery( '#billing-address-select' ).val());
     });
 
     jQuery('#shipping\\:street1, #shipping\\:street2').keyup(function(){
