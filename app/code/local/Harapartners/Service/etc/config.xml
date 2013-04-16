@@ -327,12 +327,6 @@
             </sales_order_creditmemo_refund>
             <sales_order_invoice_pay>
                 <observers>
-                    <!--Harapartners_Recurringmembership-->
-                    <!--recurringmembership>
-                        <type>singleton</type>
-                        <class>recurringmembership/observer</class>
-                        <method>saleOrderInvoicePay</method>
-                    </recurringmembership-->
                     <!--Harapartners_SpeedTax-->
                     <speedtax>
                         <type>singleton</type>
