@@ -92,6 +92,9 @@ class Harapartners_HpCheckout_CheckoutController extends Mage_Checkout_Controlle
                         }
                     }
                     $this->_getHpCheckout()->getCheckout()->setData('payment_data',$data);
+                    if(!isset($data['saved_by_customer']) || $data['saved_by_customer'] != '1') {
+                        $profile->setData('saved_by_customer', 0);
+                    }
                     $this->_getHpCheckout()->getQuote()->getPayment()->importData($data);
                 }
 
