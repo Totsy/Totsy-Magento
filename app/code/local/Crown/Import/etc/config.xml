@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Crown_Import>
-            <version>1.3.2</version>
+            <version>1.3.3</version>
         </Crown_Import>
     </modules>
     <global>
