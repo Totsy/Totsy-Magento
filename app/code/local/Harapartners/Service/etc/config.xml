@@ -268,12 +268,6 @@
                         <class>emailfactory/observer</class>
                         <method>newsletterupdateObserver</method>
                     </sailthru_customer_subscribe>
-                    <!--Harapartners_Unsubcentral-->
-                    <unsubcentral_subscribe_observer>
-                        <type>singleton</type>
-                        <class>unsubcentral/observer</class>
-                        <method>unsubscribeCustomerObserver</method>
-                    </unsubcentral_subscribe_observer>
                 </observers>
             </newsletter_subscriber_save_after>
             <order_cancel_after>
