@@ -1,7 +1,7 @@
-<form id="hpcheckout-shipping-form" action="">
-	    <div id="shipping-new-address-form fields alpha">
-	    	    <div > 
-	    		    <div class="pull-left">
+<form id="hpcheckout-shipping-form" class="well form-horizontal" action="">
+	    <div id="shipping-new-address-form control-group">
+	    	    <div class="controls"> 
+	    		    <div class="span1">
 	    	           <label for="shipping:firstname" class="required"><em>*&nbsp;</em><?php echo $this->__('first name') ?></label>
 	    	     <input type="text" name="shipping[firstname]" title="<?php echo $this->__('First Name') ?>" class="input-text required-entry firstname validate-alpha"  value="<?php echo $this->htmlEscape($this->getFirstName()) ?>" placeholder="<?php echo $this->__('First Name') ?>" id="shipping:firstname" />
 	    	        </div>
@@ -17,18 +17,18 @@
 			            <input type="text" title="<?php echo $this->__('Street Address Line 1') ?>" name="shipping[street][0]" id="shipping:street1" value="<?php echo $this->getAddress()->getStreet(1) ?>" placeholder="<?php echo $this->__('Street Address Line 1') ?>" class="input-text required-entry streetaddress1"/>
 	    	        </div>
 	    	     </div>
-	    	     <div>
-	    	         <div class="pull-left field half-of-half">
+	    	     <div class="controls">
+	    	         <div class=" field half-of-half">
 	                   <label for="shipping:street2">&nbsp;<?php echo $this->__('street address line 2') ?></label>
 	                   <input type="text" title="<?php echo $this->__('Street Address Line 2') ?>" name="shipping[street][1]" id="shipping:street2" value="<?php echo $this->getAddress()->getStreet(2) ?>" placeholder="<?php echo $this->__('Street Address Line 2') ?>" class="input-text streetaddress2" />
 	                 </div>
 	    	     </div>
-	    	     <div> 
-	    	         <div class="pull-left field half-of-half">
+	    	     <div class="controls"> 
+	    	         <div class=" field half-of-half">
 	                     <label for="shipping:city" class="required"><em>*&nbsp;</em><?php echo $this->__('city') ?></label>
 	                     <input type="text" title="<?php echo $this->__('City') ?>" name="shipping[city]" class="input-text required-entry city" value="<?php echo $this->getAddress()->getCity() ?>" placeholder="<?php echo $this->__('City') ?>" id="shipping:city" />
 	                 </div>	
-	    	     	 <div class="pull-left half-of-half">
+	    	     	 <div class=" half-of-half">
 	                     <label for="shipping:region_id" class="required"><em>*&nbsp;</em><?php echo $this->__('state') ?></label>
 		                 <div class="totsy-selective-input-box">
 		                     <select id="shipping:region_id" name="shipping[region_id]" title="<?php echo $this->__('State') ?>" class="validate-select state" style="display:none;" >
@@ -45,7 +45,7 @@
 	                      <input type="text" title="<?php echo $this->__('Zip Code') ?>" name="shipping[postcode]" id="shipping:postcode" class="input-text zip" value="<?php echo $this->getAddress()->getPostcode() ?>" placeholder="<?php echo $this->__('Zip/Postal Code') ?>" />
 	                  </div>
 	              </div>
-	              <div>
+	              <div class="controls"> 
 	    	          <div class="field half-of-half">
 	    	        	    <label for="shipping:telephone"><em>*&nbsp;</em><?php echo $this->__('telephone') ?></label>
 	    	        	    <input type="text" name="shipping[telephone]" title="<?php echo $this->__('Telephone') ?>" class="input-text telephone" id="shipping:telephone" value="<?php echo $this->htmlEscape($this->getAddress()->getTelephone()) ?>" placeholder="Telephone"/>
