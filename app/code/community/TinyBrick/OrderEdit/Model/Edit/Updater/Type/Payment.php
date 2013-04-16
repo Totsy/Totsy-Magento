@@ -100,9 +100,8 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Payment extends TinyBrick_Orde
         }
         #Authorization
         $auth_info = array(
-            'orderId' => $order->getId(),
+            'orderId' => $order->getIncrementId(),
             'amount' => (int) ($order->getGrandTotal() * 100),
-            'id'=> '456',
             'orderSource'=>'ecommerce',
             'billToAddress'=>array(
                 'name' => $billingAddress->getFirstname() . ' ' . $billingAddress->getLastname(),
@@ -160,7 +159,6 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Payment extends TinyBrick_Orde
         $auth_info = array(
             'orderId' => $order->getId(),
             'amount' => (int) ($order->getGrandTotal() * 100),
-            'id'=> '456',
             'orderSource'=>'ecommerce',
             'token' => array(
                 'litleToken' => $payment->getData('token'),
