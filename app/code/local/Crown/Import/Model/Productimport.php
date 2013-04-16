@@ -182,14 +182,7 @@ class Crown_Import_Model_Productimport extends Crown_Import_Model_Import_Abstrac
     public function filterAddConfigurableImagesToSimple() {
         if ( !empty($this->_baseSkus) ) {
             foreach ( $this->_baseSkus as $_baseSku => $childSkusArray ) {
-                Mage::log('====================================');
-                Mage::log('baseSku: ' . $_baseSku);
-
                 foreach ( $childSkusArray as $childSku ) {
-                    Mage::log('productData[ ' . $childSku . ']: ');
-                    Mage::log($this->_productData[$childSku]);
-                    Mage::log('empty image? : ' . empty( $this->_productData[$childSku]['image'] ));
-
                     if ( empty($this->_productData[$childSku]['image']) ) {
                         $this->_productData[$childSku]['image']         = $this->_productData[$_baseSku]['image'];
                         $this->_productData[$childSku]['small_image']   = $this->_productData[$_baseSku]['small_image'];
