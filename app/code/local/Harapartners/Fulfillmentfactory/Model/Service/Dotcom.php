@@ -490,10 +490,10 @@ XML;
                     $transactionSave->addObject($invoice);
                     $transactionSave->addObject($invoice->getOrder());
                     $transactionSave->save();
-                    
+
                     $invoice->capture()
                             ->save();
-                    
+
                     if (!$invoice->getOrder()->getEmailSent()) {
                         $invoice->sendEmail(true)
                             ->setEmailSent(true);
@@ -652,14 +652,12 @@ XML;
             $items = $order->getAllItems();
 
             foreach($items as $item) {
-                $product = Mage::getModel('catalog/product')->load($item->getProductId());
-
                 // only process root order items
-                if ($item->getParentItem() || $product->getIsVirtual()) {
+                if ($item->getParentItem() || $item->getIsVirtual()) {
                     continue;
                 }
 
-                if($product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_BUNDLE) {
+                if($item->getProductType() == Mage_Catalog_Model_Product_Type::TYPE_BUNDLE) {
                     foreach($item->getChildrenItems() as $child) {
                         $quantity = intval($child->getQtyToShip());
                         $sku = substr($child->getSku(), 0, 17);

@@ -75,6 +75,18 @@
 				</voucher_code_email_template>
 			</email>
 		</template>
+
+        <sales>
+            <quote>
+                <item>
+                    <product_attributes>
+                        <entertainment_savings/>
+                        <one_time_purchase/>
+                    </product_attributes>
+                </item>
+            </quote>
+        </sales>
+
 	</global>
 	<frontend>
 		<routers>

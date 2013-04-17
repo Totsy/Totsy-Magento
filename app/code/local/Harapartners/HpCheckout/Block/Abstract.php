@@ -8,6 +8,7 @@ abstract class Harapartners_HpCheckout_Block_Abstract extends Mage_Core_Block_Te
     protected $_countryCollection;
     protected $_regionCollection;
     protected $_addressesCollection;
+    protected $_options;
 
     public function getCustomer()
     {
@@ -16,7 +17,7 @@ abstract class Harapartners_HpCheckout_Block_Abstract extends Mage_Core_Block_Te
         }
         return $this->_customer;
     }
-    
+
     public function getCustomerSession()
     {
         if (empty($this->_customerSession)) {
@@ -64,42 +65,44 @@ abstract class Harapartners_HpCheckout_Block_Abstract extends Mage_Core_Block_Te
         }
         return $this->_regionCollection;
     }
-    
+
     public function customerHasAddresses()
     {
         return count($this->getCustomer()->getAddresses());
     }
-    
+
     public function getAddressesHtmlSelect($type)
     {
         if ($this->isCustomerLoggedIn()) {
-            $options = array();
-            if( $this->customerHasAddresses() ) {
-                $options[] = array( 'value' => '', 'label' => 'New Address' );
-            }
-            foreach ($this->getCustomer()->getAddresses() as $address) {
-
-                $profile = Mage::getModel('paymentfactory/profile')->load($address->getId(), 'address_id');
-                $addressSkipped = false;
-                if($profile->getId() && $profile->getIsDefault()) {
-                    $addressSkipped = true;
-                }
-                if(!$addressSkipped) {
-                    $options[] = array(
-                        'value' => $address->getId(),
-                        'label' => $address->format('oneline')
-                    );
-                }
-            }
-            
-            $addressId = '';
-            if ($type=='billing') {
-                $address = $this->getCustomer()->getPrimaryBillingAddress();
+            if (!empty($this->_options)) {
+                $options = $this->_options;
             } else {
-                $address = $this->getCustomer()->getPrimaryShippingAddress();
+
+                $options = array();
+                if( $this->customerHasAddresses() ) {
+                    $options[] = array( 'value' => '', 'label' => 'New Address' );
+                }
+                foreach ($this->getCustomer()->getAddresses() as $address) {
+                    $profile = Mage::getModel('paymentfactory/profile')->load($address->getId(), 'address_id');
+                    $addressSkipped = false;
+                    if($profile->getId() && $profile->getIsDefault()) {
+                        $addressSkipped = true;
+                    }
+                    if(!$addressSkipped) {
+                        $options[] = array(
+                            'value' => $address->getId(),
+                            'label' => $address->format('oneline')
+                        );
+                    }
+                }
+
+                $this->_options = $options;
             }
-            if ($address) {
-                $addressId = $address->getId();
+
+            if ($type=='billing') {
+                $addressId = $this->getCustomer()->getDefaultBilling();
+            } else {
+                $addressId = $this->getCustomer()->getDefaultShipping();
             }
 
             $select = $this->getLayout()->createBlock('core/html_select')
@@ -113,7 +116,7 @@ abstract class Harapartners_HpCheckout_Block_Abstract extends Mage_Core_Block_Te
         }
         return '';
     }
-    
+
     public function getAddressesJson() {
         $json = array();
         foreach ($this->getCustomer()->getAddresses() as $address) {

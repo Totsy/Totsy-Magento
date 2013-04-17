@@ -102,6 +102,17 @@
                 </observers>
             </controller_front_send_response_before>
         </events>
+
+        <sales>
+            <quote>
+                <item>
+                    <product_attributes>
+                        <is_club_subscription/>
+                    </product_attributes>
+                </item>
+            </quote>
+        </sales>
+
     </global>
 	<default>
 		<Crown_Club>
