@@ -206,9 +206,7 @@
 <script type="text/javascript">
     jQuery(".counter").each(function(){
         var saleTime = new Date(jQuery(this).data('enddate'));
-        var server_now = retrieveServertime();
-        var timezone = -server_now.getTimezoneOffset()/60;
-        var server_now = server_now.toString();
+        var server_now = "<?php echo date('F j, Y, G:i:s' , Mage::app()->getLocale()->storeTimeStamp(Mage::app()->getStore()->getId())); ?>";
         var id = jQuery(this).data('id');
         jQuery(this).countdown({
             until: saleTime,
@@ -216,27 +214,26 @@
             serverSync:retrieveServertime,
             tickInterval: 1,
             alwaysExpire: true,
-            timezone: timezone,
             onExpiry: function( event ){
                 jQuery(this).html("Completed");
                 elem_class = "." + jQuery(this).data('countertype') + '-' + id;
                jQuery(elem_class).remove();
             }
+
         });
     });
 
     function retrieveServertime() {
         var time = null;
         jQuery.ajax({
-            url:"<?php echo Mage::getUrl('ajax/servertime/servertime', array('format' => 'string', '_query' => time())); ?>",
+            url:"<?php echo Mage::getUrl('ajax/servertime/servertime', array('format' => 'string')); ?>",
             async: false,
-            cache: false,
             success: function(servertime) {
                 servertime = jQuery.parseJSON(servertime);
                 time =  servertime.time;
-            },
+            }, 
             error:function () {
-                time = "<?php echo date('F j, Y, G:i:s' , Mage::app()->getLocale()->storeTimeStamp(Mage::app()->getStore()->getId())); ?>";
+                time = "<?php Mage::getModel('core/date')->timestamp(time()); ?>";
             }
         });
         date = new Date(time);

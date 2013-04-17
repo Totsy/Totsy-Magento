@@ -210,9 +210,7 @@
 <script type="text/javascript">
     jQuery(".counter").each(function(){
         var saleTime = new Date(jQuery(this).data('enddate'));
-        var server_now = retrieveServertime();
-        var timezone = -server_now.getTimezoneOffset()/60;
-        var server_now = server_now.toString();
+        var server_now = "<?php echo date('F j, Y, G:i:s' , Mage::app()->getLocale()->storeTimeStamp(Mage::app()->getStore()->getId())); ?>";
         var id = jQuery(this).data('id');
         if(jQuery(this).data('status') == 'earlyaccess'){
             var html = getEarlyAccessTimerHtml(jQuery(this).data('status'), jQuery(this).data('enddate'), server_now);
@@ -224,7 +222,6 @@
             layout: html,
             serverSync: retrieveServertime,
             alwaysExpire: true,
-            timezone: timezone,
             onExpiry: function( event ){
                 jQuery(this).html("Completed");
             }
