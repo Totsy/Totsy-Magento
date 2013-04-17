@@ -154,7 +154,8 @@ class Crown_Import_Model_Urapidflow_Mysql4_Catalog_Product extends Unirgy_RapidF
 					$required = ! empty ( $attr ['is_required'] );
 					$visible = ! empty ( $attr ['is_visible'] );
 					$appliesTo = empty ( $attr ['apply_to'] ) || ! empty ( $attr ['apply_to'] [$typeId] );
-					$inAttrSet = empty ( $attr ['attribute_id'] ) || ! empty ( $attrSetFields [$k] );
+					$inAttrSet = true;
+                    //$inAttrSet = empty ( $attr ['attribute_id'] ) || ! empty ( $attrSetFields [$k] );
 					$selectable = ! empty ( $attr ['frontend_input'] ) && ($attr ['frontend_input'] == 'select' || $attr ['frontend_input'] == 'multiselect' || ! empty ( $attr ['source_model'] ));
 					$dynAttr = $k == 'price' && $dynPrice || $k == 'weight' && $dynWeight;
 					$parentQty = $k == 'stock.qty' && $isParentProduct;
