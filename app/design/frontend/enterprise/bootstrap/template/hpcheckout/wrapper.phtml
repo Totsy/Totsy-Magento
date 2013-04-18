@@ -15,7 +15,7 @@
   </div>
 
   <div class="row">
-    <div id="hpcheckout-payment-wrapper" class="span10 offset1">
+    <div>
       <form class="form-horizontal well">
         <fieldset>
           <legend>Controls Bootstrap supports</legend>
@@ -26,37 +26,37 @@
 				<?php echo $this->getChildHtml( 'login' ) ?>
 			</div>
 		<?php endif ?>
-		<div class="onepage-checkout container row span12">
-		    <div id="hpcheckout-payment-wrapper" class="well review-payment-blocks row-fluid">		
+		<div class="span12">
+		    <div id="hpcheckout-payment-wrapper" class="well row span12">
                 <div class="checkout-content"><?php echo $this->getChildHtml( 'payment' ) ?></div>
 			    <?php echo $this->getChildHtml( 'reward' ); ?>
 		        </div>
-		    <div id="billing-address" class="addresses pull-left well row-fluid span6">
+		    <div id="billing-address" class="pull-left row span6">
 		   		<div class="checkout-headline">
 		    	    <h4 class="legend pull-left"><?php echo $this->__('Billing Address') ?></h4>
 		    	    <?php if ($this->customerHasAddresses()): ?>
-		    	   		<span class="billing-address-select totsy-selective-input-box pull-right">
+		    	   		<span class="billing-address-select totsy-selective-input-box">
 		    	    	        <?php echo $this->getAddressesHtmlSelect('billing') ?>
 		    	    	</span>
 		    	    <?php endif; ?>
 		    	</div>
 		    	<div style="clear:both"></div>
-		    	<div id="hpcheckout-billing-wrapper" class="onepage-address-form row-fluid">
+		    	<div id="hpcheckout-billing-wrapper" class="row-fluid">
 		    	    	<div class="checkout-content"><?php echo $this->getChildHtml('billing') ?></div>
 		    	</div>
          </div>
 		 <?php if( ! $this->getQuote()->isVirtual() ): ?>
-		 <div id="shipping-address" class="addresses pull-right well row span6">
+		 <div id="shipping-address" class="pull-right row span6">
 	         <div class="checkout-headline">
 			     <h4 class="legend pull-left"><?php echo $this->__('Shipping Address') ?></h4>
 			     <?php if ($this->customerHasAddresses()): ?>
-			         <span class="shipping-address-select totsy-selective-input-box pull-right">
+			         <span class="shipping-address-select totsy-selective-input-box">
 			         <?php echo $this->getAddressesHtmlSelect('shipping') ?>
 			         </span>
 			     <?php endif; ?>
 			  </div>
 		      <div style="clear:both"></div>
-		  	  <div id="hpcheckout-shipping-wrapper" class="onepage-address-form row-fluid">
+		  	  <div id="hpcheckout-shipping-wrapper" class="row-fluid">
 	      	      <div class="checkout-content">
 	      	          <?php echo $this->getChildHtml( 'shipping' ) ?>
 	      	      </div>
