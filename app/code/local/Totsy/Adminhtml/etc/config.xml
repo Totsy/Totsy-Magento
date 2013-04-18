@@ -22,6 +22,9 @@
                     <sales_order_view>Totsy_Adminhtml_Block_Sales_Order_View</sales_order_view>
                     <catalog_category_tree>Totsy_Adminhtml_Block_Catalog_Category_Tree</catalog_category_tree>
                     <catalog_category_edit_form>Totsy_Adminhtml_Block_Catalog_Category_Edit_Form</catalog_category_edit_form>
+                    <sales_creditmemo_import_form>Totsy_Adminhtml_Block_Sales_Creditmemo_Import_Form</sales_creditmemo_import_form>
+                    <sales_creditmemo_import>Totsy_Adminhtml_Block_Sales_Creditmemo_Import</sales_creditmemo_import>
+                    <sales_creditmemo>Totsy_Adminhtml_Block_Sales_Creditmemo</sales_creditmemo>
                 </rewrite>
             </adminhtml>
         </blocks>
@@ -29,6 +32,7 @@
             <adminhtml>
                 <rewrite>
                     <sales_order_create>Totsy_Adminhtml_Model_Sales_Order_Create</sales_order_create>
+
                     <system_config_source_order_status>Totsy_Adminhtml_Model_System_Config_Source_Order_Status</system_config_source_order_status>
                 </rewrite>
             </adminhtml>
