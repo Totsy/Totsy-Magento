@@ -29,7 +29,6 @@
  * @see Mage_Page_Block_Template_Links
  */
 ?>
-<?php // echo $this->getLayout()->createBlock('cms/block')-> setBlockId('footer_logout')->toHtml(); ?>
 <footer>
     <div class="container">
     <div class="row">
@@ -84,18 +83,8 @@
     </div>
     </div>
 </footer>
-<script>
-    var jsonArray =  <?php // echo Mage::app()->getLayout()->createBlock('customertracking/background')->getBackroundImagesJsonArray();?>;
-    var keyword   =  jsonArray['keyword'];
-    var imgDir 	  =  jsonArray['dir'];
-    var items     =  jsonArray['images'];
-    if (!!keyword) {
-        var item = imgDir + keyword + ".jpg";
-    } else {
-    var item  =  items[Math.floor(Math.random()*items.length)];
-    }
-    jQuery.backstretch(item);
-</script>
-<script>
-    jQuery('input[placeholder], textarea[placeholder]').placeholder();
+<script type="text/javascript">
+    jQuery(document).ready(function() {
+        jQuery('input[placeholder], textarea[placeholder]').placeholder();
+    });
 </script>
