@@ -253,7 +253,7 @@ class Harapartners_HpCheckout_CheckoutController extends Mage_Checkout_Controlle
     protected function _updateShipping( $shippingData = array() )
     {
         $result = array();
-        if( ! empty( $shippingData ) ) {
+        if( ! empty( $shippingData ) && isset( $shippingData['save'] ) ) {
             $result = $this->_getHpCheckout()->saveShipping( $shippingData );
         }
         return $result;

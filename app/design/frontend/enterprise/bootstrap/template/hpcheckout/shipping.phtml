@@ -49,6 +49,7 @@
 	    	          <div class="field half-of-half">
 	    	        	    <label for="shipping:telephone"><em>*&nbsp;</em><?php echo $this->__('telephone') ?></label>
 	    	        	    <input type="text" name="shipping[telephone]" title="<?php echo $this->__('Telephone') ?>" class="input-text telephone" id="shipping:telephone" value="<?php echo $this->htmlEscape($this->getAddress()->getTelephone()) ?>" placeholder="Telephone"/>
+							<input type="checkbox" name="shipping[save]" id="shipping:save" value="true" /> Save Shipping Address
 	    	         </div> 
 	                 <div class="field half-of-half">
                          <label for="shipping:country_id" class="required"><em>*&nbsp;</em><?php echo $this->__('country') ?></label>
