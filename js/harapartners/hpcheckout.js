@@ -189,7 +189,14 @@ HpCheckout.prototype = {
         var step = hpcheckoutObject.data.forms[formId];
         var blocksToUpdate = hpcheckoutObject.getBlocksToUpdate(step);
         // var postData = hpcheckoutObject.getFormData( step );
-        var postData = hpcheckoutObject.getFormData();
+        if(jQuery("input[name='billing[firstname]']").attr('disabled') !== "disabled")
+        {
+             var postData = hpcheckoutObject.getFormData();
+        }else{
+            checkoutPayment.disableAddress(false, 'hpcheckout-billing-form');
+            var postData = hpcheckoutObject.getFormData();
+            checkoutPayment.disableAddress(true, 'hpcheckout-billing-form');
+        }
         postData += '&currentStep=' + step + '&updatePayment=true';
         hpcheckoutObject.ajaxRequest(postData);
     },
