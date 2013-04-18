@@ -11,10 +11,10 @@
  * If you did not receive a copy of the license and are unable to
  * obtain it through the world-wide-web, please send an email
  * to license@Harapartners.com so we can send you a copy immediately.
- *
+ * 
  */
 ?>
-
+ 
 <?php
 /**
  * Catalog index list template
@@ -23,7 +23,7 @@
  */
 ?>
 <?php
-    $indexDataObj 	= 	$this->getIndexDataObject();
+    $indexDataObj   =   $this->getIndexDataObject();
     $baseUrl 		= 	Mage::getBaseUrl();
     $maxPerSend 	= 	0;
     $timer 			= 	0;
@@ -42,6 +42,7 @@
 ?>
 <?php // include banner if it is enabled
     $bannerActive = Mage::getModel('cms/block')->load('home_banner')->getIsActive();
+
     if ($bannerActive) { ?>
     
 <!-- Carousel
@@ -49,12 +50,10 @@
     <div id="myCarousel" class="carousel slide">
       <div class="carousel-inner">
         <div class="item active">
-          <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('home_banner')->toHtml(); ?>
-          <div class="container">
-            <div class="carousel-caption">
-              <h1>Example headline.</h1>
-            </div>
-          </div>
+          <?php echo $this->getLayout()->createBlock('promotions/block')
+                  ->setBlockId('promotions_banner_view')
+                  ->setBlockPageName('home')
+                  ->toHtml(); ?>
         </div>
       </div>
       <a class="left carousel-control" href="#myCarousel" data-slide="prev">&lsaquo;</a>
@@ -229,7 +228,7 @@
             </ul>
         </section><!-- /#events-live -->
     <?php endif; ?>
-
+ 
     <?php // Upcoming Events ?>
     <?php if (!!$upcomingArray && !empty($upcomingArray)): ?>
         <section id="events-upcoming" class="tedhack events-grid anchorHack">
@@ -270,7 +269,7 @@
             </ul>
         </section><!-- /#events-upcoming -->
     <?php endif; ?>
-
+ 
     </div><!-- /.live-events-container -->
 </div><!-- /.catalog-events-container -->
 <script type="text/javascript">
@@ -289,10 +288,10 @@
                 elem_class = "." + jQuery(this).data('countertype') + '-' + id;
                jQuery(elem_class).remove();
             }
-
+ 
         });
     });
-
+ 
     function retrieveServertime() {
         var time = null;
         jQuery.ajax({
@@ -309,4 +308,9 @@
         date = new Date(time);
         return date;
     }
+    <?php if(!empty($banners)){ ?>
+        jQuery(document).ready(function() {
+            jQuery('.carousel').carousel();
+        });
+    <?php } ?>
 </script>
