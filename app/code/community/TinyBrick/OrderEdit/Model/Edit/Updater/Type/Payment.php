@@ -120,6 +120,11 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Payment extends TinyBrick_Orde
         );
         $initialize = new LitleOnlineRequest();
         $authResponse = $initialize->authorizationRequest($auth_info);
+
+        $litleResponseCode = XMLParser::getNode($authResponse, 'response');
+        if ($litleResponseCode != '000') {
+            return "Error updating payment : Please check the informations you have entered.";
+        }
         $transactionId =  XmlParser::getNode($authResponse,'litleTxnId');
         if($transactionId) {
             $payment->setData('last_trans_id', $transactionId)
