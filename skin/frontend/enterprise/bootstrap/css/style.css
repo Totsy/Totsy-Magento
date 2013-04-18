@@ -80,7 +80,13 @@ body[class*="span"] { /* bootstrap override for edge case of *span* sale title i
 [class*='event'].tedhack .span4 { min-height:438px; }
 [class*='event'].tedhack .span3 { min-height:349px;}
 [class*='event'].tedhack .span2 { }
-[class*='event'].tedhack .span4 img {max-height: 438px;}
+[class*='event'].tedhack .span4 img {
+    max-width: 100%; 
+    height: auto;
+    border: 0;
+    -ms-interpolation-mode: bicubic;
+}
+
 .thumbnail {
     border-radius:0px;
     box-shadow: none;
@@ -913,8 +919,8 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
 .catalog-events-container {margin-top:8px;}
 .banner + .catalog-events-container {margin-top:18px;}
 .page-header img {margin-right: 5px;}
-.catalog-event img {border:1px solid #ddd;}
-.caption {background:#f5f5f5; padding:4px 8px; border:1px solid #eee; min-height: 72px;}
+.catalog-event img {border:0px solid #ddd!important;}
+.caption {background:#f5f5f5; padding:4px 8px; border:0px solid #eee; min-height: 72px;}
 
 /* event tiles */
 .events-grid .thumbnail {
@@ -3391,3 +3397,4 @@ background-position: 0 .5em;
 .totsy #issw #ins-fancybox-tw-proxy .insinset {width:61px;}
 .totsy #issw #ins-fancybox-pn .insinset {width:45px;}
 .totsy #issw #ins-fancybox-em .insinset {width:55px;}
+

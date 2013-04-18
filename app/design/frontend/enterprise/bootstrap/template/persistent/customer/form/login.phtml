@@ -69,6 +69,7 @@
         <div style="text-align:center; margin:0px 0px 13px">
             <a rel="facebook-connect" style="margin:10px 0px; cursor:pointer;" title="<?php echo $this->__('Connect with Facebook') ?>" class="facebook-button" ><img src="<?php echo $this->getSkinUrl() ?>images/facebook_connect_button.png" /></a>
         </div>
+        <div class="sc-button-group"> <button rel="facebook-connect" class="sc-button-facebook sc-button g-opacity-transition facebookButton sc-button-large">Sign in with Facebook</button></div>
         <div class="span4">
             <div class="the-account-login account-login<?php if (!$this->helper('customer')->isRegistrationAllowed()) echo ' login-only' ?>">
                 <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
