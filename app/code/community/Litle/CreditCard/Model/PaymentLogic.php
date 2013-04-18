@@ -640,16 +640,6 @@ class Litle_CreditCard_Model_PaymentLogic extends Mage_Payment_Model_Method_Cc
 	 */
 	public function authorize(Varien_Object $payment, $amount)
 	{
-		// @TODO This is the wrong way to do this.
-		if (preg_match('/sales_order_create/i', $_SERVER['REQUEST_URI']) &&
-				 ($this->getConfigData('paypage_enable') == '1')) {
-			$payment->setStatus('N/A')
-				->setCcTransId('Litle VT')
-				->setLastTransId('Litle VT')
-				->setTransactionId('Litle VT')
-				->setIsTransactionClosed(0)
-				->setCcType('Litle VT');
-		} else {
 			$order = $payment->getOrder();
 			$orderId = $order->getIncrementId();
 			$amountToPass = Mage::helper('creditcard')->formatAmount($amount, true);
@@ -674,7 +664,6 @@ class Litle_CreditCard_Model_PaymentLogic extends Mage_Payment_Model_Method_Cc
 				$hash_temp = array_merge($hash, $payment_hash);
 				$merchantData = $this->merchantData($payment);
 				$hash_in = array_merge($hash_temp, $merchantData);
-
 				$litleRequest = new LitleOnlineRequest();
 				$litleResponse = $litleRequest->authorizationRequest($hash_in);
 				$this->processResponse($payment, $litleResponse);
@@ -686,8 +675,6 @@ class Litle_CreditCard_Model_PaymentLogic extends Mage_Payment_Model_Method_Cc
 					$this->_saveToken($payment, $litleResponse, $customerAddressId);
 				}
 			}
-		}
-
 		return $this;
 	}
 
