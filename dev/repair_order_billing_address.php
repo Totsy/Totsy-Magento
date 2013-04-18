@@ -25,7 +25,6 @@ if ($order->getId() != $orderAddress->getParentId()) {
         if ($address->getId() == $otherOrder->getData('shipping_address_id') - 1) {
             echo "Selected billing address ", $address->getId(), " as the other order's real billing address", PHP_EOL;
             $otherOrder->setData('billing_address_id', $address->getId());
-            print_r($otherOrder->getData());
             $otherOrder->save();
         } else {
             echo "Repairing the corrupted billing address and the link back to the original order", PHP_EOL;
@@ -33,9 +32,15 @@ if ($order->getId() != $orderAddress->getParentId()) {
             copyQuoteAddressIntoOrderAddress($quoteBillingAddress, $address);
             $address->setData('parent_id', $order->getId());
             $address->setData('customer_address_id', null);
-            print_r($address->getData());
             $address->save();
         }
+    }
+
+    $order->getResource()->updateGridRecords($order->getId());
+    $invoices = $order->getInvoiceCollection();
+    foreach ($invoices as $invoice) {
+        $invoice->getResource()->updateGridRecords($invoice->getId());
+        echo $invoice->getIncrementId(), PHP_EOL;
     }
 
     echo "Repair operation completed on order ", $order->getIncrementId(), " that affected other order ", $otherOrder->getIncrementId(), PHP_EOL;
