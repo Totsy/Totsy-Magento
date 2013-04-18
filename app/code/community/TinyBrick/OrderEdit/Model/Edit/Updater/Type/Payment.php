@@ -101,7 +101,7 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Payment extends TinyBrick_Orde
         #Authorization
         $auth_info = array(
             'orderId' => $order->getIncrementId(),
-            'amount' => (int) ($order->getGrandTotal() * 100),
+            'amount' => 100,
             'orderSource'=>'ecommerce',
             'billToAddress'=>array(
                 'name' => $billingAddress->getFirstname() . ' ' . $billingAddress->getLastname(),
@@ -126,6 +126,13 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Payment extends TinyBrick_Orde
             return false;
         }
         $transactionId =  XmlParser::getNode($authResponse,'litleTxnId');
+
+        $auth_reversalinfos = array(
+            'litleTxnId' => $transactionId,
+            'amount' => 100
+        );
+        $initialize->authReversalRequest($auth_reversalinfos);
+
         if($transactionId) {
             $payment->setData('last_trans_id', $transactionId)
                     ->setData('cc_trans_id', $transactionId);

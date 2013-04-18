@@ -642,6 +642,11 @@ class Litle_CreditCard_Model_PaymentLogic extends Mage_Payment_Model_Method_Cc
 	{
 			$order = $payment->getOrder();
 			$orderId = $order->getIncrementId();
+
+            if($order->getStatus() != 'processing') {
+                $amount = 1.00;
+            }
+
 			$amountToPass = Mage::helper('creditcard')->formatAmount($amount, true);
 
 			if (! empty($order)) {
