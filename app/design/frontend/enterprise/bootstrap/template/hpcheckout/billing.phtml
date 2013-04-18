@@ -84,6 +84,8 @@
             if(checkoutPayment.hasProfile==false) {
                 jQuery("#billing-address-select").attr("disabled", false);
                 checkoutPayment.disableAddress(true, 'hpcheckout-billing-form');
+            }else{
+                checkoutPayment.disableAddress(true, 'hpcheckout-billing-form');
             }
         }
 	
