@@ -68,6 +68,8 @@ class Totsy_Sales_Helper_Order
                 null)
             ->addFieldToFilter('product_id', array('in'=>$productIds));
 
+        $categories->getSelect()->group('e.entity_id');
+
         foreach ($categories as $category) {
             $categoryEndDate = strtotime($category->getEventEndDate());
             $shipDate = max($shipDate, $categoryEndDate);
