@@ -21,7 +21,7 @@ if(count($fulfillmentTypes) > 1) {
 }
 ?>
 
-<div class="form-list .one-page-payment" id="payment_form_<?php echo $_code ?>">
+<div class="form-list one-page-payment" id="payment_form_<?php echo $_code ?>">
 <?php $customerId = Mage::getSingleton('customer/session')->getCustomerId(); ?>
 <?php $profiles = $this->getProfilesByCustomerId( $customerId ) ?>
 <?php
@@ -62,14 +62,14 @@ jQuery(document).ready(function() {
 
 <div>
     <div>
-    	<div>
+    	<div class="control-group">
         	<div class="hpcheckout-payment-title">
         	    <h4 class="legend">Your payment methods</h4>
         	</div>
         	<!-- part A of a hack for the radio button error message-->
         	<div>
         	</div>
-        	<div class="cc_types use-new-card-wrapper input-box validation-error pull-left">
+        	<div class="cc_types use-new-card-wrapper controls validation-error pull-left">
         		<?php $_ccType = $this->getInfoData('cc_type') ?>
         		 <div id="<?php echo $_code ?>_cc_type">
         		 <?php $i=0; ?>
@@ -110,8 +110,8 @@ jQuery(document).ready(function() {
         <div style="clear:both"></div>
         <?php if($profiles && $profilesCounter > 0 ) { ?>
                 <div class="pull-left" id="use-card-method">
-                    <div id="cybersource-use-card-method ">
-                    <table class="saved_card">
+                    <div id="cybersource-use-card-method">
+                    <table class="saved_card table controls">
                     	<tr>
                         	<th></th>
                         	<th></th>
@@ -179,7 +179,7 @@ jQuery(document).ready(function() {
                 </div>
     </div>
     <div id="credits_and_card_save">
-        <div class="cc_save_card use-new-card-wrapper cc_info">
+        <div class="cc_save_card use-new-card-wrapper cc_info controls">
             <div>
                 <input type="checkbox" value="1" name="payment[saved_by_customer]" checked="checked" id="<?php echo $_code ?>_saved" />
             </div>
@@ -193,7 +193,7 @@ jQuery(document).ready(function() {
 <div id="cc_data">
     <div class="pull-left">
         <div>
-            <div class="pull-left cc_num use-new-card-wrapper cc_info">
+            <div class="pull-left cc_num use-new-card-wrapper cc_info controls">
                 <div class="input-box">
                     <input type="text" id="<?php echo $_code ?>_cc_number" name="payment[cc_number]" title="<?php echo $this->__('Credit Card Number') ?>" class="input-text validate-cc-number validate-cc-type-radio" value="<?php echo (($this->__('Credit Card Number')!=='Credit Card Number') ? $this->__('Credit Card Number') : "") ?>" placeholder="<?php echo $this->__('Credit Card Number') ?>" />
                 </div>
@@ -202,7 +202,7 @@ jQuery(document).ready(function() {
         <div style="clear:both"></div>
         <div>
             <?php if ($this->hasVerification()): ?>
-            <div class="cc_cvn pull-left use-new-card-wrapper cc_info">
+            <div class="cc_cvn pull-left use-new-card-wrapper cc_info controls">
                 <label for="<?php echo $_code ?>_cc_cid" class="required"><em>*</em><?php echo $this->__('CVN#') ?></label>
                 <div class="input-box">
                     <div class="v-fix">
@@ -213,7 +213,7 @@ jQuery(document).ready(function() {
             <?php endif; ?>
             <div id="add_payment_save_card">
             </div>
-            <div class="cc_exp pull-right use-new-card-wrapper cc_info">
+            <div class="cc_exp pull-right use-new-card-wrapper cc_info controls">
                 <div class="pull-left">
                     <div for="<?php echo $_code ?>_expiration" class="lbl"><em>*</em><?php echo $this->__('Exp.') ?></div>
                     <div class="pull-left">
