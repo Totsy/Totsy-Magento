@@ -150,7 +150,7 @@ HpCheckout.prototype = {
                     shippingRegionUpdater.update();
                 }
                 jQuery('input, select', '#' + hpcheckout.data.blocks[blockType].formId).each(function() {
-                    if(jQuery(this).attr('id').replace(blockType + ':', '')!='selected')
+                    if(jQuery(this).attr('id').replace(blockType + ':', '')!='selected' && jQuery(this).attr('id').replace(blockType + ':', '')!='save_in_address_book')
                         jQuery(this).val(hpcheckoutAddresses[clickedAddress.val()][jQuery(this).attr('id').replace(blockType + ':', '')]);
                 });
                 if (blockType == 'shipping') {

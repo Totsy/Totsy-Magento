@@ -49,7 +49,7 @@
 	    	          <div class="field half-of-half">
 	    	        	    <label for="shipping:telephone"><em>*&nbsp;</em><?php echo $this->__('telephone') ?></label>
 	    	        	    <input type="text" name="shipping[telephone]" title="<?php echo $this->__('Telephone') ?>" class="input-text telephone" id="shipping:telephone" value="<?php echo $this->htmlEscape($this->getAddress()->getTelephone()) ?>" placeholder="Telephone"/>
-							<input type="checkbox" name="shipping[save_in_address_book]" value="1" title="<?php echo $this->__('Save Shipping Address') ?>" id="shipping:save_in_address_book" onchange="shipping.setSameAsBilling(false);"<?php if ($this->getAddress()->getSaveInAddressBook()):?> checked="checked"<?php endif;?> class="checkbox" /><?php echo $this->__('Save Shipping Address') ?>
+				    <input type="checkbox" name="shipping[save_in_address_book]" value="1" title="<?php echo $this->__('Save Shipping Address') ?>" id="shipping:save_in_address_book" <?php if ($this->getAddress()->getSaveInAddressBook()):?> checked="checked"<?php endif;?> class="checkbox" /><?php echo $this->__('Save Shipping Address') ?>
                           </div>
 	                 <div class="field half-of-half">
                          <label for="shipping:country_id" class="required"><em>*&nbsp;</em><?php echo $this->__('country') ?></label>
@@ -76,6 +76,13 @@
         	jQuery('#shipping\\:region').val(jQuery("#shipping:region_id option:selected").text());
 			hpcheckout.update(true); 
 		}); 
+                
+        jQuery( '#shipping\\:save_in_address_book' ).change( function() {
+            if(jQuery(this).attr("checked")=="checked")
+                jQuery(this).val(1);
+            else
+                jQuery(this).val(0);
+        });
 		   
         if( jQuery( '#shipping-address-select' ).length > 0 ) {
         	

@@ -158,7 +158,7 @@ class Harapartners_HpCheckout_Model_Checkout
             }
         }
         $address->setSameAsBilling($data['selected']=="-1"?1:0);
-        $address->setSaveInAddressBook(empty($data['save_in_address_book']) ? 0 : 1);
+        $address['save_in_address_book']=empty($data['save_in_address_book']) ? 0 : 1;
         $address->implodeStreetAddress();
         $address->setCollectShippingRates(true);
 
