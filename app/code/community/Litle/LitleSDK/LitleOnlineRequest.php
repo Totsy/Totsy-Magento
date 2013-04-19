@@ -338,7 +338,7 @@ class LitleOnlineRequest
 
 	private function processRequest($hash_out, $hash_in, $type, $choice1 = null, $choice2 = null)
 	{
-        $hash_in['id'] = time();
+        $hash_in['id'] = microtime();
 		$hash_config = LitleOnlineRequest::overideconfig($hash_in);
 		$hash = LitleOnlineRequest::getOptionalAttributes($hash_in,$hash_out);
 		Checker::choice($choice1);
