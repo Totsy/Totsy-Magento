@@ -367,6 +367,7 @@ class Mage_Customer_AccountController extends Mage_Core_Controller_Front_Action
                         //$url = $this->_welcomeCustomer($customer);    
                         if (Mage::getSingleton('core/session')->hasWebsiteRestrictionAfterLoginUrl()){
                             $this->_redirect(
+                                substr(Mage::getBaseUrl(), 1, -1).
                                 Mage::getSingleton('core/session')->getWebsiteRestrictionAfterLoginUrl()
                             );
                             return;
