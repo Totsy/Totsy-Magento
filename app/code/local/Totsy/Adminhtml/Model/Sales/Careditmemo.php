@@ -46,9 +46,26 @@ class Totsy_Adminhtml_Model_Sales_Creditmemo extends Mage_Core_Model_Abstract {
     }
 
     protected function _processFileData(){
+
         $fh = fopen(Mage::getBaseDir('tmp').$this->_fileName,'r');
-        while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
+        if (!$fh){
+            throw new Exception('Canot open uploaded file.');     
         }
         
+        while (($row = fgetcsv($fh)) !== FALSE) {
+            $this->_applyCredits($row);
+        }
+
+        fclose($fh);
+    }
+
+    protected function _applyCredits($row){
+        $customer = Mage::getModel('customer/customer')
+            ->loadByEmail($row[0]);
+
+        if (!$customer->hasData()){
+            return;
+        }
+
     }
 }
