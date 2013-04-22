@@ -14,10 +14,8 @@ class Totsy_Adminhtml_Sales_CreditmemoController extends Mage_Adminhtml_Sales_Cr
     public function importcsvAction(){
 		try {
 
-            $bannerModel = Mage::getModel('promotions/banner');
-            $bannerModel->importData($data)->save();
-
-            Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('promotions')->__('Save success.'));
+            Mage::getModel('adminhtml/sales_creditmemo')->import()->save();
+            Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('sales')->__('Save success.'));
 
             if ($this->getRequest()->getParam('back')) {
                 $this->_redirect('*/*/import',);

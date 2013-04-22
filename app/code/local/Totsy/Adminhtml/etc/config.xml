@@ -32,7 +32,7 @@
             <adminhtml>
                 <rewrite>
                     <sales_order_create>Totsy_Adminhtml_Model_Sales_Order_Create</sales_order_create>
-
+                    <sales_creditmemo>Totsy_Adminhtml_Model_Sales_Creditmemo</sales_creditmemo>
                     <system_config_source_order_status>Totsy_Adminhtml_Model_System_Config_Source_Order_Status</system_config_source_order_status>
                 </rewrite>
             </adminhtml>
