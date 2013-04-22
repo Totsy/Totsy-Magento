@@ -1,29 +1,30 @@
     <form id="hpcheckout-shipping-form" class="well" action="">
-        <div id="shipping-new-address-form control-group">
+        <div id="shipping-new-address-form">
             <div class="row">
-                <div class="span3 controls">
+                <div class="span3">
                     <input type="text" name="shipping[firstname]" title="<?php echo $this->__('First Name') ?>" class="input-text required-entry validate-alpha" value="<?php echo $this->htmlEscape($this->getFirstName()) ?>" placeholder="<?php echo $this->__('First Name') ?>" id="shipping:firstname">
                 </div>
-                <div class="span3 controls">
+                <div class="span3">
                     <input type="text" name="shipping[lastname]" title="<?php echo $this->__('Last Name') ?>" class="input-text required-entry validate-alpha" value="<?php echo $this->htmlEscape($this->getLastName()) ?>" placeholder="<?php echo $this->__('Last Name') ?>" id="shipping:lastname">
                     <input type="hidden" name="shipping[email]" id="shipping:email" value="<?php echo $this->getCustomer()->getEmail() ?>"> <input type="hidden" name="shipping[selected]" id="shipping:selected">
                 </div>
             </div>
             <div class="row">
-                <div class="span6 controls">
+                <div class="span6">
                     <input type="text" title="<?php echo $this->__('Street Address Line 1') ?>" name="shipping[street][0]" id="shipping:street1" value="<?php echo $this->getAddress()->getStreet(1) ?>" placeholder="<?php echo $this->__('Street Address Line 1') ?>">
                 </div>
             </div>
             <div class="row">
-                <div class="span6 controls">
+                <div class="span6">
                     <input type="text" title="<?php echo $this->__('Street Address Line 2') ?>" name="shipping[street][1]" id="shipping:street2" value="<?php echo $this->getAddress()->getStreet(2) ?>" placeholder="<?php echo $this->__('Street Address Line 2') ?>">
+                </div>    
             </div>
             <div class="row">
-                <div class="span3 controls">
+                <div class="span3">
                     <input type="text" title="<?php echo $this->__('City') ?>" name="shipping[city]" class="input-text required-entry" value="<?php echo $this->getAddress()->getCity() ?>" placeholder="<?php echo $this->__('City') ?>" id="shipping:city">
                 </div>
-                <div class="span1 controls">
-                    <select id="shipping:region_id" name="shipping[region_id]" title="<?php echo $this->__('State') ?>" class="validate-select state">
+                <div class="span1">
+                    <select id="shipping:region_id" name="shipping[region_id]" title="<?php echo $this->__('State') ?>" class="validate-select">
                             <option value="">
                                 <?php echo $this->__('Please select state') ?>
                             </option>
@@ -32,17 +33,17 @@
                 <script type="text/javascript">
                 $('shipping:region_id').setAttribute('defaultValue',  "<?php echo $this->getAddress()->getRegionId() ?>");
                     </script> <input type="text" id="shipping:region" name="shipping[region]" value="<?php echo $this->htmlEscape($this->getAddress()->getRegion()) ?>" title="<?php echo $this->__('State/Province') ?>" class="input-text hidden-state" style="display:none;">
-                <div class="span2 controls">
+                <div class="span2">
                     <input type="text" title="<?php echo $this->__('Zip Code') ?>" name="shipping[postcode]" id="shipping:postcode" class="input-text" value="<?php echo $this->getAddress()->getPostcode() ?>" placeholder="<?php echo $this->__('Zip/Postal Code') ?>">
                 </div>
             </div>
             <div class="row">
-                <div class="controls span6">
+                <div class="span6">
                     <input type="text" name="shipping[telephone]" title="<?php echo $this->__('Telephone') ?>" class="input-text telephone" id="shipping:telephone" value="<?php echo $this->htmlEscape($this->getAddress()->getTelephone()) ?>" placeholder="Telephone">
-                    <div class="totsy-selective-input-box totsy-selective-input-box-shipping-country country">
-                        <?php echo $this->getCountryHtmlSelect('shipping') ?>
-                    </div>
                 </div>
+            </div>
+            <div style="display:none">
+                <?php echo $this->getCountryHtmlSelect('shipping') ?>
             </div>
     </form>
     <div class="spinner" style="display: none;"><img src="<?php echo $this->getSkinUrl( 'images/ajax-loader.gif' ) ?>"></div><script type="text/javascript">

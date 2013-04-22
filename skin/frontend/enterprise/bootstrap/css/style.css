@@ -418,8 +418,11 @@ body.customer-account-entry .btn.btn-large {
     width: 300px;
     text-align: left;
     }
+    
+    input[type="text"], select, .uneditable-input {
+        width: 100%;
+    } 
 }
-
  
 /* Portrait tablet to landscape and desktop */
 @media (min-width: 768px) and (max-width: 979px) { 
@@ -438,6 +441,10 @@ body.customer-account-entry .btn.btn-large {
     width: 300px;
     text-align: left;
     }
+    
+    input[type="text"], select, .uneditable-input {
+        width: 100%;
+    } 
 }
  
 /* Landscape phone to portrait tablet */
@@ -454,9 +461,9 @@ body.customer-account-entry .btn.btn-large {
     display: inline-block;
     margin-top: -210px;
     vertical-align: middle;
-    width: 300px;
+    width: 200px;
     text-align: left;
-    }
+    }    
 }
  
 /* Landscape phones and down */
@@ -464,7 +471,7 @@ body.customer-account-entry .btn.btn-large {
 #mainContent {
     margin:0 auto;
     /* pull out for RWD */ /* width:940px; */
-    background:#fff; 
+    background:#000; 
     padding:0px 10px 0px; /* @fixednav: top padding magic number BS; @stickyfooter: bottom padding magic number BS */
     overflow: auto; /* @stickyfooter */
     }
@@ -489,186 +496,6 @@ body.customer-account-entry .btn.btn-large {
     .use-new-card-wrapper {
     display:none;
 }
-
-/*
-    #use-card-method {
-        width: auto;
-        height: auto;
-    }
-    
-    .card-type {
-        width: auto; 
-    }
-    
-    .card-name {
-        width: auto;
-    }
-    
-    .billing-address {
-        width: auto;
-    }
-    
-    .card-expdate {
-        width: auto;
-    }
-    
-    .saved_card {
-        line-height: auto;
-    }
-    
-    .saved_card th {
-        text-align:left;
-    }
-    
-    #rewards_points {
-        float:right;
-    }
-    
-    #reward_placer {
-        margin-top: 10%;
-        margin-bottom: 10%;
-    }
-    
-    .saved_card span:not(.cc){
-        margin-left: 15px;
-        margin-right: 15px;
-        margin-bottom: 10px;
-    }
-    
-    .saved_card input[type="radio"] {
-        margin:10px 0px 10px 0;
-        position: relative;
-    }
-
-    .checkout-reward {
-        width:230px;
-        padding: 0px 0px 0px 0px;
-    }
-
-    .onepage-checkout {
-        margin-left: 0px;
-    }
-    
-    #hpcheckout-shipping-method-wrapper {
-        margin-left: 0px;
-    }
-    
-    #hpcheckout-payment-form ul {
-        margin: 0px;
-    }
-    
-    #hpcheckout-payment-form {
-        margin: 0px;
-    }
-    
-    #hpcheckout-review-wrapper {
-        margin-left: 0pxt;
-    }
-    
-    .paypal-express-review #hpcheckout-review-wrapper {
-        margin-left: 0px;
-        width: 400px; 
-    }
-    #payment_form_paypal_express .form-alt {
-        font-weight: bold;
-        padding: 10px 0;
-    }
-    .nominal-checkout #payment_form_paypal_express .form-alt {
-        display: none;
-    }
-    #hpcheckout-payment-wrapper {
-        margin-left: 0px;
-    }
-    
-    .onepage-blocks {
-        padding: 10px;
-        margin-left:0pxt;
-        width:100px;
-    }
-    
-    .onepage-checkout .addresses {
-        width:100px;
-    }
-    
-    .onepage-checkout .review-payment-blocks {
-        width:480px;
-    }
-    
-    .btn-proceed-checkout {
-        float:right;
-        margin-left: 10px;
-    }
-    
-    .onepage-address-form label {
-        display: none;
-        font-weight: bold;
-    }
-    
-    #hpcheckout-payment-form label{
-        font-weight: bold;
-        text-transform:lowercase;
-    }
-    
-    #payment_form_paypal_express label {
-        display: block !important;
-    }
-    
-    .what-is-paypal-link {
-        float:left;
-        color: #000;
-        font-size: 11px;
-        text-decoration:underline
-    }
-    
-    #use-reward-point {
-        margin-top: 5px;
-        text-align: center;
-        cursor: pointer;
-    }
-    
-    .ship-to-billing {
-        margin-left:25px;
-    }
-    
-    .cart-collaterals-buttons {
-        margin-top:10px;
-    }
-    
-    .cart-form-container .qty {
-        width: auto;
-    }
-    
-    .remove-button {
-        width: auto;
-    }
-    
-    .cart-prod-thumb {
-        float:left;
-        padding-right: 10px;
-    }
-    
-    .btn-continue {
-        margin: 0px 10px 10px 10px;
-    }
-    
-    .cart-coupon {
-        margin:0px;
-    }
-    
-    .btn-cart-checkout {
-        float:right;
-        width: 330px ;
-    }
-    
-    .cart .savings {
-        float: right;
-        width:320px;
-        color: rgba(210,47,42,0.78);
-        font-size: 14px; font-weight: 500;
-        line-height: 1.15;
-        text-align: right;
-    }
-    */
     
     }
     .logged-out ~ #mainContent {
@@ -1087,7 +914,6 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
     margin:10px 0px 10px 0;
     position: relative;
 }
->>>>>>> d0ce87adb68c44e2172b3c7d279b5313f5082b99
 /**
  * @Home page
  */

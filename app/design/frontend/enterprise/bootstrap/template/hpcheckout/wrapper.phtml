@@ -22,27 +22,31 @@
 				<?php echo $this->getChildHtml( 'login' ) ?>
 			</div>
 		<?php endif ?>
-		    <div id="hpcheckout-payment-wrapper" class="row span12 pull-left">
-                <div class="checkout-content"><?php echo $this->getChildHtml( 'payment' ) ?></div>
+		    <div id="hpcheckout-payment-wrapper" class="row  pull-left">
+                <div class="checkout-content span12"><?php echo $this->getChildHtml( 'payment' ) ?>
+                </div>
+                <div>
 			    <?php echo $this->getChildHtml( 'reward' ); ?>
 		        </div>
 		  </div>
-          <div id="billing-address" class="row span6">
-              <div class="checkout-headline">
-                  <h4 class="legend pull-left"><?php echo $this->__('Billing Address') ?></h4>
-                  <?php if ($this->customerHasAddresses()): ?>
-                 		<span class="billing-address-select totsy-selective-input-box">
-                  	        <?php echo $this->getAddressesHtmlSelect('billing') ?>
-                  	</span>
-                  <?php endif; ?>
-              </div>
-              <div style="clear:both"></div>
-              <div id="hpcheckout-billing-wrapper" class="row">
-                  	<div class="checkout-content"><?php echo $this->getChildHtml('billing') ?></div>
+          <div id="billing-address">
+              <div class="span6">
+                  <div class="checkout-headline">
+                      <h4 class="legend pull-left"><?php echo $this->__('Billing Address') ?></h4>
+                      <?php if ($this->customerHasAddresses()): ?>
+                        <span class="billing-address-select">
+                            <?php echo $this->getAddressesHtmlSelect('billing') ?>
+                      	</span>
+                      <?php endif; ?>
+                  </div>
+                  <div style="clear:both"></div>
+                  <div id="hpcheckout-billing-wrapper" class="row">
+                      	<div class="checkout-content"><?php echo $this->getChildHtml('billing') ?></div>
+                  </div>
               </div>
            </div>
 		 <?php if( ! $this->getQuote()->isVirtual() ): ?>
-		 <div id="shipping-address" class="row span6 pull-right">
+		 <div id="shipping-address" class="span6 pull-right">
 	         <div class="checkout-headline">
 			     <h4 class="legend pull-left"><?php echo $this->__('Shipping Address') ?></h4>
 			     <?php if ($this->customerHasAddresses()): ?>
@@ -67,11 +71,12 @@
             <div class="checkout-content"><?php echo $this->getChildHtml('shipping_method') ?></div>
         </div>
 		<?php endif ?>
+		</div>
 		<div style="clear:both"></div>
 		  <div id="hpcheckout-review-wrapper"<?php if(!$quote->isNominal()): ?> class="well review-payment-blocks"<?php endif;?>>
 		  	<div class="checkout-content"><?php echo $this->getChildHtml( 'review' ) ?></div>
 		  </div>
-		</div>
+    </div>
 </div>
 </section>
 		<?php echo $this->getChildHtml( 'script' ) ?>
