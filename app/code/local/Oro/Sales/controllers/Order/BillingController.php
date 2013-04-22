@@ -44,7 +44,7 @@ class Oro_Sales_Order_BillingController extends Mage_Core_Controller_Front_Actio
         }
 
         /* @var $order Crown_Club_Model_Sales_Order */
-        $order   = Mage::getModel('sales/order')->load($orderId);
+        $order   = Mage::getModel('orderedit/order')->load($orderId);
         if (!$order->getId()) {
             return false;
         }
@@ -93,7 +93,8 @@ class Oro_Sales_Order_BillingController extends Mage_Core_Controller_Front_Actio
 
             return;
         }
-
+        $customer = Mage::getModel('customer/customer')->load($order->getCustomerId());
+        $order->setCustomer($customer);
         $data     = $this->getRequest()->getParams();
         /* @var $session Totsy_Customer_Model_Session */
         $session  = Mage::getSingleton('catalog/session');
@@ -106,7 +107,6 @@ class Oro_Sales_Order_BillingController extends Mage_Core_Controller_Front_Actio
 
             return;
         }
-
         $redirect = '*/*/edit';
         try {
             $invoice  = $billing->invoice($order);
@@ -120,4 +120,5 @@ class Oro_Sales_Order_BillingController extends Mage_Core_Controller_Front_Actio
 
         $this->_redirect($redirect, array('order_id' => $order->getId()));
     }
+
 }
