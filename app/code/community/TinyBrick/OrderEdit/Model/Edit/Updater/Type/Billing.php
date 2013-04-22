@@ -53,6 +53,7 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Billing extends TinyBrick_Orde
             return false;
         }
         try{
+            $data['customer_address_id'] = $customerAddressId;
             $billing->addData($data)
                     ->save();
             $order->setData('billing_address_id', $billing->getId())
