@@ -8,15 +8,11 @@
     $serverTime = Mage::getModel('core/date')->timestamp() * 1000;
     $quote = Mage::getSingleton('checkout/session')->getQuote();
 ?>
-
-<section id="hpcheckout-wrapper"<?php if($quote->isNominal()): ?> class="nominal-checkout"<?php endif; ?>>
+<section id="hpcheckout-wrapper"  class="container-fluid <?php if ($quote->isNominal()): ?> 'nominal-checkout'<?php endif; ?>">
   <div class="page-header">
     <h1><?php echo $this->__('Checkout') ?></h1>
   </div>
-
   <div class="row">
-    <div>
-      <form class="form-horizontal well">
         <fieldset>
           <legend>Controls Bootstrap supports</legend>
           <div id="error-message-wrapper"></div>
@@ -26,27 +22,27 @@
 				<?php echo $this->getChildHtml( 'login' ) ?>
 			</div>
 		<?php endif ?>
-		<div class="span12">
-		    <div id="hpcheckout-payment-wrapper" class="well row span12">
+		    <div id="hpcheckout-payment-wrapper" class="row span12 pull-left">
                 <div class="checkout-content"><?php echo $this->getChildHtml( 'payment' ) ?></div>
 			    <?php echo $this->getChildHtml( 'reward' ); ?>
 		        </div>
-		    <div id="billing-address" class="pull-left row span6">
-		   		<div class="checkout-headline">
-		    	    <h4 class="legend pull-left"><?php echo $this->__('Billing Address') ?></h4>
-		    	    <?php if ($this->customerHasAddresses()): ?>
-		    	   		<span class="billing-address-select totsy-selective-input-box">
-		    	    	        <?php echo $this->getAddressesHtmlSelect('billing') ?>
-		    	    	</span>
-		    	    <?php endif; ?>
-		    	</div>
-		    	<div style="clear:both"></div>
-		    	<div id="hpcheckout-billing-wrapper" class="row-fluid">
-		    	    	<div class="checkout-content"><?php echo $this->getChildHtml('billing') ?></div>
-		    	</div>
-         </div>
+		  </div>
+          <div id="billing-address" class="row span6">
+              <div class="checkout-headline">
+                  <h4 class="legend pull-left"><?php echo $this->__('Billing Address') ?></h4>
+                  <?php if ($this->customerHasAddresses()): ?>
+                 		<span class="billing-address-select totsy-selective-input-box">
+                  	        <?php echo $this->getAddressesHtmlSelect('billing') ?>
+                  	</span>
+                  <?php endif; ?>
+              </div>
+              <div style="clear:both"></div>
+              <div id="hpcheckout-billing-wrapper" class="row">
+                  	<div class="checkout-content"><?php echo $this->getChildHtml('billing') ?></div>
+              </div>
+           </div>
 		 <?php if( ! $this->getQuote()->isVirtual() ): ?>
-		 <div id="shipping-address" class="pull-right row span6">
+		 <div id="shipping-address" class="row span6 pull-right">
 	         <div class="checkout-headline">
 			     <h4 class="legend pull-left"><?php echo $this->__('Shipping Address') ?></h4>
 			     <?php if ($this->customerHasAddresses()): ?>
@@ -56,7 +52,7 @@
 			     <?php endif; ?>
 			  </div>
 		      <div style="clear:both"></div>
-		  	  <div id="hpcheckout-shipping-wrapper" class="row-fluid">
+		  	  <div id="hpcheckout-shipping-wrapper" class="row">
 	      	      <div class="checkout-content">
 	      	          <?php echo $this->getChildHtml( 'shipping' ) ?>
 	      	      </div>
@@ -65,23 +61,19 @@
         <?php endif ?>
 		<div style="clear:both"></div>
         <?php if( false && ! $this->getQuote()->isVirtual() ): ?>
-        <div id="hpcheckout-shipping-method-wrapper" class="review-payment-blocks row-fluid">
+        <div id="hpcheckout-shipping-method-wrapper" class="review-payment-blocks row">
             <h4 class="legend">Shipping Method</h4>
             <br />
             <div class="checkout-content"><?php echo $this->getChildHtml('shipping_method') ?></div>
         </div>
 		<?php endif ?>
 		<div style="clear:both"></div>
-		<div id="hpcheckout-review-wrapper"<?php if(!$quote->isNominal()): ?> class="well review-payment-blocks"<?php endif;?>>
-			<div class="checkout-content"><?php echo $this->getChildHtml( 'review' ) ?></div>
+		  <div id="hpcheckout-review-wrapper"<?php if(!$quote->isNominal()): ?> class="well review-payment-blocks"<?php endif;?>>
+		  	<div class="checkout-content"><?php echo $this->getChildHtml( 'review' ) ?></div>
+		  </div>
 		</div>
-		</div>
-	</div>
-</div>
 </div>
 </section>
-
-</div>
 		<?php echo $this->getChildHtml( 'script' ) ?>
 	<?php else: ?>
 		<?php echo $this->__( 'Your cart is empty.' ) ?>

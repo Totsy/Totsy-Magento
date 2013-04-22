@@ -1,56 +1,51 @@
-<form id="hpcheckout-shipping-form" class="well form-horizontal" action="">
-	    <div id="shipping-new-address-form control-group">
-	    	    <div class="controls"> 
-	    		    <div class="span1">
-	    	     <input type="text" name="shipping[firstname]" title="<?php echo $this->__('First Name') ?>" class="input-text required-entry firstname validate-alpha"  value="<?php echo $this->htmlEscape($this->getFirstName()) ?>" placeholder="<?php echo $this->__('First Name') ?>" id="shipping:firstname" />
-	    	        </div>
-	    	        <div >
-	    	            <input type="text" name="shipping[lastname]" title="<?php echo $this->__('Last Name') ?>" class="input-text required-entry lastname validate-alpha" value="<?php echo $this->htmlEscape($this->getLastName()) ?>" placeholder="<?php echo $this->__('Last Name') ?>" id="shipping:lastname" />
-	    	        </div>
-	    	    </div>
-	    	    <input type="hidden" name="shipping[email]" id="shipping:email" value="<?php echo $this->getCustomer()->getEmail() ?>" />
-	    	    <input type="hidden" name="shipping[selected]" id="shipping:selected" />
-	    	         <div>
-			            <input type="text" title="<?php echo $this->__('Street Address Line 1') ?>" name="shipping[street][0]" id="shipping:street1" value="<?php echo $this->getAddress()->getStreet(1) ?>" placeholder="<?php echo $this->__('Street Address Line 1') ?>" class="input-text required-entry streetaddress1"/>
-	    	        </div>
-	    	     </div>
-	    	     <div class="controls">
-	    	         <div class=" field half-of-half">
-	                   <input type="text" title="<?php echo $this->__('Street Address Line 2') ?>" name="shipping[street][1]" id="shipping:street2" value="<?php echo $this->getAddress()->getStreet(2) ?>" placeholder="<?php echo $this->__('Street Address Line 2') ?>" class="input-text streetaddress2" />
-	                 </div>
-	    	     </div>
-	    	     <div class="controls"> 
-	    	         <div class=" field half-of-half">
-	                     <input type="text" title="<?php echo $this->__('City') ?>" name="shipping[city]" class="input-text required-entry city" value="<?php echo $this->getAddress()->getCity() ?>" placeholder="<?php echo $this->__('City') ?>" id="shipping:city" />
-	                 </div>	
-	    	     	 <div class=" half-of-half">
-		                 <div class="totsy-selective-input-box">
-		                     <select id="shipping:region_id" name="shipping[region_id]" title="<?php echo $this->__('State') ?>" class="validate-select state" style="display:none;" >
-		                       <option value=""><?php echo $this->__('Please select state') ?></option>
-		                     </select>
-		                 </div>
-	                     <script type="text/javascript">
-                            $('shipping:region_id').setAttribute('defaultValue',  "<?php echo $this->getAddress()->getRegionId() ?>");
-                         </script>
-                         <input type="text" id="shipping:region" name="shipping[region]" value="<?php echo $this->htmlEscape($this->getAddress()->getRegion()) ?>"  title="<?php echo $this->__('State/Province') ?>" class="input-text hidden-state" style="display:none;" />
-	                  </div> 
-	                  <div >
-	                      <input type="text" title="<?php echo $this->__('Zip Code') ?>" name="shipping[postcode]" id="shipping:postcode" class="input-text zip" value="<?php echo $this->getAddress()->getPostcode() ?>" placeholder="<?php echo $this->__('Zip/Postal Code') ?>" />
-	                  </div>
-	              </div>
-	              <div class="controls"> 
-	    	          <div >
-	    	        	    <input type="text" name="shipping[telephone]" title="<?php echo $this->__('Telephone') ?>" class="input-text telephone" id="shipping:telephone" value="<?php echo $this->htmlEscape($this->getAddress()->getTelephone()) ?>" placeholder="Telephone"/>
-	    	         </div> 
-	                 <div >
-			             <div class="totsy-selective-input-box totsy-selective-input-box-shipping-country country">
-			             	<?php echo $this->getCountryHtmlSelect('shipping') ?>
-			             </div>
-                     </div>
-                 </div>
-</form>
-<div class="spinner" style="display: none;"><img src="<?php echo $this->getSkinUrl( 'images/ajax-loader.gif' ) ?>"></div>
-<script type="text/javascript">
+    <form id="hpcheckout-shipping-form" class="well" action="">
+        <div id="shipping-new-address-form control-group">
+            <div class="row">
+                <div class="span3 controls">
+                    <input type="text" name="shipping[firstname]" title="<?php echo $this->__('First Name') ?>" class="input-text required-entry validate-alpha" value="<?php echo $this->htmlEscape($this->getFirstName()) ?>" placeholder="<?php echo $this->__('First Name') ?>" id="shipping:firstname">
+                </div>
+                <div class="span3 controls">
+                    <input type="text" name="shipping[lastname]" title="<?php echo $this->__('Last Name') ?>" class="input-text required-entry validate-alpha" value="<?php echo $this->htmlEscape($this->getLastName()) ?>" placeholder="<?php echo $this->__('Last Name') ?>" id="shipping:lastname">
+                    <input type="hidden" name="shipping[email]" id="shipping:email" value="<?php echo $this->getCustomer()->getEmail() ?>"> <input type="hidden" name="shipping[selected]" id="shipping:selected">
+                </div>
+            </div>
+            <div class="row">
+                <div class="span6 controls">
+                    <input type="text" title="<?php echo $this->__('Street Address Line 1') ?>" name="shipping[street][0]" id="shipping:street1" value="<?php echo $this->getAddress()->getStreet(1) ?>" placeholder="<?php echo $this->__('Street Address Line 1') ?>">
+                </div>
+            </div>
+            <div class="row">
+                <div class="span6 controls">
+                    <input type="text" title="<?php echo $this->__('Street Address Line 2') ?>" name="shipping[street][1]" id="shipping:street2" value="<?php echo $this->getAddress()->getStreet(2) ?>" placeholder="<?php echo $this->__('Street Address Line 2') ?>">
+            </div>
+            <div class="row">
+                <div class="span3 controls">
+                    <input type="text" title="<?php echo $this->__('City') ?>" name="shipping[city]" class="input-text required-entry" value="<?php echo $this->getAddress()->getCity() ?>" placeholder="<?php echo $this->__('City') ?>" id="shipping:city">
+                </div>
+                <div class="span1 controls">
+                    <select id="shipping:region_id" name="shipping[region_id]" title="<?php echo $this->__('State') ?>" class="validate-select state">
+                            <option value="">
+                                <?php echo $this->__('Please select state') ?>
+                            </option>
+                    </select>
+                </div>
+                <script type="text/javascript">
+                $('shipping:region_id').setAttribute('defaultValue',  "<?php echo $this->getAddress()->getRegionId() ?>");
+                    </script> <input type="text" id="shipping:region" name="shipping[region]" value="<?php echo $this->htmlEscape($this->getAddress()->getRegion()) ?>" title="<?php echo $this->__('State/Province') ?>" class="input-text hidden-state" style="display:none;">
+                <div class="span2 controls">
+                    <input type="text" title="<?php echo $this->__('Zip Code') ?>" name="shipping[postcode]" id="shipping:postcode" class="input-text" value="<?php echo $this->getAddress()->getPostcode() ?>" placeholder="<?php echo $this->__('Zip/Postal Code') ?>">
+                </div>
+            </div>
+            <div class="row">
+                <div class="controls span6">
+                    <input type="text" name="shipping[telephone]" title="<?php echo $this->__('Telephone') ?>" class="input-text telephone" id="shipping:telephone" value="<?php echo $this->htmlEscape($this->getAddress()->getTelephone()) ?>" placeholder="Telephone">
+                    <div class="totsy-selective-input-box totsy-selective-input-box-shipping-country country">
+                        <?php echo $this->getCountryHtmlSelect('shipping') ?>
+                    </div>
+                </div>
+            </div>
+    </form>
+    <div class="spinner" style="display: none;"><img src="<?php echo $this->getSkinUrl( 'images/ajax-loader.gif' ) ?>"></div><script type="text/javascript">
 //<![CDATA[
     //hack that empties out faked shipping postcode and telephone for users who select a shipping state which then triggers a shipping cost calculation 
     //this way users know their totals before hitting submit
@@ -63,26 +58,26 @@
         jQuery( '#shipping\\:postcode' ).change( function() { hpcheckout.update(true); });
         
         jQuery( '#shipping\\:region_id' ).change( function() { 
-        	jQuery('#shipping\\:region').val(jQuery("#shipping:region_id option:selected").text());
-			hpcheckout.update(true); 
-		}); 
-		   
+            jQuery('#shipping\\:region').val(jQuery("#shipping:region_id option:selected").text());
+            hpcheckout.update(true); 
+        }); 
+           
         if( jQuery( '#shipping-address-select' ).length > 0 ) {
-        	
-        	if(jQuery( '#shipping-address-select' ).val()!=="") {
-        		//disable on load
+            
+            if(jQuery( '#shipping-address-select' ).val()!=="") {
+                //disable on load
                 checkoutPayment.disableAddress(true, 'hpcheckout-shipping-form');
             }
         
             jQuery( '#shipping-address-select' ).bind('change', function() { 
-            	//enable shipping address to perform update
-            	checkoutPayment.disableAddress(false, "hpcheckout-shipping-form");
+                //enable shipping address to perform update
+                checkoutPayment.disableAddress(false, "hpcheckout-shipping-form");
                 hpcheckout.switchAddress(this.id);
                 hpcheckout.update(true);
                 
                 //if a shipping address was chosen from the dropdown, disable the form
                 if(jQuery("#shipping-address-select").val()!=="") {
-                	checkoutPayment.disableAddress(true, "hpcheckout-shipping-form");
+                    checkoutPayment.disableAddress(true, "hpcheckout-shipping-form");
                 }
             });
         }
@@ -91,12 +86,12 @@
     });
 
     jQuery('#shipping\\:street1, #shipping\\:street2').keyup(function(){
-		var $this = jQuery(this);
-		if($this.val().length > 30 ) {
-			$this.val($this.val().substr(0,30));
-		}
-	});
-	
-	var shippingRegionUpdater = new RegionUpdater('shipping:country_id', 'shipping:region', 'shipping:region_id', countryRegions, undefined, 'shipping:postcode');
-//]]>
-</script>
+        var $this = jQuery(this);
+        if($this.val().length > 30 ) {
+            $this.val($this.val().substr(0,30));
+        }
+    });
+
+    var shippingRegionUpdater = new RegionUpdater('shipping:country_id', 'shipping:region', 'shipping:region_id', countryRegions, undefined, 'shipping:postcode');
+    //]]>
+    </script>
