@@ -76,13 +76,6 @@
         	jQuery('#shipping\\:region').val(jQuery("#shipping:region_id option:selected").text());
 			hpcheckout.update(true); 
 		}); 
-                
-        jQuery( '#shipping\\:save_in_address_book' ).change( function() {
-            if(jQuery(this).attr("checked")=="checked")
-                jQuery(this).val(1);
-            else
-                jQuery(this).val(0);
-        });
 		   
         if( jQuery( '#shipping-address-select' ).length > 0 ) {
         	
