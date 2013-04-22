@@ -1034,6 +1034,60 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
     display: none;
 }
 
+.use-new-card-wrapper {
+    display:none;
+}
+
+#use-card-method {
+    width: 655px;
+    height: auto;
+}
+
+.card-type {
+    width: 205px;
+}
+
+.card-name {
+    width: 160px;
+}
+
+.billing-address {
+    width: 130px;
+}
+
+.card-expdate {
+    width: 60px;
+}
+
+.saved_card {
+    line-height: 15px;
+    border:0px !important;
+}
+
+.saved_card th {
+    text-align:left;
+}
+
+#rewards_points {
+    float:right;
+}
+
+#reward_placer {
+    margin-top: 10%;
+    margin-bottom: 10%;
+}
+
+.saved_card span:not(.cc){
+    margin-left: 5px;
+    margin-right: 15px;
+    margin-bottom: 10px;
+}
+
+.saved_card input[type="radio"] {
+    margin:10px 0px 10px 0;
+    position: relative;
+}
+>>>>>>> d0ce87adb68c44e2172b3c7d279b5313f5082b99
 /**
  * @Home page
  */
@@ -1837,7 +1891,7 @@ img.fastship-icon {
 
 .cc_exp {
     width: 238px;
-    margin-left: 40px;
+    margin-left: 30px;
 }
 
 .cc_save_card {

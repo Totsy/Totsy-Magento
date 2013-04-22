@@ -73,8 +73,8 @@
                 //enable shipping address to perform update
                 checkoutPayment.disableAddress(false, "hpcheckout-shipping-form");
                 hpcheckout.switchAddress(this.id);
-                hpcheckout.update(true);
                 
+                hpcheckout.update(true);
                 //if a shipping address was chosen from the dropdown, disable the form
                 if(jQuery("#shipping-address-select").val()!=="") {
                     checkoutPayment.disableAddress(true, "hpcheckout-shipping-form");
