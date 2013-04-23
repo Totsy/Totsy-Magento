@@ -63,7 +63,8 @@
 		            }
 		            // if this is a catalog page, get the category path
 		            if($active == 'catalog') {
-		                $active = 'plus'.strtolower(Mage::registry('current_category')->getUrlPath()).'.html';
+		                //$active = 'plus'.strtolower(Mage::registry('current_category')->getUrlPath()).'.html';
+                                $active = strtolower(Mage::registry('current_category')->getUrlPath());
 		            }
 		            ?>
 		            <ul class="links">
