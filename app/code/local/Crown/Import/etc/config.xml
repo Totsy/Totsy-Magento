@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Crown_Import>
-            <version>1.3.3</version>
+            <version>1.3.4</version>
         </Crown_Import>
     </modules>
     <global>
@@ -83,6 +83,11 @@
                         <class>Crown_Import_Model_Observer</class>
                         <method>savePurchaseOrderTransaction</method>
                     </createpurchaseordertransactions>
+                    <addproductpositions>
+                        <type>singleton</type>
+                        <class>Crown_Import_Model_Observer</class>
+                        <method>addProductPositions</method>
+                    </addproductpositions>
                 </observers>
             </urapidflow_product_import_after_save>
         </events>
