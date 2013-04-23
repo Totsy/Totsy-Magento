@@ -138,9 +138,6 @@ class Totsy_Sales_Model_Observer extends Mage_Sales_Model_Observer
                     }
                 }
             }
-            if($quoteItem->getCategoryId()) {
-                $quoteItem->save();
-            }
         }
 
         return $this;
