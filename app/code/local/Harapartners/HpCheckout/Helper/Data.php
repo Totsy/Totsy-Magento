@@ -1,10 +1,8 @@
 <?php 
 class Harapartners_HpCheckout_Helper_Data extends Mage_Core_Helper_Abstract {
-    
-	//Harapartners, yang, START
+
     //For cart timer
-    public function getCurrentTime(){
-        
+    public function getCurrentTime() {
         $defaultTimezone = date_default_timezone_get();
         $mageTimezone = Mage::getStoreConfig(Mage_Core_Model_Locale::XML_PATH_DEFAULT_TIMEZONE);            
         date_default_timezone_set($mageTimezone);
@@ -13,7 +11,6 @@ class Harapartners_HpCheckout_Helper_Data extends Mage_Core_Helper_Abstract {
         
         return strtotime($timer);
     }
-    //Harapartners, yang, END
 
     /**
      * Get concatenated category names based on order items
@@ -39,4 +36,11 @@ class Harapartners_HpCheckout_Helper_Data extends Mage_Core_Helper_Abstract {
         return implode(',', $result);
     }
 	
+    public function convertArrayToLittleHash($paymentArray){
+        foreach($paymentArray as $key => $infos) {
+            $newKey = lcfirst(str_replace(' ','', ucwords(str_replace('_',' ',$key))));
+            $hash[$newKey] = $infos;
+        }
+        return $hash;
+    }
 }

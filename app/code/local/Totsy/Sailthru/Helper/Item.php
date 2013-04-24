@@ -1,4 +1,3 @@
-
 <?php
 
 class Totsy_Sailthru_Helper_Item {
