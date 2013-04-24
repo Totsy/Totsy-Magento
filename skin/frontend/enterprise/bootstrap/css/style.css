@@ -2337,7 +2337,7 @@ body.catalog-category-view .price-box .special-price {
 }
 
 .plus .mini-col-icons {
-    width:898px;
+    width:100%;
     margin:24px auto 0;
 }
 
@@ -2356,7 +2356,7 @@ body.catalog-category-view .price-box .special-price {
 }
 
 .plus .dashboard-icon {
-    width: 110px;
+    width: 106px;
     height: 103px;
     float: left;
 }
@@ -2378,12 +2378,12 @@ body.catalog-category-view .price-box .special-price {
 }
 
 .plus .mini-col-container {
-    width:950px;
+    width:100%;
     margin:24px 0 0 8px;
 }
 
 .plus .mini-col-buttons {
-    width:950px;
+    width:100%;
     margin:8px 0 0 8px;
 }
 
