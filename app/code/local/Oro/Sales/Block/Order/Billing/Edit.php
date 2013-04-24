@@ -81,8 +81,8 @@ class Oro_Sales_Block_Order_Billing_Edit extends Mage_Core_Block_Template
     {
         if ($this->_paymentCollection === null) {
             /* @var $profile Harapartners_Paymentfactory_Model_Profile */
-            $profile = Mage::getModel('paymentfactory/profile');
-            $this->_paymentCollection = $profile->loadByCustomerId($this->getCustomer()->getId());
+            $profile = Mage::getModel('palorus/vault');
+            $this->_paymentCollection = $profile->load($this->getCustomer()->getId(),'customer_id');
         }
 
         return $this->_paymentCollection;
@@ -101,21 +101,6 @@ class Oro_Sales_Block_Order_Billing_Edit extends Mage_Core_Block_Template
     }
 
     /**
-     * Checks if can show Payment profile
-     *
-     * @param Harapartners_Paymentfactory_Model_Profile $profile
-     * @return bool
-     */
-    public function canShowPaymentProfile($profile)
-    {
-        if (!$profile->getSubscriptionId() || $profile->getIsDefault() || !$profile->getSavedByCustomer()) {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
      * Checks if Customer has saved payment methods
      *
      * @return bool
@@ -125,7 +110,7 @@ class Oro_Sales_Block_Order_Billing_Edit extends Mage_Core_Block_Template
         $result = false;
         /** @var $profile Harapartners_Paymentfactory_Model_Profile */
         foreach ($this->getPaymentCollection() as $profile) {
-            if ($this->canShowPaymentProfile($profile)) {
+            if ($profile['vault_id']) {
                 $result = true;
             }
         }
@@ -141,11 +126,10 @@ class Oro_Sales_Block_Order_Billing_Edit extends Mage_Core_Block_Template
         $result = array();
         /** @var $profile Harapartners_Paymentfactory_Model_Profile */
         foreach ($this->getPaymentCollection() as $profile) {
-            if ($this->canShowPaymentProfile($profile)) {
-                $result[$profile->getEncryptedSubscriptionId()] = $profile->getAddressId();
+            if ($profile['vault_id']) {
+                $result[$profile['vault_id']] = $profile['address_id'];
             }
         }
-
         return json_encode($result);
     }
 
@@ -180,7 +164,7 @@ class Oro_Sales_Block_Order_Billing_Edit extends Mage_Core_Block_Template
     public function getPaymentMethod()
     {
         if ($this->_paymentMethod === null) {
-            $this->_paymentMethod = Mage::getModel('paymentfactory/tokenize');
+            $this->_paymentMethod = Mage::getModel('Litle_CreditCard_Model_PaymentLogic');
         }
 
         return $this->_paymentMethod;
@@ -282,6 +266,8 @@ class Oro_Sales_Block_Order_Billing_Edit extends Mage_Core_Block_Template
         switch ($shortCardType) {
             case 'AE':
                 return 'American Express';
+            case 'AX':
+                return 'American Express';
             case 'VI':
                 return 'Visa';
             case 'MC':
@@ -321,7 +307,7 @@ class Oro_Sales_Block_Order_Billing_Edit extends Mage_Core_Block_Template
         /** @var $address Mage_Customer_Model_Address */
         foreach ($this->getCustomer()->getAddresses() as $address) {
             /* @var $profile Harapartners_Paymentfactory_Model_Profile */
-            $profile = Mage::getModel('paymentfactory/profile')->load($address->getId(), 'address_id');
+            $profile = Mage::getModel('palorus/vault')->load($address->getId(), 'address_id');
             if ($profile->getId() && $profile->getIsDefault()) {
                 continue;
             }

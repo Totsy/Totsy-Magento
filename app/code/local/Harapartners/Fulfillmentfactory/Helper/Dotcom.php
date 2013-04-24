@@ -217,7 +217,10 @@ class Harapartners_Fulfillmentfactory_Helper_Dotcom extends Mage_Core_Helper_Abs
         $this->_getConfig();
         $uri = self::$_apiUrl . '/order';
         $response = $this->_postXMLRequest($uri, $dataXML);
-        
+
+        Mage::log($dataXML, Zend_Log::DEBUG, 'fulfillment_order.log');
+        Mage::log($response, Zend_Log::DEBUG, 'fulfillment_order.log');
+
         return $this->_readXMLString($response);
     }
     

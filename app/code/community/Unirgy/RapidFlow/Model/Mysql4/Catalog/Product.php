@@ -457,6 +457,7 @@ if ($benchmark) Mage::log("_fetchCategoryValues: ".memory_get_usage().', '.memor
             'change_website' => &$this->_changeWebsite,
             'change_stock' => &$this->_changeStock,
             'change_category_product' => &$this->_changeCategoryProduct,
+            'dry_run' => $dryRun
         );
 
         $this->_profile->activity('Importing');

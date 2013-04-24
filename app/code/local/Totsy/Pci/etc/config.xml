@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Totsy_Pci>
+            <version>0.1.0</version>
+        </Totsy_Pci>
+    </modules>
+    <frontend>
+        <events>
+            <customer_customer_authenticated>
+                <observers>
+                    <enterprise_pci>
+                        <type>disabled</type>
+                    </enterprise_pci>
+                </observers>
+            </customer_customer_authenticated>
+        </events>
+    </frontend>
+</config>

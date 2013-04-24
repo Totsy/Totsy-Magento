@@ -1,0 +1,231 @@
+<?xml version="1.0"?>
+<config>
+	<modules>
+		<Litle_Palorus>
+			<version>8.14.1</version>
+		</Litle_Palorus>
+	</modules>
+	<global>
+		<models>
+			<palorus>
+				<class>Litle_Palorus_Model</class>
+				<resourceModel>palorus_mysql4</resourceModel>
+			</palorus>
+			<palorus_mysql4>
+				<class>Litle_Palorus_Model_Mysql4</class>
+				<entities>
+					<insight>
+						<table>litle_customer_insight</table>
+					</insight>
+					<vault>
+						<table>litle_vault</table>
+					</vault>
+					<failedtransactions>
+						<table>litle_failed_transactions</table>
+					</failedtransactions>
+				</entities>
+			</palorus_mysql4>
+		</models>
+
+		<blocks>
+			<palorus>
+				<class>Litle_Palorus_Block</class>
+			</palorus>
+			<adminhtml>
+				<rewrite>
+					<sales_transactions_detail>Litle_Palorus_Block_Adminhtml_Transaction</sales_transactions_detail>
+				</rewrite>
+			</adminhtml>
+		</blocks>
+		<!-- turn on database connections -->
+		<resources>
+			<!-- setup is needed for automatic installation -->
+			<palorus_setup>
+				<setup>
+					<module>Litle_Palorus</module>
+					<class>Mage_Core_Model_Resource_Setup</class>
+				</setup>
+				<connection>
+					<use>core_setup</use>
+				</connection>
+			</palorus_setup>
+			<palorus_write>
+				<connection>
+					<use>core_write</use>
+				</connection>
+			</palorus_write>
+			<palorus_read>
+				<connection>
+					<use>core_read</use>
+				</connection>
+			</palorus_read>
+		</resources>
+
+		<helpers>
+			<palorus>
+				<class>Litle_Palorus_Helper</class>
+			</palorus>
+		</helpers>
+
+		<fieldsets>
+			<sales_convert_quote_payment>
+				<litle_vault_id><to_order_payment>*</to_order_payment></litle_vault_id>
+				<is_visible><to_order_payment>*</to_order_payment></is_visible>
+			</sales_convert_quote_payment>
+
+			<palorus_vault_order>
+				<id><to_vault>order_id</to_vault></id>
+				<increment_id><to_vault>order_number</to_vault></increment_id>
+				<customer_id><to_vault>*</to_vault></customer_id>
+			</palorus_vault_order>
+
+			<palorus_vault_payment>
+				<cc_exp_month><to_vault>expiration_month</to_vault></cc_exp_month>
+				<cc_exp_year><to_vault>expiration_year</to_vault></cc_exp_year>
+			</palorus_vault_payment>
+		</fieldsets>
+	</global>
+
+	<frontend>
+		<routers>
+            <palorus>
+                <use>standard</use>
+                <args>
+                    <module>Litle_Palorus</module>
+                    <frontName>palorus</frontName>
+                </args>
+            </palorus>
+        </routers>
+		<secure_url>
+			<palorus_vault>/palorus/vault/</palorus_vault>
+            <palorus_vault_index>/palorus/vault/index/</palorus_vault_index>
+		</secure_url>
+	</frontend>
+
+	<admin>
+		<routers>
+			<palorus>
+				<use>admin</use>
+				<args>
+					<module>Litle_Palorus</module>
+					<frontName>palorus</frontName>
+				</args>
+			</palorus>
+		</routers>
+	</admin>
+
+	<adminhtml>
+       <menu>
+            <dashboard>
+                <children>
+                    <palorus_adminform translate="title" module="palorus">
+                        <title>Litle &amp; Co</title>
+                        <children>
+		                    <dashboardauthorization translate="title" module="palorus">
+        		                <title>Authorization Dashboard</title>
+        		                <action>palorus/adminhtml_myform/dashboardauthorization</action>
+        		            </dashboardauthorization>
+		                    <dashboardfrauddetection translate="title" module="palorus">
+        		                <title>Fraud Detection</title>
+        		                <action>palorus/adminhtml_myform/dashboardfrauddetection</action>
+        		            </dashboardfrauddetection>
+		                    <dashboardpostdepositfraudimpact translate="title" module="palorus">
+        		                <title>Post-Deposit Fraud Impact</title>
+        		                <action>palorus/adminhtml_myform/dashboardpostdepositfraudimpact</action>
+        		            </dashboardpostdepositfraudimpact>
+        		        </children>
+        		    </palorus_adminform>
+        		 </children>
+        	</dashboard>
+
+            <sales>
+                <children>
+                    <palorus_adminform translate="title" module="palorus">
+                        <title>Litle &amp; Co</title>
+                        <children>
+		                    <search translate="title" module="palorus">
+        		                <title>Transaction Search</title>
+        		                <action>palorus/adminhtml_myform/search</action>
+        		            </search>
+		                    <summary translate="title" module="palorus">
+        		                <title>Transaction Summary</title>
+        		                <action>palorus/adminhtml_myform/summary</action>
+        		            </summary>
+		                    <chargebacks translate="title" module="palorus">
+        		                <title>Chargebacks</title>
+        		                <action>palorus/adminhtml_myform/chargebacksearch</action>
+        		            </chargebacks>
+		   		            <failedtransactions translate="title" module="palorus">
+		   		            	<title>Failed transactions</title>
+		   		            	<action>palorus/adminhtml_myform/failedtransactions</action>
+		   		            </failedtransactions>
+        		        </children>
+        		    </palorus_adminform>
+        		 </children>
+        	</sales>
+
+            <report>
+                <children>
+                    <palorus_adminform translate="title" module="palorus">
+                        <title>Litle &amp; Co</title>
+                        <children>
+		                    <activity translate="title" module="palorus">
+        		                <title>Activity</title>
+        		                <action>palorus/adminhtml_myform/activity</action>
+        		            </activity>
+		                    <authorization translate="title" module="palorus">
+        		                <title>Authorization Report</title>
+        		                <action>palorus/adminhtml_myform/authorization</action>
+        		            </authorization>
+		                    <exchange translate="title" module="palorus">
+        		                <title>Exchange</title>
+        		                <action>palorus/adminhtml_myform/exchange</action>
+        		            </exchange>
+		                    <binlookup translate="title" module="palorus">
+        		                <title>BIN Lookup</title>
+        		                <action>palorus/adminhtml_myform/binlookup</action>
+        		            </binlookup>
+		                    <session translate="title" module="palorus">
+        		                <title>Session</title>
+        		                <action>palorus/adminhtml_myform/session</action>
+        		            </session>
+		                    <settlement translate="title" module="palorus">
+        		                <title>Settlement</title>
+        		                <action>palorus/adminhtml_myform/settlement</action>
+        		            </settlement>
+		                    <chargebackreport translate="title" module="palorus">
+        		                <title>Chargeback Report</title>
+        		                <action>palorus/adminhtml_myform/chargebackreport</action>
+        		            </chargebackreport>
+                        </children>
+                    </palorus_adminform>
+                </children>
+            </report>
+        </menu>
+
+        <acl>
+            <resources>
+                <admin>
+                    <children>
+                        <catalog>
+                            <children>
+                                <sintax_adminform>
+                                    <title>My Form</title>
+                                </sintax_adminform>
+                            </children>
+                        </catalog>
+                    </children>
+                </admin>
+            </resources>
+        </acl>
+		<layout>
+			<updates>
+				<customtabs>
+					<file>litle.xml</file>
+				</customtabs>
+			</updates>
+		</layout>
+	</adminhtml>
+
+
+</config>

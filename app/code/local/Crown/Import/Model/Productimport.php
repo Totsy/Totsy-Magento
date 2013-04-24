@@ -71,6 +71,7 @@ class Crown_Import_Model_Productimport extends Crown_Import_Model_Import_Abstrac
         $this->addRowFilter ( array (&$this, 'filterMediaGallery'), 10 );
 
         $this->addAfterParseEvent( array (&$this, 'filterFindConfigurables') );
+        $this->addAfterParseEvent( array (&$this, 'filterAddConfigurableImagesToSimple') );
         $this->addAfterParseEvent( array (&$this, 'filterValidateMediaGallery') );
 
         $this->addAttributeFilter( 'color', array (&$this, 'filterTrim') );
@@ -156,18 +157,41 @@ class Crown_Import_Model_Productimport extends Crown_Import_Model_Import_Abstrac
         $baseSkus = array();
         foreach ($this->_productData as $sku => $data ) {
             if ( isset($data['product.type']) && 'configurable' == $data['product.type'] && isset($data['vendor_style']) && !empty($data['vendor_style'])) {
-                $baseSkus[$data['vendor_style']] = $sku;
+                $simpleProductIdx = $data['vendor_style'] . '-' . $data['name'];
+                $baseSkus[$simpleProductIdx] = $sku;
                 $this->_superAttributesPerSku[$sku] = $this->_configurableAttributes;
             }
         }
         foreach ($this->_productData as $sku => $data ) {
             if ( isset($data['product.type']) && 'simple' == $data['product.type'] && isset($data['vendor_style']) && !empty($data['vendor_style'])) {
-                if (isset( $baseSkus[$data['vendor_style']] )) {
-                    $this->_baseSkus[ $baseSkus[$data['vendor_style']] ][] = $sku;
+                $simpleProductIdx = $data['vendor_style'] . '-' . $data['name'];
+                if (isset( $baseSkus[$simpleProductIdx] )) {
+                    $this->_baseSkus[ $baseSkus[$simpleProductIdx] ][] = $sku;
                     $this->_productData[$sku]['visibility'] = 'Not Visible Individually';
                 }
             }
         }
+        return $this;
+    }
+
+    /**
+     * Finds configurable product images and add them to simple product image fields if they aren't already set
+     * @since 1.3.3
+     * @return Crown_Import_Model_Productimport
+     */
+    public function filterAddConfigurableImagesToSimple() {
+        if ( !empty($this->_baseSkus) ) {
+            foreach ( $this->_baseSkus as $_baseSku => $childSkusArray ) {
+                foreach ( $childSkusArray as $childSku ) {
+                    if ( empty($this->_productData[$childSku]['image']) ) {
+                        $this->_productData[$childSku]['image']         = $this->_productData[$_baseSku]['image'];
+                        $this->_productData[$childSku]['small_image']   = $this->_productData[$_baseSku]['small_image'];
+                        $this->_productData[$childSku]['thumbnail']     = $this->_productData[$_baseSku]['thumbnail'];
+                    }
+                }
+            }
+        }
+
         return $this;
     }
 

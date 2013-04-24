@@ -29,7 +29,6 @@
  * @see Mage_Page_Block_Template_Links
  */
 ?>
-<?php // echo $this->getLayout()->createBlock('cms/block')-> setBlockId('footer_logout')->toHtml(); ?>
 <footer>
     <div class="container">
     <div class="row">
@@ -58,7 +57,7 @@
                     <a href="https://twitter.com/totsy" target="_blank"><img src="<?php echo $this->getSkinUrl('images/icons_social_footer_twitter.png') ?>"  style="width:36px;"/></a>
                     <a href="http://pinterest.com/totsy" target="_blank"><img src="<?php echo $this->getSkinUrl('images/icons_social_footer_pinterest.png') ?>"  style="width:36px;"/></a>
                     <a href="http://www.youtube.com/totsyfan" target="_blank"><img src="<?php echo $this->getSkinUrl('images/icons_social_footer_youtube.png') ?>"  style="width:36px;"/></a>
-                    <a href="http://blog.totsy.com" target="_blank"><img src="<?php echo $this->getSkinUrl('images/icons_social_footer_tumblr.png') ?>"  style="width:36px;"/></a>
+                    <a href="http://blog.totsy.com" target="_blank"><img src="<?php echo $this->getSkinUrl('images/wp.png') ?>"  style="width:36px;"/></a>
                     <a href="http://instagram.com/totsy" target="_blank"><img src="<?php echo $this->getSkinUrl('images/icons_social_footer_instagram.png') ?>"  style="width:36px;"/></a>
                     <hr />
             <div class="span2 alpha">
@@ -84,18 +83,8 @@
     </div>
     </div>
 </footer>
-<script>
-    var jsonArray =  <?php // echo Mage::app()->getLayout()->createBlock('customertracking/background')->getBackroundImagesJsonArray();?>;
-    var keyword   =  jsonArray['keyword'];
-    var imgDir 	  =  jsonArray['dir'];
-    var items     =  jsonArray['images'];
-    if (!!keyword) {
-        var item = imgDir + keyword + ".jpg";
-    } else {
-    var item  =  items[Math.floor(Math.random()*items.length)];
-    }
-    jQuery.backstretch(item);
-</script>
-<script>
-    jQuery('input[placeholder], textarea[placeholder]').placeholder();
+<script type="text/javascript">
+    jQuery(document).ready(function() {
+        jQuery('input[placeholder], textarea[placeholder]').placeholder();
+    });
 </script>

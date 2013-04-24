@@ -1,0 +1,38 @@
+<?php
+$banners = $this->getDataObject()->getBanners();
+?>
+
+ <div id="bannerCarousel" class="carousel slide">
+
+<?php  if ($banners->getCount()>1){ ?>
+	<ol class="carousel-indicators">
+	<?php  for ($i=0;$i<$banners->getCount();$i++){ ?>
+	    <li data-target="#bannerCarousel" data-slide-to="<?php echo $i ?>"<?php if ($i==0){ echo 'class="active"';} ?>></li>
+	<?php } ?>
+	</ol>
+
+	<!-- Carousel items -->
+	<div class="carousel-inner">
+
+	<?php foreach ($banners->getActiveBanners() as $key => $banner) { ?>
+		<div class="<?php if ($key==0){ echo "active ";}?>item">
+			<a href="<?php echo  Mage::getUrl('',array('_secure'=>true)).$banner['link'];?>">
+				<img src="<?php echo  $banners->getUrlPath().$banner['image']; ?>" alt="<?php echo $banner['name'];?>" border="0">
+			</a>
+		</div>
+	<?php } ?>
+	</div>
+
+	<!-- Carousel nav -->
+	<a class="carousel-control left" href="#bannerCarousel" data-slide="prev">&lsaquo;</a>
+	<a class="carousel-control right" href="#bannerCarousel" data-slide="next">&rsaquo;</a>
+<?php 
+} else if ($banners->getCount() == 1) { 
+	$banner = $banners->getActiveBanners();
+	$banner = $banner[0];
+?>
+	<a href="<?php echo  Mage::getUrl('',array('_secure'=>true)).$banner['link']; ?>">
+		<img src="<?php echo $banners->getUrlPath().$banner['image']; ?>" alt="<?php echo $banner['name'];?>" border="0">
+	</a>
+<?php } ?>
+</div>

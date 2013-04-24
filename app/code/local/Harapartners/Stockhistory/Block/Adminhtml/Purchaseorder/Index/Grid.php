@@ -87,10 +87,17 @@ class Harapartners_Stockhistory_Block_Adminhtml_Purchaseorder_Index_Grid extends
         ));
 
         $this->addColumn('total_units', array(
-                    'header'    =>    $helper->__('# of Units'),
+                    'header'    =>    $helper->__('Units on PO'),
                     'align'        =>    'right',
                     'width'        =>    '15px',
                     'index'        =>    'total_units'
+        ));
+
+        $this->addColumn('units_sold', array(
+            'header'    =>    $helper->__('Units Sold'),
+            'align'        =>    'right',
+            'width'        =>    '15px',
+            'index'        =>    'units_sold'
         ));
         
         $this->addColumn('category_event_end_date', array(

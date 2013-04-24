@@ -68,7 +68,7 @@ $customer = Mage::registry('current_customer');
 
 ?>
 
-<?php if(Mage::helper('crownclub')->isClubMember($customer)): ?>
+<?php if(Mage::helper('crownclub')->isClubMember($customer) && isset($product)): ?>
     <div class="plus">
     <table class="top-24">
         <tr>

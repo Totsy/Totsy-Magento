@@ -21,6 +21,9 @@ class Totsy_Sailthru_Helper_Feed extends Mage_Core_Helper_Abstract
     private $_excludeList = array();
     private $_errors = array();
     private $_filters = array();
+    private $_include = array();
+    private $_type = 'events';
+
 
     public function __call($name,$argiments){
         if (substr($name,0,3) == 'get'){
@@ -51,9 +54,12 @@ class Totsy_Sailthru_Helper_Feed extends Mage_Core_Helper_Abstract
     public function processor()
     {
         $this->setMagentoTimeDiff();
+        $this->_processParams();
+        $this->_processType();
         $this->_processOrder();
         $this->_processStartDate();
         $this->_processStartTime();
+        $this->_processInclude();
         $this->_processExclude();
         $this->_processFilter();
 
@@ -119,6 +125,23 @@ class Totsy_Sailthru_Helper_Feed extends Mage_Core_Helper_Abstract
         if (!in_array('products',$escape)){
             $this->arrayKeyExistsValidateAndFormat('products', $event);
         }
+        
+        if (!empty($this->_errors)){
+            $this->_errors = array_unique($this->_errors);
+        }
+    }
+
+    public function formatProduct(&$event,$product,$escape=array()){
+
+        if( !empty($escape) && in_array($product->getEntityId(),$escape)){
+            return;
+        }
+
+        $this->keyExistsValidateAndFormat('name', $product);
+        $this->keyExistsValidateAndFormat('description', $product);
+        $this->keyExistsValidateAndFormat('category', $product, $event->getName());
+        $this->keyExistsValidateAndFormat('department_label', $product);
+        $this->keyExistsValidateAndFormat('age_label', $product);
         
         if (!empty($this->_errors)){
             $this->_errors = array_unique($this->_errors);
@@ -237,6 +260,49 @@ class Totsy_Sailthru_Helper_Feed extends Mage_Core_Helper_Abstract
         return $url;
     }
 
+    private function _processParams(){
+
+        if (empty($_GET['params']) 
+            || !preg_match('/[a-f\d]+/',strtolower($_GET['params']))
+            || strlen($_GET['params'])!=40
+        ){
+            return;
+        }
+        
+        $params = Mage::getModel('sailthru/feedconfig')
+            ->getResource()
+            ->getFeedConfigParams($_GET['params']);
+
+        if (empty($params)){
+            return;
+        }
+        $params = $params[0];
+        foreach ($params as $key => $value) {
+            $_GET[$key] = $value;
+        }
+    }
+
+    private function _processType(){
+
+        if (!isset($_GET['type'])){
+            return;
+        }
+
+        switch ($_GET['type']){
+            case '1':
+            case 'products':
+                $this->_type = 'products';
+            break;
+
+            case '0':
+            case 'events':
+            default:
+                $this->_type = 'events';
+            break;
+        }
+
+    }
+
     private function _processStartDate()
     {
         $this->_startDate = strtotime(date('Y-m-d'));
@@ -273,7 +339,6 @@ class Totsy_Sailthru_Helper_Feed extends Mage_Core_Helper_Abstract
 
     private function _processOrder ()
     {
-        
         if (empty($_GET['order'])) {
             return;
         }
@@ -281,7 +346,19 @@ class Totsy_Sailthru_Helper_Feed extends Mage_Core_Helper_Abstract
         if (strtolower($_GET['order']) == 'desc') {
             $this->_order = true; //DESC
         }
+    }
 
+    private function _processInclude()
+    {
+        if (!empty($_GET['include']) && preg_match('/[\d\,]+/',$_GET['include'])) {
+            $include_list = explode(',', $_GET['include']);
+            foreach($include_list as $el){
+                if (is_numeric($el)) {
+                    $this->_include[] = $el;
+                }
+            }
+            unset($include_list);
+        }
     }
 
     private function _processExclude()
@@ -313,6 +390,16 @@ class Totsy_Sailthru_Helper_Feed extends Mage_Core_Helper_Abstract
 
         $this->_errors[] = 'Key "'.$key.'" does not exist in a for event ( Id = \''.$array['entity_id'].'\')';
         $array[$key] = null;
+        return false;
+    }
+
+    private function keyExistsValidateAndFormat($key,&$obj,$replacement=null){
+        if (is_object($obj) && $obj->hasData($key) ){
+            return true;
+        }
+
+        $this->_errors[] = 'Key "'.$key.'" does not exist for product ( Id = \''.$obj->getEntityId.'\')';
+        $obj->setData($key, $replacement);
         return false;
     }
 }
