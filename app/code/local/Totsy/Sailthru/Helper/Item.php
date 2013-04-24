@@ -1,4 +1,3 @@
-
 <?php
 
 class Totsy_Sailthru_Helper_Item {
@@ -40,7 +39,11 @@ class Totsy_Sailthru_Helper_Item {
         
         $title = isset($title)?$title:$sku;    
 
-        return compact('qty', 'title', 'price', 'id', 'url', 'tags');
+        $vars['event_id'] = Mage::getModel('catalog/product')
+            ->load( $item->getProduct()->getEntityId())
+            ->getCategoryIds();
+
+        return compact('qty', 'title', 'price', 'id', 'url', 'tags', 'vars');
     }
 
 }
