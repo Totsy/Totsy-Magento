@@ -13,7 +13,7 @@
  */
 
 $paymentCode    = $this->getPaymentMethod()->getCode();
-
+$litleProfiles = Mage::getModel('palorus/vault')->getCollection()->addCustomerFilter(Mage::helper('palorus')->getCustomer());
 ?>
 <div class="page-header">
     <h2><?php echo $this->__('Edit Order #%s Billing Info', $this->getOrder()->getIncrementId()) ?></h2>
@@ -21,7 +21,7 @@ $paymentCode    = $this->getPaymentMethod()->getCode();
 <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
 <form id="order-billing-edit-form" action="<?php echo $this->getFormActionUrl() ?>" method="POST">
 <div class="well alfa">
-    <?php if ($this->hasPaymentMethods()): ?>
+    <?php if (count($litleProfiles)): ?>
     <h4 class="table-caption"><?php echo $this->__('Your payment methods') ?></h4>
     <div class="pull-left" id="use-card-method">
         <div id="cybersource-use-card-method">
@@ -33,23 +33,22 @@ $paymentCode    = $this->getPaymentMethod()->getCode();
                     <th><?php echo $this->__('Billing address') ?></th>
                     <th><?php echo $this->__('Expires') ?></th>
                 </tr>
-                <?php foreach ($this->getPaymentCollection() as $profile): ?>
-                <?php if (!$this->canShowPaymentProfile($profile)): continue; endif; ?>
-                <?php $address = $this->getProfileAddress($profile); ?>
+                <?php foreach ($litleProfiles as $profile): ?>
+                <?php $address = Mage::getModel('customer/address')->load($profile->getData('address_id')); ?>
                 <tr>
                     <td>
-                        <input type="radio" name="payment[cybersource_subid]" id="payment_cybersource_subid_<?php echo $profile->getId() ?>"
-                               class="use-saved-card-control pull-left" value="<?php echo $profile->getEncryptedSubscriptionId() ?>">
+                        <input type="radio" name="payment[cc_vaulted]" id="payment_cc_vaulted_<?php echo $profile->getVaultId() ?>"
+                               class="use-saved-card-control pull-left" value="<?php echo $profile->getVaultId() ?>">
                         <span class="cc">
-                            <span title="<?php echo $this->getFullCcType($profile->getCardType()); ?>" class="<?php echo strtolower($profile->getCardType()); ?>"></span>
+                            <span title="<?php echo $this->getFullCcType($profile->getType()); ?>" class="<?php echo strtolower($profile->getType()); ?>"></span>
                         </span>
                     </td>
                     <td class="card-type">
-                        <strong><?php echo $this->getFullCcType($profile->getCardType()); ?></strong> ending in <?php echo $profile->getLast4no() ?>
+                        <strong><?php echo $this->getFullCcType($profile->getType()); ?></strong> ending in <?php echo $profile->getLast4() ?>
                     </td>
                     <td class="card-name"><?php echo $this->escapeHtml($this->getAddressCustomerName($address)) ?></td>
                     <td class="billing-address"><?php echo $this->escapeHtml($address->getStreet1()); ?></td>
-                    <td class="card-expdate"><?php echo $profile->getExpireMonth() ?>/<?php echo $profile->getExpireYear() ?></td>
+                    <td class="card-expdate"><?php echo $profile->getExpirationMonth() ?>/<?php echo $profile->getExpirationYear() ?></td>
                 </tr>
                 <?php endforeach; ?>
             </table>
@@ -72,6 +71,7 @@ $paymentCode    = $this->getPaymentMethod()->getCode();
 
     <div id="cc_info" class="oro-cc-info">
     <div class="pull-left">
+        <input type="hidden" id="creditcard_method" name="payment[method]" value="creditcard">
         <div>
             <div class="pull-left cc_num cc_info">
                 <div class="input-box">
@@ -97,8 +97,8 @@ $paymentCode    = $this->getPaymentMethod()->getCode();
             <?php endif; ?>
             <div class="cc_save_card cc_info">
                 <div>
-                    <input type="checkbox" value="1" name="payment[saved_by_customer]" checked="checked"
-                           id="<?php echo $paymentCode ?>_cc_save" class="no-required">
+                    <input type="checkbox" value="on" name="payment[cc_should_save]" checked="checked"
+                           id="<?php echo $paymentCode ?>_saved" class="no-required">
                 </div>
                 <label for="<?php echo $paymentCode ?>_cc_save"><?php echo $this->__('Save') ?></label>
             </div>
@@ -226,7 +226,6 @@ $paymentCode    = $this->getPaymentMethod()->getCode();
     <div class="clear"></div>
     </div>
 </div>
-
 <script type="text/javascript">
 Validation.addAllThese([
     ['validate-cc-type-radio', 'Please enter a valid credit card number.', function(v, elm) {
@@ -277,7 +276,7 @@ var billingRegionUpdater = new RegionUpdater('billing:country_id', 'billing:regi
 var editBilling = (function() {
     return {
         initialize: function() {
-            jQuery('[name="payment[cybersource_subid]"]').change(editBilling.useProfile);
+            jQuery('[name="payment[cc_vaulted]"]').change(editBilling.useProfile);
             jQuery('[name="payment[cc_type]"]').change(editBilling.newPayment);
             jQuery('#billing-address-select').change(editBilling.changeAddress);
             jQuery('#saveBilling').click(editBilling.save);
@@ -299,7 +298,7 @@ var editBilling = (function() {
             editBilling.disableAddressSelect(false);
         },
         resetProfile: function() {
-            jQuery('[name="payment[cybersource_subid]"]').each(function(){
+            jQuery('[name="payment[cc_vaulted]"]').each(function(){
                 jQuery(this).attr('checked', false);
             });
         },
@@ -364,7 +363,7 @@ var editBilling = (function() {
         },
         save: function() {
             var hasPayment = false;
-            jQuery('[name="payment[cybersource_subid]"]').each(function(){
+            jQuery('[name="payment[cc_vaulted]"]').each(function(){
                 if (this.checked) {
                     hasPayment = true;
                 }

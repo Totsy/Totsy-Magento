@@ -797,6 +797,7 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
 
 .saved_card {
     line-height: 15px;
+    border:0px !important;
 }
 
 .saved_card th {
@@ -813,7 +814,7 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
 }
 
 .saved_card span:not(.cc){
-    margin-left: 15px;
+    margin-left: 5px;
     margin-right: 15px;
     margin-bottom: 10px;
 }
@@ -1523,7 +1524,7 @@ img.fastship-icon {
 
 .cc_exp {
     width: 238px;
-    margin-left: 40px;
+    margin-left: 30px;
 }
 
 .cc_save_card {
