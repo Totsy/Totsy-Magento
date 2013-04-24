@@ -1,10 +1,10 @@
 <?php
 
-class Totsy_Adminhtml_Block_Sales_Creditmemo_Import_Form
+class Totsy_Reward_Block_Adminhtml_Import_Edit_Form
     extends Mage_Adminhtml_Block_Widget_Form
 {
     protected function _prepareForm() {
-        $helper = Mage::helper('sales');
+        $helper = Mage::helper('enterprise_reward');
 
         $form = new Varien_Data_Form(array(
             'id'        => 'edit_form',
@@ -13,7 +13,7 @@ class Totsy_Adminhtml_Block_Sales_Creditmemo_Import_Form
             'enctype'   => 'multipart/form-data'
         ));
 
-        $fieldset = $form->addFieldset('sales', array('legend'=>$helper->__('Credits')));
+        $fieldset = $form->addFieldset('enterprise_reward', array('legend'=>$helper->__('Credits')));
 
         $field = $fieldset->addField('file', 'file', array(
             'label'     =>$helper->__('Upload a File'),
