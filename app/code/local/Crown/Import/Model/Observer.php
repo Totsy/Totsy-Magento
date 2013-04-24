@@ -152,4 +152,18 @@ class Crown_Import_Model_Observer {
             }
         }
     }
+
+    /**
+     * Adjust warning count for import based on number of suppressed warning messages from logger
+     * @since 1.3.5
+     * @param unknown_type $observer
+     * @return void
+     */
+    public function adjustImportWarningCount($observer) {
+        $vars       = $observer->getEvent()->getVars();
+        $profile    = $vars['profile'];
+        $logger     = $vars['logger'];
+
+        $profile->addValue('num_warnings', $logger->suppressedWarningDelta);
+    }
 }
