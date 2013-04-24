@@ -61,6 +61,8 @@ class Totsy_Reward_Model_Import extends Mage_Core_Model_Abstract {
         }
 
         fclose($fh);
+        // remove already imported file
+        unlink(Mage::getBaseDir('tmp').'/'.$this->_fileName);
     }
 
     protected function _applyCredits($row){
