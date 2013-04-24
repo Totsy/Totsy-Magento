@@ -265,7 +265,7 @@ class Harapartners_HpCheckout_Model_Checkout
             $skipFirst = true;
 			foreach($fulfillmentTypes as $_fulfillmentKey => $_fulfillmentProducts) {
                 //skipping the first fulfillment type
-	        	if($skipFirst) {
+	        	if($skipFirst && 'sourcemktg' != $_fulfillmentKey) {
 	        		$skipFirst = false;
 	        		continue;
 	        	}
