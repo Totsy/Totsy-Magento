@@ -86,9 +86,17 @@ class Totsy_Reward_Model_Import extends Mage_Core_Model_Abstract {
             ->setEntity($rewards->getCustomerId())
             ->setPointsBalance($points)
             ->setPointsDelta($row[1])
-            ->setComment('CS import credits. Csv file')
-            ->setAdditionalData('a:1:{s:4:"rate";a:4:{s:6:"points";N;s:15:"currency_amount";N;s:9:"direction";N;s:13:"currency_code";s:3:"USD";}}')
-            ->save();
+            ->setComment('CS import credits. Csv file');
+        
+        $history->addAdditionalData(array(
+            'rate' => array(
+                'points' => $rewards->getRate()->getPoints(),
+                'currency_amount' => $rewards->getRate()->getCurrencyAmount(),
+                'direction' => $rewards->getRate()->getDirection(),
+                'currency_code' => Mage::app()->getWebsite( $rewards->getWebsiteId() )->getBaseCurrencyCode()
+            )
+        ));
+        $history->save();
         
         $rewards->setPointsBalance($points)->save();
     }
