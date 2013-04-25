@@ -68,13 +68,13 @@
 		            }
 		            ?>
 		            <ul class="links">
-		                <li class="first"><a href="/plus/dashboard" title="TOTSYPLUS DASHBOARD" <?php echo $active == 'plus/dashboard' ? 'class="active"' : ''; ?>>TOTSYPLUS DASHBOARD</a></li>
-		                <li><a href="/plus/credit.html" title="10% Credit On Every Purchase*" <?php echo $active == 'plus/credit.html' ? 'class="active"' : ''; ?>>10% Credit On<br/>Every Purchase</a></li>
-		                <li><a href="/plus/early-access.html" title="Early Access" <?php echo $active == 'plus/early-access.html' ? 'class="active"' : ''; ?>>Early Access</a></li>
-		                <li><a href="/plus/exclusive-sales.html" title="Exclusive Sales" <?php echo $active == 'plus/exclusive-sales.html' ? 'class="active"' : ''; ?>>Exclusive Sales</a></li>
-		                <li><a href="/plus/entertainment-savings.html" title="Entertainment Savings" <?php echo $active == 'plus/entertainment-savings.html' ? 'class="active"' : ''; ?>>Entertainment Savings</a></li>
-		                <li><a href="/plus/discount-vault.html" title="Discount Vault" <?php echo $active == 'plus/discount-vault.html' ? 'class="active"' : ''; ?>>Discount Vault</a></li>
-		                <li class=" last" ><a href="/sales/recurring_profile/" title="My TotsyPLUS Membership" <?php echo $active == 'sales/recurring_profile' ? 'class="active"' : ''; ?>>My TotsyPLUS Membership</a></li>
+		                <li class="first"><a href="/plus/dashboard" title="TOTSYPLUS DASHBOARD" <?php strpos($active, 'plus/dashboard')===FALSE? '' : 'class="active"'; ?>>TOTSYPLUS DASHBOARD</a></li>
+		                <li><a href="/plus/credit.html" title="10% Credit On Every Purchase*" <?php strpos($active, 'plus/credit')===FALSE? '' : 'class="active"'; ?>>10% Credit On<br/>Every Purchase</a></li>
+		                <li><a href="/plus/early-access.html" title="Early Access" <?php echo strpos($active, 'plus/early-access')===FALSE? '' : 'class="active"'; ?>>Early Access</a></li>
+		                <li><a href="/plus/exclusive-sales.html" title="Exclusive Sales" <?php echo strpos($active, 'plus/exclusive-sales')===FALSE? '' : 'class="active"'; ?>>Exclusive Sales</a></li>
+		                <li><a href="/plus/entertainment-savings.html" title="Entertainment Savings" <?php echo strpos($active, 'plus/entertainment-savings')===FALSE? '' : 'class="active"'; ?>>Entertainment Savings</a></li>
+		                <li><a href="/plus/discount-vault.html" title="Discount Vault" <?php echo strpos($active, 'plus/discount-vault')===FALSE? '' : 'class="active"'; ?>>Discount Vault</a></li>
+		                <li class=" last" ><a href="/sales/recurring_profile/" title="My TotsyPLUS Membership" <?php echo strpos($active, 'sales/recurring_profile')===FALSE? '' : 'class="active"'; ?>>My TotsyPLUS Membership</a></li>
 		            </ul>
 		
 		            <ul class="links">
