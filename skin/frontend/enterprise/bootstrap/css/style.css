@@ -407,10 +407,10 @@ body.customer-account-entry .btn.btn-large {
     margin:0 auto;
     /* pull out for RWD */ /* width:940px; */
     background:#fff; 
-    padding:300px 30px 267px; /* @fixednav: top padding magic number BS; @stickyfooter: bottom padding magic number BS */
+    padding:250px 30px 267px; /* @fixednav: top padding magic number BS; @stickyfooter: bottom padding magic number BS */
     overflow: auto; /* @stickyfooter */
     }
-    .well.page_center {
+    .well .page_center {
     position: relative;
     display: inline-block;
     margin-top: -210px;
@@ -419,9 +419,31 @@ body.customer-account-entry .btn.btn-large {
     text-align: left;
     }
     
-    input[type="text"], select, .uneditable-input {
-        width: 100%;
-    } 
+    input[type="text"],select, .uneditable-input {
+    	width: 100%;
+    }
+}
+
+@media (max-width: 1200px) and (min-width: 980px) { 
+#mainContent {
+    margin:0 auto;
+    /* pull out for RWD */ /* width:940px; */
+    background:#fff; 
+    padding:250px 30px 267px; /* @fixednav: top padding magic number BS; @stickyfooter: bottom padding magic number BS */
+    overflow: auto; /* @stickyfooter */
+    }
+    .well .page_center {
+    position: relative;
+    display: inline-block;
+    margin-top: -210px;
+    vertical-align: middle;
+    width: 300px;
+    text-align: left;
+    }
+    
+    input[type="text"],select, .uneditable-input {
+    	width: 100%;
+    }
 }
  
 /* Portrait tablet to landscape and desktop */
@@ -433,7 +455,7 @@ body.customer-account-entry .btn.btn-large {
     padding:0px 30px 267px; /* @fixednav: top padding magic number BS; @stickyfooter: bottom padding magic number BS */
     overflow: auto; /* @stickyfooter */
     }
-    .well.page_center {
+    .well .page_center {
     position: relative;
     display: inline-block;
     margin-top: -210px;
@@ -442,13 +464,13 @@ body.customer-account-entry .btn.btn-large {
     text-align: left;
     }
     
-    input[type="text"], select, .uneditable-input {
-        width: 100%;
-    } 
+    input[type="text"],select, .uneditable-input {
+    	width: 100%;
+    }
 }
  
 /* Landscape phone to portrait tablet */
-@media (max-width: 767px) { 
+@media (min-width: 481px) and (max-width: 767px) { 
 #mainContent {
     margin:0 auto;
     /* pull out for RWD */ /* width:940px; */
@@ -456,14 +478,18 @@ body.customer-account-entry .btn.btn-large {
     padding:0px 30px 267px; /* @fixednav: top padding magic number BS; @stickyfooter: bottom padding magic number BS */
     overflow: auto; /* @stickyfooter */
     }
-    .well.page_center {
+    .well .page_center {
     position: relative;
     display: inline-block;
     margin-top: -210px;
     vertical-align: middle;
     width: 200px;
     text-align: left;
-    }    
+    } 
+    
+    input[type="text"],select, .uneditable-input {
+    	width: 100%;
+    }
 }
  
 /* Landscape phones and down */
@@ -471,7 +497,7 @@ body.customer-account-entry .btn.btn-large {
 #mainContent {
     margin:0 auto;
     /* pull out for RWD */ /* width:940px; */
-    background:#000; 
+    background:#fff; 
     padding:0px 10px 0px; /* @fixednav: top padding magic number BS; @stickyfooter: bottom padding magic number BS */
     overflow: auto; /* @stickyfooter */
     }
@@ -495,13 +521,14 @@ body.customer-account-entry .btn.btn-large {
     }
     .use-new-card-wrapper {
     display:none;
-}
-    
+	}
+    input[type="text"],select, .uneditable-input {
+    	width: 50%;
     }
     .logged-out ~ #mainContent {
         padding-top:150px;
     }
-    
+}    
 /**
  * @Header
  * - "navbar" class from bootstrap
@@ -1328,6 +1355,8 @@ body.catalog-category-view .thumbnails > li {position: relative;}
 /**
  * @Cart & Checkout
  */
+ 
+/* 
 .checkout-reward {
     width:230px;
     padding: 0px 0px 0px 0px;
@@ -1349,13 +1378,10 @@ body.catalog-category-view .thumbnails > li {position: relative;}
     margin: 0px !important;
 }
 
-#hpcheckout-review-wrapper {
-    margin-left: 0px !important;
-}
 
 .paypal-express-review #hpcheckout-review-wrapper {
     margin-left: 0px !important;
-    width: 928px !important;  /* new */
+    width: 928px !important; 
 }
 #payment_form_paypal_express .form-alt {
     font-weight: bold;
@@ -1405,12 +1431,6 @@ body.catalog-category-view .thumbnails > li {position: relative;}
     display: block !important;
 }
 
-.what-is-paypal-link {
-    float:left;
-    color: #000;
-    font-size: 11px;
-    text-decoration:underline
-}
 
 #use-reward-point {
     margin-top: 5px;
@@ -1461,6 +1481,14 @@ body.catalog-category-view .thumbnails > li {position: relative;}
     font-size: 14px; font-weight: 500;
     line-height: 1.15;
     text-align: right;
+}
+*/
+
+.what-is-paypal-link {
+    float:left;
+    color: #000;
+    font-size: 11px;
+    text-decoration:underline
 }
 
 .shopping-cart-table th,

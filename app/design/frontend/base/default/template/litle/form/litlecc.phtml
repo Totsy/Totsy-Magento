@@ -121,8 +121,8 @@ jQuery(document).ready( function() {
                                 <tr>
 	                                <td>
 	                                    <div>
-	                       		            <input type="radio" data-billing-address-id="<?php echo $card->address_id; ?>" id="payment[cc_vaulted]" name="payment[cc_vaulted]" value="<?php echo $card->getVaultId() ?>"
-                                            <?php if($lastCardUsed && ($lastCardUsed->getId() == $card->getVaultId()) && (!$lastCardUsed->getSubscriptionId()))  echo 'checked="yes"'; ?> class="use-saved-card-control pull-left" id="payment">
+	                       		            <input type="radio" data-billing-address-id="<?php echo $card->address_id; ?>" id="payment" name="payment[cc_vaulted]" value="<?php echo $card->getVaultId() ?>"
+                                            <?php if($lastCardUsed && ($lastCardUsed->getId() == $card->getVaultId()) && (!$lastCardUsed->getSubscriptionId()))  echo 'checked="yes"'; ?> class="use-saved-card-control pull-left" >
                                             <span class="cc">
         		 	                            <span title="<?php echo strtolower($card->type); ?>" class="<?php echo strtolower($card->type); ?>" >
         		 	                            </span>
@@ -136,7 +136,6 @@ jQuery(document).ready( function() {
                                     <td class="card-expdate"><?php echo $card->getData('expiration_month')."/".$card->getData('expiration_year'); ?></td>
                                 </tr>
 	                        <?php endforeach ?>
-	                       	</div>
 	                   <script type="text/javascript">
 	                   	   Event.observe($("<?php echo $_code ?>_cc_vaulted"), 'change', function() {
 	                   	   	   if ($F(this) != '0') {
@@ -156,7 +155,6 @@ jQuery(document).ready( function() {
 	                   </script>
 						</table>
                     </div>
-                </div>
                  <?php } ?>
              <?php } ?>
         	<div>          
