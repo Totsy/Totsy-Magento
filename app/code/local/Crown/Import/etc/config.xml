@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Crown_Import>
-            <version>1.3.3</version>
+            <version>1.3.5</version>
         </Crown_Import>
     </modules>
     <global>
@@ -11,6 +11,11 @@
                 <class>Crown_Import_Model</class>
                 <resourceModel>crownimport_resource</resourceModel>
             </crownimport>
+            <urapidflow>
+                <rewrite>
+                    <logger_csv>Crown_Import_Model_Urapidflow_Logger_Csv</logger_csv>
+                </rewrite>
+            </urapidflow>
             <urapidflow_mysql4>
                 <rewrite>
                     <catalog_product>Crown_Import_Model_Urapidflow_Mysql4_Catalog_Product</catalog_product>
@@ -69,11 +74,11 @@
         <events>
             <urapidflow_product_import_after_validate>
                 <observers>
-                    <createpurchaseordertransactions>
+                    <orphanproductsfromexistingevent>
                         <type>singleton</type>
                         <class>Crown_Import_Model_Observer</class>
                         <method>orphanProductsFromExistingEvent</method>
-                    </createpurchaseordertransactions>
+                    </orphanproductsfromexistingevent>
                 </observers>
             </urapidflow_product_import_after_validate>
             <urapidflow_product_import_after_save>
@@ -83,8 +88,22 @@
                         <class>Crown_Import_Model_Observer</class>
                         <method>savePurchaseOrderTransaction</method>
                     </createpurchaseordertransactions>
+                    <addproductpositions>
+                        <type>singleton</type>
+                        <class>Crown_Import_Model_Observer</class>
+                        <method>addProductPositions</method>
+                    </addproductpositions>
                 </observers>
             </urapidflow_product_import_after_save>
+            <urapidflow_product_import_after_diff>
+                <observers>
+                    <adjustimportwarningcount>
+                        <type>singleton</type>
+                        <class>Crown_Import_Model_Observer</class>
+                        <method>adjustImportWarningCount</method>
+                    </adjustimportwarningcount>
+                </observers>
+            </urapidflow_product_import_after_diff>
         </events>
     </global>
     <frontend>
