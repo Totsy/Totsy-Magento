@@ -240,12 +240,18 @@ HpCheckout.prototype = {
                 }
             }
         });
+
+        //fix for cybersource saved credit card
+        if (jQuery("[id='payment[cybersource_subid]']").is(':checked') == true) {
+            jQuery('input[name="payment[method]"]').val("paymentfactory_tokenize");
+        }
+
         var checkoutObject = this;
         var postData = this.getFormData();
         postData += '&updatePayment=true';
         
         this.throbberOn();
-        
+
         jQuery.ajax({
             url: this.data.submitUrl,
             dataType: "json",
