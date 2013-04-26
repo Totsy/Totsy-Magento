@@ -82,7 +82,7 @@
 		<ul class="products-grid">
 			<?php $i=0; foreach ($category['product_list'] as $_product): ?>
 				<li class="item">
-					<a href="<?php echo $this->getBaseUrl().$_product['url_path'] ?>" title="<?php echo $_product['name']; ?>" class="product-image"><img src="<?php echo $_product['small_image']; ?>" width="125" height="125" alt="<?php echo $_product['name']; ?>" /></a>
+					<a href="<?php echo $this->getBaseUrl().$_product['url_path'] ?>" title="<?php echo $_product['name']; ?>" class="product-image"><img src="<?php echo $_product['small_image']; ?>" alt="<?php echo $_product['name']; ?>" style="absolute; width:100%; height: 100%; "/></a>
 						<a class="item-details" href="<?php echo $this->getBaseUrl().$_product['url'] ?>" title="<?php echo $_product['name']; ?>"><h4 class="product-name"><?php echo $_product['name']; ?></h4>
 							<?php //echo $this->getPriceHtml($_product, true) ?>
 							<div class="price-box">
