@@ -1,4 +1,4 @@
-<div class="sp-methods" id="checkout-payment-method-load">
+<div class="sp-methods" id="checkout-payment-method-load span6">
     <?php if(!count( $methods = $this->getMethods())): ?>
         <div>No payment methods available, please try again later or contact us.</div>
     <?php elseif( count( $methods ) == 1 ): ?>
@@ -10,14 +10,9 @@
         <div class="hpcheckout-payment-title">
             <h4 class="legend">Your payment methods</h4>
         </div>
-        <div>
-                <div class="cc_security pull-right">
-                    <div class="cc_secure_text pull-left">Totsy ensures your information is<br> private and secure!</div>
-                    <div class="cc_secure_icon">
-                        <img src="/skin/frontend/enterprise/bootstrap/images/iconmonstr-lock-7-icon.png" width="40" height="40">
-                    </div>
-                </div>
-        </div>
+        <!--
+        security icon used to be here
+        -->
         <?php foreach (array_reverse($methods) as $_method):  $_code = $_method->getCode() ?>
             <?php //if($_code != 'paymentfactory_tokenize'): ?>
                 <?php if ($html = $this->getPaymentMethodFormHtml($_method)): ?>
