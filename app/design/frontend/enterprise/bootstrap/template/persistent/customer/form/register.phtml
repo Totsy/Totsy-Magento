@@ -64,7 +64,8 @@
                     <input type="hidden" name="success_url" value="<?php echo $this->getSuccessUrl() ?>" />
                     <input type="hidden" name="error_url" value="<?php echo $this->getErrorUrl() ?>" />
                     <!--<label for="email_address" class="required"><em>*</em> <?php echo $this->__('Email Address') ?></label>-->
-                    <input placeholder="Email Address" type="text" name="email" id="email_address" value="<?php echo $this->htmlEscape($this->getFormData()->getEmail()) ?>" title="<?php echo $this->__('Email Address') ?>" class="big-input input-text validate-email required-entry" />
+                    <input placeholder="Email Address" type="text" name="email" id="email_address" value="<?php echo $this->htmlEscape($this->getFormData()->getEmail()) ?>" title="<?php echo $this->__('Email Address') ?>" class="big-input " />
+                    <div style="display:none" id="advice-validate-towerdata-email-email_address" class="validation-advice"></div>
                     <!--<label for="password" class="required"><em>*</em> <?php echo $this->__('Password') ?></label>-->
                     <input placeholder="Password" type="password" name="password" id="password" title="<?php echo $this->__('Password') ?>" class="big-input input-text required-entry strong-validate-password" />
                     <!--<label for="confirmation" class="required"><em>*</em> <?php echo $this->__('Confirm Password') ?></label>-->
@@ -192,6 +193,115 @@
                 Form.getElements('form-validate').each(function(element) {
                     element.setAttribute('autocomplete', 'off');
                 });
+                
+                (function () {
+                    var TOWERDATA_LICENSE = 'u9is6PZmPk';
+                    
+                    var email_errbox = jQuery('#advice-validate-towerdata-email-email_address');
+                    
+                    var email_input = jQuery('#email_address');
+                    
+                    var email_validate = 'stop';
+
+                    var GENERIC_ERROR_MSG = "Please enter a valid Email Address in the format: email@address.com";
+
+                    var status_rules = {
+                        "5": { pass: true },
+                        "10": { pass: true },
+                        "20": { pass: true },
+                        "30": { pass: true },
+                        "40": { pass: true },
+                        "45": { pass: true },
+                        "50": { pass: true },
+                        "100": { pass: false, msg: GENERIC_ERROR_MSG },
+                        "110": { pass: false, msg: GENERIC_ERROR_MSG },
+                        "115": { pass: false, msg: GENERIC_ERROR_MSG },
+                        "120": { pass: false, msg: GENERIC_ERROR_MSG },
+                        "125": { pass: false, msg: GENERIC_ERROR_MSG },
+                        "130": { pass: false, msg: "Email address cannot exceed 64 characters." },
+                        "135": { pass: false, msg: GENERIC_ERROR_MSG },
+                        "140": { pass: false, msg: GENERIC_ERROR_MSG },
+                        "145": { pass: false, msg: GENERIC_ERROR_MSG },
+                        "150": { pass: false, msg: GENERIC_ERROR_MSG },
+                        "155": { pass: false, msg: GENERIC_ERROR_MSG },
+                        "200": { pass: false, msg: GENERIC_ERROR_MSG },
+                        "210": { pass: false, msg: GENERIC_ERROR_MSG },
+                        "215": { pass: false, msg: GENERIC_ERROR_MSG },
+                        "310": { pass: false, msg: GENERIC_ERROR_MSG },
+                        "315": { pass: true },
+                        "400": { pass: false, msg: GENERIC_ERROR_MSG },
+                        "410": { pass: true },
+                        "420": { pass: false, msg: GENERIC_ERROR_MSG },
+                        "500": { pass: false, msg: GENERIC_ERROR_MSG },
+                        "505": { pass: false, msg: GENERIC_ERROR_MSG },
+                        "510": { pass: false, msg: GENERIC_ERROR_MSG },
+                        "520": { pass: false, msg: GENERIC_ERROR_MSG },
+                        "525": { pass: false, msg: GENERIC_ERROR_MSG },
+                        "530": { pass: true },
+                        "999": { pass: true }
+                    };
+                    
+                    var validate_email = function () {
+                        email_validate = 'processing';
+                        
+                        var verify = jQuery.tdverify({
+                            'license': TOWERDATA_LICENSE,
+                            'email': 'email_address'
+                        });
+                        
+                        verify.set({
+                            'settings': {
+                                'valid_email': 'mailbox',
+                                'timeout': 0.01
+                            }
+                        });
+                        
+                        verify.process({
+                            'onSuccess': function (data, text, xhr) {
+                                var rule = status_rules[data['email']['status_code'].toString()];
+
+                                if (data['email']['ok'] || rule['pass'] || !rule) {
+                                    email_validate = 'succeed'
+                                    email_errbox.hide();
+                                }
+                                else {
+                                    var msg = rule['msg'];
+                                    email_errbox.html(msg);
+                                    email_errbox.show();
+                                    email_validate = 'failed'
+                                }
+                                
+                                jQuery('#submit-button').prop('disabled', false);
+                            },
+                            'onError': function (xhr, error) {
+                                email_errbox.html(GENERIC_ERROR_MSG);
+                                email_errbox.show();
+                                
+                                email_validate = 'failed'
+                                jQuery('#submit-button').prop('disabled', false);
+                            }
+                        });
+                    };
+                    
+                    email_input.blur(validate_email);
+                    
+                    jQuery('#form-validate').submit(function (e) {
+                        if (email_validate == 'succeed') {
+                            return true;
+                        }
+                        
+                        return false;
+                    });
+                    
+                    jQuery('#submit-button').click(function () {
+                        if (email_validate != 'processing') {
+                            console.log(11111)
+                            validate_email();
+                        }
+                        
+                        jQuery(this).prop('disabled', true);
+                    });
+                })();
             //]]>
             </script>
         </div><!-- /.span grid col -->
