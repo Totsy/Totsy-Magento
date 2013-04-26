@@ -22,9 +22,7 @@ $multiShipping = FALSE;
 if(count($fulfillmentTypes) > 1) {
     $multiShipping = TRUE;
 }
-?>
 
-<?php
 $_reportGroup = $this->getReportGroup();
 $_paypageId = Mage::getModel('Litle_CreditCard_Model_PaymentLogic')->getConfigData("paypage_id");
 $_paypageUrl = Mage::getModel('Litle_CreditCard_Model_PaymentLogic')->getConfigData("paypage_url");
@@ -34,10 +32,7 @@ $_time =  date('ymdHis');
 $_session =  Mage::getModel("core/session")->getEncryptedSessionId();
 $_id = $_time . substr($_session,13);
 
-?>
-<div class="form-list one-page-payment" id="payment_form_<?php echo $_code ?>">
-<?php $customerId = Mage::getSingleton('customer/session')->getCustomerId(); ?>
-<?php 
+ $customerId = Mage::getSingleton('customer/session')->getCustomerId(); 
 if($this->getVaultEnabled()) {
   	if($this->hasStoredCards()) {
     	$hasProfile = true;
@@ -67,10 +62,11 @@ jQuery(document).ready( function() {
 });
 </script>
 
+<div class="form-list one-page-payment" id="payment_form_<?php echo $_code ?>">
 <div>
     <div>
     	<div>
-        	<div class="cc_types use-new-card-wrapper input-box validation-error pull-left">
+        	<div class="cc_types span6 use-new-card-wrapper pull-right">
         		<?php $_ccType = $this->getInfoData('cc_type') ?>
         		 <div id="<?php echo $_code ?>_cc_type">
         		 <?php $i=0; ?>
@@ -82,21 +78,9 @@ jQuery(document).ready( function() {
         		 	    </span>
         		 	</span>
         		 <?php endforeach ?>
-        		 <?php $methods = $this->getLayout()->getBlock('hpcheckout.payment.methods')->getMethods();  ?>
-                 <?php if(count($methods)): ?>
-                 	<?php if(!$multiShipping && !$hasVirtual && Mage::getModel('paypal/config')->isMethodActive('paypal_express')): ?>
-			    	    <input type="radio" value="paypal_express" id="paypal_payment" name="paypal_payment">
-			    	    <div>
-        		 	    <span title="Paypal Express" class="paypal"></span>
-        		 	    <a class="what-is-paypal-link" href="https://www.paypal.com/cgi-bin/webscr?cmd=xpt/Marketing/popup/OLCWhatIsPayPal-outside" target="_blank">What is<br /> PayPal?</a>
-        		 	    </div>
-        		 	<?php endif; ?>
-                 <?php endif; ?>
-        		 <div style="clear:both; height:10px"></div>
-        	    </div>
+                 </div>
         	</div>
         </div>
-        <div style="clear:both"></div>
  		<?php if($this->getVaultEnabled()) { ?>
  		        <?php if ($this->hasStoredCards()) { ?>
                 <div class="pull-left" id="use-card-method">
@@ -185,7 +169,6 @@ jQuery(document).ready( function() {
                 <div class="validation-advice" id="cc-num-error-message" style="display:none">Credit card number does not match credit card type</div>
             </div>
         </div>
-        <div style="clear:both"></div>
         <div>
             <?php if ($this->hasVerification()): ?>
             <div class="cc_cvn pull-left use-new-card-wrapper cc_info">
@@ -223,23 +206,42 @@ jQuery(document).ready( function() {
                 </div>
             </div>
         </div>
-    	</div>
     </div>
-<div style="clear:both"></div>
-<div id="add_payment">
-	<span class="add_payment_separator"><hr /></span>
-	<div id="hpcheckout-payment-add-title">
-		<h4 class="legend">Add a payment method</h4>
-	</div>
-	<div style="clear:both"></div>
-	<div>
-		<div class="pull-left" id="add_cc_types">
-		</div>
-		<div id="add_cc_data"></div>
-	</div>
-	<div style="clear:both"></div>
-	</div>
 </div>
+
+<div id="add_payment" class="row">
+    <div class="span6 pull-right">
+        <!-- <h4 class="legend">Add a payment method</h4> -->
+        <div id="add_cc_types"></div>
+        <div id="add_cc_data"></div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="span6 pull-left">
+        <div>
+<?php $methods = $this->getLayout()->getBlock('hpcheckout.payment.methods')->getMethods();  ?>
+<?php if(count($methods)): ?>
+	<?php if(!$multiShipping && !$hasVirtual && Mage::getModel('paypal/config')->isMethodActive('paypal_express')): ?>
+           <input type="radio" value="paypal_express" id="paypal_payment" name="paypal_payment">
+           <div>
+               <span title="Paypal Express" class="paypal"></span>
+               <a class="what-is-paypal-link" href="https://www.paypal.com/cgi-bin/webscr?cmd=xpt/Marketing/popup/OLCWhatIsPayPal-outside" target="_blank">What is<br /> PayPal?</a>
+           </div>
+        </div>
+   <?php endif; ?>
+<?php endif; ?>
+    </div>
+    <div class="span6 pull-right">
+        <div class="cc_security">
+            <div class="cc_secure_text pull-left">Totsy ensures your information is<br> private and secure!</div>
+            <div class="cc_secure_icon">
+                <img src="/skin/frontend/enterprise/bootstrap/images/iconmonstr-lock-7-icon.png" width="40" height="40">
+            </div>
+        </div>
+    </div>
+</div>
+
 	<?php if($this->getPaypageEnabled()):?>
    		<input type="hidden" id="<?php echo $_code ?>_paypage_id" name="payment[paypage_id]" value="<?php echo $_paypageId; ?>"/>
         <input type="hidden" id="<?php echo $_code ?>_merchant_txn_id" name="payment[merchant_txn_id]" value="<?php echo $_id; ?>"/>
