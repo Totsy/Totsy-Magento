@@ -1,0 +1,640 @@
+<?xml version="1.0"?>
+<config>
+	<sections>
+		<Crown_Towerdata translate="label">
+			<label>Email Validation</label>
+			<tab>general</tab>
+			<frontend_type>text</frontend_type>
+			<sort_order>60</sort_order>
+			<show_in_default>1</show_in_default>
+			<show_in_website>1</show_in_website>
+			<show_in_store>1</show_in_store>
+			<groups>
+				<general translate="label">
+					<label>Settings</label>
+					<frontend_type>text</frontend_type>
+					<sort_order>1</sort_order>
+					<show_in_default>1</show_in_default>
+					<show_in_website>1</show_in_website>
+					<show_in_store>1</show_in_store>
+					<expanded>1</expanded>
+					<fields>
+						<license translate="label">
+							<label>License Key</label>
+							<sort_order>1</sort_order>
+							<frontend_type>text</frontend_type>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</license>
+						<timeout translate="label">
+							<label>Timeout Seconds</label>
+							<sort_order>2</sort_order>
+							<frontend_type>text</frontend_type>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</timeout>
+						<defaultmsg translate="label">
+							<label>Default Error Message</label>
+							<sort_order>3</sort_order>
+							<frontend_type>text</frontend_type>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</defaultmsg>
+					</fields>
+				</general>
+				<error translate="label">
+					<label>Error Messages</label>
+					<frontend_type>text</frontend_type>
+					<sort_order>2</sort_order>
+					<show_in_default>1</show_in_default>
+					<show_in_website>1</show_in_website>
+					<show_in_store>1</show_in_store>
+					<expanded>1</expanded>
+					<fields>
+						<pass5 translate="label">
+							<label>5</label>
+							<source_model>Crown_Towerdata_Model_Passblock</source_model>
+							<frontend_type>select</frontend_type>
+							<sort_order>1</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</pass5>
+						<msg5 translate="label">
+							<comment>Timeout, One or more services timed out</comment>
+							<sort_order>2</sort_order>
+							<frontend_type>text</frontend_type>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</msg5>
+						<pass10 translate="label">
+							<label>10</label>
+							<source_model>Crown_Towerdata_Model_Passblock</source_model>
+							<frontend_type>select</frontend_type>
+							<sort_order>3</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</pass10>
+						<msg10 translate="label">
+							<comment>Syntax OK, Success</comment>
+							<sort_order>4</sort_order>
+							<frontend_type>text</frontend_type>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</msg10>
+						<pass20 translate="label">
+							<label>20</label>
+							<source_model>Crown_Towerdata_Model_Passblock</source_model>
+							<frontend_type>select</frontend_type>
+							<sort_order>5</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</pass20>
+						<msg20 translate="label">
+							<comment>Syntax OK and domain valid according to the domain database</comment>
+							<sort_order>6</sort_order>
+							<frontend_type>text</frontend_type>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</msg20>
+						<pass30 translate="label">
+							<label>30</label>
+							<source_model>Crown_Towerdata_Model_Passblock</source_model>
+							<frontend_type>select</frontend_type>
+							<sort_order>7</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</pass30>
+						<msg30 translate="label">
+							<comment>Syntax OK and domain exists</comment>
+							<sort_order>8</sort_order>
+							<frontend_type>text</frontend_type>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</msg30>
+						<pass40 translate="label">
+							<label>40</label>
+							<source_model>Crown_Towerdata_Model_Passblock</source_model>
+							<frontend_type>select</frontend_type>
+							<sort_order>9</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</pass40>
+						<msg40 translate="label">
+							<comment>Syntax OK, domain exists, and domain can receive email</comment>
+							<sort_order>10</sort_order>
+							<frontend_type>text</frontend_type>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</msg40>
+						<pass45 translate="label">
+							<label>45</label>
+							<source_model>Crown_Towerdata_Model_Passblock</source_model>
+							<frontend_type>select</frontend_type>
+							<sort_order>11</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</pass45>
+						<msg45 translate="label">
+							<comment>Domain does not support validation</comment>
+							<sort_order>12</sort_order>
+							<frontend_type>text</frontend_type>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</msg45>
+						<pass50 translate="label">
+							<label>50</label>
+							<source_model>Crown_Towerdata_Model_Passblock</source_model>
+							<frontend_type>select</frontend_type>
+							<sort_order>13</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</pass50>
+						<msg50 translate="label">
+							<comment>Syntax OK, domain exists, and mailbox does not reject mail</comment>
+							<sort_order>14</sort_order>
+							<frontend_type>text</frontend_type>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</msg50>
+						<pass100 translate="label">
+							<label>100</label>
+							<source_model>Crown_Towerdata_Model_Passblock</source_model>
+							<frontend_type>select</frontend_type>
+							<sort_order>15</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</pass100>
+						<msg100 translate="label">
+							<comment>General syntax error, Invalid request</comment>
+							<sort_order>16</sort_order>
+							<frontend_type>text</frontend_type>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</msg100>
+						<pass110 translate="label">
+							<label>110</label>
+							<source_model>Crown_Towerdata_Model_Passblock</source_model>
+							<frontend_type>select</frontend_type>
+							<sort_order>17</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</pass110>
+						<msg110 translate="label">
+							<comment>Invalid character in address, Invalid parameter</comment>
+							<sort_order>18</sort_order>
+							<frontend_type>text</frontend_type>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</msg110>
+						<pass115 translate="label">
+							<label>115</label>
+							<source_model>Crown_Towerdata_Model_Passblock</source_model>
+							<frontend_type>select</frontend_type>
+							<sort_order>19</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</pass115>
+						<msg115 translate="label">
+							<comment>Invalid domain syntax</comment>
+							<sort_order>20</sort_order>
+							<frontend_type>text</frontend_type>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</msg115>
+						<pass120 translate="label">
+							<label>120</label>
+							<source_model>Crown_Towerdata_Model_Passblock</source_model>
+							<frontend_type>select</frontend_type>
+							<sort_order>21</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</pass120>
+						<msg120 translate="label">
+							<comment>Invalid username syntax</comment>
+							<sort_order>22</sort_order>
+							<frontend_type>text</frontend_type>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</msg120>
+						<pass125 translate="label">
+							<label>125</label>
+							<source_model>Crown_Towerdata_Model_Passblock</source_model>
+							<frontend_type>select</frontend_type>
+							<sort_order>23</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</pass125>
+						<msg125 translate="label">
+							<comment>Invalid username syntax for that domain</comment>
+							<sort_order>24</sort_order>
+							<frontend_type>text</frontend_type>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</msg125>
+						<pass130 translate="label">
+							<label>130</label>
+							<source_model>Crown_Towerdata_Model_Passblock</source_model>
+							<frontend_type>select</frontend_type>
+							<sort_order>25</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</pass130>
+						<msg130 translate="label">
+							<comment>Address is too long</comment>
+							<sort_order>26</sort_order>
+							<frontend_type>text</frontend_type>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</msg130>
+						<pass135 translate="label">
+							<label>135</label>
+							<source_model>Crown_Towerdata_Model_Passblock</source_model>
+							<frontend_type>select</frontend_type>
+							<sort_order>27</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</pass135>
+						<msg135 translate="label">
+							<comment>Address has unbalanced parentheses, brackets, or quotes</comment>
+							<sort_order>28</sort_order>
+							<frontend_type>text</frontend_type>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</msg135>
+						<pass140 translate="label">
+							<label>140</label>
+							<source_model>Crown_Towerdata_Model_Passblock</source_model>
+							<frontend_type>select</frontend_type>
+							<sort_order>29</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</pass140>
+						<msg140 translate="label">
+							<comment>Address does not have a username</comment>
+							<sort_order>30</sort_order>
+							<frontend_type>text</frontend_type>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</msg140>
+						<pass145 translate="label">
+							<label>145</label>
+							<source_model>Crown_Towerdata_Model_Passblock</source_model>
+							<frontend_type>select</frontend_type>
+							<sort_order>31</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</pass145>
+						<msg145 translate="label">
+							<comment>Address does not have a domain</comment>
+							<sort_order>32</sort_order>
+							<frontend_type>text</frontend_type>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</msg145>
+						<pass150 translate="label">
+							<label>150</label>
+							<source_model>Crown_Towerdata_Model_Passblock</source_model>
+							<frontend_type>select</frontend_type>
+							<sort_order>33</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</pass150>
+						<msg150 translate="label">
+							<comment>Address does not have an @ sign</comment>
+							<sort_order>34</sort_order>
+							<frontend_type>text</frontend_type>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</msg150>
+						<pass155 translate="label">
+							<label>155</label>
+							<source_model>Crown_Towerdata_Model_Passblock</source_model>
+							<frontend_type>select</frontend_type>
+							<sort_order>35</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</pass155>
+						<msg155 translate="label">
+							<comment>Address has more than one @ sign</comment>
+							<sort_order>36</sort_order>
+							<frontend_type>text</frontend_type>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</msg155>
+						<pass200 translate="label">
+							<label>200</label>
+							<source_model>Crown_Towerdata_Model_Passblock</source_model>
+							<frontend_type>select</frontend_type>
+							<sort_order>37</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</pass200>
+						<msg200 translate="label">
+							<comment>Invalid top-level-domain (TLD) in address</comment>
+							<sort_order>38</sort_order>
+							<frontend_type>text</frontend_type>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</msg200>
+						<pass210 translate="label">
+							<label>210</label>
+							<source_model>Crown_Towerdata_Model_Passblock</source_model>
+							<frontend_type>select</frontend_type>
+							<sort_order>39</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</pass210>
+						<msg210 translate="label">
+							<comment>Comments are not allowed in email addresses</comment>
+							<sort_order>40</sort_order>
+							<frontend_type>text</frontend_type>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</msg210>
+						<pass215 translate="label">
+							<label>215</label>
+							<source_model>Crown_Towerdata_Model_Passblock</source_model>
+							<frontend_type>select</frontend_type>
+							<sort_order>41</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</pass215>
+						<msg215 translate="label">
+							<comment>Unquoted spaces are not allowed in email addresses</comment>
+							<sort_order>42</sort_order>
+							<frontend_type>text</frontend_type>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</msg215>
+						<pass310 translate="label">
+							<label>310</label>
+							<source_model>Crown_Towerdata_Model_Passblock</source_model>
+							<frontend_type>select</frontend_type>
+							<sort_order>43</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</pass310>
+						<msg310 translate="label">
+							<comment>Domain does not exist</comment>
+							<sort_order>44</sort_order>
+							<frontend_type>text</frontend_type>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</msg310>
+						<pass315 translate="label">
+							<label>315</label>
+							<source_model>Crown_Towerdata_Model_Passblock</source_model>
+							<frontend_type>select</frontend_type>
+							<sort_order>45</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</pass315>
+						<msg315 translate="label">
+							<comment>Domain does not have a valid IP Address</comment>
+							<sort_order>46</sort_order>
+							<frontend_type>text</frontend_type>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</msg315>
+						<pass325 translate="label">
+							<label>325</label>
+							<source_model>Crown_Towerdata_Model_Passblock</source_model>
+							<frontend_type>select</frontend_type>
+							<sort_order>47</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</pass325>
+						<msg325 translate="label">
+							<comment>Domain cannot receive email</comment>
+							<sort_order>48</sort_order>
+							<frontend_type>text</frontend_type>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</msg325>
+						<pass400 translate="label">
+							<label>400</label>
+							<source_model>Crown_Towerdata_Model_Passblock</source_model>
+							<frontend_type>select</frontend_type>
+							<sort_order>49</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</pass400>
+						<msg400 translate="label">
+							<comment>The mailbox is invalid or the username does not exist at the domain</comment>
+							<sort_order>50</sort_order>
+							<frontend_type>text</frontend_type>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</msg400>
+						<pass410 translate="label">
+							<label>410</label>
+							<source_model>Crown_Towerdata_Model_Passblock</source_model>
+							<frontend_type>select</frontend_type>
+							<sort_order>51</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</pass410>
+						<msg410 translate="label">
+							<comment>Mailbox is full and cannot receive email at this time</comment>
+							<sort_order>52</sort_order>
+							<frontend_type>text</frontend_type>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</msg410>
+						<pass420 translate="label">
+							<label>420</label>
+							<source_model>Crown_Towerdata_Model_Passblock</source_model>
+							<frontend_type>select</frontend_type>
+							<sort_order>53</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</pass420>
+						<msg420 translate="label">
+							<comment>Mail is not accepted for this domain</comment>
+							<sort_order>54</sort_order>
+							<frontend_type>text</frontend_type>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</msg420>
+						<pass500 translate="label">
+							<label>500</label>
+							<source_model>Crown_Towerdata_Model_Passblock</source_model>
+							<frontend_type>select</frontend_type>
+							<sort_order>55</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</pass500>
+						<msg500 translate="label">
+							<comment>Addresses with that username are not allowed</comment>
+							<sort_order>56</sort_order>
+							<frontend_type>text</frontend_type>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</msg500>
+						<pass505 translate="label">
+							<label>505</label>
+							<source_model>Crown_Towerdata_Model_Passblock</source_model>
+							<frontend_type>select</frontend_type>
+							<sort_order>57</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</pass505>
+						<msg505 translate="label">
+							<comment>Addresses with that domain are not allowed</comment>
+							<sort_order>58</sort_order>
+							<frontend_type>text</frontend_type>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</msg505>
+						<pass510 translate="label">
+							<label>510</label>
+							<source_model>Crown_Towerdata_Model_Passblock</source_model>
+							<frontend_type>select</frontend_type>
+							<sort_order>59</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</pass510>
+						<msg510 translate="label">
+							<comment>The email address is suppressed and not allowed</comment>
+							<sort_order>60</sort_order>
+							<frontend_type>text</frontend_type>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</msg510>
+						<pass520 translate="label">
+							<label>520</label>
+							<source_model>Crown_Towerdata_Model_Passblock</source_model>
+							<frontend_type>select</frontend_type>
+							<sort_order>61</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</pass520>
+						<msg520 translate="label">
+							<comment>Address is a known bouncer</comment>
+							<sort_order>62</sort_order>
+							<frontend_type>text</frontend_type>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</msg520>
+						<pass525 translate="label">
+							<label>525</label>
+							<source_model>Crown_Towerdata_Model_Passblock</source_model>
+							<frontend_type>select</frontend_type>
+							<sort_order>63</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</pass525>
+						<msg525 translate="label">
+							<comment>Address is a spamtrap or known complainer</comment>
+							<sort_order>64</sort_order>
+							<frontend_type>text</frontend_type>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</msg525>
+						<pass530 translate="label">
+							<label>530</label>
+							<source_model>Crown_Towerdata_Model_Passblock</source_model>
+							<frontend_type>select</frontend_type>
+							<sort_order>65</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</pass530>
+						<msg530 translate="label">
+							<comment>Address has opted out from commercial email</comment>
+							<sort_order>66</sort_order>
+							<frontend_type>text</frontend_type>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</msg530>
+						<pass999 translate="label">
+							<label>999</label>
+							<source_model>Crown_Towerdata_Model_Passblock</source_model>
+							<frontend_type>select</frontend_type>
+							<sort_order>67</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</pass999>
+						<msg999 translate="label">
+							<comment>Internal Error</comment>
+							<sort_order>68</sort_order>
+							<frontend_type>text</frontend_type>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</msg999>
+					</fields>
+				</error>
+			</groups>
+		</Crown_Towerdata>
+	</sections>
+</config>

@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<config>
+	<modules>
+		<Crown_Towerdata>
+			<version>0.0.1</version>
+		</Crown_Towerdata>
+	</modules>
+	<frontend>
+		<routers>
+			<towerdata>
+				<use>standard</use>
+				<args>
+					<module>Crown_Towerdata</module>
+					<frontName>towerdata</frontName>
+				</args>
+			</towerdata>
+		</routers>
+	</frontend>
+</config>

@@ -195,7 +195,8 @@
                 });
                 
                 (function () {
-                    var TOWERDATA_LICENSE = 'u9is6PZmPk';
+                    var TOWERDATA_LICENSE = '<?php echo Mage::getStoreConfig('Crown_Towerdata/general/license'); ?>';
+                    var GENERIC_ERROR_MSG = "<?php echo Mage::getStoreConfig('Crown_Towerdata/general/defaultmsg'); ?>";
                     
                     var email_errbox = jQuery('#advice-validate-towerdata-email-email_address');
                     
@@ -203,44 +204,24 @@
                     
                     var email_validate = 'stop';
 
-                    var GENERIC_ERROR_MSG = "Please enter a valid Email Address in the format: email@address.com";
+					<?php
+					$codes = array(5, 10, 20, 30, 40, 45, 50, 100, 110, 115, 120, 125,
+						130, 135, 140, 145, 150, 155, 200, 210, 215, 310, 315, 400, 410,
+						420, 500, 505, 510, 520, 530, 999);
 
-                    var status_rules = {
-                        "5": { pass: true },
-                        "10": { pass: true },
-                        "20": { pass: true },
-                        "30": { pass: true },
-                        "40": { pass: true },
-                        "45": { pass: true },
-                        "50": { pass: true },
-                        "100": { pass: false, msg: GENERIC_ERROR_MSG },
-                        "110": { pass: false, msg: GENERIC_ERROR_MSG },
-                        "115": { pass: false, msg: GENERIC_ERROR_MSG },
-                        "120": { pass: false, msg: GENERIC_ERROR_MSG },
-                        "125": { pass: false, msg: GENERIC_ERROR_MSG },
-                        "130": { pass: false, msg: "Email address cannot exceed 64 characters." },
-                        "135": { pass: false, msg: GENERIC_ERROR_MSG },
-                        "140": { pass: false, msg: GENERIC_ERROR_MSG },
-                        "145": { pass: false, msg: GENERIC_ERROR_MSG },
-                        "150": { pass: false, msg: GENERIC_ERROR_MSG },
-                        "155": { pass: false, msg: GENERIC_ERROR_MSG },
-                        "200": { pass: false, msg: GENERIC_ERROR_MSG },
-                        "210": { pass: false, msg: GENERIC_ERROR_MSG },
-                        "215": { pass: false, msg: GENERIC_ERROR_MSG },
-                        "310": { pass: false, msg: GENERIC_ERROR_MSG },
-                        "315": { pass: true },
-                        "400": { pass: false, msg: GENERIC_ERROR_MSG },
-                        "410": { pass: true },
-                        "420": { pass: false, msg: GENERIC_ERROR_MSG },
-                        "500": { pass: false, msg: GENERIC_ERROR_MSG },
-                        "505": { pass: false, msg: GENERIC_ERROR_MSG },
-                        "510": { pass: false, msg: GENERIC_ERROR_MSG },
-                        "520": { pass: false, msg: GENERIC_ERROR_MSG },
-                        "525": { pass: false, msg: GENERIC_ERROR_MSG },
-                        "530": { pass: true },
-                        "999": { pass: true }
-                    };
-                    
+					$rules = array();
+
+				    foreach ($codes as $code) {
+						$rule = array(
+							'pass' => (boolean) Mage::getStoreConfig('Crown_Towerdata/error/pass' . $code),
+						    'msg' => Mage::getStoreConfig('Crown_Towerdata/error/msg' . $code)
+						);
+
+					    $rules[$code] = $rule;
+					}
+				    echo "var status_rules = " . json_encode($rules) . ";";
+					?>
+
                     var validate_email = function () {
                         email_validate = 'processing';
                         
@@ -260,7 +241,7 @@
                             'onSuccess': function (data, text, xhr) {
                                 var rule = status_rules[data['email']['status_code'].toString()];
 
-                                if (data['email']['ok'] || rule['pass'] || !rule) {
+                                if ((data['email']['ok'] && rule['pass']) || !rule) {
                                     email_validate = 'succeed'
                                     email_errbox.hide();
                                 }

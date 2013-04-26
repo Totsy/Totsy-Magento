@@ -1,8 +1,0 @@
-<?xml version="1.0"?>
-<config>
-	<modules>
-		<Crown_EmailValidate>
-			<version>0.0.1</version>
-		</Crown_EmailValidate>
-	</modules>
-</config>
