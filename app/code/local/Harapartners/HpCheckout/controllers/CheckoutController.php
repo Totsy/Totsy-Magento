@@ -1,4 +1,6 @@
 <?php
+require_once ('Litle/LitleSDK/LitleOnline.php');
+
 class Harapartners_HpCheckout_CheckoutController extends Mage_Checkout_Controller_Action {
 
     protected $_stepControl = array(
@@ -50,6 +52,7 @@ class Harapartners_HpCheckout_CheckoutController extends Mage_Checkout_Controlle
         $result = array();
         $customer = Mage::getSingleton('customer/session')->getCustomer();
         $customerId = $customer->getId();
+
         try {
             if (($data = $this->getRequest()->getPost('payment', false)) && array_key_exists('method',$data) && $data['method'] == 'paypal_express') {
 
@@ -78,19 +81,6 @@ class Harapartners_HpCheckout_CheckoutController extends Mage_Checkout_Controlle
                 $result[ 'status' ] = 2;
             } else {
                 if ($data = $this->getRequest()->getPost('payment', false)) {
-
-
-                    $profile = Mage::getModel('paymentfactory/profile');
-                    if (isset($data['cc_number']) && isset($data['cc_exp_year']) && isset($data['cc_exp_month'])) {
-                        $profile->loadByCcNumberWithId($data['cc_number'].$customerId.$data[ 'cc_exp_year' ].$data[ 'cc_exp_month' ]);
-                    }
-
-                    if ($profile && $profile->getId()) {
-                        $cybersourceIdEncrypted = $profile->getEncryptedSubscriptionId();
-                        if($cybersourceIdEncrypted) {
-                            $data['cybersource_subid'] = $cybersourceIdEncrypted;
-                        }
-                    }
                     $this->_getHpCheckout()->getCheckout()->setData('payment_data',$data);
                     $this->_getHpCheckout()->getQuote()->getPayment()->importData($data);
                 }
@@ -105,20 +95,6 @@ class Harapartners_HpCheckout_CheckoutController extends Mage_Checkout_Controlle
                 	return;
                 }
                 $this->_getHpCheckout()->saveOrder();
-/*
-                $storeId = Mage::app()->getStore()->getId();
-                $paymentHelper = Mage::helper("payment");
-                $zeroSubTotalPaymentAction = $paymentHelper->getZeroSubTotalPaymentAutomaticInvoice($storeId);
-                if ($paymentHelper->isZeroSubTotal($storeId)
-                    && $this->_getOrder()->getGrandTotal() == 0
-                    && $zeroSubTotalPaymentAction == Mage_Payment_Model_Method_Abstract::ACTION_AUTHORIZE_CAPTURE
-                    && $paymentHelper->getZeroSubTotalOrderStatus($storeId) == 'pending') {
-                    $invoice = $this->_initInvoice();
-                    $invoice->getOrder()->setIsInProcess(true);
-                    $invoice->save();
-                }
-*/
-                //                $redirectUrl = $this->_getHpCheckout()->getCheckout()->getRedirectUrl();
                 $result['status'] = 0;
             }
         } catch (Mage_Payment_Model_Info_Exception $e) {
@@ -136,10 +112,6 @@ class Harapartners_HpCheckout_CheckoutController extends Mage_Checkout_Controlle
             Mage::logException($e);
         }
         $this->_getHpCheckout()->getQuote()->save();
-        //        if (isset($redirectUrl)) {
-        //            $result['redirect'] = $redirectUrl;
-        //        }
-
         $this->getResponse()->setBody(Mage::helper('core')->jsonEncode($result));
     }
 

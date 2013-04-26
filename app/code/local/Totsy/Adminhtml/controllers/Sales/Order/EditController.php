@@ -78,7 +78,7 @@ class Totsy_Adminhtml_Sales_Order_EditController extends Mage_Adminhtml_Sales_Or
             $this->_redirect('*/sales_order/view', array('order_id' => $orderId));
         } else {
             $result = Mage::getSingleton('fulfillmentfactory/service_dotcom')
-                ->submitOrdersToFulfill(array($order));
+                ->submitOrdersToFulfill(array($order), true);
 
             if (count($result)) {
                 Mage::getSingleton('adminhtml/session')->addError((string)$result[0]->order_error->error_description);

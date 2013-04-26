@@ -22,8 +22,8 @@
     </sales_order_billing_edit>
 
     <sales_order_view>
-        <reference name="sales.order.info.buttons">
-            <block type="oro_sales/order_info_button" name="oro_sales_order_info_button" template="oro/sales/info/button.phtml"/>
+        <reference name="sales.order.info">
+            <block type="oro_sales/order_info_button" name="sales.order.info.payment.button" template="oro/sales/info/button.phtml"/>
         </reference>
     </sales_order_view>
 </layout>

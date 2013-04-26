@@ -3,7 +3,7 @@
 require_once __DIR__ . '/../app/Mage.php';
 Mage::app();
 
-$options = getopt('o:f', array('order:', 'fulfillment', 'inventory', 'fulfillitems', 'submitorders'));
+$options = getopt('o:f', array('order:', 'fulfillment', 'inventory', 'fulfillitems', 'submitorders', 'skus'));
 
 $start = time();
 
@@ -36,6 +36,11 @@ if (isset($options['f']) || isset($options['fulfillment'])) {
 if (isset($options['inventory'])) {
     echo "Updating inventory levels ...", PHP_EOL;
     $service->updateInventory();
+}
+
+if (isset($options['skus'])) {
+    echo "Getting skus available ...", PHP_EOL;
+    $service->getAvailableSkus();
 }
 
 if (isset($options['fulfillitems'])) {

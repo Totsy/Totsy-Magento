@@ -18,9 +18,10 @@ class Harapartners_SpeedTax_Block_Adminhtml_Taxsku_Edit_Form
             'name'      => 'start_at',
             'required'  => true,
             'time'      => true,
-            'format'    => Mage::app()->getLocale()->getDateTimeFormat(Mage_Core_Model_Locale::FORMAT_TYPE_SHORT),
+            'format'    => Varien_Date::DATETIME_INTERNAL_FORMAT,
             'image'     => $this->getSkinUrl('images/grid-cal.gif'),
-            'style'     => 'width: 140px;'
+            'style'     => 'width: 140px;',
+            'note'      => 'Min date for event start date field'
         ));
 
         $fieldset->addField('end_at', 'date', array(
@@ -28,9 +29,10 @@ class Harapartners_SpeedTax_Block_Adminhtml_Taxsku_Edit_Form
             'name'      => 'end_at',
             'required'  => true,
             'time'      => true,
-            'format'    => Mage::app()->getLocale()->getDateTimeFormat(Mage_Core_Model_Locale::FORMAT_TYPE_SHORT),
+            'format'    => Varien_Date::DATETIME_INTERNAL_FORMAT,
             'image'     => $this->getSkinUrl('images/grid-cal.gif'),
-            'style'     => 'width: 140px;' 
+            'style'     => 'width: 140px;',
+            'note'      => 'Max date for event start date field'
         ));
 
         $fieldset->addField('ex_events', 'textarea', array(

@@ -67,6 +67,9 @@ class Totsy_CatalogFeed_Model_Feed_Csv_Insparq
 
         $productUrl = is_null($parent) ? $product->getProductUrl() : $parent->getProductUrl();
 
+        $endDate = Mage::getSingleton('core/date')
+            ->gmtDate('c', $event->getData('event_end_date'));
+
         $feedItem = array(
             $product['entity_id'],
             (null !== $parent) ? $parent->getId() : '',
@@ -79,7 +82,8 @@ class Totsy_CatalogFeed_Model_Feed_Csv_Insparq
             $product['special_price'],
             implode(',', $age),
             $product->getAttributeText('color'),
-            $product->getAttributeText('size')
+            $product->getAttributeText('size'),
+            $endDate
         );
 
         fputcsv($this->_handle, $feedItem);

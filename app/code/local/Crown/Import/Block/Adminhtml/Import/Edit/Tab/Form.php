@@ -54,14 +54,33 @@ class Crown_Import_Block_Adminhtml_Import_Edit_Tab_Form extends Mage_Adminhtml_B
 			) );
 		}
 		
-		$fieldset->addField ( 'po_id', 'select', array (
+		$poField = $fieldset->addField ( 'po_id', 'select', array (
 			'label' => $helper->__ ( 'Purchase Order' ), 
 			'required' => true, 
 			'name' => 'po_id', 
 			'values' => Mage::helper ( 'stockhistory' )->getFormPoArrayByCategoryId ( $importModel->getData ( 'category_id' ), Harapartners_Stockhistory_Model_Purchaseorder::STATUS_OPEN ), 
 			'note' => $helper->__ ( 'Products within the same event usually belong to the same PO. Be careful when creating a new PO.' ) 
 		) );
-		
+
+        $poField->setAfterElementHtml('<script>
+            function updateVendorCodeSelect() {
+                if ($(\'po_id\').value==0)
+                    $("vendor_code").disabled=false;
+                else {
+                    $("vendor_code").disabled=true;
+                }
+            }
+
+            $(\'po_id\').observe(\'change\', function(event) {
+                $("vendor_code").clear();
+                updateVendorCodeSelect();
+            });
+
+            document.observe(\'dom:loaded\', function(){
+              updateVendorCodeSelect();
+            });
+        </script>');
+
 		$fieldset->addField ( 'vendor_code', 'select', array (
 			'label' => $helper->__ ( 'Vendor Code' ), 
 			'required' => false, 

@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<config>
+	<modules>
+		<Litle_CreditCard>
+			<active>true</active>
+			<codePool>community</codePool>
+		</Litle_CreditCard>
+		<Litle_LEcheck>
+			<active>true</active>
+			<codePool>community</codePool>
+		</Litle_LEcheck>
+		<Litle_Palorus>
+			<active>true</active>
+			<codePool>community</codePool>
+		</Litle_Palorus>
+	</modules>
+</config>

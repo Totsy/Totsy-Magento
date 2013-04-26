@@ -107,8 +107,6 @@ shpn='<?php echo $topNavDataObject->getData('attr_text_label'); ?>'
 <script type="text/javascript">
         jQuery(".counter").each(function(){
         var saleTime = new Date(jQuery(this).data('enddate'));
-        var server_now = retrieveServertime();
-        var timezone = -server_now.getTimezoneOffset()/60;
         var id = jQuery(this).data('id');
         var thisElem = jQuery(this);
         jQuery(this).countdown({
@@ -116,7 +114,6 @@ shpn='<?php echo $topNavDataObject->getData('attr_text_label'); ?>'
             layout: "<span class='prefix'>Sale Ends:</span> <span class='italic'> {dn} <span class=\"cd-time\">Days,</span> {hnn} <span class=\"cd-time\">Hours,</span> {mnn} <span class=\"cd-time\">Mins</span></span>",
             serverSync: retrieveServertime,
             expiryText: 'Completed',
-            timezone: timezone,
             alwaysExpire: true,
             onExpiry: function( event ){
                 thisElem.parents('.category-event-grid').hide();

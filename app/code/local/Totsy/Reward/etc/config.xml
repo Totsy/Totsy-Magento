@@ -6,12 +6,42 @@
         </Totsy_Reward>
     </modules>
     <global>
+        <blocks>
+            <enterprise_reward>
+                <class>Totsy_Reward_Block</class>
+            </enterprise_reward>
+        </blocks>
         <models>
             <enterprise_reward>
                 <rewrite>
                     <total_invoice_reward>Totsy_Reward_Model_Total_Invoice_Reward</total_invoice_reward>
+                    <import>Totsy_Reward_Model_Import</import>
                 </rewrite>
             </enterprise_reward>
         </models>
     </global>
+    <admin>
+        <routers>
+            <reward>
+                <use>admin</use>
+                <args>
+                    <module>Totsy_Reward</module>
+                    <frontName>adminhtml_import</frontName>
+                </args>
+            </reward>
+        </routers>
+    </admin>
+    <adminhtml>
+        <menu>
+            <harapartners>
+                <children>
+                    <enterprise_reward_import translate="title" module="enterprise_reward">
+                        <title>Reward Import</title>
+                        <sort_order>200</sort_order>
+                        <action>reward/adminhtml_import</action>
+                    </enterprise_reward_import>
+                </children>
+            </harapartners>
+        </menu>
+    </adminhtml>
 </config>

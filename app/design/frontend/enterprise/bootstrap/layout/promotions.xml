@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">	
+	<promotions_banner_view>
+	    <reference name="root">
+            <action method="setTemplate"><template>page/1column.phtml</template></action>
+        </reference>
+		<reference name="content">
+            <block type="promotions/block" name="promotions_banner_view" as="promotions_banner_view" template="promotions/banner/view.phtml" />
+        </reference>
+	</promotions_banner_view>
+</layout> 
