@@ -214,11 +214,12 @@ $removedItems = $this->getRemovedItems();
         <table id="removed_items" class="data" cellspacing="0">
             <thead>
                 <tr class="headings">
+                    <th>Product Id</th>
                     <th>Vendor Style</th>
                     <th>Product Name</th>
                     <th>Sku</th>
-                    <th>Size</th>
                     <th>Color</th>
+                    <th>Size</th>
                     <th></th>
                 </tr>
             </thead>
@@ -227,12 +228,13 @@ $removedItems = $this->getRemovedItems();
                     foreach($removedItems as $id => $data): 
                 ?>
                     <tr class="removed">
+                        <td><?php echo $id; ?></td>
                         <td> <?php echo $data['vendor_style']; ?> </td>
                         <td> <?php echo $data['product_name']; ?> </td>
                         <td> <?php echo $data['sku'] ?> </td>
                         <td> <?php echo $data['color'] ?> </td>
                         <td> <?php echo $data['size'] ?> </td>
-                        <td> <button id="put_back_button" type="button" data-id="<?php echo $id?>">Put Back</button> </td>
+                        <td> <button class="put_back_button" type="button" data-id="<?php echo $id?>">Put Back</button> </td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>
@@ -273,10 +275,10 @@ $removedItems = $this->getRemovedItems();
       }
     });
 
-    jQuery("#put_back_button").click(function(){
+    jQuery("#ReportGrid").delegate('.put_back_button','click' , function(){
       var id = jQuery(this).data('id');
       jQuery.ajax({
-        url: "<?php echo Mage::getUrl('*/*/putBackRemovedItem', array('_current' => true, '_query'=> array('isAjax' => true)))?>",
+        url: "<?php echo Mage::getUrl('*/*/putBackRemovedItem', array('_current' => true, '_query'=> array('isAjax' => "true")))?>",
         type: 'POST',
         data: {product_id : id, form_key : FORM_KEY},
         beforeSend: function() {

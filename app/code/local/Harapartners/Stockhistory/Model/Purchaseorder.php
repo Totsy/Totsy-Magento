@@ -99,7 +99,7 @@ class Harapartners_Stockhistory_Model_Purchaseorder extends Mage_Core_Model_Abst
         return $this;
     }
 
-    public function totalUnitsSold($collection) {
+    public function totalPoUnits($collection) {
         foreach($collection as $result) {
             $transactionsColl = Mage::getModel('stockhistory/transaction')->getCollection();
             $transactionsColl->getSelect()->where('po_id=' . $result->getId() . ' and product_id IS NOT null and action_type= 2')->order('id DESC');
@@ -107,6 +107,16 @@ class Harapartners_Stockhistory_Model_Purchaseorder extends Mage_Core_Model_Abst
                 $total_units = $qty = 0;
                 $pre_buys = array();
                 $count = 0;
+                $category_id = $transactionsColl->getFirstItem()->getCategoryId();
+                $event = Mage::getModel('catalog/category')->load($category_id);
+                $start_date = $event->getData('event_start_date');
+                $end_date = $event->getData('event_end_date');
+
+                $start_date = strtotime($start_date) - 60*60*24*7;	// 7 days before
+                $end_date = strtotime($end_date) + 60*60*24*3;	// 3 days after
+
+                $start_date = date('Y-m-d H:i:s', $start_date);
+                $end_date = date('Y-m-d H:i:s', $end_date);
                 foreach($transactionsColl as $trans) {
                     $product_id = $trans->getProductId();
                     $product = Mage::getModel('catalog/product')
@@ -131,7 +141,7 @@ class Harapartners_Stockhistory_Model_Purchaseorder extends Mage_Core_Model_Abst
                         }
                     } else {
                         $ordersColl = Mage::getModel('sales/order_item')->getCollection();
-                        $ordersColl->getSelect()->where('product_id =' . $product_id);
+                        $ordersColl->getSelect()->where('product_id =' . $product_id . ' and created_at between "'. $start_date . '" and "' . $end_date .'"');
                         foreach($ordersColl as $order) {
 
                             if($order->getParentItemId()) {
@@ -151,5 +161,48 @@ class Harapartners_Stockhistory_Model_Purchaseorder extends Mage_Core_Model_Abst
             $result->save();
         }
     }
-    
+
+    public function totalUnitsSold($collection) {
+        foreach($collection as $result) {
+            $transactionsColl = Mage::getModel('stockhistory/transaction')->getCollection();
+            $transactionsColl->getSelect()->where('po_id=' . $result->getId() . ' and product_id IS NOT null and action_type= 2')->order('id DESC');
+            if ($transactionsColl->getSize()) {
+                $total_units = $qty = 0;
+                $pre_buys = array();
+                $count = 0;
+                $category_id = $transactionsColl->getFirstItem()->getCategoryId();
+                $event = Mage::getModel('catalog/category')->load($category_id);
+                $start_date = $event->getData('event_start_date');
+                $end_date = $event->getData('event_end_date');
+
+                $start_date = strtotime($start_date) - 60*60*24*7;	// 7 days before
+                $end_date = strtotime($end_date) + 60*60*24*3;	// 3 days after
+
+                $start_date = date('Y-m-d H:i:s', $start_date);
+                $end_date = date('Y-m-d H:i:s', $end_date);
+                foreach($transactionsColl as $trans) {
+                    $product_id = $trans->getProductId();
+                    $product = Mage::getModel('catalog/product')
+                        ->setStoreId(Mage::app()->getStore()->getId())
+                        ->load($product_id);
+
+                    $ordersColl = Mage::getModel('sales/order_item')->getCollection();
+                   $ordersColl->getSelect()->where('product_id =' . $product_id . ' and created_at between "'. $start_date . '" and "' . $end_date .'"');
+
+                    foreach($ordersColl as $order) {
+                        if($order->getParentItemId()) {
+                            $parent_item_id = $order->getParentItemId();
+                            $parent_order_line = Mage::getModel('sales/order_item')->getCollection();
+                            $parent_order_line->getSelect()->where('item_id =' . $parent_item_id);
+                            $order = $parent_order_line->getFirstItem();
+                        }
+                        $qty = $order->getQtyOrdered() - $order->getQtyReturned() - $order->getQtyCanceled();
+                        $total_units += $qty;
+                    }
+                }
+            }
+            $result->setData('units_sold', $total_units);
+            $result->save();
+        }
+    }
 }

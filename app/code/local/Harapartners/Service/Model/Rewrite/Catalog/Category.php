@@ -24,7 +24,7 @@ class Harapartners_Service_Model_Rewrite_Catalog_Category
      *
      * @return Mage_Catalog_Model_Category
      */
-    public function move($parentId, $afterCategoryId, $reIndex = false)
+    public function move($parentId, $afterCategoryId, $reIndex = FALSE)
     {
         $this->_totsyReserveAnchorCategoryCheck($parentId);
 
@@ -49,7 +49,7 @@ class Harapartners_Service_Model_Rewrite_Catalog_Category
         return parent::_beforeDelete();
     }
 
-    protected function _totsyReserveAnchorCategoryCheck($parentId = null)
+    protected function _totsyReserveAnchorCategoryCheck($parentId = NULL)
     {
         if ($this->getData('name') == Harapartners_Categoryevent_Model_Sortentry::EVENT_CATEGORY_NAME ||
             $this->getOrigData('name') == Harapartners_Categoryevent_Model_Sortentry::EVENT_CATEGORY_NAME ||
@@ -59,7 +59,7 @@ class Harapartners_Service_Model_Rewrite_Catalog_Category
             Mage::throwException('This event is a fixed/reserve event that cannot be modified.');
         }
 
-        if (null != $parentId) {
+        if (NULL != $parentId) {
             $eventCategory = Mage::getModel('catalog/category')->getCollection()
                 ->addAttributeToFilter('name', Harapartners_Categoryevent_Model_Sortentry::EVENT_CATEGORY_NAME)
                 ->getFirstItem();
@@ -76,4 +76,22 @@ class Harapartners_Service_Model_Rewrite_Catalog_Category
         return $this;
     }
 
+    /**
+     * Checks whether the event is currently active and within the start and end times.
+     * @return bool
+     */
+    public function isLiveEvent() {
+
+        if(!$this->getIsActive()) {
+            return FALSE;
+        }
+        if(strtotime($this->getEventStartDate()) > Mage::getSingleton('core/date')->timestamp()) {
+            return FALSE;
+        }
+        if(strtotime($this->getEventEndDate()) < Mage::getSingleton('core/date')->timestamp()) {
+            return FALSE;
+        }
+
+        return TRUE;
+    }
 }

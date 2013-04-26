@@ -101,7 +101,10 @@ abstract class Harapartners_HpCheckout_Block_Abstract extends Mage_Core_Block_Te
             if ($address) {
                 $addressId = $address->getId();
             }
-
+            $lastCardUsed = Mage::helper('palorus')->getLastCardUsed();
+            if($lastCardUsed && $lastCardUsed->getId()) {
+                $addressId = $lastCardUsed->getAddressId() ;
+            }
             $select = $this->getLayout()->createBlock('core/html_select')
                 ->setName($type.'_address_id')
                 ->setId($type.'-address-select')

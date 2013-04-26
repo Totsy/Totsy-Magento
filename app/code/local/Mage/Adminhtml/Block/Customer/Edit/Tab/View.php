@@ -241,4 +241,22 @@ class Mage_Adminhtml_Block_Customer_Edit_Tab_View
         return 'N/A';
     }
 
+    public function getFirstOrderDate() {
+        $collection = Mage::getResourceModel('sales/order_collection');
+        $collection
+            ->addAttributeToFilter('customer_id',$this->getCustomer()->getId())
+            ->getSelect()
+            ->order('main_table.entity_id asc')
+            ->limit(1)
+        ;
+
+        $order = $collection->load()->fetchItem();
+
+        if($order) {
+            $date = Mage::app()->getLocale()->date($order->getCreatedAt());
+            return $this->formatDate($date, Mage_Core_Model_Locale::FORMAT_TYPE_MEDIUM, true);
+        }
+        return '';
+
+    }
 }

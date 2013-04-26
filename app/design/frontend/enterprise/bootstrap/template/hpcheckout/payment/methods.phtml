@@ -1,36 +1,31 @@
-<div class="sp-methods" id="checkout-payment-method-load">
-
-<?php if(!count( $methods = $this->getMethods())): ?>
-	<div>No payment methods available, please try again later or contact us.</div>
-<?php elseif( count( $methods ) == 1 ): ?>
-	 <input type="hidden" name="payment[method]" value="<?php echo $methods[0]->getCode() ?>"> 
-	<div><?php echo $this->getPaymentMethodFormHtml( $methods[0] ) ?></div>
-	<script type="text/javascript">
-		jQuery( "#payment_form_<?php echo $methods[0]->getCode() ?>" ).show();
-	</script>
-<?php else: ?>	
-<div>
-<input type="hidden" name="payment[method]" id="payment_method" value="paymentfactory_tokenize" />
-<?php 
-
-$formPath = "paymentfactory/forma.phtml";
-
-if(isset($_GET['b'])) {
-	$formPath = "paymentfactory/form.phtml";
-} 
-
-?>
-</div>
-<?php $paymentCode = $methods[0]->getCode(); ?>
-<?php $this->setMethodFormTemplate($paymentCode, $formPath); ?>
-<?php foreach ($methods as $_method):  $_code = $_method->getCode() ?>
-    <?php if ($html = $this->getPaymentMethodFormHtml($_method)): ?>
+<div class="sp-methods" id="checkout-payment-method-load span6">
+    <?php if(!count( $methods = $this->getMethods())): ?>
+        <div>No payment methods available, please try again later or contact us.</div>
+    <?php elseif( count( $methods ) == 1 ): ?>
         <div>
-            <?php echo $html; ?>
+            <input type="hidden" name="payment[method]" value="<?php echo $methods[0]->getCode(); ?>"> 
+            <?php echo $this->getPaymentMethodFormHtml( $methods[0] ) ?>
         </div>
-    <?php endif; ?>
-<?php endforeach; ?>
-<?php endif ?>
+    <?php else: ?>
+        <div class="hpcheckout-payment-title">
+            <h4 class="legend">Your payment methods</h4>
+        </div>
+        <!--
+        security icon used to be here
+        -->
+        <?php foreach (array_reverse($methods) as $_method):  $_code = $_method->getCode() ?>
+            <?php //if($_code != 'paymentfactory_tokenize'): ?>
+                <?php if ($html = $this->getPaymentMethodFormHtml($_method)): ?>
+                <div>
+                    <?php echo $html; ?>
+                </div>
+                <?php endif; ?>
+            <?php //endif; ?>
+        <?php endforeach; ?>
+    <?php endif ?>
+ </div>
+ <div id="paypal_container">
+ </div>
 <script type="text/javascript">
     jQuery(document).ready( function() {   
         if(jQuery('input:radio[name=paypal_payment]')) {
@@ -40,7 +35,7 @@ if(isset($_GET['b'])) {
                 hpcheckout.switchPaymentMethod('paypal_express');			
             });
         }    
-
+		
         jQuery('.validate-cybsersource-cc-type').click( function() {
             if(jQuery('#paypal_payment').length > 0) {
                 jQuery('#paypal_payment').attr("checked", false);
@@ -49,10 +44,8 @@ if(isset($_GET['b'])) {
                 jQuery("#payment_form_paypal_express").hide();
             }
             jQuery("#cc_data").show();
-            jQuery('input[name="payment[method]"]').val("paymentfactory_tokenize");
-    		hpcheckout.switchPaymentMethod('paymentfactory_tokenize');		
+            jQuery('input[name="payment[method]"]').val("creditcard");
+    		hpcheckout.switchPaymentMethod('creditcard');		
         });
-
-
     });	
 </script>

@@ -42,7 +42,6 @@
             <codePool>local</codePool>
             <depends>
                 <Fooman_Speedster/>
-
             </depends>
         </Totsy_Page>
         <Totsy_Catalog>
@@ -108,5 +107,13 @@
                 <Aoe_Scheduler/>
             </depends>
         </Totsy_Scheduler>
+        <Totsy_Promotions>
+            <active>true</active>
+            <codePool>local</codePool>
+        </Totsy_Promotions>
+        <Totsy_Pci>
+            <active>true</active>
+            <codePool>local</codePool>
+        </Totsy_Pci>
     </modules>
 </config>
