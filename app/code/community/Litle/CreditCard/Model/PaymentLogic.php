@@ -524,32 +524,24 @@ class Litle_CreditCard_Model_PaymentLogic extends Mage_Payment_Model_Method_Cc
 		if($customerId === null) {
 			$customerId = 0;
 		}
-		$config = Mage::getResourceModel("sales/order")->getReadConnection()->getConfig();
-		$host = $config['host'];
-		$username = $config['username'];
-		$password = $config['password'];
-		$dbname = $config['dbname'];
+		$db = Mage::getSingleton('core/resource')->getConnection('core/write');
 
-		$con = mysql_connect($host,$username,$password);
 		$fullXml = $xmlDocument->saveXML();
-		if (!$con)
+		if (!$db)
 		{
 			Mage::log("Failed to write failed transaction to database.  Transaction details: " . $fullXml, null, "litle_failed_transactions.log");
 		}
 		else {
-			$selectedDb = mysql_select_db($dbname, $con);
-			if(!$selectedDb) {
-				Mage::log("Can't use selected database " . $dbname, null, "litle.log");
-			}
-			$fullXml = mysql_real_escape_string($fullXml);
 			$litleTxnId = XMLParser::getNode($xmlDocument, 'litleTxnId');
-			$sql = "insert into litle_failed_transactions (customer_id, order_id, message, full_xml, litle_txn_id, active, transaction_timestamp, order_num) values (" . $customerId . ", " . $orderId . ", '" . $message . "', '" . $fullXml . "', '" . $litleTxnId . "', true, now()," . $orderNumber . ")";
-			$result = mysql_query($sql);
-			if(!$result) {
-				Mage::log("Insert failed with error message: " . mysql_error(), null, "litle.log");
+			$sql = "insert into litle_failed_transactions (customer_id, order_id, message, full_xml, litle_txn_id, active, transaction_timestamp, order_num) values (?, ?, ?, ?, ?, true, now(), ?)";
+
+            try {
+			    $result = $db->query($sql,array($customerId,$orderId,$message,$fullXml,$litleTxnId,$orderNumber));
+
+            } catch(Exception $e) {
+				Mage::log("Insert failed with error message: " . $e->getMessage, null, "litle.log");
 				Mage::log("Query executed: " . $sql, null, "litle.log");
 			}
-			mysql_close($con);
 		}
 	}
 	
