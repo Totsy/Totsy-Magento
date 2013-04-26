@@ -3,7 +3,7 @@
 class Totsy_Reward_Block_Adminhtml_Import_Edit extends Mage_Adminhtml_Block_Widget_Form_Container{
     
     public function __construct(){
-        $this->_blockGroup = 'enterprise_reward';
+        $this->_blockGroup = 'totsy_reward';
         $this->_controller = 'adminhtml_import';
         $this->_headerText = Mage::helper('enterprise_reward')->__('Import credits');
         $this->_addButtonLabel = Mage::helper('enterprise_reward')->__('Generate');
