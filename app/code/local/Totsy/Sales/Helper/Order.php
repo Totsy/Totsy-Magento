@@ -27,20 +27,22 @@ class Totsy_Sales_Helper_Order
     public function calculateEstimatedShipDate($order)
     {
         // use the creation date for the order or quote
-        if($order instanceof Mage_Sales_Model_Quote) {
-            $shipDate = time();
+        if ($order instanceof Mage_Sales_Model_Quote) {
+            $orderCreated = Mage::getSingleton('core/date')->timestamp();
+            $shipDate = Mage::getSingleton('core/date')->timestamp();
         } else {
+            $orderCreated = strtotime($order->getCreatedAt());
             $shipDate = strtotime($order->getCreatedAt());
         }
-        if($order->getRelationParentId()) {
+        if ($order->getRelationParentId()) {
             $parentOrder = Mage::getModel('sales/order')->load($order->getRelationParentId());
             $shipDate = strtotime($parentOrder->getCreatedAt());
             do {
                 $parentOrder = Mage::getModel('sales/order')->load($parentOrder->getRelationParentId());
-                if($parentOrder->getCreatedAt()) {
+                if ($parentOrder->getCreatedAt()) {
                     $shipDate = strtotime($parentOrder->getCreatedAt());
                 }
-            } while($parentOrder->getRelationParentId());
+            } while ($parentOrder->getRelationParentId());
         }
         // increment the ship date to the end date of the of the event that
         // ends last, in the collection of events
@@ -53,24 +55,38 @@ class Totsy_Sales_Helper_Order
             $product = Mage::getModel('catalog/product')->load(
                 $orderItem->getProductId()
             );
-            $categories = $product->getCategoryCollection();
-            foreach ($categories as $category) {
-                $categoryEndDate = strtotime($category->getEventEndDate());
-                $shipDate = max($shipDate, $categoryEndDate);
+
+            if ($product->getFulfillmentType() == 'dotcom_stock') {
+                $shipDate = max($shipDate, $orderCreated + (3 * 24 * 60 * 60));
+                // when the calculated ship date falls on a weekend, bump it forward
+                // to the following weekday
+                if (date('N', $shipDate) > 5) {
+                    $shipDate += 24 * 3600 * (8 - date('N', $shipDate));
+                }
+
+            } elseif ($product->getFulfillmentType() == 'virtual') {
+                $shipDate = max($shipDate, $orderCreated);
+            } else {
+                $categories = $product->getCategoryCollection();
+                foreach ($categories as $category) {
+                    $category = Mage::getModel('catalog/category')->load($category->getId());
+                    $categoryEndDate = strtotime($category->getEventEndDate()) + (24 * 3600 * $this->_shipDateIncrement);
+                    // when the calculated ship date falls on a weekend, bump it forward
+                    // to the following weekday
+                    if (date('N', $categoryEndDate) > 5) {
+                        $categoryEndDate += 24 * 3600 * (8 - date('N', $categoryEndDate));
+                    }
+
+                    $shipDate = max($shipDate, $categoryEndDate);
+                }
             }
         }
 
-        $shipDate += 24 * 3600 * $this->_shipDateIncrement;
-
-        // when the calculated ship date falls on a weekend, bump it forward
-        // to the following weekday
-        if (date('N', $shipDate) > 5) {
-            $shipDate += 24 * 3600 * (8 - date('N', $shipDate));
-        }
 
         return $shipDate;
     }
-    
+
+
     public function getOrderStatus($order)
     {
         $_virtual_item_count = 0;
