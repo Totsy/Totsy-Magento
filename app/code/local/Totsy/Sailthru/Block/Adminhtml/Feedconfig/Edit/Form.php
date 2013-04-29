@@ -42,8 +42,7 @@ class Totsy_Sailthru_Block_Adminhtml_Feedconfig_Edit_Form
             'format'    => Mage::app()->getLocale()->getDateFormat(Mage_Core_Model_Locale::FORMAT_TYPE_SHORT),
             'image'     => $this->getSkinUrl('images/grid-cal.gif'),
             'style'     => 'width: 140px;',
-            'note'      => 'IMPORTANT! This field is REQUIRED for events feed.<br>'.
-                           'Provide a list of events or products ids separeted by \',\' or new line'
+            'note'      => 'IMPORTANT! This field is REQUIRED for events feed.<br>'
         ));
 
         $fieldset->addField('start_at_time', 'select', array(
