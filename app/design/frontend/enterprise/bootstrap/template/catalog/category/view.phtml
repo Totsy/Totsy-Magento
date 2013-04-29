@@ -47,7 +47,7 @@
     $timer = 'category';
 
     if ($_imgUrl = $_category->getImageUrl()) {
-        $_imgHtml = '<div class="category-image"><img src="'.$_imgUrl.'" alt="'.$this->htmlEscape($_category->getName()).'" title="'.$this->htmlEscape($_category->getName()).'" /></div>';
+        $_imgHtml = '<div class="category-image"><img src="'.$_imgUrl.'" alt="'.$this->htmlEscape($_category->getName()).'" title="'.$this->htmlEscape($_category->getName()).'" style="absolute; width:100%; height: 100%;"/></div>';
         $_imgHtml = $_helper->categoryAttribute($_category, $_imgHtml, 'image');
     }
 

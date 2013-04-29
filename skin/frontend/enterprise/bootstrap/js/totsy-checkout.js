@@ -21,9 +21,9 @@ jQuery(document).ready(function() {
             isRewardUsed: '',
             toggleViews: function() {
                 if (this.hasProfile !== "1") {
-                    jQuery(".add_payment_separator").hide();
+                    //jQuery(".add_payment_separator").hide();
                     jQuery("#add_payments").hide();
-                    jQuery(".checkout-reward").css("padding-top", "0px");
+                    //jQuery(".checkout-reward").css("padding-top", "0px");
                     jQuery(".use-new-card-wrapper").show();
                     jQuery("#use-card-method").hide();
                     jQuery("#cc_data").show();
@@ -31,11 +31,12 @@ jQuery(document).ready(function() {
                 } else {
                     jQuery(".cc_save_card").appendTo(jQuery("#add_payment_save_card"));
                     jQuery('#billing-address-select').attr('disabled', true);
+                    /*
                     jQuery(".cc_save_card").css({
                         'width': 'auto',
                         'margin-left': '10px',
                         'float': 'left'
-                    });
+                    });*/
                     jQuery("#hpcheckout-payment-add-title").show();
                     jQuery("#use-card-method").show();
                     jQuery("#creditcard_cc_type_should_save_div").contents("");

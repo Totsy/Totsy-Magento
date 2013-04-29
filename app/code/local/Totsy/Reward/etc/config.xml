@@ -7,9 +7,9 @@
     </modules>
     <global>
         <blocks>
-            <enterprise_reward>
+            <totsy_reward>
                 <class>Totsy_Reward_Block</class>
-            </enterprise_reward>
+            </totsy_reward>
         </blocks>
         <models>
             <enterprise_reward>
