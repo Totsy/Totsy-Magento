@@ -118,6 +118,7 @@ class Harapartners_Promotionfactory_Model_Observer {
                     if($order->getId()) {
                         $vpc->setData('order_id', $order->getId())
                             ->setData('order_increment_id', $order->getIncrementId())
+                            ->setData('customer_id', $order->getCustomerId())
                             ->setData('status', Harapartners_Promotionfactory_Model_Virtualproductcoupon::COUPON_STATUS_PURCHASED)
                             ->save();
                     }

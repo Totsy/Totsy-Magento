@@ -52,6 +52,18 @@ class Harapartners_Promotionfactory_Block_Adminhtml_Virtualproductcoupon_Managec
             'type'   => 'text',
             'renderer' => 'Harapartners_Promotionfactory_Block_Adminhtml_Virtualproductcoupon_Managecoupon_Grid_Column_Order'
         ));
+
+        $this->addColumn('customer_id', array(
+            'header'        => $helper->__('Customer ID'),
+            'index'         => 'customer_id'
+        ));
+
+        $this->addColumn('customer_email', array(
+            'header'        => $helper->__('Customer Email'),
+            'index'         => 'customer_email',
+            'type'   => 'text',
+            'renderer' => 'Harapartners_Promotionfactory_Block_Adminhtml_Virtualproductcoupon_Managecoupon_Grid_Column_Customer'
+        ));
         
         $this->addColumn('code', array(
             'header'        => $helper->__('Code'),
