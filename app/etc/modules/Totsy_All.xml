@@ -107,6 +107,10 @@
                 <Aoe_Scheduler/>
             </depends>
         </Totsy_Scheduler>
+        <Totsy_CustomerSegment>
+            <active>true</active>
+            <codePool>local</codePool>
+        </Totsy_CustomerSegment>
         <Totsy_Promotions>
             <active>true</active>
             <codePool>local</codePool>
