@@ -89,25 +89,13 @@ class TinyBrick_OrderEdit_OrderController extends Mage_Adminhtml_Controller_Acti
                 }
             }
             //Makes ItemQueues linked with the order Ready to be processed
-            Mage::helper('fulfillmentfactory/data')->makeOrderReadyToBeProcessed($order);
+            //Mage::helper('fulfillmentfactory/data')->makeOrderReadyToBeProcessed($order);
             Mage::getModel('promotionfactory/virtualproductcoupon')->openVirtualProductCouponInOrder($order);
-            //$order->collectTotals()->save();
-            $postTotal = $order->getGrandTotal();
+
             if(count($msgs) < 1) {
                 //auth for more if the total has increased and configured to do so
-                if(Mage::getStoreConfig('toe/orderedit/auth')) {
-                    if($postTotal > $preTotal) {
-                        $payment = $order->getPayment();
-                        $orderMethod = $payment->getMethod();
-                        if($orderMethod != 'free' && $orderMethod != 'checkmo' && $orderMethod != 'purchaseorder') {
-                            if(!$payment->authorize(1, $postTotal)) {
-                                //$this->_orderRollBack($order, $orderArr, $billingArr, $shippingArr);
-                                echo "There was an error re-authorizing payment.";
-                                return $this;
-                            }
-                        }
-                    }
-                }
+                $billing  = Mage::getModel('oro_sales/order_billing');
+                $billing->invoice($order);
                 //fire event and log changes
                 Mage::dispatchEvent('orderedit_edit', array('order'=>$order));
                 $this->_logChanges($order, $this->getRequest()->getParam('comment'), $this->getRequest()->getParam('admin_user'), $changes);
