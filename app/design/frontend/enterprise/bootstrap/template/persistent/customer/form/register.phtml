@@ -247,6 +247,10 @@
                                 }
                                 else {
                                     var msg = rule['msg'];
+
+                                    if (msg == "") {
+                                        msg = GENERIC_ERROR_MSG;
+                                    }
                                     email_errbox.html(msg);
                                     email_errbox.show();
                                     email_validate = 'failed'
