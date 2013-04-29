@@ -175,6 +175,12 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Payment extends TinyBrick_Orde
 
         $initialize = new LitleOnlineRequest();
         $authResponse = $initialize->authorizationRequest($auth_info);
+
+        $litleResponseCode = XMLParser::getNode($authResponse, 'response');
+        if ($litleResponseCode != '000') {
+            return false;
+        }
+
         $transactionId =  XmlParser::getNode($authResponse,'litleTxnId');
 
         if($transactionId) {
