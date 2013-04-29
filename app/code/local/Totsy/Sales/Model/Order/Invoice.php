@@ -63,6 +63,10 @@ class Totsy_Sales_Model_Order_Invoice extends Mage_Sales_Model_Order_Invoice
     public function capture()
     {   
         try{
+            //Litle is using ParentTransactionId to capture
+            if(!$this->getOrder()->getPayment()->getParentTransactionId() && $this->getOrder()->getPayment()->getLastTransId()) {
+                $this->getOrder()->getPayment()->setParentTransactionId($this->getOrder()->getPayment()->getLastTransId());
+            }
             $this->getOrder()->getPayment()->capture($this);
             if ($this->getIsPaid()) {
                 $this->pay();

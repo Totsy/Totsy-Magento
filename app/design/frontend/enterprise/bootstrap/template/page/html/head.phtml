@@ -27,7 +27,6 @@
     <meta charset="utf-8" />
     <title><?php echo $this->getTitle() ?></title>
     <meta name="viewport" content="width=device-width">
-    
     <!--[if IE 8]>
       <meta http-equiv="x-ua-compatible" content="IE=8">
     <![endif]-->
@@ -47,7 +46,6 @@
     </script>
     <![endif]-->
 <!-- Load in CDN External Libs -->
-<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" ></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script src="//cdn.optimizely.com/js/168465700.js"></script>
 <?php echo $this->getCssJsHtml() ?>
-    <script src="//cdn.optimizely.com/js/168465700.js"></script>
-    <?php // echo $this->helper('core/js')->getTranslatorScript() ?>

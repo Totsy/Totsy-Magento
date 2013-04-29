@@ -36,7 +36,7 @@
     <hr/>
      <?php echo $this->getChildHtml('buttons') ?>
 <div class="span4">
-    <h3 class="box-title"><?php echo $this->__('Payment Method') ?></h3>
+    <h3 class="box-title"><?php echo $this->__('Payment Method') ?><?php echo $this->getChildHtml('sales.order.info.payment.button') ?></h3>
     <hr />
     <?php echo $this->getPaymentInfoHtml() ?>
 </div>

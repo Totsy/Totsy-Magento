@@ -119,7 +119,7 @@ HpCheckout.prototype = {
             jQuery('#shipping-address').show();
             jQuery('.addresses').width(445);
         }
-        jQuery("#payment_form_" + payment_method).show();
+        //jQuery("#payment_form_" + payment_method).show();
     },
     switchAddress: function(selectName) {
         var clickedAddress = jQuery("#" + selectName);
@@ -137,7 +137,6 @@ HpCheckout.prototype = {
                 jQuery('#billing\\:selected').val('');
             }
         } else {
-            
                 if (hpcheckoutAddresses[clickedAddress.val()]) {
                 	jQuery('select#' + blockType + '\\:country_id').val(hpcheckoutAddresses[clickedAddress.val()]['country_id']);
                 if (blockType == 'billing') {
@@ -171,11 +170,13 @@ HpCheckout.prototype = {
         var hpcheckoutObject = HpCheckout.prototype;
         var step = hpcheckoutObject.data.forms[formId];
         var blocksToUpdate = "";
+        
         if (!doUpdatePayment) {
             blocksToUpdate = hpcheckoutObject.getBlocksToUpdate(step);
         } else {
             blocksToUpdate = ['review'];
         }
+        
         if (hpcheckoutObject.validate(step)) {
             var postData = hpcheckoutObject.getFormData(step);
             //var postData = hpcheckoutObject.getFormData();
@@ -183,42 +184,52 @@ HpCheckout.prototype = {
             hpcheckoutObject.ajaxRequest(postData, doUpdatePayment);
         }
     },
-    updatePayment: function() {
+    updatePayment: function(doUpdatePayment) {
         var formId = jQuery(this).parents('form').eq(0).attr('id');
         var hpcheckoutObject = HpCheckout.prototype;
         var step = hpcheckoutObject.data.forms[formId];
-        var blocksToUpdate = hpcheckoutObject.getBlocksToUpdate(step);
+        
+        var blocksToUpdate = "";
+        
+        if (!doUpdatePayment) {
+            blocksToUpdate = hpcheckoutObject.getBlocksToUpdate(step);
+        } else {
+            blocksToUpdate = ['review'];
+        }
+        
         // var postData = hpcheckoutObject.getFormData( step );
         var postData = hpcheckoutObject.getFormData();
         postData += '&currentStep=' + step + '&updatePayment=true';
-        hpcheckoutObject.ajaxRequest(postData);
+        hpcheckoutObject.ajaxRequest(postData, doUpdatePayment);
     },
     submit: function() {
         //good time to validate CC types
         if (typeof checkoutPayment !== "undefined") {
-            if (!checkoutPayment.hasProfile || jQuery("[id='payment[cybersource_subid]']").is(':checked') !== true) {
-                jQuery(".cc_types input[type='radio']").addClass("validate-one-required");
-                if (jQuery("[id='paypal_payment']").is(':checked') !== true) {
-                    jQuery('.cc_info input').addClass('required-entry');
-                    jQuery('#paymentfactory_tokenize_saved').removeClass('required-entry');
-                } else {
-                    jQuery('.cc_info input').removeClass('required-entry');
-                }
-            } else {
-                jQuery(".cc_types input[type='radio']").removeClass("validate-one-required");
+            jQuery(".cc_info input[type='radio']").addClass('required-entry');
+            jQuery('.cc_info input').addClass('required-entry');
+            jQuery("[name='payment[cc_should_save]']").removeClass("required-entry");
+            //Saved Credit Card Selected
+            if (jQuery("[id='payment[cc_vaulted]']").is(':checked') == true
+                || jQuery("[id='payment[cybersource_subid]']").is(':checked') == true) {
                 jQuery('.cc_info input').removeClass('required-entry');
+                jQuery(".cc_types input[type='radio']").removeClass("validate-one-required");
+            }
+            //Paypal selected
+            if(jQuery("[id='paypal_payment']").is(':checked') == true) {
+                jQuery('.cc_info input').removeClass('required-entry');
+                jQuery(".cc_types input[type='radio']").removeClass("validate-one-required");
             }
         }
         //only validate these fields when the customer deceides to place an order (when they click the "Place Order" button on the onepage checkout)
         jQuery("[id='shipping:postcode']").addClass("required-entry validate-zip");
         jQuery("[id='shipping:telephone']").addClass("required-entry validate-phoneLax");        
-        
+
         if (!this.validate()) {
             return;
         }
-        
+
         jQuery("#" + this.id).attr("disabled", true);
-        
+
         //IE grabs placeholder text from orders in lew of of an actual value
         //this fix removes values explicitly when they match their placeholder text
         jQuery("#hpcheckout-wrapper").find('input[placeholder]').each(function() {
@@ -229,12 +240,18 @@ HpCheckout.prototype = {
                 }
             }
         });
+
+        //fix for cybersource saved credit card
+        if (jQuery("[id='payment[cybersource_subid]']").is(':checked') == true) {
+            jQuery('input[name="payment[method]"]').val("paymentfactory_tokenize");
+        }
+
         var checkoutObject = this;
         var postData = this.getFormData();
         postData += '&updatePayment=true';
         
         this.throbberOn();
-        
+
         jQuery.ajax({
             url: this.data.submitUrl,
             dataType: "json",
@@ -367,11 +384,12 @@ HpCheckout.prototype = {
         var checkoutObject = this;
         var blocksToUpdate = "";
         //checking if payment block should be updated or not
-        if (!doUpdatePayment) {
+        if (!doUpdatePayment && (typeof checkoutPayment!=="undefined" && checkoutPayment.isEnoughPointsToCoverAmount==false)) {
             blocksToUpdate = this.getBlocksToUpdate(postData['currentStep']);
         } else {
             blocksToUpdate = ['review'];
         }
+        
         this.throbberOn(blocksToUpdate);
         jQuery.ajax({
             url: this.data.updateUrl,
