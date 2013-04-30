@@ -538,7 +538,8 @@ class Harapartners_Ordersplit_Helper_Data extends Mage_Core_Helper_Abstract {
                         $order->setData('state', 'complete')
                             ->setStatus('complete')
                             ->save();
-                        Mage::getModel('crownclub/club')->addClubMember(Mage::getSingleton('customer/session')->getCustomer());
+
+                        Mage::getModel('crownclub/club')->addClubMember($order->getCustomer());
                     }
                 }
                 catch (Exception $exception){
