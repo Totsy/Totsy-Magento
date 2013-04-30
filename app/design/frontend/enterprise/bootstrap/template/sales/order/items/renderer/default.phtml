@@ -34,6 +34,7 @@ $voucher_value = "";
 
 if($_product->getIsVirtual()) {
     $product_options = $_item->getProductOptions();
+    $voucher_code_string = array('','');
 
     if($_product->getOneTimePurchase()) {
 
@@ -41,8 +42,8 @@ if($_product->getIsVirtual()) {
         $voucher_code_string    = array($_product->getVoucherCode(), $_product->getVoucherCode()); // For backward compatibility
         $voucher_value          = $voucher_code_string[0];
 
-    } else {
-
+    } elseif (isset($product_options['options'], $product_options['options'][0])) {
+        
         $voucher_label = $product_options['options'][0]['label'];
         $voucher_code_string = explode("\n",$product_options['options'][0]['value']);
         $voucher_value = $voucher_code_string[0];

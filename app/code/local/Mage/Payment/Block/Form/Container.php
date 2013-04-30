@@ -64,8 +64,9 @@ class Mage_Payment_Block_Form_Container extends Mage_Core_Block_Template
                 if($item->getParentItemId()) {
                     continue;
                 }
-                $product = Mage::getModel ( 'catalog/product' )->load ( $item->getProductId () );
-                if($product->getIsVirtual() && $product->getIs) {
+
+                $product = $item->getProduct();
+                if($item->getIsVirtual() && $product->getFulfillmentType() == 'virtual') {
                     $fulfillmentType = 'virtual';
                     $hasVirtual = true;
                 } else {
