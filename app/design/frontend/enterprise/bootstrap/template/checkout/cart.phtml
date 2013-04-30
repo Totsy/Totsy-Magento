@@ -48,6 +48,7 @@
 <?php
 
     $fulfillmentTypes = $quote->getFulfillmentTypes();
+Mage::log(print_r($fulfillmentTypes,true));
     $splitYesCss = '';
     $splitNoCss = '';
 
@@ -147,13 +148,13 @@
                         <th colspan="1" rowspan="<?php echo $mergedCells; ?>" class="a-center"><span class="nobr"><?php echo $this->__('Move to Wishlist') ?></span></th>
                         <?php endif ?>
                         <th class="a-center" colspan="<?php echo $mergedCells; ?>" width="12%"><span class="nobr"><?php echo $this->__('Unit Price') ?></span></th>
-                    <?php if (!$this->getQuote()->isNominal()): ?>
+                    <?php if (!$this->getQuote()->isNominal() && !array_key_exists('litle_recurring',$fulfillmentTypes)): ?>
                         <th colspan="1" rowspan="<?php echo $mergedCells; ?>" class="a-center" width="10%"><?php echo $this->__('Qty') ?></th>
                         <th class="a-center" colspan="1" width="12%"><span class="nobr"><?php echo $this->__('Subtotal') ?></span></th>
                     <?php endif; ?>
                         <th colspan="1" rowspan="<?php echo $mergedCells; ?>" class="last a-center" width="6%"><span class="nobr"><?php echo $this->__('Remove') ?></span></th>
                     </tr>
-                    <?php if (!$this->getQuote()->isNominal() && $this->helper('tax')->displayCartBothPrices()): ?>
+                    <?php if (!$this->getQuote()->isNominal() && !array_key_exists('litle_recurring',$fulfillmentTypes) && $this->helper('tax')->displayCartBothPrices()): ?>
                     <tr>
                         <th class="a-right"><?php echo $this->helper('tax')->getIncExcTaxLabel(false) ?></th>
                         <th><?php echo $this->helper('tax')->getIncExcTaxLabel(true) ?></th>
@@ -179,7 +180,7 @@
         <?php endforeach;?>
 
 
-    <?php if (!$this->getQuote()->isNominal()): ?>
+    <?php if (!$this->getQuote()->isNominal() && !array_key_exists('litle_recurring',$fulfillmentTypes)): ?>
         <table class="shopping-cart-table data-table table table-bordered table-condensed">
             <tr>
                 <td colspan="6">
@@ -214,7 +215,7 @@
         </div>
     </div>
     <div style="clear:both"></div>
-    <?php if ( Mage::helper('service')->isTotsyStore() && !$this->getQuote()->isNominal() ):?>
+    <?php if ( Mage::helper('service')->isTotsyStore() && !$this->getQuote()->isNominal() && !array_key_exists('litle_recurring',$fulfillmentTypes)):?>
     <div class="cart-collaterals<?php if($this->getChildHtml('crosssell')) echo ' cross-inside'; ?>">
         <?php //echo $this->getChildHtml('crosssell') ?>
         <div class="deals pull-left span5 well cart-coupon">

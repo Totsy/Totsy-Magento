@@ -80,7 +80,8 @@ if($_fullProduct->getId() == Mage::getStoreConfig('Crown_Club/clubgeneral/club_p
             </ul>
         </div>
         <?php endif;?>
-        <?php } elseif($isVirtual && $_fullProduct->getFulfillmentType() == 'nominal') {?>
+        <?php } elseif(($isVirtual && $_fullProduct->getFulfillmentType() == 'nominal')
+            || $_fullProduct->getId() == Mage::getStoreConfig('Crown_Club/clubgeneral/club_product_id')) {?>
         <span>Save more! Shop early! Exclusive sales!</span>
         <?php } else { ?>
         <span>You will receive an email with details on this voucher code.</span>
@@ -120,7 +121,7 @@ if($_fullProduct->getId() == Mage::getStoreConfig('Crown_Club/clubgeneral/club_p
 									<?php echo $this->helper('checkout')->formatPrice($_item->getCalculationPrice()+$_item->getWeeeTaxAppliedAmount()+$_item->getWeeeTaxDisposition()); ?>
 								<?php else: ?>
 									<?php echo $this->helper('checkout')->formatPrice($_item->getCalculationPrice()) ?>
-                                    <?php echo $_fullProduct->getFulfillmentType() == 'nominal' ? '/ month' : '';?>
+                                    <?php echo in_array($_fullProduct->getFulfillmentType(),array('litle_recurring','nominal')) ? '/ month' : '';?>
 								<?php endif; ?>
 							</span>
 
@@ -196,7 +197,7 @@ if($_fullProduct->getId() == Mage::getStoreConfig('Crown_Club/clubgeneral/club_p
 		
 		
 
-    <?php if(!$quote->isNominal()): ?>
+    <?php if(!in_array($_fullProduct->getFulfillmentType(),array('litle_recurring','nominal'))): ?>
 	<td class="qty-box">
 		<?php if( $isVirtual ): ?>
 			<input type="text" name="cart[<?php echo $_item->getId() ?>][qty]" value="<?php echo $this->getQty() ?>" size="4" title="<?php echo $this->__('Qty') ?>" class="input-text qty" maxlength="12" disabled="disabled"/>
