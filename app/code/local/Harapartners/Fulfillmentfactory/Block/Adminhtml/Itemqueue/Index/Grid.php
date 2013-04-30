@@ -23,9 +23,10 @@ class Harapartners_Fulfillmentfactory_Block_Adminhtml_Itemqueue_Index_Grid exten
         $model = Mage::getModel('fulfillmentfactory/itemqueue');
         $collection = $model->getCollection();
         $collection->getSelect()
-            ->joinLeft(array('cat_prod' =>'catalog_category_product'), 'main_table.product_id=cat_prod.product_id', array('cat_prod.category_id'))
-            ->joinLeft(array('po' =>'stockhistory_purchaseorder'), 'cat_prod.category_id=po.category_id', array('po_name' => 'po.name', 'po_id' => 'po.id'))
-            ->group(array('itemqueue_id')); 
+            ->joinInner(array('qi'  => 'sales_flat_quote_item'), 'main_table.original_quote_item_id = qi.item_id', array())
+            ->joinInner(array('cat' => 'catalog_category_entity'), 'qi.category_id = cat.entity_id', array())
+            ->joinInner(array('po'  => 'stockhistory_purchaseorder'), 'cat.entity_id = po.category_id', array('po_name' => 'po.name', 'po_id' => 'po.id'));
+
         $this->setCollection($collection);
         parent::_prepareCollection();
         return $this;
