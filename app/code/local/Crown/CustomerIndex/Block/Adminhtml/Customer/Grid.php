@@ -37,7 +37,8 @@ class Crown_CustomerIndex_Block_Adminhtml_Customer_Grid
         $this->addColumn('email', array(
             'header'    => Mage::helper('customer')->__('Email'),
             'width'     => '150',
-            'index'     => 'email'
+            'index'     => 'email',
+            'wildcard'  => '*'
         ));
 
         $groups = Mage::getResourceModel('customer/group_collection')
