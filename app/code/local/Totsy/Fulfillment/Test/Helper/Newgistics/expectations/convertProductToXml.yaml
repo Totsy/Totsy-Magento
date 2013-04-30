@@ -1,0 +1,8 @@
+expectation_2:
+  value: |
+        <?xml version="1.0" encoding="utf-8"?>
+        <products apiKey="2f05718eda64482e9743c6c57f1db161"><product><sku>7832-mkp1043l</sku><description>Little Miss Daisy Dress</description><upc></upc><supplier>Mom and Pop Shop</supplier><supplierCode>mom_pop_shop</supplierCode><category>apparel</category><height></height><width></width><depth></depth><weight></weight><retailValue></retailValue><shipFrom>atlast</shipFrom><isActive></isActive><customFields><color>carnation</color><size>medium</size></customFields></product></products>
+expectation_1:
+  value: |
+        <?xml version="1.0" encoding="utf-8"?>
+        <products apiKey="2f05718eda64482e9743c6c57f1db161"><product><sku>GOW-001</sku><description>God of War</description><upc></upc><supplier>Playstation</supplier><supplierCode>playstation</supplierCode><category>video games</category><height></height><width></width><depth></depth><weight></weight><retailValue></retailValue><shipFrom>atlast</shipFrom><isActive></isActive><customFields><color></color><size></size></customFields></product></products>

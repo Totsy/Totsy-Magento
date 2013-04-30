@@ -1,0 +1,12 @@
+expectation_1: #purchase order id 99999 , number PS10001
+  status_code: 200
+  response_xml: |
+    <?xml version="1.0" encoding="UTF-8" ?>
+    <response><manifests><manifest id="30197" manifest_po="PS10001" /></manifests><warnings></warnings><errors></errors></response>
+  response: true
+expectation_: #purchase order id 99999 , number PS10001
+  status_code: 200
+  response_xml: |
+    <?xml version="1.0" encoding="UTF-8" ?>
+    <response><manifests/><warnings/><errors><error manifestID="30197" />There was an error</error></errors></response>
+  response: true

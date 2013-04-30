@@ -5,4 +5,28 @@
             <version>0.1.0</version>
         </Totsy_Fulfillment>
     </modules>
+    <global>
+        <helpers>
+            <fulfillment>
+                <class>Totsy_Fulfillment_Helper</class>
+            </fulfillment>
+        </helpers>
+        <models>
+            <fulfillment>
+                <class>Totsy_Fulfillment_Model</class>
+            </fulfillment>
+        </models>
+        <blocks>
+            <fulfillment>
+                <class>Totsy_Fulfillment_Block</class>
+            </fulfillment>
+        </blocks>
+    </global>
+    <phpunit>
+        <suite>
+            <modules>
+                <Totsy_Fulfillment/>
+            </modules>
+        </suite>
+    </phpunit>
 </config>

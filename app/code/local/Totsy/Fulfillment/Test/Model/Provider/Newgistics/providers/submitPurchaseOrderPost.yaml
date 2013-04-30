@@ -1,0 +1,60 @@
+-
+  -
+    purchase_order:
+      id: 99999
+      po_number: PS10001
+      name: Assorted Gifts
+      vendor_id: 1233456
+      fulfillment_type: atlast
+      items:
+        -
+          id: 99999
+          name: God of War
+          sku: GOW-001
+          vendor: Playstation
+          vendor_code: playstation
+          fulfillment_type: atlast
+          category: video games
+          qty_total: 3
+        -
+         id: 99997
+         name: Little Miss Daisy Dress
+         sku: 7832-mkp1043l
+         vendor: Mom and Pop Shop
+         vendor_code: mom_pop_shop
+         fulfillment_type: atlast
+         color: carnation
+         size: medium
+         category: apparel
+         qty_total: 4
+  - expectation_1
+-
+  -
+    purchase_order:
+      id: 99998
+      po_number: PS10002
+      name: Assorted Gifts
+      vendor_id: 1233456
+      fulfillment_type: atlast
+      items:
+        -
+          id: 99999
+          name: God of War
+          sku: GOW-001
+          vendor: Playstation
+          vendor_code: playstation
+          fulfillment_type: atlast
+          category: video games
+          qty_total: 5
+        -
+         id: 99997
+         name: Little Miss Daisy Dress
+         sku: 7832-mkp1043l
+         vendor: Mom and Pop Shop
+         vendor_code: mom_pop_shop
+         fulfillment_type: atlast
+         color: carnation
+         size: medium
+         category: apparel
+         qty_total: 7
+  - expectation_1

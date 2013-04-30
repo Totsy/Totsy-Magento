@@ -1,0 +1,27 @@
+Order:
+  _attribute:
+    orderID: increment_id
+  CustomerInfo:
+    FirstName: firstname
+    LastName: lastname
+    Address1: 1
+    Address2: 2
+    City: city
+    State:  region
+    Zip:  postcode
+    Country: country_id
+    Email: email
+    Phone: telephone
+    isResidential: true
+  AllowDuplicate: false
+  OrderDate: created_at
+  ShipMethod: shipping_method
+  InfoLine: null
+  AddGiftWrap: false
+  GiftMessage: null
+  Items:
+    Item:
+      SKU: sku
+      Qty:  qty_ordered
+      CustomFields:
+        Price:  price

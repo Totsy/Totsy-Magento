@@ -1,0 +1,24 @@
+-
+  -
+    -
+      id: 99999
+      name: God of War
+      sku: GOW-001
+      vendor: Playstation
+      vendor_code: playstation
+      fulfillment_type: atlast
+      category: video games
+  - expectation_1
+-
+  -
+   -
+      id: 99997
+      name: Little Miss Daisy Dress
+      sku: 7832-mkp1043l
+      vendor: Mom and Pop Shop
+      vendor_code: mom_pop_shop
+      fulfillment_type: atlast
+      color: carnation
+      size: medium
+      category: apparel
+  - expectation_2

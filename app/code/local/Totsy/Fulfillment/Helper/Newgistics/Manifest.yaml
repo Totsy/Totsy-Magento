@@ -1,0 +1,13 @@
+#describes the structure of the xml for newgistics and the correlation between the nodes and magento
+#_multi means that the node can be
+#newgistics:magento
+manifest:
+ manifest_slip:
+  manifest_po: po_number
+  notes: null
+ contents:
+  item:
+   sku: sku
+   description: name
+   original_qty: qty_total
+

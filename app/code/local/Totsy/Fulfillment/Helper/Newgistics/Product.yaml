@@ -1,0 +1,20 @@
+#describes the structure of the xml for newgistics and the correlation between the nodes and magento
+#newgistics:magento
+product:
+ sku: sku
+ description: name
+ upc: upc
+ supplier: vendor
+ supplierCode: vendor_code
+ category: category
+ height: height
+ width: width
+ depth: depth
+ weight: weight
+ retailValue: price
+ shipFrom: fulfillment_type
+ isActive: null
+ customFields:
+  color: color
+  size: size
+

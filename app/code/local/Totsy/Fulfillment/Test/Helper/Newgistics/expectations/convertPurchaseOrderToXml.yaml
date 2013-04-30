@@ -1,0 +1,2 @@
+expectation_1: #purchase order id 99999 , number PS10001
+  value:  <?xml version="1.0" encoding="utf-8"?><manifests apiKey="2f05718eda64482e9743c6c57f1db161"><manifest><manifest_slip><manifest_po>PS10001</manifest_po><notes></notes></manifest_slip><contents><item><sku>GOW-001</sku><description>God of War</description><original_qty>3</original_qty></item><item><sku>7832-mkp1043l</sku><description>Little Miss Daisy Dress</description><original_qty>4</original_qty></item></contents></manifest></manifests>

@@ -33,7 +33,7 @@ class Totsy_Customer_Test_Model_Observer extends
         foreach ($responseHeaders as $header) {
             if ('Location' == $header['name']) {
                 $this->assertEquals(
-                    'customer/account/login',
+                    '/customer/account/login',
                     $header['value']
                 );
             }
