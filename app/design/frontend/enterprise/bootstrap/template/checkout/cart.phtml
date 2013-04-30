@@ -180,7 +180,7 @@
         <?php endforeach;?>
 
 
-    <?php if (!$this->getQuote()->isNominal() && !array_key_exists('litle_recurring',$fulfillmentTypes)): ?>
+    <?php if (!$this->getQuote()->isNominal() && (array_key_exists('litle_recurring',$fulfillmentTypes) && count($fulfillmentTypes) > 1)): ?>
         <table class="shopping-cart-table data-table table table-bordered table-condensed">
             <tr>
                 <td colspan="6">
@@ -215,7 +215,7 @@
         </div>
     </div>
     <div style="clear:both"></div>
-    <?php if ( Mage::helper('service')->isTotsyStore() && !$this->getQuote()->isNominal() && !array_key_exists('litle_recurring',$fulfillmentTypes)):?>
+    <?php if ( Mage::helper('service')->isTotsyStore() && !$this->getQuote()->isNominal() && (array_key_exists('litle_recurring',$fulfillmentTypes) && count($fulfillmentTypes) > 1)):?>
     <div class="cart-collaterals<?php if($this->getChildHtml('crosssell')) echo ' cross-inside'; ?>">
         <?php //echo $this->getChildHtml('crosssell') ?>
         <div class="deals pull-left span5 well cart-coupon">
