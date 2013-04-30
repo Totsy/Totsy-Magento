@@ -66,16 +66,17 @@ function logMessage($message,$type = 'Logger'){
 
 function isRunning(){
 	global $pid, $file;
-	if (file_exists($file)){
-		$message = "Cannot write to pid file '$file'. Program execution halted.\n";
-		logMessage($message);
-		die($message);
-	}
 	
-	$pid = intval( file_get_contents($file) );
-	if (isRunningPid($pid)==false){
-		unlink($file);
-		logMessage('Pid file exists but process is not running. Removing pid file.','Error');
+	if (file_exists($file)){
+		$pid = intval( file_get_contents($file) );
+		if (isRunningPid($pid)==false){
+			unlink($file);
+			logMessage('Pid file exists but process is not running. Removing pid file.','Error');
+		} else {
+			$message = "Cannot write to pid file '$file'. Program execution halted.\n";
+			logMessage($message);
+			die($message);
+		}
 	}
 
 	file_put_contents($file, $pid);
