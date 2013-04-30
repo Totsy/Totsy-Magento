@@ -20,6 +20,7 @@ class Harapartners_Ordersplit_Helper_Data extends Mage_Core_Helper_Abstract {
     const TYPE_DROPSHIP = 'dropship';
     const TYPE_VIRTUAL = 'virtual';
     const TYPE_OTHER = 'other';
+    const TYPE_LITLE_RECURRING = 'litle_recurring';
     
     public function getAllowedFulfillmentTypeArray(){
         return array(
@@ -60,6 +61,9 @@ class Harapartners_Ordersplit_Helper_Data extends Mage_Core_Helper_Abstract {
                     break;
                 case self::TYPE_DROPSHIP:
                     Mage::helper('ordersplit')->processNonHybridOrder($order, self::TYPE_DROPSHIP);
+                    break;
+                case self::TYPE_LITLE_RECURRING:
+                    Mage::helper('ordersplit')->processNonHybridOrder($order, self::TYPE_LITLE_RECURRING);
                     break;
                 case self::TYPE_OTHER:
                 default:
@@ -500,6 +504,51 @@ class Harapartners_Ordersplit_Helper_Data extends Mage_Core_Helper_Abstract {
                 break;
             case self::TYPE_DOTCOM_STOCK:
                 Mage::getModel('fulfillmentfactory/service_itemqueue')->saveFromOrder($order);
+                break;
+            case self::TYPE_LITLE_RECURRING:
+                try{
+                    $continue = true;
+                    if($order->canInvoice() === false) {
+                        $continue = false;
+                    }
+
+                    if($continue && (($invoice = $order->prepareInvoice()) == false)) {
+                        $continue = false;
+                    }
+
+                    if($continue && (($invoice->register()) === false)) {
+                        $continue = false;
+                    }
+
+                    if($continue && (!$invoice->getBaseGrandTotal())) {
+                        $continue = false;
+                    }
+
+                    if($continue && $invoice->canCapture()) {
+                        $invoice->capture();
+
+                        $order->setStatus('processing');
+                        $order->setState('processing');
+
+                        $transactionSave = Mage::getModel('core/resource_transaction');
+                        $transactionSave->addObject($invoice);
+                        $transactionSave->addObject($invoice->getOrder());
+                        $transactionSave->save();
+
+                        $order->setData('state', 'complete')
+                            ->setStatus('complete')
+                            ->save();
+                        Mage::getModel('crownclub/club')->addClubMember(Mage::getSingleton('customer/session')->getCustomer());
+                    }
+                }
+                catch (Exception $exception){
+                    Mage::logException($exception);
+                    #Payment Failed
+                    $order->setData('state', 'payment_failed')
+                        ->setStatus('payment_failed')
+                        ->save();
+                    return null;
+                }
                 break;
             case self::TYPE_OTHER;
                 break;
