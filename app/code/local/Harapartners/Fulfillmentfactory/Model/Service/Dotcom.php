@@ -77,7 +77,6 @@ class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
                     $qty -= Mage::helper('fulfillmentfactory')->getAllocatedCount($sku);
                 }
                 $qty = max(0, $qty);
-
                 // stores inventory as eav attribute at product level
                 $product = Mage::getModel('catalog/product')
                     ->loadByAttribute('sku', $sku);
@@ -151,7 +150,6 @@ class Harapartners_Fulfillmentfactory_Model_Service_Dotcom
                 $sku = null;
             }
         }
-
         //reindex updated products
         if(count($productsToReindex)) {
             Mage::getResourceModel('cataloginventory/indexer_stock')->reindexProducts($productsToReindex);
@@ -951,6 +949,127 @@ XML;
                 return $qtys[$item->getProductId()];
             }
             return false;
+        }
+    }
+    
+    
+    public function getAvailableSkus() {
+        /** @var $write Varien_Db_Adapter_Interface */
+        $write  = Mage::getSingleton('core/resource')
+            ->getConnection('core_write');
+        $inventoryTable = Mage::getResourceModel('cataloginventory/stock_item')
+            ->getTable('cataloginventory/stock_item');
+
+        $xmlStreamName = Mage::helper('fulfillmentfactory/dotcom')
+            ->getInventory();
+
+        $reader = new XMLReader();
+        $reader->open($xmlStreamName, 'utf8');
+
+        $state = 'waiting';
+        $sku = null;
+        $qty = null;
+        $count = 0;
+        $productsToReindex = array();
+
+        while ($reader->read()) {
+            // this node is an opening <item> tag
+            if ('item' == $reader->localName &&
+                XMLReader::ELEMENT === $reader->nodeType
+            ) {
+                $state = 'item';
+
+                // this node is an opening <sku> tag
+            } else if ('sku' == $reader->localName &&
+                XMLReader::ELEMENT == $reader->nodeType &&
+                'item' == $state
+            ) {
+                $sku = $reader->readString();
+
+                // this node is an opening <quantity_available> tag
+            } else if ('quantity_available' == $reader->localName &&
+                XMLReader::ELEMENT == $reader->nodeType &&
+                'item' == $state
+            ) {
+                $qty = $reader->readString();
+
+                // this node is a closing <item> tag
+            } else if ('item' == $reader->localName &&
+                XMLReader::END_ELEMENT == $reader->nodeType
+            ) {
+                // ignore this item if either of sku or qty wasn't populated
+                if (null == $sku || null == $qty) {
+                    continue;
+                }
+
+                $sku = trim($sku);
+                if ($qty) {
+                    $qty -= Mage::helper('fulfillmentfactory')->getAllocatedCount($sku);
+                }
+                $qty = max(0, $qty);
+                if($qty) {
+                    echo 'Sku: ' . $sku .' Quantity: ' . $qty, PHP_EOL;
+                }
+                // stores inventory as eav attribute at product level
+                $product = Mage::getModel('catalog/product')
+                    ->loadByAttribute('sku', $sku);
+
+                if ($product && ($productId = $product->getId())) {
+
+                    // Update product inventory for 'dotcom_stock'
+                    if ('dotcom_stock' == $product->getData('fulfillment_type')) {
+                        $newQty = $qty - Mage::helper('fulfillmentfactory')->getPendingCount($sku);
+                        $newQty = max(0, $newQty);
+
+                        //check current stock qty
+                        $stockItem = Mage::getModel('cataloginventory/stock_item')->loadByProduct($product);
+
+                        if($stockItem->getQty() != $newQty) {
+                            if ($stockItem->getId() == 0) {
+                                //item hasn't been added to the website
+                                unset($stockItem);
+                                continue;
+                            }
+                            // only respect existing values if it already exists.  Otherwise skip.
+                            if($stockItem->getUseConfigManageStock() == 0 && !$stockItem->getManageStock()) {
+                                //Product does not manage stock
+                                unset($stockItem);
+                                continue;
+                            }
+
+                            if($newQty > $stockItem->getMinQty()) {
+                                $isInStock = 1;
+                            } else {
+                                $isInStock = 0;
+                            }
+
+                            $sql = "update `{$inventoryTable}` set qty=?, is_in_stock=? where item_id=?";
+
+                            try {
+                                $write->query($sql,
+                                    array($newQty,$isInStock,$stockItem->getId())
+                                )->execute();
+                            } catch (Exception $e) {
+                                Mage::logException($e);
+                            }
+
+                            //Items to Reindex
+                            $productsToReindex[] = $productId;
+
+                            unset($stockItem);
+                        }
+
+                        Mage::log("Product stock Qty updated for '$sku': $qty", Zend_Log::DEBUG, 'fulfillment_inventory.log');
+                    }
+                    $count++;
+                }
+                unset($product);
+                unset($productId);
+
+                $state = 'waiting';
+                $qty = null;
+                $sku = null;
+            }
         }
     }
 }
