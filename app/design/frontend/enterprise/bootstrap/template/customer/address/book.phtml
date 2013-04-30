@@ -48,7 +48,7 @@
                     <a href="<?php echo $this->getAddressEditUrl(Mage::getSingleton('customer/session')->getCustomer()->getAddressById($_pAddsses)) ?>type/billing/" class="btn btn-primary"><?php echo $this->__('Edit') ?></a>
                 </h4>
                 <address class="box-content">
-                <?php echo $this->getAddressHtml(Mage::getSingleton('customer/session')->getCustomer()->getAddressById($_pAddsses)) ?>
+                <?php $_billingHtml = $this->getAddressHtml(Mage::getSingleton('customer/session')->getCustomer()->getAddressById($_pAddsses));echo $_billingHtml; ?>
                 </address>
            </div>
         <?php else: ?>
@@ -65,7 +65,8 @@
                     <a href="<?php echo $this->getAddressEditUrl(Mage::getSingleton('customer/session')->getCustomer()->getAddressById($_pAddsses)) ?>type/shipping/" class="btn btn-primary"><?php echo $this->__('Edit') ?></a>
                 </h4>
                 <address class="box-content">
-                    <?php echo $this->getAddressHtml(Mage::getSingleton('customer/session')->getCustomer()->getAddressById($_pAddsses)) ?>
+                    <?php $_shippingHtml = $this->getAddressHtml(Mage::getSingleton('customer/session')->getCustomer()->getAddressById($_pAddsses));
+                           if($_billingHtml == $_shippingHtml): echo $this->__('Same as Default Billing Address'); else: echo $_shippingHtml; endif ?>
                 </address>
             </div>
         <?php else: ?>
