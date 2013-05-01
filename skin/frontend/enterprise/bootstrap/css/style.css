@@ -14,44 +14,13 @@
  * - Yellow         Event Hover(rollover)   #fcdc0a
  */
  
-html,
-body { height: 100%; background: transparent;}
-#stickywrap { /* @stickyfooter */
-    min-height: 100%;
-}
-html {
-    margin:0;
-    background: url(../images/bkg_stripped_blue.png) fixed 0 0 repeat;
-    /*
-    background-image: -moz-linear-gradient(top, #eef6fc, #ffffff);
-    background-image: -ms-linear-gradient(top, #eef6fc, #ffffff);
-    background-image: -o-linear-gradient(top, #eef6fc, #ffffff);
-    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#eef6fc), to(#ffffff));
-    background-image: -webkit-linear-gradient(top, #eef6fc, #ffffff);
-    background-image: linear-gradient(top, #eef6fc, #ffffff);
-    background-attachment: fixed;
-    */
-}
 /* Not implemented - pending forthought from "Creative" on how a bold font affects typography site-wide
 body {
     font-family: "Arial Rounded MT Bold", "Helvetica Rounded", Arial, "Helvetica Neue", Helvetica, sans-serif;
 }
 */
-a {
-	color:#d22f2a; 
-	color: rgba(210,47,42,0.8);
-	text-decoration:underline;
-	outline: none;
-}
-a:hover{
-	color:#d22f2a;
-	color: rgba(210,47,42,1);
-	text-decoration:underline;
-}
-a:focus{outline: none;}
 .content_push { margin-top:115px; } /* not in use, was for 1col */
 .content_push_2col { margin-top:115px; }
-h2 {font-size:20px; /* removed !important for "header @override" */ }
 /**
  * @Diagnostics
  */
@@ -147,18 +116,6 @@ body[class*="span"] { /* bootstrap override for edge case of *span* sale title i
 .row:after {clear:both;}
  */
 
-/* TED's BLUE LINE HR */
-hr {
-    background-color:#fff;
-    border:1px dashed #64a5fe;
-    border-style: none none dashed;
-    color:#fff;
-    margin:7px 0px 10px; 
-}
-/* Global Table Border (not best practice, but its a hack until RWD - Eric*/
-table{
-    border:1px solid #eee;
-}
 /**
  * @One-off Modules & 3rd Party
  */
@@ -290,14 +247,6 @@ body.categoryevent-index-topnav .page-header {
     color:#d22f2a;
 }
 
-/* Ellipsis class for truncating long titles
- * to use, the element must also have a fixed width, either implicit (inherited) or explicit
- */
-.ellipsis {
-    white-space:nowrap;
-    overflow:hidden;
-    text-overflow: ellipsis;
-}
 
 /* Got something important to say? Say it with Ted's Red… even though red *should* just be for links, Ted! */
 .shoutit {
@@ -399,129 +348,364 @@ body.customer-account-entry .btn.btn-large {
 .label-success, .badge-success {
     background-color: #c1cc00;
 }
+/**
+ * @Header
+ * - "navbar" class from bootstrap
+ * - incl: branding, actual nav, user account, cta/promo, & checkout modules
+ */
+ 
 
-/* mainContent - the site "wrapper" white box */
-/* Large desktop */
-@media (min-width: 1200px) { 
-#mainContent {
-    margin:0 auto;
-    /* pull out for RWD */ /* width:940px; */
-    background:#fff; 
-    padding:250px 30px 267px; /* @fixednav: top padding magic number BS; @stickyfooter: bottom padding magic number BS */
-    overflow: auto; /* @stickyfooter */
-    }
-    .well .page_center {
+ 
+.navbar {
+    background:#fff;
+}
+#masthead {
+    position: relative; z-index: 10;
+    min-height: 54px;
+}
+#masthead > .container {
     position: relative;
-    display: inline-block;
-    margin-top: -210px;
-    vertical-align: middle;
-    width: 300px;
-    text-align: left;
-    }
-    
-    input[type="text"],select, .uneditable-input {
-    	width: 100%;
-    }
+    padding:8px 0;
+}
+.header-utils {
+    position: absolute; bottom: 8px; right: 0;
 }
 
-@media (max-width: 1200px) and (min-width: 980px) { 
-#mainContent {
-    margin:0 auto;
-    /* pull out for RWD */ /* width:940px; */
-    background:#fff; 
-    padding:250px 30px 267px; /* @fixednav: top padding magic number BS; @stickyfooter: bottom padding magic number BS */
-    overflow: auto; /* @stickyfooter */
-    }
-    .well .page_center {
-    position: relative;
+/* CTAs */
+.cta-link:after {
+    content: "►";
     display: inline-block;
-    margin-top: -210px;
-    vertical-align: middle;
-    width: 300px;
-    text-align: left;
-    }
-    
-    input[type="text"],select, .uneditable-input {
-    	width: 100%;
+    position: relative; left: 5px;
+    font-size:60%;
+    -ms-transform:scale(2,4); /* IE 9 */
+    -moz-transform:scale(2,4); /* Firefox */
+    -webkit-transform:scale(1.5,2); /* Safari and Chrome */
+    -o-transform:scale(2,4); /* Opera */
+    transform:scale(1.5,2);
+    text-shadow:0 0 1px rgba(0,0,0,0.5);
+    vertical-align: top;
+}
+
+.header-cta {
+    position: absolute; top: 0; right: 0;
+    padding:18px 10px 5px 8px;
+    background: #c1cc00;
+    border-radius: 0 0 10px 10px;
+    color:#fff;
+    font-family: Arial,Helvetica, sans-serif; font-weight: bold;
+    letter-spacing: 0.075em;
+    line-height: 1.2em;
+    text-shadow: 0 0 4px rgba(0,0,0,0.4);
+}
+.header-cta .cta-item {
+    font-size: 150%;
+}
+.header-cta .cta-item-head {
+    display: block;
+    font-style: normal;
+}
+.header-cta .cta-item-sub {
+    font-size:60%; font-style: normal;
+    letter-spacing: normal;
+}
+.cta-item a,
+.cta-item a:link {
+    color: #fff;
+    text-decoration: none;
+}
+.cta-item a:hover {
+/*     color: #d22f2a; */
+    text-decoration: none;
+}
+.header-cta .cta-link:after {
+    color:#d22f2a;
+}
+#cta-freeship {
+    background: url(../images/icon-totsy-bug.png) 0 0 no-repeat;
+    padding-left:25px;
+}
+
+/* #userAccount - my account module */
+#userAccount > a:hover {text-decoration: none;}
+
+/* @nav */
+.navbar nav {
+    position: relative; z-index: 1;
+    border-top: 2px dashed #68a8fe;
+    border-bottom: 2px dashed #68a8fe;
+}
+.navbar .nav {
+	margin:0 0 0 20px; /* @KLUDGE: @override some @Bootstrap margins, Ted-hackery */
+}
+.navbar .nav > .nav-item {
+    padding: 8px 9px 9px 10px;
+    min-height: 26px;
+    background: url('../images/div-nav.png') 0 50% no-repeat;
+}
+.navbar .nav > .nav-item:first-child {
+    background-image: none;
+}
+.navbar .nav > .nav-item > a {
+    padding:0 33px 0 0; /* christophery - all icons on right */
+    line-height: 13px;
+}
+.navbar .nav > .nav-item.dropdown > a {
+    background: url('../images/icon-nav-drop.png') 100% 50% no-repeat;
+}
+#navSocial > a {
+    background: url('../images/icon-like-whot.png') 100% 50% no-repeat;
+}
+#navTotsyPlus.nonmember > a {
+    background: url('../images/icon-totsyplus-25x26.png') 100% 50% no-repeat;
+}
+.navbar .nav > .nav-item:hover > a {
+    color: #d22f2a;
+    text-decoration: none;
+}
+.navbar .nav .active > a,
+.navbar .nav .active > a:hover {
+    color: #d22f2a;
+    text-decoration: none;
+}
+.navbar .nav > .nav-item > a em {font-style: normal;}
+
+/* dropdown nav menus */
+.navbar .nav > .nav-item.dropdown:hover {
+    padding-left:9px;
+    background-color:#fff;
+    background-image:none;
+    border-left:1px solid rgba(0,0,0,0.2);
+    cursor: pointer;
+}
+.navbar .nav > .nav-item:first-child:hover {
+    /*     padding-left:0; */
+}
+
+.nav .dropdown-menu {
+    display: none;
+    left:-1px;
+    margin-top:0;
+    border-top:none;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    box-shadow:0 5px 5px rgba(0, 0, 0, 0.10)
+}
+.nav li:hover .dropdown-menu {
+    display: block;
+}
+.navShop .dropdown-menu li:first-child {display: none;}
+.navbar .dropdown-menu:after,
+.navbar .dropdown-menu:before {display: none;} /* not using these cool dropdown tooltip bootstrap things… boo */
+.dropdown-menu a {
+	text-decoration: none;
+}
+
+/* CTA area in header */
+header nav .cta {padding: 7px 0 0;}
+header nav .cta a {float:right; color: #636466; font-weight: bold; line-height:1.18;}
+header nav .cta a:hover {text-decoration: none;}
+header nav .cta strong {display: block;}
+header nav .cta strong em {color:#d84643; font-style:normal;}
+
+/**
+ * @User Info
+ * - global in header: checkout btn / timer / minicart
+ */
+
+/* header cart */
+#usercart {
+    position: relative;
+}
+
+.top-cart.open {
+    position: relative; top: -1px;
+/*
+    border:1px solid #ccc;
+    border:1px solid rgba(0, 0, 0, 0.15); border-bottom:none;
+*/
+    -moz-box-shadow:1px -3px 4px rgba(0, 0, 0, 0.05);
+    -webkit-box-shadow:1px -3px 4px rgba(0, 0, 0, 0.05);
+    box-shadow:1px -3px 4px rgba(0, 0, 0, 0.05);
+}
+#usercart-block-title {
+    margin-top:-1px; padding-right:8px;
+    background-image: none; /* @override .dropdown-toggle, reapplied that image to child element #cartHeader */
+    border:1px solid transparent; border-bottom: none;
+}
+#usercart-block-title.no-items,
+#usercart-block-title.dropdown-toggle,
+.top-cart.onCheckout #usercart-block-title {
+    position: relative;
+    top: 11px;
+    padding-left: 8px;
+    min-height: 43px;
+    line-height: 2;
+}
+.top-cart.onCheckout #usercart-block-title .savings { /* @KLUDGE: when on onepage checkout */
+    margin-bottom: 5px; padding-left:8px;
+    color: rgba(237, 45, 33, 0.78);
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.15;
+    text-transform: capitalize;
+}
+.open > #usercart-block-title {
+    position: relative; z-index: 100;
+/*     margin:-8px 0 0 3px; padding:7px 8px 13px; */
+/*
+    border:1px solid #ccc;
+    border:1px solid rgba(0, 0, 0, 0.15); border-bottom:none;
+    -moz-box-shadow:1px -3px 4px rgba(0, 0, 0, 0.05);
+    -webkit-box-shadow:1px -3px 4px rgba(0, 0, 0, 0.05);
+    box-shadow:1px -3px 4px rgba(0, 0, 0, 0.05);
+*/
+}
+#usercart .count-down-timer {
+    font-size: 12px;
+}
+body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
+    display: none !important;
+}
+#usercart .count-down-timer strong {
+    font-weight: normal;
+}
+#cart-timer-header,
+#usercart .over {
+    color: #d22f2a;
+    font-weight: bold;
+}
+/* webkit and IE fixes */
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+    #usercart .over {display: inline-block; margin-top:-13px;}
+    #usercart .over:before {
+        content:"\A";
+        white-space: pre;
     }
 }
- 
-/* Portrait tablet to landscape and desktop */
-@media (min-width: 768px) and (max-width: 979px) { 
-#mainContent {
-    margin:0 auto;
-    /* pull out for RWD */ /* width:940px; */
-    background:#fff; 
-    padding:0px 30px 267px; /* @fixednav: top padding magic number BS; @stickyfooter: bottom padding magic number BS */
-    overflow: auto; /* @stickyfooter */
-    }
-    .well .page_center {
-    position: relative;
-    display: inline-block;
-    margin-top: -210px;
-    vertical-align: middle;
-    width: 300px;
-    text-align: left;
-    }
-    
-    input[type="text"],select, .uneditable-input {
-    	width: 100%;
-    }
+
+#cartHeader.hasItems {
+    display: block; 
+    white-space: nowrap;
 }
- 
-/* Landscape phone to portrait tablet */
-@media (min-width: 481px) and (max-width: 767px) { 
-#mainContent {
-    margin:0 auto;
-    /* pull out for RWD */ /* width:940px; */
-    background:#fff; 
-    padding:0px 30px 267px; /* @fixednav: top padding magic number BS; @stickyfooter: bottom padding magic number BS */
-    overflow: auto; /* @stickyfooter */
-    }
-    .well .page_center {
-    position: relative;
-    display: inline-block;
-    margin-top: -210px;
-    vertical-align: middle;
-    width: 200px;
-    text-align: left;
-    } 
-    
-    input[type="text"],select, input[type="radio"],.uneditable-input {
-    	width: 100%;
-    }
+#cartHeader.cartempty {
+    background-image: none;
+    font-size:13px; font-weight: normal;
+    line-height: 14px;
+    text-transform: none;
 }
- 
-/* Landscape phones and down */
-@media (max-width: 480px) { 
-#mainContent {
-    margin:0 auto;
-    /* pull out for RWD */ /* width:940px; */
-    background:#fff; 
-    padding:0px 10px 0px; /* @fixednav: top padding magic number BS; @stickyfooter: bottom padding magic number BS */
-    overflow: auto; /* @stickyfooter */
-    }
-    #logo img {
-    width:100px;
-    }
-    .well.page_center {
-    position: relative;
+.cart-qty {
+    margin-left: 5px;
+    padding-left: 5px;
+    border-left: 1px solid #fff;
+}
+/* Minicart */
+#topCartContent {
+    position: absolute; top: 100%; left: auto; right:0; z-index: 10;
+    margin-top:-1px; padding:12px 12px 48px;
+    width:354px; /* magic number BS */
+    background:#fff;
+    border:1px solid #ccc; /* old browser fallback */
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 0;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    -moz-box-shadow:0 3px 6px rgba(0, 0, 0, 0.25);
+    -webkit-box-shadow:0 3px 6px rgba(0, 0, 0, 0.25);
+    box-shadow:0 3px 6px rgba(0, 0, 0, 0.25);
+}
+.mini-products-list {
+}
+.mini-product {
+    min-height:30px;
+    margin-bottom: 0.8em;
+    border-bottom:1px solid #e5e5e5;
+    padding-bottom:0.8em;
+}
+.mini-product-image {
+    float:left; 
+    margin:0 5px 0 0;
+    width:30px;
+    border:1px solid #ccc;
+}
+.mini-product-image img {
+    max-width: 100%;
+}
+.mini-product-details {
+    line-height: 2em;
+    padding-top:2px;
+}
+.mini-product-name {
+    float: left;
+    max-width: 220px;
+}
+.mini-product-name a {
     display: inline-block;
-    margin-top: -210px;
+    width:100%;
+    line-height: 2.25em;
     vertical-align: middle;
-    width: 500px;
-    text-align: left;
-    }
-    .use-new-card-wrapper {
-    display:none;
-	}
-    input[type="text"],select, .uneditable-input {
-    	width: 50%;
-    }
-    .logged-out ~ #mainContent {
-        padding-top:150px;
-    }
-}    
+}
+.mini-product a { /* @overrides 'dropdown-menu a' ruleset */
+    clear: none;
+    padding: 0;
+    color:#d22f2a;
+}
+.mini-product-meta {
+    float: right;
+}
+.mini-product-name,
+.mini-product-meta > * {
+    display: inline-block;
+}
+.mini-product-meta > :first-child {
+    padding:0 8px 0 8px;
+    border:1px solid #e5e5e5; border-top:none; border-bottom: none;
+}
+#topCartContent .minifoot {
+    position: absolute; bottom: 0; left: 0;
+    padding:8px 0 5px;
+    width: 100%;
+    background:#f9f9f9;
+    border-top:1px solid #e5e5e5;
+}
+#topCartContent .minifoot .subtotal {
+    float: left;
+    margin:0 0 0 12px;
+}
+#topCartContent .minifoot .subtotal-savings {
+    display: block;
+    margin-bottom:5px;
+    color:rgba(210,47,42,0.78);
+    font-size:16px; font-weight: 500;
+    line-height: 1.15;
+}
+#topCartContent .minifoot .subtotal-cost {
+    font-size: 13px; font-weight: 500;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+#topCartContent .minifoot .subtotal-cost .price {
+    color: #d22f2a;
+    font-weight: bold;
+}
+#topCartContent .minifoot .action {
+    float: right;
+    margin:8px 12px 0 0;
+}
+#topCartContent .minifoot .action a {
+    margin-top:0;
+}
+#mini-cart .last {
+    border:none;
+    margin-bottom:0.4em;
+}
+
+/* checkout btn in non-mini-cart header */
+#header-checkoutBtn {
+    position: absolute; top: 3px; right: 8px;
+    text-align: right;
+}
+.open > #header-checkoutBtn {
+    display: none;
+}
 
 /*
 .use-new-card-wrapper {
@@ -1444,80 +1628,6 @@ img.fastship-icon {
 .sales-order-virtual-item-shortdescription { /* */ }
 .sales-order-virtual-item-description { /* */ }
 
-/* 
- * Login/Register pages  
- */
-#Signin.modal {width:340px!important; margin:-250px 0 0 -200px!important;}
-#Signup.modal {
-    max-height: 470px!important;
-    overflow-y: auto;
-    padding: 15px;
-}
-
-
-/* Center on page */
-/* container for element to be centered */
-.boxit {
-  text-align: center;
-  height: 100%;
-}
-/* The ghost, maintains centering */
-.boxit:before {
-  content: '';
-  display: inline-block;
-  height: 100%;
-  vertical-align: middle;
-  margin-right: -0.25em; /* Adjusts for spacing */
-}
-/* login smaller screen */
-@media screen and (max-height:749px) { 
-	.customer-account-login .boxit {
-		position: relative;
-		min-height: 0 !important;
-		margin:60px 0 250px;
-	}
-	.customer-account-login .boxit {
-		height: 500px; 
-	}
-	.customer-account-login .boxit:before {
-		display: none;
-	}
-    .customer-account-login .page_center {
-        display: block;
-		margin:0 auto 0;
-    }
-}
-/* register smaller screen */
-@media screen and (max-height:820px) { 
-	.customer-account-create .boxit {
-		position: relative;
-		min-height: 0 !important;
-		margin:60px 0 250px;
-	}
-	.customer-account-create .boxit {
-		height: 540px; 
-	}
-	.customer-account-create .boxit:before {
-		display: none;
-	}
-    .customer-account-create .page_center {
-        display: block;
-		margin:0 auto 0;
-    }
-}
-
-
-.well.page_center /* @TODO: temporary, pending MGN-1553 */
-{
-    background: none repeat scroll 0 0 #fff;
-    border: 1px solid #ddd;
-    -moz-border-radius: 5px; -webkit-border-radius: 5px; border-radius: 5px;
-    -moz-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075);
-    -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075);
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075);
-    padding: 10px;
-}
-
 /* Old Hara Partners Classes for Invitations */
 a#invite-gmail {
     background-position: 0 -51px;
@@ -1559,33 +1669,6 @@ a.invite-btn {
     margin:-10px 0 10px 0px;
     border: 1px solid #CCCCCC;
 }
-
-/* Sign In / Sign Up Classes */
-.badgecity_log {
-    background: url("../images/freeship30_days.png") no-repeat scroll left top transparent;
-    float: right;
-    height: 99px;
-    margin-right: 0px;
-    margin-top: -21px;
-    position: absolute;
-    right: -30px;
-    top: -10px;
-    width: 98px;
-    z-index: 10;
-}
-.badgecity_reg {
-    background: url("../images/freeship30_days.png") no-repeat scroll left top transparent;
-    float: right;
-    height: 99px;
-    margin-right: 0px;
-    margin-top: -21px;
-    position: absolute;
-    right: -30px;
-    top: -10px;
-    width: 98px;
-    z-index: 10;
-}
-p.badgecity_fine_print {font-size:11px; color:#999; margin:2px 0px 0px 0px; text-align:center; padding:0px;}
 
 /* Forms @override */
 textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input {

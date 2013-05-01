@@ -18,17 +18,20 @@
  
 /* Landscape phone to portrait tablet */
 @media (min-width: 481px) and (max-width: 767px) { 
-
 }
  
 /* Landscape phones and down */
 @media (max-width: 480px) { 
     body > footer {
-    position: relative;
-    margin-top:0px; height:511px; /* @stickyfooter: top margin is footer height + padding, magic number BS */
-    padding: 18px 0 0;
-    height:auto;
-    background: #fff;
+        position: relative;
+        margin-top:0px; height:511px; /* @stickyfooter: top margin is footer height + padding, magic number BS */
+        padding: 18px 0 0;
+        height:auto;
+        background: #fff;
+    }
+    .nav > li > a:hover, .nav > li > a:focus {
+        text-decoration: none;
+        background: #000!important;
     }
 }
 /* End Footer Media Queries */
@@ -52,24 +55,14 @@ footer strong {
     color: #666;
     font-size: 12px; font-weight: bold;
 }
+footer li {
+    color: #666;
+    font-size: 12px!important; font-weight: normal;
+}
 body > footer ul {margin:0;}
 body > footer ul li a,
 body > footer ul li a:hover {color:#666; font-size: 12px; text-decoration: none;}
-body > footer small {
-    display: block;
-    margin-top:18px; padding: 16px 16px 18px;
-    background: none repeat scroll 0% 0% rgb(178, 178, 178);
-    border-top: 2px solid rgb(136, 136, 136);
-    font-size: 11px;
-}
-body > footer small .container {
-    display: block;
-    font-style: normal;
-}
 
-body.customer-account-entry #footer ul {
-    float: left;
-}
 body.customer-account-entry #footer {
     background: none repeat scroll 0 0 #FFFFFF;
     bottom: 0;
@@ -87,73 +80,4 @@ body.customer-account-entry #footer {
     min-height: 32px!important;
     text-transform: uppercase;
     width: 960px;
-}
-body .footer {
-    background: none repeat scroll 0 0 transparent;
-    font-weight: normal;
-}
-#footer li {
-    border-right: 1px solid #AAAAAA;
-    float: left;
-    margin-right: 8px;
-    padding: 4px 5px 0 0;
-}
-body .footer-container {
-    background: none repeat scroll 0 0 transparent;
-    border: 0 solid transparent;
-    padding: 0;
-}
-body .footer ul {
-    width: auto;
-}
-#footer ul {
-    margin: 0px;
-    overflow: hidden;
-}
-#footer a:link, #footer a:visited {
-    color: #707070;
-}
-.socialLink {
-    background: url('../images/sprite_social.png') no-repeat scroll 0 0 #FFFFFF;
-    border-right: 1px solid #C5C5C5;
-    display: inline;
-    float: right;
-    height: 30px;
-    text-indent: -9999em;
-    width: 30px;
-}
-#footer address {
-    float: left;
-    padding: 4px 5px 0 0;
-}
-body.customer-account-entry #footer ul {
-    float: left;
-    height: 27px;
-    margin: 0;
-    padding: 5px 0 0 5px;
-}
-#tumblrLink {
-    background-position: -60px -2px;
-}
-#twitterLink {
-    background-position: -30px -2px;
-}
-#facebookLink {
-    background-position: 0 -2px;
-}
-
-/* Checkmark Bullets / 2013 Design */
-.bullet-checks
-{
-margin-left: 0;
-padding-left: 0;
-list-style: none;
-}
-
-.bullet-checks li 
-{
-padding-left: 15px;
-background-image: url(../images/icon_checkmark_footer.png);
-background-repeat: no-repeat;
-background-position: 0 .5em;
 }
