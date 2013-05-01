@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * {magecore_license_notice}
+ *
+ * @category   Oro
+ * @package    Oro_Configurable
+ * @copyright  {magecore_copyright}
+ * @license    {magecore_license}
+ */
+-->
+<config>
+    <modules>
+        <Oro_Configurable>
+            <active>true</active>
+            <codePool>local</codePool>
+            <depends>
+                <Mage_Catalog />
+            </depends>
+        </Oro_Configurable>
+    </modules>
+</config>

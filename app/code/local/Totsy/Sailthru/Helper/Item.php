@@ -12,9 +12,15 @@ class Totsy_Sailthru_Helper_Item {
         $url = $item["product"]->getProductUrl();
         $tags = array();
 
-        $product = Mage::getModel('catalog/product')->loadByAttribute('sku',$sku);
+        $product = Mage::getResourceModel('catalog/product_collection')
+            ->addFieldToFilter('entity_id', $item->getProductId())
+            ->addAttributeToSelect('departments')
+            ->addAttributeToSelect('ages')
+            ->getFirstItem();
+
         $departments = $product->getAttributeText('departments');
         $ages = $product->getAttributeText('ages');
+
         unset($product);
 
         if (!empty($departments)){
