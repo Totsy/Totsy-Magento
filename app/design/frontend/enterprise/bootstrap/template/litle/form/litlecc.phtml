@@ -253,20 +253,8 @@
                 var _onSave = this.onSave;
                 var _currentMethod = "<?php echo $_code ?>";
                 var _form = this.form;
-                var attempts = 0;
                 // Litle Page Stuff//
                 function setLitleResponseFields(response) {
-                    //In case Litle Api don't give correct informations
-                    console.log(response.litleTxnId);
-                    if(!response.litleTxnId) {
-                        if(attempts<3) {
-                            attempts++;
-                            return sendToLitle(litleRequest, formFields, setLitleResponseFields, onErrorAfterLitle);
-                        } else {
-                            alert('Sorry we are experiencing issue with our payment processor. Please retry later.');
-                            return false;
-                        }
-                    }
                     $('<?php echo $_code ?>_code').value = response.response;
                     $('<?php echo $_code ?>_message').value = response.message;
                     $('<?php echo $_code ?>_response_time').value = response.responseTime;
