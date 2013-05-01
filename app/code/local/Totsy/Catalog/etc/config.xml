@@ -25,7 +25,7 @@
             <catalog>
                 <rewrite>
                     <product_attribute_source_tax>Totsy_Catalog_Model_Product_Attribute_Source_Tax</product_attribute_source_tax>
-                    <product_type_configurable>Totsy_Catalog_Model_Product_Type_Configurable</product_type_configurable>
+                    <!-- <product_type_configurable>Totsy_Catalog_Model_Product_Type_Configurable</product_type_configurable> -->
                 </rewrite>
             </catalog>
         </models>
