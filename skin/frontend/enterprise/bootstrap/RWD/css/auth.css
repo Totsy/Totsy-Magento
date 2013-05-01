@@ -1,0 +1,99 @@
+/* 
+ * Login/Register pages  
+ */
+#Signin.modal {width:340px!important; margin:-250px 0 0 -200px!important;}
+#Signup.modal {
+    max-height: 470px!important;
+    overflow-y: auto;
+    padding: 15px;
+}
+
+
+/* Center on page */
+/* container for element to be centered */
+.boxit {
+  text-align: center;
+  height: 100%;
+}
+/* The ghost, maintains centering */
+.boxit:before {
+  content: '';
+  display: inline-block;
+  height: 100%;
+  vertical-align: middle;
+  margin-right: -0.25em; /* Adjusts for spacing */
+}
+/* login smaller screen */
+@media screen and (max-height:749px) { 
+	.customer-account-login .boxit {
+		position: relative;
+		min-height: 0 !important;
+		margin:60px 0 250px;
+	}
+	.customer-account-login .boxit {
+		height: 500px; 
+	}
+	.customer-account-login .boxit:before {
+		display: none;
+	}
+    .customer-account-login .page_center {
+        display: block;
+		margin:0 auto 0;
+    }
+}
+/* register smaller screen */
+@media screen and (max-height:820px) { 
+	.customer-account-create .boxit {
+		position: relative;
+		min-height: 0 !important;
+		margin:60px 0 250px;
+	}
+	.customer-account-create .boxit {
+		height: 540px; 
+	}
+	.customer-account-create .boxit:before {
+		display: none;
+	}
+    .customer-account-create .page_center {
+        display: block;
+		margin:0 auto 0;
+    }
+}
+
+
+.well.page_center /* @TODO: temporary, pending MGN-1553 */
+{
+    background: none repeat scroll 0 0 #fff;
+    border: 1px solid #ddd;
+    -moz-border-radius: 5px; -webkit-border-radius: 5px; border-radius: 5px;
+    -moz-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075);
+    -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075);
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075);
+    padding: 10px;
+}
+/* Sign In / Sign Up Classes */
+.badgecity_log {
+    background: url("../images/freeship30_days.png") no-repeat scroll left top transparent;
+    float: right;
+    height: 99px;
+    margin-right: 0px;
+    margin-top: -21px;
+    position: absolute;
+    right: -30px;
+    top: -10px;
+    width: 98px;
+    z-index: 10;
+}
+.badgecity_reg {
+    background: url("../images/freeship30_days.png") no-repeat scroll left top transparent;
+    float: right;
+    height: 99px;
+    margin-right: 0px;
+    margin-top: -21px;
+    position: absolute;
+    right: -30px;
+    top: -10px;
+    width: 98px;
+    z-index: 10;
+}
+p.badgecity_fine_print {font-size:11px; color:#999; margin:2px 0px 0px 0px; text-align:center; padding:0px;}

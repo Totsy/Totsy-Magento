@@ -1,1 +1,13 @@
+/* Header */
 @import url('header.css');
+@import url('nav.css');
+
+/* Typography */
+@import url('typography.css');
+
+/* Authentication Pages
+Signup / Signin / Logout / Forget Password / Reset Password */
+@import url('auth.css');
+
+/* Footer */
+@import url('footer.css');

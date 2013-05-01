@@ -1,0 +1,42 @@
+/* Begin Footer Media Queries */
+/* Large desktop */
+@media (min-width: 1200px) { 
+
+}
+
+@media (max-width: 1200px) and (min-width: 980px) { 
+
+}
+ 
+/* Portrait tablet to landscape and desktop */
+@media (min-width: 768px) and (max-width: 979px) { 
+
+}
+ 
+/* Landscape phone to portrait tablet */
+@media (min-width: 481px) and (max-width: 767px) { 
+
+}
+ 
+/* Landscape phones and down */
+@media (max-width: 480px) { 
+    h1 { font-size:13px; }
+    h2 { font-size:13px; }
+    h3 { font-size:13px; }
+    h4 { font-size:13px; }
+    h5 { font-size:13px; }
+}
+/* End Footer Media Queries */
+
+a {
+	color:#d22f2a; 
+	color: rgba(210,47,42,0.8);
+	text-decoration:underline;
+	outline: none;
+}
+a:hover{
+	color:#d22f2a;
+	color: rgba(210,47,42,1);
+	text-decoration:underline;
+}
+a:focus{outline: none;}
