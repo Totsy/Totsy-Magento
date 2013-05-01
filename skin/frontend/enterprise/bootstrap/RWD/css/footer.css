@@ -55,6 +55,10 @@ footer strong {
     color: #666;
     font-size: 12px; font-weight: bold;
 }
+footer li {
+    color: #666;
+    font-size: 12px!important; font-weight: normal;
+}
 body > footer ul {margin:0;}
 body > footer ul li a,
 body > footer ul li a:hover {color:#666; font-size: 12px; text-decoration: none;}

@@ -1,8 +1,12 @@
+/* Layout */
+@import url('layout.css');
+
 /* Header */
 @import url('header.css');
 @import url('nav.css');
 
-/* Typography */
+/* Typography 
+font, headings, paragraphs, line-height, lists, etc */
 @import url('typography.css');
 
 /* Authentication Pages

@@ -14,41 +14,11 @@
  * - Yellow         Event Hover(rollover)   #fcdc0a
  */
  
-html,
-body { height: 100%; background: transparent;}
-#stickywrap { /* @stickyfooter */
-    min-height: 100%;
-}
-html {
-    margin:0;
-    background: url(../images/bkg_stripped_blue.png) fixed 0 0 repeat;
-    /*
-    background-image: -moz-linear-gradient(top, #eef6fc, #ffffff);
-    background-image: -ms-linear-gradient(top, #eef6fc, #ffffff);
-    background-image: -o-linear-gradient(top, #eef6fc, #ffffff);
-    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#eef6fc), to(#ffffff));
-    background-image: -webkit-linear-gradient(top, #eef6fc, #ffffff);
-    background-image: linear-gradient(top, #eef6fc, #ffffff);
-    background-attachment: fixed;
-    */
-}
 /* Not implemented - pending forthought from "Creative" on how a bold font affects typography site-wide
 body {
     font-family: "Arial Rounded MT Bold", "Helvetica Rounded", Arial, "Helvetica Neue", Helvetica, sans-serif;
 }
 */
-a {
-	color:#d22f2a; 
-	color: rgba(210,47,42,0.8);
-	text-decoration:underline;
-	outline: none;
-}
-a:hover{
-	color:#d22f2a;
-	color: rgba(210,47,42,1);
-	text-decoration:underline;
-}
-a:focus{outline: none;}
 .content_push { margin-top:115px; } /* not in use, was for 1col */
 .content_push_2col { margin-top:115px; }
 /**
@@ -146,18 +116,6 @@ body[class*="span"] { /* bootstrap override for edge case of *span* sale title i
 .row:after {clear:both;}
  */
 
-/* TED's BLUE LINE HR */
-hr {
-    background-color:#fff;
-    border:1px dashed #64a5fe;
-    border-style: none none dashed;
-    color:#fff;
-    margin:7px 0px 10px; 
-}
-/* Global Table Border (not best practice, but its a hack until RWD - Eric*/
-table{
-    border:1px solid #eee;
-}
 /**
  * @One-off Modules & 3rd Party
  */
@@ -289,14 +247,6 @@ body.categoryevent-index-topnav .page-header {
     color:#d22f2a;
 }
 
-/* Ellipsis class for truncating long titles
- * to use, the element must also have a fixed width, either implicit (inherited) or explicit
- */
-.ellipsis {
-    white-space:nowrap;
-    overflow:hidden;
-    text-overflow: ellipsis;
-}
 
 /* Got something important to say? Say it with Ted's Red… even though red *should* just be for links, Ted! */
 .shoutit {
@@ -398,129 +348,6 @@ body.customer-account-entry .btn.btn-large {
 .label-success, .badge-success {
     background-color: #c1cc00;
 }
-
-/* mainContent - the site "wrapper" white box */
-/* Large desktop */
-@media (min-width: 1200px) { 
-#mainContent {
-    margin:0 auto;
-    /* pull out for RWD */ /* width:940px; */
-    background:#fff; 
-    padding:250px 30px 267px; /* @fixednav: top padding magic number BS; @stickyfooter: bottom padding magic number BS */
-    overflow: auto; /* @stickyfooter */
-    }
-    .well .page_center {
-    position: relative;
-    display: inline-block;
-    margin-top: -210px;
-    vertical-align: middle;
-    width: 300px;
-    text-align: left;
-    }
-    
-    input[type="text"],select, .uneditable-input {
-    	width: 100%;
-    }
-}
-
-@media (max-width: 1200px) and (min-width: 980px) { 
-#mainContent {
-    margin:0 auto;
-    /* pull out for RWD */ /* width:940px; */
-    background:#fff; 
-    padding:250px 30px 267px; /* @fixednav: top padding magic number BS; @stickyfooter: bottom padding magic number BS */
-    overflow: auto; /* @stickyfooter */
-    }
-    .well .page_center {
-    position: relative;
-    display: inline-block;
-    margin-top: -210px;
-    vertical-align: middle;
-    width: 300px;
-    text-align: left;
-    }
-    
-    input[type="text"],select, .uneditable-input {
-    	width: 100%;
-    }
-}
- 
-/* Portrait tablet to landscape and desktop */
-@media (min-width: 768px) and (max-width: 979px) { 
-#mainContent {
-    margin:0 auto;
-    /* pull out for RWD */ /* width:940px; */
-    background:#fff; 
-    padding:0px 30px 267px; /* @fixednav: top padding magic number BS; @stickyfooter: bottom padding magic number BS */
-    overflow: auto; /* @stickyfooter */
-    }
-    .well .page_center {
-    position: relative;
-    display: inline-block;
-    margin-top: -210px;
-    vertical-align: middle;
-    width: 300px;
-    text-align: left;
-    }
-    
-    input[type="text"],select, .uneditable-input {
-    	width: 100%;
-    }
-}
- 
-/* Landscape phone to portrait tablet */
-@media (min-width: 481px) and (max-width: 767px) { 
-#mainContent {
-    margin:0 auto;
-    /* pull out for RWD */ /* width:940px; */
-    background:#fff; 
-    padding:0px 30px 267px; /* @fixednav: top padding magic number BS; @stickyfooter: bottom padding magic number BS */
-    overflow: auto; /* @stickyfooter */
-    }
-    .well .page_center {
-    position: relative;
-    display: inline-block;
-    margin-top: -210px;
-    vertical-align: middle;
-    width: 200px;
-    text-align: left;
-    } 
-    
-    input[type="text"],select, input[type="radio"],.uneditable-input {
-    	width: 100%;
-    }
-}
- 
-/* Landscape phones and down */
-@media (max-width: 480px) { 
-#mainContent {
-    margin:0 auto;
-    /* pull out for RWD */ /* width:940px; */
-    background:#fff; 
-    padding:0px 10px 0px; /* @fixednav: top padding magic number BS; @stickyfooter: bottom padding magic number BS */
-    overflow: auto; /* @stickyfooter */
-    }
-    #logo img {
-    width:100px;
-    }
-    .well.page_center {
-    position: relative;
-    display: inline-block;
-    margin-top: -210px;
-    vertical-align: middle;
-    width: 500px;
-    text-align: left;
-    }
-    .use-new-card-wrapper {
-    display:none;
-	}
-    input[type="text"],select, .uneditable-input {
-    	width: 50%;
-    }
-    .logged-out ~ #mainContent {
-        padding-top:150px;
-    }
-}    
 /**
  * @Header
  * - "navbar" class from bootstrap

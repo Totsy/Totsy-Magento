@@ -66,13 +66,8 @@
         
     </div><!-- /#stickywrap -->
     <?php echo $this->getChildHtml('footer') ?>
-    <?php //echo $this->getAbsoluteFooter() ?>
+    <?php echo $this->getIncludes() ?>
     <script>
-//    function logout(){
-//    	FB.logout(function(response) {
-//    		window.location = "<?php  // echo Mage::getUrl('customer/account/logout')?>"// user is now logged out
-//    	});
-//    }
     // Sailthru Horizon Tags (sailthru.com transaction email) //
         (function() {
         function loadHorizon() { 
@@ -105,6 +100,5 @@
     }
     
 </script>
-<?php echo $this->getIncludes() ?>
 </body>
 </html>
