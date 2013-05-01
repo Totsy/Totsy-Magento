@@ -39,7 +39,7 @@
     //Harapartners, yang, get the server time with the frontend JS time
     $serverTime = Mage::getModel('core/date')->timestamp() * 1000;
     $quote = Mage::getSingleton('checkout/session')->getQuote();
-    $saving = Mage::helper('sales/order')->calculateEstimatedSavings($quote);
+    $saving = Mage::helper('sales/order')->calculateEstimatedSavingsQuote($quote);
 
     $ajaxUrl = Mage::getUrl('hpcheckout/ajax/splitCart/');
 ?>
@@ -221,7 +221,7 @@
         <div class="deals pull-left span5 well cart-coupon">
             <?php echo $this->getChildHtml('coupon') ?>
         </div>
-        <div class="deals span5 well pull-right">    
+        <div class="deals span5 well pull-right">
             <?php echo $this->getChildHtml('giftcards') ?>
         </div>
         <?php //if (!$this->getIsVirtual()): echo $this->getChildHtml('shipping'); endif; ?>

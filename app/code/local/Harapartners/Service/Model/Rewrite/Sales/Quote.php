@@ -9,7 +9,7 @@
  * If you did not receive a copy of the license and are unable to
  * obtain it through the world-wide-web, please send an email
  * to eula@harapartners.com so we can send you a copy immediately.
- * 
+ *
  */
 
 class Harapartners_Service_Model_Rewrite_Sales_Quote extends Mage_Sales_Model_Quote
@@ -106,8 +106,8 @@ class Harapartners_Service_Model_Rewrite_Sales_Quote extends Mage_Sales_Model_Qu
             if($item->getParentItemId()) {
                 continue;
             }
-            $product = Mage::getModel ( 'catalog/product' )->load ( $item->getProductId () );
-            if($product->getIsVirtual() && $fulfillmentType == 'virtual') {
+            $product = $item->getProduct();
+            if($item->getIsVirtual() && $fulfillmentType == 'virtual') {
                 return true;
             } elseif($product->getFulfillmentType() == $fulfillmentType) {
                 return true;
@@ -124,7 +124,7 @@ class Harapartners_Service_Model_Rewrite_Sales_Quote extends Mage_Sales_Model_Qu
             if($item->getParentItemId()) {
                 continue;
             }
-            $product = Mage::getModel ( 'catalog/product' )->load ( $item->getProductId () );
+            $product = $item->getProduct();
             $fulfillmentType = $product->getFulfillmentType();
             $fulfillmentTypes [$fulfillmentType] [] = $item->getId ();
 

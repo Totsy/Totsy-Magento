@@ -27,10 +27,10 @@
 		$imuPercentOff = round(($salesPrice - $product->getSaleWholesale()) / $salesPrice, 4) * 100;
 		echo '<strong>IMU:</strong> ' . sprintf("%.2f", $imuPercentOff) . '%<br/>';
 		if($product->getAttributeText('departments')) {
-		    echo '<strong>Departments:</strong> ' . implode(', ', $product->getAttributeText('departments')) . '<br/>';
+		    echo '<strong>Departments:</strong> ' . ((is_array($product->getAttributeText('departments'))) ? implode(', ', $product->getAttributeText('departments')) : $product->getAttributeText('departments')) . '<br/>';
 		}
 		if($product->getAttributeText('ages')) {
-		    echo '<strong>Ages:</strong> ' . implode(', ', $product->getAttributeText('ages')) . '<br/>';
+		    echo '<strong>Ages:</strong> ' . ((is_array($product->getAttributeText('ages'))) ? implode(', ', $product->getAttributeText('ages')) : $product->getAttributeText('ages')) . '<br/>';
 		}
 	}
 ?>

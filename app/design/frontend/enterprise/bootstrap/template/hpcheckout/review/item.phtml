@@ -1,15 +1,10 @@
-<?php $_item = $this->getItem()?>
-
-
 <?php
+$_item = $this->getItem();
 $quote = Mage::getSingleton('checkout/session')->getQuote();
-
-$shipDate = date('m-d-Y', Mage::helper('sales/order')->calculateEstimatedShipDate($quote));
 
 $totsyPlus = $_item->getProductId() == Mage::getStoreConfig('Crown_Club/clubgeneral/club_product_id');
 
 ?>
-
 
 <tr>
     <td><h4 class="product-name"><?php echo $this->htmlEscape($this->getProductName()) ?></h4>
@@ -38,7 +33,7 @@ $totsyPlus = $_item->getProductId() == Mage::getStoreConfig('Crown_Club/clubgene
         <?php endif;?>
     </td>
     <td>
-        <?php $fulfillmentType = Mage::getModel('catalog/product')->load($_item->getProductId())->getFulfillmentType();?>
+        <?php $fulfillmentType = $_item->getProduct()->getFulfillmentType(); ?>
         <?php if($fulfillmentType == 'dotcom_stock'
         && (Mage::getSingleton('checkout/session')->getSplitCartFlag() || !$quote->hasFulfillmentType('dotcom') )):?>
             Estimated Ship Date: 1-3 Business Days
@@ -49,6 +44,9 @@ $totsyPlus = $_item->getProductId() == Mage::getStoreConfig('Crown_Club/clubgene
         <?php elseif($_item->getProduct()->getIsVirtual()):?>
             You will receive an email with the details of this voucher code.
         <?php else:?>
+            <?php
+                $shipDate = date('m-d-Y', Mage::helper('sales/order')->calculateEstimatedShipDate($quote));
+            ?>
             Estimated Ship Date: <?php echo $shipDate;?>
         <?php endif;?>
     </td>

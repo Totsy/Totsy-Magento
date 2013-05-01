@@ -275,9 +275,8 @@ jQuery(document).ready( function() {
 		var _onSave = this.onSave;
 		var _currentMethod = "<?php echo $_code ?>";
 		var _form = this.form;
-
 		// Litle Page Stuff//
-		function setLitleResponseFields(response) {	
+		function setLitleResponseFields(response) {
 		    $('<?php echo $_code ?>_code').value = response.response;
 		    $('<?php echo $_code ?>_message').value = response.message;
 		    $('<?php echo $_code ?>_response_time').value = response.responseTime;
