@@ -11,7 +11,7 @@ class Totsy_CustomerSegment_Model_Segment_Condition_Customer_Attributes
          if(null === $this->_defaultOperatorInputByType)
          {
              parent::getDefaultOperatorInputByType();
-             $this->_defaultOperatorInputByType['days'] = array('<=');
+             $this->_defaultOperatorInputByType['days'] = array('>=');
           }
          return $this->_defaultOperatorInputByType;
      }
@@ -20,7 +20,7 @@ class Totsy_CustomerSegment_Model_Segment_Condition_Customer_Attributes
       {
         if (null === $this->_defaultOperatorOptions) {
             $this->_defaultOperatorOptions = parent::getDefaultOperatorOptions();
-            $this->_defaultOperatorOptions['<='] = Mage::helper('rule')->__('within');
+            $this->_defaultOperatorOptions['>='] = Mage::helper('rule')->__('within');
         }
         return $this->_defaultOperatorOptions;
      }
@@ -70,15 +70,24 @@ class Totsy_CustomerSegment_Model_Segment_Condition_Customer_Attributes
                 $field = 'main.value';
             }
             $field = $select->getAdapter()->quoteColumnAs($field, null);
-            if("`main`.`created_days`" == $field)
-             {
-                $field = "datediff(now(),`main`.`created_at`)";
-             }
+           
             if ($attribute->getFrontendInput() == 'date') {
                 $value    = $this->getDateValue();
                 $operator = $this->getDateOperator();
             }
             $condition = $this->getResource()->createConditionSql($field, $operator, $value);
+            if('customer_entity' == $table)
+            {
+                 if("`main`.`created_days`" == $field)
+                 {
+                   $field = "`root`.`created_at`";
+                   $value = "date_add(now(),INTERVAL -" . $value . " day)";
+                   $condition = $field.' '.$operator.' '. $value;
+                 }else{
+                   $condition = str_replace("`main`","`root`",$condition);
+                 }
+                return $condition;
+            }
             $select->where($condition);
         } else {
             $joinFunction = 'joinLeft';
