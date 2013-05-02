@@ -84,11 +84,13 @@ class Litle_CreditCard_Model_PaymentLogic extends Mage_Payment_Model_Method_Cc
 
 	public function assignData($data)
 	{
+		Mage::log("litle");
 		if (! ($data instanceof Varien_Object)) {
 			$data = new Varien_Object($data);
 		}
-        $info = $this->getInfoInstance();
+
 		if ($this->getConfigData('paypage_enabled')) {
+			$info = $this->getInfoInstance();
 			$info->setAdditionalInformation('paypage_enabled', $data->getPaypageEnabled());
 			$info->setAdditionalInformation('paypage_registration_id', $data->getPaypageRegistrationId());
 			$info->setAdditionalInformation('paypage_order_id', $data->getOrderId());
@@ -165,19 +167,9 @@ class Litle_CreditCard_Model_PaymentLogic extends Mage_Payment_Model_Method_Cc
 	{
 		$vaultIndex = $this->getInfoInstance()->getAdditionalInformation('cc_vaulted');
 		$vaultCard = Mage::getModel('palorus/vault')->load($vaultIndex);
-        if($vaultCard->getType() == 'AE') {
-            $cardType = 'AX';
-        } else {
-            $cardType = $vaultCard->getType();
-        }
-        
-        $expDate = $vaultCard->getExpirationMonth() . substr($vaultCard->getExpirationYear(), -2);
-        if(strlen($expDate) < 4) {
-            $expDate = '0' . $expDate;
-        }
+
 		$retArray = array();
-		//$retArray['type'] = $cardType;
-		$retArray['expDate'] = $expDate;
+		$retArray['type'] = $vaultCard->getType();
 		$retArray['litleToken'] = $vaultCard->getToken();
 		$retArray['cardValidationNum'] = $payment->getCcCid();
 
@@ -448,7 +440,7 @@ class Litle_CreditCard_Model_PaymentLogic extends Mage_Payment_Model_Method_Cc
 	 * @param Varien_Object $payment
 	 * @param DOMDocument $litleResponse
 	 */
-	protected function _saveToken(Varien_Object $payment, DOMDocument $litleResponse, $customerAddressId = null)
+	protected function _saveToken(Varien_Object $payment, DOMDocument $litleResponse)
 	{
 		if (!is_null($this->getUpdater($litleResponse, 'tokenResponse')) &&
 			!is_null($this->getUpdater($litleResponse, 'tokenResponse', 'litleToken'))) {
@@ -457,10 +449,7 @@ class Litle_CreditCard_Model_PaymentLogic extends Mage_Payment_Model_Method_Cc
 					$payment,
 					$this->getUpdater($litleResponse, 'tokenResponse', 'litleToken'),
 					$this->getUpdater($litleResponse, 'tokenResponse', 'bin'));
-            if($customerAddressId) {
-                $vault->setData('address_id', $customerAddressId)
-                    ->save();
-            }
+
 			$this->getInfoInstance()->setAdditionalInformation('vault_id', $vault->getId());
 		}
 	}
@@ -524,24 +513,32 @@ class Litle_CreditCard_Model_PaymentLogic extends Mage_Payment_Model_Method_Cc
 		if($customerId === null) {
 			$customerId = 0;
 		}
-		$db = Mage::getSingleton('core/resource')->getConnection('core/write');
+		$config = Mage::getResourceModel("sales/order")->getReadConnection()->getConfig();
+		$host = $config['host'];
+		$username = $config['username'];
+		$password = $config['password'];
+		$dbname = $config['dbname'];
 
+		$con = mysql_connect($host,$username,$password);
 		$fullXml = $xmlDocument->saveXML();
-		if (!$db)
+		if (!$con)
 		{
 			Mage::log("Failed to write failed transaction to database.  Transaction details: " . $fullXml, null, "litle_failed_transactions.log");
 		}
 		else {
+			$selectedDb = mysql_select_db($dbname, $con);
+			if(!$selectedDb) {
+				Mage::log("Can't use selected database " . $dbname, null, "litle.log");
+			}
+			$fullXml = mysql_real_escape_string($fullXml);
 			$litleTxnId = XMLParser::getNode($xmlDocument, 'litleTxnId');
-			$sql = "insert into litle_failed_transactions (customer_id, order_id, message, full_xml, litle_txn_id, active, transaction_timestamp, order_num) values (?, ?, ?, ?, ?, true, now(), ?)";
-
-            try {
-			    $result = $db->query($sql,array($customerId,$orderId,$message,$fullXml,$litleTxnId,$orderNumber));
-
-            } catch(Exception $e) {
-				Mage::log("Insert failed with error message: " . $e->getMessage, null, "litle.log");
+			$sql = "insert into litle_failed_transactions (customer_id, order_id, message, full_xml, litle_txn_id, active, transaction_timestamp, order_num) values (" . $customerId . ", " . $orderId . ", '" . $message . "', '" . $fullXml . "', '" . $litleTxnId . "', true, now()," . $orderNumber . ")";
+			$result = mysql_query($sql);
+			if(!$result) {
+				Mage::log("Insert failed with error message: " . mysql_error(), null, "litle.log");
 				Mage::log("Query executed: " . $sql, null, "litle.log");
 			}
+			mysql_close($con);
 		}
 	}
 	
@@ -632,13 +629,18 @@ class Litle_CreditCard_Model_PaymentLogic extends Mage_Payment_Model_Method_Cc
 	 */
 	public function authorize(Varien_Object $payment, $amount)
 	{
+		// @TODO This is the wrong way to do this.
+		if (preg_match('/sales_order_create/i', $_SERVER['REQUEST_URI']) &&
+				 ($this->getConfigData('paypage_enable') == '1')) {
+			$payment->setStatus('N/A')
+				->setCcTransId('Litle VT')
+				->setLastTransId('Litle VT')
+				->setTransactionId('Litle VT')
+				->setIsTransactionClosed(0)
+				->setCcType('Litle VT');
+		} else {
 			$order = $payment->getOrder();
 			$orderId = $order->getIncrementId();
-
-            if($order->getStatus() != 'processing') {
-                $amount = 1.00;
-            }
-
 			$amountToPass = Mage::helper('creditcard')->formatAmount($amount, true);
 
 			if (! empty($order)) {
@@ -654,39 +656,32 @@ class Litle_CreditCard_Model_PaymentLogic extends Mage_Payment_Model_Method_Cc
 						'billToAddress' => $this->getBillToAddress($payment),
 						'shipToAddress' => $this->getAddressInfo($payment),
 						'cardholderAuthentication' => $this->getFraudCheck($payment),
-						'enhancedData' => $this->getEnhancedData($payment)
+						'enhancedData' => $this->getEnhancedData($payment),
+						'customBilling' => $this->getCustomBilling(
+								Mage::app()->getStore()
+									->getBaseUrl())
 				);
+
+
 
 				$payment_hash = $this->creditCardOrPaypageOrToken($payment);
 				$hash_temp = array_merge($hash, $payment_hash);
 				$merchantData = $this->merchantData($payment);
 				$hash_in = array_merge($hash_temp, $merchantData);
+
 				$litleRequest = new LitleOnlineRequest();
 				$litleResponse = $litleRequest->authorizationRequest($hash_in);
 				$this->processResponse($payment, $litleResponse);
 
-                $customerAddressId =$this->saveCustomerAddress($payment);
-
 				Mage::helper('palorus')->saveCustomerInsight($payment, $litleResponse);
 				if (!is_null($info->getAdditionalInformation('cc_should_save'))) {
-					$this->_saveToken($payment, $litleResponse, $customerAddressId);
+					$this->_saveToken($payment, $litleResponse);
 				}
 			}
+		}
+
 		return $this;
 	}
-
-    public function saveCustomerAddress($payment) {
-        $addressCustomer = Mage::getModel('customer/address');
-        $customerId = $payment->getOrder()->getCustomerId();
-        $billingAddressDatas = $payment->getOrder()->getBillingAddress()->getData();
-        unset($billingAddressDatas['entity_id']);
-        $addressCustomer->setData($billingAddressDatas)
-            ->setCustomerId($customerId)
-            ->setIsDefaultBilling(false)
-            ->setIsDefaultShipping(false)
-            ->save();
-        return $addressCustomer->getId();
-    }
 
 	/**
 	 * this method is called if we are authorising AND capturing a transaction

@@ -79,8 +79,7 @@ class Litle_Palorus_Model_Vault extends Mage_Core_Model_Abstract
 
 		$vault->save();
 
-        $payment->setLitleVaultId($vault->getId())
-                ->save();
+		$order->setLitleVaultId($vault->getId());
 
 		return $vault;
 	}
