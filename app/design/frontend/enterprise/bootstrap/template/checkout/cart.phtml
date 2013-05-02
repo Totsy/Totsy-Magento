@@ -180,7 +180,7 @@
         <?php endforeach;?>
 
 
-    <?php if (!$this->getQuote()->isNominal() && (array_key_exists('litle_recurring',$fulfillmentTypes) && count($fulfillmentTypes) > 1)): ?>
+    <?php if (!$this->getQuote()->isNominal() && (!array_key_exists('litle_recurring',$fulfillmentTypes) || count($fulfillmentTypes) > 1)): ?>
         <table class="shopping-cart-table data-table table table-bordered table-condensed">
             <tr>
                 <td colspan="6">
