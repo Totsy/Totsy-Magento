@@ -190,7 +190,7 @@ if($_product->getId() == Mage::getStoreConfig('Crown_Club/clubgeneral/club_produ
 
 
 
-    <?php if(!in_array($_fullProduct->getFulfillmentType(),array('litle_recurring','nominal'))): ?>
+    <?php if(!in_array($_product->getFulfillmentType(),array('litle_recurring','nominal'))): ?>
 	<td class="qty-box">
 		<?php if( $isVirtual ): ?>
 			<input type="text" name="cart[<?php echo $_item->getId() ?>][qty]" value="<?php echo $this->getQty() ?>" size="4" title="<?php echo $this->__('Qty') ?>" class="input-text qty" maxlength="12" disabled="disabled"/>

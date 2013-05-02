@@ -6,6 +6,11 @@
 		</Crown_Club>
 	</modules>
     <global>
+        <blocks>
+            <crownclub>
+                <class>Crown_Club_Block</class>
+            </crownclub>
+        </blocks>
         <models>
             <crownclub>
                 <class>Crown_Club_Model</class>
@@ -148,6 +153,13 @@
                 </args>
             </crownclub>
         </routers>
+        <layout>
+            <updates>
+                <crownclub module="Crown_Club">
+                    <file>crownclub.xml</file>
+                </crownclub>
+            </updates>
+        </layout>
     </frontend>
 	<crontab>
 		<jobs>
