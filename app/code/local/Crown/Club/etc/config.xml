@@ -10,6 +10,11 @@
             <crownclub>
                 <class>Crown_Club_Block</class>
             </crownclub>
+            <enterprise_reward>
+                <rewrite>
+                    <tooltip_checkout>Crown_Club_Block_Reward_Tooltip_Checkout</tooltip_checkout>
+                </rewrite>
+            </enterprise_reward>
         </blocks>
         <models>
             <crownclub>
