@@ -100,7 +100,7 @@ jQuery(document).ready( function() {
                             <?php foreach ($this->getStoredCards() as $card): ?>
                                 <?php
                                     $customerId = $card->getData('customer_id');
-                                    $lastCardUsed = Mage::helper('palorus')->getLastCardUsed();
+                                    $lastCardUsed = Mage::helper('litle')->getLastCardUsed();
                                     $customerObj = Mage::getSingleton('customer/customer')->load($customerId);
                                     $customerAddress = Mage::getModel('customer/address')->load($card->getData('address_id'));
                                     $customerName = $customerAddress->getFirstname() ." ". $customerAddress->getLastname();

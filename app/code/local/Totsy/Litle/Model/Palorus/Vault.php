@@ -1,12 +1,12 @@
 <?php
 /**
  * @category    Totsy
- * @package     Totsy_Palorus_Model_Vault
+ * @package     Totsy_Litle_Model_Palorus_Vault
  * @author      Tom Royer <troyer@totsy.com>
  * @copyright   Copyright (c) 2013 Totsy LLC
  */
  
-class Totsy_Palorus_Model_Vault extends Litle_Palorus_Model_Vault
+class Totsy_Litle_Model_Palorus_Vault extends Litle_Palorus_Model_Vault
 {
     /**
      * Create or update a token from a payment object

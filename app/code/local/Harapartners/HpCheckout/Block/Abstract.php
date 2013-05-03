@@ -104,7 +104,7 @@ abstract class Harapartners_HpCheckout_Block_Abstract extends Mage_Core_Block_Te
             } else {
                 $addressId = $this->getCustomer()->getDefaultShipping();
             }
-            $lastCardUsed = Mage::helper('palorus')->getLastCardUsed();
+            $lastCardUsed = Mage::helper('litle')->getLastCardUsed();
             if($lastCardUsed && $lastCardUsed->getId()) {
                 $addressId = $lastCardUsed->getAddressId() ;
             }

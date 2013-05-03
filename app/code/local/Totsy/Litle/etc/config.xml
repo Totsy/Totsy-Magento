@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @category    Totsy
+ * @package     Totsy_Litle
+ * @author      Tom Royer <troyer@totsy.com>
+ * @copyright   Copyright (c) 2013 Totsy LLC
+ */
+-->
+<config>
+    <modules>
+        <Totsy_Litle>
+            <version>0.1.0</version>
+        </Totsy_Litle>
+    </modules>
+    <global>
+         <models>
+            <Litle>
+                <rewrite>
+                    <creditcard_paymentlogic>Totsy_Litle_Model_CreditCard_PaymentLogic</creditcard_paymentlogic>
+                    <palorus_vault>Totsy_Litle_Model_Palorus_Vault</palorus_vault>
+                </rewrite>
+            </Litle>
+        </models>
+        <blocks>
+            <litle>
+                <rewrite>
+                    <palorus_vault_list>Totsy_Litle_Block_Palorus_Vault_List</palorus_vault_list>
+                </rewrite>
+            </litle>
+        </blocks>
+        <helpers>
+            <litle>
+                <rewrite>
+                    <data>Totsy_Litle_Helper_Palorus_Data</data>
+                </rewrite>
+            </litle>
+        </helpers>
+    </global>
+    <frontend>
+        <routers>
+            <litle>
+                <use>standard</use>
+                <args>
+                    <module>Totsy_Litle</module>
+                    <frontName>litle</frontName>
+                </args>
+            </litle>
+        </routers>
+    </frontend>
+</config>

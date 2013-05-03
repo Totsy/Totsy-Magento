@@ -95,7 +95,7 @@
                         </tr>
                         <?php foreach ($this->getStoredCards() as $card): ?>
                             <?php
-                                $lastCardUsed = Mage::helper('palorus')->getLastCardUsed();
+                                $lastCardUsed = Mage::helper('litle')->getLastCardUsed();
                                 $customerAddress = Mage::getModel('customer/address')->load($card->getData('address_id'));
                                 $customerName = $customerAddress->getFirstname() ." ". $customerAddress->getLastname();
                                 $customerStreet = $customerAddress['street'];

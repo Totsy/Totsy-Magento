@@ -84,7 +84,6 @@ class Litle_CreditCard_Model_PaymentLogic extends Mage_Payment_Model_Method_Cc
 
 	public function assignData($data)
 	{
-		Mage::log("litle");
 		if (! ($data instanceof Varien_Object)) {
 			$data = new Varien_Object($data);
 		}

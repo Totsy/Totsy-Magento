@@ -1,7 +1,7 @@
 <?php
 /**
  * @category    Totsy
- * @package     Totsy_Palorus_VaultController
+ * @package     Totsy_Litle_Palorus_VaultController
  * @author      Tom Royer <troyer@totsy.com>
  * @copyright   Copyright (c) 2013 Totsy LLC
  */
@@ -9,7 +9,7 @@
 require_once Mage::getBaseDir('code') . '/community/Litle/LitleSDK/LitleOnline.php';
 require_once 'Litle/Palorus/controllers/VaultController.php';
 
-class Totsy_Palorus_VaultController extends Litle_Palorus_VaultController
+class Totsy_Litle_Palorus_VaultController extends Litle_Palorus_VaultController
 {
     public function preDispatch()
     {
@@ -24,7 +24,7 @@ class Totsy_Palorus_VaultController extends Litle_Palorus_VaultController
      */
     public function indexAction()
     {
-        echo 'index';
+        Mage::log('indexAction');
         $this->loadLayout();
         $this->_initLayoutMessages('customer/session');
         $this->renderLayout();

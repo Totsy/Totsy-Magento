@@ -1,12 +1,12 @@
 <?php
 /**
  * @category    Totsy
- * @package     Totsy_Palorus_Helper_Data
+ * @package     Totsy_Litle_Helper_Palorus_Data
  * @author      Tom Royer <troyer@totsy.com>
  * @copyright   Copyright (c) 2013 Totsy LLC
  */
  
-class Totsy_Palorus_Helper_Data extends Litle_Palorus_Helper_Data
+class Totsy_Litle_Helper_Palorus_Data extends Litle_Palorus_Helper_Data
 {
 
     public function getBaseUrl()

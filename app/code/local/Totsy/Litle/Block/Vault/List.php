@@ -1,12 +1,12 @@
 <?php
 /**
  * @category    Totsy
- * @package     Totsy_Palorus_Block_Vault_List
+ * @package     Totsy_Litle_Block_Palorus_Vault_List
  * @author      Tom Royer <troyer@totsy.com>
  * @copyright   Copyright (c) 2013 Totsy LLC
  */
  
-class Totsy_Palorus_Block_Vault_List extends Litle_Palorus_Block_Vault_List
+class Totsy_Litle_Block_Palorus_Vault_List extends Litle_Palorus_Block_Vault_List
 {
 
     /**

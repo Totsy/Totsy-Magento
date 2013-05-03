@@ -115,13 +115,9 @@
             <active>true</active>
             <codePool>local</codePool>
         </Totsy_Pci>
-        <Totsy_Palorus>
+        <Totsy_Litle>
             <active>true</active>
             <codePool>local</codePool>
-        </Totsy_Palorus>
-        <Totsy_CreditCard>
-            <active>true</active>
-            <codePool>local</codePool>
-        </Totsy_CreditCard>
+        </Totsy_Litle>
     </modules>
 </config>
