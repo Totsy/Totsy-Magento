@@ -32,8 +32,41 @@
 <?php
     $sent_invitations = $this->getSentInvitations();
     $invitationInfo = $this->getInvitationInfo();
+    $customer = $this->getCustomer();
 ?>
 <div class="entry-edit box-left">
+    <div class="entry-edit-head"><h4 class="icon-head head-customer-view"><?php echo Mage::helper('customer')->__('Personal Information') ?></h4></div>
+    <fieldset>
+        <table cellspacing="2" class="box-left">
+            <tr>
+                <td><strong><?php echo $this->__('Email Address:') ?></strong><br /></td>
+                <td><strong><?php echo $customer->getEmail(); ?></strong></td>
+            </tr>
+            <tr>
+                <td><strong><?php echo $this->__('Register Date:') ?></strong><br /></td>
+                <td><?php echo Mage::app()->getLocale()->date($customer->getCreatedAtTimestamp()); ?></td>
+            </tr>
+            <?php
+            $billingAddress = $customer->getPrimaryBillingAddress();
+            $shippingAddress = $customer->getPrimaryShippingAddress();
+
+            if ($billingAddress): ?>
+            <tr>
+                <td><strong><?php echo $this->__('Billing Address:') ?></strong><br /></td>
+                <td><?php echo $billingAddress->format('html'); ?></td>
+            </tr>
+            <?php
+            endif;
+
+            if ($shippingAddress):
+            ?>
+            <tr>
+                <td><strong><?php echo $this->__('Shipping Address:') ?></strong><br /></td>
+                <td><?php echo $shippingAddress->format('html'); ?></td>
+            </tr>
+            <?php  endif; ?>
+        </table>
+    </fieldset>
     <div class="entry-edit-head"><h4 class="icon-head head-customer-view"><?php echo Mage::helper('customer')->__('Invited by') ?></h4></div>
     <fieldset>
         <table cellspacing="2" class="box-left">
@@ -93,6 +126,29 @@
                             <td><strong>Credits Earned!</strong></td>
                         <?php endif; ?>
                     </tr>
+                    <?php
+                    $invitee = Mage::getModel('customer/customer')->load($invitation['referral_id']);
+                    $billingAddress = $invitee->getPrimaryBillingAddress();
+                    $shippingAddress = $invitee->getPrimaryShippingAddress();
+
+                    if ($billingAddress):
+                    ?>
+                    <tr>
+                        <td><strong><?php echo $this->__('Billing Address:') ?></strong><br /></td>
+                        <td><?php echo $billingAddress->format('html'); ?></td>
+                    </tr>
+                    <?php
+                    endif;
+
+                    if ($shippingAddress):
+                    ?>
+                    <tr>
+                        <td><strong><?php echo $this->__('Shipping Address:') ?></strong><br /></td>
+                        <td><?php echo $shippingAddress->format('html'); ?></td>
+                    </tr>
+                    <?php
+                    endif; ?>
+
                 </table>
             </fieldset>
     <?php endforeach;?>

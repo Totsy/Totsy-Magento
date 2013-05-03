@@ -58,7 +58,8 @@ class Enterprise_Invitation_Block_Adminhtml_Report_Invitation_Customer_Grid
     {
         $this->addColumn('id', array(
             'header'    =>Mage::helper('enterprise_invitation')->__('ID'),
-            'index'     => 'entity_id'
+            'index'     => 'entity_id',
+            'renderer'  => 'Enterprise_Invitation_Block_Adminhtml_Report_Invitation_Customer_Renderer_Entity'
         ));
 
         $this->addColumn('name', array(
