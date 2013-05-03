@@ -159,7 +159,6 @@ class Harapartners_HpCheckout_Model_Checkout
         }
         $address->setSameAsBilling($data['selected']=="-1"?1:0);
         $address['save_in_address_book']=isset($data['save_in_address_book']);
-        $address->setIsDefaultBilling(isset($data['save_in_address_book']));
         $address->implodeStreetAddress();
         $address->setCollectShippingRates(true);
         $this->getQuote()->setShippingAddress($address);
@@ -428,12 +427,12 @@ class Harapartners_HpCheckout_Model_Checkout
         if (!$billing->getCustomerId() || $billing->getSaveInAddressBook()) {
             $customerBilling = $billing->exportCustomerAddress();
             $customer->addAddress($customerBilling);
-            //$billing->setCustomerAddress($customerBilling);
+            $billing->setCustomerAddress($customerBilling);
         }
         if ($shipping && !$shipping->getSameAsBilling() && $shipping->getSaveInAddressBook()) {
             $customerShipping = $shipping->exportCustomerAddress();
             $customer->addAddress($customerShipping);
-            //$shipping->setCustomerAddress($customerShipping);
+            $shipping->setCustomerAddress($customerShipping);
         }
 
         if (isset($customerBilling) && !$customer->getDefaultBilling()) {

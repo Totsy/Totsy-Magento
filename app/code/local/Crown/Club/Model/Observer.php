@@ -114,8 +114,8 @@ class Crown_Club_Model_Observer {
         $customer = Mage::helper('customer')->getCustomer();
 
 
-        if(!$customer->getDefaultBillingAddress()) {
-            //$address->setIsDefaultBilling(true);
+         if(!$customer->getDefaultBillingAddress()) {
+            $address->setIsDefaultBilling(true);
             //$address->setSaveInAddressBook(true);
         }
     }
