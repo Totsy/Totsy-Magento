@@ -111,6 +111,14 @@
                     </crownclub_check_url>
                 </observers>
             </controller_front_send_response_before>
+            <sales_convert_quote_to_order>
+                <observers>
+                    <crownclub>
+                        <class>crownclub/observer</class>
+                        <method>quoteSubmitBefore</method>
+                    </crownclub>
+                </observers>
+            </sales_convert_quote_to_order>
         </events>
 
         <sales>
