@@ -112,8 +112,13 @@ class Harapartners_Fulfillmentfactory_Model_Service_Itemqueue
             	$order->setState(Mage_Sales_Model_Order::STATE_PROCESSING);
             	$order->save();
             }
-        }
-        else if($status == 'canceled'){
+        } else if ($status == 'processing') {
+            foreach ($collection as $itemqueue) {
+                $itemqueue->setFulfillCount(0)
+                    ->setStatus(Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_PENDING)
+                    ->save();
+            }
+        } else if ($status == 'canceled') {
             foreach($collection as $itemqueue) {
                 $itemqueue->setStatus(Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_CANCELLED);
                 $itemqueue->save();
