@@ -3,15 +3,31 @@
 </div>
 <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
 <h3 class="sub-title"><?php echo $this->__('Thank you for your purchase!') ?></h3>
+<?php $orderIds = array();?>
+<?php if($this->hasMultipleOrders()):
+    $orderIds = $this->getTheOrderIds();
+    Mage::getSingleton('checkout/session')->setData('orderids', $orderIds);
+    $orderLinks = array();
+    foreach($orderIds as $orderId => $incrementId) {
+        $orderLinks[] = '<a href="' . $this->getViewOrderUrl($orderId) . '">' . $incrementId . '</a>';
+    }
 
-<?php if ($this->getOrderId()):?>
-<?php 
-	$orderIncrementId = $this->getOrderId();
-	$order = Mage::getModel('sales/order')->loadByIncrementId($orderIncrementId);
-	$quoteId = $order->getQuoteId();
-	$quote = Mage::getModel('sales/quote')->load($quoteId);
-	//$quote = Mage::getModel('checkout/cart')->getQuote();
-	
+    echo $this->__('Your order numbers are ') . implode(', ', $orderLinks);?>
+
+    <p><?php echo $this->__('You will receive an order confirmation email with details of your order and a link to track its progress.') ?></p>
+	<p class="red review-order-detail">
+    	<?php $url = $this->getBaseUrl().'sales/order/history/';?>
+		You will redirect to orders review page in 10 seconds. Or <a class="red" href="<?php echo $url?>">click here</a>
+    </p>
+    <script language="javascript" type="text/javascript">
+		function redirect(){window.location.href="<?php echo $url?>"};
+		setTimeout("redirect()",10000);
+	</script>
+
+<?php endif;?>
+
+<?php if ($this->getOrderId()):
+    $orderIds[] = $this->getOrderId();
 ?>
 <?php if ($this->getCanViewOrder()) :?>
     <p><?php echo $this->__('Your order # is: %s.', sprintf('<a href="%s">%s</a>', $this->escapeHtml($this->getViewOrderUrl($this->getOrderId())), $this->escapeHtml($this->getOrderId()))) ?></p>
@@ -21,12 +37,10 @@
     <p><?php echo $this->__('You will receive an order confirmation email with details of your order and a link to track its progress.') ?></p>
 <?php if ($this->getCanViewOrder() && $this->getCanPrintOrder()) :?>
     <p>
-       
         <?php echo $this->getChildHtml() ?>
     </p>
 	<p class="red review-order-detail">
-    	<?php 		
-    		$order_id = $order->getId();
+    	<?php
 			$url = $this->getBaseUrl().'sales/order/history/';
 		?>
 		You will redirect to orders review page in 10 seconds. Or <a class="red" href="<?php echo $url?>">click here</a>
@@ -36,12 +50,14 @@
 		setTimeout("redirect()",10000);
 	</script>
 <?php endif;?>
-<?php endif;?> 
+<?php endif;?>
 
+<?php foreach($orderIds as $orderId => $incrementId):
+        $order = Mage::getModel('sales/order')->loadByIncrementId($incrementId);?>
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', '<?php echo Mage::getStoreConfig("google/analytics/account")?>']);  
+  _gaq.push(['_setAccount', '<?php echo Mage::getStoreConfig("google/analytics/account")?>']);
   _gaq.push(['_trackPageview']);
   _gaq.push(['_addTrans',
     '<?php echo $order->getData('increment_id'); ?>',           // order ID - required
@@ -53,20 +69,13 @@
     '<?php echo $order->getShippingAddress()->getData('region')?>',     // state or province
     'USA'             // country
   ]);
-	<?php 
-	$category = array();
-//	$productid = Mage::getModel('catalog/product')->getData('category_ids');
-//	$order  = Mage::getModel('catalog/category')->getCollection()->load($productid);
-	foreach($order->getAllItems() as $item):?>
-	<?php 	if( !! $item->getParentItemId() ) {
+	<?php
+	foreach($order->getAllItems() as $item):
+        if( $item->getParentItemId() ) {
 			continue;
 		}
-		unset($category);
-		$product = Mage::getModel( 'catalog/product' )->load( $item->getProductId() );
-		$categoryIds = $product->getCategoryIds();
-		foreach ($categoryIds as $cateId){
-			$category[] = Mage::getModel('catalog/category')->load($cateId)->getData('name');
-		}
+
+        $categoryNames = Mage::helper('hpcheckout')->getCategoryNames($item->getProductId());
 	?>
 
    // add item might be called for every item in the shopping cart
@@ -76,15 +85,14 @@
     '<?php echo $order->getData('increment_id'); ?>',           // order ID - required
     '<?php echo $item->getData('sku'); ?>',           // SKU/code - required
     '<?php echo $item->getData('name')?>',        // product name
-    '<?php foreach($category as $cat){
-    	echo $cat.',';
-    } ?>',   // category or variation
+    '<?php echo $this->escapeHtml($this->jsQuoteEscape($categoryNames))?>',   // category or variation
     '<?php echo $item->getPrice() ?>',          // unit price - required
     '<?php echo $item->getQtyOrdered() ?>'               // quantity - required
   ]);
-  <?php   		
-  endforeach;
-  ?>
+  <?php endforeach;?>
+  <?php endforeach;?>
+
+
   _gaq.push(['_trackTrans']); //submits transaction to the Analytics servers
 
   (function() {

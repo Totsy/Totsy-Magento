@@ -5,7 +5,7 @@ class Totsy_Reward_Adminhtml_ImportController extends Mage_Adminhtml_Controller_
 	public function indexAction() {
         $this->loadLayout();//->_setActiveMenu('promotions/banner');
         $this->getLayout()->getBlock('head')->setCanLoadExtJs(true);
-        $this->_addContent($this->getLayout()->createBlock('enterprise_reward/adminhtml_import_edit'));
+        $this->_addContent($this->getLayout()->createBlock('totsy_reward/adminhtml_import_edit'));
         $this->renderLayout();
     }
 

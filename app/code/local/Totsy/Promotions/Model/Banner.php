@@ -12,7 +12,7 @@ class Totsy_Promotions_Model_Banner extends Mage_Core_Model_Abstract {
     }
 
     public function getUrlPath(){
-        return Mage::getBaseUrl('media'). DS. self::$path;
+        return Mage::getBaseUrl('media'). self::$path;
     }
 
     public function getBanners(){

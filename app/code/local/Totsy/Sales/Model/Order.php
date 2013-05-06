@@ -196,9 +196,12 @@ class Totsy_Sales_Model_Order extends Mage_Sales_Model_Order
         // order, with the appropriate redemption code
         foreach ($this->getAllItems() as $orderItem) {
 
-            $product = Mage::getModel('catalog/product')->load($orderItem->getProductId());
+            $product = Mage::getResourceModel('catalog/product_collection')
+                ->addFieldToFilter('entity_id', $orderItem->getProductId())
+                ->addAttributeToSelect(array('is_recurring', 'short_description', 'description', 'one_time_purchase'))
+                ->getFirstItem();
 
-            if ($product->getIsVirtual() && !$product->isRecurring()) {
+            if ($orderItem->getIsVirtual() && !$product->isRecurring()) {
 
                 // Is it a discount vault If so, skip it.
                 if($product->getOneTimePurchase())
@@ -206,7 +209,7 @@ class Totsy_Sales_Model_Order extends Mage_Sales_Model_Order
 
                 $shortDescription = $product->getShortDescription();
                 $description = $product->getDescription();
-                $title = $product->getName();
+                $title = $orderItem->getName();
 
                 $options = $orderItem->getProductOptions();
                 $temp = explode("\n", $options['options'][0]['value']);

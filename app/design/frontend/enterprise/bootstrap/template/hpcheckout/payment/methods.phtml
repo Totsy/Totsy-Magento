@@ -1,10 +1,11 @@
 <div class="sp-methods" id="checkout-payment-method-load">
     <?php if(!count( $methods = $this->getMethods())): ?>
         <div>No payment methods available, please try again later or contact us.</div>
-    <?php elseif( count( $methods ) == 1 ): ?>
+    <?php elseif( count( $methods ) == 1 ):
+        $method = array_pop($methods);?>
         <div>
-            <input type="hidden" name="payment[method]" value="<?php echo $methods[0]->getCode(); ?>"> 
-            <?php echo $this->getPaymentMethodFormHtml( $methods[0] ) ?>
+            <input type="hidden" name="payment[method]" value="<?php echo $method->getCode(); ?>">
+            <?php echo $this->getPaymentMethodFormHtml( $method ) ?>
         </div>
     <?php else: ?>
         <div class="hpcheckout-payment-title">
@@ -18,7 +19,7 @@
                     </div>
                 </div>
         </div>
-        <?php foreach (array_reverse($methods) as $_method):  $_code = $_method->getCode() ?>
+        <?php foreach (array_reverse($methods) as $_method): ?>
             <?php //if($_code != 'paymentfactory_tokenize'): ?>
                 <?php if ($html = $this->getPaymentMethodFormHtml($_method)): ?>
                 <div>
@@ -32,15 +33,15 @@
  <div id="paypal_container">
  </div>
 <script type="text/javascript">
-    jQuery(document).ready( function() {   
+    jQuery(document).ready( function() {
         if(jQuery('input:radio[name=paypal_payment]')) {
             jQuery('input:radio[name=paypal_payment]').click( function() {
                 jQuery('.validate-cybsersource-cc-type').attr("checked", false);
-        	       jQuery('input[name="payment[method]"]').val("paypal_express");
-                hpcheckout.switchPaymentMethod('paypal_express');			
+         jQuery('input[name="payment[method]"]').val("paypal_express");
+                hpcheckout.switchPaymentMethod('paypal_express');
             });
-        }    
-		
+        }
+
         jQuery('.validate-cybsersource-cc-type').click( function() {
             if(jQuery('#paypal_payment').length > 0) {
                 jQuery('#paypal_payment').attr("checked", false);
@@ -50,7 +51,7 @@
             }
             jQuery("#cc_data").show();
             jQuery('input[name="payment[method]"]').val("creditcard");
-    		hpcheckout.switchPaymentMethod('creditcard');		
+     hpcheckout.switchPaymentMethod('creditcard');
         });
-    });	
+    });
 </script>
