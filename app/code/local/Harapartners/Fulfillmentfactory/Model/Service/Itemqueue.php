@@ -92,8 +92,7 @@ class Harapartners_Fulfillmentfactory_Model_Service_Itemqueue
                     $itemqueue->save();
                 }
             }
-        }
-        else if($status == 'pending'){
+        } else if (in_array($status, array('pending', 'processing'))) {
             foreach($collection as $itemqueue) {
                 if($itemqueue->getStatus() != Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_CANCELLED) {
                     if ($itemqueue->getFulfillCount() == $itemqueue->getQtyOrdered()) {
@@ -108,15 +107,9 @@ class Harapartners_Fulfillmentfactory_Model_Service_Itemqueue
                 }
             }
 
-            if($state != Mage_Sales_Model_Order::STATE_PROCESSING) {
-            	$order->setState(Mage_Sales_Model_Order::STATE_PROCESSING);
-            	$order->save();
-            }
-        } else if ($status == 'processing') {
-            foreach ($collection as $itemqueue) {
-                $itemqueue->setFulfillCount(0)
-                    ->setStatus(Harapartners_Fulfillmentfactory_Model_Itemqueue::STATUS_PENDING)
-                    ->save();
+            if ($state != Mage_Sales_Model_Order::STATE_PROCESSING) {
+                $order->setState(Mage_Sales_Model_Order::STATE_PROCESSING);
+                $order->save();
             }
         } else if ($status == 'canceled') {
             foreach($collection as $itemqueue) {
