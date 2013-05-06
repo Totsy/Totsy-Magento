@@ -33,11 +33,14 @@ Default layout, loads most of the pages
         <label>All Pages</label>
         <block type="page/html" name="root" output="toHtml" template="page/3columns.phtml">
             <block type="page/html_head" name="head" as="head">
+                <action method="addItem"><type>skin_css</type><name>lib/tbs/css/bootstrap.css</name></action>
+                <action method="addItem"><type>skin_css</type><name>lib/tbs/css/bootstrap-responsive.css</name></action>
+                <!-- @TEMP: for dev pending LESS compiling, putting all totsy styles in as @imports -->
+                <action method="addCss"><stylesheet>css/styles.css</stylesheet></action>
+                
+                <!-- @TODO: move all JS to the footer_scripts block -->
                 <action method="addJs"><script>jquery/jquery-1.9.1.min.js</script></action>
-                <action method="addJs"><script>jquery/cloud-zoom.1.0.2.js</script></action>
-                <!--<action method="addJs"><script>mage/cookies.js</script></action>-->
-                <!--<block type="page/js_cookie" name="js_cookies" template="page/js/cookie.phtml"/>-->
-                <!--<action method="addCss"><stylesheet>css/print.css</stylesheet><params>media="print"</params></action>-->
+                <action method="addItem"><type>skin_js</type><name>js/modernizr.custom.35920.js</name></action>
                 <action method="addJs"><script>jquery/cloud-zoom.1.0.2.js</script></action>
                 <action method="addJs"><script>jquery/jquery.fancybox.js</script></action>
                 <action method="addJs"><script>jquery/jquery.countdown-1.6.1.min.js</script></action>
@@ -50,7 +53,6 @@ Default layout, loads most of the pages
                 <action method="addJs"><script>varien/form.js</script></action>
                 <action method="addJs"><script>mage/cookies.js</script></action>
                 <block type="page/js_cookie" name="js_cookies" template="page/js/cookie.phtml"/>
-                <action method="addItem"><type>skin_js</type><name>js/html5shiv.js</name><params/><if>lt IE 9</if></action>
                 <action method="addItem"><type>skin_js</type><name>js/scripts.js</name></action>
             </block>
             <block type="core/text_list" name="after_body_start" as="after_body_start" translate="label">
@@ -95,16 +97,16 @@ Default layout, loads most of the pages
                     <!-- bootstrap components / plugins -->
                     <action method="addJs"><script>jquery/jquery.placeholder.min.js</script></action>
                     <action method="addJs"><script>lib/ccard.js</script></action>
-                    <action method="addItem"><type>skin_js</type><name>js/bootstrap-transition.js</name><params/></action>
-                    <action method="addItem"><type>skin_js</type><name>js/bootstrap-alert.js</name><params/></action>
-                    <action method="addItem"><type>skin_js</type><name>js/bootstrap-modal.js</name><params/></action>
-                    <action method="addItem"><type>skin_js</type><name>js/bootstrap-dropdown.js</name><params/></action>
-                    <action method="addItem"><type>skin_js</type><name>js/bootstrap-tab.js</name><params/></action>
-                    <action method="addItem"><type>skin_js</type><name>js/bootstrap-tooltip.js</name><params/></action>
-                    <action method="addItem"><type>skin_js</type><name>js/bootstrap-popover.js</name><params/></action>
-                    <action method="addItem"><type>skin_js</type><name>js/bootstrap-button.js</name><params/></action>
-                    <action method="addItem"><type>skin_js</type><name>js/bootstrap-collapse.js</name><params/></action>
-                    <action method="addItem"><type>skin_js</type><name>js/bootstrap-carousel.js</name><params/></action>
+                    <action method="addItem"><type>skin_js</type><name>lib/tbs/js/bootstrap-alert.js</name><params/></action>
+                    <action method="addItem"><type>skin_js</type><name>lib/tbs/js/bootstrap-button.js</name><params/></action>
+                    <action method="addItem"><type>skin_js</type><name>lib/tbs/js/bootstrap-carousel.js</name><params/></action>
+                    <action method="addItem"><type>skin_js</type><name>lib/tbs/js/bootstrap-collapse.js</name><params/></action>
+                    <action method="addItem"><type>skin_js</type><name>lib/tbs/js/bootstrap-dropdown.js</name><params/></action>
+                    <action method="addItem"><type>skin_js</type><name>lib/tbs/js/bootstrap-modal.js</name><params/></action>
+                    <action method="addItem"><type>skin_js</type><name>lib/tbs/js/bootstrap-popover.js</name><params/></action>
+                    <action method="addItem"><type>skin_js</type><name>lib/tbs/js/bootstrap-tab.js</name><params/></action>
+                    <action method="addItem"><type>skin_js</type><name>lib/tbs/js/bootstrap-tooltip.js</name><params/></action>
+                    <action method="addItem"><type>skin_js</type><name>lib/tbs/js/bootstrap-transition.js</name><params/></action>
                     <action method="addItem"><type>skin_js</type><name>js/totsyApp.js</name><params/></action>
                     <action method="addJs"><script>totsy/insparq-flicker.js</script></action>
                 </block>
