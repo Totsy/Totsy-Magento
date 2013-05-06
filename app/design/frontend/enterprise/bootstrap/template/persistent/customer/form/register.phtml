@@ -204,6 +204,10 @@
                     
                     var email_validate = 'stop';
 
+                    var validate_callback = function () {};
+
+                    var form_validate = jQuery('#form-validate');
+
 					<?php
 					$codes = array(5, 10, 20, 30, 40, 45, 50, 100, 110, 115, 120, 125,
 						130, 135, 140, 145, 150, 155, 200, 210, 215, 310, 315, 400, 410,
@@ -242,8 +246,9 @@
                                 var rule = status_rules[data['email']['status_code'].toString()];
 
                                 if ((data['email']['ok'] && rule['pass']) || !rule) {
-                                    email_validate = 'succeed'
+                                    email_validate = 'succeed';
                                     email_errbox.hide();
+                                    validate_callback();
                                 }
                                 else {
                                     var msg = rule['msg'];
@@ -270,7 +275,7 @@
                     
                     email_input.blur(validate_email);
                     
-                    jQuery('#form-validate').submit(function (e) {
+                    form_validate.submit(function (e) {
                         if (email_validate == 'succeed') {
                             return true;
                         }
@@ -279,12 +284,19 @@
                     });
                     
                     jQuery('#submit-button').click(function () {
-                        if (email_validate != 'processing') {
-                            console.log(11111)
-                            validate_email();
+
+                        if (email_validate == 'succeed') {
+                            form_validate.submit();
+                        } else if (email_validate == 'processing') {
+                            jQuery(this).prop('disabled', true);
+
+                            validate_callback = function () {
+                                form_validate.submit();
+                            };
+                        } else if (email_validate == 'failed') {
+                            jQuery(this).prop('disabled', false);
                         }
                         
-                        jQuery(this).prop('disabled', true);
                     });
                 })();
             //]]>
