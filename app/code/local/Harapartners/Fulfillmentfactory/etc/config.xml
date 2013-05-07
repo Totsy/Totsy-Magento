@@ -64,6 +64,17 @@
                 </connection>
             </fulfillmentfactory_read>
         </resources>
+
+        <sales>
+            <quote>
+                <item>
+                    <product_attributes>
+                        <fulfillment_type/>
+                    </product_attributes>
+                </item>
+            </quote>
+        </sales>
+
     </global>
     <admin>
         <routers>

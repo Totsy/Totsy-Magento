@@ -1,11 +1,11 @@
 <?php
 
-$productIds = "";
+$productIDs = "";
 $productPrices = "";
 $buyerEmail = "";
 $buyerName = "";
 $couponsUsed = "";
-$buyerId = "";
+$buyerID = "";
 
 ?>
 <div class="page-title">
@@ -56,27 +56,20 @@ $url = $this->getBaseUrl().'sales/order/history/';
                 'Totsy',  // affiliation or store name
                 '<?php echo $order->getData('grand_total'); ?>',      // total - required
                 '<?php echo $order->getData('tax_amount'); ?>',       // tax
-                '<?php echo $order->getData('shipping_amount'); ?>',  // shipping
+                '<?php echo $order->getData('shipping_amount'); ?>'  // shipping
 <?php if ($address = $order->getShippingAddress()): ?>
-               ,'<?php echo $address->getData('city') ?>',            // city
+                ,'<?php echo $address->getData('city') ?>',            // city
                 '<?php echo $address->getData('region') ?>',          // state or province
                 'USA'          // country
 <?php endif; ?>
             ]);
-                <?php
-$category = array();
-// $productid = Mage::getModel('catalog/product')->getData('category_ids');
-// $order  = Mage::getModel('catalog/category')->getCollection()->load($productid);
-foreach($order->getAllItems() as $item):?>
-                    <?php  if( !! $item->getParentItemId() ) {
-		continue;
-	}
-unset($category);
-$product = Mage::getModel( 'catalog/product' )->load( $item->getProductId() );
-$categoryIds = $product->getCategoryIds();
-foreach ($categoryIds as $cateId){
-	$category[] = Mage::getModel('catalog/category')->load($cateId)->getData('name');
-}
+<?php
+    foreach($order->getAllItems() as $item):
+        if( $item->getParentItemId() ) {
+            continue;
+        }
+
+        $categoryNames = Mage::helper('hpcheckout')->getCategoryNames($item->getProductId());
 ?>
                 // add item might be called for every item in the shopping cart
                 // where your ecommerce engine loops through each item in the cart and
@@ -85,16 +78,16 @@ foreach ($categoryIds as $cateId){
                     '<?php echo $order->getData('increment_id'); ?>',           // order ID - required
                     '<?php echo $this->htmlEscape($item->getData('sku')); ?>',           // SKU/code - required
                     '<?php echo $this->htmlEscape($item->getData('name')); ?>',        // product name
-                    '<?php foreach($category as $cat){
-                        echo $this->htmlEscape($cat).',';
-                    } ?>',   // category or variation
+                    '<?php echo $this->escapeHtml($this->jsQuoteEscape($categoryNames));?>',   // category or variation
                     '<?php echo $this->htmlEscape($item->getPrice()) ?>',          // unit price - required
                     '<?php echo $this->htmlEscape($item->getQtyOrdered()) ?>'               // quantity - required
                 ]);
-                //Used with Insparq
-                <?php $productPrices .= "|" . $item->getPrice(); 
-                $productIds .= "|" . $item->getProductId(); ?>
-                    <?php endforeach;?>
+                
+    //Used with Insparq
+    <?php
+        $productPrices .= "|" . $item->getPrice();
+        $productIds .= "|" . $item->getProductId();
+    endforeach;?>
             _gaq.push(['_trackTrans']); //submits transaction to the Analytics servers
     </script>
     <script type="text/javascript">
@@ -113,17 +106,12 @@ foreach ($categoryIds as $cateId){
 <?php if ($this->getOrderId()):?>
 <?php
 	$orderIncrementId = $this->getOrderId();
-$order = Mage::getModel('sales/order')->loadByIncrementId($orderIncrementId);
+    $order = Mage::getModel('sales/order')->loadByIncrementId($orderIncrementId);
 
-$buyerId = $order->getData('customer_id');
-$customer = Mage::getModel('customer/customer')->load($buyerId);
-
-$buyerName = $customer->getData('firstname')." ".$customer->getData('lastname');
-$buyerEmail = $customer->getData('email');
-$couponsUsed = "";
-
-$quoteId = $order->getQuoteId();
-$quote = Mage::getModel('sales/quote')->load($quoteId);
+    $buyerId = $order->getData('customer_id');
+    $buyerName = $order->getData('customer_firstname')." ".$order->getData('customer_lastname');
+    $buyerEmail = $order->getData('customer_email');
+    $couponsUsed = "";
 
 ?>
 <?php if ($this->getCanViewOrder()) :?>
@@ -169,20 +157,13 @@ $quote = Mage::getModel('sales/quote')->load($quoteId);
         'USA'          // country
 <?php endif; ?>
     ]);
-        <?php
-$category = array();
-// $productid = Mage::getModel('catalog/product')->getData('category_ids');
-// $order  = Mage::getModel('catalog/category')->getCollection()->load($productid);
-foreach($order->getAllItems() as $item):?>
-            <?php  if( !! $item->getParentItemId() ) {
-		continue;
-	}
-unset($category);
-$product = Mage::getModel( 'catalog/product' )->load( $item->getProductId() );
-$categoryIds = $product->getCategoryIds();
-foreach ($categoryIds as $cateId){
-	$category[] = Mage::getModel('catalog/category')->load($cateId)->getData('name');
-}
+    
+<?php foreach($order->getAllItems() as $item):
+        if($item->getParentItemId() ) {
+            continue;
+        }
+
+        $categoryNames = Mage::helper('hpcheckout')->getCategoryNames($item->getProductId());
 ?>
 
         // add item might be called for every item in the shopping cart
@@ -192,16 +173,14 @@ foreach ($categoryIds as $cateId){
             '<?php echo $order->getData('increment_id'); ?>',           // order ID - required
             '<?php echo $item->getData('sku'); ?>',           // SKU/code - required
             '<?php echo $item->getData('name')?>',        // product name
-            '<?php foreach($category as $cat){
-	echo $cat.',';
-} ?>',   // category or variation
+            '<?php echo $this->escapeHtml($this->jsQuoteEscape($categoryNames))?>',   // category or variation
             '<?php echo $item->getPrice() ?>',          // unit price - required
             '<?php echo $item->getQtyOrdered() ?>'               // quantity - required
         ]);
         	
             <?php
             	$productPrices .= "|" . $item->getPrice(); 
-                $productIds .= "|" . $item->getProductId();
+                $productIDs .= "|" . $item->getProductId();
 endforeach;
 ?>
     _gaq.push(['_trackTrans']); //submits transaction to the Analytics servers
@@ -221,12 +200,12 @@ data-issw-widget-buttons-display="FTPE"
 data-issw-referral-name="Invitation to Totsy"
 data-issw-referral-image-url="https://www.totsy.com/skin/frontend/enterprise/bootstrap/images/logo.png"
 data-issw-referral-url="http://www.totsy.com"
-data-issw-dialogs-facebook-defaults-personal="I'm inviting my Facebook friends to save on Totsy, the premier private shopping network for moms-to-be and moms on-the-go. Membership is by invitation or request only, and itÕs free!" data-issw-dialogs-twitter-defaults-personal="Inviting my followers to save on @MyTotsy!, the premier private shopping network for moms-to-be and moms-on-the-go!" 
+data-issw-dialogs-facebook-defaults-personal="I'm inviting my Facebook friends to save on Totsy, the premier private shopping network for moms-to-be and moms on-the-go. Membership is by invitation or request only, and itï¿½s free!" data-issw-dialogs-twitter-defaults-personal="Inviting my followers to save on @MyTotsy!, the premier private shopping network for moms-to-be and moms-on-the-go!" 
 data-issw-dialogs-pinterest-defaults-description="Inviting my friends to save on Totsy!, the premier private shopping network for moms-to-be and moms-on-the-go!">
     <div data-issw-text-dialog-success="" style="display:none"><p>Thanks for sharing! Totsy will credit your account with $15 after your friend's first order ships.</p></div>
 </div>
 
- <img width="0" height="0" src="https://api.insparq.com/api/v20120319/key/48fa5885203f6957a1b65fb8a4c3304e/user?pageType=purcon&cartValue='<?php echo $order->getData('grand_total'); ?>'&cartItemCount='<?php echo count($order->getAllItems()); ?>'&beacon=1&productIds='<?php echo $productIds; ?>'&productPrices='<?php echo $productPrices; ?>'&buyerName='<?php echo $buyerName; ?>'&buyerEmail='<?php echo $buyerEmail; ?>'&couponsUsed='<?php echo $couponsUsed; ?>'&buyerId='<?php echo $buyerId; ?>'" />
+ <img width="0" height="0" src="https://api.insparq.com/api/v20120319/key/48fa5885203f6957a1b65fb8a4c3304e/user?pageType=purcon&cartValue=<?php echo $order->getData('grand_total'); ?>&cartItemCount=<?php echo count($order->getAllItems()); ?>&beacon=1&productIDs=<?php echo $productIDs; ?>&productPrices=<?php echo $productPrices; ?>&buyerName=<?php echo $buyerName; ?>&buyerEmail=<?php echo $buyerEmail; ?>&couponsUsed=<?php echo $couponsUsed; ?>&buyerID=<?php echo $buyerID; ?>" />
 
 <script type="text/javascript">
 var aid='9577';

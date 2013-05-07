@@ -173,4 +173,14 @@ class Harapartners_Paymentfactory_Model_Profile extends Mage_Core_Model_Abstract
         parent::_beforeSave();
     }
 
+    /**
+     * Returns last subscription Id
+     *
+     * @return string
+     */
+    public function getLastSubscriptionId()
+    {
+        return $this->getResource()->getLastSubscriptionId($this->getCustomerId());
+    }
+
 }

@@ -25,6 +25,10 @@ class Crown_Vouchers_Model_Mysql4_Setup extends Mage_Eav_Model_Entity_Setup {
     public function upgradeModule_1_4() {
         $this->createEntertainmentStateAttribute();
     }
+
+    public function upgradeModule_1_5() {
+        $this->createDefaultCouponFlag();
+    }
 	
 	/**
 	 * Creates the attributes for the Module
@@ -79,6 +83,13 @@ class Crown_Vouchers_Model_Mysql4_Setup extends Mage_Eav_Model_Entity_Setup {
 
     private function createEntertainmentSavingsAttribute() {
         $this->createAttribute('entertainment_savings', 'Is Entertainment Savings Voucher?', 'boolean', 'virtual');
+    }
+
+    /**
+     * Creates "default coupon" attribute
+     */
+    private function createDefaultCouponFlag() {
+        $this->createAttribute('use_default_coupon_codes', 'Use Unique Coupon Codes', 'boolean', 'virtual');
     }
 
     private function createEntertainmentStateAttribute() {

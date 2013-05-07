@@ -1,33 +1,46 @@
 <div class="sp-methods" id="checkout-payment-method-load">
-<?php if(!count( $methods = $this->getMethods())): ?>
-	<div>No payment methods available, please try again later or contact us.</div>
-<?php elseif( count( $methods ) == 1 ): ?>
-	 <input type="hidden" name="payment[method]" value="<?php echo $methods[0]->getCode() ?>"> 
-	<div><?php echo $this->getPaymentMethodFormHtml( $methods[0] ) ?></div>
-	<script type="text/javascript">
-		jQuery( "#payment_form_<?php echo $methods[0]->getCode() ?>" ).show();
-	</script>
-<?php else: ?>	
-<div>
-<input type="hidden" name="payment[method]" id="payment_method" value="paymentfactory_tokenize" />
-</div>
-<?php foreach ($methods as $_method):  $_code = $_method->getCode() ?>
-    <?php if ($html = $this->getPaymentMethodFormHtml($_method)): ?>
+    <?php if(!count( $methods = $this->getMethods())): ?>
+        <div>No payment methods available, please try again later or contact us.</div>
+    <?php elseif( count( $methods ) == 1 ):
+        $method = array_pop($methods);?>
         <div>
-            <?php echo $html; ?>
+            <input type="hidden" name="payment[method]" value="<?php echo $method->getCode(); ?>">
+            <?php echo $this->getPaymentMethodFormHtml( $method ) ?>
         </div>
-    <?php endif; ?>
-<?php endforeach; ?>
-<?php endif ?>
+    <?php else: ?>
+        <div class="hpcheckout-payment-title">
+            <h4 class="legend">Your payment methods</h4>
+        </div>
+        <div>
+                <div class="cc_security pull-right">
+                    <div class="cc_secure_text pull-left">Totsy ensures your information is<br> private and secure!</div>
+                    <div class="cc_secure_icon">
+                        <img src="/skin/frontend/enterprise/bootstrap/images/iconmonstr-lock-7-icon.png" width="40" height="40">
+                    </div>
+                </div>
+        </div>
+        <?php foreach (array_reverse($methods) as $_method): ?>
+            <?php //if($_code != 'paymentfactory_tokenize'): ?>
+                <?php if ($html = $this->getPaymentMethodFormHtml($_method)): ?>
+                <div>
+                    <?php echo $html; ?>
+                </div>
+                <?php endif; ?>
+            <?php //endif; ?>
+        <?php endforeach; ?>
+    <?php endif ?>
+ </div>
+ <div id="paypal_container">
+ </div>
 <script type="text/javascript">
-    jQuery(document).ready( function() {   
+    jQuery(document).ready( function() {
         if(jQuery('input:radio[name=paypal_payment]')) {
             jQuery('input:radio[name=paypal_payment]').click( function() {
                 jQuery('.validate-cybsersource-cc-type').attr("checked", false);
-        	       jQuery('input[name="payment[method]"]').val("paypal_express");
-                hpcheckout.switchPaymentMethod('paypal_express');			
+         jQuery('input[name="payment[method]"]').val("paypal_express");
+                hpcheckout.switchPaymentMethod('paypal_express');
             });
-        }    
+        }
 
         jQuery('.validate-cybsersource-cc-type').click( function() {
             if(jQuery('#paypal_payment').length > 0) {
@@ -37,10 +50,8 @@
                 jQuery("#payment_form_paypal_express").hide();
             }
             jQuery("#cc_data").show();
-            jQuery('input[name="payment[method]"]').val("paymentfactory_tokenize");
-    		hpcheckout.switchPaymentMethod('paymentfactory_tokenize');		
+            jQuery('input[name="payment[method]"]').val("creditcard");
+     hpcheckout.switchPaymentMethod('creditcard');
         });
-
-
-    });	
+    });
 </script>

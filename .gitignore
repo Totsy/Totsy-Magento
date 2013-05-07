@@ -5,6 +5,7 @@
 app/Mage.php
 app/code/community/Find/
 app/code/community/Phoenix/
+app/code/community/Litle/LitleSDK/litle_SDK_config.ini
 app/code/core/
 app/design/adminhtml/default/default/
 app/design/adminhtml/default/find/
