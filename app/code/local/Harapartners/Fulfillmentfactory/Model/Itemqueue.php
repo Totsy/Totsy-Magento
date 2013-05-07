@@ -92,6 +92,26 @@ class Harapartners_Fulfillmentfactory_Model_Itemqueue
         parent::_beforeSave();
     }
 
+    public function updateItemQueueShipStatus($order) {
+        $partialShip = false;
+        foreach($order->getAllItems() as $item) {
+            if($item->getProductType != 'simple') {continue;}
+            $itemQueue = $this->loadByItemId($item->getId());
+
+            if(!$item->getIsDummy(true) && $item->getQtyShipped() > 0 && $item->getQtyToShip() == 0) {
+                $itemQueue->setStatus(self::STATUS_CLOSED);
+            } elseif($item->getIsDummy(true) && ($parent = $item->getParentItem())
+                && $parent->getQtyShipped() > 0 && $parent->getQtyToShip() == 0) {
+                $itemQueue->setStatus(self::STATUS_CLOSED);
+            } else {
+                $partialShip = true;
+                $itemQueue->setStatus(self::STATUS_SHIPMENT_ERROR);
+            }
+            $itemQueue->save();
+        }
+        return $partialShip;
+    }
+
     /**
      * Load item queue object by order item id
      *

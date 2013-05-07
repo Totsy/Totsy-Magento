@@ -14,8 +14,38 @@
         <models>
             <fulfillment>
                 <class>Totsy_Fulfillment_Model</class>
+                <resourceModel>fulfillment_mysql4</resourceModel>
             </fulfillment>
+            <fulfillment_mysql4>
+                <class>Totsy_Fulfillment_Model_Mysql4</class>
+                <entities>
+                    <receipt>
+                        <table>fulfillment_receipt</table>
+                    </receipt>
+                </entities>
+            </fulfillment_mysql4>
         </models>
+        <resources>
+            <fulfillment_write>
+                <connection>
+                    <use>core_write</use>
+                </connection>
+            </fulfillment_write>
+            <fulfillment_read>
+                <connection>
+                    <use>core_read</use>
+                </connection>
+            </fulfillment_read>
+            <fulfillment_setup>
+                <setup>
+                    <module>Totsy_Fulfillment</module>
+                    <class>Totsy_Fulfillment_Model_Resource_Mysql4_Setup</class>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </fulfillment_setup>
+        </resources>
         <blocks>
             <fulfillment>
                 <class>Totsy_Fulfillment_Block</class>

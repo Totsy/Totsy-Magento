@@ -18,7 +18,12 @@ class Totsy_Fulfillment_Model_Purchaseorder extends Mage_Core_Model_Abstract {
      * @param array $items purchase order items
      * @return Totsy_Fulfillment_Model_Purchaseorder
      */
-    public function createGenericPoData($po_info, $po_items) {
+    public function reformatPoData($po_info, $po_items) {
+		
+		if(!is_array($po_info) || !is_array($po_items)) {
+			throw Exception ('Please provide an array for po info and/or po items');
+		}
+		
         $generic_po = new Varien_Object();
         
         $generic_po->setData($po_info);

@@ -8,7 +8,7 @@
       vendor_code: playstation
       fulfillment_type: atlast
       category: video games
-  - expectation_1
+  - convertproducttoxml_1
 -
   -
    -
@@ -21,4 +21,4 @@
       color: carnation
       size: medium
       category: apparel
-  - expectation_2
+  - convertproducttoxml_2

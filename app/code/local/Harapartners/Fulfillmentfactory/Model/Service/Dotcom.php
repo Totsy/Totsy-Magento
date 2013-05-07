@@ -787,6 +787,7 @@ XML;
         if (empty($fromDate)) {
             $fromDate = date('Y-m-d H:i:s', strtotime('-1 hour'));
         }
+        
         if (empty($toDate)) {
             $toDate = date('Y-m-d H:i:s');
         }

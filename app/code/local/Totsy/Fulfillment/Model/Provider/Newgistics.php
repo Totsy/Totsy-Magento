@@ -39,10 +39,19 @@ class Totsy_Fulfillment_Model_Provider_Newgistics implements Totsy_Fulfillment_M
         $success = false;
         try {
             $requestPath = 'post_manifests.aspx';
+            if(is_int($purchaseOrder)) {
+				$purchaseOrder = Mage::getModel('stockhistory/purchaseorder');
+			}
+            $poId = $purchaseOrder->getId();
+
+            if(empty($poId)) {
+                throw new Exception("Invalid purchase order. Please provide a valid purchase order");
+            }
+            
             $xml = Mage::helper('fulfillment/newgistics')->purchaseorderToXml($purchaseOrder);
             $responseXml = $this->_postData($requestPath, $xml);
 
-            if($responseXml->errors) {
+            if($responseXml->errors->children()) {
                 Mage::log($responseXml->errors->children(), 'newgistics_errors.log');
                 Mage::getSingleton('adminhtml/session')->addError($responseXml->manifests->errors);
                 $success = false;
@@ -67,7 +76,7 @@ class Totsy_Fulfillment_Model_Provider_Newgistics implements Totsy_Fulfillment_M
     {
         try{
             $requestPath = 'manifests.aspx';
-            $receipts = null;
+            $receipts = array();
             $_default = array(
                 'po' => null,
                 'warehouseID' => null,
@@ -80,7 +89,7 @@ class Totsy_Fulfillment_Model_Provider_Newgistics implements Totsy_Fulfillment_M
                 'arrivalEndTimestamp' => null,
                 'receivedStartTimestamp' => null,
                 'receivedEndTimestamp' => null,
-                'returnLineItems' => false
+                'returnLineItems' => true
             );
 
             $options = array_merge($_default, $options);
@@ -108,14 +117,33 @@ class Totsy_Fulfillment_Model_Provider_Newgistics implements Totsy_Fulfillment_M
         $quantity = 0;
 
         try {
+
+			$requestPath = 'inventory_details.aspx';
+
             if (is_int($product)) {
                 $product = Mage::getModel('catalog/product')->load($product);
             }
 
-            $productId = $product->getId();
+            $productId = $product->getData('entity_id');
 
             if(empty($productId)) {
                 throw new Exception("Invalid product. Please provide a valid product");
+            }
+            
+            $params = array(
+				'sku' => $product->getData('sku'),
+				'type' => 'INVENTORY'
+			);
+
+            $responseXml = $this->_getData($requestPath, $params);
+            if($responseXml->inventories){
+				$quantity = (int)$responseXml->inventories->inventory->quantity;
+			}
+            if($responseXml->response->errors) {
+                foreach($responseXml->response->errors as $error) {
+
+                }
+                Mage::log("getInventory: " .  $error, Zend_Log::DEBUG ,'newgistics_errors.log');
             }
 
         }catch(Exception $e) {
@@ -156,27 +184,25 @@ class Totsy_Fulfillment_Model_Provider_Newgistics implements Totsy_Fulfillment_M
     {
         try {
             $requestPath = 'manifests.aspx';
-            $shippedOrders = null;
+            $shippedOrders = array();
             $fromDate = date('Y-m-d H:i:s', strtotime('-1 day'));
             $toDate = date('Y-m-d H:i:s');
             $params = array(
 				'startShippedTimestamp' => $fromDate,
 				'endShippedTimestamp' => $toDate
             );
-            $reponseXml = $this->_getData($requestPath, $params);
-
-            $results = $reponseXml->response;
-            if (count($results->Shipments->children()) == 0) {
-                Mage::log('No shipments found.' , 'newgistics_errors.log');
+            $responseXml = $this->_getData($requestPath, $params);
+            
+            if (count($responseXml->children()) == 0) {
+                Mage::log('No shipments found.' ,Zend_Log::DEBUG ,'newgistics_errors.log');
             } else {
-                $shippedOrders = Mage::helper('fulfillment/newgistics')->processShipmentXml($results->Shipments);
+                $shippedOrders = Mage::helper('fulfillment/newgistics')->processShipmentXml($responseXml);
             }
-
         } catch(Exception $e) {
             Mage::log($e->getMessage(),Zend_Log::DEBUG ,'newgistics_errors.log');
         }
         
-        return $shippedOrders;'
+        return $shippedOrders;
     }
 
     /**
@@ -189,11 +215,11 @@ class Totsy_Fulfillment_Model_Provider_Newgistics implements Totsy_Fulfillment_M
 
         try{
             $requestPath = 'post_products.aspx';
+            			
             $xml = Mage::helper('fulfillment/newgistics')->productToXml($product);
 
             $responseXml = $this->_postData($requestPath, $xml);
-
-            if($responseXml->errors) {
+            if($responseXml->errors->children()) {
                 foreach($responseXml->errors->children() as $error) {
                     Mage::log('Product Submission: \n\t Sku :' . $error['sku'] . ' ' . $error, Zend_Log::DEBUG,
                         'newgistics_errors.log');
@@ -240,8 +266,8 @@ class Totsy_Fulfillment_Model_Provider_Newgistics implements Totsy_Fulfillment_M
         $apiCall = self::API_URL . $path;
 		$client = $this->httpClient;
         $paramKey = "?key=" . self::API_KEY;
-
-        $response = $client->get($apiCall . $paramKey)->send();
+        $paramKey = $paramKey . http_build_query($params);
+        $response = $client->get($apiCall . '&' . $paramKey)->send();
         $statusCode = $response->getStatusCode();
 
         if($statusCode != 200) {

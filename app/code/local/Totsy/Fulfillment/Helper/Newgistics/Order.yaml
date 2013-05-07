@@ -25,3 +25,4 @@ Order:
       Qty:  qty_ordered
       CustomFields:
         Price:  price
+        Id: item_id

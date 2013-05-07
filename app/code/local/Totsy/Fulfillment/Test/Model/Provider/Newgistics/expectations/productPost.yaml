@@ -1,12 +1,4 @@
-expectation_1: #sku = GOW-001 formated_correctly = true
-  status_code: 200
-  response_xml: |
-    <?xml version="1.0" encoding="utf-8"?>
-    <response><products><product id="99999" sku="GOW-001" status="updated" /></products><warnings /><errors /></response>
+productpost_1: #sku = GOW-001 formated_correctly = true
   response: true
-expectation_2: #sku = 7832-mkp1043l formated_correctly = false
-  status_code: 200
-  response_xml: |
-    <?xml version="1.0" encoding="utf-8"?>
-    <response><products /><warnings /><errors><error sku="7832-mkp1043l">There was an error</error></errors></response>
+productpost_2: #sku = 7832-mkp1043l formated_correctly = false
   response: false

@@ -27,7 +27,7 @@
          size: medium
          category: apparel
          qty_total: 4
-  - expectation_1
+  - submitpurchaseorderpost_1
 -
   -
     purchase_order:
@@ -57,4 +57,4 @@
          size: medium
          category: apparel
          qty_total: 7
-  - expectation_1
+  - submitpurchaseorderpost_2

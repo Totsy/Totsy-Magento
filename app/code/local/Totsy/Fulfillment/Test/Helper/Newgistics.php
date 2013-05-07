@@ -10,8 +10,8 @@ class Totsy_Fulfillment_Test_Helper_Newgistics
 {
     /**
      * @test
+     * @loadExpectation convertProductToXml
      * @dataProvider dataProvider
-     * @loadExpectation
      */
     public function convertProductToXml($products, $expectations){
         $testProducts = array();
@@ -33,7 +33,7 @@ class Totsy_Fulfillment_Test_Helper_Newgistics
 
             $testProducts[] = $temp;
         }
-
+        
         $actual = Mage::helper('fulfillment/newgistics')->productToXml($testProducts);
         $expected = $this->expected($expectations)->getValue();
         $expected = new SimpleXmlElement(trim($expected));
@@ -61,6 +61,8 @@ class Totsy_Fulfillment_Test_Helper_Newgistics
      * @doNotIndexAll
      * @loadExpectation
      * @dataProvider dataProvider
+     *
+     * @see Totsy_Fulfillment_Helper_Newgistics::orderToXml
      */
     public function convertOrderToXml($order, $expectations) {
         $testOrder = Mage::getModel('sales/order')->load($order['order_id']);
@@ -68,5 +70,16 @@ class Totsy_Fulfillment_Test_Helper_Newgistics
         $expected = $this->expected($expectations)->getValue();
         $expected = new SimpleXmlElement($expected);
         $this->assertXmlStringEqualsXmlString($expected->asXML(), $actual);
+    }
+
+    /**
+     * @test
+     * @loadFixture
+     * @doNotIndexAll
+     * @loadExpectation
+     * @dataProvider dataProvider
+     */
+    public function processShipmentFiles($shipmentFile, $expectations){
+
     }
 }

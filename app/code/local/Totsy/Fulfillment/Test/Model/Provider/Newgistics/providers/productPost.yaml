@@ -8,7 +8,11 @@
       vendor_code: playstation
       fulfillment_type: atlast
       category: video games
-  - expectation_1
+  - productpost_1
+  status_code: 200
+  response_xml: |
+    <?xml version="1.0" encoding="utf-8"?>
+    <response><products><product id="99999" sku="GOW-001" status="updated" /></products><warnings /><errors /></response>
 -
   -
    -
@@ -21,4 +25,8 @@
       color: carnation
       size: medium
       category: apparel
-  - expectation_2
+  - productpost_2
+  status_code: 200
+  response_xml: |
+    <?xml version="1.0" encoding="utf-8"?>
+    <response><products /><warnings /><errors><error sku="7832-mkp1043l">There was an error</error></errors></response>
