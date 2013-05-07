@@ -1,0 +1,4 @@
+productpost_1: #sku = GOW-001 formated_correctly = true
+  response: true
+productpost_2: #sku = 7832-mkp1043l formated_correctly = false
+  response: true

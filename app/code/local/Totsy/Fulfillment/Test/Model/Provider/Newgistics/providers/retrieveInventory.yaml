@@ -1,0 +1,24 @@
+-
+  - 99999
+  - retrieveinventory_1
+  status_code: 200
+  response_xml: |
+    <?xml version="1.0" encoding="utf-8" ?>
+    <response><inventories><inventory type="inventory"><warehouse id="11">Denver East, CO</warehouse><manifestID /><manifestPO /><shipmentID/><orderID/><timestamp>2013-04-28T09:54:58.453</timestamp><sku>GOW-001</sku><quantity>2</quantity><notes /></inventory></inventories></response>
+-
+  -
+   -
+      entity_id: 99997
+      name: Little Miss Daisy Dress
+      sku: 7832-mkp1043l
+      vendor: Mom and Pop Shop
+      vendor_code: mom_pop_shop
+      fulfillment_type: atlast
+      color: carnation
+      size: medium
+      category: apparel
+  - retrieveinventory_2
+  status_code: 200
+  response_xml: |
+    <?xml version="1.0" encoding="utf-8" ?>
+    <response><inventories><inventory type="inventory"><warehouse id="11">Denver East, CO</warehouse><manifestID /><manifestPO /><shipmentID/><orderID/><timestamp>2013-04-28T09:54:58.453</timestamp><sku>7832-mkp1043l</sku><quantity>10</quantity><notes /></inventory></inventories></response>

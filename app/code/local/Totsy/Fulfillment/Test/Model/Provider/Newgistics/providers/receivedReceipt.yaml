@@ -1,0 +1,8 @@
+-
+  -
+    -
+      po: PS10001
+  - receivedreceipt_1
+  status_code: 200
+  response_xml: |
+    <?xml version="1.0" encoding="UTF-8"?><manifests><manifest><manifest_slip><manifest_id>44354</manifest_id><manifest_po>PS10001</manifest_po><manifest_name>Assorted Gifts</manifest_name><destination_warehouse>Ontario, CA</destination_warehouse><incoming_id /><status>RECEIVED</status><shipped_date /><shipped_via /><tracking_no /><created_date>4/15/2013 9:04 AM</created_date><estimated_arrival_date /><actual_arrival_date>4/27/2013 9:19 AM</actual_arrival_date><actual_received_date>4/28/2013 10:57 AM</actual_received_date><no_pallets>8</no_pallets><no_cartons>0</no_cartons><total_weight /><notes /><pdfScan /></manifest_slip><contents /></manifest></manifests>

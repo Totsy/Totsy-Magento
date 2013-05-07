@@ -1,0 +1,3 @@
+retrieveshipment_1:
+  response: Mage_Sales_Order_Shipment
+  id: 1111111

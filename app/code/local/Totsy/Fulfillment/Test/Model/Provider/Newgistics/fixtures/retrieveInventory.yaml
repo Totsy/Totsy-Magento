@@ -1,0 +1,20 @@
+eav:
+  catalog_product:
+    - entity_id: 99999
+      type_id: simple
+      sku:  GOW-001
+      name: God of War
+      stock:
+        qty: 20
+        is_in_stock: 1
+      color: NULL
+      size: NULL
+    - entity_id: 99997
+      type_id: simple
+      sku:  7832-mkp1043l
+      name: Little Miss Daisy Dress
+      stock:
+        qty: 20
+        is_in_stock: 1
+      color: carnation
+      size: M

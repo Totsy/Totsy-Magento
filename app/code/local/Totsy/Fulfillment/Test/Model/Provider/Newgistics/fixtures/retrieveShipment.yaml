@@ -1,0 +1,172 @@
+eav:
+  catalog_product:
+    - entity_id: 99999
+      type_id: simple
+      sku:  GOW-001
+      name: God of War
+      stock:
+        qty: 20
+        is_in_stock: 1
+      color: NULL
+      size: NULL
+    - entity_id: 99997
+      type_id: simple
+      sku:  7832-mkp1043l
+      name: Little Miss Daisy Dress
+      stock:
+        qty: 20
+        is_in_stock: 1
+      color: carnation
+      size: M
+  customer:
+    - entity_id: 100
+      attribute_set_id: 0
+      email: jdoe+3@test.net
+      group_id: 0
+      store_id: 1
+      website_id: 1
+      is_active: 1
+    - entity_id: 101
+      attribute_set_id: 0
+      email: janedoe+3@test.net
+      group_id: 0
+      store_id: 1
+      website_id: 1
+      is_active: 1
+    - entity_id: 102
+      attribute_set_id: 0
+      email: billybob+3@test.net
+      group_id: 0
+      store_id: 1
+      website_id: 1
+      is_active: 1
+tables: 
+  sales/order:
+    - entity_id: 1000
+      is_virtual: 0
+      store_id: 1
+      created_at: '2013-04-23 21:50:00'
+      updated_at: '2013-04-23 21:50:00'
+      total_item_count: 1
+      shipping_method: flexible_flexible
+      customer_id: 100
+      state: processing
+      status: pending
+      ext_order_id: null
+      increment_id: 1111111
+    - entity_id: 1001
+      is_virtual: 0
+      store_id: 1
+      created_at: '2013-04-23 21:45:02'
+      updated_at: '2013-04-23 21:45:02'
+      total_item_count: 2
+      shipping_method:  flexible_flexible
+      customer_id: 101
+      state: processing
+      status: pending
+      ext_order_id: null
+      increment_id: 2222222
+    - entity_id:  1002
+      is_virtual: 0
+      store_id: 1
+      created_at: '2013-04-23 21:50:00'
+      updated_at: '2013-04-23 21:50:00'
+      total_item_count: 2
+      shipping_method: flexible_flexible
+      customer_id: 102
+      state: processing
+      status: pending
+      ext_order_id: null
+      increment_id: 3333333
+  sales/order_address:
+    - entity_id:  1001
+      parent_id:  1000
+      address_type: shipping
+      firstname:  John
+      lastname: Doe
+      telephone:  (718) 555-5555
+      city: Bronx
+      street: 123 Mayflower
+      postcode: 11111
+      country_id: US
+      region: New York
+      email: jdoe+3@test.net
+    - entity_id: 1003
+      parent_id: 1001
+      address_type: shipping
+      firstname: Jane
+      lastname: Doe
+      telephone:  (212) 555-5555
+      city: New York
+      street: 123 Santa Maria
+      postcode: 22222
+      country_id: US
+      region: New York
+      email: janedoe+3@test.net
+    - entity_id: 1005
+      parent_id: 1002
+      address_type: shipping
+      firstname:  Billy
+      lastname: Bob
+      telephone:  (646) 555-5555
+      city: Salt Lake City
+      region: Missouri
+      street: 456 Pinta
+      postcode: 33333
+      country_id: US
+      email: billybob+3@test.net
+  sales/order_item:
+    - item_id:  2000
+      order_id: 1000
+      parent_item_id: NULL
+      is_virtual: 0
+      sku:  GOW-001
+      qty_ordered: 2
+      qty_canceled: 0
+      product_type: simple
+      price: 20
+    - item_id:  20001
+      order_id: 1001
+      parent_item_id: NULL
+      is_virtual: 0
+      sku: GOW-001
+      qty_ordered: 3
+      qty_canceled: 1
+      product_type: simple
+      price: 20
+    - item_id: 2002
+      order_id: 1001
+      parent_item_id: NULL
+      is_virtual: 0
+      sku: 7832-mkp10431
+      qty_ordered: 2
+      qty_canceled: 0
+      product_type: configurable
+      price: 15.00
+    - item_id:  2003
+      order_id: 1001
+      parent_item_id: 2002
+      is_virtual: 0
+      sku: 7832-mkp10431
+      qty_ordered: 2
+      qty_canceled: 0
+      product_type: simple
+      price: 0
+    - item_id: 2004
+      order_id: 1002
+      parent_item_id: NULL
+      is_virtual: 0
+      sku:  GOW-001
+      qty_ordered:  1
+      qty_canceled: 0
+      product_type: simple
+      price: 20
+    - item_id: 2005
+      order_id: 1002
+      parent_item_id: NULL
+      is_virtual: 1
+      sku: 1111-mkp10431
+      qty_ordered: 1
+      qty_canceled: 0
+      product_type: simple
+      price: 40

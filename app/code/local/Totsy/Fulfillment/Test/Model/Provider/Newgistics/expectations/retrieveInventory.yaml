@@ -1,0 +1,4 @@
+retrieveinventory_1: #sku = GOW-001 formated_correctly = true
+  response: 2
+retrieveinventory_2: #sku = 7832-mkp1043l formated_correctly = false
+  response: 10
