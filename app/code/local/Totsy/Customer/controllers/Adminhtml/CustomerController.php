@@ -30,6 +30,34 @@ class Totsy_Customer_Adminhtml_CustomerController
         }
     }
 
+    public function massDeactivateAction()
+    {
+        $customerIds = $this->getRequest()->get('customer');
+        if (is_array($customerIds)) {
+            foreach ($customerIds as $customerId) {
+                $customer = Mage::getModel('customer/customer')->load($customerId);
+                $customer->setDeactivated(1);
+                $customer->save();
+            }
+        }
+
+        $this->_redirect('adminhtml/customer/index');
+    }
+
+    public function massActivateAction()
+    {
+        $customerIds = $this->getRequest()->get('customer');
+        if (is_array($customerIds)) {
+            foreach ($customerIds as $customerId) {
+                $customer = Mage::getModel('customer/customer')->load($customerId);
+                $customer->setDeactivated(0);
+                $customer->save();
+            }
+        }
+
+        $this->_redirect('adminhtml/customer/index');
+    }
+
     /**
      * Generate temporary password for customer action
      */

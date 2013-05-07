@@ -22,6 +22,7 @@
                     <sales_order_view>Totsy_Adminhtml_Block_Sales_Order_View</sales_order_view>
                     <catalog_category_tree>Totsy_Adminhtml_Block_Catalog_Category_Tree</catalog_category_tree>
                     <catalog_category_edit_form>Totsy_Adminhtml_Block_Catalog_Category_Edit_Form</catalog_category_edit_form>
+                    <widget_grid_column_filter_text>Totsy_Adminhtml_Block_Widget_Grid_Column_Filter_Text</widget_grid_column_filter_text>
                 </rewrite>
             </adminhtml>
         </blocks>

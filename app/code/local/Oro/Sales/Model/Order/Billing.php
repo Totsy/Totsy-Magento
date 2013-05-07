@@ -99,9 +99,7 @@ class Oro_Sales_Model_Order_Billing
             } else {
                 $address = $this->_saveAddress($order, $data);
             }
-            $billingId = $order->getBillingAddressId();
             $this->_replaceBillingAddress($order, $address);
-            $billingId = $order->getBillingAddressId();
             $model = Mage::getModel('orderedit/edit_updater_type_payment');
             $mess = $model->edit($order,$data['payment']);
 

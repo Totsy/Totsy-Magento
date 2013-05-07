@@ -548,7 +548,7 @@ if ($benchmark) Mage::log("_importUpdateImageGallery: ".memory_get_usage(true).'
                     Mage::dispatchEvent('urapidflow_product_import_after_save', array('vars'=>$eventVars));
 
                     #$this->_profile->realtimeReindex(array_keys($this->_productIdsUpdated));
-                    $this->_importRealtimeReindex();
+                    #$this->_importRealtimeReindex();
 
                     Mage::dispatchEvent('urapidflow_product_import_after_rtidx', array('vars'=>$eventVars));
                 }

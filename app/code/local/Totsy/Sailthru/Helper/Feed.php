@@ -277,7 +277,14 @@ class Totsy_Sailthru_Helper_Feed extends Mage_Core_Helper_Abstract
             return;
         }
         $params = $params[0];
+        $map = array(
+            'start_at_day' => 'start_date',
+            'start_at_time' => 'start_time'
+        );
         foreach ($params as $key => $value) {
+            if ( array_key_exists($key, $map) ){
+                $key = $map[$key];
+            }
             $_GET[$key] = $value;
         }
     }

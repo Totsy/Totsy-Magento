@@ -10,7 +10,7 @@
 <config>
     <modules>
         <Totsy_Sailthru>
-            <version>1.0.2</version>
+            <version>1.0.3</version>
         </Totsy_Sailthru>
     </modules>
     <global>

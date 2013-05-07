@@ -78,10 +78,7 @@ class Totsy_Sailthru_Model_Feed extends Mage_Core_Model_Abstract
 		// closing events
 		$this->_formatter(
 			$this->getFeedHelper()->filter(
-				array_merge(
-					//$this->_getSortEvents('live'),
-					$this->_getSortEvents('live','+1 day')
-				)
+				$this->_getSortEvents('live','+1 day')
 			),
 			'closing'
 		);
@@ -332,9 +329,10 @@ class Totsy_Sailthru_Model_Feed extends Mage_Core_Model_Abstract
     private function _getSortEvents($type,$plus=null){
     	$date = $this->getFeedHelper()->getStartDate();
     	if (!is_null($plus)){
-    		$date = $this->getFeedHelper()->getStartDate();
+    		$date = strtotime($plus,$date);
     	}
-    	$sort = Mage::getModel('categoryevent/sortentry')->loadByDate(date('Y-m-d',$date));
+    	$date = date('Y-m-d',$date);
+    	$sort = Mage::getModel('categoryevent/sortentry')->loadByDate($date);
     	$return = json_decode($sort[$type.'_queue'],true);	
     	return $return;
     }

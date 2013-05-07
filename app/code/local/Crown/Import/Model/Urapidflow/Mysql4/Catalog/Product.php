@@ -491,7 +491,7 @@ class Crown_Import_Model_Urapidflow_Mysql4_Catalog_Product extends Unirgy_RapidF
                     Mage::dispatchEvent('urapidflow_product_import_after_save', array('vars'=>$eventVars));
 
                     #$this->_profile->realtimeReindex(array_keys($this->_productIdsUpdated));
-                    $this->_importRealtimeReindex();
+                    #$this->_importRealtimeReindex();
 
                     Mage::dispatchEvent('urapidflow_product_import_after_rtidx', array('vars'=>$eventVars));
                 }
