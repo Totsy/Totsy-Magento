@@ -2,7 +2,7 @@
 <config>
 	<modules>
         <Crown_Vouchers>
-            <version>1.4</version>
+            <version>1.5</version>
         </Crown_Vouchers>
     </modules>
 	<global>
@@ -75,6 +75,18 @@
 				</voucher_code_email_template>
 			</email>
 		</template>
+
+        <sales>
+            <quote>
+                <item>
+                    <product_attributes>
+                        <entertainment_savings/>
+                        <one_time_purchase/>
+                    </product_attributes>
+                </item>
+            </quote>
+        </sales>
+
 	</global>
 	<frontend>
 		<routers>

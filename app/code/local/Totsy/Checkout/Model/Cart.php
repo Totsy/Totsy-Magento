@@ -21,8 +21,8 @@ class Totsy_Checkout_Model_Cart extends Mage_Checkout_Model_Cart
             if($item->getParentItemId()) {
                 continue;
             }
-            $product = Mage::getModel ( 'catalog/product' )->load ( $item->getProductId () );
-            if($product->getIsVirtual() && $product->getFulfillmentType() !== 'nominal') {
+            $product = $item->getProduct();
+            if($item->getIsVirtual() && $product->getFulfillmentType() !== 'nominal') {
                 $fulfillmentType = 'virtual';
             } else {
                 $fulfillmentType = $product->getFulfillmentType();
