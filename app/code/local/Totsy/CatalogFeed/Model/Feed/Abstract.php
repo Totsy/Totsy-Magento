@@ -82,18 +82,6 @@ abstract class Totsy_CatalogFeed_Model_Feed_Abstract
             }
         }
 
-        $events = json_decode($sortentry->getLiveQueue(), true);
-        foreach ($events as $event) {
-            $category = null;
-            if (!isset($this->_options['supress_event_load'])) {
-                $category = Mage::getModel('catalog/category')
-                    ->load($event['entity_id']);
-                $category->setStoreId(1);
-            }
-
-            $this->_processEvent($category, $event);
-        }
-
         return $this->_getFeedContent();
     }
 

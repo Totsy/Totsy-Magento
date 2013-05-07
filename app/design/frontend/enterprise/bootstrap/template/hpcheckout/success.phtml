@@ -1,11 +1,11 @@
 <?php
 
-$productIds = "";
+$productIDs = "";
 $productPrices = "";
 $buyerEmail = "";
 $buyerName = "";
 $couponsUsed = "";
-$buyerId = "";
+$buyerID = "";
 
 ?>
 <div class="page-title">
@@ -180,7 +180,7 @@ $url = $this->getBaseUrl().'sales/order/history/';
         	
             <?php
             	$productPrices .= "|" . $item->getPrice(); 
-                $productIds .= "|" . $item->getProductId();
+                $productIDs .= "|" . $item->getProductId();
 endforeach;
 ?>
     _gaq.push(['_trackTrans']); //submits transaction to the Analytics servers
@@ -205,7 +205,7 @@ data-issw-dialogs-pinterest-defaults-description="Inviting my friends to save on
     <div data-issw-text-dialog-success="" style="display:none"><p>Thanks for sharing! Totsy will credit your account with $15 after your friend's first order ships.</p></div>
 </div>
 
- <img width="0" height="0" src="https://api.insparq.com/api/v20120319/key/48fa5885203f6957a1b65fb8a4c3304e/user?pageType=purcon&cartValue='<?php echo $order->getData('grand_total'); ?>'&cartItemCount='<?php echo count($order->getAllItems()); ?>'&beacon=1&productIds='<?php echo $productIds; ?>'&productPrices='<?php echo $productPrices; ?>'&buyerName='<?php echo $buyerName; ?>'&buyerEmail='<?php echo $buyerEmail; ?>'&couponsUsed='<?php echo $couponsUsed; ?>'&buyerId='<?php echo $buyerId; ?>'" />
+ <img width="0" height="0" src="https://api.insparq.com/api/v20120319/key/48fa5885203f6957a1b65fb8a4c3304e/user?pageType=purcon&cartValue=<?php echo $order->getData('grand_total'); ?>&cartItemCount=<?php echo count($order->getAllItems()); ?>&beacon=1&productIDs=<?php echo $productIDs; ?>&productPrices=<?php echo $productPrices; ?>&buyerName=<?php echo $buyerName; ?>&buyerEmail=<?php echo $buyerEmail; ?>&couponsUsed=<?php echo $couponsUsed; ?>&buyerID=<?php echo $buyerID; ?>" />
 
 <script type="text/javascript">
 var aid='9577';
