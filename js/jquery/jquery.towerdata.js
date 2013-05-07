@@ -79,7 +79,7 @@
       });
 
       // Join all the parameters together for the URL
-      this.url = 'http://api10.towerdata.com/person?' + urlParams.join('&');
+      this.url = 'https://api10.towerdata.com/person?' + urlParams.join('&');
 
       return this.url;
     };
