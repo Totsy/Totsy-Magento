@@ -116,7 +116,7 @@ class Crown_Club_Model_Observer {
 
          if(!$customer->getDefaultBillingAddress()) {
             $address->setIsDefaultBilling(true);
-            //$address->setSaveInAddressBook(true);
+            $address->setSaveInAddressBook(true);
         }
     }
 }
