@@ -327,10 +327,16 @@ class Harapartners_Fulfillmentfactory_Model_Service_Fulfillment
      * @param string $type The type of aging (either 'fulfillment' or 'shipment')
      * @param Mage_Sales_Model_Order $order The order that has been delayed
      *
-     * @return void
+     * @return bool True when an e-mail was sent for the order.
      */
     protected function _sendTransactionalEmailAging($type, Mage_Sales_Model_Order $order)
     {
+        // only send e-mails when enabled
+        $enabled = Mage::getStoreConfig("sales_email/{$type}_aging/enabled");
+        if (!$enabled) {
+            return false;
+        }
+
         // Get the destination email addresses to send copies to
         $copyTo = Mage::getStoreConfig("sales_email/{$type}_aging/copy_to");
         $copyTo = explode(',', $copyTo);
@@ -368,5 +374,7 @@ class Harapartners_Fulfillmentfactory_Model_Service_Fulfillment
         $mailer->setTemplateId($templateId);
         $mailer->setTemplateParams(array('order' => $order));
         $mailer->send();
+
+        return true;
     }
 }
