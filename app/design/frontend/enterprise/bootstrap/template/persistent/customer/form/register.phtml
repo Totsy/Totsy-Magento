@@ -197,6 +197,7 @@
                 (function () {
                     var TOWERDATA_LICENSE = '<?php echo Mage::getStoreConfig('Crown_Towerdata/general/license'); ?>';
                     var GENERIC_ERROR_MSG = "<?php echo Mage::getStoreConfig('Crown_Towerdata/general/defaultmsg'); ?>";
+                    var TIMEOUT = <?php echo Mage::getStoreConfig('Crown_Towerdata/general/timeout'); ?>;
                     
                     var email_errbox = jQuery('#advice-validate-towerdata-email-email_address');
                     
@@ -237,7 +238,7 @@
                         verify.set({
                             'settings': {
                                 'valid_email': 'mailbox',
-                                'timeout': 0.01
+                                'timeout': TIMEOUT
                             }
                         });
                         
