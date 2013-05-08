@@ -110,6 +110,25 @@
                         </fulfillment_dotcom_api_base_url>
                     </fields>
                 </dotcom_setting>
+                <fulfillment_archive translate="label">
+                    <label>Fulfillment Archive</label>
+                    <sort_order>2</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <expanded>1</expanded>
+                    <fields>
+                        <itemqueue_archive_window>
+                            <label>Item Queue Archive Horizon</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>0</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>The number of days after which item queues are moved to an archive.</comment>
+                        </itemqueue_archive_window>
+                    </fields>
+                </fulfillment_archive>
             </groups>
         </fulfillmentfactory_options>
     </sections>

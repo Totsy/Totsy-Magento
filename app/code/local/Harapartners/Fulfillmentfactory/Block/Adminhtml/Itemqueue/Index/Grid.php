@@ -19,13 +19,15 @@ class Harapartners_Fulfillmentfactory_Block_Adminhtml_Itemqueue_Index_Grid exten
         $this->setDefaultDir('DESC');
     }
 
-    protected function _prepareCollection(){
+    protected function _prepareCollection()
+    {
         $model = Mage::getModel('fulfillmentfactory/itemqueue');
         $collection = $model->getCollection();
         $collection->getSelect()
-            ->joinLeft(array('cat_prod' =>'catalog_category_product'), 'main_table.product_id=cat_prod.product_id', array('cat_prod.category_id'))
-            ->joinLeft(array('po' =>'stockhistory_purchaseorder'), 'cat_prod.category_id=po.category_id', array('po_name' => 'po.name', 'po_id' => 'po.id'))
-            ->group(array('itemqueue_id')); 
+            ->joinInner(array('qi'  => 'sales_flat_quote_item'), 'main_table.original_quote_item_id = qi.item_id', array())
+            ->joinInner(array('pot' => 'stockhistory_transaction'), 'main_table.product_id = pot.product_id AND pot.category_id = qi.category_id AND pot.action_type = 2', array())
+            ->joinInner(array('po'  => 'stockhistory_purchaseorder'), 'pot.po_id = po.id', array('po_name' => 'po.name', 'po_id' => 'po.id'));
+
         $this->setCollection($collection);
         parent::_prepareCollection();
         return $this;
