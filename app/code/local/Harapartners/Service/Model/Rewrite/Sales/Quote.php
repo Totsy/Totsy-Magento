@@ -125,17 +125,17 @@ class Harapartners_Service_Model_Rewrite_Sales_Quote extends Mage_Sales_Model_Qu
                 continue;
             }
             $product = $item->getProduct();
-            if($item->getIsVirtual() && $product->getFulfillmentType() !== 'nominal') {
-                $fulfillmentType = 'virtual';
-            } else {
-                $fulfillmentType = $product->getFulfillmentType();
-            }
+            $fulfillmentType = $product->getFulfillmentType();
             $fulfillmentTypes [$fulfillmentType] [] = $item->getId ();
 
         }
 
         if(count($fulfillmentTypes) > 1) {
             $sortedFulfillmentTypes = array();
+            if(array_key_exists('litle_recurring',$fulfillmentTypes)) {
+                $sortedFulfillmentTypes['litle_recurring'] = $fulfillmentTypes['litle_recurring'];
+                unset($fulfillmentTypes['litle_recurring']);
+            }
             if(array_key_exists('dotcom_stock',$fulfillmentTypes)) {
                 $sortedFulfillmentTypes['dotcom_stock'] = $fulfillmentTypes['dotcom_stock'];
                 unset($fulfillmentTypes['dotcom_stock']);
