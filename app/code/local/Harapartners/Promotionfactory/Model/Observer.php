@@ -34,6 +34,10 @@ class Harapartners_Promotionfactory_Model_Observer {
             return;
         }
 
+        if($product->getFulfillmentType() !== 'virtual') {
+            return;
+        }
+
         //Return when there is already a coupon code associated
         $reservationCodeOption = $quoteItem->getOptionByCode('reservation_code');
         if($reservationCodeOption instanceof Mage_Sales_Model_Quote_Item_Option

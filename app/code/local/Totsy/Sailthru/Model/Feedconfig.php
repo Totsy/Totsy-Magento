@@ -108,7 +108,7 @@ class Totsy_Sailthru_Model_Feedconfig extends Mage_Core_Model_Abstract {
         $this->_validateList('exclude');
         
         //Validate filter
-        $this->_validateList('filter','\d\n\=\_\,');
+        $this->_validateList('filter','\w\d\n\=\_\,');
 
         return $this;
     }

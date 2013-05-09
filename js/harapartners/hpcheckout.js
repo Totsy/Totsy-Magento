@@ -205,7 +205,7 @@ HpCheckout.prototype = {
     submit: function() {
         //good time to validate CC types
         if (typeof checkoutPayment !== "undefined") {
-            jQuery(".cc_info input[type='radio']").addClass('required-entry');
+            jQuery("[name='payment[cc_type]']").addClass('validate-one-required');
             jQuery('.cc_info input').addClass('required-entry');
             jQuery("[name='payment[cc_should_save]']").removeClass("required-entry");
             //Saved Credit Card Selected

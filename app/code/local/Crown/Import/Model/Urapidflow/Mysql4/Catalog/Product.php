@@ -400,7 +400,8 @@ class Crown_Import_Model_Urapidflow_Mysql4_Catalog_Product extends Unirgy_RapidF
             'change_website' => &$this->_changeWebsite,
             'change_stock' => &$this->_changeStock,
             'change_category_product' => &$this->_changeCategoryProduct,
-            'dry_run' => $dryRun
+            'dry_run' => $dryRun,
+            'product_ids_updated' => $this->_productIdsUpdated
         );
 
         $this->_profile->activity('Importing');
