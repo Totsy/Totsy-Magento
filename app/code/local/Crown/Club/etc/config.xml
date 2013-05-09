@@ -6,6 +6,16 @@
 		</Crown_Club>
 	</modules>
     <global>
+        <blocks>
+            <crownclub>
+                <class>Crown_Club_Block</class>
+            </crownclub>
+            <enterprise_reward>
+                <rewrite>
+                    <tooltip_checkout>Crown_Club_Block_Reward_Tooltip_Checkout</tooltip_checkout>
+                </rewrite>
+            </enterprise_reward>
+        </blocks>
         <models>
             <crownclub>
                 <class>Crown_Club_Model</class>
@@ -101,6 +111,14 @@
                     </crownclub_check_url>
                 </observers>
             </controller_front_send_response_before>
+            <sales_convert_quote_to_order>
+                <observers>
+                    <crownclub>
+                        <class>crownclub/observer</class>
+                        <method>quoteSubmitBefore</method>
+                    </crownclub>
+                </observers>
+            </sales_convert_quote_to_order>
         </events>
 
         <sales>
@@ -148,6 +166,13 @@
                 </args>
             </crownclub>
         </routers>
+        <layout>
+            <updates>
+                <crownclub module="Crown_Club">
+                    <file>crownclub.xml</file>
+                </crownclub>
+            </updates>
+        </layout>
     </frontend>
 	<crontab>
 		<jobs>

@@ -119,4 +119,16 @@ class Crown_Club_Model_Observer {
             $address->setSaveInAddressBook(true);
         }
     }
+
+    public function quoteSubmitBefore(Varien_Event_Observer $observer) {
+        $order = $observer->getEvent()->getOrder();
+        $quote = $observer->getEvent()->getQuote();
+
+        foreach($quote->getAllItems() as $item) {
+            if($item->getProductId() == Mage::getStoreConfig('Crown_Club/clubgeneral/club_product_id')) {
+                $order->setData('customer_is_club_member',1);
+            }
+        }
+        return $observer;
+    }
 }
