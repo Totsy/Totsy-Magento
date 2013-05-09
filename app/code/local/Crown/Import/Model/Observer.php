@@ -80,12 +80,11 @@ class Crown_Import_Model_Observer {
      * @return void
      */
     public function orphanProductsFromExistingEvent($observer) {
-        $vars 			= $observer->getEvent()->getVars();
-        $skus			= $vars['skus'];
-        $oldData        = $vars['old_data'];
+        $vars           = $observer->getEvent()->getVars();
+        $skus           = $vars['skus'];
         $dryRun         = $vars['dry_run'];
 
-        if(count($oldData) > 0 && !$dryRun) {
+        if(!$dryRun && (!isset($vars['change_category_product']) || count($vars['change_category_product']) == 0)) {
             foreach ($skus as $sku => $productId) {
                 try {
                     $catIds = array();
@@ -108,47 +107,59 @@ class Crown_Import_Model_Observer {
     public function addProductPositions($observer) {
         $vars 			= $observer->getEvent()->getVars();
         $skus			= $vars['skus'];
-        $newData        = $vars['new_data'];
-        $oldData        = $vars['old_data'];
+        $data           = $vars['new_data'];
         $dryRun         = $vars['dry_run'];
 
-        $data = count($newData) > 0 ? $newData : $oldData;
+        if(!$dryRun && (!is_array($vars['product_ids_updated']) || count($vars['product_ids_updated']) == 0)) {
+            $configurableSort = array();
+            $simpleSort = array();
 
-        $categorySortProducts = array();
+            foreach ($skus as $sku => $productId) {
+                $vendorStyle    = $data[$sku]['vendor_style'];
+                $name           = $data[$sku]['name'];
+                $productType    = $data[$sku]['product.type'];
 
-        foreach ($skus as $sku => $productId) {
-            $vendorStyle    = $data[$sku]['vendor_style'];
-            $name           = $data[$sku]['name'];
-            $productType    = $data[$sku]['product.type'];
+                if ($productType == 'simple') {
+                    array_push($simpleSort, $sku);
+                }
 
-            if (isset($categorySortProducts[$name . "-" . $vendorStyle])) {
                 if ($productType == 'configurable') {
-                    $categorySortProducts[$name . "-" . $vendorStyle] = $sku;
+                    array_push($configurableSort, $sku);
+                }
+            }
+
+            $position = 0;
+            $positions = array();
+
+            if (count($configurableSort) > 0) {
+                foreach ($configurableSort as $sku) {
+                    $productId = $skus[$sku];
+                    $position++;
+                    $positions[$productId] = $position;
+                }
+                foreach ($simpleSort as $sku) {
+                    $productId = $skus[$sku];
+                    $position++;
+                    $positions[$productId] = 1;
                 }
             } else {
-                $categorySortProducts[$name . "-" . $vendorStyle] = $sku;
-            }
-        }
-
-        if(!$dryRun) {
-            $catPos = array();
-            foreach ($categorySortProducts as $sku) {
-                try {
-                    $catApi = new Mage_Catalog_Model_Category_Api;
-
-                    foreach ($data[$sku]['category.ids'] as $catId) {
-                        if (!isset($catPos[$catId])) {
-                            $catPos[$catId] = 0;
-                        }
-
-                        $catPos[$catId]++;
-                        $pos = $catPos[$catId];
-                        $productId = $skus[$sku];
-                        $catApi->assignProduct($catId, $productId, $pos);
-                    }
-                } catch( Exception $e) {
-                    Mage::log(  $e->getMessage(), null, 'import_observer_error.log', true);
+                foreach ($simpleSort as $sku) {
+                    $productId = $skus[$sku];
+                    $position++;
+                    $positions[$productId] = $position;
                 }
+            }
+
+            $categoryId = array_pop($data[$sku]['category.ids']);
+            $category = Mage::getModel('catalog/category')
+                ->setStoreId(Mage::app()->getStore())
+                ->load($categoryId);
+            $category->setPostedProducts($positions);
+
+            try {
+                $category->save();
+            } catch( Mage_Core_Exception $e ) {
+                Mage::log( $e->getMessage(), null, 'import_observer_error.log', true);
             }
         }
     }
