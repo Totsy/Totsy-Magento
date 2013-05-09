@@ -1,12 +1,12 @@
 <?php
 /**
  * @category    Totsy
- * @package     Totsy_Litle_Block_Palorus_Vault_New
+ * @package     Totsy_Palorus_Block_Vault_New
  * @author      Tom Royer <troyer@totsy.com>
  * @copyright   Copyright (c) 2013 Totsy LLC
  */
  
-class Totsy_Litle_Block_Palorus_Vault_New extends Mage_Core_Block_Template
+class Totsy_Palorus_Block_Vault_New extends Mage_Core_Block_Template
 {
     /**
      * Retrieve payment configuration object

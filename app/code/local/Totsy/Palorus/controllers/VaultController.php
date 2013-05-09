@@ -1,7 +1,7 @@
 <?php
 /**
  * @category    Totsy
- * @package     Totsy_Litle_Palorus_VaultController
+ * @package     Totsy_Palorus_VaultController
  * @author      Tom Royer <troyer@totsy.com>
  * @copyright   Copyright (c) 2013 Totsy LLC
  */
@@ -9,7 +9,7 @@
 require_once Mage::getBaseDir('code') . '/community/Litle/LitleSDK/LitleOnline.php';
 require_once 'Litle/Palorus/controllers/VaultController.php';
 
-class Totsy_Litle_Palorus_VaultController extends Litle_Palorus_VaultController
+class Totsy_Palorus_VaultController extends Litle_Palorus_VaultController
 {
     public function preDispatch()
     {
@@ -24,7 +24,6 @@ class Totsy_Litle_Palorus_VaultController extends Litle_Palorus_VaultController
      */
     public function indexAction()
     {
-        Mage::log('indexAction');
         $this->loadLayout();
         $this->_initLayoutMessages('customer/session');
         $this->renderLayout();
@@ -101,10 +100,10 @@ class Totsy_Litle_Palorus_VaultController extends Litle_Palorus_VaultController
         $initialize->authReversalRequest($auth_reversalinfos);
         //Create Vault Profile if option selected
         $vault = Mage::getModel('palorus/vault');
-        $alreadyCreated = Mage::getModel('palorus/vault')->getCustomerToken($customer,Mage::getModel('Litle_CreditCard_Model_PaymentLogic')->getUpdater($authResponse, 'tokenResponse', 'litleToken'));
+        $alreadyCreated = Mage::getModel('palorus/vault')->getCustomerToken($customer,Mage::getModel('creditcard/paymentlogic')->getUpdater($authResponse, 'tokenResponse', 'litleToken'));
         if(!$alreadyCreated) {
-            $vault->setData('token', Mage::getModel('Litle_CreditCard_Model_PaymentLogic')->getUpdater($authResponse, 'tokenResponse', 'litleToken'))
-                ->setData('bin', Mage::getModel('Litle_CreditCard_Model_PaymentLogic')->getUpdater($authResponse, 'tokenResponse', 'bin'))
+            $vault->setData('token', Mage::getModel('creditcard/paymentlogic')->getUpdater($authResponse, 'tokenResponse', 'litleToken'))
+                ->setData('bin', Mage::getModel('creditcard/paymentlogic')->getUpdater($authResponse, 'tokenResponse', 'bin'))
                 ->setData('customer_id', $customer->getId())
                 ->setData('type', $payment->getCcType())
                 ->setData('last4', substr($payment->getCcNumber(), -4))

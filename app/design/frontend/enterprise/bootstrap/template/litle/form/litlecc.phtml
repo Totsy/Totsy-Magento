@@ -23,8 +23,8 @@
     }
 
     $_reportGroup = $this->getReportGroup();
-    $_paypageId = Mage::getModel('Litle_CreditCard_Model_PaymentLogic')->getConfigData("paypage_id");
-    $_paypageUrl = Mage::getModel('Litle_CreditCard_Model_PaymentLogic')->getConfigData("paypage_url");
+    $_paypageId = Mage::getModel('creditcard/paymentlogic')->getConfigData("paypage_id");
+    $_paypageUrl = Mage::getModel('creditcard/paymentlogic')->getConfigData("paypage_url");
     $_isLoggedIn = Mage::helper('customer')->isLoggedIn();
 
     $_time =  date('ymdHis');
@@ -53,7 +53,6 @@
         });
     });
 </script>
-
 <div>
     <div>
         <div>
@@ -95,7 +94,7 @@
                         </tr>
                         <?php foreach ($this->getStoredCards() as $card): ?>
                             <?php
-                                $lastCardUsed = Mage::helper('litle')->getLastCardUsed();
+                                $lastCardUsed = Mage::helper('palorus')->getLastCardUsed();
                                 $customerAddress = Mage::getModel('customer/address')->load($card->getData('address_id'));
                                 $customerName = $customerAddress->getFirstname() ." ". $customerAddress->getLastname();
                                 $customerStreet = $customerAddress['street'];

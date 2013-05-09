@@ -38,7 +38,7 @@
                             $checked = '';
                             $customerObj = Mage::getSingleton('customer/customer')->load($profile->getCustomerId());
                             $customerAddress = Mage::getSingleton('customer/address')->load($profile->getAddressId());
-                            $lastCardUsed = Mage::helper('litle')->getLastCardUsed();
+                            $lastCardUsed = Mage::helper('palorus')->getLastCardUsed();
                             $customerName = $customerAddress->getFirstname() ." ". $customerAddress->getLastname();
                             
                             //reset gets the first item from the array passed in

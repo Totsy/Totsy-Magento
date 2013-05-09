@@ -32,7 +32,7 @@
     <palorus_vault_new>
         <update handle="customer_account" />
         <reference name="my.account.wrapper">
-            <block type="palorus/vault_new" name="vault.stored_cards.new" template="litle/vault/new.phtml" />
+            <block type="totsy_palorus/vault_new" name="vault.stored_cards.new" template="litle/vault/new.phtml" />
         </reference>
         <reference name="head">
             <action method="setTitle"><title>Add Credit Card</title></action>

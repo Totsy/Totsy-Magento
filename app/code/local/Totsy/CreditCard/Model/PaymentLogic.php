@@ -1,18 +1,17 @@
 <?php
 /**
  * @category    Totsy
- * @package     Totsy_Litle_Model_CreditCard_PaymentLogic
+ * @package     Totsy_CreditCard_Model_PaymentLogic
  * @author      Tom Royer <troyer@totsy.com>
  * @copyright   Copyright (c) 2013 Totsy LLC
  */
 
 require_once ('Litle/LitleSDK/LitleOnline.php');
 
-class Totsy_Litle_Model_CreditCard_PaymentLogic extends Litle_CreditCard_Model_PaymentLogic
+class Totsy_CreditCard_Model_PaymentLogic extends Litle_CreditCard_Model_PaymentLogic
 {
     public function assignData($data)
     {
-        Mage::log('Totsy assignData');
         if (! ($data instanceof Varien_Object)) {
             $data = new Varien_Object($data);
         }
@@ -115,6 +114,7 @@ class Totsy_Litle_Model_CreditCard_PaymentLogic extends Litle_CreditCard_Model_P
      */
     public function authorize(Varien_Object $payment, $amount)
     {
+        Mage::log('totsy_authorize');
         $order = $payment->getOrder();
         $orderId = $order->getIncrementId();
 
