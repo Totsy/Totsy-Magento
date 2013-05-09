@@ -797,6 +797,7 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
 
 .saved_card {
     line-height: 15px;
+    border:0px !important;
 }
 
 .saved_card th {
@@ -813,7 +814,7 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
 }
 
 .saved_card span:not(.cc){
-    margin-left: 15px;
+    margin-left: 5px;
     margin-right: 15px;
     margin-bottom: 10px;
 }
@@ -825,12 +826,122 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
 /**
  * @Home page
  */
+ .banner {
+    color: #9DA0A4;
+ }
 .carousel-inner {
     min-height: 150px;
     overflow: hidden;
     position: relative;
     width: 100%;
 }
+
+.carousel-inner > .item {
+  position: relative;
+  display: none;
+  -webkit-transition: 0.6s ease-in-out left;
+     -moz-transition: 0.6s ease-in-out left;
+       -o-transition: 0.6s ease-in-out left;
+          transition: 0.6s ease-in-out left;
+}
+
+.carousel-inner > .item > img,
+.carousel-inner > .item > a > img {
+  display: block;
+  line-height: 1;
+}
+
+.carousel-inner > .active,
+.carousel-inner > .next,
+.carousel-inner > .prev {
+  display: block;
+}
+
+.carousel-inner > .active {
+  left: 0;
+}
+
+.carousel-inner > .next,
+.carousel-inner > .prev {
+  position: absolute;
+  top: 0;
+  width: 100%;
+}
+
+.carousel-inner > .next {
+  left: 100%;
+}
+
+.carousel-inner > .prev {
+  left: -100%;
+}
+
+.carousel-inner > .next.left,
+.carousel-inner > .prev.right {
+  left: 0;
+}
+
+.carousel-inner > .active.left {
+  left: -100%;
+}
+
+.carousel-inner > .active.right {
+  left: 100%;
+}
+
+.carousel-control {display:none;}
+.carousel-control.right {
+  right: 15px;
+  left: auto;
+}
+
+.carousel-control:hover,
+.carousel-control:focus {
+  color: #999;
+  text-decoration: none;
+  opacity: 0.9;
+  filter: alpha(opacity=90);
+}
+
+.carousel-indicators {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  z-index: 5;
+  margin: 0;
+  list-style: none;
+}
+
+.carousel-indicators li {
+  display: block;
+  float: left;
+  width: 10px;
+  height: 10px;
+  margin-left: 5px;
+  text-indent: -999px;
+  background-color: #ccc;
+  background-color: rgba(255, 255, 255, 0.25);
+  border-radius: 5px;
+}
+
+.carousel-indicators .active {
+  background-color: #fff;
+}
+
+.carousel-caption h4,
+.carousel-caption p {
+  line-height: 20px;
+  color: #ffffff;
+}
+
+.carousel-caption h4 {
+  margin: 0 0 5px;
+}
+
+.carousel-caption p {
+  margin-bottom: 0;
+}
+
 #mainContent > .container > .banner {
     margin:5px auto 0;
 }
@@ -875,10 +986,10 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
 }
 /* Grid Hacks :( */
 .events-grid .span4 h3 {
-    font-size: 16px;
+    font-size: 15px; font-weight: normal;
 }
 .events-grid .span3 h3 {
-    font-size: 14px;
+    font-size: 13px; font-weight: normal;
 }
 .events-grid .span2 h5 {
     font-size: 12px;
@@ -1523,7 +1634,7 @@ img.fastship-icon {
 
 .cc_exp {
     width: 238px;
-    margin-left: 40px;
+    margin-left: 30px;
 }
 
 .cc_save_card {

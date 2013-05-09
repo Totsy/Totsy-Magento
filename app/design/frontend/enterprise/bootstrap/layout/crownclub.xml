@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+    <checkout_cart_index>
+        <reference name="checkout.cart">
+            <block type="crownclub/cart_banner" name="plus_banner" as="plus_banner" />
+        </reference>
+    </checkout_cart_index>
+</layout>

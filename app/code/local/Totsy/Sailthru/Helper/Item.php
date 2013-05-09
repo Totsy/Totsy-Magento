@@ -1,4 +1,3 @@
-
 <?php
 
 class Totsy_Sailthru_Helper_Item {
@@ -13,9 +12,15 @@ class Totsy_Sailthru_Helper_Item {
         $url = $item["product"]->getProductUrl();
         $tags = array();
 
-        $product = Mage::getModel('catalog/product')->loadByAttribute('sku',$sku);
+        $product = Mage::getResourceModel('catalog/product_collection')
+            ->addFieldToFilter('entity_id', $item->getProductId())
+            ->addAttributeToSelect('departments')
+            ->addAttributeToSelect('ages')
+            ->getFirstItem();
+
         $departments = $product->getAttributeText('departments');
         $ages = $product->getAttributeText('ages');
+
         unset($product);
 
         if (!empty($departments)){
@@ -40,7 +45,11 @@ class Totsy_Sailthru_Helper_Item {
         
         $title = isset($title)?$title:$sku;    
 
-        return compact('qty', 'title', 'price', 'id', 'url', 'tags');
+        $vars['event_id'] = Mage::getModel('catalog/product')
+            ->load( $item->getProduct()->getEntityId())
+            ->getCategoryIds();
+
+        return compact('qty', 'title', 'price', 'id', 'url', 'tags', 'vars');
     }
 
 }

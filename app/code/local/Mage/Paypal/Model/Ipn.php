@@ -568,9 +568,10 @@ class Mage_Paypal_Model_Ipn
         $this->_order->getPayment()
             ->setPreparedMessage($this->_createIpnComment(''))
             ->setParentTransactionId($parentTxnId)
-            ->registerVoidNotification();
+            ->registerVoidNotification()
+            ->setAdditionalInformation('is_order_action', false);
 
-        $this->_order->save();
+        $this->_order->cancel()->save();
     }
 
     /**

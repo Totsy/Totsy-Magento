@@ -307,7 +307,7 @@ class Harapartners_SpeedTax_Model_Speedtax_Calculate extends Harapartners_SpeedT
         //Only quote address class have the const (shared with order address here)
         //$mageAddress can be quote of order address, or null for virtual product
         if(!($mageAddress instanceof Varien_Object)  
-                || $mageAddress->getAddressType() != Mage_Sales_Model_Quote_Address::TYPE_SHIPPING
+        //        || $mageAddress->getAddressType() != Mage_Sales_Model_Quote_Address::TYPE_SHIPPING
         ){
             return false;
         }

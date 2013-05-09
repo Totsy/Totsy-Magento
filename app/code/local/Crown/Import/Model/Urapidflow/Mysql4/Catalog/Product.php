@@ -154,7 +154,8 @@ class Crown_Import_Model_Urapidflow_Mysql4_Catalog_Product extends Unirgy_RapidF
 					$required = ! empty ( $attr ['is_required'] );
 					$visible = ! empty ( $attr ['is_visible'] );
 					$appliesTo = empty ( $attr ['apply_to'] ) || ! empty ( $attr ['apply_to'] [$typeId] );
-					$inAttrSet = empty ( $attr ['attribute_id'] ) || ! empty ( $attrSetFields [$k] );
+					$inAttrSet = true;
+                    //$inAttrSet = empty ( $attr ['attribute_id'] ) || ! empty ( $attrSetFields [$k] );
 					$selectable = ! empty ( $attr ['frontend_input'] ) && ($attr ['frontend_input'] == 'select' || $attr ['frontend_input'] == 'multiselect' || ! empty ( $attr ['source_model'] ));
 					$dynAttr = $k == 'price' && $dynPrice || $k == 'weight' && $dynWeight;
 					$parentQty = $k == 'stock.qty' && $isParentProduct;
@@ -329,4 +330,197 @@ class Crown_Import_Model_Urapidflow_Mysql4_Catalog_Product extends Unirgy_RapidF
 		} // foreach ($this->_newData as $p)
 		unset ( $p );
 	}
+
+    public function import()
+    {
+        $benchmark = false;
+
+        $tune = Mage::getStoreConfig('urapidflow/finetune');
+        if (!empty($tune['import_page_size']) && $tune['import_page_size']>0) {
+            $this->_pageRowCount = (int)$tune['import_page_size'];
+        }
+        if (!empty($tune['page_sleep_delay'])) {
+            $this->_pageSleepDelay = (int)$tune['page_sleep_delay'];
+        }
+
+        $profile = $this->_profile;
+        $logger = $profile->getLogger();
+
+        #$this->_saveAttributesMethod = Mage::getStoreConfig('urapidflow/finetune/save_attributes_method');
+        $this->_saveAttributesMethod =''; #$profile->getData('options/import/save_attributes_method');
+        $this->_insertAttrChunkSize = (int)$profile->getData('options/import/insert_attr_chunk_size');
+        if (!$this->_insertAttrChunkSize) {
+            $this->_insertAttrChunkSize = 100;
+        }
+
+        $dryRun = $profile->getData('options/import/dryrun');
+
+        if (Mage::app()->isSingleStoreMode()) {
+            $storeId = 0;
+        } else {
+            $storeId = $profile->getStoreId();
+        }
+        $this->_storeId = $storeId;
+        $this->_entityTypeId = $this->_getEntityType($this->_entityType, 'entity_type_id');
+
+        $useTransactions = $profile->getUseTransactions();
+
+        $this->_profile->activity($this->__('Retrieving number of rows'));
+
+        $profile->ioOpenRead();
+        $count = -1;
+        while ($profile->ioRead()) {
+            $count++;
+        }
+        $profile->setRowsFound($count)->setStartedAt(now())->sync(true, array('rows_found', 'started_at'), false);
+        $profile->ioSeekReset();
+
+        $this->_profile->activity('Preparing data');
+
+        $this->_importPrepareColumns();
+        $this->_prepareAttributes(array_keys($this->_fieldsCodes));
+        $this->_prepareSystemAttributes();
+        $this->_importValidateColumns();
+        $this->_prepareWebsites();
+        $this->_prepareCategories();
+
+        #$profile->ioSeekReset(6700);
+
+        $eventVars = array(
+            'profile' => &$this->_profile,
+            'logger' => &$logger,
+            'old_data' => &$this->_products,
+            'new_data' => &$this->_newData,
+            'skus' => &$this->_skus,
+            'attr_value_ids' => &$this->_attrValueIds,
+            'valid' => &$this->_valid,
+            'insert_entity' => &$this->_insertEntity,
+            'update_entity' => &$this->_updateEntity,
+            'change_attr' => &$this->_changeAttr,
+            'change_website' => &$this->_changeWebsite,
+            'change_stock' => &$this->_changeStock,
+            'change_category_product' => &$this->_changeCategoryProduct,
+            'dry_run' => $dryRun,
+            'product_ids_updated' => $this->_productIdsUpdated
+        );
+
+        $this->_profile->activity('Importing');
+#memory_get_usage(true);
+        if ($benchmark) Mage::log("============================= IMPORT START: ".memory_get_usage(true).', '.memory_get_peak_usage(true));
+
+        $this->_isLastPage = false;
+
+        // data will loaded page by page to conserve memory
+        for ($page = 0; ; $page++) {
+            $this->_startLine = 2+$page*$this->_pageRowCount;
+            try {
+                $this->_checkLock();
+
+                if ($useTransactions && !$dryRun) {
+                    $this->_write->beginTransaction();
+                }
+#memory_get_usage(true);
+                if ($benchmark) Mage::log("================ PAGE START: ".memory_get_usage(true).', '.memory_get_peak_usage(true));
+                $this->_importResetPageData();
+#memory_get_usage(true);
+                if ($benchmark) Mage::log("_importResetPageData: ".memory_get_usage(true).', '.memory_get_peak_usage(true));
+                $this->_importFetchNewData();
+#memory_get_usage(true);
+                if ($benchmark) Mage::log("_importFetchNewData: ".memory_get_usage(true).', '.memory_get_peak_usage(true));
+                $this->_importFetchOldData();
+#memory_get_usage(true);
+                if ($benchmark) Mage::log("_importFetchOldData: ".memory_get_usage(true).', '.memory_get_peak_usage(true));
+                $this->_fetchAttributeValues($storeId, true);
+#memory_get_usage(true);
+                if ($benchmark) Mage::log("_fetchAttributeValues: ".memory_get_usage(true).', '.memory_get_peak_usage(true));
+                $this->_fetchWebsiteValues();
+#memory_get_usage(true);
+                if ($benchmark) Mage::log("_fetchWebsiteValues: ".memory_get_usage(true).', '.memory_get_peak_usage(true));
+                $this->_fetchStockValues();
+#memory_get_usage(true);
+                if ($benchmark) Mage::log("_fetchStockValues: ".memory_get_usage(true).', '.memory_get_peak_usage(true));
+                $this->_fetchCategoryValues();
+#memory_get_usage(true);
+                if ($benchmark) Mage::log("_fetchCategoryValues: ".memory_get_usage(true).', '.memory_get_peak_usage(true));
+
+                $this->_importProcessNewData();
+#memory_get_usage(true);
+                if ($benchmark) Mage::log("_importProcessNewData: ".memory_get_usage(true).', '.memory_get_peak_usage(true));
+
+                $this->_checkLock();
+
+                Mage::dispatchEvent('urapidflow_product_import_after_fetch', array('vars'=>$eventVars));
+                $this->_importValidateNewData();
+#memory_get_usage(true);
+                if ($benchmark) Mage::log("_importValidateNewData: ".memory_get_usage(true).', '.memory_get_peak_usage(true));
+                Mage::dispatchEvent('urapidflow_product_import_after_validate', array('vars'=>$eventVars));
+                $this->_importProcessDataDiff();
+#memory_get_usage(true);
+                if ($benchmark) Mage::log("_importProcessDataDiff: ".memory_get_usage(true).', '.memory_get_peak_usage(true));
+                Mage::dispatchEvent('urapidflow_product_import_after_diff', array('vars'=>$eventVars));
+
+                if (!$dryRun) {
+                    $this->_importSaveEntities();
+#memory_get_usage(true);
+                    if ($benchmark) Mage::log("_importSaveEntities: ".memory_get_usage(true).', '.memory_get_peak_usage(true));
+                    $this->_importCopyImageFiles();
+#memory_get_usage(true);
+                    if ($benchmark) Mage::log("_importCopyImageFiles: ".memory_get_usage(true).', '.memory_get_peak_usage(true));
+                    $this->_importGenerateAttributeValues();
+#memory_get_usage(true);
+                    if ($benchmark) Mage::log("_importGenerateAttributeValues: ".memory_get_usage(true).', '.memory_get_peak_usage(true));
+
+                    $this->_importSaveAttributeValues();
+#memory_get_usage(true);
+                    if ($benchmark) Mage::log("_importSaveAttributeValues: ".memory_get_usage(true).', '.memory_get_peak_usage(true));
+                    $this->_importSaveWebsiteValues();
+#memory_get_usage(true);
+                    if ($benchmark) Mage::log("_importSaveWebsiteValues: ".memory_get_usage(true).', '.memory_get_peak_usage(true));
+                    $this->_importSaveProductCategories();
+#memory_get_usage(true);
+                    if ($benchmark) Mage::log("_importSaveProductCategories: ".memory_get_usage(true).', '.memory_get_peak_usage(true));
+                    $this->_importSaveStockValues();
+#memory_get_usage(true);
+                    if ($benchmark) Mage::log("_importSaveStockValues: ".memory_get_usage(true).', '.memory_get_peak_usage(true));
+
+                    #$this->_importReindexProducts();
+                    #$this->_importRefreshRewrites();
+                    $this->_importUpdateImageGallery();
+#memory_get_usage(true);
+                    if ($benchmark) Mage::log("_importUpdateImageGallery: ".memory_get_usage(true).', '.memory_get_peak_usage(true));
+
+                    Mage::dispatchEvent('urapidflow_product_import_after_save', array('vars'=>$eventVars));
+
+                    #$this->_profile->realtimeReindex(array_keys($this->_productIdsUpdated));
+                    $this->_importRealtimeReindex();
+
+                    Mage::dispatchEvent('urapidflow_product_import_after_rtidx', array('vars'=>$eventVars));
+                }
+
+                $profile->setMemoryUsage(memory_get_usage(true))->setMemoryPeakUsage(memory_get_peak_usage(true))
+                    #$profile->setMemoryUsage(memory_get_usage(true))->setMemoryPeakUsage(memory_get_peak_usage(true))
+                    ->setSnapshotAt(now())->sync();
+
+                if ($useTransactions && !$dryRun) {
+                    $this->_write->commit();
+                }
+            } catch (Exception $e) {
+                if ($useTransactions && !$dryRun) {
+                    $this->_write->rollback();
+                }
+#print_r($e);
+                throw $e;
+            }
+            if ($this->_isLastPage) {
+                break;
+            }
+            if ($this->_pageSleepDelay) {
+                sleep($this->_pageSleepDelay);
+            }
+        }
+
+        $profile->ioClose();
+
+        $this->_afterImport();
+    }
 }
