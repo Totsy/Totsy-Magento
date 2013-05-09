@@ -66,7 +66,7 @@ class Harapartners_HpCheckout_Model_Checkout
                 $address->setData($attribute->getAttributeCode(), NULL);
             }
         }
-
+        $address->setSaveInAddressBook(true);
         $address->setData( 'email', $data[ 'email' ] );
 
         if (($validateRes = $address->validate()) !== true) {
