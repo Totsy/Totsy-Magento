@@ -31,6 +31,7 @@ class TinyBrick_OrderEdit_OrderController extends Mage_Adminhtml_Controller_Acti
         $order = $this->_initOrder();
         //arrays for restoring order if error is thrown or payment is declined
         $orderArr = $order->getData();
+        $originalOrderStatus = $order->getStatus();
         $billingArr = $order->getBillingAddress()->getData();
 
         $customer = Mage::getModel('customer/customer')->load($order->getCustomerId());
@@ -93,9 +94,10 @@ class TinyBrick_OrderEdit_OrderController extends Mage_Adminhtml_Controller_Acti
             Mage::getModel('promotionfactory/virtualproductcoupon')->openVirtualProductCouponInOrder($order);
 
             if(count($msgs) < 1) {
-                //auth for more if the total has increased and configured to do so
-                $billing  = Mage::getModel('oro_sales/order_billing');
-                $billing->invoice($order);
+                if($originalOrderStatus != 'pending' && $originalOrderStatus != 'processing') {
+                    $billing  = Mage::getModel('oro_sales/order_billing');
+                    $billing->invoice($order);
+                }
                 //fire event and log changes
                 Mage::dispatchEvent('orderedit_edit', array('order'=>$order));
                 $this->_logChanges($order, $this->getRequest()->getParam('comment'), $this->getRequest()->getParam('admin_user'), $changes);

@@ -62,6 +62,11 @@ class Crown_Club_Model_Rewards_Action_Club extends Enterprise_Reward_Model_Actio
         if ($this->_quote) {
             $quote = $this->_quote;
             $monetaryAmount = $quote->getBaseGrandTotal();
+            foreach($quote->getAllItems() as $item) {
+                if($item->getProductId() == Mage::getStoreConfig('Crown_Club/clubgeneral/club_product_id')) {
+                    $monetaryAmount -= $item->getBaseRowTotal();
+                }
+            }
             $monetaryAmount = $monetaryAmount < 0 ? 0 : $monetaryAmount;
         } else {
             $monetaryAmount = $this->getEntity()->getGrandTotal();
