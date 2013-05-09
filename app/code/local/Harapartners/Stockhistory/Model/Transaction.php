@@ -179,6 +179,7 @@ class Harapartners_Stockhistory_Model_Transaction extends Mage_Core_Model_Abstra
             }
             
             $stock->setQty($qtyStock + $qtyDelta);
+            $stock->setIsInStock(1);
             $stock->save();
             return true;
         } else {
