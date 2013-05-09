@@ -67,7 +67,7 @@ sub vcl_recv {
         return (pipe);
     }
 
-    if( req.http.User-Agent ~ "(?i)android.+mobile|blackberry|ip(hone|od)" ) {
+    if( req.http.User-Agent ~ "Android|Blackberry|iPhone" ) {
         set req.http.X-UA-Device = "mobile";
     }
 

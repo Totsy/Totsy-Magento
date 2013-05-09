@@ -20,7 +20,8 @@ class Harapartners_Ordersplit_Helper_Data extends Mage_Core_Helper_Abstract {
     const TYPE_DROPSHIP = 'dropship';
     const TYPE_VIRTUAL = 'virtual';
     const TYPE_OTHER = 'other';
-
+    const TYPE_LITLE_RECURRING = 'litle_recurring';
+    
     public function getAllowedFulfillmentTypeArray(){
         return array(
                 self::TYPE_DOTCOM,
@@ -43,29 +44,30 @@ class Harapartners_Ordersplit_Helper_Data extends Mage_Core_Helper_Abstract {
     }
 
     public function processOrder($order) {
-        foreach($order->getAllItems() as $item) {
-            if($item->getParentItemId()) {
-                continue;
+        if($order->getIsVirtual()) {
+            Mage::helper('ordersplit')->processNonHybridOrder($order, self::TYPE_VIRTUAL);
+        } else {
+            foreach($order->getAllItems() as $item) {
+                if($item->getParentItemId()) {
+                    continue;
+                }
+                $product = $item->getProduct();
+                switch($product->getFulfillmentType()) {
+                    case self::TYPE_DOTCOM:
+                        Mage::helper('ordersplit')->processNonHybridOrder($order, self::TYPE_DOTCOM);
+                        break;
+                    case self::TYPE_DOTCOM_STOCK:
+                        Mage::helper('ordersplit')->processNonHybridOrder($order, self::TYPE_DOTCOM_STOCK);
+                        break;
+                    case self::TYPE_DROPSHIP:
+                        Mage::helper('ordersplit')->processNonHybridOrder($order, self::TYPE_DROPSHIP);
+                        break;
+                    case self::TYPE_OTHER:
+                    default:
+                        Mage::helper('ordersplit')->processNonHybridOrder($order, self::TYPE_OTHER);
+                }
+                break;
             }
-            $product = $item->getProduct();
-            switch($product->getFulfillmentType()) {
-                case self::TYPE_DOTCOM:
-                    Mage::helper('ordersplit')->processNonHybridOrder($order, self::TYPE_DOTCOM);
-                    break;
-                case self::TYPE_DOTCOM_STOCK:
-                    Mage::helper('ordersplit')->processNonHybridOrder($order, self::TYPE_DOTCOM_STOCK);
-                    break;
-                case self::TYPE_VIRTUAL:
-                    Mage::helper('ordersplit')->processNonHybridOrder($order, self::TYPE_VIRTUAL);
-                    break;
-                case self::TYPE_DROPSHIP:
-                    Mage::helper('ordersplit')->processNonHybridOrder($order, self::TYPE_DROPSHIP);
-                    break;
-                case self::TYPE_OTHER:
-                default:
-                    Mage::helper('ordersplit')->processNonHybridOrder($order, self::TYPE_OTHER);
-            }
-            break;
         }
     }
 
@@ -475,10 +477,11 @@ class Harapartners_Ordersplit_Helper_Data extends Mage_Core_Helper_Abstract {
                             $order->setData('state', 'complete')
                                 ->setStatus('complete')
                                 ->save();
-//                        $invoiceId = Mage::getModel('sales/order_invoice_api')->create($order->getIncrementId(), array());
-//                        $invoice = Mage::getModel('sales/order_invoice')->loadByIncrementId($invoiceId);
-//                        $invoice->capture()->save();
-//                       $order->addStatusToHistory($order->getStatus(), 'Auto Complete Virtual Order', false);
+                            foreach($order->getAllItems() as $item) {
+                                if($item->getProductId() == Mage::getStoreConfig('Crown_Club/clubgeneral/club_product_id')) {
+                                    Mage::getModel('crownclub/club')->addClubMember($order->getCustomer());
+                                }
+                            }
                         }
                     }
                     catch (Exception $exception){
