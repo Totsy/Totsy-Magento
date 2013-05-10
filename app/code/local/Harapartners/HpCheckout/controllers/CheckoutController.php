@@ -83,6 +83,10 @@ class Harapartners_HpCheckout_CheckoutController extends Mage_Checkout_Controlle
                 if ($data = $this->getRequest()->getPost('payment', false)) {
                     $this->_getHpCheckout()->getCheckout()->setData('payment_data',$data);
                     $this->_getHpCheckout()->getQuote()->getPayment()->importData($data);
+                    if(!isset($data['saved_by_customer']) || $data['saved_by_customer'] != '1') {
+                        $profile->setData('saved_by_customer', 0);
+                        $profile->save();
+                    }
                 }
 
                 $service = Mage::getModel('sales/service_quote', $this->_getHpCheckout()->getQuote());
