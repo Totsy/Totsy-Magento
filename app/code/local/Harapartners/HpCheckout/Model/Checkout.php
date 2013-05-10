@@ -337,7 +337,7 @@ class Harapartners_HpCheckout_Model_Checkout
                 Mage::getSingleton('checkout/session')->setCheckoutState(true);
         		Mage::getModel('checkout/type_multishipping')->createOrders();
                 $this->_checkoutSession->setLastOrderId(null);
-        	}
+           	}
         	catch (Mage_Core_Exception $e) {
         		Mage::log($e->getMessage());
         		Mage::logException($e);
@@ -442,7 +442,8 @@ class Harapartners_HpCheckout_Model_Checkout
             $customerShipping->setIsDefaultShipping(true);
         } else if (isset($customerBilling) && !$customer->getDefaultShipping()) {
                 $customerBilling->setIsDefaultShipping(true);
-            }
+        }
+        $customer->save();
         $quote->setCustomer($customer);
     }
 
