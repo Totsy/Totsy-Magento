@@ -37,11 +37,12 @@ class Totsy_Sailthru_Block_Adminhtml_Feedconfig_Edit_Form
         $fieldset->addField('start_at_day', 'date', array(
             'label'     => $helper->__('Start Date'),
             'name'      => 'start_at_day',
-            'required'  => true,
+            'required'  => false,
             'time'      => true,
-            'format'    => Mage::app()->getLocale()->getDateFormat(Mage_Core_Model_Locale::FORMAT_TYPE_SHORT),
+            'format'    => Varien_Date::DATE_INTERNAL_FORMAT,
             'image'     => $this->getSkinUrl('images/grid-cal.gif'),
-            'style'     => 'width: 140px;'
+            'style'     => 'width: 140px;',
+            'note'      => 'IMPORTANT! This field is REQUIRED for events feed.<br>'
         ));
 
         $fieldset->addField('start_at_time', 'select', array(
@@ -58,7 +59,8 @@ class Totsy_Sailthru_Block_Adminhtml_Feedconfig_Edit_Form
             'label'     => $helper->__('Include'),
             'name'      => 'include',
             'required'  => false,
-            'note'      => 'Provide a list of events or products ids separeted by \',\' or new line'
+            'note'      => 'IMPORTANT! This field is REQUIRED for products feed.<br>'.
+                           'Provide a list of events or products ids separeted by \',\' or new line'
         ));
 
         $fieldset->addField('exclude', 'text', array(

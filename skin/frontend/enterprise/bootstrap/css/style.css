@@ -797,6 +797,7 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
 
 .saved_card {
     line-height: 15px;
+    border:0px !important;
 }
 
 .saved_card th {
@@ -813,7 +814,7 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
 }
 
 .saved_card span:not(.cc){
-    margin-left: 15px;
+    margin-left: 5px;
     margin-right: 15px;
     margin-bottom: 10px;
 }
@@ -985,10 +986,10 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
 }
 /* Grid Hacks :( */
 .events-grid .span4 h3 {
-    font-size: 16px;
+    font-size: 15px; font-weight: normal;
 }
 .events-grid .span3 h3 {
-    font-size: 14px;
+    font-size: 13px; font-weight: normal;
 }
 .events-grid .span2 h5 {
     font-size: 12px;
@@ -1633,7 +1634,7 @@ img.fastship-icon {
 
 .cc_exp {
     width: 238px;
-    margin-left: 40px;
+    margin-left: 30px;
 }
 
 .cc_save_card {

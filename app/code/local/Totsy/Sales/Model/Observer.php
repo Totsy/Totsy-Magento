@@ -114,4 +114,43 @@ class Totsy_Sales_Model_Observer extends Mage_Sales_Model_Observer
         Mage::log('Success: ' .$count. ' Orders have been canceled.',null,'payment_failed_order_cancel.log');
         return true;
     }
+
+    public function addCategoryInformationToQuoteItem($event) {
+        $quoteItems = $event->getItems();
+
+        if(!is_array($quoteItems) || count($quoteItems) <= 0) {
+            return $event;
+        }
+
+        foreach($quoteItems as $quoteItem) {
+            $product = $quoteItem->getProduct();
+            if($product->getCategoryId()) {
+                $quoteItem->setCategoryId($product->getCategoryId());
+                $quoteItem->setCategoryName($product->getCategory()->getName());
+            } else {
+                $categories = $product->getCategoryCollection();
+                foreach($categories as $category) {
+                    $category = $category->load($category->getId());
+                    if($category->isLiveEvent()) {
+                        $quoteItem->setCategoryId($category->getId());
+                        $quoteItem->setCategoryName($category->getName());
+                        break;
+                    }
+                }
+            }
+        }
+
+        return $this;
+    }
+
+    public function addEstimatedShipDatetoOrder($observer) {
+        $order = $observer->getEvent()->getOrder();
+
+        $estimatedShipDate = Mage::helper('sales/order')->calculateEstimatedShipDate($order);
+
+        if($estimatedShipDate) {
+            $order->setEstimatedShipDate($estimatedShipDate);
+        }
+        return $this;
+    }
 }

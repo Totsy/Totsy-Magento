@@ -38,10 +38,9 @@
     //Harapartners, yang, get the server time with the frontend JS time
     $serverTime = Mage::getModel('core/date')->timestamp() * 1000;
     $quote = $checkoutSession->getQuote();
-    $_saving = Mage::helper('sales/order')->calculateEstimatedSavings($quote);
+    $_saving = Mage::helper('sales/order')->calculateEstimatedSavingsQuote($quote);
     $is_nominal = $quote->isNominal();
 ?>
-
 <div class="top-cart dropdown">
 <?php
     $_cartQty = Mage::getModel('checkout/cart')->getSummaryQty();
@@ -72,9 +71,7 @@
     <?php else:?>
 
         <?php if ($_itemsInCart):?>
-
             <div id="usercart-block-title" class="dropdown-toggle block-title clearfix" data-toggle="dropdown">
-
 	            <?php
 	            /*
 	             * Cart Timer
@@ -86,7 +83,7 @@
 	            ?>
 	            <div class="count-down-timer pull-left">
 	                <strong><i class="icon-shopping-cart"></i> Your cart is reserved for <span id="cart-timer-header"></span></strong>
-	                <script type="text/javascript">
+	                <script type="text/javascript">	
 	                    jQuery(document).ready(function() {
 	                        var dateObj = new Date();
 	                        var countDownToTime = <?php echo $endcount_lc_header?>;
@@ -99,25 +96,26 @@
 	                        var UrlPath = window.location.pathname;
 	                        var onCheckout = (UrlPath == '/checkout/onepage/') ? true : false;
 	                        if (onCheckout) {
+	                            //to fix conflicts with Litle JS
+	                            jQuery.noConflict(true);
 	                            jQuery('.top-cart').addClass('onCheckout');
 	                            jQuery('#usercart-block-title').removeClass('dropdown-toggle')
 	                                .removeAttr('data-toggle');
 	                            jQuery('#cartHeader').css('background-image', 'none')
 	                                .html('<span class="savings"><?php echo $_mySaving; ?></span>');
 	                        }
-	
 	                        jQuery("#cart-timer-header").countdown({
 	                            //date: "12 10, 2011 16:11", or an object counting to a date
 	                            until: dateObj,
 	                            layout: "{mn}<span class=\"cd-time\">m</span> {snn}<span class=\"cd-time\">s</span>",
-	                            onTick: function(periods){
+	                            onTick: function(periods) {
 	                            	if( periods[5] <= 5 ) {
 	                            		//jQuery('#cart-timer-header').css('color','#21a52a');
 	                            	}
 	                            },
 	                            alwaysExpire: true,
 	                            onExpiry: function( event ) {
-	                                jQuery('#usercart .top-cart').addClass('expired').removeClass('open');
+	                            	jQuery('#usercart .top-cart').addClass('expired').removeClass('open');
 	                                jQuery('#usercart .count-down-timer').hide();
 	                                jQuery('#usercart-block-title').removeClass('dropdown-toggle')
 	                                    .removeAttr('data-toggle')
@@ -127,7 +125,7 @@
 	                                    .removeClass('hasItems')
 	                                    .html("Your cart is <span class='over'>no longer reserved</span>.");
 	                                jQuery("#topCartContent").hide();
-	
+
 	                                // if on cart or checkout, redirect; otherwise remove btn and update cart msg
 	                                var UrlPath = window.location.pathname;
 	                                if ( UrlPath == '/checkout/onepage/' || UrlPath == '/checkout/cart/' ) {
@@ -138,7 +136,7 @@
 	                                else {
 	                                    jQuery('#header-checkoutBtn').hide();
 	                                    setTimeout(function() {
-	                                        //_cartHeader.html("<?php echo $this->__('You have no items in your shopping cart.'); ?>");
+	                                        _cartHeader.html("<?php echo $this->__('You have no items in your shopping cart.'); ?>");
 	                                        window.location.reload();
 	                                    }, 5000);
 	                                }
@@ -147,7 +145,6 @@
 	                    });
 	                </script>
 	            </div>
-
                 <strong id="cartHeader" class="hasItems pull-left">
                     <?php echo $_myCart; ?>
                 </strong>
@@ -176,13 +173,13 @@
             <?php endforeach; ?>
         </div>
         <script type="text/javascript">decorateList('mini-cart', 'none-recursive')</script>
-    
+
     <?php else: ?>
         <p class="cart-empty">
             <?php echo $this->__('You have zero items in your cart.'); // @TODO: remove after confirmed not needed ?>
         </p>
     <?php endif; ?>
-    
+
     <?php if($_cartQty && !empty($_itemsArray)): ?>
         <div class="minifoot clearfix">
             <div class="subtotal">
@@ -201,7 +198,6 @@
         </div><!-- /.minifoot -->
     <?php endif; ?>
 </div><!-- /#topCartContent -->
-
     <script type="text/javascript">
     // Cart related JS needs to stay here, load in ajax call
     jQuery(document).ready( function() {
@@ -234,5 +230,5 @@
 <?php if($_itemsInCart): ?>
 <div id="header-checkoutBtn">
     <a class="btn checkout" title="Checkout" href="<?php echo Mage::getUrl('checkout/cart')?>"><strong>Checkout</strong></a>
-</div>  
+</div>
 <?php endif; ?>

@@ -14,7 +14,15 @@
         </Totsy_Catalog>
     </modules>
     <global>
+        <blocks>
+            <totsy_catalog>
+                <class>Totsy_Catalog_Block</class>
+            </totsy_catalog>
+        </blocks>
         <helpers>
+            <totsy_catalog>
+                <class>Totsy_Catalog_Helper</class>
+            </totsy_catalog>
             <catalog>
                 <rewrite>
                     <event>Totsy_Catalog_Helper_Event</event>
@@ -22,10 +30,13 @@
             </catalog>
         </helpers>
         <models>
+            <totsy_catalog>
+                <class>Totsy_Catalog_Model</class>
+            </totsy_catalog>
             <catalog>
                 <rewrite>
                     <product_attribute_source_tax>Totsy_Catalog_Model_Product_Attribute_Source_Tax</product_attribute_source_tax>
-                    <product_type_configurable>Totsy_Catalog_Model_Product_Type_Configurable</product_type_configurable>
+                    <!-- <product_type_configurable>Totsy_Catalog_Model_Product_Type_Configurable</product_type_configurable> -->
                 </rewrite>
             </catalog>
         </models>
@@ -41,4 +52,28 @@
             </totsycatalog_setup>
         </resources>
     </global>
+    <admin>
+        <routers>
+            <catalog>
+                <use>admin</use>
+                <args>
+                    <module>Totsy_Catalog</module>
+                    <frontName>adminhtml_product_purchase_limit</frontName>
+                </args>
+            </catalog>
+        </routers>
+    </admin>
+    <adminhtml>
+        <menu>
+            <harapartners>
+                <children>
+                    <totsy_catalog_product_purchase_limit translate="title" module="totsy_catalog">
+                        <title>Product Purchase Limit Import</title>
+                        <sort_order>300</sort_order>
+                        <action>catalog/adminhtml_product_purchase_limit</action>
+                    </totsy_catalog_product_purchase_limit>
+                </children>
+            </harapartners>
+        </menu>
+    </adminhtml>
 </config>
