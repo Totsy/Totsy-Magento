@@ -18,18 +18,22 @@ class Harapartners_Fulfillmentfactory_Model_Service_Fulfillment
      * mark orders which havn't been fulfilled
      *
      */
-    public function markFulfillmentAgingOrders() {
+    public function markFulfillmentAgingOrders()
+    {
         $agingDay = Mage::getStoreConfig('fulfillmentfactory_options/aging_setting/fulfillment_aging_day');
 
         $expiredTime = time() - self::DAY_SECONDS * $agingDay;
         $expiredDate = date('Y-m-d H:i:s', $expiredTime);
 
         $orderCollection = Mage::getModel('sales/order')->getCollection()
-                                                        ->addAttributeToFilter('status', 'pending')
-                                                        ->addAttributeToFilter('created_at', array('to' => $expiredDate));
+            ->addAttributeToFilter('status', 'pending')
+            ->addAttributeToFilter('created_at', array('to' => $expiredDate));
+
         foreach($orderCollection as $order) {
             $order->setStatus(Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_FULFILLMENT_AGING)
-                  ->save();
+                ->save();
+
+            $this->_sendTransactionalEmailAging('fulfillment', $order);
         }
     }
 
@@ -37,7 +41,8 @@ class Harapartners_Fulfillmentfactory_Model_Service_Fulfillment
      * mark orders which have sent to fulfillment but haven't received shipment infomation
      *
      */
-    public function markShipmentAgingOrders() {
+    public function markShipmentAgingOrders()
+    {
         $agingDay = Mage::getStoreConfig('fulfillmentfactory_options/aging_setting/shipment_aging_day');
 
         $expiredTime = time() - self::DAY_SECONDS * $agingDay;
@@ -49,6 +54,8 @@ class Harapartners_Fulfillmentfactory_Model_Service_Fulfillment
         foreach($orderCollection as $order) {
             $order->setStatus(Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_SHIPMENT_AGING)
                   ->save();
+
+            $this->_sendTransactionalEmailAging('shipment', $order);
         }
     }
 
@@ -312,5 +319,62 @@ class Harapartners_Fulfillmentfactory_Model_Service_Fulfillment
             //remove this item queue
             $itemQueue->delete();
         }
+    }
+
+    /**
+     * Send a transaction e-mail for an aging order notification.
+     *
+     * @param string $type The type of aging (either 'fulfillment' or 'shipment')
+     * @param Mage_Sales_Model_Order $order The order that has been delayed
+     *
+     * @return bool True when an e-mail was sent for the order.
+     */
+    protected function _sendTransactionalEmailAging($type, Mage_Sales_Model_Order $order)
+    {
+        // only send e-mails when enabled
+        $enabled = Mage::getStoreConfig("sales_email/{$type}_aging/enabled");
+        if (!$enabled) {
+            return false;
+        }
+
+        // Get the destination email addresses to send copies to
+        $copyTo = Mage::getStoreConfig("sales_email/{$type}_aging/copy_to");
+        $copyTo = explode(',', $copyTo);
+        $copyMethod = Mage::getStoreConfig("sales_email/{$type}_aging/copy_method");
+
+        $templateId = Mage::getStoreConfig("sales_email/{$type}_aging/template");
+        $customerName = $order->getCustomerFirstname() . ' ' . $order->getCustomerLastname();
+
+        /** @var Mage_Core_Model_Email_Template_Mailer $mailer */
+        $mailer = Mage::getModel('core/email_template_mailer');
+
+        /** @var Mage_Core_Model_Email_Info $emailInfo */
+        $emailInfo = Mage::getModel('core/email_info');
+        $emailInfo->addTo($order->getCustomerEmail(), $customerName);
+        if ($copyTo && $copyMethod == 'bcc') {
+            // Add bcc to customer email
+            foreach ($copyTo as $email) {
+                $emailInfo->addBcc($email);
+            }
+        }
+        $mailer->addEmailInfo($emailInfo);
+
+        // Email copies are sent as separated emails if their copy method is 'copy'
+        if ($copyTo && $copyMethod == 'copy') {
+            foreach ($copyTo as $email) {
+                $emailInfo = Mage::getModel('core/email_info');
+                $emailInfo->addTo($email);
+                $mailer->addEmailInfo($emailInfo);
+            }
+        }
+
+        // Set all required params and send emails
+        $mailer->setSender(Mage::getStoreConfig("sales_email/{$type}_aging/identity"));
+        $mailer->setStoreId($order->getStoreId());
+        $mailer->setTemplateId($templateId);
+        $mailer->setTemplateParams(array('order' => $order));
+        $mailer->send();
+
+        return true;
     }
 }

@@ -36,7 +36,7 @@
         <jobs>
             <totsy_catalogfeed_insparq_submit>
                 <schedule>
-                    <cron_expr>0 0,12 * * *</cron_expr>
+                    <cron_expr>0 * * * *</cron_expr>
                 </schedule>
                 <run>
                     <model>catalogfeed/observer::insparqSubmit</model>

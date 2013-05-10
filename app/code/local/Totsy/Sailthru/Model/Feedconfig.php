@@ -38,7 +38,7 @@ class Totsy_Sailthru_Model_Feedconfig extends Mage_Core_Model_Abstract {
             throw new Exception('Type is required!');
         }
         if( strlen($this->getData('type'))>1){
-            throw new Exception('Is Type can not be longer than 1 character. Error value: ' . $this->getData('type'));
+            throw new Exception('Type can not be longer than 1 character. Error value: ' . $this->getData('type'));
         }
         if(!preg_match("/^[0-1]+$/", $this->getData('type'))){
             throw new Exception('Type must be boolean. Error value: ' . $this->getData('type'));
@@ -56,17 +56,22 @@ class Totsy_Sailthru_Model_Feedconfig extends Mage_Core_Model_Abstract {
         }
 
         //Validate start_at_day
-		if (!$this->getData('start_at_day')){
+		if (!$this->hasData('start_at_day') && $this->getData('type')==0){
             throw new Exception('Start Date is required!');
         }
-        try{
-            $date = new DateTime($this->getData('start_at_day'));
-        } catch (Exception $e){
-            throw new Exception('Start date is invalid. '.$e->getMessage().'. Error value: ' . $this->getData('start_at_day')); 
+        if($this->hasData('start_at_day')){
+            try{
+                $date = new DateTime($this->getData('start_at_day'));
+            } catch (Exception $e){
+                throw new Exception('Start date is invalid. '.$e->getMessage().'. Error value: ' . $this->getData('start_at_day')); 
+            }
         }
 
         //Validate start_at_time
-        if($this->getData('start_at_time')){
+        if($this->hasData('start_at_time') && $this->getData('start_at_time')=='-1'){
+            $this->unsetData('start_at_time');
+        }
+        if($this->hasData('start_at_time')){
 
             if ( !preg_match('/[\d\:apmAPM]+/', $this->getData('start_at_time'))){
                 throw new Exception('Time contains not allowed characters. Error value: ' . $this->getData('start_at_time'));   
@@ -94,13 +99,16 @@ class Totsy_Sailthru_Model_Feedconfig extends Mage_Core_Model_Abstract {
         }
 
         //Validate include
+        if (!$this->hasData('include') && $this->getData('type')==1){
+            throw new Exception('Include is required for products feed!');
+        }
         $this->_validateList('include');
         
         //Validate exclude
         $this->_validateList('exclude');
         
         //Validate filter
-        $this->_validateList('filter','\d\n\=\_\,');
+        $this->_validateList('filter','\w\d\n\=\_\,');
 
         return $this;
     }
@@ -108,7 +116,7 @@ class Totsy_Sailthru_Model_Feedconfig extends Mage_Core_Model_Abstract {
     protected function _validateList($key,$allowed='\d\n\,'){
         $at = array();
 
-        if(!$this->getData($key)){
+        if(!$this->hasData($key)){
             return;
         }
         

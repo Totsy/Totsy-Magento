@@ -80,12 +80,12 @@ class Crown_Import_Model_Observer {
      * @return void
      */
     public function orphanProductsFromExistingEvent($observer) {
-        $vars 			= $observer->getEvent ()->getVars ();
-        $skus			= $vars['skus'];
-        $oldData        = $vars['old_data'];
+        $vars           = $observer->getEvent()->getVars();
+        $skus           = $vars['skus'];
         $dryRun         = $vars['dry_run'];
+        $oldData        = $vars['old_data'];
 
-        if(count($oldData) > 0 && !$dryRun) {
+        if(!$dryRun && count($oldData) > 0) {
             foreach ($skus as $sku => $productId) {
                 try {
                     $catIds = array();
@@ -97,5 +97,85 @@ class Crown_Import_Model_Observer {
                 }
             }
         }
+    }
+
+    /**
+     * Add initial position value for newly-imported products
+     * @since 1.3.4
+     * @param unknown_type $observer
+     * @return void
+     */
+    public function addProductPositions($observer) {
+        $vars 			= $observer->getEvent()->getVars();
+        $skus			= $vars['skus'];
+        $data           = $vars['new_data'];
+        $dryRun         = $vars['dry_run'];
+
+        if(!$dryRun && (!is_array($vars['product_ids_updated']) || count($vars['product_ids_updated']) == 0)) {
+            $configurableSort = array();
+            $simpleSort = array();
+
+            foreach ($skus as $sku => $productId) {
+                $vendorStyle    = $data[$sku]['vendor_style'];
+                $name           = $data[$sku]['name'];
+                $productType    = $data[$sku]['product.type'];
+
+                if ($productType == 'simple') {
+                    array_push($simpleSort, $sku);
+                }
+
+                if ($productType == 'configurable') {
+                    array_push($configurableSort, $sku);
+                }
+            }
+
+            $position = 0;
+            $positions = array();
+
+            if (count($configurableSort) > 0) {
+                foreach ($configurableSort as $sku) {
+                    $productId = $skus[$sku];
+                    $position++;
+                    $positions[$productId] = $position;
+                }
+                foreach ($simpleSort as $sku) {
+                    $productId = $skus[$sku];
+                    $position++;
+                    $positions[$productId] = 1;
+                }
+            } else {
+                foreach ($simpleSort as $sku) {
+                    $productId = $skus[$sku];
+                    $position++;
+                    $positions[$productId] = $position;
+                }
+            }
+
+            $categoryId = array_pop($data[$sku]['category.ids']);
+            $category = Mage::getModel('catalog/category')
+                ->setStoreId(Mage::app()->getStore())
+                ->load($categoryId);
+            $category->setPostedProducts($positions);
+
+            try {
+                $category->save();
+            } catch( Mage_Core_Exception $e ) {
+                Mage::log( $e->getMessage(), null, 'import_observer_error.log', true);
+            }
+        }
+    }
+
+    /**
+     * Adjust warning count for import based on number of suppressed warning messages from logger
+     * @since 1.3.5
+     * @param unknown_type $observer
+     * @return void
+     */
+    public function adjustImportWarningCount($observer) {
+        $vars       = $observer->getEvent()->getVars();
+        $profile    = $vars['profile'];
+        $logger     = $vars['logger'];
+
+        $profile->addValue('num_warnings', $logger->suppressedWarningDelta);
     }
 }
