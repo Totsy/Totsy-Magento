@@ -20,7 +20,11 @@
     //]]>
     </script>
     <![endif]-->
-    
-    <?php echo $this->getCssJsHtml() ?>
-    <?php // include only external JS dependencies that ABSOLUTELY require placement in the head ?>
+
+<link href="http://david.totsy.com/skin/frontend/enterprise/bootstrap/lib/tbs/docs/assets/css/bootstrap.css" rel="stylesheet">
+<link href="http://david.totsy.com/skin/frontend/enterprise/bootstrap/lib/tbs/docs/assets/css/bootstrap-responsive.css" rel="stylesheet">
+      
+    <?php // Load external CDN-hosted JS dependencies that ABSOLUTELY require placement in the head ?>
     <script src="//cdn.optimizely.com/js/168465700.js"></script>
+    <script src="http://david.totsy.com/js/jquery/jquery-1.9.1.min.js"></script>
+    <?php echo $this->getCssJsHtml(); ?>

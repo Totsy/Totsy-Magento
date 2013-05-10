@@ -33,13 +33,15 @@ Default layout, loads most of the pages
         <label>All Pages</label>
         <block type="page/html" name="root" output="toHtml" template="page/3columns.phtml">
             <block type="page/html_head" name="head" as="head">
+<!--
                 <action method="addItem"><type>skin_css</type><name>lib/tbs/css/bootstrap.css</name></action>
                 <action method="addItem"><type>skin_css</type><name>lib/tbs/css/bootstrap-responsive.css</name></action>
+-->
                 <!-- @TEMP: for dev pending LESS compiling, putting all totsy styles in as @imports -->
-                <action method="addCss"><stylesheet>css/styles.css</stylesheet></action>
+<!--                 <action method="addCss"><stylesheet>css/styles.css</stylesheet></action> -->
                 
                 <!-- @TODO: move all JS to the footer_scripts block -->
-                <action method="addJs"><script>jquery/jquery-1.9.1.min.js</script></action>
+<!--                 <action method="addJs"><script>jquery/jquery-1.9.1.min.js</script></action> -->
                 <action method="addItem"><type>skin_js</type><name>js/modernizr.custom.35920.js</name></action>
                 <action method="addJs"><script>jquery/cloud-zoom.1.0.2.js</script></action>
                 <action method="addJs"><script>jquery/jquery.fancybox.js</script></action>
@@ -107,8 +109,10 @@ Default layout, loads most of the pages
                     <action method="addItem"><type>skin_js</type><name>lib/tbs/js/bootstrap-tab.js</name><params/></action>
                     <action method="addItem"><type>skin_js</type><name>lib/tbs/js/bootstrap-tooltip.js</name><params/></action>
                     <action method="addItem"><type>skin_js</type><name>lib/tbs/js/bootstrap-transition.js</name><params/></action>
-                    <action method="addItem"><type>skin_js</type><name>js/totsyApp.js</name><params/></action>
+                    <!-- @NOTE: patch req'ed bootstrap-transition incompatibility / conflict with prototype.js -->
+                    <action method="addItem"><type>skin_js</type><name>js/tbsPatches/tbs.patch.collapse.js</name><params/></action>
                     <action method="addJs"><script>totsy/insparq-flicker.js</script></action>
+                    <action method="addItem"><type>skin_js</type><name>js/totsyApp.js</name><params/></action>
                 </block>
             </block>
         </block>
