@@ -83,8 +83,9 @@ class Crown_Import_Model_Observer {
         $vars           = $observer->getEvent()->getVars();
         $skus           = $vars['skus'];
         $dryRun         = $vars['dry_run'];
+        $oldData        = $vars['old_data'];
 
-        if(!$dryRun && (!isset($vars['change_category_product']) || count($vars['change_category_product']) == 0)) {
+        if(!$dryRun && count($oldData) > 0) {
             foreach ($skus as $sku => $productId) {
                 try {
                     $catIds = array();
