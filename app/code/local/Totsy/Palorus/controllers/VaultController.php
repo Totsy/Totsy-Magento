@@ -44,6 +44,8 @@ class Totsy_Palorus_VaultController extends Litle_Palorus_VaultController
      */
     public function createAction()
     {
+        $session = $this->_getSession();
+
         //Getting Datas
         $customer = $this->_getSession()->getCustomer();
         $payment = new Varien_Object($this->getRequest()->getParam('payment'));
@@ -92,7 +94,9 @@ class Totsy_Palorus_VaultController extends Litle_Palorus_VaultController
         $transactionId =  XmlParser::getNode($authResponse,'litleTxnId');
 
         if((!$transactionId) || ($litleResponseCode != '000')) {
+            $session->addError($this->__('The credit card has not been saved. Please retry.'));
             $this->_redirect ( '*/*/' );
+            return false;
         }
         $auth_reversalinfos = array(
             'litleTxnId' => $transactionId,
