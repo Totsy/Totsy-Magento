@@ -26,8 +26,8 @@ $splitCartFlag = Mage::getSingleton('checkout/session')->getSplitCartFlag() ? 'c
         <thead>
             <tr>
                 <th><?php echo $this->__('Product Name') ?></th>
-                <th><?php echo !$TotsyPLUS ? $this->__('Shipping Info') : $this->__('Info'); ?></th>
-                <th><?php echo !$TotsyPLUS ? $this->__('Price') : $this->__('Price/Month'); ?></th>
+                <th><?php echo $this->__('Shipping Info') ?></th>
+                <th><?php echo $this->__('Price') ?></th>
             <?php if(!$this->getQuote()->isNominal()): ?>
                 <th><?php echo $this->__('Qty') ?></th>
                 <th><?php echo $this->__('Subtotal') ?></th>

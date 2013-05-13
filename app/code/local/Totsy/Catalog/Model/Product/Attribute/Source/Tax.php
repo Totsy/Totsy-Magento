@@ -45,10 +45,14 @@ class Totsy_Catalog_Model_Product_Attribute_Source_Tax extends Mage_Eav_Model_En
 					'label' => 'Sport or Recreational Equipment',
 					'value' => '1102000',
 				),
-				array(
-					'label' => 'Shoes',
-					'value' => '01100540'
-				)
+                array(
+                    'label' => 'Shoes',
+                    'value' => '01100540'
+                ),
+                array(
+                    'label' => 'TotsyPLUS Membership',
+                    'value' => '90002296000000000019'
+                )
 			);
     	}
     	return $this->_options;

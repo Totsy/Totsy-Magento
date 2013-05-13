@@ -100,7 +100,7 @@ $litleProfiles = Mage::getModel('palorus/vault')->getCollection()->addCustomerFi
                     <input type="checkbox" value="on" name="payment[cc_should_save]" checked="checked"
                            id="<?php echo $paymentCode ?>_saved" class="no-required">
                 </div>
-                <div id="cc_save_text" for="<?php echo $paymentCode ?>_cc_save"><?php echo $this->__('Save') ?></div>
+                <label for="<?php echo $paymentCode ?>_cc_save"><?php echo $this->__('Save') ?></label>
             </div>
             <div class="cc_exp pull-right cc_info">
                 <div class="pull-left">

@@ -99,9 +99,7 @@ class Oro_Sales_Model_Order_Billing
             } else {
                 $address = $this->_saveAddress($order, $data);
             }
-            $billingId = $order->getBillingAddressId();
             $this->_replaceBillingAddress($order, $address);
-            $billingId = $order->getBillingAddressId();
             $model = Mage::getModel('orderedit/edit_updater_type_payment');
             $mess = $model->edit($order,$data['payment']);
 
@@ -246,14 +244,21 @@ class Oro_Sales_Model_Order_Billing
     public function invoice(Mage_Sales_Model_Order $order)
     {
         try {
-            /* @var $service Harapartners_Fulfillmentfactory_Model_Service_Dotcom */
-            $service = Mage::getModel('fulfillmentfactory/service_dotcom');
             $order->setStatus(Mage_Sales_Model_Order::STATE_PROCESSING);
-            $result  = $service->submitOrdersToFulfill(array($order), true);
-            $status  = $order->getStatus();
+            if ($order->getIsVirtual()) {
+                /* @var $helper Harapartners_Ordersplit_Helper_Data */
+                $helper = Mage::helper('ordersplit');
+                $helper->processNonHybridOrder($order, Harapartners_Ordersplit_Helper_Data::TYPE_VIRTUAL);
+            } else {
+                /* @var $service Harapartners_Fulfillmentfactory_Model_Service_Dotcom */
+                $service = Mage::getModel('fulfillmentfactory/service_dotcom');
+                $result  = $service->submitOrdersToFulfill(array($order), true);
+                $status  = $order->getStatus();
 
-            if ($status == Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_PAYMENT_FAILED) {
-                Mage::throwException(Mage::helper('oro_sales')->__('Cannot place payment information'));
+                if ($status == Harapartners_Fulfillmentfactory_Helper_Data::ORDER_STATUS_PAYMENT_FAILED) {
+                    Mage::throwException(Mage::helper('oro_sales')->
+                        __('Sorry, we were unable to submit your billing information, please try again.'));
+                }
             }
 
             /** @var $invoice Mage_Sales_Model_Order_Invoice */

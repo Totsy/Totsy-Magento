@@ -986,10 +986,10 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
 }
 /* Grid Hacks :( */
 .events-grid .span4 h3 {
-    font-size: 16px;
+    font-size: 15px; font-weight: normal;
 }
 .events-grid .span3 h3 {
-    font-size: 14px;
+    font-size: 13px; font-weight: normal;
 }
 .events-grid .span2 h5 {
     font-size: 12px;
@@ -3449,3 +3449,5 @@ background-position: 0 .5em;
 .totsy #issw #ins-fancybox-tw-proxy .insinset {width:61px;}
 .totsy #issw #ins-fancybox-pn .insinset {width:45px;}
 .totsy #issw #ins-fancybox-em .insinset {width:55px;}
+.discount #advice-required-entry-coupon_code {margin-top:0px;}
+.giftcard #advice-required-entry-giftcard_code {margin-top:0px;}

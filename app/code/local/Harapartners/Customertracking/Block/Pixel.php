@@ -80,7 +80,7 @@ class Harapartners_Customertracking_Block_Pixel
         if ($trackingInfo && isset($trackingInfo['registration_param'])) {
             $regParams = json_decode($trackingInfo['registration_param'], true);
         } else {
-            $regParams =  json_decode(Mage::getSingleton('customer/session')->getData('registration_param'));
+            $regParams =  json_decode(Mage::getSingleton('customer/session')->getData('registration_param'), true);
         }
 
         $order = Mage::getModel('sales/order')->load($orderId);

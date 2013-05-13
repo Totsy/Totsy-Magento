@@ -228,7 +228,7 @@ class Harapartners_HpCheckout_Model_Checkout
         }
 
         $shippingAddresses = $this->getQuote()->getAllShippingAddresses();
-        
+
     	if ($this->getQuote()->hasVirtualItems()) {
             $shippingAddresses[] = $this->getQuote()->getBillingAddress();
         }
@@ -239,12 +239,10 @@ class Harapartners_HpCheckout_Model_Checkout
             if($item->getParentItemId()) {
                 continue;
             }
-            $product = Mage::getModel ( 'catalog/product' )->load ( $item->getProductId () );
-
-            if($product->getIsVirtual()) {
+            if($item->getIsVirtual()) {
                 continue;
             }
-            $fulfillmentTypes [$product->getFulfillmentType ()] [] = $item->getId ();
+            $fulfillmentTypes [$item->getProduct()->getFulfillmentType ()] [] = $item->getId ();
 		}
 
         if(!Mage::getSingleton('checkout/session')->getSplitCartFlag() && array_key_exists('dotcom',$fulfillmentTypes) && array_key_exists('dotcom_stock', $fulfillmentTypes)) {
@@ -339,7 +337,7 @@ class Harapartners_HpCheckout_Model_Checkout
                 Mage::getSingleton('checkout/session')->setCheckoutState(true);
         		Mage::getModel('checkout/type_multishipping')->createOrders();
                 $this->_checkoutSession->setLastOrderId(null);
-        	}
+           	}
         	catch (Mage_Core_Exception $e) {
         		Mage::log($e->getMessage());
         		Mage::logException($e);
@@ -444,7 +442,8 @@ class Harapartners_HpCheckout_Model_Checkout
             $customerShipping->setIsDefaultShipping(true);
         } else if (isset($customerBilling) && !$customer->getDefaultShipping()) {
                 $customerBilling->setIsDefaultShipping(true);
-            }
+        }
+        $customer->save();
         $quote->setCustomer($customer);
     }
 

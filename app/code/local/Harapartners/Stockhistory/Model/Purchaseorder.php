@@ -107,6 +107,16 @@ class Harapartners_Stockhistory_Model_Purchaseorder extends Mage_Core_Model_Abst
                 $total_units = $qty = 0;
                 $pre_buys = array();
                 $count = 0;
+                $category_id = $transactionsColl->getFirstItem()->getCategoryId();
+                $event = Mage::getModel('catalog/category')->load($category_id);
+                $start_date = $event->getData('event_start_date');
+                $end_date = $event->getData('event_end_date');
+
+                $start_date = strtotime($start_date) - 60*60*24*7;	// 7 days before
+                $end_date = strtotime($end_date) + 60*60*24*3;	// 3 days after
+
+                $start_date = date('Y-m-d H:i:s', $start_date);
+                $end_date = date('Y-m-d H:i:s', $end_date);
                 foreach($transactionsColl as $trans) {
                     $product_id = $trans->getProductId();
                     $product = Mage::getModel('catalog/product')
@@ -131,7 +141,7 @@ class Harapartners_Stockhistory_Model_Purchaseorder extends Mage_Core_Model_Abst
                         }
                     } else {
                         $ordersColl = Mage::getModel('sales/order_item')->getCollection();
-                        $ordersColl->getSelect()->where('product_id =' . $product_id);
+                        $ordersColl->getSelect()->where('product_id =' . $product_id . ' and created_at between "'. $start_date . '" and "' . $end_date .'"');
                         foreach($ordersColl as $order) {
 
                             if($order->getParentItemId()) {
@@ -160,6 +170,16 @@ class Harapartners_Stockhistory_Model_Purchaseorder extends Mage_Core_Model_Abst
                 $total_units = $qty = 0;
                 $pre_buys = array();
                 $count = 0;
+                $category_id = $transactionsColl->getFirstItem()->getCategoryId();
+                $event = Mage::getModel('catalog/category')->load($category_id);
+                $start_date = $event->getData('event_start_date');
+                $end_date = $event->getData('event_end_date');
+
+                $start_date = strtotime($start_date) - 60*60*24*7;	// 7 days before
+                $end_date = strtotime($end_date) + 60*60*24*3;	// 3 days after
+
+                $start_date = date('Y-m-d H:i:s', $start_date);
+                $end_date = date('Y-m-d H:i:s', $end_date);
                 foreach($transactionsColl as $trans) {
                     $product_id = $trans->getProductId();
                     $product = Mage::getModel('catalog/product')
@@ -167,7 +187,8 @@ class Harapartners_Stockhistory_Model_Purchaseorder extends Mage_Core_Model_Abst
                         ->load($product_id);
 
                     $ordersColl = Mage::getModel('sales/order_item')->getCollection();
-                    $ordersColl->getSelect()->where('product_id =' . $product_id);
+                   $ordersColl->getSelect()->where('product_id =' . $product_id . ' and created_at between "'. $start_date . '" and "' . $end_date .'"');
+
                     foreach($ordersColl as $order) {
                         if($order->getParentItemId()) {
                             $parent_item_id = $order->getParentItemId();

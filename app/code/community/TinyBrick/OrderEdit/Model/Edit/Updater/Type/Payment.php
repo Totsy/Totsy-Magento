@@ -101,7 +101,7 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Payment extends TinyBrick_Orde
         #Authorization
         $auth_info = array(
             'orderId' => $order->getIncrementId(),
-            'amount' => 100,
+            'amount' => (int) ($order->getGrandTotal() * 100),
             'orderSource'=>'ecommerce',
             'billToAddress'=>array(
                 'name' => $billingAddress->getFirstname() . ' ' . $billingAddress->getLastname(),
@@ -127,12 +127,6 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Payment extends TinyBrick_Orde
         }
         $transactionId =  XmlParser::getNode($authResponse,'litleTxnId');
 
-        $auth_reversalinfos = array(
-            'litleTxnId' => $transactionId,
-            'amount' => 100
-        );
-        $initialize->authReversalRequest($auth_reversalinfos);
-
         if($transactionId) {
             $payment->setData('last_trans_id', $transactionId)
                     ->setData('cc_trans_id', $transactionId);
@@ -151,8 +145,8 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Payment extends TinyBrick_Orde
             $paymentObject->setCcNumber($payment->getCcNumber());
             $vault = Mage::getModel('palorus/vault')->setTokenFromPayment(
                 $paymentObject,
-                Mage::getModel('Litle_CreditCard_Model_PaymentLogic')->getUpdater($authResponse, 'tokenResponse', 'litleToken'),
-                Mage::getModel('Litle_CreditCard_Model_PaymentLogic')->getUpdater($authResponse, 'tokenResponse', 'bin'));
+                Mage::getModel('creditcard/paymentlogic')->getUpdater($authResponse, 'tokenResponse', 'litleToken'),
+                Mage::getModel('creditcard/paymentlogic')->getUpdater($authResponse, 'tokenResponse', 'bin'));
             $customerAddressId = Mage::getModel('orderedit/edit_updater_type_billing')->getCustomerAddressFromBilling($billingAddress->getId());
             if(!$customerAddressId) {
                 $customerAddressId = $billingAddress->getCustomerAddressId();
@@ -181,6 +175,12 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Payment extends TinyBrick_Orde
 
         $initialize = new LitleOnlineRequest();
         $authResponse = $initialize->authorizationRequest($auth_info);
+
+        $litleResponseCode = XMLParser::getNode($authResponse, 'response');
+        if ($litleResponseCode != '000') {
+            return false;
+        }
+
         $transactionId =  XmlParser::getNode($authResponse,'litleTxnId');
 
         if($transactionId) {

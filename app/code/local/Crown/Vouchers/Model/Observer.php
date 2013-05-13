@@ -15,17 +15,19 @@ class Crown_Vouchers_Model_Observer extends Mage_Core_Model_Abstract {
 		
 		$items = $order->getItemsCollection('virtual');
 
-		if(count($items) > 0 ) {
+        if(count($items) > 0 ) {
+            $customer_id = $order->getCustomerId();
 			foreach($items as $item) {
-				
-				$product_id = $item->getProductId();
-				
-				$customer_id = $order->getCustomerId();
-				
-				$product = Mage::getModel('catalog/product')->load($product_id);
-				
-				if($product->hasOneTimePurchase()) {
-					
+				$productIds[] = $item->getProductId();
+            }
+
+            $productCollection = Mage::getResourceModel('catalog/product_collection')
+                ->addAttributeToSelect('one_time_purchase')
+                ->addFieldToFilter('entity_id', array('in'=>$productIds));
+
+            foreach ($productCollection as $product) {
+				$product_id = $product->getId();
+				if($product->hasOneTimePurchase() && $product->getOneTimePurchase()) {
 					if(!Mage::helper('vouchers')->hasAssociation($customer_id, $product_id)) {
 						Mage::helper('vouchers')->saveAssociation($customer_id, $product_id);
 					}
