@@ -71,6 +71,7 @@ class Crown_Import_Model_Productimport extends Crown_Import_Model_Import_Abstrac
         $this->addRowFilter ( array (&$this, 'filterMediaGallery'), 10 );
 
         $this->addAfterParseEvent( array (&$this, 'filterFindConfigurables') );
+        $this->addAfterParseEvent( array (&$this, 'filterValidateConfigurableSuperAttributes') );
         $this->addAfterParseEvent( array (&$this, 'filterAddConfigurableImagesToSimple') );
         $this->addAfterParseEvent( array (&$this, 'filterValidateMediaGallery') );
 
@@ -168,6 +169,35 @@ class Crown_Import_Model_Productimport extends Crown_Import_Model_Import_Abstrac
                 if (isset( $baseSkus[$simpleProductIdx] )) {
                     $this->_baseSkus[ $baseSkus[$simpleProductIdx] ][] = $sku;
                     $this->_productData[$sku]['visibility'] = 'Not Visible Individually';
+                }
+            }
+        }
+    }
+
+    /**
+     * Checks whether super attributes are provided for the simple products in the input file, and removes unused
+     * super attributes.
+     * @since 1.3.6
+     * @return Crown_Import_Model_Productimport
+     */
+    public function filterValidateConfigurableSuperAttributes() {
+        if (!empty($this->_superAttributesPerSku)) {
+            $validSuperAttribs = array();
+            foreach ($this->_baseSkus as $configSku => $simpleSkus) {
+                foreach ($simpleSkus as $simpleSku) {
+                    foreach ($this->_configurableAttributes as $attrib) {
+                        if (array_key_exists($attrib, $this->_productData[$simpleSku]) && !empty($this->_productData[$simpleSku][$attrib])) {
+                            $validSuperAttribs[$configSku][$attrib] = true;
+                            continue;
+                        }
+                    }
+                }
+            }
+            foreach ($this->_superAttributesPerSku as $configSku => $superAttribs) {
+                foreach ($superAttribs as $superAttribKey => $superAttrib) {
+                    if ($validSuperAttribs[$configSku][$superAttrib] !== true) {
+                        unset($this->_superAttributesPerSku[$configSku][$superAttribKey]);
+                    }
                 }
             }
         }

@@ -206,4 +206,19 @@ class Crown_Club_Helper_Data extends Mage_Core_Helper_Abstract {
             Mage::throwException($e->getMessage());
         }
     }
+
+    public function estimatePossibleRewards($quote) {
+        if(!($quote instanceof Mage_Sales_Model_Quote)) {
+            return 0;
+        }
+
+        $orderTotal = $quote->getGrandTotal();
+        foreach($quote->getAllItems() as $item) {
+            if($item->getProductId() == Mage::getStoreConfig('Crown_Club/clubgeneral/club_product_id')) {
+                $orderTotal -= $item->getRowTotal();
+            }
+        }
+        return $orderTotal * 0.10;
+
+    }
 }

@@ -5,7 +5,7 @@ foreach($this->getQuote()->getAllItems() as $item) {
     if($item->getParentItemId()) {
         continue;
     }
-    $product = Mage::getModel ( 'catalog/product' )->load ( $item->getProductId () );
+    $product = $item->getProduct();
     if($product->getIsVirtual() && $product->getFulfillmentType() !== 'nominal') {
         $_fulfillmentType = 'virtual';
         $hasVirtual = true;
@@ -27,67 +27,67 @@ if(count($fulfillmentTypes) > 1) {
 <?php
     $profilesCounter = 0;
     foreach( $profiles as $profile ) {
-        if($profile->getSubscriptionId() && $profile->getIsDefault()==0 && $profile->getData('saved_by_customer')) { 
+        if($profile->getSubscriptionId() && $profile->getIsDefault()==0 && $profile->getData('saved_by_customer')) {
             $profilesCounter++;
         }
     }
-    
+
     $hasProfile = false;
-    
-    if ($profilesCounter > 0 ) { 
-        $hasProfile = true; 
-    } else { 
-        $hasProfile = false; 
+
+    if ($profilesCounter > 0 ) {
+        $hasProfile = true;
+    } else {
+        $hasProfile = false;
     }
-    
+
 ?>
 <div>
-    <div>   
+    <div>
         <div style="clear:both"></div>
         <?php if($profiles && $profilesCounter > 0 ) { ?>
                 <div class="pull-left" id="use-card-method">
                     <div id="cybersource-use-card-method ">
                     <table class="saved_card"
-                    	<tr>
-                        	<th></th>
-                        	<th></th>
-                        	<th>Name on card</th>
-                        	<th>Billing address</th>
-                        	<th>Expires</th>
+                     <tr>
+                         <th></th>
+                         <th></th>
+                         <th>Name on card</th>
+                         <th>Billing address</th>
+                         <th>Expires</th>
                         </tr>
-                    <?php foreach( $profiles as $profile ): ?>
-                        <?php 
+                    <?php 
+                    $lastCardUsed = Mage::helper('palorus')->getLastCardUsed();
+                    foreach( $profiles as $profile ): ?>
+                        <?php
                             $checked = '';
-                            $customerObj = Mage::getSingleton('customer/customer')->load($profile->getCustomerId());
                             $customerAddress = Mage::getSingleton('customer/address')->load($profile->getAddressId());
-                            $lastCardUsed = Mage::helper('palorus')->getLastCardUsed();
                             $customerName = $customerAddress->getFirstname() ." ". $customerAddress->getLastname();
-                            
+
                             //reset gets the first item from the array passed in
                             $customerStreetArray = $customerAddress->getStreet();
                             $customerStreet = reset($customerStreetArray);
                         ?>
-                        
+
                         <script type="text/javascript">
                             jQuery(document).ready( function() {
-                                checkoutPayment.hasProfile = "<?php echo $hasProfile; ?>"; 
-                                
+                                checkoutPayment.hasProfile = "<?php echo $hasProfile; ?>";
+
                                 if(checkoutPayment.hasProfile==1){
                                     hasCBProfile = true;
                                 }
-                                
-                                checkoutPayment.lastUsedAddressId = "<?php echo $profile->getAddressId(); ?>"; 
+
+                                checkoutPayment.lastUsedAddressId = "<?php echo $profile->getAddressId(); ?>";
                             });
                         </script>
                         <?php if(!$profile->getSubscriptionId() || $profile->getIsDefault()== 1 || !$profile->getData('saved_by_customer')) { continue; } ?>
                         <tr>
-                        	<td>
+                         <td>
                                 <input type="radio" <?php if($lastCardUsed && ($lastCardUsed->getSubscriptionId()==$profile->getSubscriptionId())) echo 'checked'; ?> name="payment[cybersource_subid]" id="payment[cybersource_subid]" data-billing-address-id="<?php echo $profile->address_id; ?>" class="use-saved-card-control pull-left" value="<?php echo $profile->getEncryptedSubscriptionId() ?>">
                                     <span class="cc">
-        		 	                    <span title="<?php echo $this->getFullCcCardType( $profile->getData( 'card_type' )); ?>" class="<?php echo strtolower($profile->getData('card_type')); ?>" >
-        		 	                    </span>
-        		 	                </span>
-        		 	         </td>
+         <span title="<?php echo $this->getFullCcCardType( $profile->getData( 'card_type' )); ?>" class="<?php echo strtolower($profile->getData('card_type')); ?>" >
+         </span>
+         </span>
+         </td>
                             <td class="card-type">
                             <strong></strong> ending in <?php echo $profile->getLast4no() ?></td>
                             <td class="card-name"><?php echo $customerName ?></td>
@@ -96,9 +96,9 @@ if(count($fulfillmentTypes) > 1) {
                             </td>
                         </tr>
                     <?php endforeach ?>
-						</table>
+</table>
                     </div>
-                </div> 
+                </div>
                 <?php } ?>
                 <div>
                      <?php foreach( $profiles as $profile ): ?>

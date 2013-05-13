@@ -986,10 +986,10 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
 }
 /* Grid Hacks :( */
 .events-grid .span4 h3 {
-    font-size: 16px;
+    font-size: 15px; font-weight: normal;
 }
 .events-grid .span3 h3 {
-    font-size: 14px;
+    font-size: 13px; font-weight: normal;
 }
 .events-grid .span2 h5 {
     font-size: 12px;
