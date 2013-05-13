@@ -88,9 +88,10 @@ class Totsy_Palorus_VaultController extends Litle_Palorus_VaultController
 
         $initialize = new LitleOnlineRequest();
         $authResponse = $initialize->authorizationRequest($auth_info);
+        $litleResponseCode = XMLParser::getNode($authResponse, 'response');
         $transactionId =  XmlParser::getNode($authResponse,'litleTxnId');
 
-        if(!$transactionId) {
+        if((!$transactionId) || ($litleResponseCode != '000')) {
             $this->_redirect ( '*/*/' );
         }
         $auth_reversalinfos = array(
