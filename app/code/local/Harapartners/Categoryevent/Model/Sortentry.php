@@ -22,7 +22,7 @@ class Harapartners_Categoryevent_Model_Sortentry
     extends Mage_Core_Model_Abstract
 {
     protected $_cacheTag = 'categoryevent_sortentry';
-    protected $_timeNewToLive = 129600 ; // 36*60*60 in sec
+    protected $_timeNewToLive = 86400 ; // 24*60*60 in sec
 
     // Only this level is considered category event
     const CATEGORYEVENT_LEVEL = 3;
@@ -386,11 +386,12 @@ class Harapartners_Categoryevent_Model_Sortentry
 
         foreach ($top as $idx => $event) {
             $startTime = strtotime($event['event_start_date']);
+            $endTime = strtotime($event['event_end_date']);
             if($earlyAccessTime) {
                 $startTime -= $earlyAccessTime;
             }
 
-            $diff = $now - $startTime;
+            $diff = $endDate - $now;
 
             if ($startTime > $now ) {
                 
@@ -399,9 +400,7 @@ class Harapartners_Categoryevent_Model_Sortentry
                 unset($top[$idx]);
                 continue;
 
-            } else if ( ($startTime < $now) 
-                && $diff <= $this->_timeNewToLive
-            ){
+            } else if ($diff <= $this->_timeNewToLive ) {
 
                 // move this event to Live
                 array_unshift($live, $event);
@@ -413,11 +412,12 @@ class Harapartners_Categoryevent_Model_Sortentry
 
         foreach ($live as $idx => $event) {
             $startTime = strtotime($event['event_start_date']);
+            $endTime = strtotime($event['event_end_date']);
             if($earlyAccessTime) {
                 $startTime -= $earlyAccessTime;
             }
 
-            $diff = $now - $startTime;
+            $diff = $endTime - $now;
 
             if ($startTime > $now ) {
                 
@@ -426,9 +426,7 @@ class Harapartners_Categoryevent_Model_Sortentry
                 unset($live[$idx]);
                 continue;
 
-            } else if ( ($startTime < $now) 
-                && $diff <= $this->_timeNewToLive
-            ){
+            } else if ( $diff <= $this->_timeNewToLive) {
 
                 // move this event to Top                
                 array_unshift($top, $event);
@@ -438,32 +436,22 @@ class Harapartners_Categoryevent_Model_Sortentry
         }
 
         foreach ($upcoming as $idx => $event) {
-            
             $startTime = strtotime($event['event_start_date']);
+            $endTime = strtotime($event['event_end_date']);
             if($earlyAccessTime) {
                 $startTime -= $earlyAccessTime;
             }
 
-            $diff = $now - $startTime;
+            $diff = $endTime - $now;
 
-            if ( ($startTime < $now) 
-                && $diff <= $this->_timeNewToLive
-            ){
+            if ( $diff <= $this->_timeNewToLive){
 
                 // move this event to Live
                 array_unshift($live, $event);
                 unset($upcoming[$idx]);
                 continue;
 
-            } else if ( ($startTime < $now) 
-                && $diff <= $this->_timeNewToLive
-            ){
-
-                // move this event to Top
-                array_unshift($top, $event);
-                unset($$upcoming[$idx]);
-                continue;
-            }
+            } 
         }
 
         $this->setData('top_live_queue', json_encode(array_reverse($top)))
