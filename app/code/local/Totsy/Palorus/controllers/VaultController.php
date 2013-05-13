@@ -100,7 +100,7 @@ class Totsy_Palorus_VaultController extends Litle_Palorus_VaultController
         $initialize->authReversalRequest($auth_reversalinfos);
         //Create Vault Profile if option selected
         $vault = Mage::getModel('palorus/vault');
-        $alreadyCreated = Mage::getModel('palorus/vault')->getCustomerToken($customer,Mage::getModel('creditcard/paymentlogic')->getUpdater($authResponse, 'tokenResponse', 'litleToken'));
+        $alreadyCreated = Mage::getModel('palorus/vault')->getCustomerToken($customer,Mage::getModel('creditcard/paymentLogic')->getUpdater($authResponse, 'tokenResponse', 'litleToken'));
         if(!$alreadyCreated) {
             $vault->setData('token', Mage::getModel('creditcard/paymentlogic')->getUpdater($authResponse, 'tokenResponse', 'litleToken'))
                 ->setData('bin', Mage::getModel('creditcard/paymentlogic')->getUpdater($authResponse, 'tokenResponse', 'bin'))

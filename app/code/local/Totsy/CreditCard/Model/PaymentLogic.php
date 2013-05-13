@@ -10,27 +10,6 @@ require_once ('Litle/LitleSDK/LitleOnline.php');
 
 class Totsy_CreditCard_Model_PaymentLogic extends Litle_CreditCard_Model_PaymentLogic
 {
-    public function assignData($data)
-    {
-        if (! ($data instanceof Varien_Object)) {
-            $data = new Varien_Object($data);
-        }
-        $info = $this->getInfoInstance();
-        if ($this->getConfigData('paypage_enabled')) {
-            $info->setAdditionalInformation('paypage_enabled', $data->getPaypageEnabled());
-            $info->setAdditionalInformation('paypage_registration_id', $data->getPaypageRegistrationId());
-            $info->setAdditionalInformation('paypage_order_id', $data->getOrderId());
-            $info->setAdditionalInformation('cc_vaulted', $data->getCcVaulted());
-            $info->setAdditionalInformation('cc_should_save', $data->getCcShouldSave());
-        }
-
-        if ($this->getConfigData('vault_enable')) {
-            $info->setAdditionalInformation('cc_vaulted', $data->getCcVaulted());
-            $info->setAdditionalInformation('cc_should_save', $data->getCcShouldSave());
-        }
-        return Mage::getModel('payment/method_cc')->assignData($data);
-    }
-
     public function getTokenInfo($payment)
     {
         $vaultIndex = $this->getInfoInstance()->getAdditionalInformation('cc_vaulted');
