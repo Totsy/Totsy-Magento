@@ -20,7 +20,7 @@
             </totsy_creditcard>
             <creditcard>
                 <rewrite>
-                    <paymentlogic>Totsy_CreditCard_Model_PaymentLogic</paymentlogic>
+                    <paymentLogic>Totsy_CreditCard_Model_PaymentLogic</paymentLogic>
                 </rewrite>
             </creditcard>
         </models>

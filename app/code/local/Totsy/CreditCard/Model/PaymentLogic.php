@@ -28,7 +28,7 @@ class Totsy_CreditCard_Model_PaymentLogic extends Litle_CreditCard_Model_Payment
             $info->setAdditionalInformation('cc_vaulted', $data->getCcVaulted());
             $info->setAdditionalInformation('cc_should_save', $data->getCcShouldSave());
         }
-        Mage::getModel('payment/method_cc')->assignData($data);
+        return Mage::getModel('payment/method_cc')->assignData($data);
     }
 
     public function getTokenInfo($payment)
