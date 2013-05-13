@@ -94,7 +94,7 @@ class Totsy_Palorus_VaultController extends Litle_Palorus_VaultController
         $transactionId =  XmlParser::getNode($authResponse,'litleTxnId');
 
         if((!$transactionId) || ($litleResponseCode != '000')) {
-            $session->addError($this->__('The credit card has not been saved. Please retry.'));
+            $session->addError($this->__('We have not been able to save your credit card because of invalid informations. Please retry.'));
             $this->_redirect ( '*/*/' );
             return false;
         }
