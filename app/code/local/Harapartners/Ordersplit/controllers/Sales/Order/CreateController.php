@@ -106,7 +106,7 @@ class Harapartners_Ordersplit_Sales_Order_CreateController extends Mage_Adminhtm
             }
 
             foreach($items as $key=>$value) {
-                $product = $value->getProduct();
+                $product = Mage::getModel('catalog/product')->load($key);
                 if($product->getFulfillmentType() == 'dotcom_stock') {
                     $type = 'dotcom';
                 }
