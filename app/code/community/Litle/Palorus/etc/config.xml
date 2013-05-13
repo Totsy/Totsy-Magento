@@ -2,7 +2,7 @@
 <config>
 	<modules>
 		<Litle_Palorus>
-			<version>8.14.1</version>
+			<version>8.14.0</version>
 		</Litle_Palorus>
 	</modules>
 	<global>
@@ -98,7 +98,6 @@
         </routers>
 		<secure_url>
 			<palorus_vault>/palorus/vault/</palorus_vault>
-            <palorus_vault_index>/palorus/vault/index/</palorus_vault_index>
 		</secure_url>
 	</frontend>
 

@@ -1,0 +1,87 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @category    Totsy
+ * @package     Totsy_Palorus
+ * @author      Tom Royer <troyer@totsy.com>
+ * @copyright   Copyright (c) 2013 Totsy LLC
+ */
+-->
+<config>
+    <modules>
+        <Totsy_Palorus>
+            <version>0.1.0</version>
+        </Totsy_Palorus>
+    </modules>
+    <global>
+        <resources>
+            <totsy_palorus_setup>
+                <setup>
+                    <module>Totsy_Palorus</module>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </totsy_palorus_setup>
+            <totsy_palorus_write>
+                <connection>
+                    <use>core_write</use>
+                </connection>
+            </totsy_palorus_write>
+            <totsy_palorus_read>
+                <connection>
+                    <use>core_read</use>
+                </connection>
+            </totsy_palorus_read>
+        </resources>
+         <models>
+            <totsy_palorus>
+                <class>Totsy_Palorus_Model</class>
+            </totsy_palorus>
+            <palorus>
+                <rewrite>
+                    <vault>Totsy_Palorus_Model_Vault</vault>
+                </rewrite>
+            </palorus>
+        </models>
+        <blocks>
+            <totsy_palorus>
+                <class>Totsy_Palorus_Block</class>
+            </totsy_palorus>
+            <palorus>
+                <rewrite>
+                    <vault_list>Totsy_Palorus_Block_Vault_List</vault_list>
+                </rewrite>
+            </palorus>
+        </blocks>
+        <helpers>
+            <palorus>
+                <rewrite>
+                    <data>Totsy_Palorus_Helper_Data</data>
+                </rewrite>
+            </palorus>
+        </helpers>
+    </global>
+    <frontend>
+        <routers>
+            <palorus>
+                <args>
+                     <modules>
+                        <Totsy_Palorus before="Litle_Palorus">Totsy_Palorus</Totsy_Palorus>
+                    </modules>
+                </args>
+            </palorus>
+        </routers>
+    </frontend>
+    <admin>
+		<routers>
+			<palorus>
+				<use>admin</use>
+				<args>
+					<module>Totsy_Palorus</module>
+					<frontName>palorus</frontName>
+				</args>
+			</palorus>
+		</routers>
+	</admin>
+</config>

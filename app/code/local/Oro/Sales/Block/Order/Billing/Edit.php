@@ -164,7 +164,7 @@ class Oro_Sales_Block_Order_Billing_Edit extends Mage_Core_Block_Template
     public function getPaymentMethod()
     {
         if ($this->_paymentMethod === null) {
-            $this->_paymentMethod = Mage::getModel('Litle_CreditCard_Model_PaymentLogic');
+            $this->_paymentMethod = Mage::getModel('creditcard/paymentlogic');
         }
 
         return $this->_paymentMethod;
