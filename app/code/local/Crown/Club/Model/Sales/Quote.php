@@ -22,8 +22,7 @@ class Crown_Club_Model_Sales_Quote extends Webshopapps_Shipdiscount_Sales_Model_
                 $profile->importQuote($this);
                 $profile->importQuoteItem($item);
                 $result [] = $profile;
-                $productModel = Mage::getModel('catalog/product')->load($product->getEntityId());
-                if ($productModel->getIsClubSubscription()) {
+                if ($product->getIsClubSubscription()) {
                     $profile->setData('is_club_profile', true);
                 } else {
                     $profile->setData('is_club_profile', false);

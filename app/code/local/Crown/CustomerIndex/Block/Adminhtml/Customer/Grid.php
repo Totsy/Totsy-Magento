@@ -1,21 +1,24 @@
 <?php
-class Crown_CustomerIndex_Block_Adminhtml_Customer_Grid extends Mage_Adminhtml_Block_Customer_Grid {
-	/**
-	 * (non-PHPdoc)
-	 * @see Mage_Adminhtml_Block_Customer_Grid::_prepareCollection()
-	 */
-	protected function _prepareCollection()
+
+class Crown_CustomerIndex_Block_Adminhtml_Customer_Grid
+    extends Mage_Adminhtml_Block_Customer_Grid
+{
+    /**
+     * (non-PHPdoc)
+     * @see Mage_Adminhtml_Block_Customer_Grid::_prepareCollection()
+     */
+    protected function _prepareCollection()
     {
-    	$collection = Mage::getResourceModel('CustomerIndex/CustomerIndex_Collection');
+        $collection = Mage::getResourceModel('CustomerIndex/CustomerIndex_Collection');
         $this->setCollection($collection);
         return Mage_Adminhtml_Block_Widget_Grid::_prepareCollection();
     }
-    
+
     /**
      * (non-PHPdoc)
-	 * @see Mage_Adminhtml_Block_Customer_Grid::_prepareCollection()
+     * @see Mage_Adminhtml_Block_Customer_Grid::_prepareCollection()
      */
-	protected function _prepareColumns()
+    protected function _prepareColumns()
     {
         $this->addColumn('entity_id', array(
             'header'    => Mage::helper('customer')->__('ID'),
@@ -34,7 +37,8 @@ class Crown_CustomerIndex_Block_Adminhtml_Customer_Grid extends Mage_Adminhtml_B
         $this->addColumn('email', array(
             'header'    => Mage::helper('customer')->__('Email'),
             'width'     => '150',
-            'index'     => 'email'
+            'index'     => 'email',
+            'wildcard'  => '*'
         ));
 
         $groups = Mage::getResourceModel('customer/group_collection')
@@ -115,8 +119,33 @@ class Crown_CustomerIndex_Block_Adminhtml_Customer_Grid extends Mage_Adminhtml_B
 
         $this->addExportType('*/*/exportCsv', Mage::helper('customer')->__('CSV'));
         $this->addExportType('*/*/exportXml', Mage::helper('customer')->__('Excel XML'));
-        
+
         $this->sortColumnsByOrder();
+        return $this;
+    }
+
+    protected function _prepareMassaction()
+    {
+        parent::_prepareMassaction();
+
+        $this->getMassactionBlock()->addItem(
+            'deactivate',
+            array(
+                'label'    => Mage::helper('customer')->__('Deactivate'),
+                'url'      => $this->getUrl('totsy/adminhtml_customer/massDeactivate'),
+                'confirm'  => Mage::helper('customer')->__('Are you sure?')
+            )
+        );
+
+        $this->getMassactionBlock()->addItem(
+            'activate',
+            array(
+                 'label'    => Mage::helper('customer')->__('Activate'),
+                 'url'      => $this->getUrl('totsy/adminhtml_customer/massActivate'),
+                 'confirm'  => Mage::helper('customer')->__('Are you sure?')
+            )
+        );
+
         return $this;
     }
 }

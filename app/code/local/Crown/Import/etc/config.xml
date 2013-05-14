@@ -72,15 +72,6 @@
             </crownimport>
         </helpers>
         <events>
-            <urapidflow_product_import_after_validate>
-                <observers>
-                    <orphanproductsfromexistingevent>
-                        <type>singleton</type>
-                        <class>Crown_Import_Model_Observer</class>
-                        <method>orphanProductsFromExistingEvent</method>
-                    </orphanproductsfromexistingevent>
-                </observers>
-            </urapidflow_product_import_after_validate>
             <urapidflow_product_import_after_save>
                 <observers>
                     <createpurchaseordertransactions>
@@ -88,6 +79,11 @@
                         <class>Crown_Import_Model_Observer</class>
                         <method>savePurchaseOrderTransaction</method>
                     </createpurchaseordertransactions>
+                    <orphanproductsfromexistingevent>
+                        <type>singleton</type>
+                        <class>Crown_Import_Model_Observer</class>
+                        <method>orphanProductsFromExistingEvent</method>
+                    </orphanproductsfromexistingevent>
                     <addproductpositions>
                         <type>singleton</type>
                         <class>Crown_Import_Model_Observer</class>

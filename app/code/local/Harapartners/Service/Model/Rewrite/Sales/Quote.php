@@ -9,7 +9,7 @@
  * If you did not receive a copy of the license and are unable to
  * obtain it through the world-wide-web, please send an email
  * to eula@harapartners.com so we can send you a copy immediately.
- * 
+ *
  */
 
 class Harapartners_Service_Model_Rewrite_Sales_Quote extends Mage_Sales_Model_Quote
@@ -106,8 +106,8 @@ class Harapartners_Service_Model_Rewrite_Sales_Quote extends Mage_Sales_Model_Qu
             if($item->getParentItemId()) {
                 continue;
             }
-            $product = Mage::getModel ( 'catalog/product' )->load ( $item->getProductId () );
-            if($product->getIsVirtual() && $fulfillmentType == 'virtual') {
+            $product = $item->getProduct();
+            if($item->getIsVirtual() && $fulfillmentType == 'virtual') {
                 return true;
             } elseif($product->getFulfillmentType() == $fulfillmentType) {
                 return true;
@@ -124,18 +124,18 @@ class Harapartners_Service_Model_Rewrite_Sales_Quote extends Mage_Sales_Model_Qu
             if($item->getParentItemId()) {
                 continue;
             }
-            $product = Mage::getModel ( 'catalog/product' )->load ( $item->getProductId () );
-            if($product->getIsVirtual() && $product->getFulfillmentType() !== 'nominal') {
-                $fulfillmentType = 'virtual';
-            } else {
-                $fulfillmentType = $product->getFulfillmentType();
-            }
+            $product = $item->getProduct();
+            $fulfillmentType = $product->getFulfillmentType();
             $fulfillmentTypes [$fulfillmentType] [] = $item->getId ();
 
         }
 
         if(count($fulfillmentTypes) > 1) {
             $sortedFulfillmentTypes = array();
+            if(array_key_exists('litle_recurring',$fulfillmentTypes)) {
+                $sortedFulfillmentTypes['litle_recurring'] = $fulfillmentTypes['litle_recurring'];
+                unset($fulfillmentTypes['litle_recurring']);
+            }
             if(array_key_exists('dotcom_stock',$fulfillmentTypes)) {
                 $sortedFulfillmentTypes['dotcom_stock'] = $fulfillmentTypes['dotcom_stock'];
                 unset($fulfillmentTypes['dotcom_stock']);

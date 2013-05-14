@@ -205,7 +205,7 @@ HpCheckout.prototype = {
     submit: function() {
         //good time to validate CC types
         if (typeof checkoutPayment !== "undefined") {
-            jQuery(".cc_info input[type='radio']").addClass('required-entry');
+            jQuery("[name='payment[cc_type]']").addClass('validate-one-required');
             jQuery('.cc_info input').addClass('required-entry');
             jQuery("[name='payment[cc_should_save]']").removeClass("required-entry");
             //Saved Credit Card Selected
@@ -218,6 +218,8 @@ HpCheckout.prototype = {
             if(jQuery("[id='paypal_payment']").is(':checked') == true) {
                 jQuery('.cc_info input').removeClass('required-entry');
                 jQuery(".cc_types input[type='radio']").removeClass("validate-one-required");
+            } else {
+                jQuery('[id="paypal_payment"]').removeClass('validate-one-required');
             }
         }
         //only validate these fields when the customer deceides to place an order (when they click the "Place Order" button on the onepage checkout)

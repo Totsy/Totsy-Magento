@@ -12,7 +12,7 @@
  * obtain it through the world-wide-web, please send an email
  * to license@Harapartners.com so we can send you a copy immediately.
  *
- * 
+ *
  */
 
 class Harapartners_Categoryevent_Block_Index_Index
@@ -48,8 +48,9 @@ class Harapartners_Categoryevent_Block_Index_Index
                 array()
             )
             ->where('ccs.stock_status = 1')
-            ->where('cp.category_id = ?', $categoryId);
-        
+            ->where('cp.category_id = ?', $categoryId)
+            ->limit(1);
+
         return $read->fetchOne($select);
     }
 
