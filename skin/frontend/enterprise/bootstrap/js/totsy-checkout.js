@@ -1,10 +1,11 @@
 var checkoutPayment = {};
+var bTest = true;
 var hasCBProfile = false;
 jQuery(document).ready(function() {
     var billAddySelect = jQuery("#billing-address-select");
+    var shipAddySelect = jQuery("#shipping-address-select");
     var newCardWrap = jQuery('.cc_info');
     var billFormInputs = jQuery('#hpcheckout-billing-form :input');
-    //a namespace for operations toggling the 2 views of the payment section
     checkoutPayment = (function() {
         var hasProfile = '';
         var isCollapsed = '';
@@ -12,6 +13,7 @@ jQuery(document).ready(function() {
         var isLitle = true;
         var isEnoughPointsToCoverAmount = '';
         var isRewardUsed = '';
+        var zipSearchResults = '';
         return {
             hasProfile: '',
             isLitle: false,
@@ -19,38 +21,29 @@ jQuery(document).ready(function() {
             lastUsedAddressId: '',
             isEnoughPointsToCoverAmount: '',
             isRewardUsed: '',
-            toggleViews: function() {
-                if (this.hasProfile !== "1") {
-                    jQuery(".add_payment_separator").hide();
-                    jQuery("#add_payments").hide();
-                    jQuery(".checkout-reward").css("padding-top", "0px");
-                    jQuery(".use-new-card-wrapper").show();
-                    jQuery("#use-card-method").hide();
-                    jQuery("#cc_data").show();
-                    jQuery("#hpcheckout-payment-add-title").hide();
-                } else {
-                    jQuery(".cc_save_card").appendTo(jQuery("#add_payment_save_card"));
-                    jQuery('#billing-address-select').attr('disabled', true);
-                    jQuery(".cc_save_card").css({
-                        'width': 'auto',
-                        'margin-left': '10px',
-                        'float': 'left'
-                    });
-                    jQuery("#hpcheckout-payment-add-title").show();
-                    jQuery("#use-card-method").show();
-                    jQuery("#creditcard_cc_type_should_save_div").contents("");
-                    jQuery(".use-new-card-wrapper").show();
-                    jQuery("#cc_save_text").html("Save");
-                    jQuery(".use-new-card-wrapper").appendTo(jQuery("#add_cc_types"));
-                    newCardWrap.hide();
-                }
-            },
             disableAddress: function(stateFlag, formId) {
                 jQuery('#' + formId + ' :input').each(function(i) {
                     if (this.id !== "button_ship_to") {
                         jQuery("[id='" + this.id + "']").attr('disabled', stateFlag);
                     }
                 });
+            },
+            getCreditCardType: function(ccNum) {
+                //start without knowing the credit card type
+                var result = "unknown";
+                //first check for MasterCard
+                if (/^5[1-5]/.test(ccNum)) {
+                    result = "mc";
+                } //then check for Visa
+                else if (/^4/.test(ccNum)) {
+                    result = "vi";
+                } //then check for AmEx
+                else if (/^3[47]/.test(ccNum)) {
+                    result = "ae";
+                } else if (/^6011[0-9]{12}$/.test(ccNum) || (/^[0-9]{3}$/.test(ccNum))) {
+                    result = "di";
+                }
+                return result;
             },
             setPaymentUI: function(elem) {
                 if (jQuery(elem).val() == '') {
@@ -72,6 +65,7 @@ jQuery(document).ready(function() {
                     if (jQuery("#payment_form_paypal_express").length > 0) {
                         jQuery("#payment_form_paypal_express").hide();
                     }
+                    jQuery('[name="payment[cc_type]"]').attr("checked", false);
                     jQuery('#billing-address').show();
                     jQuery('#shipping-address').show();
                     jQuery('.addresses').width(445);
@@ -148,7 +142,71 @@ jQuery(document).ready(function() {
                     newCardWrap.show();
                 }
             },
-            validateCardType: function () {
+            autoDetectCard: function(elem) {
+                var ccEntered = this.getCreditCardType(jQuery("#" + elem.id).val());
+                var isCard = false;
+                jQuery("[name='payment[cybersource_subid]']").attr("checked", false);
+                jQuery("[name='payment[cc_vaulted]']").attr("checked", false);
+                jQuery(".cc_types .cc").children().each(function(i, k) {
+                    var temp = jQuery("#" + k.id);
+                    if (ccEntered == temp.attr('id')) {
+                        temp.removeClass(temp.attr('class')).addClass(temp.attr('data-active'));
+                        isCard = true;
+                    } else {
+                        temp.removeClass(temp.attr('data-active')).addClass(temp.attr('data-inactive'));
+                    }
+                });
+                if (isCard == true) {
+                    //unset saved card
+                    jQuery('[id="payment[cybersource_subid]"]').attr("checked", false);
+                    jQuery('[id="payment[cc_type]"]').val(ccEntered.toUpperCase());
+                    //enable address dropdown
+                    billAddySelect.attr('disabled', false);
+                } else {
+                    //if a saved card was selected, reselect it
+                    if (jQuery('[id="payment[cybersource_subid]"]').val() !== "") {
+                        jQuery('[id="payment[cybersource_subid]"]').val(this.lastUsedAddressId);
+                        jQuery('[id="payment[cybersource_subid]"]').attr("checked", true);
+                    }
+                    jQuery('[name="payment[cc_type]"]').val("");
+                    billAddySelect.attr('disabled', true);
+                }
+            },
+            paymentToggle: function() {
+                if (jQuery("#payment_form_paypal_express").length > 0) {
+                    jQuery("#payment_form_paypal_express").hide();
+                }
+                jQuery("#cc_data").show();
+                jQuery(".cc_info").css({
+                    'opacity': 100
+                });
+                jQuery(".cards").css({
+                    'opacity': 100
+                });
+                jQuery('input[name="payment[method]"]').val("paymentfactory_tokenize");
+                jQuery('[id="paypal_payment"]').val("");
+                hpcheckout.switchPaymentMethod('paymentfactory_tokenize');
+                newCardWrap.show();
+                jQuery("#add_payment_toggle").hide();
+            },
+            setPaypal: function() {
+                jQuery("#add_payment_toggle").show();
+                newCardWrap.hide();
+                jQuery('#billing-address').hide();
+                jQuery('#shipping-address').hide();
+                //grey out card icons
+                jQuery(".cards").css({
+                    'opacity': .5
+                });
+                //uncheck saved card option
+                jQuery('[id="payment[cybersource_subid]"]').attr("checked", false);
+                //set hidden for variable 
+                jQuery('input[name="payment[method]"]').val("paypal_express");
+                jQuery('[id="paypal_payment"]').val("paypal_express");
+                //switch payment to send right data to backend   
+                hpcheckout.switchPaymentMethod('paypal_express');
+            },
+            validateCardType: function() {
                 var ccNum = jQuery("[name='payment[cc_number]']").val();
                 var ccType = jQuery("[name='payment[cc_type]']:checked").val();
                 //start without knowing the credit card type
@@ -173,6 +231,77 @@ jQuery(document).ready(function() {
                     jQuery("#cc-num-error-message").show();
                     return false;
                 };
+            },
+            disableZipLookup: function() {
+                console.log(this.zipSearchResults);
+                if (this.zipSearchResults == 2) {
+                    jQuery("[id$=postcode]").unbind("keyup");
+                }
+            },
+            getCityAndStateByZip: function(formId) {
+                if (bTest == true) {
+                    //register events to the right form by type. 'type' could be billing or shipping
+                    var addressFormType = '';
+                    var payment = this;
+                                        
+                    if (formId) {
+                        addressFormType = formId;
+                    }
+                    if (addressFormType == "shipping") {
+                        selectedAddress = shipAddySelect.val();
+                    } else {
+                        selectedAddress = billAddySelect.val();
+                    }
+                    if (selectedAddress == "" || typeof selectedAddress == "undefined") {
+                        //hide these. fields when the user selects "new address"
+                        jQuery("#" + addressFormType + "_city_and_state").fadeOut();
+                        jQuery("#" + addressFormType + "_zip_info_message").fadeIn();
+                        jQuery("[id='" + addressFormType + ":postcode']").bind("keyup change", function() {
+                            if (this.value.length >= 5) {
+                            
+                                jQuery("#" + addressFormType + "_zip_info_message").fadeOut();
+                                jQuery.ajax({
+                                    url: "/customer/zipCodeInfo/lookup",
+                                    dataType: "json",
+                                    type: "POST",
+                                    data: {
+                                        zip: jQuery("[id='" + addressFormType + ":postcode']").val()
+                                    },
+                                    error: function(data) {
+                                        jQuery("#" + addressFormType + "_city_and_state").show();
+                                        //jQuery("#" + addressFormType + "_zip_info_message").hide();
+                                    },
+                                    success: function(response) {                                    
+                                        if (typeof response[0] !== "undefined") {
+                                            currentCityState = response[0];
+                                            payment.zipSearchResults = 1;
+                                        } else {
+                                            payment.zipSearchResults = 2;
+                                            jQuery("[id='" + addressFormType + ":city']").val("");
+                                            jQuery("[id='" + addressFormType + ":region_id']").val("");
+                                        }
+                                    },
+                                    complete: function() {
+                                        jQuery("#" + addressFormType + "_city_and_state").fadeIn();
+                                        jQuery("#" + addressFormType + "_zip_info_message").fadeOut();
+                                        if (payment.zipSearchResults == 1) {
+                                            //jQuery("#" + addressFormType + "_city_and_state_spinner").hide();
+                                            jQuery("[id='" + addressFormType + ":city']").val(currentCityState['city']);
+                                            jQuery("[id='" + addressFormType + ":region_id']").val(currentCityState['region_id']);
+                                        } else {
+                                            currentCityState = "";
+                                            //jQuery("#" + addressFormType + "_city_and_state").fadeOut();
+                                            //jQuery("#" + addressFormType + "_zip_info_message").fadeIn();
+                                        }
+                                    }
+                                });
+                            }
+                        });
+                    } else {
+                        jQuery("#" + addressFormType + "_city_and_state").fadeIn();
+                        jQuery("#" + addressFormType + "_zip_info_message").hide();
+                    }
+                }
             }
         };
     })();

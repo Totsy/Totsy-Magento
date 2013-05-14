@@ -766,9 +766,7 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
     display: none;
 }
 
-
-
-
+/*
 
 .use-new-card-wrapper {
     display:none;
@@ -823,10 +821,18 @@ body[class*='checkout'] #header-checkoutBtn { /* hides just on checkout pages */
     margin:10px 0px 10px 0;
     position: relative;
 }
+*/
+
 /**
  * @Home page
  */
- .banner {
+ 
+#hpcheckout-wrapper input[type="text"] {
+    line-hight:28px;
+    height:28px;
+} 
+ 
+.banner {
     color: #9DA0A4;
  }
 .carousel-inner {
@@ -1244,7 +1250,7 @@ body.catalog-category-view .thumbnails > li {position: relative;}
 
 /**
  * @Cart & Checkout
- */
+ 
 .checkout-reward {
     width:230px;
     padding: 0px 0px 0px 0px;
@@ -1272,7 +1278,7 @@ body.catalog-category-view .thumbnails > li {position: relative;}
 
 .paypal-express-review #hpcheckout-review-wrapper {
     margin-left: 0px !important;
-    width: 928px !important;  /* new */
+    width: 928px !important;  
 }
 #payment_form_paypal_express .form-alt {
     font-weight: bold;
@@ -1379,6 +1385,7 @@ body.catalog-category-view .thumbnails > li {position: relative;}
     line-height: 1.15;
     text-align: right;
 }
+*/
 
 .shopping-cart-table th,
 html body .shopping-cart-table tr:hover th
@@ -1443,6 +1450,10 @@ img.fastship-icon {
     float:left;
 }
 
+.cc_types {
+    padding-bottom: 20px;
+}
+
 .cc .mc { background-position:0px 0px; height:24px; margin:2px; width:42px; }
 .cc .vi { background-position:-42px 0px; height:24px; margin:2px; width:42px; }
 .cc .di { background-position:-84px 0px; height:24px; margin:2px; width:42px; }
@@ -1452,13 +1463,38 @@ img.fastship-icon {
 .cc .db { background-position:-84px 24px; height:24px; margin:2px; width:42px; }
 .cc .ab { background-position:-126px 24px; height:24px; margin:2px; width:42px; }
 
-.paypal {
-    height:34px;
-    width:56px;
-    background:url('https://www.paypalobjects.com/en_US/i/logo/PayPal_mark_50x34.gif');
-    background-repeat: no-repeat;
+.what-is-paypal-link {
+    float:left;
+    color: #000;
+    font-size: 11px;
+    text-decoration:underline
+}
+
+.paypal-express-review #hpcheckout-review-wrapper {
+    margin-left: 0px !important;
+    width: 928px !important;  /* new */
+}
+#payment_form_paypal_express .form-alt {
+    font-weight: bold;
+    padding: 10px 0;
+}
+.nominal-checkout #payment_form_paypal_express .form-alt {
+    display: none;
+}
+
+#billing_city_and_state {
+        display:none;
+}
+
+#shipping_city_and_state {
+        display:none;
+}
+
+#hpcheckout-wrapper input[class*="span"] {
     float:left;
 }
+
+/*
 
 .month {
     width: auto;
@@ -1477,9 +1513,7 @@ img.fastship-icon {
     margin-bottom: 0px;
 }
 
-.onepage-address-form input[type="text"], select {
-    /* margin-right: 10px !important; */
-}
+
 
 .onepage-address-form .firstname {
     width:205px;
@@ -1660,6 +1694,7 @@ img.fastship-icon {
     width: 38px;
     height: 64px;
 }
+*/
 
 /* Sales Order Virtaul items */
 .sales-order-virtual-items-toggle-link { 
