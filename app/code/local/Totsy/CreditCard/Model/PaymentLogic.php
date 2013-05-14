@@ -147,4 +147,38 @@ class Totsy_CreditCard_Model_PaymentLogic extends Litle_CreditCard_Model_Payment
             ->save();
         return $addressCustomer->getId();
     }
+
+    /**
+     * called if voiding a payment
+     */
+    public function void(Varien_Object $payment)
+    {
+        $this->isFromVT($payment, 'void');
+
+        $order = $payment->getOrder();
+        if (! empty($order)) {
+            $hash = array(
+                'litleTxnId' => $payment->getCcTransId()
+            );
+            $merchantData = $this->merchantData($payment);
+            $hash_in = array_merge($hash, $merchantData);
+            $litleRequest = new LitleOnlineRequest();
+
+            if (Mage::helper('creditcard')->isStateOfOrderEqualTo($order,
+                Mage_Sales_Model_Order_Payment_Transaction::TYPE_AUTH)) {
+                $litleResponse = $litleRequest->authReversalRequest($hash_in);
+                //Skip Error Handling if we get a general decline on an initial auth
+                $litleResponseCode = XMLParser::getNode($litleResponse, 'response');
+                if ($litleResponseCode != '000' && $order->getStatus() == 'pending') {
+                    return $this;
+                }
+            } else {
+                $litleResponse = $litleRequest->voidRequest($hash_in);
+            }
+        }
+
+        $this->processResponse($payment, $litleResponse);
+
+        return $this;
+    }
 }
