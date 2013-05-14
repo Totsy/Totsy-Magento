@@ -97,7 +97,6 @@
 	                        var onCheckout = (UrlPath == '/checkout/onepage/') ? true : false;
 	                        if (onCheckout) {
 	                            //to fix conflicts with Litle JS
-	                            jQuery.noConflict(true);
 	                            jQuery('.top-cart').addClass('onCheckout');
 	                            jQuery('#usercart-block-title').removeClass('dropdown-toggle')
 	                                .removeAttr('data-toggle');
