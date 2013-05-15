@@ -77,17 +77,35 @@ abstract class Harapartners_HpCheckout_Block_Abstract extends Mage_Core_Block_Te
             if (!empty($this->_options)) {
                 $options = $this->_options;
             } else {
-
-                $options = array();
-                if( $this->customerHasAddresses() ) {
-                    $options[] = array( 'value' => '', 'label' => 'New Address' );
+            $options = array();
+            if( $this->customerHasAddresses() ) {
+                $options[] = array( 'value' => '', 'label' => 'New Address' );
+            }
+            $profileArry = array();
+            $deletedprofileArry = array();
+            $addresses = $this->getCustomer()->getAddresses();
+            foreach ($addresses as $address) {
+                $profile = Mage::getModel('paymentfactory/profile')->load($address->getId(), 'address_id');
+                $addressSkipped = true;
+                if($profile->getId()) {
+                    if(!$profile->getIsDefault())
+                        $addressSkipped = false;
+                    else
+                        $deletedprofileArry[] = $address->getId();
                 }
-                foreach ($this->getCustomer()->getAddresses() as $address) {
-                    $profile = Mage::getModel('paymentfactory/profile')->load($address->getId(), 'address_id');
-                    $addressSkipped = false;
-                    if($profile->getId() && $profile->getIsDefault()) {
-                        $addressSkipped = true;
-                    }
+                if(!$addressSkipped) {
+                    $profileArry[] = $address->format('oneline');
+                    $options[] = array(
+                        'value' => $address->getId(),
+                        'label' => $address->format('oneline')
+                    );
+                }
+            }
+            foreach ($addresses as $address) {
+                $addressSkipped = FALSE;
+                if(in_array($address->format('oneline'), $profileArry) || in_array($address->getId(), $deletedprofileArry)) {
+                    $addressSkipped = TRUE;
+                }
                     if(!$addressSkipped) {
                         $options[] = array(
                             'value' => $address->getId(),

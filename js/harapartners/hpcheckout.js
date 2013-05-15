@@ -104,6 +104,7 @@ HpCheckout.prototype = {
                 }
             }
         });
+        jQuery( '#shipping\\:selected' ).val("-1");
         jQuery('#shipping\\:postcode').change();
     },
     switchPaymentMethod: function(payment_method) {
@@ -136,6 +137,9 @@ HpCheckout.prototype = {
             if (blockType == 'billing') {
                 jQuery('#billing\\:selected').val('');
             }
+            if (blockType == 'shipping') {
+                jQuery('#shipping\\:selected').val('');
+            }
         } else {
                 if (hpcheckoutAddresses[clickedAddress.val()]) {
                 	jQuery('select#' + blockType + '\\:country_id').val(hpcheckoutAddresses[clickedAddress.val()]['country_id']);
@@ -145,9 +149,11 @@ HpCheckout.prototype = {
                     shippingRegionUpdater.update();
                 }
                 jQuery('input, select', '#' + hpcheckout.data.blocks[blockType].formId).each(function() {
-                    jQuery(this).val(hpcheckoutAddresses[clickedAddress.val()][jQuery(this).attr('id').replace(blockType + ':', '')]);
+                    if(jQuery(this).attr('id').replace(blockType + ':', '')!='selected' && jQuery(this).attr('id').replace(blockType + ':', '')!='save_in_address_book')
+                        jQuery(this).val(hpcheckoutAddresses[clickedAddress.val()][jQuery(this).attr('id').replace(blockType + ':', '')]);
                 });
                 if (blockType == 'shipping') {
+                    jQuery('#shipping\\:selected').val(jQuery('#shipping-address-select').val());
                     //jQuery('#shipping\\:postcode').change();
                 }
                 if (blockType == 'billing') {

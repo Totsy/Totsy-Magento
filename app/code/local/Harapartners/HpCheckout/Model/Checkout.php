@@ -66,7 +66,7 @@ class Harapartners_HpCheckout_Model_Checkout
                 $address->setData($attribute->getAttributeCode(), NULL);
             }
         }
-
+        $address->setSaveInAddressBook(true);
         $address->setData( 'email', $data[ 'email' ] );
 
         if (($validateRes = $address->validate()) !== true) {
@@ -157,12 +157,11 @@ class Harapartners_HpCheckout_Model_Checkout
                 $address->setData($attribute->getAttributeCode(), NULL);
             }
         }
-
-        $address->setSameAsBilling(0);
-
+        $address->setSameAsBilling($data['selected']=="-1"?1:0);
+        $address['save_in_address_book']=isset($data['save_in_address_book']);
         $address->implodeStreetAddress();
         $address->setCollectShippingRates(true);
-
+        $this->getQuote()->setShippingAddress($address);
         if (($validateRes = $address->validate())!==true) {
             return array('status' => 1, 'message' => $validateRes);
         }
@@ -428,8 +427,7 @@ class Harapartners_HpCheckout_Model_Checkout
             $customer->addAddress($customerBilling);
             $billing->setCustomerAddress($customerBilling);
         }
-        if ($shipping && !$shipping->getSameAsBilling() &&
-            (!$shipping->getCustomerId() || $shipping->getSaveInAddressBook())) {
+        if ($shipping && !$shipping->getSameAsBilling() && $shipping->getSaveInAddressBook()) {
             $customerShipping = $shipping->exportCustomerAddress();
             $customer->addAddress($customerShipping);
             $shipping->setCustomerAddress($customerShipping);
@@ -440,9 +438,10 @@ class Harapartners_HpCheckout_Model_Checkout
         }
         if ($shipping && isset($customerShipping) && !$customer->getDefaultShipping()) {
             $customerShipping->setIsDefaultShipping(true);
-        } else if (isset($customerBilling) && !$customer->getDefaultShipping()) {
-                $customerBilling->setIsDefaultShipping(true);
-            }
+        } 
+        //else if (isset($customerBilling) && !$customer->getDefaultShipping()) {
+         //       $customerBilling->setIsDefaultShipping(true);
+          //  }
         $quote->setCustomer($customer);
     }
 
