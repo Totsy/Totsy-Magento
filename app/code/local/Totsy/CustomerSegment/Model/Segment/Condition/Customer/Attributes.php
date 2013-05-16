@@ -11,7 +11,7 @@ class Totsy_CustomerSegment_Model_Segment_Condition_Customer_Attributes
          if(null === $this->_defaultOperatorInputByType)
          {
              parent::getDefaultOperatorInputByType();
-             $this->_defaultOperatorInputByType['days'] = array('>=');
+             $this->_defaultOperatorInputByType['days'] = array('within');
           }
          return $this->_defaultOperatorInputByType;
      }
@@ -20,7 +20,7 @@ class Totsy_CustomerSegment_Model_Segment_Condition_Customer_Attributes
       {
         if (null === $this->_defaultOperatorOptions) {
             $this->_defaultOperatorOptions = parent::getDefaultOperatorOptions();
-            $this->_defaultOperatorOptions['>='] = Mage::helper('rule')->__('within');
+            $this->_defaultOperatorOptions['within'] = Mage::helper('rule')->__('within');
         }
         return $this->_defaultOperatorOptions;
      }
@@ -48,6 +48,20 @@ class Totsy_CustomerSegment_Model_Segment_Condition_Customer_Attributes
         }
     }
     
+      public function loadArray($arr)
+    {
+        if('created_days' == $arr['attribute']){
+            $arr['operator'] = 'within' ;
+        }
+        $this->setType($arr['type']);
+        $this->setAttribute(isset($arr['attribute']) ? $arr['attribute'] : false);
+        $this->setOperator(isset($arr['operator']) ? $arr['operator'] : false);
+        $this->setValue(isset($arr['value']) ? $arr['value'] : false);
+        $this->setIsValueParsed(isset($arr['is_value_parsed']) ? $arr['is_value_parsed'] : false);
+        
+        return $this;
+    }
+    
      public function getConditionsSql($customer, $website)
     {
         $attribute = $this->getAttributeObject();
@@ -62,7 +76,11 @@ class Totsy_CustomerSegment_Model_Segment_Condition_Customer_Attributes
 
         if (!in_array($attribute->getAttributeCode(), array('default_billing', 'default_shipping')) ) {
             $value    = $this->getValue();
-            $operator = $this->getOperator();
+            if('created_days' == $attribute->getAttributeCode()){
+                  $operator = '>=';
+            }else{
+                 $operator = $this->getOperator();
+            }
             if ($attribute->isStatic()) {
                 $field = "main.{$attribute->getAttributeCode()}";
             } else {
@@ -82,7 +100,7 @@ class Totsy_CustomerSegment_Model_Segment_Condition_Customer_Attributes
                  {
                    $field = "`root`.`created_at`";
                    $value = "date_add(now(),INTERVAL -" . $value . " day)";
-                   $condition = $field.' '.$operator.' '. $value;
+		   $condition = $field.' '.$operator.' '. $value;
                  }else{
                    $condition = str_replace("`main`","`root`",$condition);
                  }
