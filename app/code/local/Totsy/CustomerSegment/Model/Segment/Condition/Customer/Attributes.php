@@ -100,7 +100,7 @@ class Totsy_CustomerSegment_Model_Segment_Condition_Customer_Attributes
                  {
                    $field = "`root`.`created_at`";
                    $value = "date_add(now(),INTERVAL -" . $value . " day)";
-		   $condition = $field.' '.$operator.' '. $value;
+	           $condition = $field.' '.$operator.' '. $value;
                  }else{
                    $condition = str_replace("`main`","`root`",$condition);
                  }
