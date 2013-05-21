@@ -10,7 +10,7 @@
 <config>
     <modules>
         <Totsy_Catalog>
-            <version>0.1.4</version>
+            <version>0.1.5</version>
         </Totsy_Catalog>
     </modules>
     <global>

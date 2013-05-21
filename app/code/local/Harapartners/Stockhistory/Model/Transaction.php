@@ -177,9 +177,9 @@ class Harapartners_Stockhistory_Model_Transaction extends Mage_Core_Model_Abstra
             if(($qtyStock + $qtyDelta) < 0){
                 throw new Exception('This stock update will result in a negative value. Ignored.');
             }
-            
-            $stock->setQty($qtyStock + $qtyDelta);
-            $stock->setIsInStock(1);
+            $upatedStockQuantity = $qtyStock + $qtyDelta;
+            $stock->setQty($updatedStockQuantity);
+            $stock->setIsInStock($updatedStockQuantity > 0);
             $stock->save();
             return true;
         } else {

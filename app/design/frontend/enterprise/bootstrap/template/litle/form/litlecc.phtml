@@ -23,8 +23,8 @@
     }
 
     $_reportGroup = $this->getReportGroup();
-    $_paypageId = Mage::getModel('Litle_CreditCard_Model_PaymentLogic')->getConfigData("paypage_id");
-    $_paypageUrl = Mage::getModel('Litle_CreditCard_Model_PaymentLogic')->getConfigData("paypage_url");
+    $_paypageId = Mage::getModel('creditcard/paymentlogic')->getConfigData("paypage_id");
+    $_paypageUrl = Mage::getModel('creditcard/paymentlogic')->getConfigData("paypage_url");
     $_isLoggedIn = Mage::helper('customer')->isLoggedIn();
 
     $_time =  date('ymdHis');
@@ -53,7 +53,6 @@
         });
     });
 </script>
-
 <div>
     <div>
         <div>

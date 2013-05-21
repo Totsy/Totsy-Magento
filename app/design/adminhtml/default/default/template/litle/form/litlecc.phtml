@@ -30,10 +30,10 @@ $_code = $this->getMethodCode();
 $_reportGroup = $this->getReportGroup();
 $_paypageId = Mage::getModel('Litle_CreditCard_Model_PaymentLogic')->getConfigData("paypage_id");
 $_paypageUrl = Mage::getModel('Litle_CreditCard_Model_PaymentLogic')->getConfigData("paypage_url");
-$_showClassicPaymentForm = true; 
 ?>
 
 <ul id="payment_form_<?php echo $_code ?>" style="display:none;">
+
 <?php if ($this->getVaultEnabled() && $this->hasStoredCards()): ?>
 	<li>
         <label for="<?php echo $_code ?>_cc_vaulted" class=""><?php echo $this->__('Stored Credit Cards') ?></label>
@@ -48,29 +48,19 @@ $_showClassicPaymentForm = true;
 	    	<?php endforeach ?>
             </select>
 		</div>
-        <div>
-            <?php foreach($this->getStoredCards() as $card): ?>
-                <?php if( !$card->getVaultId()) { continue; } ?>
-                <input type="hidden" id="address_<?php echo $card->getVaultId() ?>" value="<?php echo $card->getData('address_id') ?>" />
-            <?php endforeach ?>
-        </div>
     </li>
 
 	<script type="text/javascript">
 		function toggleLitleCardFields(index, changed) {
 			if (index !== '0' && index !== '') {
 				$$('.new-card').invoke('hide');
-                $('<?php echo $_code ?>_cc_type_cvv_div').hide();
 				$$('.new-card input, .new-card select').invoke('disable');
 				$('<?php echo $_code ?>_cc_cid').removeClassName('validate-cc-cvn');
-                $('<?php echo $_code ?>_cc_cid').removeClassName('required-entry');
 			} else {
-                $('<?php echo $_code ?>_cc_type_cvv_div').show();
 				$$('.new-card').invoke('show');
 				$$('.new-card input, .new-card select').invoke('enable');
 				$('<?php echo $_code ?>_cc_cid').addClassName('validate-cc-cvn');
-                $('<?php echo $_code ?>_cc_cid').addClassName('required-entry');
-            }
+			}
 		}
 		Event.observe($("<?php echo $_code ?>_cc_vaulted"), 'change', function() {
 			toggleLitleCardFields($F(this));
@@ -85,7 +75,7 @@ $_showClassicPaymentForm = true;
 	</script>
 <?php endif; ?>
 
-<?php if ($this->getPaypageEnabled() && !$_showClassicPaymentForm):?>
+<?php if ($this->getPaypageEnabled()):?>
 
 	<?php if($this->hasVerification() && $this->getVaultEnabled() && $this->hasStoredCards()): ?>
     <li id="<?php echo $_code ?>_cc_type_cvv_div">
@@ -102,6 +92,7 @@ $_showClassicPaymentForm = true;
 	<br/><br/>
 
 <?php else: ?>
+
     <li class="new-card">
         <label for="<?php echo $_code ?>_cc_type"><?php echo $this->__('Credit Card Type') ?> <span class="required">*</span></label>
         <div class="input-box">

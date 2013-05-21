@@ -145,8 +145,8 @@ class TinyBrick_OrderEdit_Model_Edit_Updater_Type_Payment extends TinyBrick_Orde
             $paymentObject->setCcNumber($payment->getCcNumber());
             $vault = Mage::getModel('palorus/vault')->setTokenFromPayment(
                 $paymentObject,
-                Mage::getModel('Litle_CreditCard_Model_PaymentLogic')->getUpdater($authResponse, 'tokenResponse', 'litleToken'),
-                Mage::getModel('Litle_CreditCard_Model_PaymentLogic')->getUpdater($authResponse, 'tokenResponse', 'bin'));
+                Mage::getModel('creditcard/paymentlogic')->getUpdater($authResponse, 'tokenResponse', 'litleToken'),
+                Mage::getModel('creditcard/paymentlogic')->getUpdater($authResponse, 'tokenResponse', 'bin'));
             $customerAddressId = Mage::getModel('orderedit/edit_updater_type_billing')->getCustomerAddressFromBilling($billingAddress->getId());
             if(!$customerAddressId) {
                 $customerAddressId = $billingAddress->getCustomerAddressId();

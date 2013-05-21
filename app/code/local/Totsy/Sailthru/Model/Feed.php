@@ -78,7 +78,7 @@ class Totsy_Sailthru_Model_Feed extends Mage_Core_Model_Abstract
 		// closing events
 		$this->_formatter(
 			$this->getFeedHelper()->filter(
-				$this->_getSortEvents('live','+1 day')
+				$this->_getSortEvents('live')
 			),
 			'closing'
 		);
