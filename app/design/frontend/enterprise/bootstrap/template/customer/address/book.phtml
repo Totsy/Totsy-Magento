@@ -48,7 +48,10 @@
                     <a href="<?php echo $this->getAddressEditUrl(Mage::getSingleton('customer/session')->getCustomer()->getAddressById($_pAddsses)) ?>" class="btn btn-primary"><?php echo $this->__('Edit') ?></a>
                 </h4>
                 <address class="box-content">
-                <?php echo $this->getAddressHtml(Mage::getSingleton('customer/session')->getCustomer()->getAddressById($_pAddsses)) ?>
+                <?php
+                $_billingHtml = $this->getAddressHtml(Mage::getSingleton('customer/session')->getCustomer()->getAddressById($_pAddsses));
+                echo $_billingHtml; 
+                ?>
                 </address>
            </div>
         <?php else: ?>
@@ -62,10 +65,24 @@
             <div class="info-box span4">
             
                 <h4 class="box-title"><?php echo $this->__('Default Shipping Address') ?>
+                <?php 
+                $_shippingHtml = $this->getAddressHtml(Mage::getSingleton('customer/session')->getCustomer()->getAddressById($_pAddsses));
+                $_sameAsBilling = isset($_billingHtml) && isset($_shippingHtml) && $_billingHtml == $_shippingHtml;
+                if (!$_sameAsBilling):
+                ?>
                     <a href="<?php echo $this->getAddressEditUrl(Mage::getSingleton('customer/session')->getCustomer()->getAddressById($_pAddsses)) ?>" class="btn btn-primary"><?php echo $this->__('Edit') ?></a>
+                <?php
+                endif;
+                ?>
                 </h4>
                 <address class="box-content">
-                    <?php echo $this->getAddressHtml(Mage::getSingleton('customer/session')->getCustomer()->getAddressById($_pAddsses)) ?>
+                    <?php
+                    if ($_sameAsBilling):
+                        echo $this->__('Same as Default Billing Address');
+                    else:
+                        echo $_shippingHtml;
+                    endif;
+                    ?> 
                 </address>
             </div>
         <?php else: ?>
