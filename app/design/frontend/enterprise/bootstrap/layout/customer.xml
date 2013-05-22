@@ -169,6 +169,7 @@ New customer registration
 		<remove name="top.container"/>
 		<reference name="head">
 			<action method="addJs"><script>jquery/jquery.backstretch.min.js</script></action>
+                        <action method="addJs"><script>jquery/jquery.towerdata.js</script></action>
 		</reference>
 		<reference name="header">
 			<action method="setTemplate"><template>page/html/header-login.phtml</template></action>
