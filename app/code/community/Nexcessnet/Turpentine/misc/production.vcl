@@ -10,20 +10,20 @@ import std;
 
 ## Backends
 
-backend web0 { .host = "web0-dc0.totsy.net"; .port = "80"; .first_byte_timeout = 300s; .between_bytes_timeout = 300s; .probe = { .url = "/"; .interval = 5s; .timeout = 1s; .window = 5;.threshold = 3; }}
-backend web1 { .host = "web1-dc0.totsy.net"; .port = "80"; .first_byte_timeout = 300s; .between_bytes_timeout = 300s; .probe = { .url = "/"; .interval = 5s; .timeout = 1s; .window = 5;.threshold = 3; }}
-backend web2 { .host = "web2-dc0.totsy.net"; .port = "80"; .first_byte_timeout = 300s; .between_bytes_timeout = 300s; .probe = { .url = "/"; .interval = 5s; .timeout = 1s; .window = 5;.threshold = 3; }}
-backend web3 { .host = "web3-dc0.totsy.net"; .port = "80"; .first_byte_timeout = 300s; .between_bytes_timeout = 300s; .probe = { .url = "/"; .interval = 5s; .timeout = 1s; .window = 5;.threshold = 3; }}
-backend web4 { .host = "web4-dc0.totsy.net"; .port = "80"; .first_byte_timeout = 300s; .between_bytes_timeout = 300s; .probe = { .url = "/"; .interval = 5s; .timeout = 1s; .window = 5;.threshold = 3; }}
-backend admin { .host = "web7-dc0.totsy.net"; .port = "80"; .first_byte_timeout = 21600s; .between_bytes_timeout = 21600s; }
+backend web0-dc0 { .host = "web0-dc0.totsy.net"; .port = "80"; .first_byte_timeout = 300s; .between_bytes_timeout = 300s; .probe = { .url = "/"; .interval = 5s; .timeout = 1s; .window = 5;.threshold = 3; }}
+backend web1-dc0 { .host = "web1-dc0.totsy.net"; .port = "80"; .first_byte_timeout = 300s; .between_bytes_timeout = 300s; .probe = { .url = "/"; .interval = 5s; .timeout = 1s; .window = 5;.threshold = 3; }}
+backend web2-dc0 { .host = "web2-dc0.totsy.net"; .port = "80"; .first_byte_timeout = 300s; .between_bytes_timeout = 300s; .probe = { .url = "/"; .interval = 5s; .timeout = 1s; .window = 5;.threshold = 3; }}
+backend web3-dc0 { .host = "web3-dc0.totsy.net"; .port = "80"; .first_byte_timeout = 300s; .between_bytes_timeout = 300s; .probe = { .url = "/"; .interval = 5s; .timeout = 1s; .window = 5;.threshold = 3; }}
+backend web4-dc0 { .host = "web4-dc0.totsy.net"; .port = "80"; .first_byte_timeout = 300s; .between_bytes_timeout = 300s; .probe = { .url = "/"; .interval = 5s; .timeout = 1s; .window = 5;.threshold = 3; }}
+backend web7-dc0 { .host = "web7-dc0.totsy.net"; .port = "80"; .first_byte_timeout = 21600s; .between_bytes_timeout = 21600s; }
 
 # Define the director that determines how to distribute incoming requests.
 director default_director round-robin {
-  { .backend = web0; }
-  { .backend = web1; }
-  { .backend = web2; }
-  { .backend = web3; }
-  { .backend = web4; }
+  { .backend = web0-dc0; }
+  { .backend = web1-dc0; }
+  { .backend = web2-dc0; }
+  { .backend = web3-dc0; }
+  { .backend = web4-dc0; }
 }
 
 ## ACLs
@@ -81,7 +81,7 @@ sub vcl_recv {
         return (pipe);
     }
 
-    if( req.http.User-Agent ~ "(?i)android.+mobile|blackberry|ip(hone|od)" ) {
+    if( req.http.User-Agent ~ "Android|Blackberry|iPhone" ) {
         set req.http.X-UA-Device = "mobile";
     }
 

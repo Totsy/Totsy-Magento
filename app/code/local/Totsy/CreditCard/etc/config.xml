@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @category    Totsy
+ * @package     Totsy_CreditCard
+ * @author      Tom Royer <troyer@totsy.com>
+ * @copyright   Copyright (c) 2013 Totsy LLC
+ */
+-->
+<config>
+    <modules>
+        <Totsy_CreditCard>
+            <version>0.1.0</version>
+        </Totsy_CreditCard>
+    </modules>
+    <global>
+         <models>
+            <totsy_creditcard>
+                <class>Totsy_CreditCard_Model</class>
+            </totsy_creditcard>
+            <creditcard>
+                <rewrite>
+                    <paymentLogic>Totsy_CreditCard_Model_PaymentLogic</paymentLogic>
+                </rewrite>
+            </creditcard>
+        </models>
+    </global>
+</config>

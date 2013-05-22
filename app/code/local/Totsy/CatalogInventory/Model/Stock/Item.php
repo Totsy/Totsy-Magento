@@ -19,7 +19,12 @@ class Totsy_CatalogInventory_Model_Stock_Item extends Mage_CatalogInventory_Mode
             return true;
         }
 
-        $reserved = Mage::helper('totsy_cataloginventory')->getReserveCount($this->getProductId());
+        if (!$this->hasReserved()) {
+            $reserved = Mage::helper('totsy_cataloginventory')->getReserveCount($this->getProductId());
+            $this->setReserved($reserved);
+        } else {
+            $reserved = $this->getReserved();
+        }
 
         $calcQty = $this->getQty();
         if($reserved != false) {

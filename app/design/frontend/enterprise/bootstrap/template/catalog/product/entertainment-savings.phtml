@@ -41,23 +41,24 @@ foreach($category_ids as $category_id) {
     if($category_id == $this->getLayer()->getCurrentCategory()->getId()) {
         continue;
     }
-    else {
-        $_category = Mage::getModel('catalog/category')->load($category_id);
 
-        $collection = $_category->getProductCollection();
-        $_filter = Mage::app()->getRequest()->getParam('entertainment_savings_state');
+    $_category = Mage::getModel('catalog/category')->load($category_id);
 
-        if($_filter) {
-            $collection->addFieldToFilter(
-                array(
-                    array('attribute'=>'entertainment_savings_state','eq'=>$_filter)
-                )
-            );
-        }
+    $collection = $_category->getProductCollection()
+        ->addAttributeToSelect(array('discount_voucher_price', 'regular_voucher_price'))
+        ->addAttributeToSelect(Mage::getSingleton('catalog/config')->getProductAttributes());
 
+    $_filter = Mage::app()->getRequest()->getParam('entertainment_savings_state');
 
-        $categories[$_category->getName()] = $collection;
+    if($_filter) {
+        $collection->addFieldToFilter(
+            array(
+                array('attribute'=>'entertainment_savings_state','eq'=>$_filter)
+            )
+        );
     }
+
+    $categories[$_category->getName()] = $collection;
 }
 ?>
 
@@ -76,9 +77,7 @@ foreach($category_ids as $category_id) {
     <?php foreach($categories as $name => $collection): ?>
     <div id="category-<?php echo $i;?>">
         <ol class="products-list" id="products-list">
-            <?php foreach($collection as $pro):?>
-
-            <?php $_product = Mage::getModel('catalog/product')->load($pro->getEntityId());?>
+            <?php foreach($collection as $_product):?>
             <li class="item">
                 <!-- Product Image -->
                 <div class="product-image">

@@ -38,8 +38,8 @@
     //Harapartners, yang, get the server time with the frontend JS time
     $serverTime = Mage::getModel('core/date')->timestamp() * 1000;
     $quote = $checkoutSession->getQuote();
-    $_saving = Mage::helper('sales/order')->calculateEstimatedSavings($quote);
-    $is_nominal = $quote->isNominal();    
+    $_saving = Mage::helper('sales/order')->calculateEstimatedSavingsQuote($quote);
+    $is_nominal = $quote->isNominal();
 ?>
 <div class="top-cart dropdown">
 <?php
@@ -104,7 +104,6 @@
 	                            jQuery('#cartHeader').css('background-image', 'none')
 	                                .html('<span class="savings"><?php echo $_mySaving; ?></span>');
 	                        }
-	                       
 	                        jQuery("#cart-timer-header").countdown({
 	                            //date: "12 10, 2011 16:11", or an object counting to a date
 	                            until: dateObj,
@@ -126,7 +125,7 @@
 	                                    .removeClass('hasItems')
 	                                    .html("Your cart is <span class='over'>no longer reserved</span>.");
 	                                jQuery("#topCartContent").hide();
-	
+
 	                                // if on cart or checkout, redirect; otherwise remove btn and update cart msg
 	                                var UrlPath = window.location.pathname;
 	                                if ( UrlPath == '/checkout/onepage/' || UrlPath == '/checkout/cart/' ) {
@@ -174,13 +173,13 @@
             <?php endforeach; ?>
         </div>
         <script type="text/javascript">decorateList('mini-cart', 'none-recursive')</script>
-    
+
     <?php else: ?>
         <p class="cart-empty">
             <?php echo $this->__('You have zero items in your cart.'); // @TODO: remove after confirmed not needed ?>
         </p>
     <?php endif; ?>
-    
+
     <?php if($_cartQty && !empty($_itemsArray)): ?>
         <div class="minifoot clearfix">
             <div class="subtotal">
@@ -231,5 +230,5 @@
 <?php if($_itemsInCart): ?>
 <div id="header-checkoutBtn">
     <a class="btn checkout" title="Checkout" href="<?php echo Mage::getUrl('checkout/cart')?>"><strong>Checkout</strong></a>
-</div>  
+</div>
 <?php endif; ?>

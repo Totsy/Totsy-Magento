@@ -89,4 +89,45 @@ class Harapartners_Fulfillmentfactory_Model_Observer
 
         return $this;
     }
+
+    /**
+     * Archive all item queue records beyond the (configurable) archive horizon
+     * period (default 90 days).
+     *
+     * @param Varien_Event_Observer $observer
+     *
+     * @return int The number of records archived.
+     */
+    public function archiveItemQueue(Varien_Event_Observer $observer)
+    {
+        /** @var $write Varien_Db_Adapter_Interface */
+        $write  = Mage::getSingleton('core/resource')
+            ->getConnection('core_write');
+
+        $itemqueueTable = Mage::getSingleton('core/resource')
+            ->getTableName('fulfillmentfactory/itemqueue');
+
+        $archiveTable = Mage::getSingleton('core/resource')
+            ->getTableName('fulfillmentfactory/itemqueue_archive');
+
+        $horizon = Mage::getStoreConfig('fulfillmentfactory_options/fulfillment_archive/itemqueue_archive_window');
+        if (!$horizon) {
+            $horizon = 90;
+        }
+
+        $write->beginTransaction();
+
+        // copy itemqueue records beyond the archive horizon into the archive table
+        $query = "REPLACE INTO `$archiveTable` SELECT * FROM `$itemqueueTable` WHERE DATEDIFF(CURRENT_TIMESTAMP, `created_at`) > $horizon";
+        $write->query($query)->execute();
+
+        // remove the copied records from the item queue table
+        $query = "DELETE FROM `$itemqueueTable` WHERE DATEDIFF(CURRENT_TIMESTAMP, `created_at`) > $horizon";
+        $stmt = $write->query($query);
+        $stmt->execute();
+
+        $write->commit();
+
+        return $stmt->rowCount();
+    }
 }

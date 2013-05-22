@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Crown_Catalog>
+            <version>1.0.0</version>
+        </Crown_Catalog>
+    </modules>
+    <global>
+        <models>
+            <crowncatalog>
+                <class>Crown_Catalog_Model</class>
+            </crowncatalog>
+        </models>
+        <events>
+            <catalog_category_save_commit_after>
+                <observers>
+                    <categoryreindex>
+                        <type>singleton</type>
+                        <class>Crown_Catalog_Model_Observer</class>
+                        <method>categoryProductReindexAfterSave</method>
+                    </categoryreindex>
+                </observers>
+            </catalog_category_save_commit_after>
+        </events>
+    </global>
+</config>

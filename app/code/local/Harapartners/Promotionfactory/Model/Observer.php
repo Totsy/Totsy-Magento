@@ -30,7 +30,11 @@ class Harapartners_Promotionfactory_Model_Observer {
             return;
         }
 
-        if($product->getVoucherCode()) {
+        if($product->getVoucherCode() && $product->getUseDefaultCouponCodes() != 1) {
+            return;
+        }
+
+        if($product->getFulfillmentType() !== 'virtual') {
             return;
         }
 
