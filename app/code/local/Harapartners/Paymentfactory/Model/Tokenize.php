@@ -80,7 +80,20 @@ class Harapartners_Paymentfactory_Model_Tokenize extends Totsy_Cybersource_Model
             if(!$profile->getData('saved_by_customer') && ($payment->getOrder()->getQuote()->getData('saved_by_customer') == '1')) {
                 $profile->setData('saved_by_customer', 1);
             }
-            $profile->setIsDefault(0);
+            if($payment->getOrder()->getQuote()->getData('saved_by_customer') == '1') {
+                //Update profile's address
+                parent::iniRequest();
+                $billingAdressSaved = $payment->getOrder()->getQuote()->getData('billing_selected_by_customer');
+                if(!empty($billingAdressSaved)) {
+                    $addressId = $payment->getOrder()->getQuote()->getData('billing_selected_by_customer');
+                } else {
+                    $this->addBillingAddress($payment->getOrder()->getBillingAddress(), $payment->getOrder()->getCustomerEmail());
+                    $addressId = $this->saveBillingAddress($payment);
+                }
+                $profile->setData('address_id',$addressId);
+                
+                $profile->setIsDefault(0);
+            }
             $profile->save();
              //Checkout with existing profile instead of creating new card
              //$payment->setData('cybersource_subid', $profile->getData('subscription_id'));
