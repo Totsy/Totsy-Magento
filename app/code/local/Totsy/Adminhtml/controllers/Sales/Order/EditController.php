@@ -31,9 +31,20 @@ class Totsy_Adminhtml_Sales_Order_EditController extends Mage_Adminhtml_Sales_Or
                 $this->_getOrderCreateModel()->getQuote()->getPayment()->addData($paymentData);
             }
 
+            $orderDatas = $this->getRequest()->getPost('order');
+
+            //If one item is added while being sold out. Add it on the comment section.
+            foreach($this->_getOrderCreateModel()->getQuote()->getItemsCollection() as $item) {
+                $qty = $item->getProduct()->getStockItem()->getQty();
+                if($qty == '0.0000') {
+                    $orderDatas['comment']['customer_note'] .= '<br />';
+                    $orderDatas['comment']['customer_note'] .= 'The product ' . $item->getProduct()->getSku() .' was added by Customer Service while being out of stock in our system. <br />';
+                }
+            }
+
             $order = $this->_getOrderCreateModel()
                 ->setIsValidate(true)
-                ->importPostData($this->getRequest()->getPost('order'))
+                ->importPostData($orderDatas)
                 ->createOrder();
             //Make Order Created date same as the original
             $originalIncrementId = $order->getOriginalIncrementId();

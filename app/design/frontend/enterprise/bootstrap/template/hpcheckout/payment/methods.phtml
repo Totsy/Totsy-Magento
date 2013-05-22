@@ -42,7 +42,7 @@
             });
         }
 
-        jQuery('.validate-cybsersource-cc-type').click( function() {
+        jQuery('input[name="payment[cc_type]"]').click( function() {
             if(jQuery('#paypal_payment').length > 0) {
                 jQuery('#paypal_payment').attr("checked", false);
             }
