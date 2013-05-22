@@ -72,6 +72,9 @@ foreach ($results as $productId) {
         $sql = "DELETE FROM catalog_category_product WHERE `product_id` = $productId AND `category_id` = $categoryId";
         $write->query($sql)->execute();
 
+        $sql = "DELETE FROM core_url_rewrite WHERE `product_id` = $productId AND `category_id` = $categoryId";
+        $write->query($sql)->execute();
+
         $categories->next();
     }
 }
