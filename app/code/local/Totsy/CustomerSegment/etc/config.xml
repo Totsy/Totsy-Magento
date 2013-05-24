@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @CustomerSegment    Totsy
+ * @package     Totsy_CustomerSegment
+ * @author      Brett Wang <brettwang@objectivasoftware.com>
+ * @copyright   Copyright (c) 2012 Totsy LLC
+ */
+-->
+<config>
+    <modules>
+        <Totsy_CustomerSegment>
+            <version>0.1.0</version>
+        </Totsy_CustomerSegment>
+    </modules>
+    <global>
+        <models>
+            <enterprise_customersegment>
+                <rewrite>
+                    <segment_condition_customer_attributes>Totsy_CustomerSegment_Model_Segment_Condition_Customer_Attributes</segment_condition_customer_attributes>        
+                </rewrite>             
+            </enterprise_customersegment>    
+        </models>
+        <resources>
+            <totsy_customersegment_setup>
+                <setup>
+                    <module>Totsy_CustomerSegment</module>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </totsy_customersegment_setup>
+          </resources>
+    </global>
+</config>
