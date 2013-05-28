@@ -33,49 +33,55 @@ foreach ($events as $event) {
 $eventIds = join(',', $eventIds);
 
 $sql = <<<SQL
-    SELECT `product_id`, count(*)
-    FROM catalog_category_product `cp`
-    WHERE `cp`.`category_id` IN ($eventIds)
-    GROUP BY `product_id`
-    HAVING count(*) > 1
+    SELECT product_id, count(*) FROM core_url_rewrite WHERE store_id = 1 GROUP BY product_id HAVING count(*) > 1;
 SQL;
 
 $results = $write->query($sql)->fetchAll(Zend_Db::FETCH_COLUMN, 0);
 
-echo "Found ", count($results), " products associated with more than one live event.";
+echo "Found ", count($results), " products associated with more than one live event.", PHP_EOL;
 foreach ($results as $productId) {
+    if (empty($productId)) {
+        continue;
+    }
+
     /** @var $product Mage_Catalog_Model_Product */
     $product = Mage::getModel('catalog/product')->load($productId);
+
+    echo "Analyzing product '", $product->getName(), "' (", $product->getId(), ")", PHP_EOL;
 
     $categories = $product->getCategoryCollection();
     $categories->addAttributeToSelect('name', 'event_start_date', 'event_end_date')
         ->setOrder('event_end_date', Varien_Data_Collection::SORT_ORDER_DESC);
 
-    $categories = $categories->getIterator();
-
-    /** @var $firstCategory Mage_Catalog_Model_Category */
-    $firstCategory = $categories->current();
-
-    echo "Analyzing product '", $product->getName(), "' (", $product->getId(), ")", PHP_EOL;
-    echo " * Found ", count($categories), " events associated", PHP_EOL;
-    echo " * Decided to keep event '", $firstCategory->getName(), "' (", $firstCategory->getId(), ")", PHP_EOL;
-
-    $categories->seek(1);
-    while ($category = $categories->current()) {
-        echo " * Removing association with event '", $category->getName(), "' (", $category->getId(), ")", PHP_EOL;
-
-        $categoryId = $category->getId();
-
-        $sql = "DELETE FROM catalog_category_product_index WHERE `product_id` = $productId AND `category_id` = $categoryId";
+    if (count($categories) > 1) {
+        $categories = $categories->getIterator();
+    
+        /** @var $firstCategory Mage_Catalog_Model_Category */
+        $firstCategory = $categories->current();
+    
+        echo " * Found ", count($categories), " events associated", PHP_EOL;
+        echo " * Decided to keep event '", $firstCategory->getName(), "' (", $firstCategory->getId(), ")", PHP_EOL;
+    
+        $categories->seek(1);
+        while ($category = $categories->current()) {
+            echo " * Removing association with event '", $category->getName(), "' (", $category->getId(), ")", PHP_EOL;
+            $categoryId = $category->getId();
+    
+            $sql = "DELETE FROM catalog_category_product_index WHERE `product_id` = $productId AND `category_id` = $categoryId";
+            $write->query($sql)->execute();
+    
+            $sql = "DELETE FROM catalog_category_product WHERE `product_id` = $productId AND `category_id` = $categoryId";
+            $write->query($sql)->execute();
+    
+            $sql = "DELETE FROM core_url_rewrite WHERE `product_id` = $productId AND `category_id` = $categoryId";
+            $write->query($sql)->execute();
+    
+            $categories->next();
+        }
+    } else {
+        echo " * Removing all URL rewrites only", PHP_EOL;
+        $sql = "DELETE FROM core_url_rewrite WHERE `product_id` = $productId";
         $write->query($sql)->execute();
-
-        $sql = "DELETE FROM catalog_category_product WHERE `product_id` = $productId AND `category_id` = $categoryId";
-        $write->query($sql)->execute();
-
-        $sql = "DELETE FROM core_url_rewrite WHERE `product_id` = $productId AND `category_id` = $categoryId";
-        $write->query($sql)->execute();
-
-        $categories->next();
     }
 }
 
