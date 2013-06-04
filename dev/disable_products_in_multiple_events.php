@@ -51,7 +51,7 @@ foreach ($results as $productId) {
 
     $categories = $product->getCategoryCollection();
     $categories->addAttributeToSelect('name', 'event_start_date', 'event_end_date')
-        ->setOrder('event_end_date', Varien_Data_Collection::SORT_ORDER_DESC);
+        ->setOrder('entity_id', Varien_Data_Collection::SORT_ORDER_DESC);
 
     if (count($categories) > 1) {
         $categories = $categories->getIterator();
