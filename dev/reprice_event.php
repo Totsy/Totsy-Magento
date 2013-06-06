@@ -46,7 +46,7 @@ $category = Mage::getModel('catalog/category')->load($categoryId);
 
 /** @var $products Mage_Catalog_Model_Resource_Product_Collection */
 $products = Mage::getModel('catalog/product')->getCollection()
-    ->addAttributeToSelect(array('special_price', 'name'));
+    ->addAttributeToSelect(array('special_price', 'sale_wholesale', 'name'));
 
 $products->getSelect()->joinInner(array('cp' => 'catalog_category_product'), 'cp.product_id = e.entity_id', array())
     ->where("cp.category_id = $categoryId");
@@ -55,7 +55,7 @@ echo "Updating prices for ", count($products), " products", PHP_EOL;
 
 /** @var $product Mage_Catalog_Model_Product */
 foreach ($products as $product) {
-    $currentPrice = $newPrice = $product->getData('special_price');
+    $currentPrice = $newPrice = $product->getData('sale_wholesale');
 
     if ($deltaType == '$') {
         $newPrice = $currentPrice + $delta;
