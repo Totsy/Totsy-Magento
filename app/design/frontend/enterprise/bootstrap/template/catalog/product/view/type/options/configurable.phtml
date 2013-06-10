@@ -58,22 +58,6 @@ else{
                 </select>
             </div>
         </div>
-        
-        <!--
-        <script type="text/javascript">
-$(document).ready(function() {
-$('select[id$=<%=DropDownList1.ClientID%>]').bind("keyup
-change", function() {
-if ($(this).val() != "")
-$('#message').text("Text: " + $(this).
-find(":selected").text()
-+ ' Value: ' + $(this).val());
-else
-$('#message').text("");
-});
-});
-</script>
--->
 
         <script type="text/javascript">
 		jQuery(document).ready( function() {
@@ -85,20 +69,6 @@ $('#message').text("");
 							jQuery("button.btn-cart").removeClass('btn-nogo');
 						}
 				});
-				
-<?php if($counter == 0): ?>
-				//Harapartners, Jun, Auto choose the first option when the first select only has one valid option
-				//spConfig is for calculation/validation, jQuery is used for special view rendering
-				var firstSelect = spConfig.settings[0];
-								
-				if(firstSelect.options.length == 2){
-					firstSelect.options[1].selected = true;
-					firstSelect.value = firstSelect.options[1].value;
-					spConfig.configureElement(firstSelect);
-					jQuery(selector_select_<?php echo $counter;?>).change();
-				}
-<?php endif; ?>
-
 		})
         </script>
         <?php $counter++; ?>
@@ -106,6 +76,47 @@ $('#message').text("");
     </div>
     <script type="text/javascript">
         var spConfig = new Product.Config(<?php echo $this->getJsonConfig() ?>);
+
+        if (jQuery('#product-options-wrapper .input-box').size() > 1) {
+            jQuery('#product-options-wrapper .input-box:first select').val(jQuery('#product-options-wrapper .input-box:first select > option:last').val());
+            spConfig.configureElement(jQuery('#product-options-wrapper .input-box:first select').get(0));
+        }
+
+        jQuery('#product-options-wrapper .input-box').each(function() {
+            var $attr = jQuery(this);
+
+            if ($attr.find('select > option').size() == 2) {
+                var attrName = $attr.find('label > span').text(),
+                    attrVal  = $attr.find('select > option:last').text();
+
+                $attr.children('select, label').hide();
+
+                $attr.append("<p>" + attrName + ": " + attrVal + "</p>");
+            } else {
+                var $radioGroup = jQuery('<div></div>').addClass('radio-group');
+
+                $attr.find('select > option').slice(1).each(function() {
+                    var $item = jQuery(this),
+                        namePrefix = $attr.children('select').attr('id'),
+                        $radio = jQuery('<input/>')
+                            .attr('name', namePrefix + '_radiogroup')
+                            .attr('type', 'radio'),
+                        $label = jQuery('<label/>')
+                            .append($radio)
+                            .append($item.text());
+
+                    $radio.click(function() {
+                        jQuery(this).parent().parent().siblings('select').get(0).selectedIndex = jQuery(this).parent().index() + 1;
+                    });
+
+                    $radioGroup.append($label);
+                });
+
+                $attr.children('select').hide();
+
+                $attr.append($radioGroup);
+            }
+        });
     </script>
     
 <?php endif;?>
