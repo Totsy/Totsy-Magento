@@ -89,6 +89,7 @@ else{
                 var attrName = $attr.find('label > span').text(),
                     attrVal  = $attr.find('select > option:last').text();
 
+                $attr.children('select').get(0).selectedIndex = 1;
                 $attr.children('select, label').hide();
 
                 $attr.append("<p>" + attrName + ": " + attrVal + "</p>");
