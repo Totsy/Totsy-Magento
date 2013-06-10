@@ -84,6 +84,8 @@ foreach ($productMap as $parentId => $children) {
     $write->query("REPLACE INTO catalog_category_product VALUES ($categoryId, $parentId, 1)")->execute();
     $write->query("REPLACE INTO catalog_category_product_index VALUES ($categoryId, $parentId, 1, 1, 1, 4)")->execute();
     $write->query("REPLACE INTO catalog_category_product_index VALUES ($categoryId, $parentId, 1, 1, 4, 4)")->execute();
+    $write->query("REPLACE INTO catalog_category_product_index VALUES ($categoryId, $parentId, 1, 1, 5, 4)")->execute();
+    $write->query("REPLACE INTO catalog_category_product_index VALUES ($categoryId, $parentId, 1, 1, 6, 4)")->execute();
 
     foreach ($children as $childId) {
         $write->query("REPLACE INTO catalog_category_product VALUES ($categoryId, $childId, 1)")->execute();
@@ -97,6 +99,8 @@ foreach ($productMap as $parentId => $children) {
         $write->query("REPLACE INTO catalog_category_product VALUES ($categoryId, $childId, 1);")->execute();
         $write->query("REPLACE INTO catalog_category_product_index VALUES ($categoryId, $childId, 1, 1, 1, 1)")->execute();
         $write->query("REPLACE INTO catalog_category_product_index VALUES ($categoryId, $childId, 1, 1, 4, 1)")->execute();
+        $write->query("REPLACE INTO catalog_category_product_index VALUES ($categoryId, $childId, 1, 1, 5, 1)")->execute();
+        $write->query("REPLACE INTO catalog_category_product_index VALUES ($categoryId, $childId, 1, 1, 6, 1)")->execute();
 
         $productIds[] = $childId;
     }
