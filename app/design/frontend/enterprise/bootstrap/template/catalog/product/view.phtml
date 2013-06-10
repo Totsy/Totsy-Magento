@@ -84,6 +84,7 @@ $savings = money_format('%n', $originalPrice) - money_format('%n', $discountPric
     $today = Mage::getSingleton('core/date')->timestamp();
 ?>
         <div class="span8 product-main">
+            <div id="messages_product_view"><?php echo $this->getMessagesBlock()->toHtml(); ?></div>
             <div class="product-header row">
                 <h3 class="span5 alpha"><?php echo $_product->getName(); ?></h3>
             </div>
@@ -154,7 +155,6 @@ $savings = money_format('%n', $originalPrice) - money_format('%n', $discountPric
                         </div>
                     </div>
                 </form>
-				<div id="messages_product_view"><?php echo $this->getMessagesBlock()->toHtml(); ?></div>
             </div> <!-- /.product-addtocart -->
             
             <?php echo $this->getChildHtml('relatedProducts') ?>
