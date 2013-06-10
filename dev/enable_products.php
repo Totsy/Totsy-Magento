@@ -20,8 +20,8 @@ if (isset($options['e'])) {
 
 $products = Mage::getModel('catalog/product')->getCollection()
     ->addCategoryFilter($category)
-    ->addAttributeToSelect(array('media_gallery', 'image'))
-    ->addAttributeToFilter('status', Mage_Catalog_Model_Product_Status::STATUS_DISABLED);
+    ->addAttributeToSelect(array('media_gallery', 'image'));
+//    ->addAttributeToFilter('status', Mage_Catalog_Model_Product_Status::STATUS_DISABLED);
 
 $count = 0;
 $limit = 100;
@@ -83,9 +83,15 @@ foreach ($productMap as $parentId => $children) {
     $write->query("REPLACE INTO catalog_product_entity_int (entity_type_id, attribute_id, store_id, entity_id, value) VALUES (4, 89, 6, $parentId, 1)")->execute();
     $write->query("REPLACE INTO catalog_category_product VALUES ($categoryId, $parentId, 1)")->execute();
     $write->query("REPLACE INTO catalog_category_product_index VALUES ($categoryId, $parentId, 1, 1, 1, 4)")->execute();
+    $write->query("REPLACE INTO catalog_category_product_index VALUES ($categoryId, $parentId, 1, 1, 3, 4)")->execute();
     $write->query("REPLACE INTO catalog_category_product_index VALUES ($categoryId, $parentId, 1, 1, 4, 4)")->execute();
     $write->query("REPLACE INTO catalog_category_product_index VALUES ($categoryId, $parentId, 1, 1, 5, 4)")->execute();
     $write->query("REPLACE INTO catalog_category_product_index VALUES ($categoryId, $parentId, 1, 1, 6, 4)")->execute();
+    $write->query("REPLACE INTO catalog_category_product_index VALUES (2, $parentId, 160001, 0, 1, 4)")->execute();
+    $write->query("REPLACE INTO catalog_category_product_index VALUES (2, $parentId, 160001, 0, 3, 4)")->execute();
+    $write->query("REPLACE INTO catalog_category_product_index VALUES (2, $parentId, 160001, 0, 4, 4)")->execute();
+    $write->query("REPLACE INTO catalog_category_product_index VALUES (2, $parentId, 160001, 0, 5, 4)")->execute();
+    $write->query("REPLACE INTO catalog_category_product_index VALUES (2, $parentId, 160001, 0, 6, 4)")->execute();
 
     foreach ($children as $childId) {
         $write->query("REPLACE INTO catalog_category_product VALUES ($categoryId, $childId, 1)")->execute();
@@ -98,9 +104,15 @@ foreach ($productMap as $parentId => $children) {
         $write->query("REPLACE INTO catalog_product_entity_int (entity_type_id, attribute_id, store_id, entity_id, value) VALUES (4, 89, 6, $childId, 1)")->execute();
         $write->query("REPLACE INTO catalog_category_product VALUES ($categoryId, $childId, 1);")->execute();
         $write->query("REPLACE INTO catalog_category_product_index VALUES ($categoryId, $childId, 1, 1, 1, 1)")->execute();
+        $write->query("REPLACE INTO catalog_category_product_index VALUES ($categoryId, $childId, 1, 1, 3, 1)")->execute();
         $write->query("REPLACE INTO catalog_category_product_index VALUES ($categoryId, $childId, 1, 1, 4, 1)")->execute();
         $write->query("REPLACE INTO catalog_category_product_index VALUES ($categoryId, $childId, 1, 1, 5, 1)")->execute();
         $write->query("REPLACE INTO catalog_category_product_index VALUES ($categoryId, $childId, 1, 1, 6, 1)")->execute();
+        $write->query("REPLACE INTO catalog_category_product_index VALUES (2, $childId, 160001, 0, 1, 1)")->execute();
+        $write->query("REPLACE INTO catalog_category_product_index VALUES (2, $childId, 160001, 0, 3, 1)")->execute();
+        $write->query("REPLACE INTO catalog_category_product_index VALUES (2, $childId, 160001, 0, 4, 1)")->execute();
+        $write->query("REPLACE INTO catalog_category_product_index VALUES (2, $childId, 160001, 0, 5, 1)")->execute();
+        $write->query("REPLACE INTO catalog_category_product_index VALUES (2, $childId, 160001, 0, 6, 1)")->execute();
 
         $productIds[] = $childId;
     }
@@ -132,6 +144,9 @@ foreach ($imageCopies as $productId => $imagePath) {
 echo "Rebuilding product price index for ", count($productIds), " products", PHP_EOL;
 Mage::getResourceSingleton('catalog/product_indexer_price')
     ->reindexProductIds($productIds);
+
+echo "Rebuilding stock status index for ", count($productIds), " products", PHP_EOL;
+Mage::getResourceModel('cataloginventory/indexer_stock')->reindexProducts($productsIds);
 
 $end = time();
 
