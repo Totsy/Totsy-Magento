@@ -20,8 +20,8 @@ if (isset($options['e'])) {
 
 $products = Mage::getModel('catalog/product')->getCollection()
     ->addCategoryFilter($category)
-    ->addAttributeToSelect(array('media_gallery', 'image'));
-//    ->addAttributeToFilter('status', Mage_Catalog_Model_Product_Status::STATUS_DISABLED);
+    ->addAttributeToSelect(array('media_gallery', 'image'))
+    ->addAttributeToFilter('status', Mage_Catalog_Model_Product_Status::STATUS_DISABLED);
 
 $count = 0;
 $limit = 100;
@@ -145,8 +145,8 @@ echo "Rebuilding product price index for ", count($productIds), " products", PHP
 Mage::getResourceSingleton('catalog/product_indexer_price')
     ->reindexProductIds($productIds);
 
-echo "Rebuilding stock status index for ", count($productIds), " products", PHP_EOL;
-Mage::getResourceModel('cataloginventory/indexer_stock')->reindexProducts($productsIds);
+echo "Flushing cache for event (tags: ", join(',', $category->getCacheTags()), ")", PHP_EOL;
+Mage::app()->getCache()->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, $category->getCacheTags());
 
 $end = time();
 
