@@ -3523,7 +3523,7 @@ li.catalog-event { min-height: 415px; }
 
 .last .input-box { padding-bottom: 25px; }
 #activechange1 { margin-bottom: 10px; }
-.radio-group label { padding: 7px 14px; display: inline; border: 1px #dddddd solid; }
+.radio-group label { padding: 7px 14px; display: inline-block; border: 1px #dddddd solid; margin-right: 3px; }
 .radio-group input { margin-right: 5px; margin-top: -1px; }
 
 .product-options { max-width: none; }
