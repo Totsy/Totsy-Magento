@@ -3497,7 +3497,7 @@ li.catalog-event { min-height: 415px; }
 #logo img { position: relative; left: 0; top: 0; width: 133px; height: 85px; }
 .navbar { width: 940px; padding: 0px 30px 0px; margin: 0px auto; }
 .navbar nav { border-top: 0px; }
-.header-cta { padding: 0px; border-radius: 0px; text-align: right; width: 402px; height: 63px; background: url(http://www.totsy.com/media/import/banners/75fs.png); }
+.header-cta { padding: 0px; border-radius: 0px; text-align: right; width: 402px; height: 63px; background: url(http://www.totsy.com/media/import/banners/fs35b.png); }
 .cta-link { display: none; visibility: hidden; }
 #cta-freeship { display: none; visibility: hidden; }
 .dropdown-toggle > img { display: none; visibility: hidden; }
@@ -3546,7 +3546,7 @@ li.catalog-event { min-height: 415px; }
 .product-content { line-height: 17px; margin-top: 30px; font-size: 13px; }
 
 .catalog-product-view .active { display: none; visibility: hidden; }
-.catalog-product-view .ellipsis { display: none; visibility: hidden; }
+.catalog-product-view .page-header h2 { display: none; visibility: hidden; }
 
 .product-header { clear: both; }
 .product_desc { clear: both; }
