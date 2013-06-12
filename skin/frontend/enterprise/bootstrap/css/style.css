@@ -21,7 +21,7 @@ body { height: 100%;}
 }
 html {
     margin:0;
-    background: url(../images/bkg_stripped_blue.png) fixed 0 0 repeat;
+	background: url(http://www.totsy.com/media/import/banners/totsybg2.png) top center repeat fixed;
     /*
     background-image: -moz-linear-gradient(top, #eef6fc, #ffffff);
     background-image: -ms-linear-gradient(top, #eef6fc, #ffffff);
@@ -2071,7 +2071,7 @@ body.catalog-category-view .price-box .special-price {
     font-weight: bold;
 }
 .product-main .product-content {
-    margin:10px 0;
+   /* margin:10px 0; */
 }
 .product-content .content-block {
     margin-top: .8em;
@@ -2089,7 +2089,7 @@ body.catalog-category-view .price-box .special-price {
 
 /* @PDP pricing + options + addtocart module */
 .product-main .product-addtocart {
-    position: absolute; top:0; right: 0;
+   /* position: absolute; top:0; right: 0; */
 }
 #product_addtocart_form {
     padding:2px 8px 4px;
@@ -2163,7 +2163,7 @@ body.catalog-category-view .price-box .special-price {
 /* options */
 #product-options-wrapper,
 #product-options-wrapper * {
-    max-width: 204px;
+    /* max-width: 204px; */
 }
 .options-container-big label {
     margin-bottom:3px;
@@ -3449,3 +3449,140 @@ background-position: 0 .5em;
 .totsy #issw #ins-fancybox-tw-proxy .insinset {width:61px;}
 .totsy #issw #ins-fancybox-pn .insinset {width:45px;}
 .totsy #issw #ins-fancybox-em .insinset {width:55px;}
+
+
+
+/********************* ROB'S HACKTOWN *********************/
+
+/* HIDE THE BLURB */
+.catalog-category-view .fastship-icon { left: 0px; position: relative; top: 0px; width:36px; height:36px; }
+/* .catalog-category-view .fastship-icon").detach().insertBefore("h2"); */
+.intro { display: none; visibility: hidden; }
+.event_prod_grid .thumbnail .caption { background: white; border: 0px; }
+
+/* HIDE WHATS HOT AND PLUS FROM MENU */
+#inspbfeeda { display: none; visibility: hidden; }
+#feedflicker { display: none; visibility: hidden; }
+#insfeedflicker { display: none; visibility: hidden; }
+.nonmember { display: none; visibility: hidden; }
+
+/* Every sale is a new sale! */
+/* #events-ending  { display: none; visibility: hidden; } */
+
+/* Homepage tweaks - no percent, no hover, smaller gray */
+.span4 .up-to, .span3 .up-to { display: none; visibility: hidden; }
+.span4 .more, .span3 .more { display: none; visibility: hidden; }
+.caption { min-height: 32px; }
+.span4 .caption, .span3 .caption { background-color: #ffffff; }
+li.catalog-event { min-height: 415px; } 
+.catalog-event .span4, .catalog-event .span3 { min-height: 415px; }
+
+/* cart improvements */
+.cart-collaterals .pull-right { display:none; visibility: hidden; }
+
+/* menu fixed no more! */
+.navbar-fixed-top { position: relative; }
+.navbar-fixed-bottom { position: relative; }
+#mainContent { padding: 25px 30px 267px; }
+
+/* so long, insparq */
+#ins-widget { display: none; visibility: hidden; }
+.insparq-share { display: none; visibility: hidden; }
+#ins-share-button-bar { display: none; visibility: hidden; }
+#issw { display: none; visibility: hidden; }
+.insparq-share { display: none; visibility: hidden; }
+
+/* menu fixes */
+/* $("#navByAge em").html("SHOP<br>BY&nbsp;AGE"); */
+#logo img { position: relative; left: 0; top: 0; width: 133px; height: 85px; }
+.navbar { width: 940px; padding: 0px 30px 0px; margin: 0px auto; }
+.navbar nav { border-top: 0px; }
+.header-cta { padding: 0px; border-radius: 0px; text-align: right; width: 402px; height: 63px; background: url(http://www.totsy.com/media/import/banners/75fs.png); }
+.cta-link { display: none; visibility: hidden; }
+#cta-freeship { display: none; visibility: hidden; }
+.dropdown-toggle > img { display: none; visibility: hidden; }
+#header-user-info { background: white; }
+
+
+
+
+
+
+/* product page tweaks continued */
+
+#product_addtocart_form { background-color: #fff; border-color: #a8c262; border-style: solid; border-width: 2px; padding-bottom:12px; line-height: 25px; font-size: 14px; }
+
+.catalog-product-view .product-header { border-style: none; }
+.catalog-product-view .breadcrumb { width: 700px; float: left; font-size: 16px; line-height: 40px; height: 40px; }
+
+#addToCart {position: relative; top: 0px; height: 35px; width: 180px; font-size: 18px; padding: 0px; margin: 10px 10px 0px 0px;}
+.add-to-cart-qty {padding-top: 12px; }
+.add-to-cart-qty label { font-size: 14px; float: left; display: inline; padding-top: 5px; padding-right: 8px; }
+
+#qty { float: right; }
+
+.last .input-box { padding-bottom: 25px; }
+#activechange1 { margin-bottom: 10px; }
+.radio-group label { padding: 7px 14px; display: inline; border: 1px #dddddd solid; }
+.radio-group input { margin-right: 5px; margin-top: -1px; }
+
+.product-options { max-width: none; }
+#product-options-wrapper { max-width: none; }
+
+.radio-group { max-width: none; width: 380px; }
+.last > .input-box { max-width: none; width: 380px; }
+.product-options-wrapper { max-width: none; width: 380px; }
+#product-options-wrapper { max-width: none; width: 380px; }
+
+.page-header .count-down-timer { background: none; padding-left: 20px; text-align: right; width: 220px; height: 40px; line-height: 40px; font-size: 16px; color: black; }
+
+.catalog-product-view #wrap { width: 500px; }
+.catalog-product-view .product-media { width: 505px; }
+.catalog-product-view .span8 { width: 400px; }
+.product-prices-supp { display: none; visibility: hidden; }
+.product-price-was { float: left; padding-left: 20px; }
+
+.product-addtocart { position: relative; clear: both; width: 400px; margin-left: 0px; }
+.product-content { line-height: 17px; margin-top: 30px; font-size: 13px; }
+
+.catalog-product-view .active { display: none; visibility: hidden; }
+.catalog-product-view .ellipsis { display: none; visibility: hidden; }
+
+.product-header { clear: both; }
+.product_desc { clear: both; }
+/* .product-main .product-addtocart { positive: relative; } */
+
+/* $("#activechange1").html("\n            \t    Select <span>size</span>:"); */
+
+/*
+$("#product_addtocart_form").css({"left":"0px", "position":"relative", "top":"0px"});
+$("#product_addtocart_form").insertBefore(".span8 > .alpha");  
+$("#timer").css({"font-size":"16px", "color":"black"});
+$(".hasCountdown .prefix").css({"color":"black"});
+$(".count-down-timer .prefix").css({"color":"black"});  
+$(".product-prices-supp").css({"font-size":"14px"});
+*/
+
+
+
+/* Slicker Validation  */
+
+/* .validation-form-container .fieldset > label:eq(0) { width: 100px; float: left; margin-top: 4px; } */
+.validation-form-container .fieldset > label { float: left; clear: left; margin-top: 4px; width: 100px; }
+.validation-form-container .fieldset > p { display: none; visibility: hidden; }
+.validation-form-container .fieldset { height: 150px; width: 400px; margin-left: 25px; padding-top: 25px; height: 100px; }
+
+/* 
+.validation-form-container $("h2").css({"display":"none", "visibility":""});
+$(".hero-unit > p").css({"display":"none", "visibility":""});
+$(".hero-unit").css({"background-color":"#ffffff"});
+$(".hero-unit").css({"width":"840px", "height":"200px", "margin":"0px", "padding-top":"60px", "margin-bottom":"30px"});
+*/
+
+
+
+
+
+/********************* ROB'S HACKTOWN *********************/
+
+
