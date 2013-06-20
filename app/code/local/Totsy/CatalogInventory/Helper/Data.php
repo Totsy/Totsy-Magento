@@ -19,19 +19,22 @@ class Totsy_CatalogInventory_Helper_Data extends Mage_Core_Helper_Abstract
     protected function _getReserveCountFromDb($productId) {
         $resource = Mage::getSingleton('core/resource');
 
-        $quoteTable = $resource->getTableName('sales/quote_item');
+        $quoteTable = $resource->getTableName('sales/quote');
+        $quoteItemTable = $resource->getTableName('sales/quote_item');
         $orderTable = $resource->getTableName('sales/order');
 
         $connection = $resource->getConnection('core_read');
 
         $select = $connection->select()
-            ->from(array('sfqi' => $quoteTable))
-            ->joinLeft(array('parent'=>$quoteTable),'sfqi.parent_item_id=parent.item_id')
+            ->from(array('sfqi' => $quoteItemTable))
+            ->joinLeft(array('parent'=>$quoteItemTable),'sfqi.parent_item_id=parent.item_id')
             ->joinLeft(array('sfo'=>$orderTable),'sfqi.quote_id=sfo.quote_id')
+            ->joinInner(array('q'=>$quoteTable), 'q.entity_id=sfqi.quote_id')
             ->reset(Zend_Db_Select::COLUMNS)
             ->columns(array('reserved' => 'sum(if(parent.item_id is not null,parent.qty,sfqi.qty))'))
             ->where('sfqi.product_id=?', $productId)
-            ->where('sfo.entity_id is null');
+            ->where('sfo.entity_id is null')
+            ->where('q.is_active');
 
         if(($quote = Mage::getSingleton('checkout/cart')->getQuote())
             && ($quote_id = $quote->getId())) {
