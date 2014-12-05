@@ -45,7 +45,7 @@
     <hr/>
     <?php $orderdate = $this->formatDate($_order->getCreatedAtStoreDate(), Mage_Core_Model_Locale::FORMAT_TYPE_MEDIUM);?>
     <?php $sorttime = strtotime($orderdate); ?>
-    <?php $orderealdate = date('Y-d-m', $sorttime); ?>
+    <?php $orderealdate = date('m/d/Y', $sorttime); ?>
     <?php echo $this->__('%s', $orderealdate) ?>
     </div>
     <div class="span2">
@@ -56,7 +56,7 @@
     <?php elseif($_order->hasFulfillmentType('virtual')): ?>
     You will receive an email with the details of this voucher code.
     <?php else: ?>
-    <?php echo date('Y-m-d', Mage::helper('sales/order')->calculateEstimatedShipDate($_order)); ?>
+    <?php echo date('m/d/Y', Mage::helper('sales/order')->calculateEstimatedShipDate($_order)); ?>
     <?php endif; ?>
     </div>
 </div>

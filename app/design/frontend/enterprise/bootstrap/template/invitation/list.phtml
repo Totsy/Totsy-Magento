@@ -190,6 +190,7 @@ if ( !$rewardCollection ) {
 			<tr class="<?php if ( $counter++ %2 ) echo 'odd'; else echo 'even';?>">
 				<td class="his-list date">
 					<?php $arrayDate = explode(" ", $invitation->getInvitationDate());?>
+                                        <?php $arrayDate[0] = date('m/d/Y', strtotime($arrayDate[0])); ?>
 					<?php echo $this->htmlEscape(str_replace("-","/",$arrayDate[0])); ?>
 				</td>
 				<td class="his-list events">
