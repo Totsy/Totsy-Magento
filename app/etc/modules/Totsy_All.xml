@@ -127,5 +127,9 @@
             <active>true</active>
             <codePool>local</codePool>
         </Totsy_Tax>
+        <Totsy_SalesRule>
+            <active>true</active>
+            <codePool>local</codePool>
+        </Totsy_SalesRule>
     </modules>
 </config>

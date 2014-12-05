@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @CustomerSegment    Totsy
+ * @package     Totsy_CustomerSegment
+ * @author      Brett Wang <brettwang@objectivasoftware.com>
+ * @copyright   Copyright (c) 2012 Totsy LLC
+ */
+-->
+<config>
+    <modules>
+        <Totsy_SalesRule>
+            <version>0.1.0</version>
+        </Totsy_SalesRule>
+    </modules>
+    <global>
+        <models>
+            <salesrule>
+                <rewrite>
+                    <validator>Totsy_SalesRule_Model_Validator</validator>        
+                </rewrite>             
+            </salesrule>    
+        </models>
+    </global>
+</config>
